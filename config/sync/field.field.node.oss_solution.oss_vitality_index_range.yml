@@ -1,0 +1,19 @@
+uuid: dfeba347-cfea-4660-9fe8-089ae2995a86
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.oss_vitality_index_range
+    - node.type.oss_solution
+id: node.oss_solution.oss_vitality_index_range
+field_name: oss_vitality_index_range
+entity_type: node
+bundle: oss_solution
+label: 'Vitality index range'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

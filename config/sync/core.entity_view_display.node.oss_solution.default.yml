@@ -39,10 +39,12 @@ dependencies:
     - field.field.node.oss_solution.oss_source_hash
     - field.field.node.oss_solution.oss_used_by
     - field.field.node.oss_solution.oss_vitality_index
+    - field.field.node.oss_solution.oss_vitality_index_range
     - node.type.oss_solution
   module:
     - custom_markup_block
     - joinup_layout
+    - joinup_oss_catalogue
     - layout_builder
     - layout_discovery
     - user
@@ -81,7 +83,7 @@ third_party_settings:
                 third_party_settings:
                   template_suggestion:
                     template_suggestion: ''
-            weight: 2
+            weight: 4
             additional: {  }
           613fb544-14e1-441e-bb81-629db2f729a3:
             uuid: 613fb544-14e1-441e-bb81-629db2f729a3
@@ -107,7 +109,7 @@ third_party_settings:
                 third_party_settings:
                   template_suggestion:
                     template_suggestion: ''
-            weight: 3
+            weight: 5
             additional: {  }
           f6501de4-478f-49fe-adbb-2e541ba9d0c3:
             uuid: f6501de4-478f-49fe-adbb-2e541ba9d0c3
@@ -133,7 +135,7 @@ third_party_settings:
                 third_party_settings:
                   template_suggestion:
                     template_suggestion: ''
-            weight: 4
+            weight: 6
             additional: {  }
           592281dd-6140-43f3-9ec5-9c88b1db0477:
             uuid: 592281dd-6140-43f3-9ec5-9c88b1db0477
@@ -308,7 +310,7 @@ third_party_settings:
               markup:
                 value: '<h2>Quick links</h2>'
                 format: content_editor
-            weight: 1
+            weight: 3
             additional: {  }
           7e8557ef-a668-4f97-84ab-436bdd1e1a94:
             uuid: 7e8557ef-a668-4f97-84ab-436bdd1e1a94
@@ -417,6 +419,17 @@ third_party_settings:
                   template_suggestion:
                     template_suggestion: git_indicator
             weight: 3
+            additional: {  }
+          b855c39a-9137-420d-b0b8-109904d00aae:
+            uuid: b855c39a-9137-420d-b0b8-109904d00aae
+            region: aside
+            configuration:
+              id: eu_oss_catalogue_vitality_index_chart
+              label: 'Vitality index chart'
+              label_display: '0'
+              provider: joinup_oss_catalogue
+              context_mapping: {  }
+            weight: 1
             additional: {  }
         third_party_settings: {  }
       -
@@ -884,6 +897,7 @@ hidden:
   oss_source_hash: true
   oss_used_by: true
   oss_vitality_index: true
+  oss_vitality_index_range: true
   published_at: true
   report: true
   search_api_excerpt: true

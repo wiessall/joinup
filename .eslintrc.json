@@ -19,6 +19,7 @@
   ],
   "globals": {
     "CKEDITOR": true,
+    "Chart": true,
     "L": true
   },
   "plugins": [
