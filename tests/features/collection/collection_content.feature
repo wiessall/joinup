@@ -33,8 +33,8 @@ Feature: Collection content
 
   Scenario: Publishing new solutions should result in counters being properly updated.
     Given owner:
-      | name             | type                  |
-      | Particle sweeper | Private Individual(s) |
+      | name             | type    |
+      | Particle sweeper | Company |
 
     # @see: https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-4436
     Given I am logged in as a moderator
@@ -51,11 +51,11 @@ Feature: Collection content
       | Title                 | Solution from draft to published                                    |
       | Abstract              | The abstract of the solution.                                       |
       | Description           | Testing that publishing a solution, updates the collection content. |
-      | Geographical coverage | Switzerland                                                         |
+      | Geographical coverage | Belgium                                                             |
       | Name                  | Costas Papazoglou                                                   |
       | E-mail address        | CostasPapazoglou@example.com                                        |
     And I select "Data gathering and processing" from "Topic"
-    And I select "Networking Infrastructure Enablers" from "Solution type"
+    And I select "Logging Service" from "Solution type"
     And I press "Add existing" at the "Owner" field
     And I fill in "Owner" with "Particle sweeper"
     And I press "Add owner"

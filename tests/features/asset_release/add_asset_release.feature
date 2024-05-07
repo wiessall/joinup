@@ -36,7 +36,7 @@ Feature: "Add release" visibility options.
       | title          | Chasing shadows     |
       | is version of  | Release Test 1      |
       | release number | 1.0                 |
-      | status         | Deprecated          |
+      | status         | Completed           |
       | state          | published           |
       | creation date  | 2014-08-30 23:59:00 |
 
@@ -47,7 +47,7 @@ Feature: "Add release" visibility options.
     Then I should see the "Chasing shadows" tile
     And I should see the text "v1.0" in the "Chasing shadows" tile
     And I should see the text "Release date: 30/08/2014" in the "Chasing shadows" tile
-    And I should see the statistics "Deprecated" in the "Chasing shadows" tile
+    And I should see the statistics "Completed" in the "Chasing shadows" tile
     And I should see the text "Release" in the "Chasing shadows" tile
 
     # Check that the release should have a unique combination of title and
@@ -62,8 +62,8 @@ Feature: "Add release" visibility options.
 
     When I press "Publish"
     Then I should see the following error messages:
-      | error messages                    |
-      | Name field is required.           |
+      | error messages                     |
+      | Name field is required.            |
       | Release version field is required. |
 
     When I fill in "Name" with "Chasing shadows"

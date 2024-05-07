@@ -6,10 +6,10 @@ Feature: Add distribution through the UI
 
   Background:
     Given the following collection:
-      | title      | Asset Distribution Test |
-      | logo       | logo.png                |
-      | state      | published               |
-     And the following solution:
+      | title | Asset Distribution Test |
+      | logo  | logo.png                |
+      | state | published               |
+    And the following solution:
       | title       | Solution random x name           |
       | collection  | Asset Distribution Test          |
       | description | Some reusable random description |
@@ -50,7 +50,7 @@ Feature: Add distribution through the UI
     And I enter "<p>The full software development kit for systems based on the x86-64 architecture.</p>" in the "Description" wysiwyg editor
     And I upload the file "test.zip" to "Access URL"
     And I select "ZIP" from "Format"
-    And I select "Web Ontology Language Full/DL/Lite" from "Representation technique"
+    And I select "Datalog" from "Representation technique"
     And I select "WTFPL" from "Licence"
     And I press "Publish"
     Then I should have 1 distribution
@@ -115,7 +115,7 @@ Feature: Add distribution through the UI
     And I enter "<p>The full source code.</p>" in the "Description" wysiwyg editor
     Given I upload the file "test.zip" to "Access URL"
     And I select "WTFPL" from "Licence"
-    And I select "Web Ontology Language Full/DL/Lite" from "Representation technique"
+    And I select "Datalog" from "Representation technique"
     And I press "Publish"
     Then I should have 1 distribution
 
@@ -132,11 +132,11 @@ Feature: Add distribution through the UI
     And I should see the link "WTFPL"
     And I should see the heading "Categorisation"
     And I should see the following lines of text:
-      | The full source code.              |
-      | Format                             |
-      | ZIP                            |
-      | Representation technique           |
-      | Web Ontology Language Full/DL/Lite |
+      | The full source code.    |
+      | Format                   |
+      | ZIP                      |
+      | Representation technique |
+      | Datalog                  |
 
     And I go to the homepage of the "Solution random x name" solution
     # Clean up the asset distribution that was created through the UI.
