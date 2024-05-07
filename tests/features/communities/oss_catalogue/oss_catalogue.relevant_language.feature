@@ -22,8 +22,8 @@ Feature:
       | IT Feature 2         |
 
     # Ensures only the default translation URL is exposed.
-    Then the page should have an element with CSS selector "link[rel='alternate'][hreflang='en']"
-    And the page should not have an element with CSS selector "link[rel='alternate'][hreflang='it']"
+    Then I should see a "link[rel='alternate'][hreflang='en']" element
+    And I should not see a "link[rel='alternate'][hreflang='it']" element
 
     When I visit "/eu-oss-catalogue"
     Then I should see the "EN Title" tile
@@ -49,11 +49,11 @@ Feature:
     Then I should see the heading "Translations of EN Title"
     When I click "Edit" in the "English" row
     And I should see the heading "Edit Open Source Software Solution EN Title"
-    Then the "Short description" field should have value "EN Short description"
+    Then the "Short description" field should contain "EN Short description"
     And I move backward one page
     When I click "Edit" in the "Italian" row
     And I should see the heading "Edit Open Source Software Solution EN Title [Italian translation]"
-    Then the "Short description" field should have value "IT Short description"
+    Then the "Short description" field should contain "IT Short description"
 
   Scenario: Translatable fields are displayed based on the richest OSS Solution translation
     Given oss_solution multilingual content:
