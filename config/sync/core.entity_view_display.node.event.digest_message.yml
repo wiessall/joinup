@@ -84,9 +84,6 @@ content:
         - simple_paragraph
         - text
       trim_length: 200
-      trim_suffix: ...
-      strip_tags: '1'
-      trim: 0
     third_party_settings:
       field_delimiter:
         delimiter: ''
