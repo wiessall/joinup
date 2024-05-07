@@ -123,8 +123,8 @@ Feature: "Add event" visibility options.
       | title | Stream of Dreams |
       | state | published        |
     And event content:
-      | title             | collection       | field_paragraphs_body | online location              | state     |
-      | The Great Opening | Stream of Dreams | It opens!             | webinar - http://example.com | published |
+      | title             | abstract | collection       | field_paragraphs_body | online location              | state     |
+      | The Great Opening | abstract | Stream of Dreams | It opens!             | webinar - http://example.com | published |
 
     And I am logged in as a moderator
 
