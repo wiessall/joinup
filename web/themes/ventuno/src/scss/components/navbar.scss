@@ -71,18 +71,18 @@
     }
     &--underline {
       vertical-align: baseline;
+      &.is-active,
       &:hover {
         box-shadow: 0 -2px 0 0 $white inset;
       }
     }
     @include media-breakpoint-up(sm) {
-      padding: ($spacer * 1.7) $spacer; // 8px 16px
+      padding: ($spacer * 1.75) $spacer; // 12px 28px
     }
   }
   .dropdown-menu {
     z-index: 5; // Ensure the search icon stays below on small devices
-    margin-top: 1px!important;
-    padding: 0;
+    padding: 1px 0 0 0;
     white-space: nowrap;
     border-top-left-radius: 0;
     border-top-right-radius: 0;
@@ -94,14 +94,16 @@
     }
   }
   .dropdown .dropdown-toggle {
-    height: 54px;
-    padding-top: $spacer; // 16px
-    padding-bottom: $spacer; // 16px
+    // height: 54px;
+    // padding-top: $spacer; // 16px
+    // padding-bottom: $spacer; // 16px
     color: $white;
     border: none; // Dropdown resets
     background-color: transparent; // Dropdown resets
     box-shadow: none;
-    &.show {
+    &.show,
+    &.is-active,
+    &:has(+ ul a.is-active) {
       box-shadow: 0 -2px 0 0 $white inset;
     }
     &::after {
@@ -124,9 +126,9 @@
       }
     }
     @include media-breakpoint-up(lg) {
-      height: 72px;
-      padding-top: $spacer * 1.5; // 24px
-      padding-bottom: $spacer * 1.5; // 24px
+      // height: 72px;
+      // padding-top: $spacer * 1.5; // 24px
+      // padding-bottom: $spacer * 1.5; // 24px
     }
   }
   .dropdown-list {
@@ -148,6 +150,7 @@
     padding: .5rem $spacer;
     color: $primary !important;
     background: none;
+    &.is-active,
     &:hover {
       text-decoration: none;
       color: $primary!important;
