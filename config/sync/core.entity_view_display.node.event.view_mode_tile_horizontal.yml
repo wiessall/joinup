@@ -94,6 +94,7 @@ content:
       filtered_entity_bundles:
         - simple_paragraph
         - text
+      trim_length: 500
     third_party_settings:
       field_delimiter:
         delimiter: ''
