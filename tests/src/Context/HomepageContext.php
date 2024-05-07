@@ -65,7 +65,7 @@ class HomepageContext extends RawDrupalContext {
       Assert::assertInstanceOf(NodeElement::class, $description_element, sprintf('Did not find a description for the %s "%s" in the "Explore" section.', $type, $expected_data['title']));
 
       $actual_description = $description_element->getHtml();
-      Assert::assertEquals($expected_data['description'], $actual_description, sprintf('The body text for the %s "%s" in the "Explore" section does not contain the expected text.', $type, $expected_data['title']));
+      Assert::assertEquals($expected_data['description'], trim($actual_description), sprintf('The body text for the %s "%s" in the "Explore" section does not contain the expected text.', $type, $expected_data['title']));
 
       // Check date.
       $expected_date = date("d/m/Y", strtotime($expected_data['date']));
