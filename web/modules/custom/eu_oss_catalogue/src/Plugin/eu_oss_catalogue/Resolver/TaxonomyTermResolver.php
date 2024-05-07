@@ -14,7 +14,6 @@ use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Utility\Error;
 use Drupal\eu_oss_catalogue\Exception\UnresolvableValueException;
 use Drupal\eu_oss_catalogue\Model\Project;
-use Drupal\taxonomy\TermInterface;
 use Psr\Log\LogLevel;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -27,13 +26,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * )
  */
 class TaxonomyTermResolver extends DefaultResolver implements ContainerFactoryPluginInterface {
-
-  /**
-   * The current resolve context.
-   *
-   * @var array
-   */
-  protected array $context = [];
 
   public function __construct(
     array $configuration,
@@ -81,24 +73,6 @@ class TaxonomyTermResolver extends DefaultResolver implements ContainerFactoryPl
       return;
     }
 
-    $this->context = [
-      'metadata' => $metadata,
-      'project' => $project,
-      'fieldItemList' => $fieldItemList,
-    ];
-    $value = $this->resolveTerms($value);
-  }
-
-  /**
-   * Resolve all term names to TIDs or term objects.
-   *
-   * @param array $value
-   *   Field value to resolve.
-   *
-   * @return array
-   *   The resolved field value.
-   */
-  protected function resolveTerms(array $value): array {
     // Get a flat list of all term names regardless of the language.
     $allTermNames = array_values(array_merge(...array_values($value)));
 
@@ -108,7 +82,7 @@ class TaxonomyTermResolver extends DefaultResolver implements ContainerFactoryPl
 
     // Retrieve existing term IDs for the given term names.
     // Uses a BINARY mysql comparison to be case and accents sensitive.
-    $results = $this->database->select($storage->getDataTable(), 't')
+    $records = $this->database->select($storage->getDataTable(), 't')
       ->fields('t', ['tid', 'name'])
       ->condition('vid', $this->getConfiguration()['vid'])
       ->where('BINARY [t].[name] IN (:names[])', [':names[]' => $allTermNames])
@@ -119,38 +93,27 @@ class TaxonomyTermResolver extends DefaultResolver implements ContainerFactoryPl
     $resolved = [];
     foreach ($value as $langcode => $names) {
       foreach ($names as $key => $name) {
-        $resolved[$langcode][$key] = isset($results[$name])
-          ? $results[$name]->tid
-          : $this->createTerm($name);
+        // If the term exists, use it.
+        if (isset($records[$name])) {
+          $resolved[$langcode][$key] = $records[$name]->tid;
+          continue;
+        }
+
+        // Log exception for controlled vocabs when term doesn't exist.
+        if ($this->getConfiguration()['controlled']) {
+          $exception = new UnresolvableValueException($fieldItemList->getName(), $this->getConfiguration()['path'], $name, $metadata);
+          Error::logException($this->logger, $exception, Error::DEFAULT_ERROR_MESSAGE, [], LogLevel::WARNING);
+        }
+
+        // Create new term.
+        $resolved[$langcode][$key] = $storage->create([
+          'vid' => $this->getConfiguration()['vid'],
+          'name' => $name,
+        ]);
       }
     }
-    return $resolved;
-  }
 
-  /**
-   * Creates a taxonomy term with given name.
-   *
-   * @param string $name
-   *   The term name.
-   *
-   * @return \Drupal\taxonomy\TermInterface
-   *   The created taxonomy term object.
-   */
-  protected function createTerm(string $name): TermInterface {
-    // Log exception for controlled vocabs when term doesn't exist.
-    if ($this->getConfiguration()['controlled']) {
-      $exception = new UnresolvableValueException($this->context['fieldItemList']->getName(), $this->getConfiguration()['path'], $name, $this->context['metadata']);
-      Error::logException($this->logger, $exception, Error::DEFAULT_ERROR_MESSAGE, [], LogLevel::WARNING);
-    }
-
-    // Create the term.
-    $storage = $this->entityTypeManager->getStorage('taxonomy_term');
-    /** @var \Drupal\taxonomy\TermInterface $term */
-    $term = $storage->create([
-      'vid' => $this->getConfiguration()['vid'],
-      'name' => $name,
-    ]);
-    return $term;
+    $value = $resolved;
   }
 
 }
