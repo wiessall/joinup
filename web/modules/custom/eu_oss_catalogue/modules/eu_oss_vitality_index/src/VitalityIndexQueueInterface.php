@@ -13,7 +13,7 @@ interface VitalityIndexQueueInterface {
    * Queues solution.
    *
    * @param int $solutionId
-   *  The OSS Solution entity id.
+   *   The OSS Solution entity id.
    *
    * @return void
    */
