@@ -51,7 +51,7 @@ class OssContentNegotiation extends LanguageNegotiationContentEntity {
   /**
    * {@inheritdoc}
    */
-  public function getLanguageSwitchLinks(Request $request, $type, Url $url) {
+  public function getLanguageSwitchLinks(Request $request, $type, Url $url): array {
     // OSS Solutions are storing translations, but we do not want to expose the
     // corresponding pages in the frontend, only the default translation.
     return [];
