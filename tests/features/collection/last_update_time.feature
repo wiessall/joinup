@@ -2,8 +2,8 @@
 Feature: Tests the collection last update time.
 
   Scenario: As a user visiting a collection, I want to see the collection last
-    update time as the maximum changed time of the collection itself, its
-    affiliate solutions, community content and custom pages.
+  update time as the maximum changed time of the collection itself, its
+  affiliate solutions, community content and custom pages.
 
     Given users:
       | Username    | Roles     |
@@ -12,8 +12,8 @@ Feature: Tests the collection last update time.
       | email | foo@bar.com           |
       | name  | Your Cleaning Company |
     And the following owner:
-      | name | type                  |
-      | Sean | Private Individual(s) |
+      | name | type    |
+      | Sean | Company |
     And the following collection:
       | title             | Household Wizard |
       | state             | published        |
