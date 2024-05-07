@@ -14,8 +14,6 @@ interface VitalityIndexQueueInterface {
    *
    * @param int $solutionId
    *   The OSS Solution entity id.
-   *
-   * @return void
    */
   public function addToQueue(int $solutionId): void;
 
