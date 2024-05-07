@@ -1,0 +1,49 @@
+uuid: 2caf1e58-fd9d-4153-b32d-32abafb6f0b4
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.paragraph.message_digest
+    - field.field.paragraph.text.field_body
+    - paragraphs.paragraphs_type.text
+  module:
+    - layout_builder
+    - smart_trim
+    - template_suggestion
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+id: paragraph.text.message_digest
+targetEntityType: paragraph
+bundle: text
+mode: message_digest
+content:
+  field_body:
+    type: smart_trim
+    label: hidden
+    settings:
+      trim_length: 200
+      trim_type: chars
+      trim_suffix: …
+      wrap_output: false
+      wrap_class: trimmed
+      more:
+        display_link: false
+        target_blank: false
+        link_trim_only: false
+        class: more-link
+        text: More
+        aria_label: 'Read more about [node:title]'
+      summary_handler: full
+      trim_options:
+        text: true
+        trim_zero: false
+        replace_tokens: false
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: bare
+    weight: 0
+    region: content
+hidden:
+  search_api_excerpt: true

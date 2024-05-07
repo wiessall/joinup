@@ -83,7 +83,6 @@ Feature: "Add solution" visibility options.
     And I should see the text "Only facilitators and authors can create content"
     # Regression test to endure that the language terms "Multilingual Code" are not present.
     And the available options in the "Language" select should not include the "Multilingual Code"
-    And the "Solution type" field should contain the "EIRA Ontology Viewpoint, Legal View, Deprecated" option groups
     When I fill in the following:
       | Title                 | Espresso is the solution  |
       | Abstract              | Abstract used for testing |
@@ -115,8 +114,8 @@ Feature: "Add solution" visibility options.
     # Regression test for the non required field, 'Logo'.
     # @see: https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3328
     And I should not see the following error messages:
-      | error messages            |
-      | Logo field is required.   |
+      | error messages          |
+      | Logo field is required. |
     But I should see a logo on the header
     And I should see the heading "Espresso is the solution"
     When I am logged in as "Ruth Lee"
@@ -191,7 +190,7 @@ Feature: "Add solution" visibility options.
       | Title       | PHP comments parser                             |
       | Description | A simple parser that goes through PHP comments. |
     And I select "Data gathering and processing" from "Topic"
-    And I select "Implementing Guideline" from "Solution type"
+    And I select "Data Owner" from "Solution type"
 
     # Submit the incomplete form, so error messages about missing fields will
     # be shown.
@@ -225,8 +224,8 @@ Feature: "Add solution" visibility options.
       | collection  | Ocean studies                                     |
       | state       | published                                         |
     And the following owner:
-      | name                | type                             |
-      | University of Basel | Academia/Scientific organisation |
+      | name                | type                |
+      | University of Basel | Industry consortium |
 
     Then I should have 1 solution
 
@@ -249,12 +248,12 @@ Feature: "Add solution" visibility options.
     And I check "I have read and accept the legal notice and I commit to manage my solution on a regular basis."
     And I press "Yes"
     And I fill in the following:
-      | Title                 | Climate change tracker                      |
-      | Abstract              | Tracks climate change                       |
-      | Description           | Logs retreat of 40 glaciers in Switzerland. |
-      | Geographical coverage | Switzerland                                 |
-      | Name                  | Angela Crespi                               |
-      | E-mail address        | angela_crespi@glacmon.basel-uni.ch          |
+      | Title                 | Climate change tracker                  |
+      | Abstract              | Tracks climate change                   |
+      | Description           | Logs retreat of 40 glaciers in Belgium. |
+      | Geographical coverage | Belgium                                 |
+      | Name                  | Angela Crespi                           |
+      | E-mail address        | angela_crespi@glacmon.basel-uni.ch      |
     And I select "Data gathering and processing" from "Topic"
     And I select "Logging Service" from "Solution type"
     And I press "Add existing" at the "Owner" field
@@ -289,14 +288,14 @@ Feature: "Add solution" visibility options.
       | email | invisible.man@example.com |
       | name  | Invisible Man             |
     And the following solution:
-      | title               | Cleaning solution                                 |
-      | abstract            | Cleans anything dirty                             |
-      | description         | Use on metal surfaces.                            |
-      | owner               | Organisation example                              |
-      | state               | published                                         |
-      | solution type       | Non-binding Instrument, Service Discovery Service |
-      | topic               | Employment and Support Allowance                  |
-      | contact information | Invisible Man                                     |
+      | title               | Cleaning solution                |
+      | abstract            | Cleans anything dirty            |
+      | description         | Use on metal surfaces.           |
+      | owner               | Organisation example             |
+      | state               | published                        |
+      | solution type       | Non-binding Instrument           |
+      | topic               | Employment and Support Allowance |
+      | contact information | Invisible Man                    |
 
     Given I am logged in as a moderator
     When I go to the edit form of the "Cleaning solution" solution
