@@ -34,8 +34,8 @@ Feature: Global search
       | title       | body       | collection                   | topic       | spatial coverage | state    |
       | Rummy event | Dummy body | Molecular cooking collection | E-inclusion | Luxembourg       | archived |
     And document content:
-      | title          | document type | short title          | body       | collection                   | topic       | spatial coverage | state    |
-      | Rummy document | Document      | Rummy document short | Dummy body | Molecular cooking collection | E-inclusion | Luxembourg       | archived |
+      | title          | document type | short title          | field_paragraphs_body | collection                   | topic       | spatial coverage | state    |
+      | Rummy document | Document      | Rummy document short | Dummy body            | Molecular cooking collection | E-inclusion | Luxembourg       | archived |
     And discussion content:
       | title            | body       | collection                   | topic       | spatial coverage | state    |
       | Rummy discussion | Dummy body | Molecular cooking collection | E-inclusion | Luxembourg       | archived |
@@ -201,7 +201,7 @@ Feature: Global search
       | Event Omega       | Event short delta | The epsilon event content.          | Greece           | Event agenda.  | Some place     | European Commission | International | Alphabet | Collection alpha | published |
       | Alternative event | Alt event         | This event stays in the background. | Luxembourg       | To be planned. | Event location | Event organisation  |               |          | Collection alpha | published |
     And document content:
-      | title          | document type | short title          | body                                    | spatial coverage | keywords | collection       | state     |
+      | title          | document type | short title          | field_paragraphs_body                   | spatial coverage | keywords | collection       | state     |
       | Document omega | Document      | Document short delta | A document consists of epsilon strings. | Luxembourg       | Alphabet | Collection alpha | published |
 
     When I visit the search page
@@ -249,7 +249,7 @@ Feature: Global search
       | Event Omega       | Event short delta | The epsilon event content.          | Event agenda.  | Some place     | European Commission | International | Alphabet |                  | Solution alpha | published |
       | Alternative event | Alt event         | This event stays in the background. | To be planned. | Event location | Event organisation  |               |          | Collection alpha |                | published |
     And document content:
-      | title          | document type | short title          | body                                    | keywords | collection       | state     |
+      | title          | document type | short title          | field_paragraphs_body                   | keywords | collection       | state     |
       | Document omega | Document      | Document short delta | A document consists of epsilon strings. | Alphabet | Collection alpha | published |
     And discussion content:
       | title            | body                                                              | solution       | state     |
@@ -412,7 +412,7 @@ Feature: Global search
       | description              | Übermensch foot size            |
       | access url               | http://example.com/zzolu-distro |
       | licence                  | Apache-2.0                      |
-      | format                   | HTML                            |
+      | format                   | ZIP                             |
       | representation technique | Datalog                         |
       | state                    | published                       |
 
@@ -425,7 +425,7 @@ Feature: Global search
     When I enter "apache" in the search bar and press enter
     # Also the licence itself is retrieved.
     Then the page should show only the tiles "Apache-2.0,Zzolution"
-    When I enter "HTML" in the search bar and press enter
+    When I enter "ZIP" in the search bar and press enter
     Then the page should show only the tiles "Zzolution"
     When I enter "Datalog" in the search bar and press enter
     Then the page should show only the tiles "Zzolution"
@@ -506,7 +506,7 @@ Feature: Global search
       | description              | Dracula                           |
       | access url               | http://example.com/releazz-distro |
       | licence                  | Apache-2.0                        |
-      | format                   | HTML                              |
+      | format                   | ZIP                               |
       | representation technique | Datalog                           |
       | state                    | published                         |
 
@@ -519,7 +519,7 @@ Feature: Global search
     When I enter "apache" in the search bar and press enter
     # Also the licence itself is retrieved.
     Then the page should show only the tiles "Apache-2.0,Releazz"
-    When I enter "HTML" in the search bar and press enter
+    When I enter "ZIP" in the search bar and press enter
     Then the page should show only the tiles "Releazz"
     When I enter "Datalog" in the search bar and press enter
     Then the page should show only the tiles "Releazz"
@@ -764,7 +764,7 @@ Feature: Global search
       | title | Mice in space |
       | state | published     |
     And document content:
-      | title        | collection    | topic                                  | state     | logo     | body                                                                                                                                                                                            |
+      | title        | collection    | topic                                  | state     | logo     | field_paragraphs_body                                                                                                                                                                           |
       | Microgravity | Mice in space | HR, Statistics and Analysis, E-justice | published | alan.jpg | Conventional studies investigating the effects of reduced gravity on muscle mass and function have used a ground control group that is not directly comparable to the space experimental group. |
     And event content:
       | title           | collection    | topic                    | state     | logo        | body                                                                                                                                                                                  |
@@ -854,17 +854,17 @@ Feature: Global search
       | name  | Gor-to contact     |
       | email | gor-to@example.com |
     And the following collections:
-      | title             | description                                          | abstract                      | state     |
-      | Pull alpha        | <p>collection <strong>pull</strong> description.</p> | The collection pull abstract. | published |
-      | Col for Sol javi  | <p>collection for the solution javi.</p>             | Random abstract.              | published |
-      | Roll alpha        | <p>collection <strong>roll</strong> description.</p> | The collection roll abstract. | archived  |
-      | Col for Sol net   | <p>collection for the solution net.</p>              | Loky and Rocky.               | archived  |
+      | title            | description                                          | abstract                      | state     |
+      | Pull alpha       | <p>collection <strong>pull</strong> description.</p> | The collection pull abstract. | published |
+      | Col for Sol javi | <p>collection for the solution javi.</p>             | Random abstract.              | published |
+      | Roll alpha       | <p>collection <strong>roll</strong> description.</p> | The collection roll abstract. | archived  |
+      | Col for Sol net  | <p>collection for the solution net.</p>              | Loky and Rocky.               | archived  |
     And the following solutions:
-      | title         | description                                                | abstract                    | keywords | owner       | contact information | collection        | state     |
-      | Solution pull | <p>This is the solution <strong>pull</strong> description. | The solution pull abstract. | Alphabet | Renew owner | Gor-to contact      | Pull alpha        | published |
-      | Solution javi | <p>This is the solution <strong>javi</strong> description. |                             | Alphabet | Renew owner | Gor-to contact      | Col for Sol javi  | published |
-      | Solution roll | <p>This is the solution <strong>roll</strong> description. | The solution roll abstract. | Alphabet | Renew owner | Gor-to contact      | Roll alpha        | published |
-      | Solution net  | <p>This is the solution <strong>net</strong> description.  |                             | Alphabet | Renew owner | Gor-to contact      | Col for Sol net   | published |
+      | title         | description                                                | abstract                    | keywords | owner       | contact information | collection       | state     |
+      | Solution pull | <p>This is the solution <strong>pull</strong> description. | The solution pull abstract. | Alphabet | Renew owner | Gor-to contact      | Pull alpha       | published |
+      | Solution javi | <p>This is the solution <strong>javi</strong> description. |                             | Alphabet | Renew owner | Gor-to contact      | Col for Sol javi | published |
+      | Solution roll | <p>This is the solution <strong>roll</strong> description. | The solution roll abstract. | Alphabet | Renew owner | Gor-to contact      | Roll alpha       | published |
+      | Solution net  | <p>This is the solution <strong>net</strong> description.  |                             | Alphabet | Renew owner | Gor-to contact      | Col for Sol net  | published |
 
     When I visit the search page
     And I should see the "Pull alpha" tile

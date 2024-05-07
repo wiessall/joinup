@@ -35,7 +35,7 @@ Feature: Collection RSS feed.
       | Banana tasting           | Testing more than 20 varities of bananas from all over the world.                                                                                                                                                                                                                                                                                               | published | forest | 2018-09-14 07:36 | Indigo Monkey    |
       | Scissor sharpening party | <p>The place where to be if you want to keep <strong>cutting</strong> the paper at the best of your scissors <a href="http://www.example.com/">possibilities</a>.</p> <table><tr><td>Lorem ipsum dolor sit amet consectetur adipiscing elit. Etiam sed consectetur turpis. In porta lectus sit amet nulla feugiat et viverra massa fringilla.</td></tr></table> | published | otto   | 2017-11-26 14:18 | Dreaded Scissors |
     And document content:
-      | title                  | body                                                     | state     | author  | created          | collection    |
+      | title                  | field_paragraphs_body                                    | state     | author  | created          | collection    |
       | Indigo technical paper | All technical information about the rare indigo monkeys. | published | alejake | 2016-05-30 12:21 | Indigo Monkey |
     And discussion content:
       | title                                          | body                                                                                   | state     | author  | created          | collection    |

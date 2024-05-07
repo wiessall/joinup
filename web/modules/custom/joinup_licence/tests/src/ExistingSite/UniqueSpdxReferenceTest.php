@@ -18,7 +18,7 @@ class UniqueSpdxReferenceTest extends JoinupExistingSiteTestBase {
    * Test that references to SPDX licences are unique.
    */
   public function testUniqueSpdxReference(): void {
-    $licence_type = \Drupal::getContainer()->get('rdf_sync.mapper')->getEntityByUri('http://purl.org/adms/licencetype/Attribution');
+    $licence_type = \Drupal::getContainer()->get('rdf_sync.mapper')->getEntityByUri('http://purl.org/adms/licence/PD');
 
     $spdx = $this->createRdfEntity([
       'label' => 'Test SPDX',
