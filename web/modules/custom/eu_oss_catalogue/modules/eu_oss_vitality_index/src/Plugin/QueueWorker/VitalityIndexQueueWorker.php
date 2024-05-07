@@ -50,7 +50,7 @@ class VitalityIndexQueueWorker extends QueueWorkerBase implements ContainerFacto
    */
   public function processItem(mixed $data): void {
     $nodeStorage = $this->entityTypeManager->getStorage('node');
-    $solution = $nodeStorage->load($data['nid']);
+    $solution = $nodeStorage->load($data);
 
     if ($solution instanceof OssSolutionInterface) {
       $this->vitalityIndexGenerator->processSolution($solution);

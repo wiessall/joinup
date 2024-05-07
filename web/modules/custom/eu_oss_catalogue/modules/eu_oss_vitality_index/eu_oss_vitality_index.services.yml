@@ -4,3 +4,8 @@ services:
     arguments:
       - '@entity_type.manager'
       - '@logger.channel.eu_oss_catalogue'
+  eu_oss_vitality_index.queue:
+    class: Drupal\eu_oss_vitality_index\VitalityIndexQueue
+    arguments:
+      - '@database'
+      - '@queue'
