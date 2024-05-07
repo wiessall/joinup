@@ -79,6 +79,7 @@ class FilteredEntityReferenceBundlesFormatter extends EntityReferenceRevisionsEn
   public static function defaultSettings(): array {
     return [
       'filtered_entity_bundles' => [],
+      'trim_length' => 200,
     ] + parent::defaultSettings();
   }
 
@@ -98,6 +99,13 @@ class FilteredEntityReferenceBundlesFormatter extends EntityReferenceRevisionsEn
       '#default_value' => $this->getSetting('filtered_entity_bundles'),
       '#required' => TRUE,
       '#multiple' => TRUE,
+    ];
+
+    $elements['trim_length'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Trim length'),
+      '#default_value' => $this->getSetting('trim_length'),
+      '#required' => TRUE,
     ];
 
     return $elements;
@@ -141,7 +149,7 @@ class FilteredEntityReferenceBundlesFormatter extends EntityReferenceRevisionsEn
 
     $truncate = new TruncateHTML();
     return [
-      '#markup' => $truncate->truncateChars($text, 200),
+      '#markup' => $truncate->truncateChars($text, (int) $this->getSetting('trim_length')),
     ];
   }
 
