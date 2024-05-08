@@ -33,8 +33,8 @@
 
     <div class="page-title__details order-1">
       <span class="page-title__detail">{{ additional_content.author }}</span>
-      <span class="page-title__detail">{{ 'Published on'|t }}: {{ additional_content.publication_date }}</span>
-      {% if additional_content.publication_date != additional_content.updated %}
+      <span class="page-title__detail">{{ 'Published on'|t }}: {{ additional_content.published }}</span>
+      {% if additional_content.published != additional_content.updated %}
         <span class="page-title__detail">{{ 'Last update'|t }}: {{ additional_content.updated }}</span>
       {% endif %}
       <span class="page-title__detail">
