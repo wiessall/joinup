@@ -143,10 +143,8 @@ class UriIdConversion implements EventSubscriberInterface {
         ->fields('rdf_sync_uri', ['entity_type', 'entity_id'])
         ->condition('uri', $uri)
         ->execute()
-        ->fetch(\PDO::FETCH_NUM) ?: NULL;
-      // @todo Remove this temporary exception when ISAICP-8579 lands.
-      // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-8579
-      if (!$result && !isset(self::ISAICP_8579[$uri])) {
+        ->fetch(\PDO::FETCH_NUM);
+      if (!$result) {
         throw new \InvalidArgumentException("Can't find a mapped entity with URI $uri");
       }
       $this->uriToId[$uri] = $result;
@@ -178,11 +176,7 @@ class UriIdConversion implements EventSubscriberInterface {
         ->execute()
         ->fetchField() ?: NULL;
       if (!$uri) {
-        // @todo Re-enable the exception throwing when ISAICP-8579 lands.
-        // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-8579
-        // phpcs:disable
-        // throw new \InvalidArgumentException("Can't find a URI for $entityTypeId entity with ID $id");
-        // phpcs:enable
+        throw new \InvalidArgumentException("Can't find a URI for $entityTypeId entity with ID $id");
       }
       // Cache this match.
       $this->uriToId[$uri] = [$entityTypeId, $id];
