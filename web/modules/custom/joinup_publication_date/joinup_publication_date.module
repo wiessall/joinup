@@ -45,9 +45,11 @@ function joinup_publication_date_preprocess_page_title(array &$variables): void 
   $entity = $variables['entity'] ?? NULL;
 
   if ($entity instanceof EntityPublicationTimeInterface) {
+    $publicationTime = $entity->getPublicationTime() ?? $entity->getChangedTime();
+
     /** @var \Drupal\Core\Datetime\DateFormatterInterface $date_formatter */
     $dateFormatter = \Drupal::service('date.formatter');
-    $variables['additional_content']['published'] = $dateFormatter->format($entity->getPublicationTime(), 'date_only');
+    $variables['additional_content']['published'] = $dateFormatter->format($publicationTime, 'date_only');
     $variables['additional_content']['updated'] = $dateFormatter->format($entity->getChangedTime(), 'date_only');
   }
 }
