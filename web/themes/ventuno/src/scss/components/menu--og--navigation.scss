@@ -50,8 +50,8 @@
     }
   }
   .p-plus {
-    align-items: baseline;
     display: inline-flex;
+    align-items: baseline;
     .p-plus__toggle-btn {
       color: $primary;
       &:hover {
