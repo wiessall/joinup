@@ -74,8 +74,7 @@ class UpdateHelper implements ContainerInjectionInterface {
       $sandbox['nids'] = $nodeStorage->getQuery()
         ->accessCheck(FALSE)
         ->condition('type', $nodeTypes, 'IN')
-        ->execute()
-      ;
+        ->execute();
       $sandbox['max'] = count($sandbox['nids']);
       $sandbox['progress'] = 0;
     }
@@ -97,6 +96,9 @@ class UpdateHelper implements ContainerInjectionInterface {
     return "Processed {$sandbox['progress']} out of {$sandbox['max']} nodes";
   }
 
+  /**
+   * Updates the base tables of the paragraphs.
+   */
   private function updateBaseTables(): array {
     $layoutId = $this->db->insert('paragraphs_item')
       ->fields(['type', 'uuid', 'langcode'])
@@ -144,6 +146,9 @@ class UpdateHelper implements ContainerInjectionInterface {
     ];
   }
 
+  /**
+   * Updates the data tables of the paragraphs.
+   */
   private function updateSharedTables(array $ids, NodeInterface $node, string $destinationField): void {
     $now = $this->time->getRequestTime();
 
@@ -157,7 +162,15 @@ class UpdateHelper implements ContainerInjectionInterface {
       'parent_id' => $node->id(),
       'parent_type' => 'node',
       'parent_field_name' => $destinationField,
-      'behavior_settings' => serialize(['layout_paragraphs', ['layout' => 'layout_onecol', 'config' => ['label' => ''], 'parent_uuid' => NULL, 'region' => NULL]]),
+      'behavior_settings' => serialize([
+        'layout_paragraphs',
+        [
+          'layout' => 'layout_onecol',
+          'config' => ['label' => ''],
+          'parent_uuid' => NULL,
+          'region' => NULL,
+        ],
+      ]),
       'default_langcode' => 1,
       'revision_translation_affected' => 1,
     ];
@@ -171,11 +184,17 @@ class UpdateHelper implements ContainerInjectionInterface {
       'parent_id' => $node->id(),
       'parent_type' => 'node',
       'parent_field_name' => $destinationField,
-      'behavior_settings' => serialize(['layout_paragraphs', ['parent_uuid' => $ids['layoutUuid'], 'region' => 'content']]),
+      'behavior_settings' => serialize([
+        'layout_paragraphs',
+        ['parent_uuid' => $ids['layoutUuid'], 'region' => 'content'],
+      ]),
       'default_langcode' => 1,
       'revision_translation_affected' => 1,
     ];
-    foreach (['paragraphs_item_field_data', 'paragraphs_item_revision_field_data'] as $table) {
+    foreach ([
+      'paragraphs_item_field_data',
+      'paragraphs_item_revision_field_data',
+    ] as $table) {
       if ($table === 'paragraphs_item_revision_field_data') {
         unset($layoutValues['type']);
         unset($paragraphValues['type']);
@@ -188,6 +207,9 @@ class UpdateHelper implements ContainerInjectionInterface {
     }
   }
 
+  /**
+   * Updates the field dedicated tables of the paragraphs.
+   */
   private function updateParagraphDedicatedTable(array $ids, NodeInterface $node, string $sourceField): void {
     $values = [
       'bundle' => 'simple_paragraph',
@@ -206,6 +228,9 @@ class UpdateHelper implements ContainerInjectionInterface {
     }
   }
 
+  /**
+   * Create the connection between paragraphs and nodes.
+   */
   private function updateNodeDedicatedTables(array $ids, NodeInterface $node, string $destinationField): void {
     $layoutValues = [
       'bundle' => $node->bundle(),
