@@ -9,7 +9,9 @@ use Behat\Mink\Driver\BrowserKitDriver;
 use Behat\Mink\Driver\Selenium2Driver;
 use Behat\Mink\Exception\ElementNotFoundException;
 use Behat\Mink\Exception\UnsupportedDriverActionException;
+use Drupal\Core\Site\Settings;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
+use Drupal\joinup\Traits\EntityTrait;
 use GuzzleHttp\Client;
 use GuzzleHttp\Cookie\CookieJar;
 use GuzzleHttp\Cookie\SetCookie;
@@ -20,10 +22,61 @@ use PHPUnit\Framework\ExpectationFailedException;
  */
 class LinkContext extends RawDrupalContext {
 
+  use EntityTrait;
+
+  /**
+   * Asserts that a file downloaded from a link contains a list of strings.
+   *
+   * IMPORTANT NOTE: This step definition is not performing any file access
+   * check. The file content is read directly from the file system. The user
+   * access to the file should be tested in separate Behat steps.
+   *
+   * @param string $link_label
+   *   The link from where to download the file.
+   * @param \Behat\Gherkin\Node\TableNode $strings_table
+   *   A table with a single column. Each row contains a string.
+   *
+   * @throws \Exception
+   *     If the link has no href attribute or the file content cannot be loaded.
+   *
+   * @Then the file downloaded from the :link_label link contains the following strings:
+   */
+  public function assertDownloadedFileContainsStrings(string $link_label, TableNode $strings_table): void {
+    $url = $this->getUrl($link_label);
+
+    // Get the path part from the URL.
+    $path = rtrim(parse_url($url, PHP_URL_PATH), '/');
+    // Remove the base path.
+    $path = substr($path, strlen(base_path()));
+
+    // Drupal private file.
+    if (str_starts_with($path, 'system/files')) {
+      $path = Settings::get('file_private_path') . substr($path, 12);
+    }
+    // Webserver accessible file.
+    else {
+      $path = DRUPAL_ROOT . "/{$path}";
+    }
+
+    if (($content = file_get_contents($path)) === FALSE) {
+      throw new \Exception("Cannot read '{$path}' file.");
+    }
+
+    if (!$content) {
+      throw new \Exception("The downloaded file has no content.");
+    }
+
+    $not_found = $this->searchMissingContent($content, $strings_table);
+
+    if (!empty($not_found)) {
+      throw new ExpectationFailedException("Following strings were not found in the downloaded file:\n- " . implode("\n- ", $not_found));
+    }
+  }
+
   /**
    * Asserts that the linked content contains a list of strings.
    *
-   * @param string $link
+   * @param string $link_label
    *   The link from where to get the content.
    * @param \Behat\Gherkin\Node\TableNode $strings_table
    *   A table with a single column. Each row contains a string.
@@ -33,15 +86,10 @@ class LinkContext extends RawDrupalContext {
    * @throws \GuzzleHttp\Exception\GuzzleException
    *   If the connection to the link fails.
    *
-   * @Then the content received from clicking the link :link contains the following strings:
+   * @Then the content received from clicking the link :link_label contains the following strings:
    */
-  public function assertLinkedContentContainsStrings(string $link, TableNode $strings_table): void {
-    if (!$link = $this->getSession()->getPage()->findLink($link)) {
-      throw new ElementNotFoundException($this->getSession()->getDriver(), 'Link', NULL, $link);
-    }
-    if (!$url = $link->getAttribute('href')) {
-      throw new \Exception("The link '{$link}' misses a 'href' attribute.");
-    }
+  public function assertLinkedContentContainsStrings(string $link_label, TableNode $strings_table): void {
+    $url = $this->getUrl($link_label);
 
     // Send request.
     $client = new Client();
@@ -51,7 +99,43 @@ class LinkContext extends RawDrupalContext {
       throw new \Exception("The downloaded file has no content.");
     }
 
-    // Perform the tests comparing with the expected results.
+    $not_found = $this->searchMissingContent($content, $strings_table);
+    if (!empty($not_found)) {
+      throw new ExpectationFailedException("Following strings were not found in the linked content:\n- " . implode("\n- ", $not_found));
+    }
+  }
+
+  /**
+   * Get the referred URL in a link.
+   *
+   * @param string $link_label
+   * @return string
+   *
+   * @throws \Behat\Mink\Exception\ElementNotFoundException|\Exception
+   *    If the link has no href attribute or the file content cannot be loaded.
+   */
+  protected function getUrl(string $link_label): string {
+    if (!$link = $this->getSession()->getPage()->findLink($link_label)) {
+      throw new ElementNotFoundException($this->getSession()->getDriver(), 'Link', NULL, $link_label);
+    }
+    if (!$url = $link->getAttribute('href')) {
+      throw new \Exception("The link '{$link_label}' misses an 'href' attribute.");
+    }
+
+    return $url;
+  }
+
+  /**
+   * Perform the tests comparing with the expected results.
+   *
+   * @param string $content
+   *   The content to compare.
+   * @param \Behat\Gherkin\Node\TableNode $strings_table
+   *    A table with a single column. Each row contains a string.
+   * @return array
+   *    The missing rows.
+   */
+  protected function searchMissingContent(string $content, TableNode $strings_table ): array {
     $not_found = [];
     foreach ($strings_table->getColumn(0) as $text) {
       $matches = [];
@@ -59,13 +143,11 @@ class LinkContext extends RawDrupalContext {
         $entity = $this->getEntityByLabel('rdf_entity', $matches[1]);
         $text = str_replace("%{$matches[1]}%", $entity->id(), $text);
       }
-      if (strpos($content, $text) === FALSE) {
+      if (!str_contains($content, $text)) {
         $not_found[] = $text;
       }
     }
-    if (!empty($not_found)) {
-      throw new ExpectationFailedException("Following strings were not found in the linked content:\n- " . implode("\n- ", $not_found));
-    }
+    return $not_found;
   }
 
   /**
