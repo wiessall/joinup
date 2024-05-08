@@ -62,7 +62,7 @@ class OssContentNegotiation extends LanguageNegotiationContentEntity {
   /**
    * {@inheritdoc}
    */
-  protected function meetsContentEntityRoutesCondition(Route $outbound_route, Request $request) {
+  protected function meetsContentEntityRoutesCondition(Route $outbound_route, Request $request): bool {
     // The parent class requires that the current path/request must be an entity
     // route of the same type as the outbound route.
     // We are not in the same use case as we also want to alter routes when we
