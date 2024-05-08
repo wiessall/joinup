@@ -442,3 +442,43 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
     Then I should see the text "Definition bold italic underline list 1list 2"
     And the page should contain the html text "Definition <strong>bold</strong> <em>italic</em> <u>underline</u> <ul><li>list 1</li><li>list 2</li></ul>"
 
+  Scenario: Provide CSV download link for users with access.
+    Given users:
+      | Username | Roles     |
+      | regular  |           |
+      | fac      |           |
+      | mod      | moderator |
+    And the following collections:
+      | title                    | description                   | abstract                         | state     | uri                      |
+      | Collection With Glossary | The Battle of Evermore again. | The Battle of Evermore abstract. | published | http://collection-battle |
+    And the following collection user membership:
+      | collection               | user | roles       |
+      | Collection With Glossary | fac  | facilitator |
+    And glossary content:
+      | title                | synonyms | summary          | definition | collection               |
+      | battle               | evermore | battle summary   | def        | Collection With Glossary |
+      | another battle       |          | battle 2 summary | def        | Collection With Glossary |
+
+    Given I am logged in as mod
+    When I go to the "Collection With Glossary" collection
+    When I click "Glossary"
+    Then the content received from clicking the link "Download CSV" contains the following strings:
+      | Title,Synonym,Definition             |
+      | battle,evermore,"battle summary"     |
+      | "another battle",,"battle 2 summary" |
+
+    Given I am logged in as fac
+    When I go to the "Collection With Glossary" collection
+    When I click "Glossary"
+    Then the content received from clicking the link "Download CSV" contains the following strings:
+      | Title,Synonym,Definition             |
+      | battle,evermore,"battle summary"     |
+      | "another battle",,"battle 2 summary" |
+
+    Given I am logged in as regular
+    When I am on "/collection/http_e_f_fcollection_bbattle/glossary_export?page&_format=csv"
+    Then the response status code should be 404
+
+    Given I am an anonymous user
+    When I am on "/collection/http_e_f_fcollection_bbattle/glossary_export?page&_format=csv"
+    Then the response status code should be 404
