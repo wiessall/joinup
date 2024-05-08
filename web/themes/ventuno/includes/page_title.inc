@@ -27,14 +27,6 @@ function ventuno_preprocess_page_title(array &$variables): void {
 
     $author_inline = _ventuno_get_author($entity);
     $variables['additional_content']['author'] = $author_inline;
-
-    /** @var \Drupal\Core\Datetime\DateFormatterInterface $date_formatter */
-    $date_formatter = \Drupal::service('date.formatter');
-    $published = $date_formatter->format($entity->published_at->published_at_or_created, 'date_only');
-    $variables['additional_content']['published'] = $published;
-
-    $update_date = $date_formatter->format($entity->getChangedTime(), 'date_only');
-    $variables['additional_content']['updated'] = $update_date;
   }
 
   if (\Drupal::routeMatch()->getRouteName() === 'entity.rdf_entity.eif_perspective') {
@@ -122,9 +114,6 @@ function ventuno_preprocess_page_title__node__document(&$variables): void {
   $date_formatter = \Drupal::service('date.formatter');
   $field_document_publication_date = $node->getPublicationTime();
   $variables['additional_content']['publication_date'] = empty($field_document_publication_date) ? '' : $date_formatter->format($field_document_publication_date, 'custom', 'd/m/Y');
-
-  $update_date = $date_formatter->format($node->getChangedTime(), 'custom', 'd/m/Y');
-  $variables['additional_content']['updated'] = $update_date;
 
   $field_short_title = $view_builder->viewField($node->field_short_title, 'default');
   $variables['additional_content']['field_short_title'] = $field_short_title;
