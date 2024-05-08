@@ -32,6 +32,9 @@
     justify-content: flex-end;
     width: 100%;
     .dropdown-menu {
+      border-top: 0;
+      margin-top: 0;
+      margin-right: -1px;
       @include media-breakpoint-up(xl) {
         &--sub {
           --bs-dropdown-link-hover-bg: var( --bs-gray-300);
@@ -73,16 +76,15 @@
       vertical-align: baseline;
       &.is-active,
       &:hover {
-        box-shadow: 0 -2px 0 0 $white inset;
+        box-shadow: 0 -3px 0 0 $white inset;
       }
     }
     @include media-breakpoint-up(sm) {
-      padding: ($spacer * 1.75) $spacer; // 12px 28px
+      padding: ($spacer * 1.8) $spacer; // 12px 28.8px
     }
   }
   .dropdown-menu {
     z-index: 5; // Ensure the search icon stays below on small devices
-    padding: 1px 0 0 0;
     white-space: nowrap;
     border-top-left-radius: 0;
     border-top-right-radius: 0;
@@ -104,7 +106,7 @@
     &.show,
     &.is-active,
     &:has(+ ul a.is-active) {
-      box-shadow: 0 -2px 0 0 $white inset;
+      box-shadow: 0 -3px 0 0 $white inset;
     }
     &::after {
       display: none!important; // Dropdown resets
