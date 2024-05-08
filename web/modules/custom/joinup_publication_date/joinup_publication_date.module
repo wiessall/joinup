@@ -45,11 +45,23 @@ function joinup_publication_date_preprocess_page_title(array &$variables): void 
   $entity = $variables['entity'] ?? NULL;
 
   if ($entity instanceof EntityPublicationTimeInterface) {
-    $publicationTime = $entity->getPublicationTime() ?? $entity->getChangedTime();
-
-    /** @var \Drupal\Core\Datetime\DateFormatterInterface $date_formatter */
-    $dateFormatter = \Drupal::service('date.formatter');
-    $variables['additional_content']['published'] = $dateFormatter->format($publicationTime, 'date_only');
-    $variables['additional_content']['updated'] = $dateFormatter->format($entity->getChangedTime(), 'date_only');
+    _joinup_publication_add_content_dates($entity, $variables);
   }
+}
+
+/**
+ * Ads content dates.
+ *
+ * @param \Drupal\joinup_publication_date\Entity\EntityPublicationTimeInterface $entity
+ *   Entity.
+ * @param array $variables
+ *   Render variables.
+ */
+function _joinup_publication_add_content_dates(EntityPublicationTimeInterface $entity, array &$variables): void {
+  $publicationTime = $entity->getPublicationTime() ?? $entity->getChangedTime();
+
+  /** @var \Drupal\Core\Datetime\DateFormatterInterface $date_formatter */
+  $dateFormatter = \Drupal::service('date.formatter');
+  $variables['additional_content']['published'] = $dateFormatter->format($publicationTime, 'date_only');
+  $variables['additional_content']['updated'] = $dateFormatter->format($entity->getChangedTime(), 'date_only');
 }
