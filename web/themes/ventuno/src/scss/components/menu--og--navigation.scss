@@ -51,6 +51,7 @@
   }
   .p-plus {
     align-items: baseline;
+    display: inline-flex;
     .p-plus__toggle-btn {
       color: $primary;
       &:hover {
