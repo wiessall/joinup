@@ -41,9 +41,66 @@ function joinup_rdf_requirements(string $phase): array {
 }
 
 /**
- * Delete SPDX Licence & Licence RDF entities.
+ * Release EIRA references.
  */
 function joinup_rdf_update_110500(): void {
+  $sparql = \Drupal::getContainer()->get('sparql.endpoint');
+
+  $idToUri = \Drupal::database()->select('rdf_sync_uri')
+    ->fields('rdf_sync_uri', ['entity_id', 'uri'])
+    ->condition('entity_type', 'taxonomy_term')
+    ->condition('bundle', 'eira')
+    ->execute()
+    ->fetchAllKeyed();
+
+  $query = <<<QUERY
+    SELECT ?g ?s ?o
+    WHERE {
+      GRAPH ?g {
+        ?s <http://joinup.eu/test_resource_type> ?o .
+        FILTER ( REGEX(?o, "^\\\d+$") ) .
+      }
+    }
+    QUERY;
+
+  $rows = [];
+  foreach ($sparql->query($query) as $row) {
+    $rows[$row->g->getUri()][$row->s->getUri()][] = $row->o->getUri();
+  }
+
+  $cleanup = <<<CLEANUP
+    WITH <%s>
+    DELETE { ?s <http://joinup.eu/test_resource_type> ?o }
+    WHERE {
+      ?s <http://joinup.eu/test_resource_type> ?o .
+      FILTER ( ?s IN(%s) ) .
+    }
+    CLEANUP;
+
+  foreach ($rows as $graph => $triples) {
+    $insert = ["INSERT DATA INTO <$graph> {"];
+    $sparql->update(
+      sprintf(
+        $cleanup,
+        $graph,
+        '<' . implode('>, <', array_keys($triples)) . '>'
+      )
+    );
+    foreach ($triples as $subject => $objects) {
+      foreach ($objects as $object) {
+        $uri = $idToUri[$object];
+        $insert[] = "<$subject> <http://joinup.eu/test_resource_type> <$uri> .";
+      }
+    }
+    $insert[] = '}';
+    $sparql->update(implode("\n", $insert));
+  }
+}
+
+/**
+ * Delete SPDX Licence & Licence RDF entities.
+ */
+function joinup_rdf_update_110501(): void {
   // Save licences in a temporary file because we need to delete the content
   // prior to delete the bundle configs. Data will be restored later, in a
   // deploy hook.
@@ -58,7 +115,7 @@ function joinup_rdf_update_110500(): void {
 /**
  * Store document > licence data.
  */
-function joinup_rdf_update_110501(): void {
+function joinup_rdf_update_110502(): void {
   $db = \Drupal::database();
   $documentToLicence = $db->select('node__field_licence', 'l')
     ->fields('l', ['entity_id', 'field_licence_target_id'])
@@ -72,7 +129,7 @@ function joinup_rdf_update_110501(): void {
 /**
  * Delete leftover path aliases of licence RDF entities.
  */
-function joinup_rdf_update_110502(&$sandbox): string {
+function joinup_rdf_update_110503(&$sandbox): string {
   if (!isset($sandbox['ids'])) {
     $sandbox['ids'] = \Drupal::database()->select('path_alias', 'pa')
       ->fields('pa', ['id'])
@@ -98,7 +155,7 @@ function joinup_rdf_update_110502(&$sandbox): string {
 /**
  * Remove EIF perspective data.
  */
-function joinup_rdf_update_110503(): void {
+function joinup_rdf_update_110504(): void {
   $db = \Drupal::database();
   $perms = [
     'create eif wrapper entity',
@@ -151,7 +208,7 @@ function joinup_rdf_update_110503(): void {
 /**
  * Dismantle federation.
  */
-function joinup_rdf_update_110504(): void {
+function joinup_rdf_update_110505(): void {
   // Anticipate removal of permissions from moderator role to avoid errors on
   // configuration synchronization.
   $db = \Drupal::database();
