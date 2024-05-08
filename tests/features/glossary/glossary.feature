@@ -460,6 +460,8 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
       | another battle       |          | battle 2 summary | def        | Collection With Glossary |
 
     Given I am logged in as mod
+    When I am on "/collection/http_e_f_fcollection_bbattle/glossary_export?page&_format=csv"
+    Then the response status code should be 200
     When I go to the "Collection With Glossary" collection
     When I click "Glossary"
     Then the content received from clicking the link "Download CSV" contains the following strings:
@@ -468,6 +470,8 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
       | "another battle",,"battle 2 summary" |
 
     Given I am logged in as fac
+    When I am on "/collection/http_e_f_fcollection_bbattle/glossary_export?page&_format=csv"
+    Then the response status code should be 200
     When I go to the "Collection With Glossary" collection
     When I click "Glossary"
     Then the content received from clicking the link "Download CSV" contains the following strings:
