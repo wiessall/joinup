@@ -493,10 +493,6 @@
                     "reference": "master"
                 }
             }
-        },
-        {
-            "type": "vcs",
-            "url": "https://github.com/ec-europa/virtuoso.git"
         }
     ]
 }
