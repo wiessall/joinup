@@ -1,4 +1,4 @@
-@api @group-clone
+@api @group-a
 Feature: Add a licence through the UI
   In order to manage licences
   As a moderator or a licence manager
@@ -21,37 +21,37 @@ Feature: Add a licence through the UI
       | Description field is required.    |
       | Type field is required.           |
 
-    When I fill in "Title" with "The Licence To Rule Them All"
+    When I fill in "Title" with "GNU GPL 2+"
     And I fill in "Description" with "The classic open source licence without copyleft."
     # Ensure that the Type field is a dropdown.
     # @see: https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3342
     And I select "Public domain" from "Type"
-    And I select "LaTeX Project Public License v1.0" from "Corresponding SPDX licence"
+    And I select "GNU General Public License v2.0 or later" from "Corresponding SPDX licence"
     And I select "Strong Community" from "Licence legal type"
     And I additionally select "Venue fixed" from "Licence legal type"
     And I press "Save"
-    And I should see the heading "The Licence To Rule Them All"
+    Then I should have 1 licence
+    And I should see the heading "GNU GPL 2+"
     And I should see the text "The classic open source licence without copyleft."
     And I should see the text "Type"
     And I should see the text "Public domain"
     And I should see the text "Corresponding SPDX licence"
-    And I should see the text "LaTeX Project Public License v1.0"
+    And I should see the text "GNU General Public License v2.0 or later"
     And I should see the text "Licence legal type"
     And I should see the text "Strong Community"
     And I should see the text "Venue fixed"
     And I should see the text "Licence ID"
-    And I should see the text "MIT"
+    And I should see the text "GPL-2.0-or-later"
     And I should see the text "See also"
-    And I should see the link "http://www.latex-project.org/lppl/lppl-1-0.txt"
+    And I should see the link "https://opensource.org/licenses/GPL-2.0"
     # Check that the licence text is displayed as paragraphs, and not as a wall
     # of text.
-    And I should see a paragraph containing the text "LaTeX Project Public License"
-    And I should see a paragraph containing the text "LPPL Version 1.0 1999-03-01"
-    And I should see a paragraph containing the text "Copyright 1999 LaTeX3 Project"
-    And I should see a paragraph containing the text "Everyone is permitted to copy"
+    And I should see a paragraph containing the text "GNU GENERAL PUBLIC LICENSE"
+    And I should see a paragraph containing the text "Copyright (C) 1989, 1991 Free Software Foundation, Inc."
+    And I should see a paragraph containing the text "Everyone is permitted to copy and distribute verbatim copies of this license document, but changing it is not allowed."
 
     # Clean up the licence that was created through the UI.
-    Then I delete the "The Licence To Rule Them All" licence
+    Then I delete the "GNU GPL 2+" licence
 
     Examples:
       | role            |
