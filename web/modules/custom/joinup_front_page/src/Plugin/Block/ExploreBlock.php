@@ -6,7 +6,6 @@ namespace Drupal\joinup_front_page\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Url;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -35,21 +34,7 @@ class ExploreBlock extends BlockBase implements ContainerFactoryPluginInterface 
    *
    * @var string
    */
-  protected $viewMode = 'explore_item';
-
-  /**
-   * The entity manager.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
-
-  /**
-   * The messenger.
-   *
-   * @var \Drupal\Core\Messenger\MessengerInterface
-   */
-  protected $messenger;
+  protected string $viewMode = 'explore_item';
 
   /**
    * Constructs a new ExploreItemBlock instance.
@@ -63,15 +48,11 @@ class ExploreBlock extends BlockBase implements ContainerFactoryPluginInterface 
    *   The plugin_id for the plugin instance.
    * @param mixed $plugin_definition
    *   The plugin implementation definition.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_manager
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity manager.
-   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
-   *   The messenger.
    */
-  public function __construct(array $configuration, string $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_manager, MessengerInterface $messenger) {
+  public function __construct(array $configuration, string $plugin_id, $plugin_definition, protected EntityTypeManagerInterface $entityTypeManager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
-    $this->entityTypeManager = $entity_manager;
-    $this->messenger = $messenger;
   }
 
   /**
@@ -83,7 +64,6 @@ class ExploreBlock extends BlockBase implements ContainerFactoryPluginInterface 
       $plugin_id,
       $plugin_definition,
       $container->get('entity_type.manager'),
-      $container->get('messenger')
     );
   }
 
@@ -137,7 +117,7 @@ class ExploreBlock extends BlockBase implements ContainerFactoryPluginInterface 
   /**
    * {@inheritdoc}
    */
-  public function getCacheContexts() {
+  public function getCacheContexts(): array {
     // This block shows fixed content which doesn't vary by any context.
     return [];
   }
@@ -145,7 +125,7 @@ class ExploreBlock extends BlockBase implements ContainerFactoryPluginInterface 
   /**
    * {@inheritdoc}
    */
-  public function getCacheMaxAge() {
+  public function getCacheMaxAge(): int {
     // Refresh the content at least once every 6 hours.
     return 60 * 60 * 6;
   }
@@ -153,7 +133,7 @@ class ExploreBlock extends BlockBase implements ContainerFactoryPluginInterface 
   /**
    * {@inheritdoc}
    */
-  public function getCacheTags() {
+  public function getCacheTags(): array {
     // Since this block is shown on the front page it should not be invalidated
     // whenever any of the content types shown in it change. The front page is
     // heavily trafficked and too frequent cache invalidations might affect
@@ -182,7 +162,7 @@ class ExploreBlock extends BlockBase implements ContainerFactoryPluginInterface 
     $ids = $query->condition('status', 1)
       ->condition('type', $type)
       ->condition('field_state', 'archived', '<>')
-      ->sort('created', 'DESC')
+      ->sort('changed', 'DESC')
       ->range(0, 12)
       ->execute();
 
@@ -216,7 +196,7 @@ class ExploreBlock extends BlockBase implements ContainerFactoryPluginInterface 
     $ids = $query->condition('rid', $type)
       ->condition($field_state, 'archived', '!=')
       ->graphs(['default'])
-      ->sort('created', 'DESC')
+      ->sort('changed', 'DESC')
       ->range(0, 12)
       ->execute();
 

@@ -95,12 +95,22 @@ third_party_settings:
                   class: ''
                   style: ''
                   data: ''
-          0fa88de7-8206-43f9-b5c6-55ead1f72ff5:
-            uuid: 0fa88de7-8206-43f9-b5c6-55ead1f72ff5
+          cfb0335f-0df9-4e8c-bafe-65b6909590ae:
+            uuid: cfb0335f-0df9-4e8c-bafe-65b6909590ae
             region: content
             configuration:
-              id: 'field_block:rdf_entity:collection:created'
-              label: 'Authored on'
+              id: 'extra_field_block:rdf_entity:collection:read_more'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+            weight: 4
+            additional: {  }
+          db5cc584-5eab-4118-a1fe-ecdafa832dbe:
+            uuid: db5cc584-5eab-4118-a1fe-ecdafa832dbe
+            region: content
+            configuration:
+              id: 'field_block:rdf_entity:collection:changed'
+              label: 'Changed on'
               label_display: '0'
               provider: layout_builder
               context_mapping:
@@ -122,6 +132,7 @@ third_party_settings:
                     past_format: '@interval ago'
                     granularity: 2
                     refresh: 60
+                    description: ''
                 third_party_settings:
                   template_suggestion:
                     template_suggestion: ''
@@ -143,16 +154,6 @@ third_party_settings:
                   class: ''
                   style: ''
                   data: ''
-          cfb0335f-0df9-4e8c-bafe-65b6909590ae:
-            uuid: cfb0335f-0df9-4e8c-bafe-65b6909590ae
-            region: content
-            configuration:
-              id: 'extra_field_block:rdf_entity:collection:read_more'
-              label_display: '0'
-              context_mapping:
-                entity: layout_builder.entity
-            weight: 3
-            additional: {  }
         third_party_settings: {  }
 id: rdf_entity.collection.explore_item
 targetEntityType: rdf_entity
