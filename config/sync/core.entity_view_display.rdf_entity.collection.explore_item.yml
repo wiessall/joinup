@@ -132,7 +132,6 @@ third_party_settings:
                     past_format: '@interval ago'
                     granularity: 2
                     refresh: 60
-                    description: ''
                 third_party_settings:
                   template_suggestion:
                     template_suggestion: ''
