@@ -66,6 +66,7 @@ Feature: Asset distribution editing.
       | Some other LGPL | The LGPL more permisssive than GPL. | yes        |
     When I am logged in as a facilitator of the "Solution A" solution
     And I go to the homepage of the "Asset distribution example" asset distribution
+    And I click "Edit"
     Then I should see the heading "Edit Distribution Asset distribution example"
     And the following fields should not be present "Langcode, Translation"
     But the following fields should be present "Description, Access URL, Licence, Format, Status, Representation technique"
