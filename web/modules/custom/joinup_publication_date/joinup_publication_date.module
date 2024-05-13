@@ -45,7 +45,7 @@ function joinup_publication_date_preprocess_page_title(array &$variables): void 
   $entity = $variables['entity'] ?? NULL;
 
   if ($entity instanceof EntityPublicationTimeInterface) {
-    _joinup_publication_add_content_dates($entity, $variables);
+    joinup_publication_date_add_content_dates($entity, $variables);
   }
 }
 
@@ -57,7 +57,7 @@ function joinup_publication_date_preprocess_page_title(array &$variables): void 
  * @param array $variables
  *   Render variables.
  */
-function _joinup_publication_add_content_dates(EntityPublicationTimeInterface $entity, array &$variables): void {
+function joinup_publication_date_add_content_dates(EntityPublicationTimeInterface $entity, array &$variables): void {
   $publicationTime = $entity->getPublicationTime() ?? $entity->getChangedTime();
 
   /** @var \Drupal\Core\Datetime\DateFormatterInterface $date_formatter */

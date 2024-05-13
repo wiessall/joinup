@@ -405,6 +405,6 @@ function asset_release_preprocess_rdf_entity__asset_release__compact(array &$var
   $entity = $variables['rdf_entity'] ?? NULL;
 
   if ($entity instanceof EntityPublicationTimeInterface) {
-    _joinup_publication_add_content_dates($entity, $variables);
+    joinup_publication_date_add_content_dates($entity, $variables);
   }
 }
