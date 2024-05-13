@@ -5,6 +5,8 @@ dependencies:
   config:
     - field.storage.taxonomy_term.field_taxonomy_related_term
     - taxonomy.vocabulary.eira
+  module:
+    - rdf_sync
 third_party_settings:
   rdf_sync:
     target_id:

@@ -36,3 +36,54 @@ function joinup_rdf_requirements(string $phase): array {
 
   return $requirements;
 }
+
+/**
+ * Release EIRA references.
+ */
+function joinup_rdf_update_110500(): void {
+  $sparql = \Drupal::getContainer()->get('sparql.endpoint');
+
+  $idToUri = \Drupal::database()->select('rdf_sync_uri')
+    ->fields('rdf_sync_uri', ['entity_id', 'uri'])
+    ->condition('entity_type', 'taxonomy_term')
+    ->condition('bundle', 'eira')
+    ->execute()
+    ->fetchAllKeyed();
+
+  $query = <<<QUERY
+    SELECT ?g ?s ?o
+    WHERE {
+      GRAPH ?g {
+        ?s <http://joinup.eu/test_resource_type> ?o .
+        FILTER ( REGEX(?o, "^\\\d+$") ) .
+      }
+    }
+    QUERY;
+
+  $rows = [];
+  foreach ($sparql->query($query) as $row) {
+    $rows[$row->g->getUri()][$row->s->getUri()][] = $row->o->getUri();
+  }
+
+  $cleanup = <<<CLEANUP
+    WITH <%s>
+    DELETE { ?s <http://joinup.eu/test_resource_type> ?o }
+    WHERE {
+      ?s <http://joinup.eu/test_resource_type> ?o .
+      FILTER ( ?s IN(%s) ) .
+    }
+    CLEANUP;
+
+  foreach ($rows as $graph => $triples) {
+    $insert = ["INSERT DATA INTO <$graph> {"];
+    $sparql->update(sprintf($cleanup, $graph, '<' . implode('>, <', array_keys($triples)) . '>'));
+    foreach ($triples as $subject => $objects) {
+      foreach ($objects as $object) {
+        $uri = $idToUri[$object];
+        $insert[] = "<$subject> <http://joinup.eu/test_resource_type> <$uri> .";
+      }
+    }
+    $insert[] = '}';
+    $sparql->update(implode("\n", $insert));
+  }
+}
