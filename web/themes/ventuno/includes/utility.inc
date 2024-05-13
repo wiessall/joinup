@@ -155,9 +155,13 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
       break;
 
     case 'asset_distribution':
-      //TODO?
-//      $variables['info']['icon'] = 'file-earmark-medical';
-//      $variables['info']['label'] = $variables['content']['field_ad_licence'];
+      $variables['text']['icon'] = [
+        '#type' => 'pattern',
+        '#id' => 'icon',
+        '#name' => 'file-earmark-medical',
+        '#size' => 'xs',
+      ];
+      $variables['text']['label'] = $variables['content']['field_ad_licence'];
       break;
 
     case 'asset_release':
