@@ -79,13 +79,7 @@ function joinup_rdf_update_110500(): void {
 
   foreach ($rows as $graph => $triples) {
     $insert = ["INSERT DATA INTO <$graph> {"];
-    $sparql->update(
-      sprintf(
-        $cleanup,
-        $graph,
-        '<' . implode('>, <', array_keys($triples)) . '>'
-      )
-    );
+    $sparql->update(sprintf($cleanup, $graph, '<' . implode('>, <', array_keys($triples)) . '>'));
     foreach ($triples as $subject => $objects) {
       foreach ($objects as $object) {
         $uri = $idToUri[$object];
