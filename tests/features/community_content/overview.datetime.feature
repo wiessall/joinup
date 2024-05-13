@@ -110,5 +110,5 @@ Feature:
       | field_body:format | content_editor          |
     And I press "Save as draft"
     Then I should see the heading "POLI"
-    # The "Published on" is empty and the Last update points to the current date.
-    And I should see text matching "Published on\: Last update\: \d{2}/\d{2}/\d{4}"
+    And I should see text matching "Published on: \d{2}/\d{2}/\d{4}"
+    And I should not see the text "Last update"
