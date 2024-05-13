@@ -37,8 +37,14 @@ class AboutPathRedirectSubscriber extends HttpExceptionSubscriberBase {
       return;
     }
 
-    $url = Url::createFromRequest(Request::create($pathWithoutSuffix));
-    $event->setResponse(new LocalRedirectResponse($url->toString(), Response::HTTP_PERMANENTLY_REDIRECT));
+    try {
+      $url = Url::createFromRequest(Request::create($pathWithoutSuffix));
+      $event->setResponse(new LocalRedirectResponse($url->toString(), Response::HTTP_PERMANENTLY_REDIRECT));
+    }
+    catch (\Exception) {
+      // Do not log errors if a redirect route could not be generated.
+      return;
+    }
   }
 
   /**

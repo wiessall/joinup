@@ -46,21 +46,24 @@ Feature: "Add document" visibility options.
     When I go to the homepage of the "Winter of Beginning" solution
     And I click "Add document" in the plus button menu
     Then I should see the heading "Add document"
-    And the following fields should be present "Title, Short title, Type, Topic, Search keywords, Geographical coverage, Licence, Description, Upload a new file or enter a URL"
+    And the following fields should be present "Title, Short title, Abstract, Body, Type, Topic, Search keywords, Geographical coverage, Licence, Upload a new file or enter a URL"
     And the following fields should not be present "Shared on, Motivation"
 
     When I fill in the following:
       | Title       | The Sparks of the Butterfly |
       | Short title | Amazing document            |
+      | Abstract    | Amazing document            |
     And I select "Document" from "Type"
     Then I upload the file "test1.zip" to "Upload a new file or enter a URL"
     And I press "Save as draft"
     Then I should see the following error messages:
       | error messages                 |
-      | Description field is required. |
       | Topic field is required.       |
+      | This value should not be null. |
 
-    When I enter "This is going to be an amazing document." in the "Description" wysiwyg editor
+    When I append "text" to "field_paragraphs_body" layout paragraphs field
+      | field_body:value  | This is going to be an amazing document. |
+      | field_body:format | content_editor                           |
     And I select "EU and European Policies" from "Topic"
     And I press "Save as draft"
     Then I should see the heading "The Sparks of the Butterfly"

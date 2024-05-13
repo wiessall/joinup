@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bc7d1cae9ea0d6e82ee496e9a667d4eb",
+    "content-hash": "3c198f9726d372bf8b10e08de214ae70",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -7083,17 +7083,17 @@
         },
         {
             "name": "drupal/rdf_sync",
-            "version": "1.0.0-alpha8",
+            "version": "1.0.0-alpha10",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/rdf_sync.git",
-                "reference": "1.0.0-alpha8"
+                "reference": "1.0.0-alpha10"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/rdf_sync-1.0.0-alpha8.zip",
-                "reference": "1.0.0-alpha8",
-                "shasum": "bd736dd3bc83bb721f2cb59f9a47bcdbf3353003"
+                "url": "https://ftp.drupal.org/files/projects/rdf_sync-1.0.0-alpha10.zip",
+                "reference": "1.0.0-alpha10",
+                "shasum": "bfbd6d26c1850f4b0b2bc3800a90ec934c1866ac"
             },
             "require": {
                 "drupal/core": ">=10.2",
@@ -7103,8 +7103,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "1.0.0-alpha8",
-                    "datestamp": "1712071526",
+                    "version": "1.0.0-alpha10",
+                    "datestamp": "1715064844",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Project has not opted into security advisory coverage!"
