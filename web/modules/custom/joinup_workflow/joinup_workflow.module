@@ -301,7 +301,7 @@ function joinup_workflow_entity_create(EntityInterface $entity) {
 /**
  * Implements hook_preprocess_page_title().
  */
-function joinup_workflow_page_title(array &$variables): void {
+function joinup_workflow_preprocess_page_title(array &$variables): void {
   $entity = $variables['entity'] ?? NULL;
 
   if ($entity instanceof ArchivableEntityInterface) {
