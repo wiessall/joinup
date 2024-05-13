@@ -4,6 +4,7 @@ status: true
 dependencies:
   config:
     - core.entity_view_display.comment.comment.default
+    - field.field.node.news.abstract
     - field.field.node.news.body
     - field.field.node.news.field_attachment
     - field.field.node.news.field_comments
@@ -13,6 +14,7 @@ dependencies:
     - field.field.node.news.field_news_referenced_solution
     - field.field.node.news.field_news_source_url
     - field.field.node.news.field_news_spatial_coverage
+    - field.field.node.news.field_paragraphs_body
     - field.field.node.news.field_shared_in
     - field.field.node.news.field_site_featured
     - field.field.node.news.field_state
@@ -26,6 +28,7 @@ dependencies:
     - field_formatter_range
     - field_group
     - file
+    - layout_paragraphs
     - link
     - svg_image
     - template_suggestion
@@ -139,6 +142,23 @@ content:
         template_suggestion: fieldset
     weight: 3
     region: content
+  field_paragraphs_body:
+    type: layout_paragraphs
+    label: hidden
+    settings:
+      view_mode: default
+      link: ''
+    third_party_settings:
+      field_delimiter:
+        delimiter: ''
+      field_formatter_range:
+        order: 0
+        limit: 0
+        offset: 0
+      template_suggestion:
+        template_suggestion: bare
+    weight: 1
+    region: content
   field_shared_in:
     type: entity_reference_entity_view
     label: above
@@ -170,6 +190,7 @@ content:
     weight: 4
     region: content
 hidden:
+  abstract: true
   featured: true
   field_keywords: true
   field_news_spatial_coverage: true
