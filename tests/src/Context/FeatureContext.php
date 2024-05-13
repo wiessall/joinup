@@ -803,31 +803,6 @@ class FeatureContext extends RawDrupalContext {
   }
 
   /**
-   * Checks whether an element with a CSS selector can be found on the page.
-   *
-   * @param string $selector
-   *   The CSS selector of the element.
-   *
-   * @return \Behat\Mink\Element\NodeElement
-   *   The first node element on the page matching the selector.
-   *
-   * @throws \Exception
-   *   If the element cannot be found.
-   *
-   * @Then the page should have an element with CSS selector :selector
-   */
-  public function getElementByCss(string $selector): NodeElement {
-    if ($element = $this->getSession()->getPage()->find('css', $selector)) {
-      return $element;
-    }
-
-    throw new \Exception(sprintf(
-      "Element with CSS selector '%s' could not be found on the page",
-      $selector
-    ));
-  }
-
-  /**
    * Click on an element by css class.
    *
    * @param string $element
@@ -836,7 +811,7 @@ class FeatureContext extends RawDrupalContext {
    * @Then /^I click on element "([^"]*)"$/
    */
   public function iClickOn(string $element): void {
-    $this->getElementByCss($element)->click();
+    $this->assertSession()->elementExists('css', $element)->click();
   }
 
   /**
