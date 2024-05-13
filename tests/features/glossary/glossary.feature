@@ -167,8 +167,11 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
       | title        | content                   | collection               | state     |
       | The Big Talk | The Alphabet. Call it ABC | Collection With Glossary | published |
     And document content:
-      | title             | body             | collection               | state     |
-      | Authentic Papyrus | Alphabet is back | Collection With Glossary | published |
+      | title             | abstract           | collection               | state     |
+      | Authentic Papyrus | Authentic abstract | Collection With Glossary | published |
+    And I append "simple_paragraph" to "field_paragraphs_body" field in "node" entity with following "Authentic Papyrus" title:
+      | field_body:value  | Alphabet is back |
+      | field_body:format | content_editor   |
     And event content:
       | title      | body                              | solution         | state     |
       | Soho Night | Any cOLOrs You Like. Maybe colrs? | Under The Bridge | published |

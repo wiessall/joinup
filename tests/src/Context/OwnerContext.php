@@ -40,7 +40,7 @@ class OwnerContext extends RawDrupalContext {
    * | type                        | name        | id                      | state        |
    * | Company,Industry consortium | Acme Inc.   | http://example.com/path | published    |
    * | Local authority             | Gotham City |                         | needs_update |
-   * | Private Individual(s)       | Jane Roe    |                         |              |
+   * | Company                     | Jane Roe    |                         |              |
    * @codingStandardsIgnoreEnd
    *
    * @param \Behat\Gherkin\Node\TableNode $owners_table
@@ -53,8 +53,8 @@ class OwnerContext extends RawDrupalContext {
    */
   public function givenOwner(TableNode $owners_table) {
     foreach ($owners_table->getHash() as $row) {
-      // If no type was specified, fallback to 'Private Individual(s)'.
-      $types = isset($row['type']) ? array_map('trim', explode(',', $row['type'])) : ['Private Individual(s)'];
+      // If no type was specified, fallback to 'Company'.
+      $types = isset($row['type']) ? array_map('trim', explode(',', $row['type'])) : ['Company'];
 
       $query = \Drupal::entityQuery('taxonomy_term')->accessCheck(FALSE);
       $tids = $query

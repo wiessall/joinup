@@ -47,16 +47,17 @@ Feature:
     And I should not see the image "banner.jpg"
     And I should not see the image "linus.jpeg"
     Then I click on element ".slick--optionset--image-gallery button[aria-label='Next']:not([aria-disabled='true'])"
-    And I wait up to "5" seconds for CSS transitions to finish
+    And I wait up to "5" seconds for Slick animations to finish
     Then I click on element ".slick--optionset--image-gallery button[aria-label='Next']:not([aria-disabled='true'])"
+    And I wait up to "5" seconds for Slick animations to finish
     And I should see the image "banner.jpg"
     And I should see the image "linus.jpeg"
     Then I click on element ".slick--optionset--image-gallery button[aria-label='Previous']:not([aria-disabled='true'])"
-    And I wait up to "5" seconds for CSS transitions to finish
+    And I wait up to "5" seconds for Slick animations to finish
     And I should see the image "banner.jpg"
     And I should not see the image "linus.jpeg"
     Then I click on element ".slick--optionset--image-gallery button[aria-label='Previous']:not([aria-disabled='true'])"
-    And I wait up to "5" seconds for CSS transitions to finish
+    And I wait up to "5" seconds for Slick animations to finish
     And I should not see the image "banner.jpg"
     And I should not see the image "linus.jpeg"
     And the page should have an element with CSS selector ".slick--optionset--image-gallery button[aria-label='Previous'][aria-disabled='true']"
