@@ -7,17 +7,17 @@ dependencies:
     - field.storage.node.oss_categories
     - field.storage.node.oss_development_status
     - field.storage.node.oss_git_description
-    - field.storage.node.oss_release_date
     - field.storage.node.oss_scope
+    - field.storage.node.oss_release_date
     - field.storage.node.oss_short_description
     - field.storage.node.oss_source
     - field.storage.node.oss_vitality_index
     - search_api.server.joinup
   module:
     - search_api_solr
-    - field
     - taxonomy
     - node
+    - field
     - search_api
     - joinup_flag
     - joinup_oss_catalogue
@@ -155,7 +155,7 @@ field_settings:
   oss_solution_rendered_item:
     label: 'Oss Solution rendered item'
     property_path: oss_solution_rendered_item
-    type: 'solr_text_custom:ngram'
+    type: text
   oss_source:
     label: 'Source catalogue'
     datasource_id: 'entity:node'
