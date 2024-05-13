@@ -1,0 +1,280 @@
+diff --git a/modules/svg_image_responsive/src/Plugin/Field/FieldFormatter/SvgResponsiveImageFormatter.php b/modules/svg_image_responsive/src/Plugin/Field/FieldFormatter/SvgResponsiveImageFormatter.php
+index 74804f1..5327b65 100755
+--- a/modules/svg_image_responsive/src/Plugin/Field/FieldFormatter/SvgResponsiveImageFormatter.php
++++ b/modules/svg_image_responsive/src/Plugin/Field/FieldFormatter/SvgResponsiveImageFormatter.php
+@@ -12,7 +12,6 @@ use Drupal\Core\Render\Markup;
+ use Drupal\Core\Session\AccountInterface;
+ use Drupal\Core\Utility\LinkGeneratorInterface;
+ use Drupal\file\Entity\File;
+-use Drupal\Core\Cache\Cache;
+ use Drupal\responsive_image\Plugin\Field\FieldFormatter\ResponsiveImageFormatter;
+ use Symfony\Component\DependencyInjection\ContainerInterface;
+ 
+@@ -65,95 +64,26 @@ class SvgResponsiveImageFormatter extends ResponsiveImageFormatter {
+    * {@inheritdoc}
+    */
+   public function viewElements(FieldItemListInterface $items, $langcode) {
+-    $elements = [];
+-    /** @var \Drupal\file\Entity\File[] $files */
+-    $files = $this->getEntitiesToView($items, $langcode);
+-
+-    // Early opt-out if the field is empty.
+-    if (empty($files)) {
++    $elements = parent::viewElements($items, $langcode);
++    if (empty($elements)) {
+       return $elements;
+     }
+-
+-    $url = NULL;
+-    $imageLinkSetting = $this->getSetting('image_link');
+-    // Check if the formatter involves a link.
+-    if ($imageLinkSetting === 'content') {
+-      $entity = $items->getEntity();
+-      if (!$entity->isNew()) {
+-        $url = $entity->toUrl();
+-      }
+-    }
+-    elseif ($imageLinkSetting === 'file') {
+-      $linkFile = TRUE;
+-    }
+-
+-    // Collect cache tags to be added for each item in the field.
+-    $responsiveImageStyle = $this->responsiveImageStyleStorage->load($this->getSetting('responsive_image_style'));
+-    $imageStylesToLoad = [];
+-    $cacheTags = [];
+-    if ($responsiveImageStyle) {
+-      $cacheTags = Cache::mergeTags($cacheTags, $responsiveImageStyle->getCacheTags());
+-      $imageStylesToLoad = $responsiveImageStyle->getImageStyleIds();
+-    }
+-
+-    $imageStyles = $this->imageStyleStorage->loadMultiple($imageStylesToLoad);
+-    foreach ($imageStyles as $image_style) {
+-      $cacheTags = Cache::mergeTags($cacheTags, $image_style->getCacheTags());
+-    }
+-
++    /** @var \Drupal\file\Entity\File[] $files */
++    $files = $this->getEntitiesToView($items, $langcode);
+     $svgAttributes = $this->getSetting('svg_attributes');
++    $svgRenderAsImage = $this->getSetting('svg_render_as_image');
++
+     foreach ($files as $delta => $file) {
+-      $attributes = [];
+       $isSvg = svg_image_is_file_svg($file);
+-
+-      if ($isSvg) {
+-        $attributes = $svgAttributes;
+-      }
+-
+-      $cacheContexts = [];
+-      if (isset($linkFile)) {
+-        $imageUri = $file->getFileUri();
+-        $url = $this->fileUrlGenerator->generate($imageUri);
+-        $cacheContexts[] = 'url.site';
+-      }
+-      $cacheTags = Cache::mergeTags($cacheTags, $file->getCacheTags());
+-
+-      // Link the <picture> element to the original file.
+-      if (isset($linkFile)) {
+-        $url = $this->fileUrlGenerator->generateString($file->getFileUri());
+-      }
+-      // Extract field item attributes for the theme function, and unset them
+-      // from the $item so that the field template does not re-render them.
+-      $item = $file->_referringItem;
+-      if (isset($item->_attributes)) {
+-        $attributes += $item->_attributes;
+-      }
+-      unset($item->_attributes);
+-
+       if (!$isSvg) {
+-        $elements[$delta] = [
+-          '#theme' => 'responsive_image_formatter',
+-          '#item' => $item,
+-          '#item_attributes' => $attributes,
+-          '#responsive_image_style_id' => $responsiveImageStyle ? $responsiveImageStyle->id() : '',
+-          '#url' => $url,
+-          '#cache' => [
+-            'tags' => $cacheTags,
+-          ],
+-        ];
++        continue;
+       }
+-      elseif ($this->getSetting('svg_render_as_image')) {
+-        $elements[$delta] = [
+-          '#theme' => 'image_formatter',
+-          '#item' => $item,
+-          '#item_attributes' => $attributes,
+-          '#image_style' => NULL,
+-          '#url' => $url,
+-          '#cache' => [
+-            'tags' => $cacheTags,
+-            'contexts' => $cacheContexts,
+-          ],
+-        ];
++
++      if ($svgRenderAsImage) {
++        $elements[$delta]['#theme'] = 'image_formatter';
++        $elements[$delta]['#image_style'] = NULL;
++        $elements[$delta]['#item_attributes'] += $svgAttributes;
++        unset($elements[$delta]['#responsive_image_style_id']);
+       }
+       else {
+         // Render as SVG tag.
+@@ -162,13 +92,20 @@ class SvgResponsiveImageFormatter extends ResponsiveImageFormatter {
+           $svgRaw = str_replace('<?xml version="1.0" encoding="UTF-8"?>', '', $svgRaw);
+           $svgRaw = trim($svgRaw);
+ 
+-          $elements[$delta] = [
+-            '#markup' => Markup::create($svgRaw),
+-            '#cache' => [
+-              'tags' => $cacheTags,
+-              'contexts' => $cacheContexts,
+-            ],
+-          ];
++          if (isset($elements[$delta]['#url'])) {
++            $elements[$delta] = [
++              '#type' => 'link',
++              '#title' => Markup::create($svgRaw),
++              '#cache' => $elements[$delta]['#cache'],
++              '#url' => $elements[$delta]['#url'],
++            ];
++          }
++          else {
++            $elements[$delta] = [
++              '#markup' => Markup::create($svgRaw),
++              '#cache' => $elements[$delta]['#cache'],
++            ];
++          }
+         }
+       }
+     }
+diff --git a/src/Plugin/Field/FieldFormatter/SvgImageFormatter.php b/src/Plugin/Field/FieldFormatter/SvgImageFormatter.php
+index afbad29..9122570 100755
+--- a/src/Plugin/Field/FieldFormatter/SvgImageFormatter.php
++++ b/src/Plugin/Field/FieldFormatter/SvgImageFormatter.php
+@@ -11,7 +11,6 @@ use Drupal\Core\Render\Markup;
+ use Drupal\Core\Session\AccountInterface;
+ use Drupal\file\Entity\File;
+ use Drupal\image\Plugin\Field\FieldFormatter\ImageFormatter;
+-use Drupal\Core\Cache\Cache;
+ use Psr\Log\LoggerInterface;
+ use enshrined\svgSanitize\Sanitizer;
+ use Symfony\Component\DependencyInjection\ContainerInterface;
+@@ -60,74 +59,23 @@ class SvgImageFormatter extends ImageFormatter {
+    * {@inheritdoc}
+    */
+   public function viewElements(FieldItemListInterface $items, $langcode) {
+-    $elements = [];
+-    /** @var \Drupal\file\Entity\File[] $files */
+-    $files = $this->getEntitiesToView($items, $langcode);
+-
+-    // Early opt-out if the field is empty.
+-    if (empty($files)) {
++    $elements = parent::viewElements($items, $langcode);
++    if (empty($elements)) {
+       return $elements;
+     }
+-
+-    $url = NULL;
+-    $imageLinkSetting = $this->getSetting('image_link');
+-    // Check if the formatter involves a link.
+-    if ($imageLinkSetting === 'content') {
+-      $entity = $items->getEntity();
+-      if (!$entity->isNew()) {
+-        $url = $entity->toUrl();
+-      }
+-    }
+-    elseif ($imageLinkSetting === 'file') {
+-      $linkFile = TRUE;
+-    }
+-
+-    $imageStyleSetting = $this->getSetting('image_style');
+-
+-    // Collect cache tags to be added for each item in the field.
+-    $cacheTags = [];
+-    if (!empty($imageStyleSetting)) {
+-      $imageStyle = $this->imageStyleStorage->load($imageStyleSetting);
+-      $cacheTags = $imageStyle ? $imageStyle->getCacheTags() : [];
+-    }
++    $svgRenderAsImage = $this->getSetting('svg_render_as_image');
++    /** @var \Drupal\file\Entity\File[] $files */
++    $files = $this->getEntitiesToView($items, $langcode);
+ 
+     $svgAttributes = $this->getSetting('svg_attributes');
+     foreach ($files as $delta => $file) {
+-      $attributes = [];
+       $isSvg = svg_image_is_file_svg($file);
+-
+-      if ($isSvg) {
+-        $attributes = $svgAttributes;
+-      }
+-
+-      if (isset($linkFile)) {
+-        $imageUri = $file->getFileUri();
+-        $url = $this->fileUrlGenerator->generate($imageUri);
++      if (!$isSvg) {
++        continue;
+       }
+-      $cacheTags = Cache::mergeTags($cacheTags, $file->getCacheTags());
+-
+-      // Extract field item attributes for the theme function, and unset them
+-      // from the $item so that the field template does not re-render them.
+-      $item = $file->_referringItem;
+-
+-      if (isset($item->_attributes)) {
+-        $attributes += $item->_attributes;
+-      }
+-
+-      unset($item->_attributes);
+-      $isSvg = svg_image_is_file_svg($file);
+-
+-      if (!$isSvg || $this->getSetting('svg_render_as_image')) {
+-        $elements[$delta] = [
+-          '#theme' => 'image_formatter',
+-          '#item' => $item,
+-          '#item_attributes' => $attributes,
+-          '#image_style' => $isSvg ? NULL : $imageStyleSetting,
+-          '#url' => $url,
+-          '#cache' => [
+-            'tags' => $cacheTags,
+-          ],
+-        ];
++      if ($svgRenderAsImage) {
++        $elements[$delta]['#image_style'] = NULL;
++        $elements[$delta]['#item_attributes'] += $svgAttributes;
+       }
+       else {
+         // Render as SVG tag.
+@@ -135,26 +83,24 @@ class SvgImageFormatter extends ImageFormatter {
+         if ($svgRaw) {
+           $svgRaw = preg_replace(['/<\?xml.*\?>/i', '/<!DOCTYPE((.|\n|\r)*?)">/i'], '', $svgRaw);
+           $svgRaw = trim($svgRaw);
+-
+-          if ($url) {
++          if (isset($elements[$delta]['#url'])) {
+             $elements[$delta] = [
+               '#type' => 'link',
+-              '#url' => $url,
+               '#title' => Markup::create($svgRaw),
+-              '#cache' => [
+-                'tags' => $cacheTags,
+-              ],
++              '#cache' => $elements[$delta]['#cache'],
++              '#url' => $elements[$delta]['#url'],
+             ];
+           }
+           else {
+             $elements[$delta] = [
+               '#markup' => Markup::create($svgRaw),
+-              '#cache' => [
+-                'tags' => $cacheTags,
+-              ],
++              '#cache' => $elements[$delta]['#cache'],
+             ];
+           }
+         }
++        else {
++          unset($elements[$delta]);
++        }
+       }
+     }
+ 

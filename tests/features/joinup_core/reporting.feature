@@ -47,10 +47,10 @@ Feature:
       | Monday's Artificial | published |
       | Restless Burst      | published |
     And solutions:
-      | title           | collection          | state     | creation date    | modification date | solution type                                      |
-      | Worthy Puppet   | Monday's Artificial | published | 2003-01-31T23:00 | 2015-12-07T13:57  | Interoperability Specification, Networking Service |
-      | Long Artificial | Restless Burst      | published | 2012-09-14T00:00 | 2012-12-04T16:19  | Networking Infrastructure Enablers                 |
-      | Beta Frozen     | Restless Burst      | published | 2017-10-15T14:54 | 2017-11-24T12:43  | Data Owner                                         |
+      | title           | collection          | state     | creation date    | modification date | solution type                                   |
+      | Worthy Puppet   | Monday's Artificial | published | 2003-01-31T23:00 | 2015-12-07T13:57  | Interoperability Specification, Logging Service |
+      | Long Artificial | Restless Burst      | published | 2012-09-14T00:00 | 2012-12-04T16:19  | Networking Infrastructure Enablers              |
+      | Beta Frozen     | Restless Burst      | published | 2017-10-15T14:54 | 2017-11-24T12:43  | Data Owner                                      |
 
     Given I am logged in as a moderator
     And I click "Reporting" in the "Administration toolbar" region
@@ -78,7 +78,7 @@ Feature:
     And I should see the link "November 2017"
     # Same for the "Solution type" facet.
     And I should see the link "Interoperability Specification" in the "Content" region
-    And I should see the link "Networking Service" in the "Content" region
+    And I should see the link "Logging Service" in the "Content" region
     And I should see the link "Networking Infrastructure Enablers" in the "Content" region
     And I should see the link "Data Owner" in the "Content" region
     # Verify that only solutions are shown.
