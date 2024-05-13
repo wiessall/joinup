@@ -3,6 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.node.news.abstract
     - field.field.node.news.body
     - field.field.node.news.field_attachment
     - field.field.node.news.field_comments
@@ -12,10 +13,11 @@ dependencies:
     - field.field.node.news.field_news_referenced_solution
     - field.field.node.news.field_news_source_url
     - field.field.node.news.field_news_spatial_coverage
-    - field.field.node.news.field_topic
+    - field.field.node.news.field_paragraphs_body
     - field.field.node.news.field_shared_in
     - field.field.node.news.field_site_featured
     - field.field.node.news.field_state
+    - field.field.node.news.field_topic
     - field.field.node.news.og_audience
     - image.style.thumbnail
     - media.type.news_logo
@@ -26,6 +28,7 @@ dependencies:
     - file
     - image_library_widget
     - joinup_workflow
+    - layout_paragraphs
     - link
     - text
 id: node.news.default
@@ -33,6 +36,14 @@ targetEntityType: node
 bundle: news
 mode: default
 content:
+  abstract:
+    type: string_textfield
+    weight: 2
+    region: content
+    settings:
+      size: 255
+      placeholder: ''
+    third_party_settings: {  }
   body:
     type: text_textarea_with_summary
     weight: 4
@@ -122,6 +133,16 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
+  field_paragraphs_body:
+    type: layout_paragraphs
+    weight: 4
+    region: content
+    settings:
+      preview_view_mode: preview
+      nesting_depth: 0
+      require_layouts: 1
+      empty_message: ''
+    third_party_settings: {  }
   field_state:
     type: state_machine_buttons
     weight: 15
@@ -141,6 +162,11 @@ content:
     region: content
     settings:
       include_locked: true
+    third_party_settings: {  }
+  simple_sitemap:
+    weight: 10
+    region: content
+    settings: {  }
     third_party_settings: {  }
   title:
     type: string_textfield
