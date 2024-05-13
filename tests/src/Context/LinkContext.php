@@ -99,9 +99,39 @@ class LinkContext extends RawDrupalContext {
       throw new \Exception("The downloaded file has no content.");
     }
 
-    $not_found = $this->searchMissingContent($content, $strings_table);
-    if (!empty($not_found)) {
+    if ($not_found = $this->searchMissingContent($content, $strings_table)) {
       throw new ExpectationFailedException("Following strings were not found in the linked content:\n- " . implode("\n- ", $not_found));
+    }
+  }
+
+  /**
+   * Asserts that the linked content does not contain a list of strings.
+   *
+   * @param string $link_label
+   *   The link from where to get the content.
+   * @param \Behat\Gherkin\Node\TableNode $strings_table
+   *   A table with a single column. Each row contains a string.
+   *
+   * @throws \Exception
+   *   If the link has no href attribute or the file content cannot be loaded.
+   * @throws \GuzzleHttp\Exception\GuzzleException
+   *   If the connection to the link fails.
+   *
+   * @Then the content received from clicking the link :link_label does not contain the following strings:
+   */
+  public function assertLinkedContentNotContainsStrings(string $link_label, TableNode $strings_table): void {
+    $url = $this->getUrl($link_label);
+
+    // Send request.
+    $client = new Client();
+    $response = $client->get($url, $this->getSessionOptions($url));
+    $content = $response->getBody()->getContents();
+    if (empty($content)) {
+      throw new \Exception("The downloaded file has no content.");
+    }
+
+    if ($found = array_diff($strings_table->getColumn(0), $this->searchMissingContent($content, $strings_table))) {
+      throw new ExpectationFailedException("Following strings were found in the linked content:\n- " . implode("\n- ", $found));
     }
   }
 
@@ -109,7 +139,10 @@ class LinkContext extends RawDrupalContext {
    * Get the referred URL in a link.
    *
    * @param string $link_label
+   *   The link where the URL can be found.
+   *
    * @return string
+   *   The found URL.
    *
    * @throws \Behat\Mink\Exception\ElementNotFoundException|\Exception
    *    If the link has no href attribute or the file content cannot be loaded.
@@ -131,11 +164,12 @@ class LinkContext extends RawDrupalContext {
    * @param string $content
    *   The content to compare.
    * @param \Behat\Gherkin\Node\TableNode $strings_table
-   *    A table with a single column. Each row contains a string.
+   *   A table with a single column. Each row contains a string.
+   *
    * @return array
-   *    The missing rows.
+   *   The missing rows.
    */
-  protected function searchMissingContent(string $content, TableNode $strings_table ): array {
+  protected function searchMissingContent(string $content, TableNode $strings_table): array {
     $not_found = [];
     foreach ($strings_table->getColumn(0) as $text) {
       $matches = [];
