@@ -208,9 +208,9 @@ Feature: Add distribution through the UI
       | title       | Boost Software License                                                         |
       | description | It is a permissive license in the style of the BSD license and the MIT license |
     And distributions:
-      | title        | licence                | parent                 | state     |
-      | Hot Snake    | WTFPL                  | Solution random x name | published |
-      | Quality Yard | Boost Software License | Solution random x name | published |
+      | title        | licence                | parent                 | state     | creation date    | modification date |
+      | Hot Snake    | WTFPL                  | Solution random x name | published | 2019-11-19 20:45 | 2021-11-19 20:45  |
+      | Quality Yard | Boost Software License | Solution random x name | published | 2019-12-19 20:45 | 2021-12-19 20:45  |
 
     When I go to the homepage of the "Solution random x name" solution
     # Distributions are still shown in the solution page and so the License text will be visible in the page.
@@ -218,7 +218,9 @@ Feature: Add distribution through the UI
     And I should not see the text "Boost Software License" in the "Header" region
     # Assert that the "Distribution" tile is present and contains licence link, label and bundle type.
     But I should see the "Quality Yard" tile
+    And I should see the text "Last update: 19/12/2021" in the "Quality Yard" tile
     And I should see the "Hot Snake" tile
+    And I should see the text "Last update: 19/11/2021" in the "Hot Snake" tile
     And I should see the text "WTFPL" in the "Hot Snake" tile
     And I should see the text "Distribution" in the "Hot Snake" tile
     # Assert that the "Release" tile is present
