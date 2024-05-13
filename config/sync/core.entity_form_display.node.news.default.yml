@@ -4,7 +4,6 @@ status: true
 dependencies:
   config:
     - field.field.node.news.abstract
-    - field.field.node.news.body
     - field.field.node.news.field_attachment
     - field.field.node.news.field_comments
     - field.field.node.news.field_keywords
@@ -23,14 +22,12 @@ dependencies:
     - media.type.news_logo
     - node.type.news
   module:
-    - allowed_formats
     - comment
     - file
     - image_library_widget
     - joinup_workflow
     - layout_paragraphs
     - link
-    - text
 id: node.news.default
 targetEntityType: node
 bundle: news
@@ -44,19 +41,6 @@ content:
       size: 255
       placeholder: ''
     third_party_settings: {  }
-  body:
-    type: text_textarea_with_summary
-    weight: 4
-    region: content
-    settings:
-      rows: 9
-      summary_rows: 3
-      placeholder: ''
-      show_summary: false
-    third_party_settings:
-      allowed_formats:
-        hide_help: '0'
-        hide_guidelines: '1'
   current_workflow_state:
     type: current_workflow_state_widget
     weight: 14

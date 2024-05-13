@@ -5,7 +5,6 @@ dependencies:
   config:
     - core.entity_view_mode.node.highlighted
     - field.field.node.news.abstract
-    - field.field.node.news.body
     - field.field.node.news.field_attachment
     - field.field.node.news.field_comments
     - field.field.node.news.field_keywords
@@ -26,7 +25,6 @@ dependencies:
     - field_delimiter
     - field_formatter_range
     - field_group
-    - joinup_html_stripper
     - layout_builder
     - responsive_image
     - template_suggestion
@@ -65,16 +63,6 @@ content:
       link_to_entity: false
     third_party_settings: {  }
     weight: 1
-    region: content
-  body:
-    type: joinup_html_stripper_stripped
-    label: hidden
-    settings:
-      trim_length: 200
-    third_party_settings:
-      template_suggestion:
-        template_suggestion: ''
-    weight: 2
     region: content
   field_news_logo:
     type: responsive_image
