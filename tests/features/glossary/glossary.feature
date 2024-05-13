@@ -442,7 +442,8 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
     Then I should see the text "Definition bold italic underline list 1list 2"
     And the page should contain the html text "Definition <strong>bold</strong> <em>italic</em> <u>underline</u> <ul><li>list 1</li><li>list 2</li></ul>"
 
-  Scenario: Provide CSV download link for users with access.
+  @teste
+  Scenario: Let allowed users to download the glossary in CSV format.
     Given users:
       | Username | Roles     |
       | regular  |           |
@@ -460,7 +461,7 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
       | another battle       |          | battle 2 summary | def        | Collection With Glossary |
 
     Given I am logged in as mod
-    When I am on "/collection/http_e_f_fcollection_bbattle/glossary_export?page&_format=csv"
+    When I am on "/collection/collection-glossary/glossary_export?page&_format=csv"
     Then the response status code should be 200
     When I go to the "Collection With Glossary" collection
     When I click "Glossary"
@@ -470,7 +471,7 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
       | "another battle",,"battle 2 summary" |
 
     Given I am logged in as fac
-    When I am on "/collection/http_e_f_fcollection_bbattle/glossary_export?page&_format=csv"
+    When I am on "/collection/collection-glossary/glossary_export?page&_format=csv"
     Then the response status code should be 200
     When I go to the "Collection With Glossary" collection
     When I click "Glossary"
@@ -480,9 +481,9 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
       | "another battle",,"battle 2 summary" |
 
     Given I am logged in as regular
-    When I am on "/collection/http_e_f_fcollection_bbattle/glossary_export?page&_format=csv"
-    Then the response status code should be 404
+    When I am on "/collection/collection-glossary/glossary_export?page&_format=csv"
+    Then the response status code should be 403
 
     Given I am an anonymous user
-    When I am on "/collection/http_e_f_fcollection_bbattle/glossary_export?page&_format=csv"
-    Then the response status code should be 404
+    When I am on "/collection/collection-glossary/glossary_export?page&_format=csv"
+    Then the response status code should be 403

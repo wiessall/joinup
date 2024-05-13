@@ -488,9 +488,9 @@ display:
     position: 2
     display_options:
       access:
-        type: perm
+        type: og_permission
         options:
-          perm: 'access content'
+          og_permission: 'access glossary data export'
       arguments:
         og_audience_target_id:
           id: og_audience_target_id
@@ -609,7 +609,7 @@ display:
         metatag_display_extender:
           metatags: {  }
           tokenize: false
-      path: collection/%collection/glossary_export
+      path: rdf_entity/%rdf_entity/glossary_export
       displays:
         main: main
         default: '0'
@@ -624,6 +624,7 @@ display:
       contexts:
         - 'languages:language_content'
         - 'languages:language_interface'
+        - og_group_context
         - request_format
         - url
         - 'user.node_grants:view'
