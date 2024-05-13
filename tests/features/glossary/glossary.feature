@@ -442,16 +442,16 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
     Then I should see the text "Definition bold italic underline list 1list 2"
     And the page should contain the html text "Definition <strong>bold</strong> <em>italic</em> <u>underline</u> <ul><li>list 1</li><li>list 2</li></ul>"
 
-  @teste
-  Scenario: Let allowed users to download the glossary in CSV format.
+  Scenario: Let only allowed users to download the glossary in CSV format.
     Given users:
       | Username | Roles     |
       | regular  |           |
+      | auth     |           |
       | fac      |           |
       | mod      | moderator |
     And the following collections:
-      | title                    | description                   | abstract                         | state     | uri                      |
-      | Collection With Glossary | The Battle of Evermore again. | The Battle of Evermore abstract. | published | http://collection-battle |
+      | title                    | description                   | abstract                         | state     | author | uri                      |
+      | Collection With Glossary | The Battle of Evermore again. | The Battle of Evermore abstract. | published | auth   | http://collection-battle |
     And the following collection user membership:
       | collection               | user | roles       |
       | Collection With Glossary | fac  | facilitator |
@@ -459,6 +459,18 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
       | title                | synonyms | summary          | definition | collection               |
       | battle               | evermore | battle summary   | def        | Collection With Glossary |
       | another battle       |          | battle 2 summary | def        | Collection With Glossary |
+
+    When I am logged in as auth
+    And I am on "/collection/collection-glossary/glossary_export?page&_format=csv"
+    Then the response status code should be 200
+    When I go to the "Collection With Glossary" collection
+    When I click "Glossary"
+    And I click "B"
+    Then the content received from clicking the link "Download CSV" contains the following strings:
+      | Title,Synonym,Definition             |
+      | battle,evermore,"battle summary"     |
+    And the content received from clicking the link "Download CSV" does not contain the following strings:
+      | "another battle",,"battle 2 summary" |
 
     Given I am logged in as mod
     When I am on "/collection/collection-glossary/glossary_export?page&_format=csv"
