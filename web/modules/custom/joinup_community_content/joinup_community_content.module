@@ -385,8 +385,16 @@ function joinup_community_content_preprocess_node(&$variables): void {
 
   // Disable description field of the community content on moderation page if
   // abstract is available and has value.
+  $view_modes = [
+    'moderation',
+    'view_mode_tile',
+    'view_mode_tile_horizontal',
+    'featured',
+    'highlighted',
+  ];
+
   if (
-    $variables['elements']['#view_mode'] === 'moderation' &&
+    in_array($variables['elements']['#view_mode'], $view_modes) &&
     $node instanceof AbstractInterface &&
     isset($variables['content'][$node->getAbstractField()]) &&
     !$node->get($node->getAbstractField())->isEmpty()
