@@ -113,7 +113,7 @@ function joinup_core_update_dependencies(): array {
 // phpcs:enable
 
 /**
- * Installs Layout Paragraphs body for document and event content types.
+ * Installs Layout Paragraphs body for event and news content types.
  */
 function joinup_core_update_110600(): void {
   $configManager = \Drupal::service('config.manager');
@@ -130,7 +130,7 @@ function joinup_core_update_110600(): void {
     $storage->createFromStorageRecord($configData)->save();
   }
 
-  foreach (['event'] as $contentType) {
+  foreach (['event', 'news'] as $contentType) {
     $fieldConfigId = "node.$contentType.$layoutParagraphsField";
     if (!$entityTypeManager->getStorage('field_config')->load($fieldConfigId)) {
       $configData = $source->read("field.field.$fieldConfigId");
@@ -149,5 +149,6 @@ function joinup_core_update_110601(array &$sandbox): string {
   assert($updateHelper instanceof UpdateHelper);
   return $updateHelper->transformNodeBodyToLayoutParagraphs($sandbox, [
     'event',
+    'news',
   ]);
 }
