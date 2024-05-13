@@ -16,7 +16,7 @@ use Drupal\joinup_publication_date\Plugin\Field\FieldType\PublicationDateItem;
  *
  * Exposes the publication date in various formats in node templates.
  */
-function joinup_publication_date_preprocess_node(&$variables) {
+function joinup_publication_date_preprocess_node(&$variables): void {
   $node = $variables['node'] ?? NULL;
   if ($node instanceof EntityPublicationTimeInterface) {
     $publication_time = $node->getPublicationTime();
@@ -58,7 +58,7 @@ function joinup_publication_date_preprocess_page_title(array &$variables): void 
  *   Render variables.
  */
 function joinup_publication_date_add_content_dates(EntityPublicationTimeInterface $entity, array &$variables): void {
-  $publicationTime = $entity->getPublicationTime() ?? $entity->getChangedTime();
+  $publicationTime = $entity->published_at->published_at_or_created ?? $entity->getPublicationTime() ?? $entity->getChangedTime();
 
   /** @var \Drupal\Core\Datetime\DateFormatterInterface $date_formatter */
   $dateFormatter = \Drupal::service('date.formatter');
