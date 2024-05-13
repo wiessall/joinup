@@ -79,7 +79,7 @@
     <div class="tile__text">
       {# If content.field_paragraphs_body is not empty, use this. Otherwise, use content.body #}
       {% if content.field_paragraphs_body|render %}
-        {{ content.field_paragraphs_body }}
+        {{ content.without('body') }}
       {% else %}
         {{ content.body }}
       {% endif %}
