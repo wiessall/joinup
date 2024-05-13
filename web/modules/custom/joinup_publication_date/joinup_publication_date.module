@@ -58,7 +58,7 @@ function joinup_publication_date_preprocess_page_title(array &$variables): void 
  *   Render variables.
  */
 function joinup_publication_date_add_content_dates(EntityPublicationTimeInterface $entity, array &$variables): void {
-  $publicationTime = $entity->published_at->published_at_or_created ?? $entity->getPublicationTime() ?? $entity->getChangedTime();
+  $publicationTime = $entity->published_at->published_at_or_created ?: $entity->getPublicationTime() ?: $entity->getChangedTime();
 
   /** @var \Drupal\Core\Datetime\DateFormatterInterface $date_formatter */
   $dateFormatter = \Drupal::service('date.formatter');
