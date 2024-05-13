@@ -163,8 +163,7 @@ class UpdateHelper implements ContainerInjectionInterface {
       'parent_type' => 'node',
       'parent_field_name' => $destinationField,
       'behavior_settings' => serialize([
-        'layout_paragraphs',
-        [
+        'layout_paragraphs' => [
           'layout' => 'layout_onecol',
           'config' => ['label' => ''],
           'parent_uuid' => NULL,
@@ -185,8 +184,10 @@ class UpdateHelper implements ContainerInjectionInterface {
       'parent_type' => 'node',
       'parent_field_name' => $destinationField,
       'behavior_settings' => serialize([
-        'layout_paragraphs',
-        ['parent_uuid' => $ids['layoutUuid'], 'region' => 'content'],
+        'layout_paragraphs' => [
+          'parent_uuid' => $ids['layoutUuid'],
+          'region' => 'content',
+        ],
       ]),
       'default_langcode' => 1,
       'revision_translation_affected' => 1,
