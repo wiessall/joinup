@@ -55,15 +55,17 @@ Feature: Asset distribution overview on solution.
     # Distributions of unpublished releases should not be shown.
     But I should not see the text "Solaris"
 
-#    And I should see the download link in the "Linux" asset distribution
-#    And I should see the download link in the "User manual" asset distribution
-#    And I should see the external link in the "Windows" asset distribution
+    And I should see the download link in the "Linux" asset distribution
+    And I should see the download link in the "User manual" asset distribution
+    And I should see the external link in the "Windows" asset distribution
 
     And the "The Child of the Past" release should be marked as the latest release
 
     # Verify that the releases titles link to the release page.
     And I should see the link "The Child of the Past 1"
+    And I should see the text "Published on: 28/01/1996"
     And I should see the link "Thief in the Angels 2"
+    And I should see the text "Published on: 28/01/1995"
     When I click "The Child of the Past 1"
     Then I should see the text "The Child of the Past 1" in the "Page title" region
     And I should see the text "Latest release"
@@ -96,7 +98,6 @@ Feature: Asset distribution overview on solution.
     When I click "Switch to the latest release"
     Then I should see the text "The Child of the Past 1" in the "Page title" region
     And I should see the text "Latest release"
-    And I should see the text "Published on: 28/01/1996"
 
     # Publish the release as a solution facilitator.
     When I am logged in as a facilitator of the "Lovely Butterfly" solution
