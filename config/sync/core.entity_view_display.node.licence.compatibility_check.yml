@@ -1,0 +1,76 @@
+uuid: 87c2c773-de23-41be-8c15-d1983d30c0a2
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.compatibility_check
+    - field.field.node.licence.deprecated
+    - field.field.node.licence.description
+    - field.field.node.licence.legal_type
+    - field.field.node.licence.licence_type
+    - field.field.node.licence.spdx_licence
+    - node.type.licence
+  module:
+    - field_group
+    - layout_builder
+    - text
+    - user
+third_party_settings:
+  field_group:
+    group_licence_wrapper:
+      children:
+        - legal_type
+        - spdx_licence
+      label: 'Licence wrapper'
+      parent_name: ''
+      region: hidden
+      weight: 14
+      format_type: html_element
+      format_settings:
+        classes: ''
+        id: ''
+        element: div
+        show_label: false
+        label_element: h3
+        attributes: ''
+        effect: none
+        speed: fast
+  layout_builder:
+    enabled: false
+    allow_custom: false
+id: node.licence.compatibility_check
+targetEntityType: node
+bundle: licence
+mode: compatibility_check
+content:
+  description:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  spdx_licence_external_url:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  spdx_licence_id:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+hidden:
+  deprecated: true
+  langcode: true
+  legal_type: true
+  licence_type: true
+  links: true
+  published_at: true
+  report: true
+  search_api_excerpt: true
+  spdx_licence: true
+  spdx_licence_label: true
+  spdx_licence_text: true
+  spdx_see_also: true
+  uri: true

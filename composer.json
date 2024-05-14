@@ -4,7 +4,7 @@
     "type": "project",
     "license": "EUPL-1.2",
     "require": {
-        "php": ">=8.2",
+        "php": ">=8.3",
         "ext-dom": "*",
         "ext-json": "*",
         "ext-mbstring": "*",
@@ -117,7 +117,6 @@
         "openeuropa/oe_webtools": "^1.21",
         "psr/http-factory-implementation": "*",
         "semiceu/adms-ap_validator": "1.0.0-alpha1",
-        "spdx/license-list-data": "master",
         "sweetrdf/easyrdf": "^1.9",
         "symfony/http-client": "*"
     },
@@ -144,6 +143,7 @@
         "gitonomy/gitlib": "^1.4",
         "lovers-of-behat/table-extension": "^1.4",
         "mikey179/vfsstream": "~1.6",
+        "ml/json-ld": "^1.2",
         "palantirnet/drupal-rector": "^0.12.2",
         "pear/http_request2": "~2.4",
         "php-task-runner/composer": "dev-toolkit-runner",
@@ -166,7 +166,7 @@
     "config": {
         "sort-packages": true,
         "platform": {
-            "php": "8.2"
+            "php": "8.3"
         },
         "allow-plugins": {
             "dealerdirect/phpcodesniffer-composer-installer": true,
@@ -198,7 +198,6 @@
             "web/modules/contrib/message_digest/src/Traits/MessageDigestContextTrait.php",
             "web/modules/contrib/message_digest/src/Traits/MessageDigestTrait.php",
             "web/modules/contrib/og_menu/src/Tests/Traits/OgMenuTrait.php",
-            "web/modules/contrib/pipeline/src/Traits/PipelineContextTrait.php",
             "scripts/composer/ComposerPatches.php"
         ],
         "files": [
@@ -209,9 +208,7 @@
             "Drupal\\Tests\\cas_mock_server\\": "web/modules/contrib/cas_mock_server/tests/src",
             "Drupal\\Tests\\honeypot\\": "web/modules/contrib/honeypot/tests/src",
             "Drupal\\Tests\\message_digest\\": "web/modules/contrib/message_digest/tests/src",
-            "Drupal\\Tests\\oe_webtools\\": "web/modules/contrib/oe_webtools/tests",
-            "Drupal\\Tests\\pipeline\\": "web/modules/contrib/pipeline/tests/src",
-            "Drupal\\Tests\\spdx\\": "web/modules/contrib/spdx/tests/src"
+            "Drupal\\Tests\\oe_webtools\\": "web/modules/contrib/oe_webtools/tests"
         }
     },
     "scripts": {
@@ -478,18 +475,6 @@
     },
     "repositories": [
         {
-            "type": "package",
-            "package": {
-                "name": "spdx/license-list-data",
-                "version": "master",
-                "source": {
-                    "url": "https://github.com/spdx/license-list-data",
-                    "type": "git",
-                    "reference": "main"
-                }
-            }
-        },
-        {
             "type": "vcs",
             "url": "https://github.com/openeuropa/oe_dashboard_agent.git"
         },
@@ -508,10 +493,6 @@
                     "reference": "master"
                 }
             }
-        },
-        {
-            "type": "vcs",
-            "url": "https://github.com/ec-europa/virtuoso.git"
         }
     ]
 }
