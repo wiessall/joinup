@@ -7,7 +7,6 @@ namespace Drupal\solution\Guard;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\joinup_workflow\TransitionGuardTrait;
-use Drupal\rdf_entity_provenance\ProvenanceHelperInterface;
 use Drupal\solution\Entity\SolutionInterface;
 use Drupal\state_machine\Guard\GuardInterface;
 use Drupal\state_machine\Plugin\Workflow\WorkflowInterface;
@@ -20,19 +19,7 @@ class SolutionTransitionGuard implements GuardInterface {
 
   use TransitionGuardTrait;
 
-  /**
-   * Instantiates a SolutionFulfillmentGuard service.
-   *
-   * @param \Drupal\Core\Session\AccountInterface $currentUser
-   *   The current logged-in user.
-   * @param \Drupal\rdf_entity_provenance\ProvenanceHelperInterface $provenanceHelper
-   *   Provenance helper.
-   */
-  public function __construct(
-    protected AccountInterface $currentUser,
-    protected ProvenanceHelperInterface $provenanceHelper
-  ) {
-  }
+  public function __construct(protected AccountInterface $currentUser) {}
 
   /**
    * {@inheritdoc}
@@ -44,12 +31,6 @@ class SolutionTransitionGuard implements GuardInterface {
       return TRUE;
     }
 
-    // Federated solutions cannot have the `archive` and `unarchived`
-    // transitions applied.
-    if (in_array($transition->getId(), ['archive', 'unarchive'], TRUE) && $this->isFederated($entity)) {
-      return FALSE;
-    }
-
     // In case the entity is being created, it was initiated through a
     // collection. Transitions depend on the collection's group permissions. In
     // case the entity is being updated, the group is itself, to allow
@@ -57,20 +38,6 @@ class SolutionTransitionGuard implements GuardInterface {
     $group = $entity->isNew() ? $entity->getGroup() : $entity;
     /** @var \Drupal\solution\Entity\SolutionInterface $entity */
     return $this->allowedByPermission($transition, $workflow, $entity, FALSE, TRUE, $group);
-  }
-
-  /**
-   * Checks if entity is federated.
-   *
-   * @param \Drupal\Core\Entity\EntityInterface $entity
-   *   Entity.
-   *
-   * @return bool
-   *   TRUE if it is federated, FALSE otherwise.
-   */
-  protected function isFederated(EntityInterface $entity): bool {
-    $activity = $this->provenanceHelper->loadProvenanceActivity($entity->id());
-    return !empty($activity);
   }
 
 }

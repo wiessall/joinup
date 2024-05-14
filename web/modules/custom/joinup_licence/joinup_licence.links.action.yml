@@ -1,5 +1,7 @@
 joinup_licence.licence_add:
-  route_name: joinup_licence.add
+  route_name: node.add
+  route_parameters:
+    node_type: licence
   title: 'Add licence'
   appears_on:
-    - joinup_licence.overview
+    - view.licences.list
