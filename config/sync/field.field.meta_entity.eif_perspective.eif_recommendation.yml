@@ -1,0 +1,41 @@
+uuid: 8b043d4e-bd9a-4b77-b7d7-804eefd982b2
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.meta_entity.eif_recommendation
+    - meta_entity.type.eif_perspective
+    - taxonomy.vocabulary.eif_recommendation
+  module:
+    - eif
+third_party_settings:
+  rdf_sync:
+    target_id:
+      predicate: 'http://data.europa.eu/eif/Recommendation'
+      type: resource
+    processed:
+      predicate: 'http://purl.org/dc/elements/1.1/description'
+      type: 'xsd:string'
+id: meta_entity.eif_perspective.eif_recommendation
+field_name: eif_recommendation
+entity_type: meta_entity
+bundle: eif_perspective
+label: Recommendation
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      eif_recommendation: eif_recommendation
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+  allowed_formats:
+    - basic_html
+field_type: eif_qualified_recommendation
