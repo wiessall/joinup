@@ -21,7 +21,10 @@ dependencies:
     - field.field.node.news.og_audience
     - node.type.news
   module:
-    - layout_paragraphs
+    - field_delimiter
+    - field_formatter_range
+    - joinup_core
+    - joinup_slick
     - template_suggestion
     - user
 _core:
@@ -31,6 +34,14 @@ targetEntityType: node
 bundle: news
 mode: view_mode_featured
 content:
+  abstract:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 0
+    region: content
   field_keywords:
     type: string
     label: hidden
@@ -42,18 +53,31 @@ content:
     weight: 1
     region: content
   field_paragraphs_body:
-    type: layout_paragraphs
+    type: filtered_entity_reference_bundles
     label: hidden
     settings:
-      view_mode: preview
+      view_mode: message_digest
       link: ''
+      filtered_entity_bundles:
+        - simple_paragraph
+        - text
+      trim_length: 200
     third_party_settings:
+      field_delimiter:
+        delimiter: ''
+      field_formatter_range:
+        order: 0
+        limit: 1
+        offset: 0
+      joinup_slick:
+        preset: ''
+        field_label: true
+        custom_label: ''
       template_suggestion:
         template_suggestion: ''
     weight: 0
     region: content
 hidden:
-  abstract: true
   featured: true
   field_attachment: true
   field_comments: true
