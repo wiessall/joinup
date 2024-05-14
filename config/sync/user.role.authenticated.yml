@@ -17,11 +17,7 @@ dependencies:
     - media.type.image
     - media.type.video
     - meta_entity.type.eif_perspective
-    - node.type.custom_page
-    - node.type.discussion
     - node.type.document
-    - node.type.event
-    - node.type.news
   module:
     - comment
     - contextual
