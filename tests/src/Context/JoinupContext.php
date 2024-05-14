@@ -44,7 +44,6 @@ use Drupal\node\Entity\Node;
 use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\og\OgRoleInterface;
 use Drupal\paragraphs\Entity\Paragraph;
-use Drupal\rdf_sync\RdfSyncConnection;
 use GuzzleHttp\Client;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\ExpectationFailedException;
@@ -848,6 +847,11 @@ class JoinupContext extends RawDrupalContext {
         'definition' => 'field_glossary_definition:value',
         'summary' => 'field_glossary_definition:summary',
         'synonyms' => 'field_glossary_synonyms',
+      ],
+      'licence' => [
+        'licence type' => 'licence_type',
+        'spdx licence' => 'spdx_licence',
+        'legal type' => 'legal_type',
       ],
       'news' => [
         'headline' => 'field_news_headline',
@@ -2312,17 +2316,6 @@ class JoinupContext extends RawDrupalContext {
   }
 
   /**
-   * Wait until a running pipeline batch job has finished.
-   *
-   * @Given I wait for the pipeline batch job to finish
-   */
-  public function iWaitForThePipelineBatchJobToFinish() {
-    while ($this->getSession()->getPage()->find('css', 'meta[http-equiv=\'Refresh\']')) {
-      $this->getSession()->reload();
-    }
-  }
-
-  /**
    * Asserts that a certain link points to a specific path.
    *
    * Example: Then the link "Login" should point to "user/login"
@@ -3063,7 +3056,7 @@ class JoinupContext extends RawDrupalContext {
    * @Then I should see a paragraph containing the text :text
    */
   public function assertParagraphText(string $text): void {
-    $element = $this->getSession()->getPage()->find('xpath', '//p[text() = "' . $text . '"]');
+    $element = $this->getSession()->getPage()->find('xpath', '//p[contains(text(), "' . $text . '")]');
     Assert::assertNotEmpty($element);
   }
 
@@ -3374,9 +3367,12 @@ class JoinupContext extends RawDrupalContext {
    * @Then the following :graph graph triples should exist in the RDF backend:
    */
   public function assertTriples(string $graph, TableNode $triples): void {
+    /** @var \Drupal\rdf_sync\RdfSyncConnectionInterface $connection */
+    $connection = \Drupal::service('rdf_sync.connection');
+
     $failedTriples = [];
     foreach ($triples->getRows() as [$triple]) {
-      if (!RdfSyncConnection::query("ASK WHERE { GRAPH <$graph> { $triple } }")->getBoolean()) {
+      if (!$connection->query("ASK WHERE { GRAPH <$graph> { $triple } }")->getBoolean()) {
         $failedTriples[] = $triple;
       }
     }
