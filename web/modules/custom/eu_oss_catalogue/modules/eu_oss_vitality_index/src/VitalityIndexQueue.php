@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace Drupal\eu_oss_vitality_index;
 
-use Drupal\Core\Database\Connection;
-
-use Drupal\Core\Queue\DatabaseQueue;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Queue\QueueFactory;
 use Drupal\Core\Queue\QueueInterface;
 
@@ -21,13 +20,6 @@ class VitalityIndexQueue implements VitalityIndexQueueInterface {
   const QUEUE_NAME = 'eu_oss_vitality_index';
 
   /**
-   * Table exists.
-   *
-   * @var bool|null
-   */
-  protected bool|null $tableExists = NULL;
-
-  /**
    * Vitality index queue.
    *
    * @var \Drupal\Core\Queue\QueueInterface
@@ -35,8 +27,9 @@ class VitalityIndexQueue implements VitalityIndexQueueInterface {
   protected QueueInterface $queue;
 
   public function __construct(
-    protected Connection $connection,
-    QueueFactory $queueFactory
+    protected EntityTypeManagerInterface $entityTypeManager,
+    protected LoggerChannelInterface $logger,
+    QueueFactory $queueFactory,
   ) {
     $this->queue = $queueFactory->get(self::QUEUE_NAME);
   }
@@ -45,7 +38,8 @@ class VitalityIndexQueue implements VitalityIndexQueueInterface {
    * {@inheritdoc}
    */
   public function addToQueue(int $solutionId): void {
-    if ($this->nodeExistsInQueue($solutionId)) {
+    if ($this->preventAdding()) {
+      $this->logger->error('Solution was not added to Vitality Index queue because there is already a lot of not processed solutions.');
       return;
     }
 
@@ -54,42 +48,21 @@ class VitalityIndexQueue implements VitalityIndexQueueInterface {
   }
 
   /**
-   * Check if a node exists in the queue.
-   *
-   * @param int $solutionId
-   *   The OSS Solution entity id.
+   * Checks if we want to prevent adding.
    *
    * @return bool
-   *   Whether the solution exists in queue.
+   *   True if we want to prevent.
    */
-  public function nodeExistsInQueue(int $solutionId): bool {
-    // The queue table does not exist, and a node was not added to queue.
-    if (!$this->queueTableExists()) {
-      return FALSE;
-    }
+  public function preventAdding(): bool {
+    $nodeStorage = $this->entityTypeManager->getStorage('node');
+    $numberOfNodes = $nodeStorage->getQuery()->accessCheck(FALSE)
+      ->condition('type', 'oss_solution')
+      ->condition('status', TRUE)
+      ->condition('oss_archived', FALSE)
+      ->count()
+      ->execute();
 
-    $query = $this->connection->select(DatabaseQueue::TABLE_NAME, 'q');
-    $query->condition('name', self::QUEUE_NAME);
-    $query->condition('data', serialize($solutionId));
-    $query->condition('expire', 0);
-    $query->addExpression('COUNT(*)');
-
-    return $query->execute()->fetchField() > 0;
-  }
-
-  /**
-   * Checks if the queue table exists.
-   *
-   * @return bool
-   *   TRUE if the table exists, otherwise FALSE.
-   */
-  protected function queueTableExists(): bool {
-    if (is_null($this->tableExists)) {
-      $this->tableExists = $this->connection->schema()
-        ->tableExists(DatabaseQueue::TABLE_NAME);
-    }
-
-    return $this->tableExists;
+    return $this->queue->numberOfItems() > $numberOfNodes;
   }
 
 }
