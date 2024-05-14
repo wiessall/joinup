@@ -98,6 +98,9 @@ class UpdateHelper implements ContainerInjectionInterface {
 
   /**
    * Updates the base tables of the paragraphs.
+   *
+   * @return array
+   *   The IDs of the inserted paragraphs.
    */
   private function updateBaseTables(): array {
     $layoutId = $this->db->insert('paragraphs_item')
