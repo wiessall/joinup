@@ -180,9 +180,25 @@ third_party_settings:
                     replace_tokens: false
                 third_party_settings:
                   template_suggestion:
-                    template_suggestion: ''
+                    template_suggestion: bare
             weight: -8
-            additional: {  }
+            additional:
+              component_attributes:
+                block_attributes:
+                  id: ''
+                  class: explore-item__description
+                  style: ''
+                  data: ''
+                block_title_attributes:
+                  id: ''
+                  class: ''
+                  style: ''
+                  data: ''
+                block_content_attributes:
+                  id: ''
+                  class: ''
+                  style: ''
+                  data: ''
         third_party_settings: {  }
 id: node.event.explore_item
 targetEntityType: node
