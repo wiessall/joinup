@@ -28,8 +28,9 @@ dependencies:
     - field_formatter_range
     - field_group
     - file
+    - joinup_core
+    - joinup_slick
     - layout_builder
-    - layout_paragraphs
     - link
     - responsive_image
     - template_suggestion
@@ -66,8 +67,10 @@ content:
     label: visually_hidden
     settings:
       link_to_entity: false
-    third_party_settings: {  }
-    weight: 2
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: bare
+    weight: 1
     region: content
   field_attachment:
     type: file_table
@@ -96,7 +99,7 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: no_wrappers
-    weight: 1
+    weight: 0
     region: content
   field_news_logo:
     type: responsive_image
@@ -137,11 +140,15 @@ content:
     weight: 3
     region: content
   field_paragraphs_body:
-    type: layout_paragraphs
+    type: filtered_entity_reference_bundles
     label: hidden
     settings:
       view_mode: tile
       link: ''
+      filtered_entity_bundles:
+        - simple_paragraph
+        - text
+      trim_length: 200
     third_party_settings:
       field_delimiter:
         delimiter: ''
@@ -149,9 +156,13 @@ content:
         order: 0
         limit: 1
         offset: 0
+      joinup_slick:
+        preset: ''
+        field_label: true
+        custom_label: ''
       template_suggestion:
         template_suggestion: ''
-    weight: 1
+    weight: 2
     region: content
   field_shared_in:
     type: entity_reference_entity_view
