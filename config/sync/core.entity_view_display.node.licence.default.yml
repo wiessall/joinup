@@ -1,0 +1,111 @@
+uuid: 959a838c-94bb-4bf3-8139-3c2cd24bc523
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.licence.deprecated
+    - field.field.node.licence.description
+    - field.field.node.licence.legal_type
+    - field.field.node.licence.licence_type
+    - field.field.node.licence.spdx_licence
+    - node.type.licence
+  module:
+    - field_group
+    - template_suggestion
+    - text
+    - user
+third_party_settings:
+  field_group:
+    group_licence_wrapper:
+      children:
+        - spdx_licence
+        - spdx_licence_id
+        - spdx_see_also
+        - spdx_licence_text
+      label: 'Licence wrapper'
+      parent_name: ''
+      region: content
+      weight: 4
+      format_type: html_element
+      format_settings:
+        classes: ''
+        id: ''
+        element: div
+        show_label: false
+        label_element: h3
+        attributes: ''
+        effect: none
+        speed: fast
+id: node.licence.default
+targetEntityType: node
+bundle: licence
+mode: default
+content:
+  description:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  legal_type:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: false
+    third_party_settings:
+      field_delimiter:
+        delimiter: ''
+      field_formatter_range:
+        order: 0
+        limit: 0
+        offset: 0
+      template_suggestion:
+        template_suggestion: ''
+    weight: 2
+    region: content
+  licence_type:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: false
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
+    weight: 1
+    region: content
+  spdx_licence:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: false
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: fieldset
+    weight: 3
+    region: content
+  spdx_licence_id:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 4
+    region: content
+  spdx_licence_text:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 6
+    region: content
+  spdx_see_also:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 5
+    region: content
+hidden:
+  deprecated: true
+  langcode: true
+  links: true
+  published_at: true
+  report: true
+  search_api_excerpt: true
+  spdx_licence_external_url: true
+  spdx_licence_label: true
+  uri: true

@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_seo;
 
+use Drupal\joinup_rdf\Entity\RdfSyncEntityInterface;
 use Drupal\rdf_entity\RdfInterface;
 use Drupal\sparql_entity_storage\SparqlSerializerInterface;
+use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * Helper service to ensure that data are exported properly.
@@ -13,27 +15,30 @@ use Drupal\sparql_entity_storage\SparqlSerializerInterface;
 class JoinupSeoExportHelper implements JoinupSeoExportHelperInterface {
 
   /**
-   * The SPARQL serializer service.
+   * Serialization format.
    *
-   * @var \Drupal\sparql_entity_storage\SparqlSerializerInterface
+   * @const string
    */
-  protected $serializer;
+  protected const SERIALIZATION_FORMAT = 'jsonld';
 
   /**
    * Constructs a JoinupSeoExportHelper object.
    *
-   * @param \Drupal\sparql_entity_storage\SparqlSerializerInterface $serializer
+   * @param \Drupal\sparql_entity_storage\SparqlSerializerInterface $sparQlSerializer
    *   The SPARQL serializer service.
+   * @param \Symfony\Component\Serializer\SerializerInterface $serializer
+   *   The general serializer service.
    */
-  public function __construct(SparqlSerializerInterface $serializer) {
-    $this->serializer = $serializer;
-  }
+  public function __construct(
+    protected SparqlSerializerInterface $sparQlSerializer,
+    protected SerializerInterface $serializer,
+  ) {}
 
   /**
    * {@inheritdoc}
    */
   public function exportRdfEntityMetadata(RdfInterface $entity): string {
-    $output = $this->serializer->serializeEntity($entity, 'jsonld', $this->getOptions());
+    $output = $this->sparQlSerializer->serializeEntity($entity, self::SERIALIZATION_FORMAT, self::getOptions());
     // The serializer returns also data where the entity is referred, thus, not
     // related to the metadata. Keep only the entry that has a "@type" property.
     $output = json_decode($output);
@@ -44,6 +49,45 @@ class JoinupSeoExportHelper implements JoinupSeoExportHelperInterface {
       }
     }
     return '';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getEntityJsonLdString(RdfSyncEntityInterface|RdfInterface $entity): string {
+    // @todo Remove this BC layer in ISAICP-8376.
+    if ($entity instanceof RdfInterface) {
+      return $this->exportRdfEntityMetadata($entity);
+    }
+
+    assert($entity instanceof RdfSyncEntityInterface);
+    return $this->exportEntityJsonLd($entity);
+  }
+
+  /**
+   * Exports the given RDF-synchronized entity as JSON-LD string.
+   *
+   * @param \Drupal\joinup_rdf\Entity\RdfSyncEntityInterface $entity
+   *   The RDF-synchronized entity to export.
+   *
+   * @return string
+   *   The exported string.
+   */
+  protected function exportEntityJsonLd(RdfSyncEntityInterface $entity): string {
+    $serialized = $this->serializer->serialize($entity, self::SERIALIZATION_FORMAT, $options = self::getOptions());
+    if (
+      !is_array($decodedSerialized = json_decode($serialized, TRUE))
+    ) {
+      return '';
+    }
+
+    return json_encode(
+      [
+        '@context' => $options['frame']->{'@context'},
+        '@graph' => $decodedSerialized,
+      ],
+      JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES
+    );
   }
 
   /**

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\Tests\joinup_licence\ExistingSite;
 
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
+use Drupal\joinup_taxonomy\Entity\MappedTerm;
 use Drupal\joinup_validation\Plugin\Validation\Constraint\UniqueFieldInBundleConstraint;
 
 /**
@@ -19,26 +20,21 @@ class UniqueSpdxReferenceTest extends JoinupExistingSiteTestBase {
    */
   public function testUniqueSpdxReference(): void {
     $licence_type = \Drupal::getContainer()->get('rdf_sync.mapper')->getEntityByUri('http://purl.org/adms/licence/PD');
+    $spdx_licence = MappedTerm::loadByUri('http://spdx.org/licenses/GPL-2.0-or-later');
 
-    $spdx = $this->createRdfEntity([
-      'label' => 'Test SPDX',
-      'rid' => 'spdx_licence',
+    $this->createNode([
+      'title' => 'Licence 1',
+      'type' => 'licence',
+      'description' => ['value' => 'Some description'],
+      'licence_type' => $licence_type,
+      'spdx_licence' => $spdx_licence,
     ]);
-    $spdx_id = $spdx->id();
-
-    $this->createRdfEntity([
-      'label' => 'Licence 1',
-      'rid' => 'licence',
-      'field_licence_description' => ['value' => 'Some description'],
-      'field_licence_type' => $licence_type,
-      'field_licence_spdx_licence' => $spdx_id,
-    ]);
-    $licence = $this->createRdfEntity([
-      'label' => 'Licence 2',
-      'rid' => 'licence',
-      'field_licence_description' => ['value' => 'Some description'],
-      'field_licence_type' => $licence_type,
-      'field_licence_spdx_licence' => $spdx_id,
+    $licence = $this->createNode([
+      'title' => 'Licence 2',
+      'type' => 'licence',
+      'description' => ['value' => 'Some description'],
+      'licence_type' => $licence_type,
+      'spdx_licence' => $spdx_licence,
     ]);
 
     /** @var \Drupal\Core\Entity\EntityConstraintViolationList $violations */
@@ -46,7 +42,7 @@ class UniqueSpdxReferenceTest extends JoinupExistingSiteTestBase {
     $this->assertCount(1, $violations);
     $violation = $violations[0];
     $this->assertSame(UniqueFieldInBundleConstraint::class, get_class($violation->getConstraint()));
-    $this->assertSame('field_licence_spdx_licence', $violation->getPropertyPath());
+    $this->assertSame('spdx_licence', $violation->getPropertyPath());
   }
 
 }
