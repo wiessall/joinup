@@ -4,8 +4,3 @@ description: 'A license management module.'
 package: Joinup
 
 core_version_requirement: ">=10.1"
-
-dependencies:
-  - drupal:link
-  - drupal:text
-  - rdf_entity:rdf_entity

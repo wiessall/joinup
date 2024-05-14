@@ -6,10 +6,9 @@ Feature: "Document" overview.
 
   # A document tile redesign in switch to Ventuno theme should show only title
   Scenario: Document tiles should show title but not description.
-    Given the following licence:
-      | title       | Beer licence                                     |
-      | description | Offer a beer to the developer when you meet him. |
-      | type        | Public domain                                    |
+    Given licence content:
+      | title        | description                                      | licence type  |
+      | Beer licence | Offer a beer to the developer when you meet him. | Public domain |
     And the following collection:
       | title | Traveller tools |
       | state | published       |

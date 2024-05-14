@@ -10,7 +10,7 @@ use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
-use Drupal\rdf_meta_entity\Entity\RdfMetaEntity;
+use Drupal\meta_entity\Entity\MetaEntity;
 use Drupal\solution\Entity\SolutionInterface;
 
 /**
@@ -58,7 +58,7 @@ class EifPerspectiveController extends ControllerBase {
    *   The content as a render array.
    */
   public function settings(SolutionInterface $rdf_entity): array {
-    $meta_entity = RdfMetaEntity::loadOrCreate('eif_perspective', $rdf_entity);
+    $meta_entity = MetaEntity::loadOrCreate('eif_perspective', $rdf_entity);
     return $this->entityFormBuilder()->getForm($meta_entity, 'default', [
       'redirect' => Url::fromRoute('entity.rdf_entity.canonical', [
         'rdf_entity' => $rdf_entity->id(),
@@ -76,7 +76,7 @@ class EifPerspectiveController extends ControllerBase {
    *   The access result.
    */
   public function editAccess(AccountInterface $account): AccessResultInterface {
-    return AccessResult::allowedIfHasPermissions($account, ['update eif_perspective rdf-meta-entity']);
+    return AccessResult::allowedIfHasPermissions($account, ['update eif_perspective meta-entity']);
   }
 
   /**
@@ -94,7 +94,7 @@ class EifPerspectiveController extends ControllerBase {
     }
 
     return $this->entityTypeManager()
-      ->getAccessControlHandler('rdf_meta_entity')
+      ->getAccessControlHandler('meta_entity')
       ->access($rdf_entity->eif_perspective->entity, 'view', NULL, TRUE);
   }
 

@@ -1141,6 +1141,30 @@ class FeatureContext extends RawDrupalContext {
   }
 
   /**
+   * Asserts that no link is present in the given region.
+   *
+   * @todo ISAICP-8376 Revert this once all entity types have been mapped.
+   *
+   * Same as MinkContext::assertNotLinkRegion but does not fail if region is
+   * not found.
+   *
+   * @Then I should not see the link :link in the optional :region( region)
+   *
+   * @throws \Exception
+   *   If the region is present but the link within it cannot be found.
+   */
+  public function assertNotLinkOptionalRegion($link, $region): void {
+    $session = $this->getSession();
+    $regionObj = $session->getPage()->find('region', $region);
+    if ($regionObj) {
+      $result = $regionObj->findLink($link);
+      if (!empty($result)) {
+        throw new \Exception(sprintf('Link to "%s" in the "%s" region on the page %s', $link, $region, $this->getSession()->getCurrentUrl()));
+      }
+    }
+  }
+
+  /**
    * Asserts that the page title tag equals to some text.
    *
    * The assertion strips off the possible suffix "| Joinup".
@@ -1286,6 +1310,48 @@ class FeatureContext extends RawDrupalContext {
     if (!empty($errors)) {
       throw new \Exception(sprintf("The following lines of text were not found on the page %s: '%s'", $this->getSession()->getCurrentUrl(), implode(', ', $errors)));
     }
+  }
+
+  /**
+   * Checks that multiple lines of text appear on the page in a specific order.
+   *
+   * Provide data in the following format:
+   * | Text 1 |
+   * | Text 2 |
+   * | ...    |
+   *
+   * @param \Behat\Gherkin\Node\TableNode $table
+   *   A list of texts.
+   *
+   * @Then I (should )see the following lines of text in the correct order:
+   */
+  public function assertPageTextOrder(TableNode $table): void {
+    $session = $this->getSession();
+
+    $expected_order = $table->getColumn(0);
+    $actual_text = $session->getPage()->getText();
+
+    $not_found = [];
+    foreach ($expected_order as $substring) {
+      if (!str_contains($actual_text, $substring)) {
+        $not_found[] = "'$substring'";
+      }
+    }
+    if ($not_found) {
+      throw new ElementNotFoundException($session->getDriver(), sprintf('Substring(s): %s', implode(', ', array_unique($not_found))));
+    }
+
+    $actual_order = [];
+    $offset = 0;
+    foreach ($expected_order as $substring) {
+      if (($pos = strpos($actual_text, $substring, $offset)) !== FALSE) {
+        $actual_order[$pos] = $substring;
+        $offset = $pos + strlen($substring);
+      }
+    }
+    ksort($actual_order);
+
+    Assert::assertSame($expected_order, array_values($actual_order), 'Strings found but incorrectly ordered');
   }
 
   /**
@@ -1684,6 +1750,22 @@ class FeatureContext extends RawDrupalContext {
     // Sample tests needing this:
     // - collection.subscribe-on-join.feature.
     \Drupal::getContainer()->get('cache.static')->invalidateAll();
+  }
+
+  /**
+   * Performs the RDF synchronization.
+   *
+   * When a request terminates, all services implementing DestructableInterface
+   * are called to perform tasks after the response has been sent back to the
+   * client. This is OK when operating manually the site, but when this is
+   * wrapped in the test "page request", these operations will occur only after
+   * all the steps were executed. But some tasks just need to be executed before
+   * the next Behat step.
+   *
+   * @AfterStep
+   */
+  public function kernelTerminateTasks(): void {
+    \Drupal::service('rdf_sync.synchronizer')->destruct();
   }
 
   /**
