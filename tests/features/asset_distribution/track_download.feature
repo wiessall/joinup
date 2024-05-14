@@ -6,10 +6,9 @@ Feature: Asset distribution editing.
 
   @javascript
   Scenario: Downloads made by authenticated users are logged.
-    Given the following licence:
-      | title       | Postcard licence                     |
-      | description | Send a postcard from where you live. |
-      | type        | Public domain                        |
+    Given licence content:
+      | title            | description                          | licence type  |
+      | Postcard licence | Send a postcard from where you live. | Public domain |
     And collection:
       | title | Berkeley Software Distributions |
       | state | published                       |

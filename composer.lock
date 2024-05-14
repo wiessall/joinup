@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e8ce67d757477f7a5926e6361e402a17",
+    "content-hash": "5c56dca746e78e826068b2c559cb6a3e",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -12226,16 +12226,6 @@
                 }
             ],
             "time": "2024-02-19T05:59:13+00:00"
-        },
-        {
-            "name": "spdx/license-list-data",
-            "version": "master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/spdx/license-list-data",
-                "reference": "main"
-            },
-            "type": "library"
         },
         {
             "name": "sweetrdf/easyrdf",

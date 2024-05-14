@@ -55,9 +55,8 @@ use Drupal\eif\EifWrapperInterface;
  *   bundle_entity_type = "eif_wrapper_type",
  * )
  *
- * @todo Move the whole logic to a custom field type once ISAICP-3576 lands.
- *
- * @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3576
+ * @todo Cannot delete the entity type class in a single deployment. Delete the
+ *   entities but postpone the class deletion to ISAICP-8376.
  */
 class EifWrapper extends ContentEntityBase implements EifWrapperInterface {
 
