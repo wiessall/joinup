@@ -8,54 +8,15 @@ use Drupal\Component\Render\MarkupInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Controller\ControllerBase;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\meta_entity\Entity\MetaEntity;
-use Drupal\og\OgAccessInterface;
 use Drupal\solution\Entity\SolutionInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Controller class for the solution EIF perspective.
  */
 class EifPerspectiveController extends ControllerBase {
-
-  /**
-   * The entity type manager service.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
-
-  /**
-   * The OG access service.
-   *
-   * @var \Drupal\og\OgAccessInterface
-   */
-  protected $ogAccess;
-
-  /**
-   * Constructs a new controller instance.
-   *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   The entity type manager service.
-   * @param \Drupal\og\OgAccessInterface $og_access
-   *   The OG access service.
-   */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, OgAccessInterface $og_access) {
-    $this->entityTypeManager = $entity_type_manager;
-    $this->ogAccess = $og_access;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container) {
-    return new static(
-      $container->get('entity_type.manager'),
-      $container->get('og.access')
-    );
-  }
 
   /**
    * Provides a controller for the 'eif.eif_perspective_form' route title.
@@ -108,25 +69,14 @@ class EifPerspectiveController extends ControllerBase {
   /**
    * Provides an access callback for the 'eif.eif_perspective_form' route.
    *
-   * @param \Drupal\solution\Entity\SolutionInterface $rdf_entity
-   *   The solution.
+   * @param \Drupal\Core\Session\AccountInterface $account
+   *   The account being checked.
    *
    * @return \Drupal\Core\Access\AccessResultInterface
    *   The access result.
    */
-  public function editAccess(SolutionInterface $rdf_entity): AccessResultInterface {
-    $meta_entity = MetaEntity::loadOrCreate('eif_perspective', $rdf_entity);
-    if (!$meta_entity->isNew()) {
-      $access_result = $meta_entity->access('update', NULL, TRUE);
-    }
-    else {
-      $access_result = $this->entityTypeManager->getAccessControlHandler('meta_entity')->createAccess('eif_perspective', NULL, [], TRUE);
-    }
-
-    if ($access_result->isAllowed()) {
-      return $access_result;
-    }
-    return $access_result->orIf($this->ogAccess->userAccess($rdf_entity, 'update eif_perspective meta-entity'));
+  public function editAccess(AccountInterface $account): AccessResultInterface {
+    return AccessResult::allowedIfHasPermissions($account, ['update eif_perspective meta-entity']);
   }
 
   /**
@@ -142,7 +92,10 @@ class EifPerspectiveController extends ControllerBase {
     if (empty($rdf_entity->eif_perspective->entity) || !$rdf_entity->access('view')) {
       return AccessResult::forbidden();
     }
-    return $this->entityTypeManager->getAccessControlHandler('meta_entity')->access($rdf_entity->eif_perspective->entity, 'view', NULL, TRUE);
+
+    return $this->entityTypeManager()
+      ->getAccessControlHandler('meta_entity')
+      ->access($rdf_entity->eif_perspective->entity, 'view', NULL, TRUE);
   }
 
 }

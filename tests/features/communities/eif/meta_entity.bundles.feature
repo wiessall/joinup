@@ -19,6 +19,7 @@ Feature:
       | not logged in                                                  | not see        |
       | logged in as a user with the authenticated role                | not see        |
       | logged in as a facilitator of the "Some EIF solution" solution | not see        |
+      | logged in as a owner of the "Some EIF solution" solution       | not see        |
       | logged in as a user with the moderator role                    | see            |
 
   Scenario: The authorized user should be able to add edit all available fields.
