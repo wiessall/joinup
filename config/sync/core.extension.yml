@@ -33,10 +33,8 @@ module:
   dashboard: 0
   datetime: 0
   datetime_range: 0
-  developers_italia: 0
   diff: 0
   digital_size_formatter: 0
-  dpsi: 0
   dropsolid_purge: 0
   dynamic_entity_reference: 0
   dynamic_page_cache: 0
@@ -52,7 +50,6 @@ module:
   entityqueue: 0
   entityqueue_block: 0
   error_page: 0
-  eu_sic: 0
   eupl: 0
   facets: 0
   facets_block: 0
@@ -92,7 +89,6 @@ module:
   joinup_eulogin: 0
   joinup_event: 0
   joinup_featured: 0
-  joinup_federation: 0
   joinup_flag: 0
   joinup_front_page: 0
   joinup_group: 0
@@ -110,7 +106,6 @@ module:
   joinup_newsletter: 0
   joinup_notification: 0
   joinup_paragraphs: 0
-  joinup_pipeline_log: 0
   joinup_poll: 0
   joinup_publication_date: 0
   joinup_rdf: 0
@@ -154,7 +149,6 @@ module:
   moderation: 0
   monolog: 0
   mysql: 0
-  nio: 0
   node: 0
   oe_bootstrap_theme_helper: 0
   oe_dashboard_agent: 0
@@ -175,7 +169,6 @@ module:
   paragraphs_type_permissions: 0
   path: 0
   path_alias: 0
-  pipeline: 0
   poll: 0
   purge: 0
   purge_drush: 0
@@ -185,10 +178,6 @@ module:
   queue_ui: 0
   rdf_draft: 0
   rdf_entity: 0
-  rdf_entity_provenance: 0
-  rdf_export: 0
-  rdf_meta_entity: 0
-  rdf_schema_field_validation: 0
   rdf_sync: 0
   redirect: 0
   responsive_image: 0
@@ -218,9 +207,7 @@ module:
   social_media_links: 0
   social_media_links_field: 0
   solution: 0
-  spain_ctt: 0
   sparql_entity_storage: 0
-  spdx: 0
   state_machine: 0
   state_machine_permissions: 0
   state_machine_revisions: 0

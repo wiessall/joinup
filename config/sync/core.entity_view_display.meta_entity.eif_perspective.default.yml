@@ -1,0 +1,96 @@
+uuid: 2d4e1fc0-d926-4b42-9962-2dd1500cb8fb
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.meta_entity.eif_perspective.eif_description
+    - field.field.meta_entity.eif_perspective.eif_layer
+    - field.field.meta_entity.eif_perspective.eif_model
+    - field.field.meta_entity.eif_perspective.eif_principle
+    - field.field.meta_entity.eif_perspective.eif_recommendation
+    - field.field.meta_entity.eif_perspective.eif_solution_type
+    - meta_entity.type.eif_perspective
+  module:
+    - eif
+    - field_delimiter
+    - field_formatter_range
+    - joinup_slick
+    - template_suggestion
+    - text
+id: meta_entity.eif_perspective.default
+targetEntityType: meta_entity
+bundle: eif_perspective
+mode: default
+content:
+  eif_description:
+    type: text_default
+    label: inline
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  eif_layer:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 4
+    region: content
+  eif_model:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 5
+    region: content
+  eif_principle:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  eif_recommendation:
+    type: eif_qualified_recommendation
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 6
+    region: content
+  eif_solution_type:
+    type: entity_reference_label
+    label: inline
+    settings:
+      link: false
+    third_party_settings:
+      field_delimiter:
+        delimiter: ''
+      field_formatter_range:
+        order: 0
+        limit: 0
+        offset: 0
+      joinup_slick:
+        preset: ''
+        field_label: true
+        custom_label: ''
+      template_suggestion:
+        template_suggestion: ''
+    weight: 2
+    region: content
+  label:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  changed: true
+  created: true
+  search_api_excerpt: true
+  target: true
+  uri: true
