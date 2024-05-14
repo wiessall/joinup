@@ -133,6 +133,7 @@ Feature:
 
   @loggedErrors
   Scenario: All necessary OSS Solution fields are visible on node page.
+    Given I clean the "eu_oss_vitality_index" queue worker
     Given oss_contact content:
       | title           |
       | FOSS Conference |
