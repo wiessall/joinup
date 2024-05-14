@@ -17,6 +17,5 @@ dependencies:
   - 'joinup:joinup_stats'
   - 'joinup:joinup_taxonomy'
   - 'joinup:joinup_user'
-  - 'joinup:rdf_schema_field_validation'
   - 'rdf_entity:rdf_entity'
   - 'state_machine:state_machine'
