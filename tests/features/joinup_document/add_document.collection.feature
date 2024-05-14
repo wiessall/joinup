@@ -96,10 +96,9 @@ Feature: "Add document" visibility options.
     Given the following collection:
       | title | Strong Lasers |
       | state | published     |
-    And licence:
-      | title       | Creative Commons Zero                                               |
-      | description | CC0 is a legal tool for waiving as many rights as legally possible. |
-      | type        | Public domain                                                       |
+    And licence content:
+      | title                 | description                                                         | licence type  |
+      | Creative Commons Zero | CC0 is a legal tool for waiving as many rights as legally possible. | Public domain |
     And document content:
       | title       | document type | short title | file type | file                   | abstract | field_paragraphs_body | licence               | state     | collection    |
       | Laser types | document      | L-Types     | remote    | http://www.example.com | Abstract | List of laser types.  | Creative Commons Zero | published | Strong Lasers |

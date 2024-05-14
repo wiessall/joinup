@@ -194,8 +194,8 @@ Feature: Homepage
 
     Examples:
       | version                    | url                                                                  |
-      | v1.57.0                    | https://git.fpfis.eu/ec-europa/digit-joinup-reference/-/tags/v1.57.0 |
-      | v1.57.0-177-g0123456abcdef | https://git.fpfis.eu/digit/digit-joinup-dev/-/commit/0123456abcdef   |
+      | v1.57.0                    | https://git.fpfis.tech.ec.europa.eu/ec-europa/digit-joinup-reference/-/releases/v1.57.0 |
+      | v1.57.0-177-g0123456abcdef | https://git.fpfis.tech.ec.europa.eu/ec-europa/digit-joinup-reference/-/commit/0123456abcdef   |
 
   Scenario: Search box is shown in the main content
     Given collection:
