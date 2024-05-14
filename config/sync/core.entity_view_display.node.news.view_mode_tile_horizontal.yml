@@ -26,6 +26,7 @@ dependencies:
     - field_formatter_range
     - field_group
     - joinup_core
+    - joinup_slick
     - layout_builder
     - responsive_image
     - template_suggestion
@@ -62,7 +63,9 @@ content:
     label: hidden
     settings:
       link_to_entity: false
-    third_party_settings: {  }
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: bare
     weight: 1
     region: content
   field_news_logo:
@@ -93,8 +96,12 @@ content:
         delimiter: ''
       field_formatter_range:
         order: 0
-        limit: 0
+        limit: 1
         offset: 0
+      joinup_slick:
+        preset: ''
+        field_label: true
+        custom_label: ''
       template_suggestion:
         template_suggestion: ''
     weight: 1
