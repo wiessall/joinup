@@ -6,8 +6,6 @@ namespace Drupal\asset_release\Cache;
 
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Cache\Context\CacheContextInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
@@ -15,9 +13,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
  *
  * Cache context ID: 'asset_release'.
  */
-class AssetReleaseCacheContext implements CacheContextInterface, ContainerAwareInterface {
-
-  use ContainerAwareTrait;
+class AssetReleaseCacheContext implements CacheContextInterface {
 
   /**
    * The request stack.
