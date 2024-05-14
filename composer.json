@@ -135,7 +135,7 @@
         "drupal/http_request_mock": "^1.1",
         "drupal/masquerade": "^2.0@RC",
         "drupal/renderviz": "^1.0",
-        "drupal/stage_file_proxy": "2.1.3",
+        "drupal/stage_file_proxy": "^2.1.4",
         "drupal/upgrade_status": "^4.0",
         "drupaltest/behat-one-time-login": "^1.0",
         "ec-europa/toolkit": "^10.5",
@@ -435,6 +435,9 @@
                 "SVG is not valid or cannot be sanitized, return an error. @see https://www.drupal.org/i/3350696": "resources/patch/php/drupal/svg_image/3350696.patch",
                 "SvgImageWidget should inherit from ImageWidget instead of FileWidget @see https://www.drupal.org/project/svg_image/issues/3420037": "resources/patch/php/drupal/svg_image/3420037.patch",
                 "The 'image_loading' attribute is not respected - https://www.drupal.org/project/svg_image/issues/3275057": "resources/patch/php/drupal/svg_image/3275057-14.patch"
+            },
+            "drupal/stage_file_proxy": {
+                "Fetching does not respect use_imagecache_root when using converted webp image styles @see https://www.drupal.org/i/3402972": "resources/patch/php/drupal/stage_file_proxy/stage_file_proxy-3402972-MR-28f616d8--without-method.diff"
             },
             "drupal/ui_patterns_settings": {
                 "Fix TypeError: array_unshift(): Argument #1 ($array) must be of type array, null given in array_unshift() Caused by Deprecated Hooks in Drupal ~10.2.0 @see https://www.drupal.org/i/3409221": "resources/patch/php/drupal/ui_patterns_settings/ui_patterns_settings-3409221-26.patch"
