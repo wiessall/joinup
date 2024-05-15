@@ -11,7 +11,7 @@ third_party_settings:
       resolvers:
         -
           plugin: metadata_content
-          config: {}
+          config: {  }
 id: node.oss_solution.oss_publiccode_yml_content
 field_name: oss_publiccode_yml_content
 entity_type: node

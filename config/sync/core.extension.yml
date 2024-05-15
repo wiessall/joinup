@@ -52,7 +52,6 @@ module:
   entityqueue_block: 0
   error_page: 0
   eu_oss_catalogue: 0
-  eu_sic: 0
   eupl: 0
   facets: 0
   facets_block: 0
@@ -177,7 +176,6 @@ module:
   paragraphs_type_permissions: 0
   path: 0
   path_alias: 0
-  pipeline: 0
   pluginreference: 0
   poll: 0
   purge: 0
