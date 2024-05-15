@@ -1,0 +1,36 @@
+uuid: cd5318fa-b374-47c1-9bc3-1f2e0d1515fd
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.licence_type
+    - node.type.licence
+    - taxonomy.vocabulary.licence_type
+  module:
+    - rdf_sync
+third_party_settings:
+  rdf_sync:
+    target_id:
+      predicate: 'http://purl.org/dc/terms/type'
+      type: resource
+id: node.licence.licence_type
+field_name: licence_type
+entity_type: node
+bundle: licence
+label: Type
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      licence_type: licence_type
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

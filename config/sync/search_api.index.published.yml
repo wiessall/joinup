@@ -10,12 +10,14 @@ dependencies:
     - field.storage.node.body
     - field.storage.node.oss_categories
     - field.storage.node.oss_development_status
+    - field.storage.node.spdx_licence
     - field.storage.node.field_event_date
     - field.storage.meta_entity.field_featured
     - field.storage.node.oss_features
     - field.storage.node.oss_git_description
     - field.storage.node.field_news_headline
     - field.storage.node.oss_scope
+    - field.storage.node.description
     - field.storage.node.field_location
     - field.storage.node.field_organisation
     - field.storage.meta_entity.field_pinned_in
@@ -31,12 +33,10 @@ dependencies:
     - field.storage.rdf_entity.field_ci_name
     - field.storage.rdf_entity.field_is_contact_information
     - field.storage.rdf_entity.field_isr_contact_information
-    - field.storage.rdf_entity.field_licence_spdx_licence
     - field.storage.rdf_entity.field_ad_description
     - field.storage.rdf_entity.field_ar_description
     - field.storage.rdf_entity.field_is_description
     - field.storage.rdf_entity.field_isr_description
-    - field.storage.rdf_entity.field_licence_description
     - field.storage.rdf_entity.field_is_eif_category
     - field.storage.rdf_entity.field_is_eif_recommendation
     - field.storage.rdf_entity.field_is_owner
@@ -99,6 +99,7 @@ third_party_settings:
     term_modifiers:
       slop: 10000000
       fuzzy: 2
+      fuzzy_analyzer: true
     advanced:
       index_prefix: ''
       collection: ''
@@ -149,6 +150,22 @@ field_settings:
     dependencies:
       module:
         - node
+  description_processed:
+    label: 'Licence Description »  Processed text'
+    datasource_id: 'entity:node'
+    property_path: 'description:processed'
+    type: text
+    dependencies:
+      config:
+        - field.storage.node.description
+  description_processed_spellcheck:
+    label: 'Licence Description » Processed text - spellcheck'
+    datasource_id: 'entity:node'
+    property_path: 'description:processed'
+    type: solr_text_spellcheck
+    dependencies:
+      config:
+        - field.storage.node.description
   eif_perspective:
     label: 'EIF perspective reference'
     datasource_id: 'entity:rdf_entity'
@@ -417,30 +434,6 @@ field_settings:
     dependencies:
       config:
         - field.storage.rdf_entity.field_isr_release_notes
-  field_licence_description:
-    label: 'Description » Processed text'
-    datasource_id: 'entity:rdf_entity'
-    property_path: 'field_licence_description:processed'
-    type: text
-    dependencies:
-      config:
-        - field.storage.rdf_entity.field_licence_description
-  field_licence_description_spellcheck:
-    label: 'Description » Processed text - Spellcheck'
-    datasource_id: 'entity:rdf_entity'
-    property_path: 'field_licence_description:processed'
-    type: solr_text_spellcheck
-    dependencies:
-      config:
-        - field.storage.rdf_entity.field_licence_description
-  field_licence_spdx_licence:
-    label: 'Corresponding SPDX licence'
-    datasource_id: 'entity:rdf_entity'
-    property_path: field_licence_spdx_licence
-    type: string
-    dependencies:
-      config:
-        - field.storage.rdf_entity.field_licence_spdx_licence
   field_location:
     label: Location
     datasource_id: 'entity:node'
@@ -987,6 +980,14 @@ field_settings:
     dependencies:
       module:
         - node
+  spdx_licence:
+    label: 'Corresponding SPDX licence'
+    datasource_id: 'entity:node'
+    property_path: spdx_licence
+    type: integer
+    dependencies:
+      config:
+        - field.storage.node.spdx_licence
   sticky:
     label: 'Sticky at top of lists'
     datasource_id: 'entity:node'
@@ -1000,6 +1001,9 @@ field_settings:
     datasource_id: 'entity:taxonomy_term'
     property_path: tid
     type: string
+    dependencies:
+      module:
+        - taxonomy
   title:
     label: Title
     datasource_id: 'entity:node'
@@ -1060,6 +1064,7 @@ datasource_settings:
         - discussion
         - document
         - event
+        - licence
         - news
         - oss_solution
         - video
@@ -1073,9 +1078,7 @@ datasource_settings:
         - asset_distribution
         - asset_release
         - collection
-        - licence
         - solution
-        - spdx_licence
     languages:
       default: true
       selected: {  }
@@ -1166,8 +1169,6 @@ processor_settings:
       - field_isr_description_spellcheck
       - field_isr_release_notes
       - field_isr_release_notes_spellcheck
-      - field_licence_description
-      - field_licence_description_spellcheck
       - field_location
       - field_location_spellcheck
       - field_news_headline
@@ -1227,8 +1228,6 @@ processor_settings:
       - field_isr_description_spellcheck
       - field_isr_release_notes
       - field_isr_release_notes_spellcheck
-      - field_licence_description
-      - field_licence_description_spellcheck
       - field_location
       - field_location_spellcheck
       - field_news_headline
@@ -1298,8 +1297,6 @@ processor_settings:
       - field_isr_description_spellcheck
       - field_isr_release_notes
       - field_isr_release_notes_spellcheck
-      - field_licence_description
-      - field_licence_description_spellcheck
       - field_location
       - field_location_spellcheck
       - field_news_headline
@@ -1353,8 +1350,6 @@ processor_settings:
       - field_isr_description_spellcheck
       - field_isr_release_notes
       - field_isr_release_notes_spellcheck
-      - field_licence_description
-      - field_licence_description_spellcheck
       - field_location
       - field_location_spellcheck
       - field_news_headline
