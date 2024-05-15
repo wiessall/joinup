@@ -117,11 +117,11 @@ Feature: OSS catalogue search
 
     When I am logged in as a facilitator of the "EU Open Source Solutions Catalogue" collection
     And I go to the homepage of the "EU Open Source Solutions Catalogue" collection
-    And I should see the link "Metadata" in the "Entity actions" region
+    And I should see the link "Settings" in the "Entity actions" region
 
     When I am logged in as a user with the "moderator" role
     And I go to the homepage of the "EU Open Source Solutions Catalogue" collection
-    And I should see the link "Metadata" in the "Entity actions" region
+    And I should see the link "Settings" in the "Entity actions" region
 
     When I am logged in as an "authenticated user"
     And I go to the homepage of the "EU Open Source Solutions Catalogue" collection
