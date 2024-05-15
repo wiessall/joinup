@@ -242,3 +242,55 @@ function joinup_rdf_update_110505(): void {
   // Remove provenance records from the RDF backend.
   \Drupal::getContainer()->get('sparql.endpoint')->update("CLEAR GRAPH <http://joinup.eu/provenance_activity>;");
 }
+
+/**
+ * Clean up invalid release type entries and update the predicate.
+ */
+function joinup_rdf_update_110506(): void {
+  $sparql = \Drupal::getContainer()->get('sparql.endpoint');
+  $cleanup_query = <<<SPARQL
+DELETE {
+  GRAPH ?g {
+    ?s <http://joinup.eu/test_resource_type> ?deletedTermUri .
+  }
+}
+WHERE {
+  GRAPH ?g {
+    ?s a <http://www.w3.org/ns/dcat#Dataset> .
+    ?s <http://joinup.eu/test_resource_type> ?deletedTermUri .
+    FILTER NOT EXISTS {
+      SELECT ?deletedTermUri
+      WHERE {
+        GRAPH <http://data> {
+          ?deletedTermUri <http://www.w3.org/2004/02/skos/core#inScheme> <http://data.europa.eu/dr8> .
+        }
+      }
+    }
+  }
+}
+SPARQL;
+
+  $sparql->update($cleanup_query);
+
+  $update_query = <<<SPARQL
+DELETE {
+  GRAPH ?g {
+    ?s <http://joinup.eu/test_resource_type> ?o .
+  }
+}
+INSERT {
+  GRAPH ?g {
+    ?s <http://purl.org/dc/terms/type> ?o .
+  }
+}
+WHERE {
+  GRAPH ?g {
+    ?s a <http://www.w3.org/ns/dcat#Dataset> .
+    ?s <http://joinup.eu/test_resource_type> ?o .
+    VALUES ?g { <http://joinup.eu/asset_release/published> <http://joinup.eu/asset_release/draft> }
+  }
+}
+SPARQL;
+
+  $sparql->update($update_query);
+}
