@@ -31,3 +31,28 @@ function interoperable_europe_form_join_group_form_alter(&$form, FormStateInterf
     }
   }
 }
+
+/**
+ * Implements hook_entity_prepare_view().
+ */
+function interoperable_europe_entity_prepare_view(string $entity_type_id, array $entities, array $displays, string $view_mode): void {
+  if ($entity_type_id !== 'node' || $view_mode !== 'view_mode_tile') {
+    return;
+  }
+
+  $bundles = ['event'];
+  foreach ($entities as $entity) {
+    if ($entity->get('og_audience')->target_id !== InteroperableEuropeCollectionInterface::COLLECTION_ENTITY_ID) {
+      continue;
+    }
+
+    if (!in_array($entity->bundle(), $bundles)) {
+      continue;
+    }
+
+    if ($component = $displays['event']->getComponent('field_paragraphs_body')) {
+      $component['settings']['trim_length'] = 600;
+      $displays['event']->setComponent('field_paragraphs_body', $component);
+    }
+  }
+}

@@ -390,7 +390,11 @@ function joinup_community_content_preprocess_node(&$variables): void {
     return;
   }
 
-  if ($variables['elements']['#view_mode'] === 'explore_item' && isset($variables['content']['_layout_builder'])) {
+  if (
+    $variables['elements']['#view_mode'] === 'explore_item'
+    && isset($variables['content']['_layout_builder'])
+    && !empty(Element::children($variables['content']['_layout_builder'])
+  )) {
     $mapping = _joinup_community_content_get_layout_builder_field_mapping($variables['content']['_layout_builder']);
     if (isset($mapping[$node->getAbstractField()])
       && isset($mapping[$node->getDescriptionField()])
