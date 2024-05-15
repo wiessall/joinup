@@ -39,8 +39,6 @@ dependencies:
     - paragraphs_type_permissions
     - poll
     - rdf_entity
-    - rdf_export
-    - rdf_meta_entity
     - search_api_autocomplete
     - sitewide_alert
     - state_machine_permissions
@@ -121,7 +119,6 @@ permissions:
   - 'edit own news content'
   - 'edit own owner rdf entity'
   - 'edit own polls'
-  - 'export rdf metadata'
   - 'flag bookmark_node'
   - 'flag bookmark_rdf_entity'
   - 'flag like_node'
@@ -189,8 +186,7 @@ permissions:
   - 'view bookmark_node'
   - 'view bookmark_rdf_entity'
   - 'view compatibility documents'
-  - 'view eif wrapper entity'
-  - 'view eif_perspective rdf-meta-entity'
+  - 'view eif_perspective meta-entity'
   - 'view media'
   - 'view own unpublished content'
   - 'view paragraph content 1_column_layout'

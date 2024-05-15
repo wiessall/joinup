@@ -5,12 +5,6 @@ dependencies:
   config:
     - sparql_entity_storage.graph.default
     - rdf_entity.rdfentity.contact_information
-third_party_settings:
-  rdf_schema_field_validation:
-    property_predicates:
-      - 'http://www.w3.org/2000/01/rdf-schema#domain'
-    graph: 'http://adms-definition'
-    class: 'http://www.w3.org/2000/01/rdf-schema#Class'
 id: rdf_entity.contact_information
 entity_type_id: rdf_entity
 bundle: contact_information

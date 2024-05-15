@@ -1,6 +1,0 @@
-services:
-  spdx.commands:
-    class: Drupal\spdx\Commands\SpdxCommands
-    arguments: ['@sparql.endpoint']
-    tags:
-      - { name: drush.command }

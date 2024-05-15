@@ -5,16 +5,12 @@ declare(strict_types=1);
 namespace Drupal\joinup_licence\Entity;
 
 use Drupal\joinup_bundle_class\JoinupBundleClassFieldAccessTrait;
-use Drupal\rdf_entity\Entity\Rdf;
+use Drupal\joinup_taxonomy\Entity\MappedTerm;
 
 /**
- * Bundle class for the 'SPDX' bundle.
- *
- * This RDF entity bundle type is defined by the SPDX module, but since the
- * bundle classes are not yet available in vanilla Drupal we define them inside
- * Joinup rather than in the contributed module.
+ * Bundle class for the 'SPDX Licence' vocabulary.
  */
-class SpdxLicence extends Rdf implements SpdxLicenceInterface {
+class SpdxLicence extends MappedTerm implements SpdxLicenceInterface {
 
   use JoinupBundleClassFieldAccessTrait;
 
@@ -22,7 +18,7 @@ class SpdxLicence extends Rdf implements SpdxLicenceInterface {
    * {@inheritdoc}
    */
   public function getLicenceId(): ?string {
-    if ($id = $this->getMainPropertyValue('field_spdx_licence_id')) {
+    if ($id = $this->getMainPropertyValue('spdx_id')) {
       return (string) $id;
     }
     return NULL;
