@@ -50,6 +50,7 @@
     }
   }
   .p-plus {
+    display: inline-flex;
     align-items: baseline;
     .p-plus__toggle-btn {
       color: $primary;
