@@ -68,6 +68,9 @@ class HomepageContext extends RawDrupalContext {
       Assert::assertInstanceOf(NodeElement::class, $description_element, sprintf('Did not find a description for the %s "%s" in the "Explore" section.', $type, $expected_data['title']));
 
       $actual_description = $description_element->getHtml();
+      // Note: Please, take care, that the following will not work properly if
+      // twig debug is enabled. In that case, the output will contain a lot of
+      // HTML comments which will not be stripped out by the formatter.
       Assert::assertEquals($expected_data['description'], trim($actual_description), sprintf('The body text for the %s "%s" in the "Explore" section does not contain the expected text.', $type, $expected_data['title']));
 
       // Check date.
