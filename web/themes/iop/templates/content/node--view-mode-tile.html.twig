@@ -77,12 +77,7 @@
       </h1>
     {{ title_suffix }}
     <div class="tile__text">
-      {# If content.field_paragraphs_body is not empty, use this. Otherwise, use content.body #}
-      {% if content.field_paragraphs_body|render %}
-        {{ content.without('body') }}
-      {% else %}
-        {{ content.body }}
-      {% endif %}
+      {{ content.body }}
     </div>
   </article>
 </div>
