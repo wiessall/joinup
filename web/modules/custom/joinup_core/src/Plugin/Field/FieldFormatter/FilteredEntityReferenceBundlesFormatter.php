@@ -149,6 +149,9 @@ class FilteredEntityReferenceBundlesFormatter extends EntityReferenceRevisionsEn
 
     $truncate = new TruncateHTML();
     return [
+      // The reason for typecasting is because layout builder configuration form
+      // returns a string even though the schema is set to integer and the
+      // value stored is an integer.
       '#markup' => $truncate->truncateChars($text, (int) $this->getSetting('trim_length')),
     ];
   }
