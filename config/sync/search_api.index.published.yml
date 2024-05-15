@@ -972,14 +972,6 @@ field_settings:
         - 'entity:node/field_event_spatial_coverage'
         - 'entity:node/field_news_spatial_coverage'
         - 'entity:rdf_entity/field_spatial_coverage'
-  status:
-    label: Published
-    datasource_id: 'entity:node'
-    property_path: status
-    type: boolean
-    dependencies:
-      module:
-        - node
   spdx_licence:
     label: 'Corresponding SPDX licence'
     datasource_id: 'entity:node'
@@ -988,6 +980,14 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.spdx_licence
+  status:
+    label: Published
+    datasource_id: 'entity:node'
+    property_path: status
+    type: boolean
+    dependencies:
+      module:
+        - node
   sticky:
     label: 'Sticky at top of lists'
     datasource_id: 'entity:node'
