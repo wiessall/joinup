@@ -122,12 +122,6 @@ function iop_preprocess_node(array &$variables): void {
     $variables['content']['report']['#access'] = FALSE;
   }
 
-  // This should be handled generically after news are also migrated.
-  // @see ISAICP-8606.
-  if ($node instanceof EventInterface) {
-    $variables['content']['body'] = $variables['content']['field_paragraphs_body'];
-  }
-
   // News listing page.
   if (!empty($variables['content']['field_news_logo'])) {
     $variables['logo'][] = $variables['content']['field_news_logo'];
