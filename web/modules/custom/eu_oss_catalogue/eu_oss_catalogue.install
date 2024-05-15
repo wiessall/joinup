@@ -25,10 +25,10 @@ function eu_oss_catalogue_install(): void {
     }
   }
 
-  $licencesJsonFile = DRUPAL_ROOT . "/../vendor/spdx/license-list-data/json/licenses.json";
-  $licences = Json::decode(file_get_contents($licencesJsonFile))['licenses'];
-  foreach ($licences as $licence) {
-    $terms[] = ['vid' => 'oss_licence', 'name' => $licence['licenseId']];
+  $licencesJsonFile = DRUPAL_ROOT . "/../vendor/composer/spdx-licenses/res/spdx-licenses.json";
+  $licences = Json::decode(file_get_contents($licencesJsonFile));
+  foreach ($licences as $name => $licence) {
+    $terms[] = ['vid' => 'oss_licence', 'name' => $name];
   }
 
   $pathResolver = \Drupal::getContainer()->get('extension.path.resolver');

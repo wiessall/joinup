@@ -37,8 +37,8 @@ Feature: "Edit" visibility options.
 
     When I am logged in as an "authenticated user"
     And I go to the homepage of the "My awesome solution abc v1" release
-    Then I should not see the link "Edit" in the "Entity actions" region
+    Then I should not see the link "Edit" in the optional "Entity actions" region
 
     When I am an anonymous user
     And I go to the homepage of the "My awesome solution abc v1" release
-    Then I should not see the link "Edit" in the "Entity actions" region
+    Then I should not see the link "Edit" in the optional "Entity actions" region
