@@ -1,3 +1,13 @@
+# Schema for the configuration files of the Vitality index module.
+
+eu_oss_vitality_index.settings:
+  type: config_object
+  label: 'Vitality index settings'
+  mapping:
+    cron_frequency:
+      type: integer
+      label: 'Cron frequency in days'
+
 field.formatter.settings.vitality_index_chart:
   type: mapping
   label: 'Vitality index chart'
