@@ -1,6 +1,0 @@
-name: SPDX Licences
-type: module
-description: 'A license management module.'
-package: Joinup
-
-core_version_requirement: ">=10.1"

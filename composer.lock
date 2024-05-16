@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "97d80fd978ab39a93f2da11370247152",
+    "content-hash": "b8ad876778fdf21dcff7547a2bb53715",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1966,101 +1966,6 @@
             "homepage": "https://www.drupal.org/project/changed_fields",
             "support": {
                 "source": "https://git.drupalcode.org/project/changed_fields"
-            }
-        },
-        {
-            "name": "drupal/ckeditor",
-            "version": "1.0.2",
-            "source": {
-                "type": "git",
-                "url": "https://git.drupalcode.org/project/ckeditor.git",
-                "reference": "1.0.2"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/ckeditor-1.0.2.zip",
-                "reference": "1.0.2",
-                "shasum": "fec2ca9ad852a00c7b9584cb6040dc860364c481"
-            },
-            "require": {
-                "drupal/core": "^9.4 || ^10"
-            },
-            "require-dev": {
-                "drupal/classy": "*"
-            },
-            "type": "drupal-module",
-            "extra": {
-                "drupal": {
-                    "version": "1.0.2",
-                    "datestamp": "1695740655",
-                    "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
-                    }
-                }
-            },
-            "notification-url": "https://packages.drupal.org/8/downloads",
-            "license": [
-                "GPL-2.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "dczepierga",
-                    "homepage": "https://www.drupal.org/user/911466"
-                },
-                {
-                    "name": "hass",
-                    "homepage": "https://www.drupal.org/user/85918"
-                },
-                {
-                    "name": "jcisio",
-                    "homepage": "https://www.drupal.org/user/210762"
-                },
-                {
-                    "name": "Jorrit",
-                    "homepage": "https://www.drupal.org/user/161217"
-                },
-                {
-                    "name": "lauriii",
-                    "homepage": "https://www.drupal.org/user/1078742"
-                },
-                {
-                    "name": "Magnus",
-                    "homepage": "https://www.drupal.org/user/73919"
-                },
-                {
-                    "name": "mkesicki",
-                    "homepage": "https://www.drupal.org/user/922884"
-                },
-                {
-                    "name": "nod_",
-                    "homepage": "https://www.drupal.org/user/598310"
-                },
-                {
-                    "name": "p.wiaderny",
-                    "homepage": "https://www.drupal.org/user/2956619"
-                },
-                {
-                    "name": "vokiel",
-                    "homepage": "https://www.drupal.org/user/2793801"
-                },
-                {
-                    "name": "Wim Leers",
-                    "homepage": "https://www.drupal.org/user/99777"
-                },
-                {
-                    "name": "wwalc",
-                    "homepage": "https://www.drupal.org/user/184556"
-                },
-                {
-                    "name": "xjm",
-                    "homepage": "https://www.drupal.org/user/65776"
-                }
-            ],
-            "description": "WYSIWYG editing for rich text fields using CKEditor.",
-            "homepage": "https://www.drupal.org/project/ckeditor",
-            "support": {
-                "source": "https://git.drupalcode.org/project/ckeditor"
             }
         },
         {
@@ -5918,64 +5823,6 @@
             }
         },
         {
-            "name": "drupal/pipeline",
-            "version": "1.0.0-alpha5",
-            "source": {
-                "type": "git",
-                "url": "https://git.drupalcode.org/project/pipeline.git",
-                "reference": "8.x-1.0-alpha5"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/pipeline-8.x-1.0-alpha5.zip",
-                "reference": "8.x-1.0-alpha5",
-                "shasum": "711af2229cf0689a69ce6a9621a985042c283735"
-            },
-            "require": {
-                "drupal/core": "^8.9 || ^9.1 || ^10"
-            },
-            "type": "drupal-module",
-            "extra": {
-                "drupal": {
-                    "version": "8.x-1.0-alpha5",
-                    "datestamp": "1668978778",
-                    "security-coverage": {
-                        "status": "not-covered",
-                        "message": "Alpha releases are not covered by Drupal security advisories."
-                    }
-                }
-            },
-            "notification-url": "https://packages.drupal.org/8/downloads",
-            "license": [
-                "GPL-2.0+"
-            ],
-            "authors": [
-                {
-                    "name": "Claudiu Cristea",
-                    "homepage": "https://www.drupal.org/u/claudiu.cristea",
-                    "role": "maintainer"
-                },
-                {
-                    "name": "idimopoulos",
-                    "homepage": "https://www.drupal.org/user/2578708"
-                },
-                {
-                    "name": "pfrenssen",
-                    "homepage": "https://www.drupal.org/user/382067"
-                }
-            ],
-            "description": "allows splitting processes in steps and then running them via an orchestrator service.",
-            "homepage": "https://www.drupal.org/project/pipeline",
-            "keywords": [
-                "Drupal",
-                "pipeline"
-            ],
-            "support": {
-                "source": "https://git.drupalcode.org/project/pipeline",
-                "issues": "https://www.drupal.org/project/issues/pipeline"
-            }
-        },
-        {
             "name": "drupal/poll",
             "version": "1.6.0",
             "source": {
@@ -6476,58 +6323,6 @@
             "support": {
                 "source": "https://cgit.drupalcode.org/rdf_entity",
                 "issues": "https://drupal.org/project/issues/rdf_entity"
-            }
-        },
-        {
-            "name": "drupal/rdf_meta_entity",
-            "version": "1.0.0-alpha3",
-            "source": {
-                "type": "git",
-                "url": "https://git.drupalcode.org/project/rdf_meta_entity.git",
-                "reference": "1.0.0-alpha3"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/rdf_meta_entity-1.0.0-alpha3.zip",
-                "reference": "1.0.0-alpha3",
-                "shasum": "cff92c6424966ea050e0c75f47a4274accb273e2"
-            },
-            "require": {
-                "drupal/core": ">=9.3",
-                "drupal/meta_entity": ">=1.1",
-                "drupal/sparql_entity_storage": "^2.0"
-            },
-            "type": "drupal-module",
-            "extra": {
-                "drupal": {
-                    "version": "1.0.0-alpha3",
-                    "datestamp": "1688069118",
-                    "security-coverage": {
-                        "status": "not-covered",
-                        "message": "Alpha releases are not covered by Drupal security advisories."
-                    }
-                }
-            },
-            "notification-url": "https://packages.drupal.org/8/downloads",
-            "license": [
-                "GPL-2.0+"
-            ],
-            "authors": [
-                {
-                    "name": "Ilias Dimopoulos",
-                    "homepage": "https://www.drupal.org/u/idimopoulos-0"
-                },
-                {
-                    "name": "Claudiu Cristea",
-                    "homepage": "https://www.drupal.org/user/2578708",
-                    "email": "https://www.drupal.org/u/claudiucristea"
-                }
-            ],
-            "description": "Allows storing metadata about an entity in entities having a SPARQL backend.",
-            "homepage": "https://www.drupal.org/project/rdf_meta_entity",
-            "support": {
-                "source": "https://git.drupalcode.org/project/rdf_meta_entity",
-                "issues": "https://www.drupal.org/project/issues/rdf_meta_entity"
             }
         },
         {
