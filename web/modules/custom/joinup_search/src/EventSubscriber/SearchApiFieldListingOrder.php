@@ -91,7 +91,7 @@ class SearchApiFieldListingOrder implements EventSubscriberInterface {
    */
   protected function performAlteration(
     SearchApiQueryInterface $searchApiQuery,
-    SolariumApiQueryInterface $solariumApiQuery
+    SolariumApiQueryInterface $solariumApiQuery,
   ): bool {
     if (!($searchApiQuery->hasTag('search_api_field_field_collection_content') ||
       $searchApiQuery->hasTag('search_api_field_field_is_content') ||

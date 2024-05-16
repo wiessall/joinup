@@ -21,7 +21,8 @@ class RdfExportRouteSubscriber extends RouteSubscriberBase {
   public function __construct(
     protected EntityTypeManagerInterface $entityTypeManager,
     protected EntityTypeBundleInfoInterface $entityTypeBundleInfo,
-    protected RdfSyncMapper $rdfSyncMapper) {
+    protected RdfSyncMapper $rdfSyncMapper,
+  ) {
   }
 
   /**

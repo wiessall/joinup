@@ -198,7 +198,7 @@ class JoinupSeoContext extends RawDrupalContext {
     string $value,
     TableNode $table,
     ?string $subProperty = NULL,
-    ?int $delta = NULL
+    ?int $delta = NULL,
   ): void {
     try {
       $jsonLdInspector = new JsonLdObjectInspector(
