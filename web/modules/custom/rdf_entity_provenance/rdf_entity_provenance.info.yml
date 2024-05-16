@@ -1,6 +1,0 @@
-name: RDF - Provenance
-description: Provides basic properties to track provenance data related to the entity.
-type: module
-package: Custom
-core_version_requirement: ">= 9.4"
-dependencies: [  ]

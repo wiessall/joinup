@@ -23,7 +23,8 @@ class RdfExportController extends ControllerBase {
   public function __construct(
     #[Autowire(service: 'rdf_sync.mapper')]
     protected RdfSyncMapper $rdfSyncMapper,
-    protected EntityRepositoryInterface $entityRepository) {
+    protected EntityRepositoryInterface $entityRepository,
+  ) {
   }
 
   /**

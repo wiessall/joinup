@@ -51,7 +51,8 @@ class InviteToDiscussionForm extends InviteFormBase {
     InvitationMessageHelperInterface $invitationMessageHelper,
     protected EventDispatcherInterface $eventDispatcher,
     protected JoinupDiscussionSubscriptionInterface $subscription,
-    protected OgAccessInterface $ogAccess) {
+    protected OgAccessInterface $ogAccess,
+  ) {
     parent::__construct($entityTypeManager, $invitationMessageHelper);
   }
 
