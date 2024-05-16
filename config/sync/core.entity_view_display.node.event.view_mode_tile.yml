@@ -34,7 +34,6 @@ dependencies:
     - field_delimiter
     - field_formatter_range
     - joinup_core
-    - joinup_html_stripper
     - joinup_slick
     - responsive_image
     - template_suggestion
@@ -45,10 +44,10 @@ bundle: event
 mode: view_mode_tile
 content:
   abstract:
-    type: joinup_html_stripper_stripped
+    type: string
     label: visually_hidden
     settings:
-      trim_length: 200
+      link_to_entity: false
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
@@ -89,12 +88,13 @@ content:
       filtered_entity_bundles:
         - simple_paragraph
         - text
+      trim_length: 600
     third_party_settings:
       field_delimiter:
         delimiter: ''
       field_formatter_range:
         order: 0
-        limit: 0
+        limit: 1
         offset: 0
       joinup_slick:
         preset: ''

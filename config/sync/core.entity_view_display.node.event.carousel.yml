@@ -50,7 +50,7 @@ mode: carousel
 content:
   abstract:
     type: string
-    label: visually_hidden
+    label: hidden
     settings:
       link_to_entity: false
     third_party_settings: {  }
