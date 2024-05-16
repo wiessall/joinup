@@ -44,7 +44,7 @@ class FlagBlock extends BlockBase implements ContainerFactoryPluginInterface {
     string $pluginId,
     mixed $pluginDefinition,
     protected RouteMatchInterface $routeMatch,
-    protected FlagServiceInterface $flagService
+    protected FlagServiceInterface $flagService,
   ) {
     parent::__construct($configuration, $pluginId, $pluginDefinition);
   }

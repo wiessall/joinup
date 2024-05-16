@@ -46,7 +46,7 @@ class JoinupContent extends ConditionPluginBase implements ContainerFactoryPlugi
     $plugin_id,
     $plugin_definition,
     protected EntityTypeManagerInterface $entityTypeManager,
-    protected RouteMatchInterface $routeMatch
+    protected RouteMatchInterface $routeMatch,
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
   }
