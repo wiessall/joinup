@@ -66,7 +66,7 @@ class UpdateHelper implements ContainerInjectionInterface {
     array &$sandbox,
     array $nodeTypes,
     string $sourceField = 'body',
-    string $destinationField = 'field_paragraphs_body'
+    string $destinationField = 'field_paragraphs_body',
   ): string {
     $nodeStorage = $this->entityTypeManager->getStorage('node');
 
