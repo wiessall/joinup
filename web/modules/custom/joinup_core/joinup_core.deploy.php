@@ -13,6 +13,7 @@
  */
 
 declare(strict_types=1);
+
 use Drupal\Core\Url;
 use Drupal\joinup_oss_catalogue\OssCatalogueCollectionInterface;
 
@@ -26,8 +27,8 @@ function joinup_core_deploy_110600(): void {
 
   $collection
     ?->set('field_ar_state', 'published')
-    ->set('path', ['alias' => '/eu-oss-catalogue', 'pathauto' => 0])
-    ->save();
+      ->set('path', ['alias' => '/eu-oss-catalogue', 'pathauto' => 0])
+      ->save();
 }
 
 /**
@@ -40,7 +41,7 @@ function joinup_core_deploy_110601(): void {
 
   $collection
     ?->set('label', 'EU Open Source Solutions Catalogue')
-    ->save();
+      ->save();
 }
 
 /**
