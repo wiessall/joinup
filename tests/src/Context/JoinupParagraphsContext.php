@@ -428,7 +428,7 @@ class JoinupParagraphsContext extends RawDrupalContext {
     string $parent_field,
     string $parent_type_id,
     string $parent_name,
-    TableNode $table
+    TableNode $table,
   ): void {
     $entity = $this->getEntityByLabel($parent_type_id, $parent_name);
     $paragraph = $this->createParagraph($paragraph_type, $table);
@@ -455,7 +455,8 @@ class JoinupParagraphsContext extends RawDrupalContext {
     string $poll,
     string $parent_field,
     string $parent_type_id,
-    string $parent_name): void {
+    string $parent_name,
+  ): void {
     $poll = $this->getEntityByLabel('poll', $poll);
     $parentEntity = $this->getEntityByLabel($parent_type_id, $parent_name);
 
@@ -486,7 +487,8 @@ class JoinupParagraphsContext extends RawDrupalContext {
     string $parent_field,
     string $parent_type_id,
     string $parent_name,
-    PyStringNode $value): void {
+    PyStringNode $value,
+  ): void {
     $entity = $this->getEntityByLabel($parent_type_id, $parent_name);
 
     $paragraph = $this->createParagraph(
@@ -581,7 +583,7 @@ class JoinupParagraphsContext extends RawDrupalContext {
   protected function createParagraph(
     string $type,
     TableNode|array $table,
-    bool $save = TRUE
+    bool $save = TRUE,
   ): ParagraphInterface {
     $rawArray = $table instanceof TableNode ? $table->getRowsHash() : $table;
     $rawArray['type'] = $type;

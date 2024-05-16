@@ -83,11 +83,14 @@ class DrupalSettingsCommands extends AbstractCommands {
    * @option root Drupal root.
    * @option sites-subdir Drupal site subdirectory.
    */
-  public function settings(string $preset, array $options = [
-    'filename' => 'settings.php',
-    'root' => InputOption::VALUE_REQUIRED,
-    'sites-subdir' => InputOption::VALUE_REQUIRED,
-  ]): CollectionBuilder {
+  public function settings(
+    string $preset,
+    array $options = [
+      'filename' => 'settings.php',
+      'root' => InputOption::VALUE_REQUIRED,
+      'sites-subdir' => InputOption::VALUE_REQUIRED,
+    ],
+  ): CollectionBuilder {
     $settingsFile = $this->getSettingsFilePath($options);
     $sections = $this->getSections($preset);
 

@@ -58,7 +58,8 @@ class UserUnpublishedBlock extends BlockBase implements ContainerFactoryPluginIn
     protected AccountInterface $currentUser,
     protected RouteMatchInterface $currentRouteMatch,
     protected EntityTypeManagerInterface $entityTypeManager,
-    protected RevisionManagerInterface $revisionManager) {
+    protected RevisionManagerInterface $revisionManager,
+  ) {
     parent::__construct($configuration, $pluginId, $pluginDefinition);
   }
 
