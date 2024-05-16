@@ -21,7 +21,7 @@ class HostingPlatformConfigDeleteForm extends EntityDeleteForm {
    *   Entity field manager.
    */
   public function __construct(
-    protected EntityFieldManagerInterface $entityFieldManager
+    protected EntityFieldManagerInterface $entityFieldManager,
   ) {
   }
 

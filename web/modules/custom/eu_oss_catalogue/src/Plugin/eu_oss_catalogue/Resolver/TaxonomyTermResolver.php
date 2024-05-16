@@ -34,7 +34,7 @@ class TaxonomyTermResolver extends DefaultResolver implements ContainerFactoryPl
     protected LoggerChannelInterface $logger,
     protected LanguageManagerInterface $languageManger,
     protected EntityTypeManagerInterface $entityTypeManager,
-    protected Connection $database
+    protected Connection $database,
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $logger, $this->languageManger);
   }
