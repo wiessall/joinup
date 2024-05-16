@@ -26,7 +26,7 @@ class GitHubFeed implements GitHubFeedInterface {
   public function __construct(
     protected ConfigFactoryInterface $configFactory,
     protected ClientInterface $client,
-    protected LoggerChannelFactoryInterface $logger
+    protected LoggerChannelFactoryInterface $logger,
   ) {}
 
   /**

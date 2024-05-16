@@ -89,7 +89,8 @@ abstract class InviteFormBase extends FormBase {
    */
   public function __construct(
     protected EntityTypeManagerInterface $entityTypeManager,
-    protected InvitationMessageHelperInterface $invitationMessageHelper) {
+    protected InvitationMessageHelperInterface $invitationMessageHelper,
+  ) {
   }
 
   /**
