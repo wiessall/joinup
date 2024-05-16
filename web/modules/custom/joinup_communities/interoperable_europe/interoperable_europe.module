@@ -41,18 +41,8 @@ function interoperable_europe_entity_prepare_view(string $entity_type_id, array 
   }
 
   $bundles = ['event'];
-  $group = \Drupal::getContainer()->get('og.context')->getGroup();
-  if (!$group) {
-    return;
-  }
-
   foreach ($entities as $entity) {
     if ($entity->get('og_audience')->target_id !== InteroperableEuropeCollectionInterface::COLLECTION_ENTITY_ID) {
-      continue;
-    }
-
-    // Only apply the changes for the Interoperable Europe collection pages.
-    if ($group->id() !== InteroperableEuropeCollectionInterface::COLLECTION_ENTITY_ID) {
       continue;
     }
 
