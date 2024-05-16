@@ -1,6 +1,8 @@
 # EIF wrappers are meant to be helper entities. There is no point
 # having bundle level permissions as the actual check should happen
 # in the parent entity.
+# TODO: Permissions were only kept to avoid errors cased by config dependency
+#   removals during update. Remove this file in ISAICP-8376.
 view eif wrapper entity:
   title: 'View EIF wrapper entity'
 create eif wrapper entity:

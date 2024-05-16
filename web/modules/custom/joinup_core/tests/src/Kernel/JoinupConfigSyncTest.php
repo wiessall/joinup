@@ -25,6 +25,10 @@ class JoinupConfigSyncTest extends KernelTestBase {
    * {@inheritdoc}
    */
   protected static $modules = [
+    // Blazy contains a crucial schema info alter hook implementation.
+    'blazy',
+    // Blazy depends on media.
+    'media',
     // This module alters the schema of facet.widget.default_config.
     // @see search_api_arbitrary_facet_config_schema_info_alter()
     'search_api_arbitrary_facet',
@@ -32,6 +36,8 @@ class JoinupConfigSyncTest extends KernelTestBase {
     // This module alters the schema of field.formatter.settings.image.
     // @see svg_image_config_schema_info_alter()
     'svg_image',
+    // Slick contains a schema info alter hook implementation.
+    'slick',
   ];
 
   /**

@@ -238,7 +238,7 @@ Feature: Global search
     And the following distributions:
       | title              | description                                    | parent        | access url | state     |
       | Distribution alpha | <p>A simple beta distribution description.</p> | Release Alpha | test.zip   | published |
-    And the following licences:
+    And licence content:
       | title         | description                         |
       | Licence Alpha | A beta description for the licence. |
     And news content:
@@ -394,7 +394,7 @@ Feature: Global search
       | Bird Birdman                      |
 
   Scenario: Solutions and/or releases are found by their distribution keyword.
-    Given the following licences:
+    Given licence content:
       | title      |
       | Apache-2.0 |
       | LGPL       |

@@ -12,6 +12,7 @@ use Drupal\joinup_bundle_class\DescriptionInterface;
 use Drupal\joinup_bundle_class\LogoInterface;
 use Drupal\joinup_community_content\Entity\CommunityContentInterface;
 use Drupal\joinup_core\Controller\IdRedirect;
+use Drupal\joinup_rdf\Entity\RdfSyncEntityInterface;
 use Drupal\joinup_workflow\ArchivableEntityInterface;
 use Drupal\smart_trim\TruncateHTML;
 use Drupal\topic\Entity\TopicReferencingEntityInterface;
@@ -308,10 +309,10 @@ function _ventuno_build_permalink(): ?string {
   }
 
   // Entity ID is pointing to the publication office redirect.
-  $namespaces = implode('|', array_keys(
-    IdRedirect::getEntityTypeFromPersistentUriNamespace()));
-  if (preg_match('{^http://data.europa.eu/(?:' . $namespaces . ')/}', $entity->id())) {
-    return $entity->id();
+  $namespaces = implode('|', array_keys(IdRedirect::getEntityTypeFromPersistentUriNamespace()));
+  $uri = $entity instanceof RdfSyncEntityInterface ? $entity->getUri() : $entity->id();
+  if (preg_match('{^http://data.europa.eu/(?:' . $namespaces . ')/}', $uri)) {
+    return $uri;
   }
 
   // Don't process the path to avoid pathauto aliasing.
@@ -329,7 +330,6 @@ function _ventuno_build_permalink(): ?string {
  * @param array $variables
  *   Template variables.
  *
- * @see ventuno_theme_suggestions_eif_wrapper_alter()
  * @see ventuno_theme_suggestions_taxonomy_term_alter()
  */
 function _ventuno_theme_suggestions_alter(array &$suggestions, array $variables): void {
