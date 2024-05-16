@@ -13,74 +13,40 @@
  */
 
 declare(strict_types=1);
-
 use Drupal\Core\Url;
 use Drupal\joinup_oss_catalogue\OssCatalogueCollectionInterface;
-use Drupal\search_api\Entity\Index;
-
-/**
- * Refresh legacy content to rectify Topic term name.
- */
-function joinup_core_deploy_110500(): void {
-  $content = [
-    'node' => [
-      // /collection/semic-support-centre/document/guidelines-use-code-list
-      701218,
-    ],
-    'rdf_entity' => [
-      // /collection/interoperability-maturity-tools-imts-digital-public-services
-      'http://data.europa.eu/w21/abe7d0f7-8c41-465b-86c0-93d2f857f998',
-      // /collection/eparticipation-and-evoting/solution/eusurvey/release-9
-      'http://data.europa.eu/w21/6d664eef-d0d4-4ad0-bfb4-aacb83856529',
-      // /collection/eparticipation-and-evoting/solution/eusurvey/release-8
-      'http://data.europa.eu/w21/0434c7f8-6614-46c4-8f23-7d8385172dfb',
-      // /collection/gnu-health/solution/gnu-health-hospital-information-system/release/170
-      'http://data.europa.eu/w21/c580493a-554b-4f53-887b-7988ce5c8fd9',
-    ],
-  ];
-  $items = [];
-  /** @var \Drupal\search_api\IndexInterface $index */
-  $index = Index::load('published');
-  foreach ($content as $type => $ids) {
-    foreach ($ids as $id) {
-      $item_id = 'entity:' . $type . '/' . $id . ':en';
-      $items[$item_id] = $index->loadItem($item_id);
-    }
-  }
-  $index->indexSpecificItems($items);
-}
 
 /**
  * Update path alias for EU OSS catalogue.
  */
-function joinup_core_deploy_110501(): void {
+function joinup_core_deploy_110600(): void {
   /** @var \Drupal\collection\Entity\CollectionInterface $collection */
   $collection = \Drupal::entityTypeManager()->getStorage('rdf_entity')
     ->load(OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID);
 
   $collection
     ?->set('field_ar_state', 'published')
-      ->set('path', ['alias' => '/eu-oss-catalogue', 'pathauto' => 0])
-      ->save();
+    ->set('path', ['alias' => '/eu-oss-catalogue', 'pathauto' => 0])
+    ->save();
 }
 
 /**
  * Update title of EU OSS catalogue collection.
  */
-function joinup_core_deploy_110502(): void {
+function joinup_core_deploy_110601(): void {
   /** @var \Drupal\collection\Entity\CollectionInterface $collection */
   $collection = \Drupal::entityTypeManager()->getStorage('rdf_entity')
     ->load(OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID);
 
   $collection
     ?->set('label', 'EU Open Source Solutions Catalogue')
-      ->save();
+    ->save();
 }
 
 /**
  * Import content for EU OpenSource Software Solutions Catalogue.
  */
-function joinup_core_deploy_110503(): void {
+function joinup_core_deploy_110602(): void {
   /** @var \Drupal\Core\Extension\ModuleInstallerInterface $moduleInstaller */
   $moduleInstaller = \Drupal::service('module_installer');
   /** @var \Drupal\Core\Entity\EntityRepositoryInterface $entityRepository */
@@ -113,7 +79,7 @@ function joinup_core_deploy_110503(): void {
 /**
  * Rename menu items for EU OSS catalogue.
  */
-function joinup_core_deploy_110504(): void {
+function joinup_core_deploy_110603(): void {
   $entityTypeManager = \Drupal::entityTypeManager();
   /** @var  \Drupal\menu_link_content\MenuLinkContentStorageInterface $menuLinkContentStorage */
   $menuLinkContentStorage = $entityTypeManager->getStorage('menu_link_content');
@@ -149,7 +115,7 @@ function joinup_core_deploy_110504(): void {
 /**
  * Make sure that oss_archived has a default value.
  */
-function joinup_core_deploy_110505(array &$sandbox): string {
+function joinup_core_deploy_110604(array &$sandbox): string {
   $entityTypeManager = \Drupal::entityTypeManager();
   /** @var \Drupal\node\NodeStorage $nodeStorage */
   $nodeStorage = $entityTypeManager->getStorage('node');

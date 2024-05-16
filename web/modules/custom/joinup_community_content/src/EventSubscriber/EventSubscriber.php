@@ -65,7 +65,7 @@ class EventSubscriber implements EventSubscriberInterface {
     EntityTypeBundleInfoInterface $entity_type_bundle_info,
     AccountInterface $current_user,
     EntityTypeManagerInterface $entity_type_manager,
-    OgAccessInterface $og_access
+    OgAccessInterface $og_access,
   ) {
     $this->entityTypeBundleInfo = $entity_type_bundle_info;
     $this->currentUser = $current_user;
