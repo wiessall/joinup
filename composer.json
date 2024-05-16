@@ -4,7 +4,7 @@
     "type": "project",
     "license": "EUPL-1.2",
     "require": {
-        "php": ">=8.2",
+        "php": ">=8.3",
         "ext-dom": "*",
         "ext-json": "*",
         "ext-mbstring": "*",
@@ -92,7 +92,7 @@
         "drupal/simple_block": "^1.3",
         "drupal/simple_sitemap": "^4.0",
         "drupal/sitewide_alert": "^2.1",
-        "drupal/slick": "2.10.0",
+        "drupal/slick": "^2",
         "drupal/smart_trim": "^2.1",
         "drupal/social_media_links": "^2.7",
         "drupal/state_machine": "^1.0",
@@ -117,7 +117,6 @@
         "openeuropa/oe_webtools": "^1.21",
         "psr/http-factory-implementation": "*",
         "semiceu/adms-ap_validator": "1.0.0-alpha1",
-        "spdx/license-list-data": "master",
         "sweetrdf/easyrdf": "^1.9",
         "symfony/http-client": "*"
     },
@@ -136,7 +135,7 @@
         "drupal/http_request_mock": "^1.1",
         "drupal/masquerade": "^2.0@RC",
         "drupal/renderviz": "^1.0",
-        "drupal/stage_file_proxy": "2.1.3",
+        "drupal/stage_file_proxy": "^2.1.4",
         "drupal/upgrade_status": "^4.0",
         "drupaltest/behat-one-time-login": "^1.0",
         "ec-europa/toolkit": "^10.5",
@@ -144,6 +143,7 @@
         "gitonomy/gitlib": "^1.4",
         "lovers-of-behat/table-extension": "^1.4",
         "mikey179/vfsstream": "~1.6",
+        "ml/json-ld": "^1.2",
         "palantirnet/drupal-rector": "^0.12.2",
         "pear/http_request2": "~2.4",
         "php-task-runner/composer": "dev-toolkit-runner",
@@ -166,7 +166,7 @@
     "config": {
         "sort-packages": true,
         "platform": {
-            "php": "8.2"
+            "php": "8.3"
         },
         "allow-plugins": {
             "dealerdirect/phpcodesniffer-composer-installer": true,
@@ -198,7 +198,6 @@
             "web/modules/contrib/message_digest/src/Traits/MessageDigestContextTrait.php",
             "web/modules/contrib/message_digest/src/Traits/MessageDigestTrait.php",
             "web/modules/contrib/og_menu/src/Tests/Traits/OgMenuTrait.php",
-            "web/modules/contrib/pipeline/src/Traits/PipelineContextTrait.php",
             "scripts/composer/ComposerPatches.php"
         ],
         "files": [
@@ -209,9 +208,7 @@
             "Drupal\\Tests\\cas_mock_server\\": "web/modules/contrib/cas_mock_server/tests/src",
             "Drupal\\Tests\\honeypot\\": "web/modules/contrib/honeypot/tests/src",
             "Drupal\\Tests\\message_digest\\": "web/modules/contrib/message_digest/tests/src",
-            "Drupal\\Tests\\oe_webtools\\": "web/modules/contrib/oe_webtools/tests",
-            "Drupal\\Tests\\pipeline\\": "web/modules/contrib/pipeline/tests/src",
-            "Drupal\\Tests\\spdx\\": "web/modules/contrib/spdx/tests/src"
+            "Drupal\\Tests\\oe_webtools\\": "web/modules/contrib/oe_webtools/tests"
         }
     },
     "scripts": {
@@ -416,11 +413,6 @@
                 "URL don't include the base path @see https://www.drupal.org/project/search_api_spellcheck/issues/3280372": "resources/patch/php/drupal/search_api_spellcheck/3280372.patch",
                 "PHP Notice Array to string conversion @see https://www.drupal.org/project/search_api_spellcheck/issues/3265659": "resources/patch/php/drupal/search_api_spellcheck/3265659-3.patch"
             },
-            "drupal/slick": {
-                "Slick filter schema is incomplete @see https://www.drupal.org/i/3404070": "resources/patch/php/drupal/slick/3404070.diff",
-                "The definition for the sequence declares the type of its items in a way that is deprecated in drupal:8.0.0 @see https://drupal.org/i/3411048": "resources/patch/php/drupal/slick/slick-deprecated_schema_declaration-3411048-2--on-top-of-3404070.patch",
-                "Slick image schema is incomplete @see https://www.drupal.org/i/3420880": "resources/patch/php/drupal/slick/3420880.patch"
-            },
             "drupal/social_media_links": {
                 "Missing config schema for field, widget and formatter @see https://www.drupal.org/node/2898680": "resources/patch/php/drupal/social_media_links/2898680.patch",
                 "Mastodon should not have a fixed URL prefix. @see https://www.drupal.org/project/social_media_links/issues/3319694": "resources/patch/php/drupal/social_media_links/3319694.patch",
@@ -438,6 +430,9 @@
                 "SVG is not valid or cannot be sanitized, return an error. @see https://www.drupal.org/i/3350696": "resources/patch/php/drupal/svg_image/3350696.patch",
                 "SvgImageWidget should inherit from ImageWidget instead of FileWidget @see https://www.drupal.org/project/svg_image/issues/3420037": "resources/patch/php/drupal/svg_image/3420037.patch",
                 "The 'image_loading' attribute is not respected - https://www.drupal.org/project/svg_image/issues/3275057": "resources/patch/php/drupal/svg_image/3275057-14.patch"
+            },
+            "drupal/stage_file_proxy": {
+                "Fetching does not respect use_imagecache_root when using converted webp image styles @see https://www.drupal.org/i/3402972": "resources/patch/php/drupal/stage_file_proxy/stage_file_proxy-3402972-MR-28f616d8--without-method.diff"
             },
             "drupal/ui_patterns_settings": {
                 "Fix TypeError: array_unshift(): Argument #1 ($array) must be of type array, null given in array_unshift() Caused by Deprecated Hooks in Drupal ~10.2.0 @see https://www.drupal.org/i/3409221": "resources/patch/php/drupal/ui_patterns_settings/ui_patterns_settings-3409221-26.patch"
@@ -478,18 +473,6 @@
     },
     "repositories": [
         {
-            "type": "package",
-            "package": {
-                "name": "spdx/license-list-data",
-                "version": "master",
-                "source": {
-                    "url": "https://github.com/spdx/license-list-data",
-                    "type": "git",
-                    "reference": "main"
-                }
-            }
-        },
-        {
             "type": "vcs",
             "url": "https://github.com/openeuropa/oe_dashboard_agent.git"
         },
@@ -508,10 +491,6 @@
                     "reference": "master"
                 }
             }
-        },
-        {
-            "type": "vcs",
-            "url": "https://github.com/ec-europa/virtuoso.git"
         }
     ]
 }

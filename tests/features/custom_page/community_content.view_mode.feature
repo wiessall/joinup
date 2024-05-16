@@ -20,7 +20,7 @@ Feature:
     And the following distributions:
       | title       | description | parent       | access url | state     |
       | Tile distro | meh...      | Tile release | test.zip   | published |
-    And the following licences:
+    And licence content:
       | title        | description |
       | Tile licence | Meh...      |
     And news content:

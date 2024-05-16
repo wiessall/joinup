@@ -3,5 +3,4 @@ description: Provides basic properties to track provenance data related to the e
 type: module
 package: Custom
 core_version_requirement: ">= 9.4"
-dependencies:
-  - rdf_entity:rdf_entity
+dependencies: [  ]
