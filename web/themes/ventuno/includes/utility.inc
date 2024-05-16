@@ -156,7 +156,8 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
       break;
 
     case 'asset_distribution':
-      if (!$entity->get('field_ad_licence')->isEmpty()) {
+      if (isset($variables['content']['field_ad_licence']) &&
+        !$entity->get('field_ad_licence')->isEmpty()) {
         $variables['text']['icon'] = [
           '#type' => 'pattern',
           '#id' => 'icon',

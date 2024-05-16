@@ -50,7 +50,7 @@ function joinup_publication_date_preprocess_page_title(array &$variables): void 
 }
 
 /**
- * Ads content dates.
+ * Adds content dates.
  *
  * @param \Drupal\joinup_publication_date\Entity\EntityPublicationTimeInterface $entity
  *   Entity.
