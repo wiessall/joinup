@@ -31,7 +31,7 @@ class JoinupDataSanitizationCommands extends DrushCommands implements SanitizePl
     protected EntityFieldManagerInterface $entityFieldManager,
     protected EntityTypeManagerInterface $entityTypeManager,
     protected KeyValueFactoryInterface $keyValue,
-    protected FieldTypePluginManagerInterface $fieldTypePluginManager
+    protected FieldTypePluginManagerInterface $fieldTypePluginManager,
   ) {
     parent::__construct();
   }

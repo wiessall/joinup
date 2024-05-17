@@ -37,7 +37,8 @@ abstract class GroupFormBase extends InviteFormBase {
   public function __construct(
     EntityTypeManagerInterface $entityTypeManager,
     InvitationMessageHelperInterface $invitationMessageHelper,
-    protected MembershipManagerInterface $ogMembershipManager) {
+    protected MembershipManagerInterface $ogMembershipManager,
+  ) {
     parent::__construct($entityTypeManager, $invitationMessageHelper);
   }
 
