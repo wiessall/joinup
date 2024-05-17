@@ -30,7 +30,7 @@ class CustomPageOgMenuLinksManager implements CustomPageOgMenuLinksManagerInterf
   public function __construct(
     protected EntityTypeManagerInterface $entityTypeManager,
     protected MenuLinkManagerInterface $menuLinkManager,
-    protected GroupMenuManagerInterface $groupMenuManager
+    protected GroupMenuManagerInterface $groupMenuManager,
   ) {
   }
 

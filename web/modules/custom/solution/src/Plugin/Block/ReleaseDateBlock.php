@@ -46,7 +46,7 @@ class ReleaseDateBlock extends BlockBase implements ContainerFactoryPluginInterf
     string $pluginId,
     mixed $pluginDefinition,
     protected RouteMatchInterface $routeMatch,
-    protected DateFormatterInterface $dateFormatter
+    protected DateFormatterInterface $dateFormatter,
   ) {
     parent::__construct($configuration, $pluginId, $pluginDefinition);
   }

@@ -42,7 +42,8 @@ class ExportStatisticsPerGroupForm extends ExportBatchedDataFormBase {
     protected TimeInterface $time,
     protected EntityTypeManagerInterface $entityTypeManager,
     protected Connection $mysql,
-    protected ConnectionInterface $sparql) {
+    protected ConnectionInterface $sparql,
+  ) {
     parent::__construct($cache, $dateFormatter, $time);
   }
 

@@ -27,7 +27,8 @@ class GroupSettingsFormAlter implements GroupSettingsFormAlterInterface {
    */
   public function __construct(
     protected EntityTypeManagerInterface $entityTypeManager,
-    protected GroupMenuManagerInterface $groupMenuManager) {
+    protected GroupMenuManagerInterface $groupMenuManager,
+  ) {
   }
 
   /**
