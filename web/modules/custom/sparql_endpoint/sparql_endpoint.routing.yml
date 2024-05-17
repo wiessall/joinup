@@ -1,0 +1,7 @@
+sparql_endpoint.endpoint:
+  path: '/sparql'
+  defaults:
+    _title: 'Query SPARQL endpoint'
+    _form: 'Drupal\sparql_endpoint\Form\EndpointQueryForm'
+  requirements:
+    _permission: 'access content'
