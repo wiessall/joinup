@@ -47,14 +47,8 @@ module.exports = {
       },
     },
     {
-      entry: path.resolve(
-        outputFolder,
-        `${ventuno}src/js/ventuno_mmenu.js`
-      ),
-      dest: path.resolve(
-        outputFolder,
-        `${ventuno}assets/js/ventuno_mmenu.js`
-      ),
+      entry: path.resolve(outputFolder, `${ventuno}src/js/ventuno_mmenu.js`),
+      dest: path.resolve(outputFolder, `${ventuno}assets/js/ventuno_mmenu.js`),
       options: {
         minify: true,
         sourceMap: true,
@@ -1408,10 +1402,10 @@ module.exports = {
     {
       from: [
         path.resolve(nodeModules, "mmenu-light/dist/mmenu-light.js"),
-        path.resolve(nodeModules, "mmenu-light/dist/mmenu-light.css")
+        path.resolve(nodeModules, "mmenu-light/dist/mmenu-light.css"),
       ],
       to: path.resolve(outputFolder, `${ventuno}assets/lib/mmenu-light`),
-      options: {up: true},
+      options: { up: true },
     },
   ],
   sprite: [
