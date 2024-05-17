@@ -49,8 +49,12 @@ class LegacyRdfUrlSubscriber extends HttpExceptionSubscriberBase {
     if (!$entity = $this->getEntity($found['uri'])) {
       return;
     }
+    $path = self::PREFIX[$found['prefix']] . $entity->id();
 
-    $path = self::PREFIX[$found['prefix']] . $entity->id() . $found['suffix'];
+    if (isset($found['suffix'])) {
+      $path = $path . $found['suffix'];
+    }
+
     $options = [];
     if ($query = $event->getRequest()->query->all()) {
       $options['query'] = $query;
