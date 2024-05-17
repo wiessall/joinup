@@ -1,5 +1,5 @@
 sparql_endpoint.endpoint:
-  path: '/sparql'
+  path: '/sparql-query'
   defaults:
     _title: 'Query SPARQL endpoint'
     _form: 'Drupal\sparql_endpoint\Form\EndpointQueryForm'
