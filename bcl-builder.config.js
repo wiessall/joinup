@@ -47,6 +47,20 @@ module.exports = {
       },
     },
     {
+      entry: path.resolve(
+        outputFolder,
+        `${ventuno}src/js/ventuno_mmenu.js`
+      ),
+      dest: path.resolve(
+        outputFolder,
+        `${ventuno}assets/js/ventuno_mmenu.js`
+      ),
+      options: {
+        minify: true,
+        sourceMap: true,
+      },
+    },
+    {
       entry: path.resolve(outputFolder, `${ventuno}src/js/explore-block.js`),
       dest: path.resolve(outputFolder, `${ventuno}assets/js/explore-block.js`),
       options: {
@@ -1390,6 +1404,14 @@ module.exports = {
       ],
       to: path.resolve(outputFolder, `${ventuno}assets/lib/priority-plus`),
       options: { up: true },
+    },
+    {
+      from: [
+        path.resolve(nodeModules, "mmenu-light/dist/mmenu-light.js"),
+        path.resolve(nodeModules, "mmenu-light/dist/mmenu-light.css")
+      ],
+      to: path.resolve(outputFolder, `${ventuno}assets/lib/mmenu-light`),
+      options: {up: true},
     },
   ],
   sprite: [
