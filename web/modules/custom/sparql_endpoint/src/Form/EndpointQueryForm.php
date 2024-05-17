@@ -165,6 +165,8 @@ class EndpointQueryForm extends FormBase {
    *   An array containing the keys 'success' and 'results'.
    */
   protected function getResultsFromEndpoint(string $query, string $format): array {
+    // @todo It would be fine to have our own query validator to prevent
+    //   sending invalid queries to the endpoint.
     $url = $this->buildQueryUri($query, $format);
 
     try {
