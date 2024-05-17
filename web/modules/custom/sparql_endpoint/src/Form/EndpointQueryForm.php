@@ -106,16 +106,15 @@ class EndpointQueryForm extends FormBase {
     $format = $form_state->getValue('format');
     $results = $this->getResultsFromEndpoint($query, $format);
 
-    if ($results['success'] === FALSE) {
-      $form_state->set('results', $results['results']);
-      $form_state->setRebuild();
-      return;
-    }
-
-    if (str_starts_with($format, 'text/')) {
+    if ($results['success'] === FALSE || str_starts_with($format, 'text/')) {
       $form_state->set('results', $results['results']);
       $form_state->set('format', $format);
-      $form_state->setRebuild();
+      $form_state->setRedirect('sparql_endpoint.endpoint', [], [
+        'query' => [
+          'query' => $query,
+          'format' => $format,
+        ],
+      ]);
     }
     elseif ($format === 'csv') {
       // Return a redirect response as a csv file with the results.
