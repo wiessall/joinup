@@ -42,14 +42,18 @@ Feature: Creation of news through the UI.
     Then I should see the following lines of text:
       | Headline field is required.                    |
       | Short title field is required.                 |
-      | Content field is required.                     |
+      | Abstract field is required.                    |
       | The Attachments field description is required. |
+      | This value should not be null.                 |
 
     When I fill in the following:
       | Short title      | Ytterbium has won the ultimate heavy metal of the year award of 2020!                         |
       | Headline         | Strong request for this rare metal that is on the mouth of everybody                          |
-      | Content          | Thanks to its lower density compared to thulium and lutetium its applications have increased. |
+      | Abstract         | Abstract of Strong request for... news                                                        |
       | File description | Comparison materials                                                                          |
+    And I append "text" to "field_paragraphs_body" layout paragraphs field
+      | field_body:value  | Thanks to its lower density compared to thulium and lutetium its applications have increased. |
+      | field_body:format | content_editor                                                                                |
 
     # Reference a solution in the news.
     When I fill in "Referenced solution" with "Dig do's and don'ts"
@@ -97,8 +101,8 @@ Feature: Creation of news through the UI.
       | title | Stream of Dreams |
       | state | published        |
     And news content:
-      | title             | collection       | headline      | body      | state     |
-      | The Great Opening | Stream of Dreams | Here we go... | It opens! | published |
+      | title             | collection       | headline      | abstract           | field_paragraphs_body | state     |
+      | The Great Opening | Stream of Dreams | Here we go... | Image library test | It opens!             | published |
 
     Given I am logged in as a moderator
 
