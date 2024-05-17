@@ -116,6 +116,7 @@ third_party_settings:
                     simple_paragraph: simple_paragraph
                     text: text
                   trim_length: 220
+                  trim_chars: …
                 third_party_settings:
                   field_delimiter:
                     delimiter: ''
