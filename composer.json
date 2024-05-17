@@ -21,7 +21,6 @@
         "drupal/cas": "^2.0",
         "drupal/cas_attributes": "^2.0",
         "drupal/changed_fields": "^3.2",
-        "drupal/ckeditor": "^1.0",
         "drupal/colorbox": "^2.0",
         "drupal/config_ignore": "^3.0",
         "drupal/config_readonly": "^1.0",
@@ -73,12 +72,10 @@
         "drupal/page_manager": "^4.0@beta",
         "drupal/paragraphs": "^1.12",
         "drupal/pathauto": "~1.8",
-        "drupal/pipeline": "^1.0",
         "drupal/poll": "^1.6",
         "drupal/publication_date": "^2.0",
         "drupal/queue_ui": "^3.1",
         "drupal/rdf_entity": "^2.0",
-        "drupal/rdf_meta_entity": "^1.0",
         "drupal/rdf_sync": "^1.0",
         "drupal/redirect": "^1.6",
         "drupal/role_delegation": "^1.2",
@@ -182,11 +179,8 @@
     "autoload": {
         "classmap": [
             "web/modules/contrib/error_page/src/ErrorPageErrorHandler.php",
-            "web/modules/contrib/rdf_sync/src/Encoder/RdfSyncEncoder.php",
-            "web/modules/contrib/rdf_sync/src/Model/RdfSyncFormat.php",
             "web/modules/contrib/sparql_entity_storage/src/Driver/Database/sparql/ConnectionInterface.php",
-            "web/modules/custom/joinup_sparql/src/Driver/Database/joinup_sparql/Connection.php",
-            "web/modules/custom/joinup_taxonomy/src/Entity/MappedTerm.php"
+            "web/modules/custom/joinup_sparql/src/Driver/Database/joinup_sparql/Connection.php"
         ],
         "psr-4": {
             "Joinup\\": "src"
@@ -268,9 +262,6 @@
             "drupal/autologout": {
                 "Warning: Undefined array key @see https://www.drupal.org/project/autologout/issues/3372010": "resources/patch/php/drupal/autologout/3372010.diff",
                 "Users with no roles are logged out @see https://www.drupal.org/project/autologout/issues/3443711": "resources/patch/php/drupal/autologout/3443711.diff"
-            },
-            "drupal/cas": {
-                "Should CAS respect Drupal registration configuration @see https://www.drupal.org/project/cas/issues/3038279": "resources/patch/php/drupal/cas/3038279.patch"
             },
             "drupal/colorbox": {
                 "Support Responsive Image module in D8 @see https://drupal.org/i/2808883": "resources/patch/php/drupal/colorbox/colorbox-responsive-image-2808883-69.patch"
@@ -392,9 +383,6 @@
                 "Add permissions to edit all polls @see https://www.drupal.org/project/poll/issues/3274724": "resources/patch/php/drupal/poll/3274724-4.patch",
                 "User can stuck on View results @see https://www.drupal.org/project/poll/issues/3405509": "resources/patch/php/drupal/poll/3405509.patch"
             },
-            "drupal/publication_date": {
-                "Fix PHP 8.2 deprecation issue with PublishedAtOrNowComputed class @see https://www.drupal.org/project/publication_date/issues/3328575": "resources/patch/php/drupal/publication_date/3328575.patch"
-            },
             "drupal/rdf_entity": {
                 "Allow bundle label plural variants @see https://github.com/ec-europa/rdf_entity/pull/12": "resources/patch/php/drupal/rdf_entity/ea8f6af001fca732e89a4be0e29643953f49a88f.diff"
             },
@@ -447,9 +435,6 @@
             "drupal/webform": {
                 "Radios or Checkboxes inside Composite not saved @see https://www.drupal.org/project/webform/issues/3216923": "resources/patch/php/drupal/webform/368.diff",
                 "Webform might create invalid link renderable arrays on submission list. @see https://www.drupal.org/project/webform/issues/3441600": "resources/patch/php/drupal/webform/3441600.patch"
-            },
-            "ec-europa/toolkit": {
-                "Allow commands before install clone @see https://github.com/ec-europa/toolkit/pull/757": "resources/patch/php/ec-europa/toolkit/757.diff"
             },
             "sweetrdf/easyrdf": {
                 "Add a method to remove resources from graph @see https://github.com/sweetrdf/easyrdf/pull/44": "resources/patch/php/sweetrdf/easyrdf/44.diff"

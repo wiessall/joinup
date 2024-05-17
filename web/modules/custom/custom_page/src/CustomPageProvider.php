@@ -32,7 +32,7 @@ class CustomPageProvider implements CustomPageProviderInterface {
     protected EntityTypeManagerInterface $entityTypeManager,
     protected MenuLinkManagerInterface $menuLinkManager,
     protected CustomPageOgMenuLinksManagerInterface $customPageOgMenuLinksManager,
-    protected GroupMenuManagerInterface $groupMenuManager
+    protected GroupMenuManagerInterface $groupMenuManager,
   ) {
   }
 
