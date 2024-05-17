@@ -44,7 +44,6 @@ dependencies:
   module:
     - custom_markup_block
     - joinup_layout
-    - joinup_oss_catalogue
     - layout_builder
     - layout_discovery
     - user
@@ -420,15 +419,27 @@ third_party_settings:
                     template_suggestion: git_indicator
             weight: 3
             additional: {  }
-          b855c39a-9137-420d-b0b8-109904d00aae:
-            uuid: b855c39a-9137-420d-b0b8-109904d00aae
+          b99c2317-850f-40f9-a4f5-a37e7df86571:
+            uuid: b99c2317-850f-40f9-a4f5-a37e7df86571
             region: aside
             configuration:
-              id: eu_oss_catalogue_vitality_index_chart
-              label: 'Vitality index chart'
+              id: 'field_block:node:oss_solution:oss_vitality_index_range'
+              label: 'Vitality index range'
               label_display: '0'
-              provider: joinup_oss_catalogue
-              context_mapping: {  }
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: vitality_index_chart
+                label: hidden
+                settings:
+                  info:
+                    value: '<p>The vitality index, as provided for in the guidelines on the acquisition and reuse of PA software, is calculated taking into consideration the following four categories:</p><ul><li><strong>Code activity</strong>: the number of commits and merges per day,</li><li><strong>Release history</strong>: the number of releases per day,</li><li><strong>User community</strong>: the number of unique authors,</li><li><strong>Longevity</strong>: the age of the project,</li></ul><p>The ranges of each measurement can be found in the file <a href="https://github.com/italia/publiccode-crawler/blob/main/vitality-ranges.yml">vitality-ranges.yml</a>.</p>'
+                    format: text_html
+                third_party_settings:
+                  template_suggestion:
+                    template_suggestion: ''
             weight: 1
             additional: {  }
         third_party_settings: {  }

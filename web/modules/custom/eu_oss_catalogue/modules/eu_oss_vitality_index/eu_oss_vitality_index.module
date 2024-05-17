@@ -21,3 +21,24 @@ function eu_oss_vitality_index_cron(): void {
   // Save next node ID.
   $state->set('eu_oss_catalogue.vitality_index.last_nid', $lastProcessedNid);
 }
+
+/**
+ * Implements hook_theme().
+ */
+function eu_oss_vitality_index_theme(): array {
+  return [
+    'vitality_index_chart' => [
+      'variables' => [
+        'info' => [],
+        'range' => [],
+      ],
+    ],
+  ];
+}
+
+/**
+ * Prepares variables for vitality-index-chart.html.twig templates.
+ */
+function template_preprocess_vitality_index_chart(&$variables): void {
+  $variables['attributes']['data-vitality-index-range'] = $variables['range'];
+}

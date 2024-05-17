@@ -13,4 +13,4 @@ vitality-index-chart:
   dependencies:
     - core/drupal
     - core/once
-    - joinup_oss_catalogue/chart.js
+    - eu_oss_vitality_index/chart.js
