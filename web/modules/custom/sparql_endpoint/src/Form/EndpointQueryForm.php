@@ -231,13 +231,17 @@ class EndpointQueryForm extends FormBase {
 
     $return = [];
     foreach ($helperQueries as $helperQuery) {
-      $queryLink = Url::fromRoute('sparql_endpoint.endpoint', [], [
-        'query' => [
-          'query' => $helperQuery['query'],
-          'format' => 'text/html',
-        ],
-      ])->setAbsolute()->toString();
-      $return[] = "<strong>{$helperQuery['title']}: </strong><a href='$queryLink'>Run query</a><br><pre>" . htmlentities($helperQuery['query']) . "</pre>";
+      $links = [];
+      foreach (self::ALLOWED_FORMATS as $format => $label) {
+        $queryLink = Url::fromRoute('sparql_endpoint.endpoint', [], [
+          'query' => [
+            'query' => $helperQuery['query'],
+            'format' => $format,
+          ],
+        ])->setAbsolute()->toString();
+        $links[] = "<a href='$queryLink'>$label</a>";
+      }
+      $return[] = "<strong>{$helperQuery['title']}: </strong> Run query: " . implode(' | ', $links) . "<br><pre>" . htmlentities($helperQuery['query']) . "</pre>";
     }
 
     return implode('<br>', $return);
