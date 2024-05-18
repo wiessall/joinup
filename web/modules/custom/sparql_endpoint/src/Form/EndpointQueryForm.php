@@ -55,27 +55,17 @@ class EndpointQueryForm extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state): array {
+  public function buildForm(array $form, FormStateInterface $form_state): array|Response {
     $requestQuery = $this->getRequest()->query->all();
-    if (!empty($requestQuery['query']) && isset($requestQuery['format']) && str_starts_with($requestQuery['format'], 'text/')) {
-      $format = $requestQuery['format'];
-      if (in_array($format, array_keys(self::ALLOWED_FORMATS))) {
-        $default_value = $requestQuery['query'];
-        $results = $this->getResultsFromEndpoint($requestQuery['query'], $requestQuery['format']);
-        $form_state->set('results', $results['results']);
-        $form_state->set('format', $requestQuery['format']);
-      }
-      else {
-        $this->messenger()->addError($this->t('Invalid format provided: @format', ['@format' => $format]));
-        // Set to default so that the proper option is selected.
-        $format = 'text/html';
-      }
+    $hasValidQuery = !empty($requestQuery['query']) && !empty($requestQuery['format']) && in_array($requestQuery['format'], array_keys(self::ALLOWED_FORMATS));
+    if ($hasValidQuery && $requestQuery['format'] !== 'text/html') {
+      return $this->buildExplicitResponse($requestQuery['query'], $requestQuery['format']);
     }
 
     $form['query'] = [
       '#type' => 'textarea',
       '#title' => $this->t('Query'),
-      '#default_value' => $default_value ?? 'SELECT * WHERE { ?s ?p ?o } LIMIT 10',
+      '#default_value' => $hasValidQuery ? $requestQuery['query'] : 'SELECT * WHERE { ?s ?p ?o } LIMIT 10',
       '#required' => TRUE,
     ];
 
@@ -91,7 +81,7 @@ class EndpointQueryForm extends FormBase {
       '#title' => $this->t('Format'),
       '#description' => $this->t('Select the format of the response.'),
       '#options' => self::ALLOWED_FORMATS,
-      '#default_value' => $format ?? 'text/html',
+      '#default_value' => $hasValidQuery ? $requestQuery['format'] : 'text/html',
       '#required' => TRUE,
     ];
 
@@ -99,7 +89,14 @@ class EndpointQueryForm extends FormBase {
       '#type' => 'submit',
       '#value' => $this->t('Submit'),
     ];
-    $this->handleResults($form, $form_state);
+
+    if ($hasValidQuery) {
+      $results = $this->getResultsFromEndpoint($requestQuery['query'], $requestQuery['format']);
+      $form['results'] = [
+        '#type' => 'markup',
+        '#markup' => '<div class="endpoint-results">' . $results['results'] . '</div>',
+      ];
+    }
     return $form;
   }
 
@@ -114,53 +111,16 @@ class EndpointQueryForm extends FormBase {
   public function submitForm(array &$form, FormStateInterface $form_state): void {
     $query = $form_state->getValue('query');
     $format = $form_state->getValue('format');
-    $results = $this->getResultsFromEndpoint($query, $format);
-
-    if ($results['success'] === FALSE) {
-      $form_state->set('results', $results['results']);
-      $form_state->setRebuild();
-      return;
+    if ($format === 'text/html') {
+      $form_state->setRedirect('sparql_endpoint.endpoint', [], [
+        'query' => [
+          'query' => $query,
+          'format' => $format,
+        ],
+      ]);
     }
-
-    switch ($format) {
-      case 'text/html':
-        $form_state->set('results', $results['results']);
-        $form_state->set('format', $format);
-        $form_state->setRebuild();
-        break;
-      case 'application/sparql-results+json':
-        $response = new JsonResponse(json_decode($results['results'], TRUE));
-        $response->setStatusCode($results['code']);
-        $form_state->setResponse($response);
-        break;
-
-      case 'text/csv':
-      case 'text/plain':
-      case 'text/turtle':
-      case 'application/rdf+xml':
-      case 'application/sparql-results+xml':
-        $headers = [
-          'Content-Type' => $format,
-        ];
-        if ($format === 'text/csv') {
-          $headers['Content-Disposition'] = 'attachment; filename="sparql-results.csv"';
-        }
-
-        $response = new Response($results['results'], $results['code'], $headers);
-        $form_state->setResponse($response);
-        break;
-
-      default:
-        $response = new RedirectResponse(Url::fromRoute('sparql_endpoint.endpoint', [], [
-          'query' => [
-            'query' => $query,
-            'format' => $format,
-          ],
-        ])->toString());
-        $response->setStatusCode($results['code']);
-        $form_state->setResponse($response);
-        break;
-
+    else {
+      $form_state->setResponse($this->buildExplicitResponse($query, $format));
     }
   }
 
@@ -214,24 +174,37 @@ class EndpointQueryForm extends FormBase {
   }
 
   /**
-   * Handle the results.
+   * Handle the results for formats other than text/html.
    *
-   * @param array $form
-   *   The form.
-   * @param \Drupal\Core\Form\FormStateInterface $form_state
-   *   The form state.
+   * @param string $query
+   *   The query string.
+   * @param string $format
+   *   The format string.
+   *
+   * @return \Symfony\Component\HttpFoundation\Response
+   *   A response object with the returned contents.
    */
-  protected function handleResults(array &$form, FormStateInterface $form_state): void {
-    if (empty($form_state->get('results'))) {
-      return;
+  protected function buildExplicitResponse(string $query, string $format): Response {
+    $results = $this->getResultsFromEndpoint($query, $format);
+    if ($results['success'] === FALSE) {
+      // Follow the same practice as the endpoint. Regardless of the format, if
+      // an error exists, return it as text/plain with the correct error code.
+      return new Response($results['results'], $results['code'], [
+        'Content-Type' => 'text/plain',
+      ]);
+    }
+    if ($format === 'application/sparql-results+json') {
+      return new JsonResponse(json_decode($results['results'], TRUE), $results['code']);
     }
 
-    $form['results'] = [
-      '#type' => 'markup',
-      '#markup' => $form_state->get('results'),
-      '#prefix' => $form_state->get('format') === 'text/html' ? '<div class="query-results">' : '<div class="query-results"><pre>',
-      '#suffix' => $form_state->get('format') === 'text/html' ? '</div>' : '</pre></div>',
+    $headers = [
+      'Content-Type' => $format,
     ];
+    if ($format === 'text/csv') {
+      $headers['Content-Disposition'] = 'attachment; filename="sparql-results.csv"';
+    }
+
+    return new Response($results['results'], $results['code'], $headers);
   }
 
   /**
