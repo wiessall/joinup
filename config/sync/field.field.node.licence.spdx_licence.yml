@@ -1,0 +1,34 @@
+uuid: d1dacea8-ff65-4027-ae60-5d1c04d96db8
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.spdx_licence
+    - node.type.licence
+    - taxonomy.vocabulary.spdx_licence
+third_party_settings:
+  rdf_sync:
+    target_id:
+      predicate: 'http://www.w3.org/2002/07/owl#sameAs'
+      type: resource
+id: node.licence.spdx_licence
+field_name: spdx_licence
+entity_type: node
+bundle: licence
+label: 'Corresponding SPDX licence'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      spdx_licence: spdx_licence
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

@@ -70,7 +70,7 @@ abstract class ShareFormBase extends FormBase {
     protected OgRoleManagerInterface $roleManager,
     protected AccountInterface $currentUser,
     protected EntityTypeBundleInfoInterface $bundleInfo,
-    protected CacheTagsInvalidatorInterface $invalidator
+    protected CacheTagsInvalidatorInterface $invalidator,
   ) {}
 
   /**

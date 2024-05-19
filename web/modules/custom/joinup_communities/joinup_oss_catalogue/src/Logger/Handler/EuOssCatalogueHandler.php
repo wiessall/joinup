@@ -34,7 +34,7 @@ class EuOssCatalogueHandler extends AbstractProcessingHandler implements Destruc
   public function __construct(
     protected EntityTypeManagerInterface $entityTypeManager,
     int $level = Logger::DEBUG,
-    bool $bubble = TRUE
+    bool $bubble = TRUE,
   ) {
     parent::__construct($level, $bubble);
   }

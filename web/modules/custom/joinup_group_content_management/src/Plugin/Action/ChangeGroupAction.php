@@ -95,7 +95,8 @@ class ChangeGroupAction extends ViewsBulkOperationsActionBase implements Contain
     protected SelectionPluginManagerInterface $selectionPluginManager,
     protected Renderer $renderer,
     protected CustomPageOgMenuLinksManagerInterface $customPageOgMenuLinksManager,
-    protected EntityTypeManagerInterface $entityTypeManager) {
+    protected EntityTypeManagerInterface $entityTypeManager,
+  ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
   }
 
