@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class EndpointQueryForm extends FormBase {
 
-  const ALLOWED_FORMATS = [
+  const array ALLOWED_FORMATS = [
     'text/html' => 'HTML',
     'text/plain' => 'N-Triples',
     'text/turtle' => 'Turtle',
@@ -135,7 +135,16 @@ class EndpointQueryForm extends FormBase {
    *   The query URI.
    */
   protected function buildQueryUri(string $query, string $format): string {
-    return $_SERVER['SPARQL_PUBLIC_ENDPOINT'] . '?default-graph-uri=&query=' . urlencode($query) . '&format=' . urlencode($format) . '&should-sponge=&timeout=0&signal_void=on';
+    return Url::fromUri($_SERVER['SPARQL_PUBLIC_ENDPOINT'], [
+      'query' => [
+        'default-graph-uri' => '',
+        'query' => $query,
+        'format' => $format,
+        'should-sponge' => '',
+        'timeout' => 0,
+        'signal_void' => 'on',
+      ],
+    ])->setAbsolute()->toString();
   }
 
   /**
