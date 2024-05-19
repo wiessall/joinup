@@ -5,6 +5,7 @@ dependencies:
   module:
     - joinup_core
     - joinup_licence
+    - node
   theme:
     - ventuno
 id: ventuno_licencedeprecatedmessage
@@ -19,9 +20,10 @@ settings:
   label_display: '0'
   provider: joinup_licence
 visibility:
-  request_route:
-    id: request_route
+  'entity_bundle:node':
+    id: 'entity_bundle:node'
     negate: false
-    context_mapping: {  }
-    routes:
-      - entity.rdf_entity.canonical
+    context_mapping:
+      node: '@node.node_route_context:node'
+    bundles:
+      licence: licence

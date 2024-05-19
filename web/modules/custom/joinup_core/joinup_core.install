@@ -7,12 +7,8 @@
 
 declare(strict_types=1);
 
-use Drupal\Core\Config\ConfigManagerInterface;
-use Drupal\Core\Config\Entity\ConfigEntityStorageInterface;
-use Drupal\Core\Config\FileStorage;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\Site\Settings;
-use Drupal\joinup_core\UpdateHelper;
 use Drupal\user\Entity\User;
 
 /**
@@ -99,65 +95,9 @@ function joinup_core_requirements($phase): array {
 }
 
 /**
- * Implements hook_update_dependencies().
- *
- * phpcs:disable QualityAssurance.InstallFiles.FunctionDeclarations.NonHookFound,CodingStandards.NamingConventions.ValidUpdateName.InvalidUpdateId
- */
-function joinup_core_update_dependencies(): array {
-  $dependencies['joinup_core'][110501] = [
-    'joinup_core' => 110500,
-  ];
-
-  return $dependencies;
-}
-
-// phpcs:enable
-
-/**
- * Installs Layout Paragraphs body for document content type.
- */
-function joinup_core_update_110500(): void {
-  $configManager = \Drupal::service('config.manager');
-  assert($configManager instanceof ConfigManagerInterface);
-  $source = new FileStorage(Settings::get('config_sync_directory'));
-  $layoutParagraphsField = 'field_paragraphs_body';
-  $entityTypeManager = Drupal::entityTypeManager();
-
-  $fieldStorageId = "node.$layoutParagraphsField";
-  if (!$entityTypeManager->getStorage('field_storage_config')->load($fieldStorageId)) {
-    $configData = $source->read("field.storage.$fieldStorageId");
-    $storage = $entityTypeManager->getStorage('field_storage_config');
-    assert($storage instanceof ConfigEntityStorageInterface);
-    $storage->createFromStorageRecord($configData)->save();
-  }
-
-  foreach (['document'] as $contentType) {
-    $fieldConfigId = "node.$contentType.$layoutParagraphsField";
-    if (!$entityTypeManager->getStorage('field_config')->load($fieldConfigId)) {
-      $configData = $source->read("field.field.$fieldConfigId");
-      $storage = $entityTypeManager->getStorage('field_config');
-      assert($storage instanceof ConfigEntityStorageInterface);
-      $storage->createFromStorageRecord($configData)->save();
-    }
-  }
-}
-
-/**
- * Transform document body text field to paragraphs.
- */
-function joinup_core_update_110501(&$sandbox): void {
-  // We update about 4900 document nodes. The operation takes 240 seconds
-  // (4 minutes) in total to finish. Updating the nodes takes 130 seconds, the
-  // remaining time (110 seconds) is spent on reindexing.
-  $updateHelper = \Drupal::classResolver(UpdateHelper::class);
-  assert($updateHelper instanceof UpdateHelper);
-  $updateHelper->transformNodeBodyToLayoutParagraphs($sandbox, 'document');
-}
-
-/**
  * Pre-creates OSS vocabularies.
  */
-function joinup_core_update_110502(): void {
+function joinup_core_update_110600(): void {
   // Pre-create the new controlled vocabularies provided by eu_oss_catalogue
   // module. Normally, these are imported as config but eu_oss_catalogue install
   // goes first and its install process is also populating them with terms, so
