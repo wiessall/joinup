@@ -1,0 +1,541 @@
+diff --git a/core/modules/toolbar/css/toolbar.module.css b/core/modules/toolbar/css/toolbar.module.css
+index 11374b2a3c5b40f130d5a0e63655c7e81bea54a7..f3eaf68a489b67df2a8663ebd635b8bc0d0a23d2 100644
+--- a/core/modules/toolbar/css/toolbar.module.css
++++ b/core/modules/toolbar/css/toolbar.module.css
+@@ -86,15 +86,14 @@
+ }
+ /* Position the admin toolbar fixed when the configured standard breakpoint is
+  * active. */
+-.toolbar-fixed .toolbar-oriented .toolbar-bar {
++body .toolbar-oriented .toolbar-bar {
+   position: fixed;
+ }
+ /* When the configured narrow breakpoint is active, the toolbar is sized to wrap
+  * around the trays in order to provide a context for scrolling tray content
+  * that is taller than the viewport. */
+-.toolbar-tray-open.toolbar-fixed.toolbar-vertical .toolbar-oriented {
++body.toolbar-tray-open.toolbar-vertical .toolbar-oriented {
+   bottom: 0;
+-  width: 240px;
+   width: 15rem;
+ }
+ 
+@@ -157,7 +156,6 @@
+ .toolbar-oriented .toolbar-tray-vertical {
+   position: absolute;
+   left: -100%; /* LTR */
+-  width: 240px;
+   width: 15rem;
+ }
+ [dir="rtl"] .toolbar-oriented .toolbar-tray-vertical {
+@@ -181,7 +179,7 @@
+  * the tray scroll within the confines of the viewport.
+  */
+ .toolbar .toolbar-tray-vertical.is-active,
+-.toolbar-fixed .toolbar .toolbar-tray-vertical {
++body .toolbar .toolbar-tray-vertical {
+   position: fixed;
+   overflow-x: hidden;
+   overflow-y: auto;
+@@ -251,6 +249,26 @@
+   display: block;
+ }
+ 
++[data-drupal-selector="toolbar-extra-item"][data-drupal-selector="toolbar-extra-item"][data-drupal-selector="toolbar-extra-item"] {
++  display: none;
++}
++[data-show-toolbar-extra-item] [data-drupal-selector="toolbar-extra-item"][data-drupal-selector="toolbar-extra-item"][data-drupal-selector="toolbar-extra-item"] {
++  display: block;
++}
++
++[data-drupal-selector="toolbar-extra-item-toggle"][data-drupal-selector="toolbar-extra-item-toggle"][data-drupal-selector="toolbar-extra-item-toggle"] {
++  float: right;
++}
++
++@media only screen and (min-width: 36em) {
++  [data-drupal-selector="toolbar-extra-item"][data-drupal-selector="toolbar-extra-item"][data-drupal-selector="toolbar-extra-item"] {
++    display: block;
++  }
++  [data-drupal-selector="toolbar-extra-item-toggle"][data-drupal-selector="toolbar-extra-item-toggle"][data-drupal-selector="toolbar-extra-item-toggle"] {
++    display: none;
++  }
++}
++
+ /* Anti flicker styling. */
+ .toolbar-anti-flicker.toolbar-loading.toolbar-fixed body {
+   padding-top: 2.4375rem;
+@@ -293,3 +311,23 @@
+ .toolbar-anti-flicker.toolbar-vertical.toolbar-tray-open .menu-item + .menu-item {
+   border-top: 1px solid #ddd;
+ }
++
++[data-toolbar-extra-item][data-toolbar-extra-item][data-toolbar-extra-item] {
++  display: none;
++}
++[data-show-toolbar-extra-item] [data-toolbar-extra-item][data-toolbar-extra-item][data-toolbar-extra-item] {
++  display: block;
++}
++
++[data-toolbar-extra-item-toggle][data-toolbar-extra-item-toggle][data-toolbar-extra-item-toggle] {
++  float: right;
++}
++
++@media only screen and (min-width: 36em) {
++  [data-toolbar-extra-item][data-toolbar-extra-item][data-toolbar-extra-item] {
++    display: block;
++  }
++  [data-toolbar-extra-item-toggle][data-toolbar-extra-item-toggle][data-toolbar-extra-item-toggle] {
++    display: none;
++  }
++}
+diff --git a/core/modules/toolbar/js/models/ToolbarModel.js b/core/modules/toolbar/js/models/ToolbarModel.js
+index 2dcb1b360a982fd2a28386738d2da91abdc17569..512f2eb54bd2433a9017e1e251d002fec58dec27 100644
+--- a/core/modules/toolbar/js/models/ToolbarModel.js
++++ b/core/modules/toolbar/js/models/ToolbarModel.js
+@@ -60,7 +60,7 @@
+          *
+          * @type {boolean}
+          */
+-        isFixed: false,
++        isFixed: true,
+ 
+         /**
+          * Menu subtrees are loaded through an AJAX request only when the Toolbar
+diff --git a/core/modules/toolbar/js/toolbar.js b/core/modules/toolbar/js/toolbar.js
+index c7eba1e805eaa64ad3792e7844fb05111f2f6642..405a6620399104787f15273fe11cb3af5bb096a3 100644
+--- a/core/modules/toolbar/js/toolbar.js
++++ b/core/modules/toolbar/js/toolbar.js
+@@ -78,6 +78,10 @@
+       }
+       // Process the administrative toolbar.
+       once('toolbar', '#toolbar-administration', context).forEach((toolbar) => {
++        $('[data-toolbar-extra-item-toggle-button]').on('click', () => {
++          toolbar.toggleAttribute('data-show-toolbar-extra-item');
++        });
++
+         // Establish the toolbar models and views.
+         const model = new Drupal.toolbar.ToolbarModel({
+           locked: JSON.parse(
+diff --git a/core/modules/toolbar/src/Element/Toolbar.php b/core/modules/toolbar/src/Element/Toolbar.php
+index 7fd48691113d5884fe887456e4e16f7a3286c541..646b888b4366599537aa93573553f262c4014c98 100644
+--- a/core/modules/toolbar/src/Element/Toolbar.php
++++ b/core/modules/toolbar/src/Element/Toolbar.php
+@@ -89,6 +89,65 @@ public static function preRenderToolbar($element) {
+       $element[$key]['#id'] = Html::getId('toolbar-item-' . $key);
+     }
+ 
++    $collapse_info = ['num_items' => 0];
++    foreach (Element::children($element) as $key) {
++      if (!isset($element[$key]['#type']) || $element[$key]['#type'] !== 'toolbar_item') {
++        continue;
++      }
++
++      // If a tab that opens a tray is in the items, reset the count as it can't
++      // be included in a collapsed element.
++      if ($collapse_info['num_items'] > 1 && isset($element[$key]['tray'])) {
++        $collapse_info['start'] = NULL;
++        $collapse_info['end'] = NULL;
++      }
++
++      if ($key !== 'home' && !isset($element[$key]['tray'])) {
++        if (!isset($collapse_info['start'])) {
++          $collapse_info['start'] = $key;
++        }
++        else {
++          $collapse_info['end'] = $key;
++        }
++        $collapse_info['num_items'] += 1;
++      }
++    }
++
++    if ($collapse_info['num_items'] > 2) {
++      $go = FALSE;
++      foreach (Element::children($element) as $key) {
++        if ($key === $collapse_info['start']) {
++          $go = TRUE;
++        }
++
++        if ($go && isset($element[$key]['#type']) && $element[$key]['#type'] === 'toolbar_item') {
++          $element[$key]['#wrapper_attributes']['data-drupal-selector'] = 'toolbar-extra-item';
++        }
++
++        if ($key === $collapse_info['end']) {
++          $go = FALSE;
++        }
++      }
++
++      $element['extra_item_toggle'] = [
++        '#type' => 'toolbar_item',
++        '#wrapper_attributes' => [
++          'data-drupal-selector' => 'toolbar-extra-item-toggle',
++        ],
++        '#id' => 'extra-item-toggle',
++        'tab' => [
++          '#type' => 'html_tag',
++          '#tag' => 'a',
++          '#aria-label' => t('...'),
++          '#value' => t('...'),
++          '#attributes' => [
++            'type' => 'button',
++            'data-toolbar-extra-item-toggle-button' => TRUE,
++          ],
++        ],
++      ];
++    }
++
+     return $element;
+   }
+ 
+diff --git a/core/modules/toolbar/tests/modules/toolbar_items/toolbar_items.info.yml b/core/modules/toolbar/tests/modules/toolbar_items/toolbar_items.info.yml
+new file mode 100644
+index 0000000000000000000000000000000000000000..930d2c0ac38fbd2609740e65b2bd67468c94e61e
+--- /dev/null
++++ b/core/modules/toolbar/tests/modules/toolbar_items/toolbar_items.info.yml
+@@ -0,0 +1,5 @@
++name: 'Multiple toolbar items'
++type: module
++description: 'Support module for multiple toolbar items.'
++package: Testing
++version: VERSION
+diff --git a/core/modules/toolbar/tests/modules/toolbar_items/toolbar_items.module b/core/modules/toolbar/tests/modules/toolbar_items/toolbar_items.module
+new file mode 100644
+index 0000000000000000000000000000000000000000..b215f7250f8643429809b5078ff27d56416eddcf
+--- /dev/null
++++ b/core/modules/toolbar/tests/modules/toolbar_items/toolbar_items.module
+@@ -0,0 +1,170 @@
++<?php
++
++/**
++ * @file
++ * A dummy module to test API interaction with the Toolbar module.
++ */
++
++use Drupal\Core\Link;
++use Drupal\Core\Url;
++
++/**
++ * Implements hook_toolbar().
++ */
++function toolbar_items_toolbar() {
++
++  $items['testing'] = [
++    '#type' => 'toolbar_item',
++    'tab' => [
++      '#type' => 'link',
++      '#title' => t('Test tab'),
++      '#url' => Url::fromRoute('<front>'),
++      '#options' => [
++        'attributes' => [
++          'id' => 'toolbar-tab-testing',
++          'title' => t('Test tab'),
++        ],
++      ],
++    ],
++    'tray' => [
++      '#heading' => t('Test tray'),
++      '#wrapper_attributes' => [
++        'id' => 'toolbar-tray-testing',
++      ],
++      'content' => [
++        '#theme' => 'item_list',
++        '#items' => [
++          Link::fromTextAndUrl(t('link 1'), Url::fromRoute('<front>', [], ['attributes' => ['title' => 'Test link 1 title']]))->toRenderable(),
++          Link::fromTextAndUrl(t('link 2'), Url::fromRoute('<front>', [], ['attributes' => ['title' => 'Test link 2 title']]))->toRenderable(),
++          Link::fromTextAndUrl(t('link 3'), Url::fromRoute('<front>', [], ['attributes' => ['title' => 'Test link 3 title']]))->toRenderable(),
++        ],
++        '#attributes' => [
++          'class' => ['toolbar-menu'],
++        ],
++      ],
++    ],
++    '#weight' => 50,
++  ];
++  $items['item1'] = [
++    '#type' => 'toolbar_item',
++    'tab' => [
++      '#type' => 'link',
++      '#title' => t('Toolbar-item1'),
++      '#url' => Url::fromRoute('<front>'),
++    ],
++    '#wrapper_attributes' => [
++      'class' => ['home-toolbar-tab'],
++    ],
++    '#attached' => [
++      'library' => [
++        'toolbar/toolbar.escapeAdmin',
++      ],
++    ],
++    '#weight' => 120,
++  ];
++  $items['item2'] = [
++    '#type' => 'toolbar_item',
++    'tab' => [
++      '#type' => 'link',
++      '#title' => t('Toolbar-item2'),
++      '#url' => Url::fromRoute('<front>'),
++    ],
++    '#wrapper_attributes' => [
++      'class' => ['home-toolbar-tab'],
++    ],
++    '#attached' => [
++      'library' => [
++        'toolbar/toolbar.escapeAdmin',
++      ],
++    ],
++    '#weight' => 130,
++  ];
++
++  $items['item3'] = [
++    '#type' => 'toolbar_item',
++    'tab' => [
++      '#type' => 'link',
++      '#title' => t('Toolbar-item3'),
++      '#url' => Url::fromRoute('<front>'),
++    ],
++    '#wrapper_attributes' => [
++      'class' => ['home-toolbar-tab'],
++    ],
++    '#attached' => [
++      'library' => [
++        'toolbar/toolbar.escapeAdmin',
++      ],
++    ],
++    '#weight' => 140,
++  ];
++  $items['item4'] = [
++    '#type' => 'toolbar_item',
++    'tab' => [
++      '#type' => 'link',
++      '#title' => t('Toolbar-item4'),
++      '#url' => Url::fromRoute('<front>'),
++    ],
++    '#wrapper_attributes' => [
++      'class' => ['home-toolbar-tab'],
++    ],
++    '#attached' => [
++      'library' => [
++        'toolbar/toolbar.escapeAdmin',
++      ],
++    ],
++    '#weight' => 150,
++  ];
++  $items['home5'] = [
++    '#type' => 'toolbar_item',
++    'tab' => [
++      '#type' => 'link',
++      '#title' => t('Toolbar-item5'),
++      '#url' => Url::fromRoute('<front>'),
++    ],
++    '#wrapper_attributes' => [
++      'class' => ['home-toolbar-tab'],
++    ],
++    '#attached' => [
++      'library' => [
++        'toolbar/toolbar.escapeAdmin',
++      ],
++    ],
++    '#weight' => 40,
++  ];
++  $items['item6'] = [
++    '#type' => 'toolbar_item',
++    'tab' => [
++      '#type' => 'link',
++      '#title' => t('Toolbar-item6'),
++      '#url' => Url::fromRoute('<front>'),
++    ],
++    '#wrapper_attributes' => [
++      'class' => ['home-toolbar-tab'],
++    ],
++    '#attached' => [
++      'library' => [
++        'toolbar/toolbar.escapeAdmin',
++      ],
++    ],
++    '#weight' => 170,
++  ];
++
++  $items['empty'] = [
++    '#type' => 'toolbar_item',
++  ];
++
++  return $items;
++}
++
++/**
++ * Implements hook_preprocess_HOOK().
++ *
++ * @see core/modules/toolbar/tests/modules/toolbar_test/toolbar_test.module::toolbar_test_preprocess_menu
++ */
++function toolbar_items_preprocess_menu(&$variables) {
++  // All the standard hook_theme variables should be populated when the
++  // Toolbar module is rendering a menu.
++  foreach (['menu_name', 'items', 'attributes'] as $variable) {
++    $variables[$variable];
++  }
++}
+diff --git a/core/modules/toolbar/tests/src/FunctionalJavascript/ToolbarIntegrationTest.php b/core/modules/toolbar/tests/src/FunctionalJavascript/ToolbarIntegrationTest.php
+index 9666a3af81db7801730dfe1f9208556d6aa799de..e0d592e8c0afa90079c700c365c43112b0171766 100644
+--- a/core/modules/toolbar/tests/src/FunctionalJavascript/ToolbarIntegrationTest.php
++++ b/core/modules/toolbar/tests/src/FunctionalJavascript/ToolbarIntegrationTest.php
+@@ -14,7 +14,7 @@ class ToolbarIntegrationTest extends WebDriverTestBase {
+   /**
+    * {@inheritdoc}
+    */
+-  protected static $modules = ['toolbar', 'node'];
++  protected static $modules = ['toolbar', 'node', 'toolbar_items'];
+ 
+   /**
+    * {@inheritdoc}
+@@ -85,4 +85,35 @@ public function testEmptyTray() {
+     $this->assertFalse($button->isVisible(), 'Orientation toggle from other tray is not visible');
+   }
+ 
++  /**
++   * Tests that the toolbar items collapse in mobile view.
++   */
++  public function testCollapsibleToolbarItems() {
++    $admin_user = $this->drupalCreateUser([
++      'access toolbar',
++      'administer site configuration',
++      'access content overview',
++    ]);
++    $this->drupalLogin($admin_user);
++
++    $this->assertSession()->waitForElement('css', '#toolbar-item-user');
++    $this->assertSession()->pageTextContains('Toolbar-item1');
++
++    // Test that the toolbar items are clickable.
++    $page = $this->getSession()->getPage();
++    $page->clickLink('Toolbar-item1');
++
++    // Set size for horizontal toolbar.
++    $this->getSession()->resizeWindow(400, 400);
++
++    // Check that the toolbar items are not visible.
++    $this->assertSession()->pageTextNotContains('Toolbar-item1');
++
++    // Click the toggle button to see the toolbar items.
++    $this->click("#toolbar-bar > div[data-drupal-selector=toolbar-extra-item-toggle] > a");
++
++    // Check that the toolbar items are now visible.
++    $this->assertSession()->pageTextContains('Toolbar-item1');
++  }
++
+ }
+diff --git a/core/themes/claro/css/components/toolbar.module.css b/core/themes/claro/css/components/toolbar.module.css
+index 99daf51388a9839d669092df9a2f294cfaa0fe13..c0715b01f22382fb43dbc978ba6bd8ee699c1248 100644
+--- a/core/themes/claro/css/components/toolbar.module.css
++++ b/core/themes/claro/css/components/toolbar.module.css
+@@ -102,14 +102,15 @@
+ }
+ /* Position the admin toolbar fixed when the configured standard breakpoint is
+  * active. */
+-.toolbar-fixed .toolbar-oriented .toolbar-bar {
++body .toolbar-oriented .toolbar-bar {
+   position: fixed;
++  width: 100vw;
+ }
+ /* When the configured narrow breakpoint is active, the toolbar is sized to wrap
+  * around the trays in order to provide a context for scrolling tray content
+  * that is taller than the viewport. */
+-.toolbar-tray-open.toolbar-fixed.toolbar-vertical .toolbar-oriented {
+-  inset-block-end: 0;
++body.toolbar-tray-open.toolbar-vertical .toolbar-oriented {
++  bottom: 0;
+   width: 15rem;
+ }
+ /* Present the admin toolbar tabs horizontally as a default on user agents that
+@@ -173,7 +174,7 @@
+  * the tray scroll within the confines of the viewport.
+  */
+ .toolbar .toolbar-tray-vertical.is-active,
+-.toolbar-fixed .toolbar .toolbar-tray-vertical {
++body .toolbar .toolbar-tray-vertical {
+   position: fixed;
+   overflow-x: hidden;
+   overflow-y: auto;
+@@ -271,3 +272,20 @@
+   content: "";
+   inset-inline-start: 0;
+ }
++[data-drupal-selector="toolbar-extra-item"][data-drupal-selector="toolbar-extra-item"][data-drupal-selector="toolbar-extra-item"] {
++  display: none;
++}
++[data-show-toolbar-extra-item] [data-drupal-selector="toolbar-extra-item"][data-drupal-selector="toolbar-extra-item"][data-drupal-selector="toolbar-extra-item"] {
++  display: block;
++}
++[data-drupal-selector="toolbar-extra-item-toggle"][data-drupal-selector="toolbar-extra-item-toggle"][data-drupal-selector="toolbar-extra-item-toggle"] {
++  float: right;
++}
++@media only screen and (min-width: 36em) {
++  [data-drupal-selector="toolbar-extra-item"][data-drupal-selector="toolbar-extra-item"][data-drupal-selector="toolbar-extra-item"] {
++    display: block;
++  }
++  [data-drupal-selector="toolbar-extra-item-toggle"][data-drupal-selector="toolbar-extra-item-toggle"][data-drupal-selector="toolbar-extra-item-toggle"] {
++    display: none;
++  }
++}
+diff --git a/core/themes/claro/css/components/toolbar.module.pcss.css b/core/themes/claro/css/components/toolbar.module.pcss.css
+index 1a81df00717161b8564751c67c88e1b834080aab..cb7f45c6a60a176e503337331dcd6858f070f2f3 100644
+--- a/core/themes/claro/css/components/toolbar.module.pcss.css
++++ b/core/themes/claro/css/components/toolbar.module.pcss.css
+@@ -110,14 +110,15 @@
+ 
+ /* Position the admin toolbar fixed when the configured standard breakpoint is
+  * active. */
+-.toolbar-fixed .toolbar-oriented .toolbar-bar {
++body .toolbar-oriented .toolbar-bar {
+   position: fixed;
++  width: 100vw;
+ }
+ /* When the configured narrow breakpoint is active, the toolbar is sized to wrap
+  * around the trays in order to provide a context for scrolling tray content
+  * that is taller than the viewport. */
+-.toolbar-tray-open.toolbar-fixed.toolbar-vertical .toolbar-oriented {
+-  inset-block-end: 0;
++body.toolbar-tray-open.toolbar-vertical .toolbar-oriented {
++  bottom: 0;
+   width: 15rem;
+ }
+ 
+@@ -189,7 +190,7 @@
+  * the tray scroll within the confines of the viewport.
+  */
+ .toolbar .toolbar-tray-vertical.is-active,
+-.toolbar-fixed .toolbar .toolbar-tray-vertical {
++body .toolbar .toolbar-tray-vertical {
+   position: fixed;
+   overflow-x: hidden;
+   overflow-y: auto;
+@@ -303,6 +304,7 @@
+   z-index: 0;
+   display: block;
+ }
++
+ .toolbar-tray-open.toolbar-fixed.toolbar-vertical #toolbar-administration {
+   margin-inline-start: -15rem;
+ }
+@@ -319,3 +321,23 @@
+   content: "";
+   inset-inline-start: 0;
+ }
++
++[data-drupal-selector="toolbar-extra-item"][data-drupal-selector="toolbar-extra-item"][data-drupal-selector="toolbar-extra-item"] {
++  display: none;
++}
++[data-show-toolbar-extra-item] [data-drupal-selector="toolbar-extra-item"][data-drupal-selector="toolbar-extra-item"][data-drupal-selector="toolbar-extra-item"] {
++  display: block;
++}
++
++[data-drupal-selector="toolbar-extra-item-toggle"][data-drupal-selector="toolbar-extra-item-toggle"][data-drupal-selector="toolbar-extra-item-toggle"] {
++  float: right;
++}
++
++@media only screen and (min-width: 36em) {
++  [data-drupal-selector="toolbar-extra-item"][data-drupal-selector="toolbar-extra-item"][data-drupal-selector="toolbar-extra-item"] {
++    display: block;
++  }
++  [data-drupal-selector="toolbar-extra-item-toggle"][data-drupal-selector="toolbar-extra-item-toggle"][data-drupal-selector="toolbar-extra-item-toggle"] {
++    display: none;
++  }
++}

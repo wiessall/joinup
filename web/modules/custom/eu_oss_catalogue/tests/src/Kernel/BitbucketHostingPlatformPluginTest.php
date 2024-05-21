@@ -232,7 +232,7 @@ class BitbucketHostingPlatformPluginTest extends KernelTestBase implements Logge
     string $source,
     string $projectUrl,
     ?string $expected,
-    ?array $expectedLogs = NULL
+    ?array $expectedLogs = NULL,
   ): void {
     $actual = $this->plugin->getFileRawUrl($source, $projectUrl);
     $this->assertEquals(

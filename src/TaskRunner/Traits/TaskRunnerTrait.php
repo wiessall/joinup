@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Joinup\TaskRunner\Traits;
 
-use DrupalFinder\DrupalFinder;
+use DrupalFinder\DrupalFinderComposerRuntime;
 use EcEuropa\Toolkit\TaskRunner\Runner;
 use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\NullOutput;
@@ -49,8 +49,7 @@ trait TaskRunnerTrait {
    *   A path to a project's directory or file.
    */
   protected static function getPath(?string $subDir = NULL): string {
-    $drupalFinder = new DrupalFinder();
-    $drupalFinder->locateRoot(getcwd());
+    $drupalFinder = new DrupalFinderComposerRuntime();
     $path = $drupalFinder->getComposerRoot();
     if ($subDir) {
       $path .= DIRECTORY_SEPARATOR . $subDir;

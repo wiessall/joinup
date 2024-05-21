@@ -7,3 +7,11 @@ eu_oss_vitality_index.settings:
     cron_frequency:
       type: integer
       label: 'Cron frequency in days'
+
+field.formatter.settings.vitality_index_chart:
+  type: mapping
+  label: 'Vitality index chart'
+  mapping:
+    info:
+      type: text_format
+      label: 'Information text'

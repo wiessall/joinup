@@ -79,6 +79,7 @@ group:
     - core/drupal
     - core/drupal.displace
     - core/once
+    - core/jquery
 
 # Components
 abstract:

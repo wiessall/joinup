@@ -59,3 +59,24 @@ function eu_oss_vitality_index_cron(): void {
   \Drupal::logger('eu_oss_catalogue')
     ->info('Added items to eu_oss_vitality_index queue.');
 }
+
+/**
+ * Implements hook_theme().
+ */
+function eu_oss_vitality_index_theme(): array {
+  return [
+    'vitality_index_chart' => [
+      'variables' => [
+        'info' => [],
+        'range' => [],
+      ],
+    ],
+  ];
+}
+
+/**
+ * Prepares variables for vitality-index-chart.html.twig templates.
+ */
+function template_preprocess_vitality_index_chart(&$variables): void {
+  $variables['attributes']['data-vitality-index-range'] = $variables['range'];
+}

@@ -4,7 +4,6 @@ status: true
 dependencies:
   module:
     - node
-    - rdf_entity
 _core:
   default_config_hash: fTF5s1RO5icfGMnzXESbJGqprhRaytI4BJS-B3Agq8g
 id: node.field_licence
@@ -12,7 +11,7 @@ field_name: field_licence
 entity_type: node
 type: entity_reference
 settings:
-  target_type: rdf_entity
+  target_type: node
 module: core
 locked: false
 cardinality: 1

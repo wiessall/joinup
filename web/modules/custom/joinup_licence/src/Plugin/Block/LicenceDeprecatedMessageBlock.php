@@ -9,6 +9,7 @@ use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Routing\CurrentRouteMatch;
+use Drupal\joinup_licence\Entity\LicenceInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -73,16 +74,16 @@ class LicenceDeprecatedMessageBlock extends BlockBase implements ContainerFactor
    */
   public function build() {
     $route_name = $this->currentRouteMatch->getRouteName();
-    if ($route_name !== 'entity.rdf_entity.canonical') {
+    if ($route_name !== 'entity.node.canonical') {
       return [];
     }
 
-    $term = $this->currentRouteMatch->getParameter('rdf_entity');
-    if (empty($term) || $term->bundle() !== 'licence') {
+    $term = $this->currentRouteMatch->getParameter('node');
+    if (!$term instanceof LicenceInterface) {
       return [];
     }
 
-    $deprecated = (bool) $term->get('field_licence_deprecated')->value;
+    $deprecated = (bool) $term->get('deprecated')->value;
     if (!$deprecated) {
       return [];
     }

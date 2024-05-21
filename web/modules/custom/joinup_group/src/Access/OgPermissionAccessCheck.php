@@ -23,7 +23,8 @@ class OgPermissionAccessCheck implements AccessInterface {
    *   The group manager service.
    */
   public function __construct(
-    protected JoinupGroupManagerInterface $groupManager) {
+    protected JoinupGroupManagerInterface $groupManager,
+  ) {
   }
 
   /**

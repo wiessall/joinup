@@ -8,6 +8,8 @@ dependencies:
     - taxonomy.vocabulary.eif_conceptual_model
     - taxonomy.vocabulary.eif_principle
     - taxonomy.vocabulary.eif_recommendation
+  module:
+    - rdf_sync
 third_party_settings:
   rdf_sync:
     target_id:
