@@ -34,8 +34,8 @@ Feature: Global search
       | title       | body       | collection                   | topic       | spatial coverage | state    |
       | Rummy event | Dummy body | Molecular cooking collection | E-inclusion | Luxembourg       | archived |
     And document content:
-      | title          | document type | short title          | body       | collection                   | topic       | spatial coverage | state    |
-      | Rummy document | Document      | Rummy document short | Dummy body | Molecular cooking collection | E-inclusion | Luxembourg       | archived |
+      | title          | document type | short title          | field_paragraphs_body | collection                   | topic       | spatial coverage | state    |
+      | Rummy document | Document      | Rummy document short | Dummy body            | Molecular cooking collection | E-inclusion | Luxembourg       | archived |
     And discussion content:
       | title            | body       | collection                   | topic       | spatial coverage | state    |
       | Rummy discussion | Dummy body | Molecular cooking collection | E-inclusion | Luxembourg       | archived |
@@ -201,7 +201,7 @@ Feature: Global search
       | Event Omega       | Event short delta | The epsilon event content.          | Greece           | Event agenda.  | Some place     | European Commission | International | Alphabet | Collection alpha | published |
       | Alternative event | Alt event         | This event stays in the background. | Luxembourg       | To be planned. | Event location | Event organisation  |               |          | Collection alpha | published |
     And document content:
-      | title          | document type | short title          | body                                    | spatial coverage | keywords | collection       | state     |
+      | title          | document type | short title          | field_paragraphs_body                   | spatial coverage | keywords | collection       | state     |
       | Document omega | Document      | Document short delta | A document consists of epsilon strings. | Luxembourg       | Alphabet | Collection alpha | published |
 
     When I visit the search page
@@ -238,7 +238,7 @@ Feature: Global search
     And the following distributions:
       | title              | description                                    | parent        | access url | state     |
       | Distribution alpha | <p>A simple beta distribution description.</p> | Release Alpha | test.zip   | published |
-    And the following licences:
+    And licence content:
       | title         | description                         |
       | Licence Alpha | A beta description for the licence. |
     And news content:
@@ -249,7 +249,7 @@ Feature: Global search
       | Event Omega       | Event short delta | The epsilon event content.          | Event agenda.  | Some place     | European Commission | International | Alphabet |                  | Solution alpha | published |
       | Alternative event | Alt event         | This event stays in the background. | To be planned. | Event location | Event organisation  |               |          | Collection alpha |                | published |
     And document content:
-      | title          | document type | short title          | body                                    | keywords | collection       | state     |
+      | title          | document type | short title          | field_paragraphs_body                   | keywords | collection       | state     |
       | Document omega | Document      | Document short delta | A document consists of epsilon strings. | Alphabet | Collection alpha | published |
     And discussion content:
       | title            | body                                                              | solution       | state     |
@@ -394,7 +394,7 @@ Feature: Global search
       | Bird Birdman                      |
 
   Scenario: Solutions and/or releases are found by their distribution keyword.
-    Given the following licences:
+    Given licence content:
       | title      |
       | Apache-2.0 |
       | LGPL       |
@@ -764,7 +764,7 @@ Feature: Global search
       | title | Mice in space |
       | state | published     |
     And document content:
-      | title        | collection    | topic                                  | state     | logo     | body                                                                                                                                                                                            |
+      | title        | collection    | topic                                  | state     | logo     | field_paragraphs_body                                                                                                                                                                           |
       | Microgravity | Mice in space | HR, Statistics and Analysis, E-justice | published | alan.jpg | Conventional studies investigating the effects of reduced gravity on muscle mass and function have used a ground control group that is not directly comparable to the space experimental group. |
     And event content:
       | title           | collection    | topic                    | state     | logo        | body                                                                                                                                                                                  |

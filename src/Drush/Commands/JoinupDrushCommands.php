@@ -194,11 +194,13 @@ class JoinupDrushCommands extends DrushCommands {
    * @bootstrap full
    * @validate-module-enabled upgrade_status
    */
-  public function checkExtensionMetadataDeprecation($options = [
-    'custom' => TRUE,
-    'contrib' => FALSE,
-    'uninstalled' => TRUE,
-  ]): void {
+  public function checkExtensionMetadataDeprecation(
+    $options = [
+      'custom' => TRUE,
+      'contrib' => FALSE,
+      'uninstalled' => TRUE,
+    ],
+  ): void {
     /** @var \Drupal\upgrade_status\ExtensionMetadataDeprecationAnalyzer $analizer */
     $analizer = \Drupal::service('upgrade_status.extension_metadata_deprecation_analyzer');
     /** @var \Drupal\upgrade_status\ProjectCollector $project_collector */

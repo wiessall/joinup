@@ -9,7 +9,10 @@ use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Driver\Selenium2Driver;
 use Behat\Mink\Element\TraversableElement;
 use Behat\Mink\Exception\ElementNotFoundException;
+use Drupal\Component\Serialization\Json;
 use Drupal\Core\Entity\ContentEntityInterface;
+use Drupal\Core\Layout\LayoutPluginManagerInterface;
+use Drupal\Core\Session\AccountSwitcherInterface;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Exception\WysiwygEditorNotFoundException;
 use Drupal\joinup\Traits\EntityTrait;
@@ -17,8 +20,11 @@ use Drupal\joinup\Traits\JavascriptTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\joinup\Traits\WysiwygTrait;
+use Drupal\layout_paragraphs\LayoutParagraphsLayout;
+use Drupal\layout_paragraphs\LayoutParagraphsLayoutTempstoreRepository;
 use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\paragraphs\ParagraphInterface;
+use Drupal\user\Entity\User;
 use PHPUnit\Framework\Assert;
 
 /**
@@ -422,21 +428,10 @@ class JoinupParagraphsContext extends RawDrupalContext {
     string $parent_field,
     string $parent_type_id,
     string $parent_name,
-    TableNode $table
+    TableNode $table,
   ): void {
     $entity = $this->getEntityByLabel($parent_type_id, $parent_name);
-
-    $values = [
-      'type' => $paragraph_type,
-    ];
-    foreach ($table->getRowsHash() as $field => $value) {
-      $values = array_replace_recursive($values, $this->transformParagraphField($field, $value));
-    }
-
-    $paragraph = Paragraph::create($values);
-    $paragraph->save();
-
-    $this->entities['paragraph'][$paragraph->id()] = $paragraph;
+    $paragraph = $this->createParagraph($paragraph_type, $table);
     $this->appendParagraphToEntity($entity, $paragraph, $parent_field);
   }
 
@@ -460,18 +455,15 @@ class JoinupParagraphsContext extends RawDrupalContext {
     string $poll,
     string $parent_field,
     string $parent_type_id,
-    string $parent_name): void {
+    string $parent_name,
+  ): void {
     $poll = $this->getEntityByLabel('poll', $poll);
     $parentEntity = $this->getEntityByLabel($parent_type_id, $parent_name);
 
-    $values = [
-      'type' => 'poll',
-      'field_paragraphs_poll' => [$poll->id()],
-    ];
-    $paragraph = Paragraph::create($values);
-    $paragraph->save();
-
-    $this->entities['paragraph'][$paragraph->id()] = $paragraph;
+    $paragraph = $this->createParagraph(
+      'poll',
+      ['field_paragraphs_poll' => [$poll->id()]]
+    );
     $this->appendParagraphToEntity($parentEntity, $paragraph, $parent_field);
   }
 
@@ -495,19 +487,14 @@ class JoinupParagraphsContext extends RawDrupalContext {
     string $parent_field,
     string $parent_type_id,
     string $parent_name,
-    PyStringNode $value): void {
+    PyStringNode $value,
+  ): void {
     $entity = $this->getEntityByLabel($parent_type_id, $parent_name);
 
-    $values = [
-      'type' => 'content_listing',
-      'content_listing' => [
-        'value' => unserialize($value->getRaw(), ['allowed_classes' => FALSE]),
-      ],
-    ];
-    $paragraph = Paragraph::create($values);
-    $paragraph->save();
-
-    $this->entities['paragraph'][$paragraph->id()] = $paragraph;
+    $paragraph = $this->createParagraph(
+      'content_listing',
+      ['content_listing:value' => $value->getRaw()]
+    );
     $this->appendParagraphToEntity($entity, $paragraph, $parent_field);
   }
 
@@ -516,13 +503,13 @@ class JoinupParagraphsContext extends RawDrupalContext {
    *
    * @param string $field
    *   Field name.
-   * @param string $value
+   * @param mixed $value
    *   Field value.
    *
    * @return array
    *   Transformed data.
    */
-  protected function transformParagraphField(string $field, string $value): array {
+  protected function transformParagraphField(string $field, mixed $value): array {
     $data = $this->transformParagraphValue($field, $value);
 
     $keys = explode(':', $field);
@@ -538,13 +525,13 @@ class JoinupParagraphsContext extends RawDrupalContext {
    *
    * @param string $field
    *   Field name.
-   * @param string $value
+   * @param mixed $value
    *   Field value.
    *
    * @return array
    *   Transformed value.
    */
-  protected function transformParagraphValue(string $field, string $value): mixed {
+  protected function transformParagraphValue(string $field, mixed $value): mixed {
     return match ($field) {
       'content_listing:value' => unserialize($value, ['allowed_classes' => FALSE]),
       default => $value,
@@ -575,6 +562,115 @@ class JoinupParagraphsContext extends RawDrupalContext {
       ]
     );
     $entity->save();
+  }
+
+  /**
+   * Creates a paragraph with the given values.
+   *
+   * If saved, then the paragraph is queued to be removed after the current test
+   * is finished.
+   *
+   * @param string $type
+   *   The type of the paragraph.
+   * @param \Behat\Gherkin\Node\TableNode|array $table
+   *   The data to add in the paragraph.
+   * @param bool $save
+   *   Whether the paragraph should be saved or not. Optional, defaults to TRUE.
+   *
+   * @return \Drupal\paragraphs\ParagraphInterface
+   *   The paragraph instance.
+   */
+  protected function createParagraph(
+    string $type,
+    TableNode|array $table,
+    bool $save = TRUE,
+  ): ParagraphInterface {
+    $rawArray = $table instanceof TableNode ? $table->getRowsHash() : $table;
+    $rawArray['type'] = $type;
+    foreach ($rawArray as $field => $value) {
+      $rawArray = array_replace_recursive($rawArray, $this->transformParagraphField($field, $value));
+    }
+
+    $paragraph = Paragraph::create($rawArray);
+    if ($save) {
+      $paragraph->save();
+      $this->entities['paragraph'][$paragraph->id()] = $paragraph;
+    }
+    return $paragraph;
+  }
+
+  /**
+   * Appends a paragraph to the current entity form's field.
+   *
+   * @param string $type
+   *   Paragraph entity.
+   * @param string $fieldName
+   *   Field name.
+   * @param \Behat\Gherkin\Node\TableNode $table
+   *   Paragraph values.
+   * @param string $layoutId
+   *   The ID of the layout paragraph type to add the paragraph into. Optional,
+   *   Defaults to the one-column paragraph with ID "layout_onecol".
+   * @param string $regionId
+   *   The field name in the layout paragraph to add the paragraph into.
+   *   Optional, defaults to "content".
+   *
+   * @Given I append :type to :fieldName layout paragraphs field
+   * @Given I append :type to :fieldName layout paragraphs field with :layoutId layout
+   * @Given I append :type to :fieldName layout paragraphs field into :layoutId layout's :regionId region
+   */
+  public function appendParagraphToCurrentForm(
+    string $type,
+    string $fieldName,
+    TableNode $table,
+    string $layoutId = 'layout_onecol',
+    string $regionId = 'content',
+  ): void {
+    // Layout Paragraphs uses private temporary store to store the whole
+    // paragraph structure, including the actual entities as well. Since the
+    // tests' PHP thread is independent (it iteracts with Drupal through the
+    // actual driver), we need to switch to the user account which is actually
+    // logged into the Drupal instance to get the corresponding layout
+    // paragraphs layout object.
+    $lpStorageKeyInput = $this->assertSession()->elementExists('xpath', "//input[@name='{$fieldName}[layout_paragraphs_storage_key]']");
+    $drupalSettingsElement = $this->assertSession()->elementExists('xpath', '//script[@data-drupal-selector="drupal-settings-json"]');
+    $drupalSettingsRaw = $drupalSettingsElement->getText() ?: $drupalSettingsElement->getHtml();
+    $uid = Json::decode($drupalSettingsRaw)['user']['uid'] ?? 0;
+    $storageKey = $lpStorageKeyInput->getValue();
+    $accountSwitcher = \Drupal::service('account_switcher');
+    assert($accountSwitcher instanceof AccountSwitcherInterface);
+    $accountSwitcher->switchTo(User::load($uid));
+    try {
+      $lpTempStore = \Drupal::service('layout_paragraphs.tempstore_repository');
+      assert($lpTempStore instanceof LayoutParagraphsLayoutTempstoreRepository);
+      $layoutDiscovery = \Drupal::service('plugin.manager.core.layout');
+      assert($layoutDiscovery instanceof LayoutPluginManagerInterface);
+      $layoutParagraphsLayout = $lpTempStore->getWithStorageKey($storageKey);
+      // Fail loud if the layout object cannot be loaded...
+      Assert::assertInstanceOf(LayoutParagraphsLayout::class, $layoutParagraphsLayout);
+      // ...And also when the layout is missing.
+      Assert::assertTrue($layoutDiscovery->hasDefinition($layoutId));
+      $layoutInstance = $layoutDiscovery->createInstance($layoutId);
+      $itemParagraph = $this->createParagraph($type, $table, FALSE);
+      // Create the layout paragraph and set its settings.
+      $layoutParagraph = $this->createParagraph('layout', [], FALSE);
+      $layoutParagraph->setBehaviorSettings(
+        'layout_paragraphs',
+        [
+          'layout' => $layoutId,
+          'config' => $layoutInstance->getConfiguration(),
+          'parent_uuid' => NULL,
+          'region' => NULL,
+        ]
+      );
+      Assert::assertContainsEquals($regionId, $layoutInstance->getPluginDefinition()->getRegionNames());
+      $layoutParagraphsLayout->appendComponent($layoutParagraph);
+      $layoutParagraphsLayout->insertIntoRegion($layoutParagraph->uuid(), $regionId, $itemParagraph);
+      $lpTempStore->set($layoutParagraphsLayout);
+    }
+    finally {
+      $accountSwitcher->switchBack();
+    }
   }
 
 }

@@ -20,7 +20,7 @@ Feature:
     And the following distributions:
       | title       | description | parent       | access url | state     |
       | Tile distro | meh...      | Tile release | test.zip   | published |
-    And the following licences:
+    And licence content:
       | title        | description |
       | Tile licence | Meh...      |
     And news content:
@@ -30,8 +30,8 @@ Feature:
       | title      | short title | body   | agenda        | location   | organisation        | scope         | solution      | state     |
       | Tile event | Tile event  | Meh... | Event agenda. | Some place | European Commission | International | Tile solution | published |
     And document content:
-      | title         | document type | short title | body   | solution      | state     |
-      | Tile document | Document      | Meh...      | Meh... | Tile solution | published |
+      | title         | document type | short title | field_paragraphs_body | solution      | state     |
+      | Tile document | Document      | Meh...      | Meh...                | Tile solution | published |
     And discussion content:
       | title           | body   | solution      | state     |
       | Tile discussion | Meh... | Tile solution | published |
@@ -70,8 +70,8 @@ Feature:
       | title      | short title | body   | agenda        | location   | organisation        | scope         | collection      | state     |
       | Tile event | Tile event  | Meh... | Event agenda. | Some place | European Commission | International | Tile collection | published |
     And document content:
-      | title         | document type | short title | body   | collection      | state     |
-      | Tile document | Document      | Meh...      | Meh... | Tile collection | published |
+      | title         | document type | short title | field_paragraphs_body | collection      | state     |
+      | Tile document | Document      | Meh...      | Meh...                | Tile collection | published |
     And discussion content:
       | title           | body   | collection      | state     |
       | Tile discussion | Meh... | Tile collection | published |

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup_core\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\joinup_licence\Entity\Licence;
 use Drupal\rdf_sync\RdfSyncMapper;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -50,7 +51,7 @@ class IdRedirect extends ControllerBase {
     }
 
     // The UUID has been encoded early to allow slashes.
-    // @see \Drupal\joinup_core\PathProcessor\IdRedirectNamespaceProcessor::processInbound()
+    // @see \Drupal\joinup_core\PathProcessor\IdRedirectUuidProcessor::processInbound()
     $uuid = urldecode($uuid);
 
     $id = "http://data.europa.eu/$namespace/$uuid";
@@ -59,6 +60,12 @@ class IdRedirect extends ControllerBase {
         return $this->redirect('joinup_core.not_found');
       }
       $id = $term->id();
+    }
+    // @todo This a temporary solution during conversion of RDF entities to
+    //   nodes. Convert to a stable solution in ISAICP-8376.
+    elseif ($licence = Licence::loadByUri($id)) {
+      $entity_type_id = 'node';
+      $id = $licence->id();
     }
 
     return $this->redirect("entity.$entity_type_id.canonical", [

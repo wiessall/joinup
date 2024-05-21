@@ -57,7 +57,7 @@ class OgPermission extends AccessPluginBase implements CacheableDependencyInterf
     mixed $pluginDefinition,
     protected PermissionHandlerInterface $permissionHandler,
     protected ModuleHandlerInterface $moduleHandler,
-    protected JoinupGroupManagerInterface $groupManager
+    protected JoinupGroupManagerInterface $groupManager,
   ) {
     parent::__construct($configuration, $pluginId, $pluginDefinition);
   }

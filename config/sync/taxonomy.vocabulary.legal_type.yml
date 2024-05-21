@@ -4,6 +4,7 @@ status: true
 dependencies:
   module:
     - joinup_taxonomy
+    - rdf_sync
 third_party_settings:
   joinup_taxonomy:
     locked: false
@@ -23,14 +24,14 @@ third_party_settings:
         processed:
           predicate: 'http://www.w3.org/2004/02/skos/core#definition'
           type: null
-      parent:
-        target_id:
-          predicate: 'http://www.w3.org/2004/02/skos/core#broaderTransitive'
-          type: resource
       weight:
         value:
           predicate: 'http://joinup.eu/skos#weight'
           type: 'xsd:integer'
+      parent:
+        target_id:
+          predicate: 'http://www.w3.org/2004/02/skos/core#broaderTransitive'
+          type: resource
 _core:
   default_config_hash: 3OTVrGRs8apPxQkH5XTXzQfuwxH0gLmq_c5nzKmmooU
 name: 'Legal type'

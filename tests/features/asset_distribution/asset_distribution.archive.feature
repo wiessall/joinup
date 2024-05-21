@@ -5,7 +5,7 @@ Feature: Asset distribution content archival.
     Given solution:
       | title | Some AD solution |
       | state | published        |
-    And the following licences:
+    And licence content:
       | title  | description                               | deprecated |
       | WTFPLA | The WTFPLA is a rather permissive licence | no         |
     And distributions:

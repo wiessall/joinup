@@ -160,6 +160,13 @@ Project 1.2:
       - '[EN] feat 1'
     oss_long_description: '[EN] Group1: Project 2: Long description'
     oss_short_description: '[EN] Group1: Project 2: Short description'
+    oss_used_by:
+      - 'Abbanoa'
+      - 'abbanoa'
+      - 'abbanoa '
+      - 'Comune Di Malè'
+      - 'Comune Di Male'
+      - 'comune di male'
 
 GitHub solution 2:
   en:

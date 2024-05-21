@@ -2,6 +2,8 @@
 
 set -e
 
+source scripts/composer/download_licences
+
 # Build the codebase.
 test ! -f vendor/bin/run || vendor/bin/run toolkit:build-dev
 

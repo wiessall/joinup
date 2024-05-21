@@ -71,13 +71,16 @@ Feature:
     And I fill in the following:
       | Title       | POLI |
       | Short title | POLI |
+      | Abstract    | POLI |
     And I select "Document" from "Type"
     And I select "Supplier exchange" from "Topic"
     # Regression test: Document is successfully displayed even when a publication date is not set.
     And I clear the date of the "Publication date" widget
     And I clear the time of the "Publication date" widget
     Then I upload the file "test.zip" to "Upload a new file or enter a URL"
-    When I enter "Blah blah nobody cares." in the "Description" wysiwyg editor
+    And I append "text" to "field_paragraphs_body" layout paragraphs field
+      | field_body:value  | Blah blah nobody cares. |
+      | field_body:format | content_editor          |
     And I press "Publish"
     Then I should see the heading "POLI"
     And I should see text matching "Published on: \d{2}/\d{2}/\d{4}"
@@ -95,13 +98,16 @@ Feature:
     And I fill in the following:
       | Title       | POLI |
       | Short title | POLI |
+      | Abstract    | POLI |
     And I select "Document" from "Type"
     And I select "Supplier exchange" from "Topic"
     # Regression test: Document is successfully displayed even when a publication date is not set.
     And I clear the date of the "Publication date" widget
     And I clear the time of the "Publication date" widget
     Then I upload the file "test.zip" to "Upload a new file or enter a URL"
-    When I enter "Blah blah nobody cares." in the "Description" wysiwyg editor
+    And I append "text" to "field_paragraphs_body" layout paragraphs field
+      | field_body:value  | Blah blah nobody cares. |
+      | field_body:format | content_editor          |
     And I press "Save as draft"
     Then I should see the heading "POLI"
     # The "Published on" is empty and the Last update points to the current date.

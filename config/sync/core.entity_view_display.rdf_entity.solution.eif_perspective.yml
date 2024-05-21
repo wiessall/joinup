@@ -81,7 +81,7 @@ content:
     type: entity_reference_entity_view
     label: hidden
     settings:
-      view_mode: eif_perspective
+      view_mode: default
       link: false
     third_party_settings:
       template_suggestion:
@@ -120,7 +120,7 @@ content:
       responsive_image_style: highlighted_content
       image_link: ''
       image_loading:
-        attribute: eager
+        attribute: lazy
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
