@@ -1,0 +1,19 @@
+uuid: bebfa1ce-ea34-4271-a234-c610bc78370f
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.spdx_licence
+id: taxonomy_term.spdx_licence.description
+field_name: description
+entity_type: taxonomy_term
+bundle: spdx_licence
+label: 'Licence text'
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  allowed_formats: {  }
+field_type: text_long

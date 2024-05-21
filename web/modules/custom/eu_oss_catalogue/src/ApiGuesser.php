@@ -37,7 +37,7 @@ final class ApiGuesser implements ApiGuesserInterface {
   public function __construct(
     protected EuOssCataloguePluginManagerInterface $hostingPlatformManager,
     protected StateInterface $state,
-    protected LoggerChannelInterface $logger
+    protected LoggerChannelInterface $logger,
   ) {}
 
   /**

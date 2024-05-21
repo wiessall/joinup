@@ -186,7 +186,7 @@
     }
   }
   &__discover {
-    @extend .mt-5;
+    @extend .mt-4;
     .layout__region--first {
       @extend .mb-5;
       @extend .mb-md-0;
@@ -240,6 +240,9 @@
           }
         }
       }
+    }
+    @include media-breakpoint-up(lg) {
+      max-width: calc(100% - 320px);
     }
   }
   &__most-recent {

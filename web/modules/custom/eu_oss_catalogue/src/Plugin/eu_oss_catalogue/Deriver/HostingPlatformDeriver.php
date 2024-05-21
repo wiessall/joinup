@@ -24,7 +24,7 @@ class HostingPlatformDeriver extends DeriverBase implements ContainerDeriverInte
    *   The entity type manager service.
    */
   public function __construct(
-    protected EntityTypeManagerInterface $entityTypeManager
+    protected EntityTypeManagerInterface $entityTypeManager,
   ) {}
 
   /**

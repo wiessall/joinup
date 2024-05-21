@@ -1,0 +1,11 @@
+uuid: 22f98ea9-3753-4e84-9622-55afa01d0548
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.view_mode_search_list_item
+label: 'Search list item'
+description: ''
+targetEntityType: node
+cache: true

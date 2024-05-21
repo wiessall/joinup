@@ -19,8 +19,8 @@ Feature: Global search with archive content
       | Event 3 | Event 3     | Some body | Greece           | Some agenta | Some place | European Commission | International | Rare <group type> | published |
       | Event 4 | Event 4     | Some body | Greece           | Some agenta | Some place | European Commission | International | Rare <group type> | published |
     And document content:
-      | title           | document type | short title     | body      | spatial coverage | <group type>      | state     |
-      | Some document 1 | Document      | Some document 1 | Some body | Luxembourg       | Some <group type> | published |
+      | title           | document type | short title     | field_paragraphs_body | spatial coverage | <group type>      | state     |
+      | Some document 1 | Document      | Some document 1 | Some body             | Luxembourg       | Some <group type> | published |
 
     When the "Some <group type>" <group type> is configured to show "All" community content in the overview
     And the "Some <group type>" <group type> is configured to show the "<bundle label> content archived toggle" facet in the "Top" region
@@ -39,8 +39,8 @@ Feature: Global search with archive content
       | title   | short title | body      | spatial coverage | agenda      | location   | organisation        | scope         | <group type>      | state    |
       | Event 2 | Event 2     | Some body | Greece           | Some agenta | Some place | European Commission | International | Some <group type> | archived |
     And document content:
-      | title           | document type | short title     | body      | spatial coverage | <group type>      | state    |
-      | Some document 2 | Document      | Some document 2 | Some body | Luxembourg       | Some <group type> | archived |
+      | title           | document type | short title     | field_paragraphs_body | spatial coverage | <group type>      | state    |
+      | Some document 2 | Document      | Some document 2 | Some body             | Luxembourg       | Some <group type> | archived |
     When I go to the homepage of the "Some <group type>" <group type>
     Then I should see the "<group type> content archived toggle" facet
     And I should see the following tiles in the correct order:

@@ -40,7 +40,7 @@ class NotAllowedMock extends PluginBase implements ServiceMockPluginInterface, C
     array $configuration,
     $pluginId,
     $pluginDefinition,
-    protected RequestStack $requestStack
+    protected RequestStack $requestStack,
   ) {
     parent::__construct($configuration, $pluginId, $pluginDefinition);
   }
