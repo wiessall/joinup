@@ -197,6 +197,7 @@ Feature:
       | Vitality                                                                                           |
       | 41%                                                                                                |
     And the "div" element with "title" attribute should contain "The software is typically installed and run in a a desktop operating system environment."
+    And I should not see any HTML tags inside elements with title attribute
     And I should see the following links:
       # Categories.
       | document-management              |
