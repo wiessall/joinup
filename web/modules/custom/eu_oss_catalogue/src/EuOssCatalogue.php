@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\eu_oss_catalogue;
 
+use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Queue\QueueFactory;
@@ -38,6 +39,8 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
    *   The entity type manager service.
    * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
    *   The EU OSS Catalogue channel logger.
+   * @param \Drupal\Component\Datetime\TimeInterface $time
+   *   The time service.
    */
   public function __construct(
     protected EuOssCataloguePluginManagerInterface $providerManager,
@@ -46,6 +49,7 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
     protected EventDispatcherInterface $eventDispatcher,
     protected EntityTypeManagerInterface $entityTypeManager,
     protected LoggerChannelInterface $logger,
+    protected TimeInterface $time
   ) {}
 
   /**
@@ -203,6 +207,7 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
       $silentErrors = implode(", ", $project->getSilentErrors());
       if (!$solution->isNew()) {
         $solution->setNewRevision();
+        $solution->setRevisionCreationTime($this->time->getRequestTime());
 
         $message = match ($solution->get('oss_archived')->getString()) {
           '1' => $this->t('Unarchive, because re-added (present again) in "@provider" source/catalogue. @errors', [
@@ -290,6 +295,8 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
     foreach ($this->entityTypeManager->getStorage('node')->loadMultiple($solutionIds) as $solution) {
       $solution->removeProvider($provider);
       $solution->setNewRevision();
+      $solution->setRevisionCreationTime($this->time->getRequestTime());
+
       if ($solution->get('oss_source')->isEmpty()) {
         $message = $this->t('Archive, because removed (not present anymore) from "@provider" source/catalogue', [
           '@provider' => $provider->getPluginDefinition()['label'],
