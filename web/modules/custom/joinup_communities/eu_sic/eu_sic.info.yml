@@ -1,5 +1,0 @@
-name: EU SIC
-type: module
-description: EU Schemantic Interoperability Catalogue community.
-core_version_requirement: ">= 9.4"
-package: Joinup communities

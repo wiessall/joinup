@@ -33,8 +33,8 @@ Feature: Tests the collection last update time.
     Then the response should contain "2011-05-06T21:56"
 
     Given document content:
-      | title           | document type | state     | changed          | created    | collection       | body               |
-      | Get Rid of Rats | Document      | published | 2012-01-17T07:38 | 2001-01-04 | Household Wizard | Rats everywhere... |
+      | title           | document type | state     | changed          | created    | collection       | field_paragraphs_body |
+      | Get Rid of Rats | Document      | published | 2012-01-17T07:38 | 2001-01-04 | Household Wizard | Rats everywhere...    |
 
     And I reload the page
     # The document is the newest thus will give the collection updated time.

@@ -4,6 +4,7 @@ status: true
 dependencies:
   module:
     - joinup_taxonomy
+    - rdf_sync
 third_party_settings:
   joinup_taxonomy:
     locked: true

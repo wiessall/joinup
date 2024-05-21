@@ -230,7 +230,7 @@ class DashboardForm extends FormBase {
       ],
       [
         '#title' => $this->t('Licences overview'),
-        '#url' => Url::fromRoute('joinup_licence.overview'),
+        '#url' => Url::fromRoute('view.licences.list'),
       ],
       [
         '#title' => $this->t('Curated content listings'),

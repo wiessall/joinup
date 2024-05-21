@@ -31,7 +31,8 @@ class AcceptanceTasksForm extends FormBase {
    */
   public function __construct(
     protected QueueFactory $queueFactory,
-    protected QueueWorkerManagerInterface $queueManager) {
+    protected QueueWorkerManagerInterface $queueManager,
+  ) {
   }
 
   /**

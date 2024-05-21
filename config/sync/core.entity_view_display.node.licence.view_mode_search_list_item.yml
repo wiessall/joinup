@@ -1,0 +1,133 @@
+uuid: 92106f36-97f5-4b51-b0ab-83b70889183d
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.view_mode_search_list_item
+    - field.field.node.licence.deprecated
+    - field.field.node.licence.description
+    - field.field.node.licence.legal_type
+    - field.field.node.licence.licence_type
+    - field.field.node.licence.spdx_licence
+    - node.type.licence
+  module:
+    - field_group
+    - layout_builder
+    - template_suggestion
+    - text
+    - user
+third_party_settings:
+  field_group:
+    group_licence_wrapper:
+      children: {  }
+      label: 'Licence wrapper'
+      parent_name: ''
+      region: hidden
+      weight: 16
+      format_type: html_element
+      format_settings:
+        classes: ''
+        id: ''
+        element: div
+        show_label: false
+        label_element: h3
+        attributes: ''
+        effect: none
+        speed: fast
+  layout_builder:
+    enabled: false
+    allow_custom: false
+id: node.licence.view_mode_search_list_item
+targetEntityType: node
+bundle: licence
+mode: view_mode_search_list_item
+content:
+  deprecated:
+    type: boolean
+    label: hidden
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    weight: 4
+    region: content
+  description:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  legal_type:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: true
+    third_party_settings:
+      field_delimiter:
+        delimiter: ''
+      field_formatter_range:
+        order: 0
+        limit: 0
+        offset: 0
+      joinup_slick:
+        preset: ''
+        field_label: true
+        custom_label: ''
+      template_suggestion:
+        template_suggestion: ''
+    weight: 3
+    region: content
+  licence_type:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: true
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
+    weight: 1
+    region: content
+  spdx_licence:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: true
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: fieldset
+    weight: 2
+    region: content
+  spdx_licence_external_url:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 9
+    region: content
+  spdx_licence_id:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 6
+    region: content
+  spdx_licence_label:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 5
+    region: content
+  spdx_licence_text:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 7
+    region: content
+  spdx_see_also:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 8
+    region: content
+hidden:
+  langcode: true
+  links: true
+  published_at: true
+  report: true
+  search_api_excerpt: true
+  uri: true

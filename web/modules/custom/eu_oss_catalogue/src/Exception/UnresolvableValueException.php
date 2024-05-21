@@ -33,7 +33,7 @@ class UnresolvableValueException extends EuOssCatalogueException {
     public readonly mixed $value,
     public readonly array $data,
     int $code = 0,
-    ?\Throwable $previous = NULL
+    ?\Throwable $previous = NULL,
   ) {
     $printedValue = trim(var_export($this->value, TRUE));
     $printedData = Yaml::encode($this->data);

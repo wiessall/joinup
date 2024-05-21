@@ -17,10 +17,10 @@ Feature: SEO for news articles.
 
     When I visit the "Joinup SEO news" news
     Then the metatag JSON should be attached in the page
-    And 1 metatag graph of type "NewsArticle" should exist in the page
+    And 1 metatag graph of type "http://schema.org/NewsArticle" should exist in the page
     And the metatag graph of the item with "name" "Joinup SEO news" should have the following properties:
       | property            | value                                                                   |
-      | @type               | NewsArticle                                                             |
+      | @type               | http://schema.org/NewsArticle                                           |
       | headline            | Headline of Joinup SEO news                                             |
       | description         | Body of news.                                                           |
       | isAccessibleForFree | True                                                                    |
@@ -29,9 +29,9 @@ Feature: SEO for news articles.
       # __base_url__ will be replaced with the base url of the website.
       | mainEntityOfPage    | __base_url__/collection/joinup-seo-news-collection/news/joinup-seo-news |
     And the metatag graph of the item with "name" "Joinup SEO news" should have the following "image" properties:
-      | property             | value       |
-      | @type                | ImageObject |
-      | representativeOfPage | True        |
+      | property             | value                         |
+      | @type                | http://schema.org/ImageObject |
+      | representativeOfPage | True                          |
       # The test files are assigned a random name so it is very hard to assert the real url. However, when the file is
       # found and added to the page, the dimensions are added as well. Asserting the dimensions also asserts the url in
       # a way.
@@ -39,13 +39,13 @@ Feature: SEO for news articles.
       | height               | 139         |
     And the metatag graph of the item with "name" "Joinup SEO news" should have the following "author" properties:
       | property | value                             |
-      | @type    | Person                            |
+      | @type    | http://schema.org/Person          |
       | @id      | __base_url__/user/__random_text__ |
       | name     | Kurk Smith                        |
       | url      | __base_url__/user/__random_text__ |
     And the metatag graph of the item with "name" "Joinup SEO news" should have the following "publisher" properties:
       | property | value                             |
-      | @type    | Person                            |
+      | @type    | http://schema.org/Person          |
       | @id      | __base_url__/user/__random_text__ |
       | name     | Kurk Smith                        |
       | url      | __base_url__/user/__random_text__ |

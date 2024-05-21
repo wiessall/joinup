@@ -41,6 +41,9 @@ use Drupal\Core\Config\Entity\ConfigEntityBundleBase;
  *     "label",
  *   },
  * )
+ *
+ * @todo Cannot delete the entity type class in a single deployment. Delete the
+ *   entities but postpone the class deletion to ISAICP-8376.
  */
 class EifWrapperType extends ConfigEntityBundleBase {
 

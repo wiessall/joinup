@@ -1,0 +1,11 @@
+uuid: 300af136-678f-42cc-9204-6296b989b188
+langcode: en
+status: true
+dependencies:
+  module:
+    - paragraphs
+id: paragraph.message_digest
+label: 'Message digest'
+description: 'A more compact output of the paragraph to be displayed in digest messages.'
+targetEntityType: paragraph
+cache: true

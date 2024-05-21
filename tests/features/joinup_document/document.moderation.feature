@@ -86,7 +86,10 @@ Feature: Document moderation
     When I fill in the following:
       | Title       | An amazing document |
       | Short title | Amazing document    |
-    And I enter "This is going to be an amazing document." in the "Description" wysiwyg editor
+      | Abstract    | Amazing document    |
+    And I append "text" to "field_paragraphs_body" layout paragraphs field
+      | field_body:value  | This is going to be an amazing document. |
+      | field_body:format | content_editor                           |
     And I select "Document" from "Type"
     Then I upload the file "test.zip" to "Upload a new file or enter a URL"
     And I select "EU and European Policies" from "Topic"
@@ -143,8 +146,11 @@ Feature: Document moderation
     And I click "Add document" in the plus button menu
     When I fill in the following:
       | Title       | An amazing document about life |
-      | Short title | Amazing life    |
-    And I enter "This is going to be an amazing document about life." in the "Description" wysiwyg editor
+      | Short title | Amazing life                   |
+      | Abstract    | Amazing life                   |
+    And I append "text" to "field_paragraphs_body" layout paragraphs field
+      | field_body:value  | This is going to be an amazing document about life. |
+      | field_body:format | content_editor                                      |
     And I select "Document" from "Type"
     Then I upload the file "test.zip" to "Upload a new file or enter a URL"
     And I select "EU and European Policies" from "Topic"
@@ -159,8 +165,11 @@ Feature: Document moderation
     And I click "Add document" in the plus button menu
     When I fill in the following:
       | Title       | An amazing document about health |
-      | Short title | Amazing health    |
-    And I enter "This is going to be an amazing document about health." in the "Description" wysiwyg editor
+      | Short title | Amazing health                   |
+      | Abstract    | Amazing document                 |
+    And I append "text" to "field_paragraphs_body" layout paragraphs field
+      | field_body:value  | This is going to be an amazing document. |
+      | field_body:format | content_editor                           |
     And I select "Document" from "Type"
     Then I upload the file "test.zip" to "Upload a new file or enter a URL"
     And I select "EU and European Policies" from "Topic"

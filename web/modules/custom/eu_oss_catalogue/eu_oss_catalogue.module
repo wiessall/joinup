@@ -104,6 +104,9 @@ function eu_oss_catalogue_entity_bundle_field_info_alter(array &$fields, EntityT
   // field.
   if (!empty($computedFieldCandidates)) {
     $fields[RelevantLanguageCode::FIELD_NAME] = BaseFieldDefinition::create('language')
+      ->setName(RelevantLanguageCode::FIELD_NAME)
+      ->setTargetEntityTypeId($entityType->id())
+      ->setTargetBundle($bundle)
       ->setLabel(t('Relevant language code'))
       ->setComputed(TRUE)
       ->setClass(RelevantLanguageCode::class);

@@ -18,7 +18,17 @@ services:
       - { name: paramconverter, priority: 10 }
   # TODO: Drop in ISAICP-8376
   joinup_rdf.outbound_value.tid:
-    class: Drupal\joinup_rdf\EventSubscriber\Tid
-    arguments: ['@database']
+    class: Drupal\joinup_rdf\EventSubscriber\UriIdConversion
+    arguments: ['@database', '@entity_field.manager']
+    tags:
+      - { name: event_subscriber }
+  joinup_rdf.legacy_rdf_url.subscriber:
+    class: Drupal\joinup_rdf\EventSubscriber\LegacyRdfUrlSubscriber
+    arguments: ['@rdf_sync.mapper']
+    tags:
+      - { name: event_subscriber }
+  joinup_rdf.export_route_subscriber:
+    class: Drupal\joinup_rdf\Routing\RdfExportRouteSubscriber
+    arguments: ['@entity_type.manager', '@entity_type.bundle.info', '@rdf_sync.mapper']
     tags:
       - { name: event_subscriber }

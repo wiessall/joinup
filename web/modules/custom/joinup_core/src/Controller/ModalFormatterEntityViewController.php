@@ -28,7 +28,7 @@ class ModalFormatterEntityViewController implements ContainerInjectionInterface 
    *   The entity display repository.
    */
   public function __construct(
-    protected EntityDisplayRepositoryInterface $displayRepository
+    protected EntityDisplayRepositoryInterface $displayRepository,
   ) {}
 
   /**
