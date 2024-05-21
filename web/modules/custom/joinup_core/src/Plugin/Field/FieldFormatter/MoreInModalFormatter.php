@@ -70,7 +70,7 @@ class MoreInModalFormatter extends FormatterBase {
     ContainerInterface $container,
     array $configuration,
     $plugin_id,
-    $plugin_definition
+    $plugin_definition,
   ): self {
     return new static(
       $plugin_id,
@@ -284,7 +284,7 @@ class MoreInModalFormatter extends FormatterBase {
   protected function getViewDisplayWithFallback(
     string $entityTypeId,
     string $bundle,
-    string $viewMode
+    string $viewMode,
   ): EntityViewDisplayInterface {
     $original = $this->displayRepository->getViewDisplay($entityTypeId, $bundle, $viewMode);
 

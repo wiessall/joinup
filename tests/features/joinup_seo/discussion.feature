@@ -17,10 +17,10 @@ Feature: SEO for discussion forum posts.
 
     When I visit the "Discussions are now forum posts" discussion
     Then the metatag JSON should be attached in the page
-    And 1 metatag graph of type "DiscussionForumPosting" should exist in the page
+    And 1 metatag graph of type "http://schema.org/DiscussionForumPosting" should exist in the page
     And the metatag graph of the item with "name" "Discussions are now forum posts" should have the following properties:
       | property            | value                                                                                               |
-      | @type               | DiscussionForumPosting                                                                              |
+      | @type               | http://schema.org/DiscussionForumPosting                                                            |
       | headline            | Discussions are now forum posts                                                                     |
       | name                | Discussions are now forum posts                                                                     |
       | description         | This discussion is to ensure that SEO tags are set properly.                                        |
@@ -37,14 +37,14 @@ Feature: SEO for discussion forum posts.
       | 3        | schema.org |
     And the metatag graph of the item with "name" "Discussions are now forum posts" should have the following "image" properties:
       | property | value                                                                                                                    |
-      | @type    | ImageObject                                                                                                              |
-      # Discussions don't have an image field but an image is required by google. Add the Interoperable Europe logo as the image of
+      | @type    | http://schema.org/ImageObject                                                                                            |
+      # Discussions don't have an image field but an image is required by google. Add the Joinup logo as the image of
       # all discussions.
       | url      | https://joinup.ec.europa.eu/sites/default/files/styles/logo/public/collection/logo/2019-04/190404-logo-JOINUP-blue-2.png |
     # The index is the delta in the field attachment, with 0 meaning the first of the values.
     And the metatag graph of the item with "name" "Discussions are now forum posts" should have the following "sharedContent" properties in index 0:
       | property | value                                                    |
-      | @type    | MediaObject                                              |
+      | @type    | http://schema.org/MediaObject                            |
       # __random_text__ can be any string that is appointed by the system and we
       # cannot predict. In this case it is the random file name suffix before the file extension.
       | @id      | __base_url__/sites/default/files/test__random_text__.zip |
@@ -52,7 +52,7 @@ Feature: SEO for discussion forum posts.
       | url      | __base_url__/sites/default/files/test__random_text__.zip |
     And the metatag graph of the item with "name" "Discussions are now forum posts" should have the following "sharedContent" properties in index 1:
       | property | value                                                    |
-      | @type    | MediaObject                                              |
+      | @type    | http://schema.org/MediaObject                            |
       # __random_text__ can be any string that is appointed by the system and we
       # cannot predict. In this case it is the random file name suffix before the file extension.
       | @id      | __base_url__/sites/default/files/test__random_text__.zip |
@@ -60,7 +60,7 @@ Feature: SEO for discussion forum posts.
       | url      | __base_url__/sites/default/files/test__random_text__.zip |
     And the metatag graph of the item with "name" "Discussions are now forum posts" should have the following "author" properties:
       | property | value                             |
-      | @type    | Person                            |
+      | @type    | http://schema.org/Person          |
       # The user id is only a number but we can be quite certain that this will be a url to the user since the
       # __random_text__ does not include a / character.
       | @id      | __base_url__/user/__random_text__ |
@@ -68,7 +68,7 @@ Feature: SEO for discussion forum posts.
       | url      | __base_url__/user/__random_text__ |
     And the metatag graph of the item with "name" "Discussions are now forum posts" should have the following "publisher" properties:
       | property | value                             |
-      | @type    | Person                            |
+      | @type    | http://schema.org/Person          |
       # The user id is only a number but we can be quite certain that this will be a url to the user since the
       # __random_text__ does not include a / character.
       | @id      | __base_url__/user/__random_text__ |

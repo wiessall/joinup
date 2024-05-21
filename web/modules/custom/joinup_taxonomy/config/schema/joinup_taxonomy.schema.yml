@@ -5,3 +5,8 @@ taxonomy.vocabulary.*.third_party.joinup_taxonomy:
     locked:
       type: boolean
       label: 'If true, terms cannot be added or edited via UI'
+
+# TODO: Find out a way to automatically generate the schema for each bundle
+# config entity, without needing to explicitly declare it.
+taxonomy.vocabulary.*.third_party.rdf_sync:
+  type: rdf_sync.bundle_mapping

@@ -77,10 +77,9 @@ Feature: User role management
     And 0 e-mails should have been sent
 
   Scenario: A moderator can assign and remove the Licence manager role.
-    Given the following licence:
-      | title       | Open licence              |
-      | description | Licence agreement details |
-      | type        | Public domain             |
+    Given licence content:
+      | title        | description               | licence type  |
+      | Open licence | Licence agreement details | Public domain |
 
     And I am logged in as "Rick Rolls"
     And I am on the homepage

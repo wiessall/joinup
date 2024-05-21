@@ -1,0 +1,23 @@
+uuid: 5b2ca917-4426-4c47-ba28-84c3439b57c2
+langcode: en
+status: true
+dependencies:
+  module:
+    - field_permissions
+    - link
+    - taxonomy
+third_party_settings:
+  field_permissions:
+    permission_type: public
+id: taxonomy_term.see_also
+field_name: see_also
+entity_type: taxonomy_term
+type: link
+settings: {  }
+module: link
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

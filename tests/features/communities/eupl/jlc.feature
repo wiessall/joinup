@@ -36,7 +36,7 @@ Feature:
       | http://joinup.eu/spdx/DATA             | DATA             | DATA             |
       | http://joinup.eu/spdx/SOFT             | SOFT             | SOFT             |
 
-    And licences:
+    And licence content:
       | uri                                   | title            | spdx licence     | legal type                                            |
       | http://joinup.eu/licence/agpl3only    | AGPL-3.0-only    | AGPL-3.0-only    | GPL, For software, Copyleft/Share a.                  |
       | http://joinup.eu/licence/apache2      | Apache-2.0       | Apache-2.0       | Permissive, GPL, For software                         |
@@ -272,7 +272,7 @@ Feature:
       | http://joinup.eu/spdx/EUPL-1.2 | EUPL-1.2 | EUPL-1.2 |
       | http://joinup.eu/spdx/LGPL-2.1 | LGPL-2.1 | LGPL-2.1 |
 
-    And licences:
+    And licence content:
       | uri                              | title                                 | spdx licence | legal type                                     |
       | http://joinup.eu/licence/cecillc | CeCILL-C                              | CECILL-C     | GPL, For software, Lesser copyleft             |
       | http://joinup.eu/licence/eupl12  | European Union Public Licence 1.2     | EUPL-1.2     | GPL, For data, For software, Copyleft/Share a. |
@@ -354,7 +354,7 @@ Feature:
       | http://joinup.eu/spdx/EUPL-1.2 | EUPL-1.2 | EUPL-1.2 |
       | http://joinup.eu/spdx/LGPL-2.1 | LGPL-2.1 | LGPL-2.1 |
 
-    And licences:
+    And licence content:
       | uri                              | title                                 | spdx licence | legal type                                     |
       | http://joinup.eu/licence/cecillc | CeCILL-C                              | CECILL-C     | GPL, For software, Lesser copyleft             |
       | http://joinup.eu/licence/eupl12  | European Union Public Licence 1.2     | EUPL-1.2     | GPL, For data, For software, Copyleft/Share a. |

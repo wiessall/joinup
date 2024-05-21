@@ -14,8 +14,10 @@ use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
+use Drupal\Core\Render\BubbleableMetadata;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
+use Drupal\joinup_rdf\Entity\RdfSyncEntityInterface;
 use Drupal\joinup_workflow\EntityWorkflowStateInterface;
 use Drupal\og\Og;
 
@@ -245,4 +247,35 @@ function joinup_rdf_condition_info_alter(array &$definitions): void {
   // 'entity_bundle:rdf_entity'.
   // @see https://www.drupal.org/node/3283076
   unset($definitions['rdf_entity_bundle']);
+}
+
+/**
+ * Implements hook_token_info_alter().
+ */
+function joinup_rdf_token_info_alter(&$info) {
+  $rdfUriInfo = [
+    'name' => t('The legacy RDF uri of the entity'),
+    'description' => t('The legacy RDF uri of the entity, if any.'),
+  ];
+  $info['tokens']['node']['rdf-uri'] = $rdfUriInfo;
+  $info['tokens']['term']['rdf-uri'] = $rdfUriInfo;
+}
+
+/**
+ * Implements hook_tokens().
+ */
+function joinup_rdf_tokens($type, $tokens, array $data, array $options, BubbleableMetadata $bubbleable_metadata): array {
+  $entity = $data[$type] ?? NULL;
+  if (
+    !array_key_exists('rdf-uri', $tokens) ||
+    !isset($entity) ||
+    !$entity instanceof RdfSyncEntityInterface
+  ) {
+    return [];
+  }
+
+  $bubbleable_metadata->addCacheableDependency($entity);
+  return [
+    $tokens['rdf-uri'] => $entity->getUri(),
+  ];
 }
