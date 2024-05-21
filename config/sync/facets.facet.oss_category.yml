@@ -3,7 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
-    - search_api.index.published
+    - search_api.index.oss_catalogue
     - views.view.search_oss_catalogue
   module:
     - search_api
