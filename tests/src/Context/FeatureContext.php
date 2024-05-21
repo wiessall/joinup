@@ -2468,6 +2468,28 @@ class FeatureContext extends RawDrupalContext {
   }
 
   /**
+   * Verifies that no elements with a title attribute contain HTML tags.
+   *
+   * @Then I should not see any HTML tags inside elements with title attribute
+   */
+  public function assertNoTagsInsideDiv(): void {
+    // Find all elements with a title attribute.
+    $elements = $this->getSession()->getPage()->findAll('css', '[title]');
+
+    foreach ($elements as $element) {
+      $inner_html = $element->getAttribute('title');
+
+      // Remove all HTML tags.
+      $stripped_html = strip_tags($inner_html);
+
+      // Check if the stripped HTML is the same as the inner HTML.
+      if ($inner_html !== $stripped_html) {
+        throw new \Exception(sprintf('Element with title attribute "%s" contains HTML tags.', $element->getAttribute('title')));
+      }
+    }
+  }
+
+  /**
    * Disables cookie consent banner for all tests.
    *
    * @BeforeSuite
