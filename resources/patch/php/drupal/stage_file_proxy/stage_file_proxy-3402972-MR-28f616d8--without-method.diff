@@ -1,0 +1,43 @@
+diff --git a/src/EventSubscriber/StageFileProxySubscriber.php b/src/EventSubscriber/StageFileProxySubscriber.php
+index e0285d6de429772354bb803015e880b96ab2c27b..7f0b7a3710253269975359ae312fefce62d8cfba 100644
+--- a/src/EventSubscriber/StageFileProxySubscriber.php
++++ b/src/EventSubscriber/StageFileProxySubscriber.php
+@@ -155,11 +155,18 @@ class StageFileProxySubscriber implements EventSubscriberInterface {
+     // If file is fetched and use_imagecache_root is set, original is used.
+     $paths = [$relative_path];
+ 
+-    // Webp support.
+-    $is_webp = FALSE;
+-    if (strpos($relative_path, '.webp')) {
+-      $paths[] = str_replace('.webp', '', $relative_path);
+-      $is_webp = TRUE;
++    // Image style file conversion support.
++    $unconverted_path = static::getFilePathWithoutConvertedExtension($relative_path);
++    if ($unconverted_path !== $relative_path) {
++      if ($config->get('use_imagecache_root')) {
++        // Check the unconverted file path first in order to use the local
++        // original image.
++        array_unshift($paths, $unconverted_path);
++      }
++      else {
++        // Check the unconverted path after the image derivative.
++        $paths[] = $unconverted_path;
++      }
+     }
+ 
+     foreach ($paths as $relative_path) {
+@@ -175,12 +182,12 @@ class StageFileProxySubscriber implements EventSubscriberInterface {
+       // Is this imagecache? Request the root file and let imagecache resize.
+       // We check this first so locally added files have precedence.
+       $original_path = $this->manager->styleOriginalPath($relative_path, TRUE);
+-      if ($original_path && !$is_webp) {
++      if ($original_path) {
+         if (file_exists($original_path)) {
+           // Imagecache can generate it without our help.
+           return;
+         }
+-        if ($config->get('use_imagecache_root')) {
++        if ($config->get('use_imagecache_root') && $unconverted_path === $relative_path) {
+           // Config says: Fetch the original.
+           $fetch_path = StreamWrapperManager::getTarget($original_path);
+         }

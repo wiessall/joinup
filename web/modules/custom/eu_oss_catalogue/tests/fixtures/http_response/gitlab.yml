@@ -392,7 +392,12 @@
                       softwareType: standalone/desktop
                       softwareVersion: 1.0.0
                       usedBy:
-                        - Big Orchestra
+                        - 'Abbanoa'
+                        - 'abbanoa'
+                        - 'abbanoa '
+                        - 'Comune Di Malè'
+                        - 'Comune Di Male'
+                        - 'comune di male'
 
           # Archived but still import
           - path: project-1-3

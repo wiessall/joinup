@@ -39,7 +39,7 @@ class ClearFiltersSearchBlock extends BlockBase implements ContainerFactoryPlugi
     array $configuration,
     string $pluginId,
     $pluginDefinition,
-    protected RequestStack $requestStack
+    protected RequestStack $requestStack,
   ) {
     parent::__construct($configuration, $pluginId, $pluginDefinition);
   }

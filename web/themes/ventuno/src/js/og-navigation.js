@@ -16,6 +16,7 @@
                 "p-plus__toggle-btn",
                 "px-1",
                 "mx-3",
+                "pb-1",
                 "border-0",
                 "bg-transparent",
               ],

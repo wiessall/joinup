@@ -4,7 +4,7 @@
     "type": "project",
     "license": "EUPL-1.2",
     "require": {
-        "php": ">=8.2",
+        "php": ">=8.3",
         "ext-dom": "*",
         "ext-json": "*",
         "ext-mbstring": "*",
@@ -25,7 +25,6 @@
         "drupal/cas": "^2.0",
         "drupal/cas_attributes": "^2.0",
         "drupal/changed_fields": "^3.2",
-        "drupal/ckeditor": "^1.0",
         "drupal/colorbox": "^2.0",
         "drupal/config_ignore": "^3.0",
         "drupal/config_readonly": "^1.0",
@@ -81,13 +80,11 @@
         "drupal/page_manager": "^4.0@beta",
         "drupal/paragraphs": "^1.12",
         "drupal/pathauto": "~1.8",
-        "drupal/pipeline": "^1.0",
         "drupal/pluginreference": "^3.0",
         "drupal/poll": "^1.6",
         "drupal/publication_date": "^2.0",
         "drupal/queue_ui": "^3.1",
         "drupal/rdf_entity": "^2.0",
-        "drupal/rdf_meta_entity": "^1.0",
         "drupal/rdf_sync": "^1.0",
         "drupal/redirect": "^1.6",
         "drupal/role_delegation": "^1.2",
@@ -101,7 +98,7 @@
         "drupal/simple_block": "^1.3",
         "drupal/simple_sitemap": "^4.0",
         "drupal/sitewide_alert": "^2.1",
-        "drupal/slick": "2.10.0",
+        "drupal/slick": "^2",
         "drupal/smart_trim": "^2.1",
         "drupal/social_media_links": "^2.7",
         "drupal/state_machine": "^1.0",
@@ -128,7 +125,6 @@
         "openeuropa/oe_webtools": "^1.21",
         "psr/http-factory-implementation": "*",
         "semiceu/adms-ap_validator": "1.0.0-alpha1",
-        "spdx/license-list-data": "master",
         "sweetrdf/easyrdf": "^1.9",
         "symfony/http-client": "*"
     },
@@ -147,7 +143,7 @@
         "drupal/http_request_mock": "^1.1",
         "drupal/masquerade": "^2.0@RC",
         "drupal/renderviz": "^1.0",
-        "drupal/stage_file_proxy": "2.1.3",
+        "drupal/stage_file_proxy": "^2.1.4",
         "drupal/upgrade_status": "^4.0",
         "drupaltest/behat-one-time-login": "^1.0",
         "ec-europa/toolkit": "^10.5",
@@ -155,6 +151,7 @@
         "gitonomy/gitlib": "^1.4",
         "lovers-of-behat/table-extension": "^1.4",
         "mikey179/vfsstream": "~1.6",
+        "ml/json-ld": "^1.2",
         "palantirnet/drupal-rector": "^0.12.2",
         "pear/http_request2": "~2.4",
         "php-task-runner/composer": "dev-toolkit-runner",
@@ -177,7 +174,7 @@
     "config": {
         "sort-packages": true,
         "platform": {
-            "php": "8.2"
+            "php": "8.3"
         },
         "allow-plugins": {
             "dealerdirect/phpcodesniffer-composer-installer": true,
@@ -193,11 +190,8 @@
     "autoload": {
         "classmap": [
             "web/modules/contrib/error_page/src/ErrorPageErrorHandler.php",
-            "web/modules/contrib/rdf_sync/src/Encoder/RdfSyncEncoder.php",
-            "web/modules/contrib/rdf_sync/src/Model/RdfSyncFormat.php",
             "web/modules/contrib/sparql_entity_storage/src/Driver/Database/sparql/ConnectionInterface.php",
-            "web/modules/custom/joinup_sparql/src/Driver/Database/joinup_sparql/Connection.php",
-            "web/modules/custom/joinup_taxonomy/src/Entity/MappedTerm.php"
+            "web/modules/custom/joinup_sparql/src/Driver/Database/joinup_sparql/Connection.php"
         ],
         "psr-4": {
             "Joinup\\": "src"
@@ -209,7 +203,6 @@
             "web/modules/contrib/message_digest/src/Traits/MessageDigestContextTrait.php",
             "web/modules/contrib/message_digest/src/Traits/MessageDigestTrait.php",
             "web/modules/contrib/og_menu/src/Tests/Traits/OgMenuTrait.php",
-            "web/modules/contrib/pipeline/src/Traits/PipelineContextTrait.php",
             "scripts/composer/ComposerPatches.php"
         ],
         "files": [
@@ -220,9 +213,7 @@
             "Drupal\\Tests\\cas_mock_server\\": "web/modules/contrib/cas_mock_server/tests/src",
             "Drupal\\Tests\\honeypot\\": "web/modules/contrib/honeypot/tests/src",
             "Drupal\\Tests\\message_digest\\": "web/modules/contrib/message_digest/tests/src",
-            "Drupal\\Tests\\oe_webtools\\": "web/modules/contrib/oe_webtools/tests",
-            "Drupal\\Tests\\pipeline\\": "web/modules/contrib/pipeline/tests/src",
-            "Drupal\\Tests\\spdx\\": "web/modules/contrib/spdx/tests/src"
+            "Drupal\\Tests\\oe_webtools\\": "web/modules/contrib/oe_webtools/tests"
         }
     },
     "scripts": {
@@ -292,9 +283,6 @@
             "drupal/cached_computed_field": {
                 "Deprecated function: Return type of Drupal\\cached_computed_field\\ExpiredItemCollection @see https://www.drupal.org/project/cached_computed_field/issues/3419688": "resources/patch/php/drupal/cached_computed_field/3419688.patch"
             },
-            "drupal/cas": {
-                "Should CAS respect Drupal registration configuration @see https://www.drupal.org/project/cas/issues/3038279": "resources/patch/php/drupal/cas/3038279.patch"
-            },
             "drupal/colorbox": {
                 "Support Responsive Image module in D8 @see https://drupal.org/i/2808883": "resources/patch/php/drupal/colorbox/colorbox-responsive-image-2808883-69.patch"
             },
@@ -323,7 +311,9 @@
                 "If you don't set the \"version\" of a profile, the report/status displays an empty dash @see https://www.drupal.org/project/drupal/issues/3270892": "resources/patch/php/drupal/core/3270892.patch",
                 "Views Block Display skips preBlockBuild() call on ajax rebuild https://www.drupal.org/i/2605218": "resources/patch/php/drupal/core/2605218-134.diff",
                 "Deprecated function: strnatcasecmp(): Passing null to parameter #1 ($string1) of type string is deprecated in LayoutPluginManager https://www.drupal.org/i/3392572": "resources/patch/php/drupal/core/3392572.patch",
-                "PHP deprecation error in PhpMail::mail @see https://www.drupal.org/project/drupal/issues/3418098": "resources/patch/php/drupal/core/3418098.diff"
+                "PHP deprecation error in PhpMail::mail @see https://www.drupal.org/project/drupal/issues/3418098": "resources/patch/php/drupal/core/3418098.diff",
+                "Allow the ChangedItem to skip updating the entity's \"changed\" timestamp when synchronizing (f.e. when migrating) @see https://drupal.org/i/2329253": "resources/patch/php/drupal/core/2329253-127-10.2.5.patch",
+                "Set the toolbar to position fixed on mobile (for group banner positioning and toolbar on mobile) @see https://www.drupal.org/project/drupal/issues/2516938": "resources/patch/php/drupal/core/3809.diff"
             },
             "drupal/default_content": {
                 "Allow manual imports @see https://www.drupal.org/i/2640734": "resources/patch/php/drupal/default_content/2640734.diff"
@@ -426,14 +416,8 @@
                 "Add permissions to edit all polls @see https://www.drupal.org/project/poll/issues/3274724": "resources/patch/php/drupal/poll/3274724-4.patch",
                 "User can stuck on View results @see https://www.drupal.org/project/poll/issues/3405509": "resources/patch/php/drupal/poll/3405509.patch"
             },
-            "drupal/publication_date": {
-                "Fix PHP 8.2 deprecation issue with PublishedAtOrNowComputed class @see https://www.drupal.org/project/publication_date/issues/3328575": "resources/patch/php/drupal/publication_date/3328575.patch"
-            },
             "drupal/rdf_entity": {
                 "Allow bundle label plural variants @see https://github.com/ec-europa/rdf_entity/pull/12": "resources/patch/php/drupal/rdf_entity/ea8f6af001fca732e89a4be0e29643953f49a88f.diff"
-            },
-            "drupal/rdf_sync": {
-                "Wrong normalization of multiple entity references @see https://www.drupal.org/project/rdf_sync/issues/3438180":"resources/patch/php/drupal/rdf_sync/3438180.diff"
             },
             "drupal/search_api": {
                 "item_id column is too short @see https://www.drupal.org/node/2829696": "resources/patch/php/drupal/search_api/2829696.patch",
@@ -448,11 +432,6 @@
                 "Missing plugins config schema @see https://www.drupal.org/project/search_api_spellcheck/issues/3277693": "resources/patch/php/drupal/search_api_spellcheck/3277693.patch",
                 "URL don't include the base path @see https://www.drupal.org/project/search_api_spellcheck/issues/3280372": "resources/patch/php/drupal/search_api_spellcheck/3280372.patch",
                 "PHP Notice Array to string conversion @see https://www.drupal.org/project/search_api_spellcheck/issues/3265659": "resources/patch/php/drupal/search_api_spellcheck/3265659-3.patch"
-            },
-            "drupal/slick": {
-                "Slick filter schema is incomplete @see https://www.drupal.org/i/3404070": "resources/patch/php/drupal/slick/3404070.diff",
-                "The definition for the sequence declares the type of its items in a way that is deprecated in drupal:8.0.0 @see https://drupal.org/i/3411048": "resources/patch/php/drupal/slick/slick-deprecated_schema_declaration-3411048-2--on-top-of-3404070.patch",
-                "Slick image schema is incomplete @see https://www.drupal.org/i/3420880": "resources/patch/php/drupal/slick/3420880.patch"
             },
             "drupal/social_media_links": {
                 "Missing config schema for field, widget and formatter @see https://www.drupal.org/node/2898680": "resources/patch/php/drupal/social_media_links/2898680.patch",
@@ -469,7 +448,11 @@
             },
             "drupal/svg_image": {
                 "SVG is not valid or cannot be sanitized, return an error. @see https://www.drupal.org/i/3350696": "resources/patch/php/drupal/svg_image/3350696.patch",
-                "SvgImageWidget should inherit from ImageWidget instead of FileWidget @see https://www.drupal.org/project/svg_image/issues/3420037": "resources/patch/php/drupal/svg_image/3420037.patch"
+                "SvgImageWidget should inherit from ImageWidget instead of FileWidget @see https://www.drupal.org/project/svg_image/issues/3420037": "resources/patch/php/drupal/svg_image/3420037.patch",
+                "The 'image_loading' attribute is not respected - https://www.drupal.org/project/svg_image/issues/3275057": "resources/patch/php/drupal/svg_image/3275057-14.patch"
+            },
+            "drupal/stage_file_proxy": {
+                "Fetching does not respect use_imagecache_root when using converted webp image styles @see https://www.drupal.org/i/3402972": "resources/patch/php/drupal/stage_file_proxy/stage_file_proxy-3402972-MR-28f616d8--without-method.diff"
             },
             "drupal/ui_patterns_settings": {
                 "Fix TypeError: array_unshift(): Argument #1 ($array) must be of type array, null given in array_unshift() Caused by Deprecated Hooks in Drupal ~10.2.0 @see https://www.drupal.org/i/3409221": "resources/patch/php/drupal/ui_patterns_settings/ui_patterns_settings-3409221-26.patch"
@@ -493,9 +476,6 @@
                 "GraphQL API @see https://github.com/GitLabPHP/Client/issues/766": "resources/patch/php/drupal/m4tthumphrey/php-gitlab-api/772.diff",
                 "Add support for prefixed URIs on base path @see https://github.com/GitLabPHP/Client/issues/726": "resources/patch/php/drupal/m4tthumphrey/php-gitlab-api/726.diff"
             },
-            "ec-europa/toolkit": {
-                "Allow commands before install clone @see https://github.com/ec-europa/toolkit/pull/757": "resources/patch/php/ec-europa/toolkit/757.diff"
-            },
             "sweetrdf/easyrdf": {
                 "Add a method to remove resources from graph @see https://github.com/sweetrdf/easyrdf/pull/44": "resources/patch/php/sweetrdf/easyrdf/44.diff"
             }
@@ -517,18 +497,6 @@
     },
     "repositories": [
         {
-            "type": "package",
-            "package": {
-                "name": "spdx/license-list-data",
-                "version": "master",
-                "source": {
-                    "url": "https://github.com/spdx/license-list-data",
-                    "type": "git",
-                    "reference": "main"
-                }
-            }
-        },
-        {
             "type": "vcs",
             "url": "https://github.com/openeuropa/oe_dashboard_agent.git"
         },
@@ -547,10 +515,6 @@
                     "reference": "master"
                 }
             }
-        },
-        {
-            "type": "vcs",
-            "url": "https://github.com/ec-europa/virtuoso.git"
         }
     ]
 }

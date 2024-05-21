@@ -13,10 +13,9 @@ Feature: Joinup should be ADMS-AP compliant.
     And owner:
       | name       | type    |
       | Teddy Bass | Company |
-    And the following licence:
-      | title       | Foo licence       |
-      | description | Some nice licence |
-      | type        | Public domain     |
+    And licence content:
+      | title       | description       | licence type  |
+      | Foo licence | Some nice licence | Public domain |
     And the following collection:
       | title               | Morbid Scattered Microphone    |
       | author              | Andre Munson                   |
