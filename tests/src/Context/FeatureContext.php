@@ -2736,28 +2736,6 @@ class FeatureContext extends RawDrupalContext {
   }
 
   /**
-   * Clean a queue worker.
-   *
-   * @param string $queue_name
-   *   The queue name.
-   *
-   * @When I clean the :queue_name queue worker
-   */
-  public function iCleanTheQueueWorker(string $queue_name): void {
-    $process = Process::fromShellCommandline(
-      command: sprintf('composer exec drush queue:delete %s', $queue_name),
-      cwd: getenv('DDEV_COMPOSER_ROOT') ?: dirname(DRUPAL_ROOT)
-    );
-    $process->run();
-
-    if (!$process->isSuccessful()) {
-      throw new \RuntimeException(sprintf('Failed to clean the queue worker: %s', $process->getErrorOutput()));
-    }
-
-    sleep(1);
-  }
-
-  /**
    * Process a queue worker.
    *
    * @param string $queue_name
