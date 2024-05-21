@@ -105,7 +105,7 @@ class EiraPropertiesBlock extends BlockBase implements ContainerFactoryPluginInt
    * {@inheritdoc}
    */
   public function getCacheContexts(): array {
-    return Cache::mergeContexts(parent::getCacheContexts(), ['url']);
+    return Cache::mergeContexts(parent::getCacheContexts(), ['route']);
   }
 
 }
