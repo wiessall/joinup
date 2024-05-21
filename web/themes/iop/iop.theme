@@ -179,23 +179,23 @@ function iop_preprocess_block__iope_navigation(array &$variables): void {
  * Implements hook_preprocess_node__news__view_mode_tile().
  */
 function iop_preprocess_node__news__view_mode_tile(&$variables): void {
-  $node = $variables['node'];
-  // Override logo so we can control the image style without affecting also the
-  // parent theme Ventuno.
-  $variables['logo'] = $node->getLogoAsRenderArray([
-    'label' => 'hidden',
-    'type' => 'image',
-    'settings' => [
-      'image_style' => 'iop_news_events',
-      'image_link' => 'content',
-    ],
-  ]);
+  _iop_preprocess_news_event_tile($variables);
 }
 
 /**
  * Implements hook_preprocess_node__event__view_mode_tile().
  */
 function iop_preprocess_node__event__view_mode_tile(&$variables): void {
+  _iop_preprocess_news_event_tile($variables);
+}
+
+/**
+ * Alters tile view mode of news and event content.
+ *
+ * @param array $variables
+ *   Variables passed to the node template.
+ */
+function _iop_preprocess_news_event_tile(&$variables): void {
   $node = $variables['node'];
   // Override logo so we can control the image style without affecting also the
   // parent theme Ventuno.
@@ -224,11 +224,11 @@ function iop_preprocess_node__event__view_mode_tile(&$variables): void {
 function _iop_preprocess_view_mode_tile_body(array &$variables, NodeInterface $node): void {
   if (!$node->get('abstract')->isEmpty() && isset($variables['content']['abstract'])) {
     $variables['content']['body'] = $variables['content']['abstract'];
-    unset($variables['content']['abstract']);
   }
   elseif (isset($variables['content']['field_paragraphs_body'])) {
     $variables['content']['body'] = $variables['content']['field_paragraphs_body'];
   }
+  unset($variables['content']['abstract']);
   unset($variables['content']['field_paragraphs_body']);
 }
 
