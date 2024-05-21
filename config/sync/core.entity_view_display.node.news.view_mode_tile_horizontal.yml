@@ -90,7 +90,7 @@ content:
       filtered_entity_bundles:
         - simple_paragraph
         - text
-      trim_length: 200
+      trim_length: 600
     third_party_settings:
       field_delimiter:
         delimiter: ''
