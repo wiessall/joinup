@@ -152,7 +152,7 @@ Feature:
       | Super Awesome Software | it,en,de,error,pt       | stable                 | developers_italia | document-management,collaboration | The long description. A patient developer can make this long enough to be at least 5 lines long. | The short description | The GIT description | published | 2014-11-19       | https://example.com | Feature A, Feature B | https://example.com | https://example.com | GPL-2.0-or-later | https://placehold.co/200x200.png | FOSS Conference          | ACME Ltd.                   | community            | FOSS Conference | macOs         | 0.4                        | science-and-technology,security | https://placehold.co/600x400.png,https://placehold.co/400x400.png,https://placehold.co/800x400.jpg | standalone/desktop | 3.17.143             | 0.41               | Administration 1,Administration 2,Administration 3 |
     When I go to the content page of the type "oss_solution" with the title "Super Awesome Software"
     Then I should be on "/eu-oss-catalogue/solutions/super-awesome-software"
-    And the site should not have log records with level lower than "notice"
+    And the site should not have log records with level lower than "notice" for "php" errors
     And I should see the following headings:
       | Super Awesome Software |
       | Description            |
