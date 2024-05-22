@@ -24,7 +24,7 @@ Feature:
       | Rare Nintendo64 disk drive discovered | Nintendo64 | 2018-10-01 4:26am | Magnetic drive called 64DD.      | published | no     |
       | NEC VR4300 CPU                        | Emulators  | 2018-10-03 4:27am | Update of the emulation library. | published | no     |
     And event content:
-      | title               | collection | created           | body                                        | state     | pinned |
+      | title               | collection | created           | field_paragraphs_body                       | state     | pinned |
       | 20 year anniversary | Nintendo64 | 2018-10-01 4:29am | The console was released in September 1996. | published | no     |
       | 30 year anniversary | Nintendo64 | 2017-10-01 4:29am | 30 year anniversary of Nintendo64.          | published | yes    |
     And discussion content:
