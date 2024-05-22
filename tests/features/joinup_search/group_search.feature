@@ -36,7 +36,7 @@ Feature: Search inside groups
       | Ground plan | A classic design      | published | Chalet construction |                      |
       | Rock types  | Ranked by hardness    | published |                     | Inclined foundations |
     And event content:
-      | title                        | body                              | state     | collection          | solution             |
+      | title                        | field_paragraphs_body             | state     | collection          | solution             |
       | Opening of the winter season | Ski resorts will open in December | published | Chalet construction |                      |
       | Presenting DrillMaster X88   | Our most finely ground drill bit  | published |                     | Inclined foundations |
     And news content:
