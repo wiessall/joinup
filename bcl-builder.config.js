@@ -47,8 +47,8 @@ module.exports = {
       },
     },
     {
-      entry: path.resolve(outputFolder, `${ventuno}src/js/ventuno_mmenu.js`),
-      dest: path.resolve(outputFolder, `${ventuno}assets/js/ventuno_mmenu.js`),
+      entry: path.resolve(outputFolder, `${ventuno}src/js/mmenu-nav.js`),
+      dest: path.resolve(outputFolder, `${ventuno}assets/js/mmenu-nav.js`),
       options: {
         minify: true,
         sourceMap: true,
