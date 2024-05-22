@@ -16,6 +16,7 @@
         // Apply mmenu.
         const mmenu = new window.MmenuLight(menu);
         mmenu.navigation({});
+        menu.classList.remove("d-none");
 
         // Create the drawer and open/close click listener.
         const drawer = mmenu.offcanvas();
