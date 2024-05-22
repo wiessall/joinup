@@ -9,7 +9,6 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Menu\MenuLinkTreeElement;
 use Drupal\Core\Menu\MenuLinkTreeInterface;
-use Drupal\Core\Menu\MenuTreeParameters;
 use Drupal\Core\Path\PathMatcherInterface;
 use Drupal\Core\Routing\RedirectDestinationTrait;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
@@ -149,14 +148,14 @@ class MenuHelper implements MenuHelperInterface {
 
     return array_map(function (MenuLinkTreeElement $element): array {
       $link = [
-        'link' => $element->link->getUrlObject(),
+        'link' => new Url($element->link->getRouteName(), $element->link->getRouteParameters(), ['set_active_class' => TRUE]),
         'label' => $element->link->getTitle(),
         'children' => [],
       ];
       if ($element->hasChildren) {
         foreach ($element->subtree as $child) {
           $link['children'][] = [
-            'link' => $child->link->getUrlObject(),
+            'link' => new Url($child->link->getRouteName(), $child->link->getRouteParameters(), ['set_active_class' => TRUE]),
             'label' => $child->link->getTitle(),
           ];
         }
@@ -189,7 +188,8 @@ class MenuHelper implements MenuHelperInterface {
    *   Menu links elements.
    */
   protected function getMenuLinkElements(string $menu): array {
-    $tree = $this->menuLinkTree->load($menu, new MenuTreeParameters());
+    $parameters = $this->menuLinkTree->getCurrentRouteMenuTreeParameters($menu);
+    $tree = $this->menuLinkTree->load($menu, $parameters);
     $manipulators = [
       ['callable' => 'menu.default_tree_manipulators:checkAccess'],
       ['callable' => 'menu.default_tree_manipulators:generateIndexAndSort'],
