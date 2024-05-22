@@ -6,6 +6,7 @@ namespace Drupal\joinup_rdf\EventSubscriber;
 
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
+use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\joinup_rdf\Entity\RdfSyncEntityInterface;
 use Drupal\sparql_entity_storage\Event\InboundValueEvent;
 use Drupal\sparql_entity_storage\Event\OutboundValueEvent;
@@ -83,10 +84,13 @@ class UriIdConversion implements EventSubscriberInterface {
    *   The database connection.
    * @param \Drupal\Core\Entity\EntityFieldManagerInterface $entityFieldManager
    *   The entity field manager service.
+   * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
+   *   The logger channel service.
    */
   public function __construct(
     private readonly Connection $database,
     private readonly EntityFieldManagerInterface $entityFieldManager,
+    private readonly LoggerChannelInterface $logger,
   ) {}
 
   /**
@@ -145,7 +149,7 @@ class UriIdConversion implements EventSubscriberInterface {
         ->execute()
         ->fetch(\PDO::FETCH_NUM);
       if (!$result) {
-        throw new \InvalidArgumentException("Can't find a mapped entity with URI $uri");
+        $this->logger->error("Can't find a mapped entity with URI $uri");
       }
       $this->uriToId[$uri] = $result;
     }
@@ -176,7 +180,7 @@ class UriIdConversion implements EventSubscriberInterface {
         ->execute()
         ->fetchField() ?: NULL;
       if (!$uri) {
-        throw new \InvalidArgumentException("Can't find a URI for $entityTypeId entity with ID $id");
+        $this->logger->error("Can't find a URI for $entityTypeId entity with ID $id");
       }
       // Cache this match.
       $this->uriToId[$uri] = [$entityTypeId, $id];
