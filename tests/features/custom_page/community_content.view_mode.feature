@@ -27,8 +27,8 @@ Feature:
       | title     | headline  | body   | solution      | state     |
       | Tile news | Tile news | Meh... | Tile solution | published |
     And event content:
-      | title      | short title | body   | agenda        | location   | organisation        | scope         | solution      | state     |
-      | Tile event | Tile event  | Meh... | Event agenda. | Some place | European Commission | International | Tile solution | published |
+      | title      | short title | field_paragraphs_body | agenda        | location   | organisation        | scope         | solution      | state     |
+      | Tile event | Tile event  | Meh...                | Event agenda. | Some place | European Commission | International | Tile solution | published |
     And document content:
       | title         | document type | short title | field_paragraphs_body | solution      | state     |
       | Tile document | Document      | Meh...      | Meh...                | Tile solution | published |
@@ -67,8 +67,8 @@ Feature:
       | title     | headline  | body   | collection      | state     |
       | Tile news | Tile news | Meh... | Tile collection | published |
     And event content:
-      | title      | short title | body   | agenda        | location   | organisation        | scope         | collection      | state     |
-      | Tile event | Tile event  | Meh... | Event agenda. | Some place | European Commission | International | Tile collection | published |
+      | title      | short title | field_paragraphs_body | agenda        | location   | organisation        | scope         | collection      | state     |
+      | Tile event | Tile event  | Meh...                | Event agenda. | Some place | European Commission | International | Tile collection | published |
     And document content:
       | title         | document type | short title | field_paragraphs_body | collection      | state     |
       | Tile document | Document      | Meh...      | Meh...                | Tile collection | published |
