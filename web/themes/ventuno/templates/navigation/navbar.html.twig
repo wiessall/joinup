@@ -195,7 +195,7 @@
                   </svg>
                 {% endif %}
               </button>
-              <div class="mmenu-nav__menu p-0" aria-labelledby="{{ item.id }}">
+              <div class="mmenu-nav__menu p-0 d-none" aria-labelledby="{{ item.id }}">
                 <ul>
                   {% for link_key, link in item.links %}
                     {% if link.link %}
