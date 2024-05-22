@@ -205,7 +205,7 @@ class VitalityIndexProcessor {
   private function getOldestCommitDate(): \DateTime {
     $reversed = array_reverse(array_keys($this->getCommits()));
     $hash = reset($reversed);
-    $date = $this->repository->getCommit($hash);
+    $date = $this->repository->getCommit($hash)->getCommitterDate();
 
     // Git was invented in 2005. If some repo starts before, consider that the
     // oldest date.
