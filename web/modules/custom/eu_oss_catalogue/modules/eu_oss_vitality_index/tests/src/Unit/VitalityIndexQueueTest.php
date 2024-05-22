@@ -9,9 +9,9 @@ use Drupal\Core\Entity\Query\QueryInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Queue\QueueFactory;
 use Drupal\Core\Queue\QueueInterface;
+use Drupal\Tests\UnitTestCase;
 use Drupal\eu_oss_vitality_index\VitalityIndexQueue;
 use Drupal\node\NodeStorageInterface;
-use Drupal\Tests\UnitTestCase;
 use Prophecy\Argument;
 
 /**
@@ -21,7 +21,7 @@ use Prophecy\Argument;
  *
  * @group eu_oss_catalogue
  * @group eu_oss_vitality_index
- **/
+ */
 class VitalityIndexQueueTest extends UnitTestCase {
 
   /**
@@ -85,6 +85,5 @@ class VitalityIndexQueueTest extends UnitTestCase {
       [3, 3, TRUE],
     ];
   }
-
 
 }
