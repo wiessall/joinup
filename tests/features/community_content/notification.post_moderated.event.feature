@@ -20,26 +20,29 @@ Feature: Notification test for the event transitions on a post moderated parent.
       | CC post collection | CC facilitator | facilitator |
       | CC post collection | CC member      | <roles>     |
     And event content:
-      | title                                | author    | body | location                       | collection         | field_state  |
-      | CC notify post publish               | CC member | body | Half Moon Street, London       | CC post collection | draft        |
-      | CC notify post request changes       | CC member | body | Quai d'Orleans, Paris          | CC post collection | published    |
-      | CC notify post report                | CC member | body | Rue du Mont Thabor, Paris      | CC post collection | published    |
-      | CC notify post propose from reported | CC member | body | Cort Adelers Gate, Oslo        | CC post collection | needs_update |
-      | CC notify post approve proposed      | CC member | body | Ferdinand Bolstraat, Amsterdam | CC post collection | proposed     |
-      | CC notify post delete                | CC member | body | Lychener Strasse, Berlin       | CC post collection | published    |
+      | title                                | author    | abstract | field_paragraphs_body | location                       | collection         | field_state  |
+      | CC notify post publish               | CC member | abstract | body                  | Half Moon Street, London       | CC post collection | draft        |
+      | CC notify post request changes       | CC member | abstract | body                  | Quai d'Orleans, Paris          | CC post collection | published    |
+      | CC notify post report                | CC member | abstract | body                  | Rue du Mont Thabor, Paris      | CC post collection | published    |
+      | CC notify post propose from reported | CC member | abstract | body                  | Cort Adelers Gate, Oslo        | CC post collection | needs_update |
+      | CC notify post approve proposed      | CC member | abstract | body                  | Ferdinand Bolstraat, Amsterdam | CC post collection | proposed     |
+      | CC notify post delete                | CC member | abstract | body                  | Lychener Strasse, Berlin       | CC post collection | published    |
 
     # Test 'create' operation.
     When I am logged in as "CC member"
     And I go to the "CC post collection" collection
     And I click "Add event" in the plus button menu
     And I fill in "Title" with "CC notify create publish"
-    And I fill in "Description" with "CC notify create publish"
+    And I fill in "Abstract" with "This is a test event"
+    And I append "text" to "field_paragraphs_body" layout paragraphs field
+      | field_body:value  | CC notify create publish |
+      | field_body:format | content_editor           |
     And I fill in "Physical location" with "Capel Street, Dublin"
     And I select "Statistics and Analysis" from "Topic"
     And I press "Publish"
     Then the following email should have been sent:
-      | recipient | CC owner                                                                                                                                                              |
-      | subject   | Joinup: Content has been published                                                                                                                                    |
+      | recipient | CC owner                                                                                                                                                               |
+      | subject   | Joinup: Content has been published                                                                                                                                     |
       | body      | CC Member has published the new event - "CC notify create publish" in the collection: "CC post collection". You can access the new content at the following link: http |
 
     # Test 'update' operation.

@@ -193,17 +193,13 @@ Feature:
     Examples:
       | group type | content type | moderation | final title   | moderate action | join button                | leave link            |
       | collection | discussion   | yes        | Goodbi world  | Update          | Join this collection       | Leave this collection |
-      | collection | event        | yes        | Goodbye world | Publish         | Join this collection       | Leave this collection |
       | collection | news         | yes        | Goodbye world | Publish         | Join this collection       | Leave this collection |
       | collection | discussion   | no         | Goodbi world  | Update          | Join this collection       | Leave this collection |
-      | collection | event        | no         | Goodbi world  | Update          | Join this collection       | Leave this collection |
       | collection | news         | no         | Goodbi world  | Update          | Join this collection       | Leave this collection |
       | solution   | discussion   | yes        | Goodbi world  | Update          | Subscribe to this solution | Unsubscribe           |
       | solution   | news         | yes        | Goodbye world | Publish         | Subscribe to this solution | Unsubscribe           |
-      | solution   | event        | yes        | Goodbye world | Publish         | Subscribe to this solution | Unsubscribe           |
       | solution   | discussion   | no         | Goodbi world  | Update          | Subscribe to this solution | Unsubscribe           |
       | solution   | news         | no         | Goodbi world  | Update          | Subscribe to this solution | Unsubscribe           |
-      | solution   | event        | no         | Goodbi world  | Update          | Subscribe to this solution | Unsubscribe           |
 
   Scenario Outline: Community content revisions (with layout paragraphs)
     Given <group type>:
@@ -397,3 +393,7 @@ Feature:
       | collection | document     | no         | Goodbi world  | Update          | Join this collection       | Leave this collection |
       | solution   | document     | yes        | Goodbye world | Publish         | Subscribe to this solution | Unsubscribe           |
       | solution   | document     | no         | Goodbi world  | Update          | Subscribe to this solution | Unsubscribe           |
+      | collection | event        | yes        | Goodbye world | Publish         | Join this collection       | Leave this collection |
+      | collection | event        | no         | Goodbi world  | Update          | Join this collection       | Leave this collection |
+      | solution   | event        | yes        | Goodbye world | Publish         | Subscribe to this solution | Unsubscribe           |
+      | solution   | event        | no         | Goodbi world  | Update          | Subscribe to this solution | Unsubscribe           |

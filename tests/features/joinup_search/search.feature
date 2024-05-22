@@ -31,8 +31,8 @@ Feature: Global search
       | title      | headline    | body       | collection                   | topic       | spatial coverage | state    |
       | Rummy news | Rummy title | Dummy body | Molecular cooking collection | E-inclusion | Luxembourg       | archived |
     And event content:
-      | title       | body       | collection                   | topic       | spatial coverage | state    |
-      | Rummy event | Dummy body | Molecular cooking collection | E-inclusion | Luxembourg       | archived |
+      | title       | field_paragraphs_body | collection                   | topic       | spatial coverage | state    |
+      | Rummy event | Dummy body            | Molecular cooking collection | E-inclusion | Luxembourg       | archived |
     And document content:
       | title          | document type | short title          | field_paragraphs_body | collection                   | topic       | spatial coverage | state    |
       | Rummy document | Document      | Rummy document short | Dummy body            | Molecular cooking collection | E-inclusion | Luxembourg       | archived |
@@ -197,7 +197,7 @@ Feature: Global search
       | Collection alpha | <p>collection <strong>beta</strong> description.</p> | The collection gamma abstract. | published |
       | Col for Sol      | <p>collection for the solution.</p>                  | The col for sol abstract.      | published |
     And event content:
-      | title             | short title       | body                                | spatial coverage | agenda         | location       | organisation        | scope         | keywords | collection       | state     |
+      | title             | short title       | field_paragraphs_body               | spatial coverage | agenda         | location       | organisation        | scope         | keywords | collection       | state     |
       | Event Omega       | Event short delta | The epsilon event content.          | Greece           | Event agenda.  | Some place     | European Commission | International | Alphabet | Collection alpha | published |
       | Alternative event | Alt event         | This event stays in the background. | Luxembourg       | To be planned. | Event location | Event organisation  |               |          | Collection alpha | published |
     And document content:
@@ -245,9 +245,9 @@ Feature: Global search
       | title      | headline            | body                      | keywords | collection       | state     |
       | News omega | News headline delta | The epsilon news content. | Alphabet | Collection alpha | published |
     And event content:
-      | title             | short title       | body                                | agenda         | location       | organisation        | scope         | keywords | collection       | solution       | state     |
-      | Event Omega       | Event short delta | The epsilon event content.          | Event agenda.  | Some place     | European Commission | International | Alphabet |                  | Solution alpha | published |
-      | Alternative event | Alt event         | This event stays in the background. | To be planned. | Event location | Event organisation  |               |          | Collection alpha |                | published |
+      | title             | short title       | abstract                                         | field_paragraphs_body               | agenda         | location       | organisation        | scope         | keywords | collection       | solution       | state     |
+      | Event Omega       | Event short delta | The epsilon event content but abstract.          | The epsilon event content.          | Event agenda.  | Some place     | European Commission | International | Alphabet |                  | Solution alpha | published |
+      | Alternative event | Alt event         | This event stays in the background but abstract. | This event stays in the background. | To be planned. | Event location | Event organisation  |               |          | Collection alpha |                | published |
     And document content:
       | title          | document type | short title          | field_paragraphs_body                   | keywords | collection       | state     |
       | Document omega | Document      | Document short delta | A document consists of epsilon strings. | Alphabet | Collection alpha | published |
@@ -285,6 +285,7 @@ Feature: Global search
     When I enter "omega" in the search bar and press enter
     Then I should see the text "SEARCH RESULTS (6)"
     And the page should show the tiles "Collection alpha, News omega, Event Omega, Document omega, Discussion omega, Page omega"
+    And I should see the text "The epsilon event content but abstract."
 
     # "Beta" is used in all the rdf entities body fields.
     When I enter "beta" in the search bar and press enter
@@ -372,7 +373,7 @@ Feature: Global search
       | Chickens are small birds            | Chickens are small birds            | Birds domesticated in India.    | Ornithology: the study of birds | published |
       | Found a xylophone from 1600 in Asia | Found a xylophone from 1600 in Asia | Oldest instrument of this type. | Husky Flying Xylophone          | published |
     And event content:
-      | title         | body                   | collection                      | state     |
+      | title         | field_paragraphs_body  | collection                      | state     |
       | Bird spotting | Roosters crow at dawn. | Ornithology: the study of birds | published |
     And discussion content:
       | title                             | body                    | collection                      | state     |
@@ -767,7 +768,7 @@ Feature: Global search
       | title        | collection    | topic                                  | state     | logo     | field_paragraphs_body                                                                                                                                                                           |
       | Microgravity | Mice in space | HR, Statistics and Analysis, E-justice | published | alan.jpg | Conventional studies investigating the effects of reduced gravity on muscle mass and function have used a ground control group that is not directly comparable to the space experimental group. |
     And event content:
-      | title           | collection    | topic                    | state     | logo        | body                                                                                                                                                                                  |
+      | title           | collection    | topic                    | state     | logo        | field_paragraphs_body                                                                                                                                                                 |
       | Stay at the ISS | Mice in space | EU and European Policies | published | charles.jpg | Two groups of mice (six per group) were housed aboard the International Space Station for 35 days. One group was subjected to artificial gravity (1 g) and the other to microgravity. |
     And news content:
       | title           | body                                       | collection    | topic                   | spatial coverage | state     | logo        | created    | changed    |
