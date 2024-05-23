@@ -73,6 +73,41 @@ class VitalityIndexProcessorTest extends UnitTestCase {
   }
 
   /**
+   * Tests code activity range.
+   *
+   * @dataProvider providerCodeActivityRange
+   */
+  public function testCodeActivityRange(int $numberOfCommits, int $expectedPoints): void {
+    $commits = [];
+    for ($x = 1; $x <= $numberOfCommits; $x++) {
+      $commits[] = $this->generateCommit(0);
+    }
+
+    $referenceBag = $this->generateReferenceBag([]);
+    $log = $this->generateLog($commits);
+    $lastCommit = $commits[array_key_last($commits)];
+
+    $repository = $this->generateRepository($lastCommit, $log, $referenceBag);
+
+    $processor = new VitalityIndexProcessor($repository, 1);
+    $this->assertEquals([$expectedPoints], $processor->getPointsPerDay());
+  }
+
+  /**
+   * Data provider for testLongevityRange().
+   */
+  public function providerCodeActivityRange(): array {
+    return [
+      [35, min(4 + 60 + 20 + 20, 100)],
+      [18, 4 + 38 + 20 + 20],
+      [9, 4 + 20 + 20 + 20],
+      [4, 4 + 8 + 20 + 20],
+      [1, 4 + 2 + 20 + 20],
+    ];
+  }
+
+
+  /**
    * Generates commits.
    *
    * @return Commit[]
