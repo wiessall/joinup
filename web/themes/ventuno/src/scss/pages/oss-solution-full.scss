@@ -88,14 +88,11 @@
         }
       }
     }
-    &__aside {
-      position: relative;
-    }
     &__vitality {
-      position: relative;
       display: flex;
       align-items: center;
       gap: $spacer;
+      padding-bottom: $spacer * .5;
 
       div {
         margin-bottom: $spacer * .5;
@@ -120,13 +117,6 @@
   &__oss-vitality-index {
     color: $oss-brand;
     font-size: $h2-font-size;
-  }
-  &__oss-vitality-index-range {
-    .vitality-index-info-button {
-      position: absolute;
-      top: 0;
-      right: calc(100% - 11rem);
-    }
   }
   &__oss-software-version {
     margin-right: $spacer * 2;
