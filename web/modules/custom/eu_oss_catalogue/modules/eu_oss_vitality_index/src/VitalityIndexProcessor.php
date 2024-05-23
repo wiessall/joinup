@@ -16,20 +16,31 @@ use Gitonomy\Git\Repository;
  * described here "Vitality Index computing (developers.italia approach)" page.
  *
  * @see https://citnet.tech.ec.europa.eu/CITnet/confluence/pages/viewpage.action?pageId=1272453903
+ * @see https://github.com/italia/publiccode-crawler/blob/main/docs/vitalityIndex.md
  */
 class VitalityIndexProcessor {
 
   /**
-   * Longevity range.
+   * User community range.
+   *
+   * This indicator represents the number of users that authored a commit in the last days.
    */
-  private const LONGEVITY_RANGE = [
-    730 => 35,
-    365 => 30,
-    0 => 20,
+  private const USER_COMMUNITY_RANGE = [
+    28 => 36,
+    24 => 32,
+    20 => 28,
+    16 => 24,
+    12 => 20,
+    8 => 16,
+    4 => 12,
+    2 => 8,
+    0 => 4,
   ];
 
   /**
    * Code activity range.
+   *
+   * This indicator represents the number of activities performed in the last amount of days.
    */
   private const CODE_ACTIVITY_RANGE = [
     35 => 60,
@@ -44,8 +55,11 @@ class VitalityIndexProcessor {
     0 => 2,
   ];
 
+
   /**
    * Release history range.
+   *
+   * This indicator tells how many releases have been done in the last period of time..
    */
   private const RELEASE_HISTORY_RANGE = [
     4 => 50,
@@ -55,18 +69,14 @@ class VitalityIndexProcessor {
   ];
 
   /**
-   * User community range.
+   * Longevity range.
+   *
+   * The longevity is basically the repository age.
    */
-  private const USER_COMMUNITY_RANGE = [
-    28 => 36,
-    24 => 32,
-    20 => 28,
-    16 => 24,
-    12 => 20,
-    8 => 16,
-    4 => 12,
-    2 => 8,
-    0 => 4,
+  private const LONGEVITY_RANGE = [
+    730 => 35,
+    365 => 30,
+    0 => 20,
   ];
 
   /**
@@ -205,6 +215,7 @@ class VitalityIndexProcessor {
   private function getOldestCommitDate(): \DateTime {
     $reversed = array_reverse(array_keys($this->getCommits()));
     $hash = reset($reversed);
+    //$date = $this->repository->getCommit($hash)->getAuthorDate();
     $date = $this->repository->getCommit($hash)->getCommitterDate();
 
     // Git was invented in 2005. If some repo starts before, consider that the
