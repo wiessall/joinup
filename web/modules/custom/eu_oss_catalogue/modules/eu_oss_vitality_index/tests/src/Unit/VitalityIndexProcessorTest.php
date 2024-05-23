@@ -141,4 +141,40 @@ class VitalityIndexProcessorTest extends UnitTestCase {
     ];
   }
 
+  /**
+   * Tests release history.
+   *
+   * @dataProvider providerReleaseHistory
+   */
+  public function testReleaseHistory(int $numberOfTags, int $expectedPoints): void {
+    $commits = [];
+    for ($x = 1; $x <= $numberOfTags; $x++) {
+      $commits[] = $this->generateCommit(0);
+    }
+    $tags = [];
+    foreach ($commits as $commit) {
+      $tags[] = $this->generateTag($commit);
+    }
+
+    $referenceBag = $this->generateReferenceBag($tags);
+    $log = $this->generateLog($commits);
+    $lastCommit = $commits[array_key_last($commits)];
+
+    $repository = $this->generateRepository($lastCommit, $log, $referenceBag);
+
+    $processor = new VitalityIndexProcessor($repository, 1);
+    $this->assertEquals([$expectedPoints], $processor->getPointsPerDay());
+  }
+
+  /**
+   * Data provider for testLongevityRange().
+   */
+  public function providerReleaseHistory(): array {
+    return [
+      [4, 4 + 8 + 50 + 20],
+      [2, 4 + 2 + 40 + 20],
+      [1, 4 + 2 + 30 + 20],
+    ];
+  }
+
 }
