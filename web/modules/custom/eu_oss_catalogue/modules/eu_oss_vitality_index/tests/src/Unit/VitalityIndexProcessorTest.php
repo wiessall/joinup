@@ -33,32 +33,43 @@ class VitalityIndexProcessorTest extends UnitTestCase {
     $firstCommit = $commits[array_key_first($commits)];
     $lastCommit = $commits[array_key_last($commits)];
 
-    $firstTag = $this->prophesize(Tag::class);
-    $firstTag->getCommitHash()->willReturn($firstCommit->getHash());
-    $firstTag->getCommit()->willReturn($firstCommit);
+    $firstTag = $this->generateTag($firstCommit);
+    $lastTag = $this->generateTag($lastCommit);
+    $referenceBag = $this->generateReferenceBag([$firstTag, $lastTag]);
+    $log = $this->generateLog($commits);
 
-    $lastTag = $this->prophesize(Tag::class);
-    $lastTag->getCommitHash()->willReturn($lastCommit->getHash());
-    $lastTag->getCommit()->willReturn($lastCommit);
-
-    $referenceBag = $this->prophesize(ReferenceBag::class);
-    $referenceBag->getTags()->willReturn([
-      $firstTag->reveal(),
-      $lastTag->reveal(),
-    ]);
-
-    $log = $this->prophesize(Log::class);
-    $log->getCommits()->willReturn($commits);
-
-    $repository = $this->prophesize(Repository::class);
-    $repository->getHeadCommit()->willReturn($lastCommit);
-    $repository->getLog([$lastCommit->getHash()])->willReturn($log);
-    $repository->getReferences()->willReturn($referenceBag);
-    $repository->getCommit($lastCommit->getHash())->willReturn($lastCommit);
+    $repository = $this->generateRepository($lastCommit, $log, $referenceBag);
 
     $expectedPoints = [70, 80, 66, 66, 72, 72, 74,];
-    $processor = new VitalityIndexProcessor($repository->reveal(), 7);
+    $processor = new VitalityIndexProcessor($repository, 7);
     $this->assertEquals($expectedPoints, $processor->getPointsPerDay());
+  }
+
+  /**
+   * Tests longevity range.
+   *
+   * @dataProvider providerLongevityRange
+   */
+  public function testLongevityRange(int $creationOfLastCommit, int $expectedPoints): void {
+    $commit = $this->generateCommit($creationOfLastCommit);
+    $tag = $this->generateTag($commit);
+    $referenceBag = $this->generateReferenceBag([$tag]);
+    $log = $this->generateLog([$commit]);
+    $repository = $this->generateRepository($commit, $log, $referenceBag);
+
+    $processor = new VitalityIndexProcessor($repository, 1);
+    $this->assertEquals([$expectedPoints], $processor->getPointsPerDay());
+  }
+
+  /**
+   * Data provider for testLongevityRange().
+   */
+  public function providerLongevityRange(): array {
+    return [
+      [100, 4 + 2 + 20 + 20],
+      [400, 4 + 2 + 20 + 30],
+      [900, 4 + 2 + 20 + 35],
+    ];
   }
 
   /**
@@ -72,20 +83,107 @@ class VitalityIndexProcessorTest extends UnitTestCase {
 
     for ($day = 20; $day >= 0; $day--) {
       for ($x = 1; $x <= $day; $x++) {
-        $hash = random_bytes(18);
+        $commit = $this->generateCommit($day);
 
-        $commit = $this->prophesize(Commit::class);
-        $commit->getHash()->willReturn($hash);
-        $commit->getCommitterDate()
-          ->willReturn(new \DateTime('- ' . ($day) . 'days'));
-        $commit->getParentHashes()->willReturn([2]);
-        $commit->getAuthorEmail()->willReturn('Author' . $day . '@dot.com');
-
-        $commits[$hash] = $commit->reveal();
+        $commits[$commit->getHash()] = $commit;
       }
     }
 
     return $commits;
+  }
+
+  /**
+   * Generates a commit.
+   *
+   * @param int $daysAgo
+   *   Defines when it was created.
+   *
+   * @return \Gitonomy\Git\Commit
+   *   Commit.
+   */
+  protected function generateCommit(int $daysAgo): Commit {
+    $hash = random_bytes(18);
+
+    $commit = $this->prophesize(Commit::class);
+    $commit->getHash()->willReturn($hash);
+    $commit->getCommitterDate()
+      ->willReturn(new \DateTime('- ' . ($daysAgo) . 'days'));
+    $commit->getParentHashes()->willReturn([2]);
+    $commit->getAuthorEmail()->willReturn('Author' . $daysAgo . '@dot.com');
+
+    return $commit->reveal();
+  }
+
+  /**
+   * Generates tag.
+   *
+   * @param \Gitonomy\Git\Commit $commit
+   *   Commit.
+   *
+   * @return \Gitonomy\Git\Reference\Tag
+   *   Tag.
+   */
+  protected function generateTag(Commit $commit): Tag {
+    $tag = $this->prophesize(Tag::class);
+    $tag->getCommitHash()->willReturn($commit->getHash());
+    $tag->getCommit()->willReturn($commit);
+
+    return $tag->reveal();
+  }
+
+  /**
+   * Generates a reference bag.
+   *
+   * @param Tag[] $tags
+   *   Tags.
+   *
+   * @return \Gitonomy\Git\ReferenceBag
+   *   Reference Bag.
+   */
+  protected function generateReferenceBag(array $tags): ReferenceBag {
+    $referenceBag = $this->prophesize(ReferenceBag::class);
+    $referenceBag->getTags()->willReturn($tags);
+
+    return $referenceBag->reveal();
+  }
+
+  /**
+   * Generates log.
+   *
+   * @param Commit[] $commits
+   *   Commits
+   *
+   * @return \Gitonomy\Git\Log
+   *   Log.
+   */
+  protected function generateLog(array $commits): Log {
+    $log = $this->prophesize(Log::class);
+    $log->getCommits()->willReturn($commits);
+
+    return $log->reveal();
+  }
+
+  /**
+   * Generates repository.
+   *
+   * @param \Gitonomy\Git\Commit $commit
+   *   Commit.
+   * @param \Gitonomy\Git\Log $log
+   *   Log.
+   * @param \Gitonomy\Git\ReferenceBag $referenceBag
+   *   Reference bag.
+   *
+   * @return \Gitonomy\Git\Repository
+   *   Repository
+   */
+  protected function generateRepository(Commit $commit, Log $log, ReferenceBag $referenceBag): Repository {
+    $repository = $this->prophesize(Repository::class);
+    $repository->getHeadCommit()->willReturn($commit);
+    $repository->getLog([$commit->getHash()])->willReturn($log);
+    $repository->getReferences()->willReturn($referenceBag);
+    $repository->getCommit($commit->getHash())->willReturn($commit);
+
+    return $repository->reveal();
   }
 
 }
