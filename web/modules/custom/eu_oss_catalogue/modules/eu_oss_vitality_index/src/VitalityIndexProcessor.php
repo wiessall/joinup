@@ -59,7 +59,7 @@ class VitalityIndexProcessor {
   /**
    * Release history range.
    *
-   * This indicator tells how many releases have been done in the last period of time..
+   * This indicator tells how many releases have been done in the last period of time.
    */
   private const RELEASE_HISTORY_RANGE = [
     4 => 50,
@@ -215,7 +215,6 @@ class VitalityIndexProcessor {
   private function getOldestCommitDate(): \DateTime {
     $reversed = array_reverse(array_keys($this->getCommits()));
     $hash = reset($reversed);
-    //$date = $this->repository->getCommit($hash)->getAuthorDate();
     $date = $this->repository->getCommit($hash)->getCommitterDate();
 
     // Git was invented in 2005. If some repo starts before, consider that the
