@@ -23,7 +23,8 @@ class VitalityIndexProcessor {
   /**
    * User community range.
    *
-   * This indicator represents the number of users that authored a commit in the last days.
+   * This indicator represents the number of users that
+   * authored a commit in the last days.
    */
   private const USER_COMMUNITY_RANGE = [
     28 => 36,
@@ -40,7 +41,8 @@ class VitalityIndexProcessor {
   /**
    * Code activity range.
    *
-   * This indicator represents the number of activities performed in the last amount of days.
+   * This indicator represents the number of activities performed
+   * in the last amount of days.
    */
   private const CODE_ACTIVITY_RANGE = [
     35 => 60,
@@ -55,11 +57,11 @@ class VitalityIndexProcessor {
     0 => 2,
   ];
 
-
   /**
    * Release history range.
    *
-   * This indicator tells how many releases have been done in the last period of time.
+   * This indicator tells how many releases have been done
+   * in the last period of time.
    */
   private const RELEASE_HISTORY_RANGE = [
     4 => 50,
