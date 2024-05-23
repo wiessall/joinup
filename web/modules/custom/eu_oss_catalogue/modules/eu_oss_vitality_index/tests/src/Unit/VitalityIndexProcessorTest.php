@@ -42,7 +42,7 @@ class VitalityIndexProcessorTest extends UnitTestCase {
 
     $repository = $this->generateRepository($lastCommit, $log, $referenceBag);
 
-    $expectedPoints = [70, 80, 66, 66, 72, 72, 74,];
+    $expectedPoints = [46, 56, 46, 46, 52, 52, 58];
     $processor = new VitalityIndexProcessor($repository, 7);
     $this->assertEquals($expectedPoints, $processor->getPointsPerDay());
   }
@@ -104,6 +104,39 @@ class VitalityIndexProcessorTest extends UnitTestCase {
       [18, 4 + 38 + 20 + 20],
       [9, 4 + 20 + 20 + 20],
       [4, 4 + 8 + 20 + 20],
+      [1, 4 + 2 + 20 + 20],
+    ];
+  }
+
+  /**
+   * Tests user community range.
+   *
+   * @dataProvider providerUserCommunityRange
+   */
+  public function testUserCommunityRange(int $numberOfCommits, int $expectedPoints): void {
+    $commits = [];
+    for ($x = 1; $x <= $numberOfCommits; $x++) {
+      $commits[] = $this->generateCommit(0, $x . '@dot.com');
+    }
+
+    $referenceBag = $this->generateReferenceBag([]);
+    $log = $this->generateLog($commits);
+    $lastCommit = $commits[array_key_last($commits)];
+
+    $repository = $this->generateRepository($lastCommit, $log, $referenceBag);
+
+    $processor = new VitalityIndexProcessor($repository, 1);
+    $this->assertEquals([$expectedPoints], $processor->getPointsPerDay());
+  }
+
+  /**
+   * Data provider for testLongevityRange().
+   */
+  public function providerUserCommunityRange(): array {
+    return [
+      [24, min(32 + 38 + 20 + 20, 100)],
+      [16, 24 + 32 + 20 + 20],
+      [4, 12 + 8 + 20 + 20],
       [1, 4 + 2 + 20 + 20],
     ];
   }

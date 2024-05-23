@@ -44,19 +44,22 @@ trait GitRepositoryTrait {
    *
    * @param int $daysAgo
    *   Defines when it was created.
+   * @param string|NULL $author
+   *   Commit author.
    *
    * @return \Gitonomy\Git\Commit
    *   Commit.
    */
-  protected function generateCommit(int $daysAgo): Commit {
+  protected function generateCommit(int $daysAgo, string $author = NULL): Commit {
     $hash = random_bytes(18);
+    $author = $author ?: 'Author@dot.com';
 
     $commit = $this->prophesize(Commit::class);
     $commit->getHash()->willReturn($hash);
     $commit->getCommitterDate()
       ->willReturn(new \DateTime('- ' . ($daysAgo) . 'days'));
     $commit->getParentHashes()->willReturn([2]);
-    $commit->getAuthorEmail()->willReturn('Author' . $daysAgo . '@dot.com');
+    $commit->getAuthorEmail()->willReturn($author);
 
     return $commit->reveal();
   }
