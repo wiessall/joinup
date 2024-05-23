@@ -4,13 +4,8 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\eu_oss_vitality_index\Unit;
 
-use Drupal\eu_oss_vitality_index\VitalityIndexProcessor;
 use Drupal\Tests\UnitTestCase;
-use Gitonomy\Git\Commit;
-use Gitonomy\Git\Log;
-use Gitonomy\Git\Reference\Tag;
-use Gitonomy\Git\ReferenceBag;
-use Gitonomy\Git\Repository;
+use Drupal\eu_oss_vitality_index\VitalityIndexProcessor;
 
 /**
  * Tests VitalityIndexProcessor.
