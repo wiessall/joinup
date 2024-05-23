@@ -11,7 +11,6 @@ use Gitonomy\Git\ReferenceBag;
 use Gitonomy\Git\Repository;
 use Prophecy\PhpUnit\ProphecyTrait;
 
-
 /**
  * Provides Git repository generator utility methods.
  */
@@ -22,7 +21,7 @@ trait GitRepositoryTrait {
   /**
    * Generates commits.
    *
-   * @return Commit[]
+   * @return \Gitonomy\Git\Commit[]
    *   Commits.
    */
   protected function generateCommits(): array {
@@ -44,13 +43,13 @@ trait GitRepositoryTrait {
    *
    * @param int $daysAgo
    *   Defines when it was created.
-   * @param string|NULL $author
+   * @param string|null $author
    *   Commit author.
    *
    * @return \Gitonomy\Git\Commit
    *   Commit.
    */
-  protected function generateCommit(int $daysAgo, string $author = NULL): Commit {
+  protected function generateCommit(int $daysAgo, ?string $author = NULL): Commit {
     $hash = random_bytes(18);
     $author = $author ?: 'Author@dot.com';
 
@@ -84,7 +83,7 @@ trait GitRepositoryTrait {
   /**
    * Generates a reference bag.
    *
-   * @param Tag[] $tags
+   * @param \Gitonomy\Git\Reference\Tag[] $tags
    *   Tags.
    *
    * @return \Gitonomy\Git\ReferenceBag
@@ -100,8 +99,8 @@ trait GitRepositoryTrait {
   /**
    * Generates log.
    *
-   * @param Commit[] $commits
-   *   Commits
+   * @param \Gitonomy\Git\Commit[] $commits
+   *   Commits.
    *
    * @return \Gitonomy\Git\Log
    *   Log.
@@ -137,4 +136,3 @@ trait GitRepositoryTrait {
   }
 
 }
-
