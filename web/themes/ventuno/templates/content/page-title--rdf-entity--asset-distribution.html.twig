@@ -18,4 +18,10 @@
       <span class="me-1">Licence:</span> {{ additional_content.field_ad_licence }}
     {% endif %}
   </div>
+  <div class="page-title__details fs-sm mb-3 d-flex">
+    <span class="page-title__detail">{{ 'Published on'|t }}: {{ additional_content.published }}</span>
+    {% if additional_content.published != additional_content.updated %}
+      <span class="page-title__detail">{{ 'Last update'|t }}: {{ additional_content.updated }}</span>
+    {% endif %}
+  </div>
 {% endblock %}

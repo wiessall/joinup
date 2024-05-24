@@ -3,65 +3,56 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.node.field_event_agenda
-    - field.storage.node.oss_archived
-    - field.storage.node.field_paragraphs_body
-    - field.storage.paragraph.field_body
     - field.storage.node.body
-    - field.storage.node.oss_categories
-    - field.storage.node.oss_development_status
-    - field.storage.node.spdx_licence
-    - field.storage.node.field_event_date
-    - field.storage.meta_entity.field_featured
-    - field.storage.node.oss_features
-    - field.storage.node.oss_git_description
-    - field.storage.node.field_news_headline
-    - field.storage.node.oss_scope
     - field.storage.node.description
-    - field.storage.node.field_location
-    - field.storage.node.field_organisation
-    - field.storage.meta_entity.field_pinned_in
-    - field.storage.node.oss_release_date
-    - field.storage.node.field_scope
-    - field.storage.node.oss_short_description
-    - field.storage.node.field_short_title
-    - field.storage.node.oss_source
-    - field.storage.meta_entity.count
-    - field.storage.node.oss_vitality_index
-    - field.storage.rdf_entity.field_ar_abstract
-    - field.storage.rdf_entity.field_is_abstract
-    - field.storage.rdf_entity.field_ci_name
-    - field.storage.rdf_entity.field_is_contact_information
-    - field.storage.rdf_entity.field_isr_contact_information
     - field.storage.rdf_entity.field_ad_description
+    - field.storage.rdf_entity.field_ar_abstract
     - field.storage.rdf_entity.field_ar_description
-    - field.storage.rdf_entity.field_is_description
-    - field.storage.rdf_entity.field_isr_description
-    - field.storage.rdf_entity.field_is_eif_category
-    - field.storage.rdf_entity.field_is_eif_recommendation
-    - field.storage.rdf_entity.field_is_owner
-    - field.storage.rdf_entity.field_owner_name
-    - field.storage.rdf_entity.field_isr_owner
-    - field.storage.rdf_entity.field_isr_release_notes
-    - field.storage.rdf_entity.field_is_solution_type
     - field.storage.taxonomy_term.field_eif_identifier
     - field.storage.taxonomy_term.field_eif_related_term
+    - field.storage.node.field_event_agenda
+    - field.storage.node.field_event_date
+    - field.storage.rdf_entity.field_is_abstract
+    - field.storage.rdf_entity.field_is_description
+    - field.storage.rdf_entity.field_is_eif_category
+    - field.storage.rdf_entity.field_is_eif_recommendation
+    - field.storage.rdf_entity.field_is_solution_type
+    - field.storage.rdf_entity.field_isr_description
+    - field.storage.rdf_entity.field_isr_release_notes
+    - field.storage.node.field_location
+    - field.storage.node.field_news_headline
+    - field.storage.node.field_organisation
+    - field.storage.node.field_scope
+    - field.storage.node.field_short_title
     - field.storage.user.field_user_family_name
     - field.storage.user.field_user_first_name
     - field.storage.user.field_user_organisation
+    - field.storage.meta_entity.count
+    - field.storage.rdf_entity.field_ci_name
+    - field.storage.rdf_entity.field_is_contact_information
+    - field.storage.rdf_entity.field_is_owner
+    - field.storage.rdf_entity.field_owner_name
+    - field.storage.rdf_entity.field_isr_contact_information
+    - field.storage.rdf_entity.field_isr_owner
+    - field.storage.meta_entity.field_featured
+    - field.storage.meta_entity.field_pinned_in
+    - field.storage.node.field_paragraphs_body
+    - field.storage.paragraph.field_body
+    - field.storage.node.spdx_licence
     - search_api.server.joinup
   module:
     - search_api_solr
     - node
-    - paragraphs
     - meta_entity
     - rdf_entity
-    - publication_date
     - taxonomy
+    - paragraphs
+    - publication_date
     - user
     - search_api
     - asset_distribution
     - custom_page
+    - joinup_flag
     - joinup_oss_catalogue
     - joinup_search
 third_party_settings:
@@ -751,95 +742,6 @@ field_settings:
       module:
         - meta_entity
         - rdf_entity
-  oss_archived:
-    label: 'OSS archived'
-    datasource_id: 'entity:node'
-    property_path: oss_archived
-    type: boolean
-    dependencies:
-      config:
-        - field.storage.node.oss_archived
-  oss_category:
-    label: Category
-    datasource_id: 'entity:node'
-    property_path: 'oss_categories:entity:name'
-    type: string
-    dependencies:
-      config:
-        - field.storage.node.oss_categories
-      module:
-        - taxonomy
-  oss_development_status:
-    label: 'Development status'
-    datasource_id: 'entity:node'
-    property_path: oss_development_status
-    type: string
-    dependencies:
-      config:
-        - field.storage.node.oss_development_status
-  oss_features:
-    label: Features
-    datasource_id: 'entity:node'
-    property_path: oss_features
-    type: string
-    boost: 0.5
-    dependencies:
-      config:
-        - field.storage.node.oss_features
-  oss_git_description:
-    label: 'GIT Description'
-    datasource_id: 'entity:node'
-    property_path: oss_git_description
-    type: 'solr_text_custom:ngram'
-    dependencies:
-      config:
-        - field.storage.node.oss_git_description
-  oss_release_date:
-    label: 'Release date'
-    datasource_id: 'entity:node'
-    property_path: oss_release_date
-    type: date
-    dependencies:
-      config:
-        - field.storage.node.oss_release_date
-  oss_scope:
-    label: 'Intended audience'
-    datasource_id: 'entity:node'
-    property_path: 'oss_scope:entity:name'
-    type: string
-    dependencies:
-      config:
-        - field.storage.node.oss_scope
-      module:
-        - taxonomy
-  oss_short_description:
-    label: 'Short description'
-    datasource_id: 'entity:node'
-    property_path: oss_short_description
-    type: 'solr_text_custom:ngram'
-    dependencies:
-      config:
-        - field.storage.node.oss_short_description
-  oss_solution_rendered_item:
-    label: 'Oss Solution rendered item'
-    property_path: oss_solution_rendered_item
-    type: text
-  oss_source:
-    label: 'Source catalogue'
-    datasource_id: 'entity:node'
-    property_path: oss_source
-    type: string
-    dependencies:
-      config:
-        - field.storage.node.oss_source
-  oss_vitality_index:
-    label: 'Vitality Index'
-    datasource_id: 'entity:node'
-    property_path: oss_vitality_index
-    type: decimal
-    dependencies:
-      config:
-        - field.storage.node.oss_vitality_index
   parent:
     label: 'Term Parents'
     datasource_id: 'entity:taxonomy_term'
@@ -1066,7 +968,6 @@ datasource_settings:
         - event
         - licence
         - news
-        - oss_solution
         - video
     languages:
       default: true
@@ -1135,13 +1036,6 @@ processor_settings:
       - field_isr_description_spellcheck
       - field_isr_release_notes
       - field_isr_release_notes_spellcheck
-      - field_licence_description
-      - field_licence_description_spellcheck
-      - oss_category
-      - oss_features
-      - oss_git_description
-      - oss_short_description
-      - oss_solution_rendered_item
     title: true
     alt: true
     tags:
@@ -1189,8 +1083,6 @@ processor_settings:
       - isr_field_owner_name_spellcheck
       - label
       - label_spellcheck
-      - oss_git_description
-      - oss_short_description
       - title
       - title_spellcheck
   include_custom_page_content:
@@ -1199,6 +1091,7 @@ processor_settings:
   index_distribution_data:
     weights:
       preprocess_index: -50
+  joinup_entity_bundle: {  }
   joinup_entity_published_revision: {  }
   joinup_entity_status:
     inverse: false
@@ -1238,8 +1131,6 @@ processor_settings:
       - field_short_title_spellcheck
       - label
       - label_spellcheck
-      - oss_git_description
-      - oss_short_description
       - title
       - title_spellcheck
     stopwords:
@@ -1323,8 +1214,6 @@ processor_settings:
       - isr_field_owner_name_spellcheck
       - label
       - label_spellcheck
-      - oss_git_description
-      - oss_short_description
       - title
       - title_spellcheck
     spaces: ''
@@ -1374,10 +1263,6 @@ processor_settings:
       - isr_field_owner_name_spellcheck
       - label
       - label_spellcheck
-      - oss_category
-      - oss_features
-      - oss_git_description
-      - oss_short_description
       - title
       - title_spellcheck
   type_boost:

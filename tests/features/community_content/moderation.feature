@@ -52,17 +52,17 @@ Feature: Moderate community content
       | J-band light curves           | Wilson-Devinney modeling      |                     | Survey For Supernovae | published        |
       | Physics of the Neupert effect | Observed temporal correlation |                     | Survey For Supernovae | deletion request |
     And event content:
-      | title                                   | body                         | collection          | solution              | state            |
-      | Thick-target collisional bremsstrahlung | Chromospheric evaporation    | Black hole research |                       | draft            |
-      | Conductive cooling losses               | Single-loop geometry         | Black hole research |                       | needs update     |
-      | Source of SXR plasma supply and heating | Fast electrons are not       | Black hole research |                       | proposed         |
-      | Stars forming in material outflow       | Colossal material winds      | Black hole research |                       | published        |
-      | X-Shooter                               | VLT spectroscopic instrument | Black hole research |                       | deletion request |
-      | Infant stellar population               | Quarter of star formation    |                     | Survey For Supernovae | draft            |
-      | Give rise to galactic features          | Distended bulge of stars     |                     | Survey For Supernovae | needs update     |
-      | Cosmic-infrared background radiation    | Coming from all directions   |                     | Survey For Supernovae | proposed         |
-      | Evolution of dust-to-metals ratio       | Dust at high redshift        |                     | Survey For Supernovae | published        |
-      | Total V-band extinction                 | Fitting the afterglow SED    |                     | Survey For Supernovae | deletion request |
+      | title                                   | abstract                     | field_paragraphs_body        | collection          | solution              | state            |
+      | Thick-target collisional bremsstrahlung | Chromospheric evaporation    | Chromospheric evaporation    | Black hole research |                       | draft            |
+      | Conductive cooling losses               | Single-loop geometry         | Single-loop geometry         | Black hole research |                       | needs update     |
+      | Source of SXR plasma supply and heating | Fast electrons are not       | Fast electrons are not       | Black hole research |                       | proposed         |
+      | Stars forming in material outflow       | Colossal material winds      | Colossal material winds      | Black hole research |                       | published        |
+      | X-Shooter                               | VLT spectroscopic instrument | VLT spectroscopic instrument | Black hole research |                       | deletion request |
+      | Infant stellar population               | Quarter of star formation    | Quarter of star formation    |                     | Survey For Supernovae | draft            |
+      | Give rise to galactic features          | Distended bulge of stars     | Distended bulge of stars     |                     | Survey For Supernovae | needs update     |
+      | Cosmic-infrared background radiation    | Coming from all directions   | Coming from all directions   |                     | Survey For Supernovae | proposed         |
+      | Evolution of dust-to-metals ratio       | Dust at high redshift        | Dust at high redshift        |                     | Survey For Supernovae | published        |
+      | Total V-band extinction                 | Fitting the afterglow SED    | Fitting the afterglow SED    |                     | Survey For Supernovae | deletion request |
     And news content:
       | title                         | body                        | collection          | solution              | state            |
       | Magnetosphere boundary        | Gas shock                   | Black hole research |                       | draft            |
@@ -318,8 +318,8 @@ Feature: Moderate community content
       | High frequency | Slow 1.2 second spin          | Neutron stars | deletion request |
       | Cluster        | Eddington luminosity          | Neutron stars | deletion request |
     And event content:
-      | title      | body        | collection    | state    |
-      | Accelerate | Wide binary | Neutron stars | proposed |
+      | title      | field_paragraphs_body | collection    | state    |
+      | Accelerate | Wide binary           | Neutron stars | proposed |
     And news content:
       | title                   | body                             | collection    | state            |
       | Metal-rich star cluster | Standard pulsar recycling theory | Neutron stars | deletion request |
@@ -374,7 +374,7 @@ Feature: Moderate community content
 
   @uploadFiles:logo.png
   Scenario: The logo image can be replaced for an event or news item that's in
-    the "proposed" state. See ISAICP-5818.
+  the "proposed" state. See ISAICP-5818.
 
     Given user:
       | Username | leo |
@@ -393,8 +393,11 @@ Feature: Moderate community content
     When I click "Add event" in the plus button menu
     And I fill in the following:
       | Title            | Alice in Wonderland |
-      | Description      | Here we go...       |
+      | Abstract         | Here we go...       |
       | Virtual location | http://example.com  |
+    And I append "text" to "field_paragraphs_body" layout paragraphs field
+      | field_body:value  | Here we go...  |
+      | field_body:format | content_editor |
 
     And I select "Statistics and Analysis" from "Topic"
     And I attach the file "logo.png" to "Logo"

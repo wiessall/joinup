@@ -77,8 +77,8 @@ Feature: Add community content
       | title             | content         | author    | state | collection          | created    |
       | Sample discussion | Sample content. | Publisher | draft | The afternoon shift | 01-01-2010 |
     And event content:
-      | title        | body            | location          | author    | collection          | state | created    |
-      | Sample event | Sample content. | Buckingham Palace | Publisher | The afternoon shift | draft | 01-01-2010 |
+      | title        | abstract | field_paragraphs_body | location          | author    | collection          | state | created    |
+      | Sample event | abstract | Sample content.       | Buckingham Palace | Publisher | The afternoon shift | draft | 01-01-2010 |
     And news content:
       | title       | headline    | body            | state | author    | collection          | created    |
       | Sample news | Sample news | Sample content. | draft | Publisher | The afternoon shift | 01-01-2010 |
@@ -150,7 +150,10 @@ Feature: Add community content
     And I fill in the following:
       | Title       | Published community event |
       | Short title | Published community event |
-    And I enter "Published community event" in the "Description" wysiwyg editor
+      | Abstract    | Published community event |
+    And I append "text" to "field_paragraphs_body" layout paragraphs field
+      | field_body:value  | Published community event |
+      | field_body:format | content_editor                    |
     And I select "Supplier exchange" from "Topic"
     And I press "Add another item" at the "Virtual location" field
     And I fill the start date of the Date widget with "2018-08-29"

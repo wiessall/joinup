@@ -1,16 +1,16 @@
-uuid: 3f2e1ff2-3274-448a-b730-510781f6ab4b
+uuid: bd542bda-413c-43c6-a654-32eba0e2a074
 langcode: en
 status: true
 dependencies:
   config:
-    - search_api.index.published
+    - search_api.index.oss_catalogue
     - views.view.search_oss_catalogue
   module:
     - views
     - search_api_autocomplete
 id: search_oss_catalogue
 label: 'Search oss catalogue'
-index_id: published
+index_id: oss_catalogue
 suggester_settings:
   live_results:
     fields: {  }
@@ -20,29 +20,7 @@ suggester_settings:
     suggest_keys: true
     view_modes:
       'entity:node':
-        custom_page: ''
-        discussion: ''
-        document: ''
-        event: ''
-        news: ''
         oss_solution: ''
-        video: ''
-      'entity:rdf_entity':
-        asset_distribution: ''
-        asset_release: ''
-        collection: ''
-        licence: ''
-        solution: ''
-        spdx_licence: ''
-      'entity:taxonomy_term':
-        eif_conceptual_model: ''
-        eif_interoperability_layer: ''
-        eif_principle: ''
-        eif_recommendation: ''
-        oss_category: ''
-        topic: ''
-      'entity:user':
-        user: ''
 suggester_weights:
   live_results: 0
 suggester_limits:
