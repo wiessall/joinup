@@ -20,27 +20,30 @@ Feature: Notification test for the event transitions on a pre moderated parent.
       | CC pre collection | CC facilitator | facilitator |
       | CC pre collection | CC member      |             |
     And event content:
-      | title                               | author         | body | location                             | collection        | field_state      |
+      | title                               | author         | abstract | field_paragraphs_body | location                             | collection        | field_state      |
       # The next one belongs to a facilitator because there is no published version for that and thus,
       # the facilitator would not have access to the entity.
-      | CC notify pre publish               | CC facilitator | body | Half Moon Street, London             | CC pre collection | draft            |
-      | CC notify pre propose               | CC member      | body | Quai d'Orleans, Paris                | CC pre collection | draft            |
-      | CC notify pre request changes       | CC member      | body | Rue du Mont Thabor, Paris            | CC pre collection | published        |
-      | CC notify pre report                | CC member      | body | Cort Adelers Gate, Oslo              | CC pre collection | published        |
-      | CC notify pre request deletion      | CC member      | body | Ferdinand Bolstraat, Amsterdam       | CC pre collection | published        |
-      | CC notify pre propose from reported | CC member      | body | Lychener Strasse, Berlin             | CC pre collection | needs_update     |
-      | CC notify pre approve proposed      | CC member      | body | Capel Street, Dublin                 | CC pre collection | proposed         |
-      | CC notify pre reject deletion       | CC member      | body | Carrer dels Sagristans, Barcelona    | CC pre collection | deletion_request |
-      | CC notify pre delete                | CC member      | body | 4 Chome-2-15 Ginza, Chuo City, Tokyo | CC pre collection | deletion_request |
-      | CC notify published to delete       | CC member      | body | Malcolm X Boulevard, New York        | CC pre collection | published        |
-      | CC notify published to revise       | CC member      | body | Malcolm X Boulevard, New York        | CC pre collection | published        |
+      | CC notify pre publish               | CC facilitator | abstract | body                  | Half Moon Street, London             | CC pre collection | draft            |
+      | CC notify pre propose               | CC member      | abstract | body                  | Quai d'Orleans, Paris                | CC pre collection | draft            |
+      | CC notify pre request changes       | CC member      | abstract | body                  | Rue du Mont Thabor, Paris            | CC pre collection | published        |
+      | CC notify pre report                | CC member      | abstract | body                  | Cort Adelers Gate, Oslo              | CC pre collection | published        |
+      | CC notify pre request deletion      | CC member      | abstract | body                  | Ferdinand Bolstraat, Amsterdam       | CC pre collection | published        |
+      | CC notify pre propose from reported | CC member      | abstract | body                  | Lychener Strasse, Berlin             | CC pre collection | needs_update     |
+      | CC notify pre approve proposed      | CC member      | abstract | body                  | Capel Street, Dublin                 | CC pre collection | proposed         |
+      | CC notify pre reject deletion       | CC member      | abstract | body                  | Carrer dels Sagristans, Barcelona    | CC pre collection | deletion_request |
+      | CC notify pre delete                | CC member      | abstract | body                  | 4 Chome-2-15 Ginza, Chuo City, Tokyo | CC pre collection | deletion_request |
+      | CC notify published to delete       | CC member      | abstract | body                  | Malcolm X Boulevard, New York        | CC pre collection | published        |
+      | CC notify published to revise       | CC member      | abstract | body                  | Malcolm X Boulevard, New York        | CC pre collection | published        |
 
     # Test 'create' operation.
     When I am logged in as "CC member"
     And I go to the "CC pre collection" collection
     And I click "Add event" in the plus button menu
     And I fill in "Title" with "CC notify create propose"
-    And I fill in "Description" with "CC notify create propose"
+    And I fill in "Abstract" with "This is a test event."
+    And I append "text" to "field_paragraphs_body" layout paragraphs field
+      | field_body:value  | CC notify create propose. |
+      | field_body:format | content_editor            |
     And I fill in "Physical location" with "South King Street, Honolulu"
     And I select "Statistics and Analysis" from "Topic"
     And I press "Propose"
@@ -53,13 +56,16 @@ Feature: Notification test for the event transitions on a pre moderated parent.
     And I go to the "CC pre collection" collection
     And I click "Add event" in the plus button menu
     And I fill in "Title" with "CC notify create publish"
-    And I fill in "Description" with "CC notify create publish"
+    And I fill in "Abstract" with "This is a test event."
+    And I append "text" to "field_paragraphs_body" layout paragraphs field
+      | field_body:value  | CC notify create publish. |
+      | field_body:format | content_editor            |
     And I fill in "Physical location" with "West Broadway, Vancouver"
     And I select "Statistics and Analysis" from "Topic"
     And I press "Publish"
     Then the following email should have been sent:
-      | recipient | CC owner                                                                                                                                                                  |
-      | subject   | Joinup: Content has been published                                                                                                                                        |
+      | recipient | CC owner                                                                                                                                                                   |
+      | subject   | Joinup: Content has been published                                                                                                                                         |
       | body      | CC Facilitator has published the new event - "CC notify create publish" in the collection: "CC pre collection". You can access the new content at the following link: http |
 
     # Test 'update' operation.

@@ -502,6 +502,33 @@ class JoinupSearchContext extends RawDrupalContext {
   }
 
   /**
+   * Asserts the autocomplete items not found from search.
+   *
+   * @param string $input
+   *   Search bar name.
+   *
+   * @throws \Exception
+   *    Thrown when the suggestions are present in the page.
+   *
+   * @Then I should not see any suggestion at :input
+   */
+  public function iShouldNotSeeTheSuggestions(string $input): void {
+    $session = $this->getSession();
+    $element = $this->getSearchBarElement($input);
+    $session->getDriver()->keyDown($element->getXpath(), '', NULL);
+    $session->wait(1000);
+    $allResults = $this->getSession()->getPage()->findAll('css', 'ul.ui-autocomplete a');
+    $found = array_map(function ($item) {
+      /** @var \Behat\Mink\Element\NodeElement $item */
+      return $item->getText();
+    }, $allResults);
+    if (!empty(array_filter($found))) {
+      $missing_suggestions = implode(', ', $found);
+      throw new \RuntimeException("The expected suggestions '$missing_suggestions' were not found in autocomplete.");
+    }
+  }
+
+  /**
    * Asserts the autocomplete single item from search.
    *
    * This function asserts also the order of the items.

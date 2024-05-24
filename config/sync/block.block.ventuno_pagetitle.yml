@@ -4,7 +4,6 @@ status: true
 dependencies:
   module:
     - joinup_core
-    - node
     - system
   theme:
     - ventuno
