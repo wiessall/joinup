@@ -10,8 +10,8 @@ Feature:
 
   Scenario: Test that content listing options are working correctly.
     Given the following collections:
-      | title       | state     |
-      | Sparta      | published |
+      | title  | state     |
+      | Sparta | published |
     And news content:
       | title       | headline    | collection  | content       | state     |
       | Some news 1 | Some news 1 | Roman ruins | Some content. | published |
@@ -49,10 +49,10 @@ Feature:
 
   Scenario: Test also that events, when listed alone, are sorted by event date.
     Given event content:
-      | title        | headline     | collection   | content       | state     | created    | start date | end date |
-      | Some event 1 | Some event 1 | Roman ruins  | Some content. | published | 2 day ago  | 5 day ago  | 4 day ago |
-      | Some event 2 | Some event 2 | Roman ruins  | Some content. | published | 3 days ago | 6 days ago | 5 days ago |
-      | Some event 3 | Some event 3 | Roman ruins  | Some content. | published | 1 days ago | 7 days ago | 6 days ago |
+      | title        | headline     | collection  | content       | state     | created    | start date | end date   |
+      | Some event 1 | Some event 1 | Roman ruins | Some content. | published | 2 day ago  | 5 day ago  | 4 day ago  |
+      | Some event 2 | Some event 2 | Roman ruins | Some content. | published | 3 days ago | 6 days ago | 5 days ago |
+      | Some event 3 | Some event 3 | Roman ruins | Some content. | published | 1 days ago | 7 days ago | 6 days ago |
     And custom_page content:
       | title           | collection  | state     |
       | Events carousel | Roman ruins | published |
