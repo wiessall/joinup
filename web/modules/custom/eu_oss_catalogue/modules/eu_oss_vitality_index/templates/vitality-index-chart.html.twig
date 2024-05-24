@@ -11,24 +11,11 @@
  */
 #}
 
-{{ attach_library('ventuno/modals') }}
-
 {% set classes = ['js-vitality-index-chart'] %}
+
 {{ attach_library('eu_oss_vitality_index/vitality-index-chart') }}
 
-<button class="btn btn-link vitality-index-info-button btn-md p-0 h2" type="button" data-bs-toggle="modal" data-bs-target="#vitality-index-info">
-  <svg class="bi icon--fluid">
-    <use xlink:href="{{ bcl_icon_path }}#info-circle"></use>
-  </svg>
-</button>
-{{ pattern('modal', {
-  attributes: {
-    id: 'vitality-index-info',
-  },
-  title: 'Vitality index info'|t,
-  verticaly_centered: 1,
-  show_close_button: true,
-  body: info,
-}) }}
-
-<canvas{{ attributes.addClass(classes) }}></canvas>
+<div>
+  <canvas{{ attributes.addClass(classes) }}></canvas>
+  <div>{{ info }}</div>
+</div>
