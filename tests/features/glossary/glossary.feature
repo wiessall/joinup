@@ -141,10 +141,10 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
 
   Scenario: Glossary terms should be shown as links in collection content
     Given collection:
-      | title       | Collection With Glossary                                                                             |
-      | state       | published                                                                                            |
+      | title       | Collection With Glossary                                                                          |
+      | state       | published                                                                                         |
       | description | Colors of Paradise. Abbreviated as CLR. <a href="../contact"><strong>Colors of Dream</strong></a> |
-      | abstract    | The Alphabet is back and it's s/ashy.                                                                |
+      | abstract    | The Alphabet is back and it's s/ashy.                                                             |
     And solution:
       | title       | Under The Bridge         |
       | description | No Colors                |
@@ -173,7 +173,7 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
       | field_body:value  | Alphabet is back |
       | field_body:format | content_editor   |
     And event content:
-      | title      | body                              | solution         | state     |
+      | title      | field_paragraphs_body             | solution         | state     |
       | Soho Night | Any cOLOrs You Like. Maybe colrs? | Under The Bridge | published |
     And news content:
       | title         | body                                       | solution         | state     |
