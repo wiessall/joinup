@@ -9,10 +9,8 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Mail\MailManagerInterface;
 use Drupal\contact_information\Form\ContactInformationContactForm;
-use Drupal\Core\Session\AccountInterface;
 use Drupal\email_contact\Controller\ContactController;
 use Drupal\honeypot\HoneypotServiceInterface;
-use Drupal\sparql_entity_storage\UriEncoder;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
@@ -82,20 +80,6 @@ class ContactInformationContactFormController extends ContactController {
         $field_settings,
       )
     );
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function accessCheck($entity_type, $entity, $field_name, $view_mode, AccountInterface $account) {
-    $decoded = UriEncoder::decodeUrl($entity);
-    if (filter_var($decoded, FILTER_VALIDATE_URL) !== FALSE) {
-      // If the decoded URL is not a URI, then do not pass it as a parameter
-      // to the access method to avoid unnecessary decoding.
-      $entity = $decoded;
-    }
-
-    return parent::accessCheck($entity_type, $entity, $field_name, $view_mode, $account);
   }
 
 }
