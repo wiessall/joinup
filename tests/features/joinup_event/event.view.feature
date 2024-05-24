@@ -7,7 +7,7 @@ Feature: View discussion API
       | title | Le Event Heureux |
       | state | published        |
     And event content:
-      | title       | state     | short title | body                                     | collection       | start date          | end date            | field_event_contact_email |
+      | title       | state     | short title | field_paragraphs_body                    | collection       | start date          | end date            | field_event_contact_email |
       | Dummy Event | published | Short       | This is some dummy content like foo:bar. | Le Event Heureux | 2016-03-15T11:12:12 | 2016-03-15T11:12:12 | reach.me@example.com      |
 
     When I go to the "Dummy Event" event
