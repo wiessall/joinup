@@ -136,7 +136,7 @@
                           {% set attributes = create_attribute(link.attributes|default([])) %}
                           {% set classes = [
                             "dropdown-item",
-                            link.in_active_trail ? 'is-active',
+                            child.in_active_trail ? 'is-active',
                           ] %}
                           <li>
                             {{ link(child.label, child.link, attributes.addClass(classes)) }}
@@ -199,15 +199,17 @@
                 <ul>
                   {% for link_key, link in item.links %}
                     {% if link.link %}
-                      <li>
-                        <a href="{{ link.link }}" {{ link.attributes }}>
+                      <li {{ create_attribute({'class': link.in_active_trail ? 'Selected'}) }}>
+                        {% set attributes = create_attribute(link.attributes|default([])) %}
+                        <a href="{{ link.link }}" {{ attributes.addClass(link.in_active_trail ? 'is-active') }}>
                           {{ link.label }}
                         </a>
                         {% if link.children %}
                           <ul>
                             {% for child in link.children %}
-                              <li>
-                                <a href="{{ child.link }}">
+                              <li {{ create_attribute({'class': child.in_active_trail ? 'Selected'}) }}>
+                                {% set attributes = create_attribute(child.attributes|default([])) %}
+                                <a href="{{ child.link }}" {{ attributes.addClass(child.in_active_trail ? 'is-active') }}>
                                   {{ child.label }}
                                 </a>
                               </li>
@@ -296,7 +298,7 @@
                           <ul class="dropdown-menu dropdown-menu--sub" aria-labelledby="{{ dropdown_id }}">
                             {% for child in link.children %}
                               <li class="dropdown-list-item">
-                                <a href="{{ child.link }}" class="dropdown-list-link">
+                                <a href="{{ child.link }}" class="dropdown-list-link {{ child.in_active_trail ? 'is-active' }}">
                                   {{ child.label }}
                                 </a>
                               </li>
