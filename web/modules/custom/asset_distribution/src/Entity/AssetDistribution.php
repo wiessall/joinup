@@ -8,6 +8,7 @@ use Drupal\asset_distribution\Exception\MissingDistributionParentException;
 use Drupal\joinup_bundle_class\DescriptionTrait;
 use Drupal\joinup_bundle_class\JoinupBundleClassMetaEntityTrait;
 use Drupal\joinup_group\Entity\GroupContentTrait;
+use Drupal\joinup_publication_date\Entity\EntityPublicationTimeFallbackTrait;
 use Drupal\joinup_stats\Entity\DownloadCountAwareInterface;
 use Drupal\joinup_stats\Entity\DownloadCountAwareTrait;
 use Drupal\joinup_workflow\ArchivableEntityTrait;
@@ -31,6 +32,7 @@ class AssetDistribution extends Rdf implements AssetDistributionInterface {
   use GroupContentTrait;
   use SolutionContentTrait;
   use JoinupBundleClassMetaEntityTrait;
+  use EntityPublicationTimeFallbackTrait;
 
   /**
    * Fields populated with statistical information by the joinup_stats module.
