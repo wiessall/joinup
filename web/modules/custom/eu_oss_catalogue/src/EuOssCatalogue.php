@@ -49,7 +49,7 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
     protected EventDispatcherInterface $eventDispatcher,
     protected EntityTypeManagerInterface $entityTypeManager,
     protected LoggerChannelInterface $logger,
-    protected TimeInterface $time
+    protected TimeInterface $time,
   ) {}
 
   /**
