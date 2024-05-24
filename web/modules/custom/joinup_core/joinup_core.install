@@ -7,11 +7,7 @@
 
 declare(strict_types=1);
 
-use Drupal\Core\Config\ConfigManagerInterface;
-use Drupal\Core\Config\Entity\ConfigEntityStorageInterface;
-use Drupal\Core\Config\FileStorage;
 use Drupal\Core\Site\Settings;
-use Drupal\joinup_core\UpdateHelper;
 use Drupal\user\Entity\User;
 
 /**
@@ -95,59 +91,4 @@ function joinup_core_requirements($phase): array {
   }
 
   return $requirements;
-}
-
-/**
- * Implements hook_update_dependencies().
- *
- * phpcs:disable QualityAssurance.InstallFiles.FunctionDeclarations.NonHookFound,CodingStandards.NamingConventions.ValidUpdateName.InvalidUpdateId
- */
-function joinup_core_update_dependencies(): array {
-  $dependencies['joinup_core'][110601] = [
-    'joinup_core' => 110600,
-  ];
-
-  return $dependencies;
-}
-
-// phpcs:enable
-
-/**
- * Installs Layout Paragraphs body for document and event content types.
- */
-function joinup_core_update_110600(): void {
-  $configManager = \Drupal::service('config.manager');
-  assert($configManager instanceof ConfigManagerInterface);
-  $source = new FileStorage(Settings::get('config_sync_directory'));
-  $layoutParagraphsField = 'field_paragraphs_body';
-  $entityTypeManager = Drupal::entityTypeManager();
-
-  $fieldStorageId = "node.$layoutParagraphsField";
-  if (!$entityTypeManager->getStorage('field_storage_config')->load($fieldStorageId)) {
-    $configData = $source->read("field.storage.$fieldStorageId");
-    $storage = $entityTypeManager->getStorage('field_storage_config');
-    assert($storage instanceof ConfigEntityStorageInterface);
-    $storage->createFromStorageRecord($configData)->save();
-  }
-
-  foreach (['event'] as $contentType) {
-    $fieldConfigId = "node.$contentType.$layoutParagraphsField";
-    if (!$entityTypeManager->getStorage('field_config')->load($fieldConfigId)) {
-      $configData = $source->read("field.field.$fieldConfigId");
-      $storage = $entityTypeManager->getStorage('field_config');
-      assert($storage instanceof ConfigEntityStorageInterface);
-      $storage->createFromStorageRecord($configData)->save();
-    }
-  }
-}
-
-/**
- * Transform node body text field to paragraphs.
- */
-function joinup_core_update_110601(array &$sandbox): string {
-  $updateHelper = \Drupal::classResolver(UpdateHelper::class);
-  assert($updateHelper instanceof UpdateHelper);
-  return $updateHelper->transformNodeBodyToLayoutParagraphs($sandbox, [
-    'event',
-  ]);
 }
