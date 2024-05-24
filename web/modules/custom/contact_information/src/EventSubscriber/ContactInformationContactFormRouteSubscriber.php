@@ -24,6 +24,7 @@ class ContactInformationContactFormRouteSubscriber extends RouteSubscriberBase {
   protected function alterRoutes(RouteCollection $collection) {
     if ($route = $collection->get('email_contact.form')) {
       $route->setDefault('_controller', ContactInformationContactFormController::class . '::content');
+      $route->setRequirement('_custom_access', ContactInformationContactFormController::class . '::accessCheck');
     }
   }
 
