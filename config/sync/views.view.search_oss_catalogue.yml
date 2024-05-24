@@ -3,10 +3,8 @@ langcode: en
 status: true
 dependencies:
   config:
-    - rdf_entity.rdfentity.collection
-    - search_api.index.published
+    - search_api.index.oss_catalogue
   module:
-    - joinup_group
     - search_api
     - search_api_spellcheck
     - views_autosubmit
@@ -16,7 +14,7 @@ label: 'Search oss catalogue'
 module: views
 description: ''
 tag: ''
-base_table: search_api_index_published
+base_table: search_api_index_oss_catalogue
 base_field: search_api_id
 display:
   default:
@@ -29,7 +27,7 @@ display:
       fields:
         body:
           id: body
-          table: search_api_index_published
+          table: search_api_index_oss_catalogue
           field: body
           relationship: none
           group_type: group
@@ -135,7 +133,7 @@ display:
       sorts:
         oss_release_date:
           id: oss_release_date
-          table: search_api_index_published
+          table: search_api_index_oss_catalogue
           field: oss_release_date
           relationship: none
           group_type: group
@@ -148,7 +146,7 @@ display:
           exposed: true
         oss_vitality_index:
           id: oss_vitality_index
-          table: search_api_index_published
+          table: search_api_index_oss_catalogue
           field: oss_vitality_index
           relationship: none
           group_type: group
@@ -161,7 +159,7 @@ display:
           exposed: true
         title:
           id: title
-          table: search_api_index_published
+          table: search_api_index_oss_catalogue
           field: title
           relationship: none
           group_type: group
@@ -174,7 +172,7 @@ display:
           exposed: true
         title_1:
           id: title_1
-          table: search_api_index_published
+          table: search_api_index_oss_catalogue
           field: title
           relationship: none
           group_type: group
@@ -187,7 +185,7 @@ display:
           exposed: true
         title_2:
           id: title_2
-          table: search_api_index_published
+          table: search_api_index_oss_catalogue
           field: title
           relationship: none
           group_type: group
@@ -198,47 +196,11 @@ display:
             label: ''
             field_identifier: ''
           exposed: false
-      arguments:
-        entity_groups:
-          id: entity_groups
-          table: search_api_index_published
-          field: entity_groups
-          relationship: none
-          group_type: group
-          admin_label: ''
-          plugin_id: search_api_group
-          default_action: ignore
-          exception:
-            value: all
-            title_enable: false
-            title: All
-          title_enable: false
-          title: ''
-          default_argument_type: fixed
-          default_argument_options:
-            argument: ''
-          summary_options: {  }
-          summary:
-            sort_order: asc
-            number_of_records: 0
-            format: default_summary
-          specify_validation: true
-          validate:
-            type: joinup_group_entity_id
-            fail: 'not found'
-          validate_options:
-            bundles:
-              collection: collection
-            access: true
-            operation: view
-            multiple: 0
-            rdf_entity_id: 'http://data.europa.eu/w21/6d621a47-71ce-4f1a-90e2-8859403d3ecd'
-          break_phrase: false
-          not: false
+      arguments: {  }
       filters:
         search_api_fulltext:
           id: search_api_fulltext
-          table: search_api_index_published
+          table: search_api_index_oss_catalogue
           field: search_api_fulltext
           relationship: none
           group_type: group
@@ -285,19 +247,17 @@ display:
           parse_mode: terms
           min_length: 3
           fields: {  }
-        entity_bundle:
-          id: entity_bundle
-          table: search_api_index_published
-          field: entity_bundle
+        type:
+          id: type
+          table: search_api_index_oss_catalogue
+          field: type
           relationship: none
           group_type: group
           admin_label: ''
-          plugin_id: search_api_string
-          operator: '='
+          plugin_id: search_api_options
+          operator: or
           value:
-            min: ''
-            max: ''
-            value: oss_solution
+            oss_solution: oss_solution
           group: 1
           exposed: false
           expose:
@@ -314,9 +274,7 @@ display:
             multiple: false
             remember_roles:
               authenticated: authenticated
-            min_placeholder: ''
-            max_placeholder: ''
-            placeholder: ''
+            reduce: false
           is_grouped: false
           group_info:
             label: ''
@@ -329,9 +287,10 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
+          reduce_duplicates: false
         status:
           id: status
-          table: search_api_index_published
+          table: search_api_index_oss_catalogue
           field: status
           relationship: none
           group_type: group
@@ -369,7 +328,7 @@ display:
             group_items: {  }
         oss_archived:
           id: oss_archived
-          table: search_api_index_published
+          table: search_api_index_oss_catalogue
           field: oss_archived
           relationship: none
           group_type: group
@@ -505,9 +464,9 @@ display:
         - 'url.query_args:sort_by'
         - 'user.node_grants:view'
       tags:
-        - 'config:search_api.index.published'
+        - 'config:search_api.index.oss_catalogue'
         - 'config:views.view.search_oss_catalogue'
-        - 'search_api_list:published'
+        - 'search_api_list:oss_catalogue'
   search:
     id: search
     display_title: Page
@@ -548,5 +507,5 @@ display:
         - 'url.query_args:sort_by'
         - 'user.node_grants:view'
       tags:
-        - 'config:search_api.index.published'
-        - 'search_api_list:published'
+        - 'config:search_api.index.oss_catalogue'
+        - 'search_api_list:oss_catalogue'

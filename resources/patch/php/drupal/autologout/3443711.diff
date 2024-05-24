@@ -1,26 +1,54 @@
-Index: src/Form/AutologoutSettingsForm.php
-IDEA additional info:
-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
-<+>UTF-8
-===================================================================
 diff --git a/src/Form/AutologoutSettingsForm.php b/src/Form/AutologoutSettingsForm.php
---- a/src/Form/AutologoutSettingsForm.php	
-+++ b/src/Form/AutologoutSettingsForm.php	(date 1714133315546)
-@@ -307,7 +307,7 @@
+index a1f38236f02f9e33d3caeeee34e38a99e49812e8..9713a3c89d12e5695b45959a7038a5e10994a264 100644
+--- a/src/Form/AutologoutSettingsForm.php
++++ b/src/Form/AutologoutSettingsForm.php
+@@ -9,6 +9,7 @@ use Drupal\Core\Extension\ModuleHandlerInterface;
+ use Drupal\Core\Form\ConfigFormBase;
+ use Drupal\Core\Form\FormStateInterface;
+ use Drupal\Core\Messenger\MessengerInterface;
++use Drupal\Core\Session\AccountInterface;
+ use Drupal\user\UserData;
+ use Symfony\Component\DependencyInjection\ContainerInterface;
+ 
+@@ -330,7 +331,7 @@ class AutologoutSettingsForm extends ConfigFormBase {
      ];
  
-     foreach (user_roles(TRUE) as $key => $role) {
+     foreach ($this->entityTypeManager->getStorage('user_role')->loadMultiple() as $key => $role) {
 -      if ($key != 'authenticated') {
-+//      if ($key != 'authenticated') {
++      if ($key !== AccountInterface::ANONYMOUS_ROLE) {
          $form['role_container']['table'][$key] = [
            'enabled' => [
              '#type' => 'checkbox',
-@@ -329,7 +329,7 @@
-             '#size' => 40,
-           ],
-         ];
--      }
-+//      }
-     }
+diff --git a/src/Plugin/Block/AutologoutWarningBlock.php b/src/Plugin/Block/AutologoutWarningBlock.php
+index 3e0e50de8ebdcbd2301ccb27a007cc72309892b3..cb689f71aae6ecfc75550024920f910f204b4737 100644
+--- a/src/Plugin/Block/AutologoutWarningBlock.php
++++ b/src/Plugin/Block/AutologoutWarningBlock.php
+@@ -98,7 +98,7 @@ class AutologoutWarningBlock extends BlockBase implements ContainerFactoryPlugin
+       $container->get('date.formatter'),
+       $container->get('config.factory')->get('autologout.settings'),
+       $container->get('autologout.manager'),
+-      $container->get('form_builder')
++      $container->get('form_builder'),
+     );
+   }
  
-     return parent::buildForm($form, $form_state);
+diff --git a/tests/src/Kernel/SettingsFormTest.php b/tests/src/Kernel/SettingsFormTest.php
+index 4e906384079f4423b48b9fe338975b4807ca4539..4c07e4fcf4754e29a3877c9eae81dbb1e09ad56a 100644
+--- a/tests/src/Kernel/SettingsFormTest.php
++++ b/tests/src/Kernel/SettingsFormTest.php
+@@ -7,6 +7,7 @@ use Drupal\Core\Form\FormState;
+ use Drupal\Core\StringTranslation\StringTranslationTrait;
+ use Drupal\KernelTests\KernelTestBase;
+ use Drupal\Tests\user\Traits\UserCreationTrait;
++use Drupal\user\RoleInterface;
+ 
+ /**
+  * Tests the settings form.
+@@ -89,6 +90,7 @@ class SettingsFormTest extends KernelTestBase {
+     $form_builder = $this->container->get('form_builder');
+     $settings = $this->configFactory->getEditable('autologout.settings');
+     $roles = $this->entityTypeManager->getStorage('user_role')->loadMultiple();
++    unset($roles[RoleInterface::ANONYMOUS_ID]);
+     $settings->set('max_timeout', 1000)->save();
+ 
+     // Test that it is possible to set a value above the max_timeout threshold.
