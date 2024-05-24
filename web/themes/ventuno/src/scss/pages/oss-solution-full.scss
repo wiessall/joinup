@@ -58,7 +58,7 @@
           inset-inline-start: 0;
         }
       }
-      .block {
+      .block:not([class*="oss-vitality-index-range"]) {
         margin-bottom: $spacer * 2;
       }
     }
