@@ -84,6 +84,7 @@ class VitalityIndexGenerator implements VitalityIndexGeneratorInterface {
       $this->logger->error('Repository issue for @dir. Message: @message', [
         '@dir' => $repoPath,
         '@message' => $exception->getMessage(),
+        'oss_solution' => $solution->id(),
       ]);
       return NULL;
     }
