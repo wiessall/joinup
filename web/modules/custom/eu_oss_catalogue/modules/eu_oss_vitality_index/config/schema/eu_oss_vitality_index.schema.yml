@@ -7,6 +7,9 @@ eu_oss_vitality_index.settings:
     cron_frequency:
       type: integer
       label: 'Cron frequency in days'
+    process_timeout:
+      type: integer
+      label: 'The process timeout (max. runtime) in seconds for cloning/fetching repository.'
 
 field.formatter.settings.vitality_index_chart:
   type: mapping

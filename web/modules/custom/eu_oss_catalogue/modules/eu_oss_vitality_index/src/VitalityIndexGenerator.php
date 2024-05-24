@@ -5,7 +5,10 @@ declare(strict_types=1);
 namespace Drupal\eu_oss_vitality_index;
 
 use Drupal\Component\Serialization\Json;
+use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Config\ImmutableConfig;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Site\Settings;
 use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
@@ -23,17 +26,20 @@ class VitalityIndexGenerator implements VitalityIndexGeneratorInterface {
   protected const GIT_CLONE_DIR = 'eu_oss_catalogue';
 
   /**
-   * Constructs a new service instance.
+   * Module config.
    *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *   The entity type manager service.
-   * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
-   *   The EU OSS Catalogue logger channel.
+   * @var \Drupal\Core\Config\ImmutableConfig
    */
+  protected ImmutableConfig $config;
+
   public function __construct(
     protected EntityTypeManagerInterface $entityTypeManager,
     protected LoggerChannelInterface $logger,
-  ) {}
+    protected FileSystemInterface $fileSystem,
+    ConfigFactoryInterface $configFactory,
+  ) {
+    $this->config = $configFactory->get('eu_oss_vitality_index.settings');
+  }
 
   /**
    * Computes and stores the vitality index for one solution.
@@ -68,11 +74,17 @@ class VitalityIndexGenerator implements VitalityIndexGeneratorInterface {
     $url = str_ends_with($url, '.git') ? $url : "$url.git";
     $repoPath = $this->getLocalRepositoryPath($solution);
 
-    $repository = is_dir($repoPath) ? $this->gitFetch($repoPath) : $this->gitClone($repoPath, $url);
+    try {
+      $repository = is_dir($repoPath) ? $this->gitFetch($repoPath) : $this->gitClone($repoPath, $url);
+    }
+    catch (\Throwable $exception) {
+      // Remove not fully cloned/fetched repo, so it can be picked next time.
+      $this->fileSystem->deleteRecursive($repoPath);
 
-    if (!$repository) {
-      // The repository could not be cloned or fetches. Just ignore it for now
-      // and continue the process. The error has been logged.
+      $this->logger->error('Repository issue for @dir. Message: @message', [
+        '@dir' => $repoPath,
+        '@message' => $exception->getMessage(),
+      ]);
       return NULL;
     }
 
@@ -99,6 +111,26 @@ class VitalityIndexGenerator implements VitalityIndexGeneratorInterface {
   }
 
   /**
+   * Fetches a Git repository.
+   *
+   * @param string $localPath
+   *   Repository local path.
+   *
+   * @return \Gitonomy\Git\Repository|null
+   *   The repository or NULL if fetch failed.
+   */
+  protected function gitFetch(string $localPath): ?Repository {
+    $repository = new Repository($localPath,
+      [
+        'process_timeout' => $this->config->get('process_timeout'),
+      ]
+    );
+    $repository->run('fetch');
+
+    return $repository;
+  }
+
+  /**
    * Clones a repository.
    *
    * @param string $localPath
@@ -110,45 +142,16 @@ class VitalityIndexGenerator implements VitalityIndexGeneratorInterface {
    *   The repository or NULL if clone failed.
    */
   protected function gitClone(string $localPath, string $remoteUrl): ?Repository {
-    try {
-      return Admin::cloneRepository($localPath, $remoteUrl, [
+    return Admin::cloneRepository($localPath, $remoteUrl,
+      [
         '--mirror',
         '--no-checkout',
         '--filter=tree:0',
-      ]);
-    }
-    catch (\Throwable $exception) {
-      $this->logger->error('Cannot clone into @dir from @remote. Message: @message', [
-        '@dir' => $localPath,
-        '@remote' => $remoteUrl,
-        '@message' => $exception->getMessage(),
-      ]);
-      return NULL;
-    }
-  }
-
-  /**
-   * Fetches a Git repository.
-   *
-   * @param string $localPath
-   *   Repository local path.
-   *
-   * @return \Gitonomy\Git\Repository|null
-   *   The repository or NULL if fetch failed.
-   */
-  protected function gitFetch(string $localPath): ?Repository {
-    try {
-      $repository = new Repository($localPath);
-      $repository->run('fetch');
-      return $repository;
-    }
-    catch (\Throwable $exception) {
-      $this->logger->error('Cannot fetch from remote for @dir. Message: @message', [
-        '@dir' => $localPath,
-        '@message' => $exception->getMessage(),
-      ]);
-      return NULL;
-    }
+      ],
+      [
+        'process_timeout' => $this->config->get('process_timeout'),
+      ],
+    );
   }
 
 }
