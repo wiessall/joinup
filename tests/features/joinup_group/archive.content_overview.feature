@@ -13,11 +13,11 @@ Feature: Global search with archive content
       | Some <group type> | Description | published |
       | Rare <group type> | Description | published |
     And event content:
-      | title   | short title | body      | spatial coverage | agenda      | location   | organisation        | scope         | <group type>      | state     |
-      | Event 1 | Event 1     | Some body | Greece           | Some agenta | Some place | European Commission | International | Some <group type> | published |
-      | Event 2 | Event 2     | Some body | Greece           | Some agenta | Some place | European Commission | International | Rare <group type> | published |
-      | Event 3 | Event 3     | Some body | Greece           | Some agenta | Some place | European Commission | International | Rare <group type> | published |
-      | Event 4 | Event 4     | Some body | Greece           | Some agenta | Some place | European Commission | International | Rare <group type> | published |
+      | title   | short title | field_paragraphs_body | spatial coverage | agenda      | location   | organisation        | scope         | <group type>      | state     |
+      | Event 1 | Event 1     | Some body             | Greece           | Some agenta | Some place | European Commission | International | Some <group type> | published |
+      | Event 2 | Event 2     | Some body             | Greece           | Some agenta | Some place | European Commission | International | Rare <group type> | published |
+      | Event 3 | Event 3     | Some body             | Greece           | Some agenta | Some place | European Commission | International | Rare <group type> | published |
+      | Event 4 | Event 4     | Some body             | Greece           | Some agenta | Some place | European Commission | International | Rare <group type> | published |
     And document content:
       | title           | document type | short title     | field_paragraphs_body | spatial coverage | <group type>      | state     |
       | Some document 1 | Document      | Some document 1 | Some body             | Luxembourg       | Some <group type> | published |
@@ -36,8 +36,8 @@ Feature: Global search with archive content
     Then I should not see the "<group type> content archived toggle" facet
 
     Given event content:
-      | title   | short title | body      | spatial coverage | agenda      | location   | organisation        | scope         | <group type>      | state    |
-      | Event 2 | Event 2     | Some body | Greece           | Some agenta | Some place | European Commission | International | Some <group type> | archived |
+      | title   | short title | field_paragraphs_body | spatial coverage | agenda      | location   | organisation        | scope         | <group type>      | state    |
+      | Event 2 | Event 2     | Some body             | Greece           | Some agenta | Some place | European Commission | International | Some <group type> | archived |
     And document content:
       | title           | document type | short title     | field_paragraphs_body | spatial coverage | <group type>      | state    |
       | Some document 2 | Document      | Some document 2 | Some body             | Luxembourg       | Some <group type> | archived |
@@ -94,7 +94,7 @@ Feature: Global search with archive content
       | title         | description | state     |
       | Some solution | Description | published |
     And the following distributions:
-      | title                 | description | state     | parent      |
+      | title                 | description | state     | parent        |
       | Some zip distribution | Description | published | Some solution |
       | Some rar distribution | Description | archived  | Some solution |
     And the "Some solution" solution is configured to show "All" community content in the overview
