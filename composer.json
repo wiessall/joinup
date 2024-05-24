@@ -341,6 +341,9 @@
                 "[Drupal 10.2] Deprecated sequence type schema definition @see https://www.drupal.org/i/3410265": "resources/patch/php/drupal/flag/3410265.diff",
                 "[Drupal 10.2] Merge::key() with array is deprecated @see https://www.drupal.org/i/3410363": "resources/patch/php/drupal/flag/3410363.diff"
             },
+            "drupal/email_contact": {
+                "Upcast parameter in ::accessCheck @see https://drupal.org/i/3449595": "resources/patch/php/drupal/email_contact/3449595.diff"
+            },
             "drupal/honeypot": {
                 "Behat integration. @see https://www.drupal.org/project/honeypot/issues/3059040": "resources/patch/php/drupal/honeypot/3059040.patch",
                 "Provide ways to clean up old honeypot_time_restriction values @see https://www.drupal.org/project/honeypot/issues/2997609": "resources/patch/php/drupal/honeypot/2997609.patch"
