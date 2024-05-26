@@ -604,14 +604,14 @@ Feature: Global search
       | The earth is square |
     And I should be on "/search?keys=Relativity&sort_by=relevance"
 
-    Given I select "Creation Date" from "Sort by"
+    Given I select "Date" from "Sort by"
     Then I should see the following tiles in the correct order:
       | The earth is square |
       | The uneven universe |
       | Quantum information |
     And I should be on "/search?keys=Relativity&sort_by=creation-date"
 
-    Given I select "Last Updated Date" from "Sort by"
+    Given I select "Last update" from "Sort by"
     Then I should see the following tiles in the correct order:
       | Quantum information |
       | The uneven universe |
