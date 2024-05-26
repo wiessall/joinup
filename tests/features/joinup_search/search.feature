@@ -593,6 +593,10 @@ Feature: Global search
       | Quantum information | Relativity is the word             | No one cares about the body.                                      | Custom collection | published | 01/01/2019 | 03/08/2019 |
       | The uneven universe | Relativity news: Relativity theory | I do care about the relativity keyword in the body.               | Custom collection | published | 02/01/2019 | 02/08/2019 |
       | The earth is square | Absolutely nonsense                | Some news are not worth it but I will add relativity here anyway. | Custom collection | published | 03/01/2019 | 01/08/2019 |
+    And event content:
+      | title            | collection        | state     | start date   | end date            | state     | created      |
+      | Blue revolution  | Custom collection | published | now +1 years | now +1 years +1 day | published | now -2 years |
+      | Red revolution   | Custom collection | published | now -1 years | now -1 years +1 day | published | now -1 years |
 
     When I am on the homepage
     And I enter "Relativity" in the search bar and press enter
@@ -609,7 +613,7 @@ Feature: Global search
       | The earth is square |
       | The uneven universe |
       | Quantum information |
-    And I should be on "/search?keys=Relativity&sort_by=creation-date"
+    And I should be on "/search?keys=Relativity&sort_by=date"
 
     Given I select "Last update" from "Sort by"
     Then I should see the following tiles in the correct order:
@@ -617,6 +621,26 @@ Feature: Global search
       | The uneven universe |
       | The earth is square |
     And I should be on "/search?keys=Relativity&sort_by=last-updated-date"
+
+    Then I enter "revolution" in the search bar and press enter
+      | Red revolution  |
+      | Blue revolution |
+    And I should be on "/search?keys=revolution&sort_by=last-updated-date"
+
+    Given I select "Date" from "Sort by"
+    Then I should see the following tiles in the correct order:
+      | Blue revolution |
+      | Red revolution  |
+    And I should be on "/search?keys=revolution&sort_by=date"
+
+    When I go to "/search?sort_by=date"
+    Then I should see the following tiles in the correct order:
+      | Blue revolution     |
+      | Custom collection   |
+      | The earth is square |
+      | The uneven universe |
+      | Quantum information |
+      | Red revolution      |
 
   @javascript
   Scenario: Anonymous user can find facets summary
