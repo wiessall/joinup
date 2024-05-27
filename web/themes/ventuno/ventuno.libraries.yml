@@ -100,8 +100,12 @@ alert:
   css:
     theme:
       assets/css/alert.min.css: { minified: true }
+  js:
+    assets/js/alert.js: {  }
   dependencies:
     - ventuno/close
+    - core/drupal.message
+    - core/drupalSettings
 
 align-module:
   css:
