@@ -71,21 +71,6 @@ function joinup_core_requirements_alter(array &$requirements): void {
   $requirements = array_filter($requirements, function (string $requirement) use ($ignored): bool {
     return !in_array($requirement, $ignored, TRUE);
   }, ARRAY_FILTER_USE_KEY);
-
-  // It's not possible to uninstall an entity type if its class has been removed
-  // from the codebase. We'll do this in two deployments, but as we uninstall
-  // the entity type, we need to avoid Status Report errors.
-  // @todo Remove this exception in ISAICP-8376.
-  if (isset($requirements['entity_update'])) {
-    $description = strip_tags((string) $requirements['entity_update']['description'] ?? '');
-    // Remove introductory text ('The following changes were detected...').
-    $description = substr($description, 78);
-    // Unset if 'EIF Wrapper' & 'EIF Wrapper Type' are the sole offending items.
-    $pattern = '@(?:EIF Wrapper(?: Type)?The EIF Wrapper(?: Type)? entity type needs to be installed.\s*){2}$@';
-    if (preg_match($pattern, $description)) {
-      unset($requirements['entity_update']);
-    }
-  }
 }
 
 /**
