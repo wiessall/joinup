@@ -8,10 +8,12 @@ Feature: Contact form for solution
       | name         | email                    | website url            | uri                                                            |
       | Jocelyn Bass | jocelyn.bass@example.com | http://www.example.org |                                                                |
       | John Revoked | john@example.com         | http://www.example.org | http://data.europa.eu/w21/d6d4976f-b7f2-4cab-80b9-3ed59393aa91 |
+      | John Deleted | deleted@example.com      | http://www.example.org | http://data.europa.eu/w21/33c34b2b-bfbd-4e6b-9a1d-f19a755ee631 |
     And the following email confirmation request:
       | email                    | status    |
       | jocelyn.bass@example.com | confirmed |
       | john@example.com         | confirmed |
+      | deleted@example.com      | confirmed |
     And collection:
       | title | Antibody development |
       | state | published            |
@@ -31,8 +33,8 @@ Feature: Contact form for solution
     Then I should see the link "John Revoked"
     # Page was rendered, but in the meantime, contact is changed on backend.
     Given there are no preexisting log records on the site
-    Given the "contact information" of "Six exclusion advantages" solution is changed to "Jocelyn Bass"
-    And there should be a record of severity info in the log with description "Contact info was changed on group 'Six exclusion advantages'. Previous contact was 'John Revoked', new one is 'Jocelyn Bass'."
+    Given the "contact information" of "Six exclusion advantages" solution is changed to "John Deleted"
+    And there should be a record of severity info in the log with description "Contact info was changed on group 'Six exclusion advantages'. Previous contact was 'John Revoked', new one is 'John Deleted'."
     Given there are no preexisting log records
     And I click "John Revoked" in the "Content" region
     Then a modal should open
@@ -43,8 +45,22 @@ Feature: Contact form for solution
     Then the modal should be closed
     And I should not see "Only signed in users can send a message. Please sign in or register an account on EU Login." in the "Content" region
 
-    # Authenticated case.
+    # Delete contact info.
+    Given I go to the homepage of the "Six exclusion advantages" solution
+    Then I should see the link "John Deleted"
     Given the "contact information" of "Six exclusion advantages" solution is changed to "John Revoked"
+    And I delete the "John Deleted" contact information
+    Given there are no preexisting log records
+    And I click "John Deleted" in the "Content" region
+    Then I should see the following error message:
+      | error messages                                  |
+      | No message can be sent to this contact anymore. |
+    And there should be 2 log records
+    And there should be a record of severity warning in the log with description "Attempting to send message to a missing contact."
+    # This is the default "page not found" error...
+    And there should be a record of severity warning in the log with description "/email-contact/rdf_entity/http_e_f_fdata_ceuropa_ceu_fw21_f33c34b2b_bbfbd_b4e6b_b9a1d_bf19a755ee631/field_ci_email/about?_wrapper_format=drupal_ajax"
+
+    # Authenticated case.
     When I am logged in as "Joe Hard"
     And I go to the homepage of the "Six exclusion advantages" solution
     Then I should see the link "John Revoked"
