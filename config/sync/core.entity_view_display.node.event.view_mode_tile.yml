@@ -4,7 +4,7 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.node.view_mode_tile
-    - field.field.node.event.body
+    - field.field.node.event.abstract
     - field.field.node.event.field_attachment
     - field.field.node.event.field_comments
     - field.field.node.event.field_event_agenda
@@ -19,6 +19,7 @@ dependencies:
     - field.field.node.event.field_location
     - field.field.node.event.field_organisation
     - field.field.node.event.field_organisation_type
+    - field.field.node.event.field_paragraphs_body
     - field.field.node.event.field_scope
     - field.field.node.event.field_shared_in
     - field.field.node.event.field_short_title
@@ -30,7 +31,10 @@ dependencies:
     - responsive_image.styles.tile
   module:
     - datetime_range
-    - joinup_html_stripper
+    - field_delimiter
+    - field_formatter_range
+    - joinup_core
+    - joinup_slick
     - responsive_image
     - template_suggestion
     - user
@@ -39,15 +43,15 @@ targetEntityType: node
 bundle: event
 mode: view_mode_tile
 content:
-  body:
-    type: joinup_html_stripper_stripped
-    label: hidden
+  abstract:
+    type: string
+    label: visually_hidden
     settings:
-      trim_length: 600
+      link_to_entity: false
     third_party_settings:
       template_suggestion:
-        template_suggestion: bare
-    weight: 2
+        template_suggestion: ''
+    weight: 1
     region: content
   field_event_date:
     type: daterange_default
@@ -60,7 +64,7 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
-    weight: 1
+    weight: 2
     region: content
   field_event_logo:
     type: responsive_image
@@ -75,10 +79,35 @@ content:
         template_suggestion: bare
     weight: 0
     region: content
+  field_paragraphs_body:
+    type: filtered_entity_reference_bundles
+    label: hidden
+    settings:
+      view_mode: tile
+      link: ''
+      filtered_entity_bundles:
+        - simple_paragraph
+        - text
+      trim_length: 600
+    third_party_settings:
+      field_delimiter:
+        delimiter: ''
+      field_formatter_range:
+        order: 0
+        limit: 1
+        offset: 0
+      joinup_slick:
+        preset: ''
+        field_label: true
+        custom_label: ''
+      template_suggestion:
+        template_suggestion: ''
+    weight: 3
+    region: content
   flag_like_node:
     settings: {  }
     third_party_settings: {  }
-    weight: 10
+    weight: 4
     region: content
 hidden:
   featured: true
