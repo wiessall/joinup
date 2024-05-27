@@ -319,10 +319,4 @@ settings:
   slick:
     handler: 'default:slick'
     handler_settings: {  }
-  eif_wrapper:
-    handler: 'default:eif_wrapper'
-    handler_settings: {  }
-  eif_wrapper_type:
-    handler: 'default:eif_wrapper_type'
-    handler_settings: {  }
 field_type: dynamic_entity_reference
