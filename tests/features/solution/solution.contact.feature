@@ -2,14 +2,16 @@
 Feature: Contact form for solution
   User can use contact form.
 
-  @javascript @email @uploadFiles:logo.png
+  @javascript @email @uploadFiles:logo.png @loggedErrors
   Scenario: User can use "Contact us" form
     Given contact_information content:
-      | name         | email                    | website url            |
-      | Jocelyn Bass | jocelyn.bass@example.com | http://www.example.org |
+      | name         | email                    | website url            | uri                                                            |
+      | Jocelyn Bass | jocelyn.bass@example.com | http://www.example.org |                                                                |
+      | John Revoked | john@example.com         | http://www.example.org | http://data.europa.eu/w21/d6d4976f-b7f2-4cab-80b9-3ed59393aa91 |
     And the following email confirmation request:
       | email                    | status    |
       | jocelyn.bass@example.com | confirmed |
+      | john@example.com         | confirmed |
     And collection:
       | title | Antibody development |
       | state | published            |
@@ -17,7 +19,7 @@ Feature: Contact form for solution
       | title               | Six exclusion advantages        |
       | description         | Separating molecules by weight. |
       | state               | published                       |
-      | contact information | Jocelyn Bass                    |
+      | contact information | John Revoked                    |
       | collection          | Antibody development            |
     And user:
       | Username | Joe Hard             |
@@ -26,7 +28,13 @@ Feature: Contact form for solution
     # Anonymous case.
     When I am not logged in
     And I go to the homepage of the "Six exclusion advantages" solution
-    And I click "Jocelyn Bass" in the "Content" region
+    Then I should see the link "John Revoked"
+    # Page was rendered, but in the meantime, contact is changed on backend.
+    Given there are no preexisting log records on the site
+    Given the "contact information" of "Six exclusion advantages" solution is changed to "Jocelyn Bass"
+    And there should be a record of severity info in the log with description "Contact info was changed on group 'Six exclusion advantages'. Previous contact was 'John Revoked', new one is 'Jocelyn Bass'."
+    Given there are no preexisting log records
+    And I click "John Revoked" in the "Content" region
     Then a modal should open
     And I should see the text "Contact us" in the "Modal title" region
     And I should see the text "Only signed in users can send a message. Please sign in or register an account on EU Login."
@@ -36,8 +44,25 @@ Feature: Contact form for solution
     And I should not see "Only signed in users can send a message. Please sign in or register an account on EU Login." in the "Content" region
 
     # Authenticated case.
+    Given the "contact information" of "Six exclusion advantages" solution is changed to "John Revoked"
     When I am logged in as "Joe Hard"
     And I go to the homepage of the "Six exclusion advantages" solution
+    Then I should see the link "John Revoked"
+    # Contact is changed again after page was rendered.
+    Given there are no preexisting log records on the site
+    Given the "contact information" of "Six exclusion advantages" solution is changed to "Jocelyn Bass"
+    And there should be 1 log record
+    And there should be a record of severity info in the log with description "Contact info was changed on group 'Six exclusion advantages'. Previous contact was 'John Revoked', new one is 'Jocelyn Bass'."
+    Given there are no preexisting log records on the site
+    And I click "John Revoked" in the "Content" region
+    Then I should see the following error message:
+      | error messages                                  |
+      | No message can be sent to John Revoked anymore. |
+    And there should be 1 log record
+    And there should be a record of severity warning in the log with description "Attempting to send message to contact 'http://data.europa.eu/w21/d6d4976f-b7f2-4cab-80b9-3ed59393aa91' which does not belong to a group."
+
+    Given I reload the page
+    Then I should see the link "Jocelyn Bass"
     And I click "Jocelyn Bass" in the "Content" region
     Then a modal should open
 
