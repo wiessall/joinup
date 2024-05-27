@@ -174,7 +174,7 @@
             "phpstan/extension-installer": true,
             "php-http/discovery": true,
             "ec-europa/toolkit-composer-plugin": true,
-            "phpro/grumphp-shim": true
+            "phpro/grumphp-shim": false
         }
     },
     "autoload": {
