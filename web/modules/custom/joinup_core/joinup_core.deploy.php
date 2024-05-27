@@ -25,7 +25,7 @@ define("STAT_INFO_TERM_NEW_ID", "http://joinup.eu/ontology/topic#statistics-and-
 /**
  * Fix typo in Statistics and information term URI.
  */
-function joinup_core_deploy_110600(): void {
+function joinup_core_deploy_110700(): void {
   $connection = \Drupal::database();
   $termId = $connection->select('rdf_sync_uri', 'rsu')
     ->fields('rsu', ['entity_id'])

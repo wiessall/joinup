@@ -1,8 +1,8 @@
 diff --git a/src/EventSubscriber/AutologoutSubscriber.php b/src/EventSubscriber/AutologoutSubscriber.php
-index 82a4ea304c75e66161aa82317f8b77f3e21fc01e..2d70f684c9c09040003f99b05ad8628e301f40de 100644
+index c40f33e797579f8ed2efa5e2b065864766e14eb7..46daa9f2e7e8c3881480cdf7b2043c3c957fe93f 100644
 --- a/src/EventSubscriber/AutologoutSubscriber.php
 +++ b/src/EventSubscriber/AutologoutSubscriber.php
-@@ -118,41 +118,21 @@ class AutologoutSubscriber implements EventSubscriberInterface {
+@@ -118,46 +118,21 @@ class AutologoutSubscriber implements EventSubscriberInterface {
      }
  
      // If user is not anonymous.
@@ -20,7 +20,12 @@ index 82a4ea304c75e66161aa82317f8b77f3e21fc01e..2d70f684c9c09040003f99b05ad8628e
 -      $parse_url = parse_url($referer, PHP_URL_QUERY);
 -      // If http referer url has 'destination' and session is not set,
 -      // then only redirect to user page if uid dosen't match.
--      if ($parse_url !== NULL && (strpos($parse_url, 'destination') !== FALSE) && empty($auto_redirect)) {
+-      if (
+-        $parse_url !== NULL &&
+-        (strpos($parse_url, 'destination') !== FALSE &&
+-        strpos($parse_url, 'destinations') === FALSE) &&
+-        empty($auto_redirect)
+-      ) {
 -        parse_str($parse_url, $output);
 -        $destination_uid = explode("/", $output['destination']);
 -
@@ -59,7 +64,7 @@ index 82a4ea304c75e66161aa82317f8b77f3e21fc01e..2d70f684c9c09040003f99b05ad8628e
        }
      }
  
-@@ -201,4 +181,23 @@ class AutologoutSubscriber implements EventSubscriberInterface {
+@@ -206,4 +181,23 @@ class AutologoutSubscriber implements EventSubscriberInterface {
      return $events;
    }
  

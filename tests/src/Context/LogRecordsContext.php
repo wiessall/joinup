@@ -95,6 +95,42 @@ class LogRecordsContext extends RawDrupalContext {
   }
 
   /**
+   * Asserts that a log record with the given severity and description exists.
+   *
+   * @param string $severity
+   *   The severity of the log record.
+   * @param string $description
+   *   The description of the log record.
+   *
+   * @Given there should be an record of severity :severity in the log with description :description
+   */
+  public function assertLogRecordExists(string $severity, string $description): void {
+    $logRecords = $this->getLogRecords(NULL);
+    $severity = mb_convert_case($severity, MB_CASE_TITLE);
+    \assert(array_search($severity, RfcLogLevel::getLevels()), sprintf(
+      "Invalid severity level '%s'. Allowed values are: %s",
+      $severity,
+      implode(', ', RfcLogLevel::getLevels())
+    ));
+
+    $severity = array_search($severity, RfcLogLevel::getLevels());
+    $found = FALSE;
+    foreach ($logRecords as $record) {
+      if ($record['severity'] == $severity && strpos($record['message'], $description) !== FALSE) {
+        $found = TRUE;
+        break;
+      }
+    }
+    if (!$found) {
+      throw new \Exception(sprintf(
+        "Log record with severity '%s' and description '%s' not found.",
+        $severity,
+        $description
+      ));
+    }
+  }
+
+  /**
    * The captured log records since scenario start or since the last reset.
    *
    * @param string|null $type
