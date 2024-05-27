@@ -25,48 +25,6 @@ behat:
   selenium:
     webdriver_url: ${env.WEBDRIVER_URL}
 
-phpcs:
-  file:
-    bin: ${joinup.dir}/vendor/bin/phpcs
-    config: ${joinup.dir}/phpcs.xml
-    standard: ${joinup.dir}/phpcs-ruleset.xml.dist
-    global: ${joinup.dir}/vendor/squizlabs/php_codesniffer/CodeSniffer.conf
-    phpcbf:
-      bin: ${joinup.dir}/vendor/bin/phpcbf
-  check:
-    extensions:
-      - inc
-      - install
-      - module
-      - php
-      - profile
-      - theme
-    files:
-      - ${joinup.dir}/tests/src
-      - ${joinup.dir}/src
-      - ${joinup.site_dir}/modules/custom
-      - ${joinup.site_dir}/profiles/joinup
-      - ${joinup.site_dir}/themes/iop
-      - ${joinup.site_dir}/themes/ventuno
-  ignore:
-    - '*.yml'
-    - '*/iop/assets/*'
-    - '*/iop/node_modules/*'
-    - '*/ventuno/assets/*'
-    - '*/ventuno/node_modules/*'
-  report: full
-  options:
-    # Show the progress of the run.
-    - p
-  arguments:
-    # The number of files to check in parallel. A good initial value is the
-    # number of available processor cores. If the system has fast storage then
-    # this can be increased further.
-    parallel: 50
-  # Set this config to `false` in your `runner.yml` in order to disable running
-  # PHP coding standards on Git push.
-  run_on_push: true
-
 commands:
 
   # Adds a Git hook that enforces coding standards check on push.

@@ -1,0 +1,52 @@
+parameters:
+  grumphp.tasks.php_extensions: [ 'php', 'module', 'inc', 'theme', 'install', 'profile', 'engine' ]
+
+grumphp:
+  # Extend timeout, PHPStan is rather slow to scan everything.
+  process_timeout: 120
+  git_hook_variables:
+    EXEC_GRUMPHP_COMMAND: ddev exec php
+  ascii:
+    failed: ~
+    succeeded: ~
+  fixer:
+    enabled: false
+
+  tasks:
+    # Doc: https://github.com/phpro/grumphp/blob/master/doc/tasks/composer.md
+    composer: { }
+
+    # Doc: https://github.com/phpro/grumphp/blob/master/doc/tasks/phpcs.md
+    phpcs:
+      standard: ['./phpcs-ruleset.xml']
+      triggered_by: '%grumphp.tasks.php_extensions%'
+
+    # Doc: https://github.com/phpro/grumphp/blob/master/doc/tasks/phpmd.md
+    phpmd:
+      ruleset: ['./phpmd.xml']
+      triggered_by: '%grumphp.tasks.php_extensions%'
+      metadata:
+        enabled: false
+
+    # Doc: https://github.com/phpro/grumphp/blob/master/doc/tasks/phpstan.md
+    phpstan:
+      configuration: './phpstan.neon'
+      triggered_by: '%grumphp.tasks.php_extensions%'
+
+    # Doc: https://github.com/phpro/grumphp/blob/master/doc/tasks/phplint.md
+    phplint:
+      triggered_by: '%grumphp.tasks.php_extensions%'
+
+    # Doc: https://github.com/phpro/grumphp/blob/master/doc/tasks/yamllint.md
+    yamllint: { }
+
+    # Doc: https://github.com/phpro/grumphp/blob/master/doc/tasks/eslint.md
+    eslint:
+      bin: node_modules/.bin/eslint
+      config: .eslintrc.json
+      no_eslintrc: true
+
+    # Doc: https://github.com/phpro/grumphp/blob/master/doc/tasks/stylelint.md
+    stylelint:
+      bin: node_modules/.bin/stylelint
+      config: .stylelintrc.json

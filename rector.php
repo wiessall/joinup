@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * @file
+ * Rector config file.
+ *
+ * phpcs:ignoreFile
+ */
+
 declare(strict_types=1);
 
 use DrupalFinder\DrupalFinderComposerRuntime;
