@@ -37,9 +37,9 @@ Feature:
       | Pathauto document   | Pathauto document     | Pathauto collection |                   | published |
       | Pathauto document 2 | Pathauto document 2   |                     | Pathauto solution | published |
     And event content:
-      | title            | body             | collection          | solution          | state     |
-      | Pathauto event   | Pathauto event   | Pathauto collection |                   | published |
-      | Pathauto event 2 | Pathauto event 2 |                     | Pathauto solution | published |
+      | title            | field_paragraphs_body | collection          | solution          | state     |
+      | Pathauto event   | Pathauto event        | Pathauto collection |                   | published |
+      | Pathauto event 2 | Pathauto event 2      |                     | Pathauto solution | published |
     And news content:
       | title           | body            | collection          | solution          | state     |
       | Pathauto news   | Pathauto news   | Pathauto collection |                   | published |

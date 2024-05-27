@@ -829,6 +829,7 @@ class JoinupContext extends RawDrupalContext {
       ],
       'event' => [
         'agenda' => 'field_event_agenda',
+        'body' => 'field_paragraphs_body',
         'end date' => 'field_event_date:end_value',
         'keywords' => 'field_keywords',
         'location' => 'field_location',

@@ -19,7 +19,7 @@ Feature:
       | Some news 1 | Interoperable Europe | Some content. | published |
       | Some news 2 | Carousel c1          | Come content. | published |
     And custom_page content:
-      | title         | collection  | state     |
+      | title         | collection           | state     |
       | News carousel | Interoperable Europe | published |
     And I append "carousel" to "field_paragraphs_body" field in "node" entity with following "News carousel" title:
       | content_listing:value | a:6:{s:6:"fields";a:1:{s:20:"content_listing_type";a:2:{s:6:"weight";i:0;s:6:"region";s:3:"top";}}s:7:"enabled";i:1;s:13:"query_presets";s:18:"entity_bundle\|news";s:5:"limit";s:2:"12";s:11:"show_shared";i:0;s:13:"global_search";i:0;} |
@@ -106,10 +106,10 @@ Feature:
 
   Scenario: Test also that events, when listed alone, are sorted by event date.
     Given event content:
-      | title        | collection           | content       | state     | created    | start date | end date   |
-      | Some event 1 | Interoperable Europe | Some content. | published | 2 day ago  | 5 day ago  | 4 day ago  |
-      | Some event 2 | Interoperable Europe | Some content. | published | 3 days ago | 6 days ago | 5 days ago |
-      | Some event 3 | Interoperable Europe | Some content. | published | 1 days ago | 7 days ago | 6 days ago |
+      | title        | collection           | field_paragraphs_body | state     | created    | start date | end date   |
+      | Some event 1 | Interoperable Europe | Some content.         | published | 2 day ago  | 5 day ago  | 4 day ago  |
+      | Some event 2 | Interoperable Europe | Some content.         | published | 3 days ago | 6 days ago | 5 days ago |
+      | Some event 3 | Interoperable Europe | Some content.         | published | 1 days ago | 7 days ago | 6 days ago |
     And custom_page content:
       | title           | collection           | state     |
       | Events carousel | Interoperable Europe | published |
