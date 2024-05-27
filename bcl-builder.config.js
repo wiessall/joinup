@@ -25,6 +25,14 @@ module.exports = {
       },
     },
     {
+      entry: path.resolve(outputFolder, `${ventuno}src/js/alert.js`),
+      dest: path.resolve(outputFolder, `${ventuno}assets/js/alert.js`),
+      options: {
+        minify: true,
+        sourceMap: true,
+      },
+    },
+    {
       entry: path.resolve(outputFolder, `${ventuno}src/js/checkbox.js`),
       dest: path.resolve(outputFolder, `${ventuno}assets/js/checkbox.js`),
       options: {
