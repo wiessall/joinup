@@ -66,6 +66,8 @@ class DevelopersItaliaFetchTest extends FetchTestBase {
       'Creation log entry for Project 1'
     );
 
+    $solutionInitiated = $this->getNodeByTitle('GitHub solution 1');
+
     // Re-run the process and update one solution from a new source-provider.
     $this->fetchSolutions('testing_provider', 4);
 
@@ -79,6 +81,7 @@ class DevelopersItaliaFetchTest extends FetchTestBase {
     $this->assertSame($expected_providers, array_map(fn (array $item): string => $item['plugin_id'], $updatedSolution->get('oss_source')->getValue()));
 
     $this->assertStringContainsString('Update, because data has been changed in "Testing provider" source/catalogue', $updatedSolution->getRevisionLogMessage(), 'Update revision message for GitHub solution 1');
+    $this->assertNotEquals($updatedSolution->getRevisionCreationTime(), $solutionInitiated->getRevisionCreationTime(), 'Revision creation time was not updated');
   }
 
   /**
@@ -87,7 +90,8 @@ class DevelopersItaliaFetchTest extends FetchTestBase {
   public function testArchiveSolution(): void {
     $this->fetchSolutions('removing_solution_provider', 2);
 
-    $this->assertNotFalse($this->getNodeByTitle('GitHub solution 1'));
+    $solutionInitiated = $this->getNodeByTitle('GitHub solution 1');
+    $this->assertNotFalse($solutionInitiated);
     $this->assertNotFalse($this->getNodeByTitle('Project 1.1'));
 
     // Provided no longer has "Project 1.1", so it should be archived.
@@ -98,6 +102,7 @@ class DevelopersItaliaFetchTest extends FetchTestBase {
     $this->assertSame('1', $solutionArchived->get('oss_archived')->getString());
     $this->assertSame(0, $solutionArchived->get('oss_source')->count());
     $this->assertSame('Archive, because removed (not present anymore) from "Removing solution provider" source/catalogue', $solutionArchived->getRevisionLogMessage());
+    $this->assertNotEquals($solutionArchived->getRevisionCreationTime(), $solutionInitiated->getRevisionCreationTime(), 'Revision creation time was not updated');
   }
 
   /**
