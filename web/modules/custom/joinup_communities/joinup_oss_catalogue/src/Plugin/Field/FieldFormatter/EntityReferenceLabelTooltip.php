@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_oss_catalogue\Plugin\Field\FieldFormatter;
 
+use Drupal\Component\Utility\Xss;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\Plugin\Field\FieldFormatter\EntityReferenceLabelFormatter;
@@ -125,7 +126,8 @@ class EntityReferenceLabelTooltip extends EntityReferenceLabelFormatter {
     if ($this->token) {
       $tooltip_text = $this->token->replace($tooltip_text, [$entity->getEntityTypeId() => $entity]);
     }
-    return $tooltip_text;
+    // Remove HTML tags.
+    return Xss::filter($tooltip_text, []);
   }
 
 }
