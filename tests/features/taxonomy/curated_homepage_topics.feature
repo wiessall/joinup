@@ -204,7 +204,7 @@ Feature:
       | Popular quotes | published |
     And I append "text" to "field_paragraphs_body" field in "node" entity with following "Popular Quotes" title:
       | field_body:value  |     That's one small step for a&nbsp;man, a giant leap for mankind. |
-      | field_body:format | text_html                                                      |
+      | field_body:format | text_html                                                           |
     And the following topics are enabled in the homepage:
       | Economy and Welfare     |
       | Info                    |
@@ -314,10 +314,10 @@ Feature:
       | News 3 | News 3   | Test              | published | 03-01-2023 | 01-02-2023 | E-justice |
       | News 4 | News 4   | Should not appear | published | 04-01-2023 | 01-01-2023 | E-health  |
     And event content:
-      | title   | body | start date   | end date    | created    | state     | topic     |
-      | Event 1 | Test | now -8 days  | now -9 days | now -4 day | published | E-justice |
-      | Event 2 | Test | now -9 days  | now -8 days | now -3 day | published | E-justice |
-      | Event 3 | Test | now -10 days | now -7 days | now -5 day | published | E-justice |
+      | title   | field_paragraphs_body | start date   | end date    | created    | state     | topic     |
+      | Event 1 | Test                  | now -8 days  | now -9 days | now -4 day | published | E-justice |
+      | Event 2 | Test                  | now -9 days  | now -8 days | now -3 day | published | E-justice |
+      | Event 3 | Test                  | now -10 days | now -7 days | now -5 day | published | E-justice |
     And the following topics are enabled in the homepage:
       | Economy and Welfare |
       | E-justice           |
