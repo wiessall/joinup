@@ -418,8 +418,8 @@ function joinup_group_rdf_entity_update(EntityInterface $entity) {
       "Contact info was changed on group '%group-label'. Previous contact was '%previous-id', new one is '%new-id'.",
       [
         '%group-label' => $entity->label(),
-        '%previous-id' => $originalField->entity?->label(),
-        '%new-id' => $contactInfoField->entity?->label(),
+        '%previous-id' => $originalField->entity?->id(),
+        '%new-id' => $contactInfoField->entity?->id(),
       ]
     );
   }

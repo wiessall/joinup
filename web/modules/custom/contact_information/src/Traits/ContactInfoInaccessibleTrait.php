@@ -59,9 +59,7 @@ trait ContactInfoInaccessibleTrait {
       ])
     );
 
-    $errorMessage = $contact
-      ? t('No message can be sent to %contact anymore.', ['%contact' => $contact->getName()])
-      : t('No message can be sent to this contact anymore.');
+    $errorMessage = t('Please refresh the page and try again.');
 
     if ($isAjax) {
       return (new AjaxResponse())
