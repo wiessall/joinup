@@ -37,8 +37,6 @@ Feature:
       | title         | Some EIF solution |
       | state         | published         |
       | collection    | EIF Toolbox       |
-      | eif reference | Recommendation 1  |
-      | eif category  | Common services   |
 
     When I go to the "Some EIF solution" solution
     Then I should not see the text "EIF reference"
@@ -52,10 +50,10 @@ Feature:
       | title | EIF Toolbox |
       | state | published   |
     And solutions:
-      | title    | state     | topic      | collection  | eif reference                      |
-      | Balker   | published |            | EIF Toolbox | Recommendation 1, Recommendation 2 |
-      | Corridor | published |            | EIF Toolbox | Recommendation 1                   |
-      | Lager    | published | Demography | EIF Toolbox |                                    |
+      | title    | state     | topic      | collection  |
+      | Balker   | published |            | EIF Toolbox |
+      | Corridor | published |            | EIF Toolbox |
+      | Lager    | published | Demography | EIF Toolbox |
 
     # Underlying Principle 1.
     When I visit the page of the entity having "http://data.europa.eu/Rec1" as RDF resource
