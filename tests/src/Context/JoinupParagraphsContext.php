@@ -640,6 +640,14 @@ class JoinupParagraphsContext extends RawDrupalContext {
     $accountSwitcher = \Drupal::service('account_switcher');
     assert($accountSwitcher instanceof AccountSwitcherInterface);
     $accountSwitcher->switchTo(User::load($uid));
+    Assert::assertArrayHasKey(
+      $type,
+     \Drupal::entityTypeManager()->getStorage('paragraphs_type')->loadMultiple(),
+      sprintf(
+        "The specified paragraphs type '%s' is not available",
+        $type
+      )
+    );
     try {
       $lpTempStore = \Drupal::service('layout_paragraphs.tempstore_repository');
       assert($lpTempStore instanceof LayoutParagraphsLayoutTempstoreRepository);

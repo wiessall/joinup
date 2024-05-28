@@ -16,7 +16,7 @@
         "drupal/addtocal": "^3.0",
         "drupal/allowed_formats": "^3.0",
         "drupal/antibot": "^2.0",
-        "drupal/autologout": "^1.4",
+        "drupal/autologout": "^2.0",
         "drupal/cached_computed_field": "^1.0",
         "drupal/cas": "^2.0",
         "drupal/cas_attributes": "^2.0",
@@ -34,7 +34,7 @@
         "drupal/dynamic_entity_reference": "^4.0",
         "drupal/editor_file": "^2.0",
         "drupal/email_confirmer": "^1.0",
-        "drupal/email_contact": "^2.0",
+        "drupal/email_contact": "^2.0.4",
         "drupal/embed_block": "^1.0",
         "drupal/entity_legal": "^4.0",
         "drupal/entityqueue": "^1.2",
@@ -306,9 +306,6 @@
             "drupal/email_confirmer": {
                 "Support for HTML mails @see https://www.drupal.org/i/3047124": "resources/patch/php/drupal/email_confirmer/3047124.diff"
             },
-            "drupal/email_contact": {
-                "Make ContactForm's variable protected @see https://www.drupal.org/project/email_contact/issues/3427650":  "resources/patch/php/drupal/email_contact/3427650.patch"
-            },
             "drupal/entityqueue": {
                 "Undefined array key \"add_more\" @see https://www.drupal.org/project/entityqueue/issues/3388852": "resources/patch/php/drupal/entityqueue/3388852.diff"
             },
@@ -343,6 +340,9 @@
                 "Disclose flagging view mode in flag theming @see https://www.drupal.org/project/flag/issues/3049155": "resources/patch/php/drupal/flag/3049155-16.patch",
                 "[Drupal 10.2] Deprecated sequence type schema definition @see https://www.drupal.org/i/3410265": "resources/patch/php/drupal/flag/3410265.diff",
                 "[Drupal 10.2] Merge::key() with array is deprecated @see https://www.drupal.org/i/3410363": "resources/patch/php/drupal/flag/3410363.diff"
+            },
+            "drupal/email_contact": {
+                "Upcast parameter in ::accessCheck @see https://drupal.org/i/3449595": "resources/patch/php/drupal/email_contact/3449595.diff"
             },
             "drupal/honeypot": {
                 "Behat integration. @see https://www.drupal.org/project/honeypot/issues/3059040": "resources/patch/php/drupal/honeypot/3059040.patch",

@@ -200,6 +200,7 @@ abstract class ShareForm extends ShareFormBase {
     $current_ids = array_unique($current_ids);
 
     $this->entity->get($this->getSharedOnFieldName())->setValue($current_ids);
+    $this->entity->skip_notification = TRUE;
     $this->entity->save();
 
     $this->invalidator->invalidateTags($group->getCacheTagsToInvalidate());
