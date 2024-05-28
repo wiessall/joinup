@@ -7,6 +7,7 @@ dependencies:
     - filter.format.basic_html
     - filter.format.plain_text_glossary
     - filter.format.simple_text
+    - meta_entity.type.eif_perspective
   module:
     - comment
     - eif
@@ -20,7 +21,6 @@ dependencies:
     - paragraphs_type_permissions
     - poll
     - rdf_entity
-    - rdf_meta_entity
     - search_api_autocomplete
     - sitewide_alert
     - system
@@ -46,8 +46,7 @@ permissions:
   - 'view bookmark_node'
   - 'view bookmark_rdf_entity'
   - 'view compatibility documents'
-  - 'view eif wrapper entity'
-  - 'view eif_perspective rdf-meta-entity'
+  - 'view eif_perspective meta-entity'
   - 'view like_node'
   - 'view like_rdf_entity'
   - 'view media'

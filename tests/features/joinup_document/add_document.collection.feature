@@ -52,7 +52,7 @@ Feature: "Add document" visibility options.
     When I go to the homepage of the "Hunter in the Swords" collection
     And I click "Add document" in the plus button menu
     Then I should see the heading "Add document"
-    And the following fields should be present "Title, Short title, Type, Topic, Search keywords, Geographical coverage, Licence, Description, Upload a new file or enter a URL"
+    And the following fields should be present "Title, Short title, Abstract, Body, Type, Topic, Search keywords, Geographical coverage, Licence, Upload a new file or enter a URL"
     # The entity is new, so the current workflow state should not be shown.
     And the following fields should not be present "Current workflow state, Motivation"
     And the following fields should not be present "Shared on"
@@ -60,6 +60,7 @@ Feature: "Add document" visibility options.
     When I fill in the following:
       | Title       | An amazing document |
       | Short title | Amazing document    |
+      | Abstract    | Amazing document    |
     And I select "Document" from "Type"
     # Regression test: Document is successfully displayed even when a publication date is not set.
     And I clear the date of the "Publication date" widget
@@ -68,10 +69,12 @@ Feature: "Add document" visibility options.
     And I press "Save as draft"
     Then I should see the following error messages:
       | error messages                 |
-      | Description field is required. |
       | Topic field is required.       |
+      | This value should not be null. |
 
-    When I enter "This is going to be an amazing document." in the "Description" wysiwyg editor
+    When I append "text" to "field_paragraphs_body" layout paragraphs field
+      | field_body:value  | This is going to be an amazing document. |
+      | field_body:format | content_editor                           |
     And I select "EU and European Policies" from "Topic"
     And I press "Save as draft"
     Then I should see the heading "An amazing document"
@@ -97,8 +100,8 @@ Feature: "Add document" visibility options.
       | title                 | description                                                         | licence type  |
       | Creative Commons Zero | CC0 is a legal tool for waiving as many rights as legally possible. | Public domain |
     And document content:
-      | title       | document type | short title | file type | file                   | body                 | licence               | state     | collection    |
-      | Laser types | document      | L-Types     | remote    | http://www.example.com | List of laser types. | Creative Commons Zero | published | Strong Lasers |
+      | title       | document type | short title | file type | file                   | abstract | field_paragraphs_body | licence               | state     | collection    |
+      | Laser types | document      | L-Types     | remote    | http://www.example.com | Abstract | List of laser types.  | Creative Commons Zero | published | Strong Lasers |
 
     When I am logged in as a facilitator of the "Strong Lasers" collection
     And I go to the "Laser types" document

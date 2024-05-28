@@ -1313,6 +1313,48 @@ class FeatureContext extends RawDrupalContext {
   }
 
   /**
+   * Checks that multiple lines of text appear on the page in a specific order.
+   *
+   * Provide data in the following format:
+   * | Text 1 |
+   * | Text 2 |
+   * | ...    |
+   *
+   * @param \Behat\Gherkin\Node\TableNode $table
+   *   A list of texts.
+   *
+   * @Then I (should )see the following lines of text in the correct order:
+   */
+  public function assertPageTextOrder(TableNode $table): void {
+    $session = $this->getSession();
+
+    $expected_order = $table->getColumn(0);
+    $actual_text = $session->getPage()->getText();
+
+    $not_found = [];
+    foreach ($expected_order as $substring) {
+      if (!str_contains($actual_text, $substring)) {
+        $not_found[] = "'$substring'";
+      }
+    }
+    if ($not_found) {
+      throw new ElementNotFoundException($session->getDriver(), sprintf('Substring(s): %s', implode(', ', array_unique($not_found))));
+    }
+
+    $actual_order = [];
+    $offset = 0;
+    foreach ($expected_order as $substring) {
+      if (($pos = strpos($actual_text, $substring, $offset)) !== FALSE) {
+        $actual_order[$pos] = $substring;
+        $offset = $pos + strlen($substring);
+      }
+    }
+    ksort($actual_order);
+
+    Assert::assertSame($expected_order, array_values($actual_order), 'Strings found but incorrectly ordered');
+  }
+
+  /**
    * Checks that multiple lines of text are not present on the page.
    *
    * Provide data in the following format:

@@ -42,7 +42,6 @@ Folders having 2 or less test YAML were not checked.
 | `./owner`                 |          00:35 |      35 | group-i                   |
 | `./paragraphs`            |          09:06 |     546 | group-f                   |
 | `./pipeline_log`          |             -- |         | group-i                   |
-| `./rdf_entity_provenance` |             -- |         | group-i                   |
 | `./security`              |             -- |         | group-i                   |
 | `./solution`              |   16:40  10:27 |    1000 | group-g, group-h          |
 | `./taxonomy`              |          07:07 |     427 | group-h                   |

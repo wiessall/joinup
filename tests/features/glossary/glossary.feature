@@ -141,10 +141,10 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
 
   Scenario: Glossary terms should be shown as links in collection content
     Given collection:
-      | title       | Collection With Glossary                                                                             |
-      | state       | published                                                                                            |
+      | title       | Collection With Glossary                                                                          |
+      | state       | published                                                                                         |
       | description | Colors of Paradise. Abbreviated as CLR. <a href="../contact"><strong>Colors of Dream</strong></a> |
-      | abstract    | The Alphabet is back and it's s/ashy.                                                                |
+      | abstract    | The Alphabet is back and it's s/ashy.                                                             |
     And solution:
       | title       | Under The Bridge         |
       | description | No Colors                |
@@ -167,13 +167,16 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
       | title        | content                   | collection               | state     |
       | The Big Talk | The Alphabet. Call it ABC | Collection With Glossary | published |
     And document content:
-      | title             | body             | collection               | state     |
-      | Authentic Papyrus | Alphabet is back | Collection With Glossary | published |
+      | title             | abstract           | collection               | state     |
+      | Authentic Papyrus | Authentic abstract | Collection With Glossary | published |
+    And I append "simple_paragraph" to "field_paragraphs_body" field in "node" entity with following "Authentic Papyrus" title:
+      | field_body:value  | Alphabet is back |
+      | field_body:format | content_editor   |
     And event content:
-      | title      | body                              | solution         | state     |
+      | title      | field_paragraphs_body             | solution         | state     |
       | Soho Night | Any cOLOrs You Like. Maybe colrs? | Under The Bridge | published |
     And news content:
-      | title         | body                                       | solution         | state     |
+      | title         | field_paragraphs_body                      | solution         | state     |
       | Won at Bingo! | aBC is for ALPHABET what CLR is for Colors | Under The Bridge | published |
     And glossary content:
       | title    | synonyms  | summary                  | definition                  | collection               |

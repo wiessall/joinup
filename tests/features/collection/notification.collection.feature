@@ -6,8 +6,8 @@ Feature: Notification test for the collection transitions.
 
   Scenario: Notifications should be sent whenever an event is occurring related to a collection.
     Given the following owner:
-      | name       | type                    |
-      | NC for all | Non-Profit Organisation |
+      | name       | type    |
+      | NC for all | Company |
     And contact_information content:
       | name                       | email                             |
       | Notificationous absolutous | absolute.notification@example.com |

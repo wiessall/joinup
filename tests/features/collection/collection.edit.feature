@@ -6,8 +6,8 @@ Feature: Editing collections
 
   Scenario: Edit a collection
     Given the following owner:
-      | name                 | type                    |
-      | Organisation example | Non-Profit Organisation |
+      | name                 | type    |
+      | Organisation example | Company |
     And contact_information content:
       | name                 | email                            |
       | Collection editorial | collection.editorial@example.com |
@@ -40,8 +40,8 @@ Feature: Editing collections
   Scenario: Edit a collection wysiwyg modal should close.
     # Regression test for ticket ISAICP-7181 and ISAICP-8355.
     Given the following owner:
-      | name            | type                    |
-      | wysiwyg example | Non-Profit Organisation |
+      | name            | type    |
+      | wysiwyg example | Company |
     And contact_information content:
       | name              | email                         |
       | wysiwyg editorial | wysiwyg.editorial@example.com |
@@ -71,8 +71,8 @@ Feature: Editing collections
   Scenario: Regression test wysiwyg add file shows a 0 bytes limit.
     # Regression test for ticket ISAICP-7177.
     Given the following owner:
-      | name                       | type                    |
-      | Regression wysiwyg example | Non-Profit Organisation |
+      | name                       | type    |
+      | Regression wysiwyg example | Company |
     And contact_information content:
       | name            | email                       |
       | bytes editorial | bytes.editorial@example.com |

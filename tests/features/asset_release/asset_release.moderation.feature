@@ -6,8 +6,8 @@ Feature: Asset release moderation
 
   Scenario: Publish, Update, request changes, publish again and delete a release.
     Given the following owner:
-      | name        | type                  |
-      | Kenny Logan | Private Individual(s) |
+      | name        | type    |
+      | Kenny Logan | Company |
     And contact_information content:
       | name       | email                  |
       | SheriMoore | SheriMoore@example.com |
