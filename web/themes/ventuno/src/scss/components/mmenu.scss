@@ -1,0 +1,10 @@
+@import "../partials/core";
+.mm-spn.mm-spn--navbar:after {
+  color: $primary;
+  opacity: 1;
+}
+.mm-spn {
+  a.is-active {
+    font-weight: bold;
+  }
+}
