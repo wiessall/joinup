@@ -85,5 +85,11 @@ SPARQL;
       $index->trackItemsUpdated('entity:rdf_entity', [$id]);
     }
   }
+}
 
+/**
+ * Delete stale page.
+ */
+function joinup_core_deploy_110701(): void {
+  \Drupal::entityTypeManager()->getStorage('node')->load(703013)->delete();
 }
