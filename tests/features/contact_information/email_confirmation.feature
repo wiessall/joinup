@@ -5,8 +5,8 @@ Feature: Resend validation email from collection/solution about page
 
   Scenario: Scenario for Collection and Solution
     Given owner:
-      | name      | type               |
-      | Rotterdam | National authority |
+      | name      | type    |
+      | Rotterdam | Company |
     And the following collection:
       | title       | Rally fanatics          |
       | state       | published               |
@@ -14,15 +14,15 @@ Feature: Resend validation email from collection/solution about page
       | topic       | Demography, E-inclusion |
       | owner       | Rotterdam               |
     And the following solution:
-      | title            | Klop mirubes                                      |
-      | state            | published                                         |
-      | abstract         | Klop mirubes abstact                              |
-      | description      | Klop mirubes desc                                 |
-      | topic            | Demography, E-inclusion                           |
-      | owner            | Rotterdam                                         |
-      | solution type    | Non-binding Instrument, Service Discovery Service |
-      | spatial coverage | Italy, Egypt                                      |
-      | collection       | Rally fanatics                                    |
+      | title            | Klop mirubes                            |
+      | state            | published                               |
+      | abstract         | Klop mirubes abstact                    |
+      | description      | Klop mirubes desc                       |
+      | topic            | Demography, E-inclusion                 |
+      | owner            | Rotterdam                               |
+      | solution type    | Non-binding Instrument, Logging Service |
+      | spatial coverage | Belgium, Greece                         |
+      | collection       | Rally fanatics                          |
     And users:
       | Username         | E-mail                     | First name | Family name |
       | Ferners Lee      | ferners-lee@example.com    | Ferners    | Lee         |

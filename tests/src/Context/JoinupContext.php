@@ -44,7 +44,6 @@ use Drupal\node\Entity\Node;
 use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\og\OgRoleInterface;
 use Drupal\paragraphs\Entity\Paragraph;
-use Drupal\rdf_sync\RdfSyncConnection;
 use GuzzleHttp\Client;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\ExpectationFailedException;
@@ -837,6 +836,7 @@ class JoinupContext extends RawDrupalContext {
       ],
       'event' => [
         'agenda' => 'field_event_agenda',
+        'body' => 'field_paragraphs_body',
         'end date' => 'field_event_date:end_value',
         'keywords' => 'field_keywords',
         'location' => 'field_location',
@@ -2115,29 +2115,31 @@ class JoinupContext extends RawDrupalContext {
   }
 
   /**
-   * Waits until CSS transitions and animations finish.
+   * Waits until Glide animations finish.
    *
    * @param string $seconds
    *   Number of seconds to wait.
    *
-   * @throws \Exception
-   *   Thrown when the element doesn't become visible within the given time.
-   *
-   * @Then I wait up to :seconds seconds for CSS transitions to finish
+   * @Then I wait up to :seconds seconds for Glide animations to finish
    */
-  public function waitForCssAnimations(string $seconds): void {
-    $script = <<<JS
-    (function() {
-      return document.getAnimations({}).length < 1;
-    }());
-JS;
-    $res = $this->getSession()->wait(1000 * $seconds, $script);
-    if (!$res) {
-      throw new \Exception(sprintf(
-        "An element on the page has unfinished CSS transition after '%s' seconds.",
-        $seconds
-      ));
-    }
+  public function waitForGlideAnimations(string $seconds): void {
+    $this->assertWaitJs($seconds, '(function() {
+        return typeof jQuery === "undefined" || jQuery("glide--slider.glide-animating").length === 0;
+    }())');
+  }
+
+  /**
+   * Waits until Slick animations finish.
+   *
+   * @param string $seconds
+   *   Number of seconds to wait.
+   *
+   * @Then I wait up to :seconds seconds for Slick animations to finish
+   */
+  public function waitForSlickAnimations(string $seconds): void {
+    $this->assertWaitJs($seconds, '(function() {
+        return typeof jQuery === "undefined" || jQuery("[data-slick].slick-animating").length === 0;
+    }())');
   }
 
   /**
@@ -2319,17 +2321,6 @@ JS;
   public function iWaitForTheBatchJobToFinish() {
     // The progress bar has the CSS ID '#updateprogress'.
     $this->getSession()->wait(180000, 'jQuery("#updateprogress").length === 0');
-  }
-
-  /**
-   * Wait until a running pipeline batch job has finished.
-   *
-   * @Given I wait for the pipeline batch job to finish
-   */
-  public function iWaitForThePipelineBatchJobToFinish() {
-    while ($this->getSession()->getPage()->find('css', 'meta[http-equiv=\'Refresh\']')) {
-      $this->getSession()->reload();
-    }
   }
 
   /**
@@ -3384,9 +3375,12 @@ JS;
    * @Then the following :graph graph triples should exist in the RDF backend:
    */
   public function assertTriples(string $graph, TableNode $triples): void {
+    /** @var \Drupal\rdf_sync\RdfSyncConnectionInterface $connection */
+    $connection = \Drupal::service('rdf_sync.connection');
+
     $failedTriples = [];
     foreach ($triples->getRows() as [$triple]) {
-      if (!RdfSyncConnection::query("ASK WHERE { GRAPH <$graph> { $triple } }")->getBoolean()) {
+      if (!$connection->query("ASK WHERE { GRAPH <$graph> { $triple } }")->getBoolean()) {
         $failedTriples[] = $triple;
       }
     }

@@ -23,6 +23,7 @@ use Drupal\search_api\SearchApiException;
 use Drupal\search_api_field\Plugin\Field\FieldType\SearchItemInterface;
 use Drupal\search_api_field\Plugin\FilterPluginManagerInterface;
 use Drupal\topic\Entity\Topic;
+use Drupal\topic\Entity\TopicInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -428,33 +429,41 @@ class SearchFormatter extends FormatterBase implements ContainerFactoryPluginInt
         // comma-separated list.
         if ($operator === 'IN') {
           $value = explode(',', $value);
-          $value = array_map('trim', $value);
-          array_walk($value, [$this, 'uriToId'], $field);
+          $value = array_map(function ($item) use ($field) {
+            return $this->convertValuePreset(trim($item), $field);
+          }, $value);
           $value = array_filter($value);
         }
         else {
-          $this->uriToId($value, 0, $field);
+          $value = $this->convertValuePreset($value, $field);
         }
 
-        $query->addCondition($field, $value, $operator);
+        if ($value) {
+          $query->addCondition($field, $value, $operator);
+        }
       }
     }
   }
 
   /**
-   * Provides a callback converting a topic URI to term ID.
+   * Converts the given field value preset.
    *
    * @param mixed $value
-   *   A potential topic URI passed by reference.
-   * @param int $delta
-   *   The value's delta (not used).
+   *   The preset value.
    * @param string $field
    *   The Search API field name.
+   *
+   * @return mixed
+   *   The converted value.
    */
-  protected function uriToId(mixed &$value, int $delta, string $field): void {
+  protected function convertValuePreset(mixed $value, string $field): mixed {
     if ($field === 'topic') {
-      $value = Topic::loadByUri($value)->id();
+      // Try to convert the topic URI to term ID, fallback to NULL.
+      $entity = Topic::loadByUri($value);
+      $value = $entity instanceof TopicInterface ? $entity->id() : NULL;
     }
+
+    return $value;
   }
 
   /**

@@ -42,17 +42,17 @@ Feature:
       | Sitemap news archived                    | Sitemap news | Sitemap news body | Sitemap solution published | archived  | 2 months ago              |
       | Sitemap news published but parent is not | Sitemap news | Sitemap news body | Sitemap solution draft     | published | Sun, 01 Dec 2019 13:00:00 |
     And event content:
-      | title                                     | short title             | body                      | agenda        | location   | organisation        | scope         | solution                   | state     |
+      | title                                     | short title             | field_paragraphs_body     | agenda        | location   | organisation        | scope         | solution                   | state     |
       | Sitemap event draft                       | Sitemap event draft     | It will include fireworks | Event agenda. | Some place | European Commission | International | Sitemap solution published | draft     |
       | Sitemap event published                   | Sitemap event published | It will include fireworks | Event agenda. | Some place | European Commission | International | Sitemap solution published | published |
       | Sitemap event archived                    | Sitemap event archived  | It will include fireworks | Event agenda. | Some place | European Commission | International | Sitemap solution published | archived  |
       | Sitemap event published but parent is not | Sitemap event published | It will include fireworks | Event agenda. | Some place | European Commission | International | Sitemap solution draft     | published |
     And document content:
-      | title                                        | document type | short title                | body         | solution                   | state     |
-      | Sitemap document draft                       | Document      | Sitemap document draft     | Read more... | Sitemap solution published | draft     |
-      | Sitemap document published                   | Document      | Sitemap document published | Read more... | Sitemap solution published | published |
-      | Sitemap document archived                    | Document      | Sitemap document archived  | Read more... | Sitemap solution published | archived  |
-      | Sitemap document published but parent is not | Document      | Sitemap document published | Read more... | Sitemap solution draft     | published |
+      | title                                        | document type | short title                | field_paragraphs_body | solution                   | state     |
+      | Sitemap document draft                       | Document      | Sitemap document draft     | Read more...          | Sitemap solution published | draft     |
+      | Sitemap document published                   | Document      | Sitemap document published | Read more...          | Sitemap solution published | published |
+      | Sitemap document archived                    | Document      | Sitemap document archived  | Read more...          | Sitemap solution published | archived  |
+      | Sitemap document published but parent is not | Document      | Sitemap document published | Read more...          | Sitemap solution draft     | published |
     And discussion content:
       | title                                          | body                  | solution                   | state     |
       | Sitemap discussion draft                       | Wanna discuss this??? | Sitemap solution published | draft     |

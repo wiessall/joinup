@@ -20,7 +20,8 @@ class RdfExportLocalTasks extends DeriverBase implements ContainerDeriverInterfa
 
   public function __construct(
     protected EntityTypeManagerInterface $entityTypeManager,
-    protected RdfSyncMapper $rdfSyncMapper) {
+    protected RdfSyncMapper $rdfSyncMapper,
+  ) {
   }
 
   /**

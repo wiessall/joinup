@@ -50,22 +50,23 @@ class JoinupVersion implements JoinupVersionInterface {
    * {@inheritdoc}
    */
   public function getUrl(): Url {
+    $repo = JoinupVersionInterface::REPO_BASE_URL;
     $version = $this->getVersion();
 
     // If a development version is checked out, return a link to the currently
     // checked out commit.
     if (preg_match('/^.+-\d+-g([a-f0-9]+)$/', $version, $matches) === 1) {
-      return Url::fromUri('https://git.fpfis.eu/digit/digit-joinup-dev/-/commit/' . $matches[1]);
+      return Url::fromUri($repo . '-/commit/' . $matches[1]);
     }
 
     // If the current version could not be determined, return a link to the
     // releases page on repo.
     if ($version === static::UNTAGGED) {
-      return Url::fromUri('https://git.fpfis.eu/digit/digit-joinup-reference/-/tags');
+      return Url::fromUri($repo . '-/releases');
     }
 
     // If a tag is checked out, return a link to the matching release.
-    return Url::fromUri('https://git.fpfis.eu/ec-europa/digit-joinup-reference/-/tags/' . $version);
+    return Url::fromUri($repo . '-/releases/' . $version);
   }
 
 }

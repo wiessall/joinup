@@ -72,7 +72,7 @@ class JoinupEuLoginCasEventsSubscriber implements EventSubscriberInterface {
     RequestStack $requestStack,
     protected MessengerInterface $messenger,
     protected StateInterface $state,
-    protected Authmap $authmap
+    protected Authmap $authmap,
   ) {
     $this->settings = $configFactory->get('joinup_eulogin.settings');
     $this->casSettings = $configFactory->get('cas.settings');

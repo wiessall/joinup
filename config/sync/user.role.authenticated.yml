@@ -16,6 +16,7 @@ dependencies:
     - media.type.file
     - media.type.image
     - media.type.video
+    - meta_entity.type.eif_perspective
     - node.type.document
   module:
     - comment
@@ -27,7 +28,6 @@ dependencies:
     - flag
     - joinup
     - joinup_community_content
-    - joinup_core
     - joinup_licence
     - media
     - meta_entity
@@ -36,7 +36,6 @@ dependencies:
     - paragraphs_type_permissions
     - poll
     - rdf_entity
-    - rdf_meta_entity
     - search_api_autocomplete
     - sitewide_alert
     - state_machine_permissions
@@ -183,8 +182,7 @@ permissions:
   - 'view bookmark_node'
   - 'view bookmark_rdf_entity'
   - 'view compatibility documents'
-  - 'view eif wrapper entity'
-  - 'view eif_perspective rdf-meta-entity'
+  - 'view eif_perspective meta-entity'
   - 'view media'
   - 'view own unpublished content'
   - 'view paragraph content 1_column_layout'

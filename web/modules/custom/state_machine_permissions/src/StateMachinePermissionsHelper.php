@@ -39,7 +39,7 @@ class StateMachinePermissionsHelper implements StateMachinePermissionsHelperInte
     protected EntityFieldManagerInterface $entityFieldManager,
     protected WorkflowGroupManagerInterface $workflowGroupManager,
     protected WorkflowManagerInterface $workflowManager,
-    protected OgAccessInterface $ogAccess
+    protected OgAccessInterface $ogAccess,
   ) {}
 
   /**

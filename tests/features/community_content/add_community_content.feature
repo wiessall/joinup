@@ -77,11 +77,11 @@ Feature: Add community content
       | title             | content         | author    | state | collection          | created    |
       | Sample discussion | Sample content. | Publisher | draft | The afternoon shift | 01-01-2010 |
     And event content:
-      | title        | body            | location          | author    | collection          | state | created    |
-      | Sample event | Sample content. | Buckingham Palace | Publisher | The afternoon shift | draft | 01-01-2010 |
+      | title        | abstract | field_paragraphs_body | location          | author    | collection          | state | created    |
+      | Sample event | abstract | Sample content.       | Buckingham Palace | Publisher | The afternoon shift | draft | 01-01-2010 |
     And news content:
-      | title       | headline    | body            | state | author    | collection          | created    |
-      | Sample news | Sample news | Sample content. | draft | Publisher | The afternoon shift | 01-01-2010 |
+      | title       | headline    | abstract | field_paragraphs_body | state | author    | collection          | created    |
+      | Sample news | Sample news | abstract | Sample content.       | draft | Publisher | The afternoon shift | 01-01-2010 |
 
     When I am logged in as "Publisher"
     And I go to the "Sample <content type>" <content type>
@@ -120,9 +120,8 @@ Feature: Add community content
     # Create a published discussion.
     When I go to the homepage of the "CC container" collection
     And I click "Add discussion" in the plus button menu
-    And I fill in the following:
-      | Title   | Published community discussion |
-      | Content | Published community discussion |
+    And I fill in "Title" with "Published community discussion"
+    When I enter "Published community discussion" in the "Content" wysiwyg editor
     And I select "Supplier exchange" from "Topic"
     And I press "Publish"
     Then I should see the heading "Published community discussion"
@@ -134,9 +133,12 @@ Feature: Add community content
     And I fill in the following:
       | Title       | Published community document |
       | Short title | Published community document |
+      | Abstract    | Document abstract            |
     And I select "Document" from "Type"
     And I select "Supplier exchange" from "Topic"
-    And I enter "Published community document." in the "Description" wysiwyg editor
+    And I append "text" to "field_paragraphs_body" layout paragraphs field
+      | field_body:value  | Published community document body |
+      | field_body:format | content_editor                    |
     And I press "Publish"
     Then I should see the heading "Published community document"
     And the publication date of the "Published community document" document should be equal to the created date
@@ -148,7 +150,10 @@ Feature: Add community content
     And I fill in the following:
       | Title       | Published community event |
       | Short title | Published community event |
-      | Description | Published community event |
+      | Abstract    | Published community event |
+    And I append "text" to "field_paragraphs_body" layout paragraphs field
+      | field_body:value  | Published community event |
+      | field_body:format | content_editor                    |
     And I select "Supplier exchange" from "Topic"
     And I press "Add another item" at the "Virtual location" field
     And I fill the start date of the Date widget with "2018-08-29"
@@ -169,8 +174,11 @@ Feature: Add community content
     Then the following field should not be present "Summary"
     And I fill in the following:
       | Short title | Published community news |
+      | Abstract    | Abstract                 |
       | Headline    | Published community news |
-      | Content     | Published community news |
+    And I append text to field_paragraphs_body layout paragraphs field
+      | field_body:value  | Published community news |
+      | field_body:format | content_editor           |
     And I select "Supplier exchange" from "Topic"
     And I press "Publish"
     Then I should see the heading "Published community news"
@@ -225,8 +233,8 @@ Feature: Add community content
 
     When I am logged in as a "facilitator" of the "The editor tester collection" collection
     And I go to the "The editor tester collection" collection
-    And I click "Add news" in the plus button menu
-    Then I should see the heading "Add news"
+    And I click "Add discussion" in the plus button menu
+    Then I should see the heading "Add discussion"
     And I should see the "Content" wysiwyg editor
 
     When there are no preexisting log records on the site
