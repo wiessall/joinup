@@ -22,21 +22,23 @@ class InputFilterContext extends RawDrupalContext {
   protected string $pcreBacktrackLimit;
 
   /**
-   * Set long body for news page.
+   * Set long body for a preexisting node.
    *
    * @param string $title
-   *   The name of the news page.
+   *   The title of the node.
+   * @param string $type
+   *   The bundle of the node.
    *
-   * @When I set long body of :title news
+   * @When I set long body of :title :type
    *
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
-  public function setLongBodyForNewsPage(string $title): void {
+  public function setLongBodyForNewsPage(string $title, string $type): void {
     $file = rtrim(realpath($this->getMinkParameter('files_path')), DIRECTORY_SEPARATOR)
       . DIRECTORY_SEPARATOR . 'filter.url-input-with-long-data-image.txt';
 
     /** @var \Drupal\node\NodeInterface $node */
-    $node = $this->getEntityByLabel('node', $title, 'news');
+    $node = $this->getEntityByLabel('node', $title, $type);
     $node->body->value = file_get_contents($file);
     $node->save();
   }
