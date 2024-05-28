@@ -1,40 +1,35 @@
 @api @group-c
 Feature: Content archival.
 
-  Scenario Outline: All community content can be archived any time.
+  Scenario: All community content can be archived any time.
     Given collection:
       | title      | Some collection |
       | state      | published       |
       # Set the moderation to yes to be able to access all states.
       # Deletion request is not available in a post moderation workflow.
       | moderation | yes             |
-    Given <type> content:
-      | title       | state   | collection      | body | content | headline    | changed   |
-      | Test <type> | <state> | Some collection | Test | Test    | Test <type> | <changed> |
+    Given discussion content:
+      | title           | state     | collection      | body | content | headline        | changed          |
+      | Test discussion | published | Some collection | Test | Test    | Test discussion | 2017-11-17 20:00 |
     When I am logged in as a moderator
-    And I go to the edit form of the "Test <type>" <type>
+    And I go to the edit form of the "Test discussion" discussion
     Then I should see the button "Archive"
 
     When I press "Archive"
-    Then I should see the message "<type label> Test <type> has been updated."
+    Then I should see the message "Discussion Test discussion has been updated."
     And I should see the text "Archive" in the "Page title" region
-    And I should see "Last update: <visible>"
-    When I go to the edit form of the "Test <type>" <type>
+    And I should see "Last update: 17/11/2017"
+    When I go to the edit form of the "Test discussion" discussion
     Then I should not see the button "Archive"
     And I should see the button "Unarchive"
 
     When I press "Unarchive"
-    Then I should see the message '<type label> "Test <type>" has been unarchived.'
-    And I should see "Last update: <visible>"
+    Then I should see the message 'Discussion "Test discussion" has been unarchived.'
+    And I should see "Last update: 17/11/2017"
     And I should not see the text "Archive" in the "Page title" region
-    When I go to the edit form of the "Test <type>" <type>
+    When I go to the edit form of the "Test discussion" discussion
     Then I should see the button "Archive"
-    And the current workflow state should be "<state label>"
-
-    Examples:
-      | type       | type label | state     | state label | changed          | visible    |
-      | discussion | Discussion | published | Published   | 2017-11-17 20:00 | 17/11/2017 |
-      | news       | News       | published | Published   | 2019-11-13 20:00 | 13/11/2019 |
+    And the current workflow state should be "Published"
 
   Scenario Outline: All community content using layout paragraphs can be archived any time.
     Given collection:
@@ -44,8 +39,8 @@ Feature: Content archival.
       # Deletion request is not available in a post moderation workflow.
       | moderation | yes             |
     And <type> content:
-      | title       | state   | collection      | abstract | content | headline    | changed   | field_paragraphs_body |
-      | Test <type> | <state> | Some collection | Test     | Test    | Test <type> | <changed> | Some text             |
+      | title       | state     | collection      | abstract | content | headline    | changed          | field_paragraphs_body |
+      | Test <type> | published | Some collection | Test     | Test    | Test <type> | 2019-11-12 20:00 | Some text             |
 
     When I am logged in as a moderator
     And I go to the edit form of the "Test <type>" <type>
@@ -54,23 +49,24 @@ Feature: Content archival.
     When I press "Archive"
     Then I should see the message "<type label> Test <type> has been updated."
     And I should see the text "Archive" in the "Page title" region
-    And I should see "Last update: <visible>"
+    And I should see "Last update: 12/11/2019"
     When I go to the edit form of the "Test <type>" <type>
     Then I should not see the button "Archive"
     And I should see the button "Unarchive"
 
     When I press "Unarchive"
     Then I should see the message '<type label> "Test <type>" has been unarchived.'
-    And I should see "Last update: <visible>"
+    And I should see "Last update: 12/11/2019"
     And I should not see the text "Archive" in the "Page title" region
     When I go to the edit form of the "Test <type>" <type>
     Then I should see the button "Archive"
-    And the current workflow state should be "<state label>"
+    And the current workflow state should be "Published"
 
     Examples:
-      | type     | type label | state     | state label | changed          | visible    |
-      | document | Document   | published | Published   | 2019-11-12 20:00 | 12/11/2019 |
-      | event    | Event      | published | Published   | 2019-11-12 20:00 | 12/11/2019 |
+      | type     | type label |
+      | document | Document   |
+      | event    | Event      |
+      | news     | News       |
 
   Scenario Outline: User should not be allowed unarchiving content of an archived solution.
     Given the following solution:
@@ -98,25 +94,23 @@ Feature: Content archival.
       # Set the moderation to yes to be able to access all states.
       # Deletion request is not available in a post moderation workflow.
       | moderation | yes        |
-    Given <type> content:
-      | title       | state   | <group type> | body | content | headline    |
-      | Test <type> | <state> | Some group   | Test | Test    | Test <type> |
+    Given discussion content:
+      | title           | state     | <group type> | body | content | headline        |
+      | Test discussion | published | Some group   | Test | Test    | Test discussion |
     When I am logged in as a facilitator of the "Some group" <group type>
-    And I go to the edit form of the "Test <type>" <type>
+    And I go to the edit form of the "Test discussion" discussion
     Then I should see the button "Archive"
 
     When I press "Archive"
-    Then I should see the message "<type label> Test <type> has been updated."
-    When I go to the edit form of the "Test <type>" <type>
+    Then I should see the message "Discussion Test discussion has been updated."
+    When I go to the edit form of the "Test discussion" discussion
     Then I should not see the button "Archive"
     And I should not see the button "Unarchive"
 
     Examples:
-      | group type | type       | type label | state     |
-      | collection | discussion | Discussion | published |
-      | collection | news       | News       | published |
-      | solution   | discussion | Discussion | published |
-      | solution   | news       | News       | published |
+      | group type |
+      | collection |
+      | solution   |
 
   Scenario Outline: Group facilitators can not unarchived community content which is usgin layout paragraphs
     Given <group type>:
@@ -126,8 +120,8 @@ Feature: Content archival.
       # Deletion request is not available in a post moderation workflow.
       | moderation | yes        |
     Given <type> content:
-      | title       | state   | <group type> | abstract | content | headline    | field_paragraphs_body |
-      | Test <type> | <state> | Some group   | Test     | Test    | Test <type> | Test paragraph        |
+      | title       | state     | <group type> | abstract | content | headline    | field_paragraphs_body |
+      | Test <type> | published | Some group   | Test     | Test    | Test <type> | Test paragraph        |
     When I am logged in as a facilitator of the "Some group" <group type>
     And I go to the edit form of the "Test <type>" <type>
     Then I should see the button "Archive"
@@ -139,8 +133,10 @@ Feature: Content archival.
     And I should not see the button "Unarchive"
 
     Examples:
-      | group type | type     | type label | state     |
-      | collection | document | Document   | published |
-      | collection | event    | Event      | published |
-      | solution   | document | Document   | published |
-      | solution   | event    | Event      | published |
+      | group type | type     | type label |
+      | collection | document | Document   |
+      | collection | event    | Event      |
+      | collection | news     | News       |
+      | solution   | document | Document   |
+      | solution   | event    | Event      |
+      | solution   | news     | News       |
