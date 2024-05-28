@@ -12,8 +12,8 @@ Feature: Collections/Solutions settings
   @uploadFiles:logo.png
   Scenario: Edit settings in a collection
     Given owner content:
-      | name          | owner type              |
-      | Chico example | Non-Profit Organisation |
+      | name          | owner type |
+      | Chico example | Company    |
     And contact_information content:
       | name            | email                       |
       | Chico editorial | chico.editorial@example.com |
@@ -56,7 +56,7 @@ Feature: Collections/Solutions settings
     And I attach the file "logo.png" to "Logo"
     And I select "Flemish" from "Language"
     And I select "EU and European Policies" from "Topic"
-    And I select "Citizen" from "Solution type"
+    And I select "Logging Service" from "Solution type"
 
     And I press "Add existing" at the "Owner" field
     And I fill in "Owner" with "Jonny inc."

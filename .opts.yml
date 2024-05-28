@@ -24,9 +24,9 @@ upgrade_commands:
       - ./vendor/bin/drush cache:rebuild
       - rm disable-config-readonly
 
-php_version: 8.2
+php_version: 8.3
 extra_pkgs:
-  - php8.2-apcu
+  - php8.3-apcu
 
 mysql_version: "8.0"
 mydumper: True

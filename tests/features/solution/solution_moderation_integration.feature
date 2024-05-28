@@ -12,8 +12,8 @@ Feature: As a user of the website
       | name        | email                 |
       | Crusty crab | crabbypatties@bar.com |
     And owner content:
-      | name    | owner type            |
-      | Mr Crab | Private Individual(s) |
+      | name    | owner type |
+      | Mr Crab | Company    |
     And the following solutions:
       | title                | abstract                   | description                | logo     | owner   | contact information | solution type | state        | topic       |
       | Professional Dreams  | Azure ship                 | Azure ship                 | logo.png | Mr Crab | Crusty crab         | Business      | draft        | E-inclusion |

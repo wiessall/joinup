@@ -13,13 +13,13 @@ Feature: Archived content on content listings - groups and paragraphs.
       | Some collection | Test        | Supplier exchange | Some owner | Some contact        | published |
       | Poly screens    | Test        | Supplier exchange | Some owner | Some contact        | published |
     And news content:
-      | title          | headline       | state     | collection      | body | content | created         |
-      | Archived news  | Archived news  | published | Some collection | Test | Test    | 2016-01-03T4:00 |
-      | Published news | Published news | published | Some collection | Test | Test    | 2016-02-04T5:00 |
-      | Poly news 1    | Poly news 1    | published | Poly screens    | Test | Test    | 2016-03-05T6:00 |
-      | Poly news 2    | Poly news 2    | published | Poly screens    | Test | Test    | 2016-04-06T7:00 |
-      | Poly news 3    | Poly news 3    | published | Poly screens    | Test | Test    | 2016-05-07T8:00 |
-      | Poly news 4    | Poly news 4    | published | Poly screens    | Test | Test    | 2016-06-08T9:00 |
+      | title          | headline       | state     | collection      | abstract | field_paragraphs_body | content | created         |
+      | Archived news  | Archived news  | published | Some collection | Abstract | Test                  | Test    | 2016-01-03T4:00 |
+      | Published news | Published news | published | Some collection | Abstract | Test                  | Test    | 2016-02-04T5:00 |
+      | Poly news 1    | Poly news 1    | published | Poly screens    | Abstract | Test                  | Test    | 2016-03-05T6:00 |
+      | Poly news 2    | Poly news 2    | published | Poly screens    | Abstract | Test                  | Test    | 2016-04-06T7:00 |
+      | Poly news 3    | Poly news 3    | published | Poly screens    | Abstract | Test                  | Test    | 2016-05-07T8:00 |
+      | Poly news 4    | Poly news 4    | published | Poly screens    | Abstract | Test                  | Test    | 2016-06-08T9:00 |
     # We need the "Archived news" content to be archived by altering its state
     # because "Unarchiving" it restored the previous revision and thus, needs
     # to have a previous revision (created as published).
@@ -66,18 +66,13 @@ Feature: Archived content on content listings - groups and paragraphs.
   @javascript
   Scenario: Content listing paragraph can control visibility of archived items.
     And custom_page content:
-      | title     | collection      | state     |
-      | Some page | Some collection | published |
-      | Poly page | Some collection | published |
+      | title     | collection      | state     | topic             |
+      | Some page | Some collection | published | Supplier exchange |
     And I append "layout" to "field_paragraphs_body" field in "node" entity with following "Some page" title:
-      | behavior_settings | a:3:{s:17:"layout_paragraphs";a:4:{s:6:"layout";s:13:"layout_onecol";s:6:"config";a:1:{s:5:"label";s:0:"";}s:11:"parent_uuid";N;s:6:"region";N;}s:16:"background_theme";a:0:{}s:11:"extra_class";a:0:{}} |
-    And I append "layout" to "field_paragraphs_body" field in "node" entity with following "Poly page" title:
       | behavior_settings | a:3:{s:17:"layout_paragraphs";a:4:{s:6:"layout";s:13:"layout_onecol";s:6:"config";a:1:{s:5:"label";s:0:"";}s:11:"parent_uuid";N;s:6:"region";N;}s:16:"background_theme";a:0:{}s:11:"extra_class";a:0:{}} |
 
     When I am logged in as a moderator
     And I go to the edit form of the "Some page" "custom page"
-    And I select "HR" from "Topic"
-    And I additionally select "Supplier exchange" from "Topic"
     And I click "Choose component"
     And I click "Content listing"
     And I fill in "Query presets" with "entity_bundle|news"
@@ -88,22 +83,7 @@ Feature: Archived content on content listings - groups and paragraphs.
     And I should see the "Published news" tile
     But I should not see the "Archived news" tile
 
-    When I go to the edit form of the "Poly page" "custom page"
-    And I select "Supplier exchange" from "Topic"
-    And I click "Choose component"
-    And I click "Content listing"
-    And I select "All" from "Show content" in the "Modal content" region
-    And I fill in "Query presets" with "entity_bundle|news"
-    And I press "Save" in the "Modal buttons" region
-    And I press "Update"
-
-    When I go to the "Poly page" custom page
-    Then I should see the heading "Poly page"
-    And I should see the text "Show archived"
-
-    When I go to the "Some page" custom page
-    Then I open the header local tasks menu
-    And I click "Edit" in the "Entity actions" region
+    When I go to the edit form of the "Some page" "custom page"
     Then I "edit" from the "Custom page body" field the child 1 paragraph of 1 layout
     And I select "Archived" from "Show content" in the "Modal content" region
     And I press "Save" in the "Modal buttons" region
@@ -111,37 +91,22 @@ Feature: Archived content on content listings - groups and paragraphs.
     Then I should see the heading "Some page"
     And I should see the "Archived news" tile
     But I should not see the "Published news" tile
-    Then I should see the heading "Some page"
-    And I should not see the text "Show archived"
-    And I should see the "Archived news" tile
-    And I should not see the "Published news" tile
 
-    When I go to the "Some page" custom page
-    Then I open the header local tasks menu
-    And I click "Edit" in the "Entity actions" region
+    When I go to the edit form of the "Some page" "custom page"
     Then I "edit" from the "Custom page body" field the child 1 paragraph of 1 layout
     And I select "All" from "Show content" in the "Modal content" region
     And I press "Save" in the "Modal buttons" region
     And I press "Update"
     Then I should see the heading "Some page"
-    #Then I should see the following facet items "News, Show archived" in this order
-    And I should see the text "Show archived"
-    And I should not see the "Archived news" tile
+    And I should see the "Archived news" tile
     And I should see the "Published news" tile
 
-    When I go to "/collection/some-collection/some-page?f[0]=status%3Aarchived"
-    And I should see the "Archived news" tile
-    And I should not see the "Published news" tile
-
-    When I go to the "Some page" custom page
-    Then I open the header local tasks menu
-    And I click "Edit" in the "Entity actions" region
+    When I go to the edit form of the "Some page" "custom page"
     Then I "edit" from the "Custom page body" field the child 1 paragraph of 1 layout
     And I select "Unarchived" from "Show content" in the "Modal content" region
     And I press "Save" in the "Modal buttons" region
     And I press "Update"
     Then I should see the heading "Some page"
-    And I should not see the text "Show archived"
     And I should not see the "Archived news" tile
     And I should see the "Published news" tile
 

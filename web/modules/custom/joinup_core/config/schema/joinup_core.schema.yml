@@ -77,6 +77,14 @@ field.formatter.settings.filtered_entity_reference_bundles:
       sequence:
         type: string
         label: 'Bundle'
+    trim_length:
+      type: integer
+      label: 'Trim length'
+    trim_chars:
+      # Allow translation.
+      type: label
+      label: 'Trim characters'
+      nullable: true
 
 field.widget.settings.email_legacy_multicardinality:
   type: field.widget.settings.email_default

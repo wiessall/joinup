@@ -48,7 +48,7 @@ class JoinupContentState extends State {
     EntityTypeManagerInterface $entity_type_manager,
     EntityFieldManagerInterface $entity_field_manager,
     protected WorkflowManagerInterface $workflowManager,
-    protected StateMachinePermissionsHelperInterface $stateMachinePermissionsHelper
+    protected StateMachinePermissionsHelperInterface $stateMachinePermissionsHelper,
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $entity_type_manager, $entity_field_manager);
   }

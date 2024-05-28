@@ -1,8 +1,0 @@
-name: Rdf schema field validation
-description: An API that verifies whether the field an RDF entity has, is part of the schema.
-type: module
-package: Rdf entity
-core_version_requirement: ">= 9.4"
-
-dependencies:
-  - rdf_entity:rdf_entity

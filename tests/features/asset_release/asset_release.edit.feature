@@ -28,6 +28,8 @@ Feature: "Edit" visibility options.
       | owner               | Awesome person             |
       | contact information | Awesome contact            |
       | state               | published                  |
+      | creation date       | 2020-11-19 20:45           |
+      | modification date   | 2022-11-19 20:45           |
 
   Scenario: "Edit" button should only be shown to solution facilitators and moderators.
     When I am logged in as a "facilitator" of the "My awesome solution abc" solution
@@ -41,3 +43,5 @@ Feature: "Edit" visibility options.
     When I am an anonymous user
     And I go to the homepage of the "My awesome solution abc v1" release
     Then I should not see the link "Edit" in the optional "Entity actions" region
+    And I should see the text "Published on: 19/11/2020"
+    And I should see the text "Last update: 19/11/2022"

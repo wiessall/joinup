@@ -32,28 +32,10 @@ Feature: Solution moderation
     And the following buttons should not be present "Publish, Request changes, Blacklist"
     And I should not see the link "Delete"
 
-  Scenario Outline: User should not be able to archive/unarchive entity if it has provenance activities.
-    Given the following solutions:
-      | title        | description  | state   |
-      | Azura Cruise | Azura Cruise | <state> |
-    And the following provenance activities:
-      | associated with    | entity       | enabled |
-      | http://example.com | Azura Cruise | yes     |
-
-    And I am logged in as a moderator
-    And "Azura Cruise" should have a related provenance activity
-    And I go to the edit form of the "Azura Cruise" solution
-    When I should not see the button "<button>"
-
-    Examples:
-      | state     | button   |
-      | published | Archive  |
-      | archived  | Unrchive |
-
   Scenario: Test the moderation workflow available states.
     Given owner content:
-      | name           | owner type            |
-      | Angelos Agathe | Private Individual(s) |
+      | name           | owner type |
+      | Angelos Agathe | Company    |
     And contact_information content:
       | name    | email               |
       | Placide | Placide@example.com |

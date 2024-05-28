@@ -286,3 +286,14 @@ function joinup_workflow_entity_presave(EntityInterface $entity): void {
     $entity->set('changed', $entity->original->get('changed')->getValue());
   }
 }
+
+/**
+ * Implements hook_preprocess_page_title().
+ */
+function joinup_workflow_preprocess_page_title(array &$variables): void {
+  $entity = $variables['entity'] ?? NULL;
+
+  if ($entity instanceof ArchivableEntityInterface) {
+    $variables['additional_content']['is_archived'] = $entity->isArchived();
+  }
+}

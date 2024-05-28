@@ -349,8 +349,8 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
       'field_is_description' => $this->randomString(),
       'field_is_state' => 'published',
       'field_is_owner' => $owner->id(),
-      'field_topic' => Topic::loadByUri('http://joinup.eu/ontology/topic#finance-in-eu'),
-      'field_is_solution_type' => MappedTerm::loadByUri('http://data.europa.eu/dr8/ArchitectureBuildingBlock'),
+      'field_topic' => Topic::loadByUri('http://joinup.eu/ontology/topic#finance-in-eu')->id(),
+      'field_is_solution_type' => MappedTerm::loadByUri('http://data.europa.eu/dr8/PublicServiceProvider')->id(),
       'field_is_contact_information' => $contact->id(),
     ]);
     // Releases.

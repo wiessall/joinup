@@ -6,6 +6,7 @@ namespace Drupal\joinup_rdf\EventSubscriber;
 
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
+use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\joinup_rdf\Entity\RdfSyncEntityInterface;
 use Drupal\sparql_entity_storage\Event\InboundValueEvent;
 use Drupal\sparql_entity_storage\Event\OutboundValueEvent;
@@ -41,6 +42,7 @@ class UriIdConversion implements EventSubscriberInterface {
     'rdf_entity:asset_distribution:field_status',
     'rdf_entity:asset_release:field_isr_contact_information',
     'rdf_entity:asset_release:field_isr_language',
+    'rdf_entity:asset_release:field_isr_solution_type',
     'rdf_entity:asset_release:field_spatial_coverage',
     'rdf_entity:asset_release:field_status',
     'rdf_entity:asset_release:field_topic',
@@ -62,6 +64,7 @@ class UriIdConversion implements EventSubscriberInterface {
     'rdf_entity:solution:field_topic',
     'rdf_meta_entity:eif_perspective:eif_layer',
     'rdf_meta_entity:eif_perspective:eif_model',
+    'rdf_meta_entity:eif_perspective:eif_principle',
     'rdf_meta_entity:eif_perspective:field_eif_solution_type',
     'rdf_entity:asset_release:field_isr_owner',
     'rdf_entity:collection:field_ar_owner',
@@ -79,16 +82,28 @@ class UriIdConversion implements EventSubscriberInterface {
   private array $uriToId = [];
 
   /**
+   * Static cache for the ID <-> URI relation.
+   *
+   * Keys are entity types, values are arrays of URIs keyed by entity ID.
+   *
+   * @var array[]
+   */
+  private array $idToURI = [];
+
+  /**
    * Constructs a new event subscriber instance.
    *
    * @param \Drupal\Core\Database\Connection $database
    *   The database connection.
    * @param \Drupal\Core\Entity\EntityFieldManagerInterface $entityFieldManager
    *   The entity field manager service.
+   * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
+   *   The logger channel service.
    */
   public function __construct(
     private readonly Connection $database,
     private readonly EntityFieldManagerInterface $entityFieldManager,
+    private readonly LoggerChannelInterface $logger,
   ) {}
 
   /**
@@ -145,7 +160,14 @@ class UriIdConversion implements EventSubscriberInterface {
         ->fields('rdf_sync_uri', ['entity_type', 'entity_id'])
         ->condition('uri', $uri)
         ->execute()
-        ->fetch(\PDO::FETCH_NUM) ?: NULL;
+        ->fetch(\PDO::FETCH_NUM);
+      if (!$result) {
+        $this->logger->error("Can't find a mapped entity with URI $uri");
+        $result = [NULL, NULL];
+      }
+      else {
+        $this->idToURI[$result[0]][$result[1]] = $uri;
+      }
       $this->uriToId[$uri] = $result;
     }
     return $this->uriToId[$uri][1] ?? NULL;
@@ -167,17 +189,23 @@ class UriIdConversion implements EventSubscriberInterface {
    */
   protected function getUri(string $entityTypeId, int|string|RdfSyncEntityInterface $entity): ?string {
     $id = $entity instanceof RdfSyncEntityInterface ? (string) $entity->id() : (string) $entity;
-    if (($uri = array_search([$entityTypeId, $id], $this->uriToId, TRUE)) === FALSE) {
+    if (!isset($this->idToURI[$entityTypeId][$id])) {
       $uri = $this->database->select('rdf_sync_uri')
         ->fields('rdf_sync_uri', ['uri'])
         ->condition('entity_type', $entityTypeId)
         ->condition('entity_id', $id)
         ->execute()
         ->fetchField() ?: NULL;
+      if (!$uri) {
+        $this->logger->error("Can't find a URI for $entityTypeId entity with ID $id");
+      }
+      else {
+        $this->uriToId[$uri] = [$entityTypeId, $id];
+      }
       // Cache this match.
-      $this->uriToId[$uri] = [$entityTypeId, $id];
+      $this->idToURI[$entityTypeId][$id] = $uri;
     }
-    return $uri;
+    return $this->idToURI[$entityTypeId][$id];
   }
 
   /**

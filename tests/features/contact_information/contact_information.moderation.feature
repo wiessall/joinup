@@ -10,8 +10,8 @@ Feature: Contact Information moderation
       | Sæwine Cynebald       |
       | Secondary facilitator |
     And owner content:
-      | owner type                    | name               |
-      | Non-Governmental Organisation | Anglo-Saxon Museum |
+      | owner type | name               |
+      | Company    | Anglo-Saxon Museum |
     And collection:
       | title       | Games of the Anglo-Saxon age                  |
       | description | There were many different board games played. |

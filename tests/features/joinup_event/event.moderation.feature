@@ -88,7 +88,7 @@ Feature: Event moderation
     When I fill in the following:
       | Title             | Rainbow of Worlds                     |
       | Short title       | Rainbow of Worlds                     |
-      | Description       | This is going to be an amazing event. |
+      | Abstract          | This is going to be an amazing event. |
       | Physical location | Worlds crossroad                      |
     And I fill the start date of the Date widget with "2018-08-30"
     And I fill the start time of the Date widget with "23:59:00"
@@ -148,8 +148,11 @@ Feature: Event moderation
     When I fill in the following:
       | Title             | Rainbow Beach                         |
       | Short title       | Rainbow Beach                         |
-      | Description       | This is going to be an amazing event. |
+      | Abstract          | This is going to be an amazing event. |
       | Physical location | Worlds crossroad                      |
+    And I append "text" to "field_paragraphs_body" layout paragraphs field
+      | field_body:value  | This is going to be an amazing event. |
+      | field_body:format | content_editor                        |
     And I fill the start date of the Date widget with "2018-08-30"
     And I fill the start time of the Date widget with "23:59:00"
     And I fill the end date of the Date widget with "2018-09-01"
@@ -167,7 +170,7 @@ Feature: Event moderation
     When I fill in the following:
       | Title             | Rainbow vinyls                        |
       | Short title       | Rainbow vinyls                        |
-      | Description       | This is going to be an amazing event. |
+      | Abstract          | This is going to be an amazing event. |
       | Physical location | Worlds crossroad                      |
     And I fill the start date of the Date widget with "2018-08-30"
     And I fill the start time of the Date widget with "23:59:00"

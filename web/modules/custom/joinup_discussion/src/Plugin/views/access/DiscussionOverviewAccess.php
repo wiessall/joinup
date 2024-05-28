@@ -40,7 +40,7 @@ class DiscussionOverviewAccess extends AccessPluginBase implements CacheableDepe
     array $configuration,
     string $plugin_id,
     mixed $plugin_definition,
-    protected JoinupGroupManagerInterface $groupManager
+    protected JoinupGroupManagerInterface $groupManager,
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
   }

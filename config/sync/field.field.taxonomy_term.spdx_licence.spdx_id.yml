@@ -5,6 +5,11 @@ dependencies:
   config:
     - field.storage.taxonomy_term.spdx_id
     - taxonomy.vocabulary.spdx_licence
+third_party_settings:
+  rdf_sync:
+    value:
+      predicate: 'http://spdx.org/rdf/terms#licenseId'
+      type: 'xsd:string'
 id: taxonomy_term.spdx_licence.spdx_id
 field_name: spdx_id
 entity_type: taxonomy_term

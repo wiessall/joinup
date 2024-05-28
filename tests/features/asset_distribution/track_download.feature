@@ -7,8 +7,8 @@ Feature: Asset distribution editing.
   @javascript
   Scenario: Downloads made by authenticated users are logged.
     Given licence content:
-      | title            | description                          | licence type |
-      | Postcard licence | Send a postcard from where you live. | Attribution  |
+      | title            | description                          | licence type  |
+      | Postcard licence | Send a postcard from where you live. | Public domain |
     And collection:
       | title | Berkeley Software Distributions |
       | state | published                       |
@@ -27,8 +27,8 @@ Feature: Asset distribution editing.
       | Changelog      | Detailed Changelog          | Winter of 95 | text.pdf                                                    | Postcard licence | published |
       | OpenBSD images | Images for logos and flyers | OpenBSD      | test.zip                                                    | Postcard licence | published |
     And users:
-      | Username           | E-mail                        |
-      | Bradley Emmett     | bradley.emmett@example.com    |
+      | Username       | E-mail                     |
+      | Bradley Emmett | bradley.emmett@example.com |
 
     When I am logged in as "Bradley Emmett"
     And I go to the "Berkeley Software Distributions" collection

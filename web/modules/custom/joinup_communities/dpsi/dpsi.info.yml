@@ -1,5 +1,0 @@
-name: Danish Public Sector Interoperability
-type: module
-description: A module for the Danish Public Sector Interoperability community.
-core_version_requirement: ">= 9.4"
-package: Joinup communities

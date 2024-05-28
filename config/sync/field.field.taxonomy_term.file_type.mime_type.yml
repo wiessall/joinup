@@ -5,6 +5,8 @@ dependencies:
   config:
     - field.storage.taxonomy_term.mime_type
     - taxonomy.vocabulary.file_type
+  module:
+    - rdf_sync
 third_party_settings:
   rdf_sync:
     value:

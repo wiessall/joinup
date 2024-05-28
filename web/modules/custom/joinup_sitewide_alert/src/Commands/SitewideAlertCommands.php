@@ -21,7 +21,8 @@ class SitewideAlertCommands extends DrushCommands {
    *   The entity type manager service.
    */
   public function __construct(
-    public EntityTypeManagerInterface $entityTypeManager) {
+    public EntityTypeManagerInterface $entityTypeManager,
+  ) {
     parent::__construct();
   }
 
