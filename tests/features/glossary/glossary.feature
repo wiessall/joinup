@@ -176,7 +176,7 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
       | title      | field_paragraphs_body             | solution         | state     |
       | Soho Night | Any cOLOrs You Like. Maybe colrs? | Under The Bridge | published |
     And news content:
-      | title         | body                                       | solution         | state     |
+      | title         | field_paragraphs_body                      | solution         | state     |
       | Won at Bingo! | aBC is for ALPHABET what CLR is for Colors | Under The Bridge | published |
     And glossary content:
       | title    | synonyms  | summary                  | definition                  | collection               |
