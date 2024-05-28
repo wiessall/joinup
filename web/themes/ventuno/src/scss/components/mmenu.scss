@@ -1,7 +1,7 @@
 @import "../partials/core";
-.mm-spn.mm-spn--navbar:after {
-  color: $primary;
+.mm-spn.mm-spn--navbar::after {
   opacity: 1;
+  color: $primary;
 }
 .mm-spn {
   a.is-active {
