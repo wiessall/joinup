@@ -16,20 +16,20 @@ Feature: Global search
       | Spherification | Molecular cooking collection | Spherification is the culinary process of shaping a liquid into spheres                                                              | Demography | European Union   | published |
       | Foam           | Molecular cooking collection | "The use of foam in cuisine has been used in many forms in the history of cooking:whipped cream, meringue, and mousse are all foams" | eGov       |                  | published |
     And news content:
-      | title                | headline              | body             | collection                   | topic                   | spatial coverage | state     |
-      | El Tuba de Los Lobos | El Celler de Can Roca | The best in town | Molecular cooking collection | Statistics and Analysis | Luxembourg       | published |
-      | Dummy news 1         | Dummy title 1         | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | published |
-      | Dummy news 2         | Dummy title 2         | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | published |
-      | Dummy news 3         | Dummy title 3         | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | published |
-      | Dummy news 4         | Dummy title 4         | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | published |
+      | title                | headline              | field_paragraphs_body | collection                   | topic                   | spatial coverage | state     |
+      | El Tuba de Los Lobos | El Celler de Can Roca | The best in town      | Molecular cooking collection | Statistics and Analysis | Luxembourg       | published |
+      | Dummy news 1         | Dummy title 1         | Dummy body            | Molecular cooking collection | E-inclusion             | Luxembourg       | published |
+      | Dummy news 2         | Dummy title 2         | Dummy body            | Molecular cooking collection | E-inclusion             | Luxembourg       | published |
+      | Dummy news 3         | Dummy title 3         | Dummy body            | Molecular cooking collection | E-inclusion             | Luxembourg       | published |
+      | Dummy news 4         | Dummy title 4         | Dummy body            | Molecular cooking collection | E-inclusion             | Luxembourg       | published |
 
     When I visit the search page
     Then the response should not contain "data-drupal-facet-id=\"status\""
 
     # Create some archived content too.
     Given news content:
-      | title      | headline    | body       | collection                   | topic       | spatial coverage | state    |
-      | Rummy news | Rummy title | Dummy body | Molecular cooking collection | E-inclusion | Luxembourg       | archived |
+      | title      | headline    | field_paragraphs_body | collection                   | topic       | spatial coverage | state    |
+      | Rummy news | Rummy title | Dummy body            | Molecular cooking collection | E-inclusion | Luxembourg       | archived |
     And event content:
       | title       | field_paragraphs_body | collection                   | topic       | spatial coverage | state    |
       | Rummy event | Dummy body            | Molecular cooking collection | E-inclusion | Luxembourg       | archived |
@@ -242,7 +242,7 @@ Feature: Global search
       | title         | description                         |
       | Licence Alpha | A beta description for the licence. |
     And news content:
-      | title      | headline            | body                      | keywords | collection       | state     |
+      | title      | headline            | field_paragraphs_body     | keywords | collection       | state     |
       | News omega | News headline delta | The epsilon news content. | Alphabet | Collection alpha | published |
     And event content:
       | title             | short title       | abstract                                         | field_paragraphs_body               | agenda         | location       | organisation        | scope         | keywords | collection       | solution       | state     |
@@ -369,7 +369,7 @@ Feature: Global search
       | title           | body                                  | collection                      | state     |
       | Disturbed birds | Flocks of trained pigeons flying off. | Ornithology: the study of birds | published |
     And news content:
-      | title                               | headline                            | body                            | collection                      | state     |
+      | title                               | headline                            | field_paragraphs_body           | collection                      | state     |
       | Chickens are small birds            | Chickens are small birds            | Birds domesticated in India.    | Ornithology: the study of birds | published |
       | Found a xylophone from 1600 in Asia | Found a xylophone from 1600 in Asia | Oldest instrument of this type. | Husky Flying Xylophone          | published |
     And event content:
@@ -601,7 +601,7 @@ Feature: Global search
       | title             | description       | state     |
       | Custom collection | Some custom data. | published |
     And news content:
-      | title               | headline                           | body                                                              | collection        | state     | created    | changed    |
+      | title               | headline                           | field_paragraphs_body                                             | collection        | state     | created    | changed    |
       | Quantum information | Relativity is the word             | No one cares about the body.                                      | Custom collection | published | 01/01/2019 | 03/08/2019 |
       | The uneven universe | Relativity news: Relativity theory | I do care about the relativity keyword in the body.               | Custom collection | published | 02/01/2019 | 02/08/2019 |
       | The earth is square | Absolutely nonsense                | Some news are not worth it but I will add relativity here anyway. | Custom collection | published | 03/01/2019 | 01/08/2019 |
@@ -644,12 +644,12 @@ Feature: Global search
       | Spheres  | Radio cooking collection | Spherification is the culinary process of shaping a liquid into spheres                                                              | Demography | European Union   | published |
       | Movistar | Radio cooking collection | "The use of foam in cuisine has been used in many forms in the history of cooking:whipped cream, meringue, and mousse are all foams" |            |                  | published |
     And news content:
-      | title           | body             | collection               | topic                   | spatial coverage | state     |
-      | El Cabo da Roca | The best in town | Radio cooking collection | Statistics and Analysis | Luxembourg       | published |
-      | Funny news 1    | Dummy body       | Radio cooking collection | E-inclusion             | Luxembourg       | published |
-      | Funny news 2    | Dummy body       | Radio cooking collection | E-inclusion             | Luxembourg       | published |
-      | Funny news 3    | Dummy body       | Radio cooking collection | E-inclusion             | Luxembourg       | published |
-      | Funny news 4    | Dummy body       | Radio cooking collection | E-inclusion             | Luxembourg       | published |
+      | title           | field_paragraphs_body | collection               | topic                   | spatial coverage | state     |
+      | El Cabo da Roca | The best in town      | Radio cooking collection | Statistics and Analysis | Luxembourg       | published |
+      | Funny news 1    | Dummy body            | Radio cooking collection | E-inclusion             | Luxembourg       | published |
+      | Funny news 2    | Dummy body            | Radio cooking collection | E-inclusion             | Luxembourg       | published |
+      | Funny news 3    | Dummy body            | Radio cooking collection | E-inclusion             | Luxembourg       | published |
+      | Funny news 4    | Dummy body            | Radio cooking collection | E-inclusion             | Luxembourg       | published |
 
     Given I am logged in as a user with the "authenticated" role
     When I visit the search page
@@ -683,7 +683,7 @@ Feature: Global search
       | Spheres  | Radio cooking collection | Spherification is the culinary process of shaping a liquid into spheres. Drupal is the best digital experience platform(DXP) on the web, proudly open source. | Demography | European Union   | published |
       | Movistar | Radio cooking collection | "The use of foam in cuisine has been used in many forms in the history of cooking:whipped cream, meringue, and mousse are all foams", proudly open source.    |            |                  | published |
     And news content:
-      | title           | body                                                                                 | collection               | topic                   | spatial coverage | state     |
+      | title           | field_paragraphs_body                                                                | collection               | topic                   | spatial coverage | state     |
       | El Cabo da Roca | The best in town, proudly open source.                                               | Radio cooking collection | Statistics and Analysis | Luxembourg       | published |
       | Funny news 1    | Drupal is the best digital experience platform(DXP) on the web, proudly open source. | Radio cooking collection | E-inclusion             | Luxembourg       | published |
       | Funny news 2    | Drupal is the best digital experience platform(DXP) on the web, proudly open source. | Radio cooking collection | E-inclusion             | Luxembourg       | published |
