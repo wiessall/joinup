@@ -298,6 +298,7 @@ mmenu:
   css:
     theme:
       assets/lib/mmenu-light/mmenu-light.css: { minified: true }
+      assets/css/mmenu.min.css: { minified: true }
   dependencies:
     - core/drupal
     - core/once

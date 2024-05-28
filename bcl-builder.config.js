@@ -706,6 +706,18 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
+        `${ventuno}src/scss/components/mmenu.scss`
+      ),
+      dest: path.resolve(outputFolder, `${ventuno}assets/css/mmenu.min.css`),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(
+        outputFolder,
         `${ventuno}src/scss/components/navbar-search.scss`
       ),
       dest: path.resolve(
