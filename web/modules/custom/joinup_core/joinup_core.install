@@ -103,8 +103,8 @@ function joinup_core_requirements($phase): array {
  * phpcs:disable QualityAssurance.InstallFiles.FunctionDeclarations.NonHookFound,CodingStandards.NamingConventions.ValidUpdateName.InvalidUpdateId
  */
 function joinup_core_update_dependencies(): array {
-  $dependencies['joinup_core'][110601] = [
-    'joinup_core' => 110600,
+  $dependencies['joinup_core'][110701] = [
+    'joinup_core' => 110700,
   ];
 
   return $dependencies;
@@ -113,9 +113,9 @@ function joinup_core_update_dependencies(): array {
 // phpcs:enable
 
 /**
- * Installs Layout Paragraphs body for document and event content types.
+ * Installs Layout Paragraphs body for news content type.
  */
-function joinup_core_update_110600(): void {
+function joinup_core_update_110700(): void {
   $configManager = \Drupal::service('config.manager');
   assert($configManager instanceof ConfigManagerInterface);
   $source = new FileStorage(Settings::get('config_sync_directory'));
@@ -130,7 +130,7 @@ function joinup_core_update_110600(): void {
     $storage->createFromStorageRecord($configData)->save();
   }
 
-  foreach (['event'] as $contentType) {
+  foreach (['news'] as $contentType) {
     $fieldConfigId = "node.$contentType.$layoutParagraphsField";
     if (!$entityTypeManager->getStorage('field_config')->load($fieldConfigId)) {
       $configData = $source->read("field.field.$fieldConfigId");
@@ -144,10 +144,10 @@ function joinup_core_update_110600(): void {
 /**
  * Transform node body text field to paragraphs.
  */
-function joinup_core_update_110601(array &$sandbox): string {
+function joinup_core_update_110701(array &$sandbox): string {
   $updateHelper = \Drupal::classResolver(UpdateHelper::class);
   assert($updateHelper instanceof UpdateHelper);
   return $updateHelper->transformNodeBodyToLayoutParagraphs($sandbox, [
-    'event',
+    'news',
   ]);
 }
