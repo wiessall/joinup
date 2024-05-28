@@ -11,7 +11,6 @@ use Drupal\Component\Serialization\Json;
 use Drupal\joinup_taxonomy\Entity\MappedTerm;
 use Drupal\node\Entity\Node;
 use Drupal\rdf_sync\Model\SyncMethod;
-use EasyRdf\Graph;
 
 /**
  * Migrate owners to nodes.
