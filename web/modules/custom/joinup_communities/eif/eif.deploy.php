@@ -13,11 +13,10 @@ declare(strict_types=1);
 function eif_deploy_110700(): void {
   // Retrieve EIF Perspective menu links from the same menu having the same uri.
   $query = \Drupal::database()->select('menu_link_content_data', 'd')
-    ->fields('d', ['link__uri', 'menu_name'])
+    ->fields('d', ['menu_name'])
     ->condition('d.title', 'EIF Perspective');
   $query->addExpression('GROUP_CONCAT(d.id ORDER BY d.id)', 'ids');
-  $query->groupBy('d.link__uri')
-    ->groupBy('d.menu_name')
+  $query->groupBy('d.menu_name')
     ->having('COUNT(d.id) > 1');
   $links = $query->execute()->fetchAll();
 
@@ -27,9 +26,6 @@ function eif_deploy_110700(): void {
     // Keep the first, delete the others.
     array_pop($ids);
 
-    $menu_links = $storage->loadMultiple($ids);
-    foreach ($menu_links as $menu_link) {
-      $menu_link->delete();
-    }
+    $storage->delete($storage->loadMultiple($ids));
   }
 }
