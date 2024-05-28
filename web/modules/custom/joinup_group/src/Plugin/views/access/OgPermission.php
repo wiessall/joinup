@@ -25,7 +25,7 @@ use Symfony\Component\Routing\Route;
  *   id = "og_permission",
  *   title = @Translation("OG permission"),
  *   help = @Translation("Access will be granted to users with the specified
- *   permission string in grouop or site wide.")
+ *   permission string in group or site wide.")
  * )
  */
 class OgPermission extends AccessPluginBase implements CacheableDependencyInterface {

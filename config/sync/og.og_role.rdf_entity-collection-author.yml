@@ -12,6 +12,7 @@ group_type: rdf_entity
 group_bundle: collection
 is_admin: null
 permissions:
+  - 'access glossary data export'
   - 'delete own comments'
   - 'delete own custom_page content'
   - 'delete own discussion content'
