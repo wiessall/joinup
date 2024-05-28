@@ -554,8 +554,6 @@ class SolutionContext extends RawDrupalContext {
       'creation date' => 'created',
       'description' => 'field_is_description',
       'documentation' => 'field_is_documentation',
-      'eif reference' => 'field_is_eif_recommendation',
-      'eif category' => 'field_is_eif_category',
       'keywords' => 'field_keywords',
       'landing page' => 'field_is_landing_page',
       'language' => 'field_is_language',
@@ -617,14 +615,6 @@ class SolutionContext extends RawDrupalContext {
     ];
 
     $eif_categories = array_flip(EifInterface::EIF_CATEGORIES);
-    if (isset($fields['field_is_eif_category'])) {
-      $labels = $this->explodeCommaSeparatedStepArgument($fields['field_is_eif_category']);
-      $values = [];
-      foreach ($labels as $label) {
-        $values[] = $eif_categories[$label];
-      }
-      $fields['field_is_eif_category'] = implode(',', $values);
-    }
 
     foreach ($fields as $field => $value) {
       if (isset($mapped_values[$field])) {

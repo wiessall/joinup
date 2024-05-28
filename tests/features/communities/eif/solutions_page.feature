@@ -11,8 +11,8 @@ Feature: As a user, visiting the EIF Toolbox page, I want to be able to filter
       | title | Parent    |
       | state | published |
     And solutions:
-      | title      | eif reference                      | eif category    | collection | state     |
-      | Solution 1 | Recommendation 1, Recommendation 2 | Common services | Parent     | published |
+      | title      | collection | state     |
+      | Solution 1 | Parent     | published |
 
     When I go to "/collection/nifo-collection/solution/eif-toolbox/solutions"
     Then I should see the following tiles in the correct order:
@@ -28,9 +28,9 @@ Feature: As a user, visiting the EIF Toolbox page, I want to be able to filter
     And I should not see the link "Semantic assets" in the "Content" region
 
     Given solutions:
-      | title      | eif reference    | eif category                      | collection | state     | owner |
-      | Solution 2 | Recommendation 4 | Common services, Assessment tools | Parent     | published |       |
-      | Solution 3 |                  |                                   | Parent     | published | ACME  |
+      | title      | collection | state     | owner |
+      | Solution 2 | Parent     | published |       |
+      | Solution 3 | Parent     | published | ACME  |
 
     When I reload the page
     Then the page should not be cached
@@ -113,19 +113,19 @@ Feature: As a user, visiting the EIF Toolbox page, I want to be able to filter
 
     # Test the pager.
     Given solutions:
-      | title       | eif reference    | eif category    | collection | state     |
-      | Solution 3  | Recommendation 4 | Common services | Parent     | published |
-      | Solution 4  | Recommendation 4 | Common services | Parent     | published |
-      | Solution 5  | Recommendation 4 | Common services | Parent     | published |
-      | Solution 6  | Recommendation 4 | Common services | Parent     | published |
-      | Solution 7  | Recommendation 4 | Common services | Parent     | published |
-      | Solution 8  | Recommendation 4 | Common services | Parent     | published |
-      | Solution 9  | Recommendation 4 | Common services | Parent     | published |
-      | Solution 10 | Recommendation 4 | Common services | Parent     | published |
-      | Solution 11 | Recommendation 4 | Common services | Parent     | published |
-      | Solution 12 | Recommendation 4 | Common services | Parent     | published |
-      | Solution 13 | Recommendation 4 | Common services | Parent     | published |
-      | Solution 14 | Recommendation 4 | Common services | Parent     | published |
+      | title       | collection | state     |
+      | Solution 3  | Parent     | published |
+      | Solution 4  | Parent     | published |
+      | Solution 5  | Parent     | published |
+      | Solution 6  | Parent     | published |
+      | Solution 7  | Parent     | published |
+      | Solution 8  | Parent     | published |
+      | Solution 9  | Parent     | published |
+      | Solution 10 | Parent     | published |
+      | Solution 11 | Parent     | published |
+      | Solution 12 | Parent     | published |
+      | Solution 13 | Parent     | published |
+      | Solution 14 | Parent     | published |
 
     When I reload the page
     Then I should see the following tiles in the correct order:
@@ -168,9 +168,9 @@ Feature: As a user, visiting the EIF Toolbox page, I want to be able to filter
       | title | Parent    |
       | state | published |
     And solutions:
-      | title      | eif reference    | eif category     | collection | state     |
-      | Solution 1 | Recommendation 4 | Assessment tools | Parent     | published |
-      | Solution 2 | Recommendation 4 | Common services  | Parent     | published |
+      | title      | collection | state     |
+      | Solution 1 | Parent     | published |
+      | Solution 2 | Parent     | published |
 
     When I am an anonymous user
     And I go to "/collection/nifo-collection/solution/eif-toolbox/solutions"
