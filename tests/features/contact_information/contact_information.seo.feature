@@ -36,7 +36,7 @@ Feature: Contant Information entities don't cause exceptions because of their in
     # Owner is required.
     And I press "Add new owner"
     And I fill in "Name" with "Ms. Jane Doe PHD"
-    And I check "Non-Profit Organisation"
+    And I check "Company"
     And I press "Create owner"
 
     # Add the contact information entity.

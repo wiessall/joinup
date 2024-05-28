@@ -1,6 +1,0 @@
-uuid: 857366b9-374e-45c4-8bfd-7ca136ef447d
-langcode: en
-status: true
-dependencies: {  }
-id: recommendation
-label: 'Qualified concept recommendation'

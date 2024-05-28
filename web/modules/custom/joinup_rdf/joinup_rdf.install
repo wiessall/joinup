@@ -40,64 +40,9 @@ function joinup_rdf_requirements(string $phase): array {
 }
 
 /**
- * Delete SPDX Licence & Licence RDF entities.
- */
-function joinup_rdf_update_110500(): void {
-  // Save licences in a temporary file because we need to delete the content
-  // prior to delete the bundle configs. Data will be restored later, in a
-  // deploy hook.
-  $store = \Drupal::getContainer()->get('joinup_sparql.graph_store.helper')->createGraphStore();
-  $licences = $store->get('http://joinup.eu/licence/published')->toRdfPhp();
-  file_put_contents('private://licences', Json::encode($licences));
-  $sparql = \Drupal::getContainer()->get('sparql.endpoint');
-  $sparql->update("CLEAR GRAPH <http://joinup.eu/spdx_licence/published>;");
-  $sparql->update("CLEAR GRAPH <http://joinup.eu/licence/published>;");
-}
-
-/**
- * Store document > licence data.
- */
-function joinup_rdf_update_110501(): void {
-  $db = \Drupal::database();
-  $documentToLicence = $db->select('node__field_licence', 'l')
-    ->fields('l', ['entity_id', 'field_licence_target_id'])
-    ->execute()
-    ->fetchAllKeyed();
-  file_put_contents('private://document_to_licence', Json::encode($documentToLicence));
-  $db->truncate('node__field_licence')->execute();
-  $db->truncate('node_revision__field_licence')->execute();
-}
-
-/**
- * Delete leftover path aliases of licence RDF entities.
- */
-function joinup_rdf_update_110502(&$sandbox): string {
-  if (!isset($sandbox['ids'])) {
-    $sandbox['ids'] = \Drupal::database()->select('path_alias', 'pa')
-      ->fields('pa', ['id'])
-      ->condition('pa.alias', '/licence/%', 'LIKE')
-      ->execute()
-      ->fetchAllKeyed(0, 0);
-    $sandbox['processed'] = 0;
-    $sandbox['total'] = count($sandbox['ids']);
-  }
-
-  $idsToDelete = array_slice($sandbox['ids'], $sandbox['processed'], 50);
-  $aliasStorage = \Drupal::entityTypeManager()->getStorage('path_alias');
-
-  $aliasStorage->delete($aliasStorage->loadMultiple($idsToDelete));
-
-  $deletedCount = count($idsToDelete);
-  $sandbox['processed'] += $deletedCount;
-  $sandbox['#finished'] = $sandbox['processed'] / $sandbox['total'];
-
-  return "Deleted $deletedCount licence aliases ({$sandbox['processed']} / {$sandbox['total']}) total";
-}
-
-/**
  * Delete Owner RDF entities.
  */
-function joinup_rdf_update_110503(): void {
+function joinup_rdf_update_110700(): void {
   // Save owners in a temporary file because we need to delete the content
   // prior to delete the bundle configs. Data will be restored later, in a
   // deploy hook.
@@ -113,14 +58,14 @@ function joinup_rdf_update_110503(): void {
 /**
  * Uninstall the `contact_information` `rdf_entity` bundle.
  */
-function joinup_rdf_update_110504(): void {
+function joinup_rdf_update_110701(): void {
   \Drupal::entityTypeManager()->getStorage('rdf_type')->load('contact_information')->delete();
 }
 
 /**
  * Re run user_update_10000.
  */
-function joinup_rdf_update_110505(): void {
+function joinup_rdf_update_110702(): void {
   require_once DRUPAL_ROOT . '/core/modules/user/user.install';
   user_update_10000();
 }

@@ -55,6 +55,16 @@ import ControlsDisabler from "./helpers/glide.controlsDisabler.esm";
         backward.addEventListener("click", () => {
           glide.go("<");
         });
+
+        // Event listener to add class when animating.
+        // Used in behat to detect when Glide finished animating.
+        glide
+          .on("move", () => {
+            slide.classList.add("glide-animating");
+          })
+          .on("move.after", () => {
+            slide.classList.remove("glide-animating");
+          });
       });
     },
   };

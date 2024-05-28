@@ -18,6 +18,7 @@ dependencies:
     - media.type.video
     - node.type.custom_page
     - node.type.discussion
+    - meta_entity.type.eif_perspective
     - node.type.document
     - node.type.event
     - node.type.news
@@ -40,8 +41,6 @@ dependencies:
     - paragraphs_type_permissions
     - poll
     - rdf_entity
-    - rdf_export
-    - rdf_meta_entity
     - search_api_autocomplete
     - sitewide_alert
     - state_machine_permissions
@@ -189,8 +188,7 @@ permissions:
   - 'view bookmark_node'
   - 'view bookmark_rdf_entity'
   - 'view compatibility documents'
-  - 'view eif wrapper entity'
-  - 'view eif_perspective rdf-meta-entity'
+  - 'view eif_perspective meta-entity'
   - 'view media'
   - 'view own unpublished content'
   - 'view paragraph content 1_column_layout'

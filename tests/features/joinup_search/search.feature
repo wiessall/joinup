@@ -16,26 +16,26 @@ Feature: Global search
       | Spherification | Molecular cooking collection | Spherification is the culinary process of shaping a liquid into spheres                                                              | Demography | European Union   | published |
       | Foam           | Molecular cooking collection | "The use of foam in cuisine has been used in many forms in the history of cooking:whipped cream, meringue, and mousse are all foams" | eGov       |                  | published |
     And news content:
-      | title                | headline              | body             | collection                   | topic                   | spatial coverage | state     |
-      | El Tuba de Los Lobos | El Celler de Can Roca | The best in town | Molecular cooking collection | Statistics and Analysis | Luxembourg       | published |
-      | Dummy news 1         | Dummy title 1         | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | published |
-      | Dummy news 2         | Dummy title 2         | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | published |
-      | Dummy news 3         | Dummy title 3         | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | published |
-      | Dummy news 4         | Dummy title 4         | Dummy body       | Molecular cooking collection | E-inclusion             | Luxembourg       | published |
+      | title                | headline              | field_paragraphs_body | collection                   | topic                   | spatial coverage | state     |
+      | El Tuba de Los Lobos | El Celler de Can Roca | The best in town      | Molecular cooking collection | Statistics and Analysis | Luxembourg       | published |
+      | Dummy news 1         | Dummy title 1         | Dummy body            | Molecular cooking collection | E-inclusion             | Luxembourg       | published |
+      | Dummy news 2         | Dummy title 2         | Dummy body            | Molecular cooking collection | E-inclusion             | Luxembourg       | published |
+      | Dummy news 3         | Dummy title 3         | Dummy body            | Molecular cooking collection | E-inclusion             | Luxembourg       | published |
+      | Dummy news 4         | Dummy title 4         | Dummy body            | Molecular cooking collection | E-inclusion             | Luxembourg       | published |
 
     When I visit the search page
     Then the response should not contain "data-drupal-facet-id=\"status\""
 
     # Create some archived content too.
     Given news content:
-      | title      | headline    | body       | collection                   | topic       | spatial coverage | state    |
-      | Rummy news | Rummy title | Dummy body | Molecular cooking collection | E-inclusion | Luxembourg       | archived |
+      | title      | headline    | field_paragraphs_body | collection                   | topic       | spatial coverage | state    |
+      | Rummy news | Rummy title | Dummy body            | Molecular cooking collection | E-inclusion | Luxembourg       | archived |
     And event content:
-      | title       | body       | collection                   | topic       | spatial coverage | state    |
-      | Rummy event | Dummy body | Molecular cooking collection | E-inclusion | Luxembourg       | archived |
+      | title       | field_paragraphs_body | collection                   | topic       | spatial coverage | state    |
+      | Rummy event | Dummy body            | Molecular cooking collection | E-inclusion | Luxembourg       | archived |
     And document content:
-      | title          | document type | short title          | body       | collection                   | topic       | spatial coverage | state    |
-      | Rummy document | Document      | Rummy document short | Dummy body | Molecular cooking collection | E-inclusion | Luxembourg       | archived |
+      | title          | document type | short title          | field_paragraphs_body | collection                   | topic       | spatial coverage | state    |
+      | Rummy document | Document      | Rummy document short | Dummy body            | Molecular cooking collection | E-inclusion | Luxembourg       | archived |
     And discussion content:
       | title            | body       | collection                   | topic       | spatial coverage | state    |
       | Rummy discussion | Dummy body | Molecular cooking collection | E-inclusion | Luxembourg       | archived |
@@ -197,11 +197,11 @@ Feature: Global search
       | Collection alpha | <p>collection <strong>beta</strong> description.</p> | The collection gamma abstract. | published |
       | Col for Sol      | <p>collection for the solution.</p>                  | The col for sol abstract.      | published |
     And event content:
-      | title             | short title       | body                                | spatial coverage | agenda         | location       | organisation        | scope         | keywords | collection       | state     |
+      | title             | short title       | field_paragraphs_body               | spatial coverage | agenda         | location       | organisation        | scope         | keywords | collection       | state     |
       | Event Omega       | Event short delta | The epsilon event content.          | Greece           | Event agenda.  | Some place     | European Commission | International | Alphabet | Collection alpha | published |
       | Alternative event | Alt event         | This event stays in the background. | Luxembourg       | To be planned. | Event location | Event organisation  |               |          | Collection alpha | published |
     And document content:
-      | title          | document type | short title          | body                                    | spatial coverage | keywords | collection       | state     |
+      | title          | document type | short title          | field_paragraphs_body                   | spatial coverage | keywords | collection       | state     |
       | Document omega | Document      | Document short delta | A document consists of epsilon strings. | Luxembourg       | Alphabet | Collection alpha | published |
 
     When I visit the search page
@@ -242,14 +242,14 @@ Feature: Global search
       | title         | description                         |
       | Licence Alpha | A beta description for the licence. |
     And news content:
-      | title      | headline            | body                      | keywords | collection       | state     |
+      | title      | headline            | field_paragraphs_body     | keywords | collection       | state     |
       | News omega | News headline delta | The epsilon news content. | Alphabet | Collection alpha | published |
     And event content:
-      | title             | short title       | body                                | agenda         | location       | organisation        | scope         | keywords | collection       | solution       | state     |
-      | Event Omega       | Event short delta | The epsilon event content.          | Event agenda.  | Some place     | European Commission | International | Alphabet |                  | Solution alpha | published |
-      | Alternative event | Alt event         | This event stays in the background. | To be planned. | Event location | Event organisation  |               |          | Collection alpha |                | published |
+      | title             | short title       | abstract                                         | field_paragraphs_body               | agenda         | location       | organisation        | scope         | keywords | collection       | solution       | state     |
+      | Event Omega       | Event short delta | The epsilon event content but abstract.          | The epsilon event content.          | Event agenda.  | Some place     | European Commission | International | Alphabet |                  | Solution alpha | published |
+      | Alternative event | Alt event         | This event stays in the background but abstract. | This event stays in the background. | To be planned. | Event location | Event organisation  |               |          | Collection alpha |                | published |
     And document content:
-      | title          | document type | short title          | body                                    | keywords | collection       | state     |
+      | title          | document type | short title          | field_paragraphs_body                   | keywords | collection       | state     |
       | Document omega | Document      | Document short delta | A document consists of epsilon strings. | Alphabet | Collection alpha | published |
     And discussion content:
       | title            | body                                                              | solution       | state     |
@@ -285,6 +285,7 @@ Feature: Global search
     When I enter "omega" in the search bar and press enter
     Then I should see the text "SEARCH RESULTS (6)"
     And the page should show the tiles "Collection alpha, News omega, Event Omega, Document omega, Discussion omega, Page omega"
+    And I should see the text "The epsilon event content but abstract."
 
     # "Beta" is used in all the rdf entities body fields.
     When I enter "beta" in the search bar and press enter
@@ -368,11 +369,11 @@ Feature: Global search
       | title           | body                                  | collection                      | state     |
       | Disturbed birds | Flocks of trained pigeons flying off. | Ornithology: the study of birds | published |
     And news content:
-      | title                               | headline                            | body                            | collection                      | state     |
+      | title                               | headline                            | field_paragraphs_body           | collection                      | state     |
       | Chickens are small birds            | Chickens are small birds            | Birds domesticated in India.    | Ornithology: the study of birds | published |
       | Found a xylophone from 1600 in Asia | Found a xylophone from 1600 in Asia | Oldest instrument of this type. | Husky Flying Xylophone          | published |
     And event content:
-      | title         | body                   | collection                      | state     |
+      | title         | field_paragraphs_body  | collection                      | state     |
       | Bird spotting | Roosters crow at dawn. | Ornithology: the study of birds | published |
     And discussion content:
       | title                             | body                    | collection                      | state     |
@@ -412,7 +413,7 @@ Feature: Global search
       | description              | Übermensch foot size            |
       | access url               | http://example.com/zzolu-distro |
       | licence                  | Apache-2.0                      |
-      | format                   | HTML                            |
+      | format                   | ZIP                             |
       | representation technique | Datalog                         |
       | state                    | published                       |
 
@@ -425,7 +426,7 @@ Feature: Global search
     When I enter "apache" in the search bar and press enter
     # Also the licence itself is retrieved.
     Then the page should show only the tiles "Apache-2.0,Zzolution"
-    When I enter "HTML" in the search bar and press enter
+    When I enter "ZIP" in the search bar and press enter
     Then the page should show only the tiles "Zzolution"
     When I enter "Datalog" in the search bar and press enter
     Then the page should show only the tiles "Zzolution"
@@ -506,7 +507,7 @@ Feature: Global search
       | description              | Dracula                           |
       | access url               | http://example.com/releazz-distro |
       | licence                  | Apache-2.0                        |
-      | format                   | HTML                              |
+      | format                   | ZIP                               |
       | representation technique | Datalog                           |
       | state                    | published                         |
 
@@ -519,7 +520,7 @@ Feature: Global search
     When I enter "apache" in the search bar and press enter
     # Also the licence itself is retrieved.
     Then the page should show only the tiles "Apache-2.0,Releazz"
-    When I enter "HTML" in the search bar and press enter
+    When I enter "ZIP" in the search bar and press enter
     Then the page should show only the tiles "Releazz"
     When I enter "Datalog" in the search bar and press enter
     Then the page should show only the tiles "Releazz"
@@ -600,7 +601,7 @@ Feature: Global search
       | title             | description       | state     |
       | Custom collection | Some custom data. | published |
     And news content:
-      | title               | headline                           | body                                                              | collection        | state     | created    | changed    |
+      | title               | headline                           | field_paragraphs_body                                             | collection        | state     | created    | changed    |
       | Quantum information | Relativity is the word             | No one cares about the body.                                      | Custom collection | published | 01/01/2019 | 03/08/2019 |
       | The uneven universe | Relativity news: Relativity theory | I do care about the relativity keyword in the body.               | Custom collection | published | 02/01/2019 | 02/08/2019 |
       | The earth is square | Absolutely nonsense                | Some news are not worth it but I will add relativity here anyway. | Custom collection | published | 03/01/2019 | 01/08/2019 |
@@ -643,12 +644,12 @@ Feature: Global search
       | Spheres  | Radio cooking collection | Spherification is the culinary process of shaping a liquid into spheres                                                              | Demography | European Union   | published |
       | Movistar | Radio cooking collection | "The use of foam in cuisine has been used in many forms in the history of cooking:whipped cream, meringue, and mousse are all foams" |            |                  | published |
     And news content:
-      | title           | body             | collection               | topic                   | spatial coverage | state     |
-      | El Cabo da Roca | The best in town | Radio cooking collection | Statistics and Analysis | Luxembourg       | published |
-      | Funny news 1    | Dummy body       | Radio cooking collection | E-inclusion             | Luxembourg       | published |
-      | Funny news 2    | Dummy body       | Radio cooking collection | E-inclusion             | Luxembourg       | published |
-      | Funny news 3    | Dummy body       | Radio cooking collection | E-inclusion             | Luxembourg       | published |
-      | Funny news 4    | Dummy body       | Radio cooking collection | E-inclusion             | Luxembourg       | published |
+      | title           | field_paragraphs_body | collection               | topic                   | spatial coverage | state     |
+      | El Cabo da Roca | The best in town      | Radio cooking collection | Statistics and Analysis | Luxembourg       | published |
+      | Funny news 1    | Dummy body            | Radio cooking collection | E-inclusion             | Luxembourg       | published |
+      | Funny news 2    | Dummy body            | Radio cooking collection | E-inclusion             | Luxembourg       | published |
+      | Funny news 3    | Dummy body            | Radio cooking collection | E-inclusion             | Luxembourg       | published |
+      | Funny news 4    | Dummy body            | Radio cooking collection | E-inclusion             | Luxembourg       | published |
 
     Given I am logged in as a user with the "authenticated" role
     When I visit the search page
@@ -682,7 +683,7 @@ Feature: Global search
       | Spheres  | Radio cooking collection | Spherification is the culinary process of shaping a liquid into spheres. Drupal is the best digital experience platform(DXP) on the web, proudly open source. | Demography | European Union   | published |
       | Movistar | Radio cooking collection | "The use of foam in cuisine has been used in many forms in the history of cooking:whipped cream, meringue, and mousse are all foams", proudly open source.    |            |                  | published |
     And news content:
-      | title           | body                                                                                 | collection               | topic                   | spatial coverage | state     |
+      | title           | field_paragraphs_body                                                                | collection               | topic                   | spatial coverage | state     |
       | El Cabo da Roca | The best in town, proudly open source.                                               | Radio cooking collection | Statistics and Analysis | Luxembourg       | published |
       | Funny news 1    | Drupal is the best digital experience platform(DXP) on the web, proudly open source. | Radio cooking collection | E-inclusion             | Luxembourg       | published |
       | Funny news 2    | Drupal is the best digital experience platform(DXP) on the web, proudly open source. | Radio cooking collection | E-inclusion             | Luxembourg       | published |
@@ -764,10 +765,10 @@ Feature: Global search
       | title | Mice in space |
       | state | published     |
     And document content:
-      | title        | collection    | topic                                  | state     | logo     | body                                                                                                                                                                                            |
+      | title        | collection    | topic                                  | state     | logo     | field_paragraphs_body                                                                                                                                                                           |
       | Microgravity | Mice in space | HR, Statistics and Analysis, E-justice | published | alan.jpg | Conventional studies investigating the effects of reduced gravity on muscle mass and function have used a ground control group that is not directly comparable to the space experimental group. |
     And event content:
-      | title           | collection    | topic                    | state     | logo        | body                                                                                                                                                                                  |
+      | title           | collection    | topic                    | state     | logo        | field_paragraphs_body                                                                                                                                                                 |
       | Stay at the ISS | Mice in space | EU and European Policies | published | charles.jpg | Two groups of mice (six per group) were housed aboard the International Space Station for 35 days. One group was subjected to artificial gravity (1 g) and the other to microgravity. |
     And news content:
       | title           | body                                       | collection    | topic                   | spatial coverage | state     | logo        | created    | changed    |

@@ -301,8 +301,8 @@ Feature: Proposing a collection
   @javascript @uploadFiles:error.svg,simple.svg
   Scenario: Allowing users to upload SVGs.
     Given owner content:
-      | name    | owner type            |
-      | Svinish | Private Individual(s) |
+      | name    | owner type |
+      | Svinish | Company    |
     And I am logged in as an "authenticated user"
     When I go to the propose collection form
     Then I should see the heading "Propose collection"

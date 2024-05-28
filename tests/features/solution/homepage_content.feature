@@ -6,8 +6,8 @@ Feature: Solution homepage
 
   Background:
     Given owner content:
-      | name          | owner type            |
-      | Kostas Agathe | Private Individual(s) |
+      | name          | owner type |
+      | Kostas Agathe | Company    |
     And contact_information content:
       | name    | email               |
       | Placebo | Placebo@example.com |
@@ -35,7 +35,7 @@ Feature: Solution homepage
       | IS protocol meet-up         | Discussion about the next standard. | 2018-10-04 8:02am | Statistics and Analysis | European Union   | Information sharing protocol | published |
       | Archiving some distribution | Old ZIP version archived.           | 2018-10-04 8:02am | Statistics and Analysis | European Union   | Information sharing protocol | archived  |
     And document content:
-      | title               | document type | short title | created           | body                    | spatial coverage | topic       | solution                     | state     |
+      | title               | document type | short title | created           | field_paragraphs_body   | spatial coverage | topic       | solution                     | state     |
       | IS protocol draft 2 | Document      | IS draft 2  | 2018-10-04 8:08am | Next proposition draft. | European Union   | E-inclusion | Information sharing protocol | published |
 
   Scenario: The solution homepage shows related content.

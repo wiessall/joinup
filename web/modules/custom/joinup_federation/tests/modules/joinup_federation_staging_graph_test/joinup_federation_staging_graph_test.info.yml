@@ -1,8 +1,0 @@
-type: module
-core_version_requirement: ">= 9.4"
-name: RDF Staging Graph Test
-description: Testing module for RDF staging graph.
-package: Testing
-
-dependencies:
-  - joinup:joinup_federation

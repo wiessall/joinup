@@ -32,7 +32,7 @@ class VocabularyManager {
     protected EntityTypeManagerInterface $entityTypeManager,
     protected Connection $database,
     protected ConnectionInterface $sparqlEndpoint,
-    protected MetaEntityRepositoryInterface $metaEntityRepository
+    protected MetaEntityRepositoryInterface $metaEntityRepository,
   ) {
   }
 

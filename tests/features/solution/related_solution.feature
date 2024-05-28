@@ -8,8 +8,8 @@ Feature: Related solution
       | name        | email       |
       | Kalikatoura | bar@bar.com |
     And owner content:
-      | name         | owner type                   |
-      | Kalikatoures | Company, Industry consortium |
+      | name         | owner type |
+      | Kalikatoures | Company    |
     And solutions:
       | title      | related solutions | abstract                         | description                         | documentation | related by type | moderation | logo     | topic      | state     | solution type | owner        | contact information |
       | C          |                   | Blazing fast segmentation faults | Blazing fast segmentation faults.   | text.pdf      | yes             | no         | logo.png | Demography | published |               | Kalikatoures | Kalikatoura         |

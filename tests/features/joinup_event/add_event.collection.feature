@@ -43,7 +43,7 @@ Feature: "Add event" visibility options.
     When I go to the homepage of the "Stream of Dreams" collection
     And I click "Add event" in the plus button menu
     Then I should see the heading "Add event"
-    And the following fields should be present "Title, Short title, Description, Agenda, Logo, Contact email, Website, Physical location, Organisation, Organisation type, Topic, Add a new file, Search keywords, Scope, Geographical coverage"
+    And the following fields should be present "Title, Short title, Body, Agenda, Logo, Contact email, Website, Physical location, Organisation, Organisation type, Topic, Add a new file, Search keywords, Scope, Geographical coverage"
     # The entity is new, so the current workflow state should not be shown.
     And the following fields should not be present "Current workflow state, Motivation"
     And the following fields should not be present "Shared on"
@@ -54,15 +54,18 @@ Feature: "Add event" visibility options.
     And I press "Publish"
     Then I should see the following lines of text:
       | Title field is required.                       |
-      | Description field is required.                 |
+      | Abstract field is required.                    |
       | The Attachments field description is required. |
 
     When I fill in the following:
       | Title                 | An amazing event                      |
       | Short title           | Amazing event                         |
-      | Description           | This is going to be an amazing event. |
-      | File description      | Taxi discount voucher.                |
-      | Geographical coverage | France                                |
+      | Abstract              | This is going to be an amazing event. |
+      | File description      | This is a test file.                  |
+      | Geographical coverage | Belgium                               |
+    And I append "text" to "field_paragraphs_body" layout paragraphs field
+      | field_body:value  | This is going to be an amazing event. |
+      | field_body:format | content_editor                        |
     And I press "Add another item" at the "Virtual location" field
     And I fill the start date of the Date widget with "2018-08-29"
     And I fill the start time of the Date widget with "23:59:59"
@@ -120,8 +123,8 @@ Feature: "Add event" visibility options.
       | title | Stream of Dreams |
       | state | published        |
     And event content:
-      | title             | collection       | body      | online location              | state     |
-      | The Great Opening | Stream of Dreams | It opens! | webinar - http://example.com | published |
+      | title             | abstract | collection       | field_paragraphs_body | online location              | state     |
+      | The Great Opening | abstract | Stream of Dreams | It opens!             | webinar - http://example.com | published |
 
     And I am logged in as a moderator
 

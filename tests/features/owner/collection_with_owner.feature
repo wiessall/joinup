@@ -50,17 +50,17 @@ Feature: Creation of owners through UI
 
     # Create a person owner as well.
     And I press "Add new" at the "Owner" field
-    And I check the box "Private Individual(s)"
+    And I check the box "Company"
     And I fill in "Name" with "John Doe"
     And I press "Create owner"
     Then I should see "John Doe"
-    And I should see the link "Private Individual(s)"
+    And I should see the link "Company"
 
     When I press "Remove" at the "Owner" field
     # Press 'Remove' also on confirmation dialog.
     And I press "Remove" at the "Owner" field
     Then I should not see "John Doe"
-    And I should not see the link "Private Individual(s)"
+    And I should not see the link "Company"
 
     # Click the button to select an existing owner.
     And I press "Add existing" at the "Owner" field

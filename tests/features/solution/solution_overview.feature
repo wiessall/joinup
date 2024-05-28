@@ -70,8 +70,8 @@ Feature: Solutions Overview
       | Isolating Europe      | Reusable tools and services    | published |
       | Uniting Europe        | Unusable tools and services    | draft     |
     And owner content:
-      | name              | owner type              |
-      | NonProfit example | Non-Profit Organisation |
+      | name              | owner type |
+      | NonProfit example | Company    |
 
     # Check that visiting as an anonymous does not create cache for all users.
     Given I am an anonymous user

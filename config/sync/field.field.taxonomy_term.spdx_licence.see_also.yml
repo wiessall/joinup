@@ -7,6 +7,11 @@ dependencies:
     - taxonomy.vocabulary.spdx_licence
   module:
     - link
+third_party_settings:
+  rdf_sync:
+    uri:
+      predicate: 'http://www.w3.org/2000/01/rdf-schema#seeAlso'
+      type: 'xsd:anyURI'
 id: taxonomy_term.spdx_licence.see_also
 field_name: see_also
 entity_type: taxonomy_term

@@ -3,4 +3,10 @@ delete_on_entity_delete:
   node: node
   taxonomy_term: taxonomy_term
   user: user
-purge_methods: {  }
+purge_enable: true
+purge_methods:
+  days:
+    id: days
+    data:
+      days: 30
+    weight: 0
