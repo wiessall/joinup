@@ -9,7 +9,6 @@ use Behat\Gherkin\Node\TableNode;
 use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Url;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
-use Drupal\eif\EifInterface;
 use Drupal\joinup\Traits\ConfigReadOnlyTrait;
 use Drupal\joinup\Traits\EntityReferenceTrait;
 use Drupal\joinup\Traits\EntityTrait;
@@ -613,8 +612,6 @@ class SolutionContext extends RawDrupalContext {
       ],
       'field_is_show_eira_related' => ['no' => 0, 'yes' => 1],
     ];
-
-    $eif_categories = array_flip(EifInterface::EIF_CATEGORIES);
 
     foreach ($fields as $field => $value) {
       if (isset($mapped_values[$field])) {
