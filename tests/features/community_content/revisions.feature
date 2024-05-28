@@ -22,11 +22,11 @@ Feature:
       | Hellow world | Clumsy Bounce     |             |
       | Hellow world | Grumpy author     | author      |
       | Hellow world | Jelly Facilitator | facilitator |
-    And <content type> content:
+    And discussion content:
       | title                | body                                   | state     | author        | <group type> |
       | Goodbi world         | Because I cannot spell Goodbye either. | published | Clumsy Bounce | Hellow world |
       | Careful with that ax | Someone needs to ax these questions.   | published | Grumpy Author | Hellow world |
-    And <content type> revisions:
+    And discussion revisions:
       | current title        | title                 |
       | Careful with that ax | Careful with that axe |
 
@@ -34,81 +34,81 @@ Feature:
     # We need at least 2 revisions since the main purpose of the revisions page
     # is to compare different revisions.
     Given I am an anonymous user
-    When I visit the "Goodbi world" <content type>
+    When I visit the "Goodbi world" discussion
     Then I should not see the "Entity actions" region
     When I visit the revisions page for "Goodbi world"
     Then I should see the heading "Sign in to continue"
 
     Given I am logged in as "Authenticated Bump"
-    When I visit the "Goodbi world" <content type>
+    When I visit the "Goodbi world" discussion
     Then I should not see the "Entity actions" region
     When I visit the revisions page for "Goodbi world"
     Then I should see the heading "Access denied"
 
     Given I am logged in as "Grumpy Author"
-    When I visit the "Goodbi world" <content type>
+    When I visit the "Goodbi world" discussion
     Then I should not see the "Entity actions" region
     When I visit the revisions page for "Goodbi world"
     Then I should see the heading "Access denied"
 
     # Moderators always can access the revisions.
     Given I am logged in as "Fuzzy Moderator"
-    When I visit the "Goodbi world" <content type>
+    When I visit the "Goodbi world" discussion
     Then I should see the link "Revisions" in the "Entity actions" region
     When I visit the revisions page for "Goodbi world"
     Then I should see the heading "Revisions for Goodbi world"
 
     Given I am logged in as "Jelly Facilitator"
-    When I visit the "Goodbi world" <content type>
+    When I visit the "Goodbi world" discussion
     Then I should not see the link "Revisions" in the "Entity actions" region
     When I visit the revisions page for "Goodbi world"
     Then I should see the heading "Access denied"
 
     Given I am logged in as "Clumsy Bounce"
-    When I visit the "Goodbi world" <content type>
+    When I visit the "Goodbi world" discussion
     Then I should not see the link "Revisions"
     When I visit the revisions page for "Goodbi world"
     Then I should see the heading "Access denied"
 
     # Create a second revision. This will unlock the revisions page. We need at
     # least 2 revisions since the page allows us to compare different revisions.
-    Given <content type> revisions:
+    Given discussion revisions:
       | current title | title         | body                       |
       | Goodbi world  | Goodbye world | I found the spell checker. |
 
     Given I am an anonymous user
-    When I visit the "Goodbye world" <content type>
+    When I visit the "Goodbye world" discussion
     Then I should not see the "Entity actions" region
     When I visit the revisions page for "Goodbye world"
     Then I should see the heading "Sign in to continue"
 
     Given I am logged in as "Authenticated Bump"
-    When I visit the "Goodbye world" <content type>
+    When I visit the "Goodbye world" discussion
     Then I should not see the "Entity actions" region
     When I visit the revisions page for "Goodbye world"
     Then I should see the heading "Access denied"
 
     # The author of another piece of content should not have access.
     Given I am logged in as "Grumpy Author"
-    When I visit the "Goodbye world" <content type>
+    When I visit the "Goodbye world" discussion
     Then I should not see the "Entity actions" region
     When I visit the revisions page for "Goodbye world"
     Then I should see the heading "Access denied"
 
     Given I am logged in as "Fuzzy Moderator"
-    When I visit the "Goodbye world" <content type>
+    When I visit the "Goodbye world" discussion
     Then I should see the link "Revisions" in the "Entity actions" region
     When I visit the revisions page for "Goodbye world"
     Then I should see the heading "Revisions for Goodbye world"
 
     Given I am logged in as "Jelly Facilitator"
-    When I visit the "Goodbye world" <content type>
+    When I visit the "Goodbye world" discussion
     Then I should see the link "Revisions" in the "Entity actions" region
     When I visit the revisions page for "Goodbye world"
     Then I should see the heading "Revisions for Goodbye world"
 
     Given I am logged in as "Clumsy Bounce"
-    When I visit the "Goodbye world" <content type>
+    When I visit the "Goodbye world" discussion
     Then I should see the link "Revisions" in the "Entity actions" region
 
     # Verify that revisions can be compared.
@@ -131,23 +131,23 @@ Feature:
     # If the parent group is moderated, the "Goodbye title" title will be shown
     # here because the new version will be in "proposed" state which is not
     # published.
-    Then I should see the heading "Revisions for <final title>"
-    And the "<final title>" <content type> should have 3 revisions
-    When I go to the "<final title>" <content type>
-    Then I should see the heading "<final title>"
+    Then I should see the heading "Revisions for Goodbi world"
+    And the "Goodbi world" discussion should have 3 revisions
+    When I go to the "Goodbi world" discussion
+    Then I should see the heading "Goodbi world"
 
     # After leaving the group the user is no longer able to see revisions.
     When I click "<leave link>"
     And I press "Confirm"
     Then I should see the success message "You are no longer a member of Hellow world."
 
-    When I visit the "<final title>" <content type>
+    When I visit the "Goodbi world" discussion
     Then I should not see the link "Revisions"
-    When I visit the revisions page for "<final title>"
+    When I visit the revisions page for "Goodbi world"
     Then I should see the heading "Access denied"
 
     # If the user rejoins the group, access is restored.
-    When I visit the "<final title>" <content type>
+    When I visit the "Goodbi world" discussion
     And I press "<join button>"
     Then I should see the link "Revisions" in the "Entity actions" region
 
@@ -155,9 +155,9 @@ Feature:
     # been proposed by a non-author. This part of the scenario only affects
     # moderated groups. For non-moderated groups this results in no change.
     Given I am logged in as "Fuzzy Moderator"
-    When I visit the "<final title>" <content type>
+    When I visit the "Goodbi world" discussion
     And I click "Edit" in the "Entity actions" region
-    And I press "<moderate action>"
+    And I press "Update"
     Then I should see the heading "Goodbi world"
 
     When I am on the members page of "Hellow world"
@@ -169,7 +169,7 @@ Feature:
       | Block the selected membership(s) was applied to 1 item. |
 
     Given I am logged in as "Clumsy Bounce"
-    When I visit the "Goodbi world" <content type>
+    When I visit the "Goodbi world" discussion
     Then I should not see the link "Revisions"
     When I visit the revisions page for "Goodbi world"
     Then I should see the heading "Access denied"
@@ -179,27 +179,23 @@ Feature:
     # will be reverted to the previous revision without to force-set the state
     # to 'proposed'.
     Given I am logged in as "Grumpy Author"
-    When I visit the "Careful with that axe" <content type>
+    When I visit the "Careful with that axe" discussion
     And I click "Revisions" in the "Entity actions" region
     And I click "Revert"
     And I press "Revert"
     Then I should see the heading "Revisions for Careful with that ax"
-    When I go to the "Careful with that ax" <content type>
+    When I go to the "Careful with that ax" discussion
     Then I should see the heading "Careful with that ax"
 
     # Note that discussions are always considered to be post-moderated even if
     # they are posted in a pre-moderated group. The reasoning behind this is
     # everyone should always be free to start a discussion. See ISAICP-2265.
     Examples:
-      | group type | content type | moderation | final title   | moderate action | join button                | leave link            |
-      | collection | discussion   | yes        | Goodbi world  | Update          | Join this collection       | Leave this collection |
-      | collection | news         | yes        | Goodbye world | Publish         | Join this collection       | Leave this collection |
-      | collection | discussion   | no         | Goodbi world  | Update          | Join this collection       | Leave this collection |
-      | collection | news         | no         | Goodbi world  | Update          | Join this collection       | Leave this collection |
-      | solution   | discussion   | yes        | Goodbi world  | Update          | Subscribe to this solution | Unsubscribe           |
-      | solution   | news         | yes        | Goodbye world | Publish         | Subscribe to this solution | Unsubscribe           |
-      | solution   | discussion   | no         | Goodbi world  | Update          | Subscribe to this solution | Unsubscribe           |
-      | solution   | news         | no         | Goodbi world  | Update          | Subscribe to this solution | Unsubscribe           |
+      | group type | moderation | join button                | leave link            |
+      | collection | yes        | Join this collection       | Leave this collection |
+      | collection | no         | Join this collection       | Leave this collection |
+      | solution   | yes        | Subscribe to this solution | Unsubscribe           |
+      | solution   | no         | Subscribe to this solution | Unsubscribe           |
 
   Scenario Outline: Community content revisions (with layout paragraphs)
     Given <group type>:
@@ -397,3 +393,7 @@ Feature:
       | collection | event        | no         | Goodbi world  | Update          | Join this collection       | Leave this collection |
       | solution   | event        | yes        | Goodbye world | Publish         | Subscribe to this solution | Unsubscribe           |
       | solution   | event        | no         | Goodbi world  | Update          | Subscribe to this solution | Unsubscribe           |
+      | collection | news         | yes        | Goodbye world | Publish         | Join this collection       | Leave this collection |
+      | collection | news         | no         | Goodbi world  | Update          | Join this collection       | Leave this collection |
+      | solution   | news         | yes        | Goodbye world | Publish         | Subscribe to this solution | Unsubscribe           |
+      | solution   | news         | no         | Goodbi world  | Update          | Subscribe to this solution | Unsubscribe           |
