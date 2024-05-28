@@ -10,14 +10,12 @@ declare(strict_types=1);
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
-use Drupal\eif\EifInterface;
 use Drupal\eif\Entity\EifPerspective;
 use Drupal\eif\Entity\EifPerspectiveInterface;
 use Drupal\eif\Entity\EifRecommendation;
 use Drupal\field\FieldConfigInterface;
 use Drupal\joinup_taxonomy\Entity\MappedTerm;
 use Drupal\meta_entity\Entity\MetaEntityInterface;
-use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\solution\Entity\SolutionInterface;
 use Drupal\views\ViewExecutable;
 
@@ -51,45 +49,6 @@ function eif_theme(array $existing, string $type, string $theme, string $path): 
       ],
     ],
   ];
-}
-
-/**
- * Implements hook_preprocess_HOOK() for OG navigation menu.
- *
- * On EIF Toolbox filtered Solutions pages (route 'eif.solutions') we still want
- * to highlight the left-menu 'Solution' link as being active because it acts as
- * parent of the main 'Solutions' custom page.
- */
-function eif_preprocess_menu__og__navigation(array &$variables): void {
-  if (\Drupal::routeMatch()->getRouteName() !== 'eif.solutions') {
-    return;
-  }
-
-  $instances = \Drupal::entityTypeManager()->getStorage('ogmenu_instance')->loadByProperties([
-    'type' => 'navigation',
-    OgGroupAudienceHelperInterface::DEFAULT_FIELD => EifInterface::EIF_ID,
-  ]);
-  $instance = reset($instances);
-
-  $menu_link_content_storage = \Drupal::entityTypeManager()->getStorage('menu_link_content');
-  $mids = $menu_link_content_storage->getQuery()->accessCheck(FALSE)
-    ->condition('bundle', 'menu_link_content')
-    ->condition('menu_name', "ogmenu-{$instance->id()}")
-    ->condition('link.uri', 'entity:node/' . EifInterface::EIF_SOLUTIONS_NID)
-    ->execute();
-
-  if (!$mids) {
-    throw new \Exception("There's no EIF Toolbox 'Solutions' left-menu link.");
-  }
-
-  $mid = reset($mids);
-  $plugin_id = 'menu_link_content:' . $menu_link_content_storage->load($mid)->uuid();
-
-  if (!isset($variables['items'][$plugin_id])) {
-    throw new \Exception("Link '{$plugin_id}' not present in left-side menu.");
-  }
-
-  $variables['items'][$plugin_id]['in_active_trail'] = TRUE;
 }
 
 /**
