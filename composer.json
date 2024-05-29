@@ -78,6 +78,7 @@
         "drupal/rdf_entity": "^2.0",
         "drupal/rdf_sync": "^1.0",
         "drupal/redirect": "^1.6",
+        "drupal/replicate_ui": "^1.1",
         "drupal/role_delegation": "^1.2",
         "drupal/schema_digital_document": "^1.0",
         "drupal/schema_metatag": "^3.0",
