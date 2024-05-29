@@ -11,18 +11,16 @@ Feature: Header
     Then I should see the Interoperable Europe logo in the navigation bar
     And I should see the hamburger icon in the main navigation
 
-    # The links "Home" and "About us" are only shown in the hamburger menu since
-    # people using mobile devices are always on the move and need to navigate as
-    # quickly as possible.
+    # The links "Home" and "About us" are only shown in the mobile menu.
     And I should see the following items in the main navigation:
-      | link        | desktop menu | hamburger menu |
-      | Home        | not shown    | link           |
-      | Sign in     | link         | link           |
-      | Get started | button       | not shown      |
-      | About us    | not shown    | link           |
+      | link        | desktop menu | mobile menu |
+      | Home        | not shown    | link        |
+      | Sign in     | link         | link        |
+      | Get started | button       | not shown   |
+      | About us    | not shown    | link        |
 
     # Check that the links lead to the expected pages.
-    When I click "Home" in the "Hamburger menu"
+    When I click "Home" in the "Mobile menu"
     Then I should be on "/"
 
     Given I visit the <page>
@@ -30,7 +28,7 @@ Feature: Header
     Then I should see the heading "Sign in to continue"
 
     Given I visit the <page>
-    When I click "Sign in" in the "Hamburger menu"
+    When I click "Sign in" in the "Mobile menu"
     Then I should see the heading "Sign in to continue"
 
     Examples:
