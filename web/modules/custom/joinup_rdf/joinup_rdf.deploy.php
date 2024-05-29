@@ -13,7 +13,7 @@ use Drupal\rdf_sync\Model\SyncMethod;
 /**
  * Migrate contact information entities to nodes.
  */
-function joinup_rdf_deploy_110700(array &$sandbox): string {
+function joinup_rdf_deploy_110800(array &$sandbox): string {
   $endpoint = \Drupal::getContainer()->get('sparql.endpoint');
   if (empty($sandbox['ids'])) {
     $results = $endpoint->query('SELECT ?id FROM <http://joinup.eu/contact-information/published> WHERE { ?id a ?type }')->getArrayCopy();
@@ -66,7 +66,7 @@ function joinup_rdf_deploy_110700(array &$sandbox): string {
 /**
  * Clear the contact information graph.
  */
-function joinup_rdf_deploy_110701(): string {
+function joinup_rdf_deploy_110801(): string {
   // Now that all entities are migrated and synced into the `http://data` graph,
   // we can safely remove the previous one.
   \Drupal::getContainer()
