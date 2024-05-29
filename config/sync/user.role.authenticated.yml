@@ -121,7 +121,6 @@ permissions:
   - 'edit own news content'
   - 'edit own owner content'
   - 'edit own polls'
-  - 'export rdf metadata'
   - 'flag bookmark_node'
   - 'flag bookmark_rdf_entity'
   - 'flag like_node'

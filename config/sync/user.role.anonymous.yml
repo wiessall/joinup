@@ -37,7 +37,6 @@ permissions:
   - 'access polls'
   - 'access tour'
   - 'access user profiles'
-  - 'export rdf metadata'
   - 'legal view legal_notice'
   - 'never autoplay videos'
   - 'use search_api_autocomplete for search'
