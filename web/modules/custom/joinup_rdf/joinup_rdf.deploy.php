@@ -15,7 +15,7 @@ use Drupal\rdf_sync\Model\SyncMethod;
 /**
  * Migrate owners to nodes.
  */
-function joinup_rdf_deploy_110700(array &$sandbox): string {
+function joinup_rdf_deploy_110800(array &$sandbox): string {
   $map = [
     'http://xmlns.com/foaf/0.1/name' => 'title',
     'http://purl.org/dc/terms/type' => 'owner_type',
@@ -65,7 +65,7 @@ function joinup_rdf_deploy_110700(array &$sandbox): string {
 /**
  * Update a duplicate URI.
  */
-function joinup_rdf_deploy_110701(): void {
+function joinup_rdf_deploy_110801(): void {
   // The following URI exists as an ID for both an owner and a contact
   // information. We will rename the contact information.
   $uri = 'http://resource.geolba.ac.at/doc/62';
@@ -105,7 +105,7 @@ SPARQL;
 /**
  * Migrate contact information entities to nodes.
  */
-function joinup_rdf_deploy_110702(array &$sandbox): string {
+function joinup_rdf_deploy_110802(array &$sandbox): string {
   $endpoint = \Drupal::getContainer()->get('sparql.endpoint');
   if (empty($sandbox['ids'])) {
     $results = $endpoint->query('SELECT DISTINCT ?id FROM <http://joinup.eu/contact-information/published> WHERE { ?id a ?type }')->getArrayCopy();
@@ -153,36 +153,4 @@ function joinup_rdf_deploy_110702(array &$sandbox): string {
   $sandbox['#finished'] = $sandbox['processed'] / $sandbox['total'];
 
   return "Migrated {$sandbox['processed']} out of {$sandbox['total']} contact information entities";
-}
-
-/**
- * Clear the contact information graph.
- */
-function joinup_rdf_deploy_110703(): string {
-  // Now that all entities are migrated and synced into the `http://data` graph,
-  // we can safely remove the previous one.
-  \Drupal::getContainer()
-    ->get('sparql.endpoint')
-    ->query('CLEAR GRAPH <http://joinup.eu/contact-information/published>');
-
-  return 'Cleared the contact information graph';
-}
-
-/**
- * Flatten RDF values.
- *
- * @param \stdClass[] $data
- *   The RDF data.
- *
- * @return array
- *   The flattened values.
- */
-function _joinup_rdf_deploy_flatten_rdf_values(array $data): array {
-  $values = [];
-  foreach ($data as $row) {
-    $property = $row->property->getUri();
-    $value = method_exists($row->value, 'getUri') ? $row->value->getUri() : $row->value->getValue();
-    $values[$property] = $value;
-  }
-  return $values;
 }
