@@ -154,3 +154,34 @@ function joinup_rdf_deploy_110802(array &$sandbox): string {
 
   return "Migrated {$sandbox['processed']} out of {$sandbox['total']} contact information entities";
 }
+/**
+ * Clear the contact information graph.
+ */
+function joinup_rdf_deploy_110803(): string {
+  // Now that all entities are migrated and synced into the `http://data` graph,
+  // we can safely remove the previous one.
+  \Drupal::getContainer()
+    ->get('sparql.endpoint')
+    ->query('CLEAR GRAPH <http://joinup.eu/contact-information/published>');
+
+  return 'Cleared the contact information graph';
+}
+
+/**
+ * Flatten RDF values.
+ *
+ * @param \stdClass[] $data
+ *   The RDF data.
+ *
+ * @return array
+ *   The flattened values.
+ */
+function _joinup_rdf_deploy_flatten_rdf_values(array $data): array {
+  $values = [];
+  foreach ($data as $row) {
+    $property = $row->property->getUri();
+    $value = method_exists($row->value, 'getUri') ? $row->value->getUri() : $row->value->getValue();
+    $values[$property] = $value;
+  }
+  return $values;
+}
