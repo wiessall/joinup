@@ -150,11 +150,7 @@ class EiraVocabularyVersionCompareForm extends FormBase {
   public function setupVocabulary(string $file_id, string $file_uri, array &$context): string {
     $graph = "http://example.com/voc-comparer/eira";
     $this->fixtureImporter->importFixtureToGraph($file_uri, $graph);
-    /** @var \Drupal\sparql_entity_storage\SparqlMappingInterface $mapping */
-    $mapping = $this->entityTypeManager->getStorage('sparql_mapping')->load("taxonomy_term.eira");
     $context['results']['compare']['new_graph'] = $graph;
-    $context['results']['compare']['current_graph'] = $mapping->getGraphs()['default'];
-
     $context['results']['compare']['file_id'] = $file_id;
     $context['results']['compare']['file_uri'] = $file_uri;
 
@@ -172,13 +168,12 @@ class EiraVocabularyVersionCompareForm extends FormBase {
    */
   public function calculateNewTerms(array &$context): string {
     $new_graph = $context['results']['compare']['new_graph'];
-    $current_graph = $context['results']['compare']['current_graph'];
 
     // Load new terms and categories of the new version.
     $query = <<<QUERY
 SELECT ?term ?type ?label ?category ?category_type ?category_label
 FROM <{$new_graph}>
-FROM <{$current_graph}>
+FROM <http://data>
 WHERE {
   GRAPH <{$new_graph}> {
     ?term a skos:Concept .
@@ -202,8 +197,9 @@ WHERE {
     }
   }
   FILTER NOT EXISTS {
-    GRAPH <{$current_graph}> {
+    GRAPH <http://data> {
       ?term a skos:Concept .
+      ?term skos:topConceptOf <http://data.europa.eu/dr8>
     }
   }
 }
@@ -280,19 +276,19 @@ QUERY;
    */
   public function calculateRemovedUsedTerms(array &$context): string {
     $new_graph = $context['results']['compare']['new_graph'];
-    $current_graph = $context['results']['compare']['current_graph'];
 
     // Load usages of the removed terms.
     $query = <<<QUERY
 SELECT ?term ?label ?usage ?usage_label ?is_deprecated
 FROM <{$new_graph}>
-FROM <{$current_graph}>
+FROM <http://data>
 FROM <http://joinup.eu/solution/published>
 FROM <http://joinup.eu/solution/draft>
 WHERE {
-  GRAPH <{$current_graph}> {
+  GRAPH <http://data> {
     ?term a skos:Concept .
     ?term skos:prefLabel ?label .
+    ?term skos:topConceptOf <http://data.europa.eu/dr8> .
     OPTIONAL {
       ?term skos:deprecated ?is_deprecated .
     }
@@ -384,13 +380,12 @@ QUERY;
    */
   public function loadNewSiblingsOfRemovedUsedTerms(array &$context): string {
     $new_graph = $context['results']['compare']['new_graph'];
-    $current_graph = $context['results']['compare']['current_graph'];
 
     foreach ($context['results']['compare']['missing'] as $term_id => $term) {
       $query = <<<QUERY
 SELECT ?sibling ?sibling_label
 FROM <{$new_graph}>
-FROM <{$current_graph}>
+FROM <http://data>
 WHERE {
     GRAPH <{$new_graph}> {
       ?sibling a skos:Concept ;
@@ -401,8 +396,9 @@ WHERE {
           skos:prefLabel ?category_label
     }
     FILTER EXISTS {
-      GRAPH <{$current_graph}> {
+      GRAPH <http://data> {
         ?category skos:member <{$term_id}> .
+        ?term skos:topConceptOf <http://data.europa.eu/dr8> .
       }
     }
 }
@@ -488,13 +484,12 @@ QUERY;
    */
   public function calculateNewDeprecatedTerms(array &$context): string {
     $new_graph = $context['results']['compare']['new_graph'];
-    $current_graph = $context['results']['compare']['current_graph'];
 
     // Load new deprecated terms of the new version and their usages.
     $query = <<<QUERY
 SELECT ?term ?label ?usage
 FROM <{$new_graph}>
-FROM <{$current_graph}>
+FROM <http://data>
 FROM <http://joinup.eu/solution/published>
 FROM <http://joinup.eu/solution/draft>
 WHERE {
@@ -504,8 +499,9 @@ WHERE {
     ?term skos:deprecated "true"^^xsd:boolean .
   }
   FILTER NOT EXISTS {
-    GRAPH <{$current_graph}> {
+    GRAPH <http://data> {
       ?term a skos:Concept .
+      ?term skos:topConceptOf <http://data.europa.eu/dr8> .
       ?term skos:deprecated "true"^^xsd:boolean .
     }
   }
