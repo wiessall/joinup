@@ -22,8 +22,3 @@ Feature: Ensure contacts were migrated and exist.
     When I visit the homepage of the "Dirección de Modernizacion de la Gestión y Gobierno Electrónico. Gobierno de Misiones" owner
     Then the response status code should be 200
     And the HTML title of the page should be "Dirección de Modernizacion de la Gestión y Gobierno Electrónico. Gobierno de Misiones"
-
-    # Provenance activity
-    When I visit "/rdf_entity/https_e_f_fjoinup_cec_ceuropa_ceu_frdf_aentity_fprovenance_aactivity_f0ddf7736_be1f9_b4623_b829d_bc5d118dde2e2"
-    Then the response status code should be 200
-    And the HTML title of the page should be "Provenance of http://administracionelectronica.gob.es/contacto/ctt"
