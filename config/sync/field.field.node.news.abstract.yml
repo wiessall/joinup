@@ -10,7 +10,7 @@ field_name: abstract
 entity_type: node
 bundle: news
 label: Abstract
-description: 'Short description text of the news.'
+description: 'Short description text of the news item, displayed in content tiles and search results.'
 required: true
 translatable: false
 default_value: {  }
