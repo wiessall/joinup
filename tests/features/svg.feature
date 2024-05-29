@@ -3,11 +3,11 @@ Feature: Test SVG attachments.
 
   Background:
     Given owner content:
-      | name | owner type |
-      | SVG  | Company    |
+      | name        | owner type |
+      | SVG company | Company    |
     And contact_information content:
-      | name | email           |
-      | SVG  | svg@example.com |
+      | name        | email           |
+      | SVG contact | svg@example.com |
     And collections:
       | title | logo     | abstract | description | content creation         | moderation | topic             | owner       | contact information | state     |
       | SVG   | logo.png | Test     | Test        | facilitators and authors | yes        | Supplier exchange | SVG company | SVG contact         | published |
