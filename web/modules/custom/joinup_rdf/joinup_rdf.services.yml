@@ -1,4 +1,6 @@
 services:
+  _defaults:
+    autowire: true
   joinup_rdf.vocabulary_fixtures.helper:
     class: Drupal\joinup_rdf\VocabularyFixturesHelper
     arguments: ['@sparql.endpoint']
@@ -32,3 +34,5 @@ services:
     arguments: ['@entity_type.manager', '@entity_type.bundle.info', '@rdf_sync.mapper']
     tags:
       - { name: event_subscriber }
+  joinup_rdf.readonly_endpoint:
+    class: Drupal\joinup_rdf\SparqlReadOnlyEndpoint
