@@ -4,13 +4,14 @@ Feature: User interface for the File URL field
   As an authenticated user
   I need to be able to interact with a field widget that offers both options
 
-  @javascript
-  Scenario: Interact with both the 'File upload' and 'External URL' options
+  Background:
     Given the following collection:
       | title | Caterpillar, use headbutt |
       | logo  | logo.png                  |
       | state | published                 |
 
+  @javascript
+  Scenario: Interact with both the 'File upload' and 'External URL' options
     Given I am logged in as a member of the "Caterpillar, use headbutt" collection
     # An example of the File URL field is the "Documentation" field in the
     # solution form.
@@ -39,12 +40,9 @@ Feature: User interface for the File URL field
     And I should not see the text "Allowed types: txt doc docx pdf."
 
   Scenario: User should be able to remove entity even document's entities do not exist
-    Given the following collections:
-      | title            | state     |
-      | Regression tests | published |
-    And the following solutions:
-      | title                      | documentation | state     | collection       |
-      | Solution without documents | text.pdf      | published | Regression tests |
+    Given the following solutions:
+      | title                      | documentation | state     | collection                |
+      | Solution without documents | text.pdf      | published | Caterpillar, use headbutt |
     And I delete documents from "Solution without documents" solution
 
     Given I am logged in as a moderator
@@ -53,3 +51,29 @@ Feature: User interface for the File URL field
     When I click "Delete"
     And I press "Delete"
     Then the response status code should be 200
+
+  @javascript @uploadFiles:logo.png
+  Scenario: File URL does not trigger type error after trying to submit an invalid url
+    Given document content:
+      | title          | abstract | field_paragraphs_body | state | document type | collection                |
+      | Document title | Abstract | Body                  | draft | document      | Caterpillar, use headbutt |
+
+    Given I am logged in as a moderator
+    And I go to the "Document title" document
+    And I open the header local tasks menu
+    And I click "Edit" in the "Entity actions" region
+    Then I should see the text "Upload a new file or enter a URL"
+    And I wait for AJAX to finish
+    And I select the radio button "Remote file URL"
+    And I fill in "field_file[0][file_url_remote]" with "foo"
+    # Trigger blur.
+    And I select the radio button "Upload file"
+    And I wait for AJAX to finish
+    And I select the radio button "Upload file"
+    And I attach the file "logo.png" to "files[field_file_0][]"
+    Then I wait for AJAX to finish
+    And I should not see the text "Oops, something went wrong. Check your browser's developer console for more details."
+    And I press "Publish"
+    Then I should see the heading "Document title"
+    And I should see the heading Attachment
+    And I should see the link logo.png
