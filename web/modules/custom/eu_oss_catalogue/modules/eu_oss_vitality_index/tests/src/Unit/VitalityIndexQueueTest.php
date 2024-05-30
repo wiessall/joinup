@@ -27,13 +27,6 @@ class VitalityIndexQueueTest extends UnitTestCase {
   /**
    * Test addToQueue() method.
    *
-   * @param int $numberOfItems
-   *   Number of items in queue.
-   * @param int $numberOfNodes
-   *   Number of oss nodes.
-   * @param bool $shouldBeAdded
-   *   Whether queue element should be added.
-   *
    * @covers ::addToQueue
    * @dataProvider providerForQueue
    *
@@ -80,9 +73,21 @@ class VitalityIndexQueueTest extends UnitTestCase {
    */
   public function providerForQueue(): array {
     return [
-      [1, 2, TRUE],
-      [2, 1, FALSE],
-      [3, 3, TRUE],
+      'Less queue items than nodes' => [
+        'number of items in queue' => 1,
+        'number of oss nodes' => 2,
+        'whether queue element should be added' => TRUE,
+      ],
+      'More queue items than nodes' => [
+        'number of items in queue' => 2,
+        'number of oss nodes' => 1,
+        'whether queue element should be added' => FALSE,
+      ],
+      'Equal queue size and node number' => [
+        'number of items in queue' => 3,
+        'number of oss nodes' => 3,
+        'whether queue element should be added' => TRUE,
+      ],
     ];
   }
 
