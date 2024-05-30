@@ -172,9 +172,6 @@ Feature: Pinning entities inside collections
     Then I should not see the contextual links "Pin, Unpin" in the "Very important" tile
     And I should not see the contextual links "Pin, Unpin" in the "Useful information" tile
 
-  # This scenario will be re-enabled in ISAICP-6771.
-  # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-6771
-  @wip
   Scenario: Facilitators can pin and unpin solutions inside their collections.
     Given discussion content:
       | title                         | collection    | state     | pinned | created    |
