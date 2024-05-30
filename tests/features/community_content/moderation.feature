@@ -64,17 +64,17 @@ Feature: Moderate community content
       | Evolution of dust-to-metals ratio       | Dust at high redshift        | Dust at high redshift        |                     | Survey For Supernovae | published        |
       | Total V-band extinction                 | Fitting the afterglow SED    | Fitting the afterglow SED    |                     | Survey For Supernovae | deletion request |
     And news content:
-      | title                         | body                        | collection          | solution              | state            |
-      | Magnetosphere boundary        | Gas shock                   | Black hole research |                       | draft            |
-      | Ambient magnetized medium     | Dust depletion level        | Black hole research |                       | needs update     |
-      | Stellar wind charged particle | Follow spiral paths         | Black hole research |                       | proposed         |
-      | Super-Alfvenic plasma flow    | Magnetic draping            | Black hole research |                       | published        |
-      | Massive lensing galaxy        | Sub-millimeter sky          | Black hole research |                       | deletion request |
-      | Planck's dusty gems           | An Einstein Ring            |                     | Survey For Supernovae | draft            |
-      | The optical morphology        | Turbulent gas fragmentation |                     | Survey For Supernovae | needs update     |
-      | The Tarantula massive binary  | SB2 orbital solution        |                     | Survey For Supernovae | proposed         |
-      | H-rich Wolf-Rayet star        | Polarimetric analysis       |                     | Survey For Supernovae | published        |
-      | Quasi-homogeneous evolution   | Mass-transfer was avoided   |                     | Survey For Supernovae | deletion request |
+      | title                         | abstract                    | field_paragraphs_body | collection          | solution              | state            |
+      | Magnetosphere boundary        |                             | Gas shock             | Black hole research |                       | draft            |
+      | Ambient magnetized medium     | Dust depletion level        |                       | Black hole research |                       | needs update     |
+      | Stellar wind charged particle | Follow spiral paths         | I shouldn't see this! | Black hole research |                       | proposed         |
+      | Super-Alfvenic plasma flow    | Magnetic draping            |                       | Black hole research |                       | published        |
+      | Massive lensing galaxy        | Sub-millimeter sky          |                       | Black hole research |                       | deletion request |
+      | Planck's dusty gems           | An Einstein Ring            |                       |                     | Survey For Supernovae | draft            |
+      | The optical morphology        | Turbulent gas fragmentation |                       |                     | Survey For Supernovae | needs update     |
+      | The Tarantula massive binary  | SB2 orbital solution        |                       |                     | Survey For Supernovae | proposed         |
+      | H-rich Wolf-Rayet star        | Polarimetric analysis       |                       |                     | Survey For Supernovae | published        |
+      | Quasi-homogeneous evolution   | Mass-transfer was avoided   |                       |                     | Survey For Supernovae | deletion request |
 
     # Check if all content that requires moderation shows up for the collection.
     When I reload the page
@@ -410,14 +410,17 @@ Feature: Moderate community content
     When I press "Remove"
     And I should see the heading "Edit Event Alice in Wonderland"
     And I should see the button "Upload"
+
     # Test news.
     And I go to the homepage of the "Black hole research" collection
     When I click "Add news" in the plus button menu
     And I fill in the following:
       | Short title | Declared the ultimate metal                                                                   |
       | Headline    | Strong request for this rare metal that is on the mouth of everybody                          |
-      | Content     | Thanks to its lower density compared to thulium and lutetium its applications have increased. |
-
+      | Abstract    | Thanks to its lower density compared to thulium and lutetium its applications have increased. |
+    And I append "text" to "field_paragraphs_body" layout paragraphs field
+      | field_body:value  | A short body text. |
+      | field_body:format | content_editor     |
     And I select "Data gathering and processing" from "Topic"
     And I attach the file "logo.png" to "Logo"
     And I press "Upload"

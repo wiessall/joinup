@@ -10,7 +10,7 @@ field_name: abstract
 entity_type: node
 bundle: event
 label: Abstract
-description: 'Short description text of the document.'
+description: 'Short description text of the event, displayed in content tiles and search results.'
 required: true
 translatable: false
 default_value: {  }
