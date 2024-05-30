@@ -330,6 +330,9 @@ QUERY;
    */
   protected function removedUsedTermsToRenderArray(): array {
     $cache_data = $this->databaseCache->get('joinup_vocabularies.compare_results');
+    if (!isset($cache_data->data['missing'])) {
+      return [];
+    }
     $removed_terms = $cache_data->data['missing'];
 
     $header = [
@@ -423,6 +426,9 @@ QUERY;
    */
   protected function newSiblingsOfRemovedUsedTermsToRenderArray(): array {
     $cache_data = $this->databaseCache->get('joinup_vocabularies.compare_results');
+    if (!isset($cache_data->data['missing'])) {
+      return [];
+    }
     $removed_terms = $cache_data->data['missing'];
 
     $header = [
