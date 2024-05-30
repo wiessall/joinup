@@ -261,9 +261,15 @@ drupal:
             'isolation_level' => 'SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED',
           ],
         ];
+
+        $settings['sparql']['protocol'] = getenv('DRUPAL_SPARQL_PROTOCOL') ?: 'http';
+        $settings['sparql']['hostname'] = getenv('DRUPAL_SPARQL_HOSTNAME');
+        $settings['sparql']['port'] = getenv('DRUPAL_SPARQL_PORT');
+        $settings['sparql']['user_readonly'] = getenv('DRUPAL_SPARQL_USER_READONLY');
+        $settings['sparql']['password_readonly'] = getenv('DRUPAL_SPARQL_PASSWORD_READONLY');
         $databases['sparql_default']['default'] = [
-          'host' => getenv('DRUPAL_SPARQL_HOSTNAME'),
-          'port' => getenv('DRUPAL_SPARQL_PORT'),
+          'host' => $settings['sparql']['hostname'],
+          'port' => $settings['sparql']['port'],
           'namespace' => 'Drupal\\joinup_sparql\\Driver\\Database\\joinup_sparql',
           'driver' => 'sparql',
         ];
