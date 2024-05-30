@@ -33,9 +33,10 @@ class VitalityIndexGeneratorTest extends UnitTestCase {
     $logger = $this->prophesize(LoggerChannelInterface::class);
     $logger->error(Argument::any(), Argument::type('array'))->shouldBeCalled();
     $fileSystem = $this->prophesize(FileSystemInterface::class);
-    $ImmutableConfig = $this->prophesize(ImmutableConfig::class);
-    $configFactory =$this->prophesize(ConfigFactoryInterface::class);
-    $configFactory->get('eu_oss_vitality_index.settings')->willReturn($ImmutableConfig);
+    $immutableConfig = $this->prophesize(ImmutableConfig::class);
+    $configFactory = $this->prophesize(ConfigFactoryInterface::class);
+    $configFactory->get('eu_oss_vitality_index.settings')
+      ->willReturn($immutableConfig);
 
     $ossSolution = $this->prophesize(OssSolutionInterface::class);
     $ossSolution->getUrl()->willReturn('https://www.repo.com/dummy.git');
@@ -58,9 +59,10 @@ class VitalityIndexGeneratorTest extends UnitTestCase {
     $entityTypeManager = $this->prophesize(EntityTypeManagerInterface::class);
     $logger = $this->prophesize(LoggerChannelInterface::class);
     $fileSystem = $this->prophesize(FileSystemInterface::class);
-    $ImmutableConfig = $this->prophesize(ImmutableConfig::class);
-    $configFactory =$this->prophesize(ConfigFactoryInterface::class);
-    $configFactory->get('eu_oss_vitality_index.settings')->willReturn($ImmutableConfig);
+    $immutableConfig = $this->prophesize(ImmutableConfig::class);
+    $configFactory = $this->prophesize(ConfigFactoryInterface::class);
+    $configFactory->get('eu_oss_vitality_index.settings')
+      ->willReturn($immutableConfig);
 
     $stdObject = $this->prophesize('stdClass');
     $stdObject->value = NULL;
