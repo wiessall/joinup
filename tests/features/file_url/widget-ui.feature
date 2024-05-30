@@ -34,6 +34,7 @@ Feature: User interface for the File URL field
     # Toggle the option. Now the other field and help text should be visible.
     Given I select the radio button "Remote file URL"
     Then the following field should be visible "Remote URL"
+    And I should see the button "Add URL"
     And I should see the description "This must be an external URL such as http://example.com." for "Upload a new file or enter a URL"
     But the following field should not be visible "Choose a file"
     And I should not see the text "Allowed types: txt doc docx pdf."
@@ -62,12 +63,10 @@ Feature: User interface for the File URL field
     And I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
     Then I should see the text "Upload a new file or enter a URL"
-    And I wait for AJAX to finish
     And I select the radio button "Remote file URL"
     And I fill in "field_file[0][file_url_remote]" with "foo"
-    # Trigger blur.
-    And I select the radio button "Upload file"
-    And I wait for AJAX to finish
+    And I press "Add URL"
+    Then I should see the error message "The URL foo is not valid"
     And I select the radio button "Upload file"
     And I attach the file "logo.png" to "files[field_file_0][]"
     Then I wait for AJAX to finish
