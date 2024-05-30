@@ -444,8 +444,6 @@ toolbar:
   css:
     theme:
       assets/css/toolbar.min.css: { minified: true }
-  js:
-    assets/js/sticky-menu-logged-in.min.js: { minified: true }
 
 tour-first-balloon:
   header: true

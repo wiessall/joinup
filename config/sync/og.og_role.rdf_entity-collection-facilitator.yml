@@ -13,6 +13,7 @@ group_bundle: collection
 is_admin: null
 permissions:
   - 'access content moderation overview'
+  - 'access glossary data export'
   - 'access group reports'
   - 'add user'
   - 'administer comments'
