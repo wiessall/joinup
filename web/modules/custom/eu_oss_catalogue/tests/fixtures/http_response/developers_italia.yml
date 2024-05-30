@@ -40,8 +40,9 @@ data:
     createdAt: '2023-06-15T18:04:37.975817Z'
     updatedAt: '2023-07-20T22:09:23.352593Z'
 
-  # Malformed: no URL.
+  # Malformed publiccodeYml, no URL inside.
   - id: invalid3-0000-0000-0000-000000000000
+    url: https://limited.self-hosted.gitlab.example.com/user2/project-1.git
     publiccodeYml: |
       This file content is not relevant as we only use Developers Italia to
       fetch a list of URLs. Then we use specific code hosting platform API to
