@@ -10,7 +10,7 @@ use Psr\Log\LoggerTrait;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
- * Trati for check logged messages during a test.
+ * Trait for check logged messages during a test.
  */
 trait LoggerTestTrait {
 
