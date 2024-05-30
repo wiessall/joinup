@@ -5,17 +5,16 @@ Feature: User interface for the File URL field
   I need to be able to interact with a field widget that offers both options
 
   Background:
-    Given the following collection:
-      | title | Caterpillar, use headbutt |
-      | logo  | logo.png                  |
-      | state | published                 |
+    Given the following collections:
+      | title            | state     |
+      | Regression tests | published |
 
   @javascript
   Scenario: Interact with both the 'File upload' and 'External URL' options
-    Given I am logged in as a member of the "Caterpillar, use headbutt" collection
+    Given I am logged in as a member of the "Regression tests" collection
     # An example of the File URL field is the "Documentation" field in the
     # solution form.
-    And I go to the add solution form of the "Caterpillar, use headbutt" collection
+    And I go to the add solution form of the "Regression tests" collection
 
     # Initially, only the radio button selector should be visible, but no option
     # is selected.
@@ -41,8 +40,8 @@ Feature: User interface for the File URL field
 
   Scenario: User should be able to remove entity even document's entities do not exist
     Given the following solutions:
-      | title                      | documentation | state     | collection                |
-      | Solution without documents | text.pdf      | published | Caterpillar, use headbutt |
+      | title                      | documentation | state     | collection       |
+      | Solution without documents | text.pdf      | published | Regression tests |
     And I delete documents from "Solution without documents" solution
 
     Given I am logged in as a moderator
@@ -55,8 +54,8 @@ Feature: User interface for the File URL field
   @javascript @uploadFiles:logo.png
   Scenario: File URL does not trigger type error after trying to submit an invalid url
     Given document content:
-      | title          | abstract | field_paragraphs_body | state | document type | collection                |
-      | Document title | Abstract | Body                  | draft | document      | Caterpillar, use headbutt |
+      | title          | abstract | field_paragraphs_body | state | document type | collection       |
+      | Document title | Abstract | Body                  | draft | document      | Regression tests |
 
     Given I am logged in as a moderator
     And I go to the "Document title" document
