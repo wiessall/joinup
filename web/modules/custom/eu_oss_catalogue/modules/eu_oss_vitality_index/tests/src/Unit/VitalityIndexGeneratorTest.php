@@ -5,7 +5,10 @@ declare(strict_types=1);
 namespace Drupal\Tests\eu_oss_vitality_index\Unit;
 
 use Drupal\Component\Serialization\Json;
+use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Config\ImmutableConfig;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Tests\UnitTestCase;
 use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
@@ -29,12 +32,22 @@ class VitalityIndexGeneratorTest extends UnitTestCase {
     $entityTypeManager = $this->prophesize(EntityTypeManagerInterface::class);
     $logger = $this->prophesize(LoggerChannelInterface::class);
     $logger->error(Argument::any(), Argument::type('array'))->shouldBeCalled();
+    $fileSystem = $this->prophesize(FileSystemInterface::class);
+    $ImmutableConfig = $this->prophesize(ImmutableConfig::class);
+    $configFactory =$this->prophesize(ConfigFactoryInterface::class);
+    $configFactory->get('eu_oss_vitality_index.settings')->willReturn($ImmutableConfig);
 
     $ossSolution = $this->prophesize(OssSolutionInterface::class);
     $ossSolution->getUrl()->willReturn('https://www.repo.com/dummy.git');
     $ossSolution->get('oss_vitality_index_range')->shouldNotBeCalled();
+    $ossSolution->id()->willReturn(111);
 
-    $vitalityIndexGenerator = new VitalityIndexGenerator($entityTypeManager->reveal(), $logger->reveal());
+    $vitalityIndexGenerator = new VitalityIndexGenerator(
+      $entityTypeManager->reveal(),
+      $logger->reveal(),
+      $fileSystem->reveal(),
+      $configFactory->reveal(),
+    );
     $vitalityIndexGenerator->processSolution($ossSolution->reveal());
   }
 
@@ -44,6 +57,10 @@ class VitalityIndexGeneratorTest extends UnitTestCase {
   public function testNodeUpdate(): void {
     $entityTypeManager = $this->prophesize(EntityTypeManagerInterface::class);
     $logger = $this->prophesize(LoggerChannelInterface::class);
+    $fileSystem = $this->prophesize(FileSystemInterface::class);
+    $ImmutableConfig = $this->prophesize(ImmutableConfig::class);
+    $configFactory =$this->prophesize(ConfigFactoryInterface::class);
+    $configFactory->get('eu_oss_vitality_index.settings')->willReturn($ImmutableConfig);
 
     $stdObject = $this->prophesize('stdClass');
     $stdObject->value = NULL;
@@ -59,7 +76,12 @@ class VitalityIndexGeneratorTest extends UnitTestCase {
       ->willReturn($ossSolution)->shouldBeCalledTimes(1);
     $ossSolution->save()->willReturn(1)->shouldBeCalledTimes(1);
 
-    $vitalityIndexGenerator = new VitalityIndexGeneratorHelper($entityTypeManager->reveal(), $logger->reveal());
+    $vitalityIndexGenerator = new VitalityIndexGeneratorHelper(
+      $entityTypeManager->reveal(),
+      $logger->reveal(),
+      $fileSystem->reveal(),
+      $configFactory->reveal(),
+    );
     $vitalityIndexGenerator->processSolution($ossSolution->reveal());
 
     // Process again, the solution should not be updated.
