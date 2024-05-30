@@ -60,7 +60,7 @@ class SparqlReadOnlyEndpoint {
    * @see hook_requirements()
    */
   public function getRequirement(): array {
-    $args = ['@user' => $this->settings->get('sparql')['user_readonly']];
+    $args = ['@user' => $this->settings->get('sparql')['user_readonly'] ?? ''];
     $severity = REQUIREMENT_ERROR;
 
     try {
@@ -86,6 +86,7 @@ class SparqlReadOnlyEndpoint {
       // Nothing. Just report.
     }
 
+    // Fallback value for any other not handled exception.
     if (isset($exception) && !isset($value)) {
       $value = $this->t('Cannot query the endpoint. Message: @message', [
         '@message' => $exception->getMessage(),
