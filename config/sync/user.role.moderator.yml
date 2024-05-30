@@ -19,6 +19,7 @@ dependencies:
     - taxonomy.vocabulary.legal_type
   module:
     - asset_distribution
+    - collection
     - comment
     - contact_form
     - custom_page
@@ -70,6 +71,7 @@ permissions:
   - 'access dashboard'
   - 'access distribution reports'
   - 'access files overview'
+  - 'access glossary data export'
   - 'access group reports'
   - 'access joinup reports'
   - 'access media overview'
