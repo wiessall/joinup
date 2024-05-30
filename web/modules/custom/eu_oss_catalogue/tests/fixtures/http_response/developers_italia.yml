@@ -1,7 +1,7 @@
 data:
 
   - id: 00valid1-0000-0000-0000-000000000000
-    url: https://github.com/dummy-namespace-1/dummy-name-1.git
+    url: https://github.com/italia-software/dummy-name-1.git
     aliases:
       - https://github.com/dummy-namespace-1/dummy-name-1.git
     publiccodeYml: |
