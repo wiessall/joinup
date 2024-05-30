@@ -122,6 +122,36 @@ class JoinupContext extends RawDrupalContext {
   }
 
   /**
+   * Checks that a certain link appears the given number of times.
+   *
+   * @param string $text
+   *   The text of the link.
+   * @param int $count
+   *   The expected number of the links.
+   * @param ?string $region
+   *   The region to check, if any.
+   *
+   * @Then the link :text should appear :count time(s)
+   * @Then the link :text should appear :count time(s) in the :region region
+   */
+  public function assertLinkCount(string $text, int $count, ?string $region = NULL): void {
+    $element = $region
+      ? $this->getRegion($region)
+      : $this->getSession()->getPage();
+    $links = $element->findAll('named', ['link', $text]);
+    Assert::assertCount(
+      $count,
+      $links,
+      sprintf(
+        "The link with text '%s' is expected to be present '%s' times, but its actual number is '%s'",
+        $text,
+        $count,
+        count($links)
+      )
+    );
+  }
+
+  /**
    * Creates and authenticates a user with the given og role(s).
    *
    * Multiple roles can be passed separated with comma.
