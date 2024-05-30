@@ -5,9 +5,7 @@ data:
     aliases:
       - https://github.com/dummy-namespace-1/dummy-name-1.git
     publiccodeYml: |
-      This file content is not relevant as we only use Developers Italia to
-      fetch a list of URLs. Then we use specific code hosting platform API to
-      get fresh data, including pubbliccode.yml content.
+      url: https://github.com/dummy-namespace-1/dummy-name-1.git
     active: true
     createdAt: '2023-07-17T19:01:50.417665Z'
     updatedAt: '2023-07-20T23:06:56.580871Z'
@@ -17,9 +15,7 @@ data:
     aliases:
       - https://limited.self-hosted.gitlab.example.com/group1/project-1-1.git
     publiccodeYml: |
-      This file content is not relevant as we only use Developers Italia to
-      fetch a list of URLs. Then we use specific code hosting platform API to
-      get fresh data, including pubbliccode.yml content.
+      url: https://limited.self-hosted.gitlab.example.com/group1/project-1-1.git
     active: true
     createdAt: '2023-07-03T18:02:09.536128Z'
     updatedAt: '2023-07-03T22:07:09.288625Z'
@@ -29,9 +25,7 @@ data:
     aliases:
       - https://limited.self-hosted.gitlab.example.com/group1/project-1-2.git
     publiccodeYml: |
-      This file content is not relevant as we only use Developers Italia to
-      fetch a list of URLs. Then we use specific code hosting platform API to
-      get fresh data, including pubbliccode.yml content.
+      url: https://limited.self-hosted.gitlab.example.com/group1/project-1-2.git
     active: true
     createdAt: '2023-06-15T18:04:37.975817Z'
     updatedAt: '2023-07-20T22:09:23.352593Z'
@@ -41,9 +35,7 @@ data:
     aliases:
       - https://limited.self-hosted.gitlab.example.com/user1/project-1.git
     publiccodeYml: |
-      This file content is not relevant as we only use Developers Italia to
-      fetch a list of URLs. Then we use specific code hosting platform API to
-      get fresh data, including pubbliccode.yml content.
+      url: https://limited.self-hosted.gitlab.example.com/user1/project-1.git
     active: true
     createdAt: '2023-06-15T18:04:37.975817Z'
     updatedAt: '2023-07-20T22:09:23.352593Z'
