@@ -154,20 +154,6 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/js/sticky-menu-logged-in.js`
-      ),
-      dest: path.resolve(
-        outputFolder,
-        `${ventuno}assets/js/sticky-menu-logged-in.js`
-      ),
-      options: {
-        minify: true,
-        sourceMap: true,
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
         `${ventuno}src/js/toggle-text-seemore-btn.js`
       ),
       dest: path.resolve(
