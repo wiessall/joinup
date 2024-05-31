@@ -13,7 +13,7 @@ use Drupal\replicate_ui\Form\ReplicateConfirmForm;
 /**
  * Implements hook_form_alter().
  */
-function joinup_replicate_form_alter(&$form, FormStateInterface $formState) {
+function joinup_replicate_form_alter(&$form, FormStateInterface $formState): void {
   $formObject = $formState->getFormObject();
   if (!$formObject instanceof ReplicateConfirmForm) {
     return;
@@ -24,4 +24,9 @@ function joinup_replicate_form_alter(&$form, FormStateInterface $formState) {
     '@content-type-label' => $entity->getEntityType()->getSingularLabel(),
     '%original-label' => $entity->label(),
   ]);
+  $form['description'] = [
+    '#markup' => t('The new @content-type-label will be owned by you and created as unpublished.', [
+      '@content-type-label' => $entity->getEntityType()->getSingularLabel(),
+    ]),
+  ];
 }
