@@ -105,7 +105,7 @@ class EndpointQueryForm extends FormBase {
     $query = $form_state->getValue('query');
     $format = $form_state->getValue('format');
     if ($format === 'text/html') {
-      $form_state->setRedirect('sparql_endpoint.endpoint', [], [
+      $form_state->setRedirect('sparql_endpoint.query', [], [
         'query' => [
           'query' => $query,
           'format' => $format,
@@ -207,7 +207,7 @@ class EndpointQueryForm extends FormBase {
     foreach ($helperQueries as $helperQuery) {
       $links = [];
       foreach (self::ALLOWED_FORMATS as $format => $label) {
-        $queryLink = Url::fromRoute('sparql_endpoint.endpoint', [], [
+        $queryLink = Url::fromRoute('sparql_endpoint.query', [], [
           'query' => [
             'query' => $helperQuery['query'],
             'format' => $format,
