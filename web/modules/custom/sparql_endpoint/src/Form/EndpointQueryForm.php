@@ -7,7 +7,7 @@ namespace Drupal\sparql_endpoint\Form;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
-use GuzzleHttp\ClientInterface;
+use Drupal\joinup_rdf\SparqlReadOnlyEndpoint;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,20 +27,14 @@ class EndpointQueryForm extends FormBase {
     'text/csv' => 'CSV',
   ];
 
-  /**
-   * Constructs a new EndpointQueryForm object.
-   *
-   * @param \GuzzleHttp\ClientInterface $httpClient
-   *   The HTTP client.
-   */
-  public function __construct(protected ClientInterface $httpClient) {}
+  public function __construct(protected SparqlReadOnlyEndpoint $endpoint) {}
 
   /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container): self {
     return new static(
-      $container->get('http_client')
+      $container->get('joinup_rdf.readonly_endpoint')
     );
   }
 
@@ -124,30 +118,6 @@ class EndpointQueryForm extends FormBase {
   }
 
   /**
-   * Build the query URI.
-   *
-   * @param string $query
-   *   The query.
-   * @param string $format
-   *   The format.
-   *
-   * @return string
-   *   The query URI.
-   */
-  protected function buildQueryUri(string $query, string $format): string {
-    return Url::fromUri($_SERVER['SPARQL_PUBLIC_ENDPOINT'], [
-      'query' => [
-        'default-graph-uri' => '',
-        'query' => $query,
-        'format' => $format,
-        'should-sponge' => '',
-        'timeout' => 0,
-        'signal_void' => 'on',
-      ],
-    ])->setAbsolute()->toString();
-  }
-
-  /**
    * Get the results from the endpoint.
    *
    * @param string $query
@@ -159,12 +129,8 @@ class EndpointQueryForm extends FormBase {
    *   An array containing the keys 'success' and 'results'.
    */
   protected function getResultsFromEndpoint(string $query, string $format): array {
-    // @todo It would be fine to have our own query validator to prevent
-    //   sending invalid queries to the endpoint.
-    $url = $this->buildQueryUri($query, $format);
-
     try {
-      $endpointResponse = $this->httpClient->get($url);
+      $endpointResponse = $this->endpoint->query($query, $format);
     }
     catch (\Exception $e) {
       return [
