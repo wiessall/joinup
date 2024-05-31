@@ -177,6 +177,7 @@ default:
         In the spotlight: '.block-views-blockin-the-spotlight-block'
         IOPE Menu: '#block-iope-navigation'
         Layout paragraphs dialog buttons: '.ui-dialog-buttonpane'
+        Layout paragraphs widget: '.field--type-entity-reference-revisions .fieldset-wrapper .js-lpb-component'
         Left sidebar: 'aside.layout-sidebar'
         Like block: '#block-ventuno-like'
         Main fields accordion: '.accordion .accordion-item #main'
