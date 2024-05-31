@@ -5,15 +5,13 @@ Feature: Cloning of entities
     Given collections:
       | title            | state     |
       | Collection       | published |
-      | Other Collection | published |
     And solutions:
       | title          | collection       | state     |
       | Solution       | Collection       | published |
-      | Other Solution | Other Collection | published |
     And "custom_page" content:
-      | title                     | collection | field_paragraphs_body             | state     |
-      | Collection Custom Page    | Collection | Collection custom page content    | published |
-      | Solution Custom Page      | Solution   | Solution custom page content      | published |
+      | title                  | collection | field_paragraphs_body          | state     |
+      | Collection Custom Page | Collection | Collection custom page content | published |
+      | Solution Custom Page   | Solution   | Solution custom page content   | published |
 
   Scenario Outline: Only moderators, owners and facilitators can replicate a custom page.
     Given I am <role>
@@ -61,17 +59,17 @@ Feature: Cloning of entities
   @javascript
   Scenario Outline: User replicates content
     Given I am logged in as a <role>
-    And I go to the "Collection Custom Page" custom page
+    And I go to the "<group label> Custom Page" custom page
     Then I should see the link "Replicate" in the "Entity actions" region
     Given I mark all emails as read
     And I open the header local tasks menu
     When I click "Replicate"
-    Then I should see the heading "Set the title of the new content item cloned from Collection Custom Page"
+    Then I should see the heading "Set the title of the new content item cloned from <group label> Custom Page"
     When I fill in "New label (English)" with "This is the new title of the content"
     And I press "Replicate"
     Then I should see the heading "Edit Custom page This is the new title of the content"
     And the workflow state of the "This is the new title of the content" content is set to "draft"
-    And I should see the text "Collection custom page content" in the "Layout paragraphs widget" region
+    And I should see the text "<group label> custom page content" in the "Layout paragraphs widget" region
     # Anonymous, authenticated users and group members are unable to access the new content.
     Given I am an anonymous user
     When I go to the "This is the new title of the content" custom page
@@ -84,7 +82,10 @@ Feature: Cloning of entities
     Then I should see the heading "Access denied"
 
     Examples:
-      | role                                     |
-      | moderator                                |
-      | facilitator of the Collection collection |
-      | owner of the Collection collection       |
+      | role                                     | group label |
+      # | moderator                                | Collection  |
+      # | moderator                                | Solution    |
+      # | facilitator of the Collection collection | Collection  |
+      # | facilitator of the Solution solution     | Solution    |
+      # | owner of the Collection collection       | Collection  |
+      | owner of the Solution solution           | Solution    |
