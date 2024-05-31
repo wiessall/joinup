@@ -80,8 +80,8 @@ Feature: Add community content
       | title        | abstract | field_paragraphs_body | location          | author    | collection          | state | created    |
       | Sample event | abstract | Sample content.       | Buckingham Palace | Publisher | The afternoon shift | draft | 01-01-2010 |
     And news content:
-      | title       | headline    | body            | state | author    | collection          | created    |
-      | Sample news | Sample news | Sample content. | draft | Publisher | The afternoon shift | 01-01-2010 |
+      | title       | headline    | abstract | field_paragraphs_body | state | author    | collection          | created    |
+      | Sample news | Sample news | abstract | Sample content.       | draft | Publisher | The afternoon shift | 01-01-2010 |
 
     When I am logged in as "Publisher"
     And I go to the "Sample <content type>" <content type>
@@ -174,8 +174,11 @@ Feature: Add community content
     Then the following field should not be present "Summary"
     And I fill in the following:
       | Short title | Published community news |
+      | Abstract    | Abstract                 |
       | Headline    | Published community news |
-    And I enter "Published community news" in the "Content" wysiwyg editor
+    And I append text to field_paragraphs_body layout paragraphs field
+      | field_body:value  | Published community news |
+      | field_body:format | content_editor           |
     And I select "Supplier exchange" from "Topic"
     And I press "Publish"
     Then I should see the heading "Published community news"
@@ -230,8 +233,8 @@ Feature: Add community content
 
     When I am logged in as a "facilitator" of the "The editor tester collection" collection
     And I go to the "The editor tester collection" collection
-    And I click "Add news" in the plus button menu
-    Then I should see the heading "Add news"
+    And I click "Add discussion" in the plus button menu
+    Then I should see the heading "Add discussion"
     And I should see the "Content" wysiwyg editor
 
     When there are no preexisting log records on the site
