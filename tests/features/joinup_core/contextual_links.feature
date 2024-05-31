@@ -14,13 +14,18 @@ Feature:
     And I fill in the following:
       | Short title | Revisions collection published          |
       | Headline    | Revisions collection has been published |
-    And I enter "We are proud to announce another useless test entity." in the "Content" wysiwyg editor
+      | Abstract    | Revisions collection has been published |
+    And I append "text" to "field_paragraphs_body" layout paragraphs field
+      | field_body:value  | We are proud to announce another useless test entity. |
+      | field_body:format | content_editor                                        |
     And I select "EU and European Policies" from "Topic"
     And I press "Save as draft"
 
     # Edit the news to create a new revision.
     And I click "Edit" in the "Entity actions" region
-    And I enter "We are proud (well not that proud) to announce another useless test entity." in the "Content" wysiwyg editor
+    And I append "text" to "field_paragraphs_body" layout paragraphs field
+      | field_body:value  | We are proud (well not that proud) to announce another useless test entity. |
+      | field_body:format | content_editor                                                              |
     And I press "Save as draft"
 
     And I click "Revisions" in the "Entity actions" region
