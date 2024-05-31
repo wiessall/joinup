@@ -20,7 +20,7 @@ Feature: Solution RSS feed.
       | Lantern Domestic  | scorlan | facilitator |
       | Deuteron Lonesome | scorlan | facilitator |
     And news content:
-      | title                                  | body                                                     | state     | author  | created          | solution          |
+      | title                                  | field_paragraphs_body                                    | state     | author  | created          | solution          |
       | Monkeys worst indigo amongst colors    | Research results are out.                                | published | scorlan | 2019-01-21 12:36 | Lantern Domestic  |
       | Proton lonesomeness doesn't reach peak | More than 200 thousand protons were interviewed.         | published | scorlan | 2019-01-07 12:00 | Deuteron Lonesome |
       | Old metal alloy improves scissors      | It improves sharpness but they are more subject to rust. | published | scorlan | 2018-04-11 09:00 | Lantern Domestic  |

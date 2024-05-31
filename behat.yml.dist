@@ -64,6 +64,7 @@
   - Drupal\joinup\Context\JoinupSeoContext
   - Drupal\joinup\Context\JoinupSubscriptionContext
   - Drupal\joinup\Context\JoinupUserContext
+  - Drupal\joinup\Context\LinkContext
   - Drupal\joinup\Context\LogRecordsContext
   - Drupal\joinup\Context\MediaContext
   - Drupal\joinup\Context\MetaEntityContext

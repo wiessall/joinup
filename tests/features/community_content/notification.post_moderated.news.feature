@@ -20,13 +20,13 @@ Feature: Notification test for the news transitions on a post moderated parent.
       | CC post collection | CC facilitator | facilitator |
       | CC post collection | CC member      | <roles>     |
     And news content:
-      | title                          | author    | body | headline                       | collection         | field_state  |
-      | CCN post publish               | CC member | body | CCN post publish               | CC post collection | draft        |
-      | CCN post request changes       | CC member | body | CCN post request changes       | CC post collection | published    |
-      | CCN post report                | CC member | body | CCN post report                | CC post collection | published    |
-      | CCN post propose from reported | CC member | body | CCN post propose from reported | CC post collection | needs_update |
-      | CCN post approve proposed      | CC member | body | CCN post approve proposed      | CC post collection | proposed     |
-      | CCN post delete                | CC member | body | CCN post delete                | CC post collection | published    |
+      | title                          | author    | field_paragraphs_body | headline                       | collection         | field_state  | abstract      |
+      | CCN post publish               | CC member | body                  | CCN post publish               | CC post collection | draft        | Some abstract |
+      | CCN post request changes       | CC member | body                  | CCN post request changes       | CC post collection | published    | Some abstract |
+      | CCN post report                | CC member | body                  | CCN post report                | CC post collection | published    | Some abstract |
+      | CCN post propose from reported | CC member | body                  | CCN post propose from reported | CC post collection | needs_update | Some abstract |
+      | CCN post approve proposed      | CC member | body                  | CCN post approve proposed      | CC post collection | proposed     | Some abstract |
+      | CCN post delete                | CC member | body                  | CCN post delete                | CC post collection | published    | Some abstract |
 
     # Test 'create' operation.
     When I am logged in as "CC member"
@@ -34,7 +34,10 @@ Feature: Notification test for the news transitions on a post moderated parent.
     And I click "Add news" in the plus button menu
     And I fill in "Short title" with "CCN create publish"
     And I fill in "Headline" with "CCN create publish"
-    And I fill in "Content" with "CCN create publish"
+    And I fill in "Abstract" with "CCN create publish"
+    And I append "text" to "field_paragraphs_body" layout paragraphs field
+      | field_body:value  | CCN create publish |
+      | field_body:format | content_editor     |
     And I select "Statistics and Analysis" from "Topic"
     And I press "Publish"
     Then the following email should have been sent:
