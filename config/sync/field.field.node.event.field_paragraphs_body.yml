@@ -34,7 +34,7 @@ field_name: field_paragraphs_body
 entity_type: node
 bundle: event
 label: Body
-description: ''
+description: "Insert your content. You can start by adding a single-column layout and populating it with a 'Text' component."
 required: false
 translatable: false
 default_value: {  }
