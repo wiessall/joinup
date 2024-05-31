@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_search\EventSubscriber;
 
+use Drupal\Core\Language\LanguageInterface;
 use Drupal\search_api\Event\IndexingItemsEvent;
 use Drupal\search_api\Event\SearchApiEvents;
 use Drupal\search_api\Utility\Utility;
@@ -35,7 +36,7 @@ class SearchApiIndexingItemsSubscriber implements EventSubscriberInterface {
     foreach ($items as $item_id => $item) {
       [, $raw_id] = Utility::splitCombinedId($item_id);
       [, $langcode] = Utility::splitPropertyPath($raw_id);
-      if (!in_array($langcode, ['en', 'und'], TRUE)) {
+      if (!in_array($langcode, ['en', LanguageInterface::LANGCODE_NOT_SPECIFIED], TRUE)) {
         unset($items[$item_id]);
       }
     }
