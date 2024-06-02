@@ -25,4 +25,15 @@ interface SparqlReadOnlyEndpointInterface {
    */
   public function query(string $query, ?string $accept = NULL): ResponseInterface;
 
+  /**
+   * Returns the state of endpoint as a requirement entry.
+   *
+   * @return array
+   *   The state of SPARQL read-only endpoint with the same format as an entry
+   *   from hook_requirements().
+   *
+   * @see hook_requirements()
+   */
+  public function getRequirement(): array;
+
 }
