@@ -15,7 +15,7 @@ use Psr\Http\Message\ResponseInterface;
 /**
  * Service to access the SPARQL read-only endpoint.
  */
-class SparqlReadOnlyEndpoint {
+class SparqlReadOnlyEndpoint implements SparqlReadOnlyEndpointInterface {
 
   use StringTranslationTrait;
 
@@ -25,16 +25,7 @@ class SparqlReadOnlyEndpoint {
   ) {}
 
   /**
-   * Performs an HTTP query against the endpoint.
-   *
-   * @param string $query
-   *   The SPARQL query.
-   * @param string|null $accept
-   *   (optional) The 'Accept' HTTP header. This is used to determine the format
-   *   of the response.
-   *
-   * @return \Psr\Http\Message\ResponseInterface
-   *   The HTTP response.
+   * {@inheritdoc}
    */
   public function query(string $query, ?string $accept = NULL): ResponseInterface {
     $sparql = $this->settings->get('sparql');
