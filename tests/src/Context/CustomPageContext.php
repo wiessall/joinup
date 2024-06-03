@@ -72,7 +72,9 @@ class CustomPageContext extends RawDrupalContext {
    *   The name of the custom page.
    *
    * @When I go to the :title custom page
+   * @When I go to the :title custom_page
    * @When I visit the :title custom page
+   * @When I visit the :title custom_page
    *
    * @throws \Drupal\Core\Entity\EntityMalformedException
    */
