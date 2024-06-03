@@ -15,7 +15,7 @@ class RouteSubscriber extends RouteSubscriberBase {
   /**
    * {@inheritdoc}
    */
-  protected function alterRoutes(RouteCollection $collection) {
+  protected function alterRoutes(RouteCollection $collection): void {
     // @todo Make these configurable by additional configuration options.
     if (!($route = $collection->get('entity.node.replicate'))) {
       return;
