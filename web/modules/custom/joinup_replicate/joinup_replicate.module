@@ -1,0 +1,27 @@
+<?php
+
+/**
+ * @file
+ * Hooks of Joinup Replicate module.
+ */
+
+declare(strict_types=1);
+
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\replicate_ui\Form\ReplicateConfirmForm;
+
+/**
+ * Implements hook_form_alter().
+ */
+function joinup_replicate_form_alter(&$form, FormStateInterface $formState) {
+  $formObject = $formState->getFormObject();
+  if (!$formObject instanceof ReplicateConfirmForm) {
+    return;
+  }
+
+  $entity = $formObject->getEntity();
+  $form['#title'] = t('Set the title of the new @content-type-label cloned from %original-label', [
+    '@content-type-label' => $entity->getEntityType()->getSingularLabel(),
+    '%original-label' => $entity->label(),
+  ]);
+}
