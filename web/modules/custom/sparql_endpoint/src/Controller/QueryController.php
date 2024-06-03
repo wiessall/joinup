@@ -47,13 +47,18 @@ class QueryController extends ControllerBase {
     $build['form'] = $this->formBuilder()->getForm(QueryForm::class);
 
     $formatResponse = $this->getFormatResponse($request);
-    if ($formatResponse && !empty($requestQuery['query'])) {
-      $sparqlResponse = $this->endpoint->query($requestQuery['query'], $formatResponse->getMimeType());
-
-      return $formatResponse->getResponse($sparqlResponse);
+    if ($formatResponse && empty($requestQuery['query'])) {
+      return $build;
     }
 
-    return $build;
+    $sparqlResponse = $this->endpoint->query($requestQuery['query'], $formatResponse->getMimeType());
+    if (!$sparqlResponse->isSuccess()) {
+      return new Response($sparqlResponse->results, $sparqlResponse->code, [
+        'Content-Type' => 'text/plain',
+      ]);
+    }
+
+    return $formatResponse->getResponse($sparqlResponse);
   }
 
   /**
