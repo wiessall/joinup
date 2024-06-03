@@ -8,7 +8,6 @@
 declare(strict_types=1);
 
 use Drupal\joinup_bundle_class\AbstractInterface;
-use Drupal\joinup_bundle_class\DescriptionInterface;
 use Drupal\joinup_bundle_class\LogoInterface;
 use Drupal\joinup_community_content\Entity\CommunityContentInterface;
 use Drupal\joinup_core\Controller\IdRedirect;
@@ -64,13 +63,7 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
     $variables['view_mode'] === 'highlighted' ||
     ($entity_type_id === 'node' && $entity->bundle() === 'custom_page')
   ) {
-    $variables['text'] = $entity instanceof DescriptionInterface && isset($variables['content'][$entity->getDescriptionField()]) ? $variables['content'][$entity->getDescriptionField()] : NULL;
-
-    // Use abstract if possible.
-    if ($entity instanceof AbstractInterface && !$entity->get($entity->getAbstractField())->isEmpty()
-      && isset($variables['content'][$entity->getAbstractField()])) {
-      $variables['text'] = $variables['content'][$entity->getAbstractField()];
-    }
+    $variables['text'] = $entity instanceof AbstractInterface && isset($variables['content'][$entity->getAbstractField()]) ? $variables['content'][$entity->getAbstractField()] : NULL;
   }
 
   // Image.
