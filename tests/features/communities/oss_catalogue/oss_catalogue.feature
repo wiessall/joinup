@@ -197,6 +197,7 @@ Feature:
       | Vitality                                                                                           |
       | 41%                                                                                                |
     And the "div" element with "title" attribute should contain "The software is typically installed and run in a a desktop operating system environment."
+    And I should not see any HTML tags inside elements with title attribute
     And the "canvas" element with "data-vitality-index-range" attribute should contain "[12,45,56,7,90,29,34,20,47,48,50,80]"
     And I should see the following links:
       # Categories.

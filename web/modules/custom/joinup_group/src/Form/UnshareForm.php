@@ -143,6 +143,7 @@ abstract class UnshareForm extends ShareFormBase {
     $current_ids = array_flip($this->getAlreadySharedGroupIds());
     unset($current_ids[$group->id()]);
     $this->entity->get($this->getSharedOnFieldName())->setValue(array_flip($current_ids));
+    $this->entity->skip_notification = TRUE;
     $this->entity->save();
     $this->invalidator->invalidateTags($group->getCacheTagsToInvalidate());
   }

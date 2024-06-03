@@ -26,7 +26,7 @@ Feature: Collection RSS feed.
       | Proton Lonesome | published | alejake | 2019-01-05 10:00 | Indigo Monkey    |
       | Shiny Ray       | published | otto    | 2018-08-14 17:36 | Dreaded Scissors |
     And news content:
-      | title                                   | body                                                     | state     | author  | created          | collection       | solution        |
+      | title                                   | field_paragraphs_body                                    | state     | author  | created          | collection       | solution        |
       | Monkeys favourite indigo amongst colors | Research results are out.                                | published | alejake | 2019-01-21 12:36 | Indigo Monkey    |                 |
       | Proton lonesomeness reaches peak        | More than 200 thousand protons were interviewed.         | published | forest  | 2019-01-07 12:00 |                  | Proton Lonesome |
       | New metal alloy improves scissors       | It improves sharpness but they are more subject to rust. | published | otto    | 2018-04-11 09:00 | Dreaded Scissors |                 |
