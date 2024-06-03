@@ -12,7 +12,8 @@ Feature: Tests related to the SPARQL query endpoint.
     And I should see the following table rows:
       | s | p | o |
 
-    Given I select "N-Triples" from "format"
+    Given I go to "/sparql"
+    And I select "N-Triples" from "format"
     When I press "Submit"
     Then the response status code should be 200
     And the content type of the response should be "text/plain; charset=UTF-8"
@@ -33,8 +34,8 @@ Feature: Tests related to the SPARQL query endpoint.
     And I select "JSON" from "format"
     And I press "Submit"
     Then the response status code should be 200
-    And the content type of the response should be "application/json"
-    And the response should contain "{\"head\":{\"link\":[],\"vars\":[\"s\",\"p\",\"o\"]}"
+    And the content type of the response should be "application/sparql-results+json"
+    And the response should contain "{ \"head\": { \"link\": [], \"vars\": [\"s\", \"p\", \"o\"] }"
 
     Given I go to "/sparql"
     And I select "XML" from "format"
@@ -55,16 +56,20 @@ Feature: Tests related to the SPARQL query endpoint.
     And I press "Submit"
     Then the response status code should be 400
     And the content type of the response should be "text/plain; charset=UTF-8"
-    And the response should contain "Virtuoso 37000 Error SP030: SPARQL compiler, line 4: syntax error at 'Invalid' before '}'"
+    And the response should contain "Virtuoso 37000 Error SP030: SPARQL compiler, line 2: syntax error at 'Invalid' before '}'"
 
     Examples:
-      | format    |
-      | N-Triples |
-      | Turtle    |
-      | RDF/XML   |
-      | JSON      |
-      | XML       |
-      | CSV       |
+      | format      |
+      | HTML        |
+      | Spreadsheet |
+      | XML         |
+      | JSON        |
+      | Javascript  |
+      | Turtle      |
+      | RDF/XML     |
+      | N-Triples   |
+      | CSV         |
+      | TSV         |
 
   Scenario: If a query format is forced into the URL, do not perform a query.
     # The query is valid but the format was not selected from the list and
