@@ -58,7 +58,22 @@ Feature: Cloning of entities
 
   @javascript
   Scenario Outline: User replicates content
-    Given I am logged in as a <role>
+    Given users:
+      | Username               | Roles     |
+      | Moderator              | moderator |
+      | Collection Owner       |           |
+      | Collection Facilitator |           |
+      | Solution Owner         |           |
+      | Solution Facilitator   |           |
+    And the following collection user memberships:
+      | collection | user                   | roles              |
+      | Collection | Collection Owner       | owner, facilitator |
+      | Collection | Collection Facilitator | facilitator        |
+    And the following solution user memberships:
+      | solution | user                 | roles              |
+      | Solution | Solution Owner       | owner, facilitator |
+      | Solution | Solution Facilitator | facilitator        |
+    Given I am logged in as "<user>"
     And I go to the "<group label> Custom Page" custom page
     Then I should see the link "Replicate" in the "Entity actions" region
     Given I mark all emails as read
@@ -82,10 +97,10 @@ Feature: Cloning of entities
     Then I should see the heading "Access denied"
 
     Examples:
-      | role                                     | group label |
-      # | moderator                                | Collection  |
-      # | moderator                                | Solution    |
-      # | facilitator of the Collection collection | Collection  |
-      # | facilitator of the Solution solution     | Solution    |
-      # | owner of the Collection collection       | Collection  |
-      | owner of the Solution solution           | Solution    |
+      | user                   | group label |
+      | Moderator              | Collection  |
+      | Moderator              | Solution    |
+      | Collection Facilitator | Collection  |
+      | Solution Facilitator   | Solution    |
+      | Collection Owner       | Collection  |
+      | Solution Owner         | Solution    |
