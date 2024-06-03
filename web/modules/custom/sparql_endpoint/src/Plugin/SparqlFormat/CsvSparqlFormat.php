@@ -8,9 +8,8 @@ namespace Drupal\sparql_endpoint\Plugin\SparqlFormat;
  * Provides a 'CSV' SPARQL format.
  *
  * @SparqlFormat(
- *   id = "csv",
+ *   id = "text/csv",
  *   weight = 10,
- *   mimeType = "text/csv",
  *   label = @Translation("CSV"),
  * )
  */

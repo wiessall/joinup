@@ -86,7 +86,7 @@ class QueryForm extends FormBase {
     $form_state->setRedirect('sparql_endpoint.query', [], [
       'query' => [
         'query' => $query,
-        '_format' => $format,
+        'format' => $format,
       ],
     ]);
   }
@@ -120,7 +120,7 @@ class QueryForm extends FormBase {
         $queryLink = Url::fromRoute('sparql_endpoint.query', [], [
           'query' => [
             'query' => $helperQuery['query'],
-            '_format' => $format,
+            'format' => $format,
           ],
         ])->setAbsolute()->toString();
         $links[] = "<a href='$queryLink'>$label</a>";

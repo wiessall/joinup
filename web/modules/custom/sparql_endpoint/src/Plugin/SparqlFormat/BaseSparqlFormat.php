@@ -32,19 +32,8 @@ abstract class BaseSparqlFormat extends PluginBase implements SparqlFormatInterf
    */
   protected function getHeaders(): array {
     return [
-      'Content-Type' => $this->getMimeType(),
+      'Content-Type' => $this->getPluginId(),
     ];
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getMimeType(): string {
-    // Retrieve the complete plugin definition.
-    $plugin_definition = $this->getPluginDefinition();
-
-    // Return the mimeType value.
-    return $plugin_definition['mimeType'];
   }
 
 }

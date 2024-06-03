@@ -8,9 +8,8 @@ namespace Drupal\sparql_endpoint\Plugin\SparqlFormat;
  * Provides a 'Javascript' SPARQL format.
  *
  * @SparqlFormat(
- *   id = "javascript",
+ *   id = "application/javascript",
  *   weight = 6,
- *   mimeType = "application/javascript",
  *   label = @Translation("Javascript"),
  * )
  */

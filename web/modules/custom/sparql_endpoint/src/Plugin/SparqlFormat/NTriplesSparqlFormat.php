@@ -8,9 +8,8 @@ namespace Drupal\sparql_endpoint\Plugin\SparqlFormat;
  * Provides a 'N-Triples' SPARQL format.
  *
  * @SparqlFormat(
- *   id = "plain",
+ *   id = "text/plain",
  *   weight = 9,
- *   mimeType = "text/plain",
  *   label = @Translation("N-Triples"),
  * )
  */

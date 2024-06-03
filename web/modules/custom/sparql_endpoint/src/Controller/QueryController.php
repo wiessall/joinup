@@ -7,9 +7,9 @@ namespace Drupal\sparql_endpoint\Controller;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\sparql_endpoint\CachedSparqlReadOnlyEndpoint;
 use Drupal\sparql_endpoint\Form\QueryForm;
-use Drupal\sparql_endpoint\Plugin\SparqlFormat\SparqlFormatInterface;
 use Drupal\sparql_endpoint\SparqlFormatManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\AcceptHeader;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -43,36 +43,52 @@ class QueryController extends ControllerBase {
    *   The rendered content or an HTTP response.
    */
   public function content(Request $request): array|Response {
-    $requestQuery = $request->query->all();
-    $build['form'] = $this->formBuilder()->getForm(QueryForm::class);
+    $query = $request->query->get('query');
+    $format = $this->getFormatFromQuery($request) ?? $this->getFormatFromRequest($request);
 
-    $formatResponse = $this->getFormatResponse($request);
-    if (!$formatResponse || empty($requestQuery['query'])) {
+    $sparqlFormat = $this->sparqlFormatManager->getSparqlFormatPluginById($format);
+    if (!$sparqlFormat || empty($query)) {
+      $build['form'] = $this->formBuilder()->getForm(QueryForm::class);
       return $build;
     }
 
-    $sparqlResponse = $this->endpoint->query($requestQuery['query'], $formatResponse->getMimeType());
+    $sparqlResponse = $this->endpoint->query($query, $sparqlFormat->getPluginId());
     if (!$sparqlResponse->isSuccess()) {
       return new Response($sparqlResponse->results, $sparqlResponse->code, [
         'Content-Type' => 'text/plain',
       ]);
     }
 
-    return $formatResponse->getResponse($sparqlResponse);
+    return $sparqlFormat->getResponse($sparqlResponse);
   }
 
   /**
-   * Get the SparqlFormatInterface response based on the request format.
+   * Gets the format from the query.
    *
    * @param \Symfony\Component\HttpFoundation\Request $request
    *   The request object.
    *
-   * @return \Drupal\sparql_endpoint\Plugin\SparqlFormat\SparqlFormatInterface|null
-   *   Sparql format plugin.
+   * @return string|null
+   *   The format value retrieved from the Accept header.
    */
-  protected function getFormatResponse(Request $request): ?SparqlFormatInterface {
-    $format = $request->getRequestFormat();
-    return $this->sparqlFormatManager->getSparqlFormatPluginById($format);
+  protected function getFormatFromQuery(Request $request): ?string {
+    return $request->query->get('format');
+  }
+
+  /**
+   * Gets the format from the request's Accept header.
+   *
+   * @param \Symfony\Component\HttpFoundation\Request $request
+   *   The request object.
+   *
+   * @return string
+   *   The format value retrieved from the Accept header.
+   */
+  protected function getFormatFromRequest(Request $request): string {
+    $acceptHeaderString = $request->headers->get('Accept') ?: 'text/html';
+    $acceptHeader = AcceptHeader::fromString($acceptHeaderString);
+
+    return $acceptHeader->first()->getValue();
   }
 
 }

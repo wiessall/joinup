@@ -8,9 +8,8 @@ namespace Drupal\sparql_endpoint\Plugin\SparqlFormat;
  * Provides a 'TSV' SPARQL format.
  *
  * @SparqlFormat(
- *   id = "tab-separated-values",
+ *   id = "text/tab-separated-values",
  *   weight = 11,
- *   mimeType = "text/tab-separated-values",
  *   label = @Translation("TSV"),
  * )
  */
