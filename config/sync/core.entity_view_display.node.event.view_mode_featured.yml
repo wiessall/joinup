@@ -32,9 +32,9 @@ dependencies:
   module:
     - datetime_range
     - field_delimiter
+    - field_fallback_formatter
     - field_formatter_range
     - joinup_core
-    - joinup_html_stripper
     - joinup_slick
     - svg_image
     - template_suggestion
@@ -45,10 +45,16 @@ bundle: event
 mode: view_mode_featured
 content:
   abstract:
-    type: joinup_html_stripper_stripped
+    type: field_fallback_formatter
     label: hidden
     settings:
-      trim_length: 200
+      main_field_formatter_id: joinup_html_stripper_stripped
+      main_field_formatter_settings:
+        trim_length: 200
+      fallback_field_id: field_paragraphs_body
+      fallback_field_formatter_id: entity_reference_revisions_entity_view
+      fallback_field_formatter_settings:
+        view_mode: tile
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
@@ -91,6 +97,8 @@ content:
       filtered_entity_bundles:
         - simple_paragraph
         - text
+      trim_length: 200
+      trim_chars: ...
     third_party_settings:
       field_delimiter:
         delimiter: ''
