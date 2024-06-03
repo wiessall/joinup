@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_replicate\EventSubscriber;
 
+use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityPublishedInterface;
@@ -26,7 +27,7 @@ class JoinupReplicatePrepareClone implements EventSubscriberInterface {
 
   public function __construct(
     protected AccountInterface $currentUser,
-    protected DateTimeInterface $timeService,
+    protected TimeInterface $timeService,
   ) {}
 
   /**
@@ -36,6 +37,7 @@ class JoinupReplicatePrepareClone implements EventSubscriberInterface {
     $events[ReplicatorEvents::REPLICATE_ALTER][] = ['setToDraft', 2];
     $events[ReplicatorEvents::REPLICATE_ALTER][] = ['emptySharedInField', 1];
     $events[ReplicatorEvents::REPLICATE_ALTER][] = ['setOwner'];
+    // @todo Remove this in ISAICP-8776.
     $events[ReplicatorEvents::REPLICATE_ALTER][] = ['setUnpublished', 1];
     $events[ReplicatorEvents::AFTER_SAVE][] = ['makeRedirect', 1];
 
@@ -48,7 +50,7 @@ class JoinupReplicatePrepareClone implements EventSubscriberInterface {
    * @param \Drupal\replicate\Events\ReplicateAlterEvent $event
    *   The event fired by the replicator.
    *
-   * @todo Remove this when Replicate Actions gets accepted by QA.
+   * @todo Remove this in ISAICP-8776 after Replicate Actions is verified by QA.
    */
   public function setUnpublished(ReplicateAlterEvent $event): void {
     $clonedEntity = $event->getEntity();
@@ -90,7 +92,6 @@ class JoinupReplicatePrepareClone implements EventSubscriberInterface {
         if (method_exists($clonedEntity, 'setChangedTime')) {
           $translation->setChangedTime($current_time);
         }
-
       }
     }
   }
@@ -103,10 +104,9 @@ class JoinupReplicatePrepareClone implements EventSubscriberInterface {
    *
    * @throws \Drupal\Core\Entity\EntityMalformedException
    *
-   * @todo Remove this when Replicate Actions gets accepted by QA.
+   * @todo Remove this in ISAICP-8776 after Replicate Actions is verified by QA.
    */
   public function makeRedirect(AfterSaveEvent $event): void {
-    /** @var \Drupal\Core\Entity\EntityInterface $clonedEntity */
     $clonedEntity = $event->getEntity();
     $entityType = $clonedEntity->getEntityTypeId();
 
@@ -134,9 +134,9 @@ class JoinupReplicatePrepareClone implements EventSubscriberInterface {
    * @return bool
    *   TRUE if published status is supported, FALSE otherwise.
    *
-   * @todo Remove this when Replicate Actions gets accepted by QA.
+   * @todo Remove this in ISAICP-8776 after Replicate Actions is verified by QA.
    */
-  private function isPublishableType(EntityInterface $clonedEntity) : bool {
+  protected function isPublishableType(EntityInterface $clonedEntity): bool {
     $publishable = FALSE;
     if ($clonedEntity instanceof ContentEntityInterface && $clonedEntity instanceof EntityPublishedInterface) {
       $publishable = TRUE;

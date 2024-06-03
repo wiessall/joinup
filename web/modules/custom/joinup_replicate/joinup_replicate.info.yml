@@ -5,5 +5,4 @@ package: Joinup
 core_version_requirement: ">= 10.2"
 
 dependencies:
-  - replicate:replicate
-  - replicate_actions:replicate_actions
+  - replicate_ui:replicate_ui
