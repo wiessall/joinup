@@ -22,12 +22,4 @@ interface SparqlFormatInterface extends PluginInspectionInterface {
    */
   public function getResponse(SparqlResponse $sparqlResponse): Response;
 
-  /**
-   * Retrieve the value of the mimeType annotation.
-   *
-   * @return string
-   *   The mimeType annotation value.
-   */
-  public function getMimeType(): string;
-
 }

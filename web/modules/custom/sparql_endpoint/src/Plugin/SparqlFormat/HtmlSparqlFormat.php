@@ -8,9 +8,8 @@ namespace Drupal\sparql_endpoint\Plugin\SparqlFormat;
  * Provides a 'HTML' SPARQL format.
  *
  * @SparqlFormat(
- *   id = "html",
+ *   id = "text/html",
  *   weight = 1,
- *   mimeType = "text/html",
  *   label = @Translation("HTML"),
  * )
  */

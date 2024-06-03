@@ -8,9 +8,8 @@ namespace Drupal\sparql_endpoint\Plugin\SparqlFormat;
  * Provides a 'Turtle' SPARQL format.
  *
  * @SparqlFormat(
- *   id = "turtle",
+ *   id = "text/turtle",
  *   weight = 7,
- *   mimeType = "text/turtle",
  *   label = @Translation("Turtle"),
  * )
  */

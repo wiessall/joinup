@@ -8,9 +8,8 @@ namespace Drupal\sparql_endpoint\Plugin\SparqlFormat;
  * Provides a 'XML' SPARQL format.
  *
  * @SparqlFormat(
- *   id = "sparql-results+xml",
+ *   id = "application/sparql-results+xml",
  *   weight = 4,
- *   mimeType = "application/sparql-results+xml",
  *   label = @Translation("XML"),
  * )
  */

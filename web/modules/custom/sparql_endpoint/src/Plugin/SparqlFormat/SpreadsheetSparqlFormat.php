@@ -8,9 +8,8 @@ namespace Drupal\sparql_endpoint\Plugin\SparqlFormat;
  * Provides a 'Spreadsheet' SPARQL format.
  *
  * @SparqlFormat(
- *   id = "vnd.ms-excel",
+ *   id = "application/vnd.ms-excel",
  *   weight = 3,
- *   mimeType = "application/vnd.ms-excel",
  *   label = @Translation("Spreadsheet"),
  * )
  */
