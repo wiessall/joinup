@@ -57,3 +57,34 @@ Feature: Cloning of entities
       | event       | should not see    |
       | licence     | should not see    |
       | news        | should not see    |
+
+  @javascript
+  Scenario Outline: User replicates content
+    Given I am logged in as a <role>
+    And I go to the "Collection Custom Page" custom page
+    Then I should see the link "Replicate" in the "Entity actions" region
+    Given I mark all emails as read
+    And I open the header local tasks menu
+    When I click "Replicate"
+    Then I should see the heading "Set the title of the new content item cloned from Collection Custom Page"
+    When I fill in "New label (English)" with "This is the new title of the content"
+    And I press "Replicate"
+    Then I should see the heading "Edit Custom page This is the new title of the content"
+    And the workflow state of the "This is the new title of the content" content is set to "draft"
+    And I should see the text "Collection custom page content" in the "Layout paragraphs widget" region
+    # Anonymous, authenticated users and group members are unable to access the new content.
+    Given I am an anonymous user
+    When I go to the "This is the new title of the content" custom page
+    Then I should see the heading "Sign in to continue"
+    Given I am logged in as an "authenticated user"
+    When I go to the "This is the new title of the content" custom page
+    Then I should see the heading "Access denied"
+    Given I am logged in as a member of the Collection collection
+    When I go to the "This is the new title of the content" custom page
+    Then I should see the heading "Access denied"
+
+    Examples:
+      | role                                     |
+      | moderator                                |
+      | facilitator of the Collection collection |
+      | owner of the Collection collection       |
