@@ -39,11 +39,11 @@ class SparqlFormat extends Plugin {
   public string $mimeType;
 
   /**
-   * The human-readable name of the field type.
-   *
-   * @ingroup plugin_translatable
+   * The human-readable name of the plugin type.
    *
    * @var \Drupal\Core\Annotation\Translation
+   *
+   * @ingroup plugin_translatable
    */
   public Translation $label;
 
