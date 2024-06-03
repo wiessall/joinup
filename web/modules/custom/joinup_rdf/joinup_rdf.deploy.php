@@ -174,6 +174,7 @@ function joinup_rdf_deploy_110802(array &$sandbox): string {
 
   return "Migrated {$sandbox['processed']} out of {$sandbox['total']} contact information entities";
 }
+
 /**
  * Clear the contact information graph.
  */
