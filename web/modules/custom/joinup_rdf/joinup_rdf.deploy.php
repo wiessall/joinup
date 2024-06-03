@@ -28,6 +28,22 @@ function joinup_rdf_deploy_110800(array &$sandbox): string {
     $sandbox['owners'] = Json::decode(file_get_contents('private://owners'));
     \Drupal::getContainer()->get('file_system')->delete('private://owners');
     $sandbox['progress'] = 0;
+    $query = <<<SPARQL
+      SELECT DISTINCT(?o)
+      FROM NAMED <http://joinup.eu/collection/published>
+      FROM NAMED <http://joinup.eu/collection/draft>
+      FROM NAMED <http://joinup.eu/solution/published>
+      FROM NAMED <http://joinup.eu/solution/draft>
+      FROM NAMED <http://joinup.eu/asset_release/published>
+      FROM NAMED <http://joinup.eu/asset_release/draft>
+      WHERE {
+        GRAPH ?g {
+          ?s <http://purl.org/dc/terms/publisher> ?o .
+        }
+      }
+      SPARQL;
+    $results = \Drupal::getContainer()->get('sparql.endpoint')->query($query);
+    $sandbox['referred'] = array_map(fn(\stdClass $row): string => $row->o->getUri(), $results->getArrayCopy());
     $sandbox['total'] = count($sandbox['owners']);
   }
   $count = 0;
@@ -35,6 +51,10 @@ function joinup_rdf_deploy_110800(array &$sandbox): string {
     $uri = key($sandbox['owners']);
     $data = current($sandbox['owners']);
     unset($sandbox['owners'][$uri]);
+    if (!in_array($uri, $sandbox['referred'], TRUE)) {
+      // Don't convert owners which are not referred.
+      continue;
+    }
 
     $values = ['type' => 'owner', 'uri' => $uri];
     foreach ($data as $predicate => $objects) {
