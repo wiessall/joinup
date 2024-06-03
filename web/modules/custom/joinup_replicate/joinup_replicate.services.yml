@@ -1,0 +1,10 @@
+services:
+  joinup_replicate.route_subscriber:
+    class: Drupal\joinup_replicate\RouteSubscriber\RouteSubscriber
+    tags:
+      - { name: event_subscriber }
+
+  joinup_replicate.access_check.entity.bundles:
+    class: Drupal\joinup_replicate\Access\EntityBundles
+    tags:
+      - { name: access_check, applies_to: _joinup_replicate_entity_bundles }
