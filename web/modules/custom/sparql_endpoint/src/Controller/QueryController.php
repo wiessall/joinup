@@ -47,7 +47,7 @@ class QueryController extends ControllerBase {
     $build['form'] = $this->formBuilder()->getForm(QueryForm::class);
 
     $formatResponse = $this->getFormatResponse($request);
-    if ($formatResponse && empty($requestQuery['query'])) {
+    if (!$formatResponse || empty($requestQuery['query'])) {
       return $build;
     }
 
