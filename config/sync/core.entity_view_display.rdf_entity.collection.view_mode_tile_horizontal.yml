@@ -25,8 +25,8 @@ dependencies:
     - rdf_entity.rdfentity.collection
     - responsive_image.styles.tile
   module:
+    - field_fallback_formatter
     - field_group
-    - joinup_html_stripper
     - layout_builder
     - responsive_image
     - template_suggestion
@@ -59,23 +59,34 @@ bundle: collection
 mode: view_mode_tile_horizontal
 content:
   field_ar_abstract:
-    type: string
+    type: field_fallback_formatter
     label: hidden
     settings:
-      link_to_entity: false
+      main_field_formatter_id: string
+      main_field_formatter_settings:
+        link_to_entity: false
+      fallback_field_id: field_ar_description
+      fallback_field_formatter_id: smart_trim
+      fallback_field_formatter_settings:
+        trim_length: 600
+        trim_type: chars
+        trim_suffix: ''
+        wrap_output: false
+        wrap_class: trimmed
+        more:
+          display_link: false
+          target_blank: false
+          link_trim_only: false
+          class: more-link
+          text: More
+          aria_label: 'Read more about [node:title]'
+        trim_options:
+          text: false
+          trim_zero: false
+          replace_tokens: false
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
-    weight: 2
-    region: content
-  field_ar_description:
-    type: joinup_html_stripper_stripped
-    label: hidden
-    settings:
-      trim_length: 600
-    third_party_settings:
-      template_suggestion:
-        template_suggestion: bare
     weight: 1
     region: content
   field_ar_logo:
@@ -94,7 +105,7 @@ content:
   members:
     settings: {  }
     third_party_settings: {  }
-    weight: 3
+    weight: 2
     region: content
 hidden:
   changed: true
@@ -105,6 +116,7 @@ hidden:
   field_ar_closed: true
   field_ar_contact_information: true
   field_ar_content_creation: true
+  field_ar_description: true
   field_ar_moderation: true
   field_ar_owner: true
   field_ar_state: true
