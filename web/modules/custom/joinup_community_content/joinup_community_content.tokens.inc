@@ -58,10 +58,7 @@ function joinup_community_content_tokens($type, array $tokens, array $data = [],
             break;
           }
 
-          if (
-            $node instanceof AbstractInterface &&
-            !$node->get($node->getAbstractField())->isEmpty()
-          ) {
+          if ($node instanceof AbstractInterface) {
             $field = $node->get($node->getAbstractField());
             $replacements[$original] = text_summary($field->first()->getString());
           }

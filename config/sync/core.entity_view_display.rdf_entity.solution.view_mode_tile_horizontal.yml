@@ -77,11 +77,19 @@ bundle: solution
 mode: view_mode_tile_horizontal
 content:
   field_is_abstract:
-    type: string
+    type: field_fallback_formatter
     label: hidden
     settings:
-      link_to_entity: false
-    third_party_settings: {  }
+      main_field_formatter_id: string
+      main_field_formatter_settings:
+        link_to_entity: false
+      fallback_field_id: field_is_description
+      fallback_field_formatter_id: joinup_html_stripper_stripped
+      fallback_field_formatter_settings:
+        trim_length: 600
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
     weight: 2
     region: content
   field_is_logo:
@@ -103,16 +111,10 @@ content:
     weight: 3
     region: content
   label:
-    type: field_fallback_formatter
+    type: string
     label: hidden
     settings:
-      main_field_formatter_id: string
-      main_field_formatter_settings:
-        link_to_entity: false
-      fallback_field_id: field_is_description
-      fallback_field_formatter_id: joinup_html_stripper_stripped
-      fallback_field_formatter_settings:
-        trim_length: 600
+      link_to_entity: false
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
