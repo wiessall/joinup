@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Drupal\sparql_endpoint\Plugin\SparqlFormat;
 
 /**
- * Provides a 'HTML' SPARQL format.
+ * Provides a 'RDF/XML' SPARQL format.
  *
  * @SparqlFormat(
  *   id = "rdf+xml",

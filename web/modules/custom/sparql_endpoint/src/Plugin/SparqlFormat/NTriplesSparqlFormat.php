@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Drupal\sparql_endpoint\Plugin\SparqlFormat;
 
 /**
- * Provides a 'HTML' SPARQL format.
+ * Provides a 'N-Triples' SPARQL format.
  *
  * @SparqlFormat(
  *   id = "plain",
