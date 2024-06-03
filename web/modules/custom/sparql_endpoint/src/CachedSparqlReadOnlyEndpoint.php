@@ -35,7 +35,7 @@ class CachedSparqlReadOnlyEndpoint {
     $cid = 'sparql-data: ' . sha1(serialize(func_get_args()));
 
     if ($cache = $this->cacheBackend->get($cid)) {
-      $data = unserialize($cache->data);
+      $data = unserialize($cache->data, ['allowed_classes' => [SparqlResponse::class]]);
     }
     else {
       $data = $this->getSparqlResponse($query, $accept);
