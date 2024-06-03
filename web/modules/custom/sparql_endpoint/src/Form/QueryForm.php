@@ -81,12 +81,10 @@ class QueryForm extends FormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state): void {
-    $query = $form_state->getValue('query');
-    $format = $form_state->getValue('format');
     $form_state->setRedirect('sparql_endpoint.query', [], [
       'query' => [
-        'query' => $query,
-        'format' => $format,
+        'query' => $form_state->getValue('query'),
+        'format' => $form_state->getValue('format'),
       ],
     ]);
   }

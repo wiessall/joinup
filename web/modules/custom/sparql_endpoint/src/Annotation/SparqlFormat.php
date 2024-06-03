@@ -18,7 +18,7 @@ use Drupal\Core\Annotation\Translation;
 class SparqlFormat extends Plugin {
 
   /**
-   * The plugin ID/format.
+   * The plugin ID/mime type.
    *
    * @var string
    */
@@ -30,13 +30,6 @@ class SparqlFormat extends Plugin {
    * @var int
    */
   public int $weight;
-
-  /**
-   * The mimeType.
-   *
-   * @var string
-   */
-  public string $mimeType;
 
   /**
    * The human-readable name of the plugin type.
