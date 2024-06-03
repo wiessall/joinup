@@ -42,7 +42,13 @@ class SparqlReadOnlyEndpoint implements SparqlReadOnlyEndpointInterface {
   }
 
   /**
-   * {@inheritdoc}
+   * Returns the state of endpoint as a requirements entry.
+   *
+   * @return array
+   *   The state of SPARQL read-only endpoint with the same format as an entry
+   *   from hook_requirements().
+   *
+   * @see hook_requirements()
    */
   public function getRequirement(): array {
     $args = ['@user' => $this->settings->get('sparql')['user_readonly'] ?? ''];
