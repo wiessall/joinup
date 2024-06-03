@@ -3,6 +3,7 @@ services:
     class: Drupal\joinup_replicate\EventSubscriber\JoinupReplicatePrepareClone
     arguments:
       - '@current_user'
+      - '@time'
     tags:
       - { name: event_subscriber }
 
