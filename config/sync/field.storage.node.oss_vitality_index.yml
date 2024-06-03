@@ -5,6 +5,9 @@ dependencies:
   module:
     - field_permissions
     - node
+third_party_settings:
+  field_permissions:
+    permission_type: public
 id: node.oss_vitality_index
 field_name: oss_vitality_index
 entity_type: node
