@@ -38,7 +38,7 @@
         "drupal/dynamic_entity_reference": "^4.0",
         "drupal/editor_file": "^2.0",
         "drupal/email_confirmer": "^1.0",
-        "drupal/email_contact": "2.0.3",
+        "drupal/email_contact": "^2.0.4",
         "drupal/embed_block": "^1.0",
         "drupal/entity_legal": "^4.0",
         "drupal/entityqueue": "^1.2",
@@ -142,7 +142,6 @@
         "drupal/filecache": "^1.1",
         "drupal/http_request_mock": "^1.1",
         "drupal/masquerade": "^2.0@RC",
-        "drupal/renderviz": "^1.0",
         "drupal/stage_file_proxy": "^2.1.4",
         "drupal/upgrade_status": "^4.0",
         "drupaltest/behat-one-time-login": "^1.0",
@@ -327,9 +326,6 @@
             },
             "drupal/email_confirmer": {
                 "Support for HTML mails @see https://www.drupal.org/i/3047124": "resources/patch/php/drupal/email_confirmer/3047124.diff"
-            },
-            "drupal/email_contact": {
-                "Make ContactForm's variable protected @see https://www.drupal.org/project/email_contact/issues/3427650":  "resources/patch/php/drupal/email_contact/3427650.patch"
             },
             "drupal/entityqueue": {
                 "Undefined array key \"add_more\" @see https://www.drupal.org/project/entityqueue/issues/3388852": "resources/patch/php/drupal/entityqueue/3388852.diff"

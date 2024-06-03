@@ -40,9 +40,9 @@ Feature: Search inside groups
       | Opening of the winter season | Ski resorts will open in December | published | Chalet construction |                      |
       | Presenting DrillMaster X88   | Our most finely ground drill bit  | published |                     | Inclined foundations |
     And news content:
-      | title             | headline          | body            | collection          | solution             | topic                   | spatial coverage | state     |
-      | Natural materials | Materials natural | Ground feel     | Chalet construction |                      | Statistics and Analysis | Belgium          | published |
-      | Still frozen      | Frozen still      | Maybe next week |                     | Inclined foundations |                         | Greece          | published |
+      | title             | headline          | abstract                      | field_paragraphs_body | collection          | solution             | topic                   | spatial coverage | state     |
+      | Natural materials | Materials natural | Abstract of natural materials | Ground feel           | Chalet construction |                      | Statistics and Analysis | Belgium          | published |
+      | Still frozen      | Frozen still      |                               | Maybe next week       |                     | Inclined foundations |                         | Greece           | published |
     And custom_page content:
       | title     | body                             | collection          | solution             | state     |
       | Resources | Here are some interesting links. | Chalet construction |                      | published |

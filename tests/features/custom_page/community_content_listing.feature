@@ -20,7 +20,7 @@ Feature:
     And I append "layout" to "field_paragraphs_body" field in "node" entity with following "Latest news listing" title:
       | behavior_settings | a:3:{s:17:"layout_paragraphs";a:4:{s:6:"layout";s:13:"layout_onecol";s:6:"config";a:1:{s:5:"label";s:0:"";}s:11:"parent_uuid";N;s:6:"region";N;}s:16:"background_theme";a:0:{}s:11:"extra_class";a:0:{}} |
     And news content:
-      | title                                 | collection | created           | content                          | state     | pinned |
+      | title                                 | collection | created           | field_paragraphs_body            | state     | pinned |
       | Rare Nintendo64 disk drive discovered | Nintendo64 | 2018-10-01 4:26am | Magnetic drive called 64DD.      | published | no     |
       | NEC VR4300 CPU                        | Emulators  | 2018-10-03 4:27am | Update of the emulation library. | published | no     |
     And event content:
@@ -471,8 +471,11 @@ Feature:
     And I click "Add news" in the plus button menu
     When I fill in the following:
       | Short title | Current wars               |
+      | Abstract    | Lead text of current wars. |
       | Headline    | Edisson vs Electro         |
-      | Content     | A new movie is coming out. |
+    And I append "text" to "field_paragraphs_body" layout paragraphs field
+      | field_body:value  | A new movie is coming out. |
+      | field_body:format | content_editor             |
     And I select "Statistics and Analysis" from "Topic"
     And I press "Publish"
     Then I should see the text "Current wars"

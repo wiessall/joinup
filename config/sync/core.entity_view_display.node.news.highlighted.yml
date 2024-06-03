@@ -4,7 +4,7 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.node.highlighted
-    - field.field.node.news.body
+    - field.field.node.news.abstract
     - field.field.node.news.field_attachment
     - field.field.node.news.field_comments
     - field.field.node.news.field_keywords
@@ -13,6 +13,7 @@ dependencies:
     - field.field.node.news.field_news_referenced_solution
     - field.field.node.news.field_news_source_url
     - field.field.node.news.field_news_spatial_coverage
+    - field.field.node.news.field_paragraphs_body
     - field.field.node.news.field_shared_in
     - field.field.node.news.field_site_featured
     - field.field.node.news.field_state
@@ -24,7 +25,8 @@ dependencies:
     - field_delimiter
     - field_formatter_range
     - field_group
-    - joinup_html_stripper
+    - joinup_core
+    - joinup_slick
     - layout_builder
     - responsive_image
     - template_suggestion
@@ -56,15 +58,13 @@ targetEntityType: node
 bundle: news
 mode: highlighted
 content:
-  body:
-    type: joinup_html_stripper_stripped
-    label: hidden
+  abstract:
+    type: string
+    label: visually_hidden
     settings:
-      trim_length: 200
-    third_party_settings:
-      template_suggestion:
-        template_suggestion: ''
-    weight: 2
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 1
     region: content
   field_news_logo:
     type: responsive_image
@@ -78,6 +78,31 @@ content:
       template_suggestion:
         template_suggestion: ''
     weight: 0
+    region: content
+  field_paragraphs_body:
+    type: filtered_entity_reference_bundles
+    label: hidden
+    settings:
+      view_mode: message_digest
+      link: ''
+      filtered_entity_bundles:
+        - simple_paragraph
+        - text
+      trim_length: 200
+    third_party_settings:
+      field_delimiter:
+        delimiter: ''
+      field_formatter_range:
+        order: 0
+        limit: 1
+        offset: 0
+      joinup_slick:
+        preset: ''
+        field_label: true
+        custom_label: ''
+      template_suggestion:
+        template_suggestion: ''
+    weight: 1
     region: content
   field_topic:
     type: entity_reference_label
