@@ -1,0 +1,9 @@
+name: 'Joinup Replicate'
+description: 'Integrates the Replicate module in Joinup.'
+type: module
+package: Joinup
+core_version_requirement: ">= 10.2"
+
+dependencies:
+  - replicate:replicate
+  - replicate_actions:replicate_actions
