@@ -21,10 +21,18 @@ use Drupal\solution\Exception\MissingSolutionException;
 function joinup_group_token_info(): array {
   return [
     'tokens' => [
+      'node' => [
+        'parent_collection' => [
+          'name' => t('Parent collection'),
+          'description' => t('Returns the parent collection for any distribution.'),
+          'module' => 'joinup_group',
+          'type' => 'node',
+        ],
+      ],
       'rdf_entity' => [
         'parent_collection' => [
           'name' => t('Parent collection'),
-          'description' => t('Returns the parent collection for any solution, release or distribution.'),
+          'description' => t('Returns the parent collection for any solution or release.'),
           'module' => 'joinup_group',
           'type' => 'rdf_entity',
         ],
@@ -44,62 +52,66 @@ function joinup_group_token_info(): array {
  */
 function joinup_group_tokens(string $type, array $tokens, array $data, array $options, BubbleableMetadata $bubbleable_metadata): array {
   $replacements = [];
-  if ($type !== 'rdf_entity' || empty($data['rdf_entity'])) {
+  if (!in_array($type, ['node', 'rdf_entity'], TRUE) || empty($data[$type])) {
     return $replacements;
   }
   $token_service = \Drupal::token();
-  $rdf_entity = $data['rdf_entity'];
+  $entity = $data[$type];
 
-  $get_parent_collection = function (CollectionContentInterface $rdf_entity): ?CollectionInterface {
+  $get_parent_collection = function (CollectionContentInterface $entity): ?CollectionInterface {
     try {
-      return $rdf_entity->getCollection();
+      return $entity->getCollection();
     }
     catch (MissingCollectionException $e) {
       // Unexpected case of a missing collection for group content. Let's log an
       // error but this is not fatal so allow the token generation to continue.
-      \Drupal::logger('joinup_group')->error('Failed to generate token for RDF entity with ID @id due to missing parent collection', ['@id' => $rdf_entity->id()]);
+      \Drupal::logger('joinup_group')->error('Failed to generate token for @type entity with ID @id due to missing parent collection', [
+        '@type' => $entity->getEntityTypeId(),
+        '@id' => $entity->id(),
+      ]);
     }
     return NULL;
   };
 
-  if ($type == 'rdf_entity' && !empty($data['rdf_entity'])) {
-    foreach ($tokens as $name => $original) {
-      switch ($name) {
-        case 'parent_collection':
-          // If the entity is solution content then it is related to the parent
-          // collection through the solution. Add a dependency on the solution
-          // because if the solution moves to a different collection this
-          // affects the token value.
-          if ($rdf_entity instanceof SolutionContentInterface) {
-            try {
-              $bubbleable_metadata->addCacheableDependency($rdf_entity->getSolution());
-            }
-            catch (MissingSolutionException $e) {
-              // It is not expected that the solution is missing for solution
-              // content. Let's log an error but this is not fatal so allow the
-              // token generation to continue.
-              \Drupal::logger('joinup_group')->error('Failed to generate token for RDF entity with ID @id due to missing parent solution', ['@id' => $rdf_entity->id()]);
-              break;
-            }
+  foreach ($tokens as $name => $original) {
+    switch ($name) {
+      case 'parent_collection':
+        // If the entity is solution content then it is related to the parent
+        // collection through the solution. Add a dependency on the solution
+        // because if the solution moves to a different collection this affects
+        // the token value.
+        if ($entity instanceof SolutionContentInterface) {
+          try {
+            $bubbleable_metadata->addCacheableDependency($entity->getSolution());
           }
-          if ($rdf_entity instanceof CollectionContentInterface && $parent_collection = $get_parent_collection($rdf_entity)) {
-            $bubbleable_metadata->addCacheableDependency($parent_collection);
-            $replacements[$original] = $parent_collection->label();
+          catch (MissingSolutionException $e) {
+            // It is not expected that the solution is missing for solution
+            // content. Let's log an error but this is not fatal so allow the
+            // token generation to continue.
+            \Drupal::logger('joinup_group')->error('Failed to generate token for @type entity with ID @id due to missing parent solution', [
+              '@type' => $entity->getEntityTypeId(),
+              '@id' => $entity->id(),
+            ]);
+            break;
           }
-          break;
+        }
+        if ($entity instanceof CollectionContentInterface && $parent_collection = $get_parent_collection($entity)) {
+          $bubbleable_metadata->addCacheableDependency($parent_collection);
+          $replacements[$original] = $parent_collection->label();
+        }
+        break;
 
-        case 'short_id_or_title':
-          $replacements[$original] = ($rdf_entity instanceof ShortIdInterface && $rdf_entity->hasShortId())
-            ? $rdf_entity->getShortId()
-            : $rdf_entity->label();
-          $bubbleable_metadata->addCacheableDependency($rdf_entity);
-          break;
-      }
+      case 'short_id_or_title':
+        $replacements[$original] = ($entity instanceof ShortIdInterface && $entity->hasShortId())
+          ? $entity->getShortId()
+          : $entity->label();
+        $bubbleable_metadata->addCacheableDependency($entity);
+        break;
     }
   }
 
   // Allow to descend further into the solution's parent collection.
-  if (($collection_tokens = $token_service->findWithPrefix($tokens, 'parent_collection')) && $rdf_entity instanceof CollectionContentInterface && $collection = $get_parent_collection($rdf_entity)) {
+  if (($collection_tokens = $token_service->findWithPrefix($tokens, 'parent_collection')) && $entity instanceof CollectionContentInterface && $collection = $get_parent_collection($entity)) {
     $replacements += $token_service->generate('rdf_entity', $collection_tokens, ['rdf_entity' => $collection], $options, $bubbleable_metadata);
   }
 
