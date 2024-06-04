@@ -1,0 +1,21 @@
+{#
+/**
+ * @file
+ * Template for the page title.
+ */
+#}
+{% extends '@ventuno/content/page-title.html.twig' %}
+
+{% block metadata %}
+  <div class="fs-sm mb-3 d-flex">
+    {% if additional_content.file_size|render|striptags|trim %}
+      {{ additional_content.file_size }}
+    {% endif %}
+    {% if additional_content.file_size|render|striptags|trim and additional_content.licence|render|striptags|trim %}
+      <span class="mx-1">|</span>
+    {% endif %}
+    {% if additional_content.licence|render|striptags|trim %}
+      <span class="me-1">Licence:</span> {{ additional_content.licence }}
+    {% endif %}
+  </div>
+{% endblock %}
