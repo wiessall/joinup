@@ -167,17 +167,18 @@ display:
             'entity:node':
               custom_page: default
               discussion: default
+              distribution: default
               document: default
               event: default
+              licence: default
               news: default
               newsletter: default
               video: default
             'entity:rdf_entity':
-              asset_distribution: default
               asset_release: default
               collection: default
-              licence: default
               solution: view_mode_tile
+            'entity:taxonomy_term':
               spdx_licence: default
             'entity:user':
               user: default

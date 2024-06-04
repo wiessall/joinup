@@ -5,6 +5,7 @@ dependencies:
   config:
     - field.storage.node.og_audience
     - node.type.distribution
+    - rdf_entity.rdfentity.asset_release
     - rdf_entity.rdfentity.solution
   module:
     - og
@@ -15,12 +16,18 @@ bundle: distribution
 label: 'Groups audience'
 description: 'OG group audience reference field.'
 required: false
-translatable: true
+translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:
-  handler: 'og:default'
+  handler: 'default:rdf_entity'
   handler_settings:
     target_bundles:
+      asset_release: asset_release
       solution: solution
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: asset_release
 field_type: og_standard_reference

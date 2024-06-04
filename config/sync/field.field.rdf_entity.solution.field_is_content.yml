@@ -47,12 +47,12 @@ settings:
     'entity:node':
       custom_page: view_mode_tile
       discussion: view_mode_tile
+      distribution: view_mode_tile
       document: view_mode_tile
       event: view_mode_tile
       news: view_mode_tile
       video: view_mode_tile
     'entity:rdf_entity':
-      asset_distribution: view_mode_tile
       asset_release: view_mode_tile
       collection: view_mode_tile
       licence: default

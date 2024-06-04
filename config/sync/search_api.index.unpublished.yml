@@ -431,6 +431,7 @@ datasource_settings:
       selected:
         - custom_page
         - discussion
+        - distribution
         - document
         - event
         - glossary
@@ -443,7 +444,6 @@ datasource_settings:
     bundles:
       default: false
       selected:
-        - asset_distribution
         - asset_release
         - collection
         - licence
@@ -636,17 +636,17 @@ processor_settings:
         bundle_boosts:
           custom_page: 8.0
           discussion: 2.0
+          distribution: 0.0
           document: 0.0
           event: 3.0
+          licence: 0.0
           news: 5.0
           video: 0.0
       'entity:rdf_entity':
         datasource_boost: 0.0
         bundle_boosts:
-          asset_distribution: 0.0
           asset_release: 0.0
           collection: 21.0
-          licence: 0.0
           solution: 13.0
 tracker_settings:
   default:

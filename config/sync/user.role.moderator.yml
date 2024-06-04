@@ -12,12 +12,12 @@ dependencies:
     - media.type.video
     - node.type.custom_page
     - node.type.discussion
+    - node.type.distribution
     - node.type.document
     - node.type.glossary
     - node.type.licence
     - taxonomy.vocabulary.legal_type
   module:
-    - asset_distribution
     - comment
     - contact_form
     - custom_page
@@ -31,6 +31,7 @@ dependencies:
     - joinup
     - joinup_community_content
     - joinup_core
+    - joinup_distribution
     - joinup_featured
     - joinup_group
     - joinup_group_content_management
@@ -227,9 +228,6 @@ permissions:
   - 'perform announcement workflow reject transition on any entity'
   - 'perform announcement workflow send transition on any entity'
   - 'perform announcement workflow undo transition on any entity'
-  - 'perform asset_distribution_workflow workflow archive transition on any entity'
-  - 'perform asset_distribution_workflow workflow publish transition on any entity'
-  - 'perform asset_distribution_workflow workflow unarchive transition on any entity'
   - 'perform asset_release_workflow workflow archive transition on any entity'
   - 'perform asset_release_workflow workflow draft transition on any entity'
   - 'perform asset_release_workflow workflow provide_changes transition on any entity'
@@ -254,6 +252,9 @@ permissions:
   - 'perform custom_page_workflow workflow save_as_draft transition on any entity'
   - 'perform custom_page_workflow workflow unarchive transition on any entity'
   - 'perform custom_page_workflow workflow unpublish transition on any entity'
+  - 'perform joinup_distribution_workflow workflow archive transition on any entity'
+  - 'perform joinup_distribution_workflow workflow publish transition on any entity'
+  - 'perform joinup_distribution_workflow workflow unarchive transition on any entity'
   - 'perform node:post_moderated workflow approve_proposed transition on any entity'
   - 'perform node:post_moderated workflow archive transition on any entity'
   - 'perform node:post_moderated workflow propose_from_reported transition on any entity'

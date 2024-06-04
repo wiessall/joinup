@@ -1,0 +1,22 @@
+uuid: 8c233da2-3e58-4ce4-b57a-b9df4d42ac7c
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: distribution
+label: Distribution
+type: 'canonical_entities:node'
+pattern: '[node:og_audience:entity:url:path]/distribution/[node:title]'
+selection_criteria:
+  b39133fc-fc53-4f9f-aedc-e2830052f39b:
+    id: 'entity_bundle:node'
+    negate: false
+    uuid: b39133fc-fc53-4f9f-aedc-e2830052f39b
+    context_mapping:
+      node: node
+    bundles:
+      distribution: distribution
+selection_logic: and
+weight: -5
+relationships: {  }

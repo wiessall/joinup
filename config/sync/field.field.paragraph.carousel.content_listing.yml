@@ -29,12 +29,12 @@ settings:
     'entity:node':
       custom_page: carousel
       discussion: carousel
+      distribution: carousel
       document: carousel
       event: carousel
       news: carousel
       video: carousel
     'entity:rdf_entity':
-      asset_distribution: carousel
       asset_release: carousel
       collection: carousel
       licence: eif_perspective

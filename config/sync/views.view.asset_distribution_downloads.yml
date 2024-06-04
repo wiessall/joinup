@@ -5,16 +5,16 @@ dependencies:
   config:
     - system.menu.admin
   module:
-    - asset_distribution
     - csv_serialization
     - file
+    - joinup_distribution
     - rest
     - serialization
     - user
     - views_data_export
 _core:
   default_config_hash: mneZWznSw4-uXX0ixH6W-D3uWnK_WhcQIwEsrGmISSA
-id: asset_distribution_downloads
+id: distribution_downloads
 label: 'Distribution downloads'
 module: views
 description: ''
