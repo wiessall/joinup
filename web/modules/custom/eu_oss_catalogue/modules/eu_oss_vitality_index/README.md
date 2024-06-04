@@ -16,10 +16,10 @@ and currently officially implemented within the
 updated once a week within this catalogue) taking into consideration the
 following four categories:*
 
-- ***Code activity**: the number of commits and merges per day,*
-- ***Release history**: the number of releases per day,*
-- ***User community**: the number of unique authors,*
-- ***Longevity**: the age of the project,*
+- * **Code activity**: the number of commits and merges per day,*
+- * **Release history**: the number of releases per day,*
+- * **User community**: the number of unique authors,*
+- * **Longevity**: the age of the project,*
 
 *The ranges of each measurement can be found in the file
 [vitality-ranges.yml](https://github.com/italia/publiccode-crawler/blob/main/vitality-ranges.yml).*
