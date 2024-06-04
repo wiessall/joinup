@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Drupal\asset_release\Entity;
 
-use Drupal\asset_distribution\Entity\DistributionsParentInterface;
 use Drupal\collection\Entity\CollectionContentInterface;
 use Drupal\joinup_bundle_class\DescriptionInterface;
 use Drupal\joinup_bundle_class\LogoInterface;
+use Drupal\joinup_distribution\Entity\DistributionsParentInterface;
 use Drupal\joinup_publication_date\Entity\EntityPublicationTimeInterface;
 use Drupal\joinup_workflow\ArchivableEntityInterface;
 use Drupal\joinup_workflow\EntityWorkflowStateInterface;

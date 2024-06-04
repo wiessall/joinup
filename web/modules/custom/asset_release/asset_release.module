@@ -404,3 +404,21 @@ function asset_release_preprocess_page_title__rdf_entity__asset_release(array &$
   $creation_date = $view_builder->viewField($creation_date, 'default');
   $variables['additional_content']['created'] = $creation_date;
 }
+
+/**
+ * Implements hook_sparql_bundle_load_alter().
+ *
+ * There is an initial check whether the bundle is empty because the method
+ * that invokes this hook is also called for taxonomies and the bundle is
+ * currently being skipped for the taxonomies.
+ */
+function asset_release_sparql_bundle_load_alter(array $entity_values, array &$bundles): void {
+  if (count($bundles) > 1 && in_array('solution', $bundles)) {
+    if (isset($entity_values['http://purl.org/dc/terms/isVersionOf'])) {
+      $bundles = array_diff($bundles, ['solution']);
+    }
+    else {
+      $bundles = array_diff($bundles, ['asset_release']);
+    }
+  }
+}
