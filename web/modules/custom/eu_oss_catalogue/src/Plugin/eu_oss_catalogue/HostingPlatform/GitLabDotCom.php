@@ -627,9 +627,10 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
     }
     catch (\Throwable $exception) {
       // Log a warning.
-      Error::logException($this->logger, $exception, "Can't get open issues for project {project_id} from {url} using REST API", [
+      Error::logException($this->logger, $exception, "Can't get open issues for project {project_id} from {url} using REST API: {error}", [
         'project_id' => $projectId,
         'url' => $this->getConfiguration()['baseUrl'],
+        'error' => $exception->getMessage(),
       ], LogLevel::WARNING);
     }
   }
