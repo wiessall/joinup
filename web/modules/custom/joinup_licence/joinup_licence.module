@@ -154,11 +154,11 @@ function joinup_licence_node_view(array &$build, NodeInterface $entity, EntityVi
 function joinup_licence_options_list_alter(array &$options, array $context): void {
   /** @var \Drupal\field\FieldConfigInterface $field_definition */
   $field_definition = $context['fieldDefinition'];
-  if (empty($options) || $field_definition->getName() !== 'field_ad_licence') {
+  if (empty($options) || $field_definition->getName() !== 'licence') {
     return;
   }
 
-  $default_value = (int) $context['entity']->field_ad_licence->target_id;
+  $default_value = (int) $context['entity']->licence->target_id;
   $licence_ids = array_keys($options);
   $licences = \Drupal::entityTypeManager()->getStorage('node')->loadMultiple($licence_ids);
   foreach ($licences as $licence_id => $licence) {
