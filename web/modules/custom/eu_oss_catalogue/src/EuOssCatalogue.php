@@ -113,7 +113,7 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
           // queue its second occurrence one more time, but instead, at the end
           // of this method, we log a message about the duplicated URLs.
           if (in_array($project->url, $solutionUrlsToProcess, TRUE)) {
-            $this->logger->warning(
+            $this->logger->error(
               "Solution '@solution' (@url) import skipped: URL already seen in the same provider.",
               [
                 '@solution' => $project->name,
@@ -138,28 +138,7 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
     catch (HostingPlatformFetchException $exception) {
     }
 
-    // Check duplicate URLs and log if there are any.
     $urlCounts = array_count_values($solutionUrlsDiscovered);
-    $nonUniqueUrls = array_filter(
-      $urlCounts,
-      fn (int $count) => $count > 1
-    );
-    if ($nonUniqueUrls) {
-      $this->logger->warning(
-        "Non-unique solution URLs from provider '@provider': @non-unique-urls.", [
-          '@provider' => $provider->getPluginId(),
-          '@non-unique-urls' => implode(
-            ', ',
-            array_map(
-              fn(string $url, int $count) => "$url ($count)",
-              array_keys($nonUniqueUrls),
-              $nonUniqueUrls
-            )
-          ),
-        ],
-      );
-    }
-
     if (!isset($exception)) {
       $queue->createItem([
         'operation' => 'solution:create:cleanup',
