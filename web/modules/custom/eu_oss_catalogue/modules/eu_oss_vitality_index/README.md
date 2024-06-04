@@ -46,5 +46,5 @@ Run the following, to perform Vitality Index queue worker:
 
 Run the following, to fetch Vitality Index for a specific OSS solution:
 ```bash
-./vendor/bin/drush queue:run eu-oss:generate-vitality-index <NODE_ID>
+./vendor/bin/drush eu-oss:generate-vitality-index <NODE_ID>
 ```
