@@ -52,26 +52,22 @@ class AdjustSolutionContentSubscriber implements EventSubscriberInterface {
       // We need to filter out all the distributions except the ones that are
       // directly associated to the solution.
       $or = $query->createConditionGroup('OR');
-      // The next line might seem crazy, but I am not drunk. It's needed
-      // to bypass Solr problems with negated queries. To fix this, we need
-      // to use the '(*:* NOT entity_bundle:"asset_distribution")' format.
-      // Unfortunately, SearchApiSolrBackend::createFilterQuery() uses
-      // that syntax only when multiple values are provided. While ugly,
-      // nothing is really wrong about passing twice the same bundle.
+      // The next line might seem crazy, but I am not drunk. It's needed to
+      // bypass Solr problems with negated queries. To fix this, we need to use
+      // the '(*:* NOT entity_bundle:"distribution")' format. Unfortunately,
+      // SearchApiSolrBackend::createFilterQuery() uses that syntax only when
+      // multiple values are provided. While ugly, nothing is really wrong about
+      // passing twice the same bundle.
       // @see \Drupal\search_api_solr\Plugin\search_api\backend\SearchApiSolrBackend::createFilterQuery()
       // @see http://stackoverflow.com/a/635109
-      $or->addCondition(
-        'entity_bundle',
-        ['asset_distribution', 'asset_distribution'],
-        'NOT IN'
-      );
+      $or->addCondition('entity_bundle', ['distribution', 'distribution'], 'NOT IN');
       $or->addCondition($entity->getEntityType()
         ->getKey('id'), $distributions, 'IN');
       $query->addConditionGroup($or);
     }
     else {
       // Exclude all the distributions.
-      $query->addCondition('entity_bundle', 'asset_distribution', '<>');
+      $query->addCondition('entity_bundle', 'distribution', '<>');
     }
   }
 

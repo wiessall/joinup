@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Drupal\solution\Entity;
 
-use Drupal\asset_distribution\Entity\DistributionsParentInterface;
 use Drupal\asset_release\Entity\AssetReleaseInterface;
 use Drupal\collection\Entity\CollectionContentInterface;
 use Drupal\joinup_bundle_class\AbstractInterface;
 use Drupal\joinup_bundle_class\DescriptionInterface;
+use Drupal\joinup_distribution\Entity\DistributionsParentInterface;
 use Drupal\joinup_featured\FeaturedContentInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\Entity\PinnableGroupContentInterface;
