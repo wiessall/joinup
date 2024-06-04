@@ -36,7 +36,7 @@ mode: view_mode_tile
 content:
   abstract:
     type: field_fallback_formatter
-    label: visually_hidden
+    label: hidden
     settings:
       main_field_formatter_id: string
       main_field_formatter_settings:
