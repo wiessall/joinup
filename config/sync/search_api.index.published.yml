@@ -27,8 +27,6 @@ dependencies:
     - field.storage.rdf_entity.field_ar_description
     - field.storage.rdf_entity.field_is_description
     - field.storage.rdf_entity.field_isr_description
-    - field.storage.rdf_entity.field_is_eif_category
-    - field.storage.rdf_entity.field_is_eif_recommendation
     - field.storage.rdf_entity.field_is_owner
     - field.storage.rdf_entity.field_owner_name
     - field.storage.rdf_entity.field_isr_owner
@@ -367,22 +365,6 @@ field_settings:
     dependencies:
       config:
         - field.storage.rdf_entity.field_is_description
-  field_is_eif_category:
-    label: 'EIF category'
-    datasource_id: 'entity:rdf_entity'
-    property_path: field_is_eif_category
-    type: string
-    dependencies:
-      config:
-        - field.storage.rdf_entity.field_is_eif_category
-  field_is_eif_recommendation:
-    label: 'EIF reference'
-    datasource_id: 'entity:rdf_entity'
-    property_path: field_is_eif_recommendation
-    type: string
-    dependencies:
-      config:
-        - field.storage.rdf_entity.field_is_eif_recommendation
   field_is_solution_type:
     label: 'Solution type'
     datasource_id: 'entity:rdf_entity'

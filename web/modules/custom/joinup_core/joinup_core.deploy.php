@@ -20,9 +20,16 @@ use Drupal\rdf_sync\RdfSyncMapper;
 use Drupal\sparql_entity_storage\Driver\Database\sparql\Connection;
 
 /**
- * Assign "Other" licence to asset distributions referring missing licences.
+ * Delete stale page.
  */
 function joinup_core_deploy_110800(): void {
+  \Drupal::entityTypeManager()->getStorage('node')->load(703013)->delete();
+}
+
+/**
+ * Assign "Other" licence to asset distributions referring missing licences.
+ */
+function joinup_core_deploy_110801(): void {
   $missingIds = [
     'http://data.europa.eu/w21/dbd78bd7-c584-48c0-8c4d-be72cfe9e259',
     'http://data.europa.eu/w21/db09e2bf-a3bf-458f-bd4c-3460646dd44b',
@@ -46,5 +53,4 @@ WHERE { ?id <http://purl.org/dc/terms/license> <$oldId> }
 SPARQL;
     $sparqlConnection->query($query);
   }
-
 }
