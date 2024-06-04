@@ -6,7 +6,6 @@ dependencies:
     - core.entity_view_mode.rdf_entity.compact
     - field.field.rdf_entity.asset_release.field_isr_contact_information
     - field.field.rdf_entity.asset_release.field_isr_description
-    - field.field.rdf_entity.asset_release.field_isr_distribution
     - field.field.rdf_entity.asset_release.field_isr_documentation
     - field.field.rdf_entity.asset_release.field_isr_included_asset
     - field.field.rdf_entity.asset_release.field_isr_is_version_of
@@ -57,15 +56,6 @@ content:
       link: true
     third_party_settings: {  }
     weight: 4
-    region: content
-  field_isr_distribution:
-    type: entity_reference_entity_view
-    label: hidden
-    settings:
-      view_mode: compact
-      link: false
-    third_party_settings: {  }
-    weight: 3
     region: content
   field_isr_issue_tracker:
     type: link

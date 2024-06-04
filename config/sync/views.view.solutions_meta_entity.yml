@@ -513,22 +513,22 @@ display:
             'entity:node':
               custom_page: default
               discussion: default
+              distribution: default
               document: default
               event: default
+              licence: default
               news: default
               video: default
             'entity:rdf_entity':
-              asset_distribution: default
               asset_release: default
               collection: default
-              licence: default
               solution: view_mode_search_list_item
-              spdx_licence: default
             'entity:taxonomy_term':
               eif_conceptual_model: default
               eif_interoperability_layer: default
               eif_principle: default
               eif_recommendation: default
+              spdx_licence: default
               topic: default
             'entity:user':
               user: default

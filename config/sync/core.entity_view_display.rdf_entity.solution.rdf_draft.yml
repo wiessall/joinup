@@ -10,7 +10,6 @@ dependencies:
     - field.field.rdf_entity.solution.field_is_content
     - field.field.rdf_entity.solution.field_is_content_creation
     - field.field.rdf_entity.solution.field_is_description
-    - field.field.rdf_entity.solution.field_is_distribution
     - field.field.rdf_entity.solution.field_is_documentation
     - field.field.rdf_entity.solution.field_is_eif_category
     - field.field.rdf_entity.solution.field_is_eif_recommendation
@@ -272,7 +271,6 @@ hidden:
   field_is_abstract: true
   field_is_affiliations_requests: true
   field_is_content: true
-  field_is_distribution: true
   field_is_eif_category: true
   field_is_eif_recommendation: true
   field_is_has_version: true

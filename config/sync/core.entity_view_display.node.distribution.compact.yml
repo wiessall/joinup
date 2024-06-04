@@ -15,9 +15,9 @@ dependencies:
     - field.field.node.distribution.representation_technique
     - node.type.distribution
   module:
-    - asset_distribution
     - digital_size_formatter
     - field_group
+    - joinup_distribution
     - layout_builder
     - template_suggestion
     - user
