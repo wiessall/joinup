@@ -62,6 +62,13 @@ class DevelopersItalia extends EuOssCatalogueProviderPluginBase {
   protected array $yamlContent = [];
 
   /**
+   * Number of solutions provided by API.
+   *
+   * @var int
+   */
+  protected int $numberOfProvidedSolutions = 0;
+
+  /**
    * Constructs a new plugin instance.
    *
    * @param array $configuration
@@ -116,6 +123,7 @@ class DevelopersItalia extends EuOssCatalogueProviderPluginBase {
   public function fetch(): iterable {
     if (!isset($this->fetched)) {
       $this->fetched = [];
+      $this->numberOfProvidedSolutions = 0;
       $this->doFetch();
     }
 
@@ -190,6 +198,7 @@ class DevelopersItalia extends EuOssCatalogueProviderPluginBase {
         );
       }
 
+      $this->numberOfProvidedSolutions += count($read['data']);
       foreach ($read['data'] as $newItem) {
         try {
           $decoded = Yaml::decode($newItem['publiccodeYml']);
@@ -231,7 +240,7 @@ class DevelopersItalia extends EuOssCatalogueProviderPluginBase {
     if ($unProcessed = array_diff($this->fetchedUrls, $this->processedUrls)) {
       $this->logger->warning('Processed {processed} out of {fetched} fetched solutions from Developers Italia. The following {unprocessed} solutions failed: ' . implode(', ', $unProcessed), [
         'processed' => count($this->processedUrls),
-        'fetched' => count($this->fetchedUrls),
+        'fetched' => $this->numberOfProvidedSolutions,
         'unprocessed' => count($unProcessed),
         'list' => $unProcessed,
       ]);
@@ -239,7 +248,7 @@ class DevelopersItalia extends EuOssCatalogueProviderPluginBase {
     else {
       $this->logger->info('Processed {processed} out of {fetched} fetched solutions from Developers Italia.', [
         'processed' => count($this->processedUrls),
-        'fetched' => count($this->fetchedUrls),
+        'fetched' => $this->numberOfProvidedSolutions,
       ]);
     }
   }
