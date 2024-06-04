@@ -324,6 +324,9 @@
                 "Doesn't work in layout builder. @see https://www.drupal.org/i/3099580": "resources/patch/php/drupal/field_delimiter/3099580.patch",
                 "str_replace(): Passing null to parameter #3 ($subject) of type array|string is deprecated in Drupal\\Component\\Utility\\Xss::filter(). @see https://www.drupal.org/i/3301169": "resources/patch/php/drupal/field_delimiter/3301169.patch"
             },
+            "drupal/field_fallback_formatter": {
+                "PHP 8.3: get_class() function call without arguments deprecated. @see https://www.drupal.org/i/3452299": "resources/patch/php/drupal/field_fallback_formatter/3452299.patch"
+            },
             "drupal/field_group": {
                 "Deprecated way of sequence schema def @see https://www.drupal.org/project/field_group/issues/3409719": "resources/patch/php/drupal/field_group/3409719.diff",
                 "Filtering and pagination error when adding existing media to nodes @see https://www.drupal.org/i/3412511": "resources/patch/php/drupal/field_group/3412511.patch"

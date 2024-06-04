@@ -1,0 +1,51 @@
+From 7613ddd9cb35aaabdc980206e3326b65e30196b6 Mon Sep 17 00:00:00 2001
+From: Alexandre Dias <36380-saidatom@users.noreply.drupalcode.org>
+Date: Mon, 3 Jun 2024 17:57:58 +0000
+Subject: [PATCH 1/2] Use __CLASS__ instead of deprecated get_class().
+
+---
+ src/Plugin/Field/FieldFormatter/FormatterWithFallbackField.php | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/Plugin/Field/FieldFormatter/FormatterWithFallbackField.php b/src/Plugin/Field/FieldFormatter/FormatterWithFallbackField.php
+index f95e4ce..f836f2d 100644
+--- a/src/Plugin/Field/FieldFormatter/FormatterWithFallbackField.php
++++ b/src/Plugin/Field/FieldFormatter/FormatterWithFallbackField.php
+@@ -406,7 +406,7 @@ class FormatterWithFallbackField extends FormatterBase implements ContainerFacto
+       '#options' => $formatters,
+       '#default_value' => $currentFormatterId,
+       '#ajax' => [
+-        'callback' => [get_class(), 'onFormatterTypeChange'],
++        'callback' => [__CLASS__, 'onFormatterTypeChange'],
+         'wrapper' => $formatterSettingsAjaxId,
+         'event' => 'change',
+         'method' => 'replaceWith',
+-- 
+GitLab
+
+
+From e9e6ab3e85d403d1b9a7846cf8e854874c0cd144 Mon Sep 17 00:00:00 2001
+From: Alexandre Dias <alex.jm.dias@gmail.com>
+Date: Tue, 4 Jun 2024 08:29:44 +0100
+Subject: [PATCH 2/2] Unify all get_class().
+
+---
+ src/Plugin/Field/FieldFormatter/FormatterWithFallbackField.php | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/Plugin/Field/FieldFormatter/FormatterWithFallbackField.php b/src/Plugin/Field/FieldFormatter/FormatterWithFallbackField.php
+index f836f2d..87d1e60 100644
+--- a/src/Plugin/Field/FieldFormatter/FormatterWithFallbackField.php
++++ b/src/Plugin/Field/FieldFormatter/FormatterWithFallbackField.php
+@@ -323,7 +323,7 @@ class FormatterWithFallbackField extends FormatterBase implements ContainerFacto
+       '#options' => $fallbackFieldFormOptions,
+       '#default_value' => $fallbackFieldId ?: NULL,
+       '#ajax' => [
+-        'callback' => [get_class($this), 'onFallbackFieldNameChange'],
++        'callback' => [__CLASS__, 'onFallbackFieldNameChange'],
+       ],
+       '#required' => TRUE,
+     ];
+-- 
+GitLab
+
