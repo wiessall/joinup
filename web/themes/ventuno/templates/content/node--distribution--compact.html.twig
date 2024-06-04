@@ -1,7 +1,7 @@
 {#
 /**
  * @file
- * Themeing for rdf entities, bundle 'asset_distribution', 'compact' view mode.
+ * Themeing for node, bundle 'distribution', 'compact' view mode.
  */
 #}
 {% if is_standalone %}
@@ -12,20 +12,20 @@
 <article class="tile my-2 d-md-flex justify-content-between align-items-center p-3 border rounded">
   <div>
     <h1 class="h6 mb-2"><a href="{{ url }}" rel="bookmark">{{ label }}</a></h1>
-    {% if content.field_ad_file_size|render %}
+    {% if content.file_size|render %}
     <div class="d-flex flex-wrap fs-sm">
       <span class="text-muted me-1">{{ 'File size:'|t }}</span>
-      <span class="text-dark">{{ content.field_ad_file_size }}</span>
+      <span class="text-dark">{{ content.file_size }}</span>
     </div>
     {% endif %}
-    {% if content.field_ad_licence|render %}
+    {% if content.licence|render %}
       <div class="d-flex flex-wrap fs-sm">
         <span class="text-muted me-1">{{ 'Licence:'|t }}</span>
-        {{ content.field_ad_licence }}
+        {{ content.licence }}
       </div>
     {% endif %}
   </div>
-  {{ content.field_ad_access_url }}
+  {{ content.access_url }}
 </article>
 {% if is_standalone %}
   </li>

@@ -173,23 +173,3 @@ function ventuno_preprocess_rdf_entity__solution__view_mode_search_list_item(arr
   $variables['solution_url'] = $entity->toUrl()->setAbsolute()->toString();
   $variables['eif_perspective'] = Url::fromRoute('entity.rdf_entity.eif_perspective', ['rdf_entity' => $entity->id()])->toString();
 }
-
-/**
- * Implements hook_preprocess_page_title__rdf_entity__asset_distribution().
- */
-function ventuno_preprocess_page_title__rdf_entity__asset_distribution(array &$variables): void {
-  /** @var \Drupal\rdf_entity\Entity\Rdf $entity */
-  $entity = $variables['entity'];
-
-  // Get the view builder service from the entity type manager.
-  /** @var \Drupal\Core\Entity\EntityViewBuilderInterface $view_builder */
-  $view_builder = \Drupal::entityTypeManager()->getViewBuilder('rdf_entity');
-  // Get the file size and licence fields.
-  $field_ad_file_size = $entity->field_ad_file_size;
-  $field_ad_licence = $entity->field_ad_licence;
-  $field_ad_file_size = $view_builder->viewField($field_ad_file_size, 'default');
-  $field_ad_licence = $view_builder->viewField($field_ad_licence, 'default');
-
-  $variables['additional_content']['field_ad_file_size'] = $field_ad_file_size;
-  $variables['additional_content']['field_ad_licence'] = $field_ad_licence;
-}
