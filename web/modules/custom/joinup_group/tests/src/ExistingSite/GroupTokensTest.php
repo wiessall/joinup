@@ -31,16 +31,16 @@ class GroupTokensTest extends JoinupExistingSiteTestBase {
       'collection' => $collection->id(),
     ]);
 
-    $standalone_distribution = $this->createRdfEntity([
-      'rid' => 'asset_distribution',
-      'label' => $this->randomString(),
+    $standalone_distribution = $this->createNode([
+      'type' => 'distribution',
+      'title' => $this->randomString(),
       'og_audience' => $solution->id(),
-      'field_ad_state' => 'published',
+      'field_state' => 'published',
     ]);
 
-    $release_distribution = $this->createRdfEntity([
-      'rid' => 'asset_distribution',
-      'label' => $this->randomString(),
+    $release_distribution = $this->createNode([
+      'type' => 'distribution',
+      'title' => $this->randomString(),
       'og_audience' => $solution->id(),
       'field_ad_state' => 'published',
     ]);
@@ -52,10 +52,14 @@ class GroupTokensTest extends JoinupExistingSiteTestBase {
     ]);
 
     $entities_to_test = [
-      $solution,
-      $release,
-      $release_distribution,
-      $standalone_distribution,
+      'rdf_entity' => [
+        $solution,
+        $release,
+      ],
+      'node' => [
+        $release_distribution,
+        $standalone_distribution,
+      ],
     ];
 
     $tokens = [
@@ -66,9 +70,11 @@ class GroupTokensTest extends JoinupExistingSiteTestBase {
       'parent_collection:url' => $collection->toUrl('canonical')->toString(),
     ];
 
-    foreach ($entities_to_test as $entity) {
-      $data = ['rdf_entity' => $entity];
-      $this->assertTokens('rdf_entity', $data, $tokens);
+    foreach ($entities_to_test as $entity_type_id => $entities) {
+      foreach ($entities as $entity) {
+        $data = [$entity_type_id => $entity];
+        $this->assertTokens($entity_type_id, $data, $tokens);
+      }
     }
   }
 

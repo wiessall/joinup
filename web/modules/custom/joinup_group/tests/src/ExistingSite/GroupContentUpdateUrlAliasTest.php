@@ -26,7 +26,7 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
    *
    * @var \Drupal\Core\Entity\ContentEntityInterface[][][]
    */
-  protected $entity = [];
+  protected array $entity = [];
 
   /**
    * Tests group content URL aliases update when the group short ID changes.
@@ -52,6 +52,14 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
           (int) $this->entity['node']['discussion']['1']->id(),
           (int) $this->entity['node']['discussion']['2']->id(),
         ],
+        'distribution' => [
+          (int) $this->entity['node']['distribution']['1.1.1']->id(),
+          (int) $this->entity['node']['distribution']['1.1.2']->id(),
+          (int) $this->entity['node']['distribution']['1.2.1']->id(),
+          (int) $this->entity['node']['distribution']['1.2.2']->id(),
+          (int) $this->entity['node']['distribution']['1.1']->id(),
+          (int) $this->entity['node']['distribution']['1.2']->id(),
+        ],
         'document' => [
           (int) $this->entity['node']['document']['1.1']->id(),
           (int) $this->entity['node']['document']['1.2']->id(),
@@ -76,14 +84,14 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
         ],
       ],
       'rdf_entity' => [
-        'asset_distribution' => [
-          'http://distribution/1.1',
-          'http://distribution/1.1.1',
-          'http://distribution/1.1.2',
-          'http://distribution/1.2',
-          'http://distribution/1.2.1',
-          'http://distribution/1.2.2',
-        ],
+//        'asset_distribution' => [
+//          'http://distribution/1.1',
+//          'http://distribution/1.1.1',
+//          'http://distribution/1.1.2',
+//          'http://distribution/1.2',
+//          'http://distribution/1.2.1',
+//          'http://distribution/1.2.2',
+//        ],
         'asset_release' => [
           'http://release/1.1',
           'http://release/1.2',
@@ -367,23 +375,23 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
       ]);
       // Release distributions.
       for ($j = 1; $j <= 2; $j++) {
-        $this->entity['rdf_entity']['asset_distribution']["1.{$i}.{$j}"] = $this->createRdfEntity([
-          'rid' => 'asset_distribution',
-          'id' => "http://distribution/1.{$i}.{$j}",
-          'label' => "distribution 1.{$i}.{$j}",
+        $this->entity['node']['distribution']["1.{$i}.{$j}"] = $this->createNode([
+          'type' => 'distribution',
+//          'uri' => "http://distribution/1.{$i}.{$j}",
+          'title' => "distribution 1.{$i}.{$j}",
           'parent' => "http://release/1.{$i}",
-          'field_ad_state' => 'published',
+          'field_state' => 'published',
         ]);
       }
     }
     // Solution standalone distributions.
     for ($i = 1; $i <= 2; $i++) {
-      $this->entity['rdf_entity']['asset_distribution']["1.{$i}"] = $this->createRdfEntity([
-        'rid' => 'asset_distribution',
-        'id' => "http://distribution/1.{$i}",
-        'label' => "distribution 1.{$i}",
+      $this->entity['node']['distribution']["1.{$i}"] = $this->createNode([
+        'type' => 'distribution',
+//        'uri' => "http://distribution/1.{$i}",
+        'title' => "distribution 1.{$i}",
         'parent' => 'http://solution/1',
-        'field_ad_state' => 'published',
+        'field_state' => 'published',
       ]);
     }
     // Solution nodes.
