@@ -3243,32 +3243,6 @@ class JoinupContext extends RawDrupalContext {
   }
 
   /**
-   * Asserts that a menu link is in the active trail.
-   *
-   * @param string $link_label
-   *   The label of the link to be tested.
-   *
-   * @throws \Behat\Mink\Exception\ElementNotFoundException
-   *   When the link doesn't exist.
-   *
-   * @Then the( menu) link :link_label is in the active trail
-   */
-  public function assertLinkIsInActiveTrail(string $link_label): void {
-    $session = $this->getSession();
-    $page = $session->getPage();
-    if (!$page->findLink($link_label)) {
-      throw new ElementNotFoundException($session->getDriver(), 'Link', 'label', $link_label);
-    }
-
-    // Remove the leading '#'.
-    $navigation_menu_selector = substr($this->getRegionSelector('Navigation menu'), 1);
-    $xpath = "//*[@id='$navigation_menu_selector']//ul[contains(concat(' ', normalize-space(@class), ' '), ' nav ')]//a[text()='$link_label' and contains(concat(' ', normalize-space(@class), ' '), ' is-active ')]";
-    if (!$page->find('xpath', $xpath)) {
-      throw new ExpectationFailedException("The '$link_label' link is not in the active trail but it should.");
-    }
-  }
-
-  /**
    * Changes the name of a term.
    *
    * @param string $old_name
