@@ -9,7 +9,7 @@ use Behat\Mink\Element\NodeElement;
 use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Session\AnonymousUserSession;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
-use Drupal\asset_distribution\Entity\DownloadEvent;
+use Drupal\joinup_distribution\Entity\DownloadEvent;
 use Drupal\file_url\FileUrlHandler;
 use Drupal\joinup\Traits\EntityReferenceTrait;
 use Drupal\joinup\Traits\EntityTrait;
