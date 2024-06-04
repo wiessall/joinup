@@ -22,9 +22,6 @@ default_value:
         content_listing_type:
           weight: 0
           region: top
-        content_listing_status:
-          weight: 1
-          region: top
       enabled: 1
       show_archived: unarchived
       query_presets: ''

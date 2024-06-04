@@ -6,6 +6,8 @@ namespace Drupal\eira\Plugin\Block;
 
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Block\BlockBase;
+use Drupal\Core\Cache\Cache;
+use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Routing\CurrentRouteMatch;
 use Drupal\taxonomy\TermInterface;
@@ -68,7 +70,11 @@ class EiraPropertiesBlock extends BlockBase implements ContainerFactoryPluginInt
       return $row;
     }, $data['rows'] ?? []);
 
-    return [
+    if (empty($rows)) {
+      return [];
+    }
+
+    $build = [
       '#type' => 'container',
       'namespaces_table' => [
         '#theme' => 'table',
@@ -87,6 +93,19 @@ class EiraPropertiesBlock extends BlockBase implements ContainerFactoryPluginInt
         '#rows' => $rows,
       ],
     ];
+
+    $cacheableMetadata = CacheableMetadata::createFromRenderArray($build);
+    $cacheableMetadata->addCacheableDependency($term);
+    $cacheableMetadata->applyTo($build);
+
+    return $build;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getCacheContexts(): array {
+    return Cache::mergeContexts(parent::getCacheContexts(), ['route']);
   }
 
 }

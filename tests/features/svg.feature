@@ -3,14 +3,14 @@ Feature: Test SVG attachments.
 
   Background:
     Given the following owner:
-      | name | type                    |
-      | SVG  | Non-Profit Organisation |
+      | name        | type    |
+      | SVG company | Company |
     And the following contact:
-      | name  | SVG             |
+      | name  | SVG contact     |
       | email | svg@example.com |
     And collections:
-      | title | logo     | abstract | description | content creation         | moderation | topic             | owner | contact information | state     |
-      | SVG   | logo.png | Test     | Test        | facilitators and authors | yes        | Supplier exchange | SVG   | SVG                 | published |
+      | title | logo     | abstract | description | content creation         | moderation | topic             | owner       | contact information | state     |
+      | SVG   | logo.png | Test     | Test        | facilitators and authors | yes        | Supplier exchange | SVG company | SVG contact         | published |
 
   @javascript @uploadFiles:error.svg,simple.svg
   Scenario: Edit a collection wysiwyg modal should close.
@@ -44,17 +44,16 @@ Feature: Test SVG attachments.
   Scenario: SVG logos appear in the tiles.
     When I am logged in as a facilitator of the "SVG" collection
     And I go to the homepage of the "SVG" collection
-    And I click "Add news" in the plus button menu
+    And I click "Add discussion" in the plus button menu
     When I fill in the following:
-      | Short title      | SVG News |
-      | Headline         | SVG News|
-      | Content          | SVG News |
+      | Title   | SVG discussion |
+      | Content | SVG discussion |
     And I select "EU and European Policies" from "Topic"
 
     And I attach the file "simple.svg" to "Logo"
     And I press "Upload"
     And I press "Publish"
-    Then I should see the heading "SVG News"
+    Then I should see the heading "SVG discussion"
 
-    When I go to the homepage of the "SVG" collection
+     When I go to the discussions page of "SVG"
     Then I should see the image "simple.svg"

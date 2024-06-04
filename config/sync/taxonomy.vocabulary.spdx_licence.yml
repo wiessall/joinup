@@ -19,17 +19,9 @@ third_party_settings:
         value:
           predicate: 'http://spdx.org/rdf/terms#name'
           type: null
-      spdx_id:
-        value:
-          predicate: 'http://spdx.org/rdf/terms#licenseId'
-          type: null
       description:
         processed:
           predicate: 'http://spdx.org/rdf/terms#licenseTextHtml'
-          type: null
-      see_also:
-        uri:
-          predicate: 'http://www.w3.org/2000/01/rdf-schema#seeAlso'
           type: null
 name: 'SPDX Licence'
 vid: spdx_licence

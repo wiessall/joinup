@@ -32,28 +32,10 @@ Feature: Solution moderation
     And the following buttons should not be present "Publish, Request changes, Blacklist"
     And I should not see the link "Delete"
 
-  Scenario Outline: User should not be able to archive/unarchive entity if it has provenance activities.
-    Given the following solutions:
-      | title        | description  | state   |
-      | Azura Cruise | Azura Cruise | <state> |
-    And the following provenance activities:
-      | associated with    | entity       | enabled |
-      | http://example.com | Azura Cruise | yes     |
-
-    And I am logged in as a moderator
-    And "Azura Cruise" should have a related provenance activity
-    And I go to the edit form of the "Azura Cruise" solution
-    When I should not see the button "<button>"
-
-    Examples:
-      | state     | button   |
-      | published | Archive  |
-      | archived  | Unrchive |
-
   Scenario: Test the moderation workflow available states.
     Given the following owner:
-      | name           | type                  |
-      | Angelos Agathe | Private Individual(s) |
+      | name           | type    |
+      | Angelos Agathe | Company |
     And the following contact:
       | name  | Placide             |
       | email | Placide@example.com |
@@ -100,7 +82,7 @@ Feature: Solution moderation
     # When I click the "Edit" link
     # Then the state field should have only the given states available.
     Then for the following solution, the corresponding user should have the corresponding available state buttons:
-      | solution                   | user             | buttons                                                     |
+      | solution                   | user             | buttons                                                              |
 
       # The following solutions are tested as an owner. In reality, the owner is
       # also a facilitator so the only ability that differentiates the owner
@@ -108,33 +90,33 @@ Feature: Solution moderation
       # solution when the solution is published. Note that the "Delete" option
       # is a link to a confirmation form which is styled to look as a button.
       # This is checked separately below.
-      | Azure Ship                 | Franklin Walker  | Save as draft, Propose                                      |
-      | The Last Illusion          | Franklin Walker  | Propose, Save as draft                                      |
-      | Rose of Doors              | Franklin Walker  | Publish, Save as draft, Propose                             |
-      | Fire Swords                | Franklin Walker  |                                                             |
-      | The Guardian of the Stream | Franklin Walker  | Save as draft, Propose                                      |
-      | Flames in the Swords       | Franklin Walker  | Save as draft, Propose                                      |
+      | Azure Ship                 | Franklin Walker  | Save as draft, Propose                                               |
+      | The Last Illusion          | Franklin Walker  | Propose, Save as draft                                               |
+      | Rose of Doors              | Franklin Walker  | Publish, Save as draft, Propose                                      |
+      | Fire Swords                | Franklin Walker  |                                                                      |
+      | The Guardian of the Stream | Franklin Walker  | Save as draft, Propose                                               |
+      | Flames in the Swords       | Franklin Walker  | Save as draft, Propose                                               |
 
       # The following solutions do not follow the rule above and should be
       # testes as shown.
-      | Azure Ship                 | William Curtis   | Save as draft, Propose                                      |
-      | The Last Illusion          | William Curtis   | Propose, Save as draft                                      |
-      | Rose of Doors              | William Curtis   | Publish, Save as draft, Propose                             |
-      | Fire Swords                | William Curtis   |                                                             |
-      | The Guardian of the Stream | William Curtis   | Save as draft, Propose                                      |
-      | Flames in the Swords       | William Curtis   | Save as draft, Propose                                      |
-      | Azure Ship                 | Isabel Banks     |                                                             |
-      | The Last Illusion          | Isabel Banks     |                                                             |
-      | Rose of Doors              | Isabel Banks     |                                                             |
-      | Fire Swords                | Isabel Banks     |                                                             |
-      | The Guardian of the Stream | Isabel Banks     |                                                             |
-      | Flames in the Swords       | Isabel Banks     |                                                             |
-      | Azure Ship                 | Tyrone Underwood | Save as draft, Propose, Publish                             |
-      | The Last Illusion          | Tyrone Underwood | Propose, Save as draft, Publish, Request changes            |
+      | Azure Ship                 | William Curtis   | Save as draft, Propose                                               |
+      | The Last Illusion          | William Curtis   | Propose, Save as draft                                               |
+      | Rose of Doors              | William Curtis   | Publish, Save as draft, Propose                                      |
+      | Fire Swords                | William Curtis   |                                                                      |
+      | The Guardian of the Stream | William Curtis   | Save as draft, Propose                                               |
+      | Flames in the Swords       | William Curtis   | Save as draft, Propose                                               |
+      | Azure Ship                 | Isabel Banks     |                                                                      |
+      | The Last Illusion          | Isabel Banks     |                                                                      |
+      | Rose of Doors              | Isabel Banks     |                                                                      |
+      | Fire Swords                | Isabel Banks     |                                                                      |
+      | The Guardian of the Stream | Isabel Banks     |                                                                      |
+      | Flames in the Swords       | Isabel Banks     |                                                                      |
+      | Azure Ship                 | Tyrone Underwood | Save as draft, Propose, Publish                                      |
+      | The Last Illusion          | Tyrone Underwood | Propose, Save as draft, Publish, Request changes                     |
       | Rose of Doors              | Tyrone Underwood | Publish, Save as draft, Propose, Request changes, Blacklist, Archive |
       | Fire Swords                | Tyrone Underwood | Unarchive                                                            |
-      | The Guardian of the Stream | Tyrone Underwood | Save as draft, Propose, Publish                             |
-      | Flames in the Swords       | Tyrone Underwood | Save as draft, Propose, Publish                             |
+      | The Guardian of the Stream | Tyrone Underwood | Save as draft, Propose, Publish                                      |
+      | Flames in the Swords       | Tyrone Underwood | Save as draft, Propose, Publish                                      |
 
     # The 'Delete' action is not a button but a link leading to a confirmation
     # page that is styled as a button. It should only be available to the owner

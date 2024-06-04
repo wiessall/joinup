@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use DrupalFinder\DrupalFinder;
+use DrupalFinder\DrupalFinderComposerRuntime;
 use Rector\Core\Configuration\Option;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
@@ -14,8 +14,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $parameters = $containerConfigurator->parameters();
 
-    $drupalFinder = new DrupalFinder();
-    $drupalFinder->locateRoot(__DIR__);
+    $drupalFinder = new DrupalFinderComposerRuntime();
     $drupalRoot = $drupalFinder->getDrupalRoot();
     $parameters->set(Option::AUTOLOAD_PATHS, [
         $drupalRoot . '/core',

@@ -44,18 +44,18 @@ Feature: News moderation.
       | Legion of Doom | Mirror Master | member      |
       | Legion of Doom | Cheetah       | member      |
     And "news" content:
-      | title                         | headline                                    | body                                                                    | state            | author        | collection     |
-      | Creating Justice League       | 6 Members to start with                     | TBD                                                                     | draft            | Eagle         | Justice League |
-      | Hawkgirl is a spy             | Her race lies in another part of the galaxy | Hawkgirl has been giving information about Earth to Thanagarians.       | proposed         | Eagle         | Justice League |
-      | Hawkgirl helped Green Lantern | Hawkgirl went against Thanagarians?         | It was all of a sudden when Hawkgirl turned her back to her own people. | published        | Eagle         | Justice League |
-      | Space cannon fired            | Justice League fired at army facilities     | Justice league is now the enemy                                         | needs_update     | Eagle         | Justice League |
-      | Eagle to join in season 4     | Will not start before S04E05                | The offer came when I helped defeating Iphestus armor.                  | proposed         | Eagle         | Justice League |
-      | Question joined JL            | Justice league took in Question             | The famous detective is now part of JL.                                 | draft            | Question      | Justice League |
-      | Creating Legion of Doom       | 7 Members to start with                     | We need equal number of members with the JL.                            | draft            | Mirror Master | Legion of Doom |
-      | Stealing from Batman          | Hide in his car's mirror                    | I need to steal from Batman.                                            | published        | Mirror Master | Legion of Doom |
-      | Learn batman's secret         | Can I find batman's secret identity         | I have the opportunity to find out his identity.                        | proposed         | Mirror Master | Legion of Doom |
-      | Stealing complete             | All data were copied                        | Now someone has to decrypt the data.                                    | needs_update     | Mirror Master | Legion of Doom |
-      | Kill the sun                  | Savages plan                                | As it turns out Savage's plan is to cause a solar storm.                | deletion_request | Mirror Master | Legion of Doom |
+      | title                         | headline                                    | field_paragraphs_body                                                   | state            | author        | collection     | abstract |
+      | Creating Justice League       | 6 Members to start with                     | TBD                                                                     | draft            | Eagle         | Justice League | Abstract |
+      | Hawkgirl is a spy             | Her race lies in another part of the galaxy | Hawkgirl has been giving information about Earth to Thanagarians.       | proposed         | Eagle         | Justice League | Abstract |
+      | Hawkgirl helped Green Lantern | Hawkgirl went against Thanagarians?         | It was all of a sudden when Hawkgirl turned her back to her own people. | published        | Eagle         | Justice League | Abstract |
+      | Space cannon fired            | Justice League fired at army facilities     | Justice league is now the enemy                                         | needs_update     | Eagle         | Justice League | Abstract |
+      | Eagle to join in season 4     | Will not start before S04E05                | The offer came when I helped defeating Iphestus armor.                  | proposed         | Eagle         | Justice League | Abstract |
+      | Question joined JL            | Justice league took in Question             | The famous detective is now part of JL.                                 | draft            | Question      | Justice League | Abstract |
+      | Creating Legion of Doom       | 7 Members to start with                     | We need equal number of members with the JL.                            | draft            | Mirror Master | Legion of Doom | Abstract |
+      | Stealing from Batman          | Hide in his car's mirror                    | I need to steal from Batman.                                            | published        | Mirror Master | Legion of Doom | Abstract |
+      | Learn batman's secret         | Can I find batman's secret identity         | I have the opportunity to find out his identity.                        | proposed         | Mirror Master | Legion of Doom | Abstract |
+      | Stealing complete             | All data were copied                        | Now someone has to decrypt the data.                                    | needs_update     | Mirror Master | Legion of Doom | Abstract |
+      | Kill the sun                  | Savages plan                                | As it turns out Savage's plan is to cause a solar storm.                | deletion_request | Mirror Master | Legion of Doom | Abstract |
 
   Scenario: Draft state doesn't change when facilitator edits news.
     Given I am logged in as "Eagle"
@@ -140,7 +140,7 @@ Feature: News moderation.
     And I go to the homepage of the "Justice League" collection
     And I click "Add news"
     Then I should see the heading "Add news"
-    And the following fields should be present "Headline, Short title, Logo, Content, Topic, Search keywords, Geographical coverage"
+    And the following fields should be present "Headline, Short title, Abstract, Logo, Body, Topic, Search keywords, Geographical coverage"
     # The entity is new, so the current workflow state should not be shown.
     And the following fields should not be present "Current workflow state"
 
@@ -153,7 +153,10 @@ Feature: News moderation.
     When I fill in the following:
       | Short title | Eagle joins the JL                   |
       | Headline    | Eagle from WWII                      |
-      | Content     | Specialized in close combat training |
+      | Abstract    | Eagle abstract                       |
+    And I append "text" to "field_paragraphs_body" layout paragraphs field
+      | field_body:value  | Specialized in close combat training |
+      | field_body:format | content_editor                       |
     And I select "Employment and Support Allowance" from "Topic"
     And I press "Save as draft"
     # Check reference to news page.
@@ -183,7 +186,10 @@ Feature: News moderation.
     When I fill in the following:
       | Short title | Cheetah kills WonderWoman                             |
       | Headline    | Scarch of poison                                      |
-      | Content     | A specific poison could expose Wonder-womans weakness |
+      | Abstract    | Abstract of cheetah kills WonderWoman                 |
+    And I append "text" to "field_paragraphs_body" layout paragraphs field
+      | field_body:value  | A specific poison could expose Wonder-womans weakness |
+      | field_body:format | content_editor                                        |
     And I select "Supplier exchange" from "Topic"
     And I press "Propose"
     # Check reference to news page.
@@ -335,7 +341,10 @@ Feature: News moderation.
     When I fill in the following:
       | Short title | Whale joins the JL                   |
       | Headline    | Whale from WWII                      |
-      | Content     | Specialized in close combat training |
+      | Abstract    | Whale abstract                       |
+    And I append "text" to "field_paragraphs_body" layout paragraphs field
+      | field_body:value  | Specialized in close combat training |
+      | field_body:format | content_editor                       |
     And I select "Employment and Support Allowance" from "Topic"
     And I press "Save as draft"
     Then I should see the success message 'News Whale joins the JL has been created as draft. You can find it in the section "My unpublished content" located in your My account page, or in the aforementioned section under the Collection it was created in.'
@@ -350,7 +359,10 @@ Feature: News moderation.
     When I fill in the following:
       | Short title | Eagle joins the CE                   |
       | Headline    | Eagle from WWVI                      |
-      | Content     | Specialized in close combat training |
+      | Abstract    | Eagle abstract                       |
+    And I append "text" to "field_paragraphs_body" layout paragraphs field
+      | field_body:value  | Specialized in close combat training |
+      | field_body:format | content_editor                       |
     And I select "Employment and Support Allowance" from "Topic"
     And I press "Save as draft"
     Then I should see the success message 'News Eagle joins the CE has been created as draft. You can find it in the section "My unpublished content" located in your My account page, or in the aforementioned section under the Collection it was created in.'

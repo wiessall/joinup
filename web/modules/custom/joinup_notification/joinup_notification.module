@@ -244,7 +244,7 @@ function joinup_notification_mail_alter(array &$message): void {
       $bcc = array_map(function ($value) {
         return $value['value'];
       }, $message_entity->get('field_message_bcc')->getValue());
-      $message['headers']['Bcc'] = implode(';', $bcc);
+      $message['headers']['Bcc'] = implode(',', $bcc);
     }
   }
 

@@ -21,7 +21,7 @@ Feature: SEO for RDF entities.
     Then the metatag graph of the item with "title" "SEO entity" should not be present
 
     Examples:
-      | type       | graph type      |
+      | type       | graph type                        |
       | collection | http://www.w3.org/ns/dcat#Catalog |
       | solution   | http://www.w3.org/ns/dcat#Dataset |
 
@@ -50,16 +50,16 @@ Feature: SEO for RDF entities.
       | SEO licence | Licence to perform SEO | Public domain |
     When I go to the "SEO licence" licence
     Then the following meta tags should available in the html:
-      | identifier     | value                            |
-      | og:url         | __base_url__/licence/seo-licence |
-      | og:site_name   | Joinup                           |
-      | og:title       | SEO licence                      |
+      | identifier   | value                            |
+      | og:url       | __base_url__/licence/seo-licence |
+      | og:site_name | Joinup                           |
+      | og:title     | SEO licence                      |
     And the metatag JSON should be attached in the page without context
     And 1 metatag graph of type "http://purl.org/dc/terms/LicenseDocument" should exist in the page
     And the metatag graph of the item with "@type" "http://purl.org/dc/terms/LicenseDocument" should have the following properties:
-      | property                                   | value                                         |
-      | @type                                      | http://purl.org/dc/terms/LicenseDocument      |
-      | http://www.w3.org/2000/01/rdf-schema#label | SEO licence                                   |
-      | http://joinup.eu/licence/deprecated        | false                                         |
-      | description                                | <p>Licence to perform SEO</p>                 |
-      | type                                       | http://purl.org/adms/licencetype/PublicDomain |
+      | property                                   | value                                    |
+      | @type                                      | http://purl.org/dc/terms/LicenseDocument |
+      | http://www.w3.org/2000/01/rdf-schema#label | SEO licence                              |
+      | http://joinup.eu/licence/deprecated        | false                                    |
+      | description                                | <p>Licence to perform SEO</p>            |
+      | type                                       | http://purl.org/adms/licence/PD          |

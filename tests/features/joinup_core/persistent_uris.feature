@@ -51,11 +51,11 @@ Feature:
       | title                 | body                  | collection            | state     |
       | Persistent discussion | Persistent discussion | Persistent collection | published |
     And document content:
-      | title               | body                | collection            | state     |
-      | Persistent document | Persistent document | Persistent collection | published |
+      | title               | field_paragraphs_body | collection            | state     |
+      | Persistent document | Persistent document   | Persistent collection | published |
     And event content:
-      | title            | body             | collection            | state     |
-      | Persistent event | Persistent event | Persistent collection | published |
+      | title            | field_paragraphs_body | collection            | state     |
+      | Persistent event | Persistent event      | Persistent collection | published |
     And news content:
       | title           | body            | collection            | state     |
       | Persistent news | Persistent news | Persistent collection | published |

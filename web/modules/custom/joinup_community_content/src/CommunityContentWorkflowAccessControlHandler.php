@@ -47,7 +47,7 @@ class CommunityContentWorkflowAccessControlHandler {
     protected AccountInterface $currentUser,
     protected ConfigFactoryInterface $configFactory,
     protected WorkflowHelperInterface $workflowHelper,
-    protected LoggerChannelFactoryInterface $logger
+    protected LoggerChannelFactoryInterface $logger,
   ) {
   }
 

@@ -6,21 +6,7 @@
 upgrade_commands:
   default:
     - touch disable-config-readonly
-
-    # TODO: Restore `./vendor/bin/drush deploy --yes` instead of the commands
-    # between BEGIN <-> END block, in ISAICP-8376.
-    # BEGIN
-    - ./vendor/bin/drush updatedb --yes
-    - ./vendor/bin/drush config:import --yes
-    - ./vendor/bin/drush cache:rebuild
-    - ./vendor/bin/drush rdf_sync:disable
-    - ./vendor/bin/drush joinup:create-locked-vocabulary-terms
-    - ./vendor/bin/drush deploy:hook --yes
-    - ./vendor/bin/drush joinup:sync-locked-vocabulary-terms
-    - ./vendor/bin/drush rdf_sync:synchronize taxonomy_term --bundle=legal_type,topic
-    - ./vendor/bin/drush rdf_sync:enable
-    # END
-
+    - ./vendor/bin/drush deploy --yes
     - ./vendor/bin/drush search-api:reset-tracker --yes
     - ./vendor/bin/drush joinup:node-access-rebuild
     - rm disable-config-readonly
@@ -38,9 +24,9 @@ upgrade_commands:
       - ./vendor/bin/drush cache:rebuild
       - rm disable-config-readonly
 
-php_version: 8.2
+php_version: 8.3
 extra_pkgs:
-  - php8.2-apcu
+  - php8.3-apcu
 
 mysql_version: "8.0"
 mydumper: True

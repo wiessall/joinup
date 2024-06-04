@@ -52,7 +52,7 @@ class WorkflowHelper implements WorkflowHelperInterface {
     protected EntityFieldManagerInterface $entityFieldManager,
     protected MembershipManagerInterface $membershipManager,
     protected EntityTypeManagerInterface $entityTypeManager,
-    protected TimeInterface $time
+    protected TimeInterface $time,
   ) {}
 
   /**

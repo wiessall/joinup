@@ -326,7 +326,7 @@
           .date {
             color: $gray-600;
             font-size: $font-size-xs;
-            .field--name-created, .field--name-published-at {
+            .field--name-created, .field--name-published-at, .field--name-changed {
               padding-top: $btn-padding-y;
             }
           }

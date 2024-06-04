@@ -70,7 +70,7 @@ display:
           element_label_colon: false
           element_wrapper_type: ''
           element_wrapper_class: ''
-          element_default_classes: true
+          element_default_classes: false
           empty: ''
           hide_empty: false
           empty_zero: false
@@ -113,7 +113,7 @@ display:
           role:
             authenticated: authenticated
       cache:
-        type: none
+        type: search_api_none
         options: {  }
       empty:
         area:
@@ -188,7 +188,7 @@ display:
       row:
         type: fields
         options:
-          default_field_elements: true
+          default_field_elements: false
           inline: {  }
           separator: ''
           hide_empty: false

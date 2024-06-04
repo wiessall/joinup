@@ -25,12 +25,14 @@ Feature: Asset distribution editing.
       | description    | Release description   |
       | is version of  | Solution A            |
     And the following distribution:
-      | title       | Asset distribution example |
-      | description | Sample description         |
-      | licence     | LGPL                       |
-      | access url  | test.zip                   |
-      | parent      | Asset release example      |
-      | state       | published                  |
+      | title             | Asset distribution example |
+      | description       | Sample description         |
+      | licence           | LGPL                       |
+      | access url        | test.zip                   |
+      | parent            | Asset release example      |
+      | state             | published                  |
+      | creation date     | 2019-11-19 20:45           |
+      | modification date | 2021-11-19 20:45           |
     And the following solution user membership:
       | solution   | user         | roles       |
       | Solution A | Gregg Hill   | owner       |
@@ -43,15 +45,17 @@ Feature: Asset distribution editing.
 
     When I am logged in as a facilitator of the "Solution B" solution
     And I go to the homepage of the "Asset distribution example" distribution
-    Then I should not see the link "Edit" in the "Entity actions" region
+    Then I should not see the link "Edit" in the optional "Entity actions" region
 
     When I am logged in as an "authenticated user"
     And I go to the homepage of the "Asset distribution example" distribution
-    Then I should not see the link "Edit" in the "Entity actions" region
+    Then I should not see the link "Edit" in the optional "Entity actions" region
 
     When I am an anonymous user
     And I go to the homepage of the "Asset distribution example" distribution
-    Then I should not see the link "Edit" in the "Entity actions" region
+    Then I should not see the link "Edit" in the optional "Entity actions" region
+    And I should see the text "Published on: 19/11/2019"
+    And I should see the text "Last update: 19/11/2021"
 
   Scenario: Edit a distribution as a solution facilitator.
     Given licence content:

@@ -18,6 +18,7 @@ dependencies:
     - node.type.licence
     - taxonomy.vocabulary.legal_type
   module:
+    - collection
     - comment
     - contact_form
     - custom_page
@@ -38,7 +39,6 @@ dependencies:
     - joinup_licence
     - joinup_news
     - joinup_newsletter
-    - joinup_pipeline_log
     - joinup_search
     - joinup_subscription
     - media
@@ -48,10 +48,8 @@ dependencies:
     - node
     - og
     - paragraphs_type_permissions
-    - pipeline
     - rdf_draft
     - rdf_entity
-    - rdf_meta_entity
     - role_delegation
     - sitewide_alert
     - solution
@@ -73,12 +71,11 @@ permissions:
   - 'access dashboard'
   - 'access distribution reports'
   - 'access files overview'
+  - 'access glossary data export'
   - 'access group reports'
   - 'access joinup reports'
   - 'access media overview'
   - 'access messages overview'
-  - 'access pipeline report'
-  - 'access pipeline selector'
   - 'access taxonomy overview'
   - 'access toolbar'
   - 'access uri converter'
@@ -118,8 +115,8 @@ permissions:
   - 'create discussion content'
   - 'create discussion_logo media'
   - 'create distribution content'
+  - 'create eif_perspective meta-entity'
   - 'create eif wrapper entity'
-  - 'create eif_perspective rdf-meta-entity'
   - 'create event_logo media'
   - 'create field_is_eif_category'
   - 'create field_is_eif_recommendation'
@@ -163,7 +160,6 @@ permissions:
   - 'delete any news_logo media'
   - 'delete any owner rdf entity'
   - 'delete any solution_logo media'
-  - 'delete eif wrapper entity'
   - 'delete paragraph content 1_column_layout'
   - 'delete paragraph content 2_column_featured_left'
   - 'delete paragraph content 2_column_featured_right'
@@ -210,11 +206,6 @@ permissions:
   - 'edit sitewide alert entities'
   - 'edit terms in legal_type'
   - 'edit webform variants'
-  - 'execute dpsi pipeline'
-  - 'execute eu_sic pipeline'
-  - 'execute joinup_collection pipeline'
-  - 'execute nio pipeline'
-  - 'execute spain pipeline'
   - 'feature entity'
   - 'filter membership overview'
   - 'manage custom landing pages'
@@ -289,17 +280,11 @@ permissions:
   - 'perform solution_workflow workflow unarchive transition on any entity'
   - 'perform solution_workflow workflow update_validated transition on any entity'
   - 'perform solution_workflow workflow validate transition on any entity'
-  - 'reset dpsi pipeline'
-  - 'reset eu_sic pipeline'
-  - 'reset joinup_collection pipeline'
-  - 'reset nio pipeline'
-  - 'reset spain pipeline'
   - 'revert all sitewide alert revisions'
   - 'unarchived community content'
   - 'unfeature entity'
   - 'update collection_settings meta-entity'
-  - 'update eif wrapper entity'
-  - 'update eif_perspective rdf-meta-entity'
+  - 'update eif_perspective meta-entity'
   - 'update highlighted_content entityqueue'
   - 'update highlighted_event entityqueue'
   - 'update homepage_topics entityqueue'
@@ -332,7 +317,6 @@ permissions:
   - 'vbo joinup unarchive action'
   - 'view all sitewide alert revisions'
   - 'view any unpublished content'
-  - 'view eif wrapper entity'
   - 'view field_is_eif_category'
   - 'view field_is_eif_recommendation'
   - 'view licence overview page'
