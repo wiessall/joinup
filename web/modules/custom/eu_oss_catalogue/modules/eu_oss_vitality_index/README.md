@@ -34,3 +34,17 @@ Catalogue, according to eu_oss_vitality_index_cron job, feeding an
 eu_oss_vitality_index worker queue.
 
 
+### Triggering the process
+
+The module ships with a Drush command that allows to fetch Vitality Index
+for existing solutions from the command line.
+
+Run the following, to perform Vitality Index queue worker:
+```bash
+./vendor/bin/drush queue:run eu_oss_vitality_index
+```
+
+Run the following, to fetch Vitality Index for a specific OSS solution:
+```bash
+./vendor/bin/drush queue:run eu-oss:generate-vitality-index <NODE_ID>
+```
