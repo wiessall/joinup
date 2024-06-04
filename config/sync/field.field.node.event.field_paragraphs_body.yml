@@ -1,0 +1,157 @@
+uuid: ab56809c-0602-4666-80e4-ba2c248b1715
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_paragraphs_body
+    - node.type.event
+    - paragraphs.paragraphs_type.accordion
+    - paragraphs.paragraphs_type.call_to_action
+    - paragraphs.paragraphs_type.carousel
+    - paragraphs.paragraphs_type.configurable_listing
+    - paragraphs.paragraphs_type.content_listing
+    - paragraphs.paragraphs_type.entity_reference
+    - paragraphs.paragraphs_type.github_feed
+    - paragraphs.paragraphs_type.heading
+    - paragraphs.paragraphs_type.iframe
+    - paragraphs.paragraphs_type.image
+    - paragraphs.paragraphs_type.image_gallery
+    - paragraphs.paragraphs_type.json_map
+    - paragraphs.paragraphs_type.layout
+    - paragraphs.paragraphs_type.poll
+    - paragraphs.paragraphs_type.quote
+    - paragraphs.paragraphs_type.simple_paragraph
+    - paragraphs.paragraphs_type.social_media
+    - paragraphs.paragraphs_type.testimony
+    - paragraphs.paragraphs_type.text
+    - paragraphs.paragraphs_type.tiles
+    - paragraphs.paragraphs_type.video
+    - paragraphs.paragraphs_type.webform
+  module:
+    - entity_reference_revisions
+id: node.event.field_paragraphs_body
+field_name: field_paragraphs_body
+entity_type: node
+bundle: event
+label: Body
+description: "Insert your content. You can start by adding a single-column layout and populating it with a 'Text' component."
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:paragraph'
+  handler_settings:
+    target_bundles:
+      accordion: accordion
+      call_to_action: call_to_action
+      carousel: carousel
+      configurable_listing: configurable_listing
+      content_listing: content_listing
+      entity_reference: entity_reference
+      github_feed: github_feed
+      heading: heading
+      iframe: iframe
+      image: image
+      layout: layout
+      json_map: json_map
+      poll: poll
+      quote: quote
+      simple_paragraph: simple_paragraph
+      social_media: social_media
+      testimony: testimony
+      tiles: tiles
+      text: text
+      video: video
+      webform: webform
+      image_gallery: image_gallery
+    negate: 0
+    target_bundles_drag_drop:
+      1_column_layout:
+        weight: -33
+        enabled: false
+      2_column_featured_left:
+        weight: -30
+        enabled: false
+      2_column_featured_right:
+        weight: -29
+        enabled: false
+      2_column_layout:
+        weight: -32
+        enabled: false
+      3_column_layout:
+        weight: -31
+        enabled: false
+      accordion:
+        weight: -55
+        enabled: true
+      accordion_item:
+        weight: -54
+        enabled: false
+      call_to_action:
+        weight: -53
+        enabled: true
+      carousel:
+        weight: -52
+        enabled: true
+      configurable_listing:
+        weight: -51
+        enabled: true
+      content_listing:
+        weight: -50
+        enabled: true
+      entity_reference:
+        weight: -49
+        enabled: true
+      github_feed:
+        weight: -48
+        enabled: true
+      heading:
+        weight: -47
+        enabled: true
+      iframe:
+        weight: -46
+        enabled: true
+      image:
+        weight: -45
+        enabled: true
+      image_gallery:
+        weight: 60
+        enabled: true
+      json_map:
+        weight: -43
+        enabled: true
+      layout:
+        weight: -44
+        enabled: true
+      poll:
+        weight: -42
+        enabled: true
+      quote:
+        weight: -41
+        enabled: true
+      simple_paragraph:
+        weight: -40
+        enabled: true
+      social_media:
+        weight: -39
+        enabled: true
+      testimony:
+        weight: -38
+        enabled: true
+      text:
+        weight: -35
+        enabled: true
+      tile:
+        weight: -37
+        enabled: false
+      tiles:
+        weight: -36
+        enabled: true
+      video:
+        weight: -34
+        enabled: true
+      webform:
+        weight: -32
+        enabled: true
+field_type: entity_reference_revisions

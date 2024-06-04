@@ -7,7 +7,6 @@
 
 declare(strict_types=1);
 
-use Drupal\Component\Serialization\Json;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Serialization\Yaml;
 
@@ -42,134 +41,9 @@ function joinup_rdf_requirements(string $phase): array {
 }
 
 /**
- * Uninstall 'rdf_taxonomy' module.
- */
-function joinup_rdf_update_110400(): void {
-  // Anticipate deletion of taxonomy SPARQL mapping entities to avoid errors.
-  \Drupal::database()->delete('config')
-    ->condition('name', 'sparql_entity_storage.mapping.taxonomy_term.%', 'LIKE')
-    ->execute();
-  // Uninstall rdf_taxonomy.
-  \Drupal::service('module_installer')->uninstall(['rdf_taxonomy'], FALSE);
-  // Make available RDF Sync services early.
-  \Drupal::service('module_installer')->install(['rdf_sync']);
-}
-
-/**
- * Reinstall 'taxonomy' module.
- */
-function joinup_rdf_update_110401(): void {
-  $db = \Drupal::database();
-
-  // Updating the taxonomy storage definitions and installing the missing tables
-  // is a nightmare. A better way is to uninstall and install on fresh. To
-  // enforce recreation of all taxonomy tables, we forcibly uninstall the
-  // module first. We're not using the normal uninstall API because that
-  // triggers side effects and tasks that we want to avoid. End by re-installing
-  // the module on fresh, so that all storage and its definitions are recreated.
-  // Act directly on core.extension config.
-  $config = unserialize($db->select('config')
-    ->fields('config', ['data'])
-    ->condition('collection', '')
-    ->condition('name', 'core.extension')
-    ->execute()
-    ->fetchField(), ['allowed_classes' => FALSE]);
-  unset($config['module']['taxonomy']);
-  $db->update('config')
-    ->fields(['data' => serialize($config)])
-    ->condition('collection', '')
-    ->condition('name', 'core.extension')
-    ->execute();
-
-  // Drop old tables. Remember, they're empty as data is in the SPARQL storage.
-  $db->schema()->dropTable('taxonomy_index');
-  $db->schema()->dropTable('taxonomy_term_data');
-  $db->schema()->dropTable('taxonomy_term_field_data');
-
-  // Remove configuration recreated on module re-install.
-  $db->delete('config')
-    ->condition('collection', '')
-    ->condition('name', ['core.entity_view_mode.taxonomy_term.full', 'taxonomy.settings'], 'IN')
-    ->execute();
-  \Drupal::configFactory()->reset();
-
-  // Cleanup storage definitions. It will be recreated "on fresh".
-  $db->delete('key_value')
-    ->condition('collection', ['entity.definitions.installed', 'entity.storage_schema.sql'], 'IN')
-    ->condition('name', 'taxonomy_term.%', 'LIKE')
-    ->execute();
-  $db->delete('key_value')
-    ->condition('collection', 'system.schema')
-    ->condition('name', 'taxonomy')
-    ->execute();
-
-  // Make sure we don't keep any stale cache referring entity-type and fields.
-  \Drupal::entityTypeManager()->clearCachedDefinitions();
-  \Drupal::service('entity_field.manager')->clearCachedFieldDefinitions();
-
-  // Re-install the module on clean w/o dependencies, they're already installed.
-  \Drupal::service('module_installer')->install(['taxonomy'], FALSE);
-}
-
-/**
- * Delete SPDX Licence & Licence RDF entities.
- */
-function joinup_rdf_update_110402(): void {
-  // Save licences in a temporary file because we need to delete the content
-  // prior to delete the bundle configs. Data will be restored later, in a
-  // deploy hook.
-  $store = \Drupal::getContainer()->get('joinup_sparql.graph_store.helper')->createGraphStore();
-  $licences = $store->get('http://joinup.eu/licence/published')->toRdfPhp();
-  file_put_contents('private://licences', Json::encode($licences));
-  $sparql = \Drupal::getContainer()->get('sparql.endpoint');
-  $sparql->update("CLEAR GRAPH <http://joinup.eu/spdx_licence/published>;");
-  $sparql->update("CLEAR GRAPH <http://joinup.eu/licence/published>;");
-}
-
-/**
- * Store document > licence data.
- */
-function joinup_rdf_update_110403(): void {
-  $db = \Drupal::database();
-  $documentToLicence = $db->select('node__field_licence', 'l')
-    ->fields('l', ['entity_id', 'field_licence_target_id'])
-    ->execute()
-    ->fetchAllKeyed();
-  file_put_contents('private://document_to_licence', Json::encode($documentToLicence));
-  $db->truncate('node__field_licence')->execute();
-  $db->truncate('node_revision__field_licence')->execute();
-}
-
-/**
- * Delete leftover path aliases of licence RDF entities.
- */
-function joinup_rdf_update_110404(array &$sandbox): string {
-  if (!isset($sandbox['ids'])) {
-    $sandbox['ids'] = \Drupal::database()->select('path_alias', 'pa')
-      ->fields('pa', ['id'])
-      ->condition('pa.alias', '/licence/%', 'LIKE')
-      ->execute()
-      ->fetchAllKeyed(0, 0);
-    $sandbox['processed'] = 0;
-    $sandbox['total'] = count($sandbox['ids']);
-  }
-
-  $idsToDelete = array_slice($sandbox['ids'], $sandbox['processed'], 50);
-  $aliasStorage = \Drupal::entityTypeManager()->getStorage('path_alias');
-
-  $aliasStorage->delete($aliasStorage->loadMultiple($idsToDelete));
-
-  $deletedCount = count($idsToDelete);
-  $sandbox['processed'] += $deletedCount;
-  $sandbox['#finished'] = $sandbox['processed'] / $sandbox['total'];
-
-  return "Deleted $deletedCount licence aliases ({$sandbox['processed']} / {$sandbox['total']}) total";
-}
-
-/**
  * Delete asset distribution entities.
  */
-function joinup_rdf_update_110405(): void {
+function joinup_rdf_update_110800(): void {
   $store = \Drupal::getContainer()->get('joinup_sparql.graph_store.helper')->createGraphStore();
   $distributions = $store->get('http://joinup.eu/asset_distribution/published')->toRdfPhp();
   $dir = 'private://distributions';

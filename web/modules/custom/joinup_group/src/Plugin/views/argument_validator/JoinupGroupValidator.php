@@ -38,7 +38,7 @@ class JoinupGroupValidator extends ArgumentValidatorPluginBase {
     array $configuration,
     $plugin_id,
     $plugin_definition,
-    protected EntityTypeManagerInterface $entityTypeManager
+    protected EntityTypeManagerInterface $entityTypeManager,
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
   }

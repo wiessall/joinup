@@ -131,7 +131,7 @@ final class JsonLdObjectInspector {
     string $property,
     ?string $subProperty = NULL,
     ?int $delta = NULL,
-    mixed &$id = NULL
+    mixed &$id = NULL,
   ): null|string|array {
     foreach ($this->jsonLdNodes as $node) {
       $id = $node->getId();
@@ -179,7 +179,7 @@ final class JsonLdObjectInspector {
    */
   protected function getPropertyStringValue(
     NodeInterface|Value|IRI $resource,
-    ?string $property = NULL
+    ?string $property = NULL,
   ): ?string {
     $propertyValue = $resource instanceof NodeInterface
       ? $this->getPropertyValue($resource, $property)
@@ -210,7 +210,7 @@ final class JsonLdObjectInspector {
    */
   protected function getPropertyValue(
     NodeInterface $node,
-    string $property
+    string $property,
   ): NodeInterface|IRI|Value|array|string|null {
     return match($property) {
       '@id' => $node->getId(),

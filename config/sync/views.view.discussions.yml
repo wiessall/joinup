@@ -117,7 +117,7 @@ display:
         type: joinup_discussion_overview
         options: {  }
       cache:
-        type: none
+        type: search_api_none
         options: {  }
       empty:
         area_text_custom:

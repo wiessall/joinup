@@ -12,14 +12,14 @@ Feature: Collections/Solutions settings
   @uploadFiles:logo.png
   Scenario: Edit settings in a collection
     Given the following owner:
-      | name            | type                    |
-      | Chico example   | Non-Profit Organisation |
+      | name          | type    |
+      | Chico example | Company |
     And the following contact:
       | name  | Chico editorial             |
       | email | chico.editorial@example.com |
     And collections:
-      | title             | logo     | abstract                                    | access url        | closed | creation date    | description                     | content creation         | moderation | topic             | owner         | contact information  | state     |
-      | Jillian Land Eels | logo.png | Read up on all about <strong>spice</strong> | http://spice.com/ | yes    | 28-01-1995 12:05 | The spice elegance personified. | facilitators and authors | yes        | Supplier exchange | Chico example | Chico editorial      | published |
+      | title             | logo     | abstract                                    | access url        | closed | creation date    | description                     | content creation         | moderation | topic             | owner         | contact information | state     |
+      | Jillian Land Eels | logo.png | Read up on all about <strong>spice</strong> | http://spice.com/ | yes    | 28-01-1995 12:05 | The spice elegance personified. | facilitators and authors | yes        | Supplier exchange | Chico example | Chico editorial     | published |
     When I am logged in as a owner of the "Jillian Land Eels" collection
     And I go to the homepage of the "Jillian Land Eels" collection
     And I should not see the link "Settings" in the "Entity actions" region
@@ -48,15 +48,15 @@ Feature: Collections/Solutions settings
     Then I should see the heading "Add Solution"
 
     When I fill in the following:
-      | Title          | Solution Beta      |
-      | Abstract       | Short abstract     |
-      | Description    | Last letter        |
-      | Name           | Jony Burton        |
-      | E-mail address | jonb@example.com   |
+      | Title          | Solution Beta    |
+      | Abstract       | Short abstract   |
+      | Description    | Last letter      |
+      | Name           | Jony Burton      |
+      | E-mail address | jonb@example.com |
     And I attach the file "logo.png" to "Logo"
     And I select "Flemish" from "Language"
     And I select "EU and European Policies" from "Topic"
-    And I select "Citizen" from "Solution type"
+    And I select "Logging Service" from "Solution type"
 
     And I press "Add existing" at the "Owner" field
     And I fill in "Owner" with "Jonny inc."
@@ -85,10 +85,10 @@ Feature: Collections/Solutions settings
       | state      | published      |
       | collection | Rally fanatics |
     And users:
-      | Username         | E-mail                     | First name  | Family name |
-      | Ferners Lee      | ferners-lee@example.com    | Ferners     | Lee         |
-      | Plot user        | plot.user@example.com      | Plot        | user        |
-      | Lope Facilitator | lopfacilitator@example.com | Lope        | Facilitator |
+      | Username         | E-mail                     | First name | Family name |
+      | Ferners Lee      | ferners-lee@example.com    | Ferners    | Lee         |
+      | Plot user        | plot.user@example.com      | Plot       | user        |
+      | Lope Facilitator | lopfacilitator@example.com | Lope       | Facilitator |
     And the following collection user memberships:
       | collection     | user             | roles       |
       | Rally fanatics | Lope Facilitator | facilitator |

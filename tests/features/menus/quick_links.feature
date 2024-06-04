@@ -3,8 +3,8 @@ Feature: Test the visibility of the quick links menu.
 
   Background:
     Given the following owner:
-      | name                 | type                    |
-      | Organisation example | Non-Profit Organisation |
+      | name                 | type    |
+      | Organisation example | Company |
     And the following contact:
       | name  | Collection editorial             |
       | email | collection.editorial@example.com |

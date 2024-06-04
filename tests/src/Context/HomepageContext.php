@@ -60,12 +60,18 @@ class HomepageContext extends RawDrupalContext {
       $xpath = '//h1/a[@href = "' . $this->getEntityUri($entity) . '" and contains(., "' . $expected_data['title'] . '")]';
       Assert::assertNotEmpty($actual_data->find('xpath', $xpath), sprintf('%s "%s" does not have the correct title which links to the canonical page.', $type, $expected_data['title']));
 
-      // Check the body/description text.
-      $description_element = $actual_data->find('css', '.explore-item__description div');
+      // Check the body/description text. XPath varies in case of news and
+      // events, because 'filtered_entity_reference_bundles' formatter does not
+      // use field theme functions.
+      $description_element = $actual_data->find('css', '.explore-item__description > div')
+        ?: $actual_data->find('css', '.explore-item__description');
       Assert::assertInstanceOf(NodeElement::class, $description_element, sprintf('Did not find a description for the %s "%s" in the "Explore" section.', $type, $expected_data['title']));
 
       $actual_description = $description_element->getHtml();
-      Assert::assertEquals($expected_data['description'], $actual_description, sprintf('The body text for the %s "%s" in the "Explore" section does not contain the expected text.', $type, $expected_data['title']));
+      // Note: Please, take care, that the following will not work properly if
+      // twig debug is enabled. In that case, the output will contain a lot of
+      // HTML comments which will not be stripped out by the formatter.
+      Assert::assertEquals($expected_data['description'], trim($actual_description), sprintf('The body text for the %s "%s" in the "Explore" section does not contain the expected text.', $type, $expected_data['title']));
 
       // Check date.
       $expected_date = date("d/m/Y", strtotime($expected_data['date']));

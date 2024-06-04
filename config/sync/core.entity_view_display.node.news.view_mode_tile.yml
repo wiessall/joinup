@@ -4,7 +4,7 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.node.view_mode_tile
-    - field.field.node.news.body
+    - field.field.node.news.abstract
     - field.field.node.news.field_attachment
     - field.field.node.news.field_comments
     - field.field.node.news.field_keywords
@@ -13,6 +13,7 @@ dependencies:
     - field.field.node.news.field_news_referenced_solution
     - field.field.node.news.field_news_source_url
     - field.field.node.news.field_news_spatial_coverage
+    - field.field.node.news.field_paragraphs_body
     - field.field.node.news.field_shared_in
     - field.field.node.news.field_site_featured
     - field.field.node.news.field_state
@@ -21,7 +22,10 @@ dependencies:
     - node.type.news
     - responsive_image.styles.tile
   module:
-    - joinup_html_stripper
+    - field_delimiter
+    - field_formatter_range
+    - joinup_core
+    - joinup_slick
     - responsive_image
     - template_suggestion
     - user
@@ -30,11 +34,11 @@ targetEntityType: node
 bundle: news
 mode: view_mode_tile
 content:
-  body:
-    type: joinup_html_stripper_stripped
-    label: hidden
+  abstract:
+    type: string
+    label: visually_hidden
     settings:
-      trim_length: 600
+      link_to_entity: false
     third_party_settings:
       template_suggestion:
         template_suggestion: bare
@@ -47,11 +51,36 @@ content:
       responsive_image_style: tile
       image_link: ''
       image_loading:
-        attribute: eager
+        attribute: lazy
     third_party_settings:
       template_suggestion:
         template_suggestion: bare
     weight: 0
+    region: content
+  field_paragraphs_body:
+    type: filtered_entity_reference_bundles
+    label: hidden
+    settings:
+      view_mode: tile
+      link: ''
+      filtered_entity_bundles:
+        - simple_paragraph
+        - text
+      trim_length: 600
+    third_party_settings:
+      field_delimiter:
+        delimiter: ''
+      field_formatter_range:
+        order: 0
+        limit: 1
+        offset: 0
+      joinup_slick:
+        preset: ''
+        field_label: true
+        custom_label: ''
+      template_suggestion:
+        template_suggestion: ''
+    weight: 1
     region: content
   flag_like_node:
     settings: {  }

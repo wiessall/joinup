@@ -40,7 +40,7 @@ Feature: Moderate community content
       | Stellar flares                | Dim red dwarfs       |                     | Survey For Supernovae | published    | Marco Farfarer |
       | Upgrading CCD cameras         | Liquid cooled        |                     | Survey For Supernovae | archived     | Marco Farfarer |
     And document content:
-      | title                         | body                          | collection          | solution              | state            |
+      | title                         | field_paragraphs_body         | collection          | solution              | state            |
       | A multiwavelength study       | Optical and infrared          | Black hole research |                       | draft            |
       | X-Ray Transient V616          | Weak ¹²CO absorption          | Black hole research |                       | needs update     |
       | K-band spectroscopy           | Small amount of flux          | Black hole research |                       | proposed         |
@@ -52,29 +52,29 @@ Feature: Moderate community content
       | J-band light curves           | Wilson-Devinney modeling      |                     | Survey For Supernovae | published        |
       | Physics of the Neupert effect | Observed temporal correlation |                     | Survey For Supernovae | deletion request |
     And event content:
-      | title                                   | body                         | collection          | solution              | state            |
-      | Thick-target collisional bremsstrahlung | Chromospheric evaporation    | Black hole research |                       | draft            |
-      | Conductive cooling losses               | Single-loop geometry         | Black hole research |                       | needs update     |
-      | Source of SXR plasma supply and heating | Fast electrons are not       | Black hole research |                       | proposed         |
-      | Stars forming in material outflow       | Colossal material winds      | Black hole research |                       | published        |
-      | X-Shooter                               | VLT spectroscopic instrument | Black hole research |                       | deletion request |
-      | Infant stellar population               | Quarter of star formation    |                     | Survey For Supernovae | draft            |
-      | Give rise to galactic features          | Distended bulge of stars     |                     | Survey For Supernovae | needs update     |
-      | Cosmic-infrared background radiation    | Coming from all directions   |                     | Survey For Supernovae | proposed         |
-      | Evolution of dust-to-metals ratio       | Dust at high redshift        |                     | Survey For Supernovae | published        |
-      | Total V-band extinction                 | Fitting the afterglow SED    |                     | Survey For Supernovae | deletion request |
+      | title                                   | abstract                     | field_paragraphs_body        | collection          | solution              | state            |
+      | Thick-target collisional bremsstrahlung | Chromospheric evaporation    | Chromospheric evaporation    | Black hole research |                       | draft            |
+      | Conductive cooling losses               | Single-loop geometry         | Single-loop geometry         | Black hole research |                       | needs update     |
+      | Source of SXR plasma supply and heating | Fast electrons are not       | Fast electrons are not       | Black hole research |                       | proposed         |
+      | Stars forming in material outflow       | Colossal material winds      | Colossal material winds      | Black hole research |                       | published        |
+      | X-Shooter                               | VLT spectroscopic instrument | VLT spectroscopic instrument | Black hole research |                       | deletion request |
+      | Infant stellar population               | Quarter of star formation    | Quarter of star formation    |                     | Survey For Supernovae | draft            |
+      | Give rise to galactic features          | Distended bulge of stars     | Distended bulge of stars     |                     | Survey For Supernovae | needs update     |
+      | Cosmic-infrared background radiation    | Coming from all directions   | Coming from all directions   |                     | Survey For Supernovae | proposed         |
+      | Evolution of dust-to-metals ratio       | Dust at high redshift        | Dust at high redshift        |                     | Survey For Supernovae | published        |
+      | Total V-band extinction                 | Fitting the afterglow SED    | Fitting the afterglow SED    |                     | Survey For Supernovae | deletion request |
     And news content:
-      | title                         | body                        | collection          | solution              | state            |
-      | Magnetosphere boundary        | Gas shock                   | Black hole research |                       | draft            |
-      | Ambient magnetized medium     | Dust depletion level        | Black hole research |                       | needs update     |
-      | Stellar wind charged particle | Follow spiral paths         | Black hole research |                       | proposed         |
-      | Super-Alfvenic plasma flow    | Magnetic draping            | Black hole research |                       | published        |
-      | Massive lensing galaxy        | Sub-millimeter sky          | Black hole research |                       | deletion request |
-      | Planck's dusty gems           | An Einstein Ring            |                     | Survey For Supernovae | draft            |
-      | The optical morphology        | Turbulent gas fragmentation |                     | Survey For Supernovae | needs update     |
-      | The Tarantula massive binary  | SB2 orbital solution        |                     | Survey For Supernovae | proposed         |
-      | H-rich Wolf-Rayet star        | Polarimetric analysis       |                     | Survey For Supernovae | published        |
-      | Quasi-homogeneous evolution   | Mass-transfer was avoided   |                     | Survey For Supernovae | deletion request |
+      | title                         | abstract                    | field_paragraphs_body | collection          | solution              | state            |
+      | Magnetosphere boundary        |                             | Gas shock             | Black hole research |                       | draft            |
+      | Ambient magnetized medium     | Dust depletion level        |                       | Black hole research |                       | needs update     |
+      | Stellar wind charged particle | Follow spiral paths         | I shouldn't see this! | Black hole research |                       | proposed         |
+      | Super-Alfvenic plasma flow    | Magnetic draping            |                       | Black hole research |                       | published        |
+      | Massive lensing galaxy        | Sub-millimeter sky          |                       | Black hole research |                       | deletion request |
+      | Planck's dusty gems           | An Einstein Ring            |                       |                     | Survey For Supernovae | draft            |
+      | The optical morphology        | Turbulent gas fragmentation |                       |                     | Survey For Supernovae | needs update     |
+      | The Tarantula massive binary  | SB2 orbital solution        |                       |                     | Survey For Supernovae | proposed         |
+      | H-rich Wolf-Rayet star        | Polarimetric analysis       |                       |                     | Survey For Supernovae | published        |
+      | Quasi-homogeneous evolution   | Mass-transfer was avoided   |                       |                     | Survey For Supernovae | deletion request |
 
     # Check if all content that requires moderation shows up for the collection.
     When I reload the page
@@ -313,13 +313,13 @@ Feature: Moderate community content
       | Rotation-powered pulsations | Millisecond pulsars   | Neutron stars | proposed |
       | The Recycling concept       | An epoch of accretion | Neutron stars | proposed |
     And document content:
-      | title          | body                          | collection    | state            |
+      | title          | field_paragraphs_body         | collection    | state            |
       | Donor star     | Spun up to millisecond period | Neutron stars | proposed         |
       | High frequency | Slow 1.2 second spin          | Neutron stars | deletion request |
       | Cluster        | Eddington luminosity          | Neutron stars | deletion request |
     And event content:
-      | title      | body        | collection    | state    |
-      | Accelerate | Wide binary | Neutron stars | proposed |
+      | title      | field_paragraphs_body | collection    | state    |
+      | Accelerate | Wide binary           | Neutron stars | proposed |
     And news content:
       | title                   | body                             | collection    | state            |
       | Metal-rich star cluster | Standard pulsar recycling theory | Neutron stars | deletion request |
@@ -374,7 +374,7 @@ Feature: Moderate community content
 
   @uploadFiles:logo.png
   Scenario: The logo image can be replaced for an event or news item that's in
-    the "proposed" state. See ISAICP-5818.
+  the "proposed" state. See ISAICP-5818.
 
     Given user:
       | Username | leo |
@@ -393,8 +393,11 @@ Feature: Moderate community content
     When I click "Add event" in the plus button menu
     And I fill in the following:
       | Title            | Alice in Wonderland |
-      | Description      | Here we go...       |
+      | Abstract         | Here we go...       |
       | Virtual location | http://example.com  |
+    And I append "text" to "field_paragraphs_body" layout paragraphs field
+      | field_body:value  | Here we go...  |
+      | field_body:format | content_editor |
 
     And I select "Statistics and Analysis" from "Topic"
     And I attach the file "logo.png" to "Logo"
@@ -407,14 +410,17 @@ Feature: Moderate community content
     When I press "Remove"
     And I should see the heading "Edit Event Alice in Wonderland"
     And I should see the button "Upload"
+
     # Test news.
     And I go to the homepage of the "Black hole research" collection
     When I click "Add news" in the plus button menu
     And I fill in the following:
       | Short title | Declared the ultimate metal                                                                   |
       | Headline    | Strong request for this rare metal that is on the mouth of everybody                          |
-      | Content     | Thanks to its lower density compared to thulium and lutetium its applications have increased. |
-
+      | Abstract    | Thanks to its lower density compared to thulium and lutetium its applications have increased. |
+    And I append "text" to "field_paragraphs_body" layout paragraphs field
+      | field_body:value  | A short body text. |
+      | field_body:format | content_editor     |
     And I select "Data gathering and processing" from "Topic"
     And I attach the file "logo.png" to "Logo"
     And I press "Upload"

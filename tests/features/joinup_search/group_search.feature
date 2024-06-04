@@ -9,7 +9,7 @@ Feature: Search inside groups
       | email | charalambos.katsumi@example.com |
       | name  | Charalambos Katsumi             |
     And the following owner:
-      | name              |
+      | name             |
       | Antonios Katsumi |
     And collection:
       | title               | Chalet construction |
@@ -17,7 +17,7 @@ Feature: Search inside groups
       | logo                | logo.png            |
       | moderation          | no                  |
       | topic               | Demography          |
-      | spatial coverage    | Switzerland         |
+      | spatial coverage    | Belgium             |
       | state               | published           |
       | owner               | Antonios Katsumi    |
       | contact information | Charalambos Katsumi |
@@ -32,17 +32,17 @@ Feature: Search inside groups
       | Room sizes | What are the ideal dimensions? | published | Chalet construction |                      |
       | Terrace?   | Want a decent sized terrace    | published |                     | Inclined foundations |
     And document content:
-      | title       | body               | state     | collection          | solution             |
-      | Ground plan | A classic design   | published | Chalet construction |                      |
-      | Rock types  | Ranked by hardness | published |                     | Inclined foundations |
+      | title       | field_paragraphs_body | state     | collection          | solution             |
+      | Ground plan | A classic design      | published | Chalet construction |                      |
+      | Rock types  | Ranked by hardness    | published |                     | Inclined foundations |
     And event content:
-      | title                        | body                              | state     | collection          | solution             |
+      | title                        | field_paragraphs_body             | state     | collection          | solution             |
       | Opening of the winter season | Ski resorts will open in December | published | Chalet construction |                      |
       | Presenting DrillMaster X88   | Our most finely ground drill bit  | published |                     | Inclined foundations |
     And news content:
-      | title             | headline          | body            | collection          | solution             | topic                   | spatial coverage | state     |
-      | Natural materials | Materials natural | Ground feel     | Chalet construction |                      | Statistics and Analysis | Switzerland      | published |
-      | Still frozen      | Frozen still      | Maybe next week |                     | Inclined foundations |                         | Austria          | published |
+      | title             | headline          | abstract                      | field_paragraphs_body | collection          | solution             | topic                   | spatial coverage | state     |
+      | Natural materials | Materials natural | Abstract of natural materials | Ground feel           | Chalet construction |                      | Statistics and Analysis | Belgium          | published |
+      | Still frozen      | Frozen still      |                               | Maybe next week       |                     | Inclined foundations |                         | Greece           | published |
     And custom_page content:
       | title     | body                             | collection          | solution             | state     |
       | Resources | Here are some interesting links. | Chalet construction |                      | published |

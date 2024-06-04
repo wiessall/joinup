@@ -1141,6 +1141,30 @@ class FeatureContext extends RawDrupalContext {
   }
 
   /**
+   * Asserts that no link is present in the given region.
+   *
+   * @todo ISAICP-8376 Revert this once all entity types have been mapped.
+   *
+   * Same as MinkContext::assertNotLinkRegion but does not fail if region is
+   * not found.
+   *
+   * @Then I should not see the link :link in the optional :region( region)
+   *
+   * @throws \Exception
+   *   If the region is present but the link within it cannot be found.
+   */
+  public function assertNotLinkOptionalRegion($link, $region): void {
+    $session = $this->getSession();
+    $regionObj = $session->getPage()->find('region', $region);
+    if ($regionObj) {
+      $result = $regionObj->findLink($link);
+      if (!empty($result)) {
+        throw new \Exception(sprintf('Link to "%s" in the "%s" region on the page %s', $link, $region, $this->getSession()->getCurrentUrl()));
+      }
+    }
+  }
+
+  /**
    * Asserts that the page title tag equals to some text.
    *
    * The assertion strips off the possible suffix "| Joinup".
@@ -1286,6 +1310,48 @@ class FeatureContext extends RawDrupalContext {
     if (!empty($errors)) {
       throw new \Exception(sprintf("The following lines of text were not found on the page %s: '%s'", $this->getSession()->getCurrentUrl(), implode(', ', $errors)));
     }
+  }
+
+  /**
+   * Checks that multiple lines of text appear on the page in a specific order.
+   *
+   * Provide data in the following format:
+   * | Text 1 |
+   * | Text 2 |
+   * | ...    |
+   *
+   * @param \Behat\Gherkin\Node\TableNode $table
+   *   A list of texts.
+   *
+   * @Then I (should )see the following lines of text in the correct order:
+   */
+  public function assertPageTextOrder(TableNode $table): void {
+    $session = $this->getSession();
+
+    $expected_order = $table->getColumn(0);
+    $actual_text = $session->getPage()->getText();
+
+    $not_found = [];
+    foreach ($expected_order as $substring) {
+      if (!str_contains($actual_text, $substring)) {
+        $not_found[] = "'$substring'";
+      }
+    }
+    if ($not_found) {
+      throw new ElementNotFoundException($session->getDriver(), sprintf('Substring(s): %s', implode(', ', array_unique($not_found))));
+    }
+
+    $actual_order = [];
+    $offset = 0;
+    foreach ($expected_order as $substring) {
+      if (($pos = strpos($actual_text, $substring, $offset)) !== FALSE) {
+        $actual_order[$pos] = $substring;
+        $offset = $pos + strlen($substring);
+      }
+    }
+    ksort($actual_order);
+
+    Assert::assertSame($expected_order, array_values($actual_order), 'Strings found but incorrectly ordered');
   }
 
   /**
@@ -1980,71 +2046,6 @@ class FeatureContext extends RawDrupalContext {
     // doesn't employ a cache context. In order to make the version show up on
     // previously cached pages we need to invalidate the render cache manually.
     Cache::invalidateTags(['rendered']);
-  }
-
-  /**
-   * Asserts that a file downloaded from a link contains a list of strings.
-   *
-   * IMPORTANT NOTE: This step definition is not performing any file access
-   * check. The file content is read directly from the file system. The user
-   * access to the file should be tested in separate Behat steps.
-   *
-   * @param string $link_label
-   *   The link from where to download the file.
-   * @param \Behat\Gherkin\Node\TableNode $strings_table
-   *   A table with a single column. Each row contains a string.
-   *
-   * @throws \Exception
-   *   If the link has no href attribute or the file content cannot be loaded.
-   *
-   * @Then the file downloaded from the :link_label link contains the following strings:
-   */
-  public function assertDownloadedFileContainsStrings(string $link_label, TableNode $strings_table): void {
-    if (!$link = $this->getSession()->getPage()->findLink($link_label)) {
-      throw new ElementNotFoundException($this->getSession()->getDriver(), 'Link', NULL, $link_label);
-    }
-    if (!$url = $link->getAttribute('href')) {
-      throw new \Exception("The link '{$link_label}' misses an 'href' attribute.");
-    }
-
-    // Get the path part from the URL.
-    $path = rtrim(parse_url($url, PHP_URL_PATH), '/');
-    // Remove the base path.
-    $path = substr($path, strlen(base_path()));
-
-    // Drupal private file.
-    if (strpos($path, 'system/files') === 0) {
-      $path = Settings::get('file_private_path') . substr($path, 12);
-    }
-    // Webserver accessible file.
-    else {
-      $path = DRUPAL_ROOT . "/{$path}";
-    }
-
-    if (($content = file_get_contents($path)) === FALSE) {
-      throw new \Exception("Cannot read '{$path}' file.");
-    }
-
-    if (!$content) {
-      throw new \Exception("The downloaded file has no content.");
-    }
-
-    $not_found = [];
-    foreach ($strings_table->getColumn(0) as $text) {
-      $matches = [];
-      if (preg_match('/^.*%(.*?)%.*$/', $text, $matches)) {
-        $entity = $this->getEntityByLabel('rdf_entity', $matches[1]);
-        $text = str_replace("%{$matches[1]}%", $entity->id(), $text);
-      }
-
-      if (strpos($content, $text) === FALSE) {
-        $not_found[] = $text;
-      }
-    }
-
-    if (!empty($not_found)) {
-      throw new ExpectationFailedException("Following strings were not found in the downloaded file:\n- " . implode("\n- ", $not_found));
-    }
   }
 
   /**

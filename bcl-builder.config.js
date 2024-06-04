@@ -154,20 +154,6 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/js/sticky-menu-logged-in.js`
-      ),
-      dest: path.resolve(
-        outputFolder,
-        `${ventuno}assets/js/sticky-menu-logged-in.js`
-      ),
-      options: {
-        minify: true,
-        sourceMap: true,
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
         `${ventuno}src/js/toggle-text-seemore-btn.js`
       ),
       dest: path.resolve(
@@ -188,6 +174,14 @@ module.exports = {
         outputFolder,
         `${ventuno}assets/js/tour-first-balloon.js`
       ),
+      options: {
+        minify: true,
+        sourceMap: true,
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, `${ventuno}src/js/og-navigation.js`),
+      dest: path.resolve(outputFolder, `${ventuno}assets/js/og-navigation.js`),
       options: {
         minify: true,
         sourceMap: true,
@@ -1387,6 +1381,14 @@ module.exports = {
         path.resolve(nodeModules, "@glidejs/glide/dist/css/glide.core.min.css"),
       ],
       to: path.resolve(outputFolder, `${iop}assets/css`),
+      options: { up: true },
+    },
+    {
+      from: [
+        path.resolve(nodeModules, "priority-plus/dist/priority-plus.js"),
+        path.resolve(nodeModules, "priority-plus/dist/priority-plus.css"),
+      ],
+      to: path.resolve(outputFolder, `${ventuno}assets/lib/priority-plus`),
       options: { up: true },
     },
   ],

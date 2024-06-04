@@ -79,6 +79,8 @@ class FilteredEntityReferenceBundlesFormatter extends EntityReferenceRevisionsEn
   public static function defaultSettings(): array {
     return [
       'filtered_entity_bundles' => [],
+      'trim_length' => 200,
+      'trim_chars' => '...',
     ] + parent::defaultSettings();
   }
 
@@ -98,6 +100,20 @@ class FilteredEntityReferenceBundlesFormatter extends EntityReferenceRevisionsEn
       '#default_value' => $this->getSetting('filtered_entity_bundles'),
       '#required' => TRUE,
       '#multiple' => TRUE,
+    ];
+
+    $elements['trim_length'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Trim length'),
+      '#default_value' => $this->getSetting('trim_length'),
+      '#required' => TRUE,
+    ];
+
+    $elements['trim_chars'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Trim characters'),
+      '#description' => $this->t('Characters to add to the end of the trimmed text if it was longer than the specified trim length'),
+      '#default_value' => $this->getSetting('trim_chars'),
     ];
 
     return $elements;
@@ -141,7 +157,14 @@ class FilteredEntityReferenceBundlesFormatter extends EntityReferenceRevisionsEn
 
     $truncate = new TruncateHTML();
     return [
-      '#markup' => $truncate->truncateChars($text, 200),
+      // The reason for typecasting is because layout builder configuration form
+      // returns a string even though the schema is set to integer and the
+      // value stored is an integer.
+      '#markup' => $truncate->truncateChars(
+        $text,
+        (int) $this->getSetting('trim_length'),
+        $this->getSetting('trim_chars'),
+      ),
     ];
   }
 

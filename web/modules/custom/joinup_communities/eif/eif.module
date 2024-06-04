@@ -7,20 +7,17 @@
 
 declare(strict_types=1);
 
-use Drupal\Core\Access\AccessResult;
-use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Cache\Cache;
-use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Render\Element;
-use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\eif\EifInterface;
-use Drupal\eif\Form\EifWrapperInlineForm;
+use Drupal\eif\Entity\EifPerspective;
+use Drupal\eif\Entity\EifPerspectiveInterface;
+use Drupal\eif\Entity\EifRecommendation;
 use Drupal\field\FieldConfigInterface;
 use Drupal\joinup_taxonomy\Entity\MappedTerm;
+use Drupal\meta_entity\Entity\MetaEntityInterface;
 use Drupal\og\OgGroupAudienceHelperInterface;
-use Drupal\rdf_meta_entity\Entity\RdfMetaEntityInterface;
 use Drupal\solution\Entity\SolutionInterface;
 use Drupal\views\ViewExecutable;
 
@@ -29,8 +26,12 @@ use Drupal\views\ViewExecutable;
  */
 function eif_theme(array $existing, string $type, string $theme, string $path): array {
   return [
-    'eif_wrapper' => [
-      'render element' => 'elements',
+    'eif_qualified_recommendation' => [
+      'variables' => [
+        'label' => NULL,
+        'description' => NULL,
+        'weight' => 0,
+      ],
     ],
     'eif_category_navigator' => [
       'variables' => [
@@ -50,26 +51,6 @@ function eif_theme(array $existing, string $type, string $theme, string $path): 
       ],
     ],
   ];
-}
-
-/**
- * Prepares variables for EIF wrapper templates.
- *
- * Default template: eif-wrapper.html.twig.
- *
- * @param array $variables
- *   An associative array containing:
- *   - elements: An associative array containing the user information and any
- *     fields attached to the entity. Properties used:
- *     - #eif_wrapper: A \Drupal\eif\Entity\EifWrapper
- *       object. The entity being viewed.
- *   - attributes: HTML attributes for the containing element.
- */
-function template_preprocess_eif_wrapper(array &$variables): void {
-  $variables['eif_wrapper'] = $variables['elements']['#eif_wrapper'];
-  foreach (Element::children($variables['elements']) as $key) {
-    $variables['content'][$key] = $variables['elements'][$key];
-  }
 }
 
 /**
@@ -138,17 +119,6 @@ function eif_preprocess_menu__og__navigation(array &$variables): void {
 }
 
 /**
- * Implements hook_entity_type_build().
- */
-function eif_entity_type_build(array &$entity_types): void {
-  /** @var \Drupal\Core\Entity\EntityTypeInterface[] $entity_types */
-  if (isset($entity_types['eif_wrapper']) && !$entity_types['eif_wrapper']->getHandlerClass('inline_form')) {
-    // Use a dedicated inline form handler for 'eif_wrapper' entities.
-    $entity_types['eif_wrapper']->setHandlerClass('inline_form', EifWrapperInlineForm::class);
-  }
-}
-
-/**
  * Implements hook_entity_bundle_info_alter().
  */
 function eif_entity_bundle_info_alter(array &$bundles): void {
@@ -156,7 +126,6 @@ function eif_entity_bundle_info_alter(array &$bundles): void {
     'eif_conceptual_model',
     'eif_interoperability_layer',
     'eif_principle',
-    'eif_recommendation',
     'eif_solution_type',
   ];
   foreach ($vids as $vid) {
@@ -164,20 +133,19 @@ function eif_entity_bundle_info_alter(array &$bundles): void {
       $bundles['taxonomy_term'][$vid]['class'] = MappedTerm::class;
     }
   }
+  if (!empty($bundles['taxonomy_term']['eif_recommendation'])) {
+    $bundles['taxonomy_term']['eif_recommendation']['class'] = EifRecommendation::class;
+  }
+  if (!empty($bundles['meta_entity']['eif_perspective'])) {
+    $bundles['meta_entity']['eif_perspective']['class'] = EifPerspective::class;
+  }
 }
 
 /**
  * Implements hook_form_FORM_ID_alter().
  */
-function eif_form_rdf_meta_entity_eif_perspective_form_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
-  foreach (Element::children($form) as $name) {
-    if (!empty($form[$name]['widget']['form'])) {
-      // Don't show the EIF Wrapper bundle label as sub-form title.
-      $form[$name]['widget']['form']['#title'] = NULL;
-    }
-  }
-
-  $form['#validate'][] = '_eif_form_rdf_meta_entity_no_empty_field_validate';
+function eif_form_meta_entity_eif_perspective_form_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
+  $form['#validate'][] = '_eif_form_meta_entity_no_empty_field_validate';
 }
 
 /**
@@ -188,10 +156,10 @@ function eif_form_rdf_meta_entity_eif_perspective_form_alter(array &$form, FormS
  * @param \Drupal\Core\Form\FormStateInterface $form_state
  *   The form state object.
  */
-function _eif_form_rdf_meta_entity_no_empty_field_validate(array &$form, FormStateInterface $form_state): void {
+function _eif_form_meta_entity_no_empty_field_validate(array &$form, FormStateInterface $form_state): void {
   // No field is required but the user needs to fill in at least 1 field in the
   // form.
-  if (empty($form_state->getValue('field_eif_description')[0]['value'])
+  if (empty($form_state->getValue('eif_description')[0]['value'])
     && empty($form_state->getValue('eif_solution_type'))
     && empty($form_state->getValue('eif_model'))
     && empty($form_state->getValue('eif_layer'))
@@ -203,23 +171,9 @@ function _eif_form_rdf_meta_entity_no_empty_field_validate(array &$form, FormSta
 }
 
 /**
- * Implements hook_ENTITY_TYPE_create_access().
- */
-function eif_eif_wrapper_create_access(AccountInterface $account, array $context, $entity_bundle): AccessResultInterface {
-  return AccessResult::allowedIf($account->hasPermission('create eif wrapper entity'));
-}
-
-/**
- * Implements hook_ENTITY_TYPE_access().
- */
-function eif_eif_wrapper_access(EntityInterface $entity, string $operation, AccountInterface $account): AccessResultInterface {
-  return AccessResult::allowedIf($account->hasPermission("{$operation} eif wrapper entity"));
-}
-
-/**
  * Implements hook_ENTITY_TYPE_insert().
  */
-function eif_rdf_meta_entity_insert(RdfMetaEntityInterface $entity): void {
+function eif_meta_entity_insert(MetaEntityInterface $entity): void {
   _eif_reindex_parent_solution($entity);
   _eif_add_eif_link_to_group_menus($entity);
 }
@@ -227,25 +181,25 @@ function eif_rdf_meta_entity_insert(RdfMetaEntityInterface $entity): void {
 /**
  * Implements hook_ENTITY_TYPE_update().
  */
-function eif_rdf_meta_entity_update(RdfMetaEntityInterface $entity): void {
+function eif_meta_entity_update(MetaEntityInterface $entity): void {
   _eif_reindex_parent_solution($entity);
 }
 
 /**
  * Implements hook_ENTITY_TYPE_delete().
  */
-function eif_rdf_meta_entity_delete(RdfMetaEntityInterface $entity): void {
+function eif_meta_entity_delete(MetaEntityInterface $entity): void {
   _eif_reindex_parent_solution($entity);
 }
 
 /**
  * Re index the parent solution to include the reference to the perspective.
  *
- * @param \Drupal\rdf_meta_entity\Entity\RdfMetaEntityInterface $entity
+ * @param \Drupal\meta_entity\Entity\MetaEntityInterface $entity
  *   The RDF meta entity.
  */
-function _eif_reindex_parent_solution(RdfMetaEntityInterface $entity): void {
-  if ($entity->bundle() !== 'eif_perspective') {
+function _eif_reindex_parent_solution(MetaEntityInterface $entity): void {
+  if (!$entity instanceof EifPerspectiveInterface) {
     return;
   }
 
@@ -282,10 +236,10 @@ function _eif_reindex_parent_solution(RdfMetaEntityInterface $entity): void {
 /**
  * Creates a Link to EIF perspective view from the solution's left-side menu.
  *
- * @param \Drupal\rdf_meta_entity\Entity\RdfMetaEntityInterface $meta_entity
+ * @param \Drupal\meta_entity\Entity\MetaEntityInterface $meta_entity
  *   The RDF meta entity.
  */
-function _eif_add_eif_link_to_group_menus(RdfMetaEntityInterface $meta_entity): void {
+function _eif_add_eif_link_to_group_menus(MetaEntityInterface $meta_entity): void {
   if ($meta_entity->bundle() === 'eif_perspective') {
     $solution = $meta_entity->getTargetEntity();
     if ($solution instanceof SolutionInterface) {
@@ -330,10 +284,10 @@ function eif_views_pre_render(ViewExecutable $view): void {
   }
 
   $eif_perspective_list_cache_tags = \Drupal::entityTypeManager()
-    ->getStorage('rdf_meta_entity_type')
+    ->getStorage('meta_entity_type')
     ->load('eif_perspective')
     ->getCacheTags();
-  $cache_tags[] = 'rdf_meta_entity_list:eif_perspective';
+  $cache_tags[] = 'meta_entity_list:eif_perspective';
   $cache_tags = Cache::mergeTags($cache_tags, $eif_perspective_list_cache_tags);
   $view->element['#cache']['tags'] = Cache::mergeTags($view->element['#cache']['tags'], $cache_tags);
 }
@@ -358,54 +312,4 @@ function eif_options_list_alter(array &$options, array $context): void {
       }
     }
   }
-  elseif ($context['fieldDefinition']->id() === 'eif_wrapper.recommendation.term') {
-    $empty_option = [];
-    if (isset($options['_none'])) {
-      $empty_option['_none'] = t('- Select a Recommendation -');
-    }
-
-    $terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadByProperties([
-      'vid' => 'eif_recommendation',
-    ]);
-    foreach ($options as $key => $value) {
-      if (isset($terms[$key]) && !empty($terms[$key]->field_eif_related_term->entity)) {
-        $options[$key] = $value . ' - ' . $terms[$key]->field_eif_related_term->entity->label();
-      }
-    }
-
-    // Remove the empty option - if available - to re-add it later first.
-    unset($options['_none']);
-    uksort($options, function (string $key1, string $key2) use ($terms): bool {
-      return $terms[$key1]->field_eif_identifier->value > $terms[$key2]->field_eif_identifier->value;
-    });
-    $options = $empty_option + $options;
-  }
-}
-
-/**
- * Implements hook_inline_entity_form_entity_form_alter().
- */
-function eif_inline_entity_form_entity_form_alter(array &$entity_form, FormStateInterface &$form_state): void {
-  if ($entity_form['#entity_type'] !== 'eif_wrapper' || $entity_form['#bundle'] !== 'recommendation') {
-    return;
-  }
-
-  $entity_form['term']['widget']['#title_display'] = 'invisible';
-  $entity_form['#after_build'][] = '_eif_inline_entity_form_actions_alter';
-}
-
-/**
- * Callback function to rename IEF action buttons for the EIF recommendation.
- *
- * @param array $entity_form
- *   The entity form.
- * @param \Drupal\Core\Form\FormStateInterface $form_state
- *   The form API form state object.
- *
- * @return array
- *   The processed form array.
- */
-function _eif_inline_entity_form_actions_alter(array $entity_form, FormStateInterface $form_state): array {
-  $entity_form['actions']['ief_add_save']['#value'] = t('Save recommendation');
-  return $entity_form;
 }
