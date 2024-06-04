@@ -7,11 +7,25 @@
 
 declare(strict_types=1);
 
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Access\AccessResultInterface;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\Field\Plugin\Field\FieldType\EntityReferenceItem;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\asset_release\Entity\AssetRelease;
+use Drupal\file_url\FileUrlHandler;
 use Drupal\joinup_distribution\DistributionParentFieldItemList;
 use Drupal\joinup_distribution\Entity\Distribution;
+use Drupal\joinup_distribution\Entity\DistributionInterface;
+use Drupal\joinup_distribution\Entity\DistributionsParentInterface;
 use Drupal\joinup_taxonomy\Entity\MappedTerm;
+use Drupal\node\NodeInterface;
+use Drupal\solution\Entity\Solution;
+use Drupal\solution\Exception\MissingSolutionException;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 /**
  * Implements hook_entity_bundle_info_alter().
@@ -48,4 +62,216 @@ function joinup_distribution_entity_bundle_field_info(EntityTypeInterface $entit
     ];
   }
   return [];
+}
+
+/**
+ * Implements hook_entity_bundle_field_info_alter().
+ */
+function joinup_distribution_entity_bundle_field_info_alter(array &$fields, EntityTypeInterface $entity_type, string $bundle): void {
+  if ($entity_type->id() === 'node' && $bundle === 'distribution') {
+    // Make sure a distribution's title is unique in its release.
+    if (!empty($fields['label'])) {
+      $fields['label']->addConstraint('UniqueDistributionTitle', []);
+    }
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function joinup_distribution_form_node_distribution_form_alter(array &$form, FormStateInterface $formState): void {
+  $parent = \Drupal::routeMatch()->getParameter('node');
+
+  // Bail out if the solution or asset_release is not present on the route.
+  // Since this form is only intended to be used in the context of a solution or
+  // release, there is no field provided for it. Without a solution or a release
+  // the distribution will be dangling and won't be reachable.
+  if (!$parent || !$parent instanceof DistributionsParentInterface) {
+    throw new AccessDeniedHttpException('Distributions can only be created in context of a solution or an asset release.');
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_access().
+ */
+function joinup_distribution_node_access(EntityInterface $entity, string $operation, AccountInterface $account): AccessResultInterface {
+  if (!$entity instanceof DistributionInterface) {
+    return AccessResult::neutral();
+  }
+
+  $solution = $entity->getSolution();
+  if ($operation !== 'view' && $solution->isArchived()) {
+    return AccessResult::forbidden()->addCacheableDependency($solution);
+  }
+
+  return AccessResult::neutral()->addCacheableDependency($solution);
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_presave().
+ */
+function joinup_distribution_node_presave(NodeInterface $distribution): void {
+  if (!$distribution instanceof DistributionInterface) {
+    return;
+  }
+
+  if (!empty($fileId = $distribution->access_url->target_id)) {
+    if ($file = FileUrlHandler::urlToFile($fileId)) {
+      if (!FileUrlHandler::isRemote($file)) {
+        // Set the file size field.
+        $distribution->get('file_size')->setValue($file->getSize());
+
+        $tids = \Drupal::entityQuery('taxonomy_term')
+          ->accessCheck(FALSE)
+          ->condition('mime_type', $file->getMimeType())
+          ->execute();
+        if ($tids) {
+          $distribution->set('format', reset($tids));
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert().
+ */
+function joinup_distribution_node_insert(NodeInterface $distribution): void {
+  if ($distribution instanceof DistributionInterface) {
+    // Invalidate the solution cache.
+    joinup_distribution_invalidate_solution_cache($distribution);
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_update().
+ */
+function joinup_distribution_node_update(NodeInterface $distribution): void {
+  if (!$distribution instanceof DistributionInterface) {
+    return;
+  }
+
+  // Invalidate the solution cache.
+  joinup_distribution_invalidate_solution_cache($distribution);
+
+  // Reindex the distribution's parent. Note that this is done automatically
+  // on distribution insert, in DistributionParentFieldItemList::postSave(),
+  // by saving the parent after a new distribution has been saved.
+  // @see \Drupal\joinup_distribution\DistributionParentFieldItemList::postSave()
+  if ($parent = $distribution->getParent()) {
+    /** @var \Drupal\search_api\Plugin\search_api\datasource\ContentEntityTrackingManager $contentTrackingManager */
+    $contentTrackingManager = \Drupal::service('search_api.entity_datasource.tracking_manager');
+    $contentTrackingManager->trackEntityChange($parent);
+  }
+}
+
+/**
+ * Invalidates the distribution solution cache.
+ *
+ * @param \Drupal\joinup_distribution\Entity\DistributionInterface $distribution
+ *   The distribution being inserted/updated.
+ */
+function joinup_distribution_invalidate_solution_cache(DistributionInterface $distribution): void {
+  try {
+    $solution = $distribution->getSolution();
+  }
+  catch (MissingSolutionException $exception) {
+    // The parent solution might not be set yet.
+    return;
+  }
+  /** @var \Drupal\Core\Cache\CacheTagsInvalidatorInterface $cacheTagsInvalidator */
+  $cacheTagsInvalidator = \Drupal::service('cache_tags.invalidator');
+  // Solutions show the licence of their releases in the solution header.
+  // Clear the cache of the solution this release belongs to so any licence
+  // change is picked up.
+  $cacheTagsInvalidator->invalidateTags($solution->getCacheTagsToInvalidate());
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function joinup_distribution_preprocess_node(array &$variables): void {
+  $distribution = $variables['node'];
+  if ($distribution instanceof DistributionInterface && $variables['view_mode'] === 'compact') {
+    // Provide a flag if this is a standalone distribution.
+    $variables['is_standalone'] = $distribution->isStandalone();
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_delete().
+ *
+ * Cleanup entity reference field items to the deleted distribution from
+ * solutions and releases.
+ */
+function joinup_distribution_node_delete(NodeInterface $distribution): void {
+  if (!$distribution instanceof DistributionInterface) {
+    return;
+  }
+
+  // These fields from solution and release are linking back to distributions.
+  // The only reason they existed in Drupal is to fulfill the ADMS-AP
+  // specification, where the reference is wrongly defined from parent to child.
+  // In ISAICP-8569 and ISAICP-8572, these fields will be removed from
+  // release/solution, sticking to the normal Drupal relationship, from child to
+  // parent. To honour the ADMS-AP specification, we will add a triple from
+  // asset to its distributions, with the http://www.w3.org/ns/dcat#distribution
+  // predicate, when we're normalizing the release/solution.
+  // @todo Gradually remove this check and assertions as releases and
+  //   solution are converted, first in ISAICP-8569, later in ISAICP-8572.
+  assert(!method_exists(AssetRelease::class, 'getUri'));
+  assert(!method_exists(Solution::class, 'getUri'));
+
+  /** @var \Drupal\sparql_entity_storage\SparqlEntityStorageInterface $storage */
+  $storage = \Drupal::entityTypeManager()->getStorage('rdf_entity');
+
+  $ids = $storage->getQuery('OR')->accessCheck(FALSE)
+    ->condition('field_is_distribution', $distribution->id())
+    ->condition('field_isr_distribution', $distribution->id())
+    ->execute();
+
+  foreach ($storage->loadMultiple($ids) as $entity) {
+    $fieldName = $entity->bundle() === 'solution' ? 'field_is_distribution' : 'field_isr_distribution';
+    /** @var \Drupal\Core\Field\EntityReferenceFieldItemListInterface $field */
+    $field = $entity->get($fieldName);
+    $field->filter(function (EntityReferenceItem $item) use ($distribution): bool {
+      return $item->target_id !== $distribution->id();
+    });
+    $entity->skip_notification = TRUE;
+    $entity->save();
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function joinup_distribution_preprocess_views_view_field(array &$variables): void {
+  $view = $variables['view'];
+  $field = $variables['field'];
+  if ($view->storage->id() !== 'asset_distribution_downloads' || $view->current_display !== 'page' || $field->field !== 'parent_entity_id') {
+    return;
+  }
+
+  /** @var \Drupal\joinup_distribution\Entity\DownloadEvent $downloadEvent */
+  $downloadEvent = $variables['row']->_entity;
+  if ($downloadEvent->get('parent_entity_type')->isEmpty() || $downloadEvent->get('parent_entity_id')->isEmpty()) {
+    return;
+  }
+
+  // Notice: This code works for any entity type, though it is only meant for
+  // distributions, so it might be too much.
+  $entityType = $downloadEvent->get('parent_entity_type')->value;
+  $entityId = $downloadEvent->get('parent_entity_id')->value;
+
+  try {
+    $storage = $storages[$entityType] ?? \Drupal::entityTypeManager()->getStorage($entityType);
+  }
+  catch (\Exception $exception) {
+    return;
+  }
+
+  $entity = $storage->load($entityId);
+  if (!empty($entity)) {
+    $variables['output'] = $entity->toLink($entity->label());
+  }
 }

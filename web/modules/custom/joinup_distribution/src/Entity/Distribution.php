@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_distribution\Entity;
 
-use Drupal\asset_distribution\Entity\DistributionsParentInterface;
-use Drupal\asset_distribution\Exception\MissingDistributionParentException;
 use Drupal\joinup_bundle_class\DescriptionTrait;
+use Drupal\joinup_distribution\Exception\MissingDistributionParentException;
 use Drupal\joinup_group\Entity\GroupContentTrait;
 use Drupal\joinup_stats\Entity\DownloadCountAwareInterface;
 use Drupal\joinup_stats\Entity\DownloadCountAwareTrait;
@@ -39,7 +38,7 @@ class Distribution extends Node implements DistributionInterface {
    * {@inheritdoc}
    */
   public function getParent(): DistributionsParentInterface {
-    /** @var \Drupal\asset_distribution\DistributionParentFieldItemList $field */
+    /** @var \Drupal\joinup_distribution\DistributionParentFieldItemList $field */
     $field = $this->get('parent');
 
     /** @var \Drupal\asset_release\Entity\AssetReleaseInterface|\Drupal\solution\Entity\SolutionInterface $parent */

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_distribution\Entity;
 
-use Drupal\asset_distribution\Entity\DistributionsParentInterface;
 use Drupal\collection\Entity\CollectionContentInterface;
 use Drupal\joinup_bundle_class\DescriptionInterface;
 use Drupal\joinup_stats\Entity\DownloadCountAwareInterface;
@@ -21,10 +20,10 @@ interface DistributionInterface extends NodeInterface, CollectionContentInterfac
   /**
    * Return the distribution's parent, either a release or a solution.
    *
-   * @return \Drupal\asset_distribution\Entity\DistributionsParentInterface
+   * @return \Drupal\joinup_distribution\Entity\DistributionsParentInterface
    *   The parent entity, either a release or a solution.
    *
-   * @throws \Drupal\asset_distribution\Exception\MissingDistributionParentException
+   * @throws \Drupal\joinup_distribution\Exception\MissingDistributionParentException
    *   If the parent entity reference is missing or refers to an invalid entity.
    *   This should not occur during normal operation and calling code does not
    *   need to catch this exception. This will only be thrown in case something
