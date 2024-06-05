@@ -38,11 +38,6 @@ toolkit:
         - task: remove
           file: ${toolkit.build.dist.root}/node_modules
 
-  test:
-    phpstan:
-      memory_limit: '1G'
-      options: 'debug -vvv no-progress'
-
   install:
     clone:
       commands:
@@ -92,9 +87,7 @@ commands:
       from: ${joinup.site_dir}/sites/default/default.services.yml
       to: ${joinup.site_dir}/sites/default/services.yml
     - task: run
-      command: testing:phpcs-setup
-    - task: run
-      command: testing:phpcs-git-hook
+      command: testing:setup-git-hook
     - task: process
       source: ${joinup.dir}/behat.yml.dist
       destination: ${joinup.dir}/behat.yml
@@ -158,7 +151,7 @@ commands:
     - task: exec
       command: test ! -z "$CI" || vendor/bin/run solr:build-core-config
 
-  # Overrides the toolkit:test-phpcs command.
+  # Replace toolkit test commands to use GrumPHP.
   toolkit:test-phpcs:
     # Handle a potential case where the repo has been shallow cloned. Typically,
     # this happens in GitLab pipelines, where the repos are shallow cloned for
@@ -166,55 +159,19 @@ commands:
     # latest Git tag as no tags are available. But we require this info during
     # the coding standards check.
     # See \Joinup\CodingStandards\Sniffs\NamingConventions\ValidUpdateNameSniff
-    - task: exec
-      command: test "$(git rev-parse --is-shallow-repository)" = "false" || git fetch --unshallow
-    - task: run
-      command: testing:phpcs-setup
-    - task: run
-      command: testing:lint-twig
-    - task: exec
-      command: ${phpcs.file.bin}
-    - task: run
-      command: toolkit:lint-css
-
-  # Lints JS files  using ESLint.
+    - { task: exec, command: test "$(git rev-parse --is-shallow-repository)" = "false" || git fetch --unshallow }
+    - { task: run, command: testing:lint-twig }
+    - { task: exec, command: "${runner.bin_dir}/grumphp run --tasks=phpcs" }
+    - { task: run, command: toolkit:lint-css }
+  toolkit:test-phpmd:
+    - { task: exec, command: "${runner.bin_dir}/grumphp run --tasks=phpmd" }
+  toolkit:test-phpstan:
+    - { task: exec, command: "${runner.bin_dir}/grumphp run --tasks=phpstan" }
+  toolkit:lint-php:
+    - { task: exec, command: "${runner.bin_dir}/grumphp run --tasks=phplint" }
   toolkit:lint-js:
-    - task: exec
-      command: ${joinup.dir}/node_modules/.bin/eslint --config .eslintrc.json --ext js .
-
-  # Fixes JS files using ESLint.
-  toolkit:fix-js:
-    - task: exec
-      command: ${joinup.dir}/node_modules/.bin/eslint --config .eslintrc.json --ext js --fix .
-
-  # Lints YAML files using ESLint.
+    - { task: exec, command: "${runner.bin_dir}/grumphp run --tasks=eslint" }
   toolkit:lint-yaml:
-    - task: exec
-      command: ${joinup.dir}/node_modules/.bin/eslint --config .eslintrc.json --ext yml .
-
-  # Fixes YAML files using ESLint.
-  toolkit:fix-yaml:
-    - task: exec
-      command: ${joinup.dir}/node_modules/.bin/eslint --config .eslintrc.json --ext yml --fix .
-
-  # Lints CSS, and S(A|C)SS files with stylelint.
+    - { task: exec, command: "${runner.bin_dir}/grumphp run --tasks=yamllint" }
   toolkit:lint-css:
-    - task: exec
-      dir: ${joinup.dir}
-      command: |-
-        ./node_modules/.bin/stylelint \
-          --config .stylelintrc.json \
-          --ignore-path .gitignore \
-          "${joinup.site_dir}/{modules,profiles,themes}/!(contrib)/**/!(*.min).{css,scss,sass}" \
-          "!${joinup.site_dir}/themes/ventuno/assets/**"
-
-  # Fixes CSS, PCSS and S(A|C)SS files with stylelint.
-  toolkit:fix-css:
-    - task: exec
-      dir: ${joinup.dir}
-      command: |-
-        ./node_modules/.bin/stylelint \
-          --config .stylelintrc.json \
-          --ignore-path .gitignore \
-          "${joinup.site_dir}/{modules,profiles,themes}/!(contrib)/**/!(*.min).{css,scss,sass}" \
-          --fix
+    - { task: exec, command: "${runner.bin_dir}/grumphp run --tasks=stylelint" }
