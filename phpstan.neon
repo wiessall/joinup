@@ -1,4 +1,8 @@
 parameters:
+    parallel:
+        # CPUs are limited to 2 on Gitlab, without this limit PHPStan hangs.
+        # @todo Report issue, see if anything can be done to fix this.
+        maximumNumberOfProcesses: 2
     customRulesetUsed: true
     reportUnmatchedIgnoredErrors: false
     drupal:
@@ -10,13 +14,6 @@ parameters:
             rdf_entity:
                 class: Drupal\rdf_entity\Entity\Rdf
                 storage: Drupal\sparql_entity_storage\SparqlEntityStorage
-    paths:
-      - src
-      - tests/src
-      - web/modules/custom
-      - web/profiles
-      - web/themes/ventuno
-      - web/themes/iop
     ignoreErrors:
         # We're not prepared yet for this.
         - '#\Drupal calls should be avoided in classes, use dependency injection instead#'
