@@ -32,7 +32,7 @@ class VitalityPercentage extends NumericFormatterBase {
    * {@inheritdoc}
    */
   protected function numberFormat($number): string {
-    return ($number * 100) . '%';
+    return floor($number * 100) . '%';
   }
 
 }
