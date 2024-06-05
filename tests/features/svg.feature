@@ -2,9 +2,9 @@
 Feature: Test SVG attachments.
 
   Background:
-    Given the following owner:
-      | name        | type    |
-      | SVG company | Company |
+    Given owner content:
+      | name        | owner type |
+      | SVG company | Company    |
     And contact_information content:
       | name        | email           |
       | SVG contact | svg@example.com |

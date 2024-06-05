@@ -1,16 +1,19 @@
-uuid: f51f54d3-a426-4726-9a41-acb659b1f586
+uuid: 2847dc56-8d73-4ebb-a04b-9fbd625fa82a
 langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.rdf_entity.field_owner_type
-    - rdf_entity.rdfentity.owner
+    - field.storage.node.owner_type
+    - node.type.owner
     - taxonomy.vocabulary.owner_type
-_core:
-  default_config_hash: fpp9vdOsZjFvtCEcfUp2eJUK917cNJE_Qaf_MRVNLf4
-id: rdf_entity.owner.field_owner_type
-field_name: field_owner_type
-entity_type: rdf_entity
+third_party_settings:
+  rdf_sync:
+    target_id:
+      predicate: 'http://purl.org/dc/terms/type'
+      type: resource
+id: node.owner.owner_type
+field_name: owner_type
+entity_type: node
 bundle: owner
 label: Type
 description: ''
@@ -24,7 +27,8 @@ settings:
     target_bundles:
       owner_type: owner_type
     sort:
-      field: _none
+      field: name
+      direction: asc
     auto_create: false
     auto_create_bundle: ''
 field_type: entity_reference

@@ -121,7 +121,7 @@ trait EntityTrait {
       'glossary' => 'node',
       'group' => 'rdf_entity',
       'news' => 'node',
-      'owner' => 'rdf_entity',
+      'owner' => 'node',
       'release' => 'rdf_entity',
       'solution' => 'rdf_entity',
       'spdx licence' => 'rdf_entity',

@@ -1,17 +1,15 @@
-uuid: 15fe773b-cc8a-4f24-a108-af25f425d1fb
+uuid: 4e60738a-c903-49aa-8b0c-f8af3946439d
 langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.rdf_entity.field_owner_state
-    - rdf_entity.rdfentity.owner
+    - field.storage.node.field_state
+    - node.type.owner
   module:
     - state_machine
-_core:
-  default_config_hash: JH-oHr3uxaM7rvgqxOnya3KMSZDdnsYDTqOpRXpeRjc
-id: rdf_entity.owner.field_owner_state
-field_name: field_owner_state
-entity_type: rdf_entity
+id: node.owner.field_state
+field_name: field_state
+entity_type: node
 bundle: owner
 label: State
 description: ''
@@ -19,7 +17,7 @@ required: true
 translatable: false
 default_value:
   -
-    value: __new__
+    value: published
 default_value_callback: ''
 settings:
   workflow: owner_workflow

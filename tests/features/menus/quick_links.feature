@@ -2,9 +2,9 @@
 Feature: Test the visibility of the quick links menu.
 
   Background:
-    Given the following owner:
-      | name                 | type    |
-      | Organisation example | Company |
+    Given owner content:
+      | name                 | owner type |
+      | Organisation example | Company    |
     And contact_information content:
       | name                 | email                            |
       | Collection editorial | collection.editorial@example.com |

@@ -5,7 +5,7 @@ Feature: Solution membership administration
   I need to be able to manage solution members
 
   Background:
-    Given the following owner:
+    Given owner content:
       | name                 |
       | James Wilson the 2nd |
     And contact_information content:

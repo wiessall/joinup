@@ -14,12 +14,13 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\contact_information\Entity\ContactInformationInterface;
 use Drupal\joinup_workflow\EntityWorkflowStateInterface;
+use Drupal\owner\Entity\OwnerInterface;
 
 /**
  * Implements hook_ENTITY_TYPE_create_access().
  */
 function state_machine_permissions_rdf_entity_create_access(AccountInterface $account, array $context, string $entity_bundle): AccessResultInterface {
-  $ignored_bundles = ['collection', 'contact_information', 'owner', 'licence'];
+  $ignored_bundles = ['collection', 'contact_information', 'licence'];
   if (in_array($entity_bundle, $ignored_bundles)) {
     return AccessResult::neutral();
   }
@@ -42,6 +43,11 @@ function state_machine_permissions_rdf_entity_create_access(AccountInterface $ac
  * Implements hook_ENTITY_TYPE_create_access().
  */
 function state_machine_permissions_node_create_access(AccountInterface $account, array $context, string $entity_bundle): AccessResultInterface {
+  if ($entity_bundle === 'owner') {
+    // Owners are not group content. The rest of the API will decide.
+    return AccessResult::neutral();
+  }
+
   if (empty($context['group']) && in_array($entity_bundle, ['custom_page', 'licence'], TRUE)) {
     return AccessResult::neutral('Custom pages and licences can be created as individual pages.');
   }
@@ -83,13 +89,25 @@ function state_machine_permissions_rdf_entity_access(EntityInterface $entity, $o
  * Implements hook_ENTITY_TYPE_access().
  */
 function state_machine_permissions_node_access(EntityInterface $entity, string $operation, AccountInterface $account): AccessResultInterface {
-  if (!$entity instanceof ContactInformationInterface || !in_array($operation, ['update', 'delete'])) {
+  if (!$entity instanceof ContactInformationInterface && !$entity instanceof OwnerInterface) {
+    // This is only for contact information and owner entities.
     return AccessResult::neutral();
   }
 
-  // We are exceptionally checking for the contact information transitions
-  // because the entity is related to a group but is not a group entity, thus
-  // OG will not allow access when needed.
+  // Contact information will be judged by OG, thus it checks for an update
+  // and delete operations, but owner will be judged by the core API and it
+  // will check for edit and delete operations.
+  if ($entity instanceof ContactInformationInterface && !in_array($operation, ['update', 'delete'])) {
+    return AccessResult::neutral();
+  }
+
+  if ($entity instanceof OwnerInterface && !in_array($operation, ['edit', 'delete'])) {
+    return AccessResult::neutral();
+  }
+
+  // We are exceptionally checking for the contact information or owner
+  // transitions because the entity is related to a group but is not a group
+  // entity, thus OG will not allow access when needed.
   return _state_machine_permissions_check_transition_access($entity, $operation, $account);
 }
 

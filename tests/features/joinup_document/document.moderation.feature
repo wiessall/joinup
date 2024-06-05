@@ -10,7 +10,7 @@ Feature: Document moderation
       | Crab y Patties  |
       | Gretchen Greene |
       | Kirk Collier    |
-    And the following owner:
+    And owner content:
       | name          |
       | thisisanowner |
     And contact_information content:

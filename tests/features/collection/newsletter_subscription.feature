@@ -13,7 +13,7 @@ Feature: Subscribing to collection newsletters
     And contact_information content:
       | name                  | email                             |
       | Charalambos Demetriou | charalambos.demetriou@example.com |
-    And the following owner:
+    And owner content:
       | name              |
       | Antonios Katsaros |
     And the following collections:

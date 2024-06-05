@@ -5,7 +5,7 @@ Feature: Contact form for solution
   @javascript @email @uploadFiles:logo.png
   Scenario: User can use "Contact us" form
     Given contact_information content:
-      | name         | email                    | Website URL            |
+      | name         | email                    | website url            |
       | Jocelyn Bass | jocelyn.bass@example.com | http://www.example.org |
     And the following email confirmation request:
       | email                    | status    |

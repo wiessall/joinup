@@ -2,9 +2,9 @@
 Feature: Global search with archive content
 
   Scenario Outline: Group content has an 'Show archived' facet.
-    Given the following owner:
-      | name       | type    |
-      | Some owner | Company |
+    Given owner content:
+      | name       | owner type |
+      | Some owner | Company    |
     And contact_information content:
       | name         | email                    |
       | Some contact | some-contact@example.com |
@@ -109,7 +109,7 @@ Feature: Global search with archive content
     And I should not see the "Some zip distribution" tile
 
   Scenario: Group content supports archived solutions.
-    Given owner:
+    Given owner content:
       | name       |
       | Erno Rubik |
     And contact_information content:

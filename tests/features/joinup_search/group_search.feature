@@ -8,7 +8,7 @@ Feature: Search inside groups
     Given contact_information content:
       | name                | email                           |
       | Charalambos Katsumi | charalambos.katsumi@example.com |
-    And the following owner:
+    And owner content:
       | name             |
       | Antonios Katsumi |
     And collection:

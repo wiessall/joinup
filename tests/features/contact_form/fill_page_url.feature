@@ -45,7 +45,7 @@ Feature: Fill Page URL field in Technical problem / bug report on contact form
     And contact_information content:
       | name         | email                |
       | Rarty Kelley | rmartykelley@bar.com |
-    And the following owner:
+    And owner content:
       | name              |
       | Martinez Gonzalez |
     And collection:

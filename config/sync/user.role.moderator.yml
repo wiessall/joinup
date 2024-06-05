@@ -14,6 +14,7 @@ dependencies:
     - node.type.discussion
     - node.type.document
     - node.type.glossary
+    - node.type.owner
     - node.type.licence
     - taxonomy.vocabulary.legal_type
   module:
@@ -156,7 +157,7 @@ permissions:
   - 'delete any file'
   - 'delete any licence content'
   - 'delete any news_logo media'
-  - 'delete any owner rdf entity'
+  - 'delete any owner content'
   - 'delete any solution_logo media'
   - 'delete paragraph content 1_column_layout'
   - 'delete paragraph content 2_column_featured_left'
@@ -191,7 +192,7 @@ permissions:
   - 'edit any glossary content'
   - 'edit any licence content'
   - 'edit any news_logo media'
-  - 'edit any owner rdf entity'
+  - 'edit any owner content'
   - 'edit any solution rdf entity'
   - 'edit any solution_logo media'
   - 'edit any webform'

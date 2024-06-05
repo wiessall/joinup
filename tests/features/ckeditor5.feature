@@ -2,9 +2,9 @@
 Feature: CKEditor5
 
   Background:
-    Given the following owner:
-      | name     | type    |
-      | Landlord | Company |
+    Given owner content:
+      | name     | owner type |
+      | Landlord | Company    |
     And contact_information content:
       | name    | email                |
       | ReachMe | reach.me@example.com |

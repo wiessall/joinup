@@ -7,12 +7,12 @@ Feature: Joinup should be ADMS-AP compliant.
       | Andre Munson     | andre.munson@example.com     |
       | Branson Winthrop | branson.winthrop@example.com |
     And contact_information content:
-      | name           | email                    | Website URL            |
+      | name           | email                    | website url            |
       | Jocelyn Bass   | jocelyn.bass@example.com | http://www.example.org |
       | Geoffrey Bryce | geoffrey.bryce@exam.com  |                        |
-    And owner:
-      | name       | type    |
-      | Teddy Bass | Company |
+    And owner content:
+      | name       | owner type |
+      | Teddy Bass | Company    |
     And licence content:
       | title       | description       | licence type  |
       | Foo licence | Some nice licence | Public domain |

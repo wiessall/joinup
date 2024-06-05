@@ -7,7 +7,6 @@ namespace Drupal\joinup\Context;
 use Behat\Behat\Hook\Scope\AfterScenarioScope;
 use Behat\Gherkin\Node\TableNode;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
-use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
 use Drupal\contact_information\ContactInformationEmailConfirmInterface;
 use Drupal\email_confirmer\EmailConfirmationInterface;
 use Drupal\joinup\Traits\AliasTranslatorTrait;
@@ -18,8 +17,6 @@ use Drupal\joinup\Traits\RdfEntityTrait;
 use Drupal\joinup\Traits\SearchTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup\Traits\UserTrait;
-use Drupal\node\Entity\Node;
-use Drupal\node\NodeInterface;
 use PHPUnit\Framework\Assert;
 
 /**
@@ -56,37 +53,6 @@ class ContactInformationContext extends RawDrupalContext {
   }
 
   /**
-   * Acts before node creation and translates the human readable fields.
-   *
-   * @param \Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope $scope
-   *   The before node create scope.
-   *
-   * @BeforeNodeCreate
-   */
-  public function beforeNodeCreate(BeforeNodeCreateScope $scope): void {
-    $node = $scope->getEntity();
-    if ($node->type !== 'contact_information') {
-      return;
-    }
-
-    $keys = array_keys((array) $node);
-    foreach ($keys as $key) {
-      if ($key === 'type') {
-        continue;
-      }
-
-      // Replace the column aliases with the actual field names.
-      $translated = self::translateFieldNameAlias($key, self::contactInformationFieldAliases());
-      if ($translated === $key) {
-        continue;
-      }
-
-      $node->$translated = $node->$key;
-      unset($node->$key);
-    }
-  }
-
-  /**
    * Checks the number of available contact information entities.
    *
    * @param int $number
@@ -111,48 +77,6 @@ class ContactInformationContext extends RawDrupalContext {
    */
   public function deleteContactInformation(string $name): void {
     $this->getEntityByLabel('node', $name, 'contact_information')->delete();
-  }
-
-  /**
-   * Creates a contact information from the given property and field data.
-   *
-   * @param array $values
-   *   An optional associative array of values, keyed by property name.
-   *
-   * @return \Drupal\node\NodeInterface
-   *   A new contact information entity.
-   *
-   * @throws \Exception
-   *   When the author is specified but the related user doesn't exist.
-   */
-  protected function createContactInformation(array $values): NodeInterface {
-    // The 'author' key was replaced by 'uid' in the calling function.
-    if (!empty($values['uid'])) {
-      $values['uid'] = $this->getUserByName($values['uid'])->id();
-    }
-
-    $values += [
-      'type' => 'contact_information',
-    ];
-    $node = $this->nodeCreate((object) $values);
-    return Node::load($node->nid);
-  }
-
-  /**
-   * Field alias mapping.
-   *
-   * @return array
-   *   Mapping.
-   */
-  protected static function contactInformationFieldAliases(): array {
-    // Mapping alias - field name.
-    return [
-      'email' => 'email',
-      'name' => 'title',
-      'website url' => 'webpage',
-      'author' => 'uid',
-      'state' => 'field_state',
-    ];
   }
 
   /**

@@ -16,8 +16,13 @@ dependencies:
     - media.type.file
     - media.type.image
     - media.type.video
+    - node.type.custom_page
+    - node.type.discussion
     - meta_entity.type.eif_perspective
     - node.type.document
+    - node.type.event
+    - node.type.news
+    - node.type.owner
   module:
     - comment
     - contextual
@@ -65,7 +70,7 @@ permissions:
   - 'create file media'
   - 'create image media'
   - 'create news content'
-  - 'create owner rdf entity'
+  - 'create owner content'
   - 'create paragraph content accordion'
   - 'create paragraph content accordion_item'
   - 'create paragraph content call_to_action'
@@ -114,7 +119,7 @@ permissions:
   - 'edit own document content'
   - 'edit own event content'
   - 'edit own news content'
-  - 'edit own owner rdf entity'
+  - 'edit own owner content'
   - 'edit own polls'
   - 'flag bookmark_node'
   - 'flag bookmark_rdf_entity'

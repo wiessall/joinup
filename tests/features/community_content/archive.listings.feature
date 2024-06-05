@@ -2,7 +2,7 @@
 Feature: Archived content on content listings - groups and paragraphs.
 
   Background:
-    Given owner:
+    Given owner content:
       | name       |
       | Some owner |
     And contact_information content:
