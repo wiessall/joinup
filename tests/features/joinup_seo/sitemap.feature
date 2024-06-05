@@ -5,9 +5,9 @@ Feature:
   I need to have the proper sitemaps available.
 
   Scenario: Basic sitemap link availability.
-    Given the following owner:
-      | name          | type    |
-      | Sitemap owner | Company |
+    Given owner content:
+      | name          | owner type |
+      | Sitemap owner | Company    |
     And contact_information content:
       | name                | email                           |
       | Sitemap secretariat | sitemap.secretariat@example.com |
@@ -82,7 +82,6 @@ Feature:
       | Sitemap solution draft   |
       | Sitemap release 2        |
       | Sitemap distribution     |
-      | Sitemap owner            |
     And I should not see the absolute urls of the following content entities:
       | Sitemap custom page of draft                    |
       | Sitemap custom page of published but in Spanish |
@@ -96,6 +95,7 @@ Feature:
       | Sitemap news draft                              |
       | Sitemap news published and recent               |
       | Sitemap news published but parent is not        |
+      | Sitemap owner                                   |
       | Sitemap secretariat                             |
     # The following piece of xhtml is used to declare an alternative language. If it exists in the page it means that
     # another language is included in the output.
@@ -115,7 +115,6 @@ Feature:
       | Sitemap solution published   |
       | Sitemap release 1            |
       | Sitemap release 2            |
-      | Sitemap owner                |
     And I should not see the absolute urls of the following content entities:
       | Sitemap custom page of draft                   |
       | Sitemap discussion draft                       |
@@ -135,6 +134,7 @@ Feature:
       | Sitemap news published but old                 |
       | Sitemap news archived                          |
       | Sitemap news published but parent is not       |
+      | Sitemap owner                                  |
       | Sitemap secretariat                            |
 
     # Simulate that 2 days have passed since last time the sitemaps have been created.
@@ -164,7 +164,6 @@ Feature:
       | Sitemap solution draft   |
       | Sitemap release 2        |
       | Sitemap distribution     |
-      | Sitemap owner            |
     And I should not see the absolute urls of the following content entities:
       | Sitemap custom page of draft                   |
       | Sitemap discussion draft                       |
@@ -176,6 +175,7 @@ Feature:
       | Sitemap licence                                |
       | Sitemap news draft                             |
       | Sitemap news published but parent is not       |
+      | Sitemap owner                                  |
       | Sitemap secretariat                            |
 
     # The hot news article is now removed from the news sitemap, and the page

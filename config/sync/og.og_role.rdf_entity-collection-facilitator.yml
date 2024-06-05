@@ -35,7 +35,7 @@ permissions:
   - 'create paragraph content json_map'
   - 'create rdf entity news'
   - 'create solution rdf_entity'
-  - 'create owner rdf_entity'
+  - 'create owner content'
   - 'delete any custom_page content'
   - 'delete any discussion content'
   - 'delete any document content'

@@ -6,7 +6,6 @@ namespace Drupal\Tests\contact_information\ExistingSite;
 
 use Drupal\Core\Session\AnonymousUserSession;
 use Drupal\Tests\joinup_workflow\ExistingSite\JoinupWorkflowExistingSiteTestBase;
-use Drupal\node\Entity\Node;
 
 /**
  * Tests the workflow for the contact information entity.
@@ -75,7 +74,7 @@ class ContactInformationWorkflowTest extends JoinupWorkflowExistingSiteTestBase 
   public function testWorkflow(): void {
     foreach ($this->workflowTransitionsProvider() as $entity_state => $workflow_data) {
       foreach ($workflow_data as $user_var => $expected_target_states) {
-        $content = Node::create([
+        $content = $this->createNode([
           'type' => 'contact_information',
           'title' => $this->randomMachineName(),
           'field_state' => $entity_state,

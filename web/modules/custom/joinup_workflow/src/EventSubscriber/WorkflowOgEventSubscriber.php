@@ -76,13 +76,6 @@ final class WorkflowOgEventSubscriber implements EventSubscriberInterface {
         'owner' => TRUE,
       ]),
       new GroupContentOperationPermission([
-        'name' => 'create owner rdf_entity',
-        'title' => $this->t('Create owner'),
-        'entityType' => 'rdf_entity',
-        'bundle' => 'owner',
-        'operation' => 'create owner rdf_entity',
-      ]),
-      new GroupContentOperationPermission([
         'name' => 'delete any contact_information rdf_entity',
         'title' => $this->t('Delete contact information'),
         'entityType' => 'rdf_entity',

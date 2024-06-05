@@ -11,9 +11,9 @@ Feature: Tests the collection last update time.
     And contact_information content:
       | name                  | email       |
       | Your Cleaning Company | foo@bar.com |
-    And the following owner:
-      | name | type    |
-      | Sean | Company |
+    And owner content:
+      | name | owner type |
+      | Sean | Company    |
     And the following collection:
       | title             | Household Wizard |
       | state             | published        |

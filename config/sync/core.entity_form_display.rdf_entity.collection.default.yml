@@ -3,7 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
-    - core.entity_form_mode.rdf_entity.inline
+    - core.entity_form_mode.node.inline
     - field.field.rdf_entity.collection.field_ar_abstract
     - field.field.rdf_entity.collection.field_ar_access_url
     - field.field.rdf_entity.collection.field_ar_affiliates

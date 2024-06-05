@@ -5,9 +5,9 @@ Feature: Solution homepage
   I need to be able see all content related to a solution on the solution homepage
 
   Background:
-    Given the following owner:
-      | name          | type    |
-      | Kostas Agathe | Company |
+    Given owner content:
+      | name          | owner type |
+      | Kostas Agathe | Company    |
     And contact_information content:
       | name    | email               |
       | Placebo | Placebo@example.com |

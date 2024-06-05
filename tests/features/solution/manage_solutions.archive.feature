@@ -5,9 +5,9 @@ Feature: When a solution is archived then its sub-content also should be archive
     Given the following collection:
       | title | Collection |
       | state | published  |
-    And owner:
-      | name        | type    |
-      | The Company | Company |
+    And owner content:
+      | name        | owner type |
+      | The Company | Company    |
     And contact_information content:
       | name                 | email                      |
       | Liam Smith           | liam.smith@example.com     |

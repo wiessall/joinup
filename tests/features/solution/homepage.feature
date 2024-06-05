@@ -5,11 +5,11 @@ Feature: Solution homepage
   I need to be able see an introduction of the solution on its homepage
 
   Scenario: The solution homepage shows basic information about the solution
-    Given the following owner:
+    Given owner content:
       | name          |
       | Awesome owner |
     And contact_information content:
-      | name            | email                      | Website URL        |
+      | name            | email                      | website url        |
       | Awesome contact | awesomecontact@example.com | http://example.com |
     Given the following solution:
       | title               | Petri net                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
@@ -116,9 +116,9 @@ Feature: Solution homepage
     But I should not see the link "Random Arm"
 
   Scenario: Test that a pager is shown on the solution page when needed.
-    Given the following owner:
-      | name                  | type    |
-      | Chiricahua Foundation | Company |
+    Given owner content:
+      | name                  | owner type |
+      | Chiricahua Foundation | Company    |
     And contact_information content:
       | name     | email                |
       | Geronimo | geronimo@example.com |

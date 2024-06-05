@@ -49,8 +49,6 @@ class UriIdConversion implements EventSubscriberInterface {
     'rdf_entity:collection:field_ar_contact_information',
     'rdf_entity:collection:field_spatial_coverage',
     'rdf_entity:collection:field_topic',
-    'rdf_entity:owner:field_owner_type',
-    'rdf_entity:owner:field_owner_type',
     'rdf_entity:solution:field_is_actor',
     'rdf_entity:solution:field_is_business_process',
     'rdf_entity:solution:field_is_contact_information',
@@ -68,6 +66,9 @@ class UriIdConversion implements EventSubscriberInterface {
     'rdf_meta_entity:eif_perspective:eif_model',
     'rdf_meta_entity:eif_perspective:eif_principle',
     'rdf_meta_entity:eif_perspective:field_eif_solution_type',
+    'rdf_entity:asset_release:field_isr_owner',
+    'rdf_entity:collection:field_ar_owner',
+    'rdf_entity:solution:field_is_owner',
   ];
 
   /**
