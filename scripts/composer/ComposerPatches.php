@@ -49,10 +49,10 @@ final class ComposerPatches {
    * Get all composer.json patches as a flat array.
    *
    * @param \Composer\Composer $composer
-   *    Composer.
+   *   Composer.
    *
    * @return array
-   *    List of patches.
+   *   List of patches.
    */
   private static function getComposerPatches(Composer $composer): array {
     $patches = [];
