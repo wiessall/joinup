@@ -5,6 +5,11 @@
   "rules": {
     "selector-id-pattern": "^[a-z][-_a-z0-9]*$|^eTransButton$"
   },
+  "ignoreFiles": [
+    "**/*.min.{css,scss,sass}",
+    "**/themes/iop/assets/**",
+    "**/themes/ventuno/assets/**"
+  ],
   "overrides": [
     {
       "files": [
