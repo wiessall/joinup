@@ -14,6 +14,7 @@ dependencies:
     - node.type.discussion
     - node.type.document
     - node.type.glossary
+    - node.type.owner
     - node.type.licence
     - taxonomy.vocabulary.legal_type
   module:
@@ -107,7 +108,7 @@ permissions:
   - 'create asset_release rdf entity'
   - 'create collection rdf entity'
   - 'create collection_logo media'
-  - 'create contact_information rdf entity'
+  - 'create contact_information content'
   - 'create content for any_user option'
   - 'create content for facilitators_and_authors option'
   - 'create content for only_members option'
@@ -148,7 +149,7 @@ permissions:
   - 'delete all sitewide alert revisions'
   - 'delete any asset_release rdf entity'
   - 'delete any collection_logo media'
-  - 'delete any contact_information rdf entity'
+  - 'delete any contact_information content'
   - 'delete any custom_page content'
   - 'delete any discussion_logo media'
   - 'delete any document content'
@@ -156,7 +157,7 @@ permissions:
   - 'delete any file'
   - 'delete any licence content'
   - 'delete any news_logo media'
-  - 'delete any owner rdf entity'
+  - 'delete any owner content'
   - 'delete any solution_logo media'
   - 'delete paragraph content 1_column_layout'
   - 'delete paragraph content 2_column_featured_left'
@@ -183,7 +184,7 @@ permissions:
   - 'edit any asset_distribution rdf entity'
   - 'edit any collection rdf entity'
   - 'edit any collection_logo media'
-  - 'edit any contact_information rdf entity'
+  - 'edit any contact_information content'
   - 'edit any custom_page content'
   - 'edit any discussion content'
   - 'edit any discussion_logo media'
@@ -191,7 +192,7 @@ permissions:
   - 'edit any glossary content'
   - 'edit any licence content'
   - 'edit any news_logo media'
-  - 'edit any owner rdf entity'
+  - 'edit any owner content'
   - 'edit any solution rdf entity'
   - 'edit any solution_logo media'
   - 'edit any webform'
