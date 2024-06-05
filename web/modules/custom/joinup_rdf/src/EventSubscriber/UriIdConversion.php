@@ -52,7 +52,6 @@ class UriIdConversion implements EventSubscriberInterface {
     'rdf_entity:solution:field_is_actor',
     'rdf_entity:solution:field_is_business_process',
     'rdf_entity:solution:field_is_contact_information',
-    'rdf_entity:solution:field_is_eif_recommendation',
     'rdf_entity:solution:field_is_language',
     'rdf_entity:solution:field_is_product_type',
     'rdf_entity:solution:field_is_solution_type',

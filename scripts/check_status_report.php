@@ -7,6 +7,8 @@
  *
  * If there are errors and/or warnings, apart from those explicitly ignored,
  * displays them and exits with an error code.
+ *
+ * phpcs:ignoreFile
  */
 
 if (PHP_SAPI !== 'cli') {
