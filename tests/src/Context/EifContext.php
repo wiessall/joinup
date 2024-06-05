@@ -79,24 +79,7 @@ class EifContext extends RawDrupalContext {
     $solution->save();
     $this->entities['rdf_entity'][$solution->id()] = $solution;
 
-    $page1 = Node::create([
-      'type' => 'custom_page',
-      'nid' => EifInterface::EIF_SOLUTIONS_NID,
-      'title' => 'Solutions',
-      'og_audience' => EifInterface::EIF_ID,
-      'field_paragraphs_body' => Paragraph::create([
-        'type' => 'simple_paragraph',
-        'field_body' => [
-          'value' => 'Currently available supporting solutions that can be used as added components that help build interoperability solutions.',
-          'format' => 'content_editor',
-        ],
-      ]),
-      'field_state' => 'published',
-    ]);
-    $page1->save();
-    $this->entities['node'][$page1->id()] = $page1;
-
-    $page2 = Node::create([
+    $page = Node::create([
       'type' => 'custom_page',
       'nid' => EifInterface::EIF_ONLINE_ASSISTANT,
       'title' => 'Online Assistant',
@@ -110,8 +93,8 @@ class EifContext extends RawDrupalContext {
       ]),
       'field_state' => 'published',
     ]);
-    $page2->save();
-    $this->entities['node'][$page2->id()] = $page2;
+    $page->save();
+    $this->entities['node'][$page->id()] = $page;
 
     // Ensure the taxonomy terms are indexed.
     $vids = [

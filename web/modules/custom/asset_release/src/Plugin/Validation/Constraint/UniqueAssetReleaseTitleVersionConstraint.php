@@ -26,21 +26,21 @@ class UniqueAssetReleaseTitleVersionConstraint extends Constraint {
   /**
    * {@inheritdoc}
    */
-  public function validatedBy() {
+  public function validatedBy(): string {
     return '\Drupal\asset_release\Plugin\Validation\Constraint\UniqueAssetReleaseTitleVersionValidator';
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getDefaultOption() {
-    return [];
+  public function getDefaultOption(): ?string {
+    return NULL;
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getRequiredOptions() {
+  public function getRequiredOptions(): array {
     return [];
   }
 
