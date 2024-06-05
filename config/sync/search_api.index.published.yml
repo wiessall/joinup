@@ -823,7 +823,7 @@ field_settings:
     label: 'Pinned in'
     datasource_id: 'entity:rdf_entity'
     property_path: 'pinned_in:entity:field_pinned_in:entity:id'
-    type: text
+    type: string
     dependencies:
       config:
         - field.storage.meta_entity.field_pinned_in
