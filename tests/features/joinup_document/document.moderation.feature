@@ -10,12 +10,12 @@ Feature: Document moderation
       | Crab y Patties  |
       | Gretchen Greene |
       | Kirk Collier    |
-    And the following owner:
+    And owner content:
       | name          |
       | thisisanowner |
-    And the following contact:
-      | name  | Dis contact             |
-      | email | dis.contact@example.com |
+    And contact_information content:
+      | name        | email                   |
+      | Dis contact | dis.contact@example.com |
     And the following collection:
       | title               | The Naked Ashes                 |
       | description         | The wolverine is a Marvel hero. |

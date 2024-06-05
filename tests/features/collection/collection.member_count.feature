@@ -12,7 +12,7 @@ Feature: Collection homepage
       | Kili        | active  |
       | Bilbo       | blocked |
       | Some goblin | active  |
-    Given the following owner:
+    Given owner content:
       | name         |
       | Hobbit owner |
     And the following collections:
