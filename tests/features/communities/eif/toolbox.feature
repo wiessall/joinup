@@ -6,9 +6,9 @@ Feature:
 
   @javascript
   Scenario: Present and search the solutions.
-    Given owner:
-      | name | type    |
-      | ACDC | Company |
+    Given owner content:
+      | name | owner type |
+      | ACDC | Company    |
     And collections:
       | title   | state     |
       | Killjoy | published |
@@ -23,9 +23,9 @@ Feature:
       | Jordan 5 | Killjoy    | draft     |
       | Jordan 6 | Killjoy    | published |
     And glossary content:
-      | title        | synonyms | definition  | collection      |
-      | amazing      | SMASS    | amazing def | NIFO collection |
-      | It will be   |          | survival    | Killjoy         |
+      | title      | synonyms | definition  | collection      |
+      | amazing    | SMASS    | amazing def | NIFO collection |
+      | It will be |          | survival    | Killjoy         |
 
     # Visit the toolbox page once to ensure that solutions are properly
     # re-indexed when an EIF perspective is created or deleted and that

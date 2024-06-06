@@ -132,7 +132,7 @@ class WebtoolsAnalyticsSubscriber implements EventSubscriberInterface {
   /**
    * {@inheritdoc}
    */
-  public static function getSubscribedEvents(): array {
+  public static function getSubscribedEvents() {
     $events[AnalyticsEvent::NAME][] = ['setSiteSection'];
     $events[AnalyticsEvent::NAME][] = ['setSearchData'];
 

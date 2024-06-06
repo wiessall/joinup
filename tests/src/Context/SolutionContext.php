@@ -471,7 +471,7 @@ class SolutionContext extends RawDrupalContext {
    * @Then I should have :number solution(s)
    */
   public function assertSolutionCount(int $number): void {
-    $this->assertRdfEntityCount($number, 'solution');
+    $this->assertEntityCount('rdf_entity', 'solution', $number);
   }
 
   /**

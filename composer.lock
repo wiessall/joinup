@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a18cba9b479c345dc6b03974063f6ffc",
+    "content-hash": "8067d87f510992d810d3be3ef74329f1",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -18745,40 +18745,48 @@
         },
         {
             "name": "palantirnet/drupal-rector",
-            "version": "0.20.1",
+            "version": "0.12.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/palantirnet/drupal-rector.git",
-                "reference": "dc2e858a5f5cea2ef3e2b770350169f0d0af926b"
+                "reference": "504792220c90910e581ec0750c8cf8ee412d4c7c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/palantirnet/drupal-rector/zipball/dc2e858a5f5cea2ef3e2b770350169f0d0af926b",
-                "reference": "dc2e858a5f5cea2ef3e2b770350169f0d0af926b",
+                "url": "https://api.github.com/repos/palantirnet/drupal-rector/zipball/504792220c90910e581ec0750c8cf8ee412d4c7c",
+                "reference": "504792220c90910e581ec0750c8cf8ee412d4c7c",
                 "shasum": ""
             },
             "require": {
-                "rector/rector": "^1.0",
+                "rector/rector": "~0.12.21",
                 "webflo/drupal-finder": "^1.2"
+            },
+            "conflict": {
+                "rector/rector": ">0.12.21"
             },
             "replace": {
                 "drupal8-rector/drupal8-rector": "*",
                 "palantirnet/drupal8-rector": "*"
             },
             "require-dev": {
-                "cweagans/composer-patches": "^1.7.2",
-                "friendsofphp/php-cs-fixer": "^3.38",
-                "php": "^8.1",
+                "php": "^8.0",
                 "phpstan/extension-installer": "^1.1",
                 "phpstan/phpstan": "^1.0",
                 "phpstan/phpstan-deprecation-rules": "^1.0",
-                "phpunit/phpunit": "^10.0",
-                "symfony/yaml": "^5 || ^6",
-                "symplify/rule-doc-generator": "^12.0",
-                "symplify/vendor-patches": "^11.0"
+                "phpunit/phpunit": "^9.5",
+                "rector/rector-cakephp": "dev-main#d1fa93dbf332a0170deaf37467b40735727003fb",
+                "rector/rector-doctrine": "dev-main#ae06e92e71b741f43906374a699eb041882259c3",
+                "rector/rector-laravel": "dev-main#48a1f3458dc9536a32dae0507ba53fc2d3d28f01",
+                "rector/rector-nette": "dev-main#e01d41e5caa10ff5057d3b922c95ba4f15d41657",
+                "rector/rector-phpoffice": "dev-main#4b9837410f4b1f2002693d94a0c4c483abf37e7f",
+                "rector/rector-phpunit": "dev-main#41775450593f1a94c30a562865c5340f4118880c",
+                "rector/rector-src": "dev-main#11fdd74f8abe3deefbb2492c00868c57184fd484",
+                "rector/rector-symfony": "dev-main#6e679917c27895e94314c436b44821e091384e8e",
+                "symfony/yaml": "^5 || ^6"
             },
             "type": "library",
             "extra": {
+                "enable-patching-note": "We need the following to allow rector/rector-src to patch dependencies.",
                 "enable-patching": true
             },
             "autoload": {
@@ -18806,14 +18814,6 @@
                 {
                     "name": "Matt Glaman",
                     "email": "nmd.matt@gmail.com"
-                },
-                {
-                    "name": "Björn Brala",
-                    "email": "drupal@bjorn.dev"
-                },
-                {
-                    "name": "Ken Rickard",
-                    "email": "agentrickard@gmail.com"
                 }
             ],
             "description": "Instant fixes for your Drupal code by using Rector.",
@@ -18825,9 +18825,9 @@
                 "rector"
             ],
             "support": {
-                "source": "https://github.com/palantirnet/drupal-rector/tree/0.20.1"
+                "source": "https://github.com/palantirnet/drupal-rector/tree/0.12.4"
             },
-            "time": "2024-03-09T19:12:48+00:00"
+            "time": "2022-06-01T15:22:43+00:00"
         },
         {
             "name": "pdepend/pdepend",
@@ -19746,65 +19746,6 @@
             "time": "2023-11-12T21:59:55+00:00"
         },
         {
-            "name": "phpro/grumphp-shim",
-            "version": "v2.5.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/phpro/grumphp-shim.git",
-                "reference": "37d705a7f83619785e8bee914a425cd872e7bf8a"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/phpro/grumphp-shim/zipball/37d705a7f83619785e8bee914a425cd872e7bf8a",
-                "reference": "37d705a7f83619785e8bee914a425cd872e7bf8a",
-                "shasum": ""
-            },
-            "require": {
-                "composer-plugin-api": "~2.0",
-                "ext-json": "*",
-                "php": "~8.1.0 || ~8.2.0 || ~8.3.0"
-            },
-            "replace": {
-                "phpro/grumphp": "self.version"
-            },
-            "require-dev": {
-                "humbug/box": "^3.16"
-            },
-            "bin": [
-                "grumphp",
-                "grumphp.phar"
-            ],
-            "type": "composer-plugin",
-            "extra": {
-                "class": "GrumPHP\\Composer\\GrumPHPPlugin"
-            },
-            "autoload": {
-                "psr-4": {
-                    "GrumPHP\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Toon Verwerft",
-                    "email": "toon.verwerft@phpro.be"
-                },
-                {
-                    "name": "Community",
-                    "homepage": "https://github.com/phpro/grumphp/graphs/contributors"
-                }
-            ],
-            "description": "GrumPHP Phar distribution",
-            "support": {
-                "issues": "https://github.com/phpro/grumphp-shim/issues",
-                "source": "https://github.com/phpro/grumphp-shim/tree/v2.5.0"
-            },
-            "time": "2024-02-09T09:26:45+00:00"
-        },
-        {
             "name": "phpspec/prophecy",
             "version": "v1.19.0",
             "source": {
@@ -20618,35 +20559,42 @@
         },
         {
             "name": "rector/rector",
-            "version": "1.0.4",
+            "version": "0.12.21",
             "source": {
                 "type": "git",
                 "url": "https://github.com/rectorphp/rector.git",
-                "reference": "6e04d0eb087aef707fa0c5686d33d6ff61f4a555"
+                "reference": "2fb3b1c1d85e784a55e5806cf50734e5aa872eb4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rectorphp/rector/zipball/6e04d0eb087aef707fa0c5686d33d6ff61f4a555",
-                "reference": "6e04d0eb087aef707fa0c5686d33d6ff61f4a555",
+                "url": "https://api.github.com/repos/rectorphp/rector/zipball/2fb3b1c1d85e784a55e5806cf50734e5aa872eb4",
+                "reference": "2fb3b1c1d85e784a55e5806cf50734e5aa872eb4",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.2|^8.0",
-                "phpstan/phpstan": "^1.10.57"
+                "phpstan/phpstan": "^1.5.6"
             },
             "conflict": {
+                "phpstan/phpdoc-parser": "<1.2",
+                "rector/rector-cakephp": "*",
                 "rector/rector-doctrine": "*",
-                "rector/rector-downgrade-php": "*",
+                "rector/rector-laravel": "*",
+                "rector/rector-nette": "*",
+                "rector/rector-phpoffice": "*",
                 "rector/rector-phpunit": "*",
+                "rector/rector-prefixed": "*",
                 "rector/rector-symfony": "*"
-            },
-            "suggest": {
-                "ext-dom": "To manipulate phpunit.xml via the custom-rule command"
             },
             "bin": [
                 "bin/rector"
             ],
             "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-main": "0.12-dev"
+                }
+            },
             "autoload": {
                 "files": [
                     "bootstrap.php"
@@ -20657,15 +20605,9 @@
                 "MIT"
             ],
             "description": "Instant Upgrade and Automated Refactoring of any PHP code",
-            "keywords": [
-                "automation",
-                "dev",
-                "migration",
-                "refactoring"
-            ],
             "support": {
                 "issues": "https://github.com/rectorphp/rector/issues",
-                "source": "https://github.com/rectorphp/rector/tree/1.0.4"
+                "source": "https://github.com/rectorphp/rector/tree/0.12.21"
             },
             "funding": [
                 {
@@ -20673,7 +20615,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-04-05T09:01:07+00:00"
+            "time": "2022-04-18T12:12:41+00:00"
         },
         {
             "name": "sebastian/cli-parser",
