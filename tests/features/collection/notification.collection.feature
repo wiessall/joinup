@@ -5,12 +5,12 @@ Feature: Notification test for the collection transitions.
   I want to receive a notification when an event occurs
 
   Scenario: Notifications should be sent whenever an event is occurring related to a collection.
-    Given the following owner:
-      | name       | type    |
-      | NC for all | Company |
-    And the following contact:
-      | name  | Notificationous absolutous        |
-      | email | absolute.notification@example.com |
+    Given owner content:
+      | name       | owner type |
+      | NC for all | Company    |
+    And contact_information content:
+      | name                       | email                             |
+      | Notificationous absolutous | absolute.notification@example.com |
     And users:
       | Username       | Roles     | E-mail                  | First name | Family name |
       | NC moderator   | moderator | nc_moderator@test.com   | NC         | Moderator   |

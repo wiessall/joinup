@@ -39,7 +39,7 @@ class JoinupGroupOgSubscriber implements EventSubscriberInterface {
   /**
    * {@inheritdoc}
    */
-  public static function getSubscribedEvents(): array {
+  public static function getSubscribedEvents() {
     return [
       GroupContentEntityOperationAccessEventInterface::EVENT_NAME => [
         ['preventBlockedUsersFromEditingOrDeletingContent'],

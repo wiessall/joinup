@@ -12,13 +12,15 @@ use Drupal\Core\Access\AccessResultAllowed;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\contact_information\Entity\ContactInformationInterface;
 use Drupal\joinup_workflow\EntityWorkflowStateInterface;
+use Drupal\owner\Entity\OwnerInterface;
 
 /**
  * Implements hook_ENTITY_TYPE_create_access().
  */
 function state_machine_permissions_rdf_entity_create_access(AccountInterface $account, array $context, string $entity_bundle): AccessResultInterface {
-  $ignored_bundles = ['collection', 'contact_information', 'owner', 'licence'];
+  $ignored_bundles = ['collection', 'contact_information', 'licence'];
   if (in_array($entity_bundle, $ignored_bundles)) {
     return AccessResult::neutral();
   }
@@ -41,12 +43,23 @@ function state_machine_permissions_rdf_entity_create_access(AccountInterface $ac
  * Implements hook_ENTITY_TYPE_create_access().
  */
 function state_machine_permissions_node_create_access(AccountInterface $account, array $context, string $entity_bundle): AccessResultInterface {
+  if ($entity_bundle === 'owner') {
+    // Owners are not group content. The rest of the API will decide.
+    return AccessResult::neutral();
+  }
+
   if (empty($context['group']) && in_array($entity_bundle, ['custom_page', 'licence'], TRUE)) {
     return AccessResult::neutral('Custom pages and licences can be created as individual pages.');
   }
 
   if (empty($context['group'])) {
-    return AccessResult::forbidden('Cannot create content entities outside a group context.');
+    if ($entity_bundle !== 'contact_information') {
+      return AccessResult::forbidden('Cannot create content entities outside a group context.');
+    }
+
+    $workflow_helper = \Drupal::getContainer()->get('joinup_workflow.workflow_helper');
+    $entity = \Drupal::entityTypeManager()->getStorage('node')->create(['type' => $entity_bundle]);
+    return AccessResult::allowedIf($workflow_helper->getAvailableTransitions($entity, $account), 'No available transitions for the entity.');
   }
 
   $workflow_helper = \Drupal::getContainer()->get('joinup_workflow.workflow_helper');
@@ -69,7 +82,49 @@ function state_machine_permissions_rdf_entity_access(EntityInterface $entity, $o
     // View permission is already covered.
     return AccessResult::neutral();
   }
+  return _state_machine_permissions_check_transition_access($entity, $operation, $account);
+}
 
+/**
+ * Implements hook_ENTITY_TYPE_access().
+ */
+function state_machine_permissions_node_access(EntityInterface $entity, string $operation, AccountInterface $account): AccessResultInterface {
+  if (!$entity instanceof ContactInformationInterface && !$entity instanceof OwnerInterface) {
+    // This is only for contact information and owner entities.
+    return AccessResult::neutral();
+  }
+
+  // Contact information will be judged by OG, thus it checks for an update
+  // and delete operations, but owner will be judged by the core API and it
+  // will check for edit and delete operations.
+  if ($entity instanceof ContactInformationInterface && !in_array($operation, ['update', 'delete'])) {
+    return AccessResult::neutral();
+  }
+
+  if ($entity instanceof OwnerInterface && !in_array($operation, ['edit', 'delete'])) {
+    return AccessResult::neutral();
+  }
+
+  // We are exceptionally checking for the contact information or owner
+  // transitions because the entity is related to a group but is not a group
+  // entity, thus OG will not allow access when needed.
+  return _state_machine_permissions_check_transition_access($entity, $operation, $account);
+}
+
+/**
+ * Checks if the user has a permission according to the available transitions.
+ *
+ * @param \Drupal\Core\Entity\EntityInterface $entity
+ *   The entity to check.
+ * @param string $operation
+ *   The operation to check.
+ * @param \Drupal\Core\Session\AccountInterface $account
+ *   The account to check.
+ *
+ * @return \Drupal\Core\Access\AccessResultInterface
+ *   The access result.
+ */
+function _state_machine_permissions_check_transition_access(EntityInterface $entity, string $operation, AccountInterface $account): AccessResultInterface {
   $permission_helper = \Drupal::getContainer()->get('state_machine_permissions.helper');
   if ($operation === 'delete') {
     // If the operation is delete, there is no need to check for transitions.

@@ -18,7 +18,7 @@ class NotificationSubscriber extends NotificationSubscriberBase {
   /**
    * {@inheritdoc}
    */
-  public static function getSubscribedEvents(): array {
+  public static function getSubscribedEvents() {
     $events[ContactFormEvents::CONTACT_FORM_EVENT] = ['contactForm'];
     return $events;
   }
