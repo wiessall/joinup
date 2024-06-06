@@ -33,12 +33,12 @@ Feature: Solution moderation
     And I should not see the link "Delete"
 
   Scenario: Test the moderation workflow available states.
-    Given the following owner:
-      | name           | type    |
-      | Angelos Agathe | Company |
-    And the following contact:
-      | name  | Placide             |
-      | email | Placide@example.com |
+    Given owner content:
+      | name           | owner type |
+      | Angelos Agathe | Company    |
+    And contact_information content:
+      | name    | email               |
+      | Placide | Placide@example.com |
     And users:
       | Username         | Roles     |
       # Authenticated user.

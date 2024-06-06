@@ -375,7 +375,7 @@ class CollectionContext extends RawDrupalContext {
    * @Then I should have :number collection(s)
    */
   public function assertCollectionCount(int $number): void {
-    $this->assertRdfEntityCount($number, 'collection');
+    $this->assertEntityCount('rdf_entity', 'collection', $number);
   }
 
   /**

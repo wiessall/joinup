@@ -2,11 +2,12 @@
 Feature: Archived content on content listings - groups and paragraphs.
 
   Background:
-    Given owner:
+    Given owner content:
       | name       |
       | Some owner |
-    And contact:
-      | name | Some contact |
+    And contact_information content:
+      | name         |
+      | Some contact |
     And collections:
       | title           | description | topic             | owner      | contact information | state     |
       | Some collection | Test        | Supplier exchange | Some owner | Some contact        | published |

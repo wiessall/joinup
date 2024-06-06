@@ -4,7 +4,7 @@ status: true
 dependencies:
   config:
     - field.storage.rdf_entity.field_is_contact_information
-    - rdf_entity.rdfentity.contact_information
+    - node.type.contact_information
     - rdf_entity.rdfentity.solution
 _core:
   default_config_hash: Y7_Q-rG7J1hIpMCVAQv7sK9XKnxrp8MvDHCSqdfdmiM
@@ -19,12 +19,13 @@ translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:
-  handler: 'default:rdf_entity'
+  handler: 'default:node'
   handler_settings:
     target_bundles:
       contact_information: contact_information
     sort:
       field: _none
+      direction: ASC
     auto_create: false
     auto_create_bundle: ''
 field_type: entity_reference

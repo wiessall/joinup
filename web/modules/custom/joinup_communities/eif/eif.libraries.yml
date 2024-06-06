@@ -1,9 +1,3 @@
-recommendations.selector:
-  js:
-    js/eif_recommendations.js: {}
-  dependencies:
-    - core/drupal
-
 eif-filter:
   js:
     js/eif_filter.js: {}

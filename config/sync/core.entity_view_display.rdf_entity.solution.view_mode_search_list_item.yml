@@ -12,8 +12,6 @@ dependencies:
     - field.field.rdf_entity.solution.field_is_description
     - field.field.rdf_entity.solution.field_is_distribution
     - field.field.rdf_entity.solution.field_is_documentation
-    - field.field.rdf_entity.solution.field_is_eif_category
-    - field.field.rdf_entity.solution.field_is_eif_recommendation
     - field.field.rdf_entity.solution.field_is_has_version
     - field.field.rdf_entity.solution.field_is_included_asset
     - field.field.rdf_entity.solution.field_is_issue_tracker
@@ -95,13 +93,6 @@ content:
         template_suggestion: p_wrapper
     weight: 3
     region: content
-  field_is_eif_category:
-    type: list_default
-    label: hidden
-    settings: {  }
-    third_party_settings: {  }
-    weight: 4
-    region: content
   field_is_logo:
     type: responsive_image
     label: hidden
@@ -152,7 +143,6 @@ hidden:
   field_is_content_creation: true
   field_is_distribution: true
   field_is_documentation: true
-  field_is_eif_recommendation: true
   field_is_has_version: true
   field_is_included_asset: true
   field_is_issue_tracker: true
