@@ -1,12 +1,10 @@
 services:
+  _defaults:
+    autoconfigure: true
+    autowire: true
+
   joinup_replicate.prepare_entity:
     class: Drupal\joinup_replicate\EventSubscriber\JoinupReplicatePrepareClone
-    arguments:
-      - '@current_user'
-    tags:
-      - { name: event_subscriber }
 
   joinup_replicate.route_subscriber:
     class: Drupal\joinup_replicate\RouteSubscriber\RouteSubscriber
-    tags:
-      - { name: event_subscriber }
