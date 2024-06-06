@@ -394,9 +394,6 @@
             "drupal/search_api_spellcheck": {
                 "URL don't include the base path @see https://www.drupal.org/project/search_api_spellcheck/issues/3280372": "resources/patch/php/drupal/search_api_spellcheck/3280372.patch"
             },
-            "drupal/search_api_solr": {
-                "Boost more recent processor configuration missing schema @see https://drupal.org/i/3449952": "resources/patch/php/drupal/search_api_solr/3449952.patch"
-            },
             "drupal/social_media_links": {
                 "Missing config schema for field, widget and formatter @see https://www.drupal.org/node/2898680": "resources/patch/php/drupal/social_media_links/2898680.patch",
                 "Mastodon should not have a fixed URL prefix. @see https://www.drupal.org/project/social_media_links/issues/3319694": "resources/patch/php/drupal/social_media_links/3319694.patch",
