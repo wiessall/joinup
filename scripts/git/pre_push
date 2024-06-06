@@ -38,10 +38,10 @@ CHANGED_FILES_ARRAY=($(printf "%s\n" "${CHANGED_FILES_ARRAY[@]}" | xargs ls -d 2
 
 # Run GrumPHP.
 if [[ "$FULL_CHECK" == "1" ]]; then
-  ddev exec ./vendor/bin/grumphp run --no-interaction
+  ddev exec ./vendor/bin/grumphp run --no-interaction --testsuite=git_pre_push
   EXIT_CODE=$?
 elif [[ "${#CHANGED_FILES_ARRAY[@]}" -gt 0 ]]; then
-  printf "%s\n" "${CHANGED_FILES_ARRAY[@]}" | ddev exec ./vendor/bin/grumphp run --no-interaction
+  printf "%s\n" "${CHANGED_FILES_ARRAY[@]}" | ddev exec ./vendor/bin/grumphp run --no-interaction --testsuite=git_pre_push
   EXIT_CODE=$?
 else
   EXIT_CODE=0
