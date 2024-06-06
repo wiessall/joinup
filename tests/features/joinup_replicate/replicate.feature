@@ -41,20 +41,22 @@ Feature: Cloning of entities
 
   Scenario Outline: Only custom page nodes should have the Replicate link
     Given <type> content:
-      | title        | state     |
-      | Test content | published |
+      | title               | state     |
+      | Test <type> content | published |
     When I am logged in as a moderator
-    And I go to the "Test content" <type>
+    And I go to the "Test <type> content" <type>
     Then I <link availability> the link "Replicate" in the "Entity actions" region
+    And I visit the replicate path of the "Test <type> content" content
+    Then the response status code should be <status code>
 
     Examples:
-      | type        | link availability |
-      | custom_page | should see        |
-      | discussion  | should not see    |
-      | document    | should not see    |
-      | event       | should not see    |
-      | licence     | should not see    |
-      | news        | should not see    |
+      | type        | link availability | status code |
+      | custom_page | should see        | 200         |
+      | discussion  | should not see    | 404         |
+      | document    | should not see    | 404         |
+      | event       | should not see    | 404         |
+      | licence     | should not see    | 404         |
+      | news        | should not see    | 404         |
 
   @javascript
   Scenario Outline: User replicates content

@@ -71,6 +71,7 @@
   - Drupal\joinup\Context\OwnerContext
   - Drupal\joinup\Context\PollContext
   - Drupal\joinup\Context\RdfGraphContext
+  - Drupal\joinup\Context\ReplicateContext
   - Drupal\joinup\Context\RssContext
   - Drupal\joinup\Context\ScreenshotContext:
       localDir: ${behat.screenshots.local.dir}
