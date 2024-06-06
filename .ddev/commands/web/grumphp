@@ -1,0 +1,9 @@
+#!/bin/bash
+
+## Description: Executes a GrumPHP command
+## Usage: grumphp <command>
+## Example: ddev grumphp run
+## Example: ddev grumphp run --tasks=phpcs
+## ExecRaw: true
+
+vendor/bin/grumphp "$@"

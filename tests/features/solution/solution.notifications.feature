@@ -11,12 +11,12 @@ Feature: Solution notifications
       | title | Collection of random solutions |
       | logo  | logo.png                       |
       | state | published                      |
-    And the following owner:
-      | name               | type    |
-      | Karanikolas Kitsos | Company |
-    And the following contact:
-      | name  | Information Desk             |
-      | email | information.desk@example.com |
+    And owner content:
+      | name               | owner type |
+      | Karanikolas Kitsos | Company    |
+    And contact_information content:
+      | name             | email                        |
+      | Information Desk | information.desk@example.com |
     And users:
       | Username     | Roles     | First name | Family name | E-mail                   |
       | Pat Harper   | moderator | Pat        | Harper      | pat.harper@example.com   |

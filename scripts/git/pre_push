@@ -8,10 +8,8 @@
 SHA1_EMPTY="0000000000000000000000000000000000000000"
 FULL_CHECK="0"
 
-# Get the top-level directory name.
-TOPLEVEL_DIR=$(basename $(git rev-parse --show-toplevel))
-
-# Loop over the commits.
+# Get all changed files, loop over the commits.
+declare -a CHANGED_FILES_ARRAY
 while IFS= read -r LINE; do
   PARTS=($LINE)
   LOCAL_REF=${PARTS[0]}
@@ -31,110 +29,22 @@ while IFS= read -r LINE; do
     break
   fi
 
-  ALL_FILES="${ALL_FILES} $(git diff-tree --no-commit-id --name-only -r ${LOCAL_SHA} ${REMOTE_SHA})"
+  mapfile -t CHANGED_FILES < <(git diff-tree --no-commit-id --name-only -r "${LOCAL_SHA}" "${REMOTE_SHA}")
+  CHANGED_FILES_ARRAY+=("${CHANGED_FILES[@]}")
 done
 
-ALL_FILES="$(echo "$ALL_FILES" | tr "\r" ' ')"
+# Keep only existing files.
+CHANGED_FILES_ARRAY=($(printf "%s\n" "${CHANGED_FILES_ARRAY[@]}" | xargs ls -d 2>/dev/null))
 
-if [ "${FULL_CHECK}" = "0" ] && [ "${ALL_FILES}" != " " ] && [ -f phpcs.xml ]
-then
-  # Remove all files that do not match the extensions from the list.
-  EXTENSIONS=" $(xmllint --xpath "string(/ruleset/arg[@name='extensions']/@value)" phpcs.xml) "
-  for FILE in $ALL_FILES
-  do
-    for EXTENSION in $(echo ${EXTENSIONS} | tr , " ")
-    do
-      if [[ $FILE =~ \.${EXTENSION}$ ]]
-      then
-        FILES="$FILES $FILE"
-        # Don't check the rest of extensions.
-        break
-      fi
-    done
-  done
-
-  ALL_FILES=$FILES
-  FILES=""
-
-  # Check white-listed paths.
-  ALLOWED_PATHS="$(xmllint --xpath "/ruleset/file" phpcs.xml | sed 's#<file>##' | sed 's#</file>##')"
-  ALLOWED_PATHS="$(echo "$ALLOWED_PATHS" | tr "\n" ' ')"
-  if [ "${ALLOWED_PATHS}" != "" ]
-  then
-    for FILE in $ALL_FILES
-    do
-      FILE=$($DOCKER_EXEC_PREFIX realpath "$FILE")
-      for ALLOWED_FILE in $ALLOWED_PATHS
-      do
-        if [[ $FILE =~ ^${ALLOWED_FILE} ]] && [ -f $FILE ]
-        then
-          FILES="$FILES $FILE"
-          # Don't check the rest of allowed files.
-          break
-        fi
-      done
-    done
-  fi
-
-  ALL_FILES=$FILES
-  FILES=""
-
-  # Check exclude patterns.
-  EXCLUDED_PATHS="$(xmllint --xpath "/ruleset/exclude-pattern" phpcs.xml | sed 's#<exclude-pattern>##' | sed 's#</exclude-pattern>##')"
-  EXCLUDED_PATHS="$(echo "$EXCLUDED_PATHS" | tr "\n" ' ')"
-  if [ "${EXCLUDED_PATHS}" != "" ]
-  then
-    for FILE in $ALL_FILES
-    do
-      EXCLUDE="0"
-      for EXCLUDED_PATH in $EXCLUDED_PATHS
-      do
-        if [[ "$FILE" == $EXCLUDED_PATH ]]
-        then
-          EXCLUDE="1"
-        fi
-      done
-      if [ "$EXCLUDE" = "0" ]
-      then
-        FILES="$FILES $FILE"
-      fi
-    done
-  fi
+# Run GrumPHP.
+if [[ "$FULL_CHECK" == "1" ]]; then
+  ddev exec ./vendor/bin/grumphp run --no-interaction
+  EXIT_CODE=$?
+elif [[ "${#CHANGED_FILES_ARRAY[@]}" -gt 0 ]]; then
+  printf "%s\n" "${CHANGED_FILES_ARRAY[@]}" | ddev exec ./vendor/bin/grumphp run --no-interaction
+  EXIT_CODE=$?
+else
+  EXIT_CODE=0
 fi
-
-# Run PHPCS and save the exit code.
-PHPCS="0"
-if [ "$FULL_CHECK" = "1" ] || [ "$FILES" != "" ]
-then
-  ddev exec ./vendor/bin/phpcs ${FILES}
-  PHPCS=$?
-fi
-
-# Run ESLint and save the exit code.
-# TODO: Need a way to check only changed files, similar to PHP.
-echo "Running ESLint on all files...";
-ddev exec ./node_modules/.bin/eslint --config .eslintrc.json --format compact --ext yml --ext js .
-ESLINT=$?
-
-if [ "$ESLINT" != "0" ]
-then
-  echo "- Run 'ddev run toolkit:fix-js' to fix most Javascript issues.";
-  echo "- Run 'ddev run toolkit:fix-yaml' to fix most YAML issues.";
-fi
-
-# Stylelint CSS, PCSS and S(A|C)SS files.
-# TODO: Need a way to check only changed files, similar to PHP.
-echo "Running Stylelint on all CSS-like files...";
-ddev run toolkit:lint-css -q
-CSSLINT=$?
-
-if [ "$CSSLINT" != "0" ]
-then
-  echo "CSS linting has failed.";
-  echo " - Run 'ddev run toolkit:lint-css' to see the report.";
-  echo " - Run 'ddev run toolkit:fix-css' to fix all fixable CSS issues.";
-fi
-
-let EXIT_CODE=$PHPCS+$ESLINT+$CSSLINT
 
 exit $EXIT_CODE

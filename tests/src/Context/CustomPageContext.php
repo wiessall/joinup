@@ -326,10 +326,10 @@ class CustomPageContext extends RawDrupalContext {
   public function updatePublicationState(string $title, string $state): void {
     $node = $this->getEntityByLabel('node', $title, 'custom_page');
     if ($state === 'published') {
-      $node->setPublished();
+      $node->set('field_state', 'published');
     }
     else {
-      $node->setUnpublished();
+      $node->set('field_state', 'draft');
     }
     $node->save();
   }
