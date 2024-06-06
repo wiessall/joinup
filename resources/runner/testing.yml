@@ -40,3 +40,17 @@ commands:
   testing:fix-twig:
     - task: exec
       command: ${joinup.dir}/vendor/bin/twig-cs-fixer lint --fix
+
+  # Checks for any unused behat step definitions.
+  testing:audit-behat:
+    - task: exec
+      command: ${joinup.dir}/vendor/bin/behat --profile=audit --dry-run
+
+  # Extra commands to run on Gitlab after qa-code-review.
+  testing:post-qa-code-review:
+    - task: run
+      command: toolkit:lint-css
+    - task: run
+      command: testing:lint-twig
+    - task: run
+      command: testing:audit-behat

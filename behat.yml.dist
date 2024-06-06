@@ -228,6 +228,18 @@ default:
   formatters:
     ${behat.formatter.name}: ~
 
+# Dedicated profile to detect unused steps.
+audit:
+  extensions:
+    NicWortel\BehatUnusedStepDefinitionsExtension\Extension:
+      ignorePatternAliases: true
+      filters:
+        include:
+          - '/Drupal\\joinup\\Context/'
+  suites:
+    default:
+      filters: ~
+
 # Suites to run with the site installed without content.
 clean:
   suites:
