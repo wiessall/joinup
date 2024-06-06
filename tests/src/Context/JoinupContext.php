@@ -716,6 +716,17 @@ class JoinupContext extends RawDrupalContext {
         $node->{$format_key} = 'content_editor';
         unset($node->{$name});
       }
+      if ($name === 'webpage' && filter_var($value, FILTER_VALIDATE_URL)) {
+        // \Drupal\Driver\Fields\Drupal8\LinkHandler::expand() expects the
+        // value to be an array with at least 2 elements, the first one for the
+        // title and the second one for the URI. If only the URI is passed, the
+        // string is handled as an array and wrong data are parsed. To avoid
+        // this, we are adding a title to the URL. The field parser will split
+        // the data into an array and the LinkHandler will handle it correctly.
+        // @see \Drupal\Driver\Fields\Drupal8\LinkHandler::expand()
+        // @see \Drupal\DrupalExtension\Context\RawDrupalContext::parseEntityFields()
+        $node->webpage = "$value - $value";
+      }
     }
 
     if (!empty($node->field_attachment)) {
@@ -783,6 +794,13 @@ class JoinupContext extends RawDrupalContext {
       }
     }
 
+    if (property_exists($node, 'uid') && !empty($node->uid) && !is_numeric($node->uid)) {
+      $user = user_load_by_name($node->uid);
+      if ($user) {
+        $node->uid = $user->id();
+      }
+    }
+
     $image_fields = [
       'field_document_logo',
       'field_event_logo',
@@ -831,6 +849,13 @@ class JoinupContext extends RawDrupalContext {
    */
   protected static function getNodeFieldNameFromAlias($type, $alias) {
     $aliases = [
+      'contact_information' => [
+        'email' => 'email',
+        'name' => 'title',
+        'website url' => 'webpage',
+        'author' => 'uid',
+        'state' => 'field_state',
+      ],
       'custom_page' => [
         'attachments' => 'field_attachment',
         'body' => 'field_paragraphs_body',
@@ -891,6 +916,12 @@ class JoinupContext extends RawDrupalContext {
         'publication date' => 'published_at',
         'spatial coverage' => 'field_news_spatial_coverage',
         'state' => 'field_state',
+      ],
+      'owner' => [
+        'name' => 'title',
+        'owner type' => 'owner_type',
+        'state' => 'field_state',
+        'author' => 'uid',
       ],
       'shared' => [
         'collection' => OgGroupAudienceHelperInterface::DEFAULT_FIELD,
@@ -3240,32 +3271,6 @@ class JoinupContext extends RawDrupalContext {
       throw new \Exception("The {$current_url} does not contain an anchor.");
     }
     $this->assertHtmlText("id=\"{$url_parts['fragment']}\"");
-  }
-
-  /**
-   * Asserts that a menu link is in the active trail.
-   *
-   * @param string $link_label
-   *   The label of the link to be tested.
-   *
-   * @throws \Behat\Mink\Exception\ElementNotFoundException
-   *   When the link doesn't exist.
-   *
-   * @Then the( menu) link :link_label is in the active trail
-   */
-  public function assertLinkIsInActiveTrail(string $link_label): void {
-    $session = $this->getSession();
-    $page = $session->getPage();
-    if (!$page->findLink($link_label)) {
-      throw new ElementNotFoundException($session->getDriver(), 'Link', 'label', $link_label);
-    }
-
-    // Remove the leading '#'.
-    $navigation_menu_selector = substr($this->getRegionSelector('Navigation menu'), 1);
-    $xpath = "//*[@id='$navigation_menu_selector']//ul[contains(concat(' ', normalize-space(@class), ' '), ' nav ')]//a[text()='$link_label' and contains(concat(' ', normalize-space(@class), ' '), ' is-active ')]";
-    if (!$page->find('xpath', $xpath)) {
-      throw new ExpectationFailedException("The '$link_label' link is not in the active trail but it should.");
-    }
   }
 
   /**

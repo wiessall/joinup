@@ -41,22 +41,16 @@ class EifContext extends RawDrupalContext {
    */
   public function setupEifData(BeforeScenarioScope $scope): void {
     // Create an owner.
-    $owner = Rdf::create([
-      'rid' => 'owner',
-      'id' => 'http://example.com/owner',
-      'field_owner_name' => 'Owner',
+    $owner = $this->nodeCreate((object) [
+      'type' => 'owner',
+      'title' => 'Owner',
     ]);
-    $owner->save();
-    $this->entities['rdf_entity'][$owner->id()] = $owner;
 
-    $contact = Rdf::create([
-      'rid' => 'contact_information',
-      'id' => 'http://example.com/contact',
-      'field_contact_name' => 'Contact name',
-      'field_contact_email' => 'contact.email@example.com',
+    $contact = $this->nodeCreate((object) [
+      'type' => 'contact_information',
+      'title' => 'Contact name',
+      'email' => 'contact.email@example.com',
     ]);
-    $contact->save();
-    $this->entities['rdf_entity'][$contact->id()] = $contact;
 
     // Create the NIFO sample collection.
     $collection = Rdf::create([
@@ -65,8 +59,8 @@ class EifContext extends RawDrupalContext {
       'label' => 'NIFO collection',
       'field_ar_state' => 'published',
       'field_topic' => $tid = $this->getRandomTopic()->id(),
-      'field_ar_owner' => 'http://example.com/owner',
-      'field_ar_contact_information' => 'http://example.com/contact',
+      'field_ar_owner' => $owner->nid,
+      'field_ar_contact_information' => $contact->nid,
     ]);
     $collection->save();
     $this->entities['rdf_entity'][$collection->id()] = $collection;
@@ -79,30 +73,13 @@ class EifContext extends RawDrupalContext {
       'collection' => 'http://nifo.collection',
       'field_is_state' => 'published',
       'field_topic' => $tid,
-      'field_is_owner' => 'http://example.com/owner',
-      'field_is_contact_information' => 'http://example.com/contact',
+      'field_is_owner' => $owner->nid,
+      'field_is_contact_information' => $contact->nid,
     ]);
     $solution->save();
     $this->entities['rdf_entity'][$solution->id()] = $solution;
 
-    $page1 = Node::create([
-      'type' => 'custom_page',
-      'nid' => EifInterface::EIF_SOLUTIONS_NID,
-      'title' => 'Solutions',
-      'og_audience' => EifInterface::EIF_ID,
-      'field_paragraphs_body' => Paragraph::create([
-        'type' => 'simple_paragraph',
-        'field_body' => [
-          'value' => 'Currently available supporting solutions that can be used as added components that help build interoperability solutions.',
-          'format' => 'content_editor',
-        ],
-      ]),
-      'field_state' => 'published',
-    ]);
-    $page1->save();
-    $this->entities['node'][$page1->id()] = $page1;
-
-    $page2 = Node::create([
+    $page = Node::create([
       'type' => 'custom_page',
       'nid' => EifInterface::EIF_ONLINE_ASSISTANT,
       'title' => 'Online Assistant',
@@ -116,8 +93,8 @@ class EifContext extends RawDrupalContext {
       ]),
       'field_state' => 'published',
     ]);
-    $page2->save();
-    $this->entities['node'][$page2->id()] = $page2;
+    $page->save();
+    $this->entities['node'][$page->id()] = $page;
 
     // Ensure the taxonomy terms are indexed.
     $vids = [

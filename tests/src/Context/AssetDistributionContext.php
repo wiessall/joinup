@@ -213,7 +213,7 @@ class AssetDistributionContext extends RawDrupalContext {
    * @Then I should have :number distribution(s)
    */
   public function assertAssetDistributionCount(int $number): void {
-    $this->assertRdfEntityCount($number, 'asset_distribution');
+    $this->assertEntityCount('rdf_entity', 'asset_distribution', $number);
   }
 
   /**
