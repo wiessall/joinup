@@ -10,10 +10,10 @@ Feature: Creating content and commenting on archived collection
       | Flora Hunt  | moderator |
       | Lee Reeves  |           |
       | Karl Fields |           |
-    And the following contact:
-      | email | JodyRodriquez@bar.com |
-      | name  | Jody Rodriquez        |
-    And the following owner:
+    And contact_information content:
+      | name           | email                 |
+      | Jody Rodriquez | JodyRodriquez@bar.com |
+    And owner content:
       | name          |
       | April Hawkins |
     And the following collections:

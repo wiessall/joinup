@@ -5,12 +5,12 @@ Feature:
   I need to be able to see the content listed in the appropriate view mode.
 
   Scenario: Present custom page solution listings in tiles.
-    Given the following owner:
-      | name                   | type    |
-      | Some fancy named owner | Company |
-    And the following contact:
-      | name  | Some fancy named contact |
-      | email | who.cares@example.com    |
+    Given owner content:
+      | name                   | owner type |
+      | Some fancy named owner | Company    |
+    And contact_information content:
+      | name                     | email                 |
+      | Some fancy named contact | who.cares@example.com |
     And the following solutions:
       | title         | description | owner                  | contact information      | state     |
       | Tile solution | Meh...      | Some fancy named owner | Some fancy named contact | published |
@@ -54,12 +54,12 @@ Feature:
     But I should not see the "Tile licence" tile
 
   Scenario: Present custom page collection listings in tiles.
-    Given the following owner:
-      | name                   | type    |
-      | Some fancy named owner | Company |
-    And the following contact:
-      | name  | Some fancy named contact |
-      | email | who.cares@example.com    |
+    Given owner content:
+      | name                   | owner type |
+      | Some fancy named owner | Company    |
+    And contact_information content:
+      | name                     | email                 |
+      | Some fancy named contact | who.cares@example.com |
     And the following collections:
       | title           | description | owner                  | contact information      | state     |
       | Tile collection | Meh...      | Some fancy named owner | Some fancy named contact | published |

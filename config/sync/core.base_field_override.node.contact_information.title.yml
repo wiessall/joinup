@@ -1,0 +1,18 @@
+uuid: 16320c51-bea3-4ea1-a623-3e097a24e74b
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.contact_information
+id: node.contact_information.title
+field_name: title
+entity_type: node
+bundle: contact_information
+label: Name
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string
