@@ -183,6 +183,7 @@ module:
   rdf_sync: 0
   redirect: 0
   replicate: 0
+  replicate_actions: 0
   replicate_ui: 0
   responsive_image: 0
   rest: 0
