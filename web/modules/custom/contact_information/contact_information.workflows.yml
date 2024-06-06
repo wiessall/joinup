@@ -4,10 +4,6 @@ contact_information_workflow:
   label: "Contact information"
   group: contact_information
   states:
-    # The first state is used as the initial state when creating a new entity.
-    __new__:
-      label: "- New -"
-      published: false
     validated:
       label: Validated
       published: true
@@ -21,7 +17,7 @@ contact_information_workflow:
   transitions:
     validate:
       label: Publish
-      from: [__new__, validated]
+      from: [validated]
       to: validated
     request_changes:
       label: Request changes

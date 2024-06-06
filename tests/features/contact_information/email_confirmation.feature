@@ -4,9 +4,9 @@ Feature: Resend validation email from collection/solution about page
   then a message must be displayed under the about page
 
   Scenario: Scenario for Collection and Solution
-    Given owner:
-      | name      | type    |
-      | Rotterdam | Company |
+    Given owner content:
+      | name      | owner type |
+      | Rotterdam | Company    |
     And the following collection:
       | title       | Rally fanatics          |
       | state       | published               |
@@ -126,9 +126,9 @@ Feature: Resend validation email from collection/solution about page
     Then I should not see the text "Please confirm your contact information to enable users to contact you"
 
   Scenario: Test the resend functionality for a contact created through API.
-    Given the following contact:
-      | email | existing@resend.com |
-      | name  | Existing to resend  |
+    Given contact_information content:
+      | name               | email               |
+      | Existing to resend | existing@resend.com |
     And solutions:
       | title                       | description          | state     | contact information |
       | Existing to resend solution | Default description. | published | Existing to resend  |
@@ -161,9 +161,9 @@ Feature: Resend validation email from collection/solution about page
     Then I should not see the text "Please confirm your contact information to enable users to contact you"
 
   Scenario: Regression test to verify permissions into multiple edge cases.
-    Given the following contact:
-      | email | some.resend@example.com |
-      | name  | Some Resend             |
+    Given contact_information content:
+      | name        | email                   |
+      | Some Resend | some.resend@example.com |
     And solutions:
       | title                       | description          | state     | contact information |
       | Existing to resend solution | Default description. | published | Some Resend         |

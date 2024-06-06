@@ -1,4 +1,4 @@
-@api @group-d
+@api @group-c
 Feature:
   As a moderator
   I should be able to create and edit webforms and manage submissions
