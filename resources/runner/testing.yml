@@ -25,31 +25,56 @@ behat:
   selenium:
     webdriver_url: ${env.WEBDRIVER_URL}
 
-git_hook:
-  # In `runner.yml`, specify pre-push/pre-commit or false to disable entirely.
-  run_on: pre-push
+phpcs:
+  file:
+    bin: ${joinup.dir}/vendor/bin/phpcs
+    config: ${joinup.dir}/phpcs.xml
+    standard: ${joinup.dir}/phpcs-ruleset.xml.dist
+    global: ${joinup.dir}/vendor/squizlabs/php_codesniffer/CodeSniffer.conf
+    phpcbf:
+      bin: ${joinup.dir}/vendor/bin/phpcbf
+  check:
+    extensions:
+      - inc
+      - install
+      - module
+      - php
+      - profile
+      - theme
+    files:
+      - ${joinup.dir}/tests/src
+      - ${joinup.dir}/src
+      - ${joinup.site_dir}/modules/custom
+      - ${joinup.site_dir}/profiles/joinup
+      - ${joinup.site_dir}/themes/iop
+      - ${joinup.site_dir}/themes/ventuno
+  ignore:
+    - '*.yml'
+    - '*/iop/assets/*'
+    - '*/iop/node_modules/*'
+    - '*/ventuno/assets/*'
+    - '*/ventuno/node_modules/*'
+  report: full
+  options:
+    # Show the progress of the run.
+    - p
+  arguments:
+    # The number of files to check in parallel. A good initial value is the
+    # number of available processor cores. If the system has fast storage then
+    # this can be increased further.
+    parallel: 50
+  # Set this config to `false` in your `runner.yml` in order to disable running
+  # PHP coding standards on Git push.
+  run_on_push: true
 
 commands:
 
-  # Setup Git hook enforcing coding standards check on push/commit.
-  testing:setup-git-hook:
+  # Adds a Git hook that enforces coding standards check on push.
+  testing:phpcs-git-hook:
     - task: remove
       file: ${joinup.dir}/.git/hooks/pre-push
     - task: exec
-      command: |
-        # Reset state.
-        rm -f "${joinup.dir}/.git/hooks/pre-push"
-        ${runner.bin_dir}/grumphp git:deinit --quiet || true
-        # Activate.
-        if [ "${git_hook.run_on}" = "pre-push" ]; then
-          ln -s ../../scripts/git/pre_push "${joinup.dir}/.git/hooks/pre-push"
-          echo "Static code analysis active on git pre-push hook."
-        elif [ "${git_hook.run_on}" = "pre-commit" ]; then
-          ${runner.bin_dir}/grumphp git:init
-          echo "Static code analysis active on git pre-commit hook."
-        else
-          echo "Static code analysis is disabled. Specify git_hook.run_on: pre-push/pre-commit to enable."
-        fi
+      command: (test "${phpcs.run_on_push}" = "1" && ln -s ../../scripts/git/pre_push ${joinup.dir}/.git/hooks/pre-push) || true
 
   testing:install-modules:
     - task: run

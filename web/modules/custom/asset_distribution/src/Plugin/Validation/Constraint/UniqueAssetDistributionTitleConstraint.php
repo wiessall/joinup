@@ -26,21 +26,21 @@ class UniqueAssetDistributionTitleConstraint extends Constraint {
   /**
    * {@inheritdoc}
    */
-  public function validatedBy(): string {
+  public function validatedBy() {
     return '\Drupal\asset_distribution\Plugin\Validation\Constraint\UniqueAssetDistributionTitleValidator';
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getDefaultOption(): ?string {
-    return NULL;
+  public function getDefaultOption() {
+    return [];
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getRequiredOptions(): array {
+  public function getRequiredOptions() {
     return [];
   }
 

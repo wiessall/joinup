@@ -119,7 +119,7 @@ class SolutionRdfSubscriber extends NotificationSubscriberBase {
   /**
    * {@inheritdoc}
    */
-  public static function getSubscribedEvents(): array {
+  public static function getSubscribedEvents() {
     $events[NotificationEvents::RDF_ENTITY_CRUD] = [
       ['onCreate'],
       ['onUpdate'],

@@ -30,7 +30,7 @@ class WorkflowTransitionEventSubscriber implements EventSubscriberInterface {
   /**
    * {@inheritdoc}
    */
-  public static function getSubscribedEvents(): array {
+  public static function getSubscribedEvents() {
     return [
       'state_machine.pre_transition' => 'handleRevision',
     ];

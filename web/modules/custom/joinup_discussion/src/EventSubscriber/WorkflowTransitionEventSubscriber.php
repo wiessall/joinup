@@ -16,7 +16,7 @@ class WorkflowTransitionEventSubscriber implements EventSubscriberInterface {
   /**
    * {@inheritdoc}
    */
-  public static function getSubscribedEvents(): array {
+  public static function getSubscribedEvents() {
     return [
       'discussion.disable.pre_transition' => 'closeComments',
     ];

@@ -308,25 +308,31 @@ Testing frameworks used by Joinup:
 #### PHP coding standards check
 
 ```shell
-ddev grumphp run --tasks=phpcs
+ddev exec vendor/bin/phpcs [arguments and options]
+```
+
+To fix violations, run:
+
+```shell
+ddev exec vendor/bin/phpcbf [arguments and options]
 ```
 
 #### PHP statical analysis
 
 ```shell
-ddev grumphp run --tasks=phpstan
+ddev run toolkit:test-phpstan
 ```
 
 #### Javascript lint
 
 ```shell
-ddev grumphp run --tasks=eslint
+ddev run toolkit:lint-js
 ````
 
 #### YAML files lint
 
 ```shell
-ddev grumphp run --tasks=yamllint
+ddev run toolkit:lint-yaml
 ````
 
 ### Upgrade process
