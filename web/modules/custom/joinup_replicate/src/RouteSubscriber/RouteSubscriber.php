@@ -12,22 +12,27 @@ use Symfony\Component\Routing\RouteCollection;
  */
 class RouteSubscriber extends RouteSubscriberBase {
 
+  protected const array ALLOWED_BUNDLES_PER_TYPE = [
+    'node' => [
+      'custom_page',
+    ],
+  ];
+
   /**
    * {@inheritdoc}
    */
   protected function alterRoutes(RouteCollection $collection): void {
-    // @todo Make these configurable by additional configuration options.
-    if (!($route = $collection->get('entity.node.replicate'))) {
-      return;
-    }
+    // @todo Consider making this configurable by additional configuration
+    // options either in Joinup or in the contrib module.
+    foreach (static::ALLOWED_BUNDLES_PER_TYPE as $entityTypeId => $allowedBundles) {
+      if (!$route = $collection->get("entity.$entityTypeId.replicate")) {
+        continue;
+      }
 
-    $route->addRequirements(
-      $route->getRequirements() + [
-        // Do not forget: allowed bundles should be a comma separated string
-        // if we need to allow replication at multiple node types.
-        '_joinup_replicate_entity_bundles' => 'custom_page',
-      ]
-    );
+      $parameters = $route->getOption('parameters') ?? [];
+      $parameters['node']['bundle'] = $allowedBundles;
+      $route->setOption('parameters', $parameters);
+    }
   }
 
 }
