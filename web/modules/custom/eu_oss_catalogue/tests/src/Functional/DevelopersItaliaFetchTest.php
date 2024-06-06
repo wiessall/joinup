@@ -66,8 +66,6 @@ class DevelopersItaliaFetchTest extends FetchTestBase {
       'Creation log entry for Project 1'
     );
 
-    $solutionInitiated = $this->getNodeByTitle('GitHub solution 1');
-
     // Re-run the process and update one solution from a new source-provider.
     $this->fetchSolutions('testing_provider', 4);
 
@@ -81,7 +79,6 @@ class DevelopersItaliaFetchTest extends FetchTestBase {
     $this->assertSame($expected_providers, array_map(fn (array $item): string => $item['plugin_id'], $updatedSolution->get('oss_source')->getValue()));
 
     $this->assertStringContainsString('Update, because data has been changed in "Testing provider" source/catalogue', $updatedSolution->getRevisionLogMessage(), 'Update revision message for GitHub solution 1');
-    $this->assertNotEquals($updatedSolution->getRevisionCreationTime(), $solutionInitiated->getRevisionCreationTime(), 'Revision creation time was not updated');
   }
 
   /**
@@ -102,7 +99,6 @@ class DevelopersItaliaFetchTest extends FetchTestBase {
     $this->assertSame('1', $solutionArchived->get('oss_archived')->getString());
     $this->assertSame(0, $solutionArchived->get('oss_source')->count());
     $this->assertSame('Archive, because removed (not present anymore) from "Removing solution provider" source/catalogue', $solutionArchived->getRevisionLogMessage());
-    $this->assertNotEquals($solutionArchived->getRevisionCreationTime(), $solutionInitiated->getRevisionCreationTime(), 'Revision creation time was not updated');
   }
 
   /**
@@ -110,6 +106,7 @@ class DevelopersItaliaFetchTest extends FetchTestBase {
    */
   public function testUnarchiveSolution(): void {
     // Node without provider and archived.
+    $timeInPast = 1591435975;
     $archivedNode = $this->createNode([
       'type' => 'oss_solution',
       'status' => 1,
@@ -118,8 +115,13 @@ class DevelopersItaliaFetchTest extends FetchTestBase {
       'oss_default_branch' => 'main',
       'oss_git_url' => 'https://github.com/dummy-namespace-1/dummy-name-1',
     ]);
+    $archivedNode->setNewRevision();
+    $archivedNode->setRevisionCreationTime($timeInPast);
+    $archivedNode->save();
+
     $this->assertSame('1', $archivedNode->get('oss_archived')->getString());
     $this->assertTrue($archivedNode->get('oss_source')->isEmpty());
+    $this->assertSame($timeInPast, $archivedNode->getRevisionCreationTime());
 
     // Perform sync.
     $this->fetchSolutions('developers_italia', 4);
@@ -127,6 +129,7 @@ class DevelopersItaliaFetchTest extends FetchTestBase {
     // Check if the node was unarchived.
     $updatedSolution = $this->getNodeByTitle('GitHub solution 1', TRUE);
     $this->assertSame('0', $updatedSolution->get('oss_archived')->getString());
+    $this->assertNotEquals($timeInPast, $updatedSolution->getRevisionCreationTime());
     $this->assertSame(
       'developers_italia',
       $updatedSolution->get('oss_source')->getString()
