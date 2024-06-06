@@ -10,12 +10,3 @@ services:
     class: Drupal\joinup_replicate\RouteSubscriber\RouteSubscriber
     tags:
       - { name: event_subscriber }
-
-  joinup_replicate.replicate_ui.access_check:
-    public: false
-    decorates: replicate_ui.access_check
-    class: Drupal\joinup_replicate\JoinupReplicateAccessChecker
-    arguments:
-      - '@access_check.permission'
-      - '@access_check.entity'
-      - '@og.membership_manager'

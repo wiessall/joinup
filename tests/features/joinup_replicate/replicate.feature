@@ -13,11 +13,13 @@ Feature: Cloning of entities
       | Collection Custom Page | Collection | Collection custom page content | published |
       | Solution Custom Page   | Solution   | Solution custom page content   | published |
 
-  Scenario Outline: Only moderators, owners and facilitators can replicate a custom page.
+  Scenario Outline: Only moderators and facilitators can replicate a custom page.
     Given I am <role>
     And I go to the "<content>" custom page
     Then I <link availability> the link "Replicate"
 
+    # Owners should also be facilitators, so we don't test them explicitly...
+    # Yes, because testing with an only-admin user would fail.
     Examples:
       | role                                                    | content                | link availability |
       | an anonymous user                                       | Collection Custom Page | should not see |
@@ -30,14 +32,10 @@ Feature: Cloning of entities
       | logged in as a member of the Collection collection      | Solution Custom Page   | should not see |
       | logged in as a facilitator of the Collection collection | Collection Custom Page | should see     |
       | logged in as a facilitator of the Collection collection | Solution Custom Page   | should not see |
-      | logged in as a owner of the Collection collection       | Collection Custom Page | should see     |
-      | logged in as a owner of the Collection collection       | Solution Custom Page   | should not see |
       | logged in as a member of the Solution solution          | Collection Custom Page | should not see |
       | logged in as a member of the Solution solution          | Solution Custom Page   | should not see |
       | logged in as a facilitator of the Solution solution     | Collection Custom Page | should not see |
       | logged in as a facilitator of the Solution solution     | Solution Custom Page   | should see     |
-      | logged in as a owner of the Solution solution           | Collection Custom Page | should not see |
-      | logged in as a owner of the Solution solution           | Solution Custom Page   | should see     |
 
   Scenario Outline: Only custom page nodes should have the Replicate link
     Given <type> content:
