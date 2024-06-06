@@ -5,10 +5,13 @@ declare(strict_types=1);
 namespace Drupal\joinup_replicate\RouteSubscriber;
 
 use Drupal\Core\Routing\RouteSubscriberBase;
+use Drupal\joinup_group\Controller\GroupNodeController;
 use Symfony\Component\Routing\RouteCollection;
 
 /**
  * Decorates Replicate UI routes by adding additional requirements.
+ *
+ * @see \Drupal\replicate_ui\RouteSubscriber
  */
 class RouteSubscriber extends RouteSubscriberBase {
 
@@ -32,6 +35,10 @@ class RouteSubscriber extends RouteSubscriberBase {
       $parameters = $route->getOption('parameters') ?? [];
       $parameters['node']['bundle'] = $allowedBundles;
       $route->setOption('parameters', $parameters);
+      // Override requirements.
+      $route->setRequirements([
+        '_custom_access' => GroupNodeController::class . '::createAccessFromNode',
+      ]);
     }
   }
 
