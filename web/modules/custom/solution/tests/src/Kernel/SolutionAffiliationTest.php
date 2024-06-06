@@ -239,8 +239,6 @@ QUERY;
         $entity->delete();
       }
     }
-
-    parent::tearDown();
   }
 
 }
