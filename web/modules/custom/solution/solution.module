@@ -778,20 +778,6 @@ function solution_theme_suggestions_solution_member_count(array $variables): arr
 }
 
 /**
- * Implements hook_ENTITY_TYPE_view_alter().
- */
-function solution_rdf_entity_view_alter(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display) {
-  if (!$entity instanceof SolutionInterface || $display->getMode() !== 'default') {
-    return;
-  }
-
-  // Hide the description when the abstract is available.
-  if (isset($build['field_is_abstract']) && Element::children($build['field_is_abstract'])) {
-    $build['field_is_description']['#access'] = FALSE;
-  }
-}
-
-/**
  * Provides a callback for the solution status field default value.
  *
  * @return int
