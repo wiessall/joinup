@@ -3,7 +3,7 @@ parameters:
 
 grumphp:
   # Extend timeout, PHPStan is rather slow to scan everything.
-  process_timeout: 120
+  process_timeout: 240
   git_hook_variables:
     EXEC_GRUMPHP_COMMAND: ddev exec php
   ascii:
