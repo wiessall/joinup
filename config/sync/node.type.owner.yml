@@ -1,0 +1,34 @@
+uuid: d94103b1-a3da-4510-91ad-ca566f78c3ae
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+    - rdf_sync
+third_party_settings:
+  menu_ui:
+    available_menus: {  }
+    parent: ''
+  rdf_sync:
+    type: 'http://xmlns.com/foaf/0.1/Agent'
+    uri_plugin: joinup_po_namespace
+    fields:
+      type:
+        target_id:
+          predicate: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type'
+          type: resource
+      title:
+        value:
+          predicate: 'http://xmlns.com/foaf/0.1/name'
+          type: 'xsd:string'
+label_singular: owner
+label_plural: owners
+label_count:
+  no_count_capitalize: !!binary T3duZXIDT3duZXJz
+name: Owner
+type: owner
+description: ''
+help: ''
+new_revision: true
+preview_mode: 0
+display_submitted: false

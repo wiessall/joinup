@@ -8,12 +8,12 @@ Feature: Tests the collection last update time.
     Given users:
       | Username    | Roles     |
       | The Cleaner | moderator |
-    And  the following contact:
-      | email | foo@bar.com           |
-      | name  | Your Cleaning Company |
-    And the following owner:
-      | name | type    |
-      | Sean | Company |
+    And contact_information content:
+      | name                  | email       |
+      | Your Cleaning Company | foo@bar.com |
+    And owner content:
+      | name | owner type |
+      | Sean | Company    |
     And the following collection:
       | title             | Household Wizard |
       | state             | published        |

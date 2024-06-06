@@ -48,8 +48,7 @@ class IDMaxLengthConstraintValidatorTest extends UnitTestCase {
   public function providerValidate(): array {
     $data = [];
 
-    $entity = $this->getMockBuilder(EntityInterface::class)
-      ->getMock();
+    $entity = $this->createMock(EntityInterface::class);
     $entity->expects($this->any())
       ->method('id')
       ->willReturn('https://joinup.ec.europa.eu');

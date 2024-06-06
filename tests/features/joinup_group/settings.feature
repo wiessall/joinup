@@ -5,18 +5,18 @@ Feature: Collections/Solutions settings
   Moderator need to be able to edit collections/solutions settings through the UI
 
   Background:
-    Given owner:
-      | name       | type    |
-      | Jonny inc. | Company |
+    Given owner content:
+      | name       | owner type |
+      | Jonny inc. | Company    |
 
   @uploadFiles:logo.png
   Scenario: Edit settings in a collection
-    Given the following owner:
-      | name          | type    |
-      | Chico example | Company |
-    And the following contact:
-      | name  | Chico editorial             |
-      | email | chico.editorial@example.com |
+    Given owner content:
+      | name          | owner type |
+      | Chico example | Company    |
+    And contact_information content:
+      | name            | email                       |
+      | Chico editorial | chico.editorial@example.com |
     And collections:
       | title             | logo     | abstract                                    | access url        | closed | creation date    | description                     | content creation         | moderation | topic             | owner         | contact information | state     |
       | Jillian Land Eels | logo.png | Read up on all about <strong>spice</strong> | http://spice.com/ | yes    | 28-01-1995 12:05 | The spice elegance personified. | facilitators and authors | yes        | Supplier exchange | Chico example | Chico editorial     | published |
