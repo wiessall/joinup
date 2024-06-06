@@ -37,7 +37,7 @@ abstract class AddGroupContentEventSubscriberBase implements EventSubscriberInte
   /**
    * {@inheritdoc}
    */
-  public static function getSubscribedEvents(): array {
+  public static function getSubscribedEvents() {
     return [
       AddGroupContentEvent::class => ['addLinks', static::getPriority()],
     ];

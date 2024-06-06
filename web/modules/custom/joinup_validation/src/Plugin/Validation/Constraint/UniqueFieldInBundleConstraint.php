@@ -36,21 +36,21 @@ class UniqueFieldInBundleConstraint extends Constraint {
   /**
    * {@inheritdoc}
    */
-  public function validatedBy(): string {
+  public function validatedBy() {
     return '\Drupal\joinup_validation\Plugin\Validation\Constraint\UniqueFieldValueInBundleValidator';
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getDefaultOption(): ?string {
+  public function getDefaultOption() {
     return 'bundles';
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getRequiredOptions(): array {
+  public function getRequiredOptions() {
     return ['bundles'];
   }
 

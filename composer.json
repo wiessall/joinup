@@ -140,11 +140,10 @@
         "lovers-of-behat/table-extension": "^1.4",
         "mikey179/vfsstream": "~1.6",
         "ml/json-ld": "^1.2",
-        "palantirnet/drupal-rector": "^0.20.1",
+        "palantirnet/drupal-rector": "^0.12.2",
         "pear/http_request2": "~2.4",
         "php-task-runner/composer": "dev-toolkit-runner",
         "php-task-runner/sparql": "dev-toolkit-runner",
-        "phpro/grumphp-shim": "^2.5",
         "phpspec/prophecy-phpunit": "^2",
         "phpstan/extension-installer": "^1.3",
         "phpunit/phpunit": "^9.6",
@@ -173,8 +172,7 @@
             "openeuropa/composer-artifacts": true,
             "phpstan/extension-installer": true,
             "php-http/discovery": true,
-            "ec-europa/toolkit-composer-plugin": true,
-            "phpro/grumphp-shim": false
+            "ec-europa/toolkit-composer-plugin": true
         }
     },
     "autoload": {
