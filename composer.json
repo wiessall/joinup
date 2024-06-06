@@ -143,6 +143,7 @@
         "lovers-of-behat/table-extension": "^1.4",
         "mikey179/vfsstream": "~1.6",
         "ml/json-ld": "^1.2",
+        "nicwortel/behat-unused-step-definitions-extension": "dev-temp",
         "palantirnet/drupal-rector": "^0.20.1",
         "pear/http_request2": "~2.4",
         "php-task-runner/composer": "dev-toolkit-runner",
@@ -452,6 +453,10 @@
         }
     },
     "repositories": [
+        {
+            "type": "vcs",
+            "url": "git@github.com:vever001/behat-unused-step-definitions-extension.git"
+        },
         {
             "type": "vcs",
             "url": "https://github.com/openeuropa/oe_dashboard_agent.git"

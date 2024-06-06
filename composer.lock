@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a58dc6698377f349fa47330c0da6091c",
+    "content-hash": "a842760402b43d560d4475e9e9e3b276",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -18882,6 +18882,55 @@
             "time": "2024-06-12T14:39:25+00:00"
         },
         {
+            "name": "nicwortel/behat-unused-step-definitions-extension",
+            "version": "dev-temp",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/vever001/behat-unused-step-definitions-extension.git",
+                "reference": "26b6a284b77928f399d786c78ad1f90d83ca94c3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/vever001/behat-unused-step-definitions-extension/zipball/26b6a284b77928f399d786c78ad1f90d83ca94c3",
+                "reference": "26b6a284b77928f399d786c78ad1f90d83ca94c3",
+                "shasum": ""
+            },
+            "require": {
+                "behat/behat": "^3.9",
+                "php": "^8.1",
+                "symfony/config": "^4.4 || ^5.4 || ^6.0 || ^7.0"
+            },
+            "require-dev": {
+                "nicwortel/coding-standard": "^2.0",
+                "phpstan/phpstan": "^1.8",
+                "phpstan/phpstan-symfony": "^1.2",
+                "phpunit/phpunit": "^10.3",
+                "rector/rector": "^0.18.4",
+                "slevomat/coding-standard": ">=6.3.11",
+                "squizlabs/php_codesniffer": "^3.6",
+                "symfony/process": "^6.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "NicWortel\\BehatUnusedStepDefinitionsExtension\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "NicWortel\\BehatUnusedStepDefinitionsExtension\\Tests\\": "tests/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "description": "A Behat extension that detects unused step definitions",
+            "support": {
+                "source": "https://github.com/vever001/behat-unused-step-definitions-extension/tree/filters"
+            },
+            "time": "2024-06-20T18:16:16+00:00"
+        },
+        {
             "name": "palantirnet/drupal-rector",
             "version": "0.20.3",
             "source": {
@@ -22920,6 +22969,7 @@
         "drupal/page_manager": 10,
         "drupal/views_block_area": 10,
         "drupal/masquerade": 5,
+        "nicwortel/behat-unused-step-definitions-extension": 20,
         "php-task-runner/composer": 20,
         "php-task-runner/sparql": 20,
         "weitzman/drupal-test-traits": 20
