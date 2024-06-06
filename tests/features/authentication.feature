@@ -57,6 +57,7 @@ Feature: User authentication
       | media/add/solution_logo                             |
       | media/add/video                                     |
       | node/add                                            |
+      | node/add/contact_information                        |
       | node/add/custom_page                                |
       | node/add/discussion                                 |
       | node/add/document                                   |
@@ -64,6 +65,7 @@ Feature: User authentication
       | node/add/glossary                                   |
       | node/add/licence                                    |
       | node/add/news                                       |
+      | node/add/owner                                      |
       | outdated-content-threshold                          |
       | propose/collection                                  |
       | propose/solution                                    |
@@ -71,8 +73,6 @@ Feature: User authentication
       | rdf_entity/add/asset_distribution                   |
       | rdf_entity/add/asset_release                        |
       | rdf_entity/add/collection                           |
-      | rdf_entity/add/contact_information                  |
-      | rdf_entity/add/owner                                |
       | rdf_entity/add/solution                             |
       | user/subscriptions                                  |
 
@@ -140,6 +140,7 @@ Feature: User authentication
       | media/add/solution_logo                             |
       | media/add/video                                     |
       | node/add                                            |
+      | node/add/contact_information                        |
       | node/add/custom_page                                |
       | node/add/discussion                                 |
       | node/add/document                                   |
@@ -147,14 +148,13 @@ Feature: User authentication
       | node/add/glossary                                   |
       | node/add/licence                                    |
       | node/add/news                                       |
+      | node/add/owner                                      |
       | outdated-content-threshold                          |
       | propose/solution                                    |
       | rdf_entity/add                                      |
       | rdf_entity/add/asset_distribution                   |
       | rdf_entity/add/asset_release                        |
       | rdf_entity/add/collection                           |
-      | rdf_entity/add/contact_information                  |
-      | rdf_entity/add/owner                                |
       | rdf_entity/add/solution                             |
 
   Scenario Outline: Authenticated user cannot access restricted non-HTML URLs.
@@ -223,19 +223,19 @@ Feature: User authentication
       | admin/structure/compatibility-document/form-display |
       | admin/structure/media                               |
       | node/add                                            |
+      | node/add/contact_information                        |
       | node/add/custom_page                                |
       | node/add/discussion                                 |
       | node/add/document                                   |
       | node/add/event                                      |
       | node/add/glossary                                   |
       | node/add/news                                       |
+      | node/add/owner                                      |
       | propose/solution                                    |
       | rdf_entity/add                                      |
       | rdf_entity/add/asset_distribution                   |
       | rdf_entity/add/asset_release                        |
       | rdf_entity/add/collection                           |
-      | rdf_entity/add/contact_information                  |
-      | rdf_entity/add/owner                                |
       | rdf_entity/add/solution                             |
 
   Scenario Outline: Administrator can access pages they are authorized to
@@ -267,16 +267,16 @@ Feature: User authentication
       | admin/reporting/distribution-downloads/csv |
       | admin/structure                            |
       | node/add                                   |
+      | node/add/contact_information               |
       | node/add/custom_page                       |
       | node/add/discussion                        |
       | node/add/document                          |
       | node/add/event                             |
       | node/add/licence                           |
       | node/add/news                              |
+      | node/add/owner                             |
       | rdf_entity/add                             |
       | rdf_entity/add/asset_distribution          |
       | rdf_entity/add/asset_release               |
       | rdf_entity/add/collection                  |
-      | rdf_entity/add/contact_information         |
-      | rdf_entity/add/owner                       |
       | rdf_entity/add/solution                    |
