@@ -24,7 +24,7 @@ class FileConfigReadOnly implements ConfigReadOnlyInterface {
    * {@inheritdoc}
    */
   public function isReadOnlyEnabled(): bool {
-    return !file_exists($this->pathToReadOnlyFile()());
+    return !file_exists($this->pathToReadOnlyFile());
   }
 
   /**
@@ -32,7 +32,7 @@ class FileConfigReadOnly implements ConfigReadOnlyInterface {
    */
   public function enableReadOnly(): void {
     if (!$this->isReadOnlyEnabled()) {
-      $this->fileSystem->unlink($this->pathToReadOnlyFile()());
+      $this->fileSystem->unlink($this->pathToReadOnlyFile());
     }
   }
 
@@ -40,7 +40,7 @@ class FileConfigReadOnly implements ConfigReadOnlyInterface {
    * {@inheritdoc}
    */
   public function disableReadOnly(): void {
-    touch($this->pathToReadOnlyFile()());
+    touch($this->pathToReadOnlyFile());
   }
 
   /**
