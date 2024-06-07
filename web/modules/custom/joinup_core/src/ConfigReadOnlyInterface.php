@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup_core;
 
 /**
- * Interface ConfigReadOnlyInterface
+ * Config read-only interface.
  */
 interface ConfigReadOnlyInterface {
 
