@@ -43,7 +43,6 @@ dependencies:
     - node.type.oss_solution
     - responsive_image.styles.tile
   module:
-    - datetime
     - imagecache_external
     - joinup_html_stripper
     - layout_builder
@@ -75,7 +74,7 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: git_indicator
-    weight: 14
+    weight: 5
     region: content
   oss_git_open_issues:
     type: number_integer
@@ -86,7 +85,7 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: git_indicator
-    weight: 12
+    weight: 3
     region: content
   oss_git_open_pull_requests:
     type: number_integer
@@ -97,7 +96,7 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: git_indicator
-    weight: 13
+    weight: 4
     region: content
   oss_git_stars:
     type: number_integer
@@ -108,7 +107,7 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: git_indicator
-    weight: 11
+    weight: 2
     region: content
   oss_logo:
     type: imagecache_external_responsive_image
@@ -120,17 +119,6 @@ content:
       template_suggestion:
         template_suggestion: ''
     weight: 0
-    region: content
-  oss_release_date:
-    type: datetime_default
-    label: inline
-    settings:
-      timezone_override: ''
-      format_type: date_only
-    third_party_settings:
-      template_suggestion:
-        template_suggestion: no_bold
-    weight: 2
     region: content
 hidden:
   langcode: true
@@ -161,6 +149,7 @@ hidden:
   oss_platforms: true
   oss_publiccode_yml_content: true
   oss_publiccode_yml_version: true
+  oss_release_date: true
   oss_scope: true
   oss_screenshots: true
   oss_short_description: true
