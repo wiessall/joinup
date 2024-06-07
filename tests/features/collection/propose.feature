@@ -24,9 +24,9 @@ Feature: Proposing a collection
     Then I should see the heading "Propose collection"
 
   Scenario: Propose a collection
-    Given owner:
-      | name                 | type    |
-      | Organisation example | Company |
+    Given owner content:
+      | name                 | owner type |
+      | Organisation example | Company    |
     And I am logged in as an "authenticated user"
     When I go to the propose collection form
     Then I should see the heading "Propose collection"
@@ -125,9 +125,9 @@ Feature: Proposing a collection
 
   @javascript @generateMedia @generateMediaTypes:collection_logo @uploadFiles:logo.png
   Scenario: Propose collection form fields should be organized in tabs.
-    Given the following owner:
-      | name                 | type    |
-      | Organisation example | Company |
+    Given owner content:
+      | name                 | owner type |
+      | Organisation example | Company    |
 
     Given I am logged in as an "authenticated user"
     When I go to the propose collection form
@@ -215,9 +215,9 @@ Feature: Proposing a collection
 
   @email
   Scenario: Email validator after submit a Collection/Solution.
-    Given the following owner:
-      | name               | type    |
-      | Organisation valid | Company |
+    Given owner content:
+      | name               | owner type |
+      | Organisation valid | Company    |
 
     Given I am logged in as an "authenticated user"
     Then I go to the propose collection form
@@ -300,9 +300,9 @@ Feature: Proposing a collection
 
   @javascript @uploadFiles:error.svg,simple.svg
   Scenario: Allowing users to upload SVGs.
-    Given the following owner:
-      | name    | type    |
-      | Svinish | Company |
+    Given owner content:
+      | name    | owner type |
+      | Svinish | Company    |
     And I am logged in as an "authenticated user"
     When I go to the propose collection form
     Then I should see the heading "Propose collection"

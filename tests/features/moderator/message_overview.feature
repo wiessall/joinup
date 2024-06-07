@@ -37,9 +37,9 @@ Feature: Solutions message overview
     Given users:
       | Username   | Roles     |
       | Weinberger | moderator |
-    And owner:
-      | name                 | type    |
-      | Organisation example | Company |
+    And owner content:
+      | name                 | owner type |
+      | Organisation example | Company    |
     And I am logged in as an "authenticated user"
     When I go to the propose collection form
     When I fill in the following:

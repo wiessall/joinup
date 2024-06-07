@@ -5,12 +5,12 @@ Feature: Editing collections
   I need to be able to edit collections through the UI
 
   Scenario: Edit a collection
-    Given the following owner:
-      | name                 | type    |
-      | Organisation example | Company |
-    And the following contact:
-      | name  | Collection editorial             |
-      | email | collection.editorial@example.com |
+    Given owner content:
+      | name                 | owner type |
+      | Organisation example | Company    |
+    And contact_information content:
+      | name                 | email                            |
+      | Collection editorial | collection.editorial@example.com |
     And collections:
       | title                 | logo     | abstract                                   | access url                             | closed | creation date    | description                               | content creation         | moderation | topic             | owner                | contact information  | state |
       | Überwaldean Land Eels | logo.png | Read up on all about <strong>dogs</strong> | http://dogtime.com/dog-breeds/profiles | yes    | 28-01-1995 12:05 | The Afghan Hound is elegance personified. | facilitators and authors | yes        | Supplier exchange | Organisation example | Collection editorial | draft |
@@ -39,12 +39,12 @@ Feature: Editing collections
   @javascript
   Scenario: Edit a collection wysiwyg modal should close.
     # Regression test for ticket ISAICP-7181 and ISAICP-8355.
-    Given the following owner:
-      | name            | type    |
-      | wysiwyg example | Company |
-    And the following contact:
-      | name  | wysiwyg editorial             |
-      | email | wysiwyg.editorial@example.com |
+    Given owner content:
+      | name            | owner type |
+      | wysiwyg example | Company    |
+    And contact_information content:
+      | name              | email                         |
+      | wysiwyg editorial | wysiwyg.editorial@example.com |
     And collections:
       | title           | logo     | abstract                                   | access url                             | closed | creation date    | description                    | content creation         | moderation | topic             | owner           | contact information | state |
       | Rhyme Land Eels | logo.png | Read up on all about <strong>dogs</strong> | http://dogtime.com/dog-breeds/profiles | yes    | 28-01-1995 12:05 | Hound is elegance personified. | facilitators and authors | yes        | Supplier exchange | wysiwyg example | wysiwyg editorial   | draft |
@@ -70,12 +70,12 @@ Feature: Editing collections
   @javascript
   Scenario: Regression test wysiwyg add file shows a 0 bytes limit.
     # Regression test for ticket ISAICP-7177.
-    Given the following owner:
-      | name                       | type    |
-      | Regression wysiwyg example | Company |
-    And the following contact:
-      | name  | bytes editorial             |
-      | email | bytes.editorial@example.com |
+    Given owner content:
+      | name                       | owner type |
+      | Regression wysiwyg example | Company    |
+    And contact_information content:
+      | name            | email                       |
+      | bytes editorial | bytes.editorial@example.com |
     And collections:
       | title                   | logo     | abstract                                   | access url                             | closed | creation date    | description                    | content creation         | moderation | topic             | owner                      | contact information | state |
       | Rhyme Land wysiwyg Eels | logo.png | Read up on all about <strong>dogs</strong> | http://dogtime.com/dog-breeds/profiles | yes    | 28-01-1995 12:05 | Hound is elegance personified. | facilitators and authors | yes        | Supplier exchange | Regression wysiwyg example | bytes editorial     | draft |

@@ -4,10 +4,9 @@ Feature: Contact form for solution
 
   @javascript @email @uploadFiles:logo.png
   Scenario: User can use "Contact us" form
-    Given contact:
-      | name        | Jocelyn Bass             |
-      | email       | jocelyn.bass@example.com |
-      | website url | http://www.example.org   |
+    Given contact_information content:
+      | name         | email                    | website url            |
+      | Jocelyn Bass | jocelyn.bass@example.com | http://www.example.org |
     And the following email confirmation request:
       | email                    | status    |
       | jocelyn.bass@example.com | confirmed |
