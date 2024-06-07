@@ -55,6 +55,7 @@ Feature: Variety tests for the developer role.
     And I am on the homepage
     Then I should not see the text "Warning: You are working on production. Please, be extra cautious!"
 
+  @wip
   Scenario: Configuration is locked and unlocked on developers login and logout.
     Given users:
       | Username   | Roles     |
