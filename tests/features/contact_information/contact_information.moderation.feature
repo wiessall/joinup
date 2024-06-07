@@ -9,9 +9,9 @@ Feature: Contact Information moderation
       | Username              |
       | Sæwine Cynebald       |
       | Secondary facilitator |
-    And owner:
-      | type                          | name               |
-      | Non-Governmental Organisation | Anglo-Saxon Museum |
+    And owner content:
+      | owner type | name               |
+      | Company    | Anglo-Saxon Museum |
     And collection:
       | title       | Games of the Anglo-Saxon age                  |
       | description | There were many different board games played. |
@@ -72,7 +72,7 @@ Feature: Contact Information moderation
     # information entity.
     When I am logged in as an "authenticated user"
     And I go to the "Ceolwulf II of Mercia" contact information page
-    Then I should not see the link "Edit" in the "Entity actions" region
+    Then I should not see the link "Edit" in the optional "Entity actions" region
 
     # The original author is allowed to update the entity with the requested
     # changes.
@@ -110,17 +110,16 @@ Feature: Contact Information moderation
     Then I should not see the link "EU healthy group"
 
   Scenario: Owners can request deletion when they are not facilitators and facilitators can delete.
-    Given the following owner:
-      | name        | type    |
-      | Saint Louis | Company |
+    Given owner content:
+      | name        | owner type |
+      | Saint Louis | Company    |
     Given users:
       | Username        | First name | Family name |
       | Sown Carnberry  | Sown       | Carnberry   |
       | Saint Louis CEO | George     | McLouis     |
-    And the following contact:
-      | name   | Secreteriat      |
-      | email  | info@example.com |
-      | author | Sown Carnberry   |
+    And contact_information content:
+      | name        | email            | author         |
+      | Secreteriat | info@example.com | Sown Carnberry |
     And collection:
       | title               | Saint Louis solutions |
       | description         | A software company    |

@@ -11,15 +11,16 @@ Feature: Solution notifications
       | title | Collection of random solutions |
       | logo  | logo.png                       |
       | state | published                      |
-    And the following owner:
-      | name               | type                  |
-      | Karanikolas Kitsos | Private Individual(s) |
-    And the following contact:
-      | name  | Information Desk             |
-      | email | information.desk@example.com |
+    And owner content:
+      | name               | owner type |
+      | Karanikolas Kitsos | Company    |
+    And contact_information content:
+      | name             | email                        |
+      | Information Desk | information.desk@example.com |
     And users:
       | Username     | Roles     | First name | Family name | E-mail                   |
       | Pat Harper   | moderator | Pat        | Harper      | pat.harper@example.com   |
+      | Jack Harper  | moderator | Jack       | Harper      | jack.harper@example.com  |
       | Ramiro Myers |           | Ramiro     | Myers       | ramiro.myers@example.com |
       | Edith Poole  |           | Edith      | Poole       | edith.poole@example.com  |
     And the following solutions:
@@ -76,7 +77,7 @@ Feature: Solution notifications
       | recipient | Ramiro Myers                                                                                                                                                              |
       | subject   | Joinup: You are requested to update your solution                                                                                                                         |
       | body      | the moderator has requested you to modify the interoperability solution - Solution notification to request changes following the following advises: Can you change this?. |
-      | bcc       | pat.harper@example.com                                                                                                                                                    |
+      | bcc       | pat.harper@example.com,jack.harper@example.com                                                                                                                            |
     And the email sent to "Ramiro Myers" with subject "Joinup: You are requested to update your solution" contains the following lines of text:
       | the moderator has requested you to modify the interoperability solution - Solution notification to request changes following the following advises: Can you change this?. |
       | If you think this action is not clear or not due, please contact Joinup Support at                                                                                        |

@@ -6,10 +6,10 @@ Feature: Add distribution through the UI
 
   Background:
     Given the following collection:
-      | title      | Asset Distribution Test |
-      | logo       | logo.png                |
-      | state      | published               |
-     And the following solution:
+      | title | Asset Distribution Test |
+      | logo  | logo.png                |
+      | state | published               |
+    And the following solution:
       | title       | Solution random x name           |
       | collection  | Asset Distribution Test          |
       | description | Some reusable random description |
@@ -22,7 +22,7 @@ Feature: Add distribution through the UI
       | is version of  | Solution random x name |
       | status         | Completed              |
       | state          | published              |
-    And the following licences:
+    And licence content:
       | title              | description                                              | deprecated |
       | WTFPL              | The WTFPL is a rather permissive licence                 | no         |
       | Deprecated licence | The deprecated licence should not be available to select | yes        |
@@ -49,8 +49,8 @@ Feature: Add distribution through the UI
     When I fill in "Title" with "Linux x86-64 SDK"
     And I enter "<p>The full software development kit for systems based on the x86-64 architecture.</p>" in the "Description" wysiwyg editor
     And I upload the file "test.zip" to "Access URL"
-    And I select "GNU zip" from "Format"
-    And I select "Web Ontology Language Full/DL/Lite" from "Representation technique"
+    And I select "ZIP" from "Format"
+    And I select "Datalog" from "Representation technique"
     And I select "WTFPL" from "Licence"
     And I press "Publish"
     Then I should have 1 distribution
@@ -115,8 +115,7 @@ Feature: Add distribution through the UI
     And I enter "<p>The full source code.</p>" in the "Description" wysiwyg editor
     Given I upload the file "test.zip" to "Access URL"
     And I select "WTFPL" from "Licence"
-    And I select "RDF XML" from "Format"
-    And I select "Web Ontology Language Full/DL/Lite" from "Representation technique"
+    And I select "Datalog" from "Representation technique"
     And I press "Publish"
     Then I should have 1 distribution
 
@@ -133,11 +132,11 @@ Feature: Add distribution through the UI
     And I should see the link "WTFPL"
     And I should see the heading "Categorisation"
     And I should see the following lines of text:
-      | The full source code.              |
-      | Format                             |
-      | RDF XML                            |
-      | Representation technique           |
-      | Web Ontology Language Full/DL/Lite |
+      | The full source code.    |
+      | Format                   |
+      | ZIP                      |
+      | Representation technique |
+      | Datalog                  |
 
     And I go to the homepage of the "Solution random x name" solution
     # Clean up the asset distribution that was created through the UI.
@@ -205,13 +204,13 @@ Feature: Add distribution through the UI
     Then I should see the error message "A distribution with title Windows - source already exists in this solution. Please choose a different title."
 
   Scenario: Licences are not shown in the solution header.
-    Given the following licence:
-      | title       | Boost Software License                                                         |
-      | description | It is a permissive license in the style of the BSD license and the MIT license |
+    Given licence content:
+      | title                  | description                                                                    |
+      | Boost Software License | It is a permissive license in the style of the BSD license and the MIT license |
     And distributions:
-      | title        | licence                | parent                 | state     |
-      | Hot Snake    | WTFPL                  | Solution random x name | published |
-      | Quality Yard | Boost Software License | Solution random x name | published |
+      | title        | licence                | parent                 | state     | creation date    | modification date |
+      | Hot Snake    | WTFPL                  | Solution random x name | published | 2019-11-19 20:45 | 2021-11-19 20:45  |
+      | Quality Yard | Boost Software License | Solution random x name | published | 2019-12-19 20:45 | 2021-12-19 20:45  |
 
     When I go to the homepage of the "Solution random x name" solution
     # Distributions are still shown in the solution page and so the License text will be visible in the page.
@@ -219,7 +218,9 @@ Feature: Add distribution through the UI
     And I should not see the text "Boost Software License" in the "Header" region
     # Assert that the "Distribution" tile is present and contains licence link, label and bundle type.
     But I should see the "Quality Yard" tile
+    And I should see the text "Last update: 19/12/2021" in the "Quality Yard" tile
     And I should see the "Hot Snake" tile
+    And I should see the text "Last update: 19/11/2021" in the "Hot Snake" tile
     And I should see the text "WTFPL" in the "Hot Snake" tile
     And I should see the text "Distribution" in the "Hot Snake" tile
     # Assert that the "Release" tile is present

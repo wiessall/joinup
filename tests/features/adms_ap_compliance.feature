@@ -6,17 +6,16 @@ Feature: Joinup should be ADMS-AP compliant.
       | Username         | E-mail                       |
       | Andre Munson     | andre.munson@example.com     |
       | Branson Winthrop | branson.winthrop@example.com |
-    And contacts:
+    And contact_information content:
       | name           | email                    | website url            |
       | Jocelyn Bass   | jocelyn.bass@example.com | http://www.example.org |
       | Geoffrey Bryce | geoffrey.bryce@exam.com  |                        |
-    And owner:
-      | name       | type                          |
-      | Teddy Bass | Non-Governmental Organisation |
-    And the following licence:
-      | title       | Foo licence       |
-      | description | Some nice licence |
-      | type        | Attribution       |
+    And owner content:
+      | name       | owner type |
+      | Teddy Bass | Company    |
+    And licence content:
+      | title       | description       | licence type  |
+      | Foo licence | Some nice licence | Public domain |
     And the following collection:
       | title               | Morbid Scattered Microphone    |
       | author              | Andre Munson                   |
@@ -36,13 +35,13 @@ Feature: Joinup should be ADMS-AP compliant.
       | state               | published                      |
       | featured            | no                             |
     And the following solutions:
-      | title        | collection                  | author           | description    | logo     | owner      | contact information | creation date   | modification date | documentation | content creation | keywords         | landing page                    | language    | metrics page                    | moderation | topic                    | related solutions | solution type                      | source code repository        | spatial coverage | status    | translation | webdav creation | webdav url                    | wiki                        | state     | featured | pinned in |
-      | Early Omega  | Morbid Scattered Microphone | Andre Munson     | <p>content</p> | logo.png | Teddy Bass | Jocelyn Bass        | 2017-11-01T8:00 | 2017-12-01T8:43   | text.pdf      | registered users | ADMS, validation | http://www.example.com/landing1 | Interlingua | http://www.example.org/metrics1 | no         | EU and European Policies |                   | Networking Infrastructure Enablers | http://www.example.org/source | Canada           | Completed |             | no              | http://www.example.org/webdav | http://www.example.org/wiki | published | no       |           |
-      | Snake Timely | Morbid Scattered Microphone | Branson Winthrop | <p>content</p> | logo.png | Teddy Bass | Jocelyn Bass        | 2015-03-03T8:00 | 2018-02-14T18:43  | text.pdf      | registered users |                  | http://www.example.com/landing2 | English     | http://www.example.org/metrics2 | yes        | Demography               | Early Omega       | Gateway                            | http://www.example.org/source | Canada           | Completed |             | yes             | http://www.example.org/webdav | http://www.example.org/wiki | published | no       |           |
+      | title        | collection                  | author           | description    | logo     | owner      | contact information | creation date   | modification date | documentation | content creation | keywords         | landing page                    | language | metrics page                    | moderation | topic                    | related solutions | solution type                      | source code repository        | spatial coverage | status    | translation | webdav creation | webdav url                    | wiki                        | state     | featured | pinned in |
+      | Early Omega  | Morbid Scattered Microphone | Andre Munson     | <p>content</p> | logo.png | Teddy Bass | Jocelyn Bass        | 2017-11-01T8:00 | 2017-12-01T8:43   | text.pdf      | registered users | ADMS, validation | http://www.example.com/landing1 | Flemish  | http://www.example.org/metrics1 | no         | EU and European Policies |                   | Networking Infrastructure Enablers | http://www.example.org/source | Belgium          | Completed |             | no              | http://www.example.org/webdav | http://www.example.org/wiki | published | no       |           |
+      | Snake Timely | Morbid Scattered Microphone | Branson Winthrop | <p>content</p> | logo.png | Teddy Bass | Jocelyn Bass        | 2015-03-03T8:00 | 2018-02-14T18:43  | text.pdf      | registered users |                  | http://www.example.com/landing2 | English  | http://www.example.org/metrics2 | yes        | Demography               | Early Omega       | Networking Infrastructure Enablers | http://www.example.org/source | Belgium          | Completed |             | yes             | http://www.example.org/webdav | http://www.example.org/wiki | published | no       |           |
     And the following releases:
-      | title  | documentation | release number | release notes | creation date    | is version of | state     | status    | spatial coverage | keywords | language             |
-      | Omega3 | text.pdf      | 3.0.0          | New 3.0       | 2017-11-11T11:11 | Early Omega   | published | Completed | Andorra          | food     | Athapascan languages |
+      | title  | documentation | release number | release notes | creation date    | is version of | state     | status    | spatial coverage | keywords | language |
+      | Omega3 | text.pdf      | 3.0.0          | New 3.0       | 2017-11-11T11:11 | Early Omega   | published | Completed | Belgium          | food     | English  |
     And the following distributions:
-      | title      | description                    | creation date    | access url                        | parent | downloads | licence     | format | status            | representation technique | state     |
-      | Omega3.zip | The zipped version of Omega 3. | 2017-11-11T11:20 | http://www.example.org/omega3.zip | Omega3 | 232       | Foo licence | HTML   | Under development | Datalog                  | published |
+      | title      | description                    | creation date    | access url                        | parent | downloads | licence     | format | status    | representation technique | state     |
+      | Omega3.zip | The zipped version of Omega 3. | 2017-11-11T11:20 | http://www.example.org/omega3.zip | Omega3 | 232       | Foo licence | ZIP    | Completed | Datalog                  | published |
     Then the ADMS-AP data of the published entities in Joinup is valid

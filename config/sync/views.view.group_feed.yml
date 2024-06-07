@@ -415,7 +415,7 @@ display:
             more_link_path: ''
             strip_tags: true
             trim: true
-            preserve_tags: '<p>'
+            preserve_tags: ''
             html: false
           element_type: ''
           element_class: ''

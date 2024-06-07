@@ -35,7 +35,11 @@
   },
   "dependencies": {
     "@glidejs/glide": "^3.6.0",
-    "jquery-jsonview": "^1.2.3"
+    "dompurify": "^3.0.9",
+    "jquery-colorbox": "^1.6.4",
+    "jquery-jsonview": "^1.2.3",
+    "priority-plus": "^1.5.1",
+    "slick-carousel": ">1.8.1 || <1.8.1"
   },
   "scripts": {
     "watch": "npm-watch",
@@ -47,7 +51,7 @@
     "build:styles": "cross-env bcl-builder styles",
     "build:copy": "cross-env bcl-builder copy",
     "build:sprite": "cross-env bcl-builder sprite",
-    "postinstall": "patch-package --patch-dir=resources/patch/node && mkdir -p web/libraries/jquery-jsonview/dist && cp node_modules/jquery-jsonview/dist/* web/libraries/jquery-jsonview/dist/"
+    "postinstall": "patch-package --patch-dir=resources/patch/node && ./scripts/node/copy-libraries"
   },
   "watch": {
     "build:styles": {

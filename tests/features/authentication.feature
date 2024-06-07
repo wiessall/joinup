@@ -30,6 +30,7 @@ Feature: User authentication
       | admin/content/rdf                                   |
       | admin/custom-landing-pages                          |
       | admin/custom-landing-pages/add                      |
+      | admin/homepage-topics                               |
       | admin/legal-notice                                  |
       | admin/legal-notice/add                              |
       | admin/people                                        |
@@ -44,11 +45,9 @@ Feature: User authentication
       | admin/structure/compatibility-document/display      |
       | admin/structure/compatibility-document/form-display |
       | admin/structure/media                               |
-      | admin/homepage-topics                               |
       | announcements                                       |
       | dashboard                                           |
       | licence                                             |
-      | licence/add                                         |
       | media/add                                           |
       | media/add/collection_logo                           |
       | media/add/event_logo                                |
@@ -58,12 +57,15 @@ Feature: User authentication
       | media/add/solution_logo                             |
       | media/add/video                                     |
       | node/add                                            |
+      | node/add/contact_information                        |
       | node/add/custom_page                                |
       | node/add/discussion                                 |
       | node/add/document                                   |
       | node/add/event                                      |
       | node/add/glossary                                   |
+      | node/add/licence                                    |
       | node/add/news                                       |
+      | node/add/owner                                      |
       | outdated-content-threshold                          |
       | propose/collection                                  |
       | propose/solution                                    |
@@ -71,9 +73,6 @@ Feature: User authentication
       | rdf_entity/add/asset_distribution                   |
       | rdf_entity/add/asset_release                        |
       | rdf_entity/add/collection                           |
-      | rdf_entity/add/contact_information                  |
-      | rdf_entity/add/licence                              |
-      | rdf_entity/add/owner                                |
       | rdf_entity/add/solution                             |
       | user/subscriptions                                  |
 
@@ -114,6 +113,7 @@ Feature: User authentication
       | admin/content/rdf                                   |
       | admin/custom-landing-pages                          |
       | admin/custom-landing-pages/add                      |
+      | admin/homepage-topics                               |
       | admin/legal-notice                                  |
       | admin/legal-notice/add                              |
       | admin/people                                        |
@@ -128,11 +128,9 @@ Feature: User authentication
       | admin/structure/compatibility-document/display      |
       | admin/structure/compatibility-document/form-display |
       | admin/structure/media                               |
-      | admin/homepage-topics                               |
       | announcements                                       |
       | dashboard                                           |
       | licence                                             |
-      | licence/add                                         |
       | media/add                                           |
       | media/add/collection_logo                           |
       | media/add/event_logo                                |
@@ -142,21 +140,21 @@ Feature: User authentication
       | media/add/solution_logo                             |
       | media/add/video                                     |
       | node/add                                            |
+      | node/add/contact_information                        |
       | node/add/custom_page                                |
       | node/add/discussion                                 |
       | node/add/document                                   |
       | node/add/event                                      |
       | node/add/glossary                                   |
+      | node/add/licence                                    |
       | node/add/news                                       |
+      | node/add/owner                                      |
       | outdated-content-threshold                          |
       | propose/solution                                    |
       | rdf_entity/add                                      |
       | rdf_entity/add/asset_distribution                   |
       | rdf_entity/add/asset_release                        |
       | rdf_entity/add/collection                           |
-      | rdf_entity/add/contact_information                  |
-      | rdf_entity/add/licence                              |
-      | rdf_entity/add/owner                                |
       | rdf_entity/add/solution                             |
 
   Scenario Outline: Authenticated user cannot access restricted non-HTML URLs.
@@ -168,6 +166,8 @@ Feature: User authentication
       | path                                        |
       | admin/reporting/distribution-downloads/csv  |
       | admin/reporting/subscribers-report/download |
+      | admin/structure/webform                     |
+      | admin/structure/webform/submissions/manage  |
 
   Scenario Outline: Moderator can access pages they are authorized to
     Given I am logged in as a user with the "moderator" role
@@ -175,9 +175,10 @@ Feature: User authentication
 
     Examples:
       | path                                        |
+      | admin/content/files                         |
       | admin/content/media                         |
       | admin/content/rdf                           |
-      | admin/content/files                         |
+      | admin/homepage-topics                       |
       | admin/legal-notice                          |
       | admin/legal-notice/add                      |
       | admin/people                                |
@@ -190,11 +191,9 @@ Feature: User authentication
       | admin/reporting/solutions-by-type           |
       | admin/reporting/subscribers-report          |
       | admin/structure/compatibility-document      |
-      | admin/homepage-topics                       |
       | announcements                               |
       | dashboard                                   |
       | licence                                     |
-      | licence/add                                 |
       | media/add                                   |
       | media/add/collection_logo                   |
       | media/add/event_logo                        |
@@ -205,6 +204,8 @@ Feature: User authentication
       | media/add/video                             |
       | outdated-content-threshold                  |
       | propose/collection                          |
+      | admin/structure/webform                     |
+      | admin/structure/webform/submissions/manage  |
 
   Scenario Outline: Moderator cannot access restricted pages
     Given I am logged in as a user with the "moderator" role
@@ -222,20 +223,19 @@ Feature: User authentication
       | admin/structure/compatibility-document/form-display |
       | admin/structure/media                               |
       | node/add                                            |
+      | node/add/contact_information                        |
       | node/add/custom_page                                |
       | node/add/discussion                                 |
       | node/add/document                                   |
       | node/add/event                                      |
       | node/add/glossary                                   |
       | node/add/news                                       |
+      | node/add/owner                                      |
       | propose/solution                                    |
       | rdf_entity/add                                      |
       | rdf_entity/add/asset_distribution                   |
       | rdf_entity/add/asset_release                        |
       | rdf_entity/add/collection                           |
-      | rdf_entity/add/contact_information                  |
-      | rdf_entity/add/licence                              |
-      | rdf_entity/add/owner                                |
       | rdf_entity/add/solution                             |
 
   Scenario Outline: Administrator can access pages they are authorized to
@@ -267,16 +267,16 @@ Feature: User authentication
       | admin/reporting/distribution-downloads/csv |
       | admin/structure                            |
       | node/add                                   |
+      | node/add/contact_information               |
       | node/add/custom_page                       |
       | node/add/discussion                        |
       | node/add/document                          |
       | node/add/event                             |
+      | node/add/licence                           |
       | node/add/news                              |
+      | node/add/owner                             |
       | rdf_entity/add                             |
       | rdf_entity/add/asset_distribution          |
       | rdf_entity/add/asset_release               |
       | rdf_entity/add/collection                  |
-      | rdf_entity/add/contact_information         |
-      | rdf_entity/add/licence                     |
-      | rdf_entity/add/owner                       |
       | rdf_entity/add/solution                    |

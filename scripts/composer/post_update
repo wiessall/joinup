@@ -2,8 +2,7 @@
 
 set -e
 
-# Check that patches are local.
-php ./scripts/composer/check_patches.php
+source scripts/composer/download_licences
 
 # Build the codebase.
 test ! -f vendor/bin/run || vendor/bin/run toolkit:build-dev

@@ -5,12 +5,12 @@ Feature: Solution editing.
   I need to be able to edit solutions through UI.
 
   Background:
-    Given the following contact:
-      | name  | Seward Shawn       |
-      | email | seward@example.com |
-    And owner:
-      | name      | type    |
-      | Acme inc. | Company |
+    Given contact_information content:
+      | name         | email              |
+      | Seward Shawn | seward@example.com |
+    And owner content:
+      | name      | owner type |
+      | Acme inc. | Company    |
     And users:
       | Username     | E-mail                   |
       | Yancy Burton | yancy.burton@example.com |
@@ -46,9 +46,9 @@ Feature: Solution editing.
       | Name           | Yancy Burton       |
       | E-mail address | yancyb@example.com |
     And I attach the file "logo.png" to "Logo"
-    And I fill in "Language" with "http://publications.europa.eu/resource/authority/language/VLS"
+    And I select "Flemish" from "Language"
     And I select "EU and European Policies" from "Topic"
-    And I select "Citizen" from "Solution type"
+    And I select "Logging Service" from "Solution type"
 
     # Click the button to select an existing owner.
     And I press "Add existing" at the "Owner" field

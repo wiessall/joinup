@@ -61,12 +61,6 @@ settings:
   editor:
     handler: 'default:editor'
     handler_settings: {  }
-  eif_wrapper_type:
-    handler: 'default:eif_wrapper_type'
-    handler_settings: {  }
-  eif_wrapper:
-    handler: 'default:eif_wrapper'
-    handler_settings: {  }
   email_confirmer_confirmation:
     handler: 'default:email_confirmer_confirmation'
     handler_settings: {  }
@@ -202,12 +196,6 @@ settings:
   rdf_type:
     handler: 'default:rdf_type'
     handler_settings: {  }
-  rdf_meta_entity:
-    handler: 'default:rdf_meta_entity'
-    handler_settings: {  }
-  rdf_meta_entity_type:
-    handler: 'default:rdf_meta_entity_type'
-    handler_settings: {  }
   redirect:
     handler: 'default:redirect'
     handler_settings: {  }
@@ -327,5 +315,8 @@ settings:
     handler_settings: {  }
   date_format:
     handler: 'default:date_format'
+    handler_settings: {  }
+  slick:
+    handler: 'default:slick'
     handler_settings: {  }
 field_type: dynamic_entity_reference

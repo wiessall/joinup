@@ -2,9 +2,6 @@
 
 set -e
 
-# Check that patches are local.
-php ./scripts/composer/check_patches.php
-
 # Check that composer.lock hash is in sync.
 composer validate --no-check-all --no-check-publish
 
@@ -13,6 +10,8 @@ if [ "$BUILD_DISTRO" = "1" ] || [ ! -f .env ] || [ "$(grep 'COMPOSER_DISABLE_NOD
 then
   npm ci --no-progress
 fi
+
+source scripts/composer/download_licences
 
 # Done, if we're building the distribution.
 if [ "$BUILD_DISTRO" = "1" ]

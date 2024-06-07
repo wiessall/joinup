@@ -5,12 +5,12 @@ Feature:
   I need to have the proper sitemaps available.
 
   Scenario: Basic sitemap link availability.
-    Given the following owner:
-      | name          | type    |
-      | Sitemap owner | Company |
-    And the following contact:
-      | name  | Sitemap secretariat             |
-      | email | sitemap.secretariat@example.com |
+    Given owner content:
+      | name          | owner type |
+      | Sitemap owner | Company    |
+    And contact_information content:
+      | name                | email                           |
+      | Sitemap secretariat | sitemap.secretariat@example.com |
     And the following collections:
       | title                        | state     |
       | Sitemap collection draft     | draft     |
@@ -26,14 +26,14 @@ Feature:
     And the following distributions:
       | title                | description           | parent            | access url | state     |
       | Sitemap distribution | Some kind of download | Sitemap release 1 | test.zip   | published |
-    And the following licences:
+    And licence content:
       | title           | description |
       | Sitemap licence | Not allowed |
     And "custom_page" content:
-      | title                                           | collection                   | body | logo     | langcode |
-      | Sitemap custom page of draft                    | Sitemap collection draft     | N/A  | logo.png | en       |
-      | Sitemap custom page of published                | Sitemap collection published | N/A  | logo.png | en       |
-      | Sitemap custom page of published but in Spanish | Sitemap collection published | N/A  | logo.png | es       |
+      | title                                           | collection                   | body | logo     | langcode | state     |
+      | Sitemap custom page of draft                    | Sitemap collection draft     | N/A  | logo.png | en       | published |
+      | Sitemap custom page of published                | Sitemap collection published | N/A  | logo.png | en       | published |
+      | Sitemap custom page of published but in Spanish | Sitemap collection published | N/A  | logo.png | es       | published |
     And news content:
       | title                                    | headline     | body              | solution                   | state     | publication date          |
       | Sitemap news draft                       | Sitemap news | Sitemap news body | Sitemap solution published | draft     |                           |
@@ -42,17 +42,17 @@ Feature:
       | Sitemap news archived                    | Sitemap news | Sitemap news body | Sitemap solution published | archived  | 2 months ago              |
       | Sitemap news published but parent is not | Sitemap news | Sitemap news body | Sitemap solution draft     | published | Sun, 01 Dec 2019 13:00:00 |
     And event content:
-      | title                                     | short title             | body                      | agenda        | location   | organisation        | scope         | solution                   | state     |
+      | title                                     | short title             | field_paragraphs_body     | agenda        | location   | organisation        | scope         | solution                   | state     |
       | Sitemap event draft                       | Sitemap event draft     | It will include fireworks | Event agenda. | Some place | European Commission | International | Sitemap solution published | draft     |
       | Sitemap event published                   | Sitemap event published | It will include fireworks | Event agenda. | Some place | European Commission | International | Sitemap solution published | published |
       | Sitemap event archived                    | Sitemap event archived  | It will include fireworks | Event agenda. | Some place | European Commission | International | Sitemap solution published | archived  |
       | Sitemap event published but parent is not | Sitemap event published | It will include fireworks | Event agenda. | Some place | European Commission | International | Sitemap solution draft     | published |
     And document content:
-      | title                                        | document type | short title                | body         | solution                   | state     |
-      | Sitemap document draft                       | Document      | Sitemap document draft     | Read more... | Sitemap solution published | draft     |
-      | Sitemap document published                   | Document      | Sitemap document published | Read more... | Sitemap solution published | published |
-      | Sitemap document archived                    | Document      | Sitemap document archived  | Read more... | Sitemap solution published | archived  |
-      | Sitemap document published but parent is not | Document      | Sitemap document published | Read more... | Sitemap solution draft     | published |
+      | title                                        | document type | short title                | field_paragraphs_body | solution                   | state     |
+      | Sitemap document draft                       | Document      | Sitemap document draft     | Read more...          | Sitemap solution published | draft     |
+      | Sitemap document published                   | Document      | Sitemap document published | Read more...          | Sitemap solution published | published |
+      | Sitemap document archived                    | Document      | Sitemap document archived  | Read more...          | Sitemap solution published | archived  |
+      | Sitemap document published but parent is not | Document      | Sitemap document published | Read more...          | Sitemap solution draft     | published |
     And discussion content:
       | title                                          | body                  | solution                   | state     |
       | Sitemap discussion draft                       | Wanna discuss this??? | Sitemap solution published | draft     |
@@ -82,9 +82,6 @@ Feature:
       | Sitemap solution draft   |
       | Sitemap release 2        |
       | Sitemap distribution     |
-      | Sitemap licence          |
-      | Sitemap owner            |
-      | Sitemap secretariat      |
     And I should not see the absolute urls of the following content entities:
       | Sitemap custom page of draft                    |
       | Sitemap custom page of published but in Spanish |
@@ -94,9 +91,12 @@ Feature:
       | Sitemap document published but parent is not    |
       | Sitemap event draft                             |
       | Sitemap event published but parent is not       |
+      | Sitemap licence                                 |
       | Sitemap news draft                              |
       | Sitemap news published and recent               |
       | Sitemap news published but parent is not        |
+      | Sitemap owner                                   |
+      | Sitemap secretariat                             |
     # The following piece of xhtml is used to declare an alternative language. If it exists in the page it means that
     # another language is included in the output.
     And the response should not contain "<xhtml:link rel=\"alternate\" hreflang="
@@ -115,9 +115,6 @@ Feature:
       | Sitemap solution published   |
       | Sitemap release 1            |
       | Sitemap release 2            |
-      | Sitemap licence              |
-      | Sitemap owner                |
-      | Sitemap secretariat          |
     And I should not see the absolute urls of the following content entities:
       | Sitemap custom page of draft                   |
       | Sitemap discussion draft                       |
@@ -132,10 +129,13 @@ Feature:
       | Sitemap event published                        |
       | Sitemap event archived                         |
       | Sitemap event published but parent is not      |
+      | Sitemap licence                                |
       | Sitemap news draft                             |
       | Sitemap news published but old                 |
       | Sitemap news archived                          |
       | Sitemap news published but parent is not       |
+      | Sitemap owner                                  |
+      | Sitemap secretariat                            |
 
     # Simulate that 2 days have passed since last time the sitemaps have been created.
     When the publication date of the "Sitemap news published and recent" news content is changed to "3 days ago"
@@ -164,9 +164,6 @@ Feature:
       | Sitemap solution draft   |
       | Sitemap release 2        |
       | Sitemap distribution     |
-      | Sitemap licence          |
-      | Sitemap owner            |
-      | Sitemap secretariat      |
     And I should not see the absolute urls of the following content entities:
       | Sitemap custom page of draft                   |
       | Sitemap discussion draft                       |
@@ -175,8 +172,11 @@ Feature:
       | Sitemap document published but parent is not   |
       | Sitemap event draft                            |
       | Sitemap event published but parent is not      |
+      | Sitemap licence                                |
       | Sitemap news draft                             |
       | Sitemap news published but parent is not       |
+      | Sitemap owner                                  |
+      | Sitemap secretariat                            |
 
     # The hot news article is now removed from the news sitemap, and the page
     # should no longer be present since it doesn't contain any more entries.

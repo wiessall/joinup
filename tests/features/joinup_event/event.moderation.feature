@@ -10,12 +10,12 @@ Feature: Event moderation
       | Salvador Thomas |
       | Rosa Vaughn     |
       | Patricia Lynch  |
-    And the following owner:
+    And owner content:
       | name     |
       | Alma Lee |
-    And the following contact:
-      | name  | Evs contact             |
-      | email | evs.contact@example.com |
+    And contact_information content:
+      | name        | email                   |
+      | Evs contact | evs.contact@example.com |
     And the following collection:
       | title               | Wet Lords             |
       | description         | The Forgotten Female. |
@@ -88,7 +88,7 @@ Feature: Event moderation
     When I fill in the following:
       | Title             | Rainbow of Worlds                     |
       | Short title       | Rainbow of Worlds                     |
-      | Description       | This is going to be an amazing event. |
+      | Abstract          | This is going to be an amazing event. |
       | Physical location | Worlds crossroad                      |
     And I fill the start date of the Date widget with "2018-08-30"
     And I fill the start time of the Date widget with "23:59:00"
@@ -146,10 +146,13 @@ Feature: Event moderation
     And I go to the homepage of the "Wet Lords" collection
     And I click "Add event"
     When I fill in the following:
-      | Title             | Rainbow Beach                     |
-      | Short title       | Rainbow Beach                     |
-      | Description       | This is going to be an amazing event. |
+      | Title             | Rainbow Beach                         |
+      | Short title       | Rainbow Beach                         |
+      | Abstract          | This is going to be an amazing event. |
       | Physical location | Worlds crossroad                      |
+    And I append "text" to "field_paragraphs_body" layout paragraphs field
+      | field_body:value  | This is going to be an amazing event. |
+      | field_body:format | content_editor                        |
     And I fill the start date of the Date widget with "2018-08-30"
     And I fill the start time of the Date widget with "23:59:00"
     And I fill the end date of the Date widget with "2018-09-01"
@@ -165,9 +168,9 @@ Feature: Event moderation
     And I go to the homepage of the "Wet Lords" collection
     And I click "Add event"
     When I fill in the following:
-      | Title             | Rainbow vinyls                     |
-      | Short title       | Rainbow vinyls                     |
-      | Description       | This is going to be an amazing event. |
+      | Title             | Rainbow vinyls                        |
+      | Short title       | Rainbow vinyls                        |
+      | Abstract          | This is going to be an amazing event. |
       | Physical location | Worlds crossroad                      |
     And I fill the start date of the Date widget with "2018-08-30"
     And I fill the start time of the Date widget with "23:59:00"

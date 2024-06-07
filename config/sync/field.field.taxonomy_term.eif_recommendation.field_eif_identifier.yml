@@ -5,6 +5,13 @@ dependencies:
   config:
     - field.storage.taxonomy_term.field_eif_identifier
     - taxonomy.vocabulary.eif_recommendation
+  module:
+    - rdf_sync
+third_party_settings:
+  rdf_sync:
+    value:
+      predicate: 'http://www.w3.org/ns/adms#identifier'
+      type: 'xsd:integer'
 id: taxonomy_term.eif_recommendation.field_eif_identifier
 field_name: field_eif_identifier
 entity_type: taxonomy_term

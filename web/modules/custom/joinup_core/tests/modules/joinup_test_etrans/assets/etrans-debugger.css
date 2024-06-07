@@ -1,0 +1,13 @@
+.etrans-debugger-included {
+  outline: 2px solid green !important;
+  background: rgba(0, 255, 0, 0.2) !important;
+}
+
+.etrans-debugger-excluded {
+  outline: 2px solid red !important;
+  background: rgba(255, 0, 0, 0.2) !important;
+}
+
+[class*="etrans-debugger-"]:not(:hover) > * {
+  opacity: 0.8!important;
+}

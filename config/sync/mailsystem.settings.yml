@@ -2,7 +2,7 @@ _core:
   default_config_hash: 64LU75RdzlSfkiiUC4Eu9sKHY8bk3Ahqsrlmdz9G4xk
 theme: current
 defaults:
-  sender: symfony_mailer_lite
+  sender: php_mail
   formatter: symfony_mailer_lite
 modules:
   symfony_mailer_lite:

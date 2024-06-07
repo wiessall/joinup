@@ -1,0 +1,26 @@
+uuid: 8c8ebb98-29ac-4d06-9152-2f65604ccaae
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.extra_properties
+    - taxonomy.vocabulary.eira
+  module:
+    - rdf_sync
+third_party_settings:
+  rdf_sync:
+    value:
+      predicate: 'http://joinup.eu/eira/properties'
+      type: 'xsd:string'
+id: taxonomy_term.eira.extra_properties
+field_name: extra_properties
+entity_type: taxonomy_term
+bundle: eira
+label: 'Extra properties'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

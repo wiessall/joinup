@@ -204,7 +204,7 @@ Feature:
       | Popular quotes | published |
     And I append "text" to "field_paragraphs_body" field in "node" entity with following "Popular Quotes" title:
       | field_body:value  |     That's one small step for a&nbsp;man, a giant leap for mankind. |
-      | field_body:format | text_html                                                      |
+      | field_body:format | text_html                                                           |
     And the following topics are enabled in the homepage:
       | Economy and Welfare     |
       | Info                    |
@@ -314,10 +314,10 @@ Feature:
       | News 3 | News 3   | Test              | published | 03-01-2023 | 01-02-2023 | E-justice |
       | News 4 | News 4   | Should not appear | published | 04-01-2023 | 01-01-2023 | E-health  |
     And event content:
-      | title   | body | start date   | end date    | created    | state     | topic     |
-      | Event 1 | Test | now -8 days  | now -9 days | now -4 day | published | E-justice |
-      | Event 2 | Test | now -9 days  | now -8 days | now -3 day | published | E-justice |
-      | Event 3 | Test | now -10 days | now -7 days | now -5 day | published | E-justice |
+      | title   | field_paragraphs_body | start date   | end date    | created    | state     | topic     |
+      | Event 1 | Test                  | now -8 days  | now -9 days | now -4 day | published | E-justice |
+      | Event 2 | Test                  | now -9 days  | now -8 days | now -3 day | published | E-justice |
+      | Event 3 | Test                  | now -10 days | now -7 days | now -5 day | published | E-justice |
     And the following topics are enabled in the homepage:
       | Economy and Welfare |
       | E-justice           |
@@ -561,3 +561,37 @@ Feature:
     And the url should match "/topic/law-and-justice/e-justice"
     And I should see the text "What do we mean by Legislation & Technology?" in the "Legislation & Technology" tile
     And I should not see the text "What do we mean by Legislation &amp; Technology?" in the "Legislation & Technology" tile
+
+  @javascript
+  Scenario: Show abstract instead of description in Collection/Solution tiles.
+    Given collections:
+      | title                | abstract         | closed | description                          | state     |
+      | Col with abstract    | Magic abstract   | no     | This tree is impervious description. | published |
+      | Col without abstract | Another abstract | no     | Magic description.                   | published |
+    Given the following solutions:
+      | title             | description              | state     | collection        | abstract                         |
+      | Another rough day | Lorem description issum  | published | Col with abstract |                                  |
+      | Just another solt | Second description issum | published | Col with abstract | This is an soltion with abstract |
+    And the following topics are enabled in the homepage:
+      | E-justice |
+    And I am logged in as a moderator
+    And I go to the edit form of the topic meta entity of the "E-justice" topic "taxonomy term"
+    And I add a layout paragraph in the "Topic meta entity body" form field with the following properties:
+      | layout           | one column |
+      | Background theme | light      |
+      | Extra classes    | test-class |
+    And I add a "Configurable listing" paragraph in the "Topic meta entity body" form field:
+      | layout position | 1                                                          |
+      | region          | content                                                    |
+      | Heading         | type: text - value: E-justice heading                      |
+      | Action link     | type: text - value: http://example.com                     |
+      | Link text       | type: text - value: E-justice link text                    |
+      | List style      | type: select - value: List                                 |
+      | Show content    | type: select - value: All                                  |
+      | Query presets   | type: text - value: entity_bundle\|solution,collection\|IN |
+    And I press "Save"
+    And the url should match "/topic/law-and-justice/e-justice"
+    And I should see the text "Magic abstract" in the "Col with abstract" tile
+    And I should see the text "Another abstract" in the "Col without abstract" tile
+    And I should see the text "Lorem description issum" in the "Another rough day" tile
+    And I should see the text "This is an soltion with abstract" in the "Just another solt" tile

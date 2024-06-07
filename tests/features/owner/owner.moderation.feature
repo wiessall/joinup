@@ -6,12 +6,13 @@ Feature: Owner moderation
 
   @uploadFiles:logo.png
   Scenario: Publish, update, request changes, publish again and ask to delete an owner.
+
     Given users:
       | Username        |
       | Raeburn Hibbert |
-    And owner:
-      | name             | type                    |
-      | Good food eaters | Non-Profit Organisation |
+    And owner content:
+      | name             | owner type |
+      | Good food eaters | Company    |
 
     When I am logged in as "Raeburn Hibbert"
     And I go to the propose collection form
@@ -29,7 +30,7 @@ Feature: Owner moderation
     # An authenticated user can create an owner in published state.
     When I click the 'Additional fields' tab
     And I press "Add new" at the "Owner" field
-    And I check the box "Academia/Scientific organisation"
+    And I check the box "Industry consortium"
     And I fill in "Name" with "EU healthy movement"
     When I press "Create owner"
     Then I should see "EU healthy movement"
@@ -64,7 +65,7 @@ Feature: Owner moderation
     # Another authenticated user should not be allowed to edit the owner entity.
     When I am logged in as an "authenticated user"
     And I go to the homepage of the "EU healthy group" owner
-    Then I should not see the link "Edit" in the "Entity actions" region
+    Then I should not see the link "Edit" in the optional "Entity actions" region
 
     # The original owner creator is allowed to update the entity with the
     # requested changes.
@@ -76,7 +77,7 @@ Feature: Owner moderation
     And the current workflow state should be "Needs update"
     And I should not see the link "Delete"
     # Do the changes.
-    When I check the box "Non-Governmental Organisation"
+    When I check the box "Company"
     And I press "Update"
     Then I should see the heading "EU healthy group"
 

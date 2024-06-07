@@ -58,7 +58,7 @@ class OwnerWorkflowTest extends JoinupWorkflowExistingSiteTestBase {
    * {@inheritdoc}
    */
   protected function getEntityType(): string {
-    return 'rdf_entity';
+    return 'node';
   }
 
   /**
@@ -93,10 +93,10 @@ class OwnerWorkflowTest extends JoinupWorkflowExistingSiteTestBase {
 
     // Test view, update, delete access.
     foreach ($this->readUpdateDeleteAccessProvider() as $entity_state => $test_data) {
-      $content = $this->createRdfEntity([
-        'rid' => 'owner',
-        'label' => $this->randomMachineName(),
-        'field_owner_state' => $entity_state,
+      $content = $this->createNode([
+        'type' => 'owner',
+        'title' => $this->randomMachineName(),
+        'field_state' => $entity_state,
         'uid' => $this->userOwner->id(),
       ]);
 
@@ -139,14 +139,19 @@ class OwnerWorkflowTest extends JoinupWorkflowExistingSiteTestBase {
   public function testWorkflow(): void {
     foreach ($this->workflowTransitionsProvider() as $entity_state => $workflow_data) {
       foreach ($workflow_data as $user_var => $expected_target_states) {
-        $content = $this->createRdfEntity([
-          'rid' => 'owner',
-          'label' => $this->randomMachineName(),
+        $content = $this->createNode([
+          'type' => 'owner',
+          'title' => $this->randomMachineName(),
         ]);
-        // Override the default state of 'published' that is set during entity
-        // creation.
-        // @see owner_rdf_entity_create()
-        $content->set('field_owner_state', $entity_state);
+
+        if ($user_var === 'userAuthenticated') {
+          // If the user is userAuthenticated, set them as an owner of the
+          // entity because the authenticated user can only act on owners they
+          // own.
+          $content->setOwnerId($this->$user_var->id());
+        }
+
+        $content->set('field_state', $entity_state);
         $content->save();
 
         // Override the user to be checked for the allowed transitions.
@@ -211,8 +216,6 @@ class OwnerWorkflowTest extends JoinupWorkflowExistingSiteTestBase {
       ],
       'needs_update' => [
         'view' => [
-          'userAnonymous',
-          'userAuthenticated',
           'userModerator',
           'userOwner',
         ],
@@ -226,8 +229,6 @@ class OwnerWorkflowTest extends JoinupWorkflowExistingSiteTestBase {
       ],
       'deletion_request' => [
         'view' => [
-          'userAnonymous',
-          'userAuthenticated',
           'userModerator',
           'userOwner',
         ],
@@ -263,14 +264,6 @@ class OwnerWorkflowTest extends JoinupWorkflowExistingSiteTestBase {
    */
   public function workflowTransitionsProvider(): array {
     return [
-      '__new__' => [
-        'userAuthenticated' => [
-          'published',
-        ],
-        'userModerator' => [
-          'published',
-        ],
-      ],
       'published' => [
         'userAuthenticated' => [
           'published',

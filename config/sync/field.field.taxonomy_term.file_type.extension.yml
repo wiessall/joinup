@@ -5,6 +5,13 @@ dependencies:
   config:
     - field.storage.taxonomy_term.extension
     - taxonomy.vocabulary.file_type
+  module:
+    - rdf_sync
+third_party_settings:
+  rdf_sync:
+    value:
+      predicate: 'http://joinup.eu/file-type/extension'
+      type: 'xsd:string'
 _core:
   default_config_hash: V8Ufw3W_FumOfiNcNCDeLJboRnXI7yNC-2r3Au4L1EE
 id: taxonomy_term.file_type.extension

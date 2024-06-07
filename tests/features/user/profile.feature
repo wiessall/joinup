@@ -29,7 +29,7 @@ Feature: User profile
     And I fill in "First name" with "Leoke"
     And I fill in "Family name" with "di ser Piero da Vinci"
     And I select "Supplier exchange" from "Professional domain"
-    And I fill in "Country of origin" with "Italy"
+    And I fill in "Country of origin" with "Belgium"
     And I fill in "Facebook" with "leodavinci"
     And I fill in "X" with "therealdavinci"
     And I fill in "LinkedIn" with "leonardo.davinci"
@@ -58,13 +58,13 @@ Feature: User profile
     And I should not see the link "Vimeo" in the "Header" region
     # @todo The nationality will be rendered as flag image.
     # @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3175
-    # And I should see the link "Italy"
+    # And I should see the link "Belgium"
     # A user should not be able to edit the profile page of another user.
     When I go to the public profile of "Domenico Ghirlandaio"
     Then I should not see the link "Edit"
     # Verify that the user's "Country of origin" field is visible on its profile.
     When I go to the public profile of "Leonardo Da Vinci"
-    Then I should see the text "Country of origin: Italy" in the "Header" region
+    Then I should see the text "Country of origin: Belgium" in the "Header" region
 
   Scenario: A moderator can navigate to any user's profile and edit it.
     Given users:
@@ -87,7 +87,7 @@ Feature: User profile
     And I fill in "First name" with "Leo"
     And I fill in "Family name" with "di ser Piero da Vinci"
     And I select "Finance in EU" from "Professional domain"
-    And I fill in "Country of origin" with "Italy"
+    And I fill in "Country of origin" with "Belgium"
     And I press "Save"
     Then I should see the success message "The changes have been saved."
     And I should see the success message "The user has been notified that their account has been updated."
@@ -128,14 +128,12 @@ Feature: User profile
       | title                 | author        | collection       | state     | created         |
       | Planting a tree howto | Corwin Robert | Botanic E.D.E.N. | published | 2017-10-30 9:30 |
     # Contact information and owner tiles should never be shown.
-    And the following contact:
-      | name        | Wibo Verhoeven             |
-      | email       | wibo.verhoeven@example.com |
-      | Website URL | http://example.com         |
-      | author      | Corwin Robert              |
-    And the following owner:
-      | type                  | name                 | author        |
-      | Private Individual(s) | Somboon De Laurentis | Corwin Robert |
+    And contact_information content:
+      | name           | email                      | website url        | author        |
+      | Wibo Verhoeven | wibo.verhoeven@example.com | http://example.com | Corwin Robert |
+    And owner content:
+      | owner type | name                 | author        |
+      | Company    | Somboon De Laurentis | Corwin Robert |
     And the following collection user membership:
       | user          | collection       |
       | Corwin Robert | Botanic E.D.E.N. |
@@ -250,18 +248,18 @@ Feature: User profile
       | Janny Robert      | janny.robert@example.com      |
       | Clarise Edwardson | clarise.edwardson@example.com |
     And the following collections:
-      | title            | description                           | logo     | state     | creation date    | author             |
-      | Lake E.D.E.N.    | European Deep Earth Nurturing project | logo.png | published | 2017-02-23 10:00 | Janny Robert       |
-      | Rose is red      | Better descriptions ever              | logo.png | published | 2017-02-23 10:00 | Clarise Edwardson  |
-      | Lone handling    | Because even flowers have feelings.   | logo.png | archived  | 2017-02-23 12:00 | Janny Robert       |
+      | title         | description                           | logo     | state     | creation date    | author            |
+      | Lake E.D.E.N. | European Deep Earth Nurturing project | logo.png | published | 2017-02-23 10:00 | Janny Robert      |
+      | Rose is red   | Better descriptions ever              | logo.png | published | 2017-02-23 10:00 | Clarise Edwardson |
+      | Lone handling | Because even flowers have feelings.   | logo.png | archived  | 2017-02-23 12:00 | Janny Robert      |
     And the following solutions:
       | title          | collection    | state     | creation date   | author       |
       | Sugar is sweet | Lake E.D.E.N. | archived  | 2015-03-03T8:00 | Janny Robert |
       | Salt is salty  | Lake E.D.E.N. | published | 2015-02-03T7:00 | Janny Robert |
     And discussion content:
-      | title                   | author          | collection    | state     | created         |
-      | Repopulating green iris | Janny Robert   | Lake E.D.E.N. | published | 2018-06-15 16:00 |
-      | Best plant comfort      | Janny Robert   | Lone handling | published | 2018-09-01 19:30 |
+      | title                   | author       | collection    | state     | created          |
+      | Repopulating green iris | Janny Robert | Lake E.D.E.N. | published | 2018-06-15 16:00 |
+      | Best plant comfort      | Janny Robert | Lone handling | published | 2018-09-01 19:30 |
     And document content:
       | title           | author       | collection    | state     | created          |
       | Cherry schedule | Janny Robert | Lake E.D.E.N. | published | 2017-05-13 16:00 |

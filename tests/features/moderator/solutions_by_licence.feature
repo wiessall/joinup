@@ -16,7 +16,7 @@ Feature: Solutions by licence report
     Then the response status code should be 200
 
   Scenario: List licences and their solutions.
-    Given the following licences:
+    Given licence content:
       | title          |
       | Open source    |
       | Free for all   |

@@ -17,10 +17,10 @@ Feature: SEO for news articles.
 
     When I visit the "Joinup SEO event" event
     Then the metatag JSON should be attached in the page
-    And 1 metatag graph of type "Event" should exist in the page
+    And 1 metatag graph of type "http://schema.org/Event" should exist in the page
     And the metatag graph of the item with "name" "Joinup SEO event" should have the following properties:
       | property    | value                              |
-      | @type       | Event                              |
+      | @type       | http://schema.org/Event            |
       | name        | Joinup SEO event                   |
       # Though it would be nice to have this to the Joinup URL, Search Engines
       # expect this to be the URL of the event. If a website is provided, then
@@ -37,7 +37,7 @@ Feature: SEO for news articles.
       | @id         | <expected url>                     |
     And the metatag graph of the item with "name" "Joinup SEO event" should have the following "image" properties:
       | property             | value                                                |
-      | @type                | ImageObject                                          |
+      | @type                | http://schema.org/ImageObject                        |
       | representativeOfPage | True                                                 |
       # __random_text__ can be any string that is appointed by the system and we
       # cannot predict. In this case it is the random file name of the image.
@@ -46,18 +46,18 @@ Feature: SEO for news articles.
       | height               | 139                                                  |
     And the metatag graph of the item with "name" "Joinup SEO event" should have the following "location" properties:
       | property | value                                 |
-      | @type    | Place                                 |
+      | @type    | http://schema.org/Place               |
       | name     | <expected location>                   |
       | url      | http://example.com/some-online-meetup |
     # Target the location subgraph which has the name property set to "Rue
     # Belliard 28".
     And the metatag subgraph of the item with "name" "Rue Belliard 28" should have the following "address" properties:
-      | property      | value               |
-      | @type         | PostalAddress       |
-      | streetAddress | <expected location> |
+      | property      | value                           |
+      | @type         | http://schema.org/PostalAddress |
+      | streetAddress | <expected location>             |
     And the metatag subgraph of the item with "name" "Rue Belliard 28" should have the following "geo" properties:
-      | property  | value          |
-      | @type     | GeoCoordinates |
+      | property  | value                            |
+      | @type     | http://schema.org/GeoCoordinates |
       # Geo coordinates are hardcoded as offered by the service.
       | latitude  | 50.842291      |
       | longitude | 4.370476       |
@@ -101,8 +101,8 @@ Feature: SEO for news articles.
 
     When I visit the "Joinup SEO event" event
     Then the metatag JSON should be attached in the page
-    And 1 metatag graph of type "Event" should exist in the page
+    And 1 metatag graph of type "http://schema.org/Event" should exist in the page
     And the metatag graph of the item with "name" "Joinup SEO event" should have the following "location" properties:
       | property | value                                 |
-      | @type    | Place                                 |
+      | @type    | http://schema.org/Place               |
       | url      | http://example.com/some-online-meetup |

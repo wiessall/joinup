@@ -12,12 +12,12 @@ Feature: Collection homepage
       | Legolas  | active |           |
       | Gimli    | active |           |
       | Samwise  | active | moderator |
-    And the following owner:
+    And owner content:
       | name          |
       | Bilbo Baggins |
-    And the following contact:
-      | name  | Kalikatoura             |
-      | email | kalikatoura@example.com |
+    And contact_information content:
+      | name        | email                   |
+      | Kalikatoura | kalikatoura@example.com |
     And the following collection:
       | title               | Middle earth daily               |
       | description         | Middle earth daily               |
@@ -46,7 +46,7 @@ Feature: Collection homepage
       | Rohirrim make extraordinary deal                  | Horse prices drops  | Finance in EU     | Middle earth daily | published | 2014-10-17 8:34am | 2017-7-5 |
       | Breaking: Gandalf supposedly plans his retirement | A new white wizard? | Supplier exchange | Middle earth daily | published | 2014-10-17 8:31am | 2017-7-5 |
     And event content:
-      | title                                    | short title      | body                                      | collection         | created           | start date          | end date            | state     | topic             | changed  |
+      | title                                    | short title      | field_paragraphs_body                     | collection         | created           | start date          | end date            | state     | topic             | changed  |
       | Big hobbit feast - fireworks at midnight | Big hobbit feast | Barbecue followed by dance and fireworks. | Middle earth daily | 2014-10-17 8:33am | 2016-03-15T11:12:12 | 2016-03-15T11:12:12 | published | Supplier exchange | 2017-7-5 |
 
   Scenario: The collection homepage shows the collection metrics.
@@ -197,3 +197,51 @@ Feature: Collection homepage
     Then the page should not be cached
     When I reload the page
     Then the page should be cached
+
+  # Regression test for OE Webtools e-translate service.
+  @javascript
+  Scenario: The applied etranslate selectors correspond to the collection's landing page
+    Given "custom_page" content:
+      | title               | collection         | state     |
+      | Custom Landing Page | Middle earth daily | published |
+    Given I am not logged in
+    When I go to the homepage of the "Middle earth daily" collection
+    Then I should see a Webtools eTrans element
+    And the eTrans translatable text should contain the following text:
+      | This is a test abstract. |
+      | Owner                    |
+      | Bilbo Baggins            |
+      | Contact information      |
+      | Kalikatoura              |
+      | Middle earth daily       |
+      | 2 News                   |
+      | 1 Event                  |
+      | 1 Solution               |
+      | About:                   |
+      | all topics               |
+      | See more topics          |
+      | eGov (2)                 |
+      | Supplier exchange (2)    |
+      | Economy and Welfare (1)  |
+      | Finance in EU (1)        |
+      | Detailed information     |
+      | Last updated             |
+     # Exclude "last update" string.
+      | Moderation               |
+      | Open collection          |
+      | Moderated                |
+    Given I am logged in as a user with the "moderator" role
+    When I go to the homepage of the "Middle earth daily" collection
+    When I open the header local tasks menu
+    And I click "Settings" in the "Entity actions" region
+    Then the following fields should be present "Landing page"
+    When I select "Custom Landing Page" from "Landing page"
+    And I press "Save"
+    Then I should see the heading "Middle earth daily"
+    And I should see the heading "Custom Landing Page"
+    # And I should see "The custom page 3 content"
+    Given I am not logged in
+    When I go to the homepage of the "Middle earth daily" collection
+    Then I should see a Webtools eTrans element
+    And the eTrans translatable text should contain the following text:
+      | Custom Landing Page |

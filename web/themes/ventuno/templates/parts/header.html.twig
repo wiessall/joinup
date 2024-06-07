@@ -24,6 +24,14 @@
   label: logged_in ? user_name : "Toggle menu"|t,
   links: logged_in ? profile_links : anonymous_links,
 }]) %}
+{% if bookmark_link %}
+  {% set items = items|merge([{
+    breakpoint: "all",
+    label: "Bookmark"|t,
+    links: [bookmark_link|merge({order: 1})],
+    hide_toggle: TRUE,
+  }]) %}
+{% endif %}
 {% if not hide_searchbar %}
   {% set items = items|merge([{
     type: "search",
@@ -39,8 +47,8 @@
 {% endif %}
 {% include directory ~ '/templates/navigation/navbar.html.twig' with {
   brand: {
-    src: path('<front>') ~ "themes/ventuno/assets/images/logo.svg",
-    alt: "Joinup logo"|t,
+    src: path('<front>') ~ "themes/ventuno/assets/images/logo-interoperable-europe.svg",
+    alt: "Interoperable Europe logo"|t,
     link: path('<front>'),
   },
   collapse_id: "main-navbar",

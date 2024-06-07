@@ -1,0 +1,10 @@
+name: Bookmark
+description: 'bookmark functionality'
+type: module
+package: Joinup
+core_version_requirement: ">= 9.4"
+
+dependencies:
+  - flag:flag
+  - joinup_modal:joinup_modal
+  - joinup_flag:joinup_flag

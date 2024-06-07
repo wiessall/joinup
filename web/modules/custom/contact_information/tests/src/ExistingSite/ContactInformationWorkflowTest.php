@@ -6,7 +6,6 @@ namespace Drupal\Tests\contact_information\ExistingSite;
 
 use Drupal\Core\Session\AnonymousUserSession;
 use Drupal\Tests\joinup_workflow\ExistingSite\JoinupWorkflowExistingSiteTestBase;
-use Drupal\rdf_entity\Entity\Rdf;
 
 /**
  * Tests the workflow for the contact information entity.
@@ -75,13 +74,10 @@ class ContactInformationWorkflowTest extends JoinupWorkflowExistingSiteTestBase 
   public function testWorkflow(): void {
     foreach ($this->workflowTransitionsProvider() as $entity_state => $workflow_data) {
       foreach ($workflow_data as $user_var => $expected_target_states) {
-        // The created entity is not saved because this will trigger the
-        // '__new__' state to be converted to 'validated'.
-        // @see: contact_information_rdf_entity_presave().
-        $content = Rdf::create([
-          'rid' => 'contact_information',
-          'label' => $this->randomMachineName(),
-          'field_ci_state' => $entity_state,
+        $content = $this->createNode([
+          'type' => 'contact_information',
+          'title' => $this->randomMachineName(),
+          'field_state' => $entity_state,
           'uid' => $this->$user_var->id(),
         ]);
 
@@ -118,14 +114,6 @@ class ContactInformationWorkflowTest extends JoinupWorkflowExistingSiteTestBase 
    */
   public function workflowTransitionsProvider(): array {
     return [
-      '__new__' => [
-        'userAuthenticated' => [
-          'validated',
-        ],
-        'userModerator' => [
-          'validated',
-        ],
-      ],
       'validated' => [
         'userAuthenticated' => [
           'validated',

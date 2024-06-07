@@ -361,6 +361,111 @@ class FeatureContext extends RawDrupalContext {
   }
 
   /**
+   * Checks that the given images are present on the page in the given order.
+   *
+   * @param \Behat\Gherkin\Node\TableNode $imagesTable
+   *   A table with the image file names to look for.
+   *
+   * @throws \Exception
+   *   If one of the images is missing, or if the order of the images is
+   *   different than expected.
+   *
+   * @Then I (should ) have the following images on the page( in this order)
+   */
+  public function assertImagesPresentInOrder(TableNode $imagesTable): void {
+    $this->assertImagesInOrder($imagesTable, FALSE);
+  }
+
+  /**
+   * Checks that the given images are visible on the page in the given order.
+   *
+   * @param \Behat\Gherkin\Node\TableNode $imagesTable
+   *   A table with the image file names to look for.
+   *
+   * @throws \Exception
+   *   If one of the images is missing or is not visible, or if the order of
+   *   the images is different than expected.
+   *
+   * @Then I (should ) see the following images on the page( in this order)
+   */
+  public function assertImagesVisibleInOrder(TableNode $imagesTable): void {
+    $this->assertImagesInOrder($imagesTable, TRUE);
+  }
+
+  /**
+   * Checks whether the given images are present or visible on the page.
+   *
+   * @param \Behat\Gherkin\Node\TableNode $imagesTable
+   *   A table with the image file names to look for.
+   * @param bool $checkVisibility
+   *   Whether visibility should also be checked or not.
+   *
+   * @throws \Exception
+   *   If one of the images is missing (or is not visible), or if the order of
+   *   the images is different than expected.
+   */
+  protected function assertImagesInOrder(TableNode $imagesTable, bool $checkVisibility): void {
+    $availableImages = $this->getImages();
+    $imageFilenameList = $imagesTable->getColumn(0);
+    $firstFile = reset($imageFilenameList);
+    // Try to find the first image in the list of available images. Note: the
+    // same image might appear multiple times on the page.
+    $startIndexes = array_keys(
+      array_filter(
+        $availableImages,
+        function (NodeElement $img) use ($firstFile): bool {
+          return $this->imageSourceMatches($firstFile, $img);
+        }
+      )
+    );
+    if (empty($startIndexes)) {
+      throw new \Exception(sprintf(
+        "Cannot find the first image with source '%s' from the given set on the page.",
+        $firstFile,
+      ));
+    }
+    $listsToCheck = array_reduce(
+      $startIndexes,
+      function (array $carry, int $index) use ($availableImages): array {
+        $carry[] = array_slice($availableImages, $index);
+        return $carry;
+      },
+      [],
+    );
+
+    foreach ($listsToCheck as $imageList) {
+      // Check the list.
+      foreach ($imageFilenameList as $index => $filename) {
+        if (
+          !$imageList[$index] instanceof NodeElement ||
+          !$this->imageSourceMatches($filename, $imageList[$index])
+        ) {
+          // First non-matching case. Break this loop and continue with the next
+          // image list (if any).
+          continue 2;
+        }
+        if ($checkVisibility && !$imageList[$index]->isVisible()) {
+          // Image is not visible.
+          continue 2;
+        }
+      }
+
+      // If we made it here, then the last image list contained all the images
+      // in the expected order.
+      return;
+    }
+
+    $format = $checkVisibility
+      ? "The images '%s' are not visible on the page in this order. The first non-visible was '%s'."
+      : "The images '%s' cannot be found on the page in this order. The first missing image was '%s'.";
+    throw new \Exception(sprintf(
+      $format,
+      implode("', '", $imageFilenameList),
+      $imageFilenameList[$index]
+    ));
+  }
+
+  /**
    * Checks that a given image is present.
    *
    * @param string $filename
@@ -372,10 +477,11 @@ class FeatureContext extends RawDrupalContext {
    * @Then I (should )see the image :filename
    */
   public function assertImagePresent(string $filename, ?NodeElement $element = NULL): void {
-    if ($imageNode = $this->getImage($filename, $element)) {
+    foreach ($this->getAllImages($filename, $element) as $imageNode) {
       try {
-        Assert::assertTrue($imageNode->isVisible());
-        return;
+        if ($imageNode->isVisible()) {
+          return;
+        }
       }
       catch (UnsupportedDriverActionException | UnsupportedDrupalDriverActionException) {
       }
@@ -697,6 +803,31 @@ class FeatureContext extends RawDrupalContext {
   }
 
   /**
+   * Checks whether an element with a CSS selector can be found on the page.
+   *
+   * @param string $selector
+   *   The CSS selector of the element.
+   *
+   * @return \Behat\Mink\Element\NodeElement
+   *   The first node element on the page matching the selector.
+   *
+   * @throws \Exception
+   *   If the element cannot be found.
+   *
+   * @Then the page should have an element with CSS selector :selector
+   */
+  public function getElementByCss(string $selector): NodeElement {
+    if ($element = $this->getSession()->getPage()->find('css', $selector)) {
+      return $element;
+    }
+
+    throw new \Exception(sprintf(
+      "Element with CSS selector '%s' could not be found on the page",
+      $selector
+    ));
+  }
+
+  /**
    * Click on an element by css class.
    *
    * @param string $element
@@ -705,12 +836,7 @@ class FeatureContext extends RawDrupalContext {
    * @Then /^I click on element "([^"]*)"$/
    */
   public function iClickOn(string $element): void {
-    $page = $this->getSession()->getPage();
-    $findName = $page->find('css', $element);
-    if (!$findName) {
-      throw new \Exception($element . " could not be found");
-    }
-    $findName->click();
+    $this->getElementByCss($element)->click();
   }
 
   /**
@@ -1015,6 +1141,30 @@ class FeatureContext extends RawDrupalContext {
   }
 
   /**
+   * Asserts that no link is present in the given region.
+   *
+   * @todo ISAICP-8376 Revert this once all entity types have been mapped.
+   *
+   * Same as MinkContext::assertNotLinkRegion but does not fail if region is
+   * not found.
+   *
+   * @Then I should not see the link :link in the optional :region( region)
+   *
+   * @throws \Exception
+   *   If the region is present but the link within it cannot be found.
+   */
+  public function assertNotLinkOptionalRegion($link, $region): void {
+    $session = $this->getSession();
+    $regionObj = $session->getPage()->find('region', $region);
+    if ($regionObj) {
+      $result = $regionObj->findLink($link);
+      if (!empty($result)) {
+        throw new \Exception(sprintf('Link to "%s" in the "%s" region on the page %s', $link, $region, $this->getSession()->getCurrentUrl()));
+      }
+    }
+  }
+
+  /**
    * Asserts that the page title tag equals to some text.
    *
    * The assertion strips off the possible suffix "| Joinup".
@@ -1160,6 +1310,48 @@ class FeatureContext extends RawDrupalContext {
     if (!empty($errors)) {
       throw new \Exception(sprintf("The following lines of text were not found on the page %s: '%s'", $this->getSession()->getCurrentUrl(), implode(', ', $errors)));
     }
+  }
+
+  /**
+   * Checks that multiple lines of text appear on the page in a specific order.
+   *
+   * Provide data in the following format:
+   * | Text 1 |
+   * | Text 2 |
+   * | ...    |
+   *
+   * @param \Behat\Gherkin\Node\TableNode $table
+   *   A list of texts.
+   *
+   * @Then I (should )see the following lines of text in the correct order:
+   */
+  public function assertPageTextOrder(TableNode $table): void {
+    $session = $this->getSession();
+
+    $expected_order = $table->getColumn(0);
+    $actual_text = $session->getPage()->getText();
+
+    $not_found = [];
+    foreach ($expected_order as $substring) {
+      if (!str_contains($actual_text, $substring)) {
+        $not_found[] = "'$substring'";
+      }
+    }
+    if ($not_found) {
+      throw new ElementNotFoundException($session->getDriver(), sprintf('Substring(s): %s', implode(', ', array_unique($not_found))));
+    }
+
+    $actual_order = [];
+    $offset = 0;
+    foreach ($expected_order as $substring) {
+      if (($pos = strpos($actual_text, $substring, $offset)) !== FALSE) {
+        $actual_order[$pos] = $substring;
+        $offset = $pos + strlen($substring);
+      }
+    }
+    ksort($actual_order);
+
+    Assert::assertSame($expected_order, array_values($actual_order), 'Strings found but incorrectly ordered');
   }
 
   /**
@@ -1561,23 +1753,19 @@ class FeatureContext extends RawDrupalContext {
   }
 
   /**
-   * Forces the indexing of new or changed content after each step.
+   * Performs the RDF synchronization.
    *
-   * When a Search API index is configured with the 'options.index_directly'
-   * setting set to TRUE, the entity is not indexed immediately after was saved,
-   * in hook_entity_update(), instead the indexing is postponed to the end of
-   * the request. This is OK when operating manually the site, but when this is
-   * wrapped in the test "page request", the index will occur only after all the
-   * steps were executed and, as an effect, entities created across the steps
-   * are not indexed yet when the next step is executed. For this reason, we
-   * force an indexing after each step.
-   *
-   * @see https://www.drupal.org/project/search_api/issues/2922525
+   * When a request terminates, all services implementing DestructableInterface
+   * are called to perform tasks after the response has been sent back to the
+   * client. This is OK when operating manually the site, but when this is
+   * wrapped in the test "page request", these operations will occur only after
+   * all the steps were executed. But some tasks just need to be executed before
+   * the next Behat step.
    *
    * @AfterStep
    */
-  public function indexEntities(): void {
-    \Drupal::service('search_api.post_request_indexing')->destruct();
+  public function kernelTerminateTasks(): void {
+    \Drupal::service('rdf_sync.synchronizer')->destruct();
   }
 
   /**
@@ -1858,71 +2046,6 @@ class FeatureContext extends RawDrupalContext {
     // doesn't employ a cache context. In order to make the version show up on
     // previously cached pages we need to invalidate the render cache manually.
     Cache::invalidateTags(['rendered']);
-  }
-
-  /**
-   * Asserts that a file downloaded from a link contains a list of strings.
-   *
-   * IMPORTANT NOTE: This step definition is not performing any file access
-   * check. The file content is read directly from the file system. The user
-   * access to the file should be tested in separate Behat steps.
-   *
-   * @param string $link_label
-   *   The link from where to download the file.
-   * @param \Behat\Gherkin\Node\TableNode $strings_table
-   *   A table with a single column. Each row contains a string.
-   *
-   * @throws \Exception
-   *   If the link has no href attribute or the file content cannot be loaded.
-   *
-   * @Then the file downloaded from the :link_label link contains the following strings:
-   */
-  public function assertDownloadedFileContainsStrings(string $link_label, TableNode $strings_table): void {
-    if (!$link = $this->getSession()->getPage()->findLink($link_label)) {
-      throw new ElementNotFoundException($this->getSession()->getDriver(), 'Link', NULL, $link_label);
-    }
-    if (!$url = $link->getAttribute('href')) {
-      throw new \Exception("The link '{$link_label}' misses an 'href' attribute.");
-    }
-
-    // Get the path part from the URL.
-    $path = rtrim(parse_url($url, PHP_URL_PATH), '/');
-    // Remove the base path.
-    $path = substr($path, strlen(base_path()));
-
-    // Drupal private file.
-    if (strpos($path, 'system/files') === 0) {
-      $path = Settings::get('file_private_path') . substr($path, 12);
-    }
-    // Webserver accessible file.
-    else {
-      $path = DRUPAL_ROOT . "/{$path}";
-    }
-
-    if (($content = file_get_contents($path)) === FALSE) {
-      throw new \Exception("Cannot read '{$path}' file.");
-    }
-
-    if (!$content) {
-      throw new \Exception("The downloaded file has no content.");
-    }
-
-    $not_found = [];
-    foreach ($strings_table->getColumn(0) as $text) {
-      $matches = [];
-      if (preg_match('/^.*%(.*?)%.*$/', $text, $matches)) {
-        $entity = $this->getEntityByLabel('rdf_entity', $matches[1]);
-        $text = str_replace("%{$matches[1]}%", $entity->id(), $text);
-      }
-
-      if (strpos($content, $text) === FALSE) {
-        $not_found[] = $text;
-      }
-    }
-
-    if (!empty($not_found)) {
-      throw new ExpectationFailedException("Following strings were not found in the downloaded file:\n- " . implode("\n- ", $not_found));
-    }
   }
 
   /**
@@ -2575,23 +2698,6 @@ class FeatureContext extends RawDrupalContext {
     }
 
     sleep(1);
-  }
-
-  /**
-   * Asserts that configuration is editable or locked.
-   *
-   * @param string $state
-   *   The state of the configuration. Either 'locked' or 'unlocked'.
-   *
-   * @Then the configuration should be :state
-   */
-  public function theConfigurationState(string $state): void {
-    \assert(in_array($state, ['locked', 'unlocked']));
-
-    // Settings array persist over the static request so in order to check if
-    // configuration is readonly, we are checking the disable-config-readonly
-    // file.
-    Assert::assertTrue(file_exists(DRUPAL_ROOT . '/../disable-config-readonly') === ($state === 'unlocked'));
   }
 
 }

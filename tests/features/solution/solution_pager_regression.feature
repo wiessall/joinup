@@ -2,12 +2,12 @@
 Feature: Test for a 'facets' regression on the solution overview page.
   # @see ISAICP-4188
   Scenario: Test that no pager is shown on the solution page when not needed.
-    Given the following owner:
-      | name              | type                  |
-      | Apache Foundation | Private Individual(s) |
-    And the following contact:
-      | name  | Pierre Plezant             |
-      | email | pierre.plezant@example.com |
+    Given owner content:
+      | name              | owner type |
+      | Apache Foundation | Company    |
+    And contact_information content:
+      | name           | email                      |
+      | Pierre Plezant | pierre.plezant@example.com |
     And the following solutions:
       | title                | description                | logo     | state     | owner             | contact information | solution type | topic       |
       | Apache               | Serving the web            | logo.png | published | Apache Foundation | Pierre Plezant      | Business      | E-inclusion |

@@ -12,15 +12,15 @@ Feature: SEO for news articles.
       | Username          | E-mail                 | First name | Family name |
       | Joinup SEO author | joinup.seo@example.com | Kurk       | Smith       |
     And "news" content:
-      | title           | headline                    | logo     | body          | created                   | publication date          | changed                   | state     | author            | collection                 |
-      | Joinup SEO news | Headline of Joinup SEO news | logo.png | Body of news. | Sun, 01 Dec 2019 13:00:00 | Wed, 25 Dec 2019 13:00:00 | Wed, 01 Jan 2020 13:00:00 | published | Joinup SEO author | Joinup SEO news collection |
+      | title           | headline                    | logo     | field_paragraphs_body | created                   | publication date          | changed                   | state     | author            | collection                 |
+      | Joinup SEO news | Headline of Joinup SEO news | logo.png | Body of news.         | Sun, 01 Dec 2019 13:00:00 | Wed, 25 Dec 2019 13:00:00 | Wed, 01 Jan 2020 13:00:00 | published | Joinup SEO author | Joinup SEO news collection |
 
     When I visit the "Joinup SEO news" news
     Then the metatag JSON should be attached in the page
-    And 1 metatag graph of type "NewsArticle" should exist in the page
+    And 1 metatag graph of type "http://schema.org/NewsArticle" should exist in the page
     And the metatag graph of the item with "name" "Joinup SEO news" should have the following properties:
       | property            | value                                                                   |
-      | @type               | NewsArticle                                                             |
+      | @type               | http://schema.org/NewsArticle                                           |
       | headline            | Headline of Joinup SEO news                                             |
       | description         | Body of news.                                                           |
       | isAccessibleForFree | True                                                                    |
@@ -29,9 +29,9 @@ Feature: SEO for news articles.
       # __base_url__ will be replaced with the base url of the website.
       | mainEntityOfPage    | __base_url__/collection/joinup-seo-news-collection/news/joinup-seo-news |
     And the metatag graph of the item with "name" "Joinup SEO news" should have the following "image" properties:
-      | property             | value       |
-      | @type                | ImageObject |
-      | representativeOfPage | True        |
+      | property             | value                         |
+      | @type                | http://schema.org/ImageObject |
+      | representativeOfPage | True                          |
       # The test files are assigned a random name so it is very hard to assert the real url. However, when the file is
       # found and added to the page, the dimensions are added as well. Asserting the dimensions also asserts the url in
       # a way.
@@ -39,13 +39,13 @@ Feature: SEO for news articles.
       | height               | 139         |
     And the metatag graph of the item with "name" "Joinup SEO news" should have the following "author" properties:
       | property | value                             |
-      | @type    | Person                            |
+      | @type    | http://schema.org/Person          |
       | @id      | __base_url__/user/__random_text__ |
       | name     | Kurk Smith                        |
       | url      | __base_url__/user/__random_text__ |
     And the metatag graph of the item with "name" "Joinup SEO news" should have the following "publisher" properties:
       | property | value                             |
-      | @type    | Person                            |
+      | @type    | http://schema.org/Person          |
       | @id      | __base_url__/user/__random_text__ |
       | name     | Kurk Smith                        |
       | url      | __base_url__/user/__random_text__ |

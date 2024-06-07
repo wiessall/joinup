@@ -20,11 +20,11 @@ Feature:
     And I append "layout" to "field_paragraphs_body" field in "node" entity with following "Latest news listing" title:
       | behavior_settings | a:3:{s:17:"layout_paragraphs";a:4:{s:6:"layout";s:13:"layout_onecol";s:6:"config";a:1:{s:5:"label";s:0:"";}s:11:"parent_uuid";N;s:6:"region";N;}s:16:"background_theme";a:0:{}s:11:"extra_class";a:0:{}} |
     And news content:
-      | title                                 | collection | created           | content                          | state     | pinned |
+      | title                                 | collection | created           | field_paragraphs_body            | state     | pinned |
       | Rare Nintendo64 disk drive discovered | Nintendo64 | 2018-10-01 4:26am | Magnetic drive called 64DD.      | published | no     |
       | NEC VR4300 CPU                        | Emulators  | 2018-10-03 4:27am | Update of the emulation library. | published | no     |
     And event content:
-      | title               | collection | created           | body                                        | state     | pinned |
+      | title               | collection | created           | field_paragraphs_body                       | state     | pinned |
       | 20 year anniversary | Nintendo64 | 2018-10-01 4:29am | The console was released in September 1996. | published | no     |
       | 30 year anniversary | Nintendo64 | 2017-10-01 4:29am | 30 year anniversary of Nintendo64.          | published | yes    |
     And discussion content:
@@ -197,7 +197,7 @@ Feature:
     And I fill in "Collection" with "Emulators"
     Then I drag the table row in the "Content listing field filter form" region at position 4 up
     And I press "Save" in the "Modal buttons" region
-    And I press "Save"
+    And I press "Save as draft"
     Then I should see the heading "Chosen content"
     And I should see the following tiles in the correct order:
       | Searching for green pad.              |
@@ -214,7 +214,7 @@ Feature:
     And I click "Remove filter" at 5th filter of the 1st content listing paragraph
     And I uncheck "Global search"
     And I press "Save" in the "Modal buttons" region
-    And I press "Save"
+    And I press "Save as draft"
     And I should see the following tiles in the correct order:
       | 20 year anniversary                   |
       | Searching for green pad.              |
@@ -230,7 +230,7 @@ Feature:
     And I fill in the 2nd "News" with "NEC VR4300 CPU" in the "Custom content listing" field
     And I check "Allow shared content"
     And I press "Save" in the "Modal buttons" region
-    And I press "Save"
+    And I press "Save as draft"
     Then I should see the following tiles in the correct order:
       | 20 year anniversary                   |
       | Searching for green pad.              |
@@ -257,7 +257,7 @@ Feature:
     And I "edit" from the "Custom page body" field the child 1 paragraph of 1 layout
     And I uncheck "Allow shared content"
     And I press "Save" in the "Modal buttons" region
-    And I press "Save"
+    And I press "Save as draft"
     Then I should see the following tiles in the correct order:
       | 20 year anniversary                   |
       | Searching for green pad.              |
@@ -285,7 +285,7 @@ Feature:
     And I press "Add and configure filter"
     And I fill in "Solution" with "N64 cartridge cleaner"
     And I press "Save" in the "Modal buttons" region
-    And I press "Save"
+    And I press "Save as draft"
     Then I should see the following tiles in the correct order:
       | Searching for green pad.        |
       | What's your favourite N64 game? |
@@ -299,7 +299,7 @@ Feature:
     And I "edit" from the "Custom page body" field the child 1 paragraph of 1 layout
     And I fill in "Query presets" with "entity_bundle|solution"
     And I press "Save" in the "Modal buttons" region
-    And I press "Save"
+    And I press "Save as draft"
     Then I should see the following tiles in the correct order:
       | N64 cartridge cleaner |
 
@@ -371,9 +371,9 @@ Feature:
 
   Scenario: Test listing by keywords that contain the same word.
     Given document content:
-      | title        | keywords            | content     | collection | state     |
-      | User's Guide | nintendo64 manuals  | User manual | Nintendo64 | published |
-      | Licence      | nintendo64 licences | Licence     | Nintendo64 | published |
+      | title        | keywords            | field_paragraphs_body | collection | state     |
+      | User's Guide | nintendo64 manuals  | User manual           | Nintendo64 | published |
+      | Licence      | nintendo64 licences | Licence               | Nintendo64 | published |
     And custom_page content:
       | title   | collection | state     |
       | Manuals | Nintendo64 | published |
@@ -471,8 +471,11 @@ Feature:
     And I click "Add news" in the plus button menu
     When I fill in the following:
       | Short title | Current wars               |
+      | Abstract    | Lead text of current wars. |
       | Headline    | Edisson vs Electro         |
-      | Content     | A new movie is coming out. |
+    And I append "text" to "field_paragraphs_body" layout paragraphs field
+      | field_body:value  | A new movie is coming out. |
+      | field_body:format | content_editor             |
     And I select "Statistics and Analysis" from "Topic"
     And I press "Publish"
     Then I should see the text "Current wars"

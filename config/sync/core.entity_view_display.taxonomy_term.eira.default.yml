@@ -3,6 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.taxonomy_term.eira.extra_properties
     - field.field.taxonomy_term.eira.field_taxonomy_deprecated
     - field.field.taxonomy_term.eira.field_taxonomy_related_term
     - field.field.taxonomy_term.eira.field_taxonomy_replaces
@@ -30,7 +31,9 @@ content:
     weight: 1
     region: content
 hidden:
+  extra_properties: true
   field_taxonomy_deprecated: true
   field_taxonomy_replaces: true
   langcode: true
   search_api_excerpt: true
+  uri: true

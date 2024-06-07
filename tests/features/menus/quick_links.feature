@@ -2,12 +2,12 @@
 Feature: Test the visibility of the quick links menu.
 
   Background:
-    Given the following owner:
-      | name                 | type                    |
-      | Organisation example | Non-Profit Organisation |
-    And the following contact:
-      | name  | Collection editorial             |
-      | email | collection.editorial@example.com |
+    Given owner content:
+      | name                 | owner type |
+      | Organisation example | Company    |
+    And contact_information content:
+      | name                 | email                            |
+      | Collection editorial | collection.editorial@example.com |
     And collection:
       | title               | Some collection          |
       | abstract            | Some abstract            |

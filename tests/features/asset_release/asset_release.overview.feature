@@ -15,8 +15,8 @@ Feature: Asset distribution overview on solution.
     # A solution with no releases or standalone distributions has no button.
     When I go to the homepage of the "Lovely Butterfly" solution
     Then I should not see the link "Release history"
-    When I go to "/collection/end-of-past/solution/lovely-butterfly/releases"
-    Then the response status code should be 404
+    When I go to "/collection/end-past/solution/lovely-butterfly/releases"
+    Then I should see the heading "Sign in to continue"
 
     # The release numbers do not follow the creation date to ensure proper
     # ordering. "The Child of the Past" should be shown first as it is the
@@ -63,7 +63,9 @@ Feature: Asset distribution overview on solution.
 
     # Verify that the releases titles link to the release page.
     And I should see the link "The Child of the Past 1"
+    And I should see the text "Published on: 28/01/1996"
     And I should see the link "Thief in the Angels 2"
+    And I should see the text "Published on: 28/01/1995"
     When I click "The Child of the Past 1"
     Then I should see the text "The Child of the Past 1" in the "Page title" region
     And I should see the text "Latest release"

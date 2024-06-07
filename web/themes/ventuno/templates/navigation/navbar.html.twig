@@ -91,7 +91,7 @@
   <div class="container">
     <div class="d-flex">
       <a class="navbar-brand" href="{{ _brand.link }}">
-        <img class="navbar-brand-image" src="{{ _brand.src }}" alt="{{ _brand.alt }}" width="96" height="25"/>
+        <img class="navbar-brand-image" src="{{ _brand.src }}" alt="{{ _brand.alt }}" />
       </a>
     </div>
     <nav id="{{ _collapse_id }}">
@@ -105,9 +105,11 @@
                 {% set desktop_li_attributes = create_attribute() %}
                 {% set desktop_li_classes = [
                   "nav-item",
-                  "d-none",
-                  "d-" ~ item.breakpoint ~ "-inline-block",
-                  link.children ? 'dropdown'
+                  item.breakpoint != 'all' ? "d-none",
+                  item.breakpoint != 'all' ? "d-" ~ item.breakpoint ~ "-inline-block" : "d-inline-block",
+                  link.order ? "order-" ~ link.order,
+                  link.children ? 'dropdown',
+                  link.in_active_trail ? 'is-active',
                 ] %}
 
                 <li{{ desktop_li_attributes.addClass(desktop_li_classes) }}>
@@ -116,7 +118,8 @@
                     {% set desktop_a_classes = [
                       "nav-link",
                       "nav-link--underline",
-                      link.children ? 'dropdown-toggle'
+                      link.children ? 'dropdown-toggle',
+                      link.in_active_trail ? 'is-active',
                     ] %}
 
                     {% if link.children %}
@@ -129,10 +132,13 @@
                     {% if link.children %}
                       <ul class="dropdown-menu dropdown-menu--sub" aria-labelledby="{{ link_key }}">
                         {% for child in link.children %}
+                          {% set attributes = create_attribute(link.attributes|default([])) %}
+                          {% set classes = [
+                            "dropdown-item",
+                            link.in_active_trail ? 'is-active',
+                          ] %}
                           <li>
-                            <a href="{{ child.link }}" class="dropdown-item">
-                              {{ child.label }}
-                            </a>
+                            {{ link(child.label, child.link, attributes.addClass(classes)) }}
                           </li>
                         {% endfor %}
                       </ul>
@@ -173,75 +179,78 @@
             {% set _list_item_classes = _list_item_classes|merge(['d-' ~ item.breakpoint ~ '-none']) %}
           {% endif %}
           {% set list_item_attributes = list_item_attributes.addClass(_list_item_classes) %}
-          <li {{ list_item_attributes }}>
-            <button
-              id="{{ item.id }}"
-              class="dropdown-toggle nav-link"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-              type="button"
-              data-bs-auto-close="outside"
-              aria-label="{{ item.label }}"
-            >
-              <span class="visually-hidden">{{ item.label }}</span>
-              {% if item.icon is not empty %}
-                <svg class="bi icon--s">
-                  <use xlink:href="{{ bcl_icon_path }}#{{ item.icon.name }}"></use>
-                </svg>
-              {% endif %}
-            </button>
-            <div
-              {% if item.type is same as 'search' and search %}
-                id="dropdown-menu--search"
-              {% endif %}
-              class="dropdown-menu p-0"
-              aria-labelledby="{{ item.id }}"
-              data-popper-placement="right"
-            >
-              {% if item.type is same as 'search' and search %}
-                <div class="navbar-search p-2">
-                  {{ search }}
-                </div>
-              {% else %}
-                <ul class="dropdown-list">
-                  {% for link_key, link in item.links %}
-                    {% if link.link %}
-                      <li class="dropdown-list-item">
-                        {% set attributes = create_attribute(link.attributes|default([])) %}
-                        {% if link.children %}
-                          {% set attributes = attributes.setAttribute('aria-expanded', 'false') %}
-                          {% set attributes = attributes.setAttribute('id', link_key) %}
-                          {% set attributes = attributes.setAttribute('role', 'button') %}
-                          {% set attributes = attributes.setAttribute('data-bs-toggle', 'dropdown') %}
-                        {% endif %}
-
-                        <a href="{{ link.link }}" {{ attributes.addClass(['dropdown-list-link']) }}>
-                          {{ link.label }}
+          {% if not hide_toggle and not item.hide_toggle %}
+            <li {{ list_item_attributes }}>
+              <button
+                id="{{ item.id }}"
+                class="dropdown-toggle nav-link"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+                type="button"
+                data-bs-auto-close="outside"
+                aria-label="{{ item.label }}"
+              >
+                <span class="visually-hidden">{{ item.label }}</span>
+                {% if item.icon is not empty %}
+                  <svg class="bi icon--s">
+                    <use xlink:href="{{ bcl_icon_path }}#{{ item.icon.name }}"></use>
+                  </svg>
+                {% endif %}
+              </button>
+              <div
+                {% if item.type is same as 'search' and search %}
+                  id="dropdown-menu--search"
+                {% endif %}
+                class="dropdown-menu p-0"
+                aria-labelledby="{{ item.id }}"
+                data-popper-placement="right"
+              >
+                {% if item.type is same as 'search' and search %}
+                  <div class="navbar-search p-2">
+                    {{ search }}
+                  </div>
+                {% else %}
+                  <ul class="dropdown-list">
+                    {% for link_key, link in item.links %}
+                      {% if link.link %}
+                        {% set dropdown_id = link_key ~ '-dropdown'|clean_id %}
+                        <li class="dropdown-list-item">
+                          {% set attributes = create_attribute(link.attributes|default([])) %}
                           {% if link.children %}
-                            {{ pattern('icon', {
-                              name: 'chevron-down',
-                              size: 'xs',
-                            }) }}
+                            {% set attributes = attributes.setAttribute('aria-expanded', 'false') %}
+                            {% set attributes = attributes.setAttribute('id', dropdown_id) %}
+                            {% set attributes = attributes.setAttribute('role', 'button') %}
+                            {% set attributes = attributes.setAttribute('data-bs-toggle', 'dropdown') %}
                           {% endif %}
-                        </a>
-                        {% if link.children %}
-                          <ul class="dropdown-menu dropdown-menu--sub" aria-labelledby="{{ link_key }}">
-                            {% for child in link.children %}
-                              <li class="dropdown-list-item">
-                                <a href="{{ child.link }}" class="dropdown-list-link">
-                                  {{ child.label }}
-                                </a>
-                              </li>
-                            {% endfor %}
-                          </ul>
-                        {% endif %}
-                      </li>
-                    {% endif %}
-                  {% endfor %}
-                </ul>
-              {% endif %}
-            </div>
-          </li>
+
+                          <a href="{{ link.link }}" {{ attributes.addClass(['dropdown-list-link']) }}>
+                            {{ link.label }}
+                            {% if link.children %}
+                              {{ pattern('icon', {
+                                name: 'chevron-down',
+                                size: 'xs',
+                              }) }}
+                            {% endif %}
+                          </a>
+                          {% if link.children %}
+                            <ul class="dropdown-menu dropdown-menu--sub" aria-labelledby="{{ dropdown_id }}">
+                              {% for child in link.children %}
+                                <li class="dropdown-list-item">
+                                  <a href="{{ child.link }}" class="dropdown-list-link">
+                                    {{ child.label }}
+                                  </a>
+                                </li>
+                              {% endfor %}
+                            </ul>
+                          {% endif %}
+                        </li>
+                      {% endif %}
+                    {% endfor %}
+                  </ul>
+                {% endif %}
+              </div>
+            </li>
+          {% endif %}
         {% endfor %}
       </ul>
     </nav>

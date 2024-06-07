@@ -44,6 +44,14 @@ trait GroupContentTrait {
   /**
    * {@inheritdoc}
    */
+  public function setGroup(GroupInterface $group): self {
+    $this->set($this->getGroupFieldName(), $group->id());
+    return $this;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function getGroupId(): string {
     $ids = $this->getReferencedEntityIds($this->getGroupFieldName());
     if (empty($ids['rdf_entity'])) {

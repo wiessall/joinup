@@ -1,11 +1,12 @@
 {#
 /**
  * @file
- * Template for a Node.
+ * Template override for Document's full view mode.
  */
 #}
 <div class="pt-3 pb-5 border-bottom">
-  {{ content.body }}
+  {# Render every field which isn't rendered below. #}
+  {{ content|without('group_categorisation', 'group_attachment', 'report', 'share_link', 'field_shared_in', 'field_comments') }}
 </div>
 {% if content.group_categorisation|render|striptags %}
   <div class="pb-5 border-bottom my-5">
@@ -17,7 +18,7 @@
     {{ content.group_attachment }}
   </div>
 {% endif %}
-<div class="d-flex justify-content-end">
+<div class="d-flex flex-wrap align-items-end flex-row justify-content-end my-3">
   {{ content.report }}
   {{ content.share_link }}
 </div>

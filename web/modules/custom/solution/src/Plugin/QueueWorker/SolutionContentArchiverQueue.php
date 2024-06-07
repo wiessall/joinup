@@ -82,7 +82,7 @@ class SolutionContentArchiverQueue extends QueueWorkerBase implements ContainerF
     ContainerInterface $container,
     array $configuration,
     $plugin_id,
-    $plugin_definition
+    $plugin_definition,
   ): self {
     return new static(
       $configuration,

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup_event\Entity;
 
 use Drupal\Core\Url;
+use Drupal\joinup_bundle_class\AbstractTrait;
 use Drupal\joinup_bundle_class\JoinupBundleClassFieldAccessTrait;
 use Drupal\joinup_bundle_class\LogoTrait;
 use Drupal\joinup_community_content\Entity\CommunityContentBase;
@@ -18,6 +19,21 @@ class Event extends CommunityContentBase implements EventInterface {
   use JoinupBundleClassFieldAccessTrait;
   use LogoTrait;
   use ArchivableEntityTrait;
+  use AbstractTrait;
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getDescriptionField(): string {
+    return 'field_paragraphs_body';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getAbstractField(): string {
+    return 'abstract';
+  }
 
   /**
    * {@inheritdoc}

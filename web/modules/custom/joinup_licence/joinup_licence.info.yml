@@ -7,5 +7,5 @@ core_version_requirement: ">= 9.4"
 dependencies:
   - 'drupal:taxonomy'
   - 'drupal:text'
+  - 'joinup:joinup_taxonomy'
   - 'joinup:joinup_validation'
-  - 'spdx:spdx'

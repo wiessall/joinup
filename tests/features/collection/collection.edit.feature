@@ -5,12 +5,12 @@ Feature: Editing collections
   I need to be able to edit collections through the UI
 
   Scenario: Edit a collection
-    Given the following owner:
-      | name                 | type                    |
-      | Organisation example | Non-Profit Organisation |
-    And the following contact:
-      | name  | Collection editorial             |
-      | email | collection.editorial@example.com |
+    Given owner content:
+      | name                 | owner type |
+      | Organisation example | Company    |
+    And contact_information content:
+      | name                 | email                            |
+      | Collection editorial | collection.editorial@example.com |
     And collections:
       | title                 | logo     | abstract                                   | access url                             | closed | creation date    | description                               | content creation         | moderation | topic             | owner                | contact information  | state |
       | Überwaldean Land Eels | logo.png | Read up on all about <strong>dogs</strong> | http://dogtime.com/dog-breeds/profiles | yes    | 28-01-1995 12:05 | The Afghan Hound is elegance personified. | facilitators and authors | yes        | Supplier exchange | Organisation example | Collection editorial | draft |
@@ -26,7 +26,7 @@ Feature: Editing collections
     And the following fields should not be present "Langcode, Translation, Affiliates, Enable the search field, Query presets, Limit"
     And I should see "Short description text of the collection. Appears on the Overview page."
     And I should see "Add a country name relevant to the content of this collection."
-    And the "Description" wysiwyg editor should have the buttons "Heading,Bold,Italic,Remove Format,Link,Contact us,Bulleted list,Numbered list,Outdent,Indent,Block quote,File,Drupal media,table,Undo,Redo,Source,Code,Code Block"
+    And the "Description" wysiwyg editor should have the buttons "Heading,Style,Bold,Italic,Remove Format,Link,Contact us,Bulleted list,Numbered list,Outdent,Indent,Block quote,File,Drupal media,table,Undo,Redo,Source,Code,Code Block"
 
     # Query builder is disabled in collections.
     But I should not see the button "Add and configure filter"
@@ -39,15 +39,15 @@ Feature: Editing collections
   @javascript
   Scenario: Edit a collection wysiwyg modal should close.
     # Regression test for ticket ISAICP-7181 and ISAICP-8355.
-    Given the following owner:
-      | name            | type                    |
-      | wysiwyg example | Non-Profit Organisation |
-    And the following contact:
-      | name  | wysiwyg editorial             |
-      | email | wysiwyg.editorial@example.com |
+    Given owner content:
+      | name            | owner type |
+      | wysiwyg example | Company    |
+    And contact_information content:
+      | name              | email                         |
+      | wysiwyg editorial | wysiwyg.editorial@example.com |
     And collections:
-      | title           | logo     | abstract                                   | access url                             | closed | creation date    | description                    | content creation         | moderation | topic             | owner           | contact information  | state |
-      | Rhyme Land Eels | logo.png | Read up on all about <strong>dogs</strong> | http://dogtime.com/dog-breeds/profiles | yes    | 28-01-1995 12:05 | Hound is elegance personified. | facilitators and authors | yes        | Supplier exchange | wysiwyg example | wysiwyg editorial    | draft |
+      | title           | logo     | abstract                                   | access url                             | closed | creation date    | description                    | content creation         | moderation | topic             | owner           | contact information | state |
+      | Rhyme Land Eels | logo.png | Read up on all about <strong>dogs</strong> | http://dogtime.com/dog-breeds/profiles | yes    | 28-01-1995 12:05 | Hound is elegance personified. | facilitators and authors | yes        | Supplier exchange | wysiwyg example | wysiwyg editorial   | draft |
     When I am logged in as a facilitator of the "Rhyme Land Eels" collection
     And I go to the homepage of the "Rhyme Land Eels" collection
 
@@ -70,15 +70,15 @@ Feature: Editing collections
   @javascript
   Scenario: Regression test wysiwyg add file shows a 0 bytes limit.
     # Regression test for ticket ISAICP-7177.
-    Given the following owner:
-      | name                       | type                    |
-      | Regression wysiwyg example | Non-Profit Organisation |
-    And the following contact:
-      | name  | bytes editorial             |
-      | email | bytes.editorial@example.com |
+    Given owner content:
+      | name                       | owner type |
+      | Regression wysiwyg example | Company    |
+    And contact_information content:
+      | name            | email                       |
+      | bytes editorial | bytes.editorial@example.com |
     And collections:
-      | title           | logo     | abstract                                   | access url                             | closed | creation date    | description                    | content creation         | moderation | topic             | owner                      | contact information  | state |
-      | Rhyme Land wysiwyg Eels | logo.png | Read up on all about <strong>dogs</strong> | http://dogtime.com/dog-breeds/profiles | yes    | 28-01-1995 12:05 | Hound is elegance personified. | facilitators and authors | yes        | Supplier exchange | Regression wysiwyg example | bytes editorial      | draft |
+      | title                   | logo     | abstract                                   | access url                             | closed | creation date    | description                    | content creation         | moderation | topic             | owner                      | contact information | state |
+      | Rhyme Land wysiwyg Eels | logo.png | Read up on all about <strong>dogs</strong> | http://dogtime.com/dog-breeds/profiles | yes    | 28-01-1995 12:05 | Hound is elegance personified. | facilitators and authors | yes        | Supplier exchange | Regression wysiwyg example | bytes editorial     | draft |
     When I am logged in as a facilitator of the "Rhyme Land wysiwyg Eels" collection
     And I go to the homepage of the "Rhyme Land wysiwyg Eels" collection
 

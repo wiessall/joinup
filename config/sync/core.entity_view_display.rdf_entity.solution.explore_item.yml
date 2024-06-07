@@ -12,8 +12,6 @@ dependencies:
     - field.field.rdf_entity.solution.field_is_description
     - field.field.rdf_entity.solution.field_is_distribution
     - field.field.rdf_entity.solution.field_is_documentation
-    - field.field.rdf_entity.solution.field_is_eif_category
-    - field.field.rdf_entity.solution.field_is_eif_recommendation
     - field.field.rdf_entity.solution.field_is_has_version
     - field.field.rdf_entity.solution.field_is_included_asset
     - field.field.rdf_entity.solution.field_is_issue_tracker
@@ -111,12 +109,22 @@ third_party_settings:
                   class: ''
                   style: ''
                   data: ''
-          4044431f-0d0a-46f8-af2f-aa11270f596a:
-            uuid: 4044431f-0d0a-46f8-af2f-aa11270f596a
+          0e4a6d85-b472-49b2-adb9-c6ff451c9e1b:
+            uuid: 0e4a6d85-b472-49b2-adb9-c6ff451c9e1b
             region: content
             configuration:
-              id: 'field_block:rdf_entity:solution:created'
-              label: 'Authored on'
+              id: 'extra_field_block:rdf_entity:solution:read_more'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+            weight: 4
+            additional: {  }
+          121b7af6-509b-49c5-a9e7-0dcc3b875b94:
+            uuid: 121b7af6-509b-49c5-a9e7-0dcc3b875b94
+            region: content
+            configuration:
+              id: 'field_block:rdf_entity:solution:changed'
+              label: 'Changed on'
               label_display: '0'
               provider: layout_builder
               context_mapping:
@@ -159,16 +167,6 @@ third_party_settings:
                   class: ''
                   style: ''
                   data: ''
-          0e4a6d85-b472-49b2-adb9-c6ff451c9e1b:
-            uuid: 0e4a6d85-b472-49b2-adb9-c6ff451c9e1b
-            region: content
-            configuration:
-              id: 'extra_field_block:rdf_entity:solution:read_more'
-              label_display: '0'
-              context_mapping:
-                entity: layout_builder.entity
-            weight: 3
-            additional: {  }
         third_party_settings: {  }
 id: rdf_entity.solution.explore_item
 targetEntityType: rdf_entity
@@ -190,8 +188,6 @@ hidden:
   field_is_description: true
   field_is_distribution: true
   field_is_documentation: true
-  field_is_eif_category: true
-  field_is_eif_recommendation: true
   field_is_has_version: true
   field_is_included_asset: true
   field_is_issue_tracker: true

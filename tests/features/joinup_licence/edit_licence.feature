@@ -5,9 +5,9 @@ Feature: Edit licence through UI
   I need to be able to edit licences through the UI.
 
   Scenario Outline: Moderators and Licence Managers must be able to view created licences and edit them.
-    Given the following licence:
-      | title       | Licence 1              |
-      | description | Some dummy description |
+    Given licence content:
+      | title     | description            |
+      | Licence 1 | Some dummy description |
     When I am logged in as a "<role>"
     And I am on the homepage
     When I click "Dashboard"
@@ -22,11 +22,11 @@ Feature: Edit licence through UI
     When I click "Edit"
     And I fill in "Title" with "Licence 1.1"
     And I fill in "Description" with "This is some different description."
-    And I select "Attribution" from "Type"
+    And I select "Public domain" from "Type"
     And I press "Save"
     Then I should see the heading "Licence 1.1"
 
     Examples:
-      | role |
-      | moderator |
+      | role            |
+      | moderator       |
       | licence_manager |

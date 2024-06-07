@@ -4,7 +4,7 @@
     "type": "project",
     "license": "EUPL-1.2",
     "require": {
-        "php": ">=8.2",
+        "php": ">=8.3",
         "ext-dom": "*",
         "ext-json": "*",
         "ext-mbstring": "*",
@@ -16,16 +16,16 @@
         "drupal/addtocal": "^3.0",
         "drupal/allowed_formats": "^3.0",
         "drupal/antibot": "^2.0",
-        "drupal/autologout": "^1.4",
+        "drupal/autologout": "^2.0",
         "drupal/cached_computed_field": "^1.0",
         "drupal/cas": "^2.0",
         "drupal/cas_attributes": "^2.0",
         "drupal/changed_fields": "^3.2",
-        "drupal/ckeditor": "^1.0",
+        "drupal/colorbox": "^2.0",
         "drupal/config_ignore": "^3.0",
         "drupal/config_readonly": "^1.0",
-        "drupal/core": "~10.2",
-        "drupal/core-composer-scaffold": "~10.2",
+        "drupal/core": "~10.2.2",
+        "drupal/core-composer-scaffold": "~10.2.2",
         "drupal/custom_markup_block": "^1.2",
         "drupal/default_content": "^2.0",
         "drupal/diff": "~1.0",
@@ -34,7 +34,7 @@
         "drupal/dynamic_entity_reference": "^4.0",
         "drupal/editor_file": "^2.0",
         "drupal/email_confirmer": "^1.0",
-        "drupal/email_contact": "^2.0",
+        "drupal/email_contact": "^2.0.4",
         "drupal/embed_block": "^1.0",
         "drupal/entity_legal": "^4.0",
         "drupal/entityqueue": "^1.2",
@@ -72,12 +72,11 @@
         "drupal/page_manager": "^4.0@beta",
         "drupal/paragraphs": "^1.12",
         "drupal/pathauto": "~1.8",
-        "drupal/pipeline": "^1.0",
         "drupal/poll": "^1.6",
         "drupal/publication_date": "^2.0",
         "drupal/queue_ui": "^3.1",
         "drupal/rdf_entity": "^2.0",
-        "drupal/rdf_meta_entity": "^1.0",
+        "drupal/rdf_sync": "^1.0",
         "drupal/redirect": "^1.6",
         "drupal/role_delegation": "^1.2",
         "drupal/schema_digital_document": "^1.0",
@@ -90,6 +89,7 @@
         "drupal/simple_block": "^1.3",
         "drupal/simple_sitemap": "^4.0",
         "drupal/sitewide_alert": "^2.1",
+        "drupal/slick": "^2",
         "drupal/smart_trim": "^2.1",
         "drupal/social_media_links": "^2.7",
         "drupal/state_machine": "^1.0",
@@ -107,7 +107,6 @@
         "drupal/views_multiple_permissions": "^2.0",
         "drupal/webform": "^6.2",
         "drush/drush": "^12.1",
-        "ec-europa/spdx": "^1.0",
         "openeuropa/composer-artifacts": "^1.0",
         "openeuropa/gisco-geocoding-provider": "^1.0",
         "openeuropa/oe_bootstrap_theme": "^1.0",
@@ -132,8 +131,7 @@
         "drupal/filecache": "^1.1",
         "drupal/http_request_mock": "^1.1",
         "drupal/masquerade": "^2.0@RC",
-        "drupal/renderviz": "^1.0",
-        "drupal/stage_file_proxy": "^2.1",
+        "drupal/stage_file_proxy": "^2.1.4",
         "drupal/upgrade_status": "^4.0",
         "drupaltest/behat-one-time-login": "^1.0",
         "ec-europa/toolkit": "^10.5",
@@ -141,6 +139,7 @@
         "gitonomy/gitlib": "^1.4",
         "lovers-of-behat/table-extension": "^1.4",
         "mikey179/vfsstream": "~1.6",
+        "ml/json-ld": "^1.2",
         "palantirnet/drupal-rector": "^0.12.2",
         "pear/http_request2": "~2.4",
         "php-task-runner/composer": "dev-toolkit-runner",
@@ -163,7 +162,7 @@
     "config": {
         "sort-packages": true,
         "platform": {
-            "php": "8.2"
+            "php": "8.3"
         },
         "allow-plugins": {
             "dealerdirect/phpcodesniffer-composer-installer": true,
@@ -172,7 +171,8 @@
             "drupal/core-composer-scaffold": true,
             "openeuropa/composer-artifacts": true,
             "phpstan/extension-installer": true,
-            "php-http/discovery": true
+            "php-http/discovery": true,
+            "ec-europa/toolkit-composer-plugin": true
         }
     },
     "autoload": {
@@ -191,8 +191,7 @@
             "web/modules/contrib/message_digest/src/Traits/MessageDigestContextTrait.php",
             "web/modules/contrib/message_digest/src/Traits/MessageDigestTrait.php",
             "web/modules/contrib/og_menu/src/Tests/Traits/OgMenuTrait.php",
-            "web/modules/contrib/pipeline/src/Traits/PipelineContextTrait.php",
-            "web/modules/contrib/spdx/src/Traits/SpdxContextTrait.php"
+            "scripts/composer/ComposerPatches.php"
         ],
         "files": [
             "src/Composer/load.environment.php"
@@ -202,16 +201,16 @@
             "Drupal\\Tests\\cas_mock_server\\": "web/modules/contrib/cas_mock_server/tests/src",
             "Drupal\\Tests\\honeypot\\": "web/modules/contrib/honeypot/tests/src",
             "Drupal\\Tests\\message_digest\\": "web/modules/contrib/message_digest/tests/src",
-            "Drupal\\Tests\\oe_webtools\\": "web/modules/contrib/oe_webtools/tests",
-            "Drupal\\Tests\\pipeline\\": "web/modules/contrib/pipeline/tests/src",
-            "Drupal\\Tests\\spdx\\": "web/modules/contrib/spdx/tests/src"
+            "Drupal\\Tests\\oe_webtools\\": "web/modules/contrib/oe_webtools/tests"
         }
     },
     "scripts": {
         "post-install-cmd": [
+            "Joinup\\composer\\ComposerPatches::validate",
             "./scripts/composer/post_install"
         ],
         "post-update-cmd": [
+            "Joinup\\composer\\ComposerPatches::validate",
             "./scripts/composer/post_update"
         ]
     },
@@ -256,11 +255,15 @@
             "drupal/core": "-p2"
         },
         "patches": {
-            "drupal/autologout": {
-                "Warning: Undefined array key @see https://www.drupal.org/project/autologout/issues/3372010": "resources/patch/php/drupal/autologout/3372010.diff"
+            "drupal/addtocal": {
+                "Uncaught TypeError: $(...).once is not a function @see https://www.drupal.org/project/addtocal/issues/3372354": "resources/patch/php/drupal/addtocal/3372354.patch"
             },
-            "drupal/cas": {
-                "Should CAS respect Drupal registration configuration @see https://www.drupal.org/project/cas/issues/3038279": "resources/patch/php/drupal/cas/3038279.patch"
+            "drupal/autologout": {
+                "Warning: Undefined array key @see https://www.drupal.org/project/autologout/issues/3372010": "resources/patch/php/drupal/autologout/3372010.diff",
+                "Users with no roles are logged out @see https://www.drupal.org/project/autologout/issues/3443711": "resources/patch/php/drupal/autologout/3443711.diff"
+            },
+            "drupal/colorbox": {
+                "Support Responsive Image module in D8 @see https://drupal.org/i/2808883": "resources/patch/php/drupal/colorbox/colorbox-responsive-image-2808883-69.patch"
             },
             "drupal/core": {
                 "Allow image style to be selected in text editor @see https://www.drupal.org/node/2061377": "resources/patch/php/drupal/core/2061377-d10.2-455.diff",
@@ -269,24 +272,26 @@
                 "Regression: Do not bypass route access with 'link to any page' permissions for menu links @see https://www.drupal.org/project/drupal/issues/2463753": "resources/patch/php/drupal/core/2463753.patch",
                 "Upcast named arguments/named parameters in views @see https://www.drupal.org/project/drupal/issues/2528166": "resources/patch/php/drupal/core/2528166.patch",
                 "Confirmation cancel links are incorrect if installed in a subdirectory @see https://www.drupal.org/project/drupal/issues/2582295": "resources/patch/php/drupal/core/2582295.patch",
-                "Allow plurals on bundle labels @see https://www.drupal.org/node/2765065": "resources/patch/php/drupal/core/2765065.patch",
                 "Enlarge file_usage entity ID length. @see https://www.drupal.org/node/2675600": "resources/patch/php/drupal/core/2675600.diff",
-                "Menu link plugins should provide a way for the link to be conditionally hidden @see https://www.drupal.org/project/drupal/issues/2719609": "resources/patch/php/drupal/core/2719609.patch",
-                "Add thread depth configuration to comments. Includes patch for parent issue #2879087. @see https://www.drupal.org/project/drupal/issues/2786587 @see https://www.drupal.org/project/drupal/issues/2879087": "resources/patch/php/drupal/core/2879087.patch",
+                "Menu link plugins should provide a way for the link to be conditionally hidden @see https://www.drupal.org/i/2719609": "resources/patch/php/drupal/core/2719609.patch",
+                "Allow plurals on bundle labels @see https://www.drupal.org/i/2765065": "resources/patch/php/drupal/core/2765065.patch",
+                "Add thread depth configuration to comments. Includes patch for parent issue #2879087. @see https://www.drupal.org/i/2786587 @see https://www.drupal.org/i/2879087": "resources/patch/php/drupal/core/2879087.patch",
                 "Set fixed depth for comment threads.": "resources/patch/php/drupal/core/2786587-thread-depth-fixed-limit.patch",
                 "Add option to show only start or end date in the DateTime Range custom formatter @see https://www.drupal.org/project/drupal/issues/2827055": "resources/patch/php/drupal/core/2827055.patch",
                 "Views with a different query plugin created via the UI do not have the correct query plugin ID in the view config @see https://www.drupal.org/project/drupal/issues/2836237": "resources/patch/php/drupal/core/2836237.patch",
                 "Pass current route parameters to the confirmation form route @see https://www.drupal.org/project/drupal/issues/2901412": "resources/patch/php/drupal/core/2901412.patch",
-                "Allow adding computed bundle fields in Views @see https://drupal.org/i/2981047#mr4139-note200447": "resources/patch/php/drupal/core/2981047-mr4224-note200448.diff",
                 "Cache tags are not invalidated on revision delete @see https://www.drupal.org/project/drupal/issues/2945928": "resources/patch/php/drupal/core/2945928.patch",
                 "Have responsive image module ignore svg @see https://www.drupal.org/project/drupal/issues/2957924": "resources/patch/php/drupal/core/2957924.patch",
-                "Restrict images to this site\" restricts images that, by definition, *are* on this site @see https://www.drupal.org/project/drupal/issues/2998318": "resources/patch/php/drupal/core/2998318.patch",
+                "Allow adding computed bundle fields in Views @see https://drupal.org/i/2981047#mr4139-note200447": "resources/patch/php/drupal/core/2981047-mr4224-note200448.diff",
+                "Restrict images to this site\" restricts images that, by definition, *are* on this site @see https://www.drupal.org/i/2998318": "resources/patch/php/drupal/core/2998318.patch",
                 "Make it easier to trigger a tour @see https://www.drupal.org/project/drupal/issues/3012027": "resources/patch/php/drupal/core/3012027.patch",
                 "Layout builder doesn't support bundle computed field @see https://drupal.org/i/3034979": "resources/patch/php/drupal/core/layoutbuilder-bundlecomputedfieldsfix-3034979-3-8.6x.patch",
                 "Cannot implement a custom user cancellation method @see https://www.drupal.org/project/drupal/issues/3135592": "resources/patch/php/drupal/core/3135592.patch",
                 "If you don't set the \"version\" of a profile, the report/status displays an empty dash @see https://www.drupal.org/project/drupal/issues/3270892": "resources/patch/php/drupal/core/3270892.patch",
-                "Transaction autocommit during shutdown relies on unreliable object destruction order @see https://www.drupal.org/i/3405976": "resources/patch/php/drupal/core/3405976.diff",
-                "Views Block Display skips preBlockBuild() call on ajax rebuild https://www.drupal.org/i/2605218": "resources/patch/php/drupal/core/2605218-134.diff"
+                "Views Block Display skips preBlockBuild() call on ajax rebuild https://www.drupal.org/i/2605218": "resources/patch/php/drupal/core/2605218-134.diff",
+                "Deprecated function: strnatcasecmp(): Passing null to parameter #1 ($string1) of type string is deprecated in LayoutPluginManager https://www.drupal.org/i/3392572": "resources/patch/php/drupal/core/3392572.patch",
+                "PHP deprecation error in PhpMail::mail @see https://www.drupal.org/project/drupal/issues/3418098": "resources/patch/php/drupal/core/3418098.diff",
+                "Set the toolbar to position fixed on mobile (for group banner positioning and toolbar on mobile) @see https://www.drupal.org/project/drupal/issues/2516938": "resources/patch/php/drupal/core/3809.diff"
             },
             "drupal/default_content": {
                 "Allow manual imports @see https://www.drupal.org/i/2640734": "resources/patch/php/drupal/default_content/2640734.diff"
@@ -299,10 +304,6 @@
             },
             "drupal/email_confirmer": {
                 "Support for HTML mails @see https://www.drupal.org/i/3047124": "resources/patch/php/drupal/email_confirmer/3047124.diff"
-            },
-            "drupal/email_contact": {
-                "Move form creation in a protected method from ContactController::content() to ContactController::getForm() @see https://www.drupal.org/project/email_contact/issues/3346470": "resources/patch/php/drupal/email_contact/3346470.patch",
-                "Deprecated dynamic creation of property @see https://www.drupal.org/project/email_contact/issues/3397818": "resources/patch/php/drupal/email_contact/3397818.patch"
             },
             "drupal/entityqueue": {
                 "Undefined array key \"add_more\" @see https://www.drupal.org/project/entityqueue/issues/3388852": "resources/patch/php/drupal/entityqueue/3388852.diff"
@@ -329,7 +330,8 @@
             "drupal/file_url": {
                 "Handle deleted files @see https://www.drupal.org/project/file_url/issues/3326758": "resources/patch/php/drupal/file_url/3326758.diff",
                 "No link template 'canonical' found @see https://www.drupal.org/project/file_url/issues/3346487": "resources/patch/php/drupal/file_url/3346487.diff",
-                "Error thrown when local file does not exist upon deletion @see https://www.drupal.org/project/file_url/issues/3393473": "resources/patch/php/drupal/file_url/3393473.diff"
+                "Error thrown when local file does not exist upon deletion @see https://www.drupal.org/project/file_url/issues/3393473": "resources/patch/php/drupal/file_url/3393473.diff",
+                "Do not assume that a file with the given target_id exists @see https://drupal.org/i/3440231": "resources/patch/php/drupal/file_url/3440231.diff"
             },
             "drupal/flag": {
                 "TypeError: Argument 1 passed to FlagCount::count() must implement interface @see https://www.drupal.org/project/flag/issues/3168014": "resources/patch/php/drupal/flag/3168014-46.patch",
@@ -353,11 +355,14 @@
                 "Allow to drag and drop nested paragraphs @see https://www.drupal.org/project/layout_paragraphs/issues/3401176": "resources/patch/php/drupal/layout_paragraphs/3401176.patch",
                 "Buttons are duplicated when form has validation errors. @see https://www.drupal.org/i/3265794": "resources/patch/php/drupal/layout_paragraphs/3265794.diff"
             },
-            "drupal/message": {
-                "[Drupal 10.2] Deprecated sequence type schema definition @see https://www.drupal.org/i/3410267": "resources/patch/php/drupal/message/3410267.diff"
+            "drupal/menu_link_destination": {
+                "Error: Call to a member function getOption() on null @see https://www.drupal.org/project/menu_link_destination/issues/3251757": "resources/patch/php/drupal/menu_link_destination/menu_link_destination-fatal_error_when-no_url-3251757-15.patch"
             },
             "drupal/message_notify": {
                 "Allow 3rd-party to act before delivery @see https://www.drupal.org/project/message_notify/issues/3314370": "resources/patch/php/drupal/message_notify/3314370.diff"
+            },
+            "drupal/meta_entity": {
+                "Target entity tags should be invalidated even if meta entity is new @see https://drupal-org/i/3422612": "resources/patch/php/drupal/meta_entity/meta_entity-target_entity_cache_tags-3422612-7.diff"
             },
             "drupal/og": {
                 "The annotations for \"edit-form\" and \"delete-form\" @see https://www.drupal.org/project/og/issues/3338830": "resources/patch/php/drupal/og/3338830.diff",
@@ -374,13 +379,8 @@
                 "Add permissions to edit all polls @see https://www.drupal.org/project/poll/issues/3274724": "resources/patch/php/drupal/poll/3274724-4.patch",
                 "User can stuck on View results @see https://www.drupal.org/project/poll/issues/3405509": "resources/patch/php/drupal/poll/3405509.patch"
             },
-            "drupal/publication_date": {
-                "Fix PHP 8.2 deprecation issue with PublishedAtOrNowComputed class @see https://www.drupal.org/project/publication_date/issues/3328575": "resources/patch/php/drupal/publication_date/3328575.patch"
-            },
             "drupal/rdf_entity": {
-                "Allow bundle label plural variants @see https://github.com/ec-europa/rdf_entity/pull/12": "resources/patch/php/drupal/rdf_entity/ea8f6af001fca732e89a4be0e29643953f49a88f.diff",
-                "rdf_taxonomy generates a fatal error on the latest devel version @see https://www.drupal.org/project/rdf_entity/issues/3389721": "resources/patch/php/drupal/rdf_entity/3389721.diff",
-                "Allow new entities to be rendered @see https://www.drupal.org/project/rdf_entity/issues/3413718": "resources/patch/php/drupal/rdf_entity/3413718.diff"
+                "Allow bundle label plural variants @see https://github.com/ec-europa/rdf_entity/pull/12": "resources/patch/php/drupal/rdf_entity/ea8f6af001fca732e89a4be0e29643953f49a88f.diff"
             },
             "drupal/search_api": {
                 "item_id column is too short @see https://www.drupal.org/node/2829696": "resources/patch/php/drupal/search_api/2829696.patch",
@@ -396,11 +396,6 @@
                 "URL don't include the base path @see https://www.drupal.org/project/search_api_spellcheck/issues/3280372": "resources/patch/php/drupal/search_api_spellcheck/3280372.patch",
                 "PHP Notice Array to string conversion @see https://www.drupal.org/project/search_api_spellcheck/issues/3265659": "resources/patch/php/drupal/search_api_spellcheck/3265659-3.patch"
             },
-            "drupal/smart_trim": {
-                "Avoid max nesting level during development @see https://www.drupal.org/project/smart_trim/issues/3013628": "resources/patch/php/drupal/smart_trim/3013628.patch",
-                "Space inserted before full stop, comma, etc @see https://www.drupal.org/project/smart_trim/issues/3369954": "resources/patch/php/drupal/smart_trim/3369954.diff",
-                "Remove token_browser from saved configuration of formatter @see https://www.drupal.org/i/3368694": "resources/patch/php/drupal/smart_trim/3368694.diff"
-            },
             "drupal/social_media_links": {
                 "Missing config schema for field, widget and formatter @see https://www.drupal.org/node/2898680": "resources/patch/php/drupal/social_media_links/2898680.patch",
                 "Mastodon should not have a fixed URL prefix. @see https://www.drupal.org/project/social_media_links/issues/3319694": "resources/patch/php/drupal/social_media_links/3319694.patch",
@@ -411,9 +406,19 @@
                 "Interface contract violation @see https://drupal.org/i/3379328": "resources/patch/php/drupal/sparql_entity_storage/3379328.patch",
                 "Error when deleting a vocabulary @see https://www.drupal.org/i/3421694": "resources/patch/php/drupal/sparql_entity_storage/3421694.diff"
             },
+            "drupal/state_machine": {
+                "Do not force default state in options. @see https://www.drupal.org/project/state_machine/issues/2746091": "resources/patch/php/drupal/state_machine/2746091.diff"
+            },
             "drupal/svg_image": {
                 "SVG is not valid or cannot be sanitized, return an error. @see https://www.drupal.org/i/3350696": "resources/patch/php/drupal/svg_image/3350696.patch",
-                "Upload a SVG from CKEditor (image inline). @see https://www.drupal.org/i/3093972": "resources/patch/php/drupal/svg_image/3093972.patch"
+                "SvgImageWidget should inherit from ImageWidget instead of FileWidget @see https://www.drupal.org/project/svg_image/issues/3420037": "resources/patch/php/drupal/svg_image/3420037.patch",
+                "The 'image_loading' attribute is not respected - https://www.drupal.org/project/svg_image/issues/3275057": "resources/patch/php/drupal/svg_image/3275057-14.patch"
+            },
+            "drupal/stage_file_proxy": {
+                "Fetching does not respect use_imagecache_root when using converted webp image styles @see https://www.drupal.org/i/3402972": "resources/patch/php/drupal/stage_file_proxy/stage_file_proxy-3402972-MR-28f616d8--without-method.diff"
+            },
+            "drupal/ui_patterns_settings": {
+                "Fix TypeError: array_unshift(): Argument #1 ($array) must be of type array, null given in array_unshift() Caused by Deprecated Hooks in Drupal ~10.2.0 @see https://www.drupal.org/i/3409221": "resources/patch/php/drupal/ui_patterns_settings/ui_patterns_settings-3409221-26.patch"
             },
             "drupal/video_embed_field": {
                 "Extend support for embed URLs. Option to force privacy @see https://www.drupal.org/project/video_embed_field/issues/3060201 (originally on https://www.drupal.org/node/2899093)": "resources/patch/php/drupal/video_embed_field/3060201.patch",
@@ -424,10 +429,11 @@
                 "Stop auto submitting first character entered in an Autocomplete Filter field. @see https://www.drupal.org/project/views_autosubmit/issues/3160600" : "resources/patch/php/drupal/views_autosubmit/3160600.patch"
             },
             "drupal/webform": {
-                "Radios or Checkboxes inside Composite not saved @see https://www.drupal.org/project/webform/issues/3216923": "resources/patch/php/drupal/webform/368.diff"
+                "Radios or Checkboxes inside Composite not saved @see https://www.drupal.org/project/webform/issues/3216923": "resources/patch/php/drupal/webform/368.diff",
+                "Webform might create invalid link renderable arrays on submission list. @see https://www.drupal.org/project/webform/issues/3441600": "resources/patch/php/drupal/webform/3441600.patch"
             },
-            "ec-europa/toolkit": {
-                "DROPSEC-8519: Correctly parse the .env files @see https://github.com/ec-europa/toolkit/pull/744": "resources/patch/php/ec-europa/toolkit/744.diff"
+            "sweetrdf/easyrdf": {
+                "Add a method to remove resources from graph @see https://github.com/sweetrdf/easyrdf/pull/44": "resources/patch/php/sweetrdf/easyrdf/44.diff"
             }
         },
         "artifacts": {
@@ -447,18 +453,6 @@
     },
     "repositories": [
         {
-            "type": "package",
-            "package": {
-                "name": "spdx/license-list-data",
-                "version": "master",
-                "source": {
-                    "url": "https://github.com/spdx/license-list-data",
-                    "type": "git",
-                    "reference": "main"
-                }
-            }
-        },
-        {
             "type": "vcs",
             "url": "https://github.com/openeuropa/oe_dashboard_agent.git"
         },
@@ -477,10 +471,6 @@
                     "reference": "master"
                 }
             }
-        },
-        {
-            "type": "vcs",
-            "url": "https://github.com/ec-europa/virtuoso.git"
         }
     ]
 }
