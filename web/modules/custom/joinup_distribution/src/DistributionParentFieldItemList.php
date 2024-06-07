@@ -7,7 +7,7 @@ namespace Drupal\joinup_distribution;
 use Drupal\Core\Field\EntityReferenceFieldItemList;
 use Drupal\Core\TypedData\ComputedItemListTrait;
 use Drupal\asset_release\Entity\AssetReleaseInterface;
-use Drupal\rdf_entity\RdfInterface;
+use Drupal\joinup_distribution\Entity\DistributionInterface;
 use Drupal\solution\Entity\SolutionInterface;
 use Drupal\sparql_entity_storage\Entity\Query\Sparql\SparqlQueryInterface;
 
@@ -70,7 +70,7 @@ class DistributionParentFieldItemList extends EntityReferenceFieldItemList {
   /**
    * Returns the parent of the distribution host entity.
    *
-   * @param \Drupal\rdf_entity\RdfInterface $distribution
+   * @param \Drupal\joinup_distribution\Entity\DistributionInterface $distribution
    *   The distribution entity.
    *
    * @return string|null
@@ -79,7 +79,7 @@ class DistributionParentFieldItemList extends EntityReferenceFieldItemList {
    * @throws \Exception
    *   When the distribution has more than one parent.
    */
-  protected function getParentId(RdfInterface $distribution): ?string {
+  protected function getParentId(DistributionInterface $distribution): ?string {
     $ids = $this->getQuery($distribution)->execute();
     return reset($ids) ?: NULL;
   }
@@ -87,13 +87,13 @@ class DistributionParentFieldItemList extends EntityReferenceFieldItemList {
   /**
    * Returns the query used to determine the parent ID.
    *
-   * @param \Drupal\rdf_entity\RdfInterface $distribution
+   * @param \Drupal\joinup_distribution\Entity\DistributionInterface $distribution
    *   The distribution entity.
    *
    * @return \Drupal\sparql_entity_storage\Entity\Query\Sparql\SparqlQueryInterface
    *   The query used to determine the parent ID.
    */
-  protected function getQuery(RdfInterface $distribution): SparqlQueryInterface {
+  protected function getQuery(DistributionInterface $distribution): SparqlQueryInterface {
     /** @var \Drupal\sparql_entity_storage\Entity\Query\Sparql\SparqlQueryInterface $query */
     $query = \Drupal::entityQuery('rdf_entity', 'OR')
       ->condition('field_is_distribution', $distribution->id())
