@@ -50,6 +50,9 @@ function joinup_rdf_deploy_110406(array &$sandbox): string {
         // Remove the reverse reference, if case.
         $group = Rdf::load($groupUri);
         $distributionFieldName = $group instanceof SolutionInterface ? 'field_is_distribution' : 'field_isr_distribution';
+        if (!$group->hasField($distributionFieldName)) {
+          continue;
+        }
         $field = $group->get($distributionFieldName);
         $initial = $field->getString();
         $group->get($distributionFieldName)->filter(function (EntityReferenceItem $item) use ($uri): bool {

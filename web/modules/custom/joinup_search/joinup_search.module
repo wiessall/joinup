@@ -15,6 +15,7 @@ use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Template\Attribute;
+use Drupal\search_api\IndexInterface;
 use Drupal\search_api\Query\ConditionGroupInterface;
 use Drupal\views\ViewExecutable;
 
