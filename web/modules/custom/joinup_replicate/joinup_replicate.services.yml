@@ -8,3 +8,8 @@ services:
 
   joinup_replicate.route_subscriber:
     class: Drupal\joinup_replicate\RouteSubscriber\RouteSubscriber
+
+  joinup_replicate.replicate_actions.replicate_entity_edit:
+    class: Drupal\joinup_replicate\JoinupReplicateSetEntityEdit
+    decorates: replicate_actions.replicate_entity_edit
+    public: false
