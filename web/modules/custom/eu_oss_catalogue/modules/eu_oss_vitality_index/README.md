@@ -16,10 +16,10 @@ and currently officially implemented within the
 updated once a week within this catalogue) taking into consideration the
 following four categories:*
 
-- ***Code activity**: the number of commits and merges per day,*
-- ***Release history**: the number of releases per day,*
-- ***User community**: the number of unique authors,*
-- ***Longevity**: the age of the project,*
+- * **Code activity**: the number of commits and merges per day,*
+- * **Release history**: the number of releases per day,*
+- * **User community**: the number of unique authors,*
+- * **Longevity**: the age of the project,*
 
 *The ranges of each measurement can be found in the file
 [vitality-ranges.yml](https://github.com/italia/publiccode-crawler/blob/main/vitality-ranges.yml).*
@@ -34,3 +34,17 @@ Catalogue, according to eu_oss_vitality_index_cron job, feeding an
 eu_oss_vitality_index worker queue.
 
 
+### Triggering the process
+
+The module ships with a Drush command that allows to fetch Vitality Index
+for existing solutions from the command line.
+
+Run the following, to perform Vitality Index queue worker:
+```bash
+./vendor/bin/drush queue:run eu_oss_vitality_index
+```
+
+Run the following, to fetch Vitality Index for a specific OSS solution:
+```bash
+./vendor/bin/drush eu-oss:generate-vitality-index <NODE_ID>
+```

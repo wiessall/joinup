@@ -62,6 +62,13 @@ class DevelopersItalia extends EuOssCatalogueProviderPluginBase {
   protected array $yamlContent = [];
 
   /**
+   * Number of solutions provided by API.
+   *
+   * @var int
+   */
+  protected int $numberOfProvidedSolutions = 0;
+
+  /**
    * Constructs a new plugin instance.
    *
    * @param array $configuration
@@ -116,6 +123,7 @@ class DevelopersItalia extends EuOssCatalogueProviderPluginBase {
   public function fetch(): iterable {
     if (!isset($this->fetched)) {
       $this->fetched = [];
+      $this->numberOfProvidedSolutions = 0;
       $this->doFetch();
     }
 
@@ -190,21 +198,26 @@ class DevelopersItalia extends EuOssCatalogueProviderPluginBase {
         );
       }
 
+      $this->numberOfProvidedSolutions += count($read['data']);
       foreach ($read['data'] as $newItem) {
+        $projectInfo = self::ENDPOINT . '/' . $newItem['id'];
         try {
           $decoded = Yaml::decode($newItem['publiccodeYml']);
         }
-        catch (InvalidDataTypeException) {
-          $this->logger->error('Not valid publiccodeYml for {id}', ['id' => $newItem['id']]);
+        catch (InvalidDataTypeException $e) {
+          $this->logger->error('Not valid publiccodeYml for {id}. Message: {message}',
+            ['id' => $projectInfo, 'message' => $e->getMessage()]);
           continue;
         }
 
         if (empty($decoded['url'])) {
-          $this->logger->error('Item {id} lacks the mandatory URL in publiccodeYml', ['id' => $newItem['id']]);
+          $this->logger->error('Item {id} lacks the mandatory URL in publiccodeYml', ['id' => $projectInfo]);
           continue;
         }
 
         if (!$api = $this->apiGuesser->getHostingPlatformApi($decoded['url'])) {
+          $this->logger->error('Can\'t determinate hosting platform for {id} with {repository} repository',
+            ['id' => $projectInfo, 'repository' => $decoded['url']]);
           continue;
         }
 
@@ -231,7 +244,7 @@ class DevelopersItalia extends EuOssCatalogueProviderPluginBase {
     if ($unProcessed = array_diff($this->fetchedUrls, $this->processedUrls)) {
       $this->logger->warning('Processed {processed} out of {fetched} fetched solutions from Developers Italia. The following {unprocessed} solutions failed: ' . implode(', ', $unProcessed), [
         'processed' => count($this->processedUrls),
-        'fetched' => count($this->fetchedUrls),
+        'fetched' => $this->numberOfProvidedSolutions,
         'unprocessed' => count($unProcessed),
         'list' => $unProcessed,
       ]);
@@ -239,7 +252,7 @@ class DevelopersItalia extends EuOssCatalogueProviderPluginBase {
     else {
       $this->logger->info('Processed {processed} out of {fetched} fetched solutions from Developers Italia.', [
         'processed' => count($this->processedUrls),
-        'fetched' => count($this->fetchedUrls),
+        'fetched' => $this->numberOfProvidedSolutions,
       ]);
     }
   }
