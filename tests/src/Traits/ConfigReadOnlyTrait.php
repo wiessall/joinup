@@ -32,12 +32,16 @@ trait ConfigReadOnlyTrait {
   public static function bypassReadOnlyConfig(): void {
     static::checkConfigReadOnlyKillSwitch();
 
+    /** @var \Drupal\joinup_core\ConfigReadOnlyInterface $fileReadOnly */
+    $fileReadOnly = \Drupal::service('joinup_core.file_config_read_only');
+
     if (!isset(static::$isConfigReadonlyEnabled)) {
       // Save the initial state of config_readonly kill-switch.
-      static::$isConfigReadonlyEnabled = !file_exists(getcwd() . '/../disable-config-readonly');
+      static::$isConfigReadonlyEnabled = $fileReadOnly->isReadOnlyEnabled();
     }
 
-    touch(DRUPAL_ROOT . '/../disable-config-readonly');
+    $fileReadOnly->disableReadOnly();
+
     // Ensure the new value also for the current request.
     new Settings(['config_readonly' => FALSE] + Settings::getAll());
   }
@@ -46,14 +50,15 @@ trait ConfigReadOnlyTrait {
    * Restores the read only configuration functionality if available.
    */
   public static function restoreReadOnlyConfig(): void {
+    /** @var \Drupal\joinup_core\ConfigReadOnlyInterface $fileReadOnly */
+    $fileReadOnly = \Drupal::service('joinup_core.file_config_read_only');
+
     // Restore as enabled only if initially has been enabled. This allows to
     // keep config_readonly disabled on a local development environment (i.e.
     // where the Task Runner config `config_readonly` was set to `false`), after
     // the tests had finished.
     if (static::$isConfigReadonlyEnabled) {
-      /** @var \Drupal\Core\File\FileSystemInterface $file_system */
-      $file_system = \Drupal::service('file_system');
-      $file_system->unlink(DRUPAL_ROOT . '/../disable-config-readonly');
+      $fileReadOnly->enableReadOnly();
       // Ensure the new value also for the current request.
       new Settings(['config_readonly' => TRUE] + Settings::getAll());
     }
