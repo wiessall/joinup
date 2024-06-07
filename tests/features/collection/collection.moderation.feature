@@ -19,12 +19,12 @@ Feature: Collection moderation
     And I should not see the link "Delete"
 
   Scenario: Test the available buttons in every stage of the editorial workflow
-    Given the following owner:
+    Given owner content:
       | name           |
       | Simon Sandoval |
-    And the following contact:
-      | name  | Francis             |
-      | email | Francis@example.com |
+    And contact_information content:
+      | name    | email               |
+      | Francis | Francis@example.com |
     And users:
       | Username        | Roles     |
       # Authenticated user.
@@ -166,12 +166,12 @@ Feature: Collection moderation
 
   Scenario: Published collections should be shown in the collections overview page.
     # Regression test for ticket ISAICP-2889.
-    Given the following owner:
-      | name             | type    |
-      | Carpet Sandation | Company |
-    And the following contact:
-      | name  | Partyanimal             |
-      | email | partyanimal@example.com |
+    Given owner content:
+      | name             | owner type |
+      | Carpet Sandation | Company    |
+    And contact_information content:
+      | name        | email                   |
+      | Partyanimal | partyanimal@example.com |
     And collection:
       | title               | Some berry pie     |
       | description         | Berries are tasty. |
@@ -257,7 +257,6 @@ Feature: Collection moderation
 
     # Clean up the entities that were created.
     Then I delete the "Spectres in fog" collection
-    And I delete the "Katsumoto" owner
     And I delete the "A secretary in the fog" contact information
 
   @javascript @uploadFiles:logo.png
@@ -298,7 +297,6 @@ Feature: Collection moderation
 
     # Clean up the entities that were created.
     Then I delete the "Domestic bovins" collection
-    And I delete the "Garnett Clifton" owner
     And I delete the "Domestic secretary" contact information
 
   @javascript @uploadFiles:logo.png
@@ -339,7 +337,6 @@ Feature: Collection moderation
 
     # Clean up the entities that were created.
     Then I delete the "Theft of Body" collection
-    And I delete the "Coretta Simonson" owner
     And I delete the "Secretary of thieves" contact information
 
   @javascript @uploadFiles:logo.png
@@ -383,7 +380,6 @@ Feature: Collection moderation
 
     # Clean up the entities that were created.
     Then I delete the "Silken Emperor" collection
-    And I delete the "Terrance Nash" owner
     And I delete the "Secretary of Silk" contact information
 
   @javascript @uploadFiles:logo.png
@@ -427,5 +423,4 @@ Feature: Collection moderation
 
     # Clean up the entities that were created.
     Then I delete the "The blue ships" collection
-    And I delete the "Mable Pelley" owner
     And I delete the "Secretary of the harbor" contact information
