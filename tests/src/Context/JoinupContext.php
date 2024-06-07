@@ -47,8 +47,6 @@ use Drupal\paragraphs\Entity\Paragraph;
 use GuzzleHttp\Client;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\ExpectationFailedException;
-use WebDriver\Exception\NoSuchElement;
-use WebDriver\Exception\StaleElementReference;
 
 /**
  * Behat step definitions that are generally useful for the Joinup project.
@@ -121,6 +119,36 @@ class JoinupContext extends RawDrupalContext {
   public function assertTextCount(string $text, int $count): void {
     $xpath = '//*[contains(text(), "' . $text . '")]';
     $this->assertSession()->elementsCount('xpath', $xpath, $count);
+  }
+
+  /**
+   * Checks that a certain link appears the given number of times.
+   *
+   * @param string $text
+   *   The text of the link.
+   * @param int $count
+   *   The expected number of the links.
+   * @param ?string $region
+   *   The region to check, if any.
+   *
+   * @Then the link :text should appear :count time(s)
+   * @Then the link :text should appear :count time(s) in the :region region
+   */
+  public function assertLinkCount(string $text, int $count, ?string $region = NULL): void {
+    $element = $region
+      ? $this->getRegion($region)
+      : $this->getSession()->getPage();
+    $links = $element->findAll('named', ['link', $text]);
+    Assert::assertCount(
+      $count,
+      $links,
+      sprintf(
+        "The link with text '%s' is expected to be present '%s' times, but its actual number is '%s'",
+        $text,
+        $count,
+        count($links)
+      )
+    );
   }
 
   /**
@@ -402,17 +430,17 @@ class JoinupContext extends RawDrupalContext {
    */
   public function assertSelectOptions($select, $options) {
     $field = $this->findSelect($select);
-    $available_options = array_map(function (array $option): string {
+    $availableOptions = array_map(function (array $option): string {
       return $option['text'];
     }, $this->getSelectOptions($field));
-    sort($available_options);
+    sort($availableOptions);
 
     $options = $this->explodeCommaSeparatedStepArgument($options);
     sort($options);
 
     // The PHPUnit assertion will allow to understand easily which values are
     // missing and which one are extra.
-    Assert::assertEquals($options, $available_options, "The '{$select}' select options don't match the wanted ones.");
+    Assert::assertEquals($options, $availableOptions, "The '$select' select options don't match the wanted ones.");
   }
 
   /**
@@ -428,23 +456,23 @@ class JoinupContext extends RawDrupalContext {
   public function assertCheckboxesFieldOptions(string $field, TableNode $options): void {
     // We are looking for a field with the class 'field--widget-options-buttons'
     // that contains a fieldset and a legend with the $field as span.
-    $xpath = "//fieldset[legend/span[text()='{$field}']]";
+    $xpath = "//fieldset[legend/span[text()='$field']]";
     $field = $this->getSession()->getPage()->find('xpath', $xpath);
     if (!$field) {
-      throw new \Exception("The field '{$field}' was not found.");
+      throw new \Exception("The field '$field' was not found.");
     }
 
     // Get the checkboxes.
     $checkboxes = $field->findAll('css', 'input[type="checkbox"]');
-    $checkbox_labels = array_map(function (NodeElement $checkbox): string {
+    $checkboxLabels = array_map(function (NodeElement $checkbox): string {
       return $checkbox->getParent()->getText();
     }, $checkboxes);
 
-    $expected_options = $options->getColumn(0);
-    sort($expected_options);
-    sort($checkbox_labels);
+    $expectedOptions = $options->getColumn(0);
+    sort($expectedOptions);
+    sort($checkboxLabels);
 
-    Assert::assertEquals($expected_options, $checkbox_labels);
+    Assert::assertEquals($expectedOptions, $checkboxLabels);
   }
 
   /**
@@ -459,12 +487,12 @@ class JoinupContext extends RawDrupalContext {
    */
   public function assertSelectOptionNotAvailable($select, $options) {
     $field = $this->findSelect($select);
-    $available_options = array_map(function (array $option): string {
+    $availableOptions = array_map(function (array $option): string {
       return $option['text'];
     }, $this->getSelectOptions($field));
     $options = $this->explodeCommaSeparatedStepArgument($options);
 
-    Assert::assertEmpty(array_intersect($available_options, $options), "The '{$select}' select options include at least one of the given values.");
+    Assert::assertEmpty(array_intersect($availableOptions, $options), "The '$select' select options include at least one of the given values.");
   }
 
   /**
@@ -479,11 +507,11 @@ class JoinupContext extends RawDrupalContext {
    */
   public function assertSelectContainsOptgroups($select, $optgroups) {
     $field = $this->findSelect($select);
-    $available_optgroups = array_values($this->getSelectOptgroups($field));
+    $availableOptgroups = array_values($this->getSelectOptgroups($field));
     $options = $this->explodeCommaSeparatedStepArgument($optgroups);
 
     foreach ($options as $option) {
-      Assert::assertContains($option, $available_optgroups, "The '{$select}' select doesn't contain the option '{$option}''.", TRUE);
+      Assert::assertContains($option, $availableOptgroups, "The '$select' select doesn't contain the option '$option''.", TRUE);
     }
   }
 
@@ -688,6 +716,17 @@ class JoinupContext extends RawDrupalContext {
         $node->{$format_key} = 'content_editor';
         unset($node->{$name});
       }
+      if ($name === 'webpage' && filter_var($value, FILTER_VALIDATE_URL)) {
+        // \Drupal\Driver\Fields\Drupal8\LinkHandler::expand() expects the
+        // value to be an array with at least 2 elements, the first one for the
+        // title and the second one for the URI. If only the URI is passed, the
+        // string is handled as an array and wrong data are parsed. To avoid
+        // this, we are adding a title to the URL. The field parser will split
+        // the data into an array and the LinkHandler will handle it correctly.
+        // @see \Drupal\Driver\Fields\Drupal8\LinkHandler::expand()
+        // @see \Drupal\DrupalExtension\Context\RawDrupalContext::parseEntityFields()
+        $node->webpage = "$value - $value";
+      }
     }
 
     if (!empty($node->field_attachment)) {
@@ -755,6 +794,13 @@ class JoinupContext extends RawDrupalContext {
       }
     }
 
+    if (property_exists($node, 'uid') && !empty($node->uid) && !is_numeric($node->uid)) {
+      $user = user_load_by_name($node->uid);
+      if ($user) {
+        $node->uid = $user->id();
+      }
+    }
+
     $image_fields = [
       'field_document_logo',
       'field_event_logo',
@@ -803,6 +849,13 @@ class JoinupContext extends RawDrupalContext {
    */
   protected static function getNodeFieldNameFromAlias($type, $alias) {
     $aliases = [
+      'contact_information' => [
+        'email' => 'email',
+        'name' => 'title',
+        'website url' => 'webpage',
+        'author' => 'uid',
+        'state' => 'field_state',
+      ],
       'custom_page' => [
         'attachments' => 'field_attachment',
         'body' => 'field_paragraphs_body',
@@ -831,6 +884,7 @@ class JoinupContext extends RawDrupalContext {
       ],
       'event' => [
         'agenda' => 'field_event_agenda',
+        'body' => 'field_paragraphs_body',
         'end date' => 'field_event_date:end_value',
         'keywords' => 'field_keywords',
         'location' => 'field_location',
@@ -850,6 +904,11 @@ class JoinupContext extends RawDrupalContext {
         'summary' => 'field_glossary_definition:summary',
         'synonyms' => 'field_glossary_synonyms',
       ],
+      'licence' => [
+        'licence type' => 'licence_type',
+        'spdx licence' => 'spdx_licence',
+        'legal type' => 'legal_type',
+      ],
       'news' => [
         'headline' => 'field_news_headline',
         'keywords' => 'field_keywords',
@@ -857,6 +916,12 @@ class JoinupContext extends RawDrupalContext {
         'publication date' => 'published_at',
         'spatial coverage' => 'field_news_spatial_coverage',
         'state' => 'field_state',
+      ],
+      'owner' => [
+        'name' => 'title',
+        'owner type' => 'owner_type',
+        'state' => 'field_state',
+        'author' => 'uid',
       ],
       'shared' => [
         'collection' => OgGroupAudienceHelperInterface::DEFAULT_FIELD,
@@ -1742,23 +1807,30 @@ class JoinupContext extends RawDrupalContext {
   }
 
   /**
-   * Asserts that the current url is the same as the parameter.
+   * Asserts that the current URL is the same as the parameter.
    *
    * The difference with the steps "Then I should be on" and "Then the url
    * should match" is that the later two strip off the query string and keep
    * only the path to compare.
    *
-   * @When the( current) relative url should be :url
+   * @param string $method
+   *   Options: 'be' for strict comparison, 'match' for regexp check.
+   * @param string $url
+   *   The URL to be checked.
+   *
+   * @Then the( current) relative url should :method :url
    */
-  public function relativeUrlMatches($url) {
+  public function relativeUrlMatches(string $method, string $url): void {
+    \assert(in_array($method, ['be', 'match'], TRUE));
+
+    $url = str_replace('\\"', '"', $url);
     $current_url = $this->getSession()->getCurrentUrl();
     $current_url = str_replace($this->getMinkParameter('base_url'), '', $current_url);
-    if ($current_url !== $url) {
-      $message = $this->t('Url "@current" does not match expected "@expected".', [
-        '@current' => $current_url,
-        '@expected' => $url,
-      ]);
-      throw new \Exception((string) $message);
+
+    $failed = ($method === 'be' && $current_url !== $url) || ($method === 'match' && !preg_match($url, $current_url));
+
+    if ($failed) {
+      throw new ExpectationFailedException("Url $current_url does not match expected $url.");
     }
   }
 
@@ -2062,7 +2134,7 @@ class JoinupContext extends RawDrupalContext {
       if (isset($fake_node->author)) {
         $user = user_load_by_name($fake_node->author);
         if ($user) {
-          $node->uid = $user->id();
+          $node->set('uid', $user->id());
         }
         unset($fake_node->author);
       }
@@ -2097,6 +2169,34 @@ class JoinupContext extends RawDrupalContext {
   }
 
   /**
+   * Waits until Glide animations finish.
+   *
+   * @param string $seconds
+   *   Number of seconds to wait.
+   *
+   * @Then I wait up to :seconds seconds for Glide animations to finish
+   */
+  public function waitForGlideAnimations(string $seconds): void {
+    $this->assertWaitJs($seconds, '(function() {
+        return typeof jQuery === "undefined" || jQuery("glide--slider.glide-animating").length === 0;
+    }())');
+  }
+
+  /**
+   * Waits until Slick animations finish.
+   *
+   * @param string $seconds
+   *   Number of seconds to wait.
+   *
+   * @Then I wait up to :seconds seconds for Slick animations to finish
+   */
+  public function waitForSlickAnimations(string $seconds): void {
+    $this->assertWaitJs($seconds, '(function() {
+        return typeof jQuery === "undefined" || jQuery("[data-slick].slick-animating").length === 0;
+    }())');
+  }
+
+  /**
    * Waits until the given region becomes visible.
    *
    * @param string $region
@@ -2127,18 +2227,7 @@ class JoinupContext extends RawDrupalContext {
    * @Then a modal should/will open
    */
   public function waitForDrupalModalToOpen(): void {
-    // A modal can be opened only in a JavaScript-enabled browser.
-    self::assertJavaScriptEnabledBrowser();
-
-    $result = $this->getSession()->getPage()->waitFor(5, function (): bool {
-      // Retrieve again a fresh copy of the page element at each cycle.
-      $modal = $this->getSession()->getPage()->find('css', '.ui-dialog-content');
-      return $modal && $modal->isVisible();
-    });
-
-    if (!$result) {
-      throw new \Exception('The modal did not open.');
-    }
+    self::assertModalToOpen();
   }
 
   /**
@@ -2149,32 +2238,8 @@ class JoinupContext extends RawDrupalContext {
    *
    * @Then the modal should be closed
    */
-  public function waitForDrupalModalToClose() {
-    // A modal can be opened only in a JavaScript-enabled browser.
-    self::assertJavaScriptEnabledBrowser();
-
-    $result = $this->getSession()->getPage()->waitFor(5, function () {
-      try {
-        // Normally the modal should be completely removed from the DOM,
-        // but sometimes the markup is kept in the DOM as hidden.
-        // @see Drupal.AjaxCommands.prototype.closeDialog()
-        return !$this->getSession()->getDriver()->isVisible('//*[@id = "drupal-modal"]');
-      }
-      catch (NoSuchElement $e) {
-        // The modal has been completely removed from the DOM.
-        return TRUE;
-      }
-      catch (StaleElementReference $e) {
-        // The element went stale in the time between fetching it and actually
-        // checking its visibility. The next check should launch a NoSuchElement
-        // exception.
-        return FALSE;
-      }
-    });
-
-    if (!$result) {
-      throw new \Exception('The modal did not close.');
-    }
+  public function waitForDrupalModalToClose(): void {
+    self::assertModalToClose();
   }
 
   /**
@@ -2310,17 +2375,6 @@ class JoinupContext extends RawDrupalContext {
   public function iWaitForTheBatchJobToFinish() {
     // The progress bar has the CSS ID '#updateprogress'.
     $this->getSession()->wait(180000, 'jQuery("#updateprogress").length === 0');
-  }
-
-  /**
-   * Wait until a running pipeline batch job has finished.
-   *
-   * @Given I wait for the pipeline batch job to finish
-   */
-  public function iWaitForThePipelineBatchJobToFinish() {
-    while ($this->getSession()->getPage()->find('css', 'meta[http-equiv=\'Refresh\']')) {
-      $this->getSession()->reload();
-    }
   }
 
   /**
@@ -3064,7 +3118,7 @@ class JoinupContext extends RawDrupalContext {
    * @Then I should see a paragraph containing the text :text
    */
   public function assertParagraphText(string $text): void {
-    $element = $this->getSession()->getPage()->find('xpath', '//p[text() = "' . $text . '"]');
+    $element = $this->getSession()->getPage()->find('xpath', '//p[contains(text(), "' . $text . '")]');
     Assert::assertNotEmpty($element);
   }
 
@@ -3220,32 +3274,6 @@ class JoinupContext extends RawDrupalContext {
   }
 
   /**
-   * Asserts that a menu link is in the active trail.
-   *
-   * @param string $link_label
-   *   The label of the link to be tested.
-   *
-   * @throws \Behat\Mink\Exception\ElementNotFoundException
-   *   When the link doesn't exist.
-   *
-   * @Then the( menu) link :link_label is in the active trail
-   */
-  public function assertLinkIsInActiveTrail(string $link_label): void {
-    $session = $this->getSession();
-    $page = $session->getPage();
-    if (!$page->findLink($link_label)) {
-      throw new ElementNotFoundException($session->getDriver(), 'Link', 'label', $link_label);
-    }
-
-    // Remove the leading '#'.
-    $navigation_menu_selector = substr($this->getRegionSelector('Navigation menu'), 1);
-    $xpath = "//*[@id='$navigation_menu_selector']//ul[contains(concat(' ', normalize-space(@class), ' '), ' nav ')]//a[text()='$link_label' and contains(concat(' ', normalize-space(@class), ' '), ' is-active ')]";
-    if (!$page->find('xpath', $xpath)) {
-      throw new ExpectationFailedException("The '$link_label' link is not in the active trail but it should.");
-    }
-  }
-
-  /**
    * Changes the name of a term.
    *
    * @param string $old_name
@@ -3338,6 +3366,54 @@ class JoinupContext extends RawDrupalContext {
           ],
         ])->save();
       }
+    }
+  }
+
+  /**
+   * Visits an entity canonical page given its RDF resource (URI).
+   *
+   * @param string $uri
+   *   The entity RDF URI.
+   *
+   * @throws \InvalidArgumentException
+   *   When for the passed URI no entity can be found.
+   *
+   * @Given I visit the page of the entity having :uri as RDF resource
+   */
+  public function visitEntityCanonicalPagePageByRdfUri(string $uri): void {
+    if (!$entity = \Drupal::getContainer()->get('rdf_sync.mapper')->getEntityByUri($uri)) {
+      throw new \InvalidArgumentException("No entity found for URI $uri");
+    }
+    $this->visitPath($entity->toUrl()->toString());
+  }
+
+  /**
+   * Asserts that a list of triples exists in a certain graph.
+   *
+   * Each row is a triple serialized as NTriples:
+   * | <http://subject1> <http://predicate1> <http://reference1>  |
+   * | <http://subject1> <http://predicate2> "value1"@en          |
+   * | <http://subject2> <http://predicate3> "value2"^^xsd:string |
+   *
+   * @param string $graph
+   *   The graph to be queried.
+   * @param \Behat\Gherkin\Node\TableNode $triples
+   *   The user data.
+   *
+   * @Then the following :graph graph triples should exist in the RDF backend:
+   */
+  public function assertTriples(string $graph, TableNode $triples): void {
+    /** @var \Drupal\rdf_sync\RdfSyncConnectionInterface $connection */
+    $connection = \Drupal::service('rdf_sync.connection');
+
+    $failedTriples = [];
+    foreach ($triples->getRows() as [$triple]) {
+      if (!$connection->query("ASK WHERE { GRAPH <$graph> { $triple } }")->getBoolean()) {
+        $failedTriples[] = $triple;
+      }
+    }
+    if ($failedTriples) {
+      throw new ExpectationFailedException(sprintf("Triple(s) %s doesn't exists in the RDF backend", implode(', ', $failedTriples)));
     }
   }
 

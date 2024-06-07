@@ -132,7 +132,7 @@ display:
         type: none
         options: {  }
       cache:
-        type: none
+        type: search_api_none
         options: {  }
       empty:
         area_text_custom:
@@ -342,15 +342,14 @@ display:
               discussion: view_mode_tile_horizontal
               document: view_mode_tile_horizontal
               event: view_mode_tile_horizontal
+              licence: view_mode_tile_horizontal
               news: view_mode_tile_horizontal
               video: view_mode_tile_horizontal
             'entity:rdf_entity':
               asset_distribution: view_mode_tile_horizontal
               asset_release: view_mode_tile_horizontal
               collection: view_mode_tile_horizontal
-              licence: view_mode_tile_horizontal
               solution: view_mode_tile_horizontal
-              spdx_licence: default
             'entity:taxonomy_term':
               eif_conceptual_model: default
               eif_interoperability_layer: default
@@ -412,7 +411,10 @@ display:
           search_api_spellcheck_hide_on_result: true
           search_api_spellcheck_collate: true
       footer: {  }
-      display_extenders: {  }
+      display_extenders:
+        metatag_display_extender:
+          metatags: {  }
+          tokenize: false
     cache_metadata:
       max-age: -1
       contexts:
@@ -432,7 +434,7 @@ display:
     position: 1
     display_options:
       cache:
-        type: none
+        type: search_api_none
       defaults:
         cache: false
       exposed_block: true

@@ -1,0 +1,32 @@
+@import "../partials/core";
+@import "../partials/mixins/bootstrap-icons";
+
+.carousel {
+  img {
+    margin-bottom: 0;
+  }
+  &__title {
+    flex: 1 1 auto;
+    flex-basis: 100%;
+    @include media-breakpoint-up(md) {
+      flex-basis: 50%;
+    }
+  }
+  .glide__outer {
+    // Visual workarounds to avoid slides' shadow being cut.
+    width: calc(100% + $spacer);
+    margin-left: $spacer * -.5;
+  }
+  .glide__arrows {
+    &--disabled {
+      display: none;
+    }
+  }
+  .glide__arrow {
+    width: 40px;
+    height: 40px;
+  }
+  .glide__slides .tile {
+    white-space: normal;
+  }
+}

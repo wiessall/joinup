@@ -228,6 +228,22 @@ class JoinupUserContext extends RawDrupalContext {
   }
 
   /**
+   * Fills uid of user with the provided name in the selected field.
+   *
+   * @param string $username
+   *   User's name.
+   * @param string $field
+   *   Field name.
+   *
+   * @When I fill uid of :username in :field
+   */
+  public function fillUidOfUserNameInField(string $username, string $field): void {
+    $user = $this->getUserByName($username);
+
+    $this->getSession()->getPage()->fillField($field, $user->id());
+  }
+
+  /**
    * Generates a unique URL for a user to log in and reset their password.
    *
    * @param \Drupal\user\UserInterface $account
@@ -255,80 +271,6 @@ class JoinupUserContext extends RawDrupalContext {
       // @see https://www.drupal.org/project/drupal/issues/2548095
       'base_url' => $GLOBALS['base_url'],
     ])->toString();
-  }
-
-  /**
-   * Deletes all active sessions.
-   *
-   * @Given (there are )no active sessions
-   */
-  public function givenNoActiveSessions(): void {
-    $database = \Drupal::database();
-    $database->delete('sessions')->execute();
-  }
-
-  /**
-   * Logs in the user in the background so that there is an active session.
-   *
-   * @param string $users
-   *   A comma separated list of the usernames to login.
-   *
-   * @Given user(s) :users have active sessions
-   */
-  public function createUsersSession(string $users): void {
-    $users = explode(',', $users);
-    $database = \Drupal::database();
-    $module_handler = \Drupal::getContainer()->get('module_handler');
-    foreach ($users as $user) {
-      $account = $this->getUserByName(trim($user));
-      if (empty($account)) {
-        throw new \Exception("User {$user} was not found.");
-      }
-
-      // Mimic the login process which is by default meant for the active
-      // session. Create a session in the sessions table and invoke the login
-      // hooks.
-      $session = [
-        'uid' => $account->id(),
-        'sid' => session_create_id(),
-        'hostname' => '127.0.0.1',
-        'timestamp' => \Drupal::time()->getRequestTime(),
-        'session' => md5(uniqid('', TRUE)),
-      ];
-      $database->insert('sessions')
-        ->fields($session)
-        ->execute();
-
-      $module_handler->invokeAll('user_login', [$account]);
-    }
-  }
-
-  /**
-   * Logs out the user in the background so that there is no active session.
-   *
-   * @param string $users
-   *   A comma separated list of the usernames to logout.
-   *
-   * @Given user(s) :users log(s) out
-   */
-  public function destroyUsersSession(string $users): void {
-    $users = explode(',', $users);
-    $database = \Drupal::database();
-    $module_handler = \Drupal::getContainer()->get('module_handler');
-    foreach ($users as $user) {
-      $account = $this->getUserByName(trim($user));
-      if (empty($account)) {
-        throw new \Exception("User {$user} was not found.");
-      }
-
-      // Mimic the logout process which is by default meant for the active
-      // session. Invoke the logout - are run before the removal of the session,
-      // and remove the session from the sessions table.
-      $module_handler->invokeAll('user_logout', [$account]);
-      $database->delete('sessions')
-        ->condition('uid', $account->id())
-        ->execute();
-    }
   }
 
 }

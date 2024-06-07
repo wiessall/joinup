@@ -88,9 +88,9 @@ class EiraDeprecatedTermBlock extends BlockBase implements ContainerFactoryPlugi
     }
 
     $taxonomy_storage = $this->entityTypeManager->getStorage('taxonomy_term');
-    $query = $taxonomy_storage->getQuery()->accessCheck(FALSE);
-    $results = $query->condition('field_taxonomy_replaces', $term->id())
-      ->condition('bundle', 'eira')
+    $results = $taxonomy_storage->getQuery()->accessCheck(FALSE)
+      ->condition('field_taxonomy_replaces', $term->id())
+      ->condition('vid', 'eira')
       ->execute();
 
     if (empty($results)) {
@@ -100,7 +100,7 @@ class EiraDeprecatedTermBlock extends BlockBase implements ContainerFactoryPlugi
       $replacement_id = reset($results);
       $replacement = $taxonomy_storage->load($replacement_id);
       $message = $this->t('This building block is deprecated, and should not be used in new development. Consider using @title (@uri) instead.', [
-        '@uri' => $replacement->id(),
+        '@uri' => $replacement->getUri(),
         '@title' => $replacement->label(),
       ]);
     }

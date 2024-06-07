@@ -21,24 +21,14 @@ use Behat\MinkExtension\Context\RawMinkContext;
 class ScreenshotContext extends RawMinkContext {
 
   /**
-   * Optional directory where the screenshots are saved.
-   *
-   * @var string
-   */
-  protected $localDir;
-
-  /**
    * Constructs a new ScreenshotContext context.
    *
-   * @param string|null $localDir
-   *   Optional directory where the screenshots are saved. If omitted the
-   *   screenshots will not be saved.
+   * @param string $localDir
+   *   Directory where the screenshots are saved.
    *
-   * @see tests/behat.yml.dist
+   * @see behat.yml.dist
    */
-  public function __construct(?string $localDir = NULL) {
-    $this->localDir = $localDir;
-  }
+  public function __construct(protected readonly string $localDir) {}
 
   /**
    * Saves a screenshot under a given name.
@@ -47,21 +37,12 @@ class ScreenshotContext extends RawMinkContext {
    *   The file name.
    *
    * @Then I take a screenshot :name
-   */
-  public function takeScreenshot(?string $name = NULL): void {
-    $message = "Screenshot: @file_name";
-    $this->createScreenshots($name, $message);
-  }
-
-  /**
-   * Saves a screenshot under a predefined name.
-   *
    * @Then I take a screenshot
    */
-  public function takeScreenshotUnnamed(): void {
-    $file_name = 'screenshot-' . \Drupal::service('password_generator')->generate();
-    $message = "Screenshot: @file_name";
-    $this->createScreenshots($file_name, $message);
+  public function takeScreenshot(?string $name = NULL): void {
+    $name ??= 'screenshot-' . \Drupal::service('password_generator')->generate();
+    $message = "Screenshot:";
+    $this->createScreenshots($name, $message);
   }
 
   /**
@@ -80,20 +61,15 @@ class ScreenshotContext extends RawMinkContext {
       /** @var \Drupal\DrupalExtension\Context\MessageContext $context */
       $context = $environment->getContext($class);
       // Only check if the session is started.
-      try {
-        if ($context->getMink()->isSessionStarted()) {
-          try {
-            $context->assertNotWarningMessage('Notice:');
-          }
-          catch (ExpectationException $e) {
-            $message = "{$this->getStepLine($event)} screenshot: @file_name";
-            $this->createScreenshots($this->buildScreenshotFileName('php-notice', $event), $message, $event->getSuite()->getName());
-            // We don't throw $e anymore because we don't fail on the notice.
-          }
+      if ($context->getMink()->isSessionStarted()) {
+        try {
+          $context->assertNotWarningMessage('Notice:');
         }
-      }
-      catch (DriverException $driver_exception) {
-
+        catch (ExpectationException) {
+          $message = "{$this->getStepLine($event)} screenshot(s):";
+          $this->createScreenshots($this->buildScreenshotFileName('php-notice', $event), $message);
+          // We don't throw $e anymore because we don't fail on the notice.
+        }
       }
     }
   }
@@ -108,47 +84,44 @@ class ScreenshotContext extends RawMinkContext {
    */
   public function takeScreenshotAfterFailedStep(AfterStepScope $event): void {
     if (!$event->getTestResult()->isPassed()) {
-      $message = "{$this->getStepLine($event)} screenshot: @file_name";
-      $this->createScreenshots($this->buildScreenshotFileName('failed', $event), $message, $event->getSuite()->getName());
+      $message = "{$this->getStepLine($event)} screenshot(s):";
+      $this->createScreenshots($this->buildScreenshotFileName('failed', $event), $message);
     }
   }
 
   /**
    * Creates a screenshot in HTML or PNG format.
    *
-   * @param string $file_name
+   * @param string $fileName
    *   The filename of the screenshot (complete).
    * @param string $message
    *   The message to be printed.
-   * @param string|null $suite_name
-   *   (optional) Suite name. Passed only from hook callers.
+   *
+   * @throws \Exception
+   *   When the screenshot cannot be saved.
    */
-  protected function createScreenshots(string $file_name, string $message, ?string $suite_name = NULL): void {
-    try {
-      $screenshot = $this->getSession()->getPage()->getContent();
-      $this->storeScreenshot($screenshot, "{$file_name}.html", $message, $suite_name);
-    }
-    catch (DriverException $e) {
-      // A DriverException might occur if no page has been loaded yet so no
-      // screenshot can yet be taken. In this case we exit silently, allowing
-      // the remainder of the test suite to run.
-      return;
-    }
+  protected function createScreenshots(string $fileName, string $message): void {
+    $screenshot = $this->getSession()->getPage()->getContent();
+    $output = [
+      $message,
+      '- ' . $this->storeScreenshot($screenshot, "$fileName.html"),
+    ];
 
     // For Selenium tests, create an additional .png screenshot.
     if ($this->getSession()->getDriver() instanceof Selenium2Driver) {
       try {
         $screenshot = $this->getSession()->getDriver()->getScreenshot();
-        print "\n";
-        $this->storeScreenshot($screenshot, "{$file_name}.png", $message, $suite_name);
+        $output[] = '- ' . $this->storeScreenshot($screenshot, "$fileName.png");
       }
-      catch (DriverException $e) {
+      catch (DriverException) {
         // If the .html screenshot was successful, do nothing.
       }
     }
 
+    print implode("\n", $output) . PHP_EOL;
+
     // Depending on the output formatter used, Behat will suppress any output
-    // generated during the test. Flush the output buffers so out message will
+    // generated during the test. Flush the output buffers so our message will
     // show up in the test logs.
     ob_flush();
   }
@@ -158,17 +131,20 @@ class ScreenshotContext extends RawMinkContext {
    *
    * @param string $screenshot
    *   The screenshot content.
-   * @param string $file_name
+   * @param string $fileName
    *   The filename of the screenshot (complete).
-   * @param string $message
-   *   The message to be printed.
-   * @param string|null $suite_name
-   *   (optional) Suite name. Passed only from hook callers.
+   *
+   * @return string
+   *   The screenshot URL.
+   *
+   * @throws \Exception
+   *   When the screenshot cannot be saved.
    */
-  protected function storeScreenshot(string $screenshot, string $file_name, string $message, ?string $suite_name = NULL): void {
+  protected function storeScreenshot(string $screenshot, string $fileName): string {
     // Save the screenshot locally.
-    $path = $this->save($screenshot, $file_name, $suite_name);
-    print strtr($message, ['@file_name' => $path ?: $file_name]);
+    $path = $this->save($screenshot, $fileName);
+    // Show it as a URL, so that it can be easy to click in IDE or shell.
+    return $this->getMinkParameter('base_url') . '/' . $path;
   }
 
   /**
@@ -176,39 +152,34 @@ class ScreenshotContext extends RawMinkContext {
    *
    * @param string $screenshot
    *   The screenshot data.
-   * @param string $file_name
+   * @param string $fileName
    *   The file name.
-   * @param string|null $suite_name
-   *   (optional) If passed, will be used to build the screenshot file path.
    *
-   * @return string|null
+   * @return string
    *   The saved screenshot path.
    *
    * @throws \Exception
    *   Thrown if the destination folder doesn't exist and couldn't be created.
    */
-  protected function save(string $screenshot, string $file_name, ?string $suite_name = NULL): ?string {
-    // Don't attempt to save the screenshot if no folder name has been
-    // configured.
-    if (empty($this->localDir)) {
-      return NULL;
-    }
-
+  protected function save(string $screenshot, string $fileName): string {
     // Ensure the directory exists.
     $dir = rtrim($this->localDir, DIRECTORY_SEPARATOR);
-    if ($suite_name) {
-      $dir .= DIRECTORY_SEPARATOR . $suite_name;
+
+    if (!is_dir($dir) && !mkdir($dir, 0755, TRUE)) {
+      throw new \Exception("The '$dir' folder does not exist and could not be created.");
     }
 
-    if (!is_dir($dir)) {
-      if (!mkdir($dir, 0755, TRUE)) {
-        throw new \Exception("The '$dir' folder does not exist and could not be created.");
-      }
-    }
-    $path = $dir . DIRECTORY_SEPARATOR . $file_name;
+    $path = $dir . DIRECTORY_SEPARATOR . $fileName;
     file_put_contents($path, $screenshot);
+    if (!$pathAbsolute = realpath($path)) {
+      throw new \Exception("The screenshot file $path could not be created");
+    }
 
-    return $path;
+    if (!str_starts_with($pathAbsolute, DRUPAL_ROOT)) {
+      throw new \InvalidArgumentException("The behat.screenshots.local.dir config should point to a directory beneath Drupal webroot. Actual value: $this->localDir");
+    }
+
+    return trim(str_replace(DRUPAL_ROOT, '', $pathAbsolute), DIRECTORY_SEPARATOR);
   }
 
   /**
@@ -223,8 +194,8 @@ class ScreenshotContext extends RawMinkContext {
    *   The screenshot filename.
    */
   protected function buildScreenshotFileName(string $type, AfterStepScope $event): string {
-    $step_line = str_replace('/', '--', ltrim(substr($event->getFeature()->getFile(), strlen($event->getEnvironment()->getSuite()->getSetting('paths')[0])), '/'));
-    return "{$type}--{$step_line}--{$event->getStep()->getLine()}";
+    $stepLine = str_replace('/', '--', ltrim(substr($event->getFeature()->getFile(), strlen($event->getEnvironment()->getSuite()->getSetting('paths')[0])), '/'));
+    return "$type--$stepLine--{$event->getStep()->getLine()}";
   }
 
   /**

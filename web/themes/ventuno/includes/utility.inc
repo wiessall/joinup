@@ -12,6 +12,7 @@ use Drupal\joinup_bundle_class\DescriptionInterface;
 use Drupal\joinup_bundle_class\LogoInterface;
 use Drupal\joinup_community_content\Entity\CommunityContentInterface;
 use Drupal\joinup_core\Controller\IdRedirect;
+use Drupal\joinup_rdf\Entity\RdfSyncEntityInterface;
 use Drupal\joinup_workflow\ArchivableEntityInterface;
 use Drupal\smart_trim\TruncateHTML;
 use Drupal\topic\Entity\TopicReferencingEntityInterface;
@@ -64,6 +65,12 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
     ($entity_type_id === 'node' && $entity->bundle() === 'custom_page')
   ) {
     $variables['text'] = $entity instanceof DescriptionInterface && isset($variables['content'][$entity->getDescriptionField()]) ? $variables['content'][$entity->getDescriptionField()] : NULL;
+
+    // Use abstract if possible.
+    if ($entity instanceof AbstractInterface && !$entity->get($entity->getAbstractField())->isEmpty()
+      && isset($variables['content'][$entity->getAbstractField()])) {
+      $variables['text'] = $variables['content'][$entity->getAbstractField()];
+    }
   }
 
   // Image.
@@ -149,8 +156,16 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
       break;
 
     case 'asset_distribution':
-      $variables['info']['icon'] = 'file-earmark-medical';
-      $variables['info']['label'] = $variables['content']['field_ad_licence'];
+      if (isset($variables['content']['field_ad_licence']) &&
+        !$entity->get('field_ad_licence')->isEmpty()) {
+        $variables['text']['icon'] = [
+          '#type' => 'pattern',
+          '#id' => 'icon',
+          '#name' => 'file-earmark-medical',
+          '#size' => 'xs',
+        ];
+        $variables['text']['label'] = $variables['content']['field_ad_licence'];
+      }
       break;
 
     case 'asset_release':
@@ -225,10 +240,6 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
       'label' => t('Archived'),
     ];
   }
-
-  if ($entity instanceof AbstractInterface && $route_name === 'view.search.page_1') {
-    $variables['text'] = !$entity->get($entity->getAbstractField())->isEmpty() ? $variables['content'][$entity->getAbstractField()] : $variables['text'];
-  }
 }
 
 /**
@@ -299,10 +310,10 @@ function _ventuno_build_permalink(): ?string {
   }
 
   // Entity ID is pointing to the publication office redirect.
-  $namespaces = implode('|', array_keys(
-    IdRedirect::getEntityTypeFromPersistentUriNamespace()));
-  if (preg_match('{^http://data.europa.eu/(?:' . $namespaces . ')/}', $entity->id())) {
-    return $entity->id();
+  $namespaces = implode('|', array_keys(IdRedirect::getEntityTypeFromPersistentUriNamespace()));
+  $uri = $entity instanceof RdfSyncEntityInterface ? $entity->getUri() : $entity->id();
+  if (preg_match('{^http://data.europa.eu/(?:' . $namespaces . ')/}', $uri)) {
+    return $uri;
   }
 
   // Don't process the path to avoid pathauto aliasing.
@@ -320,7 +331,6 @@ function _ventuno_build_permalink(): ?string {
  * @param array $variables
  *   Template variables.
  *
- * @see ventuno_theme_suggestions_eif_wrapper_alter()
  * @see ventuno_theme_suggestions_taxonomy_term_alter()
  */
 function _ventuno_theme_suggestions_alter(array &$suggestions, array $variables): void {

@@ -21,5 +21,6 @@ content:
     region: content
 hidden:
   roles: true
+  search_api_excerpt: true
   state: true
   uid: true

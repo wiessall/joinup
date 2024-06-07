@@ -13,4 +13,8 @@
       color: var(--#{$prefix}table-striped-color);
     }
   }
+
+  @at-root &--columns-equal {
+    table-layout: fixed;
+  }
 }

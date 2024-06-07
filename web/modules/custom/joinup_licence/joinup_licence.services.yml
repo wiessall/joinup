@@ -16,3 +16,7 @@ services:
   plugin.manager.joinup_licence_compatibility_rule:
     class: Drupal\joinup_licence\JoinupLicenceCompatibilityRulePluginManager
     parent: default_plugin_manager
+  joinup_licence.prepare_vocabulary_graph.subscriber:
+    class: Drupal\joinup_licence\EventSubscriber\SpdxVocabularySubscriber
+    tags:
+      - { name: event_subscriber }

@@ -10,17 +10,13 @@ use Drupal\Core\Cache\Context\UserCacheContextBase;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 /**
  * Defines the "can invite to discussion" cache context service.
  *
  * Cache context ID: 'can_invite_to_discussion'.
  */
-class CanInviteToDiscussionCacheContext extends UserCacheContextBase implements CacheContextInterface, ContainerAwareInterface {
-
-  use ContainerAwareTrait;
+class CanInviteToDiscussionCacheContext extends UserCacheContextBase implements CacheContextInterface {
 
   /**
    * The current route match service.

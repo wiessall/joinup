@@ -3,38 +3,35 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.node.field_event_agenda
-    - field.storage.node.field_paragraphs_body
-    - field.storage.paragraph.field_body
     - field.storage.node.body
+    - field.storage.rdf_entity.field_ad_description
+    - field.storage.rdf_entity.field_ar_abstract
+    - field.storage.rdf_entity.field_ar_description
+    - field.storage.node.field_event_agenda
     - field.storage.node.field_event_date
-    - field.storage.node.field_news_headline
+    - field.storage.rdf_entity.field_is_description
+    - field.storage.rdf_entity.field_is_solution_type
+    - field.storage.rdf_entity.field_isr_description
+    - field.storage.rdf_entity.field_isr_release_notes
+    - field.storage.rdf_entity.field_is_description
+    - field.storage.rdf_entity.field_is_solution_type
+    - field.storage.rdf_entity.field_isr_description
+    - field.storage.rdf_entity.field_isr_release_notes
     - field.storage.node.field_location
+    - field.storage.node.field_news_headline
     - field.storage.node.field_organisation
     - field.storage.node.field_scope
     - field.storage.node.field_shared_in
     - field.storage.node.field_short_title
-    - field.storage.rdf_entity.field_ar_abstract
-    - field.storage.rdf_entity.field_ci_name
     - field.storage.rdf_entity.field_is_contact_information
-    - field.storage.rdf_entity.field_isr_contact_information
-    - field.storage.rdf_entity.field_ad_description
-    - field.storage.rdf_entity.field_ar_description
-    - field.storage.rdf_entity.field_is_description
-    - field.storage.rdf_entity.field_isr_description
-    - field.storage.rdf_entity.field_licence_description
-    - field.storage.rdf_entity.field_is_eif_recommendation
-    - field.storage.rdf_entity.field_is_owner
-    - field.storage.rdf_entity.field_owner_name
-    - field.storage.rdf_entity.field_isr_owner
-    - field.storage.rdf_entity.field_isr_release_notes
-    - field.storage.rdf_entity.field_is_solution_type
+    - field.storage.node.field_paragraphs_body
+    - field.storage.paragraph.field_body
     - search_api.server.joinup
   module:
     - search_api_solr
     - node
-    - paragraphs
     - rdf_entity
+    - paragraphs
     - search_api
     - asset_distribution
     - custom_page
@@ -176,14 +173,6 @@ field_settings:
     dependencies:
       config:
         - field.storage.rdf_entity.field_is_description
-  field_is_eif_recommendation:
-    label: 'EIF reference'
-    datasource_id: 'entity:rdf_entity'
-    property_path: field_is_eif_recommendation
-    type: string
-    dependencies:
-      config:
-        - field.storage.rdf_entity.field_is_eif_recommendation
   field_is_solution_type:
     label: 'Solution type'
     datasource_id: 'entity:rdf_entity'
@@ -208,14 +197,6 @@ field_settings:
     dependencies:
       config:
         - field.storage.rdf_entity.field_isr_release_notes
-  field_licence_description:
-    label: 'Description » Processed text'
-    datasource_id: 'entity:rdf_entity'
-    property_path: 'field_licence_description:processed'
-    type: text
-    dependencies:
-      config:
-        - field.storage.rdf_entity.field_licence_description
   field_location:
     label: Location
     datasource_id: 'entity:node'
@@ -271,50 +252,6 @@ field_settings:
     property_path: id
     type: string
     dependencies:
-      module:
-        - rdf_entity
-  is_field_ci_name:
-    label: 'Contact information » Rdf entity » Name'
-    datasource_id: 'entity:rdf_entity'
-    property_path: 'field_is_contact_information:entity:field_ci_name'
-    type: text
-    dependencies:
-      config:
-        - field.storage.rdf_entity.field_ci_name
-        - field.storage.rdf_entity.field_is_contact_information
-      module:
-        - rdf_entity
-  is_field_owner_name:
-    label: 'Owner » Rdf entity » Name'
-    datasource_id: 'entity:rdf_entity'
-    property_path: 'field_is_owner:entity:field_owner_name'
-    type: text
-    dependencies:
-      config:
-        - field.storage.rdf_entity.field_is_owner
-        - field.storage.rdf_entity.field_owner_name
-      module:
-        - rdf_entity
-  isr_field_ci_name:
-    label: 'Contact information » Rdf entity » Name'
-    datasource_id: 'entity:rdf_entity'
-    property_path: 'field_isr_contact_information:entity:field_ci_name'
-    type: text
-    dependencies:
-      config:
-        - field.storage.rdf_entity.field_ci_name
-        - field.storage.rdf_entity.field_isr_contact_information
-      module:
-        - rdf_entity
-  isr_field_owner_name:
-    label: 'Owner » Rdf entity » Name'
-    datasource_id: 'entity:rdf_entity'
-    property_path: 'field_isr_owner:entity:field_owner_name'
-    type: text
-    dependencies:
-      config:
-        - field.storage.rdf_entity.field_isr_owner
-        - field.storage.rdf_entity.field_owner_name
       module:
         - rdf_entity
   keywords:
@@ -483,7 +420,6 @@ processor_settings:
       - field_is_description
       - field_isr_description
       - field_isr_release_notes
-      - field_licence_description
     title: true
     alt: true
     tags:
@@ -506,13 +442,10 @@ processor_settings:
       - field_is_description
       - field_isr_description
       - field_isr_release_notes
-      - field_licence_description
       - field_location
       - field_news_headline
       - field_organisation
       - field_short_title
-      - isr_field_ci_name
-      - isr_field_owner_name
       - label
       - title
   include_custom_page_content:
@@ -543,7 +476,6 @@ processor_settings:
       - field_is_description
       - field_isr_description
       - field_isr_release_notes
-      - field_licence_description
       - field_location
       - field_news_headline
       - field_scope
@@ -601,16 +533,11 @@ processor_settings:
       - field_is_description
       - field_isr_description
       - field_isr_release_notes
-      - field_licence_description
       - field_location
       - field_news_headline
       - field_organisation
       - field_scope
       - field_short_title
-      - is_field_ci_name
-      - is_field_owner_name
-      - isr_field_ci_name
-      - isr_field_owner_name
       - keywords
       - label
       - title
@@ -632,15 +559,10 @@ processor_settings:
       - field_is_description
       - field_isr_description
       - field_isr_release_notes
-      - field_licence_description
       - field_location
       - field_news_headline
       - field_organisation
       - field_short_title
-      - is_field_ci_name
-      - is_field_owner_name
-      - isr_field_ci_name
-      - isr_field_owner_name
       - label
       - title
   type_boost:

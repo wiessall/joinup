@@ -230,7 +230,7 @@ class DashboardForm extends FormBase {
       ],
       [
         '#title' => $this->t('Licences overview'),
-        '#url' => Url::fromRoute('joinup_licence.overview'),
+        '#url' => Url::fromRoute('view.licences.list'),
       ],
       [
         '#title' => $this->t('Curated content listings'),
@@ -247,6 +247,10 @@ class DashboardForm extends FormBase {
       [
         '#title' => $this->t('Files'),
         '#url' => Url::fromRoute('view.files.page_1'),
+      ],
+      [
+        '#title' => $this->t('Manage webforms'),
+        '#url' => Url::fromRoute('entity.webform.collection'),
       ],
     ];
 

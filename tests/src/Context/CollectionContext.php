@@ -109,6 +109,20 @@ class CollectionContext extends RawDrupalContext {
   }
 
   /**
+   * Checks that the user is on the given collection homepage.
+   *
+   * @param string $collection
+   *   The title of the collection.
+   *
+   * @Then I should be on (the homepage of )the :collection collection
+   */
+  public function assertCollectionPath(string $collection): void {
+    /** @var \Drupal\rdf_entity\Entity\Rdf $entity */
+    $entity = $this->getEntityByLabel('rdf_entity', $collection, 'collection');
+    $this->assertSession()->addressEquals($this->locatePath($entity->toUrl()->toString()));
+  }
+
+  /**
    * Navigates to the collections overview page.
    *
    * @todo This is currently dependent on the Joinup profile being installed,
@@ -361,7 +375,7 @@ class CollectionContext extends RawDrupalContext {
    * @Then I should have :number collection(s)
    */
   public function assertCollectionCount(int $number): void {
-    $this->assertRdfEntityCount($number, 'collection');
+    $this->assertEntityCount('rdf_entity', 'collection', $number);
   }
 
   /**

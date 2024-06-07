@@ -6,9 +6,9 @@ Feature: "Add event" visibility options.
 
   Scenario: "Add event" button should not be shown to normal members, authenticated users and anonymous users.
     Given the following collection:
-      | title  | Collective Ragged tower |
-      | logo   | logo.png                |
-      | state  | published               |
+      | title | Collective Ragged tower |
+      | logo  | logo.png                |
+      | state | published               |
     And the following solutions:
       | title           | collection              | logo     | state     |
       | Ragged Tower    | Collective Ragged tower | logo.png | published |
@@ -36,9 +36,9 @@ Feature: "Add event" visibility options.
   @uploadFiles:test.zip
   Scenario: Add event as a facilitator.
     Given the following collection:
-      | title  | Collective The Luscious Bridges |
-      | logo   | logo.png                        |
-      | state  | published                       |
+      | title | Collective The Luscious Bridges |
+      | logo  | logo.png                        |
+      | state | published                       |
     And the following solutions:
       | title                | collection                      | logo     | state     |
       | The Luscious Bridges | Collective The Luscious Bridges | logo.png | published |
@@ -46,7 +46,7 @@ Feature: "Add event" visibility options.
     When I go to the homepage of the "The Luscious Bridges" solution
     And I click "Add event" in the plus button menu
     Then I should see the heading "Add event"
-    And the following fields should be present "Title, Short title, Description, Agenda, Logo, Contact email, Website, Topic, Add a new file, Scope, Geographical coverage"
+    And the following fields should be present "Title, Short title, Body, Agenda, Logo, Contact email, Website, Topic, Add a new file, Scope, Geographical coverage"
     And the following fields should not be present "Shared on, Motivation"
 
     # Check required fields.
@@ -55,18 +55,21 @@ Feature: "Add event" visibility options.
     And I press "Publish"
     Then I should see the following lines of text:
       | Title field is required.                         |
-      | Description field is required.                   |
+      | Abstract field is required.                      |
       | The Attachments field description is required.   |
       | At least one location field should be filled in. |
 
     When I fill in the following:
       | Title             | An amazing event                      |
       | Short title       | Amazing event                         |
-      | Description       | This is going to be an amazing event. |
+      | Abstract          | This is going to be an amazing event. |
       | Physical location | Rue Belliard, 28                      |
       | File description  | Your free ticket                      |
     And I fill the start date of the "Date" widget with "2018-08-29"
     And I fill the start time of the Date widget with "23:59:00"
+    And I append "text" to "field_paragraphs_body" layout paragraphs field
+      | field_body:value  | This is going to be an amazing event. |
+      | field_body:format | content_editor                        |
 
     # Test that a helpful message is shown when a field is only partially filled in.
     And I fill the end date of the Date widget with "2018-08-29"

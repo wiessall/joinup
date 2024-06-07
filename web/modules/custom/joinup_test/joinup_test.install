@@ -8,38 +8,68 @@
 declare(strict_types=1);
 
 use Drupal\Component\Serialization\Yaml;
+use Drupal\Core\Field\Plugin\Field\FieldType\EntityReferenceItemInterface;
+use Drupal\taxonomy\TermInterface;
+use Drupal\text\Plugin\Field\FieldType\TextItemBase;
 
 /**
  * Implements hook_install().
  */
 function joinup_test_install($is_syncing): void {
+  $rdfSync = \Drupal::getContainer()->get('rdf_sync.synchronizer');
+  $fieldManager = \Drupal::getContainer()->get('entity_field.manager');
+  $storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
+
+  // Creates a term given term data from YAML file.
+  $createTerm = function (string $vid, int $weight, array $data, array $definitions, int $parentTermId = 0) use ($storage): TermInterface {
+    $values = ['vid' => $vid, 'weight' => $weight, 'parent' => $parentTermId];
+    foreach ($data as $fieldName => $fieldValue) {
+      if (isset($definitions[$fieldName])) {
+        if (is_a($definitions[$fieldName]->getItemDefinition()->getClass(), EntityReferenceItemInterface::class, TRUE)) {
+          // Reference to other entity should be always represented as URI.
+          assert((bool) filter_var($fieldValue, FILTER_VALIDATE_URL));
+          $values[$fieldName] = \Drupal::getContainer()->get('rdf_sync.mapper')->getEntityByUri($fieldValue);
+        }
+        else {
+          if (is_a($definitions[$fieldName]->getItemDefinition()->getClass(), TextItemBase::class, TRUE)) {
+            $fieldValue = ['value' => $fieldValue, 'format' => 'content_editor'];
+          }
+          $values[$fieldName] = $fieldValue;
+        }
+      }
+    }
+    /** @var \Drupal\taxonomy\TermInterface $term */
+    $term = $storage->create($values);
+    $term->save();
+
+    return $term;
+  };
+
   // Create the testing taxonomy terms. Limitation: It creates terms with
   // maximum 2 level hierarchy.
   $hierarchy = Yaml::decode(file_get_contents(__DIR__ . '/fixtures/testing_terms.yml'));
-  $storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
 
   $termIds = [];
   foreach ($hierarchy as $vid => $terms) {
+    $hasTerms = (bool) $storage->getQuery()->accessCheck(FALSE)
+      ->condition('vid', $vid)
+      ->count()
+      ->execute();
+    if ($hasTerms) {
+      // On rebuild terms are already populated from the database dump.
+      continue;
+    }
+
     foreach ($terms as $parentWeight => $data) {
-      $term = $storage->create([
-        'vid' => $vid,
-        'name' => $data['name'],
-        'weight' => $parentWeight,
-      ]);
-      $term->save();
-      $parentTermId = $term->id();
+      $definitions = $fieldManager->getFieldDefinitions('taxonomy_term', $vid);
+      $term = $createTerm($vid, $parentWeight, $data, $definitions);
+      $parentTermId = (int) $term->id();
       $termIds[] = $parentTermId;
       foreach ($data['children'] ?? [] as $childWeight => $child) {
-        $term = $storage->create([
-          'vid' => $vid,
-          'name' => $child['name'],
-          'parent' => $parentTermId,
-          'weight' => $childWeight,
-          'description' => $child['description'] ?? '',
-        ]);
-        $term->save();
+        $term = $createTerm($vid, $childWeight, $child, $definitions, $parentTermId);
         $termIds[] = $term->id();
       }
+      $rdfSync->destruct();
     }
   }
 

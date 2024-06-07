@@ -1,0 +1,11 @@
+uuid: 739f71e3-4067-4480-a2a2-c7267693fcbc
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.eif_conceptual_model
+id: taxonomy_term.eif_conceptual_model
+target_entity_type_id: taxonomy_term
+target_bundle: eif_conceptual_model
+default_langcode: site_default
+language_alterable: false

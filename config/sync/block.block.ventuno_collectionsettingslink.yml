@@ -10,7 +10,7 @@ dependencies:
 id: ventuno_collectionsettingslink
 theme: ventuno
 region: content
-weight: -20
+weight: -21
 provider: null
 plugin: collection_settings_link
 settings:

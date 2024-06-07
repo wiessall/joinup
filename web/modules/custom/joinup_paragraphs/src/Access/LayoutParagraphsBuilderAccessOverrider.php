@@ -32,7 +32,7 @@ class LayoutParagraphsBuilderAccessOverrider extends LayoutParagraphsBuilderAcce
    */
   public function __construct(
     EntityTypeManagerInterface $entityTypeManager,
-    protected OgAccessInterface $ogAccess
+    protected OgAccessInterface $ogAccess,
   ) {
     parent::__construct($entityTypeManager);
   }
@@ -61,7 +61,7 @@ class LayoutParagraphsBuilderAccessOverrider extends LayoutParagraphsBuilderAcce
     LayoutParagraphsLayout $layout_paragraphs_layout,
     ?string $operation = NULL,
     ?string $component_uuid = NULL,
-    ?ParagraphsTypeInterface $paragraph_type = NULL
+    ?ParagraphsTypeInterface $paragraph_type = NULL,
   ): AccessResultInterface {
     $entity = $layout_paragraphs_layout->getEntity();
 

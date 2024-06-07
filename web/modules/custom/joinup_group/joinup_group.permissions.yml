@@ -1,3 +1,7 @@
+access glossary data export:
+  title: 'Access glossary data export'
+  description: 'Users granted with this permission are able to access glossary data export.'
+
 access group reports:
   title: 'Access group reports pages of all groups.'
   restrict access: true

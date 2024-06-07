@@ -1,0 +1,19 @@
+uuid: 367cfbf1-548b-452d-94c1-857ad65df753
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.abstract
+    - node.type.event
+id: node.event.abstract
+field_name: abstract
+entity_type: node
+bundle: event
+label: Abstract
+description: 'Short description text of the event, displayed in content tiles and search results.'
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

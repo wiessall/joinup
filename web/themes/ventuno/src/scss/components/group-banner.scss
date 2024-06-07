@@ -1,11 +1,46 @@
 @import "../partials/core";
 
+// Position fixed related rules.
+// @see Drupal.behaviors.stickyGroupHeader
+.region-header {
+  &__inner {
+    &.fixed-top {
+      z-index: 501; // Higher z-index than the .actions-menu.
+      top: var(--drupal-displace-offset-top, 0);
+      left: var(--drupal-displace-offset-left, 0);
+      box-shadow: 0 .1rem .4rem .1rem rgba(0, 0, 0, .1);
+
+      .group-banner {
+        > .container {
+          align-items: center !important;
+        }
+
+        &__logo {
+          width: 60px;
+        }
+
+        &__meta {
+          display: none !important;
+        }
+        @include media-breakpoint-down(lg) {
+          &__logo,
+          &__actions {
+            display: none !important;
+          }
+        }
+      }
+    }
+  }
+}
+
 .group-banner {
   &__logo {
     flex-shrink: 0;
+    width: 100px;
+    transition: width 0.5s;
   }
   &__title {
-    flex: 10 1 0%;
+    flex: 10 1 0;
   }
   &__meta {
     flex: 1 0 100%;

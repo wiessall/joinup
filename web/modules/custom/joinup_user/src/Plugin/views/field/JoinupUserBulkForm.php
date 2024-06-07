@@ -73,7 +73,7 @@ class JoinupUserBulkForm extends RoleDelegationUserBulkForm {
     MessengerInterface $messenger,
     EntityRepositoryInterface $entityRepository,
     AccountInterface $currentUser,
-    protected JoinupUserNotificationHelperInterface $notificationHelper
+    protected JoinupUserNotificationHelperInterface $notificationHelper,
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $entityTypeManager, $languageManager, $messenger, $entityRepository, $currentUser);
   }

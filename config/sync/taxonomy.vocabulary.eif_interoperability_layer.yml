@@ -1,10 +1,33 @@
 uuid: e86c446b-7ff8-43f0-9c45-8b6141564606
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  module:
+    - joinup_taxonomy
+    - rdf_sync
 third_party_settings:
-  rdf_taxonomy:
-    locked: false
+  joinup_taxonomy:
+    locked: true
+  rdf_sync:
+    type: 'http://data.europa.eu/eif/Layer/'
+    uri_plugin: null
+    fields:
+      vid:
+        target_id:
+          predicate: 'http://www.w3.org/2004/02/skos/core#inScheme'
+          type: resource
+      name:
+        value:
+          predicate: 'http://www.w3.org/2004/02/skos/core#prefLabel'
+          type: null
+      description:
+        processed:
+          predicate: 'http://www.w3.org/2004/02/skos/core#definition'
+          type: null
+      weight:
+        value:
+          predicate: 'http://www.w3.org/ns/adms#identifier'
+          type: 'xsd:integer'
 name: 'Interoperability layer'
 vid: eif_interoperability_layer
 description: 'Terms that represent an interoperability layer of the EIF Toolbox.'

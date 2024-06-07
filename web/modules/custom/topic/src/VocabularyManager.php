@@ -32,7 +32,7 @@ class VocabularyManager {
     protected EntityTypeManagerInterface $entityTypeManager,
     protected Connection $database,
     protected ConnectionInterface $sparqlEndpoint,
-    protected MetaEntityRepositoryInterface $metaEntityRepository
+    protected MetaEntityRepositoryInterface $metaEntityRepository,
   ) {
   }
 
@@ -195,7 +195,7 @@ class VocabularyManager {
    * @param string $newId
    *   The new reference ID.
    */
-  protected function updateSparqlEntityReferences(string $oldId, string $newId): void {
+  public function updateSparqlEntityReferences(string $oldId, string $newId): void {
     $graphs = [
       'http://joinup.eu/collection/published',
       'http://joinup.eu/collection/draft',

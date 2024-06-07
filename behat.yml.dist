@@ -45,6 +45,7 @@
   - Drupal\joinup\Context\JoinupCoreContext
   - Drupal\joinup\Context\JoinupDiscussionContext
   - Drupal\joinup\Context\JoinupDocumentContext
+  - Drupal\joinup\Context\JoinupEtransContext
   - Drupal\joinup\Context\JoinupEventContext
   - Drupal\joinup\Context\JoinupFeaturedContext
   - Drupal\joinup\Context\JoinupGroupContext
@@ -60,6 +61,7 @@
   - Drupal\joinup\Context\JoinupSeoContext
   - Drupal\joinup\Context\JoinupSubscriptionContext
   - Drupal\joinup\Context\JoinupUserContext
+  - Drupal\joinup\Context\LinkContext
   - Drupal\joinup\Context\LogRecordsContext
   - Drupal\joinup\Context\MediaContext
   - Drupal\joinup\Context\MetaEntityContext
@@ -68,12 +70,13 @@
   - Drupal\joinup\Context\OeNewsroomNewsletterContext
   - Drupal\joinup\Context\OwnerContext
   - Drupal\joinup\Context\PollContext
-  - Drupal\joinup\Context\RdfEntityProvenanceContext
   - Drupal\joinup\Context\RdfGraphContext
   - Drupal\joinup\Context\RssContext
   - Drupal\joinup\Context\ScreenshotContext:
       localDir: ${behat.screenshots.local.dir}
   - Drupal\joinup\Context\SolutionContext
+  - Drupal\joinup\Context\SpdxContext
+  - Drupal\joinup\Context\WebformContext
   - Drupal\joinup\Context\WhatsNewContext
   - Drupal\joinup\Context\WysiwygContext
   - Drupal\Tests\cas_mock_server\Context\CasMockServerContext:
@@ -83,8 +86,6 @@
   - Drupal\Tests\message_digest\Behat\MessageDigestContext
   - Drupal\Tests\oe_webtools\Behat\WebtoolsETransContext
   - Drupal\Tests\oe_webtools\Behat\WebtoolsMapsContext
-  - Drupal\Tests\pipeline\Behat\PipelineContext
-  - Drupal\Tests\spdx\Behat\SpdxContext
   - Drupal\joinup\Context\FeatureContext
   - LoversOfBehat\TableExtension\Context\TableContext
   - Drupal\joinup\Context\ContentTypeContext
@@ -147,7 +148,6 @@ default:
         'member administration': '.og-members-overview table'
         'member permissions': '#joinup-group-membership-permissions-info table[data-drupal-selector="edit-permissions"]'
         'licence comparer': 'table[data-drupal-selector="licence-comparer"]'
-        'pipeline log': 'table.joinup-pipeline-log-table'
         'subscribers report': 'table'
         'media admin': 'form[data-drupal-selector="views-form-media-media-page-list"] table'
         'manage solutions': '.view-id-manage_collection_solutions.view-display-id-manage_solutions table'
@@ -158,6 +158,7 @@ default:
       region_map:
         Additional fields accordion: '.accordion .accordion-item #management'
         Administration toolbar: '#toolbar-administration'
+        Bookmark block: '#block-ventuno-bookmark'
         Comment: 'section.comments'
         Contact information inline form: '#edit-field-ar-contact-information-wrapper'
         Content listing field filter form: '.field--name-content-listing'
@@ -177,7 +178,7 @@ default:
         IOPE Menu: '#block-iope-navigation'
         Layout paragraphs dialog buttons: '.ui-dialog-buttonpane'
         Left sidebar: 'aside.layout-sidebar'
-        Like block: '.block-joinup-like-block'
+        Like block: '#block-ventuno-like'
         Main fields accordion: '.accordion .accordion-item #main'
         Main solution vertical tab: '#edit-group-main'
         Management solution vertical tab: '#edit-group-management'

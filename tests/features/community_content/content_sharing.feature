@@ -11,6 +11,7 @@ Feature: Sharing content between collections
       | Sara Barber   | sara.barber@example.com   |
       | Deryck Lynn   | deryck.lynn@example.com   |
       | Marjolein Rye | marjolein.rye@example.com |
+      | Group owner   | group.owner@example.com   |
     And the following <group type>s:
       | title        | state     |
       | Classic Rock | published |
@@ -25,11 +26,12 @@ Feature: Sharing content between collections
       | title                       | <group type> | state     |
       | Rockabilly is still rocking | Classic Rock | published |
     And the following <group type> user memberships:
-      | <group type> | user          |
-      | Hip-Hop      | Marjolein Rye |
-      | Classic Rock | Sara Barber   |
-      | Hip-Hop      | Sara Barber   |
-      | Drum'n'Bass  | Sara Barber   |
+      | <group type> | user          | roles |
+      | Hip-Hop      | Marjolein Rye |       |
+      | Classic Rock | Sara Barber   |       |
+      | Hip-Hop      | Sara Barber   |       |
+      | Drum'n'Bass  | Sara Barber   |       |
+      | Hip-Hop      | Group owner   | owner |
     And <content type> content:
       | title               | <group type> | state     |
       | Interesting content | Hip-Hop      | published |
@@ -76,10 +78,12 @@ Feature: Sharing content between collections
     And the following fields should not be present "Hip-Hop, Power ballad"
 
     # Share the content in a group.
+    Given I mark all emails as read
     When I check "Classic Rock"
     And I press "Share" in the "Modal buttons" region
     And I wait for AJAX to finish
     Then I should see the success message "Item was shared on the following groups: Classic Rock."
+    Then 0 e-mails should have been sent
     # Verify that the groups where the content has already been shared are not shown anymore in the list.
     When I click "Share"
     Then a modal should open
@@ -128,6 +132,7 @@ Feature: Sharing content between collections
     # I should still be on the same page, but the group content should be
     # changed. The "Interesting content" should no longer be visible.
     Then I should see the success message "Item was unshared from the following groups: Classic Rock."
+    Then 0 e-mails should have been sent
     And the page should show only the tiles "New D'n'B compilation released, Rockabilly is still rocking"
 
     # Verify that the content is again shareable.

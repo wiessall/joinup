@@ -1,0 +1,56 @@
+/**
+ * @file
+ * Extend core align.module from /core/modules/system/css/components/align.module.css
+ */
+@import "../partials/core";
+
+.align-left,
+.align-right {
+  // Align center on small screens.
+  float: none;
+  width: fit-content;
+  margin: 0 auto;
+
+  // Add some padding on images outside <figure> element.
+  > img {
+    padding-bottom: $spacer;
+  }
+}
+.align-center {
+  width: fit-content;
+
+  // Add some padding on images outside <figure> element.
+  > img {
+    padding-bottom: $spacer;
+  }
+}
+
+@include media-breakpoint-up(lg) {
+  // Put back original alignment on larger screens and add margin where needed for images and videos.
+  .align-left {
+    float: left;
+    margin-right: $spacer * 1.25;
+  }
+  .align-right {
+    float: right;
+    margin-left: $spacer * 1.25;
+  }
+}
+
+figure[class^="align-"] {
+  // Hack to contain captions width inside figure elemnt.
+  display: table !important;
+  padding-bottom: $spacer;
+  img {
+    display:block;
+    margin: 0 auto;
+  }
+  figcaption {
+    display: table-caption;
+    padding-bottom: $spacer;
+    caption-side: bottom;
+  }
+  &:has(figcaption) {
+    padding-bottom: 0;
+  }
+}

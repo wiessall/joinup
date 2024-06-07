@@ -92,7 +92,7 @@ class OgMenuInstanceForm extends OriginalOgMenuInstanceForm {
     UrlGeneratorInterface $url_generator,
     EntityTypeBundleInfoInterface $entity_type_bundle_info,
     TimeInterface $time,
-    UrlMatcherInterface $url_matcher
+    UrlMatcherInterface $url_matcher,
   ) {
     parent::__construct($entity_repository, $menu_link_manager, $menu_tree, $link_generator, $og_access, $url_generator, $entity_type_bundle_info, $time);
 

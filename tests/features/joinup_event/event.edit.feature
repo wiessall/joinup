@@ -13,8 +13,9 @@ Feature: "Event page" editing.
     And I click "Add event" in the plus button menu
     When I fill in the following:
       | Title             | Best event                                               |
-      | Description       | It will be the best event this year.                     |
+      | Abstract          | It will be the best event this year.                     |
       | Physical location | Tower Bridge, Tower Bridge Road, London, United Kingdom. |
+
     And I select "EU and European Policies" from "Topic"
     And I press "Save as draft"
     Then I should see the heading "Best event"

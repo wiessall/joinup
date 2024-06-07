@@ -70,7 +70,7 @@ class JoinupUserMailTest extends JoinupMailKernelTestBase {
   const HTML_VERSION = <<<'EOS'
 <html>
 <head>
-<style type="text/css">
+<style>
 table tr td {
   font-family: Arial;
   font-size: 12px;
@@ -79,7 +79,7 @@ table tr td {
 </head>
 <body>
 <div>
-  <table width="800px" cellpadding="0" cellspacing="0">
+  <table style="width: 800px;" cellpadding="0" cellspacing="0">
     <tr>
       <td>
         <div style="padding: 0px 0px 0px 0px;">

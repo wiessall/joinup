@@ -1,0 +1,19 @@
+{#
+/**
+ * @file
+ * Ventuno override of the EIF qualified recomendation field item template.
+ *
+ * Available variables:
+ * - label: The EIF recommendation term label.
+ * - description: The EIF qualified recommendation description.
+ * - weight: The EIF qualified recommendation weight (used to order the list).
+ */
+#}
+<div class="field--name-term recommendation__term">
+  <p class="mb-0">
+  <span class="text-success">
+    <svg class="bi icon--s"><use xlink:href="/themes/ventuno/assets/icons/icons.svg#check-circle-fill"></use></svg>
+  </span>
+  <strong>{{ label }}</strong></p>
+</div>
+<div class="field--name-description recommendation__description">{{ description }}</div>

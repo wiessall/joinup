@@ -83,14 +83,8 @@ module.exports = {
       },
     },
     {
-      entry: path.resolve(
-        outputFolder,
-        `${ventuno}src/js/paragraph--carousel.js`
-      ),
-      dest: path.resolve(
-        outputFolder,
-        `${ventuno}assets/js/paragraph--carousel.js`
-      ),
+      entry: path.resolve(outputFolder, `${ventuno}src/js/carousel.js`),
+      dest: path.resolve(outputFolder, `${ventuno}assets/js/carousel.js`),
       options: {
         minify: true,
         sourceMap: true,
@@ -160,20 +154,6 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/js/sticky-menu-logged-in.js`
-      ),
-      dest: path.resolve(
-        outputFolder,
-        `${ventuno}assets/js/sticky-menu-logged-in.js`
-      ),
-      options: {
-        minify: true,
-        sourceMap: true,
-      },
-    },
-    {
-      entry: path.resolve(
-        outputFolder,
         `${ventuno}src/js/toggle-text-seemore-btn.js`
       ),
       dest: path.resolve(
@@ -193,6 +173,28 @@ module.exports = {
       dest: path.resolve(
         outputFolder,
         `${ventuno}assets/js/tour-first-balloon.js`
+      ),
+      options: {
+        minify: true,
+        sourceMap: true,
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, `${ventuno}src/js/og-navigation.js`),
+      dest: path.resolve(outputFolder, `${ventuno}assets/js/og-navigation.js`),
+      options: {
+        minify: true,
+        sourceMap: true,
+      },
+    },
+    {
+      entry: path.resolve(
+        outputFolder,
+        `${ventuno}src/js/sticky-groupheader.js`
+      ),
+      dest: path.resolve(
+        outputFolder,
+        `${ventuno}assets/js/sticky-groupheader.js`
       ),
       options: {
         minify: true,
@@ -246,6 +248,19 @@ module.exports = {
         includePaths,
         minify: true,
         sourceMap: "file",
+      },
+    },
+    // Emails
+    {
+      entry: path.resolve(outputFolder, `${ventuno}src/scss/emails/mail.scss`),
+      dest: path.resolve(
+        outputFolder,
+        `${ventuno}assets/css/emails/mail.min.css`
+      ),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: false,
       },
     },
     // Theme (SMACSS)
@@ -380,6 +395,21 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
+        `${ventuno}src/scss/modules/align-module.scss`
+      ),
+      dest: path.resolve(
+        outputFolder,
+        `${ventuno}assets/css/align-module.min.css`
+      ),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(
+        outputFolder,
         `${ventuno}src/scss/components/badge.scss`
       ),
       dest: path.resolve(outputFolder, `${ventuno}assets/css/badge.min.css`),
@@ -449,6 +479,21 @@ module.exports = {
         `${ventuno}src/scss/components/etrans.scss`
       ),
       dest: path.resolve(outputFolder, `${ventuno}assets/css/etrans.min.css`),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(
+        outputFolder,
+        `${ventuno}src/scss/components/ajax-throbber.scss`
+      ),
+      dest: path.resolve(
+        outputFolder,
+        `${ventuno}assets/css/ajax-throbber.min.css`
+      ),
       options: {
         includePaths,
         minify: true,
@@ -740,11 +785,23 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/scss/components/paragraphs/paragraph--carousel.scss`
+        `${ventuno}src/scss/components/carousel.scss`
+      ),
+      dest: path.resolve(outputFolder, `${ventuno}assets/css/carousel.min.css`),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(
+        outputFolder,
+        `${ventuno}src/scss/components/image-gallery.scss`
       ),
       dest: path.resolve(
         outputFolder,
-        `${ventuno}assets/css/paragraph--carousel.min.css`
+        `${ventuno}assets/css/image-gallery.min.css`
       ),
       options: {
         includePaths,
@@ -1326,6 +1383,14 @@ module.exports = {
       to: path.resolve(outputFolder, `${iop}assets/css`),
       options: { up: true },
     },
+    {
+      from: [
+        path.resolve(nodeModules, "priority-plus/dist/priority-plus.js"),
+        path.resolve(nodeModules, "priority-plus/dist/priority-plus.css"),
+      ],
+      to: path.resolve(outputFolder, `${ventuno}assets/lib/priority-plus`),
+      options: { up: true },
+    },
   ],
   sprite: [
     {
@@ -1334,11 +1399,14 @@ module.exports = {
       options: {
         file: "icons.svg",
         list: [
+          "archive.svg",
           "archive-fill.svg",
           "arrow-left.svg",
           "arrow-repeat.svg",
           "arrow-right.svg",
           "award.svg",
+          "bookmark.svg",
+          "bookmark-check-fill.svg",
           "box-arrow-up-right.svg",
           "calendar.svg",
           "calendar-event.svg",

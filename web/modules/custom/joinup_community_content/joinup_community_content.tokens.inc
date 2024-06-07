@@ -9,6 +9,8 @@ declare(strict_types=1);
 
 use Drupal\Core\Render\BubbleableMetadata;
 use Drupal\Core\Url;
+use Drupal\joinup_bundle_class\AbstractInterface;
+use Drupal\joinup_community_content\Entity\CommunityContentInterface;
 
 /**
  * Implements hook_token_info_alter().
@@ -50,6 +52,27 @@ function joinup_community_content_tokens($type, array $tokens, array $data = [],
           }
           break;
 
+        // Build the proper summary for community content having abstract field.
+        case 'summary':
+          if (!$node instanceof CommunityContentInterface) {
+            break;
+          }
+
+          if (
+            $node instanceof AbstractInterface &&
+            !$node->get($node->getAbstractField())->isEmpty()
+          ) {
+            $field = $node->get($node->getAbstractField());
+            $replacements[$original] = text_summary($field->first()->getString());
+          }
+          // Community content implements DescriptionInterface, no need for an
+          // extra condition logic here.
+          else {
+            $output = $node->getDescriptionAsRenderArray('view_mode_tile');
+            $outputString = \Drupal::service('renderer')->renderPlain($output);
+            $replacements[$original] = text_summary($outputString);
+          }
+          break;
       }
     }
   }

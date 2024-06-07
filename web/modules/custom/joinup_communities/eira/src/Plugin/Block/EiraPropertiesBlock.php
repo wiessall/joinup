@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Drupal\eira\Plugin\Block;
 
+use Drupal\Component\Serialization\Json;
 use Drupal\Core\Block\BlockBase;
+use Drupal\Core\Cache\Cache;
+use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Routing\CurrentRouteMatch;
-use Drupal\sparql_entity_storage\Driver\Database\sparql\ConnectionInterface;
 use Drupal\taxonomy\TermInterface;
-use EasyRdf\RdfNamespace;
-use EasyRdf\Resource;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -33,12 +33,10 @@ class EiraPropertiesBlock extends BlockBase implements ContainerFactoryPluginInt
    *   The plugin_id for the plugin instance.
    * @param mixed $pluginDefinition
    *   The plugin implementation definition.
-   * @param \Drupal\sparql_entity_storage\Driver\Database\sparql\ConnectionInterface $sparql
-   *   The sparql endpoint service.
    * @param \Drupal\Core\Routing\CurrentRouteMatch $currentRouteMatch
    *   The current_route_match service.
    */
-  public function __construct(array $configuration, $pluginId, $pluginDefinition, protected ConnectionInterface $sparql, protected CurrentRouteMatch $currentRouteMatch) {
+  public function __construct(array $configuration, $pluginId, $pluginDefinition, protected CurrentRouteMatch $currentRouteMatch) {
     parent::__construct($configuration, $pluginId, $pluginDefinition);
   }
 
@@ -50,7 +48,6 @@ class EiraPropertiesBlock extends BlockBase implements ContainerFactoryPluginInt
       $configuration,
       $pluginId,
       $pluginDefinition,
-      $container->get('sparql.endpoint'),
       $container->get('current_route_match')
     );
   }
@@ -66,10 +63,18 @@ class EiraPropertiesBlock extends BlockBase implements ContainerFactoryPluginInt
       ];
     }
 
-    $this->setupNamespaces();
-    [$rows, $namespaces] = $this->getRows($term->id());
+    $data = Json::decode($term->get('extra_properties')->value ?? '') ?? [];
 
-    return [
+    $rows = array_map(function (array $row): array {
+      $row['value'] = $row['value']['value'];
+      return $row;
+    }, $data['rows'] ?? []);
+
+    if (empty($rows)) {
+      return [];
+    }
+
+    $build = [
       '#type' => 'container',
       'namespaces_table' => [
         '#theme' => 'table',
@@ -77,7 +82,7 @@ class EiraPropertiesBlock extends BlockBase implements ContainerFactoryPluginInt
           'namespace' => $this->t('Namespace'),
           'uri' => $this->t('URI'),
         ],
-        '#rows' => array_values($namespaces),
+        '#rows' => array_values($data['namespaces'] ?? []),
       ],
       'properties_table' => [
         '#theme' => 'table',
@@ -88,74 +93,19 @@ class EiraPropertiesBlock extends BlockBase implements ContainerFactoryPluginInt
         '#rows' => $rows,
       ],
     ];
+
+    $cacheableMetadata = CacheableMetadata::createFromRenderArray($build);
+    $cacheableMetadata->addCacheableDependency($term);
+    $cacheableMetadata->applyTo($build);
+
+    return $build;
   }
 
   /**
-   * Generates the row for the term with the provided ID.
-   *
-   * @param string $tid
-   *   The term ID.
-   *
-   * @return array
-   *   The row data.
+   * {@inheritdoc}
    */
-  protected function getRows(string $tid): array {
-    $query = <<<SPARQL
-PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
-PREFIX eira: <http://data.europa.eu/dr8/>
-WITH <http://eira_skos_properties>
-SELECT ?property ?value
-WHERE {
-  ?s ?property ?value .
-  FILTER EXISTS { ?s skos:related <$tid> }
-}
-SPARQL;
-
-    $results = $this->sparql->query($query);
-    $rows = [];
-    $namespaces = [];
-    foreach ($results as $result) {
-      $property = $result->property->getUri();
-      // Do not show the skos:related property.
-      if ($property === 'http://www.w3.org/2004/02/skos/core#related') {
-        continue;
-      }
-
-      $value = $result->value instanceof Resource ? $result->value->getUri() : $result->value->getValue();
-      // Do not show empty values.
-      if (empty($value)) {
-        continue;
-      }
-
-      $shortenedProperty = RdfNamespace::shorten($property);
-      $prefix = RdfNamespace::prefixOfUri($property);
-      $namespaces[$prefix] = [
-        'namespace' => $prefix . ':',
-        'uri' => RdfNamespace::get($prefix),
-      ];
-
-      $rows[] = [
-        'property' => $shortenedProperty,
-        'value' => $value,
-      ];
-    }
-    return [$rows, $namespaces];
-  }
-
-  /**
-   * Sets up the namespaces.
-   *
-   * According to the requirements, the EIRA team needs some specific changes
-   * in the presented namespaces. Alter the data for this block to match the
-   * requirements.
-   */
-  protected function setupNamespaces(): void {
-    RdfNamespace::set('eira', 'http://data.europa.eu/dr8/');
-    // Replace the `dc` namespace with `dct` - requested by the client.
-    RdfNamespace::delete('dc');
-    RdfNamespace::delete('dcterms');
-    RdfNamespace::set('dct', 'http://purl.org/dc/terms/');
-    RdfNamespace::set('owlturtle', 'http://www.semanticweb.org/owl/owlapi/turtle#');
+  public function getCacheContexts(): array {
+    return Cache::mergeContexts(parent::getCacheContexts(), ['route']);
   }
 
 }

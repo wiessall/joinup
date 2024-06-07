@@ -8,10 +8,14 @@ dependencies:
     - node.type.glossary
     - rdf_entity.rdfentity.collection
   module:
+    - csv_serialization
     - joinup_group
     - node
+    - rest
+    - serialization
     - text
     - user
+    - views_data_export
 id: glossary
 label: Glossary
 module: views
@@ -471,6 +475,73 @@ display:
       contexts:
         - 'languages:language_content'
         - 'languages:language_interface'
+        - url
+        - 'user.node_grants:view'
+        - user.permissions
+      tags:
+        - 'config:field.storage.node.field_glossary_definition'
+        - 'config:field.storage.node.field_glossary_synonyms'
+  data_export:
+    id: data_export
+    display_title: 'Data export'
+    display_plugin: data_export
+    position: 2
+    display_options:
+      access:
+        type: og_permission
+        options:
+          og_permission: 'access glossary data export'
+      style:
+        type: data_export
+        options:
+          formats:
+            csv: csv
+          csv_settings:
+            delimiter: ','
+            enclosure: '"'
+            escape_char: \
+            strip_tags: true
+            trim: true
+            encoding: utf8
+            utf8_bom: '0'
+            use_serializer_encode_only: false
+      row:
+        type: data_field
+        options:
+          field_options:
+            title_1:
+              alias: Title
+              raw_output: false
+            field_glossary_synonyms:
+              alias: Synonym
+              raw_output: false
+            field_glossary_definition:
+              alias: Definition
+              raw_output: false
+      defaults:
+        access: false
+        arguments: true
+      display_extenders:
+        metatag_display_extender:
+          metatags: {  }
+          tokenize: false
+      path: rdf_entity/%rdf_entity/glossary_export
+      displays:
+        main: main
+        default: '0'
+      filename: glossary_export.csv
+      automatic_download: true
+      store_in_public_file_directory: true
+      custom_redirect_path: false
+      redirect_to_display: none
+      include_query_params: false
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_content'
+        - 'languages:language_interface'
+        - og_group_context
+        - request_format
         - url
         - 'user.node_grants:view'
         - user.permissions

@@ -28,3 +28,23 @@
     }
   }
 }
+
+.l-group-heading {
+  .contact-information__ci-webpage {
+    a {
+      display: inline-block;
+      overflow: hidden;
+      max-width: 100%;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+  }
+  &__main {
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
+  &__aside {
+    // CSS hack to align Quick links box, see #ISAICP-8461.
+    margin-right: $spacer * -.75;
+  }
+}

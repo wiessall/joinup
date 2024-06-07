@@ -1,0 +1,42 @@
+{#
+/**
+ * @file
+ * Override theme implementation to display a single Drupal page while offline.
+ *
+ * All available variables are mirrored in page.html.twig.
+ * Some may be blank but they are provided for consistency.
+ *
+ * @see template_preprocess_maintenance_page()
+ *
+ * @ingroup themeable
+ */
+#}
+<div class="layout-container">
+  {% include '@ventuno/parts/header.html.twig' with {
+    hide_searchbar: 1,
+    hide_toggle: 1,
+  } %}
+  {% if page.header %}
+    {{ page.header }}
+  {% endif %}
+
+  {% if page.messages %}
+    <div class="container">
+      {{ page.messages }}
+    </div>
+  {% endif %}
+
+  {{ page.content_top }}
+
+  <main role="main">
+    <div id="main-content" tabindex="-1">{# link is in html.html.twig #}
+      <div class="container layout-content">
+      {% if title %}
+        <h1 class="mt-5 mb-4">{{ title }}</h1>
+      {% endif %}
+      <p>{{ page.content }}</p>
+      </div>
+    </div>{# /.layout-content #}
+  </main>
+
+</div>{# /.layout-container #}

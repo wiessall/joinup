@@ -14,9 +14,9 @@ use PHPUnit\Framework\Assert;
 class FooterContext extends RawDrupalContext {
 
   /**
-   * Checks that the Joinup logo is present in the footer.
+   * Checks that the Interoperable Europe logo is present in the footer.
    *
-   * @Then I should see the Joinup logo in the footer
+   * @Then I should see the Interoperable Europe logo in the footer
    */
   public function assertLogo(): void {
     $logo_element = $this->getSession()->getPage()->find('css', 'footer .joinup-logo');
@@ -34,7 +34,7 @@ class FooterContext extends RawDrupalContext {
   public function assertVersion(): void {
     $element = $this->getSession()->getPage()->find('css', 'footer .joinup-version a');
     Assert::assertInstanceOf(NodeElement::class, $element, 'The version is shown in the footer.');
-    Assert::assertStringStartsWith('https://git.fpfis.eu/', $element->getAttribute('href'), 'The version links to the Gitlab instance.');
+    Assert::assertStringStartsWith('https://git.fpfis.tech.ec.europa.eu/ec-europa/digit-joinup-reference/', $element->getAttribute('href'), 'The version links to the Gitlab instance.');
     Assert::assertStringStartsWith('v1.', $element->getText(), 'The version number starts with the expected string "v1.".');
   }
 

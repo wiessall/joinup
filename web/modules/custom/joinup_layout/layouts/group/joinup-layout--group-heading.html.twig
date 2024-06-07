@@ -1,9 +1,9 @@
 {% if content %}
-  <div {{ attributes.addClass('layout', 'l-group-heading', 'row') }}>
-    <div class="l-group-heading__content col-12 col-md-7 col-lg-6 py-5">
+  <div {{ attributes.addClass('layout', 'l-group-heading', 'row', 'align-items-start', 'w-lg-100', 'mt-lg-5', 'pt-3') }}>
+    <div class="l-group-heading__content col-12 col-md-7 col-lg-6 py-3 py-lg-5 me-auto">
       {% if content.main %}
         <div class="row mb-4">
-          <div {{ region_attributes.second.addClass('l-group-heading__main') }}>
+          <div {{ region_attributes.main.addClass('l-group-heading__main') }}>
             {{ content.main }}
           </div>
         </div>
@@ -27,7 +27,7 @@
     </div>
 
     {% if content.aside|render|striptags|trim %}
-      <div {{ region_attributes.aside.addClass('l-group-heading__aside', 'bg-light', 'col-12', 'col-md-5', 'col-lg-4', 'offset-lg-2', 'rounded-3', 'p-4', 'p-lg-5', 'mb-5') }}>
+      <div {{ region_attributes.aside.addClass('l-group-heading__aside', 'bg-light', 'col-12', 'col-md-5', 'col-lg-4', 'rounded-3', 'p-4', 'p-lg-5', 'mb-5') }}>
         {{ content.aside }}
       </div>
     {% endif %}

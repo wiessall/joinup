@@ -13,11 +13,10 @@ Feature: Embed of videos into the page.
   Scenario: As a community content editor I can embed video iframes from allowed providers into the content field.
     Given I am logged in as a "facilitator" of the "Beer brewing corporation" collection
     And I go to the homepage of the "Beer brewing corporation" collection
-    And I click "Add news" in the plus button menu
+    And I click "Add discussion" in the plus button menu
 
     Then I fill in the following:
-      | Headline    | United Kingdom Brexit Notification |
-      | Short title | Brexit                             |
+      | Title | United Kingdom Brexit Notification |
     And I select "Supplier exchange" from "Topic"
     And I fill in "Content" with:
       """
@@ -53,10 +52,9 @@ Feature: Embed of videos into the page.
     Given I am logged in as a "facilitator" of the "Beer brewing corporation" collection
     And I go to the homepage of the "Beer brewing corporation" collection
     When I open the plus button menu
-    And I click "Add news"
+    And I click "Add discussion"
     When I fill in the following:
-      | Headline    | Some test video |
-      | Short title | Some test video |
+      | Title | Some test video |
     And I select "Supplier exchange" from "Topic"
     And I press the button "Insert Media" in the "Content" wysiwyg editor
     And a modal should open
@@ -92,10 +90,9 @@ Feature: Embed of videos into the page.
   Scenario: Forcing auto-play into the content of an entity will not trigger the auto-play.
     Given I am logged in as a "facilitator" of the "Beer brewing corporation" collection
     And I go to the homepage of the "Beer brewing corporation" collection
-    And I click "Add news"
+    And I click "Add discussion"
     When I fill in the following:
-      | Headline    | Some test video |
-      | Short title | Some test video |
+      | Title | Some test video |
     And I select "Supplier exchange" from "Topic"
     And I fill in "Content" with:
     """
@@ -106,5 +103,5 @@ Feature: Embed of videos into the page.
     Then the response should contain "autoplay%3D0"
 
     When I am not logged in
-    And I go to the "Some test video" news
+    And I go to the "Some test video" discussion
     Then the response should contain "autoplay%3D0"

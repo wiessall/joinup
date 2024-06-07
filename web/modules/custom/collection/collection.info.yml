@@ -20,9 +20,7 @@ dependencies:
   - joinup:joinup_workflow
   - joinup:oe_newsroom_newsletter
   - joinup:owner
-  - joinup:rdf_schema_field_validation
   - joinup:search_api_field
-  - joinup:workflow_state_permission
   - rdf_entity:rdf_entity
   - smart_trim:smart_trim
   - state_machine:state_machine

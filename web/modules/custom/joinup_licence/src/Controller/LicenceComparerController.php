@@ -148,7 +148,7 @@ class LicenceComparerController extends ControllerBase {
    *   @endcode
    */
   protected function getLegalTypeStructure(): array {
-    /** @var \Drupal\rdf_taxonomy\TermRdfStorage $storage */
+    /** @var \Drupal\taxonomy\TermStorageInterface $storage */
     $storage = $this->entityTypeManager()->getStorage('taxonomy_term');
     $tree = $storage->loadTree('legal_type');
 
@@ -197,8 +197,8 @@ class LicenceComparerController extends ControllerBase {
           '#theme' => 'licence_comparer_header_content',
           '#spdx_id' => $spdx_id,
           '#title' => $licence->label(),
-          '#description' => check_markup($licence->field_licence_description->value, 'content_editor'),
-          '#url' => $licence->getSpdxLicenceRdfId(),
+          '#description' => check_markup($licence->get('description')->value, 'content_editor'),
+          '#url' => $licence->getSpdxLicenceUrl(),
           '#first_header' => $this->firstHeader[$spdx_id],
         ],
         'class' => [

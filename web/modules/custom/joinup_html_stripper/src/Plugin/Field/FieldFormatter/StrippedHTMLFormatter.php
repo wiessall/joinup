@@ -101,7 +101,10 @@ class StrippedHTMLFormatter extends FormatterBase {
       // Trim the text if a maximum length has been set.
       if ($this->getSetting('trim_length') !== 0) {
         $truncate = new TruncateHTML();
-        $output = $truncate->truncateChars($output, $this->getSetting('trim_length'), '…');
+        // When attempting to save the formatter settings in the layout builder
+        // it returns the value from the form as a string, so we need to cast
+        // it to an integer.
+        $output = $truncate->truncateChars($output, (int) $this->getSetting('trim_length'), '…');
       }
 
       $element[$delta] = [

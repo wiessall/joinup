@@ -2,11 +2,7 @@ services:
   topic.path_processor:
     class: Drupal\topic\PathProcessor\TopicPathProcessor
     tags:
-      - { name: path_processor_outbound, priority: 0 }
-  topic.route_processor:
-    class: Drupal\topic\RouteProcessor\TopicRouteProcessor
-    tags:
-      - { name: route_processor_outbound, priority: 0 }
+      - { name: path_processor_outbound, priority: 1001 }
 
   topic.vocabulary_manager:
     class: Drupal\topic\VocabularyManager
@@ -26,5 +22,12 @@ services:
 
   topic.topic_route_subscriber:
     class: Drupal\topic\Routing\TopicRouteSubscriber
+    tags:
+      - { name: event_subscriber }
+
+  topic.request_subscriber:
+    class: Drupal\topic\EventSubscriber\TopicRedirectRequestSubscriber
+    arguments:
+      - '@router'
     tags:
       - { name: event_subscriber }

@@ -1,0 +1,18 @@
+uuid: 3f657e67-5c9c-471d-a988-4005e8f1fd15
+langcode: en
+status: true
+dependencies:
+  config:
+    - flag.flag.bookmark_node
+id: flagging.bookmark_node.default
+targetEntityType: flagging
+bundle: bookmark_node
+mode: default
+content:
+  flag_entity_render:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  search_api_excerpt: true

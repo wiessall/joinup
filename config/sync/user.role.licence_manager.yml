@@ -4,12 +4,13 @@ status: true
 dependencies:
   config:
     - filter.format.plain_text_glossary
+    - node.type.licence
     - taxonomy.vocabulary.legal_type
   module:
     - dashboard
     - filter
     - joinup_licence
-    - rdf_entity
+    - node
     - taxonomy
     - toolbar
 id: licence_manager
@@ -21,9 +22,9 @@ permissions:
   - 'access dashboard'
   - 'access taxonomy overview'
   - 'access toolbar'
-  - 'create licence rdf entity'
-  - 'delete licence rdf entity'
-  - 'edit licence rdf entity'
+  - 'create licence content'
+  - 'delete any licence content'
+  - 'edit any licence content'
   - 'edit terms in legal_type'
   - 'use text format plain_text_glossary'
   - 'view licence overview page'

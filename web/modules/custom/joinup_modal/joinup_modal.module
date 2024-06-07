@@ -14,21 +14,11 @@ function joinup_modal_theme(): array {
   return [
     'joinup_modal_anonymous' => [
       'variables' => [
-        'type' => NULL,
         'title' => NULL,
         'description' => NULL,
         'login' => NULL,
         'register' => NULL,
       ],
     ],
-  ];
-}
-
-/**
- * Implements hook_theme_suggestions_HOOK().
- */
-function joinup_modal_theme_suggestions_joinup_modal_anonymous(array $variables): array {
-  return [
-    'joinup_modal_anonymous__' . $variables['type'],
   ];
 }

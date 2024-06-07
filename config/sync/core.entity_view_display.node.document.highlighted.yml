@@ -4,7 +4,7 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.node.highlighted
-    - field.field.node.document.body
+    - field.field.node.document.abstract
     - field.field.node.document.field_comments
     - field.field.node.document.field_document_logo
     - field.field.node.document.field_document_publication_date
@@ -12,6 +12,7 @@ dependencies:
     - field.field.node.document.field_file
     - field.field.node.document.field_keywords
     - field.field.node.document.field_licence
+    - field.field.node.document.field_paragraphs_body
     - field.field.node.document.field_shared_in
     - field.field.node.document.field_short_title
     - field.field.node.document.field_site_featured
@@ -22,8 +23,11 @@ dependencies:
     - node.type.document
     - responsive_image.styles.highlighted_content
   module:
+    - field_delimiter
+    - field_formatter_range
     - field_group
-    - joinup_html_stripper
+    - joinup_core
+    - joinup_slick
     - layout_builder
     - responsive_image
     - template_suggestion
@@ -77,14 +81,12 @@ targetEntityType: node
 bundle: document
 mode: highlighted
 content:
-  body:
-    type: joinup_html_stripper_stripped
-    label: hidden
+  abstract:
+    type: string
+    label: visually_hidden
     settings:
-      trim_length: 200
-    third_party_settings:
-      template_suggestion:
-        template_suggestion: ''
+      link_to_entity: false
+    third_party_settings: {  }
     weight: 1
     region: content
   field_document_logo:
@@ -94,11 +96,35 @@ content:
       responsive_image_style: highlighted_content
       image_link: ''
       image_loading:
-        attribute: eager
+        attribute: lazy
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
     weight: 0
+    region: content
+  field_paragraphs_body:
+    type: filtered_entity_reference_bundles
+    label: visually_hidden
+    settings:
+      view_mode: message_digest
+      link: ''
+      filtered_entity_bundles:
+        - simple_paragraph
+        - text
+    third_party_settings:
+      field_delimiter:
+        delimiter: ''
+      field_formatter_range:
+        order: 0
+        limit: 1
+        offset: 0
+      joinup_slick:
+        preset: ''
+        field_label: true
+        custom_label: ''
+      template_suggestion:
+        template_suggestion: ''
+    weight: 1
     region: content
   flag_like_node:
     settings: {  }

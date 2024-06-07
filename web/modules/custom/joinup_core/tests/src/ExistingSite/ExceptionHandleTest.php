@@ -31,7 +31,7 @@ final class ExceptionHandleTest extends JoinupExistingSiteTestBase {
 
     $this->visit($entity->toUrl('canonical')->setAbsolute()->toString());
     $this->assertSession()->statusCodeEquals(200);
-    // Assert that the page is in RDFXML format.
+    // Assert that the page is in HTML format.
     $this->assertSession()->responseHeaderEquals('Content-Type', 'text/html; charset=UTF-8');
 
     $query = ['query' => ['_format' => 'rdfxml']];

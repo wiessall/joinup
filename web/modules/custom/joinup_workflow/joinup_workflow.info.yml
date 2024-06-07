@@ -3,6 +3,3 @@ description: Shared code for handling workflows in Joinup.
 type: module
 package: Joinup
 core_version_requirement: ">= 9.4"
-
-dependencies:
-  - 'joinup:workflow_state_permission'

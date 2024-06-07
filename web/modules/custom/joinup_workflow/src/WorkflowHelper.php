@@ -21,7 +21,6 @@ use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\og\MembershipManagerInterface;
 use Drupal\state_machine\Plugin\Workflow\WorkflowInterface;
 use Drupal\state_machine\Plugin\Workflow\WorkflowTransition;
-use Drupal\workflow_state_permission\WorkflowStatePermissionInterface;
 use Stringable;
 
 /**
@@ -42,8 +41,6 @@ class WorkflowHelper implements WorkflowHelperInterface {
    *   The entity field manager.
    * @param \Drupal\og\MembershipManagerInterface $membershipManager
    *   The membership manager service.
-   * @param \Drupal\workflow_state_permission\WorkflowStatePermissionInterface $workflowStatePermission
-   *   The workflow state permission service.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity type manager.
    * @param \Drupal\Component\Datetime\TimeInterface $time
@@ -54,23 +51,9 @@ class WorkflowHelper implements WorkflowHelperInterface {
     protected AccountSwitcherInterface $accountSwitcher,
     protected EntityFieldManagerInterface $entityFieldManager,
     protected MembershipManagerInterface $membershipManager,
-    protected WorkflowStatePermissionInterface $workflowStatePermission,
     protected EntityTypeManagerInterface $entityTypeManager,
-    protected TimeInterface $time
+    protected TimeInterface $time,
   ) {}
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getAvailableStatesLabels(FieldableEntityInterface $entity, ?AccountInterface $account = NULL): array {
-    $allowedTransitions = $this->getAvailableTransitions($entity, $account);
-
-    $allowedStates = array_map(function (WorkflowTransition $transition) {
-      return (string) $transition->getToState()->getLabel();
-    }, $allowedTransitions);
-
-    return $allowedStates;
-  }
 
   /**
    * {@inheritdoc}
@@ -79,17 +62,9 @@ class WorkflowHelper implements WorkflowHelperInterface {
     /** @var \Drupal\joinup_workflow\EntityWorkflowStateInterface $entity */
     $allowedTransitions = $this->getAvailableTransitions($entity, $account);
 
-    $allowedStates = array_map(function (WorkflowTransition $transition) {
+    return array_map(function (WorkflowTransition $transition) {
       return (string) $transition->getToState()->getId();
     }, $allowedTransitions);
-
-    $currentState = $entity->getWorkflowState();
-    $workflow = $entity->getWorkflow();
-    if ($this->workflowStatePermission->isStateUpdatePermitted($account, $entity, $workflow, $currentState, $currentState)) {
-      $allowedStates[$currentState] = $currentState;
-    }
-
-    return $allowedStates;
   }
 
   /**
@@ -165,47 +140,6 @@ class WorkflowHelper implements WorkflowHelperInterface {
   }
 
   /**
-   * {@inheritdoc}
-   */
-  public function userHasOwnAnyRoles(EntityInterface $entity, AccountInterface $account, array $roles): bool {
-    $own = $entity->getOwnerId() === $account->id();
-    if (isset($roles['any']) && $this->userHasRoles($entity, $account, $roles['any'])) {
-      return TRUE;
-    }
-    if ($own && isset($roles['own']) && $this->userHasRoles($entity, $account, $roles['own'])) {
-      return TRUE;
-    }
-
-    return FALSE;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function userHasRoles(EntityInterface $entity, AccountInterface $account, array $roles): bool {
-    $parent = $this->getEntityParent($entity);
-    if (empty($parent)) {
-      return FALSE;
-    }
-
-    $membership = $this->membershipManager->getMembership($parent, $account->id());
-
-    // First check the 'any' permissions.
-    if (isset($roles['roles'])) {
-      if (array_intersect($account->getRoles(), $roles['roles'])) {
-        return TRUE;
-      }
-    }
-    if (isset($roles['og_roles']) && !empty($membership)) {
-      if (array_intersect($membership->getRolesIds(), $roles['og_roles'])) {
-        return TRUE;
-      }
-    }
-
-    return FALSE;
-  }
-
-  /**
    * Helper method to retrieve the parent of the entity.
    *
    * @param \Drupal\Core\Entity\EntityInterface $entity
@@ -221,19 +155,6 @@ class WorkflowHelper implements WorkflowHelperInterface {
     }
 
     return reset($groups['rdf_entity']);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function hasOgPermission(string $permission, EntityInterface $group, AccountInterface $user): bool {
-    $actualPermissions = [];
-    if ($membership = $this->membershipManager->getMembership($group, $user->id())) {
-      foreach ($membership->getRoles() as $role) {
-        $actualPermissions = array_merge($actualPermissions, $role->getPermissions());
-      }
-    }
-    return in_array($permission, array_unique($actualPermissions));
   }
 
   /**
@@ -327,6 +248,7 @@ class WorkflowHelper implements WorkflowHelperInterface {
       $previousRevision->setRevisionCreationTime($this->time->getRequestTime());
       $previousRevision->setRevisionUserId($this->currentUser->id());
     }
+    $previousRevision->skip_notification = TRUE;
     $previousRevision->save();
 
     return $previousRevision;

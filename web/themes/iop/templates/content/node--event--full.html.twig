@@ -70,4 +70,9 @@
  *   in different view modes.
  */
 #}
-{% extends "node--news--full.html.twig" %}
+<div class="clearfix">
+  {{ content.field_paragraphs_body }}
+</div>
+<div class="d-flex justify-content-end my-3">
+  {{ content.report }}
+</div>

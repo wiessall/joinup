@@ -1,10 +1,33 @@
 uuid: a4ea76cf-766f-4247-84fc-33c44944db6e
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  module:
+    - joinup_taxonomy
+    - rdf_sync
 third_party_settings:
-  rdf_taxonomy:
-    locked: false
+  joinup_taxonomy:
+    locked: true
+  rdf_sync:
+    type: 'http://data.europa.eu/eif/Principle/'
+    uri_plugin: null
+    fields:
+      vid:
+        target_id:
+          predicate: 'http://www.w3.org/2004/02/skos/core#inScheme'
+          type: resource
+      name:
+        value:
+          predicate: 'http://www.w3.org/2004/02/skos/core#prefLabel'
+          type: null
+      description:
+        processed:
+          predicate: 'http://www.w3.org/2004/02/skos/core#definition'
+          type: null
+      weight:
+        value:
+          predicate: 'http://www.w3.org/ns/adms#identifier'
+          type: 'xsd:integer'
 name: 'Underlying principle'
 vid: eif_principle
 description: 'Terms that represent a principle of the EIF Toolbox.'

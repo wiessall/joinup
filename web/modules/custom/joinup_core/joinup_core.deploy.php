@@ -13,3 +13,10 @@
  */
 
 declare(strict_types=1);
+
+/**
+ * Delete stale page.
+ */
+function joinup_core_deploy_110800(): void {
+  \Drupal::entityTypeManager()->getStorage('node')->load(703013)->delete();
+}

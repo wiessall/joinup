@@ -43,6 +43,16 @@ class AssetRelease extends Rdf implements AssetReleaseInterface {
   }
 
   /**
+   * Returns the group reference field name.
+   *
+   * @return string
+   *   The group reference field name.
+   */
+  protected function getGroupFieldName(): string {
+    return 'field_isr_is_version_of';
+  }
+
+  /**
    * {@inheritdoc}
    */
   public function getGroupId(): string {

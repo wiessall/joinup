@@ -1,0 +1,15 @@
+#!/bin/bash
+
+WEB_LIBRARY_ROOT="web/libraries"
+
+echo "Copy required JavaScript libraries to '$WEB_LIBRARY_ROOT'"
+
+# Copy jQuery JSONView into the libraries folder.
+mkdir -p "$WEB_LIBRARY_ROOT/jquery-jsonview/dist" && cp node_modules/jquery-jsonview/dist/* "$WEB_LIBRARY_ROOT/jquery-jsonview/dist/"
+
+# Copy Slick Carousel library.
+mkdir -p "$WEB_LIBRARY_ROOT/slick" && cp -r "node_modules/slick-carousel/slick" "$WEB_LIBRARY_ROOT/slick"
+
+# Colorbox: Copy DOMPurify and Colorbox libraries.
+cp -r "node_modules/dompurify" "$WEB_LIBRARY_ROOT/dompurify"
+cp -r "node_modules/jquery-colorbox" "$WEB_LIBRARY_ROOT/colorbox"

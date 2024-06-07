@@ -1,0 +1,24 @@
+uuid: 91fde17b-2016-4a70-86e5-38b8e1ceae22
+langcode: en
+status: true
+dependencies: {  }
+id: image_gallery
+name: image_gallery
+weight: 0
+label: 'Image gallery'
+group: ''
+skin: ''
+breakpoints: 0
+optimized: true
+options:
+  options__active_tab: edit-options-settings
+  settings:
+    infinite: false
+    lazyLoad: ondemand
+    respondTo: slider
+    rows: 0
+    slidesToShow: 1
+    speed: 300
+    swipeToSlide: true
+    cssEase: 'cubic-bezier(0.3, 0.8, 0.5, 0.9)'
+    variableWidth: true

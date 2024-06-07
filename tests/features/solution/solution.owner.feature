@@ -32,9 +32,9 @@ Feature:
 
   @uploadFiles:logo.png
   Scenario: Assign ownership during creation of solutions through UI
-    Given the following owner:
-      | name      | type            |
-      | Leechidna | Local Authority |
+    Given owner content:
+      | name      | owner type |
+      | Leechidna | Company    |
     And users:
       | Username          |
       | Solution API user |
@@ -65,9 +65,9 @@ Feature:
     And I press "Add existing" at the "Owner" field
     # Then I wait for AJAX to finish
     And I fill in "Owner" with "Leechidna"
-    And I fill in "Language" with "http://publications.europa.eu/resource/authority/language/VLS"
+    And I select "Flemish" from "Language"
     And I select "EU and European Policies" from "Topic"
-    And I select "Citizen" from "Solution type"
+    And I select "Logging Service" from "Solution type"
     And I press "Add owner"
     And I press "Save"
     Then I should see the heading "Solution API example"

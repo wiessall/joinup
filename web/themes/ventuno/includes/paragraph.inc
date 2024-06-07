@@ -104,7 +104,12 @@ function ventuno_preprocess_paragraph__configurable_listing(&$variables): void {
 
   if ($results = &$variables['content']['content_listing']['#results']) {
     foreach ($results as &$result) {
+      $view_mode_old = $result['#item']['#view_mode'];
       $result['#item']['#view_mode'] = $view_mode_mapping[$style];
+
+      if (($key = array_search($view_mode_old, $result['#item']['#cache']['keys'])) !== FALSE) {
+        $result['#item']['#cache']['keys'][$key] = $view_mode_mapping[$style];
+      }
       $cache_tags = CacheableMetadata::createFromRenderArray($result['#item']);
       $cache_tags->addCacheTags($paragraph->getCacheTags());
       $cache_tags->applyTo($result['#item']);

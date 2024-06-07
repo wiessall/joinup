@@ -1,0 +1,24 @@
+uuid: e8828792-418b-4664-92e5-7ec1b48c5a4f
+langcode: en
+status: true
+dependencies:
+  config:
+    - image.style.image_gallery_1x
+    - image.style.image_gallery_2x
+  theme:
+    - ventuno
+id: image_gallery
+label: 'Image gallery'
+image_style_mappings:
+  -
+    image_mapping_type: image_style
+    image_mapping: image_gallery_1x
+    breakpoint_id: ventuno.all
+    multiplier: 1x
+  -
+    image_mapping_type: image_style
+    image_mapping: image_gallery_2x
+    breakpoint_id: ventuno.all
+    multiplier: 2x
+breakpoint_group: ventuno
+fallback_image_style: image_gallery_1x

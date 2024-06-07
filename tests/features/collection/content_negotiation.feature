@@ -1,12 +1,11 @@
-@api @group-a
+@api @group-clone
 Feature: Export collection metadata
   As a user of Joinup I am able to retrieve the content of entities in a machine readable format.
 
-  Scenario Outline: Export RDF Entity data
-    Given the following licence:
-      | title       | Creative commons      |
-      | description | This is so creative   |
-      | uri         | http://i-am-creative/ |
+  Scenario Outline: Export node data
+    Given licence content:
+      | title            | description         | uri                   | licence type | deprecated |
+      | Creative commons | This is so creative | http://i-am-creative/ | Nominal cost | yes        |
     When I visit the homepage of the "Creative commons" licence in the <format> serialisation.
     Then the output should match the file contents of "<fixture>"
     And the content type of the response should be "<Content-Type>"

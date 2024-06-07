@@ -24,4 +24,6 @@ default_value_callback: ''
 settings:
   workflow: ''
   workflow_callback: joinup_community_content_workflow_selector
+  always_allow_default: false
+  current_state_first: true
 field_type: state

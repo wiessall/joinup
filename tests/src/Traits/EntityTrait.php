@@ -14,14 +14,30 @@ use Drupal\menu_link_content\MenuLinkContentInterface;
 trait EntityTrait {
 
   /**
-   * Returns the entity with the given type, bundle and label.
+   * Finds and entity by label with given type and bundle.
+   */
+  protected static function getEntityByLabel(string $entity_type_id, string $label, ?string $bundle = NULL): EntityInterface {
+    return static::getEntityByKey('label', $entity_type_id, $label, $bundle);
+  }
+
+  /**
+   * Finds and entity by ID with given type and bundle.
+   */
+  protected static function getEntityById(string $entity_type_id, string $label, ?string $bundle = NULL): EntityInterface {
+    return static::getEntityByKey('id', $entity_type_id, $label, $bundle);
+  }
+
+  /**
+   * Returns the entity with the given type, bundle and key.
    *
    * If multiple entities have the same label then the first one is returned.
    *
+   * @param string $key
+   *   The entity key to check against.
    * @param string $entity_type_id
    *   The entity type to check.
-   * @param string $label
-   *   The label to check.
+   * @param string $value
+   *   The value to check.
    * @param string|null $bundle
    *   Optional bundle to check. If omitted, the entity can be of any bundle.
    *
@@ -32,13 +48,13 @@ trait EntityTrait {
    *   Thrown when an entity with the given type, label and bundle does not
    *   exist.
    */
-  protected static function getEntityByLabel(string $entity_type_id, string $label, ?string $bundle = NULL): EntityInterface {
+  protected static function getEntityByKey(string $key, string $entity_type_id, string $value, ?string $bundle = NULL): EntityInterface {
     $entity_type_manager = \Drupal::entityTypeManager();
     $storage = $entity_type_manager->getStorage($entity_type_id);
     $entity = $entity_type_manager->getDefinition($entity_type_id);
 
     $query = $storage->getQuery()
-      ->condition($entity->getKey('label'), $label)
+      ->condition($entity->getKey($key), $value)
       ->accessCheck(FALSE)
       ->range(0, 1);
 
@@ -57,7 +73,33 @@ trait EntityTrait {
       return $storage->load($result);
     }
 
-    throw new \RuntimeException("The entity with label '$label' was not found.");
+    throw new \RuntimeException("The entity with $key '$value' was not found.");
+  }
+
+  /**
+   * Checks the number of available entities filtered by entity type and bundle.
+   *
+   * @param string $entityTypeId
+   *   The entity type.
+   * @param string $bundle
+   *   The bundle of the entity.
+   * @param int $number
+   *   The expected number of entities.
+   *
+   * @throws \Exception
+   *   Thrown when the number of entities does not
+   *   match the expectation.
+   */
+  protected function assertEntityCount(string $entityTypeId, string $bundle, int $number): void {
+    $typeKey = \Drupal::entityTypeManager()->getDefinition($entityTypeId)->getKey('bundle');
+    $actual = \Drupal::entityQuery($entityTypeId)
+      ->accessCheck(FALSE)
+      ->condition($typeKey, $bundle)
+      ->count()
+      ->execute();
+    if ($actual != $number) {
+      throw new \Exception("Wrong number of $bundle entities. Expected number: $number, actual number: $actual.");
+    }
   }
 
   /**
@@ -79,7 +121,7 @@ trait EntityTrait {
       'glossary' => 'node',
       'group' => 'rdf_entity',
       'news' => 'node',
-      'owner' => 'rdf_entity',
+      'owner' => 'node',
       'release' => 'rdf_entity',
       'solution' => 'rdf_entity',
       'spdx licence' => 'rdf_entity',

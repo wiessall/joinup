@@ -12,8 +12,6 @@ dependencies:
     - field.field.rdf_entity.solution.field_is_description
     - field.field.rdf_entity.solution.field_is_distribution
     - field.field.rdf_entity.solution.field_is_documentation
-    - field.field.rdf_entity.solution.field_is_eif_category
-    - field.field.rdf_entity.solution.field_is_eif_recommendation
     - field.field.rdf_entity.solution.field_is_has_version
     - field.field.rdf_entity.solution.field_is_included_asset
     - field.field.rdf_entity.solution.field_is_issue_tracker
@@ -58,7 +56,7 @@ third_party_settings:
       label: 'Abstract wrapper'
       parent_name: ''
       region: hidden
-      weight: 60
+      weight: 56
       format_type: html_element
       format_settings:
         classes: ''
@@ -77,6 +75,14 @@ targetEntityType: rdf_entity
 bundle: solution
 mode: view_mode_search_list_item
 content:
+  field_is_abstract:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 6
+    region: content
   field_is_description:
     type: joinup_html_stripper_stripped
     label: hidden
@@ -87,13 +93,6 @@ content:
         template_suggestion: p_wrapper
     weight: 3
     region: content
-  field_is_eif_category:
-    type: list_default
-    label: hidden
-    settings: {  }
-    third_party_settings: {  }
-    weight: 4
-    region: content
   field_is_logo:
     type: responsive_image
     label: hidden
@@ -101,7 +100,7 @@ content:
       responsive_image_style: teaser
       image_link: ''
       image_loading:
-        attribute: eager
+        attribute: lazy
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
@@ -138,14 +137,12 @@ hidden:
   download_total: true
   eif_perspective: true
   featured: true
-  field_is_abstract: true
   field_is_affiliations_requests: true
   field_is_contact_information: true
   field_is_content: true
   field_is_content_creation: true
   field_is_distribution: true
   field_is_documentation: true
-  field_is_eif_recommendation: true
   field_is_has_version: true
   field_is_included_asset: true
   field_is_issue_tracker: true

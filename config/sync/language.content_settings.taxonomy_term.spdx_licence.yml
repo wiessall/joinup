@@ -1,0 +1,11 @@
+uuid: 7ac3697e-6b6d-4faf-ba4a-3c34d5f09c57
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.spdx_licence
+id: taxonomy_term.spdx_licence
+target_entity_type_id: taxonomy_term
+target_bundle: spdx_licence
+default_langcode: site_default
+language_alterable: false

@@ -1,8 +1,0 @@
-name: Spain - Center for Technology Transfer
-type: module
-description: Specificities for the Spain CTT community.
-core_version_requirement: ">= 9.4"
-package: Joinup communities
-
-dependencies:
-  - joinup:joinup_federation

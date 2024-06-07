@@ -1,0 +1,36 @@
+uuid: 489538be-c89d-4034-99e3-20fbde0e60ed
+langcode: en
+status: true
+dependencies:
+  module:
+    - joinup_core
+    - joinup_flag
+  theme:
+    - ventuno
+id: ventuno_bookmark
+theme: ventuno
+region: content_top
+weight: -28
+provider: null
+plugin: joinup_flag_block
+settings:
+  id: joinup_flag_block
+  label: Bookmark
+  label_display: '0'
+  provider: joinup_flag
+  flag_type: bookmark
+visibility:
+  joinup_content:
+    id: joinup_content
+    negate: false
+    context_mapping:
+      node: '@node.node_route_context:node'
+      rdf: '@rdf_entity.rdf_entity_route_context:rdf_entity'
+    content:
+      node-custom_page: node-custom_page
+      node-discussion: node-discussion
+      node-document: node-document
+      node-event: node-event
+      node-news: node-news
+      rdf_entity-collection: rdf_entity-collection
+      rdf_entity-solution: rdf_entity-solution

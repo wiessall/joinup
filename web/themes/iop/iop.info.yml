@@ -17,7 +17,7 @@ libraries-override:
   tour/tour-styling: false
   ventuno/components: false
   ventuno/theme: false
-  ventuno/paragraph__carousel: false
+  ventuno/carousel: false
 
 regions:
   search_bar: 'Search bar'

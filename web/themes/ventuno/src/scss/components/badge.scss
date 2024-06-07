@@ -3,7 +3,13 @@
 @import "@openeuropa/bcl-bootstrap/scss/badge";
 @import "@openeuropa/bcl-theme-default/src/scss/badge";
 
-.badge.bg-secondary,
-.badge.bg-secondary a {
-  color: color.adjust($brand, $lightness: -15%);
+.badge {
+  display: inline-block;
+  overflow: hidden;
+  max-width: 100%;
+  text-overflow: ellipsis;
+  &.bg-secondary,
+  &.bg-secondary a {
+    color: color.adjust($brand, $lightness: -15%);
+  }
 }

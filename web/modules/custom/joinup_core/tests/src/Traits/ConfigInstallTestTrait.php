@@ -27,7 +27,7 @@ trait ConfigInstallTestTrait {
    */
   protected function installFromConfigCollection(
     array $config_patterns,
-    ?string $source = NULL
+    ?string $source = NULL,
   ): void {
     $diff_before = $this->getFieldStorageChangeList();
     $source = rtrim($source ?? DRUPAL_ROOT . '/../config/sync', '/') . '/';
@@ -119,7 +119,7 @@ trait ConfigInstallTestTrait {
    */
   protected function getMatchingConfigNames(
     array $config_patterns,
-    ?string $source = NULL
+    ?string $source = NULL,
   ): array {
     $source = rtrim($source ?? DRUPAL_ROOT . '/../config/common', '/') . '/';
     $all_configs = array_filter(
@@ -159,7 +159,7 @@ trait ConfigInstallTestTrait {
    */
   protected function installLanguageConfigOverridesFromConfigCollection(
     array $config_patterns,
-    ?string $source = NULL
+    ?string $source = NULL,
   ): void {
     $module_handler = \Drupal::moduleHandler();
     if (

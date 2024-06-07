@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_invite\Controller;
 
+use Drupal\Component\Render\MarkupInterface;
 use Drupal\Core\Controller\ControllerBase;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\user\UserInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -15,29 +14,6 @@ use Symfony\Component\HttpFoundation\Request;
  * Class that handles an auto complete by first name, family name or email.
  */
 class UserAutoCompleteController extends ControllerBase {
-
-  /**
-   * Drupal\Core\Entity\EntityTypeManager definition.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
-
-  /**
-   * {@inheritdoc}
-   */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager) {
-    $this->entityTypeManager = $entity_type_manager;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container) {
-    return new static(
-      $container->get('entity_type.manager')
-    );
-  }
 
   /**
    * Returns auto completed user entries.
@@ -48,13 +24,13 @@ class UserAutoCompleteController extends ControllerBase {
    * @return \Symfony\Component\HttpFoundation\JsonResponse
    *   A JSON response containing the auto complete suggestions.
    */
-  public function userAutoComplete(Request $request) {
+  public function userAutoComplete(Request $request): JsonResponse {
     $param = $request->query->get('q');
     $values = [];
     if ($param) {
-      $results = $this->entityTypeManager->getStorage('user')->getQuery('OR')
+      $userStorage = $this->entityTypeManager()->getStorage('user');
+      $results = $userStorage->getQuery('OR')
         ->accessCheck(FALSE)
-        ->condition('mail', $param, 'CONTAINS')
         ->condition('name', $param, 'CONTAINS')
         ->condition('field_user_first_name', $param, 'CONTAINS')
         ->condition('field_user_family_name', $param, 'CONTAINS')
@@ -63,11 +39,11 @@ class UserAutoCompleteController extends ControllerBase {
         ->range(0, 10)
         ->execute();
       /** @var \Drupal\user\UserInterface[] $users */
-      $users = $this->entityTypeManager->getStorage('user')->loadMultiple($results);
+      $users = $userStorage->loadMultiple($results);
 
       foreach ($users as $user) {
         $values[] = [
-          'value' => $user->getEmail(),
+          'value' => $user->id(),
           'label' => $this->getAccountName($user),
         ];
       }
@@ -76,7 +52,7 @@ class UserAutoCompleteController extends ControllerBase {
   }
 
   /**
-   * Returns a full name of the user with their email as suffix in parenthesis.
+   * Returns a full name of the user with their email as suffix in parentheses.
    *
    * @param \Drupal\user\UserInterface $user
    *   The user object.
@@ -84,7 +60,7 @@ class UserAutoCompleteController extends ControllerBase {
    * @return \Drupal\Core\StringTranslation\TranslatableMarkup
    *   A string version of user's full name.
    */
-  protected function getAccountName(UserInterface $user) {
+  protected function getAccountName(UserInterface $user): MarkupInterface {
     return $this->t('@name (@username)', [
       '@name' => $user->getDisplayName(),
       '@username' => $user->getAccountName(),

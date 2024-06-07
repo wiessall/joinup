@@ -1,4 +1,0 @@
-services:
-  rdf_schema_field_validation.schema_field_validator:
-    class: Drupal\rdf_schema_field_validation\SchemaFieldValidator
-    arguments: ['@sparql.endpoint', '@entity_type.manager', '@sparql.field_handler']

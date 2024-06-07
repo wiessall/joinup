@@ -1,0 +1,25 @@
+uuid: 15e71d30-3407-4824-a72d-b8e9e873dc0b
+langcode: en
+status: true
+dependencies:
+  module:
+    - eif
+    - field_permissions
+    - meta_entity
+    - taxonomy
+third_party_settings:
+  field_permissions:
+    permission_type: public
+id: meta_entity.eif_recommendation
+field_name: eif_recommendation
+entity_type: meta_entity
+type: eif_qualified_recommendation
+settings:
+  target_type: taxonomy_term
+module: eif
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

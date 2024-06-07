@@ -61,6 +61,13 @@ group:
   css:
     theme:
       assets/css/group.min.css: { minified: true }
+  js:
+    assets/js/sticky-groupheader.min.js: { minified: true, attributes: { defer: true } }
+  dependencies:
+    - core/drupal
+    - core/drupal.displace
+    - core/once
+    - core/jquery
 
 # Components
 abstract:
@@ -82,6 +89,9 @@ ajax-throbber:
   header: true
   js:
     assets/js/ajax-throbber.min.js: { minified: true, attributes: { defer: true } }
+  css:
+    theme:
+      assets/css/ajax-throbber.min.css: { minified: true }
   dependencies:
     - core/drupal
     - ventuno/spinners
@@ -93,6 +103,11 @@ alert:
   dependencies:
     - ventuno/close
 
+align-module:
+  css:
+    theme:
+      assets/css/align-module.min.css: { minified: true }
+
 badge:
   css:
     theme:
@@ -102,6 +117,32 @@ button-group:
   css:
     theme:
       assets/css/button-group.min.css: { minified: true }
+
+carousel-theme:
+  css:
+    theme:
+      assets/css/carousel.min.css: { minified: true }
+
+carousel:
+  dependencies:
+    - ventuno/carousel.js
+    - ventuno/carousel-theme
+
+image-gallery:
+  css:
+    theme:
+      assets/css/image-gallery.min.css: { minified: true }
+  dependencies:
+    - ventuno/carousel-theme
+
+carousel.js:
+  header: true
+  js:
+    assets/js/carousel.min.js: { minified: true, attributes: { defer: true } }
+  dependencies:
+    - ventuno/glide
+    - core/drupal
+    - core/once
 
 close:
   css:
@@ -211,10 +252,23 @@ listing-grid:
     theme:
       assets/css/listing-grid.min.css: { minified: true }
 
+priority-plus:
+  css:
+    theme:
+      assets/lib/priority-plus/priority-plus.css: { minified: true }
+  js:
+    assets/lib/priority-plus/priority-plus.js: { minified: true }
+
 menu--og--navigation:
   css:
     theme:
       assets/css/menu--og--navigation.min.css: { minified: true }
+  js:
+    assets/js/og-navigation.min.js: { minified: true }
+  dependencies:
+    - core/drupal
+    - core/once
+    - ventuno/priority-plus
 
 modals:
   css:
@@ -279,22 +333,6 @@ paragraph:
 paragraph__accordion:
   dependencies:
     - ventuno/accordion
-
-paragraph__carousel:
-  css:
-    theme:
-      assets/css/paragraph--carousel.min.css: { minified: true }
-  dependencies:
-    - ventuno/paragraph__carousel.js
-
-paragraph__carousel.js:
-  header: true
-  js:
-    assets/js/paragraph--carousel.min.js: { minified: true, attributes: { defer: true } }
-  dependencies:
-    - ventuno/glide
-    - core/drupal
-    - core/once
 
 paragraph__layout:
   css:
@@ -406,8 +444,6 @@ toolbar:
   css:
     theme:
       assets/css/toolbar.min.css: { minified: true }
-  js:
-    assets/js/sticky-menu-logged-in.min.js: { minified: true }
 
 tour-first-balloon:
   header: true

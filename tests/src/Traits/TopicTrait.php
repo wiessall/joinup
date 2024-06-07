@@ -34,17 +34,9 @@ trait TopicTrait {
 
     $tids = array_values($storage->getQuery()->accessCheck(FALSE)
       ->condition('vid', 'topic')
+      ->condition('parent', '0', '<>')
       ->execute());
-    // Because of https://www.drupal.org/project/rdf_entity/issues/3333748, we
-    // cannot filter out terms without parent.
-    // @see https://www.drupal.org/project/rdf_entity/issues/3333748
-    // @todo Replace this filtering with a query condition on the parent
-    //   taxonomy term in ISAICP-8338.
-    $tids = array_filter($tids, fn(string $tid): bool => str_starts_with($tid, 'http://joinup.eu/ontology/topic#'));
-    /** @var \Drupal\topic\Entity\TopicInterface $term */
-    $term = $storage->load($tids[array_rand($tids)]);
-
-    return $term;
+    return $storage->load($tids[array_rand($tids)]);
   }
 
 }

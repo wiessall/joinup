@@ -1,0 +1,65 @@
+uuid: c842fc98-3bb0-47e8-a1ca-62fb792fa78b
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.meta_entity.eif_perspective.eif_description
+    - field.field.meta_entity.eif_perspective.eif_layer
+    - field.field.meta_entity.eif_perspective.eif_model
+    - field.field.meta_entity.eif_perspective.eif_principle
+    - field.field.meta_entity.eif_perspective.eif_recommendation
+    - field.field.meta_entity.eif_perspective.eif_solution_type
+    - meta_entity.type.eif_perspective
+  module:
+    - eif
+    - text
+id: meta_entity.eif_perspective.default
+targetEntityType: meta_entity
+bundle: eif_perspective
+mode: default
+content:
+  eif_description:
+    type: text_textarea
+    weight: 0
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+  eif_layer:
+    type: options_buttons
+    weight: 3
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  eif_model:
+    type: options_buttons
+    weight: 4
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  eif_principle:
+    type: options_buttons
+    weight: 2
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  eif_recommendation:
+    type: eif_qualified_recommendation
+    weight: 5
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+  eif_solution_type:
+    type: options_buttons
+    weight: 1
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  label: true
+  path: true
+  target: true
+  uri: true

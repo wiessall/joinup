@@ -1,5 +1,5 @@
 diff --git a/core/config/schema/core.entity.schema.yml b/core/config/schema/core.entity.schema.yml
-index c88ca10bd3d9b9ca90b3c30931794e86b74a643d..b8f09d39b42327e89f22899aac81edd90d202153 100644
+index c88ca10bd3..b8f09d39b4 100644
 --- a/core/config/schema/core.entity.schema.yml
 +++ b/core/config/schema/core.entity.schema.yml
 @@ -418,6 +418,27 @@ field.formatter.settings.entity_reference_label:
@@ -32,7 +32,7 @@ index c88ca10bd3d9b9ca90b3c30931794e86b74a643d..b8f09d39b42327e89f22899aac81edd9
    mapping:
 diff --git a/core/lib/Drupal/Core/Config/Entity/EntityBundleWithPluralLabelsInterface.php b/core/lib/Drupal/Core/Config/Entity/EntityBundleWithPluralLabelsInterface.php
 new file mode 100644
-index 0000000000000000000000000000000000000000..b200111cb05067f7f0427dbabf83555a424a95bc
+index 0000000000..b200111cb0
 --- /dev/null
 +++ b/core/lib/Drupal/Core/Config/Entity/EntityBundleWithPluralLabelsInterface.php
 @@ -0,0 +1,64 @@
@@ -102,7 +102,7 @@ index 0000000000000000000000000000000000000000..b200111cb05067f7f0427dbabf83555a
 +}
 diff --git a/core/lib/Drupal/Core/Config/Entity/EntityBundleWithPluralLabelsTrait.php b/core/lib/Drupal/Core/Config/Entity/EntityBundleWithPluralLabelsTrait.php
 new file mode 100644
-index 0000000000000000000000000000000000000000..542326337aa640e591356b36bc0fe3dacafa6b71
+index 0000000000..542326337a
 --- /dev/null
 +++ b/core/lib/Drupal/Core/Config/Entity/EntityBundleWithPluralLabelsTrait.php
 @@ -0,0 +1,102 @@
@@ -209,7 +209,7 @@ index 0000000000000000000000000000000000000000..542326337aa640e591356b36bc0fe3da
 +
 +}
 diff --git a/core/lib/Drupal/Core/Entity/EntityTypeBundleInfo.php b/core/lib/Drupal/Core/Entity/EntityTypeBundleInfo.php
-index 8aef5ee039e1e1867692deb1cf4f44402c12eb76..a242b46886b079c8f8069f122b1d4ad14797084c 100644
+index 8aef5ee039..a242b46886 100644
 --- a/core/lib/Drupal/Core/Entity/EntityTypeBundleInfo.php
 +++ b/core/lib/Drupal/Core/Entity/EntityTypeBundleInfo.php
 @@ -2,9 +2,12 @@
@@ -303,7 +303,7 @@ index 8aef5ee039e1e1867692deb1cf4f44402c12eb76..a242b46886b079c8f8069f122b1d4ad1
 +
  }
 diff --git a/core/lib/Drupal/Core/Entity/EntityTypeBundleInfoInterface.php b/core/lib/Drupal/Core/Entity/EntityTypeBundleInfoInterface.php
-index 2789b651e56d930a624aec5f15d4e8482ed3e303..7baea06b5e96d58ac8ae966dfe325f3cd105676a 100644
+index 2789b651e5..7baea06b5e 100644
 --- a/core/lib/Drupal/Core/Entity/EntityTypeBundleInfoInterface.php
 +++ b/core/lib/Drupal/Core/Entity/EntityTypeBundleInfoInterface.php
 @@ -37,4 +37,30 @@ public function getBundleInfo($entity_type_id);
@@ -338,7 +338,7 @@ index 2789b651e56d930a624aec5f15d4e8482ed3e303..7baea06b5e96d58ac8ae966dfe325f3c
 +
  }
 diff --git a/core/lib/Drupal/Core/Entity/entity.api.php b/core/lib/Drupal/Core/Entity/entity.api.php
-index 73c2f060dd640dcccd96217487019ff26f361f59..00522ea4f043ca3a7813027396378e29087fa45b 100644
+index 73c2f060dd..00522ea4f0 100644
 --- a/core/lib/Drupal/Core/Entity/entity.api.php
 +++ b/core/lib/Drupal/Core/Entity/entity.api.php
 @@ -873,6 +873,31 @@ function hook_entity_view_mode_info_alter(&$view_modes) {
@@ -411,10 +411,10 @@ index 73c2f060dd640dcccd96217487019ff26f361f59..00522ea4f043ca3a7813027396378e29
  
  /**
 diff --git a/core/misc/cspell/dictionary.txt b/core/misc/cspell/dictionary.txt
-index 8fcbd4fe32ae774028877d851f3e6c5714ec9289..40d1ce9d0d76c467b6cd3184cf8e6959c8bbcecf 100644
+index 9a90c3566b..b99b2bc904 100644
 --- a/core/misc/cspell/dictionary.txt
 +++ b/core/misc/cspell/dictionary.txt
-@@ -572,6 +572,7 @@ ntfs
+@@ -537,6 +537,7 @@ ntfs
  nyan
  nyancat
  nyans
@@ -423,7 +423,7 @@ index 8fcbd4fe32ae774028877d851f3e6c5714ec9289..40d1ce9d0d76c467b6cd3184cf8e6959
  officedocument
  omittable
 diff --git a/core/modules/book/config/optional/node.type.book.yml b/core/modules/book/config/optional/node.type.book.yml
-index 0c07a79e8f9d3682e8515135dd95c1bd190df5ff..ada815bb6d0c73f4af745ed5a995c88f21f59d4d 100644
+index 0c07a79e8f..ada815bb6d 100644
 --- a/core/modules/book/config/optional/node.type.book.yml
 +++ b/core/modules/book/config/optional/node.type.book.yml
 @@ -11,3 +11,7 @@ help: ''
@@ -435,7 +435,7 @@ index 0c07a79e8f9d3682e8515135dd95c1bd190df5ff..ada815bb6d0c73f4af745ed5a995c88f
 +label_count:
 +  - "1 book page\x03@count book pages"
 diff --git a/core/modules/forum/config/optional/node.type.forum.yml b/core/modules/forum/config/optional/node.type.forum.yml
-index 8ed965df3fb6e5f2878597671736c6e02f46c3d9..5e0db03df43eb9131a24a61d42ee43bf01bd9883 100644
+index 8ed965df3f..5e0db03df4 100644
 --- a/core/modules/forum/config/optional/node.type.forum.yml
 +++ b/core/modules/forum/config/optional/node.type.forum.yml
 @@ -11,3 +11,7 @@ help: ''
@@ -447,7 +447,7 @@ index 8ed965df3fb6e5f2878597671736c6e02f46c3d9..5e0db03df43eb9131a24a61d42ee43bf
 +label_count:
 +  - "1 forum topic\x03@count forum topics"
 diff --git a/core/modules/jsonapi/tests/src/Functional/NodeTypeTest.php b/core/modules/jsonapi/tests/src/Functional/NodeTypeTest.php
-index 525a29bf55fdf02efb489dcf7fcab40c052ab931..f737af1d97ce24c7992075eda82cc30b03797c1d 100644
+index 525a29bf55..f737af1d97 100644
 --- a/core/modules/jsonapi/tests/src/Functional/NodeTypeTest.php
 +++ b/core/modules/jsonapi/tests/src/Functional/NodeTypeTest.php
 @@ -92,6 +92,9 @@ protected function getExpectedDocument() {
@@ -461,7 +461,7 @@ index 525a29bf55fdf02efb489dcf7fcab40c052ab931..f737af1d97ce24c7992075eda82cc30b
            'new_revision' => TRUE,
            'preview_mode' => 1,
 diff --git a/core/modules/node/config/schema/node.schema.yml b/core/modules/node/config/schema/node.schema.yml
-index 7ce661e745aa56dea3c6655d2eaf8aa4c5aa3a7d..fd95748c7e0da71e3d03f448da41e44c8460dd01 100644
+index 7ce661e745..fd95748c7e 100644
 --- a/core/modules/node/config/schema/node.schema.yml
 +++ b/core/modules/node/config/schema/node.schema.yml
 @@ -9,7 +9,7 @@ node.settings:
@@ -474,7 +474,7 @@ index 7ce661e745aa56dea3c6655d2eaf8aa4c5aa3a7d..fd95748c7e0da71e3d03f448da41e44c
    mapping:
      name:
 diff --git a/core/modules/node/migrations/d6_node_type.yml b/core/modules/node/migrations/d6_node_type.yml
-index 3afe4bc475891e54411f7aca415bca9cc3e4ed6a..063fb16fb8f6888a30974104edad1cb9a368df98 100644
+index 5c138c4683..a090cd82ce 100644
 --- a/core/modules/node/migrations/d6_node_type.yml
 +++ b/core/modules/node/migrations/d6_node_type.yml
 @@ -8,6 +8,7 @@ source:
@@ -485,17 +485,18 @@ index 3afe4bc475891e54411f7aca415bca9cc3e4ed6a..063fb16fb8f6888a30974104edad1cb9
  process:
    type: type
    name: name
-@@ -23,5 +24,8 @@ process:
+@@ -21,6 +22,9 @@ process:
+   'settings/node/options': options
+   create_body: has_body
    create_body_label: body_label
-   'third_party_settings/menu_ui/available_menus': available_menus
-   'third_party_settings/menu_ui/parent': parent
 +  label_singular: 'constants/null_value'
 +  label_plural: 'constants/null_value'
 +  label_count: 'constants/null_value'
- destination:
-   plugin: entity:node_type
+   'third_party_settings/menu_ui/available_menus':
+     plugin: static_map
+     bypass: true
 diff --git a/core/modules/node/migrations/d7_node_type.yml b/core/modules/node/migrations/d7_node_type.yml
-index 1be9cd1ccc3af3f8094bc900b893e35e87407998..23deba9c821a211cf4e1abed5cf8c8b0ecc0ade3 100644
+index bd9c727f43..4c20cf5a6b 100644
 --- a/core/modules/node/migrations/d7_node_type.yml
 +++ b/core/modules/node/migrations/d7_node_type.yml
 @@ -7,6 +7,7 @@ source:
@@ -506,17 +507,18 @@ index 1be9cd1ccc3af3f8094bc900b893e35e87407998..23deba9c821a211cf4e1abed5cf8c8b0
  process:
    type: type
    name: name
-@@ -20,5 +21,8 @@ process:
+@@ -18,6 +19,9 @@ process:
+   new_revision: 'options/revision'
+   create_body: create_body
    create_body_label: body_label
-   'third_party_settings/menu_ui/available_menus': available_menus
-   'third_party_settings/menu_ui/parent': parent
 +  label_singular: 'constants/null_value'
 +  label_plural: 'constants/null_value'
 +  label_count: 'constants/null_value'
- destination:
-   plugin: entity:node_type
+   'third_party_settings/menu_ui/available_menus':
+     plugin: static_map
+     bypass: true
 diff --git a/core/modules/node/node.post_update.php b/core/modules/node/node.post_update.php
-index 0e76fd8ed51c95f79a3117adf8d078f51bc37dc5..52667ffd73c58b73328a7c4222367bc582592de8 100644
+index 0e76fd8ed5..52667ffd73 100644
 --- a/core/modules/node/node.post_update.php
 +++ b/core/modules/node/node.post_update.php
 @@ -5,6 +5,8 @@
@@ -542,7 +544,7 @@ index 0e76fd8ed51c95f79a3117adf8d078f51bc37dc5..52667ffd73c58b73328a7c4222367bc5
 +  });
 +}
 diff --git a/core/modules/node/src/Entity/NodeType.php b/core/modules/node/src/Entity/NodeType.php
-index 8662408aa8f35e4a173a6505f2f280378f7bba53..a14263ef904a09d130a3e2e501ecdf4f264b7022 100644
+index 8662408aa8..a14263ef90 100644
 --- a/core/modules/node/src/Entity/NodeType.php
 +++ b/core/modules/node/src/Entity/NodeType.php
 @@ -3,6 +3,7 @@
@@ -571,7 +573,7 @@ index 8662408aa8f35e4a173a6505f2f280378f7bba53..a14263ef904a09d130a3e2e501ecdf4f
     * The machine name of this node type.
     *
 diff --git a/core/modules/node/src/NodeTypeInterface.php b/core/modules/node/src/NodeTypeInterface.php
-index 941be20c849636cba786b8ea638f001f2efabbc2..e0789e2a26d16b4a04f0000c8337b997f4118eab 100644
+index 941be20c84..e0789e2a26 100644
 --- a/core/modules/node/src/NodeTypeInterface.php
 +++ b/core/modules/node/src/NodeTypeInterface.php
 @@ -3,12 +3,13 @@
@@ -590,7 +592,7 @@ index 941be20c849636cba786b8ea638f001f2efabbc2..e0789e2a26d16b4a04f0000c8337b997
    /**
     * Determines whether the node type is locked.
 diff --git a/core/modules/node/tests/src/Functional/Rest/NodeTypeResourceTestBase.php b/core/modules/node/tests/src/Functional/Rest/NodeTypeResourceTestBase.php
-index 9b3e21cc86281b90c87139076feb55f4467f9526..8fbd1957eb8d6e9a838cd00fbee583869cbe572a 100644
+index 9b3e21cc86..8fbd1957eb 100644
 --- a/core/modules/node/tests/src/Functional/Rest/NodeTypeResourceTestBase.php
 +++ b/core/modules/node/tests/src/Functional/Rest/NodeTypeResourceTestBase.php
 @@ -59,6 +59,9 @@ protected function getExpectedNormalizedEntity() {
@@ -605,7 +607,7 @@ index 9b3e21cc86281b90c87139076feb55f4467f9526..8fbd1957eb8d6e9a838cd00fbee58386
        'new_revision' => TRUE,
 diff --git a/core/modules/node/tests/src/Functional/Update/NodeUpdateTest.php b/core/modules/node/tests/src/Functional/Update/NodeUpdateTest.php
 new file mode 100644
-index 0000000000000000000000000000000000000000..8fd22ddb73539f32fa54f42b543e61a1b37153e5
+index 0000000000..8fd22ddb73
 --- /dev/null
 +++ b/core/modules/node/tests/src/Functional/Update/NodeUpdateTest.php
 @@ -0,0 +1,44 @@
@@ -655,7 +657,7 @@ index 0000000000000000000000000000000000000000..8fd22ddb73539f32fa54f42b543e61a1
 +}
 diff --git a/core/modules/system/tests/modules/entity_bundle_test/entity_bundle_test.info.yml b/core/modules/system/tests/modules/entity_bundle_test/entity_bundle_test.info.yml
 new file mode 100644
-index 0000000000000000000000000000000000000000..660bf0c41ea8ab0719f49f1647465ee243d5c960
+index 0000000000..660bf0c41e
 --- /dev/null
 +++ b/core/modules/system/tests/modules/entity_bundle_test/entity_bundle_test.info.yml
 @@ -0,0 +1,4 @@
@@ -665,7 +667,7 @@ index 0000000000000000000000000000000000000000..660bf0c41ea8ab0719f49f1647465ee2
 +package: Testing
 diff --git a/core/modules/system/tests/modules/entity_bundle_test/entity_bundle_test.module b/core/modules/system/tests/modules/entity_bundle_test/entity_bundle_test.module
 new file mode 100644
-index 0000000000000000000000000000000000000000..39d4df32a931aa65daccfcddff4d83116b1dde27
+index 0000000000..39d4df32a9
 --- /dev/null
 +++ b/core/modules/system/tests/modules/entity_bundle_test/entity_bundle_test.module
 @@ -0,0 +1,60 @@
@@ -730,7 +732,7 @@ index 0000000000000000000000000000000000000000..39d4df32a931aa65daccfcddff4d8311
 +  }
 +}
 diff --git a/core/modules/system/tests/modules/entity_test/config/schema/entity_test.schema.yml b/core/modules/system/tests/modules/entity_test/config/schema/entity_test.schema.yml
-index 31aa1d614ca48cda1527816cb4a4df6ecb9d4778..54311bba091039fd764463a9bdb7b59cc2fe7376 100644
+index 31aa1d614c..54311bba09 100644
 --- a/core/modules/system/tests/modules/entity_test/config/schema/entity_test.schema.yml
 +++ b/core/modules/system/tests/modules/entity_test/config/schema/entity_test.schema.yml
 @@ -31,3 +31,13 @@ entity_test.entity_test_bundle.*:
@@ -749,7 +751,7 @@ index 31aa1d614ca48cda1527816cb4a4df6ecb9d4778..54311bba091039fd764463a9bdb7b59c
 +      label: 'Machine-readable name'
 diff --git a/core/modules/system/tests/modules/entity_test/src/Entity/EntityTestBundleWithPluralLabels.php b/core/modules/system/tests/modules/entity_test/src/Entity/EntityTestBundleWithPluralLabels.php
 new file mode 100644
-index 0000000000000000000000000000000000000000..d5b0d1d3f5a3439f0a9c7cf8162d818629a37bbb
+index 0000000000..d5b0d1d3f5
 --- /dev/null
 +++ b/core/modules/system/tests/modules/entity_test/src/Entity/EntityTestBundleWithPluralLabels.php
 @@ -0,0 +1,32 @@
@@ -786,7 +788,7 @@ index 0000000000000000000000000000000000000000..d5b0d1d3f5a3439f0a9c7cf8162d8186
 +
 +}
 diff --git a/core/profiles/demo_umami/config/install/node.type.article.yml b/core/profiles/demo_umami/config/install/node.type.article.yml
-index 1fd439ce71bf22657ff5b7e15805eb6f9b93ae05..13de4e6d33aa57b09ee83afdb87ba66adaaf6fd7 100644
+index 1fd439ce71..13de4e6d33 100644
 --- a/core/profiles/demo_umami/config/install/node.type.article.yml
 +++ b/core/profiles/demo_umami/config/install/node.type.article.yml
 @@ -8,3 +8,7 @@ help: ''
@@ -798,7 +800,7 @@ index 1fd439ce71bf22657ff5b7e15805eb6f9b93ae05..13de4e6d33aa57b09ee83afdb87ba66a
 +label_count:
 +  - "1 article\x03@count articles"
 diff --git a/core/profiles/demo_umami/config/install/node.type.page.yml b/core/profiles/demo_umami/config/install/node.type.page.yml
-index 57dcc0c9926f11a617ca22ba0e3073b426d20d66..01dd16a83df31493a83f4f1b8b51e721b9c8806c 100644
+index 57dcc0c992..01dd16a83d 100644
 --- a/core/profiles/demo_umami/config/install/node.type.page.yml
 +++ b/core/profiles/demo_umami/config/install/node.type.page.yml
 @@ -8,3 +8,7 @@ help: ''
@@ -810,7 +812,7 @@ index 57dcc0c9926f11a617ca22ba0e3073b426d20d66..01dd16a83df31493a83f4f1b8b51e721
 +label_count:
 +  - "1 page\x03@count pages"
 diff --git a/core/profiles/demo_umami/config/install/node.type.recipe.yml b/core/profiles/demo_umami/config/install/node.type.recipe.yml
-index 89ed3215c74ed18bd7057215681977097e360b1b..6076968d0c85500ea6348aa46f64e40c0773e5f4 100644
+index 89ed3215c7..6076968d0c 100644
 --- a/core/profiles/demo_umami/config/install/node.type.recipe.yml
 +++ b/core/profiles/demo_umami/config/install/node.type.recipe.yml
 @@ -14,3 +14,7 @@ help: ''
@@ -822,7 +824,7 @@ index 89ed3215c74ed18bd7057215681977097e360b1b..6076968d0c85500ea6348aa46f64e40c
 +label_count:
 +  - "1 recipe\x03@count recipes"
 diff --git a/core/profiles/standard/config/install/node.type.article.yml b/core/profiles/standard/config/install/node.type.article.yml
-index 1fd439ce71bf22657ff5b7e15805eb6f9b93ae05..13de4e6d33aa57b09ee83afdb87ba66adaaf6fd7 100644
+index 1fd439ce71..13de4e6d33 100644
 --- a/core/profiles/standard/config/install/node.type.article.yml
 +++ b/core/profiles/standard/config/install/node.type.article.yml
 @@ -8,3 +8,7 @@ help: ''
@@ -834,7 +836,7 @@ index 1fd439ce71bf22657ff5b7e15805eb6f9b93ae05..13de4e6d33aa57b09ee83afdb87ba66a
 +label_count:
 +  - "1 article\x03@count articles"
 diff --git a/core/profiles/standard/config/install/node.type.page.yml b/core/profiles/standard/config/install/node.type.page.yml
-index 57dcc0c9926f11a617ca22ba0e3073b426d20d66..01dd16a83df31493a83f4f1b8b51e721b9c8806c 100644
+index 57dcc0c992..01dd16a83d 100644
 --- a/core/profiles/standard/config/install/node.type.page.yml
 +++ b/core/profiles/standard/config/install/node.type.page.yml
 @@ -8,3 +8,7 @@ help: ''
@@ -847,7 +849,7 @@ index 57dcc0c9926f11a617ca22ba0e3073b426d20d66..01dd16a83df31493a83f4f1b8b51e721
 +  - "1 page\x03@count pages"
 diff --git a/core/tests/Drupal/KernelTests/Core/Entity/EntityTypeBundleInfoPluralLabelTest.php b/core/tests/Drupal/KernelTests/Core/Entity/EntityTypeBundleInfoPluralLabelTest.php
 new file mode 100644
-index 0000000000000000000000000000000000000000..e299359762a6f0d8b8c1c57959c5a14187b4e5f8
+index 0000000000..e299359762
 --- /dev/null
 +++ b/core/tests/Drupal/KernelTests/Core/Entity/EntityTypeBundleInfoPluralLabelTest.php
 @@ -0,0 +1,252 @@

@@ -7,13 +7,80 @@
 
 declare(strict_types=1);
 
+use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
-use Drupal\rdf_taxonomy\Entity\RdfTerm;
+use Drupal\Core\Render\BubbleableMetadata;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\joinup_group\Entity\GroupInterface;
+use Drupal\joinup_rdf\Entity\RdfSyncEntityInterface;
+use Drupal\joinup_workflow\EntityWorkflowStateInterface;
+use Drupal\og\Og;
+
+/**
+ * Implements hook_entity_create_access().
+ */
+function joinup_rdf_entity_create_access(AccountInterface $account, array $context, $bundle) {
+  // OG handles node content in its own hook_entity_create_access(). This is the
+  // RDF entity equivalent.
+  $entity_type_id = $context['entity_type_id'];
+  if ($entity_type_id !== 'rdf_entity') {
+    return AccessResult::neutral();
+  }
+
+  if (!Og::isGroupContent($entity_type_id, $bundle)) {
+    // Not a group content.
+    return AccessResult::neutral();
+  }
+
+  // A user with the global permission to administer all groups has full access.
+  $access_result = AccessResult::allowedIfHasPermission($account, 'administer organic groups');
+  if ($access_result->isAllowed()) {
+    return $access_result;
+  }
+
+  // This check needs the group parameter to be passed in the context. In order
+  // to do that, the access check must be called through the access control
+  // handler using:
+  // @code
+  // \Drupal::entityTypeManager()->getAccessControlHandler($entity_type_id)
+  //   ->createAccess($bundle, $account, [
+  //     'group' => $group,
+  //   ]);
+  // @endcode
+  if (empty($context['group']) || !($context['group'] instanceof GroupInterface)) {
+    // Fail silently as it might not be always the case that this is set.
+    return AccessResult::neutral();
+  }
+
+  $group = $context['group'];
+  // Note: The OG structure of the permission is used instead of the RDF entity.
+  // That is why it is `rdf_entity` and not `rdf entity`.
+  if (!$group->hasGroupPermission($account->id(), "create $bundle rdf_entity")) {
+    return AccessResult::forbidden();
+  }
+
+  // Create an empty entity with the correct group in order to check the allowed
+  // transitions.
+  /** @var \Drupal\joinup_group\Entity\GroupContentInterface $entity */
+  $entity = \Drupal::entityTypeManager()->getStorage($entity_type_id)->create([
+    'rid' => $bundle,
+  ]);
+
+  // If the entity does not have a workflow, do not run a check.
+  if (!($entity instanceof EntityWorkflowStateInterface)) {
+    return AccessResult::neutral();
+  }
+
+  $entity->setGroup($group);
+  return $entity->getWorkflow()->getAllowedTransitions($entity->getWorkflowState(), $entity)
+    ? AccessResult::allowed()
+    : AccessResult::forbidden();
+}
 
 /**
  * Implements hook_form_BASE_FORM_ID_alter().
@@ -183,11 +250,32 @@ function joinup_rdf_condition_info_alter(array &$definitions): void {
 }
 
 /**
- * Implements hook_entity_operation_alter().
+ * Implements hook_token_info_alter().
  */
-function joinup_rdf_entity_operation_alter(array &$operations, EntityInterface $entity): void {
-  if ($entity instanceof RdfTerm) {
-    // RDF taxonomy terms don't support drafts.
-    unset($operations['draft']);
+function joinup_rdf_token_info_alter(&$info) {
+  $rdfUriInfo = [
+    'name' => t('The legacy RDF uri of the entity'),
+    'description' => t('The legacy RDF uri of the entity, if any.'),
+  ];
+  $info['tokens']['node']['rdf-uri'] = $rdfUriInfo;
+  $info['tokens']['term']['rdf-uri'] = $rdfUriInfo;
+}
+
+/**
+ * Implements hook_tokens().
+ */
+function joinup_rdf_tokens($type, $tokens, array $data, array $options, BubbleableMetadata $bubbleable_metadata): array {
+  $entity = $data[$type] ?? NULL;
+  if (
+    !array_key_exists('rdf-uri', $tokens) ||
+    !isset($entity) ||
+    !$entity instanceof RdfSyncEntityInterface
+  ) {
+    return [];
   }
+
+  $bubbleable_metadata->addCacheableDependency($entity);
+  return [
+    $tokens['rdf-uri'] => $entity->getUri(),
+  ];
 }

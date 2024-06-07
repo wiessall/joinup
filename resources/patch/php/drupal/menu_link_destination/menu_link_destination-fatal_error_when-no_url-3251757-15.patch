@@ -1,0 +1,45 @@
+diff --git a/src/MenuLinkDestination.php b/src/MenuLinkDestination.php
+index c03fbbf..19969cc 100644
+--- a/src/MenuLinkDestination.php
++++ b/src/MenuLinkDestination.php
+@@ -6,6 +6,7 @@ namespace Drupal\menu_link_destination;
+ 
+ use Drupal\Core\Cache\CacheableMetadata;
+ use Drupal\Core\Security\TrustedCallbackInterface;
++use Drupal\Core\Url;
+ 
+ /**
+  * Provides a pre-render callback for links.
+@@ -30,9 +31,9 @@ class MenuLinkDestination implements TrustedCallbackInterface {
+    */
+   public static function preRenderLink(array $element): array {
+     /** @var \Drupal\Core\Url $url */
+-    $url = $element['#url'];
++    $url = $element['#url'] ?? NULL;
+ 
+-    if (!empty($url->getOption('menu_link_destination'))) {
++    if ($url instanceof Url && !empty($url->getOption('menu_link_destination'))) {
+       (new CacheableMetadata())
+         // Such links cache is varying by URL.
+         ->setCacheContexts(['url'])
+diff --git a/tests/src/Functional/MenuLinkDestinationTest.php b/tests/src/Functional/MenuLinkDestinationTest.php
+index 5937ba7..edd514e 100644
+--- a/tests/src/Functional/MenuLinkDestinationTest.php
++++ b/tests/src/Functional/MenuLinkDestinationTest.php
+@@ -89,4 +89,16 @@ class MenuLinkDestinationTest extends BrowserTestBase {
+     $assert->addressEquals('/some/path');
+   }
+ 
++  /**
++   * Checks case when URL is not defined.
++   */
++  public function testInvalidLink(): void {
++    $invalidLink = [
++      '#type' => 'link',
++      '#title' => 'test',
++    ];
++    $linkOutput = \Drupal::service('renderer')->renderRoot($invalidLink);
++    $this->assertEquals('', $linkOutput);
++  }
++
+ }

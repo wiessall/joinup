@@ -16,21 +16,12 @@ use Symfony\Component\Routing\Route;
 class SpdxIdsParamConverter implements ParamConverterInterface {
 
   /**
-   * The entity type manager service.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
-
-  /**
    * Constructs a new param converter service instance.
    *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity type manager service.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager) {
-    $this->entityTypeManager = $entity_type_manager;
-  }
+  public function __construct(protected EntityTypeManagerInterface $entityTypeManager) {}
 
   /**
    * {@inheritdoc}
@@ -62,21 +53,22 @@ class SpdxIdsParamConverter implements ParamConverterInterface {
       $spdx_id = str_replace(' ', '+', $spdx_id);
     });
 
-    $storage = $this->entityTypeManager->getStorage('rdf_entity');
+    $term_storage = $this->entityTypeManager->getStorage('taxonomy_term');
 
-    $actual_spdx_uris = $storage->getQuery()->accessCheck(FALSE)
-      ->condition('rid', 'spdx_licence')
-      ->condition('field_spdx_licence_id', $spdx_ids, 'IN')
+    $actual_spdx_ids = $term_storage->getQuery()->accessCheck(FALSE)
+      ->condition('vid', 'spdx_licence')
+      ->condition('spdx_id', $spdx_ids, 'IN')
       ->execute();
 
     // Some of the passed SPDX IDs were not retrieved from the database.
-    if (count($spdx_ids) > count($actual_spdx_uris)) {
+    if (count($spdx_ids) > count($actual_spdx_ids)) {
       return NULL;
     }
 
-    $actual_licence_ids = $storage->getQuery()->accessCheck(FALSE)
-      ->condition('rid', 'licence')
-      ->condition('field_licence_spdx_licence', $actual_spdx_uris, 'IN')
+    $node_storage = $this->entityTypeManager->getStorage('node');
+    $actual_licence_ids = $node_storage->getQuery()->accessCheck(FALSE)
+      ->condition('type', 'licence')
+      ->condition('spdx_licence.target_id', $actual_spdx_ids, 'IN')
       ->execute();
 
     // Some of the passed SPDX IDs don't have a related Joinup licence.
@@ -85,7 +77,7 @@ class SpdxIdsParamConverter implements ParamConverterInterface {
     }
 
     // Restore the original order as it has been passed in the route parameter.
-    $licences = $storage->loadMultiple($actual_licence_ids);
+    $licences = $node_storage->loadMultiple($actual_licence_ids);
     $spdx_ids_order = array_flip($spdx_ids);
     uasort($licences, function (LicenceInterface $licence_a, LicenceInterface $licence_b) use ($spdx_ids_order): int {
       $licence_a_spdx_id = $licence_a->getSpdxLicenceId();

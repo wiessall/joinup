@@ -71,7 +71,19 @@
  */
 #}
 <div class="clearfix">
-  {{ content.body }}
+  {{
+    content|without(
+      'field_attachment',
+      'field_comments',
+      'field_news_headline',
+      'field_news_logo',
+      'field_news_referenced_solution',
+      'field_shared_in',
+      'group_references',
+      'report',
+      'share_link',
+    )
+  }}
 </div>
 <div class="d-flex justify-content-end my-3">
   {{ content.report }}

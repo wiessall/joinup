@@ -2,12 +2,12 @@
 Feature: CKEditor5
 
   Background:
-    Given the following owner:
-      | name     | type                    |
-      | Landlord | Non-Profit Organisation |
-    And the following contact:
-      | name  | ReachMe              |
-      | email | reach.me@example.com |
+    Given owner content:
+      | name     | owner type |
+      | Landlord | Company    |
+    And contact_information content:
+      | name    | email                |
+      | ReachMe | reach.me@example.com |
     And collections:
       | title                 | state     | topic                   | owner    | contact information |
       | Shaping of disruption | published | Supplier exchange       | Landlord | ReachMe             |
@@ -17,21 +17,17 @@ Feature: CKEditor5
       | Angry Birds | Shaping of disruption | published | Supplier exchange | Landlord | ReachMe             |
 
   Scenario: CKE5 textarea do not respect any configurable sizes.
-    Given news content:
-      | title                | headline             | collection            | topic                                  | state     | publication date     | body                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
-      | Spatial construction | Jilly of wildlands   | Shaping of disruption | HR, Statistics and Analysis, E-justice | published | 2021-02-28T13:15:00Z | Global land use history confirms that empowering the environmental stewardship of Indigenous peoples and local communities will be critical to conserving biodiversity across the planet.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
-      | Earlier transformers | Recognize management | Shaping of disruption | EU and European Policies               | published | 2021-03-29T10:18:00Z | "<h2>What is Lorem Ipsum? </h2> <p><strong>Lorem Ipsum</strong> is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum. </p> <h2>Why do we use it? </h2> <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like). </p> <p><br>&nbsp; </p> <h2>Where does it come from? </h2> <p>Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32. </p> <p>The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from "de Finibus Bonorum et Malorum" by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham. </p> <h2>Where can I get some? </h2> <p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc. </p>" |
+    Given glossary content:
+      | title                | definition                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+      | Spatial construction | Global land use history confirms that empowering the environmental stewardship of Indigenous peoples and local communities will be critical to conserving biodiversity across the planet.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+      | Earlier transformers | "<h2>What is Lorem Ipsum? </h2> <p><strong>Lorem Ipsum</strong> is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum. </p> <h2>Why do we use it? </h2> <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like). </p> <p><br>&nbsp; </p> <h2>Where does it come from? </h2> <p>Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32. </p> <p>The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from "de Finibus Bonorum et Malorum" by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham. </p> <h2>Where can I get some? </h2> <p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc. </p>" |
 
     Given I am logged in as a moderator
-    And I go to the "Earlier transformers" news
-    When I open the header local tasks menu
-    And I click "Edit" in the "Entity actions" region
-    Then I check "Content" wysiwyg height
+    When I go to the edit form of the "Spatial construction" glossary
+    Then I check "Definition" wysiwyg height
 
-    When I go to the "Spatial construction" news
-    Then I open the header local tasks menu
-    And I click "Edit" in the "Entity actions" region
-    Then I check "Content" wysiwyg height
+    When I go to the edit form of the "Earlier transformers" glossary
+    Then I check "Definition" wysiwyg height
 
   @uploadFiles:alan.jpg
   Scenario: Media image with CKEditor5.
@@ -147,19 +143,19 @@ Feature: CKEditor5
     Then a modal should open
 
     And the "Ventuno media library" table should be:
-      | | Thumbnail | Name                      | Authored by | Updated                 |
-      | |           | Too angry for Angry Birds | Anonymous   | Tue, 26/07/2016 - 13:00 |
-      | |           | Pager test 1              | Anonymous   | Mon, 25/07/2016 - 13:00 |
-      | |           | Pager test 2              | Anonymous   | Sun, 24/07/2016 - 13:00 |
-      | |           | Pager test 3              | Anonymous   | Sat, 23/07/2016 - 13:00 |
-      | |           | Pager test 4              | Anonymous   | Fri, 22/07/2016 - 13:00 |
-      | |           | Pager test 5              | Anonymous   | Thu, 21/07/2016 - 13:00 |
-      | |           | Pager test 6              | Anonymous   | Wed, 20/07/2016 - 13:00 |
-      | |           | Pager test 7              | Anonymous   | Tue, 19/07/2016 - 13:00 |
-      | |           | Pager test 8              | Anonymous   | Mon, 18/07/2016 - 13:00 |
-      | |           | Pager test 9              | Anonymous   | Sun, 17/07/2016 - 13:00 |
-      | |           | Pager test ten            | Anonymous   | Sat, 16/07/2016 - 13:00 |
-      | |           | Pager test eleven         | Anonymous   | Fri, 15/07/2016 - 13:00 |
+      |  | Thumbnail | Name                      | Authored by | Updated                 |
+      |  |           | Too angry for Angry Birds | Anonymous   | Tue, 26/07/2016 - 13:00 |
+      |  |           | Pager test 1              | Anonymous   | Mon, 25/07/2016 - 13:00 |
+      |  |           | Pager test 2              | Anonymous   | Sun, 24/07/2016 - 13:00 |
+      |  |           | Pager test 3              | Anonymous   | Sat, 23/07/2016 - 13:00 |
+      |  |           | Pager test 4              | Anonymous   | Fri, 22/07/2016 - 13:00 |
+      |  |           | Pager test 5              | Anonymous   | Thu, 21/07/2016 - 13:00 |
+      |  |           | Pager test 6              | Anonymous   | Wed, 20/07/2016 - 13:00 |
+      |  |           | Pager test 7              | Anonymous   | Tue, 19/07/2016 - 13:00 |
+      |  |           | Pager test 8              | Anonymous   | Mon, 18/07/2016 - 13:00 |
+      |  |           | Pager test 9              | Anonymous   | Sun, 17/07/2016 - 13:00 |
+      |  |           | Pager test ten            | Anonymous   | Sat, 16/07/2016 - 13:00 |
+      |  |           | Pager test eleven         | Anonymous   | Fri, 15/07/2016 - 13:00 |
     And I should not see "Pager test twelve"
     And I should not see "Pager test thirteen"
     And I should not see "Pager test fourteen"
@@ -183,10 +179,10 @@ Feature: CKEditor5
     And I should not see "Pager test ten"
     And I should not see "Pager test eleven"
     But the "Ventuno media library" table should be:
-      | | Thumbnail | Name                | Authored by | Updated                 |
-      | |           | Pager test twelve   | Anonymous   | Thu, 14/07/2016 - 13:00 |
-      | |           | Pager test thirteen | Anonymous   | Wed, 13/07/2016 - 13:00 |
-      | |           | Pager test fourteen | Anonymous   | Tue, 12/07/2016 - 13:00 |
+      |  | Thumbnail | Name                | Authored by | Updated                 |
+      |  |           | Pager test twelve   | Anonymous   | Thu, 14/07/2016 - 13:00 |
+      |  |           | Pager test thirteen | Anonymous   | Wed, 13/07/2016 - 13:00 |
+      |  |           | Pager test fourteen | Anonymous   | Tue, 12/07/2016 - 13:00 |
 
     When I close the modal dialog
     And the modal should be closed
@@ -198,19 +194,19 @@ Feature: CKEditor5
     And I wait for 1 second
     And I wait for AJAX to finish
     Then the "Ventuno media library" table should be:
-      | | Thumbnail | Name                | Authored by | Updated                 |
-      | |           | Pager test 1        | Anonymous   | Mon, 25/07/2016 - 13:00 |
-      | |           | Pager test 2        | Anonymous   | Sun, 24/07/2016 - 13:00 |
-      | |           | Pager test 3        | Anonymous   | Sat, 23/07/2016 - 13:00 |
-      | |           | Pager test 4        | Anonymous   | Fri, 22/07/2016 - 13:00 |
-      | |           | Pager test 5        | Anonymous   | Thu, 21/07/2016 - 13:00 |
-      | |           | Pager test 6        | Anonymous   | Wed, 20/07/2016 - 13:00 |
-      | |           | Pager test 7        | Anonymous   | Tue, 19/07/2016 - 13:00 |
-      | |           | Pager test 8        | Anonymous   | Mon, 18/07/2016 - 13:00 |
-      | |           | Pager test 9        | Anonymous   | Sun, 17/07/2016 - 13:00 |
-      | |           | Pager test eleven   | Anonymous   | Fri, 15/07/2016 - 13:00 |
-      | |           | Pager test fourteen | Anonymous   | Tue, 12/07/2016 - 13:00 |
-      | |           | Pager test ten      | Anonymous   | Sat, 16/07/2016 - 13:00 |
+      |  | Thumbnail | Name                | Authored by | Updated                 |
+      |  |           | Pager test 1        | Anonymous   | Mon, 25/07/2016 - 13:00 |
+      |  |           | Pager test 2        | Anonymous   | Sun, 24/07/2016 - 13:00 |
+      |  |           | Pager test 3        | Anonymous   | Sat, 23/07/2016 - 13:00 |
+      |  |           | Pager test 4        | Anonymous   | Fri, 22/07/2016 - 13:00 |
+      |  |           | Pager test 5        | Anonymous   | Thu, 21/07/2016 - 13:00 |
+      |  |           | Pager test 6        | Anonymous   | Wed, 20/07/2016 - 13:00 |
+      |  |           | Pager test 7        | Anonymous   | Tue, 19/07/2016 - 13:00 |
+      |  |           | Pager test 8        | Anonymous   | Mon, 18/07/2016 - 13:00 |
+      |  |           | Pager test 9        | Anonymous   | Sun, 17/07/2016 - 13:00 |
+      |  |           | Pager test eleven   | Anonymous   | Fri, 15/07/2016 - 13:00 |
+      |  |           | Pager test fourteen | Anonymous   | Tue, 12/07/2016 - 13:00 |
+      |  |           | Pager test ten      | Anonymous   | Sat, 16/07/2016 - 13:00 |
     And I should not see "Pager test twelve"
     And I should not see "Pager test thirteen"
     And I should not see "Too angry for Angry Birds"
@@ -236,10 +232,10 @@ Feature: CKEditor5
     And I should not see "Pager test fourteen"
     And I should not see "Pager test ten"
     And the "Ventuno media library" table should be:
-      | | Thumbnail | Name                      | Authored by | Updated                 |
-      | |           | Pager test thirteen       | Anonymous   | Wed, 13/07/2016 - 13:00 |
-      | |           | Pager test twelve         | Anonymous   | Thu, 14/07/2016 - 13:00 |
-      | |           | Too angry for Angry Birds | Anonymous   | Tue, 26/07/2016 - 13:00 |
+      |  | Thumbnail | Name                      | Authored by | Updated                 |
+      |  |           | Pager test thirteen       | Anonymous   | Wed, 13/07/2016 - 13:00 |
+      |  |           | Pager test twelve         | Anonymous   | Thu, 14/07/2016 - 13:00 |
+      |  |           | Too angry for Angry Birds | Anonymous   | Tue, 26/07/2016 - 13:00 |
     But I should not see "The Image in Shaping of disruption"
     And I should not see "This is Alan we love"
     And I should not see "Other Image in The Other Collection"

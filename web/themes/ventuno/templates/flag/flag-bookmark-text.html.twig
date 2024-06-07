@@ -1,0 +1,22 @@
+{#
+/**
+ * @file
+ * Flag bookmark text template
+ *
+ * Available variables:
+ * - flag: The flag object.
+ * - flaggable: The flaggable entity.
+ */
+#}
+
+{% set classes = [
+  'btn',
+  'btn-secondary',
+] %}
+
+<a{{ attributes.addClass(classes) }}>
+  {{ pattern('icon', {
+    name: 'bookmark'
+  }) }}
+  {{ flag.get('flag_short') }}
+</a>

@@ -20,20 +20,20 @@ Feature: Notification test for the news transitions on a pre moderated parent.
       | CC pre collection | CC facilitator | facilitator |
       | CC pre collection | CC member      |             |
     And news content:
-      | title                         | author         | body | headline                      | collection        | field_state      |
+      | title                         | author         | field_paragraphs_body | headline                      | collection        | field_state      | abstract      |
       # The next one belongs to a facilitator because there is no published version for that and thus,
       # the facilitator would not have access to the entity.
-      | CCN pre publish               | CC facilitator | body | CCN pre publish               | CC pre collection | draft            |
-      | CCN pre propose               | CC member      | body | CCN pre propose               | CC pre collection | draft            |
-      | CCN pre request changes       | CC member      | body | CCN pre request changes       | CC pre collection | published        |
-      | CCN pre report                | CC member      | body | CCN pre report                | CC pre collection | published        |
-      | CCN pre request deletion      | CC member      | body | CCN pre request deletion      | CC pre collection | published        |
-      | CCN pre propose from reported | CC member      | body | CCN pre propose from reported | CC pre collection | needs_update     |
-      | CCN pre approve proposed      | CC member      | body | CCN pre approve proposed      | CC pre collection | proposed         |
-      | CCN pre reject deletion       | CC member      | body | CCN pre reject deletion       | CC pre collection | deletion_request |
-      | CCN pre delete                | CC member      | body | CCN pre delete                | CC pre collection | deletion_request |
-      | CCN published to delete       | CC member      | body | CCN pre delete                | CC pre collection | published        |
-      | CCN published to revise       | CC member      | body | CCN pre revise                | CC pre collection | published        |
+      | CCN pre publish               | CC facilitator | body                  | CCN pre publish               | CC pre collection | draft            | Some abstract |
+      | CCN pre propose               | CC member      | body                  | CCN pre propose               | CC pre collection | draft            | Some abstract |
+      | CCN pre request changes       | CC member      | body                  | CCN pre request changes       | CC pre collection | published        | Some abstract |
+      | CCN pre report                | CC member      | body                  | CCN pre report                | CC pre collection | published        | Some abstract |
+      | CCN pre request deletion      | CC member      | body                  | CCN pre request deletion      | CC pre collection | published        | Some abstract |
+      | CCN pre propose from reported | CC member      | body                  | CCN pre propose from reported | CC pre collection | needs_update     | Some abstract |
+      | CCN pre approve proposed      | CC member      | body                  | CCN pre approve proposed      | CC pre collection | proposed         | Some abstract |
+      | CCN pre reject deletion       | CC member      | body                  | CCN pre reject deletion       | CC pre collection | deletion_request | Some abstract |
+      | CCN pre delete                | CC member      | body                  | CCN pre delete                | CC pre collection | deletion_request | Some abstract |
+      | CCN published to delete       | CC member      | body                  | CCN pre delete                | CC pre collection | published        | Some abstract |
+      | CCN published to revise       | CC member      | body                  | CCN pre revise                | CC pre collection | published        | Some abstract |
 
     # Test 'create' operation.
     When I am logged in as "CC member"
@@ -41,7 +41,10 @@ Feature: Notification test for the news transitions on a pre moderated parent.
     And I click "Add news" in the plus button menu
     And I fill in "Short title" with "CCN create propose"
     And I fill in "Headline" with "CCN create propose"
-    And I fill in "Content" with "CCN create propose"
+    And I fill in "Abstract" with "CCN create propose"
+    And I append "text" to "field_paragraphs_body" layout paragraphs field
+      | field_body:value  | CCN create propose |
+      | field_body:format | content_editor     |
     And I select "Statistics and Analysis" from "Topic"
     And I press "Propose"
     Then the email sent to "CC owner" with subject "Joinup: Content has been proposed" contains the following lines of text:
@@ -72,7 +75,10 @@ Feature: Notification test for the news transitions on a pre moderated parent.
     And I click "Add news" in the plus button menu
     And I fill in "Short title" with "CCN create publish"
     And I fill in "Headline" with "CCN create publish"
-    And I fill in "Content" with "CCN create publish"
+    And I fill in "Abstract" with "CCN create publish"
+    And I append "text" to "field_paragraphs_body" layout paragraphs field
+      | field_body:value  | CCN create publish |
+      | field_body:format | content_editor     |
     And I select "Statistics and Analysis" from "Topic"
     And I press "Publish"
     Then the following email should have been sent:

@@ -184,7 +184,7 @@ class AssetReleaseContext extends RawDrupalContext {
    * @Then I should have :number release(s)
    */
   public function assertReleaseCount(int $number): void {
-    $this->assertRdfEntityCount($number, 'asset_release');
+    $this->assertEntityCount('rdf_entity', 'asset_release', $number);
   }
 
   /**

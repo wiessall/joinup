@@ -4,25 +4,22 @@ declare(strict_types=1);
 
 namespace Drupal\joinup\Context;
 
-use Behat\Behat\Hook\Scope\AfterScenarioScope;
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Behat\Gherkin\Node\TableNode;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\eif\EifInterface;
-use Drupal\eif\EifWrapperInterface;
-use Drupal\eif\Entity\EifWrapper;
 use Drupal\joinup\Traits\EntityReferenceTrait;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\SearchTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup\Traits\TopicTrait;
 use Drupal\joinup\Traits\UtilityTrait;
+use Drupal\meta_entity\Entity\MetaEntity;
 use Drupal\node\Entity\Node;
 use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\rdf_entity\Entity\Rdf;
-use Drupal\rdf_meta_entity\Entity\RdfMetaEntity;
 
 /**
  * Behat step definitions and related methods provided by the eif module.
@@ -44,29 +41,29 @@ class EifContext extends RawDrupalContext {
    */
   public function setupEifData(BeforeScenarioScope $scope): void {
     // Create an owner.
-    Rdf::create([
-      'rid' => 'owner',
-      'id' => 'http://example.com/owner',
-      'field_owner_name' => 'Owner',
-    ])->save();
+    $owner = $this->nodeCreate((object) [
+      'type' => 'owner',
+      'title' => 'Owner',
+    ]);
 
-    Rdf::create([
-      'rid' => 'contact_information',
-      'id' => 'http://example.com/contact',
-      'field_contact_name' => 'Contact name',
-      'field_contact_email' => 'contact.email@example.com',
-    ])->save();
+    $contact = $this->nodeCreate((object) [
+      'type' => 'contact_information',
+      'title' => 'Contact name',
+      'email' => 'contact.email@example.com',
+    ]);
 
     // Create the NIFO sample collection.
-    Rdf::create([
+    $collection = Rdf::create([
       'rid' => 'collection',
       'id' => 'http://nifo.collection',
       'label' => 'NIFO collection',
       'field_ar_state' => 'published',
       'field_topic' => $tid = $this->getRandomTopic()->id(),
-      'field_ar_owner' => 'http://example.com/owner',
-      'field_ar_contact_information' => 'http://example.com/contact',
-    ])->save();
+      'field_ar_owner' => $owner->nid,
+      'field_ar_contact_information' => $contact->nid,
+    ]);
+    $collection->save();
+    $this->entities['rdf_entity'][$collection->id()] = $collection;
 
     // Create the EIF Toolbox solution.
     $solution = Rdf::create([
@@ -76,26 +73,13 @@ class EifContext extends RawDrupalContext {
       'collection' => 'http://nifo.collection',
       'field_is_state' => 'published',
       'field_topic' => $tid,
-      'field_is_owner' => 'http://example.com/owner',
-      'field_is_contact_information' => 'http://example.com/contact',
+      'field_is_owner' => $owner->nid,
+      'field_is_contact_information' => $contact->nid,
     ]);
     $solution->save();
+    $this->entities['rdf_entity'][$solution->id()] = $solution;
 
-    Node::create([
-      'type' => 'custom_page',
-      'nid' => EifInterface::EIF_SOLUTIONS_NID,
-      'title' => 'Solutions',
-      'og_audience' => EifInterface::EIF_ID,
-      'field_paragraphs_body' => Paragraph::create([
-        'type' => 'simple_paragraph',
-        'field_body' => [
-          'value' => 'Currently available supporting solutions that can be used as added components that help build interoperability solutions.',
-          'format' => 'content_editor',
-        ],
-      ]),
-    ])->save();
-
-    Node::create([
+    $page = Node::create([
       'type' => 'custom_page',
       'nid' => EifInterface::EIF_ONLINE_ASSISTANT,
       'title' => 'Online Assistant',
@@ -107,7 +91,10 @@ class EifContext extends RawDrupalContext {
           'format' => 'content_editor',
         ],
       ]),
-    ])->save();
+      'field_state' => 'published',
+    ]);
+    $page->save();
+    $this->entities['node'][$page->id()] = $page;
 
     // Ensure the taxonomy terms are indexed.
     $vids = [
@@ -130,28 +117,6 @@ class EifContext extends RawDrupalContext {
   }
 
   /**
-   * Clears the content created for the purpose of this test.
-   *
-   * @throws \Drupal\Core\Entity\EntityStorageException
-   *   Thrown when one of the created entities could not be deleted.
-   *
-   * @AfterScenario @eif_community&&@api
-   */
-  public function cleanEifData(AfterScenarioScope $scope): void {
-    $rdf_ids = [
-      EifInterface::EIF_ID,
-      'http://nifo.collection',
-      'http://example.com/owner',
-      'http://example.com/contact',
-    ];
-    foreach ($rdf_ids as $id) {
-      $entity = Rdf::load($id);
-      $entity->skip_notification = TRUE;
-      $entity->delete();
-    }
-  }
-
-  /**
    * Generates an EIF perspective entity for a solution.
    *
    * @param \Behat\Gherkin\Node\TableNode $table_data
@@ -163,70 +128,49 @@ class EifContext extends RawDrupalContext {
    */
   public function givenEifPerspectiveOfSolution(TableNode $table_data, string $solution): void {
     $solution = $this->getEntityByLabel('rdf_entity', $solution, 'solution');
-    $qualifiers = [];
-    $eif_perspective_fields = [];
+    $fields = [];
     foreach ($table_data->getRows() as $row) {
+      $field_name = 'eif_' . str_replace(' ', '_', strtolower($row[0]));
+      $fields[$field_name] ??= [];
       switch ($row[0]) {
         case 'Description':
-          $eif_perspective_fields['field_eif_description'] = trim($row[1]);
-          break;
-
-        case 'Solution type':
-          $eif_perspective_fields['field_eif_solution_type'] = $this->explodeCommaSeparatedStepArgument($row[1]);
+          $value = [['value' => trim($row[1]), 'format' => 'content_editor']];
           break;
 
         case 'Layer':
         case 'Model':
         case 'Principle':
-          $eif_perspective_fields['eif_' . strtolower($row[0])] = $this->explodeCommaSeparatedStepArgument($row[1]);
+        case 'Solution type':
+          $value = $this->explodeCommaSeparatedStepArgument($row[1]);
           break;
 
         case 'Recommendation':
-          $bundle = strtolower($row[0]);
           // The following will split a phrase in the format of:
+          // @code
           // name: Some title without comma, description: Some description.
-          //
+          // @endcode
           // The part from the comma symbol on (the description) is optional.
-          preg_match_all('/name:(\s*?)(?<name>[^,]*)(?:,(\s*?)description:(\s*?)(?<description>.*$))?/', $row[1], $matches);
-          if (isset($matches['name'][0])) {
-            $values = ['term' => trim($matches['name'][0])];
-            if (isset($matches['description'][0])) {
-              $values['description'] = trim($matches['description'][0]);
+          preg_match('/name:(\s*?)(?<name>[^,]*)(?:,(\s*?)description:(\s*?)(?<description>.*$))?/', $row[1], $matches);
+          $value = NULL;
+          if (isset($matches['name'])) {
+            $value = [['entity' => $this->getEntityByLabel('taxonomy_term', trim($matches['name']), 'eif_recommendation')]];
+            if (isset($matches['description'])) {
+              $value[0]['value'] = trim($matches['description']);
+              $value[0]['format'] = 'basic_html';
             }
-
-            $qualifiers['eif_recommendation'][] = $this->createEifWrapper($bundle, $values);
           }
           break;
       }
+      $fields[$field_name] = [...$fields[$field_name], ...$value];
     }
 
-    $eif_perspective_fields = $this->convertEntityReferencesValues('rdf_meta_entity', 'eif_perspective', $eif_perspective_fields);
-    $eif_perspective = RdfMetaEntity::create([
+    $fields = $this->convertEntityReferencesValues('meta_entity', 'eif_perspective', $fields);
+    $eif_perspective = MetaEntity::create([
       'type' => 'eif_perspective',
       'target' => $solution,
-    ] + $eif_perspective_fields + $qualifiers);
+    ] + $fields);
     $eif_perspective->save();
-    $this->entities['rdf_meta_entity'][$eif_perspective->id()] = $eif_perspective;
-  }
-
-  /**
-   * Creates an EIF wrapper entity and returns it. Does not save the entity.
-   *
-   * @param string $bundle
-   *   The bundle of the EIF wrapper.
-   * @param array $values
-   *   An array of values of the EIF wrapper.
-   *
-   * @return \Drupal\eif\EifWrapperInterface
-   *   The created EIF wrapper.
-   */
-  protected function createEifWrapper(string $bundle, array $values): EifWrapperInterface {
-    $values = $this->convertEntityReferencesValues('eif_wrapper', $bundle, $values);
-    $values['type'] = $bundle;
-    $eif_wrapper = EifWrapper::create($values);
-    $eif_wrapper->save();
-    $this->entities['eif_wrapper'][$eif_wrapper->id()] = $eif_wrapper;
-    return $eif_wrapper;
+    $this->entities['meta_entity'][$eif_perspective->id()] = $eif_perspective;
   }
 
   /**
@@ -271,7 +215,7 @@ class EifContext extends RawDrupalContext {
    */
   public function assertSolutionWithPerspective(string $solution): void {
     $solution = $this->getEntityByLabel('rdf_entity', $solution, 'solution');
-    if (empty(\Drupal::getContainer()->get('rdf_meta_entity.repository')->getMetaEntityForEntity($solution, 'eif_perspective'))) {
+    if (empty(\Drupal::getContainer()->get('meta_entity.repository')->getMetaEntityForEntity($solution, 'eif_perspective'))) {
       throw new \Exception('No perspective was found for the solution');
     }
   }

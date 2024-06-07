@@ -58,8 +58,8 @@ Feature: "Add solution" visibility options.
       | title | Belgian barista's |
       | logo  | logo.png          |
       | state | published         |
-    And the following owner:
-      | name                 | type                         |
+    And owner content:
+      | name                 | owner type                   |
       | Organisation example | Company, Industry consortium |
     Given users:
       | Username      | Roles     | E-mail                 | First name | Family name |
@@ -83,15 +83,14 @@ Feature: "Add solution" visibility options.
     And I should see the text "Only facilitators and authors can create content"
     # Regression test to endure that the language terms "Multilingual Code" are not present.
     And the available options in the "Language" select should not include the "Multilingual Code"
-    And the "Solution type" field should contain the "EIRA Ontology Viewpoint, Legal View, Deprecated" option groups
     When I fill in the following:
-      | Title                 | Espresso is the solution                                      |
-      | Abstract              | Abstract used for testing                                     |
-      | Description           | This is a test text                                           |
-      | Geographical coverage | Belgium                                                       |
-      | Language              | http://publications.europa.eu/resource/authority/language/VLS |
-      | Name                  | Ernst Brice                                                   |
-      | E-mail address        | ernsy1999@gmail.com                                           |
+      | Title                 | Espresso is the solution  |
+      | Abstract              | Abstract used for testing |
+      | Description           | This is a test text       |
+      | Geographical coverage | Belgium                   |
+      | Name                  | Ernst Brice               |
+      | E-mail address        | ernsy1999@gmail.com       |
+    And I select "Flemish" from "Language"
     Then I select "Data Owner" from "Solution type"
     And I select "Demography" from "Topic"
     # Attach a PDF to the documentation.
@@ -104,7 +103,8 @@ Feature: "Add solution" visibility options.
     And I press "Add owner"
     # Ensure that the Status field is a dropdown.
     # @see: https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3342
-    And I select "Completed" from "Status"
+    And the option with text "Completed" from select "Status" is selected
+    And the "Show solutions related by EIRA terms" checkbox should not be checked
     And I press "Propose"
     Then the email sent to "Ruth Lee" with subject "Joinup: A new solution has been proposed" contains the following lines of text:
       | Wendell Silva has proposed a new Interoperability solution: "Espresso is the solution" on Joinup. |
@@ -114,8 +114,8 @@ Feature: "Add solution" visibility options.
     # Regression test for the non required field, 'Logo'.
     # @see: https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3328
     And I should not see the following error messages:
-      | error messages            |
-      | Logo field is required.   |
+      | error messages          |
+      | Logo field is required. |
     But I should see a logo on the header
     And I should see the heading "Espresso is the solution"
     When I am logged in as "Ruth Lee"
@@ -142,13 +142,13 @@ Feature: "Add solution" visibility options.
     And I check "I have read and accept the legal notice and I commit to manage my solution on a regular basis."
     And I press "Yes"
     When I fill in the following:
-      | Title                 | V60 filter coffee solution                                             |
-      | Abstract              | Abstract of filter coffee                                              |
-      | Description           | This is a test text                                                    |
-      | Geographical coverage | Belgium (http://publications.europa.eu/resource/authority/country/BEL) |
-      | Language              | http://publications.europa.eu/resource/authority/language/VLS          |
-      | Name                  | Ajit Tamboli                                                           |
-      | E-mail address        | tambotamboli@gocloud.in                                                |
+      | Title                 | V60 filter coffee solution |
+      | Abstract              | Abstract of filter coffee  |
+      | Description           | This is a test text        |
+      | Geographical coverage | Belgium                    |
+      | Name                  | Ajit Tamboli               |
+      | E-mail address        | tambotamboli@gocloud.in    |
+    And I select "Flemish" from "Language"
     Then I select "Data Owner" from "Solution type"
     And I select "E-inclusion" from "Topic"
     # Attach a PDF to the documentation.
@@ -190,7 +190,7 @@ Feature: "Add solution" visibility options.
       | Title       | PHP comments parser                             |
       | Description | A simple parser that goes through PHP comments. |
     And I select "Data gathering and processing" from "Topic"
-    And I select "Implementing Guideline" from "Solution type"
+    And I select "Data Owner" from "Solution type"
 
     # Submit the incomplete form, so error messages about missing fields will
     # be shown.
@@ -223,9 +223,9 @@ Feature: "Add solution" visibility options.
       | description | Atlantic salmon arrived after the Little Ice Age. |
       | collection  | Ocean studies                                     |
       | state       | published                                         |
-    And the following owner:
-      | name                | type                             |
-      | University of Basel | Academia/Scientific organisation |
+    And owner content:
+      | name                | owner type          |
+      | University of Basel | Industry consortium |
 
     Then I should have 1 solution
 
@@ -248,12 +248,12 @@ Feature: "Add solution" visibility options.
     And I check "I have read and accept the legal notice and I commit to manage my solution on a regular basis."
     And I press "Yes"
     And I fill in the following:
-      | Title                 | Climate change tracker                      |
-      | Abstract              | Tracks climate change                       |
-      | Description           | Logs retreat of 40 glaciers in Switzerland. |
-      | Geographical coverage | Switzerland                                 |
-      | Name                  | Angela Crespi                               |
-      | E-mail address        | angela_crespi@glacmon.basel-uni.ch          |
+      | Title                 | Climate change tracker                  |
+      | Abstract              | Tracks climate change                   |
+      | Description           | Logs retreat of 40 glaciers in Belgium. |
+      | Geographical coverage | Belgium                                 |
+      | Name                  | Angela Crespi                           |
+      | E-mail address        | angela_crespi@glacmon.basel-uni.ch      |
     And I select "Data gathering and processing" from "Topic"
     And I select "Logging Service" from "Solution type"
     And I press "Add existing" at the "Owner" field
@@ -281,21 +281,21 @@ Feature: "Add solution" visibility options.
 
   @javascript @generateMedia @generateMediaTypes:solution_logo
   Scenario: Tests the image library widget.
-    Given the following owner:
-      | name                 | type    |
-      | Organisation example | Company |
-    And the following contact:
-      | email | invisible.man@example.com |
-      | name  | Invisible Man             |
+    Given owner content:
+      | name                 | owner type |
+      | Organisation example | Company    |
+    And contact_information content:
+      | name          | email                     |
+      | Invisible Man | invisible.man@example.com |
     And the following solution:
-      | title               | Cleaning solution                                 |
-      | abstract            | Cleans anything dirty                             |
-      | description         | Use on metal surfaces.                            |
-      | owner               | Organisation example                              |
-      | state               | published                                         |
-      | solution type       | Non-binding Instrument, Service Discovery Service |
-      | topic               | Employment and Support Allowance                  |
-      | contact information | Invisible Man                                     |
+      | title               | Cleaning solution                |
+      | abstract            | Cleans anything dirty            |
+      | description         | Use on metal surfaces.           |
+      | owner               | Organisation example             |
+      | state               | published                        |
+      | solution type       | Non-binding Instrument           |
+      | topic               | Employment and Support Allowance |
+      | contact information | Invisible Man                    |
 
     Given I am logged in as a moderator
     When I go to the edit form of the "Cleaning solution" solution

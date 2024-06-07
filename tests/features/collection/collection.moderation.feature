@@ -19,12 +19,12 @@ Feature: Collection moderation
     And I should not see the link "Delete"
 
   Scenario: Test the available buttons in every stage of the editorial workflow
-    Given the following owner:
+    Given owner content:
       | name           |
       | Simon Sandoval |
-    And the following contact:
-      | name  | Francis             |
-      | email | Francis@example.com |
+    And contact_information content:
+      | name    | email               |
+      | Francis | Francis@example.com |
     And users:
       | Username        | Roles     |
       # Authenticated user.
@@ -162,18 +162,16 @@ Feature: Collection moderation
     Then I should see the heading "Are you sure you want to delete collection Person of Wizards?"
     And I should see "This action cannot be undone."
     When I press "Delete"
-    # @todo: check that a success message is shown.
-    # @see ISAICP-6140
     Then I should be on the homepage
 
   Scenario: Published collections should be shown in the collections overview page.
     # Regression test for ticket ISAICP-2889.
-    Given the following owner:
-      | name             | type    |
-      | Carpet Sandation | Company |
-    And the following contact:
-      | name  | Partyanimal             |
-      | email | partyanimal@example.com |
+    Given owner content:
+      | name             | owner type |
+      | Carpet Sandation | Company    |
+    And contact_information content:
+      | name        | email                   |
+      | Partyanimal | partyanimal@example.com |
     And collection:
       | title               | Some berry pie     |
       | description         | Berries are tasty. |
@@ -223,7 +221,7 @@ Feature: Collection moderation
     And I press "Add new" at the "Owner" field
     And I wait for AJAX to finish
     And I fill in "Name" with "Katsumoto"
-    And I check the box "Academia/Scientific organisation"
+    And I check the box "Company"
     And I expand the "Additional fields" accordion section
     Then the "Additional fields" accordion section should be active
     And I attach the file "logo.png" to "Logo"
@@ -259,7 +257,6 @@ Feature: Collection moderation
 
     # Clean up the entities that were created.
     Then I delete the "Spectres in fog" collection
-    And I delete the "Katsumoto" owner
     And I delete the "A secretary in the fog" contact information
 
   @javascript @uploadFiles:logo.png
@@ -283,7 +280,7 @@ Feature: Collection moderation
     And I press "Add new" at the "Owner" field
     And I wait for AJAX to finish
     And I fill in "Name" with "Garnett Clifton"
-    And I check the box "Supra-national authority"
+    And I check the box "Company"
     And I expand the "Additional fields" accordion section
     And I attach the file "logo.png" to "Logo"
     And I wait for AJAX to finish
@@ -300,7 +297,6 @@ Feature: Collection moderation
 
     # Clean up the entities that were created.
     Then I delete the "Domestic bovins" collection
-    And I delete the "Garnett Clifton" owner
     And I delete the "Domestic secretary" contact information
 
   @javascript @uploadFiles:logo.png
@@ -324,7 +320,7 @@ Feature: Collection moderation
     And I press "Add new" at the "Owner" field
     And I wait for AJAX to finish
     And I fill in "Name" with "Coretta Simonson"
-    And I check the box "Private Individual(s)"
+    And I check the box "Company"
     And I expand the "Additional fields" accordion section
     And I attach the file "logo.png" to "Logo"
     And I wait for AJAX to finish
@@ -341,7 +337,6 @@ Feature: Collection moderation
 
     # Clean up the entities that were created.
     Then I delete the "Theft of Body" collection
-    And I delete the "Coretta Simonson" owner
     And I delete the "Secretary of thieves" contact information
 
   @javascript @uploadFiles:logo.png
@@ -366,7 +361,7 @@ Feature: Collection moderation
     And I press "Add new" at the "Owner" field
     And I wait for AJAX to finish
     And I fill in "Name" with "Terrance Nash"
-    And I check the box "Regional authority"
+    And I check the box "Company"
     And I expand the "Additional fields" accordion section
     And I attach the file "logo.png" to "Logo"
     And I wait for AJAX to finish
@@ -385,7 +380,6 @@ Feature: Collection moderation
 
     # Clean up the entities that were created.
     Then I delete the "Silken Emperor" collection
-    And I delete the "Terrance Nash" owner
     And I delete the "Secretary of Silk" contact information
 
   @javascript @uploadFiles:logo.png
@@ -409,7 +403,7 @@ Feature: Collection moderation
     And I press "Add new" at the "Owner" field
     And I wait for AJAX to finish
     And I fill in "Name" with "Mable Pelley"
-    And I check the box "National authority"
+    And I check the box "Company"
     And I expand the "Additional fields" accordion section
     And I attach the file "logo.png" to "Logo"
     And I wait for AJAX to finish
@@ -429,5 +423,4 @@ Feature: Collection moderation
 
     # Clean up the entities that were created.
     Then I delete the "The blue ships" collection
-    And I delete the "Mable Pelley" owner
     And I delete the "Secretary of the harbor" contact information

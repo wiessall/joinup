@@ -26,9 +26,9 @@ Feature: "Add release" visibility options.
     Then I should not see the link "Add release"
 
   Scenario: Add release as a solution facilitator.
-    Given the following owner:
-      | name                 | type    |
-      | Organisation example | Company |
+    Given owner content:
+      | name                 | owner type |
+      | Organisation example | Company    |
     And the following solutions:
       | title          | description        | documentation | owner                | state     |
       | Release Test 1 | test description 1 | text.pdf      | Organisation example | published |
@@ -36,7 +36,7 @@ Feature: "Add release" visibility options.
       | title          | Chasing shadows     |
       | is version of  | Release Test 1      |
       | release number | 1.0                 |
-      | status         | Deprecated          |
+      | status         | Completed           |
       | state          | published           |
       | creation date  | 2014-08-30 23:59:00 |
 
@@ -47,7 +47,7 @@ Feature: "Add release" visibility options.
     Then I should see the "Chasing shadows" tile
     And I should see the text "v1.0" in the "Chasing shadows" tile
     And I should see the text "Release date: 30/08/2014" in the "Chasing shadows" tile
-    And I should see the statistics "Deprecated" in the "Chasing shadows" tile
+    And I should see the statistics "Completed" in the "Chasing shadows" tile
     And I should see the text "Release" in the "Chasing shadows" tile
 
     # Check that the release should have a unique combination of title and
@@ -62,12 +62,15 @@ Feature: "Add release" visibility options.
 
     When I press "Publish"
     Then I should see the following error messages:
-      | error messages                    |
-      | Name field is required.           |
+      | error messages                     |
+      | Name field is required.            |
       | Release version field is required. |
 
     When I fill in "Name" with "Chasing shadows"
-    And I fill in "Release version" with "1.0"
+    And I press "Publish"
+    Then I should see the error message "Release version field is required."
+
+    When I fill in "Release version" with "1.0"
     And I fill in "Release notes" with "Changed release."
     # Ensure that the Status field is a dropdown.
     # @see: https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3342
@@ -117,9 +120,9 @@ Feature: "Add release" visibility options.
     Then I should see the heading "Page not found"
 
   Scenario: Check publish time release is present time and past.
-    Given the following owner:
-      | name                     | type    |
-      | Organisation example two | Company |
+    Given owner content:
+      | name                     | owner type |
+      | Organisation example two | Company    |
     And the following solutions:
       | title          | description        | documentation | owner                    | state     |
       | Release Test 2 | test description 2 | text.pdf      | Organisation example two | published |

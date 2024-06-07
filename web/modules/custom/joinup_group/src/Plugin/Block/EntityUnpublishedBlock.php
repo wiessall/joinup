@@ -89,7 +89,7 @@ class EntityUnpublishedBlock extends BlockBase implements ContainerFactoryPlugin
     $plugin_definition,
     EntityTypeManagerInterface $entity_type_manager,
     RevisionManagerInterface $revision_manager,
-    AccountProxyInterface $current_user
+    AccountProxyInterface $current_user,
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->entityTypeManager = $entity_type_manager;

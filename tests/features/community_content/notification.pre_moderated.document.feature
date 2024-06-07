@@ -20,27 +20,30 @@ Feature: Notification test for the document transitions on a pre moderated paren
       | CC pre collection | CC facilitator | facilitator |
       | CC pre collection | CC member      |             |
     And document content:
-      | title                               | author         | body | document type | collection        | field_state      |
+      | title                               | author         | field_paragraphs_body | document type | collection        | field_state      | abstract |
       # The next one belongs to a facilitator because there is no published version for that and thus,
       # the facilitator would not have access to the entity.
-      | CC notify pre publish               | CC facilitator | body | Document      | CC pre collection | draft            |
-      | CC notify pre propose               | CC member      | body | Document      | CC pre collection | draft            |
-      | CC notify pre request changes       | CC member      | body | Document      | CC pre collection | published        |
-      | CC notify pre report                | CC member      | body | Document      | CC pre collection | published        |
-      | CC notify pre request deletion      | CC member      | body | Document      | CC pre collection | published        |
-      | CC notify pre propose from reported | CC member      | body | Document      | CC pre collection | needs_update     |
-      | CC notify pre approve proposed      | CC member      | body | Document      | CC pre collection | proposed         |
-      | CC notify pre reject deletion       | CC member      | body | Document      | CC pre collection | deletion_request |
-      | CC notify pre delete                | CC member      | body | Document      | CC pre collection | deletion_request |
-      | CC notify published to delete       | CC member      | body | Document      | CC pre collection | published        |
-      | CC notify published to revise       | CC member      | body | Document      | CC pre collection | published        |
+      | CC notify pre publish               | CC facilitator | body                  | Document      | CC pre collection | draft            | abstract |
+      | CC notify pre propose               | CC member      | body                  | Document      | CC pre collection | draft            | abstract |
+      | CC notify pre request changes       | CC member      | body                  | Document      | CC pre collection | published        | abstract |
+      | CC notify pre report                | CC member      | body                  | Document      | CC pre collection | published        | abstract |
+      | CC notify pre request deletion      | CC member      | body                  | Document      | CC pre collection | published        | abstract |
+      | CC notify pre propose from reported | CC member      | body                  | Document      | CC pre collection | needs_update     | abstract |
+      | CC notify pre approve proposed      | CC member      | body                  | Document      | CC pre collection | proposed         | abstract |
+      | CC notify pre reject deletion       | CC member      | body                  | Document      | CC pre collection | deletion_request | abstract |
+      | CC notify pre delete                | CC member      | body                  | Document      | CC pre collection | deletion_request | abstract |
+      | CC notify published to delete       | CC member      | body                  | Document      | CC pre collection | published        | abstract |
+      | CC notify published to revise       | CC member      | body                  | Document      | CC pre collection | published        | abstract |
 
     # Test 'create' operation.
     When I am logged in as "CC member"
     And I go to the "CC pre collection" collection
     And I click "Add document" in the plus button menu
     And I fill in "Title" with "CC notify create propose"
-    And I fill in "Description" with "Sample body."
+    And I fill in "Abstract" with "Abstract"
+    And I append "text" to "field_paragraphs_body" layout paragraphs field
+      | field_body:value  | Sample body.   |
+      | field_body:format | content_editor |
     And I select "Document" from "Type"
     And I select "Statistics and Analysis" from "Topic"
     And I press "Propose"
@@ -53,7 +56,10 @@ Feature: Notification test for the document transitions on a pre moderated paren
     And I go to the "CC pre collection" collection
     And I click "Add document" in the plus button menu
     And I fill in "Title" with "CC notify create publish"
-    And I fill in "Description" with "Sample body."
+    And I fill in "Abstract" with "Abstract"
+    And I append "text" to "field_paragraphs_body" layout paragraphs field
+      | field_body:value  | Sample body.   |
+      | field_body:format | content_editor |
     And I select "Document" from "Type"
     And I select "Statistics and Analysis" from "Topic"
     And I press "Publish"

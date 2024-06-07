@@ -61,7 +61,7 @@ class JoinupGroupContentManagementResolver extends RouteGroupResolver {
     GroupTypeManagerInterface $groupTypeManager,
     EntityTypeManagerInterface $entityTypeManager,
     protected PrivateTempStoreFactory $tempStoreFactory,
-    protected AccountInterface $currentUser
+    protected AccountInterface $currentUser,
   ) {
     parent::__construct($configuration, $pluginId, $pluginDefinition, $routeMatch, $groupTypeManager, $entityTypeManager);
   }

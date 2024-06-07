@@ -1,5 +1,0 @@
-name: Developers Italia
-type: module
-description: Specific functionality for the Developers Italia community.
-core_version_requirement: ">= 9.4"
-package: Joinup communities

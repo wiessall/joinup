@@ -1,0 +1,20 @@
+http://www.w3.org/1999/02/22-rdf-syntax-ns#type:
+  - http://data.europa.eu/eif/adms/PerspectiveEIF
+http://www.w3.org/ns/adms#aboutAsset:
+  - <SOLUTION URI>
+http://purl.org/dc/terms/description:
+  - "<p>EIF perspective description</p>\n"
+http://data.europa.eu/eif/Layer:
+  - http://data.europa.eu/IL1
+  - http://data.europa.eu/IL3
+http://data.europa.eu/eif/Model:
+  - http://data.europa.eu/BC1
+  - http://data.europa.eu/BC4
+  - http://data.europa.eu/BC7
+http://data.europa.eu/eif/Principle:
+  - http://data.europa.eu/UP1
+http://data.europa.eu/eif/Recommendation:
+  - http://data.europa.eu/eif/adms/qualifier: http://data.europa.eu/Rec21
+    http://purl.org/dc/terms/description: Qualified recommendation 2
+  - http://data.europa.eu/eif/adms/qualifier: http://data.europa.eu/Rec2
+    http://purl.org/dc/terms/description: Qualified recommendation 1

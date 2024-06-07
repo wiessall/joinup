@@ -14,5 +14,6 @@ group_type: rdf_entity
 group_bundle: collection
 is_admin: null
 permissions:
-  - 'transition group from published to archival_request using the collection - collection_workflow workflow'
+  - 'update group'
+  - 'perform collection_workflow workflow request_archival transition on any entity'
 role_type: null

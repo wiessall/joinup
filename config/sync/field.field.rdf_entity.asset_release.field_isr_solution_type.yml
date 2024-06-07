@@ -18,6 +18,12 @@ translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:
-  handler: 'default:rdf_entity'
-  handler_settings: {  }
+  handler: 'grouped_rdf_taxonomy_term_selection:default'
+  handler_settings:
+    target_bundles:
+      eira: eira
+    sort:
+      field: _none
+    auto_create: false
+    auto_create_bundle: ''
 field_type: entity_reference

@@ -1,0 +1,25 @@
+From 822fa0121c99b631fe3e2185dcda4c2a116c0566 Mon Sep 17 00:00:00 2001
+From: Benji Fisher <benji@FisherFam.org>
+Date: Fri, 9 Feb 2024 20:43:48 -0500
+Subject: [PATCH] Add required plugin annotations
+
+---
+ core/modules/layout_builder/src/Plugin/Layout/BlankLayout.php | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/core/modules/layout_builder/src/Plugin/Layout/BlankLayout.php b/core/modules/layout_builder/src/Plugin/Layout/BlankLayout.php
+index a3f71b0ef9c6..b10c9214598b 100644
+--- a/core/modules/layout_builder/src/Plugin/Layout/BlankLayout.php
++++ b/core/modules/layout_builder/src/Plugin/Layout/BlankLayout.php
+@@ -16,6 +16,8 @@
+  *
+  * @Layout(
+  *   id = "layout_builder_blank",
++ *   label = "Blank",
++ *   category = "Blank",
+  * )
+  */
+ class BlankLayout extends LayoutDefault {
+-- 
+GitLab
+

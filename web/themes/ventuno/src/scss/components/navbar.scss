@@ -12,7 +12,7 @@
 }
 .joinup-navbar {
   z-index: 50;
-  height: 54px;
+  height: 72px;
   padding: 0;
   border-bottom: 1px solid rgba(255, 255, 255, .5);
   background-color: $ec-blue;
@@ -21,10 +21,10 @@
     font-size: $font-size-xs; // 12px
   }
   .navbar-brand-image {
-    width: 6rem; // 96px
+    width: 8rem; // 128px
     height: auto;
     @include media-breakpoint-up(lg) {
-      width: 8rem; // 128px
+      width: 13rem; // 208px
     }
   }
   .navbar-nav {
@@ -32,6 +32,9 @@
     justify-content: flex-end;
     width: 100%;
     .dropdown-menu {
+      margin-top: 0;
+      margin-right: -1px;
+      border-top: 0;
       @include media-breakpoint-up(xl) {
         &--sub {
           --bs-dropdown-link-hover-bg: var( --bs-gray-300);
@@ -71,18 +74,17 @@
     }
     &--underline {
       vertical-align: baseline;
+      &.is-active,
       &:hover {
-        box-shadow: 0 -2px 0 0 $white inset;
+        box-shadow: 0 -3px 0 0 $white inset;
       }
     }
     @include media-breakpoint-up(sm) {
-      padding: ($spacer * 1.5) $spacer; // 8px 16px
+      padding: ($spacer * 1.8) $spacer; // 12px 28.8px
     }
   }
   .dropdown-menu {
     z-index: 5; // Ensure the search icon stays below on small devices
-    margin-top: 1px!important;
-    padding: 0;
     white-space: nowrap;
     border-top-left-radius: 0;
     border-top-right-radius: 0;
@@ -94,15 +96,17 @@
     }
   }
   .dropdown .dropdown-toggle {
-    height: 54px;
-    padding-top: $spacer; // 16px
-    padding-bottom: $spacer; // 16px
+    // height: 54px;
+    // padding-top: $spacer; // 16px
+    // padding-bottom: $spacer; // 16px
     color: $white;
     border: none; // Dropdown resets
     background-color: transparent; // Dropdown resets
     box-shadow: none;
-    &.show {
-      box-shadow: 0 -2px 0 0 $white inset;
+    &.show,
+    &.is-active,
+    &:has(+ ul a.is-active) {
+      box-shadow: 0 -3px 0 0 $white inset;
     }
     &::after {
       display: none!important; // Dropdown resets
@@ -124,9 +128,9 @@
       }
     }
     @include media-breakpoint-up(lg) {
-      height: 72px;
-      padding-top: $spacer * 1.5; // 24px
-      padding-bottom: $spacer * 1.5; // 24px
+      // height: 72px;
+      // padding-top: $spacer * 1.5; // 24px
+      // padding-bottom: $spacer * 1.5; // 24px
     }
   }
   .dropdown-list {
@@ -148,6 +152,7 @@
     padding: .5rem $spacer;
     color: $primary !important;
     background: none;
+    &.is-active,
     &:hover {
       text-decoration: none;
       color: $primary!important;
@@ -191,9 +196,10 @@
   &.navbar--sticky {
     position: sticky;
     z-index: 501; // Avoid navbar to overlap toolbar-tray
-    top: 0;
+    top: var(--drupal-displace-offset-top, 0);
+    left: var(--drupal-displace-offset-left, 0);
   }
   @include media-breakpoint-up(lg) {
-    height: 72px;
+    height: 80px;
   }
 }

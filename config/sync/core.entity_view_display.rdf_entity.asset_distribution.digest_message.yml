@@ -8,7 +8,6 @@ dependencies:
     - field.field.rdf_entity.asset_distribution.field_ad_description
     - field.field.rdf_entity.asset_distribution.field_ad_file_size
     - field.field.rdf_entity.asset_distribution.field_ad_format
-    - field.field.rdf_entity.asset_distribution.field_ad_gitb_compliant
     - field.field.rdf_entity.asset_distribution.field_ad_licence
     - field.field.rdf_entity.asset_distribution.field_ad_repr_technique
     - field.field.rdf_entity.asset_distribution.field_ad_state
@@ -111,7 +110,6 @@ hidden:
   field_ad_creation_date: true
   field_ad_file_size: true
   field_ad_format: true
-  field_ad_gitb_compliant: true
   field_ad_licence: true
   field_ad_modification_date: true
   field_ad_repr_technique: true

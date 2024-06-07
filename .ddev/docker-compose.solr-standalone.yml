@@ -2,7 +2,7 @@ services:
 
   solr-standalone:
     container_name: ddev-${DDEV_SITENAME}-solr-standalone
-    image: solr:8
+    image: solr:8.11.3
     labels:
         com.ddev.site-name: ${DDEV_SITENAME}
         com.ddev.approot: ${DDEV_APPROOT}

@@ -145,3 +145,20 @@ Feature: Discussions added to collections
     And I wait for AJAX to finish
     And I press "Update"
     And the "Yellow Zeus" discussion logo is image #4
+
+  @javascript
+  Scenario: Ensures deleting the last discussion, using contextual links, leads back to the collection HP (and not the discussion page as 403).
+    Given the following collection:
+      | title | Snack ideas |
+      | state | published   |
+    And discussion content:
+      | title                | collection  | state     | content         |
+      | Quick and easy snack | Snack ideas | published | Sample content. |
+
+    Given I am logged in as a moderator
+    When I go to the discussions page of "Snack ideas"
+    And I click the contextual link "Delete" in the "Quick and easy snack" tile
+    Then I should see the heading "Are you sure you want to delete the content item Quick and easy snack?"
+    And I press "Delete" in the "Content" region
+    Then I should see the success message "The Discussion Quick and easy snack has been deleted."
+    And I should be on the homepage of the "Snack ideas" collection

@@ -7,3 +7,4 @@ ignored_config_entities:
   - memcache_admin.settings
   - update.settings
   - upgrade_status.settings
+  - 'webform.webform.*'

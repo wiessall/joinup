@@ -26,6 +26,7 @@ services:
       VIRT_Parameters_ThreadCleanupInterval: 1
       VIRT_Replication_ServerEnable: 0
       VIRT_SPARQL_DefaultQuery: 'SELECT ?g ?s ?p ?o WHERE { GRAPH ?g { ?s ?p ?o . } } LIMIT 500'
+      VIRT_SPARQL_MaxConstructTriples: 1000000
       VIRT_SPARQL_ResultSetMaxRows: 1000000
     volumes:
       - virtuoso:/opt/virtuoso-opensource/database

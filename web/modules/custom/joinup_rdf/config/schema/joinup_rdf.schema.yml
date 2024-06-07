@@ -1,3 +1,8 @@
 entity_reference_selection.grouped_rdf_taxonomy_term_selection:default:
   type: entity_reference_selection.default
   label: 'RDF taxonomy term selection handler settings'
+
+# TODO: Find out a way to automatically generate the schema for each bundle
+# config entity, without needing to explicitly declare it.
+meta_entity.type.*.third_party.rdf_sync:
+  type: rdf_sync.bundle_mapping

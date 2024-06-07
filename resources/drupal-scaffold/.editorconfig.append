@@ -1,3 +1,6 @@
 [*.{diff,patch}]
 trim_trailing_whitespace = false
 insert_final_newline = false
+
+[.ddev/config.yaml]
+indent_size = 4

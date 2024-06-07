@@ -15,7 +15,7 @@ function github_feed_theme(array $existing, string $type, string $theme, string 
     'github_feed' => [
       'variables' => [
         'url' => NULL,
-        'type' => NULL,
+        'feed_type' => NULL,
         'items' => NULL,
       ],
     ],
@@ -52,7 +52,7 @@ function github_feed_theme(array $existing, string $type, string $theme, string 
  * Implements template_preprocess_HOOK().
  */
 function template_preprocess_github_feed(array &$variables): void {
-  switch ($variables['type']) {
+  switch ($variables['feed_type']) {
     case 'issue':
       $variables['type_parsed'] = t('Issues');
       $variables['icon_id'] = 'info-circle';

@@ -2,34 +2,3 @@ eif.eif_perspective_form:
   route_name: eif.eif_perspective_form
   title: 'EIF perspective'
   base_route: entity.rdf_entity.canonical
-
-# EIF Wrapper Type links
-entity.eif_wrapper_type.collection:
-  title: EIF Wrapper
-  route_name: entity.eif_wrapper_type.collection
-  base_route: system.admin_structure
-
-entity.eif_wrapper_type.edit_form:
-  title: Edit
-  route_name: entity.eif_wrapper_type.edit_form
-  base_route: entity.eif_wrapper_type.edit_form
-
-## EIF Wrapper links
-entity.eif_wrapper.collection:
-  title: EIF Wrapper
-  route_name: entity.eif_wrapper.collection
-  base_route: system.admin_content
-  weight: 10
-entity.eif_wrapper.view:
-  title: View
-  route_name: entity.eif_wrapper.canonical
-  base_route: entity.eif_wrapper.canonical
-entity.eif_wrapper.edit_form:
-  title: Edit
-  route_name: entity.eif_wrapper.edit_form
-  base_route: entity.eif_wrapper.canonical
-entity.eif_wrapper.delete_form:
-  title: Delete
-  route_name: entity.eif_wrapper.delete_form
-  base_route: entity.eif_wrapper.canonical
-  weight: 10

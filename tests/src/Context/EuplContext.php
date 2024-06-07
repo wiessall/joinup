@@ -13,8 +13,8 @@ use Drupal\joinup\HtmlManipulator;
 use Drupal\joinup\Traits\ConfigReadOnlyTrait;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\JavascriptTrait;
+use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup_licence\Entity\CompatibilityDocument;
-use Drupal\node\Entity\Node;
 use Drupal\rdf_entity\Entity\Rdf;
 use LoversOfBehat\TableExtension\Hook\Scope\AfterTableFetchScope;
 use PHPUnit\Framework\Assert;
@@ -27,6 +27,7 @@ class EuplContext extends RawDrupalContext {
   use ConfigReadOnlyTrait;
   use EntityTrait;
   use JavascriptTrait;
+  use TestingEntitiesTrait;
 
   /**
    * Creates the standard 'EUPL' collection and several dependencies.
@@ -39,46 +40,51 @@ class EuplContext extends RawDrupalContext {
    */
   public function setupEuplData(): void {
     // Create an owner.
-    Rdf::create([
-      'rid' => 'owner',
-      'id' => 'http://example.com/owner',
-      'field_owner_name' => 'Owner',
-    ])->save();
+    $owner = $this->nodeCreate((object) [
+      'type' => 'owner',
+      'title' => 'Owner',
+    ]);
 
     // Create the EUPL entity.
-    Rdf::create([
+    $collection = Rdf::create([
       'rid' => 'collection',
       'id' => Eupl::EUPL_COMMUNITY_ID,
       'label' => 'EUPL',
       'field_ar_state' => 'published',
-      'field_ar_owner' => 'http://example.com/owner',
-    ])->save();
+      'field_ar_owner' => $owner->nid,
+    ]);
+    $collection->save();
+    $this->entities['rdf_entity'][$collection->id()] = $collection;
 
-    Rdf::create([
+    $solution = Rdf::create([
       'rid' => 'solution',
       'collection' => Eupl::EUPL_COMMUNITY_ID,
       'id' => Eupl::JLA_SOLUTION,
       'label' => 'Joinup Licensing Assistant',
       'field_is_state' => 'published',
-    ])->save();
+    ]);
+    $solution->save();
+    $this->entities['rdf_entity'][$solution->id()] = $solution;
 
     // The 'Joinup Licensing Assistant' standard custom page.
-    Node::create([
+    $this->nodeCreate((object) [
       'nid' => 701805,
       'type' => 'custom_page',
       'uuid' => '3bee8b04-75fd-46a8-94b3-af0d8f5a4c41',
       'title' => 'JLA',
       'og_audience' => Eupl::JLA_SOLUTION,
-    ])->save();
+      'field_state' => 'published',
+    ]);
 
     // The 'Joinup Licensing Compatibility Check' standard custom page.
-    Node::create([
+    $this->nodeCreate((object) [
       'nid' => 703242,
       'type' => 'custom_page',
       'uuid' => '431f631f-e973-4fae-8368-c31f346a9616',
       'title' => 'JLC',
       'og_audience' => Eupl::JLA_SOLUTION,
-    ])->save();
+      'field_state' => 'published',
+    ]);
 
     // Populate the compatibility documents.
     CompatibilityDocument::populate();
@@ -370,7 +376,7 @@ class EuplContext extends RawDrupalContext {
    *
    * @Then the following combination of licences should be described in the compatibility document:
    */
-  public function assertLicenceCompatibility(TableNode $table) {
+  public function assertLicenceCompatibility(TableNode $table): void {
     /** @var \Drupal\joinup_licence\JoinupLicenceCompatibilityRulePluginManager $plugin_manager */
     $plugin_manager = \Drupal::service('plugin.manager.joinup_licence_compatibility_rule');
     foreach ($table->getColumnsHash() as $test_case) {
@@ -379,9 +385,9 @@ class EuplContext extends RawDrupalContext {
       $expected_result = $test_case['document ID'];
 
       /** @var \Drupal\joinup_licence\Entity\LicenceInterface $inbound_licence */
-      $inbound_licence = $this->getEntityByLabel('rdf_entity', $use_label, 'licence');
+      $inbound_licence = $this->getEntityByLabel('node', $use_label, 'licence');
       /** @var \Drupal\joinup_licence\Entity\LicenceInterface $outbound_licence */
-      $outbound_licence = $this->getEntityByLabel('rdf_entity', $redistribute_as_label, 'licence');
+      $outbound_licence = $this->getEntityByLabel('node', $redistribute_as_label, 'licence');
 
       $result = $plugin_manager->getCompatibilityDocumentId($inbound_licence, $outbound_licence);
 
@@ -441,31 +447,11 @@ class EuplContext extends RawDrupalContext {
   /**
    * Clears the content created for the purpose of this test.
    *
-   * @throws \Drupal\Core\Entity\EntityStorageException
-   *   Thrown when one of the created entities could not be deleted.
-   *
    * @AfterScenario @eupl&&@api
+   *
+   * @throws \Drupal\Core\Entity\EntityStorageException
    */
   public function cleanEuplData(): void {
-    /** @var \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository */
-    $entity_repository = \Drupal::service('entity.repository');
-    foreach ([
-      '3bee8b04-75fd-46a8-94b3-af0d8f5a4c41',
-      '431f631f-e973-4fae-8368-c31f346a9616',
-    ] as $uuid) {
-      $entity_repository->loadEntityByUuid('node', $uuid)->delete();
-    }
-
-    $collection = Rdf::load(Eupl::EUPL_COMMUNITY_ID);
-    $collection->skip_notification = TRUE;
-    $collection->delete();
-
-    $solution = Rdf::load(Eupl::JLA_SOLUTION);
-    $solution->skip_notification = TRUE;
-    $solution->delete();
-
-    Rdf::load('http://example.com/owner')->delete();
-
     $this->cleanCompatibilityDocuments();
   }
 

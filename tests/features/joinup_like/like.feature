@@ -140,8 +140,8 @@ Feature: Like/unlike feature.
       | title             | state     | collection |
       | Likeable solution | published | Bulgaria   |
     And "custom_page" content:
-      | title                | collection | author    |
-      | Likeable custom page | Bulgaria   | Lisa Like |
+      | title                | collection | author    | state     |
+      | Likeable custom page | Bulgaria   | Lisa Like | published |
     And "discussion" content:
       | title               | collection | state     |
       | Likeable discussion | Bulgaria   | published |
@@ -194,10 +194,10 @@ Feature: Like/unlike feature.
     Then I should see the statistics "0" in the "Likeable custom page" tile
     And I should see the "Lisa Like" tile
 
-  @javascript
+  @javascript @terms
   Scenario: Tiles in the carousel should also give possibility to like content.
     Given custom_page content:
-      | title                | collection | author    | status    |
+      | title                | collection | author    | state     |
       | Likeable custom page | Bulgaria   | Lisa Like | published |
     And document content:
       | title             | collection | state     |
@@ -222,6 +222,7 @@ Feature: Like/unlike feature.
     And I click "Add custom page"
 
     And I fill in "Title" with "Carousel of likes"
+    And I select "HR" from "Topic"
     And I add a layout paragraph in the "Custom page body" form field with the following properties:
       | layout           | one column |
       | Background theme | light      |
@@ -267,7 +268,9 @@ Feature: Like/unlike feature.
     And I should see the "Likeable document" tile
     And I should see the link "Like this content" in the "Likeable document" tile
     Then I press "Next item"
+    And I wait up to 5 seconds for Glide animations to finish
     And I press "Next item"
+    And I wait up to 5 seconds for Glide animations to finish
     And I should see the "Likeable event" tile
     And I should see the link "Like this content" in the "Likeable event" tile
     And I should see the "Likeable news" tile

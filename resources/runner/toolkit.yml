@@ -4,10 +4,12 @@ toolkit:
   project_id: digit-joinup
   tmp_folder: ${joinup.dir}/tmp
   clone:
-    asda_services:
-      - mysql
-      - solr
-      - virtuoso
+    dumpfile: mysql.tar
+    nextcloud:
+      services:
+        - mysql
+        - solr
+        - virtuoso
   components:
     # Disable 'toolkit-components' job check for outdated packages. The Joinup
     # dependencies policy is to update all dependencies after each release.
@@ -40,6 +42,45 @@ toolkit:
     phpstan:
       memory_limit: '1G'
       options: 'debug -vvv no-progress'
+
+  install:
+    clone:
+      commands:
+        before:
+          - task: run
+            command: joinup:environment
+          - task: exec
+            command: ${drush.bin} memcache:flush-all
+          - task: run
+            command: drupal:settings
+            arguments:
+              - install
+        after:
+          # The `toolkit:run-deploy` command has enabled config read-only.
+          - task: run
+            command: config-readonly:disable
+          - task: run
+            command: testing:install-modules
+          - task: exec
+            command: ${drush.bin}
+            arguments:
+              - cas-mock-server:start
+            options:
+              yes: null
+              root: ${joinup.site_dir}
+          - task: exec
+            command: ${drush.bin}
+            arguments:
+              - php:eval
+              - if (node_access_needs_rebuild()) { node_access_rebuild(); }
+          - task: run
+            command: drupal:settings
+            arguments:
+              - site-clone
+          - task: run
+            command: config-readonly:enable
+          - task: exec
+            command: test ! -z "$CI" || vendor/bin/run solr:build-core-config
 
 commands:
 
@@ -117,46 +158,6 @@ commands:
     - task: exec
       command: test ! -z "$CI" || vendor/bin/run solr:build-core-config
 
-  # Overrides the toolkit:install-clone command.
-  toolkit:install-clone:
-    - task: run
-      command: joinup:environment
-    - task: exec
-      command: ${drush.bin} memcache:flush-all
-    - task: run
-      command: drupal:settings
-      arguments:
-        - install
-    - task: run
-      command: toolkit:install-dump
-    - task: run
-      command: toolkit:run-deploy
-    # The `toolkit:run-deploy` command has enabled config read-only.
-    - task: run
-      command: config-readonly:disable
-    - task: run
-      command: testing:install-modules
-    - task: exec
-      command: ${drush.bin}
-      arguments:
-        - cas-mock-server:start
-      options:
-        yes: null
-        root: ${joinup.site_dir}
-    - task: exec
-      command: ${drush.bin}
-      arguments:
-        - php:eval
-        - if (node_access_needs_rebuild()) { node_access_rebuild(); }
-    - task: run
-      command: drupal:settings
-      arguments:
-        - site-clone
-    - task: run
-      command: config-readonly:enable
-    - task: exec
-      command: test ! -z "$CI" || vendor/bin/run solr:build-core-config
-
   # Overrides the toolkit:test-phpcs command.
   toolkit:test-phpcs:
     # Handle a potential case where the repo has been shallow cloned. Typically,
@@ -204,7 +205,8 @@ commands:
         ./node_modules/.bin/stylelint \
           --config .stylelintrc.json \
           --ignore-path .gitignore \
-          "${joinup.site_dir}/{modules,profiles,themes}/!(contrib)/**/!(*.min).{css,scss,sass}"
+          "${joinup.site_dir}/{modules,profiles,themes}/!(contrib)/**/!(*.min).{css,scss,sass}" \
+          "!${joinup.site_dir}/themes/ventuno/assets/**"
 
   # Fixes CSS, PCSS and S(A|C)SS files with stylelint.
   toolkit:fix-css:

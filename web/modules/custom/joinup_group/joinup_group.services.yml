@@ -45,6 +45,10 @@ services:
     class: Drupal\joinup_group\Routing\RouteSubscriber
     tags:
       - { name: event_subscriber }
+  joinup_group.exception_redirect_subscriber:
+    class: \Drupal\joinup_group\EventSubscriber\JoinupGroupExceptionRedirectSubscriber
+    tags:
+      - { name: event_subscriber }
   joinup_group.transfer_ownership_subscriber:
     class: Drupal\joinup_group\EventSubscriber\TransferGroupOwnershipSubscriber
     arguments: ['@current_user', '@messenger', '@tempstore.private']

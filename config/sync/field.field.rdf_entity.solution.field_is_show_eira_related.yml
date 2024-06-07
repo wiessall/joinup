@@ -13,9 +13,7 @@ label: 'Show solutions related by EIRA terms'
 description: 'If checked, solutions related by EIRA terms ("Solution type" field) will be displayed in the <em>Related solutions</em> section'
 required: false
 translatable: false
-default_value:
-  -
-    value: 1
+default_value: {  }
 default_value_callback: ''
 settings:
   on_label: 'Solutions related by type will be displayed in the "Related solutions" section'

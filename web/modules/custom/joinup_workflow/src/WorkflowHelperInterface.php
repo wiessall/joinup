@@ -121,60 +121,6 @@ interface WorkflowHelperInterface {
   public function isWorkflowStatePublished(string $stateId, WorkflowInterface $workflow): bool;
 
   /**
-   * Checks if the user has at least one role with the given OG permission.
-   *
-   * This does a simple inspection of the available permissions and should not
-   * be relied on for access checks. For example this does not take into account
-   * that a group admin has full permissions, or a blocked user has no
-   * permissions. Use OgAccess to check access.
-   *
-   * @param string $permission
-   *   The permission string.
-   * @param \Drupal\Core\Entity\EntityInterface $group
-   *   The group entity.
-   * @param \Drupal\Core\Session\AccountInterface $user
-   *   The user entity.
-   *
-   * @return bool
-   *   TRUE if the permission is present in at least one of the user's role in
-   *   the group.
-   */
-  public function hasOgPermission(string $permission, EntityInterface $group, AccountInterface $user): bool;
-
-  /**
-   * Checks whether the user has at least one of the provided roles.
-   *
-   * @param \Drupal\Core\Entity\EntityInterface $entity
-   *   The group content entity.
-   * @param \Drupal\Core\Session\AccountInterface $account
-   *   The user account.
-   * @param array $roles
-   *   A list of role ids indexed by keys 'own' and 'any' which represents
-   *   ownership and a second level of 'roles' for system roles and
-   *   'og_roles' for og roles.
-   *
-   * @return bool
-   *   True if the user has at least one of the roles provided.
-   */
-  public function userHasOwnAnyRoles(EntityInterface $entity, AccountInterface $account, array $roles): bool;
-
-  /**
-   * Checks if the user has at least one required role in the entity's group.
-   *
-   * @param \Drupal\Core\Entity\EntityInterface $entity
-   *   The group content entity.
-   * @param \Drupal\Core\Session\AccountInterface $account
-   *   The user account.
-   * @param array $roles
-   *   A list of role ids indexed by 'roles' for system roles and
-   *   'og_roles' for og roles.
-   *
-   * @return bool
-   *   True if the user has at least one of the roles provided.
-   */
-  public function userHasRoles(EntityInterface $entity, AccountInterface $account, array $roles): bool;
-
-  /**
    * Archives an entity by creating a new default revision if possible.
    *
    * @param \Drupal\joinup_workflow\EntityWorkflowStateInterface $entity

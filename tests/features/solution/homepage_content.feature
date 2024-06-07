@@ -5,21 +5,21 @@ Feature: Solution homepage
   I need to be able see all content related to a solution on the solution homepage
 
   Background:
-    Given the following owner:
-      | name          | type                  |
-      | Kostas Agathe | Private Individual(s) |
-    And the following contact:
-      | name  | Placebo             |
-      | email | Placebo@example.com |
+    Given owner content:
+      | name          | owner type |
+      | Kostas Agathe | Company    |
+    And contact_information content:
+      | name    | email               |
+      | Placebo | Placebo@example.com |
     And the following solutions:
-      | title                        | abstract                              | description                           | logo     | state     | owner         | contact information | solution type | topic       |
-      | Information sharing protocol | Handling information sharing securely | Handling information sharing securely | logo.png | published | Kostas Agathe | Placebo             | Business      | E-inclusion |
-      | Security audit tools         | Automated test of security            | Automated test of security            | logo.png | published | Kostas Agathe | Placebo             | Business      | E-inclusion |
+      | title                        | abstract                              | description                           | logo     | state     | status | related by type | owner         | contact information | solution type | topic       |
+      | Information sharing protocol | Handling information sharing securely | Handling information sharing securely | logo.png | published |        | yes             | Kostas Agathe | Placebo             | Business      | E-inclusion |
+      | Security audit tools         | Automated test of security            | Automated test of security            | logo.png | published |        | yes             | Kostas Agathe | Placebo             | Business      | E-inclusion |
     And the following releases:
-      | title              | release number | creation date     | release notes                               | is version of                | state     | spatial coverage |
-      | IS protocol paper  | 1              | 2018-10-04 8:01am | First stable version.                       | Information sharing protocol | published | Belgium          |
-      | IS protocol archived | 0.1-rc         | 2018-10-04 8:06am | Release candidate.                          | Information sharing protocol   | archived  | Belgium                 |
-      | Fireproof          | 0.1            | 2018-10-04 8:06am | First release for the firewall bypass tool. | Security audit tools         | published |                  |
+      | title                | release number | creation date     | release notes                               | is version of                | state     | spatial coverage |
+      | IS protocol paper    | 1              | 2018-10-04 8:01am | First stable version.                       | Information sharing protocol | published | Belgium          |
+      | IS protocol archived | 0.1-rc         | 2018-10-04 8:06am | Release candidate.                          | Information sharing protocol | archived  | Belgium          |
+      | Fireproof            | 0.1            | 2018-10-04 8:06am | First release for the firewall bypass tool. | Security audit tools         | published |                  |
     And the following distributions:
       | title               | description                                        | creation date     | access url       | parent                       | downloads | state     |
       | PDF version         | Pdf version of the paper.                          | 2018-10-04 8:07am | text.pdf         | IS protocol paper            | 589       | published |
@@ -35,7 +35,7 @@ Feature: Solution homepage
       | IS protocol meet-up         | Discussion about the next standard. | 2018-10-04 8:02am | Statistics and Analysis | European Union   | Information sharing protocol | published |
       | Archiving some distribution | Old ZIP version archived.           | 2018-10-04 8:02am | Statistics and Analysis | European Union   | Information sharing protocol | archived  |
     And document content:
-      | title               | document type | short title | created           | body                    | spatial coverage | topic       | solution                     | state     |
+      | title               | document type | short title | created           | field_paragraphs_body   | spatial coverage | topic       | solution                     | state     |
       | IS protocol draft 2 | Document      | IS draft 2  | 2018-10-04 8:08am | Next proposition draft. | European Union   | E-inclusion | Information sharing protocol | published |
 
   Scenario: The solution homepage shows related content.

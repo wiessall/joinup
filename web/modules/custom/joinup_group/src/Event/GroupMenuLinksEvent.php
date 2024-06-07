@@ -33,7 +33,7 @@ class GroupMenuLinksEvent extends Event {
     protected GroupInterface $group,
     protected string $menuName,
     protected string $menuType,
-    protected EntityTypeManagerInterface $entityTypeManager
+    protected EntityTypeManagerInterface $entityTypeManager,
   ) {}
 
   /**

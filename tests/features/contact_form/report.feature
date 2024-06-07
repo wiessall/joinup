@@ -17,8 +17,8 @@ Feature: Submit the contact form
       | collection                            | user         | roles              |
       | Collection with inappropriate content | Report owner | owner, facilitator |
     And event content:
-      | title           | author      | body | location  | collection                            | field_state |
-      | Event to report | Report user | body | Somewhere | Collection with inappropriate content | published   |
+      | title           | author      | field_paragraphs_body | location  | collection                            | field_state |
+      | Event to report | Report user | body                  | Somewhere | Collection with inappropriate content | published   |
 
     # There should be a link to the contact form in the footer.
     Given I am not logged in

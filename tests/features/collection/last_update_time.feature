@@ -2,18 +2,18 @@
 Feature: Tests the collection last update time.
 
   Scenario: As a user visiting a collection, I want to see the collection last
-    update time as the maximum changed time of the collection itself, its
-    affiliate solutions, community content and custom pages.
+  update time as the maximum changed time of the collection itself, its
+  affiliate solutions, community content and custom pages.
 
     Given users:
       | Username    | Roles     |
       | The Cleaner | moderator |
-    And  the following contact:
-      | email | foo@bar.com           |
-      | name  | Your Cleaning Company |
-    And the following owner:
-      | name | type                  |
-      | Sean | Private Individual(s) |
+    And contact_information content:
+      | name                  | email       |
+      | Your Cleaning Company | foo@bar.com |
+    And owner content:
+      | name | owner type |
+      | Sean | Company    |
     And the following collection:
       | title             | Household Wizard |
       | state             | published        |
@@ -33,8 +33,8 @@ Feature: Tests the collection last update time.
     Then the response should contain "2011-05-06T21:56"
 
     Given document content:
-      | title           | document type | state     | changed          | created    | collection       | body               |
-      | Get Rid of Rats | Document      | published | 2012-01-17T07:38 | 2001-01-04 | Household Wizard | Rats everywhere... |
+      | title           | document type | state     | changed          | created    | collection       | field_paragraphs_body |
+      | Get Rid of Rats | Document      | published | 2012-01-17T07:38 | 2001-01-04 | Household Wizard | Rats everywhere...    |
 
     And I reload the page
     # The document is the newest thus will give the collection updated time.

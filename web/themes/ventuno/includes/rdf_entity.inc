@@ -8,6 +8,7 @@
 declare(strict_types=1);
 
 use Drupal\Core\Url;
+use Drupal\joinup_workflow\ArchivableEntityInterface;
 
 /**
  * Implements hook_preprocess_rdf_entity().
@@ -50,6 +51,7 @@ function ventuno_preprocess_rdf_entity__explore_item(array &$variables): void {
  * Implements hook_preprocess_HOOK() for rdf_entity__solution__group-header.
  */
 function ventuno_preprocess_rdf_entity__solution__group_header(array &$variables): void {
+  $entity = $variables['rdf_entity'];
   if (isset($variables['content']['releases_overview'])) {
     $variables['content']['releases_overview']['#attributes'] = [
       'class' => [
@@ -57,6 +59,9 @@ function ventuno_preprocess_rdf_entity__solution__group_header(array &$variables
         'btn-secondary',
       ],
     ];
+  }
+  if ($entity instanceof ArchivableEntityInterface) {
+    $variables['is_archived'] = $entity->isArchived();
   }
 }
 
@@ -82,7 +87,7 @@ function ventuno_preprocess_rdf_entity__solution__view_mode_search_list_item(arr
     'class' => $parent_id,
   ];
   $category_lists[$parent_id]['items'] = [];
-  foreach ($eif_perspective->field_eif_solution_type as $solution_type) {
+  foreach ($eif_perspective->eif_solution_type as $solution_type) {
     $solution_type = $solution_type->entity;
     $category_lists[$parent_id]['items'][] = [
       'title' => $solution_type->label(),
@@ -161,7 +166,7 @@ function ventuno_preprocess_rdf_entity__solution__view_mode_search_list_item(arr
     $variables['category_lists'] = $category_lists;
   }
 
-  $eif_perspective_view = \Drupal::entityTypeManager()->getViewBuilder('rdf_meta_entity')->viewField($eif_perspective->field_eif_description, [
+  $eif_perspective_view = \Drupal::entityTypeManager()->getViewBuilder('meta_entity')->viewField($eif_perspective->eif_description, [
     'label' => 'hidden',
   ]);
   $variables['eif_perspective_description'] = $eif_perspective_view;

@@ -50,13 +50,14 @@ Feature:
       | Transparency                     |
       | Legal interoperability           |
 
-    And I should see the following lines of text:
+    And I should see the following lines of text in the correct order:
       # Recommendation titles appear with their related term a
-      # "Recommendation [identifier] | Term name".
+      # "Recommendation [identifier] | Term name". The eif_recommendation terms
+      # weight/order is respected.
+      | Recommendation 15 \| Security and privacy        |
+      | This is also recommended                         |
       | Recommendation 21 \| Interoperability governance |
       | This is recommended                              |
-      | Recommendation 15                                |
-      | Recommendation 15 \| Security and privacy        |
 
     When I go to the EIF perspective page of the "EIF only type" solution
     Then I should see the heading "EIF Perspective attributes of EIF only type"

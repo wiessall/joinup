@@ -9,7 +9,7 @@ dependencies:
 id: iop_site_wide_alerts
 theme: iop
 region: messages
-weight: -20
+weight: -6
 provider: null
 plugin: sitewide_alert_block
 settings:

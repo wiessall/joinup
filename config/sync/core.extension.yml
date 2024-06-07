@@ -8,6 +8,7 @@ module:
   asset_distribution: 0
   asset_release: 0
   autologout: 0
+  blazy: 0
   block: 0
   breakpoint: 0
   cached_computed_field: 0
@@ -16,6 +17,7 @@ module:
   changed_fields: 0
   ckeditor5: 0
   collection: 0
+  colorbox: 0
   comment: 0
   config: 0
   config_ignore: 0
@@ -31,11 +33,8 @@ module:
   dashboard: 0
   datetime: 0
   datetime_range: 0
-  developer: 0
-  developers_italia: 0
   diff: 0
   digital_size_formatter: 0
-  dpsi: 0
   dropsolid_purge: 0
   dynamic_entity_reference: 0
   dynamic_page_cache: 0
@@ -51,7 +50,6 @@ module:
   entityqueue: 0
   entityqueue_block: 0
   error_page: 0
-  eu_sic: 0
   eupl: 0
   facets: 0
   facets_block: 0
@@ -81,6 +79,7 @@ module:
   inline_entity_form: 0
   interoperable_europe: 0
   isa2_analytics: 0
+  joinup_bookmark: 0
   joinup_bundle_class: 0
   joinup_collection: 0
   joinup_community_content: 0
@@ -90,7 +89,7 @@ module:
   joinup_eulogin: 0
   joinup_event: 0
   joinup_featured: 0
-  joinup_federation: 0
+  joinup_flag: 0
   joinup_front_page: 0
   joinup_group: 0
   joinup_group_content_management: 0
@@ -107,7 +106,6 @@ module:
   joinup_newsletter: 0
   joinup_notification: 0
   joinup_paragraphs: 0
-  joinup_pipeline_log: 0
   joinup_poll: 0
   joinup_publication_date: 0
   joinup_rdf: 0
@@ -115,15 +113,18 @@ module:
   joinup_search: 0
   joinup_seo: 0
   joinup_sitewide_alert: 0
+  joinup_slick: 0
   joinup_sparql: 0
   joinup_stats: 0
   joinup_subscription: 0
+  joinup_taxonomy: 0
   joinup_tiles: 0
   joinup_tour: 0
   joinup_user: 0
   joinup_validation: 0
   joinup_video: 0
   joinup_workflow: 0
+  js_cookie: 0
   json_field: 0
   language: 0
   layout_builder: 0
@@ -149,7 +150,6 @@ module:
   moderation: 0
   monolog: 0
   mysql: 0
-  nio: 0
   node: 0
   oe_bootstrap_theme_helper: 0
   oe_dashboard_agent: 0
@@ -170,7 +170,6 @@ module:
   paragraphs_type_permissions: 0
   path: 0
   path_alias: 0
-  pipeline: 0
   poll: 0
   purge: 0
   purge_drush: 0
@@ -180,11 +179,7 @@ module:
   queue_ui: 0
   rdf_draft: 0
   rdf_entity: 0
-  rdf_entity_provenance: 0
-  rdf_export: 0
-  rdf_meta_entity: 0
-  rdf_schema_field_validation: 0
-  rdf_taxonomy: 0
+  rdf_sync: 0
   redirect: 0
   responsive_image: 0
   rest: 0
@@ -208,13 +203,12 @@ module:
   simple_sitemap: 0
   sitewide_alert: 0
   sitewide_alert_block: 0
+  slick: 0
   smart_trim: 0
   social_media_links: 0
   social_media_links_field: 0
   solution: 0
-  spain_ctt: 0
   sparql_entity_storage: 0
-  spdx: 0
   state_machine: 0
   state_machine_permissions: 0
   state_machine_revisions: 0
@@ -244,8 +238,8 @@ module:
   views_data_export: 0
   views_multiple_permissions: 0
   webform: 0
+  webform_ui: 0
   whats_new: 0
-  workflow_state_permission: 0
   menu_admin_per_menu: 1
   menu_link_content: 1
   pathauto: 1

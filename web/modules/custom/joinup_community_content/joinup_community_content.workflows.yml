@@ -23,7 +23,7 @@ node:pre_moderated:
   transitions:
     save_as_draft:
       label: 'Save as draft'
-      from: [__new__]
+      from: [__new__, draft]
       to: draft
     save_new_draft:
       label: 'Save new draft'
@@ -31,7 +31,7 @@ node:pre_moderated:
       to: draft
     propose:
       label: 'Propose'
-      from: [__new__, draft]
+      from: [__new__, draft, proposed ]
       to: proposed
     propose_from_reported:
       label: 'Propose'
@@ -39,7 +39,7 @@ node:pre_moderated:
       to: proposed
     publish:
       label: 'Publish'
-      from: [__new__, draft]
+      from: [__new__, draft, published]
       to: published
     approve_proposed:
       label: 'Publish'
@@ -53,11 +53,10 @@ node:pre_moderated:
     # transition will be shown as "Request changes". If a content author
     # proposes a new revision then it will be labeled "Propose changes".
     # Here we only need to provide the 'Propose changes' transition since a
-    # facilitator is not subject to moderation, and its workflow is
-    # automatically set to post-moderated.
+    # facilitator is not subject to moderation, and can publish directly.
     # @see joinup_community_content_workflow_selector()
     propose_new_revision:
-      label: 'Propose new revision'
+      label: 'Propose changes'
       from: [published]
       to: proposed
     request_deletion:
@@ -99,7 +98,7 @@ node:post_moderated:
   transitions:
     save_as_draft:
       label: 'Save as draft'
-      from: [__new__]
+      from: [__new__, draft]
       to: draft
     save_new_draft:
       label: 'Save new draft'
@@ -107,11 +106,11 @@ node:post_moderated:
       to: draft
     propose_from_reported:
       label: 'Propose'
-      from: [needs_update]
+      from: [proposed, needs_update]
       to: proposed
     publish:
       label: 'Publish'
-      from: [__new__, draft]
+      from: [__new__, draft, published]
       to: published
     approve_proposed:
       label: 'Publish'

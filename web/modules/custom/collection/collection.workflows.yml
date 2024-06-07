@@ -11,33 +11,42 @@
 # The virtual state allowes to handle the initial values during a node create.
 collection_workflow:
   id: collection_workflow
-  label: "Default"
+  label: "Collection"
   group: collection
   states:
     __new__:
       label: New
     draft:
       label: Draft
+      published: false
     proposed:
       label: Proposed
+      published: false
     published:
       label: Published
+      published: true
     archival_request:
       label: Request archival
+      published: true
     archived:
       label: Archived
+      published: true
   transitions:
     draft:
       label: Save as draft
-      from: [__new__, proposed, published]
+      from: [__new__, draft, proposed, published]
       to: draft
     propose:
       label: Propose
-      from: [__new__, draft, published]
+      from: [__new__, draft, proposed, published]
       to: proposed
     validate:
       label: Publish
       from: [__new__, draft, proposed, archival_request]
+      to: published
+    update_published:
+      label: Publish
+      from: [published]
       to: published
     request_archival:
       label: Request archival

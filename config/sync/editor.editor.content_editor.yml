@@ -12,6 +12,7 @@ settings:
   toolbar:
     items:
       - heading
+      - style
       - bold
       - italic
       - removeFormat
@@ -112,6 +113,11 @@ settings:
         - '<img alt usemap>'
         - '<a hreflang accesskey id rel target title>'
         - '<iframe src allowfullscreen mozallowfullscreen webkitallowfullscreen width height frameborder>'
+    ckeditor5_style:
+      styles:
+        -
+          label: 'Equal width columns'
+          element: '<table class="table--columns-equal">'
     editor_file_file:
       status: true
       scheme: public

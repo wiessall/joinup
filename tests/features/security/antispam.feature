@@ -16,9 +16,9 @@ Feature: As a visitor or logged-in user, when I want to post content, the form
     Given users:
       | Username |
       | Günther  |
-    And the following contact:
-      | name  | ACME Inc.            |
-      | email | acme.inc@example.com |
+    And contact_information content:
+      | name      | email                |
+      | ACME Inc. | acme.inc@example.com |
     And the following email confirmation request:
       | email                | status    |
       | acme.inc@example.com | confirmed |
@@ -83,9 +83,9 @@ Feature: As a visitor or logged-in user, when I want to post content, the form
     Given users:
       | Username   |
       | Ransomware |
-    And the following contact:
-      | name  | Anti Inc.            |
-      | email | anti.inc@example.com |
+    And contact_information content:
+      | name      | email                |
+      | Anti Inc. | anti.inc@example.com |
     And the following collection:
       | title               | Ware cat   |
       | state               | draft      |
