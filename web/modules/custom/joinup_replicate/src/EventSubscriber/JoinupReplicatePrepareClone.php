@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_replicate\EventSubscriber;
 
+use Drupal\Core\Entity\RevisionLogInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\joinup_group\Entity\GroupContentInterface;
 use Drupal\joinup_workflow\EntityWorkflowStateInterface;
 use Drupal\replicate\Events\ReplicateAlterEvent;
@@ -17,6 +19,8 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  */
 class JoinupReplicatePrepareClone implements EventSubscriberInterface {
 
+  use StringTranslationTrait;
+
   public function __construct(
     protected AccountInterface $currentUser,
   ) {}
@@ -28,6 +32,7 @@ class JoinupReplicatePrepareClone implements EventSubscriberInterface {
     $events[ReplicatorEvents::REPLICATE_ALTER][] = ['setToDraft', 2];
     $events[ReplicatorEvents::REPLICATE_ALTER][] = ['emptySharedInField', 1];
     $events[ReplicatorEvents::REPLICATE_ALTER][] = ['setOwner'];
+    $events[ReplicatorEvents::REPLICATE_ALTER][] = ['setRevisionLog'];
 
     return $events;
   }
@@ -82,6 +87,23 @@ class JoinupReplicatePrepareClone implements EventSubscriberInterface {
     }
 
     $clone->setOwnerId($this->currentUser->id());
+  }
+
+  /**
+   * Sets a revision log message about cloning.
+   *
+   * @param \Drupal\replicate\Events\ReplicateAlterEvent $event
+   *   The event fired by Replicator.
+   */
+  public function setRevisionLog(ReplicateAlterEvent $event): void {
+    $clone = $event->getEntity();
+    if (!$clone instanceof RevisionLogInterface) {
+      return;
+    }
+
+    $clone->setRevisionLogMessage($this->t('Replicated by account with ID @account-id', [
+      '@account-id' => $this->currentUser->id(),
+    ]));
   }
 
 }
