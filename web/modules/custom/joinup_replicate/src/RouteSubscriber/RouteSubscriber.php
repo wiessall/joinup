@@ -35,9 +35,11 @@ class RouteSubscriber extends RouteSubscriberBase {
       $parameters = $route->getOption('parameters') ?? [];
       $parameters['node']['bundle'] = $allowedBundles;
       $route->setOption('parameters', $parameters);
+
       // Override requirements.
       $route->setRequirements([
-        '_custom_access' => GroupNodeController::class . '::createAccessFromNode',
+        '_custom_access' => GroupNodeController::class . '::nodeCreateAccessFromNode',
+        '_joinup_replicate_permission' => 'replicate entities',
       ]);
     }
   }
