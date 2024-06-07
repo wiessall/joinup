@@ -225,14 +225,15 @@ class AssetReleaseContext extends RawDrupalContext {
       'language' => 'field_isr_language',
       'modification date' => 'changed',
       'owner' => 'field_isr_owner',
+      'published at' => 'published_at',
       'release number' => 'field_isr_release_number',
       'release notes' => 'field_isr_release_notes',
       'related solutions' => 'field_isr_related_solutions',
       'solution type' => 'field_isr_solution_type',
       'spatial coverage' => 'field_spatial_coverage',
+      'state' => 'field_isr_state',
       'status' => 'field_status',
       'translation' => 'field_isr_translation',
-      'state' => 'field_isr_state',
     ];
   }
 
