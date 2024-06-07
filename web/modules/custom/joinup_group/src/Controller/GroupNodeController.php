@@ -107,9 +107,9 @@ class GroupNodeController extends ControllerBase {
   }
 
   /**
-   * Handles access to the content add form by node instance.
+   * Determines access to the node add form based on a node instance.
    *
-   * Used on replicate route.
+   * Used on the node replicate route.
    *
    * @param \Drupal\node\NodeInterface $node
    *   The node to fetch the node type and group from to determine create
@@ -120,7 +120,7 @@ class GroupNodeController extends ControllerBase {
    * @return \Drupal\Core\Access\AccessResult
    *   The access result object.
    */
-  public function createAccessFromNode(NodeInterface $node, AccountInterface $account): AccessResultInterface {
+  public function nodeCreateAccessFromNode(NodeInterface $node, AccountInterface $account): AccessResultInterface {
     if (!$node instanceof GroupContentInterface || !$node->hasGroup()) {
       return AccessResult::forbidden("Node doesn't belong to a group")
         ->addCacheableDependency($node);
