@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_distribution\Plugin\Validation\Constraint;
 
-use Drupal\joinup_distribution\Entity\DistributionInterface;
-use Drupal\joinup_distribution\Entity\DistributionsParentInterface;
-use Drupal\solution\Entity\SolutionInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
@@ -27,20 +24,20 @@ class UniqueDistributionTitleValidator extends ConstraintValidator {
       return;
     }
 
+    /** @var \Drupal\rdf_entity\RdfInterface $entity */
     $entity = $items->getEntity();
-    assert($entity instanceof DistributionInterface);
 
-    if (!($parent = $entity->parent->entity) || !$parent instanceof DistributionsParentInterface) {
+    /** @var \Drupal\rdf_entity\RdfInterface $rdf_entity */
+    if (!$rdf_entity = $entity->distribution_parent->entity) {
       return;
     }
-    $fieldName = $parent instanceof SolutionInterface ? 'field_is_distribution' : 'field_isr_distribution';
-    /** @var \Drupal\joinup_distribution\Entity\DistributionInterface[] $distributions */
-    $distributions = $parent->get($fieldName)->referencedEntities();
+
+    $distributions = \Drupal::getContainer()->get('joinup_distribution.parent_distribution_resolver')->getDistributions($rdf_entity->id());
     foreach ($distributions as $distribution) {
       if ($distribution->label() === $entity->label() && $distribution->id() !== $entity->id()) {
         $this->context->addViolation($constraint->message, [
           '%title' => $entity->label(),
-          '%bundle' => strtolower($parent->get('rid')->entity->label()),
+          '%bundle' => strtolower($rdf_entity->get('rid')->entity->label()),
         ]);
 
         return;

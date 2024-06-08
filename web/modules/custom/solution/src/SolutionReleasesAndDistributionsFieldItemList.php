@@ -47,34 +47,24 @@ class SolutionReleasesAndDistributionsFieldItemList extends EntityReferenceField
    *   Thrown if the 'rdf_entity' entity type doesn't exist.
    */
   protected function getReleasesAndDistributions(): array {
+    $entityTypeManager = \Drupal::entityTypeManager();
     /** @var \Drupal\sparql_entity_storage\SparqlEntityStorageInterface $storage */
-    $storage = \Drupal::entityTypeManager()->getStorage('rdf_entity');
+    $storage = $entityTypeManager->getStorage('rdf_entity');
     /** @var \Drupal\solution\Entity\SolutionInterface $solution */
     $solution = $this->getEntity();
     $graph_id = $solution->get('graph')->target_id;
-    /** @var \Drupal\sparql_entity_storage\Entity\Query\Sparql\SparqlQueryInterface $query */
-    $query = $storage->getQuery();
-
-    $or_condition = ($query->orConditionGroup())
-      ->condition('field_isr_is_version_of', $solution->id());
-
-    if (!$solution->get('field_is_distribution')->isEmpty()) {
-      $distribution_ids = [];
-      foreach ($solution->get('field_is_distribution') as $item) {
-        $distribution_ids[] = $item->target_id;
-      }
-      $or_condition->condition('id', $distribution_ids, 'IN');
-    }
 
     // Retrieve all releases and distributions for this solution.
-    $ids = array_values($query
+    $ids = array_values($storage
+      ->getQuery()
       ->graphs([$graph_id])
-      ->condition('rid', ['asset_release', 'asset_distribution'], 'IN')
-      ->condition($or_condition)
+      ->condition('rid', 'asset_release')
+      ->condition('field_isr_is_version_of', $solution->id())
       ->sort('created', 'DESC')
       ->execute());
 
-    return $ids;
+    // Retrieve also, all standalone distributions for this solution.
+    return $ids + \Drupal::getContainer()->get('joinup_distribution.parent_distribution_resolver')->getParentsDistributionIds($solution->id());
   }
 
 }

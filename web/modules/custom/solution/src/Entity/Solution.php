@@ -122,7 +122,7 @@ class Solution extends Rdf implements SolutionInterface {
    * {@inheritdoc}
    */
   public function getDistributionIds(): array {
-    return $this->getReferencedEntityIds('field_is_distribution')['rdf_entity'] ?? [];
+    return \Drupal::getContainer()->get('joinup_distribution.parent_distribution_resolver')->getParentsDistributionIds($this->id());
   }
 
   /**

@@ -100,10 +100,8 @@ class IndexDistributionData extends ProcessorPluginBase {
       return;
     }
 
-    $distributionFieldName = $entity->bundle() === 'asset_release' ? 'field_isr_distribution' : 'field_is_distribution';
-    /** @var \Drupal\Core\Field\EntityReferenceFieldItemListInterface $distributionReference */
-    $distributionReference = $entity->get($distributionFieldName);
-    if ($distributionReference->isEmpty()) {
+    $distributionIds = \Drupal::getContainer()->get('joinup_distribution.parent_distribution_resolver')->getParentsDistributionIds($entity->id());
+    if (empty($distributionIds)) {
       return;
     }
 
@@ -113,7 +111,7 @@ class IndexDistributionData extends ProcessorPluginBase {
 
     // Iterate over all distributions and append their data to Search API field.
     /** @var \Drupal\rdf_entity\RdfInterface $distribution */
-    foreach ($distributionReference->referencedEntities() as $distribution) {
+    foreach (\Drupal::entityTypeManager()->getStorage('node')->loadMultiple($distributionIds) as $distribution) {
       // Add the distribution title.
       $sapiField->addValue($distribution->label());
 

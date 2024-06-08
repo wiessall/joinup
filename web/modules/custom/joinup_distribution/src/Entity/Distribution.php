@@ -38,11 +38,10 @@ class Distribution extends Node implements DistributionInterface {
    * {@inheritdoc}
    */
   public function getParent(): DistributionsParentInterface {
-    /** @var \Drupal\joinup_distribution\DistributionParentFieldItemList $field */
-    $field = $this->get('parent');
+    $parent = $this->get('distribution_parent')?->entity;
 
-    /** @var \Drupal\asset_release\Entity\AssetReleaseInterface|\Drupal\solution\Entity\SolutionInterface $parent */
-    if ($field->isEmpty() || !($parent = $field->entity) || !$parent instanceof DistributionsParentInterface) {
+    /** @var \Drupal\joinup_distribution\Entity\DistributionsParentInterface $parent */
+    if (!$parent instanceof DistributionsParentInterface) {
       // During normal operation every distribution should have a parent entity,
       // so the only way a parent can be missing is because of an unexpected
       // condition occurring at runtime, for example if a data store goes

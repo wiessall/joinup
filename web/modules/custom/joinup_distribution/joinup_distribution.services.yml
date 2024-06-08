@@ -1,0 +1,4 @@
+services:
+  joinup_distribution.parent_distribution_resolver:
+    class: Drupal\joinup_distribution\ParentDistributionResolver
+    arguments: ['@entity_type.manager']

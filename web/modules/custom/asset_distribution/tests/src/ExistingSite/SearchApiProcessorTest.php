@@ -27,11 +27,11 @@ class SearchApiProcessorTest extends JoinupExistingSiteTestBase {
         'field_ar_state' => 'published',
       ]),
     ]);
-    $distribution = $this->createRdfEntity([
-      'rid' => 'asset_distribution',
+    $distribution = $this->createNode([
+      'type' => 'distribution',
       'label' => $this->randomString(),
       'og_audience' => $solution->id(),
-      'parent' => $solution,
+      'distribution_parent' => $solution->id(),
       'field_ad_access_url' => 'ftp://example.com',
       'field_ad_state' => 'published',
     ]);
