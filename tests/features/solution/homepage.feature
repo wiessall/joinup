@@ -5,13 +5,12 @@ Feature: Solution homepage
   I need to be able see an introduction of the solution on its homepage
 
   Scenario: The solution homepage shows basic information about the solution
-    Given the following owner:
+    Given owner content:
       | name          |
       | Awesome owner |
-    And the following contact:
-      | name        | Awesome contact            |
-      | email       | awesomecontact@example.com |
-      | Website URL | http://example.com         |
+    And contact_information content:
+      | name            | email                      | website url        |
+      | Awesome contact | awesomecontact@example.com | http://example.com |
     Given the following solution:
       | title               | Petri net                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
       | description         | "<p>A <b>Petri net</b>, also known as a <b>place/transition (PT) net</b>, is one of several <a href=\"#mathematical\">mathematical</a> modeling languages for the description of distributed systems. It is a class of discrete event dynamic system. A Petri net is a directed bipartite graph, in which the nodes represent transitions (i.e. events that may occur, represented by bars) and places (i.e. conditions, represented by circles). The directed arcs describe which places are pre- and/or postconditions for which transitions (signified by arrows). Some sources state that Petri nets were invented in August 1939 by Carl Adam Petri - at the age of 13 - for the purpose of describing chemical processes.</p>" |
@@ -117,12 +116,12 @@ Feature: Solution homepage
     But I should not see the link "Random Arm"
 
   Scenario: Test that a pager is shown on the solution page when needed.
-    Given the following owner:
-      | name                  | type    |
-      | Chiricahua Foundation | Company |
-    And the following contact:
-      | name  | Geronimo             |
-      | email | geronimo@example.com |
+    Given owner content:
+      | name                  | owner type |
+      | Chiricahua Foundation | Company    |
+    And contact_information content:
+      | name     | email                |
+      | Geronimo | geronimo@example.com |
     And the following solutions:
       | title             | description     | logo     | state     | owner                 | contact information | solution type | topic       |
       | Chiricahua Server | Serving the web | logo.png | published | Chiricahua Foundation | Geronimo            | Business      | E-inclusion |

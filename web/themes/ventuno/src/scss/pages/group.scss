@@ -30,7 +30,7 @@
 }
 
 .l-group-heading {
-  .contact-information__field-ci-webpage {
+  .contact-information__ci-webpage {
     a {
       display: inline-block;
       overflow: hidden;
@@ -42,7 +42,7 @@
   &__main {
     overflow-wrap: break-word;
     word-break: break-word;
-  } 
+  }
   &__aside {
     // CSS hack to align Quick links box, see #ISAICP-8461.
     margin-right: $spacer * -.75;

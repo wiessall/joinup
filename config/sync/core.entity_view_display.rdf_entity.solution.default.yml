@@ -10,8 +10,6 @@ dependencies:
     - field.field.rdf_entity.solution.field_is_content_creation
     - field.field.rdf_entity.solution.field_is_description
     - field.field.rdf_entity.solution.field_is_documentation
-    - field.field.rdf_entity.solution.field_is_eif_category
-    - field.field.rdf_entity.solution.field_is_eif_recommendation
     - field.field.rdf_entity.solution.field_is_has_version
     - field.field.rdf_entity.solution.field_is_included_asset
     - field.field.rdf_entity.solution.field_is_issue_tracker
@@ -121,7 +119,7 @@ third_party_settings:
                 type: entity_reference_entity_view
                 label: above
                 settings:
-                  view_mode: about
+                  view_mode: teaser
                 third_party_settings:
                   field_delimiter:
                     delimiter: ''
@@ -129,6 +127,10 @@ third_party_settings:
                     order: 0
                     limit: 0
                     offset: 0
+                  joinup_slick:
+                    preset: ''
+                    field_label: true
+                    custom_label: ''
                   template_suggestion:
                     template_suggestion: ''
             weight: 0
@@ -832,8 +834,6 @@ hidden:
   field_is_content_creation: true
   field_is_description: true
   field_is_documentation: true
-  field_is_eif_category: true
-  field_is_eif_recommendation: true
   field_is_has_version: true
   field_is_included_asset: true
   field_is_issue_tracker: true

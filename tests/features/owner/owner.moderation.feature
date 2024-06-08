@@ -10,9 +10,9 @@ Feature: Owner moderation
     Given users:
       | Username        |
       | Raeburn Hibbert |
-    And owner:
-      | name             | type    |
-      | Good food eaters | Company |
+    And owner content:
+      | name             | owner type |
+      | Good food eaters | Company    |
 
     When I am logged in as "Raeburn Hibbert"
     And I go to the propose collection form

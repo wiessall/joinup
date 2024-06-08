@@ -1,0 +1,42 @@
+uuid: eb2a0f9b-9a4f-4eef-9680-7f52de98afa6
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_form_mode.node.inline
+    - field.field.node.owner.field_state
+    - field.field.node.owner.owner_type
+    - node.type.owner
+id: node.owner.inline
+targetEntityType: node
+bundle: owner
+mode: inline
+content:
+  owner_type:
+    type: options_buttons
+    weight: 1
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  title:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  created: true
+  current_workflow_state: true
+  field_state: true
+  langcode: true
+  path: true
+  promote: true
+  published_at: true
+  simple_sitemap: true
+  status: true
+  sticky: true
+  uid: true
+  uri: true
+  url_redirects: true

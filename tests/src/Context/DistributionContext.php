@@ -9,7 +9,6 @@ use Behat\Mink\Element\NodeElement;
 use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Session\AnonymousUserSession;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
-use Drupal\joinup_distribution\Entity\DownloadEvent;
 use Drupal\file_url\FileUrlHandler;
 use Drupal\joinup\Traits\EntityReferenceTrait;
 use Drupal\joinup\Traits\EntityTrait;
@@ -18,9 +17,9 @@ use Drupal\joinup\Traits\JavascriptTrait;
 use Drupal\joinup\Traits\RdfEntityTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup_distribution\Entity\DistributionInterface;
+use Drupal\joinup_distribution\Entity\DownloadEvent;
 use Drupal\meta_entity\Entity\MetaEntity;
 use Drupal\node\Entity\Node;
-use PHPUnit\Framework\Assert;
 
 /**
  * Behat step definitions for testing distributions.
@@ -217,12 +216,8 @@ class DistributionContext extends RawDrupalContext {
    *
    * @Then I should have :number distribution(s)
    */
-  public function assertDistributionCount(int $number): void {
-    $actual = \Drupal::entityQuery('rdf_entity')->accessCheck(FALSE)
-      ->condition('type', 'distribution')
-      ->count()
-      ->execute();
-    Assert::assertEquals($number, $actual);
+  public function assertAssetDistributionCount(int $number): void {
+    $this->assertEntityCount('rdf_entity', 'asset_distribution', $number);
   }
 
   /**

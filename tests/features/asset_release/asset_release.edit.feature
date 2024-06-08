@@ -5,13 +5,12 @@ Feature: "Edit" visibility options.
   I need to be able to edit "Release" rdf entities through UI.
 
   Background:
-    Given the following owner:
+    Given owner content:
       | name           |
       | Awesome person |
-    And the following contact:
-      | name        | Awesome contact            |
-      | email       | awesomecontact@example.com |
-      | Website URL | http://example.com         |
+    And contact_information content:
+      | name            | email                      | website url        |
+      | Awesome contact | awesomecontact@example.com | http://example.com |
     And the following solution:
       | title               | My awesome solution abc |
       | description         | My awesome solution     |
