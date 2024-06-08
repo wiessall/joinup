@@ -5,12 +5,12 @@ Feature: Solution homepage
   I need to be able see all content related to a solution on the solution homepage
 
   Background:
-    Given the following owner:
-      | name          | type    |
-      | Kostas Agathe | Company |
-    And the following contact:
-      | name  | Placebo             |
-      | email | Placebo@example.com |
+    Given owner content:
+      | name          | owner type |
+      | Kostas Agathe | Company    |
+    And contact_information content:
+      | name    | email               |
+      | Placebo | Placebo@example.com |
     And the following solutions:
       | title                        | abstract                              | description                           | logo     | state     | status | related by type | owner         | contact information | solution type | topic       |
       | Information sharing protocol | Handling information sharing securely | Handling information sharing securely | logo.png | published |        | yes             | Kostas Agathe | Placebo             | Business      | E-inclusion |

@@ -43,7 +43,7 @@ class DistributionSubscriber extends NotificationSubscriberBase {
   /**
    * {@inheritdoc}
    */
-  public static function getSubscribedEvents() {
+  public static function getSubscribedEvents(): array {
     $events[NotificationEvents::RDF_ENTITY_CRUD] = [
       ['onUpdate'],
       ['onDelete'],

@@ -6,8 +6,8 @@ namespace Drupal\joinup_rdf\EventSubscriber;
 
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
-use Drupal\asset_release\Entity\AssetRelease;
 use Drupal\Core\Logger\LoggerChannelInterface;
+use Drupal\asset_release\Entity\AssetRelease;
 use Drupal\joinup_rdf\Entity\RdfSyncEntityInterface;
 use Drupal\solution\Entity\Solution;
 use Drupal\sparql_entity_storage\Event\InboundValueEvent;
@@ -43,17 +43,18 @@ class UriIdConversion implements EventSubscriberInterface {
     'rdf_entity:asset_distribution:field_ad_repr_technique',
     'rdf_entity:asset_distribution:field_isr_distribution',
     'rdf_entity:asset_distribution:field_status',
+    'rdf_entity:asset_release:field_isr_contact_information',
     'rdf_entity:asset_release:field_isr_language',
     'rdf_entity:asset_release:field_isr_solution_type',
     'rdf_entity:asset_release:field_spatial_coverage',
     'rdf_entity:asset_release:field_status',
     'rdf_entity:asset_release:field_topic',
+    'rdf_entity:collection:field_ar_contact_information',
     'rdf_entity:collection:field_spatial_coverage',
     'rdf_entity:collection:field_topic',
-    'rdf_entity:owner:field_owner_type',
-    'rdf_entity:owner:field_owner_type',
     'rdf_entity:solution:field_is_actor',
     'rdf_entity:solution:field_is_business_process',
+    'rdf_entity:solution:field_is_contact_information',
     'rdf_entity:solution:field_is_distribution',
     'rdf_entity:solution:field_is_eif_recommendation',
     'rdf_entity:solution:field_is_language',
@@ -69,6 +70,9 @@ class UriIdConversion implements EventSubscriberInterface {
     'rdf_meta_entity:eif_perspective:eif_model',
     'rdf_meta_entity:eif_perspective:eif_principle',
     'rdf_meta_entity:eif_perspective:field_eif_solution_type',
+    'rdf_entity:asset_release:field_isr_owner',
+    'rdf_entity:collection:field_ar_owner',
+    'rdf_entity:solution:field_is_owner',
   ];
 
   /**
@@ -188,7 +192,7 @@ class UriIdConversion implements EventSubscriberInterface {
       }
       $this->uriToId[$uri] = $result;
     }
-    return $this->uriToId[$uri][1];
+    return $this->uriToId[$uri][1] ?? NULL;
   }
 
   /**

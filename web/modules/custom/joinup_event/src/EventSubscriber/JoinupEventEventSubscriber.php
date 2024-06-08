@@ -39,7 +39,7 @@ class JoinupEventEventSubscriber implements EventSubscriberInterface {
   /**
    * {@inheritdoc}
    */
-  public static function getSubscribedEvents() {
+  public static function getSubscribedEvents(): array {
     return [
       // This needs to run before RouterListener::onKernelRequest(), which has a
       // priority of 32. Otherwise, that aborts the request if no matching route

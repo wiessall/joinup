@@ -84,14 +84,14 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
         ],
       ],
       'rdf_entity' => [
-//        'asset_distribution' => [
-//          'http://distribution/1.1',
-//          'http://distribution/1.1.1',
-//          'http://distribution/1.1.2',
-//          'http://distribution/1.2',
-//          'http://distribution/1.2.1',
-//          'http://distribution/1.2.2',
-//        ],
+        // 'asset_distribution' => [
+        // 'http://distribution/1.1',
+        // 'http://distribution/1.1.1',
+        // 'http://distribution/1.1.2',
+        // 'http://distribution/1.2',
+        // 'http://distribution/1.2.1',
+        // 'http://distribution/1.2.2',
+        // ],
         'asset_release' => [
           'http://release/1.1',
           'http://release/1.2',
@@ -150,7 +150,8 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
     $edit = ['field_short_id[0][value]' => 'abc123'];
     $this->drupalGet($this->entity['rdf_entity']['solution']['1']->toUrl('edit-form'));
     $this->submitForm($edit, 'Publish');
-    $this->assertSession()->pageTextContains("You've added a solution short ID: abc123. It will take some time until the solution content URLs will be updated.");
+    $this->assertSession()
+      ->pageTextContains("You've added a solution short ID: abc123. It will take some time until the solution content URLs will be updated.");
 
     // Process both queues.
     $this->drush('queue:run', ['joinup_group:group_update']);
@@ -205,7 +206,8 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
     $edit = ['field_short_id[0][value]' => 'xyz789'];
     $this->drupalGet($this->entity['rdf_entity']['collection']['1']->toUrl('edit-form'));
     $this->submitForm($edit, 'Publish');
-    $this->assertSession()->pageTextContains("You've added a collection short ID: xyz789. It will take some time until the collection content URLs will be updated.");
+    $this->assertSession()
+      ->pageTextContains("You've added a collection short ID: xyz789. It will take some time until the collection content URLs will be updated.");
 
     // Process both queues.
     $this->drush('queue:run', ['joinup_group:group_update']);
@@ -288,19 +290,23 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
     $edit = ['field_short_id[0][value]' => 'other-id'];
     $this->drupalGet($this->entity['rdf_entity']['solution']['1']->toUrl('edit-form'));
     $this->submitForm($edit, 'Publish');
-    $this->assertSession()->pageTextContains("You've changed the solution's short ID from abc123 to other-id. It will take some time until the solution content URLs will be updated.");
+    $this->assertSession()
+      ->pageTextContains("You've changed the solution's short ID from abc123 to other-id. It will take some time until the solution content URLs will be updated.");
     $this->drupalGet($this->entity['rdf_entity']['collection']['1']->toUrl('edit-form'));
     $this->submitForm($edit, 'Publish');
-    $this->assertSession()->pageTextContains("You've changed the collection's short ID from xyz789 to other-id. It will take some time until the collection content URLs will be updated.");
+    $this->assertSession()
+      ->pageTextContains("You've changed the collection's short ID from xyz789 to other-id. It will take some time until the collection content URLs will be updated.");
 
     // Test the success message on short ID delete.
     $edit = ['field_short_id[0][value]' => ''];
     $this->drupalGet($this->entity['rdf_entity']['solution']['1']->toUrl('edit-form'));
     $this->submitForm($edit, 'Publish');
-    $this->assertSession()->pageTextContains("You've removed the solution's short ID: other-id. It will take some time until the solution content URLs will be updated.");
+    $this->assertSession()
+      ->pageTextContains("You've removed the solution's short ID: other-id. It will take some time until the solution content URLs will be updated.");
     $this->drupalGet($this->entity['rdf_entity']['collection']['1']->toUrl('edit-form'));
     $this->submitForm($edit, 'Publish');
-    $this->assertSession()->pageTextContains("You've removed the collection's short ID: other-id. It will take some time until the collection content URLs will be updated.");
+    $this->assertSession()
+      ->pageTextContains("You've removed the collection's short ID: other-id. It will take some time until the collection content URLs will be updated.");
   }
 
   /**
@@ -325,17 +331,17 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
     ];
     $collection_node_bundles = array_merge($solution_node_bundles, ['glossary']);
 
-    $this->createRdfEntity([
-      'id' => 'http://example.com/owner',
-      'rid' => 'owner',
-      'field_owner_name' => $this->randomString(),
-      'field_owner_type' => \Drupal::getContainer()->get('rdf_sync.mapper')->getEntityByUri('http://purl.org/adms/publishertype/SupraNationalAuthority'),
+    $owner = $this->createNode([
+      'type' => 'owner',
+      'title' => $this->randomString(),
+      'owner_type' => \Drupal::getContainer()
+        ->get('rdf_sync.mapper')
+        ->getEntityByUri('http://purl.org/adms/publishertype/SupraNationalAuthority'),
     ]);
-    $this->createRdfEntity([
-      'id' => 'http://example.com/contact',
-      'rid' => 'contact_information',
-      'field_ci_name' => $this->randomString(),
-      'field_ci_email' => $this->randomMachineName() . '@example.com',
+    $contact = $this->createNode([
+      'type' => 'contact_information',
+      'title' => $this->randomString(),
+      'email' => $this->randomMachineName() . '@example.com',
     ]);
 
     $this->entity['rdf_entity']['collection']['1'] = $this->createRdfEntity([
@@ -345,9 +351,9 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
       'field_ar_abstract' => $this->randomString(),
       'field_ar_description' => $this->randomString(),
       'field_ar_state' => 'published',
-      'field_ar_owner' => 'http://example.com/owner',
+      'field_ar_owner' => $owner->id(),
       'field_topic' => Topic::loadByUri('http://joinup.eu/ontology/topic#finance-in-eu'),
-      'field_ar_contact_information' => 'http://example.com/contact',
+      'field_ar_contact_information' => $contact->id(),
     ]);
 
     $this->entity['rdf_entity']['solution']['1'] = $this->createRdfEntity([
@@ -358,10 +364,12 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
       'field_is_abstract' => $this->randomString(),
       'field_is_description' => $this->randomString(),
       'field_is_state' => 'published',
-      'field_is_owner' => 'http://example.com/owner',
-      'field_topic' => Topic::loadByUri('http://joinup.eu/ontology/topic#finance-in-eu')->id(),
-      'field_is_solution_type' => MappedTerm::loadByUri('http://data.europa.eu/dr8/PublicServiceProvider')->id(),
-      'field_is_contact_information' => 'http://example.com/contact',
+      'field_is_owner' => $owner->id(),
+      'field_topic' => Topic::loadByUri('http://joinup.eu/ontology/topic#finance-in-eu')
+        ->id(),
+      'field_is_solution_type' => MappedTerm::loadByUri('http://data.europa.eu/dr8/PublicServiceProvider')
+        ->id(),
+      'field_is_contact_information' => $contact->id(),
     ]);
     // Releases.
     for ($i = 1; $i <= 2; $i++) {
@@ -377,7 +385,7 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
       for ($j = 1; $j <= 2; $j++) {
         $this->entity['node']['distribution']["1.{$i}.{$j}"] = $this->createNode([
           'type' => 'distribution',
-//          'uri' => "http://distribution/1.{$i}.{$j}",
+          // 'uri' => "http://distribution/1.{$i}.{$j}",
           'title' => "distribution 1.{$i}.{$j}",
           'parent' => "http://release/1.{$i}",
           'field_state' => 'published',
@@ -388,7 +396,7 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
     for ($i = 1; $i <= 2; $i++) {
       $this->entity['node']['distribution']["1.{$i}"] = $this->createNode([
         'type' => 'distribution',
-//        'uri' => "http://distribution/1.{$i}",
+        // 'uri' => "http://distribution/1.{$i}",
         'title' => "distribution 1.{$i}",
         'parent' => 'http://solution/1',
         'field_state' => 'published',
@@ -429,7 +437,9 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
     array_walk($this->entity, function (array $bundles, string $entity_type_id): void {
       array_walk($bundles, function (array $entities, string $bundle) use ($entity_type_id): void {
         array_walk($entities, function (ContentEntityInterface $entity, string $index) use ($entity_type_id, $bundle): void {
-          $this->entity[$entity_type_id][$bundle][$index] = \Drupal::entityTypeManager()->getStorage($entity->getEntityTypeId())->load($entity->id());
+          $this->entity[$entity_type_id][$bundle][$index] = \Drupal::entityTypeManager()
+            ->getStorage($entity->getEntityTypeId())
+            ->load($entity->id());
         });
       });
     });
