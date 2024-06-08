@@ -40,6 +40,7 @@ services:
       - { name: event_subscriber }
   solution.adjust_group_content_subscriber:
     class: Drupal\solution\EventSubscriber\AdjustSolutionContentSubscriber
+    arguments: ['@joinup_distribution.parent_distribution_resolver']
     tags:
       - { name: event_subscriber }
 

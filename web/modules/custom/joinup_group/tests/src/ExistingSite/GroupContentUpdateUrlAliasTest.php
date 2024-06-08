@@ -387,7 +387,7 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
           'type' => 'distribution',
           // 'uri' => "http://distribution/1.{$i}.{$j}",
           'title' => "distribution 1.{$i}.{$j}",
-          'parent' => "http://release/1.{$i}",
+          'distribution_parent' => "http://release/1.{$i}",
           'field_state' => 'published',
         ]);
       }
@@ -398,7 +398,7 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
         'type' => 'distribution',
         // 'uri' => "http://distribution/1.{$i}",
         'title' => "distribution 1.{$i}",
-        'parent' => 'http://solution/1',
+        'distribution_parent' => 'http://solution/1',
         'field_state' => 'published',
       ]);
     }

@@ -98,11 +98,6 @@ function solution_entity_bundle_field_info_alter(&$fields, EntityTypeInterface $
   if (!empty($fields['label'])) {
     $fields['label']->addConstraint('UniqueSolutionTitle', []);
   }
-
-  // A distribution can be referenced only by a single parent.
-  if (!empty($fields['field_is_distribution'])) {
-    $fields['field_is_distribution']->addConstraint('DistributionSingleParent');
-  }
 }
 
 /**

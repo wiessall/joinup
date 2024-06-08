@@ -51,11 +51,6 @@ function asset_release_entity_bundle_field_info_alter(&$fields, EntityTypeInterf
   if ($entity_type->id() == 'rdf_entity' && $bundle == 'asset_release' && !empty($fields['label'])) {
     $fields['label']->addConstraint('UniqueAssetReleaseTitleVersion', []);
   }
-
-  // A distribution can be referenced only by a single parent.
-  if (!empty($fields['field_isr_distribution'])) {
-    $fields['field_isr_distribution']->addConstraint('DistributionSingleParent');
-  }
 }
 
 /**

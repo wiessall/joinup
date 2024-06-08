@@ -8,13 +8,10 @@
 declare(strict_types=1);
 
 use Drupal\Component\Serialization\Json;
-use Drupal\Core\Field\Plugin\Field\FieldType\EntityReferenceItem;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\joinup_taxonomy\Entity\MappedTerm;
 use Drupal\node\Entity\Node;
-use Drupal\rdf_entity\Entity\Rdf;
 use Drupal\rdf_sync\Model\SyncMethod;
-use Drupal\solution\Entity\SolutionInterface;
 
 /**
  * Migrate owners to nodes.
@@ -240,30 +237,10 @@ function joinup_rdf_deploy_110804(array &$sandbox): string {
   $file = array_shift($sandbox['files']);
   $distributions = Yaml::decode(file_get_contents($file));
   foreach ($distributions as $uri => $data) {
-    // Data integrity: Some distributions lack essential data. Skip them until
-    // they are fixed in ISAICP-8649.
-    // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-8649
-    if (empty($data['http://purl.org/dc/terms/title'][0]['value'])) {
-      if ($groupUri = ($data['http://joinup.eu/rdf_entity/group'][0]['value'] ?? NULL)) {
-        // Remove the reverse reference, if case.
-        $group = Rdf::load($groupUri);
-        $distributionFieldName = $group instanceof SolutionInterface ? 'field_is_distribution' : 'field_isr_distribution';
-        if (!$group->hasField($distributionFieldName)) {
-          continue;
-        }
-        $field = $group->get($distributionFieldName);
-        $initial = $field->getString();
-        $group->get($distributionFieldName)->filter(function (EntityReferenceItem $item) use ($uri): bool {
-          return $item->target_id !== $uri;
-        });
-        $final = $field->getString();
-        if ($initial != $final) {
-          $group->save();
-        }
-      }
-      continue;
-    }
-
+    // @todo Implement an RDF sync subscriber to add the distributions to the
+    //   parent entity. Add a follow up for the release and solution tickets to
+    //   update this subscriber to add the data in the http://data graph
+    //   instead.
     $values = ['type' => 'distribution', 'uri' => $uri];
     foreach ($data as $predicate => $objects) {
       if (isset($map[$predicate])) {
@@ -290,10 +267,39 @@ function joinup_rdf_deploy_110804(array &$sandbox): string {
         }
       }
     }
+    $value['distribution_parent'] = _joinup_rdf_get_distribution_parent($uri);
     $storage->create($values)->save();
     $sandbox['progress']++;
   }
 
   $sandbox['#finished'] = (int) empty($sandbox['files']);
   return "Imported {$sandbox['progress']} distributions";
+}
+
+/**
+ * Helper function to determine a distribution's parent.
+ */
+function _joinup_rdf_get_distribution_parent(string $distribution_id): string {
+  $query = <<<SPARQL
+SELECT ?parent
+WHERE {
+  GRAPH ?graph {
+    ?parent <http://www.w3.org/ns/dcat#distribution> <$distribution_id> .
+  }
+  VALUES ?graph {
+    <http://joinup.eu/solution/published>
+    <http://joinup.eu/solution/draft>
+    <http://joinup.eu/asset_release/published>
+    <http://joinup.eu/asset_release/draft>
+  }
+}
+SPARQL;
+
+  $results = \Drupal::getContainer()->get('sparql.endpoint')->query($query)->getArrayCopy();
+  $parent = reset($results);
+  if (!$parent) {
+    return '';
+  }
+
+  return $parent->parent->getUri();
 }

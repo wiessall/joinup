@@ -10,11 +10,8 @@ declare(strict_types=1);
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Entity\EntityInterface;
-use Drupal\Core\Entity\EntityTypeInterface;
-use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\asset_distribution\DistributionParentFieldItemList;
 use Drupal\asset_distribution\Entity\AssetDistribution;
 use Drupal\asset_distribution\Entity\AssetDistributionInterface;
 use Drupal\file_url\FileUrlHandler;
@@ -28,40 +25,6 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 function asset_distribution_entity_bundle_info_alter(array &$bundles): void {
   if (!empty($bundles['rdf_entity']['asset_distribution'])) {
     $bundles['rdf_entity']['asset_distribution']['class'] = AssetDistribution::class;
-  }
-}
-
-/**
- * Implements hook_entity_bundle_field_info().
- */
-function asset_distribution_entity_bundle_field_info(EntityTypeInterface $entity_type, string $bundle, array $base_field_definitions): array {
-  if ($entity_type->id() === 'rdf_entity' && $bundle === 'asset_distribution') {
-    // Add reference to the parent entity (solution or asset_release).
-    return [
-      'parent' => BaseFieldDefinition::create('entity_reference')
-        ->setLabel(t('Parent'))
-        ->setName('parent')
-        ->setDescription(t('The distribution parent. Could be a solutions or a releases.'))
-        ->setTargetEntityTypeId('rdf_entity')
-        ->setTargetBundle('asset_distribution')
-        ->setSetting('target_type', 'rdf_entity')
-        ->setCardinality(1)
-        ->setComputed(TRUE)
-        ->setClass(DistributionParentFieldItemList::class),
-    ];
-  }
-  return [];
-}
-
-/**
- * Implements hook_entity_bundle_field_info_alter().
- */
-function asset_distribution_entity_bundle_field_info_alter(array &$fields, EntityTypeInterface $entity_type, string $bundle): void {
-  if ($entity_type->id() === 'rdf_entity' && $bundle === 'asset_distribution') {
-    // Make sure a distribution's title is unique in its release.
-    if (!empty($fields['label'])) {
-      $fields['label']->addConstraint('UniqueAssetDistributionTitle', []);
-    }
   }
 }
 
@@ -174,12 +137,7 @@ function asset_distribution_rdf_entity_update(RdfInterface $distribution): void 
   // on distribution insert, in DistributionParentFieldItemList::postSave(),
   // by saving the parent after a new distribution has been saved.
   // @see \Drupal\asset_distribution\DistributionParentFieldItemList::postSave()
-  /** @var \Drupal\rdf_entity\RdfInterface $parent */
-  if (!$distribution->get('parent')->isEmpty() && ($parent = $distribution->get('parent')->entity)) {
-    /** @var \Drupal\search_api\Plugin\search_api\datasource\ContentEntityTrackingManager $content_tracking_manager */
-    $content_tracking_manager = \Drupal::service('search_api.entity_datasource.tracking_manager');
-    $content_tracking_manager->trackEntityChange($parent);
-  }
+  // @todo Check that this is done in joinup_distribution module.
 }
 
 /**

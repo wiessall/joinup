@@ -269,7 +269,6 @@ hidden:
   field_is_abstract: true
   field_is_affiliations_requests: true
   field_is_content: true
-  field_is_distribution: true
   field_is_has_version: true
   field_is_logo: true
   field_is_related_solutions: true

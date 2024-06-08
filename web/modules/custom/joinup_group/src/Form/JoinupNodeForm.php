@@ -18,6 +18,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides the group for node types that are group members.
+ *
+ * @internal
  */
 class JoinupNodeForm extends NodeForm {
 
@@ -97,8 +99,8 @@ class JoinupNodeForm extends NodeForm {
       foreach ($info as $fieldType => ['bundles' => $bundles]) {
         foreach ($bundles as $bundle) {
           if ($bundle === $this->entity->bundle()) {
-             $this->entity->set($fieldType, $group);
-             return;
+            $this->entity->set($fieldType, $group);
+            return;
           }
         }
       }
