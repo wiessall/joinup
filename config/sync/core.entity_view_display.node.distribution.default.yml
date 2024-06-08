@@ -5,6 +5,7 @@ dependencies:
   config:
     - field.field.node.distribution.access_url
     - field.field.node.distribution.description
+    - field.field.node.distribution.distribution_parent
     - field.field.node.distribution.field_licence
     - field.field.node.distribution.field_state
     - field.field.node.distribution.file_size
@@ -123,6 +124,7 @@ content:
     weight: 7
     region: content
 hidden:
+  distribution_parent: true
   download_count: true
   langcode: true
   links: true

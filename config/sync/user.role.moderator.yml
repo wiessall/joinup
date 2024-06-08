@@ -10,24 +10,22 @@ dependencies:
     - media.type.news_logo
     - media.type.solution_logo
     - media.type.video
+    - node.type.contact_information
     - node.type.custom_page
     - node.type.discussion
     - node.type.distribution
     - node.type.document
     - node.type.glossary
-    - node.type.owner
     - node.type.licence
+    - node.type.owner
     - taxonomy.vocabulary.legal_type
   module:
-    - collection
     - comment
     - contact_form
     - custom_page
     - dashboard
-    - eif
     - entity_legal
     - entityqueue
-    - field_permissions
     - file
     - filter
     - joinup
@@ -116,7 +114,6 @@ permissions:
   - 'create discussion content'
   - 'create discussion_logo media'
   - 'create distribution content'
-  - 'create eif wrapper entity'
   - 'create eif_perspective meta-entity'
   - 'create event_logo media'
   - 'create licence content'
