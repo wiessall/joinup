@@ -41,14 +41,12 @@ class DistributionContext extends RawDrupalContext {
    *
    * @When I go to (the homepage of )the :distribution distribution
    * @When I visit (the homepage of )the :distribution distribution
-   * @When I go to (the homepage of )the :distribution distribution
-   * @When I visit (the homepage of )the :distribution distribution
    *
    * @throws \Drupal\Core\Entity\EntityMalformedException
    */
   public function visitDistribution(string $distribution): void {
     /** @var \Drupal\node\NodeInterface $entity */
-    $entity = $this->getEntityByLabel('rdf_entity', $distribution);
+    $entity = $this->getEntityByLabel('node', $distribution);
     $this->visitPath($entity->toUrl()->toString());
   }
 
