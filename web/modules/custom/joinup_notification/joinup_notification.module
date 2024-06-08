@@ -9,9 +9,9 @@ declare(strict_types=1);
 
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Render\Markup;
-use Drupal\joinup_distribution\Exception\MissingDistributionParentException;
 use Drupal\joinup_community_content\Entity\CommunityContentInterface;
 use Drupal\joinup_distribution\Entity\DistributionInterface;
+use Drupal\joinup_distribution\Exception\MissingDistributionParentException;
 use Drupal\joinup_group\Entity\GroupContentInterface;
 use Drupal\joinup_group\Exception\MissingGroupException;
 use Drupal\joinup_notification\Event\NotificationEvent;
