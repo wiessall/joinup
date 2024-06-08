@@ -6,7 +6,6 @@ namespace Drupal\solution;
 
 use Drupal\Core\Field\EntityReferenceFieldItemList;
 use Drupal\Core\TypedData\ComputedItemListTrait;
-use Drupal\og\Og;
 use Drupal\solution\Entity\SolutionInterface;
 
 /**

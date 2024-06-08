@@ -14,7 +14,6 @@ use Drupal\Core\TempStore\PrivateTempStoreFactory;
 use Drupal\joinup_group\Entity\GroupContentInterface;
 use Drupal\joinup_group\JoinupGroupManagerInterface;
 use Drupal\node\NodeForm;
-use Drupal\og\Og;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -22,6 +21,26 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class JoinupNodeForm extends NodeForm {
 
+  /**
+   * Constructs a new JoinupNodeForm object.
+   *
+   * @param \Drupal\Core\Entity\EntityRepositoryInterface $entity_repository
+   *   The entity repository.
+   * @param \Drupal\Core\TempStore\PrivateTempStoreFactory $temp_store_factory
+   *   The temp store factory.
+   * @param \Drupal\Core\Entity\EntityTypeBundleInfoInterface $entity_type_bundle_info
+   *   The entity type bundle info.
+   * @param \Drupal\Component\Datetime\TimeInterface $time
+   *   The time service.
+   * @param \Drupal\Core\Session\AccountInterface $current_user
+   *   The current user.
+   * @param \Drupal\Core\Datetime\DateFormatterInterface $date_formatter
+   *   The date formatter.
+   * @param \Drupal\joinup_group\JoinupGroupManagerInterface $groupManager
+   *   The group manager.
+   * @param \Drupal\Core\Entity\EntityFieldManagerInterface $fieldManager
+   *   The entity field manager.
+   */
   public function __construct(
     EntityRepositoryInterface $entity_repository,
     PrivateTempStoreFactory $temp_store_factory,
@@ -78,8 +97,8 @@ class JoinupNodeForm extends NodeForm {
       foreach ($info as $fieldType => ['bundles' => $bundles]) {
         foreach ($bundles as $bundle) {
           if ($bundle === $this->entity->bundle()) {
-//            $this->entity->set($fieldType, $group);
-//            return;
+             $this->entity->set($fieldType, $group);
+             return;
           }
         }
       }
