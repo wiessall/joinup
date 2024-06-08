@@ -6,6 +6,7 @@ dependencies:
     - core.entity_view_mode.node.compact
     - field.field.node.distribution.access_url
     - field.field.node.distribution.description
+    - field.field.node.distribution.distribution_parent
     - field.field.node.distribution.field_licence
     - field.field.node.distribution.field_state
     - field.field.node.distribution.file_size
@@ -83,6 +84,7 @@ content:
     region: content
 hidden:
   description: true
+  distribution_parent: true
   download_count: true
   field_state: true
   format: true

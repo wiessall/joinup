@@ -5,6 +5,7 @@ dependencies:
   config:
     - field.field.node.distribution.access_url
     - field.field.node.distribution.description
+    - field.field.node.distribution.distribution_parent
     - field.field.node.distribution.field_licence
     - field.field.node.distribution.field_state
     - field.field.node.distribution.file_size
@@ -92,6 +93,7 @@ content:
     third_party_settings: {  }
 hidden:
   created: true
+  distribution_parent: true
   file_size: true
   langcode: true
   og_audience: true
