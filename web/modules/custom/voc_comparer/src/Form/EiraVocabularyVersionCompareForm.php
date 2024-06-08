@@ -384,6 +384,10 @@ QUERY;
   public function loadNewSiblingsOfRemovedUsedTerms(array &$context): string {
     $new_graph = $context['results']['compare']['new_graph'];
 
+    if (!isset($context['results']['compare']['missing'])) {
+      return 'No missing terms to fetch siblings for.';
+    }
+
     foreach ($context['results']['compare']['missing'] as $term_id => $term) {
       $query = <<<QUERY
 SELECT ?sibling ?sibling_label
