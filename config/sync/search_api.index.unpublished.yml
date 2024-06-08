@@ -6,24 +6,24 @@ dependencies:
     - field.storage.node.body
     - field.storage.node.field_event_agenda
     - field.storage.node.field_event_date
-    - field.storage.rdf_entity.field_is_description
-    - field.storage.rdf_entity.field_is_solution_type
-    - field.storage.rdf_entity.field_isr_description
-    - field.storage.rdf_entity.field_isr_release_notes
-    - field.storage.rdf_entity.field_is_description
-    - field.storage.rdf_entity.field_is_solution_type
-    - field.storage.rdf_entity.field_isr_description
-    - field.storage.rdf_entity.field_isr_release_notes
     - field.storage.node.field_location
     - field.storage.node.field_news_headline
     - field.storage.node.field_organisation
     - field.storage.node.field_paragraphs_body
+    - field.storage.node.field_paragraphs_body
     - field.storage.node.field_scope
     - field.storage.node.field_shared_in
     - field.storage.node.field_short_title
-    - field.storage.rdf_entity.field_is_contact_information
-    - field.storage.node.field_paragraphs_body
     - field.storage.paragraph.field_body
+    - field.storage.rdf_entity.field_is_contact_information
+    - field.storage.rdf_entity.field_is_description
+    - field.storage.rdf_entity.field_is_description
+    - field.storage.rdf_entity.field_is_solution_type
+    - field.storage.rdf_entity.field_is_solution_type
+    - field.storage.rdf_entity.field_isr_description
+    - field.storage.rdf_entity.field_isr_description
+    - field.storage.rdf_entity.field_isr_release_notes
+    - field.storage.rdf_entity.field_isr_release_notes
     - search_api.server.joinup
   module:
     - custom_page
