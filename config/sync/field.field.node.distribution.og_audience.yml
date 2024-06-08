@@ -5,7 +5,6 @@ dependencies:
   config:
     - field.storage.node.og_audience
     - node.type.distribution
-    - rdf_entity.rdfentity.asset_release
     - rdf_entity.rdfentity.solution
   module:
     - og
@@ -23,7 +22,6 @@ settings:
   handler: 'default:rdf_entity'
   handler_settings:
     target_bundles:
-      asset_release: asset_release
       solution: solution
     sort:
       field: _none
