@@ -29,7 +29,6 @@ use Drupal\joinup_group\Entity\GroupContentInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\Entity\PinnableGroupContentInterface;
 use Drupal\joinup_group\Event\GroupMenuLinksEvent;
-use Drupal\joinup_group\Form\JoinupNodeForm;
 use Drupal\joinup_group\Form\RdfDeleteForm;
 use Drupal\joinup_group\Form\UserCancelForm;
 use Drupal\joinup_group\JoinupGroupHelper;
@@ -173,11 +172,6 @@ function joinup_group_preprocess(array &$variables, string $hook): void {
  * Implements hook_entity_type_alter().
  */
 function joinup_group_entity_type_alter(array &$entity_types): void {
-  // Swap the default node form class to provide support for group nodes.
-  $entity_types['node']
-    ?->setFormClass('default', JoinupNodeForm::class)
-    ?->setFormClass('edit', JoinupNodeForm::class);
-
   /** @var \Drupal\Core\Entity\EntityTypeInterface[] $entity_types */
   // Swap the default user cancel form implementation with a custom one that
   // prevents deleting users when they are the sole owner of a group.
@@ -202,6 +196,39 @@ function joinup_group_entity_type_alter(array &$entity_types): void {
     ];
     foreach ($link_templates as $key => $path) {
       $entity_types['rdf_entity']->setLinkTemplate($key, $path);
+    }
+  }
+}
+
+/**
+ * Implements hook_entity_prepare_form().
+ */
+function joinup_group_entity_prepare_form(EntityInterface $entity, $operation, FormStateInterface $form_state) {
+  // This entity is not group content.
+  if (!$entity instanceof GroupContentInterface) {
+    return;
+  }
+  // Only set the group on new entities.
+  if (!$entity->isNew()) {
+    return;
+  }
+  // The group cannot be determined from context.
+  if (!$group = \Drupal::getContainer()->get('joinup_group.group_manager')->getGroupFromContext()) {
+    return;
+  }
+
+  $map = \Drupal::getContainer()->get('entity_field.manager')->getFieldMapByFieldType('og_standard_reference');
+  foreach ($map as $entityTypeId => $info) {
+    if ($entityTypeId !== $entity->getEntityTypeId()) {
+      continue;
+    }
+    foreach ($info as $fieldType => ['bundles' => $bundles]) {
+      foreach ($bundles as $bundle) {
+        if ($bundle === $entity->bundle()) {
+          $entity->set($fieldType, $group);
+          return;
+        }
+      }
     }
   }
 }
