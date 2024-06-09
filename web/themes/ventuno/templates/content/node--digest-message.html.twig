@@ -114,7 +114,13 @@
             <td style="width: 200px;" class="d-none d-sm-block me-3"><a href="{{ url }}"><img src="{{ image_url }}" width="200" alt=""/></a></td>
             <td style="width: 20px;" class="d-none d-sm-block">&nbsp;</td>
           {% endif %}
-          <td style="vertical-align: top;">{{ content.body }}</td>
+          <td style="vertical-align: top;">
+            {% if node.hasField('abstract') %}
+              {{ content.abstract }}
+            {% else %}
+              {{ content.body }}
+            {% endif %}
+          </td>
         </tr>
         </tbody>
       </table>
