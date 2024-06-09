@@ -9,8 +9,6 @@ declare(strict_types=1);
 
 use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\joinup_bundle_class\AbstractInterface;
-use Drupal\joinup_bundle_class\DescriptionInterface;
 use Drupal\message\MessageInterface;
 use Drupal\user\Entity\User;
 
