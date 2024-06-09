@@ -60,29 +60,3 @@ function ventuno_preprocess_message_digest(array &$variables): void {
 function ventuno_preprocess_rdf_entity__digest_message_header(array &$variables): void {
   $variables['url'] = $variables['rdf_entity']->toUrl('canonical', ['absolute' => TRUE])->toString();
 }
-
-/**
- * Implements hook_preprocess_HOOK() for node__digest_message.
- *
- * Adds abstract or (shortened) description field to digest message output
- * of nodes.
- */
-function ventuno_preprocess_node__digest_message(&$variables): void {
-  $node = $variables['node'];
-
-  // Use abstract if present and non-empty.
-  if (
-    $node instanceof AbstractInterface &&
-    !$node->get($node->getAbstractField())->isEmpty() &&
-    isset($variables['content'][$node->getAbstractField()])
-  ) {
-    $variables['content']['body'] = $variables['content'][$node->getAbstractField()];
-  }
-  // Fall back to description if it exists.
-  elseif (
-    $node instanceof DescriptionInterface &&
-    isset($variables['content'][$node->getDescriptionField()])
-  ) {
-    $variables['content']['body'] = $variables['content'][$node->getDescriptionField()];
-  }
-}
