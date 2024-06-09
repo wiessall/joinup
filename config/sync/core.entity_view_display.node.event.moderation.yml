@@ -29,11 +29,7 @@ dependencies:
     - field.field.node.event.og_audience
     - node.type.event
   module:
-    - field_delimiter
-    - field_formatter_range
-    - joinup_core
-    - joinup_html_stripper
-    - joinup_slick
+    - field_fallback_formatter
     - options
     - template_suggestion
     - user
@@ -43,38 +39,25 @@ bundle: event
 mode: moderation
 content:
   abstract:
-    type: joinup_html_stripper_stripped
+    type: field_fallback_formatter
     label: hidden
     settings:
-      trim_length: 200
+      main_field_formatter_id: string
+      main_field_formatter_settings:
+        link_to_entity: false
+      fallback_field_id: field_paragraphs_body
+      fallback_field_formatter_id: filtered_entity_reference_bundles
+      fallback_field_formatter_settings:
+        view_mode: default
+        filtered_entity_bundles:
+          - simple_paragraph
+          - text
+        trim_length: 200
+        trim_chars: ...
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
     weight: 1
-    region: content
-  field_paragraphs_body:
-    type: filtered_entity_reference_bundles
-    label: hidden
-    settings:
-      view_mode: default
-      link: ''
-      filtered_entity_bundles:
-        - simple_paragraph
-        - text
-    third_party_settings:
-      field_delimiter:
-        delimiter: ''
-      field_formatter_range:
-        order: 0
-        limit: 1
-        offset: 0
-      joinup_slick:
-        preset: ''
-        field_label: true
-        custom_label: ''
-      template_suggestion:
-        template_suggestion: ''
-    weight: 2
     region: content
   field_state:
     type: list_default
@@ -99,6 +82,7 @@ hidden:
   field_location: true
   field_organisation: true
   field_organisation_type: true
+  field_paragraphs_body: true
   field_scope: true
   field_shared_in: true
   field_short_title: true

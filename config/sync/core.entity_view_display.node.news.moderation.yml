@@ -21,10 +21,7 @@ dependencies:
     - field.field.node.news.og_audience
     - node.type.news
   module:
-    - field_delimiter
-    - field_formatter_range
-    - joinup_core
-    - joinup_slick
+    - field_fallback_formatter
     - options
     - template_suggestion
     - user
@@ -36,37 +33,25 @@ bundle: news
 mode: moderation
 content:
   abstract:
-    type: string
+    type: field_fallback_formatter
     label: hidden
     settings:
-      link_to_entity: false
-    third_party_settings: {  }
-    weight: 1
-    region: content
-  field_paragraphs_body:
-    type: filtered_entity_reference_bundles
-    label: hidden
-    settings:
-      view_mode: tile
-      link: ''
-      filtered_entity_bundles:
-        - simple_paragraph
-        - text
-      trim_length: 600
+      main_field_formatter_id: string
+      main_field_formatter_settings:
+        link_to_entity: false
+      fallback_field_id: field_paragraphs_body
+      fallback_field_formatter_id: filtered_entity_reference_bundles
+      fallback_field_formatter_settings:
+        view_mode: tile
+        filtered_entity_bundles:
+          - simple_paragraph
+          - text
+        trim_length: 200
+        trim_chars: ...
     third_party_settings:
-      field_delimiter:
-        delimiter: ''
-      field_formatter_range:
-        order: 0
-        limit: 1
-        offset: 0
-      joinup_slick:
-        preset: ''
-        field_label: true
-        custom_label: ''
       template_suggestion:
         template_suggestion: ''
-    weight: 2
+    weight: 1
     region: content
   field_state:
     type: list_default
@@ -85,6 +70,7 @@ hidden:
   field_news_referenced_solution: true
   field_news_source_url: true
   field_news_spatial_coverage: true
+  field_paragraphs_body: true
   field_shared_in: true
   field_site_featured: true
   field_topic: true

@@ -160,10 +160,21 @@ third_party_settings:
                 entity: layout_builder.entity
                 view_mode: view_mode
               formatter:
-                type: joinup_html_stripper_stripped
+                type: field_fallback_formatter
                 label: hidden
                 settings:
-                  trim_length: 220
+                  main_field_formatter_id: string
+                  main_field_formatter_settings:
+                    link_to_entity: false
+                  fallback_field_id: field_paragraphs_body
+                  fallback_field_formatter_id: filtered_entity_reference_bundles
+                  fallback_field_formatter_settings:
+                    view_mode: tile
+                    filtered_entity_bundles:
+                      simple_paragraph: simple_paragraph
+                      text: text
+                    trim_length: 200
+                    trim_chars: ...
                 third_party_settings:
                   template_suggestion:
                     template_suggestion: bare
