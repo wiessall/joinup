@@ -18,10 +18,11 @@
       <span class="text-dark">{{ content.file_size }}</span>
     </div>
     {% endif %}
-    {% if content.licence|render %}
+    {{ dump(content) }}
+    {% if content.field_licence|render %}
       <div class="d-flex flex-wrap fs-sm">
         <span class="text-muted me-1">{{ 'Licence:'|t }}</span>
-        {{ content.licence }}
+        {{ content.field_licence }}
       </div>
     {% endif %}
   </div>

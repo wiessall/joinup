@@ -1,27 +1,21 @@
-joinup_distribution.distribution.add:
-  path: /rdf_entity/{rdf_entity}/add/{node_type}
+joinup_distribution.asset_distribution.add:
+  path: 'rdf_entity/{rdf_entity}/distribution/add'
   defaults:
-    _entity_form: node
-    _title: Add new distribution
+    _controller: '\Drupal\joinup_distribution\Controller\JoinupDistributionController::add'
+    _title: 'Add Distribution'
   requirements:
-    _entity_create_access: node:distribution
-    node_type: distribution
+    _custom_access: '\Drupal\joinup_distribution\Controller\JoinupDistributionController::createAssetDistributionAccess'
+    _joinup_group: 'solution'
   options:
     parameters:
       rdf_entity:
         type: entity:rdf_entity
-        bundle:
-          - asset_release
-          - solution
-        group: true
-      node_type:
-        type: entity:node_type
 
-#asset_distribution.track_download:
-#  path: 'distribution/track/{file}'
-#  defaults:
-#    _controller: '\Drupal\asset_distribution\Controller\DownloadTrackingController::trackDownload'
-#    _title: 'Download in progress...'
-#  requirements:
-#    _access: 'TRUE'
-#    _custom_access: '\Drupal\asset_distribution\Controller\DownloadTrackingController::isDistributionFile'
+joinup_distribution.track_download:
+  path: 'distribution/track/{file}'
+  defaults:
+    _controller: '\Drupal\joinup_distribution\Controller\DownloadTrackingController::trackDownload'
+    _title: 'Download in progress...'
+  requirements:
+    _access: 'TRUE'
+    _custom_access: '\Drupal\joinup_distribution\Controller\DownloadTrackingController::isDistributionFile'

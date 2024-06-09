@@ -1,16 +1,4 @@
 # Route to create a custom page that belongs to an rdf_entity.
-asset_distribution.asset_release_asset_distribution.add:
-  path: 'rdf_entity/{rdf_entity}/distribution/add'
-  defaults:
-    _controller: '\Drupal\asset_distribution\Controller\AssetDistributionController::add'
-    _title: 'Add new distribution'
-  requirements:
-    _custom_access: '\Drupal\asset_distribution\Controller\AssetDistributionController::createAssetDistributionAccess'
-    _joinup_group: 'solution'
-  options:
-    parameters:
-      rdf_entity:
-        type: entity:rdf_entity
 asset_distribution.track_download:
   path: 'distribution/track/{file}'
   defaults:

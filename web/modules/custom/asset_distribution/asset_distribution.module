@@ -105,7 +105,7 @@ function asset_distribution_rdf_entity_presave(RdfInterface $distribution): void
           ->condition('mime_type', $file->getMimeType())
           ->execute();
         if ($tids) {
-          $distribution->set('field_ad_format', reset($tids));
+          $distribution->set('format', reset($tids));
         }
       }
     }

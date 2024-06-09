@@ -14,7 +14,6 @@ dependencies:
   - 'inline_entity_form:inline_entity_form'
   - 'joinup:asset_release'
   - 'joinup:contact_information'
-  - 'joinup:joinup_distribution'
   - 'joinup:joinup_taxonomy'
   - 'joinup:joinup_workflow'
   - 'joinup:owner'

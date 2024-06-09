@@ -53,7 +53,7 @@ function joinup_distribution_entity_bundle_field_info_alter(array &$fields, Enti
  * Implements hook_form_FORM_ID_alter().
  */
 function joinup_distribution_form_node_distribution_form_alter(array &$form, FormStateInterface $formState): void {
-  $parent = \Drupal::routeMatch()->getParameter('node');
+  $parent = \Drupal::routeMatch()->getParameter('rdf_entity');
 
   // Bail out if the solution or asset_release is not present on the route.
   // Since this form is only intended to be used in the context of a solution or

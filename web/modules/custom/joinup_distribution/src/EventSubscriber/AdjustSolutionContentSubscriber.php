@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Drupal\solution\EventSubscriber;
+namespace Drupal\joinup_distribution\EventSubscriber;
 
 use Drupal\joinup_distribution\ParentDistributionResolverInterface;
 use Drupal\search_api\Event\QueryPreExecuteEvent;
@@ -70,8 +70,7 @@ class AdjustSolutionContentSubscriber implements EventSubscriberInterface {
       // @see \Drupal\search_api_solr\Plugin\search_api\backend\SearchApiSolrBackend::createFilterQuery()
       // @see http://stackoverflow.com/a/635109
       $or->addCondition('entity_bundle', ['distribution', 'distribution'], 'NOT IN');
-      $or->addCondition($entity->getEntityType()
-        ->getKey('id'), $distributions, 'IN');
+      $or->addCondition('nid', $distributions, 'IN');
       $query->addConditionGroup($or);
     }
     else {

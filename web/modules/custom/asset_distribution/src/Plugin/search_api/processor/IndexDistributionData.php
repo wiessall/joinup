@@ -146,7 +146,7 @@ class IndexDistributionData extends ProcessorPluginBase {
       }
 
       // Add the distribution format.
-      $distributionFieldItemList = $distribution->get('field_ad_format');
+      $distributionFieldItemList = $distribution->get('format');
       if (!$distributionFieldItemList->isEmpty()) {
         foreach ($distributionFieldItemList->referencedEntities() as $format) {
           $sapiField->addValue($format->label());

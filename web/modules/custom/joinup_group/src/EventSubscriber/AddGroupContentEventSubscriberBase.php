@@ -109,15 +109,15 @@ abstract class AddGroupContentEventSubscriberBase implements EventSubscriberInte
    *
    * @param \Drupal\joinup_group\Event\AddGroupContentEvent $event
    *   The event.
-   * @param string $entity_type_id
+   * @param string $entityTypeId
    *   The entity type ID.
-   * @param string $bundle_id
+   * @param string $bundleId
    *   The bundle ID.
    *
    * @return array
    *   Route parameters.
    */
-  protected function getRouteParameters(AddGroupContentEvent $event, string $entity_type_id, string $bundle_id): array {
+  protected function getRouteParameters(AddGroupContentEvent $event, string $entityTypeId, string $bundleId): array {
     return [];
   }
 
