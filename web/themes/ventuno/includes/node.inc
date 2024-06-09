@@ -146,7 +146,7 @@ function ventuno_preprocess_page_title__node__distribution(array &$variables): v
   $view_builder = \Drupal::entityTypeManager()->getViewBuilder('rdf_entity');
   // Get the file size and licence fields.
   $file_size = $entity->file_size;
-  $licence = $entity->licence;
+  $licence = $entity->field_licence;
   $file_size = $view_builder->viewField($file_size, 'default');
   $licence = $view_builder->viewField($licence, 'default');
 

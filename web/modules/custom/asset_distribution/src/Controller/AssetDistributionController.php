@@ -63,7 +63,7 @@ class AssetDistributionController extends ControllerBase {
       return AccessResult::forbidden();
     }
 
-    return $this->entityTypeManager()->getAccessControlHandler('rdf_entity')->createAccess('asset_distribution', NULL, [
+    return $this->entityTypeManager()->getAccessControlHandler('node')->createAccess('distribution', NULL, [
       'group' => $this->getRelatedSolution($rdf_entity),
     ], TRUE);
   }
@@ -86,8 +86,8 @@ class AssetDistributionController extends ControllerBase {
       return NULL;
     }
 
-    return $this->entityTypeManager()->getStorage('rdf_entity')->create([
-      'rid' => 'asset_distribution',
+    return $this->entityTypeManager()->getStorage('node')->create([
+      'type' => 'distribution',
       'distribution_parent' => $rdf_entity->id(),
       OgGroupAudienceHelperInterface::DEFAULT_FIELD => $this->solution,
     ]);

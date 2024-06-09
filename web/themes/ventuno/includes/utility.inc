@@ -155,16 +155,16 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
       }
       break;
 
-    case 'asset_distribution':
-      if (isset($variables['content']['field_ad_licence']) &&
-        !$entity->get('field_ad_licence')->isEmpty()) {
+    case 'distribution':
+      if (isset($variables['content']['field_licence']) &&
+        !$entity->get('field_licence')->isEmpty()) {
         $variables['text']['icon'] = [
           '#type' => 'pattern',
           '#id' => 'icon',
           '#name' => 'file-earmark-medical',
           '#size' => 'xs',
         ];
-        $variables['text']['label'] = $variables['content']['field_ad_licence'];
+        $variables['text']['label'] = $variables['content']['field_licence'];
       }
       break;
 

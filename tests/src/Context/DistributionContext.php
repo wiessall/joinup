@@ -215,7 +215,7 @@ class DistributionContext extends RawDrupalContext {
    * @Then I should have :number distribution(s)
    */
   public function assertAssetDistributionCount(int $number): void {
-    $this->assertEntityCount('rdf_entity', 'asset_distribution', $number);
+    $this->assertEntityCount('node', 'distribution', $number);
   }
 
   /**
@@ -330,7 +330,7 @@ class DistributionContext extends RawDrupalContext {
     $mime_guesser = \Drupal::service('file.mime_type.guesser');
     $mime_type = $mime_guesser->guessMimeType($path);
     /** @var \Drupal\taxonomy\TermInterface $file_type */
-    $file_type = $distribution->get('field_ad_format')->entity;
+    $file_type = $distribution->get('format')->entity;
     // Test the file format.
     if ($file_type->get('mime_type')->value !== $mime_type) {
       throw new \Exception("File '$file_name' has the format '{$file_type->get('mime_type')->value}'. Expected '$mime_type'.");
