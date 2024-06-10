@@ -81,9 +81,9 @@ class FileUrlFieldTest extends JoinupExistingSiteTestBase {
     $test_file = $this->getTestFile('text');
     $this->assertTrue($test_file instanceof FileInterface);
 
-    $distribution = $this->createRdfEntity([
-      'rid' => 'asset_distribution',
-      'label' => $this->randomString(),
+    $distribution = $this->createNode([
+      'type' => 'distribution',
+      'title' => $this->randomString(),
       'og_audience' => $solution->id(),
       'field_ad_licence' => $licence->id(),
       'field_ad_description' => $this->randomString(),

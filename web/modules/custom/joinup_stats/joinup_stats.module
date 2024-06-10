@@ -10,6 +10,7 @@ declare(strict_types=1);
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Site\Settings;
+use Drupal\joinup_distribution\Entity\DistributionInterface;
 use Drupal\joinup_stats\Entity\DownloadCount;
 use Drupal\joinup_stats\Entity\VisitCount;
 use Drupal\meta_entity\Entity\MetaEntityInterface;
@@ -61,8 +62,8 @@ function joinup_stats_invalidate_solution_download_count_cache(MetaEntityInterfa
  * @param \Drupal\rdf_entity\RdfInterface $distribution
  *   The asset distribution being added or deleted.
  */
-function joinup_stats_invalidate_solution_download_count_cache_by_distribution(RdfInterface $distribution): void {
-  if ($distribution->bundle() === 'asset_distribution') {
+function joinup_stats_invalidate_solution_download_count_cache_by_distribution(DistributionInterface $distribution): void {
+  if ($distribution->bundle() === 'distribution') {
     /** @var \Drupal\rdf_entity\RdfInterface $solution */
     if ($solution = $distribution->get('og_audience')->entity) {
       // On solution page we show the sum of all compounded distributions

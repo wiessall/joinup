@@ -84,7 +84,7 @@ class AssetReleaseController extends ControllerBase {
     // Put a flag on the standalone distributions so they can be identified for
     // theming purposes.
     foreach ($entities as $entity) {
-      if ($entity->bundle() === 'asset_distribution') {
+      if ($entity->bundle() === 'distribution') {
         $entity->standalone = TRUE;
       }
     }

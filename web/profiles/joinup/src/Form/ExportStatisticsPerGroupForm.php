@@ -169,7 +169,7 @@ QUERY;
       // RDF entities.
       'solution' => 0,
       'asset_release' => 0,
-      'asset_distribution' => 0,
+      'distribution' => 0,
     ];
 
     $group_content_keys = array_keys($group_content);
