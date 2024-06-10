@@ -1,0 +1,34 @@
+uuid: 2847dc56-8d73-4ebb-a04b-9fbd625fa82a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.owner_type
+    - node.type.owner
+    - taxonomy.vocabulary.owner_type
+third_party_settings:
+  rdf_sync:
+    target_id:
+      predicate: 'http://purl.org/dc/terms/type'
+      type: resource
+id: node.owner.owner_type
+field_name: owner_type
+entity_type: node
+bundle: owner
+label: Type
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      owner_type: owner_type
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

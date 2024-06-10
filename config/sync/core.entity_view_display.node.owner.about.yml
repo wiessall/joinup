@@ -1,0 +1,53 @@
+uuid: 0882523c-b96e-4361-a04e-b07767e9048e
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.about
+    - field.field.node.owner.field_state
+    - field.field.node.owner.owner_type
+    - node.type.owner
+  module:
+    - field_delimiter
+    - field_formatter_range
+    - joinup_slick
+    - layout_builder
+    - template_suggestion
+    - user
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+id: node.owner.about
+targetEntityType: node
+bundle: owner
+mode: about
+content:
+  owner_type:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: false
+    third_party_settings:
+      field_delimiter:
+        delimiter: ''
+      field_formatter_range:
+        order: 0
+        limit: 0
+        offset: 0
+      joinup_slick:
+        preset: ''
+        field_label: true
+        custom_label: ''
+      template_suggestion:
+        template_suggestion: ''
+    weight: 1
+    region: content
+hidden:
+  field_state: true
+  langcode: true
+  links: true
+  published_at: true
+  report: true
+  search_api_excerpt: true
+  uri: true

@@ -3,7 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
-    - core.entity_form_mode.rdf_entity.inline
+    - core.entity_form_mode.node.inline
     - core.entity_form_mode.rdf_entity.propose
     - field.field.rdf_entity.collection.field_ar_abstract
     - field.field.rdf_entity.collection.field_ar_access_url
@@ -29,6 +29,7 @@ dependencies:
   module:
     - allowed_formats
     - field_group
+    - image_library_widget
     - inline_entity_form
     - joinup_core
     - joinup_workflow
