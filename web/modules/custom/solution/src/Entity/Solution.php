@@ -208,12 +208,14 @@ class Solution extends Rdf implements SolutionInterface {
     $ids = NestedArray::mergeDeep($ids, [
       'rdf_entity' => [
         'asset_release' => array_keys($releases),
+      ],
+      'node' => [
         'asset_distribution' => $this->getDistributionIds(),
       ],
     ]);
     foreach ($releases as $release) {
       $ids = NestedArray::mergeDeep($ids, [
-        'rdf_entity' => [
+        'node' => [
           'asset_distribution' => $release->getDistributionIds(),
         ],
       ]);

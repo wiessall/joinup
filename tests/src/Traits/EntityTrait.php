@@ -175,7 +175,7 @@ trait EntityTrait {
     return [
       'custom page' => 'custom_page',
       'discussion' => 'discussion',
-      'distribution' => 'asset_distribution',
+      'distribution' => 'distribution',
       'document' => 'document',
       'event' => 'event',
       'glossary' => 'glossary',

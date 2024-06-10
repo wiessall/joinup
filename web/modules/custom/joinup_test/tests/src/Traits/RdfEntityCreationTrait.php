@@ -25,7 +25,7 @@ trait RdfEntityCreationTrait {
     'collection' => 'field_ar_state',
     'solution' => 'field_is_state',
     'asset_release' => 'field_isr_state',
-    'asset_distribution' => 'field_ad_state',
+    'distribution' => 'field_state',
     'owner' => 'field_owner_state',
   ];
 
