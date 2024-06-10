@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_distribution\Entity;
 
+use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\joinup_bundle_class\DescriptionTrait;
 use Drupal\joinup_distribution\Exception\MissingDistributionParentException;
 use Drupal\joinup_group\Entity\GroupContentTrait;
@@ -12,6 +13,7 @@ use Drupal\joinup_stats\Entity\DownloadCountAwareTrait;
 use Drupal\joinup_workflow\ArchivableEntityTrait;
 use Drupal\joinup_workflow\EntityWorkflowStateTrait;
 use Drupal\node\Entity\Node;
+use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\solution\Entity\SolutionContentTrait;
 use Drupal\solution\Entity\SolutionInterface;
 
@@ -33,6 +35,29 @@ class Distribution extends Node implements DistributionInterface {
   const JOINUP_STATS_FIELDS = [
     DownloadCountAwareInterface::class => 'download_count',
   ];
+
+  /**
+   * {@inheritdoc}
+   */
+  public function preSave(EntityStorageInterface $storage) {
+    if (!$this->isNew()) {
+      return;
+    }
+
+    // If the group is not assigned but the parent is, pass the group to the
+    // distribution.
+    if (!$this->get(OgGroupAudienceHelperInterface::DEFAULT_FIELD)->target_id && $this->get('distribution_parent')->target_id) {
+      if ($parent = $this->getParent()) {
+        if ($parent instanceof SolutionInterface) {
+          $this->set(OgGroupAudienceHelperInterface::DEFAULT_FIELD, $parent->id());
+        }
+        else {
+          // The parent is a release, thus, get the solution instead.
+          $this->set(OgGroupAudienceHelperInterface::DEFAULT_FIELD, $parent->getGroup()->id());
+        }
+      }
+    }
+  }
 
   /**
    * {@inheritdoc}

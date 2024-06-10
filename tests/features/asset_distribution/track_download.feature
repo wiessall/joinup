@@ -21,7 +21,7 @@ Feature: Asset distribution editing.
       | release number | 6.1          |
       | is version of  | OpenBSD      |
       | state          | published    |
-    And distributions:
+    And distribution content:
       | title          | description                 | parent       | access url                                                  | licence          | state     |
       | i386           | The i386 version            | Winter of 95 | https://mirrors.evowise.com/pub/OpenBSD/6.1/i386/random.iso | Postcard licence | published |
       | Changelog      | Detailed Changelog          | Winter of 95 | text.pdf                                                    | Postcard licence | published |

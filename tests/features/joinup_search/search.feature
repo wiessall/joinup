@@ -407,15 +407,9 @@ Feature: Global search
     Then I should see "No content found for your search."
 
     # Add distribution, child of solution.
-    Given the following distribution:
-      | title                    | ZzoluDistro                     |
-      | parent                   | Zzolution                       |
-      | description              | Übermensch foot size            |
-      | access url               | http://example.com/zzolu-distro |
-      | licence                  | Apache-2.0                      |
-      | format                   | ZIP                             |
-      | representation technique | Datalog                         |
-      | state                    | published                       |
+    Given distribution content:
+      | title       | parent    | description          | access url                      | licence    | format | representation technique | state     |
+      | ZzoluDistro | Zzolution | Übermensch foot size | http://example.com/zzolu-distro | Apache-2.0 | ZIP    | Datalog                  | published |
 
     When I enter "zzoludistro" in the search bar and press enter
     Then the page should show only the tiles "Zzolution"
@@ -501,15 +495,9 @@ Feature: Global search
     When I enter "ReleazzDistro" in the search bar and press enter
     Then I should see "No content found for your search."
 
-    Given the following distribution:
-      | title                    | ReleazzDistro                     |
-      | parent                   | Releazz                           |
-      | description              | Dracula                           |
-      | access url               | http://example.com/releazz-distro |
-      | licence                  | Apache-2.0                        |
-      | format                   | ZIP                               |
-      | representation technique | Datalog                           |
-      | state                    | published                         |
+    Given distribution content:
+      | title         | parent  | description | access url                        | licence    | format | representation technique | state     |
+      | ReleazzDistro | Releazz | Dracula     | http://example.com/releazz-distro | Apache-2.0 | ZIP    | Datalog                  | published |
 
     When I enter "releazzDistro" in the search bar and press enter
     Then the page should show only the tiles "Releazz"

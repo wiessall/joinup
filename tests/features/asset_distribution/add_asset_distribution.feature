@@ -189,12 +189,9 @@ Feature: Add distribution through the UI
     And I delete the "MacOSX binary" distribution
 
   Scenario: Distributions with the same name should not be allowed within the same solution.
-    Given the following distribution:
-      | title       | Windows - source       |
-      | description | Sample description     |
-      | access url  | test.zip               |
-      | parent      | Solution random x name |
-      | state       | published              |
+    Given distribution content:
+      | title | description        | access url | parent                 | state     |
+      | test  | Sample description | test.zip   | Solution random x name | published |
     And I am logged in as a facilitator of the "Solution random x name" solution
     When I go to the homepage of the "Solution random x name" solution
     And I click "Add distribution" in the plus button menu
@@ -207,7 +204,7 @@ Feature: Add distribution through the UI
     Given licence content:
       | title                  | description                                                                    |
       | Boost Software License | It is a permissive license in the style of the BSD license and the MIT license |
-    And distributions:
+    And distribution content:
       | title        | licence                | parent                 | state     | creation date    | modification date |
       | Hot Snake    | WTFPL                  | Solution random x name | published | 2019-11-19 20:45 | 2021-11-19 20:45  |
       | Quality Yard | Boost Software License | Solution random x name | published | 2019-12-19 20:45 | 2021-12-19 20:45  |

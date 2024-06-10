@@ -130,7 +130,7 @@ Feature: Solution homepage
     Then I should not see the "Pager" region
 
     # The pager should only appear when there are more than 12 items.
-    Given the following distributions:
+    Given distribution content:
       | title           | description    | parent            | state     |
       | Distribution 1  | Description 1  | Chiricahua Server | published |
       | Distribution 2  | Description 2  | Chiricahua Server | published |
@@ -148,7 +148,7 @@ Feature: Solution homepage
     Then I should not see the "Pager" region
     And I should not see the "Distribution 13" tile
 
-    Given the following distributions:
+    Given distribution content:
       | title           | description    | parent            | state     |
       | Distribution 13 | Description 13 | Chiricahua Server | published |
     When I go to the homepage of the "Chiricahua Server" solution
@@ -175,7 +175,7 @@ Feature: Solution homepage
       | Go to page 3    |
     And I should not see the "Distribution 12" tile
 
-    Given the following distributions:
+    Given distribution content:
       | title           | description    | parent            | state     |
       | Distribution 14 | Description 14 | Chiricahua Server | published |
       | Distribution 15 | Description 15 | Chiricahua Server | published |
