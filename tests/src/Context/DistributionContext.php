@@ -9,6 +9,7 @@ use Behat\Mink\Element\NodeElement;
 use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Session\AnonymousUserSession;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
+use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
 use Drupal\file_url\FileUrlHandler;
 use Drupal\joinup\Traits\EntityReferenceTrait;
 use Drupal\joinup\Traits\EntityTrait;
@@ -16,10 +17,8 @@ use Drupal\joinup\Traits\FileTrait;
 use Drupal\joinup\Traits\JavascriptTrait;
 use Drupal\joinup\Traits\RdfEntityTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
-use Drupal\joinup_distribution\Entity\DistributionInterface;
 use Drupal\joinup_distribution\Entity\DownloadEvent;
 use Drupal\meta_entity\Entity\MetaEntity;
-use Drupal\node\Entity\Node;
 
 /**
  * Behat step definitions for testing distributions.
@@ -51,135 +50,38 @@ class DistributionContext extends RawDrupalContext {
   }
 
   /**
-   * Creates a number of distributions with data provided in a table.
+   * Distribution specific alterations before creation.
    *
-   * @param \Behat\Gherkin\Node\TableNode $distribution_table
-   *   The distribution data.
+   * @param \Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope $event
+   *   The before node create event.
    *
-   * @codingStandardsIgnoreStart
-   *   Table format:
-   *   | uri                               | title            | description                | access url                               | creation date     | modification date | parent        |
-   *   | http://joinup.eu/distribution/foo | Foo distribution | This is a foo distribution | test.zip                                 | 28-01-1995 12:05  | 30-01-1995 10:44  | Solution name |
-   *   | http://joinup.eu/distribution/bar | Bar distribution | This is a bar distribution | http://external_url.com/path-to-file.zip | 28-01-1995 12:06  |                   | Release name  |
-   * @codingStandardsIgnoreEnd
-   *
-   * Fields title and description are mandatory. Field 'access url' can be
-   * either an external valid URL or a local file to be uploaded.
-   *
-   * @throws \Exception
-   *   Thrown when a column name is incorrect.
-   *
-   * @Given (the following )distributions:
+   * @BeforeNodeCreate
    */
-  public function givenDistributions(TableNode $distribution_table): void {
-    foreach ($distribution_table->getColumnsHash() as $values) {
-      $this->createDistributionFromAliasedTableValues($values);
+  public function convertToBoolean(BeforeNodeCreateScope $event): void {
+    $node = $event->getEntity();
+    if ($node->type !== 'distribution') {
+      return;
     }
-  }
 
-  /**
-   * Creates a distribution with data provided in a table.
-   *
-   * Table format:
-   * | title       | Sample distribution                             |
-   * | uri         | http://joinup.eu/distribution/foobar            |
-   * | description | A sample distribution                           |
-   * | access url  | http://external.path/to/file.zip  (or test.zip) |
-   * | parent      | Release or solution name                        |
-   *
-   * Fields 'title' and 'description' are required. Field 'access url' can be
-   * either an external valid URL or a local file to be uploaded.
-   *
-   * @param \Behat\Gherkin\Node\TableNode $distribution_table
-   *   The distribution data.
-   *
-   * @throws \Exception
-   *   Thrown when a column name is incorrect.
-   *
-   * @Given (the following )distribution:
-   */
-  public function givenAssetDistribution(TableNode $distribution_table): void {
-    $values = $distribution_table->getRowsHash();
-    $this->createDistributionFromAliasedTableValues($values);
-  }
-
-  /**
-   * Creates a distribution from the given property and field data.
-   *
-   * @param array $values
-   *   An optional associative array of values, keyed by property name.
-   *
-   * @return \Drupal\joinup_distribution\Entity\DistributionInterface
-   *   A new distribution entity.
-   *
-   * @throws \Exception
-   *   Thrown when a given file is not found.
-   */
-  protected function createDistribution(array $values): DistributionInterface {
     // The Access URL field is either an external URI, or file upload.
-    if (!empty($values['access_url'])) {
+    if (!empty($node->access_url)) {
       global $base_url;
-      foreach ($values['access_url'] as $key => $url) {
+      foreach ($node->access_url as $key => $url) {
         if (!UrlHelper::isValid($url, TRUE) || !UrlHelper::isExternal($url) || UrlHelper::externalIsLocal($url, $base_url)) {
           // It's a local file to be uploaded.
-          $values['access_url'][$key] = FileUrlHandler::fileToUrl($this->createFile($url));
+          $node->access_url[$key] = FileUrlHandler::fileToUrl($this->createFile($url));
         }
       }
     }
 
     // Downloads are stored in a meta entity.
-    if (array_key_exists('downloads', $values)) {
-      $values['download_count'] = MetaEntity::create([
+    if (!empty($node->downloads)) {
+      $node->download_count = MetaEntity::create([
         'type' => 'download_count',
-        'count' => (int) $values['downloads'],
+        'count' => (int) $node->downloads,
       ]);
-      unset($values['downloads']);
+      unset($node->downloads);
     }
-
-    $values['type'] = 'distribution';
-
-    $distribution = Node::create($values);
-    $distribution->save();
-    $this->entities['node'][$distribution->id()] = $distribution;
-
-    return $distribution;
-  }
-
-  /**
-   * Creates a distribution using the provided aliases table values.
-   *
-   * @param array $aliased_values
-   *   An associative array of values used to create the distribution, with keys
-   *   using the aliases from self::assetDistributionFieldAliases(). If the key
-   *   'parent' is present, a relation with a parent solution or release with
-   *   a label matching this value will be created.
-   *
-   * @throws \InvalidArgumentException
-   *   Thrown when an unknown key alias is present in the list of values.
-   * @throws \Exception
-   *   Thrown when the passed values cannot be converted, or when the
-   *   distribution cannot be created.
-   */
-  protected function createDistributionFromAliasedTableValues(array $aliased_values): void {
-    $aliases = self::distributionFieldAliases();
-
-    $values = [];
-    // Replace the column aliases with the actual field names.
-    foreach ($aliased_values as $key => $value) {
-      if (array_key_exists($key, $aliases)) {
-        $values[$aliases[$key]] = $value;
-      }
-      else {
-        throw new \InvalidArgumentException("Unknown key '$key' in asset distribution table.");
-      }
-    }
-
-    if (isset($values['parent'])) {
-      $values['parent'] = [$values['parent']];
-    }
-
-    $values = $this->convertEntityReferencesValues('node', 'distribution', $values);
-    $this->createDistribution($values);
   }
 
   /**
@@ -192,6 +94,8 @@ class DistributionContext extends RawDrupalContext {
    *
    * @throws \Drupal\Core\Entity\EntityStorageException
    *   Thrown when the entity could not be deleted.
+   *
+   * @todo Do we still need this?
    */
   public function deleteDistribution(string $distribution): void {
     /** @var \Drupal\joinup_distribution\Entity\DistributionInterface $entity */
@@ -216,32 +120,6 @@ class DistributionContext extends RawDrupalContext {
    */
   public function assertAssetDistributionCount(int $number): void {
     $this->assertEntityCount('node', 'distribution', $number);
-  }
-
-  /**
-   * Field alias mapping.
-   *
-   * @return array
-   *   Mapping.
-   */
-  protected static function distributionFieldAliases(): array {
-    // Mapping alias - field name.
-    return [
-      'access url' => 'access_url',
-      'creation date' => 'created',
-      'description' => 'description',
-      'downloads' => 'downloads',
-      'file size' => 'file_size',
-      'format' => 'format',
-      'licence' => 'licence',
-      'modification date' => 'changed',
-      'representation technique' => 'representation_technique',
-      'parent' => 'parent',
-      'state' => 'field_state',
-      'status' => 'process_status',
-      'title' => 'title',
-      'uri' => 'uri',
-    ];
   }
 
   /**

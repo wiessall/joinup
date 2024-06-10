@@ -8,7 +8,7 @@ Feature: Asset distribution content archival.
     And licence content:
       | title  | description                               | deprecated |
       | WTFPLA | The WTFPLA is a rather permissive licence | no         |
-    And distributions:
+    And distribution content:
       | title        | licence | parent           | state     |
       | Hot Snake    | WTFPLA  | Some AD solution | published |
       | Red Snake    | WTFPLA  | Some AD solution | published |

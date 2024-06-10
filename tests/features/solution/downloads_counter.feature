@@ -11,7 +11,7 @@ Feature:
       | description | Atlantic salmon arrived after the Little Ice Age. |
       | collection  | Ocean studies                                     |
       | state       | published                                         |
-    Given the following distributions:
+    Given distribution content:
       | title                 | description          | parent                 | downloads | state     |
       | Sample distribution   | Sample description   | Climate change tracker | 10        | published |
       | Sample distribution 2 | Sample description 2 | Climate change tracker | 0         | published |
@@ -29,11 +29,8 @@ Feature:
     # Go back to the solution tiles page and check downloads are disappeared.
     When I visit the solution overview
     Then the download icon should not be shown in the "Climate change tracker" tile
-    Given the following distribution:
-      | title       | Sample distribution 3  |
-      | description | Sample description 3   |
-      | parent      | Climate change tracker |
-      | downloads   | 20                     |
-      | state       | published              |
+    Given distribution content:
+      | title                 | description          | parent                 | downloads | state     |
+      | Sample distribution 3 | Sample description 3 | Climate change tracker | 20        | published |
     When I reload the page
     Then the "Climate change tracker" tile should show 20 downloads

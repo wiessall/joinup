@@ -36,7 +36,7 @@ Feature:
     When I click "Translate" in the "Entity actions" region
     Then I should see the link "View" in the "Entity actions" region
 
-    Given distribution:
+    Given distribution content:
       | title  | Test distribution |
       | parent | Test release      |
       | state  | published         |
