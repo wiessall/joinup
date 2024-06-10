@@ -930,7 +930,7 @@ class JoinupContext extends RawDrupalContext {
         'downloads' => 'downloads',
         'file size' => 'file_size',
         'format' => 'format',
-        'licence' => 'licence',
+        'licence' => 'field_licence',
         'modification date' => 'changed',
         'representation technique' => 'representation_technique',
         'parent' => 'distribution_parent',

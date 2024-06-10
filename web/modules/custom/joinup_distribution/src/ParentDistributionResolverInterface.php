@@ -10,7 +10,7 @@ namespace Drupal\joinup_distribution;
 interface ParentDistributionResolverInterface {
 
   /**
-   * Fetches the IDs of the distributions of a given parent entity.
+   * Fetches the IDs of the distributions of a given parent entity ID.
    *
    * @param string $parentId
    *   The ID of the parent entity.
@@ -21,7 +21,7 @@ interface ParentDistributionResolverInterface {
   public function getParentsDistributionIds(string $parentId): array;
 
   /**
-   * Fetches the distributions of a given parent entity.
+   * Fetches the distributions of a given parent entity ID.
    *
    * @param string $parentId
    *   The ID of the parent entity.
