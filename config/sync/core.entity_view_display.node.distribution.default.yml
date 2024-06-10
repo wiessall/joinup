@@ -15,12 +15,12 @@ dependencies:
     - field.field.node.distribution.representation_technique
     - node.type.distribution
   module:
+    - collection
     - digital_size_formatter
     - field_group
     - joinup_distribution
     - options
     - template_suggestion
-    - text
     - user
 third_party_settings:
   field_group:
@@ -63,7 +63,7 @@ content:
     weight: 3
     region: content
   description:
-    type: text_default
+    type: collection_plain_glossary
     label: hidden
     settings: {  }
     third_party_settings: {  }
