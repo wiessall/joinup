@@ -267,7 +267,7 @@ function joinup_rdf_deploy_110804(array &$sandbox): string {
         }
       }
     }
-    $value['distribution_parent'] = _joinup_rdf_get_distribution_parent($uri);
+    $values['distribution_parent'] = _joinup_rdf_get_distribution_parent($uri);
     $storage->create($values)->save();
     $sandbox['progress']++;
   }
