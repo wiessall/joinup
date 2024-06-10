@@ -24,15 +24,9 @@ Feature: Asset distribution editing.
       | release number | C3PO                  |
       | description    | Release description   |
       | is version of  | Solution A            |
-    And the following distribution:
-      | title             | Asset distribution example |
-      | description       | Sample description         |
-      | licence           | LGPL                       |
-      | access url        | test.zip                   |
-      | parent            | Asset release example      |
-      | state             | published                  |
-      | creation date     | 2019-11-19 20:45           |
-      | modification date | 2021-11-19 20:45           |
+    And distribution content:
+      | title         | description        | licence | access url | parent | state     | creation date | modification date |
+      | Asset release | Sample description | LGPL    | test.zip   |        | published | 2019-11-19    | 2021-11-19        |
     And the following solution user membership:
       | solution   | user         | roles       |
       | Solution A | Gregg Hill   | owner       |

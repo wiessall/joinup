@@ -14,12 +14,9 @@ Feature: Asset distribution deleting.
     And the following solution user memberships:
       | solution              | user       | roles                      |
       | Rough valentine's day | Papa roach | administrator, facilitator |
-    And the following distribution:
-      | title       | Francesco's cats      |
-      | description | Sample description    |
-      | access url  | test.zip              |
-      | parent      | Rough valentine's day |
-      | state       | published             |
+    And distribution content:
+      | title       | description    | access url  | parent      | state       |
+      | test        | Sample content | test.zip    |             | published   |
 
     When I am logged in as a facilitator of the "Rough valentine's day" solution
     And I go to the homepage of the "Francesco's cats" distribution

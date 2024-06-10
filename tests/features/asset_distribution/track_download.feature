@@ -98,7 +98,7 @@ Feature: Asset distribution editing.
       | title         | Release 1 |
       | is version of | Solution  |
       | state         | published |
-    And the following distributions:
+    And distribution content:
       | title          | parent    | access url | state     |
       | Distribution 1 | Release 1 | text.pdf   | published |
       | Distribution 2 | Solution  | test.zip   | published |
