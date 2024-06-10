@@ -415,7 +415,7 @@ function joinup_group_rdf_entity_update(EntityInterface $entity) {
     !$contactInfoField->equals($originalField = $original->get($contactInfoFieldName))
   ) {
     \Drupal::logger('joinup_group')->info(
-      "Contact info was changed on group '%group-label'. Previous contact was '%previous-id', new one is '%new-id'.",
+      "Contact info was changed on group '%group-label'. Previous contact ID was '%previous-id', new one's ID is '%new-id'.",
       [
         '%group-label' => $entity->label(),
         '%previous-id' => $originalField->entity?->id(),

@@ -48,7 +48,7 @@ trait ContactInfoInaccessibleTrait {
     bool $isAjax = TRUE,
   ): array|AjaxResponse {
     $loggerMessage = $contact
-      ? "Attempting to send message to contact '%contact-id' which does not belong to a group."
+      ? "Attempting to send message to contact with ID '%contact-id' which does not belong to a group."
       : 'Attempting to send message to a missing contact.';
     $loggerChannel->warning(
       $loggerMessage,
