@@ -2,12 +2,12 @@
 Feature: CKEditor5
 
   Background:
-    Given the following owner:
-      | name     | type    |
-      | Landlord | Company |
-    And the following contact:
-      | name  | ReachMe              |
-      | email | reach.me@example.com |
+    Given owner content:
+      | name     | owner type |
+      | Landlord | Company    |
+    And contact_information content:
+      | name    | email                |
+      | ReachMe | reach.me@example.com |
     And collections:
       | title                 | state     | topic                   | owner    | contact information |
       | Shaping of disruption | published | Supplier exchange       | Landlord | ReachMe             |

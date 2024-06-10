@@ -8,10 +8,10 @@ Feature: As a user of the website
       | Username    | Roles     |
       | Cornelius   |           |
       | Tina Butler | moderator |
-    And the following contact:
-      | email | martykelley@bar.com |
-      | name  | Marty Kelley        |
-    And the following owner:
+    And contact_information content:
+      | name         | email               |
+      | Marty Kelley | martykelley@bar.com |
+    And owner content:
       | name            |
       | Martin Gonzalez |
     And the following collections:

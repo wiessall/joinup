@@ -12,9 +12,9 @@ Feature: Collections Overview
       | E-health          | Supports health-related fields | 2018-10-04 8:31am | published |
       | Open Data         | Facilitate access to data sets | 2018-10-04 8:33am | published |
       | Connecting Europe | Reusable tools and services    | 2018-10-04 8:32am | published |
-    And the following owner:
-      | name                 | type    |
-      | Organisation example | Company |
+    And owner content:
+      | name                 | owner type |
+      | Organisation example | Company    |
     # Check that visiting as an anonymous does not create cache for all users.
     When I am an anonymous user
     And I visit the collection overview

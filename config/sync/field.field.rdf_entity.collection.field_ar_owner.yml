@@ -5,7 +5,7 @@ dependencies:
   config:
     - field.storage.rdf_entity.field_ar_owner
     - rdf_entity.rdfentity.collection
-    - rdf_entity.rdfentity.owner
+    - node.type.owner
 _core:
   default_config_hash: ZHX4Z3lG7p89okXRT8FGUAU0k9wsdjDYC1vVFA4i4yY
 id: rdf_entity.collection.field_ar_owner
@@ -19,7 +19,7 @@ translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:
-  handler: 'default:rdf_entity'
+  handler: 'default:node'
   handler_settings:
     target_bundles:
       owner: owner
