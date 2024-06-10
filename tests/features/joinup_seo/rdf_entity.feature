@@ -33,10 +33,9 @@ Feature: SEO for RDF entities.
       | title         | SEO release  |
       | is version of | SEO solution |
       | state         | published    |
-    And the following distribution:
-      | title  | SEO distribution |
-      | parent | SEO release      |
-      | state  | published        |
+    And distribution content:
+      | title | parent      | state     |
+      | SEO   | SEO release | published |
 
     When I go to the "SEO release" release
     Then the metatag graph of the item with title "SEO release" should be present

@@ -235,7 +235,7 @@ Feature: Global search
     And the following releases:
       | title         | release number | release notes                               | keywords | is version of  | owner             | contact information | state     |
       | Release Alpha | 1              | <p>Release notes for <em>beta</em> changes. | Alphabet | Solution alpha | Responsible owner | Go-to contact       | published |
-    And the following distributions:
+    And distribution content:
       | title              | description                                    | parent        | access url | state     |
       | Distribution alpha | <p>A simple beta distribution description.</p> | Release Alpha | test.zip   | published |
     And licence content:

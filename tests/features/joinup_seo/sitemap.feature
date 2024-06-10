@@ -23,7 +23,7 @@ Feature:
       | title             | release number | release notes | is version of              | owner         | contact information | state     |
       | Sitemap release 1 | 1              | New release   | Sitemap solution published | Sitemap owner | Sitemap secretariat | published |
       | Sitemap release 2 | 2              | Newer release | Sitemap solution published | Sitemap owner | Sitemap secretariat | draft     |
-    And the following distributions:
+    And distribution content:
       | title                | description           | parent            | access url | state     |
       | Sitemap distribution | Some kind of download | Sitemap release 1 | test.zip   | published |
     And licence content:

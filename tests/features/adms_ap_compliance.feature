@@ -41,7 +41,7 @@ Feature: Joinup should be ADMS-AP compliant.
     And the following releases:
       | title  | documentation | release number | release notes | creation date    | is version of | state     | status    | spatial coverage | keywords | language |
       | Omega3 | text.pdf      | 3.0.0          | New 3.0       | 2017-11-11T11:11 | Early Omega   | published | Completed | Belgium          | food     | English  |
-    And the following distributions:
+    And distribution content:
       | title      | description                    | creation date    | access url                        | parent | downloads | licence     | format | status    | representation technique | state     |
       | Omega3.zip | The zipped version of Omega 3. | 2017-11-11T11:20 | http://www.example.org/omega3.zip | Omega3 | 232       | Foo licence | ZIP    | Completed | Datalog                  | published |
     Then the ADMS-AP data of the published entities in Joinup is valid

@@ -246,7 +246,7 @@ Feature: Solution homepage
       | description | Searching your datas  |
       | state       | published             |
       | owner       | Chiricahua Foundation |
-    And the following distributions:
+    And distribution content:
       | title               | description   | parent          | state     |
       | Solr distribution 1 | Description 1 | Chiricahua Solr | published |
     When I go to the homepage of the "Chiricahua Solr" solution

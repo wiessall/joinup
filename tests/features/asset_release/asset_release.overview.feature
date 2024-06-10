@@ -27,7 +27,7 @@ Feature: Asset distribution overview on solution.
       | Hidden spies          | text.pdf      | 3              | Notes 3       | 28-01-1995 12:05 | Lovely Butterfly | draft     |
       | Thief in the Angels   | text.pdf      | 2              | Notes 2       | 28-01-1995 12:06 | Lovely Butterfly | published |
       | The Child of the Past | text.pdf      | 1              | Notes 1       | 28-01-1996 12:05 | Lovely Butterfly | published |
-    And the following distributions:
+    And distribution content:
       | title       | access url                          | creation date    | parent                | state     |
       | Linux       | test.zip                            | 28-01-1995 12:05 | Thief in the Angels   | published |
       | Windows     | http://www.example.org/download.php | 28-01-1995 12:06 | The Child of the Past | published |

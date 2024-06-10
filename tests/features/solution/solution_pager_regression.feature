@@ -25,11 +25,8 @@ Feature: Test for a 'facets' regression on the solution overview page.
       | Solution 8           | More solution              | logo.png | published | Apache Foundation | Pierre Plezant      | Business      | E-inclusion |
       | Solution 9           | More solution              | logo.png | published | Apache Foundation | Pierre Plezant      | Business      | E-inclusion |
       | Solution 10          | More solution              | logo.png | published | Apache Foundation | Pierre Plezant      | Business      | E-inclusion |
-    And the following distribution:
-      | title       | Apache for MacOS    |
-      | description | Apache distribution |
-      | access url  | test.zip            |
-      | parent      | Apache              |
-      | state       | published           |
+    And distribution content:
+      | title       | description          | access url | parent  | state     |
+      | test.zip    | Apache distribution  | test.zip   | Apache  | published |
     And I go to the homepage of the "Apache" solution
     Then I should not see the "Pager" region
