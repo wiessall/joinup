@@ -5,10 +5,10 @@ Feature: Contact form for solution
   @javascript @email @uploadFiles:logo.png @loggedErrors
   Scenario: User can use "Contact us" form
     Given contact_information content:
-      | name         | email                    | website url            | uri                                                            |
-      | Jocelyn Bass | jocelyn.bass@example.com | http://www.example.org | http://data.europa.eu/w21/2ab00d29-90e9-4780-8f78-6d8a1d2db026 |
-      | John Revoked | john@example.com         | http://www.example.org | http://data.europa.eu/w21/d6d4976f-b7f2-4cab-80b9-3ed59393aa91 |
-      | John Deleted | deleted@example.com      | http://www.example.org | http://data.europa.eu/w21/33c34b2b-bfbd-4e6b-9a1d-f19a755ee631 |
+      | name         | email                    | website url            | nid  |
+      | Jocelyn Bass | jocelyn.bass@example.com | http://www.example.org | 1001 |
+      | John Revoked | john@example.com         | http://www.example.org | 1002 |
+      | John Deleted | deleted@example.com      | http://www.example.org | 1003 |
     And the following email confirmation request:
       | email                    | status    |
       | jocelyn.bass@example.com | confirmed |
@@ -34,7 +34,7 @@ Feature: Contact form for solution
     # Page was rendered, but in the meantime, contact is changed on backend.
     Given there are no preexisting log records on the site
     Given the "contact information" of "Six exclusion advantages" solution is changed to "John Deleted"
-    And there should be a record of severity info in the log with description "Contact info was changed on group 'Six exclusion advantages'. Previous contact was 'http://data.europa.eu/w21/d6d4976f-b7f2-4cab-80b9-3ed59393aa91', new one is 'http://data.europa.eu/w21/33c34b2b-bfbd-4e6b-9a1d-f19a755ee631'."
+    And there should be a record of severity info in the log with description "Contact info was changed on group 'Six exclusion advantages'. Previous contact ID was '1002', new one's ID is '1003'."
     Given there are no preexisting log records
     And I click "John Revoked" in the "Content" region
     Then a modal should open
@@ -58,7 +58,7 @@ Feature: Contact form for solution
     And there should be 2 log records
     And there should be a record of severity warning in the log with description "Attempting to send message to a missing contact."
     # This is the default "page not found" error...
-    And there should be a record of severity warning in the log with description "/email-contact/rdf_entity/http_e_f_fdata_ceuropa_ceu_fw21_f33c34b2b_bbfbd_b4e6b_b9a1d_bf19a755ee631/field_ci_email/about?_wrapper_format=drupal_ajax"
+    And there should be a record of severity warning in the log with description "/email-contact/node/1003/email/teaser?_wrapper_format=drupal_ajax"
 
     # Authenticated case.
     When I am logged in as "Joe Hard"
@@ -68,14 +68,14 @@ Feature: Contact form for solution
     Given there are no preexisting log records on the site
     Given the "contact information" of "Six exclusion advantages" solution is changed to "Jocelyn Bass"
     And there should be 1 log record
-    And there should be a record of severity info in the log with description "Contact info was changed on group 'Six exclusion advantages'. Previous contact was 'http://data.europa.eu/w21/d6d4976f-b7f2-4cab-80b9-3ed59393aa91', new one is 'http://data.europa.eu/w21/2ab00d29-90e9-4780-8f78-6d8a1d2db026'."
+    And there should be a record of severity info in the log with description "Contact info was changed on group 'Six exclusion advantages'. Previous contact ID was '1002', new one's ID is '1001'."
     Given there are no preexisting log records on the site
     And I click "John Revoked" in the "Content" region
     Then I should see the following error message:
       | error messages                         |
       | Please refresh the page and try again. |
     And there should be 1 log record
-    And there should be a record of severity warning in the log with description "Attempting to send message to contact 'http://data.europa.eu/w21/d6d4976f-b7f2-4cab-80b9-3ed59393aa91' which does not belong to a group."
+    And there should be a record of severity warning in the log with description "Attempting to send message to contact with ID '1002' which does not belong to a group."
 
     Given I reload the page
     Then I should see the link "Jocelyn Bass"
