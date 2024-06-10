@@ -2584,8 +2584,9 @@ class JoinupContext extends RawDrupalContext {
    *
    * @Then :text should be the active item in the :region menu
    * @Then :text should be the active item in the :region region
+   * @Then the link :text is in the active trail
    */
-  public function assertActiveLinkInRegion($text, $region) {
+  public function assertActiveLinkInRegion(string $text, ?string $region = NULL): void {
     $links = $this->findLinksMarkedAsActive($region);
 
     if (empty($links)) {
