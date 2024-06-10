@@ -141,9 +141,10 @@ class LogRecordsContext extends RawDrupalContext {
     }
 
     throw new \Exception(sprintf(
-      "Log record with severity '%s' and description '%s' not found.",
+      "Log record with severity '%s' and description '%s' not found. Existing records are: %s",
       $severity,
-      $description
+      $description,
+      Variable::export($logRecords)
     ));
   }
 
