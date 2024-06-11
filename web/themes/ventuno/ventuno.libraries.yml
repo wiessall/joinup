@@ -291,6 +291,18 @@ navbar:
   dependencies:
     - core/once
 
+mmenu:
+  js:
+    assets/lib/mmenu-light/mmenu-light.js: { minified: true }
+    assets/js/mmenu-nav.min.js: { minified: true }
+  css:
+    theme:
+      assets/lib/mmenu-light/mmenu-light.css: { minified: true }
+      assets/css/mmenu.min.css: { minified: true }
+  dependencies:
+    - core/drupal
+    - core/once
+
 navbar-search:
   css:
     theme:
