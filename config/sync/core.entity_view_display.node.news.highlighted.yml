@@ -26,6 +26,7 @@ dependencies:
     - field_fallback_formatter
     - field_formatter_range
     - field_group
+    - joinup_core
     - layout_builder
     - responsive_image
     - template_suggestion
