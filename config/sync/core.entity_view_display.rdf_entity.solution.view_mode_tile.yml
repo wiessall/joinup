@@ -42,6 +42,7 @@ dependencies:
     - responsive_image.styles.tile
   module:
     - field_fallback_formatter
+    - joinup_html_stripper
     - responsive_image
     - template_suggestion
     - user

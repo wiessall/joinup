@@ -42,6 +42,7 @@ dependencies:
   module:
     - field_fallback_formatter
     - joinup
+    - smart_trim
     - template_suggestion
     - user
 id: rdf_entity.solution.digest_message
