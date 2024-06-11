@@ -51,7 +51,6 @@ dependencies:
     - asset_distribution
     - custom_page
     - joinup_flag
-    - joinup_oss_catalogue
     - joinup_search
 third_party_settings:
   search_api_solr:
@@ -115,6 +114,46 @@ name: 'Published entities index'
 description: ''
 read_only: false
 field_settings:
+  ar_contact_title:
+    label: 'Collection » Contact information » Title'
+    datasource_id: 'entity:rdf_entity'
+    property_path: 'field_ar_contact_information:entity:title'
+    type: text
+    dependencies:
+      config:
+        - field.storage.rdf_entity.field_ar_contact_information
+      module:
+        - node
+  ar_contact_title_spellcheck:
+    label: 'Collection » Contact information » Title - Spellcheck'
+    datasource_id: 'entity:rdf_entity'
+    property_path: 'field_ar_contact_information:entity:title'
+    type: solr_text_spellcheck
+    dependencies:
+      config:
+        - field.storage.rdf_entity.field_ar_contact_information
+      module:
+        - node
+  ar_owner:
+    label: 'Collection » Owner » Name'
+    datasource_id: 'entity:rdf_entity'
+    property_path: 'field_ar_owner:entity:title'
+    type: string
+    dependencies:
+      config:
+        - field.storage.rdf_entity.field_ar_owner
+      module:
+        - node
+  ar_owner_spellcheck:
+    label: 'Collection » Owner » Name - Spellcheck'
+    datasource_id: 'entity:rdf_entity'
+    property_path: 'field_ar_owner:entity:title'
+    type: solr_text_spellcheck
+    dependencies:
+      config:
+        - field.storage.rdf_entity.field_ar_owner
+      module:
+        - node
   body:
     label: 'Body » Processed text'
     datasource_id: 'entity:node'
@@ -555,94 +594,86 @@ field_settings:
     dependencies:
       module:
         - rdf_entity
-  is_field_ci_name:
-    label: 'Contact information » Rdf entity » Name'
+  is_contact_title:
+    label: 'Solution » Contact information » Title'
     datasource_id: 'entity:rdf_entity'
-    property_path: 'field_is_contact_information:entity:field_ci_name'
+    property_path: 'field_is_contact_information:entity:title'
     type: text
     dependencies:
       config:
-        - field.storage.rdf_entity.field_ci_name
         - field.storage.rdf_entity.field_is_contact_information
       module:
-        - rdf_entity
-  is_field_ci_name_spellcheck:
-    label: 'Contact information » Rdf entity » Name - Spellcheck'
+        - node
+  is_contact_title_spellcheck:
+    label: 'Solution » Contact information » Title - Spellcheck'
     datasource_id: 'entity:rdf_entity'
-    property_path: 'field_is_contact_information:entity:field_ci_name'
+    property_path: 'field_is_contact_information:entity:title'
     type: solr_text_spellcheck
     dependencies:
       config:
-        - field.storage.rdf_entity.field_ci_name
         - field.storage.rdf_entity.field_is_contact_information
       module:
-        - rdf_entity
-  is_field_owner_name:
-    label: 'Owner » Rdf entity » Name'
+        - node
+  is_owner:
+    label: 'Solution » Owner » Name'
     datasource_id: 'entity:rdf_entity'
-    property_path: 'field_is_owner:entity:field_owner_name'
+    property_path: 'field_is_owner:entity:title'
     type: text
     dependencies:
       config:
         - field.storage.rdf_entity.field_is_owner
-        - field.storage.rdf_entity.field_owner_name
       module:
-        - rdf_entity
-  is_field_owner_name_spellcheck:
-    label: 'Owner » Rdf entity » Name - Spellcheck'
+        - node
+  is_owner_spellcheck:
+    label: 'Solution » Owner » Name - Spellcheck'
     datasource_id: 'entity:rdf_entity'
-    property_path: 'field_is_owner:entity:field_owner_name'
+    property_path: 'field_is_owner:entity:title'
     type: solr_text_spellcheck
     dependencies:
       config:
         - field.storage.rdf_entity.field_is_owner
-        - field.storage.rdf_entity.field_owner_name
       module:
-        - rdf_entity
-  isr_field_ci_name:
-    label: 'Contact information » Rdf entity » Name'
+        - node
+  isr_contact_title:
+    label: 'Release » Contact information » Title'
     datasource_id: 'entity:rdf_entity'
-    property_path: 'field_isr_contact_information:entity:field_ci_name'
+    property_path: 'field_isr_contact_information:entity:title'
     type: text
     dependencies:
       config:
-        - field.storage.rdf_entity.field_ci_name
         - field.storage.rdf_entity.field_isr_contact_information
       module:
-        - rdf_entity
-  isr_field_ci_name_spellcheck:
-    label: 'Contact information » Rdf entity » Name - Spellcheck'
+        - node
+  isr_contact_title_spellcheck:
+    label: 'Release » Contact information » Title - Spellcheck'
     datasource_id: 'entity:rdf_entity'
-    property_path: 'field_isr_contact_information:entity:field_ci_name'
+    property_path: 'field_isr_contact_information:entity:title'
     type: solr_text_spellcheck
     dependencies:
       config:
-        - field.storage.rdf_entity.field_ci_name
         - field.storage.rdf_entity.field_isr_contact_information
       module:
-        - rdf_entity
-  isr_field_owner_name:
-    label: 'Owner » Rdf entity » Name'
+        - node
+  isr_owner:
+    label: 'Release » Owner » Name'
     datasource_id: 'entity:rdf_entity'
-    property_path: 'field_isr_owner:entity:field_owner_name'
+    property_path: 'field_isr_owner:entity:title'
     type: text
     dependencies:
       config:
         - field.storage.rdf_entity.field_isr_owner
-        - field.storage.rdf_entity.field_owner_name
       module:
-        - rdf_entity
-  isr_field_owner_name_spellcheck:
-    label: 'Owner » Rdf entity » Name - Spellcheck'
+        - node
+  isr_owner_spellcheck:
+    label: 'Release » Owner » Name - Spellcheck'
     datasource_id: 'entity:rdf_entity'
-    property_path: 'field_isr_owner:entity:field_owner_name'
+    property_path: 'field_isr_owner:entity:title'
     type: solr_text_spellcheck
     dependencies:
       config:
         - field.storage.rdf_entity.field_isr_owner
-        - field.storage.rdf_entity.field_owner_name
       module:
-        - rdf_entity
+        - node
   keywords:
     label: Keywords
     property_path: aggregated_field
@@ -864,6 +895,14 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.spdx_licence
+  status:
+    label: Published
+    datasource_id: 'entity:node'
+    property_path: status
+    type: boolean
+    dependencies:
+      module:
+        - node
   sticky:
     label: 'Sticky at top of lists'
     datasource_id: 'entity:node'
@@ -884,7 +923,7 @@ field_settings:
     label: Title
     datasource_id: 'entity:node'
     property_path: title
-    type: text
+    type: 'solr_text_custom:ngram'
     boost: 5.0
     dependencies:
       module:
@@ -965,6 +1004,7 @@ datasource_settings:
         - eif_interoperability_layer
         - eif_principle
         - eif_recommendation
+        - oss_category
         - topic
     languages:
       default: true
@@ -1050,10 +1090,6 @@ processor_settings:
       - field_user_first_name_spellcheck
       - field_user_organisation
       - field_user_organisation_spellcheck
-      - isr_field_ci_name
-      - isr_field_ci_name_spellcheck
-      - isr_field_owner_name
-      - isr_field_owner_name_spellcheck
       - label
       - label_spellcheck
       - title
@@ -1064,10 +1100,12 @@ processor_settings:
   index_distribution_data:
     weights:
       preprocess_index: -50
+  joinup_entity_bundle: {  }
   joinup_entity_published_revision: {  }
   joinup_entity_status:
     inverse: false
   language_with_fallback: {  }
+  oss_solution_rendered_item: {  }
   rendered_item: {  }
   reverse_entity_references: {  }
   solr_date_range:
@@ -1175,14 +1213,6 @@ processor_settings:
       - field_user_first_name_spellcheck
       - field_user_organisation
       - field_user_organisation_spellcheck
-      - is_field_ci_name
-      - is_field_ci_name_spellcheck
-      - is_field_owner_name
-      - is_field_owner_name_spellcheck
-      - isr_field_ci_name
-      - isr_field_ci_name_spellcheck
-      - isr_field_owner_name
-      - isr_field_owner_name_spellcheck
       - label
       - label_spellcheck
       - title
@@ -1224,14 +1254,6 @@ processor_settings:
       - field_user_first_name_spellcheck
       - field_user_organisation
       - field_user_organisation_spellcheck
-      - is_field_ci_name
-      - is_field_ci_name_spellcheck
-      - is_field_owner_name
-      - is_field_owner_name_spellcheck
-      - isr_field_ci_name
-      - isr_field_ci_name_spellcheck
-      - isr_field_owner_name
-      - isr_field_owner_name_spellcheck
       - label
       - label_spellcheck
       - title

@@ -18,16 +18,9 @@ use Drupal\Core\Url;
 use Drupal\joinup_oss_catalogue\OssCatalogueCollectionInterface;
 
 /**
- * Delete stale page.
- */
-function joinup_core_deploy_110800(): void {
-  \Drupal::entityTypeManager()->getStorage('node')->load(703013)->delete();
-}
-
-/**
  * Update path alias for EU OSS catalogue.
  */
-function joinup_core_deploy_110801(): void {
+function joinup_core_deploy_110800(): void {
   /** @var \Drupal\collection\Entity\CollectionInterface $collection */
   $collection = \Drupal::entityTypeManager()->getStorage('rdf_entity')
     ->load(OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID);
@@ -41,7 +34,7 @@ function joinup_core_deploy_110801(): void {
 /**
  * Update title of EU OSS catalogue collection.
  */
-function joinup_core_deploy_110802(): void {
+function joinup_core_deploy_110801(): void {
   /** @var \Drupal\collection\Entity\CollectionInterface $collection */
   $collection = \Drupal::entityTypeManager()->getStorage('rdf_entity')
     ->load(OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID);
@@ -54,7 +47,7 @@ function joinup_core_deploy_110802(): void {
 /**
  * Import content for EU OpenSource Software Solutions Catalogue.
  */
-function joinup_core_deploy_110803(): void {
+function joinup_core_deploy_110802(): void {
   /** @var \Drupal\Core\Extension\ModuleInstallerInterface $moduleInstaller */
   $moduleInstaller = \Drupal::service('module_installer');
   /** @var \Drupal\Core\Entity\EntityRepositoryInterface $entityRepository */
@@ -87,7 +80,7 @@ function joinup_core_deploy_110803(): void {
 /**
  * Rename menu items for EU OSS catalogue.
  */
-function joinup_core_deploy_110804(): void {
+function joinup_core_deploy_110803(): void {
   $entityTypeManager = \Drupal::entityTypeManager();
   /** @var  \Drupal\menu_link_content\MenuLinkContentStorageInterface $menuLinkContentStorage */
   $menuLinkContentStorage = $entityTypeManager->getStorage('menu_link_content');
@@ -123,7 +116,7 @@ function joinup_core_deploy_110804(): void {
 /**
  * Make sure that oss_archived has a default value.
  */
-function joinup_core_deploy_110805(array &$sandbox): string {
+function joinup_core_deploy_110804(array &$sandbox): string {
   $entityTypeManager = \Drupal::entityTypeManager();
   /** @var \Drupal\node\NodeStorage $nodeStorage */
   $nodeStorage = $entityTypeManager->getStorage('node');
@@ -149,4 +142,11 @@ function joinup_core_deploy_110805(array &$sandbox): string {
   $sandbox['#finished'] = (int) empty($sandbox['ids']);
 
   return "Processed {$sandbox['progress']} out of {$sandbox['count']} solutions.";
+}
+
+/**
+ * Delete stale page.
+ */
+function joinup_core_deploy_110805(): void {
+  \Drupal::entityTypeManager()->getStorage('node')->load(703013)?->delete();
 }
