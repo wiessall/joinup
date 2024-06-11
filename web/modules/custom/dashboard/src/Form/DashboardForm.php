@@ -122,8 +122,8 @@ class DashboardForm extends FormBase {
       '#access' => $this->getFormElementsAccess($form),
     ];
     $form['actions']['submit'] = [
-     '#type' => 'submit',
-     '#value' => $this->t('Submit'),
+      '#type' => 'submit',
+      '#value' => $this->t('Submit'),
     ];
 
     $hasEnableDisablePermission = $this->currentUser()->hasPermission('enable/disable config readonly');

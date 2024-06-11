@@ -28,7 +28,7 @@ final class WarningMessageBlock extends BlockBase implements ContainerFactoryPlu
     array $configuration,
     string $pluginId,
     mixed $pluginDefinition,
-    protected ConfigReadOnlyInterface $fileConfigReadOnly
+    protected ConfigReadOnlyInterface $fileConfigReadOnly,
   ) {
     parent::__construct($configuration, $pluginId, $pluginDefinition);
   }
@@ -50,7 +50,7 @@ final class WarningMessageBlock extends BlockBase implements ContainerFactoryPlu
    */
   public function build(): array {
     $warnings = [
-      $this->t('You are working on production. Please, be extra cautious!')
+      $this->t('You are working on production. Please, be extra cautious!'),
     ];
 
     if (!$this->fileConfigReadOnly->isReadOnlyEnabled()) {
