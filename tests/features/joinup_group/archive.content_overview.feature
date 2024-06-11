@@ -2,12 +2,12 @@
 Feature: Global search with archive content
 
   Scenario Outline: Group content has an 'Show archived' facet.
-    Given the following owner:
-      | name       | type    |
-      | Some owner | Company |
-    And the following contact:
-      | name  | Some contact             |
-      | email | some-contact@example.com |
+    Given owner content:
+      | name       | owner type |
+      | Some owner | Company    |
+    And contact_information content:
+      | name         | email                    |
+      | Some contact | some-contact@example.com |
     And the following <group type>s:
       | title             | description | state     |
       | Some <group type> | Description | published |
@@ -109,11 +109,12 @@ Feature: Global search with archive content
     And I should not see the "Some zip distribution" tile
 
   Scenario: Group content supports archived solutions.
-    Given owner:
+    Given owner content:
       | name       |
       | Erno Rubik |
-    And contact:
-      | name | Tom Kremer |
+    And contact_information content:
+      | name       |
+      | Tom Kremer |
     And collections:
       | title      | description                | topic             | owner      | contact information | state     |
       | Rubik Cube | combination puzzle         | Supplier exchange | Erno Rubik | Tom Kremer          | published |
