@@ -50,6 +50,18 @@ licence-comparer:
     theme:
       assets/css/licence-comparer.min.css: { minified: true }
 
+oss-landing:
+  css:
+    theme:
+      assets/css/oss-landing.min.css: { minified: true }
+
+oss-solution-full:
+  css:
+    theme:
+      assets/css/oss-solution-full.min.css: { minified: true }
+  dependencies:
+    - ventuno/see-more
+
 searchpage:
   css:
     theme:
@@ -144,6 +156,18 @@ carousel.js:
     - core/drupal
     - core/once
 
+oss-solution-screenshots-carousel:
+  css:
+    theme:
+      assets/css/oss-solution-screenshots-carousel.min.css: { minified: true }
+  dependencies:
+    - ventuno/carousel-theme
+
+oss-solution-indicator:
+  css:
+    theme:
+      assets/css/oss-solution-indicator.min.css: { minified: true }
+
 close:
   css:
     theme:
@@ -229,6 +253,8 @@ header-topic:
   css:
     theme:
       assets/css/header-topic.min.css: { minified: true }
+  dependencies:
+    - ventuno/see-more
 
 ief-entity-table:
   css:

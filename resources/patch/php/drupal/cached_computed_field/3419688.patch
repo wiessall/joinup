@@ -1,0 +1,47 @@
+diff --git a/src/ExpiredItemCollection.php b/src/ExpiredItemCollection.php
+index 45a0c67..a75a1de 100644
+--- a/src/ExpiredItemCollection.php
++++ b/src/ExpiredItemCollection.php
+@@ -2,6 +2,8 @@
+ 
+ namespace Drupal\cached_computed_field;
+ 
++use Traversable;
++
+ /**
+  * Default implementation of a collection of expired items.
+  */
+@@ -28,14 +30,14 @@ class ExpiredItemCollection implements ExpiredItemCollectionInterface {
+   /**
+    * {@inheritdoc}
+    */
+-  public function getItems() {
++  public function getItems(): array {
+     return $this->items;
+   }
+ 
+   /**
+    * {@inheritdoc}
+    */
+-  public function validate() {
++  public function validate(): void {
+     // Check that every item is an ExpiredItem.
+     foreach ($this->items as $item) {
+       if (!$item instanceof ExpiredItemInterface) {
+@@ -47,14 +49,14 @@ class ExpiredItemCollection implements ExpiredItemCollectionInterface {
+   /**
+    * {@inheritdoc}
+    */
+-  public function getIterator() {
++  public function getIterator(): Traversable {
+     return new \ArrayIterator($this->items);
+   }
+ 
+   /**
+    * {@inheritdoc}
+    */
+-  public function count() {
++  public function count(): int {
+     return count($this->items);
+   }
+ 

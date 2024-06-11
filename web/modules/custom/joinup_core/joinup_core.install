@@ -7,6 +7,7 @@
 
 declare(strict_types=1);
 
+use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\Site\Settings;
 use Drupal\user\Entity\User;
 
@@ -91,4 +92,21 @@ function joinup_core_requirements($phase): array {
   }
 
   return $requirements;
+}
+
+/**
+ * Pre-creates OSS vocabularies.
+ */
+function joinup_core_update_110800(): void {
+  // Pre-create the new controlled vocabularies provided by eu_oss_catalogue
+  // module. Normally, these are imported as config but eu_oss_catalogue install
+  // goes first and its install process is also populating them with terms, so
+  // they should be available at that point.
+  $config_factory = \Drupal::configFactory();
+  foreach (['category', 'licence', 'intended_audience_scope', 'software_type'] as $vocab) {
+    $name = "taxonomy.vocabulary.oss_$vocab";
+    $config_factory->getEditable($name)
+      ->setData(Yaml::decode(file_get_contents(DRUPAL_ROOT . "/../config/sync/$name.yml")))
+      ->save();
+  }
 }

@@ -1,0 +1,25 @@
+uuid: 3b9dda43-ee77-495e-84e7-e3c1acd3e223
+langcode: en
+status: true
+dependencies:
+  module:
+    - joinup_taxonomy
+third_party_settings:
+  joinup_taxonomy:
+    locked: false
+  rdf_sync:
+    type: 'http://joinup.eu/eu-oss/rdf-type/category'
+    uri_plugin: null
+    fields:
+      vid:
+        target_id:
+          predicate: 'http://www.w3.org/2004/02/skos/core#inScheme'
+          type: resource
+      name:
+        value:
+          predicate: 'http://www.w3.org/2004/02/skos/core#prefLabel'
+          type: null
+name: 'OSS Category'
+vid: oss_category
+description: 'Open Source Software Solution Category'
+weight: 0

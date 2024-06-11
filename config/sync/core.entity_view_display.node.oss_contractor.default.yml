@@ -1,0 +1,67 @@
+uuid: 1021581b-8be8-4c03-9a88-f97a5bed23e2
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.oss_contractor.oss_contractor_email
+    - field.field.node.oss_contractor.oss_contractor_until
+    - field.field.node.oss_contractor.oss_contractor_website
+    - node.type.oss_contractor
+  module:
+    - datetime
+    - link
+    - user
+id: node.oss_contractor.default
+targetEntityType: node
+bundle: oss_contractor
+mode: default
+content:
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+  oss_contractor_email:
+    type: basic_string
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 103
+    region: content
+  oss_contractor_until:
+    type: datetime_default
+    label: above
+    settings:
+      timezone_override: ''
+      format_type: medium
+    third_party_settings: {  }
+    weight: 102
+    region: content
+  oss_contractor_website:
+    type: link
+    label: above
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    weight: 104
+    region: content
+  report:
+    type: link
+    label: hidden
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    weight: 50
+    region: content
+hidden:
+  langcode: true
+  published_at: true
+  search_api_excerpt: true

@@ -1,0 +1,270 @@
+uuid: 88a7a00a-4d76-4906-9cf4-420cc26670de
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.oss_archived
+    - field.storage.node.oss_categories
+    - field.storage.node.oss_development_status
+    - field.storage.node.oss_git_description
+    - field.storage.node.oss_release_date
+    - field.storage.node.oss_scope
+    - field.storage.node.oss_short_description
+    - field.storage.node.oss_source
+    - field.storage.node.oss_vitality_index
+    - search_api.server.joinup
+  module:
+    - search_api_solr
+    - field
+    - taxonomy
+    - node
+    - search_api
+    - joinup_flag
+    - joinup_oss_catalogue
+    - joinup_search
+third_party_settings:
+  search_api_solr:
+    finalize: true
+    commit_before_finalize: false
+    commit_after_finalize: true
+    debug_finalize: false
+    highlighter:
+      maxAnalyzedChars: 51200
+      fragmenter: gap
+      usePhraseHighlighter: true
+      highlightMultiTerm: true
+      preserveMulti: false
+      regex:
+        slop: 0.5
+        pattern: blank
+        maxAnalyzedChars: 10000
+      highlight:
+        mergeContiguous: false
+        requireFieldMatch: false
+        snippets: 3
+        fragsize: 0
+    mlt:
+      mintf: 1
+      mindf: 1
+      maxdf: 0
+      maxdfpct: 0
+      minwl: 0
+      maxwl: 0
+      maxqt: 100
+      maxntp: 2000
+      boost: false
+      interestingTerms: none
+    term_modifiers:
+      slop: 10000000
+      fuzzy: 2
+      fuzzy_analyzer: true
+    advanced:
+      index_prefix: ''
+      collection: ''
+      timezone: ''
+    multilingual:
+      limit_to_content_language: false
+      include_language_independent: true
+      use_language_undefined_as_fallback_language: false
+      specific_languages:
+        cs: '0'
+        da: '0'
+        nl: '0'
+        en: '0'
+        et: '0'
+        fr: '0'
+        de: '0'
+        el: '0'
+        it: '0'
+        sl: '0'
+        es: '0'
+      use_universal_collation: false
+id: oss_catalogue
+name: 'OSS catalogue'
+description: ''
+read_only: false
+field_settings:
+  node_grants:
+    label: 'Node access information'
+    property_path: search_api_node_grants
+    type: string
+    indexed_locked: true
+    type_locked: true
+    hidden: true
+  oss__features:
+    label: Features
+    datasource_id: 'entity:node'
+    property_path: oss__features
+    type: string
+    dependencies:
+      module:
+        - field
+  oss_archived:
+    label: Archived
+    datasource_id: 'entity:node'
+    property_path: oss_archived
+    type: boolean
+    dependencies:
+      config:
+        - field.storage.node.oss_archived
+  oss_category:
+    label: Category
+    datasource_id: 'entity:node'
+    property_path: 'oss_categories:entity:name'
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.oss_categories
+      module:
+        - taxonomy
+  oss_development_status:
+    label: 'Development status'
+    datasource_id: 'entity:node'
+    property_path: oss_development_status
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.oss_development_status
+  oss_git_description:
+    label: 'GIT Description'
+    datasource_id: 'entity:node'
+    property_path: oss_git_description
+    type: 'solr_text_custom:ngram'
+    dependencies:
+      config:
+        - field.storage.node.oss_git_description
+  oss_release_date:
+    label: 'Release date'
+    datasource_id: 'entity:node'
+    property_path: oss_release_date
+    type: date
+    dependencies:
+      config:
+        - field.storage.node.oss_release_date
+  oss_scope:
+    label: 'Intended audience'
+    datasource_id: 'entity:node'
+    property_path: 'oss_scope:entity:name'
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.oss_scope
+      module:
+        - taxonomy
+  oss_short_description:
+    label: 'Short description'
+    datasource_id: 'entity:node'
+    property_path: oss_short_description
+    type: 'solr_text_custom:ngram'
+    dependencies:
+      config:
+        - field.storage.node.oss_short_description
+  oss_solution_rendered_item:
+    label: 'Oss Solution rendered item'
+    property_path: oss_solution_rendered_item
+    type: text
+  oss_source:
+    label: 'Source catalogue'
+    datasource_id: 'entity:node'
+    property_path: oss_source
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.oss_source
+  oss_vitality_index:
+    label: Vitality
+    datasource_id: 'entity:node'
+    property_path: oss_vitality_index
+    type: decimal
+    dependencies:
+      config:
+        - field.storage.node.oss_vitality_index
+  status:
+    label: Published
+    datasource_id: 'entity:node'
+    property_path: status
+    type: boolean
+    indexed_locked: true
+    type_locked: true
+    dependencies:
+      module:
+        - node
+  title:
+    label: Title
+    datasource_id: 'entity:node'
+    property_path: title
+    type: 'solr_text_custom:ngram'
+    dependencies:
+      module:
+        - node
+  type:
+    label: 'Content type'
+    datasource_id: 'entity:node'
+    property_path: type
+    type: string
+    dependencies:
+      module:
+        - node
+  uid:
+    label: null
+    datasource_id: 'entity:node'
+    property_path: uid
+    type: integer
+    indexed_locked: true
+    type_locked: true
+    dependencies:
+      module:
+        - node
+datasource_settings:
+  'entity:node':
+    bundles:
+      default: false
+      selected:
+        - oss_solution
+    languages:
+      default: true
+      selected: {  }
+processor_settings:
+  add_url: {  }
+  aggregated_field: {  }
+  aggregated_topic_hierarchy:
+    weights:
+      preprocess_index: -50
+  auto_aggregated_fulltext_field: {  }
+  content_access:
+    weights:
+      preprocess_query: -30
+  custom_value: {  }
+  entity_type: {  }
+  html_filter:
+    weights:
+      preprocess_index: -15
+      preprocess_query: -15
+    all_fields: false
+    fields:
+      - oss_git_description
+      - oss_short_description
+      - oss_solution_rendered_item
+    title: true
+    alt: true
+    tags:
+      b: 2
+      h1: 5
+      h2: 3
+      h3: 2
+      strong: 2
+  joinup_entity_bundle: {  }
+  language_with_fallback: {  }
+  oss_solution_rendered_item: {  }
+  rendered_item: {  }
+  solr_date_range:
+    weights:
+      preprocess_index: 0
+tracker_settings:
+  default:
+    indexing_order: fifo
+options:
+  cron_limit: 50
+  index_directly: true
+  track_changes_in_references: true
+server: joinup

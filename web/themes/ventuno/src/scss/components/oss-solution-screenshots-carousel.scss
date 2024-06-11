@@ -1,0 +1,46 @@
+@import "../partials/core";
+
+.slick--optionset--oss-solution-screenshot {
+  .slick__slider {
+    &.mx-n2 {
+      margin-inline: $spacer * -0.5;
+    }
+  }
+
+  .slick-track {
+    position: static;
+    width: auto !important;
+    white-space: nowrap;
+    font-size: 0;
+  }
+  .slick__slide {
+    display: inline-block;
+    float: none;
+    max-width: calc(100% - ($spacer * 2));
+    vertical-align: middle;
+    white-space: normal;
+    font-size: var(--bs-body-font-size);
+
+    &:only-child {
+      width: auto !important;
+      max-width: 100%;
+    }
+  }
+
+  .slick-arrow.slick-disabled {
+    pointer-events: none;
+    opacity: var(--bs-btn-disabled-opacity);
+  }
+
+  // Fouc.
+  .slick__slider:not(.slick-initialized) {
+    overflow: hidden;
+    white-space: nowrap;
+    font-size: 0;
+
+    & > * {
+      white-space: normal;
+      font-size: var(--bs-body-font-size);
+    }
+  }
+}

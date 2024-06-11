@@ -1,0 +1,25 @@
+@import "../partials/core";
+
+.git-indicator {
+  margin-bottom: calc($spacer / 2);
+  &:not(:last-child) {
+    margin-right: $spacer;
+  }
+  span {
+    padding-bottom: $spacer * .2;
+    font-size: $font-size-xs;
+  }
+  &__oss-git-stars::after {
+    @include get-bootstrap-icon('oss_git_stars', $gray-800, 1.6em);
+  }
+  &__oss-git-open-issues::after {
+    @include get-bootstrap-icon('oss_git_open_issues', $gray-800, 1.6em);
+  }
+  &__oss-git-forks::after {
+    @include get-bootstrap-icon('oss_git_forks', $gray-800, 1.6em);
+  }
+  &__oss-git-open-pull-requests::after {
+    @include get-bootstrap-icon('oss_git_open_pull_requests', $gray-800, 1.6em);
+  }
+}
+
