@@ -151,10 +151,6 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
       if (!$entity->get('oss_software_version')->isEmpty()) {
         $variables['highlighted']['text'] = $entity->get('oss_software_version')->value;
       }
-      if (isset($variables['content']['oss_release_date']['0'])) {
-        $variables['info']['icon'] = 'calendar-event';
-        $variables['info']['label'] = $variables['content']['oss_release_date'];
-      }
 
       $indicators = [
         'oss_git_stars',
