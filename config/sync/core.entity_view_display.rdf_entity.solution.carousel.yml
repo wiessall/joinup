@@ -45,6 +45,7 @@ dependencies:
     - field_group
     - layout_builder
     - responsive_image
+    - smart_trim
     - template_suggestion
     - user
 third_party_settings:
