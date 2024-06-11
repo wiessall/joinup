@@ -57,10 +57,9 @@ Feature: When a solution is archived then its sub-content also should be archive
       | Solution Custom page 2 | Solution | draft     |
       | Solution Custom page 3 | Solution | published |
     And the workflow state of the "Solution Custom page 3" content is changed to "archived"
-    And distribution:
-      | title  | Solution Distribution |
-      | parent | Solution              |
-      | state  | published             |
+    And distribution content:
+      | title                 | parent   | published |
+      | Solution Distribution | Solution | published |
     And releases:
       | title              | is version of | state     |
       | Solution Release 1 | Solution      | published |
