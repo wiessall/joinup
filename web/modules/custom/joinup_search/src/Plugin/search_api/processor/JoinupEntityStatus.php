@@ -111,7 +111,7 @@ class JoinupEntityStatus extends ProcessorPluginBase implements PluginFormInterf
       $object = $item->getOriginalObject()->getValue();
       $inverse = $this->getConfiguration()['inverse'];
       $enabled = TRUE;
-      if ($object instanceof NodeInterface && $object instanceof GroupContentInterface) {
+      if ($object instanceof NodeInterface) {
         $enabled = $object->isPublished();
         // The entity can be published only if the parent entity is published.
         // Load the parent from the entity storage cache rather than relying

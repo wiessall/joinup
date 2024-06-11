@@ -16,22 +16,18 @@
     z-index: 3;
   }
   &__figure {
-    display: flex;
     overflow: hidden;
-    align-items: center;
-    justify-content: center;
-    aspect-ratio: 1 / 1;
+    aspect-ratio: 16 / 9;
     & picture {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
       & img {
-        width: 100%;
+        width: auto;
+        max-height: 100%;
         margin-bottom: 0;
       }
-    }
-  }
-  &__default-img {
-    aspect-ratio: 4 / 3;
-    @include media-breakpoint-up(md) {
-      aspect-ratio: 1 / 1;
     }
   }
   &__body {
@@ -40,10 +36,6 @@
   &__standout-info {
     top: $spacer * -1;
     right: $spacer * .5;
-    overflow: hidden;
-    max-width: 9.3rem;
-    white-space: nowrap;
-    text-overflow: ellipsis;
     font-size: .875rem;
   }
   &__standout-info-icon,
@@ -145,26 +137,19 @@
       }
     }
   }
-  .field--name-oss-logo {
-    width: 100%;
-    padding: $spacer;
-  }
   &--horizontal {
     width: 100%;
-    .field--name-oss-logo {
-      width: 100%;
-      padding: $spacer;
-    }
     @include media-breakpoint-up(md) {
       flex-direction: row;
       flex-wrap: wrap;
       height: auto;
-      .field--name-oss-logo {
-        padding: 0;
-      }
       .tile__figure {
         width: 180px;
         padding: $spacer 0 0 $spacer;
+        aspect-ratio: 1 / 1;
+        & picture {
+          align-items: start;
+        }
       }
       .tile__body {
         flex: 1 1 calc(100% - 180px);
@@ -175,7 +160,7 @@
       .tile__standout-info {
         top: unset;
         right: unset;
-        bottom: $spacer * -.5;
+        bottom: $spacer * .5;
         transform: translateX(calc(-100% - $spacer * 1.5));
       }
       .tile__footer {

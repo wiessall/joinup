@@ -1,8 +1,0 @@
-type: module
-name: EU OSS Catalogue Test
-description: EU OSS Catalogue supports testing
-core_version_requirement: ">=10.0"
-package: testing
-dependencies:
-  - eu_oss_catalogue:eu_oss_catalogue
-  - http_request_mock:http_request_mock

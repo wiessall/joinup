@@ -26,7 +26,6 @@ settings:
       properties:
         reversed: false
         startIndex: false
-      multiBlock: true
     ckeditor5_sourceEditing:
       allowed_tags:
         - '<a hreflang>'
