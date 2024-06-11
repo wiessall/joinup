@@ -1,0 +1,20 @@
+name: Joinup OSS Catalogue
+type: module
+description: EU OSS Catalogue customisation
+core_version_requirement: ">= 9.4"
+package: Joinup communities
+
+dependencies:
+  - eu_oss_catalogue:eu_oss_catalogue
+  - imagecache_external:imagecache_external
+  - joinup_bundle_class:joinup_bundle_class
+  - message:message
+  - oe_bootstrap_theme_helper:oe_bootstrap_theme_helper
+
+default_content:
+  file:
+    - 4b8712c1-bc69-4bb2-985d-33635e08466c
+  node:
+    - 54acbd6f-47f0-4280-ad09-0a07c397318b
+  meta_entity:
+    - c090df0a-4960-41bf-b5b3-138a15523164

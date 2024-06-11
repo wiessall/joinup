@@ -32,9 +32,10 @@
   - Drupal\joinup\Context\EifContext
   - Drupal\joinup\Context\EntityQueueContext
   - Drupal\joinup\Context\EuplContext
-  - Drupal\joinup\Context\FileFieldContext
   - Drupal\joinup\Context\FaviconContext
+  - Drupal\joinup\Context\FileFieldContext
   - Drupal\joinup\Context\FooterContext
+  - Drupal\joinup\Context\GitHubContext
   - Drupal\joinup\Context\HeaderContext
   - Drupal\joinup\Context\HomepageContext
   - Drupal\joinup\Context\InputFilterContext
@@ -53,9 +54,11 @@
   - Drupal\joinup\Context\JoinupLayoutParagraphsContext
   - Drupal\joinup\Context\JoinupLegalContext
   - Drupal\joinup\Context\JoinupLicenceContext
+  - Drupal\joinup\Context\JoinupMultilingualContentContext
   - Drupal\joinup\Context\JoinupNewsContext
   - Drupal\joinup\Context\JoinupNewsletterContext
   - Drupal\joinup\Context\JoinupNotificationContext
+  - Drupal\joinup\Context\JoinupOSSSolutionContext
   - Drupal\joinup\Context\JoinupParagraphsContext
   - Drupal\joinup\Context\JoinupSearchContext
   - Drupal\joinup\Context\JoinupSeoContext
@@ -141,6 +144,7 @@ default:
                 - '--whitelisted-ips=*'
     LoversOfBehat\TableExtension:
       table_map:
+        'EU OSS Catalogue administration': '[data-drupal-selector="views-form-eu-oss-catalogue-admin-admin"] table.vbo-table'
         'announcement list': '.announcement-list table'
         'group menu edit table': '#menu-overview'
         'eif recommendations': '.eif-recommendations table'
@@ -187,6 +191,8 @@ default:
         Modal buttons: '.ui-dialog-buttonpane'
         Modal content: '.ui-dialog-content'
         Modal title: '.ui-dialog-titlebar'
+        Most recent solutions: '#block-views-block-oss-solutions-listing-most-recent'
+        Most active solutions : '#block-views-block-oss-solutions-listing-most-active'
         My unpublished content area: '.block-user-unpublished'
         Navigation bar: '.joinup-navbar'
         Navigation menu: '#block-ventuno-navigation'
@@ -197,6 +203,7 @@ default:
         Quick links: '.block-group-menu-blockquick-links'
         Related solutions: '.field--name-field-is-related-solutions'
         SevenHeader: '.region-header'
+        Search filters: '.joinup-search-filters'
         Statistics: '#block-ventuno-statistics'
         Table of contents: '#block-ventuno-table-of-contents'
         Table of contents outline: '#block-ventuno-toc-outline'
@@ -206,6 +213,8 @@ default:
         Visually hidden title: '#block-ventuno-pagetitle .visually-hidden'
       drupal:
         drupal_root: ${joinup.site_dir}
+      drush:
+        root: ${joinup.site_dir}
       selectors:
         message_selector: '.alert, .messages'
         error_message_selector: '.alert.alert--error, .messages.messages--error, .alert.alert-danger'

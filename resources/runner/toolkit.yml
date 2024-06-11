@@ -101,7 +101,7 @@ commands:
     - task: exec
       command: mkdir ${joinup.files_private_dir} -p -m ug=rwx,o=
     - task: exec
-      command: mkdir ${env.DRUPAL_FILE_TEMP_PATH} -p -m ug=rwx,o=
+      command: mkdir ${joinup.files_temp_dir} -p -m ug=rwx,o=
 
   # Overrides toolkit:install-clean.
   toolkit:install-clean:

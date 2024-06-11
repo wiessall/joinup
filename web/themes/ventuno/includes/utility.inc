@@ -7,11 +7,13 @@
 
 declare(strict_types=1);
 
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\joinup_bundle_class\AbstractInterface;
 use Drupal\joinup_bundle_class\DescriptionInterface;
 use Drupal\joinup_bundle_class\LogoInterface;
 use Drupal\joinup_community_content\Entity\CommunityContentInterface;
 use Drupal\joinup_core\Controller\IdRedirect;
+use Drupal\joinup_oss_catalogue\Entity\JoinupOssSolution;
 use Drupal\joinup_rdf\Entity\RdfSyncEntityInterface;
 use Drupal\joinup_workflow\ArchivableEntityInterface;
 use Drupal\smart_trim\TruncateHTML;
@@ -59,7 +61,9 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
     'page_manager.page_view_homepage_homepage-layout_builder-0',
     'entity.meta_entity.canonical',
   ];
+  $is_oss_solution_tile = $variables['view_mode'] === 'view_mode_tile' && $entity instanceof JoinupOssSolution;
   if ((in_array($route_name, $routes_with_text) && $variables['view_mode'] === 'view_mode_tile') ||
+    $is_oss_solution_tile ||
     $variables['view_mode'] === 'view_mode_tile_horizontal' ||
     $variables['view_mode'] === 'highlighted' ||
     ($entity_type_id === 'node' && $entity->bundle() === 'custom_page')
@@ -74,32 +78,14 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
   }
 
   // Image.
-  $variables['image'] = ($entity instanceof LogoInterface) && $entity->getLogoAsFile()
+  $variables['image'] = ($entity instanceof LogoInterface) && !$entity->get($entity->getLogoFieldName())->isEmpty()
     ? $entity->getLogoAsRenderArray($variables['view_mode'])
     : [];
 
   // Topics.
-  // Max number of topics displayed.
-  $max_topics = 2;
   $topics = ($entity instanceof TopicReferencingEntityInterface) ? $entity->getTopics() : NULL;
   if ($topics) {
-    $variables['badges'] = [];
-    foreach ($topics as $topic) {
-      $variables['badges'][] = [
-        'label' => $topic->label(),
-        'topic_id' => $topic->id(),
-      ];
-    }
-    $num_of_items = count($topics);
-    // Display the actual topic instead of "+ 1 topic".
-    if ($num_of_items > $max_topics + 1) {
-      $extra_items = $num_of_items - $max_topics;
-      $variables['badges'] = array_splice($variables['badges'], 0, $max_topics);
-      $variables['badges'][] = [
-        'label' => '+' . $extra_items . ' ' . t('topics'),
-        'overflow' => TRUE,
-      ];
-    }
+    $variables['badges'] = _ventuno_terms_to_badges($topics, t('topics'));
   }
 
   // Bundle label and icon.
@@ -153,6 +139,32 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
       else {
         $variables['info']['label'] = t('Physical event');
       }
+      break;
+
+    case 'oss_solution':
+      unset($variables['info']);
+      $variables['badges'] = _ventuno_terms_to_badges($entity->getCategories(), t('categories'), 1);
+      // Logo URL is invalid, lets use default image provided by theme.
+      if (!isset($variables['image']['0'])) {
+        unset($variables['image']);
+      }
+      if (!$entity->get('oss_software_version')->isEmpty()) {
+        $variables['highlighted']['text'] = $entity->get('oss_software_version')->value;
+      }
+
+      $indicators = [
+        'oss_git_stars',
+        'oss_git_open_issues',
+        'oss_git_open_pull_requests',
+        'oss_git_forks',
+      ];
+
+      foreach ($indicators as $indicator) {
+        if (isset($variables['content'][$indicator][0])) {
+          $variables['indicators'][] = $variables['content'][$indicator];
+        }
+      }
+
       break;
 
     case 'asset_distribution':
@@ -261,6 +273,7 @@ function _ventuno_get_default_icon(string $entity_type_id, string $bundle): stri
       'document' => 'file-earmark-text',
       'event' => 'calendar-event',
       'news' => 'newspaper',
+      'oss_solution' => 'clipboard2-check',
       'video' => 'file-earmark-play',
     ],
     'rdf_entity' => [
@@ -357,4 +370,41 @@ function _ventuno_get_author(CommunityContentInterface $node): array {
   $view_builder = \Drupal::entityTypeManager()->getViewBuilder('user');
   $author = $node->get('uid')->entity;
   return $view_builder->view($author, 'inline');
+}
+
+/**
+ * Converts terms to badges.
+ *
+ * @param \Drupal\taxonomy\TermInterface[] $terms
+ *   Entity terms.
+ * @param \Drupal\Core\StringTranslation\TranslatableMarkup $extraLabel
+ *   Extra label.
+ * @param int $maxNumberOfBadges
+ *   Max number of badges.
+ *
+ * @return array
+ *   Render array.
+ */
+function _ventuno_terms_to_badges(array $terms, TranslatableMarkup $extraLabel, int $maxNumberOfBadges = 2): array {
+  $badges = [];
+
+  foreach ($terms as $term) {
+    $badges[] = [
+      'label' => $term->label(),
+      'topic_id' => $term->id(),
+    ];
+  }
+
+  $numOfItems = count($terms);
+  // Display the actual topic instead of "+ 1 topic".
+  if ($numOfItems > $maxNumberOfBadges + 1) {
+    $extraItems = $numOfItems - $maxNumberOfBadges;
+    $badges = array_splice($badges, 0, $maxNumberOfBadges);
+    $badges[] = [
+      'label' => '+' . $extraItems . ' ' . $extraLabel,
+      'overflow' => TRUE,
+    ];
+  }
+
+  return $badges;
 }

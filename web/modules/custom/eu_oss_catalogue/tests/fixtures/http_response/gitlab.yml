@@ -1,0 +1,634 @@
+'all.self-hosted.gitlab.example.com':
+  data:
+    projects:
+      count: 5
+      pageInfo:
+        hasNextPage: false
+        endCursor: foo
+      nodes:
+
+        # Valid project 1.
+        - fullPath: group1/group1_2/group1_3/project1
+          path: project1
+          id: 'gid://gitlab/Project/1'
+          description: Description of Project1
+          archived: false
+          # Not set as logo as the logo from publiccode.yml is valid.
+          avatarUrl: https://all.self-hosted.gitlab.example.com/uploads/-/system/project/avatar/1/logo.jpeg
+          openMergeRequestsCount: 1
+          releases:
+            nodes:
+              - tagName: 'v1.1.1'
+                createdAt: '2015-06-21'
+          repository:
+            rootRef: branch-project-1
+            blobs:
+              nodes:
+                - path: publiccode.yml
+                  rawBlob: |-
+                    publiccodeYmlVersion: "0.2"
+                    name: Project 1
+                    applicationSuite: Suite1
+                    url: "https://all.self-hosted.example.com/different-than-real-url"
+                    landingURL: "https://example.com/project1"
+                    softwareVersion: '1.4.5'
+                    releaseDate: "2022-10-07"
+                    # Will be set as logo as the file exists.
+                    logo: images/logo.svg
+                    platforms:
+                      - linux
+                    categories:
+                      - data-collection
+                      - data-analytics
+                    usedBy:
+                      - ACME
+                    developmentStatus: development
+                    softwareType: "standalone/backend"
+                    description:
+                      en:
+                        genericName: '[EN] ACME Solution 1'
+                        shortDescription: '[EN] Solution 1: Short description'
+                        longDescription: '[EN] Solution 1: Long description'
+                        features:
+                          - '[EN] Solution 1: Feature 1'
+                          - '[EN] Solution 1: Feature 2'
+                          - '[EN] Solution 1: Feature 3'
+                        screenshots:
+                          - 'Solution_1_EN_Screenshot1.jpg'
+                    legal:
+                      license: AGPL-3.0-or-later
+                    maintenance:
+                      type: "internal"
+                      contacts:
+                        - name: ACME Ltd
+                          email: acme@example.com
+                        - name: Das Auto GmbH
+                          email: das-auto@example.com
+                    localisation:
+                      localisationReady: true
+                      availableLanguages:
+                        - de
+
+        # Valid project 2.
+        - fullPath: group2/group2_2/group2_3/project2
+          path: project2
+          id: 'gid://gitlab/Project/2'
+          description: Description of Project2
+          archived: false
+          forksCount: 202
+          starCount: 222
+          openIssuesCount: 242
+          # Will be set as logo as the logo from publiccode.yml isn't valid.
+          avatarUrl: https://all.self-hosted.gitlab.example.com/uploads/-/system/project/avatar/2/logo.png
+          openMergeRequestsCount: 0
+          releases:
+            nodes:
+              - tagName: 'v14.0.1'
+                createdAt: '2007-01-30'
+          repository:
+            rootRef: branch-project-2
+            blobs:
+              nodes:
+                - path: publiccode.yml
+                  rawBlob: |-
+                    publiccodeYmlVersion: "0.2"
+                    name: Project 2
+                    applicationSuite: Suite1
+                    url: "https://all.self-hosted.example.com/group2/group2_2/group2_3/project2"
+                    landingURL: "https://example.com/project2"
+                    softwareVersion: '7.0.2-alpha1'
+                    releaseDate: "2021-08-05"
+                    # The GitLab logo will be save.
+                    logo: path/to/non-existing/image/logo.gif
+                    platforms:
+                      - linux
+                    categories:
+                      - data-collection
+                      - data-analytics
+                    usedBy:
+                      - ACME
+                      - Gotham City
+                    developmentStatus: development
+                    softwareType: "standalone/backend"
+                    description:
+                      de:
+                        genericName: '[DE] ACME Solution 2'
+                        shortDescription: '[DE] Solution 2: Short description'
+                        longDescription: '[DE] Solution 2: Long description'
+                        features:
+                          - '[DE] Solution 1: Feature 1'
+                          - '[DE] Solution 1: Feature 2'
+                          - '[DE] Solution 1: Feature 3'
+                        screenshots:
+                          - 'Solution_1_DE_Screenshot1.jpg'
+                    legal:
+                      license: AGPL-3.0-or-later
+                    maintenance:
+                      type: "internal"
+                      contacts:
+                        - name: Das Auto GmbH
+                          email: das-auto@example.com
+                    localisation:
+                      localisationReady: false
+                      availableLanguages:
+                        - de
+
+        # Valid project 3 (even is archived).
+        - fullPath: group3/project3
+          path: project3
+          id: 'gid://gitlab/Project/3'
+          description: Description of Project3
+          archived: true
+          forksCount: 203
+          starCount: 223
+          openIssuesCount: 243
+          avatarUrl: null
+          releases:
+            nodes: {  }
+          repository:
+            rootRef: branch-project-3
+            blobs:
+              nodes:
+                - path: publiccode.yml
+                  rawBlob: |-
+                    publiccodeYmlVersion: "0.2"
+                    name: Project 3
+                    applicationSuite: Suite1
+                    url: "https://all.self-hosted.example.com/group3/project3"
+                    landingURL: "https://example.com/project3"
+                    platforms:
+                      - linux
+                    categories:
+                      - data-analytics
+                    usedBy:
+                      - ACME
+                      - Gotham City
+                    developmentStatus: development
+                    softwareType: "standalone/backend"
+                    description:
+                      en:
+                        genericName: '[EN] ACME Solution 3'
+                        shortDescription: '[EN] Solution 3: Short description'
+                        longDescription: '[EN] Solution 3: Long description'
+                        features:
+                          - '[EN] Solution 3: Feature 1'
+                          - '[EN] Solution 3: Feature 2'
+                          - '[EN] Solution 3: Feature 3'
+                        screenshots:
+                          - 'Solution_3_EN_Screenshot1.jpg'
+                    legal:
+                      license: AGPL-3.0-or-later
+                    maintenance:
+                      type: "internal"
+                      contacts:
+                        - name: ACME Ltd
+                          email: acme@example.com
+                          website: http://www.example.com/acme
+                    localisation:
+                      localisationReady: false
+                      availableLanguages:
+                        - en
+
+        # No code yet.
+        - fullPath: group4/group_4_1/project4
+          path: project4
+          id: 'gid://gitlab/Project/4'
+          description: Description of Project4
+          archived: false
+          forksCount: 204
+          starCount: 224
+          openIssuesCount: 244
+          openMergeRequestsCount: 0
+          releases:
+            nodes: {  }
+          repository:
+            rootRef: null
+            blobs:
+              nodes: { }
+
+        # No publiccode.yml.
+        - fullPath: group5/project5
+          path: project5
+          id: 'gid://gitlab/Project/5'
+          description: Description of Project5
+          archived: false
+          forksCount: 205
+          starCount: 225
+          openIssuesCount: 245
+          openMergeRequestsCount: 3
+          releases:
+            nodes: {  }
+          repository:
+            rootRef: main
+
+'limited.self-hosted.gitlab.example.com group1':
+  data:
+    group:
+      projects:
+        pageInfo:
+          hasNextPage: false
+          endCursor: foo
+        nodes:
+
+          # Valid project.
+          - path: project-1-1
+            id: gid://gitlab/Project/11
+            description: 'Group 1: Project 1: description'
+            archived: false
+            forksCount: 206
+            starCount: 226
+            openIssuesCount: 246
+            # Not set as logo as the logo from publiccode.yml is valid.
+            avatarUrl: https://all.self-hosted.gitlab.example.com/uploads/-/system/project/avatar/2/logo.svg
+            openMergeRequestsCount: 32
+            releases:
+              nodes:
+                - tagName: '2.0.0-alpha12'
+                  createdAt: '2010-07-08'
+            repository:
+              rootRef: branch-project-1-1
+              blobs:
+                nodes:
+                  - path: publiccode.yml
+                    rawBlob: |-
+                      publiccodeYmlVersion: '0.2'
+                      name: 'Project 1.1'
+                      applicationSuite: Suite1
+                      url: https://limited.self-hosted.gitlab.example.com/whatever
+                      releaseDate: '2022-12-23'
+                      softwareVersion: 1.0.2
+                      # Will be set as logo as the file exists.
+                      logo: images/logo-of-project-1-1.svg
+                      developmentStatus: stable
+                      softwareType: standalone/other
+                      platforms:
+                        - web
+                      usedBy:
+                        - Empire
+                      categories:
+                        - data-collection
+                      dependsOn:
+                        open:
+                          - name: Foo
+                            versionMin: 15.0.2
+                      maintenance:
+                        type: internal
+                        contacts:
+                          - name: Big Brother
+                            email: bbrother@example.com
+                            phone: '+000000000'
+                      legal:
+                        license: MIT
+                        mainCopyrightOwner: Sin City
+                        repoOwner: Sin City
+                      localisation:
+                        localisationReady: true
+                        availableLanguages:
+                          - de
+                      description:
+                        # Wins because has more features than DE.
+                        it:
+                          genericName: '[IT] Group1: Project 1: Generic name'
+                          documentation: https://example.com/group1/project-1-1/it/docs.md
+                          shortDescription: '[IT] Group1: Project 1: Short description'
+                          longDescription: '[IT] Group1: Project 1: Long description'
+                          features:
+                            - '[IT] feat 1'
+                            - '[IT] feat 2'
+                            - '[IT] feat 3'
+                          screenshots:
+                            - 'Group_1_Project1_IT_Screenshot.jpg'
+                        de:
+                          genericName: '[DE] Group1: Project 1: Generic name'
+                          documentation: https://example.com/group1/project-1-1/de/docs.md
+                          shortDescription: '[DE] Group1: Project 1: Short description'
+                          longDescription: '[DE] Group1: Project 1: Long description'
+                          features:
+                            - '[DE] feat 1'
+                            - '[DE] feat 2'
+                          screenshots:
+                            - 'assets/de/Group_1_Project1_DE_Screenshot.png'
+
+          # Valid project.
+          - path: project-1-2
+            id: gid://gitlab/Project/12
+            description: 'Group 1: Project 2: description'
+            archived: false
+            forksCount: 207
+            starCount: 227
+            openIssuesCount: 247
+            # Will be set as logo as the logo from publiccode.yml isn't valid.
+            avatarUrl: https://all.self-hosted.gitlab.example.com/uploads/-/system/project/avatar/12/logo.jpg
+            openMergeRequestsCount: 2
+            releases:
+              nodes:
+                - tagName: '220.0.1'
+                  createdAt: '2013-08-19'
+            repository:
+              rootRef: branch-project-1-2
+              blobs:
+                nodes:
+                  - path: publiccode.yml
+                    rawBlob: |
+                      publiccodeYmlVersion: '0.2'
+                      name: 'Project 1.2'
+                      url: 'https://example.de/arbitrary'
+                      # This returns 404.
+                      logo: doesn-t/exist.png
+                      applicationSuite: Suite1
+                      categories:
+                        - data-collection
+                        - data-analytics
+                      dependsOn:
+                        open:
+                          - name: Bar
+                            optional: false
+                            versionMin: 15.0.2
+                      description:
+                        # DE and IT have the same amount of features but this is the 1st.
+                        de:
+                          genericName: '[DE] Group1: Project 2: Generic name'
+                          documentation: https://example.com/group1/project-1-2/de/docs.md
+                          shortDescription: '[DE] Group1: Project 2: Short description'
+                          longDescription: '[DE] Group1: Project 2: Long description'
+                          features:
+                            - '[DE] feat 1'
+                            - '[DE] feat 2'
+                        it:
+                          genericName: '[IT] Group1: Project 2: Generic name'
+                          documentation: https://example.com/group1/project-1-2/it/docs.md
+                          shortDescription: '[IT] Group1: Project 2: Short description'
+                          longDescription: '[IT] Group1: Project 2: Long description'
+                          features:
+                            - '[IT] feat 1'
+                            - '[IT] feat 2'
+                        en:
+                          genericName: '[EN] Group1: Project 2: Generic name'
+                          documentation: https://example.com/group1/project-1-2/en/docs.md
+                          shortDescription: '[EN] Group1: Project 2: Short description'
+                          longDescription: '[EN] Group1: Project 2: Long description'
+                          features:
+                            - '[EN] feat 1'
+                      developmentStatus: concept
+                      intendedAudience:
+                        countries:
+                          - de
+                      legal:
+                        license: EUPL-1.2
+                        mainCopyrightOwner: Townhall
+                        repoOwner: Townhall
+                      localisation:
+                        availableLanguages:
+                          - de
+                        localisationReady: true
+                      maintenance:
+                        contacts:
+                            - name: John Doe
+                            - name: Jane Roe
+                        type: internal
+                      platforms:
+                        - web
+                      releaseDate: '2022-12-16'
+                      softwareType: standalone/desktop
+                      softwareVersion: 1.0.0
+                      usedBy:
+                        - 'Abbanoa'
+                        - 'abbanoa'
+                        - 'abbanoa '
+                        - 'Comune Di Malè'
+                        - 'Comune Di Male'
+                        - 'comune di male'
+
+          # Archived but still import
+          - path: project-1-3
+            id: gid://gitlab/Project/13
+            description: 'Group 1: Project 3: description'
+            archived: true
+            forksCount: 208
+            starCount: 228
+            openIssuesCount: 248
+            avatarUrl: null
+            openMergeRequestsCount: 0
+            releases:
+              nodes: []
+            repository:
+              rootRef: branch-project-1-3
+              blobs:
+                nodes:
+                  - path: publiccode.yml
+                    rawBlob: |
+                      publiccodeYmlVersion: '0.2'
+                      name: 'Project 1.3'
+                      url: 'https://example.de/arbitrary-too'
+                      categories:
+                        - data-analytics
+                      description:
+                        de:
+                          genericName: '[DE] Group1: Project 3: Generic name'
+                          documentation: https://example.com/group1/project-1-3/docs.md
+                          shortDescription: '[DE] Group1: Project 3: Short description'
+                          longDescription: '[DE] Group1: Project 3: Long description'
+                          features:
+                            - expensive
+                      developmentStatus: concept
+                      intendedAudience:
+                        countries:
+                          - de
+                      legal:
+                        license: EUPL-1.2
+                      localisation:
+                        availableLanguages:
+                          - de
+                        localisationReady: true
+                      maintenance:
+                        contacts:
+                            - name: Jane Roe
+                        type: internal
+                      platforms:
+                        - web
+                      softwareType: standalone/desktop
+
+'limited.self-hosted.gitlab.example.com group2':
+  data:
+    group:
+      projects:
+        pageInfo:
+          hasNextPage: false
+          endCursor: baz
+        nodes:
+
+          # Valid and requested.
+          - path: project-2-1
+            id: gid://gitlab/Project/21
+            description: 'Group 2: Project 1: description'
+            archived: false
+            forksCount: 209
+            starCount: 229
+            openIssuesCount: 249
+            openMergeRequestsCount: 7
+            releases:
+              nodes:
+                - tagName: '1.12.0-beta2'
+                  createdAt: '2011-12-31'
+            repository:
+              rootRef: branch-project-2-1
+              blobs:
+                nodes:
+                  - path: publiccode.yml
+                    rawBlob: |-
+                      publiccodeYmlVersion: '0.2'
+                      name: 'Project 2.1'
+                      applicationSuite: Suite1
+                      url: https://limited.self-hosted.gitlab.example.com/as-you-like
+                      releaseDate: '2020-07-19'
+                      softwareVersion: 7.0.1
+                      developmentStatus: beta
+                      softwareType: standalone/iot
+                      platforms:
+                        - linux
+                      usedBy:
+                        - Deplorables
+                      categories:
+                        - nothing
+                      maintenance:
+                        type: community
+                        contacts:
+                          - name: Big Brother
+                            email: bbrother@example.com
+                            phone: '+000000000'
+                      legal:
+                        license: MIT
+                        mainCopyrightOwner: Sin City
+                        repoOwner: Sin City
+                      localisation:
+                        localisationReady: false
+                        availableLanguages:
+                          - de
+                      description:
+                        de:
+                          genericName: '[DE] Group2: Project 1: Generic name'
+                          documentation: https://example.com/group2/project-2-1/docs.md
+                          shortDescription: '[DE] Group2: Project 1: Short description'
+                          longDescription: '[DE] Group2: Project 1: Long description'
+                          features:
+                            - whatever
+                            - other
+
+          # Valid but not requested.
+          - path: project-2-2
+            id: gid://gitlab/Project22
+            description: 'Group 2: Project 2: description'
+            archived: false
+            forksCount: 210
+            starCount: 230
+            openIssuesCount: 250
+            openMergeRequestsCount: 1
+            releases:
+              nodes: []
+            repository:
+              rootRef: main
+              blobs:
+                nodes:
+                  - path: publiccode.yml
+                    rawBlob: |-
+                      publiccodeYmlVersion: '0.2'
+                      name: 'Project 2.2'
+                      url: https://limited.self-hosted.gitlab.example.com/as-you-like-it
+                      releaseDate: '2009-08-01'
+                      softwareVersion: 6.6.5
+                      developmentStatus: beta
+                      softwareType: standalone/iot
+                      platforms:
+                        - linux
+                      categories:
+                        - nothing
+                      maintenance:
+                        type: community
+                        contacts:
+                          - name: Big Brother
+                            email: bbrother@example.com
+                            phone: '+000000000'
+                      legal:
+                        license: MIT
+                      localisation:
+                        localisationReady: false
+                        availableLanguages:
+                          - de
+                      description:
+                        de:
+                          genericName: '[DE] Group2: Project 2: Generic name'
+                          documentation: https://example.com/group2/project-2-2/docs.md
+                          shortDescription: '[DE] Group2: Project 2: Short description'
+                          longDescription: '[DE] Group2: Project 2: Long description'
+                          features:
+                            - other
+
+'limited.self-hosted.gitlab.example.com user1/project1':
+  data:
+    project:
+      path: project-1
+      id: gid://gitlab/Project/1
+      description: 'User 1: Project 1: description'
+      archived: false
+      forksCount: 211
+      starCount: 231
+      openIssuesCount: 251
+      openMergeRequestsCount: 1
+      releases:
+        nodes:
+          - tagName: '1.0.x-dev'
+            createdAt: '2020-10-22'
+      repository:
+        rootRef: branch-project-1
+        blobs:
+          nodes:
+            - path: publiccode.yml
+              rawBlob: |-
+                publiccodeYmlVersion: '0.2'
+                name: 'Project 1'
+                applicationSuite: Suite2
+                url: https://limited.self-hosted.gitlab.example.com/user/wrong-url
+                releaseDate: '2010-02-18'
+                softwareVersion: 7.0.1-beta2
+                developmentStatus: stable
+                softwareType: standalone/other
+                platforms:
+                  - android
+                categories:
+                  - data-collection
+                maintenance:
+                  type: internal
+                  contacts:
+                    - name: Still The Big Brother
+                      email: bbrother@example.com
+                      phone: '+000000000'
+                legal:
+                  license: MIT
+                localisation:
+                  localisationReady: false
+                  availableLanguages:
+                    - de
+                description:
+                  de:
+                    genericName: '[DE] User 1: Project 1: Generic name'
+                    documentation: https://example.com/group1/project-1/docs.md
+                    shortDescription: '[DE] User 1: Project 1: Short description'
+                    longDescription: '[DE] User 1: Project 1: Long description'
+                    features:
+                      - nada
+
+'limited.self-hosted.gitlab.example.com null':
+  data:
+    group: null
+
+'wrong.self-hosted.gitlab.example.com': |
+  <!DOCTYPE html>
+  <html lang="en">
+    <head prefix="og: http://ogp.me/ns#">
+     <meta charset="utf-8">
+     <title>Foo</title>
+    </head>
+    <body>
+      <p>Bar Baz</p>
+    </body>
+  </html>

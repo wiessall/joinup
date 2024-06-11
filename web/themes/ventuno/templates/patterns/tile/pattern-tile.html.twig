@@ -21,6 +21,7 @@
     - badges (array) (default: [])
     - extra_data (array of objects) (default: [])
     - bundle (object) (default: {})
+    - indicators (array) (default: [])
   #}
 
   {% set _horizontal = horizontal|default(false) %}
@@ -37,6 +38,7 @@
   {% set _badges = badges|default([]) %}
   {% set _extra_data = extra_data|default([]) %}
   {% set _bundle = bundle|default({}) %}
+  {% set _indicators = indicators|default([]) %}
 
   {{ attach_library('ventuno/tile') }}
 
@@ -71,7 +73,7 @@
       </figure>
       <div class="tile__body d-flex flex-column justify-content-between{% if _highlighted is not empty %} position-relative{% endif %}">
         {% if _highlighted.text is not empty %}
-          <div class="tile__standout-info position-absolute d-flex align-items-center bg-brand rounded text-white fw-bold px-2 py-1">
+          <div class="tile__standout-info position-absolute bg-brand rounded text-white fw-bold px-2 py-1">
             {% if _highlighted.icon is not empty %}
               <svg class="tile__standout-info-icon bi icon--xs me-1">
                 <use xlink:href="{{ bcl_icon_path }}#{{ _highlighted.icon }}"></use>
@@ -111,6 +113,13 @@
                 rounded_pill: true,
                 attributes: create_attribute().addClass(['fs-sm', 'me-1', 'mb-1']),
               } only %}
+            {% endfor %}
+          </div>
+        {%- endif -%}
+        {%- if _indicators is not empty and _indicators is iterable -%}
+          <div class="mt-2 d-flex flex-wrap">
+            {% for _indicator in _indicators %}
+              {{ _indicator }}
             {% endfor %}
           </div>
         {%- endif -%}

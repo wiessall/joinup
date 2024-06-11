@@ -55,6 +55,7 @@ drupal:
         - Memcache
         - Custom queue services
         - Monolog
+        - EU OSS Catalogue
         - Stage file proxy
       site-clean:
         - Main settings
@@ -75,6 +76,7 @@ drupal:
         - Memcache
         - Custom queue services
         - Monolog
+        - EU OSS Catalogue
       behat:
         - Main settings
         - Databases
@@ -148,6 +150,7 @@ drupal:
         - Dashboard agent
         - Varnish purge
         - Reverse proxy
+        - EU OSS Catalogue
       acc-override:
         - Stage file proxy
     header: |
@@ -360,6 +363,8 @@ drupal:
       Reverse proxy: |
         $settings['reverse_proxy'] = (bool) getenv('DRUPAL_REVERSE_PROXY_ENABLE');
         $settings['reverse_proxy_addresses'] = array_filter(explode(',', (string) getenv('DRUPAL_REVERSE_PROXY_ADDRESSES')));
+      EU OSS Catalogue: |
+        $settings['eu_oss_catalogue']['platform_github']['access_token'] = getenv('JOINUP_GITHUB_TOKEN');
       Stage file proxy: |
         $config['stage_file_proxy.settings']['hotlink'] = TRUE;
         $config['stage_file_proxy.settings']['origin'] = 'https://joinup.ec.europa.eu';

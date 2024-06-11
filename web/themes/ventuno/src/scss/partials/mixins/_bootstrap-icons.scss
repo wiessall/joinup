@@ -1,12 +1,12 @@
 /**
 * Mixin to generate bootstrap icon
 */
-@mixin get-bootstrap-icon($icon-name, $icon-color: currentColor) {
+@mixin get-bootstrap-icon($icon-name, $icon-color: currentColor, $size: 1em) {
   display: inline-block;
-  width: 1em;
-  height: 1em;
+  width: $size;
+  height: $size;
   content: "";
-  vertical-align: -.125em;
+  vertical-align: $size * -0.16;
   background-color: $icon-color;
   mask-image: url("#{$bootstrap-icons-path}/#{$icon-name}.svg");
   mask-repeat: no-repeat;
