@@ -115,11 +115,7 @@
             <td style="width: 20px;" class="d-none d-sm-block">&nbsp;</td>
           {% endif %}
           <td style="vertical-align: top;">
-            {% if node.hasField('abstract') %}
-              {{ content.abstract }}
-            {% else %}
-              {{ content.body }}
-            {% endif %}
+            {{ content.abstract ?? content.body }}
           </td>
         </tr>
         </tbody>
