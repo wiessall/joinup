@@ -22,7 +22,7 @@ class VocabularyFixturesHelper implements VocabularyFixturesHelperInterface {
    *   The SPARQL connection service.
    */
   public function __construct(
-    protected ConnectionInterface $connection
+    protected ConnectionInterface $connection,
   ) {}
 
   /**
