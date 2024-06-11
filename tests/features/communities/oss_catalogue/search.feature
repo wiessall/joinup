@@ -58,8 +58,6 @@ Feature: OSS catalogue search
 
     # Check tiles.
     And I should see the "Django-MDQ" tile
-    And I should see the text "Release date:" in the "Django-MDQ" tile
-    And I should see the text "02/04/2022" in the "Django-MDQ" tile
     And I should see the text "1.0-beta" in the "Django-MDQ" tile
     And I should see the image "c3e7768d02acad9995a74bb403cfaeae.png.webp"
     And I should see the "INGV - QuakeML to NonLinLoc PHS" tile
@@ -72,7 +70,6 @@ Feature: OSS catalogue search
     And I should see the text "0.1-alpha" in the "Software Registry" tile
     And I should see the image "2875501db3e1dc4a54df527a59964d40.png.webp"
     And I should see the "Immuni" tile
-    And I should not see the text "Release date:" in the "Immuni" tile
 
     # Check facets headings.
     And I see the following headings:
