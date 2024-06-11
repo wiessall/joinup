@@ -34,6 +34,8 @@ dependencies:
     - field_delimiter
     - field_fallback_formatter
     - field_formatter_range
+    - joinup_core
+    - joinup_html_stripper
     - layout_builder
     - responsive_image
     - template_suggestion

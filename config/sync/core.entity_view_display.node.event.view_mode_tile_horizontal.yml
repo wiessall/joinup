@@ -32,6 +32,8 @@ dependencies:
   module:
     - datetime_range
     - field_fallback_formatter
+    - joinup_core
+    - joinup_html_stripper
     - layout_builder
     - responsive_image
     - template_suggestion

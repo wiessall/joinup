@@ -30,6 +30,7 @@ dependencies:
     - node.type.event
   module:
     - field_fallback_formatter
+    - joinup_core
     - options
     - template_suggestion
     - user

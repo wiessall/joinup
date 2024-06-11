@@ -31,7 +31,9 @@ dependencies:
     - node.type.event
   module:
     - datetime_range
+    - entity_reference_revisions
     - field_fallback_formatter
+    - joinup_html_stripper
     - svg_image
     - template_suggestion
     - user
