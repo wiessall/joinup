@@ -1,0 +1,97 @@
+diff --git a/file_url.libraries.yml b/file_url.libraries.yml
+deleted file mode 100644
+index 22e65db340ec64cb95036a6321a537381992427d..0000000000000000000000000000000000000000
+--- a/file_url.libraries.yml
++++ /dev/null
+@@ -1,7 +0,0 @@
+-remote_url:
+-  version: VERSION
+-  js:
+-    js/remote_url.js: {}
+-  dependencies:
+-    - core/drupal
+-    - core/once
+diff --git a/js/remote_url.js b/js/remote_url.js
+deleted file mode 100644
+index ca15f06535f67b6df3c17dd9aa17c3a26205b2cf..0000000000000000000000000000000000000000
+--- a/js/remote_url.js
++++ /dev/null
+@@ -1,33 +0,0 @@
+-/**
+- * @file
+- * Improves the remote URL text field.
+- */
+-
+-(function (Drupal) {
+-
+-  /**
+-   * Attach behaviors to the file URL auto add URL.
+-   *
+-   * @type {Drupal~behavior}
+-   *
+-   * @prop {Drupal~behaviorAttach} attach
+-   *   Attaches triggers for the remote URL addition.
+-   * @prop {Drupal~behaviorDetach} detach
+-   *   Detaches triggers for the remote URL addition.
+-   */
+-  Drupal.behaviors.fileUrlRemoteUrlAdd = {
+-    attach(context) {
+-      once("auto-remote-url-add", "input[data-drupal-file-url-remote]", context).forEach((element) => {
+-        element.addEventListener('change', Drupal.file.triggerUploadButton);
+-      });
+-    },
+-    detach(context, setting, trigger) {
+-      if (trigger === 'unload') {
+-        once.remove("auto-remote-url-add", "input[data-drupal-file-url-remote]").forEach((element) => {
+-          element.removeEventListener('change', Drupal.file.triggerUploadButton);
+-        });
+-      }
+-    }
+-  };
+-
+-})(Drupal);
+diff --git a/src/Plugin/Field/FieldWidget/FileUrlWidget.php b/src/Plugin/Field/FieldWidget/FileUrlWidget.php
+index a7397749a5c0ffcf540150fba80faae5fc35c054..3ff81bfb0bf2c93b35d8a0ab4d26e4be364bf8aa 100644
+--- a/src/Plugin/Field/FieldWidget/FileUrlWidget.php
++++ b/src/Plugin/Field/FieldWidget/FileUrlWidget.php
+@@ -152,18 +152,19 @@ class FileUrlWidget extends FileWidget {
+       '#default_value' => $file_url_remote,
+       // Only show this field when the 'remote' radio is selected.
+       '#states' => ['visible' => $remote_visible],
+-      '#attached' => [
+-        // Load the JS functionality that triggers automatically the 'Upload'
+-        // button when a remote URL is entered.
+-        'library' => ['file_url/remote_url'],
+-      ],
+-      '#attributes' => [
+-        // Used by 'file_url/remote_url' library identify the text field.
+-        'data-drupal-file-url-remote' => TRUE,
+-      ],
+       '#access' => $access_file_url_elements,
+       '#weight' => 15,
+     ];
++    $element['file_url_remote_add'] = [
++      '#type' => 'submit',
++      '#value' => t('Add URL'),
++      '#limit_validation_errors' => $element['upload_button']['#limit_validation_errors'],
++      '#ajax' => $element['upload_button']['#ajax'],
++      '#submit' => $element['upload_button']['#submit'],
++      '#states' => ['visible' => $remote_visible],
++      '#access' => $access_file_url_elements,
++      '#weight' => 16,
++    ];
+ 
+     // Only show this field when the 'upload' radio is selected. Add also a
+     // wrapper around file upload, so states knows what field to target.
+diff --git a/tests/src/FunctionalJavascript/FileUrlWidgetTest.php b/tests/src/FunctionalJavascript/FileUrlWidgetTest.php
+index fbf2987dbe3042b609dacb0fd462e3be37106884..63183e7f0068b08c303e0e638807c490d0f29536 100644
+--- a/tests/src/FunctionalJavascript/FileUrlWidgetTest.php
++++ b/tests/src/FunctionalJavascript/FileUrlWidgetTest.php
+@@ -225,6 +225,7 @@ class FileUrlWidgetTest extends WebDriverTestBase {
+     }
+     elseif ($file_mode === 'remote') {
+       $wrapper->fillField('Remote URL', $value);
++      $wrapper->find('xpath', "//input[@type='submit' and @value='Add URL']")->click();
+       $link = $value;
+     }
+     // Check that the URL has been added to the field item list.

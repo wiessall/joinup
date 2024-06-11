@@ -1,0 +1,81 @@
+diff --git a/src/Plugin/Field/FieldWidget/FileUrlWidget.php b/src/Plugin/Field/FieldWidget/FileUrlWidget.php
+index a7397749a5c0ffcf540150fba80faae5fc35c054..4ca8cd96d89351186642c7464f2e4b6466f6b317 100644
+--- a/src/Plugin/Field/FieldWidget/FileUrlWidget.php
++++ b/src/Plugin/Field/FieldWidget/FileUrlWidget.php
+@@ -218,47 +218,44 @@ class FileUrlWidget extends FileWidget {
+    * {@inheritdoc}
+    */
+   public static function value($element, $input, FormStateInterface $form_state) {
+-    $file_url_remote = $file_url_type = NULL;
+-
+-    if (!empty($element['#default_value']['fids'])) {
+-      $url = $element['#default_value']['fids'][0];
+-      $file = FileUrlHandler::urlToFile($url);
+-      if (!FileUrlHandler::isRemote($file)) {
+-        // Normalise managed file IDs from URLs to numeric IDs before calling
+-        // the parent method.
+-        if ($file instanceof FileInterface) {
+-          $element['#default_value']['fids'] = [$file->id()];
+-        }
+-        $file_url_type = 'upload';
++    $return = parent::value($element, $input, $form_state);
++
++    // Handle default values.
++    $fid = $element['#default_value']['fids'][0] ?? NULL;
++    if (!empty($fid)) {
++      $file = FileUrlHandler::urlToFile($fid);
++      if ($file instanceof RemoteFile) {
++        $return['file_url_type'] = static::TYPE_REMOTE;
++        $return['file_url_remote'] = $fid;
++        $return['fids'] = [$file->id()];
+       }
+-      else {
+-        $file_url_remote = $url;
+-        $file_url_type = 'remote';
++      elseif ($file instanceof FileInterface) {
++        $return['file_url_type'] = static::TYPE_UPLOAD;
++        $return['file_url_remote'] = '';
++        $return['fids'] = [$file->id()];
+       }
+     }
+ 
+-    $return = parent::value($element, $input, $form_state);
+-
+-    if ($input !== FALSE) {
+-      if (isset($input['file_url_type']) && $input['file_url_type'] === static::TYPE_REMOTE) {
+-        if (!empty($input['file_url_remote']) && !$input['fids']) {
+-          $file_url_remote = $input['file_url_remote'];
++    // Handle input values.
++    if ($input && isset($input['file_url_type'])) {
++      if ($input['file_url_type'] === static::TYPE_UPLOAD) {
++        // Clear the remote URL if upload is given.
++        $return['file_url_remote'] = '';
++      }
++      elseif ($input['file_url_type'] === static::TYPE_REMOTE) {
++        // Add the URL to FIDs, if valid.
++        $file_url_remote = $input['file_url_remote'] ?? NULL;
++        if (!empty($file_url_remote) && UrlHelper::isValid($file_url_remote, TRUE)) {
++          $return['fids'] = [$file_url_remote];
+         }
+       }
+     }
+ 
+-    if (!empty($file_url_remote)) {
+-      // The parent widget is doing this but only for managed files.
+-      $return['fids'] = [$file_url_remote];
+-    }
+-
+     // Provide file URL parameters as part of the value.
+-    if (empty($return['file_url_remote'])) {
+-      $return['file_url_remote'] = $file_url_remote;
+-    }
+-    if (empty($return['file_url_type'])) {
+-      $return['file_url_type'] = $file_url_type;
+-    }
++    $return += [
++      'file_url_remote' => '',
++      'file_url_type' => '',
++    ];
+ 
+     return $return;
+   }
