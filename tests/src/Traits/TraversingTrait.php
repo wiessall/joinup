@@ -398,10 +398,6 @@ trait TraversingTrait {
       'solution topic' => 'solution_topic',
       'spatial coverage' => 'spatial_coverage',
       'topic' => 'topic',
-      'OSS category' => 'oss_category',
-      'OSS intended audience' => 'oss_scope',
-      'OSS development status' => 'oss_development_status',
-      'OSS catalog' => 'oss_source',
     ];
 
     if (!isset($mappings[$alias])) {
@@ -572,7 +568,6 @@ trait TraversingTrait {
       // The various search input fields.
       [
         'names' => [
-          'search',
           'search bar',
           'search bars',
           'search field',
@@ -580,15 +575,6 @@ trait TraversingTrait {
         ],
         'selectors' => [
           ['css', 'input[name="keys"]'],
-        ],
-      ],
-      [
-        'names' => [
-          'oss search',
-          'oss search bar',
-        ],
-        'selectors' => [
-          ['css', 'input[name="oss_keys"]'],
         ],
       ],
     ];
