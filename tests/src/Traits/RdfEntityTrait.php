@@ -14,29 +14,6 @@ use Drupal\rdf_entity\RdfInterface;
 trait RdfEntityTrait {
 
   /**
-   * Checks the number of available RDF entities filtered by bundle.
-   *
-   * @param int $number
-   *   The expected number of RDF entities.
-   * @param string $type
-   *   The RDF type.
-   *
-   * @throws \Exception
-   *   Thrown when the number of RDF entities does not
-   *   match the expectation.
-   */
-  protected function assertRdfEntityCount(int $number, string $type): void {
-    $actual = \Drupal::entityQuery('rdf_entity')
-      ->accessCheck(FALSE)
-      ->condition('rid', $type)
-      ->count()
-      ->execute();
-    if ($actual != $number) {
-      throw new \Exception("Wrong number of $type entities. Expected number: $number, actual number: $actual.");
-    }
-  }
-
-  /**
    * Parses human readable fields for RDF entities.
    *
    * This is a convenient wrapper around parseEntityFields() that handles the

@@ -42,10 +42,10 @@ Feature:
     Given collection:
       | title | Share collection |
       | state | published        |
-    And contact:
-      | name  | Somebody             |
-      | email | somebody@example.com |
-    And owner:
+    And contact_information content:
+      | name    | email                |
+      | Somebody | somebody@example.com |
+    And owner content:
       | name       |
       | Some owner |
     And solution:

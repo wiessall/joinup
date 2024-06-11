@@ -2,12 +2,12 @@
 Feature: Test SVG attachments.
 
   Background:
-    Given the following owner:
-      | name        | type    |
-      | SVG company | Company |
-    And the following contact:
-      | name  | SVG contact     |
-      | email | svg@example.com |
+    Given owner content:
+      | name        | owner type |
+      | SVG company | Company    |
+    And contact_information content:
+      | name        | email           |
+      | SVG contact | svg@example.com |
     And collections:
       | title | logo     | abstract | description | content creation         | moderation | topic             | owner       | contact information | state     |
       | SVG   | logo.png | Test     | Test        | facilitators and authors | yes        | Supplier exchange | SVG company | SVG contact         | published |
@@ -55,5 +55,5 @@ Feature: Test SVG attachments.
     And I press "Publish"
     Then I should see the heading "SVG discussion"
 
-     When I go to the discussions page of "SVG"
+    When I go to the discussions page of "SVG"
     Then I should see the image "simple.svg"

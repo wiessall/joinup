@@ -1,0 +1,41 @@
+uuid: 9e51437f-d047-46ba-87ad-7ebc2e51ae5a
+langcode: en
+status: false
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.owner.field_state
+    - field.field.node.owner.owner_type
+    - node.type.owner
+  module:
+    - link
+    - user
+id: node.owner.teaser
+targetEntityType: node
+bundle: owner
+mode: teaser
+content:
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+  report:
+    type: link
+    label: hidden
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    weight: 50
+    region: content
+hidden:
+  field_state: true
+  langcode: true
+  owner_type: true
+  published_at: true
+  search_api_excerpt: true
+  uri: true

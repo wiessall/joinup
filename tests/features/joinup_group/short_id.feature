@@ -8,9 +8,9 @@ Feature:
     Given the following collections:
       | title              | short ID | state     |
       | Scientific Studies | sst-2020 | published |
-    And owner:
-      | name                 | type    |
-      | Organisation example | Company |
+    And owner content:
+      | name                 | owner type |
+      | Organisation example | Company    |
 
     When I am logged in as an "authenticated user"
     And I go to the propose collection form
@@ -73,9 +73,9 @@ Feature:
     And solutions:
       | title                         | short ID | state     | collection         |
       | Who knows what a solution is? | wkwasi   | published | Scientific Studies |
-    And owner:
-      | name                 | type    |
-      | Organisation example | Company |
+    And owner content:
+      | name                 | owner type |
+      | Organisation example | Company    |
 
     When I am logged in as a facilitator of the "Scientific Studies" collection
     And I go to the homepage of the "Scientific Studies" collection
