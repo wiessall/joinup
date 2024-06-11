@@ -24,6 +24,7 @@ dependencies:
   module:
     - datetime
     - field_fallback_formatter
+    - joinup_core
     - svg_image
     - template_suggestion
     - user
