@@ -64,13 +64,11 @@ class DistributionContext extends RawDrupalContext {
     }
 
     // The Access URL field is either an external URI, or file upload.
-    if (!empty($node->access_url)) {
-      global $base_url;
-      foreach ($node->access_url as $key => $url) {
-        if (!UrlHelper::isValid($url, TRUE) || !UrlHelper::isExternal($url) || UrlHelper::externalIsLocal($url, $base_url)) {
-          // It's a local file to be uploaded.
-          $node->access_url[$key] = FileUrlHandler::fileToUrl($this->createFile($url));
-        }
+    if (!empty($node->{'access url'})) {
+      // The access URL can be a file name or a remote URL.
+      if (filter_var($node->{'access url'}, FILTER_VALIDATE_URL) === FALSE) {
+        // It's a local file to be uploaded.
+        $node->{'access url'} = FileUrlHandler::fileToUrl($this->createFile($node->{'access url'}));
       }
     }
 
@@ -314,7 +312,6 @@ class DistributionContext extends RawDrupalContext {
    */
   public function downloadEvents(TableNode $table): void {
     foreach ($table->getColumnsHash() as $row) {
-      /** @var \Drupal\asset_distribution\Entity\AssetDistributionInterface $distribution */
       $distribution = $this->getEntityByLabel('node', $row['distribution'], 'distribution');
       $file = FileUrlHandler::urlToFile($distribution->get('access_url')->target_id);
       $account = \Drupal::service('email.validator')->isValid($row['user']) ? new AnonymousUserSession() : user_load_by_name($row['user']);
