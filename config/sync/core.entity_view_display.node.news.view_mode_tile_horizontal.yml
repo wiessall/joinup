@@ -24,6 +24,7 @@ dependencies:
   module:
     - field_fallback_formatter
     - field_group
+    - joinup_core
     - layout_builder
     - responsive_image
     - template_suggestion
