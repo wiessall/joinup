@@ -168,6 +168,30 @@ Project 1.2:
       - 'Comune Di Male'
       - 'comune di male'
 
+Project 1.4:
+  de:
+    langcode: de
+    default_langcode: '0'
+    oss_categories:
+      - data-collection
+      - data-analytics
+    oss_git_url: https://limited.self-hosted.gitlab.example.com/group1/project-1-4
+    oss_git_description: 'Group 1: Project 4: description'
+    oss_default_branch: branch-project-1-4
+    oss_software_version: '220.0.9'
+    oss_release_date: '2013-08-19'
+    oss_platform_reference: gid://gitlab/Project/4
+    oss_git_forks: 209
+    oss_git_stars: 229
+    oss_git_open_issues: 249
+    oss_publiccode_yml_version: '0.2'
+    oss_documentation: https://example.com/group1/project-1-4/de/docs.md
+    oss_features:
+      - '[DE] feat 4'
+    oss_long_description: '[DE] Group1: Project 4: Long description'
+    oss_short_description: '[DE] Group1: Project 4: Short description'
+    oss_git_open_pull_requests: 9
+
 GitHub solution 2:
   en:
     langcode: en

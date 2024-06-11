@@ -464,6 +464,9 @@
                 "Radios or Checkboxes inside Composite not saved @see https://www.drupal.org/project/webform/issues/3216923": "resources/patch/php/drupal/webform/368.diff",
                 "Webform might create invalid link renderable arrays on submission list. @see https://www.drupal.org/project/webform/issues/3441600": "resources/patch/php/drupal/webform/3441600.patch"
             },
+            "gitonomy/gitlib": {
+                "Edge case: Empty message in the first commit @see https://github.com/gitonomy/gitlib/pull/217": "resources/patch/gitonomy/gitlib/217.diff"
+            },
             "m4tthumphrey/php-gitlab-api": {
                 "GraphQL API @see https://github.com/GitLabPHP/Client/issues/766": "resources/patch/php/drupal/m4tthumphrey/php-gitlab-api/772.diff",
                 "Add support for prefixed URIs on base path @see https://github.com/GitLabPHP/Client/issues/726": "resources/patch/php/drupal/m4tthumphrey/php-gitlab-api/726.diff"

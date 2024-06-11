@@ -28,7 +28,7 @@ class OssSolutionListingPageTest extends FetchTestBase {
    */
   public function setUp(): void {
     parent::setUp();
-    $this->fetchSolutions('developers_italia', 4);
+    $this->fetchSolutions('developers_italia', 5);
   }
 
   /**
@@ -118,6 +118,17 @@ class OssSolutionListingPageTest extends FetchTestBase {
           '[DE] Group1: Project 2: Short description',
           'Developers Italia',
           'EN, DE, IT',
+          'Yes',
+          'No',
+          '',
+        ],
+        [
+          'Project 1.4',
+          'Project 1.4',
+          'https://limited.self-hosted.gitlab.example.com/group1/project-1-4',
+          '[DE] Group1: Project 4: Short description',
+          'Developers Italia',
+          'EN, DE',
           'Yes',
           'No',
           '',

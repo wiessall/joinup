@@ -39,6 +39,7 @@ dependencies:
     - field.field.node.oss_solution.oss_source_hash
     - field.field.node.oss_solution.oss_used_by
     - field.field.node.oss_solution.oss_vitality_index
+    - field.field.node.oss_solution.oss_vitality_index_range
     - node.type.oss_solution
   module:
     - datetime
@@ -503,3 +504,4 @@ content:
     third_party_settings: {  }
 hidden:
   current_workflow_state: true
+  oss_vitality_index_range: true

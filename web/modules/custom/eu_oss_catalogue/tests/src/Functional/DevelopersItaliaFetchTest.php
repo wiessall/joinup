@@ -29,7 +29,7 @@ class DevelopersItaliaFetchTest extends FetchTestBase {
    * @covers
    */
   public function testDevelopersItalia(): void {
-    $this->fetchSolutions('developers_italia', 4);
+    $this->fetchSolutions('developers_italia', 5);
 
     $this->assertOssSolution('GitHub solution 1', 'en');
     $this->assertOssContractor('ACME Ltd');
@@ -43,6 +43,7 @@ class DevelopersItaliaFetchTest extends FetchTestBase {
     $this->assertOssContact('John Doe');
     $this->assertOssContact('Jane Roe');
 
+    $this->assertOssSolution('Project 1.4', 'de');
     $this->assertOssSolution('Project 1', 'de');
 
     $this->assertCount(
@@ -69,7 +70,7 @@ class DevelopersItaliaFetchTest extends FetchTestBase {
     $solutionInitiated = $this->getNodeByTitle('GitHub solution 1');
 
     // Re-run the process and update one solution from a new source-provider.
-    $this->fetchSolutions('testing_provider', 4);
+    $this->fetchSolutions('testing_provider', 5);
 
     $this->assertFalse($this->getNodeByTitle('GitHub solution 1'));
     $updatedSolution = $this->getNodeByTitle('GitHub solution 1 (updated)', TRUE);
@@ -122,7 +123,7 @@ class DevelopersItaliaFetchTest extends FetchTestBase {
     $this->assertTrue($archivedNode->get('oss_source')->isEmpty());
 
     // Perform sync.
-    $this->fetchSolutions('developers_italia', 4);
+    $this->fetchSolutions('developers_italia', 5);
 
     // Check if the node was unarchived.
     $updatedSolution = $this->getNodeByTitle('GitHub solution 1', TRUE);
@@ -148,7 +149,7 @@ class DevelopersItaliaFetchTest extends FetchTestBase {
 
     // Import the solutions from developers_italia plugin so that
     // the "Project 1.1" has 2 sources.
-    $this->fetchSolutions('developers_italia', 4);
+    $this->fetchSolutions('developers_italia', 5);
 
     $solution2 = $this->getNodeByTitle('Project 1.1', TRUE);
     $this->assertSame(2, $solution2->get('oss_source')->count());
@@ -170,7 +171,7 @@ class DevelopersItaliaFetchTest extends FetchTestBase {
   public function testMarkDownResolver(): void {
     $entity_view_builder = $this->container->get('entity_type.manager')->getViewBuilder('node');
     $renderer = $this->container->get('renderer');
-    $this->fetchSolutions('developers_italia', 4);
+    $this->fetchSolutions('developers_italia', 5);
 
     // The fact that the solution is found means that the title was cleaned of
     // extra spaces.

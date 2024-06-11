@@ -448,6 +448,21 @@
                         - web
                       softwareType: standalone/desktop
 
+          # Project without publiccode.yml.
+          - path: project-1-4
+            id: gid://gitlab/Project/4
+            description: 'Group 1: Project 4: description'
+            archived: false
+            forksCount: 209
+            starCount: 229
+            openIssuesCount: 249
+            openMergeRequestsCount: 9
+            releases:
+              nodes:
+                - tagName: '220.0.9'
+                  createdAt: '2013-08-19'
+            repository:
+              rootRef: branch-project-1-4
 'limited.self-hosted.gitlab.example.com group2':
   data:
     group:

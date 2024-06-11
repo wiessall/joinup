@@ -1,0 +1,14 @@
+services:
+  eu_oss_vitality_index.generator:
+    class: Drupal\eu_oss_vitality_index\VitalityIndexGenerator
+    arguments:
+      - '@entity_type.manager'
+      - '@logger.channel.eu_oss_catalogue'
+      - '@file_system'
+      - '@config.factory'
+  eu_oss_vitality_index.queue:
+    class: Drupal\eu_oss_vitality_index\VitalityIndexQueue
+    arguments:
+      - '@entity_type.manager'
+      - '@logger.channel.eu_oss_catalogue'
+      - '@queue'

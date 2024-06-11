@@ -39,6 +39,7 @@ dependencies:
     - field.field.node.oss_solution.oss_source_hash
     - field.field.node.oss_solution.oss_used_by
     - field.field.node.oss_solution.oss_vitality_index
+    - field.field.node.oss_solution.oss_vitality_index_range
     - node.type.oss_solution
   module:
     - custom_markup_block
@@ -81,7 +82,7 @@ third_party_settings:
                 third_party_settings:
                   template_suggestion:
                     template_suggestion: ''
-            weight: 2
+            weight: 4
             additional: {  }
           613fb544-14e1-441e-bb81-629db2f729a3:
             uuid: 613fb544-14e1-441e-bb81-629db2f729a3
@@ -107,7 +108,7 @@ third_party_settings:
                 third_party_settings:
                   template_suggestion:
                     template_suggestion: ''
-            weight: 3
+            weight: 5
             additional: {  }
           f6501de4-478f-49fe-adbb-2e541ba9d0c3:
             uuid: f6501de4-478f-49fe-adbb-2e541ba9d0c3
@@ -133,7 +134,7 @@ third_party_settings:
                 third_party_settings:
                   template_suggestion:
                     template_suggestion: ''
-            weight: 4
+            weight: 6
             additional: {  }
           592281dd-6140-43f3-9ec5-9c88b1db0477:
             uuid: 592281dd-6140-43f3-9ec5-9c88b1db0477
@@ -308,7 +309,7 @@ third_party_settings:
               markup:
                 value: '<h2>Quick links</h2>'
                 format: content_editor
-            weight: 1
+            weight: 3
             additional: {  }
           7e8557ef-a668-4f97-84ab-436bdd1e1a94:
             uuid: 7e8557ef-a668-4f97-84ab-436bdd1e1a94
@@ -417,6 +418,29 @@ third_party_settings:
                   template_suggestion:
                     template_suggestion: git_indicator
             weight: 3
+            additional: {  }
+          b99c2317-850f-40f9-a4f5-a37e7df86571:
+            uuid: b99c2317-850f-40f9-a4f5-a37e7df86571
+            region: aside
+            configuration:
+              id: 'field_block:node:oss_solution:oss_vitality_index_range'
+              label: 'Vitality index range'
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: vitality_index_chart
+                label: hidden
+                settings:
+                  info:
+                    value: '<p>The vitality index indicates the degree of activity carried out in the last time period on each OSS Solution repository indexed in the Catalogue.</p><p>It reproduces exactly (in its definition and calculation) that envisaged by the guidelines on acquisition and reuse of software for Public Administrations defined by the <a href="https://www.agid.gov.it/it/agenzia" target="_blank">Agency for Digital Italy - AGID</a>, and currently officially implemented within the <a href="https://developers.italia.it/en/software" target="blank">Developers.Italia OSS Solutions Catalogue</a>.</p><p>This vitality index is calculated on the time window of the last 60 days (and updated once a week within this catalogue) taking into consideration the following four categories:</p><ul><li><strong>Code activity</strong>: the number of commits and merges per day,</li><li><strong>Release history</strong>: the number of releases per day,</li><li><strong>User community</strong>: the number of unique authors,</li><li><strong>Longevity</strong>: the age of the project,</li></ul><p>The ranges of each measurement can be found in the file <a href="https://github.com/italia/publiccode-crawler/blob/main/vitality-ranges.yml" target="blank">vitality-ranges.yml</a>.</p>'
+                    format: text_html
+                third_party_settings:
+                  template_suggestion:
+                    template_suggestion: ''
+            weight: 1
             additional: {  }
         third_party_settings: {  }
       -
@@ -884,6 +908,7 @@ hidden:
   oss_source_hash: true
   oss_used_by: true
   oss_vitality_index: true
+  oss_vitality_index_range: true
   published_at: true
   report: true
   search_api_excerpt: true

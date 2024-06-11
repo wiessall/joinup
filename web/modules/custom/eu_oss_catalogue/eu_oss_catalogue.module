@@ -119,7 +119,7 @@ function eu_oss_catalogue_entity_bundle_field_info_alter(array &$fields, EntityT
     $computedName = preg_replace('#^oss_(.*)$#', 'oss__$1', $originalFieldName);
 
     // Field config labels have the " [stored]" suffix, what we remove here.
-    // This original label might be a string or a (translsatable)
+    // This original label might be a string or a (translatable)
     // MarkupInterface.
     $relevantLabel = preg_replace('/ \[stored\]/', '', (string) $fieldDefinition->getLabel());
     $fields[$computedName] = BaseFieldDefinition::createFromFieldStorageDefinition($fieldDefinition->getFieldStorageDefinition())
