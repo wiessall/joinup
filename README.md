@@ -294,6 +294,13 @@ Testing frameworks used by Joinup:
   ddev exec vendor/bin/behat [arguments and options]
   ```
 
+###### Update / post-update / deploy hooks
+
+Tests covering such hooks should be placed under `tests/features/update` and
+features and/or scenarios should be tagged with `@group-clone` and
+`@update:[function]`, where `[function]` is the update hook/function name.
+See `\Drupal\joinup\Context\UpdateContext`.
+
 #### PHPUnit testing
 
 * See https://phpunit.de
