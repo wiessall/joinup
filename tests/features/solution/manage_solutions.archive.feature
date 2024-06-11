@@ -5,15 +5,13 @@ Feature: When a solution is archived then its sub-content also should be archive
     Given the following collection:
       | title | Collection |
       | state | published  |
-    And owner:
-      | name        | type    |
-      | The Company | Company |
-    And contact:
-      | name  | Liam Smith             |
-      | email | liam.smith@example.com |
-    And contact:
-      | name  | Jennifer Unconfirmed       |
-      | email | jennifer.smith@example.com |
+    And owner content:
+      | name        | owner type |
+      | The Company | Company    |
+    And contact_information content:
+      | name                 | email                      |
+      | Liam Smith           | liam.smith@example.com     |
+      | Jennifer Unconfirmed | jennifer.smith@example.com |
     And solution:
       | title               | Solution                         |
       | collection          | Collection                       |

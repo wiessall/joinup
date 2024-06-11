@@ -5,23 +5,26 @@ declare(strict_types=1);
 namespace Drupal\owner\Entity;
 
 use Drupal\joinup_bundle_class\JoinupBundleClassFieldAccessTrait;
+use Drupal\joinup_rdf\Entity\RdfSyncEntityTrait;
 use Drupal\joinup_workflow\EntityWorkflowStateTrait;
+use Drupal\node\Entity\Node;
 use Drupal\rdf_entity\Entity\Rdf;
 use Drupal\sparql_entity_storage\Entity\Query\Sparql\SparqlArg;
 
 /**
  * Bundle class for the 'owner' bundle.
  */
-class Owner extends Rdf implements OwnerInterface {
+class Owner extends Node implements OwnerInterface {
 
   use EntityWorkflowStateTrait;
   use JoinupBundleClassFieldAccessTrait;
+  use RdfSyncEntityTrait;
 
   /**
    * {@inheritdoc}
    */
   public function getWorkflowStateFieldName(): string {
-    return 'field_owner_state';
+    return 'field_state';
   }
 
   /**
@@ -31,9 +34,8 @@ class Owner extends Rdf implements OwnerInterface {
     if (empty($this->id())) {
       return FALSE;
     }
-
     $sparql_endpoint = \Drupal::getContainer()->get('sparql.endpoint');
-    return $sparql_endpoint->query("ASK { ?s ?p " . SparqlArg::uri($this->id()) . " }")->isTrue();
+    return $sparql_endpoint->query("ASK { ?s ?p " . SparqlArg::uri($this->getUri()) . " }")->isTrue();
   }
 
   /**
@@ -47,7 +49,7 @@ class Owner extends Rdf implements OwnerInterface {
     $query = \Drupal::entityQuery('rdf_entity')->accessCheck(FALSE);
     $result = $query
       ->condition('rid', 'collection')
-      ->condition('field_ar_owner', $this->id())
+      ->condition('field_ar_owner', $this->getUri())
       ->execute();
 
     return !empty($result) ? Rdf::loadMultiple($result) : [];
