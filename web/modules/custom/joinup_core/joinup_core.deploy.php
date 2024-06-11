@@ -143,3 +143,10 @@ function joinup_core_deploy_110804(array &$sandbox): string {
 
   return "Processed {$sandbox['progress']} out of {$sandbox['count']} solutions.";
 }
+
+/**
+ * Delete stale page.
+ */
+function joinup_core_deploy_110805(): void {
+  \Drupal::entityTypeManager()->getStorage('node')->load(703013)?->delete();
+}

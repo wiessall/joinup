@@ -186,12 +186,12 @@ Feature: Global search
 
   @javascript
   Scenario: Alphabetical order for the spatial coverage in the search page.
-    Given the following owner:
-      | name              | type    |
-      | Responsible owner | Company |
-    And the following contact:
-      | name  | Go-to contact     |
-      | email | go-to@example.com |
+    Given owner content:
+      | name              | owner type |
+      | Responsible owner | Company    |
+    And contact_information content:
+      | name          | email             |
+      | Go-to contact | go-to@example.com |
     And the following collections:
       | title            | description                                          | abstract                       | state     |
       | Collection alpha | <p>collection <strong>beta</strong> description.</p> | The collection gamma abstract. | published |
@@ -219,12 +219,12 @@ Feature: Global search
     And the "spatial coverage" checkbox facet should allow selecting the following values "Greece (1), Luxembourg (2)"
 
   Scenario: Content can be found with a full-text search.
-    Given the following owner:
-      | name              | type    |
-      | Responsible owner | Company |
-    And the following contact:
-      | name  | Go-to contact     |
-      | email | go-to@example.com |
+    Given owner content:
+      | name              | owner type |
+      | Responsible owner | Company    |
+    And contact_information content:
+      | name          | email             | state     |
+      | Go-to contact | go-to@example.com | validated |
     And the following collections:
       | title            | description                                          | abstract                       | state     |
       | Collection alpha | <p>collection <strong>beta</strong> description.</p> | The collection gamma abstract. | published |
@@ -848,12 +848,12 @@ Feature: Global search
 
   @javascript
   Scenario: Search page - Show the abstract or description in the search results.
-    Given the following owner:
-      | name        | type    |
-      | Renew owner | Company |
-    And the following contact:
-      | name  | Gor-to contact     |
-      | email | gor-to@example.com |
+    Given owner content:
+      | name        | owner type |
+      | Renew owner | Company    |
+    And contact_information content:
+      | name           | email              |
+      | Gor-to contact | gor-to@example.com |
     And the following collections:
       | title            | description                                          | abstract                      | state     |
       | Pull alpha       | <p>collection <strong>pull</strong> description.</p> | The collection pull abstract. | published |
