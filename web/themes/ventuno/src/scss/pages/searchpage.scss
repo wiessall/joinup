@@ -10,7 +10,6 @@
 @import "@openeuropa/bcl-theme-default/src/scss/badge";
 @import "@openeuropa/bcl-theme-default/src/scss/multiselect";
 @import "../components/form";
-@import "../partials/overrides/eu-oss-catalogue";
 
 // Filters
 .joinup-search-filters {
@@ -286,6 +285,10 @@
         list-style: none;
       }
     }
+  }
+  [class$="logo"] {
+    display: flex;
+    justify-content: center;
   }
 
   // img[src*="user_icon.png"] {

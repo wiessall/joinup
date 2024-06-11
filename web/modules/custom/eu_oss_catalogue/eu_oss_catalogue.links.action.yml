@@ -1,9 +1,0 @@
-eu_oss_catalogue.hosting_platform_add:
-  route_name: eu_oss_catalogue.hosting_platform_add
-  title: 'Platform provider'
-  description: Adds and configures a new code platform provider
-  appears_on:
-    - eu_oss_catalogue.provider.collection
-  options:
-    query:
-      destination: admin/content/eu-oss-catalogue

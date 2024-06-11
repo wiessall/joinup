@@ -10,8 +10,6 @@ dependencies:
     - dashboard
     - filter
     - joinup_licence
-    - paragraphs_type_permissions
-    - rdf_entity
     - node
     - taxonomy
     - toolbar
@@ -30,4 +28,3 @@ permissions:
   - 'edit terms in legal_type'
   - 'use text format plain_text_glossary'
   - 'view licence overview page'
-  - 'view paragraph content block'

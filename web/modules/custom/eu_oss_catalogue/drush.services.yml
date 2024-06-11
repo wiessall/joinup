@@ -1,8 +1,0 @@
-services:
-  eu_oss_catalogue.commands:
-    class: Drupal\eu_oss_catalogue\Commands\EuOssCatalogueCommands
-    arguments:
-      - '@eu_oss_catalogue'
-      - '@plugin.manager.eu_oss_catalogue.provider'
-    tags:
-      - { name: drush.command }
