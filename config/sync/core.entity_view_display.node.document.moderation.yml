@@ -23,6 +23,7 @@ dependencies:
     - node.type.document
   module:
     - field_fallback_formatter
+    - joinup_core
     - options
     - template_suggestion
     - user
