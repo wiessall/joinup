@@ -43,7 +43,7 @@
         "drupal/facets_block": "^2.0@beta",
         "drupal/facets_date_range": "^1.0@beta",
         "drupal/field_delimiter": "^2.0",
-        "drupal/field_fallback_formatter": "^1.0@alpha",
+        "drupal/field_fallback_formatter": "^1.0",
         "drupal/field_formatter_range": "^1.1",
         "drupal/field_group": "^3.1",
         "drupal/field_permissions": "^1.1",
@@ -323,9 +323,6 @@
             "drupal/field_delimiter": {
                 "Doesn't work in layout builder. @see https://www.drupal.org/i/3099580": "resources/patch/php/drupal/field_delimiter/3099580.patch",
                 "str_replace(): Passing null to parameter #3 ($subject) of type array|string is deprecated in Drupal\\Component\\Utility\\Xss::filter(). @see https://www.drupal.org/i/3301169": "resources/patch/php/drupal/field_delimiter/3301169.patch"
-            },
-            "drupal/field_fallback_formatter": {
-                "PHP 8.3: get_class() function call without arguments deprecated. @see https://www.drupal.org/i/3452299": "resources/patch/php/drupal/field_fallback_formatter/3452299.patch"
             },
             "drupal/field_group": {
                 "Deprecated way of sequence schema def @see https://www.drupal.org/project/field_group/issues/3409719": "resources/patch/php/drupal/field_group/3409719.diff",
