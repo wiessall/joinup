@@ -833,10 +833,9 @@ class SolutionContext extends RawDrupalContext {
       throw new \Exception("Type should be 'download' or 'visit' but '$type' was given.");
     }
 
-    $target_entity_type_id = $type === 'visit' ? 'node' : 'rdf_entity';
     $field_name = "{$type}_count";
     /** @var \Drupal\Core\Entity\ContentEntityInterface $target_entity */
-    $target_entity = $this->getEntityByLabel($target_entity_type_id, $target_entity_label);
+    $target_entity = $this->getEntityByLabel('node', $target_entity_label);
 
     /** @var \Drupal\meta_entity\Entity\MetaEntityInterface $meta_entity */
     $meta_entity = $target_entity->{$field_name}->entity;
