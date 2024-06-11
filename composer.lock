@@ -17841,16 +17841,16 @@
         },
         {
             "name": "ec-europa/toolkit",
-            "version": "10.12.1",
+            "version": "10.12.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ec-europa/toolkit.git",
-                "reference": "0ce3ff11c923a41a422e53c5fbdc41d03fe74152"
+                "reference": "7a7aa2ecaae62841a53422efcfd392a2be0320ba"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ec-europa/toolkit/zipball/0ce3ff11c923a41a422e53c5fbdc41d03fe74152",
-                "reference": "0ce3ff11c923a41a422e53c5fbdc41d03fe74152",
+                "url": "https://api.github.com/repos/ec-europa/toolkit/zipball/7a7aa2ecaae62841a53422efcfd392a2be0320ba",
+                "reference": "7a7aa2ecaae62841a53422efcfd392a2be0320ba",
                 "shasum": ""
             },
             "require": {
@@ -17906,7 +17906,7 @@
                 "email": "DIGIT-NEXTEUROPA-QA@ec.europa.eu",
                 "source": "https://github.com/ec-europa/toolkit"
             },
-            "time": "2024-05-28T13:27:16+00:00"
+            "time": "2024-06-07T08:55:10+00:00"
         },
         {
             "name": "ec-europa/toolkit-composer-plugin",
