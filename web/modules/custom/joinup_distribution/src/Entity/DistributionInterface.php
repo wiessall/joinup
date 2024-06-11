@@ -6,6 +6,7 @@ namespace Drupal\joinup_distribution\Entity;
 
 use Drupal\collection\Entity\CollectionContentInterface;
 use Drupal\joinup_bundle_class\DescriptionInterface;
+use Drupal\joinup_rdf\Entity\RdfSyncEntityInterface;
 use Drupal\joinup_stats\Entity\DownloadCountAwareInterface;
 use Drupal\joinup_workflow\ArchivableEntityInterface;
 use Drupal\joinup_workflow\EntityWorkflowStateInterface;
@@ -15,7 +16,7 @@ use Drupal\solution\Entity\SolutionContentInterface;
 /**
  * Interface for distributions.
  */
-interface DistributionInterface extends NodeInterface, CollectionContentInterface, SolutionContentInterface, DownloadCountAwareInterface, DescriptionInterface, EntityWorkflowStateInterface, ArchivableEntityInterface {
+interface DistributionInterface extends NodeInterface, RdfSyncEntityInterface, CollectionContentInterface, SolutionContentInterface, DownloadCountAwareInterface, DescriptionInterface, EntityWorkflowStateInterface, ArchivableEntityInterface {
 
   /**
    * Return the distribution's parent, either a release or a solution.

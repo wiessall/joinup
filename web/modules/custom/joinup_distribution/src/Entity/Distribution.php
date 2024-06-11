@@ -8,6 +8,7 @@ use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\joinup_bundle_class\DescriptionTrait;
 use Drupal\joinup_distribution\Exception\MissingDistributionParentException;
 use Drupal\joinup_group\Entity\GroupContentTrait;
+use Drupal\joinup_rdf\Entity\RdfSyncEntityTrait;
 use Drupal\joinup_stats\Entity\DownloadCountAwareInterface;
 use Drupal\joinup_stats\Entity\DownloadCountAwareTrait;
 use Drupal\joinup_workflow\ArchivableEntityTrait;
@@ -27,6 +28,7 @@ class Distribution extends Node implements DistributionInterface {
   use DownloadCountAwareTrait;
   use EntityWorkflowStateTrait;
   use GroupContentTrait;
+  use RdfSyncEntityTrait;
   use SolutionContentTrait;
 
   /**
