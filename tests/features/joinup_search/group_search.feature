@@ -59,7 +59,7 @@ Feature: Search inside groups
     # Pages that do not belong to a collection or solution do not have chips in
     # the search field.
     When I am on the homepage
-    Then the page should not contain any chips
+    Then the "Navigation bar" region should not contain any chips
     When I visit the collection overview
     Then the page should not contain any chips
     When I visit the solution overview
@@ -146,7 +146,7 @@ Feature: Search inside groups
     # the keywords have been typed in. This should have the same result.
     Given I am on the homepage of the "Inclined foundations" solution
     When I should toggle search bar in navbar
-    And I enter "ground" in the search bar
+    And I enter "ground" in the "search bar"
     And I press the remove button on the chip "Inclined foundations"
     And I submit the search by pressing enter
     Then the page should show the tiles "Ground plan, Pre-alpha, Natural materials, Presenting DrillMaster X88"
@@ -235,4 +235,4 @@ Feature: Search inside groups
     # Search page doesn't have search bar in header.
     When I am on the homepage
     Then I should toggle search bar in navbar
-    And the page should not contain any chips
+    And the "Navigation bar" region should not contain any chips

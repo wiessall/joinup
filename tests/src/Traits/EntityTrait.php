@@ -122,6 +122,7 @@ trait EntityTrait {
       'group' => 'rdf_entity',
       'news' => 'node',
       'owner' => 'node',
+      'oss_solution' => 'node',
       'release' => 'rdf_entity',
       'solution' => 'rdf_entity',
       'spdx licence' => 'rdf_entity',
@@ -180,6 +181,7 @@ trait EntityTrait {
       'event' => 'event',
       'glossary' => 'glossary',
       'news' => 'news',
+      'oss_solution' => 'oss_solution',
       'release' => 'asset_release',
       'spdx licence' => 'spdx_licence',
     ];

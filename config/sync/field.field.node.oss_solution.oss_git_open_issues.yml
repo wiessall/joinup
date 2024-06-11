@@ -1,0 +1,23 @@
+uuid: 5bb2ec61-b7d9-49f3-bf53-f488f9e21ecd
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.oss_git_open_issues
+    - node.type.oss_solution
+id: node.oss_solution.oss_git_open_issues
+field_name: oss_git_open_issues
+entity_type: node
+bundle: oss_solution
+label: 'Open Issues'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

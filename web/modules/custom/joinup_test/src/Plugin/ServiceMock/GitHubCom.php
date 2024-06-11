@@ -25,7 +25,7 @@ class GitHubCom extends PluginBase implements ServiceMockPluginInterface {
    * {@inheritdoc}
    */
   public function applies(RequestInterface $request, array $options): bool {
-    return $request->getUri()->getHost() === 'api.github.com';
+    return \Drupal::state()->get('joinup_test.github_mock.enabled', FALSE) && ($request->getUri()->getHost() === 'api.github.com');
   }
 
   /**

@@ -26,6 +26,16 @@ services:
     tags:
       - { name: path_processor_inbound, priority: 200 }
 
+  path_processor.joinup_core.field_more_in_modal:
+    class: Drupal\joinup_core\PathProcessor\ModalRouteProcessor
+    arguments:
+      - '@entity_type.manager'
+    calls:
+      - [setAliasProcessor, ['@?path_alias.path_processor']]
+    tags:
+      - { name: path_processor_inbound, priority: 0 }
+      - { name: path_processor_outbound, priority: 0 }
+
   joinup_core.event_subscriber:
     class: Drupal\joinup_core\EventSubscriber\ExceptionEventSubscriber
     arguments: ['@logger.channel.joinup_core']

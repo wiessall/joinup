@@ -1,0 +1,194 @@
+<?php
+
+/**
+ * @file
+ * Main file of Joinup OSS Catalogue module.
+ */
+
+declare(strict_types=1);
+
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Url;
+use Drupal\block\BlockInterface;
+use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
+use Drupal\joinup_group\Entity\GroupInterface;
+use Drupal\joinup_oss_catalogue\Entity\JoinupOssSolution;
+use Drupal\joinup_oss_catalogue\OssCatalogueCollectionInterface;
+use Drupal\node\NodeInterface;
+
+/**
+ * Implements hook_views_plugins_argument_alter().
+ */
+function joinup_oss_catalogue_views_plugins_argument_alter(array &$plugins): void {
+  // We don't want to apply a group contextual filter for search_oss_catalogue
+  // view. The contextual filter is added only for validation.
+  // @see joinup_group_views_data_alter()
+  // @see \Drupal\joinup_group\Plugin\views\argument\SearchApiGroupArgument
+  $plugins['search_api_group']['exceptions'][] = 'search_oss_catalogue';
+}
+
+/**
+ * Implements hook_entity_bundle_info_alter().
+ */
+function joinup_oss_catalogue_entity_bundle_info_alter(array &$bundles): void {
+  if (!empty($bundles['node']['oss_solution'])) {
+    $bundles['node']['oss_solution']['class'] = JoinupOssSolution::class;
+  }
+}
+
+/**
+ * Implements hook_block_access().
+ */
+function joinup_oss_catalogue_block_access(BlockInterface $block, string $operation, AccountInterface $account) {
+  if (
+    $operation === 'view' &&
+    $block->id() === 'ventuno_three_dots_menu'
+  ) {
+    $group = \Drupal::service('joinup_group.group_manager')
+      ->getGroupFromContext();
+    if (
+      $group &&
+      $group->id() === OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID
+    ) {
+      /** @var \Drupal\joinup_workflow\WorkflowHelperInterface $workflow_helper */
+      $workflow_helper = \Drupal::service('joinup_workflow.workflow_helper');
+      $allowed_transitions = $workflow_helper->getAvailableTransitions($group, $account);
+      return AccessResult::forbiddenIf(empty($allowed_transitions))->cachePerPermissions()->cachePerUser();
+    }
+  }
+}
+
+/**
+ * Implements hook_preprocess_facets_item_list__checkbox__oss_source().
+ */
+function joinup_oss_catalogue_preprocess_facets_item_list__checkbox__oss_source(array &$variables): void {
+  $descriptions = \Drupal::service('plugin.manager.eu_oss_catalogue.provider')->getDefinitionsAsOptions('description');
+  foreach ($variables['items'] as &$item) {
+    $provider = $item['value']['#attributes']['data-drupal-facet-item-value'];
+    if ($provider && isset($descriptions[$provider])) {
+      $item['attributes']['title'] = $descriptions[$provider];
+    }
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function joinup_oss_catalogue_preprocess_field__in_modal(&$variables) {
+  if ($variables['element']['#field_name'] !== 'oss_used_by') {
+    return;
+  }
+  $variables['label_hidden'] = FALSE;
+  $variables['label_display'] = 'above';
+  $variables['label'] = t("@count administrations are currently using the %solution-label solution", [
+    '@count' => count($variables['items']),
+    '%solution-label' => $variables['element']['#items']->getEntity()->label(),
+  ]);
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function joinup_oss_catalogue_preprocess_node(array &$variables): void {
+  // Disables the "Report" link for OSS pages.
+  $group = \Drupal::routeMatch()->getParameter('rdf_entity');
+  if (
+    $group instanceof GroupInterface &&
+    $group->id() === OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID
+  ) {
+    $variables['content']['report']['#access'] = FALSE;
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function joinup_oss_catalogue_preprocess_html(array &$variables): void {
+  // All OSS pages should expose a class eu-oss-catalogue in the <body> tag.
+  /** @var \Drupal\og\OgContextInterface $ogContext */
+  $ogContext = \Drupal::service('og.context');
+
+  if (($group = $ogContext->getGroup()) && $group->id() === OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID) {
+    $variables['attributes']['class'][] = 'eu-oss-catalogue';
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for "image_style".
+ *
+ * Makes SVG file assets visible even if they are formatted as image styles.
+ *
+ * @see template_preprocess_image_style()
+ */
+function joinup_oss_catalogue_preprocess_image_style(array &$variables): void {
+  // Early return of the image is accessible or if the URI os empty.
+  if (
+    !isset($variables['image']['#access']) ||
+    $variables['image']['#access'] ||
+    empty($variables['image']['#uri'])
+  ) {
+    return;
+  }
+
+  // If the file's extension from the given URI is string, we make the markup
+  // visible by removing the "#access" key.
+  $assetExtension = strtolower(pathinfo($variables['image']['#uri'], PATHINFO_EXTENSION));
+  if ($assetExtension === 'svg') {
+    unset($variables['image']['#access']);
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert() for "node" entity type.
+ */
+function joinup_oss_catalogue_node_insert(NodeInterface $node): void {
+  if ($node instanceof OssSolutionInterface) {
+    \Drupal::service('joinup_oss_catalogue.oss_solution.imagecache_warmer')
+      ->queueImageUrls($node);
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_update() for "node" entity type.
+ */
+function joinup_oss_catalogue_node_update(NodeInterface $node): void {
+  if ($node instanceof OssSolutionInterface) {
+    \Drupal::service('joinup_oss_catalogue.oss_solution.imagecache_warmer')
+      ->queueImageUrls($node);
+  }
+}
+
+/**
+ * Implements hook_entity_presave().
+ */
+function joinup_oss_catalogue_node_presave(NodeInterface $entity): void {
+  if (!$entity instanceof OssSolutionInterface) {
+    return;
+  }
+
+  if ($entity->get('oss_vitality_index')->isEmpty()) {
+    $value = mt_rand(51, 99) / 100;
+    $entity->set('oss_vitality_index', $value);
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function joinup_oss_catalogue_preprocess_views_view__eu_oss_catalogue_admin_carousel(&$variables): void {
+  $url = Url::fromRoute('view.search_oss_catalogue.search');
+  $variables['search_url'] = match ($variables['display_id']) {
+    'most_recent' => $url->setOptions([
+      'query' => [
+        'sort_by' => 'date',
+      ],
+    ]),
+    'most_active' => $url->setOptions([
+      'query' => [
+        'sort_by' => 'vitality',
+      ],
+    ]),
+    default => $url,
+  };
+}
