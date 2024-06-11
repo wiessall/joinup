@@ -15,7 +15,7 @@ use Drupal\replicate_ui\Form\ReplicateConfirmForm;
 /**
  * Implements hook_form_alter().
  */
-function joinup_replicate_form_alter(&$form, FormStateInterface $formState): void {
+function joinup_replicate_form_alter(array &$form, FormStateInterface $formState): void {
   $formObject = $formState->getFormObject();
   if (!$formObject instanceof ReplicateConfirmForm) {
     return;
