@@ -65,7 +65,15 @@ function solution_entity_bundle_field_info_alter(&$fields, EntityTypeInterface $
     ->setDescription(t('The Releases and standalone distributions of this solution.'))
     ->setTargetEntityTypeId('rdf_entity')
     ->setTargetBundle('solution')
-    ->setSetting('target_type', 'rdf_entity')
+    // This is a workaround until releases are also converted. Currently, the
+    // target type is 'rdf_entity' because the releases and distributions were
+    // RDF entities. However, now that distributions are converted, this will
+    // automatically throw an exception due to the distributions being nodes.
+    // Changing this now but leaving it as a comment because otherwise, the
+    // releases will throw an exception instead.
+    // @todo Uncomment this as `('target_type', 'node')` once releases are also
+    //   converted.
+    // ->setSetting('target_type', 'node')
     ->setComputed(TRUE)
     ->setReadOnly(TRUE)
     ->setCardinality(FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED)
