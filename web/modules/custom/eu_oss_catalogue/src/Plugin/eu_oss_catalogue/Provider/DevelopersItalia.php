@@ -4,13 +4,16 @@ declare(strict_types=1);
 
 namespace Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\Provider;
 
+use Drupal\Component\Serialization\Exception\InvalidDataTypeException;
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Logger\LoggerChannelInterface;
+use Drupal\Core\Serialization\Yaml;
 use Drupal\eu_oss_catalogue\ApiGuesserInterface;
 use Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface;
 use Drupal\eu_oss_catalogue\EuOssCatalogueProviderPluginBase;
 use Drupal\eu_oss_catalogue\Exception\HostingPlatformFetchException;
 use Drupal\eu_oss_catalogue\Exception\ProviderFetchException;
+use Drupal\eu_oss_catalogue\Model\Project;
 use GuzzleHttp\Client;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -52,6 +55,18 @@ class DevelopersItalia extends EuOssCatalogueProviderPluginBase {
    * Processed URLs collector.
    */
   protected array $processedUrls = [];
+
+  /**
+   * YAML content from developers.italia.it.
+   */
+  protected array $yamlContent = [];
+
+  /**
+   * Number of solutions provided by API.
+   *
+   * @var int
+   */
+  protected int $numberOfProvidedSolutions = 0;
 
   /**
    * Constructs a new plugin instance.
@@ -108,6 +123,7 @@ class DevelopersItalia extends EuOssCatalogueProviderPluginBase {
   public function fetch(): iterable {
     if (!isset($this->fetched)) {
       $this->fetched = [];
+      $this->numberOfProvidedSolutions = 0;
       $this->doFetch();
     }
 
@@ -127,7 +143,19 @@ class DevelopersItalia extends EuOssCatalogueProviderPluginBase {
       try {
         foreach ($hostingPlatform->getProjects(['publiccodeYml' => 'publiccode.yml']) as $project) {
           $this->processedUrls[] = $project->url;
-          yield $project;
+
+          // Try to use publiccodeYml from the Git repository if it is provided.
+          if (isset($project->files['publiccodeYml']) || !isset($this->yamlContent[$project->url])) {
+            yield $project;
+            continue;
+          }
+
+          // Drop to autonomous Git Repos that simply host a publiccode.yml file
+          // that points to the target OSS Solution GIT repo
+          // (that doesn't host a publiccode.yml, yet ... ).
+          $values = $project->toArray();
+          $values['files']['publiccodeYml'] = $this->yamlContent[$project->url];
+          yield new Project(...$values);
         }
       }
       catch (HostingPlatformFetchException $exception) {
@@ -154,7 +182,7 @@ class DevelopersItalia extends EuOssCatalogueProviderPluginBase {
     $next = '';
 
     do {
-      $endpointUrl = static::ENDPOINT . $next . ($next ? '&' : '?') . 'page[size]=100&all=true';
+      $endpointUrl = static::ENDPOINT . $next . ($next ? '&' : '?') . 'page[size]=100&all=false';
       try {
         $response = $this->httpClient->get($endpointUrl);
         $read = Json::decode($response->getBody()->getContents());
@@ -170,17 +198,30 @@ class DevelopersItalia extends EuOssCatalogueProviderPluginBase {
         );
       }
 
+      $this->numberOfProvidedSolutions += count($read['data']);
       foreach ($read['data'] as $newItem) {
-        if (empty($newItem['url'])) {
-          $this->logger->error('Item {id} lacks the mandatory URL', ['id' => $newItem['id']]);
+        $projectInfo = self::ENDPOINT . '/' . $newItem['id'];
+        try {
+          $decoded = Yaml::decode($newItem['publiccodeYml']);
+        }
+        catch (InvalidDataTypeException $e) {
+          $this->logger->error('Not valid publiccodeYml for {id}. Message: {message}',
+            ['id' => $projectInfo, 'message' => $e->getMessage()]);
           continue;
         }
 
-        if (!$api = $this->apiGuesser->getHostingPlatformApi($newItem['url'])) {
+        if (empty($decoded['url'])) {
+          $this->logger->error('Item {id} lacks the mandatory URL in publiccodeYml', ['id' => $projectInfo]);
           continue;
         }
 
-        $url = preg_replace('/^(.*)\.git$/', '$1', $newItem['url']);
+        if (!$api = $this->apiGuesser->getHostingPlatformApi($decoded['url'])) {
+          $this->logger->error('Can\'t determinate hosting platform for {id} with {repository} repository',
+            ['id' => $projectInfo, 'repository' => $decoded['url']]);
+          continue;
+        }
+
+        $url = preg_replace('/^(.*)\.git$/', '$1', $decoded['url']);
         $pathParts = explode('/', trim(substr($url, strlen($api->baseUrl)), '/'));
         $name = array_pop($pathParts);
         $namespace = implode('/', $pathParts);
@@ -190,6 +231,7 @@ class DevelopersItalia extends EuOssCatalogueProviderPluginBase {
         }
         $this->fetched[$api->baseUrl]['projects'][$namespace][] = $name;
         $this->fetchedUrls[] = $url;
+        $this->yamlContent[$url] = $newItem['publiccodeYml'];
       }
       $next = $read['links']['next'];
     } while ($next !== NULL);
@@ -202,7 +244,7 @@ class DevelopersItalia extends EuOssCatalogueProviderPluginBase {
     if ($unProcessed = array_diff($this->fetchedUrls, $this->processedUrls)) {
       $this->logger->warning('Processed {processed} out of {fetched} fetched solutions from Developers Italia. The following {unprocessed} solutions failed: ' . implode(', ', $unProcessed), [
         'processed' => count($this->processedUrls),
-        'fetched' => count($this->fetchedUrls),
+        'fetched' => $this->numberOfProvidedSolutions,
         'unprocessed' => count($unProcessed),
         'list' => $unProcessed,
       ]);
@@ -210,7 +252,7 @@ class DevelopersItalia extends EuOssCatalogueProviderPluginBase {
     else {
       $this->logger->info('Processed {processed} out of {fetched} fetched solutions from Developers Italia.', [
         'processed' => count($this->processedUrls),
-        'fetched' => count($this->fetchedUrls),
+        'fetched' => $this->numberOfProvidedSolutions,
       ]);
     }
   }

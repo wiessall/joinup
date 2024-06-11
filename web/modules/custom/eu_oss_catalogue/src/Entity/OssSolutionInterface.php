@@ -48,4 +48,12 @@ interface OssSolutionInterface extends NodeInterface {
    */
   public function isArchived(): bool;
 
+  /**
+   * Returns the repository URL.
+   *
+   * @return string
+   *   The repository URL.
+   */
+  public function getUrl(): string;
+
 }
