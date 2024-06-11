@@ -43,15 +43,3 @@ joinup_core.outdated_content_threshold:
     _title: 'Outdated content thresholds'
   requirements:
     _permission: 'administer outdated content threshold'
-
-joinup_core.field_more_in_modal:
-  path: /modal/{entityType}/{entity}/{viewMode}/{field}
-  defaults:
-    _controller: Drupal\joinup_core\Controller\ModalFormatterEntityViewController::buildViewModeResponse
-    _title_callback: Drupal\joinup_core\Controller\ModalFormatterEntityViewController:title
-  requirements:
-    _custom_access: Drupal\joinup_core\Controller\ModalFormatterEntityViewController:access
-  options:
-    parameters:
-      entity:
-        type: entity:{entityType}

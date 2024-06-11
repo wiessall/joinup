@@ -39,7 +39,6 @@ dependencies:
     - joinup_licence
     - joinup_news
     - joinup_newsletter
-    - joinup_oss_catalogue
     - joinup_search
     - joinup_subscription
     - media
@@ -125,7 +124,6 @@ permissions:
   - 'create paragraph content 2_column_featured_right'
   - 'create paragraph content 2_column_layout'
   - 'create paragraph content 3_column_layout'
-  - 'create paragraph content block'
   - 'create paragraph content call_to_action'
   - 'create paragraph content carousel'
   - 'create paragraph content content_listing'
@@ -164,7 +162,6 @@ permissions:
   - 'delete paragraph content 2_column_featured_right'
   - 'delete paragraph content 2_column_layout'
   - 'delete paragraph content 3_column_layout'
-  - 'delete paragraph content block'
   - 'delete paragraph content call_to_action'
   - 'delete paragraph content carousel'
   - 'delete paragraph content entity_reference'
@@ -202,7 +199,6 @@ permissions:
   - 'edit sitewide alert entities'
   - 'edit terms in legal_type'
   - 'edit webform variants'
-  - 'eu oss catalogue log'
   - 'feature entity'
   - 'filter membership overview'
   - 'manage custom landing pages'
@@ -290,7 +286,6 @@ permissions:
   - 'update paragraph content 2_column_featured_right'
   - 'update paragraph content 2_column_layout'
   - 'update paragraph content 3_column_layout'
-  - 'update paragraph content block'
   - 'update paragraph content call_to_action'
   - 'update paragraph content carousel'
   - 'update paragraph content entity_reference'

@@ -24,30 +24,33 @@ use Symfony\Component\HttpFoundation\RequestStack;
 class ClearFiltersSearchBlock extends BlockBase implements ContainerFactoryPluginInterface {
 
   /**
+   * The request stack.
+   *
+   * @var \Symfony\Component\HttpFoundation\RequestStack
+   */
+  protected $requestStack;
+
+  /**
    * Constructs a new ProposedEntitiesBlock object.
    *
    * @param array $configuration
    *   A configuration array containing information about the plugin instance.
-   * @param string $pluginId
+   * @param string $plugin_id
    *   The plugin_id for the plugin instance.
-   * @param mixed $pluginDefinition
+   * @param mixed $plugin_definition
    *   The plugin implementation definition.
-   * @param \Symfony\Component\HttpFoundation\RequestStack $requestStack
+   * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
    *   The request stack.
    */
-  public function __construct(
-    array $configuration,
-    string $pluginId,
-    $pluginDefinition,
-    protected RequestStack $requestStack,
-  ) {
-    parent::__construct($configuration, $pluginId, $pluginDefinition);
+  public function __construct(array $configuration, string $plugin_id, $plugin_definition, RequestStack $request_stack) {
+    $this->requestStack = $request_stack;
+    parent::__construct($configuration, $plugin_id, $plugin_definition);
   }
 
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): self {
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
     return new static(
       $configuration,
       $plugin_id,
@@ -59,7 +62,7 @@ class ClearFiltersSearchBlock extends BlockBase implements ContainerFactoryPlugi
   /**
    * {@inheritdoc}
    */
-  public function build(): array {
+  public function build() {
     $request = $this->requestStack->getMainRequest();
     $query_params = $request->query->all();
     $arr = array_diff_key($query_params, array_flip(['keys', 'sort_by']));
@@ -70,7 +73,7 @@ class ClearFiltersSearchBlock extends BlockBase implements ContainerFactoryPlugi
     return [
       '#type' => 'link',
       '#title' => $this->t('Clear filters'),
-      '#url' => Url::fromRoute('<current>', [], ['query' => $query_params]),
+      '#url' => Url::fromRoute('view.search.page_1', [], ['query' => $query_params]),
       '#attributes' => [
         'class' => ['btn', 'btn-outline-brand', 'w-100', 'mb-4'],
         'rel' => 'nofollow',
@@ -82,7 +85,7 @@ class ClearFiltersSearchBlock extends BlockBase implements ContainerFactoryPlugi
   /**
    * {@inheritdoc}
    */
-  public function getCacheMaxAge(): int {
+  public function getCacheMaxAge() {
     return 0;
   }
 

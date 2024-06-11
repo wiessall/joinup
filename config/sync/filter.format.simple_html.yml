@@ -15,7 +15,6 @@ dependencies:
     - joinup_core
     - joinup_video
     - linkit
-    - markdown_easy
     - media
     - slick
 name: 'Simple HTML'
@@ -85,7 +84,7 @@ filters:
     status: true
     weight: -49
     settings:
-      allowed_html: '<br> <p> <i> <b> <q> <a hreflang href> <img data-image-style src alt height width data-entity-uuid data-entity-type> <strong> <em> <blockquote> <ul> <ol> <li>'
+      allowed_html: '<br> <p> <i> <b> <q> <a hreflang href> <img data-image-style src alt data-entity-uuid data-entity-type height width> <strong> <em> <blockquote> <ul> <ol> <li>'
       filter_html_help: false
       filter_html_nofollow: true
   filter_html_escape:
@@ -136,14 +135,14 @@ filters:
     weight: -38
     settings:
       allowed_providers:
-        slideshare: 0
-        internal_path: 0
-        prezi: 0
         joinup_ec_video: 0
-        joinup_ec_webcast_video: 0
+        internal_path: 0
         google_docs: 0
-        youtube: 0
+        joinup_ec_webcast_video: 0
+        prezi: 0
+        slideshare: 0
         vimeo: 0
+        youtube: 0
         youtube_playlist: 0
       autoplay: false
       responsive: true
@@ -154,14 +153,6 @@ filters:
     weight: -37
     settings:
       title: true
-  markdown_easy:
-    id: markdown_easy
-    provider: markdown_easy
-    status: false
-    weight: 0
-    settings:
-      flavor: standard
-      tips: ''
   media_embed:
     id: media_embed
     provider: media

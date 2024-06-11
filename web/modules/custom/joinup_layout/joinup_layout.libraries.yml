@@ -9,13 +9,3 @@ twocolfooter_onecol_67_33:
   css:
     theme:
       layouts/twocolfooter-onecol-67-33/twocolfooter_onecol_67_33.css: {}
-
-oss_heading:
-  css:
-    layout:
-      layouts/oss-heading/oss-heading.css: { }
-
-four_column_grid:
-  css:
-    layout:
-      layouts/four-column-grid/four-column-grid.layout.css: {}

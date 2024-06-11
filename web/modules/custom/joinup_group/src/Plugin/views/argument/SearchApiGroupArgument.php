@@ -17,18 +17,4 @@ class SearchApiGroupArgument extends SearchApiStandard {
 
   use DecodeRdfEntityIdArgumentTrait;
 
-  /**
-   * {@inheritdoc}
-   */
-  public function query($group_by = FALSE): void {
-    $exceptions = $this->definition['exceptions'] ?? [];
-
-    // Avoid any filtering on group for selected viewes.
-    if (in_array($this->view->id(), $exceptions, TRUE)) {
-      return;
-    }
-
-    parent::query($group_by);
-  }
-
 }

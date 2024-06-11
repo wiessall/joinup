@@ -6,7 +6,6 @@ dependencies:
     - blazy
     - collection
     - joinup_video
-    - markdown_easy
     - slick
 _core:
   default_config_hash: _EOmoFGHhTjV4rORLrzpQZv9C6rnPb8LVLDoNMqBz7Us
@@ -75,14 +74,6 @@ filters:
         youtube_playlist: 0
       autoplay: false
       responsive: true
-  markdown_easy:
-    id: markdown_easy
-    provider: markdown_easy
-    status: false
-    weight: 0
-    settings:
-      flavor: standard
-      tips: ''
   slick_filter:
     id: slick_filter
     provider: slick
