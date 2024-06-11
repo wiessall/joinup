@@ -10,6 +10,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
 use Drupal\Core\State\StateInterface;
 use Drupal\Core\Url;
+use Drupal\joinup_core\ConfigReadOnlyInterface;
 use Drupal\joinup_core\Logger\Handler\MailHandler;
 use Drupal\joinup_core\Logger\Handler\TelegramHandler;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -19,20 +20,20 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class DashboardForm extends FormBase {
 
-  /**
-   * Constructs a new form instance.
-   *
-   * @param \Drupal\Core\State\StateInterface $state
-   *   The state service.
-   */
-  public function __construct(protected StateInterface $state) {
+  public function __construct(
+    protected StateInterface $state,
+    protected ConfigReadOnlyInterface $fileConfigReadOnly
+  ) {
   }
 
   /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container): self {
-    return new static($container->get('state'));
+    return new static(
+      $container->get('state'),
+      $container->get('joinup_core.file_config_read_only')
+    );
   }
 
   /**
@@ -116,13 +117,53 @@ class DashboardForm extends FormBase {
     $form['actions'] = [
       '#type' => 'actions',
       '#access' => $this->getFormElementsAccess($form),
-      'submit' => [
-        '#type' => 'submit',
-        '#value' => $this->t('Submit'),
-      ],
+    ];
+    $form['actions']['submit'] = [
+     '#type' => 'submit',
+     '#value' => $this->t('Submit'),
+    ];
+
+    $hasEnableDisablePermission = $this->currentUser()->hasPermission('enable/disable config readonly');
+    $form['actions']['enable'] = [
+      '#type' => 'submit',
+      '#value' => $this->t('Enable config readonly'),
+      '#submit' => ['::enableConfigSubmitForm'],
+      '#access' => $hasEnableDisablePermission && !$this->fileConfigReadOnly->isReadOnlyEnabled(),
+    ];
+    $form['actions']['disable'] = [
+      '#type' => 'submit',
+      '#value' => $this->t('Disable config readonly'),
+      '#submit' => ['::disableConfigSubmitForm'],
+      '#access' => $hasEnableDisablePermission && $this->fileConfigReadOnly->isReadOnlyEnabled(),
     ];
 
     return $form;
+  }
+
+  /**
+   * Enable the configuration submit form.
+   *
+   * @param array &$form
+   *   The form.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The form state.
+   */
+  public function enableConfigSubmitForm(array &$form, FormStateInterface $form_state): void {
+    $this->fileConfigReadOnly->enableReadOnly();
+    $this->messenger()->addStatus($this->t('Enabled config readonly'));
+  }
+
+  /**
+   * Disables the config submit form.
+   *
+   * @param array $form
+   *   The form structure array.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The form state object.
+   */
+  public function disableConfigSubmitForm(array &$form, FormStateInterface $form_state): void {
+    $this->fileConfigReadOnly->disableReadOnly();
+    $this->messenger()->addStatus($this->t('Disabled config readonly'));
   }
 
   /**

@@ -1,5 +1,7 @@
 access dashboard:
   title: 'Access the dashboard'
+enable/disable config readonly:
+  title: 'Enable/disable config readonly'
 manage site auto-registration:
   title: 'Manage site auto-registration'
 cas debug mode:
