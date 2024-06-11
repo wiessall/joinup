@@ -1,14 +1,4 @@
-joinup debug - access vocabulary importer:
-  title: 'Import RDF vocabularies'
-  description: 'Allows access to "/joinup-debug/vocabulary-importer".'
-  restrict access: true
-
-joinup debug - access sparql console:
-  title: 'Run direct SPARQL queries'
-  description: 'Allows access to "/joinup-debug/sparql-console".'
-  restrict access: true
-
-joinup debug - access vocabulary index:
-  title: 'Reindex topics'
-  description: 'Allows access to "/joinup-debug/vocabulary-index".'
+joinup debug - access debug pages:
+  title: 'Access debug pages'
+  description: 'Allows access to the pages from the joinup_debug module'
   restrict access: true
