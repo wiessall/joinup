@@ -303,9 +303,8 @@ function solution_rdf_entity_view(array &$build, RdfInterface $solution, EntityV
   if ($display->getComponent('download_total')) {
     $total = 0;
     if (!$solution->isNew()) {
-      /** @var \Drupal\Core\Field\EntityReferenceFieldItemListInterface $distributions */
-      $distributions = $solution->get('distribution');
-      foreach ($distributions->referencedEntities() as $distribution) {
+      $distributions = \Drupal::getContainer()->get('joinup_distribution.parent_distribution_resolver')->getParentsDistributions($solution->id());
+      foreach ($distributions as $distribution) {
         $total += $distribution->getDownloadCount();
       }
     }
