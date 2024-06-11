@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\dashboard\Form;
 
 use Drupal\Core\Access\AccessResultInterface;
+use Drupal\Core\Cache\CacheTagsInvalidatorInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
@@ -22,7 +23,8 @@ class DashboardForm extends FormBase {
 
   public function __construct(
     protected StateInterface $state,
-    protected ConfigReadOnlyInterface $fileConfigReadOnly
+    protected ConfigReadOnlyInterface $fileConfigReadOnly,
+    protected CacheTagsInvalidatorInterface $invalidator,
   ) {
   }
 
@@ -32,7 +34,8 @@ class DashboardForm extends FormBase {
   public static function create(ContainerInterface $container): self {
     return new static(
       $container->get('state'),
-      $container->get('joinup_core.file_config_read_only')
+      $container->get('joinup_core.file_config_read_only'),
+      $container->get('cache_tags.invalidator')
     );
   }
 
@@ -142,27 +145,19 @@ class DashboardForm extends FormBase {
 
   /**
    * Enable the configuration submit form.
-   *
-   * @param array &$form
-   *   The form.
-   * @param \Drupal\Core\Form\FormStateInterface $form_state
-   *   The form state.
    */
-  public function enableConfigSubmitForm(array &$form, FormStateInterface $form_state): void {
+  public function enableConfigSubmitForm(): void {
     $this->fileConfigReadOnly->enableReadOnly();
+    $this->invalidator->invalidateTags(['dashboard:read_only_config']);
     $this->messenger()->addStatus($this->t('Enabled config readonly'));
   }
 
   /**
    * Disables the config submit form.
-   *
-   * @param array $form
-   *   The form structure array.
-   * @param \Drupal\Core\Form\FormStateInterface $form_state
-   *   The form state object.
    */
-  public function disableConfigSubmitForm(array &$form, FormStateInterface $form_state): void {
+  public function disableConfigSubmitForm(): void {
     $this->fileConfigReadOnly->disableReadOnly();
+    $this->invalidator->invalidateTags(['dashboard:read_only_config']);
     $this->messenger()->addStatus($this->t('Disabled config readonly'));
   }
 
