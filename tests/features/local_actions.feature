@@ -37,9 +37,8 @@ Feature:
     Then I should see the link "View" in the "Entity actions" region
 
     Given distribution content:
-      | title  | Test distribution |
-      | parent | Test release      |
-      | state  | published         |
+      | title             | parent       | state     |
+      | Test distribution | Test release | published |
     When I go to the "Test distribution" distribution
     Then I should not see the link "View" in the "Entity actions" region
     And I should not see the link "Manage content"
