@@ -58,7 +58,7 @@ Feature: When a solution is archived then its sub-content also should be archive
       | Solution Custom page 3 | Solution | published |
     And the workflow state of the "Solution Custom page 3" content is changed to "archived"
     And distribution content:
-      | title                 | parent   | published |
+      | title                 | parent   | state     |
       | Solution Distribution | Solution | published |
     And releases:
       | title              | is version of | state     |
@@ -95,7 +95,7 @@ Feature: When a solution is archived then its sub-content also should be archive
     And the workflow state of the "Solution Custom page 1" content should be "archived"
     And the workflow state of the "Solution Custom page 2" content should be "draft"
     And the workflow state of the "Solution Custom page 3" content should be "archived"
-    And the workflow state of the "Solution Distribution" "rdf entity" should be "archived"
+    And the workflow state of the "Solution Distribution" "content" should be "archived"
     And the workflow state of the "Solution Release 1" "rdf entity" should be "archived"
     And the workflow state of the "Solution Release 2" "rdf entity" should be "draft"
     And the workflow state of the "Solution Release 3" "rdf entity" should be "archived"
@@ -185,7 +185,7 @@ Feature: When a solution is archived then its sub-content also should be archive
     And the workflow state of the "Solution Custom page 1" content should be "published"
     And the workflow state of the "Solution Custom page 2" content should be "draft"
     And the workflow state of the "Solution Custom page 3" content should be "published"
-    And the workflow state of the "Solution Distribution" "rdf entity" should be "published"
+    And the workflow state of the "Solution Distribution" "content" should be "published"
     And the workflow state of the "Solution Release 1" "rdf entity" should be "published"
     And the workflow state of the "Solution Release 2" "rdf entity" should be "draft"
     And the workflow state of the "Solution Release 3" "rdf entity" should be "published"
