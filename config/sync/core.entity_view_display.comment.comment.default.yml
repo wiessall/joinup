@@ -7,7 +7,7 @@ dependencies:
     - field.field.comment.comment.anonymize
     - field.field.comment.comment.field_body
   module:
-    - geocoder_field
+    - text
 _core:
   default_config_hash: 1pqbtJl4kPoWoUVg305Sq43ImIeCrjxJg2H1-GTrepU
 id: comment.comment.default
@@ -16,11 +16,9 @@ bundle: comment
 mode: default
 content:
   field_body:
-    type: geocoder_geocode_formatter
+    type: text_default
     label: hidden
-    settings:
-      dumper: wkt
-      providers: {  }
+    settings: {  }
     third_party_settings: {  }
     weight: 0
     region: content

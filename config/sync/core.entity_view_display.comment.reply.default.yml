@@ -7,6 +7,8 @@ dependencies:
     - field.field.comment.reply.anonymize
     - field.field.comment.reply.field_attachment
     - field.field.comment.reply.field_body
+  module:
+    - text
 _core:
   default_config_hash: 8APsY4agDzWtGRFsi6z-0NK63NlxjvOgO4yi3MGURmA
 id: comment.reply.default
@@ -15,7 +17,7 @@ bundle: reply
 mode: default
 content:
   field_body:
-    type: basic_string
+    type: text_default
     label: hidden
     settings: {  }
     third_party_settings: {  }
