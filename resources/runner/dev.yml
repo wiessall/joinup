@@ -2,7 +2,7 @@
 
 dev:
   # Controls when static code analysis (grumphp) runs.
-  # Specify dev.git_hook_on: pre-push / pre-commit or false to disable.
+  # Options: pre-push / pre-commit / disable.
   git_hook_on: pre-push
   modules:
     - admin_toolbar
