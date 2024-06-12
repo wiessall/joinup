@@ -29,15 +29,15 @@ class SearchApiProcessorTest extends JoinupExistingSiteTestBase {
     ]);
     $distribution = $this->createNode([
       'type' => 'distribution',
-      'label' => $this->randomString(),
+      'title' => $this->randomString(),
       'og_audience' => $solution->id(),
       'distribution_parent' => $solution->id(),
-      'field_ad_access_url' => 'ftp://example.com',
-      'field_ad_state' => 'published',
+      'access_url' => 'ftp://example.com',
+      'field_state' => 'published',
     ]);
     // Trigger indexing.
     \Drupal::getContainer()->get('search_api.post_request_indexing')->destruct();
-    $this->assertSame('ftp://example.com', $distribution->get('field_ad_access_url')->target_id);
+    $this->assertSame('ftp://example.com', $distribution->get('access_url')->target_id);
   }
 
 }
