@@ -366,3 +366,78 @@ Feature: Log in through EU Login
     When I fill in "Password" with "123"
     And I press "Log in"
     Then I should see the success message "Fill in the fields below to let the Joinup community learn more about you!"
+
+  @email
+  Scenario: As a moderator I can activate the approval of new accounts.
+    Given CAS users:
+      | Username     | E-mail            | Password |
+      | ricky_martin | ricky@example.com | 123      |
+      | jonh_martin  | jonh@example.com  | 123      |
+
+    Given I am logged in as a user with the "moderator" role
+    And I visit "Dashboard"
+    And I check "New accounts need approval"
+    And I press "Submit"
+    Then I should see the warning message "Registering new users to Joinup requires approval is enabled"
+
+    Given I am an anonymous user
+    And I am on the homepage
+    When I click "Sign in"
+    When I fill in "E-mail address" with "ricky@example.com"
+    When I fill in "Password" with "123"
+    And I press "Log in"
+    Then I should see the success message "Thank you for applying for an account. Your account is currently pending approval by the site administrator."
+    And I should see the success message "In the meantime, a welcome message with further instructions has been sent to your email address."
+    But I should not see the error message "Your account is blocked or has not been activated. Please contact a site administrator."
+    # Check that the user is not logged in.
+    And I should see the link "Sign in"
+    And the email sent to "ricky@example.com" with subject "Your Joinup account is pending approval." contains the text:
+      | Thank you for registering at Joinup. Your application for an account is currently pending approval. Once it has been approved, you will receive another email containing information about how to sign in, and other details. |
+      | Kind regards,                                                                                                                                                                                                                 |
+      | The Joinup Support Team.                                                                                                                                                                                                      |
+
+    # Retrying login should display an error message.
+    And I am on the homepage
+    When I click "Sign in"
+    And I fill in "E-mail address" with "ricky@example.com"
+    And I fill in "Password" with "123"
+    And I press "Log in"
+    Then I should see the error message "You cannot sign in yet. Your Joinup account is currently being verified. You will be notified by email once it is activated."
+
+    Given I am logged in as a user with the "moderator" role
+    Given I am on the homepage
+    When I click "People"
+    And I fill in "Name or email contains" with "ricky_martin"
+    And I press "Filter"
+    Then I should see "Blocked" in the "ricky_martin" row
+
+    # Unblock the user
+    Then I check "ricky_martin"
+    And I select "Unblock the selected user(s)" from "Action"
+    And I press "Apply to selected items"
+    Then I should see the success message "Unblock the selected user(s) was applied to 1 item."
+    And the email sent to "ricky@example.com" with subject "Your Joinup account has been activated." contains the text:
+      | You may now log in with EU Login credentials by clicking this link or copying and pasting it into your browser |
+
+    Given I am an anonymous user
+    And I am on the homepage
+    When I click "Sign in"
+    When I fill in "E-mail address" with "ricky@example.com"
+    When I fill in "Password" with "123"
+    And I press "Log in"
+    And I should see the success message "You have been logged in."
+
+    # Restore open registration.
+    Given I am logged in as a user with the "moderator" role
+    And I visit "Dashboard"
+    And I uncheck "New accounts need approval"
+    And I press "Submit"
+    Then I should see the success message "Registering new users to Joinup requires approval is disabled"
+
+    Given I am an anonymous user
+    And I am on the homepage
+    When I click "Sign in"
+    When I fill in "E-mail address" with "jonh@example.com"
+    When I fill in "Password" with "123"
+    And I press "Log in"
+    And I should see the success message "You have been logged in."
