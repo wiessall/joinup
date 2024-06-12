@@ -63,7 +63,7 @@ final class WarningMessageBlock extends BlockBase implements ContainerFactoryPlu
         'warning' => $warnings,
       ],
     ];
-    $build['#cache']['tags'][] = 'dashboard:read_only_config';
+    $build['#cache']['tags'][] = 'joinup_user:read_only_config';
 
     return $build;
   }

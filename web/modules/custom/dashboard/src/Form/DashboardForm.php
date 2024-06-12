@@ -148,7 +148,7 @@ class DashboardForm extends FormBase {
    */
   public function enableConfigSubmitForm(): void {
     $this->fileConfigReadOnly->enableReadOnly();
-    $this->invalidator->invalidateTags(['dashboard:read_only_config']);
+    $this->invalidator->invalidateTags(['joinup_user:read_only_config']);
     $this->messenger()->addStatus($this->t('Enabled config readonly'));
   }
 
@@ -157,7 +157,7 @@ class DashboardForm extends FormBase {
    */
   public function disableConfigSubmitForm(): void {
     $this->fileConfigReadOnly->disableReadOnly();
-    $this->invalidator->invalidateTags(['dashboard:read_only_config']);
+    $this->invalidator->invalidateTags(['joinup_user:read_only_config']);
     $this->messenger()->addStatus($this->t('Disabled config readonly'));
   }
 
