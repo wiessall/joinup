@@ -16,7 +16,7 @@ grumphp:
 
     # Doc: https://github.com/phpro/grumphp/blob/master/doc/tasks/phpcs.md
     phpcs:
-      standard: ['./phpcs-ruleset.xml']
+      standard: ['./phpcs.xml']
       triggered_by: '%grumphp.tasks.php_extensions%'
 
     # Doc: https://github.com/phpro/grumphp/blob/master/doc/tasks/phpmd.md
