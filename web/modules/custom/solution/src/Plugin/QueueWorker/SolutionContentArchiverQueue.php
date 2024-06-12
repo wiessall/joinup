@@ -200,10 +200,15 @@ class SolutionContentArchiverQueue extends QueueWorkerBase implements ContainerF
       }
 
       $entity->skip_notification = TRUE;
-      match ($transition) {
-        Transition::ARCHIVE => $this->workflowHelper->archiveEntity($entity),
-        Transition::UNARCIVE => $this->workflowHelper->unarchiveEntity($entity),
-      };
+      try {
+        match ($transition) {
+          Transition::ARCHIVE => $this->workflowHelper->archiveEntity($entity),
+          Transition::UNARCIVE => $this->workflowHelper->unarchiveEntity($entity),
+        };
+      }
+      catch (\Exception $exception) {
+        $this->logger->warning($exception->getMessage());
+      }
     }
 
     if ($transition === Transition::ARCHIVE) {
