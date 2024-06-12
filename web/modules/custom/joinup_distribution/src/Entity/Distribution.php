@@ -17,6 +17,7 @@ use Drupal\node\Entity\Node;
 use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\solution\Entity\SolutionContentTrait;
 use Drupal\solution\Entity\SolutionInterface;
+use Drupal\solution\Exception\MissingSolutionException;
 
 /**
  * Bundle class for distributions.
@@ -42,23 +43,80 @@ class Distribution extends Node implements DistributionInterface {
    * {@inheritdoc}
    */
   public function preSave(EntityStorageInterface $storage) {
-    if (!$this->isNew()) {
-      return;
-    }
-
-    // If the group is not assigned but the parent is, pass the group to the
-    // distribution.
-    if (!$this->get(OgGroupAudienceHelperInterface::DEFAULT_FIELD)->target_id && $this->get('distribution_parent')->target_id) {
-      if ($parent = $this->getParent()) {
-        if ($parent instanceof SolutionInterface) {
-          $this->set(OgGroupAudienceHelperInterface::DEFAULT_FIELD, $parent->id());
-        }
-        else {
-          // The parent is a release, thus, get the solution instead.
-          $this->set(OgGroupAudienceHelperInterface::DEFAULT_FIELD, $parent->getGroup()->id());
+    if ($this->isNew()) {
+      // If the group is not assigned but the parent is, pass the group to the
+      // distribution.
+      if (!$this->get(OgGroupAudienceHelperInterface::DEFAULT_FIELD)->target_id && $this->get('distribution_parent')->target_id) {
+        if ($parent = $this->getParent()) {
+          if ($parent instanceof SolutionInterface) {
+            $this->set(OgGroupAudienceHelperInterface::DEFAULT_FIELD, $parent->id());
+          }
+          else {
+            // The parent is a release, thus, get the solution instead.
+            $this->set(OgGroupAudienceHelperInterface::DEFAULT_FIELD, $parent->getGroup()->id());
+          }
         }
       }
     }
+
+    parent::preSave($storage);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function postSave(EntityStorageInterface $storage, $update = TRUE): void {
+    parent::postSave($storage, $update);
+
+    // Re-index the parent of the distribution.
+    if ($parent = $this->getParentSafe()) {
+      $this->reIndexDistributionParent($parent);
+    }
+
+    // Clear the cache of the solution of the distribution.
+    if ($solution = $this->getSolutionSafe()) {
+      $this->clearSolutionCache($solution);
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function delete() {
+    $solution = $this->getSolutionSafe();
+    $parent = $this->getParentSafe();
+    parent::delete();
+
+    // Clear the cache of the solution of the distribution.
+    if ($solution) {
+      $this->clearSolutionCache($solution);
+    }
+
+    // Re-index the parent of the distribution.
+    if ($parent) {
+      $this->reIndexDistributionParent($parent);
+    }
+  }
+
+  /**
+   * Clears the cache of the solution of the distribution.
+   */
+  protected function clearSolutionCache(DistributionsParentInterface $solution): void {
+    /** @var \Drupal\Core\Cache\CacheTagsInvalidatorInterface $cacheTagsInvalidator */
+    $cacheTagsInvalidator = \Drupal::service('cache_tags.invalidator');
+    // Solutions show the licence of their releases in the solution header.
+    // Clear the cache of the solution this release belongs to so any licence
+    // change is picked up.
+    $cacheTagsInvalidator->invalidateTags($solution->getCacheTagsToInvalidate());
+  }
+
+  /**
+   * Re-indexes the parent of the distribution.
+   */
+  protected function reIndexDistributionParent(DistributionsParentInterface $parent): void {
+    /** @var \Drupal\search_api\Plugin\search_api\datasource\ContentEntityTrackingManager $contentTrackingManager */
+    $contentTrackingManager = \Drupal::service('search_api.entity_datasource.tracking_manager');
+    $contentTrackingManager->trackEntityChange($parent);
   }
 
   /**
@@ -77,6 +135,40 @@ class Distribution extends Node implements DistributionInterface {
     }
 
     return $parent;
+  }
+
+  /**
+   * Returns the parent entity or NULL if it is missing.
+   *
+   * @todo This method should be removed once the parent entity is always set.
+   *
+   * @return \Drupal\joinup_distribution\Entity\DistributionsParentInterface|null
+   *   The parent entity or NULL if it is missing.
+   */
+  protected function getParentSafe(): ?DistributionsParentInterface {
+    try {
+      return $this->getParent();
+    }
+    catch (MissingDistributionParentException $exception) {
+      return NULL;
+    }
+  }
+
+  /**
+   * Returns the solution of the distribution or NULL if it is missing.
+   *
+   * @todo This method should be removed once the solution is always set.
+   *
+   * @return \Drupal\solution\Entity\SolutionInterface|null
+   *   The solution of the distribution or NULL if it is missing.
+   */
+  protected function getSolutionSafe(): ?SolutionInterface {
+    try {
+      return $this->getSolution();
+    }
+    catch (MissingSolutionException $exception) {
+      return NULL;
+    }
   }
 
   /**

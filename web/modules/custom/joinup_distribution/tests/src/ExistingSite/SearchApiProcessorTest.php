@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Drupal\Tests\asset_distribution\ExistingSite;
+namespace Drupal\Tests\joinup_distribution\ExistingSite;
 
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 
 /**
- * @covers \Drupal\asset_distribution\Plugin\search_api\processor\IndexDistributionData::appendDistributionData
+ * @covers \Drupal\joinup_distribution\Plugin\search_api\processor\IndexDistributionData::appendDistributionData
  * @group asset_distribution
  */
 class SearchApiProcessorTest extends JoinupExistingSiteTestBase {
