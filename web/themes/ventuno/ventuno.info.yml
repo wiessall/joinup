@@ -21,6 +21,10 @@ libraries-extend:
     - ventuno/layout-paragraphs--builder
   system/base:
     - ventuno/align-module
+  core/drupal.message:
+    - ventuno/alert
+  sitewide_alert/init:
+    - ventuno/alert
 
 libraries-override:
   core/jquery.once: false

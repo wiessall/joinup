@@ -16,3 +16,11 @@ services:
     class: Drupal\contact_information\EventSubscriber\ContactInformationContactFormRouteSubscriber
     tags:
       - { name: event_subscriber }
+
+  contact_information.exception:
+    class: Drupal\contact_information\EventSubscriber\ExceptionSubscriber
+    arguments:
+      - '@current_route_match'
+      - '@logger.factory'
+    tags:
+      - { name: event_subscriber }
