@@ -1,7 +1,0 @@
-services:
-
-  dashboard.config_overrider:
-    class: Drupal\dashboard\Config\DashboardConfigOverrider
-    arguments: ['@state', '@config.factory']
-    tags:
-      - { name: config.factory.override }
