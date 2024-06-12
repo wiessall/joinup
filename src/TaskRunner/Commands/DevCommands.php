@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Joinup\TaskRunner\Commands;
 
+use Consolidation\AnnotatedCommand\Attributes as CLI;
 use EcEuropa\Toolkit\TaskRunner\AbstractCommands;
 use Robo\Collection\CollectionBuilder;
 
@@ -14,12 +15,8 @@ class DevCommands extends AbstractCommands {
 
   /**
    * Setup git pre-commit/pre-push hook.
-   *
-   * @return \Robo\Collection\CollectionBuilder
-   *   The Robo collection builder.
-   *
-   * @command dev:setup-git-hook
    */
+  #[CLI\Command(name: 'dev:setup-git-hook')]
   public function setupGitHook(): CollectionBuilder {
     $config = $this->getConfig();
     $joinupDir = $config->get('joinup.dir');
