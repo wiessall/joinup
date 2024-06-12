@@ -15,9 +15,6 @@ class DevCommands extends AbstractCommands {
   /**
    * Setup git pre-commit/pre-push hook.
    *
-   * Specify dev.git_hook_on: pre-push / pre-commit or false to disable.
-   * Defaults to pre-push.
-   *
    * @return \Robo\Collection\CollectionBuilder
    *   The Robo collection builder.
    *
@@ -47,11 +44,17 @@ class DevCommands extends AbstractCommands {
         break;
 
       default:
+        // For any other value, disable.
         $this->yell('Static code analysis disabled.', 40, 'yellow');
-        $this->say('Specify <comment>dev.git_hook_on: pre-push / pre-commit</comment> in your runner.yml to enable.');
         break;
     }
 
+    $yaml = <<<YAML
+dev:
+  # Options: pre-push / pre-commit / disable
+  git_hook_on: pre-push
+YAML;
+    $this->say(sprintf("To change this behavior, specify in your runner.yml:\n<comment>%s</comment>", $yaml));
     return $this->collectionBuilder()->addTaskList($collection);
   }
 
