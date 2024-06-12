@@ -19,7 +19,6 @@ use Drupal\joinup_distribution\Entity\DistributionInterface;
 use Drupal\joinup_distribution\Entity\DistributionsParentInterface;
 use Drupal\joinup_taxonomy\Entity\MappedTerm;
 use Drupal\node\NodeInterface;
-use Drupal\solution\Exception\MissingSolutionException;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 /**
@@ -104,60 +103,6 @@ function joinup_distribution_node_presave(NodeInterface $distribution): void {
       }
     }
   }
-}
-
-/**
- * Implements hook_ENTITY_TYPE_insert().
- */
-function joinup_distribution_node_insert(NodeInterface $distribution): void {
-  if ($distribution instanceof DistributionInterface) {
-    // Invalidate the solution cache.
-    joinup_distribution_invalidate_solution_cache($distribution);
-  }
-}
-
-/**
- * Implements hook_ENTITY_TYPE_update().
- */
-function joinup_distribution_node_update(NodeInterface $distribution): void {
-  if (!$distribution instanceof DistributionInterface) {
-    return;
-  }
-
-  // Invalidate the solution cache.
-  joinup_distribution_invalidate_solution_cache($distribution);
-
-  // Reindex the distribution's parent. Note that this is done automatically
-  // on distribution insert, in DistributionParentFieldItemList::postSave(),
-  // by saving the parent after a new distribution has been saved.
-  // @see \Drupal\joinup_distribution\DistributionParentFieldItemList::postSave()
-  if ($parent = $distribution->getParent()) {
-    /** @var \Drupal\search_api\Plugin\search_api\datasource\ContentEntityTrackingManager $contentTrackingManager */
-    $contentTrackingManager = \Drupal::service('search_api.entity_datasource.tracking_manager');
-    $contentTrackingManager->trackEntityChange($parent);
-  }
-}
-
-/**
- * Invalidates the distribution solution cache.
- *
- * @param \Drupal\joinup_distribution\Entity\DistributionInterface $distribution
- *   The distribution being inserted/updated.
- */
-function joinup_distribution_invalidate_solution_cache(DistributionInterface $distribution): void {
-  try {
-    $solution = $distribution->getSolution();
-  }
-  catch (MissingSolutionException $exception) {
-    // The parent solution might not be set yet.
-    return;
-  }
-  /** @var \Drupal\Core\Cache\CacheTagsInvalidatorInterface $cacheTagsInvalidator */
-  $cacheTagsInvalidator = \Drupal::service('cache_tags.invalidator');
-  // Solutions show the licence of their releases in the solution header.
-  // Clear the cache of the solution this release belongs to so any licence
-  // change is picked up.
-  $cacheTagsInvalidator->invalidateTags($solution->getCacheTagsToInvalidate());
 }
 
 /**

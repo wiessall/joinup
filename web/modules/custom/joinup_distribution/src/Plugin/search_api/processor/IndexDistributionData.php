@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Drupal\asset_distribution\Plugin\search_api\processor;
+namespace Drupal\joinup_distribution\Plugin\search_api\processor;
 
 use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\File\FileUrlGeneratorInterface;
@@ -63,7 +63,7 @@ class IndexDistributionData extends ProcessorPluginBase {
    */
   public static function supportsIndex(IndexInterface $index): bool {
     foreach ($index->getDatasources() as $datasource) {
-      if ($datasource->getEntityTypeId() == 'rdf_entity') {
+      if ($datasource->getEntityTypeId() === 'rdf_entity') {
         return TRUE;
       }
     }
@@ -116,14 +116,14 @@ class IndexDistributionData extends ProcessorPluginBase {
       $sapiField->addValue($distribution->label());
 
       // Add the distribution description.
-      $distributionFieldItemList = $distribution->get('field_ad_description');
+      $distributionFieldItemList = $distribution->get('description');
       if (!$distributionFieldItemList->isEmpty()) {
         $sapiField->addValue(check_markup($distributionFieldItemList->value, $distributionFieldItemList->format));
       }
 
       // Add the distribution URL.
       /** @var \Drupal\file_url\Plugin\Field\FieldType\FileUrlFieldItemList $distributionFieldItemList */
-      $distributionFieldItemList = $distribution->get('field_ad_access_url');
+      $distributionFieldItemList = $distribution->get('access_url');
       if (!$distributionFieldItemList->isEmpty()) {
         foreach ($distributionFieldItemList->referencedEntities() as $file) {
           $file_url = $file->getFileUri();
@@ -138,7 +138,7 @@ class IndexDistributionData extends ProcessorPluginBase {
       }
 
       // Add the distribution licence.
-      $distributionFieldItemList = $distribution->get('field_ad_licence');
+      $distributionFieldItemList = $distribution->get('field_licence');
       if (!$distributionFieldItemList->isEmpty()) {
         foreach ($distributionFieldItemList->referencedEntities() as $licence) {
           $sapiField->addValue($licence->label());
@@ -154,7 +154,7 @@ class IndexDistributionData extends ProcessorPluginBase {
       }
 
       // Add the distribution representation technique.
-      $distributionFieldItemList = $distribution->get('field_ad_repr_technique');
+      $distributionFieldItemList = $distribution->get('representation_technique');
       if (!$distributionFieldItemList->isEmpty()) {
         foreach ($distributionFieldItemList->referencedEntities() as $technique) {
           $sapiField->addValue($technique->label());
