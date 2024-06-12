@@ -2,7 +2,5 @@ access dashboard:
   title: 'Access the dashboard'
 manage site auto-registration:
   title: 'Manage site auto-registration'
-cas debug mode:
-  title: 'CAS debug mode'
 administer log alerts:
   title: 'Administer log alerts'
