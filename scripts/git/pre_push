@@ -9,7 +9,7 @@ SHA1_EMPTY="0000000000000000000000000000000000000000"
 FULL_CHECK="0"
 
 # Get all changed files, loop over the commits.
-CHANGED_FILES=""
+declare -a CHANGED_FILES=()
 while IFS= read -r LINE; do
   PARTS=($LINE)
   LOCAL_REF=${PARTS[0]}
@@ -29,21 +29,22 @@ while IFS= read -r LINE; do
     break
   fi
 
-  CHANGED_FILES="${CHANGED_FILES} $(git diff-tree --no-commit-id --name-only -r "${LOCAL_SHA}" "${REMOTE_SHA}")"
+  CHANGED_FILES+=($(git diff-tree --no-commit-id --name-only -r ${LOCAL_SHA} ${REMOTE_SHA}))
 done
 
-# Keep only existing files.
-CHANGED_FILES=$(echo "$CHANGED_FILES" | xargs ls -d 2>/dev/null)
-
 # Run GrumPHP.
+EXIT_CODE=0
 if [[ "$FULL_CHECK" == "1" ]]; then
   ddev exec ./vendor/bin/grumphp run --no-interaction --testsuite=git_pre_push
   EXIT_CODE=$?
-elif [[ -n "$CHANGED_FILES" ]]; then
-  echo "$CHANGED_FILES" | ddev exec ./vendor/bin/grumphp run --no-interaction --testsuite=git_pre_push
-  EXIT_CODE=$?
 else
-  EXIT_CODE=0
+  # Keep only existing files.
+  CHANGED_FILES=($(printf "%s\n" "${CHANGED_FILES[@]}" | xargs -I {} bash -c 'test -e "{}" && echo "{}"'))
+
+  if [ "${#CHANGED_FILES[@]}" -gt 0 ]; then
+    printf "%s\n" "${CHANGED_FILES[@]}" | ddev exec ./vendor/bin/grumphp run --no-interaction --testsuite=git_pre_push
+    EXIT_CODE=$?
+  fi
 fi
 
 exit $EXIT_CODE
