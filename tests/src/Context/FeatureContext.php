@@ -27,6 +27,7 @@ use Drupal\DrupalExtension\TagTrait;
 use Drupal\image\Plugin\Field\FieldType\ImageItem;
 use Drupal\joinup\HtmlManipulator;
 use Drupal\joinup\Traits\AntispamTrait;
+use Drupal\joinup\Traits\ConfigReadOnlyTrait;
 use Drupal\joinup\Traits\ContextualLinksTrait;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\JavascriptTrait;
@@ -64,6 +65,7 @@ class FeatureContext extends RawDrupalContext {
   use TraversingTrait;
   use UserTrait;
   use UtilityTrait;
+  use ConfigReadOnlyTrait;
 
   /**
    * The Joinup version, retrieved from the `VERSION` file in the project root.
@@ -2698,6 +2700,23 @@ class FeatureContext extends RawDrupalContext {
     }
 
     sleep(1);
+  }
+
+  /**
+   * Asserts that configuration is editable or locked.
+   *
+   * @param string $state
+   *   The state of the configuration. Either 'locked' or 'unlocked'.
+   *
+   * @Then the configuration should be :state
+   */
+  public function theConfigurationState(string $state): void {
+    \assert(in_array($state, ['locked', 'unlocked']));
+
+    /** @var \Drupal\joinup_core\ConfigReadOnlyInterface $fileReadOnly */
+    $fileReadOnly = \Drupal::service('joinup_core.file_config_read_only');
+
+    Assert::assertTrue($fileReadOnly->isReadOnlyEnabled() === ($state === 'locked'));
   }
 
 }
