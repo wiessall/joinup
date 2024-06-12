@@ -227,6 +227,7 @@ function joinup_rdf_deploy_110804(array &$sandbox): string {
     'https://schema.org/fileSize' => 'file_size',
   ];
   $storage = \Drupal::entityTypeManager()->getStorage('node');
+  $logger = \Drupal::getContainer()->get('logger.factory')->get('joinup_rdf');
 
   if (!isset($sandbox['files'])) {
     $fileSystem = \Drupal::getContainer()->get('file_system');
@@ -267,7 +268,16 @@ function joinup_rdf_deploy_110804(array &$sandbox): string {
         }
       }
     }
-    $values['distribution_parent'] = _joinup_rdf_get_distribution_parent($uri);
+
+    if (empty($values['title'])) {
+      $values['title'] = 'Untitled distribution';
+      $logger->warning("Distribution with URI $uri has no title. Using 'Untitled distribution' instead. Distribution value array: @values", [
+        '@values' => print_r($data, TRUE),
+      ]);
+    }
+
+    // Set the OG reference as a parent if there is no parent found.
+    $values['distribution_parent'] = _joinup_rdf_get_distribution_parent($uri) ?? $data[0]['value'];
     $storage->create($values)->save();
     $sandbox['progress']++;
   }
@@ -278,8 +288,14 @@ function joinup_rdf_deploy_110804(array &$sandbox): string {
 
 /**
  * Helper function to determine a distribution's parent.
+ *
+ * @param string $distribution_id
+ *   The distribution ID.
+ *
+ * @return string|null
+ *   The parent ID or NULL if not found.
  */
-function _joinup_rdf_get_distribution_parent(string $distribution_id): string {
+function _joinup_rdf_get_distribution_parent(string $distribution_id): ?string {
   $query = <<<SPARQL
 SELECT ?parent
 WHERE {
@@ -298,7 +314,7 @@ SPARQL;
   $results = \Drupal::getContainer()->get('sparql.endpoint')->query($query)->getArrayCopy();
   $parent = reset($results);
   if (!$parent) {
-    return '';
+    return NULL;
   }
 
   return $parent->parent->getUri();
