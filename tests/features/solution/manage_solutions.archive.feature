@@ -46,8 +46,10 @@ Feature: When a solution is archived then its sub-content also should be archive
     And the workflow state of the "Solution News 3" content is changed to "needs_update"
     And the workflow state of the "Solution News 4" content is changed to "archived"
     And "document" content:
-      | title             | collection | state     |
-      | Solution Document | Solution   | published |
+      | title                   | collection | state     | nid |
+      | Solution Document       | Solution   | published |     |
+      | Weird Solution Document | Solution   | draft     | 200 |
+    And the workflow state of the "Weird Solution Document" content is changed to "archived"
     And "discussion" content:
       | title               | collection | state     |
       | Solution Discussion | Solution   | published |
@@ -72,8 +74,10 @@ Feature: When a solution is archived then its sub-content also should be archive
       | Solution   | Announcement1 C1     | draft | 2005-11-05 | Blahman |
       | Collection | Some announcement C2 | draft | 2005-11-05 | Blahman |
 
+  @loggedErrors
   Scenario: Archiving / unarchiving a solution must archive / unarchive its sub-content.
     Given I am logged in as "John Moderator"
+    And the "solution_archive_related_content" queue is empty
     When I go to the edit form of the "Solution" solution
     Then I should see the button "Archive"
     When I press "Archive"
@@ -81,17 +85,20 @@ Feature: When a solution is archived then its sub-content also should be archive
       | Success messages                                                            |
       | The archiving process of the Solution has been initiated.                   |
       | You will receive an email notification as soon as the process is completed. |
+    And the number of items in the "solution_archive_related_content" queue should be 1
 
     # Execute the queue.
     Given the following contact information emails are validated:
       | Liam Smith |
     And I mark all emails as read
     Given I run the "solution_archive_related_content" queue worker
+    Then the number of items in the "solution_archive_related_content" queue should be 0
     And the workflow state of the "Solution Event" content should be "archived"
     And the workflow state of the "Solution News 1" content should be "archived"
     And the workflow state of the "Solution News 2" content should be "draft"
     And the workflow state of the "Solution News 3" content should be "archived"
     And the workflow state of the "Solution Document" content should be "archived"
+    And the workflow state of the "Weird Solution Document" content should be "archived"
     And the workflow state of the "Solution Discussion" content should be "archived"
     And the workflow state of the "Solution Custom page 1" content should be "archived"
     And the workflow state of the "Solution Custom page 2" content should be "draft"
@@ -173,15 +180,20 @@ Feature: When a solution is archived then its sub-content also should be archive
     Then I should see the following success messages:
       | Success messages                                            |
       | The unarchiving process of the Solution has been initiated. |
+    And the number of items in the "solution_archive_related_content" queue should be 1
     # Execute the queue.
+    Given there are no preexisting log records
     Given I run the "solution_archive_related_content" queue worker
     Then 0 e-mails should have been sent
+    And the number of items in the "solution_archive_related_content" queue should be 0
+    And there should be a record of severity warning in the log with description "The Content entity with id '200' cannot be unarchived: cannot find the previous revision it was archived from."
     And the workflow state of the "Solution Event" content should be "published"
     And the workflow state of the "Solution News 1" content should be "published"
     And the workflow state of the "Solution News 2" content should be "draft"
     And the workflow state of the "Solution News 3" content should be "published"
     And the workflow state of the "Solution News 4" content should be "published"
     And the workflow state of the "Solution Document" content should be "published"
+    And the workflow state of the "Weird Solution Document" content should be "archived"
     And the workflow state of the "Solution Discussion" content should be "published"
     And the workflow state of the "Solution Custom page 1" content should be "published"
     And the workflow state of the "Solution Custom page 2" content should be "draft"
