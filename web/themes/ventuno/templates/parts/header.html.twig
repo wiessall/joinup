@@ -8,6 +8,7 @@
   </nav>
 </div>
 {% set items = logged_in ? [{
+  type: "mmenu",
   breakpoint: "xl",
   classes: ["order-1"],
   id: "landing-pages",
@@ -16,6 +17,7 @@
   links: landing_page_links,
 }] : [] %}
 {% set items = items|merge([{
+  type: logged_in ? "dropdown" : "mmenu",
   breakpoint: logged_in ? "" : "xl",
   id: logged_in ? "account" : "navbar-toggler",
   icon: {
@@ -29,7 +31,6 @@
     breakpoint: "all",
     label: "Bookmark"|t,
     links: [bookmark_link|merge({order: 1})],
-    hide_toggle: TRUE,
   }]) %}
 {% endif %}
 {% if not hide_searchbar %}
