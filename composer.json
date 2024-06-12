@@ -174,7 +174,7 @@
             "phpstan/extension-installer": true,
             "php-http/discovery": true,
             "ec-europa/toolkit-composer-plugin": true,
-            "phpro/grumphp-shim": false
+            "phpro/grumphp-shim": true
         }
     },
     "autoload": {
@@ -453,6 +453,9 @@
                 "vendor/mglaman/phpstan-drupal/extension.neon",
                 "vendor/phpstan/phpstan-deprecation-rules/rules.neon"
             ]
+        },
+        "grumphp": {
+            "disable-plugin": true
         }
     },
     "repositories": [
