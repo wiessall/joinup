@@ -27,7 +27,6 @@ use Drupal\DrupalExtension\TagTrait;
 use Drupal\image\Plugin\Field\FieldType\ImageItem;
 use Drupal\joinup\HtmlManipulator;
 use Drupal\joinup\Traits\AntispamTrait;
-use Drupal\joinup\Traits\ConfigReadOnlyTrait;
 use Drupal\joinup\Traits\ContextualLinksTrait;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\JavascriptTrait;
@@ -65,7 +64,6 @@ class FeatureContext extends RawDrupalContext {
   use TraversingTrait;
   use UserTrait;
   use UtilityTrait;
-  use ConfigReadOnlyTrait;
 
   /**
    * The Joinup version, retrieved from the `VERSION` file in the project root.
