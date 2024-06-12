@@ -38,6 +38,10 @@ if [[ "$FULL_CHECK" == "1" ]]; then
   ddev exec ./vendor/bin/grumphp run --no-interaction --testsuite=git_pre_push
   EXIT_CODE=$?
 else
+  # Add composer.json if lock is present.
+  # @todo Remove once https://github.com/phpro/grumphp/pull/1142 gets in.
+  [[ "${CHANGED_FILES[@]}" =~ "composer.lock" ]] && CHANGED_FILES+=("composer.json")
+
   # Keep only existing files.
   CHANGED_FILES=($(printf "%s\n" "${CHANGED_FILES[@]}" | xargs -I {} bash -c 'test -e "{}" && echo "{}"'))
 
