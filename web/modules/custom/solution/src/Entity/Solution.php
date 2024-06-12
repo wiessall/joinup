@@ -209,16 +209,23 @@ class Solution extends Rdf implements SolutionInterface {
       'rdf_entity' => [
         'asset_release' => array_keys($releases),
       ],
-      'node' => [
-        'asset_distribution' => $this->getDistributionIds(),
-      ],
     ]);
     foreach ($releases as $release) {
       $ids = NestedArray::mergeDeep($ids, [
         'node' => [
-          'asset_distribution' => $release->getDistributionIds(),
+          'distribution' => $release->getDistributionIds(),
         ],
       ]);
+    }
+
+    if (!empty($ids['node']['distribution'])) {
+      // Depending on the code, sometimes the IDs will be string and sometimes
+      // they will be integers. We need to make sure they are all integers.
+      // For example, in
+      // `\Drupal\joinup_group\Entity\GroupTrait::getNodeGroupContent`, the code
+      // iterates over the IDs and re-assigns them to the array. This converts
+      // the numeric strings into integers.
+      $ids['node']['distribution'] = array_unique(array_map('intval', $ids['node']['distribution']));
     }
     return $ids;
   }

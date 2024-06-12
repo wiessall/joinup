@@ -36,6 +36,16 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
 
     $this->createContent();
 
+    $distributions = [
+      (int) $this->entity['node']['distribution']['1.2.2']->id(),
+      (int) $this->entity['node']['distribution']['1.1']->id(),
+      (int) $this->entity['node']['distribution']['1.1.1']->id(),
+      (int) $this->entity['node']['distribution']['1.2']->id(),
+      (int) $this->entity['node']['distribution']['1.2.1']->id(),
+      (int) $this->entity['node']['distribution']['1.1.2']->id(),
+    ];
+    sort($distributions);
+
     // Check that the collection content is correctly computed and predictable.
     $this->assertSame([
       // The creation order is determined, same is the node IDs order.
@@ -52,14 +62,7 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
           (int) $this->entity['node']['discussion']['1']->id(),
           (int) $this->entity['node']['discussion']['2']->id(),
         ],
-        'distribution' => [
-          (int) $this->entity['node']['distribution']['1.1.1']->id(),
-          (int) $this->entity['node']['distribution']['1.1.2']->id(),
-          (int) $this->entity['node']['distribution']['1.2.1']->id(),
-          (int) $this->entity['node']['distribution']['1.2.2']->id(),
-          (int) $this->entity['node']['distribution']['1.1']->id(),
-          (int) $this->entity['node']['distribution']['1.2']->id(),
-        ],
+        'distribution' => $distributions,
         'document' => [
           (int) $this->entity['node']['document']['1.1']->id(),
           (int) $this->entity['node']['document']['1.2']->id(),
@@ -84,14 +87,6 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
         ],
       ],
       'rdf_entity' => [
-        // 'asset_distribution' => [
-        // 'http://distribution/1.1',
-        // 'http://distribution/1.1.1',
-        // 'http://distribution/1.1.2',
-        // 'http://distribution/1.2',
-        // 'http://distribution/1.2.1',
-        // 'http://distribution/1.2.2',
-        // ],
         'asset_release' => [
           'http://release/1.1',
           'http://release/1.2',
@@ -113,6 +108,7 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
           (int) $this->entity['node']['discussion']['1.1']->id(),
           (int) $this->entity['node']['discussion']['1.2']->id(),
         ],
+        'distribution' => $distributions,
         'document' => [
           (int) $this->entity['node']['document']['1.1']->id(),
           (int) $this->entity['node']['document']['1.2']->id(),
@@ -127,14 +123,6 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
         ],
       ],
       'rdf_entity' => [
-        'asset_distribution' => [
-          'http://distribution/1.1',
-          'http://distribution/1.1.1',
-          'http://distribution/1.1.2',
-          'http://distribution/1.2',
-          'http://distribution/1.2.1',
-          'http://distribution/1.2.2',
-        ],
         'asset_release' => [
           'http://release/1.1',
           'http://release/1.2',
@@ -166,19 +154,19 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
     $this->drupalGet($this->entity['rdf_entity']['asset_release']['1.2']->toUrl());
     $assert->addressEquals('/collection/collection/solution/abc123/release/12');
     // Release 1.1 distributions.
-    $this->drupalGet($this->entity['rdf_entity']['asset_distribution']['1.1.1']->toUrl());
+    $this->drupalGet($this->entity['node']['distribution']['1.1.1']->toUrl());
     $assert->addressEquals('/collection/collection/solution/abc123/distribution/distribution-111');
-    $this->drupalGet($this->entity['rdf_entity']['asset_distribution']['1.1.2']->toUrl());
+    $this->drupalGet($this->entity['node']['distribution']['1.1.2']->toUrl());
     $assert->addressEquals('/collection/collection/solution/abc123/distribution/distribution-112');
     // Release 1.2 distributions.
-    $this->drupalGet($this->entity['rdf_entity']['asset_distribution']['1.2.1']->toUrl());
+    $this->drupalGet($this->entity['node']['distribution']['1.2.1']->toUrl());
     $assert->addressEquals('/collection/collection/solution/abc123/distribution/distribution-121');
-    $this->drupalGet($this->entity['rdf_entity']['asset_distribution']['1.2.2']->toUrl());
+    $this->drupalGet($this->entity['node']['distribution']['1.2.2']->toUrl());
     $assert->addressEquals('/collection/collection/solution/abc123/distribution/distribution-122');
     // Solution distributions.
-    $this->drupalGet($this->entity['rdf_entity']['asset_distribution']['1.1']->toUrl());
+    $this->drupalGet($this->entity['node']['distribution']['1.1']->toUrl());
     $assert->addressEquals('/collection/collection/solution/abc123/distribution/distribution-11');
-    $this->drupalGet($this->entity['rdf_entity']['asset_distribution']['1.2']->toUrl());
+    $this->drupalGet($this->entity['node']['distribution']['1.2']->toUrl());
     $assert->addressEquals('/collection/collection/solution/abc123/distribution/distribution-12');
     // Solution nodes.
     $this->drupalGet($this->entity['node']['custom_page']['1.1']->toUrl());
@@ -225,19 +213,19 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
     $this->drupalGet($this->entity['rdf_entity']['asset_release']['1.2']->toUrl());
     $assert->addressEquals('/collection/xyz789/solution/abc123/release/12');
     // Release 1.1 distributions.
-    $this->drupalGet($this->entity['rdf_entity']['asset_distribution']['1.1.1']->toUrl());
+    $this->drupalGet($this->entity['node']['distribution']['1.1.1']->toUrl());
     $assert->addressEquals('/collection/xyz789/solution/abc123/distribution/distribution-111');
-    $this->drupalGet($this->entity['rdf_entity']['asset_distribution']['1.1.2']->toUrl());
+    $this->drupalGet($this->entity['node']['distribution']['1.1.2']->toUrl());
     $assert->addressEquals('/collection/xyz789/solution/abc123/distribution/distribution-112');
     // Release 1.2 distributions.
-    $this->drupalGet($this->entity['rdf_entity']['asset_distribution']['1.2.1']->toUrl());
+    $this->drupalGet($this->entity['node']['distribution']['1.2.1']->toUrl());
     $assert->addressEquals('/collection/xyz789/solution/abc123/distribution/distribution-121');
-    $this->drupalGet($this->entity['rdf_entity']['asset_distribution']['1.2.2']->toUrl());
+    $this->drupalGet($this->entity['node']['distribution']['1.2.2']->toUrl());
     $assert->addressEquals('/collection/xyz789/solution/abc123/distribution/distribution-122');
     // Solution distributions.
-    $this->drupalGet($this->entity['rdf_entity']['asset_distribution']['1.1']->toUrl());
+    $this->drupalGet($this->entity['node']['distribution']['1.1']->toUrl());
     $assert->addressEquals('/collection/xyz789/solution/abc123/distribution/distribution-11');
-    $this->drupalGet($this->entity['rdf_entity']['asset_distribution']['1.2']->toUrl());
+    $this->drupalGet($this->entity['node']['distribution']['1.2']->toUrl());
     $assert->addressEquals('/collection/xyz789/solution/abc123/distribution/distribution-12');
     // Solution nodes.
     $this->drupalGet($this->entity['node']['custom_page']['1.1']->toUrl());
@@ -396,7 +384,6 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
     for ($i = 1; $i <= 2; $i++) {
       $this->entity['node']['distribution']["1.{$i}"] = $this->createNode([
         'type' => 'distribution',
-        // 'uri' => "http://distribution/1.{$i}",
         'title' => "distribution 1.{$i}",
         'distribution_parent' => 'http://solution/1',
         'field_state' => 'published',
