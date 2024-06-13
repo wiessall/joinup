@@ -63,8 +63,8 @@ function joinup_distribution_entity_bundle_field_info(EntityTypeInterface $entit
     return [];
   }
 
-
-  // Create the `distributions` field.
+  // Define a distributions field that computes the distributions of a solution
+  // or a release and can be placed in the displays.
   $fields['distributions'] = BaseFieldDefinition::create('entity_reference')
     ->setLabel(t('Distributions'))
     ->setDescription(t('The distributions of this entity.'))
