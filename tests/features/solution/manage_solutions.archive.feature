@@ -107,6 +107,7 @@ Feature: When a solution is archived then its sub-content also should be archive
     And the workflow state of the "Solution Release 1" "rdf entity" should be "archived"
     And the workflow state of the "Solution Release 2" "rdf entity" should be "draft"
     And the workflow state of the "Solution Release 3" "rdf entity" should be "archived"
+    And the string value of the "revision_log" field in "Solution Discussion" content should be "Updated state to 'archived' by 'solution_archive_related_content' queue, from revision ID '<placeholder>' with state 'published'."
     And 2 e-mails should have been sent
     And the following email should have been sent:
       | recipient | John Moderator                     |
@@ -202,6 +203,7 @@ Feature: When a solution is archived then its sub-content also should be archive
     And the workflow state of the "Solution Release 1" "rdf entity" should be "published"
     And the workflow state of the "Solution Release 2" "rdf entity" should be "draft"
     And the workflow state of the "Solution Release 3" "rdf entity" should be "published"
+    And the string value of the "revision_log" field in "Solution Discussion" content should be "Updated state to 'published' by 'solution_archive_related_content' queue, from revision ID '<placeholder>' with state 'archived'."
 
     When I go to the homepage of the "Solution" solution
     Then I should not see the text "Archived" in the "Header"
