@@ -36,6 +36,56 @@ class SolutionReleasesAndDistributionsFieldItemList extends EntityReferenceField
   }
 
   /**
+   * {@inheritdoc}
+   */
+  public function referencedEntities(): array {
+    // Override the default value until we have all relevant entities as nodes.
+    // @todo Remove this in ISAICP-8376.
+    if ($this->isEmpty()) {
+      return [];
+    }
+
+    // Collect the IDs of existing entities to load, and directly grab the
+    // "autocreate" entities that are already populated in $item->entity.
+    $target_entities = $ids = [];
+    foreach ($this->list as $delta => $item) {
+      if ($item->target_id !== NULL) {
+        $ids[$delta] = $item->target_id;
+      }
+      elseif ($item->hasNewEntity()) {
+        $target_entities[$delta] = $item->entity;
+      }
+    }
+
+    // Load and add the existing entities.
+    if ($ids) {
+      $numeric_ids = [];
+      $string_ids = [];
+      foreach ($ids as $delta => $target_id) {
+        if (is_numeric($target_id)) {
+          $numeric_ids[$delta] = $target_id;
+        }
+        else {
+          $string_ids[$delta] = $target_id;
+        }
+      }
+
+      foreach (\Drupal::entityTypeManager()->getStorage('node')->loadMultiple($numeric_ids) as $delta => $referenced_entity) {
+        $target_entities[$delta] = $referenced_entity;
+      }
+
+      foreach (\Drupal::entityTypeManager()->getStorage('rdf_entity')->loadMultiple($string_ids) as $delta => $referenced_entity) {
+        $target_entities[$delta] = $referenced_entity;
+      }
+
+      // Ensure the returned array is ordered by deltas.
+      ksort($target_entities);
+    }
+
+    return $target_entities;
+  }
+
+  /**
    * Returns a list of solution's releases and standalone distributions as IDs.
    *
    * @return string[]
