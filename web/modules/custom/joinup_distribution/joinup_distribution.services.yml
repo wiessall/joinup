@@ -12,3 +12,9 @@ services:
     arguments: ['@joinup_distribution.parent_distribution_resolver']
     tags:
       - { name: event_subscriber }
+
+  joinup_distribution.event_subscriber:
+    class: Drupal\joinup_distribution\EventSubscriber\DistributionParentRdfSyncSubscriber
+    arguments: ['@rdf_sync.mapper', '@file_url_generator']
+    tags:
+      - { name: event_subscriber }
