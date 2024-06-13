@@ -11,7 +11,7 @@ use Drupal\sparql_endpoint\Plugin\Attribute\SparqlFormat;
  * Provides a 'N-Triples' SPARQL format.
  */
 #[SparqlFormat(
-  id: 'text/plain',
+  id: 'text/ntriples',
   label: new TranslatableMarkup('N-Triples'),
   weight: 9,
 )]
