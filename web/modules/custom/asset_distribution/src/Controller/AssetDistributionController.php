@@ -63,9 +63,16 @@ class AssetDistributionController extends ControllerBase {
       return AccessResult::forbidden();
     }
 
-    return $this->entityTypeManager()->getAccessControlHandler('node')->createAccess('distribution', NULL, [
+    $access = $this->entityTypeManager()->getAccessControlHandler('node')->createAccess('distribution', NULL, [
       'group' => $this->getRelatedSolution($rdf_entity),
     ], TRUE);
+
+    if ($access->isForbidden()) {
+      return $access;
+    }
+
+    return \Drupal::getContainer()->get('og.access')
+      ->userAccess($this->getRelatedSolution($rdf_entity), 'create distribution content', NULL, TRUE);
   }
 
   /**

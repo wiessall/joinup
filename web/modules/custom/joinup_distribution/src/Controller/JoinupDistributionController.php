@@ -85,18 +85,9 @@ class JoinupDistributionController extends ControllerBase {
       return AccessResult::forbidden();
     }
 
-    $access = $this->entityTypeManager()->getAccessControlHandler('node')->createAccess('distribution', NULL, [
+    return $this->entityTypeManager()->getAccessControlHandler('node')->createAccess('distribution', NULL, [
       'group' => $this->getRelatedSolution($rdf_entity),
     ], TRUE);
-
-    if ($access->isForbidden()) {
-      return $access;
-    }
-
-    // The access control handler is not going through the OG access handler
-    // for the create operation, so we need to check the access to the group
-    // manually.
-    return $this->ogAccess->userAccessGroupContentEntityOperation('create', $rdf_entity, $distribution, $this->currentUser());
   }
 
   /**
