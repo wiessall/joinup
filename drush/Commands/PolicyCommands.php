@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drush\Commands;
 
 use Consolidation\AnnotatedCommand\CommandData;
@@ -10,8 +12,10 @@ use Consolidation\AnnotatedCommand\CommandData;
 class PolicyCommands extends DrushCommands {
 
   /**
-   * Prevent catastrophic braino. Note that this file has to be local to the
-   * machine that initiates the sql:sync command.
+   * Prevent catastrophic braino.
+   *
+   * Note that this file has to be local to the machine that initiates
+   * the sql:sync command.
    *
    * @hook validate sql:sync
    *
@@ -35,4 +39,5 @@ class PolicyCommands extends DrushCommands {
       throw new \Exception(dt('Per !file, you may never rsync to the production site.', ['!file' => __FILE__]));
     }
   }
+
 }
