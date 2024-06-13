@@ -9,7 +9,7 @@ dependencies:
     - file_url
 third_party_settings:
   rdf_sync:
-    value:
+    target_id:
       predicate: 'http://www.w3.org/ns/dcat#accessURL'
       type: 'xsd:anyURI'
 id: node.distribution.access_url
