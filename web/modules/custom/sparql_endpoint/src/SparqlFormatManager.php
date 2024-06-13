@@ -52,4 +52,27 @@ class SparqlFormatManager extends DefaultPluginManager {
     return NULL;
   }
 
+  /**
+   * Finds and returns an array of plugin definitions.
+   *
+   * @return array
+   *   An associative array of plugin definitions.
+   */
+  public function findDefinitions(): array {
+    $options = [];
+
+    $definitions = $this->getDefinitions();
+
+    // Sort plugins by weight.
+    uasort($definitions, function($a, $b) {
+      return $a['weight'] <=> $b['weight'];
+    });
+
+    foreach ($definitions as $definition) {
+      $options[$definition['id']] = $definition['label'];
+    }
+
+    return $options;
+  }
+
 }

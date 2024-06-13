@@ -59,7 +59,7 @@ class QueryForm extends FormBase {
       '#type' => 'select',
       '#title' => $this->t('Format'),
       '#description' => $this->t('Select the format of the response.'),
-      '#options' => $this->getIdOptions(),
+      '#options' => $this->sparqlFormatManager->findDefinitions(),
       '#default_value' => $requestQuery['format'] ?? 'html',
       '#required' => TRUE,
     ];
@@ -114,7 +114,7 @@ class QueryForm extends FormBase {
     $return = [];
     foreach ($helperQueries as $helperQuery) {
       $links = [];
-      foreach ($this->getIdOptions() as $format => $label) {
+      foreach ($this->sparqlFormatManager->findDefinitions() as $format => $label) {
         $queryLink = Url::fromRoute('sparql_endpoint.query', [], [
           'query' => [
             'query' => $helperQuery['query'],
@@ -127,29 +127,6 @@ class QueryForm extends FormBase {
     }
 
     return implode('<br>', $return);
-  }
-
-  /**
-   * Retrieves the available ID options from the SparqlFormatManager.
-   *
-   * @return array
-   *   An array of ID options.
-   */
-  protected function getIdOptions(): array {
-    $options = [];
-
-    $definitions = $this->sparqlFormatManager->getDefinitions();
-
-    // Sort plugins by weight.
-    uasort($definitions, function ($a, $b) {
-      return $a['weight'] <=> $b['weight'];
-    });
-
-    foreach ($definitions as $definition) {
-      $options[$definition['id']] = $definition['label'];
-    }
-
-    return $options;
   }
 
 }
