@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\sparql_endpoint;
 
 use Drupal\Core\Cache\CacheBackendInterface;

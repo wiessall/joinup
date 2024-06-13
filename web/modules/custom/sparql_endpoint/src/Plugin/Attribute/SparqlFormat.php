@@ -19,7 +19,7 @@ class SparqlFormat extends Plugin {
    * @param string $id
    *   The plugin ID.
    * @param class-string|null $deriver
-   *  (optional) The deriver class.
+   *   The deriver class.
    * @param \Drupal\Core\StringTranslation\TranslatableMarkup|null $label
    *   The administrative label of the plugin.
    * @param int|null $weight
