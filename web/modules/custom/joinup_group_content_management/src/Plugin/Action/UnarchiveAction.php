@@ -142,13 +142,14 @@ class UnarchiveAction extends StateActionBase {
    * {@inheritdoc}
    *
    * @throws \Drupal\Core\Entity\EntityStorageException
+   * @throws \Exception
    */
   public function execute(?NodeInterface $node = NULL): void {
     if (!$node instanceof EntityWorkflowStateInterface) {
       return;
     }
 
-    $this->workflowHelper->unarchiveEntity($node);
+    $this->workflowHelper->unarchiveEntity($node, $this->getRevisionLogMessage($node, 'published'));
   }
 
 }
