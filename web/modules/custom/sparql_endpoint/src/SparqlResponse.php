@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Drupal\sparql_endpoint;
 
 /**
- * Represents a Sparql response.
+ * Represents a SPARQL response.
  */
 readonly class SparqlResponse {
 
