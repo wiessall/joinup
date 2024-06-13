@@ -62,6 +62,16 @@ class QueryController extends ControllerBase {
       ]);
     }
 
+    if ($sparqlFormat->isInlineResults()) {
+      $build['form'] = $this->formBuilder()->getForm(QueryForm::class);
+      $build['results'] = [
+        '#type' => 'markup',
+        '#markup' => '<div class="endpoint-results my-4">' . $sparqlResponse->results . '</div>',
+        '#attributes' => ['class' => ['form-item']],
+      ];
+      return $build;
+    }
+
     return $sparqlFormat->getResponse($sparqlResponse);
   }
 

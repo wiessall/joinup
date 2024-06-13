@@ -14,6 +14,7 @@ use Drupal\sparql_endpoint\Plugin\Attribute\SparqlFormat;
   id: 'text/html',
   label: new TranslatableMarkup('HTML'),
   weight: 1,
+  inline: TRUE,
 )]
 class HtmlSparqlFormat extends BaseSparqlFormat {
 
