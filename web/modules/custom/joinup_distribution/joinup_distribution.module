@@ -11,9 +11,12 @@ use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\file_url\FileUrlHandler;
+use Drupal\joinup_distribution\DistributionsFieldItemList;
 use Drupal\joinup_distribution\Entity\Distribution;
 use Drupal\joinup_distribution\Entity\DistributionInterface;
 use Drupal\joinup_distribution\Entity\DistributionsParentInterface;
@@ -46,6 +49,46 @@ function joinup_distribution_entity_bundle_field_info_alter(array &$fields, Enti
       $fields['label']->addConstraint('UniqueDistributionTitle', []);
     }
   }
+}
+
+/**
+ * Implements hook_entity_bundle_field_info().
+ */
+function joinup_distribution_entity_bundle_field_info(EntityTypeInterface $entity_type, $bundle, array $base_field_definitions): array {
+  if ($entity_type->id() !== 'rdf_entity') {
+    return [];
+  }
+
+  if (!in_array($bundle, ['asset_release', 'solution'])) {
+    return [];
+  }
+
+
+  // Create the `distributions` field.
+  $fields['distributions'] = BaseFieldDefinition::create('entity_reference')
+    ->setLabel(t('Distributions'))
+    ->setDescription(t('The distributions of this entity.'))
+    ->setCardinality(FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED)
+    ->setComputed(TRUE)
+    ->setSetting('target_type', 'node')
+    ->setSetting('handler', 'default')
+    ->setSetting('handler_settings', [
+      'target_bundles' => ['distribution'],
+      'sort' => [
+        'field' => 'created',
+        'direction' => 'DESC',
+      ],
+    ])
+    ->setDisplayOptions('view', [
+      'label' => 'hidden',
+      'type' => 'entity_reference_entity_view',
+      'weight' => 0,
+    ])
+    ->setDisplayConfigurable('form', FALSE)
+    ->setDisplayConfigurable('view', TRUE)
+    ->setClass(DistributionsFieldItemList::class);
+
+  return $fields;
 }
 
 /**

@@ -60,6 +60,7 @@ hidden:
   changed: true
   collections: true
   created: true
+  distributions: true
   download_total: true
   eif_perspective: true
   featured: true

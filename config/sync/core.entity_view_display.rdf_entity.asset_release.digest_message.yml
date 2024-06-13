@@ -226,6 +226,7 @@ content:
     region: content
 hidden:
   changed: true
+  distributions: true
   field_isr_contact_information: true
   field_isr_description: true
   field_isr_documentation: true

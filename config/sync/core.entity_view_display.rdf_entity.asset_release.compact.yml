@@ -24,6 +24,10 @@ dependencies:
     - field.field.rdf_entity.asset_release.field_topic
     - rdf_entity.rdfentity.asset_release
   module:
+    - field_delimiter
+    - field_formatter_range
+    - joinup_slick
+    - template_suggestion
     - text
     - user
 _core:
@@ -33,6 +37,27 @@ targetEntityType: rdf_entity
 bundle: asset_release
 mode: compact
 content:
+  distributions:
+    type: entity_reference_entity_view
+    label: hidden
+    settings:
+      view_mode: compact
+      link: false
+    third_party_settings:
+      field_delimiter:
+        delimiter: ''
+      field_formatter_range:
+        order: 0
+        limit: 0
+        offset: 0
+      joinup_slick:
+        preset: ''
+        field_label: false
+        custom_label: ''
+      template_suggestion:
+        template_suggestion: ''
+    weight: 0
+    region: content
   field_isr_affiliations_requests:
     type: entity_reference_label
     label: above

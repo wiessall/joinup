@@ -171,7 +171,16 @@ id: rdf_entity.solution.explore_item
 targetEntityType: rdf_entity
 bundle: solution
 mode: explore_item
-content: {  }
+content:
+  distributions:
+    type: entity_reference_entity_view
+    label: hidden
+    settings:
+      view_mode: default
+      link: false
+    third_party_settings: {  }
+    weight: 0
+    region: content
 hidden:
   changed: true
   collections: true
