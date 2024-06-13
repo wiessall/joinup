@@ -71,10 +71,9 @@ Feature: Tests related to the SPARQL query endpoint.
       | CSV         |
       | TSV         |
 
-  Scenario: If a query format is forced into the URL, do not perform a query.
+  Scenario: Wrong format was requested.
     # The query is valid but the format was not selected from the list and
     # was typed directly into the URL.
     Given I go to "sparql?query=SELECT%20%2A%20WHERE%20%7B%20%3Fs%20%3Fp%20%3Fo%20%7D%20LIMIT%2010&format=adfsadf"
-    Then the response status code should be 200
-    And I should see the heading "Query SPARQL endpoint"
-    And I should not see the text "HTML5 table"
+    Then the response status code should be 400
+    And I should see the text "Bad Request. Unknown format"
