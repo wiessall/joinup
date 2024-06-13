@@ -8,6 +8,7 @@ use Drupal\Core\Controller\ControllerBase;
 use Drupal\sparql_endpoint\CachedSparqlReadOnlyEndpoint;
 use Drupal\sparql_endpoint\Form\QueryForm;
 use Drupal\sparql_endpoint\SparqlFormatManager;
+use Drupal\sparql_endpoint\SparqlResponse;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\AcceptHeader;
 use Symfony\Component\HttpFoundation\Request;
@@ -45,34 +46,48 @@ class QueryController extends ControllerBase {
   public function content(Request $request): array|Response {
     $query = $request->query->get('query');
     $format = $this->getFormatFromQuery($request) ?? $this->getFormatFromRequest($request);
+    $pluginFormat = $this->sparqlFormatManager->getSparqlFormatPluginById($format);
 
-    $sparqlFormat = $this->sparqlFormatManager->getSparqlFormatPluginById($format);
-    if (!$sparqlFormat) {
+    if (!$pluginFormat) {
       return new Response('Bad Request. Unknown format', Response::HTTP_BAD_REQUEST);
     }
+
     if (empty($query)) {
       $build['form'] = $this->formBuilder()->getForm(QueryForm::class);
       return $build;
     }
 
-    $sparqlResponse = $this->endpoint->query($query, $sparqlFormat->getPluginId());
+    $sparqlResponse = $this->endpoint->query($query, $pluginFormat->getPluginId());
     if (!$sparqlResponse->isSuccess()) {
       return new Response($sparqlResponse->results, $sparqlResponse->code, [
         'Content-Type' => 'text/plain',
       ]);
     }
 
-    if ($sparqlFormat->isInlineResults()) {
-      $build['form'] = $this->formBuilder()->getForm(QueryForm::class);
-      $build['results'] = [
-        '#type' => 'markup',
-        '#markup' => '<div class="endpoint-results my-4">' . $sparqlResponse->results . '</div>',
-        '#attributes' => ['class' => ['form-item']],
-      ];
-      return $build;
+    if ($pluginFormat->isInlineResults()) {
+      return $this->getBuildWithFormAndResults($sparqlResponse);
     }
+    return $pluginFormat->getResponse($sparqlResponse);
+  }
 
-    return $sparqlFormat->getResponse($sparqlResponse);
+  /**
+   * Gets build with form and results.
+   *
+   * @param \Drupal\sparql_endpoint\SparqlResponse $sparqlResponse
+   *   The SPARQL response object.
+   *
+   * @return array
+   *   The build with form and results.
+   */
+  protected function getBuildWithFormAndResults(SparqlResponse $sparqlResponse): array {
+    $build['form'] = $this->formBuilder()->getForm(QueryForm::class);
+    $build['results'] = [
+      '#type' => 'markup',
+      '#markup' => '<div class="endpoint-results my-4">' . $sparqlResponse->results . '</div>',
+      '#attributes' => ['class' => ['form-item']],
+    ];
+
+    return $build;
   }
 
   /**
