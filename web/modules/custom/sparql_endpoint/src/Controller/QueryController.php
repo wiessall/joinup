@@ -47,7 +47,10 @@ class QueryController extends ControllerBase {
     $format = $this->getFormatFromQuery($request) ?? $this->getFormatFromRequest($request);
 
     $sparqlFormat = $this->sparqlFormatManager->getSparqlFormatPluginById($format);
-    if (!$sparqlFormat || empty($query)) {
+    if (!$sparqlFormat) {
+      return new Response('Bad Request. Unknown format', Response::HTTP_BAD_REQUEST);
+    }
+    if (empty($query)) {
       $build['form'] = $this->formBuilder()->getForm(QueryForm::class);
       return $build;
     }
