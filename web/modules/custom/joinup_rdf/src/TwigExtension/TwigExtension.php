@@ -21,14 +21,8 @@ class TwigExtension extends AbstractExtension {
    */
   public function getFilters(): array {
     return [
-      new TwigFilter('sparql_entity_storage_uri_encode', [
-        $this,
-        'sparqlEntityStorageUriEncode',
-      ]),
-      new TwigFilter('sparql_entity_storage_uri_decode', [
-        $this,
-        'sparqlEntityStorageUriDecode',
-      ]),
+      new TwigFilter('sparql_entity_storage_uri_encode', $this->sparqlEntityStorageUriEncode(...)),
+      new TwigFilter('sparql_entity_storage_uri_decode', $this->sparqlEntityStorageUriDecode(...)),
     ];
   }
 
