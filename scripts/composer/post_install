@@ -2,9 +2,6 @@
 
 set -e
 
-# Check that composer.lock hash is in sync.
-composer validate --no-check-all --no-check-publish
-
 # Run NPM install only if it's not bypassed or when building the distribution.
 if [ "$BUILD_DISTRO" = "1" ] || [ ! -f .env ] || [ "$(grep 'COMPOSER_DISABLE_NODE_DEPENDENCIES=1' .env)" = "" ]
 then
