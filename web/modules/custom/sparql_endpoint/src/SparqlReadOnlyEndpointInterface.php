@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Drupal\joinup_rdf;
+namespace Drupal\sparql_endpoint;
 
 use Psr\Http\Message\ResponseInterface;
 

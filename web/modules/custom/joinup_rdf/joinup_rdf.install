@@ -36,9 +36,6 @@ function joinup_rdf_requirements(string $phase): array {
     $requirements['joinup_rdf_content_integrity']['value'] = $errors;
   }
 
-  // Check the SPARQL read-only endpoint status.
-  $requirements['joinup_rdf.readonly_endpoint'] = \Drupal::service('joinup_rdf.readonly_endpoint')->getRequirement();
-
   return $requirements;
 }
 

@@ -9,10 +9,14 @@ services:
     factory: cache_factory:get
     arguments: [ sparql_endpoint ]
 
+  sparql_endpoint.readonly_endpoint:
+    class: Drupal\sparql_endpoint\SparqlReadOnlyEndpoint
+    autowire: true
+
   sparql_endpoint.cached_sparql_endpoint:
     class: Drupal\sparql_endpoint\CachedSparqlReadOnlyEndpoint
     arguments:
-      - '@joinup_rdf.readonly_endpoint'
+      - '@sparql_endpoint.readonly_endpoint'
       - '@cache.sparql_endpoint'
       - '@datetime.time'
       - '%sparql_endpoint.ttl%'
