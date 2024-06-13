@@ -4,15 +4,17 @@ declare(strict_types=1);
 
 namespace Drupal\sparql_endpoint\Plugin\SparqlFormat;
 
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\sparql_endpoint\Plugin\Attribute\SparqlFormat;
+
 /**
  * Provides a 'CSV' SPARQL format.
- *
- * @SparqlFormat(
- *   id = "text/csv",
- *   weight = 10,
- *   label = @Translation("CSV"),
- * )
  */
+#[SparqlFormat(
+  id: 'text/csv',
+  label: new TranslatableMarkup('CSV'),
+  weight: 10,
+)]
 class CsvSparqlFormat extends BaseSparqlFormat {
 
   /**
