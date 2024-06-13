@@ -7,9 +7,11 @@ namespace Drupal\asset_distribution\Controller;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\og\OgAccessInterface;
 use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\rdf_entity\RdfInterface;
 use Drupal\solution\Entity\SolutionInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Controller for asset distribution forms.
@@ -23,6 +25,25 @@ class AssetDistributionController extends ControllerBase {
    * The solution parent.
    */
   protected SolutionInterface|null $solution = NULL;
+
+  /**
+   * Constructs a new controller instance.
+   *
+   * @param \Drupal\og\OgAccessInterface $ogAccess
+   *   The OG access handler.
+   */
+  public function __construct(
+    protected OgAccessInterface $ogAccess,
+  ) {}
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container): self {
+    return new static(
+      $container->get('og.access'),
+    );
+  }
 
   /**
    * Controller for the base form.
@@ -71,8 +92,7 @@ class AssetDistributionController extends ControllerBase {
       return $access;
     }
 
-    return \Drupal::getContainer()->get('og.access')
-      ->userAccess($this->getRelatedSolution($rdf_entity), 'create distribution content', NULL, TRUE);
+    return $this->ogAccess->userAccess($this->getRelatedSolution($rdf_entity), 'create distribution content', NULL, TRUE);
   }
 
   /**
