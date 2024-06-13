@@ -269,7 +269,9 @@ function template_preprocess_asset_release_releases_download(array &$variables) 
   // generically. Currently we have to iterate through each of them and do a
   // separate view builder call.
   // @todo Swap the following commented line and remove the rest in ISAICP-8376.
+  // @codingStandardsIgnoreStart
   // $variables['releases'] = \Drupal::entityTypeManager()->getViewBuilder('node')->viewMultiple($releases, 'compact');
+  // @codingStandardsIgnoreEnd
   foreach ($releases as $key => $entity) {
     $variables['releases'][$key] = \Drupal::entityTypeManager()->getViewBuilder($entity->getEntityTypeId())->view($entity, 'compact');
   }
