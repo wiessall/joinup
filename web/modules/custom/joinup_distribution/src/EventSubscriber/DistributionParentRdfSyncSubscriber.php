@@ -6,7 +6,6 @@ namespace Drupal\joinup_distribution\EventSubscriber;
 
 use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\File\FileUrlGeneratorInterface;
-use Drupal\file_url\FileUrlHandler;
 use Drupal\joinup_distribution\Entity\DistributionInterface;
 use Drupal\joinup_rdf\Entity\RdfSyncEntityInterface;
 use Drupal\rdf_sync\Event\RdfSyncNormalizeEvent;
@@ -24,6 +23,8 @@ final class DistributionParentRdfSyncSubscriber implements EventSubscriberInterf
    *
    * @param \Drupal\rdf_sync\RdfSyncMapper $mapper
    *   The mapper service.
+   * @param \Drupal\Core\File\FileUrlGeneratorInterface $fileUrlGenerator
+   *   The file URL generator service.
    */
   public function __construct(
     protected RdfSyncMapper $mapper,
@@ -43,7 +44,7 @@ final class DistributionParentRdfSyncSubscriber implements EventSubscriberInterf
    * Adds the dcat:distribution relationship from parent to distribution.
    *
    * @param \Drupal\rdf_sync\Event\RdfSyncNormalizeEvent $event
-   *    The event object.
+   *   The event object.
    */
   public function addDistributionParentRelation(RdfSyncNormalizeEvent $event): void {
     $entity = $event->getEntity();

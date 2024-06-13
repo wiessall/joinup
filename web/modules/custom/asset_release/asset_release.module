@@ -264,7 +264,15 @@ function asset_release_entity_update(EntityInterface $entity) {
 function template_preprocess_asset_release_releases_download(array &$variables) {
   $releases = $variables['releases'];
 
-  $variables['releases'] = \Drupal::entityTypeManager()->getViewBuilder('rdf_entity')->viewMultiple($releases, 'compact');
+  // In the commented out section, all entities are handled as nodes. When
+  // RDF2Node is completed, both releases and distributions will be handled
+  // generically. Currently we have to iterate through each of them and do a
+  // separate view builder call.
+  // @todo Swap the following commented line and remove the rest in ISAICP-8376.
+  // $variables['releases'] = \Drupal::entityTypeManager()->getViewBuilder('node')->viewMultiple($releases, 'compact');
+  foreach ($releases as $key => $entity) {
+    $variables['releases'][$key] = \Drupal::entityTypeManager()->getViewBuilder($entity->getEntityTypeId())->view($entity, 'compact');
+  }
 }
 
 /**
