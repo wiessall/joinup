@@ -190,8 +190,8 @@ Feature: Add distribution through the UI
 
   Scenario: Distributions with the same name should not be allowed within the same solution.
     Given distribution content:
-      | title | description        | access url | parent                 | state     |
-      | test  | Sample description | test.zip   | Solution random x name | published |
+      | title            | description        | access url | parent                 | state     |
+      | Windows - source | Sample description | test.zip   | Solution random x name | published |
     And I am logged in as a facilitator of the "Solution random x name" solution
     When I go to the homepage of the "Solution random x name" solution
     And I click "Add distribution" in the plus button menu

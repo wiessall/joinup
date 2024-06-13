@@ -40,13 +40,12 @@ function joinup_distribution_entity_bundle_info_alter(array &$bundles): void {
 }
 
 /**
- * Implements hook_entity_bundle_field_info_alter().
+ * Implements hook_entity_base_field_info_alter().
  */
-function joinup_distribution_entity_bundle_field_info_alter(array &$fields, EntityTypeInterface $entity_type, string $bundle): void {
-  if ($entity_type->id() === 'node' && $bundle === 'distribution') {
-    // Make sure a distribution's title is unique in its release.
-    if (!empty($fields['label'])) {
-      $fields['label']->addConstraint('UniqueDistributionTitle', []);
+function joinup_distribution_entity_base_field_info_alter(array &$fields, EntityTypeInterface $entity_type): void {
+  if ($entity_type->id() === 'node') {
+    if (!empty($fields['title'])) {
+      $fields['title']->addConstraint('UniqueDistributionTitle', []);
     }
   }
 }
