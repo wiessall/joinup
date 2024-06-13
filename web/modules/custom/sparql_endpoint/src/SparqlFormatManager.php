@@ -5,6 +5,7 @@ namespace Drupal\sparql_endpoint;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Plugin\DefaultPluginManager;
+use Drupal\sparql_endpoint\Plugin\Attribute\SparqlFormat;
 use Drupal\sparql_endpoint\Plugin\SparqlFormat\SparqlFormatInterface;
 
 /**
@@ -24,7 +25,7 @@ class SparqlFormatManager extends DefaultPluginManager {
    *   The module handler.
    */
   public function __construct(\Traversable $namespaces, CacheBackendInterface $cache_backend, ModuleHandlerInterface $module_handler) {
-    parent::__construct('Plugin/SparqlFormat', $namespaces, $module_handler, 'Drupal\sparql_endpoint\Plugin\SparqlFormat\SparqlFormatInterface', 'Drupal\sparql_endpoint\Annotation\SparqlFormat');
+    parent::__construct('Plugin/SparqlFormat', $namespaces, $module_handler, SparqlFormatInterface::class, SparqlFormat::class);
 
     $this->alterInfo('sparql_endpoint_sparql_format_info');
     $this->setCacheBackend($cache_backend, 'sparql_endpoint_sparql_format_plugins');

@@ -4,15 +4,17 @@ declare(strict_types=1);
 
 namespace Drupal\sparql_endpoint\Plugin\SparqlFormat;
 
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\sparql_endpoint\Plugin\Attribute\SparqlFormat;
+
 /**
  * Provides a 'N-Triples' SPARQL format.
- *
- * @SparqlFormat(
- *   id = "text/plain",
- *   weight = 9,
- *   label = @Translation("N-Triples"),
- * )
  */
+#[SparqlFormat(
+  id: 'text/plain',
+  label: new TranslatableMarkup('N-Triples'),
+  weight: 9,
+)]
 class NTriplesSparqlFormat extends BaseSparqlFormat {
 
 }
