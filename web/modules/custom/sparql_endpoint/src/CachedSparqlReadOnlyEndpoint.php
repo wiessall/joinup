@@ -6,7 +6,6 @@ namespace Drupal\sparql_endpoint;
 
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Cache\CacheBackendInterface;
-use Drupal\joinup_rdf\SparqlReadOnlyEndpointInterface;
 
 /**
  * Represents a cached SPARQL read-only endpoint.
