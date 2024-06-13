@@ -43,7 +43,6 @@ dependencies:
     - field_group
     - joinup_html_stripper
     - layout_builder
-    - options
     - responsive_image
     - template_suggestion
     - user
@@ -55,7 +54,7 @@ third_party_settings:
       label: 'Abstract wrapper'
       parent_name: ''
       region: hidden
-      weight: 56
+      weight: 54
       format_type: html_element
       format_settings:
         classes: ''
@@ -80,7 +79,7 @@ content:
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    weight: 6
+    weight: 5
     region: content
   field_is_description:
     type: joinup_html_stripper_stripped
@@ -111,7 +110,7 @@ content:
     settings:
       link: true
     third_party_settings: {  }
-    weight: 5
+    weight: 4
     region: content
   field_topic:
     type: entity_reference_label
@@ -133,6 +132,7 @@ hidden:
   changed: true
   collections: true
   created: true
+  distributions: true
   download_total: true
   eif_perspective: true
   featured: true

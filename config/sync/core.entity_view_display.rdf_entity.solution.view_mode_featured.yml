@@ -105,6 +105,7 @@ hidden:
   changed: true
   collections: true
   created: true
+  distributions: true
   eif_perspective: true
   featured: true
   field_is_abstract: true

@@ -55,7 +55,7 @@ third_party_settings:
       label: 'Abstract wrapper'
       parent_name: ''
       region: hidden
-      weight: 61
+      weight: 55
       format_type: html_element
       format_settings:
         classes: ''
@@ -172,6 +172,7 @@ hidden:
   changed: true
   collections: true
   created: true
+  distributions: true
   download_total: true
   featured: true
   field_is_abstract: true

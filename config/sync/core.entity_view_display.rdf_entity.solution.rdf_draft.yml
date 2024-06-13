@@ -77,7 +77,7 @@ content:
     settings:
       mode: link
     third_party_settings: {  }
-    weight: 27
+    weight: 22
     region: content
   field_is_included_asset:
     type: entity_reference_label
@@ -263,6 +263,7 @@ hidden:
   changed: true
   collections: true
   created: true
+  distributions: true
   download_total: true
   eif_perspective: true
   featured: true
