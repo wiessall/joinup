@@ -8,6 +8,7 @@ use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\joinup_bundle_class\DescriptionTrait;
 use Drupal\joinup_distribution\Exception\MissingDistributionParentException;
 use Drupal\joinup_group\Entity\GroupContentTrait;
+use Drupal\joinup_publication_date\Entity\EntityPublicationTimeFallbackTrait;
 use Drupal\joinup_rdf\Entity\RdfSyncEntityTrait;
 use Drupal\joinup_stats\Entity\DownloadCountAwareInterface;
 use Drupal\joinup_stats\Entity\DownloadCountAwareTrait;
@@ -31,6 +32,7 @@ class Distribution extends Node implements DistributionInterface {
   use GroupContentTrait;
   use RdfSyncEntityTrait;
   use SolutionContentTrait;
+  use EntityPublicationTimeFallbackTrait;
 
   /**
    * Fields populated with statistical information by the joinup_stats module.
@@ -140,10 +142,10 @@ class Distribution extends Node implements DistributionInterface {
   /**
    * Returns the parent entity or NULL if it is missing.
    *
-   * @todo This method should be removed once the parent entity is always set.
-   *
    * @return \Drupal\joinup_distribution\Entity\DistributionsParentInterface|null
    *   The parent entity or NULL if it is missing.
+   * @todo This method should be removed once the parent entity is always set.
+   *
    */
   protected function getParentSafe(): ?DistributionsParentInterface {
     try {
@@ -157,10 +159,10 @@ class Distribution extends Node implements DistributionInterface {
   /**
    * Returns the solution of the distribution or NULL if it is missing.
    *
-   * @todo This method should be removed once the solution is always set.
-   *
    * @return \Drupal\solution\Entity\SolutionInterface|null
    *   The solution of the distribution or NULL if it is missing.
+   * @todo This method should be removed once the solution is always set.
+   *
    */
   protected function getSolutionSafe(): ?SolutionInterface {
     try {

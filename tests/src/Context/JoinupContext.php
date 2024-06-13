@@ -938,6 +938,7 @@ class JoinupContext extends RawDrupalContext {
         'status' => 'process_status',
         'title' => 'title',
         'uri' => 'uri',
+        'publication date' => 'published_at',
       ],
       'shared' => [
         'collection' => OgGroupAudienceHelperInterface::DEFAULT_FIELD,
