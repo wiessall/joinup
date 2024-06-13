@@ -16,7 +16,7 @@ Feature: Tests related to the SPARQL query endpoint.
     And I select "N-Triples" from "format"
     When I press "Submit"
     Then the response status code should be 200
-    And the content type of the response should be "text/plain; charset=UTF-8"
+    And the content type of the response should be "text/ntriples; charset=UTF-8"
 
     Given I go to "/sparql"
     And I select "Turtle" from "format"

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\sparql_endpoint\Plugin\SparqlFormat;
 
 use Drupal\Component\Plugin\PluginInspectionInterface;
