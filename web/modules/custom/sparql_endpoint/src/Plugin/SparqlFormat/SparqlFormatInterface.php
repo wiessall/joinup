@@ -24,4 +24,12 @@ interface SparqlFormatInterface extends PluginInspectionInterface {
    */
   public function getResponse(SparqlResponse $sparqlResponse): Response;
 
+  /**
+   * Determines whether the results should be displayed inline or not.
+   *
+   * @return bool
+   *   Returns true if the results should be displayed inline, false otherwise.
+   */
+  public function isInlineResults(): bool;
+
 }

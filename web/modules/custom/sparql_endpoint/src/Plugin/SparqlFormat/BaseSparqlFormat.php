@@ -36,4 +36,11 @@ abstract class BaseSparqlFormat extends PluginBase implements SparqlFormatInterf
     ];
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function isInlineResults(): bool {
+    return (bool) $this->pluginDefinition['inline'] ?? FALSE;
+  }
+
 }
