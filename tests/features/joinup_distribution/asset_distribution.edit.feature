@@ -25,8 +25,8 @@ Feature: Asset distribution editing.
       | description    | Release description   |
       | is version of  | Solution A            |
     And distribution content:
-      | title         | description        | licence | access url | parent | state     | creation date | modification date |
-      | Asset release | Sample description | LGPL    | test.zip   |        | published | 2019-11-19    | 2021-11-19        |
+      | title                      | description        | licence | access url | parent                | state     | publication date | modification date |
+      | Asset distribution example | Sample description | LGPL    | test.zip   | Asset release example | published | 2019-11-19       | 2021-11-19        |
     And the following solution user membership:
       | solution   | user         | roles       |
       | Solution A | Gregg Hill   | owner       |
