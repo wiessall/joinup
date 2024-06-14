@@ -4,8 +4,8 @@ Feature: Asset distributions have Other licence instead of a missing one.
   Scenario Outline: Regression test for distributions with missing licence
     And I go to "<url>"
     Then the response status code should be 200
-    And I should see the text "Licence: Other"
-    And I should see the link "Other"
+    And I should see the text "Licence: Other" in the Content region
+    And I should see the link "Other" in the Content region
 
     Examples:
       | url                                                                                                                                                                                                                              |
@@ -48,14 +48,14 @@ Feature: Asset distributions have Other licence instead of a missing one.
       | /collection/spain-center-technology-transfer/solution/openjrubik-system-dissemination-statistical-data/distribution/openjrubik-system-dissemination-statistical-data |
       | /collection/spain-center-technology-transfer/solution/european-legislation-identifier/distribution/european-legislation-identifier                                   |
 
-  Scenario: Distributions without licence is not modified
-    And I go to "/collection/gnu-health/solution/gnu-health-hospital-information-system/distribution/gnu-health-hospital-information-system"
+  Scenario: Distributions without licence are not modified
+    And I go to "/collection/egovernment/solution/standard-data-e-forms/distribution/standarddaten-fur-e-formulare"
     Then the response status code should be 200
-    And I should not see the text "Licence: Other"
-    And I should not see the link "Other"
+    And I should not see the text "Licence: Other" in the Content region
+    And I should not see the link "Other" in the Content region
 
   Scenario: Other distributions are not touched
     And I go to "/collection/doris/solution/doris/distribution/doris-10"
     Then the response status code should be 200
-    And I should see the text "Licence: European Union Public Licence, Version 1.2 or later (EUPL)"
-    And I should see the link "European Union Public Licence, Version 1.2 or later (EUPL)"
+    And I should see the text "Licence: European Union Public Licence, Version 1.2 or later (EUPL)" in the Content region
+    And I should see the link "European Union Public Licence, Version 1.2 or later (EUPL)" in the Content region
