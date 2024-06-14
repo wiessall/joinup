@@ -15,13 +15,11 @@ use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\file_url\FileUrlHandler;
 use Drupal\joinup_distribution\DistributionsFieldItemList;
 use Drupal\joinup_distribution\Entity\Distribution;
 use Drupal\joinup_distribution\Entity\DistributionInterface;
 use Drupal\joinup_distribution\Entity\DistributionsParentInterface;
 use Drupal\joinup_taxonomy\Entity\MappedTerm;
-use Drupal\node\NodeInterface;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 /**
@@ -119,32 +117,6 @@ function joinup_distribution_node_access(EntityInterface $entity, string $operat
   }
 
   return AccessResult::neutral()->addCacheableDependency($solution);
-}
-
-/**
- * Implements hook_ENTITY_TYPE_presave().
- */
-function joinup_distribution_node_presave(NodeInterface $distribution): void {
-  if (!$distribution instanceof DistributionInterface) {
-    return;
-  }
-
-  if (!empty($fileId = $distribution->access_url->target_id)) {
-    if ($file = FileUrlHandler::urlToFile($fileId)) {
-      if (!FileUrlHandler::isRemote($file)) {
-        // Set the file size field.
-        $distribution->get('file_size')->setValue($file->getSize());
-
-        $tids = \Drupal::entityQuery('taxonomy_term')
-          ->accessCheck(FALSE)
-          ->condition('mime_type', $file->getMimeType())
-          ->execute();
-        if ($tids) {
-          $distribution->set('format', reset($tids));
-        }
-      }
-    }
-  }
 }
 
 /**
