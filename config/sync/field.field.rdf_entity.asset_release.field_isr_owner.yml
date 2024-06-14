@@ -4,8 +4,8 @@ status: true
 dependencies:
   config:
     - field.storage.rdf_entity.field_isr_owner
+    - node.type.owner
     - rdf_entity.rdfentity.asset_release
-    - rdf_entity.rdfentity.owner
 _core:
   default_config_hash: 0BfoiFt7tvUOHaSLU4j2eVW1yKaoXWxrCeTcd2mUsuI
 id: rdf_entity.asset_release.field_isr_owner
@@ -19,7 +19,7 @@ translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:
-  handler: 'default:rdf_entity'
+  handler: 'default:node'
   handler_settings:
     target_bundles:
       owner: owner

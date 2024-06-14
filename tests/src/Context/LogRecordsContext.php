@@ -8,6 +8,7 @@ use Drupal\Component\Utility\Variable;
 use Drupal\Core\Logger\RfcLogLevel;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\ConfigReadOnlyTrait;
+use PHPUnit\Framework\Assert;
 
 /**
  * Behat step definitions to check log records created during tests.
@@ -33,6 +34,20 @@ class LogRecordsContext extends RawDrupalContext {
    */
   public function assertNoLogRecords(): void {
     $this->failIfLogRecords();
+  }
+
+  /**
+   * Checks the number of log records.
+   *
+   * @Given there should be :count log record(s)
+   * @Given there should be :count log record(s) with level :level_exact
+   */
+  public function assertLogRecordCount(int $count, ?string $level_exact = NULL): void {
+    Assert::assertCount(
+      $count,
+      $this->getLogRecords($level_exact),
+      'Number of log records is different than expected.'
+    );
   }
 
   /**
@@ -102,32 +117,35 @@ class LogRecordsContext extends RawDrupalContext {
    * @param string $description
    *   The description of the log record.
    *
+   * @Given there should be a record of severity :severity in the log with description :description
    * @Given there should be an record of severity :severity in the log with description :description
    */
   public function assertLogRecordExists(string $severity, string $description): void {
-    $logRecords = $this->getLogRecords(NULL);
+    $logRecords = $this->getLogRecords();
     $severity = mb_convert_case($severity, MB_CASE_TITLE);
-    \assert(array_search($severity, RfcLogLevel::getLevels()), sprintf(
-      "Invalid severity level '%s'. Allowed values are: %s",
-      $severity,
-      implode(', ', RfcLogLevel::getLevels())
-    ));
+    Assert::assertNotFalse(
+      $severityCode = array_search($severity, RfcLogLevel::getLevels()),
+      sprintf(
+        "Invalid severity level '%s'. Allowed values are: %s",
+        $severity,
+        implode(', ', RfcLogLevel::getLevels())
+      )
+    );
 
-    $severity = array_search($severity, RfcLogLevel::getLevels());
-    $found = FALSE;
     foreach ($logRecords as $record) {
-      if ($record['severity'] == $severity && strpos($record['message'], $description) !== FALSE) {
-        $found = TRUE;
-        break;
+      if ($record['severity'] == $severityCode &&
+        strpos($record['message'], $description) !== FALSE
+      ) {
+        return;
       }
     }
-    if (!$found) {
-      throw new \Exception(sprintf(
-        "Log record with severity '%s' and description '%s' not found.",
-        $severity,
-        $description
-      ));
-    }
+
+    throw new \Exception(sprintf(
+      "Log record with severity '%s' and description '%s' not found. Existing records are: %s",
+      $severity,
+      $description,
+      Variable::export($logRecords)
+    ));
   }
 
   /**
@@ -140,7 +158,7 @@ class LogRecordsContext extends RawDrupalContext {
    * @return array[]
    *   The captured log records since scenario start or since the last reset.
    */
-  protected function getLogRecords($type): array {
+  protected function getLogRecords(?string $type = NULL): array {
     $query = \Drupal::database()->select('watchdog', 'log')
       ->fields('log')
       ->condition('timestamp', $this->timeStamp, '>=');

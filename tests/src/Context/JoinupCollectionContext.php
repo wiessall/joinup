@@ -31,19 +31,17 @@ class JoinupCollectionContext extends RawDrupalContext {
    */
   public function setupJoinupCollection(): void {
     // Create the owner.
-    Rdf::create([
-      'rid' => 'owner',
-      'id' => 'http://example.com/owner/isa2',
-      'field_owner_name' => 'ISA²',
-    ])->save();
+    $owner = $this->nodeCreate((object) [
+      'type' => 'owner',
+      'title' => 'ISA²',
+    ]);
 
     // Create the contact.
-    Rdf::create([
-      'rid' => 'contact_information',
-      'id' => 'http://example.com/contact/joinup',
-      'field_contact_name' => 'Contact name',
-      'field_contact_email' => 'contact.email@example.com',
-    ])->save();
+    $contact = $this->nodeCreate((object) [
+      'type' => 'contact_information',
+      'title' => 'Contact name',
+      'email' => 'contact.email@example.com',
+    ]);
 
     // Create the Joinup collection.
     Rdf::create([
@@ -52,28 +50,23 @@ class JoinupCollectionContext extends RawDrupalContext {
       'label' => 'Joinup',
       'field_ar_state' => 'published',
       'field_topic' => $this->getRandomTopic()->id(),
-      'field_ar_owner' => 'http://example.com/owner/isa2',
-      'field_ar_contact_information' => 'http://example.com/contact/joinup',
+      'field_ar_owner' => $owner->nid,
+      'field_ar_contact_information' => $contact->nid,
     ])->save();
   }
 
   /**
-   * Clears the content created for the purpose of this test.
+   * Clears the Joinup collection created before the scenario.
    *
    * @throws \Drupal\Core\Entity\EntityStorageException
    *   Thrown when one of the created entities could not be deleted.
    *
    * @AfterScenario @joinup&&@api
    */
-  public function cleanJoinupData() {
-    // Delete the Joinup collection.
+  public function cleanJoinupData(): void {
     $collection = Rdf::load(JoinupCollectionHelper::JOINUP_COLLECTION_DEFAULT_ENTITY_ID);
     $collection->skip_notification = TRUE;
     $collection->delete();
-
-    // Delete related entities.
-    Rdf::load('http://example.com/owner/isa2')->delete();
-    Rdf::load('http://example.com/contact/joinup')->delete();
   }
 
 }

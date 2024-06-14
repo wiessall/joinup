@@ -5,12 +5,12 @@ Feature: Solution membership administration
   I need to be able to manage solution members
 
   Background:
-    Given the following owner:
+    Given owner content:
       | name                 |
       | James Wilson the 2nd |
-    And the following contact:
-      | name  | Princeton-Plainsboro Teaching University |
-      | email | info@princeton-plainsboro.edu            |
+    And contact_information content:
+      | name                                     | email                         |
+      | Princeton-Plainsboro Teaching University | info@princeton-plainsboro.edu |
     And users:
       | Username         | Roles | E-mail                       | First name | Family name |
       # Authenticated user.
