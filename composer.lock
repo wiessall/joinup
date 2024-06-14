@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3b475bfbd6cfba66843679042372b2ac",
+    "content-hash": "c94de0089efef95a82084a64e273abfc",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -22646,16 +22646,16 @@
         },
         {
             "name": "vincentlanglet/twig-cs-fixer",
-            "version": "1.6.0",
+            "version": "2.10.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/VincentLanglet/Twig-CS-Fixer.git",
-                "reference": "e5be674a439e0dcfa2a4bd4ce83ee44e20867310"
+                "reference": "30fef7f8dc01bf1eaf948400a086ee2becae0f15"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/VincentLanglet/Twig-CS-Fixer/zipball/e5be674a439e0dcfa2a4bd4ce83ee44e20867310",
-                "reference": "e5be674a439e0dcfa2a4bd4ce83ee44e20867310",
+                "url": "https://api.github.com/repos/VincentLanglet/Twig-CS-Fixer/zipball/30fef7f8dc01bf1eaf948400a086ee2becae0f15",
+                "reference": "30fef7f8dc01bf1eaf948400a086ee2becae0f15",
                 "shasum": ""
             },
             "require": {
@@ -22663,8 +22663,10 @@
                 "ext-ctype": "*",
                 "ext-json": "*",
                 "php": ">=8.0",
-                "symfony/console": "^5.4.9 || ^6.0",
-                "symfony/finder": "^5.4 || ^6.0",
+                "symfony/console": "^5.4.9 || ^6.0 || ^7.0",
+                "symfony/filesystem": "^5.4 || ^6.0 || ^7.0",
+                "symfony/finder": "^5.4 || ^6.0 || ^7.0",
+                "symfony/string": "^5.4 || ^6.0 || ^7.0",
                 "twig/twig": "^2.14.0 || ^3.0.5",
                 "webmozart/assert": "^1.10"
             },
@@ -22683,10 +22685,9 @@
                 "phpunit/phpunit": "^9.5.26 || ^10.0.9",
                 "psalm/plugin-phpunit": "^0.18.4",
                 "psalm/plugin-symfony": "^5.0.0",
-                "rector/rector": "^0.18.0",
-                "symfony/filesystem": "^5.4 || ^6.0",
-                "symfony/process": "^5.4 || ^6.0",
-                "symfony/twig-bridge": "^5.4 || ^6.0",
+                "rector/rector": "^1.0.0",
+                "symfony/process": "^5.4 || ^6.0 || ^7.0",
+                "symfony/twig-bridge": "^5.4 || ^6.0 || ^7.0",
                 "symfony/ux-twig-component": "^2.2.0",
                 "twig/cache-extra": "^3.2",
                 "vimeo/psalm": "^5.2.0"
@@ -22713,7 +22714,7 @@
             "homepage": "https://github.com/VincentLanglet/Twig-CS-Fixer",
             "support": {
                 "issues": "https://github.com/VincentLanglet/Twig-CS-Fixer/issues",
-                "source": "https://github.com/VincentLanglet/Twig-CS-Fixer/tree/1.6.0"
+                "source": "https://github.com/VincentLanglet/Twig-CS-Fixer/tree/2.10.1"
             },
             "funding": [
                 {
@@ -22721,7 +22722,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-10-25T18:51:07+00:00"
+            "time": "2024-05-28T14:51:00+00:00"
         },
         {
             "name": "vlucas/phpdotenv",
