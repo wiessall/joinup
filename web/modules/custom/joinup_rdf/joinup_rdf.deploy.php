@@ -235,6 +235,7 @@ function joinup_rdf_deploy_110804(array &$sandbox): string {
     $sandbox['progress'] = 0;
   }
 
+  $start = microtime(TRUE);
   $file = array_shift($sandbox['files']);
   $distributions = Yaml::decode(file_get_contents($file));
   foreach ($distributions as $uri => $data) {
@@ -283,12 +284,17 @@ function joinup_rdf_deploy_110804(array &$sandbox): string {
       $values['distribution_parent'] = $data['http://joinup.eu/rdf_entity/group'][0]['value'];
     }
     assert(!empty($values['distribution_parent']), "Distribution with URI $uri has no parent. Distribution value array: " . print_r($data, TRUE));
-    $storage->create($values)->save();
+    $entity = $storage->create($values);
+    $entity->skip_notification = TRUE;
+    $entity->skip_parent_invalidation = TRUE;
+    $entity->save();
     $sandbox['progress']++;
   }
 
+  $finish = microtime(TRUE);
+  $count = count($distributions);
   $sandbox['#finished'] = (int) empty($sandbox['files']);
-  return "Imported {$sandbox['progress']} distributions";
+  return "Imported {$count} ({$sandbox['progress']} total) distributions in " . round($finish - $start, 2) . ' seconds';
 }
 
 /**

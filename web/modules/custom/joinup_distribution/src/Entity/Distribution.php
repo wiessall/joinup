@@ -92,6 +92,11 @@ class Distribution extends Node implements DistributionInterface {
   public function postSave(EntityStorageInterface $storage, $update = TRUE): void {
     parent::postSave($storage, $update);
 
+    // @todo Remove this in ISAICP-8376. Invalidation should always occur.
+    if (property_exists($this, 'skip_parent_invalidation')) {
+      return;
+    }
+
     // Re-index the parent of the distribution.
     if ($parent = $this->getParentSafe()) {
       $this->reIndexDistributionParent($parent);
