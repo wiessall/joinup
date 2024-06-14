@@ -12,10 +12,10 @@
  */
 #}
 <div class="layout-container">
-  {% include '@ventuno/parts/header.html.twig' with {
+  {{ include('@ventuno/parts/header.html.twig', {
     hide_searchbar: 1,
     hide_toggle: 1,
-  } %}
+  }) }}
   {% if page.header %}
     {{ page.header }}
   {% endif %}

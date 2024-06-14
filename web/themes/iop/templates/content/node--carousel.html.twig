@@ -71,7 +71,7 @@
  */
 #}
 
-{% include '@iop/carousel/carousel-item.html.twig' with {
+{{ include('@iop/carousel/carousel-item.html.twig', {
   attributes,
   url,
   title_prefix,
@@ -81,4 +81,4 @@
   title_attributes,
   image,
   icon: node.bundle is same as 'collection' ? 'folder2-open' : 'clipboard2-check',
-} only %}
+}, false) }}
