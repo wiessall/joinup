@@ -277,7 +277,12 @@ function joinup_rdf_deploy_110804(array &$sandbox): string {
     }
 
     // Set the OG reference as a parent if there is no parent found.
-    $values['distribution_parent'] = _joinup_rdf_get_distribution_parent($uri) ?? $data[0]['value'];
+    $values['distribution_parent'] = _joinup_rdf_get_distribution_parent($uri);
+    if (empty($values['distribution_parent'])) {
+      assert(!empty($data['http://joinup.eu/rdf_entity/group']), "Distribution with URI $uri has no parent.");
+      $values['distribution_parent'] = $data['http://joinup.eu/rdf_entity/group'][0]['value'];
+    }
+    assert(!empty($values['distribution_parent']), "Distribution with URI $uri has no parent. Distribution value array: " . print_r($data, TRUE));
     $storage->create($values)->save();
     $sandbox['progress']++;
   }
@@ -318,4 +323,15 @@ SPARQL;
   }
 
   return $parent->parent->getUri();
+}
+
+/**
+ * Empty the purge queue.
+ */
+function joinup_rdf_deploy_110805(): string {
+  // Purge queue reports more than 30.000 items post deploy stuck in queue which
+  // is reaching a warning level amount of items. Purge the queue because we
+  // anyway clear the cache during deploy.
+  \Drupal::getContainer()->get('purge.queue')->emptyQueue();
+  return 'Purge queue emptied';
 }
