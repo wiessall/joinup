@@ -6,11 +6,14 @@ namespace Drupal\contact_information\Form;
 
 use Drupal\Component\Utility\Bytes;
 use Drupal\Component\Utility\Environment;
+use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\EventSubscriber\MainContentViewSubscriber;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Mail\MailManagerInterface;
 use Drupal\Core\Render\Markup;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\ByteSizeMarkup;
 use Drupal\email_contact\Form\ContactForm;
 use Drupal\file\FileInterface;
@@ -55,15 +58,12 @@ abstract class ContactInformationFormBase extends ContactForm {
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state): array {
-    if ($this->currentUser()->isAnonymous()) {
-      $form = $this->buildFormForAnonymous($form);
-    }
-    else {
-      $form = $this->buildFormForAuthenticated($form, $form_state);
-    }
+  public function buildForm(array $form, FormStateInterface $form_state): array|AjaxResponse {
+    $form = $this->accessIsAllowed()
+      ? $this->buildFormForAuthenticated($form, $form_state)
+      : $this->buildFormForAnonymous($form);
 
-    if (!empty($this->fieldSettings['modal'])) {
+    if ($this->isAjax()) {
       $form['actions']['cancel'] = [
         '#type' => 'button',
         '#value' => $this->t('Cancel'),
@@ -85,6 +85,22 @@ abstract class ContactInformationFormBase extends ContactForm {
       ->applyTo($form);
 
     return $form;
+  }
+
+  /**
+   * Checks whether user has permission to access the form.
+   *
+   * @param \Drupal\Core\Session\AccountInterface|null $user
+   *   The account to check. Defaults to the current user account.
+   *
+   * @return bool
+   *   Whether user has permission to access and submit the form.
+   *
+   * @todo Consider replacing role-based access check with a permission.
+   */
+  protected function accessIsAllowed(?AccountInterface $user = NULL): bool {
+    $account = $user ?? $this->currentUser();
+    return $account->isAuthenticated();
   }
 
   /**
@@ -252,7 +268,7 @@ abstract class ContactInformationFormBase extends ContactForm {
    * {@inheritdoc}
    */
   public function validateForm(array &$form, FormStateInterface $form_state): void {
-    if ($this->currentUser()->isAnonymous()) {
+    if (!$this->accessIsAllowed()) {
       return;
     }
 
@@ -263,7 +279,7 @@ abstract class ContactInformationFormBase extends ContactForm {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    if ($this->currentUser()->isAnonymous()) {
+    if (!$this->accessIsAllowed()) {
       return;
     }
 
@@ -365,5 +381,19 @@ abstract class ContactInformationFormBase extends ContactForm {
    *   Email addresses where the message will be sent to.
    */
   abstract protected function getEmailAddresses(): array;
+
+  /**
+   * Determines whether the form is rendered in an AJAX context or not.
+   *
+   * @return bool
+   *   Whether the form is rendered in an AJAX context or not.
+   */
+  protected function isAjax(): bool {
+    return !empty($this->fieldSettings['modal']) &&
+      preg_match(
+        '/\bdrupal_(?>ajax|modal|dialog)\b/',
+        $this->getRequest()->get(MainContentViewSubscriber::WRAPPER_FORMAT, '')
+      );
+  }
 
 }
