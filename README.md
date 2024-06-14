@@ -305,35 +305,27 @@ Testing frameworks used by Joinup:
   site](https://gitlab.com/weitzman/drupal-test-traits) but also plain PHPUnit
   tests.
 
-#### PHP coding standards check
+#### Static code analysis
 
+Joinup uses GrumPHP, which runs all tasks defined in [grumphp.yml.dist](grumphp.yml.dist).
+See [GrumPHP documentation](https://github.com/phpro/grumphp/blob/v2.x/doc/commands.md#run).
+
+* Run all tasks:
 ```shell
-ddev exec vendor/bin/phpcs [arguments and options]
+ddev grumphp run
+```
+* Alternatively, run 1 or more tasks:
+```shell
+ddev grumphp run --tasks=phpcs,phpstan,phplint,yamllint,eslint,stylelint
 ```
 
-To fix violations, run:
-
-```shell
-ddev exec vendor/bin/phpcbf [arguments and options]
+GrumPHP gets triggered on git pre-push hook by default. To change this behavior,
+specify in your runner.yml:
+```yaml
+dev:
+  # Options: pre-push / pre-commit / disable
+  git_hook_on: pre-push
 ```
-
-#### PHP statical analysis
-
-```shell
-ddev run toolkit:test-phpstan
-```
-
-#### Javascript lint
-
-```shell
-ddev run toolkit:lint-js
-````
-
-#### YAML files lint
-
-```shell
-ddev run toolkit:lint-yaml
-````
 
 ### Upgrade process
 

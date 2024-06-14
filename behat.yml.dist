@@ -170,7 +170,7 @@ default:
         Explore block: '.block-joinup-front-page-explore-block'
         Featured: '.region-featured'
         Footer: 'footer.page__footer'
-        Hamburger menu: '.joinup-navbar ul.navbar-nav ul.dropdown-list'
+        Mobile menu: '.joinup-navbar ul.navbar-nav .mmenu-nav__menu'
         Header: '.region-header'
         Homepage topics: '.view-homepage-topics'
         Highlighted content: '.block-entityqueue--highlighted-content'

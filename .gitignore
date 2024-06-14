@@ -32,7 +32,6 @@
 /.env
 /.env.pipeline
 /behat.yml
-/phpcs.xml
 /runner.yml
 /web/sites/default/services.yml
 /.phpunit.result.cache
