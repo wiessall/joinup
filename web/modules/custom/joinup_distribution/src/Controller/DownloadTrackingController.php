@@ -60,15 +60,13 @@ class DownloadTrackingController extends ControllerBase {
    * @param \Drupal\file\FileInterface $file
    *   The distribution file that has been downloaded.
    *
-   * @return \Drupal\Core\Ajax\AjaxResponse
-   *   The generated response.
+   * @return \Drupal\Core\Ajax\AjaxResponse|array
+   *   The generated response or the form array.
    */
-  public function trackDownload(FileInterface $file): AjaxResponse {
-    $response = $this->currentUser()->isAnonymous()
+  public function trackDownload(FileInterface $file): array|AjaxResponse {
+    return $this->currentUser()->isAnonymous()
       ? $this->trackAnonymousDownload($file)
       : $this->trackAuthenticatedDownload($file);
-
-    return $response;
   }
 
   /**
@@ -81,7 +79,7 @@ class DownloadTrackingController extends ControllerBase {
    *   The form array.
    */
   protected function trackAnonymousDownload(FileInterface $file): array {
-    return $this->formBuilder->getForm(AnonymousDownloadForm::class, $file);
+    return $this->formBuilder()->getForm(AnonymousDownloadForm::class, $file);
   }
 
   /**
@@ -110,7 +108,7 @@ class DownloadTrackingController extends ControllerBase {
     $parent = $distribution->getParent();
 
     $event = $this->eventStorage->create([
-      'uid' => $this->currentUser->id(),
+      'uid' => $this->currentUser()->id(),
       'file' => $file->id(),
       'parent_entity_type' => $parent->getEntityTypeId(),
       'parent_entity_id' => $parent->id(),
