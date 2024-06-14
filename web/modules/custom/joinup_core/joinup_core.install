@@ -92,3 +92,31 @@ function joinup_core_requirements($phase): array {
 
   return $requirements;
 }
+
+/**
+ * Fix the informatino again.
+ */
+function joinup_core_update_110800(): string {
+  $sparql = <<<SPARQL
+DELETE {
+  GRAPH ?g {
+    ?s ?p <http://joinup.eu/ontology/topic#statistics-and-informatino> .
+  }
+}
+INSERT {
+  GRAPH ?g {
+    ?s ?p <http://joinup.eu/ontology/topic#statistics-and-information> .
+  }
+}
+WHERE {
+  GRAPH ?g {
+    ?s ?p <http://joinup.eu/ontology/topic#statistics-and-informatino> .
+  }
+}
+SPARQL;
+
+  $endpoint = \Drupal::service('sparql.endpoint');
+  $endpoint->update($sparql);
+
+  return 'The information has been fixed.';
+}
