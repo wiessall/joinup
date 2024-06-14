@@ -11,40 +11,43 @@ grumphp:
     succeeded: ~
 
   tasks:
-    # Doc: https://github.com/phpro/grumphp/blob/master/doc/tasks/composer.md
+    # https://github.com/phpro/grumphp/blob/v2.x/doc/tasks/composer.md
     composer: { }
 
-    # Doc: https://github.com/phpro/grumphp/blob/master/doc/tasks/phpcs.md
+    # https://github.com/phpro/grumphp/blob/v2.x/doc/tasks/phpcs.md
     phpcs:
       standard: ['./phpcs.xml']
       triggered_by: '%grumphp.tasks.php_extensions%'
 
-    # Doc: https://github.com/phpro/grumphp/blob/master/doc/tasks/phpmd.md
+    # https://github.com/phpro/grumphp/blob/v2.x/doc/tasks/phpmd.md
     phpmd:
       ruleset: ['./phpmd.xml']
       triggered_by: '%grumphp.tasks.php_extensions%'
       metadata:
         enabled: false
 
-    # Doc: https://github.com/phpro/grumphp/blob/master/doc/tasks/phpstan.md
+    # https://github.com/phpro/grumphp/blob/v2.x/doc/tasks/phpstan.md
     phpstan:
       configuration: './phpstan.neon'
       triggered_by: '%grumphp.tasks.php_extensions%'
 
-    # Doc: https://github.com/phpro/grumphp/blob/master/doc/tasks/phplint.md
+    # https://github.com/phpro/grumphp/blob/v2.x/doc/tasks/phplint.md
     phplint:
       triggered_by: '%grumphp.tasks.php_extensions%'
 
-    # Doc: https://github.com/phpro/grumphp/blob/master/doc/tasks/yamllint.md
+    # https://github.com/phpro/grumphp/blob/v2.x/doc/tasks/twigcsfixer.md
+    twigcsfixer: { }
+
+    # https://github.com/phpro/grumphp/blob/v2.x/doc/tasks/yamllint.md
     yamllint: { }
 
-    # Doc: https://github.com/phpro/grumphp/blob/master/doc/tasks/eslint.md
+    # https://github.com/phpro/grumphp/blob/v2.x/doc/tasks/eslint.md
     eslint:
       bin: node_modules/.bin/eslint
       config: .eslintrc.json
       no_eslintrc: true
 
-    # Doc: https://github.com/phpro/grumphp/blob/master/doc/tasks/stylelint.md
+    # https://github.com/phpro/grumphp/blob/v2.x/doc/tasks/stylelint.md
     stylelint:
       bin: node_modules/.bin/stylelint
       config: .stylelintrc.json
