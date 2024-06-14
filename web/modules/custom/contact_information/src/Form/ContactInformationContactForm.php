@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Drupal\contact_information\Form;
 
+use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\contact_information\Entity\ContactInformation;
+use Drupal\contact_information\Traits\ContactInfoInaccessibleTrait;
 use Drupal\rdf_entity\RdfInterface;
 
 /**
@@ -13,19 +15,32 @@ use Drupal\rdf_entity\RdfInterface;
  */
 class ContactInformationContactForm extends ContactInformationFormBase {
 
+  use ContactInfoInaccessibleTrait;
+
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state, ?RdfInterface $rdf_entity = NULL): array {
+  public function buildForm(array $form, FormStateInterface $form_state, ?RdfInterface $rdf_entity = NULL): array|AjaxResponse {
     $form = parent::buildForm($form, $form_state);
 
     // We cannot use the current url in case we open modal.
     $entity = $this->entityTypeManager->getStorage($this->entityType)
       ->load($this->entityId);
-    if (!empty($this->fieldSettings['modal']) && $entity instanceof ContactInformation) {
+
+    if ($entity instanceof ContactInformation) {
+      $group = $entity->getRelatedGroup();
+      if (!$group && $this->accessIsAllowed()) {
+        return static::logAndBuildContactInfoInaccessibilityResponse(
+          $this->getRequest(),
+          $this->logger(static::LOGGER_CHANNEL),
+          $entity,
+          $this->isAjax()
+        );
+      }
+
       $settings = $form_state->get('settings');
       $settings['default_message'] = '[current-user:name] sent a message using the contact form at ' .
-        $entity->getRelatedGroup()->toUrl()->setAbsolute()->toString() . '.';
+        $group?->toUrl()->setAbsolute()->toString() . '.';
       $form_state->set('settings', $settings);
     }
 
