@@ -29,7 +29,7 @@ class UniqueShortIdInsensitiveConstraint extends Constraint {
   /**
    * {@inheritdoc}
    */
-  public function validatedBy() {
+  public function validatedBy(): string {
     return '\Drupal\joinup_group\Plugin\Validation\Constraint\UniqueShortIdInsensitiveValidator';
   }
 

@@ -142,10 +142,11 @@
         "lovers-of-behat/table-extension": "^1.4",
         "mikey179/vfsstream": "~1.6",
         "ml/json-ld": "^1.2",
-        "palantirnet/drupal-rector": "^0.12.2",
+        "palantirnet/drupal-rector": "^0.20.1",
         "pear/http_request2": "~2.4",
         "php-task-runner/composer": "dev-toolkit-runner",
         "php-task-runner/sparql": "dev-toolkit-runner",
+        "phpro/grumphp-shim": "^2.5",
         "phpspec/prophecy-phpunit": "^2",
         "phpstan/extension-installer": "^1.3",
         "phpunit/phpunit": "^9.6",
@@ -174,7 +175,8 @@
             "openeuropa/composer-artifacts": true,
             "phpstan/extension-installer": true,
             "php-http/discovery": true,
-            "ec-europa/toolkit-composer-plugin": true
+            "ec-europa/toolkit-composer-plugin": true,
+            "phpro/grumphp-shim": true
         }
     },
     "autoload": {
@@ -333,7 +335,9 @@
                 "Handle deleted files @see https://www.drupal.org/project/file_url/issues/3326758": "resources/patch/php/drupal/file_url/3326758.diff",
                 "No link template 'canonical' found @see https://www.drupal.org/project/file_url/issues/3346487": "resources/patch/php/drupal/file_url/3346487.diff",
                 "Error thrown when local file does not exist upon deletion @see https://www.drupal.org/project/file_url/issues/3393473": "resources/patch/php/drupal/file_url/3393473.diff",
-                "Do not assume that a file with the given target_id exists @see https://drupal.org/i/3440231": "resources/patch/php/drupal/file_url/3440231.diff"
+                "Do not assume that a file with the given target_id exists @see https://drupal.org/i/3440231": "resources/patch/php/drupal/file_url/3440231.diff",
+                "PHP warnings from FileUrlWidget @see https://www.drupal.org/i/3450344": "resources/patch/php/drupal/file_url/3450344.diff",
+                "URL not sumbitted (missing context in JS behavior detach) @see https://www.drupal.org/i/3450664": "resources/patch/php/drupal/file_url/3450664.diff"
             },
             "drupal/flag": {
                 "TypeError: Argument 1 passed to FlagCount::count() must implement interface @see https://www.drupal.org/project/flag/issues/3168014": "resources/patch/php/drupal/flag/3168014-46.patch",
@@ -451,6 +455,9 @@
                 "vendor/mglaman/phpstan-drupal/extension.neon",
                 "vendor/phpstan/phpstan-deprecation-rules/rules.neon"
             ]
+        },
+        "grumphp": {
+            "disable-plugin": true
         }
     },
     "repositories": [

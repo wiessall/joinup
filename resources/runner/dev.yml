@@ -1,9 +1,9 @@
 # Development configs and commands
 
-phpstan:
-  bin: ${joinup.dir}/vendor/bin/phpstan
-
 dev:
+  # Controls when static code analysis (grumphp) runs.
+  # Options: pre-push / pre-commit / disable.
+  git_hook_on: pre-push
   modules:
     - admin_toolbar
     - config_update
@@ -14,9 +14,6 @@ dev:
     - page_manager_ui
     - stage_file_proxy
     - views_ui
-
-rector:
-  bin: ${joinup.dir}/vendor/bin/rector
 
 commands:
 
@@ -204,15 +201,3 @@ commands:
       command: virtuoso:import-fixtures
       arguments:
         - resources/adms/adms-definition.rdf
-
-  dev:rector:
-    - task: exec
-      command: ${rector.bin} process --memory-limit=-1 src/ tests/src/ web/modules/custom/ web/profiles/joinup/ web/themes/ventuno/ web/themes/iop/
-    - task: run
-      command: testing:phpcs-setup
-      # Not all Rector changes are Drupal coding standards compliant.
-    - task: exec
-      command: ${phpcs.file.phpcbf.bin}
-      # Show what wasn't fixed automatically.
-    - task: exec
-      command: ${phpcs.file.bin}
