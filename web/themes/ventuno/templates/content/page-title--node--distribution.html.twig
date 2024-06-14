@@ -11,11 +11,11 @@
     {% if additional_content.file_size|render|striptags|trim %}
       {{ additional_content.file_size }}
     {% endif %}
-    {% if additional_content.file_size|render|striptags|trim and additional_content.field_licence|render|striptags|trim %}
+    {% if additional_content.file_size|render|striptags|trim and additional_content.licence|render|striptags|trim %}
       <span class="mx-1">|</span>
     {% endif %}
-    {% if additional_content.field_licence|render|striptags|trim %}
-      <span class="me-1">Licence:</span> {{ additional_content.field_licence }}
+    {% if additional_content.licence|render|striptags|trim %}
+      <span class="me-1">Licence:</span> {{ additional_content.licence }}
     {% endif %}
   </div>
   <div class="page-title__details fs-sm mb-3 d-flex">
