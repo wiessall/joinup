@@ -14,9 +14,16 @@ use Drupal\node\Entity\Node;
 use Drupal\rdf_sync\Model\SyncMethod;
 
 /**
+ * Disable RDF Sync for the deployment.
+ */
+function joinup_rdf_deploy_110800(): void {
+  \Drupal::getContainer()->get('rdf_sync.synchronizer')->disableSynchronization();
+}
+
+/**
  * Migrate owners to nodes.
  */
-function joinup_rdf_deploy_110800(array &$sandbox): string {
+function joinup_rdf_deploy_110801(array &$sandbox): string {
   $map = [
     'http://xmlns.com/foaf/0.1/name' => 'title',
     'http://purl.org/dc/terms/type' => 'owner_type',
@@ -86,7 +93,7 @@ function joinup_rdf_deploy_110800(array &$sandbox): string {
 /**
  * Update a duplicate URI.
  */
-function joinup_rdf_deploy_110801(): void {
+function joinup_rdf_deploy_110802(): void {
   // The following URI exists as an ID for both an owner and a contact
   // information. We will rename the contact information.
   $uri = 'http://resource.geolba.ac.at/doc/62';
@@ -126,7 +133,7 @@ SPARQL;
 /**
  * Migrate contact information entities to nodes.
  */
-function joinup_rdf_deploy_110802(array &$sandbox): string {
+function joinup_rdf_deploy_110803(array &$sandbox): string {
   $endpoint = \Drupal::getContainer()->get('sparql.endpoint');
   if (empty($sandbox['ids'])) {
     $results = $endpoint->query('SELECT DISTINCT ?id FROM <http://joinup.eu/contact-information/published> WHERE { ?id a ?type }')->getArrayCopy();
@@ -179,7 +186,7 @@ function joinup_rdf_deploy_110802(array &$sandbox): string {
 /**
  * Clear the contact information graph.
  */
-function joinup_rdf_deploy_110803(): string {
+function joinup_rdf_deploy_110804(): string {
   // Now that all entities are migrated and synced into the `http://data` graph,
   // we can safely remove the previous one.
   \Drupal::getContainer()
@@ -211,7 +218,7 @@ function _joinup_rdf_deploy_flatten_rdf_values(array $data): array {
 /**
  * Restore distributions.
  */
-function joinup_rdf_deploy_110804(array &$sandbox): string {
+function joinup_rdf_deploy_110805(array &$sandbox): string {
   $map = [
     'http://joinup.eu/ad/workflow_status' => 'field_state',
     'http://joinup.eu/rdf_entity/group' => 'og_audience',
@@ -334,10 +341,17 @@ SPARQL;
 /**
  * Empty the purge queue.
  */
-function joinup_rdf_deploy_110805(): string {
+function joinup_rdf_deploy_110806(): string {
   // Purge queue reports more than 30.000 items post deploy stuck in queue which
   // is reaching a warning level amount of items. Purge the queue because we
   // anyway clear the cache during deploy.
   \Drupal::getContainer()->get('purge.queue')->emptyQueue();
   return 'Purge queue emptied';
+}
+
+/**
+ * Re-enable RDF Sync.
+ */
+function joinup_rdf_deploy_110807(): void {
+  \Drupal::getContainer()->get('rdf_sync.synchronizer')->enableSynchronization();
 }
