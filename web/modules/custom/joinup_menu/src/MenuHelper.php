@@ -60,6 +60,7 @@ class MenuHelper implements MenuHelperInterface {
       return [
         'link' => $element->link->getUrlObject(),
         'label' => $element->link->getTitle(),
+        'in_active_trail' => $element->inActiveTrail,
       ];
     }, $tree);
   }
@@ -151,12 +152,14 @@ class MenuHelper implements MenuHelperInterface {
         'link' => $element->link->getUrlObject()->setOption('set_active_class', TRUE),
         'label' => $element->link->getTitle(),
         'children' => [],
+        'in_active_trail' => $element->inActiveTrail,
       ];
       if ($element->hasChildren) {
         foreach ($element->subtree as $child) {
           $link['children'][] = [
             'link' => $child->link->getUrlObject()->setOption('set_active_class', TRUE),
             'label' => $child->link->getTitle(),
+            'in_active_trail' => $child->inActiveTrail,
           ];
         }
       }
