@@ -43,8 +43,8 @@ class AnonymousDownloadForm extends FormBase {
   public function __construct(
     protected SparqlEntityStorageInterface $sparqlStorage,
     protected ContentEntityStorageInterface $eventStorage,
-    protected FileUsageInterface $fileUsage) {
-  }
+    protected FileUsageInterface $fileUsage,
+  ) {}
 
   /**
    * {@inheritdoc}
