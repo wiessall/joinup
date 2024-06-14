@@ -144,8 +144,8 @@ class Distribution extends Node implements DistributionInterface {
    *
    * @return \Drupal\joinup_distribution\Entity\DistributionsParentInterface|null
    *   The parent entity or NULL if it is missing.
-   * @todo This method should be removed once the parent entity is always set.
    *
+   * @todo This method should be removed once the parent entity is always set.
    */
   protected function getParentSafe(): ?DistributionsParentInterface {
     try {
@@ -161,8 +161,8 @@ class Distribution extends Node implements DistributionInterface {
    *
    * @return \Drupal\solution\Entity\SolutionInterface|null
    *   The solution of the distribution or NULL if it is missing.
-   * @todo This method should be removed once the solution is always set.
    *
+   * @todo This method should be removed once the solution is always set.
    */
   protected function getSolutionSafe(): ?SolutionInterface {
     try {
