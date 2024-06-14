@@ -1,4 +1,4 @@
-joinup_distribution.asset_distribution.add:
+joinup_distribution.distribution.add:
   path: 'rdf_entity/{rdf_entity}/distribution/add'
   defaults:
     _controller: '\Drupal\joinup_distribution\Controller\JoinupDistributionController::add'

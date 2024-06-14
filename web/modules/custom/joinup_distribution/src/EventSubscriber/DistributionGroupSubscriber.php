@@ -69,7 +69,7 @@ class DistributionGroupSubscriber extends AddGroupContentEventSubscriberBase {
    * {@inheritdoc}
    */
   protected function getRouteName(): string {
-    return 'joinup_distribution.asset_distribution.add';
+    return 'joinup_distribution.distribution.add';
   }
 
   /**
