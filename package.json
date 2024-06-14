@@ -38,6 +38,7 @@
     "dompurify": "^3.0.9",
     "jquery-colorbox": "^1.6.4",
     "jquery-jsonview": "^1.2.3",
+    "mmenu-light": "^3.2.2",
     "priority-plus": "^1.5.1",
     "slick-carousel": ">1.8.1 || <1.8.1"
   },
