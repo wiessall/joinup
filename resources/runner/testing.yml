@@ -31,16 +31,6 @@ commands:
       command: drush:module-install
       arguments: ${testing.modules}
 
-  # Lints Twig files using Twig Coding Standard Rules.
-  testing:lint-twig:
-    - task: exec
-      command: ${joinup.dir}/vendor/bin/twig-cs-fixer lint
-
-  # Fixes Twig files using Twig Coding Standard Rules.
-  testing:fix-twig:
-    - task: exec
-      command: ${joinup.dir}/vendor/bin/twig-cs-fixer lint --fix
-
   # Checks for any unused step definitions, see profile in behat.yml.dist.
   testing:unused-behat:
     - task: exec
