@@ -10,11 +10,11 @@ use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\ContentEntityStorageInterface;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\asset_distribution\Form\AnonymousDownloadForm;
 use Drupal\file\FileInterface;
 use Drupal\file\FileUsage\FileUsageInterface;
 use Drupal\file_url\FileUrlHandler;
-use Drupal\sparql_entity_storage\SparqlEntityStorageInterface;
+use Drupal\joinup_distribution\Form\AnonymousDownloadForm;
+use Drupal\node\NodeStorageInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -26,7 +26,7 @@ class DownloadTrackingController extends ControllerBase {
   /**
    * Instantiates a new DownloadTrackingController object.
    *
-   * @param \Drupal\sparql_entity_storage\SparqlEntityStorageInterface $sparqlStorage
+   * @param \Drupal\node\NodeStorageInterface $nodeStorage
    *   The RDF entity storage.
    * @param \Drupal\Core\Entity\ContentEntityStorageInterface $eventStorage
    *   The download event entity storage.
@@ -36,7 +36,7 @@ class DownloadTrackingController extends ControllerBase {
    *   The file usage service.
    */
   public function __construct(
-    protected SparqlEntityStorageInterface $sparqlStorage,
+    protected NodeStorageInterface $nodeStorage,
     protected ContentEntityStorageInterface $eventStorage,
     protected FileUrlHandler $fileUrlHandler,
     protected FileUsageInterface $fileUsage,
@@ -47,7 +47,7 @@ class DownloadTrackingController extends ControllerBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('entity_type.manager')->getStorage('rdf_entity'),
+      $container->get('entity_type.manager')->getStorage('node'),
       $container->get('entity_type.manager')->getStorage('download_event'),
       $container->get('file_url.handler'),
       $container->get('file.usage')
@@ -98,13 +98,13 @@ class DownloadTrackingController extends ControllerBase {
 
     // Normally, only one distribution is allowed to use a file and only
     // distributions call this code.
-    if (empty($usages['file']['rdf_entity'])) {
+    if (empty($usages['file']['node'])) {
       throw new \RuntimeException('No distributions were found using the file with ID ' . $file->id());
     }
-    if (count($usages['file']['rdf_entity']) > 1) {
+    if (count($usages['file']['node']) > 1) {
       throw new \RuntimeException('More than one distributions were found for the file with ID ' . $file->id());
     }
-    $distribution = $this->sparqlStorage->load(key($usages['file']['rdf_entity']));
+    $distribution = $this->nodeStorage->load(key($usages['file']['node']));
 
     /** @var \Drupal\solution\Entity\SolutionInterface|\Drupal\asset_release\Entity\AssetReleaseInterface $parent */
     $parent = $distribution->getParent();
@@ -135,19 +135,19 @@ class DownloadTrackingController extends ControllerBase {
    *   Allowed when the file exists, neutral otherwise.
    */
   public function isDistributionFile(FileInterface $file, AccountInterface $account): AccessResultInterface {
-    $query = $this->sparqlStorage->getQuery()->accessCheck(FALSE);
+    $query = $this->nodeStorage->getQuery()->accessCheck(FALSE);
     $file_url_handler = $this->fileUrlHandler;
 
     // Verify that the file exists and it's attached to a solution.
-    $query->condition($this->sparqlStorage->getEntityType()->getKey('bundle'), 'asset_distribution')
-      ->condition('field_ad_access_url', $file_url_handler::fileToUrl($file));
+    $query->condition($this->nodeStorage->getEntityType()->getKey('bundle'), 'distribution')
+      ->condition('access_url', $file_url_handler::fileToUrl($file));
     $results = $query->execute();
 
     if (empty($results)) {
       return AccessResult::forbidden();
     }
 
-    $entity = $this->sparqlStorage->load(array_pop($results));
+    $entity = $this->nodeStorage->load(array_pop($results));
 
     return $entity->access('view', $account, TRUE);
   }

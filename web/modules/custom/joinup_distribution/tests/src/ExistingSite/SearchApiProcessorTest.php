@@ -8,7 +8,7 @@ use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 
 /**
  * @covers \Drupal\joinup_distribution\Plugin\search_api\processor\IndexDistributionData::appendDistributionData
- * @group asset_distribution
+ * @group joinup_distribution
  */
 class SearchApiProcessorTest extends JoinupExistingSiteTestBase {
 

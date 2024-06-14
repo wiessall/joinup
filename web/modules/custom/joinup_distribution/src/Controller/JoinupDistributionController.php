@@ -91,15 +91,15 @@ class JoinupDistributionController extends ControllerBase {
   }
 
   /**
-   * Creates a new asset_distribution entity.
+   * Creates a new distribution entity.
    *
    * @param \Drupal\rdf_entity\RdfInterface $rdf_entity
    *   The RDF entity that the distribution is associated with. Can be either an
    *   'asset_release' or a 'solution'.
    *
    * @return \Drupal\joinup_distribution\Entity\DistributionInterface|null
-   *   The unsaved asset_distribution entity or NULL if the RDF entity parameter
-   *   is neither a solution nor a release.
+   *   The unsaved distribution entity or NULL if the RDF entity parameter is
+   *   neither a solution nor a release.
    */
   protected function createNewAssetDistribution(RdfInterface $rdf_entity): ?DistributionInterface {
     // A solution is needed to create a distribution. If the rdf entity
