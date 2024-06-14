@@ -311,6 +311,8 @@ drupal:
         $config['oe_webtools_analytics.settings']['siteID'] = getenv('OE_WEBTOOLS_ANALYTICS_SITE_ID');
         $config['oe_webtools_analytics.settings']['sitePath'] = getenv('OE_WEBTOOLS_ANALYTICS_SITE_PATH');
         $config['oe_webtools_analytics.settings']['instance'] = getenv('OE_WEBTOOLS_ANALYTICS_SITE_INSTANCE');
+        $config['sparql_endpoint_piwik.settings']['base_uri'] = getenv('ANALYTICS_BASE_URI');
+        $config['sparql_endpoint_piwik.settings']['site_id'] = getenv('ANALYTICS_SITE_ID');
       Memcache: |
         if ($memcache_hosts = getenv('DRUPAL_MEMCACHE_HOSTS')) {
           $settings['cache']['default'] = 'cache.backend.memcache';
