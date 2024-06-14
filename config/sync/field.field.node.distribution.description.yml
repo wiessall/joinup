@@ -8,18 +8,13 @@ dependencies:
     - node.type.distribution
   module:
     - text
-third_party_settings:
-  rdf_sync:
-    processed:
-      predicate: 'http://purl.org/dc/terms/description'
-      type: null
 id: node.distribution.description
 field_name: description
 entity_type: node
 bundle: distribution
 label: Description
 description: ''
-required: true
+required: false
 translatable: false
 default_value: {  }
 default_value_callback: ''
