@@ -5,10 +5,10 @@ Feature: Search inside groups
   I want to be able to launch a search limited to my current collection or solution
 
   Background:
-    Given the following contact:
-      | email | charalambos.katsumi@example.com |
-      | name  | Charalambos Katsumi             |
-    And the following owner:
+    Given contact_information content:
+      | name                | email                           |
+      | Charalambos Katsumi | charalambos.katsumi@example.com |
+    And owner content:
       | name             |
       | Antonios Katsumi |
     And collection:

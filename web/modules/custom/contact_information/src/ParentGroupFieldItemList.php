@@ -26,8 +26,8 @@ class ParentGroupFieldItemList extends EntityReferenceFieldItemList {
     }
     $query = \Drupal::entityTypeManager()->getStorage('rdf_entity')->getQuery()->accessCheck(FALSE);
     $or = $query->orConditionGroup()
-      ->condition('field_ar_contact_information', $contact_info->id())
-      ->condition('field_is_contact_information', $contact_info->id());
+      ->condition('field_ar_contact_information', $contact_info->getUri())
+      ->condition('field_is_contact_information', $contact_info->getUri());
     $gids = $query
       ->condition('rid', array_values(JoinupGroupHelper::GROUP_BUNDLES), 'IN')
       ->condition($or)

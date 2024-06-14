@@ -54,14 +54,14 @@ class ContactForm extends ContactInformationFormBase {
    * Access check for the form.
    *
    * @param \Drupal\rdf_entity\RdfInterface $rdf_entity
-   *   The collection for which to check access.
+   *   The RDF entity for which to check access.
    *
    * @return \Drupal\Core\Access\AccessResultInterface
    *   The access result.
    */
   public function access(RdfInterface $rdf_entity): AccessResultInterface {
     return AccessResult::allowedIf(
-      $this->currentUser()->isAuthenticated() &&
+      $this->accessIsAllowed() &&
       !empty($rdf_entity->getValidatedContactInformationEmails())
     );
   }

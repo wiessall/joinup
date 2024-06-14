@@ -1,0 +1,18 @@
+uuid: fe9a0cff-eba4-4b61-b6b0-1047c9124a0a
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.owner
+id: node.owner.title
+field_name: title
+entity_type: node
+bundle: owner
+label: Name
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string
