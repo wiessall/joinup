@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup_distribution\Entity;
 
 use Drupal\Core\Entity\EntityStorageInterface;
+use Drupal\file_url\FileUrlHandler;
 use Drupal\joinup_bundle_class\DescriptionTrait;
 use Drupal\joinup_distribution\Exception\MissingDistributionParentException;
 use Drupal\joinup_group\Entity\GroupContentTrait;
@@ -45,6 +46,27 @@ class Distribution extends Node implements DistributionInterface {
    * {@inheritdoc}
    */
   public function preSave(EntityStorageInterface $storage) {
+    if (!empty($fileId = $this->access_url->target_id)) {
+      if ($file = FileUrlHandler::urlToFile($fileId)) {
+        if (!FileUrlHandler::isRemote($file)) {
+          // Set the file size field.
+          $this->get('file_size')->setValue($file->getSize());
+
+          $tids = \Drupal::entityQuery('taxonomy_term')
+            ->accessCheck(FALSE)
+            ->condition('mime_type', $file->getMimeType())
+            ->execute();
+          if ($tids) {
+            $this->set('format', reset($tids));
+          }
+        }
+        else {
+          // Trim the value so that leading and trailing spaces are removed.
+          $this->set('access_url', trim($this->get('access_url')->target_id));
+        }
+      }
+    }
+
     if ($this->isNew()) {
       // If the group is not assigned but the parent is, pass the group to the
       // distribution.
