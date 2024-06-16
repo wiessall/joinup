@@ -87,7 +87,7 @@ commands:
       from: ${joinup.site_dir}/sites/default/default.services.yml
       to: ${joinup.site_dir}/sites/default/services.yml
     - task: run
-      command: testing:setup-git-hook
+      command: dev:setup-git-hook
     - task: process
       source: ${joinup.dir}/behat.yml.dist
       destination: ${joinup.dir}/behat.yml

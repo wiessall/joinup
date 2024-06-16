@@ -3,7 +3,7 @@ parameters:
 
 grumphp:
   # Extend timeout, PHPStan is rather slow to scan everything.
-  process_timeout: 120
+  process_timeout: 240
   git_hook_variables:
     EXEC_GRUMPHP_COMMAND: ddev exec php
   ascii:
@@ -16,7 +16,7 @@ grumphp:
 
     # Doc: https://github.com/phpro/grumphp/blob/master/doc/tasks/phpcs.md
     phpcs:
-      standard: ['./phpcs-ruleset.xml']
+      standard: ['./phpcs.xml']
       triggered_by: '%grumphp.tasks.php_extensions%'
 
     # Doc: https://github.com/phpro/grumphp/blob/master/doc/tasks/phpmd.md
@@ -48,3 +48,9 @@ grumphp:
     stylelint:
       bin: node_modules/.bin/stylelint
       config: .stylelintrc.json
+
+  testsuites:
+    # On git pre-push, often initiating a full scan, omit phpstan which is slow.
+    # See scripts/git/pre_push.
+    git_pre_push:
+      tasks: [composer, phpcs, phplint, yamllint, eslint, stylelint]
