@@ -9,7 +9,7 @@ SHA1_EMPTY="0000000000000000000000000000000000000000"
 FULL_CHECK="0"
 
 # Get all changed files, loop over the commits.
-declare -a CHANGED_FILES_ARRAY
+declare -a CHANGED_FILES=()
 while IFS= read -r LINE; do
   PARTS=($LINE)
   LOCAL_REF=${PARTS[0]}
@@ -29,22 +29,26 @@ while IFS= read -r LINE; do
     break
   fi
 
-  mapfile -t CHANGED_FILES < <(git diff-tree --no-commit-id --name-only -r "${LOCAL_SHA}" "${REMOTE_SHA}")
-  CHANGED_FILES_ARRAY+=("${CHANGED_FILES[@]}")
+  CHANGED_FILES+=($(git diff-tree --no-commit-id --name-only -r ${LOCAL_SHA} ${REMOTE_SHA}))
 done
 
-# Keep only existing files.
-CHANGED_FILES_ARRAY=($(printf "%s\n" "${CHANGED_FILES_ARRAY[@]}" | xargs ls -d 2>/dev/null))
-
 # Run GrumPHP.
+EXIT_CODE=0
 if [[ "$FULL_CHECK" == "1" ]]; then
-  ddev exec ./vendor/bin/grumphp run --no-interaction
-  EXIT_CODE=$?
-elif [[ "${#CHANGED_FILES_ARRAY[@]}" -gt 0 ]]; then
-  printf "%s\n" "${CHANGED_FILES_ARRAY[@]}" | ddev exec ./vendor/bin/grumphp run --no-interaction
+  ddev exec ./vendor/bin/grumphp run --no-interaction --testsuite=git_pre_push
   EXIT_CODE=$?
 else
-  EXIT_CODE=0
+  # Add composer.json if lock is present.
+  # @todo Remove once https://github.com/phpro/grumphp/pull/1142 gets in.
+  [[ "${CHANGED_FILES[@]}" =~ "composer.lock" ]] && CHANGED_FILES+=("composer.json")
+
+  # Keep only existing files.
+  CHANGED_FILES=($(printf "%s\n" "${CHANGED_FILES[@]}" | xargs -I {} bash -c 'test -e "{}" && echo "{}"'))
+
+  if [ "${#CHANGED_FILES[@]}" -gt 0 ]; then
+    printf "%s\n" "${CHANGED_FILES[@]}" | ddev exec ./vendor/bin/grumphp run --no-interaction --testsuite=git_pre_push
+    EXIT_CODE=$?
+  fi
 fi
 
 exit $EXIT_CODE

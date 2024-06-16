@@ -438,6 +438,24 @@ function joinup_group_rdf_entity_update(EntityInterface $entity) {
       $content_tracking_manager->trackEntityChange($node);
     }
   }
+
+  // Log an informational message if contact was changed.
+  $contactInfoFieldName = $entity->getContactInformationFieldName();
+  $contactInfoField = $entity->get($contactInfoFieldName);
+  $original = $entity->original;
+  if (
+    $original &&
+    !$contactInfoField->equals($originalField = $original->get($contactInfoFieldName))
+  ) {
+    \Drupal::logger('joinup_group')->info(
+      "Contact info was changed on group '%group-label'. Previous contact ID was '%previous-id', new one's ID is '%new-id'.",
+      [
+        '%group-label' => $entity->label(),
+        '%previous-id' => $originalField->entity?->id(),
+        '%new-id' => $contactInfoField->entity?->id(),
+      ]
+    );
+  }
 }
 
 /**

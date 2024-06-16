@@ -1,6 +1,9 @@
 # Development configs and commands
 
 dev:
+  # Controls when static code analysis (grumphp) runs.
+  # Options: pre-push / pre-commit / disable.
+  git_hook_on: pre-push
   modules:
     - admin_toolbar
     - config_update
@@ -12,9 +15,6 @@ dev:
     - page_manager_ui
     - stage_file_proxy
     - views_ui
-
-rector:
-  bin: ${joinup.dir}/vendor/bin/rector
 
 commands:
 

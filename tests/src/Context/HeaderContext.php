@@ -58,7 +58,7 @@ class HeaderContext extends RawDrupalContext {
     // Retrieve the main navigation links on desktop.
     $desktop_items = $this->getSession()->getPage()->findAll('xpath', '//header[contains(concat(" ", normalize-space(@class), " "), " joinup-navbar ")]//ul[contains(concat(" ", normalize-space(@class), " "), " navbar-nav ")]/li/*[self::a or self::button]');
     // Retrieve the main navigation links on mobile.
-    $mobile_items = $this->getSession()->getPage()->findAll('css', 'header.joinup-navbar ul.dropdown-list a');
+    $mobile_items = $this->getSession()->getPage()->findAll('css', '.joinup-navbar ul.navbar-nav .mmenu-nav__menu a');
     foreach ($items->getColumnsHash() as $item) {
       // Check if the item is present in the desktop menu.
       if ($item['desktop menu'] !== 'not shown') {
@@ -76,20 +76,20 @@ class HeaderContext extends RawDrupalContext {
         Assert::assertEquals($item['link'], $actual_text, sprintf('Expected the %s item in the main navigation menu but instead found %s.', $item['link'], $actual_text));
       }
 
-      // Check the hamburger menu.
-      if ($item['hamburger menu'] !== 'not shown') {
+      // Check the mobile menu.
+      if ($item['mobile menu'] !== 'not shown') {
         $actual_item = array_shift($mobile_items);
 
         // Check that the item exists.
-        Assert::assertInstanceOf(NodeElement::class, $actual_item, sprintf('Expected the %s item in the hamburger menu but instead found nothing.', $item['link']));
+        Assert::assertInstanceOf(NodeElement::class, $actual_item, sprintf('Expected the %s item in the mobile menu but instead found nothing.', $item['link']));
 
         // Check that the item is the expected type.
         $actual_tag = $actual_item->getTagName();
-        Assert::assertEquals(self::HTML_ELEMENT_ALIASES[$item['hamburger menu']], $actual_tag, sprintf('Expected that the %s item in the hamburger menu was a %s but instead found a %s element.', $item['link'], $item['hamburger menu'], $actual_tag));
+        Assert::assertEquals(self::HTML_ELEMENT_ALIASES[$item['mobile menu']], $actual_tag, sprintf('Expected that the %s item in the mobile menu was a %s but instead found a %s element.', $item['link'], $item['mobile menu'], $actual_tag));
 
         // Check the item text.
         $actual_text = trim($actual_item->getHtml());
-        Assert::assertEquals($item['link'], $actual_text, sprintf('Expected the %s item in the hamburger menu but instead found %s.', $item['link'], $actual_text));
+        Assert::assertEquals($item['link'], $actual_text, sprintf('Expected the %s item in the mobile menu but instead found %s.', $item['link'], $actual_text));
       }
     }
 
