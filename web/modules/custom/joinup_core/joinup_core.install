@@ -120,3 +120,24 @@ SPARQL;
 
   return 'The information has been fixed.';
 }
+
+/**
+ * Remove the eif_solutions_page condition from blocks that use it.
+ */
+function joinup_core_update_110802(): string {
+  $configs = [
+    'block.block.ventuno_eifcategories',
+    'block.block.ventuno_eifrecomendationsselector',
+  ];
+
+  foreach ($configs as $config) {
+    $block = \Drupal::configFactory()->getEditable($config);
+    $conditions = $block->get('visibility');
+    if (isset($conditions['eif_solutions_page'])) {
+      unset($conditions['eif_solutions_page']);
+      $block->set('visibility', $conditions)->save();
+    }
+  }
+
+  return 'Cleaned up conditions of invalid plugins.';
+}
