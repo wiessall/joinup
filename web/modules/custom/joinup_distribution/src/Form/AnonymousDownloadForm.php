@@ -14,7 +14,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 use Drupal\file\FileInterface;
 use Drupal\file\FileUsage\FileUsageInterface;
-use Drupal\sparql_entity_storage\SparqlEntityStorageInterface;
+use Drupal\node\NodeStorageInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
@@ -33,7 +33,7 @@ class AnonymousDownloadForm extends FormBase {
   /**
    * Instantiates a new AnonymousDownloadForm object.
    *
-   * @param \Drupal\sparql_entity_storage\SparqlEntityStorageInterface $sparqlStorage
+   * @param \Drupal\node\NodeStorageInterface $nodeStorage
    *   The RDF entity storage.
    * @param \Drupal\Core\Entity\ContentEntityStorageInterface $eventStorage
    *   The download event entity storage.
@@ -41,7 +41,7 @@ class AnonymousDownloadForm extends FormBase {
    *   The file usage service.
    */
   public function __construct(
-    protected SparqlEntityStorageInterface $sparqlStorage,
+    protected NodeStorageInterface $nodeStorage,
     protected ContentEntityStorageInterface $eventStorage,
     protected FileUsageInterface $fileUsage,
   ) {}
@@ -51,7 +51,7 @@ class AnonymousDownloadForm extends FormBase {
    */
   public static function create(ContainerInterface $container): self {
     return new static(
-      $container->get('entity_type.manager')->getStorage('rdf_entity'),
+      $container->get('entity_type.manager')->getStorage('node'),
       $container->get('entity_type.manager')->getStorage('download_event'),
       $container->get('file.usage')
     );
@@ -126,13 +126,13 @@ class AnonymousDownloadForm extends FormBase {
 
     // Normally, only one distribution is allowed to use a file and only
     // distributions call this code.
-    if (empty($usages['file']['rdf_entity'])) {
+    if (empty($usages['file']['node'])) {
       throw new \RuntimeException('No distributions were found using the file with ID ' . $this->file->id());
     }
-    if (count($usages['file']['rdf_entity']) > 1) {
+    if (count($usages['file']['node']) > 1) {
       throw new \RuntimeException('More than one distributions were found for the file with ID ' . $this->file->id());
     }
-    $distribution = $this->sparqlStorage->load(key($usages['file']['rdf_entity']));
+    $distribution = $this->nodeStorage->load(key($usages['file']['node']));
 
     /** @var \Drupal\solution\Entity\SolutionInterface|\Drupal\asset_release\Entity\AssetReleaseInterface $parent */
     $parent = $distribution->getParent();
