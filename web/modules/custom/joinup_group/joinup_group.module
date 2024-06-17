@@ -201,39 +201,6 @@ function joinup_group_entity_type_alter(array &$entity_types): void {
 }
 
 /**
- * Implements hook_entity_prepare_form().
- */
-function joinup_group_entity_prepare_form(EntityInterface $entity, $operation, FormStateInterface $form_state) {
-  // This entity is not group content.
-  if (!$entity instanceof GroupContentInterface) {
-    return;
-  }
-  // Only set the group on new entities.
-  if (!$entity->isNew()) {
-    return;
-  }
-  // The group cannot be determined from context.
-  if (!$group = \Drupal::getContainer()->get('joinup_group.group_manager')->getGroupFromContext()) {
-    return;
-  }
-
-  $map = \Drupal::getContainer()->get('entity_field.manager')->getFieldMapByFieldType('og_standard_reference');
-  foreach ($map as $entityTypeId => $info) {
-    if ($entityTypeId !== $entity->getEntityTypeId()) {
-      continue;
-    }
-    foreach ($info as $fieldType => ['bundles' => $bundles]) {
-      foreach ($bundles as $bundle) {
-        if ($bundle === $entity->bundle()) {
-          $entity->set($fieldType, $group);
-          return;
-        }
-      }
-    }
-  }
-}
-
-/**
  * Implements hook_form_BASE_FORM_ID_alter().
  *
  * Adds a submit handler that will show a message to the user after proposing a
