@@ -131,11 +131,12 @@ function joinup_core_update_110802(): string {
   ];
 
   foreach ($configs as $config) {
-    $block = \Drupal::configFactory()->getEditable($config);
-    $conditions = $block->get('visibility');
-    if (isset($conditions['eif_solutions_page'])) {
-      unset($conditions['eif_solutions_page']);
-      $block->set('visibility', $conditions)->save();
+    if ($block = \Drupal::configFactory()->getEditable($config)) {
+      $conditions = $block->get('visibility');
+      if (isset($conditions['eif_solutions_page'])) {
+        unset($conditions['eif_solutions_page']);
+        $block->set('visibility', $conditions)->save();
+      }
     }
   }
 
