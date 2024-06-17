@@ -57,7 +57,7 @@ class DistributionContext extends RawDrupalContext {
    *
    * @BeforeNodeCreate
    */
-  public function convertToBoolean(BeforeNodeCreateScope $event): void {
+  public function beforeNodeCreateDistributionFields(BeforeNodeCreateScope $event): void {
     $node = $event->getEntity();
     if ($node->type !== 'distribution') {
       return;
