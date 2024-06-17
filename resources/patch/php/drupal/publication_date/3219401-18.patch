@@ -106,7 +106,7 @@ index e938b94..1e399f0 100644
      tags:
        - { name: event_subscriber }
 diff --git a/publication_date.tokens.inc b/publication_date.tokens.inc
-index a20da20..a98f466 100644
+index a20da20..e99c8d1 100644
 --- a/publication_date.tokens.inc
 +++ b/publication_date.tokens.inc
 @@ -13,11 +13,14 @@ use Drupal\Core\Render\BubbleableMetadata;
@@ -129,19 +129,16 @@ index a20da20..a98f466 100644
  }
 
  /**
-@@ -35,22 +38,24 @@ function publication_date_tokens($type, $tokens, array $data, array $options, Bu
+@@ -35,22 +38,20 @@ function publication_date_tokens($type, $tokens, array $data, array $options, Bu
    }
    $replacements = [];
 
 -  if ($type == 'node' && !empty($data['node'])) {
 -    /** @var \Drupal\node\NodeInterface $node */
 -    $node = $data['node'];
+-
 +  if (\Drupal::service('publication_date.enabled_entity_types')->isEnabled($type) && !empty($data[$type])) {
 +    $entity = $data[$type];
-+    if (!$entity instanceof FieldableEntityInterface) {
-+      return;
-+    }
-
      foreach ($tokens as $name => $original) {
        switch ($name) {
          case 'published':
