@@ -7,6 +7,7 @@ namespace Drupal\joinup_distribution\EventSubscriber;
 use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\File\FileUrlGeneratorInterface;
 use Drupal\joinup_distribution\Entity\DistributionInterface;
+use Drupal\joinup_distribution\Exception\MissingDistributionParentException;
 use Drupal\joinup_rdf\Entity\RdfSyncEntityInterface;
 use Drupal\rdf_sync\Event\RdfSyncNormalizeEvent;
 use Drupal\rdf_sync\RdfSyncMapper;
@@ -50,19 +51,26 @@ final class DistributionParentRdfSyncSubscriber implements EventSubscriberInterf
     $entity = $event->getEntity();
     $normalizedArray = $event->getNormalizedArray();
     if ($entity instanceof DistributionInterface) {
-      /** @var \Drupal\joinup_rdf\Entity\RdfSyncEntityInterface $parent */
-      if ($parent = $entity->getParent()) {
-        // @todo Remove these lines in ISAICP-8376. The URI should always be
-        //   fetched with the getUri() method once RDF2Node is completed.
-        if ($parent instanceof RdfSyncEntityInterface) {
-          $parentUri = $parent->getUri();
+      try {
+        /** @var \Drupal\joinup_rdf\Entity\RdfSyncEntityInterface $parent */
+        if ($parent = $entity->getParent()) {
+          // @todo Remove these lines in ISAICP-8376. The URI should always be
+          //   fetched with the getUri() method once RDF2Node is completed.
+          if ($parent instanceof RdfSyncEntityInterface) {
+            $parentUri = $parent->getUri();
+          }
+          else {
+            // The parents have not been converted yet, we can get their ID
+            // directly.
+            $parentUri = $parent->id();
+          }
+          $normalizedArray[$parentUri]['http://www.w3.org/ns/dcat#distribution'][] = (new Resource($entity->getUri()))->toRdfPhp();
         }
-        else {
-          // The parents have not been converted yet, we can get their ID
-          // directly.
-          $parentUri = $parent->id();
-        }
-        $normalizedArray[$parentUri]['http://www.w3.org/ns/dcat#distribution'][] = (new Resource($entity->getUri()))->toRdfPhp();
+      }
+      catch (MissingDistributionParentException $exception) {
+        // The parent is missing, so we cannot add the relationship. This can
+        // happen during during complex operations like entities cleanup where
+        // the order of the cleanup can be unpredictable.
       }
 
       // Export also all `access_url` values that are external URLs because RDF
