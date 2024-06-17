@@ -98,7 +98,7 @@ class DistributionSubscriber extends NotificationSubscriberBase {
    *   Whether the conditions apply.
    */
   protected function appliesOnUpdate(): bool {
-    if (!$this->appliesOnReleases()) {
+    if (!$this->appliesOnDistributions()) {
       return FALSE;
     }
 
@@ -143,7 +143,7 @@ class DistributionSubscriber extends NotificationSubscriberBase {
    *   Whether the conditions apply.
    */
   protected function appliesOnDelete(): bool {
-    if (!$this->appliesOnReleases()) {
+    if (!$this->appliesOnDistributions()) {
       return FALSE;
     }
 
@@ -155,13 +155,13 @@ class DistributionSubscriber extends NotificationSubscriberBase {
   }
 
   /**
-   * Checks if the event applies for releases.
+   * Checks if the event applies for distributions.
    *
    * @return bool
    *   Whether the event applies.
    */
-  protected function appliesOnReleases(): bool {
-    if ($this->entity->getEntityTypeId() !== 'rdf_entity') {
+  protected function appliesOnDistributions(): bool {
+    if ($this->entity->getEntityTypeId() !== 'node') {
       return FALSE;
     }
 
