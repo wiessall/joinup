@@ -1,0 +1,9 @@
+services:
+  sparql_endpoint.endpoint_tracker:
+    class: Drupal\sparql_endpoint_piwik\EndpointTracker
+    autowire: true
+  sparql_endpoint.endpoint_response_subscriber:
+    class: Drupal\sparql_endpoint_piwik\EventSubscriber\EndpointResponseSubscriber
+    arguments: [ '@sparql_endpoint.endpoint_tracker' ]
+    tags:
+      - { name: 'event_subscriber' }
