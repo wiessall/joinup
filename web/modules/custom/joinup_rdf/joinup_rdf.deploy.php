@@ -287,8 +287,8 @@ function joinup_rdf_deploy_110805(array &$sandbox): string {
     // Set the OG reference as a parent if there is no parent found.
     $values['distribution_parent'] = _joinup_rdf_get_distribution_parent($uri);
     if (empty($values['distribution_parent'])) {
-      assert(!empty($data['http://joinup.eu/rdf_entity/group']), "Distribution with URI $uri has no parent.");
-      $values['distribution_parent'] = $data['http://joinup.eu/rdf_entity/group'][0]['value'];
+      assert(!empty($data['http://joinup.eu/rdf_entity/group'][0]['value']), "Distribution with URI $uri has no parent.");
+      $values['distribution_parent'] = $data['http://joinup.eu/rdf_entity/group'][0]['value'] ?? NULL;
     }
     assert(!empty($values['distribution_parent']), "Distribution with URI $uri has no parent. Distribution value array: " . print_r($data, TRUE));
     $entity = $storage->create($values);

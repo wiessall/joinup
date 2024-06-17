@@ -93,7 +93,7 @@ class Distribution extends Node implements DistributionInterface {
     parent::postSave($storage, $update);
 
     // @todo Remove this in ISAICP-8376. Invalidation should always occur.
-    if (property_exists($this, 'skip_parent_invalidation')) {
+    if (isset($this->skip_parent_invalidation) && $this->skip_parent_invalidation) {
       return;
     }
 
