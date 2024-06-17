@@ -32,10 +32,9 @@ class EndpointTracker {
   }
 
   /**
-   * Tracks the request by sending a GET request to the URL with the query
-   * parameters.
+   * Tracks the request by sending a GET request.
    *
-   * @param Request $request
+   * @param \Symfony\Component\HttpFoundation\Request $request
    *   The request.
    */
   public function track(Request $request): void {
@@ -52,7 +51,7 @@ class EndpointTracker {
   /**
    * Builds the query parameters for the request.
    *
-   * @param Request $request
+   * @param \Symfony\Component\HttpFoundation\Request $request
    *   The request stack.
    *
    * @return array
@@ -81,7 +80,7 @@ class EndpointTracker {
   /**
    * Builds the headers for the request.
    *
-   * @param Request $request
+   * @param \Symfony\Component\HttpFoundation\Request $request
    *   The request stack.
    *
    * @return array
@@ -109,5 +108,3 @@ class EndpointTracker {
   }
 
 }
-
-

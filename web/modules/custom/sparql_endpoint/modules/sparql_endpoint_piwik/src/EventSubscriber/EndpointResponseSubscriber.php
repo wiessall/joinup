@@ -27,7 +27,7 @@ class EndpointResponseSubscriber implements EventSubscriberInterface {
   /**
    * Event listener for `KernelEvents::RESPONSE` event.
    *
-   * @param ResponseEvent $event
+   * @param \Symfony\Component\HttpKernel\Event\ResponseEvent $event
    *   The event object.
    */
   public function onRespond(ResponseEvent $event): void {
@@ -39,7 +39,7 @@ class EndpointResponseSubscriber implements EventSubscriberInterface {
   /**
    * Determines if the request should be tracked.
    *
-   * @param ResponseEvent $event
+   * @param \Symfony\Component\HttpKernel\Event\ResponseEvent $event
    *   The response event.
    *
    * @return bool
@@ -55,7 +55,7 @@ class EndpointResponseSubscriber implements EventSubscriberInterface {
       return FALSE;
     }
 
-    // Don't truck is response is HTML as it will be picked by the default tracking.
+    // Don't truck is response is HTML.
     if (str_contains($event->getResponse()->headers->get('Content-Type', ''), 'text/html')) {
       return FALSE;
     }
