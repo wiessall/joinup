@@ -83,7 +83,7 @@ function joinup_notification_rdf_entity_presave(RdfInterface $entity): void {
 function joinup_notification_node_update(EntityInterface $entity): void {
   $event_name = match(TRUE) {
     $entity instanceof CommunityContentInterface => NotificationEvents::COMMUNITY_CONTENT_UPDATE,
-    // @todo Refactor the constant when migration to node is complete.
+    // @todo To be unified in ISAICP-8839.
     $entity instanceof DistributionInterface => NotificationEvents::RDF_ENTITY_CRUD,
     default => NULL,
   };
@@ -113,7 +113,7 @@ function joinup_notification_node_predelete(EntityInterface $entity): void {
 
   $event_name = match(TRUE) {
     $entity instanceof CommunityContentInterface => NotificationEvents::COMMUNITY_CONTENT_DELETE,
-    // @todo Refactor the constant when migration to node is complete.
+    // @todo To be unified in ISAICP-8839.
     $entity instanceof DistributionInterface => NotificationEvents::RDF_ENTITY_CRUD,
     default => NULL,
   };
