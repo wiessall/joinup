@@ -128,6 +128,9 @@ class Distribution extends Node implements DistributionInterface {
 
   /**
    * Clears the cache of the solution of the distribution.
+   *
+   * @param \Drupal\joinup_distribution\Entity\DistributionsParentInterface $solution
+   *   The solution to clear the cache for.
    */
   protected function clearSolutionCache(DistributionsParentInterface $solution): void {
     /** @var \Drupal\Core\Cache\CacheTagsInvalidatorInterface $cacheTagsInvalidator */
@@ -140,6 +143,9 @@ class Distribution extends Node implements DistributionInterface {
 
   /**
    * Re-indexes the parent of the distribution.
+   *
+   * @param \Drupal\joinup_distribution\Entity\DistributionsParentInterface $parent
+   *   The parent to re-index.
    */
   protected function reIndexDistributionParent(DistributionsParentInterface $parent): void {
     /** @var \Drupal\search_api\Plugin\search_api\datasource\ContentEntityTrackingManager $contentTrackingManager */
