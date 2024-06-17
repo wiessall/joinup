@@ -350,8 +350,36 @@ function joinup_rdf_deploy_110806(): string {
 }
 
 /**
+ * Implements entity definition updates.
+ */
+function joinup_rdf_deploy_110807(): string {
+  $entity_update_manager = \Drupal::entityDefinitionUpdateManager();
+  if (!$entity_update_manager->needsUpdates()) {
+    return 'No updates needed';
+  }
+
+  $messages = [];
+  $entity_field_manager = \Drupal::getContainer()->get('entity_field.manager');
+  foreach ($entity_update_manager->getChangeList() as $entity_type_id => $changes) {
+    $entity_type = $entity_update_manager->getEntityType($entity_type_id);
+    if (isset($changes['field_storage_definitions'])) {
+      $field_storage_definitions = $entity_field_manager->getFieldStorageDefinitions($entity_type_id);
+      foreach ($changes['field_storage_definitions'] as $field_name => $value) {
+        /** @var \Drupal\Core\Field\FieldStorageDefinitionInterface $storage_definition */
+        $storage_definition = $field_storage_definitions[$field_name];
+        $entity_update_manager->updateFieldStorageDefinition($storage_definition);
+        $messages[] = "Updated field storage definition for $entity_type_id.$field_name";
+      }
+    }
+    $entity_update_manager->updateEntityType($entity_type);
+  }
+
+  return implode("\n", $messages);
+}
+
+/**
  * Re-enable RDF Sync.
  */
-function joinup_rdf_deploy_110807(): void {
+function joinup_rdf_deploy_110808(): void {
   \Drupal::getContainer()->get('rdf_sync.synchronizer')->enableSynchronization();
 }
