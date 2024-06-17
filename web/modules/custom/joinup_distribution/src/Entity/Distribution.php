@@ -19,7 +19,6 @@ use Drupal\node\Entity\Node;
 use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\solution\Entity\SolutionContentTrait;
 use Drupal\solution\Entity\SolutionInterface;
-use Drupal\solution\Exception\MissingSolutionException;
 
 /**
  * Bundle class for distributions.
@@ -98,12 +97,12 @@ class Distribution extends Node implements DistributionInterface {
     }
 
     // Re-index the parent of the distribution.
-    if ($parent = $this->getParentSafe()) {
+    if ($parent = $this->get('distribution_parent')?->entity) {
       $this->reIndexDistributionParent($parent);
     }
 
     // Clear the cache of the solution of the distribution.
-    if ($solution = $this->getSolutionSafe()) {
+    if ($solution = $this->get(OgGroupAudienceHelperInterface::DEFAULT_FIELD)?->entity) {
       $this->clearSolutionCache($solution);
     }
   }
@@ -112,8 +111,8 @@ class Distribution extends Node implements DistributionInterface {
    * {@inheritdoc}
    */
   public function delete() {
-    $solution = $this->getSolutionSafe();
-    $parent = $this->getParentSafe();
+    $solution = $this->get(OgGroupAudienceHelperInterface::DEFAULT_FIELD)?->entity;
+    $parent = $this->get('distribution_parent')?->entity;
     parent::delete();
 
     // Clear the cache of the solution of the distribution.
@@ -164,40 +163,6 @@ class Distribution extends Node implements DistributionInterface {
     }
 
     return $parent;
-  }
-
-  /**
-   * Returns the parent entity or NULL if it is missing.
-   *
-   * @return \Drupal\joinup_distribution\Entity\DistributionsParentInterface|null
-   *   The parent entity or NULL if it is missing.
-   *
-   * @todo This method should be removed once the parent entity is always set.
-   */
-  protected function getParentSafe(): ?DistributionsParentInterface {
-    try {
-      return $this->getParent();
-    }
-    catch (MissingDistributionParentException $exception) {
-      return NULL;
-    }
-  }
-
-  /**
-   * Returns the solution of the distribution or NULL if it is missing.
-   *
-   * @return \Drupal\solution\Entity\SolutionInterface|null
-   *   The solution of the distribution or NULL if it is missing.
-   *
-   * @todo This method should be removed once the solution is always set.
-   */
-  protected function getSolutionSafe(): ?SolutionInterface {
-    try {
-      return $this->getSolution();
-    }
-    catch (MissingSolutionException $exception) {
-      return NULL;
-    }
   }
 
   /**
