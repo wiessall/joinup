@@ -27,6 +27,7 @@
   - Drupal\joinup\Context\ContactFormContext
   - Drupal\joinup\Context\ContactInformationContext
   - Drupal\joinup\Context\CustomPageContext
+  - Drupal\joinup\Context\DebugContext
   - Drupal\joinup\Context\DigitQaPipelineContext
   - Drupal\joinup\Context\DrupalContext
   - Drupal\joinup\Context\EifContext
@@ -70,7 +71,6 @@
   - Drupal\joinup\Context\OeNewsroomNewsletterContext
   - Drupal\joinup\Context\OwnerContext
   - Drupal\joinup\Context\PollContext
-  - Drupal\joinup\Context\RdfGraphContext
   - Drupal\joinup\Context\ReplicateContext
   - Drupal\joinup\Context\RssContext
   - Drupal\joinup\Context\ScreenshotContext:
@@ -236,6 +236,10 @@ audit:
       filters:
         include:
           - '/Drupal\\joinup\\Context/'
+        exclude:
+          - '/Drupal\\joinup\\Context\\DebugContext/'
+          - '/Drupal\\joinup\\Context\\ScreenshotContext/'
+          - '/Drupal\\joinup\\Context\\MinkContext::clickLink/'
   suites:
     default:
       filters: ~
