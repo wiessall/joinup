@@ -45,6 +45,8 @@ Feature: Publication date works as expected on RDF entities
       | title   | description | deprecated |
       | Licence | Description | no         |
     When I am logged in as a "facilitator" of the "Published solution" solution
+    When I check the box "I agree to the Legal notice document"
+    And I press "Submit"
     And I go to the homepage of the "Published solution" solution
     When I click "Add distribution" in the plus button menu
     Then I should see the heading "Add Distribution"
