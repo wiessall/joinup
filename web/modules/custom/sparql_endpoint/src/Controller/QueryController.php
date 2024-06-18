@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Provides a Sparql query controller.
+ * Provides a SPARQL query controller.
  */
 class QueryController extends ControllerBase {
 
