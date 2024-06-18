@@ -7,8 +7,10 @@ dependencies:
     - filter.format.basic_html
     - filter.format.plain_text_glossary
     - filter.format.simple_text
+    - meta_entity.type.eif_perspective
   module:
     - comment
+    - eif
     - email_confirmer
     - entity_legal
     - filter

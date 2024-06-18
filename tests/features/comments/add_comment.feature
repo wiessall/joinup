@@ -275,7 +275,6 @@ Feature: Add comments
       | Gossip collection | document     | Celebrity scandals 2019   | published |
 
   Scenario Outline: Anonymized comments
-
     Given the following collections:
       | title           | state     | closed |
       | Show collection | published | yes    |

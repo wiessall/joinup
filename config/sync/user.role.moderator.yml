@@ -10,22 +10,24 @@ dependencies:
     - media.type.news_logo
     - media.type.solution_logo
     - media.type.video
-    - node.type.contact_information
     - node.type.custom_page
     - node.type.discussion
     - node.type.document
     - node.type.glossary
-    - node.type.licence
     - node.type.owner
+    - node.type.licence
     - taxonomy.vocabulary.legal_type
   module:
     - asset_distribution
+    - collection
     - comment
     - contact_form
     - custom_page
     - dashboard
+    - eif
     - entity_legal
     - entityqueue
+    - field_permissions
     - file
     - filter
     - joinup
