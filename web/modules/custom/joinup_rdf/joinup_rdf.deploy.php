@@ -12,6 +12,7 @@ use Drupal\Core\Serialization\Yaml;
 use Drupal\joinup_taxonomy\Entity\MappedTerm;
 use Drupal\node\Entity\Node;
 use Drupal\rdf_sync\Model\SyncMethod;
+use Drupal\search_api\Entity\Index;
 
 /**
  * Disable RDF Sync for the deployment.
@@ -246,10 +247,6 @@ function joinup_rdf_deploy_110805(array &$sandbox): string {
   $file = array_shift($sandbox['files']);
   $distributions = Yaml::decode(file_get_contents($file));
   foreach ($distributions as $uri => $data) {
-    // @todo Implement an RDF sync subscriber to add the distributions to the
-    //   parent entity. Add a follow up for the release and solution tickets to
-    //   update this subscriber to add the data in the http://data graph
-    //   instead.
     $values = ['type' => 'distribution', 'uri' => $uri];
     foreach ($data as $predicate => $objects) {
       if (isset($map[$predicate])) {
@@ -292,6 +289,7 @@ function joinup_rdf_deploy_110805(array &$sandbox): string {
     }
     assert(!empty($values['distribution_parent']), "Distribution with URI $uri has no parent. Distribution value array: " . print_r($data, TRUE));
     $entity = $storage->create($values);
+
     $entity->skip_notification = TRUE;
     $entity->skip_parent_invalidation = TRUE;
     $entity->save();
@@ -377,9 +375,29 @@ function joinup_rdf_deploy_110807(): string {
   return implode("\n", $messages);
 }
 
+
+
+/**
+ * Clean up asset distributions from the search index.
+ */
+function joinup_rdf_deploy_110808(): string {
+  /** @var \Drupal\search_api\Entity\Index $index */
+  $index = Index::load('published');
+  $results = $index->query()->addCondition('entity_bundle', 'asset_distribution')->execute();
+  $ids = array_keys($results->getResultItems());
+  // ::trackItems{action} re-constructs the IDs so we need to remove the prefix
+  // `entity:rdf_entity:` from the IDs.
+  $ids = array_map(function (string $id): string {
+    return str_replace('entity:rdf_entity/', '', $id);
+  }, $ids);
+  $index->trackItemsDeleted('entity:rdf_entity', $ids);
+
+  return 'Asset distributions have been removed from the search index.';
+}
+
 /**
  * Re-enable RDF Sync.
  */
-function joinup_rdf_deploy_110808(): void {
+function joinup_rdf_deploy_110809(): void {
   \Drupal::getContainer()->get('rdf_sync.synchronizer')->enableSynchronization();
 }
