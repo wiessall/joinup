@@ -149,7 +149,7 @@ class MenuHelper implements MenuHelperInterface {
 
     return array_map(function (MenuLinkTreeElement $element): array {
       $link = [
-        'link' => new Url($element->link->getRouteName(), $element->link->getRouteParameters(), ['set_active_class' => TRUE]),
+        'link' => $element->link->getUrlObject()->setOption('set_active_class', TRUE),
         'label' => $element->link->getTitle(),
         'children' => [],
         'in_active_trail' => $element->inActiveTrail,
@@ -157,7 +157,7 @@ class MenuHelper implements MenuHelperInterface {
       if ($element->hasChildren) {
         foreach ($element->subtree as $child) {
           $link['children'][] = [
-            'link' => new Url($child->link->getRouteName(), $child->link->getRouteParameters(), ['set_active_class' => TRUE]),
+            'link' => $child->link->getUrlObject()->setOption('set_active_class', TRUE),
             'label' => $child->link->getTitle(),
             'in_active_trail' => $child->inActiveTrail,
           ];

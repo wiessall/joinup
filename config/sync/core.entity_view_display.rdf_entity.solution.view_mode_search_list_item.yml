@@ -44,7 +44,6 @@ dependencies:
     - field_group
     - joinup_html_stripper
     - layout_builder
-    - options
     - responsive_image
     - template_suggestion
     - user
