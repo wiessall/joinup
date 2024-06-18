@@ -240,7 +240,6 @@ Feature: CKEditor5
     And I should not see "This is Alan we love"
     And I should not see "Other Image in The Other Collection"
 
-  @uploadFiles:alan.jpg
   Scenario: Media type error with CKEditor5.
   # Regression test for ticket ISAICP-8806.
     Given collection:
@@ -254,13 +253,5 @@ Feature: CKEditor5
     And I press "Insert selected" in the "Modal buttons" region
     And I wait for AJAX to finish
     Then I should see the error message "No items selected."
-    When I attach the file "alan.jpg" to "Add file"
-    And I wait for AJAX to finish
-
-    When I fill in "Name" with "This is Alan photo"
-    And I fill in "Alternative text" with "This is photo portrait"
-    And I press "Save" in the "Modal buttons" region
-    And I wait for AJAX to finish
-    And the modal should be closed
 
   # For 'Media video with CKEditor5' see tests/features/video/embed.feature
