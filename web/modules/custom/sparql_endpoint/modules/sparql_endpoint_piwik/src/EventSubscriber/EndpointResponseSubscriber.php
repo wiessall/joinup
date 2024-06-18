@@ -50,12 +50,12 @@ class EndpointResponseSubscriber implements EventSubscriberInterface {
       return FALSE;
     }
 
-    // Truck only specific route.
+    // Track only specific route.
     if ($event->getRequest()->attributes->get('_route') !== 'sparql_endpoint.query') {
       return FALSE;
     }
 
-    // Don't truck is response is HTML.
+    // Don't track is response is HTML.
     if (str_contains($event->getResponse()->headers->get('Content-Type', ''), 'text/html')) {
       return FALSE;
     }
