@@ -63,13 +63,10 @@ class DistributionContext extends RawDrupalContext {
       return;
     }
 
-    // The Access URL field is either an external URI, or file upload.
-    if (!empty($node->{'access url'})) {
-      // The access URL can be a file name or a remote URL.
-      if (filter_var($node->{'access url'}, FILTER_VALIDATE_URL) === FALSE) {
-        // It's a local file to be uploaded.
-        $node->{'access url'} = FileUrlHandler::fileToUrl($this->createFile($node->{'access url'}));
-      }
+    // The Access URL field is either an external URI, or file upload. If it is
+    // a local file, translate the value to a URL.
+    if (!empty($node->{'access url'}) && (filter_var($node->{'access url'}, FILTER_VALIDATE_URL) === FALSE)) {
+      $node->{'access url'} = FileUrlHandler::fileToUrl($this->createFile($node->{'access url'}));
     }
 
     // Downloads are stored in a meta entity.
