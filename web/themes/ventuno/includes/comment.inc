@@ -47,8 +47,11 @@ function ventuno_preprocess_comment(array &$variables): void {
       /** @var \Drupal\file\Entity\File $file */
       if ($file = File::load($photo_target)) {
         $uri = $file->getFileUri();
-        $url = ImageStyle::load('profile_icon')->buildUrl($uri);
-        $variables['user_picture'] = ['#markup' => $url];
+        $variables['user_picture'] = [
+          '#theme' => 'image',
+          '#uri' => ImageStyle::load('profile_icon')->buildUrl($uri),
+          '#alt' => $user->getDisplayName(),
+        ];
       }
     }
   }
