@@ -21,10 +21,8 @@ dependencies:
     - field.field.node.news.og_audience
     - node.type.news
   module:
-    - field_delimiter
-    - field_formatter_range
+    - field_fallback_formatter
     - joinup_core
-    - joinup_slick
     - template_suggestion
     - user
 _core:
@@ -35,11 +33,24 @@ bundle: news
 mode: view_mode_featured
 content:
   abstract:
-    type: string
+    type: field_fallback_formatter
     label: hidden
     settings:
-      link_to_entity: false
-    third_party_settings: {  }
+      main_field_formatter_id: string
+      main_field_formatter_settings:
+        link_to_entity: false
+      fallback_field_id: field_paragraphs_body
+      fallback_field_formatter_id: filtered_entity_reference_bundles
+      fallback_field_formatter_settings:
+        view_mode: tile
+        filtered_entity_bundles:
+          - simple_paragraph
+          - text
+        trim_length: 200
+        trim_chars: ...
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
     weight: 0
     region: content
   field_keywords:
@@ -52,31 +63,6 @@ content:
         template_suggestion: comma_separated
     weight: 1
     region: content
-  field_paragraphs_body:
-    type: filtered_entity_reference_bundles
-    label: hidden
-    settings:
-      view_mode: tile
-      link: ''
-      filtered_entity_bundles:
-        - simple_paragraph
-        - text
-      trim_length: 600
-    third_party_settings:
-      field_delimiter:
-        delimiter: ''
-      field_formatter_range:
-        order: 0
-        limit: 1
-        offset: 0
-      joinup_slick:
-        preset: ''
-        field_label: true
-        custom_label: ''
-      template_suggestion:
-        template_suggestion: ''
-    weight: 0
-    region: content
 hidden:
   featured: true
   field_attachment: true
@@ -86,6 +72,7 @@ hidden:
   field_news_referenced_solution: true
   field_news_source_url: true
   field_news_spatial_coverage: true
+  field_paragraphs_body: true
   field_shared_in: true
   field_site_featured: true
   field_state: true
