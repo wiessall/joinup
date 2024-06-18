@@ -5,9 +5,12 @@ declare(strict_types=1);
 namespace Drupal\joinup_group\Controller;
 
 use Drupal\Component\Render\MarkupInterface;
+use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\joinup_group\Entity\GroupContentInterface;
+use Drupal\node\NodeInterface;
 use Drupal\node\NodeTypeInterface;
 use Drupal\og\OgAccessInterface;
 use Drupal\og\OgGroupAudienceHelperInterface;
@@ -101,6 +104,31 @@ class GroupNodeController extends ControllerBase {
     // Grant access depending on whether the user has permission to create a
     // node in this group according to their OG role.
     return $this->ogAccess->userAccessGroupContentEntityOperation('create', $rdf_entity, $this->createNode($rdf_entity, $node_type), $account);
+  }
+
+  /**
+   * Determines access to the node add form based on a node instance.
+   *
+   * Used on the node replicate route.
+   *
+   * @param \Drupal\node\NodeInterface $node
+   *   The node to fetch the node type and group from to determine create
+   *   access.
+   * @param \Drupal\Core\Session\AccountInterface $account
+   *   The account to check access for.
+   *
+   * @return \Drupal\Core\Access\AccessResult
+   *   The access result object.
+   */
+  public function nodeCreateAccessFromNode(NodeInterface $node, AccountInterface $account): AccessResultInterface {
+    if (!$node instanceof GroupContentInterface || !$node->hasGroup()) {
+      return AccessResult::forbidden("Node doesn't belong to a group")
+        ->addCacheableDependency($node);
+    }
+    $nodeType = $this->entityTypeManager()->getStorage('node_type')->load($node->bundle());
+    assert($nodeType instanceof NodeTypeInterface);
+
+    return $this->createAccess($node->getGroup(), $nodeType, $account);
   }
 
   /**
