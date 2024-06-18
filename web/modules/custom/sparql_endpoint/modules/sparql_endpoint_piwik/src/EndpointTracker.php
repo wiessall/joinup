@@ -111,6 +111,10 @@ class EndpointTracker {
       return NULL;
     }
 
+    if (!preg_match("~^(?:f|ht)tps?://~i", $url)) {
+      $url = 'https://' . $url;
+    }
+
     return http_build_url($url, ['path' => 'ppms.php']);
   }
 
