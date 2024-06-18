@@ -6,8 +6,6 @@ dependencies:
     - comment.type.comment
     - field.field.comment.comment.anonymize
     - field.field.comment.comment.field_body
-  module:
-    - text
 _core:
   default_config_hash: 1pqbtJl4kPoWoUVg305Sq43ImIeCrjxJg2H1-GTrepU
 id: comment.comment.default
@@ -16,7 +14,7 @@ bundle: comment
 mode: default
 content:
   field_body:
-    type: text_default
+    type: basic_string
     label: hidden
     settings: {  }
     third_party_settings: {  }
