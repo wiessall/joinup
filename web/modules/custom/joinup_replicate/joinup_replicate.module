@@ -1,0 +1,74 @@
+<?php
+
+/**
+ * @file
+ * Hooks of Joinup Replicate module.
+ */
+
+declare(strict_types=1);
+
+use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\joinup_replicate\Form\JoinupReplicateConfirmForm;
+use Drupal\replicate_ui\Form\ReplicateConfirmForm;
+
+/**
+ * Implements hook_form_alter().
+ */
+function joinup_replicate_form_alter(array &$form, FormStateInterface $formState): void {
+  $formObject = $formState->getFormObject();
+  if (!$formObject instanceof ReplicateConfirmForm) {
+    return;
+  }
+
+  $entity = $formObject->getEntity();
+  $form['#title'] = t('Set the title of the new @content-type-label cloned from %original-label', [
+    '@content-type-label' => $entity->getEntityType()->getSingularLabel(),
+    '%original-label' => $entity->label(),
+  ]);
+  $form['description'] = [
+    '#markup' => t('The new @content-type-label will be owned by you and created as unpublished.', [
+      '@content-type-label' => $entity->getEntityType()->getSingularLabel(),
+    ]),
+  ];
+}
+
+/**
+ * Implements hook_entity_type_alter().
+ *
+ * @see \Drupal\replicate_ui\Hooks\EntityTypeBuild
+ */
+function joinup_replicate_entity_type_alter(array $entityTypes): void {
+  foreach ($entityTypes as $entityType) {
+    assert($entityType instanceof EntityTypeInterface);
+    if (!$entityType->getFormClass('replicate')) {
+      continue;
+    }
+    $entityType->setFormClass('replicate', JoinupReplicateConfirmForm::class);
+  }
+}
+
+/**
+ * Implements hook_local_tasks_alter().
+ *
+ * Change the "Replicate" local task link's label to "Replicate <group-label>".
+ */
+function joinup_replicate_local_tasks_alter(array &$localTasks): void {
+  $entityTypeManager = \Drupal::entityTypeManager();
+
+  foreach ($localTasks as &$localTaskDefinition) {
+    $routeName = $localTaskDefinition['route_name'] ?? '';
+    if (!preg_match('/^entity\.([^.]*)\.replicate$/', $routeName, $matches)) {
+      continue;
+    }
+
+    $groupLabel = (string) $entityTypeManager
+      ->getStorage($matches[1])
+      ->getEntityType()
+      ->getGroupLabel();
+
+    $localTaskDefinition['title'] = t('Clone @content-type-group-label', [
+      '@content-type-group-label' => mb_strtolower($groupLabel),
+    ]);
+  }
+}

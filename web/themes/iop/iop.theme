@@ -207,29 +207,6 @@ function _iop_preprocess_news_event_tile(&$variables): void {
       'image_link' => 'content',
     ],
   ]);
-
-  _iop_preprocess_view_mode_tile_body($variables, $node);
-}
-
-/**
- * Sets the body variable in the tile view mode for news and events.
- *
- * @param array $variables
- *   The variables array.
- * @param \Drupal\node\NodeInterface $node
- *   The node object.
- *
- * @see iop_preprocess_node__event__view_mode_tile()
- */
-function _iop_preprocess_view_mode_tile_body(array &$variables, NodeInterface $node): void {
-  if (!$node->get('abstract')->isEmpty() && isset($variables['content']['abstract'])) {
-    $variables['content']['body'] = $variables['content']['abstract'];
-  }
-  elseif (isset($variables['content']['field_paragraphs_body'])) {
-    $variables['content']['body'] = $variables['content']['field_paragraphs_body'];
-  }
-  unset($variables['content']['abstract']);
-  unset($variables['content']['field_paragraphs_body']);
 }
 
 /**
