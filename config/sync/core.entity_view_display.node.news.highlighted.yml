@@ -23,10 +23,10 @@ dependencies:
     - responsive_image.styles.highlighted_content
   module:
     - field_delimiter
+    - field_fallback_formatter
     - field_formatter_range
     - field_group
     - joinup_core
-    - joinup_slick
     - layout_builder
     - responsive_image
     - template_suggestion
@@ -39,7 +39,7 @@ third_party_settings:
       label: References
       parent_name: ''
       region: hidden
-      weight: 24
+      weight: 25
       format_type: html_element
       format_settings:
         classes: ''
@@ -59,11 +59,24 @@ bundle: news
 mode: highlighted
 content:
   abstract:
-    type: string
+    type: field_fallback_formatter
     label: visually_hidden
     settings:
-      link_to_entity: false
-    third_party_settings: {  }
+      main_field_formatter_id: string
+      main_field_formatter_settings:
+        link_to_entity: false
+      fallback_field_id: field_paragraphs_body
+      fallback_field_formatter_id: filtered_entity_reference_bundles
+      fallback_field_formatter_settings:
+        view_mode: tile
+        filtered_entity_bundles:
+          - simple_paragraph
+          - text
+        trim_length: 200
+        trim_chars: ...
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
     weight: 1
     region: content
   field_news_logo:
@@ -79,31 +92,6 @@ content:
         template_suggestion: ''
     weight: 0
     region: content
-  field_paragraphs_body:
-    type: filtered_entity_reference_bundles
-    label: hidden
-    settings:
-      view_mode: message_digest
-      link: ''
-      filtered_entity_bundles:
-        - simple_paragraph
-        - text
-      trim_length: 200
-    third_party_settings:
-      field_delimiter:
-        delimiter: ''
-      field_formatter_range:
-        order: 0
-        limit: 1
-        offset: 0
-      joinup_slick:
-        preset: ''
-        field_label: true
-        custom_label: ''
-      template_suggestion:
-        template_suggestion: ''
-    weight: 1
-    region: content
   field_topic:
     type: entity_reference_label
     label: hidden
@@ -118,7 +106,7 @@ content:
         offset: 0
       template_suggestion:
         template_suggestion: ''
-    weight: 1
+    weight: 2
     region: content
   flag_like_node:
     settings: {  }
@@ -134,6 +122,7 @@ hidden:
   field_news_referenced_solution: true
   field_news_source_url: true
   field_news_spatial_coverage: true
+  field_paragraphs_body: true
   field_shared_in: true
   field_site_featured: true
   field_state: true

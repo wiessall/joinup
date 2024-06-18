@@ -41,6 +41,7 @@ dependencies:
     - image.style.vertical_medium_image
     - rdf_entity.rdfentity.solution
   module:
+    - field_fallback_formatter
     - smart_trim
     - svg_image
     - template_suggestion
@@ -55,25 +56,32 @@ content:
     third_party_settings: {  }
     weight: 3
     region: content
-  field_is_description:
-    type: smart_trim
+  field_is_abstract:
+    type: field_fallback_formatter
     label: hidden
     settings:
-      trim_length: 200
-      trim_type: chars
-      trim_suffix: …
-      wrap_output: false
-      wrap_class: trimmed
-      more:
-        display_link: false
-        target_blank: false
-        link_trim_only: false
-        class: more-link
-        text: More
-        aria_label: 'Read more about [node:title]'
-      summary_handler: full
-      trim_options:
-        text: false
+      main_field_formatter_id: string
+      main_field_formatter_settings:
+        link_to_entity: false
+      fallback_field_id: field_is_description
+      fallback_field_formatter_id: smart_trim
+      fallback_field_formatter_settings:
+        trim_length: 200
+        trim_type: chars
+        trim_suffix: ...
+        wrap_output: false
+        wrap_class: trimmed
+        more:
+          display_link: false
+          target_blank: false
+          link_trim_only: false
+          class: more-link
+          text: More
+          aria_label: 'Read more about [node:title]'
+        trim_options:
+          text: true
+          trim_zero: false
+          replace_tokens: false
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
@@ -108,11 +116,11 @@ hidden:
   created: true
   eif_perspective: true
   featured: true
-  field_is_abstract: true
   field_is_affiliations_requests: true
   field_is_contact_information: true
   field_is_content: true
   field_is_content_creation: true
+  field_is_description: true
   field_is_distribution: true
   field_is_documentation: true
   field_is_has_version: true

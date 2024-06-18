@@ -57,6 +57,7 @@ module:
   facets_summary: 0
   field: 0
   field_delimiter: 0
+  field_fallback_formatter: 0
   field_formatter_range: 0
   field_group: 0
   field_permissions: 0
@@ -109,6 +110,7 @@ module:
   joinup_poll: 0
   joinup_publication_date: 0
   joinup_rdf: 0
+  joinup_replicate: 0
   joinup_rss: 0
   joinup_search: 0
   joinup_seo: 0
@@ -181,6 +183,9 @@ module:
   rdf_entity: 0
   rdf_sync: 0
   redirect: 0
+  replicate: 0
+  replicate_actions: 0
+  replicate_ui: 0
   responsive_image: 0
   rest: 0
   role_delegation: 0
