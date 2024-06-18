@@ -38,9 +38,13 @@ class EndpointTracker {
    *   The request.
    */
   public function track(Request $request): void {
+    $url = $this->getUrl();
+    if (!$url) {
+      return;
+    }
+
     $this->httpClient->requestAsync(
-      'GET',
-      $this->getUrl(),
+      'GET', $url,
       [
         RequestOptions::QUERY => $this->buildQuery($request),
         RequestOptions::HEADERS => $this->buildHeaders($request),
@@ -98,11 +102,14 @@ class EndpointTracker {
   /**
    * Returns the PIWIK endpoint URL.
    *
-   * @return string
+   * @return string|NULL
    *   The endpoint URL.
    */
-  protected function getUrl(): string {
+  protected function getUrl(): ?string {
     $url = $this->config->get('base_uri');
+    if (empty($url)) {
+      return NULL;
+    }
 
     return http_build_url($url, ['path' => 'ppms.php']);
   }
