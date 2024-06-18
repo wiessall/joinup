@@ -1,0 +1,74 @@
+diff --git a/core/modules/media_library/js/media_library.ui.js b/core/modules/media_library/js/media_library.ui.js
+index 05429560f4e64243af5d337f50399fabee333b58..bdd41a3d1fa34f59d61d1360cf8193cc75c27abe 100644
+--- a/core/modules/media_library/js/media_library.ui.js
++++ b/core/modules/media_library/js/media_library.ui.js
+@@ -200,7 +200,7 @@
+         // Override the AJAX success callback to announce the updated content
+         // to screen readers.
+         if (displayAnnouncement || focusSelector) {
+-          const success = ajaxObject.success;
++          const { success } = ajaxObject;
+           ajaxObject.success = function (response, status) {
+             success.bind(this)(response, status);
+             // The AJAX link replaces the whole view, including the clicked
+@@ -225,6 +225,21 @@
+           Drupal.announce(loadingAnnouncement);
+         }
+       });
++      // Whenever we are filtering the results in media library widget, the
++      // value of "media_library_modal_selection" element is not setting.
++      // Value of "current_selection" input field is retained. So we are setting
++      // this value from the value of "current_selection" input field.
++      // See https://www.drupal.org/project/drupal/issues/3340973
++      const { currentSelection } = Drupal.MediaLibrary;
++      const mediaLibraryModalSelection = document.querySelector(
++        '#media-library-modal-selection',
++      );
++
++      if (mediaLibraryModalSelection && !mediaLibraryModalSelection.value) {
++        // Set the selection in the hidden form element.
++        mediaLibraryModalSelection.value = currentSelection.join();
++        $(mediaLibraryModalSelection).trigger('change');
++      }
+     },
+   };
+ 
+@@ -242,7 +257,7 @@
+         '.js-media-library-views-form, .js-media-library-add-form',
+         context,
+       );
+-      const currentSelection = Drupal.MediaLibrary.currentSelection;
++      const { currentSelection } = Drupal.MediaLibrary;
+ 
+       if (!$form.length) {
+         return;
+diff --git a/core/modules/media_library/src/Plugin/views/field/MediaLibrarySelectForm.php b/core/modules/media_library/src/Plugin/views/field/MediaLibrarySelectForm.php
+index 203d1cda890999ac545e299e2c12dc89996ba750..4f3be5a7ef2637ffbac3521a991d37d189dc781e 100644
+--- a/core/modules/media_library/src/Plugin/views/field/MediaLibrarySelectForm.php
++++ b/core/modules/media_library/src/Plugin/views/field/MediaLibrarySelectForm.php
+@@ -160,6 +160,13 @@ public static function updateWidget(array &$form, FormStateInterface $form_state
+     $state = MediaLibraryState::fromRequest($request);
+ 
+     $current_selection = $form_state->getValue('media_library_select_form_selection');
++    if (empty($current_selection)) {
++      $response = new AjaxResponse();
++      $error = \Drupal::translation()->translate('No items selected.');
++      $response->addCommand(new MessageCommand($error, '#media-library-messages', ['type' => 'error']));
++      return $response;
++    }
++
+     $available_slots = $state->getAvailableSlots();
+     $selected_count = count(explode(',', $current_selection));
+     if ($available_slots > 0 && $selected_count > $available_slots) {
+@@ -182,8 +189,9 @@ public static function updateWidget(array &$form, FormStateInterface $form_state
+    * {@inheritdoc}
+    */
+   public function viewsFormValidate(array &$form, FormStateInterface $form_state) {
+-    $selected = array_filter($form_state->getValue($this->options['id']));
+-    if (empty($selected)) {
++    $selected = array_filter($form_state->getValue($this->options['id'], []));
++    $current_selection = $form_state->getValue('media_library_select_form_selection');
++    if (empty($selected) && empty($current_selection)) {
+       $form_state->setErrorByName('', $this->t('No items selected.'));
+     }
+   }
