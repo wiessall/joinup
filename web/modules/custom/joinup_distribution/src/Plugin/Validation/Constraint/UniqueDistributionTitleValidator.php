@@ -27,15 +27,15 @@ class UniqueDistributionTitleValidator extends ConstraintValidator implements Co
    *   The parent distribution resolver service.
    */
   public function __construct(
-    protected ParentDistributionResolverInterface $parentDistributionResolver
+    protected ParentDistributionResolverInterface $parentDistributionResolver,
   ) {}
 
   /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container): self {
-    return new static (
-      $container->get('joinup_distribution.parent_distribution_resolver')
+    return new static(
+      $container->get('joinup_distribution.parent_distribution_resolver'),
     );
   }
 

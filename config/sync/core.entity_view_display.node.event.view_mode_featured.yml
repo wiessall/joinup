@@ -31,11 +31,9 @@ dependencies:
     - node.type.event
   module:
     - datetime_range
-    - field_delimiter
-    - field_formatter_range
-    - joinup_core
+    - entity_reference_revisions
+    - field_fallback_formatter
     - joinup_html_stripper
-    - joinup_slick
     - svg_image
     - template_suggestion
     - user
@@ -45,14 +43,20 @@ bundle: event
 mode: view_mode_featured
 content:
   abstract:
-    type: joinup_html_stripper_stripped
+    type: field_fallback_formatter
     label: hidden
     settings:
-      trim_length: 200
+      main_field_formatter_id: joinup_html_stripper_stripped
+      main_field_formatter_settings:
+        trim_length: 200
+      fallback_field_id: field_paragraphs_body
+      fallback_field_formatter_id: entity_reference_revisions_entity_view
+      fallback_field_formatter_settings:
+        view_mode: tile
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
-    weight: 3
+    weight: 2
     region: content
   field_event_date:
     type: daterange_default
@@ -65,7 +69,7 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
-    weight: 4
+    weight: 3
     region: content
   field_event_logo:
     type: image
@@ -80,31 +84,7 @@ content:
         height: null
       svg_render_as_image: true
     third_party_settings: {  }
-    weight: 2
-    region: content
-  field_paragraphs_body:
-    type: filtered_entity_reference_bundles
-    label: hidden
-    settings:
-      view_mode: tile
-      link: ''
-      filtered_entity_bundles:
-        - simple_paragraph
-        - text
-    third_party_settings:
-      field_delimiter:
-        delimiter: ''
-      field_formatter_range:
-        order: 0
-        limit: 1
-        offset: 0
-      joinup_slick:
-        preset: ''
-        field_label: true
-        custom_label: ''
-      template_suggestion:
-        template_suggestion: ''
-    weight: 0
+    weight: 1
     region: content
   field_short_title:
     type: string
@@ -112,7 +92,7 @@ content:
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    weight: 1
+    weight: 0
     region: content
 hidden:
   featured: true
@@ -128,6 +108,7 @@ hidden:
   field_location: true
   field_organisation: true
   field_organisation_type: true
+  field_paragraphs_body: true
   field_scope: true
   field_shared_in: true
   field_site_featured: true

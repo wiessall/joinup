@@ -102,6 +102,7 @@ permissions:
   - 'perform solution_workflow workflow propose transition on any entity'
   - 'perform solution_workflow workflow update_validated transition on any entity'
   - 'pin group content'
+  - 'replicate entities'
   - 'resend email confirmation request'
   - 'unpin group content'
   - 'unshare discussion content'
