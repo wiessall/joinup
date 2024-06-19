@@ -40,6 +40,7 @@ dependencies:
     - rdf_entity.rdfentity.solution
     - responsive_image.styles.tile
   module:
+    - field_fallback_formatter
     - field_group
     - joinup_html_stripper
     - layout_builder
@@ -54,7 +55,7 @@ third_party_settings:
       label: 'Abstract wrapper'
       parent_name: ''
       region: hidden
-      weight: 54
+      weight: 56
       format_type: html_element
       format_settings:
         classes: ''
@@ -74,21 +75,19 @@ bundle: solution
 mode: view_mode_tile_horizontal
 content:
   field_is_abstract:
-    type: string
+    type: field_fallback_formatter
     label: hidden
     settings:
-      link_to_entity: false
-    third_party_settings: {  }
-    weight: 3
-    region: content
-  field_is_description:
-    type: joinup_html_stripper_stripped
-    label: hidden
-    settings:
-      trim_length: 600
+      main_field_formatter_id: string
+      main_field_formatter_settings:
+        link_to_entity: false
+      fallback_field_id: field_is_description
+      fallback_field_formatter_id: joinup_html_stripper_stripped
+      fallback_field_formatter_settings:
+        trim_length: 600
     third_party_settings:
       template_suggestion:
-        template_suggestion: bare
+        template_suggestion: ''
     weight: 2
     region: content
   field_is_logo:
@@ -107,14 +106,16 @@ content:
   flag_like_rdf_entity:
     settings: {  }
     third_party_settings: {  }
-    weight: 4
+    weight: 3
     region: content
   label:
     type: string
     label: hidden
     settings:
       link_to_entity: false
-    third_party_settings: {  }
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
     weight: 1
     region: content
 hidden:
@@ -129,6 +130,7 @@ hidden:
   field_is_contact_information: true
   field_is_content: true
   field_is_content_creation: true
+  field_is_description: true
   field_is_documentation: true
   field_is_has_version: true
   field_is_included_asset: true

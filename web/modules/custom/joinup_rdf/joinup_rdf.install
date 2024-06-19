@@ -7,7 +7,6 @@
 
 declare(strict_types=1);
 
-use Drupal\Component\Serialization\Json;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Serialization\Yaml;
 
@@ -42,40 +41,9 @@ function joinup_rdf_requirements(string $phase): array {
 }
 
 /**
- * Delete Owner RDF entities.
- */
-function joinup_rdf_update_110800(): void {
-  // Save owners in a temporary file because we need to delete the content
-  // prior to delete the bundle configs. Data will be restored later, in a
-  // deploy hook.
-  $store = \Drupal::getContainer()
-    ->get('joinup_sparql.graph_store.helper')
-    ->createGraphStore();
-  $owners = $store->get('http://joinup.eu/owner/published')->toRdfPhp();
-  file_put_contents('private://owners', Json::encode($owners));
-  $sparql = \Drupal::getContainer()->get('sparql.endpoint');
-  $sparql->update("CLEAR GRAPH <http://joinup.eu/owner/published>;");
-}
-
-/**
- * Uninstall the `contact_information` `rdf_entity` bundle.
- */
-function joinup_rdf_update_110801(): void {
-  \Drupal::entityTypeManager()->getStorage('rdf_type')->load('contact_information')->delete();
-}
-
-/**
- * Re run user_update_10000.
- */
-function joinup_rdf_update_110802(): void {
-  require_once DRUPAL_ROOT . '/core/modules/user/user.install';
-  user_update_10000();
-}
-
-/**
  * Delete asset distribution entities.
  */
-function joinup_rdf_update_110803(): void {
+function joinup_rdf_update_110900(): void {
   $store = \Drupal::getContainer()->get('joinup_sparql.graph_store.helper')->createGraphStore();
   $distributions = $store->get('http://joinup.eu/asset_distribution/published')->toRdfPhp();
   $dir = 'private://distributions';

@@ -46,7 +46,7 @@ class IndexDistributionData extends ProcessorPluginBase {
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity type manager service.
    * @param \Drupal\joinup_distribution\ParentDistributionResolverInterface $parentDistributionResolver
-   *  The parent distribution resolver service.
+   *   The parent distribution resolver service.
    */
   public function __construct(
     array $configuration,

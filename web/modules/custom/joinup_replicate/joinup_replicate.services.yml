@@ -1,0 +1,22 @@
+services:
+  _defaults:
+    autoconfigure: true
+    autowire: true
+
+  joinup_replicate.prepare_entity:
+    class: Drupal\joinup_replicate\EventSubscriber\JoinupReplicatePrepareClone
+
+  joinup_replicate.route_subscriber:
+    class: Drupal\joinup_replicate\RouteSubscriber\RouteSubscriber
+
+  joinup_replicate.replicate_actions.replicate_entity_edit:
+    class: Drupal\joinup_replicate\JoinupReplicateSetEntityEdit
+    decorates: replicate_actions.replicate_entity_edit
+    public: false
+
+  access_check.joinup_replicate.permission:
+    class: Drupal\joinup_replicate\Access\JoinupReplicatePermission
+    arguments:
+      $membershipManager: '@og.membership_manager'
+    tags:
+      - { name: access_check, applies_to: _joinup_replicate_permission }
