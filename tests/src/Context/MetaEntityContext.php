@@ -97,8 +97,6 @@ class MetaEntityContext extends RawDrupalContext {
     return \Drupal::getContainer()->get('meta_entity.repository')->getMetaEntityForEntity($entity, $bundle);
   }
 
-
-
   /**
    * Sets the visit or download count for a given entity to a certain value.
    *

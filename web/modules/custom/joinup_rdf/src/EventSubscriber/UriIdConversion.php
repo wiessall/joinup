@@ -36,9 +36,6 @@ class UriIdConversion implements EventSubscriberInterface {
    */
   private const MAP = [
     'eif_wrapper:recommendation:term',
-    'rdf_entity:asset_distribution:field_ad_format',
-    'rdf_entity:asset_distribution:field_ad_licence',
-    'rdf_entity:asset_distribution:field_ad_repr_technique',
     'rdf_entity:asset_distribution:field_status',
     'rdf_entity:asset_release:field_isr_contact_information',
     'rdf_entity:asset_release:field_isr_language',
