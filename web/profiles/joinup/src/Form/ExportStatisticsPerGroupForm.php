@@ -166,10 +166,10 @@ QUERY;
       'document' => ['active' => 0, 'archived' => 0],
       'event' => ['active' => 0, 'archived' => 0],
       'news' => ['active' => 0, 'archived' => 0],
+      'distribution' => 0,
       // RDF entities.
       'solution' => 0,
       'asset_release' => 0,
-      'distribution' => 0,
     ];
 
     $group_content_keys = array_keys($group_content);
@@ -178,7 +178,10 @@ QUERY;
         continue;
       }
 
-      if ($data->state === 'archived') {
+      if ($data->type === 'distribution') {
+        $group_content[$data->type] += $data->entities;
+      }
+      elseif ($data->state === 'archived') {
         $group_content[$data->type]['archived'] += $data->entities;
       }
       else {
@@ -196,11 +199,7 @@ QUERY;
 
     // For solutions, count releases and distributions.
     if ($group instanceof SolutionInterface) {
-      $releases_and_distributions_ids = $this->sparql->query($this->getReleasesAndDistributionsQuery($entity_id));
-
-      /** @var \EasyRdf\Sparql\Result $result */
-      foreach ($releases_and_distributions_ids as $result_id) {
-        $entity = $rdf_storage->load((string) $result_id->entity_id);
+      foreach ($group->releases_and_distributions->referencedEntities() as $entity) {
         $group_content[$entity->bundle()]++;
       }
       $content_ids[] = $group->id();
@@ -227,7 +226,7 @@ QUERY;
       'News' => $group_content['news']['active'],
       'Solutions' => $group_content['solution'],
       'Releases' => $group_content['asset_release'],
-      'Distributions' => $group_content['asset_distribution'],
+      'Distributions' => $group_content['distribution'],
       'Total number of items' =>
       $group_content['custom_page']['active']
       + $group_content['discussion']['active']
@@ -235,7 +234,7 @@ QUERY;
       + $group_content['event']['active']
       + $group_content['news']['active']
       + $group_content['asset_release']
-      + $group_content['asset_distribution'],
+      + $group_content['distribution'],
       'Total number of archived items' =>
       $group_content['custom_page']['archived']
       + $group_content['discussion']['archived']
@@ -279,32 +278,6 @@ LEFT JOIN {node_field_data} n ON og.entity_id = n.nid
 LEFT JOIN {node__field_state} s ON n.nid = s.entity_id AND n.vid = s.revision_id
 WHERE og.og_audience_target_id = :parent_entity_id
 group by n.type, s.field_state_value
-QUERY;
-  }
-
-  /**
-   * Helper method to return a query to fetch releases and distribution IDs.
-   *
-   * @param string $entity_id
-   *   The group ID.
-   *
-   * @return string
-   *   The query.
-   */
-  private function getReleasesAndDistributionsQuery(string $entity_id): string {
-    return <<<QUERY
-SELECT DISTINCT ?entity_id
-FROM <http://joinup.eu/asset_release/published>
-FROM <http://joinup.eu/asset_distribution/published>
-WHERE {
-  {
-    ?entity_id <http://purl.org/dc/terms/isVersionOf> <{$entity_id}>
-  }
-  UNION
-  {
-    ?entity_id <http://joinup.eu/rdf_entity/group> <{$entity_id}>
-  }
-}
 QUERY;
   }
 
