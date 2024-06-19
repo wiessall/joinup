@@ -147,6 +147,7 @@ class JoinCollectionForm extends JoinGroupFormBase {
    */
   public function getJoinSubmitLabel(): TranslatableMarkup {
     if (!$this->group->getSetting('label_join')->isEmpty()) {
+      // phpcs:ignore Drupal.Semantics.FunctionT.NotLiteralString
       return new TranslatableMarkup($this->group->getSetting('label_join')
         ->getString());
     }
@@ -159,6 +160,7 @@ class JoinCollectionForm extends JoinGroupFormBase {
    */
   public function getLeaveSubmitLabel(): TranslatableMarkup {
     if (!$this->group->getSetting('label_leave')->isEmpty()) {
+      // phpcs:ignore Drupal.Semantics.FunctionT.NotLiteralString
       return new TranslatableMarkup($this->group->getSetting('label_leave')
         ->getString());
     }
