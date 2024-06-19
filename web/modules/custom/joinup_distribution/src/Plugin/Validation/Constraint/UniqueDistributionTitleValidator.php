@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_distribution\Plugin\Validation\Constraint;
 
+use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\joinup_distribution\Entity\DistributionInterface;
+use Drupal\joinup_distribution\ParentDistributionResolver;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
@@ -15,7 +18,26 @@ use Symfony\Component\Validator\ConstraintValidator;
  *
  * @see \Drupal\joinup_distribution\Plugin\Validation\Constraint\UniqueDistributionTitleConstraint
  */
-class UniqueDistributionTitleValidator extends ConstraintValidator {
+class UniqueDistributionTitleValidator extends ConstraintValidator implements ContainerInjectionInterface {
+
+  /**
+   * The parent distribution resolver service.
+   *
+   * @var \Drupal\joinup_distribution\ParentDistributionResolver $parentDistributionResolver
+   *   The parent distribution resolver service.
+   */
+  public function __construct(
+    protected ParentDistributionResolver $parentDistributionResolver
+  ) {}
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container): self {
+    return new static (
+      $container->get('joinup_distribution.parent_distribution_resolver')
+    );
+  }
 
   /**
    * {@inheritdoc}
@@ -35,7 +57,7 @@ class UniqueDistributionTitleValidator extends ConstraintValidator {
       return;
     }
 
-    $distributions = \Drupal::getContainer()->get('joinup_distribution.parent_distribution_resolver')->getParentsDistributions($rdf_entity->id());
+    $distributions = $this->parentDistributionResolver->getParentsDistributions($rdf_entity->id());
     foreach ($distributions as $distribution) {
       if ($distribution->label() === $entity->label() && $distribution->id() !== $entity->id()) {
         $this->context->addViolation($constraint->message, [
