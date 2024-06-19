@@ -41,10 +41,13 @@ commands:
     - task: exec
       command: ${joinup.dir}/vendor/bin/twig-cs-fixer lint --fix
 
-  # Checks for any unused behat step definitions.
+  # Checks for any unused step definitions, see audit profile in behat.yml.dist.
   testing:audit-behat:
     - task: exec
-      command: ${joinup.dir}/vendor/bin/behat --profile=audit --dry-run
+      command: |
+        tmp_file=$(mktemp)
+        ${joinup.dir}/vendor/bin/behat --profile=audit --dry-run | tee $tmp_file
+        if grep -q "unused step definition" $tmp_file; then exit 1; fi
 
   # Extra commands to run on Gitlab after qa-code-review.
   testing:post-qa-code-review:

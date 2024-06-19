@@ -228,7 +228,7 @@ default:
   formatters:
     ${behat.formatter.name}: ~
 
-# Dedicated profile to detect unused steps.
+# Dedicated profile to detect unused steps, see testing:audit-behat.
 audit:
   extensions:
     NicWortel\BehatUnusedStepDefinitionsExtension\Extension:
