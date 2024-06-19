@@ -96,7 +96,7 @@ function joinup_core_requirements($phase): array {
 /**
  * Fix the informatino again.
  */
-function joinup_core_update_110800(): string {
+function joinup_core_update_110900(): string {
   $sparql = <<<SPARQL
 DELETE {
   GRAPH ?g {
@@ -119,26 +119,4 @@ SPARQL;
   $endpoint->update($sparql);
 
   return 'The information has been fixed.';
-}
-
-/**
- * Remove the eif_solutions_page condition from blocks that use it.
- */
-function joinup_core_update_110802(): string {
-  $configs = [
-    'block.block.ventuno_eifcategories',
-    'block.block.ventuno_eifrecomendationsselector',
-  ];
-
-  foreach ($configs as $config) {
-    if ($block = \Drupal::configFactory()->getEditable($config)) {
-      $conditions = $block->get('visibility');
-      if (isset($conditions['eif_solutions_page'])) {
-        unset($conditions['eif_solutions_page']);
-        $block->set('visibility', $conditions)->save();
-      }
-    }
-  }
-
-  return 'Cleaned up conditions of invalid plugins.';
 }
