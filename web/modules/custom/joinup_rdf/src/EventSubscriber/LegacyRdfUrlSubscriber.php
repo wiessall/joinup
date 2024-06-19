@@ -16,6 +16,12 @@ use Symfony\Component\HttpKernel\Event\ExceptionEvent;
  */
 class LegacyRdfUrlSubscriber extends HttpExceptionSubscriberBase {
 
+  /**
+   * Constructs a new event subscriber instance.
+   *
+   * @param \Drupal\rdf_sync\RdfSyncMapper $mapper
+   *   The RDF Sync mapper service.
+   */
   public function __construct(protected RdfSyncMapper $mapper) {}
 
   /**
@@ -69,8 +75,7 @@ class LegacyRdfUrlSubscriber extends HttpExceptionSubscriberBase {
    */
   protected function getEntity(string $encodedUri): ?RdfSyncEntityInterface {
     // With the legacy storage, RDF entity IDs were encoded URIs.
-    $uriDecoded = strtr($encodedUri, self::MAP);
-    $uri = self::URI_TYPO_MAP[$uriDecoded] ?? $uriDecoded;
+    $uri = strtr($encodedUri, self::MAP);
 
     if (!$entity = $this->mapper->getEntityByUri($uri)) {
       return NULL;
@@ -112,15 +117,6 @@ class LegacyRdfUrlSubscriber extends HttpExceptionSubscriberBase {
     '_v' => '=',
     '_w' => '`',
     '_x' => '%',
-  ];
-
-  /**
-   * Mapping for URIs with typos.
-   *
-   * @const string[]
-   */
-  private const URI_TYPO_MAP = [
-    'http://joinup.eu/ontology/topic#statistics-and-informatino' => 'http://joinup.eu/ontology/topic#statistics-and-information',
   ];
 
   /**
