@@ -53,7 +53,7 @@ class EndpointTracker {
         RequestOptions::HEADERS => $this->buildHeaders($request),
       ]
     )
-      ->then(NULL, function() use ($url) {
+      ->then(NULL, function () use ($url) {
         $this->logger->error('Can\'t send track data to @url',
           ['@url' => $url]
         );
@@ -111,7 +111,7 @@ class EndpointTracker {
   /**
    * Returns the PIWIK endpoint URL.
    *
-   * @return string|NULL
+   * @return string|null
    *   The endpoint URL.
    */
   protected function getUrl(): ?string {
