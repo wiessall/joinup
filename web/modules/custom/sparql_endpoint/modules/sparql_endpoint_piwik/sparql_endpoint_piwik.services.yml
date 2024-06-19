@@ -1,7 +1,11 @@
 services:
   sparql_endpoint.endpoint_tracker:
     class: Drupal\sparql_endpoint_piwik\EndpointTracker
-    autowire: true
+    arguments:
+      - '@http_client'
+      - '@current_user'
+      - '@logger.channel.sparql_endpoint'
+      - '@config.factory'
   sparql_endpoint.endpoint_response_subscriber:
     class: Drupal\sparql_endpoint_piwik\EventSubscriber\EndpointResponseSubscriber
     arguments: [ '@sparql_endpoint.endpoint_tracker' ]
