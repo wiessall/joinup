@@ -83,7 +83,7 @@ function joinup_rdf_update_110803(): void {
     throw new \Exception("Directory '$dir' cannot be created or is not writable");
   }
   $delta = 0;
-  foreach (array_chunk($distributions, 100, TRUE) as $chunk) {
+  foreach (array_chunk($distributions, 50, TRUE) as $chunk) {
     file_put_contents($dir . '/' . ++$delta . '.yml', Yaml::encode($chunk));
   }
   $sparql = \Drupal::getContainer()->get('sparql.endpoint');
