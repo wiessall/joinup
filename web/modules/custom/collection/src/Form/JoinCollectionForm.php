@@ -28,38 +28,21 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class JoinCollectionForm extends JoinGroupFormBase {
 
-  /**
-   * The event dispatcher service.
-   *
-   * @var \Psr\EventDispatcher\EventDispatcherInterface
-   */
-  protected EventDispatcherInterface $eventDispatcher;
-
-  /**
-   * Constructs a new form instance.
-   *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   The entity type manager service.
-   * @param \Drupal\og\MembershipManagerInterface $membership_manager
-   *   The membership manager service.
-   * @param \Drupal\Core\Access\AccessManagerInterface $access_manager
-   *   The access manager service.
-   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
-   *   The messenger service.
-   * @param \Drupal\Core\Form\FormBuilderInterface $form_builder
-   *   The form builder.
-   * @param \Psr\EventDispatcher\EventDispatcherInterface $event_dispatcher
-   *   The event dispatcher service.
-   */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, MembershipManagerInterface $membership_manager, AccessManagerInterface $access_manager, MessengerInterface $messenger, FormBuilderInterface $form_builder, EventDispatcherInterface $event_dispatcher) {
-    parent::__construct($entity_type_manager, $membership_manager, $access_manager, $messenger, $form_builder);
-    $this->eventDispatcher = $event_dispatcher;
+  public function __construct(
+    EntityTypeManagerInterface $entityTypeManager,
+    MembershipManagerInterface $membershipManager,
+    AccessManagerInterface $accessManager,
+    MessengerInterface $messenger,
+    FormBuilderInterface $formBuilder,
+    protected EventDispatcherInterface $event_dispatcher
+  ) {
+    parent::__construct($entityTypeManager, $membershipManager, $accessManager, $messenger, $formBuilder);
   }
 
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container) {
+  public static function create(ContainerInterface $container): self {
     return new static(
       $container->get('entity_type.manager'),
       $container->get('og.membership_manager'),
@@ -148,8 +131,10 @@ class JoinCollectionForm extends JoinGroupFormBase {
   public function getJoinSubmitLabel(): TranslatableMarkup {
     if (!$this->group->getSetting('label_join')->isEmpty()) {
       // phpcs:ignore Drupal.Semantics.FunctionT.NotLiteralString
-      return new TranslatableMarkup($this->group->getSetting('label_join')
-        ->getString());
+      return new TranslatableMarkup(
+        $this->group->getSetting('label_join')->getString(),
+        [], ['context' => 'collection'],
+      );
     }
 
     return parent::getJoinSubmitLabel();
@@ -161,8 +146,10 @@ class JoinCollectionForm extends JoinGroupFormBase {
   public function getLeaveSubmitLabel(): TranslatableMarkup {
     if (!$this->group->getSetting('label_leave')->isEmpty()) {
       // phpcs:ignore Drupal.Semantics.FunctionT.NotLiteralString
-      return new TranslatableMarkup($this->group->getSetting('label_leave')
-        ->getString());
+      return new TranslatableMarkup(
+        $this->group->getSetting('label_leave')->getString(),
+        [], ['context' => 'collection'],
+      );
     }
 
     return parent::getLeaveSubmitLabel();
