@@ -291,13 +291,21 @@ Feature: Add comments
     When I press "Post comment"
     Then I should see the text "Anonymous user"
 
+    When I click "Reply" in comment #1
+    And I fill in "Create comment" with "Comment Anonymous indent 1"
+    And I check the box "Post as anonymous"
+    When I press "Post comment"
+    Then comment #2 should contain the markup "Anonymous user"
+
     Given I am logged in as a moderator
     When I go to the content page of the type "<content type>" with the title "<title>"
     Then I should see the text "Anonymous user (Miss Tales)"
+    Then comment #2 should contain the markup "Anonymous user (Miss Tales)"
 
     Given I am an anonymous user
     When I go to the content page of the type "<content type>" with the title "<title>"
     Then I should see the text "Anonymous user"
+    Then comment #2 should contain the markup "Anonymous user"
 
     Examples:
       | collection         | content type | title                     | state     |
