@@ -8,11 +8,9 @@ use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\joinup_distribution\Entity\DistributionInterface;
-use Drupal\og\OgAccessInterface;
 use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\rdf_entity\RdfInterface;
 use Drupal\solution\Entity\SolutionInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Controller for asset distribution forms.
@@ -26,25 +24,6 @@ class JoinupDistributionController extends ControllerBase {
    * The solution parent.
    */
   protected SolutionInterface|null $solution = NULL;
-
-  /**
-   * Constructs a new controller instance.
-   *
-   * @param \Drupal\og\OgAccessInterface $ogAccess
-   *   The OG access handler.
-   */
-  public function __construct(
-    protected OgAccessInterface $ogAccess,
-  ) {}
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container): self {
-    return new static(
-      $container->get('og.access'),
-    );
-  }
 
   /**
    * Controller for the base form.
