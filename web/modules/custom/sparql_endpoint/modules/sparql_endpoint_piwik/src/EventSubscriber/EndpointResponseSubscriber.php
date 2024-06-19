@@ -55,7 +55,7 @@ class EndpointResponseSubscriber implements EventSubscriberInterface {
       return FALSE;
     }
 
-    // Don't track is response is HTML.
+    // Don't track if response is HTML.
     if (str_contains($event->getResponse()->headers->get('Content-Type', ''), 'text/html')) {
       return FALSE;
     }
