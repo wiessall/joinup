@@ -34,7 +34,7 @@ class JoinCollectionForm extends JoinGroupFormBase {
     AccessManagerInterface $accessManager,
     MessengerInterface $messenger,
     FormBuilderInterface $formBuilder,
-    protected EventDispatcherInterface $event_dispatcher
+    protected EventDispatcherInterface $eventDispatcher,
   ) {
     parent::__construct($entityTypeManager, $membershipManager, $accessManager, $messenger, $formBuilder);
   }
@@ -130,8 +130,8 @@ class JoinCollectionForm extends JoinGroupFormBase {
    */
   public function getJoinSubmitLabel(): TranslatableMarkup {
     if (!$this->group->getSetting('label_join')->isEmpty()) {
-      // phpcs:ignore Drupal.Semantics.FunctionT.NotLiteralString
       return new TranslatableMarkup(
+        // phpcs:ignore Drupal.Semantics.FunctionT.NotLiteralString
         $this->group->getSetting('label_join')->getString(),
         [], ['context' => 'collection'],
       );
@@ -145,8 +145,8 @@ class JoinCollectionForm extends JoinGroupFormBase {
    */
   public function getLeaveSubmitLabel(): TranslatableMarkup {
     if (!$this->group->getSetting('label_leave')->isEmpty()) {
-      // phpcs:ignore Drupal.Semantics.FunctionT.NotLiteralString
       return new TranslatableMarkup(
+        // phpcs:ignore Drupal.Semantics.FunctionT.NotLiteralString
         $this->group->getSetting('label_leave')->getString(),
         [], ['context' => 'collection'],
       );
