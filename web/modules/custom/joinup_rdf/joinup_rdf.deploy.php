@@ -11,8 +11,10 @@ use Drupal\Component\Serialization\Json;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\joinup_taxonomy\Entity\MappedTerm;
 use Drupal\node\Entity\Node;
+use Drupal\pathauto\PathautoState;
 use Drupal\rdf_sync\Model\SyncMethod;
 use Drupal\search_api\Entity\Index;
+use Drupal\sparql_entity_storage\UriEncoder;
 
 /**
  * Disable RDF Sync for the deployment.
@@ -236,16 +238,20 @@ function joinup_rdf_deploy_110805(array &$sandbox): string {
   ];
   $storage = \Drupal::entityTypeManager()->getStorage('node');
   $logger = \Drupal::getContainer()->get('logger.factory')->get('joinup_rdf');
+  $alias_repository = \Drupal::getContainer()->get('path_alias.repository');
+  $connection = \Drupal::database();
 
   if (!isset($sandbox['files'])) {
     $fileSystem = \Drupal::getContainer()->get('file_system');
     $sandbox['files'] = array_keys($fileSystem->scanDirectory('private://distributions', '/\.yml$/'));
     $sandbox['progress'] = 0;
+    $sandbox['swapped_aliases'] = 0;
   }
 
   $start = microtime(TRUE);
   $file = array_shift($sandbox['files']);
   $distributions = Yaml::decode(file_get_contents($file));
+  $aliases_not_swapped = [];
   foreach ($distributions as $uri => $data) {
     $values = ['type' => 'distribution', 'uri' => $uri];
     foreach ($data as $predicate => $objects) {
@@ -292,14 +298,40 @@ function joinup_rdf_deploy_110805(array &$sandbox): string {
 
     $entity->skip_notification = TRUE;
     $entity->skip_parent_invalidation = TRUE;
+
+    // We need to ensure that existing pathauto aliases persist.
+    $pathauto_old_path = '/rdf_entity/' . UriEncoder::encodeUrl($uri);
+    $has_alias = $alias_repository->lookupBySystemPath($pathauto_old_path, 'en');
+    if ($has_alias) {
+      $entity->get('path')->pathauto = PathautoState::SKIP;
+    }
+
     $entity->save();
+    if ($has_alias) {
+      $internal_url = $entity->toUrl()->getInternalPath();
+      $connection->update('path_alias')
+        ->fields(['path' => $internal_url])
+        ->condition('path', $pathauto_old_path)
+        ->execute();
+
+      $connection->update('path_alias_revision')
+        ->fields(['path' => $internal_url])
+        ->condition('path', $pathauto_old_path)
+        ->execute();
+      $sandbox['swapped_aliases']++;
+    }
+
     $sandbox['progress']++;
   }
 
+  $aliases_not_swapped = array_filter($aliases_not_swapped);
+  $sandbox['swapped_aliases'] += count($aliases_not_swapped);
   $finish = microtime(TRUE);
   $count = count($distributions);
   $sandbox['#finished'] = (int) empty($sandbox['files']);
-  return "Imported {$count} ({$sandbox['progress']} total) distributions in " . round($finish - $start, 2) . ' seconds';
+  $message = "Imported {$count} ({$sandbox['progress']} total) distributions in " . round($finish - $start, 2) . ' seconds. Aliases swapped: ' . $sandbox['swapped_aliases'];
+  $message .= ' Aliases swapped: ' . implode(', ', $aliases_not_swapped);
+  return $message;
 }
 
 /**
@@ -374,8 +406,6 @@ function joinup_rdf_deploy_110807(): string {
 
   return implode("\n", $messages);
 }
-
-
 
 /**
  * Clean up asset distributions from the search index.
