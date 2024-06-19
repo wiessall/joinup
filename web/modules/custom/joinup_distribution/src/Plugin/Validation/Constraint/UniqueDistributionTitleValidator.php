@@ -6,7 +6,7 @@ namespace Drupal\joinup_distribution\Plugin\Validation\Constraint;
 
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\joinup_distribution\Entity\DistributionInterface;
-use Drupal\joinup_distribution\ParentDistributionResolver;
+use Drupal\joinup_distribution\ParentDistributionResolverInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
@@ -23,11 +23,11 @@ class UniqueDistributionTitleValidator extends ConstraintValidator implements Co
   /**
    * The parent distribution resolver service.
    *
-   * @var \Drupal\joinup_distribution\ParentDistributionResolver $parentDistributionResolver
+   * @var \Drupal\joinup_distribution\ParentDistributionResolverInterface $parentDistributionResolver
    *   The parent distribution resolver service.
    */
   public function __construct(
-    protected ParentDistributionResolver $parentDistributionResolver
+    protected ParentDistributionResolverInterface $parentDistributionResolver
   ) {}
 
   /**
