@@ -8,13 +8,11 @@ use Drupal\Component\Utility\Variable;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityPublishedInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Entity\RevisionableInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Queue\QueueWorkerBase;
 use Drupal\Core\Session\AccountSwitcherInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\asset_distribution\Entity\AssetDistributionInterface;
 use Drupal\asset_release\Entity\AssetReleaseInterface;
 use Drupal\custom_page\Entity\CustomPageInterface;
@@ -23,6 +21,7 @@ use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_notification\NotificationEvents;
 use Drupal\joinup_workflow\ArchivableEntityInterface;
 use Drupal\joinup_workflow\WorkflowHelperInterface;
+use Drupal\joinup_workflow\WorkflowStateChangeMessageTrait;
 use Drupal\solution\Entity\SolutionInterface;
 use Drupal\solution\Transition;
 use Drupal\sparql_entity_storage\SparqlEntityStorageInterface;
@@ -42,6 +41,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class SolutionContentArchiverQueue extends QueueWorkerBase implements ContainerFactoryPluginInterface {
 
   use StringTranslationTrait;
+  use WorkflowStateChangeMessageTrait;
 
   private const ENTITY_CLASSES_TO_ARCHIVE = [
     AssetReleaseInterface::class,
@@ -206,9 +206,21 @@ class SolutionContentArchiverQueue extends QueueWorkerBase implements ContainerF
 
       $entity->skip_notification = TRUE;
       try {
+        $newState = match ($transition) {
+          Transition::ARCHIVE => 'archived',
+          Transition::UNARCIVE =>'published',
+        };
+        $revisionLogMessage = $this->workflowStateChangeRevisionLogMessage(
+          $entity,
+          $newState,
+          $this->t("'@plugin-id' queue", [
+            '@plugin-id' => $this->getPluginId(),
+          ])
+        );
         match ($transition) {
-          Transition::ARCHIVE => $this->workflowHelper->archiveEntity($entity, $this->getRevisionLogMessage($entity, 'archived')),
-          Transition::UNARCIVE => $this->workflowHelper->unarchiveEntity($entity, $this->getRevisionLogMessage($entity, 'published')),
+          // '@plugin-id' queue
+          Transition::ARCHIVE => $this->workflowHelper->archiveEntity($entity, $revisionLogMessage),
+          Transition::UNARCIVE => $this->workflowHelper->unarchiveEntity($entity, $revisionLogMessage),
         };
       }
       catch (\Exception $exception) {
@@ -336,37 +348,6 @@ class SolutionContentArchiverQueue extends QueueWorkerBase implements ContainerF
       return NULL;
     }
     return $actor;
-  }
-
-  /**
-   * Constructs the revision log message for the newly saved entity version.
-   *
-   * @param \Drupal\joinup_workflow\ArchivableEntityInterface $entity
-   *   The entity.
-   * @param string $newState
-   *   The new workflow state ID of the entity.
-   *
-   * @return \Drupal\Core\StringTranslation\TranslatableMarkup|null
-   *   The revision log message for the newly saved entity version, or NULL if
-   *   the provided entity is not revisionable.
-   */
-  protected function getRevisionLogMessage(ArchivableEntityInterface $entity, string $newState): ?TranslatableMarkup {
-    if (
-      !$entity instanceof RevisionableInterface ||
-      !$entity->getEntityType()->isRevisionable()
-    ) {
-      return NULL;
-    }
-
-    return $this->t(
-      "Updated state to '@state-new' by '@plugin-id' queue, from revision ID '@revision-id-original' with state '@state-original'.",
-      [
-        '@plugin-id' => $this->getPluginId(),
-        '@revision-id-original' => $entity->getRevisionId(),
-        '@state-original' => $entity->getWorkflowState(),
-        '@state-new' => $newState,
-      ]
-    );
   }
 
 }

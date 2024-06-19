@@ -84,7 +84,10 @@ class ArchiveAction extends StateActionBase {
       return;
     }
 
-    $this->workflowHelper->archiveEntity($node, $this->getRevisionLogMessage($node, self::ARCHIVE_STATE));
+    $this->workflowHelper->archiveEntity(
+      $node,
+      $this->workflowStateChangeRevisionLogMessage($node, self::ARCHIVE_STATE, $this->t('VBO action'))
+    );
   }
 
   /**
