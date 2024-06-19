@@ -42,7 +42,7 @@ class GroupTokensTest extends JoinupExistingSiteTestBase {
       'type' => 'distribution',
       'title' => $this->randomString(),
       'og_audience' => $solution->id(),
-      'field_ad_state' => 'published',
+      'field_state' => 'published',
     ]);
 
     $release = $this->createRdfEntity([
