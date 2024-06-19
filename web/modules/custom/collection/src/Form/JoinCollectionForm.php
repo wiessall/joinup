@@ -14,6 +14,7 @@ use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Session\AccountProxyInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\joinup_core\Event\AjaxCommandEvent;
 use Drupal\joinup_group\Form\JoinGroupFormBase;
 use Drupal\og\MembershipManagerInterface;
@@ -139,6 +140,30 @@ class JoinCollectionForm extends JoinGroupFormBase {
       $response->addCommand($event->getCommand())->addAttachments($event->getAttachments());
     }
     return $response;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getJoinSubmitLabel(): TranslatableMarkup {
+    if (!$this->group->getSetting('label_join')->isEmpty()) {
+      return new TranslatableMarkup($this->group->getSetting('label_join')
+        ->getString());
+    }
+
+    return parent::getJoinSubmitLabel();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getLeaveSubmitLabel(): TranslatableMarkup {
+    if (!$this->group->getSetting('label_leave')->isEmpty()) {
+      return new TranslatableMarkup($this->group->getSetting('label_leave')
+        ->getString());
+    }
+
+    return parent::getLeaveSubmitLabel();
   }
 
 }
