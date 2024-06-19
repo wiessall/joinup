@@ -16,7 +16,7 @@ class FileConfigReadOnly implements ConfigReadOnlyInterface {
    *
    * @var string
    */
-  const string FILE_NAME = 'disable-config-readonly';
+  protected const string FILE_NAME = 'disable-config-readonly';
 
   public function __construct(protected FileSystemInterface $fileSystem) {}
 
