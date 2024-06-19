@@ -23,8 +23,7 @@ dependencies:
     - node.type.document
     - responsive_image.styles.tile
   module:
-    - field_delimiter
-    - field_formatter_range
+    - field_fallback_formatter
     - field_group
     - joinup_core
     - layout_builder
@@ -40,7 +39,7 @@ third_party_settings:
       label: Categorisation
       parent_name: ''
       region: hidden
-      weight: 23
+      weight: 24
       format_type: html_element
       format_settings:
         classes: ''
@@ -57,7 +56,7 @@ third_party_settings:
       label: Attachment
       parent_name: ''
       region: hidden
-      weight: 24
+      weight: 25
       format_type: html_element
       format_settings:
         classes: ''
@@ -79,11 +78,24 @@ bundle: document
 mode: view_mode_tile_horizontal
 content:
   abstract:
-    type: string
+    type: field_fallback_formatter
     label: hidden
     settings:
-      link_to_entity: false
-    third_party_settings: {  }
+      main_field_formatter_id: string
+      main_field_formatter_settings:
+        link_to_entity: false
+      fallback_field_id: field_paragraphs_body
+      fallback_field_formatter_id: filtered_entity_reference_bundles
+      fallback_field_formatter_settings:
+        view_mode: tile
+        filtered_entity_bundles:
+          - simple_paragraph
+          - text
+        trim_length: 200
+        trim_chars: ...
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
     weight: 1
     region: content
   field_document_logo:
@@ -99,26 +111,6 @@ content:
         template_suggestion: bare
     weight: 0
     region: content
-  field_paragraphs_body:
-    type: filtered_entity_reference_bundles
-    label: hidden
-    settings:
-      view_mode: tile
-      link: ''
-      filtered_entity_bundles:
-        - simple_paragraph
-        - text
-    third_party_settings:
-      field_delimiter:
-        delimiter: ''
-      field_formatter_range:
-        order: 0
-        limit: 0
-        offset: 0
-      template_suggestion:
-        template_suggestion: ''
-    weight: 1
-    region: content
   flag_like_node:
     settings: {  }
     third_party_settings: {  }
@@ -132,6 +124,7 @@ hidden:
   field_file: true
   field_keywords: true
   field_licence: true
+  field_paragraphs_body: true
   field_shared_in: true
   field_short_title: true
   field_site_featured: true
