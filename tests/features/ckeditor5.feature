@@ -242,12 +242,8 @@ Feature: CKEditor5
 
   Scenario: Media type error with CKEditor5.
   # Regression test for ticket ISAICP-8806.
-    Given collection:
-      | title | Test error collection |
-      | state | published             |
-
     Given I am logged in as a moderator
-    When I go to the edit form of the "Test error collection" collection
+    When I go to the edit form of the "The Other Collection" collection
     And I press the button "Insert Media" in the "Description" wysiwyg editor
     Then a modal should open
     And I press "Insert selected" in the "Modal buttons" region
