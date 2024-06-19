@@ -127,6 +127,11 @@ Feature: Joining and leaving collections through the web interface
     When I click "1 member"
     Then I should not see the link "Add members"
 
+  Scenario: Custom labels for Joining and leaving a collection.
+    Given collection:
+      | title | Brexit    |
+      | state | published |
+
   @javascript
   Scenario: Close the modal dialogs with the cancel button.
     Given collections:
