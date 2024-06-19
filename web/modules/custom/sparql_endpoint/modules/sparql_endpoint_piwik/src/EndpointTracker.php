@@ -6,6 +6,7 @@ namespace Drupal\sparql_endpoint_piwik;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Config\ImmutableConfig;
+use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\RequestOptions;
@@ -26,6 +27,7 @@ class EndpointTracker {
   public function __construct(
     protected ClientInterface $httpClient,
     protected AccountProxyInterface $currentUser,
+    protected LoggerChannelInterface $logger,
     ConfigFactoryInterface $configFactory,
   ) {
     $this->config = $configFactory->get('sparql_endpoint_piwik.settings');
@@ -40,6 +42,7 @@ class EndpointTracker {
   public function track(Request $request): void {
     $url = $this->getUrl();
     if (!$url) {
+      $this->logger->error('PIWIK base URI is not configured.');
       return;
     }
 
@@ -49,7 +52,13 @@ class EndpointTracker {
         RequestOptions::QUERY => $this->buildQuery($request),
         RequestOptions::HEADERS => $this->buildHeaders($request),
       ]
-    )->wait();
+    )
+      ->then(NULL, function() use ($url) {
+        $this->logger->error('Can\'t send track data to @url',
+          ['@url' => $url]
+        );
+      })
+      ->wait();
   }
 
   /**
