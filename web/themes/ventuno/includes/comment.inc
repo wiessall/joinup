@@ -19,7 +19,6 @@ function ventuno_preprocess_comment(array &$variables): void {
   $comment = $variables['comment'];
   /** @var \Drupal\user\Entity\User $user */
   $user = $variables['user_picture']['#user'];
-  $photo_target = $user->get('field_user_photo')->getValue();
 
   $username = [
     '#theme' => 'username',
@@ -42,6 +41,7 @@ function ventuno_preprocess_comment(array &$variables): void {
   }
   else {
     $variables['author'] = $username;
+    $photo_target = $user->get('field_user_photo')->getValue();
     if ($photo_target) {
       $photo_target = $photo_target[0]['target_id'];
       /** @var \Drupal\file\Entity\File $file */
