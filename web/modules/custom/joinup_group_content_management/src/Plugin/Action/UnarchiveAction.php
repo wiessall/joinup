@@ -149,7 +149,10 @@ class UnarchiveAction extends StateActionBase {
       return;
     }
 
-    $this->workflowHelper->unarchiveEntity($node, $this->getRevisionLogMessage($node, 'published'));
+    $this->workflowHelper->unarchiveEntity(
+      $node,
+      $this->workflowStateChangeRevisionLogMessage($node, 'published', $this->t('VBO action'))
+    );
   }
 
 }
