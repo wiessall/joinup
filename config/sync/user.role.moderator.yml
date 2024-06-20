@@ -206,6 +206,7 @@ permissions:
   - 'manage group announcements'
   - 'manage group content'
   - 'manage newsroom newsletter subscriptions'
+  - 'manage site auto-registration'
   - 'manage solutions'
   - 'moderate entity parents'
   - 'perform announcement workflow approve transition on any entity'
