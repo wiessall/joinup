@@ -49,6 +49,18 @@ class DashboardForm extends FormBase {
       '#title' => $this->t('Tasks'),
     ];
 
+    $form['cas'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Users registration/login'),
+      '#open' => TRUE,
+      'registration_disabled' => [
+        '#type' => 'checkbox',
+        '#title' => $this->t('Disable new accounts registration'),
+        '#default_value' => $this->state->get('joinup_eulogin.registration_disabled', FALSE),
+        '#access' => $this->currentUser()->hasPermission('manage site auto-registration'),
+      ],
+    ];
+
     $log_alerts = $this->state->get('joinup.log_alerts', $this->getLogAlertsDefaultSettings());
 
     // Builds a level form element.
@@ -141,6 +153,18 @@ class DashboardForm extends FormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state): void {
+    $registration_disabled = (bool) $form_state->getValue(['registration_disabled']);
+    if ($registration_disabled !== $form['cas']['registration_disabled']['#default_value']) {
+      if ($registration_disabled) {
+        $this->state->set('joinup_eulogin.registration_disabled', TRUE);
+        $this->messenger()->addWarning($this->t('Registering new users to Joinup is disabled'));
+      }
+      else {
+        $this->state->delete('joinup_eulogin.registration_disabled');
+        $this->messenger()->addStatus($this->t('Registering new users to Joinup is enabled'));
+      }
+    }
+
     $log_alerts = $form_state->getValue('log_alerts');
     if ($log_alerts !== $this->state->get('log_alerts', $this->getLogAlertsDefaultSettings())) {
       $this->state->set('joinup.log_alerts', $log_alerts);

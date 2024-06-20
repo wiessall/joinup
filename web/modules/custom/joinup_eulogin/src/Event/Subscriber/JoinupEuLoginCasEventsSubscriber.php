@@ -90,6 +90,7 @@ class JoinupEuLoginCasEventsSubscriber implements EventSubscriberInterface {
         ['blockedUserMessage'],
       ],
       CasHelper::EVENT_PRE_REGISTER => [
+        ['disableRegistration', 1000],
         ['markAsNewAccountRegistration'],
         ['handleDrupalUsernameCollision'],
         ['preventRegisterEmailCollision'],
@@ -150,6 +151,20 @@ class JoinupEuLoginCasEventsSubscriber implements EventSubscriberInterface {
     $uid = $this->authmap->getUid($event->getCasPropertyBag()->getUsername(), 'cas');
     if ($uid && ($user = $this->entityTypeManager->getStorage('user')->load($uid)) && $user->isBlocked()) {
       $this->messenger->addError('You cannot sign in yet. Your Joinup account is currently being verified. You will be notified by email once it is activated.');
+    }
+  }
+
+  /**
+   * Disables the CAS automatic registration based on a kill-switch.
+   *
+   * @param \Drupal\cas\Event\CasPreRegisterEvent $event
+   *   The CAS pre-register event.
+   */
+  public function disableRegistration(CasPreRegisterEvent $event): void {
+    if ($this->state->get('joinup_eulogin.registration_disabled', FALSE)) {
+      $event
+        ->cancelAutomaticRegistration($this->t('Registering new accounts to Joinup is temporarily disabled. Please come back later.'))
+        ->stopPropagation();
     }
   }
 
