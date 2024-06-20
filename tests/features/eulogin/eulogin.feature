@@ -328,3 +328,45 @@ Feature: Log in through EU Login
     Given I am logged in as an "authenticated user"
     When I go to "/user/password"
     Then the response status code should be 404
+
+  Scenario: As a developer I can temporary disable the site registration.
+    Given CAS users:
+      | Username | E-mail          | Password |
+      | joe_doe  | joe@example.com | 123      |
+    And users:
+      | Username | Roles     |
+      | dev      | developer |
+
+    Given I am logged in as dev
+    And I go to "/dashboard"
+    And I press "Disable config readonly"
+    And I visit "/admin/config/people/cas"
+    And I uncheck "Automatically register users"
+    And I press "Save configuration"
+    Then I should see the message "The configuration options have been saved."
+
+    Given I am an anonymous user
+    And I am on the homepage
+    When I click "Sign in"
+    When I fill in "E-mail address" with "joe@example.com"
+    When I fill in "Password" with "123"
+    And I press "Log in"
+    Then I should see the error message "Registering new accounts to Joinup is temporarily disabled. Please come back later."
+    # Check that the user is not logged in.
+    And I should see the link "Sign in"
+
+    Given I am logged in as dev
+    And I visit "/admin/config/people/cas"
+    And I check "Automatically register users"
+    And I press "Save configuration"
+    Then I should see the message "The configuration options have been saved."
+    And I go to "/dashboard"
+    And I press "Enable config readonly"
+
+    Given I am an anonymous user
+    And I am on the homepage
+    When I click "Sign in"
+    When I fill in "E-mail address" with "joe@example.com"
+    When I fill in "Password" with "123"
+    And I press "Log in"
+    Then I should see the success message "Fill in the fields below to let the Joinup community learn more about you!"
