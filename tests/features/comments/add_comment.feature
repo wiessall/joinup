@@ -300,7 +300,8 @@ Feature: Add comments
     Given I am logged in as a moderator
     When I go to the content page of the type "<content type>" with the title "<title>"
     Then I should see the text "Anonymous user (Miss Tales)"
-    Then comment #2 should contain the markup "Anonymous user (Miss Tales)"
+    Then comment #2 should contain the markup "Anonymous user"
+    Then comment #2 should contain the markup "Miss Tales"
 
     Given I am an anonymous user
     When I go to the content page of the type "<content type>" with the title "<title>"
