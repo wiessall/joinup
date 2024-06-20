@@ -14,6 +14,6 @@ function dashboard_deploy_110800(): void {
   \Drupal::state()->deleteMultiple([
     'joinup_eulogin.accounts_approve',
     'joinup_eulogin.cas_debug',
-    'joinup_eulogin.registration_disabled',
+    'joinup_eulogin.registration_disabled'
   ]);
 }
