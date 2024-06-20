@@ -110,7 +110,7 @@ function joinup_rdf_deploy_110901(array &$sandbox): string {
 
     $entity->save();
     if ($has_alias) {
-      $internal_url = $entity->toUrl()->getInternalPath();
+      $internal_url = '/' . $entity->toUrl()->getInternalPath();
       $connection->update('path_alias')
         ->fields(['path' => $internal_url])
         ->condition('path', $pathauto_old_path)
