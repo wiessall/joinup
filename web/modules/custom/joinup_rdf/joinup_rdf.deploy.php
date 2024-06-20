@@ -82,9 +82,9 @@ function joinup_rdf_deploy_110901(array &$sandbox): string {
     }
 
     if (empty($values['title'])) {
-      $error_messages[] = t("Distribution with URI :uri has no title. %title", [
+      $error_messages[] = t("Distribution with URI %uri has no title. %data", [
         '%uri' => $uri,
-        '%title' => $values['title'] ?? '(Undefined title)',
+        '%data' => print_r($data, TRUE),
       ]);
       $values['title'] = 'Untitled distribution';
     }
