@@ -129,8 +129,24 @@ Feature: Joining and leaving collections through the web interface
 
   Scenario: Custom labels for Joining and leaving a collection.
     Given collection:
-      | title | Brexit    |
-      | state | published |
+      | title | Joinup exit |
+      | state | published   |
+
+    Given I am logged in as a user with the "moderator" role
+    And I go to the homepage of the "Joinup exit" collection
+    And I open the header local tasks menu
+    And I click "Settings" in the "Entity actions" region
+    And I fill in "Join label" with "Join this community"
+    And I fill in "Leave label" with "Leave this community"
+    And I press "Save"
+
+    When I am logged in as a user with the "authenticated" role
+    And I go to the homepage of the "Joinup exit" collection
+    Then I should see the "Join this community" button
+
+    When I press "Join this community"
+    And I go to the homepage of the "Joinup exit" collection
+    Then I should see the link "Leave this community"
 
   @javascript
   Scenario: Close the modal dialogs with the cancel button.
