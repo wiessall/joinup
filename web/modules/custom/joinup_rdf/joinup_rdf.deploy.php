@@ -39,7 +39,6 @@ function joinup_rdf_deploy_110901(array &$sandbox): string {
     'https://schema.org/fileSize' => 'file_size',
   ];
   $storage = \Drupal::entityTypeManager()->getStorage('node');
-  $logger = \Drupal::getContainer()->get('logger.factory')->get('joinup_rdf');
   $alias_repository = \Drupal::getContainer()->get('path_alias.repository');
   $connection = \Drupal::database();
 
@@ -53,7 +52,7 @@ function joinup_rdf_deploy_110901(array &$sandbox): string {
   $start = microtime(TRUE);
   $file = array_shift($sandbox['files']);
   $distributions = Yaml::decode(file_get_contents($file));
-  $aliases_not_swapped = [];
+  $error_messages = [];
   foreach ($distributions as $uri => $data) {
     $values = ['type' => 'distribution', 'uri' => $uri];
     foreach ($data as $predicate => $objects) {
@@ -83,10 +82,11 @@ function joinup_rdf_deploy_110901(array &$sandbox): string {
     }
 
     if (empty($values['title'])) {
-      $values['title'] = 'Untitled distribution';
-      $logger->warning("Distribution with URI $uri has no title. Using 'Untitled distribution' instead. Distribution value array: @values", [
-        '@values' => print_r($data, TRUE),
+      $error_messages[] = t("Distribution with URI :uri has no title. %title", [
+        '%uri' => $uri,
+        '%title' => $values['title'] ?? '(Undefined title)',
       ]);
+      $values['title'] = 'Untitled distribution';
     }
 
     // Set the OG reference as a parent if there is no parent found.
@@ -107,6 +107,12 @@ function joinup_rdf_deploy_110901(array &$sandbox): string {
     if ($has_alias) {
       $entity->get('path')->pathauto = PathautoState::SKIP;
     }
+    else {
+      $error_messages[] = t("Distribution with URI %uri has no alias. %title", [
+        '%uri' => $uri,
+        '%title' => $values['title'],
+      ]);
+    }
 
     $entity->save();
     if ($has_alias) {
@@ -126,13 +132,13 @@ function joinup_rdf_deploy_110901(array &$sandbox): string {
     $sandbox['progress']++;
   }
 
-  $aliases_not_swapped = array_filter($aliases_not_swapped);
-  $sandbox['swapped_aliases'] += count($aliases_not_swapped);
+  $error_messages = array_filter($error_messages);
+  $sandbox['swapped_aliases'] += count($error_messages);
   $finish = microtime(TRUE);
   $count = count($distributions);
   $sandbox['#finished'] = (int) empty($sandbox['files']);
-  $message = "Imported {$count} ({$sandbox['progress']} total) distributions in " . round($finish - $start, 2) . ' seconds. Aliases swapped: ' . $sandbox['swapped_aliases'];
-  $message .= ' Aliases swapped: ' . implode(', ', $aliases_not_swapped);
+  $message = "Progress: {$count} distributions ({$sandbox['progress']} total / {$sandbox['swapped_aliases']} aliases swapped) in " . round($finish - $start, 2) . ' s. Error messages: ' . count($error_messages) . '. ';
+  $message .= implode("\n", $error_messages);
   return $message;
 }
 
