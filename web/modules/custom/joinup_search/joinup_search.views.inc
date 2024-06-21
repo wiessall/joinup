@@ -15,7 +15,7 @@ use Drupal\search_api\Entity\Index;
  * Adds definitions to support rendering links to the canonical page of
  * entities.
  */
-function joinup_search_views_data_alter(array &$data) {
+function joinup_search_views_data_alter(array &$data): void {
   // Create an empty alias tracker variable to mimic the alias generation from
   // search_api_views_data().
   $alias_tracker = [];

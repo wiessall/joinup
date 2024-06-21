@@ -37,7 +37,7 @@ class LastUpdatedFieldItemList extends FieldItemList {
    * @return int
    *   Last updated timestamp.
    */
-  protected function collectionLastUpdate() {
+  protected function collectionLastUpdate(): int {
     /** @var \Drupal\collection\Entity\CollectionInterface $collection */
     $collection = $this->getEntity();
 

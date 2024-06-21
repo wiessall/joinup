@@ -15,6 +15,7 @@ use Drupal\Core\Form\SubformState;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\facets\Entity\Facet;
 use Drupal\facets\FacetInterface;
+use Drupal\search_api\IndexInterface;
 use Drupal\search_api_field\Event\AlterQueryPresetsDescriptionEvent;
 use Drupal\search_api_field\Plugin\Field\FieldType\SearchItem;
 use Drupal\search_api_field\Plugin\FilterPluginManagerInterface;
@@ -296,14 +297,14 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
    * @return string|null
    *   The region name this row belongs to.
    */
-  public static function getRowRegion(array $row) {
+  public static function getRowRegion(array $row): ?string {
     return $row['plugin']['type']['#value'];
   }
 
   /**
    * Form submission handler for multistep buttons.
    */
-  public function multistepSubmit($form, FormStateInterface $form_state) {
+  public function multistepSubmit($form, FormStateInterface $form_state): void {
     $trigger = $form_state->getTriggeringElement();
     $op = $trigger['#op'];
 
@@ -344,7 +345,7 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
   /**
    * Ajax handler for multistep buttons.
    */
-  public function multistepAjax($form, FormStateInterface $form_state) {
+  public function multistepAjax($form, FormStateInterface $form_state): array {
     $trigger = $form_state->getTriggeringElement();
     $op = $trigger['#op'];
 
@@ -383,7 +384,7 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
   /**
    * Returns the headers for the facet table.
    */
-  protected function getTableHeader() {
+  protected function getTableHeader(): array {
     return [
       $this->t('Field'),
       $this->t('Weight'),
@@ -399,7 +400,7 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
    * @return array
    *   List of facet regions.
    */
-  protected function getRegions() {
+  protected function getRegions(): array {
     $facet_regions = $this->fieldDefinition->getSetting('facet_regions');
     $regions = [];
     foreach ($facet_regions as $id => $label) {
@@ -426,7 +427,7 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
    * @return array
    *   Render array of the row.
    */
-  protected function buildFacetRow(Facet $facet, SearchItem $item) {
+  protected function buildFacetRow(Facet $facet, SearchItem $item): array {
     $value = $item->get('value')->getValue();
     $areas = !empty($value['fields']) ? $value['fields'] : [];
     $facet_config = NULL;
@@ -497,7 +498,7 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
    * @return \Drupal\Core\Entity\EntityInterface[]
    *   List of facets.
    */
-  protected function getFacets() {
+  protected function getFacets(): array {
     $facet_storage = $this->entityTypeManager->getStorage('facets_facet');
     $facets = $facet_storage->loadByProperties([
       'facet_source_id' => 'search_api_field:' . $this->fieldDefinition->id(),
@@ -520,7 +521,7 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
    * @return array
    *   The form structure for the query builder.
    */
-  protected function buildQueryBuilder(SearchItem $item, int $delta, array &$form, FormStateInterface $form_state) {
+  protected function buildQueryBuilder(SearchItem $item, int $delta, array &$form, FormStateInterface $form_state): array {
     $index = $this->getSearchApiIndex();
     if (!$index) {
       return [];
@@ -649,7 +650,7 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
    * @return array
    *   The form portion to render.
    */
-  public function ajaxUpdateQueryBuilder(array $form, FormStateInterface $form_state) {
+  public function ajaxUpdateQueryBuilder(array $form, FormStateInterface $form_state): array {
     $button = $form_state->getTriggeringElement();
     $wrapper_parents = array_slice($button['#array_parents'], 0, array_search('query_builder', $button['#array_parents'], TRUE));
     $element = NestedArray::getValue($form, $wrapper_parents);
@@ -665,7 +666,7 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The current state of the form.
    */
-  public function submitAddFilter(array $form, FormStateInterface $form_state) {
+  public function submitAddFilter(array $form, FormStateInterface $form_state): void {
     $button = $form_state->getTriggeringElement();
     $wrapper = NestedArray::getValue($form, array_slice($button['#array_parents'], 0, -1));
 
@@ -699,7 +700,7 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The current state of the form.
    */
-  public function submitRemoveFilter(array $form, FormStateInterface $form_state) {
+  public function submitRemoveFilter(array $form, FormStateInterface $form_state): void {
     $button = $form_state->getTriggeringElement();
     $filter = NestedArray::getValue($form, array_slice($button['#array_parents'], 0, -1));
     $plugin_delta = end($filter['#array_parents']);
@@ -723,7 +724,7 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
    * @return \Drupal\search_api\IndexInterface|null
    *   The index entity. Null if not found.
    */
-  protected function getSearchApiIndex() {
+  protected function getSearchApiIndex(): ?IndexInterface {
     if ($index_id = $this->fieldDefinition->getSetting('index')) {
       /** @var \Drupal\search_api\IndexInterface $index */
       $index = $this->entityTypeManager->getStorage('search_api_index')->load($index_id);
@@ -740,7 +741,7 @@ class SearchWidget extends WidgetBase implements ContainerFactoryPluginInterface
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The form state.
    */
-  public function validateQueryPresets(array &$element, FormStateInterface $form_state) {
+  public function validateQueryPresets(array &$element, FormStateInterface $form_state): void {
     $list = explode("\n", $element['#value']);
     $list = array_map('trim', $list);
     $list = array_filter($list, 'strlen');

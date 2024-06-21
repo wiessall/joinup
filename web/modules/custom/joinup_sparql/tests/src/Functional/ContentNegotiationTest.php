@@ -242,7 +242,7 @@ class ContentNegotiationTest extends BrowserTestBase {
    * @return string
    *   The body part of the last HTTP response,
    */
-  protected function getBody() {
+  protected function getBody(): string {
     return trim($this->getSession()->getPage()->getContent());
   }
 

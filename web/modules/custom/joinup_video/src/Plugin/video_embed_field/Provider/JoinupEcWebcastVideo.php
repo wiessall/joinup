@@ -59,7 +59,7 @@ class JoinupEcWebcastVideo extends ProviderPluginBase {
    * @return string
    *   A time index parameter to pass to the frame or 0 if none is found.
    */
-  protected function getTimeIndex() {
+  protected function getTimeIndex(): string {
     preg_match('#[&?]starttime=(?<time_index>\d+)#i', $this->getInput(), $matches);
     return $matches['time_index'] ?? 0;
   }
