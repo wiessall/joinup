@@ -193,7 +193,7 @@ QUERY;
     $content = $group->getGroupContentIds();
     $content_ids = [];
 
-    array_walk_recursive($content, function ($value) use (&$content_ids) {
+    array_walk_recursive($content, function ($value) use (&$content_ids): void {
       $content_ids[] = $value;
     });
 

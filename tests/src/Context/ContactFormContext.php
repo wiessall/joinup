@@ -18,7 +18,7 @@ class ContactFormContext extends RawDrupalContext {
    * @When I visit the contact form
    * @When I am on the contact form
    */
-  public function visitContactForm() {
+  public function visitContactForm(): void {
     $this->visitPath('contact');
   }
 

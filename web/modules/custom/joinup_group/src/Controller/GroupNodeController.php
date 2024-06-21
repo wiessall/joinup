@@ -8,6 +8,7 @@ use Drupal\Component\Render\MarkupInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\joinup_group\Entity\GroupContentInterface;
 use Drupal\node\NodeInterface;
@@ -147,7 +148,7 @@ class GroupNodeController extends ControllerBase {
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    *   Thrown when the user entity type is not defined.
    */
-  protected function createNode(RdfInterface $rdf_entity, NodeTypeInterface $node_type) {
+  protected function createNode(RdfInterface $rdf_entity, NodeTypeInterface $node_type): EntityInterface {
     return $this->entityTypeManager()->getStorage('node')->create([
       'type' => $node_type->id(),
       OgGroupAudienceHelperInterface::DEFAULT_FIELD => $rdf_entity->id(),

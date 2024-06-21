@@ -75,7 +75,7 @@ trait FileTrait {
    *   Thrown when a field name is present in the $values array which does not
    *   exist on the specified entity bundle.
    */
-  protected function handleFileFields(array &$values, $entity_type, $bundle) {
+  protected function handleFileFields(array &$values, $entity_type, $bundle): void {
     $entity_field_manager = \Drupal::service('entity_field.manager');
     $fields = $entity_field_manager->getFieldDefinitions($entity_type, $bundle);
 

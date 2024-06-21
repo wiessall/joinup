@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup_group\Form;
 
 use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\ConfirmFormBase;
 use Drupal\Core\Form\FormStateInterface;
@@ -188,10 +189,10 @@ class DeleteGroupMembershipConfirmForm extends ConfirmFormBase {
    * @param \Drupal\Core\Session\AccountInterface $account
    *   The account for which to check access.
    *
-   * @return \Drupal\Core\Access\AccessResult
+   * @return \Drupal\Core\Access\AccessResultInterface
    *   The access result.
    */
-  public function access(AccountInterface $account) {
+  public function access(AccountInterface $account): AccessResultInterface {
     if ($account->isAnonymous()) {
       return AccessResult::forbidden('Anonymous');
     }
