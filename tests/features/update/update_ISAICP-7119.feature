@@ -1,4 +1,4 @@
-@api @group-clone @update:joinup_publication_date_update_110900
+@api @group-clone @update:joinup_publication_date_update_111001
 Feature: Publication date works as expected on RDF entities
 
   Background:
