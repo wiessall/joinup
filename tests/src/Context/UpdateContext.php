@@ -12,42 +12,58 @@ use Drupal\DrupalExtension\Context\RawDrupalContext;
  */
 class UpdateContext extends RawDrupalContext {
 
+  private const string UPDATE_DIR = 'tests/features/update';
+
   /**
    * Ensures that update-related features use proper tags.
    *
-   * @BeforeScenario @group-clone
+   * @BeforeScenario
    */
   public function checkUpdateExists(BeforeScenarioScope $scope): void {
-    $update_tests_path = realpath(DRUPAL_ROOT . '/../tests/features/update');
-    $feature_file = $scope->getFeature()->getFile();
-    if (!str_starts_with($feature_file, $update_tests_path)) {
-      // Only handle features inside tests/features/update.
+    $feature_path = realpath(DRUPAL_ROOT . '/../' . self::UPDATE_DIR);
+    if (!str_starts_with($scope->getFeature()->getFile(), $feature_path)) {
+      // Only handle features in the update dir.
       return;
     }
 
+    $violations = $this->getViolations($scope);
+    if ($violations) {
+      $path = sprintf('%s:%d', $scope->getFeature()->getFile(), $scope->getScenario()->getLine());
+      throw new \Exception("$path\n\t" . implode("\n\t", $violations));
+    }
+  }
+
+  /**
+   * Returns violations for the current scope.
+   */
+  private function getViolations(BeforeScenarioScope $scope): array {
+    $violations = [];
+
     $tags = array_unique(array_merge($scope->getFeature()->getTags(), $scope->getScenario()->getTags()));
+    if (!in_array('group-clone', $tags)) {
+      $violations[] = sprintf('Scenarios inside %s should always be tagged with @group-clone', self::UPDATE_DIR);
+    }
+
     $updates = array_filter($tags, function (string $tag): bool {
       return str_starts_with($tag, 'update:');
     });
 
-    if (empty($updates)) {
-      $path = sprintf('%s:%d', $scope->getFeature()->getFile(), $scope->getScenario()->getLine());
-      throw new \Exception("$path\n\tScenarios inside $update_tests_path should always be tagged with @update:[function], where [function] is the update/post-update/deploy function.");
+    if (!$updates) {
+      $violations[] = sprintf('Scenarios inside %s should always be tagged with @update:[function], where [function] is the update/post-update/deploy function.', self::UPDATE_DIR);
+      return $violations;
     }
 
-    $missing_updates = [];
-    foreach ($updates as $tag) {
+    $missing_updates = array_filter($updates, function ($tag) {
       [, $update] = explode(':', $tag, 2);
-      if (!$this->loadUpdateFile($update) || !function_exists($update)) {
-        $missing_updates[] = $update;
-      }
-    }
+      return !$this->loadUpdateFile($update) || !function_exists($update);
+    });
 
     if (!empty($missing_updates)) {
-      $path = sprintf('%s:%d', $scope->getFeature()->getFile(), $scope->getScenario()->getLine());
       $missing_updates = implode(', ', $missing_updates);
-      throw new \Exception("$path\n\tThe following update hooks could not be found: $missing_updates. Fix or remove the related Behat scenario.");
+      $violations[] = "The following update hooks could not be found: $missing_updates. Fix or remove the related Behat scenario.";
     }
+
+    return $violations;
   }
 
   /**
