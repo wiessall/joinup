@@ -14,7 +14,7 @@ use Drupal\Core\Field\BaseFieldDefinition;
  *
  * Add Publication date field to RDF entities.
  */
-function joinup_publication_date_update_110800(&$sandbox): void {
+function joinup_publication_date_update_111001(&$sandbox): void {
   $field_storage_definition = BaseFieldDefinition::create('published_at')
     ->setName('published_at')
     ->setLabel(t('Published on'))
