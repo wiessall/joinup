@@ -43,7 +43,7 @@ function joinup_rdf_requirements(string $phase): array {
 /**
  * Delete asset distribution entities.
  */
-function joinup_rdf_update_110900(): void {
+function joinup_rdf_update_110900(): string {
   $store = \Drupal::getContainer()->get('joinup_sparql.graph_store.helper')->createGraphStore();
   $distributions = $store->get('http://joinup.eu/asset_distribution/published')->toRdfPhp();
   $dir = 'private://distributions';
@@ -54,6 +54,17 @@ function joinup_rdf_update_110900(): void {
   foreach (array_chunk($distributions, 50, TRUE) as $chunk) {
     file_put_contents($dir . '/' . ++$delta . '.yml', Yaml::encode($chunk));
   }
+
+  $query = <<<SPARQL
+SELECT *
+FROM <http://joinup.eu/asset_distribution/published>
+WHERE {
+  ?s ?p ?o .
+}
+SPARQL;
+
   $sparql = \Drupal::getContainer()->get('sparql.endpoint');
+  $count = $sparql->query($query)->count();
   $sparql->update("CLEAR GRAPH <http://joinup.eu/asset_distribution/published>;");
+  return "Exported $delta files of distributions and cleared $count triples.";
 }
