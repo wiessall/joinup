@@ -1,5 +1,28 @@
+diff --git a/core/modules/ckeditor5/tests/src/FunctionalJavascript/MediaLibraryTest.php b/core/modules/ckeditor5/tests/src/FunctionalJavascript/MediaLibraryTest.php
+index 9344a24778467454a53857931c36280226481cb6..cf73cb5f9ce437146c8fa1981b389d2985ab4b60 100644
+--- a/core/modules/ckeditor5/tests/src/FunctionalJavascript/MediaLibraryTest.php
++++ b/core/modules/ckeditor5/tests/src/FunctionalJavascript/MediaLibraryTest.php
+@@ -322,4 +322,18 @@ public function testAlt(): void {
+     $this->assertEquals('""', $drupal_media->getAttribute('alt'));
+   }
+ 
++  /**
++   * Test submit without select items, should return error.
++   */
++  public function testEmptyWidgetOverflow(): void {
++    $assert_session = $this->assertSession();
++    $this->drupalGet('/node/add/blog');
++    $this->waitForEditor();
++    $this->pressEditorButton('Insert Media');
++    $this->assertNotEmpty($assert_session->waitForElementVisible('css', '#drupal-modal #media-library-content'));
++    $assert_session->elementExists('css', '.ui-dialog-buttonpane')->pressButton('Insert selected');
++    $element = $assert_session->waitForElement('css', ".messages--error:contains('No items selected.')", 10000);
++    $this->assertNotEmpty($element);
++  }
++
+ }
 diff --git a/core/modules/media_library/js/media_library.ui.js b/core/modules/media_library/js/media_library.ui.js
-index 05429560f4e64243af5d337f50399fabee333b58..bdd41a3d1fa34f59d61d1360cf8193cc75c27abe 100644
+index 4ff97d57dc1edfabd9d3cd2289454c7b53fc98c2..3726fa8cb51e27cedaeec53180a55f2fa9a56664 100644
 --- a/core/modules/media_library/js/media_library.ui.js
 +++ b/core/modules/media_library/js/media_library.ui.js
 @@ -200,7 +200,7 @@
@@ -43,24 +66,51 @@ index 05429560f4e64243af5d337f50399fabee333b58..bdd41a3d1fa34f59d61d1360cf8193cc
        if (!$form.length) {
          return;
 diff --git a/core/modules/media_library/src/Plugin/views/field/MediaLibrarySelectForm.php b/core/modules/media_library/src/Plugin/views/field/MediaLibrarySelectForm.php
-index 203d1cda890999ac545e299e2c12dc89996ba750..4f3be5a7ef2637ffbac3521a991d37d189dc781e 100644
+index 203d1cda890999ac545e299e2c12dc89996ba750..d63eb0f7e52b09425e22609bb99e1a4898c1a330 100644
 --- a/core/modules/media_library/src/Plugin/views/field/MediaLibrarySelectForm.php
 +++ b/core/modules/media_library/src/Plugin/views/field/MediaLibrarySelectForm.php
-@@ -160,6 +160,13 @@ public static function updateWidget(array &$form, FormStateInterface $form_state
-     $state = MediaLibraryState::fromRequest($request);
- 
-     $current_selection = $form_state->getValue('media_library_select_form_selection');
-+    if (empty($current_selection)) {
+@@ -5,6 +5,7 @@
+ use Drupal\Core\Ajax\AjaxResponse;
+ use Drupal\Core\Ajax\CloseDialogCommand;
+ use Drupal\Core\Ajax\MessageCommand;
++use Drupal\Core\Ajax\ReplaceCommand;
+ use Drupal\Core\Form\FormBuilderInterface;
+ use Drupal\Core\Form\FormStateInterface;
+ use Drupal\Core\Url;
+@@ -152,6 +153,32 @@ public function viewsForm(array &$form, FormStateInterface $form_state) {
+    *   A command to send the selection to the current field widget.
+    */
+   public static function updateWidget(array &$form, FormStateInterface $form_state, Request $request) {
++    if ($form_state->getErrors()) {
++      // If there are errors, we need to replace the form messages container with the error messages.
++      $messages = \Drupal::messenger()->all();
++
++      // Build the error message output.
++      $translate = \Drupal::translation();
++      $output = [
++        '#theme' => 'status_messages',
++        '#message_list' => $messages,
++        '#status_headings' => [
++          'status' => $translate->translate('Status message'),
++          'error' => $translate->translate('Error message'),
++          'warning' => $translate->translate('Warning message'),
++        ],
++      ];
++
++      // Replace the content of the messages container with the new messages
 +      $response = new AjaxResponse();
-+      $error = \Drupal::translation()->translate('No items selected.');
-+      $response->addCommand(new MessageCommand($error, '#media-library-messages', ['type' => 'error']));
++      $response->addCommand(new ReplaceCommand('#media-library-messages', $output));
++
++      // Clear the messages to prevent duplication.
++      \Drupal::messenger()->deleteAll();
++
 +      return $response;
 +    }
 +
-     $available_slots = $state->getAvailableSlots();
-     $selected_count = count(explode(',', $current_selection));
-     if ($available_slots > 0 && $selected_count > $available_slots) {
-@@ -182,8 +189,9 @@ public static function updateWidget(array &$form, FormStateInterface $form_state
+     $field_id = $form_state->getTriggeringElement()['#field_id'];
+     $selected_ids = $form_state->getValue($field_id);
+     $selected_ids = $selected_ids ? array_filter(explode(',', $selected_ids)) : [];
+@@ -182,8 +209,9 @@ public static function updateWidget(array &$form, FormStateInterface $form_state
     * {@inheritdoc}
     */
    public function viewsFormValidate(array &$form, FormStateInterface $form_state) {
