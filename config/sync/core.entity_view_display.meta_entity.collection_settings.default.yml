@@ -4,7 +4,9 @@ status: true
 dependencies:
   config:
     - field.field.meta_entity.collection_settings.announcements_enabled
+    - field.field.meta_entity.collection_settings.code_of_conduct
     - field.field.meta_entity.collection_settings.glossary_link_only_first
+    - field.field.meta_entity.collection_settings.greeting
     - field.field.meta_entity.collection_settings.landing_page
     - field.field.meta_entity.collection_settings.metadata_banner_disabled
     - meta_entity.type.collection_settings
@@ -90,6 +92,8 @@ content:
     weight: 25
     region: content
 hidden:
+  code_of_conduct: true
+  greeting: true
   landing_page: true
   search_api_excerpt: true
   target: true
