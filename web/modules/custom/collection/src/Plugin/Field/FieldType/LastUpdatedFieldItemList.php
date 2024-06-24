@@ -42,13 +42,15 @@ class LastUpdatedFieldItemList extends FieldItemList {
     $collection = $this->getEntity();
 
     // Store the collection changed timestamp.
-    $last_updated = $collection->getChangedTime();
+    // @todo Fix casting in \Drupal\rdf_entity\Entity\Rdf::getChangedTime
+    $last_updated = (int) $collection->getChangedTime();
 
     // Check for a higher child solution changed timestamp.
     foreach ($collection->getSolutions(TRUE) as $solution) {
       if ($solution->getWorkflowState() === 'published') {
         if ($solution->getChangedTime() > $last_updated) {
-          $last_updated = $solution->getChangedTime();
+          // @todo Fix casting in \Drupal\rdf_entity\Entity\Rdf::getChangedTime
+          $last_updated = (int) $solution->getChangedTime();
         }
       }
     }
