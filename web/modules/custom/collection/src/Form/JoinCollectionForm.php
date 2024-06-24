@@ -96,6 +96,21 @@ class JoinCollectionForm extends JoinGroupFormBase {
       ];
     }
 
+    // Rebuild button for refreshing the form if membership is created by the
+    // SubscribeToCollectionForm.
+    $form['rebuild'] = [
+      '#type' => 'button',
+      '#value' => $this->t('Rebuild'),
+      '#attributes' => ['class' => ['visually-hidden']],
+      '#name' => 'join_collection_rebuild',
+      '#ajax' => [
+        'callback' => '::rebuild',
+      ],
+      '#limit_validation_errors' => [],
+    ];
+    $form['#prefix'] = "<div id=\"{$this->ajaxWrapperId()}\">";
+    $form['#suffix'] = "</div>";
+
     return $form;
   }
 
@@ -139,8 +154,8 @@ class JoinCollectionForm extends JoinGroupFormBase {
       // Rebuild the form and replace it in the page, so that the "Join this
       // "collection" button will be replaced with either the "You're a member"
       // button or the "Membership is pending" button.
-      $form_button = $this->formBuilder->rebuildForm('join_group_form', $form_state, $form);
-      $response->addCommand(new ReplaceCommand('#join-group-form', $form_button));
+      $rebuiltForm = $this->formBuilder->rebuildForm($this->getFormId(), $form_state, $form);
+      $response->addCommand(new ReplaceCommand("#{$this->ajaxWrapperId()}", $rebuiltForm));
 
       $title = $this->t('Welcome to %collection', [
         '%collection' => $this->group->label(),
@@ -168,6 +183,30 @@ class JoinCollectionForm extends JoinGroupFormBase {
       $response->addCommand($event->getCommand())->addAttachments($event->getAttachments());
     }
     return $response;
+  }
+
+  /**
+   * AJAX callback to reset the form.
+   *
+   * @param array $form
+   *   The form.
+   * @param \Drupal\Core\Form\FormStateInterface $formState
+   *   The form state.
+   */
+  public function rebuild(array $form, FormStateInterface $formState): AjaxResponse {
+    $rebuiltForm = $this->formBuilder->rebuildForm($this->getFormId(), $formState, $form);
+    return (new AjaxResponse())
+      ->addCommand(new ReplaceCommand("#{$this->ajaxWrapperId()}", $rebuiltForm));
+  }
+
+  /**
+   * Returns the HTML ID of the form wrapper.
+   *
+   * @return string
+   *   The HTML ID of the form wrapper.
+   */
+  protected function ajaxWrapperId(): string {
+    return $this->getFormId() . '_ajax_wrapper';
   }
 
 }

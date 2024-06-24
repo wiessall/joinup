@@ -11,6 +11,7 @@ use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Ajax\AfterCommand;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\CloseModalDialogCommand;
+use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Ajax\OpenModalDialogCommand;
 use Drupal\Core\Ajax\PrependCommand;
 use Drupal\Core\Ajax\RemoveCommand;
@@ -370,6 +371,7 @@ class SubscribeToCollectionForm extends FormBase {
 
       $response->addCommand($event->getCommand());
       $response->addCommand(new AfterCommand('*[data-drupal-messages-fallback]', $messages));
+      $response->addCommand(new InvokeCommand('[name="join_collection_rebuild"]', 'trigger', ['mousedown']));
     }
     elseif ($this->isAjax()) {
       $response->addCommand(new RemoveCommand('#drupal-modal form > [data-drupal-messages], #drupal-modal form > [data-drupal-messages-fallback]'));
