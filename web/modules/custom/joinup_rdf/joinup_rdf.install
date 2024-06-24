@@ -7,9 +7,6 @@
 
 declare(strict_types=1);
 
-use Drupal\Core\File\FileSystemInterface;
-use Drupal\Core\Serialization\Yaml;
-
 /**
  * Performs checks for the RDF entities and its storage.
  *
@@ -44,27 +41,14 @@ function joinup_rdf_requirements(string $phase): array {
  * Delete asset distribution entities.
  */
 function joinup_rdf_update_110900(): string {
-  $store = \Drupal::getContainer()->get('joinup_sparql.graph_store.helper')->createGraphStore();
-  $distributions = $store->get('http://joinup.eu/asset_distribution/published')->toRdfPhp();
-  $dir = 'private://distributions';
-  if (!\Drupal::getContainer()->get('file_system')->prepareDirectory($dir, FileSystemInterface::CREATE_DIRECTORY | FileSystemInterface::MODIFY_PERMISSIONS)) {
-    throw new \Exception("Directory '$dir' cannot be created or is not writable");
-  }
-  $delta = 0;
-  foreach (array_chunk($distributions, 50, TRUE) as $chunk) {
-    file_put_contents($dir . '/' . ++$delta . '.yml', Yaml::encode($chunk));
-  }
-
-  $query = <<<SPARQL
-SELECT *
-FROM <http://joinup.eu/asset_distribution/published>
-WHERE {
-  ?s ?p ?o .
+  \Drupal::entityTypeManager()->getStorage('rdf_type')->load('asset_distribution')->delete();
+  return 'Deleted asset distribution entity bundle.';
 }
-SPARQL;
 
-  $sparql = \Drupal::getContainer()->get('sparql.endpoint');
-  $count = $sparql->query($query)->count();
-  $sparql->update("CLEAR GRAPH <http://joinup.eu/asset_distribution/published>;");
-  return "Exported $delta files of distributions and cleared $count triples.";
+/**
+ * Re run user_update_10000.
+ */
+function joinup_rdf_update_110901(): void {
+  require_once DRUPAL_ROOT . '/core/modules/user/user.install';
+  user_update_10000();
 }
