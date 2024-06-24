@@ -69,6 +69,7 @@ class DeployAndSmokeTestHelper {
       'uuid' => self::IEA_DOCUMENT_UUID,
       'title' => 'Regulation (EU) 2024/903 of the European Parliament and of the Council of 13 March 2024 laying down measures for a high level of public sector interoperability across the Union (Interoperable Europe Act)',
       'type' => 'custom_page',
+      'field_hide_title' => TRUE,
       'status' => 0,
       'field_paragraphs_body' => [
         ['entity' => $layoutParagraph],
