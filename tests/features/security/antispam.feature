@@ -47,7 +47,7 @@ Feature: As a visitor or logged-in user, when I want to post content, the form
     And a modal should open
     Then the form is protected by Antibot
 
-    When I press "No thanks" in the "Modal buttons" region
+    When I press "Don't subscribe" in the "Modal buttons" region
     And I go to the homepage of the "Family photos" collection
     And I click "Add discussion" in the plus button menu
     Then the form is protected by Antibot

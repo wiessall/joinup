@@ -26,13 +26,13 @@ Feature: Subscribing to a collection after joining
     And a modal should open
     And I should see the text "Welcome to Sapient Pearwood" in the "Modal title"
     And I should see the text "You have joined the collection and you are now able to publish content in it." in the "Modal content"
-    And I should see the text "Want to receive notifications, too?" in the "Modal content"
-    And I should see the text "You can receive weekly notifications for this collection, by selecting the subscribe button below" in the "Modal content"
-    And I should see the button "No thanks" in the "Modal buttons" region
-    And I should see the button "Subscribe" in the "Modal buttons" region
+    And I should see the text "Want to subscribe for new content notifications, too?" in the "Modal content"
+    And I should see the text "You can update your notification preferences from your profile page at any time." in the "Modal content"
+    And I should see the button "Don't subscribe" in the "Modal buttons" region
+    And I should see the button "Subscribe to notifications" in the "Modal buttons" region
 
     # The user can decline the subscription.
-    When I press "No thanks" in the "Modal buttons" region
+    When I press "Don't subscribe" in the "Modal buttons" region
     Then the modal should be closed
     And I should not be subscribed to any bundle from the "Sapient Pearwood" collection
 
@@ -45,7 +45,7 @@ Feature: Subscribing to a collection after joining
     # animation to finish manually otherwise, the button is clicked too fast
     # and the modal is not dismissed.
     And I wait for 1 second
-    When I press "Subscribe" in the "Modal buttons" region
+    When I press "Subscribe to notifications" in the "Modal buttons" region
     Then the modal should be closed
     And I should see the success message "You have been subscribed to Drop bears and will receive weekly notifications. To manage your notifications go to My subscriptions in your user menu."
     And I should have the following content subscriptions:
@@ -57,11 +57,11 @@ Feature: Subscribing to a collection after joining
     Then a modal should open
     And I should see the text "Welcome to Troll ducks" in the "Modal title"
     And I should see the text "When your membership is approved you will be able to publish content in it." in the "Modal content"
-    And I should see the text "Want to receive notifications, too?" in the "Modal content"
-    And I should see the text "You can receive weekly notifications for this collection, by selecting the subscribe button below" in the "Modal content"
-    And I should see the button "No thanks" in the "Modal buttons" region
-    And I should see the button "Subscribe" in the "Modal buttons" region
-    When I press "No thanks" in the "Modal buttons" region
+    And I should see the text "Want to subscribe for new content notifications, too?" in the "Modal content"
+    And I should see the text "You can update your notification preferences from your profile page at any time." in the "Modal content"
+    And I should see the button "Don't subscribe" in the "Modal buttons" region
+    And I should see the button "Subscribe to notifications" in the "Modal buttons" region
+    When I press "Don't subscribe" in the "Modal buttons" region
     Then the modal should be closed
     And I should not be subscribed to any bundle from the "Troll ducks" collection
 
@@ -71,7 +71,7 @@ Feature: Subscribing to a collection after joining
     Then a modal should open
     # Wait for the animation to finish.
     And I wait for 1 second
-    When I press "Subscribe" in the "Modal buttons" region
+    When I press "Subscribe to notifications" in the "Modal buttons" region
     Then the modal should be closed
     And I should see the success message "You have been subscribed to Swamp dragons and will receive weekly notifications once your membership is approved."
     And I should have the following content subscriptions:

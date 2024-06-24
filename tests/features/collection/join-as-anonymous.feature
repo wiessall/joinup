@@ -52,9 +52,9 @@ Feature: Joining a collection as an anonymous user
     # Quick check without pressing buttons, this is fully tested in the
     # subscribe-on-join scenario.
     And I should see the text "Welcome to Reannual plants" in the "Modal title"
-    And I should see the text "Want to receive notifications, too?" in the "Modal content"
-    And I should see the button "No thanks" in the "Modal buttons" region
-    And I should see the button "Subscribe" in the "Modal buttons" region
+    And I should see the text "Want to subscribe for new content notifications, too?" in the "Modal content"
+    And I should see the button "Don't subscribe" in the "Modal buttons" region
+    And I should see the button "Subscribe to notifications" in the "Modal buttons" region
 
     # The modal should not open when visiting the page for a second time.
     When I reload the page
@@ -102,9 +102,9 @@ Feature: Joining a collection as an anonymous user
     And the "Vul nuts" collection should have 1 pending member
     And a modal should open
     And I should see the text "Welcome to Vul nuts" in the "Modal title"
-    And I should see the text "Want to receive notifications, too?" in the "Modal content"
-    And I should see the button "No thanks" in the "Modal buttons" region
-    And I should see the button "Subscribe" in the "Modal buttons" region
+    And I should see the text "Want to subscribe for new content notifications, too?" in the "Modal content"
+    And I should see the button "Don't subscribe" in the "Modal buttons" region
+    And I should see the button "Subscribe to notifications" in the "Modal buttons" region
 
     Given I am an anonymous user
     When I go to the homepage of the "Vul nuts" collection
@@ -162,9 +162,9 @@ Feature: Joining a collection as an anonymous user
     # Quick check without pressing buttons, this is fully tested in the
     # subscribe-on-join scenario.
     And I should see the text "Welcome to Reannual plants" in the "Modal title"
-    And I should see the text "Want to receive notifications, too?" in the "Modal content"
-    And I should see the button "No thanks" in the "Modal buttons" region
-    And I should see the button "Subscribe" in the "Modal buttons" region
+    And I should see the text "Want to subscribe for new content notifications, too?" in the "Modal content"
+    And I should see the button "Don't subscribe" in the "Modal buttons" region
+    And I should see the button "Subscribe to notifications" in the "Modal buttons" region
 
     # The modal should not open when visiting the page for a second time.
     When I reload the page
@@ -196,9 +196,9 @@ Feature: Joining a collection as an anonymous user
     And the "Vul nuts" collection should have 1 pending member
     And a modal should open
     And I should see the text "Welcome to Vul nuts" in the "Modal title"
-    And I should see the text "Want to receive notifications, too?" in the "Modal content"
-    And I should see the button "No thanks" in the "Modal buttons" region
-    And I should see the button "Subscribe" in the "Modal buttons" region
+    And I should see the text "Want to subscribe for new content notifications, too?" in the "Modal content"
+    And I should see the button "Don't subscribe" in the "Modal buttons" region
+    And I should see the button "Subscribe to notifications" in the "Modal buttons" region
 
     When I reload the page
     And I wait for AJAX to finish
