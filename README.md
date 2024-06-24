@@ -306,9 +306,9 @@ See `\Drupal\joinup\Context\UpdateContext`.
 In order to prevent stale code in tests, the CI runs the following command to
 detect unused Behat step definitions, and will fail if any are found:
 ```shell
-  ddev run testing:audit-behat
+  ddev run testing:unused-behat
 ```
-See the `audit` Behat profile in [behat.yml.dist](behat.yml.dist).
+See the `unused` Behat profile in [behat.yml.dist](behat.yml.dist).
 Relies on [nicwortel/behat-unused-step-definitions-extension](https://github.com/nicwortel/behat-unused-step-definitions-extension)
 
 #### PHPUnit testing
