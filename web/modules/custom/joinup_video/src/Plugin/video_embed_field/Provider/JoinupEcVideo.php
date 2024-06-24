@@ -96,7 +96,7 @@ class JoinupEcVideo extends ProviderPluginBase {
    */
   protected function getTimeIndex(): string {
     preg_match('#[&?]starttime=(?<time_index>\d+)#i', $this->getInput(), $matches);
-    return $matches['time_index'] ?? 0;
+    return $matches['time_index'] ?? '0';
   }
 
   /**
