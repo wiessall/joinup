@@ -33,3 +33,23 @@ function joinup_publication_date_update_111001(&$sandbox): void {
   \Drupal::entityDefinitionUpdateManager()
     ->installFieldStorageDefinition('published_at', 'rdf_entity', 'published_date', $field_storage_definition);
 }
+
+/**
+ * Add Publication date to RDF entities.
+ */
+function joinup_publication_date_update_110901(&$sandbox): void {
+  /** @var \Drupal\sparql_entity_storage\Driver\Database\sparql\ConnectionInterface $sparql */
+  $sparql = \Drupal::service('sparql.endpoint');
+
+  $bundles = ['asset_distribution', 'asset_release', 'collection', 'solution'];
+  foreach ($bundles as $bundle) {
+    $sparql->query("WITH <http://joinup.eu/{$bundle}/published>
+      INSERT {
+        ?entity <http://joinup.eu/collection/published-at> ?created .
+      }
+      WHERE {
+        ?entity <http://purl.org/dc/terms/issued> ?created .
+        FILTER NOT EXISTS { ?entity <http://joinup.eu/collection/published-at> [] . }
+      }");
+  }
+}
