@@ -2700,4 +2700,21 @@ class FeatureContext extends RawDrupalContext {
     sleep(1);
   }
 
+  /**
+   * Asserts that configuration is editable or locked.
+   *
+   * @param string $state
+   *   The state of the configuration. Either 'locked' or 'unlocked'.
+   *
+   * @Then the configuration should be :state
+   */
+  public function theConfigurationState(string $state): void {
+    \assert(in_array($state, ['locked', 'unlocked']));
+
+    /** @var \Drupal\joinup_core\ConfigReadOnlyInterface $fileReadOnly */
+    $fileReadOnly = \Drupal::service('joinup_core.file_config_read_only');
+
+    Assert::assertTrue($fileReadOnly->isReadOnlyEnabled() === ($state === 'locked'));
+  }
+
 }
