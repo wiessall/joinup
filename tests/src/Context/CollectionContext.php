@@ -24,10 +24,12 @@ use Drupal\joinup\Traits\WorkflowTrait;
 use Drupal\joinup_collection\JoinupCollectionHelper;
 use Drupal\joinup_community_content\CommunityContentHelper;
 use Drupal\joinup_group\ContentCreationOptions;
+use Drupal\meta_entity\Entity\MetaEntity;
 use Drupal\og\OgRoleInterface;
 use Drupal\og_menu\Tests\Traits\OgMenuTrait;
 use Drupal\sparql_entity_storage\UriEncoder;
 use Drupal\user\Entity\User;
+use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\ExpectationFailedException;
 
 /**
@@ -761,6 +763,61 @@ class CollectionContext extends RawDrupalContext {
     }
 
     $node->collection = $collection->label();
+  }
+
+  /**
+   * Sets a collection settings (meta entity) field to the given value.
+   *
+   * @param string $collectionLabel
+   *   The label of the collection.
+   * @param string $config
+   *   The configuration (field name) of the collection's settings meta entity.
+   * @param string $value
+   *   The new value of the meta entity field. This should be an entity label if
+   *   the field is an entity reference field.
+   * @param string|null $entityTypeId
+   *   The entity type ID (or alias) if the value is an entity reference.
+   *
+   * @Given the :config setting of the :collectionLabel collection is set to :value
+   * @Given the :config setting of the :collectionLabel collection is set to :value :entityTypeId
+   */
+  public function givenCollectionSetting(
+    string $collectionLabel,
+    string $config,
+    string $value,
+    ?string $entityTypeId = NULL,
+  ): void {
+    $collection = $this->getEntityByLabel('rdf_entity', $collectionLabel, 'collection');
+    Assert::assertInstanceOf(CollectionInterface::class, $collection);
+    $fieldName = preg_replace('/\s+/', '_', mb_strtolower($config));
+
+    try {
+      $collection->getSetting($fieldName);
+    }
+    catch (\InvalidArgumentException) {
+      Assert::fail(sprintf(
+        "The '%s' setting does not exist. (Tried to get field name '%s'.)",
+        $config,
+        $fieldName,
+      ));
+    }
+
+    // Assume entity reference field and an entity label in the $value variable.
+    if (is_string($entityTypeId)) {
+      $value = $this->getEntityByLabel(static::translateEntityTypeAlias($entityTypeId), $labelToSearchFor = $value);
+      Assert::assertNotEmpty(
+        $value,
+        sprintf(
+          "Cannot find '%s' entity with label '%s'.",
+          $entityTypeId,
+          $labelToSearchFor
+        ),
+      );
+    }
+
+    MetaEntity::loadOrCreate("collection_settings", $collection)
+      ->set($fieldName, $value)
+      ->save();
   }
 
 }
