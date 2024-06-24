@@ -181,4 +181,4 @@ commands:
     - task: run
       command: testing:lint-twig
     - task: run
-      command: testing:audit-behat
+      command: testing:unused-behat
