@@ -66,41 +66,21 @@ index 4ff97d57dc1edfabd9d3cd2289454c7b53fc98c2..3726fa8cb51e27cedaeec53180a55f2f
        if (!$form.length) {
          return;
 diff --git a/core/modules/media_library/src/Plugin/views/field/MediaLibrarySelectForm.php b/core/modules/media_library/src/Plugin/views/field/MediaLibrarySelectForm.php
-index 203d1cda890999ac545e299e2c12dc89996ba750..d63eb0f7e52b09425e22609bb99e1a4898c1a330 100644
+index 203d1cda890999ac545e299e2c12dc89996ba750..78f39174335ab26218c4baea6a7c83b51eebe885 100644
 --- a/core/modules/media_library/src/Plugin/views/field/MediaLibrarySelectForm.php
 +++ b/core/modules/media_library/src/Plugin/views/field/MediaLibrarySelectForm.php
-@@ -5,6 +5,7 @@
- use Drupal\Core\Ajax\AjaxResponse;
- use Drupal\Core\Ajax\CloseDialogCommand;
- use Drupal\Core\Ajax\MessageCommand;
-+use Drupal\Core\Ajax\ReplaceCommand;
- use Drupal\Core\Form\FormBuilderInterface;
- use Drupal\Core\Form\FormStateInterface;
- use Drupal\Core\Url;
-@@ -152,6 +153,32 @@ public function viewsForm(array &$form, FormStateInterface $form_state) {
+@@ -152,6 +152,20 @@ public function viewsForm(array &$form, FormStateInterface $form_state) {
     *   A command to send the selection to the current field widget.
     */
    public static function updateWidget(array &$form, FormStateInterface $form_state, Request $request) {
 +    if ($form_state->getErrors()) {
-+      // If there are errors, we need to replace the form messages container with the error messages.
-+      $messages = \Drupal::messenger()->all();
-+
-+      // Build the error message output.
-+      $translate = \Drupal::translation();
-+      $output = [
-+        '#theme' => 'status_messages',
-+        '#message_list' => $messages,
-+        '#status_headings' => [
-+          'status' => $translate->translate('Status message'),
-+          'error' => $translate->translate('Error message'),
-+          'warning' => $translate->translate('Warning message'),
-+        ],
-+      ];
-+
-+      // Replace the content of the messages container with the new messages
++      $all_messages = \Drupal::messenger()->all();
 +      $response = new AjaxResponse();
-+      $response->addCommand(new ReplaceCommand('#media-library-messages', $output));
-+
++      foreach ($all_messages as $type => $messages) {
++        foreach ($messages as $message) {
++          $response->addCommand(new MessageCommand($message, '#media-library-messages', ['type' => $type]));
++        }
++      }
 +      // Clear the messages to prevent duplication.
 +      \Drupal::messenger()->deleteAll();
 +
@@ -110,7 +90,7 @@ index 203d1cda890999ac545e299e2c12dc89996ba750..d63eb0f7e52b09425e22609bb99e1a48
      $field_id = $form_state->getTriggeringElement()['#field_id'];
      $selected_ids = $form_state->getValue($field_id);
      $selected_ids = $selected_ids ? array_filter(explode(',', $selected_ids)) : [];
-@@ -182,8 +209,9 @@ public static function updateWidget(array &$form, FormStateInterface $form_state
+@@ -182,8 +196,9 @@ public static function updateWidget(array &$form, FormStateInterface $form_state
     * {@inheritdoc}
     */
    public function viewsFormValidate(array &$form, FormStateInterface $form_state) {
