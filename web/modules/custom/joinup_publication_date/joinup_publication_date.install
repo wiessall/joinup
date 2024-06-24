@@ -10,8 +10,6 @@ declare(strict_types=1);
 use Drupal\Core\Field\BaseFieldDefinition;
 
 /**
- * Implements hook_update_N().
- *
  * Add Publication date field to RDF entities.
  */
 function joinup_publication_date_update_111001(&$sandbox): void {
