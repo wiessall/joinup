@@ -157,9 +157,7 @@ class JoinCollectionForm extends JoinGroupFormBase {
       $rebuiltForm = $this->formBuilder->rebuildForm($this->getFormId(), $form_state, $form);
       $response->addCommand(new ReplaceCommand("#{$this->ajaxWrapperId()}", $rebuiltForm));
 
-      $title = $this->t('Welcome to %collection', [
-        '%collection' => $this->group->label(),
-      ]);
+      $title = $this->t('Welcome to the community!');
       $greetingField = $this->group instanceof CollectionInterface
         ? $this->group->getSetting('greeting')
         : NULL;
