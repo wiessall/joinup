@@ -5,11 +5,13 @@ declare(strict_types=1);
 namespace Drupal\dashboard\Form;
 
 use Drupal\Core\Access\AccessResultInterface;
+use Drupal\Core\Cache\CacheTagsInvalidatorInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
 use Drupal\Core\State\StateInterface;
 use Drupal\Core\Url;
+use Drupal\joinup_core\ConfigReadOnlyInterface;
 use Drupal\joinup_core\Logger\Handler\MailHandler;
 use Drupal\joinup_core\Logger\Handler\TelegramHandler;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -19,20 +21,22 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class DashboardForm extends FormBase {
 
-  /**
-   * Constructs a new form instance.
-   *
-   * @param \Drupal\Core\State\StateInterface $state
-   *   The state service.
-   */
-  public function __construct(protected StateInterface $state) {
+  public function __construct(
+    protected StateInterface $state,
+    protected ConfigReadOnlyInterface $fileConfigReadOnly,
+    protected CacheTagsInvalidatorInterface $invalidator,
+  ) {
   }
 
   /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container): self {
-    return new static($container->get('state'));
+    return new static(
+      $container->get('state'),
+      $container->get('joinup_core.file_config_read_only'),
+      $container->get('cache_tags.invalidator')
+    );
   }
 
   /**
@@ -43,30 +47,6 @@ class DashboardForm extends FormBase {
       '#theme' => 'item_list',
       '#items' => $this->getLinks(),
       '#title' => $this->t('Tasks'),
-    ];
-
-    $form['cas'] = [
-      '#type' => 'details',
-      '#title' => $this->t('Users registration/login'),
-      '#open' => TRUE,
-      'registration_disabled' => [
-        '#type' => 'checkbox',
-        '#title' => $this->t('Disable new accounts registration'),
-        '#default_value' => $this->state->get('joinup_eulogin.registration_disabled', FALSE),
-        '#access' => $this->currentUser()->hasPermission('manage site auto-registration'),
-      ],
-      'accounts_approve' => [
-        '#type' => 'checkbox',
-        '#title' => $this->t('New accounts need approval'),
-        '#default_value' => $this->state->get('joinup_eulogin.accounts_approve', FALSE),
-        '#access' => $this->currentUser()->hasPermission('manage site auto-registration'),
-      ],
-      'debug' => [
-        '#type' => 'checkbox',
-        '#title' => $this->t('CAS debug mode'),
-        '#default_value' => $this->state->get('joinup_eulogin.cas_debug', FALSE),
-        '#access' => $this->currentUser()->hasPermission('cas debug mode'),
-      ],
     ];
 
     $log_alerts = $this->state->get('joinup.log_alerts', $this->getLogAlertsDefaultSettings());
@@ -116,54 +96,51 @@ class DashboardForm extends FormBase {
     $form['actions'] = [
       '#type' => 'actions',
       '#access' => $this->getFormElementsAccess($form),
-      'submit' => [
-        '#type' => 'submit',
-        '#value' => $this->t('Submit'),
-      ],
+    ];
+    $form['actions']['submit'] = [
+      '#type' => 'submit',
+      '#value' => $this->t('Submit'),
+    ];
+
+    $hasEnableDisablePermission = $this->currentUser()->hasPermission('enable/disable config readonly');
+    $form['actions']['enable'] = [
+      '#type' => 'submit',
+      '#value' => $this->t('Enable config readonly'),
+      '#submit' => ['::enableConfigSubmitForm'],
+      '#access' => $hasEnableDisablePermission && !$this->fileConfigReadOnly->isReadOnlyEnabled(),
+    ];
+    $form['actions']['disable'] = [
+      '#type' => 'submit',
+      '#value' => $this->t('Disable config readonly'),
+      '#submit' => ['::disableConfigSubmitForm'],
+      '#access' => $hasEnableDisablePermission && $this->fileConfigReadOnly->isReadOnlyEnabled(),
     ];
 
     return $form;
   }
 
   /**
+   * Enable the configuration submit form.
+   */
+  public function enableConfigSubmitForm(): void {
+    $this->fileConfigReadOnly->enableReadOnly();
+    $this->invalidator->invalidateTags(['joinup_user:read_only_config']);
+    $this->messenger()->addStatus($this->t('Enabled config readonly'));
+  }
+
+  /**
+   * Disables the config submit form.
+   */
+  public function disableConfigSubmitForm(): void {
+    $this->fileConfigReadOnly->disableReadOnly();
+    $this->invalidator->invalidateTags(['joinup_user:read_only_config']);
+    $this->messenger()->addStatus($this->t('Disabled config readonly'));
+  }
+
+  /**
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state): void {
-    $registration_disabled = (bool) $form_state->getValue(['registration_disabled']);
-    if ($registration_disabled !== $form['cas']['registration_disabled']['#default_value']) {
-      if ($registration_disabled) {
-        $this->state->set('joinup_eulogin.registration_disabled', TRUE);
-        $this->messenger()->addWarning($this->t('Registering new users to Joinup is disabled'));
-      }
-      else {
-        $this->state->delete('joinup_eulogin.registration_disabled');
-        $this->messenger()->addStatus($this->t('Registering new users to Joinup is enabled'));
-      }
-    }
-    $accounts_approve = (bool) $form_state->getValue(['accounts_approve']);
-    if ($accounts_approve !== $form['cas']['accounts_approve']['#default_value']) {
-      if ($accounts_approve) {
-        $this->state->set('joinup_eulogin.accounts_approve', TRUE);
-        $this->messenger()->addWarning($this->t('Registering new users to Joinup requires approval is enabled'));
-      }
-      else {
-        $this->state->delete('joinup_eulogin.accounts_approve');
-        $this->messenger()->addStatus($this->t('Registering new users to Joinup requires approval is disabled'));
-      }
-    }
-    $cas_debug = (bool) $form_state->getValue(['debug']);
-    if ($cas_debug !== $form['cas']['debug']['#default_value']) {
-      if ($cas_debug) {
-        $this->state->set('joinup_eulogin.cas_debug', TRUE);
-        $this->messenger()->addWarning($this->t('CAS debug mode enabled'));
-      }
-      else {
-        $this->state->delete('joinup_eulogin.cas_debug');
-        $this->messenger()->addStatus($this->t('CAS debug mode disabled'));
-      }
-      $this->configFactory()->reset('cas.settings');
-    }
-
     $log_alerts = $form_state->getValue('log_alerts');
     if ($log_alerts !== $this->state->get('log_alerts', $this->getLogAlertsDefaultSettings())) {
       $this->state->set('joinup.log_alerts', $log_alerts);
