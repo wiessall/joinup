@@ -14,12 +14,11 @@ use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
-use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
+use Drupal\joinup_group\Traits\MembershipCreateTrait;
 use Drupal\joinup_workflow\ArchivableEntityInterface;
 use Drupal\og\MembershipManagerInterface;
 use Drupal\og\OgMembershipInterface;
-use Drupal\og\OgRoleInterface;
 use Drupal\rdf_entity\RdfInterface;
 use Drupal\user\UserInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -28,6 +27,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * A simple form with a button to join or leave a collection.
  */
 abstract class JoinGroupFormBase extends FormBase implements JoinGroupFormInterface {
+
+  use MembershipCreateTrait;
 
   /**
    * The entity type manager service.
@@ -245,42 +246,9 @@ abstract class JoinGroupFormBase extends FormBase implements JoinGroupFormInterf
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state): void {
-    $og_roles = [$this->loadOgRole($this->group->getEntityTypeId() . '-' . $this->group->bundle() . '-' . OgRoleInterface::AUTHENTICATED)];
-
-    // Take into account the `field_ar_closed` in case of a collection.
-    // @todo Collection specific code does not belong in the generic base class.
-    //   This should be moved to the `JoinCollectionForm` which extends this.
-    $state = $this->group instanceof CollectionInterface && $this->group->isClosed() ? OgMembershipInterface::STATE_PENDING : OgMembershipInterface::STATE_ACTIVE;
-
-    $membership = $this->createMembership($state, $og_roles);
-    $membership->save();
+    $membership = $this->createSaveNewMembership(OgMembershipInterface::STATE_ACTIVE, $this->user, $this->group);
 
     $this->messenger->addStatus($this->group->getNewMembershipSuccessMessage($membership));
-  }
-
-  /**
-   * Creates a membership for the group and the user.
-   *
-   * @param string $state
-   *   The membership state.
-   * @param array $roles
-   *   The role ids to pass in the membership.
-   *
-   * @return \Drupal\og\OgMembershipInterface
-   *   The created membership.
-   */
-  protected function createMembership(string $state, array $roles): OgMembershipInterface {
-    /** @var \Drupal\og\OgMembershipInterface $membership */
-    $membership = $this->entityTypeManager->getStorage('og_membership')->create([
-      'type' => OgMembershipInterface::TYPE_DEFAULT,
-    ]);
-    $membership
-      ->setOwner($this->user)
-      ->setGroup($this->group)
-      ->setState($state)
-      ->setRoles($roles);
-
-    return $membership;
   }
 
   /**
@@ -317,19 +285,6 @@ abstract class JoinGroupFormBase extends FormBase implements JoinGroupFormInterf
    */
   protected function loadUser(int $user_id): UserInterface {
     return $this->entityTypeManager->getStorage('user')->load($user_id);
-  }
-
-  /**
-   * Loads the OG role with the given ID.
-   *
-   * @param string $role_id
-   *   The OG role ID.
-   *
-   * @return \Drupal\og\OgRoleInterface
-   *   The OG role entity.
-   */
-  protected function loadOgRole(string $role_id): OgRoleInterface {
-    return $this->entityTypeManager->getStorage('og_role')->load($role_id);
   }
 
 }
