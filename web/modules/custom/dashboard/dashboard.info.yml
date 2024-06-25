@@ -3,3 +3,5 @@ description: Provides a dashboard for the Joinup project.
 type: module
 package: Joinup
 core_version_requirement: ">= 9.4"
+dependencies:
+  - joinup:joinup_core

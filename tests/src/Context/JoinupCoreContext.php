@@ -247,20 +247,6 @@ class JoinupCoreContext extends RawDrupalContext {
   }
 
   /**
-   * Asserts the content type of the response from the server.
-   *
-   * @param string $header
-   *   The header of the response.
-   * @param string $value
-   *   The expected value.
-   *
-   * @Given the response header :header should match :value
-   */
-  public function assertResponseHeaderMatches(string $header, string $value): void {
-    $this->assertSession()->responseHeaderMatches($header, "/^$value$/");
-  }
-
-  /**
    * Asserts the order of elements.
    *
    * @Then I should see the following quick links menu items in the specified order:

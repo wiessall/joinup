@@ -294,6 +294,23 @@ Testing frameworks used by Joinup:
   ddev exec vendor/bin/behat [arguments and options]
   ```
 
+###### Update / post-update / deploy hooks
+
+Tests covering such hooks should be placed under `tests/features/update` and
+features and/or scenarios should be tagged with `@group-clone` and
+`@update:[function]`, where `[function]` is the update hook/function name.
+See `\Drupal\joinup\Context\UpdateContext`.
+
+###### Unused step definitions
+
+In order to prevent stale code in tests, the CI runs the following command to
+detect unused Behat step definitions, and will fail if any are found:
+```shell
+  ddev run testing:unused-behat
+```
+See the `unused` Behat profile in [behat.yml.dist](behat.yml.dist).
+Relies on [nicwortel/behat-unused-step-definitions-extension](https://github.com/nicwortel/behat-unused-step-definitions-extension)
+
 #### PHPUnit testing
 
 * See https://phpunit.de

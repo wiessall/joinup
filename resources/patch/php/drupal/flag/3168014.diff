@@ -1,0 +1,179 @@
+diff --git a/modules/flag_count/flag_count.module b/modules/flag_count/flag_count.module
+index 6973a4c81cfd6cdd030e2af57b80bb4ffe4387ce..5ab2897885cefec40a5d3693b7b2fa72ec949499 100644
+--- a/modules/flag_count/flag_count.module
++++ b/modules/flag_count/flag_count.module
+@@ -23,5 +23,11 @@ function flag_count_theme() {
+         'flaggable' => NULL,
+       ],
+     ],
++    'flag_count_text' => [
++      'variables' => [
++        'flag' => NULL,
++        'flaggable' => NULL,
++      ],
++    ],
+   ];
+ }
+diff --git a/modules/flag_count/src/Plugin/ActionLink/CountLink.php b/modules/flag_count/src/Plugin/ActionLink/CountLink.php
+index ff878d73ea7745e17952173f3b2cd55aee047c08..01e1c0a4cf15ebb334fac54fcdc0abbafeff9d9b 100644
+--- a/modules/flag_count/src/Plugin/ActionLink/CountLink.php
++++ b/modules/flag_count/src/Plugin/ActionLink/CountLink.php
+@@ -3,8 +3,12 @@
+ namespace Drupal\flag_count\Plugin\ActionLink;
+ 
+ use Drupal\Core\Entity\EntityInterface;
++use Drupal\Core\Session\AccountInterface;
++use Drupal\flag\FlagCountManagerInterface;
+ use Drupal\flag\FlagInterface;
+ use Drupal\flag\Plugin\ActionLink\AJAXactionLink;
++use Symfony\Component\DependencyInjection\ContainerInterface;
++use Symfony\Component\HttpFoundation\Request;
+ 
+ /**
+  * Provides the Count link type.
+@@ -20,20 +24,93 @@ use Drupal\flag\Plugin\ActionLink\AJAXactionLink;
+  */
+ class CountLink extends AJAXactionLink {
+ 
++  /**
++   * The flag count manager.
++   *
++   * @var \Drupal\flag\FlagCountManagerInterface
++   */
++  protected $flagCountManager;
++
++  /**
++   * Build a new link type instance and sets the configuration.
++   *
++   * @param array $configuration
++   *   The configuration array with which to initialize this plugin.
++   * @param string $plugin_id
++   *   The ID with which to initialize this plugin.
++   * @param array $plugin_definition
++   *   The plugin definition array.
++   * @param \Drupal\Core\Session\AccountInterface $current_user
++   *   The current user.
++   * @param \Symfony\Component\HttpFoundation\Request $request
++   *   The current request from the request stack.
++   * @param \Drupal\flag\FlagCountManagerInterface $flag_count
++   *   The flag count manager.
++   */
++  public function __construct(
++    array $configuration,
++    string $plugin_id,
++    array $plugin_definition,
++    AccountInterface $current_user,
++    Request $request,
++    FlagCountManagerInterface $flag_count
++  ) {
++    parent::__construct($configuration, $plugin_id, $plugin_definition, $current_user, $request);
++    $this->flagCountManager = $flag_count;
++  }
++
+   /**
+    * {@inheritdoc}
++   *
++   * @noinspection PhpParamsInspection
+    */
+-  public function getAsFlagLink(FlagInterface $flag, EntityInterface $entity) {
+-    // Get the render array.
+-    $build = parent::getAsFlagLink($flag, $entity);
++  public static function create(
++    ContainerInterface $container,
++    array $configuration,
++    $plugin_id,
++    $plugin_definition
++  ): self {
++    return new static(
++      $configuration,
++      $plugin_id,
++      $plugin_definition,
++      $container->get('current_user'),
++      $container->get('request_stack')->getCurrentRequest(),
++      $container->get('flag.count')
++    );
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public function getAsFlagLink(FlagInterface $flag, EntityInterface $entity): array {
++    $action = $this->getAction($flag, $entity);
++    $access = $flag->actionAccess($action, $this->currentUser, $entity);
++    if ($access->isAllowed()) {
++      // Get the render array.
++      $build = parent::getAsFlagLink($flag, $entity);
++
++      // Normally, you'd just override flag.html.twig in your site's theme. For
++      // this example module, we do something more advanced: Provide a new
++      // @ActionLinkType that changes the default theme function.
++      $build['#theme'] = 'flag_count';
++
++      return $build;
++    }
+ 
+-    // Normally, you'd just override flag.html.twig in your site's theme. For
+-    // this example module, we do something more advanced: Provide a new
+-    // @ActionLinkType that changes the default theme function.
+-    $build['#theme'] = 'flag_count';
++    $access = $flag->actionAccess('view', $this->currentUser, $entity);
++    if ($access->isAllowed()) {
++      return [
++        '#theme' => 'flag_count_text',
++        '#flag' => $flag,
++        '#flaggable' => $entity,
++        '#cache' => [
++          'tags' => ['flagging_list:' . $flag->id()],
++        ],
++      ];
++    }
+ 
+-    // Return the modified render array.
+-    return $build;
++    return [];
+   }
+ 
+ }
+diff --git a/modules/flag_count/templates/flag-count-text.html.twig b/modules/flag_count/templates/flag-count-text.html.twig
+new file mode 100644
+index 0000000000000000000000000000000000000000..fc6468215737a46c606245dad1e915c3d3fa81a4
+--- /dev/null
++++ b/modules/flag_count/templates/flag-count-text.html.twig
+@@ -0,0 +1,21 @@
++{#
++/**
++ * @file
++ * Flag count text template
++ *
++ * Available variables:
++ * - flag: The flag object.
++ * - flaggable: The flaggable entity.
++ */
++#}
++{% apply spaceless %}
++  {# Set the remaining Flag CSS classes. #}
++  {% set classes = [
++    'flag',
++    'flag-' ~ flag.id()|clean_class,
++  ] %}
++
++  {% set count = flagcount(flag, flaggable) %}
++
++  <div class="{{ classes|join(' ') }}">{{ flag.label() }}: <span>{{ count }}</span></div>
++{% endapply %}
+diff --git a/src/FlagType/FlagTypeBase.php b/src/FlagType/FlagTypeBase.php
+index 6a33b1e0d56804e61d026f63f325d0cd47b286af..611946baf4913094a0a22c232b2f01ecac628c6f 100644
+--- a/src/FlagType/FlagTypeBase.php
++++ b/src/FlagType/FlagTypeBase.php
+@@ -164,6 +164,11 @@ abstract class FlagTypeBase extends PluginBase implements FlagTypePluginInterfac
+           '%flag_title' => $flag->label(),
+         ]),
+       ],
++      'view ' . $flag->id() => [
++        'title' => $this->t('View %flag_title', [
++          '%flag_title' => $flag->label(),
++        ]),
++      ],
+     ];
+   }
+ 

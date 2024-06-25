@@ -38,10 +38,7 @@ class AssetDistributionContext extends RawDrupalContext {
    * @param string $asset_distribution
    *   The title of the asset distribution.
    *
-   * @When I go to (the homepage of )the :asset_distribution distribution
-   * @When I visit (the homepage of )the :asset_distribution distribution
-   * @When I go to (the homepage of )the :asset_distribution asset distribution
-   * @When I visit (the homepage of )the :asset_distribution asset distribution
+   * @When I go to (the homepage of )the :asset_distribution (asset )distribution
    *
    * @throws \Drupal\Core\Entity\EntityMalformedException
    */
@@ -275,26 +272,6 @@ class AssetDistributionContext extends RawDrupalContext {
     $result = $this->getSession()->getPage()->find('xpath', "//a[contains(., '{$distribution->label()}')]/ancestor::li[contains(concat(' ', @class, ' '), ' releases__item ')]//a[@href='{$link}' and contains(concat(' ', @class, ' '), ' btn ') and normalize-space(text()) = '{$link_type}']");
     if (empty($result)) {
       throw new \Exception(sprintf('No link was found in the "%s" distribution on the page %s', $distribution->label(), $this->getSession()->getCurrentUrl()));
-    }
-  }
-
-  /**
-   * Checks that a distribution in compact view does not contain download links.
-   *
-   * The compact view is used for example in the "Downloads" page.
-   *
-   * @param string $distribution
-   *   The name of the distribution.
-   *
-   * @throws \Exception
-   *   Thrown if the link was found.
-   *
-   * @Then the :distribution( asset) distribution should not have any download urls
-   */
-  public function assertLinkNotPresentInCompactDistributionTile(string $distribution): void {
-    $link = $this->getSession()->getPage()->find('xpath', "//a[contains(text(), '$distribution')]/ancestor::div[contains(concat(' ', @class, ' '), ' releases__item ')]//a[contains(text(), 'External') or contains(text(), 'Download')]");
-    if (!empty($link)) {
-      throw new \Exception(sprintf('Asset distribution "%s" contains download link(s).', $distribution));
     }
   }
 

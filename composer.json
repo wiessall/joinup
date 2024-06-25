@@ -143,6 +143,7 @@
         "lovers-of-behat/table-extension": "^1.4",
         "mikey179/vfsstream": "~1.6",
         "ml/json-ld": "^1.2",
+        "nicwortel/behat-unused-step-definitions-extension": "dev-master",
         "palantirnet/drupal-rector": "^0.20.1",
         "pear/http_request2": "~2.4",
         "php-task-runner/composer": "dev-toolkit-runner",
@@ -310,9 +311,6 @@
             "drupal/email_confirmer": {
                 "Support for HTML mails @see https://www.drupal.org/i/3047124": "resources/patch/php/drupal/email_confirmer/3047124.diff"
             },
-            "drupal/entityqueue": {
-                "Undefined array key \"add_more\" @see https://www.drupal.org/project/entityqueue/issues/3388852": "resources/patch/php/drupal/entityqueue/3388852.diff"
-            },
             "drupal/entity_legal": {
                 "Custom agree validation error message and submit button label @see https://www.drupal.org/project/entity_legal/issues/3293017": "resources/patch/php/drupal/entity_legal/3293017.patch"
             },
@@ -341,7 +339,7 @@
                 "URL not sumbitted (missing context in JS behavior detach) @see https://www.drupal.org/i/3450664": "resources/patch/php/drupal/file_url/3450664.diff"
             },
             "drupal/flag": {
-                "TypeError: Argument 1 passed to FlagCount::count() must implement interface @see https://www.drupal.org/project/flag/issues/3168014": "resources/patch/php/drupal/flag/3168014-46.patch",
+                "TypeError: Argument 1 passed to FlagCount::count() must implement interface @see https://www.drupal.org/project/flag/issues/3168014": "resources/patch/php/drupal/flag/3168014.diff",
                 "AJAX link broken if flaggable entity id is string @see https://www.drupal.org/project/flag/issues/3359007": "resources/patch/php/drupal/flag/3359007-47.patch",
                 "Disclose flagging view mode in flag theming @see https://www.drupal.org/project/flag/issues/3049155": "resources/patch/php/drupal/flag/3049155-16.patch",
                 "[Drupal 10.2] Deprecated sequence type schema definition @see https://www.drupal.org/i/3410265": "resources/patch/php/drupal/flag/3410265.diff",
@@ -359,11 +357,7 @@
                 "Link shown after the autocomplete selection is the bare node/xxx link, not the alias @see https://www.drupal.org/node/2877535": "resources/patch/php/drupal/linkit/2877535.patch"
             },
             "drupal/layout_paragraphs": {
-                "Allow to drag and drop nested paragraphs @see https://www.drupal.org/project/layout_paragraphs/issues/3401176": "resources/patch/php/drupal/layout_paragraphs/3401176.patch",
-                "Buttons are duplicated when form has validation errors. @see https://www.drupal.org/i/3265794": "resources/patch/php/drupal/layout_paragraphs/3265794.diff"
-            },
-            "drupal/menu_link_destination": {
-                "Error: Call to a member function getOption() on null @see https://www.drupal.org/project/menu_link_destination/issues/3251757": "resources/patch/php/drupal/menu_link_destination/menu_link_destination-fatal_error_when-no_url-3251757-15.patch"
+                "Allow to drag and drop nested paragraphs @see https://www.drupal.org/project/layout_paragraphs/issues/3401176": "resources/patch/php/drupal/layout_paragraphs/3401176.patch"
             },
             "drupal/message_notify": {
                 "Allow 3rd-party to act before delivery @see https://www.drupal.org/project/message_notify/issues/3314370": "resources/patch/php/drupal/message_notify/3314370.diff"
@@ -424,9 +418,6 @@
             "drupal/stage_file_proxy": {
                 "Fetching does not respect use_imagecache_root when using converted webp image styles @see https://www.drupal.org/i/3402972": "resources/patch/php/drupal/stage_file_proxy/stage_file_proxy-3402972-MR-28f616d8--without-method.diff"
             },
-            "drupal/ui_patterns_settings": {
-                "Fix TypeError: array_unshift(): Argument #1 ($array) must be of type array, null given in array_unshift() Caused by Deprecated Hooks in Drupal ~10.2.0 @see https://www.drupal.org/i/3409221": "resources/patch/php/drupal/ui_patterns_settings/ui_patterns_settings-3409221-26.patch"
-            },
             "drupal/video_embed_field": {
                 "Extend support for embed URLs. Option to force privacy @see https://www.drupal.org/project/video_embed_field/issues/3060201 (originally on https://www.drupal.org/node/2899093)": "resources/patch/php/drupal/video_embed_field/3060201.patch",
                 "WYSIWYG Video URL max length limited to 128 characters @see https://www.drupal.org/project/video_embed_field/issues/2908562": "resources/patch/php/drupal/video_embed_field/2908562.patch",
@@ -438,6 +429,9 @@
             "drupal/webform": {
                 "Radios or Checkboxes inside Composite not saved @see https://www.drupal.org/project/webform/issues/3216923": "resources/patch/php/drupal/webform/368.diff",
                 "Webform might create invalid link renderable arrays on submission list. @see https://www.drupal.org/project/webform/issues/3441600": "resources/patch/php/drupal/webform/3441600.patch"
+            },
+            "nicwortel/behat-unused-step-definitions-extension": {
+                "Filters improvements (check concrete impl., include/exclude, ignore pattern aliases) - https://github.com/nicwortel/behat-unused-step-definitions-extension/pull/7": "resources/patch/php/nicwortel/behat-unused-step-definitions-extension/filters-improvements-PR_7.diff"
             },
             "sweetrdf/easyrdf": {
                 "Add a method to remove resources from graph @see https://github.com/sweetrdf/easyrdf/pull/44": "resources/patch/php/sweetrdf/easyrdf/44.diff"

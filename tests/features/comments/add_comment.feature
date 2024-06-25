@@ -273,3 +273,46 @@ Feature: Add comments
       | Gossip collection | news         | Rihanna wears pope outfit | published |
       | Gossip collection | discussion   | Is gossip good?           | published |
       | Gossip collection | document     | Celebrity scandals 2019   | published |
+
+  Scenario Outline: Anonymized comments
+    Given the following collections:
+      | title           | state     | closed |
+      | Show collection | published | yes    |
+    And <content type> content:
+      | title   | body                                                | collection   | state   |
+      | <title> | How could this ever happen? Moral panic on its way! | <collection> | <state> |
+
+    Given I am logged in as "Miss tell tales"
+    When I go to the content page of the type "<content type>" with the title "<title>"
+    Then the following fields should be present "Create comment, Post as anonymous"
+    And I should see the button "Post comment"
+    And I fill in "Create comment" with "<p>Mr anonymize was doing something<br />weird the other day.<p/>"
+    And I check the box "Post as anonymous"
+    When I press "Post comment"
+    Then I should see the text "Anonymous user"
+
+    When I click "Reply" in comment #1
+    And I fill in "Create comment" with "Comment Anonymous indent 1"
+    And I check the box "Post as anonymous"
+    When I press "Post comment"
+    Then comment #2 should contain the markup "Anonymous user"
+
+    Given I am logged in as a moderator
+    When I go to the content page of the type "<content type>" with the title "<title>"
+    Then I should see the text "Anonymous user (Miss Tales)"
+    Then comment #2 should contain the markup "Anonymous user"
+    Then comment #2 should contain the markup "Miss Tales"
+
+    Given I am an anonymous user
+    When I go to the content page of the type "<content type>" with the title "<title>"
+    Then I should see the text "Anonymous user"
+    Then comment #2 should contain the markup "Anonymous user"
+
+    Examples:
+      | collection         | content type | title                     | state     |
+      | Show collection    | news         | Scandalous busy           | published |
+      | Show collection    | discussion   | Is gossip bad or not?     | published |
+      | Show collection    | document     | Wikilikes                 | published |
+      | Gossip collection  | news         | Bosinga wears pope outfit | published |
+      | Gossip collection  | discussion   | Is gossip good or not?    | published |
+      | Gossip collection  | document     | Celebrity scandals 2022   | published |
