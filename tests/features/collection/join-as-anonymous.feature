@@ -51,7 +51,7 @@ Feature: Joining a collection as an anonymous user
     And a modal should open
     # Quick check without pressing buttons, this is fully tested in the
     # subscribe-on-join scenario.
-    And I should see the text "Welcome to Reannual plants" in the "Modal title"
+    And I should see the text "Welcome to the community!" in the "Modal title"
     And I should see the text "Want to subscribe for new content notifications, too?" in the "Modal content"
     And I should see the button "Don't subscribe" in the "Modal buttons" region
     And I should see the button "Subscribe to notifications" in the "Modal buttons" region
@@ -59,7 +59,7 @@ Feature: Joining a collection as an anonymous user
     # The modal should not open when visiting the page for a second time.
     When I reload the page
     And I wait for AJAX to finish
-    Then I should not see the text "Welcome to Reannual plants"
+    Then I should not see the text "Welcome to the community!"
 
     # Now that the user is a member, if we log out and try to join again as an
     # anonymous user, we should be shown an appropriate message.
@@ -76,7 +76,7 @@ Feature: Joining a collection as an anonymous user
     Then I should see the heading "Reannual plants"
     And I should see the success message "You have been logged in."
     And I should see the success message "You already are a member of Reannual plants."
-    And I should not see the text "Welcome to Reannual plants"
+    And I should not see the text "Welcome to the community!"
 
     # Now repeat the whole procedure for a closed collection.
     Given I am an anonymous user
@@ -101,7 +101,7 @@ Feature: Joining a collection as an anonymous user
     And I should see the success message "Your membership to the Vul nuts collection is under approval."
     And the "Vul nuts" collection should have 1 pending member
     And a modal should open
-    And I should see the text "Welcome to Vul nuts" in the "Modal title"
+    And I should see the text "Welcome to the community!" in the "Modal title"
     And I should see the text "Want to subscribe for new content notifications, too?" in the "Modal content"
     And I should see the button "Don't subscribe" in the "Modal buttons" region
     And I should see the button "Subscribe to notifications" in the "Modal buttons" region
@@ -118,7 +118,7 @@ Feature: Joining a collection as an anonymous user
     And I press "Log in"
     Then I should see the heading "Vul nuts"
     And I should see the success message "You have already joined the Vul nuts collection but your membership still needs to be approved by a facilitator."
-    And I should not see the text "Welcome to Vul nuts"
+    And I should not see the text "Welcome to the community!"
 
     # Clean up the user that was created manually during the scenario.
     Then I delete the "Iodine Maccalariat" user
@@ -161,7 +161,7 @@ Feature: Joining a collection as an anonymous user
     And a modal should open
     # Quick check without pressing buttons, this is fully tested in the
     # subscribe-on-join scenario.
-    And I should see the text "Welcome to Reannual plants" in the "Modal title"
+    And I should see the text "Welcome to the community!" in the "Modal title"
     And I should see the text "Want to subscribe for new content notifications, too?" in the "Modal content"
     And I should see the button "Don't subscribe" in the "Modal buttons" region
     And I should see the button "Subscribe to notifications" in the "Modal buttons" region
@@ -169,7 +169,7 @@ Feature: Joining a collection as an anonymous user
     # The modal should not open when visiting the page for a second time.
     When I reload the page
     And I wait for AJAX to finish
-    Then I should not see the text "Welcome to Reannual plants"
+    Then I should not see the text "Welcome to the community!"
 
     # Repeat the scenario for a closed collection.
     Given I am an anonymous user
@@ -195,14 +195,14 @@ Feature: Joining a collection as an anonymous user
     And I should see the success message "Your membership to the Vul nuts collection is under approval."
     And the "Vul nuts" collection should have 1 pending member
     And a modal should open
-    And I should see the text "Welcome to Vul nuts" in the "Modal title"
+    And I should see the text "Welcome to the community!" in the "Modal title"
     And I should see the text "Want to subscribe for new content notifications, too?" in the "Modal content"
     And I should see the button "Don't subscribe" in the "Modal buttons" region
     And I should see the button "Subscribe to notifications" in the "Modal buttons" region
 
     When I reload the page
     And I wait for AJAX to finish
-    Then I should not see the text "Welcome to Vul nuts"
+    Then I should not see the text "Welcome to the community!"
 
   Scenario: Show relevant message to a blocked user that tries to rejoin a collection as anonymous
     Given users:

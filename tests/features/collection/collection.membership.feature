@@ -49,3 +49,18 @@ Feature: Tests membership to Joinup collection.
 
     Given I am on the members page of "Joinup"
     Then the available options in the "Action" select should not include the "Delete the selected membership(s)" options
+
+  @javascript
+  Scenario Outline: Membership / signup form title is customizable
+    Given the greeting setting of the "An arbitrary collection" collection is set to "<greeting value>"
+    And I am logged in as an "authenticated user"
+    When I go to the homepage of the "An arbitrary collection" collection
+    Then I should see the button "Join this collection" in the Header region
+    When I press "Join this collection" in the Header region
+    Then a modal should open
+    Then I should see the text "<expected modal title>" in the "Modal title" region
+
+    Examples:
+      | greeting value | expected modal title      |
+      |                | Welcome to the community! |
+      | Hello, friend! | Hello, friend!            |

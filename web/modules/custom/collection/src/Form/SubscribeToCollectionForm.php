@@ -480,7 +480,7 @@ class SubscribeToCollectionForm extends FormBase {
       : NULL;
     $title = $greetingField && !$greetingField->isEmpty()
       ? Html::escape($greetingField->first()->getString())
-      : $this->t('Welcome to %collection', ['%collection' => $rdf_entity->label()]);
+      : $this->t('Welcome to the community!');
 
     $modal_form = $this->formBuilder->getForm(SubscribeToCollectionForm::class, $rdf_entity);
     $modal_form['#attached']['library'][] = 'core/drupal.dialog.ajax';
