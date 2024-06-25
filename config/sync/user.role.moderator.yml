@@ -51,6 +51,7 @@ dependencies:
     - paragraphs_type_permissions
     - rdf_draft
     - rdf_entity
+    - replicate_ui
     - role_delegation
     - sitewide_alert
     - solution
@@ -209,7 +210,6 @@ permissions:
   - 'manage group announcements'
   - 'manage group content'
   - 'manage newsroom newsletter subscriptions'
-  - 'manage site auto-registration'
   - 'manage solutions'
   - 'moderate entity parents'
   - 'perform announcement workflow approve transition on any entity'
@@ -277,6 +277,7 @@ permissions:
   - 'perform solution_workflow workflow unarchive transition on any entity'
   - 'perform solution_workflow workflow update_validated transition on any entity'
   - 'perform solution_workflow workflow validate transition on any entity'
+  - 'replicate entities'
   - 'revert all sitewide alert revisions'
   - 'unarchived community content'
   - 'unfeature entity'

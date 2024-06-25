@@ -24,10 +24,6 @@ function ventuno_preprocess_block(array &$variables): void {
     case 'entity_unpublished':
       $variables['attributes']['class'][] = 'my-5';
       break;
-
-    case 'sitewide_alert_block':
-      $variables['#attached']['library'][] = 'ventuno/alert';
-      break;
   }
 
   // List of the "layout-blocks" (mainly in the Home page) that share common

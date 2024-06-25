@@ -30,7 +30,7 @@ class OgMembershipSubscriber extends NotificationSubscriberBase {
   /**
    * {@inheritdoc}
    */
-  public static function getSubscribedEvents() {
+  public static function getSubscribedEvents(): array {
     $events[NotificationEvents::OG_MEMBERSHIP_MANAGEMENT] = [
       ['onCreate'],
       ['onUpdate'],
