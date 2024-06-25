@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\collection\Entity;
 
 use Drupal\Component\Utility\NestedArray;
+use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\contact_information\Traits\ContactInformationTrait;
@@ -155,6 +156,21 @@ class Collection extends Rdf implements CollectionInterface {
    */
   public function isClosed(): bool {
     return (bool) $this->getMainPropertyValue('field_ar_closed');
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function hasCodeOfConduct(): bool {
+    try {
+      $codeOfConduct = $this->getSetting('code_of_conduct')->entity;
+      return $this->isClosed() &&
+        $codeOfConduct instanceof ContentEntityInterface &&
+        $codeOfConduct->access('view');
+    }
+    catch (\Exception) {
+    }
+    return FALSE;
   }
 
   /**
