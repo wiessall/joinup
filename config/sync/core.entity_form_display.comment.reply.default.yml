@@ -4,6 +4,7 @@ status: true
 dependencies:
   config:
     - comment.type.reply
+    - field.field.comment.reply.anonymize
     - field.field.comment.reply.field_attachment
     - field.field.comment.reply.field_body
   module:
@@ -16,6 +17,13 @@ targetEntityType: comment
 bundle: reply
 mode: default
 content:
+  anonymize:
+    type: boolean_checkbox
+    weight: 3
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
   author:
     weight: 1
     region: content
