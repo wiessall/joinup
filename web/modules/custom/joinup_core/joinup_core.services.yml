@@ -31,3 +31,12 @@ services:
     arguments: ['@logger.channel.joinup_core']
     tags:
       - { name: event_subscriber }
+
+  joinup_core.file_config_read_only:
+    class: Drupal\joinup_core\FileConfigReadOnly
+    arguments: [ '@file_system' ]
+
+  joinup_core.twig_extension:
+    class: Drupal\joinup_core\TwigExtension\DummyTextTwigExtension
+    tags:
+      - { name: twig.extension }

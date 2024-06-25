@@ -682,3 +682,21 @@ function joinup_user_module_implements_alter(array &$implementations, string $ho
     $implementations['joinup_user'] = $group;
   }
 }
+
+/**
+ * Implements hook_user_logout().
+ */
+function joinup_user_user_logout(AccountInterface $account): void {
+  /** @var \Drupal\joinup_core\ConfigReadOnlyInterface $fileConfigReadOnly */
+  $fileConfigReadOnly = \Drupal::service('joinup_core.file_config_read_only');
+  /** @var \Drupal\Core\Cache\CacheTagsInvalidatorInterface $cacheTagsInvalidator */
+  $cacheTagsInvalidator = \Drupal::service('cache_tags.invalidator');
+  $logger = \Drupal::logger('joinup_user');
+
+  if ($account->hasPermission('enable/disable config readonly') &&
+    !$fileConfigReadOnly->isReadOnlyEnabled()) {
+    $fileConfigReadOnly->enableReadOnly();
+    $logger->info('Config read-only mode has been restored/enabled.');
+    $cacheTagsInvalidator->invalidateTags(['joinup_user:read_only_config']);
+  }
+}

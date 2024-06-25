@@ -38,7 +38,7 @@ user_accounts:
 error_handling:
   login_failure_page: /
   message_validation_failure: 'There was a problem validating your login, please contact a site administrator.'
-  message_no_local_account: 'You do not have an account on this website. Please contact a site administrator.'
+  message_no_local_account: 'Registering new accounts to Joinup is temporarily disabled. Please come back later.'
   message_subscriber_denied_reg: 'You do not have access to log in to this website. Please contact a site administrator if you believe you should have access.'
   message_subscriber_denied_login: 'You do not have access to log in to this website. Please contact a site administrator if you believe you should have access.'
   message_account_blocked: 'Your account is blocked or has not been activated. Please contact a site administrator.'

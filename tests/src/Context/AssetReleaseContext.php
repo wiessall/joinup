@@ -38,7 +38,6 @@ class AssetReleaseContext extends RawDrupalContext {
    *   The name of the asset_release.
    *
    * @When I go to (the homepage of )the :asset_release release
-   * @When I visit (the homepage of )the :asset_release release
    *
    * @throws \Drupal\Core\Entity\EntityMalformedException
    */
