@@ -62,4 +62,13 @@ interface CollectionInterface extends RdfInterface, EntityPublicationTimeInterfa
    */
   public function isClosed(): bool;
 
+  /**
+   * Whether there is any Code of Conduct what new members must accept.
+   *
+   * @return bool
+   *   TRUE if there is a Code of Conduct what new members must accept before
+   *   joining, FALSE otherwise.
+   */
+  public function hasCodeOfConduct(): bool;
+
 }
