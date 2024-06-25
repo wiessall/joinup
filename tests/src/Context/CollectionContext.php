@@ -85,7 +85,6 @@ class CollectionContext extends RawDrupalContext {
    * Navigates to the propose collection form.
    *
    * @When I go to the propose collection form
-   * @When I visit the propose collection form
    */
   public function visitProposeCollectionForm(): void {
     $this->visitPath('propose/collection');
@@ -468,10 +467,8 @@ class CollectionContext extends RawDrupalContext {
    *
    * @throws \Exception
    *    Throws an exception when the user is not found.
-   *
-   * @Given (the user ):username should be the owner of the :rdf_entity collection
    */
-  public function assertCollectionOwnership(string $username, string $rdf_entity): void {
+  protected function assertCollectionOwnership(string $username, string $rdf_entity): void {
     $user = user_load_by_name($username);
     if (!$user instanceof AccountInterface) {
       throw new \Exception("User {$username} could not be found.");

@@ -1,0 +1,23 @@
+uuid: d599c6ec-9f90-4389-8544-e2885a23755a
+langcode: en
+status: true
+dependencies:
+  config:
+    - comment.type.comment
+    - field.storage.comment.anonymize
+id: comment.comment.anonymize
+field_name: anonymize
+entity_type: comment
+bundle: comment
+label: 'Post as anonymous'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

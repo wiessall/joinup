@@ -190,22 +190,6 @@ class EifContext extends RawDrupalContext {
   }
 
   /**
-   * Navigates to the EIF perspective edit form of the given solution.
-   *
-   * @param string $solution
-   *   The solution label.
-   *
-   * @Given I go to the EIF perspective edit form of the :solution solution
-   */
-  public function goToEifEditFormOfSolution(string $solution): void {
-    $solution = $this->getEntityByLabel('rdf_entity', $solution, 'solution');
-    $url = Url::fromRoute('eif.eif_perspective_form', [
-      'rdf_entity' => $solution->id(),
-    ]);
-    $this->visitPath($url->getInternalPath());
-  }
-
-  /**
    * Asserts that there is an EIF perspective entity associated to the solution.
    *
    * @param string $solution
