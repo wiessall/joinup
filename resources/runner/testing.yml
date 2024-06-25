@@ -40,3 +40,11 @@ commands:
   testing:fix-twig:
     - task: exec
       command: ${joinup.dir}/vendor/bin/twig-cs-fixer lint --fix
+
+  # Checks for any unused step definitions, see profile in behat.yml.dist.
+  testing:unused-behat:
+    - task: exec
+      command: |
+        tmp_file=$(mktemp)
+        ${joinup.dir}/vendor/bin/behat --profile=unused --dry-run | tee $tmp_file
+        if grep -q "unused step definition" $tmp_file; then exit 1; fi

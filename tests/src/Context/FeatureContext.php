@@ -37,7 +37,6 @@ use Drupal\joinup\Traits\UserTrait;
 use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\joinup_core\JoinupVersionInterface;
 use Drupal\media\Entity\Media;
-use Drupal\paragraphs\ParagraphInterface;
 use Joinup\TaskRunner\Traits\TaskRunnerTrait;
 use Joinup\Traits\DigitQaPipelineAwareTrait;
 use LoversOfBehat\TableExtension\Hook\Scope\AfterTableFetchScope;
@@ -559,31 +558,6 @@ class FeatureContext extends RawDrupalContext {
   }
 
   /**
-   * Checks that a given image is not present in a given tile.
-   *
-   * @param string $filename
-   *   The filename.
-   * @param string $tile
-   *   The tile title.
-   *
-   * @Then I should not see the image :filename in the :tile tile
-   */
-  public function assertImageNotPresentInRegion(string $filename, string $tile): void {
-    $tileElement = $this->getTileByHeading($tile);
-    Assert::assertNotEmpty($tileElement, "Tile cannot be found");
-    $this->assertImageNotPresent($filename, $tileElement);
-  }
-
-  /**
-   * Maximize the browser window for javascript tests so elements are visible.
-   *
-   * @Given I maximize the browser window
-   */
-  public function maximizeBrowserWindow(): void {
-    $this->getSession()->getDriver()->maximizeWindow();
-  }
-
-  /**
    * Checks that the option with the given text is selected.
    *
    * @param string $text
@@ -604,30 +578,6 @@ class FeatureContext extends RawDrupalContext {
 
     if (!$option->isSelected()) {
       throw new \Exception("The option with text $text is not selected.");
-    }
-  }
-
-  /**
-   * Checks that the option with the given text is not selected.
-   *
-   * @param string $text
-   *   Text value of the option to check.
-   *
-   * @throws \Exception
-   *   Thrown when an option with the given text does not exist, or when it is
-   *   selected.
-   *
-   * @Then the option :option should not be selected
-   */
-  public function assertOptionNotSelected(string $text): void {
-    $option = $this->getSession()->getPage()->find('xpath', '//option[text()="' . $text . '"]');
-
-    if (!$option) {
-      throw new \Exception("Option with text $text not found in the page.");
-    }
-
-    if ($option->isSelected()) {
-      throw new \Exception("The option with text $text is selected.");
     }
   }
 
@@ -737,32 +687,6 @@ class FeatureContext extends RawDrupalContext {
     $radio = $page->find('named', ['radio', $radio]);
     if ($radio->isChecked()) {
       throw new ExpectationException($session->getDriver(), 'The radio button is checked but it should not be.');
-    }
-  }
-
-  /**
-   * Checks that a select element does not have the given text option selected.
-   *
-   * @param string $option
-   *   Text value of the option to find.
-   * @param string $select
-   *   CSS selector of the select field.
-   *
-   * @throws \Exception
-   *
-   * @Then the option with text :option from select :select is not selected
-   */
-  public function assertFieldOptionNotSelected(string $option, string $select): void {
-    $selectField = $this->getSession()->getPage()->find('css', $select);
-    if ($selectField === NULL) {
-      throw new \Exception(sprintf('The select "%s" was not found in the page %s', $select, $this->getSession()->getCurrentUrl()));
-    }
-
-    $optionField = $selectField->find('xpath', '//option[@selected="selected"]');
-    if ($optionField !== NULL) {
-      if ($optionField->getHtml() == $option) {
-        throw new \Exception(sprintf('The option "%s" was selected in the page %s', $option, $this->getSession()->getCurrentUrl()));
-      }
     }
   }
 
@@ -1200,28 +1124,6 @@ class FeatureContext extends RawDrupalContext {
   }
 
   /**
-   * Asserts that the page contains a certain capitalised heading.
-   *
-   * @param string $heading
-   *   The heading to search for.
-   *
-   * @Then I (should )see the capitalised heading :heading
-   */
-  public function assertCapitalisedHeading(string $heading): void {
-    $heading = strtoupper($heading);
-    $element = $this->getSession()->getPage();
-    foreach (['h1', 'h2', 'h3', 'h4', 'h5', 'h6'] as $tag) {
-      $results = $element->findAll('css', $tag);
-      foreach ($results as $result) {
-        if ($result->getText() == $heading) {
-          return;
-        }
-      }
-    }
-    throw new \Exception(sprintf("The text '%s' was not found in any heading on the page %s", $heading, $this->getSession()->getCurrentUrl()));
-  }
-
-  /**
    * Checks multiple headings on the page.
    *
    * Provide data in the following format:
@@ -1455,15 +1357,6 @@ class FeatureContext extends RawDrupalContext {
   }
 
   /**
-   * Checks that the page is not cacheable.
-   *
-   * @Then the page should not be cacheable
-   */
-  public function assertPageNotCacheable(): void {
-    Assert::assertFalse($this->isPageCacheable());
-  }
-
-  /**
    * Checks that the page is cached.
    *
    * @Then the page should be cached
@@ -1567,26 +1460,6 @@ class FeatureContext extends RawDrupalContext {
   }
 
   /**
-   * Asserts that a table row contains a link.
-   *
-   * @param string $link_text
-   *   The link to search for.
-   * @param string $row_text
-   *   Text contained in a row. Must be unique.
-   *
-   * @return \Behat\Mink\Element\NodeElement
-   *   The found link.
-   *
-   * @Given I should see the :link_text link in the :row_text row
-   */
-  public function tableRowContainsLink(string $link_text, string $row_text): NodeElement {
-    $element = $this->getRowByRowText($row_text);
-    $link = $element->findLink($link_text);
-    Assert::assertNotEmpty($link);
-    return $link;
-  }
-
-  /**
    * Clicks a link to a given row.
    *
    * @param string $link_text
@@ -1597,7 +1470,9 @@ class FeatureContext extends RawDrupalContext {
    * @Given I click the :link_text link in the :row_text row
    */
   public function clickLinkInRow(string $link_text, string $row_text): void {
-    $link = $this->tableRowContainsLink($link_text, $row_text);
+    $element = $this->getRowByRowText($row_text);
+    $link = $element->findLink($link_text);
+    Assert::assertNotEmpty($link);
     $link->click();
   }
 
@@ -1629,22 +1504,6 @@ class FeatureContext extends RawDrupalContext {
     }
 
     return $row;
-  }
-
-  /**
-   * Asserts that a checkbox/radio exists in a row containing a given text.
-   *
-   * @param string $text
-   *   Text in the row.
-   *
-   * @throws \Exception
-   *   If the page contains no rows, no row contains the text or the row
-   *   contains no checkbox or radio button.
-   *
-   * @Then the :text table row contains a checkbox/radio
-   */
-  public function assertCheckboxOrRadioExistsInRow(string $text): void {
-    $this->getCheckboxOrRadioByRowText($text);
   }
 
   /**
@@ -2049,29 +1908,6 @@ class FeatureContext extends RawDrupalContext {
   }
 
   /**
-   * Tests that the given entity has a creation date.
-   *
-   * @param string $title
-   *   The entity title.
-   * @param string $bundle
-   *   The entity bundle.
-   *
-   * @Given the :title :bundle has a creation date set
-   */
-  public function assertEntityCreationDate(string $title, string $bundle): void {
-    $rdf_bundles = [
-      'collection',
-      'solution',
-      'asset_release',
-      'asset_distribution',
-    ];
-    $type = in_array($bundle, $rdf_bundles) ? 'rdf_entity' : 'node';
-    $entity = $this->getEntityByLabel($type, $title, $bundle);
-
-    Assert::assertNotEmpty($entity->getCreatedTime());
-  }
-
-  /**
    * Stores the ID of the latest file entity created before the scenario.
    *
    * @BeforeScenario @api
@@ -2361,22 +2197,6 @@ class FeatureContext extends RawDrupalContext {
   }
 
   /**
-   * Asserts that a link has an attribute set to a specific value.
-   *
-   * @param string $link_text
-   *   The link text.
-   * @param string $attribute_name
-   *   The name of the attribute to assert.
-   * @param string $attribute_value
-   *   The value of the attribute to assert.
-   *
-   * @Then the :link_text link should have the :attribute_name attribute set to :attribute_value
-   */
-  public function givenLinkHasAttribute(string $link_text, string $attribute_name, string $attribute_value): void {
-    Assert::assertNotNull($this->getSession()->getPage()->find('xpath', "//a[@$attribute_name='$attribute_value' and text()='$link_text']"));
-  }
-
-  /**
    * Asserts that an element has an empty attribute in the specific region.
    *
    * @param string $tag
@@ -2564,116 +2384,6 @@ class FeatureContext extends RawDrupalContext {
     if (\Drupal::time()->getRequestTime() - $value > 3) {
       throw new ExpectationFailedException("The entity wasn't updated recently");
     }
-  }
-
-  /**
-   * Asserts that a specific entity field is matching a given regexp pattern.
-   *
-   * @param string $bundle
-   *   The human-readable type according to self::bundleAliases().
-   * @param string $title
-   *   The entity title.
-   * @param string $field_label
-   *   The human-readable field name.
-   * @param string $pattern
-   *   The regexp pattern.
-   * @param string $paragraph_tree
-   *   Applies only the $field_label is exposed on a nested paragraph. A string
-   *   like '2nd Body, 1st Accordion item, 1st Item content' where the sequence,
-   *   delimited by comma, is the path down to the paragraph entity on which we
-   *   want to check the $field_label field. Each item consist on human-readable
-   *   delta (1-based) and the reference field label. Defaults to empty string.
-   *
-   * @Then the :field_label field of :title :bundle should match :pattern
-   * @Then the :field_label field of :paragraph_tree paragraph of :title :bundle should match :pattern
-   */
-  public function assertEntityFieldMatches(string $bundle, string $title, string $field_label, string $pattern, string $paragraph_tree = ''): void {
-    if (!$this->entityFieldMatchHelper($bundle, $title, $field_label, $pattern, $paragraph_tree)) {
-      throw new ExpectationFailedException("The '$field_label' of $title' $bundle doesn't match the given regexp pattern but it should");
-    }
-  }
-
-  /**
-   * Asserts that a specific entity field doesn't match a regexp pattern.
-   *
-   * @param string $bundle
-   *   The human-readable type according to self::bundleAliases().
-   * @param string $title
-   *   The entity title.
-   * @param string $field_label
-   *   The human-readable field name.
-   * @param string $pattern
-   *   The regexp pattern.
-   * @param string $paragraph_tree
-   *   Applies only the $field_label is exposed on a nested paragraph. A string
-   *   like '2nd Body, 1st Accordion item, 1st Item content' where the sequence,
-   *   delimited by comma, is the path down to the paragraph entity on which we
-   *   want to check the $field_label field. Each item consist on human-readable
-   *   delta (1-based) and the reference field label. Defaults to empty string.
-   *
-   * @Then the :field_label field of :title :bundle should not match :pattern
-   * @Then the :field_label field of :paragraph_tree paragraph of :title :bundle should not match :pattern
-   */
-  public function assertEntityFieldNotMatch(string $bundle, string $title, string $field_label, string $pattern, string $paragraph_tree = ''): void {
-    if ($this->entityFieldMatchHelper($bundle, $title, $field_label, $pattern, $paragraph_tree)) {
-      throw new ExpectationFailedException("The '$field_label' of $title' $bundle matches the given regexp pattern but it should not");
-    }
-  }
-
-  /**
-   * Provides a helper for entity field content match assertions.
-   *
-   * @param string $bundle
-   *   The human-readable type according to self::entityTypeAliases().
-   * @param string $title
-   *   The entity title.
-   * @param string $field_label
-   *   The human-readable field name.
-   * @param string $pattern
-   *   The regexp pattern.
-   * @param string $paragraph_tree
-   *   Applies only the $field_label is exposed on a nested paragraph. A string
-   *   like '2nd Body, 1st Accordion item, 1st Item content' where the sequence,
-   *   delimited by comma, is the path down to the paragraph entity on which we
-   *   want to check the $field_label field. Each item consist on human-readable
-   *   delta (1-based) and the reference field label. Defaults to empty string.
-   */
-  protected function entityFieldMatchHelper(string $bundle, string $title, string $field_label, string $pattern, string $paragraph_tree): bool {
-    $entity_type_id = static::entityTypeAliases()[$bundle];
-    $entity = $this->getEntityByLabel($entity_type_id, $title);
-
-    $trail = array_map(function (string $part): array {
-      [$position, $paragraph_field] = preg_split('#\s+#', trim($part), 2);
-      // Convert delta from human-readable to 0-based integers.
-      return [$paragraph_field, $this->convertOrdinalToNumber($position) - 1];
-    }, array_filter(explode(',', $paragraph_tree)));
-
-    // Append the field we want to check.
-    $trail[] = [$field_label, 0];
-
-    do {
-      [[$field_label, $delta]] = array_splice($trail, 0, 1);
-      $found = FALSE;
-      foreach ($entity->getFields(FALSE) as $field_name => $field) {
-        $definition = $field->getFieldDefinition();
-        if ($definition->getLabel() === $field_label) {
-          $found = TRUE;
-          break;
-        }
-      }
-      if (!$found) {
-        throw new \LogicException("The {$entity->bundle()} {$entity->getEntityTypeId()} doesn't have a $field_label field");
-      }
-
-      if ($definition->getType() === 'entity_reference_revisions') {
-        $entity = $field->get($delta)->entity;
-        \assert($entity instanceof ParagraphInterface);
-      }
-    } while ($trail);
-
-    $column = $definition->getFieldStorageDefinition()->getMainPropertyName();
-    $value = (string) $entity->get($field_name)->{$column};
-    return (bool) preg_match($pattern, $value);
   }
 
   /**

@@ -143,6 +143,7 @@
         "lovers-of-behat/table-extension": "^1.4",
         "mikey179/vfsstream": "~1.6",
         "ml/json-ld": "^1.2",
+        "nicwortel/behat-unused-step-definitions-extension": "dev-master",
         "palantirnet/drupal-rector": "^0.20.1",
         "pear/http_request2": "~2.4",
         "php-task-runner/composer": "dev-toolkit-runner",
@@ -428,6 +429,9 @@
             "drupal/webform": {
                 "Radios or Checkboxes inside Composite not saved @see https://www.drupal.org/project/webform/issues/3216923": "resources/patch/php/drupal/webform/368.diff",
                 "Webform might create invalid link renderable arrays on submission list. @see https://www.drupal.org/project/webform/issues/3441600": "resources/patch/php/drupal/webform/3441600.patch"
+            },
+            "nicwortel/behat-unused-step-definitions-extension": {
+                "Filters improvements (check concrete impl., include/exclude, ignore pattern aliases) - https://github.com/nicwortel/behat-unused-step-definitions-extension/pull/7": "resources/patch/php/nicwortel/behat-unused-step-definitions-extension/filters-improvements-PR_7.diff"
             },
             "sweetrdf/easyrdf": {
                 "Add a method to remove resources from graph @see https://github.com/sweetrdf/easyrdf/pull/44": "resources/patch/php/sweetrdf/easyrdf/44.diff"
