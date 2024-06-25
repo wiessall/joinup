@@ -294,6 +294,23 @@ Testing frameworks used by Joinup:
   ddev exec vendor/bin/behat [arguments and options]
   ```
 
+###### Update / post-update / deploy hooks
+
+Tests covering such hooks should be placed under `tests/features/update` and
+features and/or scenarios should be tagged with `@group-clone` and
+`@update:[function]`, where `[function]` is the update hook/function name.
+See `\Drupal\joinup\Context\UpdateContext`.
+
+###### Unused step definitions
+
+In order to prevent stale code in tests, the CI runs the following command to
+detect unused Behat step definitions, and will fail if any are found:
+```shell
+  ddev run testing:unused-behat
+```
+See the `unused` Behat profile in [behat.yml.dist](behat.yml.dist).
+Relies on [nicwortel/behat-unused-step-definitions-extension](https://github.com/nicwortel/behat-unused-step-definitions-extension)
+
 #### PHPUnit testing
 
 * See https://phpunit.de
@@ -305,35 +322,27 @@ Testing frameworks used by Joinup:
   site](https://gitlab.com/weitzman/drupal-test-traits) but also plain PHPUnit
   tests.
 
-#### PHP coding standards check
+#### Static code analysis
 
+Joinup uses GrumPHP, which runs all tasks defined in [grumphp.yml.dist](grumphp.yml.dist).
+See [GrumPHP documentation](https://github.com/phpro/grumphp/blob/v2.x/doc/commands.md#run).
+
+* Run all tasks:
 ```shell
-ddev exec vendor/bin/phpcs [arguments and options]
+ddev grumphp run
+```
+* Alternatively, run 1 or more tasks:
+```shell
+ddev grumphp run --tasks=phpcs,phpstan,phplint,yamllint,eslint,stylelint
 ```
 
-To fix violations, run:
-
-```shell
-ddev exec vendor/bin/phpcbf [arguments and options]
+GrumPHP gets triggered on git pre-push hook by default. To change this behavior,
+specify in your runner.yml:
+```yaml
+dev:
+  # Options: pre-push / pre-commit / disable
+  git_hook_on: pre-push
 ```
-
-#### PHP statical analysis
-
-```shell
-ddev run toolkit:test-phpstan
-```
-
-#### Javascript lint
-
-```shell
-ddev run toolkit:lint-js
-````
-
-#### YAML files lint
-
-```shell
-ddev run toolkit:lint-yaml
-````
 
 ### Upgrade process
 

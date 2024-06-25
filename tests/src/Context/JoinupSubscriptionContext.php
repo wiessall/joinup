@@ -17,7 +17,6 @@ use Drupal\joinup\Traits\OgTrait;
 use Drupal\joinup\Traits\TraversingTrait;
 use Drupal\joinup\Traits\UserTrait;
 use Drupal\joinup\Traits\UtilityTrait;
-use Drupal\joinup_community_content\CommunityContentHelper;
 use Drupal\joinup_group\JoinupGroupHelper;
 use Drupal\joinup_subscription\Entity\GroupContentSubscriptionMessageInterface;
 use Drupal\joinup_subscription\JoinupDiscussionSubscriptionInterface;
@@ -297,45 +296,6 @@ class JoinupSubscriptionContext extends RawDrupalContext {
     $checkbox = $this->getGroupSubscriptionCardByHeading($label)->findField($bundle);
     $this->scrollElementIntoView($checkbox);
     $checkbox->uncheck();
-  }
-
-  /**
-   * Selects group subscription options in the subscription settings form.
-   *
-   * This performs the action in the user interface, so the browser should be
-   * navigated to the my subscriptions form before performing this step. This
-   * will not submit the form.
-   *
-   * Table format:
-   * | Group A | Discussion, Document, Event, News |
-   * | Group B | Discussion, Event                 |
-   *
-   * @param \Behat\Gherkin\Node\TableNode $subscription_options
-   *   The Behat table node containing the subscription options.
-   * @param string $bundle
-   *   The group bundle.
-   *
-   * @throws \Behat\Mink\Exception\ElementNotFoundException
-   *   Thrown when a checkbox for a given subscription option is not found.
-   *
-   * @When I select the following :bundle subscription options:
-   */
-  public function selectSubscriptionOptionsInMySubscriptions(TableNode $subscription_options, string $bundle): void {
-    foreach ($subscription_options->getRowsHash() as $group_label => $bundle_ids) {
-      $bundle_ids = $this->explodeCommaSeparatedStepArgument(strtolower($bundle_ids));
-      $group = $this->getEntityByLabel('rdf_entity', $group_label, $bundle);
-      foreach (CommunityContentHelper::BUNDLES as $bundle_id) {
-        $locator = 'groups[' . $group->id() . '][bundles][' . $bundle_id . ']';
-        if (in_array($bundle_id, $bundle_ids)) {
-          if ($this->getSession()->getPage()->hasUncheckedField($locator)) {
-            $this->getSession()->getPage()->checkField($locator);
-          }
-        }
-        elseif ($this->getSession()->getPage()->hasCheckedField($locator)) {
-          $this->getSession()->getPage()->uncheckField($locator);
-        }
-      }
-    }
   }
 
   /**
@@ -703,23 +663,6 @@ class JoinupSubscriptionContext extends RawDrupalContext {
     }
 
     return $emails;
-  }
-
-  /**
-   * Asserts if memberships with bundle subscriptions have announcements too.
-   *
-   * @Given all active memberships with accepted terms have active announcements
-   */
-  public function assertAnnouncementsInMemberships(): void {
-    $count = \Drupal::database()->select('og_membership')
-      ->condition('type', OgMembershipInterface::TYPE_DEFAULT)
-      ->condition('entity_type', 'rdf_entity')
-      ->condition('entity_bundle', JoinupGroupHelper::GROUP_BUNDLES, 'IN')
-      ->condition('announcements', 1, '<>')
-      ->countQuery()
-      ->execute()
-      ->fetchField();
-    Assert::assertEquals(0, $count);
   }
 
   /**

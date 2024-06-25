@@ -25,6 +25,14 @@ module.exports = {
       },
     },
     {
+      entry: path.resolve(outputFolder, `${ventuno}src/js/alert.js`),
+      dest: path.resolve(outputFolder, `${ventuno}assets/js/alert.js`),
+      options: {
+        minify: true,
+        sourceMap: true,
+      },
+    },
+    {
       entry: path.resolve(outputFolder, `${ventuno}src/js/checkbox.js`),
       dest: path.resolve(outputFolder, `${ventuno}assets/js/checkbox.js`),
       options: {
@@ -41,6 +49,14 @@ module.exports = {
         outputFolder,
         `${ventuno}assets/js/navbar-hover-dropdown.js`
       ),
+      options: {
+        minify: true,
+        sourceMap: true,
+      },
+    },
+    {
+      entry: path.resolve(outputFolder, `${ventuno}src/js/mmenu-nav.js`),
+      dest: path.resolve(outputFolder, `${ventuno}assets/js/mmenu-nav.js`),
       options: {
         minify: true,
         sourceMap: true,
@@ -719,6 +735,18 @@ module.exports = {
         `${ventuno}src/scss/components/nav.scss`
       ),
       dest: path.resolve(outputFolder, `${ventuno}assets/css/nav.min.css`),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(
+        outputFolder,
+        `${ventuno}src/scss/components/mmenu.scss`
+      ),
+      dest: path.resolve(outputFolder, `${ventuno}assets/css/mmenu.min.css`),
       options: {
         includePaths,
         minify: true,
@@ -1449,6 +1477,14 @@ module.exports = {
         path.resolve(nodeModules, "priority-plus/dist/priority-plus.css"),
       ],
       to: path.resolve(outputFolder, `${ventuno}assets/lib/priority-plus`),
+      options: { up: true },
+    },
+    {
+      from: [
+        path.resolve(nodeModules, "mmenu-light/dist/mmenu-light.js"),
+        path.resolve(nodeModules, "mmenu-light/dist/mmenu-light.css"),
+      ],
+      to: path.resolve(outputFolder, `${ventuno}assets/lib/mmenu-light`),
       options: { up: true },
     },
   ],

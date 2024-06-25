@@ -52,13 +52,15 @@
         {{ meta_title }}
       </h1>
       {{ title_suffix }}
-      {% if meta_description|render|striptags|split(' ')|length < 50 %}
+
+      {% set _meta_description = meta_description|render %}
+      {% if _meta_description|striptags|split(' ')|length < 50 %}
         <div class="header-topic__description">
-          {{ meta_description }}
+          {{ _meta_description }}
         </div>
       {% else %}
         <div class="header-topic__description see-more see-more--long collapse" id="collapseSeeMore">
-          {{ meta_description }}
+          {{ _meta_description }}
         </div>
         <div class="d-flex justify-content-end mt-3{{ logged_in ? ' mb-3' }}">
           <button

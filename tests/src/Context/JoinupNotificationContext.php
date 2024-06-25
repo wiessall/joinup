@@ -380,25 +380,6 @@ class JoinupNotificationContext extends RawDrupalContext {
   }
 
   /**
-   * Clicks on the mail change link received via a verification E-mail.
-   *
-   * @param string $mail
-   *   The recipient E-mail address.
-   *
-   * @throws \Exception
-   *   If no mail change verification E-mail was sent to the given address or
-   *   the E-mail doesn't contain a valid verification link.
-   *
-   * @Given I click the mail change link from the email sent to :mail
-   */
-  public function clickMailChangeLinkFromMail(string $mail): void {
-    $pattern = '#https?://[^/].*/user/mail-change/[^/].*/[^/].*/[^/].*/.*#';
-    $no_mail_message = "No mail change verification E-mail has been sent to $mail.";
-    $no_match_message = "The mail change verification E-mail doesn't contain a valid verification link.";
-    $this->assertMailLinkMatchingPattern($pattern, $mail, $no_mail_message, $no_match_message, 'mail_change_verification');
-  }
-
-  /**
    * Searches the delete confirmation link from an email and navigates to it.
    *
    * @param string $user

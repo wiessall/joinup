@@ -9,6 +9,7 @@ use Behat\Gherkin\Node\TableNode;
 use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Url;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
+use Drupal\file_url\FileUrlHandler;
 use Drupal\joinup\Traits\ConfigReadOnlyTrait;
 use Drupal\joinup\Traits\EntityReferenceTrait;
 use Drupal\joinup\Traits\EntityTrait;
@@ -29,6 +30,7 @@ use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\og\OgRoleInterface;
 use Drupal\rdf_entity\Entity\Rdf;
 use Drupal\rdf_entity\RdfInterface;
+use Drupal\solution\Entity\SolutionInterface;
 use PHPUnit\Framework\Assert;
 
 /**
@@ -56,18 +58,6 @@ class SolutionContext extends RawDrupalContext {
    * @var \Drupal\rdf_entity\RdfInterface[]
    */
   protected array $rdfEntities = [];
-
-  /**
-   * Checks that the user is on the solutions overview page.
-   *
-   * The solutions overview page currently doesn't have a title so our common
-   * practice of checking the page title falls short here.
-   *
-   * @Then I should be on the solutions overview page
-   */
-  public function assertSolutionsOverviewPage(): void {
-    $this->assertSession()->addressEquals($this->locatePath('/solutions'));
-  }
 
   /**
    * Navigates to the add solution form.
@@ -223,6 +213,32 @@ class SolutionContext extends RawDrupalContext {
   }
 
   /**
+   * Changes a value of a solution by API.
+   *
+   * @param string $property
+   *   The alias of the solution field.
+   * @param string $label
+   *   The label of the solution entity.
+   * @param string $fieldValue
+   *   The new value of the solution field.
+   *
+   * @Given the :fieldName of :label solution is changed to :fieldValue
+   */
+  public function givenSolutionNewValue(string $property, string $label, string $fieldValue): void {
+    $aliases = self::solutionFieldAliases();
+    Assert::assertArrayHasKey($property, $aliases, "Unknown column '$property' in solution table.");
+    $fieldName = $aliases[$property];
+    $solution = static::getEntityByLabel('rdf_entity', $label, 'solution');
+    Assert::assertInstanceOf(SolutionInterface::class, $solution, "Cannot find any solution with label $label");
+
+    $values = $this->prepareFields(
+      $this->convertValueAliases([$fieldName => $fieldValue])
+    );
+    Assert::assertSame(SAVED_UPDATED, $solution->set(key($values), current($values))->save(), "Solution cannot be updated");
+    $this->applyPostSaveTasks($solution, $values);
+  }
+
+  /**
    * Make sure that the solution being created has a parent collection.
    *
    * For some tests the solution's parent collection has no relevance. Such
@@ -264,34 +280,6 @@ class SolutionContext extends RawDrupalContext {
   }
 
   /**
-   * Make group content part of a solution.
-   *
-   * Table format:
-   * | content                | solution          |
-   * | Content entity 1 title | Solution 1 title  |
-   * | Content entity 2 title | Solution 1 title  |
-   * | Content entity 3 title | Solution 2 title  |
-   *
-   * @param string $bundle
-   *   The bundle of the content entity.
-   * @param \Behat\Gherkin\Node\TableNode $membership_table
-   *   The membership table.
-   *
-   * @Given (the following ):bundle content belong to the corresponding solutions:
-   */
-  public function givenContentMemberships(string $bundle, TableNode $membership_table): void {
-    // As each given step is executed in the same request
-    // we need to reset the mapping.
-    foreach ($membership_table->getColumnsHash() as $values) {
-      $group = $this->getEntityByLabel('rdf_entity', $values['solution'], 'solution');
-      /** @var \Drupal\node\NodeInterface $content */
-      $content = $this->getEntityByLabel('node', $values['content'], $bundle);
-      $content->get(OgGroupAudienceHelperInterface::DEFAULT_FIELD)->set(0, $group->id());
-      $content->save();
-    }
-  }
-
-  /**
    * Asserts that a user is an owner of the given solution.
    *
    * To be owner of a solution, a user should be an administrator and
@@ -323,21 +311,11 @@ class SolutionContext extends RawDrupalContext {
   }
 
   /**
-   * Creates a solution from the given property and field data.
-   *
-   * @param array $values
-   *   An optional associative array of values, keyed by property name.
-   *
-   * @return \Drupal\rdf_entity\RdfInterface
-   *   A new solution entity.
-   *
-   * @throws \Exception
-   *   Thrown when a given image is not found, or when a solution is being
-   *   pinned in a non-existing group.
+   * Prepares the fields of the solution for being saved.
    */
-  protected function createSolution(array $values): RdfInterface {
-    /** @var \Drupal\file_url\FileUrlHandler $fileHandler */
+  protected function prepareFields(array $values): array {
     $fileHandler = \Drupal::service('file_url.handler');
+    Assert::assertInstanceOf(FileUrlHandler::class, $fileHandler);
 
     $file_fields = [
       'field_is_documentation',
@@ -359,36 +337,80 @@ class SolutionContext extends RawDrupalContext {
         }
       }
     }
+    return $values;
+  }
 
+  /**
+   * Creates a solution from the given property and field data.
+   *
+   * @param array $values
+   *   An optional associative array of values, keyed by property name.
+   *
+   * @return \Drupal\rdf_entity\RdfInterface
+   *   A new solution entity.
+   */
+  protected function createSolution(array $values): SolutionInterface {
+    $values = $this->prepareFields($values);
+    $this->setFallbackTopic($values);
+
+    $solution = $this->createRdfEntity('solution', $values);
+    Assert::assertInstanceOf(SolutionInterface::class, $solution);
+    $this->rdfEntities[$solution->id()] = $solution;
+
+    $this->applyPostSaveTasks($solution, $values);
+
+    return $solution;
+  }
+
+  /**
+   * Applies post-save tasks: (un)pinning and (un)featuring.
+   *
+   * @param \Drupal\solution\Entity\SolutionInterface $solution
+   *   The saved solution object.
+   * @param array $values
+   *   The solution values.
+   */
+  protected function applyPostSaveTasks(SolutionInterface $solution, array $values): void {
     // If the solution is featured we need to create the meta entity that stores
     // this information after creating the solution.
     $is_featured = in_array(strtolower((string) ($values['feature'] ?? '')), [
       'y',
       'yes',
     ]);
-
-    $this->setFallbackTopic($values);
-
-    /** @var \Drupal\solution\Entity\SolutionInterface $solution */
-    $solution = $this->createRdfEntity('solution', $values);
-
     if ($is_featured) {
       $solution->feature();
     }
-
-    $this->rdfEntities[$solution->id()] = $solution;
-
-    if (!empty($values['pinned_in_collection'])) {
-      foreach (explode(',', $values['pinned_in_collection']) as $group_label) {
-        $group = $this->getEntityByLabel('rdf_entity', trim($group_label));
-        if (!$group instanceof GroupInterface) {
-          throw new \Exception("Cannot pin solution {$solution->label()} in $group_label since it does not exist or is not a group.");
-        }
-        $solution->pin($group);
-      }
+    else {
+      $solution->unfeature();
     }
 
-    return $solution;
+    // Pin solution in collection where needed.
+    foreach (explode(',', $values['pinned_in_collection'] ?? '') as $groupLabel) {
+      if (!($groupLabel = trim($groupLabel))) {
+        continue;
+      }
+      $group = $this->getEntityByLabel('rdf_entity', $groupLabel);
+      Assert::assertInstanceOf(
+        GroupInterface::class,
+        $group,
+        "Cannot pin solution {$solution->label()} in $groupLabel since it does not exist or is not a group."
+      );
+      $solution->pin($group);
+    }
+
+    // Unpin where needed.
+    foreach (explode(',', $values['unpinned_in_collection'] ?? '') as $groupLabel) {
+      if (!($groupLabel = trim($groupLabel))) {
+        continue;
+      }
+      $group = $this->getEntityByLabel('rdf_entity', $groupLabel);
+      Assert::assertInstanceOf(
+        GroupInterface::class,
+        $group,
+        "Cannot unpin solution {$solution->label()} in $groupLabel since it does not exist or is not a group."
+      );
+      $solution->unpin($group);
+    }
   }
 
   /**
@@ -578,6 +600,7 @@ class SolutionContext extends RawDrupalContext {
       'collections' => 'collection',
       'featured' => 'feature',
       'pinned in' => 'pinned_in_collection',
+      'unpinned in' => 'unpinned_in_collection',
       'shared on' => 'field_is_shared_in',
     ];
   }
@@ -747,31 +770,6 @@ class SolutionContext extends RawDrupalContext {
     // Create the translation.
     $solution->addTranslation('ca', $solution_values)->save();
     $this->rdfEntities[$solution->id()] = $solution;
-  }
-
-  /**
-   * Checks that the given solution is affiliated with the given collection.
-   *
-   * @param string $collection_label
-   *   The name of the collection to check.
-   * @param string $solution_label
-   *   The name of the solution to check.
-   *
-   * @throws \Exception
-   *   Thrown when the solution is not affiliated with the collection.
-   *
-   * @Then the :solution_label solution should be affiliated with the :collection_label collection
-   */
-  public function assertCollectionAffiliation(string $collection_label, string $solution_label): void {
-    $solution = $this->getEntityByLabel('rdf_entity', $solution_label, 'solution');
-    $ids = \Drupal::entityQuery('rdf_entity')->accessCheck(FALSE)
-      ->condition('rid', 'collection')
-      ->condition('label', $collection_label)
-      ->condition('field_ar_affiliates', $solution->id())
-      ->execute();
-    if (!$ids) {
-      throw new \Exception("The '$solution_label' solution is not affiliated with the '$collection_label' collection but it should be.");
-    }
   }
 
   /**

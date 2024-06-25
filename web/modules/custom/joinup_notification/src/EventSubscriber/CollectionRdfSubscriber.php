@@ -75,7 +75,7 @@ class CollectionRdfSubscriber extends NotificationSubscriberBase {
   /**
    * {@inheritdoc}
    */
-  public static function getSubscribedEvents() {
+  public static function getSubscribedEvents(): array {
     $events[NotificationEvents::RDF_ENTITY_CRUD] = [
       // Notification id 1 - Propose new collection.
       ['onCreate'],

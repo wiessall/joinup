@@ -16,13 +16,14 @@
 <div {{ attributes.addClass(classes) }}>
   {% for item in items %}
 
-    {% if item.content|render|striptags|split(' ')|length < 100 %}
+    {% set _item_content = item.content|render %}
+    {% if _item_content|striptags|split(' ')|length < 100 %}
       <div class="see-more">
-        {{ item.content }}
+        {{ _item_content }}
       </div>
     {% else %}
       <div class="see-more see-more--long collapse" id="collapseSeeMore">
-        {{ item.content }}
+        {{ _item_content }}
       </div>
       <button
         class="btn btn-link p-0 mt-3 js-see-more-btn"
