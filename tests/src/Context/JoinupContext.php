@@ -16,8 +16,6 @@ use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
 use Drupal\User\Entity\User;
 use Drupal\comment\CommentInterface;
 use Drupal\comment\Entity\Comment;
-use Drupal\file\Entity\File;
-use Drupal\image\Entity\ImageStyle;
 use Drupal\joinup\Traits\BootstrapTrait;
 use Drupal\joinup\Traits\ContextualLinksTrait;
 use Drupal\joinup\Traits\EntityTrait;
@@ -119,36 +117,6 @@ class JoinupContext extends RawDrupalContext {
   public function assertTextCount(string $text, int $count): void {
     $xpath = '//*[contains(text(), "' . $text . '")]';
     $this->assertSession()->elementsCount('xpath', $xpath, $count);
-  }
-
-  /**
-   * Checks that a certain link appears the given number of times.
-   *
-   * @param string $text
-   *   The text of the link.
-   * @param int $count
-   *   The expected number of the links.
-   * @param ?string $region
-   *   The region to check, if any.
-   *
-   * @Then the link :text should appear :count time(s)
-   * @Then the link :text should appear :count time(s) in the :region region
-   */
-  public function assertLinkCount(string $text, int $count, ?string $region = NULL): void {
-    $element = $region
-      ? $this->getRegion($region)
-      : $this->getSession()->getPage();
-    $links = $element->findAll('named', ['link', $text]);
-    Assert::assertCount(
-      $count,
-      $links,
-      sprintf(
-        "The link with text '%s' is expected to be present '%s' times, but its actual number is '%s'",
-        $text,
-        $count,
-        count($links)
-      )
-    );
   }
 
   /**
@@ -536,7 +504,6 @@ class JoinupContext extends RawDrupalContext {
    *   \Drupal\joinup\Traits\EntityTrait::bundleAliases method.
    *
    * @When I go to the :action form of the :title :bundle
-   * @When I visit the :action form of the :title :bundle
    */
   public function goToEntityForm(string $action, string $title, string $bundle): void {
     $this->visitEntityForm($action, $title, $bundle);
@@ -554,7 +521,6 @@ class JoinupContext extends RawDrupalContext {
    *   The name of the news page.
    *
    * @When I go to the content page of the type :type with the title :title
-   * @When I visit the content page of the type :type with the title :title
    *
    * @throws \Drupal\Core\Entity\EntityMalformedException
    */
@@ -583,7 +549,6 @@ class JoinupContext extends RawDrupalContext {
   /**
    * Navigates to the dashboard page of the user.
    *
-   * @When I go to the dashboard
    * @When I go to my dashboard
    */
   public function visitDashboard() {
@@ -656,22 +621,6 @@ class JoinupContext extends RawDrupalContext {
       ->execute();
 
     Assert::assertEquals($count, $revision_count);
-  }
-
-  /**
-   * Checks if the given node has the correct publication state.
-   *
-   * @param string $title
-   *   The title of the node.
-   * @param string $state
-   *   The expected publication state, either 'published' or 'unpublished'.
-   *
-   * @Then the community content with title :title should have the publication state :state
-   */
-  public function assertPublicationState($title, $state) {
-    /** @var \Drupal\node\NodeInterface $node */
-    $node = $this->getEntityByLabel('node', $title);
-    Assert::assertSame($node->isPublished(), $state === 'published');
   }
 
   /**
@@ -967,19 +916,6 @@ class JoinupContext extends RawDrupalContext {
 
     $this->scrollNamedElementIntoView('button', $button, $element);
     $element->pressButton($button);
-  }
-
-  /**
-   * Prints system message from the page for debugging.
-   *
-   * @Then /^print messages$/
-   */
-  public function printMessages() {
-    $selector = $this->getDrupalSelector('message_selector');
-    /** @var \Behat\Mink\Element\NodeElement $message */
-    foreach ($this->getSession()->getPage()->findAll("css", $selector) as $message) {
-      echo $message->getText() . "\n\n";
-    }
   }
 
   /**
@@ -1284,7 +1220,6 @@ class JoinupContext extends RawDrupalContext {
    *   Thrown when the expected tile is not found.
    *
    * @Then I (should )see the :heading tile
-   * @Then I (should )see the :heading carousel card
    */
   public function assertTilePresent(string $heading): void {
     $results = $this->getAllCardsInPage();
@@ -1376,29 +1311,6 @@ class JoinupContext extends RawDrupalContext {
     $headings_in_page = array_keys($this->getTiles($region));
     $headings_expected = $titles_table->getColumn(0);
     Assert::assertEquals($headings_expected, $headings_in_page, 'The expected tiles were not found in the wanted region or were not in the proper order.');
-  }
-
-  /**
-   * Checks that none of the given tiles are available on the page.
-   *
-   * Table format:
-   * | Tile title 1 |
-   * | Tile title 2 |
-   *
-   * @Then I( should) not see the( following) tiles in the :region region:
-   */
-  public function assertTilesNotPresentInBlock(TableNode $titles_table, $region) {
-    try {
-      // This will fail if the region does not exist. The region does not exist
-      // if there is no content rendered inside.
-      $headings_in_page = array_keys($this->getTiles($region));
-    }
-    catch (\Exception $e) {
-      return;
-    }
-
-    $headings_not_expected = $titles_table->getColumn(0);
-    Assert::assertEmpty(array_intersect($headings_in_page, $headings_not_expected), 'At least one tile was found in the region but should not.');
   }
 
   /**
@@ -1511,7 +1423,6 @@ class JoinupContext extends RawDrupalContext {
    *   Thrown when the tile is not found or the text is found in the tile.
    *
    * @Then I( should) not see the text :text in the :heading tile
-   * @Then I( should) not see the text :text in the :heading card
    */
   public function assertTileDoesNotContainsText(string $heading, string $text): void {
     $element = $this->getTileByHeading($heading);
@@ -1537,25 +1448,6 @@ class JoinupContext extends RawDrupalContext {
   public function assertTileContainsStatistic(string $heading, string $text): void {
     if (!$this->getTileStatisticElement($heading, $text)) {
       throw new \Exception("The statistics '$text' was not found in the tile '$heading'.");
-    }
-  }
-
-  /**
-   * Asserts that a certain statistics string is not present in a tile.
-   *
-   * @param string $heading
-   *   The heading of the tile.
-   * @param string $text
-   *   The text to search.
-   *
-   * @throws \Exception
-   *   Thrown when the tile is not found or the text is found in the tile.
-   *
-   * @Then I( should) not see the statistics :text in the :heading tile
-   */
-  public function assertTileDoesNotContainStatistic(string $heading, string $text): void {
-    if ($this->getTileStatisticElement($heading, $text)) {
-      throw new \Exception("The statistics '$text' was found in the tile '$heading'.");
     }
   }
 
@@ -1758,16 +1650,6 @@ class JoinupContext extends RawDrupalContext {
     $button = $this->getSession()->getPage()->find('css', '#dropdown-add-content');
     $this->scrollElementIntoView($button);
     $button->press();
-  }
-
-  /**
-   * Opens the sidebar menu on JS-enabled browsers.
-   *
-   * @When I open the group sidebar menu
-   */
-  public function openGroupMenu(): void {
-    $region = $this->getSession()->getPage()->find('css', $this->getRegionSelector('Left sidebar'));
-    $this->getContextualLinksHelper()->openContextualLinksMenu($region);
   }
 
   /**
@@ -2036,18 +1918,6 @@ class JoinupContext extends RawDrupalContext {
   }
 
   /**
-   * Asserts that a banner exists in the header.
-   *
-   * @Then I should see a banner on the header
-   */
-  public function assertExistingBanner(): void {
-    $xpath = '//*[contains(concat(" ", normalize-space(@class), " "), " group-banner ")]';
-    if (!$this->getSession()->getPage()->find('xpath', $xpath)) {
-      throw new \Exception("No banner");
-    }
-  }
-
-  /**
    * Asserts that a featured stats exist in the header.
    *
    * @Then I should see a featured stats on the header
@@ -2065,26 +1935,6 @@ class JoinupContext extends RawDrupalContext {
   public function assertNotExistingFeaturedStats(): void {
     $xpath = '//ul[contains(concat(" ", normalize-space(@class), " "), "group-stats")]/@class';
     $this->assertSession()->elementsCount('xpath', $xpath, 0);
-  }
-
-  /**
-   * Asserts that the current user's profile picture is shown in the header.
-   *
-   * @Then my user profile picture should be shown in the page header
-   */
-  public function assertCurrentUserProfilePictureVisible() {
-    if ($this->getUserManager()->currentUserIsAnonymous()) {
-      throw new ExpectationFailedException('No user is currently logged in.');
-    }
-    $user = User::load($this->getUserManager()->getCurrentUser()->uid);
-    if ($user->field_user_photo->isEmpty()) {
-      throw new ExpectationFailedException('The currently logged in user does not have a profile picture.');
-    }
-    /** @var \Drupal\file\FileInterface $photo */
-    $photo = File::load($user->field_user_photo->target_id);
-    $url = ImageStyle::load('profile_icon')->buildUrl($photo->getFileUri());
-    $xpath = '//div[contains(concat(" ", normalize-space(@class), " "), " login-menu ")]//img[@src="' . $url . '"]';
-    $this->assertSession()->elementsCount('xpath', $xpath, 1);
   }
 
   /**
@@ -2194,28 +2044,6 @@ class JoinupContext extends RawDrupalContext {
     $this->assertWaitJs($seconds, '(function() {
         return typeof jQuery === "undefined" || jQuery("[data-slick].slick-animating").length === 0;
     }())');
-  }
-
-  /**
-   * Waits until the given region becomes visible.
-   *
-   * @param string $region
-   *   The region that should become visible.
-   *
-   * @throws \Exception
-   *   Thrown when the region doesn't become visible within 5 seconds.
-   *
-   * @Then I wait until the :region appears
-   */
-  public function waitForRegionToAppear(string $region): void {
-    $result = $this->getSession()->getPage()->waitFor(5, function () use ($region) {
-      $element = $this->getSession()->getPage()->find('region', $region);
-      return $element && $element->isVisible();
-    });
-
-    if (!$result) {
-      throw new \Exception("The $region region did not appear.");
-    }
   }
 
   /**
@@ -2361,20 +2189,6 @@ class JoinupContext extends RawDrupalContext {
     $field_selector = $this->getSession()->getPage()->find('css', '.permalink');
     $href = $field_selector->getAttribute('href');
     Assert::assertStringContainsString($pattern, $href);
-  }
-
-  /**
-   * Wait until a running batch job has finished.
-   *
-   * This will periodically check if the progress bar is still visible on the
-   * page. When this is no longer shown, it means that the batch process either
-   * finished or failed.
-   *
-   * @Given I wait for the batch job to finish
-   */
-  public function iWaitForTheBatchJobToFinish() {
-    // The progress bar has the CSS ID '#updateprogress'.
-    $this->getSession()->wait(180000, 'jQuery("#updateprogress").length === 0');
   }
 
   /**
@@ -2556,7 +2370,6 @@ class JoinupContext extends RawDrupalContext {
    * @throws \Exception
    *   Thrown when active links are found.
    *
-   * @Then no menu items should be active in the :region menu
    * @Then no menu items should be active in the :region region
    */
   public function assertNoActiveLinksInRegion($region) {
@@ -2582,7 +2395,6 @@ class JoinupContext extends RawDrupalContext {
    * @throws \Exception
    *   Thrown when multiple or no links at all are found in the region.
    *
-   * @Then :text should be the active item in the :region menu
    * @Then :text should be the active item in the :region region
    */
   public function assertActiveLinkInRegion($text, $region) {
@@ -2736,7 +2548,6 @@ class JoinupContext extends RawDrupalContext {
    *   not found.
    *
    * @When I hit :key( in the keyboard) on the field :field
-   * @When I hit|press the :key key in the :field field
    */
   public function pressKeyInField(string $key, string $field): void {
     if (!$this->hasJavascriptSupport()) {
@@ -3251,29 +3062,6 @@ class JoinupContext extends RawDrupalContext {
   }
 
   /**
-   * Asserts that the anchor from the url has a correct id to track in the page.
-   *
-   * There is no good way to track if the page has navigated to the anchor
-   * requested as this is a browser side functionality. What we _can_ assert is
-   * that the anchor that is requested from the URL exists as an element id in
-   * the page.
-   *
-   * @throws \Exception
-   *   Thrown when the url does not include an anchor or the anchor is not found
-   *   in the page.
-   *
-   * @When the page should point to the anchor from the URL
-   */
-  public function assertCorrectAnchor(): void {
-    $current_url = $this->getSession()->getCurrentUrl();
-    $url_parts = UrlHelper::parse($current_url);
-    if (empty($url_parts['fragment'])) {
-      throw new \Exception("The {$current_url} does not contain an anchor.");
-    }
-    $this->assertHtmlText("id=\"{$url_parts['fragment']}\"");
-  }
-
-  /**
    * Changes the name of a term.
    *
    * @param string $old_name
@@ -3385,36 +3173,6 @@ class JoinupContext extends RawDrupalContext {
       throw new \InvalidArgumentException("No entity found for URI $uri");
     }
     $this->visitPath($entity->toUrl()->toString());
-  }
-
-  /**
-   * Asserts that a list of triples exists in a certain graph.
-   *
-   * Each row is a triple serialized as NTriples:
-   * | <http://subject1> <http://predicate1> <http://reference1>  |
-   * | <http://subject1> <http://predicate2> "value1"@en          |
-   * | <http://subject2> <http://predicate3> "value2"^^xsd:string |
-   *
-   * @param string $graph
-   *   The graph to be queried.
-   * @param \Behat\Gherkin\Node\TableNode $triples
-   *   The user data.
-   *
-   * @Then the following :graph graph triples should exist in the RDF backend:
-   */
-  public function assertTriples(string $graph, TableNode $triples): void {
-    /** @var \Drupal\rdf_sync\RdfSyncConnectionInterface $connection */
-    $connection = \Drupal::service('rdf_sync.connection');
-
-    $failedTriples = [];
-    foreach ($triples->getRows() as [$triple]) {
-      if (!$connection->query("ASK WHERE { GRAPH <$graph> { $triple } }")->getBoolean()) {
-        $failedTriples[] = $triple;
-      }
-    }
-    if ($failedTriples) {
-      throw new ExpectationFailedException(sprintf("Triple(s) %s doesn't exists in the RDF backend", implode(', ', $failedTriples)));
-    }
   }
 
 }
