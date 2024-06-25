@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\collection\Form;
 
+use Drupal\Component\Utility\Html;
 use Drupal\Core\Access\AccessManagerInterface;
 use Drupal\Core\Ajax\AfterCommand;
 use Drupal\Core\Ajax\AjaxResponse;
@@ -14,9 +15,11 @@ use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Session\AccountProxyInterface;
+use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_core\Event\AjaxCommandEvent;
 use Drupal\joinup_group\Form\JoinGroupFormBase;
 use Drupal\og\MembershipManagerInterface;
+use Drupal\og\OgMembershipInterface;
 use Drupal\rdf_entity\RdfInterface;
 use Drupal\sparql_entity_storage\UriEncoder;
 use Psr\EventDispatcher\EventDispatcherInterface;
@@ -97,6 +100,23 @@ class JoinCollectionForm extends JoinGroupFormBase {
   }
 
   /**
+   * {@inheritdoc}
+   */
+  public function submitForm(array &$form, FormStateInterface $form_state): void {
+    \assert($this->group instanceof CollectionInterface);
+    if ($this->group->hasCodeOfConduct()) {
+      // Membership is created only after user accepted the code of conduct
+      // document.
+      return;
+    }
+    $state = $this->group->isClosed()
+      ? OgMembershipInterface::STATE_PENDING
+      : OgMembershipInterface::STATE_ACTIVE;
+    $membership = $this->createSaveNewMembership($state, $this->user, $this->group);
+    $this->messenger->addStatus($this->group->getNewMembershipSuccessMessage($membership));
+  }
+
+  /**
    * AJAX callback showing a form to subscribe to the collection after joining.
    *
    * @param array $form
@@ -122,13 +142,22 @@ class JoinCollectionForm extends JoinGroupFormBase {
       $form_button = $this->formBuilder->rebuildForm('join_group_form', $form_state, $form);
       $response->addCommand(new ReplaceCommand('#join-group-form', $form_button));
 
-      $title = $this->t('Welcome to %collection', ['%collection' => $this->group->label()]);
+      $title = $this->t('Welcome to %collection', [
+        '%collection' => $this->group->label(),
+      ]);
+      $greetingField = $this->group instanceof CollectionInterface
+        ? $this->group->getSetting('greeting')
+        : NULL;
+      if ($greetingField && !$greetingField->isEmpty()) {
+        $title = Html::escape($greetingField->first()->getString());
+      }
 
       $modal_form = $this->formBuilder->getForm(SubscribeToCollectionForm::class, $this->group);
       $modal_form['#attached']['library'][] = 'core/drupal.dialog.ajax';
 
       // Allow modules to alter or replace the Ajax command.
       $event = new AjaxCommandEvent(new OpenModalDialogCommand($title, $modal_form, [
+        // The only option right now seems to be to disable drupalAutoButtons.
         'width' => '500',
       ]), [
         'instance' => 'join_collection.subscribe_dialog.open',
