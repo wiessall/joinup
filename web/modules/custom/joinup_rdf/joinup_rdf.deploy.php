@@ -94,10 +94,7 @@ function joinup_rdf_deploy_110901(array &$sandbox): string {
 
     // Some distributions do not have a title. Set a default one.
     if (empty($values['title'])) {
-      $error_messages[] = t("Distribution with URI %uri has no title. %data", [
-        '%uri' => $uri,
-        '%data' => print_r($data, TRUE),
-      ]);
+      $error_messages[] = sprintf('Distribution with URI %s has no title.', $uri);
       $values['title'] = 'Untitled distribution';
     }
 
@@ -111,6 +108,16 @@ function joinup_rdf_deploy_110901(array &$sandbox): string {
 
     // Clean the entity from the endpoint.
     $endpoint->query("WITH <http://joinup.eu/asset_distribution/published> DELETE { ?s ?p ?o } WHERE { ?s ?p ?o . VALUES ?s { <$uri> } }");
+
+    // The distributions were always published. Set the `published_at` field to
+    // the creation time.
+    if (empty($values['created'])) {
+      $error_messages[] = sprintf('Distribution with URI %s has no creation date.', $uri);
+      $values['published_at'] = $values['changed'];
+    }
+    else {
+      $values['published_at'] = $values['created'];
+    }
 
     // Create the node.
     /** @var \Drupal\contact_information\Entity\ContactInformationInterface $node */
@@ -126,10 +133,7 @@ function joinup_rdf_deploy_110901(array &$sandbox): string {
       $node->get('path')->pathauto = PathautoState::SKIP;
     }
     else {
-      $error_messages[] = t("Distribution with URI %uri has no alias. %title", [
-        '%uri' => $uri,
-        '%title' => $values['title'],
-      ]);
+      $error_messages[] = sprintf('No alias found for %s', $pathauto_old_path);
     }
 
     $node->save();
@@ -155,7 +159,7 @@ function joinup_rdf_deploy_110901(array &$sandbox): string {
   $count = count($nodes);
   $sandbox['progress'] += $count;
   $sandbox['#finished'] = $sandbox['progress'] / $sandbox['total'];
-  $message = "Progress: {$count} distributions ({$sandbox['progress']} total / {$sandbox['swapped_aliases']} aliases swapped) in " . round($finish - $start, 2) . ' s. Error messages: ' . count($error_messages) . "\n";
+  $message = "Progress: {$count} distributions ({$sandbox['progress']} total / {$sandbox['swapped_aliases']} aliases swapped) in " . round($finish - $start, 2) . ' s. Error messages: ' . count($error_messages ?? []) . "\n";
   $message .= implode("\n", $error_messages);
   return $message;
 }
