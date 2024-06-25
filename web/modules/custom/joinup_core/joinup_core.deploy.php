@@ -14,9 +14,11 @@
 
 declare(strict_types=1);
 
+use Drupal\joinup_core\DeployAndSmokeTestHelper;
+
 /**
- * Delete stale page.
+ * Create Interoperable Europe Act document as custom page.
  */
-function joinup_core_deploy_110800(): void {
-  \Drupal::entityTypeManager()->getStorage('node')->load(703013)->delete();
+function joinup_core_deploy_110900(): string {
+  return DeployAndSmokeTestHelper::createIeaCustomPage();
 }
