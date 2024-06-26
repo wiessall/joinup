@@ -201,8 +201,6 @@ class VocabularyManager {
       'http://joinup.eu/collection/draft',
       'http://joinup.eu/solution/published',
       'http://joinup.eu/solution/draft',
-      'http://joinup.eu/asset_release/published',
-      'http://joinup.eu/asset_release/draft',
     ];
 
     foreach ($graphs as $graph) {

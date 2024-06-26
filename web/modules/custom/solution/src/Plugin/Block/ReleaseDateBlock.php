@@ -1,5 +1,7 @@
 <?php
 
+// @todo This should probably move to joinup_release.
+
 declare(strict_types=1);
 
 namespace Drupal\solution\Plugin\Block;
@@ -12,7 +14,7 @@ use Drupal\Core\Datetime\DateFormatterInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\asset_release\Entity\AssetReleaseInterface;
+use Drupal\joinup_release\Entity\ReleaseInterface;
 use Drupal\solution\Entity\SolutionInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -88,11 +90,11 @@ class ReleaseDateBlock extends BlockBase implements ContainerFactoryPluginInterf
   /**
    * Gets the latest release.
    *
-   * @return \Drupal\asset_release\Entity\AssetReleaseInterface|null
+   * @return \Drupal\joinup_release\Entity\ReleaseInterface|null
    *   The latest release.
    */
-  protected function getLatestRelease(): ?AssetReleaseInterface {
-    $entity = $this->routeMatch->getParameter('rdf_entity');
+  protected function getLatestRelease(): ?ReleaseInterface {
+    $entity = $this->routeMatch->getParameter('node');
 
     if ($entity instanceof SolutionInterface) {
       return $entity->getLatestRelease();

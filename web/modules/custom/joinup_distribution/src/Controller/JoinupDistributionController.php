@@ -74,7 +74,7 @@ class JoinupDistributionController extends ControllerBase {
    *
    * @param \Drupal\rdf_entity\RdfInterface $rdf_entity
    *   The RDF entity that the distribution is associated with. Can be either an
-   *   'asset_release' or a 'solution'.
+   *   'release' or a 'solution'.
    *
    * @return \Drupal\joinup_distribution\Entity\DistributionInterface|null
    *   The unsaved distribution entity or NULL if the RDF entity parameter is
@@ -114,8 +114,8 @@ class JoinupDistributionController extends ControllerBase {
       $this->solution = $rdf_entity;
     }
 
-    if ($rdf_entity->bundle() === 'asset_release') {
-      $this->solution = $rdf_entity->field_isr_is_version_of->entity;
+    if ($rdf_entity->bundle() === 'release') {
+      $this->solution = $rdf_entity->is_version_of->entity;
     }
 
     return $this->solution;

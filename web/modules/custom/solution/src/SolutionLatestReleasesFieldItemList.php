@@ -35,10 +35,10 @@ class SolutionLatestReleasesFieldItemList extends EntityReferenceFieldItemList {
     /** @var string $graph_id */
     $graph_id = $solution->get('graph')->target_id;
 
-    $ids = \Drupal::entityQuery('rdf_entity')
+    $ids = \Drupal::entityQuery('node')
       ->graphs([$graph_id])
-      ->condition('rid', 'asset_release')
-      ->condition('field_isr_is_version_of', $solution->id())
+      ->condition('type', 'release')
+      ->condition('is_version_of', $solution->id())
       ->sort('created', 'DESC')
       ->range(0, 1)
       ->execute();

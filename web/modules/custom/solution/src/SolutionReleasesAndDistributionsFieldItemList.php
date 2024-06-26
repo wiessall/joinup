@@ -99,7 +99,7 @@ class SolutionReleasesAndDistributionsFieldItemList extends EntityReferenceField
   protected function getReleasesAndDistributions(): array {
     $entityTypeManager = \Drupal::entityTypeManager();
     /** @var \Drupal\sparql_entity_storage\SparqlEntityStorageInterface $storage */
-    $storage = $entityTypeManager->getStorage('rdf_entity');
+    $storage = $entityTypeManager->getStorage('node');
     /** @var \Drupal\solution\Entity\SolutionInterface $solution */
     $solution = $this->getEntity();
     $graph_id = $solution->get('graph')->target_id;
@@ -108,8 +108,8 @@ class SolutionReleasesAndDistributionsFieldItemList extends EntityReferenceField
     $ids = array_values($storage
       ->getQuery()
       ->graphs([$graph_id])
-      ->condition('rid', 'asset_release')
-      ->condition('field_isr_is_version_of', $solution->id())
+      ->condition('type', 'release')
+      ->condition('is_version_of', $solution->id())
       ->sort('created', 'DESC')
       ->execute());
 

@@ -56,13 +56,6 @@ class CommunityContentSubscriber extends NotificationSubscriberBase {
   protected bool $hasPublished;
 
   /**
-   * The revision manager service.
-   *
-   * @var \Drupal\state_machine_revisions\RevisionManagerInterface
-   */
-  protected RevisionManagerInterface $revisionManager;
-
-  /**
    * Constructs a new CommunityContentSubscriber object.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -80,9 +73,16 @@ class CommunityContentSubscriber extends NotificationSubscriberBase {
    * @param \Drupal\state_machine_revisions\RevisionManagerInterface $revision_manager
    *   The revision manager service.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, ConfigFactory $config_factory, AccountProxy $current_user, MembershipManager $og_membership_manager, WorkflowHelperInterface $workflow_helper, JoinupMessageDeliveryInterface $message_delivery, RevisionManagerInterface $revision_manager) {
+  public function __construct(
+    EntityTypeManagerInterface $entity_type_manager,
+    ConfigFactory $config_factory,
+    AccountProxy $current_user,
+    MembershipManager $og_membership_manager,
+    WorkflowHelperInterface $workflow_helper,
+    JoinupMessageDeliveryInterface $message_delivery,
+    protected RevisionManagerInterface $revision_manager
+  ) {
     parent::__construct($entity_type_manager, $config_factory, $current_user, $og_membership_manager, $workflow_helper, $message_delivery);
-    $this->revisionManager = $revision_manager;
   }
 
   /**

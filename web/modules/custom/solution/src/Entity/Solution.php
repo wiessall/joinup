@@ -9,7 +9,6 @@ use Drupal\Core\Cache\Cache;
 use Drupal\Core\Field\EntityReferenceFieldItemList;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
-use Drupal\asset_release\Entity\AssetReleaseInterface;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\collection\Exception\MissingCollectionException;
 use Drupal\contact_information\Traits\ContactInformationTrait;
@@ -26,6 +25,7 @@ use Drupal\joinup_group\Entity\GroupTrait;
 use Drupal\joinup_group\Entity\PinnableGroupContentTrait;
 use Drupal\joinup_group\Exception\MissingGroupException;
 use Drupal\joinup_publication_date\Entity\EntityPublicationTimeFallbackTrait;
+use Drupal\joinup_release\Entity\ReleaseInterface;
 use Drupal\joinup_workflow\ArchivableEntityTrait;
 use Drupal\joinup_workflow\EntityWorkflowStateTrait;
 use Drupal\og\OgMembershipInterface;
@@ -107,14 +107,14 @@ class Solution extends Rdf implements SolutionInterface {
    * {@inheritdoc}
    */
   public function getReleaseIds(): array {
-    return $this->getReferencedEntityIds('field_is_has_version')['rdf_entity'] ?? [];
+    return $this->getReferencedEntityIds('field_is_has_version')['node'] ?? [];
   }
 
   /**
    * {@inheritdoc}
    */
   public function getReleases(): array {
-    return $this->entityTypeManager()->getStorage('rdf_entity')
+    return $this->entityTypeManager()->getStorage('node')
       ->loadMultiple($this->getReleaseIds());
   }
 
@@ -135,7 +135,7 @@ class Solution extends Rdf implements SolutionInterface {
   /**
    * {@inheritdoc}
    */
-  public function getLatestRelease(): ?AssetReleaseInterface {
+  public function getLatestRelease(): ?ReleaseInterface {
     return $this->get('latest_release')->entity;
   }
 
@@ -206,8 +206,8 @@ class Solution extends Rdf implements SolutionInterface {
     $ids = ['node' => $this->getNodeGroupContent()];
     $releases = $this->getReleases();
     $ids = NestedArray::mergeDeep($ids, [
-      'rdf_entity' => [
-        'asset_release' => array_keys($releases),
+      'node' => [
+        'release' => array_keys($releases),
       ],
     ]);
     foreach ($releases as $release) {
