@@ -106,9 +106,6 @@ function joinup_rdf_deploy_110901(array &$sandbox): string {
     }
     assert(!empty($values['distribution_parent']), "Distribution with URI $uri has no parent. Distribution value array: " . print_r($data, TRUE));
 
-    // Clean the entity from the endpoint.
-    $endpoint->query("WITH <http://joinup.eu/asset_distribution/published> DELETE { ?s ?p ?o } WHERE { ?s ?p ?o . VALUES ?s { <$uri> } }");
-
     // The distributions were always published. Set the `published_at` field to
     // the creation time.
     if (empty($values['created'])) {
@@ -256,9 +253,11 @@ function joinup_rdf_deploy_110904(): string {
 }
 
 /**
- * Re-enable RDF Sync.
+ * Clean up. Clear the graph and re-enable synchronization.
  */
 function joinup_rdf_deploy_110905(): void {
+  $endpoint = \Drupal::getContainer()->get('sparql.endpoint');
+  $endpoint->query('CLEAR GRAPH <http://joinup.eu/asset_distribution/published>');
   \Drupal::getContainer()->get('rdf_sync.synchronizer')->enableSynchronization();
 }
 
