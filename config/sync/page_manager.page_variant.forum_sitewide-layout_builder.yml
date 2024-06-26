@@ -35,7 +35,33 @@ variant_settings:
             region_classes: ''
             region_styles: null
             region_data: null
-      components: {  }
+      components:
+        fc40a54a-2efc-46b4-876d-6e42f723fad8:
+          uuid: fc40a54a-2efc-46b4-876d-6e42f723fad8
+          region: content
+          configuration:
+            id: 'views_block:discussions_sitewide-most_active'
+            label: ''
+            label_display: visible
+            provider: views
+            context_mapping: {  }
+            views_label: ''
+            items_per_page: none
+          weight: 0
+          additional: {  }
+        ce35d87d-d5dc-4248-b2c4-544d6dd66dbd:
+          uuid: ce35d87d-d5dc-4248-b2c4-544d6dd66dbd
+          region: content
+          configuration:
+            id: 'views_block:discussions_sitewide-most_recent'
+            label: ''
+            label_display: visible
+            provider: views
+            context_mapping: {  }
+            views_label: ''
+            items_per_page: none
+          weight: 1
+          additional: {  }
       third_party_settings: {  }
 page: forum_sitewide
 selection_criteria: {  }
