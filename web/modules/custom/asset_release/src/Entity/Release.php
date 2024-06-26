@@ -19,7 +19,7 @@ use Drupal\solution\Entity\SolutionContentTrait;
 /**
  * Bundle class for the 'asset_release' bundle.
  */
-class AssetRelease extends Rdf implements AssetReleaseInterface {
+class Release extends Rdf implements ReleaseInterface {
 
   use ArchivableEntityTrait;
   use EntityPublicationTimeFallbackTrait;
