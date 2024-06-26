@@ -7,8 +7,10 @@
 
 declare(strict_types=1);
 
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\joinup_release\Entity\Release;
+use Drupal\joinup_release\Entity\ReleaseInterface;
 
 /**
  * Implements hook_entity_type_alter().
@@ -37,6 +39,39 @@ function joinup_release_entity_bundle_field_info_alter(array &$fields, EntityTyp
   // Make sure a release's title and version number is unique in its solution.
   if ($entity_type->id() == 'node' && $bundle == 'release' && !empty($fields['label'])) {
     $fields['label']->addConstraint('UniqueReleaseTitleVersion', []);
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function joinup_release_preprocess_node(array &$variables): void {
+  $release = $variables['rdf_entity'];
+  if (!$release instanceof ReleaseInterface) {
+    return;
+  }
+
+  $variables['full_label'] = new TranslatableMarkup('@label @version', [
+    '@label' => $release->label(),
+    '@version' => $release->getVersion(),
+  ]);
+
+  $solution = $release->getSolution();
+  $variables['is_latest_release'] = $release->isLatestRelease();
+
+  // Whenever a new release gets created, the parent solution gets updated.
+  // Invalidate the rendered template cache of the latest release in that case,
+  // so the latest release flag gets updated.
+  if ($solution && $variables['is_latest_release']) {
+    $cache_tags = $variables['#cache']['tags'] ?? [];
+    $cache_tags = Cache::mergeTags($cache_tags, $solution->getCacheTags());
+
+    // Add the group content tag belonging to the parent too. We need to
+    // invalidate the cache also when a release is first saved as draft and then
+    // published. In that case the solution won't be updated, so we need to
+    // manually take care of this.
+    $group_tag = Cache::buildTags('og-group-content', $solution->getCacheTagsToInvalidate());
+    $variables['#cache']['tags'] = Cache::mergeTags($cache_tags, $group_tag);
   }
 }
 

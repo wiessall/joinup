@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup_release\Entity;
 
 use Drupal\asset_release\Entity\ReleaseInterface;
+use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\joinup_bundle_class\DescriptionTrait;
 use Drupal\joinup_bundle_class\JoinupBundleClassFieldAccessTrait;
 use Drupal\joinup_bundle_class\LogoTrait;
