@@ -11,6 +11,11 @@ layout:
     layout:
       assets/css/layout.min.css: { minified: true }
 
+full-width-bg:
+  css:
+    layout:
+      assets/css/full-width-bg.min.css: { minified: true }
+
 components:
   version: VERSION
   css:

@@ -39,6 +39,9 @@
     align-items: center;
     color: $gray-700;
   }
+  &__icon {
+    aspect-ratio: 1;
+  }
   .badge {
     position: relative;
     top: -.25em; // Vertically align badge to heading
