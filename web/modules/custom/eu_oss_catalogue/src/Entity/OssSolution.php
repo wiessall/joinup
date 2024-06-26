@@ -18,6 +18,8 @@ use Drupal\pluginreference\Plugin\Field\FieldType\PluginReferenceItem;
  */
 class OssSolution extends Node implements OssSolutionInterface {
 
+  use EntityAnonymousOwnerTrait;
+
   /**
    * {@inheritdoc}
    */
@@ -36,6 +38,15 @@ class OssSolution extends Node implements OssSolutionInterface {
       ->setComputed(TRUE)
       ->setClass(OssGitFullNameItemList::class);
 
+    return $fields;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function bundleFieldDefinitions(EntityTypeInterface $entity_type, $bundle, array $base_field_definitions): array {
+    $fields = parent::bundleFieldDefinitions($entity_type, $bundle, $base_field_definitions);
+    $fields['uid'] = static::getAnonymousOwnerFieldDefinition($entity_type);
     return $fields;
   }
 
