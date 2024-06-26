@@ -2395,7 +2395,6 @@ class JoinupContext extends RawDrupalContext {
    * @throws \Exception
    *   Thrown when multiple or no links at all are found in the region.
    *
-   * @Then :text should be the active item in the :region menu
    * @Then :text should be the active item in the :region region
    */
   public function assertActiveLinkInRegion(string $text, string $region): void {
