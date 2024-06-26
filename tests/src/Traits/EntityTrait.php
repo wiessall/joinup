@@ -180,7 +180,7 @@ trait EntityTrait {
       'event' => 'event',
       'glossary' => 'glossary',
       'news' => 'news',
-      'release' => 'asset_release',
+      'release' => 'release',
       'spdx licence' => 'spdx_licence',
     ];
   }
