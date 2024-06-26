@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Drupal\asset_release\ContextProvider;
+namespace Drupal\joinup_release\ContextProvider;
 
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Plugin\Context\Context;
@@ -10,13 +10,13 @@ use Drupal\Core\Plugin\Context\ContextProviderInterface;
 use Drupal\Core\Plugin\Context\EntityContextDefinition;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\asset_release\Entity\AssetReleaseInterface;
 use Drupal\joinup_distribution\Entity\DistributionInterface;
+use Drupal\joinup_release\Entity\ReleaseInterface;
 
 /**
  * Sets the current asset_release as a context on asset_release routes.
  */
-class AssetReleaseRouteContext implements ContextProviderInterface {
+class ReleaseRouteContext implements ContextProviderInterface {
 
   use StringTranslationTrait;
 
@@ -25,7 +25,7 @@ class AssetReleaseRouteContext implements ContextProviderInterface {
    *
    * @var \Drupal\Core\Routing\RouteMatchInterface
    */
-  protected $routeMatch;
+  protected RouteMatchInterface $routeMatch;
 
   /**
    * Constructs a new AssetReleaseRouteContext.
@@ -40,15 +40,15 @@ class AssetReleaseRouteContext implements ContextProviderInterface {
   /**
    * {@inheritdoc}
    */
-  public function getRuntimeContexts(array $unqualified_context_ids) {
+  public function getRuntimeContexts(array $unqualified_context_ids): array {
     $result = [];
-    $context_definition = new EntityContextDefinition('entity:rdf_entity', NULL, FALSE);
+    $context_definition = new EntityContextDefinition('entity:node', NULL, FALSE);
     $value = NULL;
     if (($route_object = $this->routeMatch->getRouteObject()) && ($route_contexts = $route_object->getOption('parameters'))) {
       if (
-        isset($route_contexts['rdf_entity'])
-        && ($asset_release = $this->routeMatch->getParameter('rdf_entity'))
-        && ($asset_release instanceof AssetReleaseInterface)
+        isset($route_contexts['node'])
+        && ($asset_release = $this->routeMatch->getParameter('node'))
+        && ($asset_release instanceof ReleaseInterface)
       ) {
         $value = $asset_release;
       }
@@ -58,7 +58,7 @@ class AssetReleaseRouteContext implements ContextProviderInterface {
         && $node instanceof DistributionInterface
       ) {
         $parent = $node->distribution_parent->entity;
-        if ($parent instanceof AssetReleaseInterface) {
+        if ($parent instanceof ReleaseInterface) {
           $value = $parent;
         }
       }
@@ -70,7 +70,7 @@ class AssetReleaseRouteContext implements ContextProviderInterface {
     $context = new Context($context_definition, $value);
     $context->addCacheableDependency($cacheability);
 
-    $result['asset_release'] = $context;
+    $result['release'] = $context;
 
     return $result;
   }
@@ -78,9 +78,9 @@ class AssetReleaseRouteContext implements ContextProviderInterface {
   /**
    * {@inheritdoc}
    */
-  public function getAvailableContexts() {
-    $context = new Context(new EntityContextDefinition('entity:rdf_entity', $this->t('AssetRelease from URL')));
-    return ['asset_release' => $context];
+  public function getAvailableContexts(): array {
+    $context = new Context(new EntityContextDefinition('entity:node', $this->t('Release from URL')));
+    return ['release' => $context];
   }
 
 }

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Drupal\asset_release\EventSubscriber;
+namespace Drupal\joinup_release\EventSubscriber;
 
 use Drupal\joinup_group\Event\AddGroupContentEvent;
 use Drupal\joinup_group\EventSubscriber\AddGroupContentEventSubscriberBase;
@@ -27,8 +27,8 @@ class ReleaseGroupSubscriber extends AddGroupContentEventSubscriberBase {
    */
   protected function getBundles(): array {
     return [
-      'rdf_entity' => [
-        'asset_release',
+      'node' => [
+        'release',
       ],
     ];
   }
@@ -38,7 +38,7 @@ class ReleaseGroupSubscriber extends AddGroupContentEventSubscriberBase {
    */
   protected function getRouteParameters(AddGroupContentEvent $event, string $entityTypeId, string $bundleId): array {
     return [
-      'rdf_entity' => $event->getGroup()->id(),
+      'node' => $event->getGroup()->id(),
     ];
   }
 
@@ -46,7 +46,7 @@ class ReleaseGroupSubscriber extends AddGroupContentEventSubscriberBase {
    * {@inheritdoc}
    */
   protected function getRouteName(): string {
-    return 'asset_release.solution_asset_release.add';
+    return 'joinup_release.solution_release.add';
   }
 
   /**

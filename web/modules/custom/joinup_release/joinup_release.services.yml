@@ -1,0 +1,21 @@
+services:
+  joinup_release.release_route_context:
+    class: Drupal\joinup_release\ContextProvider\ReleaseRouteContext
+    arguments: ['@current_route_match']
+    tags:
+      - { name: 'context_provider' }
+  cache_context.release:
+    class: Drupal\joinup_release\Cache\ReleaseCacheContext
+    arguments: ['@request_stack']
+    tags:
+      - { name: cache.context }
+  cache_context.route.name.is_download_releases_route:
+    class: Drupal\joinup_release\Cache\DownloadReleasesCacheContext
+    arguments: ['@current_route_match']
+    tags:
+      - { name: cache.context }
+  joinup_release.group_add_content.subscriber:
+    class: Drupal\joinup_release\EventSubscriber\ReleaseGroupSubscriber
+    arguments: ['@entity_type.manager']
+    tags:
+      - { name: event_subscriber }
