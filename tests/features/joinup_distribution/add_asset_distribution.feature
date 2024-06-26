@@ -14,14 +14,9 @@ Feature: Add distribution through the UI
       | collection  | Asset Distribution Test          |
       | description | Some reusable random description |
       | state       | published                        |
-    And the following release:
-      | title          | Authoritarian Alpaca   |
-      | description    | First public release.  |
-      | release number | 1.0.0                  |
-      | creation date  | 2019-11-19 20:45       |
-      | is version of  | Solution random x name |
-      | status         | Completed              |
-      | state          | published              |
+    And release content:
+      | title | description | release number | creation date    | is version of          | status    | state     |
+      | title | description | 1.0.0          | 2019-11-19 20:45 | Solution random x name | Completed | published |
     And licence content:
       | title              | description                                              | deprecated |
       | WTFPL              | The WTFPL is a rather permissive licence                 | no         |
@@ -156,10 +151,9 @@ Feature: Add distribution through the UI
       | title       | Solubility of gases     |
       | description | Affected by temperature |
       | state       | published               |
-    And the following release:
-      | title         | 1.0.0 Adolf Sieverts |
-      | description   | First public release |
-      | is version of | Solubility of gases  |
+    And release content:
+      | title | description          | is version of       |
+      | 1.0.0 | First public release | Solubility of gases |
 
     # Distributions should have a unique title within a single release.
     And I am logged in as a facilitator of the "Solution random x name" solution

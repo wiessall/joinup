@@ -26,11 +26,9 @@ Feature: Solutions by licence report
       | title                 | state     |
       | Solution by licence 1 | published |
       | Solution by licence 2 | published |
-    And the following release:
-      | title          | Solution by licence 2 release |
-      | release number | 1                             |
-      | is version of  | Solution by licence 2         |
-      | state          | published                     |
+    And release content:
+      | title                         | release number | is version of         | state     |
+      | Solution by licence 2 release | 1              | Solution by licence 2 | published |
     # Distribution linked to the solution directly.
     And distribution content:
       | title                     | licence      | parent                | state     |

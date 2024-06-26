@@ -19,7 +19,7 @@ Feature:
       | title                      | description                 | owner         | contact information | collection                   | state     |
       | Sitemap solution draft     | Sitemap keywords everywhere | Sitemap owner | Sitemap secretariat | Sitemap collection published | draft     |
       | Sitemap solution published | Sitemap keywords everywhere | Sitemap owner | Sitemap secretariat | Sitemap collection published | published |
-    And the following releases:
+    And release content:
       | title             | release number | release notes | is version of              | owner         | contact information | state     |
       | Sitemap release 1 | 1              | New release   | Sitemap solution published | Sitemap owner | Sitemap secretariat | published |
       | Sitemap release 2 | 2              | Newer release | Sitemap solution published | Sitemap owner | Sitemap secretariat | draft     |

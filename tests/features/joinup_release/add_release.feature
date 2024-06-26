@@ -32,14 +32,9 @@ Feature: "Add release" visibility options.
     And the following solutions:
       | title          | description        | documentation | owner                | state     |
       | Release Test 1 | test description 1 | text.pdf      | Organisation example | published |
-    And the following release:
-      | title          | Chasing shadows     |
-      | is version of  | Release Test 1      |
-      | release number | 1.0                 |
-      | status         | Completed           |
-      | state          | published           |
-      | creation date  | 2014-08-30 23:59:00 |
-
+    And release content:
+      | title | is version of  | release number | status    | state     | creation date       | published at        |
+      | v1.0  | Release Test 1 | 1.0            | Completed | published | 2014-08-30 23:59:00 | 2014-08-30 23:59:00 |
     Then I should have 1 release
 
     # Assert that the "Release" tiles are present and contain version, release date, label and bundle type.
@@ -56,8 +51,12 @@ Feature: "Add release" visibility options.
     When I go to the homepage of the "Release Test 1" solution
     And I click "Add release"
     Then I should see the heading "Add Release"
+    # @todo Probably these are extra fields we need to keep. Revisit this when
+    #   all changes are done.
     And the following fields should be present "Name, Release version, Release notes, Upload a new file or enter a URL, Geographical coverage, Search keywords, Status, Language, Date, Time"
     # The entity is new, so the current workflow state should not be shown.
+    # @todo Remove this when the revision reference to solutions is implemented.
+    #   Revisit this when all changes are done.
     And the following fields should not be present "Description, Logo, Solution type, Contact information, Included asset, Translation, Distribution, Current workflow state, Langcode, Motivation"
 
     When I press "Publish"
@@ -112,11 +111,11 @@ Feature: "Add release" visibility options.
       | state | published                 |
 
     When I am not logged in
-    And I go to "/rdf_entity/http_e_f_fexample1regression/asset_release/add"
+    And I go to "/rdf_entity/http_e_f_fexample1regression/release/add"
     Then I should see the heading "Page not found"
 
     When I am logged in as a moderator
-    And I go to "/rdf_entity/http_e_f_fexample1regression/asset_release/add"
+    And I go to "/rdf_entity/http_e_f_fexample1regression/release/add"
     Then I should see the heading "Page not found"
 
   Scenario: Check publish time release is present time and past.

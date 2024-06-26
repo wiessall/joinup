@@ -22,7 +22,7 @@ Feature: Asset release "delete" functionality.
       | contact information | Yet another contact        |
       | collection          | Yet another collection     |
       | state               | published                  |
-    And the following releases:
+    And release content:
       | title               | description      | documentation | release number | release notes   | is version of        | owner             | contact information | state     |
       | Yet another release | A sample release | text.pdf      | 1              | Changed release | Yet another solution | Yet another owner | Yet another contact | published |
       | No release          | A sample release | text.pdf      | 1.2            | Changed release | Yet another solution | Yet another owner | Yet another contact | published |

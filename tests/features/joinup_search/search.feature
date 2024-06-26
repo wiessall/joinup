@@ -232,7 +232,7 @@ Feature: Global search
     And the following solutions:
       | title          | description                                                | keywords | owner             | contact information | collection  | state     |
       | Solution alpha | <p>This is the solution <strong>beta</strong> description. | Alphabet | Responsible owner | Go-to contact       | Col for Sol | published |
-    And the following releases:
+    And release content:
       | title         | release number | release notes                               | keywords | is version of  | owner             | contact information | state     |
       | Release Alpha | 1              | <p>Release notes for <em>beta</em> changes. | Alphabet | Solution alpha | Responsible owner | Go-to contact       | published |
     And distribution content:
@@ -486,11 +486,9 @@ Feature: Global search
     Then I should see "No content found for your search."
 
     # Add a new distribution, child of a release.
-    Given the following release:
-      | title          | Releazz   |
-      | release number | 1         |
-      | state          | published |
-      | is version of  | Zzolution |
+    Given release content:
+      | title   | release number | state     | is version of |
+      | Releazz | 1              | published | Zzolution     |
 
     When I enter "ReleazzDistro" in the search bar and press enter
     Then I should see "No content found for your search."

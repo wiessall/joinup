@@ -4,7 +4,7 @@ Feature: "Edit" visibility options.
   As a solution facilitator
   I need to be able to edit "Release" rdf entities through UI.
 
-  Background:
+  Scenario: "Edit" button should only be shown to solution facilitators and moderators.
     Given owner content:
       | name           |
       | Awesome person |
@@ -18,20 +18,10 @@ Feature: "Edit" visibility options.
       | owner               | Awesome person          |
       | contact information | Awesome contact         |
       | state               | published               |
-    And the following release:
-      | title               | My awesome solution abc v1 |
-      | description         | A sample release           |
-      | documentation       | text.pdf                   |
-      | release number      | 1                          |
-      | release notes       | Changed release            |
-      | is version of       | My awesome solution abc    |
-      | owner               | Awesome person             |
-      | contact information | Awesome contact            |
-      | state               | published                  |
-      | creation date       | 2020-11-19 20:45           |
-      | modification date   | 2022-11-19 20:45           |
+    And release content:
+      | title | description | documentation | release number | release notes | is version of | owner          | contact information | state     | creation date    | modification date | published at     |
+      | v1    | A sample    | text.pdf      | 1              | Changed       | My awesome    | Awesome person | Awesome contact     | published | 2020-11-19 20:45 | 2022-11-19 20:45  | 2020-11-19 20:45 |
 
-  Scenario: "Edit" button should only be shown to solution facilitators and moderators.
     When I am logged in as a "facilitator" of the "My awesome solution abc" solution
     And I go to the homepage of the "My awesome solution abc v1" release
     Then I should see the link "Edit" in the "Entity actions" region

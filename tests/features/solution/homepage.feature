@@ -26,15 +26,9 @@ Feature: Solution homepage
       | creation date       | 2017-12-01T8:43                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
       | modification date   | 2012-12-01T8:43                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
       | abstract            | Short abstract description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
-    And the following release:
-      | title          | Petri net v1     |
-      | description    | A sample release |
-      | documentation  | text.pdf         |
-      | release number | v1.1             |
-      | release notes  | Changed release  |
-      | is version of  | Petri net        |
-      | state          | published        |
-      | creation date  | 2022-12-21T13:00 |
+    And release content:
+      | title          | description      | documentation | release number | release notes   | is version of | state     | creation date    |
+      | Petri net v1.1 | A sample release | text.pdf      | v1.1           | Changed release | Petri net     | published | 2022-12-21T13:00 |
 
     When I go to the homepage of the "Petri net" solution
     Then the page should be cacheable
