@@ -115,49 +115,6 @@ function asset_release_rdf_entity_update(EntityInterface $entity) {
 }
 
 /**
- * Implements hook_preprocess_HOOK().
- */
-function asset_release_preprocess_rdf_entity(array &$variables): void {
-  $release = $variables['rdf_entity'];
-  if (!$release instanceof AssetReleaseInterface) {
-    return;
-  }
-  $variables['full_label'] = new TranslatableMarkup('@label @version', [
-    '@label' => $release->label(),
-    '@version' => $release->getVersion(),
-  ]);
-
-  $solution = $release->getSolution();
-  $variables['is_latest_release'] = $release->isLatestRelease();
-
-  // Whenever a new release gets created, the parent solution gets updated.
-  // Invalidate the rendered template cache of the latest release in that case,
-  // so the latest release flag gets updated.
-  if ($solution && $variables['is_latest_release']) {
-    $cache_tags = $variables['#cache']['tags'] ?? [];
-    $cache_tags = Cache::mergeTags($cache_tags, $solution->getCacheTags());
-
-    // Add the group content tag belonging to the parent too. We need to
-    // invalidate the cache also when a release is first saved as draft and then
-    // published. In that case the solution won't be updated, so we need to
-    // manually take care of this.
-    $group_tag = Cache::buildTags('og-group-content', $solution->getCacheTagsToInvalidate());
-    $variables['#cache']['tags'] = Cache::mergeTags($cache_tags, $group_tag);
-  }
-}
-
-/**
- * Implements hook_theme().
- */
-function asset_release_theme($existing, $type, $theme, $path) {
-  return [
-    'asset_release_releases_download' => [
-      'variables' => ['releases' => []],
-    ],
-  ];
-}
-
-/**
  * Implements hook_ENTITY_TYPE_access().
  */
 function asset_release_rdf_entity_access(EntityInterface $release, $operation, AccountInterface $account): AccessResultInterface {
@@ -255,75 +212,6 @@ function asset_release_entity_update(EntityInterface $entity) {
   if (in_array($entity->getWorkflowState(), ['published', 'archived'], TRUE)) {
     $storage->deleteFromGraph([$entity], 'draft');
   }
-}
-
-/**
- * Prepares variables for the 'asset_release_releases_download' template.
- *
- * @param array $variables
- *   An associative array containing:
- *   - releases: a list of releases and distributions to be rendered.
- */
-function template_preprocess_asset_release_releases_download(array &$variables) {
-  $releases = $variables['releases'];
-
-  // In the commented out section, all entities are handled as nodes. When
-  // RDF2Node is completed, both releases and distributions will be handled
-  // generically. Currently we have to iterate through each of them and do a
-  // separate view builder call.
-  // @todo Swap the following commented line and remove the rest in ISAICP-8376.
-  // @codingStandardsIgnoreStart
-  // $variables['releases'] = \Drupal::entityTypeManager()->getViewBuilder('node')->viewMultiple($releases, 'compact');
-  // @codingStandardsIgnoreEnd
-  foreach ($releases as $key => $entity) {
-    $variables['releases'][$key] = \Drupal::entityTypeManager()->getViewBuilder($entity->getEntityTypeId())->view($entity, 'compact');
-  }
-}
-
-/**
- * Checks if the given release has a unique combination of title and version.
- *
- * A solution might have releases of different software packages associated with
- * it, and some of these might have duplicate version numbers, but to avoid
- * confusion we should avoid having releases with identical names and versions
- * within the same solution.
- *
- * @param \Drupal\asset_release\Entity\AssetReleaseInterface $asset_release
- *   The release to check.
- * @param bool $check_unaffiliated_solutions
- *   Whether or not to check if the release title and version are unique in
- *   solutions that are not related to the release.
- *   - When this is TRUE the function will return TRUE if any other release has
- *     the same title and version as the given release, regardless of the
- *     solutions they are affiliated with.
- *   - When this is FALSE the function will only return TRUE if the solution
- *     that is affiliated with this release contains a release with a duplicate
- *     title and version. Releases that belong to unaffiliated solutions will be
- *     ignored.
- *
- * @return bool
- *   TRUE if the title and version are unique.
- */
-function asset_release_title_version_is_unique(AssetReleaseInterface $asset_release, $check_unaffiliated_solutions = FALSE) {
-  $query = \Drupal::entityQuery('rdf_entity')->accessCheck(FALSE)
-    ->condition('label', $asset_release->label())
-    ->condition('rid', 'asset_release');
-  if ($asset_release->getVersion()) {
-    $query->condition('field_isr_release_number', $asset_release->getVersion());
-  }
-
-  if (!empty($asset_release->id())) {
-    $query->condition('id', $asset_release->id(), '<>');
-  }
-
-  // Filter all releases that do not belong to the same solution.
-  if (!$check_unaffiliated_solutions) {
-    $query->condition('field_isr_is_version_of', $asset_release->get('field_isr_is_version_of')->first()->getValue()['target_id']);
-  }
-
-  $result = $query->execute();
-
-  return empty($result);
 }
 
 /**
