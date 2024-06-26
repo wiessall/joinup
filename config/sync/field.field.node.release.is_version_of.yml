@@ -1,0 +1,28 @@
+uuid: 931fd705-0b62-4a62-9e04-b64d2807582d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.is_version_of
+    - node.type.release
+    - rdf_entity.rdfentity.solution
+  module:
+    - og
+id: node.release.is_version_of
+field_name: is_version_of
+entity_type: node
+bundle: release
+label: 'Is version of'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:rdf_entity'
+  handler_settings:
+    target_bundles:
+      solution: solution
+    sort:
+      field: _none
+field_type: og_standard_reference
