@@ -77,7 +77,7 @@ function joinup_rdf_deploy_110901(array &$sandbox): string {
         }
       }
       $value = match ($fieldName) {
-        'field_licence', 'format', 'representation_technique' => MappedTerm::loadByUri($value)->id(),
+        'field_licence', 'format', 'representation_technique', 'process_status' => MappedTerm::loadByUri($value)->id(),
         'description' => ['value' => $value, 'format' => 'content_editor'],
         'changed', 'created' => $value->getTimestamp(),
         // Title can't be longer than 255 characters.
