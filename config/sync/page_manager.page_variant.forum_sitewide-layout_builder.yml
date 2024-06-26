@@ -1,0 +1,43 @@
+uuid: 618f77b4-e481-40ac-b417-b079378c26c5
+langcode: en
+status: true
+dependencies:
+  config:
+    - page_manager.page.forum_sitewide
+    - views.view.discussions_sitewide
+  module:
+    - layout_discovery
+    - views
+id: forum_sitewide-layout_builder
+label: Forum
+weight: 0
+variant: layout_builder
+variant_settings:
+  id: layout_builder
+  label: null
+  weight: 0
+  uuid: 441b33a3-08fe-4ed3-9054-942ec7163084
+  sections:
+    -
+      layout_id: layout_onecol
+      layout_settings:
+        label: 'Main content'
+        context_mapping: {  }
+        custom_id: null
+        custom_classes: ''
+        custom_class_choose: null
+        custom_styles: null
+        custom_data_attributes: null
+        regions:
+          content:
+            region_id: null
+            region_class_choose: null
+            region_classes: ''
+            region_styles: null
+            region_data: null
+      components: {  }
+      third_party_settings: {  }
+page: forum_sitewide
+selection_criteria: {  }
+selection_logic: and
+static_context: {  }
