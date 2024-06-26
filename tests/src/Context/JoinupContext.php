@@ -2397,7 +2397,7 @@ class JoinupContext extends RawDrupalContext {
    *
    * @Then :text should be the active item in the :region region
    */
-  public function assertActiveLinkInRegion($text, $region) {
+  public function assertActiveLinkInRegion(string $text, string $region): void {
     $links = $this->findLinksMarkedAsActive($region);
 
     if (empty($links)) {

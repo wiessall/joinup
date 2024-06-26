@@ -231,7 +231,7 @@ Feature:
     When I click "document-management"
     Then I should be on "/eu-oss-catalogue/solutions"
     And I should see the following facet summary "document-management"
-    And "Search" should be the active item in the "Navigation menu" menu
+    And "Search" should be the active item in the "Navigation menu" region
     When I go to the content page of the type "oss_solution" with the title "Super Awesome Software"
     And I click "Developers Italia"
     Then I should be on "/eu-oss-catalogue/solutions"
@@ -239,7 +239,7 @@ Feature:
     When I go to the content page of the type "oss_solution" with the title "Super Awesome Software"
     And I click "science-and-technology"
     Then I should be on "/eu-oss-catalogue/solutions"
-    And "Search" should be the active item in the "Navigation menu" menu
+    And "Search" should be the active item in the "Navigation menu" region
     And I should see the following facet summary "science-and-technology"
 
     # Check that this node type doesn't leak in search as facet.

@@ -43,18 +43,6 @@ class JoinupOSSSolutionContext extends RawDrupalContext {
   }
 
   /**
-   * Deletes an OSS Solution.
-   *
-   * @param string $title
-   *   The entity title.
-   *
-   * @When I delete the :title oss_solution
-   */
-  public function deleteOssSolution(string $title): void {
-    $this->getEntityByLabel('node', $title, 'oss_solution')->delete();
-  }
-
-  /**
    * Ensures that we do not import solutions when the cron job is performed.
    *
    * @BeforeScenario @api

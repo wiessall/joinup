@@ -37,6 +37,7 @@ upgrade_commands:
 php_version: 8.3
 extra_pkgs:
   - php8.3-apcu
+  - git
 
 mysql_version: "8.0"
 mydumper: True
