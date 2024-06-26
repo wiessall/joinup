@@ -20,7 +20,6 @@
         # Third-party code injected in page with Javascript.
         - .globan
   - Drupal\joinup\Context\AdmsValidatorContext
-  - Drupal\joinup\Context\AssetReleaseContext
   - Drupal\joinup\Context\BootstrapContext
   - Drupal\joinup\Context\CollectionContext
   - Drupal\joinup\Context\ContactFormContext
@@ -71,6 +70,7 @@
   - Drupal\joinup\Context\OwnerContext
   - Drupal\joinup\Context\PollContext
   - Drupal\joinup\Context\RdfGraphContext
+  - Drupal\joinup\Context\ReleaseContext
   - Drupal\joinup\Context\ReplicateContext
   - Drupal\joinup\Context\RssContext
   - Drupal\joinup\Context\ScreenshotContext:

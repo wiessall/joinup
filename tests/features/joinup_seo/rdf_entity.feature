@@ -29,10 +29,9 @@ Feature: SEO for RDF entities.
     Given the following solution:
       | title | SEO solution |
       | state | published    |
-    And the following release:
-      | title         | SEO release  |
-      | is version of | SEO solution |
-      | state         | published    |
+    And release content:
+      | title       | is version of | state     |
+      | SEO release | SEO solution  | published |
     And distribution content:
       | title            | parent      | state     |
       | SEO distribution | SEO release | published |
