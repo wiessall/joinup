@@ -258,36 +258,6 @@ function _asset_release_edit_date_validate(array &$form, FormStateInterface $for
 }
 
 /**
- * Implements hook_preprocess_page_title__rdf_entity__asset_release().
- */
-function asset_release_preprocess_page_title__rdf_entity__asset_release(array &$variables): void {
-  /** @var \Drupal\asset_release\Entity\AssetReleaseInterface $release */
-  $release = $variables['entity'];
-
-  $variables['additional_content']['full_label'] = new TranslatableMarkup('@label @version', [
-    '@label' => $release->label(),
-    '@version' => $release->getVersion(),
-  ]);
-
-  $is_latest_release = $release->isLatestRelease();
-  $variables['additional_content']['is_latest_release'] = $is_latest_release;
-  if (!$is_latest_release && ($latest_release = $release->getSolution()->getLatestRelease())) {
-    $variables['additional_content']['latest_release'] = $latest_release->toUrl()->toString();
-  }
-}
-
-/**
- * Implements hook_preprocess().
- */
-function asset_release_preprocess_rdf_entity__asset_release__compact(array &$variables): void {
-  $entity = $variables['rdf_entity'] ?? NULL;
-
-  if ($entity instanceof EntityPublicationTimeInterface) {
-    joinup_publication_date_add_content_dates($entity, $variables);
-  }
-}
-
-/**
  * Implements hook_sparql_bundle_load_alter().
  *
  * There is an initial check whether the bundle is empty because the method
@@ -295,6 +265,9 @@ function asset_release_preprocess_rdf_entity__asset_release__compact(array &$var
  * currently being skipped for the taxonomies.
  */
 function asset_release_sparql_bundle_load_alter(array $entity_values, array &$bundles): void {
+  // @todo Ensure this is not needed anymore. After the conversion of the
+  //   releases, there is no confusion about the bundles having the same URI ID.
+  //   Revisit this when standard changes are finished.
   if (count($bundles) > 1 && in_array('solution', $bundles)) {
     if (isset($entity_values['http://purl.org/dc/terms/isVersionOf'])) {
       $bundles = array_diff($bundles, ['solution']);

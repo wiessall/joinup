@@ -10,6 +10,8 @@ declare(strict_types=1);
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\joinup_publication_date\Entity\EntityPublicationTimeInterface;
 use Drupal\joinup_release\Entity\Release;
 use Drupal\joinup_release\Entity\ReleaseInterface;
 
@@ -97,6 +99,34 @@ function joinup_release_theme(array $existing, $type, $theme, $path): array {
 function template_preprocess_joinup_release_releases_download(array &$variables): void {
   $releases = $variables['releases'];
   $variables['releases'] = \Drupal::entityTypeManager()->getViewBuilder('node')->viewMultiple($releases, 'compact');
+}
+
+/**
+ * Implements hook_preprocess_page_title__node__release().
+ */
+function joinup_release_preprocess_page_title__node__release(array &$variables): void {
+  /** @var \Drupal\joinup_release\Entity\ReleaseInterface $release */
+  $release = $variables['entity'];
+  $variables['additional_content']['full_label'] = new TranslatableMarkup('@label @version', [
+    '@label' => $release->label(),
+    '@version' => $release->getVersion(),
+  ]);
+
+  $is_latest_release = $release->isLatestRelease();
+  $variables['additional_content']['is_latest_release'] = $is_latest_release;
+  if (!$is_latest_release && ($latest_release = $release->getSolution()->getLatestRelease())) {
+    $variables['additional_content']['latest_release'] = $latest_release->toUrl()->toString();
+  }
+}
+
+/**
+ * Implements hook_preprocess().
+ */
+function joinup_release_preprocess_node__release__compact(array &$variables): void {
+  $entity = $variables['node'] ?? NULL;
+  if ($entity instanceof EntityPublicationTimeInterface) {
+    joinup_publication_date_add_content_dates($entity, $variables);
+  }
 }
 
 /**
