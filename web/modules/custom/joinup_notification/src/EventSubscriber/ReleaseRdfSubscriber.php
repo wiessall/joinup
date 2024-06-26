@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Drupal\joinup_notification\EventSubscriber;
 
 use Drupal\Core\Entity\EntityInterface;
-use Drupal\asset_release\Entity\AssetReleaseInterface;
 use Drupal\joinup_group\JoinupGroupHelper;
 use Drupal\joinup_notification\Event\NotificationEvent;
 use Drupal\joinup_notification\MessageArgumentGenerator;
 use Drupal\joinup_notification\NotificationEvents;
+use Drupal\joinup_release\Entity\ReleaseInterface;
 use Drupal\og\OgRoleInterface;
 use Drupal\state_machine\Plugin\Workflow\WorkflowInterface;
 use Drupal\state_machine\Plugin\Workflow\WorkflowTransition;
@@ -40,10 +40,10 @@ use Drupal\state_machine\Plugin\Workflow\WorkflowTransition;
  */
 class ReleaseRdfSubscriber extends NotificationSubscriberBase {
 
-  const TEMPLATE_UPDATE_PUBLISHED = 'release_update';
-  const TEMPLATE_DELETE = 'release_delete';
-  const TEMPLATE_APPROVE_PROPOSED = 'release_approve_proposed';
-  const TEMPLATE_REQUEST_CHANGES = 'release_request_changes';
+  const string TEMPLATE_UPDATE_PUBLISHED = 'release_update';
+  const string TEMPLATE_DELETE = 'release_delete';
+  const string TEMPLATE_APPROVE_PROPOSED = 'release_approve_proposed';
+  const string TEMPLATE_REQUEST_CHANGES = 'release_request_changes';
 
   /**
    * The transition object.
@@ -107,13 +107,13 @@ class ReleaseRdfSubscriber extends NotificationSubscriberBase {
 
     // Only initialize the workflow if it is available. It is unavailable when
     // the entity is being deleted during cleanup of orphaned group content.
-    if (!$this->entity instanceof AssetReleaseInterface || !$this->entity->hasWorkflow()) {
+    if (!$this->entity instanceof ReleaseInterface || !$this->entity->hasWorkflow()) {
       return;
     }
 
     $this->event = $event;
     $this->workflow = $this->entity->getWorkflow();
-    $this->fromState = isset($this->entity->original) ? $this->entity->original->getWorkflowState() : '__new__';
+    $this->fromState = isset($this->entity->original) ? $this->entity->original->getWorkflowState() : 'draft';
     $this->toState = $this->entity->getWorkflowState();
     $this->transition = $this->workflow->findTransition($this->fromState, $this->toState);
     $this->motivation = empty($this->entity->motivation) ? '' : $this->entity->motivation;
@@ -270,11 +270,11 @@ class ReleaseRdfSubscriber extends NotificationSubscriberBase {
    *   Whether the event applies.
    */
   protected function appliesOnReleases(): bool {
-    if ($this->entity->getEntityTypeId() !== 'rdf_entity') {
+    if ($this->entity->getEntityTypeId() !== 'node') {
       return FALSE;
     }
 
-    if ($this->entity->bundle() !== 'asset_release') {
+    if ($this->entity->bundle() !== 'release') {
       return FALSE;
     }
 
@@ -286,15 +286,15 @@ class ReleaseRdfSubscriber extends NotificationSubscriberBase {
    */
   protected function generateArguments(EntityInterface $entity): array {
     // PHP does not support covariance on arguments so we cannot narrow the type
-    // hint to only asset release entities. Let's assert the type instead.
-    assert($entity instanceof AssetReleaseInterface, __METHOD__ . ' only supports asset release entities.');
+    // hint to only release entities. Let's assert the type instead.
+    assert($entity instanceof ReleaseInterface, __METHOD__ . ' only supports release entities.');
 
     $arguments = parent::generateArguments($entity);
     /** @var \Drupal\user\UserInterface $actor */
     $actor = $this->entityTypeManager->getStorage('user')->load($this->currentUser->id());
     $motivation = $this->entity->motivation ?? '';
     $arguments['@transition:motivation'] = $motivation;
-    $arguments['@entity:field_isr_release_number'] = $entity->getVersion();
+    $arguments['@entity:release_number'] = $entity->getVersion();
 
     // Add arguments related to the parent collection or solution.
     $parent = JoinupGroupHelper::getGroup($entity);

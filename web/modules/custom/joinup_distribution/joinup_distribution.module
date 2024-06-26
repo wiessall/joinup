@@ -54,7 +54,7 @@ function joinup_distribution_entity_bundle_field_info(EntityTypeInterface $entit
     return [];
   }
 
-  if (!in_array($bundle, ['asset_release', 'solution'])) {
+  if (!in_array($bundle, ['joinup_release', 'solution'])) {
     return [];
   }
 
@@ -92,10 +92,10 @@ function joinup_distribution_entity_bundle_field_info(EntityTypeInterface $entit
 function joinup_distribution_form_node_distribution_form_alter(array &$form, FormStateInterface $formState): void {
   $parent = \Drupal::routeMatch()->getParameter('rdf_entity');
 
-  // Bail out if the solution or asset_release is not present on the route.
-  // Since this form is only intended to be used in the context of a solution or
-  // release, there is no field provided for it. Without a solution or a release
-  // the distribution will be dangling and won't be reachable.
+  // Bail out if the solution or release is not present on the route. Since this
+  // form is only intended to be used in the context of a solution or  release,
+  // there is no field provided for it. Without a solution or a release the
+  // distribution will be dangling and won't be reachable.
   if (!$parent || !$parent instanceof DistributionsParentInterface) {
     throw new AccessDeniedHttpException('Distributions can only be created in context of a solution or an asset release.');
   }

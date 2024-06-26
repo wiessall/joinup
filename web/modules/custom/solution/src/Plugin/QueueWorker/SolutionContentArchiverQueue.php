@@ -12,12 +12,12 @@ use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Queue\QueueWorkerBase;
 use Drupal\Core\Session\AccountSwitcherInterface;
-use Drupal\asset_release\Entity\AssetReleaseInterface;
 use Drupal\custom_page\Entity\CustomPageInterface;
 use Drupal\joinup_community_content\Entity\CommunityContentInterface;
 use Drupal\joinup_distribution\Entity\DistributionInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_notification\NotificationEvents;
+use Drupal\joinup_release\Entity\ReleaseInterface;
 use Drupal\joinup_workflow\ArchivableEntityInterface;
 use Drupal\joinup_workflow\WorkflowHelperInterface;
 use Drupal\solution\Entity\SolutionInterface;
@@ -39,7 +39,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class SolutionContentArchiverQueue extends QueueWorkerBase implements ContainerFactoryPluginInterface {
 
   private const ENTITY_CLASSES_TO_ARCHIVE = [
-    AssetReleaseInterface::class,
+    ReleaseInterface::class,
     CustomPageInterface::class,
     CommunityContentInterface::class,
     DistributionInterface::class,

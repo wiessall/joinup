@@ -276,7 +276,7 @@ function solution_rdf_entity_view(array &$build, RdfInterface $solution, EntityV
   if ($display->getComponent('releases_overview')) {
     $show_button =
       // Don't show it on the release overview page.
-      \Drupal::routeMatch()->getRouteName() !== 'asset_release.solution_asset_release.overview'
+      \Drupal::routeMatch()->getRouteName() !== 'joinup_release.solution_release.overview'
       // Don't show if the solution has no releases or standalone distributions.
       && !$solution->get('releases_and_distributions')->isEmpty();
 
@@ -284,12 +284,12 @@ function solution_rdf_entity_view(array &$build, RdfInterface $solution, EntityV
       $build['releases_overview'] = [
         '#type' => 'link',
         '#title' => t('Download releases'),
-        '#url' => Url::fromRoute('asset_release.solution_asset_release.overview', [
+        '#url' => Url::fromRoute('joinup_release.solution_release.overview', [
           'rdf_entity' => $solution->id(),
         ]),
         '#cache' => [
           // The 'group_header_block' block cache will have different versions
-          // for the 'asset_release.solution_asset_release.overview' route
+          // for the 'joinup_release.solution_release.overview' route
           // compared to the canonical solution route.
           'contexts' => ['route.name.is_download_releases_route'],
         ],

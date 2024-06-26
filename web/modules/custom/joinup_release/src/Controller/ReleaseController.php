@@ -13,6 +13,8 @@ use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Routing\TrustedRedirectResponse;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\joinup_release\Entity\ReleaseInterface;
+use Drupal\node\NodeInterface;
 use Drupal\rdf_entity\RdfInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -163,21 +165,20 @@ class ReleaseController extends ControllerBase {
   }
 
   /**
-   * Creates a new asset_release entity.
+   * Creates a new release entity.
    *
    * @param \Drupal\rdf_entity\RdfInterface $rdf_entity
-   *   The solution that the asset_release is version of.
+   *   The solution that the release is version of.
    *
-   * @return \Drupal\rdf_entity\RdfInterface
-   *   The unsaved asset_release entity.
+   * @return \Drupal\joinup_release\Entity\ReleaseInterface
+   *   The unsaved release entity.
    */
-  protected function createNewRelease(RdfInterface $rdf_entity): RdfInterface {
+  protected function createNewRelease(RdfInterface $rdf_entity): ReleaseInterface {
     /** @var \Drupal\rdf_entity\RdfInterface $release */
-    $release = $this->entityTypeManager()->getStorage('rdf_entity')->create([
-      'rid' => 'asset_release',
+    return $this->entityTypeManager()->getStorage('node')->create([
+      'type' => 'release',
       'is_version_of' => $rdf_entity->id(),
     ]);
-    return $release;
   }
 
 }

@@ -111,7 +111,7 @@ class IndexDistributionData extends ProcessorPluginBase {
     $entity = $item->getOriginalObject()->getValue();
 
     // Only solutions and releases should receive distribution data.
-    if (!in_array($entity->bundle(), ['asset_release', 'solution'])) {
+    if (!in_array($entity->bundle(), ['release', 'solution'])) {
       return;
     }
 
@@ -121,7 +121,9 @@ class IndexDistributionData extends ProcessorPluginBase {
     }
 
     // Get the parent Search API field.
-    $sapiFieldName = $entity->bundle() === 'asset_release' ? 'field_isr_description' : 'field_is_description';
+    // @todo This should take the solutions description from the referenced
+    //   revision. Revisit this when all changes are done.
+    $sapiFieldName = $entity->bundle() === 'release' ? 'field_isr_description' : 'field_is_description';
     $sapiField = $item->getField($sapiFieldName);
 
     // Iterate over all distributions and append their data to Search API field.

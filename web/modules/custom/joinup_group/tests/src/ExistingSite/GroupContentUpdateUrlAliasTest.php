@@ -63,6 +63,12 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
           (int) $this->entity['node']['discussion']['2']->id(),
         ],
         'distribution' => $distributions,
+        // @todo This should probably be handles like the distributions above.
+        //   Revisit this once all changes are done.
+        'release' => [
+          'http://release/1.1',
+          'http://release/1.2',
+        ],
         'document' => [
           (int) $this->entity['node']['document']['1.1']->id(),
           (int) $this->entity['node']['document']['1.2']->id(),
@@ -87,10 +93,6 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
         ],
       ],
       'rdf_entity' => [
-        'asset_release' => [
-          'http://release/1.1',
-          'http://release/1.2',
-        ],
         'solution' => [
           'http://solution/1',
         ],
@@ -109,6 +111,12 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
           (int) $this->entity['node']['discussion']['1.2']->id(),
         ],
         'distribution' => $distributions,
+        // @todo This should probably be handles like the distributions above.
+        //   Revisit this once all changes are done.
+        'release' => [
+          'http://release/1.1',
+          'http://release/1.2',
+        ],
         'document' => [
           (int) $this->entity['node']['document']['1.1']->id(),
           (int) $this->entity['node']['document']['1.2']->id(),
@@ -122,12 +130,9 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
           (int) $this->entity['node']['news']['1.2']->id(),
         ],
       ],
-      'rdf_entity' => [
-        'asset_release' => [
-          'http://release/1.1',
-          'http://release/1.2',
-        ],
-      ],
+      // @todo Check if this is needed to be blank for some foreach. Revisit
+      //   this once all changes are done.
+      'rdf_entity' => [],
     ], $this->entity['rdf_entity']['solution']['1']->getGroupContentIds());
 
     $this->drupalLogin($this->createUser([], NULL, FALSE, [
@@ -149,9 +154,9 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
     $this->drupalGet($this->entity['rdf_entity']['solution']['1']->toUrl());
     $assert->addressEquals('/collection/collection/solution/abc123');
     // Releases.
-    $this->drupalGet($this->entity['rdf_entity']['asset_release']['1.1']->toUrl());
+    $this->drupalGet($this->entity['node']['release']['1.1']->toUrl());
     $assert->addressEquals('/collection/collection/solution/abc123/release/11');
-    $this->drupalGet($this->entity['rdf_entity']['asset_release']['1.2']->toUrl());
+    $this->drupalGet($this->entity['node']['release']['1.2']->toUrl());
     $assert->addressEquals('/collection/collection/solution/abc123/release/12');
     // Release 1.1 distributions.
     $this->drupalGet($this->entity['node']['distribution']['1.1.1']->toUrl());
@@ -208,9 +213,9 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
     $this->drupalGet($this->entity['rdf_entity']['solution']['1']->toUrl());
     $assert->addressEquals('/collection/xyz789/solution/abc123');
     // Releases.
-    $this->drupalGet($this->entity['rdf_entity']['asset_release']['1.1']->toUrl());
+    $this->drupalGet($this->entity['node']['release']['1.1']->toUrl());
     $assert->addressEquals('/collection/xyz789/solution/abc123/release/11');
-    $this->drupalGet($this->entity['rdf_entity']['asset_release']['1.2']->toUrl());
+    $this->drupalGet($this->entity['node']['release']['1.2']->toUrl());
     $assert->addressEquals('/collection/xyz789/solution/abc123/release/12');
     // Release 1.1 distributions.
     $this->drupalGet($this->entity['node']['distribution']['1.1.1']->toUrl());
@@ -361,13 +366,13 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
     ]);
     // Releases.
     for ($i = 1; $i <= 2; $i++) {
-      $this->entity['rdf_entity']['asset_release']["1.{$i}"] = $this->createRdfEntity([
-        'rid' => 'asset_release',
+      $this->entity['node']['release']["1.{$i}"] = $this->createNode([
+        'type' => 'release',
         'id' => "http://release/1.{$i}",
-        'label' => "release 1.{$i}",
-        'field_isr_release_number' => "1.{$i}",
-        'field_isr_is_version_of' => 'http://solution/1',
-        'field_isr_state' => 'published',
+        'title' => "release 1.{$i}",
+        'release_number' => "1.{$i}",
+        'is_version_of' => 'http://solution/1',
+        'field_state' => 'published',
       ]);
       // Release distributions.
       for ($j = 1; $j <= 2; $j++) {

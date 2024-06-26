@@ -45,18 +45,20 @@ class GroupTokensTest extends JoinupExistingSiteTestBase {
       'field_state' => 'published',
     ]);
 
-    $release = $this->createRdfEntity([
-      'rid' => 'asset_release',
-      'field_isr_is_version_of' => $solution->id(),
-      'field_isr_distribution' => $release_distribution->id(),
+    $release = $this->createNode([
+      'type' => 'release',
+      'is_version_of' => $solution->id(),
+      // @todo Check if this is needed or a reverse reference should be used.
+      //   Revisit this once all changes are done.
+      'distribution' => $release_distribution->id(),
     ]);
 
     $entities_to_test = [
       'rdf_entity' => [
         $solution,
-        $release,
       ],
       'node' => [
+        $release,
         $release_distribution,
         $standalone_distribution,
       ],

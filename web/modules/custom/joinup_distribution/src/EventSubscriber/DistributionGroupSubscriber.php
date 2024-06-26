@@ -35,10 +35,10 @@ class DistributionGroupSubscriber extends AddGroupContentEventSubscriberBase {
    */
   public function addLinks(AddGroupContentEvent $event): void {
     // Add distribution under a release.
-    $releaseContexts = $this->assetReleaseContext->getRuntimeContexts(['asset_release']);
-    if ($releaseContexts && $releaseContexts['asset_release']->hasContextValue()) {
+    $releaseContexts = $this->assetReleaseContext->getRuntimeContexts(['release']);
+    if ($releaseContexts && $releaseContexts['release']->hasContextValue()) {
       $routeParameters = [
-        'rdf_entity' => $releaseContexts['asset_release']->getContextValue()->id(),
+        'node' => $releaseContexts['release']->getContextValue()->id(),
       ];
       /** @var \Drupal\Core\Config\Entity\EntityBundleWithPluralLabelsInterface $distributionBundle */
       $distributionBundle = $this->entityTypeManager->getStorage('node_type')->load('distribution');

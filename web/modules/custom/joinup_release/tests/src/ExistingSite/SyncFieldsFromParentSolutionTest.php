@@ -130,11 +130,11 @@ class SyncFieldsFromParentSolutionTest extends JoinupExistingSiteTestBase {
     ]);
 
     // Create a release.
-    $release = $this->createRdfEntity([
-      'rid' => 'asset_release',
-      'id' => 'http://example.com/release',
-      'label' => 'release',
-      'field_isr_is_version_of' => 'http://example.com/solution',
+    $release = $this->createNode([
+      'type' => 'release',
+      'uri' => 'http://example.com/release',
+      'title' => 'release',
+      'is_version_of' => 'http://example.com/solution',
     ]);
 
     // Check that the release fields were synchronized.

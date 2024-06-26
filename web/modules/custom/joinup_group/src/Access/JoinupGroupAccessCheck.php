@@ -9,8 +9,8 @@ use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Routing\Access\AccessInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
-use Drupal\asset_release\Entity\AssetReleaseInterface;
 use Drupal\joinup_group\JoinupGroupHelper;
+use Drupal\joinup_release\Entity\ReleaseInterface;
 use Drupal\rdf_entity\RdfInterface;
 use Drupal\sparql_entity_storage\UriEncoder;
 use Symfony\Component\Routing\Route;
@@ -38,7 +38,7 @@ class JoinupGroupAccessCheck implements AccessInterface {
    *
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
-  protected $entityTypeManager;
+  protected EntityTypeManagerInterface $entityTypeManager;
 
   /**
    * Builds a new access checker instance.
@@ -73,36 +73,35 @@ class JoinupGroupAccessCheck implements AccessInterface {
       throw new \Exception("The '_joinup_group' route requirement should have one of the following values: 'TRUE', 'FALSE', 'collection' or 'solution' but '{$requirement}' was given.");
     }
 
-    // If the rdf_entity from the route is a release, we might be in a route
-    // that is related to a distribution, thus, still we need to check for the
-    // solution instead.
-    $rdf_entity = $route_match->getParameter('rdf_entity');
-    if ($rdf_entity instanceof AssetReleaseInterface) {
-      $rdf_entity = $rdf_entity->getGroup();
+    // If the node from the route is a release, we might be in a route that is
+    // related to a distribution, thus, still we need to check for the solution
+    // instead.
+    $release = $route_match->getParameter('node');
+    if ($release instanceof ReleaseInterface) {
+      $release = $release->getGroup();
     }
 
     // If the route wasn't configured to upcast the parameter, try to load an
     // RDF entity given its ID.
-    if (!$rdf_entity instanceof RdfInterface) {
-      if ($rdf_entity) {
-        $id = UriEncoder::decodeUrl($rdf_entity);
-        $rdf_entity = $this->entityTypeManager->getStorage('rdf_entity')->load($id);
+    if (!$release instanceof ReleaseInterface) {
+      if ($release) {
+        $release = $this->entityTypeManager->getStorage('node')->load($release);
       }
-      if (!$rdf_entity) {
+      if (!$release) {
         // If the {rdf_entity} route parameter is missed or is not an RDF
         // entity, looks like we have a bug.
-        throw new \Exception("The {rdf_entity} route parameter is missed or is not an RDF entity.");
+        throw new \Exception("The {node} route parameter is missed or is not an RDF entity.");
       }
     }
-    $bundle = $rdf_entity->bundle();
+    $bundle = $release->bundle();
 
     $allow_access =
       ($requirement === 'TRUE' && isset(JoinupGroupHelper::GROUP_BUNDLES[$bundle])) ||
       ($requirement === 'FALSE' && !isset(JoinupGroupHelper::GROUP_BUNDLES[$bundle])) ||
       (isset(JoinupGroupHelper::GROUP_BUNDLES[$requirement]) && $bundle === JoinupGroupHelper::GROUP_BUNDLES[$requirement]);
 
-    /** @var \Drupal\joinup_workflow\ArchivableEntityInterface $rdf_entity */
-    $allow_access = $allow_access && !$rdf_entity->isArchived();
+    /** @var \Drupal\joinup_workflow\ArchivableEntityInterface $release */
+    $allow_access = $allow_access && !$release->isArchived();
 
     return $allow_access ? AccessResult::allowed() : AccessResult::forbidden();
   }

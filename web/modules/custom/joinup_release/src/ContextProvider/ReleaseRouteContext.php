@@ -14,7 +14,7 @@ use Drupal\joinup_distribution\Entity\DistributionInterface;
 use Drupal\joinup_release\Entity\ReleaseInterface;
 
 /**
- * Sets the current asset_release as a context on asset_release routes.
+ * Sets the current release as a context on asset_release routes.
  */
 class ReleaseRouteContext implements ContextProviderInterface {
 
@@ -47,10 +47,10 @@ class ReleaseRouteContext implements ContextProviderInterface {
     if (($route_object = $this->routeMatch->getRouteObject()) && ($route_contexts = $route_object->getOption('parameters'))) {
       if (
         isset($route_contexts['node'])
-        && ($asset_release = $this->routeMatch->getParameter('node'))
-        && ($asset_release instanceof ReleaseInterface)
+        && ($release = $this->routeMatch->getParameter('node'))
+        && ($release instanceof ReleaseInterface)
       ) {
-        $value = $asset_release;
+        $value = $release;
       }
       elseif (
         isset($route_contexts['node'])
