@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Drupal\Tests\asset_release\ExistingSite;
+namespace Drupal\Tests\joinup_release\ExistingSite;
 
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\rdf_entity\Entity\Rdf;
@@ -11,7 +11,9 @@ use Drupal\taxonomy\Entity\Vocabulary;
 /**
  * Tests field synchronization between solution and release.
  *
- * @group asset_release
+ * @todo This should be converted to check the revision reference or dropped.
+ *
+ * @group joinup_release
  */
 class SyncFieldsFromParentSolutionTest extends JoinupExistingSiteTestBase {
 
