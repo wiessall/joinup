@@ -1,0 +1,49 @@
+uuid: b11006c4-79b5-4f49-9dbb-30b889b8db21
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.release.body
+    - field.field.node.release.is_version_of
+    - field.field.node.release.release_number
+    - node.type.release
+  module:
+    - link
+    - text
+    - user
+id: node.release.default
+targetEntityType: node
+bundle: release
+mode: default
+content:
+  body:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 101
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+  report:
+    type: link
+    label: hidden
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    weight: 50
+    region: content
+hidden:
+  is_version_of: true
+  langcode: true
+  published_at: true
+  release_number: true
+  search_api_excerpt: true
+  uri: true
