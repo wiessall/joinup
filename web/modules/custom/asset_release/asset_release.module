@@ -152,6 +152,8 @@ function asset_release_rdf_entity_access(EntityInterface $release, $operation, A
  * Default graph is published. Draft graph is draft.
  */
 function asset_release_rdf_entity_presave(EntityInterface $entity) {
+  // @todo Drop this when the graph is set as with all nodes by the joinup
+  //   workflow module. Revisit this when standard changes are finished.
   if (!$entity instanceof AssetReleaseInterface) {
     // Act only on releases.
     return;
@@ -198,6 +200,8 @@ function asset_release_rdf_entity_presave(EntityInterface $entity) {
  * - When the entity is saved into the default graph, the draft must be deleted.
  */
 function asset_release_entity_update(EntityInterface $entity) {
+  // @todo Drop this when the changes are finished and revisions are active.
+  //    Revisit this when standard changes are finished.
   // Quick escape check to avoid unnecessary loadings.
   if (!$entity instanceof AssetReleaseInterface) {
     return;
@@ -222,6 +226,7 @@ function asset_release_entity_update(EntityInterface $entity) {
  * This applies in create/edit forms only.
  */
 function asset_release_form_alter(&$form, FormStateInterface $form_state, string $form_id): void {
+  // @todo Check the todo in the _asset_release_edit_date_validate function.
   $ids = ['rdf_entity_asset_release_form', 'rdf_entity_asset_release_edit_form'];
   if (!in_array($form_id, $ids)) {
     return;
@@ -239,6 +244,8 @@ function asset_release_form_alter(&$form, FormStateInterface $form_state, string
  *   The form state.
  */
 function _asset_release_edit_date_validate(array &$form, FormStateInterface $form_state): void {
+  // @todo Where is this used? This seems like a weird bug workaround. Revisit
+  //   this when standard changes are finished.
   $dt_now = new DateTime();
   $values = $form_state->getValues();
   $date_value = $values['created'][0]['value'];
@@ -247,31 +254,6 @@ function _asset_release_edit_date_validate(array &$form, FormStateInterface $for
   }
   if ($date_value && ($date_value->format('c') > $dt_now->format('c'))) {
     $form_state->setErrorByName('created', t('Your "Authored on" field date is greater than @date', ['@date' => $dt_now->format('c')]));
-  }
-}
-
-/**
- * Implements hook_form_FORM_ID_alter().
- */
-function asset_release_form_rdf_entity_asset_release_delete_form_alter(array &$form, FormStateInterface $form_state, string $form_id) {
-  $form['actions']['submit']['#submit'][] = 'asset_release_delete_redirect';
-}
-
-/**
- * Redirect users to the solution homepage after deleting a release.
- *
- * @param array $form
- *   The form array.
- * @param \Drupal\Core\Form\FormStateInterface $form_state
- *   The form state.
- */
-function asset_release_delete_redirect(array &$form, FormStateInterface $form_state) {
-  /** @var \Drupal\asset_release\Entity\AssetReleaseInterface $release */
-  $release = $form_state->getFormObject()->getEntity();
-  $solution = $release->getSolution();
-  if (!empty($solution)) {
-    $url = $solution->toUrl();
-    $form_state->setRedirect($url->getRouteName(), $url->getRouteParameters(), $url->getOptions());
   }
 }
 

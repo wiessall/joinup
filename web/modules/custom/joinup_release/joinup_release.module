@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\joinup_release\Entity\Release;
 use Drupal\joinup_release\Entity\ReleaseInterface;
 
@@ -96,6 +97,30 @@ function joinup_release_theme(array $existing, $type, $theme, $path): array {
 function template_preprocess_joinup_release_releases_download(array &$variables): void {
   $releases = $variables['releases'];
   $variables['releases'] = \Drupal::entityTypeManager()->getViewBuilder('node')->viewMultiple($releases, 'compact');
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function joinup_release_form_node_release_delete_form_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
+  $form['actions']['submit']['#submit'][] = 'joinup_release_delete_redirect';
+}
+
+/**
+ * Redirect users to the solution homepage after deleting a release.
+ *
+ * @param array $form
+ *   The form array.
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ *   The form state.
+ */
+function joinup_release_delete_redirect(array &$form, FormStateInterface $form_state): void {
+  /** @var ReleaseInterface $release */
+  $release = $form_state->getFormObject()->getEntity();
+  if ($solution = $release->getSolution()) {
+    $url = $solution->toUrl();
+    $form_state->setRedirect($url->getRouteName(), $url->getRouteParameters(), $url->getOptions());
+  }
 }
 
 /**
