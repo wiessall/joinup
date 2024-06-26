@@ -2,76 +2,79 @@
 
 declare(strict_types=1);
 
-namespace Drupal\Tests\asset_release\ExistingSite;
+namespace Drupal\Tests\joinup_release\ExistingSite;
 
+use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Session\AnonymousUserSession;
+use Drupal\node\Entity\Node;
+use Drupal\og\OgRoleInterface;
 use Drupal\Tests\joinup_workflow\ExistingSite\JoinupWorkflowExistingSiteTestBase;
 use Drupal\og\Entity\OgRole;
 use Drupal\rdf_entity\Entity\Rdf;
 use Drupal\rdf_entity\RdfInterface;
 
 /**
- * Tests crud operations and the workflow for the asset release rdf entity.
+ * Tests crud operations and the workflow for the release rdf entity.
  *
- * @group asset_release
+ * @group joinup_release
  */
-class AssetReleaseWorkflowTest extends JoinupWorkflowExistingSiteTestBase {
+class ReleaseWorkflowTest extends JoinupWorkflowExistingSiteTestBase {
 
   /**
    * A non authenticated user.
    *
-   * @var \Drupal\Core\Session\AccountInterface
+   * @var \Drupal\Core\Session\AnonymousUserSession
    */
-  protected $userAnonymous;
+  protected AnonymousUserSession $userAnonymous;
 
   /**
    * A user with the authenticated role.
    *
    * @var \Drupal\Core\Session\AccountInterface
    */
-  protected $userAuthenticated;
+  protected AccountInterface $userAuthenticated;
 
   /**
    * A user with the moderator role.
    *
    * @var \Drupal\Core\Session\AccountInterface
    */
-  protected $userModerator;
+  protected AccountInterface $userModerator;
 
   /**
    * A user to be used as a solution facilitator.
    *
    * @var \Drupal\Core\Session\AccountInterface
    */
-  protected $userOgFacilitator;
+  protected AccountInterface $userOgFacilitator;
 
   /**
    * A user to be used as a solution administrator.
    *
    * @var \Drupal\Core\Session\AccountInterface
    */
-  protected $userOgAdministrator;
+  protected AccountInterface $userOgAdministrator;
 
   /**
    * The solution parent entity.
    *
    * @var \Drupal\rdf_entity\RdfInterface
    */
-  protected $solutionGroup;
+  protected RdfInterface $solutionGroup;
 
   /**
    * The solution facilitator role.
    *
-   * @var \Drupal\og\Entity\OgRole
+   * @var \Drupal\og\OgRoleInterface
    */
-  protected $roleFacilitator;
+  protected OgRoleInterface $roleFacilitator;
 
   /**
    * The solution administrator role.
    *
-   * @var \Drupal\og\Entity\OgRole
+   * @var \Drupal\og\OgRoleInterface
    */
-  protected $roleAdministrator;
+  protected OgRoleInterface $roleAdministrator;
 
   /**
    * {@inheritdoc}
@@ -97,7 +100,7 @@ class AssetReleaseWorkflowTest extends JoinupWorkflowExistingSiteTestBase {
   }
 
   /**
-   * Tests the CRUD operations for the asset release entities.
+   * Tests the CRUD operations for the release entities.
    *
    * Since the browser test is a slow test, both create access and read/update/
    * delete access are tested below.
@@ -107,9 +110,9 @@ class AssetReleaseWorkflowTest extends JoinupWorkflowExistingSiteTestBase {
     foreach ($this->createAccessProvider() as $parent_state => $test_data_arrays) {
       $parent = $this->createDefaultParent($parent_state);
       // Initialize the release entity as is used in all sub-cases.
-      $content = $this->createRdfEntity([
-        'rid' => 'asset_release',
-        'field_isr_is_version_of' => $parent->id(),
+      $content = $this->createNode([
+        'rid' => 'release',
+        'is_version_of' => $parent->id(),
       ]);
       foreach ($test_data_arrays as $test_data) {
         $operation = 'create';
@@ -118,7 +121,7 @@ class AssetReleaseWorkflowTest extends JoinupWorkflowExistingSiteTestBase {
 
         $access = $this->ogAccess->userAccessEntityOperation('create', $content, $this->$user_var)->isAllowed();
         $result = $expected_result ? $this->t('have') : $this->t('not have');
-        $message = "User {$user_var} should {$result} {$operation} access for bundle 'asset_release' with the parent entity in {$parent_state} state.";
+        $message = "User {$user_var} should {$result} {$operation} access for bundle 'release' with the parent entity in {$parent_state} state.";
         $this->assertEquals($expected_result, $access, $message);
       }
     }
@@ -130,11 +133,11 @@ class AssetReleaseWorkflowTest extends JoinupWorkflowExistingSiteTestBase {
       foreach ($content_data as $content_state => $test_data_arrays) {
         // Initialize the release entity as it is going to be used in all sub
         // cases.
-        $content = $this->createRdfEntity([
-          'rid' => 'asset_release',
+        $content = $this->createNode([
+          'rid' => 'release',
           'label' => $this->randomMachineName(),
-          'field_isr_state' => $content_state,
-          'field_isr_is_version_of' => $parent->id(),
+          'field_state' => $content_state,
+          'is_version_of' => $parent->id(),
         ]);
 
         foreach ($test_data_arrays as $test_data_array) {
@@ -152,18 +155,18 @@ class AssetReleaseWorkflowTest extends JoinupWorkflowExistingSiteTestBase {
   }
 
   /**
-   * Tests the asset release workflow.
+   * Tests the release workflow.
    */
-  public function testWorkflow() {
+  public function testWorkflow(): void {
     foreach ($this->workflowTransitionsProvider() as $entity_state => $workflow_data) {
       $parent = $this->createDefaultParent('published');
 
       foreach ($workflow_data as $user_var => $expected_target_states) {
-        $content = Rdf::create([
-          'rid' => 'asset_release',
+        $content = Node::create([
+          'rid' => 'release',
           'label' => $this->randomMachineName(),
-          'field_isr_state' => $entity_state,
-          'field_isr_is_version_of' => $parent->id(),
+          'field_state' => $entity_state,
+          'is_version_of' => $parent->id(),
         ]);
         $content->save();
 
@@ -457,7 +460,7 @@ class AssetReleaseWorkflowTest extends JoinupWorkflowExistingSiteTestBase {
    * {@inheritdoc}
    */
   protected function getEntityBundle(): string {
-    return 'asset_release';
+    return 'release';
   }
 
 }
