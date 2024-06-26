@@ -28,6 +28,8 @@ function ventuno_preprocess_rdf_entity(array &$variables): void {
     }
   }
 
+  // @todo Ensure that the functionality applies for releases in nodes.
+  //   Revisit this when the changes are done.
   // View modes where tiles are expected.
   $tile_view_modes = ['view_mode_tile', 'view_mode_tile_horizontal', 'carousel'];
   // Prepare data for the tiles.

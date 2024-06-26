@@ -167,8 +167,8 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
       }
       break;
 
-    case 'asset_release':
-      $variables['label'] = $entity->label();
+    case 'release':
+      $variables['title'] = $entity->label();
       $variables['highlighted']['text'] = 'v' . $entity->getVersion();
       $variables['info']['icon'] = 'calendar-event';
       if ($created_time = $entity->getCreatedTime()) {
@@ -261,12 +261,12 @@ function _ventuno_get_default_icon(string $entity_type_id, string $bundle): stri
       'document' => 'file-earmark-text',
       'event' => 'calendar-event',
       'news' => 'newspaper',
+      'release' => 'file-earmark-zip',
       'video' => 'file-earmark-play',
     ],
     'rdf_entity' => [
       'collection' => 'folder2-open',
       'licence' => 'file-earmark-medical',
-      'asset_release' => 'file-earmark-zip',
       'solution' => 'clipboard2-check',
     ],
   ];
