@@ -118,7 +118,6 @@ class LogRecordsContext extends RawDrupalContext {
    *   The description of the log record.
    *
    * @Given there should be a record of severity :severity in the log with description :description
-   * @Given there should be an record of severity :severity in the log with description :description
    */
   public function assertLogRecordExists(string $severity, string $description): void {
     $logRecords = $this->getLogRecords();
