@@ -76,6 +76,29 @@ function joinup_release_preprocess_node(array &$variables): void {
 }
 
 /**
+ * Implements hook_theme().
+ */
+function joinup_release_theme(array $existing, $type, $theme, $path): array {
+  return [
+    'joinup_release_releases_download' => [
+      'variables' => ['releases' => []],
+    ],
+  ];
+}
+
+/**
+ * Prepares variables for the 'joinup_release_releases_download' template.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - releases: a list of releases and distributions to be rendered.
+ */
+function template_preprocess_joinup_release_releases_download(array &$variables): void {
+  $releases = $variables['releases'];
+  $variables['releases'] = \Drupal::entityTypeManager()->getViewBuilder('node')->viewMultiple($releases, 'compact');
+}
+
+/**
  * Checks if the given release has a unique combination of title and version.
  *
  * A solution might have releases of different software packages associated with
