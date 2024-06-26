@@ -10,7 +10,6 @@ declare(strict_types=1);
 use Drupal\joinup_taxonomy\Entity\MappedTerm;
 use Drupal\node\Entity\Node;
 use Drupal\pathauto\PathautoState;
-use Drupal\rdf_sync\Model\SyncMethod;
 use Drupal\search_api\Entity\Index;
 use Drupal\sparql_entity_storage\UriEncoder;
 
