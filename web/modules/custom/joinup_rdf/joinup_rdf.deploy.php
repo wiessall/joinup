@@ -150,7 +150,6 @@ function joinup_rdf_deploy_110901(array &$sandbox): string {
       $sandbox['swapped_aliases']++;
     }
   }
-  \Drupal::getContainer()->get('rdf_sync.synchronizer')->synchronize(SyncMethod::INSERT, $nodes, TRUE);
 
   $finish = microtime(TRUE);
   $count = count($nodes);
