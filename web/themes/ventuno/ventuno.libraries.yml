@@ -62,6 +62,10 @@ searchpage:
   dependencies:
     - ventuno/close
 
+forum_sitewide:
+  dependencies:
+    - ventuno/full-width-bg
+
 group:
   css:
     theme:

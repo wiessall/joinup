@@ -8,6 +8,7 @@
 declare(strict_types=1);
 
 use Drupal\interoperable_europe\InteroperableEuropeCollectionInterface;
+use Drupal\page_manager\PageInterface;
 use Drupal\rdf_entity\RdfInterface;
 use Drupal\topic\Entity\TopicMetaEntityInterface;
 
@@ -68,6 +69,15 @@ function ventuno_preprocess_page(array &$variables): void {
     if (in_array($entity->getType(), ['collection', 'solution']) && $entity->getSetting('landing_page')->count() === 0) {
       unset($variables['page']['content']['ventuno_pagetitle']);
     }
+  }
+
+  // Add Page Manager page specific libraries if we have any.
+  $pageManagerPage = $route_match->getParameter('page_manager_page');
+  if (
+    $pageManagerPage instanceof PageInterface &&
+    array_key_exists($pageManagerPage->id(), \Drupal::service('library.discovery')->getLibrariesByExtension('ventuno'))
+  ) {
+    $variables['#attached']['library'][] = "ventuno/{$pageManagerPage->id()}";
   }
 }
 
