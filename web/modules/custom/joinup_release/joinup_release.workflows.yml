@@ -1,8 +1,8 @@
 # The workflow of the release entity.
-asset_release_workflow:
-  id: asset_release_workflow
-  label: "Asset release"
-  group: asset_release
+release_workflow:
+  id: release_workflow
+  label: "Release"
+  group: release
   states:
     draft:
       label: Draft
