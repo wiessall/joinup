@@ -7,6 +7,7 @@
 
 declare(strict_types=1);
 
+use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\joinup_release\Entity\Release;
 
 /**
@@ -26,4 +27,61 @@ function joinup_release_entity_bundle_info_alter(array &$bundles): void {
   if (!empty($bundles['node']['release'])) {
     $bundles['node']['release']['class'] = Release::class;
   }
+}
+
+/**
+ * Implements hook_entity_bundle_field_info_alter().
+ */
+function joinup_release_entity_bundle_field_info_alter(array &$fields, EntityTypeInterface $entity_type, string $bundle): void {
+  /** @var \Drupal\Core\Field\FieldConfigInterface[] $fields */
+  // Make sure a release's title and version number is unique in its solution.
+  if ($entity_type->id() == 'node' && $bundle == 'release' && !empty($fields['label'])) {
+    $fields['label']->addConstraint('UniqueReleaseTitleVersion', []);
+  }
+}
+
+/**
+ * Checks if the given release has a unique combination of title and version.
+ *
+ * A solution might have releases of different software packages associated with
+ * it, and some of these might have duplicate version numbers, but to avoid
+ * confusion we should avoid having releases with identical names and versions
+ * within the same solution.
+ *
+ * @param \Drupal\joinup_release\Entity\ReleaseInterface $release
+ *   The release to check.
+ * @param bool $check_unaffiliated_solutions
+ *   Whether or not to check if the release title and version are unique in
+ *   solutions that are not related to the release.
+ *   - When this is TRUE the function will return TRUE if any other release has
+ *     the same title and version as the given release, regardless of the
+ *     solutions they are affiliated with.
+ *   - When this is FALSE the function will only return TRUE if the solution
+ *     that is affiliated with this release contains a release with a duplicate
+ *     title and version. Releases that belong to unaffiliated solutions will be
+ *     ignored.
+ *
+ * @return bool
+ *   TRUE if the title and version are unique.
+ */
+function joinup_release_title_version_is_unique(ReleaseInterface $release, bool $check_unaffiliated_solutions = FALSE): bool {
+  $query = \Drupal::entityQuery('node')
+    ->accessCheck(FALSE)
+    ->condition('title', $release->label())
+    ->condition('type', 'release');
+  if ($release->getVersion()) {
+    $query->condition('release_number', $release->getVersion());
+  }
+
+  if (!empty($release->id())) {
+    $query->condition('id', $release->id(), '<>');
+  }
+
+  // Filter all releases that do not belong to the same solution.
+  if (!$check_unaffiliated_solutions) {
+    $query->condition('is_version_of', $release->get('is_version_of')->first()->getValue()['target_id']);
+  }
+
+  $result = $query->execute();
+  return empty($result);
 }

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Drupal\asset_release\Entity;
+namespace Drupal\joinup_release\Entity;
 
 use Drupal\collection\Entity\CollectionContentInterface;
 use Drupal\joinup_bundle_class\DescriptionInterface;
