@@ -15,7 +15,7 @@ use Symfony\Component\Validator\ConstraintValidator;
  * The following checks make sure that a release must have a unique combination
  * of title and version within the solution.
  *
- * @see \Drupal\asset_release\Plugin\Validation\Constraint\UniqueAssetReleaseTitleVersionConstraint
+ * @see \Drupal\asset_release\Plugin\Validation\Constraint\UniqueReleaseTitleVersionConstraint
  */
 class UniqueAssetReleaseTitleVersionValidator extends ConstraintValidator {
 

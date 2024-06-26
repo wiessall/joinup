@@ -27,7 +27,7 @@ class UniqueAssetReleaseTitleVersionConstraint extends Constraint {
    * {@inheritdoc}
    */
   public function validatedBy(): string {
-    return '\Drupal\asset_release\Plugin\Validation\Constraint\UniqueAssetReleaseTitleVersionValidator';
+    return '\Drupal\asset_release\Plugin\Validation\Constraint\UniqueReleaseTitleVersionValidator';
   }
 
   /**
