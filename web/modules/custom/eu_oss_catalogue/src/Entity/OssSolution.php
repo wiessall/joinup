@@ -18,6 +18,8 @@ use Drupal\pluginreference\Plugin\Field\FieldType\PluginReferenceItem;
  */
 class OssSolution extends Node implements OssSolutionInterface {
 
+  use EntityAnonymousOwnerTrait;
+
   /**
    * {@inheritdoc}
    */
@@ -44,11 +46,7 @@ class OssSolution extends Node implements OssSolutionInterface {
    */
   public static function bundleFieldDefinitions(EntityTypeInterface $entity_type, $bundle, array $base_field_definitions): array {
     $fields = parent::bundleFieldDefinitions($entity_type, $bundle, $base_field_definitions);
-
-    // Use anonymous user as default owner/author.
-    /* @see \Drupal\user\EntityOwnerTrait::ownerBaseFieldDefinitions */
-    $fields['uid'] = clone $base_field_definitions['uid'];
-    $fields['uid']->setDefaultValueCallback(NULL)->setDefaultValue(0);
+    $fields['uid'] = static::getAnonymousOwnerFieldDefinition($entity_type);
     return $fields;
   }
 
