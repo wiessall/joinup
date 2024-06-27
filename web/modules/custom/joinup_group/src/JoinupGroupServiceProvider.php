@@ -22,7 +22,7 @@ class JoinupGroupServiceProvider implements ServiceModifierInterface {
 
     $monologChannelHandlers = $container->getParameter('monolog.channel_handlers');
     $monologChannelHandlers['group_membership'] = $monologChannelHandlers['default'];
-    $monologChannelHandlers['group_membership'][] = 'group_membership';
+    $monologChannelHandlers['group_membership'][] = 'business_handler';
 
     $container->setParameter('monolog.channel_handlers', $monologChannelHandlers);
   }
