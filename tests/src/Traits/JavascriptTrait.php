@@ -95,20 +95,32 @@ trait JavascriptTrait {
     if (!$this->hasJavascriptSupport()) {
       return;
     }
+
     // Strings (labels) containing simple quotes (') are enclosed with double
     // quotes ("), thus we need to escape them. Also, xpath might contain new
     // lines which we replace with spaces.
     $xpath = str_replace(['"', "\n"], ['\"', ' '], $element->getXpath());
+    // @todo Bug in chromium: element.scrollIntoView doesn't honor 'instant',
+    //   which is much faster than smooth scrolling in tests and doesn't require
+    //   much delay. Use scrollTo for now, fix once included in selenium.
+    //   @see https://issues.chromium.org/issues/40284142
     $this->getSession()->executeScript("
-    (
-      function() {
-        setTimeout(() => {
-          let elem = document.evaluate(\"$xpath\", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
-          elem.scrollIntoView({ behavior: 'instant', block: 'center' });
-        }, 300);
+      if (typeof Element.prototype.scrollIntoViewPromise !== 'function') {
+        Element.prototype.scrollIntoViewPromise = async function(delay = 100) {
+          // Bring the element at the center of the screen.
+          const rect = this.getBoundingClientRect();
+          const scrollTop = window.scrollY || window.pageYOffset || document.documentElement.scrollTop;
+          const centerScrollPosition = rect.top + scrollTop - (window.innerHeight / 2 - rect.height / 2);
+          window.scrollTo({ top: centerScrollPosition, behavior: 'instant' });
+
+          // Wait for the specified delay.
+          await new Promise(resolve => setTimeout(resolve, delay));
+        };
       }
-    )();");
-    sleep(1);
+
+      let element = document.evaluate(\"$xpath\", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+      await element.scrollIntoViewPromise();
+    ");
   }
 
   /**
