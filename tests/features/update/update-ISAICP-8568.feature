@@ -1,6 +1,7 @@
 @api @group-clone
 Feature: Test distributions deployment.
 
+  @update:joinup_rdf_deploy_110901
   Scenario Outline: Sample check for the path alias of distributions.
     And I go to "<url>"
     Then the response status code should be 200
