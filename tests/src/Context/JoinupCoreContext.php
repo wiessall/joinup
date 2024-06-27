@@ -399,9 +399,6 @@ class JoinupCoreContext extends RawDrupalContext {
    *
    * @returns \Drupal\Core\Field\FieldItemListInterface
    *   The field instance.
-   *
-   * @Then /^the (?'fieldName'\w*) field in "(?'label'[^"]*)" "?(?'entityTypeId'[\w]*)"? (?'emptiness'should be empty|should not be empty)$/
-   * @Then /^the (?'fieldName'\w*) field in "(?'label'[^"]*)" "?(?'entityTypeId'[\w]*)"? with type "?(?'bundle'[\w]*)"? should be (?'emptiness'should be empty|should not be empty)$/
    */
   public function assertEntityFieldEmptiness(
     string $entityTypeId,
