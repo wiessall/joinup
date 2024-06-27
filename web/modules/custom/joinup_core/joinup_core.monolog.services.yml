@@ -43,6 +43,7 @@ services:
 
   monolog.handler.business_handler:
     class: Drupal\joinup_core\Logger\Handler\BusinessHandler
+    arguments: [ '@entity_type.manager', '@joinup_group.group_manager'' ]
     tags:
       - { name: needs_destruction }
 
