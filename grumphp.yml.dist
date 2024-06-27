@@ -14,14 +14,24 @@ grumphp:
     # https://github.com/phpro/grumphp/blob/v2.x/doc/tasks/composer.md
     composer: { }
 
+    # https://github.com/phpro/grumphp/blob/v2.x/doc/tasks/eslint.md
+    eslint:
+      bin: node_modules/.bin/eslint
+      config: .eslintrc.json
+      no_eslintrc: true
+
     # https://github.com/phpro/grumphp/blob/v2.x/doc/tasks/phpcs.md
     phpcs:
-      standard: ['./phpcs.xml']
+      standard: [ './phpcs.xml' ]
+      triggered_by: '%grumphp.tasks.php_extensions%'
+
+    # https://github.com/phpro/grumphp/blob/v2.x/doc/tasks/phplint.md
+    phplint:
       triggered_by: '%grumphp.tasks.php_extensions%'
 
     # https://github.com/phpro/grumphp/blob/v2.x/doc/tasks/phpmd.md
     phpmd:
-      ruleset: ['./phpmd.xml']
+      ruleset: [ './phpmd.xml' ]
       triggered_by: '%grumphp.tasks.php_extensions%'
       metadata:
         enabled: false
@@ -31,9 +41,10 @@ grumphp:
       configuration: './phpstan.neon'
       triggered_by: '%grumphp.tasks.php_extensions%'
 
-    # https://github.com/phpro/grumphp/blob/v2.x/doc/tasks/phplint.md
-    phplint:
-      triggered_by: '%grumphp.tasks.php_extensions%'
+    # https://github.com/phpro/grumphp/blob/v2.x/doc/tasks/stylelint.md
+    stylelint:
+      bin: node_modules/.bin/stylelint
+      config: .stylelintrc.json
 
     # https://github.com/phpro/grumphp/blob/v2.x/doc/tasks/twigcsfixer.md
     twigcsfixer: { }
@@ -41,19 +52,8 @@ grumphp:
     # https://github.com/phpro/grumphp/blob/v2.x/doc/tasks/yamllint.md
     yamllint: { }
 
-    # https://github.com/phpro/grumphp/blob/v2.x/doc/tasks/eslint.md
-    eslint:
-      bin: node_modules/.bin/eslint
-      config: .eslintrc.json
-      no_eslintrc: true
-
-    # https://github.com/phpro/grumphp/blob/v2.x/doc/tasks/stylelint.md
-    stylelint:
-      bin: node_modules/.bin/stylelint
-      config: .stylelintrc.json
-
   testsuites:
     # On git pre-push, often initiating a full scan, omit phpstan which is slow.
     # See scripts/git/pre_push.
     git_pre_push:
-      tasks: [composer, phpcs, phplint, yamllint, eslint, stylelint]
+      tasks: [ composer, eslint, phpcs, phplint, phpmd, stylelint, twigcsfixer, yamllint ]
