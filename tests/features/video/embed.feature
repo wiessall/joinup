@@ -73,6 +73,9 @@ Feature: Embed of videos into the page.
     Then I press "Save" in the "Modal buttons" region
     And I press "Insert selected" in the "Modal buttons" region
     Then the modal should be closed
+    # Delay for the preview to load, otherwise the next step can fail
+    # when attempting to scroll the button into view.
+    And I wait for 3 seconds
     And I press "Save as draft"
     Then the response should contain "<embed url>"
     And I see the "iframe" element with the "title" attribute set to "Video player" in the "Content" region
