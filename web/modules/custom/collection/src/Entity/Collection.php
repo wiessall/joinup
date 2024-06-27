@@ -6,6 +6,7 @@ namespace Drupal\collection\Entity;
 
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Entity\ContentEntityInterface;
+use Drupal\Core\Entity\EntityPublishedInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\contact_information\Traits\ContactInformationTrait;
@@ -161,16 +162,24 @@ class Collection extends Rdf implements CollectionInterface {
   /**
    * {@inheritdoc}
    */
-  public function hasCodeOfConduct(): bool {
-    try {
-      $codeOfConduct = $this->getSetting('code_of_conduct')->entity;
-      return $this->isClosed() &&
-        $codeOfConduct instanceof ContentEntityInterface &&
-        $codeOfConduct->access('view');
+  public function getCodeOfConduct(): ?ContentEntityInterface {
+    return $this->getSetting('code_of_conduct')->entity;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function hasCodeOfConductToAccept(): bool {
+    // Open collections are not forcing users to accept their Code of Conduct.
+    if (!$this->isClosed()) {
+      return FALSE;
     }
-    catch (\Exception) {
-    }
-    return FALSE;
+    $codeOfConduct = $this->getCodeOfConduct();
+    return $codeOfConduct &&
+      (
+        !$codeOfConduct instanceof EntityPublishedInterface ||
+        $codeOfConduct->isPublished()
+      );
   }
 
   /**

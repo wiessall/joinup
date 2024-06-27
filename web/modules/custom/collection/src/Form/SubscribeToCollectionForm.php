@@ -200,7 +200,7 @@ class SubscribeToCollectionForm extends FormBase {
       '#op' => 'no_subscribe',
     ] + $form['actions']['confirm_subscribe'];
 
-    if ($rdf_entity instanceof CollectionInterface && $rdf_entity->hasCodeOfConduct()) {
+    if ($rdf_entity instanceof CollectionInterface && $rdf_entity->hasCodeOfConductToAccept()) {
       $this->mergeCodeOfConductComponents($form, $rdf_entity);
     }
     else {
@@ -236,7 +236,7 @@ class SubscribeToCollectionForm extends FormBase {
    *   The collection.
    */
   protected function mergeCodeOfConductComponents(array &$form, ?RdfInterface $collection): void {
-    $codeOfConduct = $collection->getSetting('code_of_conduct')->entity;
+    $codeOfConduct = $collection->getCodeOfConduct();
     if (!$collection->isClosed() || !$codeOfConduct instanceof ContentEntityInterface) {
       return;
     }
@@ -422,15 +422,10 @@ class SubscribeToCollectionForm extends FormBase {
   public function access(RdfInterface $rdf_entity): AccessResultInterface {
     $user = $this->getUser();
     $membership = $this->getUserNonBlockedMembership($rdf_entity);
-    $codeOfConductField = $rdf_entity instanceof CollectionInterface
-      ? $rdf_entity->getSetting('code_of_conduct')
-      : NULL;
+    $hasCodeOfConductToAccept = $rdf_entity instanceof CollectionInterface && $rdf_entity->hasCodeOfConductToAccept();
     return AccessResult::allowedIf(
       $user->isAuthenticated() &&
-      (
-        !empty($membership) ||
-        $codeOfConductField && !$codeOfConductField->isEmpty()
-      )
+      (!empty($membership) ||  $hasCodeOfConductToAccept)
     );
   }
 

@@ -103,7 +103,7 @@ class JoinCollectionForm extends JoinGroupFormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state): void {
     \assert($this->group instanceof CollectionInterface);
-    if ($this->group->hasCodeOfConduct()) {
+    if ($this->group->hasCodeOfConductToAccept()) {
       // Membership is created only after user accepted the code of conduct
       // document.
       return;
