@@ -628,45 +628,6 @@ Feature: Global search
       | spatial coverage | Belgium                  |
       | state            | published                |
     And the following solutions:
-      | title    | collection               | description                                                                                                                          | topic      | spatial coverage | state     |
-      | Spheres  | Radio cooking collection | Spherification is the culinary process of shaping a liquid into spheres                                                              | Demography | European Union   | published |
-      | Movistar | Radio cooking collection | "The use of foam in cuisine has been used in many forms in the history of cooking:whipped cream, meringue, and mousse are all foams" |            |                  | published |
-    And news content:
-      | title           | field_paragraphs_body | collection               | topic                   | spatial coverage | state     |
-      | El Cabo da Roca | The best in town      | Radio cooking collection | Statistics and Analysis | Luxembourg       | published |
-      | Funny news 1    | Dummy body            | Radio cooking collection | E-inclusion             | Luxembourg       | published |
-      | Funny news 2    | Dummy body            | Radio cooking collection | E-inclusion             | Luxembourg       | published |
-      | Funny news 3    | Dummy body            | Radio cooking collection | E-inclusion             | Luxembourg       | published |
-      | Funny news 4    | Dummy body            | Radio cooking collection | E-inclusion             | Luxembourg       | published |
-
-    Given I am logged in as a user with the "authenticated" role
-    When I visit the search page
-    And I check the "Solutions (2)" checkbox from the "Content types" facet
-    And I check the "News (5)" checkbox from the "Content types" facet
-    And I should see the following facet summary "Solutions, News"
-
-    When I click "Clear filters"
-    And I check the "News (5)" checkbox from the "Content types" facet
-    And I should see the following facet summary "News"
-
-    # Check if facet summary was remove correctly.
-    When I click "Clear filters"
-    And I check the "News (5)" checkbox from the "Content types" facet
-    And I check the "Collection (1)" checkbox from the "Content types" facet
-    Then I should see the following facet summary "Collection, News"
-    When I remove the following facet summary "News"
-    Then the page should show only the tiles "Radio cooking collection"
-
-  @javascript
-  Scenario: Anonymous user can find facets summary
-    Given the following collection:
-      | title            | Radio cooking collection |
-      | logo             | logo.png                 |
-      | moderation       | no                       |
-      | topic            | Demography               |
-      | spatial coverage | Belgium                  |
-      | state            | published                |
-    And the following solutions:
       | title    | collection               | description                                                                                                                                                   | topic      | spatial coverage | state     |
       | Spheres  | Radio cooking collection | Spherification is the culinary process of shaping a liquid into spheres. Drupal is the best digital experience platform(DXP) on the web, proudly open source. | Demography | European Union   | published |
       | Movistar | Radio cooking collection | "The use of foam in cuisine has been used in many forms in the history of cooking:whipped cream, meringue, and mousse are all foams", proudly open source.    |            |                  | published |
