@@ -161,20 +161,9 @@ class SubscribeToCollectionForm extends FormBase {
     $form['actions'] = [
       '#type' => 'actions',
     ];
-    $form['actions']['cancel'] = [
-      '#type' => 'button',
-      '#value' => $this->t('Cancel'),
-      '#extra_suggestion' => 'light_blue',
-      '#weight' => 10,
-      '#name' => 'cancel',
-      '#op' => 'cancel',
-      '#limit_validation_errors' => [],
-    ];
 
-    $form['actions']['confirm_subscribe'] = [
+    $submitButtonBase = [
       '#type' => 'submit',
-      '#op' => 'subscribe',
-      '#value' => $this->t('Subscribe to notifications'),
       // This form is opened via AJAX in a modal dialog that is triggered by
       // submitting the JoinCollectionForm. By default, Drupal will send the
       // AJAX requests to the route of the original form, which in this case
@@ -194,11 +183,24 @@ class SubscribeToCollectionForm extends FormBase {
         ],
       ],
     ];
-    $form['actions']['cancel']['#ajax'] = $form['actions']['confirm_subscribe']['#ajax'];
+
+    $form['actions']['confirm_subscribe'] = [
+      '#value' => $this->t('Subscribe to notifications'),
+      '#op' => 'subscribe',
+    ] + $submitButtonBase;
     $form['actions']['confirm_membership_only'] = [
       '#value' => $dontSubscribe = $this->t("Don't subscribe"),
       '#op' => 'no_subscribe',
-    ] + $form['actions']['confirm_subscribe'];
+    ] + $submitButtonBase;
+    $form['actions']['cancel'] = [
+      '#type' => 'button',
+      '#value' => $this->t('Cancel'),
+      '#extra_suggestion' => 'light_blue',
+      '#weight' => 10,
+      '#op' => 'cancel',
+      '#limit_validation_errors' => [],
+      '#ajax' => $submitButtonBase['#ajax'],
+    ];
 
     if ($rdf_entity instanceof CollectionInterface && $rdf_entity->hasCodeOfConductToAccept()) {
       $this->mergeCodeOfConductComponents($form, $rdf_entity);
