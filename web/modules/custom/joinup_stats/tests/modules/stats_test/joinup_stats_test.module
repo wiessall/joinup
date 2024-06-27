@@ -7,7 +7,7 @@
 
 declare(strict_types=1);
 
-use Drupal\joinup_stats_test\Entity\AssetDistribution;
+use Drupal\joinup_distribution\Entity\DistributionInterface;
 use Drupal\joinup_stats_test\Entity\CommunityContent;
 
 /**
@@ -19,7 +19,7 @@ function joinup_stats_test_entity_bundle_info_alter(&$bundles) {
       $bundles['node'][$bundle]['class'] = CommunityContent::class;
     }
   }
-  if (!empty($bundles['rdf_entity']['asset_distribution'])) {
-    $bundles['rdf_entity']['asset_distribution']['class'] = AssetDistribution::class;
+  if (!empty($bundles['node']['distribution'])) {
+    $bundles['node']['distribution']['class'] = DistributionInterface::class;
   }
 }

@@ -11,7 +11,6 @@ entity.rdf_entity.rdf_export:
       rdf_entity:
         type: entity:rdf_entity
         bundle:
-          - asset_distribution
           - asset_release
           - collection
           - solution
