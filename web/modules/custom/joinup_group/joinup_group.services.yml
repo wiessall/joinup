@@ -1,4 +1,9 @@
 services:
+  monolog.handler.business_handler:
+    class: Drupal\joinup_group\Logger\Handler\BusinessHandler
+    arguments: [ '@entity_type.manager', '@joinup_group.group_manager', 100, TRUE ]
+    tags:
+      - { name: needs_destruction }
   logger.channel.group_membership:
     parent: logger.channel_base
     arguments: [ 'group_membership' ]
