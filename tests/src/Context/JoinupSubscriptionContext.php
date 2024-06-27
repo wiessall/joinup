@@ -365,9 +365,7 @@ class JoinupSubscriptionContext extends RawDrupalContext {
   /**
    * Checks that a group content subscription exists with the given bundles.
    *
-   * @Then I should be subscribed to( the) :bundlesCommaSeparated bundle from the :groupLabel group
    * @Then I should be subscribed to( the) :bundlesCommaSeparated bundle from the :groupLabel collection
-   * @Then I should be subscribed to( the) :bundlesCommaSeparated bundle from the :groupLabel solution
    */
   public function assertGroupContentSubscription(string $groupLabel, string $bundlesCommaSeparated): void {
     $account = User::load($this->getUserManager()->getCurrentUser()->uid);
