@@ -6,6 +6,7 @@ namespace Drupal\joinup_core\Logger\Handler;
 
 use Drupal\Core\DestructableInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\joinup_group\JoinupGroupManagerInterface;
 use Monolog\Handler\AbstractProcessingHandler;
 use Monolog\Logger;
 
@@ -23,6 +24,7 @@ class BusinessHandler extends AbstractProcessingHandler implements DestructableI
 
   public function __construct(
     protected EntityTypeManagerInterface $entityTypeManager,
+    protected JoinupGroupManagerInterface $groupManager,
     int $level = Logger::DEBUG,
     bool $bubble = TRUE,
   ) {
@@ -40,6 +42,8 @@ class BusinessHandler extends AbstractProcessingHandler implements DestructableI
    * {@inheritdoc}
    */
   public function destruct(): void {
+    $group = $this->groupManager->getGroupFromContext();
+
     foreach ($this->records as $record) {
       /** @var \Drupal\message\MessageInterface $message */
       $message = $this->entityTypeManager->getStorage('message')->create([
