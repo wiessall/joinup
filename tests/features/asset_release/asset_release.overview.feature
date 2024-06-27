@@ -27,7 +27,7 @@ Feature: Asset distribution overview on solution.
       | Hidden spies          | text.pdf      | 3              | Notes 3       | 28-01-1995 12:05 | Lovely Butterfly | draft     |
       | Thief in the Angels   | text.pdf      | 2              | Notes 2       | 28-01-1995 12:06 | Lovely Butterfly | published |
       | The Child of the Past | text.pdf      | 1              | Notes 1       | 28-01-1996 12:05 | Lovely Butterfly | published |
-    And the following asset distributions:
+    And distribution content:
       | title       | access url                          | creation date    | parent                | state     |
       | Linux       | test.zip                            | 28-01-1995 12:05 | Thief in the Angels   | published |
       | Windows     | http://www.example.org/download.php | 28-01-1995 12:06 | The Child of the Past | published |
@@ -55,9 +55,9 @@ Feature: Asset distribution overview on solution.
     # Distributions of unpublished releases should not be shown.
     But I should not see the text "Solaris"
 
-    And I should see the download link in the "Linux" asset distribution
-    And I should see the download link in the "User manual" asset distribution
-    And I should see the external link in the "Windows" asset distribution
+    And I should see the download link in the "Linux" distribution
+    And I should see the download link in the "User manual" distribution
+    And I should see the external link in the "Windows" distribution
 
     And the "The Child of the Past" release should be marked as the latest release
 
@@ -120,10 +120,10 @@ Feature: Asset distribution overview on solution.
     And the "The Deep Doors" release should be marked as the latest release
 
     # Check that the cache is invalidated.
-    When I delete the "Linux" asset distribution
-    And I delete the "Windows" asset distribution
-    And I delete the "User manual" asset distribution
-    And I delete the "Solaris" asset distribution
+    When I delete the "Linux" distribution
+    And I delete the "Windows" distribution
+    And I delete the "User manual" distribution
+    And I delete the "Solaris" distribution
     And I delete the "Hidden spies" release
     And I delete the "Thief in the Angels" release
     And I delete the "The Child of the Past" release

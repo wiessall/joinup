@@ -41,11 +41,11 @@ class TokenTest extends JoinupExistingSiteTestBase {
       'field_isr_state' => 'published',
     ]);
 
-    $asset_distribution = $this->createRdfEntity([
-      'rid' => 'asset_distribution',
+    $distribution = $this->createNode([
+      'type' => 'distribution',
       'title' => $this->randomMachineName(),
       'og_audience' => $solution->id(),
-      'field_ad_state' => 'published',
+      'field_state' => 'published',
     ]);
 
     // Check both the token itself and one of the recursively generated
@@ -61,7 +61,7 @@ class TokenTest extends JoinupExistingSiteTestBase {
     $data = ['rdf_entity' => $asset_release];
     $this->assertTokens('rdf_entity', $data, $tokens);
 
-    $data = ['rdf_entity' => $asset_distribution];
+    $data = ['rdf_entity' => $distribution];
     $this->assertTokens('rdf_entity', $data, $tokens);
   }
 
