@@ -41,6 +41,12 @@ function joinup_rdf_requirements(string $phase): array {
  * Delete asset distribution entities.
  */
 function joinup_rdf_update_110900(): string {
+  $role = \Drupal::configFactory()->getEditable('user.role.moderator');
+  $dependencies = $role->get('dependencies');
+  $dependencies['module'] = array_diff($dependencies['module'], ['asset_distribution']);
+  $role->set('dependencies', $dependencies);
+  $role->save();
+
   \Drupal::entityTypeManager()->getStorage('rdf_type')->load('asset_distribution')->delete();
   return 'Deleted asset distribution entity bundle.';
 }
