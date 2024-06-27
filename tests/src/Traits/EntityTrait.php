@@ -115,7 +115,7 @@ trait EntityTrait {
       'content' => 'node',
       'custom page' => 'node',
       'discussion' => 'node',
-      'distribution' => 'rdf_entity',
+      'distribution' => 'node',
       'document' => 'node',
       'event' => 'node',
       'glossary' => 'node',
@@ -175,7 +175,7 @@ trait EntityTrait {
     return [
       'custom page' => 'custom_page',
       'discussion' => 'discussion',
-      'distribution' => 'asset_distribution',
+      'distribution' => 'distribution',
       'document' => 'document',
       'event' => 'event',
       'glossary' => 'glossary',

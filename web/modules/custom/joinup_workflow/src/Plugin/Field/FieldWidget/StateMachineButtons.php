@@ -117,6 +117,13 @@ class StateMachineButtons extends OptionsSelectWidget implements ContainerFactor
   public function formElement(FieldItemListInterface $items, $delta, array $element, array &$form, FormStateInterface $form_state): array {
     $element = parent::formElement($items, $delta, $element, $form, $form_state);
 
+    // Avoid using this widget in places other than the entity edit forms.
+    $base_form_id = $form_state->getFormObject()->getBaseFormId();
+    // @todo Remove 'rdf_entity_form' in ISAICP-8376.
+    if (!in_array($base_form_id, ['node_form', 'rdf_entity_form'], TRUE)) {
+      return $element;
+    }
+
     if ($this->getSetting('use_transition_label')) {
       $element['#options'] = $this->replaceStateLabelsWithTransitionLabels($element['#options'], $items);
     }

@@ -2063,7 +2063,6 @@ class FeatureContext extends RawDrupalContext {
       'collection',
       'solution',
       'asset_release',
-      'asset_distribution',
     ];
     $type = in_array($bundle, $rdf_bundles) ? 'rdf_entity' : 'node';
     $entity = $this->getEntityByLabel($type, $title, $bundle);
