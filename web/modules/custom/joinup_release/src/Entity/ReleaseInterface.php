@@ -11,13 +11,13 @@ use Drupal\joinup_distribution\Entity\DistributionsParentInterface;
 use Drupal\joinup_publication_date\Entity\EntityPublicationTimeInterface;
 use Drupal\joinup_workflow\ArchivableEntityInterface;
 use Drupal\joinup_workflow\EntityWorkflowStateInterface;
-use Drupal\rdf_entity\RdfInterface;
+use Drupal\node\NodeInterface;
 use Drupal\solution\Entity\SolutionContentInterface;
 
 /**
  * Interface for asset release entities in Joinup.
  */
-interface ReleaseInterface extends RdfInterface, CollectionContentInterface, SolutionContentInterface, EntityPublicationTimeInterface, EntityWorkflowStateInterface, LogoInterface, DistributionsParentInterface, DescriptionInterface, ArchivableEntityInterface {
+interface ReleaseInterface extends NodeInterface, CollectionContentInterface, SolutionContentInterface, EntityPublicationTimeInterface, EntityWorkflowStateInterface, LogoInterface, DistributionsParentInterface, DescriptionInterface, ArchivableEntityInterface {
 
   /**
    * Checks whether this release is the latest release of the parent solution.

@@ -14,13 +14,14 @@ use Drupal\joinup_publication_date\Entity\EntityPublicationTimeFallbackTrait;
 use Drupal\joinup_rdf\Entity\RdfSyncEntityTrait;
 use Drupal\joinup_workflow\ArchivableEntityTrait;
 use Drupal\joinup_workflow\EntityWorkflowStateTrait;
-use Drupal\rdf_entity\Entity\Rdf;
+use Drupal\node\Entity\Node;
 use Drupal\solution\Entity\SolutionContentTrait;
+use Drupal\user\EntityOwnerTrait;
 
 /**
  * Bundle class for the 'release' bundle.
  */
-class Release extends Rdf implements ReleaseInterface {
+class Release extends Node implements ReleaseInterface {
 
   use ArchivableEntityTrait;
   use DescriptionTrait;
@@ -31,6 +32,8 @@ class Release extends Rdf implements ReleaseInterface {
   use LogoTrait;
   use RdfSyncEntityTrait;
   use SolutionContentTrait;
+  use EntityOwnerTrait;
+  use EntityPublicationTimeFallbackTrait;
 
   /**
    * {@inheritdoc}
