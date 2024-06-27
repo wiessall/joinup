@@ -51,6 +51,10 @@ class BusinessHandler extends AbstractProcessingHandler implements DestructableI
         'severity' => $record['level'],
       ]);
 
+      if ($group) {
+        $message->set('group', $group);
+      }
+
       // Remove backtrace and exception as they may contain unserializable vars.
       unset($record['context']['backtrace'], $record['context']['exception']);
       $message->setArguments($record['context']);
