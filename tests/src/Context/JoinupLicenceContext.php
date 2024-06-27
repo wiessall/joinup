@@ -42,8 +42,7 @@ class JoinupLicenceContext extends RawDrupalContext {
    *
    * @throws \Drupal\Core\Entity\EntityMalformedException
    *
-   * @When I go to (the homepage of )the :licence licence in the :format serialisation.
-   * @When I visit (the homepage of )the :licence licence in the :format serialisation.
+   * @When I go to (the homepage of )the :licence licence in the :format serialisation
    */
   public function visitLicenceWithFormat(string $licence, string $format): void {
     $entity = $this->getEntityByLabel('node', $licence);

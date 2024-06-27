@@ -95,18 +95,6 @@ class WysiwygContext extends RawDrupalContext {
   }
 
   /**
-   * Checks that a given field label is not associated with a WYSIWYG editor.
-   *
-   * @param string $label
-   *   The label of the field uncontaining the WYSIWYG editor.
-   *
-   * @Then the :label field should not have a wysiwyg editor
-   */
-  public function assertNoWysiwyg(string $label): void {
-    Assert::assertFalse($this->hasWysiwyg($label));
-  }
-
-  /**
    * Asserts that a ckeditor list contains an element.
    *
    * CKeditor stores the lists available in the header of the editor pane in an

@@ -4,6 +4,7 @@ status: true
 dependencies:
   config:
     - comment.type.comment
+    - field.field.comment.comment.anonymize
     - field.field.comment.comment.field_body
   module:
     - allowed_formats
@@ -15,6 +16,13 @@ targetEntityType: comment
 bundle: comment
 mode: default
 content:
+  anonymize:
+    type: boolean_checkbox
+    weight: 3
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
   author:
     weight: 1
     region: content

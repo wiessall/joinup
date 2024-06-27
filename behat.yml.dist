@@ -25,6 +25,7 @@
   - Drupal\joinup\Context\ContactFormContext
   - Drupal\joinup\Context\ContactInformationContext
   - Drupal\joinup\Context\CustomPageContext
+  - Drupal\joinup\Context\DebugContext
   - Drupal\joinup\Context\DigitQaPipelineContext
   - Drupal\joinup\Context\DistributionContext
   - Drupal\joinup\Context\DrupalContext
@@ -69,7 +70,6 @@
   - Drupal\joinup\Context\OeNewsroomNewsletterContext
   - Drupal\joinup\Context\OwnerContext
   - Drupal\joinup\Context\PollContext
-  - Drupal\joinup\Context\RdfGraphContext
   - Drupal\joinup\Context\ReleaseContext
   - Drupal\joinup\Context\ReplicateContext
   - Drupal\joinup\Context\RssContext
@@ -77,6 +77,7 @@
       localDir: ${behat.screenshots.local.dir}
   - Drupal\joinup\Context\SolutionContext
   - Drupal\joinup\Context\SpdxContext
+  - Drupal\joinup\Context\UpdateContext
   - Drupal\joinup\Context\WebformContext
   - Drupal\joinup\Context\WhatsNewContext
   - Drupal\joinup\Context\WysiwygContext
@@ -226,6 +227,22 @@ default:
         - ${joinup.dir}/vendor/drupaltest/behat-one-time-login/behat.services.yml
   formatters:
     ${behat.formatter.name}: ~
+
+# Dedicated profile to detect unused steps, see testing:unused-behat.
+unused:
+  extensions:
+    NicWortel\BehatUnusedStepDefinitionsExtension\Extension:
+      ignorePatternAliases: true
+      filters:
+        include:
+          - '/Drupal\\joinup\\Context/'
+        exclude:
+          - '/Drupal\\joinup\\Context\\DebugContext/'
+          - '/Drupal\\joinup\\Context\\ScreenshotContext/'
+          - '/Drupal\\joinup\\Context\\MinkContext::clickLink/'
+  suites:
+    default:
+      filters: ~
 
 # Suites to run with the site installed without content.
 clean:

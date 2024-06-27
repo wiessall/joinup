@@ -308,26 +308,6 @@ class JoinupCommunityContentContext extends RawDrupalContext {
   }
 
   /**
-   * Asserts that a link exists within a comment.
-   *
-   * The comment is identified by its '1 based' number. Numbers are starting
-   * from 1 and are assigned in the order comments are shown on the page,
-   * regardless of their indentation.
-   *
-   * @param string $label
-   *   The link's text.
-   * @param int $comment_number
-   *   The '1 based' number of the comment in the page.
-   *
-   * @Then I should see the link :label in comment #:comment_number
-   */
-  public function assertCommentContainsLink(string $label, int $comment_number): void {
-    if (!$this->getNumberedComment($comment_number - 1)->findLink($label)) {
-      throw new ElementNotFoundException($this->getSession(), 'link', 'text', $label);
-    }
-  }
-
-  /**
    * Asserts that a link doesn't exist within a comment.
    *
    * The comment is identified by its '1 based' number. Numbers are starting

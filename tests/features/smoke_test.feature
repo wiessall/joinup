@@ -19,7 +19,7 @@ Feature: Minimal install clone testing.
     Given I am an anonymous user
     When I visit "/interoperable_solutions"
     Then I should see the link "Solutions"
-    And "Solutions" should be the active item in the "Navigation bar" menu
+    And "Solutions" should be the active item in the "Navigation bar" region
     Then I visit "/collection/joinup"
-    And no menu items should be active in the "Navigation bar" menu
+    And no menu items should be active in the "Navigation bar" region
 

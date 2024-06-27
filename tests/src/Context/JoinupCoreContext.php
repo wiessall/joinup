@@ -6,6 +6,8 @@ namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
 use Behat\Testwork\Hook\Scope\BeforeSuiteScope;
+use Drupal\Core\Entity\FieldableEntityInterface;
+use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Chip;
 use Drupal\joinup\Traits\EntityTrait;
@@ -247,20 +249,6 @@ class JoinupCoreContext extends RawDrupalContext {
   }
 
   /**
-   * Asserts the content type of the response from the server.
-   *
-   * @param string $header
-   *   The header of the response.
-   * @param string $value
-   *   The expected value.
-   *
-   * @Given the response header :header should match :value
-   */
-  public function assertResponseHeaderMatches(string $header, string $value): void {
-    $this->assertSession()->responseHeaderMatches($header, "/^$value$/");
-  }
-
-  /**
    * Asserts the order of elements.
    *
    * @Then I should see the following quick links menu items in the specified order:
@@ -391,6 +379,129 @@ class JoinupCoreContext extends RawDrupalContext {
     foreach ($rows as $row) {
       Assert::assertContains(implode(' ', $row), $table_rows);
     }
+  }
+
+  /**
+   * Checks whether the field of an entity is or is not empty.
+   *
+   * @param string $entityTypeId
+   *   The entity type ID of the entity. "content" or "rdf" are converted
+   *   automatically to "node" and "rdf_entity".
+   * @param string $label
+   *   The label of the entity.
+   * @param string $fieldName
+   *   The machine name of the field what we want to check.
+   * @param string $emptiness
+   *   Use the string "empty" if the field is expected to be empty. Every other
+   *   value means that the field must have a value.
+   * @param string|null $bundle
+   *   The bundle of the entity. Use NULL to not apply this restriction.
+   *
+   * @returns \Drupal\Core\Field\FieldItemListInterface
+   *   The field instance.
+   */
+  public function assertEntityFieldEmptiness(
+    string $entityTypeId,
+    string $label,
+    string $fieldName,
+    string $emptiness,
+    ?string $bundle = NULL,
+  ): FieldItemListInterface {
+    $bundle = is_string($bundle) ? static::translateBundle($bundle) : NULL;
+    $entity = $this->getEntityByLabel(static::translateEntityTypeAlias($entityTypeId), $label, $bundle);
+    Assert::assertInstanceOf(
+      FieldableEntityInterface::class,
+      $entity,
+      'No fieldable entity was found',
+    );
+    Assert::assertTrue(
+      $entity->hasField($fieldName),
+      sprintf("The entity has no '%s' field", $fieldName),
+    );
+
+    $field = $entity->get($fieldName);
+    Assert::assertFalse(
+      $field->isEmpty(),
+      sprintf(
+        "The '%s' field in the entity with label '%s' is empty",
+        $fieldName,
+        $label,
+      ),
+    );
+
+    if ($emptiness === 'empty') {
+      Assert::assertTrue(
+        $field->isEmpty(),
+        sprintf(
+          "The '%s' field in the entity with label '%s' is not empty",
+          $fieldName,
+          $label,
+        ),
+      );
+    }
+    else {
+      Assert::assertFalse(
+        $field->isEmpty(),
+        sprintf(
+          "The '%s' field in the entity with label '%s' is empty",
+          $fieldName,
+          $label,
+        ),
+      );
+    }
+
+    return $field;
+  }
+
+  /**
+   * Asserts the string value of an entity field.
+   *
+   * Use this assertion if there is a need for checking a property value which
+   * is not revealed for the current user anywhere on the UI.
+   *
+   * @param string $entityTypeId
+   *   The entity type ID of the entity. "content" or "rdf" are converted
+   *   automatically to "node" and "rdf_entity".
+   * @param string $label
+   *   The label of the entity.
+   * @param string $fieldName
+   *   The machine name of the field what we want to check.
+   * @param string $expectedValue
+   *   The expected value of the field. The "<placeholder>" string can be used
+   *   to exclude dynamic content from comparison.
+   * @param string|null $bundle
+   *   The bundle of the entity. Use NULL to not apply this restriction.
+   *
+   * @Then the string value of the :fieldName field in :label :entityTypeId should be :expectedValue
+   * @Then the string value of the :fieldName field in :label :entityTypeId with type :bundle should be :expectedValue
+   */
+  public function assertFieldValueString(
+    string $entityTypeId,
+    string $label,
+    string $fieldName,
+    string $expectedValue,
+    ?string $bundle = NULL,
+  ): void {
+    $field = $this->assertEntityFieldEmptiness($entityTypeId, $label, $fieldName, '', $bundle);
+    $template = mb_strpos('<placeholder>', $expectedValue) === FALSE
+      ? "Value of the '%s' field in the entity with label '%s' should be '%s', but it is '%s'"
+      : "Value of the '%s' field in the entity with label '%s' should match '%s', but the actual value is '%s'";
+    $expectedValuePattern = mb_ereg_replace(
+      '\\\<placeholder\\\>',
+      '.*',
+      preg_quote($expectedValue, '/')
+    );
+    Assert::assertMatchesRegularExpression(
+      '/^' . $expectedValuePattern . '$/',
+      $actual = $field->getString(),
+      sprintf(
+        $template,
+        $fieldName,
+        $label,
+        $expectedValue,
+        $actual,
+      ),
+    );
   }
 
 }
