@@ -143,6 +143,7 @@
         "lovers-of-behat/table-extension": "^1.4",
         "mikey179/vfsstream": "~1.6",
         "ml/json-ld": "^1.2",
+        "nicwortel/behat-unused-step-definitions-extension": "dev-master",
         "palantirnet/drupal-rector": "^0.20.1",
         "pear/http_request2": "~2.4",
         "php-task-runner/composer": "dev-toolkit-runner",
@@ -297,7 +298,8 @@
                 "Views Block Display skips preBlockBuild() call on ajax rebuild https://www.drupal.org/i/2605218": "resources/patch/php/drupal/core/2605218-134.diff",
                 "Deprecated function: strnatcasecmp(): Passing null to parameter #1 ($string1) of type string is deprecated in LayoutPluginManager https://www.drupal.org/i/3392572": "resources/patch/php/drupal/core/3392572.patch",
                 "PHP deprecation error in PhpMail::mail @see https://www.drupal.org/project/drupal/issues/3418098": "resources/patch/php/drupal/core/3418098.diff",
-                "Set the toolbar to position fixed on mobile (for group banner positioning and toolbar on mobile) @see https://www.drupal.org/project/drupal/issues/2516938": "resources/patch/php/drupal/core/3809.diff"
+                "Set the toolbar to position fixed on mobile (for group banner positioning and toolbar on mobile) @see https://www.drupal.org/project/drupal/issues/2516938": "resources/patch/php/drupal/core/3809.diff",
+                "Media Library: Argument #1 ($array) must be of type array, null given in array_filter(). @see https://www.drupal.org/i/3340973": "resources/patch/php/drupal/core/3340973.diff"
             },
             "drupal/default_content": {
                 "Allow manual imports @see https://www.drupal.org/i/2640734": "resources/patch/php/drupal/default_content/2640734.diff"
@@ -339,7 +341,7 @@
                 "URL not sumbitted (missing context in JS behavior detach) @see https://www.drupal.org/i/3450664": "resources/patch/php/drupal/file_url/3450664.diff"
             },
             "drupal/flag": {
-                "TypeError: Argument 1 passed to FlagCount::count() must implement interface @see https://www.drupal.org/project/flag/issues/3168014": "resources/patch/php/drupal/flag/3168014-46.patch",
+                "TypeError: Argument 1 passed to FlagCount::count() must implement interface @see https://www.drupal.org/project/flag/issues/3168014": "resources/patch/php/drupal/flag/3168014.diff",
                 "AJAX link broken if flaggable entity id is string @see https://www.drupal.org/project/flag/issues/3359007": "resources/patch/php/drupal/flag/3359007-47.patch",
                 "Disclose flagging view mode in flag theming @see https://www.drupal.org/project/flag/issues/3049155": "resources/patch/php/drupal/flag/3049155-16.patch",
                 "[Drupal 10.2] Deprecated sequence type schema definition @see https://www.drupal.org/i/3410265": "resources/patch/php/drupal/flag/3410265.diff",
@@ -429,6 +431,9 @@
             "drupal/webform": {
                 "Radios or Checkboxes inside Composite not saved @see https://www.drupal.org/project/webform/issues/3216923": "resources/patch/php/drupal/webform/368.diff",
                 "Webform might create invalid link renderable arrays on submission list. @see https://www.drupal.org/project/webform/issues/3441600": "resources/patch/php/drupal/webform/3441600.patch"
+            },
+            "nicwortel/behat-unused-step-definitions-extension": {
+                "Filters improvements (check concrete impl., include/exclude, ignore pattern aliases) - https://github.com/nicwortel/behat-unused-step-definitions-extension/pull/7": "resources/patch/php/nicwortel/behat-unused-step-definitions-extension/filters-improvements-PR_7.diff"
             },
             "sweetrdf/easyrdf": {
                 "Add a method to remove resources from graph @see https://github.com/sweetrdf/easyrdf/pull/44": "resources/patch/php/sweetrdf/easyrdf/44.diff"

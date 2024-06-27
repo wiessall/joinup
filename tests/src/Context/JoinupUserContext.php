@@ -33,32 +33,11 @@ class JoinupUserContext extends RawDrupalContext {
    *   The user name.
    *
    * @When I go to the (public )profile of :user
-   * @When I visit the (public )profile of :user
    *
    * @throws \Drupal\Core\Entity\EntityMalformedException
    */
   public function visitUserPublicProfile(string $user): void {
     $this->visitPath($this->getUserByName($user)->toUrl()->toString());
-  }
-
-  /**
-   * Navigates to the one time sign in page of the user.
-   *
-   * @param string $user
-   *   The user name.
-   *
-   * @throws \Exception
-   *   Thrown when a user is not found.
-   *
-   * @When I go to the one time sign in page of (the user ):user
-   */
-  public function visitOneTimeLogIn(string $user): void {
-    $user = $this->getUserByName($user);
-    if (empty($user)) {
-      throw new \Exception("User {$user->getAccountName()} was not found.");
-    }
-
-    $this->visitPath($this->getOneTimeLoginUrl($user) . '/login');
   }
 
   /**

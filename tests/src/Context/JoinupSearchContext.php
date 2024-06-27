@@ -149,23 +149,6 @@ class JoinupSearchContext extends RawDrupalContext {
   }
 
   /**
-   * Checks that the given tab facet is selected.
-   *
-   * @param string $type
-   *   The text of the content tab that should be selected.
-   *
-   * @throws \Exception
-   *   Thrown when the tab facet is not selected or not present in the page.
-   *
-   * @Then the :type content tab should be selected
-   */
-  public function assertContentTypeFacetSelected(string $type): void {
-    $xpath = "//a[contains(concat(' ', normalize-space(@class), ' '), ' tab--content-type ') and contains(concat(' ', normalize-space(@class), ' '), ' is-active ')]//span[contains(concat(' ', normalize-space(@class), ' '), ' tab__text--lower ')][normalize-space(string(.)) = '$type']";
-    $element = $this->getSession()->getPage()->find('xpath', $xpath);
-    Assert::assertNotEmpty($element);
-  }
-
-  /**
    * Checks that the given content facet checkbox item is selected.
    *
    * @param string $bundle
@@ -250,36 +233,6 @@ class JoinupSearchContext extends RawDrupalContext {
   }
 
   /**
-   * Asserts that an inline facet widget exists in the page.
-   *
-   * @param string $facet
-   *   The facet identifier.
-   *
-   * @Then I should see the :facet inline facet
-   */
-  public function assertInlineFacetExists(string $facet): void {
-    $facet_id = self::getFacetIdFromAlias($facet);
-    if (!$this->getSession()->getPage()->find('xpath', "//*[@data-drupal-facet-id='{$facet_id}']")) {
-      throw new \Exception("Inline facet '{$facet}' should be found in the page but was not.");
-    }
-  }
-
-  /**
-   * Asserts that an inline facet widget does not exist in the page.
-   *
-   * @param string $facet
-   *   The facet identifier.
-   *
-   * @Then I should not see the :facet inline facet
-   */
-  public function assertInlineFacetNotExists(string $facet): void {
-    $facet_id = self::getFacetIdFromAlias($facet);
-    if ($this->getSession()->getPage()->find('xpath', "//*[@data-drupal-facet-id='{$facet_id}']")) {
-      throw new \Exception("Inline facet '{$facet}' should not exist but was found.");
-    }
-  }
-
-  /**
    * Clicks a facet item in an inline facet.
    *
    * @param string $link
@@ -297,78 +250,6 @@ class JoinupSearchContext extends RawDrupalContext {
   }
 
   /**
-   * Asserts a selected option in the given facet.
-   *
-   * @param string $option
-   *   Text value of the option to find.
-   * @param string $select
-   *   CSS selector of the select field.
-   *
-   * @throws \Exception
-   *
-   * @Then the option with text :option from select facet :select is selected
-   */
-  public function assertSelectFacetOptionSelected(string $option, string $select): void {
-    // What appears as a select list in the frontend is actually output as a
-    // list of links by the Facets module which is ultimately converted into a
-    // select list using JavaScript.
-    // @see https://www.drupal.org/project/facets/issues/2937191
-    $html_tag = $this->hasJavascriptSupport() ? 'select' : 'ul';
-    $element = $this->findFacetByAlias($select, NULL, $html_tag);
-    if (!$element) {
-      throw new \Exception(sprintf('The select "%s" was not found in the page %s', $select, $this->getSession()->getCurrentUrl()));
-    }
-    if ($this->hasJavascriptSupport()) {
-      $this->assertSelectedOption($element, $option);
-    }
-    else {
-      $selected_option = $element->find('css', 'a.is-active');
-      if ($selected_option instanceof NodeElement) {
-        $text = $selected_option->getText();
-        // Selected facet options are prefixed with '(-) '. Strip this.
-        $text = preg_replace('/^\(-\) /', '', $text);
-        // Ignore duplicate whitespace.
-        $option = preg_replace('/\s{2,}/', ' ', $option);
-        Assert::assertEquals($option, $text, sprintf('The option "%s" is selected in the "%s" facet, but the option "%s" was expected.', $text, $select, $option));
-      }
-    }
-  }
-
-  /**
-   * Asserts a selected option in the select facets form.
-   *
-   * @param string $option
-   *   Text value of the option to find.
-   * @param string $select
-   *   Title of the select field.
-   *
-   * @throws \Exception
-   *    Throws an exception when the select is not found in page.
-   *
-   * @Then the option with text :option from select facet form :select is selected
-   */
-  public function assertSelectFacetFormOptionSelected(string $option, string $select): void {
-    $element = $this->findFacetByAlias($select, NULL, 'select', TRUE);
-    if (!$element) {
-      throw new \Exception(sprintf('The select "%s" was not found in the page %s', $select, $this->getSession()->getCurrentUrl()));
-    }
-    if ($this->hasJavascriptSupport()) {
-      $this->assertSelectedOption($element, $option);
-    }
-    else {
-      $selected_option = $element->find('css', 'a.is-active');
-      if ($selected_option instanceof NodeElement) {
-        $text = $selected_option->getText();
-        // Selected facet options are prefixed with '(-) '. Strip this.
-        $text = preg_replace('/^\(-\) /', '', $text);
-        // Ignore duplicate whitespace.
-        $option = preg_replace('/\s{2,}/', ' ', $option);
-        Assert::assertSame($option, $text, sprintf('The option "%s" is selected in the "%s" facet, but the option "%s" was expected.', $text, $select, $option));
-      }
-    }
-  }
-
-  /**
    * Asserts the list of available options in a select facet.
    *
    * @param string $select
@@ -382,34 +263,6 @@ class JoinupSearchContext extends RawDrupalContext {
    */
   public function assertSelectFacetOptionsAsList($select, TableNode $table) {
     $element = $this->findFacetByAlias($select);
-    $this->assertSelectAvailableOptions($element, $table);
-  }
-
-  /**
-   * Asserts the list of available options in a facet select box.
-   *
-   * @codingStandardsIgnoreStart
-   * Table format:
-   * | Option 1 | 0 |
-   * | Option 2 | 1 |
-   * @codingStandardsIgnoreEnd
-   *
-   * The first column in the table is required and lists the options that should
-   * be available. The second, optional, column lists the expected indentation.
-   *
-   * @param string $select
-   *   The name of the field element.
-   * @param \Behat\Gherkin\Node\TableNode $table
-   *   The available list of options.
-   *
-   * @throws \Exception
-   *    Throws an exception when the select is not found or options are not
-   *    identical.
-   *
-   * @Then the :select select facet should contain the following options:
-   */
-  public function assertSelectOptionsAsList(string $select, TableNode $table): void {
-    $element = $this->findFacetByAlias($select, NULL, 'select');
     $this->assertSelectAvailableOptions($element, $table);
   }
 
@@ -434,33 +287,6 @@ class JoinupSearchContext extends RawDrupalContext {
       if ($node_element->getText() === $option) {
         $facet_id = $facet->getAttribute('data-drupal-facet-id');
         $this->scrollCssSelectedElementIntoView('[data-drupal-facet-id="' . $facet_id . '"]');
-        $node_element->click();
-        return;
-      }
-    }
-
-    throw new \Exception("The option '{$option}' was not found in the '{$facet_type}' facet.");
-  }
-
-  /**
-   * Checks a checkbox in a facet form.
-   *
-   * @param string $option
-   *   The label of the checkbox.
-   * @param string $facet_type
-   *   The label of the facet.
-   *
-   * @throws \Exception
-   *   Thrown when the checkbox is not found.
-   *
-   * @Given I check the :option checkbox from the :facet_type facet form
-   */
-  public function checkCheckboxFacetForm(string $option, string $facet_type): void {
-    $facet = $this->findFacetByAlias($facet_type, NULL, '*', TRUE);
-    /** @var \Behat\Mink\Element\NodeElement[] $node_elements */
-    $node_elements = $facet->findAll('xpath', '//option');
-    foreach ($node_elements as $node_element) {
-      if ($node_element->getText() === $option) {
         $node_element->click();
         return;
       }
@@ -497,38 +323,6 @@ class JoinupSearchContext extends RawDrupalContext {
       $missing_suggestions = implode(', ', $missing_suggestions);
       throw new \RuntimeException("The expected suggestions '$missing_suggestions' were not found in autocomplete.");
     }
-  }
-
-  /**
-   * Asserts the autocomplete single item from search.
-   *
-   * This function asserts also the order of the items.
-   *
-   * @param string $keywords
-   *   A list of words to search.
-   * @param string $suggestion
-   *   The word we need to see in suggestion.
-   *
-   * @throws \Exception
-   *   Thrown when the suggestion is not present in the page.
-   *
-   * @Then I enter :keywords in the search and it should see the suggestion :suggestion
-   */
-  public function iShouldSeeTheSuggestion(string $keywords, string $suggestion): void {
-    $session = $this->getSession();
-    $element = $this->getSearchBarElement();
-    $element->setValue($keywords);
-
-    $session->getDriver()->keyDown($element->getXpath(), '', NULL);
-    $session->wait(1000);
-    $allResults = $session->getPage()->findAll('css', '.ui-autocomplete a');
-
-    $found = array_map(function ($item) {
-      /** @var \Behat\Mink\Element\NodeElement $item */
-      return $item->getText();
-    }, $allResults);
-
-    Assert::assertEquals([$suggestion], $found, "The autocomplete values mismatch the expected ones.");
   }
 
   /**
@@ -749,29 +543,6 @@ class JoinupSearchContext extends RawDrupalContext {
   }
 
   /**
-   * Press a key in the search field.
-   *
-   * Works only in Javascript-enabled browsers.
-   *
-   * Don't use this for submitting the form by sending an `enter` key since this
-   * does not trigger the form submission. Use ::submitSearch() instead.
-   *
-   * @param string $key
-   *   The human readable name of the key to press.
-   *
-   * @throws \Exception
-   *   Thrown when the browser doesn't support Javascript or when the search
-   *   field is not found.
-   *
-   * @When I press :key in the search bar
-   */
-  public function pressKeyInSearchBar(string $key): void {
-    $this->assertJavaScriptEnabledBrowser();
-    $element = $this->getSearchBarElement();
-    $this->pressKeyInElement($key, $element);
-  }
-
-  /**
    * Submits the search form.
    *
    * For some reason sending a return key press to the form input field does not
@@ -789,30 +560,6 @@ class JoinupSearchContext extends RawDrupalContext {
     $this->assertJavaScriptEnabledBrowser();
     $element = $this->getSearchBarElement();
     $element->submit();
-  }
-
-  /**
-   * Asserts that a link has the "rel" attribute set to "nofollow".
-   *
-   * @param string $link
-   *   The link title.
-   *
-   * @throws \Exception
-   *   Thrown when the link is not found or when the link doesn't have the "rel"
-   *   attribute set to "nofollow".
-   *
-   * @Then search engines should be discouraged to follow the link :link
-   */
-  public function assertLinkHasRelNofollow(string $link): void {
-    $element = $this->getSession()->getPage()->findLink($link);
-
-    if (!$element) {
-      throw new \Exception("Link '$link' not found in the page.");
-    }
-
-    if ($element->getAttribute('rel') !== 'nofollow') {
-      throw new \Exception("Link '$link' doesn't have the 'rel' attribute set to 'nofollow'.");
-    }
   }
 
   /**
@@ -945,21 +692,6 @@ class JoinupSearchContext extends RawDrupalContext {
     $getAllInput = $this->findAllSearchBoxes();
     if (count($getAllInput) < 1) {
       throw new \Exception('Search bar not found in navbar.');
-    }
-  }
-
-  /**
-   * Checks if search bar does not appear in navbar.
-   *
-   * @throws \Exception
-   *   Thrown when search bar appears in navbar.
-   *
-   * @Then I should not see search bar in navbar
-   */
-  public function failSearchExposedFilterNavbar(): void {
-    $getAllInput = $this->findAllSearchBoxes();
-    if (count($getAllInput) > 0) {
-      throw new \Exception('Search bar found in navbar.');
     }
   }
 
@@ -1113,32 +845,6 @@ class JoinupSearchContext extends RawDrupalContext {
       ];
       $entity->set($field_name, $data);
       $entity->save();
-    }
-  }
-
-  /**
-   * Asserts that a group listing field facet is configured in a given region.
-   *
-   * @param string $label
-   *   The label of the group.
-   * @param string $bundle
-   *   The group bundle.
-   * @param string $facet
-   *   The facet to set.
-   * @param string $region
-   *   The facet region.
-   *
-   * @When the :label :bundle should be configured to show the :facet facet in the :region region
-   */
-  public function assertGroupContentFacet(string $label, string $bundle, string $facet, string $region): void {
-    $facet = strtolower($facet);
-    $facet = self::getFacetIdFromAlias($facet);
-    $entity = $this->getEntityByLabel('rdf_entity', $label, $bundle);
-    $region = strtolower($region);
-    $field_name = $bundle === 'collection' ? 'field_collection_content' : 'field_is_content';
-    $data = $entity->get($field_name)->getValue();
-    if (empty($data) || !isset($data[0]['value']['fields'][$facet]) || ($data[0]['value']['fields'][$facet]['region'] !== $region)) {
-      throw new \RuntimeException(sprintf('The %s facet is not configured in the %s region.', $facet, $region));
     }
   }
 

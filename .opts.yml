@@ -10,6 +10,7 @@ upgrade_commands:
     - ./vendor/bin/drush rdf_sync:synchronize node --bundle=distribution
     - ./vendor/bin/drush search-api:reset-tracker --yes
     - ./vendor/bin/drush joinup:node-access-rebuild
+    - ./vendor/bin/drush twigc --yes
     - rm disable-config-readonly
     - ./vendor/bin/drush joinup:unpublish-alert --category
     - ./scripts/check_status_report.php
