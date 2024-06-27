@@ -9,6 +9,7 @@ use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\joinup_group_content_management\Exception\ActionException;
+use Drupal\joinup_workflow\WorkflowStateChangeMessageTrait;
 use Drupal\node\NodeInterface;
 use Drupal\views_bulk_operations\Action\ViewsBulkOperationsActionBase;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -17,6 +18,8 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
  * State action base.
  */
 abstract class StateActionBase extends ViewsBulkOperationsActionBase implements ContainerFactoryPluginInterface {
+
+  use WorkflowStateChangeMessageTrait;
 
   /**
    * Archive state.
