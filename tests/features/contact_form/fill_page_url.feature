@@ -27,7 +27,7 @@ Feature: Fill Page URL field in Technical problem / bug report on contact form
     And I fill in "Organisation" with "Kiolin State"
     And I fill in "E-mail address" with "josie.camaru@free.pe"
     And I select "Technical problem / bug report" from "Category"
-    And I fill "Page URL" with the absolute url "/interoperable-europe/interoperable-europe"
+    And I fill "Page URL" with the absolute URL "/interoperable-europe/interoperable-europe"
     And I fill in "Subject" with "Mistery reminder"
     And I enter "I will be back soon..." in the "Message" wysiwyg editor
     Then I press "Submit"
