@@ -39,10 +39,7 @@ class ContactInformationContext extends RawDrupalContext {
    * @param string $label
    *   The label of the contact information entity.
    *
-   * @When I go to (the homepage of )the :label contact
-   * @When I visit (the homepage of )the :label contact
    * @When I go to the :label contact information page
-   * @When I visit the :label contact information page
    *
    * @throws \Drupal\Core\Entity\EntityMalformedException
    */
@@ -77,24 +74,6 @@ class ContactInformationContext extends RawDrupalContext {
    */
   public function deleteContactInformation(string $name): void {
     $this->getEntityByLabel('node', $name, 'contact_information')->delete();
-  }
-
-  /**
-   * Clicks the validate contact info link found in an email.
-   *
-   * @param string $mail
-   *   The recipient E-mail address.
-   *
-   * @throws \Exception
-   *   Thrown when a user is not found.
-   *
-   * @When I click the validate contact info email from the last email sent to :mail
-   */
-  public function clickValidateContactInfoInEmail(string $mail): void {
-    $pattern = '#\[(?<url>https?://[^/].*' . base_path() . 'email-confirmer/reply/[^/].*/[^]].*)\]#';
-    $no_mail_message = "No email was sent to $mail containing a validate contact info link.";
-    $no_match_message = "The email sent to $mail did not contain a valid validate contact info link.";
-    $this->assertMailLinkMatchingPattern($pattern, $mail, $no_mail_message, $no_match_message, 'confirmation_request');
   }
 
   /**
@@ -301,30 +280,6 @@ class ContactInformationContext extends RawDrupalContext {
           break;
       }
       $confirmation->save();
-    }
-  }
-
-  /**
-   * Asserts no multiple confirmed requests of the same email exist.
-   *
-   * @todo Remove this in the next release cleanup.
-   *
-   * @Given no multiple confirmed confirmations exist for the same email
-   */
-  public function noMultipleConfirmedConfirmationsExistForTheSameEmail(): void {
-    $query = <<<MYSQL
-SELECT ec.email AS email
-FROM {email_confirmer_confirmation} ec WHERE
-    (ec.confirmed = 1)
-    AND (ec.status = 1)
-    AND (ec.realm = 'contact_information_email')
-GROUP BY email
-HAVING (COUNT(email) > 1)
-MYSQL;
-
-    $result = \Drupal::database()->query($query)->fetchAll();
-    if (!empty($result)) {
-      throw new \RuntimeException('Multiple confirmed confirmations exist for the same email.');
     }
   }
 

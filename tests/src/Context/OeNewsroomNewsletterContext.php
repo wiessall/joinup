@@ -32,10 +32,8 @@ class OeNewsroomNewsletterContext extends RawDrupalContext {
 
   /**
    * Clears the newsletter subscriptions that are being tracked.
-   *
-   * @Given there are no newsletter subscribers
    */
-  public function clearNewsletterSubscriptions() {
+  protected function clearNewsletterSubscriptions() {
     // @todo Uncomment this line when TagTrait is available in DrupalExtension.
     // @see https://github.com/jhedstrom/drupalextension/pull/510
     // $this->assertNewsletterTagPresent();
