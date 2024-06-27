@@ -72,4 +72,13 @@ final class NotificationEvents {
    */
   const RDF_ENTITY_ARCHIVE_COMPLETED = 'joinup_notification.rdf.archive_completed.notify';
 
+  /**
+   * Solution sub-items are completely archived and only contact needs email.
+   *
+   * @Event
+   *
+   * @var string
+   */
+  const RDF_ENTITY_ARCHIVE_COMPLETED_CONTACT_ONLY = 'joinup_notification.rdf.archive_completed.notify.contact_only';
+
 }
