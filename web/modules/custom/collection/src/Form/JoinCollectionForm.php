@@ -15,6 +15,7 @@ use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Session\AccountProxyInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_core\Event\AjaxCommandEvent;
 use Drupal\joinup_group\Form\JoinGroupFormBase;
@@ -30,38 +31,21 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class JoinCollectionForm extends JoinGroupFormBase {
 
-  /**
-   * The event dispatcher service.
-   *
-   * @var \Psr\EventDispatcher\EventDispatcherInterface
-   */
-  protected EventDispatcherInterface $eventDispatcher;
-
-  /**
-   * Constructs a new form instance.
-   *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   The entity type manager service.
-   * @param \Drupal\og\MembershipManagerInterface $membership_manager
-   *   The membership manager service.
-   * @param \Drupal\Core\Access\AccessManagerInterface $access_manager
-   *   The access manager service.
-   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
-   *   The messenger service.
-   * @param \Drupal\Core\Form\FormBuilderInterface $form_builder
-   *   The form builder.
-   * @param \Psr\EventDispatcher\EventDispatcherInterface $event_dispatcher
-   *   The event dispatcher service.
-   */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, MembershipManagerInterface $membership_manager, AccessManagerInterface $access_manager, MessengerInterface $messenger, FormBuilderInterface $form_builder, EventDispatcherInterface $event_dispatcher) {
-    parent::__construct($entity_type_manager, $membership_manager, $access_manager, $messenger, $form_builder);
-    $this->eventDispatcher = $event_dispatcher;
+  public function __construct(
+    EntityTypeManagerInterface $entityTypeManager,
+    MembershipManagerInterface $membershipManager,
+    AccessManagerInterface $accessManager,
+    MessengerInterface $messenger,
+    FormBuilderInterface $formBuilder,
+    protected EventDispatcherInterface $eventDispatcher,
+  ) {
+    parent::__construct($entityTypeManager, $membershipManager, $accessManager, $messenger, $formBuilder);
   }
 
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container) {
+  public static function create(ContainerInterface $container): self {
     return new static(
       $container->get('entity_type.manager'),
       $container->get('og.membership_manager'),
@@ -170,7 +154,6 @@ class JoinCollectionForm extends JoinGroupFormBase {
 
       // Allow modules to alter or replace the Ajax command.
       $event = new AjaxCommandEvent(new OpenModalDialogCommand($title, $modal_form, [
-        // The only option right now seems to be to disable drupalAutoButtons.
         'width' => '500',
       ]), [
         'instance' => 'join_collection.subscribe_dialog.open',
@@ -181,6 +164,36 @@ class JoinCollectionForm extends JoinGroupFormBase {
       $response->addCommand($event->getCommand())->addAttachments($event->getAttachments());
     }
     return $response;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getJoinSubmitLabel(): TranslatableMarkup {
+    if (!$this->group->getSetting('label_join')->isEmpty()) {
+      return new TranslatableMarkup(
+        // phpcs:ignore Drupal.Semantics.FunctionT.NotLiteralString
+        $this->group->getSetting('label_join')->getString(),
+        [], ['context' => 'collection'],
+      );
+    }
+
+    return parent::getJoinSubmitLabel();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getLeaveSubmitLabel(): TranslatableMarkup {
+    if (!$this->group->getSetting('label_leave')->isEmpty()) {
+      return new TranslatableMarkup(
+        // phpcs:ignore Drupal.Semantics.FunctionT.NotLiteralString
+        $this->group->getSetting('label_leave')->getString(),
+        [], ['context' => 'collection'],
+      );
+    }
+
+    return parent::getLeaveSubmitLabel();
   }
 
   /**
