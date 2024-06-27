@@ -365,7 +365,7 @@ class JoinupSubscriptionContext extends RawDrupalContext {
   /**
    * Checks that a group content subscription exists with the given bundles.
    *
-   * @Then I should be subscribed to( the) :bundlesCommaSeparated bundle from the :groupLabel collection
+   * @Then I should be subscribed to( the) :bundlesCommaSeparated bundle(s) from the :groupLabel collection
    */
   public function assertGroupContentSubscription(string $groupLabel, string $bundlesCommaSeparated): void {
     $account = User::load($this->getUserManager()->getCurrentUser()->uid);
@@ -403,7 +403,7 @@ class JoinupSubscriptionContext extends RawDrupalContext {
    * @throws \Exception
    *   Thrown when the user is not a member of the given group.
    *
-   * @Then I should not be subscribed to any bundle from the :label :bundle
+   * @Then I should not be subscribed to any bundle(s) from the :label :bundle
    */
   public function assertNoGroupContentSubscriptions(string $label, string $bundle): void {
     $user = $this->getUserManager()->getCurrentUser();

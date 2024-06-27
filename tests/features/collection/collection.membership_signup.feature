@@ -103,7 +103,7 @@ Feature: Tests membership to Joinup collection.
     And I should not see the button "Join this collection" in the Header region
     But I should see the link "Membership is pending" in the Header region
     And I should see the success message "<expected success message>"
-    And I <subscription expectation> bundle from the "Closed collection with public CoC" collection
+    And I <subscription expectation> bundles from the "Closed collection with public CoC" collection
 
     Examples:
       | button to click            | subscription expectation                                                             | expected success message                                                                                                              |
