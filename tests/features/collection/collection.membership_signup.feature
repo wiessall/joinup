@@ -109,3 +109,25 @@ Feature: Tests membership to Joinup collection.
       | button to click            | subscription expectation                                                             | expected success message                                                                                                              |
       | Subscribe to notifications | should be subscribed to "announcements, discussion, document, event, news, solution" | You have been subscribed to Closed collection with public CoC and will receive weekly notifications once your membership is approved. |
       | Don't subscribe            | should not be subscribed to any                                                      | You will get a notification once your membership at Closed collection with public CoC is approved.                                    |
+
+  Scenario Outline: No membership is created when pressing Cancel on a modal of a closed collection with CoC
+    Given I am logged in as an "authenticated user"
+    When I go to the homepage of the "Closed collection with public CoC" collection
+    Then I should see the button "Join this collection" in the Header region
+    When I press "Join this collection" in the Header region
+    Then a modal should open
+    And I should not see the text "To complete your application and send it for approval, we need to make sure you agree with our Public CoC of Closed collection. This helps us maintain a safe and respectful environment for all our members."
+    And I should see the link "Public CoC of Closed collection"
+    Then the "I have read and agree to the Public CoC of Closed collection." checkbox should not be checked
+    Given I <checkbox action> "I have read and agree to the Public CoC of Closed collection."
+    And I press Cancel in the "Modal buttons" region
+    Then the modal should be closed
+    And I should see the button "Join this collection" in the Header region
+    And the "Closed collection with public CoC" collection should have 0 active members
+    And the "Closed collection with public CoC" collection should have 0 pending members
+    And the "Closed collection with public CoC" collection should have 0 blocked members
+
+    Examples:
+      | checkbox action |
+      | check           |
+      | uncheck         |
