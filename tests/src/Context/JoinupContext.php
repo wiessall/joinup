@@ -1796,14 +1796,14 @@ class JoinupContext extends RawDrupalContext {
         $comment_type = 'comment';
       }
 
-      $query = \Drupal::entityQuery('user')->accessCheck(FALSE)
-        ->condition('name', $comment_values['author'])
-        ->range(0, 1);
-      $result = $query->execute();
-      $uid = reset($result);
-
-      if (empty($result)) {
-        throw new \InvalidArgumentException('Unable to load author of comment.');
+      $uid = 0;
+      if (!empty($comment_values['author'])) {
+        $query = \Drupal::entityQuery('user')->accessCheck(FALSE)
+          ->condition('name', $comment_values['author'])
+          ->range(0, 1);
+        $result = $query->execute();
+        Assert::assertNotEmpty($result, 'Unable to load author of comment.');
+        $uid = reset($result);
       }
 
       // Replace field_body alias if present.
