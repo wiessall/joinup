@@ -35,10 +35,10 @@ trait MembershipCreateTrait {
     ]);
 
     $membership = $this->createMembership(
-      $state ?? OgMembershipInterface::STATE_ACTIVE,
+      $state,
       [$this->loadOgRole($authenticatedRoleId)],
       $user,
-      $group
+      $group,
     );
     $membership->save();
     return $membership;
