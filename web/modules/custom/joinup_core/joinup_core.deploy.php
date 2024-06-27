@@ -15,9 +15,12 @@
 declare(strict_types=1);
 
 use Drupal\Component\Utility\Variable;
+use Drupal\Core\Cache\Cache;
+use Drupal\Core\Entity\Sql\SqlEntityStorageInterface;
 use Drupal\Core\Session\AccountSwitcherInterface;
 use Drupal\Core\Utility\UpdateException;
 use Drupal\joinup_core\DeployAndSmokeTestHelper;
+use Drupal\joinup_document\Entity\DocumentInterface;
 use Drupal\joinup_workflow\WorkflowHelperInterface;
 use Drupal\solution\Entity\Solution;
 use Drupal\user\Entity\User;
@@ -35,9 +38,64 @@ function joinup_core_deploy_110900(): string {
 }
 
 /**
+ * Restores the missing "published" revision of node '701955'.
+ */
+function joinup_core_deploy_110901(): string {
+  $nodeStorage = \Drupal::entityTypeManager()->getStorage('node');
+  assert($nodeStorage instanceof SqlEntityStorageInterface);
+  $connection = \Drupal::database();
+  $node = $nodeStorage->load(701955);
+  $previousRevisionIds = $connection->select('node_revision__field_state', 'nr')
+    ->fields('nr', ['revision_id', 'field_state_value'])
+    ->condition('entity_id', $node->id())
+    ->condition('revision_id', $currentRevisionId = $node->getRevisionId(), '<')
+    ->orderBy('revision_id')
+    ->execute()
+    ->fetchAllKeyed();
+  $previousPublishedRevisionIds = array_filter(
+    $previousRevisionIds,
+    fn (string $state): bool => $state === 'published',
+  );
+
+  // Skip any action if the problem is already resolved or if the document does
+  // not exist anymore.
+  if (
+    !$node instanceof DocumentInterface ||
+    $node->getWorkflowState() !== 'archived' ||
+    !empty($previousPublishedRevisionIds)
+  ) {
+    return "No need for further action";
+  }
+
+  // Set the current archived revision to published.
+  foreach (['node', 'node_revision'] as $base) {
+    $connection->update("{$base}__field_state")
+      ->condition('revision_id', $currentRevisionId)
+      ->fields(['field_state_value' => 'published'])
+      ->execute();
+  }
+  $revisionLogMessage = $connection->select('node_revision', 't')
+    ->fields('t', ['revision_log'])
+    ->condition('t.vid', $currentRevisionId)
+    ->execute()
+    ->fetchField();
+  $revisionLogMessage = implode('. ', array_filter([
+    $revisionLogMessage,
+    'Restored to published programmatically on ' . \Drupal::time()->getCurrentTime() . '.',
+  ]));
+  $connection->update('node_revision')
+    ->condition('vid', $currentRevisionId)
+    ->fields(['revision_log' => $revisionLogMessage])
+    ->execute();
+  $nodeStorage->resetCache([$node->id()]);
+  Cache::invalidateTags($node->getCacheTagsToInvalidate());
+  return "Orphan archived revision of document node with ID '{$node->id()}' was programmatically changed to published.";
+}
+
+/**
  * Archives solutions specified by Functional Team.
  */
-function joinup_core_deploy_110901(&$sandbox): string {
+function joinup_core_deploy_110902(&$sandbox): string {
   if (!isset($sandbox['remaining'])) {
     $stream = fopen(__DIR__ . '/solutions-to-archive.csv', 'r');
     // CSV is small enough to store it in memory.
