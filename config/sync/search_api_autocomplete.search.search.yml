@@ -22,22 +22,22 @@ suggester_settings:
       'entity:node':
         custom_page: ''
         discussion: ''
+        distribution: ''
         document: ''
         event: ''
+        licence: ''
         news: ''
         video: ''
       'entity:rdf_entity':
-        asset_distribution: ''
         asset_release: ''
         collection: ''
-        licence: ''
         solution: ''
-        spdx_licence: ''
       'entity:taxonomy_term':
         eif_conceptual_model: ''
         eif_interoperability_layer: ''
         eif_principle: ''
         eif_recommendation: ''
+        spdx_licence: ''
         topic: ''
       'entity:user':
         user: ''
