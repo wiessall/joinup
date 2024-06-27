@@ -77,13 +77,17 @@ class ArchiveAction extends StateActionBase {
    * {@inheritdoc}
    *
    * @throws \Drupal\Core\Entity\EntityStorageException
+   * @throws \Exception
    */
   public function execute(?NodeInterface $node = NULL): void {
     if (!$node instanceof EntityWorkflowStateInterface) {
       return;
     }
 
-    $this->workflowHelper->archiveEntity($node, 'Updated state to ' . self::ARCHIVE_STATE . ' by VBO action');
+    $this->workflowHelper->archiveEntity(
+      $node,
+      $this->workflowStateChangeRevisionLogMessage($node, self::ARCHIVE_STATE, $this->t('VBO action'))
+    );
   }
 
   /**
