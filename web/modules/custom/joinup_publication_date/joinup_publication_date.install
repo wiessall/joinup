@@ -41,6 +41,7 @@ function joinup_publication_date_update_110901(&$sandbox): void {
   /** @var \Drupal\sparql_entity_storage\Driver\Database\sparql\ConnectionInterface $sparql */
   $sparql = \Drupal::service('sparql.endpoint');
 
+  // Update published RDF entities.
   $bundles = ['asset_distribution', 'asset_release', 'collection', 'solution'];
   foreach ($bundles as $bundle) {
     $sparql->query("WITH <http://joinup.eu/{$bundle}/published>
@@ -50,6 +51,24 @@ function joinup_publication_date_update_110901(&$sandbox): void {
       WHERE {
         ?entity <http://purl.org/dc/terms/issued> ?created .
         FILTER NOT EXISTS { ?entity <http://joinup.eu/collection/published-at> [] . }
+      }");
+  }
+
+  // Update drafts of RDF entities having a published version.
+  $bundles = ['asset_release', 'collection', 'solution'];
+  foreach ($bundles as $bundle) {
+    $sparql->query("
+      INSERT {
+        GRAPH <http://joinup.eu/{$bundle}/draft> { ?entity <http://joinup.eu/collection/published-at> ?created . }
+      }
+      WHERE {
+        GRAPH <http://joinup.eu/{$bundle}/draft> {
+          ?entity <http://purl.org/dc/terms/issued> ?created .
+          FILTER NOT EXISTS { ?entity <http://joinup.eu/collection/published-at> [] . }
+        } .
+        GRAPH <http://joinup.eu/{$bundle}/published> {
+          ?entity <http://purl.org/dc/terms/issued> ?created .
+        }
       }");
   }
 }
