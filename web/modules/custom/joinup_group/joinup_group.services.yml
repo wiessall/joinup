@@ -49,7 +49,7 @@ services:
     tags:
       - { name: event_subscriber }
   joinup_group.exception_redirect_subscriber:
-    class: \Drupal\joinup_group\EventSubscriber\JoinupGroupExceptionRedirectSubscriber
+    class: Drupal\joinup_group\EventSubscriber\JoinupGroupExceptionRedirectSubscriber
     tags:
       - { name: event_subscriber }
   joinup_group.transfer_ownership_subscriber:
