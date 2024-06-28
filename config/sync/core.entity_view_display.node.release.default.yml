@@ -4,11 +4,13 @@ status: true
 dependencies:
   config:
     - field.field.node.release.body
+    - field.field.node.release.field_state
     - field.field.node.release.is_version_of
     - field.field.node.release.release_number
     - node.type.release
   module:
     - link
+    - options
     - text
     - user
 id: node.release.default
@@ -22,6 +24,13 @@ content:
     settings: {  }
     third_party_settings: {  }
     weight: 101
+    region: content
+  field_state:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 102
     region: content
   links:
     settings: {  }

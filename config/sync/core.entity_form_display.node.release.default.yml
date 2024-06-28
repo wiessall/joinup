@@ -4,10 +4,12 @@ status: true
 dependencies:
   config:
     - field.field.node.release.body
+    - field.field.node.release.field_state
     - field.field.node.release.is_version_of
     - field.field.node.release.release_number
     - node.type.release
   module:
+    - joinup_workflow
     - path
     - publication_date
     - text
@@ -31,6 +33,13 @@ content:
     weight: 10
     region: content
     settings: {  }
+    third_party_settings: {  }
+  field_state:
+    type: state_machine_buttons
+    weight: 4
+    region: content
+    settings:
+      use_transition_label: 1
     third_party_settings: {  }
   langcode:
     type: language_select
@@ -84,6 +93,11 @@ content:
     settings:
       size: 60
       placeholder: ''
+    third_party_settings: {  }
+  transition_motivation:
+    weight: 10
+    region: content
+    settings: {  }
     third_party_settings: {  }
   uid:
     type: entity_reference_autocomplete

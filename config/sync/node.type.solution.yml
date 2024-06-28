@@ -1,0 +1,20 @@
+uuid: 74365c62-9bce-41ff-bc5e-af5c99d586ea
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+third_party_settings:
+  menu_ui:
+    available_menus: {  }
+    parent: ''
+label_singular: null
+label_plural: null
+label_count: null
+name: Solution
+type: solution
+description: 'A solution on Joinup is a framework, tool, or service either hosted directly on Joinup or federated from third-party repositories.'
+help: ''
+new_revision: true
+preview_mode: 1
+display_submitted: false

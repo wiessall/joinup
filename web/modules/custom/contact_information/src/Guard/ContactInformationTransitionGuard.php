@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\contact_information\Guard;
 
+use Drupal\contact_information\Entity\ContactInformationInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\joinup_workflow\TransitionGuardTrait;
@@ -30,6 +31,10 @@ class ContactInformationTransitionGuard implements GuardInterface {
    * {@inheritdoc}
    */
   public function allowed(WorkflowTransition $transition, WorkflowInterface $workflow, EntityInterface $entity): bool {
+    if (!$entity instanceof ContactInformationInterface) {
+      return FALSE;
+    }
+
     // There are 2 specific permissions for contact information which are:
     // - The user cannot request_deletion if they have access to delete.
     // - The owner cannot request deletion if they are a moderator according
