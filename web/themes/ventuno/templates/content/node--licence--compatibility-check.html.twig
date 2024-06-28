@@ -12,7 +12,7 @@
   'border',
   'rounded',
 ] %}
-{% set spdx_licence_id = content.spdx_licence_id|render|striptags|trim|replace({'_': '-'}) %}
+{% set spdx_licence_id = content.spdx_licence_id|render|striptags|trim|replace({_: '-'}) %}
 <article{{ attributes.addClass(classes) }} data-joinup-spdx="{{ spdx_licence_id }}" data-joinup-licence-category="{{ content.legal_categories }}">
   <div class="row">
     <div class="col-12 col-sm-6 col-md-4">
