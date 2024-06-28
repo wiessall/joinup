@@ -198,3 +198,24 @@ function joinup_release_title_version_is_unique(ReleaseInterface $release, bool 
   $result = $query->execute();
   return empty($result);
 }
+
+
+
+/**
+ * Implements hook_sparql_bundle_load_alter().
+ *
+ * There is an initial check whether the bundle is empty because the method
+ * that invokes this hook is also called for taxonomies and the bundle is
+ * currently being skipped for the taxonomies.
+ */
+function joinup_release_sparql_bundle_load_alter(array $entity_values, array &$bundles): void {
+  // @todo Remove this.
+  if (count($bundles) > 1 && in_array('solution', $bundles)) {
+    if (isset($entity_values['http://purl.org/dc/terms/isVersionOf'])) {
+      $bundles = array_diff($bundles, ['solution']);
+    }
+    else {
+      $bundles = array_diff($bundles, ['asset_release']);
+    }
+  }
+}

@@ -5,6 +5,7 @@ dependencies:
   config:
     - core.entity_view_mode.node.teaser
     - field.field.node.release.body
+    - field.field.node.release.field_state
     - field.field.node.release.is_version_of
     - field.field.node.release.release_number
     - node.type.release
@@ -43,6 +44,7 @@ content:
     weight: 50
     region: content
 hidden:
+  field_state: true
   is_version_of: true
   langcode: true
   published_at: true

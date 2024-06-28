@@ -3,6 +3,10 @@ langcode: en
 status: true
 dependencies:
   config:
+    - entityqueue.entity_queue.highlighted_content
+    - entityqueue.entity_queue.highlighted_event
+    - entityqueue.entity_queue.homepage_topics
+    - entityqueue.entity_queue.spotlight
     - filter.format.plain_text_glossary
     - media.type.collection_logo
     - media.type.discussion_logo
@@ -211,15 +215,6 @@ permissions:
   - 'perform announcement workflow reject transition on any entity'
   - 'perform announcement workflow send transition on any entity'
   - 'perform announcement workflow undo transition on any entity'
-  - 'perform asset_release_workflow workflow archive transition on any entity'
-  - 'perform asset_release_workflow workflow draft transition on any entity'
-  - 'perform asset_release_workflow workflow provide_changes transition on any entity'
-  - 'perform asset_release_workflow workflow request_changes transition on any entity'
-  - 'perform asset_release_workflow workflow unarchive transition on any entity'
-  - 'perform asset_release_workflow workflow update_archived transition on any entity'
-  - 'perform asset_release_workflow workflow update_published transition on any entity'
-  - 'perform asset_release_workflow workflow validate transition on any entity'
-  - 'perform asset_release_workflow workflow validate_changes transition on any entity'
   - 'perform collection_workflow workflow archive transition on any entity'
   - 'perform collection_workflow workflow draft transition on any entity'
   - 'perform collection_workflow workflow propose transition on any entity'
@@ -264,6 +259,15 @@ permissions:
   - 'perform owner_workflow workflow retract_deletion_request transition on any entity'
   - 'perform owner_workflow workflow update_needs_changes transition on any entity'
   - 'perform owner_workflow workflow validate transition on any entity'
+  - 'perform release_workflow workflow archive transition on any entity'
+  - 'perform release_workflow workflow draft transition on any entity'
+  - 'perform release_workflow workflow provide_changes transition on any entity'
+  - 'perform release_workflow workflow request_changes transition on any entity'
+  - 'perform release_workflow workflow unarchive transition on any entity'
+  - 'perform release_workflow workflow update_archived transition on any entity'
+  - 'perform release_workflow workflow update_published transition on any entity'
+  - 'perform release_workflow workflow validate transition on any entity'
+  - 'perform release_workflow workflow validate_changes transition on any entity'
   - 'perform solution_workflow workflow archive transition on any entity'
   - 'perform solution_workflow workflow blacklist transition on any entity'
   - 'perform solution_workflow workflow draft transition on any entity'
