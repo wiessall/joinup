@@ -73,9 +73,6 @@ Feature: Embed of videos into the page.
     Then I press "Save" in the "Modal buttons" region
     And I press "Insert selected" in the "Modal buttons" region
     Then the modal should be closed
-    # Delay for the preview to load, otherwise the next step can fail
-    # when attempting to scroll the button into view.
-    And I wait for 3 seconds
     And I press "Save as draft"
     Then the response should contain "<embed url>"
     And I see the "iframe" element with the "title" attribute set to "Video player" in the "Content" region
@@ -83,7 +80,7 @@ Feature: Embed of videos into the page.
     Examples:
       | url                                                                                                                                                   | embed url                                                                                                                                                                                                                                     |
       | https://www.youtube.com/watch?v=YTaLmMsaLOg                                                                                                           | //europa.eu/webtools/crs/iframe/?oriurl=https%3A%2F%2Fwww.youtube-nocookie.com%2Fembed%2FYTaLmMsaLOg%3Fautoplay%3D0%26start%3D0%26rel%3D0                                                                                                     |
-      | http://europa.eu/!dV74uw                                                                                                                              | //europa.eu/webtools/crs/iframe/?oriurl=%2F%2Faudiovisual.ec.europa.eu%2Fembed%2Findex.html%3Fref%3DI-136289%26lg%3Den%26starttime%3D0%26autoplay%3Dfalse                                                                                     |
+      | https://europa.eu/!dV74uw                                                                                                                              | //europa.eu/webtools/crs/iframe/?oriurl=%2F%2Faudiovisual.ec.europa.eu%2Fembed%2Findex.html%3Fref%3DI-136289%26lg%3Den%26starttime%3D0%26autoplay%3Dfalse                                                                                     |
       | https://ec.europa.eu/avservices/video/player.cfm?sitelang=en&ref=I156836                                                                              | //europa.eu/webtools/crs/iframe/?oriurl=%2F%2Faudiovisual.ec.europa.eu%2Fembed%2Findex.html%3Fref%3DI156836%26lg%3Den%26starttime%3D0%26autoplay%3Dfalse                                                                                      |
       | https://audiovisual.ec.europa.eu/embed/index.html?sitelang=en&ref=I-087075                                                                            | //europa.eu/webtools/crs/iframe/?oriurl=%2F%2Faudiovisual.ec.europa.eu%2Fembed%2Findex.html%3Fref%3DI-087075%26lg%3Den%26starttime%3D0%26autoplay%3Dfalse                                                                                     |
       | https://webcast.ec.europa.eu/iprs-and-innovation-procurement-22-01-20/embed                                                                           | //europa.eu/webtools/crs/iframe/?oriurl=%2F%2Fwebcast.ec.europa.eu%2Fiprs-and-innovation-procurement-22-01-20%2Fembed%3Flg%3Den%26starttime%3D0%26autostart%3Dfalse                                                                           |
