@@ -2050,7 +2050,7 @@ class JoinupContext extends RawDrupalContext {
    */
   public function waitForGlideAnimations(string $seconds): void {
     $this->assertWaitJs($seconds, '(function() {
-        return typeof jQuery === "undefined" || jQuery("glide--slider.glide-animating").length === 0;
+        return typeof jQuery === "undefined" || jQuery(".glide--slider.glide-animating").length === 0;
     }())');
   }
 
