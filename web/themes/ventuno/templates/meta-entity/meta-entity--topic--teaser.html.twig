@@ -5,9 +5,9 @@
  */
 #}
 
-{% include '@ventuno/parts/tile-item.html.twig' with {
-  'title': content.label,
-  'image': content.image,
-  'url': url,
-  'description': content.description
-} %}
+{{ include('@ventuno/parts/tile-item.html.twig', {
+  title: content.label,
+  image: content.image,
+  url: url,
+  description: content.description
+}) }}
