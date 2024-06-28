@@ -83,27 +83,22 @@ Feature: Bookmark/Unbookmark feature.
       | Bookmark news three | Batman Begins | published |
       | Ohter news          | Batman Begins | published |
 
+    # Add small delays between flaggings so they have different creation dates,
+    # important when checking the order later (granularity: seconds).
     When I am logged in as "Gregory Bookmark"
     And I am on the homepage
     And I click "Bookmark" in the "Navigation bar"
     Then I should see the text "There are no bookmarked items."
     And I go to the content page of the type "news" with the title "Bookmark news one"
     And I click "Bookmark" in the "Bookmark block" region
+    And I wait for 3 seconds
     Then I go to the content page of the type "news" with the title "Bookmark news two"
     And I click "Bookmark" in the "Bookmark block" region
+    And I wait for 3 seconds
     Then I go to the homepage of the "Batman Begins" solution
     And I click "Bookmark" in the "Bookmark block" region
-
-    When I am logged in as "Lisa Bookmark"
-    And I go to the content page of the type "news" with the title "Bookmark news three"
-    And I click "Bookmark" in the "Bookmark block" region
-    Then I go to the content page of the type "news" with the title "Ohter news"
-    And I click "Bookmark" in the "Bookmark block" region
-    Then I go to the homepage of the "Batman" collection
-    And I click "Bookmark" in the "Bookmark block" region
-
-    When I am logged in as "Gregory Bookmark"
-    And I visit "/user/bookmarks"
+    And I wait for 3 seconds
+    When I click "Bookmark" in the "Navigation bar"
     Then I should not see the text "There are no bookmarked items."
     And I should see the following tiles in the correct order:
       | Batman Begins     |
@@ -114,7 +109,17 @@ Feature: Bookmark/Unbookmark feature.
       | 1 Solution |
 
     When I am logged in as "Lisa Bookmark"
-    And I visit "/user/bookmarks"
+    And I go to the content page of the type "news" with the title "Bookmark news three"
+    And I click "Bookmark" in the "Bookmark block" region
+    And I wait for 3 seconds
+    Then I go to the content page of the type "news" with the title "Ohter news"
+    And I click "Bookmark" in the "Bookmark block" region
+    And I wait for 3 seconds
+    Then I go to the homepage of the "Batman" collection
+    And I click "Bookmark" in the "Bookmark block" region
+    And I wait for 3 seconds
+    When I click "Bookmark" in the "Navigation bar"
+    Then I should not see the text "There are no bookmarked items."
     Then I should see the following tiles in the correct order:
       | Batman              |
       | Ohter news          |
