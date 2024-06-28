@@ -7,8 +7,10 @@ dependencies:
     - field.field.node.release.field_state
     - field.field.node.release.is_version_of
     - field.field.node.release.release_number
+    - field.field.node.release.solution_data
     - node.type.release
   module:
+    - entity_reference_revisions
     - link
     - options
     - text
@@ -48,6 +50,15 @@ content:
       target: ''
     third_party_settings: {  }
     weight: 50
+    region: content
+  solution_data:
+    type: entity_reference_revisions_entity_view
+    label: above
+    settings:
+      view_mode: default
+      link: ''
+    third_party_settings: {  }
+    weight: 103
     region: content
 hidden:
   is_version_of: true

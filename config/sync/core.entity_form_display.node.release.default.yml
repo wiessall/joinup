@@ -7,8 +7,10 @@ dependencies:
     - field.field.node.release.field_state
     - field.field.node.release.is_version_of
     - field.field.node.release.release_number
+    - field.field.node.release.solution_data
     - node.type.release
   module:
+    - entity_reference_revisions
     - joinup_workflow
     - path
     - publication_date
@@ -71,6 +73,16 @@ content:
     weight: 10
     region: content
     settings: {  }
+    third_party_settings: {  }
+  solution_data:
+    type: entity_reference_revisions_autocomplete
+    weight: 122
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
     third_party_settings: {  }
   status:
     type: boolean_checkbox
