@@ -101,3 +101,9 @@ services:
     class: Drupal\joinup_group\EventSubscriber\AdjustGroupContentSubscriber
     tags:
       - { name: event_subscriber }
+  joinup_group.invitation_business_loger:
+    class: Drupal\joinup_group\EventSubscriber\InvitationBusinessLogger
+    arguments: [ '@entity_type.manager', '@logger.channel.group_membership' ]
+    tags:
+      - { name: event_subscriber }
+
