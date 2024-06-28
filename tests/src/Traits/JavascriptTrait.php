@@ -218,12 +218,12 @@ trait JavascriptTrait {
   /**
    * Asserts that a JS condition completes within a specified time frame.
    *
-   * @param string $seconds
+   * @param int $seconds
    *   Number of seconds to wait.
    * @param string $script
    *   The JS condition/callback to run.
    */
-  protected function assertWaitJs(string $seconds, $script): void {
+  protected function assertWaitJs(int $seconds, $script): void {
     self::assertJavaScriptEnabledBrowser();
 
     $res = $this->getSession()->wait(1000 * $seconds, $script);
