@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace Drupal\joinup_group\EventSubscriber;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\joinup_invite\Event\InvitationEventInterface;
 use Drupal\joinup_invite\Event\InvitationEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Drupal\Core\Logger\LoggerChannelInterface;
 
 /**
- * Class InvitationBusinessLogger.
+ * Invitation business logger.
  */
 class InvitationBusinessLogger implements EventSubscriberInterface {
 
@@ -26,7 +26,7 @@ class InvitationBusinessLogger implements EventSubscriberInterface {
   public static function getSubscribedEvents(): array {
     // Perform events at the very end.
     $events[InvitationEvents::ACCEPT_INVITATION_EVENT] =
-      ['acceptInvitation', -1,];
+      ['acceptInvitation', -1];
 
     return $events;
   }
@@ -53,7 +53,7 @@ class InvitationBusinessLogger implements EventSubscriberInterface {
   /**
    * Checks if an invitation is for a group membership.
    *
-   * @param InvitationEventInterface $event
+   * @param \Drupal\joinup_invite\Event\InvitationEventInterface $event
    *   The invitation event.
    *
    * @return bool
