@@ -8,6 +8,7 @@ dependencies:
     - field.field.node.release.field_state
     - field.field.node.release.is_version_of
     - field.field.node.release.release_number
+    - field.field.node.release.solution_data
     - node.type.release
   module:
     - link
@@ -50,4 +51,5 @@ hidden:
   published_at: true
   release_number: true
   search_api_excerpt: true
+  solution_data: true
   uri: true
