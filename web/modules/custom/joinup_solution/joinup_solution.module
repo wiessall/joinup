@@ -10,7 +10,7 @@ use Drupal\joinup_solution\Entity\Solution;
 /**
  * Implements hook_entity_bundle_info_alter().
  */
-function solution_entity_bundle_info_alter(&$bundles): void {
+function joinup_solution_entity_bundle_info_alter(&$bundles): void {
   if (!empty($bundles['node']['solution'])) {
     $bundles['node']['solution']['class'] = Solution::class;
   }
