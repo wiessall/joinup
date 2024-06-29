@@ -1,0 +1,70 @@
+uuid: b9f766f6-a0b1-41b0-9758-0a8a9ecbb6e2
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.view_mode_featured
+    - field.field.node.release.access_url
+    - field.field.node.release.body
+    - field.field.node.release.field_keywords
+    - field.field.node.release.field_state
+    - field.field.node.release.is_version_of
+    - field.field.node.release.language
+    - field.field.node.release.process_status
+    - field.field.node.release.release_number
+    - field.field.node.release.solution_data
+    - field.field.node.release.spatial_coverage
+    - node.type.release
+  module:
+    - joinup_distribution
+    - link
+    - template_suggestion
+    - user
+id: node.release.view_mode_featured
+targetEntityType: node
+bundle: release
+mode: view_mode_featured
+content:
+  access_url:
+    type: tracked_hosted_file_download
+    label: hidden
+    settings:
+      hosted_files_title: Download
+      remote_files_title: External
+      show_remote_files: false
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: no_wrappers
+    weight: 1
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+  report:
+    type: link
+    label: hidden
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    weight: 50
+    region: content
+hidden:
+  body: true
+  field_keywords: true
+  field_state: true
+  is_version_of: true
+  langcode: true
+  language: true
+  process_status: true
+  published_at: true
+  release_number: true
+  search_api_excerpt: true
+  solution_data: true
+  spatial_coverage: true
+  uri: true

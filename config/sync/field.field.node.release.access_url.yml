@@ -1,0 +1,34 @@
+uuid: d8a0f7c0-47bc-4e2f-b99a-81df02ea0bd3
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.access_url
+    - node.type.release
+  module:
+    - file_url
+    - rdf_sync
+third_party_settings:
+  rdf_sync:
+    target_id:
+      predicate: 'http://xmlns.com/foaf/0.1/page'
+      type: 'xsd:string'
+id: node.release.access_url
+field_name: access_url
+entity_type: node
+bundle: release
+label: 'Access URL'
+description: 'If the file(s) exist in an external server, you can provide the URL here directly. You can alternatively host your distribution in Joinup by using the Distribution file field above.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'file_url_default:file'
+  handler_settings: {  }
+  file_directory: 'release/documentation/[date:custom:Y]-[date:custom:m]'
+  file_extensions: 'txt doc docx pdf'
+  max_filesize: ''
+  description_field: false
+  description_field_required: false
+field_type: file_url

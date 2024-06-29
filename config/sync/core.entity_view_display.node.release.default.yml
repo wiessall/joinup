@@ -3,16 +3,23 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.node.release.access_url
     - field.field.node.release.body
+    - field.field.node.release.field_keywords
     - field.field.node.release.field_state
     - field.field.node.release.is_version_of
+    - field.field.node.release.language
+    - field.field.node.release.process_status
     - field.field.node.release.release_number
     - field.field.node.release.solution_data
+    - field.field.node.release.spatial_coverage
     - node.type.release
   module:
     - entity_reference_revisions
+    - joinup_distribution
     - link
     - options
+    - template_suggestion
     - text
     - user
 id: node.release.default
@@ -20,12 +27,32 @@ targetEntityType: node
 bundle: release
 mode: default
 content:
+  access_url:
+    type: tracked_hosted_file_download
+    label: hidden
+    settings:
+      hosted_files_title: Download
+      remote_files_title: External
+      show_remote_files: true
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: no_wrappers
+    weight: 3
+    region: content
   body:
     type: text_default
     label: hidden
     settings: {  }
     third_party_settings: {  }
     weight: 101
+    region: content
+  field_keywords:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 105
     region: content
   field_state:
     type: list_default
@@ -34,10 +61,28 @@ content:
     third_party_settings: {  }
     weight: 102
     region: content
+  language:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 106
+    region: content
   links:
     settings: {  }
     third_party_settings: {  }
     weight: 100
+    region: content
+  process_status:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: false
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
+    weight: 6
     region: content
   report:
     type: link
@@ -59,6 +104,14 @@ content:
       link: ''
     third_party_settings: {  }
     weight: 103
+    region: content
+  spatial_coverage:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 104
     region: content
 hidden:
   is_version_of: true
