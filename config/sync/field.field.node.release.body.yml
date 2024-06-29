@@ -4,9 +4,16 @@ status: true
 dependencies:
   config:
     - field.storage.node.body
+    - filter.format.content_editor
     - node.type.release
   module:
+    - rdf_sync
     - text
+third_party_settings:
+  rdf_sync:
+    value:
+      predicate: 'http://www.w3.org/ns/adms#versionNotes'
+      type: 'xsd:string'
 id: node.release.body
 field_name: body
 entity_type: node
@@ -20,5 +27,6 @@ default_value_callback: ''
 settings:
   display_summary: true
   required_summary: false
-  allowed_formats: {  }
+  allowed_formats:
+    - content_editor
 field_type: text_with_summary

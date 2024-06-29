@@ -5,6 +5,13 @@ dependencies:
   config:
     - field.storage.node.release_number
     - node.type.release
+  module:
+    - rdf_sync
+third_party_settings:
+  rdf_sync:
+    value:
+      predicate: 'http://www.w3.org/2002/07/owl#versionInfo'
+      type: 'xsd:string'
 id: node.release.release_number
 field_name: release_number
 entity_type: node
@@ -12,7 +19,7 @@ bundle: release
 label: 'Release version'
 description: ''
 required: true
-translatable: true
+translatable: false
 default_value: {  }
 default_value_callback: ''
 settings: {  }
