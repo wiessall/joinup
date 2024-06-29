@@ -4,11 +4,16 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.node.teaser
+    - field.field.node.release.access_url
     - field.field.node.release.body
+    - field.field.node.release.field_keywords
     - field.field.node.release.field_state
     - field.field.node.release.is_version_of
+    - field.field.node.release.language
+    - field.field.node.release.process_status
     - field.field.node.release.release_number
     - field.field.node.release.solution_data
+    - field.field.node.release.spatial_coverage
     - node.type.release
   module:
     - link
@@ -45,11 +50,16 @@ content:
     weight: 50
     region: content
 hidden:
+  access_url: true
+  field_keywords: true
   field_state: true
   is_version_of: true
   langcode: true
+  language: true
+  process_status: true
   published_at: true
   release_number: true
   search_api_excerpt: true
   solution_data: true
+  spatial_coverage: true
   uri: true
