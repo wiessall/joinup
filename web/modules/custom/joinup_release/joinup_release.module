@@ -145,7 +145,7 @@ function joinup_release_form_node_release_delete_form_alter(array &$form, FormSt
  *   The form state.
  */
 function joinup_release_delete_redirect(array &$form, FormStateInterface $form_state): void {
-  /** @var ReleaseInterface $release */
+  /** @var \Drupal\joinup_release\Entity\ReleaseInterface $release */
   $release = $form_state->getFormObject()->getEntity();
   if ($solution = $release->getSolution()) {
     $url = $solution->toUrl();
@@ -198,8 +198,6 @@ function joinup_release_title_version_is_unique(ReleaseInterface $release, bool 
   $result = $query->execute();
   return empty($result);
 }
-
-
 
 /**
  * Implements hook_sparql_bundle_load_alter().

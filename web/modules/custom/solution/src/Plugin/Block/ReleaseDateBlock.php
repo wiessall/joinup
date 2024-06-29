@@ -1,19 +1,19 @@
 <?php
 
-// @todo This should probably move to joinup_release.
-
 declare(strict_types=1);
 
 namespace Drupal\solution\Plugin\Block;
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
+use Drupal\Core\Block\Attribute\Block;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Datetime\DateFormatterInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\joinup_release\Entity\ReleaseInterface;
 use Drupal\solution\Entity\SolutionInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -21,12 +21,13 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * A block showing the release date.
  *
- * @Block(
- *   id = "solution_release_date",
- *   admin_label = @Translation("Release date"),
- *   category = @Translation("Solution")
- * )
+ * @todo This should probably move to joinup_release.
  */
+#[Block(
+  id: 'solution_release_date',
+  admin_label: new TranslatableMarkup('Release date'),
+  category: new TranslatableMarkup('Solution'),
+)]
 class ReleaseDateBlock extends BlockBase implements ContainerFactoryPluginInterface {
 
   /**
