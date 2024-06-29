@@ -65,5 +65,5 @@ function joinup_rdf_update_110901(): void {
 function joinup_rdf_update_110902(): void {
   // Install the joinup_release module because the joinup_distribution services
   // have some dependency on the services provided by the joinup_release module.
-  \Drupal::service('module_installer')->install(['joinup_release']);
+  \Drupal::service('module_installer')->install(['joinup_release', 'joinup_solution']);
 }

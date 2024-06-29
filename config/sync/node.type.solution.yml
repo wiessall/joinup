@@ -4,10 +4,19 @@ status: true
 dependencies:
   module:
     - menu_ui
+    - rdf_sync
 third_party_settings:
   menu_ui:
     available_menus: {  }
     parent: ''
+  rdf_sync:
+    type: 'http://www.w3.org/ns/dcat#Dataset'
+    uri_plugin: joinup_po_namespace
+    fields:
+      title:
+        value:
+          predicate: 'http://purl.org/dc/terms/title'
+          type: 'xsd:string'
 label_singular: null
 label_plural: null
 label_count: null

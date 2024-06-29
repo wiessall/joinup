@@ -17,6 +17,7 @@ dependencies:
   - 'joinup:joinup_publication_date'
   - 'joinup:joinup_user'
   - 'joinup:joinup_workflow'
+  - 'joinup:joinup_solution'
   - 'joinup:owner'
   - 'joinup:solution'
   - 'og:og'
