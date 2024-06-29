@@ -11,8 +11,6 @@ use Drupal\Core\Routing\Access\AccessInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\joinup_group\JoinupGroupHelper;
 use Drupal\joinup_release\Entity\ReleaseInterface;
-use Drupal\rdf_entity\RdfInterface;
-use Drupal\sparql_entity_storage\UriEncoder;
 use Symfony\Component\Routing\Route;
 
 /**

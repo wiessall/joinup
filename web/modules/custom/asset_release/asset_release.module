@@ -9,16 +9,13 @@ declare(strict_types=1);
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
-use Drupal\Core\Cache\Cache;
 use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\asset_release\Entity\AssetRelease;
 use Drupal\asset_release\Entity\AssetReleaseInterface;
-use Drupal\joinup_publication_date\Entity\EntityPublicationTimeInterface;
 use Drupal\rdf_entity\RdfInterface;
 use Drupal\sparql_entity_storage\SparqlEntityStorageInterface;
 use Drupal\sparql_entity_storage\SparqlGraphInterface;
@@ -201,7 +198,7 @@ function asset_release_rdf_entity_presave(EntityInterface $entity) {
  */
 function asset_release_entity_update(EntityInterface $entity) {
   // @todo Drop this when the changes are finished and revisions are active.
-  //    Revisit this when standard changes are finished.
+  //   Revisit this when standard changes are finished.
   // Quick escape check to avoid unnecessary loadings.
   if (!$entity instanceof AssetReleaseInterface) {
     return;

@@ -14,7 +14,6 @@ use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Routing\TrustedRedirectResponse;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\joinup_release\Entity\ReleaseInterface;
-use Drupal\node\NodeInterface;
 use Drupal\rdf_entity\RdfInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 

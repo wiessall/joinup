@@ -80,7 +80,7 @@ class CommunityContentSubscriber extends NotificationSubscriberBase {
     MembershipManager $og_membership_manager,
     WorkflowHelperInterface $workflow_helper,
     JoinupMessageDeliveryInterface $message_delivery,
-    protected RevisionManagerInterface $revision_manager
+    protected RevisionManagerInterface $revision_manager,
   ) {
     parent::__construct($entity_type_manager, $config_factory, $current_user, $og_membership_manager, $workflow_helper, $message_delivery);
   }
