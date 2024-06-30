@@ -52,6 +52,14 @@ grumphp:
     # https://github.com/phpro/grumphp/blob/v2.x/doc/tasks/yamllint.md
     yamllint: { }
 
+    # https://github.com/phpro/grumphp/blob/v2.x/doc/tasks/shell.md
+    gherkin_lint:
+      scripts:
+          - scripts/grumphp/gherkinlint
+      triggered_by: [ feature ]
+      metadata:
+        task: shell
+
   testsuites:
     # On git pre-push, often initiating a full scan, omit phpstan which is slow.
     # See scripts/git/pre_push.
