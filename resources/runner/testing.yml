@@ -38,8 +38,3 @@ commands:
         tmp_file=$(mktemp)
         ${joinup.dir}/vendor/bin/behat --profile=unused --dry-run | tee $tmp_file
         if grep -q "unused step definition" $tmp_file; then exit 1; fi
-
-  # Lints features files using Gherkin Rules.
-  testing:lint-features:
-    - task: exec
-      command: npm run lint:gherkin
