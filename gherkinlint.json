@@ -1,0 +1,38 @@
+{
+  "rules": {
+    "no-duplicate-tags": {},
+    "no-empty-file": {
+      "enabled": false
+    },
+    "allowed-tags": {
+      "enabled": false,
+      "allow": null
+    },
+    "filename": {
+      "style": "snake_case"
+    },
+    "indentation": {
+      "width": 2,
+      "feature": 0,
+      "rule": 1,
+      "backgroud": 1,
+      "scenario": 1,
+      "step": 2,
+      "table": 3,
+      "literalBlock": 2,
+      "examples": 2,
+      "examplesTable": 3
+    },
+    "keyword-order": {
+      "tolerateThenBeforeWhen": true
+    },
+    "scenario-size": {
+      "enabled": false
+    },
+    "scenarios-per-file": {
+      "enabled": true,
+      "min": 0,
+      "max": null
+    }
+  }
+}
