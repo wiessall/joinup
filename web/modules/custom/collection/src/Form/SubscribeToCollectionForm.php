@@ -15,14 +15,12 @@ use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Ajax\OpenModalDialogCommand;
 use Drupal\Core\Ajax\PrependCommand;
 use Drupal\Core\Ajax\RemoveCommand;
-use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\EventSubscriber\MainContentViewSubscriber;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Messenger\MessengerInterface;
-use Drupal\Core\Render\Element;
 use Drupal\Core\Url;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_core\Event\AjaxCommandEvent;
@@ -134,11 +132,33 @@ class SubscribeToCollectionForm extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state, ?RdfInterface $rdf_entity = NULL): array {
+    $coc_components = $this->getCodeOfConductComponents($rdf_entity);
+    $has_coc = !empty($coc_components);
+    $membership = $this->getUserNonBlockedMembership($rdf_entity);
+    $intro_message = $membership && $membership->isPending() ?
+      $this->t('When your membership is approved you will be able to publish content in it.') :
+      $this->t('You have joined the collection and you are now able to publish content in it.');
+    $form = $coc_components ?? [
+      'intro' => [
+        '#type' => 'html_tag',
+        '#tag' => 'p',
+        '#value' => $intro_message,
+        '#weight' => -1,
+      ],
+    ];
+    // Submit buttons (excluding "Cancel") must be disabled unless the checkbox
+    // of CoC is checked.
+    $submit_states = $has_coc
+      ? [
+        'disabled' => [
+          ':input[name="code_of_conduct_agreed"]' => ['checked' => FALSE],
+        ],
+      ]
+      : [];
+
     // This form should only be accessible if the user is already a member of
     // the collection.
-    $membership = $this->getUserNonBlockedMembership($rdf_entity);
     $form['#access'] = $this->access($rdf_entity)->isAllowed();
-
     // Keep track of the collection we are subscribing to.
     $form['collection_id'] = [
       '#type' => 'value',
@@ -162,7 +182,7 @@ class SubscribeToCollectionForm extends FormBase {
       '#type' => 'actions',
     ];
 
-    $submitButtonBase = [
+    $submit_button_base = [
       '#type' => 'submit',
       // This form is opened via AJAX in a modal dialog that is triggered by
       // submitting the JoinCollectionForm. By default, Drupal will send the
@@ -186,45 +206,29 @@ class SubscribeToCollectionForm extends FormBase {
 
     $form['actions']['confirm_subscribe'] = [
       '#value' => $this->t('Subscribe to notifications'),
+      '#states' => $submit_states,
       '#op' => 'subscribe',
-    ] + $submitButtonBase;
-    $form['actions']['confirm_membership_only'] = [
-      '#value' => $dontSubscribe = $this->t("Don't subscribe"),
-      '#op' => 'no_subscribe',
-    ] + $submitButtonBase;
+    ] + $submit_button_base;
     $form['actions']['cancel'] = [
       '#type' => 'button',
-      '#value' => $this->t('Cancel'),
       '#extra_suggestion' => 'light_blue',
       '#weight' => 10,
+      '#value' => $this->t("Don't subscribe"),
       '#op' => 'cancel',
       '#limit_validation_errors' => [],
-      '#ajax' => $submitButtonBase['#ajax'],
+      '#ajax' => $submit_button_base['#ajax'],
     ];
 
-    if ($rdf_entity instanceof CollectionInterface && $rdf_entity->hasCodeOfConductToAccept()) {
-      $this->mergeCodeOfConductComponents($form, $rdf_entity);
+    if (!$has_coc) {
+      return $form;
     }
-    else {
-      // User don't have to confirm the membership subscription since it is
-      // created automatically.
-      unset($form['actions']['confirm_membership_only']);
-      // ...But, in this case, 'Cancel' means nothing (we don't need to take any
-      // action), so the button will be just a "Close" button.
-      $form['actions']['cancel']['#value'] = $dontSubscribe;
-      // Check if the user is pending, so we can adapt the messages for the
-      // user.
-      $intro_message = $membership && $membership->isPending() ?
-        $this->t('When your membership is approved you will be able to publish content in it.') :
-        $this->t('You have joined the collection and you are now able to publish content in it.');
 
-      $form['intro'] = [
-        '#type' => 'html_tag',
-        '#tag' => 'p',
-        '#value' => $intro_message,
-        '#weight' => -1,
-      ];
-    }
+    $form['actions']['cancel']['#value'] = $this->t('Cancel');
+    $form['actions']['confirm_membership_only'] = [
+      '#value' => $this->t("Don't subscribe"),
+      '#states' => $submit_states,
+      '#op' => 'no_subscribe',
+    ] + $submit_button_base;
 
     return $form;
   }
@@ -232,30 +236,35 @@ class SubscribeToCollectionForm extends FormBase {
   /**
    * Adds the necessary code of conduct form elements to the form.
    *
-   * @param array $form
-   *   The form structure.
    * @param \Drupal\rdf_entity\RdfInterface|null $collection
    *   The collection.
+   *
+   * @return array[]|null
+   *   The form components about accepting the Code of Conduct document, or
+   *   NULL if there is nothing what users should agree to.
    */
-  protected function mergeCodeOfConductComponents(array &$form, ?RdfInterface $collection): void {
-    $codeOfConduct = $collection->getCodeOfConduct();
-    if (!$collection->isClosed() || !$codeOfConduct instanceof ContentEntityInterface) {
-      return;
+  protected function getCodeOfConductComponents(?RdfInterface $collection): ?array {
+    if (
+      !$collection instanceof CollectionInterface ||
+      !$collection->hasCodeOfConductToAccept()
+    ) {
+      return NULL;
     }
 
+    $codeOfConduct = $collection->getCodeOfConduct();
     $codeOfConductArgs = [
       ':code-of-conduct-url' => $codeOfConduct->toUrl()->toString(),
       '%code-of-conduct-label' => $codeOfConduct->label(),
     ];
 
-    $extra['code_of_conduct_lead'] = [
+    $codeOfConductComponents['code_of_conduct_lead'] = [
       '#type' => 'item',
       '#markup' => $this->t(
         'To complete your application and send it for approval, we need to make sure you agree with our <a href=:code-of-conduct-url>%code-of-conduct-label</a>. This helps us maintain a safe and respectful environment for all our members.',
         $codeOfConductArgs,
       ),
     ];
-    $extra['code_of_conduct_agreed'] = [
+    $codeOfConductComponents['code_of_conduct_agreed'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('I have read and agree to the <a href=:code-of-conduct-url>%code-of-conduct-label</a>.', $codeOfConductArgs),
       '#return_value' => $codeOfConduct->getRevisionId(),
@@ -263,23 +272,12 @@ class SubscribeToCollectionForm extends FormBase {
       '#required_error' => $this->t('You must agree to the <a href=:code-of-conduct-url>%code-of-conduct-label</a> before asking for membership.', $codeOfConductArgs),
     ];
 
-    $extra['code_of_conduct_trailer'] = [
+    $codeOfConductComponents['code_of_conduct_trailer'] = [
       '#type' => 'item',
       '#markup' => $this->t('You will receive a confirmation email once your application has been approved. We look forward to having you as a valued member of our community!<br><br>If you have any questions or need assistance, please feel free to contact us.'),
     ];
 
-    $form = [...$extra, ...$form];
-
-    foreach (Element::children($form['actions']) as $buttonKey) {
-      if (!str_starts_with($buttonKey, 'confirm')) {
-        continue;
-      }
-      $form['actions'][$buttonKey]['#states'] = [
-        'disabled' => [
-          ':input[name="code_of_conduct_agreed"]' => ['checked' => FALSE],
-        ],
-      ];
-    }
+    return $codeOfConductComponents;
   }
 
   /**
