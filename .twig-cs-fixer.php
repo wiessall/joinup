@@ -1,9 +1,13 @@
 <?php
 
 $finder = new TwigCsFixer\File\Finder();
-$finder->exclude('web/core');
-$finder->exclude('web/modules/contrib');
-$finder->exclude('web/themes/contrib');
+$finder->exclude([
+  'dist',
+  'tmp',
+  'web/core',
+  'web/modules/contrib',
+  'web/themes/contrib'
+]);
 
 $config = new TwigCsFixer\Config\Config();
 $config->setFinder($finder);
