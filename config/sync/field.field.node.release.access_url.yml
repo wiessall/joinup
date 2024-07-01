@@ -17,7 +17,7 @@ id: node.release.access_url
 field_name: access_url
 entity_type: node
 bundle: release
-label: 'Access URL'
+label: Documentation
 description: 'If the file(s) exist in an external server, you can provide the URL here directly. You can alternatively host your distribution in Joinup by using the Distribution file field above.'
 required: false
 translatable: false
