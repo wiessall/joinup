@@ -39,17 +39,22 @@
           }, 100); // Set timeout delay.
         }
       }
-
+      var eventListOver = ["mouseover", "focusin"];
+      var eventListOut = ["mouseleave", "focusout"];
       once(
         "navbar-hover-dropdown",
         "#main-navbar .nav-item.d-xl-inline-block.dropdown"
       ).forEach((li) => {
-        li.addEventListener("mouseover", () => {
-          toggleDropdown(li, true);
-        });
-        li.addEventListener("mouseleave", () => {
-          toggleDropdown(li, false);
-        });
+        for(event of eventListOver) {
+          li.addEventListener(event, () => {
+            toggleDropdown(li, true);
+          });
+        }
+        for(event of eventListOut) {
+          li.addEventListener(event, () => {
+            toggleDropdown(li, false);
+          });
+        }
       });
     },
   };
