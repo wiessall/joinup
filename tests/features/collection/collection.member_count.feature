@@ -33,9 +33,13 @@ Feature: Collection homepage
   Scenario: Counters are properly synced for open collections.
     When I go to the homepage of the "Under the mountain" collection
     Then I see the text "3 Members" in the "Header" region
+    And the "Under the mountain" collection should have 4 active member
+    And the "Under the mountain" collection should have 0 pending members
+    And the "Under the mountain" collection should have 0 blocked members
     When I am logged in as "Some goblin"
     And I go to the homepage of the "Under the mountain" collection
     And I press "Join this collection"
+    Then the "Under the mountain" collection should have 5 active member
     And I go to the homepage of the "Under the mountain" collection
     Then I see the text "4 Members" in the "Header" region
     And I am on the members page of "Under the mountain"
@@ -45,6 +49,7 @@ Feature: Collection homepage
     When I click "Leave this collection"
     When I press "Confirm"
     Then I should see the success message "You are no longer a member of Under the mountain."
+    And the "Under the mountain" collection should have 4 active member
     Then I see the text "3 Members" in the "Header" region
     And I am on the members page of "Under the mountain"
     Then the "Roles" field should contain the "- Any - (3)" option
@@ -52,9 +57,13 @@ Feature: Collection homepage
   Scenario: Counters are properly synced for closed collections.
     When I go to the homepage of the "Exactly the same collection, but closed" collection
     Then I see the text "3 Members" in the "Header" region
+    And the "Exactly the same collection, but closed" collection should have 4 active member
+    And the "Exactly the same collection, but closed" collection should have 0 pending members
+    And the "Exactly the same collection, but closed" collection should have 0 blocked members
     When I am logged in as "Some goblin"
     And I go to the homepage of the "Exactly the same collection, but closed" collection
     And I press "Join this collection"
+    Then the "Exactly the same collection, but closed" collection should have 1 pending member
     And I go to the homepage of the "Exactly the same collection, but closed" collection
     Then I see the text "3 Members" in the "Header" region
     And I am on the members page of "Exactly the same collection, but closed"
@@ -68,13 +77,20 @@ Feature: Collection homepage
     And I check the box "Update the member Some goblin"
     Then I select "Approve the pending membership(s)" from "Action"
     And I press "Apply to selected items"
+    # Block Fili's membership
+    And I check the box "Update the member Fili"
+    Then I select "Block the selected membership(s)" from "Action"
+    And I press "Apply to selected items"
 
     When I am an anonymous user
     And I go to the homepage of the "Exactly the same collection, but closed" collection
-    Then I see the text "4 Members" in the "Header" region
+    Then I see the text "3 Members" in the "Header" region
+    And the "Exactly the same collection, but closed" collection should have 4 active member
+    And the "Exactly the same collection, but closed" collection should have 0 pending members
+    And the "Exactly the same collection, but closed" collection should have 1 blocked member
     When I am on the members page of "Exactly the same collection, but closed"
-    Then the "Roles" field should contain the "- Any - (4)" option
-    Then I see the text "4 Members" in the "Header" region
+    Then the "Roles" field should contain the "- Any - (3)" option
+    Then I see the text "3 Members" in the "Header" region
 
   Scenario: Blocked users are not counted towards total member count.
     # Cache the collection overview page.
