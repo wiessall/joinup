@@ -1,4 +1,4 @@
-@api @group-f
+@api @group-f @javascript
 Feature:
   As a moderator of the site
   I need to be able to use "iframe" and "map" paragraphs for content.
@@ -9,7 +9,6 @@ Feature:
       | state | published             |
       | topic | HR                    |
 
-  @javascript
   Scenario: Moderator can manage map and iframe paragraph.
     Given users:
       | Username |
