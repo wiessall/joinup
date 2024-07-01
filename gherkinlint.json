@@ -9,7 +9,7 @@
       "allow": null
     },
     "filename": {
-      "style": "snake_case"
+      "enabled": false
     },
     "indentation": {
       "width": 2,
@@ -23,7 +23,20 @@
       "examples": 2,
       "examplesTable": 3
     },
+    "no-background-with-single-scenario": {
+      "enabled": false
+    },
+    "no-duplicated-feature-names": {
+      "enabled": false
+    },
+    "no-duplicated-scenario-names": {
+      "enabled": false
+    },
+    "no-unnamed-features": {
+      "enabled": false
+    },
     "keyword-order": {
+      "enabled": false,
       "tolerateThenBeforeWhen": true
     },
     "scenario-size": {

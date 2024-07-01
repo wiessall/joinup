@@ -115,15 +115,15 @@ Feature: Messaging group announcements
 
     When I fill in "Subject" with "The Big Opening is postponed"
     And I fill in "Body" with:
-     """
-     In this email we are testing the available arguments:
-     <a href="@group_landing_page">The <group> landing page URL</a>
-     <a href="@group_members_page">The <group> members page URL</a>
-     The recipient's full name: @recipient_name
-     <a href="@recipient_profile">The recipient's profile URL</a>
-     <a href="@recipient_profile_edit">The recipient's profile edit URL</a>
-     <a href="@recipient_subscriptions">The recipient's subscriptions page URL</a>
-     """
+    """
+    In this email we are testing the available arguments:
+    <a href="@group_landing_page">The <group> landing page URL</a>
+    <a href="@group_members_page">The <group> members page URL</a>
+    The recipient's full name: @recipient_name
+    <a href="@recipient_profile">The recipient's profile URL</a>
+    <a href="@recipient_profile_edit">The recipient's profile edit URL</a>
+    <a href="@recipient_subscriptions">The recipient's subscriptions page URL</a>
+    """
 
     When I press "Update"
     Then I should see the success message "The announcement has been updated but it's still in Draft state. Review the announcement and, when is ready to be sent, use the 'Send' button."

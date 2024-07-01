@@ -1,10 +1,9 @@
-@api
+@api @loggedErrors @joinup_collection
 Feature: Validate an ADMS-AP file through the UI
   In order to be sure that my ADMS data is compliant
   As a user
   I need to be able to publish an RDF file
 
-  @loggedErrors @joinup_collection
   Scenario: Validate a file
     When I am an anonymous user
     And I go to the homepage
