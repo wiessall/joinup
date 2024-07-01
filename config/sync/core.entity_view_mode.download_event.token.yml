@@ -1,9 +1,9 @@
-uuid: d758286e-1af0-4156-ab8e-9931d1dfdea3
+uuid: 86d57460-5b8e-46c8-a512-1a77f79df31b
 langcode: en
 status: true
 dependencies:
   module:
-    - asset_distribution
+    - joinup_distribution
 id: download_event.token
 label: Token
 description: ''

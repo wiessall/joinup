@@ -20,7 +20,7 @@ Feature: Solution homepage
       | IS protocol paper    | 1              | 2018-10-04 8:01am | First stable version.                       | Information sharing protocol | published | Belgium          |
       | IS protocol archived | 0.1-rc         | 2018-10-04 8:06am | Release candidate.                          | Information sharing protocol | archived  | Belgium          |
       | Fireproof            | 0.1            | 2018-10-04 8:06am | First release for the firewall bypass tool. | Security audit tools         | published |                  |
-    And the following distributions:
+    And distribution content:
       | title               | description                                        | creation date     | access url       | parent                       | downloads | state     |
       | PDF version         | Pdf version of the paper.                          | 2018-10-04 8:07am | text.pdf         | IS protocol paper            | 589       | published |
       | ZIP version         | Zip version of the paper.                          | 2018-10-04 8:04am | test.zip         | IS protocol paper            | 514       | published |

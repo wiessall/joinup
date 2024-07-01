@@ -28,7 +28,7 @@ Feature: As a user of the website
     And I go to the homepage of the "Professional Dreams" solution
     Then I should see the heading "Professional Dreams"
     And I should see the link "View draft"
-    # @todo: Fix the visibility issue.
+    # @todo Fix the visibility issue.
     And I should see the link "View"
     But I should not see the following warning messages:
       | warning messages                                                                     |

@@ -70,7 +70,7 @@ Feature: Collections Overview
     Then I should see the text "Colonies in space"
     And the page should be cacheable
 
-    # @todo: Normally the collection should go through a moderation process.
+    # @todo Normally the collection should go through a moderation process.
     # It will not be immediately available.
     # Check the new collection as an anonymous user.
     When I am an anonymous user

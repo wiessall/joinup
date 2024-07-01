@@ -105,6 +105,7 @@ Feature:
     And I wait for the batch process to finish
     Then I should see "Proceeded updates to 1 entities"
     And I should see "12/06/2017 - 19:00"
+    And the string value of the "revision_log" field in "The Ultimate Debate" content should be "Updated state to 'archived' by VBO action, from revision ID '<placeholder>' with state 'published'."
 
     # Check archived state.
     Given I select "Archived" from "State"
@@ -127,6 +128,7 @@ Feature:
     And I should see the link "The Ultimate Debate"
     And I should see "19/11/2019 - 20:00"
     And I should see "12/06/2017 - 19:00"
+    And the string value of the "revision_log" field in "The Ultimate Debate" content should be "Updated state to 'published' by VBO action, from revision ID '<placeholder>' with state 'archived'."
 
     # Check warning message.
     Given I press "Reset"

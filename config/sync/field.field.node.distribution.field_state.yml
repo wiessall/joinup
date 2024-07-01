@@ -1,0 +1,25 @@
+uuid: 98fd5a8c-9333-439e-a5d0-67cc80b3b1b2
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_state
+    - node.type.distribution
+  module:
+    - state_machine
+id: node.distribution.field_state
+field_name: field_state
+entity_type: node
+bundle: distribution
+label: State
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  workflow: joinup_distribution_workflow
+  workflow_callback: ''
+  always_allow_default: false
+  current_state_first: true
+field_type: state

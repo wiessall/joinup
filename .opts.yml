@@ -7,6 +7,7 @@ upgrade_commands:
   default:
     - touch disable-config-readonly
     - ./vendor/bin/drush deploy --yes
+    - ./vendor/bin/drush rdf_sync:synchronize node --bundle=distribution
     - ./vendor/bin/drush search-api:reset-tracker --yes
     - ./vendor/bin/drush joinup:node-access-rebuild
     - ./vendor/bin/drush twigc --yes
