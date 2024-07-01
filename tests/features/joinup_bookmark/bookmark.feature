@@ -91,13 +91,13 @@ Feature: Bookmark/Unbookmark feature.
     Then I should see the text "There are no bookmarked items."
     And I go to the content page of the type "news" with the title "Bookmark news one"
     And I click "Bookmark" in the "Bookmark block" region
-    And I wait for 3 seconds
+    And I wait for 1 second
     Then I go to the content page of the type "news" with the title "Bookmark news two"
     And I click "Bookmark" in the "Bookmark block" region
-    And I wait for 3 seconds
+    And I wait for 1 second
     Then I go to the homepage of the "Batman Begins" solution
     And I click "Bookmark" in the "Bookmark block" region
-    And I wait for 3 seconds
+    And I wait for 1 second
     When I click "Bookmark" in the "Navigation bar"
     Then I should not see the text "There are no bookmarked items."
     And I should see the following tiles in the correct order:
@@ -111,13 +111,13 @@ Feature: Bookmark/Unbookmark feature.
     When I am logged in as "Lisa Bookmark"
     And I go to the content page of the type "news" with the title "Bookmark news three"
     And I click "Bookmark" in the "Bookmark block" region
-    And I wait for 3 seconds
+    And I wait for 1 second
     Then I go to the content page of the type "news" with the title "Ohter news"
     And I click "Bookmark" in the "Bookmark block" region
-    And I wait for 3 seconds
+    And I wait for 1 second
     Then I go to the homepage of the "Batman" collection
     And I click "Bookmark" in the "Bookmark block" region
-    And I wait for 3 seconds
+    And I wait for 1 second
     When I click "Bookmark" in the "Navigation bar"
     Then I should not see the text "There are no bookmarked items."
     Then I should see the following tiles in the correct order:
