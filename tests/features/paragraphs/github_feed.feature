@@ -1,9 +1,8 @@
-@api @group-f
+@api @group-f @javascript
 Feature: Github feed paragraph tests.
   The scenarios are split into 4 tests because re-saving the entity would
   invalidate the file cache and the tests would require connecting to Github.
 
-  @javascript
   Scenario Outline: Test the Github feed paragraph.
     Given the following <group>:
       | title | Paragraphs <group> |
@@ -75,7 +74,6 @@ Feature: Github feed paragraph tests.
       | collection |
       | solution   |
 
-  @javascript
   Scenario Outline: Facilitators can also access paragraphs.
     Given the following <group>:
       | title | Paragraphs <group> |
