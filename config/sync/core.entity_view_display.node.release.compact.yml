@@ -16,54 +16,39 @@ dependencies:
     - field.field.node.release.spatial_coverage
     - node.type.release
   module:
-    - joinup_distribution
-    - link
-    - template_suggestion
+    - text
     - user
 id: node.release.compact
 targetEntityType: node
 bundle: release
 mode: compact
 content:
-  access_url:
-    type: tracked_hosted_file_download
+  body:
+    type: text_default
     label: hidden
-    settings:
-      hosted_files_title: Download
-      remote_files_title: External
-      show_remote_files: true
-    third_party_settings:
-      template_suggestion:
-        template_suggestion: no_wrappers
-    weight: 0
-    region: content
-  links:
     settings: {  }
     third_party_settings: {  }
-    weight: 100
+    weight: 1
     region: content
-  report:
-    type: link
+  release_number:
+    type: string
     label: hidden
     settings:
-      trim_length: 80
-      url_only: false
-      url_plain: false
-      rel: ''
-      target: ''
+      link_to_entity: false
     third_party_settings: {  }
-    weight: 50
+    weight: 0
     region: content
 hidden:
-  body: true
+  access_url: true
   field_keywords: true
   field_state: true
   is_version_of: true
   langcode: true
   language: true
+  links: true
   process_status: true
   published_at: true
-  release_number: true
+  report: true
   search_api_excerpt: true
   solution_data: true
   spatial_coverage: true

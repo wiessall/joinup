@@ -34,5 +34,5 @@ type: release
 description: 'A release represents a version of a solution in time.'
 help: ''
 new_revision: true
-preview_mode: 1
+preview_mode: 0
 display_submitted: true

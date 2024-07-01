@@ -148,12 +148,12 @@
         "pear/http_request2": "~2.4",
         "php-task-runner/composer": "dev-toolkit-runner",
         "php-task-runner/sparql": "dev-toolkit-runner",
-        "phpro/grumphp-shim": "^2.5",
+        "phpro/grumphp-shim": "^2.6",
         "phpspec/prophecy-phpunit": "^2",
         "phpstan/extension-installer": "^1.3",
         "phpunit/phpunit": "^9.6",
         "symfony/phpunit-bridge": "^6.3",
-        "vincentlanglet/twig-cs-fixer": "^1.6",
+        "vincentlanglet/twig-cs-fixer": "^2.10",
         "vlucas/phpdotenv": "~5",
         "weitzman/drupal-test-traits": "2.x-dev",
         "weitzman/logintrait": "^1.1"
@@ -364,9 +364,6 @@
             "drupal/message_notify": {
                 "Allow 3rd-party to act before delivery @see https://www.drupal.org/project/message_notify/issues/3314370": "resources/patch/php/drupal/message_notify/3314370.diff"
             },
-            "drupal/meta_entity": {
-                "Target entity tags should be invalidated even if meta entity is new @see https://drupal-org/i/3422612": "resources/patch/php/drupal/meta_entity/meta_entity-target_entity_cache_tags-3422612-7.diff"
-            },
             "drupal/og": {
                 "The annotations for \"edit-form\" and \"delete-form\" @see https://www.drupal.org/project/og/issues/3338830": "resources/patch/php/drupal/og/3338830.diff",
                 "[Drupal 10.2] Using a translatable string as a category for field type is deprecated @see https://github.com/Gizra/og/pull/764": "resources/patch/php/drupal/og/pr764.diff"
@@ -395,9 +392,7 @@
                 "Clear timeout autosubmit used in views_autosubmit. @see https://www.drupal.org/i/3314418": "resources/patch/php/drupal/search_api_autocomplete/3314418.patch"
             },
             "drupal/search_api_spellcheck": {
-                "Missing plugins config schema @see https://www.drupal.org/project/search_api_spellcheck/issues/3277693": "resources/patch/php/drupal/search_api_spellcheck/3277693.patch",
-                "URL don't include the base path @see https://www.drupal.org/project/search_api_spellcheck/issues/3280372": "resources/patch/php/drupal/search_api_spellcheck/3280372.patch",
-                "PHP Notice Array to string conversion @see https://www.drupal.org/project/search_api_spellcheck/issues/3265659": "resources/patch/php/drupal/search_api_spellcheck/3265659-3.patch"
+                "URL don't include the base path @see https://www.drupal.org/project/search_api_spellcheck/issues/3280372": "resources/patch/php/drupal/search_api_spellcheck/3280372.patch"
             },
             "drupal/social_media_links": {
                 "Missing config schema for field, widget and formatter @see https://www.drupal.org/node/2898680": "resources/patch/php/drupal/social_media_links/2898680.patch",

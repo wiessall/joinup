@@ -39,9 +39,9 @@
  */
 #}
 
-{% include '@ventuno/parts/tile-item.html.twig' with {
-  'title': content.paragraph_tile_title,
-  'image': content.paragraph_tile_image,
-  'url': content.paragraph_tile_link[0]["#url"],
-  'description': content.paragraph_tile_description
-} %}
+{{ include('@ventuno/parts/tile-item.html.twig', {
+  title: content.paragraph_tile_title,
+  image: content.paragraph_tile_image,
+  url: content.paragraph_tile_link[0]['#url'],
+  description: content.paragraph_tile_description
+}) }}

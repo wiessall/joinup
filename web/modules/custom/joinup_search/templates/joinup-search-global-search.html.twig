@@ -12,7 +12,7 @@
 <div class="search-bar">
     <label for="search-bar__input">{{ 'Search'|trans }}</label>
 
-    <form action="{{ path("view.search.page_1") }}">
+    <form action="{{ path('view.search.page_1') }}">
         {% for id, filter in filters %}
             <input type="hidden" class="search-bar__chip" name="f[]" value="{{ id }}" data-joinup-description="{{ filter }}">
         {% endfor %}

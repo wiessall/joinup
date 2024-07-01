@@ -25,6 +25,7 @@ dependencies:
     - rdf_entity.rdfentity.asset_release
   module:
     - layout_builder
+    - template_suggestion
     - user
 third_party_settings:
   layout_builder:
@@ -42,7 +43,9 @@ content:
     label: above
     settings:
       link_to_entity: false
-    third_party_settings: {  }
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
     weight: 0
     region: content
 hidden:
