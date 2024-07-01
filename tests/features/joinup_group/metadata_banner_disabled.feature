@@ -30,8 +30,8 @@ Feature: Collections/Solutions settings Metadata Banner disabled
       | title                         | headline                                    | body                                                                    | state            | author        | collection     |
       | Creating Justice League       | 6 Members to start with                     | TBD                                                                     | published        | Eagle         | Rally fanatics |
     And "news" content:
-     | title                         | headline                                    | body                                                                    | state            | author        | solution       |
-     | Hawkgirl is a spy             | Her race lies in another part of the galaxy | Hawkgirl has been giving information about Earth to Thanagarians.       | published        | Eagle         | Klop mirubes   |
+      | title                         | headline                                    | body                                                                    | state            | author        | solution       |
+      | Hawkgirl is a spy             | Her race lies in another part of the galaxy | Hawkgirl has been giving information about Earth to Thanagarians.       | published        | Eagle         | Klop mirubes   |
 
     Given I am logged in as "Ferners Lee"
     When I go to the "Rally fanatics" collection

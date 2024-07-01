@@ -1,4 +1,4 @@
-@api @group-f
+@api @group-f @javascript @uploadFiles:logo.png
 Feature:
   As a site builder of the site
   I need to be able to use "image" paragraphs for content.
@@ -8,7 +8,6 @@ Feature:
       | title | Paragraphs collection |
       | state | published             |
 
-  @javascript @uploadFiles:logo.png
   Scenario: User should be able to add image paragraph.
     Given custom_page content:
       | title                | collection            | state     |

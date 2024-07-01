@@ -1,4 +1,4 @@
-@api @group-f
+@api @group-f @javascript
 Feature:
   As a site builder of the site
   I need to be able to use "Tiles" paragraph for content.
@@ -8,7 +8,7 @@ Feature:
       | title | Paragraphs collection |
       | state | published             |
 
-  @javascript @uploadFiles:topic.png
+  @uploadFiles:topic.png
   Scenario: Add tiles paragraph to one column layout.
     Given custom_page content:
       | title                   | collection            | state     |
@@ -30,7 +30,6 @@ Feature:
     When I should see the heading "Card title"
     And I see the text "This is some text within a card body."
 
-  @javascript
   Scenario: Tiles paragraph is restricted.
     Given custom_page content:
       | title                   | collection            | state     |

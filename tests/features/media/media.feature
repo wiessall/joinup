@@ -1,9 +1,7 @@
-@api @group-f
+@api @group-f @uploadFiles:banner.jpg @javascript
 Feature: Administer media.
 
-  @uploadFiles:banner.jpg @javascript
   Scenario: Moderators are able to administer media.
-
     Given users:
       | Username | Roles     |
       | joe      |           |
@@ -105,4 +103,3 @@ Feature: Administer media.
       | The File              | File              | Published   | Mars  | joe    |
       | Other File            | File              | Published   | Venus | joe    |
       | The Video             | Video             | Unpublished | Mars  | joe    |
-

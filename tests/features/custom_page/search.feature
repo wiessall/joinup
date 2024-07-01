@@ -77,4 +77,3 @@ Feature: Custom pages enhance search results for their collections/solutions
       | group      |
       | collection |
       | solution   |
-

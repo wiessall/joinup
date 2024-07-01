@@ -1,8 +1,7 @@
-@api @group-g
+@api @group-g @javascript @email @uploadFiles:logo.png @loggedErrors
 Feature: Contact form for solution
   User can use contact form.
 
-  @javascript @email @uploadFiles:logo.png @loggedErrors
   Scenario: User can use "Contact us" form
     Given contact_information content:
       | name         | email                    | website url            | nid  |

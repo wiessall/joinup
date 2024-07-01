@@ -78,4 +78,3 @@ Feature:
       | Some group document 2 |
     And I should see the following tiles in the "Other unpublished block" region:
       | Some group custom page 1 |
-

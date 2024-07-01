@@ -1,4 +1,4 @@
-@api @group-f
+@api @group-f @javascript
 Feature:
   As a site builder of the site
   I need to be able to use "Social media" paragraphs for content.
@@ -8,7 +8,6 @@ Feature:
       | title | Paragraphs collection |
       | state | published             |
 
-  @javascript
   Scenario: Call to action(s) has alignment setting.
     Given custom_page content:
       | title             | collection            | state     |
@@ -30,7 +29,6 @@ Feature:
     And I press "Save" in the "Modal buttons" region
     And I press "Update"
 
-  @javascript
   Scenario Outline: A paragraph of social media links is available.
     Given custom_page content:
       | title        | collection            | state     |

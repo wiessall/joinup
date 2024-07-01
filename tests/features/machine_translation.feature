@@ -1,10 +1,9 @@
-@api
+@api @javascript
 Feature: Machine translation
   As a citizen of the European Union
   I am likely not to have English as my native language
   So it would be helpful to have a button that can translate the page content
 
-  @javascript
   Scenario: Translation link is only visible on content focused pages
     Given collection:
       | title | Brexit    |
