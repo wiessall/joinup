@@ -6,7 +6,6 @@ dependencies:
     - core.entity_view_mode.rdf_entity.digest_message
     - field.field.rdf_entity.asset_release.field_isr_contact_information
     - field.field.rdf_entity.asset_release.field_isr_description
-    - field.field.rdf_entity.asset_release.field_isr_distribution
     - field.field.rdf_entity.asset_release.field_isr_documentation
     - field.field.rdf_entity.asset_release.field_isr_included_asset
     - field.field.rdf_entity.asset_release.field_isr_is_version_of
@@ -227,9 +226,9 @@ content:
     region: content
 hidden:
   changed: true
+  distributions: true
   field_isr_contact_information: true
   field_isr_description: true
-  field_isr_distribution: true
   field_isr_documentation: true
   field_isr_included_asset: true
   field_isr_is_version_of: true

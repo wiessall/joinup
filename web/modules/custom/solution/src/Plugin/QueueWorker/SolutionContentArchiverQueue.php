@@ -12,14 +12,16 @@ use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Queue\QueueWorkerBase;
 use Drupal\Core\Session\AccountSwitcherInterface;
-use Drupal\asset_distribution\Entity\AssetDistributionInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\asset_release\Entity\AssetReleaseInterface;
 use Drupal\custom_page\Entity\CustomPageInterface;
 use Drupal\joinup_community_content\Entity\CommunityContentInterface;
+use Drupal\joinup_distribution\Entity\DistributionInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_notification\NotificationEvents;
 use Drupal\joinup_workflow\ArchivableEntityInterface;
 use Drupal\joinup_workflow\WorkflowHelperInterface;
+use Drupal\joinup_workflow\WorkflowStateChangeMessageTrait;
 use Drupal\solution\Entity\SolutionInterface;
 use Drupal\solution\Transition;
 use Drupal\sparql_entity_storage\SparqlEntityStorageInterface;
@@ -38,11 +40,14 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class SolutionContentArchiverQueue extends QueueWorkerBase implements ContainerFactoryPluginInterface {
 
+  use StringTranslationTrait;
+  use WorkflowStateChangeMessageTrait;
+
   private const ENTITY_CLASSES_TO_ARCHIVE = [
     AssetReleaseInterface::class,
-    AssetDistributionInterface::class,
     CustomPageInterface::class,
     CommunityContentInterface::class,
+    DistributionInterface::class,
   ];
 
   /**
@@ -113,7 +118,7 @@ class SolutionContentArchiverQueue extends QueueWorkerBase implements ContainerF
 
     $this->accountSwitcher->switchTo($actor);
     try {
-      $this->performOperation($solution, $data['transition']);
+      $this->performOperation($solution, $data['transition'], !empty($data['notifyContactOnly']));
     }
     finally {
       $this->accountSwitcher->switchBack();
@@ -161,12 +166,14 @@ class SolutionContentArchiverQueue extends QueueWorkerBase implements ContainerF
    *   The solution whose sub-contents we want to archive.
    * @param \Drupal\solution\Transition $transition
    *   The transition to apply.
+   * @param bool $notifyContactOnly
+   *   Whether notification should be sent only to contact email.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
-  protected function performOperation(SolutionInterface $solution, Transition $transition): void {
+  protected function performOperation(SolutionInterface $solution, Transition $transition, bool $notifyContactOnly): void {
     foreach ($this->getSolutionGroupContent($solution) as $entity) {
       if (!$entity instanceof ArchivableEntityInterface) {
         // Continue silently.
@@ -200,14 +207,34 @@ class SolutionContentArchiverQueue extends QueueWorkerBase implements ContainerF
       }
 
       $entity->skip_notification = TRUE;
-      match ($transition) {
-        Transition::ARCHIVE => $this->workflowHelper->archiveEntity($entity),
-        Transition::UNARCIVE => $this->workflowHelper->unarchiveEntity($entity),
-      };
+      try {
+        $newState = match ($transition) {
+          Transition::ARCHIVE => 'archived',
+          Transition::UNARCIVE =>'published',
+        };
+        $revisionLogMessage = $this->workflowStateChangeRevisionLogMessage(
+          $entity,
+          $newState,
+          $this->t("'@plugin-id' queue", [
+            '@plugin-id' => $this->getPluginId(),
+          ])
+        );
+        match ($transition) {
+          // '@plugin-id' queue
+          Transition::ARCHIVE => $this->workflowHelper->archiveEntity($entity, $revisionLogMessage),
+          Transition::UNARCIVE => $this->workflowHelper->unarchiveEntity($entity, $revisionLogMessage),
+        };
+      }
+      catch (\Exception $exception) {
+        $this->logger->warning($exception->getMessage());
+      }
     }
 
     if ($transition === Transition::ARCHIVE) {
-      joinup_notification_dispatch_notification('update', NotificationEvents::RDF_ENTITY_ARCHIVE_COMPLETED, $solution);
+      $eventName = $notifyContactOnly
+        ? NotificationEvents::RDF_ENTITY_ARCHIVE_COMPLETED_CONTACT_ONLY
+        : NotificationEvents::RDF_ENTITY_ARCHIVE_COMPLETED;
+      joinup_notification_dispatch_notification('update', $eventName, $solution);
     }
   }
 

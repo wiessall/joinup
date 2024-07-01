@@ -18,6 +18,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   label = @Translation("Plain text with glossary proccessing"),
  *   field_types = {
  *     "string",
+ *     "text_long",
  *   },
  * )
  */

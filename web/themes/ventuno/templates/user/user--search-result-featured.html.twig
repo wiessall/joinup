@@ -6,7 +6,7 @@
 #}
 {% if content %}
   {% set title %}
-    <a class="fs-5 fw-normal text-underline-hover mb-3" href="{{ path('entity.user.canonical', {'user': user.id}) }}">{{ full_name }}</a>
+    <a class="fs-5 fw-normal text-underline-hover mb-3" href="{{ path('entity.user.canonical', {user: user.id}) }}">{{ full_name }}</a>
   {% endset %}
   {{ pattern('search_item', {
     image: content.field_user_photo,

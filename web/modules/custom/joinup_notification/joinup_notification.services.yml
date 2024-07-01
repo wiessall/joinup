@@ -29,8 +29,8 @@ services:
     parent: joinup_notification.notification_subscriber_base
     tags:
       - { name: event_subscriber }
-  joinup_notification.asset_distribution.rdf.subscriber:
-    class: Drupal\joinup_notification\EventSubscriber\DistributionRdfSubscriber
+  joinup_notification.distribution.subscriber:
+    class: Drupal\joinup_notification\EventSubscriber\DistributionSubscriber
     parent: joinup_notification.notification_subscriber_base
     tags:
       - { name: event_subscriber }

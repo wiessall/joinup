@@ -156,7 +156,7 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
       | release notes  | Everything was Colors |
       | is version of  | Under The Bridge      |
       | state          | published             |
-    And distributions:
+    And distribution content:
       | title   | description          | parent           | access url         | state     |
       | Distro1 | Alphabet & CLR       | Under The Bridge | http://example.com | published |
       | Distro2 | Colors & ABC & colrs | Summer of 69     | http://example.com | published |
