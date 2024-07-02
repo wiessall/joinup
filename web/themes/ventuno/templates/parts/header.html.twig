@@ -29,7 +29,7 @@
 {% if bookmark_link %}
   {% set items = items|merge([{
     breakpoint: 'all',
-    label: 'Bookmark'|t,
+    label: 'Bookmarks'|t,
     links: [bookmark_link|merge({order: 1})],
   }]) %}
 {% endif %}
