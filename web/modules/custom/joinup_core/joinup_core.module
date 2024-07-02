@@ -391,7 +391,7 @@ function joinup_core_theme_suggestions_alter(array &$suggestions, array $variabl
  */
 function joinup_core_entity_bundle_field_info(EntityTypeInterface $entity_type, string $bundle, array $base_field_definitions): array {
   $fields = [];
-  $threshold = \Drupal::config('joinup_core.outdated_content_threshold')->get("{$entity_type->id()}.{$bundle}");
+  $threshold = \Drupal::config('joinup_core.outdated_content_threshold')->get("thresholds.{$entity_type->id()}.$bundle");
   if ($threshold) {
     $fields['outdated_time'] = BaseFieldDefinition::create('timestamp')
       ->setLabel(t('Outdated time'))
