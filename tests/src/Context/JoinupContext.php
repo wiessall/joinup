@@ -1309,7 +1309,7 @@ class JoinupContext extends RawDrupalContext {
    *
    * @Then the page should show( only) the tiles :headings
    */
-  public function assertUnorderedTilesPresent($headings) {
+  public function assertUnorderedTilesPresent(string $headings): void {
     $tiles_in_page = array_keys($this->getTiles());
     $headings = $this->explodeCommaSeparatedStepArgument($headings);
 
