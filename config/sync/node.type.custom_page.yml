@@ -10,14 +10,14 @@ third_party_settings:
     parent: ''
 _core:
   default_config_hash: gZNgrckSL7Si5W-QIE5aJsSzoe72LC_dvRfVi2gkQyY
+name: 'Custom page'
+type: custom_page
+description: null
+help: null
+new_revision: true
+preview_mode: 0
+display_submitted: false
 label_singular: 'custom page'
 label_plural: 'custom pages'
 label_count:
   no_count_capitalize: !!binary Q3VzdG9tIHBhZ2UDQ3VzdG9tIHBhZ2Vz
-name: 'Custom page'
-type: custom_page
-description: ''
-help: ''
-new_revision: true
-preview_mode: 0
-display_submitted: false

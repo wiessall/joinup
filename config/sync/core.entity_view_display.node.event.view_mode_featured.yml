@@ -64,8 +64,8 @@ content:
     settings:
       timezone_override: ''
       format_type: date_only
-      fromto: both
       separator: '-'
+      from_to: both
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
