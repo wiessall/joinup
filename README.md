@@ -272,7 +272,7 @@ Find out more on how to write custom commands [here](https://ddev.readthedocs.io
 * http://joinup.ddev.site:8890/sparql — The SPARQL endpoint
 * http://joinup.ddev.site:8983 — The Solr admin UI
 * https://joinup.ddev.site:7900, http://joinup.ddev.site:7910 — The Selenium
-  tests viewer (use "secret" as password)
+  tests viewer
 * https://joinup.ddev.site:8026, http://joinup.ddev.site:8025 — The mailcatcher
   UI (Mailpit)
 * To connect locally to MySQL, you'll need to find the port as this is
