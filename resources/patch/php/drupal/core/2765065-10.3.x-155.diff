@@ -1,5 +1,5 @@
 diff --git a/core/config/schema/core.entity.schema.yml b/core/config/schema/core.entity.schema.yml
-index 2934ca7fee0c1287bed1f4bae8092fad68fe986c..d591f3d2db4103bb97535028cbacd2a8d20b0850 100644
+index 2934ca7fee..d591f3d2db 100644
 --- a/core/config/schema/core.entity.schema.yml
 +++ b/core/config/schema/core.entity.schema.yml
 @@ -436,6 +436,27 @@ field.formatter.settings.entity_reference_label:
@@ -32,7 +32,7 @@ index 2934ca7fee0c1287bed1f4bae8092fad68fe986c..d591f3d2db4103bb97535028cbacd2a8
    mapping:
 diff --git a/core/lib/Drupal/Core/Config/Entity/EntityBundleWithPluralLabelsInterface.php b/core/lib/Drupal/Core/Config/Entity/EntityBundleWithPluralLabelsInterface.php
 new file mode 100644
-index 0000000000000000000000000000000000000000..b200111cb05067f7f0427dbabf83555a424a95bc
+index 0000000000..b200111cb0
 --- /dev/null
 +++ b/core/lib/Drupal/Core/Config/Entity/EntityBundleWithPluralLabelsInterface.php
 @@ -0,0 +1,64 @@
@@ -102,10 +102,10 @@ index 0000000000000000000000000000000000000000..b200111cb05067f7f0427dbabf83555a
 +}
 diff --git a/core/lib/Drupal/Core/Config/Entity/EntityBundleWithPluralLabelsTrait.php b/core/lib/Drupal/Core/Config/Entity/EntityBundleWithPluralLabelsTrait.php
 new file mode 100644
-index 0000000000000000000000000000000000000000..542326337aa640e591356b36bc0fe3dacafa6b71
+index 0000000000..2805c43eeb
 --- /dev/null
 +++ b/core/lib/Drupal/Core/Config/Entity/EntityBundleWithPluralLabelsTrait.php
-@@ -0,0 +1,102 @@
+@@ -0,0 +1,105 @@
 +<?php
 +
 +namespace Drupal\Core\Config\Entity;
@@ -120,6 +120,7 @@ index 0000000000000000000000000000000000000000..542326337aa640e591356b36bc0fe3da
 +   *
 +   * @var string|null
 +   */
++  // phpcs:ignore Drupal.NamingConventions.ValidVariableName.LowerCamelName
 +  protected $label_singular;
 +
 +  /**
@@ -127,6 +128,7 @@ index 0000000000000000000000000000000000000000..542326337aa640e591356b36bc0fe3da
 +   *
 +   * @var string|null
 +   */
++  // phpcs:ignore Drupal.NamingConventions.ValidVariableName.LowerCamelName
 +  protected $label_plural;
 +
 +  /**
@@ -160,6 +162,7 @@ index 0000000000000000000000000000000000000000..542326337aa640e591356b36bc0fe3da
 +   *
 +   * @see \Drupal\Component\Gettext\PoItem::DELIMITER
 +   */
++  // phpcs:ignore Drupal.NamingConventions.ValidVariableName.LowerCamelName
 +  protected $label_count;
 +
 +  /**
@@ -209,7 +212,7 @@ index 0000000000000000000000000000000000000000..542326337aa640e591356b36bc0fe3da
 +
 +}
 diff --git a/core/lib/Drupal/Core/Entity/EntityTypeBundleInfo.php b/core/lib/Drupal/Core/Entity/EntityTypeBundleInfo.php
-index 8aef5ee039e1e1867692deb1cf4f44402c12eb76..a242b46886b079c8f8069f122b1d4ad14797084c 100644
+index 8aef5ee039..a242b46886 100644
 --- a/core/lib/Drupal/Core/Entity/EntityTypeBundleInfo.php
 +++ b/core/lib/Drupal/Core/Entity/EntityTypeBundleInfo.php
 @@ -2,9 +2,12 @@
@@ -303,7 +306,7 @@ index 8aef5ee039e1e1867692deb1cf4f44402c12eb76..a242b46886b079c8f8069f122b1d4ad1
 +
  }
 diff --git a/core/lib/Drupal/Core/Entity/EntityTypeBundleInfoInterface.php b/core/lib/Drupal/Core/Entity/EntityTypeBundleInfoInterface.php
-index 2789b651e56d930a624aec5f15d4e8482ed3e303..7baea06b5e96d58ac8ae966dfe325f3cd105676a 100644
+index 2789b651e5..7baea06b5e 100644
 --- a/core/lib/Drupal/Core/Entity/EntityTypeBundleInfoInterface.php
 +++ b/core/lib/Drupal/Core/Entity/EntityTypeBundleInfoInterface.php
 @@ -37,4 +37,30 @@ public function getBundleInfo($entity_type_id);
@@ -338,64 +341,10 @@ index 2789b651e56d930a624aec5f15d4e8482ed3e303..7baea06b5e96d58ac8ae966dfe325f3c
 +
  }
 diff --git a/core/lib/Drupal/Core/Entity/entity.api.php b/core/lib/Drupal/Core/Entity/entity.api.php
-index 4af6932e45f4dce82a293a3238796b1522a576b5..00522ea4f043ca3a7813027396378e29087fa45b 100644
+index 4af6932e45..1ebc583aff 100644
 --- a/core/lib/Drupal/Core/Entity/entity.api.php
 +++ b/core/lib/Drupal/Core/Entity/entity.api.php
-@@ -51,7 +51,7 @@
-  * - The entity-type-specific hooks are represented in the list below as
-  *   hook_ENTITY_TYPE_... (hook_ENTITY_TYPE_create() in this example). To
-  *   implement one of these hooks for an entity whose machine name is "foo",
-- *   define a function called my_module_foo_create(), for instance. Also note
-+ *   define a function called mymodule_foo_create(), for instance. Also note
-  *   that the entity or array of entities that are passed into a specific-type
-  *   hook are of the specific entity class, not the generic Entity class, so in
-  *   your implementation, you can make the $entity argument something like $node
-@@ -287,6 +287,7 @@
-  * - hook_entity_build_defaults_alter()
-  *
-  * View builders for some types override these hooks, notably:
-+ * - The Tour view builder does not invoke any hooks.
-  * - The Block view builder invokes hook_block_view_alter() and
-  *   hook_block_view_BASE_BLOCK_ID_alter(). Note that in other view builders,
-  *   the view alter hooks are run later in the process.
-@@ -523,6 +524,9 @@
-  * general information about configuration.)
-  *
-  * There are several good examples of this in Drupal Core:
-+ * - The Forum module defines a content type in node.type.forum.yml and a
-+ *   vocabulary in taxonomy.vocabulary.forums.yml
-+ * - The Book module defines a content type in node.type.book.yml
-  * - The Standard install profile defines Page and Article content types in
-  *   node.type.page.yml and node.type.article.yml, a Tags vocabulary in
-  *   taxonomy.vocabulary.tags.yml, and a Node comment type in
-@@ -572,7 +576,7 @@
-  * @code
-  * $fids = Drupal::entityQuery('file')
-  *   ->condition('status', \Drupal\file\FileInterface::STATUS_PERMANENT, '<>')
-- *   ->condition('changed', \Drupal::time()->getRequestTime() - $age, '<')
-+ *   ->condition('changed', REQUEST_TIME - $age, '<')
-  *   ->range(0, 100)
-  *   ->execute();
-  * $files = $storage->loadMultiple($fids);
-@@ -817,7 +821,7 @@ function hook_entity_type_build(array &$entity_types) {
-   /** @var \Drupal\Core\Entity\EntityTypeInterface[] $entity_types */
-   // Add a form for a custom node form without overriding the default
-   // node form. To override the default node form, use hook_entity_type_alter().
--  $entity_types['node']->setFormClass('my_module_foo', 'Drupal\my_module\NodeFooForm');
-+  $entity_types['node']->setFormClass('mymodule_foo', 'Drupal\mymodule\NodeFooForm');
- }
- 
- /**
-@@ -846,7 +850,7 @@ function hook_entity_type_alter(array &$entity_types) {
-   /** @var \Drupal\Core\Entity\EntityTypeInterface[] $entity_types */
-   // Set the controller class for nodes to an alternate implementation of the
-   // Drupal\Core\Entity\EntityStorageInterface interface.
--  $entity_types['node']->setStorageClass('Drupal\my_module\MyCustomNodeStorage');
-+  $entity_types['node']->setStorageClass('Drupal\mymodule\MyCustomNodeStorage');
- }
- 
- /**
-@@ -869,6 +873,31 @@ function hook_entity_view_mode_info_alter(&$view_modes) {
+@@ -869,6 +869,31 @@ function hook_entity_view_mode_info_alter(&$view_modes) {
   *   An associative array of all entity bundles, keyed by the entity
   *   type name, and then the bundle name, with the following keys:
   *   - label: The human-readable name of the bundle.
@@ -427,7 +376,7 @@ index 4af6932e45f4dce82a293a3238796b1522a576b5..00522ea4f043ca3a7813027396378e29
   *   - uri_callback: (optional) The same as the 'uri_callback' key defined for
   *     the entity type in the EntityTypeManager, but for the bundle only. When
   *     determining the URI of an entity, if a 'uri_callback' is defined for both
-@@ -886,6 +915,16 @@ function hook_entity_view_mode_info_alter(&$view_modes) {
+@@ -886,6 +911,16 @@ function hook_entity_view_mode_info_alter(&$view_modes) {
   */
  function hook_entity_bundle_info() {
    $bundles['user']['user']['label'] = t('User');
@@ -444,7 +393,7 @@ index 4af6932e45f4dce82a293a3238796b1522a576b5..00522ea4f043ca3a7813027396378e29
    return $bundles;
  }
  
-@@ -893,7 +932,9 @@ function hook_entity_bundle_info() {
+@@ -893,7 +928,9 @@ function hook_entity_bundle_info() {
   * Alter the bundles for entity types.
   *
   * @param array $bundles
@@ -455,349 +404,20 @@ index 4af6932e45f4dce82a293a3238796b1522a576b5..00522ea4f043ca3a7813027396378e29
   *
   * @see Drupal\Core\Entity\EntityTypeBundleInfo::getBundleInfo()
   * @see hook_entity_bundle_info()
-@@ -901,7 +942,9 @@ function hook_entity_bundle_info() {
- function hook_entity_bundle_info_alter(&$bundles) {
+@@ -902,6 +939,8 @@ function hook_entity_bundle_info_alter(&$bundles) {
    $bundles['user']['user']['label'] = t('Full account');
    // Override the bundle class for the "article" node type in a custom module.
--  $bundles['node']['article']['class'] = 'Drupal\my_module\Entity\Article';
-+  $bundles['node']['article']['class'] = 'Drupal\mymodule\Entity\Article';
+   $bundles['node']['article']['class'] = 'Drupal\my_module\Entity\Article';
 +  // Override the count label.
 +  $bundles['user']['user']['label_count']['search results'] = t('1 user is registered\x03@count users are registered');
  }
  
  /**
-@@ -1042,7 +1085,7 @@ function hook_entity_preload(array $ids, $entity_type_id) {
-   $entities = [];
- 
-   foreach ($ids as $id) {
--    $entities[] = my_module_swap_revision($id);
-+    $entities[] = mymodule_swap_revision($id);
-   }
- 
-   return $entities;
-@@ -1067,7 +1110,7 @@ function hook_entity_preload(array $ids, $entity_type_id) {
-  */
- function hook_entity_load(array $entities, $entity_type_id) {
-   foreach ($entities as $entity) {
--    $entity->foo = my_module_add_something($entity);
-+    $entity->foo = mymodule_add_something($entity);
-   }
- }
- 
-@@ -1082,7 +1125,7 @@ function hook_entity_load(array $entities, $entity_type_id) {
-  */
- function hook_ENTITY_TYPE_load($entities) {
-   foreach ($entities as $entity) {
--    $entity->foo = my_module_add_something($entity);
-+    $entity->foo = mymodule_add_something($entity);
-   }
- }
- 
-@@ -1100,7 +1143,7 @@ function hook_ENTITY_TYPE_load($entities) {
-  */
- function hook_entity_storage_load(array $entities, $entity_type) {
-   foreach ($entities as $entity) {
--    $entity->foo = my_module_add_something_uncached($entity);
-+    $entity->foo = mymodule_add_something_uncached($entity);
-   }
- }
- 
-@@ -1116,7 +1159,7 @@ function hook_entity_storage_load(array $entities, $entity_type) {
-  */
- function hook_ENTITY_TYPE_storage_load(array $entities) {
-   foreach ($entities as $entity) {
--    $entity->foo = my_module_add_something_uncached($entity);
-+    $entity->foo = mymodule_add_something_uncached($entity);
-   }
- }
- 
-@@ -1176,8 +1219,8 @@ function hook_entity_insert(\Drupal\Core\Entity\EntityInterface $entity) {
-     ->fields([
-       'type' => $entity->getEntityTypeId(),
-       'id' => $entity->id(),
--      'created' => \Drupal::time()->getRequestTime(),
--      'updated' => \Drupal::time()->getRequestTime(),
-+      'created' => REQUEST_TIME,
-+      'updated' => REQUEST_TIME,
-     ])
-     ->execute();
- }
-@@ -1199,8 +1242,8 @@ function hook_ENTITY_TYPE_insert(\Drupal\Core\Entity\EntityInterface $entity) {
-   \Drupal::database()->insert('example_entity')
-     ->fields([
-       'id' => $entity->id(),
--      'created' => \Drupal::time()->getRequestTime(),
--      'updated' => \Drupal::time()->getRequestTime(),
-+      'created' => REQUEST_TIME,
-+      'updated' => REQUEST_TIME,
-     ])
-     ->execute();
- }
-@@ -1222,7 +1265,7 @@ function hook_entity_update(\Drupal\Core\Entity\EntityInterface $entity) {
-   // Update the entity's entry in a fictional table of all entities.
-   \Drupal::database()->update('example_entity')
-     ->fields([
--      'updated' => \Drupal::time()->getRequestTime(),
-+      'updated' => REQUEST_TIME,
-     ])
-     ->condition('type', $entity->getEntityTypeId())
-     ->condition('id', $entity->id())
-@@ -1246,7 +1289,7 @@ function hook_ENTITY_TYPE_update(\Drupal\Core\Entity\EntityInterface $entity) {
-   // Update the entity's entry in a fictional table of this type of entity.
-   \Drupal::database()->update('example_entity')
-     ->fields([
--      'updated' => \Drupal::time()->getRequestTime(),
-+      'updated' => REQUEST_TIME,
-     ])
-     ->condition('id', $entity->id())
-     ->execute();
-@@ -1517,12 +1560,12 @@ function hook_ENTITY_TYPE_revision_delete(\Drupal\Core\Entity\EntityInterface $e
-  */
- function hook_entity_view(array &$build, \Drupal\Core\Entity\EntityInterface $entity, \Drupal\Core\Entity\Display\EntityViewDisplayInterface $display, $view_mode) {
-   // Only do the extra work if the component is configured to be displayed.
--  // This assumes a 'my_module_addition' extra field has been defined for the
-+  // This assumes a 'mymodule_addition' extra field has been defined for the
-   // entity bundle in hook_entity_extra_field_info().
--  if ($display->getComponent('my_module_addition')) {
--    $build['my_module_addition'] = [
--      '#markup' => my_module_addition($entity),
--      '#theme' => 'my_module_my_additional_field',
-+  if ($display->getComponent('mymodule_addition')) {
-+    $build['mymodule_addition'] = [
-+      '#markup' => mymodule_addition($entity),
-+      '#theme' => 'mymodule_my_additional_field',
-     ];
-   }
- }
-@@ -1550,12 +1593,12 @@ function hook_entity_view(array &$build, \Drupal\Core\Entity\EntityInterface $en
-  */
- function hook_ENTITY_TYPE_view(array &$build, \Drupal\Core\Entity\EntityInterface $entity, \Drupal\Core\Entity\Display\EntityViewDisplayInterface $display, $view_mode) {
-   // Only do the extra work if the component is configured to be displayed.
--  // This assumes a 'my_module_addition' extra field has been defined for the
-+  // This assumes a 'mymodule_addition' extra field has been defined for the
-   // entity bundle in hook_entity_extra_field_info().
--  if ($display->getComponent('my_module_addition')) {
--    $build['my_module_addition'] = [
--      '#markup' => my_module_addition($entity),
--      '#theme' => 'my_module_my_additional_field',
-+  if ($display->getComponent('mymodule_addition')) {
-+    $build['mymodule_addition'] = [
-+      '#markup' => mymodule_addition($entity),
-+      '#theme' => 'mymodule_my_additional_field',
-     ];
-   }
- }
-@@ -1660,16 +1703,16 @@ function hook_entity_prepare_view($entity_type_id, array $entities, array $displ
-   // Load a specific node into the user object for later theming.
-   if (!empty($entities) && $entity_type_id == 'user') {
-     // Only do the extra work if the component is configured to be
--    // displayed. This assumes a 'my_module_addition' extra field has been
-+    // displayed. This assumes a 'mymodule_addition' extra field has been
-     // defined for the entity bundle in hook_entity_extra_field_info().
-     $ids = [];
-     foreach ($entities as $id => $entity) {
--      if ($displays[$entity->bundle()]->getComponent('my_module_addition')) {
-+      if ($displays[$entity->bundle()]->getComponent('mymodule_addition')) {
-         $ids[] = $id;
-       }
-     }
-     if ($ids) {
--      $nodes = my_module_get_user_nodes($ids);
-+      $nodes = mymodule_get_user_nodes($ids);
-       foreach ($ids as $id) {
-         $entities[$id]->user_node = $nodes[$id];
-       }
-@@ -1694,23 +1737,6 @@ function hook_entity_view_mode_alter(&$view_mode, \Drupal\Core\Entity\EntityInte
-   }
- }
- 
--/**
-- * Change the view mode of a specific entity type currently being displayed.
-- *
-- * @param string $view_mode
-- *   The view_mode currently displaying the entity.
-- * @param \Drupal\Core\Entity\EntityInterface $entity
-- *   The entity that is being viewed.
-- *
-- * @ingroup entity_crud
-- */
--function hook_ENTITY_TYPE_view_mode_alter(string &$view_mode, \Drupal\Core\Entity\EntityInterface $entity): void {
--  // Change the view mode to teaser.
--  if ($view_mode == 'full') {
--    $view_mode = 'teaser';
--  }
--}
--
- /**
-  * Alter entity renderable values before cache checking during rendering.
-  *
-@@ -1877,23 +1903,6 @@ function hook_entity_form_mode_alter(&$form_mode, \Drupal\Core\Entity\EntityInte
-   }
- }
- 
--/**
-- * Change the form mode of a specific entity type currently being displayed.
-- *
-- * @param string $form_mode
-- *   The form_mode currently displaying the entity.
-- * @param \Drupal\Core\Entity\EntityInterface $entity
-- *   The entity that is being viewed.
-- *
-- * @ingroup entity_crud
-- */
--function hook_ENTITY_TYPE_form_mode_alter(string &$form_mode, \Drupal\Core\Entity\EntityInterface $entity): void {
--  // Change the form mode for nodes with 'article' bundle.
--  if ($entity->bundle() == 'article') {
--    $form_mode = 'custom_article_form_mode';
--  }
--}
--
- /**
-  * Alter the settings used for displaying an entity form.
-  *
-@@ -1942,11 +1951,11 @@ function hook_entity_form_display_alter(\Drupal\Core\Entity\Display\EntityFormDi
- function hook_entity_base_field_info(\Drupal\Core\Entity\EntityTypeInterface $entity_type) {
-   if ($entity_type->id() == 'node') {
-     $fields = [];
--    $fields['my_module_text'] = BaseFieldDefinition::create('string')
-+    $fields['mymodule_text'] = BaseFieldDefinition::create('string')
-       ->setLabel(t('The text'))
--      ->setDescription(t('A text property added by my_module.'))
-+      ->setDescription(t('A text property added by mymodule.'))
-       ->setComputed(TRUE)
--      ->setClass('\Drupal\my_module\EntityComputedText');
-+      ->setClass('\Drupal\mymodule\EntityComputedText');
- 
-     return $fields;
-   }
-@@ -1968,9 +1977,9 @@ function hook_entity_base_field_info(\Drupal\Core\Entity\EntityTypeInterface $en
-  * https://www.drupal.org/node/2346329.
-  */
- function hook_entity_base_field_info_alter(&$fields, \Drupal\Core\Entity\EntityTypeInterface $entity_type) {
--  // Alter the my_module_text field to use a custom class.
--  if ($entity_type->id() == 'node' && !empty($fields['my_module_text'])) {
--    $fields['my_module_text']->setClass('\Drupal\another_module\EntityComputedText');
-+  // Alter the mymodule_text field to use a custom class.
-+  if ($entity_type->id() == 'node' && !empty($fields['mymodule_text'])) {
-+    $fields['mymodule_text']->setClass('\Drupal\anothermodule\EntityComputedText');
-   }
- }
- 
-@@ -2007,8 +2016,8 @@ function hook_entity_bundle_field_info(\Drupal\Core\Entity\EntityTypeInterface $
-   // Add a property only to nodes of the 'article' bundle.
-   if ($entity_type->id() == 'node' && $bundle == 'article') {
-     $fields = [];
--    $storage_definitions = my_module_entity_field_storage_info($entity_type);
--    $fields['my_module_bundle_field'] = FieldDefinition::createFromFieldStorageDefinition($storage_definitions['my_module_bundle_field'])
-+    $storage_definitions = mymodule_entity_field_storage_info($entity_type);
-+    $fields['mymodule_bundle_field'] = FieldDefinition::createFromFieldStorageDefinition($storage_definitions['mymodule_bundle_field'])
-       ->setLabel(t('Bundle Field'));
-     return $fields;
-   }
-@@ -2033,9 +2042,9 @@ function hook_entity_bundle_field_info(\Drupal\Core\Entity\EntityTypeInterface $
-  * https://www.drupal.org/node/2346347.
-  */
- function hook_entity_bundle_field_info_alter(&$fields, \Drupal\Core\Entity\EntityTypeInterface $entity_type, $bundle) {
--  if ($entity_type->id() == 'node' && $bundle == 'article' && !empty($fields['my_module_text'])) {
--    // Alter the my_module_text field to use a custom class.
--    $fields['my_module_text']->setClass('\Drupal\another_module\EntityComputedText');
-+  if ($entity_type->id() == 'node' && $bundle == 'article' && !empty($fields['mymodule_text'])) {
-+    // Alter the mymodule_text field to use a custom class.
-+    $fields['mymodule_text']->setClass('\Drupal\anothermodule\EntityComputedText');
-   }
- }
- 
-@@ -2089,8 +2098,8 @@ function hook_entity_field_storage_info(\Drupal\Core\Entity\EntityTypeInterface
-  */
- function hook_entity_field_storage_info_alter(&$fields, \Drupal\Core\Entity\EntityTypeInterface $entity_type) {
-   // Alter the max_length setting.
--  if ($entity_type->id() == 'node' && !empty($fields['my_module_text'])) {
--    $fields['my_module_text']->setSetting('max_length', 128);
-+  if ($entity_type->id() == 'node' && !empty($fields['mymodule_text'])) {
-+    $fields['mymodule_text']->setSetting('max_length', 128);
-   }
- }
- 
-@@ -2159,7 +2168,7 @@ function hook_entity_operation_alter(array &$operations, \Drupal\Core\Entity\Ent
-  *
-  * @see \Drupal\Core\Entity\EntityAccessControlHandlerInterface::fieldAccess()
-  */
--function hook_entity_field_access($operation, \Drupal\Core\Field\FieldDefinitionInterface $field_definition, \Drupal\Core\Session\AccountInterface $account, ?\Drupal\Core\Field\FieldItemListInterface $items = NULL) {
-+function hook_entity_field_access($operation, \Drupal\Core\Field\FieldDefinitionInterface $field_definition, \Drupal\Core\Session\AccountInterface $account, \Drupal\Core\Field\FieldItemListInterface $items = NULL) {
-   if ($field_definition->getName() == 'field_of_interest' && $operation == 'edit') {
-     return AccessResult::allowedIfHasPermission($account, 'update field of interest');
-   }
-@@ -2306,65 +2315,6 @@ function hook_entity_extra_field_info_alter(&$info) {
-   }
- }
- 
--/**
-- * Alter an entity query.
-- *
-- * @param \Drupal\Core\Entity\Query\QueryInterface $query
-- *   The entity query.
-- *
-- * @see hook_entity_query_ENTITY_TYPE_alter()
-- * @see hook_entity_query_tag__TAG_alter()
-- * @see \Drupal\Core\Entity\Query\QueryInterface
-- */
--function hook_entity_query_alter(\Drupal\Core\Entity\Query\QueryInterface $query): void {
--  if ($query->hasTag('entity_reference')) {
--    $entityType = \Drupal::entityTypeManager()->getDefinition($query->getEntityTypeId());
--    $query->sort($entityType->getKey('id'), 'desc');
--  }
--}
--
--/**
-- * Alter an entity query for a specific entity type.
-- *
-- * @param \Drupal\Core\Entity\Query\QueryInterface $query
-- *   The entity query.
-- *
-- * @see hook_entity_query_alter()
-- * @see \Drupal\Core\Entity\Query\QueryInterface
-- */
--function hook_entity_query_ENTITY_TYPE_alter(\Drupal\Core\Entity\Query\QueryInterface $query): void {
--  $query->condition('id', '1', '<>');
--}
--
--/**
-- * Alter an entity query that has a specific tag.
-- *
-- * @param \Drupal\Core\Entity\Query\QueryInterface $query
-- *   The entity query.
-- *
-- * @see hook_entity_query_alter()
-- * @see hook_entity_query_tag__ENTITY_TYPE__TAG_alter()
-- * @see \Drupal\Core\Entity\Query\QueryInterface
-- */
--function hook_entity_query_tag__TAG_alter(\Drupal\Core\Entity\Query\QueryInterface $query): void {
--  $entityType = \Drupal::entityTypeManager()->getDefinition($query->getEntityTypeId());
--  $query->sort($entityType->getKey('id'), 'desc');
--}
--
--/**
-- * Alter an entity query for a specific entity type that has a specific tag.
-- *
-- * @param \Drupal\Core\Entity\Query\QueryInterface $query
-- *   The entity query.
-- *
-- * @see hook_entity_query_ENTITY_TYPE_alter()
-- * @see hook_entity_query_tag__TAG_alter()
-- * @see \Drupal\Core\Entity\Query\QueryInterface
-- */
--function hook_entity_query_tag__ENTITY_TYPE__TAG_alter(\Drupal\Core\Entity\Query\QueryInterface $query): void {
--  $query->condition('id', '1', '<>');
--}
--
- /**
-  * @} End of "addtogroup hooks".
-  */
 diff --git a/core/misc/cspell/dictionary.txt b/core/misc/cspell/dictionary.txt
-index 304c8da17b6ef1d13f236f24b74672190f65c641..a531f8823e8742d0da4b569cfa7542e10e1820a6 100644
+index 19615ef0db..88d07e76c1 100644
 --- a/core/misc/cspell/dictionary.txt
 +++ b/core/misc/cspell/dictionary.txt
-@@ -443,6 +443,7 @@ ntfs
+@@ -454,6 +454,7 @@ ntfs
  nyan
  nyancat
  nyans
@@ -806,7 +426,7 @@ index 304c8da17b6ef1d13f236f24b74672190f65c641..a531f8823e8742d0da4b569cfa7542e1
  omittable
  onecol
 diff --git a/core/modules/jsonapi/tests/src/Functional/NodeTypeTest.php b/core/modules/jsonapi/tests/src/Functional/NodeTypeTest.php
-index 858ed98d65f9ad959c842c382834b4d529d0f95f..f998fb5520bb637806366dad4581d8d8596cfac6 100644
+index 858ed98d65..f998fb5520 100644
 --- a/core/modules/jsonapi/tests/src/Functional/NodeTypeTest.php
 +++ b/core/modules/jsonapi/tests/src/Functional/NodeTypeTest.php
 @@ -94,6 +94,9 @@ protected function getExpectedDocument() {
@@ -820,7 +440,7 @@ index 858ed98d65f9ad959c842c382834b4d529d0f95f..f998fb5520bb637806366dad4581d8d8
            'new_revision' => TRUE,
            'preview_mode' => 1,
 diff --git a/core/modules/node/config/schema/node.schema.yml b/core/modules/node/config/schema/node.schema.yml
-index 08fe92cc401e4ec5d4996362302c2f670866fedc..fe09764f101bde420984d4dbb3145bd184998eab 100644
+index 08fe92cc40..fe09764f10 100644
 --- a/core/modules/node/config/schema/node.schema.yml
 +++ b/core/modules/node/config/schema/node.schema.yml
 @@ -11,7 +11,7 @@ node.settings:
@@ -833,7 +453,7 @@ index 08fe92cc401e4ec5d4996362302c2f670866fedc..fe09764f101bde420984d4dbb3145bd1
    constraints:
      FullyValidatable: ~
 diff --git a/core/modules/node/migrations/d6_node_type.yml b/core/modules/node/migrations/d6_node_type.yml
-index 5c138c4683f1cda478b5d20cd4bc470a9fa000c7..e3c890b43a855b75d9af9eb3359ddf027bc26dcd 100644
+index 5c138c4683..2ceb9ffedf 100644
 --- a/core/modules/node/migrations/d6_node_type.yml
 +++ b/core/modules/node/migrations/d6_node_type.yml
 @@ -8,6 +8,7 @@ source:
@@ -844,19 +464,17 @@ index 5c138c4683f1cda478b5d20cd4bc470a9fa000c7..e3c890b43a855b75d9af9eb3359ddf02
  process:
    type: type
    name: name
-@@ -39,5 +40,10 @@ process:
+@@ -39,5 +40,8 @@ process:
        'management:': 'admin:'
        'navigation:': 'tools:'
        'user-menu:': 'account:'
-+  'third_party_settings/menu_ui/available_menus': available_menus
-+  'third_party_settings/menu_ui/parent': parent
 +  label_singular: 'constants/null_value'
 +  label_plural: 'constants/null_value'
 +  label_count: 'constants/null_value'
  destination:
    plugin: entity:node_type
 diff --git a/core/modules/node/migrations/d7_node_type.yml b/core/modules/node/migrations/d7_node_type.yml
-index bd9c727f4358cc7fee18a3674b2809de5a204988..eba3e4aadf4fa3a85548167a78aa30694b2f1c91 100644
+index bd9c727f43..8142314ec7 100644
 --- a/core/modules/node/migrations/d7_node_type.yml
 +++ b/core/modules/node/migrations/d7_node_type.yml
 @@ -7,6 +7,7 @@ source:
@@ -867,35 +485,23 @@ index bd9c727f4358cc7fee18a3674b2809de5a204988..eba3e4aadf4fa3a85548167a78aa3069
  process:
    type: type
    name: name
-@@ -36,5 +37,10 @@ process:
+@@ -36,5 +37,8 @@ process:
        'management:0:': 'admin:'
        'navigation:0:': 'tools:'
        'user-menu:0:': 'account:'
-+  'third_party_settings/menu_ui/available_menus': available_menus
-+  'third_party_settings/menu_ui/parent': parent
 +  label_singular: 'constants/null_value'
 +  label_plural: 'constants/null_value'
 +  label_count: 'constants/null_value'
  destination:
    plugin: entity:node_type
 diff --git a/core/modules/node/node.post_update.php b/core/modules/node/node.post_update.php
-index 52d65c3acfddbcd029c8d1645135853262afeaf3..19c0973d43d2cbf27aba7b59a48ffe02ec1f106d 100644
+index 47894ee83a..74fe1bbe62 100644
 --- a/core/modules/node/node.post_update.php
 +++ b/core/modules/node/node.post_update.php
-@@ -5,6 +5,8 @@
-  * Post update functions for Node.
-  */
- 
-+use Drupal\Core\Config\Entity\ConfigEntityUpdater;
-+
- /**
-  * Implements hook_removed_post_updates().
-  */
-@@ -18,3 +20,12 @@ function node_removed_post_updates() {
-     'node_post_update_set_node_type_description_and_help_to_null' => '11.0.0',
-   ];
+@@ -19,6 +19,15 @@ function node_post_update_set_node_type_description_and_help_to_null(array &$san
+     });
  }
-+
+ 
 +/**
 + * Add plural label variants to node-type entities.
 + */
@@ -904,8 +510,12 @@ index 52d65c3acfddbcd029c8d1645135853262afeaf3..19c0973d43d2cbf27aba7b59a48ffe02
 +    return TRUE;
 +  });
 +}
++
+ /**
+  * Implements hook_removed_post_updates().
+  */
 diff --git a/core/modules/node/src/Entity/NodeType.php b/core/modules/node/src/Entity/NodeType.php
-index a6a826f62975868489a8cded7b1b126c2b8155f8..f0364ac6233306eb133594e0d9b49aac5004d338 100644
+index a6a826f629..f0364ac623 100644
 --- a/core/modules/node/src/Entity/NodeType.php
 +++ b/core/modules/node/src/Entity/NodeType.php
 @@ -3,6 +3,7 @@
@@ -934,7 +544,7 @@ index a6a826f62975868489a8cded7b1b126c2b8155f8..f0364ac6233306eb133594e0d9b49aac
     * The machine name of this node type.
     *
 diff --git a/core/modules/node/src/NodeTypeInterface.php b/core/modules/node/src/NodeTypeInterface.php
-index 941be20c849636cba786b8ea638f001f2efabbc2..e0789e2a26d16b4a04f0000c8337b997f4118eab 100644
+index 941be20c84..e0789e2a26 100644
 --- a/core/modules/node/src/NodeTypeInterface.php
 +++ b/core/modules/node/src/NodeTypeInterface.php
 @@ -3,12 +3,13 @@
@@ -953,7 +563,7 @@ index 941be20c849636cba786b8ea638f001f2efabbc2..e0789e2a26d16b4a04f0000c8337b997
    /**
     * Determines whether the node type is locked.
 diff --git a/core/modules/node/tests/src/Functional/Rest/NodeTypeResourceTestBase.php b/core/modules/node/tests/src/Functional/Rest/NodeTypeResourceTestBase.php
-index f3df9ee07b0aab8ba8da59c5a2e0ea8d14692e43..3fde5d377f89b8316b0361651046fb85fbd56c36 100644
+index f3df9ee07b..3fde5d377f 100644
 --- a/core/modules/node/tests/src/Functional/Rest/NodeTypeResourceTestBase.php
 +++ b/core/modules/node/tests/src/Functional/Rest/NodeTypeResourceTestBase.php
 @@ -61,6 +61,9 @@ protected function getExpectedNormalizedEntity() {
@@ -968,11 +578,13 @@ index f3df9ee07b0aab8ba8da59c5a2e0ea8d14692e43..3fde5d377f89b8316b0361651046fb85
        'new_revision' => TRUE,
 diff --git a/core/modules/node/tests/src/Functional/Update/NodeUpdateTest.php b/core/modules/node/tests/src/Functional/Update/NodeUpdateTest.php
 new file mode 100644
-index 0000000000000000000000000000000000000000..5dbb6eed2a6a746b008bb258e64d3a20a1d4bdd1
+index 0000000000..88b43d61ff
 --- /dev/null
 +++ b/core/modules/node/tests/src/Functional/Update/NodeUpdateTest.php
-@@ -0,0 +1,44 @@
+@@ -0,0 +1,46 @@
 +<?php
++
++declare(strict_types=1);
 +
 +namespace Drupal\Tests\node\Functional\Update;
 +
@@ -1018,7 +630,7 @@ index 0000000000000000000000000000000000000000..5dbb6eed2a6a746b008bb258e64d3a20
 +}
 diff --git a/core/modules/system/tests/modules/entity_bundle_test/entity_bundle_test.info.yml b/core/modules/system/tests/modules/entity_bundle_test/entity_bundle_test.info.yml
 new file mode 100644
-index 0000000000000000000000000000000000000000..660bf0c41ea8ab0719f49f1647465ee243d5c960
+index 0000000000..660bf0c41e
 --- /dev/null
 +++ b/core/modules/system/tests/modules/entity_bundle_test/entity_bundle_test.info.yml
 @@ -0,0 +1,4 @@
@@ -1028,7 +640,7 @@ index 0000000000000000000000000000000000000000..660bf0c41ea8ab0719f49f1647465ee2
 +package: Testing
 diff --git a/core/modules/system/tests/modules/entity_bundle_test/entity_bundle_test.module b/core/modules/system/tests/modules/entity_bundle_test/entity_bundle_test.module
 new file mode 100644
-index 0000000000000000000000000000000000000000..39d4df32a931aa65daccfcddff4d83116b1dde27
+index 0000000000..39d4df32a9
 --- /dev/null
 +++ b/core/modules/system/tests/modules/entity_bundle_test/entity_bundle_test.module
 @@ -0,0 +1,60 @@
@@ -1093,7 +705,7 @@ index 0000000000000000000000000000000000000000..39d4df32a931aa65daccfcddff4d8311
 +  }
 +}
 diff --git a/core/modules/system/tests/modules/entity_test/config/schema/entity_test.schema.yml b/core/modules/system/tests/modules/entity_test/config/schema/entity_test.schema.yml
-index 31aa1d614ca48cda1527816cb4a4df6ecb9d4778..54311bba091039fd764463a9bdb7b59cc2fe7376 100644
+index 31aa1d614c..54311bba09 100644
 --- a/core/modules/system/tests/modules/entity_test/config/schema/entity_test.schema.yml
 +++ b/core/modules/system/tests/modules/entity_test/config/schema/entity_test.schema.yml
 @@ -31,3 +31,13 @@ entity_test.entity_test_bundle.*:
@@ -1112,7 +724,7 @@ index 31aa1d614ca48cda1527816cb4a4df6ecb9d4778..54311bba091039fd764463a9bdb7b59c
 +      label: 'Machine-readable name'
 diff --git a/core/modules/system/tests/modules/entity_test/src/Entity/EntityTestBundleWithPluralLabels.php b/core/modules/system/tests/modules/entity_test/src/Entity/EntityTestBundleWithPluralLabels.php
 new file mode 100644
-index 0000000000000000000000000000000000000000..d5b0d1d3f5a3439f0a9c7cf8162d818629a37bbb
+index 0000000000..d5b0d1d3f5
 --- /dev/null
 +++ b/core/modules/system/tests/modules/entity_test/src/Entity/EntityTestBundleWithPluralLabels.php
 @@ -0,0 +1,32 @@
@@ -1149,7 +761,7 @@ index 0000000000000000000000000000000000000000..d5b0d1d3f5a3439f0a9c7cf8162d8186
 +
 +}
 diff --git a/core/profiles/demo_umami/config/install/node.type.article.yml b/core/profiles/demo_umami/config/install/node.type.article.yml
-index ae8e9d12580b22cb2a38e40384818ac1bff2ce79..f88d2219e341dec33f0d5f10859633eb4d731987 100644
+index ae8e9d1258..f88d2219e3 100644
 --- a/core/profiles/demo_umami/config/install/node.type.article.yml
 +++ b/core/profiles/demo_umami/config/install/node.type.article.yml
 @@ -8,3 +8,7 @@ help: null
@@ -1161,7 +773,7 @@ index ae8e9d12580b22cb2a38e40384818ac1bff2ce79..f88d2219e341dec33f0d5f10859633eb
 +label_count:
 +  - "1 article\x03@count articles"
 diff --git a/core/profiles/demo_umami/config/install/node.type.page.yml b/core/profiles/demo_umami/config/install/node.type.page.yml
-index 176315b5824423a5445b4ea8ea9d8b0b8266138c..d79b97a12d608c70447083764101d684845bda23 100644
+index 176315b582..d79b97a12d 100644
 --- a/core/profiles/demo_umami/config/install/node.type.page.yml
 +++ b/core/profiles/demo_umami/config/install/node.type.page.yml
 @@ -8,3 +8,7 @@ help: null
@@ -1173,7 +785,7 @@ index 176315b5824423a5445b4ea8ea9d8b0b8266138c..d79b97a12d608c70447083764101d684
 +label_count:
 +  - "1 page\x03@count pages"
 diff --git a/core/profiles/demo_umami/config/install/node.type.recipe.yml b/core/profiles/demo_umami/config/install/node.type.recipe.yml
-index 1810e77bcf292e37a3941adc5839f7ff5066f1bc..a07f30888b453c60391feee066013f31285890f5 100644
+index 1810e77bcf..a07f30888b 100644
 --- a/core/profiles/demo_umami/config/install/node.type.recipe.yml
 +++ b/core/profiles/demo_umami/config/install/node.type.recipe.yml
 @@ -14,3 +14,7 @@ help: null
@@ -1185,7 +797,7 @@ index 1810e77bcf292e37a3941adc5839f7ff5066f1bc..a07f30888b453c60391feee066013f31
 +label_count:
 +  - "1 recipe\x03@count recipes"
 diff --git a/core/profiles/standard/config/install/node.type.article.yml b/core/profiles/standard/config/install/node.type.article.yml
-index ae8e9d12580b22cb2a38e40384818ac1bff2ce79..f88d2219e341dec33f0d5f10859633eb4d731987 100644
+index ae8e9d1258..f88d2219e3 100644
 --- a/core/profiles/standard/config/install/node.type.article.yml
 +++ b/core/profiles/standard/config/install/node.type.article.yml
 @@ -8,3 +8,7 @@ help: null
@@ -1197,7 +809,7 @@ index ae8e9d12580b22cb2a38e40384818ac1bff2ce79..f88d2219e341dec33f0d5f10859633eb
 +label_count:
 +  - "1 article\x03@count articles"
 diff --git a/core/profiles/standard/config/install/node.type.page.yml b/core/profiles/standard/config/install/node.type.page.yml
-index 176315b5824423a5445b4ea8ea9d8b0b8266138c..d79b97a12d608c70447083764101d684845bda23 100644
+index 176315b582..d79b97a12d 100644
 --- a/core/profiles/standard/config/install/node.type.page.yml
 +++ b/core/profiles/standard/config/install/node.type.page.yml
 @@ -8,3 +8,7 @@ help: null
@@ -1210,11 +822,13 @@ index 176315b5824423a5445b4ea8ea9d8b0b8266138c..d79b97a12d608c70447083764101d684
 +  - "1 page\x03@count pages"
 diff --git a/core/tests/Drupal/KernelTests/Core/Entity/EntityTypeBundleInfoPluralLabelTest.php b/core/tests/Drupal/KernelTests/Core/Entity/EntityTypeBundleInfoPluralLabelTest.php
 new file mode 100644
-index 0000000000000000000000000000000000000000..e299359762a6f0d8b8c1c57959c5a14187b4e5f8
+index 0000000000..2a3fd15f2c
 --- /dev/null
 +++ b/core/tests/Drupal/KernelTests/Core/Entity/EntityTypeBundleInfoPluralLabelTest.php
-@@ -0,0 +1,252 @@
+@@ -0,0 +1,254 @@
 +<?php
++
++declare(strict_types=1);
 +
 +namespace Drupal\KernelTests\Core\Entity;
 +

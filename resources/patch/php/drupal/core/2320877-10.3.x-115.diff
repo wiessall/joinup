@@ -1,5 +1,5 @@
 diff --git a/core/modules/field/tests/src/Kernel/Migrate/d6/MigrateFieldInstanceTest.php b/core/modules/field/tests/src/Kernel/Migrate/d6/MigrateFieldInstanceTest.php
-index e85f216de1c0cbf607cb7f4ad87ed5e5800fd697..9c1fec42d534c6fb980c74bc7167a6ea318d0b48 100644
+index e85f216de1c..9c1fec42d53 100644
 --- a/core/modules/field/tests/src/Kernel/Migrate/d6/MigrateFieldInstanceTest.php
 +++ b/core/modules/field/tests/src/Kernel/Migrate/d6/MigrateFieldInstanceTest.php
 @@ -86,6 +86,7 @@ public function testFieldInstanceMigration(): void {
@@ -11,7 +11,7 @@ index e85f216de1c0cbf607cb7f4ad87ed5e5800fd697..9c1fec42d534c6fb980c74bc7167a6ea
        'uri_scheme' => 'public',
        'handler' => 'default:file',
 diff --git a/core/modules/file/config/schema/file.schema.yml b/core/modules/file/config/schema/file.schema.yml
-index d8b098d50fc2b990a26701f7412f41bd152d0421..f670682527f3bdf0c6654e991a8a226afc14704f 100644
+index d8b098d50fc..f670682527f 100644
 --- a/core/modules/file/config/schema/file.schema.yml
 +++ b/core/modules/file/config/schema/file.schema.yml
 @@ -91,6 +91,9 @@ field.field_settings.file:
@@ -25,22 +25,20 @@ index d8b098d50fc2b990a26701f7412f41bd152d0421..f670682527f3bdf0c6654e991a8a226a
  file.formatter.media:
    type: mapping
 diff --git a/core/modules/file/file.post_update.php b/core/modules/file/file.post_update.php
-index 3d693cff1513eb1c87fd2d45f805e7ed8479610d..7130dafe31f20b1e185bda254c701361e122278c 100644
+index 73c815b1cc0..7b89d3319d0 100644
 --- a/core/modules/file/file.post_update.php
 +++ b/core/modules/file/file.post_update.php
-@@ -5,6 +5,9 @@
-  * Post update functions for File.
+@@ -6,6 +6,7 @@
   */
  
-+use Drupal\Core\Config\Entity\ConfigEntityUpdater;
+ use Drupal\Core\Config\Entity\ConfigEntityUpdater;
 +use Drupal\field\FieldConfigInterface;
-+
+ use Drupal\user\RoleInterface;
+ 
  /**
-  * Implements hook_removed_post_updates().
-  */
-@@ -15,3 +18,12 @@ function file_removed_post_updates() {
-     'file_post_update_add_default_filename_sanitization_configuration' => '11.0.0',
-   ];
+@@ -43,3 +44,12 @@ function file_post_update_add_default_filename_sanitization_configuration() {
+   $config->set('filename_sanitization.replacement_character', '-');
+   $config->save();
  }
 +
 +/**
@@ -52,7 +50,7 @@ index 3d693cff1513eb1c87fd2d45f805e7ed8479610d..7130dafe31f20b1e185bda254c701361
 +  });
 +}
 diff --git a/core/modules/file/src/Plugin/Field/FieldType/FileItem.php b/core/modules/file/src/Plugin/Field/FieldType/FileItem.php
-index 6859ba82fd5954494a09a6a856f0e0e1a43a9e80..15d22ee517d6d959cd06ed63724087654b651bcd 100644
+index 6dc17e520bf..15d22ee517d 100644
 --- a/core/modules/file/src/Plugin/Field/FieldType/FileItem.php
 +++ b/core/modules/file/src/Plugin/Field/FieldType/FileItem.php
 @@ -33,7 +33,7 @@
@@ -93,8 +91,18 @@ index 6859ba82fd5954494a09a6a856f0e0e1a43a9e80..15d22ee517d6d959cd06ed6372408765
      return $element;
    }
  
+@@ -253,7 +266,8 @@ public static function validateDirectory($element, FormStateInterface $form_stat
+    *
+    * This doubles as a convenience clean-up function and a validation routine.
+    * Commas are allowed by the end-user, but ultimately the value will be stored
+-   * as a space-separated list for compatibility with file_validate_extensions().
++   * as a space-separated list for compatibility with the 'FileExtension'
++   * constraint.
+    */
+   public static function validateExtensions($element, FormStateInterface $form_state) {
+     if (!empty($element['#value'])) {
 diff --git a/core/modules/file/src/Plugin/Field/FieldWidget/FileWidget.php b/core/modules/file/src/Plugin/Field/FieldWidget/FileWidget.php
-index 62db3ddf1a43e96008fe042c4cf02e23aa09d57d..fc463d32a6434188e157270e5a5bfed09584115d 100644
+index 62db3ddf1a4..fc463d32a64 100644
 --- a/core/modules/file/src/Plugin/Field/FieldWidget/FileWidget.php
 +++ b/core/modules/file/src/Plugin/Field/FieldWidget/FileWidget.php
 @@ -12,6 +12,7 @@
@@ -183,7 +191,7 @@ index 62db3ddf1a43e96008fe042c4cf02e23aa09d57d..fc463d32a6434188e157270e5a5bfed0
  }
 diff --git a/core/modules/file/src/Plugin/Validation/Constraint/FileDescriptionRequired.php b/core/modules/file/src/Plugin/Validation/Constraint/FileDescriptionRequired.php
 new file mode 100644
-index 0000000000000000000000000000000000000000..ac978ac9bc4855f65c789aece21a2f7f8c3c3e35
+index 00000000000..ac978ac9bc4
 --- /dev/null
 +++ b/core/modules/file/src/Plugin/Validation/Constraint/FileDescriptionRequired.php
 @@ -0,0 +1,25 @@
@@ -214,7 +222,7 @@ index 0000000000000000000000000000000000000000..ac978ac9bc4855f65c789aece21a2f7f
 +}
 diff --git a/core/modules/file/src/Plugin/Validation/Constraint/FileDescriptionRequiredValidator.php b/core/modules/file/src/Plugin/Validation/Constraint/FileDescriptionRequiredValidator.php
 new file mode 100644
-index 0000000000000000000000000000000000000000..9fff895c7b3b4de3063e3d538d1ab1e094363ced
+index 00000000000..9fff895c7b3
 --- /dev/null
 +++ b/core/modules/file/src/Plugin/Validation/Constraint/FileDescriptionRequiredValidator.php
 @@ -0,0 +1,32 @@
@@ -251,7 +259,7 @@ index 0000000000000000000000000000000000000000..9fff895c7b3b4de3063e3d538d1ab1e0
 +
 +}
 diff --git a/core/modules/file/tests/src/Functional/FileFieldDisplayTest.php b/core/modules/file/tests/src/Functional/FileFieldDisplayTest.php
-index 7566930e379a5758ec8f86e80a924fbc896446fd..dc3f5f952f04ddc075bb5a85d11532b85c7d0913 100644
+index 7566930e379..dc3f5f952f0 100644
 --- a/core/modules/file/tests/src/Functional/FileFieldDisplayTest.php
 +++ b/core/modules/file/tests/src/Functional/FileFieldDisplayTest.php
 @@ -170,10 +170,20 @@ public function testDescToggle(): void {
@@ -295,7 +303,7 @@ index 7566930e379a5758ec8f86e80a924fbc896446fd..dc3f5f952f04ddc075bb5a85d11532b8
    /**
 diff --git a/core/modules/file/tests/src/Functional/Update/FileDescriptionRequiredUpdateTest.php b/core/modules/file/tests/src/Functional/Update/FileDescriptionRequiredUpdateTest.php
 new file mode 100644
-index 0000000000000000000000000000000000000000..fbd51cbadcb1622e438bc79f343e3537e9dc0c84
+index 00000000000..fbd51cbadcb
 --- /dev/null
 +++ b/core/modules/file/tests/src/Functional/Update/FileDescriptionRequiredUpdateTest.php
 @@ -0,0 +1,46 @@
@@ -346,7 +354,7 @@ index 0000000000000000000000000000000000000000..fbd51cbadcb1622e438bc79f343e3537
 +
 +}
 diff --git a/core/modules/image/src/Plugin/Field/FieldType/ImageItem.php b/core/modules/image/src/Plugin/Field/FieldType/ImageItem.php
-index 29fa146d487431b8ca07785c3ddc5d7eda143a1f..87182a94c272901510d3ab547d66f99313c05232 100644
+index 29fa146d487..87182a94c27 100644
 --- a/core/modules/image/src/Plugin/Field/FieldType/ImageItem.php
 +++ b/core/modules/image/src/Plugin/Field/FieldType/ImageItem.php
 @@ -97,6 +97,7 @@ public static function defaultFieldSettings() {
@@ -369,7 +377,7 @@ index 29fa146d487431b8ca07785c3ddc5d7eda143a1f..87182a94c272901510d3ab547d66f993
      // Add title and alt configuration options.
      $element['alt_field'] = [
 diff --git a/core/modules/jsonapi/tests/src/Functional/FileUploadTest.php b/core/modules/jsonapi/tests/src/Functional/FileUploadTest.php
-index 354904df3898a8c50370e33304592d3c9ee798b6..7bba9636bffd1af8b1d42d60c87564cb061c4d7f 100644
+index 354904df389..7bba9636bff 100644
 --- a/core/modules/jsonapi/tests/src/Functional/FileUploadTest.php
 +++ b/core/modules/jsonapi/tests/src/Functional/FileUploadTest.php
 @@ -275,6 +275,15 @@ public function testPostFileUpload(): void {
@@ -389,7 +397,7 @@ index 354904df3898a8c50370e33304592d3c9ee798b6..7bba9636bffd1af8b1d42d60c87564cb
  
    /**
 diff --git a/core/profiles/demo_umami/config/install/field.field.media.audio.field_media_audio_file.yml b/core/profiles/demo_umami/config/install/field.field.media.audio.field_media_audio_file.yml
-index a4bb52eb859a2a18c2409964ea3c6d3ee1e0e579..c7feda30306541b36a98595771f191b57f9a66d6 100644
+index a4bb52eb859..c7feda30306 100644
 --- a/core/profiles/demo_umami/config/install/field.field.media.audio.field_media_audio_file.yml
 +++ b/core/profiles/demo_umami/config/install/field.field.media.audio.field_media_audio_file.yml
 @@ -23,4 +23,5 @@ settings:
@@ -399,7 +407,7 @@ index a4bb52eb859a2a18c2409964ea3c6d3ee1e0e579..c7feda30306541b36a98595771f191b5
 +  description_field_required: false
  field_type: file
 diff --git a/core/profiles/demo_umami/config/install/field.field.media.document.field_media_document.yml b/core/profiles/demo_umami/config/install/field.field.media.document.field_media_document.yml
-index fb0b9909e2e870210c3c927eb40e1de8f10947f2..7dd5de65dd5844d74eb5e38ded8dfd2b7588359e 100644
+index fb0b9909e2e..7dd5de65dd5 100644
 --- a/core/profiles/demo_umami/config/install/field.field.media.document.field_media_document.yml
 +++ b/core/profiles/demo_umami/config/install/field.field.media.document.field_media_document.yml
 @@ -26,4 +26,5 @@ settings:
@@ -409,7 +417,7 @@ index fb0b9909e2e870210c3c927eb40e1de8f10947f2..7dd5de65dd5844d74eb5e38ded8dfd2b
 +  description_field_required: false
  field_type: file
 diff --git a/core/profiles/demo_umami/config/install/field.field.media.video.field_media_video_file.yml b/core/profiles/demo_umami/config/install/field.field.media.video.field_media_video_file.yml
-index b6c0be146e45a376e680c704c72391f5bbd55eca..d1793489c918da904d485b8486d2250c9e2559bb 100644
+index b6c0be146e4..d1793489c91 100644
 --- a/core/profiles/demo_umami/config/install/field.field.media.video.field_media_video_file.yml
 +++ b/core/profiles/demo_umami/config/install/field.field.media.video.field_media_video_file.yml
 @@ -23,4 +23,5 @@ settings:
@@ -419,7 +427,7 @@ index b6c0be146e45a376e680c704c72391f5bbd55eca..d1793489c918da904d485b8486d2250c
 +  description_field_required: false
  field_type: file
 diff --git a/core/profiles/standard/config/optional/field.field.media.audio.field_media_audio_file.yml b/core/profiles/standard/config/optional/field.field.media.audio.field_media_audio_file.yml
-index a4bb52eb859a2a18c2409964ea3c6d3ee1e0e579..c7feda30306541b36a98595771f191b57f9a66d6 100644
+index a4bb52eb859..c7feda30306 100644
 --- a/core/profiles/standard/config/optional/field.field.media.audio.field_media_audio_file.yml
 +++ b/core/profiles/standard/config/optional/field.field.media.audio.field_media_audio_file.yml
 @@ -23,4 +23,5 @@ settings:
@@ -429,7 +437,7 @@ index a4bb52eb859a2a18c2409964ea3c6d3ee1e0e579..c7feda30306541b36a98595771f191b5
 +  description_field_required: false
  field_type: file
 diff --git a/core/profiles/standard/config/optional/field.field.media.document.field_media_document.yml b/core/profiles/standard/config/optional/field.field.media.document.field_media_document.yml
-index fb0b9909e2e870210c3c927eb40e1de8f10947f2..7dd5de65dd5844d74eb5e38ded8dfd2b7588359e 100644
+index fb0b9909e2e..7dd5de65dd5 100644
 --- a/core/profiles/standard/config/optional/field.field.media.document.field_media_document.yml
 +++ b/core/profiles/standard/config/optional/field.field.media.document.field_media_document.yml
 @@ -26,4 +26,5 @@ settings:
@@ -439,7 +447,7 @@ index fb0b9909e2e870210c3c927eb40e1de8f10947f2..7dd5de65dd5844d74eb5e38ded8dfd2b
 +  description_field_required: false
  field_type: file
 diff --git a/core/profiles/standard/config/optional/field.field.media.video.field_media_video_file.yml b/core/profiles/standard/config/optional/field.field.media.video.field_media_video_file.yml
-index b6c0be146e45a376e680c704c72391f5bbd55eca..d1793489c918da904d485b8486d2250c9e2559bb 100644
+index b6c0be146e4..d1793489c91 100644
 --- a/core/profiles/standard/config/optional/field.field.media.video.field_media_video_file.yml
 +++ b/core/profiles/standard/config/optional/field.field.media.video.field_media_video_file.yml
 @@ -23,4 +23,5 @@ settings:
