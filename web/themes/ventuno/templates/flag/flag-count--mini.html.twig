@@ -39,7 +39,7 @@
   {% set count = flagcount(flag, flaggable) %}
 
   {# Set nofollow to prevent search bots from crawling anonymous flag links #}
-  {% set attributes = attributes.setAttribute('rel', 'nofollow').setAttribute('title', link_title) %}
+  {% set attributes = attributes.setAttribute('rel', 'nofollow').setAttribute('aria-label', link_title) %}
 
   <a{{ attributes.addClass(link_classes) }}>
     <svg class="bi icon--xs me-1">
