@@ -7,6 +7,7 @@ namespace Drupal\joinup_core\Logger\Formatter;
 use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Utility\Error;
 use Monolog\Formatter\NormalizerFormatter;
+use Monolog\LogRecord;
 
 /**
  * Telegram handler specific formatter.
@@ -16,7 +17,7 @@ class TelegramFormatter extends NormalizerFormatter {
   /**
    * {@inheritdoc}
    */
-  public function format(array $record): string {
+  public function format(LogRecord $record): string {
     $normalized = $this->normalize($record);
 
     $formatted = [];
