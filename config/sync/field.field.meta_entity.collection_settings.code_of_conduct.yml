@@ -10,7 +10,7 @@ field_name: code_of_conduct
 entity_type: meta_entity
 bundle: collection_settings
 label: 'Code of Conduct'
-description: 'Users should accept and agree to the content of this custom page before they ask for membership in a closed collection.'
+description: 'Users should accept and agree to the content of this custom page before they ask for membership. <em>This only applies for closed collections.</em>'
 required: false
 translatable: false
 default_value: {  }
