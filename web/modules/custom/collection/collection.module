@@ -437,14 +437,25 @@ function collection_preprocess_search_api_field__rdf_entity__field_collection_co
  * Implements hook_entity_field_access().
  */
 function collection_entity_field_access(string $operation, FieldDefinitionInterface $field_definition, AccountInterface $account, ?FieldItemListInterface $items = NULL): AccessResultInterface {
+  if (
+    $field_definition->getTargetEntityTypeId() !== 'meta_entity' ||
+    $field_definition->getTargetBundle() !== 'collection_settings'
+  ) {
+    return AccessResult::neutral();
+  }
+
   // Until ISAICP-7223 only moderators are able to set a landing page.
   // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7223
-  if (
-    $field_definition->getTargetEntityTypeId() === 'meta_entity'
-    && $field_definition->getTargetBundle() === 'collection_settings'
-    && $field_definition->getName() === 'landing_page'
-  ) {
-    return AccessResult::forbiddenIf(!$account->hasPermission('update collection_settings meta-entity'));
+  $field_name = $field_definition->getName();
+  switch ($field_name) {
+    case 'landing_page':
+      return AccessResult::forbiddenIf(!$account->hasPermission('update collection_settings meta-entity'));
+
+    case 'code_of_conduct':
+      if ($operation === 'edit') {
+        return AccessResult::forbiddenIf(!$account->hasPermission('update collection_settings meta-entity'));
+      }
   }
+
   return AccessResult::neutral();
 }
