@@ -8,7 +8,7 @@
   Drupal.behaviors.removeDomainFromUrl = {
     attach() {
       const input = document.querySelector(
-        "input#edit-field-contact-url-0-uri"
+        "input#edit-field-contact-url-0-uri",
       );
       if (input === null || input === undefined) {
         return;
