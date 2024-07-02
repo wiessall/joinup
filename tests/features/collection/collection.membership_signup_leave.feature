@@ -22,9 +22,9 @@ Feature: Joining and leaving collections through the web interface
       | Public CoC of Closed collection | Closed collection with public CoC     | published |
       | Draft CoC of Closed collection  | Closed collection with non-public CoC | draft     |
     And the following collection user memberships:
-      | collection      | user              | roles |
-      | Open collection | Collection author | owner |
-      | Open collection | Stewe Griffin     |       |
+      | collection      | user              | roles             |
+      | Open collection | Collection author | owner             |
+      | Open collection | Stewe Griffin     |                   |
     And the "code of conduct" setting of the "Open collection with public CoC" collection is set to "Public CoC of Open collection" "custom page"
     And the "code of conduct" setting of the "Closed collection with public CoC" collection is set to "Public CoC of Closed collection" "custom page"
     And the "code of conduct" setting of the "Closed collection with non-public CoC" collection is set to "Draft CoC of Closed collection" "custom page"
@@ -195,3 +195,17 @@ Feature: Joining and leaving collections through the web interface
     When I press "Cancel" in the "Modal buttons" region
     And I wait for AJAX to finish
     Then I should see the heading "Open collection"
+
+  Scenario Outline: Only moderators are able to edit the Code of Conduct setting
+    Given I am logged in as <user>
+    And I go to the homepage of the "Open collection" collection
+    And I click "Settings" in the "Entity actions" region
+    Then the following field <Code of Conduct field> present "Code of Conduct"
+
+    # Access to Settings is implicitly tested in
+    # metadata_banner_disabled.feature, so we only test with these roles.
+    Examples:
+      | user                                              | Code of Conduct field |
+      | "Collection author"                               | should not be         |
+      | a facilitator of the "Open collection" collection | should not be         |
+      | a moderator                                       | should be             |
