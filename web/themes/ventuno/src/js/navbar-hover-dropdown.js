@@ -5,7 +5,10 @@
 ((Drupal, once) => {
   Drupal.behaviors.navbar_hover_dropdown = {
     attach() {
-      let mouseLeaveTimeout; // Variable to store the timeout ID
+      /**
+       * Variable to store the timeout ID.
+       */
+      let mouseLeaveTimeout;
 
       /**
        * It toggles dropdown on hover.
@@ -39,22 +42,26 @@
           }, 100); // Set timeout delay.
         }
       }
-      const eventListOver = ["mouseover", "focusin"];
-      const eventListOut = ["mouseleave", "focusout"];
+
+      /**
+       * Adds event listeners to the list item.
+       *
+       * @param {Array<string>} events - List of events to listen for.
+       * @param {HTMLElement} li - List element.
+       * @param {boolean} expand - True if we want to expand.
+       */
+      function addEventListeners(events, li, expand) {
+        events.forEach((event) => {
+          li.addEventListener(event, () => toggleDropdown(li, expand));
+        });
+      }
+
       once(
         "navbar-hover-dropdown",
         "#main-navbar .nav-item.d-xl-inline-block.dropdown"
       ).forEach((li) => {
-        for (event of eventListOver) {
-          li.addEventListener(event, () => {
-            toggleDropdown(li, true);
-          });
-        }
-        for (event of eventListOut) {
-          li.addEventListener(event, () => {
-            toggleDropdown(li, false);
-          });
-        }
+        addEventListeners(["mouseover", "focusin"], li, true);
+        addEventListeners(["mouseleave", "focusout"], li, false);
       });
     },
   };
