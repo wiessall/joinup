@@ -10,7 +10,8 @@ $wireframe-opacity: 0.5;
 
 .lp-builder {
   .js-lpb-component {
-    outline: $wireframe-width $wireframe-style rgba($wireframe-color, $wireframe-opacity);
+    outline: $wireframe-width $wireframe-style
+      rgba($wireframe-color, $wireframe-opacity);
   }
 
   .js-lpb-component-list > .js-lpb-component {
@@ -22,7 +23,8 @@ $wireframe-opacity: 0.5;
     display: block;
     height: 100%;
     content: "";
-    border-inline-start: $wireframe-width $wireframe-style rgba($wireframe-color, $wireframe-opacity);
+    border-inline-start: $wireframe-width $wireframe-style
+      rgba($wireframe-color, $wireframe-opacity);
     inset-inline-start: calc($wireframe-width / -2);
   }
 
