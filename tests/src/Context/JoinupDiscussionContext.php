@@ -6,6 +6,7 @@ namespace Drupal\joinup\Context;
 
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\EntityTrait;
+use Drupal\joinup_discussion\Entity\DiscussionInterface;
 use Drupal\joinup_subscription\JoinupDiscussionSubscriptionInterface;
 use PHPUnit\Framework\Assert;
 
@@ -57,6 +58,50 @@ class JoinupDiscussionContext extends RawDrupalContext {
    */
   protected function getDiscussionSubscriptionService(): JoinupDiscussionSubscriptionInterface {
     return \Drupal::service('joinup_subscription.discussion_subscription');
+  }
+
+  /**
+   * Leaves a comment at the given discussion on behalf of the given user.
+   *
+   * This step definition also switches back to the original user account at the
+   * end of the task and returns to the original page.
+   *
+   * @param string $userName
+   *   The username of the account to own the new comment.
+   * @param string $discussionLabel
+   *   The label of the discussion where the comment should be posted.
+   *
+   * @Given the :userName user leaves a comment at the :discussionLabel discussion
+   */
+  public function leaveCommentAsUser(string $userName, string $discussionLabel): void {
+    $session = $this->getSession();
+    $userManager = $this->getUserManager();
+    $authenticationManager = $this->getAuthenticationManager();
+    $originalUrl = str_replace(
+      $this->getMinkParameter('base_url'),
+      '',
+      $session->getCurrentUrl(),
+    );
+
+    $commentMessage = 'Hello!';
+    $userBeforeCommenting = $userManager->getCurrentUser();
+    $userManager->setCurrentUser($user = $userManager->getUser($userName));
+    $authenticationManager->logIn($user);
+    $discussion = $this->getEntityByLabel('node', $discussionLabel, 'discussion');
+    Assert::assertInstanceOf(
+      DiscussionInterface::class,
+      $discussion,
+      sprintf("Cannot find the discussion with label '%s'", $discussionLabel),
+    );
+    $this->visitPath($discussion->toUrl()->toString());
+    $session->getPage()->fillField('Create comment', $commentMessage);
+    $session->getPage()->pressButton('Post comment');
+    $userManager->setCurrentUser($userBeforeCommenting);
+    $authenticationManager->logOut();
+    if ($userBeforeCommenting) {
+      $authenticationManager->logIn($userBeforeCommenting);
+    }
+    $this->visitPath($originalUrl);
   }
 
 }

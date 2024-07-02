@@ -11,6 +11,8 @@ Feature: Sitewide forum
       | New discussion           | published | 2023-03-03 | 2023-03-03 | 2023-03-03   |
       | Quite new discussion     | published | 2024-05-05 | 2024-05-05 | 2024-05-05   |
       | Very new discussion      | published | 2024-06-06 | 2024-06-06 | 2024-06-06   |
+    And user:
+      | Username | Commenter |
     And comments:
       | parent                  | created    | changed    |
       | Blast from the past     | 1981-01-01 | 1981-01-01 |
@@ -50,7 +52,9 @@ Feature: Sitewide forum
       | parent                  |
       | Not that old discussion |
       | New discussion          |
-      | Blast from the past     |
+    # Leave the last comment manually to have the cache tags being invalidated
+    # properly.
+    Given the Commenter user leaves a comment at the "Blast from the past" discussion
     And I go to "/discussions"
     And I should see the heading "Most active discussions"
     Then in the "Most active discussions" list, I should see the following tiles in the correct order:
@@ -72,7 +76,8 @@ Feature: Sitewide forum
       | Supa-dupa-new |
       | Supa-dupa-new |
       | Supa-dupa-new |
-      | Supa-dupa-new |
+    # Send last comment through the UI.
+    Given the Commenter user leaves a comment at the "Supa-dupa-new" discussion
     And I go to "/discussions"
     Then in the "Most active discussions" list, I should see the following tiles in the correct order:
       | Supa-dupa-new           |
@@ -95,8 +100,8 @@ Feature: Sitewide forum
       | This is the newest |
       | This is the newest |
       | This is the newest |
-      | This is the newest |
-    And I go to "/discussions"
+    # Again, send last comment through the UI.
+    Given the Commenter user leaves a comment at the "This is the newest" discussion
     Then in the "Most active discussions" list, I should see the following tiles in the correct order:
       | This is the newest      |
       | Supa-dupa-new           |
