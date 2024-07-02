@@ -1358,12 +1358,19 @@ class JoinupContext extends RawDrupalContext {
    * | Tile title 1 |
    * | Tile title 2 |
    *
+   * @param \Behat\Gherkin\Node\TableNode $titles_table
+   *   The table node containing the headings of tiles.
+   * @param string|null $list_title
+   *   The title of the list. The assertion searches for tiles in the parent
+   *   element of the list heading if given.
+   *
    * @Then I( should) see the( following) tiles in the correct order:
+   * @Then in the :list_title list, I should see the following tiles in the correct order:
    */
-  public function assertOrderedTilesPresent(TableNode $titles_table): void {
-    $headings_in_page = array_keys($this->getTiles());
+  public function assertOrderedTilesPresent(TableNode $titles_table, ?string $list_title = NULL): void {
+    $headings = array_keys($this->getTiles(listTitle: $list_title));
     $headings_expected = $titles_table->getColumn(0);
-    Assert::assertEquals($headings_expected, $headings_in_page, 'The expected tiles were not found or were not in the proper order.');
+    Assert::assertEquals($headings_expected, $headings, 'The expected tiles were not found or were not in the proper order.');
   }
 
   /**
