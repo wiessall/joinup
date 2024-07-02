@@ -32,5 +32,6 @@ _core:
   default_config_hash: gJxGOQLZ5SdzmXOXbMP-A0S0AQ3XGYBZNljeopTEaZw
 name: Spatial
 vid: spatial
-description: ''
+description: null
 weight: 0
+new_revision: false
