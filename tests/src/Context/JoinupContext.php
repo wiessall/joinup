@@ -2049,9 +2049,7 @@ class JoinupContext extends RawDrupalContext {
    * @Then I wait up to :seconds seconds for Glide animations to finish
    */
   public function waitForGlideAnimations(string $seconds): void {
-    $this->assertWaitJs($seconds, '(function() {
-        return typeof jQuery === "undefined" || jQuery("glide--slider.glide-animating").length === 0;
-    }())');
+    $this->assertWaitJs((int) $seconds, 'document.querySelector(".glide--slider.glide-animating") === null');
   }
 
   /**
@@ -2063,9 +2061,19 @@ class JoinupContext extends RawDrupalContext {
    * @Then I wait up to :seconds seconds for Slick animations to finish
    */
   public function waitForSlickAnimations(string $seconds): void {
-    $this->assertWaitJs($seconds, '(function() {
-        return typeof jQuery === "undefined" || jQuery("[data-slick].slick-animating").length === 0;
-    }())');
+    $this->assertWaitJs((int) $seconds, 'document.querySelector("[data-slick].slick-animating") === null');
+  }
+
+  /**
+   * Waits until Bootstrap collapse animations finish.
+   *
+   * @param string $seconds
+   *   Number of seconds to wait.
+   *
+   * @Then I wait up to :seconds seconds for Bootstrap collapse animations to finish
+   */
+  public function waitForBsCollapseAnimations(string $seconds): void {
+    $this->assertWaitJs((int) $seconds, 'document.querySelector(".collapsing") === null');
   }
 
   /**

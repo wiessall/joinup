@@ -47,7 +47,7 @@ Feature: Global search
     When I visit the search page
     And I focus on the search input
     And I enter "Rummy" in the search bar
-    And I wait for animations to finish
+    And I wait for AJAX to finish
     Then I should not see the text "Rummy news"
     And I should not see the text "Rummy event"
     And I should not see the text "Rummy document"

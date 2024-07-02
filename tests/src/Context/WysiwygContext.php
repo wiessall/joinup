@@ -41,24 +41,7 @@ class WysiwygContext extends RawDrupalContext {
       // header.
       $page = $this->getSession()->getPage();
       $element = $page->find('xpath', "//*[contains(text(),'{$label}')]");
-      $xpath = $element->getXpath();
-      $function = <<<JS
-  (
-      function(){
-        setTimeout(() => {
-          let elem = document.evaluate("$xpath", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
-          elem.scrollIntoView({ behavior: 'instant', block: 'center' });
-        }, 300);
-      }
-  )()
-  JS;
-      try {
-        $this->getSession()->executeScript($function);
-        sleep(1);
-      }
-      catch (\Exception $e) {
-        throw new \Exception("Scroll element into view failed");
-      }
+      $this->scrollElementIntoView($element);
       $this->pressWysiwygButton($label, 'Source');
       $this->setWysiwygText($label, $text);
     }
