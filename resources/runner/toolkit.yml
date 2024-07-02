@@ -185,6 +185,6 @@ commands:
     - task: run
       command: toolkit:lint-twig
     - task: run
-      command: testing:unused-behat
-    - task: run
       command: toolkit:lint-features
+    - task: run
+      command: testing:unused-behat

@@ -55,7 +55,7 @@ grumphp:
     # https://github.com/phpro/grumphp/blob/v2.x/doc/tasks/shell.md
     gherkin_lint:
       scripts:
-          - scripts/grumphp/gherkinlint
+          - ["-c", "./vendor/bin/gherkinlint lint tests/features"]
       triggered_by: [ feature ]
       metadata:
         task: shell
