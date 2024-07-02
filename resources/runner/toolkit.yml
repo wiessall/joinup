@@ -175,7 +175,7 @@ commands:
     - { task: exec, command: "${runner.bin_dir}/grumphp run --tasks=stylelint" }
   toolkit:lint-twig:
     - { task: exec, command: "${runner.bin_dir}/grumphp run --tasks=twigcsfixer" }
-  toolkit:lint-features:
+  toolkit:lint-gherkin:
     - { task: exec, command: "${runner.bin_dir}/grumphp run --tasks=gherkin_lint" }
 
   # Extra commands to run on Gitlab after qa-code-review.
@@ -185,6 +185,6 @@ commands:
     - task: run
       command: toolkit:lint-twig
     - task: run
-      command: toolkit:lint-features
+      command: toolkit:lint-gherkin
     - task: run
       command: testing:unused-behat
