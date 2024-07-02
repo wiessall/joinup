@@ -260,13 +260,13 @@ class SubscribeToCollectionForm extends FormBase {
     $codeOfConductComponents['code_of_conduct_lead'] = [
       '#type' => 'item',
       '#markup' => $this->t(
-        'To complete your application and send it for approval, we need to make sure you agree with our <a href=:code-of-conduct-url>%code-of-conduct-label</a>. This helps us maintain a safe and respectful environment for all our members.',
+        'To complete your application and send it for approval, we need to make sure you agree with our <a href=:code-of-conduct-url target="_blank">%code-of-conduct-label</a>. This helps us maintain a safe and respectful environment for all our members.',
         $codeOfConductArgs,
       ),
     ];
     $codeOfConductComponents['code_of_conduct_agreed'] = [
       '#type' => 'checkbox',
-      '#title' => $this->t('I have read and agree to the <a href=:code-of-conduct-url>%code-of-conduct-label</a>.', $codeOfConductArgs),
+      '#title' => $this->t('I have read and agree to the <a href=:code-of-conduct-url target="_blank">%code-of-conduct-label</a>.', $codeOfConductArgs),
       '#return_value' => $codeOfConduct->getRevisionId(),
       '#required' => TRUE,
       '#required_error' => $this->t('You must agree to the <a href=:code-of-conduct-url>%code-of-conduct-label</a> before asking for membership.', $codeOfConductArgs),
