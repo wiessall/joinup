@@ -11,6 +11,8 @@ Feature: Sitewide forum
       | New discussion           | published | 2023-03-03 | 2023-03-03 | 2023-03-03   |
       | Quite new discussion     | published | 2024-05-05 | 2024-05-05 | 2024-05-05   |
       | Very new discussion      | published | 2024-06-06 | 2024-06-06 | 2024-06-06   |
+      | Archived discussion      | published |            |            |              |
+    And the workflow state of the "Archived discussion" content is set to "archived"
     And user:
       | Username | Commenter |
     And comments:
