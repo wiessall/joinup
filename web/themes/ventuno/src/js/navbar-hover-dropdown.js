@@ -39,18 +39,18 @@
           }, 100); // Set timeout delay.
         }
       }
-      var eventListOver = ["mouseover", "focusin"];
-      var eventListOut = ["mouseleave", "focusout"];
+      const eventListOver = ["mouseover", "focusin"];
+      const eventListOut = ["mouseleave", "focusout"];
       once(
         "navbar-hover-dropdown",
         "#main-navbar .nav-item.d-xl-inline-block.dropdown"
       ).forEach((li) => {
-        for(event of eventListOver) {
+        for (event of eventListOver) {
           li.addEventListener(event, () => {
             toggleDropdown(li, true);
           });
         }
-        for(event of eventListOut) {
+        for (event of eventListOut) {
           li.addEventListener(event, () => {
             toggleDropdown(li, false);
           });
