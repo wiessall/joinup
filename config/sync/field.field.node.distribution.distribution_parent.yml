@@ -5,7 +5,6 @@ dependencies:
   config:
     - field.storage.node.distribution_parent
     - node.type.distribution
-    - rdf_entity.rdfentity.asset_release
     - rdf_entity.rdfentity.solution
 id: node.distribution.distribution_parent
 field_name: distribution_parent
@@ -21,11 +20,10 @@ settings:
   handler: 'default:rdf_entity'
   handler_settings:
     target_bundles:
-      asset_release: asset_release
       solution: solution
     sort:
       field: _none
       direction: ASC
     auto_create: false
-    auto_create_bundle: asset_release
+    auto_create_bundle: null
 field_type: entity_reference
