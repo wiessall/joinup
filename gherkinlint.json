@@ -1,6 +1,8 @@
 {
   "rules": {
-    "no-duplicate-tags": {},
+    "no-homogenous-tags": {
+      "enabled": false
+    },
     "no-empty-file": {
       "enabled": false
     },
