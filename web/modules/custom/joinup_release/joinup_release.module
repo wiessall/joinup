@@ -257,6 +257,14 @@ function joinup_release_form_node_release_form_alter(array &$form, FormStateInte
     unset($form['created']['#group']);
   }
 
+  // NodeTranslationHandler revokes access to the authored on field by default.
+  // We need to allow the facilitator to override this field.
+  if (isset($form['created']['#access']) && !$form['created']['#access']) {
+    $form['created']['#access'] = TRUE;
+  }
+
+  // Add a validator to ensure the authored on date is not in the future as it
+  // represents the release date of the solution's release.
   $form['#validate'][] = '_joinup_release_edit_date_validate';
 }
 
