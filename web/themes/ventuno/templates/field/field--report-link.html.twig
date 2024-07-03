@@ -14,5 +14,5 @@
 %}
 
 {% for item in items %}
-  <a{{ attributes.addClass(classes) }} href="{{ item.content["#url"] }}">{{ item.content["#title"] }}</a>
+  <a{{ attributes.addClass(classes) }} href="{{ item.content['#url'] }}">{{ item.content['#title'] }}</a>
 {% endfor %}

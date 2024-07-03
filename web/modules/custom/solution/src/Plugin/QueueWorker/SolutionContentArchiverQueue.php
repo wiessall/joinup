@@ -12,14 +12,16 @@ use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Queue\QueueWorkerBase;
 use Drupal\Core\Session\AccountSwitcherInterface;
-use Drupal\asset_distribution\Entity\AssetDistributionInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\asset_release\Entity\AssetReleaseInterface;
 use Drupal\custom_page\Entity\CustomPageInterface;
 use Drupal\joinup_community_content\Entity\CommunityContentInterface;
+use Drupal\joinup_distribution\Entity\DistributionInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_notification\NotificationEvents;
 use Drupal\joinup_workflow\ArchivableEntityInterface;
 use Drupal\joinup_workflow\WorkflowHelperInterface;
+use Drupal\joinup_workflow\WorkflowStateChangeMessageTrait;
 use Drupal\solution\Entity\SolutionInterface;
 use Drupal\solution\Transition;
 use Drupal\sparql_entity_storage\SparqlEntityStorageInterface;
@@ -38,11 +40,14 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class SolutionContentArchiverQueue extends QueueWorkerBase implements ContainerFactoryPluginInterface {
 
+  use StringTranslationTrait;
+  use WorkflowStateChangeMessageTrait;
+
   private const ENTITY_CLASSES_TO_ARCHIVE = [
     AssetReleaseInterface::class,
-    AssetDistributionInterface::class,
     CustomPageInterface::class,
     CommunityContentInterface::class,
+    DistributionInterface::class,
   ];
 
   /**
@@ -200,10 +205,27 @@ class SolutionContentArchiverQueue extends QueueWorkerBase implements ContainerF
       }
 
       $entity->skip_notification = TRUE;
-      match ($transition) {
-        Transition::ARCHIVE => $this->workflowHelper->archiveEntity($entity),
-        Transition::UNARCIVE => $this->workflowHelper->unarchiveEntity($entity),
-      };
+      try {
+        $newState = match ($transition) {
+          Transition::ARCHIVE => 'archived',
+          Transition::UNARCIVE =>'published',
+        };
+        $revisionLogMessage = $this->workflowStateChangeRevisionLogMessage(
+          $entity,
+          $newState,
+          $this->t("'@plugin-id' queue", [
+            '@plugin-id' => $this->getPluginId(),
+          ])
+        );
+        match ($transition) {
+          // '@plugin-id' queue
+          Transition::ARCHIVE => $this->workflowHelper->archiveEntity($entity, $revisionLogMessage),
+          Transition::UNARCIVE => $this->workflowHelper->unarchiveEntity($entity, $revisionLogMessage),
+        };
+      }
+      catch (\Exception $exception) {
+        $this->logger->warning($exception->getMessage());
+      }
     }
 
     if ($transition === Transition::ARCHIVE) {

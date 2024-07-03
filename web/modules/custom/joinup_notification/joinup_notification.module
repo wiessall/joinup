@@ -9,9 +9,9 @@ declare(strict_types=1);
 
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Render\Markup;
-use Drupal\asset_distribution\Entity\AssetDistributionInterface;
-use Drupal\asset_distribution\Exception\MissingDistributionParentException;
 use Drupal\joinup_community_content\Entity\CommunityContentInterface;
+use Drupal\joinup_distribution\Entity\DistributionInterface;
+use Drupal\joinup_distribution\Exception\MissingDistributionParentException;
 use Drupal\joinup_group\Entity\GroupContentInterface;
 use Drupal\joinup_group\Exception\MissingGroupException;
 use Drupal\joinup_notification\Event\NotificationEvent;
@@ -25,7 +25,7 @@ use Drupal\symfony_mailer_lite\Plugin\Mail\SymfonyMailer;
  * Sends notifications when community content is updated.
  */
 function joinup_notification_node_insert(EntityInterface $entity): void {
-  if ($entity instanceof CommunityContentInterface) {
+  if ($entity instanceof CommunityContentInterface || $entity instanceof DistributionInterface) {
     joinup_notification_dispatch_notification('create', NotificationEvents::COMMUNITY_CONTENT_CREATE, $entity);
   }
 }
@@ -46,7 +46,7 @@ function joinup_notification_node_insert(EntityInterface $entity): void {
  * @see https://www.drupal.org/node/2833084
  */
 function joinup_notification_node_presave(EntityInterface $entity): void {
-  if ($entity->isNew() || !$entity instanceof CommunityContentInterface) {
+  if ($entity->isNew() || !($entity instanceof CommunityContentInterface || $entity instanceof DistributionInterface)) {
     return;
   }
   $entity->field_state_initial_value = $entity->get('field_state')->first()->getOriginalId();
@@ -81,8 +81,14 @@ function joinup_notification_rdf_entity_presave(RdfInterface $entity): void {
  * Sends notifications when community content is updated.
  */
 function joinup_notification_node_update(EntityInterface $entity): void {
-  if ($entity instanceof CommunityContentInterface) {
-    joinup_notification_dispatch_notification('update', NotificationEvents::COMMUNITY_CONTENT_UPDATE, $entity);
+  $event_name = match(TRUE) {
+    $entity instanceof CommunityContentInterface => NotificationEvents::COMMUNITY_CONTENT_UPDATE,
+    // @todo To be unified in ISAICP-8839.
+    $entity instanceof DistributionInterface => NotificationEvents::RDF_ENTITY_CRUD,
+    default => NULL,
+  };
+  if ($event_name) {
+    joinup_notification_dispatch_notification('update', $event_name, $entity);
   }
 }
 
@@ -95,8 +101,24 @@ function joinup_notification_node_update(EntityInterface $entity): void {
  * into the delete hooks which can lead into false data e.g. wrong state.
  */
 function joinup_notification_node_predelete(EntityInterface $entity): void {
-  if ($entity instanceof CommunityContentInterface) {
-    joinup_notification_dispatch_notification('delete', NotificationEvents::COMMUNITY_CONTENT_DELETE, $entity);
+  // Avoid sending notifications when orphaned distributions are deleted.
+  if ($entity instanceof DistributionInterface) {
+    try {
+      $entity->getParent();
+    }
+    catch (MissingDistributionParentException $e) {
+      return;
+    }
+  }
+
+  $event_name = match(TRUE) {
+    $entity instanceof CommunityContentInterface => NotificationEvents::COMMUNITY_CONTENT_DELETE,
+    // @todo To be unified in ISAICP-8839.
+    $entity instanceof DistributionInterface => NotificationEvents::RDF_ENTITY_CRUD,
+    default => NULL,
+  };
+  if ($event_name) {
+    joinup_notification_dispatch_notification('delete', $event_name, $entity);
   }
 }
 
@@ -119,15 +141,6 @@ function joinup_notification_rdf_entity_update(EntityInterface $entity): void {
  */
 function joinup_notification_rdf_entity_predelete(EntityInterface $entity): void {
   // Avoid sending notifications e.g. when orphaned entities are deleted.
-  if ($entity instanceof AssetDistributionInterface) {
-    try {
-      $entity->getParent();
-    }
-    catch (MissingDistributionParentException $e) {
-      return;
-    }
-  }
-
   if ($entity instanceof GroupContentInterface) {
     try {
       $entity->getGroup();

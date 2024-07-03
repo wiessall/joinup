@@ -122,7 +122,7 @@ class Solution extends Rdf implements SolutionInterface {
    * {@inheritdoc}
    */
   public function getDistributionIds(): array {
-    return $this->getReferencedEntityIds('field_is_distribution')['rdf_entity'] ?? [];
+    return \Drupal::getContainer()->get('joinup_distribution.parent_distribution_resolver')->getParentsDistributionIds($this->id());
   }
 
   /**
@@ -208,15 +208,24 @@ class Solution extends Rdf implements SolutionInterface {
     $ids = NestedArray::mergeDeep($ids, [
       'rdf_entity' => [
         'asset_release' => array_keys($releases),
-        'asset_distribution' => $this->getDistributionIds(),
       ],
     ]);
     foreach ($releases as $release) {
       $ids = NestedArray::mergeDeep($ids, [
-        'rdf_entity' => [
-          'asset_distribution' => $release->getDistributionIds(),
+        'node' => [
+          'distribution' => $release->getDistributionIds(),
         ],
       ]);
+    }
+
+    if (!empty($ids['node']['distribution'])) {
+      // Depending on the code, sometimes the IDs will be string and sometimes
+      // they will be integers. We need to make sure they are all integers.
+      // For example, in
+      // `\Drupal\joinup_group\Entity\GroupTrait::getNodeGroupContent`, the code
+      // iterates over the IDs and re-assigns them to the array. This converts
+      // the numeric strings into integers.
+      $ids['node']['distribution'] = array_unique(array_map('intval', $ids['node']['distribution']));
     }
     return $ids;
   }

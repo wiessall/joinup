@@ -36,10 +36,6 @@ class UriIdConversion implements EventSubscriberInterface {
    */
   private const MAP = [
     'eif_wrapper:recommendation:term',
-    'rdf_entity:asset_distribution:field_ad_format',
-    'rdf_entity:asset_distribution:field_ad_licence',
-    'rdf_entity:asset_distribution:field_ad_repr_technique',
-    'rdf_entity:asset_distribution:field_status',
     'rdf_entity:asset_release:field_isr_contact_information',
     'rdf_entity:asset_release:field_isr_language',
     'rdf_entity:asset_release:field_isr_solution_type',
@@ -52,6 +48,7 @@ class UriIdConversion implements EventSubscriberInterface {
     'rdf_entity:solution:field_is_actor',
     'rdf_entity:solution:field_is_business_process',
     'rdf_entity:solution:field_is_contact_information',
+    'rdf_entity:solution:field_is_eif_recommendation',
     'rdf_entity:solution:field_is_language',
     'rdf_entity:solution:field_is_product_type',
     'rdf_entity:solution:field_is_solution_type',
@@ -123,7 +120,7 @@ class UriIdConversion implements EventSubscriberInterface {
    */
   public function onLoad(InboundValueEvent $event): void {
     if ($this->acceptsConversion($event)) {
-      $event->setValue($this->getId($event->getValue()));
+      $event->setValue($this->getId($event));
     }
   }
 
@@ -142,10 +139,10 @@ class UriIdConversion implements EventSubscriberInterface {
   }
 
   /**
-   * Returns and caches an entity ID give its corresponding URI.
+   * Returns and caches an entity ID given its corresponding URI.
    *
-   * @param string $uri
-   *   The URI.
+   * @param \Drupal\sparql_entity_storage\Event\InboundValueEvent $event
+   *   The event.
    *
    * @return string|int|null
    *   The entity ID.
@@ -153,7 +150,8 @@ class UriIdConversion implements EventSubscriberInterface {
    * @throws \InvalidArgumentException
    *   If there's no entity mapped with the passed URI.
    */
-  protected function getId(string $uri): string|int|null {
+  protected function getId(InboundValueEvent $event): string|int|null {
+    $uri = $event->getValue();
     if (!isset($this->uriToId[$uri])) {
       $result = $this->database->select('rdf_sync_uri')
         ->fields('rdf_sync_uri', ['entity_type', 'entity_id'])
@@ -162,7 +160,6 @@ class UriIdConversion implements EventSubscriberInterface {
         ->fetch(\PDO::FETCH_NUM);
       if (!$result) {
         $this->logger->error("Can't find a mapped entity with URI $uri");
-        $result = [NULL, NULL];
       }
       else {
         $this->idToURI[$result[0]][$result[1]] = $uri;

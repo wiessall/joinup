@@ -17,8 +17,10 @@ dependencies:
     - media.type.image
     - media.type.video
     - meta_entity.type.eif_perspective
+    - node.type.contact_information
     - node.type.custom_page
     - node.type.discussion
+    - meta_entity.type.eif_perspective
     - node.type.document
     - node.type.event
     - node.type.news
@@ -26,6 +28,7 @@ dependencies:
   module:
     - comment
     - contextual
+    - eif
     - email_confirmer
     - entity_legal
     - filter
@@ -42,7 +45,6 @@ dependencies:
     - rdf_entity
     - search_api_autocomplete
     - sitewide_alert
-    - sparql_endpoint
     - state_machine_permissions
     - system
     - tour
@@ -151,7 +153,6 @@ permissions:
   - 'propose collection rdf entity'
   - 'revert all revisions'
   - 'skip comment approval'
-  - 'sparql endpoint query'
   - 'unflag bookmark_node'
   - 'unflag bookmark_rdf_entity'
   - 'unflag like_node'

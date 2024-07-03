@@ -155,7 +155,7 @@ Feature: Notification test for the collection transitions.
     # Test the 'reject archival' operation.
     And I go to the homepage of the "NC to reject archival" collection
     And I click "Edit" in the "Entity actions" region
-    # @todo: This should change into a separate transition.
+    # @todo This should change into a separate transition.
     And I press "Publish"
     Then I should see the error message "This action requires you to fill in the motivation field"
     When I fill in "Motivation" with "It will not be archived."
