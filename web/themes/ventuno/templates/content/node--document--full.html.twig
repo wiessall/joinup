@@ -6,7 +6,7 @@
 #}
 <div class="pt-3 pb-5 border-bottom">
   {# Render every field which isn't rendered below. #}
-  {{ content|without('group_categorisation', 'group_attachment', 'report', 'share_link', 'field_shared_in', 'field_comments') }}
+  {{ content|without('group_categorisation', 'group_attachment', 'report', 'share_link', 'field_shared_in', 'field_comments', 'field_short_title') }}
 </div>
 {% if content.group_categorisation|render|striptags %}
   <div class="pb-5 border-bottom my-5">

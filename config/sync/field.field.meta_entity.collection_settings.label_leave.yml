@@ -1,0 +1,19 @@
+uuid: 73a14375-02d5-48e0-a135-40d1bda02707
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.meta_entity.label_leave
+    - meta_entity.type.collection_settings
+id: meta_entity.collection_settings.label_leave
+field_name: label_leave
+entity_type: meta_entity
+bundle: collection_settings
+label: 'Leave label'
+description: 'It overwrites the default label for the "Leave this collection" button'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

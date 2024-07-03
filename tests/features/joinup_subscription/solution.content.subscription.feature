@@ -57,7 +57,7 @@ Feature: Subscribing to community content in solutions
     And releases:
       | title       | release number | release notes   | is version of        | state     |
       | Spring 2021 | 2021/03        | Blooming pears. | Products of Bulgaria | published |
-    And distributions:
+    And distribution content:
       | title                 | description    | parent               | state     |
       # A distribution linked directly to the solution.
       | Full list of products | There are many | Products of Bulgaria | published |

@@ -60,6 +60,7 @@ Feature: User authentication
       | node/add/contact_information                        |
       | node/add/custom_page                                |
       | node/add/discussion                                 |
+      | node/add/distribution                               |
       | node/add/document                                   |
       | node/add/event                                      |
       | node/add/glossary                                   |
@@ -70,7 +71,6 @@ Feature: User authentication
       | propose/collection                                  |
       | propose/solution                                    |
       | rdf_entity/add                                      |
-      | rdf_entity/add/asset_distribution                   |
       | rdf_entity/add/asset_release                        |
       | rdf_entity/add/collection                           |
       | rdf_entity/add/solution                             |
@@ -143,6 +143,7 @@ Feature: User authentication
       | node/add/contact_information                        |
       | node/add/custom_page                                |
       | node/add/discussion                                 |
+      | node/add/distribution                               |
       | node/add/document                                   |
       | node/add/event                                      |
       | node/add/glossary                                   |
@@ -152,7 +153,6 @@ Feature: User authentication
       | outdated-content-threshold                          |
       | propose/solution                                    |
       | rdf_entity/add                                      |
-      | rdf_entity/add/asset_distribution                   |
       | rdf_entity/add/asset_release                        |
       | rdf_entity/add/collection                           |
       | rdf_entity/add/solution                             |
@@ -226,6 +226,7 @@ Feature: User authentication
       | node/add/contact_information                        |
       | node/add/custom_page                                |
       | node/add/discussion                                 |
+      | node/add/distribution                               |
       | node/add/document                                   |
       | node/add/event                                      |
       | node/add/glossary                                   |
@@ -233,7 +234,6 @@ Feature: User authentication
       | node/add/owner                                      |
       | propose/solution                                    |
       | rdf_entity/add                                      |
-      | rdf_entity/add/asset_distribution                   |
       | rdf_entity/add/asset_release                        |
       | rdf_entity/add/collection                           |
       | rdf_entity/add/solution                             |
@@ -270,13 +270,13 @@ Feature: User authentication
       | node/add/contact_information               |
       | node/add/custom_page                       |
       | node/add/discussion                        |
+      | node/add/distribution                      |
       | node/add/document                          |
       | node/add/event                             |
       | node/add/licence                           |
       | node/add/news                              |
       | node/add/owner                             |
       | rdf_entity/add                             |
-      | rdf_entity/add/asset_distribution          |
       | rdf_entity/add/asset_release               |
       | rdf_entity/add/collection                  |
       | rdf_entity/add/solution                    |

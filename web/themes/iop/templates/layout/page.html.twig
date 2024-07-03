@@ -42,14 +42,14 @@
 #}
 {% set node_attributes = create_attribute() %}
 <div{{ node_attributes.addClass(node_classes, 'layout-container') }}>
-  {% include '@ventuno/parts/header.html.twig' with {
+  {{ include('@ventuno/parts/header.html.twig', {
     user_name: user_name,
     landing_page_links: landing_page_links,
     profile_links: profile_links,
     anonymous_links: anonymous_links,
     hide_searchbar: hide_searchbar,
     searchbar: page.search_bar,
-  } %}
+  }) }}
   {% if page.header %}
     {{ page.header }}
   {% endif %}
@@ -91,7 +91,7 @@
   </div>
 
   {% if page.footer %}
-    {% include '@ventuno/parts/footer.html.twig' %}
+    {{ include('@ventuno/parts/footer.html.twig') }}
   {% endif %}
 
 </div>
