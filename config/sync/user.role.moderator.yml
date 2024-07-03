@@ -22,6 +22,7 @@ dependencies:
     - node.type.glossary
     - node.type.licence
     - node.type.owner
+    - node.type.release
     - taxonomy.vocabulary.legal_type
   module:
     - comment
