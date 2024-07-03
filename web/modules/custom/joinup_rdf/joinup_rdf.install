@@ -40,7 +40,7 @@ function joinup_rdf_requirements(string $phase): array {
 /**
  * Re run user_update_10000.
  */
-function joinup_rdf_update_111000(): void {
+function joinup_rdf_update_111001(): void {
   require_once DRUPAL_ROOT . '/core/modules/user/user.install';
   user_update_10000();
 }
@@ -48,7 +48,7 @@ function joinup_rdf_update_111000(): void {
 /**
  * Enable the joinup_release module.
  */
-function joinup_rdf_update_111001(): void {
+function joinup_rdf_update_111002(): void {
   // Install the joinup_release module because the joinup_distribution services
   // have some dependency on the services provided by the joinup_release module.
   \Drupal::service('module_installer')->install(['joinup_release', 'joinup_solution']);
