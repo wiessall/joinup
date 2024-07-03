@@ -56,7 +56,7 @@
 
         {% if content.paragraph_carousel_action|render|striptags|trim is not empty %}
           {% set link = content.paragraph_carousel_action[0] %}
-          {% set link = link|merge({'#options': {'attributes': {'class': ['btn', 'btn-secondary', 'mb-3', 'ms-3']}}}) %}
+          {% set link = link|merge({'#options': {attributes: {class: ['btn', 'btn-secondary', 'mb-3', 'ms-3']}}}) %}
           {{ link }}
         {% endif %}
         <div class="glide__arrows mb-3 ms-3" data-glide-el="controls">

@@ -143,6 +143,10 @@ interface WorkflowHelperInterface {
    *
    * @param \Drupal\Core\Entity\EntityInterface $entity
    *   The entity to un-archive.
+   * @param string|\Stringable|\Drupal\Core\StringTranslation\TranslatableMarkup|null $revisionLogMessage
+   *   An optional message for the new revision. A default "Unrchived by user N"
+   *   message is used if omitted. Use empty string to not set any revision log
+   *   message.
    *
    * @return \Drupal\Core\Entity\EntityInterface
    *   The unarchived entity.
@@ -150,7 +154,7 @@ interface WorkflowHelperInterface {
    * @throws \Exception
    *   If the entity cannot be unarchived.
    */
-  public function unarchiveEntity(EntityInterface $entity): EntityInterface;
+  public function unarchiveEntity(EntityInterface $entity, string|Stringable|TranslatableMarkup|null $revisionLogMessage = NULL): EntityInterface;
 
   /**
    * Checks whether the user can not un-archive content.

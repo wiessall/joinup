@@ -18,11 +18,11 @@ dependencies:
     - node.type.licence
     - taxonomy.vocabulary.legal_type
   module:
-    - asset_distribution
     - comment
     - contact_form
     - custom_page
     - dashboard
+    - eif
     - entity_legal
     - entityqueue
     - field_permissions
