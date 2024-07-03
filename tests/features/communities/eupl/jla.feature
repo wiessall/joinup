@@ -443,7 +443,6 @@ Feature:
     # Test that the list is also cleared since it is stored in a different property.
     When I add the "Apache-2.0" licence to the compare list
     And I add the "GPL-2.0+" licence to the compare list
-    And I wait for animations to finish
     And I press "Compare"
     Then the url should match "/licence/compare/Apache-2.0;GPL-2.0\+"
 
