@@ -184,7 +184,7 @@ Feature: "Add custom page" visibility options.
 
     # Collapse again the list.
     When I press "Show less"
-    And I wait for animations to finish
+    And I wait up to 5 seconds for Bootstrap collapse animations to finish
     Then the "linus.jpeg" link in the Content region should not be visible
     And the "Show more" button in the Content region should be visible
     But I should not see the button "Show less" in the Content region

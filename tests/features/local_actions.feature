@@ -36,15 +36,14 @@ Feature:
     When I click "Translate" in the "Entity actions" region
     Then I should see the link "View" in the "Entity actions" region
 
-    Given distribution:
-      | title  | Test distribution |
-      | parent | Test release      |
-      | state  | published         |
+    Given distribution content:
+      | title             | parent       | state     |
+      | Test distribution | Test release | published |
     When I go to the "Test distribution" distribution
     Then I should not see the link "View" in the "Entity actions" region
     And I should not see the link "Manage content"
     And I should not see the link "Moderate content"
-    When I click "Translate" in the "Entity actions" region
+    When I click "Metadata" in the "Entity actions" region
     Then I should see the link "View" in the "Entity actions" region
 
     # TODO: Re-enable this test in ISAICP-8556.

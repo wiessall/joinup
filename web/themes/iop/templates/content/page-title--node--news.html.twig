@@ -15,7 +15,7 @@
 {% extends '@iop/content/page-title.html.twig' %}
 {% block url_more %}
   {{ attach_library('iop/call-to-action') }}
-  {% set url_more = url_more|merge({'#attributes': {'class': [
+  {% set url_more = url_more|merge({'#attributes': {class: [
     'call-to-action',
     'flex-shrink-0',
     'h3',

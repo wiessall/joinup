@@ -60,7 +60,7 @@
 {{ attach_library('ventuno/searchpage') }}
 
 <div class="layout-container">
-  {% include '@ventuno/parts/header.html.twig' with {
+  {{ include('@ventuno/parts/header.html.twig', {
     user_name: user_name,
     landing_page_links: landing_page_links,
     profile_links: profile_links,
@@ -68,7 +68,7 @@
     hide_searchbar: hide_searchbar,
     searchbar: page.search_bar,
     bookmark_link: bookmark_link,
-  } %}
+  }) }}
   {% if page.header %}
     {{ page.header }}
   {% endif %}
@@ -103,7 +103,7 @@
   </main>
 
   {% if page.footer %}
-    {% include '@ventuno/parts/footer.html.twig' %}
+    {{ include('@ventuno/parts/footer.html.twig') }}
   {% endif %}
 
 </div>{# /.layout-container #}

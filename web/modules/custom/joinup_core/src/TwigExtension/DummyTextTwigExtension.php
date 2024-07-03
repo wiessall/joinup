@@ -9,6 +9,9 @@ use Twig\TwigFunction;
 
 /**
  * A class providing Drupal Twig dummy text.
+ *
+ * Prevent errors in twigc by implementing the missing get_dummy_text function,
+ * which is referenced in BCL component templates.
  */
 class DummyTextTwigExtension extends AbstractExtension {
 
