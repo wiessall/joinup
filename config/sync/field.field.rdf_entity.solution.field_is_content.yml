@@ -54,7 +54,6 @@ settings:
       release: view_mode_tile
       video: view_mode_tile
     'entity:rdf_entity':
-      asset_release: view_mode_tile
       collection: view_mode_tile
       licence: default
       solution: view_mode_tile

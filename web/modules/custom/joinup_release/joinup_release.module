@@ -242,8 +242,5 @@ function joinup_release_sparql_bundle_load_alter(array $entity_values, array &$b
     if (isset($entity_values['http://purl.org/dc/terms/isVersionOf'])) {
       $bundles = array_diff($bundles, ['solution']);
     }
-    else {
-      $bundles = array_diff($bundles, ['asset_release']);
-    }
   }
 }
