@@ -150,12 +150,9 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
       | description | No Colors                |
       | state       | published                |
       | collection  | Collection With Glossary |
-    And release:
-      | title          | Summer of 69          |
-      | release number | 6.22                  |
-      | release notes  | Everything was Colors |
-      | is version of  | Under The Bridge      |
-      | state          | published             |
+    And release content:
+      | title        | release number | release notes         | is version of    | state     |
+      | Summer of 69 | 6.22           | Everything was Colors | Under The Bridge | published |
     And distribution content:
       | title   | description          | parent           | access url         | state     |
       | Distro1 | Alphabet & CLR       | Under The Bridge | http://example.com | published |
@@ -456,9 +453,9 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
       | collection               | user | roles       |
       | Collection With Glossary | fac  | facilitator |
     And glossary content:
-      | title                | synonyms | summary          | definition | collection               |
-      | battle               | evermore | battle summary   | def        | Collection With Glossary |
-      | another battle       |          | battle 2 summary | def        | Collection With Glossary |
+      | title          | synonyms | summary          | definition | collection               |
+      | battle         | evermore | battle summary   | def        | Collection With Glossary |
+      | another battle |          | battle 2 summary | def        | Collection With Glossary |
 
     When I am logged in as auth
     And I am on "/collection/collection-glossary/glossary_export?page&_format=csv"
@@ -467,8 +464,8 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
     When I click "Glossary"
     And I click "B"
     Then the content received from clicking the link "Download CSV" contains the following strings:
-      | Title,Synonym,Definition             |
-      | battle,evermore,"battle summary"     |
+      | Title,Synonym,Definition         |
+      | battle,evermore,"battle summary" |
     And the content received from clicking the link "Download CSV" does not contain the following strings:
       | "another battle",,"battle 2 summary" |
 
