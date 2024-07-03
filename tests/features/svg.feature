@@ -1,4 +1,4 @@
-@api @uploadFiles:error.svg,simple.svg
+@api
 Feature: Test SVG attachments.
 
   Background:
@@ -12,7 +12,7 @@ Feature: Test SVG attachments.
       | title | logo     | abstract | description | content creation         | moderation | topic             | owner       | contact information | state     |
       | SVG   | logo.png | Test     | Test        | facilitators and authors | yes        | Supplier exchange | SVG company | SVG contact         | published |
 
-  @javascript
+  @javascript @uploadFiles:error.svg,simple.svg
   Scenario: Edit a collection wysiwyg modal should close.
     When I am logged in as a facilitator of the "SVG" collection
     And I go to the edit form of the "SVG" collection
@@ -40,6 +40,7 @@ Feature: Test SVG attachments.
     Then the response should not contain "This image has been removed. For security reasons, only images from the local domain are allowed."
     But the response should contain "sites/default/files/media/image/simple.svg"
 
+  @uploadFiles:error.svg,simple.svg
   Scenario: SVG logos appear in the tiles.
     When I am logged in as a facilitator of the "SVG" collection
     And I go to the homepage of the "SVG" collection
