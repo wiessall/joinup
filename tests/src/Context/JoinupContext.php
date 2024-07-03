@@ -1404,11 +1404,12 @@ class JoinupContext extends RawDrupalContext {
     $this->scrollElementIntoView($element);
 
     $linkElement = $element->findLink($link);
-    if (!$linkElement) {
+    $linkElementAriaLabel = $element->find('xpath', '//a[@aria-label=contains(text(), "' . $link . '")]');
+    if (!$linkElement && !$linkElementAriaLabel) {
       throw new \Exception("The link '$link' was not found in the tile '$heading'.");
     }
 
-    $linkElement->click();
+    $linkElement ? $linkElement->click() : $linkElementAriaLabel->click();
   }
 
   /**
