@@ -9,9 +9,7 @@ declare(strict_types=1);
 
 use Drupal\joinup_taxonomy\Entity\MappedTerm;
 use Drupal\node\Entity\Node;
-use Drupal\pathauto\PathautoState;
 use Drupal\search_api\Entity\Index;
-use Drupal\sparql_entity_storage\UriEncoder;
 
 /**
  * Disable RDF Sync for the deployment.
