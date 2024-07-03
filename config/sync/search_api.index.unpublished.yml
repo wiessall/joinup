@@ -51,15 +51,42 @@ third_party_settings:
         requireFieldMatch: false
         snippets: 3
         fragsize: 0
+    mlt:
+      mintf: 1
+      mindf: 1
+      maxdf: 0
+      maxdfpct: 0
+      minwl: 0
+      maxwl: 0
+      maxqt: 100
+      maxntp: 2000
+      boost: false
+      interestingTerms: none
     term_modifiers:
       slop: 10000000
       fuzzy: 2
+      fuzzy_analyzer: true
     advanced:
       index_prefix: ''
+      collection: ''
+      timezone: ''
     multilingual:
       limit_to_content_language: false
       include_language_independent: true
-      specific_languages: {  }
+      use_language_undefined_as_fallback_language: false
+      specific_languages:
+        cs: '0'
+        da: '0'
+        nl: '0'
+        en: '0'
+        et: '0'
+        fr: '0'
+        de: '0'
+        el: '0'
+        it: '0'
+        sl: '0'
+        es: '0'
+      use_universal_collation: false
 id: unpublished
 name: 'Unpublished entities index'
 description: ''
@@ -123,10 +150,9 @@ field_settings:
     configuration:
       type: union
       fields:
+        - 'entity:node/is_version_of'
         - 'entity:node/og_audience'
         - 'entity:rdf_entity/collection'
-        - 'entity:rdf_entity/field_isr_is_version_of'
-        - 'entity:rdf_entity/og_audience'
   field_ar_abstract:
     label: Abstract
     datasource_id: 'entity:rdf_entity'
@@ -322,7 +348,6 @@ field_settings:
         - 'entity:node/field_state'
         - 'entity:rdf_entity/field_ar_state'
         - 'entity:rdf_entity/field_is_state'
-        - 'entity:rdf_entity/field_isr_state'
   sticky:
     label: 'Sticky at top of lists'
     datasource_id: 'entity:node'
@@ -361,6 +386,7 @@ datasource_settings:
         - event
         - glossary
         - news
+        - release
         - video
     languages:
       default: true
@@ -369,11 +395,8 @@ datasource_settings:
     bundles:
       default: false
       selected:
-        - asset_release
         - collection
-        - licence
         - solution
-        - spdx_licence
     languages:
       default: true
       selected: {  }
