@@ -17,7 +17,7 @@ id: node.release.spatial_coverage
 field_name: spatial_coverage
 entity_type: node
 bundle: release
-label: 'Spatial coverage'
+label: 'Geographical coverage'
 description: ''
 required: false
 translatable: false
