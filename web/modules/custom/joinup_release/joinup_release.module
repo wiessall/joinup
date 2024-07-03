@@ -71,8 +71,8 @@ function joinup_release_entity_bundle_info_alter(array &$bundles): void {
 function joinup_release_entity_bundle_field_info_alter(array &$fields, EntityTypeInterface $entity_type, string $bundle): void {
   /** @var \Drupal\Core\Field\FieldConfigInterface[] $fields */
   // Make sure a release's title and version number is unique in its solution.
-  if ($entity_type->id() == 'node' && $bundle == 'release' && !empty($fields['label'])) {
-    $fields['label']->addConstraint('UniqueReleaseTitleVersion', []);
+  if ($entity_type->id() == 'node' && $bundle == 'release' && !empty($fields['title'])) {
+    $fields['title']->addConstraint('UniqueReleaseTitleVersion', []);
   }
 }
 

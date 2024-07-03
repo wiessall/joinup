@@ -57,7 +57,7 @@ Feature: "Add release" visibility options.
     # The entity is new, so the current workflow state should not be shown.
     # @todo Remove this when the revision reference to solutions is implemented.
     #   Revisit this when all changes are done.
-    And the following fields should not be present "Description, Logo, Solution type, Contact information, Included asset, Translation, Distribution, Current workflow state, Langcode, Motivation"
+    And the following fields should not be present "Solution logo, Solution data, Distribution, Current workflow state, Langcode, Motivation"
 
     When I press "Publish"
     Then I should see the following error messages:
