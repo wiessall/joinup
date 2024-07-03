@@ -1,0 +1,28 @@
+uuid: 8b1f4de1-8315-42a8-ac2b-107820634f30
+langcode: en
+status: true
+dependencies:
+  module:
+    - field_permissions
+    - file
+    - file_url
+    - node
+third_party_settings:
+  field_permissions:
+    permission_type: public
+id: node.documentation
+field_name: documentation
+entity_type: node
+type: file_url
+settings:
+  target_type: file
+  display_field: false
+  display_default: false
+  uri_scheme: public
+module: file_url
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

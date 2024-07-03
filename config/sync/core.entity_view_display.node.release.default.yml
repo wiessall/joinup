@@ -3,8 +3,8 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.field.node.release.access_url
     - field.field.node.release.body
+    - field.field.node.release.documentation
     - field.field.node.release.field_keywords
     - field.field.node.release.field_state
     - field.field.node.release.is_version_of
@@ -25,20 +25,20 @@ targetEntityType: node
 bundle: release
 mode: default
 content:
-  access_url:
-    type: file_url_default
-    label: above
-    settings:
-      mode: link
-    third_party_settings: {  }
-    weight: 2
-    region: content
   body:
     type: text_default
     label: hidden
     settings: {  }
     third_party_settings: {  }
     weight: 0
+    region: content
+  documentation:
+    type: file_url_default
+    label: above
+    settings:
+      mode: link
+    third_party_settings: {  }
+    weight: 3
     region: content
   field_state:
     type: list_default
