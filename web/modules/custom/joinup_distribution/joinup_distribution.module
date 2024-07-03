@@ -68,7 +68,9 @@ function joinup_distribution_entity_bundle_field_info(EntityTypeInterface $entit
     ->setSetting('target_type', 'node')
     ->setSetting('handler', 'default')
     ->setSetting('handler_settings', [
-      'target_bundles' => ['distribution'],
+      'target_bundles' => [
+        'distribution' => 'distribution',
+      ],
       'sort' => [
         'field' => 'created',
         'direction' => 'DESC',
