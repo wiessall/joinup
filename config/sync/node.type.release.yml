@@ -26,9 +26,10 @@ third_party_settings:
         value:
           predicate: 'http://purl.org/dc/terms/modified'
           type: 'xsd:dateTime'
-label_singular: null
-label_plural: null
-label_count: null
+label_singular: release
+label_plural: releases
+label_count:
+  no_count_capitalize: !!binary UmVsZWFzZQpSZWxlYXNlcw==
 name: Release
 type: release
 description: 'A release represents a version of a solution in time.'

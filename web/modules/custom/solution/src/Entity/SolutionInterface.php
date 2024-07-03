@@ -41,10 +41,10 @@ interface SolutionInterface extends RdfInterface, CollectionContentInterface, En
   /**
    * Returns the latest release ID of this solution, if any.
    *
-   * @return string|null
+   * @return int|null
    *   The latest release ID of this solution, if any.
    */
-  public function getLatestReleaseId(): ?string;
+  public function getLatestReleaseId(): ?int;
 
   /**
    * Returns the latest release of this solution, if any.

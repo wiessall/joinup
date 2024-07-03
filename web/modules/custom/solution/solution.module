@@ -84,7 +84,7 @@ function solution_entity_bundle_field_info_alter(&$fields, EntityTypeInterface $
     ->setDescription(t('The latest release, if any.'))
     ->setTargetEntityTypeId('rdf_entity')
     ->setTargetBundle('solution')
-    ->setSetting('target_type', 'rdf_entity')
+    ->setSetting('target_type', 'node')
     ->setComputed(TRUE)
     ->setReadOnly(TRUE)
     ->setCardinality(1)

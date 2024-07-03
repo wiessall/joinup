@@ -128,7 +128,7 @@ class Solution extends Rdf implements SolutionInterface {
   /**
    * {@inheritdoc}
    */
-  public function getLatestReleaseId(): ?string {
+  public function getLatestReleaseId(): ?int {
     return $this->get('latest_release')->target_id;
   }
 

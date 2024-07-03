@@ -9,8 +9,8 @@ use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Routing\Access\AccessInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\JoinupGroupHelper;
-use Drupal\joinup_release\Entity\ReleaseInterface;
 use Symfony\Component\Routing\Route;
 
 /**
@@ -74,32 +74,32 @@ class JoinupGroupAccessCheck implements AccessInterface {
     // If the node from the route is a release, we might be in a route that is
     // related to a distribution, thus, still we need to check for the solution
     // instead.
-    $release = $route_match->getParameter('node');
-    if ($release instanceof ReleaseInterface) {
-      $release = $release->getGroup();
+    //
+    // @todo Change this in ISAICP-8572 to check for nodes but also handle
+    //   collections and add a new todo for the collections ticket.
+    if ($release = $route_match->getParameter('node')) {
+      $group = $release->getGroup();
+    }
+    else {
+      $group = $route_match->getParameter('rdf_entity');
     }
 
     // If the route wasn't configured to upcast the parameter, try to load an
     // RDF entity given its ID.
-    if (!$release instanceof ReleaseInterface) {
-      if ($release) {
-        $release = $this->entityTypeManager->getStorage('node')->load($release);
-      }
-      if (!$release) {
-        // If the {rdf_entity} route parameter is missed or is not an RDF
-        // entity, looks like we have a bug.
-        throw new \Exception("The {node} route parameter is missed or is not an RDF entity.");
-      }
+    if (!$group instanceof GroupInterface) {
+      // If the {rdf_entity} route parameter is missed or is not an RDF
+      // entity, looks like we have a bug.
+      throw new \Exception("The {rdf_entity} route parameter is missed or is not an RDF entity.");
     }
-    $bundle = $release->bundle();
+    $bundle = $group->bundle();
 
     $allow_access =
       ($requirement === 'TRUE' && isset(JoinupGroupHelper::GROUP_BUNDLES[$bundle])) ||
       ($requirement === 'FALSE' && !isset(JoinupGroupHelper::GROUP_BUNDLES[$bundle])) ||
       (isset(JoinupGroupHelper::GROUP_BUNDLES[$requirement]) && $bundle === JoinupGroupHelper::GROUP_BUNDLES[$requirement]);
 
-    /** @var \Drupal\joinup_workflow\ArchivableEntityInterface $release */
-    $allow_access = $allow_access && !$release->isArchived();
+    /** @var \Drupal\joinup_workflow\ArchivableEntityInterface $group */
+    $allow_access = $allow_access && !$group->isArchived();
 
     return $allow_access ? AccessResult::allowed() : AccessResult::forbidden();
   }
