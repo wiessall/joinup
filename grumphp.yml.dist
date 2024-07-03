@@ -74,4 +74,4 @@ grumphp:
     # On git pre-push, often initiating a full scan, omit phpstan which is slow.
     # See scripts/git/pre_push.
     git_pre_push:
-      tasks: [ composer, phpcs, phpmd, lint-css, lint-js, lint-php, lint-twig, lint-yaml ]
+      tasks: [ composer, phpcs, phpmd, lint-css, lint-gherkin, lint-js, lint-php, lint-twig, lint-yaml ]
