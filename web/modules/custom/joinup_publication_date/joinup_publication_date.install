@@ -37,7 +37,7 @@ function joinup_publication_date_update_111001(&$sandbox): void {
 /**
  * Add Publication date to RDF entities.
  */
-function joinup_publication_date_update_110901(&$sandbox): void {
+function joinup_publication_date_update_111002(&$sandbox): void {
   /** @var \Drupal\sparql_entity_storage\Driver\Database\sparql\ConnectionInterface $sparql */
   $sparql = \Drupal::service('sparql.endpoint');
 
