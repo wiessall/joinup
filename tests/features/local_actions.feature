@@ -25,10 +25,9 @@ Feature:
     When I click "Translate" in the "Entity actions" region
     Then I should see the link "View" in the "Entity actions" region
 
-    Given release:
-      | title         | Test release  |
-      | is version of | Test solution |
-      | state         | published     |
+    Given release content:
+      | title        | is version of | state     |
+      | Test release | Test solution | published |
     When I go to the "Test release" release
     Then I should not see the link "View" in the "Entity actions" region
     And I should not see the link "Manage content"
