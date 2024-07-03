@@ -165,18 +165,18 @@ commands:
     - { task: exec, command: "${runner.bin_dir}/grumphp run --tasks=phpmd" }
   toolkit:test-phpstan:
     - { task: exec, command: "${runner.bin_dir}/grumphp run --tasks=phpstan" }
-  toolkit:lint-php:
-    - { task: exec, command: "${runner.bin_dir}/grumphp run --tasks=phplint" }
-  toolkit:lint-js:
-    - { task: exec, command: "${runner.bin_dir}/grumphp run --tasks=eslint" }
-  toolkit:lint-yaml:
-    - { task: exec, command: "${runner.bin_dir}/grumphp run --tasks=yamllint" }
   toolkit:lint-css:
-    - { task: exec, command: "${runner.bin_dir}/grumphp run --tasks=stylelint" }
-  toolkit:lint-twig:
-    - { task: exec, command: "${runner.bin_dir}/grumphp run --tasks=twigcsfixer" }
+    - { task: exec, command: "${runner.bin_dir}/grumphp run --tasks=lint-css" }
   toolkit:lint-gherkin:
-    - { task: exec, command: "${runner.bin_dir}/grumphp run --tasks=gherkin_lint" }
+    - { task: exec, command: "${runner.bin_dir}/grumphp run --tasks=lint-gherkin" }
+  toolkit:lint-js:
+    - { task: exec, command: "${runner.bin_dir}/grumphp run --tasks=lint-js" }
+  toolkit:lint-php:
+    - { task: exec, command: "${runner.bin_dir}/grumphp run --tasks=lint-php" }
+  toolkit:lint-twig:
+    - { task: exec, command: "${runner.bin_dir}/grumphp run --tasks=lint-twig" }
+  toolkit:lint-yaml:
+    - { task: exec, command: "${runner.bin_dir}/grumphp run --tasks=lint-yaml" }
 
   # Extra commands to run on Gitlab after qa-code-review.
   toolkit:post-qa-code-review:
