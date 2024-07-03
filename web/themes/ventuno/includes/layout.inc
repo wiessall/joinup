@@ -75,9 +75,9 @@ function ventuno_preprocess_page(array &$variables): void {
   $pageManagerPage = $route_match->getParameter('page_manager_page');
   if (
     $pageManagerPage instanceof PageInterface &&
-    array_key_exists($pageManagerPage->id(), \Drupal::service('library.discovery')->getLibrariesByExtension('ventuno'))
+    array_key_exists("page_manager.{$pageManagerPage->id()}", \Drupal::service('library.discovery')->getLibrariesByExtension('ventuno'))
   ) {
-    $variables['#attached']['library'][] = "ventuno/{$pageManagerPage->id()}";
+    $variables['#attached']['library'][] = "ventuno/page_manager.{$pageManagerPage->id()}";
   }
 }
 
