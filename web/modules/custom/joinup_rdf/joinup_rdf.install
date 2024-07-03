@@ -46,9 +46,12 @@ function joinup_rdf_update_111001(): void {
 }
 
 /**
- * Enable the joinup_release module.
+ * Delete the asset_release RDF bundle. Enable joinup_release, joinup_solution.
  */
 function joinup_rdf_update_111002(): void {
+  // Delete the asset_release RDF bundle.
+  \Drupal::entityTypeManager()->getStorage('rdf_type')->load('asset_release')->delete();
+
   // Install the joinup_release module because the joinup_distribution services
   // have some dependency on the services provided by the joinup_release module.
   \Drupal::service('module_installer')->install(['joinup_release', 'joinup_solution']);
