@@ -71,13 +71,18 @@ function ventuno_preprocess_page(array &$variables): void {
     }
   }
 
-  // Add Page Manager page specific libraries if we have any.
   $pageManagerPage = $route_match->getParameter('page_manager_page');
-  if (
-    $pageManagerPage instanceof PageInterface &&
-    array_key_exists("page_manager.{$pageManagerPage->id()}", \Drupal::service('library.discovery')->getLibrariesByExtension('ventuno'))
-  ) {
-    $variables['#attached']['library'][] = "ventuno/page_manager.{$pageManagerPage->id()}";
+  $pageManagerPageId = $pageManagerPage instanceof PageInterface
+    ? $pageManagerPage->id()
+    : NULL;
+  if ($pageManagerPageId) {
+    // Indicate that the page is a page manager page.
+    $variables['page_manager']['id'] = $pageManagerPageId;
+
+    // Add Page Manager page specific libraries if we have any.
+    if (array_key_exists("page_manager.$pageManagerPageId", \Drupal::service('library.discovery')->getLibrariesByExtension('ventuno'))) {
+      $variables['#attached']['library'][] = "ventuno/page_manager.$pmid";
+    }
   }
 }
 
