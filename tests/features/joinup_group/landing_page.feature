@@ -6,7 +6,7 @@ Feature: Tests the group landing page customization.
   - As an anonymous, when I visit a group, I cannot set its landing page.
   - As a user, when I visit a group, I cannot set its landing page.
   - As a group member, when I visit a group, I cannot set its landing page.
-  - As a group facilitator, when I visit other group, I cannot its landing page.
+  - As a group facilitator, when I visit other group, I cannot set its landing page.
   - As a moderator, when I visit a group, I can set a landing page.
   """
   # This may be uncommented in ISAICP-7223.
