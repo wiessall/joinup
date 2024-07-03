@@ -9,11 +9,13 @@ declare(strict_types=1);
 
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\joinup_publication_date\Entity\EntityPublicationTimeInterface;
 use Drupal\joinup_release\Entity\Release;
 use Drupal\joinup_release\Entity\ReleaseInterface;
+use Drupal\joinup_release\SolutionFieldsFieldItemList;
 
 /**
  * Implements hook_entity_type_alter().
@@ -23,6 +25,34 @@ use Drupal\joinup_release\Entity\ReleaseInterface;
  */
 function joinup_release_entity_type_alter(array &$entity_types): void {
   $entity_types['rdf_entity']->setLinkTemplate('solution-releases', '/rdf_entity/{rdf_entity}/releases');
+}
+
+/**
+ * Implements hook_entity_bundle_field_info().
+ */
+function joinup_release_entity_bundle_field_info(EntityTypeInterface $entity_type, $bundle, array $base_field_definitions): array {
+  $fields = [];
+  if ($entity_type->id() !== 'node' || $bundle !== 'release') {
+    return $fields;
+  }
+
+  $fields['solution_logo'] = BaseFieldDefinition::create('image')
+    ->setLabel(t('Solution logo'))
+    ->setDescription(t('The logo of the solution this release belongs to.'))
+    ->setComputed(TRUE)
+    ->setReadOnly(TRUE)
+    ->setClass(SolutionFieldsFieldItemList::class)
+    // @todo Update this when the solution field is simplified in ISAICP-8573.
+    ->setSetting('target_field_name', 'field_is_logo')
+    ->setDisplayOptions('view', [
+      'label' => 'hidden',
+      'type' => 'image',
+      'weight' => 0,
+    ])
+    ->setDisplayConfigurable('form', FALSE)
+    ->setDisplayConfigurable('view', TRUE);
+
+  return $fields;
 }
 
 /**
@@ -207,7 +237,7 @@ function joinup_release_title_version_is_unique(ReleaseInterface $release, bool 
  * currently being skipped for the taxonomies.
  */
 function joinup_release_sparql_bundle_load_alter(array $entity_values, array &$bundles): void {
-  // @todo Remove this.
+  // @todo Remove this in ISAICP-8573.
   if (count($bundles) > 1 && in_array('solution', $bundles)) {
     if (isset($entity_values['http://purl.org/dc/terms/isVersionOf'])) {
       $bundles = array_diff($bundles, ['solution']);

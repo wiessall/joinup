@@ -33,8 +33,8 @@ Feature: "Add release" visibility options.
       | title          | description        | documentation | owner                | state     |
       | Release Test 1 | test description 1 | text.pdf      | Organisation example | published |
     And release content:
-      | title | is version of  | release number | status    | state     | creation date       | published at        |
-      | v1.0  | Release Test 1 | 1.0            | Completed | published | 2014-08-30 23:59:00 | 2014-08-30 23:59:00 |
+      | title           | is version of  | release number | status    | state     | creation date       | published at        |
+      | Chasing shadows | Release Test 1 | 1.0            | Completed | published | 2014-08-30 23:59:00 | 2014-08-30 23:59:00 |
     Then I should have 1 release
 
     # Assert that the "Release" tiles are present and contain version, release date, label and bundle type.

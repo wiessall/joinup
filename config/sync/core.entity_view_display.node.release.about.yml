@@ -17,6 +17,7 @@ dependencies:
     - node.type.release
   module:
     - layout_builder
+    - svg_image
     - user
 third_party_settings:
   layout_builder:
@@ -32,6 +33,21 @@ content:
     label: above
     settings:
       link_to_entity: false
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  solution_logo:
+    type: image
+    label: hidden
+    settings:
+      image_link: ''
+      image_style: ''
+      image_loading:
+        attribute: lazy
+      svg_attributes:
+        width: null
+        height: null
+      svg_render_as_image: true
     third_party_settings: {  }
     weight: 0
     region: content

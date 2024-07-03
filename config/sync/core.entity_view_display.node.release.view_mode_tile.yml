@@ -18,6 +18,7 @@ dependencies:
   module:
     - joinup_html_stripper
     - layout_builder
+    - svg_image
     - template_suggestion
     - user
 third_party_settings:
@@ -48,6 +49,21 @@ content:
       template_suggestion:
         template_suggestion: ''
     weight: 1
+    region: content
+  solution_logo:
+    type: image
+    label: hidden
+    settings:
+      image_link: ''
+      image_style: ''
+      image_loading:
+        attribute: lazy
+      svg_attributes:
+        width: null
+        height: null
+      svg_render_as_image: true
+    third_party_settings: {  }
+    weight: 0
     region: content
 hidden:
   access_url: true

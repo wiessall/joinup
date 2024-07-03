@@ -17,6 +17,7 @@ dependencies:
   module:
     - file_url
     - options
+    - svg_image
     - text
     - user
 id: node.release.default
@@ -45,6 +46,21 @@ content:
     settings: {  }
     third_party_settings: {  }
     weight: 1
+    region: content
+  solution_logo:
+    type: image
+    label: hidden
+    settings:
+      image_link: ''
+      image_style: ''
+      image_loading:
+        attribute: lazy
+      svg_attributes:
+        width: null
+        height: null
+      svg_render_as_image: true
+    third_party_settings: {  }
+    weight: 0
     region: content
 hidden:
   field_keywords: true
