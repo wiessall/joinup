@@ -21,6 +21,10 @@ third_party_settings:
         value:
           predicate: 'http://www.w3.org/2006/vcard/ns#fn'
           type: null
+label_singular: 'contact information entry'
+label_plural: 'contact information entries'
+label_count:
+  no_count_capitalize: !!binary Q29udGFjdCBpbmZvcm1hdGlvbiBlbnRyeQNDb250YWN0IGluZm9ybWF0aW9uIGVudHJpZXM=
 name: 'Contact information'
 type: contact_information
 description: null
@@ -28,7 +32,3 @@ help: null
 new_revision: false
 preview_mode: 0
 display_submitted: true
-label_singular: 'contact information entry'
-label_plural: 'contact information entries'
-label_count:
-  no_count_capitalize: !!binary Q29udGFjdCBpbmZvcm1hdGlvbiBlbnRyeQNDb250YWN0IGluZm9ybWF0aW9uIGVudHJpZXM=

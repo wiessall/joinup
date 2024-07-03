@@ -73,8 +73,8 @@ content:
     settings:
       timezone_override: ''
       format_type: date_only
-      separator: '-'
       from_to: start_date
+      separator: '-'
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
