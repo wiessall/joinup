@@ -1,4 +1,4 @@
-@api @group-f @javascript @uploadFiles:logo.png
+@api @group-f @javascript
 Feature:
   As a site builder of the site
   I need to be able to use "Webform" paragraph for content.
@@ -11,6 +11,7 @@ Feature:
       | Username   | E-mail                 | First name | Family name |
       | john.smith | john.smith@example.com | John       | Smith       |
 
+  @uploadFiles:logo.png
   Scenario: Add webform paragraph.
     Given the following webforms:
       | id           | title        | elements                                           |
