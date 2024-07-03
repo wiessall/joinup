@@ -14,7 +14,7 @@ use Drupal\joinup_distribution\Entity\DistributionInterface;
 use Drupal\joinup_release\Entity\ReleaseInterface;
 
 /**
- * Sets the current release as a context on asset_release routes.
+ * Sets the current release as a context on release routes.
  */
 class ReleaseRouteContext implements ContextProviderInterface {
 

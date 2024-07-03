@@ -24,12 +24,14 @@ class SolutionFieldsFieldItemList extends EntityReferenceFieldItemList {
 
     /** @var \Drupal\joinup_release\Entity\ReleaseInterface $release */
     $release = $this->getEntity();
-    if (!($solution = $release->getSolution())) {
+    if ($release->get('is_version_of')->isEmpty()) {
       $this->list = [];
-      // Avoid breaking pages of orphaned ore test releases.
+      // Avoid breaking pages of orphaned or test releases or administration
+      // pages that create sample entities, like the field UI.
       return;
     }
 
+    $solution = $release->getSolution();
     if (!$solution->hasField($field)) {
       throw new \RuntimeException(sprintf('The solution field "%s" does not exist.', $field));
     }

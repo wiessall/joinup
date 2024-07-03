@@ -570,11 +570,11 @@ processor_settings:
           event: 3.0
           licence: 0.0
           news: 5.0
+          release: 0.0
           video: 0.0
       'entity:rdf_entity':
         datasource_boost: 0.0
         bundle_boosts:
-          asset_release: 0.0
           collection: 21.0
           solution: 13.0
 tracker_settings:

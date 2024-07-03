@@ -257,9 +257,9 @@ display:
               event: default
               licence: default
               news: default
+              release: default
               video: default
             'entity:rdf_entity':
-              asset_release: default
               collection: default
               solution: default
             'entity:taxonomy_term':
