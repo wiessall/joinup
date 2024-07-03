@@ -705,9 +705,10 @@ class JoinupContext extends RawDrupalContext {
     // actual URI. Note that this fails if a URI is supplied for a collection or
     // solution in a Behat test. This is by design, the URIs are not exposed to
     // end users of the site so they should not be used in BDD scenarios.
-    if (!empty($node->{OgGroupAudienceHelperInterface::DEFAULT_FIELD})) {
-      $entity = $this->getEntityByLabel('rdf_entity', $node->{OgGroupAudienceHelperInterface::DEFAULT_FIELD});
-      $node->{OgGroupAudienceHelperInterface::DEFAULT_FIELD} = $entity->id();
+    if (!empty($node->{OgGroupAudienceHelperInterface::DEFAULT_FIELD}) || !empty($node->is_version_of)) {
+      $field = !empty($node->{OgGroupAudienceHelperInterface::DEFAULT_FIELD}) ? OgGroupAudienceHelperInterface::DEFAULT_FIELD : 'is_version_of';
+      $entity = $this->getEntityByLabel('rdf_entity', $node->$field);
+      $node->$field = $entity->id();
     }
 
     // Replace the human readable publication statuses with the boolean values
@@ -888,6 +889,16 @@ class JoinupContext extends RawDrupalContext {
         'title' => 'title',
         'uri' => 'uri',
         'publication date' => 'published_at',
+      ],
+      'release' => [
+        'is version of' => 'is_version_of',
+        'title' => 'title',
+        'release number' => 'release_number',
+        'status' => 'process_status',
+        'state' => 'field_state',
+        'creation date' => 'created',
+        'published at' => 'published_at',
+        'release notes' => 'body',
       ],
       'shared' => [
         'collection' => OgGroupAudienceHelperInterface::DEFAULT_FIELD,
