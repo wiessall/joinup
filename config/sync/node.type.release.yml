@@ -7,9 +7,8 @@ dependencies:
     - rdf_sync
 third_party_settings:
   menu_ui:
-    available_menus:
-      - main
-    parent: 'main:'
+    available_menus: {  }
+    parent: ''
   rdf_sync:
     type: 'http://www.w3.org/ns/dcat#Dataset'
     uri_plugin: joinup_po_namespace
@@ -38,4 +37,4 @@ description: 'A release represents a version of a solution in time.'
 help: ''
 new_revision: true
 preview_mode: 0
-display_submitted: true
+display_submitted: false
