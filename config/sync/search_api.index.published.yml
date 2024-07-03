@@ -241,10 +241,9 @@ field_settings:
     configuration:
       type: union
       fields:
+        - 'entity:node/is_version_of'
         - 'entity:node/og_audience'
         - 'entity:rdf_entity/collection'
-        - 'entity:rdf_entity/field_isr_is_version_of'
-        - 'entity:rdf_entity/og_audience'
   entity_status:
     label: Status
     property_path: aggregated_field
