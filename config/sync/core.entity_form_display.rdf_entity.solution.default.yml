@@ -3,7 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
-    - core.entity_form_mode.rdf_entity.inline
+    - core.entity_form_mode.node.inline
     - field.field.rdf_entity.solution.field_is_abstract
     - field.field.rdf_entity.solution.field_is_affiliations_requests
     - field.field.rdf_entity.solution.field_is_contact_information
@@ -11,7 +11,6 @@ dependencies:
     - field.field.rdf_entity.solution.field_is_content_creation
     - field.field.rdf_entity.solution.field_is_description
     - field.field.rdf_entity.solution.field_is_documentation
-    - field.field.rdf_entity.solution.field_is_has_version
     - field.field.rdf_entity.solution.field_is_included_asset
     - field.field.rdf_entity.solution.field_is_issue_tracker
     - field.field.rdf_entity.solution.field_is_landing_page
@@ -334,7 +333,6 @@ content:
 hidden:
   created: true
   field_is_affiliations_requests: true
-  field_is_has_version: true
   field_is_included_asset: true
   field_is_issue_tracker: true
   field_is_shared_in: true

@@ -4,30 +4,26 @@ status: true
 dependencies:
   config:
     - field.storage.node.body
+    - field.storage.node.description
     - field.storage.node.field_event_agenda
     - field.storage.node.field_event_date
     - field.storage.node.field_location
     - field.storage.node.field_news_headline
     - field.storage.node.field_organisation
     - field.storage.node.field_paragraphs_body
-    - field.storage.node.field_paragraphs_body
     - field.storage.node.field_scope
     - field.storage.node.field_shared_in
     - field.storage.node.field_short_title
     - field.storage.paragraph.field_body
-    - field.storage.rdf_entity.field_is_contact_information
-    - field.storage.rdf_entity.field_is_description
+    - field.storage.rdf_entity.field_ar_abstract
+    - field.storage.rdf_entity.field_ar_description
     - field.storage.rdf_entity.field_is_description
     - field.storage.rdf_entity.field_is_solution_type
-    - field.storage.rdf_entity.field_is_solution_type
-    - field.storage.rdf_entity.field_isr_description
-    - field.storage.rdf_entity.field_isr_description
-    - field.storage.rdf_entity.field_isr_release_notes
-    - field.storage.rdf_entity.field_isr_release_notes
     - search_api.server.joinup
   module:
     - custom_page
     - joinup_distribution
+    - joinup_flag
     - joinup_search
     - node
     - paragraphs
@@ -179,22 +175,6 @@ field_settings:
     dependencies:
       config:
         - field.storage.rdf_entity.field_is_solution_type
-  field_isr_description:
-    label: 'Description » Processed text'
-    datasource_id: 'entity:rdf_entity'
-    property_path: 'field_isr_description:processed'
-    type: text
-    dependencies:
-      config:
-        - field.storage.rdf_entity.field_isr_description
-  field_isr_release_notes:
-    label: 'Release notes » Processed text'
-    datasource_id: 'entity:rdf_entity'
-    property_path: 'field_isr_release_notes:processed'
-    type: text
-    dependencies:
-      config:
-        - field.storage.rdf_entity.field_isr_release_notes
   field_location:
     label: Location
     datasource_id: 'entity:node'
@@ -415,8 +395,6 @@ processor_settings:
       - field_ar_description
       - field_event_agenda
       - field_is_description
-      - field_isr_description
-      - field_isr_release_notes
     title: true
     alt: true
     tags:
@@ -437,8 +415,6 @@ processor_settings:
       - field_ar_description
       - field_event_agenda
       - field_is_description
-      - field_isr_description
-      - field_isr_release_notes
       - field_location
       - field_news_headline
       - field_organisation
@@ -451,6 +427,7 @@ processor_settings:
   index_distribution_data:
     weights:
       preprocess_index: -50
+  joinup_entity_bundle: {  }
   joinup_entity_latest_revision: {  }
   joinup_entity_status:
     inverse: true
@@ -471,8 +448,6 @@ processor_settings:
       - field_ar_description
       - field_event_agenda
       - field_is_description
-      - field_isr_description
-      - field_isr_release_notes
       - field_location
       - field_news_headline
       - field_scope
@@ -528,8 +503,6 @@ processor_settings:
       - field_ar_description
       - field_event_agenda
       - field_is_description
-      - field_isr_description
-      - field_isr_release_notes
       - field_location
       - field_news_headline
       - field_organisation
@@ -554,8 +527,6 @@ processor_settings:
       - field_ar_description
       - field_event_agenda
       - field_is_description
-      - field_isr_description
-      - field_isr_release_notes
       - field_location
       - field_news_headline
       - field_organisation

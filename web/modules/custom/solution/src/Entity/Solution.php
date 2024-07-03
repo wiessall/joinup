@@ -107,7 +107,13 @@ class Solution extends Rdf implements SolutionInterface {
    * {@inheritdoc}
    */
   public function getReleaseIds(): array {
-    return $this->getReferencedEntityIds('field_is_has_version')['node'] ?? [];
+    // @todo This should probably be moved to a service.
+    return $this->entityTypeManager()->getStorage('node')
+      ->getQuery()
+      ->condition('type', 'release')
+      ->condition('is_version_of', $this->id())
+      ->sort('created', 'ASC')
+      ->execute();
   }
 
   /**
