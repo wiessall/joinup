@@ -1,9 +1,9 @@
-uuid: d8a0f7c0-47bc-4e2f-b99a-81df02ea0bd3
+uuid: b19f38e1-0261-471e-b393-8280298a7282
 langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.node.access_url
+    - field.storage.node.documentation
     - node.type.release
   module:
     - file_url
@@ -12,13 +12,13 @@ third_party_settings:
   rdf_sync:
     target_id:
       predicate: 'http://xmlns.com/foaf/0.1/page'
-      type: 'xsd:string'
-id: node.release.access_url
-field_name: access_url
+      type: resource
+id: node.release.documentation
+field_name: documentation
 entity_type: node
 bundle: release
 label: Documentation
-description: 'If the file(s) exist in an external server, you can provide the URL here directly. You can alternatively host your distribution in Joinup by using the Distribution file field above.'
+description: ''
 required: false
 translatable: false
 default_value: {  }

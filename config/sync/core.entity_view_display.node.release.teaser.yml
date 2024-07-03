@@ -4,8 +4,8 @@ status: false
 dependencies:
   config:
     - core.entity_view_mode.node.teaser
-    - field.field.node.release.access_url
     - field.field.node.release.body
+    - field.field.node.release.documentation
     - field.field.node.release.field_keywords
     - field.field.node.release.field_state
     - field.field.node.release.is_version_of
@@ -17,6 +17,7 @@ dependencies:
     - node.type.release
   module:
     - link
+    - svg_image
     - text
     - user
 id: node.release.teaser
@@ -49,8 +50,23 @@ content:
     third_party_settings: {  }
     weight: 50
     region: content
+  solution_logo:
+    type: image
+    label: hidden
+    settings:
+      image_link: ''
+      image_style: ''
+      image_loading:
+        attribute: lazy
+      svg_attributes:
+        width: null
+        height: null
+      svg_render_as_image: true
+    third_party_settings: {  }
+    weight: 0
+    region: content
 hidden:
-  access_url: true
+  documentation: true
   field_keywords: true
   field_state: true
   is_version_of: true

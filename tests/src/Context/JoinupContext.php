@@ -898,6 +898,7 @@ class JoinupContext extends RawDrupalContext {
         'state' => 'field_state',
         'creation date' => 'created',
         'published at' => 'published_at',
+        'documentation' => 'documentation',
         'release notes' => 'body',
       ],
       'shared' => [
