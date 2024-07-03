@@ -102,12 +102,11 @@ class SolutionReleasesAndDistributionsFieldItemList extends EntityReferenceField
     $storage = $entityTypeManager->getStorage('node');
     /** @var \Drupal\solution\Entity\SolutionInterface $solution */
     $solution = $this->getEntity();
-    $graph_id = $solution->get('graph')->target_id;
 
     // Retrieve all releases and distributions for this solution.
     $ids = array_values($storage
       ->getQuery()
-      ->graphs([$graph_id])
+      ->accessCheck(FALSE)
       ->condition('type', 'release')
       ->condition('is_version_of', $solution->id())
       ->sort('created', 'DESC')
