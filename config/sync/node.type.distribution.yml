@@ -28,6 +28,10 @@ third_party_settings:
         value:
           predicate: 'http://purl.org/dc/terms/issued'
           type: 'xsd:dateTime'
+label_singular: distribution
+label_plural: distributions
+label_count:
+  no_count_capitalize: !!binary RGlzdHJpYnV0aW9uA0Rpc3RyaWJ1dGlvbnM=
 name: Distribution
 type: distribution
 description: 'Typically a downloadable computer file but it could also be a paper document or API response'
@@ -35,7 +39,3 @@ help: null
 new_revision: true
 preview_mode: 0
 display_submitted: false
-label_singular: distribution
-label_plural: distributions
-label_count:
-  no_count_capitalize: !!binary RGlzdHJpYnV0aW9uA0Rpc3RyaWJ1dGlvbnM=

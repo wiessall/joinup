@@ -10,6 +10,10 @@ third_party_settings:
     parent: ''
 _core:
   default_config_hash: DP6UxdvaCvuYejE_k_ZYkWxA8_rCs4tWJgFUGJdYVso
+label_singular: document
+label_plural: documents
+label_count:
+  no_count_capitalize: !!binary RG9jdW1lbnQDRG9jdW1lbnRz
 name: Document
 type: document
 description: null
@@ -17,7 +21,3 @@ help: null
 new_revision: true
 preview_mode: 0
 display_submitted: false
-label_singular: document
-label_plural: documents
-label_count:
-  no_count_capitalize: !!binary RG9jdW1lbnQDRG9jdW1lbnRz
