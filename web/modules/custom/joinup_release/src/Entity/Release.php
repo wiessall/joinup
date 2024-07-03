@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_release\Entity;
 
+use Drupal\file\FileInterface;
 use Drupal\joinup_bundle_class\DescriptionTrait;
 use Drupal\joinup_bundle_class\JoinupBundleClassFieldAccessTrait;
 use Drupal\joinup_bundle_class\LogoTrait;
@@ -79,11 +80,7 @@ class Release extends Node implements ReleaseInterface {
    * {@inheritdoc}
    */
   public function getLogoFieldName(): string {
-    // @todo Override the
-    //   \Drupal\joinup_bundle_class\LogoTrait::getLogoAsRenderArray
-    //   in order to fetch the solution's logo *OR* create a computed field
-    //   (preferred) and use it here.
-    return 'field_is_logo';
+    return 'solution_logo';
   }
 
   /**

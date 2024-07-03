@@ -76,5 +76,6 @@ hidden:
   report: true
   search_api_excerpt: true
   solution_data: true
+  solution_logo: true
   spatial_coverage: true
   uri: true
