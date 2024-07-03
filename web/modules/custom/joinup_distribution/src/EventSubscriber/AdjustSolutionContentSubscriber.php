@@ -50,7 +50,8 @@ class AdjustSolutionContentSubscriber implements EventSubscriberInterface {
     // If we don't have any releases associated to this solution, it also means
     // that any distribution available is directly associated. We don't need any
     // further filtering on the results.
-    if (!$entity->get('field_is_has_version')->count()) {
+    /** @var \Drupal\solution\Entity\SolutionInterface $entity */
+    if (empty($entity->getReleaseIds())) {
       return;
     }
 
