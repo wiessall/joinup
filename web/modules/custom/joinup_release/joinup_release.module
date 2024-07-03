@@ -8,6 +8,7 @@
 declare(strict_types=1);
 
 use Drupal\Core\Cache\Cache;
+use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Form\FormStateInterface;
@@ -242,5 +243,39 @@ function joinup_release_sparql_bundle_load_alter(array $entity_values, array &$b
     if (isset($entity_values['http://purl.org/dc/terms/isVersionOf'])) {
       $bundles = array_diff($bundles, ['solution']);
     }
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function joinup_release_form_node_release_form_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
+  // Node form by default forces some fields into the a details container and
+  // this is hardcoded. Remove the grouping of the created field as it is not
+  // in the specifications to show grouped.
+  if (isset($form['created']['#group'])) {
+    unset($form['created']['#group']);
+  }
+
+  $form['#validate'][] = '_joinup_release_edit_date_validate';
+}
+
+/**
+ * Validate publish time date.
+ *
+ * @param array $form
+ *   The form array.
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ *   The form state.
+ */
+function _joinup_release_edit_date_validate(array &$form, FormStateInterface $form_state): void {
+  $dt_now = new DateTime();
+  $values = $form_state->getValues();
+  $date_value = $values['created'][0]['value'];
+  if ($date_value && !$date_value instanceof DrupalDateTime) {
+    $date_value = new DateTime($date_value['date']);
+  }
+  if ($date_value && ($date_value->format('c') > $dt_now->format('c'))) {
+    $form_state->setErrorByName('created', t('Your "Authored on" field date is greater than @date', ['@date' => $dt_now->format('c')]));
   }
 }
