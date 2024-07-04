@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup_distribution\Plugin\Validation\Constraint;
 
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\joinup_distribution\Entity\DistributionInterface;
 use Drupal\joinup_distribution\ParentDistributionResolverInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -25,9 +26,12 @@ class UniqueDistributionTitleValidator extends ConstraintValidator implements Co
    *
    * @var \Drupal\joinup_distribution\ParentDistributionResolverInterface $parentDistributionResolver
    *   The parent distribution resolver service.
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
+   *   The entity type manager.
    */
   public function __construct(
     protected ParentDistributionResolverInterface $parentDistributionResolver,
+    protected EntityTypeManagerInterface $entityTypeManager,
   ) {}
 
   /**
@@ -36,6 +40,7 @@ class UniqueDistributionTitleValidator extends ConstraintValidator implements Co
   public static function create(ContainerInterface $container): self {
     return new static(
       $container->get('joinup_distribution.parent_distribution_resolver'),
+      $container->get('entity_type.manager'),
     );
   }
 
@@ -52,17 +57,16 @@ class UniqueDistributionTitleValidator extends ConstraintValidator implements Co
       return;
     }
 
-    /** @var \Drupal\rdf_entity\RdfInterface $rdf_entity */
-    if (!$rdf_entity = $entity->distribution_parent->entity) {
+    if (!($parent = $entity->getParent())) {
       return;
     }
 
-    $distributions = $this->parentDistributionResolver->getParentsDistributions($rdf_entity->id());
+    $distributions = $this->parentDistributionResolver->getParentsDistributions($parent->id());
     foreach ($distributions as $distribution) {
       if ($distribution->label() === $entity->label() && $distribution->id() !== $entity->id()) {
         $this->context->addViolation($constraint->message, [
           '%title' => $entity->label(),
-          '%bundle' => strtolower($rdf_entity->get('rid')->entity->label()),
+          '%bundle' => strtolower($parent->get('rid')->entity->label()),
         ]);
 
         return;

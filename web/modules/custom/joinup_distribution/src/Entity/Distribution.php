@@ -77,6 +77,7 @@ class Distribution extends Node implements DistributionInterface {
           else {
             // The parent is a release, thus, get the solution instead.
             $this->set(OgGroupAudienceHelperInterface::DEFAULT_FIELD, $parent->getGroup()->id());
+            $this->set('distribution_parent', $parent->getUri());
           }
         }
       }
@@ -92,7 +93,7 @@ class Distribution extends Node implements DistributionInterface {
     parent::postSave($storage, $update);
 
     // Re-index the parent of the distribution.
-    if ($parent = $this->get('distribution_parent')?->entity) {
+    if ($parent = $this->getParent()) {
       $this->reIndexDistributionParent($parent);
     }
 
@@ -152,7 +153,14 @@ class Distribution extends Node implements DistributionInterface {
    * {@inheritdoc}
    */
   public function getParent(): DistributionsParentInterface {
-    $parent = $this->get('distribution_parent')?->entity;
+    $parentId = $this->get('distribution_parent')->target_id;
+    // @todo Remove this check on ISAICP-8572 and simply use `->entity` above.
+    if (is_numeric($parentId)) {
+      $parent = $this->entityTypeManager()->getStorage('node')->load($parentId);
+    }
+    else {
+      $parent = $this->get('distribution_parent')->entity;
+    }
 
     /** @var \Drupal\joinup_distribution\Entity\DistributionsParentInterface $parent */
     if (!$parent instanceof DistributionsParentInterface) {
