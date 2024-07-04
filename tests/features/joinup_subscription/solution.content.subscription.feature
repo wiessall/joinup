@@ -54,7 +54,7 @@ Feature: Subscribing to community content in solutions
       | title    | body                        | solution             | state     | author |
       | Rose oil | A widely used essential oil | Products of Bulgaria | published | bisera |
       | Burgas   | City of dreams              | Cities of Bulgaria   | published | hristo |
-    And releases:
+    And release content:
       | title       | release number | release notes   | is version of        | state     |
       | Spring 2021 | 2021/03        | Blooming pears. | Products of Bulgaria | published |
     And distribution content:

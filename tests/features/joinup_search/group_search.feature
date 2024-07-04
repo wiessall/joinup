@@ -47,7 +47,7 @@ Feature: Search inside groups
       | title     | body                             | collection          | solution             | state     |
       | Resources | Here are some interesting links. | Chalet construction |                      | published |
       | Geography | A collection of height maps.     |                     | Inclined foundations | published |
-    And releases:
+    And release content:
       | title     | release number | release notes              | is version of        | state     |
       | Pre-alpha | 0.0-alpha0     | Only works on flat ground. | Inclined foundations | published |
     And distribution content:

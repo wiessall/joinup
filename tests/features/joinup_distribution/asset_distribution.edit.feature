@@ -20,7 +20,7 @@ Feature: Asset distribution editing.
       | title | description                         | deprecated |
       | LGPL  | The LGPL more permisssive than GPL. | yes        |
     And release content:
-      | title                 | release number | description         | is version of |
+      | title                 | release number | release notes       | is version of |
       | Asset release example | C3PO           | Release description | Solution A    |
     And distribution content:
       | title                      | description        | licence | access url | parent                | state     | publication date | modification date |

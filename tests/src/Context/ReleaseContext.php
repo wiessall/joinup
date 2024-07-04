@@ -6,6 +6,7 @@ namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
+use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
 use Drupal\joinup\Traits\EntityReferenceTrait;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\FileTrait;
@@ -40,40 +41,25 @@ class ReleaseContext extends RawDrupalContext {
   }
 
   /**
-   * Creates a number of releases with data provided in a table.
+   * Handles release specific fields.
    *
-   * @todo This method should be converted to a beforeNodeScenario.
+   * @param \Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope $scope
+   *   The scope object.
    *
-   * Fields title, release number and release notes are required.
-   *
-   * @param \Behat\Gherkin\Node\TableNode $release_table
-   *   The release data.
-   *
-   * @throws \Exception
-   *   Thrown when a column name is incorrect.
-   *
-   * @Given (the following )releases:
+   * @BeforeNodeCreate
    */
-  public function givenAssetReleases(TableNode $release_table): void {
-    $aliases = self::releaseFieldAliases();
+  public function massageFieldsBeforeNodeCreate(BeforeNodeCreateScope $scope): void {
+    if ($scope->getEntity()->type !== 'release') {
+      return;
+    }
 
-    foreach ($release_table->getColumnsHash() as $release) {
-      $values = [];
-      // Replace the column aliases with the actual field names.
-      foreach ($release as $key => $value) {
-        if (array_key_exists($key, $aliases)) {
-          $values[$aliases[$key]] = $value;
+    if (!empty($node->documentation)) {
+      foreach ($node->documentation as &$filename) {
+        if (empty($filename)) {
+          continue;
         }
-        else {
-          throw new \Exception("Unknown column '$key' in release table.");
-        }
-      }
 
-      $values = $this->convertEntityReferencesValues('rdf_entity', 'release', $this->parseRdfEntityFields($values));
-      if (!empty($values['field_isr_documentation'])) {
-        foreach ($values['field_isr_documentation'] as &$filename) {
-          $filename = [$this->createFile($filename)->id()];
-        }
+        $filename = [$this->createFile($filename)->id()];
       }
     }
   }
@@ -106,38 +92,6 @@ class ReleaseContext extends RawDrupalContext {
    */
   public function assertReleaseCount(int $number): void {
     $this->assertEntityCount('node', 'release', $number);
-  }
-
-  /**
-   * Field alias mapping.
-   *
-   * @return array
-   *   Mapping.
-   */
-  protected static function releaseFieldAliases(): array {
-    // Mapping alias - field name.
-    return [
-      // @todo Move this to the JoinupContext. Or keep it here. But take the
-      //   referenced solution into account. Revisit this once all changes are
-      //   done.
-      'uri' => 'uri',
-      'title' => 'title',
-      'contact information' => 'field_isr_contact_information',
-      'creation date' => 'created',
-      'is version of' => 'field_isr_is_version_of',
-      'keywords' => 'field_keywords',
-      'language' => 'field_isr_language',
-      'modification date' => 'changed',
-      'owner' => 'field_isr_owner',
-      'release number' => 'field_isr_release_number',
-      'release notes' => 'field_isr_release_notes',
-      'related solutions' => 'field_isr_related_solutions',
-      'solution type' => 'field_isr_solution_type',
-      'spatial coverage' => 'field_spatial_coverage',
-      'status' => 'field_status',
-      'translation' => 'field_isr_translation',
-      'state' => 'field_isr_state',
-    ];
   }
 
   /**

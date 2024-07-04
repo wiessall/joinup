@@ -15,8 +15,8 @@ Feature: Add distribution through the UI
       | description | Some reusable random description |
       | state       | published                        |
     And release content:
-      | title | description | release number | creation date    | is version of          | status    | state     |
-      | title | description | 1.0.0          | 2019-11-19 20:45 | Solution random x name | Completed | published |
+      | title                | release notes | release number | creation date    | is version of          | status    | state     |
+      | Authoritarian Alpaca | description   | 1.0.0          | 2019-11-19 20:45 | Solution random x name | Completed | published |
     And licence content:
       | title              | description                                              | deprecated |
       | WTFPL              | The WTFPL is a rather permissive licence                 | no         |
@@ -152,7 +152,7 @@ Feature: Add distribution through the UI
       | description | Affected by temperature |
       | state       | published               |
     And release content:
-      | title | description          | is version of       |
+      | title | release notes        | is version of       |
       | 1.0.0 | First public release | Solubility of gases |
 
     # Distributions should have a unique title within a single release.
