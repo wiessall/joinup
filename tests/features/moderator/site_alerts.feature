@@ -1,9 +1,10 @@
-@api @group-d @javascript
+@api @group-d
 Feature: Site alerts
   In order to announce scheduled downtime
   As a moderator
   I want to be able to display a site wide alert
 
+  @javascript
   Scenario: Show a site wide alert and hide it again
     # Create a site wide alert as a moderator.
     Given I am logged in as a moderator

@@ -1,9 +1,10 @@
-@api @group-h @javascript
+@api @group-h
 Feature: Fill Page URL field in Technical problem / bug report on contact form
   As anonymous user
   In order to avoid the Page URL value containing the domain
   I want the domain to be removed from the input if I enter it
 
+  @javascript
   Scenario: The domain is automatically removed from Page URL field if user inputs it.
     Given I am not logged in
     Then I go to the contact form
@@ -34,6 +35,7 @@ Feature: Fill Page URL field in Technical problem / bug report on contact form
       | success messages                                              |
       | Your message has been submitted. Thank you for your feedback. |
 
+  @javascript
   Scenario: Regression test for ISAICP-8398
   See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-8398
 
