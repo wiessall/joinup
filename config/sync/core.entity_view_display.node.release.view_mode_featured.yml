@@ -32,7 +32,7 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
-    weight: 1
+    weight: 2
     region: content
   release_number:
     type: string
@@ -55,10 +55,11 @@ content:
         height: null
       svg_render_as_image: true
     third_party_settings: {  }
-    weight: 0
+    weight: 1
     region: content
 hidden:
   body: true
+  distributions: true
   documentation: true
   field_keywords: true
   field_state: true

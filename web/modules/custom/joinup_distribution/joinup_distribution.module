@@ -62,11 +62,7 @@ function joinup_distribution_entity_base_field_info_alter(array &$fields, Entity
  * Implements hook_entity_bundle_field_info().
  */
 function joinup_distribution_entity_bundle_field_info(EntityTypeInterface $entity_type, $bundle, array $base_field_definitions): array {
-  if ($entity_type->id() !== 'rdf_entity') {
-    return [];
-  }
-
-  if (!in_array($bundle, ['joinup_release', 'solution'])) {
+  if (!in_array($bundle, ['release', 'solution'])) {
     return [];
   }
 
