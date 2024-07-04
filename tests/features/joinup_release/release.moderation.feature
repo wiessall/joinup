@@ -39,18 +39,12 @@ Feature: Asset release moderation
       | Release notes   | We go live.              |
     And I press "Save as draft"
     Then I should see the text "Release of the dark ship 1" in the "Page title" region
-    But I should not see the following warning messages:
-      | warning messages                                                                     |
-      | You are viewing the published version. To view the latest draft version, click here. |
     When I click "Edit" in the "Entity actions" region
     Then the current workflow state should be "Draft"
     And I should see the workflow buttons "Save as draft, Publish"
     When I fill in "Release version" with "v1"
     And I press "Publish"
     Then I should see the text "Release of the dark ship v1" in the "Page title" region
-    And I should not see the following warning messages:
-      | warning messages                                                                     |
-      | You are viewing the published version. To view the latest draft version, click here. |
     And 0 e-mails should have been sent
 
     When I click "Edit" in the "Entity actions" region
@@ -114,9 +108,6 @@ Feature: Asset release moderation
     And I press "Request changes"
     # The published version does not change.
     Then I should see the text "Release of the dark ship v1" in the "Page title" region
-    And I should see the following warning messages:
-      | warning messages                                                                     |
-      | You are viewing the published version. To view the latest draft version, click here. |
     And the email sent to "Bonnie Holloway" with subject "Joinup: Modification of a release of your solution has been requested" contains the following lines of text:
       | the Joinup moderation team requires editing the release Release, v1 of the solution Dark Ship due to I don't like it. |
       | If you think this action is not clear or not due, please contact Joinup Support at                                    |
@@ -151,9 +142,6 @@ Feature: Asset release moderation
     And I press "Publish"
     # The published is updated.
     Then I should see the text "Release fix v1" in the "Page title" region
-    And I should not see the following warning messages:
-      | warning messages                                                                     |
-      | You are viewing the published version. To view the latest draft version, click here. |
     And the following email should have been sent:
       | recipient | Bonnie Holloway                                                                                    |
       | subject   | Joinup: Your release was accepted                                                                  |

@@ -188,6 +188,9 @@ function joinup_workflow_is_motivation_required($entity_type_id, $workflow_id, $
         'report',
         'request_changes',
       ],
+      'release_workflow' => [
+        'request_changes',
+      ],
     ],
     'rdf_entity' => [
       'collection_workflow' => [
@@ -196,9 +199,6 @@ function joinup_workflow_is_motivation_required($entity_type_id, $workflow_id, $
       ],
       'solution_workflow' => [
         'needs_update',
-      ],
-      'release_workflow' => [
-        'request_changes',
       ],
     ],
   ];
