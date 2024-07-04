@@ -22,4 +22,3 @@ Feature: Minimal install clone testing.
     And "Solutions" should be the active item in the "Navigation bar" region
     Then I visit "/collection/joinup"
     And no menu items should be active in the "Navigation bar" region
-
