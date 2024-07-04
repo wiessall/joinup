@@ -1,4 +1,4 @@
-@api @group-h @javascript
+@api @group-h
 Feature: Pinning discussion entities
   As a facilitator of a solution/collection
   I want to pin content at the top of the discussions page
@@ -12,6 +12,7 @@ Feature: Pinning discussion entities
       | title                | state     |
       | Blue Wrench solution | published |
 
+  @javascript
   Scenario Outline: Pinned discussions should show a visual cue in discussions page.
     Given discussion content:
       | title       | headline    | solution   | collection   | state     | pinned |

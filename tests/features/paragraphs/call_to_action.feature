@@ -1,4 +1,4 @@
-@api @group-f @javascript
+@api @group-f
 Feature:
   As a site builder of the site
   I need to be able to use "Call to action(s)" paragraphs for content.
@@ -8,6 +8,7 @@ Feature:
       | title | Paragraphs collection |
       | state | published             |
 
+  @javascript
   Scenario: Call to action(s) has alignment setting.
     Given custom_page content:
       | title               | collection            | state     |
@@ -29,6 +30,7 @@ Feature:
     When the page should contain the html text '<div class="paragraph--call-to-action d-flex col-gap-3 row-gap-3 justify-content-end flex-wrap paragraph">'
     When the page should contain the html text '<a href="https://european-union.europa.eu" class="btn btn-secondary">european-union.europa.eu</a>'
 
+  @javascript
   Scenario: Call to action(s) has pill setting.
     Given custom_page content:
       | title                 | collection            | state     |

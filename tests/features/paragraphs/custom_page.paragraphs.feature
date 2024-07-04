@@ -1,4 +1,4 @@
-@api @group-f @javascript
+@api @group-f
 Feature:
   As a site builder of the site
   In order to be able to better control the structure of my content
@@ -10,6 +10,7 @@ Feature:
       | state | published             |
       | topic | HR                    |
 
+  @javascript
   Scenario: Paragraph sections are multivalue and sort-able.
     Given custom_page content:
       | title           | collection            | state     | topic |
@@ -44,6 +45,7 @@ Feature:
     And I click "Choose component"
     Then I should not see the link "Simple paragraph"
 
+  @javascript
   Scenario Outline: Privileged users can add paragraphs.
     Given the following <group type>:
       | title | Paragraphs group type |

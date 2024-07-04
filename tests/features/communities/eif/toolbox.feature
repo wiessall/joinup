@@ -1,9 +1,10 @@
-@api @eif_community @group-e @javascript
+@api @eif_community @group-e
 Feature:
   As the owner of the EIF toolbox
   in order to make it easier for users to find appropriate solutions
   I need to be able to present them in a nice searchable way.
 
+  @javascript
   Scenario: Present and search the solutions.
     Given owner content:
       | name | owner type |
