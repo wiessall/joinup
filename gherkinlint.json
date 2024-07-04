@@ -4,7 +4,7 @@
       "enabled": false
     },
     "no-empty-file": {
-      "enabled": false
+      "enabled": true
     },
     "allowed-tags": {
       "enabled": false,
