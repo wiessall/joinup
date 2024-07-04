@@ -901,7 +901,7 @@ class JoinupContext extends RawDrupalContext {
         'modification date' => 'changed',
         'published at' => 'published_at',
         'documentation' => 'documentation',
-        'release notes' => 'body',
+        'release notes' => 'description',
       ],
       'shared' => [
         'collection' => OgGroupAudienceHelperInterface::DEFAULT_FIELD,

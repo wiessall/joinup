@@ -4,7 +4,7 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.node.view_mode_featured
-    - field.field.node.release.body
+    - field.field.node.release.description
     - field.field.node.release.documentation
     - field.field.node.release.field_keywords
     - field.field.node.release.field_state
@@ -58,7 +58,7 @@ content:
     weight: 1
     region: content
 hidden:
-  body: true
+  description: true
   distributions: true
   documentation: true
   field_keywords: true

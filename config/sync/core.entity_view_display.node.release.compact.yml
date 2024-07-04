@@ -4,7 +4,7 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.node.compact
-    - field.field.node.release.body
+    - field.field.node.release.description
     - field.field.node.release.documentation
     - field.field.node.release.field_keywords
     - field.field.node.release.field_state
@@ -28,12 +28,12 @@ targetEntityType: node
 bundle: release
 mode: compact
 content:
-  body:
+  description:
     type: text_default
     label: hidden
     settings: {  }
     third_party_settings: {  }
-    weight: 2
+    weight: 3
     region: content
   distributions:
     type: entity_reference_entity_view
@@ -54,7 +54,7 @@ content:
         custom_label: ''
       template_suggestion:
         template_suggestion: ''
-    weight: 3
+    weight: 4
     region: content
   release_number:
     type: string

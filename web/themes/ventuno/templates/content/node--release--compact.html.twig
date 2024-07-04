@@ -16,7 +16,7 @@
       <span class="page-title__detail">{{ 'Last update'|t }}: {{ additional_content.updated }}</span>
     {% endif %}
   </div>
-  {% set abstract = content.release_notes|render|striptags %}
+  {% set abstract = content.description|render|striptags %}
   {{ abstract|length > 200 ? abstract|slice(0, 200) ~ '...' : abstract }}
   <a href="{{ url }}">
     {{ 'Read full release note'|t }}

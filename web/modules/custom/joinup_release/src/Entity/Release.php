@@ -86,7 +86,7 @@ class Release extends Node implements ReleaseInterface {
    * {@inheritdoc}
    */
   public function getDescriptionField(): string {
-    return 'body';
+    return 'description';
   }
 
   /**

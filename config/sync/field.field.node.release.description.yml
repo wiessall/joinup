@@ -1,9 +1,9 @@
-uuid: 94e5783c-4839-4dbb-9ec1-37360dcaabd4
+uuid: 6cbded71-f5a0-4f68-a823-504bce418c35
 langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.node.body
+    - field.storage.node.description
     - filter.format.content_editor
     - node.type.release
   module:
@@ -14,19 +14,17 @@ third_party_settings:
     value:
       predicate: 'http://www.w3.org/ns/adms#versionNotes'
       type: 'xsd:string'
-id: node.release.body
-field_name: body
+id: node.release.description
+field_name: description
 entity_type: node
 bundle: release
 label: 'Release notes'
 description: ''
 required: false
-translatable: true
+translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:
-  display_summary: true
-  required_summary: false
   allowed_formats:
     - content_editor
-field_type: text_with_summary
+field_type: text_long
