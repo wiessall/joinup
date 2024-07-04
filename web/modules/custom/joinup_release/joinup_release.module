@@ -43,7 +43,7 @@ function joinup_release_entity_bundle_field_info(EntityTypeInterface $entity_typ
     ->setComputed(TRUE)
     ->setReadOnly(TRUE)
     ->setClass(SolutionFieldsFieldItemList::class)
-    // @todo Update this when the solution field is simplified in ISAICP-8573.
+    // @todo Update this when the solution field is simplified in ISAICP-8572.
     ->setSetting('target_field_name', 'field_is_logo')
     ->setDisplayOptions('view', [
       'label' => 'hidden',
@@ -238,7 +238,7 @@ function joinup_release_title_version_is_unique(ReleaseInterface $release, bool 
  * currently being skipped for the taxonomies.
  */
 function joinup_release_sparql_bundle_load_alter(array $entity_values, array &$bundles): void {
-  // @todo Remove this in ISAICP-8573.
+  // @todo Remove this in ISAICP-8572.
   if (count($bundles) > 1 && in_array('solution', $bundles)) {
     if (isset($entity_values['http://purl.org/dc/terms/isVersionOf'])) {
       $bundles = array_diff($bundles, ['solution']);

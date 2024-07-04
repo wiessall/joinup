@@ -17,7 +17,7 @@ translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:
-  handler: 'default:rdf_entity'
+  handler: 'distribution_parent:default'
   handler_settings:
     target_bundles:
       solution: solution
