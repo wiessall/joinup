@@ -19,8 +19,8 @@ Feature: "Edit" visibility options.
       | contact information | Awesome contact         |
       | state               | published               |
     And release content:
-      | title | release notes | documentation | release number | release notes | is version of | owner          | contact information | state     | creation date    | modification date | published at     |
-      | v1    | A sample      | text.pdf      | 1              | Changed       | My awesome    | Awesome person | Awesome contact     | published | 2020-11-19 20:45 | 2022-11-19 20:45  | 2020-11-19 20:45 |
+      | title                      | release notes | documentation | release number | release notes | is version of           | state     | creation date    | modification date | published at     |
+      | My awesome solution abc v1 | A sample      | text.pdf      | 1              | Changed       | My awesome solution abc | published | 2020-11-19 20:45 | 2022-11-19 20:45  | 2020-11-19 20:45 |
 
     When I am logged in as a "facilitator" of the "My awesome solution abc" solution
     And I go to the homepage of the "My awesome solution abc v1" release
