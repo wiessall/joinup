@@ -218,7 +218,7 @@ function joinup_release_title_version_is_unique(ReleaseInterface $release, bool 
   }
 
   if (!empty($release->id())) {
-    $query->condition('id', $release->id(), '<>');
+    $query->condition('nid', $release->id(), '<>');
   }
 
   // Filter all releases that do not belong to the same solution.
