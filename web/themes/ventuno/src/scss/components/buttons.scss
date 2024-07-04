@@ -25,8 +25,8 @@ a.btn-link {
   &:focus,
   &:active,
   &.active {
-    background-color: $primary-darker;
     color: $white;
+    background-color: $primary-darker;
   }
 }
 

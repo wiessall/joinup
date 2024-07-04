@@ -20,9 +20,6 @@
   border-radius: $border-radius;
   background: $white;
   box-shadow: $box-shadow-lg;
-  @include media-breakpoint-up(sm) {
-    max-width: 400px;
-  }
   &[data-popper-placement^=top]>.shepherd-arrow {
     bottom: $spacer * -.5;
   }
@@ -35,6 +32,9 @@
   &[data-popper-placement^=right]>.shepherd-arrow {
     left: $spacer * -.5
   }
+  @include media-breakpoint-up(sm) {
+    max-width: 400px;
+  }
 }
 
 .shepherd-cancel-icon {
@@ -42,8 +42,8 @@
   padding: 0;
   cursor: pointer;
   transition: $transition-base;
-  border: none;
   color: $gray-500;
+  border: none;
   background: transparent;
   font-size: 2rem;
   font-weight: $font-weight-base;
