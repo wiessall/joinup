@@ -109,7 +109,7 @@ SPARQL;
       'created' => $values['http://purl.org/dc/terms/issued'][0]->getTimestamp(),
       'changed' => $values['http://purl.org/dc/terms/modified'][0]->getTimestamp(),
       'published_at' => $values['http://purl.org/dc/terms/issued'][0]->getTimestamp(),
-      'body' => [
+      'description' => [
         'value' => $values['http://www.w3.org/ns/adms#versionNotes'][0] ?? '',
         'format' => 'content_editor',
       ],

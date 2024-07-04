@@ -4,7 +4,7 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.node.digest_message
-    - field.field.node.release.body
+    - field.field.node.release.description
     - field.field.node.release.documentation
     - field.field.node.release.field_keywords
     - field.field.node.release.field_state
@@ -29,31 +29,31 @@ targetEntityType: node
 bundle: release
 mode: digest_message
 content:
-  body:
+  description:
     type: smart_trim
     label: hidden
     settings:
       trim_length: 200
       trim_type: chars
-      trim_suffix: …
+      trim_suffix: ''
       wrap_output: false
       wrap_class: trimmed
       more:
-        display_link: true
+        display_link: false
         target_blank: false
         link_trim_only: false
         class: more-link
         text: More
         aria_label: 'Read more about [node:title]'
-      summary_handler: ignore
+      summary_handler: full
       trim_options:
         text: true
         trim_zero: false
         replace_tokens: false
     third_party_settings:
       template_suggestion:
-        template_suggestion: ''
-    weight: 1
+        template_suggestion: bare
+    weight: 0
     region: content
   release_number:
     type: string

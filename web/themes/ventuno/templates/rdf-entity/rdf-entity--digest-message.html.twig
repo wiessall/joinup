@@ -11,8 +11,8 @@
 {% if content.release_number|render %}
   {% set release_number = content.release_number|render|striptags %}
 {% endif %}
-{% if content.release_notes %}
-  {% set body = content.release_notes %}
+{% if content.description %}
+  {% set body = content.description %}
 {% endif %}
 <!-- RDF -->
 <table role="presentation">

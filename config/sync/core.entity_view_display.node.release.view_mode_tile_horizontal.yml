@@ -4,7 +4,7 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.node.view_mode_tile_horizontal
-    - field.field.node.release.body
+    - field.field.node.release.description
     - field.field.node.release.documentation
     - field.field.node.release.field_keywords
     - field.field.node.release.field_state
@@ -30,12 +30,14 @@ targetEntityType: node
 bundle: release
 mode: view_mode_tile_horizontal
 content:
-  body:
+  description:
     type: joinup_html_stripper_stripped
     label: hidden
     settings:
       trim_length: 600
-    third_party_settings: {  }
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
     weight: 0
     region: content
   process_status:
