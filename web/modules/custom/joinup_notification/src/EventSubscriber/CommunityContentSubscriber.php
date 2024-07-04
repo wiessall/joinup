@@ -58,31 +58,31 @@ class CommunityContentSubscriber extends NotificationSubscriberBase {
   /**
    * Constructs a new CommunityContentSubscriber object.
    *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity type manager service.
-   * @param \Drupal\Core\Config\ConfigFactory $config_factory
+   * @param \Drupal\Core\Config\ConfigFactory $configFactory
    *   The config factory service.
-   * @param \Drupal\Core\Session\AccountProxy $current_user
+   * @param \Drupal\Core\Session\AccountProxy $currentUser
    *   The current user service.
-   * @param \Drupal\og\MembershipManager $og_membership_manager
+   * @param \Drupal\og\MembershipManager $ogMembershipManager
    *   The og membership manager service.
-   * @param \Drupal\joinup_workflow\WorkflowHelperInterface $workflow_helper
+   * @param \Drupal\joinup_workflow\WorkflowHelperInterface $workflowHelper
    *   The workflow helper service.
-   * @param \Drupal\joinup_notification\JoinupMessageDeliveryInterface $message_delivery
+   * @param \Drupal\joinup_notification\JoinupMessageDeliveryInterface $messageDelivery
    *   The message deliver service.
-   * @param \Drupal\state_machine_revisions\RevisionManagerInterface $revision_manager
+   * @param \Drupal\state_machine_revisions\RevisionManagerInterface $revisionManager
    *   The revision manager service.
    */
   public function __construct(
-    EntityTypeManagerInterface $entity_type_manager,
-    ConfigFactory $config_factory,
-    AccountProxy $current_user,
-    MembershipManager $og_membership_manager,
-    WorkflowHelperInterface $workflow_helper,
-    JoinupMessageDeliveryInterface $message_delivery,
-    protected RevisionManagerInterface $revision_manager,
+    EntityTypeManagerInterface $entityTypeManager,
+    ConfigFactory $configFactory,
+    AccountProxy $currentUser,
+    MembershipManager $ogMembershipManager,
+    WorkflowHelperInterface $workflowHelper,
+    JoinupMessageDeliveryInterface $messageDelivery,
+    protected RevisionManagerInterface $revisionManager,
   ) {
-    parent::__construct($entity_type_manager, $config_factory, $current_user, $og_membership_manager, $workflow_helper, $message_delivery);
+    parent::__construct($entityTypeManager, $configFactory, $currentUser, $ogMembershipManager, $workflowHelper, $messageDelivery);
   }
 
   /**
@@ -131,8 +131,8 @@ class CommunityContentSubscriber extends NotificationSubscriberBase {
       return;
     }
 
-    $user_data = $this->getUsersMessages($this->config[$this->workflow->getId()][$this->transition->getId()]);
-    $this->sendUserDataMessages($user_data);
+    $userData = $this->getUsersMessages($this->config[$this->workflow->getId()][$this->transition->getId()]);
+    $this->sendUserDataMessages($userData);
   }
 
   /**
@@ -169,10 +169,10 @@ class CommunityContentSubscriber extends NotificationSubscriberBase {
 
     /** @var \Drupal\joinup_community_content\Entity\CommunityContentInterface $entity */
     $entity = $this->entity;
-    $workflow_id = $this->workflow->getId();
-    $transition_id = $this->transition->getId();
+    $workflowId = $this->workflow->getId();
+    $transitionId = $this->transition->getId();
 
-    $config = $this->config[$workflow_id][$transition_id] ?? [];
+    $config = $this->config[$workflowId][$transitionId] ?? [];
     if (empty($config)) {
       return;
     }
@@ -188,20 +188,20 @@ class CommunityContentSubscriber extends NotificationSubscriberBase {
     //   changes" if they want to update their content. In a pre-moderated group
     //   the facilitators need to be notified so they can approve the changes
     //   for publication.
-    if ($transition_id === 'propose_new_revision') {
+    if ($transitionId === 'propose_new_revision') {
       // Determine if we are a privileged user such as a facilitator or
       // moderator. Only privileged users can update content in published state
       // directly, all other users first need to pass through proposed state.
-      $is_privileged = $entity->isTargetWorkflowStateAllowed('published', 'published');
-      if ($is_privileged) {
+      $isPrivileged = $entity->isTargetWorkflowStateAllowed('published', 'published');
+      if ($isPrivileged) {
         // We are a facilitator or moderator and are requesting changes. Ensure
         // the notifications are only sent to the content owner.
         $config = array_intersect_key($config, array_flip(['owner']));
       }
     }
 
-    $user_data = $this->getUsersMessages($config);
-    $this->sendUserDataMessages($user_data);
+    $userData = $this->getUsersMessages($config);
+    $this->sendUserDataMessages($userData);
   }
 
   /**
@@ -239,17 +239,17 @@ class CommunityContentSubscriber extends NotificationSubscriberBase {
     // The storage class passes the loaded entity to the hooks when a delete
     // operation occurs. This returns the wrong state of the entity so the
     // latest revision is forced here.
-    /** @var \Drupal\joinup_workflow\EntityWorkflowStateInterface $latest_revision */
-    if ($latest_revision = $this->revisionManager->loadLatestRevision($this->entity)) {
-      $state = $latest_revision->getWorkflowState();
+    /** @var \Drupal\joinup_workflow\EntityWorkflowStateInterface $latestRevision */
+    if ($latestRevision = $this->revisionManager->loadLatestRevision($this->entity)) {
+      $state = $latestRevision->getWorkflowState();
       if (empty($this->workflow) || empty($this->config[$this->workflow->getId()][$state])) {
         return;
       }
 
-      $transition_action = $state === 'deletion_request' ? $this->t('approved your request of deletion for') : $this->t('deleted');
-      $user_data = $this->getUsersMessages($this->config[$this->workflow->getId()][$state]);
-      $arguments = ['@transition:request_action:past' => $transition_action];
-      $this->sendUserDataMessages($user_data, $arguments);
+      $transitionAction = $state === 'deletion_request' ? $this->t('approved your request of deletion for') : $this->t('deleted');
+      $userData = $this->getUsersMessages($this->config[$this->workflow->getId()][$state]);
+      $arguments = ['@transition:request_action:past' => $transitionAction];
+      $this->sendUserDataMessages($userData, $arguments);
     }
   }
 
@@ -303,14 +303,14 @@ class CommunityContentSubscriber extends NotificationSubscriberBase {
       if (empty($arguments['@actor:role'])) {
         $membership = $this->membershipManager->getMembership($parent, $actor->id());
         if (!empty($membership)) {
-          $role_names = array_map(function (OgRoleInterface $og_role) {
+          $roleNames = array_map(function (OgRoleInterface $og_role) {
             return $og_role->getName();
           }, $membership->getRoles());
 
-          if (in_array('administrator', $role_names)) {
+          if (in_array('administrator', $roleNames)) {
             $arguments['@actor:role'] = $this->t('Owner');
           }
-          elseif (in_array('facilitator', $role_names)) {
+          elseif (in_array('facilitator', $roleNames)) {
             $arguments['@actor:role'] = $this->t('Facilitator');
           }
         }
