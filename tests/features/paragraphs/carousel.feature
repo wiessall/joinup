@@ -1,4 +1,4 @@
-@api @group-f @javascript
+@api @group-f
 Feature:
   Access and functionality checks for carousel paragraphs in custom pages.
 
@@ -8,6 +8,7 @@ Feature:
       | state | published   |
       | topic | HR          |
 
+  @javascript
   Scenario: Test that carousels with specific content is working correctly.
     Given the following collections:
       | title  | state     |
@@ -65,6 +66,7 @@ Feature:
     But I should not see the "Some page 1" tile
     And I should not see the "Some page 2" tile
 
+  @javascript
   Scenario: Carousel's control buttons should be visible if there is more content to show.
     Given the following collections:
       | title  | state     |

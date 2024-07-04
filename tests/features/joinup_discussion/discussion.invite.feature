@@ -1,9 +1,10 @@
-@api @group-h @javascript
+@api @group-h
 Feature: Invite members to subscribe to discussions
   In order to promote discussion of topics
   As a discussion author or moderator
   I need to be able to invite users to discussions
 
+  @javascript
   Scenario: Invite members to a discussion
     Given users:
       | Username         | E-mail                           | First name | Family name |

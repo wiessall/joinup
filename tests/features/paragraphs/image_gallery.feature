@@ -1,4 +1,4 @@
-@api @group-f @javascript
+@api @group-f
 Feature:
   As a site builder of the site
   I need to be able to use "image gallery" paragraphs for content.
@@ -8,7 +8,7 @@ Feature:
       | title | Paragraphs IG collection |
       | state | published                |
 
-  @uploadFiles:logo.png,topic.png,banner.jpg,linus.jpeg
+  @javascript @uploadFiles:logo.png,topic.png,banner.jpg,linus.jpeg
   Scenario: User should be able to add image gallery paragraph.
     Given custom_page content:
       | title                        | collection               | state     |

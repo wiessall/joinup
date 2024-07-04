@@ -1,7 +1,7 @@
-@api @group-f @javascript
+@api @group-f
 Feature: Administer media.
 
-  @uploadFiles:banner.jpg
+  @uploadFiles:banner.jpg @javascript
   Scenario: Moderators are able to administer media.
     Given users:
       | Username | Roles     |

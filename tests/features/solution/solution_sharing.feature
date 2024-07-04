@@ -1,8 +1,9 @@
-@api @group-g @javascript
+@api @group-g
 Feature: As a privileged user
   I want to share solutions to my collections
   So that useful information has more visibility
 
+  @javascript
   Scenario: Share link is visible for privileged users.
     Given users:
       | Username    | E-mail                  | First name | Family name | Roles     |

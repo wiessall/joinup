@@ -1,9 +1,10 @@
-@api @group-e @javascript
+@api @group-e
 Feature: Subscribing to a collection after joining
   In order to promote my collection
   As a collection owner
   I want to persuade new members to subscribe to my collection
 
+  @javascript
   Scenario: Show a modal dialog asking a user to subscribe after joining
     Given collections:
       | title            | abstract                       | closed | description                          | state     |
