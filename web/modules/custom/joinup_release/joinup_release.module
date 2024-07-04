@@ -25,6 +25,7 @@ use Drupal\joinup_release\SolutionFieldsFieldItemList;
  * can be resolved automatically.
  */
 function joinup_release_entity_type_alter(array &$entity_types): void {
+  // @todo Change this to match a node on ISAICP-8572.
   $entity_types['rdf_entity']->setLinkTemplate('solution-releases', '/rdf_entity/{rdf_entity}/releases');
 }
 
