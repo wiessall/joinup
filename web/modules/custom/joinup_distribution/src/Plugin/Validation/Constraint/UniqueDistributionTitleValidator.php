@@ -8,6 +8,7 @@ use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\joinup_distribution\Entity\DistributionInterface;
 use Drupal\joinup_distribution\ParentDistributionResolverInterface;
+use Drupal\joinup_release\Entity\ReleaseInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
@@ -64,9 +65,12 @@ class UniqueDistributionTitleValidator extends ConstraintValidator implements Co
     $distributions = $this->parentDistributionResolver->getParentsDistributions($parent->id());
     foreach ($distributions as $distribution) {
       if ($distribution->label() === $entity->label() && $distribution->id() !== $entity->id()) {
+        // @todo Remove this in ISAICP-8572 and move the ::get('type') directly
+        //   to the if condition.
+        $bundle = ($parent instanceof ReleaseInterface) ? strtolower($parent->get('type')->entity->label()) : $parent->get('rid')->entity->label();
         $this->context->addViolation($constraint->message, [
           '%title' => $entity->label(),
-          '%bundle' => strtolower($parent->get('rid')->entity->label()),
+          '%bundle' => $bundle,
         ]);
 
         return;
