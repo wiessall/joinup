@@ -106,7 +106,7 @@ class SolutionReleasesAndDistributionsFieldItemList extends EntityReferenceField
     // Retrieve all releases and distributions for this solution.
     $ids = array_values($storage
       ->getQuery()
-      ->accessCheck(FALSE)
+      ->accessCheck()
       ->condition('type', 'release')
       ->condition('is_version_of', $solution->id())
       ->sort('created', 'DESC')

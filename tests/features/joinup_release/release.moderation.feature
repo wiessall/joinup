@@ -142,6 +142,7 @@ Feature: Asset release moderation
     And I press "Publish"
     # The published is updated.
     Then I should see the text "Release fix v1" in the "Page title" region
+    # @todo This is problematic. Forward revisions are created here.
     And the following email should have been sent:
       | recipient | Bonnie Holloway                                                                                    |
       | subject   | Joinup: Your release was accepted                                                                  |

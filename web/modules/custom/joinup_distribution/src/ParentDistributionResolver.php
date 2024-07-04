@@ -23,7 +23,7 @@ class ParentDistributionResolver implements ParentDistributionResolverInterface 
    */
   public function getParentsDistributionIds(string $parentId): array {
     return $this->entityTypeManager->getStorage('node')->getQuery()
-      ->accessCheck(FALSE)
+      ->accessCheck()
       ->condition('type', 'distribution')
       ->condition('distribution_parent', $parentId)
       ->execute();
