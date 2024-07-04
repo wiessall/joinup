@@ -28,9 +28,7 @@ third_party_settings:
 label_singular: release
 label_plural: releases
 label_count:
-  no_count_capitalize: |-
-    Release
-    Releases
+  no_count_capitalize: !!binary UmVsZWFzZQNSZWxlYXNlcw==
 name: Release
 type: release
 description: 'A release represents a version of a solution in time.'
