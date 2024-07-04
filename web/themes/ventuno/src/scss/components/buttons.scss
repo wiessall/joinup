@@ -26,6 +26,7 @@ a.btn-link {
   &:active,
   &.active {
     background-color: $primary-darker;
+    color: $white;
   }
 }
 
@@ -44,6 +45,11 @@ a.btn-link {
 }
 
 .button--primary {
+  @extend .btn-primary;
+}
+
+.shepherd-button {
+  @extend .btn;
   @extend .btn-primary;
 }
 
