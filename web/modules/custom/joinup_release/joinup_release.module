@@ -7,11 +7,15 @@
 
 declare(strict_types=1);
 
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Datetime\DrupalDateTime;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\joinup_publication_date\Entity\EntityPublicationTimeInterface;
 use Drupal\joinup_release\Entity\Release;
@@ -75,6 +79,39 @@ function joinup_release_entity_bundle_field_info_alter(array &$fields, EntityTyp
   if ($entity_type->id() == 'node' && $bundle == 'release' && !empty($fields['title'])) {
     $fields['title']->addConstraint('UniqueReleaseTitleVersion', []);
   }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_access().
+ */
+function joinup_release_node_access(EntityInterface $release, $operation, AccountInterface $account): AccessResultInterface {
+  if (!$release instanceof ReleaseInterface || $account->hasPermission($release->getEntityType()->getAdminPermission())) {
+    return AccessResult::neutral();
+  }
+
+  $parent = $release->getSolution();
+
+  // Archived parents deny operations other than view.
+  if ($operation !== 'view' && $parent->isArchived()) {
+    return AccessResult::forbidden();
+  }
+
+  if ($operation !== 'view') {
+    return AccessResult::neutral();
+  }
+
+  $access_handler = \Drupal::service('entity_type.manager')->getAccessControlHandler('rdf_entity');
+  if (!$access_handler->access($parent, 'view', $account)) {
+    return AccessResult::forbidden();
+  }
+
+  if ($release->isPublished()) {
+    return AccessResult::neutral();
+  }
+
+  // Allow access depending to the publication status and the corresponding
+  // permission in the group.
+  return AccessResult::allowedIf(!$release->isPublished() && $parent->hasGroupPermission($account->id(), 'view any unpublished content'));
 }
 
 /**

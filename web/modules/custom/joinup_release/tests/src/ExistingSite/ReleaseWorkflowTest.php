@@ -95,7 +95,7 @@ class ReleaseWorkflowTest extends JoinupWorkflowExistingSiteTestBase {
    * {@inheritdoc}
    */
   protected function getEntityType(): string {
-    return 'rdf_entity';
+    return 'node';
   }
 
   /**
@@ -110,7 +110,7 @@ class ReleaseWorkflowTest extends JoinupWorkflowExistingSiteTestBase {
       $parent = $this->createDefaultParent($parent_state);
       // Initialize the release entity as is used in all sub-cases.
       $content = $this->createNode([
-        'rid' => 'release',
+        'type' => 'release',
         'is_version_of' => $parent->id(),
       ]);
       foreach ($test_data_arrays as $test_data) {
@@ -133,7 +133,7 @@ class ReleaseWorkflowTest extends JoinupWorkflowExistingSiteTestBase {
         // Initialize the release entity as it is going to be used in all sub
         // cases.
         $content = $this->createNode([
-          'rid' => 'release',
+          'type' => 'release',
           'label' => $this->randomMachineName(),
           'field_state' => $content_state,
           'is_version_of' => $parent->id(),
@@ -162,8 +162,8 @@ class ReleaseWorkflowTest extends JoinupWorkflowExistingSiteTestBase {
 
       foreach ($workflow_data as $user_var => $expected_target_states) {
         $content = Node::create([
-          'rid' => 'release',
-          'label' => $this->randomMachineName(),
+          'type' => 'release',
+          'title' => $this->randomMachineName(),
           'field_state' => $entity_state,
           'is_version_of' => $parent->id(),
         ]);
