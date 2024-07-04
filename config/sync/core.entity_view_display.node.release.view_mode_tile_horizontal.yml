@@ -46,7 +46,7 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
-    weight: 1
+    weight: 2
     region: content
   solution_logo:
     type: image
@@ -61,9 +61,10 @@ content:
         height: null
       svg_render_as_image: true
     third_party_settings: {  }
-    weight: 0
+    weight: 1
     region: content
 hidden:
+  distributions: true
   documentation: true
   field_keywords: true
   field_state: true

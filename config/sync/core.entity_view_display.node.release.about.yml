@@ -49,10 +49,11 @@ content:
         height: null
       svg_render_as_image: true
     third_party_settings: {  }
-    weight: 0
+    weight: 1
     region: content
 hidden:
   body: true
+  distributions: true
   documentation: true
   field_keywords: true
   field_state: true
