@@ -26,7 +26,7 @@ use Drupal\symfony_mailer_lite\Plugin\Mail\SymfonyMailer;
  * Sends notifications when community content is updated.
  */
 function joinup_notification_node_insert(EntityInterface $entity): void {
-  if ($entity instanceof CommunityContentInterface || $entity instanceof DistributionInterface) {
+  if ($entity instanceof CommunityContentInterface || $entity instanceof DistributionInterface || $entity instanceof ReleaseInterface) {
     joinup_notification_dispatch_notification('create', NotificationEvents::COMMUNITY_CONTENT_CREATE, $entity);
   }
 }
