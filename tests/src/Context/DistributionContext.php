@@ -122,6 +122,18 @@ class DistributionContext extends RawDrupalContext {
     }
 
     $distribution->set('distribution_parent', $parent->id());
+    // Keep the update date during the update.
+    $distribution->setNewRevision(FALSE);
+    // Temporary workaround to not change the created and changed date when they
+    // are set in the distribution. The +1 is because in
+    // \Drupal\Core\Field\Plugin\Field\FieldType\ChangedItem::preSave() the
+    // changed date is set to REQUEST_TIME if it is the same as the original
+    // value.
+    foreach (['created', 'changed'] as $field) {
+      if (isset($node->{$field})) {
+        $distribution->set($field, $node->{$field} + 1);
+      }
+    }
     $distribution->save();
   }
 
