@@ -28,7 +28,7 @@ Feature: Solution homepage
       | abstract            | Short abstract description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
     And release content:
       | title          | release notes    | documentation | release number | release notes   | is version of | state     | creation date    |
-      | Petri net v1.1 | A sample release | text.pdf      | v1.1           | Changed release | Petri net     | published | 2022-12-21T13:00 |
+      | Petri net v1.1 | A sample release | text.pdf      | 1.1            | Changed release | Petri net     | published | 2022-12-21T13:00 |
 
     When I go to the homepage of the "Petri net" solution
     Then the page should be cacheable
