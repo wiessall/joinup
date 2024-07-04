@@ -15,8 +15,8 @@ Feature:
       | state       | published           |
       | collection  | Pathauto collection |
     And release content:
-      | title          | release number    | description      | is version of     | state     |
-      | 23             | 23                | Pathauto release | Pathauto solution | published |
+      | title | release number | release notes    | is version of     | state     |
+      | 23    | 23             | Pathauto release | Pathauto solution | published |
     And distribution content:
       | title                 | description           | parent            | state     |
       | Pathauto distribution | Pathauto distribution | Pathauto solution | published |

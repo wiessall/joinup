@@ -62,7 +62,7 @@ Feature: When a solution is archived then its sub-content also should be archive
     And distribution content:
       | title                 | parent   | state     |
       | Solution Distribution | Solution | published |
-    And releases:
+    And release content:
       | title              | is version of | state     |
       | Solution Release 1 | Solution      | published |
       | Solution Release 2 | Solution      | draft     |

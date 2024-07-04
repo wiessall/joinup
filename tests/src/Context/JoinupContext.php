@@ -891,6 +891,7 @@ class JoinupContext extends RawDrupalContext {
         'publication date' => 'published_at',
       ],
       'release' => [
+        'uri' => 'uri',
         'is version of' => 'is_version_of',
         'title' => 'title',
         'release number' => 'release_number',
