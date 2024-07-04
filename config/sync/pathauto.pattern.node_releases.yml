@@ -3,17 +3,16 @@ langcode: en
 status: true
 dependencies:
   module:
-    - ctools
-    - rdf_entity
+    - node
 id: node_releases
 label: 'Node - releases'
-type: node
-pattern: '[rdf_entity:is_version_of:entity:url:path]/release/[node:release_number]'
+type: 'canonical_entities:node'
+pattern: '[node:is_version_of:entity:url:path]/release/[node:release_number]'
 selection_criteria:
-  5a8a721e-7acc-46ac-8822-90b177ed44e3:
+  47b8c34a-75f8-499b-88d2-aa72b73e3ebc:
     id: 'entity_bundle:node'
     negate: false
-    uuid: 5a8a721e-7acc-46ac-8822-90b177ed44e3
+    uuid: 47b8c34a-75f8-499b-88d2-aa72b73e3ebc
     context_mapping:
       node: node
     bundles:
