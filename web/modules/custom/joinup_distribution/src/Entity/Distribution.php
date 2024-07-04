@@ -77,7 +77,6 @@ class Distribution extends Node implements DistributionInterface {
           else {
             // The parent is a release, thus, get the solution instead.
             $this->set(OgGroupAudienceHelperInterface::DEFAULT_FIELD, $parent->getGroup()->id());
-            $this->set('distribution_parent', $parent->getUri());
           }
         }
       }
@@ -93,13 +92,19 @@ class Distribution extends Node implements DistributionInterface {
     parent::postSave($storage, $update);
 
     // Re-index the parent of the distribution.
-    if ($parent = $this->getParent()) {
-      $this->reIndexDistributionParent($parent);
-    }
+    // @todo Drop the try-catching on ISAICP-8572.
+    try {
+      if ($parent = $this->getParent()) {
+        $this->reIndexDistributionParent($parent);
+      }
 
-    // Clear the cache of the solution of the distribution.
-    if ($solution = $this->get(OgGroupAudienceHelperInterface::DEFAULT_FIELD)?->entity) {
-      $this->clearSolutionCache($solution);
+      // Clear the cache of the solution of the distribution.
+      if ($solution = $this->get(OgGroupAudienceHelperInterface::DEFAULT_FIELD)?->entity) {
+        $this->clearSolutionCache($solution);
+      }
+    }
+    catch (MissingDistributionParentException $e) {
+      // The parent is missing, so we cannot re-index it.
     }
   }
 
