@@ -16,6 +16,7 @@ use Drupal\joinup_group\Entity\GroupContentInterface;
 use Drupal\joinup_group\Exception\MissingGroupException;
 use Drupal\joinup_notification\Event\NotificationEvent;
 use Drupal\joinup_notification\NotificationEvents;
+use Drupal\joinup_release\Entity\ReleaseInterface;
 use Drupal\rdf_entity\RdfInterface;
 use Drupal\symfony_mailer_lite\Plugin\Mail\SymfonyMailer;
 
@@ -85,6 +86,7 @@ function joinup_notification_node_update(EntityInterface $entity): void {
     $entity instanceof CommunityContentInterface => NotificationEvents::COMMUNITY_CONTENT_UPDATE,
     // @todo To be unified in ISAICP-8839.
     $entity instanceof DistributionInterface => NotificationEvents::RDF_ENTITY_CRUD,
+    $entity instanceof ReleaseInterface => NotificationEvents::RDF_ENTITY_CRUD,
     default => NULL,
   };
   if ($event_name) {

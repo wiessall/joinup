@@ -254,7 +254,6 @@ field_settings:
         - 'entity:node/field_state'
         - 'entity:rdf_entity/field_ar_state'
         - 'entity:rdf_entity/field_is_state'
-        - 'entity:rdf_entity/field_isr_state'
   field_ar_abstract:
     label: Abstract
     datasource_id: 'entity:rdf_entity'

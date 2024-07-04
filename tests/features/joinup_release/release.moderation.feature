@@ -87,8 +87,6 @@ Feature: Asset release moderation
     # styled to look identical to a button.
     And I should see the link "Delete"
     And the following fields should be present "Motivation"
-    # @todo Probably this will need special handling. Revisit this once all
-    #   changes are done.
     # Ensure that owners has access to override the creation date.
     # @see ISAICP-4068
     And I should see the text "Authored on"
