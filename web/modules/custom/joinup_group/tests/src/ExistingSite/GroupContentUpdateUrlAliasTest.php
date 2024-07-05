@@ -46,6 +46,12 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
     ];
     sort($distributions);
 
+    $releases = [
+      (int) $this->entity['node']['release']['1.1']->id(),
+      (int) $this->entity['node']['release']['1.2']->id(),
+    ];
+    sort($releases);
+
     // Check that the collection content is correctly computed and predictable.
     $this->assertSame([
       // The creation order is determined, same is the node IDs order.
@@ -63,12 +69,6 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
           (int) $this->entity['node']['discussion']['2']->id(),
         ],
         'distribution' => $distributions,
-        // @todo This should probably be handles like the distributions above.
-        //   Revisit this once all changes are done.
-        'release' => [
-          'http://release/1.1',
-          'http://release/1.2',
-        ],
         'document' => [
           (int) $this->entity['node']['document']['1.1']->id(),
           (int) $this->entity['node']['document']['1.2']->id(),
@@ -91,6 +91,7 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
           (int) $this->entity['node']['news']['1']->id(),
           (int) $this->entity['node']['news']['2']->id(),
         ],
+        'release' => $releases,
       ],
       'rdf_entity' => [
         'solution' => [
@@ -111,12 +112,6 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
           (int) $this->entity['node']['discussion']['1.2']->id(),
         ],
         'distribution' => $distributions,
-        // @todo This should probably be handles like the distributions above.
-        //   Revisit this once all changes are done.
-        'release' => [
-          'http://release/1.1',
-          'http://release/1.2',
-        ],
         'document' => [
           (int) $this->entity['node']['document']['1.1']->id(),
           (int) $this->entity['node']['document']['1.2']->id(),
@@ -129,10 +124,8 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
           (int) $this->entity['node']['news']['1.1']->id(),
           (int) $this->entity['node']['news']['1.2']->id(),
         ],
+        'release' => $releases,
       ],
-      // @todo Check if this is needed to be blank for some foreach. Revisit
-      //   this once all changes are done.
-      'rdf_entity' => [],
     ], $this->entity['rdf_entity']['solution']['1']->getGroupContentIds());
 
     $this->drupalLogin($this->createUser([], NULL, FALSE, [
@@ -358,10 +351,8 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
       'field_is_description' => $this->randomString(),
       'field_is_state' => 'published',
       'field_is_owner' => $owner->id(),
-      'field_topic' => Topic::loadByUri('http://joinup.eu/ontology/topic#finance-in-eu')
-        ->id(),
-      'field_is_solution_type' => MappedTerm::loadByUri('http://data.europa.eu/dr8/PublicServiceProvider')
-        ->id(),
+      'field_topic' => Topic::loadByUri('http://joinup.eu/ontology/topic#finance-in-eu')->id(),
+      'field_is_solution_type' => MappedTerm::loadByUri('http://data.europa.eu/dr8/PublicServiceProvider')->id(),
       'field_is_contact_information' => $contact->id(),
     ]);
     // Releases.
@@ -378,9 +369,9 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
       for ($j = 1; $j <= 2; $j++) {
         $this->entity['node']['distribution']["1.{$i}.{$j}"] = $this->createNode([
           'type' => 'distribution',
-          // 'uri' => "http://distribution/1.{$i}.{$j}",
+          'uri' => "http://distribution/1.{$i}.{$j}",
           'title' => "distribution 1.{$i}.{$j}",
-          'distribution_parent' => "http://release/1.{$i}",
+          'distribution_parent' => $this->entity['node']['release']["1.{$i}"]->id(),
           'field_state' => 'published',
         ]);
       }
