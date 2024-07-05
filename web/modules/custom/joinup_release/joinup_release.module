@@ -42,21 +42,68 @@ function joinup_release_entity_bundle_field_info(EntityTypeInterface $entity_typ
     return $fields;
   }
 
-  $fields['solution_logo'] = BaseFieldDefinition::create('image')
-    ->setLabel(t('Solution logo'))
-    ->setDescription(t('The logo of the solution this release belongs to.'))
-    ->setComputed(TRUE)
-    ->setReadOnly(TRUE)
-    ->setClass(SolutionFieldsFieldItemList::class)
-    // @todo Update this when the solution field is simplified in ISAICP-8572.
-    ->setSetting('target_field_name', 'field_is_logo')
-    ->setDisplayOptions('view', [
-      'label' => 'hidden',
+  $fields = [
+    'solution_logo' => [
+      'name' => 'solution_logo',
       'type' => 'image',
-      'weight' => 0,
-    ])
-    ->setDisplayConfigurable('form', FALSE)
-    ->setDisplayConfigurable('view', TRUE);
+      // @todo Update this when the solution field is simplified in ISAICP-8572.
+      'target_field_name' => 'field_is_logo',
+      'label' => t('Solution logo'),
+      'description' => t('The logo of the solution this release belongs to.'),
+      'display' => [
+        'view' => [
+          'label' => 'hidden',
+          'type' => 'image',
+          'weight' => 0,
+        ],
+      ],
+    ],
+    'owner' => [
+      'name' => 'owner',
+      'type' => 'entity_reference',
+      // @todo Update this when the solution field is simplified in ISAICP-8572.
+      'target_field_name' => 'field_is_owner',
+      'label' => t('Owner'),
+      'description' => t('The user who owns this release.'),
+      'settings' => [
+        'target_type' => 'node',
+      ],
+      'display' => NULL,
+    ],
+    'contact' => [
+      'name' => 'contact',
+      'type' => 'entity_reference',
+      // @todo Update this when the solution field is simplified in ISAICP-8572.
+      'target_field_name' => 'field_is_contact_information',
+      'label' => t('Contact'),
+      'description' => t('The contact person for this release.'),
+      'settings' => [
+        'target_type' => 'node',
+      ],
+      'display' => NULL,
+    ],
+  ];
+
+  foreach ($fields as $field_name => $field_info) {
+    $fields[$field_name] = BaseFieldDefinition::create($field_info['type'])
+      ->setLabel($field_info['label'])
+      ->setName($field_name)
+      ->setDescription($field_info['description'])
+      ->setComputed(TRUE)
+      ->setClass(SolutionFieldsFieldItemList::class)
+      ->setSetting('target_field_name', $field_info['target_field_name'])
+      ->setDisplayConfigurable('form', FALSE)
+      ->setDisplayConfigurable('view', FALSE);
+
+    if (!empty($field_info['settings'])) {
+      $fields[$field_name]->setSetting('target_type', $field_info['settings']['target_type']);
+    }
+
+    if (!empty($field_info['display'])) {
+      $fields[$field_name]->setDisplayOptions('view', $field_info['display']);
+      $fields[$field_name]->setDisplayConfigurable('view', TRUE);
+    }
+  }
 
   return $fields;
 }

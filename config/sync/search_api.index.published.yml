@@ -37,6 +37,7 @@ dependencies:
     - custom_page
     - joinup_distribution
     - joinup_flag
+    - joinup_release
     - joinup_search
     - meta_entity
     - node
@@ -165,6 +166,24 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.body
+  contact_title:
+    label: 'Related Contact » Title'
+    datasource_id: 'entity:node'
+    property_path: 'contact:entity:title'
+    type: text
+    dependencies:
+      module:
+        - joinup_release
+        - node
+  contact_title_spellcheck:
+    label: 'Related Contact » Title spellcheck'
+    datasource_id: 'entity:node'
+    property_path: 'contact:entity:title'
+    type: solr_text_spellcheck
+    dependencies:
+      module:
+        - joinup_release
+        - node
   created:
     label: 'Authored on'
     datasource_id: 'entity:node'
@@ -659,6 +678,24 @@ field_settings:
       module:
         - meta_entity
         - rdf_entity
+  owner_title:
+    label: 'Related Owner » Title'
+    datasource_id: 'entity:node'
+    property_path: 'owner:entity:title'
+    type: text
+    dependencies:
+      module:
+        - joinup_release
+        - node
+  owner_title_spellcheck:
+    label: 'Related Owner » Title spellcheck'
+    datasource_id: 'entity:node'
+    property_path: 'owner:entity:title'
+    type: solr_text_spellcheck
+    dependencies:
+      module:
+        - joinup_release
+        - node
   parent:
     label: 'Term Parents'
     datasource_id: 'entity:taxonomy_term'
