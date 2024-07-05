@@ -896,6 +896,7 @@ class JoinupContext extends RawDrupalContext {
         'title' => 'title',
         'release number' => 'release_number',
         'keywords' => 'field_keywords',
+        'spatial coverage' => 'spatial_coverage',
         'status' => 'process_status',
         'state' => 'field_state',
         'creation date' => 'created',

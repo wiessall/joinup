@@ -31,6 +31,8 @@ class SolutionFieldsFieldItemList extends EntityReferenceFieldItemList {
       return;
     }
 
+    // @todo Change this to load the revision of the solution instead, once
+    //   solutions are nodes in ISAICP-8572.
     $solution = $release->getSolution();
     if (!$solution->hasField($field)) {
       throw new \RuntimeException(sprintf('The solution field "%s" does not exist.', $field));
