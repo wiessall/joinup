@@ -9,7 +9,9 @@ declare(strict_types=1);
 
 use Drupal\joinup_taxonomy\Entity\MappedTerm;
 use Drupal\node\Entity\Node;
+use Drupal\pathauto\PathautoState;
 use Drupal\search_api\Entity\Index;
+use Drupal\sparql_entity_storage\UriEncoder;
 
 /**
  * Disable RDF Sync for the deployment.
@@ -57,8 +59,10 @@ SPARQL;
     $sandbox['progress'] = 0;
     $sandbox['total'] = count($sandbox['releases']);
     $sandbox['solution_stubs'] = [];
+    $sandbox['swapped_aliases'] = 0;
   }
-
+  $alias_repository = \Drupal::getContainer()->get('path_alias.repository');
+  $connection = \Drupal::database();
   $rdf_storage = \Drupal::entityTypeManager()->getStorage('rdf_entity');
   $uris = array_splice($sandbox['releases'], 0, 50);
   $start = microtime(TRUE);
@@ -141,17 +145,35 @@ SPARQL;
       }
       $release_node->set($target_field, $mapped_values);
     }
+    $pathauto_old_path = '/rdf_entity/' . UriEncoder::encodeUrl($uri);
+    $has_alias = $alias_repository->lookupBySystemPath($pathauto_old_path, 'en');
+    if ($has_alias) {
+      $release_node->get('path')->pathauto = PathautoState::SKIP;
+    }
 
     $release_node->set('uri', $uri);
     $release_node->save();
 
+    if ($has_alias) {
+      $internal_url = '/' . $release_node->toUrl()->getInternalPath();
+      $connection->update('path_alias')
+        ->fields(['path' => $internal_url])
+        ->condition('path', $pathauto_old_path)
+        ->execute();
+
+      $connection->update('path_alias_revision')
+        ->fields(['path' => $internal_url])
+        ->condition('path', $pathauto_old_path)
+        ->execute();
+      $sandbox['swapped_aliases']++;
+    }
     $sandbox['progress']++;
   }
 
   $finish = microtime(TRUE);
-  $message = "Progress: {$sandbox['progress']} releases in " . round($finish - $start, 2) . ' s.';
+  $count = count($uris);
   $sandbox['#finished'] = $sandbox['progress'] / $sandbox['total'];
-  return $message;
+  return "Progress: {$count} distributions ({$sandbox['progress']} total / {$sandbox['swapped_aliases']} aliases swapped) in " . round($finish - $start, 2) . ' s. Error messages: ' . count($error_messages ?? []);
 }
 
 /**
