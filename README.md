@@ -344,6 +344,14 @@ dev:
   git_hook_on: pre-push
 ```
 
+#### Watcher for compiling themes assets
+
+* Run task:
+  ```shell
+  ddev npm run watch
+  ```
+* PhpStorm and VS Code, see our [NPM watch developer documentation](docs/npm_watch.md).
+
 ### Upgrade process
 
 Joinup offers only _contiguous upgrades_. For details and naming conventions,
