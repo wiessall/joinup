@@ -17,8 +17,8 @@ Feature:
       | state       | published                                                      |
       | uri         | http://data.europa.eu/w21/ffb0ffc9-7704-45d3-95b3-42706b6320e5 |
     And release content:
-      | title | release number | release notes      | is version of       | state     | uri                                                            |
-      | 1     | 1              | Persistent release | Persistent solution | published | http://data.europa.eu/w21/98004ec9-62f3-4734-a1b6-af7e4838b09c |
+      | title              | release number | release notes      | is version of       | state     | uri                                                            |
+      | Persistent release | 23             | Persistent release | Persistent solution | published | http://data.europa.eu/w21/98004ec9-62f3-4734-a1b6-af7e4838b09c |
     And distribution content:
       | title                   | description             | access url | parent              | uri                                                            |
       | Persistent distribution | Persistent distribution | test.zip   | Persistent solution | http://data.europa.eu/w21/643a2a52-da3b-4594-92bb-295d8134e1fb |
