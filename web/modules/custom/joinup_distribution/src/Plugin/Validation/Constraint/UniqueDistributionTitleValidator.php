@@ -70,7 +70,7 @@ class UniqueDistributionTitleValidator extends ConstraintValidator implements Co
         $bundle = ($parent instanceof ReleaseInterface) ? strtolower($parent->get('type')->entity->label()) : $parent->get('rid')->entity->label();
         $this->context->addViolation($constraint->message, [
           '%title' => $entity->label(),
-          '%bundle' => $bundle,
+          '%bundle' => strtolower($bundle),
         ]);
 
         return;
