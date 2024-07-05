@@ -827,6 +827,7 @@ field_settings:
         - 'entity:node/field_document_spatial_coverage'
         - 'entity:node/field_event_spatial_coverage'
         - 'entity:node/field_news_spatial_coverage'
+        - 'entity:node/spatial_coverage'
         - 'entity:rdf_entity/field_spatial_coverage'
   spdx_licence:
     label: 'Corresponding SPDX licence'
