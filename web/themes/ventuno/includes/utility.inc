@@ -177,7 +177,7 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
           '@created' => \Drupal::service('date.formatter')->format($created_time, 'date_only'),
         ]);
       }
-      $status = $variables['elements']['field_status'][0]['#plain_text'] ?? 'No status';
+      $status = $variables['elements']['process_status'][0]['#plain_text'] ?? 'No status';
       switch ($status) {
 
         case 'Completed':
