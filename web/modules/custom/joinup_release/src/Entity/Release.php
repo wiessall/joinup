@@ -6,7 +6,6 @@ namespace Drupal\joinup_release\Entity;
 
 use Drupal\joinup_bundle_class\DescriptionTrait;
 use Drupal\joinup_bundle_class\JoinupBundleClassFieldAccessTrait;
-use Drupal\joinup_bundle_class\LogoTrait;
 use Drupal\joinup_group\Entity\GroupContentTrait;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\Exception\MissingGroupException;
@@ -29,7 +28,6 @@ class Release extends Node implements ReleaseInterface {
   use EntityWorkflowStateTrait;
   use GroupContentTrait;
   use JoinupBundleClassFieldAccessTrait;
-  use LogoTrait;
   use RdfSyncEntityTrait;
   use SolutionContentTrait;
   use EntityOwnerTrait;
@@ -73,13 +71,6 @@ class Release extends Node implements ReleaseInterface {
    */
   public function getWorkflowStateFieldName(): string {
     return 'field_state';
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getLogoFieldName(): string {
-    return 'solution_logo';
   }
 
   /**
