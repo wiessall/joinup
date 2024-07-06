@@ -19,3 +19,8 @@ services:
     arguments: ['@entity_type.manager']
     tags:
       - { name: event_subscriber }
+  joinup_release.event_subscriber:
+    class: Drupal\joinup_release\EventSubscriber\SolutionDataRdfSyncSubscriber
+    arguments: ['@rdf_sync.mapper', '@sparql.field_handler']
+    tags:
+      - { name: event_subscriber }
