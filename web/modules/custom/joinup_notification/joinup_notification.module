@@ -47,7 +47,7 @@ function joinup_notification_node_insert(EntityInterface $entity): void {
  * @see https://www.drupal.org/node/2833084
  */
 function joinup_notification_node_presave(EntityInterface $entity): void {
-  if ($entity->isNew() || !($entity instanceof CommunityContentInterface || $entity instanceof DistributionInterface)) {
+  if ($entity->isNew() || !($entity instanceof CommunityContentInterface || $entity instanceof DistributionInterface || $entity instanceof ReleaseInterface)) {
     return;
   }
   $entity->field_state_initial_value = $entity->get('field_state')->first()->getOriginalId();
@@ -117,6 +117,7 @@ function joinup_notification_node_predelete(EntityInterface $entity): void {
     $entity instanceof CommunityContentInterface => NotificationEvents::COMMUNITY_CONTENT_DELETE,
     // @todo To be unified in ISAICP-8839.
     $entity instanceof DistributionInterface => NotificationEvents::RDF_ENTITY_CRUD,
+    $entity instanceof ReleaseInterface => NotificationEvents::RDF_ENTITY_CRUD,
     default => NULL,
   };
   if ($event_name) {
