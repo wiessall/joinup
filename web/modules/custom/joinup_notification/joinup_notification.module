@@ -26,6 +26,8 @@ use Drupal\symfony_mailer_lite\Plugin\Mail\SymfonyMailer;
  * Sends notifications when community content is updated.
  */
 function joinup_notification_node_insert(EntityInterface $entity): void {
+  // @todo To be unified in ISAICP-8839 - maybe create a new interface?.
+  // @todo Add the solution interface too in ISAICP-8572.
   if ($entity instanceof CommunityContentInterface || $entity instanceof DistributionInterface || $entity instanceof ReleaseInterface) {
     joinup_notification_dispatch_notification('create', NotificationEvents::COMMUNITY_CONTENT_CREATE, $entity);
   }
@@ -47,6 +49,8 @@ function joinup_notification_node_insert(EntityInterface $entity): void {
  * @see https://www.drupal.org/node/2833084
  */
 function joinup_notification_node_presave(EntityInterface $entity): void {
+  // @todo To be unified in ISAICP-8839 - maybe create a new interface?.
+  // @todo Add the solution interface too in ISAICP-8572.
   if ($entity->isNew() || !($entity instanceof CommunityContentInterface || $entity instanceof DistributionInterface || $entity instanceof ReleaseInterface)) {
     return;
   }
@@ -84,7 +88,8 @@ function joinup_notification_rdf_entity_presave(RdfInterface $entity): void {
 function joinup_notification_node_update(EntityInterface $entity): void {
   $event_name = match(TRUE) {
     $entity instanceof CommunityContentInterface => NotificationEvents::COMMUNITY_CONTENT_UPDATE,
-    // @todo To be unified in ISAICP-8839.
+    // @todo To be unified in ISAICP-8839 - maybe create a new interface?.
+    // @todo Add the solution interface too in ISAICP-8572.
     $entity instanceof DistributionInterface => NotificationEvents::RDF_ENTITY_CRUD,
     $entity instanceof ReleaseInterface => NotificationEvents::RDF_ENTITY_CRUD,
     default => NULL,
@@ -115,7 +120,8 @@ function joinup_notification_node_predelete(EntityInterface $entity): void {
 
   $event_name = match(TRUE) {
     $entity instanceof CommunityContentInterface => NotificationEvents::COMMUNITY_CONTENT_DELETE,
-    // @todo To be unified in ISAICP-8839.
+    // @todo To be unified in ISAICP-8839 - maybe create a new interface?.
+    // @todo Add the solution interface too in ISAICP-8572.
     $entity instanceof DistributionInterface => NotificationEvents::RDF_ENTITY_CRUD,
     $entity instanceof ReleaseInterface => NotificationEvents::RDF_ENTITY_CRUD,
     default => NULL,
