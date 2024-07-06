@@ -120,7 +120,7 @@ SPARQL;
       'release_number' => $values['http://www.w3.org/2002/07/owl#versionInfo'][0] ?? '',
       'field_state' => $values['http://joinup.eu/isr/workflow_status'][0],
       'field_keywords' => $values['http://www.w3.org/ns/dcat#keyword'] ?? [],
-      'access_url' => $values['http://xmlns.com/foaf/0.1/page'][0] ?? NULL,
+      'documentation' => $values['http://xmlns.com/foaf/0.1/page'][0] ?? NULL,
       'langcode' => $values['http://joinup.eu/language'][0] ?? 'en',
     ]);
     $release_node->set('solution_data', $sandbox['solution_stubs'][$stub_uri]);
