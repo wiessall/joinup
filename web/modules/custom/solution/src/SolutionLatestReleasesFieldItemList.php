@@ -36,11 +36,12 @@ class SolutionLatestReleasesFieldItemList extends EntityReferenceFieldItemList {
       ->accessCheck(FALSE)
       ->condition('type', 'release')
       ->condition('is_version_of', $solution->id())
+      ->condition('status', 1)
       ->sort('created', 'DESC')
       ->range(0, 1)
       ->execute();
 
-    return $ids ? key($ids) : NULL;
+    return $ids ? (int) reset($ids) : NULL;
   }
 
 }
