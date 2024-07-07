@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "af7ddc0200a67089932110ffe87494c6",
+    "content-hash": "98ca08a8ec0f8121c2b1411c1fac10af",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -16543,6 +16543,203 @@
                 }
             ],
             "time": "2024-05-06T16:37:16+00:00"
+        },
+        {
+            "name": "cucumber/gherkin",
+            "version": "v24.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/cucumber/gherkin-php.git",
+                "reference": "8c78d433150388eddb60c60fa90a65a1b8c58e35"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/cucumber/gherkin-php/zipball/8c78d433150388eddb60c60fa90a65a1b8c58e35",
+                "reference": "8c78d433150388eddb60c60fa90a65a1b8c58e35",
+                "shasum": ""
+            },
+            "require": {
+                "cucumber/messages": "^19.0",
+                "ext-mbstring": "*",
+                "php": "^8.1"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^3.5",
+                "nikic/php-parser": "^4.14",
+                "phpunit/phpunit": "^9.5",
+                "psalm/plugin-phpunit": "^0.17.0",
+                "vimeo/psalm": "^4.24"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Cucumber\\Gherkin\\": [
+                        "src/",
+                        "src-generated/"
+                    ]
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Gherkin parser",
+            "support": {
+                "source": "https://github.com/cucumber/gherkin-php/tree/v24.1.0"
+            },
+            "time": "2022-10-10T18:49:29+00:00"
+        },
+        {
+            "name": "cucumber/messages",
+            "version": "v19.1.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/cucumber/messages-php.git",
+                "reference": "042947e90d71e449495a65230470ac0f13786a74"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/cucumber/messages-php/zipball/042947e90d71e449495a65230470ac0f13786a74",
+                "reference": "042947e90d71e449495a65230470ac0f13786a74",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "php": "^8.1"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^3.5",
+                "phpunit/phpunit": "^9.5",
+                "psalm/plugin-phpunit": "^0.17.0",
+                "ramsey/uuid": "^4.2.1",
+                "vimeo/psalm": "^4.18"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Cucumber\\Messages\\": [
+                        "src",
+                        "src-generated"
+                    ]
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "JSON schema-based messages for Cucumber's inter-process communication",
+            "support": {
+                "source": "https://github.com/cucumber/messages-php/tree/v19.1.4"
+            },
+            "time": "2022-07-27T01:17:26+00:00"
+        },
+        {
+            "name": "dantleech/gherkin-lint",
+            "version": "0.2.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/dantleech/gherkin-lint-php.git",
+                "reference": "f3277c4945261d26a3098b5e003b51d815eaed4b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/dantleech/gherkin-lint-php/zipball/f3277c4945261d26a3098b5e003b51d815eaed4b",
+                "reference": "f3277c4945261d26a3098b5e003b51d815eaed4b",
+                "shasum": ""
+            },
+            "require": {
+                "cucumber/gherkin": "^24.0",
+                "cucumber/messages": "^19.0",
+                "dantleech/invoke": "^2.0",
+                "php": "^8.1",
+                "symfony/console": "^5.0|^6.0|^7.0",
+                "symfony/filesystem": "^5.0|^6.0|^7.0",
+                "symfony/finder": "^5.0|^6.0|^7.0",
+                "symfony/string": "^5.1|^6.0|^7.0"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^3.8",
+                "phpunit/phpunit": "^10.5",
+                "symfony/process": "^6.0",
+                "symfony/var-dumper": "^6.0",
+                "vimeo/psalm": "^5.22"
+            },
+            "bin": [
+                "bin/gherkinlint"
+            ],
+            "type": "project",
+            "autoload": {
+                "psr-4": {
+                    "DTL\\GherkinLint\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Daniel Leech",
+                    "email": "dan.t.leech@gmail.com"
+                }
+            ],
+            "description": "Gherkin linter",
+            "support": {
+                "issues": "https://github.com/dantleech/gherkin-lint-php/issues",
+                "source": "https://github.com/dantleech/gherkin-lint-php/tree/0.2.3"
+            },
+            "time": "2024-06-08T10:11:58+00:00"
+        },
+        {
+            "name": "dantleech/invoke",
+            "version": "2.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/dantleech/invoke.git",
+                "reference": "9b002d746d2c1b86cfa63a47bb5909cee58ef50c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/dantleech/invoke/zipball/9b002d746d2c1b86cfa63a47bb5909cee58ef50c",
+                "reference": "9b002d746d2c1b86cfa63a47bb5909cee58ef50c",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.2||^8.0"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^2.13",
+                "phpbench/phpbench": "^1.0",
+                "phpstan/phpstan": "^0.12.0",
+                "phpunit/phpunit": "^8.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.2-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "DTL\\Invoke\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "daniel leech",
+                    "email": "daniel@dantleech.com"
+                }
+            ],
+            "description": "Emulate named parameters",
+            "support": {
+                "issues": "https://github.com/dantleech/invoke/issues",
+                "source": "https://github.com/dantleech/invoke/tree/2.0.0"
+            },
+            "time": "2021-05-01T17:22:58+00:00"
         },
         {
             "name": "dealerdirect/phpcodesniffer-composer-installer",
