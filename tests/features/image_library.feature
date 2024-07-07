@@ -1,6 +1,5 @@
 @api
-Feature:
-  - As a moderator, I am able to pre-upload images for logos.
+Feature: As a moderator, I am able to pre-upload images for logos.
 
   Scenario Outline: Test moderator tasks.
 
