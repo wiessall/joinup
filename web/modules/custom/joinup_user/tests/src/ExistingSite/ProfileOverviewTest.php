@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_user\ExistingSite;
 
+use Drupal\Core\Session\AccountInterface;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use weitzman\LoginTrait\LoginTrait;
 
@@ -21,14 +22,14 @@ class ProfileOverviewTest extends JoinupExistingSiteTestBase {
    *
    * @var \Drupal\Core\Session\AccountInterface
    */
-  protected $owner;
+  protected AccountInterface $owner;
 
   /**
    * A member of the groups.
    *
    * @var \Drupal\Core\Session\AccountInterface
    */
-  protected $member;
+  protected AccountInterface $member;
 
   /**
    * An authenticated user without groups.
@@ -63,7 +64,7 @@ class ProfileOverviewTest extends JoinupExistingSiteTestBase {
     $this->authenticated = $this->createUser([], 'some_user', FALSE, [
       'mail' => "some_user@example.com",
     ]);
-    $this->owner->save();
+    $this->authenticated->save();
 
     // Sign a user up for more than 100 groups in total. Also the owner will
     // transparently become a member of all these groups.
