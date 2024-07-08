@@ -121,9 +121,7 @@ class IndexDistributionData extends ProcessorPluginBase {
     }
 
     // Get the parent Search API field.
-    // @todo This should take the solutions description from the referenced
-    //   revision. Revisit this when all changes are done.
-    $sapiFieldName = $entity->bundle() === 'release' ? 'body' : 'field_is_description';
+    $sapiFieldName = $entity->bundle() === 'release' ? 'description_processed' : 'field_is_description';
     $sapiField = $item->getField($sapiFieldName);
 
     // Iterate over all distributions and append their data to Search API field.
