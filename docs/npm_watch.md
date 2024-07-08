@@ -24,7 +24,7 @@
 1. **Open your project** in VS Code.
 
 2. **Configure a Docker-based development environment**:
-  - Install the `Remote - Containers` extension if you haven't already.
+  - Install the [Dev Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) extension if you haven't already.
   - Add a `.devcontainer/devcontainer.json` file in your project with the following configuration (adjust the service name as necessary):
 
     ```json
@@ -32,15 +32,18 @@
       "name": "DDEV Container",
       "context": "..",
       "dockerFile": "../.ddev/Dockerfile",
-      "service": "web",
       "workspaceFolder": "/var/www/html",
-      "settings": {},
-      "extensions": [
-        "dbaeumer.vscode-eslint",
-        "esbenp.prettier-vscode"
-      ],
       "postCreateCommand": "npm install",
-      "remoteUser": "vscode"
+      "remoteUser": "vscode",
+      "customizations": {
+        "vscode": {
+          "extensions": [
+            "dbaeumer.vscode-eslint",
+            "esbenp.prettier-vscode"
+          ],
+          "settings": {}
+        }
+      }
     }
     ```
 
