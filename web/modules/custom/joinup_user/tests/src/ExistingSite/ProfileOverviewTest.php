@@ -19,24 +19,18 @@ class ProfileOverviewTest extends JoinupExistingSiteTestBase {
 
   /**
    * The owner of the groups.
-   *
-   * @var \Drupal\Core\Session\AccountInterface
    */
   protected AccountInterface $owner;
 
   /**
    * A member of the groups.
-   *
-   * @var \Drupal\Core\Session\AccountInterface
    */
   protected AccountInterface $member;
 
   /**
    * An authenticated user without groups.
-   *
-   * @var \Drupal\Core\Session\AccountInterface
    */
-  protected $authenticated;
+  protected AccountInterface $authenticated;
 
   /**
    * {@inheritdoc}
@@ -55,18 +49,15 @@ class ProfileOverviewTest extends JoinupExistingSiteTestBase {
         'moderator',
       ],
     ]);
-    $this->owner->save();
     $this->member = $this->createUser([], 'some_member', FALSE, [
       'mail' => "some_member@example.com",
       'roles' => ['moderator'],
     ]);
-    $this->member->save();
     $this->authenticated = $this->createUser([], 'some_user', FALSE, [
       'mail' => "some_user@example.com",
     ]);
-    $this->authenticated->save();
 
-    // Sign a user up for more than 100 groups in total. Also the owner will
+    // Sign a user up for more than 100 groups in total. Also, the owner will
     // transparently become a member of all these groups.
     for ($count = 0; $count < 52; $count++) {
       $collection = $this->createRdfEntity([
