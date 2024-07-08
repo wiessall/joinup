@@ -40,7 +40,7 @@ function _joinup_rdf_deploy_flatten_rdf_values(array $data): array {
 }
 
 /**
- * Migrates releases and their solutions.
+ * Migrates published releases and their solutions.
  */
 function joinup_rdf_deploy_111001(array &$sandbox): string {
   $endpoint = \Drupal::getContainer()->get('sparql.endpoint');
@@ -48,29 +48,46 @@ function joinup_rdf_deploy_111001(array &$sandbox): string {
     $query = <<<SPARQL
 SELECT DISTINCT ?id
 FROM <http://joinup.eu/asset_release/published>
-FROM <http://joinup.eu/asset_release/draft>
 WHERE {
   ?id a ?type .
 }
 SPARQL;
-
     $results = $endpoint->query($query)->getArrayCopy();
-    $sandbox['releases'] = array_map(fn(\stdClass $result) => $result->id->getUri(), $results);
+    $sandbox['releases']['published'] = array_map(fn(\stdClass $result) => $result->id->getUri(), $results);
+    // Also fetch releases from the draft graph, that do not exist in the
+    // published graph too - the new releases.
+    $query = <<<SPARQL
+SELECT DISTINCT ?id
+FROM <http://joinup.eu/asset_release/published>
+FROM <http://joinup.eu/asset_release/draft>
+WHERE {
+  GRAPH <http://joinup.eu/asset_release/draft> { ?id a ?type } .
+  FILTER NOT EXISTS {
+    GRAPH <http://joinup.eu/asset_release/published> {
+      ?id a ?type .
+    }
+  }
+}
+SPARQL;
+    $results = $endpoint->query($query)->getArrayCopy();
+    $sandbox['releases']['draft'] = array_map(fn(\stdClass $result) => $result->id->getUri(), $results);
+
     $sandbox['progress'] = 0;
-    $sandbox['total'] = count($sandbox['releases']);
+    $sandbox['total'] = count($sandbox['releases']['published']) + count($sandbox['releases']['draft']);
     $sandbox['solution_stubs'] = [];
     $sandbox['swapped_aliases'] = 0;
   }
   $alias_repository = \Drupal::getContainer()->get('path_alias.repository');
   $connection = \Drupal::database();
   $rdf_storage = \Drupal::entityTypeManager()->getStorage('rdf_entity');
-  $uris = array_splice($sandbox['releases'], 0, 50);
+  // Use this was to first create the published versions and then the new ones.
+  $source = empty($sandbox['releases']['published']) ? 'draft' : 'published';
+  $uris = array_splice($sandbox['releases'][$source], 0, 50);
   $start = microtime(TRUE);
   foreach ($uris as $uri) {
     $query = <<<SPARQL
 SELECT *
-FROM <http://joinup.eu/asset_release/published>
-FROM <http://joinup.eu/asset_release/draft>
+FROM <http://joinup.eu/asset_release/$source>
 WHERE {
   <$uri> ?property ?value .
 }
@@ -87,7 +104,14 @@ SPARQL;
     // solutions later during the solution migration. Change the `http://` to
     // `swap://` and `https` to `swap-s://` to avoid conflicts with the RDF
     // sync URIs.
-    $stub_uri = str_replace(['http://', 'https://'], ['swap://', 'swap-s://'], $solution->id());
+    $stub_uri = str_replace([
+      'http://',
+      'https://',
+    ], [
+      'swap://',
+      'swap-s://',
+    ], $solution->id());
+
     if (!isset($sandbox['solution_stubs'][$stub_uri])) {
       $solution_stub = Node::create([
         'type' => 'solution',
@@ -152,7 +176,10 @@ SPARQL;
     }
 
     $release_node->set('uri', $uri);
+    $release_node->setRevisionCreationTime($values['http://purl.org/dc/terms/modified'][0]->getTimestamp());
     $release_node->save();
+
+    _joinup_rdf_deploy_update_field_target_id('node', 'distribution_parent', 'target_id', $uri, $release_node->id());
 
     if ($has_alias) {
       $internal_url = '/' . $release_node->toUrl()->getInternalPath();
@@ -177,9 +204,102 @@ SPARQL;
 }
 
 /**
+ * Migrates forward release revisions and unpublished ones, and their solutions.
+ */
+function joinup_rdf_deploy_111002(array &$sandbox): string {
+  $endpoint = \Drupal::getContainer()->get('sparql.endpoint');
+  if (empty($sandbox['releases'])) {
+    $query = <<<SPARQL
+SELECT DISTINCT ?id
+FROM <http://joinup.eu/asset_release/draft>
+WHERE {
+  GRAPH <http://joinup.eu/asset_release/draft> { ?id a ?type } .
+  FILTER EXISTS {
+    GRAPH <http://joinup.eu/asset_release/published> {
+      ?id a ?type .
+    }
+  }
+}
+SPARQL;
+
+    $results = $endpoint->query($query)->getArrayCopy();
+    $sandbox['releases'] = array_map(fn(\stdClass $result) => $result->id->getUri(), $results);
+    $sandbox['progress'] = 0;
+    $sandbox['total'] = count($sandbox['releases']);
+    $sandbox['solution_stubs'] = [];
+    $sandbox['swapped_aliases'] = 0;
+  }
+
+  $rdf_sync = \Drupal::getContainer()->get('rdf_sync.mapper');
+  $uris = array_splice($sandbox['releases'], 0, 50);
+  $start = microtime(TRUE);
+  foreach ($uris as $uri) {
+    $query = <<<SPARQL
+SELECT *
+FROM <http://joinup.eu/asset_release/draft>
+WHERE {
+  <$uri> ?property ?value .
+}
+SPARQL;
+    $results = $endpoint->query($query)->getArrayCopy();
+    $values = _joinup_rdf_deploy_flatten_rdf_values($results);
+
+    if ($release_node = $rdf_sync->getEntityByUri($uri)) {
+      // We need to do the same process but create a new revision instead.
+      foreach ([
+        'http://purl.org/dc/terms/language' => 'language',
+        'http://www.w3.org/ns/adms#status' => 'process_status',
+        'http://purl.org/dc/terms/spatial' => 'spatial_coverage',
+      ] as $predicate => $target_field) {
+        $mapped_values = [];
+        if (empty($values[$predicate])) {
+          continue;
+        }
+
+        foreach ($values[$predicate] as $value) {
+          if ($term = MappedTerm::loadByUri($value)) {
+            $mapped_values[] = [
+              'target_id' => $term->id(),
+            ];
+          }
+        }
+        $release_node->set($target_field, $mapped_values);
+      }
+
+      $release_node->set('title', strlen($values['http://purl.org/dc/terms/title'][0]) > 255
+        ? substr($values['http://purl.org/dc/terms/title'][0], 0, 255)
+        : $values['http://purl.org/dc/terms/title'][0]);
+      $release_node->set('created', $values['http://purl.org/dc/terms/issued'][0]->getTimestamp());
+      $release_node->set('changed', $values['http://purl.org/dc/terms/modified'][0]->getTimestamp());
+      $release_node->set('published_at', $values['http://purl.org/dc/terms/issued'][0]->getTimestamp());
+      $release_node->set('description', [
+        'value' => $values['http://www.w3.org/ns/adms#versionNotes'][0] ?? '',
+        'format' => 'content_editor',
+      ]);
+      $release_node->set('release_number', $values['http://www.w3.org/2002/07/owl#versionInfo'][0] ?? '');
+      $release_node->set('field_state', $values['http://joinup.eu/isr/workflow_status'][0]);
+      $release_node->set('field_keywords', $values['http://www.w3.org/ns/dcat#keyword'] ?? []);
+      $release_node->set('documentation', $values['http://xmlns.com/foaf/0.1/page'][0] ?? NULL);
+      $release_node->set('langcode', $values['http://joinup.eu/language'][0] ?? 'en');
+
+      $release_node->setNewRevision();
+      $release_node->setRevisionCreationTime($values['http://purl.org/dc/terms/modified'][0]->getTimestamp());
+      $release_node->save();
+      _joinup_rdf_deploy_update_field_target_id('node', 'distribution_parent', 'target_id', $uri, $release_node->id());
+    }
+    $sandbox['progress']++;
+  }
+
+  $finish = microtime(TRUE);
+  $count = count($uris);
+  $sandbox['#finished'] = $sandbox['progress'] / $sandbox['total'];
+  return "Progress: {$count} distributions ({$sandbox['progress']} total / {$sandbox['swapped_aliases']} aliases swapped) in " . round($finish - $start, 2) . ' s. Error messages: ' . count($error_messages ?? []);
+}
+
+/**
  * Clean up the search index.
  */
-function joinup_rdf_deploy_111002(): string {
+function joinup_rdf_deploy_111003(): string {
   /** @var \Drupal\search_api\Entity\Index $index */
   $index = Index::load('published');
   $results = $index->query()->addCondition('entity_bundle', 'asset_release')->execute();
@@ -197,7 +317,41 @@ function joinup_rdf_deploy_111002(): string {
 /**
  * Clean the asset release graph.
  */
-function joinup_rdf_deploy_111003(): void {
+function joinup_rdf_deploy_111004(): void {
   $endpoint = \Drupal::getContainer()->get('sparql.endpoint');
   $endpoint->query('CLEAR GRAPH <http://joinup.eu/asset_release/published>');
+  $endpoint->query('CLEAR GRAPH <http://joinup.eu/asset_release/draft>');
+}
+
+/**
+ * Update the field target ID.
+ *
+ * @param string $base_table_prefix
+ *   The base table prefix without the trailing underscores.
+ * @param string $table
+ *   The table name.
+ * @param string $field
+ *   The field name.
+ * @param string $old_target_id
+ *   The old target ID.
+ * @param string $new_target_id
+ *   The new target ID.
+ * @param bool $include_revisions
+ *   Whether to include revisions.
+ *
+ * @todo Remove this only after the RDF2Node is complete.
+ */
+function _joinup_rdf_deploy_update_field_target_id(string $base_table_prefix, string $table, string $field, string $old_target_id, string $new_target_id, bool $include_revisions = TRUE): void {
+  $connection = \Drupal::database();
+  $connection->update($base_table_prefix . '__' . $table)
+    ->fields([$table . '_' . $field => $new_target_id])
+    ->condition($table . '_' . $field, $old_target_id)
+    ->execute();
+
+  if ($include_revisions) {
+    $connection->update($base_table_prefix . '_revision__' . $table)
+      ->fields([$table . '_' . $field => $new_target_id])
+      ->condition($table . '_' . $field, $old_target_id)
+      ->execute();
+  }
 }
