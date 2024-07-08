@@ -39,7 +39,6 @@ Feature:
       | title            | solution      | state     |
       | Tile custom page | Tile solution | published |
     And I append "content_listing" to "field_paragraphs_body" field in "node" entity with following "Tile custom page" title:
-      # @todo Check for existing cases where releases are presented and update them in the deploy hook.
       | content_listing:value | a:3:{s:7:"enabled";i:1;s:13:"query_presets";s:68:"entity_bundle\|distribution,release,discussion,document,event,news\|IN";s:5:"limit";s:2:"10";} |
 
     When I am logged in as a moderator

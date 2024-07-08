@@ -56,8 +56,6 @@ class ReleaseController extends ControllerBase {
     }
 
     return $this->entityTypeManager()->getAccessControlHandler('node')->createAccess('release', $account, [
-      // @todo This should be consumed somewhere else. Revisit this when all
-      //   changes are completed.
       // The group will be consumed in joinup_rdf_entity_create_access().
       'group' => $rdf_entity,
     ], TRUE);
