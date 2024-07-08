@@ -48,8 +48,6 @@ class GroupTokensTest extends JoinupExistingSiteTestBase {
     $release = $this->createNode([
       'type' => 'release',
       'is_version_of' => $solution->id(),
-      // @todo Check if this is needed or a reverse reference should be used.
-      //   Revisit this once all changes are done.
       'distribution' => $release_distribution->id(),
     ]);
 

@@ -51,12 +51,8 @@ Feature: "Add release" visibility options.
     When I go to the homepage of the "Release Test 1" solution
     And I click "Add release"
     Then I should see the heading "Add Release"
-    # @todo Probably these are extra fields we need to keep. Revisit this when
-    #   all changes are done.
     And the following fields should be present "Name, Release version, Release notes, Upload a new file or enter a URL, Geographical coverage, Search keywords, Status, Language, Date, Time"
     # The entity is new, so the current workflow state should not be shown.
-    # @todo Remove this when the revision reference to solutions is implemented.
-    #   Revisit this when all changes are done.
     And the following fields should not be present "Solution logo, Solution data, Distribution, Current workflow state, Langcode, Motivation"
 
     When I press "Publish"
