@@ -429,6 +429,9 @@
             },
             "sweetrdf/easyrdf": {
                 "Add a method to remove resources from graph @see https://github.com/sweetrdf/easyrdf/pull/44": "resources/patch/php/sweetrdf/easyrdf/44.diff"
+            },
+            "weitzman/logintrait": {
+                "LoginTrait::drupalLogout() @see https://gitlab.com/weitzman/logintrait/-/issues/2": "resources/patch/php/weitzman/logintrait/3.patch"
             }
         },
         "artifacts": {
