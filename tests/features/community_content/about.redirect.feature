@@ -7,10 +7,10 @@ Feature: Old about paths are redirected to the host entity canonical page.
     Then the response status code should be 200
 
     Examples:
-     | user                                 |
-     | an anonymous user                    |
-     | logged in as an "authenticated user" |
-     | logged in as a moderator             |
+      | user                                 |
+      | an anonymous user                    |
+      | logged in as an "authenticated user" |
+      | logged in as a moderator             |
 
   Scenario Outline: About pages with obsolete base path alias are redirected
     Given I am <user>
