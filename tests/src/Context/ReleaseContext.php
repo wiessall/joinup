@@ -31,7 +31,6 @@ class ReleaseContext extends RawDrupalContext {
    *   The name of the release.
    *
    * @When I go to (the homepage of )the :release release
-   * @When I visit (the homepage of )the :release release
    *
    * @throws \Drupal\Core\Entity\EntityMalformedException
    */
