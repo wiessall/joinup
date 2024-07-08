@@ -4,15 +4,12 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_log\Entity;
 
-use Drupal\Component\Render\FormattableMarkup;
-use Drupal\Component\Render\MarkupInterface;
-use Drupal\Component\Utility\Xss;
 use Drupal\Core\Entity\ContentEntityBase;
-use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\rdf_entity\RdfInterface;
 use Drupal\user\EntityOwnerTrait;
 
 /**
@@ -53,18 +50,19 @@ final class JoinupLog extends ContentEntityBase implements JoinupLogInterface {
     $fields += static::ownerBaseFieldDefinitions($entity_type);
     $fields['uid']->setRequired(TRUE);
 
-    $fields['entity_logged'] = BaseFieldDefinition::create('entity_reference')
-      ->setLabel(t('Entity logged'))
-      ->setDescription(t('Entity this log entry relates to.'))
+    $fields['group_entity'] = BaseFieldDefinition::create('entity_reference')
+      ->setLabel(t('Group entity'))
+      ->setDescription(t('RDF entity this log entry relates to, if any.'))
       ->setTargetEntityTypeId('rdf_entity')
       ->setSetting('target_type', 'rdf_entity');
 
     $fields['type'] = BaseFieldDefinition::create('string')
       ->setLabel(new TranslatableMarkup('Type'))
       ->setDescription(new TranslatableMarkup('Type of log message, for example "user" or "page not found."'))
+      ->setSetting('max_length', 64)
       ->setRequired(TRUE);
 
-    $fields['message'] = BaseFieldDefinition::create('string')
+    $fields['message'] = BaseFieldDefinition::create('string_long')
       ->setLabel(new TranslatableMarkup('Message'))
       ->setDescription(new TranslatableMarkup('Text of log message to be passed into the t() function.'))
       ->setRequired(TRUE);
@@ -76,15 +74,19 @@ final class JoinupLog extends ContentEntityBase implements JoinupLogInterface {
     $fields['severity'] = BaseFieldDefinition::create('integer')
       ->setLabel(new TranslatableMarkup('Severity'))
       ->setDescription(new TranslatableMarkup('The severity level of the event; ranges from 0 (Emergency) to 7 (Debug)'))
+      ->setSetting('unsigned', TRUE)
+      ->setSetting('size', 'tiny')
       ->setRequired(TRUE);
 
-    $fields['location'] = BaseFieldDefinition::create('string_long')
+    $fields['location'] = BaseFieldDefinition::create('string')
       ->setLabel(new TranslatableMarkup('Location'))
-      ->setDescription(new TranslatableMarkup('URL of the origin of the event.'));
+      ->setDescription(new TranslatableMarkup('URL of the origin of the event.'))
+      ->setSetting('max_length', 2048);
 
     $fields['referer'] = BaseFieldDefinition::create('string')
       ->setLabel(new TranslatableMarkup('Referer'))
-      ->setDescription(new TranslatableMarkup('URL of referring page.'));
+      ->setDescription(new TranslatableMarkup('URL of referring page.'))
+      ->setSetting('max_length', 2048);
 
     $fields['hostname'] = BaseFieldDefinition::create('string')
       ->setLabel(new TranslatableMarkup('Hostname'))
@@ -101,15 +103,8 @@ final class JoinupLog extends ContentEntityBase implements JoinupLogInterface {
   /**
    * {@inheritdoc}
    */
-  public function getEntityLogged(): ?EntityInterface {
-    return $this->get('entity_logged')->entity;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getEntityLoggedId(): ?int {
-    return $this->get('entity_logged')->target_id;
+  public function getGroupEntity(): ?RdfInterface {
+    return $this->get('group_entity')->entity;
   }
 
   /**
@@ -159,46 +154,6 @@ final class JoinupLog extends ContentEntityBase implements JoinupLogInterface {
    */
   public function getTimestamp(): int {
     return (int) $this->get('timestamp')->value;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getFormattedMessage(): MarkupInterface {
-    $message = $this->get('message')->getString();
-    $variables = $this->get('variables')->first()?->getValue() ?? [];
-    if (!is_array($variables)) {
-      return $this->formatMessage($message, NULL, NULL);
-    }
-
-    $backtrace_string = NULL;
-    if (isset($variables['@backtrace_string'])) {
-      $backtrace_string = '@backtrace_string';
-    }
-    return $this->formatMessage($message, $variables, $backtrace_string);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  private function formatMessage(string $message, ?array $variables, ?string $backtrace_string = NULL): MarkupInterface {
-    if (empty($message) && empty($variables)) {
-      return new FormattableMarkup('', []);
-    }
-
-    if (!is_array($variables)) {
-      return $this->t('Log data is corrupted and cannot be unserialized: @message', ['@message' => Xss::filterAdmin($message)]);
-    }
-
-    // Ensure backtrace strings are properly formatted.
-    if (!empty($backtrace_string) && isset($variables[$backtrace_string])) {
-      $variables[$backtrace_string] = new FormattableMarkup(
-        sprintf('<pre class="backtrace">@%s</pre>', $backtrace_string), $variables
-      );
-    }
-
-    // phpcs:ignore Drupal.Semantics.FunctionT.NotLiteralString
-    return $this->t(Xss::filterAdmin($message), $variables);
   }
 
 }

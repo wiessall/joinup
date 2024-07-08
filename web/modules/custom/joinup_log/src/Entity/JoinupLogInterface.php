@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_log\Entity;
 
-use Drupal\Component\Render\MarkupInterface;
 use Drupal\Core\Entity\ContentEntityInterface;
-use Drupal\Core\Entity\EntityInterface;
+use Drupal\rdf_entity\RdfInterface;
 use Drupal\user\EntityOwnerInterface;
 
 /**
@@ -15,25 +14,17 @@ use Drupal\user\EntityOwnerInterface;
 interface JoinupLogInterface extends ContentEntityInterface, EntityOwnerInterface {
 
   /**
-   * Getter for entity logged.
+   * Getter for the group entity.
    *
-   * @return \Drupal\Core\Entity\EntityInterface|null
-   *   Entity this log entry relates to, if any.
+   * @return \Drupal\rdf_entity\RdfInterface|null
+   *   RDF entity this log entry relates to, if any.
    */
-  public function getEntityLogged(): ?EntityInterface;
-
-  /**
-   * Getter for entity logged ID.
-   *
-   * @return int|null
-   *   Entity ID this log entry relates to, if any.
-   */
-  public function getEntityLoggedId(): ?int;
+  public function getGroupEntity(): ?RdfInterface;
 
   /**
    * Hostname of the user who triggered the event.
    *
-   * @return string
+   * @return string|null
    *   The hostname of the user who triggered the event.
    */
   public function getHostname(): ?string;
@@ -41,7 +32,7 @@ interface JoinupLogInterface extends ContentEntityInterface, EntityOwnerInterfac
   /**
    * URL of the origin of the event.
    *
-   * @return string
+   * @return string|null
    *   The origin of the event.
    */
   public function getLocation(): ?string;
@@ -49,7 +40,7 @@ interface JoinupLogInterface extends ContentEntityInterface, EntityOwnerInterfac
   /**
    * URL of referring page.
    *
-   * @return string
+   * @return string|null
    *   The referer of the event.
    */
   public function getReferer(): ?string;
@@ -87,13 +78,5 @@ interface JoinupLogInterface extends ContentEntityInterface, EntityOwnerInterfac
    *   The user id.
    */
   public function getUid(): int;
-
-  /**
-   * Returns the messages formatted with placeholders already replaced.
-   *
-   * @return \Drupal\Component\Render\MarkupInterface
-   *   The formatted message.
-   */
-  public function getFormattedMessage(): MarkupInterface;
 
 }
