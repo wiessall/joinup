@@ -38,7 +38,7 @@ final class SolutionDataRdfSyncSubscriber implements EventSubscriberInterface {
     return [
       RdfSyncNormalizeEvent::class => 'addSolutionData',
       // @todo Add an event to export the hasVersion value of the solution in
-      //   ISAICP-8572.
+      //   ISAICP-8572 so that the data are not exported now in the wrong graph.
     ];
   }
 
