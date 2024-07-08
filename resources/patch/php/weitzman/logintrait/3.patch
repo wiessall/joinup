@@ -1,0 +1,35 @@
+From 309723fd98897f79e106b5779ccc413442dac935 Mon Sep 17 00:00:00 2001
+From: Alexandre Dias <alex.jm.dias@gmail.com>
+Date: Mon, 8 Jul 2024 14:43:10 +0100
+Subject: [PATCH] LoginTrait::drupalLogout() #2.
+
+---
+ src/LoginTrait.php | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/src/LoginTrait.php b/src/LoginTrait.php
+index d1ecc2b..e8e9b31 100644
+--- a/src/LoginTrait.php
++++ b/src/LoginTrait.php
+@@ -44,7 +44,8 @@ trait LoginTrait
+     protected function drupalLogout()
+     {
+         $this->drupalGet('user/logout');
+-        // Omit checking for user/pass fields.
++        $page = $this->getCurrentPage();
++        $page->pressButton('Log out');
+ 
+         // Clear entity cache entry so drupalLogin() goes to DB.
+         \Drupal::entityTypeManager()
+@@ -54,7 +55,7 @@ trait LoginTrait
+         // @see BrowserTestBase::drupalUserIsLoggedIn()
+         unset($this->loggedInUser->sessionId);
+         $this->loggedInUser = false;
+-        \Drupal::currentUser()->setAccount(new AnonymousUserSession());
++        $this->container->get('current_user')->setAccount(new AnonymousUserSession());
+     }
+ 
+     /**
+-- 
+GitLab
+
