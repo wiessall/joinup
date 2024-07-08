@@ -23,7 +23,6 @@ class TelegramFormatter extends NormalizerFormatter {
 
     $date = date('Y-m-d H:i', (new DrupalDateTime($normalized['datetime'], 'Europe/Brussels'))->getTimestamp());
     $formatted[] = "[$date] {$normalized['channel']}.{$normalized['level_name']}";
-    $formatted[] = $this->simplify($normalized['message']);
     if (!empty($normalized['extra'])) {
       $formatted[] = 'Context:';
       unset($normalized['extra']['user']);
@@ -31,6 +30,7 @@ class TelegramFormatter extends NormalizerFormatter {
         $formatted[] = "- $key: $value";
       }
     }
+    $formatted[] = $this->simplify($normalized['message']);
 
     $backtrace = array_filter(explode("\n", Error::formatBacktrace($normalized['context']['backtrace'] ?? [])));
     unset($backtrace[0]);
