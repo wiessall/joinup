@@ -123,6 +123,9 @@ class IndexDistributionData extends ProcessorPluginBase {
     // Get the parent Search API field.
     $sapiFieldName = $entity->bundle() === 'release' ? 'description_processed' : 'field_is_description';
     $sapiField = $item->getField($sapiFieldName);
+    if (empty($sapiField)) {
+      return;
+    }
 
     // Iterate over all distributions and append their data to Search API field.
     /** @var \Drupal\rdf_entity\RdfInterface $distribution */
