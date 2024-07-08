@@ -224,7 +224,7 @@ Feature: Add community content
     And I should not see the link "Office.com"
     And I should not see the link "iCal / MS Outlook"
 
-  @javascript @loggedErrors @api @uploadFiles:logo.png
+  @javascript @loggedErrors @uploadFiles:logo.png
   Scenario: Editor File dialog form does not trigger warning
     Given the following collection:
       | title | The editor tester collection |
@@ -249,4 +249,3 @@ Feature: Add community content
     When I press "Insert selected" in the "Modal buttons" region
     Then the modal should be closed
     And the site should not have log records with level lower than "notice"
-
