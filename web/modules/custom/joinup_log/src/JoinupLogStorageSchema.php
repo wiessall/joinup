@@ -15,7 +15,7 @@ class JoinupLogStorageSchema extends SqlContentEntityStorageSchema {
   /**
    * {@inheritdoc}
    */
-  protected function getEntitySchema(ContentEntityTypeInterface $entity_type, $reset = FALSE) {
+  protected function getEntitySchema(ContentEntityTypeInterface $entity_type, $reset = FALSE): array {
     $schema = parent::getEntitySchema($entity_type, $reset);
 
     if ($base_table = $this->storage->getBaseTable()) {
@@ -25,6 +25,7 @@ class JoinupLogStorageSchema extends SqlContentEntityStorageSchema {
         'type' => ['type'],
         'uid' => ['uid'],
         'severity' => ['severity'],
+        'group_entity' => ['group_entity'],
       ];
     }
 
