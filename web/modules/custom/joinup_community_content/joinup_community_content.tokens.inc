@@ -58,20 +58,16 @@ function joinup_community_content_tokens($type, array $tokens, array $data = [],
             break;
           }
 
-          if (
-            $node instanceof AbstractInterface &&
-            !$node->get($node->getAbstractField())->isEmpty()
-          ) {
-            $field = $node->get($node->getAbstractField());
-            $replacements[$original] = text_summary($field->first()->getString());
+          if ($node instanceof AbstractInterface) {
+            $output = $node->getAbstractAsRenderArray('view_mode_tile');
           }
           // Community content implements DescriptionInterface, no need for an
           // extra condition logic here.
           else {
             $output = $node->getDescriptionAsRenderArray('view_mode_tile');
-            $outputString = \Drupal::service('renderer')->renderPlain($output);
-            $replacements[$original] = text_summary($outputString);
           }
+          $outputString = \Drupal::service('renderer')->renderInIsolation($output);
+          $replacements[$original] = text_summary($outputString);
           break;
       }
     }

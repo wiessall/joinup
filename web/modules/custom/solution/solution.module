@@ -17,7 +17,6 @@ use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Render\Element;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\joinup_rdf\Entity\RdfSyncEntityInterface;
@@ -33,6 +32,7 @@ use Drupal\rdf_entity\RdfInterface;
 use Drupal\solution\Entity\Solution;
 use Drupal\solution\Entity\SolutionInterface;
 use Drupal\solution\SolutionAffiliationFieldItemList;
+use Drupal\solution\SolutionDistributionFieldItemList;
 use Drupal\solution\SolutionLatestReleasesFieldItemList;
 use Drupal\solution\SolutionReleasesAndDistributionsFieldItemList;
 use Drupal\sparql_entity_storage\SparqlGraphInterface;
@@ -64,7 +64,15 @@ function solution_entity_bundle_field_info_alter(&$fields, EntityTypeInterface $
     ->setDescription(t('The Releases and standalone distributions of this solution.'))
     ->setTargetEntityTypeId('rdf_entity')
     ->setTargetBundle('solution')
-    ->setSetting('target_type', 'rdf_entity')
+    // This is a workaround until releases are also converted. Currently, the
+    // target type is 'rdf_entity' because the releases and distributions were
+    // RDF entities. However, now that distributions are converted, this will
+    // automatically throw an exception due to the distributions being nodes.
+    // Changing this now but leaving it as a comment because otherwise, the
+    // releases will throw an exception instead.
+    // @todo Uncomment this as `('target_type', 'node')` once releases are also
+    //   converted.
+    // ->setSetting('target_type', 'node')
     ->setComputed(TRUE)
     ->setReadOnly(TRUE)
     ->setCardinality(FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED)
@@ -81,15 +89,21 @@ function solution_entity_bundle_field_info_alter(&$fields, EntityTypeInterface $
     ->setReadOnly(TRUE)
     ->setCardinality(1)
     ->setClass(SolutionLatestReleasesFieldItemList::class);
+  $fields['distribution'] = BaseFieldDefinition::create('entity_reference')
+    ->setLabel(t('Distributions'))
+    ->setName('distribution')
+    ->setDescription(t('The distributions linked to this solution.'))
+    ->setTargetEntityTypeId('rdf_entity')
+    ->setTargetBundle('solution')
+    ->setSetting('target_type', 'node')
+    ->setComputed(TRUE)
+    ->setReadOnly(TRUE)
+    ->setCardinality(FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED)
+    ->setClass(SolutionDistributionFieldItemList::class);
 
   // Make sure a solution's title is unique among the collections it belongs to.
   if (!empty($fields['label'])) {
     $fields['label']->addConstraint('UniqueSolutionTitle', []);
-  }
-
-  // A distribution can be referenced only by a single parent.
-  if (!empty($fields['field_is_distribution'])) {
-    $fields['field_is_distribution']->addConstraint('DistributionSingleParent');
   }
 }
 
@@ -296,9 +310,8 @@ function solution_rdf_entity_view(array &$build, RdfInterface $solution, EntityV
   if ($display->getComponent('download_total')) {
     $total = 0;
     if (!$solution->isNew()) {
-      /** @var \Drupal\asset_distribution\AssetDistributionRelations $relationship_counselor */
-      $relationship_counselor = \Drupal::service('asset_distribution.relations');
-      foreach ($relationship_counselor->getSolutionDistributions($solution) as $distribution) {
+      $distributions = \Drupal::getContainer()->get('joinup_distribution.parent_distribution_resolver')->getParentsDistributions($solution->id());
+      foreach ($distributions as $distribution) {
         $total += $distribution->getDownloadCount();
       }
     }
@@ -775,20 +788,6 @@ function solution_theme_suggestions_solution_member_count(array $variables): arr
   $suggestions[] = 'solution_member_count__' . $sanitized_view_mode;
 
   return $suggestions;
-}
-
-/**
- * Implements hook_ENTITY_TYPE_view_alter().
- */
-function solution_rdf_entity_view_alter(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display) {
-  if (!$entity instanceof SolutionInterface || $display->getMode() !== 'default') {
-    return;
-  }
-
-  // Hide the description when the abstract is available.
-  if (isset($build['field_is_abstract']) && Element::children($build['field_is_abstract'])) {
-    $build['field_is_description']['#access'] = FALSE;
-  }
 }
 
 /**

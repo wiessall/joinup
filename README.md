@@ -272,7 +272,7 @@ Find out more on how to write custom commands [here](https://ddev.readthedocs.io
 * http://joinup.ddev.site:8890/sparql — The SPARQL endpoint
 * http://joinup.ddev.site:8983 — The Solr admin UI
 * https://joinup.ddev.site:7900, http://joinup.ddev.site:7910 — The Selenium
-  tests viewer (use "secret" as password)
+  tests viewer
 * https://joinup.ddev.site:8026, http://joinup.ddev.site:8025 — The mailcatcher
   UI (Mailpit)
 * To connect locally to MySQL, you'll need to find the port as this is
@@ -293,6 +293,23 @@ Testing frameworks used by Joinup:
   ```shell
   ddev exec vendor/bin/behat [arguments and options]
   ```
+
+###### Update / post-update / deploy hooks
+
+Tests covering such hooks should be placed under `tests/features/update` and
+features and/or scenarios should be tagged with `@group-clone` and
+`@update:[function]`, where `[function]` is the update hook/function name.
+See `\Drupal\joinup\Context\UpdateContext`.
+
+###### Unused step definitions
+
+In order to prevent stale code in tests, the CI runs the following command to
+detect unused Behat step definitions, and will fail if any are found:
+```shell
+  ddev run testing:unused-behat
+```
+See the `unused` Behat profile in [behat.yml.dist](behat.yml.dist).
+Relies on [nicwortel/behat-unused-step-definitions-extension](https://github.com/nicwortel/behat-unused-step-definitions-extension)
 
 #### PHPUnit testing
 
@@ -326,6 +343,14 @@ dev:
   # Options: pre-push / pre-commit / disable
   git_hook_on: pre-push
 ```
+
+#### Watcher for compiling themes assets
+
+* Run task:
+  ```shell
+  ddev npm run watch
+  ```
+* PhpStorm and VS Code, see our [NPM watch developer documentation](docs/npm_watch.md).
 
 ### Upgrade process
 

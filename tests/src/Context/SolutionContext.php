@@ -60,18 +60,6 @@ class SolutionContext extends RawDrupalContext {
   protected array $rdfEntities = [];
 
   /**
-   * Checks that the user is on the solutions overview page.
-   *
-   * The solutions overview page currently doesn't have a title so our common
-   * practice of checking the page title falls short here.
-   *
-   * @Then I should be on the solutions overview page
-   */
-  public function assertSolutionsOverviewPage(): void {
-    $this->assertSession()->addressEquals($this->locatePath('/solutions'));
-  }
-
-  /**
    * Navigates to the add solution form.
    *
    * @param string $collection
@@ -288,34 +276,6 @@ class SolutionContext extends RawDrupalContext {
         ->condition(OgGroupAudienceHelperInterface::DEFAULT_FIELD, $collection->id())
         ->execute();
       $storage->delete($storage->loadMultiple($og_menu_instance_ids));
-    }
-  }
-
-  /**
-   * Make group content part of a solution.
-   *
-   * Table format:
-   * | content                | solution          |
-   * | Content entity 1 title | Solution 1 title  |
-   * | Content entity 2 title | Solution 1 title  |
-   * | Content entity 3 title | Solution 2 title  |
-   *
-   * @param string $bundle
-   *   The bundle of the content entity.
-   * @param \Behat\Gherkin\Node\TableNode $membership_table
-   *   The membership table.
-   *
-   * @Given (the following ):bundle content belong to the corresponding solutions:
-   */
-  public function givenContentMemberships(string $bundle, TableNode $membership_table): void {
-    // As each given step is executed in the same request
-    // we need to reset the mapping.
-    foreach ($membership_table->getColumnsHash() as $values) {
-      $group = $this->getEntityByLabel('rdf_entity', $values['solution'], 'solution');
-      /** @var \Drupal\node\NodeInterface $content */
-      $content = $this->getEntityByLabel('node', $values['content'], $bundle);
-      $content->get(OgGroupAudienceHelperInterface::DEFAULT_FIELD)->set(0, $group->id());
-      $content->save();
     }
   }
 
@@ -813,31 +773,6 @@ class SolutionContext extends RawDrupalContext {
   }
 
   /**
-   * Checks that the given solution is affiliated with the given collection.
-   *
-   * @param string $collection_label
-   *   The name of the collection to check.
-   * @param string $solution_label
-   *   The name of the solution to check.
-   *
-   * @throws \Exception
-   *   Thrown when the solution is not affiliated with the collection.
-   *
-   * @Then the :solution_label solution should be affiliated with the :collection_label collection
-   */
-  public function assertCollectionAffiliation(string $collection_label, string $solution_label): void {
-    $solution = $this->getEntityByLabel('rdf_entity', $solution_label, 'solution');
-    $ids = \Drupal::entityQuery('rdf_entity')->accessCheck(FALSE)
-      ->condition('rid', 'collection')
-      ->condition('label', $collection_label)
-      ->condition('field_ar_affiliates', $solution->id())
-      ->execute();
-    if (!$ids) {
-      throw new \Exception("The '$solution_label' solution is not affiliated with the '$collection_label' collection but it should be.");
-    }
-  }
-
-  /**
    * Checks that the given tile contains the given number of downloads.
    *
    * @param string $heading
@@ -871,43 +806,6 @@ class SolutionContext extends RawDrupalContext {
     $tile = $this->getTileByHeading($heading);
     $elements = $tile->findAll('xpath', '//span[contains(concat(" ", normalize-space(@class), " "), " icon--download ")]');
     Assert::assertEmpty($elements);
-  }
-
-  /**
-   * Sets the visit or download count for a given entity to a certain value.
-   *
-   * @param string $type
-   *   The type of counter: 'download' or 'visit'.
-   * @param string $target_entity_label
-   *   The target entit label.
-   * @param string $count
-   *   The counter to be set.
-   *
-   * @throws \Exception
-   *   When:
-   *   - An invalid $type was specified.
-   *   - The entity with $target_entity_label doesn't exist.
-   *   - A related meta entity doesn't exist.
-   *
-   * @Given the :type count of :target_entity_label is :count
-   */
-  public function setDownloadCountForEntity(string $type, string $target_entity_label, string $count): void {
-    if (!in_array($type, ['download', 'visit'])) {
-      throw new \Exception("Type should be 'download' or 'visit' but '$type' was given.");
-    }
-
-    $target_entity_type_id = $type === 'visit' ? 'node' : 'rdf_entity';
-    $field_name = "{$type}_count";
-    /** @var \Drupal\Core\Entity\ContentEntityInterface $target_entity */
-    $target_entity = $this->getEntityByLabel($target_entity_type_id, $target_entity_label);
-
-    /** @var \Drupal\meta_entity\Entity\MetaEntityInterface $meta_entity */
-    $meta_entity = $target_entity->{$field_name}->entity;
-    if (!$meta_entity) {
-      throw new \Exception("The '$target_entity_label' doesn't have a related meta entity.");
-    }
-
-    $meta_entity->set('count', (int) $count)->save();
   }
 
 }

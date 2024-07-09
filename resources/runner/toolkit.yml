@@ -160,18 +160,31 @@ commands:
     # the coding standards check.
     # See \Joinup\CodingStandards\Sniffs\NamingConventions\ValidUpdateNameSniff
     - { task: exec, command: test "$(git rev-parse --is-shallow-repository)" = "false" || git fetch --unshallow }
-    - { task: run, command: testing:lint-twig }
     - { task: exec, command: "${runner.bin_dir}/grumphp run --tasks=phpcs" }
-    - { task: run, command: toolkit:lint-css }
   toolkit:test-phpmd:
     - { task: exec, command: "${runner.bin_dir}/grumphp run --tasks=phpmd" }
   toolkit:test-phpstan:
     - { task: exec, command: "${runner.bin_dir}/grumphp run --tasks=phpstan" }
-  toolkit:lint-php:
-    - { task: exec, command: "${runner.bin_dir}/grumphp run --tasks=phplint" }
-  toolkit:lint-js:
-    - { task: exec, command: "${runner.bin_dir}/grumphp run --tasks=eslint" }
-  toolkit:lint-yaml:
-    - { task: exec, command: "${runner.bin_dir}/grumphp run --tasks=yamllint" }
   toolkit:lint-css:
-    - { task: exec, command: "${runner.bin_dir}/grumphp run --tasks=stylelint" }
+    - { task: exec, command: "${runner.bin_dir}/grumphp run --tasks=lint-css" }
+  toolkit:lint-gherkin:
+    - { task: exec, command: "${runner.bin_dir}/grumphp run --tasks=lint-gherkin" }
+  toolkit:lint-js:
+    - { task: exec, command: "${runner.bin_dir}/grumphp run --tasks=lint-js" }
+  toolkit:lint-php:
+    - { task: exec, command: "${runner.bin_dir}/grumphp run --tasks=lint-php" }
+  toolkit:lint-twig:
+    - { task: exec, command: "${runner.bin_dir}/grumphp run --tasks=lint-twig" }
+  toolkit:lint-yaml:
+    - { task: exec, command: "${runner.bin_dir}/grumphp run --tasks=lint-yaml" }
+
+  # Extra commands to run on Gitlab after qa-code-review.
+  toolkit:post-qa-code-review:
+    - task: run
+      command: toolkit:lint-css
+    - task: run
+      command: toolkit:lint-twig
+    - task: run
+      command: toolkit:lint-gherkin
+    - task: run
+      command: testing:unused-behat

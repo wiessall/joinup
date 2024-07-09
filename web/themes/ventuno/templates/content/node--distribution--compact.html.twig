@@ -1,0 +1,32 @@
+{#
+/**
+ * @file
+ * Themeing for node, bundle 'distribution', 'compact' view mode.
+ */
+#}
+{% if is_standalone %}
+  {{ attach_library('ventuno/badge') }}
+  <li class="mb-3 releases__item">
+    <span class="badge bg-brand fs-sm">{{ 'Standalone distribution'|t }}</span>
+{% endif %}
+<article class="tile my-2 d-md-flex justify-content-between align-items-center p-3 border rounded">
+  <div>
+    <h1 class="h6 mb-2"><a href="{{ url }}" rel="bookmark">{{ label }}</a></h1>
+    {% if content.file_size|render %}
+    <div class="d-flex flex-wrap fs-sm">
+      <span class="text-muted me-1">{{ 'File size:'|t }}</span>
+      <span class="text-dark">{{ content.file_size }}</span>
+    </div>
+    {% endif %}
+    {% if content.field_licence|render %}
+      <div class="d-flex flex-wrap fs-sm">
+        <span class="text-muted me-1">{{ 'Licence:'|t }}</span>
+        {{ content.field_licence }}
+      </div>
+    {% endif %}
+  </div>
+  {{ content.access_url }}
+</article>
+{% if is_standalone %}
+  </li>
+{% endif %}

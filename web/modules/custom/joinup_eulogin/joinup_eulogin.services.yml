@@ -18,8 +18,3 @@ services:
     arguments: ['@externalauth.authmap']
     tags:
       - { name: 'event_subscriber' }
-  joinup_eulogin.config_overrider:
-    class: Drupal\joinup_eulogin\Config\JoinupEuLoginConfigOverrider
-    arguments: ['@state']
-    tags:
-      - { name: config.factory.override }

@@ -130,10 +130,10 @@ Feature: Like/unlike feature.
     Then I should see the statistics "0" in the "Likeable <content type>" tile
 
     Examples:
-      | content type | state     | headline      |
-      | document     | published |               |
-      | event        | published |               |
-      | news         | published | Likeable news |
+      | content type |
+      | document     |
+      | event        |
+      | news         |
 
   Scenario: Logged-in user can see and hit like button in custom page, discussion and solution tiles
     Given the following solutions:
@@ -194,7 +194,7 @@ Feature: Like/unlike feature.
     Then I should see the statistics "0" in the "Likeable custom page" tile
     And I should see the "Lisa Like" tile
 
-  @javascript @terms
+  @terms
   Scenario: Tiles in the carousel should also give possibility to like content.
     Given custom_page content:
       | title                | collection | author    | state     |

@@ -19,7 +19,7 @@
 {{ pattern('tile', {
   attributes,
   image: content.field_user_photo,
-  url: path('entity.user.canonical', {'user': user.id}),
+  url: path('entity.user.canonical', {user: user.id}),
   info: {
     icon: 'calendar-event',
     label: content.member_for|render|striptags,

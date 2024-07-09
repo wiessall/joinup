@@ -194,7 +194,10 @@ class WorkflowHelper implements WorkflowHelperInterface {
   /**
    * {@inheritdoc}
    */
-  public function unarchiveEntity(EntityInterface $entity): EntityInterface {
+  public function unarchiveEntity(
+    EntityInterface $entity,
+    string|Stringable|TranslatableMarkup|null $revisionLogMessage = NULL,
+  ): EntityInterface {
     if (
       !$entity instanceof EntityWorkflowStateInterface ||
       !$entity instanceof ArchivableEntityInterface ||
@@ -242,9 +245,12 @@ class WorkflowHelper implements WorkflowHelperInterface {
     $previousRevision->setNewRevision();
     $previousRevision->isDefaultRevision(TRUE);
     if ($previousRevision instanceof RevisionLogInterface) {
-      $previousRevision->setRevisionLogMessage($this->t('Unarchived by @user', [
+      $revisionLogMessage = $revisionLogMessage ?? $this->t('Unarchived by @user', [
         '@user' => $this->currentUser->getAccountName(),
-      ]));
+      ]);
+      if ($revisionLogMessage) {
+        $previousRevision->setRevisionLogMessage((string) $revisionLogMessage);
+      }
       $previousRevision->setRevisionCreationTime($this->time->getRequestTime());
       $previousRevision->setRevisionUserId($this->currentUser->id());
     }

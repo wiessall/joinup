@@ -12,17 +12,18 @@ dependencies:
     - media.type.video
     - node.type.custom_page
     - node.type.discussion
+    - node.type.distribution
     - node.type.document
     - node.type.glossary
     - node.type.owner
     - node.type.licence
     - taxonomy.vocabulary.legal_type
   module:
-    - asset_distribution
     - comment
     - contact_form
     - custom_page
     - dashboard
+    - eif
     - entity_legal
     - entityqueue
     - field_permissions
@@ -31,6 +32,7 @@ dependencies:
     - joinup
     - joinup_community_content
     - joinup_core
+    - joinup_distribution
     - joinup_featured
     - joinup_group
     - joinup_group_content_management
@@ -48,6 +50,7 @@ dependencies:
     - paragraphs_type_permissions
     - rdf_draft
     - rdf_entity
+    - replicate_ui
     - role_delegation
     - sitewide_alert
     - solution
@@ -102,7 +105,6 @@ permissions:
   - 'administer webform element access'
   - 'administer webform submission'
   - 'assign licence_manager role'
-  - 'create asset_distribution rdf entity'
   - 'create asset_release rdf entity'
   - 'create collection rdf entity'
   - 'create collection_logo media'
@@ -113,6 +115,7 @@ permissions:
   - 'create custom_page content'
   - 'create discussion content'
   - 'create discussion_logo media'
+  - 'create distribution content'
   - 'create eif_perspective meta-entity'
   - 'create event_logo media'
   - 'create licence content'
@@ -177,13 +180,13 @@ permissions:
   - 'delete paragraph content webform'
   - 'delete sitewide alert entities'
   - 'download subscribers report'
-  - 'edit any asset_distribution rdf entity'
   - 'edit any collection rdf entity'
   - 'edit any collection_logo media'
   - 'edit any contact_information content'
   - 'edit any custom_page content'
   - 'edit any discussion content'
   - 'edit any discussion_logo media'
+  - 'edit any distribution content'
   - 'edit any event_logo media'
   - 'edit any glossary content'
   - 'edit any licence content'
@@ -203,16 +206,12 @@ permissions:
   - 'manage group announcements'
   - 'manage group content'
   - 'manage newsroom newsletter subscriptions'
-  - 'manage site auto-registration'
   - 'manage solutions'
   - 'moderate entity parents'
   - 'perform announcement workflow approve transition on any entity'
   - 'perform announcement workflow reject transition on any entity'
   - 'perform announcement workflow send transition on any entity'
   - 'perform announcement workflow undo transition on any entity'
-  - 'perform asset_distribution_workflow workflow archive transition on any entity'
-  - 'perform asset_distribution_workflow workflow publish transition on any entity'
-  - 'perform asset_distribution_workflow workflow unarchive transition on any entity'
   - 'perform asset_release_workflow workflow archive transition on any entity'
   - 'perform asset_release_workflow workflow draft transition on any entity'
   - 'perform asset_release_workflow workflow provide_changes transition on any entity'
@@ -237,6 +236,9 @@ permissions:
   - 'perform custom_page_workflow workflow save_as_draft transition on any entity'
   - 'perform custom_page_workflow workflow unarchive transition on any entity'
   - 'perform custom_page_workflow workflow unpublish transition on any entity'
+  - 'perform joinup_distribution_workflow workflow archive transition on any entity'
+  - 'perform joinup_distribution_workflow workflow publish transition on any entity'
+  - 'perform joinup_distribution_workflow workflow unarchive transition on any entity'
   - 'perform node:post_moderated workflow approve_proposed transition on any entity'
   - 'perform node:post_moderated workflow archive transition on any entity'
   - 'perform node:post_moderated workflow propose_from_reported transition on any entity'
@@ -271,6 +273,7 @@ permissions:
   - 'perform solution_workflow workflow unarchive transition on any entity'
   - 'perform solution_workflow workflow update_validated transition on any entity'
   - 'perform solution_workflow workflow validate transition on any entity'
+  - 'replicate entities'
   - 'revert all sitewide alert revisions'
   - 'unarchived community content'
   - 'unfeature entity'

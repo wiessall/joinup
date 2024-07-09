@@ -216,13 +216,13 @@ display:
             'entity:node':
               custom_page: default
               discussion: default
+              distribution: default
               document: default
               event: default
               licence: view_mode_search_list_item
               news: default
               video: default
             'entity:rdf_entity':
-              asset_distribution: default
               asset_release: default
               collection: default
               solution: default
@@ -301,13 +301,13 @@ display:
             'entity:node':
               custom_page: default
               discussion: default
+              distribution: default
               document: default
               event: default
               licence: compatibility_check
               news: default
               video: default
             'entity:rdf_entity':
-              asset_distribution: default
               asset_release: default
               collection: default
               solution: default
