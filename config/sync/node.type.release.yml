@@ -32,7 +32,7 @@ label_count:
 name: Release
 type: release
 description: 'A release represents a version of a solution in time.'
-help: ''
+help: null
 new_revision: true
 preview_mode: 0
 display_submitted: false
