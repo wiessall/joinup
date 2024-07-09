@@ -66,7 +66,7 @@ function joinup_community_content_tokens($type, array $tokens, array $data = [],
           else {
             $output = $node->getDescriptionAsRenderArray('view_mode_tile');
           }
-          $outputString = \Drupal::service('renderer')->renderPlain($output);
+          $outputString = \Drupal::service('renderer')->renderInIsolation($output);
           $replacements[$original] = text_summary($outputString);
           break;
       }

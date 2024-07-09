@@ -17,12 +17,12 @@
   Drupal.behaviors.fieldUIDisplayOverview = {
     attach(context, settings) {
       $(
-        once("field-display-overview", "table#field-display-overview", context)
+        once("field-display-overview", "table#field-display-overview", context),
       ).each(() => {
         Drupal.fieldUIOverview.attach(
           this,
           settings.fieldUIRowsData,
-          Drupal.fieldUIDisplayOverview
+          Drupal.fieldUIDisplayOverview,
         );
       });
     },
@@ -112,7 +112,7 @@
         const regionRow = $row.prevAll("tr.region-message").get(0);
         const region = regionRow.className.replace(
           /([^ ]+[ ]+)*region-([^ ]+)-message([ ]+[^ ]+)*/,
-          "$2"
+          "$2",
         );
 
         if (region !== rowHandler.region) {
