@@ -49,7 +49,6 @@ Feature: As a user of the website
       | warning messages                                                                     |
       | You are viewing the published version. To view the latest draft version, click here. |
 
-
     # Edit as facilitator and save as draft.
     When I click "Edit"
     Then the following fields should be present "Current workflow state"

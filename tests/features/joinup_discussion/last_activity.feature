@@ -22,7 +22,6 @@ Feature: Last Activity feature
     And I should see the text "01/01/2023" in the "Tools cabinet" tile
     And the changed date of the "Tools cabinet" discussion is "01-02-2023 00:00"
 
-
     When I go to the discussions page of "Development through bricolage"
     Then I should see the text "Last activity:" in the "Tools cabinet" tile
     And I should see the text "01/02/2023" in the "Tools cabinet" tile
@@ -39,5 +38,3 @@ Feature: Last Activity feature
     And I go to the discussions page of "Development through bricolage"
     Then I should see the text "Last activity:" in the "Tools cabinet" tile
     And I should not see the text "01/02/2023" in the "Tools cabinet" tile
-
-

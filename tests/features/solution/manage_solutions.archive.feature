@@ -245,4 +245,3 @@ Feature: When a solution is archived then its sub-content also should be archive
       | John Moderator     |
       | Anne Group Admin   |
       | Andrew Facilitator |
-
