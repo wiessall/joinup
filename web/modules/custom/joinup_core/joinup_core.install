@@ -96,7 +96,7 @@ function joinup_core_requirements($phase): array {
 /**
  * Fix redirection.
  */
-function joinup_core_update_111000(): string {
+function joinup_core_update_111001(): string {
   /** @var \Drupal\redirect\RedirectRepository $redirectRepository */
   $redirectRepository = \Drupal::service('redirect.repository');
   $redirects = $redirectRepository->findBySourcePath('collection/interoperability-test-bed-repository/solution/interoperability-test-bed/news');
