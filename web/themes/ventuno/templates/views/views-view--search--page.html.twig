@@ -54,12 +54,12 @@
     disabled: false,
     icon: 'filter',
     icon_position: 'after',
-    attributes: create_attribute().addClass(["d-lg-none", "mt-2", "mb-4", "rounded-0", "w-100"]).setAttribute("data-bs-toggle", "offcanvas").setAttribute("data-bs-target", "#bcl-offcanvas").setAttribute("aria-controls", "bcl-offcanvas"),
+    attributes: create_attribute().addClass(['d-lg-none', 'mt-2', 'mb-4', 'rounded-0', 'w-100']).setAttribute('data-bs-toggle', 'offcanvas').setAttribute('data-bs-target', '#bcl-offcanvas').setAttribute('aria-controls', 'bcl-offcanvas'),
   }) }}
   {% if header %}
     <div class="view-header">
-      {% set results_count = header.views_block_area_1.content.results_count|merge({'value': header.result}) %}
-      {% set search_exposed = header.views_block_area_1.content|merge({'results_count': results_count}) %}
+      {% set results_count = header.views_block_area_1.content.results_count|merge({value: header.result}) %}
+      {% set search_exposed = header.views_block_area_1.content|merge({results_count: results_count}) %}
       {{ search_exposed }}
       {{ header.views_block_area }}
       {{ header.search_api_spellcheck_did_you_mean }}

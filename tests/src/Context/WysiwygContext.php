@@ -41,24 +41,7 @@ class WysiwygContext extends RawDrupalContext {
       // header.
       $page = $this->getSession()->getPage();
       $element = $page->find('xpath', "//*[contains(text(),'{$label}')]");
-      $xpath = $element->getXpath();
-      $function = <<<JS
-  (
-      function(){
-        setTimeout(() => {
-          let elem = document.evaluate("$xpath", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
-          elem.scrollIntoView({ behavior: 'instant', block: 'center' });
-        }, 300);
-      }
-  )()
-  JS;
-      try {
-        $this->getSession()->executeScript($function);
-        sleep(1);
-      }
-      catch (\Exception $e) {
-        throw new \Exception("Scroll element into view failed");
-      }
+      $this->scrollElementIntoView($element);
       $this->pressWysiwygButton($label, 'Source');
       $this->setWysiwygText($label, $text);
     }
@@ -92,18 +75,6 @@ class WysiwygContext extends RawDrupalContext {
    */
   public function assertWysiwyg(string $label): void {
     Assert::assertTrue($this->hasWysiwyg($label));
-  }
-
-  /**
-   * Checks that a given field label is not associated with a WYSIWYG editor.
-   *
-   * @param string $label
-   *   The label of the field uncontaining the WYSIWYG editor.
-   *
-   * @Then the :label field should not have a wysiwyg editor
-   */
-  public function assertNoWysiwyg(string $label): void {
-    Assert::assertFalse($this->hasWysiwyg($label));
   }
 
   /**

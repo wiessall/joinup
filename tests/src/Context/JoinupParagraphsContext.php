@@ -55,38 +55,6 @@ class JoinupParagraphsContext extends RawDrupalContext {
   ];
 
   /**
-   * Enters the given text in the given WYSIWYG editor.
-   *
-   * If this is running on a JavaScript enabled browser it will first click the
-   * 'Source' button so the text can be entered as normal HTML.
-   *
-   * @param string $text
-   *   The text to enter in the WYSIWYG editor.
-   * @param string $label
-   *   The label of the field containing the WYSIWYG editor.
-   * @param string $field
-   *   The field in which to take action.
-   * @param int $position
-   *   The delta of the paragraph entry.
-   *
-   * @When I enter :text in the :label wysiwyg editor in the :field field for paragraph :position
-   */
-  public function enterTextInWysiwyg(string $text, string $label, string $field, int $position): void {
-    $field = $this->getParagraphsElementItem($field, $position);
-
-    // If we are running in a JavaScript enabled browser, first click the
-    // 'Source' button so we can enter the text as HTML and get the same result
-    // as in a non-JS browser.
-    if ($this->hasJavascriptSupport()) {
-      $this->pressWysiwygButton($label, 'Source', $field);
-      $this->setWysiwygText($label, $text, $field);
-    }
-    else {
-      $field->fillField($label, $text);
-    }
-  }
-
-  /**
    * Fills in a text field in the given paragraph.
    *
    * Sometimes, when testing complex paragraph structures makes it hard to
@@ -160,23 +128,6 @@ class JoinupParagraphsContext extends RawDrupalContext {
   }
 
   /**
-   * Asserts the existence of a button in a row of paragraphs.
-   *
-   * @param string $button
-   *   The button label.
-   * @param string $field
-   *   The field name.
-   * @param int $delta
-   *   The paragraphs row number. Starts at 1 for readability.
-   *
-   * @Given I should see the :button button in the :field field for paragraph :delta
-   */
-  public function assertButtonInParagraphsItem(string $button, string $field, int $delta): void {
-    $paragraph_item = $this->getParagraphsElementItem($field, --$delta);
-    Assert::assertNotEmpty($paragraph_item->findButton($button));
-  }
-
-  /**
    * Clicks a link in the given paragraphs item.
    *
    * @param string $label
@@ -218,21 +169,6 @@ class JoinupParagraphsContext extends RawDrupalContext {
     }
 
     $link->click();
-  }
-
-  /**
-   * Asserts the number of rows in the paragraphs field.
-   *
-   * @param int $expected_rows
-   *   The expected number of rows.
-   * @param string $field
-   *   The field name.
-   *
-   * @Given there should be :expected paragraph(s) in the :field field
-   */
-  public function assertRowsInParagraphsField(int $expected_rows, string $field): void {
-    $field = $this->getParagraphsElement($field);
-    Assert::assertCount($expected_rows, $field->findAll('xpath', "//tr[contains(concat(' ', @class, ' '), 'draggable')]"));
   }
 
   /**
@@ -378,30 +314,6 @@ class JoinupParagraphsContext extends RawDrupalContext {
     while ($item = $queue->claimItem()) {
       $worker->processItem($item->data);
       $queue->deleteItem($item);
-    }
-  }
-
-  /**
-   * Asserts that there are results in the carousel paragraph.
-   *
-   * @param string $heading
-   *   The heading of the carousel paragraph.
-   *
-   * @Then I should see results in the :heading carousel
-   */
-  public function iShouldResultsInTheCarousel(string $heading): void {
-    $xpath = "//div[contains(concat(' ', @class, ' '), ' paragraph--carousel ')]";
-    $xpath .= "//h2[contains(concat(' ', @class, ' '), ' paragraph__heading ')]";
-    $xpath .= "[contains(text(), '$heading')]";
-    $element = $this->getSession()->getPage()->find('xpath', $xpath);
-    if (empty($element)) {
-      throw new ElementNotFoundException($this->getSession()->getDriver(), 'paragraph', 'paragraph--carousel', $heading);
-    }
-
-    $xpath = "//article[contains(concat(' ', @class, ' '), ' glide__slide ')]";
-    $elements = $element->getParent()->findAll('xpath', $xpath);
-    if (empty($elements)) {
-      throw new ElementNotFoundException($this->getSession()->getDriver(), 'paragraph', 'glide__slide', $heading);
     }
   }
 

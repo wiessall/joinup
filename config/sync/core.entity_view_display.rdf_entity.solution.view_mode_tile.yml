@@ -10,7 +10,6 @@ dependencies:
     - field.field.rdf_entity.solution.field_is_content
     - field.field.rdf_entity.solution.field_is_content_creation
     - field.field.rdf_entity.solution.field_is_description
-    - field.field.rdf_entity.solution.field_is_distribution
     - field.field.rdf_entity.solution.field_is_documentation
     - field.field.rdf_entity.solution.field_is_has_version
     - field.field.rdf_entity.solution.field_is_included_asset
@@ -41,6 +40,7 @@ dependencies:
     - rdf_entity.rdfentity.solution
     - responsive_image.styles.tile
   module:
+    - field_fallback_formatter
     - joinup_html_stripper
     - responsive_image
     - template_suggestion
@@ -53,24 +53,22 @@ content:
   download_total:
     settings: {  }
     third_party_settings: {  }
-    weight: 3
-    region: content
-  field_is_abstract:
-    type: string
-    label: hidden
-    settings:
-      link_to_entity: false
-    third_party_settings: {  }
     weight: 2
     region: content
-  field_is_description:
-    type: joinup_html_stripper_stripped
+  field_is_abstract:
+    type: field_fallback_formatter
     label: hidden
     settings:
-      trim_length: 600
+      main_field_formatter_id: string
+      main_field_formatter_settings:
+        link_to_entity: false
+      fallback_field_id: field_is_description
+      fallback_field_formatter_id: joinup_html_stripper_stripped
+      fallback_field_formatter_settings:
+        trim_length: 600
     third_party_settings:
       template_suggestion:
-        template_suggestion: bare
+        template_suggestion: ''
     weight: 1
     region: content
   field_is_logo:
@@ -89,19 +87,20 @@ content:
   flag_like_rdf_entity:
     settings: {  }
     third_party_settings: {  }
-    weight: 4
+    weight: 3
     region: content
 hidden:
   changed: true
   collections: true
   created: true
+  distributions: true
   eif_perspective: true
   featured: true
   field_is_affiliations_requests: true
   field_is_contact_information: true
   field_is_content: true
   field_is_content_creation: true
-  field_is_distribution: true
+  field_is_description: true
   field_is_documentation: true
   field_is_has_version: true
   field_is_included_asset: true

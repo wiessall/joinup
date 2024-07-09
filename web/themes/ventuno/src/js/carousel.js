@@ -59,10 +59,10 @@ import ControlsDisabler from "./helpers/glide.controlsDisabler.esm";
         // Event listener to add class when animating.
         // Used in behat to detect when Glide finished animating.
         glide
-          .on("move", () => {
+          .on("run", () => {
             slide.classList.add("glide-animating");
           })
-          .on("move.after", () => {
+          .on("run.after", () => {
             slide.classList.remove("glide-animating");
           });
       });

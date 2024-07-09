@@ -15,7 +15,6 @@ use Drupal\file\Entity\File;
  * Tests the download & visit count refresh.
  *
  * @group joinup_stats
- * @group wip
  */
 class RefreshCountersTest extends KernelTestBase {
 
@@ -213,34 +212,6 @@ class RefreshCountersTest extends KernelTestBase {
           'rid' => 'solution',
           'label' => 'Solution 1',
         ],
-        [
-          'id' => 'http://example.com/distro/1',
-          'rid' => 'asset_distribution',
-          'label' => 'Distro 1',
-          'field_ad_access_url' => File::create([
-            'uri' => 'public://d1',
-          ]),
-          'og_audience' => 'http://example.com/solution/1',
-          'field_ad_state' => 'published',
-        ],
-        [
-          'id' => 'http://example.com/distro/2',
-          'rid' => 'asset_distribution',
-          'label' => 'Distro 2',
-          'field_ad_access_url' => File::create([
-            'uri' => 'public://d2',
-          ]),
-          'field_ad_state' => 'published',
-        ],
-        [
-          'id' => 'http://example.com/distro/3',
-          'rid' => 'asset_distribution',
-          'label' => 'Distro 3',
-          'field_ad_access_url' => File::create([
-            'uri' => 'public://d3',
-          ]),
-          'field_ad_state' => 'published',
-        ],
       ],
       // Enforce predictable NIDs.
       'node' => [
@@ -264,6 +235,37 @@ class RefreshCountersTest extends KernelTestBase {
           'nid' => 4,
           'title' => 'News',
         ],
+      ],
+      [
+        'nid' => 5,
+        'uri' => 'http://example.com/distro/1',
+        'type' => 'distribution',
+        'label' => 'Distro 1',
+        'field_access_url' => File::create([
+          'uri' => 'public://d1',
+        ]),
+        'og_audience' => 'http://example.com/solution/1',
+        'field_state' => 'published',
+      ],
+      [
+        'nid' => 6,
+        'uri' => 'http://example.com/distro/2',
+        'type' => 'distribution',
+        'label' => 'Distro 2',
+        'field_access_url' => File::create([
+          'uri' => 'public://d2',
+        ]),
+        'field_state' => 'published',
+      ],
+      [
+        'nid' => 7,
+        'uri' => 'http://example.com/distro/3',
+        'rid' => 'distribution',
+        'label' => 'Distro 3',
+        'field_access_url' => File::create([
+          'uri' => 'public://d3',
+        ]),
+        'field_state' => 'published',
       ],
     ];
   }

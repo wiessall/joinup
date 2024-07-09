@@ -1,6 +1,6 @@
 .ui-widget,
 .ui-widget button {
-  font-family: $font-family-base!important;
+  font-family: $font-family-base !important;
 }
 .ui-widget-overlay {
   z-index: $zindex-modal-backdrop;
@@ -9,15 +9,15 @@
   color: $white;
 }
 .ui-dialog {
-  z-index: $zindex-modal!important;
+  z-index: $zindex-modal !important;
   overflow: hidden;
-  padding: 0!important;
+  padding: 0 !important;
   border: 1px solid $gray-200;
-  border-radius: $border-radius-lg!important;
+  border-radius: $border-radius-lg !important;
   box-shadow: $modal-content-box-shadow-sm-up;
   overflow-wrap: break-word;
   &.ui-widget-content a.btn-link {
-    color: $brand
+    color: $brand;
   }
   .ui-widget-header {
     border-top: 0;
@@ -26,13 +26,13 @@
     border-left: 0;
   }
   .ui-dialog-titlebar {
-    padding: $spacer!important;
-    border-top-left-radius: $border-radius-lg!important;
+    padding: $spacer !important;
+    border-top-left-radius: $border-radius-lg !important;
     border-top-left-radius: var(--bs-modal-inner-border-radius);
-    border-top-right-radius: $border-radius-lg!important;
+    border-top-right-radius: $border-radius-lg !important;
     border-top-right-radius: var(--bs-modal-inner-border-radius);
-    border-bottom-right-radius: 0!important;
-    border-bottom-left-radius: 0!important;
+    border-bottom-right-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
     background-color: transparent;
   }
   .ui-dialog-title {
@@ -42,31 +42,35 @@
   }
   .ui-dialog-titlebar-close {
     top: 1.75rem;
-    right: $spacer!important;
+    right: $spacer !important;
     box-sizing: content-box;
     width: 1em;
     height: 1em;
-    padding: .25em;
-    opacity: .5;
+    padding: 0.25em;
+    opacity: 0.5;
     color: #000;
     border: 0;
-    border-radius: .5rem;
-    background: transparent url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M.293.293a1 1 0 0 1 1.414 0L8 6.586 14.293.293a1 1 0 1 1 1.414 1.414L9.414 8l6.293 6.293a1 1 0 0 1-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 0 1-1.414-1.414L6.586 8 .293 1.707a1 1 0 0 1 0-1.414z'/%3E%3C/svg%3E") 50%/1em auto no-repeat;
+    border-radius: 0.5rem;
+    background: transparent
+      url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M.293.293a1 1 0 0 1 1.414 0L8 6.586 14.293.293a1 1 0 1 1 1.414 1.414L9.414 8l6.293 6.293a1 1 0 0 1-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 0 1-1.414-1.414L6.586 8 .293 1.707a1 1 0 0 1 0-1.414z'/%3E%3C/svg%3E")
+      50%/1em auto no-repeat;
     &:hover {
       border: 0;
-      background: transparent url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M.293.293a1 1 0 0 1 1.414 0L8 6.586 14.293.293a1 1 0 1 1 1.414 1.414L9.414 8l6.293 6.293a1 1 0 0 1-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 0 1-1.414-1.414L6.586 8 .293 1.707a1 1 0 0 1 0-1.414z'/%3E%3C/svg%3E") 50%/1em auto no-repeat;
+      background: transparent
+        url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M.293.293a1 1 0 0 1 1.414 0L8 6.586 14.293.293a1 1 0 1 1 1.414 1.414L9.414 8l6.293 6.293a1 1 0 0 1-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 0 1-1.414-1.414L6.586 8 .293 1.707a1 1 0 0 1 0-1.414z'/%3E%3C/svg%3E")
+        50%/1em auto no-repeat;
     }
   }
   .ui-dialog-content {
-    padding: $spacer!important;
+    padding: $spacer !important;
   }
   .ui-dialog-buttonpane {
-    padding: $spacer!important;
+    padding: $spacer !important;
     .ui-dialog-buttonset {
       display: flex;
       float: unset;
       justify-content: right;
-      padding: 0!important;
+      padding: 0 !important;
       column-gap: $spacer;
       button.ui-button {
         display: inline-block;
@@ -76,7 +80,11 @@
         -webkit-user-select: none;
         -moz-user-select: none;
         user-select: none;
-        transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+        transition:
+          color 0.15s ease-in-out,
+          background-color 0.15s ease-in-out,
+          border-color 0.15s ease-in-out,
+          box-shadow 0.15s ease-in-out;
         text-align: center;
         vertical-align: middle;
         color: var(--bs-btn-color);

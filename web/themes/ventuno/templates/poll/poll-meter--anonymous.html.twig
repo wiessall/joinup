@@ -25,11 +25,11 @@
 #}
  {% set attributes = create_attribute(
    {
-     'class': 'use-ajax',
+     class: 'use-ajax',
      'data-dialog-type': 'modal',
-     'data-dialog-options': {'width': 400}|json_encode,
-     'href': path('joinup_modal.anonymous', {'type': 'vote'}, {'query': {'destination': path('<current>')}}),
-     'title': 'Login or register to proceed voting'|t,
+     'data-dialog-options': {width: 400}|json_encode,
+     href: path('joinup_modal.anonymous', {type: 'vote'}, {query: {destination: path('<current>')}}),
+     title: 'Login or register to proceed voting'|t,
    }
  ) %}
 

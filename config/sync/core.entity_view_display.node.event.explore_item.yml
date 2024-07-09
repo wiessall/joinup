@@ -73,7 +73,7 @@ third_party_settings:
                 settings:
                   timezone_override: ''
                   format_type: date_only
-                  fromto: start_date
+                  from_to: start_date
                   separator: '-'
                 third_party_settings:
                   template_suggestion:
@@ -84,58 +84,6 @@ third_party_settings:
                 block_attributes:
                   id: ''
                   class: date
-                  style: ''
-                  data: ''
-                block_title_attributes:
-                  id: ''
-                  class: ''
-                  style: ''
-                  data: ''
-                block_content_attributes:
-                  id: ''
-                  class: ''
-                  style: ''
-                  data: ''
-          eef89898-f244-4390-a11f-506d0b31ee8c:
-            uuid: eef89898-f244-4390-a11f-506d0b31ee8c
-            region: content
-            configuration:
-              id: 'field_block:node:event:field_paragraphs_body'
-              label: Body
-              label_display: '0'
-              provider: layout_builder
-              context_mapping:
-                entity: layout_builder.entity
-                view_mode: view_mode
-              formatter:
-                type: filtered_entity_reference_bundles
-                label: hidden
-                settings:
-                  view_mode: tile
-                  filtered_entity_bundles:
-                    simple_paragraph: simple_paragraph
-                    text: text
-                  trim_length: 220
-                  trim_chars: …
-                third_party_settings:
-                  field_delimiter:
-                    delimiter: ''
-                  field_formatter_range:
-                    order: 0
-                    limit: 1
-                    offset: 0
-                  joinup_slick:
-                    preset: ''
-                    field_label: true
-                    custom_label: ''
-                  template_suggestion:
-                    template_suggestion: bare
-            weight: -9
-            additional:
-              component_attributes:
-                block_attributes:
-                  id: ''
-                  class: explore-item__description
                   style: ''
                   data: ''
                 block_title_attributes:
@@ -160,10 +108,21 @@ third_party_settings:
                 entity: layout_builder.entity
                 view_mode: view_mode
               formatter:
-                type: joinup_html_stripper_stripped
+                type: field_fallback_formatter
                 label: hidden
                 settings:
-                  trim_length: 220
+                  main_field_formatter_id: string
+                  main_field_formatter_settings:
+                    link_to_entity: false
+                  fallback_field_id: field_paragraphs_body
+                  fallback_field_formatter_id: filtered_entity_reference_bundles
+                  fallback_field_formatter_settings:
+                    view_mode: tile
+                    filtered_entity_bundles:
+                      simple_paragraph: simple_paragraph
+                      text: text
+                    trim_length: 200
+                    trim_chars: ...
                 third_party_settings:
                   template_suggestion:
                     template_suggestion: bare

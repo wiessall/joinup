@@ -32,5 +32,6 @@ _core:
   default_config_hash: eAoRkzoUJJqeXZZewXmI-Yk4WcGs3dlP6NJBGn9Edj0
 name: 'Representation Technique'
 vid: representation_technique
-description: ''
+description: null
 weight: 0
+new_revision: false

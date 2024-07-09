@@ -30,7 +30,7 @@
 
     <div class="page-title__details mb-4">
       {% if additional_content.is_archived %}
-        {% include '@ventuno/parts/page-title-detail-archive.html.twig' %}
+        {{ include('@ventuno/parts/page-title-detail-archive.html.twig') }}
       {% endif %}
     </div>
   </div>

@@ -9,6 +9,7 @@ upgrade_commands:
     - ./vendor/bin/drush deploy --yes
     - ./vendor/bin/drush search-api:reset-tracker --yes
     - ./vendor/bin/drush joinup:node-access-rebuild
+    - ./vendor/bin/drush twigc --yes
     - rm disable-config-readonly
     - ./vendor/bin/drush joinup:unpublish-alert --category
     - ./scripts/check_status_report.php
@@ -52,6 +53,7 @@ dev_install_clean: True
 phpunit_clone: False
 phpunit_clean: True
 
+# Keep this version in sync with .ddev/docker-compose.selenium-chrome.yaml.
 selenium_version: '4.5.0'
 
 memcached: True

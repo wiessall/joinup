@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace Drupal\joinup_test_time\Datetime;
 
 use Drupal\Component\Datetime\Time;
-use Drupal\Core\State\StateInterface;
-use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Provides mockable request / current time during testing.
@@ -17,45 +15,20 @@ final class TestTime extends Time {
 
   /**
    * State key of the mocked timestamp, if any.
-   *
-   * @const string
    */
-  const MOCK_TIMESTAMP_STATE_KEY = 'joinup_test_time.timestamp';
+  public const string MOCK_TIMESTAMP_STATE_KEY = 'joinup_test_time.timestamp';
 
   /**
-   * The state service.
-   *
-   * @var \Drupal\Core\State\StateInterface
+   * {@inheritdoc}
    */
-  protected $state;
-
-  /**
-   * Constructs a new TestTime instance.
-   *
-   * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
-   *   The request stack.
-   * @param \Drupal\Core\State\StateInterface $state
-   *   The state service.
-   */
-  public function __construct(RequestStack $request_stack, StateInterface $state) {
-    parent::__construct($request_stack);
-    $this->state = $state;
+  public function getRequestTime(): int {
+    return $this->getMockTimestamp() ?? parent::getRequestTime();
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getRequestTime() {
-    if ($mock_timestamp = $this->state->get(self::MOCK_TIMESTAMP_STATE_KEY)) {
-      return $mock_timestamp;
-    }
-    return parent::getRequestTime();
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getRequestMicroTime() {
+  public function getRequestMicroTime(): float {
     return (float) $this->getRequestTime();
   }
 
@@ -63,17 +36,26 @@ final class TestTime extends Time {
    * {@inheritdoc}
    */
   public function getCurrentTime() {
-    if ($mock_timestamp = $this->state->get(self::MOCK_TIMESTAMP_STATE_KEY)) {
-      return $mock_timestamp;
-    }
-    return parent::getRequestTime();
+    return $this->getMockTimestamp() ?? parent::getRequestTime();
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getCurrentMicroTime() {
+  public function getCurrentMicroTime(): float {
     return (float) $this->getCurrentTime();
+  }
+
+  /**
+   * Returns the mocked timestamp.
+   *
+   * @return int|null
+   *   The mocked timestamp or NULL if no timestamp was set.
+   */
+  protected function getMockTimestamp(): ?int {
+    // The service is not injected to avoid container circular dependencies.
+    // phpcs:ignore DrupalPractice.Objects.GlobalDrupal.GlobalDrupal
+    return \Drupal::state()->get(self::MOCK_TIMESTAMP_STATE_KEY);
   }
 
 }
