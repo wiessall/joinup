@@ -19,11 +19,11 @@
         // data-joinup-eif-category.
         let solutionsCount = 0;
         const eifFilterItem = document.querySelectorAll(
-          ".eif-filter__item button.is-active"
+          ".eif-filter__item button.is-active",
         );
         eifFilterItem.forEach((element) => {
           const currentEifCategory = element.getAttribute(
-            "data-joinup-eif-category"
+            "data-joinup-eif-category",
           );
 
           if (typeof currentEifCategory !== "undefined") {

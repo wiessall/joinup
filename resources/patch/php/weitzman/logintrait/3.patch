@@ -1,0 +1,50 @@
+From 3bdbfc7b1aa6aa5207cc18a6684a9dbfc7079e5b Mon Sep 17 00:00:00 2001
+From: Alexandre Dias <alex.jm.dias@gmail.com>
+Date: Mon, 8 Jul 2024 14:27:00 +0000
+Subject: [PATCH] Drupal 10.3 compat for logout confirm page
+
+---
+ composer.json      | 3 +++
+ src/LoginTrait.php | 5 +++--
+ 2 files changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/composer.json b/composer.json
+index bd1820b..58a48ab 100644
+--- a/composer.json
++++ b/composer.json
+@@ -13,6 +13,9 @@
+         "squizlabs/php_codesniffer": "^3.2",
+         "jakub-onderka/php-parallel-lint": "^1.0"
+     },
++    "conflict": {
++      "drupal/core": "<10.3"
++    },
+     "autoload": {
+         "psr-4": { "weitzman\\LoginTrait\\": "src" }
+     },
+diff --git a/src/LoginTrait.php b/src/LoginTrait.php
+index d1ecc2b..bf4112b 100644
+--- a/src/LoginTrait.php
++++ b/src/LoginTrait.php
+@@ -44,7 +44,8 @@ trait LoginTrait
+     protected function drupalLogout()
+     {
+         $this->drupalGet('user/logout');
+-        // Omit checking for user/pass fields.
++        $page = $this->getCurrentPage();
++        $page->pressButton('edit-submit');
+ 
+         // Clear entity cache entry so drupalLogin() goes to DB.
+         \Drupal::entityTypeManager()
+@@ -54,7 +55,7 @@ trait LoginTrait
+         // @see BrowserTestBase::drupalUserIsLoggedIn()
+         unset($this->loggedInUser->sessionId);
+         $this->loggedInUser = false;
+-        \Drupal::currentUser()->setAccount(new AnonymousUserSession());
++        $this->container->get('current_user')->setAccount(new AnonymousUserSession());
+     }
+ 
+     /**
+-- 
+GitLab
+

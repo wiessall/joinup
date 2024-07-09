@@ -3,14 +3,14 @@
 .page-header {
   width: 100vw;
   height: 100%;
-  padding: $spacer * 2 0!important; // 32px 0
+  padding: $spacer * 2 0 !important; // 32px 0
   text-align: center;
   background-color: $primary;
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
   &__title {
-    margin: 0!important;
+    margin: 0 !important;
     color: $white;
     font-size: 3rem;
     font-weight: $font-weight-normal;
@@ -23,10 +23,10 @@
     }
   }
   @include media-breakpoint-up(md) {
-    padding: $spacer * 3.5 0!important; // 56px 0
+    padding: $spacer * 3.5 0 !important; // 56px 0
   }
   @include media-breakpoint-up(xxl) {
-    padding: $spacer * 5 0!important; // 64px 0
+    padding: $spacer * 5 0 !important; // 64px 0
   }
 }
 .page--news {
