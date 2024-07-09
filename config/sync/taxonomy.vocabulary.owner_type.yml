@@ -32,5 +32,6 @@ _core:
   default_config_hash: U6oNQvUPHBpdDusMd-QjjNnPw-p3b7pbkyv_uu4c9B8
 name: 'Owner type'
 vid: owner_type
-description: ''
+description: null
 weight: 0
+new_revision: false

@@ -30,7 +30,7 @@ class OutdatedContentFieldItemList extends FieldItemList {
     $config = \Drupal::config('joinup_core.outdated_content_threshold');
 
     // If $threshold is NULL, then the entity will never be outdated.
-    if ($threshold = $config->get("{$entity->getEntityTypeId()}.{$entity->bundle()}")) {
+    if ($threshold = $config->get("thresholds.{$entity->getEntityTypeId()}.{$entity->bundle()}")) {
       $publication_time = $entity->getPublicationTime();
     }
 
