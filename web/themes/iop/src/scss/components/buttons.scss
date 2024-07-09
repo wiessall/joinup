@@ -11,7 +11,11 @@
 
 .btn-primary {
   &:hover {
-    background-color: color.adjust($primary, $saturation: -23.76%, $lightness: 8.63%);
+    background-color: color.adjust(
+      $primary,
+      $saturation: -23.76%,
+      $lightness: 8.63%
+    );
   }
   &:focus,
   &:active,

@@ -43,7 +43,7 @@
               window.location.href = downloadLink.href;
             }
           });
-        }
+        },
       );
     },
   };

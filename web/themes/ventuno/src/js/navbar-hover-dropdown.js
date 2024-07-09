@@ -42,7 +42,7 @@
 
       once(
         "navbar-hover-dropdown",
-        "#main-navbar .nav-item.d-xl-inline-block.dropdown"
+        "#main-navbar .nav-item.d-xl-inline-block.dropdown",
       ).forEach((li) => {
         li.addEventListener("mouseover", () => {
           toggleDropdown(li, true);
