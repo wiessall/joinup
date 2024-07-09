@@ -15,7 +15,6 @@ use Drupal\file\Entity\File;
  * Tests the download & visit count refresh.
  *
  * @group joinup_stats
- * @group wip
  */
 class RefreshCountersTest extends KernelTestBase {
 
