@@ -48,12 +48,12 @@
 
     messageWrapper.setAttribute(
       "class",
-      `alert alert-${variant} d-flex align-items-center`
+      `alert alert-${variant} d-flex align-items-center`,
     );
     messageWrapper.setAttribute("aria-label", messagesTypes[type]);
     messageWrapper.setAttribute(
       "role",
-      type === "error" ? "alert" : "contentinfo"
+      type === "error" ? "alert" : "contentinfo",
     );
     messageWrapper.setAttribute("data-drupal-message-id", id);
     messageWrapper.setAttribute("data-drupal-message-type", type);

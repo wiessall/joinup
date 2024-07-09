@@ -84,8 +84,8 @@ class OutdatedContentThresholdForm extends ConfigFormBase {
       foreach ($bundles as $bundle => $info) {
         $class = $info['class'] ?? NULL;
         if ($class && is_subclass_of($class, OutdatedContentInterface::class)) {
-          $threshold = $config->get("{$entity_type_id}.{$bundle}");
-          $form['config']["{$entity_type_id}:{$bundle}"] = [
+          $threshold = $config->get("thresholds.$entity_type_id.$bundle");
+          $form['config']["$entity_type_id:$bundle"] = [
             'label' => [
               '#markup' => $this->t('@bundle (@type)', [
                 '@bundle' => $info['label'],
@@ -128,7 +128,7 @@ class OutdatedContentThresholdForm extends ConfigFormBase {
     foreach ($form_state->getValue('config') as $row_id => $row) {
       [$entity_type_id, $bundle] = explode(':', $row_id, 2);
       $threshold = $row['enabled'] ? $row['threshold'] : NULL;
-      $config->set("{$entity_type_id}.{$bundle}", $threshold);
+      $config->set("thresholds.$entity_type_id.$bundle", $threshold);
     }
     $config->save();
 

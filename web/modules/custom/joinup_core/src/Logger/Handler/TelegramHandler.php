@@ -8,7 +8,8 @@ use Drupal\Core\DestructableInterface;
 use Drupal\joinup_core\Logger\Formatter\TelegramFormatter;
 use Monolog\Formatter\FormatterInterface;
 use Monolog\Handler\TelegramBotHandler;
-use Monolog\Logger;
+use Monolog\Level;
+use Monolog\LogRecord;
 
 /**
  * Wraps the TelegramBotHandler Monolog handler.
@@ -36,14 +37,14 @@ class TelegramHandler extends TelegramBotHandler implements DestructableInterfac
     return [
       'apiKey' => '',
       'channel' => '',
-      'level' => Logger::ERROR,
+      'level' => Level::Error->value,
     ];
   }
 
   /**
    * {@inheritdoc}
    */
-  public function isHandling(array $record): bool {
+  public function isHandling(LogRecord $record): bool {
     return parent::isHandling($record)
       && !empty($this->settings['apiKey'])
       && !empty($this->settings['channel'])
@@ -53,7 +54,7 @@ class TelegramHandler extends TelegramBotHandler implements DestructableInterfac
   /**
    * {@inheritdoc}
    */
-  public function write(array $record): void {
+  public function write(LogRecord $record): void {
     // Sending the message to Telegram requires to honour the API limits, such
     // as "no more than one message per second in a chat". If multiple messages
     // are generated in the life of a request, we need to sleep at least one
