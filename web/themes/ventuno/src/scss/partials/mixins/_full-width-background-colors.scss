@@ -3,19 +3,19 @@
 // Fixed height on top, flexible on bottom.
 @mixin full-width-color-to-bottom(
   // Background Color for mobile.
-    $mobile-color: $gray-100,
+  $mobile-color: $gray-100,
   // Background Color Top for desktop.
-    $top-color: $gray-100,
+  $top-color: $gray-100,
   // Top Background Color height on desktop.
-    $top-size: 8rem,
+  $top-size: 8rem,
   // Top padding.
-    $padding-top: 3rem,
+  $padding-top: 3rem,
   // Background Color Bottom for desktop.
-    $bottom-color: $primary,
+  $bottom-color: $primary,
   // Bottom Background Color height on desktop.
-    $bottom-size: 0,
+  $bottom-size: 0,
   // Bottom padding.
-    $padding-bottom: 3rem
+  $padding-bottom: 3rem
 ) {
   position: relative;
   padding-top: $padding-top;
@@ -44,19 +44,19 @@
 // Fixed height on bottom, flexible on bottom.
 @mixin full-width-color-to-top(
   // Background Color for mobile.
-    $mobile-color: $primary,
+  $mobile-color: $primary,
   // Background Color Bottom for desktop.
-    $bottom-color: $primary,
+  $bottom-color: $primary,
   // Bottom Background Color height on desktop.
-    $bottom-size: 8rem,
+  $bottom-size: 8rem,
   // Bottom padding.
-    $padding-bottom: 3rem,
+  $padding-bottom: 3rem,
   // Background Color Top for desktop.
-    $top-color: $gray-100,
+  $top-color: $gray-100,
   // Top Background Color height on desktop.
-    $top-size: 0,
+  $top-size: 0,
   // Top padding.
-    $padding-top: 3rem // Top padding.
+  $padding-top: 3rem // Top padding.
 ) {
   position: relative;
   padding-top: $padding-top;

@@ -76,7 +76,7 @@ content:
     settings:
       timezone_override: ''
       date_format: d-m-Y
-      fromto: start_date
+      from_to: start_date
       separator: '-'
     third_party_settings:
       template_suggestion:

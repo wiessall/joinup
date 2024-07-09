@@ -32,3 +32,4 @@ name: 'EIF solution type'
 vid: eif_solution_type
 description: 'A categorization of the solutions for the EIF toolbox.'
 weight: 0
+new_revision: false

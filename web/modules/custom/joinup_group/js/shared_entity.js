@@ -29,7 +29,7 @@
   Drupal.behaviors.sharedContent = {
     attach: (context) => {
       const groupElement = document.querySelector(
-        "[data-joinup-group-context]"
+        "[data-joinup-group-context]",
       );
 
       // If there is no global group context, bail out.
@@ -53,7 +53,7 @@
           }
 
           const statsContainer = groupContent.querySelector(
-            "[data-joinup-card-stats]"
+            "[data-joinup-card-stats]",
           );
           // There's no stats container defined in this card.
           if (statsContainer === null) {
@@ -64,16 +64,16 @@
           const sharedContentCue = document.createElement("div");
           sharedContentCue.setAttribute(
             "data-joinup-card-stats-shared",
-            parentLabel
+            parentLabel,
           );
           const template = document.createElement("template");
           template.innerHTML = Drupal.theme(
             "sharedContentCue",
-            parentLabel
+            parentLabel,
           ).trim();
           sharedContentCue.appendChild(template.content.firstChild);
           statsContainer.appendChild(sharedContentCue);
-        }
+        },
       );
     },
   };
