@@ -10,13 +10,13 @@
       // submit button.
       const frequencyButton = document
         .querySelector(
-          "[data-drupal-selector='edit-field-user-frequency-wrapper']"
+          "[data-drupal-selector='edit-field-user-frequency-wrapper']",
         )
         .querySelector("input[type='submit']");
       once(
         "user_subscriptions",
         "select[name='field_user_frequency']",
-        context
+        context,
       ).forEach((selectElement) => {
         selectElement.addEventListener("change", () => {
           frequencyButton.removeAttribute("disabled");
@@ -33,7 +33,7 @@
             // Get current status of checkboxes.
             document
               .querySelectorAll(
-                `input[type='checkbox'][data-joinup-group='${group}']`
+                `input[type='checkbox'][data-joinup-group='${group}']`,
               )
               // eslint-disable-next-line max-nested-callbacks
               .forEach((checkboxElement) => {
@@ -41,7 +41,7 @@
               });
 
             const button = document.querySelector(
-              `input[type='submit'][data-joinup-group='${group}']`
+              `input[type='submit'][data-joinup-group='${group}']`,
             );
 
             // Get initial status of checkboxes stored inside button attribute.
@@ -60,7 +60,7 @@
               button.classList.remove("disabled");
             }
           });
-        }
+        },
       );
     },
   };

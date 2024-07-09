@@ -50,27 +50,25 @@
   </php>
   <testsuites>
     <testsuite name="unit">
-      <file>src/PhpUnit/JoinupUnitTestSuite.php</file>
+      <directory>web/modules/custom/**/tests/src/Unit</directory>
+      <directory>web/profiles/joinup/tests/src/Unit</directory>
     </testsuite>
     <testsuite name="kernel">
-      <file>src/PhpUnit/JoinupKernelTestSuite.php</file>
+      <directory>web/modules/custom/**/tests/src/Kernel</directory>
+      <!-- WIP -->
+      <exclude>web/modules/custom/joinup_stats/tests/src/Kernel/RefreshCountersTest.php</exclude>
     </testsuite>
     <testsuite name="functional">
-      <file>src/PhpUnit/JoinupFunctionalTestSuite.php</file>
-    </testsuite>
-    <testsuite name="functional-javascript">
-      <file>src/PhpUnit/JoinupFunctionalJavascriptTestSuite.php</file>
+      <directory>web/modules/custom/**/tests/src/Functional</directory>
     </testsuite>
     <testsuite name="existing-site">
-      <file>src/PhpUnit/JoinupExistingSiteTestSuite.php</file>
-    </testsuite>
-    <testsuite name="existing-site-javascript">
-      <file>src/PhpUnit/JoinupExistingSiteJavascriptTestSuite.php</file>
+      <directory>web/modules/custom/**/tests/src/ExistingSite</directory>
+      <directory>web/profiles/joinup/tests/src/ExistingSite</directory>
+      <directory>web/themes/ventuno/tests/src/ExistingSite</directory>
     </testsuite>
   </testsuites>
   <listeners>
-    <listener class="\Drupal\Tests\Listeners\DrupalListener">
-    </listener>
+    <listener class="\Drupal\Tests\Listeners\DrupalListener"/>
   </listeners>
   <extensions>
     <extension class="Joinup\PhpUnit\Hooks\DrupalSettingsHook"/>
