@@ -20,7 +20,7 @@ L.custom = {
     const kmlOptions = {
       onEachFeature(feature, layer) {
         layer.bindInfo(
-          `<p><b>${feature.properties.name}</b></p>${feature.properties.description}`
+          `<p><b>${feature.properties.name}</b></p>${feature.properties.description}`,
         );
       },
     };
