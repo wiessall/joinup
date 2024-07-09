@@ -40,27 +40,27 @@ class JoinupEcVideoTest extends UnitTestCase {
       // Entries starting with bc are old style links.
       'bc standard url with http' => [
         'http://ec.europa.eu/avservices/play.cfm?ref=I136289',
-        'I136289',
+        'I-136289',
       ],
       'bc standard url with https' => [
         'https://ec.europa.eu/avservices/play.cfm?ref=I136289',
-        'I136289',
+        'I-136289',
       ],
       'bc standard url with double slash' => [
         '//ec.europa.eu/avservices/play.cfm?ref=I136289',
-        'I136289',
+        'I-136289',
       ],
       'bc standard url with no protocol' => [
         'ec.europa.eu/avservices/play.cfm?ref=I136289',
-        'I136289',
+        'I-136289',
       ],
       'bc standard url with additional params' => [
         'http://ec.europa.eu/avservices/play.cfm?a=x&ref=I136289&b=y',
-        'I136289',
+        'I-136289',
       ],
       'bc standard url with additional params and fragment' => [
         'http://ec.europa.eu/avservices/play.cfm?a=x&ref=I136289&b=y#whatever',
-        'I136289',
+        'I-136289',
       ],
       'standard url with http' => [
         'http://audiovisual.ec.europa.eu/embed/index.html?ref=I-136289',
