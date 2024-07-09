@@ -32,3 +32,4 @@ name: 'Underlying principle'
 vid: eif_principle
 description: 'Terms that represent a principle of the EIF Toolbox.'
 weight: 0
+new_revision: false

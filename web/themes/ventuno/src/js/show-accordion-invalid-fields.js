@@ -13,7 +13,7 @@
         }
       }
       const requiredFields = document.querySelectorAll(
-        ".accordion-body .required"
+        ".accordion-body .required",
       );
       requiredFields.forEach((field) => {
         field.addEventListener("invalid", () => {

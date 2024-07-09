@@ -14,9 +14,9 @@
           align-items: center;
           justify-content: start;
           &::before {
-            @include get-bootstrap-icon('chevron-left', currentColor);
+            @include get-bootstrap-icon("chevron-left", currentColor);
 
-            margin-right: $spacer * .5;
+            margin-right: $spacer * 0.5;
           }
         }
       }
@@ -28,9 +28,9 @@
           align-items: center;
           justify-content: end;
           &::after {
-            @include get-bootstrap-icon('chevron-right', currentColor);
+            @include get-bootstrap-icon("chevron-right", currentColor);
 
-            margin-left: $spacer * .5;
+            margin-left: $spacer * 0.5;
           }
         }
       }

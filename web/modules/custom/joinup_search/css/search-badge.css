@@ -37,7 +37,7 @@
   width: 8px;
   height: 8px;
   content: "";
-  vertical-align: -.125em;
+  vertical-align: -0.125em;
   background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' viewBox='0 0 16 16'><path d='M13.854 2.146a.5.5 0 0 1 0 .708l-11 11a.5.5 0 0 1-.708-.708l11-11a.5.5 0 0 1 .708 0Z'/><path d='M2.146 2.146a.5.5 0 0 0 0 .708l11 11a.5.5 0 0 0 .708-.708l-11-11a.5.5 0 0 0-.708 0Z'/></svg>");
   background-repeat: no-repeat;
   background-size: 8px 8px;
