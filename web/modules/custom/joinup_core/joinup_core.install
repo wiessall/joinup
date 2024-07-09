@@ -92,3 +92,17 @@ function joinup_core_requirements($phase): array {
 
   return $requirements;
 }
+
+/**
+ * Fix redirection.
+ */
+function joinup_core_update_110901(): string {
+  /** @var \Drupal\redirect\RedirectRepository $redirectRepository */
+  $redirectRepository = \Drupal::service('redirect.repository');
+  $redirects = $redirectRepository->findBySourcePath('collection/interoperability-test-bed-repository/solution/interoperability-test-bed/news');
+  foreach ($redirects as $redirect) {
+    $redirect->delete();
+  }
+
+  return 'Redirection to wrong custom page was removed.';
+}
