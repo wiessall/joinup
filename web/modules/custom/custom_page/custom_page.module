@@ -376,7 +376,7 @@ function custom_page_pathauto_alias_alter(&$alias, array $context): void {
     '/discussion',
     '/document',
     '/event',
-    '/solution'
+    '/solution',
   ];
   foreach ($prohibited_prefixes as $prohibited) {
     if (str_ends_with($alias, $prohibited)) {
