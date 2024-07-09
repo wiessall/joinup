@@ -124,6 +124,7 @@
         "ext-fileinfo": "*",
         "ext-iconv": "*",
         "ext-libxml": "*",
+        "dantleech/gherkin-lint": "^0.2.3",
         "drupal/admin_toolbar": "^3.4",
         "drupal/cas_mock_server": "^2.0",
         "drupal/coder": "*",
