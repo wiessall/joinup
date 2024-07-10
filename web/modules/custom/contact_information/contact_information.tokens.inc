@@ -59,7 +59,7 @@ function contact_information_tokens(string $type, array $tokens, array $data, ar
             $groups)
         ),
       ];
-      $replacements[$original] = \Drupal::service('renderer')->renderPlain($render_array);
+      $replacements[$original] = \Drupal::service('renderer')->renderInIsolation($render_array);
       break;
     }
   }

@@ -6,7 +6,7 @@ namespace Drupal\joinup_core\Logger\Handler;
 
 use Drupal\Core\Lock\LockBackendInterface;
 use Drupal\Core\State\StateInterface;
-use Monolog\Logger;
+use Monolog\Level;
 
 /**
  * Generic handler wrapping mail and Telegram Monolog handlers.
@@ -54,16 +54,11 @@ trait WrapperHandlerTrait {
    *   A list of logger severity levels.
    */
   public static function getSeverityLevels(): array {
-    return [
-      Logger::DEBUG => 'DEBUG',
-      Logger::INFO => 'INFO',
-      Logger::NOTICE => 'NOTICE',
-      Logger::WARNING => 'WARNING',
-      Logger::ERROR => 'ERROR',
-      Logger::CRITICAL => 'CRITICAL',
-      Logger::ALERT => 'ALERT',
-      Logger::EMERGENCY => 'EMERGENCY',
-    ];
+    $levels = [];
+    foreach (Level::cases() as $level) {
+      $levels[$level->value] = $level->getName();
+    }
+    return $levels;
   }
 
 }
