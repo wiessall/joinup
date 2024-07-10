@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Drupal\joinup_invite\Plugin\OgGroupResolver;
 
 use Drupal\joinup_group\Entity\GroupInterface;
+use Drupal\joinup_invite\Entity\InvitationInterface;
 use Drupal\og\OgResolvedGroupCollectionInterface;
 use Drupal\og\Plugin\OgGroupResolver\RouteGroupResolver;
-use Drupal\joinup_invite\Entity\InvitationInterface;
 
 /**
  * Resolves a group from the invite route.
