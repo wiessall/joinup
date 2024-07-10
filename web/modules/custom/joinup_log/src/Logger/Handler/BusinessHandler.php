@@ -22,7 +22,7 @@ class BusinessHandler extends AbstractProcessingHandler implements DestructableI
   /**
    * Log entries collector.
    *
-   * @var LogRecord[]
+   * @var \Monolog\LogRecord[]
    */
   protected array $records = [];
 
@@ -53,7 +53,8 @@ class BusinessHandler extends AbstractProcessingHandler implements DestructableI
     foreach ($this->records as $record) {
       $logMessage = $record->message;
       $logContext = $record->context;
-      // Remove backtrace and exception since they may contain an unserializable variable.
+      // Remove backtrace and exception
+      // since they may contain an unserializable variable.
       unset($logContext['backtrace'], $logContext['exception']);
 
       $messagePlaceholders = $this->parser->parseMessagePlaceholders($logMessage, $logContext);
