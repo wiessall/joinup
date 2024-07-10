@@ -64,12 +64,12 @@ class BusinessHandler extends AbstractProcessingHandler implements DestructableI
           'group_entity' => $group?->id(),
           'type' => mb_substr($record->channel, 0, 64),
           'message' => $logMessage,
-          'variables' => serialize($messagePlaceholders),
+          'variables' => $messagePlaceholders,
           'severity' => $record->level->value,
           'uid' => $record->extra['uid'],
           'location' => $record->extra['request_uri'],
           'referer' => $record->extra['referer'],
-          'hostname' => mb_substr($record->extra['ip'], 0, 128),
+          'hostname' => $record->extra['ip'],
           'timestamp' => $record->datetime->getTimestamp(),
         ]
       )->save();
