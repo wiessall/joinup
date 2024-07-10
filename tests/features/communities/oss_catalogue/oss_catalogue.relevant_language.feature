@@ -79,4 +79,3 @@ Feature:
     And the "EU OSS Catalogue administration" table should contain the following columns:
       | Title        | URL | Short description | Source Catalogue  | Languages  | Published | Changed            |
       | ABC Solution |     |                   | Developers Italia | EN, DE, EL | Yes       | 14/11/2023 - 22:13 |
-

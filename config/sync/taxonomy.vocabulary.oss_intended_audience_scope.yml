@@ -26,3 +26,4 @@ name: 'OSS Intended Audience'
 vid: oss_intended_audience_scope
 description: 'Intended Audience of Open Source Software Solutions'
 weight: 0
+new_revision: false

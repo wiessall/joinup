@@ -154,7 +154,7 @@ class OssSolutionRenderedItem extends ProcessorPluginBase {
         return;
       }
 
-      $markup = (string) $this->renderer->renderPlain($build);
+      $markup = (string) $this->renderer->renderInIsolation($build);
       $field->addValue($markup);
     }
   }

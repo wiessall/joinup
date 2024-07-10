@@ -14,14 +14,14 @@ dependencies:
     - field.storage.node.oss_vitality_index
     - search_api.server.joinup
   module:
-    - search_api_solr
     - field
-    - taxonomy
-    - node
-    - search_api
     - joinup_flag
     - joinup_oss_catalogue
     - joinup_search
+    - node
+    - search_api
+    - search_api_solr
+    - taxonomy
 third_party_settings:
   search_api_solr:
     finalize: true

@@ -7,7 +7,8 @@ namespace Drupal\joinup_oss_catalogue\Logger\Handler;
 use Drupal\Core\DestructableInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Monolog\Handler\AbstractProcessingHandler;
-use Monolog\Logger;
+use Monolog\Level;
+use Monolog\LogRecord;
 
 /**
  * EU OSS catalogue handler.
@@ -33,7 +34,7 @@ class EuOssCatalogueHandler extends AbstractProcessingHandler implements Destruc
    */
   public function __construct(
     protected EntityTypeManagerInterface $entityTypeManager,
-    int $level = Logger::DEBUG,
+    int $level = Level::Debug->value,
     bool $bubble = TRUE,
   ) {
     parent::__construct($level, $bubble);
@@ -42,7 +43,7 @@ class EuOssCatalogueHandler extends AbstractProcessingHandler implements Destruc
   /**
    * {@inheritdoc}
    */
-  public function write(array $record): void {
+  public function write(LogRecord $record): void {
     $this->records[] = $record;
   }
 
