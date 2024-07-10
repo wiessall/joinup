@@ -54,6 +54,7 @@
   - Drupal\joinup\Context\JoinupLayoutParagraphsContext
   - Drupal\joinup\Context\JoinupLegalContext
   - Drupal\joinup\Context\JoinupLicenceContext
+  - Drupal\joinup\Context\JoinupLogContext
   - Drupal\joinup\Context\JoinupNewsContext
   - Drupal\joinup\Context\JoinupNewsletterContext
   - Drupal\joinup\Context\JoinupNotificationContext
