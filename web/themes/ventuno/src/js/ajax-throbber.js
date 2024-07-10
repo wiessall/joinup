@@ -9,7 +9,7 @@
     const loading = Drupal.t(
       "Loading",
       {},
-      { context: "Loading text for Drupal cores Ajax throbber (inline)" }
+      { context: "Loading text for Drupal cores Ajax throbber (inline)" },
     );
     const spinner = document.createElement("div");
     spinner.classList.add("spinner-border");

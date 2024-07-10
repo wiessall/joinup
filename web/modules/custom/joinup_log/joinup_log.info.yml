@@ -1,0 +1,8 @@
+name: 'Joinup log'
+description: 'Contains log-related features.'
+type: module
+package: Joinup
+core_version_requirement: ">= 10.1"
+dependencies:
+  - drupal:user
+  - rdf_entity:rdf_entity

@@ -32,7 +32,7 @@ Feature: As a user of the website
     But I should not see the following warning messages:
       | warning messages                                                                     |
       | You are viewing the published version. To view the latest draft version, click here. |
-    # @todo: Fix the visibility issue.
+    # @todo Fix the visibility issue.
     And I should see the link "Edit" in the "Entity actions" region
 
     # I should not be able to view draft collections I'm not a facilitator of.
@@ -48,7 +48,6 @@ Feature: As a user of the website
     And I should not see the following warning messages:
       | warning messages                                                                     |
       | You are viewing the published version. To view the latest draft version, click here. |
-
 
     # Edit as facilitator and save as draft.
     When I click "Edit"

@@ -1,0 +1,99 @@
+uuid: 9922aa41-bfc4-438b-a357-81769d552a09
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.compact
+    - field.field.node.distribution.access_url
+    - field.field.node.distribution.description
+    - field.field.node.distribution.distribution_parent
+    - field.field.node.distribution.field_licence
+    - field.field.node.distribution.field_state
+    - field.field.node.distribution.file_size
+    - field.field.node.distribution.format
+    - field.field.node.distribution.og_audience
+    - field.field.node.distribution.process_status
+    - field.field.node.distribution.representation_technique
+    - node.type.distribution
+  module:
+    - digital_size_formatter
+    - field_group
+    - joinup_distribution
+    - layout_builder
+    - template_suggestion
+    - user
+third_party_settings:
+  field_group:
+    group_categorisation:
+      children:
+        - format
+        - process_status
+        - representation_technique
+      label: Categorisation
+      parent_name: ''
+      region: hidden
+      weight: 5
+      format_type: html_element
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        element: div
+        show_label: true
+        label_element: h3
+        label_element_classes: ''
+        attributes: ''
+        effect: none
+        speed: fast
+  layout_builder:
+    enabled: false
+    allow_custom: false
+id: node.distribution.compact
+targetEntityType: node
+bundle: distribution
+mode: compact
+content:
+  access_url:
+    type: tracked_hosted_file_download
+    label: hidden
+    settings:
+      hosted_files_title: Download
+      remote_files_title: External
+      show_remote_files: true
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: no_wrappers
+    weight: 0
+    region: content
+  field_licence:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: true
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: fieldset
+    weight: 2
+    region: content
+  file_size:
+    type: digital_size
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+hidden:
+  description: true
+  distribution_parent: true
+  download_count: true
+  field_state: true
+  format: true
+  langcode: true
+  links: true
+  og_audience: true
+  process_status: true
+  published_at: true
+  report: true
+  representation_technique: true
+  search_api_excerpt: true
+  uri: true

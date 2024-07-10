@@ -7,7 +7,7 @@
     attach() {
       const url = document.querySelector("input[name*='field_contact_url']");
       const category = document.querySelector(
-        "select[name='field_contact_category']"
+        "select[name='field_contact_category']",
       );
       if (
         url === null ||

@@ -13,12 +13,3 @@
  */
 
 declare(strict_types=1);
-
-use Drupal\joinup_core\DeployAndSmokeTestHelper;
-
-/**
- * Create Interoperable Europe Act document as custom page.
- */
-function joinup_core_deploy_110900(): string {
-  return DeployAndSmokeTestHelper::createIeaCustomPage();
-}

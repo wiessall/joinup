@@ -424,10 +424,10 @@ Feature:
     Then I should see the error message "Invalid operator specified: equal. Allowed operators are '=', '<>', 'IN', 'NOT IN'."
     # Verify that errors are reported when multiline values are added.
     When I fill in "Query presets" with:
-        """
-        entity_bundle|news
-        unknown_field|test
-        """
+    """
+    entity_bundle|news
+    unknown_field|test
+    """
     And I press "Save" in the "Modal buttons" region
     Then I should see the error message "Invalid search field specified: unknown_field."
 

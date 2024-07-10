@@ -18,51 +18,51 @@
   <div class="github-feed-activity-stream-item__body__content">
     <div class="github-feed-activity-stream-item__body__content__event">
       {% if item.type == 'IssueCommentEvent' %}
-        {{ item.payload.action }} {{ "comment"|t }} {{ item.payload.issue.number }} {{ "on"|t }}
-        <a href="{{ item.payload.issue.html_url }}">{{ item.payload.issue.title }}</a> {{ "by"|t }}
+        {{ item.payload.action }} {{ 'comment'|t }} {{ item.payload.issue.number }} {{ 'on'|t }}
+        <a href="{{ item.payload.issue.html_url }}">{{ item.payload.issue.title }}</a> {{ 'by'|t }}
         <a href="{{ item.actor.url }}">{{ item.actor.login }}</a>.
       {% elseif item.type == 'IssuesEvent' %}
-        {{ item.payload.action }} {{ "issue"|t }} {{ "on"|t }}
-        <a href="{{ item.payload.issue.html_url }}">{{ item.payload.issue.title }}</a> {{ "by"|t }}
+        {{ item.payload.action }} {{ 'issue'|t }} {{ 'on'|t }}
+        <a href="{{ item.payload.issue.html_url }}">{{ item.payload.issue.title }}</a> {{ 'by'|t }}
         <a href="{{ item.actor.url }}">{{ item.actor.login }}</a>.
       {% elseif item.type == 'PullRequestEvent' %}
-        {{ item.payload.action }} {{ "pull request"|t }} {{ "on"|t }}
-        <a href="{{ item.payload.pull_request.html_url }}">{{ item.payload.pull_request.title }}</a> {{ "by"|t }}
+        {{ item.payload.action }} {{ 'pull request'|t }} {{ 'on'|t }}
+        <a href="{{ item.payload.pull_request.html_url }}">{{ item.payload.pull_request.title }}</a> {{ 'by'|t }}
         <a href="{{ item.actor.url }}">{{ item.actor.login }}</a>.
       {% elseif item.type == 'PullRequestReviewEvent' %}
-        {{ item.payload.action }} {{ "pull request review"|t }} {{ "on"|t }}
-        <a href="{{ item.payload.pull_request.html_url }}">{{ item.payload.pull_request.title }}</a> {{ "by"|t }}
+        {{ item.payload.action }} {{ 'pull request review'|t }} {{ 'on'|t }}
+        <a href="{{ item.payload.pull_request.html_url }}">{{ item.payload.pull_request.title }}</a> {{ 'by'|t }}
         <a href="{{ item.actor.url }}">{{ item.actor.login }}</a>.
       {% elseif item.type == 'PushEvent' %}
-        {{ item.payload.commits|length }} {{ "commits"|t }} {{ "on"|t }}
-        <a href="{{ item.payload.commits.0.url }}">{{ item.payload.commits.0.sha|slice(0, 7) }}</a> {{ "by"|t }}
+        {{ item.payload.commits|length }} {{ 'commits'|t }} {{ 'on'|t }}
+        <a href="{{ item.payload.commits.0.url }}">{{ item.payload.commits.0.sha|slice(0, 7) }}</a> {{ 'by'|t }}
         <a href="{{ item.actor.url }}">{{ item.actor.login }}</a>.
       {% elseif item.type == 'WatchEvent' %}
-        {{ "User"|t }} {{ item.actor.login }} {{ "starred the repository"|t }}.
+        {{ 'User'|t }} {{ item.actor.login }} {{ 'starred the repository'|t }}.
       {% elseif item.type == 'ForkEvent' %}
-        {{ "User"|t }} {{ item.actor.login }} {{ "forked the repository"|t }}.
+        {{ 'User'|t }} {{ item.actor.login }} {{ 'forked the repository'|t }}.
       {% elseif item.type == 'CreateEvent' %}
         {{ item.payload.ref_type }} created: {{ item.payload.ref }}
       {% elseif item.type == 'DeleteEvent' %}
         {{ item.payload.ref_type }} deleted: {{ item.payload.ref }}
       {% elseif item.type == 'PullRequestReviewCommentEvent' %}
-        {{ item.payload.action }} comment on pull request {{ "on"|t }}
-        <a href="{{ item.payload.pull_request.html_url }}">{{ item.payload.pull_request.title }}</a> {{ "by"|t }}
+        {{ item.payload.action }} comment on pull request {{ 'on'|t }}
+        <a href="{{ item.payload.pull_request.html_url }}">{{ item.payload.pull_request.title }}</a> {{ 'by'|t }}
         <a href="{{ item.actor.url }}">{{ item.actor.login }}</a>.
       {% elseif item.type == 'CommitCommentEvent' %}
-        {{ item.payload.action }} comment on commit {{ item.payload.comment.commit_id|slice(0, 7) }} {{ "by"|t }}
+        {{ item.payload.action }} comment on commit {{ item.payload.comment.commit_id|slice(0, 7) }} {{ 'by'|t }}
         <a href="{{ item.actor.url }}">{{ item.actor.login }}</a>.
       {% elseif item.type == 'ReleaseEvent' %}
-        {{ item.payload.action }} release {{ item.payload.release.tag_name }} {{ "by"|t }}
+        {{ item.payload.action }} release {{ item.payload.release.tag_name }} {{ 'by'|t }}
         <a href="{{ item.actor.url }}">{{ item.actor.login }}</a>.
       {% elseif item.type == 'MemberEvent' %}
-        {{ item.payload.action }} {{ "user"|t }} {{ item.payload.member.login }} {{ "was added to the repository"|t }}.
+        {{ item.payload.action }} {{ 'user'|t }} {{ item.payload.member.login }} {{ 'was added to the repository'|t }}.
       {% elseif item.type == 'PublicEvent' %}
         Repository made public.
       {% elseif item.type == 'GollumEvent' %}
         {{ item.payload.pages|length }} wiki page(s) {{ item.payload.pages.0.action }} on the repository.
       {% else %}
-        {{ "Unrecognized event type"|t }}
+        {{ 'Unrecognized event type'|t }}
       {% endif %}
     </div>
   </div>

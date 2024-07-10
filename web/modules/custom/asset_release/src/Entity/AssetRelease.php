@@ -110,7 +110,7 @@ class AssetRelease extends Rdf implements AssetReleaseInterface {
    * {@inheritdoc}
    */
   public function getDistributionIds(): array {
-    return $this->getReferencedEntityIds('field_isr_distribution')['rdf_entity'] ?? [];
+    return \Drupal::getContainer()->get('joinup_distribution.parent_distribution_resolver')->getParentsDistributionIds($this->id());
   }
 
 }

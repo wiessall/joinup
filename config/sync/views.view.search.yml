@@ -100,6 +100,7 @@ display:
         type: full
         options:
           offset: 0
+          pagination_heading_level: h4
           items_per_page: 12
           total_pages: null
           id: 0
@@ -247,7 +248,7 @@ display:
           value:
             min: ''
             max: ''
-            value: asset_distribution
+            value: distribution
           group: 1
           exposed: false
           expose:
@@ -340,13 +341,13 @@ display:
             'entity:node':
               custom_page: view_mode_tile_horizontal
               discussion: view_mode_tile_horizontal
+              distribution: view_mode_tile_horizontal
               document: view_mode_tile_horizontal
               event: view_mode_tile_horizontal
               licence: view_mode_tile_horizontal
               news: view_mode_tile_horizontal
               video: view_mode_tile_horizontal
             'entity:rdf_entity':
-              asset_distribution: view_mode_tile_horizontal
               asset_release: view_mode_tile_horizontal
               collection: view_mode_tile_horizontal
               solution: view_mode_tile_horizontal

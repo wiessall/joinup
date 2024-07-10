@@ -9,7 +9,6 @@ dependencies:
     - field.field.rdf_entity.solution.field_is_content
     - field.field.rdf_entity.solution.field_is_content_creation
     - field.field.rdf_entity.solution.field_is_description
-    - field.field.rdf_entity.solution.field_is_distribution
     - field.field.rdf_entity.solution.field_is_documentation
     - field.field.rdf_entity.solution.field_is_has_version
     - field.field.rdf_entity.solution.field_is_included_asset
@@ -820,7 +819,16 @@ id: rdf_entity.solution.default
 targetEntityType: rdf_entity
 bundle: solution
 mode: default
-content: {  }
+content:
+  distributions:
+    type: entity_reference_entity_view
+    label: hidden
+    settings:
+      view_mode: default
+      link: false
+    third_party_settings: {  }
+    weight: 0
+    region: main
 hidden:
   changed: true
   collections: true
@@ -834,7 +842,6 @@ hidden:
   field_is_content: true
   field_is_content_creation: true
   field_is_description: true
-  field_is_distribution: true
   field_is_documentation: true
   field_is_has_version: true
   field_is_included_asset: true

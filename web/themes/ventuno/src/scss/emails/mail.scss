@@ -19,7 +19,6 @@ $bs-body-color: #242626;
 $bs-link-color: #1073de;
 $bs-link-hover-color: #0d5cb2;
 
-
 * {
   box-sizing: border-box;
 }
@@ -113,7 +112,7 @@ p time {
 }
 
 .fs-sm {
-  font-size: calc($bs-body-font-size * .75);
+  font-size: calc($bs-body-font-size * 0.75);
 }
 
 .fs-lg {
@@ -212,7 +211,11 @@ p time {
   -webkit-user-select: none;
   -moz-user-select: none;
   user-select: none;
-  transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+  transition:
+    color 0.15s ease-in-out,
+    background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out;
   text-align: center;
   vertical-align: middle;
   text-decoration: none;
@@ -220,7 +223,9 @@ p time {
   border: 1px solid $bs-brand;
   border-radius: 0.4rem;
   background-color: $bs-brand;
-  box-shadow: inset 0 1px 0 hsla(0, 0%, 100%, .15), 0 1px 1px rgba(0, 0, 0, .075);
+  box-shadow:
+    inset 0 1px 0 hsla(0, 0%, 100%, 0.15),
+    0 1px 1px rgba(0, 0, 0, 0.075);
   font-family: $bs-body-font-family;
   font-size: $bs-body-font-size;
   font-weight: 400;

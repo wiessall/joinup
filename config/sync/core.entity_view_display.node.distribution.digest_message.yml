@@ -1,0 +1,97 @@
+uuid: 6c941941-c5c6-4384-9c20-930f48b954a5
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.digest_message
+    - field.field.node.distribution.access_url
+    - field.field.node.distribution.description
+    - field.field.node.distribution.distribution_parent
+    - field.field.node.distribution.field_licence
+    - field.field.node.distribution.field_state
+    - field.field.node.distribution.file_size
+    - field.field.node.distribution.format
+    - field.field.node.distribution.og_audience
+    - field.field.node.distribution.process_status
+    - field.field.node.distribution.representation_technique
+    - node.type.distribution
+  module:
+    - field_group
+    - layout_builder
+    - smart_trim
+    - template_suggestion
+    - user
+third_party_settings:
+  field_group:
+    group_categorisation:
+      children:
+        - format
+        - process_status
+        - representation_technique
+      label: Categorisation
+      parent_name: ''
+      region: hidden
+      weight: 5
+      format_type: html_element
+      format_settings:
+        classes: ''
+        show_empty_fields: false
+        id: ''
+        element: div
+        show_label: true
+        label_element: h3
+        label_element_classes: ''
+        attributes: ''
+        effect: none
+        speed: fast
+  layout_builder:
+    enabled: false
+    allow_custom: false
+id: node.distribution.digest_message
+targetEntityType: node
+bundle: distribution
+mode: digest_message
+content:
+  description:
+    type: smart_trim
+    label: hidden
+    settings:
+      trim_length: 200
+      trim_type: chars
+      trim_suffix: ''
+      wrap_output: false
+      wrap_class: trimmed
+      more:
+        display_link: false
+        target_blank: false
+        link_trim_only: false
+        class: more-link
+        text: More
+        aria_label: 'Read more about [node:title]'
+      summary_handler: full
+      trim_options:
+        text: true
+        trim_zero: false
+        replace_tokens: false
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: bare
+    weight: 0
+    region: content
+hidden:
+  access_url: true
+  distribution_parent: true
+  download_count: true
+  field_licence: true
+  field_state: true
+  file_size: true
+  format: true
+  langcode: true
+  links: true
+  og_audience: true
+  process_status: true
+  published_at: true
+  report: true
+  representation_technique: true
+  search_api_excerpt: true
+  uri: true

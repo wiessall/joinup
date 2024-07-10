@@ -32,16 +32,14 @@ Feature: Solutions by licence report
       | is version of  | Solution by licence 2         |
       | state          | published                     |
     # Distribution linked to the solution directly.
-    And the following distributions:
+    And distribution content:
       | title                     | licence      | parent                | state     |
       | Solution_by_licence_1.tar | Open source  | Solution by licence 1 | published |
       | Solution_by_licence_1.exe | Free for all | Solution by licence 1 | published |
     # Distribution that belongs to the release of a solution.
-    And the following distribution:
-      | title   | Solution_by_licence_2.tar     |
-      | licence | Commercial                    |
-      | parent  | Solution by licence 2 release |
-      | state   | published                     |
+    And distribution content:
+      | title                     | licence    | parent                        | state     |
+      | Solution_by_licence_2.tar | Commercial | Solution by licence 2 release | published |
 
     When I am logged in as a moderator
     And I click "Reporting" in the "Administration toolbar" region

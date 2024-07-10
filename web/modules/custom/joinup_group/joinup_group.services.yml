@@ -38,6 +38,7 @@ services:
       - { name: event_subscriber }
   joinup_group.node_access_grants.memory_cache:
     class: Drupal\Core\Cache\MemoryCache\MemoryCache
+    arguments: ['@datetime.time']
     tags:
       # Ensure tag invalidation for this backend.
       - { name: cache.bin }

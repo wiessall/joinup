@@ -20,8 +20,8 @@ $utilities: map.merge(
         50: 50%,
         75: 75%,
         100: 100%,
-        auto: auto
-      )
+        auto: auto,
+      ),
     ),
     "border-width": null,
     "viewport-width": null,
@@ -36,22 +36,22 @@ $utilities: map.merge(
         50: 50%,
         75: 75%,
         100: 100%,
-        auto: auto
-      )
+        auto: auto,
+      ),
     ),
     "max-height": null,
     "viewport-height": null,
     "min-viewport-height": null,
     "flex": null,
     "flex-grow": null,
-    "flex-shrink":  (
+    "flex-shrink": (
       responsive: false,
       property: flex-shrink,
       class: flex,
       values: (
         shrink-0: 0,
         shrink-1: 1,
-      )
+      ),
     ),
     "gap": null,
     "align-self": null,
@@ -78,13 +78,13 @@ $utilities: map.merge(
       responsive: false,
       property: column-gap,
       class: col-gap,
-      values: $spacers
+      values: $spacers,
     ),
     "row-gap": (
       responsive: false,
       property: row-gap,
       class: row-gap,
-      values: $spacers
+      values: $spacers,
     ),
     "z-index": (
       responsive: false,
@@ -93,8 +93,8 @@ $utilities: map.merge(
       values: (
         0: 0,
         1: 1,
-        2: 2
-      )
+        2: 2,
+      ),
     ),
     "font-weight":
       map.merge(
