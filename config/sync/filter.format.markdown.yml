@@ -177,8 +177,7 @@ filters:
     provider: oe_bootstrap_theme_helper
     status: false
     weight: -37
-    settings:
-      responsive: ''
+    settings: {  }
   slick_filter:
     id: slick_filter
     provider: slick

@@ -9,7 +9,7 @@
       once(
         "vitality-index-chart",
         "canvas.js-vitality-index-chart",
-        context
+        context,
       ).forEach((canvas) => {
         const data = JSON.parse(canvas.dataset.vitalityIndexRange);
         const ctx = canvas.getContext("2d");

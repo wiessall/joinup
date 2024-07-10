@@ -124,7 +124,7 @@ function joinup_core_update_111002(): void {
     'category',
     'licence',
     'intended_audience_scope',
-    'software_type'
+    'software_type',
   ] as $vocab) {
     $name = "taxonomy.vocabulary.oss_$vocab";
     $config_factory->getEditable($name)

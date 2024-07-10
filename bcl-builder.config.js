@@ -305,11 +305,11 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/scss/pages/oss-landing.scss`
+        `${ventuno}src/scss/pages/oss-landing.scss`,
       ),
       dest: path.resolve(
         outputFolder,
-        `${ventuno}assets/css/oss-landing.min.css`
+        `${ventuno}assets/css/oss-landing.min.css`,
       ),
       options: {
         includePaths,
@@ -320,11 +320,11 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/scss/pages/oss-solution-full.scss`
+        `${ventuno}src/scss/pages/oss-solution-full.scss`,
       ),
       dest: path.resolve(
         outputFolder,
-        `${ventuno}assets/css/oss-solution-full.min.css`
+        `${ventuno}assets/css/oss-solution-full.min.css`,
       ),
       options: {
         includePaths,
@@ -870,11 +870,11 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/scss/components/oss-solution-indicator.scss`
+        `${ventuno}src/scss/components/oss-solution-indicator.scss`,
       ),
       dest: path.resolve(
         outputFolder,
-        `${ventuno}assets/css/oss-solution-indicator.min.css`
+        `${ventuno}assets/css/oss-solution-indicator.min.css`,
       ),
       options: {
         includePaths,
@@ -885,11 +885,11 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/scss/components/oss-solution-screenshots-carousel.scss`
+        `${ventuno}src/scss/components/oss-solution-screenshots-carousel.scss`,
       ),
       dest: path.resolve(
         outputFolder,
-        `${ventuno}assets/css/oss-solution-screenshots-carousel.min.css`
+        `${ventuno}assets/css/oss-solution-screenshots-carousel.min.css`,
       ),
       options: {
         includePaths,
