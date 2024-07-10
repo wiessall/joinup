@@ -100,7 +100,7 @@ function topic_form_entity_subqueue_homepage_topics_edit_form_alter(array &$form
   $form['help'] = [
     '#type' => 'html_tag',
     '#tag' => 'p',
-    '#value' => \Drupal::service('renderer')->renderPlain($help),
+    '#value' => \Drupal::service('renderer')->renderInIsolation($help),
   ];
 }
 

@@ -43,11 +43,11 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/js/navbar-hover-dropdown.js`
+        `${ventuno}src/js/navbar-hover-dropdown.js`,
       ),
       dest: path.resolve(
         outputFolder,
-        `${ventuno}assets/js/navbar-hover-dropdown.js`
+        `${ventuno}assets/js/navbar-hover-dropdown.js`,
       ),
       options: {
         minify: true,
@@ -73,11 +73,11 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/js/fieldset-show-more.js`
+        `${ventuno}src/js/fieldset-show-more.js`,
       ),
       dest: path.resolve(
         outputFolder,
-        `${ventuno}assets/js/fieldset-show-more.js`
+        `${ventuno}assets/js/fieldset-show-more.js`,
       ),
       options: {
         minify: true,
@@ -87,11 +87,11 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/js/highlight-invalid-fields.js`
+        `${ventuno}src/js/highlight-invalid-fields.js`,
       ),
       dest: path.resolve(
         outputFolder,
-        `${ventuno}assets/js/highlight-invalid-fields.js`
+        `${ventuno}assets/js/highlight-invalid-fields.js`,
       ),
       options: {
         minify: true,
@@ -109,11 +109,11 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/js/paragraph-inline-img.js`
+        `${ventuno}src/js/paragraph-inline-img.js`,
       ),
       dest: path.resolve(
         outputFolder,
-        `${ventuno}assets/js/paragraph-inline-img.js`
+        `${ventuno}assets/js/paragraph-inline-img.js`,
       ),
       options: {
         minify: true,
@@ -123,11 +123,11 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/js/responsive-tables.js`
+        `${ventuno}src/js/responsive-tables.js`,
       ),
       dest: path.resolve(
         outputFolder,
-        `${ventuno}assets/js/responsive-tables.js`
+        `${ventuno}assets/js/responsive-tables.js`,
       ),
       options: {
         minify: true,
@@ -138,7 +138,7 @@ module.exports = {
       entry: path.resolve(outputFolder, `${ventuno}src/js/searchbox-focus.js`),
       dest: path.resolve(
         outputFolder,
-        `${ventuno}assets/js/searchbox-focus.js`
+        `${ventuno}assets/js/searchbox-focus.js`,
       ),
       options: {
         minify: true,
@@ -156,11 +156,11 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/js/show-accordion-invalid-fields.js`
+        `${ventuno}src/js/show-accordion-invalid-fields.js`,
       ),
       dest: path.resolve(
         outputFolder,
-        `${ventuno}assets/js/show-accordion-invalid-fields.js`
+        `${ventuno}assets/js/show-accordion-invalid-fields.js`,
       ),
       options: {
         minify: true,
@@ -170,11 +170,11 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/js/toggle-text-seemore-btn.js`
+        `${ventuno}src/js/toggle-text-seemore-btn.js`,
       ),
       dest: path.resolve(
         outputFolder,
-        `${ventuno}assets/js/toggle-text-seemore-btn.js`
+        `${ventuno}assets/js/toggle-text-seemore-btn.js`,
       ),
       options: {
         minify: true,
@@ -184,11 +184,11 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/js/tour-first-balloon.js`
+        `${ventuno}src/js/tour-first-balloon.js`,
       ),
       dest: path.resolve(
         outputFolder,
-        `${ventuno}assets/js/tour-first-balloon.js`
+        `${ventuno}assets/js/tour-first-balloon.js`,
       ),
       options: {
         minify: true,
@@ -206,11 +206,11 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/js/sticky-groupheader.js`
+        `${ventuno}src/js/sticky-groupheader.js`,
       ),
       dest: path.resolve(
         outputFolder,
-        `${ventuno}assets/js/sticky-groupheader.js`
+        `${ventuno}assets/js/sticky-groupheader.js`,
       ),
       options: {
         minify: true,
@@ -254,11 +254,11 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/scss/03-components.scss`
+        `${ventuno}src/scss/03-components.scss`,
       ),
       dest: path.resolve(
         outputFolder,
-        `${ventuno}assets/css/components.min.css`
+        `${ventuno}assets/css/components.min.css`,
       ),
       options: {
         includePaths,
@@ -271,7 +271,7 @@ module.exports = {
       entry: path.resolve(outputFolder, `${ventuno}src/scss/emails/mail.scss`),
       dest: path.resolve(
         outputFolder,
-        `${ventuno}assets/css/emails/mail.min.css`
+        `${ventuno}assets/css/emails/mail.min.css`,
       ),
       options: {
         includePaths,
@@ -293,7 +293,7 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/scss/pages/homepage.scss`
+        `${ventuno}src/scss/pages/homepage.scss`,
       ),
       dest: path.resolve(outputFolder, `${ventuno}assets/css/homepage.min.css`),
       options: {
@@ -305,11 +305,11 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/scss/pages/searchpage.scss`
+        `${ventuno}src/scss/pages/searchpage.scss`,
       ),
       dest: path.resolve(
         outputFolder,
-        `${ventuno}assets/css/searchpage.min.css`
+        `${ventuno}assets/css/searchpage.min.css`,
       ),
       options: {
         includePaths,
@@ -320,11 +320,11 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/scss/pages/licence-comparer.scss`
+        `${ventuno}src/scss/pages/licence-comparer.scss`,
       ),
       dest: path.resolve(
         outputFolder,
-        `${ventuno}assets/css/licence-comparer.min.css`
+        `${ventuno}assets/css/licence-comparer.min.css`,
       ),
       options: {
         includePaths,
@@ -335,7 +335,7 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/scss/pages/glossary.scss`
+        `${ventuno}src/scss/pages/glossary.scss`,
       ),
       dest: path.resolve(outputFolder, `${ventuno}assets/css/glossary.min.css`),
       options: {
@@ -357,7 +357,7 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/scss/components/abstract.scss`
+        `${ventuno}src/scss/components/abstract.scss`,
       ),
       dest: path.resolve(outputFolder, `${ventuno}assets/css/abstract.min.css`),
       options: {
@@ -369,11 +369,11 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/scss/components/accordion.scss`
+        `${ventuno}src/scss/components/accordion.scss`,
       ),
       dest: path.resolve(
         outputFolder,
-        `${ventuno}assets/css/accordion.min.css`
+        `${ventuno}assets/css/accordion.min.css`,
       ),
       options: {
         includePaths,
@@ -384,11 +384,11 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/scss/components/actions-menu.scss`
+        `${ventuno}src/scss/components/actions-menu.scss`,
       ),
       dest: path.resolve(
         outputFolder,
-        `${ventuno}assets/css/actions-menu.min.css`
+        `${ventuno}assets/css/actions-menu.min.css`,
       ),
       options: {
         includePaths,
@@ -399,7 +399,7 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/scss/components/alert.scss`
+        `${ventuno}src/scss/components/alert.scss`,
       ),
       dest: path.resolve(outputFolder, `${ventuno}assets/css/alert.min.css`),
       options: {
@@ -411,11 +411,11 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/scss/modules/align-module.scss`
+        `${ventuno}src/scss/modules/align-module.scss`,
       ),
       dest: path.resolve(
         outputFolder,
-        `${ventuno}assets/css/align-module.min.css`
+        `${ventuno}assets/css/align-module.min.css`,
       ),
       options: {
         includePaths,
@@ -426,7 +426,7 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/scss/components/badge.scss`
+        `${ventuno}src/scss/components/badge.scss`,
       ),
       dest: path.resolve(outputFolder, `${ventuno}assets/css/badge.min.css`),
       options: {
@@ -438,11 +438,11 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/scss/components/button-group.scss`
+        `${ventuno}src/scss/components/button-group.scss`,
       ),
       dest: path.resolve(
         outputFolder,
-        `${ventuno}assets/css/button-group.min.css`
+        `${ventuno}assets/css/button-group.min.css`,
       ),
       options: {
         includePaths,
@@ -453,7 +453,7 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/scss/components/close.scss`
+        `${ventuno}src/scss/components/close.scss`,
       ),
       dest: path.resolve(outputFolder, `${ventuno}assets/css/close.min.css`),
       options: {
@@ -465,7 +465,7 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/scss/components/comments.scss`
+        `${ventuno}src/scss/components/comments.scss`,
       ),
       dest: path.resolve(outputFolder, `${ventuno}assets/css/comments.min.css`),
       options: {
@@ -477,11 +477,11 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/scss/components/eif-filter.scss`
+        `${ventuno}src/scss/components/eif-filter.scss`,
       ),
       dest: path.resolve(
         outputFolder,
-        `${ventuno}assets/css/eif-filter.min.css`
+        `${ventuno}assets/css/eif-filter.min.css`,
       ),
       options: {
         includePaths,
@@ -492,7 +492,7 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/scss/components/etrans.scss`
+        `${ventuno}src/scss/components/etrans.scss`,
       ),
       dest: path.resolve(outputFolder, `${ventuno}assets/css/etrans.min.css`),
       options: {
@@ -504,11 +504,11 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/scss/components/ajax-throbber.scss`
+        `${ventuno}src/scss/components/ajax-throbber.scss`,
       ),
       dest: path.resolve(
         outputFolder,
-        `${ventuno}assets/css/ajax-throbber.min.css`
+        `${ventuno}assets/css/ajax-throbber.min.css`,
       ),
       options: {
         includePaths,
@@ -519,11 +519,11 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/scss/components/fieldset-show-more.scss`
+        `${ventuno}src/scss/components/fieldset-show-more.scss`,
       ),
       dest: path.resolve(
         outputFolder,
-        `${ventuno}assets/css/fieldset-show-more.min.css`
+        `${ventuno}assets/css/fieldset-show-more.min.css`,
       ),
       options: {
         includePaths,
@@ -534,7 +534,7 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/scss/components/footer.scss`
+        `${ventuno}src/scss/components/footer.scss`,
       ),
       dest: path.resolve(outputFolder, `${ventuno}assets/css/footer.min.css`),
       options: {
@@ -546,11 +546,11 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/scss/components/form-checkboxes.scss`
+        `${ventuno}src/scss/components/form-checkboxes.scss`,
       ),
       dest: path.resolve(
         outputFolder,
-        `${ventuno}assets/css/form-checkboxes.min.css`
+        `${ventuno}assets/css/form-checkboxes.min.css`,
       ),
       options: {
         includePaths,
@@ -561,7 +561,7 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/scss/components/forms.scss`
+        `${ventuno}src/scss/components/forms.scss`,
       ),
       dest: path.resolve(outputFolder, `${ventuno}assets/css/forms.min.css`),
       options: {
@@ -573,7 +573,7 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/scss/components/webform.scss`
+        `${ventuno}src/scss/components/webform.scss`,
       ),
       dest: path.resolve(outputFolder, `${ventuno}assets/css/webform.min.css`),
       options: {
@@ -585,11 +585,11 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/scss/components/group-banner.scss`
+        `${ventuno}src/scss/components/group-banner.scss`,
       ),
       dest: path.resolve(
         outputFolder,
-        `${ventuno}assets/css/group-banner.min.css`
+        `${ventuno}assets/css/group-banner.min.css`,
       ),
       options: {
         includePaths,
@@ -600,11 +600,11 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/scss/components/header-topic.scss`
+        `${ventuno}src/scss/components/header-topic.scss`,
       ),
       dest: path.resolve(
         outputFolder,
-        `${ventuno}assets/css/header-topic.min.css`
+        `${ventuno}assets/css/header-topic.min.css`,
       ),
       options: {
         includePaths,
@@ -615,11 +615,11 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/scss/components/ief-entity-table.scss`
+        `${ventuno}src/scss/components/ief-entity-table.scss`,
       ),
       dest: path.resolve(
         outputFolder,
-        `${ventuno}assets/css/ief-entity-table.min.css`
+        `${ventuno}assets/css/ief-entity-table.min.css`,
       ),
       options: {
         includePaths,
@@ -630,11 +630,11 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/scss/components/layout-block.scss`
+        `${ventuno}src/scss/components/layout-block.scss`,
       ),
       dest: path.resolve(
         outputFolder,
-        `${ventuno}assets/css/layout-block.min.css`
+        `${ventuno}assets/css/layout-block.min.css`,
       ),
       options: {
         includePaths,
@@ -645,11 +645,11 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/scss/components/licence-filter.scss`
+        `${ventuno}src/scss/components/licence-filter.scss`,
       ),
       dest: path.resolve(
         outputFolder,
-        `${ventuno}assets/css/licence-filter.min.css`
+        `${ventuno}assets/css/licence-filter.min.css`,
       ),
       options: {
         includePaths,
@@ -660,11 +660,11 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/scss/components/listing-grid.scss`
+        `${ventuno}src/scss/components/listing-grid.scss`,
       ),
       dest: path.resolve(
         outputFolder,
-        `${ventuno}assets/css/listing-grid.min.css`
+        `${ventuno}assets/css/listing-grid.min.css`,
       ),
       options: {
         includePaths,
@@ -675,11 +675,11 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/scss/components/menu--og--navigation.scss`
+        `${ventuno}src/scss/components/menu--og--navigation.scss`,
       ),
       dest: path.resolve(
         outputFolder,
-        `${ventuno}assets/css/menu--og--navigation.min.css`
+        `${ventuno}assets/css/menu--og--navigation.min.css`,
       ),
       options: {
         includePaths,
@@ -690,7 +690,7 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/scss/components/modals.scss`
+        `${ventuno}src/scss/components/modals.scss`,
       ),
       dest: path.resolve(outputFolder, `${ventuno}assets/css/modals.min.css`),
       options: {
@@ -702,7 +702,7 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/scss/components/nav.scss`
+        `${ventuno}src/scss/components/nav.scss`,
       ),
       dest: path.resolve(outputFolder, `${ventuno}assets/css/nav.min.css`),
       options: {
@@ -714,7 +714,7 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/scss/components/mmenu.scss`
+        `${ventuno}src/scss/components/mmenu.scss`,
       ),
       dest: path.resolve(outputFolder, `${ventuno}assets/css/mmenu.min.css`),
       options: {
@@ -726,11 +726,11 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/scss/components/navbar-search.scss`
+        `${ventuno}src/scss/components/navbar-search.scss`,
       ),
       dest: path.resolve(
         outputFolder,
-        `${ventuno}assets/css/navbar-search.min.css`
+        `${ventuno}assets/css/navbar-search.min.css`,
       ),
       options: {
         includePaths,
@@ -741,7 +741,7 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/scss/components/navbar.scss`
+        `${ventuno}src/scss/components/navbar.scss`,
       ),
       dest: path.resolve(outputFolder, `${ventuno}assets/css/navbar.min.css`),
       options: {
@@ -753,11 +753,11 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/scss/components/navigation-bottom.scss`
+        `${ventuno}src/scss/components/navigation-bottom.scss`,
       ),
       dest: path.resolve(
         outputFolder,
-        `${ventuno}assets/css/navigation-bottom.min.css`
+        `${ventuno}assets/css/navigation-bottom.min.css`,
       ),
       options: {
         includePaths,
@@ -768,11 +768,11 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/scss/components/page-title.scss`
+        `${ventuno}src/scss/components/page-title.scss`,
       ),
       dest: path.resolve(
         outputFolder,
-        `${ventuno}assets/css/page-title.min.css`
+        `${ventuno}assets/css/page-title.min.css`,
       ),
       options: {
         includePaths,
@@ -783,11 +783,11 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/scss/components/pagination.scss`
+        `${ventuno}src/scss/components/pagination.scss`,
       ),
       dest: path.resolve(
         outputFolder,
-        `${ventuno}assets/css/pagination.min.css`
+        `${ventuno}assets/css/pagination.min.css`,
       ),
       options: {
         includePaths,
@@ -798,11 +798,11 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/scss/components/paragraphs/paragraph.scss`
+        `${ventuno}src/scss/components/paragraphs/paragraph.scss`,
       ),
       dest: path.resolve(
         outputFolder,
-        `${ventuno}assets/css/paragraph.min.css`
+        `${ventuno}assets/css/paragraph.min.css`,
       ),
       options: {
         includePaths,
@@ -813,7 +813,7 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/scss/components/carousel.scss`
+        `${ventuno}src/scss/components/carousel.scss`,
       ),
       dest: path.resolve(outputFolder, `${ventuno}assets/css/carousel.min.css`),
       options: {
@@ -825,11 +825,11 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/scss/components/image-gallery.scss`
+        `${ventuno}src/scss/components/image-gallery.scss`,
       ),
       dest: path.resolve(
         outputFolder,
-        `${ventuno}assets/css/image-gallery.min.css`
+        `${ventuno}assets/css/image-gallery.min.css`,
       ),
       options: {
         includePaths,
@@ -840,11 +840,11 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/scss/components/paragraphs/paragraph--heading.scss`
+        `${ventuno}src/scss/components/paragraphs/paragraph--heading.scss`,
       ),
       dest: path.resolve(
         outputFolder,
-        `${ventuno}assets/css/paragraph--heading.min.css`
+        `${ventuno}assets/css/paragraph--heading.min.css`,
       ),
       options: {
         includePaths,
@@ -855,11 +855,11 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/scss/components/paragraphs/paragraph--layout.scss`
+        `${ventuno}src/scss/components/paragraphs/paragraph--layout.scss`,
       ),
       dest: path.resolve(
         outputFolder,
-        `${ventuno}assets/css/paragraph--layout.min.css`
+        `${ventuno}assets/css/paragraph--layout.min.css`,
       ),
       options: {
         includePaths,
@@ -870,11 +870,11 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/scss/components/paragraphs/paragraph--poll.scss`
+        `${ventuno}src/scss/components/paragraphs/paragraph--poll.scss`,
       ),
       dest: path.resolve(
         outputFolder,
-        `${ventuno}assets/css/paragraph--poll.min.css`
+        `${ventuno}assets/css/paragraph--poll.min.css`,
       ),
       options: {
         includePaths,
@@ -885,11 +885,11 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/scss/components/paragraphs/paragraph--social-media.scss`
+        `${ventuno}src/scss/components/paragraphs/paragraph--social-media.scss`,
       ),
       dest: path.resolve(
         outputFolder,
-        `${ventuno}assets/css/paragraph--social-media.min.css`
+        `${ventuno}assets/css/paragraph--social-media.min.css`,
       ),
       options: {
         includePaths,
@@ -900,11 +900,11 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/scss/components/paragraphs/paragraph--testimony.scss`
+        `${ventuno}src/scss/components/paragraphs/paragraph--testimony.scss`,
       ),
       dest: path.resolve(
         outputFolder,
-        `${ventuno}assets/css/paragraph--testimony.min.css`
+        `${ventuno}assets/css/paragraph--testimony.min.css`,
       ),
       options: {
         includePaths,
@@ -915,11 +915,11 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/scss/components/paragraphs/paragraph--tiles.scss`
+        `${ventuno}src/scss/components/paragraphs/paragraph--tiles.scss`,
       ),
       dest: path.resolve(
         outputFolder,
-        `${ventuno}assets/css/paragraph--tiles.min.css`
+        `${ventuno}assets/css/paragraph--tiles.min.css`,
       ),
       options: {
         includePaths,
@@ -930,11 +930,11 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/scss/components/paragraphs/paragraph--video.scss`
+        `${ventuno}src/scss/components/paragraphs/paragraph--video.scss`,
       ),
       dest: path.resolve(
         outputFolder,
-        `${ventuno}assets/css/paragraph--video.min.css`
+        `${ventuno}assets/css/paragraph--video.min.css`,
       ),
       options: {
         includePaths,
@@ -945,7 +945,7 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/scss/components/releases.scss`
+        `${ventuno}src/scss/components/releases.scss`,
       ),
       dest: path.resolve(outputFolder, `${ventuno}assets/css/releases.min.css`),
       options: {
@@ -957,11 +957,11 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/scss/components/share-content-form.scss`
+        `${ventuno}src/scss/components/share-content-form.scss`,
       ),
       dest: path.resolve(
         outputFolder,
-        `${ventuno}assets/css/share-content-form.min.css`
+        `${ventuno}assets/css/share-content-form.min.css`,
       ),
       options: {
         includePaths,
@@ -972,7 +972,7 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/scss/components/see-more.scss`
+        `${ventuno}src/scss/components/see-more.scss`,
       ),
       dest: path.resolve(outputFolder, `${ventuno}assets/css/see-more.min.css`),
       options: {
@@ -984,7 +984,7 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/scss/components/spinners.scss`
+        `${ventuno}src/scss/components/spinners.scss`,
       ),
       dest: path.resolve(outputFolder, `${ventuno}assets/css/spinners.min.css`),
       options: {
@@ -996,11 +996,11 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/scss/components/table-files.scss`
+        `${ventuno}src/scss/components/table-files.scss`,
       ),
       dest: path.resolve(
         outputFolder,
-        `${ventuno}assets/css/table-files.min.css`
+        `${ventuno}assets/css/table-files.min.css`,
       ),
       options: {
         includePaths,
@@ -1011,11 +1011,11 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/scss/components/tabledrag.scss`
+        `${ventuno}src/scss/components/tabledrag.scss`,
       ),
       dest: path.resolve(
         outputFolder,
-        `${ventuno}assets/css/tabledrag.min.css`
+        `${ventuno}assets/css/tabledrag.min.css`,
       ),
       options: {
         includePaths,
@@ -1026,7 +1026,7 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/scss/components/tables.scss`
+        `${ventuno}src/scss/components/tables.scss`,
       ),
       dest: path.resolve(outputFolder, `${ventuno}assets/css/tables.min.css`),
       options: {
@@ -1038,7 +1038,7 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/scss/components/tabs.scss`
+        `${ventuno}src/scss/components/tabs.scss`,
       ),
       dest: path.resolve(outputFolder, `${ventuno}assets/css/tabs.min.css`),
       options: {
@@ -1050,7 +1050,7 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/scss/components/tile.scss`
+        `${ventuno}src/scss/components/tile.scss`,
       ),
       dest: path.resolve(outputFolder, `${ventuno}assets/css/tile.min.css`),
       options: {
@@ -1062,7 +1062,7 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/scss/components/timeline.scss`
+        `${ventuno}src/scss/components/timeline.scss`,
       ),
       dest: path.resolve(outputFolder, `${ventuno}assets/css/timeline.min.css`),
       options: {
@@ -1074,7 +1074,7 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/scss/components/toolbar.scss`
+        `${ventuno}src/scss/components/toolbar.scss`,
       ),
       dest: path.resolve(outputFolder, `${ventuno}assets/css/toolbar.min.css`),
       options: {
@@ -1086,7 +1086,7 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/scss/components/tour.scss`
+        `${ventuno}src/scss/components/tour.scss`,
       ),
       dest: path.resolve(outputFolder, `${ventuno}assets/css/tour.min.css`),
       options: {
@@ -1098,11 +1098,11 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/scss/components/user--group-header.scss`
+        `${ventuno}src/scss/components/user--group-header.scss`,
       ),
       dest: path.resolve(
         outputFolder,
-        `${ventuno}assets/css/user--group-header.min.css`
+        `${ventuno}assets/css/user--group-header.min.css`,
       ),
       options: {
         includePaths,
@@ -1114,11 +1114,11 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/scss/components/layout-paragraphs--builder.scss`
+        `${ventuno}src/scss/components/layout-paragraphs--builder.scss`,
       ),
       dest: path.resolve(
         outputFolder,
-        `${ventuno}assets/css/layout-paragraphs--builder.min.css`
+        `${ventuno}assets/css/layout-paragraphs--builder.min.css`,
       ),
       options: {
         includePaths,
@@ -1170,11 +1170,11 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${iop}src/scss/components/accordion-faq.scss`
+        `${iop}src/scss/components/accordion-faq.scss`,
       ),
       dest: path.resolve(
         outputFolder,
-        `${iop}assets/css/accordion-faq.min.css`
+        `${iop}assets/css/accordion-faq.min.css`,
       ),
       options: {
         minify: true,
@@ -1185,11 +1185,11 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${iop}src/scss/components/call-to-action.scss`
+        `${iop}src/scss/components/call-to-action.scss`,
       ),
       dest: path.resolve(
         outputFolder,
-        `${iop}assets/css/call-to-action.min.css`
+        `${iop}assets/css/call-to-action.min.css`,
       ),
       options: {
         minify: true,
@@ -1209,7 +1209,7 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${iop}src/scss/components/navbar.scss`
+        `${iop}src/scss/components/navbar.scss`,
       ),
       dest: path.resolve(outputFolder, `${iop}assets/css/navbar.min.css`),
       options: {
@@ -1221,7 +1221,7 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${iop}src/scss/components/page-header.scss`
+        `${iop}src/scss/components/page-header.scss`,
       ),
       dest: path.resolve(outputFolder, `${iop}assets/css/page-header.min.css`),
       options: {
@@ -1233,11 +1233,11 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${iop}src/scss/components/paragraphs/paragraph--call-to-action.scss`
+        `${iop}src/scss/components/paragraphs/paragraph--call-to-action.scss`,
       ),
       dest: path.resolve(
         outputFolder,
-        `${iop}assets/css/paragraph--call-to-action.min.css`
+        `${iop}assets/css/paragraph--call-to-action.min.css`,
       ),
       options: {
         minify: true,
@@ -1248,11 +1248,11 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${iop}src/scss/components/paragraphs/paragraph--carousel.scss`
+        `${iop}src/scss/components/paragraphs/paragraph--carousel.scss`,
       ),
       dest: path.resolve(
         outputFolder,
-        `${iop}assets/css/paragraph--carousel.min.css`
+        `${iop}assets/css/paragraph--carousel.min.css`,
       ),
       options: {
         minify: true,
@@ -1263,11 +1263,11 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${iop}src/scss/components/paragraphs/paragraph--image.scss`
+        `${iop}src/scss/components/paragraphs/paragraph--image.scss`,
       ),
       dest: path.resolve(
         outputFolder,
-        `${iop}assets/css/paragraph--image.min.css`
+        `${iop}assets/css/paragraph--image.min.css`,
       ),
       options: {
         minify: true,
@@ -1278,11 +1278,11 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${iop}src/scss/components/paragraphs/paragraph--layout.scss`
+        `${iop}src/scss/components/paragraphs/paragraph--layout.scss`,
       ),
       dest: path.resolve(
         outputFolder,
-        `${iop}assets/css/paragraph--layout.min.css`
+        `${iop}assets/css/paragraph--layout.min.css`,
       ),
       options: {
         minify: true,
@@ -1293,11 +1293,11 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${iop}src/scss/components/paragraphs/paragraph--testimony.scss`
+        `${iop}src/scss/components/paragraphs/paragraph--testimony.scss`,
       ),
       dest: path.resolve(
         outputFolder,
-        `${iop}assets/css/paragraph--testimony.min.css`
+        `${iop}assets/css/paragraph--testimony.min.css`,
       ),
       options: {
         minify: true,
@@ -1317,7 +1317,7 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${iop}src/scss/components/pagination.scss`
+        `${iop}src/scss/components/pagination.scss`,
       ),
       dest: path.resolve(outputFolder, `${iop}assets/css/pagination.min.css`),
       options: {
@@ -1340,7 +1340,7 @@ module.exports = {
       from: [
         path.resolve(
           nodeModules,
-          "@openeuropa/bcl-theme-joinup/fonts/files/*.woff*"
+          "@openeuropa/bcl-theme-joinup/fonts/files/*.woff*",
         ),
       ],
       to: path.resolve(outputFolder, `${ventuno}assets/css/fonts/files`),
@@ -1351,7 +1351,7 @@ module.exports = {
       from: [
         path.resolve(
           nodeModules,
-          "@openeuropa/bcl-theme-joinup/js/oe-bcl-joinup.bundle.min.js"
+          "@openeuropa/bcl-theme-joinup/js/oe-bcl-joinup.bundle.min.js",
         ),
       ],
       to: path.resolve(outputFolder, `${ventuno}assets/js`),
@@ -1386,7 +1386,7 @@ module.exports = {
       from: [
         path.resolve(
           nodeModules,
-          "@openeuropa/bcl-theme-joinup/fonts/files/*.woff*"
+          "@openeuropa/bcl-theme-joinup/fonts/files/*.woff*",
         ),
       ],
       to: path.resolve(outputFolder, `${iop}assets/css/fonts/files`),
@@ -1397,7 +1397,7 @@ module.exports = {
       from: [
         path.resolve(
           nodeModules,
-          "@openeuropa/bcl-theme-joinup/js/oe-bcl-joinup.bundle.min.js"
+          "@openeuropa/bcl-theme-joinup/js/oe-bcl-joinup.bundle.min.js",
         ),
       ],
       to: path.resolve(outputFolder, `${iop}assets/js`),
