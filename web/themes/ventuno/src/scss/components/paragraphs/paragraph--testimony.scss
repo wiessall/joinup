@@ -41,7 +41,9 @@
       object-fit: cover;
       border: 2px solid transparent;
       border-radius: $spacer * 2; // 32px
-      background: linear-gradient($primary, $primary) padding-box, $gradient border-box;
+      background:
+        linear-gradient($primary, $primary) padding-box,
+        $gradient border-box;
       aspect-ratio: 16 / 9;
       img {
         width: 100%;
@@ -80,16 +82,16 @@
     }
     &__author {
       margin-bottom: 0;
-      font-size: .875rem;
+      font-size: 0.875rem;
     }
     &__bio {
       margin-bottom: 0;
-      font-size: .75rem;
+      font-size: 0.75rem;
       line-height: 1.2;
     }
     &__cite {
       display: inline-block; // Browsers seem to have a min line-height for <cite> element
-      font-size: .625rem;
+      font-size: 0.625rem;
       font-style: normal;
       line-height: 1.2;
     }

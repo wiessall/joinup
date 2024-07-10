@@ -209,14 +209,14 @@ class RefreshCachedFieldsEventSubscriber extends RefreshExpiredFieldsSubscriberB
    *   Thrown when target entity is not a distribution.
    */
   protected function getDistributionFileUrl(MetaEntityInterface $meta_entity): string {
-    /** @var \Drupal\asset_distribution\Entity\AssetDistributionInterface $distribution */
+    /** @var \Drupal\joinup_distribution\Entity\DistributionInterface $distribution */
     $distribution = $meta_entity->getTargetEntity();
-    if ($distribution->bundle() !== 'asset_distribution') {
+    if ($distribution->bundle() !== 'distribution') {
       throw new \InvalidArgumentException('Retrieving files from entities other than distributions has not been implemented yet.');
     }
 
     /** @var \Drupal\file\FileInterface $file */
-    foreach ($distribution->field_ad_access_url->referencedEntities() as $file) {
+    foreach ($distribution->access_url->referencedEntities() as $file) {
       if ($file !== NULL) {
         return ($file instanceof RemoteFile) ?
           $file->getFileUri() :

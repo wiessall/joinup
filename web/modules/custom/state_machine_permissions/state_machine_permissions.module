@@ -71,7 +71,11 @@ function state_machine_permissions_node_create_access(AccountInterface $account,
     return AccessResult::forbidden('No available transitions for the entity.');
   }
 
-  return AccessResult::neutral();
+  // OG does not check for a create permission properly, because the
+  // `hook_create_access` does not include a group. However, we are passing the
+  // group in our code, so a proper access check should be performed here.
+  return \Drupal::getContainer()->get('og.access')
+    ->userAccess($context['group'], 'create ' . $entity_bundle . ' content', NULL, TRUE);
 }
 
 /**

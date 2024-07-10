@@ -36,6 +36,56 @@ class SolutionReleasesAndDistributionsFieldItemList extends EntityReferenceField
   }
 
   /**
+   * {@inheritdoc}
+   */
+  public function referencedEntities(): array {
+    // Override the default value until we have all relevant entities as nodes.
+    // @todo Remove this in ISAICP-8376.
+    if ($this->isEmpty()) {
+      return [];
+    }
+
+    // Collect the IDs of existing entities to load, and directly grab the
+    // "autocreate" entities that are already populated in $item->entity.
+    $target_entities = $ids = [];
+    foreach ($this->list as $delta => $item) {
+      if ($item->target_id !== NULL) {
+        $ids[$delta] = $item->target_id;
+      }
+      elseif ($item->hasNewEntity()) {
+        $target_entities[$delta] = $item->entity;
+      }
+    }
+
+    // Load and add the existing entities.
+    if ($ids) {
+      $numeric_ids = [];
+      $string_ids = [];
+      foreach ($ids as $delta => $target_id) {
+        if (is_numeric($target_id)) {
+          $numeric_ids[$delta] = $target_id;
+        }
+        else {
+          $string_ids[$delta] = $target_id;
+        }
+      }
+
+      foreach (\Drupal::entityTypeManager()->getStorage('node')->loadMultiple($numeric_ids) as $delta => $referenced_entity) {
+        $target_entities[$delta] = $referenced_entity;
+      }
+
+      foreach (\Drupal::entityTypeManager()->getStorage('rdf_entity')->loadMultiple($string_ids) as $delta => $referenced_entity) {
+        $target_entities[$delta] = $referenced_entity;
+      }
+
+      // Ensure the returned array is ordered by deltas.
+      ksort($target_entities);
+    }
+
+    return $target_entities;
+  }
+
+  /**
    * Returns a list of solution's releases and standalone distributions as IDs.
    *
    * @return string[]
@@ -47,34 +97,24 @@ class SolutionReleasesAndDistributionsFieldItemList extends EntityReferenceField
    *   Thrown if the 'rdf_entity' entity type doesn't exist.
    */
   protected function getReleasesAndDistributions(): array {
+    $entityTypeManager = \Drupal::entityTypeManager();
     /** @var \Drupal\sparql_entity_storage\SparqlEntityStorageInterface $storage */
-    $storage = \Drupal::entityTypeManager()->getStorage('rdf_entity');
+    $storage = $entityTypeManager->getStorage('rdf_entity');
     /** @var \Drupal\solution\Entity\SolutionInterface $solution */
     $solution = $this->getEntity();
     $graph_id = $solution->get('graph')->target_id;
-    /** @var \Drupal\sparql_entity_storage\Entity\Query\Sparql\SparqlQueryInterface $query */
-    $query = $storage->getQuery();
-
-    $or_condition = ($query->orConditionGroup())
-      ->condition('field_isr_is_version_of', $solution->id());
-
-    if (!$solution->get('field_is_distribution')->isEmpty()) {
-      $distribution_ids = [];
-      foreach ($solution->get('field_is_distribution') as $item) {
-        $distribution_ids[] = $item->target_id;
-      }
-      $or_condition->condition('id', $distribution_ids, 'IN');
-    }
 
     // Retrieve all releases and distributions for this solution.
-    $ids = array_values($query
+    $ids = array_values($storage
+      ->getQuery()
       ->graphs([$graph_id])
-      ->condition('rid', ['asset_release', 'asset_distribution'], 'IN')
-      ->condition($or_condition)
+      ->condition('rid', 'asset_release')
+      ->condition('field_isr_is_version_of', $solution->id())
       ->sort('created', 'DESC')
       ->execute());
 
-    return $ids;
+    // Retrieve also, all standalone distributions for this solution.
+    return $ids + \Drupal::getContainer()->get('joinup_distribution.parent_distribution_resolver')->getParentsDistributionIds($solution->id());
   }
 
 }

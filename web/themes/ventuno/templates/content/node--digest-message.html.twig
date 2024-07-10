@@ -88,6 +88,12 @@
 {% else %}
   {% set node_title = label %}
 {% endif %}
+{% if content.description %}
+  {% set body = content.description %}
+{% else %}
+  {% set body = content.body %}
+{% endif %}
+
 <!-- NODE START-->
 <table role="presentation">
   <tbody>

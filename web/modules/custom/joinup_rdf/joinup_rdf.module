@@ -122,8 +122,8 @@ function joinup_rdf_form_rdf_entity_form_alter(array &$form, FormStateInterface 
       'rdf_entity_licence_edit_form',
       'rdf_entity_asset_release_form',
       'rdf_entity_asset_release_edit_form',
-      'rdf_entity_asset_distribution_form',
-      'rdf_entity_asset_distribution_edit_form',
+      'node_distribution_form',
+      'node_distribution_edit_form',
     ];
     if (in_array($form_id, $honeypot_forms)) {
       \Drupal::service('honeypot')->addFormProtection(

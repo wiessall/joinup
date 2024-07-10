@@ -23,13 +23,9 @@ Feature:
       | is version of  | Persistent solution                                            |
       | state          | published                                                      |
       | uri            | http://data.europa.eu/w21/98004ec9-62f3-4734-a1b6-af7e4838b09c |
-    And the following distribution:
-      | title       | Persistent distribution                                        |
-      | description | Persistent distribution                                        |
-      | access url  | test.zip                                                       |
-      | parent      | Persistent solution                                            |
-      | uri         | http://data.europa.eu/w21/643a2a52-da3b-4594-92bb-295d8134e1fb |
-      | state       | published                                                      |
+    And distribution content:
+      | title                   | description             | access url | parent              | uri                                                            |
+      | Persistent distribution | Persistent distribution | test.zip   | Persistent solution | http://data.europa.eu/w21/643a2a52-da3b-4594-92bb-295d8134e1fb |
     And licence content:
       | title              | description        | uri                                                            |
       | Persistent licence | Persistent licence | http://data.europa.eu/w21/4205229d-92b6-4cac-80af-d8c2296d923c |
@@ -66,7 +62,7 @@ Feature:
     When I go to the "Persistent release" release
     Then the persistent url should contain "http://data.europa.eu/w21"
 
-    When I go to the "Persistent distribution" asset distribution
+    When I go to the "Persistent distribution" distribution
     Then the persistent url should contain "http://data.europa.eu/w21"
 
     When I go to the "Persistent licence" licence

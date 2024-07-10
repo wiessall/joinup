@@ -10,15 +10,20 @@ declare(strict_types=1);
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Site\Settings;
+use Drupal\joinup_distribution\Entity\DistributionInterface;
 use Drupal\joinup_stats\Entity\DownloadCount;
 use Drupal\joinup_stats\Entity\VisitCount;
 use Drupal\meta_entity\Entity\MetaEntityInterface;
-use Drupal\rdf_entity\RdfInterface;
+use Drupal\node\NodeInterface;
 
 /**
  * Implements hook_ENTITY_TYPE_insert().
  */
-function joinup_stats_rdf_entity_insert(RdfInterface $distribution): void {
+function joinup_stats_node_insert(NodeInterface $distribution): void {
+  if ($distribution->bundle() !== 'distribution') {
+    return;
+  }
+
   // Invalidate the solution download count cache.
   joinup_stats_invalidate_solution_download_count_cache_by_distribution($distribution);
 }
@@ -27,16 +32,18 @@ function joinup_stats_rdf_entity_insert(RdfInterface $distribution): void {
  * Implements hook_ENTITY_TYPE_update().
  */
 function joinup_stats_meta_entity_update(MetaEntityInterface $meta_entity): void {
-  // Invalidate the solution download count cache.
-  joinup_stats_invalidate_solution_download_count_cache($meta_entity);
+  if ($meta_entity->bundle() === 'download_count') {
+    joinup_stats_invalidate_solution_download_count_cache($meta_entity);
+  }
 }
 
 /**
  * Implements hook_ENTITY_TYPE_delete().
  */
-function joinup_stats_rdf_entity_delete(RdfInterface $distribution): void {
-  // Invalidate the solution download count cache.
-  joinup_stats_invalidate_solution_download_count_cache_by_distribution($distribution);
+function joinup_stats_meta_entity_delete(MetaEntityInterface $meta_entity): void {
+  if ($meta_entity->bundle() === 'download_count') {
+    joinup_stats_invalidate_solution_download_count_cache($meta_entity);
+  }
 }
 
 /**
@@ -46,9 +53,7 @@ function joinup_stats_rdf_entity_delete(RdfInterface $distribution): void {
  *   The distribution download count meta entity.
  */
 function joinup_stats_invalidate_solution_download_count_cache(MetaEntityInterface $meta_entity): void {
-  if ($meta_entity->bundle() === 'download_count') {
-    /** @var \Drupal\rdf_entity\RdfInterface $distribution */
-    $distribution = $meta_entity->target->entity;
+  if ($meta_entity->bundle() === 'download_count' && $distribution = $meta_entity->target->entity) {
     joinup_stats_invalidate_solution_download_count_cache_by_distribution($distribution);
   }
 }
@@ -58,11 +63,11 @@ function joinup_stats_invalidate_solution_download_count_cache(MetaEntityInterfa
  *
  * This is called when a distribution is added or deleted.
  *
- * @param \Drupal\rdf_entity\RdfInterface $distribution
+ * @param \Drupal\joinup_distribution\Entity\DistributionInterface $distribution
  *   The asset distribution being added or deleted.
  */
-function joinup_stats_invalidate_solution_download_count_cache_by_distribution(RdfInterface $distribution): void {
-  if ($distribution->bundle() === 'asset_distribution') {
+function joinup_stats_invalidate_solution_download_count_cache_by_distribution(DistributionInterface $distribution): void {
+  if ($distribution->bundle() === 'distribution') {
     /** @var \Drupal\rdf_entity\RdfInterface $solution */
     if ($solution = $distribution->get('og_audience')->entity) {
       // On solution page we show the sum of all compounded distributions
