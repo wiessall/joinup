@@ -1,25 +1,92 @@
-From 822fa0121c99b631fe3e2185dcda4c2a116c0566 Mon Sep 17 00:00:00 2001
-From: Benji Fisher <benji@FisherFam.org>
-Date: Fri, 9 Feb 2024 20:43:48 -0500
-Subject: [PATCH] Add required plugin annotations
-
----
- core/modules/layout_builder/src/Plugin/Layout/BlankLayout.php | 2 ++
- 1 file changed, 2 insertions(+)
-
+diff --git a/core/lib/Drupal/Core/Layout/LayoutPluginManager.php b/core/lib/Drupal/Core/Layout/LayoutPluginManager.php
+index bc97ec66e0..5454d01fd8 100644
+--- a/core/lib/Drupal/Core/Layout/LayoutPluginManager.php
++++ b/core/lib/Drupal/Core/Layout/LayoutPluginManager.php
+@@ -227,7 +227,8 @@ public function getGroupedDefinitions(?array $definitions = NULL, $label_key = '
+    */
+   public function getLayoutOptions() {
+     $layout_options = [];
+-    foreach ($this->getGroupedDefinitions() as $category => $layout_definitions) {
++    $filtered_definitions = $this->getFilteredDefinitions($this->getType());
++    foreach ($this->getGroupedDefinitions($filtered_definitions) as $category => $layout_definitions) {
+       foreach ($layout_definitions as $name => $layout_definition) {
+         $layout_options[$category][$name] = $layout_definition->getLabel();
+       }
 diff --git a/core/modules/layout_builder/src/Plugin/Layout/BlankLayout.php b/core/modules/layout_builder/src/Plugin/Layout/BlankLayout.php
-index a3f71b0ef9c6..b10c9214598b 100644
+index 7d5b83e3c8..9fc5372c5a 100644
 --- a/core/modules/layout_builder/src/Plugin/Layout/BlankLayout.php
 +++ b/core/modules/layout_builder/src/Plugin/Layout/BlankLayout.php
-@@ -16,6 +16,8 @@
-  *
-  * @Layout(
-  *   id = "layout_builder_blank",
-+ *   label = "Blank",
-+ *   category = "Blank",
-  * )
+@@ -18,7 +18,8 @@
   */
+ #[Layout(
+   id: 'layout_builder_blank',
+-  label: new TranslatableMarkup('Blank'),
++  label: new TranslatableMarkup('Blank Layout'),
++  category: new TranslatableMarkup('Blank Layout'),
+ )]
  class BlankLayout extends LayoutDefault {
--- 
-GitLab
-
+ 
+diff --git a/core/tests/Drupal/Tests/Core/Layout/LayoutPluginManagerTest.php b/core/tests/Drupal/Tests/Core/Layout/LayoutPluginManagerTest.php
+index 7610bf16bf..112adba982 100644
+--- a/core/tests/Drupal/Tests/Core/Layout/LayoutPluginManagerTest.php
++++ b/core/tests/Drupal/Tests/Core/Layout/LayoutPluginManagerTest.php
+@@ -17,6 +17,7 @@
+ use Drupal\Core\Layout\LayoutInterface;
+ use Drupal\Core\Layout\LayoutPluginManager;
+ use Drupal\Core\StringTranslation\TranslatableMarkup;
++use Drupal\Core\Theme\ThemeManagerInterface;
+ use Drupal\Tests\UnitTestCase;
+ use org\bovigo\vfs\vfsStream;
+ use Prophecy\Argument;
+@@ -43,6 +44,13 @@ class LayoutPluginManagerTest extends UnitTestCase {
+    */
+   protected $themeHandler;
+ 
++  /**
++   * The theme manager.
++   *
++   * @var \Drupal\Core\Theme\ThemeManagerInterface
++   */
++  protected $themeManager;
++
+   /**
+    * Cache backend instance.
+    *
+@@ -67,6 +75,8 @@ protected function setUp(): void {
+ 
+     $container = new ContainerBuilder();
+     $container->set('string_translation', $this->getStringTranslationStub());
++    $this->themeManager = $this->prophesize(ThemeManagerInterface::class);
++    $container->set('theme.manager', $this->themeManager->reveal());
+     \Drupal::setContainer($container);
+ 
+     $this->moduleHandler = $this->prophesize(ModuleHandlerInterface::class);
+@@ -347,6 +357,28 @@ public function testGetGroupedDefinitions() {
+     }
+   }
+ 
++  /**
++   * @covers ::getLayoutOptions
++   *
++   * Test that modules and themes can alter the list of layouts.
++   */
++  public function testGetLayoutOptions(): void {
++    $this->moduleHandler->alter(
++      ['plugin_filter_layout', 'plugin_filter_layout__layout'],
++      Argument::type('array'),
++      [],
++      'layout',
++    )->shouldBeCalled();
++    $this->themeManager->alter(
++      ['plugin_filter_layout', 'plugin_filter_layout__layout'],
++      Argument::type('array'),
++      [],
++      'layout',
++    )->shouldBeCalled();
++
++    $this->layoutPluginManager->getLayoutOptions();
++  }
++
+   /**
+    * Sets up the filesystem with YAML files and annotated plugins.
+    */

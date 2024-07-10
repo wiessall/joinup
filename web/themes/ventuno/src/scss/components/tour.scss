@@ -9,11 +9,10 @@
   float: left;
 }
 
-
 // Shepherd.js styles (Guided tour as from Drupal 9, replacing Joyride)
 .shepherd-button {
-  margin-right: .5rem;
-  padding: .5rem 1.5rem;
+  margin-right: 0.5rem;
+  padding: 0.5rem 1.5rem;
   cursor: pointer;
   transition: $transition-base;
   color: $brand;
@@ -37,7 +36,7 @@
 // }
 
 .shepherd-button:disabled {
-  cursor: not-allowed
+  cursor: not-allowed;
 }
 
 .shepherd-footer {
@@ -49,7 +48,7 @@
 }
 
 .shepherd-footer .shepherd-button:last-child {
-  margin-right: 0
+  margin-right: 0;
 }
 
 .shepherd-cancel-icon {
@@ -62,7 +61,7 @@
   background: transparent;
   font-size: 2rem;
   font-weight: $font-weight-base;
-  line-height: .5;
+  line-height: 0.5;
 }
 
 .shepherd-cancel-icon:hover {
@@ -98,8 +97,8 @@
 }
 
 // .shepherd-has-title .shepherd-content .shepherd-header {
-  // background: $gray-100;
-  // padding: $spacer; // 16px
+// background: $gray-100;
+// padding: $spacer; // 16px
 // }
 
 .shepherd-text {
@@ -172,27 +171,28 @@
   background: $white;
 }
 
-.shepherd-element[data-popper-placement^=top]>.shepherd-arrow {
-  bottom: $spacer * -.5;
+.shepherd-element[data-popper-placement^="top"] > .shepherd-arrow {
+  bottom: $spacer * -0.5;
 }
 
-.shepherd-element[data-popper-placement^=bottom]>.shepherd-arrow {
-  top: $spacer * -.5
+.shepherd-element[data-popper-placement^="bottom"] > .shepherd-arrow {
+  top: $spacer * -0.5;
 }
 
-.shepherd-element[data-popper-placement^=left]>.shepherd-arrow {
-  right: $spacer * -.5
+.shepherd-element[data-popper-placement^="left"] > .shepherd-arrow {
+  right: $spacer * -0.5;
 }
 
-.shepherd-element[data-popper-placement^=right]>.shepherd-arrow {
-  left: $spacer * -.5
+.shepherd-element[data-popper-placement^="right"] > .shepherd-arrow {
+  left: $spacer * -0.5;
 }
 
-.shepherd-element.shepherd-centered>.shepherd-arrow {
+.shepherd-element.shepherd-centered > .shepherd-arrow {
   opacity: 0;
 }
 
-.shepherd-element.shepherd-has-title[data-popper-placement^=bottom]>.shepherd-arrow::before {
+.shepherd-element.shepherd-has-title[data-popper-placement^="bottom"]
+  > .shepherd-arrow::before {
   background-color: $gray-100;
 }
 

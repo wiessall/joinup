@@ -6,14 +6,14 @@
  * Components that are needed across all pages.
  */
 
- @import "partials/core"; // Functions, variables, utilities and mixins required
- @import "@openeuropa/bcl-bootstrap/scss/buttons";
- @import "@openeuropa/bcl-bootstrap/scss/dropdown";
- @import "@openeuropa/bcl-bootstrap/scss/nav";
- @import "@openeuropa/bcl-bootstrap/scss/navbar";
- @import "@openeuropa/bcl-theme-default/src/scss/header";
- @import "@openeuropa/bcl-theme-default/src/scss/icon";
- @import "@openeuropa/bcl-theme-joinup/src/scss/buttons";
- @import "components/ui-dialog";
- @import "components/buttons";
- @import "components/link";
+@import "partials/core"; // Functions, variables, utilities and mixins required
+@import "@openeuropa/bcl-bootstrap/scss/buttons";
+@import "@openeuropa/bcl-bootstrap/scss/dropdown";
+@import "@openeuropa/bcl-bootstrap/scss/nav";
+@import "@openeuropa/bcl-bootstrap/scss/navbar";
+@import "@openeuropa/bcl-theme-default/src/scss/header";
+@import "@openeuropa/bcl-theme-default/src/scss/icon";
+@import "@openeuropa/bcl-theme-joinup/src/scss/buttons";
+@import "components/ui-dialog";
+@import "components/buttons";
+@import "components/link";

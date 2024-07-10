@@ -4,30 +4,30 @@
   overflow: hidden;
   border-radius: $border-radius-lg;
   &__header {
-    padding: $spacer * .5; // 8px
+    padding: $spacer * 0.5; // 8px
     text-align: center;
     color: $white;
     font-weight: $font-weight-bold;
     a {
       text-decoration: underline;
       color: $white;
-      text-decoration-color: $white!important;
+      text-decoration-color: $white !important;
     }
   }
   &__list {
     margin-bottom: 0;
-    padding: $spacer * .5 0;
+    padding: $spacer * 0.5 0;
     list-style: none;
   }
   &__button {
     width: 100%;
-    padding: $spacer * .5; // 8px
+    padding: $spacer * 0.5; // 8px
     text-align: left;
     word-break: break-word;
     color: inherit; // Resets
     border: 0; // Resets
     background: none; // Resets
-    font-size: .875rem; // 14px
+    font-size: 0.875rem; // 14px
     &:hover {
       cursor: pointer;
       text-decoration: underline;
@@ -84,7 +84,7 @@
     text-align: right;
   }
   &__label {
-    margin: $spacer * .25; // 4px
+    margin: $spacer * 0.25; // 4px
     border-radius: $border-radius-sm;
     font-size: $font-size-sm;
   }

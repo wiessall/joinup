@@ -7,6 +7,7 @@ namespace Drupal\joinup_core\Logger\Formatter;
 use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Utility\Error;
 use Monolog\Formatter\NormalizerFormatter;
+use Monolog\LogRecord;
 
 /**
  * Telegram handler specific formatter.
@@ -16,14 +17,13 @@ class TelegramFormatter extends NormalizerFormatter {
   /**
    * {@inheritdoc}
    */
-  public function format(array $record): string {
+  public function format(LogRecord $record): string {
     $normalized = $this->normalize($record);
 
     $formatted = [];
 
     $date = date('Y-m-d H:i', (new DrupalDateTime($normalized['datetime'], 'Europe/Brussels'))->getTimestamp());
     $formatted[] = "[$date] {$normalized['channel']}.{$normalized['level_name']}";
-    $formatted[] = $this->simplify($normalized['message']);
     if (!empty($normalized['extra'])) {
       $formatted[] = 'Context:';
       unset($normalized['extra']['user']);
@@ -31,6 +31,7 @@ class TelegramFormatter extends NormalizerFormatter {
         $formatted[] = "- $key: $value";
       }
     }
+    $formatted[] = $this->simplify($normalized['message']);
 
     $backtrace = array_filter(explode("\n", Error::formatBacktrace($normalized['context']['backtrace'] ?? [])));
     unset($backtrace[0]);

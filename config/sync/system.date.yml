@@ -2,7 +2,7 @@ _core:
   default_config_hash: j8IYIRS4fz2KpmobxL7JDLv6IoVBqo5INF6jZNjY1fg
 first_day: 0
 country:
-  default: ''
+  default: null
 timezone:
   default: Europe/Brussels
   user:
