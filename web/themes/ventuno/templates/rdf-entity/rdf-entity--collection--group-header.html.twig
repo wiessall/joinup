@@ -17,7 +17,7 @@
         {% if is_canonical %}
           <h1>
         {% endif %}
-        <a class="h1 fw-bold mb-0" href="{{ path('entity.rdf_entity.canonical', {'rdf_entity': rdf_entity.id()}) }}">
+        <a class="h1 fw-bold mb-0" href="{{ path('entity.rdf_entity.canonical', {rdf_entity: rdf_entity.id()}) }}">
           {{ label }}
         </a>
         {% if is_canonical %}
@@ -39,7 +39,7 @@
             {{ content.solutions }}
           </li>
           <li class="group-banner__li text-muted">
-            <a href="{{ path('entity.rdf_entity.member_overview', {'rdf_entity': rdf_entity.id()}) }}">
+            <a href="{{ path('entity.rdf_entity.member_overview', {rdf_entity: rdf_entity.id()}) }}">
               <svg class="bi icon--xs me-1">
                 <use xlink:href="{{ bcl_icon_path }}#people"></use>
               </svg>

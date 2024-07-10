@@ -8,12 +8,12 @@ use Drupal\joinup_bundle_class\JoinupBundleClassFieldAccessTrait;
 use Drupal\joinup_bundle_class\JoinupBundleClassMetaEntityTrait;
 use Drupal\joinup_stats\Entity\DownloadCountAwareInterface;
 use Drupal\joinup_stats\Entity\DownloadCountAwareTrait;
-use Drupal\rdf_entity\Entity\Rdf;
+use Drupal\node\Entity\Node;
 
 /**
- * Test bundle class for asset distributions.
+ * Test bundle class for distributions.
  */
-class AssetDistribution extends Rdf implements DownloadCountAwareInterface {
+class AssetDistribution extends Node implements DownloadCountAwareInterface {
 
   use DownloadCountAwareTrait;
   use JoinupBundleClassFieldAccessTrait;

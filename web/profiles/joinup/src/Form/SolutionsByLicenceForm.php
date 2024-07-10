@@ -4,27 +4,20 @@ declare(strict_types=1);
 
 namespace Drupal\joinup\Form;
 
+use Drupal\Core\Database\Query\PagerSelectExtender;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Pager\PagerManagerInterface;
-use Drupal\Core\Url;
 use Drupal\Core\Utility\LinkGeneratorInterface;
-use Drupal\joinup_licence\Entity\Licence;
 use Drupal\joinup_licence\Entity\LicenceInterface;
-use Drupal\sparql_entity_storage\Driver\Database\sparql\ConnectionInterface;
-use Drupal\sparql_entity_storage\Entity\Query\Sparql\SparqlArg;
+use Drupal\mysql\Driver\Database\mysql\Connection;
+use Drupal\og\OgGroupAudienceHelperInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * A reporting page that presents solutions indexed by related licences.
  */
 class SolutionsByLicenceForm extends FormBase {
-
-  /**
-   * The items per page.
-   */
-  protected const ITEMS_PER_PAGE = 50;
 
   /**
    * {@inheritdoc}
@@ -38,17 +31,14 @@ class SolutionsByLicenceForm extends FormBase {
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity type manager service.
-   * @param \Drupal\sparql_entity_storage\Driver\Database\sparql\ConnectionInterface $connection
-   *   The SPARQL connection.
-   * @param \Drupal\Core\Pager\PagerManagerInterface $pagerManager
-   *   The pager manager.
+   * @param \Drupal\mysql\Driver\Database\mysql\Connection $database
+   *   The database service.
    * @param \Drupal\Core\Utility\LinkGeneratorInterface $linkGenerator
    *   The link generator.
    */
   public function __construct(
     protected EntityTypeManagerInterface $entityTypeManager,
-    protected ConnectionInterface $connection,
-    protected PagerManagerInterface $pagerManager,
+    protected Connection $database,
     protected LinkGeneratorInterface $linkGenerator,
   ) {}
 
@@ -58,8 +48,7 @@ class SolutionsByLicenceForm extends FormBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('entity_type.manager'),
-      $container->get('sparql.endpoint'),
-      $container->get('pager.manager'),
+      $container->get('database'),
       $container->get('link_generator')
     );
   }
@@ -85,29 +74,36 @@ class SolutionsByLicenceForm extends FormBase {
     ];
 
     $licence_id = $form_state->getValue('licence_option');
+    $query = $this->database->select('node_field_data', 'nfd');
+    $query->extend(PagerSelectExtender::class);
+    $query->leftJoin('node__field_licence', 'nfl', 'nfl.entity_id = nfd.nid');
+    $query->leftJoin('node__' . OgGroupAudienceHelperInterface::DEFAULT_FIELD, 'nog', 'nog.entity_id = nfd.nid');
+    $query->fields('nog', ['og_audience_target_id'])
+      ->fields('nfl', ['field_licence_target_id'])
+      ->groupBy('nog.og_audience_target_id')
+      ->groupBy('nfl.field_licence_target_id');
+    if ($licence_id) {
+      $query->condition('nfl.field_licence_target_id', $licence_id);
+    }
 
-    // Under some unknown circumstances the result returned can be a string with
-    // the value 'binding' instead of the expected count. This has been causing
-    // random test failures, and has also been observed during debugging on a
-    // development environment. It appears that calling ::getArrayCopy() works
-    // around this somehow and the problem can no longer be replicated.
-    $results = $this->connection->query($this->getCountQuery($licence_id))->getArrayCopy();
-    $result = reset($results);
-    $total = $result->total->getValue();
-    $page = $this->pagerManager->createPager($total, self::ITEMS_PER_PAGE)->getCurrentPage();
-    $offset = $page * self::ITEMS_PER_PAGE;
-    $items = $this->connection->query($this->getQuery($offset, $licence_id));
+    $items = $query->execute()->fetchAll();
 
     $rows = [];
     foreach ($items as $item) {
-      $licence = Licence::loadByUri($item->licence->getUri());
-      $solution_url = Url::fromRoute('entity.rdf_entity.canonical', [
-        'rdf_entity' => $item->solution->getUri(),
-      ]);
+      if (empty($item->field_licence_target_id) || empty($item->og_audience_target_id)) {
+        continue;
+      }
+
+      $licence = $this->entityTypeManager->getStorage('node')->load($item->field_licence_target_id);
+      $solution = $this->entityTypeManager->getStorage('rdf_entity')->load($item->og_audience_target_id);
+
+      if (!$licence || !$solution) {
+        continue;
+      }
 
       $rows[] = [
         $this->linkGenerator->generate($licence->label(), $licence->toUrl()),
-        $this->linkGenerator->generate($item->solution_label, $solution_url),
+        $this->linkGenerator->generate($solution->label(), $solution->toUrl()),
       ];
     }
 
@@ -150,101 +146,6 @@ class SolutionsByLicenceForm extends FormBase {
       fn(LicenceInterface $licence): string => $licence->label(),
       $storage->loadMultiple($nids),
     );
-  }
-
-  /**
-   * Returns the query that counts total of the results.
-   *
-   * @param string|null $licence_id
-   *   (Optional) A licence id to narrow down the results with.
-   *
-   * @return string
-   *   The count query.
-   */
-  protected function getCountQuery(?string $licence_id = NULL): string {
-    $query = <<<QUERY
-SELECT COUNT(*) AS ?total
-WHERE {
-  SELECT DISTINCT ?solution ?licence_label ?licence ?solution_label (COUNT(*) as ?total)
-  WHERE {
-    {
-      {
-        ?solution <http://www.w3.org/ns/dcat#distribution> ?distribution .
-        ?distribution <http://purl.org/dc/terms/license> ?licence .
-        FILTER NOT EXISTS { ?solution <http://purl.org/dc/terms/isVersionOf> ?version } .
-      }
-      UNION
-      {
-        ?solution <http://purl.org/dc/terms/hasVersion> ?release .
-        ?release <http://www.w3.org/ns/dcat#distribution> ?distribution .
-        ?distribution <http://purl.org/dc/terms/license> ?licence .
-      }
-    } .
-    {
-      ?solution a <http://www.w3.org/ns/dcat#Dataset> .
-      ?solution <http://purl.org/dc/terms/title> ?solution_label .
-      ?licence a <http://purl.org/dc/terms/LicenseDocument> .
-      ?licence <http://www.w3.org/2000/01/rdf-schema#label> ?licence_label .
-    } .
-    @extra_condition
-  }
-}
-QUERY;
-
-    $licence_uri = $licence_id ? $this->entityTypeManager->getStorage('node')->load($licence_id)->getUri() : NULL;
-    $extra_condition = $licence_uri ? 'VALUES ?licence { ' . SparqlArg::uri($licence_uri) . ' } ' : '';
-    $query = str_replace('@extra_condition', $extra_condition, $query);
-    return $query;
-  }
-
-  /**
-   * Returns the query that fetches licence and solution labels.
-   *
-   * @param int $offset
-   *   The offset number.
-   * @param string|null $licence_id
-   *   (Optional) A licence id to narrow down the results with.
-   *
-   * @return string
-   *   The query string.
-   */
-  protected function getQuery(int $offset, ?string $licence_id = NULL): string {
-
-    $query = <<<QUERY
-SELECT DISTINCT ?solution ?licence_label ?licence ?solution_label
-WHERE {
-  {
-    {
-      ?solution <http://www.w3.org/ns/dcat#distribution> ?distribution .
-      ?distribution <http://purl.org/dc/terms/license> ?licence .
-      FILTER NOT EXISTS { ?solution <http://purl.org/dc/terms/isVersionOf> ?version } .
-    }
-    UNION
-    {
-      ?solution <http://purl.org/dc/terms/hasVersion> ?release .
-      ?release <http://www.w3.org/ns/dcat#distribution> ?distribution .
-      ?distribution <http://purl.org/dc/terms/license> ?licence .
-    }
-  } .
-  {
-    ?solution a <http://www.w3.org/ns/dcat#Dataset> .
-    ?solution <http://purl.org/dc/terms/title> ?solution_label .
-    ?licence a <http://purl.org/dc/terms/LicenseDocument> .
-    ?licence <http://www.w3.org/2000/01/rdf-schema#label> ?licence_label .
-  } .
-  @extra_condition
-}
-ORDER BY ASC(?licence_label) ASC(?solution_label)
-LIMIT @limit
-OFFSET {$offset}
-QUERY;
-
-    $licence_uri = $licence_id ? $this->entityTypeManager->getStorage('node')->load($licence_id)->getUri() : NULL;
-    $extra_condition = $licence_uri ? 'VALUES ?licence { ' . SparqlArg::uri($licence_uri) . ' } ' : NULL;
-    $search = ['@extra_condition', '@limit'];
-    $replace = [$extra_condition, self::ITEMS_PER_PAGE];
-    $query = str_replace($search, $replace, $query);
-    return $query;
   }
 
 }

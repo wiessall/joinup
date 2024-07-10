@@ -4,13 +4,13 @@
   float: right;
   margin: $spacer * 1.5 0 $spacer $spacer; // 16px 0 8px 16px
   &::before {
-    @include get-bootstrap-icon('gear-fill', $link-color);
+    @include get-bootstrap-icon("gear-fill", $link-color);
 
-    margin: 0 $spacer * .375 0 0; // 0 6px 0 0
+    margin: 0 $spacer * 0.375 0 0; // 0 6px 0 0
   }
   &:hover {
     &::before {
-      @include get-bootstrap-icon('gear-fill', $link-hover-color);
+      @include get-bootstrap-icon("gear-fill", $link-hover-color);
     }
   }
 }
@@ -21,14 +21,14 @@
   margin: $spacer * 2 0 $spacer; // 16px 0 8px
   &-item {
     display: inline-block;
-    padding: $spacer * .5 $spacer * .75; // 8px 12px
+    padding: $spacer * 0.5 $spacer * 0.75; // 8px 12px
     border-radius: $border-radius;
     &:hover {
       text-decoration: none;
       background-color: $gray-300;
     }
     &.current {
-      padding: $spacer * .5 $spacer * .75; // 8px 12px
+      padding: $spacer * 0.5 $spacer * 0.75; // 8px 12px
       color: $brand;
       border-radius: $border-radius;
       background-color: rgba(16, 115, 222, 0.1);

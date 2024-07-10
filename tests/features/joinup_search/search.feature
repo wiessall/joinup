@@ -47,7 +47,7 @@ Feature: Global search
     When I visit the search page
     And I focus on the search input
     And I enter "Rummy" in the search bar
-    And I wait for animations to finish
+    And I wait for AJAX to finish
     Then I should not see the text "Rummy news"
     And I should not see the text "Rummy event"
     And I should not see the text "Rummy document"
@@ -235,7 +235,7 @@ Feature: Global search
     And the following releases:
       | title         | release number | release notes                               | keywords | is version of  | owner             | contact information | state     |
       | Release Alpha | 1              | <p>Release notes for <em>beta</em> changes. | Alphabet | Solution alpha | Responsible owner | Go-to contact       | published |
-    And the following distributions:
+    And distribution content:
       | title              | description                                    | parent        | access url | state     |
       | Distribution alpha | <p>A simple beta distribution description.</p> | Release Alpha | test.zip   | published |
     And licence content:
@@ -407,15 +407,9 @@ Feature: Global search
     Then I should see "No content found for your search."
 
     # Add distribution, child of solution.
-    Given the following distribution:
-      | title                    | ZzoluDistro                     |
-      | parent                   | Zzolution                       |
-      | description              | Übermensch foot size            |
-      | access url               | http://example.com/zzolu-distro |
-      | licence                  | Apache-2.0                      |
-      | format                   | ZIP                             |
-      | representation technique | Datalog                         |
-      | state                    | published                       |
+    Given distribution content:
+      | title       | parent    | description          | access url                      | licence    | format | representation technique | state     |
+      | ZzoluDistro | Zzolution | Übermensch foot size | http://example.com/zzolu-distro | Apache-2.0 | ZIP    | Datalog                  | published |
 
     When I enter "zzoludistro" in the search bar and press enter
     Then the page should show only the tiles "Zzolution"
@@ -475,7 +469,7 @@ Feature: Global search
     When I enter "Human Language" in the search bar and press enter
     Then the page should show only the tiles "Zzolution"
 
-    Given I delete the "DistroZzolu" asset distribution
+    Given I delete the "DistroZzolu" distribution
 
     # The parent solution has been re-indexed without distribution data.
     When I enter "distrozzolu" in the search bar and press enter
@@ -501,15 +495,9 @@ Feature: Global search
     When I enter "ReleazzDistro" in the search bar and press enter
     Then I should see "No content found for your search."
 
-    Given the following distribution:
-      | title                    | ReleazzDistro                     |
-      | parent                   | Releazz                           |
-      | description              | Dracula                           |
-      | access url               | http://example.com/releazz-distro |
-      | licence                  | Apache-2.0                        |
-      | format                   | ZIP                               |
-      | representation technique | Datalog                           |
-      | state                    | published                         |
+    Given distribution content:
+      | title         | parent  | description | access url                        | licence    | format | representation technique | state     |
+      | ReleazzDistro | Releazz | Dracula     | http://example.com/releazz-distro | Apache-2.0 | ZIP    | Datalog                  | published |
 
     When I enter "releazzDistro" in the search bar and press enter
     Then the page should show only the tiles "Releazz"
@@ -567,7 +555,7 @@ Feature: Global search
     When I enter "Human Language" in the search bar and press enter
     Then the page should show only the tiles "Releazz"
 
-    Given I delete the "DistroReleazz" asset distribution
+    Given I delete the "DistroReleazz" distribution
 
     # The parent release has been re-indexed without distribution data.
     When I enter "dIstrOreleazz" in the search bar and press enter
@@ -629,45 +617,6 @@ Feature: Global search
       | The uneven universe |
       | The earth is square |
     And I should be on "/search?keys=Relativity&sort_by=last-updated-date"
-
-  @javascript
-  Scenario: Anonymous user can find facets summary
-    Given the following collection:
-      | title            | Radio cooking collection |
-      | logo             | logo.png                 |
-      | moderation       | no                       |
-      | topic            | Demography               |
-      | spatial coverage | Belgium                  |
-      | state            | published                |
-    And the following solutions:
-      | title    | collection               | description                                                                                                                          | topic      | spatial coverage | state     |
-      | Spheres  | Radio cooking collection | Spherification is the culinary process of shaping a liquid into spheres                                                              | Demography | European Union   | published |
-      | Movistar | Radio cooking collection | "The use of foam in cuisine has been used in many forms in the history of cooking:whipped cream, meringue, and mousse are all foams" |            |                  | published |
-    And news content:
-      | title           | field_paragraphs_body | collection               | topic                   | spatial coverage | state     |
-      | El Cabo da Roca | The best in town      | Radio cooking collection | Statistics and Analysis | Luxembourg       | published |
-      | Funny news 1    | Dummy body            | Radio cooking collection | E-inclusion             | Luxembourg       | published |
-      | Funny news 2    | Dummy body            | Radio cooking collection | E-inclusion             | Luxembourg       | published |
-      | Funny news 3    | Dummy body            | Radio cooking collection | E-inclusion             | Luxembourg       | published |
-      | Funny news 4    | Dummy body            | Radio cooking collection | E-inclusion             | Luxembourg       | published |
-
-    Given I am logged in as a user with the "authenticated" role
-    When I visit the search page
-    And I check the "Solutions (2)" checkbox from the "Content types" facet
-    And I check the "News (5)" checkbox from the "Content types" facet
-    And I should see the following facet summary "Solutions, News"
-
-    When I click "Clear filters"
-    And I check the "News (5)" checkbox from the "Content types" facet
-    And I should see the following facet summary "News"
-
-    # Check if facet summary was remove correctly.
-    When I click "Clear filters"
-    And I check the "News (5)" checkbox from the "Content types" facet
-    And I check the "Collection (1)" checkbox from the "Content types" facet
-    Then I should see the following facet summary "Collection, News"
-    When I remove the following facet summary "News"
-    Then the page should show only the tiles "Radio cooking collection"
 
   @javascript
   Scenario: Anonymous user can find facets summary
@@ -824,7 +773,7 @@ Feature: Global search
     And I should see the text "Last update: 08/02/2019" in the "The uneven universe" card
     And I should see the text "Last update: 08/01/2019" in the "The earth is square" card
 
-  @javascript  @loggedErrors
+  @javascript @loggedErrors
   Scenario: Regression test for warning generated by search_api_solr.
   See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-8210
 

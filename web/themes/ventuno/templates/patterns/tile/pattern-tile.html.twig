@@ -107,12 +107,12 @@
           <div class="my-2">
             {{ attach_library('ventuno/badge') }}
             {% for _badge in _badges %}
-              {% include '@oe-bcl/badge' with {
+              {{ include('@oe-bcl/badge', {
                 label: _badge.label,
                 background: 'light',
                 rounded_pill: true,
                 attributes: create_attribute().addClass(['fs-sm', 'me-1', 'mb-1']),
-              } only %}
+              }, false) }}
             {% endfor %}
           </div>
         {%- endif -%}

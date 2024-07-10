@@ -93,7 +93,7 @@ Feature: Global search with archive content
     And the following solutions:
       | title         | description | state     |
       | Some solution | Description | published |
-    And the following distributions:
+    And distribution content:
       | title                 | description | state     | parent        |
       | Some zip distribution | Description | published | Some solution |
       | Some rar distribution | Description | archived  | Some solution |

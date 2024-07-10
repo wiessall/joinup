@@ -23,7 +23,7 @@ Feature:
       | title             | release number | release notes | is version of              | owner         | contact information | state     |
       | Sitemap release 1 | 1              | New release   | Sitemap solution published | Sitemap owner | Sitemap secretariat | published |
       | Sitemap release 2 | 2              | Newer release | Sitemap solution published | Sitemap owner | Sitemap secretariat | draft     |
-    And the following distributions:
+    And distribution content:
       | title                | description           | parent            | access url | state     |
       | Sitemap distribution | Some kind of download | Sitemap release 1 | test.zip   | published |
     And licence content:
@@ -81,12 +81,12 @@ Feature:
       | Sitemap collection draft |
       | Sitemap solution draft   |
       | Sitemap release 2        |
-      | Sitemap distribution     |
     And I should not see the absolute urls of the following content entities:
       | Sitemap custom page of draft                    |
       | Sitemap custom page of published but in Spanish |
       | Sitemap discussion draft                        |
       | Sitemap discussion published but parent is not  |
+      | Sitemap distribution                            |
       | Sitemap document draft                          |
       | Sitemap document published but parent is not    |
       | Sitemap event draft                             |
@@ -110,7 +110,6 @@ Feature:
     But I should not see the absolute urls of the following RDF entities:
       | Sitemap collection draft     |
       | Sitemap collection published |
-      | Sitemap distribution         |
       | Sitemap solution draft       |
       | Sitemap solution published   |
       | Sitemap release 1            |
@@ -121,6 +120,7 @@ Feature:
       | Sitemap discussion published                   |
       | Sitemap discussion archived                    |
       | Sitemap discussion published but parent is not |
+      | Sitemap distribution                           |
       | Sitemap document draft                         |
       | Sitemap document published                     |
       | Sitemap document archived                      |
@@ -163,11 +163,11 @@ Feature:
       | Sitemap collection draft |
       | Sitemap solution draft   |
       | Sitemap release 2        |
-      | Sitemap distribution     |
     And I should not see the absolute urls of the following content entities:
       | Sitemap custom page of draft                   |
       | Sitemap discussion draft                       |
       | Sitemap discussion published but parent is not |
+      | Sitemap distribution                           |
       | Sitemap document draft                         |
       | Sitemap document published but parent is not   |
       | Sitemap event draft                            |

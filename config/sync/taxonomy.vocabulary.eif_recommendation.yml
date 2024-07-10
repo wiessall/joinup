@@ -32,3 +32,4 @@ name: 'EIF Recommendation'
 vid: eif_recommendation
 description: 'Terms that represent a recommendation of the EIF Toolbox.'
 weight: 0
+new_revision: false

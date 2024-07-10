@@ -76,5 +76,3 @@ Feature:
     And I should see the image "linus.jpeg"
     Then I press "Close"
     And I should not see the image "linus.jpeg"
-
-

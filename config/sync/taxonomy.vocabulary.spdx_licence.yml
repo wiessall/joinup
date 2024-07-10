@@ -4,6 +4,7 @@ status: true
 dependencies:
   module:
     - joinup_taxonomy
+    - rdf_sync
 third_party_settings:
   joinup_taxonomy:
     locked: true
@@ -27,3 +28,4 @@ name: 'SPDX Licence'
 vid: spdx_licence
 description: 'See https://spdx.org/licenses'
 weight: 0
+new_revision: false

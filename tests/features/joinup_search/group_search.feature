@@ -50,7 +50,7 @@ Feature: Search inside groups
     And releases:
       | title     | release number | release notes              | is version of        | state     |
       | Pre-alpha | 0.0-alpha0     | Only works on flat ground. | Inclined foundations | published |
-    And distributions:
+    And distribution content:
       | title       | description          | parent    | access url | state     |
       | Zip archive | It has files inside. | Pre-alpha | test.zip   | published |
 

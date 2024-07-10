@@ -15,7 +15,7 @@
   .glide__outer {
     // Visual workarounds to avoid slides' shadow being cut.
     width: calc(100% + $spacer);
-    margin-left: $spacer * -.5;
+    margin-left: $spacer * -0.5;
   }
   .glide__arrows {
     &--disabled {

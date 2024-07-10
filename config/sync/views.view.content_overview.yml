@@ -371,6 +371,7 @@ display:
         type: full
         options:
           offset: 0
+          pagination_heading_level: h4
           items_per_page: 12
           total_pages: null
           id: 0
@@ -615,16 +616,16 @@ display:
             'entity:node':
               custom_page: view_mode_tile
               discussion: view_mode_tile
+              distribution: default
               document: view_mode_tile
               event: view_mode_tile
+              licence: default
               news: view_mode_tile
               video: view_mode_tile
             'entity:rdf_entity':
-              asset_distribution: default
               asset_release: default
               collection: view_mode_tile
               contact_information: default
-              licence: default
               owner: ''
               solution: view_mode_tile
       query:

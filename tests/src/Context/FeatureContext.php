@@ -2443,4 +2443,33 @@ class FeatureContext extends RawDrupalContext {
     Assert::assertTrue($fileReadOnly->isReadOnlyEnabled() === ($state === 'locked'));
   }
 
+  /**
+   * Check the items in a queue.
+   *
+   * @param string $queueName
+   *   The queue name.
+   * @param int $itemCount
+   *   The expected number of items in the queue.
+   *
+   * @Then the number of items in the :queueName queue should be :itemCount
+   * @Then the number of items in the :queueName queue must be :itemCount
+   */
+  public function assertNumberOfQueueItems(string $queueName, int $itemCount): void {
+    Assert::assertSame($itemCount, \Drupal::queue($queueName)->numberOfItems());
+  }
+
+  /**
+   * Empties a queue.
+   *
+   * @param string $queueName
+   *   The queue name.
+   *
+   * @Given the :queueName queue is empty
+   */
+  public function emptyQueue(string $queueName): void {
+    $queue = \Drupal::queue($queueName);
+    $queue->deleteQueue();
+    Assert::assertSame(0, $queue->numberOfItems());
+  }
+
 }
