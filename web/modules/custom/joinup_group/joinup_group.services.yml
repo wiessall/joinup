@@ -1,12 +1,4 @@
 services:
-  monolog.handler.business_handler:
-    class: Drupal\joinup_group\Logger\Handler\BusinessHandler
-    arguments: [ '@entity_type.manager', '@joinup_group.group_manager' ]
-    tags:
-      - { name: needs_destruction }
-  logger.channel.group_membership:
-    parent: logger.channel_base
-    arguments: [ 'group_membership' ]
   cache_context.joinup_group_owner:
     class: 'Drupal\joinup_group\Cache\Context\GroupOwnerCacheContext'
     arguments: ['@current_user', '@entity_type.manager', '@og.membership_manager', '@database', '@private_key']
@@ -102,9 +94,3 @@ services:
     class: Drupal\joinup_group\EventSubscriber\AdjustGroupContentSubscriber
     tags:
       - { name: event_subscriber }
-  joinup_group.invitation_business_loger:
-    class: Drupal\joinup_group\EventSubscriber\InvitationBusinessLogger
-    arguments: [ '@entity_type.manager', '@logger.channel.group_membership' ]
-    tags:
-      - { name: event_subscriber }
-

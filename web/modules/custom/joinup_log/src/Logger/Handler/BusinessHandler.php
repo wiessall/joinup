@@ -2,13 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Drupal\joinup_group\Logger\Handler;
+namespace Drupal\joinup_log\Logger\Handler;
 
 use Drupal\Core\DestructableInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\joinup_group\JoinupGroupManagerInterface;
 use Monolog\Handler\AbstractProcessingHandler;
-use Monolog\Logger;
+use Monolog\Level;
+use Monolog\LogRecord;
 
 /**
  * Business handler.
@@ -25,7 +26,7 @@ class BusinessHandler extends AbstractProcessingHandler implements DestructableI
   public function __construct(
     protected EntityTypeManagerInterface $entityTypeManager,
     protected JoinupGroupManagerInterface $groupManager,
-    int $level = Logger::DEBUG,
+    Level $level = Level::Debug,
     bool $bubble = TRUE,
   ) {
     parent::__construct($level, $bubble);
@@ -34,7 +35,7 @@ class BusinessHandler extends AbstractProcessingHandler implements DestructableI
   /**
    * {@inheritdoc}
    */
-  public function write(array $record): void {
+  public function write(LogRecord $record): void {
     $this->records[] = $record;
   }
 
@@ -45,20 +46,6 @@ class BusinessHandler extends AbstractProcessingHandler implements DestructableI
     $group = $this->groupManager->getGroupFromContext();
 
     foreach ($this->records as $record) {
-      /** @var \Drupal\message\MessageInterface $message */
-      $message = $this->entityTypeManager->getStorage('message')->create([
-        'template' => 'business',
-        'severity' => $record['level'],
-      ]);
-
-      if ($group) {
-        $message->set('group', $group);
-      }
-
-      // Remove backtrace and exception as they may contain unserializable vars.
-      unset($record['context']['backtrace'], $record['context']['exception']);
-      $message->setArguments($record['context']);
-      $message->save();
     }
   }
 
