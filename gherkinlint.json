@@ -1,0 +1,53 @@
+{
+  "rules": {
+    "no-homogenous-tags": {
+      "enabled": false
+    },
+    "no-empty-file": {
+      "enabled": true
+    },
+    "allowed-tags": {
+      "enabled": false,
+      "allow": null
+    },
+    "filename": {
+      "enabled": false
+    },
+    "indentation": {
+      "width": 2,
+      "feature": 0,
+      "rule": 1,
+      "backgroud": 1,
+      "scenario": 1,
+      "step": 2,
+      "table": 3,
+      "literalBlock": 2,
+      "examples": 2,
+      "examplesTable": 3
+    },
+    "no-background-with-single-scenario": {
+      "enabled": false
+    },
+    "no-duplicated-feature-names": {
+      "enabled": false
+    },
+    "no-duplicated-scenario-names": {
+      "enabled": false
+    },
+    "no-unnamed-features": {
+      "enabled": false
+    },
+    "keyword-order": {
+      "enabled": false,
+      "tolerateThenBeforeWhen": true
+    },
+    "scenario-size": {
+      "enabled": false
+    },
+    "scenarios-per-file": {
+      "enabled": true,
+      "min": 0,
+      "max": null
+    }
+  }
+}

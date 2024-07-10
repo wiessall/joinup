@@ -15,8 +15,7 @@
        - Topic
        - Workflow status
      Distribution:
-       - Parent. The parent of the distribution. Can be either a solution or a release. The entity set as parent
-         must be referencing the distribution too through the field_is_distribution or field_isr_distribution fields.
+       - Parent. The parent of the distribution. Can be either a solution or a release.
      Owner:
        - Workflow status
      Contact information:

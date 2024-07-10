@@ -48,14 +48,14 @@
         }
         &::after {
           display: inline-block;
-          content: 'Remove item';;
+          content: "Remove item";
           font-weight: bold;
         }
         @include media-breakpoint-up(md) {
           &::after {
             position: absolute;
             top: 22px;
-            left: 30px
+            left: 30px;
           }
           .image-button {
             position: absolute;
@@ -85,7 +85,8 @@
 
 // Styles specifically for the Public Sector Tech Watch webform paragraph.
 .webform-submission-public-sector-tech-watch-form {
-  .form-item-source-url, .form-item-geographical-coverage-section {
+  .form-item-source-url,
+  .form-item-geographical-coverage-section {
     .webform-multiple-table {
       margin-top: 0;
 

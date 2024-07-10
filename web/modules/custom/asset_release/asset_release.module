@@ -51,11 +51,6 @@ function asset_release_entity_bundle_field_info_alter(&$fields, EntityTypeInterf
   if ($entity_type->id() == 'rdf_entity' && $bundle == 'asset_release' && !empty($fields['label'])) {
     $fields['label']->addConstraint('UniqueAssetReleaseTitleVersion', []);
   }
-
-  // A distribution can be referenced only by a single parent.
-  if (!empty($fields['field_isr_distribution'])) {
-    $fields['field_isr_distribution']->addConstraint('DistributionSingleParent');
-  }
 }
 
 /**
@@ -269,7 +264,17 @@ function asset_release_entity_update(EntityInterface $entity) {
 function template_preprocess_asset_release_releases_download(array &$variables) {
   $releases = $variables['releases'];
 
-  $variables['releases'] = \Drupal::entityTypeManager()->getViewBuilder('rdf_entity')->viewMultiple($releases, 'compact');
+  // In the commented out section, all entities are handled as nodes. When
+  // RDF2Node is completed, both releases and distributions will be handled
+  // generically. Currently we have to iterate through each of them and do a
+  // separate view builder call.
+  // @todo Swap the following commented line and remove the rest in ISAICP-8376.
+  // @codingStandardsIgnoreStart
+  // $variables['releases'] = \Drupal::entityTypeManager()->getViewBuilder('node')->viewMultiple($releases, 'compact');
+  // @codingStandardsIgnoreEnd
+  foreach ($releases as $key => $entity) {
+    $variables['releases'][$key] = \Drupal::entityTypeManager()->getViewBuilder($entity->getEntityTypeId())->view($entity, 'compact');
+  }
 }
 
 /**
@@ -406,5 +411,23 @@ function asset_release_preprocess_rdf_entity__asset_release__compact(array &$var
 
   if ($entity instanceof EntityPublicationTimeInterface) {
     joinup_publication_date_add_content_dates($entity, $variables);
+  }
+}
+
+/**
+ * Implements hook_sparql_bundle_load_alter().
+ *
+ * There is an initial check whether the bundle is empty because the method
+ * that invokes this hook is also called for taxonomies and the bundle is
+ * currently being skipped for the taxonomies.
+ */
+function asset_release_sparql_bundle_load_alter(array $entity_values, array &$bundles): void {
+  if (count($bundles) > 1 && in_array('solution', $bundles)) {
+    if (isset($entity_values['http://purl.org/dc/terms/isVersionOf'])) {
+      $bundles = array_diff($bundles, ['solution']);
+    }
+    else {
+      $bundles = array_diff($bundles, ['asset_release']);
+    }
   }
 }

@@ -1,0 +1,28 @@
+uuid: 3274e626-6cd6-4fd9-9362-85cffd171584
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.file_size
+    - node.type.distribution
+third_party_settings:
+  rdf_sync:
+    value:
+      predicate: 'https://schema.org/fileSize'
+      type: 'xsd:decimal'
+id: node.distribution.file_size
+field_name: file_size
+entity_type: node
+bundle: distribution
+label: 'File size'
+description: "Size of the distribution payload file (in KB).\r\nIf the distribution is hosted in Joinup, you can omit this field."
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

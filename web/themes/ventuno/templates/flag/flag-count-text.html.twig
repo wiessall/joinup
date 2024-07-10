@@ -20,7 +20,7 @@
   ] %}
   {% set attributes = create_attribute()
     .addClass(classes)
-    .setAttribute('href', path('joinup_modal.anonymous', {'type': 'like'}, {'query': {'destination': path('<current>')}}))
+    .setAttribute('href', path('joinup_modal.anonymous', {type: 'like'}, {query: {destination: path('<current>')}}))
     .setAttribute('data-dialog-type', 'modal')
     .setAttribute('data-dialog-options', '{"width":"auto","height":"auto"}')
   %}
