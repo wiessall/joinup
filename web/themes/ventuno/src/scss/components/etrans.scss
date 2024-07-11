@@ -40,9 +40,9 @@
       box-shadow: $box-shadow;
     }
     &::before {
-      @include get-bootstrap-icon('translate', currentColor);
+      @include get-bootstrap-icon("translate", currentColor);
 
-      margin-right: $spacer * .5;
+      margin-right: $spacer * 0.5;
     }
   }
 }
