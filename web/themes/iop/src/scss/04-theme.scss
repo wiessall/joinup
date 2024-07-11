@@ -5,25 +5,25 @@
  * Look & feel of the website.
  */
 
- @import "partials/core"; // Functions, variables, utilities and mixins required
- @import "partials/base/fonts";
- @import "partials/base/typography";
+@import "partials/core"; // Functions, variables, utilities and mixins required
+@import "partials/base/fonts";
+@import "partials/base/typography";
 
-  // @import "@openeuropa/bcl-bootstrap/scss/reboot";
- @import "partials/overrides/reboot"; // Hack to prevent build break
- @import "@openeuropa/bcl-bootstrap/scss/type";
- @import "@openeuropa/bcl-bootstrap/scss/transitions";
- @import "@openeuropa/bcl-bootstrap/scss/utilities";
- @import "@openeuropa/bcl-theme-default/src/scss/base/utilities";
- @import "partials/overrides/utilities"; // Override with required utilities only
- @import "@openeuropa/bcl-bootstrap/scss/helpers";
- @import "@openeuropa/bcl-bootstrap/scss/utilities/api";
+// @import "@openeuropa/bcl-bootstrap/scss/reboot";
+@import "partials/overrides/reboot"; // Hack to prevent build break
+@import "@openeuropa/bcl-bootstrap/scss/type";
+@import "@openeuropa/bcl-bootstrap/scss/transitions";
+@import "@openeuropa/bcl-bootstrap/scss/utilities";
+@import "@openeuropa/bcl-theme-default/src/scss/base/utilities";
+@import "partials/overrides/utilities"; // Override with required utilities only
+@import "@openeuropa/bcl-bootstrap/scss/helpers";
+@import "@openeuropa/bcl-bootstrap/scss/utilities/api";
 
 // Link: avoid purple underline for visited links
 a {
   &:hover {
     &:visited {
-      text-decoration-color: currentColor!important;
+      text-decoration-color: currentColor !important;
     }
   }
 }

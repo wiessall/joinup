@@ -28,10 +28,10 @@
   .form-item {
     align-self: center;
     width: 100%;
-    margin-bottom: 0!important;
+    margin-bottom: 0 !important;
   }
   .form-autocomplete {
-    padding: .25rem;
+    padding: 0.25rem;
     border-style: none;
     box-shadow: none;
     font-size: $font-size-sm;
@@ -41,14 +41,14 @@
   }
   .btn.btn-search {
     width: 2.5rem;
-    margin-left: .125rem;
-    padding: $spacer * .25 $spacer * .5;
+    margin-left: 0.125rem;
+    padding: $spacer * 0.25 $spacer * 0.5;
     color: $primary;
     border-style: none;
     background: transparent;
-    font-size: 0!important;
+    font-size: 0 !important;
     &::before {
-      @include get-bootstrap-icon('search', $primary);
+      @include get-bootstrap-icon("search", $primary);
 
       font-size: 1rem;
     }
@@ -69,7 +69,7 @@
 
   // Adjust position to right side of container
   @include media-breakpoint-between(xs, sm) {
-    width: calc(100vw - .25rem);
+    width: calc(100vw - 0.25rem);
   }
   @include media-breakpoint-between(sm, md) {
     width: calc(map.get($container-max-widths, sm) - 1.5rem);
@@ -88,7 +88,7 @@
   }
 }
 #dropdown-menu--search {
-  padding: $spacer * .5; // 8px
+  padding: $spacer * 0.5; // 8px
   @include media-breakpoint-between(xs, sm) {
     right: -10.5px;
   }

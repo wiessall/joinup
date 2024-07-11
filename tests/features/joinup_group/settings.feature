@@ -74,7 +74,6 @@ Feature: Collections/Solutions settings
     Then I should see the heading "Solution Beta solution settings"
     And the "Announcements enabled" checkbox should be checked
 
-
   Scenario: Testing group settings permissions
     Given the following collection:
       | title | Rally fanatics |
