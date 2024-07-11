@@ -194,7 +194,7 @@ Feature: Like/unlike feature.
     Then I should see the statistics "0" in the "Likeable custom page" tile
     And I should see the "Lisa Like" tile
 
-  @javascript @terms
+  @terms
   Scenario: Tiles in the carousel should also give possibility to like content.
     Given custom_page content:
       | title                | collection | author    | state     |

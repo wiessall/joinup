@@ -31,7 +31,6 @@ Feature:
     And I should see an "h4" element with the text "H4 heading paragraph" in the "Content" region
     And I should see an "h5" element with the text "H5 heading paragraph" in the "Content" region
 
-
   @javascript
   Scenario: User should be able to edit behaviour settings.
     Given custom_page content:

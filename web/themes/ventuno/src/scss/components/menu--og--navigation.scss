@@ -10,18 +10,18 @@
       flex-wrap: nowrap;
       border: none;
       .nav-item {
-        margin: $spacer * .25;
-        margin-right: $spacer * .75;
+        margin: $spacer * 0.25;
+        margin-right: $spacer * 0.75;
         &:first-of-type {
           margin-left: 0;
         }
         &:not(:first-of-type) {
-          margin-left: $spacer * .75;
+          margin-left: $spacer * 0.75;
         }
       }
       .nav-link {
         height: 28px;
-        padding: 0 $spacer * .25 $spacer * .25;
+        padding: 0 $spacer * 0.25 $spacer * 0.25;
         white-space: nowrap;
         color: $primary;
         border: none;
@@ -58,9 +58,9 @@
         box-shadow: 0 4px 0 0 $primary;
       }
       &::after {
-        @include get-bootstrap-icon('chevron-down', currentColor);
+        @include get-bootstrap-icon("chevron-down", currentColor);
 
-        margin-left: $spacer * .5;
+        margin-left: $spacer * 0.5;
       }
     }
     .p-plus__primary {
@@ -70,7 +70,8 @@
       right: $spacer;
       overflow: hidden;
       .p-plus__primary-nav-item {
-        padding: var(--bs-dropdown-item-padding-y) var(--bs-dropdown-item-padding-x);
+        padding: var(--bs-dropdown-item-padding-y)
+          var(--bs-dropdown-item-padding-x);
         color: $primary;
         &:hover,
         &:has(a.is-active) {

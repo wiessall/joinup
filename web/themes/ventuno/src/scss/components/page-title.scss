@@ -9,7 +9,7 @@
       .permalink {
         position: absolute;
         display: inline;
-        margin-left: $spacer * .5;
+        margin-left: $spacer * 0.5;
       }
     }
     &.visually-hidden {
@@ -44,6 +44,6 @@
   }
   .badge {
     position: relative;
-    top: -.25em; // Vertically align badge to heading
+    top: -0.25em; // Vertically align badge to heading
   }
 }

@@ -62,7 +62,7 @@ function joinup_core_theme(array $existing, string $type, string $theme, string 
  * Implements hook_requirements_alter().
  */
 function joinup_core_requirements_alter(array &$requirements): void {
-  $ignored = getenv('DRUPAL_STATUS_REPORT_IGNORE') ?: 'update status,search_api_solr_schema_joinup_modifications,metatag_maintenance_mode,webform_libraries,output_buffering';
+  $ignored = getenv('DRUPAL_STATUS_REPORT_IGNORE') ?: 'update status,search_api_solr_schema_joinup_modifications,metatag_maintenance_mode,webform_libraries,output_buffering,deprecated_modules';
   $ignored = array_map('trim', explode(',', $ignored));
 
   $requirements = array_filter($requirements, function (string $requirement) use ($ignored): bool {
@@ -391,7 +391,7 @@ function joinup_core_theme_suggestions_alter(array &$suggestions, array $variabl
  */
 function joinup_core_entity_bundle_field_info(EntityTypeInterface $entity_type, string $bundle, array $base_field_definitions): array {
   $fields = [];
-  $threshold = \Drupal::config('joinup_core.outdated_content_threshold')->get("{$entity_type->id()}.{$bundle}");
+  $threshold = \Drupal::config('joinup_core.outdated_content_threshold')->get("thresholds.{$entity_type->id()}.$bundle");
   if ($threshold) {
     $fields['outdated_time'] = BaseFieldDefinition::create('timestamp')
       ->setLabel(t('Outdated time'))

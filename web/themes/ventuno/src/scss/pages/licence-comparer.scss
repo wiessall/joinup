@@ -37,22 +37,22 @@
   }
   &__sidebar-cell {
     &.licence-filter--can {
-      background-color: rgba($joinup-green, .1);
+      background-color: rgba($joinup-green, 0.1);
     }
     &.licence-filter--must {
-      background-color: rgba($joinup-brown, .1);
+      background-color: rgba($joinup-brown, 0.1);
     }
     &.licence-filter--cannot {
-      background-color: rgba($joinup-red, .1);
+      background-color: rgba($joinup-red, 0.1);
     }
     &.licence-filter--compatible {
-      background-color: rgba($joinup-softblue, .1);
+      background-color: rgba($joinup-softblue, 0.1);
     }
     &.licence-filter--law {
-      background-color: rgba($joinup-gray, .1);
+      background-color: rgba($joinup-gray, 0.1);
     }
     &.licence-filter--support {
-      background-color: rgba($joinup-orange, .1);
+      background-color: rgba($joinup-orange, 0.1);
     }
   }
   &__header {

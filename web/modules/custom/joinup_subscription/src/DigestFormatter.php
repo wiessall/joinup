@@ -68,7 +68,7 @@ class DigestFormatter extends OriginalFormatter {
       $output[] = $rows;
     }
 
-    return $this->renderer->renderPlain($output);
+    return $this->renderer->renderInIsolation($output);
   }
 
   /**
