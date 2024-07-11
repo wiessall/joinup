@@ -28,5 +28,6 @@ _core:
   default_config_hash: taJnGgyhe_WHm54kdNtR3Klyiuk3cwlTPx7RH1Hta6g
 name: Status
 vid: status
-description: ''
+description: null
 weight: 0
+new_revision: false

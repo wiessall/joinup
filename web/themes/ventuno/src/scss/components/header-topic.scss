@@ -20,7 +20,7 @@
     margin-bottom: 0;
     color: $white;
     &--long {
-      display: -webkit-box!important;
+      display: -webkit-box !important;
       overflow: hidden;
       min-height: 48px;
       -webkit-line-clamp: 2;
@@ -42,7 +42,7 @@
     a {
       text-decoration: underline;
       color: $white;
-      text-decoration-color: $white!important;
+      text-decoration-color: $white !important;
     }
     &.see-more--long {
       min-height: 48px;
@@ -53,8 +53,8 @@
     color: $white;
     &:hover,
     &:focus-visible {
-      text-decoration: underline!important;
-      color: $white!important;
+      text-decoration: underline !important;
+      color: $white !important;
     }
   }
 }

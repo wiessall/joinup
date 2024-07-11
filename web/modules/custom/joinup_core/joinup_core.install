@@ -92,3 +92,35 @@ function joinup_core_requirements($phase): array {
 
   return $requirements;
 }
+
+/**
+ * Fix joinup_core.outdated_content_threshold config.
+ */
+function joinup_core_update_111001(): void {
+  // The 'joinup_core.outdated_content_threshold' is excepted from config sync,
+  // thus we need to explicitly fix it here.
+  // @see \joinup_core_config_readonly_whitelist_patterns()
+  $config = \Drupal::configFactory()->getEditable('joinup_core.outdated_content_threshold');
+  foreach ($config->getRawData() as $entityTypeId => $bundles) {
+    $config->clear($entityTypeId);
+    foreach ($bundles as $bundle => $threshold) {
+      $config->set("thresholds.$entityTypeId.$bundle", $threshold);
+    }
+  }
+  $config->save();
+}
+
+/**
+ * OG membership bundle subscriptions still refers asset_distribution.
+ */
+function joinup_core_update_111002(): void {
+  $connection = \Drupal::database();
+  $connection->update('og_membership__subscription_bundles')
+    ->fields([
+      'subscription_bundles_entity_type' => 'node',
+      'subscription_bundles_bundle' => 'distribution',
+    ])
+    ->condition('subscription_bundles_entity_type', 'rdf_entity')
+    ->condition('subscription_bundles_bundle', 'asset_distribution')
+    ->execute();
+}

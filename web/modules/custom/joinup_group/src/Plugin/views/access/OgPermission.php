@@ -6,7 +6,7 @@ namespace Drupal\joinup_group\Plugin\views\access;
 
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheableDependencyInterface;
-use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\Core\Extension\ModuleExtensionList;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
@@ -35,28 +35,12 @@ class OgPermission extends AccessPluginBase implements CacheableDependencyInterf
    */
   protected $usesOptions = TRUE;
 
-  /**
-   * Constructs Og permission object.
-   *
-   * @param array $configuration
-   *   A configuration array containing information about the plugin instance.
-   * @param string $pluginId
-   *   The plugin_id for the plugin instance.
-   * @param mixed $pluginDefinition
-   *   The plugin implementation definition.
-   * @param \Drupal\user\PermissionHandlerInterface $permissionHandler
-   *   The permission handler.
-   * @param \Drupal\Core\Extension\ModuleHandlerInterface $moduleHandler
-   *   The module handler.
-   * @param \Drupal\joinup_group\JoinupGroupManagerInterface $groupManager
-   *   The Joinup Group manager service.
-   */
   public function __construct(
     array $configuration,
     string $pluginId,
     mixed $pluginDefinition,
     protected PermissionHandlerInterface $permissionHandler,
-    protected ModuleHandlerInterface $moduleHandler,
+    protected ModuleExtensionList $moduleExtensionList,
     protected JoinupGroupManagerInterface $groupManager,
   ) {
     parent::__construct($configuration, $pluginId, $pluginDefinition);
@@ -71,7 +55,7 @@ class OgPermission extends AccessPluginBase implements CacheableDependencyInterf
       $plugin_id,
       $plugin_definition,
       $container->get('user.permissions'),
-      $container->get('module_handler'),
+      $container->get('extension.list.module'),
       $container->get('joinup_group.group_manager')
     );
   }
@@ -116,7 +100,7 @@ class OgPermission extends AccessPluginBase implements CacheableDependencyInterf
     $permissions = $this->permissionHandler->getPermissions();
     foreach ($permissions as $perm => $permItem) {
       $provider = $permItem['provider'];
-      $display_name = $this->moduleHandler->getName($provider);
+      $display_name = $this->moduleExtensionList->getName($provider);
       $options[$display_name][$perm] = $permItem['title'];
     }
 
