@@ -17,7 +17,6 @@ declare(strict_types=1);
 use Drupal\Component\Utility\Variable;
 use Drupal\Core\Session\AccountSwitcherInterface;
 use Drupal\Core\Utility\UpdateException;
-use Drupal\joinup_core\DeployAndSmokeTestHelper;
 use Drupal\joinup_workflow\WorkflowHelperInterface;
 use Drupal\solution\Entity\Solution;
 use Drupal\user\Entity\User;
