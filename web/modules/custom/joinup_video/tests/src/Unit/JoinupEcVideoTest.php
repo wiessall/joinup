@@ -37,6 +37,18 @@ class JoinupEcVideoTest extends UnitTestCase {
    */
   public function providerTestGetIdFromInput(): array {
     return [
+      'Current URL' => [
+        'https://audiovisual.ec.europa.eu/en/video/I-136289',
+        'I-136289',
+      ],
+      'Current embed URL - video param' => [
+        'https://audiovisual.ec.europa.eu/corporateplayer/index.html?video=I-136289',
+        'I-136289',
+      ],
+      'Current embed URL - ref param' => [
+        'https://audiovisual.ec.europa.eu/corporateplayer/index.html?ref=I-136289',
+        'I-136289',
+      ],
       'Old URL - http' => [
         'http://ec.europa.eu/avservices/play.cfm?ref=I136289',
         'I-136289',

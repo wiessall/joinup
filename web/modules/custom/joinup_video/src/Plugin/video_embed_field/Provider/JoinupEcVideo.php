@@ -72,7 +72,7 @@ class JoinupEcVideo extends ProviderPluginBase {
       // Current URLs.
       '#^(?:(?:https?:)?//)?audiovisual\.ec\.europa\.eu/(.*)/video/(?<id>I\-\d+)#i',
       // Current embed URLs.
-      '#^(?:(?:https?:)?//)?audiovisual\.ec\.europa\.eu/corporateplayer/index.html(?:.*video=)?(?<id>[^&\?]+)#i',
+      '#^(?:(?:https?:)?//)?audiovisual\.ec\.europa\.eu/corporateplayer/index.html(?:.*(?:video|ref)=)?(?<id>[^&\?]+)#i',
       // Old URLs.
       '#^(?:(?:https?:)?//)?ec\.europa\.eu/(?:.*ref=)?(?<id>[^&\?]+)#i',
       // Old embed URLs.
