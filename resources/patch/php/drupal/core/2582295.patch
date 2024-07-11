@@ -1,5 +1,5 @@
 diff --git a/core/lib/Drupal/Core/Form/ConfirmFormHelper.php b/core/lib/Drupal/Core/Form/ConfirmFormHelper.php
-index fc92ff97..02255927 100644
+index e5f5d23e891d9ec8f67dbfcfc7aee552db092141..6d8c6726eb38c62314db774a7095b226f6c67e09 100644
 --- a/core/lib/Drupal/Core/Form/ConfirmFormHelper.php
 +++ b/core/lib/Drupal/Core/Form/ConfirmFormHelper.php
 @@ -31,6 +31,10 @@ public static function buildCancelLink(ConfirmFormInterface $form, Request $requ
@@ -7,26 +7,26 @@ index fc92ff97..02255927 100644
        // @todo Revisit this in https://www.drupal.org/node/2418219.
        try {
 +        $base_path = $request->getBasePath();
-+        if ($base_path && strpos($options['path'], $base_path) === 0) {
++        if ($base_path && str_starts_with($options['path'], $base_path)) {
 +          $options['path'] = substr($options['path'], mb_strlen($base_path));
 +        }
          $url = Url::fromUserInput('/' . ltrim($options['path'], '/'), $options);
        }
        catch (\InvalidArgumentException $e) {
 diff --git a/core/tests/Drupal/Tests/Core/Form/ConfirmFormHelperTest.php b/core/tests/Drupal/Tests/Core/Form/ConfirmFormHelperTest.php
-index b7f78627..1a7a8747 100644
+index 449964fd5730b90a9b37dc8bf2167235ee5d106d..b5810f32405a56c131e622eb89757c502b05d674 100644
 --- a/core/tests/Drupal/Tests/Core/Form/ConfirmFormHelperTest.php
 +++ b/core/tests/Drupal/Tests/Core/Form/ConfirmFormHelperTest.php
-@@ -94,7 +94,7 @@ public function testCancelLinkRouteWithUrl() {
-    *
+@@ -95,7 +95,7 @@ public function testCancelLinkRouteWithUrl(): void {
+    * @covers ::buildCancelLink
     * @dataProvider providerTestCancelLinkDestination
     */
--  public function testCancelLinkDestination($destination) {
-+  public function testCancelLinkDestination($destination, $base_path) {
+-  public function testCancelLinkDestination($destination): void {
++  public function testCancelLinkDestination($destination, $base_path): void {
      $query = ['destination' => $destination];
      $form = $this->createMock('Drupal\Core\Form\ConfirmFormInterface');
  
-@@ -109,7 +109,12 @@ public function testCancelLinkDestination($destination) {
+@@ -110,7 +110,12 @@ public function testCancelLinkDestination($destination): void {
        ->with('baz')
        ->willReturn($url);
  
@@ -40,9 +40,9 @@ index b7f78627..1a7a8747 100644
      $this->assertSame($url, $link['#url']);
      $this->assertSame(['contexts' => ['url.query_args:destination']], $link['#cache']);
    }
-@@ -119,8 +124,10 @@ public function testCancelLinkDestination($destination) {
+@@ -120,8 +125,10 @@ public function testCancelLinkDestination($destination): void {
     */
-   public function providerTestCancelLinkDestination() {
+   public static function providerTestCancelLinkDestination() {
      $data = [];
 -    $data[] = ['baz'];
 -    $data[] = ['/baz'];

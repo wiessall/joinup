@@ -22,7 +22,7 @@
       .field__items {
         display: flex;
         .field__item {
-          margin-right: $spacer * .25;
+          margin-right: $spacer * 0.25;
         }
       }
     }
@@ -45,6 +45,6 @@
   }
   &__aside {
     // CSS hack to align Quick links box, see #ISAICP-8461.
-    margin-right: $spacer * -.75;
+    margin-right: $spacer * -0.75;
   }
 }

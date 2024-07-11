@@ -4,7 +4,7 @@
   &__title {
     display: inline-block;
     margin-bottom: $spacer;
-    padding-top: $spacer * .75;
+    padding-top: $spacer * 0.75;
     padding-bottom: $spacer;
     text-transform: uppercase;
     color: $primary;
@@ -13,31 +13,31 @@
     line-height: 1.2;
     &--homepage_topics-block_1 {
       display: block;
-      border-bottom: 1px solid rgba($primary, .1);
+      border-bottom: 1px solid rgba($primary, 0.1);
       &::before {
-        @include get-bootstrap-icon('lightning-charge', $warning);
+        @include get-bootstrap-icon("lightning-charge", $warning);
 
-        margin-right: $spacer * .25;
+        margin-right: $spacer * 0.25;
       }
     }
     &--listing-grid {
       &::before {
-        @include get-bootstrap-icon('lightning-charge', $warning);
+        @include get-bootstrap-icon("lightning-charge", $warning);
 
-        margin-right: $spacer * .25;
+        margin-right: $spacer * 0.25;
       }
     }
   }
   &__link-wrapper {
     display: inline;
     margin-bottom: $spacer;
-    padding-top: $spacer * .75;
+    padding-top: $spacer * 0.75;
     padding-bottom: $spacer;
     a {
       &::after {
-        @include get-bootstrap-icon('arrow-right', currentColor);
+        @include get-bootstrap-icon("arrow-right", currentColor);
 
-        margin-left: $spacer * .25;
+        margin-left: $spacer * 0.25;
       }
     }
   }
