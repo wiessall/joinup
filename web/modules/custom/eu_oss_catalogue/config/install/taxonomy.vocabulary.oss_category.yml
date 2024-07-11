@@ -5,3 +5,4 @@ name: 'OSS Category'
 vid: oss_category
 description: 'Open Source Software Solution Category'
 weight: 0
+new_revision: false
