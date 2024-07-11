@@ -112,9 +112,24 @@ function joinup_core_update_111001(): void {
 }
 
 /**
- * Pre-creates OSS vocabularies.
+ * OG membership bundle subscriptions still refers asset_distribution.
  */
 function joinup_core_update_111002(): void {
+  $connection = \Drupal::database();
+  $connection->update('og_membership__subscription_bundles')
+    ->fields([
+      'subscription_bundles_entity_type' => 'node',
+      'subscription_bundles_bundle' => 'distribution',
+    ])
+    ->condition('subscription_bundles_entity_type', 'rdf_entity')
+    ->condition('subscription_bundles_bundle', 'asset_distribution')
+    ->execute();
+}
+
+/**
+ * Pre-creates OSS vocabularies.
+ */
+function joinup_core_update_111003(): void {
   // Pre-create the new controlled vocabularies provided by eu_oss_catalogue
   // module. Normally, these are imported as config but eu_oss_catalogue install
   // goes first and its install process is also populating them with terms, so
