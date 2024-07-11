@@ -25,16 +25,16 @@
         // Check every active filter item and hide tiles which don't contain proper
         // data-joinup-licence-category.
         const licenceFilterItem = document.querySelectorAll(
-          ".licence-filter__item button.is-active"
+          ".licence-filter__item button.is-active",
         );
         licenceFilterItem.forEach((element) => {
           const currentlicenceCategory = element.getAttribute(
-            "data-joinup-licence-category"
+            "data-joinup-licence-category",
           );
           if (typeof currentlicenceCategory !== "undefined") {
             licenceTile.forEach((el) => {
               const licenceCategory = el.getAttribute(
-                "data-joinup-licence-category"
+                "data-joinup-licence-category",
               );
               if (typeof licenceCategory !== "undefined") {
                 const licenceCategoryArray = licenceCategory.split(" ");
@@ -78,13 +78,13 @@
 
         // Show calculated number of tiles.
         const licenceCounterNumber = document.querySelector(
-          ".licence-counter__number"
+          ".licence-counter__number",
         );
         licenceCounterNumber.textContent = licenceTiles;
 
         // Use plural only if licences count is higher than one.
         const licenceCounterText = document.querySelector(
-          ".licence-counter__text"
+          ".licence-counter__text",
         );
         if (licenceTiles === 1) {
           licenceCounterText.textContent = "licence found";
@@ -122,10 +122,10 @@
 
       licenceResetButton.addEventListener("click", () => {
         const licenceSearchInput = document.querySelector(
-          "input.licence-search__input"
+          "input.licence-search__input",
         );
         const licenceFilterItem = document.querySelectorAll(
-          ".licence-filter__item button.is-active"
+          ".licence-filter__item button.is-active",
         );
         licenceFilterItem.forEach((el) => {
           el.classList.remove("is-active");

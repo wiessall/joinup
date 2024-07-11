@@ -8,6 +8,7 @@ use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleExtensionList;
+use Drupal\Core\File\FileExists;
 use Drupal\Core\File\FileSystemInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -63,7 +64,7 @@ class JoinupUserDefaultAvatarImageHelper implements ContainerInjectionInterface 
    */
   public function createOrUpdate(): void {
     $source = $this->fileSystem->realpath($this->moduleExtensionList->getPath('joinup_user') . '/includes/user_icon.png');
-    $uri = $this->fileSystem->copy($source, 'public://', FileSystemInterface::EXISTS_REPLACE);
+    $uri = $this->fileSystem->copy($source, 'public://', FileExists::Replace);
 
     /** @var \Drupal\file\FileInterface $file */
     if (!$file = $this->entityRepository->loadEntityByUuid('file', self::UUID)) {

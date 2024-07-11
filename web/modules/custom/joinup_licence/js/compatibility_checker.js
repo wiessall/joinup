@@ -47,23 +47,23 @@
 
       function initCompatibleRadios() {
         const radios = document.querySelectorAll(
-          ".jla--compatibility .form-check-input[type='radio']"
+          ".jla--compatibility .form-check-input[type='radio']",
         );
         radios.forEach((element) => {
           // Uncheck radios on page load.
           element.checked = false;
           element.addEventListener("click", () => {
             const inboundLicence = document.querySelector(
-              "input[name='inbound-licence']:checked"
+              "input[name='inbound-licence']:checked",
             );
             const distributeLicence = document.querySelector(
-              "input[name='outbound-licence']:checked"
+              "input[name='outbound-licence']:checked",
             );
             if (inboundLicence && distributeLicence) {
               const compatibleUrl = `${
                 drupalSettings.path.baseUrl
               }licence/compatibility-check/${inboundLicence.getAttribute(
-                "data-joinup-licence-name"
+                "data-joinup-licence-name",
               )}/${distributeLicence.getAttribute("data-joinup-licence-name")}`;
               const licenceTileCompatibleButton =
                 document.querySelectorAll(".jla-compatible");

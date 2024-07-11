@@ -24,5 +24,6 @@ _core:
   default_config_hash: JbBEI30UF33FIZZ3P4ehBtQBWn8-wneaC4sl_P0Al_M
 name: Language
 vid: language
-description: ''
+description: null
 weight: 0
+new_revision: false
