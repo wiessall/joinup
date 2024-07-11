@@ -37,52 +37,51 @@ class JoinupEcVideoTest extends UnitTestCase {
    */
   public function providerTestGetIdFromInput(): array {
     return [
-      // Entries starting with bc are old style links.
-      'bc standard url with http' => [
+      'Old URL - http' => [
         'http://ec.europa.eu/avservices/play.cfm?ref=I136289',
         'I-136289',
       ],
-      'bc standard url with https' => [
+      'Old URL - https' => [
         'https://ec.europa.eu/avservices/play.cfm?ref=I136289',
         'I-136289',
       ],
-      'bc standard url with double slash' => [
+      'Old URL - double slash' => [
         '//ec.europa.eu/avservices/play.cfm?ref=I136289',
         'I-136289',
       ],
-      'bc standard url with no protocol' => [
+      'Old URL - no protocol' => [
         'ec.europa.eu/avservices/play.cfm?ref=I136289',
         'I-136289',
       ],
-      'bc standard url with additional params' => [
+      'Old URL - additional params' => [
         'http://ec.europa.eu/avservices/play.cfm?a=x&ref=I136289&b=y',
         'I-136289',
       ],
-      'bc standard url with additional params and fragment' => [
+      'Old URL - additional params and fragment' => [
         'http://ec.europa.eu/avservices/play.cfm?a=x&ref=I136289&b=y#whatever',
         'I-136289',
       ],
-      'standard url with http' => [
+      'Old embed URL - http' => [
         'http://audiovisual.ec.europa.eu/embed/index.html?ref=I-136289',
         'I-136289',
       ],
-      'standard url with https' => [
+      'Old embed URL - https' => [
         'https://audiovisual.ec.europa.eu/embed/index.html?ref=I-136289',
         'I-136289',
       ],
-      'standard url with double slash' => [
+      'Old embed URL - double slash' => [
         '//audiovisual.ec.europa.eu/embed/index.html?ref=I-136289',
         'I-136289',
       ],
-      'standard url with no protocol' => [
+      'Old embed URL - no protocol' => [
         'audiovisual.ec.europa.eu/embed/index.html?ref=I-136289',
         'I-136289',
       ],
-      'standard url with additional params' => [
+      'Old embed URL - additional params' => [
         'http://audiovisual.ec.europa.eu/embed/index.html?a=x&ref=I-136289&b=y',
         'I-136289',
       ],
-      'standard url with additional params and fragment' => [
+      'Old embed URL - additional params and fragment' => [
         'http://audiovisual.ec.europa.eu/embed/index.html?a=x&ref=I-136289&b=y#whatever',
         'I-136289',
       ],

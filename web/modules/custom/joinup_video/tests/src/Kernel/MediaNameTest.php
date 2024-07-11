@@ -79,16 +79,20 @@ class MediaNameTest extends MediaKernelTestBase {
         'contact',
         'Internal path | contact',
       ],
-      'AV Services' => [
-        'https://audiovisual.ec.europa.eu/embed/index.html?ref=I-136289',
+      'AV Services - Current URL' => [
+        'https://audiovisual.ec.europa.eu/en/video/I-136289',
+        'EC Audiovisual Services | United Kingdom notification - Article 50, Brussels: press statement by Donald Tusk, President of the European Council',
+      ],
+      'AV Services - Current embed URL' => [
+        'https://audiovisual.ec.europa.eu/corporateplayer/index.html?video=I-136289',
         'EC Audiovisual Services | United Kingdom notification - Article 50, Brussels: press statement by Donald Tusk, President of the European Council',
       ],
       'AV Services - Old URL' => [
         'https://ec.europa.eu/avservices/play.cfm?ref=I136289',
         'EC Audiovisual Services | United Kingdom notification - Article 50, Brussels: press statement by Donald Tusk, President of the European Council',
       ],
-      'AV Services - Old URL 2' => [
-        'https://audiovisual.ec.europa.eu/corporateplayer/index.html?video=I-136289',
+      'AV Services - Old embed URL' => [
+        'https://audiovisual.ec.europa.eu/embed/index.html?ref=I-136289',
         'EC Audiovisual Services | United Kingdom notification - Article 50, Brussels: press statement by Donald Tusk, President of the European Council',
       ],
       'AV Services - EU short URL' => [

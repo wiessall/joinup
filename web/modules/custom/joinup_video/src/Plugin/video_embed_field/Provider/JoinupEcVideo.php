@@ -69,12 +69,14 @@ class JoinupEcVideo extends ProviderPluginBase {
     }
 
     $expressions = [
-      // Backwards compatible with old style uris.
-      '#^(?:(?:https?:)?//)?ec\.europa\.eu/(?:.*ref=)?(?<id>[^&\?]+)#i',
-      // New style uris.
-      '#^(?:(?:https?:)?//)?audiovisual\.ec\.europa\.eu/embed/index.html(?:.*ref=)?(?<id>[^&\?]+)#i',
-      // Another updates to uris.
+      // Current URLs.
+      '#^(?:(?:https?:)?//)?audiovisual\.ec\.europa\.eu/(.*)/video/(?<id>I\-\d+)#i',
+      // Current embed URLs.
       '#^(?:(?:https?:)?//)?audiovisual\.ec\.europa\.eu/corporateplayer/index.html(?:.*video=)?(?<id>[^&\?]+)#i',
+      // Old URLs.
+      '#^(?:(?:https?:)?//)?ec\.europa\.eu/(?:.*ref=)?(?<id>[^&\?]+)#i',
+      // Old embed URLs.
+      '#^(?:(?:https?:)?//)?audiovisual\.ec\.europa\.eu/embed/index.html(?:.*ref=)?(?<id>[^&\?]+)#i',
     ];
     foreach ($expressions as $expression) {
       preg_match($expression, $input, $matches);
