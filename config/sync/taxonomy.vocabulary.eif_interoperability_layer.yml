@@ -32,3 +32,4 @@ name: 'Interoperability layer'
 vid: eif_interoperability_layer
 description: 'Terms that represent an interoperability layer of the EIF Toolbox.'
 weight: 0
+new_revision: false

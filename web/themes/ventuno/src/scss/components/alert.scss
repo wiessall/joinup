@@ -9,6 +9,9 @@
     margin-bottom: 0;
   }
   a {
-    color: color.adjust($link-color, $lightness: -4%); // Make sure we comply with WCAG 2.0 level AA contrast ratio
+    color: color.adjust(
+      $link-color,
+      $lightness: -4%
+    ); // Make sure we comply with WCAG 2.0 level AA contrast ratio
   }
 }

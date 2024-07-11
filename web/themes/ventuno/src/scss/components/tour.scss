@@ -20,17 +20,17 @@
   border-radius: $border-radius;
   background: $white;
   box-shadow: $box-shadow-lg;
-  &[data-popper-placement^=top]>.shepherd-arrow {
-    bottom: $spacer * -.5;
+  &[data-popper-placement^="top"] > .shepherd-arrow {
+    bottom: $spacer * -0.5;
   }
-  &[data-popper-placement^=bottom]>.shepherd-arrow {
-    top: $spacer * -.5
+  &[data-popper-placement^="bottom"] > .shepherd-arrow {
+    top: $spacer * -0.5;
   }
-  &[data-popper-placement^=left]>.shepherd-arrow {
-    right: $spacer * -.5
+  &[data-popper-placement^="left"] > .shepherd-arrow {
+    right: $spacer * -0.5;
   }
-  &[data-popper-placement^=right]>.shepherd-arrow {
-    left: $spacer * -.5
+  &[data-popper-placement^="right"] > .shepherd-arrow {
+    left: $spacer * -0.5;
   }
   @include media-breakpoint-up(sm) {
     max-width: 400px;
@@ -47,7 +47,7 @@
   background: transparent;
   font-size: 2rem;
   font-weight: $font-weight-base;
-  line-height: .5;
+  line-height: 0.5;
   &:hover {
     color: $gray-900;
   }
@@ -94,6 +94,6 @@
   border-bottom-right-radius: $border-radius;
   border-bottom-left-radius: $border-radius;
   .shepherd-button:last-child {
-    margin-right: 0
+    margin-right: 0;
   }
 }

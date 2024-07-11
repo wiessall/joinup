@@ -128,7 +128,7 @@ class FilteredEntityReferenceBundlesFormatter extends EntityReferenceRevisionsEn
 
     $rendered = [];
     foreach ($elements as $element) {
-      $output = (string) $this->renderer->renderPlain($element);
+      $output = (string) $this->renderer->renderInIsolation($element);
       $output = trim(strip_tags($output));
       // Apply a fix for the CKEditor converting HTML entities. This is
       // because we are prematurely rendering the paragraphs as plain text in
