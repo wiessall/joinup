@@ -1315,7 +1315,15 @@ class JoinupContext extends RawDrupalContext {
 
     sort($headings);
     sort($tiles_in_page);
-    Assert::assertEquals($headings, $tiles_in_page, 'The found tiles mismatch the expected ones.');
+    Assert::assertEquals(
+      $headings,
+      $tiles_in_page,
+      sprintf(
+        "The found tiles mismatch the expected ones.\nExpected: %s\nActual:%s",
+        implode(', ', $headings),
+        implode(', ', $tiles_in_page),
+      )
+    );
   }
 
   /**

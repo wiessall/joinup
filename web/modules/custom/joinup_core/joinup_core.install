@@ -127,9 +127,23 @@ function joinup_core_update_111002(): void {
 }
 
 /**
+ * Fix redirection.
+ */
+function joinup_core_update_111003(): string {
+  /** @var \Drupal\redirect\RedirectRepository $redirectRepository */
+  $redirectRepository = \Drupal::service('redirect.repository');
+  $redirects = $redirectRepository->findBySourcePath('collection/interoperability-test-bed-repository/solution/interoperability-test-bed/news');
+  foreach ($redirects as $redirect) {
+    $redirect->delete();
+  }
+
+  return 'Wrong redirection was removed.';
+}
+
+/**
  * Pre-creates OSS vocabularies.
  */
-function joinup_core_update_111003(): void {
+function joinup_core_update_111004(): void {
   // Pre-create the new controlled vocabularies provided by eu_oss_catalogue
   // module. Normally, these are imported as config but eu_oss_catalogue install
   // goes first and its install process is also populating them with terms, so
