@@ -109,3 +109,18 @@ function joinup_core_update_111001(): void {
   }
   $config->save();
 }
+
+/**
+ * OG membership bundle subscriptions still refers asset_distribution.
+ */
+function joinup_core_update_111002(): void {
+  $connection = \Drupal::database();
+  $connection->update('og_membership__subscription_bundles')
+    ->fields([
+      'subscription_bundles_entity_type' => 'node',
+      'subscription_bundles_bundle' => 'distribution',
+    ])
+    ->condition('subscription_bundles_entity_type', 'rdf_entity')
+    ->condition('subscription_bundles_bundle', 'asset_distribution')
+    ->execute();
+}
