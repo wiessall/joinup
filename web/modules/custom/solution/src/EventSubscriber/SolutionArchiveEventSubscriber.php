@@ -109,6 +109,7 @@ class SolutionArchiveEventSubscriber implements EventSubscriberInterface {
       'user' => $this->currentUser->id(),
       'solution' => $solution->id(),
       'transition' => $transition,
+      'notifyContactOnly' => !empty($solution->notifyContactOnly),
     ]);
     return TRUE;
   }
