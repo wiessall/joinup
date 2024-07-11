@@ -22,7 +22,7 @@
       right: 0;
       width: 100vw;
       height: 100%;
-      content: '';
+      content: "";
       @include media-breakpoint-up(lg) {
         background: $gray-200;
       }
@@ -33,7 +33,7 @@
       font-weight: $font-weight-normal;
       @include media-breakpoint-up(lg) {
         padding-top: $spacer * 1.5; // 24px
-        font-size: $font-size-lg * .9; // 18px
+        font-size: $font-size-lg * 0.9; // 18px
       }
     }
     @include media-breakpoint-up(lg) {
@@ -52,7 +52,7 @@
     h3 {
       text-transform: uppercase;
       color: $black;
-      font-size: $font-size-lg * .9; // 18px
+      font-size: $font-size-lg * 0.9; // 18px
       font-weight: $font-weight-normal;
       @include media-breakpoint-up(lg) {
         font-size: $font-size-base; // 16px
@@ -62,15 +62,15 @@
   .facets-soft-limit-link {
     display: inline-block;
     width: 100%;
-    margin-top: $spacer * .5;
+    margin-top: $spacer * 0.5;
     text-align: right;
     &::after {
       display: inline-block;
       width: 1em;
       height: 1em;
-      margin-left: $spacer * .25; // 4px
-      content: '';
-      transition: transform .5s;
+      margin-left: $spacer * 0.25; // 4px
+      content: "";
+      transition: transform 0.5s;
       vertical-align: middle;
       color: $secondary;
       background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%231073de' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M2 5l6 6 6-6'/%3e%3c/svg%3e"); // Corresponding BS variable '$form-select-indicator' don't work bc of '<' and '>' characters
@@ -97,9 +97,9 @@
   .facets-checkbox {
     width: 1rem; // 16px
     height: 1rem; // 16px
-    margin-right: $spacer * .5; // 8px
-    border:$form-check-input-border;
-    border-radius: .25em;
+    margin-right: $spacer * 0.5; // 8px
+    border: $form-check-input-border;
+    border-radius: 0.25em;
     background-repeat: no-repeat;
     background-position: 50%;
     background-size: contain;
@@ -110,9 +110,9 @@
     }
   }
   .facet-item:not(:last-child) {
-    margin-bottom: $spacer * .75; // 12px
+    margin-bottom: $spacer * 0.75; // 12px
     .facets-widget- {
-      margin-top: $spacer * .75; // 12px
+      margin-top: $spacer * 0.75; // 12px
     }
   }
   .facet-item label {
@@ -194,7 +194,7 @@
     background-color: $primary;
     font-size: 0;
     &::before {
-      @include get-bootstrap-icon('search', $white);
+      @include get-bootstrap-icon("search", $white);
 
       font-size: 1rem;
     }
@@ -208,7 +208,7 @@
   .ui-menu-item {
     .ui-menu-item-wrapper {
       display: block;
-      padding: .2rem 1rem;
+      padding: 0.2rem 1rem;
       .search-api-autocomplete-suggestion {
         color: $gray-600;
       }

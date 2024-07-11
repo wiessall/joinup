@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup_group\Plugin\views\argument_validator;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\Core\Extension\ModuleExtensionList;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\Context\EntityContextDefinition;
 use Drupal\joinup_group\Entity\GroupInterface;
@@ -27,58 +27,17 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class JoinupGroupUserPermissionValidator extends ArgumentValidatorPluginBase {
 
-  /**
-   * The OG permission manager service.
-   */
-  protected PermissionManagerInterface $ogPermissionManager;
-
-  /**
-   * The permission handler service.
-   */
-  protected PermissionHandlerInterface $permissionHandler;
-
-  /**
-   * The module handler service.
-   */
-  protected ModuleHandlerInterface $moduleHandler;
-
-  /**
-   * The Joinup Group manager service.
-   */
-  protected JoinupGroupManagerInterface $groupManager;
-
-  /**
-   * The entity type manager service.
-   */
-  protected EntityTypeManagerInterface $entityTypeManager;
-
-  /**
-   * Constructs a new argument validator plugin instance.
-   *
-   * @param array $configuration
-   *   A configuration array containing information about the plugin instance.
-   * @param string $plugin_id
-   *   The plugin_id for the plugin instance.
-   * @param mixed $plugin_definition
-   *   The plugin implementation definition.
-   * @param \Drupal\og\PermissionManagerInterface $og_permission_manager
-   *   The OG permission manager service.
-   * @param \Drupal\user\PermissionHandlerInterface $permission_handler
-   *   The permission handler service.
-   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
-   *   The module handler service.
-   * @param \Drupal\joinup_group\JoinupGroupManagerInterface $group_manager
-   *   The Joinup Group manager service.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   The entity type manager service.
-   */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, PermissionManagerInterface $og_permission_manager, PermissionHandlerInterface $permission_handler, ModuleHandlerInterface $module_handler, JoinupGroupManagerInterface $group_manager, EntityTypeManagerInterface $entity_type_manager) {
+  public function __construct(
+    array $configuration,
+    $plugin_id,
+    $plugin_definition,
+    protected PermissionManagerInterface $ogPermissionManager,
+    protected PermissionHandlerInterface $permissionHandler,
+    protected ModuleExtensionList $moduleExtensionList,
+    protected JoinupGroupManagerInterface $groupManager,
+    protected EntityTypeManagerInterface $entityTypeManager,
+  ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
-    $this->ogPermissionManager = $og_permission_manager;
-    $this->permissionHandler = $permission_handler;
-    $this->moduleHandler = $module_handler;
-    $this->groupManager = $group_manager;
-    $this->entityTypeManager = $entity_type_manager;
   }
 
   /**
@@ -91,7 +50,7 @@ class JoinupGroupUserPermissionValidator extends ArgumentValidatorPluginBase {
       $plugin_definition,
       $container->get('og.permission_manager'),
       $container->get('user.permissions'),
-      $container->get('module_handler'),
+      $container->get('extension.list.module'),
       $container->get('joinup_group.group_manager'),
       $container->get('entity_type.manager')
     );
@@ -126,7 +85,7 @@ class JoinupGroupUserPermissionValidator extends ArgumentValidatorPluginBase {
     $permissions = $this->permissionHandler->getPermissions();
     foreach ($permissions as $permission => $info) {
       $provider = $info['provider'];
-      $display_name = $this->moduleHandler->getName($provider);
+      $display_name = $this->moduleExtensionList->getName($provider);
       $site_wide_options[$display_name][$permission] = strip_tags((string) $info['title']);
     }
 

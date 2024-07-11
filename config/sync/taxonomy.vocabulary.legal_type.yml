@@ -36,5 +36,6 @@ _core:
   default_config_hash: 3OTVrGRs8apPxQkH5XTXzQfuwxH0gLmq_c5nzKmmooU
 name: 'Legal type'
 vid: legal_type
-description: ''
+description: null
 weight: 0
+new_revision: false

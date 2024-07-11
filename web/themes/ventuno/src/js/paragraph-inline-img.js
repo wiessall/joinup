@@ -10,7 +10,7 @@
       const img = once(
         "paragraph-img-fluid",
         document.querySelectorAll("img.img-fluid"),
-        context
+        context,
       );
       img.forEach((element) => {
         const parentDiv = element.closest("div");

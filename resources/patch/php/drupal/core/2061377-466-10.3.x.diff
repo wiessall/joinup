@@ -61,10 +61,10 @@ index 0000000000..e4e8162b84
 +
 +}
 diff --git a/core/lib/Drupal/Core/Entity/EntityDisplayBase.php b/core/lib/Drupal/Core/Entity/EntityDisplayBase.php
-index 768835903f..03e7f1f454 100644
+index 4951ef32d7..06429f7c8a 100644
 --- a/core/lib/Drupal/Core/Entity/EntityDisplayBase.php
 +++ b/core/lib/Drupal/Core/Entity/EntityDisplayBase.php
-@@ -12,6 +12,8 @@
+@@ -14,6 +14,8 @@
   */
  abstract class EntityDisplayBase extends ConfigEntityBase implements EntityDisplayInterface {
  
@@ -73,7 +73,7 @@ index 768835903f..03e7f1f454 100644
    /**
     * The mode used to render entities with arbitrary display options.
     *
-@@ -489,48 +491,6 @@ public function onDependencyRemoval(array $dependencies) {
+@@ -492,48 +494,6 @@ public function onDependencyRemoval(array $dependencies) {
      return $changed;
    }
  
@@ -123,19 +123,19 @@ index 768835903f..03e7f1f454 100644
     * Gets the default region.
     *
 diff --git a/core/misc/cspell/dictionary.txt b/core/misc/cspell/dictionary.txt
-index 8fcbd4fe32..22ac84ce18 100644
+index 5eda566e2f..d067e2d0a9 100644
 --- a/core/misc/cspell/dictionary.txt
 +++ b/core/misc/cspell/dictionary.txt
-@@ -260,6 +260,7 @@ drupalelementstyleediting
+@@ -208,6 +208,7 @@ drupalelementstyleediting
  drupalelementstyleui
  drupalhtmlbuilder
  drupalimage
 +drupalimagestyle
- drupalin
  drupalism
  drupalisms
+ drupallink
 diff --git a/core/modules/filter/filter.module b/core/modules/filter/filter.module
-index 8814e0d8ea..55801fcebb 100644
+index e0adbc1620..31b1c48477 100644
 --- a/core/modules/filter/filter.module
 +++ b/core/modules/filter/filter.module
 @@ -323,7 +323,7 @@ function check_markup($text, $format_id = NULL, $langcode = '', $filter_types_to
@@ -159,18 +159,18 @@ index 8814e0d8ea..55801fcebb 100644
            ];
          }
 diff --git a/core/modules/filter/src/Entity/FilterFormat.php b/core/modules/filter/src/Entity/FilterFormat.php
-index b47ed360cd..1ae3115b41 100644
+index 699b6a99d4..b1f45f28ec 100644
 --- a/core/modules/filter/src/Entity/FilterFormat.php
 +++ b/core/modules/filter/src/Entity/FilterFormat.php
-@@ -4,6 +4,7 @@
- 
+@@ -5,6 +5,7 @@
  use Drupal\Component\Plugin\PluginInspectionInterface;
+ use Drupal\Core\Config\Action\Attribute\ActionMethod;
  use Drupal\Core\Config\Entity\ConfigEntityBase;
 +use Drupal\Core\Entity\DependencyRemovalTrait;
  use Drupal\Core\Entity\EntityWithPluginCollectionInterface;
  use Drupal\Core\Entity\EntityStorageInterface;
- use Drupal\filter\FilterFormatInterface;
-@@ -56,6 +57,8 @@
+ use Drupal\Core\StringTranslation\TranslatableMarkup;
+@@ -58,6 +59,8 @@
   */
  class FilterFormat extends ConfigEntityBase implements FilterFormatInterface, EntityWithPluginCollectionInterface {
  
@@ -179,7 +179,7 @@ index b47ed360cd..1ae3115b41 100644
    /**
     * Unique machine name of the format.
     *
-@@ -395,7 +398,28 @@ public function removeFilter($instance_id) {
+@@ -403,7 +406,27 @@ public function removeFilter($instance_id) {
    public function onDependencyRemoval(array $dependencies) {
      $changed = parent::onDependencyRemoval($dependencies);
      $filters = $this->filters();
@@ -204,12 +204,11 @@ index b47ed360cd..1ae3115b41 100644
 +        ]);
 +        $changed = TRUE;
 +      }
-+
        // Remove disabled filters, so that this FilterFormat config entity can
        // continue to exist.
        if (!$filter->status && in_array($filter->provider, $dependencies['module'])) {
-@@ -419,4 +443,14 @@ protected function calculatePluginDependencies(PluginInspectionInterface $instan
-     }
+@@ -414,6 +437,16 @@ public function onDependencyRemoval(array $dependencies) {
+     return $changed;
    }
  
 +  /**
@@ -222,7 +221,9 @@ index b47ed360cd..1ae3115b41 100644
 +    return \Drupal::logger('filter');
 +  }
 +
- }
+   /**
+    * {@inheritdoc}
+    */
 diff --git a/core/modules/filter/src/Plugin/FilterBase.php b/core/modules/filter/src/Plugin/FilterBase.php
 index 11e385f27a..9c93eaea9c 100644
 --- a/core/modules/filter/src/Plugin/FilterBase.php
@@ -240,7 +241,7 @@ index 11e385f27a..9c93eaea9c 100644
 +
  }
 diff --git a/core/modules/filter/src/Plugin/FilterInterface.php b/core/modules/filter/src/Plugin/FilterInterface.php
-index 7714f03e61..c87d4d1d0d 100644
+index f03a94b125..c0ec54d722 100644
 --- a/core/modules/filter/src/Plugin/FilterInterface.php
 +++ b/core/modules/filter/src/Plugin/FilterInterface.php
 @@ -262,11 +262,25 @@ public function getHTMLRestrictions();
@@ -272,10 +273,10 @@ index 7714f03e61..c87d4d1d0d 100644
 +
  }
 diff --git a/core/modules/image/config/schema/image.schema.yml b/core/modules/image/config/schema/image.schema.yml
-index d3c9e980f0..4d1218f6ab 100644
+index 428ba96648..e9ff3b64cd 100644
 --- a/core/modules/image/config/schema/image.schema.yml
 +++ b/core/modules/image/config/schema/image.schema.yml
-@@ -168,3 +168,15 @@ field.widget.settings.image_image:
+@@ -180,3 +180,15 @@ field.widget.settings.image_image:
      preview_image_style:
        type: string
        label: 'Preview image style'
@@ -292,7 +293,7 @@ index d3c9e980f0..4d1218f6ab 100644
 +        type: string
 +        label: 'Image style ID'
 diff --git a/core/modules/image/image.module b/core/modules/image/image.module
-index eb407dcfd1..cec64d0eed 100644
+index 0d8bd4b1f2..b0611bd933 100644
 --- a/core/modules/image/image.module
 +++ b/core/modules/image/image.module
 @@ -6,12 +6,14 @@
@@ -308,9 +309,9 @@ index eb407dcfd1..cec64d0eed 100644
  use Drupal\field\FieldStorageConfigInterface;
 +use Drupal\file\Entity\File;
  use Drupal\file\FileInterface;
+ use Drupal\image\Controller\ImageStyleDownloadController;
  use Drupal\image\Entity\ImageStyle;
- 
-@@ -480,3 +482,108 @@ function image_field_config_delete(FieldConfigInterface $field) {
+@@ -507,3 +509,108 @@ function image_field_config_delete(FieldConfigInterface $field) {
      \Drupal::service('file.usage')->delete($file, 'image', 'default_image', $field->uuid());
    }
  }
@@ -324,35 +325,35 @@ index eb407dcfd1..cec64d0eed 100644
 + * @see \Drupal\editor\Form\EditorImageDialog::buildForm()
 + */
 +function image_form_editor_image_dialog_alter(array &$form, FormStateInterface $form_state): void {
-+  /** @var \Drupal\editor\EditorInterface $editor */
-+  $editor = $form_state->getBuildInfo()['args'][0];
++ /** @var \Drupal\editor\EditorInterface $editor */
++ $editor = $form_state->getBuildInfo()['args'][0];
 +
-+  /** @var \Drupal\image\Plugin\Filter\FilterImageStyle $filter */
-+  $filter = $editor->getFilterFormat()->filters('filter_image_style');
++ /** @var \Drupal\image\Plugin\Filter\FilterImageStyle $filter */
++ $filter = $editor->getFilterFormat()->filters('filter_image_style');
 +
-+  if (!$filter->status) {
-+    // The 'filter_image_style' filter is not enabled for this text format.
-+    return;
-+  }
++ if (!$filter->status) {
++   // The 'filter_image_style' filter is not enabled for this text format.
++   return;
++ }
 +
-+  // Get the image (<img>) that is being edited on the client.
-+  $image_element = $form_state->get('image_element');
++ // Get the image (<img>) that is being edited on the client.
++ $image_element = $form_state->get('image_element');
 +
-+  // Add a select element to choose an image style.
-+  $form['image_style']['selection'] = [
-+    '#title' => t('Use image style'),
-+    '#type' => 'select',
-+    '#default_value' => isset($image_element['data-image-style']) ? $image_element['data-image-style'] : '',
-+    '#options' => $filter->getAllowedImageStylesAsOptions(),
-+    '#empty_value' => '',
-+    // Set #parents in order to make the selected value an image attribute,
-+    // named 'data-image-style', in the same way as other image attributes, such as
-+    // 'data-align' or 'hasCaption', are added to the form.
-+    // @see \Drupal\editor\Form\EditorImageDialog::buildForm()
-+    '#parents' => ['attributes', 'data-image-style'],
-+  ];
++ // Add a select element to choose an image style.
++ $form['image_style']['selection'] = [
++   '#title' => t('Use image style'),
++   '#type' => 'select',
++   '#default_value' => isset($image_element['data-image-style']) ? $image_element['data-image-style'] : '',
++   '#options' => $filter->getAllowedImageStylesAsOptions(),
++   '#empty_value' => '',
++   // Set #parents in order to make the selected value an image attribute,
++   // named 'data-image-style', in the same way as other image attributes, such as
++   // 'data-align' or 'hasCaption', are added to the form.
++   // @see \Drupal\editor\Form\EditorImageDialog::buildForm()
++   '#parents' => ['attributes', 'data-image-style'],
++ ];
 +
-+  $form['actions']['save_modal']['#validate'][] = 'image_form_editor_image_dialog_validate';
++ $form['actions']['save_modal']['#validate'][] = 'image_form_editor_image_dialog_validate';
 +}
 +
 +/**
@@ -398,8 +399,8 @@ index eb407dcfd1..cec64d0eed 100644
 +  if ($image->isValid()) {
 +    // Get the original width and height of the image.
 +    $dimensions = [
-+      'width' => $image->getWidth(),
-+      'height' => $image->getHeight(),
++    'width' => $image->getWidth(),
++    'height' => $image->getHeight(),
 +    ];
 +
 +    // Transform the 'width' and 'height' dimensions of the image based on
@@ -419,6 +420,7 @@ index eb407dcfd1..cec64d0eed 100644
 +  }
 +  $form_state->setValue('attributes', $attributes);
 +}
+\ No newline at end of file
 diff --git a/core/modules/image/image.post_update.php b/core/modules/image/image.post_update.php
 index 9046ce55a7..43b65accd0 100644
 --- a/core/modules/image/image.post_update.php
@@ -1809,7 +1811,7 @@ index 0000000000..9d14f8581e
 +
 +}
 diff --git a/core/modules/views/src/Plugin/views/PluginBase.php b/core/modules/views/src/Plugin/views/PluginBase.php
-index e478e91301..a07b7b8924 100644
+index 57c8589281..8a6defb5db 100644
 --- a/core/modules/views/src/Plugin/views/PluginBase.php
 +++ b/core/modules/views/src/Plugin/views/PluginBase.php
 @@ -357,12 +357,9 @@ public function globalTokenReplace($string = '', array $options = []) {
