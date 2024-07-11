@@ -12,7 +12,14 @@ $brand: $lightblue;
 $link-color: $brand;
 $primary: $darkblue;
 $secondary: color.adjust($lightblue, $lightness: 50%);
-$gradient: linear-gradient(to right, $lightblue 0%, $blue 25%, $turquoise 55%, $lightgreen 80%, $orange 100%);
+$gradient: linear-gradient(
+  to right,
+  $lightblue 0%,
+  $blue 25%,
+  $turquoise 55%,
+  $lightgreen 80%,
+  $orange 100%
+);
 $brand-darker: color.adjust($brand, $lightness: -15%);
 $primary-darker: color.adjust(
   $primary,

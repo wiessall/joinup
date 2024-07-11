@@ -9,5 +9,5 @@
 }
 
 [class*="etrans-debugger-"]:not(:hover) > * {
-  opacity: 0.8!important;
+  opacity: 0.8 !important;
 }
