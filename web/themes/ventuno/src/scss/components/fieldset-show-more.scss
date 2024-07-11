@@ -6,13 +6,13 @@
   }
   .btn[aria-expanded="false"] {
     svg {
-      transition: transform .25s ease;
+      transition: transform 0.25s ease;
       transform: rotate(0deg);
     }
   }
   .btn[aria-expanded="true"] {
     svg {
-      transition: transform .25s ease;
+      transition: transform 0.25s ease;
       transform: rotate(-180deg);
     }
   }
