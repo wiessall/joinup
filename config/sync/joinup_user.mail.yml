@@ -1,3 +1,4 @@
+langcode: en
 email_admin_update:
   subject: 'The Joinup Support Team updated your account for you at [site:name]'
   body: |-

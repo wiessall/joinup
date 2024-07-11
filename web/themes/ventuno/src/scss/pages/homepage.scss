@@ -5,7 +5,7 @@
   .block {
     & > h2 {
       margin-bottom: 1em;
-      padding-top: .75em;
+      padding-top: 0.75em;
       text-transform: uppercase;
       color: $primary;
       font-size: 1.25rem; // 20px
@@ -16,21 +16,29 @@
 }
 
 .iop-gradient {
-	// background: linear-gradient(to right, #278ebf 0%, #44bfb8 32%, #50c1b0 37%, #70c89a 45%, #a4d377 56%, #c2d962 62%, #f6921e 100%); // Full IOP gradient
-	background: linear-gradient(to right, #c2d962 0%, #f6921e 100%); // Only last 2 colors
-	-webkit-background-clip: text;
+  // background: linear-gradient(to right, #278ebf 0%, #44bfb8 32%, #50c1b0 37%, #70c89a 45%, #a4d377 56%, #c2d962 62%, #f6921e 100%); // Full IOP gradient
+  background: linear-gradient(
+    to right,
+    #c2d962 0%,
+    #f6921e 100%
+  ); // Only last 2 colors
+
+  -webkit-background-clip: text;
   background-clip: text;
-	-webkit-text-fill-color: transparent;
+  -webkit-text-fill-color: transparent;
 }
 
 // Hero
 .region-featured {
-  background-image: url(../images/wave.svg), url(../images/background.svg), linear-gradient($ec-blue 0%, $ec-blue 50%, #001e2f 50%, #001e2f 100%);
+  background-image: url(../images/wave.svg), url(../images/background.svg),
+    linear-gradient($ec-blue 0%, $ec-blue 50%, #001e2f 50%, #001e2f 100%);
   background-repeat: no-repeat;
-  background-position: 0 55%, 0 55%;
+  background-position:
+    0 55%,
+    0 55%;
   background-size: 100% auto;
   .block-views-exposed-filter-blocksearch-page-1 {
-    padding-bottom: $spacer * .5; // 8px
+    padding-bottom: $spacer * 0.5; // 8px
     .search-bar {
       .search-bar__input {
         padding-top: $spacer;
@@ -47,16 +55,16 @@
         }
       }
       .btn-search {
-        padding: $spacer * .425 $spacer;
+        padding: $spacer * 0.425 $spacer;
         color: $dark;
         border-top-right-radius: $border-radius-pill;
         border-bottom-right-radius: $border-radius-pill;
         background-color: $white;
         font-size: 0;
         &::before {
-          @include get-bootstrap-icon('search', $primary);
+          @include get-bootstrap-icon("search", $primary);
 
-          margin: $spacer * .25 0; // 4px 0
+          margin: $spacer * 0.25 0; // 4px 0
           font-size: 1.2rem;
         }
         &:hover {
@@ -78,7 +86,14 @@
     }
   }
   @include media-breakpoint-up(md) {
-    background-image: url(../images/banner-md.svg), linear-gradient(to right, $ec-blue 0%, $ec-blue 45%, #001e2f 45%, #001e2f 100%);
+    background-image: url(../images/banner-md.svg),
+      linear-gradient(
+        to right,
+        $ec-blue 0%,
+        $ec-blue 45%,
+        #001e2f 45%,
+        #001e2f 100%
+      );
     background-position: center;
     background-size: auto 100%;
   }
@@ -95,12 +110,12 @@
 .block-views-blockin-the-spotlight-block {
   height: 100%;
   padding-bottom: $spacer * 3; // 48px
-  border-bottom: 1px solid rgba($primary, .1);
+  border-bottom: 1px solid rgba($primary, 0.1);
   > h2 {
     &::before {
-      @include get-bootstrap-icon('star', $warning);
+      @include get-bootstrap-icon("star", $warning);
 
-      margin-right: $spacer * .5; // 8px
+      margin-right: $spacer * 0.5; // 8px
     }
   }
 }
@@ -110,12 +125,12 @@
   position: relative;
   height: 100%;
   padding-bottom: $spacer * 3; // 48px
-  border-bottom: 1px solid rgba($primary, .1);
+  border-bottom: 1px solid rgba($primary, 0.1);
   > h2 {
     &::before {
-      @include get-bootstrap-icon('award', $warning);
+      @include get-bootstrap-icon("award", $warning);
 
-      margin-right: $spacer * .5; // 8px
+      margin-right: $spacer * 0.5; // 8px
     }
   }
   .more-link {
@@ -123,9 +138,9 @@
     right: 0;
     bottom: $spacer;
     &::after {
-      @include get-bootstrap-icon('arrow-right');
+      @include get-bootstrap-icon("arrow-right");
 
-      margin-left: $spacer * .5; // 8px
+      margin-left: $spacer * 0.5; // 8px
     }
     @include media-breakpoint-up(md) {
       top: $spacer;
@@ -140,9 +155,9 @@
   margin-bottom: $spacer * 3; // 48px
   > h2 {
     &::before {
-      @include get-bootstrap-icon('lightning-charge', $warning);
+      @include get-bootstrap-icon("lightning-charge", $warning);
 
-      margin-right: $spacer * .5; // 8px
+      margin-right: $spacer * 0.5; // 8px
     }
   }
   .more-link {
@@ -150,9 +165,9 @@
     right: 0;
     bottom: $spacer * -3;
     &::after {
-      @include get-bootstrap-icon('arrow-right');
+      @include get-bootstrap-icon("arrow-right");
 
-      margin-left: $spacer * .5; // 8px
+      margin-left: $spacer * 0.5; // 8px
     }
     @include media-breakpoint-up(md) {
       top: $spacer;
@@ -168,9 +183,9 @@
   margin-bottom: $spacer * 3; // 48px
   > h2 {
     &::before {
-      @include get-bootstrap-icon('calendar', $warning);
+      @include get-bootstrap-icon("calendar", $warning);
 
-      margin-right: $spacer * .5; // 8px
+      margin-right: $spacer * 0.5; // 8px
     }
   }
   .more-link {
@@ -178,9 +193,9 @@
     right: 0;
     bottom: 0;
     &::after {
-      @include get-bootstrap-icon('arrow-right');
+      @include get-bootstrap-icon("arrow-right");
 
-      margin-left: $spacer * .5; // 8px
+      margin-left: $spacer * 0.5; // 8px
     }
     @include media-breakpoint-up(md) {
       top: $spacer;
@@ -196,7 +211,8 @@
     text-align: center;
     color: $white;
     border-radius: $border-radius-lg;
-    background: $gray-600 url(../images/highlighted-event.jpg) no-repeat center center;
+    background: $gray-600 url(../images/highlighted-event.jpg) no-repeat center
+      center;
     background-size: cover;
     header {
       margin-bottom: $spacer * 3; // 48px
@@ -210,7 +226,7 @@
       }
     }
     > h2 {
-      margin-bottom: $spacer * .25; // 4px
+      margin-bottom: $spacer * 0.25; // 4px
       color: $white;
       line-height: $line-height-sm;
     }
@@ -246,20 +262,20 @@
     margin-bottom: $spacer * 1.5; // 24px
     padding-bottom: $spacer * 1.5; // 24px
     text-transform: uppercase;
-    border-bottom: 1px solid rgba($primary, .1);
+    border-bottom: 1px solid rgba($primary, 0.1);
     font-size: 1.25rem; // 20px
     font-weight: $font-weight-bold;
     &::before {
-      @include get-bootstrap-icon('eye', $warning);
+      @include get-bootstrap-icon("eye", $warning);
 
-      margin-right: $spacer * .5; // 8px
+      margin-right: $spacer * 0.5; // 8px
     }
   }
   .nav-tabs {
     margin-bottom: $spacer; // 16px
     border: none;
     .nav-link {
-      margin: $spacer * .5; // 8px
+      margin: $spacer * 0.5; // 8px
       padding: 0 0 $btn-padding-y 0;
       color: $gray-600;
       border: none;
@@ -271,7 +287,6 @@
       @include media-breakpoint-up(xl) {
         margin: $spacer * 1.5;
       }
-
     }
     @include media-breakpoint-up(md) {
       position: absolute;
@@ -324,7 +339,9 @@
           .date {
             color: $gray-600;
             font-size: $font-size-xs;
-            .field--name-created, .field--name-published-at, .field--name-changed {
+            .field--name-created,
+            .field--name-published-at,
+            .field--name-changed {
               padding-top: $btn-padding-y;
             }
           }
@@ -344,16 +361,19 @@
   }
 }
 
-.glide__outer {// Visual workarounds to avoid slides' shadow being cut
+.glide__outer {
+  // Visual workarounds to avoid slides' shadow being cut
   overflow: hidden;
   width: calc(100% + 2rem);
   margin-left: -1rem;
   padding: 1rem;
 }
-.glide__track { // Visual workarounds to avoid slides' shadow being cut
+.glide__track {
+  // Visual workarounds to avoid slides' shadow being cut
   overflow: visible;
 }
-.glide__slides { // Visual workarounds to avoid slides' shadow being cut
+.glide__slides {
+  // Visual workarounds to avoid slides' shadow being cut
   overflow: visible;
 }
 .glide__slide {
@@ -377,20 +397,20 @@
     margin-right: 1rem;
     span.icon {
       &::before {
-        @include get-bootstrap-icon('chevron-left', $primary);
+        @include get-bootstrap-icon("chevron-left", $primary);
       }
     }
   }
   &--right {
     span.icon {
       &::before {
-        @include get-bootstrap-icon('chevron-right', $primary);
+        @include get-bootstrap-icon("chevron-right", $primary);
       }
     }
   }
   &--disabled,
   &:disabled {
     pointer-events: none;
-    opacity: .3;
+    opacity: 0.3;
   }
 }

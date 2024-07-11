@@ -17,7 +17,7 @@
       }
       const contactInfoId = decodeURIComponent(cookie);
       const contactInfoElement = document.querySelector(
-        `[data-joinup-contact-info-id="${contactInfoId}"]`
+        `[data-joinup-contact-info-id="${contactInfoId}"]`,
       );
       // Does the contact information entity still exist?
       if (contactInfoElement) {

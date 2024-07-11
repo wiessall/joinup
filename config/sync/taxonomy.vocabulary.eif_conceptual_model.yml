@@ -32,3 +32,4 @@ name: 'Conceptual model'
 vid: eif_conceptual_model
 description: 'Terms that represent a conceptual model of the EIF Toolbox.'
 weight: 0
+new_revision: false

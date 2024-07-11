@@ -4,24 +4,27 @@ a {
   // Avoid purple underline for visited links.
   &:hover {
     &:visited {
-      text-decoration-color: currentColor!important;
+      text-decoration-color: currentColor !important;
     }
   }
 
   // Add icon to show users the link is external.
   &.external {
     &::after {
-      @include get-bootstrap-icon('box-arrow-up-right');
+      @include get-bootstrap-icon("box-arrow-up-right");
 
-      margin: 0 0 0 $spacer * .375; // 0 0 0 6px
+      margin: 0 0 0 $spacer * 0.375; // 0 0 0 6px
     }
     &:hover {
       &::after {
-        @include get-bootstrap-icon('box-arrow-up-right');
+        @include get-bootstrap-icon("box-arrow-up-right");
       }
     }
   }
 }
 .bg-light a:not(.btn) {
-  color: color.adjust($brand, $lightness: -15%); // Ensure having enough contrast
+  color: color.adjust(
+    $brand,
+    $lightness: -15%
+  ); // Ensure having enough contrast
 }
