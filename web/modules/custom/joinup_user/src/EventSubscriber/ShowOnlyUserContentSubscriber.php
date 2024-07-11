@@ -78,7 +78,7 @@ class ShowOnlyUserContentSubscriber implements EventSubscriberInterface {
         // If the user is the owner of the profile, show a warning message.
         if ($user->id() === $this->currentUser->id()) {
           $this->messenger
-            ->addMessage($this->t('You have joined a large number of collections and solutions.<br /> Only the content of the first 100 groups is shown.'), 'warning');
+            ->addWarning($this->t('You have joined a large number of collections and solutions.<br /> Only the content of the first 100 groups is shown.'));
         }
       }
       $or = $query->createConditionGroup('OR');

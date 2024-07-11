@@ -4,6 +4,7 @@ status: true
 dependencies:
   module:
     - menu_ui
+    - rdf_sync
 third_party_settings:
   menu_ui:
     available_menus: {  }
@@ -34,7 +35,7 @@ label_count:
 name: Distribution
 type: distribution
 description: 'Typically a downloadable computer file but it could also be a paper document or API response'
-help: ''
+help: null
 new_revision: true
 preview_mode: 0
 display_submitted: false

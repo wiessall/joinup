@@ -1,3 +1,6 @@
 # Mute forward compatibility warnings.
 # See: https://github.com/consolidation/config/issues/61 and other similar.
 %Method "[^"]+" might add "[^"]+" as a native return type declaration in the future. Do the same in (child class|implementation) "[^"]+" now to avoid errors or add an explicit @return annotation to suppress this message%
+
+# TODO: Remove in Drupal 11.
+%Renderer::renderPlain\(\) is deprecated in drupal:10.3.0 and is removed from drupal:12.0.0. Instead, you should use ::renderInIsolation\(\). See https://www.drupal.org/node/3407994%

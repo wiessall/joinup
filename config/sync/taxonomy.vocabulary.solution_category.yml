@@ -28,5 +28,6 @@ _core:
   default_config_hash: PvceGPsDDAw9Uoa9hEr8DxsLfofzcREiPTf_fa4mlS8
 name: 'Solution category'
 vid: solution_category
-description: ''
+description: null
 weight: 0
+new_revision: false
