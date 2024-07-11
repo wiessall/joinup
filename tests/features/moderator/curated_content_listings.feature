@@ -52,7 +52,6 @@ Feature: Curated content listings
     When I click the contextual link "Update curated content" in the "Highlighted content" region
     Then I should see the heading "Update curated content listing Highlighted content"
 
-
   @javascript
   Scenario: Regression test for ISAICP-6658
   See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-6658

@@ -10,7 +10,7 @@
       const fieldsets = once(
         "fieldset-show-more",
         document.querySelectorAll(".fieldset-show-more"),
-        context
+        context,
       );
       // Ensures "Show more" functionality in case there are multiple fieldsets
       fieldsets.forEach((fieldset) => {

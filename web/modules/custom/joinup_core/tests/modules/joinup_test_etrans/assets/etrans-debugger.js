@@ -61,7 +61,7 @@
       let isInline = false;
       element.childNodes.forEach((child) => {
         isInline = Drupal.eTransDebugger.inlineElements.includes(
-          child.nodeName
+          child.nodeName,
         );
         if (isInline) {
           textcontent = child.textContent.replace(/\n+/, " ");
@@ -80,7 +80,7 @@
           // Replace long whitespaces.
           .replace(
             /[ \f\r\t\v\u00a0\u1680\u2000-\u200a\u2028\u2029\u202f\u205f\u3000\ufeff]{2,}/g,
-            " "
+            " ",
           )
           // Replace line breaks and their leading / trailing whitespaces.
           .replace(/ ?\n+ ?/g, "\n")
@@ -140,7 +140,7 @@
       once(
         "etrans-debugger",
         "body script[type='application/json']",
-        context
+        context,
       ).forEach((element) => {
         const json = JSON.parse(element.textContent);
         if (!json.service || json.service !== "etrans") {

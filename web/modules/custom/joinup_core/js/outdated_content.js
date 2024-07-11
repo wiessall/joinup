@@ -21,7 +21,7 @@
         if (currentTime > outdatedContent.outdatedTime) {
           // One year: 60 * 60 * 24 * 365 = 31536000.
           const yearsOld = Math.floor(
-            (currentTime - outdatedContent.publicationTime) / 31536000
+            (currentTime - outdatedContent.publicationTime) / 31536000,
           );
           const text = Drupal.formatPlural(
             yearsOld,
@@ -29,7 +29,7 @@
             "This @bundle is more than @count years old",
             {
               "@bundle": outdatedContent.bundle,
-            }
+            },
           );
 
           const titleDetails = document.querySelector(".page-title__details");

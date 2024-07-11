@@ -30,5 +30,6 @@ third_party_settings:
           type: resource
 name: Topic
 vid: topic
-description: ''
+description: null
 weight: 0
+new_revision: false

@@ -63,7 +63,7 @@
           });
         licenceListing.setAttribute(
           "data-joinup-licence-compare",
-          licencesString
+          licencesString,
         );
       }
 
@@ -93,10 +93,10 @@
           element.addEventListener("click", (e) => {
             const licenceListing = document.querySelector(".listing--licences");
             const licences = licenceListing.getAttribute(
-              "data-joinup-licence-compare"
+              "data-joinup-licence-compare",
             );
             const licenceName = e.target.getAttribute(
-              "data-joinup-licence-name"
+              "data-joinup-licence-name",
             );
             let licencesString = "";
             let licencesArray = [];
@@ -131,7 +131,7 @@
             }
             licenceListing.setAttribute(
               "data-joinup-licence-compare",
-              licencesString
+              licencesString,
             );
           });
         });

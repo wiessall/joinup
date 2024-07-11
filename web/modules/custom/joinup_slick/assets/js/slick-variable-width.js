@@ -53,7 +53,7 @@
       this.timeouts[slickNode.id] = setTimeout(
         this.calculateSlidesToShow,
         100,
-        slickNode
+        slickNode,
       );
     },
     timeouts: {},
@@ -105,7 +105,7 @@
       once("joinupSlickVariableWidth", "[data-slick]", context).forEach(
         (slickNode) => {
           initialize(slickNode);
-        }
+        },
       );
     },
   };
