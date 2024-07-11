@@ -1,8 +1,8 @@
 diff --git a/core/modules/field/tests/src/Kernel/Migrate/d6/MigrateFieldInstanceTest.php b/core/modules/field/tests/src/Kernel/Migrate/d6/MigrateFieldInstanceTest.php
-index 489ef4af9caf1bd1faebe4020514d4ffdef98a74..dcfbdcf717e613ad7fad614ba72f5e629db48a8b 100644
+index e85f216de1c..9c1fec42d53 100644
 --- a/core/modules/field/tests/src/Kernel/Migrate/d6/MigrateFieldInstanceTest.php
 +++ b/core/modules/field/tests/src/Kernel/Migrate/d6/MigrateFieldInstanceTest.php
-@@ -84,6 +84,7 @@ public function testFieldInstanceMigration() {
+@@ -86,6 +86,7 @@ public function testFieldInstanceMigration(): void {
        'max_filesize' => '200KB',
        'target_type' => 'file',
        'display_field' => FALSE,
@@ -11,7 +11,7 @@ index 489ef4af9caf1bd1faebe4020514d4ffdef98a74..dcfbdcf717e613ad7fad614ba72f5e62
        'uri_scheme' => 'public',
        'handler' => 'default:file',
 diff --git a/core/modules/file/config/schema/file.schema.yml b/core/modules/file/config/schema/file.schema.yml
-index aaa74af750c4fa9a7a4abc49d3b615d585fd8637..e5ba1b434bc4b835ed0977975cf64f8ca850f380 100644
+index d8b098d50fc..f670682527f 100644
 --- a/core/modules/file/config/schema/file.schema.yml
 +++ b/core/modules/file/config/schema/file.schema.yml
 @@ -91,6 +91,9 @@ field.field_settings.file:
@@ -25,7 +25,7 @@ index aaa74af750c4fa9a7a4abc49d3b615d585fd8637..e5ba1b434bc4b835ed0977975cf64f8c
  file.formatter.media:
    type: mapping
 diff --git a/core/modules/file/file.post_update.php b/core/modules/file/file.post_update.php
-index 73c815b1cc0233c03d950cf278ff024527b06d79..7b89d3319d06d0eb27a3c257979f96c270502df9 100644
+index 73c815b1cc0..7b89d3319d0 100644
 --- a/core/modules/file/file.post_update.php
 +++ b/core/modules/file/file.post_update.php
 @@ -6,6 +6,7 @@
@@ -50,23 +50,19 @@ index 73c815b1cc0233c03d950cf278ff024527b06d79..7b89d3319d06d0eb27a3c257979f96c2
 +  });
 +}
 diff --git a/core/modules/file/src/Plugin/Field/FieldType/FileItem.php b/core/modules/file/src/Plugin/Field/FieldType/FileItem.php
-index d9fe46ec600c8f8ca7f699e3c267369623c432bb..bd27ef37c7d9d7c708bfc7926defd0babfc7e3cd 100644
+index 6dc17e520bf..15d22ee517d 100644
 --- a/core/modules/file/src/Plugin/Field/FieldType/FileItem.php
 +++ b/core/modules/file/src/Plugin/Field/FieldType/FileItem.php
-@@ -31,7 +31,11 @@
-  *   default_widget = "file_generic",
-  *   default_formatter = "file_default",
-  *   list_class = "\Drupal\file\Plugin\Field\FieldType\FileFieldItemList",
-- *   constraints = {"ReferenceAccess" = {}, "FileValidation" = {}}
-+ *   constraints = {
-+ *    "ReferenceAccess" = {},
-+ *    "FileValidation" = {},
-+ *    "FileDescriptionRequired" = {},
-+ *   },
-  * )
-  */
- class FileItem extends EntityReferenceItem {
-@@ -58,7 +62,8 @@ public static function defaultFieldSettings() {
+@@ -33,7 +33,7 @@
+   default_widget: "file_generic",
+   default_formatter: "file_default",
+   list_class: FileFieldItemList::class,
+-  constraints: ["ReferenceAccess" => [], "FileValidation" => []],
++  constraints: ["ReferenceAccess" => [], "FileValidation" => [], "FileDescriptionRequired" => []],
+   column_groups: [
+     'target_id' => [
+       'label' => new TranslatableMarkup('File'),
+@@ -73,7 +73,8 @@ public static function defaultFieldSettings() {
        'file_extensions' => 'txt',
        'file_directory' => '[date:custom:Y]-[date:custom:m]',
        'max_filesize' => '',
@@ -76,7 +72,7 @@ index d9fe46ec600c8f8ca7f699e3c267369623c432bb..bd27ef37c7d9d7c708bfc7926defd0ba
      ] + parent::defaultFieldSettings();
    }
  
-@@ -211,6 +216,21 @@ public function fieldSettingsForm(array $form, FormStateInterface $form_state) {
+@@ -226,6 +227,18 @@ public function fieldSettingsForm(array $form, FormStateInterface $form_state) {
        '#weight' => 11,
      ];
  
@@ -84,13 +80,10 @@ index d9fe46ec600c8f8ca7f699e3c267369623c432bb..bd27ef37c7d9d7c708bfc7926defd0ba
 +      '#type' => 'checkbox',
 +      '#title' => $this->t('Require the <em>Description</em> field'),
 +      '#default_value' => $settings['description_field_required'] ?? FALSE,
-+      '#weight' => 12,
++      '#weight' => 20,
 +      '#states' => [
 +        'visible' => [
 +          ':input[name="settings[description_field]"]' => ['checked' => TRUE],
-+        ],
-+        'disabled' => [
-+          ':input[name="settings[description_field]"]' => ['checked' => FALSE],
 +        ],
 +      ],
 +    ];
@@ -98,11 +91,21 @@ index d9fe46ec600c8f8ca7f699e3c267369623c432bb..bd27ef37c7d9d7c708bfc7926defd0ba
      return $element;
    }
  
+@@ -253,7 +266,8 @@ public static function validateDirectory($element, FormStateInterface $form_stat
+    *
+    * This doubles as a convenience clean-up function and a validation routine.
+    * Commas are allowed by the end-user, but ultimately the value will be stored
+-   * as a space-separated list for compatibility with file_validate_extensions().
++   * as a space-separated list for compatibility with the 'FileExtension'
++   * constraint.
+    */
+   public static function validateExtensions($element, FormStateInterface $form_state) {
+     if (!empty($element['#value'])) {
 diff --git a/core/modules/file/src/Plugin/Field/FieldWidget/FileWidget.php b/core/modules/file/src/Plugin/Field/FieldWidget/FileWidget.php
-index 458d4234bc5bf75e52ca8f05d8c6a9f8e3612e58..73febe750ae3db4d0bbab2381dfbbe8f328f2ecb 100644
+index 62db3ddf1a4..fc463d32a64 100644
 --- a/core/modules/file/src/Plugin/Field/FieldWidget/FileWidget.php
 +++ b/core/modules/file/src/Plugin/Field/FieldWidget/FileWidget.php
-@@ -11,6 +11,7 @@
+@@ -12,6 +12,7 @@
  use Drupal\Core\Render\Element;
  use Drupal\Core\Render\ElementInfoManagerInterface;
  use Drupal\Core\StringTranslation\TranslatableMarkup;
@@ -110,7 +113,7 @@ index 458d4234bc5bf75e52ca8f05d8c6a9f8e3612e58..73febe750ae3db4d0bbab2381dfbbe8f
  use Drupal\file\Element\ManagedFile;
  use Drupal\file\Entity\File;
  use Symfony\Component\DependencyInjection\ContainerInterface;
-@@ -216,9 +217,10 @@ public function formElement(FieldItemListInterface $items, $delta, array $elemen
+@@ -214,9 +215,10 @@ public function formElement(FieldItemListInterface $items, $delta, array $elemen
      // widget is a base class for other widgets (e.g., ImageWidget) that may act
      // on field types without these expected settings.
      $field_settings += [
@@ -124,7 +127,7 @@ index 458d4234bc5bf75e52ca8f05d8c6a9f8e3612e58..73febe750ae3db4d0bbab2381dfbbe8f
      ];
  
      $cardinality = $this->fieldDefinition->getFieldStorageDefinition()->getCardinality();
-@@ -246,6 +248,7 @@ public function formElement(FieldItemListInterface $items, $delta, array $elemen
+@@ -244,6 +246,7 @@ public function formElement(FieldItemListInterface $items, $delta, array $elemen
        '#display_field' => (bool) $field_settings['display_field'],
        '#display_default' => $field_settings['display_default'],
        '#description_field' => $field_settings['description_field'],
@@ -132,16 +135,15 @@ index 458d4234bc5bf75e52ca8f05d8c6a9f8e3612e58..73febe750ae3db4d0bbab2381dfbbe8f
        '#cardinality' => $cardinality,
      ];
  
-@@ -425,6 +428,8 @@ public static function process($element, FormStateInterface $form_state, $form)
+@@ -423,6 +426,7 @@ public static function process($element, FormStateInterface $form_state, $form)
          '#value' => $item['description'] ?? '',
          '#maxlength' => $config->get('description.length'),
          '#description' => new TranslatableMarkup('The description may be used as the label of the link to the file.'),
 +        '#required' => !empty($element['#description_field_required']),
-+        // do i need this? '#element_validate' => $element['#description_field_required'] == 1 ? [[static::class, 'validateRequiredFields']] : [],
        ];
      }
  
-@@ -601,11 +606,44 @@ public static function submit($form, FormStateInterface $form_state) {
+@@ -599,11 +603,44 @@ public static function submit($form, FormStateInterface $form_state) {
     * {@inheritdoc}
     */
    public function flagErrors(FieldItemListInterface $items, ConstraintViolationListInterface $violations, array $form, FormStateInterface $form_state) {
@@ -189,25 +191,26 @@ index 458d4234bc5bf75e52ca8f05d8c6a9f8e3612e58..73febe750ae3db4d0bbab2381dfbbe8f
  }
 diff --git a/core/modules/file/src/Plugin/Validation/Constraint/FileDescriptionRequired.php b/core/modules/file/src/Plugin/Validation/Constraint/FileDescriptionRequired.php
 new file mode 100644
-index 0000000000000000000000000000000000000000..238b64f9a0b0d0904b44508667b77b474266c147
+index 00000000000..ac978ac9bc4
 --- /dev/null
 +++ b/core/modules/file/src/Plugin/Validation/Constraint/FileDescriptionRequired.php
-@@ -0,0 +1,24 @@
+@@ -0,0 +1,25 @@
 +<?php
 +
 +namespace Drupal\file\Plugin\Validation\Constraint;
 +
-+use Symfony\Component\Validator\Constraint;
++use Drupal\Core\StringTranslation\TranslatableMarkup;
++use Drupal\Core\Validation\Attribute\Constraint;
++use Symfony\Component\Validator\Constraint as SymfonyConstraint;
 +
 +/**
 + * Constrains the existence of a file description if it has been configured.
-+ *
-+ * @Constraint(
-+ *   id = "FileDescriptionRequired",
-+ *   label = @Translation("File required description", context = "Validation"),
-+ * )
 + */
-+class FileDescriptionRequired extends Constraint {
++#[Constraint(
++  id: 'FileDescriptionRequired',
++  label: new TranslatableMarkup('File required description', [], ['context' => 'Validation']),
++)]
++class FileDescriptionRequired extends SymfonyConstraint {
 +
 +  /**
 +   * Constraint violation message template.
@@ -219,7 +222,7 @@ index 0000000000000000000000000000000000000000..238b64f9a0b0d0904b44508667b77b47
 +}
 diff --git a/core/modules/file/src/Plugin/Validation/Constraint/FileDescriptionRequiredValidator.php b/core/modules/file/src/Plugin/Validation/Constraint/FileDescriptionRequiredValidator.php
 new file mode 100644
-index 0000000000000000000000000000000000000000..9fff895c7b3b4de3063e3d538d1ab1e094363ced
+index 00000000000..9fff895c7b3
 --- /dev/null
 +++ b/core/modules/file/src/Plugin/Validation/Constraint/FileDescriptionRequiredValidator.php
 @@ -0,0 +1,32 @@
@@ -256,28 +259,32 @@ index 0000000000000000000000000000000000000000..9fff895c7b3b4de3063e3d538d1ab1e0
 +
 +}
 diff --git a/core/modules/file/tests/src/Functional/FileFieldDisplayTest.php b/core/modules/file/tests/src/Functional/FileFieldDisplayTest.php
-index 52d46385b93eb29a38fb3c55582d0fb2c50b240c..c77937ee89bf5b53ad1a0aeee3ea3d4a290c0dac 100644
+index 7566930e379..dc3f5f952f0 100644
 --- a/core/modules/file/tests/src/Functional/FileFieldDisplayTest.php
 +++ b/core/modules/file/tests/src/Functional/FileFieldDisplayTest.php
-@@ -168,6 +168,17 @@ public function testDescToggle() {
+@@ -170,10 +170,20 @@ public function testDescToggle(): void {
      ];
      $this->drupalGet('admin/structure/types/add');
      $this->submitForm($edit, 'Save and manage fields');
 +    $field_label = $this->randomString();
-+    $edit = [
-+      'new_storage_type' => $field_type,
-+      'field_name' => $field_name,
-+      'label' => $field_label,
-+    ];
 +    $this->drupalGet('/admin/structure/types/manage/' . $type_name . '/fields/add-field');
-+    $this->submitForm($edit, 'Save and continue');
-+    $this->submitForm([], 'Save field settings');
++    $this->submitForm(['new_storage_type' => 'file_upload'], 'Continue');
++    $edit = [
++      'label' => $field_label,
++      'group_field_options_wrapper' => $field_type,
++    ];
++    $this->submitForm($edit, 'Continue');
 +    // Ensure the description field is selected on the field instance settings
 +    // form. That's what this test is all about.
      $field_edit = [
        'settings[description_field]' => TRUE,
      ];
-@@ -184,6 +195,16 @@ public function testDescToggle() {
+-    $this->fieldUIAddNewField('/admin/structure/types/manage/' . $type_name, $field_name, $this->randomString(), $field_type, [], $field_edit);
++    $this->fieldUIAddNewField('/admin/structure/types/manage/' . $type_name, $field_name, $label = $this->randomString(), $field_type, [], $field_edit);
+     // Add a node of our new type and upload a file to it.
+     $file = current($this->drupalGetTestFiles('text'));
+     $title = $this->randomString();
+@@ -186,6 +196,16 @@ public function testDescToggle(): void {
      $node = $this->drupalGetNodeByTitle($title);
      $this->drupalGet('node/' . $node->id() . '/edit');
      $this->assertSession()->pageTextContains('The description may be used as the label of the link to the file.');
@@ -290,17 +297,19 @@ index 52d46385b93eb29a38fb3c55582d0fb2c50b240c..c77937ee89bf5b53ad1a0aeee3ea3d4a
 +    // description is now required.
 +    $this->drupalGet($node->toUrl('edit-form'));
 +    $this->submitForm([], 'Save');
-+    $this->assertSession()->pageTextContains("The {$field_label} field description is required.");
++    $this->assertSession()->pageTextContains("The $label field description is required.");
    }
  
    /**
 diff --git a/core/modules/file/tests/src/Functional/Update/FileDescriptionRequiredUpdateTest.php b/core/modules/file/tests/src/Functional/Update/FileDescriptionRequiredUpdateTest.php
 new file mode 100644
-index 0000000000000000000000000000000000000000..e0014e575db223e6e3e35f2b8a37e8ed5856f096
+index 00000000000..fbd51cbadcb
 --- /dev/null
 +++ b/core/modules/file/tests/src/Functional/Update/FileDescriptionRequiredUpdateTest.php
-@@ -0,0 +1,44 @@
+@@ -0,0 +1,46 @@
 +<?php
++
++declare(strict_types=1);
 +
 +namespace Drupal\Tests\file\Functional\Update;
 +
@@ -320,7 +329,7 @@ index 0000000000000000000000000000000000000000..e0014e575db223e6e3e35f2b8a37e8ed
 +  protected function setDatabaseDumpFiles() {
 +    $this->databaseDumpFiles = [
 +      // Using the 'filled' fixture as 'base' contains no file fields.
-+      __DIR__ . '/../../../../../system/tests/fixtures/update/drupal-9.4.0.filled.standard.php.gz',
++      __DIR__ . '/../../../../../system/tests/fixtures/update/drupal-10.3.0.filled.standard.php.gz',
 +    ];
 +  }
 +
@@ -345,10 +354,10 @@ index 0000000000000000000000000000000000000000..e0014e575db223e6e3e35f2b8a37e8ed
 +
 +}
 diff --git a/core/modules/image/src/Plugin/Field/FieldType/ImageItem.php b/core/modules/image/src/Plugin/Field/FieldType/ImageItem.php
-index 7f96744c5ff6bc4abdb10849d18b0a1617a3d7d3..dfd26525d875a6cf4aed748423bec886554ee427 100644
+index 29fa146d487..87182a94c27 100644
 --- a/core/modules/image/src/Plugin/Field/FieldType/ImageItem.php
 +++ b/core/modules/image/src/Plugin/Field/FieldType/ImageItem.php
-@@ -89,6 +89,7 @@ public static function defaultFieldSettings() {
+@@ -97,6 +97,7 @@ public static function defaultFieldSettings() {
      ] + parent::defaultFieldSettings();
  
      unset($settings['description_field']);
@@ -356,7 +365,7 @@ index 7f96744c5ff6bc4abdb10849d18b0a1617a3d7d3..dfd26525d875a6cf4aed748423bec886
      return $settings;
    }
  
-@@ -263,8 +264,9 @@ public function fieldSettingsForm(array $form, FormStateInterface $form_state) {
+@@ -271,8 +272,9 @@ public function fieldSettingsForm(array $form, FormStateInterface $form_state) {
        '#suffix' => '</div>',
      ];
  
@@ -368,10 +377,10 @@ index 7f96744c5ff6bc4abdb10849d18b0a1617a3d7d3..dfd26525d875a6cf4aed748423bec886
      // Add title and alt configuration options.
      $element['alt_field'] = [
 diff --git a/core/modules/jsonapi/tests/src/Functional/FileUploadTest.php b/core/modules/jsonapi/tests/src/Functional/FileUploadTest.php
-index 4ccf903d27c3cb2d61625b78e535c84bf48cab90..816c3f6f7d86b078e8bbd901ca0d966fc41450f9 100644
+index 354904df389..7bba9636bff 100644
 --- a/core/modules/jsonapi/tests/src/Functional/FileUploadTest.php
 +++ b/core/modules/jsonapi/tests/src/Functional/FileUploadTest.php
-@@ -273,6 +273,15 @@ public function testPostFileUpload() {
+@@ -275,6 +275,15 @@ public function testPostFileUpload(): void {
          'description' => "The most fascinating file ever!",
        ],
      ], EntityTest::load(2)->get('field_rest_file_test')->getValue());
@@ -388,7 +397,7 @@ index 4ccf903d27c3cb2d61625b78e535c84bf48cab90..816c3f6f7d86b078e8bbd901ca0d966f
  
    /**
 diff --git a/core/profiles/demo_umami/config/install/field.field.media.audio.field_media_audio_file.yml b/core/profiles/demo_umami/config/install/field.field.media.audio.field_media_audio_file.yml
-index a4bb52eb859a2a18c2409964ea3c6d3ee1e0e579..c7feda30306541b36a98595771f191b57f9a66d6 100644
+index a4bb52eb859..c7feda30306 100644
 --- a/core/profiles/demo_umami/config/install/field.field.media.audio.field_media_audio_file.yml
 +++ b/core/profiles/demo_umami/config/install/field.field.media.audio.field_media_audio_file.yml
 @@ -23,4 +23,5 @@ settings:
@@ -398,7 +407,7 @@ index a4bb52eb859a2a18c2409964ea3c6d3ee1e0e579..c7feda30306541b36a98595771f191b5
 +  description_field_required: false
  field_type: file
 diff --git a/core/profiles/demo_umami/config/install/field.field.media.document.field_media_document.yml b/core/profiles/demo_umami/config/install/field.field.media.document.field_media_document.yml
-index fb0b9909e2e870210c3c927eb40e1de8f10947f2..7dd5de65dd5844d74eb5e38ded8dfd2b7588359e 100644
+index fb0b9909e2e..7dd5de65dd5 100644
 --- a/core/profiles/demo_umami/config/install/field.field.media.document.field_media_document.yml
 +++ b/core/profiles/demo_umami/config/install/field.field.media.document.field_media_document.yml
 @@ -26,4 +26,5 @@ settings:
@@ -408,7 +417,7 @@ index fb0b9909e2e870210c3c927eb40e1de8f10947f2..7dd5de65dd5844d74eb5e38ded8dfd2b
 +  description_field_required: false
  field_type: file
 diff --git a/core/profiles/demo_umami/config/install/field.field.media.video.field_media_video_file.yml b/core/profiles/demo_umami/config/install/field.field.media.video.field_media_video_file.yml
-index b6c0be146e45a376e680c704c72391f5bbd55eca..d1793489c918da904d485b8486d2250c9e2559bb 100644
+index b6c0be146e4..d1793489c91 100644
 --- a/core/profiles/demo_umami/config/install/field.field.media.video.field_media_video_file.yml
 +++ b/core/profiles/demo_umami/config/install/field.field.media.video.field_media_video_file.yml
 @@ -23,4 +23,5 @@ settings:
@@ -418,7 +427,7 @@ index b6c0be146e45a376e680c704c72391f5bbd55eca..d1793489c918da904d485b8486d2250c
 +  description_field_required: false
  field_type: file
 diff --git a/core/profiles/standard/config/optional/field.field.media.audio.field_media_audio_file.yml b/core/profiles/standard/config/optional/field.field.media.audio.field_media_audio_file.yml
-index a4bb52eb859a2a18c2409964ea3c6d3ee1e0e579..c7feda30306541b36a98595771f191b57f9a66d6 100644
+index a4bb52eb859..c7feda30306 100644
 --- a/core/profiles/standard/config/optional/field.field.media.audio.field_media_audio_file.yml
 +++ b/core/profiles/standard/config/optional/field.field.media.audio.field_media_audio_file.yml
 @@ -23,4 +23,5 @@ settings:
@@ -428,7 +437,7 @@ index a4bb52eb859a2a18c2409964ea3c6d3ee1e0e579..c7feda30306541b36a98595771f191b5
 +  description_field_required: false
  field_type: file
 diff --git a/core/profiles/standard/config/optional/field.field.media.document.field_media_document.yml b/core/profiles/standard/config/optional/field.field.media.document.field_media_document.yml
-index fb0b9909e2e870210c3c927eb40e1de8f10947f2..7dd5de65dd5844d74eb5e38ded8dfd2b7588359e 100644
+index fb0b9909e2e..7dd5de65dd5 100644
 --- a/core/profiles/standard/config/optional/field.field.media.document.field_media_document.yml
 +++ b/core/profiles/standard/config/optional/field.field.media.document.field_media_document.yml
 @@ -26,4 +26,5 @@ settings:
@@ -438,7 +447,7 @@ index fb0b9909e2e870210c3c927eb40e1de8f10947f2..7dd5de65dd5844d74eb5e38ded8dfd2b
 +  description_field_required: false
  field_type: file
 diff --git a/core/profiles/standard/config/optional/field.field.media.video.field_media_video_file.yml b/core/profiles/standard/config/optional/field.field.media.video.field_media_video_file.yml
-index b6c0be146e45a376e680c704c72391f5bbd55eca..d1793489c918da904d485b8486d2250c9e2559bb 100644
+index b6c0be146e4..d1793489c91 100644
 --- a/core/profiles/standard/config/optional/field.field.media.video.field_media_video_file.yml
 +++ b/core/profiles/standard/config/optional/field.field.media.video.field_media_video_file.yml
 @@ -23,4 +23,5 @@ settings:

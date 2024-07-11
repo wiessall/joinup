@@ -68,7 +68,7 @@
         {
           // Account for the toolbar (set negative margins).
           rootMargin: `-${displace.offsets.top}px 0px 0px -${displace.offsets.left}px`,
-        }
+        },
       );
       this.observer.observe(this.navbar);
     }
@@ -114,7 +114,7 @@
           $(context).on("drupalViewportOffsetChange", () => {
             stickyHeader.updateObserver();
           });
-        }
+        },
       );
     },
   };

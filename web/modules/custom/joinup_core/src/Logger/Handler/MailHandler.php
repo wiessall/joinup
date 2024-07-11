@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace Drupal\joinup_core\Logger\Handler;
 
 use Drupal\monolog\Logger\Handler\DrupalMailHandler;
-use Monolog\Logger;
+use Monolog\Level;
+use Monolog\LogRecord;
 
 /**
  * Wraps the DrupalMailHandler Monolog handler.
@@ -22,14 +23,14 @@ class MailHandler extends DrupalMailHandler {
   public static function getDefaultSettings(): array {
     return [
       'to' => '',
-      'level' => Logger::ERROR,
+      'level' => Level::Error->value,
     ];
   }
 
   /**
    * {@inheritdoc}
    */
-  public function isHandling(array $record): bool {
+  public function isHandling(LogRecord $record): bool {
     return parent::isHandling($record)
       && !empty($this->settings['to'])
       && isset(static::getSeverityLevels()[$this->settings['level']]);

@@ -9,7 +9,7 @@
       const closeIcons = once(
         "searchBadge",
         ".navbar-search .search-badge .icon--close",
-        context
+        context,
       );
       closeIcons.forEach((icon) => {
         icon.addEventListener("click", () => {
@@ -18,7 +18,7 @@
           const badge = icon.parentNode;
           const dataDescription = badge.dataset.joinupDescription;
           const input = context.querySelector(
-            `input.search_bar_badge[data-joinup-description="${dataDescription}"]`
+            `input.search_bar_badge[data-joinup-description="${dataDescription}"]`,
           );
           input.removeAttribute("value");
           badge.remove();
