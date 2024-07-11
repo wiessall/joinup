@@ -5,3 +5,4 @@ name: 'OSS Licence'
 vid: oss_licence
 description: 'Open Source Software Solution Licence'
 weight: 0
+new_revision: false
