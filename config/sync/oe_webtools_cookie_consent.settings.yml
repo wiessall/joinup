@@ -1,3 +1,4 @@
+langcode: en
 banner_popup: true
 video_popup: true
 cookie_notice_url: 'https://ec.europa.eu/info/cookies_{lang}'

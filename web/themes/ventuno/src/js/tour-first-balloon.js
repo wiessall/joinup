@@ -11,12 +11,12 @@
       let spot = {};
       if (loggedIn) {
         spot = navbarList.querySelector(
-          'button[data-bs-target="#collapse-account"]'
+          'button[data-bs-target="#collapse-account"]',
         );
         // 992px is the breakpoint from which the menu is expanded
       } else if (window.innerWidth < 992) {
         spot = navbarList.querySelector(
-          'button[data-bs-target="#collapse-navbar-toggler"]'
+          'button[data-bs-target="#collapse-navbar-toggler"]',
         );
       } else {
         const links = navbarList.querySelectorAll("li.nav-item a.nav-link");
