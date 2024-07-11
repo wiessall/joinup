@@ -23,7 +23,6 @@ Feature: View a comment
     When I click "Permalink" in the "Comment" region
     Then the url should match "/comment/9999#comment-9999"
 
-
     Examples:
       | content type |
       | news         |

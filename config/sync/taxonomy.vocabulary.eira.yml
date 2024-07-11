@@ -32,5 +32,6 @@ _core:
   default_config_hash: mEUCMUaY5OkSGEFzI41HGbP3_Thnomwf6kQ8gtaCu8k
 name: EIRA
 vid: eira
-description: ''
+description: null
 weight: 0
+new_revision: false
