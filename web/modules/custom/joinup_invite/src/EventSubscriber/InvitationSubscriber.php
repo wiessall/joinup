@@ -90,9 +90,9 @@ class InvitationSubscriber implements EventSubscriberInterface {
     $this->messenger->addMessage($this->t('You have been promoted to %role.', [
       '%role' => strtolower($role->label()),
     ]));
-    $this->logger->info($this->t('You have been promoted to %role.', [
-      '%role' => strtolower($role->label()),
-    ]));
+    $this->logger->info('Invitation was accepted with @role role.', [
+      '@role' => strtolower($role->label()),
+    ]);
   }
 
   /**
