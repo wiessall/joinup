@@ -62,7 +62,7 @@ dependencies:
     - webform
 id: moderator
 label: Moderator
-weight: 3
+weight: -6
 is_admin: false
 permissions:
   - 'access any webform configuration'

@@ -11,7 +11,7 @@ _core:
   default_config_hash: xKyy6NiCYYSeq0L__tK8RfM3jxXIHAFSrHulgff4TJw
 id: administrator
 label: Administrator
-weight: 4
+weight: -5
 is_admin: false
 permissions:
   - 'access toolbar'
