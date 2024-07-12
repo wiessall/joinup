@@ -491,7 +491,16 @@ class JoinupSearchContext extends RawDrupalContext {
     }, $element->findAll('css', $css));
 
     $values = $this->explodeCommaSeparatedStepArgument($values);
-    Assert::assertEquals($values, $found, "The '{$facet}' values mismatch the expected ones.");
+    Assert::assertEquals(
+      $values,
+      $found,
+      sprintf(
+        "The '%s' values mismatch the expected ones.\nExpected values: %s\nActual values: %s",
+        $facet,
+        implode(', ', $values),
+        implode(', ', $found),
+      ),
+    );
   }
 
   /**
