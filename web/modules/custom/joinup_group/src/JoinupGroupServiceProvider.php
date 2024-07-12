@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Drupal\joinup_log;
+namespace Drupal\joinup_group;
 
 use Drupal\Core\DependencyInjection\ContainerBuilder;
 use Drupal\Core\DependencyInjection\ServiceModifierInterface;
@@ -10,7 +10,7 @@ use Drupal\Core\DependencyInjection\ServiceModifierInterface;
 /**
  * Sets group_membership logging channel.
  */
-class JoinupLogServiceProvider implements ServiceModifierInterface {
+class JoinupGroupServiceProvider implements ServiceModifierInterface {
 
   /**
    * {@inheritdoc}
