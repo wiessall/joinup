@@ -791,6 +791,18 @@ function solution_theme_suggestions_solution_member_count(array $variables): arr
 }
 
 /**
+ * Implements hook_theme_suggestions_HOOK_alter().
+ */
+function solution_theme_suggestions_flag_alter(array &$suggestions, array &$variables, string $hook): void {
+  /** @var \Drupal\flag\FlagInterface $flag */
+  $flag = $variables['flag'];
+
+  if ($flag->id() === 'interoperability') {
+    $suggestions[] = $hook . '__interoperability_' . $variables['view_mode'];
+  }
+}
+
+/**
  * Provides a callback for the solution status field default value.
  *
  * @return int
