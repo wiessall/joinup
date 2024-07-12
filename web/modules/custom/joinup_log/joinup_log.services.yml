@@ -7,8 +7,3 @@ services:
   logger.channel.group_membership:
     parent: logger.channel_base
     arguments: [ 'group_membership' ]
-  joinup_log.invitation_business_logger:
-    class: Drupal\joinup_log\EventSubscriber\InvitationBusinessLogger
-    arguments: [ '@entity_type.manager', '@logger.channel.group_membership' ]
-    tags:
-      - { name: event_subscriber }
