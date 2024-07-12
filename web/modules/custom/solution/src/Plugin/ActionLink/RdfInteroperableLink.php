@@ -23,4 +23,5 @@ use Drupal\joinup_flag\Plugin\ActionLink\RdfActionLinkTrait;
 class RdfInteroperableLink extends AJAXactionLink {
 
   use RdfActionLinkTrait;
+
 }
