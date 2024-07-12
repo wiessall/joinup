@@ -27,7 +27,7 @@ dependencies:
     - video_embed_field
 id: anonymous
 label: 'Anonymous user'
-weight: 0
+weight: -9
 is_admin: false
 permissions:
   - 'access comments'
@@ -47,6 +47,7 @@ permissions:
   - 'view bookmark_rdf_entity'
   - 'view compatibility documents'
   - 'view eif_perspective meta-entity'
+  - 'view interoperability'
   - 'view like_node'
   - 'view like_rdf_entity'
   - 'view media'
