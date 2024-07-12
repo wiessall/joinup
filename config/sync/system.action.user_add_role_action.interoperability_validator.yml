@@ -1,0 +1,14 @@
+uuid: 8928a816-67d7-4000-9b28-8919ff843100
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.interoperability_validator
+  module:
+    - user
+id: user_add_role_action.interoperability_validator
+label: 'Add the Interoperability Validator role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: interoperability_validator
