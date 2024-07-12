@@ -4,6 +4,7 @@ status: true
 dependencies:
   module:
     - rdf_entity
+    - solution
 id: interoperability
 label: Interoperable
 bundles:
@@ -19,10 +20,10 @@ unflag_message: ''
 unflag_denied_text: ''
 weight: 0
 flag_type: 'entity:rdf_entity'
-link_type: ajax_link
+link_type: rdf_interoperable_link
 flagTypeConfig:
   show_in_links: {  }
-  show_as_field: false
+  show_as_field: true
   show_on_form: false
   show_contextual_link: false
   extra_permissions:
