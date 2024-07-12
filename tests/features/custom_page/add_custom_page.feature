@@ -229,3 +229,23 @@ Feature: "Add custom page" visibility options.
       | first title | second title    | group      |
       | Code Camp   | Open Collective | collection |
       | Parachute   | Skydiving       | solution   |
+
+  Scenario Outline: Regression test for auto generated aliases.
+    # Regression test for ISAICP-8886.
+    Given custom_page content:
+      | title   | body        | <type>  | creation date       | state     |
+      | <title> | For outside | <group> | 2014-08-30 23:59:00 | published |
+
+    When I am logged in as a moderator
+    And I go to the homepage of the "<group>" <type>
+    And I click "<link>" in the plus button menu
+    Then the response status code should be 200
+
+    Examples:
+      | title        | group     | type       | link             |
+      | Distribution | Parachute | solution   | Add distribution |
+      | News         | Parachute | solution   | Add news         |
+      | Discussion   | Parachute | solution   | Add discussion   |
+      | Document     | Parachute | solution   | Add document     |
+      | Event        | Parachute | solution   | Add event        |
+      | Solution     | Code Camp | collection | Add solution     |
