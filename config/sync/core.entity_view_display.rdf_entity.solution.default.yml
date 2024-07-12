@@ -917,6 +917,7 @@ hidden:
   field_spatial_coverage: true
   field_status: true
   field_topic: true
+  flag_interoperability: true
   flag_like_rdf_entity: true
   label: true
   langcode: true
