@@ -27,7 +27,7 @@ class RdfInteroperableLink extends AJAXactionLink {
   /**
    * View modes where actions are allowed.
    *
-   * @var array|string[]
+   * @var string[]
    */
   protected array $actionViewModes = ['group_header'];
 
