@@ -25,7 +25,7 @@ class JoinupLogStorageSchema extends SqlContentEntityStorageSchema {
         'type' => ['type'],
         'uid' => ['uid'],
         'severity' => ['severity'],
-        'group_entity' => ['group_entity'],
+        'group' => ['group'],
       ];
     }
 
