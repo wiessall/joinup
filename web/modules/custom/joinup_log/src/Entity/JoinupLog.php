@@ -9,7 +9,7 @@ use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
-use Drupal\rdf_entity\RdfInterface;
+use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\user\EntityOwnerTrait;
 
 /**
@@ -50,10 +50,11 @@ final class JoinupLog extends ContentEntityBase implements JoinupLogInterface {
     $fields += static::ownerBaseFieldDefinitions($entity_type);
     $fields['uid']->setRequired(TRUE);
 
-    $fields['group_entity'] = BaseFieldDefinition::create('entity_reference')
-      ->setLabel(t('Group entity'))
+    $fields['group'] = BaseFieldDefinition::create('entity_reference')
+      ->setLabel(t('Group'))
       ->setDescription(t('RDF entity this log entry relates to, if any.'))
       ->setTargetEntityTypeId('rdf_entity')
+      ->setRequired(FALSE)
       ->setSetting('target_type', 'rdf_entity');
 
     $fields['type'] = BaseFieldDefinition::create('string')
@@ -103,15 +104,8 @@ final class JoinupLog extends ContentEntityBase implements JoinupLogInterface {
   /**
    * {@inheritdoc}
    */
-  public function getGroupEntity(): ?RdfInterface {
-    return $this->get('group_entity')->entity;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getUid(): int {
-    return (int) $this->getOwnerId();
+  public function getGroup(): ?GroupInterface {
+    return $this->get('group')->entity;
   }
 
   /**

@@ -19,7 +19,20 @@ class JoinupLogEntityTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['joinup_log', 'rdf_entity', 'system', 'user'];
+  protected static $modules = [
+    'joinup_group',
+    'joinup_group',
+    'joinup_log',
+    'joinup_notification',
+    'joinup_workflow',
+    'message',
+    'message_notify',
+    'og',
+    'rdf_entity',
+    'state_machine_revisions',
+    'system',
+    'user',
+  ];
 
   /**
    * {@inheritdoc}
@@ -45,7 +58,7 @@ class JoinupLogEntityTest extends KernelTestBase {
       'timestamp' => 1632269259,
     ]);
 
-    $this->assertEquals(1, $log_entity->getUid());
+    $this->assertEquals(1, $log_entity->getOwnerId());
     $this->assertEquals('system', $log_entity->getType());
     $this->assertEquals(RfcLogLevel::NOTICE, $log_entity->getSeverity());
     $this->assertEquals('1.1.1.1', $log_entity->getLocation());

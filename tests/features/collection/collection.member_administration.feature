@@ -380,6 +380,7 @@ Feature: Collection membership administration
     When I am logged in as "dwightone"
     And I accept the invitation for the "Medical diagnosis" collection group
     Then I should see the text "You have been promoted to collection facilitator"
+    And Log entry with the message "Invitation was accepted with collection facilitator role." should exist.
     And I am on the members page of "Medical diagnosis"
     Then I should see the link "Add members"
     And I should see the link "Invite members"
