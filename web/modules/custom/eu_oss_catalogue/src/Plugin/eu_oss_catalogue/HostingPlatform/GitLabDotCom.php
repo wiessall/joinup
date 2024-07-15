@@ -155,10 +155,10 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
             $response['data']['group'] = $this->getGroupProjectsWithRestApi($namespace, $requestedFiles);
           }
           else {
-            Error::logException($this->logger, $exception, "Can't get the group {namespace} from {url}. Message: {message}", [
-              'namespace' => $namespace,
-              'url' => $this->getConfiguration()['baseUrl'],
-              'message' => $exception->getMessage(),
+            Error::logException($this->logger, $exception, "Can't get the group @namespace from @url. Message: @message", [
+              '@namespace' => $namespace,
+              '@url' => $this->getConfiguration()['baseUrl'],
+              '@message' => $exception->getMessage(),
             ]);
             throw new HostingPlatformFetchException(message: $exception->getMessage(), previous: $exception);
           }
@@ -459,10 +459,10 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
       }
       catch (\Throwable $exception) {
         // Log only a warning as we retry later by using REST API.
-        Error::logException($this->logger, $exception, "Can't get the project {project} from {url} using GraphQL API. Message: {message}", [
-          'project' => "$namespace/$name",
-          'url' => $this->getConfiguration()['baseUrl'],
-          'message' => $exception->getMessage(),
+        Error::logException($this->logger, $exception, "Can't get the project @project from @url using GraphQL API. Message: @message", [
+          '@project' => "$namespace/$name",
+          '@url' => $this->getConfiguration()['baseUrl'],
+          '@message' => $exception->getMessage(),
         ], LogLevel::WARNING);
       }
 
@@ -505,10 +505,10 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
     }
     catch (\Throwable $exception) {
       // Fail silently but log if the project data cannot be retrieved.
-      Error::logException($this->logger, $exception, "Can't get the project {project} from {url} using REST API. Message: {message}", [
-        'project' => $fullPath,
-        'url' => $this->getConfiguration()['baseUrl'],
-        'message' => $exception->getMessage(),
+      Error::logException($this->logger, $exception, "Can't get the project @project from @url using REST API. Message: @message", [
+        '@project' => $fullPath,
+        '@url' => $this->getConfiguration()['baseUrl'],
+        '@message' => $exception->getMessage(),
       ]);
       return NULL;
     }
@@ -571,10 +571,10 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
     }
     catch (\Throwable $exception) {
       // Log a warning.
-      Error::logException($this->logger, $exception, "Can't get the releases for project {project} from {url} using REST API. Message: {message}", [
-        'project' => $fullPath,
-        'url' => $this->getConfiguration()['baseUrl'],
-        'message' => $exception->getMessage(),
+      Error::logException($this->logger, $exception, "Can't get the releases for project @project from @url using REST API. Message: @message", [
+        '@project' => $fullPath,
+        '@url' => $this->getConfiguration()['baseUrl'],
+        '@message' => $exception->getMessage(),
       ], LogLevel::WARNING);
     }
   }
@@ -601,11 +601,11 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
       }
       catch (\Throwable $exception) {
         // Log a warning.
-        Error::logException($this->logger, $exception, "Can't get the file {file} for project {project} from {url} using REST API. Message: {message}", [
-          'project' => $fullPath,
-          'url' => $this->getConfiguration()['baseUrl'],
-          'file' => $requestedFile,
-          'message' => $exception->getMessage(),
+        Error::logException($this->logger, $exception, "Can't get the file @file for project @project from @url using REST API. Message: @message", [
+          '@project' => $fullPath,
+          '@url' => $this->getConfiguration()['baseUrl'],
+          '@file' => $requestedFile,
+          '@message' => $exception->getMessage(),
         ], LogLevel::WARNING);
       }
     }
@@ -631,10 +631,10 @@ class GitLabDotCom extends EuOssCatalogueGitHostingPlatformPluginBase {
     }
     catch (\Throwable $exception) {
       // Log a warning.
-      Error::logException($this->logger, $exception, "Can't get open issues for project {project_id} from {url} using REST API. Message: {message}", [
-        'project_id' => $projectId,
-        'url' => $this->getConfiguration()['baseUrl'],
-        'message' => $exception->getMessage(),
+      Error::logException($this->logger, $exception, "Can't get open issues for project @project_id from @url using REST API. Message: @message", [
+        '@project_id' => $projectId,
+        '@url' => $this->getConfiguration()['baseUrl'],
+        '@message' => $exception->getMessage(),
       ], LogLevel::WARNING);
     }
   }

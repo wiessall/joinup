@@ -205,19 +205,21 @@ class DevelopersItalia extends EuOssCatalogueProviderPluginBase {
           $decoded = Yaml::decode($newItem['publiccodeYml']);
         }
         catch (InvalidDataTypeException $e) {
-          $this->logger->error('Not valid publiccodeYml for {id}. Message: {message}',
-            ['id' => $projectInfo, 'message' => $e->getMessage()]);
+          $this->logger->error('Not valid publiccodeYml for @id. Message: @message', [
+            '@id' => $projectInfo,
+            '@message' => $e->getMessage(),
+          ]);
           continue;
         }
 
         if (empty($decoded['url'])) {
-          $this->logger->error('Item {id} lacks the mandatory URL in publiccodeYml', ['id' => $projectInfo]);
+          $this->logger->error('Item @id lacks the mandatory URL in publiccodeYml', ['@id' => $projectInfo]);
           continue;
         }
 
         if (!$api = $this->apiGuesser->getHostingPlatformApi($decoded['url'])) {
-          $this->logger->error('Can\'t determinate hosting platform for {id} with {repository} repository',
-            ['id' => $projectInfo, 'repository' => $decoded['url']]);
+          $this->logger->error('Can\'t determinate hosting platform for @id with @repository repository',
+            ['@id' => $projectInfo, '@repository' => $decoded['url']]);
           continue;
         }
 
