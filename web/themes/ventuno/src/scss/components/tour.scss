@@ -1,54 +1,40 @@
 @import "../partials/core";
 
-/* Tab appearance. */
-.toolbar .toolbar-bar .tour-toolbar-tab.toolbar-tab {
-  float: right;
-}
-
-[dir="rtl"] .toolbar .toolbar-bar .tour-toolbar-tab.toolbar-tab {
-  float: left;
-}
-
 // Shepherd.js styles (Guided tour as from Drupal 9, replacing Joyride)
-.shepherd-button {
-  margin-right: 0.5rem;
-  padding: 0.5rem 1.5rem;
-  cursor: pointer;
-  transition: $transition-base;
-  color: $brand;
-  border: 1px solid transparent;
+
+.shepherd-modal-overlay-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  width: 100vw;
+  height: 0;
+  pointer-events: none;
+}
+
+.shepherd-element {
+  z-index: 9999;
+  width: 100%;
+  max-width: 200px;
+  transition: $transition-fade;
+  border-radius: $border-radius;
   background: $white;
-}
-
-.shepherd-button:not(:disabled):hover {
-  background: $gray-100;
-  box-shadow: $box-shadow;
-}
-
-// .shepherd-button.shepherd-button-secondary {
-//   background: #f1f2f3;
-//   color: rgba(0, 0, 0, .75)
-// }
-
-// .shepherd-button.shepherd-button-secondary:not(:disabled):hover {
-//   background: #d6d9db;
-//   color: rgba(0, 0, 0, .75)
-// }
-
-.shepherd-button:disabled {
-  cursor: not-allowed;
-}
-
-.shepherd-footer {
-  display: flex;
-  justify-content: flex-end;
-  padding: 0 $spacer $spacer; // 0 16px 16px
-  border-bottom-right-radius: $border-radius;
-  border-bottom-left-radius: $border-radius;
-}
-
-.shepherd-footer .shepherd-button:last-child {
-  margin-right: 0;
+  box-shadow: $box-shadow-lg;
+  &[data-popper-placement^="top"] > .shepherd-arrow {
+    bottom: $spacer * -0.5;
+  }
+  &[data-popper-placement^="bottom"] > .shepherd-arrow {
+    top: $spacer * -0.5;
+  }
+  &[data-popper-placement^="left"] > .shepherd-arrow {
+    right: $spacer * -0.5;
+  }
+  &[data-popper-placement^="right"] > .shepherd-arrow {
+    left: $spacer * -0.5;
+  }
+  @include media-breakpoint-up(sm) {
+    max-width: 400px;
+  }
 }
 
 .shepherd-cancel-icon {
@@ -62,105 +48,29 @@
   font-size: 2rem;
   font-weight: $font-weight-base;
   line-height: 0.5;
-}
-
-.shepherd-cancel-icon:hover {
-  color: $gray-700;
-}
-
-.shepherd-has-title .shepherd-content .shepherd-cancel-icon {
-  color: $gray-700;
-}
-
-.shepherd-has-title .shepherd-content .shepherd-cancel-icon:hover {
-  color: $gray-900;
+  &:hover {
+    color: $gray-900;
+  }
 }
 
 .shepherd-title {
-  display: flex;
   flex: 1 0 auto;
-  margin: 0;
-  padding: 0;
-  color: $gray-700;
   font-size: 0;
-  font-weight: $font-weight-base;
 }
 
 .shepherd-header {
   display: flex;
-  align-items: center;
-  justify-content: flex-end;
   padding: $spacer $spacer 0; // 16px 16px 0
-  border-top-left-radius: $border-radius;
-  border-top-right-radius: $border-radius;
-  line-height: 2em;
 }
-
-// .shepherd-has-title .shepherd-content .shepherd-header {
-// background: $gray-100;
-// padding: $spacer; // 16px
-// }
 
 .shepherd-text {
   margin: $spacer * -1 0 0; // -16px 0 0
   padding: 0 $spacer * 2.5 0 $spacer; // 0 40px 0 16px
-  color: $gray-900;
-  font-size: 1rem;
-  line-height: 1.3em;
-}
-
-.shepherd-text p {
-  margin-top: 0;
-}
-
-.shepherd-text p:last-child {
-  margin-bottom: 0;
-}
-
-.shepherd-content {
-  padding: 0;
-  border-radius: $border-radius;
-  outline: none;
-}
-
-.shepherd-element {
-  z-index: 9999;
-  visibility: hidden;
-  width: 100%;
-  max-width: 200px;
-  transition: $transition-fade;
-  opacity: 0;
-  border-radius: $border-radius;
-  outline: none;
-  background: $white;
-  box-shadow: $box-shadow-lg;
-  @include media-breakpoint-up(sm) {
-    max-width: 400px;
-  }
-}
-
-.shepherd-enabled.shepherd-element {
-  visibility: visible;
-  opacity: 1;
-}
-
-.shepherd-element[data-popper-reference-hidden]:not(.shepherd-centered) {
-  visibility: hidden;
-  pointer-events: none;
-  opacity: 0;
-}
-
-.shepherd-element,
-.shepherd-element *,
-.shepherd-element ::after,
-.shepherd-element ::before {
-  box-sizing: border-box;
 }
 
 .shepherd-arrow,
 .shepherd-arrow::before {
   position: absolute;
-  z-index: -1;
   width: 1rem;
   height: 1rem;
 }
@@ -171,63 +81,19 @@
   background: $white;
 }
 
-.shepherd-element[data-popper-placement^="top"] > .shepherd-arrow {
-  bottom: $spacer * -0.5;
-}
-
-.shepherd-element[data-popper-placement^="bottom"] > .shepherd-arrow {
-  top: $spacer * -0.5;
-}
-
-.shepherd-element[data-popper-placement^="left"] > .shepherd-arrow {
-  right: $spacer * -0.5;
-}
-
-.shepherd-element[data-popper-placement^="right"] > .shepherd-arrow {
-  left: $spacer * -0.5;
-}
-
-.shepherd-element.shepherd-centered > .shepherd-arrow {
-  opacity: 0;
-}
-
-.shepherd-element.shepherd-has-title[data-popper-placement^="bottom"]
-  > .shepherd-arrow::before {
-  background-color: $gray-100;
-}
-
-.shepherd-target-click-disabled.shepherd-enabled.shepherd-target,
-.shepherd-target-click-disabled.shepherd-enabled.shepherd-target * {
-  pointer-events: none;
-}
-
-.shepherd-modal-overlay-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  overflow: hidden;
-
-  // transition: $transition-base;
-  width: 100vw;
-  height: 0;
-  pointer-events: none;
-  opacity: 0;
-
-  // z-index: 9997;
-}
-
-// .shepherd-modal-overlay-container.shepherd-modal-is-visible {
-//   height: 100vh;
-//   opacity: .5;
-//   transition: $transition-base;
-// }
-
-// .shepherd-modal-overlay-container.shepherd-modal-is-visible path {
-//   pointer-events: all;
-// }
-
 .tour-progress {
   position: absolute;
   bottom: $spacer * 1.5; // 24px
   color: $gray-500;
+}
+
+.shepherd-footer {
+  display: flex;
+  justify-content: flex-end;
+  padding: 0 $spacer $spacer; // 0 16px 16px
+  border-bottom-right-radius: $border-radius;
+  border-bottom-left-radius: $border-radius;
+  .shepherd-button:last-child {
+    margin-right: 0;
+  }
 }
