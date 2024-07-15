@@ -21,7 +21,7 @@
 
   {% set count = flagcount(flag, flaggable) %}
 
-  <button{{ attributes.addClass(classes).setAttribute('title', 'Archived content can not be liked'|t).setAttribute('disabled', '') }}>
+  <button{{ attributes.addClass(classes).setAttribute('aria-label', 'Archived content can not be liked'|t).setAttribute('disabled', '') }}>
     <svg class="bi icon--fluid mb-1">
       <use xlink:href="{{ bcl_icon_path }}#hand-thumbs-up"></use>
     </svg>
