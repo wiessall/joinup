@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Drupal\solution\Plugin\ActionLink;
 
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\flag\FlagInterface;
 use Drupal\flag\Plugin\ActionLink\AJAXactionLink;
 use Drupal\joinup_flag\Plugin\ActionLink\RdfActionLinkTrait;
 
@@ -23,5 +25,28 @@ use Drupal\joinup_flag\Plugin\ActionLink\RdfActionLinkTrait;
 class RdfInteroperableLink extends AJAXactionLink {
 
   use RdfActionLinkTrait;
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getAsFlagLink(FlagInterface $flag, EntityInterface $entity, $view_mode): array {
+    $build = parent::getAsFlagLink($flag, $entity, $view_mode);
+    if (isset($build['#theme'])) {
+      return $build;
+    }
+
+    $accessView = $flag->actionAccess('view', $this->currentUser, $entity);
+    if ($accessView->isAllowed()) {
+      return [
+        '#theme' => 'flag_interoperable_text',
+        '#flagged' => $flag->isFlagged($entity),
+        '#cache' => [
+          'tags' => ['flagging_list:' . $flag->id()],
+        ],
+      ];
+    }
+
+    return $build;
+  }
 
 }
