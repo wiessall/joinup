@@ -24,6 +24,13 @@ use Drupal\joinup_flag\Plugin\ActionLink\RdfActionLinkTrait;
  */
 class RdfInteroperableLink extends AJAXactionLink {
 
+  /**
+   * View modes where actions are allowed.
+   *
+   * @var array|string[]
+   */
+  protected array $actionViewModes = ['group_header'];
+
   use RdfActionLinkTrait;
 
   /**
@@ -31,7 +38,7 @@ class RdfInteroperableLink extends AJAXactionLink {
    */
   public function getAsFlagLink(FlagInterface $flag, EntityInterface $entity, $view_mode): array {
     $build = parent::getAsFlagLink($flag, $entity, $view_mode);
-    if (isset($build['#theme'])) {
+    if (isset($build['#theme']) && in_array($view_mode, $this->actionViewModes, TRUE)) {
       return $build;
     }
 
