@@ -1309,13 +1309,21 @@ class JoinupContext extends RawDrupalContext {
    *
    * @Then the page should show( only) the tiles :headings
    */
-  public function assertUnorderedTilesPresent($headings) {
+  public function assertUnorderedTilesPresent(string $headings): void {
     $tiles_in_page = array_keys($this->getTiles());
     $headings = $this->explodeCommaSeparatedStepArgument($headings);
 
     sort($headings);
     sort($tiles_in_page);
-    Assert::assertEquals($headings, $tiles_in_page, 'The found tiles mismatch the expected ones.');
+    Assert::assertEquals(
+      $headings,
+      $tiles_in_page,
+      sprintf(
+        "The found tiles mismatch the expected ones.\nExpected: %s\nActual:%s",
+        implode(', ', $headings),
+        implode(', ', $tiles_in_page),
+      )
+    );
   }
 
   /**
@@ -1386,9 +1394,9 @@ class JoinupContext extends RawDrupalContext {
    *
    * @Then I( should) see the link :text in the :heading tile
    */
-  public function assertTileContainsLink($heading, $link) {
+  public function assertTileContainsLink(string $heading, string $link): void {
     $element = $this->getTileByHeading($heading);
-    if (!$element->findLink($link)) {
+    if (!$element->findLink($link) && !$element->find('xpath', '//a[@aria-label=contains(text(), "' . $link . '")]')) {
       throw new \Exception("The link '$link' was not found in the tile '$heading'.");
     }
   }
@@ -1411,11 +1419,12 @@ class JoinupContext extends RawDrupalContext {
     $this->scrollElementIntoView($element);
 
     $linkElement = $element->findLink($link);
-    if (!$linkElement) {
+    $linkElementAriaLabel = $element->find('xpath', '//a[@aria-label=contains(text(), "' . $link . '")]');
+    if (!$linkElement && !$linkElementAriaLabel) {
       throw new \Exception("The link '$link' was not found in the tile '$heading'.");
     }
 
-    $linkElement->click();
+    $linkElement ? $linkElement->click() : $linkElementAriaLabel->click();
   }
 
   /**

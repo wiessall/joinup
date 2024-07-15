@@ -12,6 +12,8 @@ use Drupal\Component\Utility\Unicode;
 use Drupal\Component\Utility\Xss;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Render\Markup;
@@ -21,6 +23,7 @@ use Drupal\joinup_notification\MessageArgumentGenerator;
 use Drupal\joinup_user\Entity\JoinupUser;
 use Drupal\joinup_user\Entity\JoinupUserInterface;
 use Drupal\joinup_user\JoinupUserViewsData;
+use Drupal\joinup_user\Plugin\Field\UserBundle;
 use Drupal\joinup_user\Plugin\Menu\LoginLogoutMenuLink;
 use Drupal\og\OgMembershipInterface;
 use Drupal\user\Entity\User;
@@ -699,4 +702,22 @@ function joinup_user_user_logout(AccountInterface $account): void {
     $logger->info('Config read-only mode has been restored/enabled.');
     $cacheTagsInvalidator->invalidateTags(['joinup_user:read_only_config']);
   }
+}
+
+/**
+ * Implements hook_entity_base_field_info().
+ */
+function joinup_user_entity_base_field_info(EntityTypeInterface $entityType): array {
+  if ($entityType->id() !== 'user') {
+    return [];
+  }
+
+  return [
+    'type' => BaseFieldDefinition::create('string')
+      ->setLabel(t('Bundle'))
+      ->setDescription(t('User bundle (<code>user<code>) to be used by SAPI / facets'))
+      ->setComputed(TRUE)
+      ->setName('type')
+      ->setClass(UserBundle::class),
+  ];
 }
