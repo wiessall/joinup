@@ -267,7 +267,7 @@ trait TraversingTrait {
       '.card-title',
       '.card-title > h1 a',
       'h2 a',
-      'h1.tile__title',
+      '.tile__title',
       '.slide__title',
     ]);
 
@@ -331,8 +331,7 @@ trait TraversingTrait {
    *   Thrown when the element is not found.
    */
   protected function getListingByHeading(string $type, string $heading): NodeElement {
-    // @todo Keep only h1 selector when tiles refactor.
-    $xpath = '//*[@class and contains(concat(" ", normalize-space(@class), " "), " ' . $type . ' ")][.//h1[normalize-space()="' . $heading . '"]]';
+    $xpath = '//*[@class and contains(concat(" ", normalize-space(@class), " "), " ' . $type . ' ")][.//h3[normalize-space()="' . $heading . '"]]';
     if (!$element = $this->getSession()->getPage()->find('xpath', $xpath)) {
       throw new ElementNotFoundException($this->getSession()->getDriver(), "'$heading' $type item.");
     }
@@ -816,7 +815,7 @@ trait TraversingTrait {
   protected function getTileCssSelector(): string {
     return implode(', ', [
       '.card .card-title',
-      'article.tile h1',
+      'article.tile .tile__title',
       'article.slide',
     ]);
   }
