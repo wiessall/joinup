@@ -598,6 +598,10 @@ Feature: Global search
       | Quantum information | Relativity is the word             | No one cares about the body.                                      | Custom collection | published | 01/01/2019 | 03/08/2019 |
       | The uneven universe | Relativity news: Relativity theory | I do care about the relativity keyword in the body.               | Custom collection | published | 02/01/2019 | 02/08/2019 |
       | The earth is square | Absolutely nonsense                | Some news are not worth it but I will add relativity here anyway. | Custom collection | published | 03/01/2019 | 01/08/2019 |
+    And event content:
+      | title            | collection        | state     | start date   | end date            | state     | created      |
+      | Blue revolution  | Custom collection | published | now +1 years | now +1 years +1 day | published | now -2 years |
+      | Red revolution   | Custom collection | published | now -1 years | now -1 years +1 day | published | now -1 years |
 
     When I am on the homepage
     And I enter "Relativity" in the search bar and press enter
@@ -609,19 +613,39 @@ Feature: Global search
       | The earth is square |
     And I should be on "/search?keys=Relativity&sort_by=relevance"
 
-    Given I select "Creation Date" from "Sort by"
+    Given I select "Date" from "Sort by"
     Then I should see the following tiles in the correct order:
       | The earth is square |
       | The uneven universe |
       | Quantum information |
-    And I should be on "/search?keys=Relativity&sort_by=creation-date"
+    And I should be on "/search?keys=Relativity&sort_by=date"
 
-    Given I select "Last Updated Date" from "Sort by"
+    Given I select "Last update" from "Sort by"
     Then I should see the following tiles in the correct order:
       | Quantum information |
       | The uneven universe |
       | The earth is square |
     And I should be on "/search?keys=Relativity&sort_by=last-updated-date"
+
+    Then I enter "revolution" in the search bar and press enter
+      | Red revolution  |
+      | Blue revolution |
+    And I should be on "/search?keys=revolution&sort_by=last-updated-date"
+
+    Given I select "Date" from "Sort by"
+    Then I should see the following tiles in the correct order:
+      | Blue revolution |
+      | Red revolution  |
+    And I should be on "/search?keys=revolution&sort_by=date"
+
+    When I go to "/search?sort_by=date"
+    Then I should see the following tiles in the correct order:
+      | Blue revolution     |
+      | Custom collection   |
+      | The earth is square |
+      | The uneven universe |
+      | Quantum information |
+      | Red revolution      |
 
   @javascript
   Scenario: Anonymous user can find facets summary
@@ -725,33 +749,33 @@ Feature: Global search
       | title           | collection    | topic                    | state     | logo        | field_paragraphs_body                                                                                                                                                                 |
       | Stay at the ISS | Mice in space | EU and European Policies | published | charles.jpg | Two groups of mice (six per group) were housed aboard the International Space Station for 35 days. One group was subjected to artificial gravity (1 g) and the other to microgravity. |
     And news content:
-      | title           | body                                       | collection    | topic                   | spatial coverage | state     | logo        | created    | changed    |
-      | Muscle atrophy  | Researchers from the University of Tsukuba | Mice in space | Finance in EU           | Luxembourg       | published | blaise.jpg  | 01/01/2019 | 01/01/2019 |
-      | El Cabo da Roca | The best in town                           | Mice in space | Statistics and Analysis | Luxembourg       | published | charles.jpg | 01/12/2020 | 01/12/2020 |
-      | Funny news 1    | Dummy body                                 | Mice in space | HR                      | Luxembourg       | published | ada.png     | 05/01/2019 | 05/01/2019 |
-      | Funny news 2    | Dummy body                                 | Mice in space | E-inclusion             | Luxembourg       | published | alan.jpg    | 06/21/2019 | 06/21/2019 |
-      | Funny news 3    | Dummy body                                 | Mice in space | E-inclusion             | Luxembourg       | published | charles.jpg | 12/31/2021 | 12/31/2021 |
-      | Funny news 4    | Dummy body                                 | Mice in space | HR                      | Luxembourg       | published | ada.png     | 06/25/2020 | 06/25/2020 |
-      | Funny news 5    | Dummy body                                 | Mice in space | HR                      | Luxembourg       | published | ada.png     | 01/01/2021 | 01/01/2021 |
-      | Dummy news 1    | Dummy body                                 | Mice in space | Statistics and Analysis | Luxembourg       | published | charles.jpg | 09/24/2019 | 09/24/2019 |
-      | Dummy news 2    | Dummy body                                 | Mice in space | E-inclusion             | Luxembourg       | published | alan.jpg    | 01/18/2021 | 01/18/2021 |
-      | Dummy news 3    | Dummy body                                 | Mice in space | Statistics and Analysis | Luxembourg       | published | ada.png     | 08/01/2019 | 08/01/2019 |
-      | Dummy news 4    | Dummy body                                 | Mice in space | E-inclusion             | Luxembourg       | published | charles.jpg | 09/18/2019 | 09/18/2019 |
+      | title           | body                                       | collection    | topic                   | spatial coverage | state     | logo        | created    | changed    | published_at |
+      | Muscle atrophy  | Researchers from the University of Tsukuba | Mice in space | Finance in EU           | Luxembourg       | published | blaise.jpg  | 01/01/2019 | 01/01/2019 | 01/01/2019   |
+      | El Cabo da Roca | The best in town                           | Mice in space | Statistics and Analysis | Luxembourg       | published | charles.jpg | 01/12/2020 | 01/12/2020 | 01/12/2020   |
+      | Funny news 1    | Dummy body                                 | Mice in space | HR                      | Luxembourg       | published | ada.png     | 05/01/2019 | 05/01/2019 | 05/01/2019   |
+      | Funny news 2    | Dummy body                                 | Mice in space | E-inclusion             | Luxembourg       | published | alan.jpg    | 06/21/2019 | 06/21/2019 | 06/21/2019   |
+      | Funny news 3    | Dummy body                                 | Mice in space | E-inclusion             | Luxembourg       | published | charles.jpg | 12/31/2021 | 12/31/2021 | 12/31/2021   |
+      | Funny news 4    | Dummy body                                 | Mice in space | HR                      | Luxembourg       | published | ada.png     | 06/25/2020 | 06/25/2020 | 06/25/2020   |
+      | Funny news 5    | Dummy body                                 | Mice in space | HR                      | Luxembourg       | published | ada.png     | 01/01/2021 | 01/01/2021 | 01/01/2021   |
+      | Dummy news 1    | Dummy body                                 | Mice in space | Statistics and Analysis | Luxembourg       | published | charles.jpg | 09/24/2019 | 09/24/2019 | 09/24/2019   |
+      | Dummy news 2    | Dummy body                                 | Mice in space | E-inclusion             | Luxembourg       | published | alan.jpg    | 01/18/2021 | 01/18/2021 | 01/18/2021   |
+      | Dummy news 3    | Dummy body                                 | Mice in space | Statistics and Analysis | Luxembourg       | published | ada.png     | 08/01/2019 | 08/01/2019 | 08/01/2019   |
+      | Dummy news 4    | Dummy body                                 | Mice in space | E-inclusion             | Luxembourg       | published | charles.jpg | 09/18/2019 | 09/18/2019 | 09/18/2019   |
 
     When I visit the search page
 
     # Filter content from 01-01-2020 to 30-06-2020.
     # Only "El Cabo da Roca" and "Funny news 4" should appear.
-    Then I go to "/search?f[0]=creation_date:(min:1577880000,max:1593518400)"
+    Then I go to "/search?f[0]=date:(min:1577880000,max:1593518400)"
     And I should see the text "SEARCH RESULTS (2)"
 
-    Then I go to "/search?f[0]=creation_date:(min:1577836800,max:)"
+    Then I go to "/search?f[0]=date:(min:1577836800,max:)"
     And I should see the text "SEARCH RESULTS (8)"
 
-    Then I go to "/search?f[0]=creation_date:(min:,max:1609113600)"
+    Then I go to "/search?f[0]=date:(min:,max:1609113600)"
     And I should see the text "SEARCH RESULTS (8)"
 
-    Then I go to "/search?f[0]=creation_date:(min:,max:)"
+    Then I go to "/search?f[0]=date:(min:,max:)"
     And I should see the text "SEARCH RESULTS (14)"
 
   Scenario: Max 2 topic terms appear in each search result with a suffix for the rest.
