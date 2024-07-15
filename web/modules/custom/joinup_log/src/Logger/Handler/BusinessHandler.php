@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Drupal\joinup_group\Logger\Handler;
+namespace Drupal\joinup_log\Logger\Handler;
 
 use Drupal\Core\DestructableInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -61,7 +61,7 @@ class BusinessHandler extends AbstractProcessingHandler implements DestructableI
 
       $logStorage->create(
         [
-          'group_entity' => $group?->id(),
+          'group' => $group?->id(),
           'type' => mb_substr($record->channel, 0, 64),
           'message' => $logMessage,
           'variables' => $messagePlaceholders,
