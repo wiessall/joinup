@@ -124,3 +124,17 @@ function joinup_core_update_111002(): void {
     ->condition('subscription_bundles_bundle', 'asset_distribution')
     ->execute();
 }
+
+/**
+ * Fix redirection.
+ */
+function joinup_core_update_111003(): string {
+  /** @var \Drupal\redirect\RedirectRepository $redirectRepository */
+  $redirectRepository = \Drupal::service('redirect.repository');
+  $redirects = $redirectRepository->findBySourcePath('collection/interoperability-test-bed-repository/solution/interoperability-test-bed/news');
+  foreach ($redirects as $redirect) {
+    $redirect->delete();
+  }
+
+  return 'Wrong redirection was removed.';
+}

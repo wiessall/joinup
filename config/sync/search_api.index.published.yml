@@ -221,6 +221,7 @@ field_settings:
       fields:
         - 'entity:node/type'
         - 'entity:rdf_entity/rid'
+        - 'entity:user/type'
   entity_changed:
     label: Changed
     property_path: aggregated_field
