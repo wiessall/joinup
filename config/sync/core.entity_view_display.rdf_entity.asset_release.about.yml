@@ -69,4 +69,5 @@ hidden:
   label: true
   langcode: true
   og_audience: true
+  published_at: true
   search_api_excerpt: true

@@ -24,10 +24,15 @@ trait EntityPublicationTimeFallbackTrait {
    * {@inheritdoc}
    */
   public function getPublicationTime(): ?int {
-    // We don't know the actual initial publication date. If the entity is
-    // currently unpublished, pretend it has never been published.
+    // If the entity is currently unpublished,
+    // pretend it has never been published.
     if ($this instanceof EntityPublishedInterface && !$this->isPublished()) {
       return NULL;
+    }
+
+    // If we know the actual initial publication date, return it.
+    if (!$this->get('published_at')->isEmpty()) {
+      return (int) $this->get('published_at')->value;
     }
 
     // No unified interface exists yet to get the creation time from an entity.
