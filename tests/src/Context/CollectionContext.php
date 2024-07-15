@@ -63,15 +63,16 @@ class CollectionContext extends RawDrupalContext {
     'content creation' => 'field_ar_content_creation',
     'creation date' => 'created',
     'description' => 'field_ar_description',
+    'featured' => 'feature',
     'keywords' => 'field_keywords',
     'logo' => 'field_ar_logo',
     'moderation' => 'field_ar_moderation',
     'modification date' => 'changed',
     'owner' => 'field_ar_owner',
+    'published at' => 'published_at',
     'topic' => 'field_topic',
     'spatial coverage' => 'field_spatial_coverage',
     'state' => 'field_ar_state',
-    'featured' => 'feature',
   ];
 
   /**

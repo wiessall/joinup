@@ -345,6 +345,54 @@ third_party_settings:
               region_styles: null
               region_data: null
         components:
+          2eb6a670-fbe8-4ec7-bc1e-bd129bbd39eb:
+            uuid: 2eb6a670-fbe8-4ec7-bc1e-bd129bbd39eb
+            region: content
+            configuration:
+              id: 'field_block:rdf_entity:collection:published_at'
+              label: 'Published on'
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: timestamp
+                label: above
+                settings:
+                  date_format: date_only
+                  custom_date_format: ''
+                  timezone: ''
+                  tooltip:
+                    date_format: long
+                    custom_date_format: ''
+                  time_diff:
+                    enabled: false
+                    future_format: '@interval hence'
+                    past_format: '@interval ago'
+                    granularity: 2
+                    refresh: 60
+                third_party_settings:
+                  template_suggestion:
+                    template_suggestion: ''
+            weight: 0
+            additional:
+              component_attributes:
+                block_attributes:
+                  id: ''
+                  class: 'pe-5 pb-4'
+                  style: ''
+                  data: ''
+                block_title_attributes:
+                  id: ''
+                  class: ''
+                  style: ''
+                  data: ''
+                block_content_attributes:
+                  id: ''
+                  class: ''
+                  style: ''
+                  data: ''
           a6db9a21-e068-4956-bc80-546313dacf23:
             uuid: a6db9a21-e068-4956-bc80-546313dacf23
             region: content
@@ -875,6 +923,7 @@ hidden:
   members: true
   og_group: true
   pinned_in: true
+  published_at: true
   rdf_entity_solution_field_is_content_inline_facets: true
   rdf_entity_solution_field_is_content_top: true
   read_more: true
