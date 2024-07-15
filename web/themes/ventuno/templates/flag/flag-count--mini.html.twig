@@ -39,9 +39,9 @@
   {% set count = flagcount(flag, flaggable) %}
 
   {# Set nofollow to prevent search bots from crawling anonymous flag links #}
-  {% set attributes = attributes.setAttribute('rel', 'nofollow').setAttribute('title', link_title) %}
+  {% set attributes = attributes.setAttribute('rel', 'nofollow').setAttribute('aria-label', link_title) %}
 
-  <a{{ attributes.addClass(link_classes) }}>
+  <a{{ attributes.addClass(link_classes) }}><span class="visually-hidden">{{ link_title }}</span>
     <svg class="bi icon--xs me-1">
       <use xlink:href="{{ bcl_icon_path }}#{{ action == 'unflag' ? 'hand-thumbs-up-fill' : 'hand-thumbs-up' }}"></use>
     </svg>
