@@ -774,6 +774,11 @@ function solution_theme(array $existing, string $type, string $theme, string $pa
         'view_mode' => '',
       ],
     ],
+    'flag_interoperable_text' => [
+      'variables' => [
+        'flagged' => FALSE,
+      ],
+    ],
   ];
 }
 
