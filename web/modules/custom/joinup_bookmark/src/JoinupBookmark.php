@@ -60,7 +60,7 @@ class JoinupBookmark implements JoinupBookmarkInterface {
       ],
       'link' => $bookmarkLink,
       'attributes' => [
-        'title' => $this->t('Bookmark'),
+        'title' => $this->t('Bookmarks'),
       ],
     ];
 

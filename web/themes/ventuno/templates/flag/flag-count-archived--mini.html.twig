@@ -38,7 +38,7 @@
   {% set count = flagcount(flag, flaggable) %}
 
   {# Set nofollow to prevent search bots from crawling anonymous flag links #}
-  {% set attributes = attributes.setAttribute('rel', 'nofollow').setAttribute('title', 'Archived content can not be liked'|t) %}
+  {% set attributes = attributes.setAttribute('rel', 'nofollow').setAttribute('aria-label', 'Archived content can not be liked'|t) %}
 
   <a{{ attributes.addClass(link_classes) }}>
     <svg class="bi icon--xs me-1">

@@ -3,12 +3,12 @@
 .paragraph--carousel {
   position: relative;
   .paragraph__heading {
-    margin-top: $spacer * 1.5;
-    margin-top: 2.5rem;
+    margin-top: 2.5rem !important;
     text-align: center;
     color: $primary;
     font-size: 1.75rem;
     font-weight: $font-weight-normal;
+    line-height: $line-height-base;
     &::after {
       position: relative;
       top: -8px;
