@@ -22,6 +22,11 @@ a {
     }
   }
 }
-.bg-light a:not(.btn) {
-  color: color.adjust($brand, $lightness: -15%); // Ensure having enough contrast
+.bg-light {
+  a {
+    &:not(.btn),
+    &:not(.bg-transparent) {
+      color: color.adjust($brand, $lightness: -15%); // Ensure having enough contrast.
+    }
+  }
 }
