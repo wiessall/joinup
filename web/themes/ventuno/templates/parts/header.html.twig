@@ -48,6 +48,7 @@
 {% endif %}
 {{ include(directory ~ '/templates/navigation/navbar.html.twig', {
   brand: {
+    title: 'Interoperable Europe Portal'|t,
     src: path('<front>') ~ 'themes/ventuno/assets/images/logo-interoperable-europe.svg',
     alt: 'Interoperable Europe logo'|t,
     link: path('<front>'),
