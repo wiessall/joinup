@@ -87,7 +87,7 @@
     overflow-y: auto;
     max-height: 410px;
     margin-bottom: 0;
-    padding-left: 0;
+    padding: 3px 0 0 3px; // Add 3px margin left to allow the .facets-checkbox:focus-visible outline to be visible.
     list-style: none;
   }
   .facets-widget- ul {
@@ -103,11 +103,6 @@
     background-repeat: no-repeat;
     background-position: 50%;
     background-size: contain;
-    &:focus {
-      border-color: $form-check-input-focus-border;
-      outline: 0;
-      box-shadow: $form-check-input-focus-box-shadow;
-    }
     &:checked[type="checkbox"] {
       border-color: $form-check-input-checked-border-color;
       background-color: $form-check-input-checked-bg-color;
