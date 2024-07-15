@@ -67,14 +67,6 @@
     &:hover {
       color: $gray-200;
     }
-    &:focus,
-    &:focus-visible {
-      color: $white;
-      box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.15),
-        0 1px 1px rgba(0, 0, 0, 0.075),
-        0 0 0 0.25rem rgba(213, 213, 214, 0.5);
-    }
     &--underline {
       vertical-align: baseline;
       &.is-active,
