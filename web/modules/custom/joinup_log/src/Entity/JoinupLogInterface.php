@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup_log\Entity;
 
 use Drupal\Core\Entity\ContentEntityInterface;
-use Drupal\rdf_entity\RdfInterface;
+use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\user\EntityOwnerInterface;
 
 /**
@@ -14,15 +14,15 @@ use Drupal\user\EntityOwnerInterface;
 interface JoinupLogInterface extends ContentEntityInterface, EntityOwnerInterface {
 
   /**
-   * Getter for the group entity.
+   * Returns the group entity, if any.
    *
-   * @return \Drupal\rdf_entity\RdfInterface|null
-   *   RDF entity this log entry relates to, if any.
+   * @return \Drupal\joinup_group\Entity\GroupInterface|null
+   *   The entity this log entry relates to, if any.
    */
-  public function getGroupEntity(): ?RdfInterface;
+  public function getGroup(): ?GroupInterface;
 
   /**
-   * Hostname of the user who triggered the event.
+   * Returns the hostname of the user who triggered the event.
    *
    * @return string|null
    *   The hostname of the user who triggered the event.
@@ -30,7 +30,7 @@ interface JoinupLogInterface extends ContentEntityInterface, EntityOwnerInterfac
   public function getHostname(): ?string;
 
   /**
-   * URL of the origin of the event.
+   * Returns the URL of the origin of the event.
    *
    * @return string|null
    *   The origin of the event.
@@ -38,7 +38,7 @@ interface JoinupLogInterface extends ContentEntityInterface, EntityOwnerInterfac
   public function getLocation(): ?string;
 
   /**
-   * URL of referring page.
+   * Returns the URL of referring page.
    *
    * @return string|null
    *   The referer of the event.
@@ -46,7 +46,7 @@ interface JoinupLogInterface extends ContentEntityInterface, EntityOwnerInterfac
   public function getReferer(): ?string;
 
   /**
-   * The severity level of the event.
+   * Returns the severity level of the event.
    *
    * @see \Drupal\Core\Logger\RfcLogLevel::getLevels()
    *
@@ -56,7 +56,7 @@ interface JoinupLogInterface extends ContentEntityInterface, EntityOwnerInterfac
   public function getSeverity(): int;
 
   /**
-   * Unix timestamp of when event occurred.
+   * Returns the Unix timestamp of when event occurred.
    *
    * @return int
    *   The unix timestamp.
@@ -64,19 +64,11 @@ interface JoinupLogInterface extends ContentEntityInterface, EntityOwnerInterfac
   public function getTimestamp(): int;
 
   /**
-   * Type of log message, for example "user" or "page not found".
+   * Returns the type of log message, for example "user" or "page not found".
    *
    * @return string
    *   The type of the event.
    */
   public function getType(): string;
-
-  /**
-   * The id of the user who triggered the event.
-   *
-   * @return int
-   *   The user id.
-   */
-  public function getUid(): int;
 
 }

@@ -58,7 +58,7 @@ class JoinupLogEntityTest extends KernelTestBase {
       'timestamp' => 1632269259,
     ]);
 
-    $this->assertEquals(1, $log_entity->getUid());
+    $this->assertEquals(1, $log_entity->getOwnerId());
     $this->assertEquals('system', $log_entity->getType());
     $this->assertEquals(RfcLogLevel::NOTICE, $log_entity->getSeverity());
     $this->assertEquals('1.1.1.1', $log_entity->getLocation());
