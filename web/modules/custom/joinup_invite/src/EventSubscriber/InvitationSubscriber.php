@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup_invite\EventSubscriber;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\joinup_invite\Entity\InvitationInterface;
@@ -20,42 +21,12 @@ class InvitationSubscriber implements EventSubscriberInterface {
 
   use StringTranslationTrait;
 
-  /**
-   * The entity type manager.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
-
-  /**
-   * The membership manager service.
-   *
-   * @var \Drupal\og\MembershipManagerInterface
-   */
-  protected $membershipManager;
-
-  /**
-   * The messenger.
-   *
-   * @var \Drupal\Core\Messenger\MessengerInterface
-   */
-  protected $messenger;
-
-  /**
-   * Constructs a new InvitationSubscriber.
-   *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   The entity type manager service.
-   * @param \Drupal\og\MembershipManagerInterface $membership_manager
-   *   The subscription service.
-   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
-   *   The messenger.
-   */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, MembershipManagerInterface $membership_manager, MessengerInterface $messenger) {
-    $this->entityTypeManager = $entity_type_manager;
-    $this->membershipManager = $membership_manager;
-    $this->messenger = $messenger;
-  }
+  public function __construct(
+    protected EntityTypeManagerInterface $entityTypeManager,
+    protected MembershipManagerInterface $membershipManager,
+    protected MessengerInterface $messenger,
+    protected LoggerChannelInterface $logger,
+  ) {}
 
   /**
    * {@inheritdoc}
@@ -119,6 +90,9 @@ class InvitationSubscriber implements EventSubscriberInterface {
     $this->messenger->addMessage($this->t('You have been promoted to %role.', [
       '%role' => strtolower($role->label()),
     ]));
+    $this->logger->info('Invitation was accepted with @role role.', [
+      '@role' => strtolower($role->label()),
+    ]);
   }
 
   /**
