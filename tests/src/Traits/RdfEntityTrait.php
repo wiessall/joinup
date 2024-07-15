@@ -50,7 +50,7 @@ trait RdfEntityTrait {
   protected static function createRdfEntity(string $bundle, array $values): RdfInterface {
     // Convert timestamp fields from human-readable to timestamp.
     // @todo Replace this with a Behat hook.
-    foreach (['changed', 'created'] as $field) {
+    foreach (['changed', 'created', 'published_at'] as $field) {
       if (isset($values[$field])) {
         $date = new DrupalDateTime($values[$field]);
         $values[$field] = $date->getTimestamp();

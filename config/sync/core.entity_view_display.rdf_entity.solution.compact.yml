@@ -137,6 +137,7 @@ hidden:
   members: true
   og_group: true
   pinned_in: true
+  published_at: true
   rdf_entity_solution_field_is_content_inline_facets: true
   rdf_entity_solution_field_is_content_top: true
   read_more: true

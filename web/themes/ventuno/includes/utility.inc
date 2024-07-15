@@ -183,10 +183,10 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
       $variables['label'] = $entity->label();
       $variables['highlighted']['text'] = 'v' . $entity->getVersion();
       $variables['info']['icon'] = 'calendar-event';
-      if ($created_time = $entity->getCreatedTime()) {
-        $variables['info']['label'] = t('@label: @created', [
+      if ($published_at = $entity->getPublicationTime()) {
+        $variables['info']['label'] = t('@label: @published_at', [
           '@label' => t('Release date'),
-          '@created' => \Drupal::service('date.formatter')->format($created_time, 'date_only'),
+          '@published_at' => \Drupal::service('date.formatter')->format($published_at, 'date_only'),
         ]);
       }
       $status = $variables['elements']['field_status'][0]['#plain_text'] ?? 'No status';
