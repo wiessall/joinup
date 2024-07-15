@@ -18,12 +18,12 @@
         init() {
           ["mouseover", "focusin"].forEach((evtName) => {
             this.dropdown.addEventListener(evtName, () =>
-              this.toggleDropdown(true)
+              this.toggleDropdown(true),
             );
           });
           ["mouseleave", "focusout"].forEach((evtName) => {
             this.dropdown.addEventListener(evtName, () =>
-              this.toggleDropdown(false)
+              this.toggleDropdown(false),
             );
           });
         }
@@ -31,7 +31,7 @@
         toggleDropdown(expand) {
           const className = "show";
           const toggle = this.dropdown.querySelector(
-            ":scope > .dropdown-toggle"
+            ":scope > .dropdown-toggle",
           );
           const menu = this.dropdown.querySelector(":scope > .dropdown-menu");
 
@@ -56,7 +56,7 @@
 
       once(
         "navbar-hover-dropdown",
-        "#main-navbar .nav-item.d-xl-inline-block.dropdown"
+        "#main-navbar .nav-item.d-xl-inline-block.dropdown",
       ).forEach((li) => new NavbarHoverDropdown(li));
     },
   };
