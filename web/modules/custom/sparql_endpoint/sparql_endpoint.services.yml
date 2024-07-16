@@ -2,6 +2,10 @@ parameters:
   sparql_endpoint.ttl: 86400
 
 services:
+  logger.channel.sparql_endpoint:
+    parent: logger.channel_base
+    arguments: [ 'sparql_endpoint' ]
+
   cache.sparql_endpoint:
     class: Drupal\Core\Cache\CacheBackendInterface
     tags:
