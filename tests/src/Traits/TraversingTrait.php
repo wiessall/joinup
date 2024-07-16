@@ -381,6 +381,7 @@ trait TraversingTrait {
       'EIF recommendations' => 'category',
       'Entity bundle' => 'bookmark_entity_bundle',
       'Event date' => 'event_date',
+      'Interoperable' => 'interoperable_flag',
       'My collections content' => 'collection_my_content',
       'My content' => 'content_my_content',
       'My solutions content' => 'solution_my_content',
