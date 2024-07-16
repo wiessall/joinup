@@ -11,6 +11,7 @@ dependencies:
   - 'drupal:options'
   - 'drupal:text'
   - 'file_url:file_url'
+  - 'flag:flag'
   - 'inline_entity_form:inline_entity_form'
   - 'joinup:asset_release'
   - 'joinup:contact_information'

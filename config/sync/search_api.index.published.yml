@@ -39,18 +39,17 @@ dependencies:
     - search_api.server.joinup
   module:
     - custom_page
-    - custom_page
     - joinup_distribution
     - joinup_flag
     - joinup_search
-    - joinup_search
-    - meta_entity
     - meta_entity
     - node
     - paragraphs
     - publication_date
     - rdf_entity
     - search_api
+    - search_api_solr
+    - solution
     - taxonomy
     - user
 third_party_settings:
@@ -579,6 +578,11 @@ field_settings:
     dependencies:
       module:
         - rdf_entity
+  interoperable_flag:
+    label: 'Interoperable flag'
+    datasource_id: 'entity:node'
+    property_path: interoperable_flag
+    type: boolean
   is_contact_title:
     label: 'Solution » Contact information » Title'
     datasource_id: 'entity:rdf_entity'
@@ -1076,6 +1080,7 @@ processor_settings:
   index_distribution_data:
     weights:
       preprocess_index: -50
+  interoperable_flag: {  }
   joinup_entity_bundle: {  }
   joinup_entity_published_revision: {  }
   joinup_entity_status:
