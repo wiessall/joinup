@@ -580,7 +580,7 @@ field_settings:
         - rdf_entity
   interoperable_flag:
     label: 'Interoperable flag'
-    datasource_id: 'entity:node'
+    datasource_id: 'entity:rdf_entity'
     property_path: interoperable_flag
     type: boolean
   is_contact_title:
