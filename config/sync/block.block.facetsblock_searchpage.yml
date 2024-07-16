@@ -25,8 +25,9 @@ settings:
     - 'facet_block:topic'
     - 'facet_block:type'
     - 'facet_block:spatial_coverage'
-    - 'facet_block:creation_date'
     - 'facet_block:status'
+    - 'facet_block:interoperable_flag'
+    - 'facet_block:creation_date'
   add_js_classes: true
 visibility:
   request_route:
