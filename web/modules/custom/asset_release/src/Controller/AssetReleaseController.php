@@ -9,6 +9,7 @@ use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Routing\TrustedRedirectResponse;
 use Drupal\Core\Session\AccountInterface;
@@ -81,10 +82,15 @@ class AssetReleaseController extends ControllerBase {
     }
     $entities = $field->referencedEntities();
 
+    // Sort entities by date in reverse.
+    usort($entities, static function (ContentEntityInterface $a, ContentEntityInterface $b) {
+      return $b->getCreatedTime() - $a->getCreatedTime();
+    });
+
     // Put a flag on the standalone distributions so they can be identified for
     // theming purposes.
     foreach ($entities as $entity) {
-      if ($entity->bundle() === 'asset_distribution') {
+      if ($entity->bundle() === 'distribution') {
         $entity->standalone = TRUE;
       }
     }

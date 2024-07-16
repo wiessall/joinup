@@ -16,7 +16,7 @@
         {% if is_canonical %}
           <h1>
         {% endif %}
-        <a class="h1 fw-bold mb-0" href="{{ path('entity.rdf_entity.canonical', {'rdf_entity': rdf_entity.id()}) }}">
+        <a class="h1 fw-bold mb-0" href="{{ path('entity.rdf_entity.canonical', {rdf_entity: rdf_entity.id()}) }}">
           {{ label }}
         </a>
         {% if is_canonical %}

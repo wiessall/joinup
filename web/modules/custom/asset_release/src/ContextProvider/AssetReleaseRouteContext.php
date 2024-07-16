@@ -10,6 +10,8 @@ use Drupal\Core\Plugin\Context\ContextProviderInterface;
 use Drupal\Core\Plugin\Context\EntityContextDefinition;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\asset_release\Entity\AssetReleaseInterface;
+use Drupal\joinup_distribution\Entity\DistributionInterface;
 
 /**
  * Sets the current asset_release as a context on asset_release routes.
@@ -42,11 +44,22 @@ class AssetReleaseRouteContext implements ContextProviderInterface {
     $result = [];
     $context_definition = new EntityContextDefinition('entity:rdf_entity', NULL, FALSE);
     $value = NULL;
-    if (($route_object = $this->routeMatch->getRouteObject()) && ($route_contexts = $route_object->getOption('parameters')) && isset($route_contexts['rdf_entity'])) {
-      /** @var \Drupal\rdf_entity\RdfInterface $asset_release */
-      if ($asset_release = $this->routeMatch->getParameter('rdf_entity')) {
-        if ($asset_release->bundle() == 'asset_release') {
-          $value = $asset_release;
+    if (($route_object = $this->routeMatch->getRouteObject()) && ($route_contexts = $route_object->getOption('parameters'))) {
+      if (
+        isset($route_contexts['rdf_entity'])
+        && ($asset_release = $this->routeMatch->getParameter('rdf_entity'))
+        && ($asset_release instanceof AssetReleaseInterface)
+      ) {
+        $value = $asset_release;
+      }
+      elseif (
+        isset($route_contexts['node'])
+        && ($node = $this->routeMatch->getParameter('node'))
+        && $node instanceof DistributionInterface
+      ) {
+        $parent = $node->distribution_parent->entity;
+        if ($parent instanceof AssetReleaseInterface) {
+          $value = $parent;
         }
       }
     }

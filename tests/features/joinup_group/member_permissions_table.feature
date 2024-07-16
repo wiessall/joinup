@@ -113,7 +113,6 @@ Feature: Group member permissions table
     When I go to the content page of the type event with the title "Rag Week"
     Then I should get an access denied error
 
-
     # Collection. Content creation: members. Moderated.
     Given I am on the members page of "Approximate accuracy"
     When I click "Member permissions"
@@ -332,7 +331,6 @@ Feature: Group member permissions table
     When I go to the content page of the type event with the title "Scrawn Money"
     Then I should get an access denied error
 
-
     # Solution. Content creation: authors and facilitators. Non-moderated.
     Given I am on the members page of "Extreme horticulture"
     When I click "Member permissions"
@@ -362,7 +360,6 @@ Feature: Group member permissions table
       | 'Sity and Guilds | draft | Extreme horticulture | Mustrum Ridcully |
     When I go to the content page of the type event with the title "'Sity and Guilds"
     Then I should get an access denied error
-
 
     # Solution. Content creation: any user. Moderated.
     Given I am on the members page of "Prehumous morbid bibliomancy"

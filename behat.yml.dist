@@ -20,7 +20,6 @@
         # Third-party code injected in page with Javascript.
         - .globan
   - Drupal\joinup\Context\AdmsValidatorContext
-  - Drupal\joinup\Context\AssetDistributionContext
   - Drupal\joinup\Context\AssetReleaseContext
   - Drupal\joinup\Context\BootstrapContext
   - Drupal\joinup\Context\CollectionContext
@@ -29,6 +28,7 @@
   - Drupal\joinup\Context\CustomPageContext
   - Drupal\joinup\Context\DebugContext
   - Drupal\joinup\Context\DigitQaPipelineContext
+  - Drupal\joinup\Context\DistributionContext
   - Drupal\joinup\Context\DrupalContext
   - Drupal\joinup\Context\EifContext
   - Drupal\joinup\Context\EntityQueueContext

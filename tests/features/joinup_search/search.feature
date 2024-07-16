@@ -47,7 +47,7 @@ Feature: Global search
     When I visit the search page
     And I focus on the search input
     And I enter "Rummy" in the search bar
-    And I wait for animations to finish
+    And I wait for AJAX to finish
     Then I should not see the text "Rummy news"
     And I should not see the text "Rummy event"
     And I should not see the text "Rummy document"
@@ -134,15 +134,20 @@ Feature: Global search
     Then I should see the text "SEARCH RESULTS (2)"
 
     Given I am on the search page
+    When I check the "User profiles (1)" checkbox from the "Content types" facet
+    Then the "User profiles" content checkbox item should be selected
+    And I should see 1 tile
+
+    Given I click "Clear filters"
     When I check the "News (5)" checkbox from the "Content types" facet
     Then the "News" content checkbox item should be selected
-    And the "Content types" checkbox facet should allow selecting the following values "Collection (1), Solutions (2), News (5)"
+    And the "Content types" checkbox facet should allow selecting the following values "Collection (1), Solutions (2), News (5), User profiles (1)"
 
     When I check the "Solutions (2)" checkbox from the "Content types" facet
     Then the "Solutions" content checkbox item should be selected
     And the "News" content checkbox item should be selected
     And I should see the following facet summary "Solutions, News"
-    Then the "Content types" checkbox facet should allow selecting the following values "Collection (1), Solutions (2), News (5)"
+    Then the "Content types" checkbox facet should allow selecting the following values "Collection (1), Solutions (2), News (5), User profiles (1)"
     And the "topic" checkbox facet should allow selecting the following values "eGov (1), Info (1), Statistics and Analysis (1), Social and Political (5), Demography (1), E-inclusion (4)"
     Then I click show more from the "spatial coverage" facet
     And the "spatial coverage" checkbox facet should allow selecting the following values "European Union (1), Luxembourg (5)"
@@ -235,7 +240,7 @@ Feature: Global search
     And the following releases:
       | title         | release number | release notes                               | keywords | is version of  | owner             | contact information | state     |
       | Release Alpha | 1              | <p>Release notes for <em>beta</em> changes. | Alphabet | Solution alpha | Responsible owner | Go-to contact       | published |
-    And the following distributions:
+    And distribution content:
       | title              | description                                    | parent        | access url | state     |
       | Distribution alpha | <p>A simple beta distribution description.</p> | Release Alpha | test.zip   | published |
     And licence content:
@@ -266,7 +271,7 @@ Feature: Global search
       | ulyssesfrees | ulysses.freeman@example.com | Ulysses    | Freeman     | Omero snc    |
 
     When I visit the search page
-    Then the "Content types" checkbox facet should allow selecting the following values "Collections (2), Solution (1), News (1), Events (2), Document (1), Discussion (1), Release (1), Custom page (1), Licence (1), Video (1)"
+    Then the "Content types" checkbox facet should allow selecting the following values "Collections (2), Solution (1), News (1), Events (2), Document (1), Discussion (1), Release (1), Custom page (1), Licence (1), Video (1), User profiles (2)"
 
     # "A beta" word does not show "You must include at least one positive keyword with 3 characters or more." error message.
     When I enter "A beta" in the search bar and press enter
@@ -407,15 +412,9 @@ Feature: Global search
     Then I should see "No content found for your search."
 
     # Add distribution, child of solution.
-    Given the following distribution:
-      | title                    | ZzoluDistro                     |
-      | parent                   | Zzolution                       |
-      | description              | Übermensch foot size            |
-      | access url               | http://example.com/zzolu-distro |
-      | licence                  | Apache-2.0                      |
-      | format                   | ZIP                             |
-      | representation technique | Datalog                         |
-      | state                    | published                       |
+    Given distribution content:
+      | title       | parent    | description          | access url                      | licence    | format | representation technique | state     |
+      | ZzoluDistro | Zzolution | Übermensch foot size | http://example.com/zzolu-distro | Apache-2.0 | ZIP    | Datalog                  | published |
 
     When I enter "zzoludistro" in the search bar and press enter
     Then the page should show only the tiles "Zzolution"
@@ -475,7 +474,7 @@ Feature: Global search
     When I enter "Human Language" in the search bar and press enter
     Then the page should show only the tiles "Zzolution"
 
-    Given I delete the "DistroZzolu" asset distribution
+    Given I delete the "DistroZzolu" distribution
 
     # The parent solution has been re-indexed without distribution data.
     When I enter "distrozzolu" in the search bar and press enter
@@ -501,15 +500,9 @@ Feature: Global search
     When I enter "ReleazzDistro" in the search bar and press enter
     Then I should see "No content found for your search."
 
-    Given the following distribution:
-      | title                    | ReleazzDistro                     |
-      | parent                   | Releazz                           |
-      | description              | Dracula                           |
-      | access url               | http://example.com/releazz-distro |
-      | licence                  | Apache-2.0                        |
-      | format                   | ZIP                               |
-      | representation technique | Datalog                           |
-      | state                    | published                         |
+    Given distribution content:
+      | title         | parent  | description | access url                        | licence    | format | representation technique | state     |
+      | ReleazzDistro | Releazz | Dracula     | http://example.com/releazz-distro | Apache-2.0 | ZIP    | Datalog                  | published |
 
     When I enter "releazzDistro" in the search bar and press enter
     Then the page should show only the tiles "Releazz"
@@ -567,7 +560,7 @@ Feature: Global search
     When I enter "Human Language" in the search bar and press enter
     Then the page should show only the tiles "Releazz"
 
-    Given I delete the "DistroReleazz" asset distribution
+    Given I delete the "DistroReleazz" distribution
 
     # The parent release has been re-indexed without distribution data.
     When I enter "dIstrOreleazz" in the search bar and press enter
@@ -605,6 +598,10 @@ Feature: Global search
       | Quantum information | Relativity is the word             | No one cares about the body.                                      | Custom collection | published | 01/01/2019 | 03/08/2019 |
       | The uneven universe | Relativity news: Relativity theory | I do care about the relativity keyword in the body.               | Custom collection | published | 02/01/2019 | 02/08/2019 |
       | The earth is square | Absolutely nonsense                | Some news are not worth it but I will add relativity here anyway. | Custom collection | published | 03/01/2019 | 01/08/2019 |
+    And event content:
+      | title            | collection        | state     | start date   | end date            | state     | created      |
+      | Blue revolution  | Custom collection | published | now +1 years | now +1 years +1 day | published | now -2 years |
+      | Red revolution   | Custom collection | published | now -1 years | now -1 years +1 day | published | now -1 years |
 
     When I am on the homepage
     And I enter "Relativity" in the search bar and press enter
@@ -616,58 +613,39 @@ Feature: Global search
       | The earth is square |
     And I should be on "/search?keys=Relativity&sort_by=relevance"
 
-    Given I select "Creation Date" from "Sort by"
+    Given I select "Date" from "Sort by"
     Then I should see the following tiles in the correct order:
       | The earth is square |
       | The uneven universe |
       | Quantum information |
-    And I should be on "/search?keys=Relativity&sort_by=creation-date"
+    And I should be on "/search?keys=Relativity&sort_by=date"
 
-    Given I select "Last Updated Date" from "Sort by"
+    Given I select "Last update" from "Sort by"
     Then I should see the following tiles in the correct order:
       | Quantum information |
       | The uneven universe |
       | The earth is square |
     And I should be on "/search?keys=Relativity&sort_by=last-updated-date"
 
-  @javascript
-  Scenario: Anonymous user can find facets summary
-    Given the following collection:
-      | title            | Radio cooking collection |
-      | logo             | logo.png                 |
-      | moderation       | no                       |
-      | topic            | Demography               |
-      | spatial coverage | Belgium                  |
-      | state            | published                |
-    And the following solutions:
-      | title    | collection               | description                                                                                                                          | topic      | spatial coverage | state     |
-      | Spheres  | Radio cooking collection | Spherification is the culinary process of shaping a liquid into spheres                                                              | Demography | European Union   | published |
-      | Movistar | Radio cooking collection | "The use of foam in cuisine has been used in many forms in the history of cooking:whipped cream, meringue, and mousse are all foams" |            |                  | published |
-    And news content:
-      | title           | field_paragraphs_body | collection               | topic                   | spatial coverage | state     |
-      | El Cabo da Roca | The best in town      | Radio cooking collection | Statistics and Analysis | Luxembourg       | published |
-      | Funny news 1    | Dummy body            | Radio cooking collection | E-inclusion             | Luxembourg       | published |
-      | Funny news 2    | Dummy body            | Radio cooking collection | E-inclusion             | Luxembourg       | published |
-      | Funny news 3    | Dummy body            | Radio cooking collection | E-inclusion             | Luxembourg       | published |
-      | Funny news 4    | Dummy body            | Radio cooking collection | E-inclusion             | Luxembourg       | published |
+    Then I enter "revolution" in the search bar and press enter
+      | Red revolution  |
+      | Blue revolution |
+    And I should be on "/search?keys=revolution&sort_by=last-updated-date"
 
-    Given I am logged in as a user with the "authenticated" role
-    When I visit the search page
-    And I check the "Solutions (2)" checkbox from the "Content types" facet
-    And I check the "News (5)" checkbox from the "Content types" facet
-    And I should see the following facet summary "Solutions, News"
+    Given I select "Date" from "Sort by"
+    Then I should see the following tiles in the correct order:
+      | Blue revolution |
+      | Red revolution  |
+    And I should be on "/search?keys=revolution&sort_by=date"
 
-    When I click "Clear filters"
-    And I check the "News (5)" checkbox from the "Content types" facet
-    And I should see the following facet summary "News"
-
-    # Check if facet summary was remove correctly.
-    When I click "Clear filters"
-    And I check the "News (5)" checkbox from the "Content types" facet
-    And I check the "Collection (1)" checkbox from the "Content types" facet
-    Then I should see the following facet summary "Collection, News"
-    When I remove the following facet summary "News"
-    Then the page should show only the tiles "Radio cooking collection"
+    When I go to "/search?sort_by=date"
+    Then I should see the following tiles in the correct order:
+      | Blue revolution     |
+      | Custom collection   |
+      | The earth is square |
+      | The uneven universe |
+      | Quantum information |
+      | Red revolution      |
 
   @javascript
   Scenario: Anonymous user can find facets summary
@@ -771,33 +749,33 @@ Feature: Global search
       | title           | collection    | topic                    | state     | logo        | field_paragraphs_body                                                                                                                                                                 |
       | Stay at the ISS | Mice in space | EU and European Policies | published | charles.jpg | Two groups of mice (six per group) were housed aboard the International Space Station for 35 days. One group was subjected to artificial gravity (1 g) and the other to microgravity. |
     And news content:
-      | title           | body                                       | collection    | topic                   | spatial coverage | state     | logo        | created    | changed    |
-      | Muscle atrophy  | Researchers from the University of Tsukuba | Mice in space | Finance in EU           | Luxembourg       | published | blaise.jpg  | 01/01/2019 | 01/01/2019 |
-      | El Cabo da Roca | The best in town                           | Mice in space | Statistics and Analysis | Luxembourg       | published | charles.jpg | 01/12/2020 | 01/12/2020 |
-      | Funny news 1    | Dummy body                                 | Mice in space | HR                      | Luxembourg       | published | ada.png     | 05/01/2019 | 05/01/2019 |
-      | Funny news 2    | Dummy body                                 | Mice in space | E-inclusion             | Luxembourg       | published | alan.jpg    | 06/21/2019 | 06/21/2019 |
-      | Funny news 3    | Dummy body                                 | Mice in space | E-inclusion             | Luxembourg       | published | charles.jpg | 12/31/2021 | 12/31/2021 |
-      | Funny news 4    | Dummy body                                 | Mice in space | HR                      | Luxembourg       | published | ada.png     | 06/25/2020 | 06/25/2020 |
-      | Funny news 5    | Dummy body                                 | Mice in space | HR                      | Luxembourg       | published | ada.png     | 01/01/2021 | 01/01/2021 |
-      | Dummy news 1    | Dummy body                                 | Mice in space | Statistics and Analysis | Luxembourg       | published | charles.jpg | 09/24/2019 | 09/24/2019 |
-      | Dummy news 2    | Dummy body                                 | Mice in space | E-inclusion             | Luxembourg       | published | alan.jpg    | 01/18/2021 | 01/18/2021 |
-      | Dummy news 3    | Dummy body                                 | Mice in space | Statistics and Analysis | Luxembourg       | published | ada.png     | 08/01/2019 | 08/01/2019 |
-      | Dummy news 4    | Dummy body                                 | Mice in space | E-inclusion             | Luxembourg       | published | charles.jpg | 09/18/2019 | 09/18/2019 |
+      | title           | body                                       | collection    | topic                   | spatial coverage | state     | logo        | created    | changed    | published_at |
+      | Muscle atrophy  | Researchers from the University of Tsukuba | Mice in space | Finance in EU           | Luxembourg       | published | blaise.jpg  | 01/01/2019 | 01/01/2019 | 01/01/2019   |
+      | El Cabo da Roca | The best in town                           | Mice in space | Statistics and Analysis | Luxembourg       | published | charles.jpg | 01/12/2020 | 01/12/2020 | 01/12/2020   |
+      | Funny news 1    | Dummy body                                 | Mice in space | HR                      | Luxembourg       | published | ada.png     | 05/01/2019 | 05/01/2019 | 05/01/2019   |
+      | Funny news 2    | Dummy body                                 | Mice in space | E-inclusion             | Luxembourg       | published | alan.jpg    | 06/21/2019 | 06/21/2019 | 06/21/2019   |
+      | Funny news 3    | Dummy body                                 | Mice in space | E-inclusion             | Luxembourg       | published | charles.jpg | 12/31/2021 | 12/31/2021 | 12/31/2021   |
+      | Funny news 4    | Dummy body                                 | Mice in space | HR                      | Luxembourg       | published | ada.png     | 06/25/2020 | 06/25/2020 | 06/25/2020   |
+      | Funny news 5    | Dummy body                                 | Mice in space | HR                      | Luxembourg       | published | ada.png     | 01/01/2021 | 01/01/2021 | 01/01/2021   |
+      | Dummy news 1    | Dummy body                                 | Mice in space | Statistics and Analysis | Luxembourg       | published | charles.jpg | 09/24/2019 | 09/24/2019 | 09/24/2019   |
+      | Dummy news 2    | Dummy body                                 | Mice in space | E-inclusion             | Luxembourg       | published | alan.jpg    | 01/18/2021 | 01/18/2021 | 01/18/2021   |
+      | Dummy news 3    | Dummy body                                 | Mice in space | Statistics and Analysis | Luxembourg       | published | ada.png     | 08/01/2019 | 08/01/2019 | 08/01/2019   |
+      | Dummy news 4    | Dummy body                                 | Mice in space | E-inclusion             | Luxembourg       | published | charles.jpg | 09/18/2019 | 09/18/2019 | 09/18/2019   |
 
     When I visit the search page
 
     # Filter content from 01-01-2020 to 30-06-2020.
     # Only "El Cabo da Roca" and "Funny news 4" should appear.
-    Then I go to "/search?f[0]=creation_date:(min:1577880000,max:1593518400)"
+    Then I go to "/search?f[0]=date:(min:1577880000,max:1593518400)"
     And I should see the text "SEARCH RESULTS (2)"
 
-    Then I go to "/search?f[0]=creation_date:(min:1577836800,max:)"
+    Then I go to "/search?f[0]=date:(min:1577836800,max:)"
     And I should see the text "SEARCH RESULTS (8)"
 
-    Then I go to "/search?f[0]=creation_date:(min:,max:1609113600)"
+    Then I go to "/search?f[0]=date:(min:,max:1609113600)"
     And I should see the text "SEARCH RESULTS (8)"
 
-    Then I go to "/search?f[0]=creation_date:(min:,max:)"
+    Then I go to "/search?f[0]=date:(min:,max:)"
     And I should see the text "SEARCH RESULTS (14)"
 
   Scenario: Max 2 topic terms appear in each search result with a suffix for the rest.
@@ -824,7 +802,7 @@ Feature: Global search
     And I should see the text "Last update: 08/02/2019" in the "The uneven universe" card
     And I should see the text "Last update: 08/01/2019" in the "The earth is square" card
 
-  @javascript  @loggedErrors
+  @javascript @loggedErrors
   Scenario: Regression test for warning generated by search_api_solr.
   See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-8210
 

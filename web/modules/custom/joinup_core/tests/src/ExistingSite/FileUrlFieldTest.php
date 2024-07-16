@@ -12,8 +12,7 @@ use Drupal\Tests\rdf_entity\Traits\EntityUtilityTrait;
 use Drupal\Tests\sparql_entity_storage\Traits\SparqlConnectionTrait;
 use Drupal\file\FileInterface;
 use Drupal\file_url\FileUrlHandler;
-use Drupal\rdf_entity\Entity\Rdf;
-use Drupal\sparql_entity_storage\UriEncoder;
+use Drupal\node\Entity\Node;
 use weitzman\LoginTrait\LoginTrait;
 
 /**
@@ -41,7 +40,7 @@ class FileUrlFieldTest extends JoinupExistingSiteTestBase {
    *
    * @var \Drupal\Core\Entity\ContentEntityStorageInterface
    */
-  protected $sparqlStorage;
+  protected $nodeStorage;
 
   /**
    * {@inheritdoc}
@@ -52,7 +51,7 @@ class FileUrlFieldTest extends JoinupExistingSiteTestBase {
     $this->fileSystem = $this->container->get('file_system');
     // @todo This will no longer be needed once ISAICP-3392 is fixed.
     // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3392
-    $this->sparqlStorage = $this->container->get('entity_type.manager')->getStorage('rdf_entity');
+    $this->nodeStorage = $this->container->get('entity_type.manager')->getStorage('node');
   }
 
   /**
@@ -81,30 +80,30 @@ class FileUrlFieldTest extends JoinupExistingSiteTestBase {
     $test_file = $this->getTestFile('text');
     $this->assertTrue($test_file instanceof FileInterface);
 
-    $distribution = $this->createRdfEntity([
-      'rid' => 'asset_distribution',
-      'label' => $this->randomString(),
+    $distribution = $this->createNode([
+      'type' => 'distribution',
+      'title' => $this->randomString(),
       'og_audience' => $solution->id(),
-      'field_ad_licence' => $licence->id(),
-      'field_ad_description' => $this->randomString(),
-      'parent' => $solution,
-      'field_ad_state' => 'published',
+      'field_licence' => $licence->id(),
+      'description' => $this->randomString(),
+      'distribution_parent' => $solution,
+      'field_state' => 'published',
     ]);
 
-    $field_name = 'field_ad_access_url';
+    $field_name = 'access_url';
 
     // Test file for new entities.
-    $url = "/rdf_entity/" . UriEncoder::encodeUrl($distribution->id()) . "/edit";
+    $url = "/node/" . $distribution->id() . "/edit";
 
     $this->drupalGet($url);
     $this->addFileUrlItem($field_name, 'upload', $test_file->getFileUri());
-    $this->submitForm(['label[0][value]' => 'Foo'], 'Update');
+    $this->submitForm(['title[0][value]' => 'Foo'], 'Update');
 
     // Check that the file has been uploaded to the file URL field.
-    $distribution = Rdf::load($distribution->id());
-    $rdf_entity_file = FileUrlHandler::urlToFile($distribution->{$field_name}->target_id);
-    $this->markEntityForCleanup($rdf_entity_file);
-    $initial_uri = $rdf_entity_file->getFileUri();
+    $distribution = Node::load($distribution->id());
+    $file = FileUrlHandler::urlToFile($distribution->{$field_name}->target_id);
+    $this->markEntityForCleanup($file);
+    $initial_uri = $file->getFileUri();
     $this->assertFileExists($initial_uri);
 
     /** @var \Drupal\Core\File\FileUrlGeneratorInterface $file_url_generator */
@@ -125,12 +124,12 @@ class FileUrlFieldTest extends JoinupExistingSiteTestBase {
     // @todo We should not need cache clearing here. The cache should have been
     //   wiped out at this point. Fix this regression in ISAICP-3392.
     // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3392
-    $this->sparqlStorage->resetCache([$distribution->id()]);
+    $this->nodeStorage->resetCache([$distribution->id()]);
 
     // Check that the file has been uploaded to the file URL field.
-    $distribution = Rdf::load($distribution->id());
-    $rdf_entity_file = FileUrlHandler::urlToFile($distribution->{$field_name}->target_id);
-    $second_uri = $rdf_entity_file->getFileUri();
+    $distribution = Node::load($distribution->id());
+    $file = FileUrlHandler::urlToFile($distribution->{$field_name}->target_id);
+    $second_uri = $file->getFileUri();
     $this->assertFileExists($second_uri);
 
     // Ensure the file can be downloaded.
@@ -154,10 +153,10 @@ class FileUrlFieldTest extends JoinupExistingSiteTestBase {
     // @todo We should not need cache clearing here. The cache should have been
     //   wiped out at this point. Fix this regression in ISAICP-3392.
     // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3392
-    $this->sparqlStorage->resetCache([$distribution->id()]);
+    $this->nodeStorage->resetCache([$distribution->id()]);
 
     // Check that the remote URL replaced the uploaded file.
-    $distribution = Rdf::load($distribution->id());
+    $distribution = Node::load($distribution->id());
     $this->assertEquals($url, $distribution->{$field_name}->target_id);
   }
 

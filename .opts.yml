@@ -63,6 +63,7 @@ dev_install_clean: True
 phpunit_clone: False
 phpunit_clean: True
 
+# Keep this version in sync with .ddev/docker-compose.selenium-chrome.yaml.
 selenium_version: '4.5.0'
 
 memcached: True

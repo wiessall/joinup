@@ -89,18 +89,17 @@ WHERE {
     ?s ?p ?o .
     FILTER NOT EXISTS { ?s <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ?o1 } .
     VALUES ?g {
-      <http://joinup.eu/asset_distribution/published>
       <http://joinup.eu/asset_release/published>
       <http://joinup.eu/asset_release/draft>
       <http://joinup.eu/collection/published>
-      <http://joinup.eu/collection/draft> 
+      <http://joinup.eu/collection/draft>
       <http://joinup.eu/contact-information/published>
       <http://joinup.eu/licence/published>
       <http://joinup.eu/owner/published>
       <http://joinup.eu/provenance_activity>
       <http://joinup.eu/solution/published>
       <http://joinup.eu/solution/draft>
-      <http://joinup.eu/spdx_licence/published> 
+      <http://joinup.eu/spdx_licence/published>
     }
   }
 }

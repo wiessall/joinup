@@ -205,6 +205,9 @@ drupal:
         // Expiration of cached forms is 3 hours.
         $settings['form_cache_expiration'] = 10800;
 
+        // State cache.
+        $settings['state_cache'] = TRUE;
+
         // Disable Piwik API calls until ISAICP-6944.
         // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-6944
         $settings['joinup.parse_cached_computed_field'] = FALSE;

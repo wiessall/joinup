@@ -1,7 +1,12 @@
 @import "../partials/core";
 
 .iop-navbar {
-  background: linear-gradient(to bottom, $darkblue 0%, $darkblue 60%, $blue 120%);
+  background: linear-gradient(
+    to bottom,
+    $darkblue 0%,
+    $darkblue 60%,
+    $blue 120%
+  );
   .navbar-brand {
     position: relative;
     left: 50%;
@@ -27,7 +32,7 @@
     }
   }
   .navbar-toggler {
-    padding: $spacer * .25; // 4px
+    padding: $spacer * 0.25; // 4px
     border: 0;
     &:focus {
       box-shadow: 0 0 0 0.125rem $lightblue;
@@ -41,10 +46,10 @@
     justify-content: end;
   }
   .navbar-nav {
-    margin: $spacer * .5 0; // 8px 0;
+    margin: $spacer * 0.5 0; // 8px 0;
   }
   .nav-item {
-    margin-top: $spacer * .5; // 8px
+    margin-top: $spacer * 0.5; // 8px
     text-align: right;
     @include media-breakpoint-up(md) {
       margin-top: 0;
@@ -56,7 +61,7 @@
   }
   .nav-link {
     display: inline;
-    padding: $spacer * .25 $spacer * .75; // 4px 12px
+    padding: $spacer * 0.25 $spacer * 0.75; // 4px 12px
     color: $white;
     border: 2px solid transparent;
     border-radius: $border-radius-pill;

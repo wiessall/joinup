@@ -66,4 +66,8 @@ base_fields_mapping:
     value:
       predicate: 'http://joinup.eu/language/translation_changed_time'
       format: t_literal
+  published_at:
+    value:
+      predicate: 'http://joinup.eu/collection/published-at'
+      format: 'xsd:dateTime'
 entity_id_plugin: joinup_po_namespace

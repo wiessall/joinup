@@ -54,7 +54,7 @@
   }
   .oss__social .paragraph--call-to-action a {
     background-color: transparent !important;
-    &::before{
+    &::before {
       background-color: $oss-brand;
     }
   }
@@ -64,7 +64,7 @@
       -webkit-appearance: none; /* remove default appearance on Webkit-based browsers */
       -moz-appearance: none; /* remove default appearance on Mozilla-based browsers */
       appearance: none; /* remove default appearance on all other browsers */
-      &:checked[type=checkbox] {
+      &:checked[type="checkbox"] {
         border-color: color.adjust($oss-brand, $lightness: -5%);
         background-color: $oss-brand;
       }

@@ -205,19 +205,21 @@ class DevelopersItalia extends EuOssCatalogueProviderPluginBase {
           $decoded = Yaml::decode($newItem['publiccodeYml']);
         }
         catch (InvalidDataTypeException $e) {
-          $this->logger->error('Not valid publiccodeYml for {id}. Message: {message}',
-            ['id' => $projectInfo, 'message' => $e->getMessage()]);
+          $this->logger->error('Not valid publiccodeYml for @id. Message: @message', [
+            '@id' => $projectInfo,
+            '@message' => $e->getMessage(),
+          ]);
           continue;
         }
 
         if (empty($decoded['url'])) {
-          $this->logger->error('Item {id} lacks the mandatory URL in publiccodeYml', ['id' => $projectInfo]);
+          $this->logger->error('Item @id lacks the mandatory URL in publiccodeYml', ['@id' => $projectInfo]);
           continue;
         }
 
         if (!$api = $this->apiGuesser->getHostingPlatformApi($decoded['url'])) {
-          $this->logger->error('Can\'t determinate hosting platform for {id} with {repository} repository',
-            ['id' => $projectInfo, 'repository' => $decoded['url']]);
+          $this->logger->error('Can\'t determinate hosting platform for @id with @repository repository',
+            ['@id' => $projectInfo, '@repository' => $decoded['url']]);
           continue;
         }
 
@@ -242,17 +244,17 @@ class DevelopersItalia extends EuOssCatalogueProviderPluginBase {
    */
   protected function logResults(): void {
     if ($unProcessed = array_diff($this->fetchedUrls, $this->processedUrls)) {
-      $this->logger->warning('Processed {processed} out of {fetched} fetched solutions from Developers Italia. The following {unprocessed} solutions failed: ' . implode(', ', $unProcessed), [
-        'processed' => count($this->processedUrls),
-        'fetched' => $this->numberOfProvidedSolutions,
-        'unprocessed' => count($unProcessed),
+      $this->logger->warning('Processed @processed out of @fetched fetched solutions from Developers Italia. The following @unprocessed solutions failed: ' . implode(', ', $unProcessed), [
+        '@processed' => count($this->processedUrls),
+        '@fetched' => $this->numberOfProvidedSolutions,
+        '@unprocessed' => count($unProcessed),
         'list' => $unProcessed,
       ]);
     }
     else {
-      $this->logger->info('Processed {processed} out of {fetched} fetched solutions from Developers Italia.', [
-        'processed' => count($this->processedUrls),
-        'fetched' => $this->numberOfProvidedSolutions,
+      $this->logger->info('Processed @processed out of @fetched fetched solutions from Developers Italia.', [
+        '@processed' => count($this->processedUrls),
+        '@fetched' => $this->numberOfProvidedSolutions,
       ]);
     }
   }

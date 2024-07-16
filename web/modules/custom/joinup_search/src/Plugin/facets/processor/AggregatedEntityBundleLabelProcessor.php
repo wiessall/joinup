@@ -161,10 +161,14 @@ class AggregatedEntityBundleLabelProcessor extends ProcessorPluginBase implement
 
       if (!empty($bundles[$bundle_id]['has_count_label'])) {
         $result->setDisplayValue($this->bundleInfo->getBundleCountLabel($bundles[$bundle_id]['entity_type_id'], $bundle_id, $result->getCount(), $plural_count_label_variant));
+        continue;
       }
-      else {
-        $result->setDisplayValue($bundles[$bundle_id]['label']);
-      }
+
+      $label = match ($bundle_id) {
+        'user' => $this->t('User profiles'),
+        default => $bundles[$bundle_id]['label'],
+      };
+      $result->setDisplayValue($label);
     }
 
     return $results;

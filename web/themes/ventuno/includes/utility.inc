@@ -166,16 +166,16 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
 
       break;
 
-    case 'asset_distribution':
-      if (isset($variables['content']['field_ad_licence']) &&
-        !$entity->get('field_ad_licence')->isEmpty()) {
+    case 'distribution':
+      if (isset($variables['content']['field_licence']) &&
+        !$entity->get('field_licence')->isEmpty()) {
         $variables['text']['icon'] = [
           '#type' => 'pattern',
           '#id' => 'icon',
           '#name' => 'file-earmark-medical',
           '#size' => 'xs',
         ];
-        $variables['text']['label'] = $variables['content']['field_ad_licence'];
+        $variables['text']['label'] = $variables['content']['field_licence'];
       }
       break;
 
@@ -183,10 +183,10 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
       $variables['label'] = $entity->label();
       $variables['highlighted']['text'] = 'v' . $entity->getVersion();
       $variables['info']['icon'] = 'calendar-event';
-      if ($created_time = $entity->getCreatedTime()) {
-        $variables['info']['label'] = t('@label: @created', [
+      if ($published_at = $entity->getPublicationTime()) {
+        $variables['info']['label'] = t('@label: @published_at', [
           '@label' => t('Release date'),
-          '@created' => \Drupal::service('date.formatter')->format($created_time, 'date_only'),
+          '@published_at' => \Drupal::service('date.formatter')->format($published_at, 'date_only'),
         ]);
       }
       $status = $variables['elements']['field_status'][0]['#plain_text'] ?? 'No status';
@@ -269,6 +269,7 @@ function _ventuno_get_default_icon(string $entity_type_id, string $bundle): stri
     'node' => [
       'custom_page' => 'file-earmark-richtext',
       'discussion' => 'chat-left-text',
+      'distribution' => 'file-earmark-post',
       'document' => 'file-earmark-text',
       'event' => 'calendar-event',
       'news' => 'newspaper',
@@ -278,7 +279,6 @@ function _ventuno_get_default_icon(string $entity_type_id, string $bundle): stri
     'rdf_entity' => [
       'collection' => 'folder2-open',
       'licence' => 'file-earmark-medical',
-      'asset_distribution' => 'file-earmark-post',
       'asset_release' => 'file-earmark-zip',
       'solution' => 'clipboard2-check',
     ],

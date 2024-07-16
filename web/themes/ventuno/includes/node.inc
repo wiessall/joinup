@@ -148,3 +148,22 @@ function ventuno_preprocess_node__oss_solution__full(array &$variables): void {
   $variables['#attached']['library'][] = 'ventuno/oss-solution-full';
   $variables['content_attributes']['class'][] = 'layout--stack';
 }
+
+/**
+ * Implements hook_preprocess_page_title__node__distribution().
+ */
+function ventuno_preprocess_page_title__node__distribution(array &$variables): void {
+  /** @var \Drupal\joinup_distribution\Entity\DistributionInterface $entity */
+  $entity = $variables['entity'];
+
+  // Get the view builder service from the entity type manager.
+  $view_builder = \Drupal::entityTypeManager()->getViewBuilder('rdf_entity');
+  // Get the file size and licence fields.
+  $file_size = $entity->file_size;
+  $licence = $entity->field_licence;
+  $file_size = $view_builder->viewField($file_size, 'default');
+  $licence = $view_builder->viewField($licence, 'default');
+
+  $variables['additional_content']['file_size'] = $file_size;
+  $variables['additional_content']['licence'] = $licence;
+}

@@ -17,7 +17,7 @@ Feature:
     And the following releases:
       | title        | release number | release notes | is version of | owner                  | contact information      | state     |
       | Tile release | 0.1            | Meh...        | Tile solution | Some fancy named owner | Some fancy named contact | published |
-    And the following distributions:
+    And distribution content:
       | title       | description | parent       | access url | state     |
       | Tile distro | meh...      | Tile release | test.zip   | published |
     And licence content:
@@ -39,7 +39,7 @@ Feature:
       | title            | solution      | state     |
       | Tile custom page | Tile solution | published |
     And I append "content_listing" to "field_paragraphs_body" field in "node" entity with following "Tile custom page" title:
-      | content_listing:value | a:3:{s:7:"enabled";i:1;s:13:"query_presets";s:80:"entity_bundle\|asset_distribution,asset_release,discussion,document,event,news\|IN";s:5:"limit";s:2:"10";} |
+      | content_listing:value | a:3:{s:7:"enabled";i:1;s:13:"query_presets";s:74:"entity_bundle\|distribution,asset_release,discussion,document,event,news\|IN";s:5:"limit";s:2:"10";} |
 
     When I am logged in as a moderator
     And I go to the "Tile custom page" custom page
