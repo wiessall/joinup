@@ -12,7 +12,6 @@ dependencies:
   - 'drupal:text'
   - 'file_url:file_url'
   - 'inline_entity_form:inline_entity_form'
-  - 'joinup:asset_distribution'
   - 'joinup:asset_release'
   - 'joinup:contact_information'
   - 'joinup:joinup_taxonomy'

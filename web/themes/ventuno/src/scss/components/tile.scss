@@ -39,16 +39,16 @@
   }
   &__standout-info {
     top: $spacer * -1;
-    right: $spacer * .5;
+    right: $spacer * 0.5;
     overflow: hidden;
     max-width: 9.3rem;
     white-space: nowrap;
     text-overflow: ellipsis;
-    font-size: .875rem;
+    font-size: 0.875rem;
   }
   &__standout-info-icon,
   &__info-icon {
-    font-size: .75rem;
+    font-size: 0.75rem;
   }
   &__info-icon {
     flex-shrink: 0;
@@ -105,8 +105,8 @@
   .mark {
     position: absolute;
     z-index: 1;
-    top: $spacer * .5;
-    right: $spacer * .5;
+    top: $spacer * 0.5;
+    right: $spacer * 0.5;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -115,15 +115,15 @@
     border-radius: $border-radius-pill;
     background-color: $brand;
     &.star::before {
-      @include get-bootstrap-icon('star', $white);
+      @include get-bootstrap-icon("star", $white);
     }
     &.pin::before {
-      @include get-bootstrap-icon('pin', $white);
+      @include get-bootstrap-icon("pin", $white);
     }
   }
   &__footer {
     .flag__link {
-      padding: $spacer * .125;
+      padding: $spacer * 0.4;
       border-radius: $border-radius-pill;
       &:hover {
         text-decoration: none;
@@ -175,7 +175,7 @@
       .tile__standout-info {
         top: unset;
         right: unset;
-        bottom: $spacer * -.5;
+        bottom: $spacer * 0.5;
         transform: translateX(calc(-100% - $spacer * 1.5));
       }
       .tile__footer {

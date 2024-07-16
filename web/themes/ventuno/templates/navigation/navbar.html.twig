@@ -91,9 +91,11 @@
 >
   <div class="container">
     <div class="d-flex">
-      <a class="navbar-brand" href="{{ _brand.link }}">
+      {% if is_front %}<h1 class="mb-0">{% endif %}
+      <a class="navbar-brand" href="{{ _brand.link }}" title="{{ _brand.title }}">
         <img class="navbar-brand-image" src="{{ _brand.src }}" alt="{{ _brand.alt }}" />
       </a>
+      {% if is_front %}</h1>{% endif %}
     </div>
     <nav id="{{ _collapse_id }}">
       <ul
@@ -105,10 +107,10 @@
               {% if not link.hide_on_desktop %}
                 {% set desktop_li_attributes = create_attribute() %}
                 {% set desktop_li_classes = [
-                  "nav-item",
-                  item.breakpoint != 'all' ? "d-none",
-                  item.breakpoint != 'all' ? "d-" ~ item.breakpoint ~ "-inline-block" : "d-inline-block",
-                  link.order ? "order-" ~ link.order,
+                  'nav-item',
+                  item.breakpoint != 'all' ? 'd-none',
+                  item.breakpoint != 'all' ? 'd-' ~ item.breakpoint ~ '-inline-block' : 'd-inline-block',
+                  link.order ? 'order-' ~ link.order,
                   link.children ? 'dropdown',
                   link.in_active_trail ? 'is-active',
                 ] %}
@@ -117,8 +119,8 @@
                   {% if link.link %}
                     {% set attributes = create_attribute(link.attributes|default([])) %}
                     {% set desktop_a_classes = [
-                      "nav-link",
-                      "nav-link--underline",
+                      'nav-link',
+                      'nav-link--underline',
                       link.children ? 'dropdown-toggle',
                       link.in_active_trail ? 'is-active',
                     ] %}
@@ -135,7 +137,7 @@
                         {% for child in link.children %}
                           {% set attributes = create_attribute(link.attributes|default([])) %}
                           {% set classes = [
-                            "dropdown-item",
+                            'dropdown-item',
                             child.in_active_trail ? 'is-active',
                           ] %}
                           <li>
@@ -199,7 +201,7 @@
                 <ul>
                   {% for link_key, link in item.links %}
                     {% if link.link %}
-                      <li {{ create_attribute({'class': link.in_active_trail ? 'Selected'}) }}>
+                      <li {{ create_attribute({class: link.in_active_trail ? 'Selected'}) }}>
                         {% set attributes = create_attribute(link.attributes|default([])) %}
                         <a href="{{ link.link }}" {{ attributes.addClass(link.in_active_trail ? 'is-active') }}>
                           {{ link.label }}
@@ -207,7 +209,7 @@
                         {% if link.children %}
                           <ul>
                             {% for child in link.children %}
-                              <li {{ create_attribute({'class': child.in_active_trail ? 'Selected'}) }}>
+                              <li {{ create_attribute({class: child.in_active_trail ? 'Selected'}) }}>
                                 {% set attributes = create_attribute(child.attributes|default([])) %}
                                 <a href="{{ child.link }}" {{ attributes.addClass(child.in_active_trail ? 'is-active') }}>
                                   {{ child.label }}

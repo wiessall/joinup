@@ -35,7 +35,7 @@ Feature: Proposing a collection
     # Ensure that the description for the "Access url" is shown.
     # @see: https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3196
     And I should see the description "Web page for the external Repository." for the "Access URL" field
-    And I should see the description "This must be an external URL such as http://example.com." for the "Access URL" field
+    And I should see the description "This must be an external URL such as https://example.com." for the "Access URL" field
 
     # Check that validations errors are shown for required fields.
     When I press "Propose"

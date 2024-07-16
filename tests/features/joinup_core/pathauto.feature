@@ -20,11 +20,9 @@ Feature:
       | description    | Pathauto release. |
       | is version of  | Pathauto solution |
       | state          | published         |
-    And the following distribution:
-      | title       | Pathauto distribution  |
-      | description | Pathauto distribution. |
-      | parent      | Pathauto solution      |
-      | state       | published              |
+    And distribution content:
+      | title                 | description           | parent            | state     |
+      | Pathauto distribution | Pathauto distribution | Pathauto solution | published |
     And licence content:
       | title            | description      |
       | Pathauto licence | Pathauto licence |

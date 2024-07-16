@@ -86,6 +86,7 @@ display:
         type: full
         options:
           offset: 0
+          pagination_heading_level: h4
           items_per_page: 8
           total_pages: null
           id: 0
@@ -252,22 +253,22 @@ display:
             'entity:node':
               custom_page: default
               discussion: view_mode_tile
+              distribution: default
               document: default
               event: default
+              licence: default
               news: default
               video: default
             'entity:rdf_entity':
-              asset_distribution: default
               asset_release: default
               collection: default
-              licence: default
               solution: default
-              spdx_licence: default
             'entity:taxonomy_term':
               eif_conceptual_model: default
               eif_interoperability_layer: default
               eif_principle: default
               eif_recommendation: default
+              spdx_licence: default
               topic: default
             'entity:user':
               user: default

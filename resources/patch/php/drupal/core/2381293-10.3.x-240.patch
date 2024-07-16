@@ -1,0 +1,1048 @@
+diff --git a/core/modules/comment/config/optional/views.view.comment.yml b/core/modules/comment/config/optional/views.view.comment.yml
+index c15fa3ef294..d8ca57f5afe 100644
+--- a/core/modules/comment/config/optional/views.view.comment.yml
++++ b/core/modules/comment/config/optional/views.view.comment.yml
+@@ -75,6 +75,9 @@ display:
+           selected_actions:
+             - comment_delete_action
+             - comment_unpublish_action
++          actions_order:
++            - comment_unpublish_action
++            - comment_delete_action
+         subject:
+           id: subject
+           table: comment_field_data
+@@ -963,6 +966,9 @@ display:
+           selected_actions:
+             - comment_delete_action
+             - comment_publish_action
++          actions_order:
++            - comment_publish_action
++            - comment_delete_action
+         subject:
+           id: subject
+           table: comment_field_data
+diff --git a/core/modules/comment/tests/src/Kernel/Views/CommentAdminViewTest.php b/core/modules/comment/tests/src/Kernel/Views/CommentAdminViewTest.php
+index a0e4ae3e38a..2f442a4c92e 100644
+--- a/core/modules/comment/tests/src/Kernel/Views/CommentAdminViewTest.php
++++ b/core/modules/comment/tests/src/Kernel/Views/CommentAdminViewTest.php
+@@ -37,11 +37,13 @@ class CommentAdminViewTest extends ViewsKernelTestBase {
+    * {@inheritdoc}
+    */
+   protected static $modules = [
+-    'user',
+     'comment',
+     'entity_test',
++    'field',
+     'language',
+     'locale',
++    'text',
++    'user',
+   ];
+ 
+   /**
+@@ -54,7 +56,7 @@ protected function setUp($import_test_views = TRUE): void {
+     $this->installEntitySchema('comment');
+     $this->installEntitySchema('entity_test');
+     // Create the anonymous role.
+-    $this->installConfig(['user']);
++    $this->installConfig(['comment', 'user']);
+ 
+     // Create user 1 so that the user created later in the test has a different
+     // user ID.
+diff --git a/core/modules/media/config/optional/views.view.media.yml b/core/modules/media/config/optional/views.view.media.yml
+index 120015a7e4c..8e089a289a1 100644
+--- a/core/modules/media/config/optional/views.view.media.yml
++++ b/core/modules/media/config/optional/views.view.media.yml
+@@ -76,6 +76,11 @@ display:
+           action_title: Action
+           include_exclude: exclude
+           selected_actions: {  }
++          actions_order:
++            - media_publish_action
++            - media_unpublish_action
++            - media_save_action
++            - media_delete_action
+         thumbnail__target_id:
+           id: thumbnail__target_id
+           table: media_field_data
+diff --git a/core/modules/media/tests/modules/media_test_views/config/install/views.view.test_media_bulk_form.yml b/core/modules/media/tests/modules/media_test_views/config/install/views.view.test_media_bulk_form.yml
+index 8f7f0c8493d..5e3339402fe 100644
+--- a/core/modules/media/tests/modules/media_test_views/config/install/views.view.test_media_bulk_form.yml
++++ b/core/modules/media/tests/modules/media_test_views/config/install/views.view.test_media_bulk_form.yml
+@@ -41,6 +41,11 @@ display:
+           action_title: 'With selection'
+           include_exclude: exclude
+           selected_actions: {  }
++          actions_order:
++            - media_publish_action
++            - media_unpublish_action
++            - media_save_action
++            - media_delete_action
+         name:
+           id: name
+           table: media_field_data
+diff --git a/core/modules/media/tests/src/Functional/MediaBulkFormTest.php b/core/modules/media/tests/src/Functional/MediaBulkFormTest.php
+index 85c1d59eb15..a9bc842cc99 100644
+--- a/core/modules/media/tests/src/Functional/MediaBulkFormTest.php
++++ b/core/modules/media/tests/src/Functional/MediaBulkFormTest.php
+@@ -4,6 +4,7 @@
+ 
+ namespace Drupal\Tests\media\Functional;
+ 
++use Behat\Mink\Element\NodeElement;
+ use Drupal\media\Entity\Media;
+ use Drupal\views\Views;
+ 
+@@ -74,16 +75,18 @@ public function testBulkForm(): void {
+ 
+     // Check the operations are accessible to the logged in user.
+     $this->drupalGet('test-media-bulk-form');
+-    // Current available actions: Delete, Save, Publish, Unpublish.
+-    $available_actions = [
+-      'media_delete_action',
++
++    // Tests that actions are sorted according to the view configured order.
++    $actual_actions = $this->xpath('//select[@id="edit-action"]//option');
++    $expected_actions = [
+       'media_publish_action',
+-      'media_save_action',
+       'media_unpublish_action',
++      'media_save_action',
++      'media_delete_action',
+     ];
+-    foreach ($available_actions as $action_name) {
+-      $assert_session->optionExists('action', $action_name);
+-    }
++    $this->assertSame($expected_actions, array_values(array_filter(array_map(function (NodeElement $action): string {
++      return $action->getValue();
++    }, $actual_actions))));
+ 
+     // Test unpublishing in bulk.
+     $page->checkField('media_bulk_form[0]');
+diff --git a/core/modules/media_library/config/install/views.view.media_library.yml b/core/modules/media_library/config/install/views.view.media_library.yml
+index 67743ffddda..f38185c5171 100644
+--- a/core/modules/media_library/config/install/views.view.media_library.yml
++++ b/core/modules/media_library/config/install/views.view.media_library.yml
+@@ -81,6 +81,11 @@ display:
+           action_title: Action
+           include_exclude: exclude
+           selected_actions: {  }
++          actions_order:
++            - media_publish_action
++            - media_unpublish_action
++            - media_save_action
++            - media_delete_action
+         rendered_entity:
+           id: rendered_entity
+           table: media
+@@ -543,6 +548,11 @@ display:
+           action_title: Action
+           include_exclude: exclude
+           selected_actions: {  }
++          actions_order:
++            - media_publish_action
++            - media_save_action
++            - media_unpublish_action
++            - media_delete_action
+         name:
+           id: name
+           table: media_field_data
+diff --git a/core/modules/media_library/tests/src/FunctionalJavascript/MediaOverviewTest.php b/core/modules/media_library/tests/src/FunctionalJavascript/MediaOverviewTest.php
+index a88502c6596..beb86d9a686 100644
+--- a/core/modules/media_library/tests/src/FunctionalJavascript/MediaOverviewTest.php
++++ b/core/modules/media_library/tests/src/FunctionalJavascript/MediaOverviewTest.php
+@@ -4,6 +4,8 @@
+ 
+ namespace Drupal\Tests\media_library\FunctionalJavascript;
+ 
++use Behat\Mink\Element\NodeElement;
++
+ /**
+  * Tests the grid-style media overview page.
+  *
+@@ -66,6 +68,18 @@ public function testAdministrationPage(): void {
+     // Visit the administration page.
+     $this->drupalGet('admin/content/media');
+ 
++    // Tests that actions are sorted according to the view configured order.
++    $actual_actions = $this->xpath('//select[@id="edit-action"]//option');
++    $expected_actions = [
++      'media_publish_action',
++      'media_unpublish_action',
++      'media_save_action',
++      'media_delete_action',
++    ];
++    $this->assertSame($expected_actions, array_values(array_filter(array_map(function (NodeElement $action): string {
++      return $action->getValue();
++    }, $actual_actions))));
++
+     // There should be links to both the grid and table displays.
+     $assert_session->linkExists('Grid');
+     $assert_session->linkExists('Table');
+@@ -116,6 +130,7 @@ public function testAdministrationPage(): void {
+ 
+     // This tests that anchor tags clicked inside the preview are suppressed.
+     $this->getSession()->executeScript('jQuery(".js-click-to-select-trigger a")[4].click()');
++    $this->getSession()->getPage()->selectFieldOption('Action', 'Delete media');
+     $this->submitForm([], 'Apply to selected items');
+     $assert_session->pageTextContains('Dog');
+     $assert_session->pageTextNotContains('Cat');
+diff --git a/core/modules/node/config/optional/views.view.content.yml b/core/modules/node/config/optional/views.view.content.yml
+index 20d6dad58a7..837ca76b9cb 100644
+--- a/core/modules/node/config/optional/views.view.content.yml
++++ b/core/modules/node/config/optional/views.view.content.yml
+@@ -36,6 +36,18 @@ display:
+           hide_empty: false
+           empty_zero: false
+           hide_alter_empty: true
++          action_title: Action
++          include_exclude: exclude
++          selected_actions: {  }
++          actions_order:
++            - node_publish_action
++            - node_unpublish_action
++            - node_promote_action
++            - node_unpromote_action
++            - node_make_sticky_action
++            - node_make_unsticky_action
++            - node_save_action
++            - node_delete_action
+         title:
+           id: title
+           table: node_field_data
+diff --git a/core/modules/node/tests/modules/node_test_views/test_views/views.view.test_node_bulk_form.yml b/core/modules/node/tests/modules/node_test_views/test_views/views.view.test_node_bulk_form.yml
+index d7a3fa080fe..0f67e50640e 100644
+--- a/core/modules/node/tests/modules/node_test_views/test_views/views.view.test_node_bulk_form.yml
++++ b/core/modules/node/tests/modules/node_test_views/test_views/views.view.test_node_bulk_form.yml
+@@ -28,6 +28,18 @@ display:
+           field: node_bulk_form
+           plugin_id: node_bulk_form
+           entity_type: node
++          action_title: Action
++          include_exclude: exclude
++          selected_actions: {  }
++          actions_order:
++            - node_publish_action
++            - node_unpublish_action
++            - node_promote_action
++            - node_unpromote_action
++            - node_make_sticky_action
++            - node_make_unsticky_action
++            - node_save_action
++            - node_delete_action
+         title:
+           id: title
+           table: node_field_data
+diff --git a/core/modules/node/tests/src/Functional/Views/BulkFormTest.php b/core/modules/node/tests/src/Functional/Views/BulkFormTest.php
+index 83d21c4d965..2bb94ff1163 100644
+--- a/core/modules/node/tests/src/Functional/Views/BulkFormTest.php
++++ b/core/modules/node/tests/src/Functional/Views/BulkFormTest.php
+@@ -4,6 +4,7 @@
+ 
+ namespace Drupal\Tests\node\Functional\Views;
+ 
++use Behat\Mink\Element\NodeElement;
+ use Drupal\language\Entity\ConfigurableLanguage;
+ use Drupal\views\Views;
+ 
+@@ -103,6 +104,30 @@ protected function setUp($import_test_views = TRUE, $modules = ['node_test_views
+    * Tests the node bulk form.
+    */
+   public function testBulkForm(): void {
++    // Tests that actions are sorted according to the view configured order.
++    $actual_actions = $this->xpath('//select[@id="edit-action"]//option');
++    $expected_actions = [
++      'node_publish_action',
++      'node_unpublish_action',
++      'node_promote_action',
++      'node_unpromote_action',
++      'node_make_sticky_action',
++      'node_make_unsticky_action',
++      'node_save_action',
++      'node_delete_action',
++    ];
++    $this->assertSame(
++      $expected_actions,
++      array_values(
++        array_filter(
++          array_map(
++            fn(NodeElement $action): string => $action->getValue(),
++            $actual_actions,
++          ),
++        ),
++      ),
++    );
++
+     // Unpublish a node using the bulk form.
+     $node = reset($this->nodes);
+     $this->assertTrue($node->isPublished(), 'Node is initially published');
+@@ -223,7 +248,7 @@ public function testBulkForm(): void {
+   /**
+    * Tests multiple deletion.
+    */
+-  public function testBulkDeletion(): void {
++  public function testBulkDeletion() {
+     // Select a bunch of translated and untranslated nodes and check that
+     // nodes and individual translations are properly deleted.
+     $edit = [
+diff --git a/core/modules/user/config/optional/views.view.user_admin_people.yml b/core/modules/user/config/optional/views.view.user_admin_people.yml
+index 1740f24b5b5..89924a7f2ea 100644
+--- a/core/modules/user/config/optional/views.view.user_admin_people.yml
++++ b/core/modules/user/config/optional/views.view.user_admin_people.yml
+@@ -69,6 +69,10 @@ display:
+           hide_empty: false
+           empty_zero: false
+           hide_alter_empty: true
++          action_title: Action
++          include_exclude: exclude
++          selected_actions: {  }
++          actions_order: []
+         name:
+           id: name
+           table: users_field_data
+diff --git a/core/modules/user/tests/src/Functional/Views/BulkFormTest.php b/core/modules/user/tests/src/Functional/Views/BulkFormTest.php
+index 3e1548a1022..ee5e44b2c50 100644
+--- a/core/modules/user/tests/src/Functional/Views/BulkFormTest.php
++++ b/core/modules/user/tests/src/Functional/Views/BulkFormTest.php
+@@ -126,7 +126,7 @@ public function testBulkForm(): void {
+     $action_id = 'user_add_role_action.' . $role;
+     $edit = [
+       'options[include_exclude]' => 'exclude',
+-      "options[selected_actions][$action_id]" => $action_id,
++      "options[selected_actions][$action_id][selected]" => TRUE,
+     ];
+     $this->drupalGet('admin/structure/views/nojs/handler/test_user_bulk_form/default/field/user_bulk_form');
+     $this->submitForm($edit, 'Apply');
+diff --git a/core/modules/views/config/schema/views.data_types.schema.yml b/core/modules/views/config/schema/views.data_types.schema.yml
+index 3495ce93fa2..5aef1eba0a1 100644
+--- a/core/modules/views/config/schema/views.data_types.schema.yml
++++ b/core/modules/views/config/schema/views.data_types.schema.yml
+@@ -921,3 +921,9 @@ views_field_bulk_form:
+       sequence:
+         type: string
+         label: 'Action'
++    actions_order:
++      type: sequence
++      label: 'Actions order'
++      sequence:
++        type: string
++        label: 'Action'
+diff --git a/core/modules/views/css/views.bulk_form.css b/core/modules/views/css/views.bulk_form.css
+new file mode 100644
+index 00000000000..488c792d63f
+--- /dev/null
++++ b/core/modules/views/css/views.bulk_form.css
+@@ -0,0 +1,12 @@
++tr.draggable td {
++  width: 100%;
++}
++tr.draggable td:first-child {
++  display: flex;
++  align-items: center;
++  width: 2.5rem;
++}
++/* Ensure a space between checkbox and the 'Changed' asterisk */
++tr.draggable td:first-child input[type="checkbox"] {
++  margin-right: 3px;
++}
+diff --git a/core/modules/views/src/Plugin/views/field/BulkForm.php b/core/modules/views/src/Plugin/views/field/BulkForm.php
+index c7b27ea5c06..c01937ef605 100644
+--- a/core/modules/views/src/Plugin/views/field/BulkForm.php
++++ b/core/modules/views/src/Plugin/views/field/BulkForm.php
+@@ -221,6 +221,9 @@ protected function defineOptions() {
+     $options['selected_actions'] = [
+       'default' => [],
+     ];
++    $options['actions_order'] = [
++      'default' => [],
++    ];
+     return $options;
+   }
+ 
+@@ -244,13 +247,52 @@ public function buildOptionsForm(&$form, FormStateInterface $form_state) {
+       ],
+       '#default_value' => $this->options['include_exclude'],
+     ];
++
+     $form['selected_actions'] = [
+-      '#type' => 'checkboxes',
++      '#type' => 'table',
+       '#title' => $this->t('Selected actions'),
+-      '#options' => $this->getBulkOptions(FALSE),
+-      '#default_value' => $this->options['selected_actions'],
++      '#tabledrag' => [
++        [
++          'action' => 'order',
++          'relationship' => 'sibling',
++          'group' => 'action-order-weight',
++        ],
++      ],
++      '#tree' => FALSE,
++      '#input' => FALSE,
++      '#theme_wrappers' => ['form_element'],
++      '#attached' => ['library' => ['views/views.bulk_form']],
+     ];
+ 
++    $weight = 0;
++    foreach ($this->getBulkOptions(FALSE) as $action_id => $action_label) {
++      $form['selected_actions'][$action_id]['#attributes']['class'][] = 'draggable';
++      $form['selected_actions'][$action_id]['#weight'] = $weight++;
++
++      $arguments = ['@title' => $action_label];
++      $form['selected_actions'][$action_id]['selected'] = [
++        '#type' => 'checkbox',
++        '#title' => $this->t('Select @title', $arguments),
++        '#title_display' => 'attribute',
++        '#default_value' => in_array($action_id, $this->options['selected_actions'], TRUE),
++        '#parents' => ['options', 'selected_actions', $action_id, 'selected'],
++      ];
++
++      $form['selected_actions'][$action_id]['action'] = [
++        '#markup' => $action_label,
++      ];
++
++      $form['selected_actions'][$action_id]['weight'] = [
++        '#type' => 'weight',
++        '#title' => $this->t('Weight for @title', $arguments),
++        '#title_display' => 'invisible',
++        '#delta' => 50,
++        '#default_value' => $weight,
++        '#parents' => ['options', 'selected_actions', $action_id, 'weight'],
++        '#attributes' => ['class' => ['action-order-weight']],
++      ];
++
++    }
+     parent::buildOptionsForm($form, $form_state);
+   }
+ 
+@@ -260,8 +302,16 @@ public function buildOptionsForm(&$form, FormStateInterface $form_state) {
+   public function validateOptionsForm(&$form, FormStateInterface $form_state) {
+     parent::validateOptionsForm($form, $form_state);
+ 
+-    $selected_actions = $form_state->getValue(['options', 'selected_actions']);
+-    $form_state->setValue(['options', 'selected_actions'], array_values(array_filter($selected_actions)));
++    $selected_actions = $actions_order = [];
++    foreach ($form_state->getValue(['options', 'selected_actions']) as $action_id => $action_data) {
++      if ($action_data['selected']) {
++        $selected_actions[] = $action_id;
++      }
++      $actions_order[$action_id] = (int) $action_data['weight'];
++    }
++    $form_state->setValue(['options', 'selected_actions'], $selected_actions);
++    asort($actions_order);
++    $form_state->setValue(['options', 'actions_order'], array_keys($actions_order));
+   }
+ 
+   /**
+@@ -331,6 +381,11 @@ public function viewsForm(&$form, FormStateInterface $form_state) {
+ 
+       // Replace the form submit button label.
+       $form['actions']['submit']['#value'] = $this->t('Apply to selected items');
++      $form['actions']['submit']['#states'] = [
++        'disabled' => [
++          'select[name="action"]' => ['value' => ''],
++        ],
++      ];
+ 
+       // Ensure a consistent container for filters/operations in the view header.
+       $form['header'] = [
+@@ -348,6 +403,7 @@ public function viewsForm(&$form, FormStateInterface $form_state) {
+         '#title' => $this->options['action_title'],
+         '#options' => $this->getBulkOptions(),
+         '#empty_option' => $this->t('- Select -'),
++        '#required' => TRUE,
+       ];
+ 
+       // Duplicate the form actions into the action container in the header.
+@@ -370,8 +426,18 @@ public function viewsForm(&$form, FormStateInterface $form_state) {
+    */
+   protected function getBulkOptions($filtered = TRUE) {
+     $options = [];
++
++    $actions = $this->actions;
++
++    // Only order if there is a user specified order.
++    if ($actions && $this->options['actions_order']) {
++      // Some actions might have been removed. Keep only existing actions.
++      $actions_order = array_intersect($this->options['actions_order'], array_keys($actions));
++      $actions = array_merge(array_flip($actions_order), $actions);
++    }
++
+     // Filter the action list.
+-    foreach ($this->actions as $id => $action) {
++    foreach ($actions as $id => $action) {
+       if ($filtered) {
+         $in_selected = in_array($id, $this->options['selected_actions']);
+         // If the field is configured to include only the selected actions,
+diff --git a/core/modules/views/src/ViewsConfigUpdater.php b/core/modules/views/src/ViewsConfigUpdater.php
+index 8f9dfcfbf08..856b77ebb08 100644
+--- a/core/modules/views/src/ViewsConfigUpdater.php
++++ b/core/modules/views/src/ViewsConfigUpdater.php
+@@ -10,6 +10,7 @@
+ use Drupal\Core\Entity\EntityTypeManagerInterface;
+ use Drupal\Core\Field\Plugin\Field\FieldFormatter\TimestampFormatter;
+ use Drupal\Core\Language\LanguageInterface;
++use Drupal\views\Plugin\views\field\BulkForm;
+ use Symfony\Component\DependencyInjection\ContainerInterface;
+ 
+ /**
+@@ -159,6 +160,9 @@ public function updateAll(ViewEntityInterface $view) {
+       if ($this->addLabelIfMissing($view)) {
+         $changed = TRUE;
+       }
++      if ($this->needsBulkFormActionsOrderUpdate($view)) {
++        $changed = TRUE;
++      }
+       return $changed;
+     });
+   }
+@@ -689,4 +693,45 @@ protected function processRenderedEntityFieldHandler(array &$handler, string $ha
+     return $handler_type === 'field' && $plugin_id === 'rendered_entity';
+   }
+ 
++  /**
++   * Updates the bulk form fields by adding the actions order configuration.
++   *
++   * @param \Drupal\views\ViewEntityInterface $view
++   *   The View being updated.
++   *
++   * @return bool
++   *   Whether the handler was updated.
++   */
++  public function needsBulkFormActionsOrderUpdate(ViewEntityInterface $view): bool {
++    return $this->processDisplayHandlers($view, FALSE, function (array &$handler, string $handler_type): bool {
++      return $this->processBulkFormActionsOrderUpdate($handler, $handler_type);
++    });
++  }
++
++  /**
++   * Processes the bulk form fields by adding the actions order configuration.
++   *
++   * @param array $handler
++   *   A display handler.
++   * @param string $handler_type
++   *   The handler type.
++   *
++   * @return bool
++   *   Whether the handler was updated.
++   */
++  protected function processBulkFormActionsOrderUpdate(array &$handler, string $handler_type): bool {
++    if ($handler_type === 'field' && !isset($handler['actions_order']) && isset($handler['plugin_id'])) {
++      /** @var \Drupal\views\Plugin\ViewsPluginManager $plugin_manager */
++      $plugin_manager = \Drupal::service('plugin.manager.views.field');
++      if ($plugin_manager->hasDefinition($handler['plugin_id'])) {
++        $definition = $plugin_manager->getDefinition($handler['plugin_id']);
++        if (is_subclass_of($definition['class'], BulkForm::class)) {
++          $handler['actions_order'] = [];
++          return TRUE;
++        }
++      }
++    }
++    return FALSE;
++  }
++
+ }
+diff --git a/core/modules/views/tests/modules/action_bulk_test/config/install/views.view.test_bulk_form.yml b/core/modules/views/tests/modules/action_bulk_test/config/install/views.view.test_bulk_form.yml
+index 6446dc86c8c..29b7b90cf34 100644
+--- a/core/modules/views/tests/modules/action_bulk_test/config/install/views.view.test_bulk_form.yml
++++ b/core/modules/views/tests/modules/action_bulk_test/config/install/views.view.test_bulk_form.yml
+@@ -89,6 +89,18 @@ display:
+           hide_empty: false
+           empty_zero: false
+           hide_alter_empty: true
++          action_title: Action
++          include_exclude: exclude
++          selected_actions: {  }
++          actions_order:
++            - node_publish_action
++            - node_unpublish_action
++            - node_promote_action
++            - node_unpromote_action
++            - node_make_sticky_action
++            - node_make_unsticky_action
++            - node_save_action
++            - node_delete_action
+       pager:
+         type: full
+         options:
+diff --git a/core/modules/views/tests/src/Functional/BulkFormTest.php b/core/modules/views/tests/src/Functional/BulkFormTest.php
+index 7d05fb20226..825e770fc6a 100644
+--- a/core/modules/views/tests/src/Functional/BulkFormTest.php
++++ b/core/modules/views/tests/src/Functional/BulkFormTest.php
+@@ -4,6 +4,7 @@
+ 
+ namespace Drupal\Tests\views\Functional;
+ 
++use Behat\Mink\Element\NodeElement;
+ use Drupal\Tests\BrowserTestBase;
+ use Drupal\Tests\node\Traits\NodeCreationTrait;
+ use Drupal\views\Views;
+@@ -73,6 +74,55 @@ public function testBulkForm(): void {
+ 
+     $this->drupalGet('test_bulk_form');
+ 
++    // Tests that actions are sorted according to the view configured order.
++    $actual_actions = $this->xpath('//select[@id="edit-action"]//option');
++    $expected_actions = [
++      'node_publish_action',
++      'node_unpublish_action',
++      'node_promote_action',
++      'node_unpromote_action',
++      'node_make_sticky_action',
++      'node_make_unsticky_action',
++      'node_save_action',
++      'node_delete_action',
++      'test_action',
++    ];
++    $this->assertSame($expected_actions, array_values(array_filter(array_map(function (NodeElement $action): string {
++      return $action->getValue();
++    }, $actual_actions))));
++
++    // Test changing the order of the actions.
++    $view = Views::getView('test_bulk_form');
++    $display = &$view->storage->getDisplay('default');
++    $display['display_options']['fields']['node_bulk_form']['actions_order'] = [
++      'node_make_unsticky_action',
++      'node_publish_action',
++      'node_make_sticky_action',
++      'node_save_action',
++      'test_action',
++      'node_unpromote_action',
++      'node_delete_action',
++      'node_unpublish_action',
++      'node_promote_action',
++    ];
++    $view->save();
++    $this->getSession()->reload();
++    $actual_actions = $this->xpath('//select[@id="edit-action"]//option');
++    $expected_actions = [
++      'node_make_unsticky_action',
++      'node_publish_action',
++      'node_make_sticky_action',
++      'node_save_action',
++      'test_action',
++      'node_unpromote_action',
++      'node_delete_action',
++      'node_unpublish_action',
++      'node_promote_action',
++    ];
++    $this->assertSame($expected_actions, array_values(array_filter(array_map(function (NodeElement $action): string {
++      return $action->getValue();
++    }, $actual_actions))));
++
+     // Test that the views edit header appears first.
+     $this->assertSession()->elementExists('xpath', '//form/div[1][@id = "edit-header"]');
+ 
+diff --git a/core/modules/views/tests/src/Functional/Plugin/ViewsBulkTest.php b/core/modules/views/tests/src/Functional/Plugin/ViewsBulkTest.php
+index 141bfd07366..561aa8a438c 100644
+--- a/core/modules/views/tests/src/Functional/Plugin/ViewsBulkTest.php
++++ b/core/modules/views/tests/src/Functional/Plugin/ViewsBulkTest.php
+@@ -73,7 +73,8 @@ public function testBulkSelection(): void {
+ 
+     // Now click 'Apply to selected items' and assert the first node is selected
+     // on the confirm form.
+-    $this->submitForm(['node_bulk_form[0]' => TRUE], 'Apply to selected items');
++    $edit = ['node_bulk_form[0]' => TRUE, 'action' => 'node_delete_action'];
++    $this->submitForm($edit, 'Apply to selected items');
+     $this->assertSession()->pageTextContains($node_1->getTitle());
+     $this->assertSession()->pageTextNotContains($node_2->getTitle());
+ 
+@@ -94,7 +95,8 @@ public function testBulkSelection(): void {
+ 
+     // Now click 'Apply to selected items' and assert the second node is
+     // selected on the confirm form.
+-    $this->submitForm(['node_bulk_form[1]' => TRUE], 'Apply to selected items');
++    $edit = ['node_bulk_form[1]' => TRUE, 'action' => 'node_delete_action'];
++    $this->submitForm($edit, 'Apply to selected items');
+     $this->assertSession()->pageTextContains($node_1->getTitle());
+     $this->assertSession()->pageTextNotContains($node_3->getTitle());
+   }
+diff --git a/core/modules/views/tests/src/Functional/Update/ViewsBulkFormActionsOrderUpdate.php b/core/modules/views/tests/src/Functional/Update/ViewsBulkFormActionsOrderUpdate.php
+new file mode 100644
+index 00000000000..4eafeaecf6d
+--- /dev/null
++++ b/core/modules/views/tests/src/Functional/Update/ViewsBulkFormActionsOrderUpdate.php
+@@ -0,0 +1,40 @@
++<?php
++
++declare(strict_types=1);
++
++namespace Drupal\Tests\views\Functional\Update;
++
++use Drupal\FunctionalTests\Update\UpdatePathTestBase;
++
++/**
++ * Tests views_post_update_bulk_form_action_order().
++ *
++ * @group views
++ * @group legacy
++ */
++class ViewsBulkFormActionsOrderUpdate extends UpdatePathTestBase {
++
++  /**
++   * {@inheritdoc}
++   */
++  protected function setDatabaseDumpFiles(): void {
++    $this->databaseDumpFiles = [
++      __DIR__ . '/../../../../../system/tests/fixtures/update/drupal-10.3.0.bare.standard.php.gz',
++    ];
++  }
++
++  /**
++   * @covers  \views_post_update_bulk_form_action_order
++   */
++  public function testBulkFormActionsOrderPostUpdate(): void {
++    $config_factory = \Drupal::configFactory();
++    $path = 'display.default.display_options.fields.user_bulk_form';
++    $config = $config_factory->get('views.view.user_admin_people');
++    $this->assertArrayNotHasKey('actions_order', $config->get($path));
++    $this->runUpdates();
++    $config = $config_factory->get('views.view.user_admin_people');
++    $this->assertArrayHasKey('actions_order', $config->get($path));
++    $this->assertSame([], $config->get("$path.actions_order"));
++  }
++
++}
+diff --git a/core/modules/views/views.libraries.yml b/core/modules/views/views.libraries.yml
+index 08ff2d16407..89cc2558c70 100644
+--- a/core/modules/views/views.libraries.yml
++++ b/core/modules/views/views.libraries.yml
+@@ -22,3 +22,9 @@ views.responsive-grid:
+   css:
+     layout:
+       css/views-responsive-grid.css: {}
++
++views.bulk_form:
++  version: VERSION
++  css:
++    component:
++      css/views.bulk_form.css: {}
+diff --git a/core/modules/views/views.post_update.php b/core/modules/views/views.post_update.php
+index 4df7a0ac4d1..cbeb85f40dd 100644
+--- a/core/modules/views/views.post_update.php
++++ b/core/modules/views/views.post_update.php
+@@ -171,3 +171,14 @@ function views_post_update_views_data_argument_plugin_id(?array &$sandbox = NULL
+     return $view_config_updater->needsEntityArgumentUpdate($view);
+   });
+ }
++
++/**
++ * Add the actions order option to all bulk form field configurations.
++ */
++function views_post_update_bulk_form_action_order(?array &$sandbox = NULL): void {
++  /** @var \Drupal\views\ViewsConfigUpdater $view_config_updater */
++  $view_config_updater = \Drupal::classResolver(ViewsConfigUpdater::class);
++  \Drupal::classResolver(ConfigEntityUpdater::class)->update($sandbox, 'view', function (ViewEntityInterface $view) use ($view_config_updater): bool {
++    return $view_config_updater->needsBulkFormActionsOrderUpdate($view);
++  });
++}
+diff --git a/core/profiles/demo_umami/config/optional/views.view.media.yml b/core/profiles/demo_umami/config/optional/views.view.media.yml
+index 8c2bf80d65b..3058c3bcc67 100644
+--- a/core/profiles/demo_umami/config/optional/views.view.media.yml
++++ b/core/profiles/demo_umami/config/optional/views.view.media.yml
+@@ -76,6 +76,11 @@ display:
+           action_title: Action
+           include_exclude: exclude
+           selected_actions: {  }
++          actions_order:
++            - media_publish_action
++            - media_unpublish_action
++            - media_save_action
++            - media_delete_action
+         thumbnail__target_id:
+           id: thumbnail__target_id
+           table: media_field_data
+diff --git a/core/tests/fixtures/config_install/multilingual.tar.gz b/core/tests/fixtures/config_install/multilingual.tar.gz
+index adf60af587f..02d1ea7cb92 100644
+--- a/core/tests/fixtures/config_install/multilingual.tar.gz
++++ b/core/tests/fixtures/config_install/multilingual.tar.gz
+@@ -1,106 +1,112 @@
+-‹      ì]ÙrÛº²Í³¾‚oª:µ©II~:žã8ž¶ím;/,ˆ%ÚÉp°-ï»«ÎoÝû9çK.’"@Hò ÉNBT*‰0è^h4ÖçO+
+-
+-Ý®ŽÿU»ºRþ7ŸTMošjºâ»Mù$é«ïÚ§Oiœ€H’>ù®57ß¢ôŸ4´>ß»ð!ná¿[ ±Fv0lMÆÞÛÀlhÚŒù×t]ëó¯wÚŸµÓíŸ$e‰}˜~óùOS×Þ€ÖîvÊNOïÈšÚëÈØƒ²¢v§cõŠ£6<à­À†ôhÔ’4Þ’(…†Ð·¡o¹0ÞhHÒ8°SâÿI’,Ù/fÿOc5L+ˆHªz	úí;îÐx´!Ý*ÉãÁãæß}½0íØ_[wG²züÉpçîë&ür
+-¾:“/J÷='ZÔ¿ô6¤«üwÖ‰8êclEn˜¸¿!5ÿ„ô	uLÃ8C7	¢¤fc bh&`€µ“HÇ…nÒµ¶‡˜”>ƒ~/îRA~gùÌÄMp};‚¤ÐK‡®ÏƒØ¥}U˜¼ù‚˜¶%IY­âï¡YHŸ‹’äÉÈõ‡ÓÚç,º› ¾it6Õüô éÜÈqºK‰Ã(HC3™„¨FòÿR°Ç®ofÓw€ˆ¡”FÇÆÄ=´«ãRZV¢Ù,ÅÁGËK1:À‹Ë ^£òGgQf“ŒŽË‰4š©6¸ƒ¦çúwÕúQWA2ª” ƒ8ðÒDÐ!ÜWÔ¾<QZÑt[ÐŒCôw<«9ÓBTYkÔùÈ›#7¤¼¨8úøJg£Êp¢AF_kZˆãJRAÇ}¬DÇ©#ŠF0;„Õ6}¯=ˆDƒGÓƒþªÂ¤<‘m‚Ô·A4Lô<7ŒÝX4FÈ3s‹DS<ùE²p¦c4èˆÂÁP8[xF„³A‰÷0+ÈÕ9JÆê€#nÏ¸‰%ÿ,)›0—e¦<•0Î¼â4ƒhÖ¹‡!jV"†˜Åf·”g™×V±Là<"f€ã0™p…G®Í,A˜ß|‚QPM#å(2K#ìç¡/Ó~á˜¦”ViärP“ùôf¢esI¹Á|™<ØÁ&Ç1PS@ç5l’PÃf5ù§Í9ˆ·<ÐäyÕ˜É7·RÈd‹á=ŒÜdÂÃfÿì”Y-€Ž…Ä\hú`\®7+u^íN¤¤ó5’ÖHZ#é’‘Tbàˆ/N¾“ÃX÷|åò¿—pzÁvãµ›úTi£5¨Ö ZƒêPMÜ1DH4+Ø™'¼@…V‹¢6H’é[#(í| 5‚Öºt±céÑ òˆGA””é¹Éäaº…1ó	±*cñ œE¿’«EVÈø¼Ó¬¶š;ª$¬œ+|Ÿq,ù®Ï[ÑÌÅŸÉ|†÷ˆÌ>ÿý7ÖWKÿüóSÁ7êu6þ•žX,×ŸÌ«G¦Ë«4ö(Ÿ•5’KkFòœAïAäb`å»C&sºÑ±©GL-&0öƒ*0såXTN™S²×2]-FLO*iâ®”Ðœd¨¢ø%W[-_“Î×òu-_×¨¼tT¶<×º3c$áOÇèëïÇd™‚VÃ$qýa¼Qå¯$0)VZ¤€;«±r*š¿%éŸJj<TGÍ†^1Ý„å.š8N…)>i‹¡]<šî¸QŒé#€êÍ£›ÑCC$ˆ˜ÊâÐtþ!•'”®^ tgÙž–æ–C÷’ý	—›“ Q?m¤º²ˆÒêõv¾^ßêõ­^ß–º¾…h—^BúYÉÜ"Š³y&Q‚…Uäú¹Ì6ZòßcÖieˆNà86ñðà–Ñ¾»\G$À#	hDüÔó8lgò~Mõ	yÿ÷?ÿ‡þðÔxïØ^þ¿ÿù_ô‡AÖ0ˆ![ßÅ*y³9
+-Ð?ÀÑŠ&£ÚœW$T©©ÿ!©ÊRý«+Ï)ƒ¦Rˆ­³s”¥MÏ“d¶•|2«5Ò”¼ô	ùÕ(›M4Š<õ@ìZóÈ'NH1i’`NÛs1m2k0n6O®l‘§‰y×þ„Óž•{‡E¶¸øúsôKLš•ŒT´CðMÒ@låÕlÆŸŠ/7äÉ;°HZãb~tÐçNÇ:ARXŠÑ¬J™f0ï¸¬ä«eË‚ºJ¢!eý"ˆ àE'G	³bì?ÿ6Âœ‚K’§Žæv…îëá>µfHZâÞÌï?A üìf’àúî„Ø¦CúÓ[*gü°³{¾½ 0EuçÒ;Z{Ðý?â?(cRv‘4•â’¥]‡ ÏJÜè~hc*øã
+-ÊìC7xçã–/
+-ýžx_·!©¢!ä¥Á$åm™ùX¡B4‹œñÞá•¯n±sŒ6¼æô#+H‘&j±èÙ‘š1Ž,ÚÌìšP^¼ÉäÆSÀ”Îþ"ø#u#Ñö§áx BþlëzUsÒi1´Ñö 'ˆ šH“îÜ*ó“ÏŠHm2&ÒI“[ÿ3ÚBœï~gc§¢}›„ZD_LIÙõà9L<oòËCÎ%ÑT.’íÃý²iÊ…éŒC6¹‘K6§Th(,Gq©?µ5ú'çž€=ù÷ÏÀQ÷²0hVË«Â!ÁL×XTcÑ›°ˆŠB´|iª§D¾y<½YÆç’$µœ!N&^e#AðkÞ…TŠ¯0óŽ‚‡Bçñ÷ß¤:éŸ$ôßœ8s€|0J+’9Õq3C“_¡\‚¦b7'h–à[Ì’Ù‡óRÃÔ4QhW85’Ø¸dGµüÉf¦²æ•Îùv®ãUÆÜÇxî°Ê¬jO££üˆ¡JÈd§¢¹wïñ®5r<nòÚn:®9ß0ÚÑuPTq>ïåm·™}õš¿ÊÄóæïé³ømûIxü€_$ ?¡ñ«¾ìcÑ ÀýªL‚üqg·Â~ÈOJxüéãš{ÄÒK€ +r7c$êÝ	Nât<&MìùéË³€Hø‹ehMç%ê
+-%‹ü‘ÂhÂç êE“$Í“@H4`ã1ÕÚ1½qcÜy3þá™|@#%ø”)q}K ôÆ”H4®&Ð6éqVIî)ïÜJ}L«Ê¿ôeÊ¿tÊ?Îjj¾úO¼O±â8ÕHÕòÔ½$ásÌ¨eq5.*÷¥ƒÏ‰}«õ¦©DµmŽa°ÍZ>„cð(9KÎ7 DcûXV·ÊR{HJÉÙQþ?3Óì6dsQ®È,gL#ýÕ¢4 ¢a\N@ƒÚÂJ{7ŽKÇö¥„ŽãÁsQ‘sNtÊÇçž‰ŠS·D*“‘ã‘y#œèlŽÝxo7_3ãÿDÖAü’Ý¿-ðÿ¦jšbþß´Ž†ý¿Jíÿm-ú8=Ûé;ôtGÖz= ƒ.Td¥o=Cµ`hbÿošypÔ¡[î »{keö¶˜ÎÌ1ª¥åã¿è’ÀºŒÃi)o-ðwô÷Ÿü§ã­ë/wé“Ò?Ù[gêÍÉù×››Û‹åb+<þ«suè#„¡§Œ„Ìs‡q›ÙÏÜ_iœ•)ð¡u†#Hƒ	ê­ŸŒZ™Ç¸Üm[Ùm®£lû\öç8ïqGøs¼I>09fžãXè~_cu¦±F9¡¶ÔøU-56ÃÐcÏ-Ê†UYzµ–üFç]589Gh£¡RaÕD£ÃÙX$J|ŽÙ²èêö‚ÇÁi†«%WpÅÜ)Ö&mfwfß´^¾yBµu¡‰à§ÈuÊhòóbS~ÖÌ	‘IÖ®XÊñú¹W2o¸1W/ý ;ËÔÌ`Y®ØÌ8“UÎ„¾PÕ³8‘ž%£Úª~åŒC…¼ˆ™+™©ÍúÏ¯É4ÌT¦T—œŽR­”­l®†1¿‘[è»*Ã‡Ðr$ºÏµüR¯*¦1™hÈQ}UU
+->Ÿ›+EK„6ÁÁsSm2|FNÑ”
+-OŠÏ—«§’Ë:Ú-¤on\óøWŒ¬ è»‚¯ ?¥	ËwêežgAÀŒló_ÿú×·ÍãýËÍý]“W ´æÆâ,UªZ#T£™#ð^|ôü|ûƒÊÁôjÌ*×Þjp0»Ü-j›¬“«µžó—7¬ÓO~ùIÿËô³d·’¹û$‚ó‚fv9£Vs^?­6ûS%÷/yÆPNùx
+-÷·èq›D‘KÖM,_£Æð\1=C×>ðëÎT§
+-,¢QŠL´ÜÂILB®Î)ÏÔ¹×rÿ/ ÷¿\¸³üþbŒb8›¶ZúŠ’ý|]~/ ZµÐß" xÉ‘[{û¿mŸs^—©ÉÅ{ïS˜÷­Ïät¦äœ«…/Ç”C‚uLÜv½ñ@pþùŸ¢ttüþ“ªi]½£vºŸPªªuêó¿u„ìü¾!÷ý®¬éz_îõ€#;zßtÚÝž¦€ç¾ÿD9jþ‰þWŽ¢ÃÓÝÓí»àD»	Or±³wÒ¶‡îÁçâÉýš<xãËG‹œØUI2?¼k~¹8ú&ÝdIDŒh6°èT\@è…ÝlHcÙþ}Fh}Ž'1:ZcàzË>øÏÂ"þWu•ãÿvGÕkþ_G˜Ï§ÑÍ0é¦£Sàœ¶ý!86¿_žî¥“íÐÞUž.{FïéÛñ¹÷tì6Š5¼|¨-…£ÐÄ¤UsÞÇ­Ïd£Ù¢c^À^/^",âÿn—_ÿ5CÕjþ_G ë?ZþmÕîé²ÒÓ:²¦µu¹Ú–¬u-h”NÇÐ•¼ÿÈšÿäôÓ!­oîCs ÉŽ§±˜Û'îí7{K•/‡×g} ì¨fh÷îwGÎ‘ÿxýÝêÝÞŒ¾ÜÆì*'ðm,k&‚Cª]pm8@|âOªñ ÝáˆX®„QpïUñ
+-’ïÒš´ë&þ8“ðÐ©¼Ù({Ý"Zþ™9§Ÿ³Á¡^`r!´‰‹]z#jÚ‰bÄ2£•P˜ûô!ðmbÏ‘)cé^œTåznqÈ?Sþ§NËÁ€…ò‡ç‘`Íÿë”ÿ5ËîwU Èn·‡ä»øßîË¶bØ¶œž­êË”ÿ¿wÓíË‡#óÊ¾8¾ÿf^’^wÌž-ÇroïûÝÅ±q8<~ØSàÑTþ§ŠAFî'†k³äýy\K‹BÆÿœñœºE(â+·Bx£0°Pþïhüþ¿£×òÿZÂ‚·˜í›îæ¥’\ÊgñíØ=yè\õîÂ›£¼5‘eóè|o8øqxyqs„@Àq}·¬[|ïo«ÃâPÞÿcKà[k¶ÿGë¿¢püäMµæÿu„ë´~tí:Ñ^·»¿»9|TöÏ÷ê¢÷pžÜî¥7½­þI”ÎÕÅ×+Ó›ÿ&ÄÜX²Ò(‚~âM¤1He‚“® ~6"õli ¥°îè+Þ¤%]Œ€'M‚uá±ÉtâB\®YcÌCë39ÄmåÛ•U¨ ¯ÿ¼üßîvëû?k	óùßÿz§\lžm=yÇÞ†#÷ËAwp°{úmßU¶n~|¿?µwýîöÈIÑ9†Ðàû¤fL|ÓéJÍž=ë?5¯ ç¨a:ðÜx”™\¼ñ?b|ŽÿÃèÖü¿Ž@÷ÿ]Ívz–Ö—ÃvÐþßR¨þÏ24Ýé=Å¶º/Ðÿ	.óÍÇ/>»šû]>3ƒýÃíÓýëý«½Û«=õ {7±œô#ëÏ`“èTZ(Niôô>LÉô¨PÛe†}l™íYe¦2¿öVFÈÿ©¿TXÈÿh³ÏíÿÛZþ_K üßï¶a¿ãè²
+-¬õ×°þOÈFÛ°uEWCo¯’ÿ‡ûg×îy>ì{Š7997Ì/Û§áýþæéŽåþØ9þ¶÷pu2±ÿJ¦üÏSi —yÂ³0€¯æ÷BÖçÜ«E|Ã¾‡üoûÿÌþ_QjûŸµ„ù|iÿÒ½ÅðøëñýîmÜ>\ïäà"Ý~¼¹Ú¤}rq|vjöøªqó{ÕªÎ˜’ÄÆ~Ë(x«òá0H\›ûòµRÐ¡v½Å5Õ<“<µQ ÇdåÖçÄŠK`åXÙAßô®ÚágÕû~óŸéÿ+ÞˆÍ¤ŒCŠoÅ„…ë¿‚×|æ¯µÑ/,ÿwkû¿õ„Lþ·:=¨@î´CÖ¬Ž#Ûr´`× /9ÿg×ÿgxðèªÛç›‘ùíøÔ¦ÆŽq{ {êáæÅáärok÷bójzÔƒG™:óe;ûÉ_¸¢ïãì¿˜¾HïÇÓþ¿÷$¼c˜Åÿ%ï,«ßÿ£Å>ãUïê˜ÿu£–ÿ×(ÿ·A.4ä.’ÃdÍ1rßQÙ  8Ðúv·¿Jùÿè©ÿã*Rï.o•ñíŸ›û;q¤_Ÿ§÷É÷¶}³ëÛ‰N® VÈÿ¹ï Üx†þZÌý¤;5÷gñÿ5ô‚8ÑdÉ›€ùüßQ:Ý©ÿ/]Åü¡¶ÿ[KÈìÿ-G7,»#05Ú2èA ÛvÏè;šÑîªöëý• ñ©Ÿ!ž-,ÄOæ^pô¤ƒmo_»Ý›h—;Þô¯Ï’áÅåu0ÚÝ¹½úk+ý¢€€ENÕ9Rìç¿_àðËƒØ¨èç÷ø•]|ž^#­p—BIä+îòåÞÕ™ß™ÅO:_p%ê7/içë7/ë7/ë7/—ü¦3ïÜ­>BŸÁ.^ã¹¸Ë•ca—uã¼ÔMYÎ,êr]Yº›i2b^ªQ—v¾FÝukÔ]2êæ~0†™VY#´»8¶¤Ñ¯†«%ß×±e¥;‹±¹ùÄ‰”†ôRu©æ¢Içkˆ®!º†èA´èÁ³òÊi(Ý]ÜÐ`±Ï±Ñ˜M&Ï4¨©'ÄÝÕ„ À®îxï‚ó|v“¦í:_w~P,|…ÇI“4*ÕùorÊ|<i„Íáùg}Bß¢Ì`ðYwÂm.!b ÄŒFïí¾c”é¥v¿ Lí¾v_®ñµnàË1wƒ¿¥2K$Ì
+-Àû+äÝœ.Ã_!Oá¹ÃÂW¸#¬dú%ÌS7¤òTñ®y/­«qXˆC–ÄÁp>“œ î O½$¨q$Ð6Íü†üô¨Òâ3™õM7
+-)·˜5®ØCxÁ“” e7Æ‚˜ /°ü¼"$<ŠHérêoáu½ê_{¦×õÚézítý™ÔR;]¯®ÿ¶N×—ó¸ú’\®ã |`=“gx±kæ›æ¹öV æ,<Ññ•Ui©"¿’Qœ÷HðìGu_üÞðìªªéW×¶¤Gz…ï!Ï|¹wÑK¼B:ÌÉŠ®¥™¢ªJ[®ï¹~•+f}ÿ,¥Õ/é¨¿ÈÿÜÇ€
+-/«xð'À¯y¯Æà<2ôññ'XÃ[´Ëq`’}:Ù–Ü˜—cå±Ëðz³HgRs{5À&?Ó±¹P×ÈÛ3u¼’.O«5ÏÔd¬âå…ªÉ`%FŽpÚ:›œ-A•e¸¼Iÿ#5«í‰5#©Oÿ‡_›¨µ#¯ÑŽ¼ÿ›Ej©šBåU‚Ùsåg"0Y ’Laã¿íÂ´š—5æ>¬³ò—5
+-õl¡ŸV×;ÓaÎ>qŸ-ˆv©…¿Ú<†8s¤»¦Ìô>o9*K«¿)=½÷í‹÷Sÿøv×îÿO¯Üÿ7êû¿ë	ôþOm”l½Ó••>öÿk÷U¹×1y Ã„VÏî¶—êÿ·;‰¼+ý©ÿdÛp+µ¶Úû§?®ÏÎœ/}ïüÏómgpµ×ÝÜ£ïPºÌ/ðìÑ_¬’ïœ¸Ì$'ElªbÎ7ð{öÇ%ÿt£ÐZ¾Eüßnóþ:º^ûÿ[KÈîÿj}]Q *k°ßAA±>€r¿ØÓÛ¶gÜÿ›ÅÿäU8çØóøn<jØn”vxIT¸×W.¥î{Êo˜û¿Ä,šjB„Þ’<ÿ?{W¶œºŽ®ïy
+-ÎUªº¶‰g›Tª&!ó<®$uª(y€81˜˜!«ý>ýÝ}·e?ÉÑ`[²•„•HÝ{ÅX²­é$ýÿ÷O§]2eâÿ+Ëÿ_×9ý¯$úw$ÑR 	¶å8‚ji¢`š†$h¦êZ’­MÕ\&þGç<z­Óá¶
+-º²´×jô/í£§­‡£ý3O­>jáÕIãL¿:üÌDÍù{öXH€=¯ã”ü¯:Pê•Éóe¼A]VùÍë? a„]<Íé—ñÍJ{ýÖÆë7^“Î!÷hO`Ü¥ÖÀ¡ô¢ã‚L.»	Š;‚Ýú,|lÙ{ ”“Zj—³°Jñ;·awzàNÜé;=|9oà¥sÚ_t¾í!¾•yˆ3^RyÎx9ãåŒweÁ?gO=›-3O~*cžf£]Àš¯‹pÎ˜qå9cæŒ™3æ%1fÖa$ß	8¶!¾·9YÈ+×c«¼Mvœ§DÕÙ*×ì¾7œT¾7y5X«J*;_N4ˆù<+"ŠŸ^‚¬ ·Dè:Å~’ÔmÎôIå9ÓçLŸ3ýeiãiO˜´å)#J;t±£Å‚£ÛQÑÙG?UGg«3dÏ)v7B¢Œo^s®Í¹v6‹síU ö4@+˜­°aÙPÄ”a“-T€^CÃiDN,øîGäóä§Š¦6óº‘¹xàâ‹‡lë/ò Îæ:+fvüBŒt’S 0X)‘ûÈçÙ»DÅrkÃtååq™@*Ïe—	\&,\&8.Â<Ès_m#TŠ£{ÑØ©ç>U_§ê2‡¶ž«¢SýÈ¹1çÆeÎ—Á‹ª÷Ù±í{ö5%€L[ÐÑâ1RkƒŠH”x  sÕ¢w¦s‹žƒ7¶s×ïƒF2 2yð$'t‡Phä!Œ‘ü¦öÐ<èå0OŒÁ{r*‘é„ü“ŠH5@×›Œvúå¹'ÍA
+-l¹pÊZ%ùWá”7ÎàªÌpÕRyãï?ÿ]¾ˆ~fáî‡%þúWy]R<ÙÅúë¿YñÈA™?ÊŒÒë `Ee«\-¥{s1PÍ{¨4£„¥±š)ºþ&PÍHôz°_ˆWzX3aÝI6]€%zd±ÂltSù¬]ÿX­yÊƒË5DÉÿfÄŠâ½CvÄN\`ulÔ´JúýàÅíxï ˆÖI±ï}šŒœÒ¢…K}÷zgÍ‡ß$Ý’Úd¿^ÝšÙ£ë¹pœãÇÌc;h[z‰4r{îùÎ–_î4g¿7‹EÓx™¸!yƒ®C.­GÎ‚Âª%MîÐž¶g$CH\Iý²¾ Ü‚Š,0—"—µ†Ì…Eá,·‰þDéÑ´ƒ-ŽµÏL«[˜ýX]”hçY”
+- iñvVvóçûº°Ö¼)˜ìÿMïç`á?Àõèí %€“Y[cúÿ[06jøgð5Æ—e~Þ–Ó½¿?£z]¢o$”9ü¤ò©˜¤\ZFI.üNžyþüJÍ’ïc°?éšÌ¦TÔ'y[kâ¤T/è‘È‘`	¼uÆÇ—ÅdCº5_”Åò`I%—¯U’®n8úÞgÇ&X–4›äü$Ë}pÜ‹…åDéÓxØ¤:ìë"¯ŸÅÄŠ¿¾,þ•;ìœ‹q.¶.¥(¸ŸÏÑ¦/‰§¼ãSÇSêµše2sj¼Fëd†4¾w ,Î›
+-³?Æ›p}‚7šßD·?ÂfØG?ÏÐ·3h»¡—>¿LQÖÿäpì¨yìÔhÖÚ)g‰½h†#rŽÃ9ÎWà8ä¼’<Ÿ’Éô«ÕK™—dNJX›`~¹ñú(ðÐbÍÂc’O6o÷o2yÙå@|^Ÿs²œg°.rý8°;Å6¾ÌŽztcã”É5ÛEy_f©£U×Ó÷Z,}L‹›ùÅuì¤Æ64]8¼!}hü¨„Iæ”M6êß§´ƒ=AûmZÒ½ Ù6~ðÆLóÂå½uí[”cS“mÕœÃä¸ëÔ*Ö«ø4jÂ×§N)Nü[ÒEæñ^ÍÄXM½iVˆÕ/ßÔîõµeú3ý¢“YTÇöž ^­´Px˜L¢!_ˆì#ñÝðßP4·üLâX.£ìO£¿g»á¬A˜VšcÜv¶“‰åþ$îf2-ÒÕø…¦±A÷öZÓ0plX@v6MŸkóYìr…Þ$¶­›h™^N€¸¨zhM0éó¨N&ÏÒK³„Cˆß‡o¤Üxs¸úIF4ÁRSÖ”·9-Ü]&~ÝSR4yˆ~ïr<ün`jFå´aF¾"áø•M˜£‚ƒ|ú
+-rÎBû].òØ_D˜™ñßt‰Šÿ¤K"ÿ²’Dâ¿Ø–lÉ¢&®è¸‚ª*š €£	š¥S¶¡›ö"ã¿=š;þÛãáÕý¡cOÃ]Aøñb?Žêû·wÁùá®rÝ–Ï®ý½Á.Ž÷’™’q¬—ƒ›Ó“r=ºKEzë¢ð¹!bB[pþïæ`ËÛêoðØRÙ”CÿPp…ýEÆ€›ÿ‘Žÿg Èé)Šÿ(Áÿ)¶,Ø"0ÕU¡
+-€*(†m7«²¢8úÜñŸæ¡ÿšÿîŽÇýšyØÙn÷«òmýè¡§ììWÍÇg}|Õ«·}ëñ­†éOÉ„î£èHän™êÉ›P{ÓÙ|€â’?§ýœ”Ä%AÞI<]0è¥iþýÂ,úWu1Kÿ2,/sú_E"ôo9’é*@DCvU³LÁUUpIº«V-Óýpü7¼Å>øõÓj{x¸_˜×ofØ;çêuhŒïµ»‹°~1z°ÁÛ‹uìè/˜ÎÒ„GœÂÌØG°Ú(ÅËX£xXü.RÅA¡”|ÉˆÑ‘üÇËÐÞ¯‘yašEÿPÛ§ã¿Âÿsú_EšN—myÿîU’nkçwƒ³Ö³9ûZóôübðÜ^^6ÞG'ðÇÒöéîmiBôÆdQLÞF®x?¾Ã¶gwâõŒïGfäÒOnbŒ|/£_âRäLOŒ÷†R/Å€2À÷@„g@¹&[è
+-­—ÉÞÝ*K$m]¶â^ñ ‡@Žøø0Ø÷P]|TRKý'—œ­¡ù„[ßÒˆ9^òi|¥²‰û¼Òë!
+-º±bÎxŒ`&ýË
+-£ÿsù¿šéÿ¦+ë†fŠŽôÃ‚ú¿ÛÔ	Åæud»ª›ê¯Ér‰Èm†*°»}¯ç?^÷.W;ÕÞÉƒvÔ»O×Š:4Œ»ÃƒëÚNûî!Qð„-C-²s‡od§p-"³	3€v5ãÝô_‡ÅÕÍ®,l:^rä.•ú!èô|>ñ`OŒ’uP×{^/ú\'hDž£¤hi$¢½ø+ÿÊ&jd%î€eˆÿ™ô/©:Eÿp2œþW‘¦ãö‹ûfÆÕöù±Ò ÷§½®Ù5–e‹ÊÙ°½£µ¶OÞ/|ãé®VJŽ]	M%g:ŽŸÝJžŠRÎþäB¾ì—…ñ‚Ùûÿ*EÿšÈ÷ÿV“ˆüoÚ¢è4WÐlÍ‚òßÐËA‘D·ªU%GÒõEîÿ/þµvøã>|{¿Ý‡Ç½ZO³Gæ­¼·'ÝÊy3ìßô†ƒ!Ùÿ§d²¼ß‹nàÝ¿(pWá	@ý2ß,H•M¼,[ª0Sþ+2-ÿCãô¿Š4N]ÓTÀ~/ìKo{aoìø·š©^<žŸí\7¯Æb½ÿòX=~?°4³„L†#@F¼ þì–ñ4OJöÿ±mÇ2´ÿ9öÿ™ó?YQùùÿJÒŒsºñMµgžßÚ¶ß¬\í6¼ööøü´Õ”ªî¹ÿêìéï‡J×¿Yõ R+tÉÑÑ>‚êè
+-üÇµ`W%A´«¦.7Aµi%²`?Mo†Ì$l}óOwÚ]ß­ØA»Ôƒ’
+-£Mé	«­ŠJdR¤ŠjtÕdC·‰¶ô6á#^§Dì°à;ºÀî7ÚÁ$°1 Š|}Øå	²¯ã¤ŠZõÙƒµ„TÙŒ·T+d»¤ò>-˜Ì>ÿgöÿ¾þ_M"„*W-GÕDQuÛTÙT…ª£0DK´uH ,RÿW´·ùÃê¼oÜ·[
+-°ÝÑè½±3¼>?8Ç»Ý¾ú÷äüÎÉDõ?úeÐÅvÃ–ïn”/Œ½ôü~XŠú”ìjà³ûy]S"ÿ½6â-g	:ÀlýŸÞÿWD.ÿW“fèÿg÷à ùrtt{ótàî‰áKp?¾8¹
+-öG­ƒ«çó«áº§…—¥ç®Ûj¼¢­qCã$÷;$Vþ:‹æ3å¿j0ò_åç+I‘ý¯®ë¢îh‚ª™² ZbU @4Y†,©p‰fH‹”ÿ¯èþÉÎq<˜JgçôIOÇ‚ ŒEåØòöü¡)Êõãî°…å?œ“ùßëº6ò w
+-Å¿ÌÅÿ\)‘ÿØ~a9 ³Ïÿhù/«—ÿ+IÓéT÷/5íìþ´:î­ÓKýìýèYuúÞ¥äÔ^ÎFN­¨…°ñòB–ØxžxÈcSN{ëœ*›ØÜ©‚þ­Dö’ÈQáŸÿÉ¢ª0çßÿ_M"òß¢£¦+ˆ†e@ù¯ÁR«UÁÕ5GWDX¢µûŒ^4å<¼>ži¡mÜ×/í=û°c›o/ïppÔÞÑ†^øtÓ®Û!oôÓ‰^ž³‰–p…–G»Ø¤W&ë9˜-ZÙ(õA+Aj+Y çÆ×ØT8……ó"›ÅŽç”bßIÛ&ªñû°çbÖEµž“['§›8ªŠÓU£·2]@rièzR:åz± ›©{íŸˆ:~nÙhXzKk®ÌG#.þr Ü©Ñ§R¤æDZL"²y‹ÛÇ#ó­Yd¾(Ü\aÀ½Ìè‘ AÃzeÞe?AžâˆÜþ µ³O~*½³Õù4ŠçAVIâAVÙldõ»²ò¹ƒ¬"v¨`·»Ð
+-ò˜>²º¨(«½ D8g”U:°h²È¸™µn×§²³a3Y ¥o7?L¯hfDÍœ¼0=óy,Í4cJÇÒŒf%˜æwÖ4—K“ùúbiB}j€$dbmâŠ„.ƒs)ôp¦ó>0¦¯x`Ó Ú¨Æþìäý\˜dŽ½ŸÎçHØß	›8nçû(ò1“|Bl©RazLØÌ"—µxi€étþüã'µ³ýÛÚþnƒF‘ƒy[³‹p&õÕ˜k”Tr¹ì+|cÒùidÍÕ ðGq@ÒM¤vBP„LÍÐÞCö[ß08-Ru°‘@yÑ?gÊ Á¢~"rrBHÍ!‚²ÕII¨Ö¢Ïlec¶¶PäÓ"äI\— ä'àeRz-}êÖ/à±°[	Dk:H|c±â¹„dðÛˆèfAcT4æqt£”î™tøÜLF|žl%9óÂß>ÿlÛŒU¤"üßEaÿ¢4Ûþ—ÆÿÕdnÿ¿šDìÌªe©0É”tA•mG š®†)»²ÕÔæÆÿ›Çþ÷Ô¿zöÃË­¢?]µnÕ	k`{Û{zº­KçãÁó¼qYUSø¿,öïÍ4Ü_øËýg¤Äþ×ZP@´>ÇÿŸ¶ÿSD™Ûÿ¯$M§Ó"tž{ï~UÞ£çpçÔ{Çuû¹Ö´‘!¿Iï7ÒyÕé VrÃ-¯Ý!¢OtÊIï7H	ý£°•~ø‹‡ ™)ÿÚÿ_Ñ8þÿj‘ÿºii@tDA”\GP«"ª²)†TµuCvš’ª,Rþoïœ
+-Ã;éýý
+-œœI¦óZ»jìöÏŸÍÚÞÑðfdlûsßÙXþãyËþü#»1u‹Â~ RxqÙû£4áJ®«×)[ãÈ"¹·Á½‚¨TÙÄ+Â
+-ù;l 5«Ãÿ”DÿWÕd‰Óÿ*RŒÿ¯¹ÍªY4Ë„ô¯7¡þßtÁÐWM»êZ?ƒÿ¡þ–ÈB;-`âˆ:YRþH@tñ]ì=4‘ÔÔ¶PkÖŽÜ°Öß˜Ûò± ¿Ž<{Píˆöñ]·
+-Â™JIj‚Gˆ½ÑgB·…9I*.‰…RâM(!0ß¡‡·¨:ßOÀÃ7HÕ8hÁ=Æ/ß(¥tñ1IaÉdë½†~{½>ïOvÐ†^Ï#_'µIº.R¼$ÜSÝØîÑuAÇi ¸áh[›lÝáWyÄUûÛìuðÄ¦<ÿ¯E+€Óù¿*I"òÿÖd]•tUWþ§+ÿe%‰ð§©¹jµ
+-»‰ðeÅL	B¶&YVÌÿ‰áî?çÿ5Ü>þñ°¿_j÷BÏ‘ŽvÃm³ÿxr=)þ‘Ø‚Á]¯Õµ­m5íÿ+‡;ÑÏ)þ^tÈ»¯æøw¹Iû{á¦äF¤Nl òw§:‚=+|êg,¯òž_¦—Æ<Öîkd>¾T?½e:ÕÝÐßúžã·HO.ü&z*À{™	ÙÇ>×a3[—9¼·"V‡Ÿäž\Ü“+Û¯Ü“k•ž\4ký^Ž\dZ7²FD¸ÉƒDâ†PEvI¯Í% ŠŒ÷¦}”;{E	ãÊÒê-hçI´*éM•’ÔsY)™5ºÊˆ»ŒQ
+--î¨—Îw5Æ0ì{«R¨w™^ŒV¥Ô¨3>?ç¢ò!]†ytöð^3_ûÞÃkï‚´e|>§$fK[eÆÙ-ÎŠÜà¸[åÛNw`ù^ï‰2¦ÎFUÚ*_0%WàÛ¶\ÈƒÛ®CÙ‘óy–x[Ïœi)+¹8&q:;š9™R´ö¿õÕt6Nö>”&™›Ô¡šÕ¢òçüdÃñšMúÝnÍÐ\·89ýA˜zç?±Ñåøå'¤ÄlPÅ»Pºç­€.šñI”©L¨%AMGJrˆëmdŽfø$'ŸîXbË}b¹Ž¸Åæ~9zô</¯aIåù–¯aùvá²ÏÁAi£ÐÖ©¼\”Œæ åR•‡Ï ZÑ»È“»Õ4Ï¦€3´41àY“¥'2uÏàŸòßþ‡¡Ø¡ #¨¿ÿüwù"úI;Ï‡hÕ¹ñ×¿Ê{è’vUÄ™'ðOù¯ÿÆy‹ñØÃþôQ“Fñ †ä;‚x”ƒ!ä)×Œhk€Û±\¥‘Þ·™ªá[92§)gaÔÅÀË¨TfC¦Ó|¡iþ<ËWjz—É=[”Otî7—åMÄZ;GÃ¢p¢ŽÛDHˆô:L¬­ðöb¦ w .ÌþþÃ·;²´ NŸ¡•©h¹ûô‹âJ°ŽL©ð uaÜ)çÛKcNÙ±ø²¼‰Ã>$•\6×ZöyÂ§ò®iGìÞû¬iYJU>¾sX²(ŽÁ’­ˆg1c°Æ\+Í]¨AœÅ\’c”¨Ác69õû3j,$úFbÖÉEM:!Ÿ4IÊ%P”äÂOÍÿ±”ÀâÈ_?‰üµL]0®i>xÂVuQ|µèËËâ¬9c²Æ¼åaœÖ‰Açi„«D]ôÒ–òK4Kv0É`¤èfRåÚY=¹K—B’2U ¡w|ê½«@g‹ï2}@ù\û;$˜Ýh‹šD¯qIôtÊ”,Y¸ä©L±KŽñmŽg‡8ùÄ—	ùnßŠ¤~d…A7>ã˜\SíŒŒ.Ø¶&áãØ
+-²ÌªØ%à{-–]eÍ
+-é<rª›XæÙF„n¯g’7Ì1ã 7áñ×‚0âœL©ôAÈœÄ|NC¨ýºßµ´h¶y/[—†tC/@F2‚¼åÑöœ[º5Åq×i|&<ô·œwŒÞ7aø_¢=Ùôš3‘£¿k)@è9,Ý÷à‚é…=QïÚml6•]¶ã
+-ä3ä-`ò—6BÈ]-ít Ù Âöž ª½!ëd‡ôÀAcÓŸ•`ƒ†~öW…Àƒ°ÕKg,¶Y:¥Q[ÉïRº÷â¾xã…vïÆ€lm;ñnFº™Òà>	=«7"v&å¤ý¹îæÅ1–Š M¬¾0
+-YÂÄÈ0™Y‘zü4ÝÎ¸zdwìÿ\½
+-@ >P]>Ï9|Ìï›òð¿0‹ÂT´$˜Yøº¨Óø¿š.rü—U$‚ÿ":|Ç4Ít4Aµ%W¨Ž#XUY’5ÑrGû	ü—Ÿ†ñ2ÇÝ~½©ÿïGîØÞ¾«mØíþèòugû´ãužîäÃ#©•‚ñšÌÓ|,¯&aåŠX„ã5yÁæbà»˜©ÃM$?pÖF‰Áì"õ“¯¢nX'ô­Êf,R*d£þY-þ“(*ŠÁàj§ÿU¤ÿÏÐ4Ñ †Ðt%CP«ª$ ]–…ªièäÏ¢]µ‰ÿéoß×»Nýâþ²6oŽ.ŸBýôùêèhwwüp\‰Àv†'½n­D|¨b|§ÝNL—¸R‰Îü~˜¸˜ |’eÊgwïÚ§ÿ?:dBŠ_£Ç«ƒäö± f0‹þUI†ô¯êð?É4Hÿº¬¨œþW‘ý[—5E´M—DA•ü·MCÐmÃV-ÓÔšFü'd6 Üt†ðÿì=io«Ê’óÙ¿‚oyO:ä²c"ÍHNì$N¼$±³>]¡CŒÁ¼j~üô°çžã8wîqˆâî¦×ªêªîZ^7ýùÅë‹¥^ 0¾’»šÏ¢³Yp.„æüÜÆŸ‹/»Ñ°’¾vðÌœ£+)®,„R‹½òþê%•›üÎÎ€3ÿß€PS*ÛPzé¦'ù¿B¶â¿,”ÎUüÿ^RÿCTyƒç8Ö°%ƒ•ª
+-Ç¢,Àr’$[Ò •_óÿø1úG]CP®zÑ¾?§wÜãsGÑöÛ«®X|85¦áp9æÀeè¿J3bÐFE™­‚hÀ
+-ïS¶ÿ½vèà&abù¾âXá?¹,v—;‹ú³J[ãHkþÿ%þ€ÿ{I¶ëÁ8~dÃPÏ4/ˆlü1Ê.ÑŠªmiy.¼Æàünxgv=ÛŒžgv³¿|­Kæ+?¼³ìÁ?uþ©|þŸJ4²ùwÇÿ'Îÿ²ü¯JœxÀÿ}$zþ¼fk–Á³†lÄÿk*[•lžåE°É4ðóþŸ?áô¹¾XŒ—}»ï<ñÜùùíŒ5ííÆn­Ö"tž·áõÍC4ªWÔéóf(ÍŽþßB&º¥Ð"_ü+úwÊ1¥\À;­ýL@QþÇ:tTþ'O>ø"‡ðY‚­øOü¿ù_àìÿ]åÅÃýß^Rrÿ÷¯ˆ<«h’ÿ^e5Éÿ–)Ê¢¤@ûK÷ÿÿmïÉé›cY^´ÌÅB}iu›‹ë‹—Àx¹½²†µó‡Ç±AwÒÌð?ƒÎJæ*#ù½]ø'C:ÿÿU¸ÿ÷á ˆ]ðëç}9mÿY>ÿ%^9ÄÿÙKÚÿ¯ošý¦?(oËQÔ7Ô¶}sæÊ‹›Ç§Þ¼Öáç°e>ŸßíJ‰rÀ	Ñy	ÁÆ©±(Âñž+X-mbCâò‹zÝª¤î·Rë¸RÁï	ëXÁ;óØXáGÛ¡ç¼¾"R‘ÃT¢ù}ñ{[Êø3Ü5ÚgiþBùþOÅÿ¿—ô1þsò=çózuyù¼œ7Î{¯‹Ë³ÇÉÕÂ±àR Ê‹úÍ'×ç¤F%v°çÆÀ#z‰.!q[¤Ï@è+^ªW.&CQ¡Ài
+-*ýîù½Òñ”—
+-<xœ î˜lçÿËñ%Ž?ÄÿÜK¢ü¿$Š,ˆ«qœÅJ†*°@UEV3MÓ€"”d íòýÿU^¶Ú]ëêôíŒ3ÚÓž;ò=4†ãðê´:Ð…ó§Ë7Ç_-ƒá÷3ÈÌDüZšCxù£œ€Q}åôm2§·ˆÇÃ–=ÐýÞ!ÂÓøo©¾Ó7Äÿæå5ý?‘“üÿ^Òþÿå2j…õ1ßwºÜÝt2¾¼6o–­îâaúç#¹zÕï_vêº0+ïiGCw¬'²6ÅÈèÍÓ#wàìb:Íœ¸D<pR«`Y.5'ænÑs0°¦À7¿¿nh’N$SÁ[!R@|Tã(˜€¹øÕ¯Ð.ñ*
+-gÄ*;³.zGÅ/˜}lt¡=s ž0‚iQŸ›­çêo‘î¹S¨'ýf}eNH©4ð©QG€£^ø‹
+-µ		á,ÄrNâb–P8Ëž0õæ^Î1@ãïÝÔ:è‡ÃŸ0—ØpÀÐ?Øó¶#¢Dü„þÁžZý#ãô‚E³æÿ†€è/^6jõÆ]{Ëˆ€wÞíöIÑbbÅûÚ]¿yÖjàîS­^ã¬ßìâA€ˆøÔzÍzƒ@]\mA½Ñ¯5[=”E.bß&v4}Úêž]ßÞ£pø2ež7/îïp‘û!ejõú]£‡?¦çÓY—4>ÆµoHÕ)@C}¨áqFÄè¸Wkãi´!×§ØŒ<Š‘„˜Ô^ÿ®Û¹À{0:am2Hìþ´ÑÂª 8¦J³ƒ»z;anñgè‹ÿÇ'ÈñÄ¾ò Ø*ÿñ|™þóêþï%}LÿÏÝ›×¶øhêz89¯©§J¿5ó]ýÞ|1Fp(_H†`Ío›ñ¼VAdÍ3€9ÌÂ  šçúÄ‡n%!uÄ˜,«g:»òYòÝñ›¦÷ô?‰T¸wýO™“Dªÿ©ô?÷’¨ü§AXšb³†liXÿKb±ª°ªaš"´,™7øŸ×ÿüÄÐè¶yŽÇóëÈè…Z{lÖ¥³>¸jèçã._[Ô-½—ñ…Ó^= ô?ïQvLL>§ÿyx")»ÿ£/‘ýpÚ~ÿ[–ÿ;¼ÿî%}Œ–}ïRít†’2vìù„õîíÙ€?ãžßÀEtë’§]Ýú·^ý¾H2ß†Ù‰rÂ ÃöQ4À ÏU°÷z´ó"º~÷ªü>)÷þ;ãñ—H [ßåuýOùpÿ»—´Å,£ýÕç‰t+Ã:Û¹·;“ÛÚãÅéôù¾órÓtýeÜˆ»Þ(ª›>¸#?8:a|ËßXˆÙ1¶Á_b•Q‡E(‘_l<K3h1ëK£ ”aâÞbŽ_j5”2L'Zå|÷bÿÓFûÄçÏ.t?qÚÊÿKå÷E:Øï'%ï?’Á«¶¸~£*³’-‹¬fC‰åLÙ’e$ =úJû—9÷Zç¯=GŽ_ÀÅÕ¢:éÂ;]hŸM´óz[šÔ>¸¿ºoÃæÊþ£ ¥™P'¹«ÇVGTÚ=)4p‚«ýJŸ¹´ÉÿúxÉ²ì‚Ø†ÿŠXÖÿPù ÿï%%ö_’ Y¦YÙ$ÿ“ÕL¨±¦iAEË†êWú¸±íÑ-[;í-åøüõqôÝ©Müºßp§Ó`ì_ù§¯^õºÓÈù(Àé']@ðïº€(´öŽˆMurŽ Bû#£¾˜¤ÖßÜ'ÄÆóâ£Á‚]± [Ï¥|ÿ¯
+-ÒAþßKJô¿5±
+-UeùªÊ³’`™l•çMVR¨bUÖà§ý?üÌùu:Ž_}{ÒmÇ‘u½½§yÐÀîY¿ßÎ½ábôêû¯¬y–³ÿ,CiÆÜÁQ0]ÙÚ¨þƒþÅ^\Þ7]kð7`’ûÿ\ éã´ÜÉh‡· [å¥|þK²¤ð‰â¿]…”eÀj²& óVY`Wy–S9(Š&iÖNõ¿üeK¶8Aê¼>5Ÿôjßë+“óÚDSEodG—CïêŒ\-¬Ñóž‚dŽÇ§îi6	’~Trü21ŽH+ÿ`FX<#Jtyâî‹);ÿ±oÃãäýdßúŸüšþ—ªîÿö’ûO¨ˆ’	d¶
+-yƒ•@°UZ¬)@S,ÉTÄâ[?uª|Õ÷·Òì»Üëë´ó6\¶«jÔš¿‚3ëüUù‰þ'…Ë}Ä+gùÅ¯…}ÕRß»Ðbâ€ƒâSñ“ÂKaJ6~Ó7ÀMòÿFö6º+2°Uþ—×ü?
+-òáüßK¢ø¯jUËbN¶×/HlU +s’&ª<'þ¼ý'=`~æZ@nw¬¡hÛ×s}>?í›K¡Ïóõ–ôÔ¸ç/åÞàÒ«žFÏÖyTË]¤à»ùFÀqŽ‡/ •SçN€=kñ[ÍµV÷4V!“–âF Y²=Ü	làÿ½Àì”Øþþ·fÿ)ˆÂÿ÷‘(þóª4K1YCã°ÿ'IcÛPYŽçxÚ¢¤ðŸÆÿÏœÿÁ =>9§“K£Õž‰g{Úxy¼õÎùéùÈ4îõYË´;FP¡÷nþ`ûÇ™[xïsÎ¼þ`Ìÿ{)±ÿúJó­ø¯Škú?ÊÿßOúOCi8sºm®ùøôÐ¾©/UIz6y¥ÑuDõÅy6jÕáE×éZÃ"yÈÅ2Ì,µ*SºöB7è1ÊÁÝ›Ø(Ã£½ãi‰ÄDÑ,±¡C„c&ÙI¨<ÂÐÓÀŠÅ£H²|ÚK¾ u"‘Ä¸0CXh/+öŒñ<}-PFV“A„FYÕ¤FZŽãƒDn„‰‰ZV¯’Lc'HýÛ$y”›(.„ŽÃ¾´ UEâ¸Ui‡Ðà Ÿ”gˆþ?ü^ü¤5ûoE8ðÿ{I[ü²·š,ÿ4˜µbÍy¾ó#]5«|OK¹r¬·§ëHšÖ.”FA ¯dñ
+-á<&–J˜çM “ª×¤µ¨ç ñÁùƒJÊ?p¥ƒÒÎ×¦äü·½ °¾MÿWäÊø(Àÿ÷‘>Æÿûg»½„7|¯úz=ÒnzÓ¹­ú·X­G+¦ðØëtžNo£
+-$ôÀ÷2ƒKw¬'º¾2‡Ì\ß
+-f'Œˆ<.-¦¿Òr?xØ_Êîÿ-×¶¿Éÿ¯®ûáø¿—ô1þóÀ†3Ô§íª._Ç‘åÇ¯Õ6èj÷§—OÎë(œx=¶+iÈ.¢ãïÃH÷ °ˆÛ!ËŠCÄû'yß=óCÂ©àÿ%œ~ïÿõË÷
+-°ÿÝKJÞÿP’xÓb-H¬¤T¶*Ø&Ë+ªUM3,s§ñ_¬+®%Ô;½WùMyzx©]D“‡úøª½À<›7³ëð¾Û‡Õgªï[€Ì•˜|nÉðó©”à?¾“ù*öþ«Š,–ðŸGyüßGÚb–+]‰wÝ`*
+-ÝÆÛäîù¢eÌÅÞØª_LÞæš§/¯âÎÔuÞ¬³A‘<”®óðÜÄxE¢>FÛäÝžÖ¡Ñq‰G8ÅŒ„Ì0Hž$c,Ž·ù'bæ?Ø£ã	ù‰_ËŒÀB²Æÿ²ä=qÃ'?*¤¤–5I—Ì"˜¬ÔÐLBŸ–ú9¦m<Tº`ü`¶±	4~úÑ$ôX#t¡ý'c,ÓsÍ!âv˜Øq#Ì4;3/p&>:¾vcÜ˜q}4>Òª3<›Jnf´Wµÿ'Íîtû¦ïÀâ2vqd¨_?ˆÑLa¹:äéçýlDp>vC¡þÑ4 c¡iâ‘¡¯<²™ëyh‰ÆˆÀ3®MJ›DÃ²’ÆX–É/C0*]X!à¢m2‰ÇÆ¨ëœ¿/2¢’Žtø+ ¦€—o·;Ž6ƒÅ·¼,Y ÜÎ¯¶í<ƒ%n4V²è‡	ñ“áþÈþaN÷„Ë Q‚¥NŠHn/	Iº&ÇL3Î@Ø1?GŸŽwnÝ‹dÂ§Šô¨"‰5Î$µÐ ²JvîW@Vê¨Ø†÷û>þÇƒB²R’w‚bäcÒ<ê{ÄÊ÷œ.æjð8# =ÁÀÐx±DH{Áó¥–éÔÉPÏ\Ig'x½W}È6¾Ýl<’wT»'A} ]ÂË„›NGF ¡H]Ðôw‡¦µ7¾@ó¯¤ÕÔv(iûß_b!îÂÃ’Szâæ(s†ètF ,Ò1ÓÅÀàæNIZó;Bb]K€O
+-´ÓDÒ®OÀ4wà#˜ æÀgýcr~°£Í%«‹€é'6,¿{ÛÈú‘]€ViŽóø
+--7¦Xºöê½“)¤»÷W`í9Ï-m8.)X¤ãüMX¦ï¤lÉ^°¿BáJº;®¤±Ÿ†­L²*ÁVÒîG<fYåc'óI[Ûù„Ò†?˜Ñ—ÈÿãMüF ÛnÿYöÿ¢ªûÏý¤ÄþÛ4,È+kB­ÊJ20Y(…À€ÀTaUåáWÆÿéÝD÷OÑxgV-~!àl	j×€GHôÅìéI´ÕVßW‡Ü*þ×(]ˆÐ²¿lS‹ÿpÐÔÿ7þ{<s=Âø®¿Ë0 ã?/*BÿE8èï%Qü7-SÐÃd«¢eaüçX  r BCÑL“ãmÛúJü&õè¡= ³§à6–B{dÙã“OâR¼^Øõzÿy {íªV%øŸÔçàè(bh.åŽ*ÉPè Š6b=$qD„B‹0|ÐFøçŒ‚(&B‘r†cCp8ˆÇø“‘oÇìB­cìrrp’Î¶b€ê1fùèP"úï¶@h!ù
+-]+õ¤ž[-º”xæiƒy¿â±ãvëŠRò–ÿlD.]®P7 ¥¾Í“V‹Ëz”’ÑfU²x«_t¨8/—õÞìW5’%(}GŒøðÀwŒõý|á &cÒsò®ŒÞ-¦Ðq”+I¼ÝæŽµ²Íc¡Ë©“éD«1Mû™›ÞÄ‚E÷ðdhØåv~½’,â-y½:Â(£K0›
+-Þ$ÞÐÃ+x$_û›*@ÏsÇ‘m*‹b„-lKQáhS¾¼õüÄC}²èÅeJŠLDÑ;eÔ`êƒi…íM˜Wðé_¬3ñevøQGi•ºÊˆ®£õîFclÓUøÖq-¨'k‹‡³õ%ƒõ2ò…žäëRg+0×sàŒEÚÒJQ÷= Y¶MÔð¹<ªcWŸ:^Ü$ñì™:aÐÀ|Gˆä¹æG=!QmäÆº1‰c¼]µñØ[ˆÖ‚OKËK’/Õ³è(¯€›ttQÆQF%zèc,ŽÖ*’z:B&¬Å_Z`R"3m¥™åR|ò¤Åu˜•S„òâ`M…Ö—Ÿdêäð‡V™ŽÒSÇÆ¥v"¯5KÚd¦|²* D¼7&Hº‰˜¤`T¦ïåòuZOXËuÿÁ‡_@ìs4{sŸ›±&Ñ
+-AõÉ½tîV”£çXr*çû‹ƒ!ôÝe‰0Ë­miã“%¹?sf®}ù­§æÚhr{€öò…bT½Ñ;[Ã¹â¹iHÉüQÃx èÿpCç	¦¯“‰Aü‰Bb_A´ãéÂÁ„ÆSÉã”‘Ûµ„	.í"Íý™]\ûòóK¾öinÉ ð ðs…SàMðùÆ•¡kN}¼"?ø™4µZ^/¡ŠÝ:•»ÝMºP7Š«|@ŽMKý?ÿ}´¶EÑõ×cækyéÖ³¼Œ¿AlcT¬@§@OúÏ@ÇÄúlôÕ^"‰c#†· ¾h•âÐŠò[}.ÑàÃa…BrŸO¤?|ŸK°‘0U`@2Û‚q Ñ<Ü>œð‹>á„Ž‹¡†õÕâ¿½ïÍdW˜€Ó‡´-¥¹apÙÇœÚ8…âOÝ±·QhH¿Ó±ZpTÜG¦¨ŒYÖÍ,U]™–‰STº(Wp#@Üfº1¿ ~æ„(û–omÊÄŒF[cLåZÌÓmýË«º©,,«yÞûÅúª“5`I–†xßÏ—FñÂ[ã± F î#f“´HTöK…Ál£”Ž5W¾Y ÉO±$Tá	°…‘!†¬ÔW˜FŠ[5Io%þ½+]nGÒÿõêŠ­ÐLGS")ŠÕ5í»\>å³\ÑžeJ¤II>Ú1ï³O°»ÿæQæIO:ì’dËDGµ€@ 3Ä—™af&P[TíHq·IƒFÀQ±×Ã[ÀÌøì 
+-ƒÃ¯ågÔ€¡åúzÁYÞ7Ñ½{¾ ·‰Û©O–UÙ’0$[)ys«Šp‚¬çÎ¼7ÏU_ìŽ<×Ü˜ðäÝøXW¸%âÔ¥>Ü¸H…¨!xp‚vØ*ÜKDRn™Hþ…Ö.©UÃ”+Q(…`-úK‰Áå“«Ù –o©º™®ˆÙ)Øz)šÀÔIkBñÕm¢+Ì—•ÒÃŸ à#Õ‡ÉÃ‰òËÔ$ˆ(Ê&%6¤i¨+ÅS5è¨b*·ÝRÙîÇ8i¶ÂhD3Z­i]¢þ\ü/èµ˜ª¯wL¤/¿šzÿ+Haü/ƒ¾ÀYžåÿ}))ôÿcèZ³Y×mÊŒ`ZÓl
+-,#h‚ÔNæšcüÿÌÿkÀâîæq‹éžð§š¡}Yo\_µDí¼¹iíj·þÆõþñÙ¦òíZØ®?Œ g—g|t†rCÉ’¸ûÂ 3o8Sp0ÔãŸ"8XŒÿHÅÆ·!ÐúçØ\ü¯:õÿ³¤4™,5^¿Ë8Ç½õó=Í0;Öæ­µ¹Ó¾<eo7ûû«ÎÝ­Êïo\¶J±Ê]”Bùª ùÊ–t¬ÐñÀö×w‘z':´áÆý°À¹\XÖŒC+Çž€0”O¥ögõoÿXÜž¼~û©m[O]ÏüGû	4ðÔžlÝ}
+-î¬'Ë=émûISAEçÉpœ'óÞ|RïïÿU³¡8/ç”äÅ5ðbtP¯é~£ýýÏZVÇ·Z•O¿lož_Ÿl£ŒÏŸÂÁVüó'´¡úú_>råxéö©†3?ÕpÕ¹Ï©à×'ï34å	ÍTÀþçâô üáØµå;UX°:!ÅØDŒÀ>âSÍ/Ç¯­¡ÎTJÝ>5Xõ¼tÿ:€Wv\¸ûç2ÏRï?Q*ðÿˆÔ0cYþ_ëuÒÿcƒú\R
+-ý¿K¬¡ª`ÃgÕU“$SdT‚ M±)/ªÚÌñŸf±ÿÞ>n9ƒ‹ÖI¯­‹-Þ×¿
+-ßlÅ17·¿vC›=?e8Þž1ç7h»/Éx—÷åüð ¼•qþˆºû~¼fzŒAÙ´T­¡˜6õ 7Õÿ£ïÿ¬Ä¢øï"õÿ°”4™NnïšÞzkÏò…àôlð§§W»²díŠ£Ósi§s»£hÍã“Ý¼ÿƒ‘kdL_íÐ»böÛŽ_‰Œ]u¤âCá.V¢ÄÏ†þä†ƒ1ôaÄx´dS}†ÛlQùö<ãÏ|DÏn¿ú1pê¹•ÔCx¥$Îb;ƒ·V«Y¯jøCOuª®ßFžè‚Zª3Aí#rUµT›Þ¤
+-¢8Øék¤ìò25ÂmÛÐCâ)“ ý’¡>ƒ7ˆ çÐP ¨…+è1ìƒÝó %»­.ÄÿöÁ_seSð¿€ÖIÿGñ¿ËI!þWhJ–j4UµêŒ`ò#7ù&#iM]”ÁŸ¬Á.ÿûØµY…«>\îîK}Î¹8Ü2¿?<ï}7«Ñ­w}a*g¶{²—Âÿ‚…J‚AÖ˜_5ÖCC/xúH‡…ð1ËDÖáïË‹¾Rx=B¼ÈK¼È›ò6Â2ŠãMJˆã%® Á›~dq§)O+QBòg¿„Éç}U>ŸïÎ2±§ùÖ)ø”‚OW|:gì)'K,Ãrà¿"è)Ñ¹OÉUó|ÈàìÐÐ p1˜P¢™7‹¥ˆÎ±ÅCtRŒ$ÆHféûb@—hÂŒRz ãôÇý–°Ìüat_J‡kA~ÓF:ä‹H®ÖÜ½Šþ¯ÐÿKè½uNî_¦ãÿrþÿÁÿ·”„õ¿ªÊZ¼dXLCåTF¨Cÿ¬e1œÁ
+-QcUV©ÿíüYÛ±ÇQ×ºÇ²ßêïlyë’±±qÑ=ëœÄ£3fë"ñÿ’_¥±6x;éÍy‰ô»½À¼÷ý:Añ¿0 fŽÎïhþc9@ÿVâ%©! ûI¢ñ¿–’0ý³¬n44‘eL¡Ñ`Ñ4˜¦,[ŒÆ›š%êº$ª3Óÿ,ø£½ýxs§O:G{ìíà”ßêŸZRïì¸½Þ2î¥–,œív¿i­Rx±{&²à®”ðZ]+'‹5ñûÏ–Ršü§Ž$®—ìˆÒ¹xsÞÅE(33B˜‘DFÅQàh¿¾mÁÁ†EõÌ\‹©²´Ëp“[úN®E÷ã#Ìh à+•(”›DÃ¸¬xŠ÷à7„a ~l«W˜¦âÿDòþ¿Î‹”ÿ/%aþ/k²,ëàú<Ç2‚Á7¹)þo˜‚ ê¢ÅÊú<ù‹?Uë]ËÝ»¼a­úY÷þë7‘ÓN[;—ëš÷x½Õ:¶¯™›¾‹ý}Áuoî¡ è«#»¶c¤=Çtè`ÝrúÁ×þäo*ÅôÂÀ¾Nü7¾NÆâëœ@éi2„f{óBÞz¼¶ºZ][?Þ»ýrðØ9`7;Î·Ž¨46'®<h¶Kªã¸wŠÝ¤7ôMeè9®j¤,ÄBÔÞ1á~ÎjŽ­—ÀÊó\_õaTè{»7ìa{rY©ZCÚ³*þÒÂ‚à•Ê@næƒžFÿ¢@Êÿ†Dí?—“¢øoB½Y·,F•Lpþ³Ži
+-Z“Ñ¹FXMµü3ô?Dã¡ú­©)ûaEMÛvN¯Á~¯íÜH‚çµÏ¯äúö@`¶¿î<Ùßµæ×ëRxË]§%ÜdØtý÷¡¾6>2<[JNBý¡ãÄšŸÔ»BSùôñ¶™¯ßO«ZýR"Ä_x×˜´¿ Ê°{Â…¬GwÿI¯ÙŽ9:ÿü¯åƒ†Üá,ÿ+IÈÿoƒNl°ÆÿÒýÿRRhÿ-pgÈ2Ãs’ÌQedµÙd8¡®5TÃEõgÐ?¦íˆLp0à‡X„‰•¦Š/t
+-¬ÊgÖ0ÛÞq×¹íÍ¯ûß„K¯¿u{{Ú:f\g0¼6zÝîhwûzk?h±†9&…èØ±gDðbÔâ¢Ëq"¦	¿çBÅóÀÅQà"gScÅð¥ãðÄý7‡'&PÄé«»BX¢5L]ƒÏK/²ûè¤§tpDaÅ1GpJ:B^0Î)jú‡Ay4²¿Ñu\æþ½€¼•#ð¿òþõ¿YHç›#»·úÏ¿þ§|þ$ab>qTþýßåø'‰@A…ÈçÙ¿ÿ/XÌö†ew­Ã…ö`6D¢‰©Lz$V¿Ïø[™ÿo°³<£€CÀJÕŽ;È@ˆD™! áz(@È ’èécÒ[ÝíPE¼d­,—Ò_“¢XWÅWùYüÐ"û¦ø¦=rSr%=IT™0láƒ9¨~ÒüÚçžÒ‘<ú¤–±ã“ß?€ý¬Ú¿ùPîø¦õûh¬ÕjwwwiC8ÃÕ,Xiƒ=ƒY3û5ý{d/þá3]”waÉ§šú
+-=¸±Ëwh;F
+-)´§IÍP¡·Ü2–ƒBµbA„V)¹ù‰÷™yŸøä¢á™D—R«bb·f]X2Ÿ
+-eÎLdíÓÑÚìTƒ˜LGw{(–œ& ¾®~“[K8·xýLM.yù8l¢7qØó‡¿çÚÔ}®ÂÔiX¾ÂÄyøyŒÂC9“aöf2ÿä«Îd¾;“I*økžÕäáEÀvŠk§¸ö÷€k®aÓ"z’]Óyú
+-vM‹¡®XyG|Ö(ÿ¶àÑWåÕýIÍW„Î.äÖv~3_¶òë¯¿¬í^¬ïn+$”UÖ¦W¡œÿ½q~øc¨4@eÂØâ¹Ù:¥ÕÖÉí»KhïI¸R(0µª`þ´¹VeR?ã¨RûMjžõdiæYÅ¶;¾SÅcÇ¢ ýdÕƒ$%<J×ÃÙy®É–ešFÚbÿ.¥‡ê:vÌ‘w8VT\àð™ŠÄ
+-Y|ô·BšõS¶ÇÏ¡×±T‡†XÈ"èÍÓ”.LÜÁ¤è4yÍd6ì¡Ô®Þ÷"®•TPGÍjŠÅ„/KŸ°áªäÖÂÿÇÙÑå_4à¥ÐÁ|–{8¢x¹§FF,÷“h¿F.w/*x¦Yâ¤9Š÷–«ÏRžqÿŸÅ@ÏqËÆKž—BüÏÕ"ÂSÿßËIÿ¡I–Å[¼Äl½ÎM£Î4%Sf¹^×xÙTÍÙý¿–H \U¥déNjl©»æöÖ×C]ÓZƒö¥,®OÌïkû‡ºr¬Šß;üE}ì"14­Ù¤~D ÔpV:ìØ}pî©}xc†Wü<ò+0†õÖÀxì8‹ôê:Küaÿ“œ¢Ñ&¥©!'™‹>ëÇË&SVØ•éÞÜvì¬><tçFlî©77êÍmIÞÜb—µ9²ÄùÏ§ÍÜs¯L ¹þL§Ò£ìóóºˆósŠ&oèY7ûÄ$Š†[Ki\Št'€oëà¼í‰6§è@¼ä&
+-´r×>~áó…¬ÆÉÏ/Ð&ÁÑR‚²YvÞeS0´Š²1r$—Ýwx­X§ÞÇF£l¦ä‡8aì$ÆNa\¨O\\8×/c²{ù#3|x'eÁo‰Ã’¶~ƒ±t`ðÃ=Rþ§™oÌêÐZÉqÐqÏ¥KÉ®¨ÔwïòÀ0Š5êYRÁE:\â›Ðýx‘Æ—#ª‚á¦d¤“§60=©êSåq˜™ßÊé¹ÁDªg'3š}9üt=»XÐÁü—:â¹WtDfp.|¸w¸ÖÖb¼Sy‡ÓÛ—w¹ë™DÜåŠ¨´£Òî‡ÝG#îšcZHa¸\æ¿„KÏ½:—&ú3KŸe ìwž²gÊž){^${ÎpªçÁá&³åÜS¯Ê”'ÁëÆ±ä˜2eÔyÊ”)S¦LyAL9õ%}ãáù%Ì™öEE¡ÑŸ‚ú±V>¼ßL¨
+-;´V>1ahnèË"ªõ\šÉ‚aù4%ÃDšq:•äqÙ×P­
+-•TBd‹¨„X „Ø=lg{iFX,#R‘¶×Ê=Ó°‡YA²ýL5’l@c€¾ó@Nl„³gÞæ§M”ÏØ¤bØ–E¾;Ž'š_Ç@¸Ð\üÎ?¢¦åŽÙ×	/}ƒ¢ÊjÛ%«fy¢ð Ñ~­,&LBï¨ýv¸ÄÙÏ—¹Ç^W\æº3ƒ¸ÜÄQyIå%•—T^RyYÜäÏ*/a˜Œœ´„™cdå0ÈWF¢‰x$+'³0Î´˜2Ó<“'‘þ°gúvÚÙQ|2€œ³û¯#år4d}hLµÐ@4ÚŽ>bí¯¿à‡)ÿóŸTR9Håàû”ƒÐ'˜1Ý
+--¦SEY¨—n÷ ™W3¯J¡³Ò5‰€Gú¦À™R®9hy÷Ë/šÝÄP><Û¸Óvwºß[Gë×¼ÌiýV[ß½ï\ó—ÙŽæI4G·…ö†€ÿÙqÖb½A6Þˆ7HêÓñe>çé½q'‰€ƒuß»oDÛ²;r$eu¸ª^§º\œÅ½"ú"êHµØØy!ö+—ðŒ.³~nË,fÒL>ö.÷b©‚ÈN…ìûÇ)¤0Ÿæ7%ÂÀ)®—©”2%$†1/7*Ñ"[^”?•‚yÓ^U@U°fzX”B*\¤`Ô…à©ç•±Å/óÆõsã÷W†][Ì“c5¾HŽEL
+-åX©D9ÖÜü¾À$Ž’&º¸+´J›»Â=Ã¬r(Îyñ©âVÅ¥r_ûÝò(êé.îä+xºCœ*Î[ŽŸ»Èr5Ók+ï8$už->gÄûÇb¡™è$!ŠH-@€¸G4"ºÛÊ]MÅ.µòÏä×0áQõÕõ#™Rp·@L©~ÔŒn&Õ±ÛùåŸUñ’eX"µí›–Œ=Ê_i#²ƒÉ‘Õ›yTY™±x¾íÂëY¦àŽ»È:oõæ¸wE´½’T4vP°ìì¨fœ)Ã|}z*ÀÌ­îXH<Cv$+±Örœêé}»À‘Uå$÷ê`ØÃ±'³Ôâ9ÕÕ¢ÙÌ.7±#²0ó]º³ë¿akP—]FØ’JæåÑY%5çø¥ZöR$è€}bøJP=Søö|ø1Èžë—3û«ØKç|ýœ¢	"¯Ý~Øç)f_„+YòÂ‘ðÍœ&÷·ÎÓ£‹¾Z1+›Åal€+ZºfXpˆKròÇŸ£àÅ	0¾^ÁG.Ô‡¸ $øñ÷LX<AXYw×iÂJ¯ˆˆj¢ßìqïÍ»Ü5wxiô’.C8cà”cž\lˆ¶1†Om£Òôv‚ ÎSà$NRàäÜ“xq¸J\ƒ	Jp[˜÷<.K<±XîTHDE&Z˜µR?q”ÁRKìrlÚw?NIáÜçqÑÜ3¯ÆGOÍ¶€Ã0Ô¸W”RvJÙi¶ˆ²Ó°ÓåØQÎ›—N4¥Ä}¡”rPÊA³E”ƒ¾SI²i¶’‰äïÙž­€m$Gm#WÛ6M¡%ZüŽ7|k—Yóˆ †œ§K#n¦†°ßJß ’¢ŒØÅ˜øú-óåC¬´J@=ÑM‚ÝyŠ|S”Eˆf"=£äî–î2Ð)È‚Êý•Ìm5ï#"gX'þŽ÷fáçˆªð—dåØ‚?ƒäÊés™Û$–iT´è2ßlû“ :`OAÔ®¥ yêä'ò¤ã~pé6= S¬,	ÛP‹!äaÁÇ¢ ´ÄŽÑRmgÜrŒ^¤×¢í›*Øu|´%ûÞ™ÍŒQóÆ©®œšÊP¿~´ç†µV®œ¹‚w‹÷:«óay5Öt ñ˜¦ò(âq—ÄèÛ®¸“<m×/+3ŽIèÛ¼F4;¬•Àæpª«‹‡Ì<¾bÈbW	y¨Vá1*Ü d3CPW63Añeó1¿&2aŸÉ¬ñ¨°éBä¦¼ÕC¹S”‰žw<+X.ºûˆê-+ªyö×KA^¯û§IÕŒÆ]Mù2¬Bõ—rgš7óŠ?9þ;ËÖë0þ;'R£Î¿Y®Áƒbÿ}		Ç—TÝªKºÁðM–eµ)3«ñŒf6›²¬6XAgÿŽ	xr÷»ý-á*p/•»öˆµ÷„ž¾¾¾s¶÷è?˜œôpóhÜùýuïÆºFAÞã%z¯|9?<(_œJÉqõ›˜ÉfÕûkåkæÏ«+ÊG¦¥j-xÀ9»j÷ WŸÅgÓ4úçx‘ ^hH”þ—‘&Ó©1ô¯¾¨ûæ†z+ò•g§·wë[]îxhm™žÞÿ:ì\ôöx¡éÞÀ µmƒ’ÝÊ¤qòÿÁTýåÉÿF^þ×)ý/#aùßP9VyŽaAcÖd™f£ÙdADÎàM2æ)ÿ»æÝ~“OµË¯4»Ç_6dá´}}`žÜ~“î<ëh·­·ý›DþÃ%™•ÿ× gœü¯\W(šžªµ>˜Òjä{}!€©ò_àHù/Ö)ý/%M¦SþøðÛæ™þíâøàìzoKf¼N÷X¸­‹ý~_=¼:ºp¶î·o¿?îr%è¥kE³k™^{€4MLÕšùgÿiáFqÜ¶ÝŸ#'˜FÿbÜÿ†Hé)<ÿë:+ZªÎ˜¬`1B·U`yÆÐx­néN0ùYå){c‚µ}àOÌÂ<´Ð¦l„–sÖ¿ÚÐïï÷÷vN›6T»g7ºW?êî¶û—¾Î8ýÖ—½R o)dA¸ßl#}j`¦¦úŠeûÁ ”ØÕz¾;²ÑuFè8¥È6ö¿NAÔQJ(æ*d`’~U¢\%ÔâB—¯H“–ÑGB¶cÇpŽÅÏ|þG_¬Úv\Muæ¼˜FÿV è¿.Õ)ý/%M&AÙ_¿Nn†’y¸ÑºW‡­Ûõv÷ÑÑm}ç;¿ˆÛªø8:w67š%KÙ:Ï@'LøÚi•j£¾QíÙºï®5¨ÂZ¥pwèG8 ¸‰ˆ¯Ño±LÅADºÿPáy¶âË•LáÈôm:Á³SXÉ¨‡Ño¸ó%Þ…÷,€pÑEýŒ]|í9ü‘Ó?ÆFUÑ7l©çÌ/õÃÜ`ý’þE	°JÿKHXþ³/œh1MËòŸŒlX:£©²YxVbeéÅò.©)¢þˆ=ÝÚ8¿µ÷cß=<Á½â»ìÙîÕƒn|yX?¸0åCæØòšòõ«4ÖœàìÈ‹yà–-ÿÿÛ»ºå¶d½×z
+-”o”T™4‚¤¤Ê¦V¶eÙ»‘ãÈ’gw‹5†$lC„d)•ª}}sçËÔ©\¤ru|î–oržätÏàÿ‡ E’Åùª’( ~gº{º{úþAÃH,x§p¡/º›x=ß$ÈÝ”Œø‹Š4¹ýví>€Jÿ_¯•]ÿõ¶*ù¿þß%Ã]JƒÆîi5t³µÓ ;;;½³ÛÞ×:TÝ¹NÿŸG¦–öæñ!{¶{ñÃ³“þëÑ³WÚÙ©ùC÷ñKãiëU{¸qBÌýïZœßE™›°#J\©952‘üñŒ*3â½ãÉ4^ÆOxÓã~[Pdÿ\â`ö@]þ`ûœÿ¿­Iþ¯‚ÿ}w¨u`Õo›:ðÿpü¯iFCÓ{­ÙéjFgxåõ_,0Wñ ÿöãó‡»êé‡ÇgGï.ïüôÐ#çÃGÝ'ïªfl@­öÈ×€|‹ ¢\]µõ/Þ:ºY‰ ø¬ØðÒM$üµÀ ÊlÇ¯Z\Üç¶Hh±DGEõ¯ìQN&¡}³œ3!Zÿqp=ÛÿÕë¿šÿÑÚªÔÿkÁb|µ{ê»?j‡/NZç¯ÿvRâðõïŸj'Ç‡;gÆ¥ež¿^ô^3¶Å½j}©ºµÅÃ‹EvFd+ƒõuâM?ð]6¥~ò]ËrÒá"%<–])ò7Î‰ëÈÝ†+"Øÿ°úd‚‚Á® qqßÙþaÙPiÿkð¿Þ…Ô.èðk¯-ãÿjXÿ‰ÖêvõvCîtúŽ¦5È°Ûm˜f{H5½ÓîJÖÁv+; †¯žÿzÖ?¼|x|Ð8Ÿ?wHûÕ[g<8øþÇÃ®}vl¶}bo"@Š<#óÿ%?¨ðƒÛ[Ùxj‘/êjÄž Ñàp-ƒæƒ0¢ûÁÚž!tüN)ÿ8ÿëª¦â^@KUÕVûOJgmo”À†óbþ©·&¸ÂüwTMÎHÏ?/ÆÞÄ7ÏÉÌ›ì:œ ë¿¦µ³þ?Pdüo-–ÍCŸ¸¦5ÿ˜u§QÇ#o©§`Pá/“ÚŠËª¹ØÀ’M(ô[É”¥0©ýsñjÌXºsIåÊ'’º¹J›1³¸,Sëh,N‡£¸O8K%‘‡â’3j’8W,›ÚœwbMãû¡yä4™œø„c†ó07«à¼àÃã/Ê4ç	N;õ`Æ¬øÑ¼ºNþ´ï1“Û€Ž
+-gª¤gW×áˆòÞD¹æ)S˜ßéü# Y¶pF¢Æ	3Yq-ŒDŸk —K2Ab?»¸+ørÀ]–ø½¤Ç7O(4R½Â‹;}ï‚òbF!üˆ‚ö×¥T‰}¦Çä»¢7iDéœQ˜ƒ#^39B©.ÕŸuu®%u–¶‹( ˆÞ‹øgÁµ	žšFÄŸ/m˜~s(]ÿÑŠ²Î®Å%X±þ«ùüŸN¯'ãkA¸§Æg›eV.–aÕ¢Æ2Ù}.ç'\–¬kå^…‹3ŸØ%U²6rÝÚçŠÜõ-\|û"ìY“™È‡6{Ï°É¾6RzáHËÿò\0Ð¼þ÷ˆªü¿­¶––ÿšÚÖ¤ü¯Q4Oâ€ÄU0·J&OmÒüŸÁ¬ÞU³Â*ù_ÏùzÝŽäÿ:hdÁSêºB_!ž”wË¬ÿPÿÇkÜÿmi™õ_íuåú_ÂõÿˆzrÝß@¤ù?Œ'XÝË!ŽQ‡ÿ–û,ÿw[ÿ]Âeû/B¨Po6ÿ¨PG™îó~< ¿0O™0á8i*/0©‚áaâÒ	ÝÎ.õX]½†E„{Åó•)ÁM8Ò”òåv¡ÿS¹`þÀ¶¼ñ*¹`Õö¿žµÿ%ÿ×„(k
+-§Ù€‘ˆ|½’S7•üï;+K€Jþït³ü¯k2þ³„ü¿ïø6ŒƒM”©†5ÿÃá1R"ÜaØÿ¹Xp^®×`ÐâfWQ ªíÿV–ÿU]ò-øÿ‘˜]&9|Ã°ÿó`û%(Ö¢ÿgó¿´V¯#ó?kA3€Õû%ûoJã¿F6ó<â^¬?þ”ýlüWW“ú=C3a¶y<qe ±‡d0ÿu&zé"Á²AÝâú‚Øëùo3ßŽÃQKB¥÷ý‹#¡Œ1Ð;5ÎÛžÿ—=³&DEÈ'¶u)l €Vc ™Íˆ1æu¼Š#ÌöÍ·¾øŽ%ÂÐ’?e>ËÝd),æ‚›æÊúP¼ÿƒµ€†ŒÍ®¨ðeP¹ÿ£fëÿvqKXÊÿù-Š8‘$J¯¶Åæ[<AKÊØ=äYp’t}¡Hóøw`6éµÿlÿÚéérÿ§üàMÉüwfK6Þ0”Ú¼.ªÈR›R6µWˆ©àÿv'kÿi­–ôÿÔƒt:©—[÷–—*Ê´zL$UL¼µºÇøã½JÁóLgóOÄAcc>¸^°¾<¡èÅÑ¬ÍÈÉwàÛï26Nlíí§¬<eB<ë,a‚•“ÛÏÙdàr]Éo_ÔDÉ_t ¿˜É|ÓdÔmsÙ7€$Ù¤Ï+«„i7éË³§bÝ0Œ¦p…§.%³bC÷È¢ð{˜ÂwŒSM‰Š^ÑGæ1g$>[t‹ÎZŽ+$ ó>©Ïuè‡¯¦6òy2¸òmÚäºôÌbXfûÿþõ?Ê>’£çâc†ªàŒÿü·òÂµ&Ôeéßªg‰ÏüÏÿ¦›ÃßuÛ¾Ž¤è\æ±Üd9Ë&‡ÌÇà:×¥èšqáûZãN*ºˆ!E÷Õ|#î2F®À	Ë¶KV³"á”aE­ôô<»Ì¦^_T+ê§ûÞ.Ÿc·_Û«.yñ~Aø
+-XSpÂ\ÚŸqÖ›Ì?zëñ¹|g¥Çüú àqd}Ÿ²µ$û‡âÁåó¬ˆûb~àÄ(‹àÇ`=ð¾¨ÇŠøo,½ªXiÿåê?w»²þc=HçÿØ ž/[‘&7T3L¼QÊÓ=ëK¢p‰E¨Œÿ›wÐxwqµÀÏÎÿÓ4M—ý_jAÈÿ J‚vö†BFüm*Ö0Bí1Vk_ÍÿÙýÿž¦Êúoµ Zÿù|£K@rU€góxSbK)p—Q¸þc&Xý[j¶ÿ³Þ‘õŸëh$ðØõÓ%›oïÿ^~X¥î{ˆêýß\üŸÚ“û¿µ Q’ðà®Måz¿9XÌÿ¾cÖÁÿí\ü—*ã¿êAÜ¨3ü§ÔàmS])6¥ñAyá¾KøÏZíÿ®ž«ÿÓîJÿ_-Hït=
+-QÙõ5pÜÚàs~b¾l7ßB-’¯—+À¹MU·£ýÇÌ†ê‘ØP]¢àêzç™ú_XÖ~P­ÿgû?öô¶¬ÿWBVxÊ\"€mÊó?®£ò§@eþ‡žíÿØéö$ÿ×‚¢šŸ¥¹ãÄY‰ˆ—¦òó`µ¦6u2ÿ˜–«ØX,lþ‡éÃR¦ÜZTÕÿ½ŽŽðÕûÙõ¿Û“ù¿õ  þoÜBGFKÞ½Ë¨²ÿkÈÿj«9û¿ÛÒdü_-ˆêÿ¦k>~qa„.DË*.U×—à¿’8|Õª %Û¶±“*1‰`§ð”¥
+-	¬%Ûƒûaƒ
+-lÙô…‚” jcâiåå¢|—ÄÙw>uã6'C¬ÍÕ”ïï–e•EÞ*ØgQzÆ–ÊsË‚å8¨"mc[\ÀØÕÓ4r¥DŽ<ƒ	”çr”ppÔ<{¹xfZlBÖ“q‘¬‹2#²ç.•Ÿ!#H¿TÙœþ81¬-ÿ·Õêdó?z=]ö¨ößv°¤êÜô{J¬õ?VuýpTÇæü¿=]ÆÔ‚PßpFöüWÙîiã°tý×¡oÛWÕñ_Ùþ-]Æ×ƒpÍ#?°Ð·MgRsß,—ÿ¹Jöçâ?5µ×’ú-ˆò¿xî§4Û7‹ø_ÔPâj¢ØÀTò7×ÿ¥#ó?êAÈÿA	W!vÖ¡°¨¤‰âa¥Ü ¦ç¸K(×ÿqË$ÑÿÅ¥#Ë»ZAàêøÏ\ÿ—¶&ó¿kA´•…³ënRåk	Dšÿ§3›6‰Ãœ‹	ó¯#´ZÿÏÅh-ÿYÂõ?(¦«éM¤°!XºÿÛZýíœÿ¯+ýµ òÿñÊ†©²¶7ýj5 Òÿg‚å7£«´¾Šÿ¿«Ëõ¿ÄE‹­‰åHà¦a™þÏ.›°UD@µÿ/×ÿ]oËüïZPÎÿ¨`;h$ZÿX†Tî*ò¿'Ô´üÉºó¿zÙúo]ÿSÒõŸqº‰SZúñ}E¾[(Ïÿ&†ÁükI «âµ“¯ÿÔ•ù_µ j	Cù'ž»‘wçƒ»Ô&áŽ o¹ ÊBtq¼‰Hx+)+n)*Ö›9£•%@åú¯çø_Wåú_Òë¿MÜQfõ¿é”X+
+-öÿÂ”k« ]½ÿ¯gãÿ[iÿ×‚hŸwOÙ¶þ$ËoJ÷ÿýÙ7ì!¸nû¿µÿ{ $ÿ×Üþ¿?Ó.7 6ü?!ÖUwú‹QÁÿ=½•ÿÑ±$œäÿ0%žwÎ\³Ï\`°çÞ‚ê2á˜Ò	öeÂùÏMBÑ,7ÚÀ¿<êñƒSâåïHB{A9‚Rù§BåïØRdÿ/ÖD0óbO¹Wpòý¸ÿpðŸStCRDñ½]ÜàÞ^šÆ£óß¹¿ÂóCÿX2ž(b+
+-žÌ+4Ã‡ì±ìåÔ§á)„Ÿ3&X¢lËÀÀÃ)ü½¼éÔš„ßmÆû@ŽÂÿ¡¼ù¤CÎè„¨»>K|,shë©6l6²œ†ïÚÿO8HÜßÃ;‰÷‚«ßÃò>É½ƒ‘}ÝÅ¦ŠmÓ3âÎ?*„ŸíÝ0‡—ÆÀÛ%†,Â¦òˆ˜¾CéMýù¯¢ÂÌõü7wwp™á»®…ð,Åaðp|µh8E9°úÞ
+-$ÆüÞVAtOô'ŽIîÔI”‚ÑÃ©Äƒ¯æ— 0.5¯J[™§ ÃŠ·ÍÜ¯êñMåTÂéè
+-Dðç[C>@@–  ;G?ÌÄ_Ê	(|“Ç	*=û>¾ÜÎ Sr©ð_4ñ§ò1´•¡?ó]LNÀÑ‹(×˜{/F|&ñŒGñÓ÷”—©·IQpù:¬O¦S—¤&œìf©ø1Û53í4Ù\›|<ÄÚLDô˜¯æ×£YIw}Jn}¸õ6‘B§0©–3ŠÈ´œ:?4•¯øy/$*¸û ÐáÃSbõëk&e ˜ƒ™oŠÅ)â-Â‹›Mø›Á„Â¬•½iS9èûFÉE +ˆSL˜u,}?àDÆfni«ñ´Bä1œYcþÇ„eÉä~9…Uã#p&Ä”|îJšh±´ÞÎéæZ™˜¾ôzÚL‹jZ3ÎK÷¶DÑ0xt–×Vù°`¶Ù²$ú2Ò-ó
+-‚ þŽfü1§\=™.+}ß}&Ki˜ü—Äð•ðÂa×v{Qœºà~ð¼àÞËÈbf¡úŸÁÁìq7"œ~æžò†ù®ÚH"8Å–¹òŒÙåTdì%¨u ’3MrmäÝqI‰|šAá52¢¸ãurbxÇe?í¦-ð›Eeþ·ï¬œ^ÿ•­ÿ ©²þK=HôÿÈðÍCiýïó1ë{}æØ–³j/à
+-þ×ZÝ\ýGL	“ü_Òõ¶)7œa}Üž;ò)êü¼Ç‡ÃÚd;®âÀ/ÑD¶ùèEÅ<Ð'Á‚pæŸ°œ³2c C¤\µ¾ãÛ?øÖüW'°£¯]µtôímSö”\(­x€A²ç¿9””Žý˜zËVmŽÊoó«2ºÓtêDÄB9¡æFÑˆŒ§A1}—æ<…)ƒ/f)×ôžê*g`}²”	‚¦éü¾	·e¢ƒº›¬^³QRv¤öî,·í;1*F Ãh…£˜”šÂ(&ÕE¤WBµááìHÂ×!;óû;	NN:J¢‘
+-^ú¾e/xÓòJâz±týG4CcÜ\óy
+-AµþŸÍÿÒÚ²ÿ_=Hèÿ3Ë:'° ;îöEL9—pd0ÿäh1eMè;eúâõöÿÌÆötUò-HÇË ›†
+-ûß¿V«àµÕë¿tõŽÞÆü¶.ã¿kAÈÿ‘¾¯8>=Ë%}…¿Ÿ27ˆøâSæÆÌbkê°äÃ·_Õ„ŸÚë3à5ý.þ”Ï4	Å‰~~—Ø,\ÊæK¢8ÁGÌ½ØS‚Pa¹LÜTîÿˆí´•
+- vþ¿¦ödÿÇzÕÿ»¦hÿ}å}ˆuü+!Ø;@ø“Tï Òü/ÀÍÀøƒµÅr¸[y5°:ÿ'ÿßS»2ÿ§ðV§Êö	L20¸åmF¥§wCP^ÿcBVnü ²þ‡šÍÿë€(ù¿„ëÿsMwº–cXSb—•þà1ƒ†hÛwRd|(õÿ]æÌ°ûçÚý?šÚjgë´eüG=ù?h&ÕøK3þ	3Yª­¯Â‹BžñÈçd¦P$:ÖàìùòºÇ¡ô[ñ&Ôý)ðc{Ý¸#Åy&2!¢Ö«®Æ Ol;ºKCá³ÕH_È†Côa'aÐµM.É…­ì-»­/ûóON¦'ò9–3Âã©B—¹*—Må›û-Ð’÷7HËÑÙŸïõ /ßÝSÆ.þùÞx6›z{œŸŸ7M×Gºgî%©É‘NÝÊ3¹pµ“~à;j÷¾=ô1«2Q'ë›ä[5m0 ‚KÃä13×·x8|èC?3×Ô=ä§‡0©gâËH6±lHa°K<ˆ#"\†i·„û
+-—è?~Ó"Lb”¯ÿæ#Õ¡ÿëZ'¯ÿKû¿"wß5Æm™Y÷úÆ„\$½@.ç®o?'zqthQÛL¬@HšÜo‘~ÁwˆËÔ™«ðÌíL9zvt°:Ý³.‹N?!2ÿE?ˆ„˜‚øÎKrµLtX!Ü,ÁêÕtåƒ]b/8–½Ž9¨ÐD§&Òé³_*ööy…„e&4
+-8ìŒ*®™0ÓÂúÎMÃÄ¥˜7Utá)O$£Ñ©7¤µÝ}µë‰ecÃ®ø÷Û¢u=g<f6œ×™cp=)4.âéE±Æq.uðœ4g™~Ñ­
+-Až»Ü âøºÒ6L„T†/Ü4Â[(	Ñ?-/ù³´âgzL¸eRCS±…^|Q^øÑ¡âÛÄül3~ó‹i¹ôÅ”Oq~<ô o|»ð’£ùð¿*ÈgKÈ£cÊ÷²˜ØÈbR,ñÏ­K`ï ÁÎR<j¦YÂ BQHÝ; (|ìWÞ×öÉ³L%!˜•{Â
+-úùçø@5•_~‘þÅ5`™øÏsJß­7þ3WÿOoKÿ-åÄK:ÁÂÿ2 tÃ°ÿ_Pr•¶¿ªù?ëÿþ—õÿjAÈÿû`ÜJîß<¤ùŸ‡z6Å¿‘/Þõy9•u×ÿÕ{ùþ?rý¯IïT(žeK{J™pgQÙÿoåîËôÿëfã1$Xòˆöÿqšylo²`º
+-¨ì x÷° ÿnù\Ë`uü_¶þK§«ÊøŸZîÿEû{Ü-W÷7Ã= /±ˆee9¨/Ÿ[ÿA±|žT¨ŽÿÏ®ÿš*óêAT»çßŽiTVxØ0Têÿ9[IùÿÓ2üŸñÿi­¶.ë?Ö‚ÿ}âšIÝ_2ÿF ¹&žO¢Šÿõìú¯vÕŽ´ÿkï[æžÒtv[¤C&1Z]o«A·­7zÞhm•½·……ä±§P'(½§`<XX(ž:†E¹#1ÃÑP¤¶ú¨Z&âáÿ¡5ê‰7ÞSNwŸzSïò»ÆywúÓä˜OH÷âñ`0¦GÏ¯©>|1p_¿~z8ÚÂ÷ÍRéV´‰å»ƒP¤í-|"ž?µý‘…¶ŒÐn÷ïá	Û[â…|´hÐèùYQ~Ù Ø\¤ó»ÞµD Wñ»‡ü¯wáµ×R9ÿ·$ÿ×Áÿ­¡Ú&íV»±3ÐÿíNc04ººÛì¶[šÚó?\]] œÙo.Ý†;Õ†»Ï¦lW÷ž¼µß¿oì¶&ë4Èð»ç‡çÜÓH  y†ŒüòeÆgÜÏS68eŸÄ’À Æ˜‚ë¦G_BBBBBBBBBBBBBBBBBBBBBBBBBâzñÿInÍ Ø 
+\ No newline at end of file
++‹  Gf ì½çrãJ– Ü¿ù˜oBÓ<HEOoSÞ{[;ˆ ! CŠêÛý>û3ûo¥ŸäK€p4¥")©
++9=·ÄÌDúcòä1ëXzâ8N•e†ü«Ð9A¢ÿÆ‰á%g
++ªÄ1Ï‹ÿF^þÐþð‡(†b8 šVU³¬)åñ<Ò¿HZß0<®C7´Ã‘6°áPëy&\wñü Xõœí­‡"I“÷_T´ÿ’‚þŸW9žáT‘ûÃ-b‚³Ò/¾ÿQd››gñ"9‘mêÇJº(³ºe(¬Î·½%r/[¸‹Mº´al2pØ0aº&t›†AG(r þ‹aXŸ¥††ÏÎ1¡"'D¿]Ëîh]t7™óøæ³~_°Zg§}öÒñ¥`ïÉy¹za[\ÏðdX'gûÃmÿ¶œO4(:›ÌÕõ5D`øv?´=w“Y[k }íÀp—œì›QÒ¯0ºèïÐ`ã£WÿãÓúF@=€ah»…€{)Í‚UÄð _•E^Tþ—…¯ái:XúÒó°{~ÊÞ?ÜÞ~ÛyS%éÑà•Ýó®¨~ë>êíæóþy÷ºwòœGÀõÜQÏÃ¢üÙ@ß¶FZØN®¢Ü½\:´w¿3LÁÐóMÍ‡èˆ¦ÙûhÀí¡Y,ÐÏxÆÙ=¥ù´—l;vB_fÏv5Ã‡¹öÒb×Ó@¿ï{à ±¼D¶_UcAFiÕ¸FRŽðœØ¡çqwI½F<ý»jÃd<X:—F~!´ÐîA/BÒT$Ž—¡ÝNØ¿ÅôßD³Ö,Ïïp½ömïÀ ÐpÉb…™ô_Vóð/ð¼ Ôð¿ŠDé¿Œ_Aô¿¥²’,·ØfX¬%·]Ô¦ÄjúOŽYŽü3c˜¿Ï ÷ò]Oýã‹Ý‹ígï\zì_ îfgï\0;öáuóf…C§wûjr_>’	á_;¸9=aã"­5è'ƒëƒb	z¬YübZßÀ<°Žÿ»Þq¼  þhÁ\Àtøcþ_‰Wd^Fô_áxµ†ÿU¤þKVSdè¬ÄA“MXÓl*-KR•7¿‡ÿ§ÀžðÿÁ¿ÞzºÑ:"þnõþ‰)ßä¼i{Þé›¶}éio$Ýî8ÏÐ}¸;7·^wwçéþn+: ¾GGrª”±ŸüŽA»ÏßÚŽƒ'¢{ñoŒ>bˆ‘È:¾Tt6“a5t@-zÒˆfÙÐ11~´ŒüFe¶Ù0í ï€QfVtöx„I{øw\Qø7»SQÔw¢Žíæ?ë{ˆ± cçru=2£€öÅ0d@é/†¡½¤?épHf&oÂÇâi¿ó¡Hï]»?w³…ß‹úZHîeäïLeŽ¿–)‰åáø:W*›0ºhž©‘)Š;º)|_'ÂÇ=áÓá9˜—ËdÄYZ_Ãru´€$?7àjŽí>W}ˆV·ôÐÏ‰ÂŠáÁb"‡9Îr™ÑQ0 ôÑƒIÝ!~3€¥mBƒ÷íž6ìÚ!$ßW}Žf_¬_Ú;´Ðh¶B´AP*êûÐ²_KÙAdUeÓ«})ÛuÝ¯`¼jNÌs¹Â5ë^äš#¤ý8AÇ±ûTõ’š¸i¡V½ùiqåN#6ÞFÀ:•»…w¤rñÝÀÀøÃB›˜‡*…nC/‡1Dåa-.ªÚ°¤Œ€Î´i…ÙMžƒ‘Wa‘“:CÝ”0€Mî(©2­«”œà:°¼§°×G…o»6ÂzqAiñp¶ö}¯\F¾£h!þ:×™z%¼‹óÊhSÄ`*Þ-|—G»ˆ¾/ë
++]*«Êl¤ÛŽÐ7×^uÉàk¬[cÝë.ë¢]Lq˜–ÃUFÝn YDÉqö;˜áò—Ê—‡37¯€ d¢>ªdZ®Q4|¢k]£è%¡hüÂ„ —E„É+eÅdÞ.6´X\©¡×Ór•Š@ƒºzCÐ].ð<'DÈ:—9«Ã¹»ÔLÛ²ŠmCÓ³ê#Ò…‘Ÿió¯¶‹–q ¦]®ª÷ú®ª:^±jÇnä ßÆû!
++B „€QIPDt²ˆžî"RvšU;‘,Ë"oxY<ƒ²]Bµ.äíÌŒ!»R–‡°høãž7QÉž/)òÍ†é.—  þã¿ÑÿŠc`“çËþã¿ÐÿrÔ¯ï0ßNq|åÍË×H‰ù!ÎfP6YÒµiŸ$+Ê¬É¿1<÷# enžo¸UÒ¿ÉµÓ²…²ù^’,·HK’¯ÏÉ¯FvÝLr ‹GGmL;;A¤÷ìPÓ£0ÄØ°Ýï;£k…{MJ‹ÃÊ–&C»‚ã‘eGx~¤³¿F¿}´VªHêiˆDâGÝþ"E 0’VÚQ,ÅÂæ¤x¦åÀ@lHP\´?½ikƒËÑXéÇ‰Ô:2Õv)´ˆ ¡Ô }¶‹çHñr&‡,K.1¦¿º0s$9
++ÐR¬œà¤ôqÛ¯¤š€:Ñ((Å\añ„Ç¹Ù¥ãˆ7*ž'âs×€RµŠ6ÞíM&»UAÔë!îP«:C™ò|S	AJ:Ž+e?ëC+Š Ze›€®ba9â¢Nv²À¨[DádÍõBÔ9bh×*š8‡äõ¨4ÇFi“á3Yô¢av+GãÒ;„ãsE!"»^˜À÷U÷!@œp×'_gK-sP™]Šä
++ÐGsß~¥ç–Ò§hÑG›ß€]>»+†ók[Ev=´Ð ôü{•hd“´ ñ¹14V¬qÝ ,lúäYXÖ$ÿ[ñé‡¢¶Šñdö—Fˆ7È²qé¢Ûå}Ì­ìÚŸþô§“öÙþm{WKZÒb…ÊÖ6gW™çPTpËÓN™Xñ^±†7æ5J³eQ€qF²“ÕÒÎ&Nè*…6íd¹›±’Z•Ü£{:¬–DøÊSEdÆßi>‚â xuQØÅÃ1¨]îg¡3ª’—ØFö¸jÐl×ò6pã¦¬¥©Ú^¶hh›D°B·ë»W¬ª,!€ñ¹F|öäbmÜIéÄKƒyù<ÏŽœ
++ÖOÏp2´ž´†8šRG¾7¬”!$ãÌ”VJü€U!µ1<'êÙ˜Ÿ)²]ñ³Yñ•i,½­s&Ê¥ÆÊg©Ä¿’UDœo%GF
++aTCyñ}ïšªM¿»5o }ß6ËPŸ+$9	Wh†^|@îfC…>a™CE'£xéi˜v“cEii,¨*Ÿ-Ûul·“æ?IhõÁ,ŸJI4ã4R4m¤¤¢Y=Ê çÃðzhÁVúv•U
++m×¨¸Pc5B åÚ'gf¦žå$2cÄ:^&ÿ,</ó’ÿj1|(¾ ç.W ËŸóVÑ5LÁxÍ,QÂÇ4³@–ç……¬DS
++?¸&æ©Ç¥äöŒµ²^d{à•%b6áEÃòš½³ÌZÂÎ›EÆfmF5"©³@V¢Ç2‘ïä­ÓC€®fA¶=bÏAvõÐ˜ð1Î5„+`¡x÷ÉÈ&†hêä>ÈõÔ²¹ìÚÅøº–çJ}5/«¬	¹ê«”5æÛœ²Æ¢.)«%sJ2Ê7õŸV’‘çGóÅ1	*‘á,b~gÖÊýUKF"—þbyd-y‡tä»ÉyŽ Ðs”9c‘ëeåHK3Í¤¬hQ$H¤ïüfüoœm»]ˆø­²ó_–0ÅK•’¤Ì’ˆÑE"¶(’¡~R0&@ù
++HàÇÓÔ3Bß¸Sõx¡•éBãeŽ§¸ŸÿÝR¡ÝéæÈnL£·¦Xõ>éÙÏr«¿èyúhë‹O9ûŸa×ÓÍE-Ô hºýÏ+¼X°ÿE9rmÿ³ŠDí©©ZÀ”Y ,‘• `±­¦ÐdU½i(-ô'gróÚÿ5ŠÖ=s˜ô¼=ÙœÆ‹§£»ýcuËåÛÓøm4:?üÍûÁKÿñžj×¶wqHLzÒƒššÞw½µµ€q1HìzHÇyQàu×`°<]˜°ñ7ë¹¡Úøñ@aÀx.)CN³ú))ggÍ~¢Ocö“pÕÙU¢%Eƒ •é¥/þÞ³XÅô|?ÓxœªÜ8M± W¡è˜*ä•ËÞ§6W+Æ}FÅ¸¢îr¥|$ð2Çýò‘ä–[+îŒK¿¨âNúQâß¢€áãì÷ ùò§ŠçËÃÉ zâ8`\Ÿ‚ÝëíÒ9™ç•‘.Kö=±ÜûÄêœÆe Ñî'Ÿe.üYÉõ)|ÌÞÈéSýC4>
++š‹zV/‚r,ù&¹ïYÖÒ—
++¥ÑLŽñRÿe­´}y¦Æ.?³÷@Ù:!Ýù–Ê±þWÐŠ&(Œc±j…SSë}$iézµvÇÄâ…iw?9øÌÄù³^ÞÊgïlÉOö<‡€œ¸ËJÈãŒFv¢“äEQõ=†Kæ”•'Ùo*©¼õDiæÚKŸL&ßXY†Aka|ÓñðÝø6¡€_kï>Dþ7Õÿkõ
++ƒgù“81õÿ*«2öÿ*KR-ÿ]E¢ò_ÁâU‚
++«òÏJ–¢³-‹·X `)@j™jëÝòß9Ü¿ž¾µ^î}þùöñ˜ë=]µ÷w_~¸V.á7A‚®¦ºfÈöG÷P»¥§3‘ ßÐ_µØïKë	ÚZwúmBHWùþÃq¢¤–Þjø_Mš—Ñ.¼8¼9l…wÊýË[/¸ÑÕSëbÛ–G÷×¯í3þž{—úi#€„°á¶°Ú¢º˜ËJ"ßÁEùX÷›¨}PÛöFbäž\-à˜­Ç"Wˆi¥éáçëê
++èOÊ¸CS#)üt“ÈomŸ–úÙ¯`áOÓ,øWx®èÿYUkÿ¯+IÓá¿'ìß½ðümûü.:ë<5_¹P¶NÏ/¢§þàòR{{=ñ€3â·Nwoc¢Oøqú¶;‚$›(?ùsä‚žmP³ã˜ãüXJEÿtÒLòÈFþNÐIüË3@RË%@Ï5b¡L£Õ Ç±y8uGIÿ¦Ïtø/ÌŸÓ¿ÈýÝsh9¾£v’UA(ÄÖÑä¾îØx,®Éq°éË)>Odö}ß£“˜£‘CPë‰wN`;Kñþ>þy™/Â¿ÈÕñV’føì„jÔ½ Ö…àvÀ™öíöb/JÇæ.÷vÛTšo'g×ÎÛ±·ÛHo½Y]¦ßí‡ï5þœi}ƒ`ëuú_‚»´âä°DcQè`&ý—‹ñTAjø_E¢÷°Õ4MVád“•Ðò³Mt÷gªrRKTyN”ß}ÿ§Ó„D’\|Ôf¹‰?=3ŸE«züª½¾nÝoÂÏïœH»·ü|Ý9pš[Á£¹´ñãgæøÆ$9î	Ç`À2®Ýé:XKš±º,Ã`I±9N#‘Ò¡§-Æ±²nˆH·•µÆ¯×d­˜¤|-)Òå°øYj<ˆxÉp´±é›þâ÷?¥ÿÔÈƒêÓFn?Ò;èÆ¦KŽÿ Ér1þƒÀ×÷ÿ•$
++ÿ-Á¿hÉ,Á¿$°-Àë¬"(¦ÌÉ<BÑÂ2åýËû:è÷Î_+Cí`û¢?Øo_ìöËÎÙÉÞðþ|dÞ…‡©ü¯tJS]ÐÛ¤`¬S“±ŒJ`{Ê¼7‹ÍlâZk:¾È-l~Vuñ¼üŸÛù?y®HâÖ,þ95‘ÿœ Òø/5ÿ¿’Dá_„:‚q‘g•V‹cÑN¨lKlª¬iˆ²(©:h™ï§ÿsè[ÎC÷ÆèËòèÄÔo'çÝ‹ýãýožþíòÈ|nïÝÝß‰'´#
++ÿ¹Ó™Æ€K~Ï~ Cªß þ¡ÿØáGÝÿU¡xÿÔ:þÛJÒt¸äïÛ»Ý×{mpÚÔäã00Ýð©y
++Î[·[Î9S8ñ"¸?mÄè¸-lhuèHÍ»iVè"ñÂy=ó:á”yÿ£<ÀúâîýIšÿ‚PàÿyY–jø_IŠßÿ¥–Ìqg%t@ÿ«Ë ²­°`SL	Nˆÿ4)þn¦áY¯ûÀEvÃ´ýDéÑ	ýôþÍ7òñ?zQ~¡”Ò»‡qÀR€™ô_(Å•jùßjÒtúoFþý8†[àE2[÷}[ºz¶wžøóÈÚ}Ã=Šºw'½ã3Aj`gÙÏØçC§³øuR™þ¿½¾®4þ#ŽÿZ|ÿ—U¥†ÿ•¤˜þ·tSB +(d%¡)±èÆ¯²@åtÎPtÀƒ…ÆåmhÝëî°G¡Ñ__ß´ý›A4<|z4µo7F¯wÅ†T°Îd*Ý;óBô‰‚¸îÀµI<…˜ûÑëüYÓøýGç$&FgfÂ¿Z‚©–ÿ¯&Åò`µ Ôu¶Õ+™\“Íf“•ä–¬r-A†|s‘ð€þ®-<îì{‡­Ñåávß9¼·æ¥²smpw¢ÕÝ ³}Âø'ç2Á müÃB*š/nÍ ‚à™D×	Öj|P•rþ_€otÑª­öþàžÇ–D‰ÜÿkùßjRÿÙjšVËÒÔË+5›øér,×2•¦ÂP Òûã?Ï´0©~2œûõàÙkí¿¹og[ÏÑ×:ß[—üãùõÑããÓÍ#w³Õ?»ï]¯C±	=æ)>‰~G8èú»ûõ£A'f`§x:Î(Y˜‚o˜¼Ã²üÃçâùÔf|Sþ©ý‡d[\¹ÿÙa2Wî>dz˜ÌŸÉ}Hq×´¾Fh×„ÌÔxÿ^V72m
++k\ÝÀ*¼W¢}ûÛßÆ«º^ž%ó÷¿¿Ã]ñT—ÃýôWÄÂãÊæË¢,æÒÂ1ý‘ˆ¸L®Ú/MŠ¨ET»¤)}W‡"úÞû4ÎjŠ^Ð?8Q…¯œDE˜jOg*ÕÀÆ~`ì€«ö¯“Œdeþu>Ú¥ø÷yàÙJìü°ëšïÿ	øþïgî˜ÿøX?
++XN”Š©a’–¥"‘šÿŒ;öÑ¯0—òïÿ”v¯ZÿW,ÙÿÊŠPûÿXIŠígÊ¢Êr-µÉJf‹g›¢¢°º›MSæ¶ÿ™çý_ùÎ½üÖz3;ÜŠŒ-aÿâåáøúôÒ:h9×W×çÒŽ~¿§¶÷òbGÏeò`·G"; ÒIbzbrˆ²êWÿ¹R
++ÿÄXz½ãx:X´Yð/sRIÿO¨ßÿW’¦ÃiËoßJÏ‘
++O·._AtùÒî<½9†mì}Úò¶”·Á³½ÕlX``”ïÙˆ5 Ñ*ß¸æzÏ6|/ð¬p×j$\¹Öbß`ñ_Aê³+YqÝ‘Ÿ¨Ë°FB ôm¤¼l®p }ÛÂòž,·›Œ0ùM­ˆsmQ–Õñ:ÞæüCüè=ü‘Tåÿƒp«„?]"˜ÿ
++Wòÿ!Kbÿ«H”þs&V¾j6Y¹iÊ¬dðm©¦Éê-dN‡êwÙÿ~·£æ¨îXÊ½ÿð
++Gppû&¹òÀòÕ­ðõòe{ëÔµÝîpxÄw2Ž>Æç´ÚÕG,»OU‚Yq¢£qS||”*Œå½ø
++GEsxöÀË°
++¿ó¦Iþ?|¯‡˜¬ùÿPø’ÿ±¶ÿ_IŠùÿ–Ø„ºª²|SåYI0¶ÉóØˆ¢UlÊ-¨/ÓÿÇÑV?|r­èü4ÌãQçÙyxõÎ;ð|ûæ4¼|užG½'×}bm.çÿ#wJS+Øó0ÆBµðÐŸT×ªÂHuƒ¿€õì£p=AwK1 œÿ‚T²ÿWøÚþg%i]>9dù‡Îð$lu¯Ü@S&­ˆ‚©uMtc¤ÁN‚}e7wo¤
++gð5Lì9Ðí`~ššä¦@wˆ×~<Š9r(7p¥àg¸O–
++ö?4üåŠïÿ_’ÿ©J}ÿ_IŠíÿ "JÙ&äuVMÀ6eh²† A0%Cçöÿ?üïTÛê6y/ØÝ^JÃ;n¿s«™[g/Ïo§M58y}ÛæÞS«çqø-|.Ç¾2±ZIˆëµ‚4ðÿè»54™Ð#Á\1UG|A6Ðë//Œý‘çW*;]'A„pÆªüŠbÑÿ¿*ðuüç•$
++ÿ–Ê™ Hk‰ "®*,0€ÁêPi¶$SP€>Áþç}ð¿{~é„·—½Ž¡Ü^
++¾q$=Øš·wžäÈæn®X^0£köæ™Àz$SppszÂì œ÷AB¡€G¶ÇÖŽf¦IðO-œƒ Þÿ’PÃÿJ…É0[*8VTñûŸlbÿŸf‹59Å4`5M~¡ïßÔãhûvxªÝ›7gƒÃsÂèAÔš&°Í½oÏ7gÊqçl¸ÇÁÓ1üSÅ  †kS0@ÿ³¹ÿã7ÿøû°]½|q—€ðÏó–ÿÉœ*¨ª,‘ø?µÿ¥XþÏ¦¬+%Yf%±þÍVËbuê–bª²Xÿg‡Ç[¡ò<Ô¢‹îÙ!÷^	;î•¥ö®Ï;íKóU½lI×Ç§Oúe‡:ÇRv|0‰<a­‘è¼ëØ•×È¤Ð?5…^¬•Í¥*V©xž‘ÌÜqÆØ[8)NM©¸U‚ªÐ]ôa©ÇLÙ;úeùé=Ç–r=&:T?4ÃD±7mRKD9jíÆñ‹§õ¢g9žg.Éýëlù¯XŠÿÄóµüg%i:ž¾}´NßàÝ|:îµ.®¯–ê^žÁæNpvÍŠº!Ü_Ÿ=l]ÞDH4ÏuF‰…Ý§fE›ŒÌáCÛ5½á&#*× ZI1ý•”<®ðÑëò«¤TþKž>Æÿ³ õ¿$Ä	Öð¿Š4þC©ÙÙ¾mí¼=ZOº¨·Ï_NÞº'ÜvwËyè*š¼%_Œ¼VØì4€ãxCÜ‘µ¨ïx`lc•š'TSƒÄ\0èäõ=›CôÀ«Ý‹zQ ¯qÀªR•þ×¢½ÀÍºÿq¥øŠÌÕþßV’bý^†V«Ùbe½i¢ûŸe²À2MV•U(ËhA~‡þGÞýSÉÁ`ICäý¢vîÛ[êh[í#è·{£›æ–pÌ*/¯¶µ\îÂ8¾ëïø,{&Å1:ŠJ± Ý’tàk–í™[å$½±µ4ö“QÅ°MÒøZIlrÍT“¬àØ®¤KFÔÆØ¨ˆ…_×‰÷$ž¬T_Îð-¾ökÇ>±U.EÇŸH­N™Ö7hÕej ÍâÿT5}ÿ—9•Ãïÿuüï¥éèõäeØì·/-_
++®®Ã@¸ººßo©ðl_\Ý¨{Ý—=M—·Ï/öŸi8a/*›"„¡27Àoðt;8ÆV‚žÀ Ð÷ú‚Pj˜~ëEÄ÷NŽlfÌøî‹	ÿ¡Æ'Ôû¯è“€Öÿš:¸î{k™Ðs@ìlãç‚µnö776¬°¿núQ8ëžß!šHÁFf0ÁÆ¿U¥¤§Ù]bo>ÄH_3Ðqózö[Ö¯Ä¸ÔõÂ\X0õÉó1’ ü:
++Æ¡1iAñÄ*FŒÇ`cF;Œ-žÇúéýÏñ:ˆ¢u>"þ7_ºÿÉW¿ÿ­$M‡ÿHdÝ§àÍi	{àõÉß>µ_¸ÑŽñÔ¶óU†üÛÞ2_Ðn@ßÇÞab'Žˆ;©yŠ/ªî½jØuòb¸Yð¯Hbñý_­íW“bý?A›¢ea¯¿2+Y&Ï6%½É¼,r§ë»â~÷5Î`9E×w«G98îuœgUê÷;7÷-q7”ØÝ£½Ñ™}ûíTo=f®q™s:§0Ñ (ÓÖ rôâvô`NÓœa/	u§ÎÇ9«½šíˆ(>r©ËòãÇM€fÁ¿¤”âÿªµýÏj…ÿ¦¡›WLÖ€-¬ÿƒUÿ€YˆN40TØTùï‘ÿ|wüÏë‹àö!¸¯Œ¦ÉÄ¾öñ=à]m4|x-õäÆUŸ¹4þgÕ)Í„ &eDí—úIƒ&ùêß‚?&@d\	üOlñ'·Ãv=Ý;˜ÉÿK¥ø¢ZÛÿ®$áË"¹*ZèÈ§fí„4NÙ7E4ƒæ©ôváœÝÎÞÕó•qîXFðp?´oÞžv$ã‰¾2­ÎÏ/?[ªÐÿX¨	Ð,øå"ü+_ÃÿJRòþƒþO4Öà€ÊJ&h±- $VTÃj	¢h*ÿÓvÞàh¶›‡îVçõp¿u Üî=âö~«ùíI];Ç=Gÿ6¤ñ¿È‘L‰{ƒæÏk… ¢c¡^oÃÜxDLÈÁ¦½Vã¡rš|ÿ§üÏ"$ 3ïÿbÁþWà±ÖÿXIŠùIh™F²²!*¬ÔDü]XÃ0¡¢ŠºiAu™÷ÿËê]²í­ë79Ü{ºïÝWê"wÇÝµ¯ï¹[ONóøl·tÿÏéœ ~† nmª _'ã„Þì©/t&®õÉ}‚¤üú„þ£×Šýÿñ\)þ¯¬Ôö¿«IÓáRŒ ðŸXç¼×¾9ÔMØµ¶_¬í½ÎÝ÷²m¾¾Þw‡/@8Þº»l¤gˆçÚFì”êsqƒ†·éû{ì&‘uÞp¨êë¡&q®™¨¢O]ØÛ÷Æ¬ÿÛÿÞ_Ãßûnç÷ŽmýþÔ‡ÿ»ó;êà÷§àwÛð~†Öï–3øÝèØ¿ë Ut~7çwø
++Aÿÿß†½FT#'2¡6nx5L<•£f°ß22£?þÇÆ®Žu÷Q­?ÿËÎùöÍãÅ.ÉøËŸãÿB`þåÏÄÐ_Ðø£tÏ‹\óÏ4óÏ´Šî™#TÿK¦úõçþ_nº8Ê‡UÜ^0ÿë¯xhÿ‹‚€qQuWg<¡W;`èóåúŸ7ú¨qÚìÌZãiŽ¥FÇÙäáT»>D¬öä,È-«5ï~¡Téÿ©ž±7œ ´çÑ€gËú‚ÀIõûïJRÿÑä›P"Ë©‚ÉJ²Þd›œ$±¦ÊK@RKo¾_þ;‡ÿ'gç´Õî·£æõ°é‡l´}.]ûêèA¾»ðw.^0|ÖMåyìÿ©ê”¦wÄST˜z€J*MvýTÙÖO.ú%)ÿuØõ´ qØî"™ÀéðÏ‹ŠP’ÿ(bÿ+IþÓZºn°MÑÄð8(ŠÉŠPWZ†Áñ–e.óý'ˆv‚»Ó>x—¡ä[=Óêûœ¼{÷ ¾‰Ç#kgçæ±¯O›­&ÿìAMAþ¾ë­­Í¥ñ3ÖÒ ®dÑ]o"â+¡¯-’Óó‚±cÂ8.êØqLð†ëð£è‰ƒêàï²µ¦Å†%&‡>]pØÜ²BÃ¦Nö‰ö]ú‹çe²&Í~\#‰›ÿnÙ!É¢q¸žLYõX2K¯fIªì‡^1Êqv ¶¤ÍÇñ YÄ–¹2¦OØ£yU!ÐÏ‰ªB 1ÌÐóMMÇ7¢aP® ÇîvPU†•9ûq8 r)*ìUåÓ›R)š3AQòËUtJÊ¨eÊÇ´Âì&Ï)@ÉÖú £¯Lé(©2­«Éá:°„*Ž³šû«ÌiqAiñp¶ö}¯\F¾£§'þºÍ&=æZæ8WFr¼ÌqŸ3’óÄÍuÜßqéãþâ…núDíwÑÓ*À‡€ ¤X'¹ˆß‹åe\OXË2‚Ÿòá}gW÷Y5ñÝ5vÓ…>ÄƒfŒÈ÷)GÀQ:SÅõl¡÷]û­€q”‹¯(É}Í,}ù¡T³4šUQ.uþC1”s‘í~,Òíì]œêvê’/.Ôm9¨éªCÝÖÀQ^ê¿üûZiÿò¢]Ž/Ú¯¥¼dëY^Æß ¶1ÈW S ”~žÓñž·t4¯Ÿ«’¬ë	@—/ZeZ,Õ6%}v€q5¶Ûô¡™ÜþÏAÅäˆÙë0ÀBp‹ïl#¦ÐÍÁ`â„> „ZÏw4DÝê™,+°néì|êàº¨*‚­QÏÃ‚‚"²ˆ‰š»–±I€wbñÂðwTøÔMc6—‚7F’Ù).Uxlndˆ!+ôU¯—J%âÌ_%öncÜrŠŠhÂ¨–æÎÍ›—ª/—#/u7á<ÿ+ÅU²äŽ8øÚŒjÕ0çˆ4š•„ÆnÉÖ—ËÙéOðýp0â$»H±1LcY)Ýª°ÂÂVb3TD•m7ÝÀé±I©Â~¾›Š	}­m]¡ü?öÿ†	ýzŽ’¯Îÿ'ñEû_EVkûÿ•¤ÄþO$Þ0YS+)M…m
++–ÁòŠjAµÕÒMcîø?óèÿšGÜ‰°svý$¿(wßÚûAt·Ó?ºéÊ·ðñùðbxìßžŸ÷ýæã!õÿŸã1šÒÎæ°ZËxlA$!A©Nðâð¸ØT€–ÂòGïÅG$ìÿþ¥ šiÿSòÿ-Õñ?V”¦Ã©{ôÌÝ´/·Þœ3O`×>8TõÃÝ‹“}›Ûz|ù6¸0w]u»kE\£ùˆâé 4ºZ@äŸr­HöéS^ÿožé-Ú	Ètø—dìó›—d‚R‘E¡Žÿ³ÂDé?UäÈZMYd%¾)²:lBqb¦(M³øwë˜ˆGï4Æ¼ïÞà‰__%÷ùèF3£÷`<Ÿ²ü ¸£ÎÎóQ\€á·ckt@m“C›°÷ÉïDõƒÞtóW„+¢ÚoLñ ˜k56ÐM5«¬‘¶žUÒ~:%ÊùÄà¢ª†v±<§ 'ˆ³ç”ë/FRpH£C')#+(=Ü-Rå¢$ä£Ù%ú5ŒL´èLSt3ðÖ'"Æ*a!ÚnjAý·Rýw§èT–ÖšªfhÃ.v…¿¯TqÊÓó+Ä§x¶•r>¢anÙå† ²ª²š%RÓB¶ëzµ€¼¦~æ¹\IA§¥´uc•–RQaž‰˜jÕ›ŸWîôû”eúXWÁÀøÃB›?ªJcçiYÊ4“¸,mšJõ˜¥©Óäk Ü_D˜ŒsŠ„c\’¡ãÌåÊW™ÆPR¡¨v¸S…6óÝŠj5Ú¤©F›åâ/ƒ6kÄEj p ‰ŽMm&ùßƒ;+¾Y.í£‹ŸO
++ŠÀñW×åáÔ˜”¾Æ¤5&­1éÂu¹³è¨ø9™gÇâ¼ïÁ¯…úÅœÞä‡±8;Š©ÒT#ÕrqTI¤Ú=ˆ0Q¯_ÂIÁw!ÐŠ–‹E:Ã‰‘I>·Æ tð5­1hAÎ–fÜG&ÎúÆ…ôÝFËÕÉãÌ7ª¹ìø«ˆ”ãìïAÉåO–Œñ{§Vî5þì´T°:ä\‚ûbÉ¼6nÅVjdp€ŽÙÆßþ†åÕÌßÿþ¥Ð7u¼þ¥‘Z\.+_™—ŸL	./Ÿ±9Pù\YcrfÅ˜<ÐðmŒX‹ÃY™£‡(÷Jöéü<ÜZ«ùk2øš¿®ùë+/+Žm<ShòQÍžØñf±n¥—œ²NlÇ‰ž7O£x°Ô#E¸“:Ë–%Ë@Zê{Ãòª™Ð	Aø+Tù¡%>~i«46¦å$^«†{Ë5ˆ½d|ØÄà4·@qÚÎß˜ì†Rêúö$ÝÒrˆó¾ç~R¨¿ŠË	µ9Î‘¹Ð/Ï«ÊjúF_Ó·š¾Õôm¡ô­ÒöfÍéˆ
++5d»siØ4‘¼4¥”EÑUr¶bHL
++‚Ø=|æC3ß9Yy˜#ÇûŸÿøoô¿âiØÄÂ?ÿñ_è9ÌZö•Qbùxçk¤HÿgcÿPdU×¦}’:€Z“cxî7F@ÿÊÜ<ßàpâs*S; ‹]0l¾—d3+|c’äëó¬O’EzÛ#Ž}r48ë^¬tE^®w±â2|¬{1[˜‰%ƒÉÀ+½‹åˆåœîÅ¾K±3/g]Á€°<¦õ	œÖûœÍ×Í\>Æ¾¼¦òâ}ƒå'Té¿hN×__NÙ†2þ¸,øŒÙþÁªîu\@¹‡Y ð@&ø*(ÿL÷à3¿§¦ª—å§),NáÇ½4•XîOà¤	ÂŒªîAµû¦‰ÅïqßôÅ•¨Ñ?	ô|Ü“Ìþ©Pê^šÔó²ðPÅN×¸¨ÆE?„‹(+D¿Ïlõø·ÏÆ–eÅZÃg+Tº¥#økÚe.—tûiŽùûßôgu€Ù¾êwniê
++#hÊvÍú®ÉxâE®a¬šX©W8V’©Ðq‰Ÿj‹/›±Èº(tN#ÿæ^Œ
++ëqœ€cwÊ0‘­Ë¨Ä(yb(drÓîc×ž|kõm¯Ûƒ¦õJK^ìÝ…(¬j8Ù÷ìµÛ„¹{õŠgåxÃêóÃóŸiZÅkS~J%ôø	gTqü*5ˆß5³Ïu+Tðò³úÌG°øRÐ[ÉOä‹¼âëãŠG”?/BX¾]aùHƒjUÈ5£^<4åß'ÈX&0T1_ÕlÙ/é6­•…Ñ÷	ÿ¢%ÿ
++ZSÓÅÕ÷#V4ÍŽÝ¥.qsìêöÿê;ù_ëô ¿dæp;ŽÉŠ»Ÿ°ŠçDÅüÄ3QúÁwº­öÙJŸy+tŽÞøh7_ÓúF²Këû}“åÉþ±¿4^’‰x™“Ž9Eù#/mD™ô‹û+Æ%
++dŽîhäïŽþ:‡ÿ_U(Äåe^©ýÿ­"Åþÿ g	ªi±2à+‰8þ#gY,or’¬èœ	Z`™ñÝÒÒ÷lçmkÐô§ó–éîíô·Úª¹µuûtÝ½¾•³kvç–øü›pJSÏÀÛ¤ˆDi¤’µØ?0~÷"7ü·àI,X2º„ÎMj÷ç›óÿ_WêÿÁ?WòÿÍqµÿÏ•$
++ÿ’ +² Jl‹ãLVÒUª*²-Ã0t(BI­Eúÿ~’ßNNÏÍ£­—mN?\›!öü­?÷ý£­fGö^ºVÿèÝ0	~JNæØ÷w’SðûÍÕ~¿¿+­o`&z©î¿gûÿ–”¢ÿoEjø_Eš§[Ïp¨«êÕÖù±¨‡Ó‹ ßì7ÕŽnpâÙ ·-w¶NÞ.µ{×n¤3*ÖIuŒ.ÿ¥!ìs§œÿï#j4ðõÂpÁtø8I,Òq 5ü¯"QúgŠ*vø­ê*¢ÿ2`u©Õb¡"›ŠÈq@çæŽÿQâÿ]ôÍüWÇ—og²o¨;—ÆžqèÍáó[Ž¶yØ~÷¦·cøÀ¿QN	k?³);ÄNi|âœ¦Òx\uZävüñ¤Àíîgõ	^ÝÓÚQ1É,‹‹óWH½ßä¿[v ÍôhåÊ&¦ÞžI_:xû¤áýl¦1d£¨Ù"Ú¯œžÉ;Œ:.Bà°ô,g¿ÚË_~(¼—‡óa_9ÒT9–‹k#Ç_•ÏmÅŸ*i ãU!ýj‹ûÚZªµ~¥¡iàeÔ#ç44-šgòIá"mÛý¾“×ÐÏš$–µF–k“XTéùP“ÄÂ¦ÒaÄRƒ3Œ³öƒ_È0qÑæ‡ñ±<ü¥9Í‚?ÖÅ1–{¯4d¤ÜÈ‰æ9ÚÚä³9Í©˜ëñø%cÝlÙ;ötÂç+ÞØÌÆ‘ÓQe÷/µkXû÷l£±™R¥AÉ;¥31ËP©ÈM·QÊü–I%“•å$•î?jŠ4ù»²Eªm†&¿Ï~1H’ÿRñé‡R…Šñd°K¢fW‰Z* sëºö§?ýé¤}¶ÛÞßÕŠš¨lmsv•IýlHª6yL¹\ôUi¦ˆÅ+ä4M»¸Ìeªø}‰±ÚZvŠIž ›–=äûª­#
++„¨Ò:b&Z†‘w¯ÂUí$(?œyÍ+2ãb,ªÌ/p’«gFÁ„B*÷<EÆ%DÜ™¼‰fÌµI~äg‘ÍOf¸‘5sAßKr–ð…õ©øÁ,ÝñŒg¿(ÇìÊÄo¿[¸(W¼'ëiÉL9~ò5ÿhÝŒU¤õzç_¦à,ý?çú?2/KµþÏ*Òteœ=ûâéT¼7·4ÍöÚê–rs2tmíÖø¦÷à³¼/é‚ùzy¾¶ˆ&8:@)‰ñÐ¢>ð”nhAq5i=£ëÙcæõ£âMëø ¬g‚³¬SCãâYð/*BQÿ_kýß•$ªÿg5¡e°-¹%°R6Y`5y–S9(JKj™ÕÿwßNd³§‡Ã­yãÜ(½D-UtzÖsïàÙ9Úf»å·w4ê±}O®¨±Â\œM$îkÌØŒï»}bý\ù7¦·an<"’°iÿÚÚþåT¥ÿ»h`:üK¼*Êþ”)Š¼ bú¯ðµþïJ…Ó’¡ÔjÖ°d•Ñd›ª`²™×u4éÿ¶Žï÷÷w¼öî™üÑ®¿Õ¿\¿¾ŠÎ‡n…Ñ]Ðéú–”ÕÿMpÃvüsŠ¾ïžíšº£‹Š‹#DýlŠ¿ÉÄ×è‚¾/™Š9Ï-…8”O®´Z R–‚Lüê{^Þª¾_¦–Þ<ÚNŸJ}ˆÚ¢&g§M-SÇÅ¶KÖEK×'þ#S%±…ÍZËº@q~¬õ‘[J
++ÇZ?Ò;è&†±5"wv¾ïõ<ÄqNmef¢PI½ËÌª¹3ë`0­3­]y4KÕž_¦ªûM±¯_ª§_=¿KèÙ'aéž¡¿ãlåÇ2‡NuL€È—µ~u­__×Z¿º"³*õjz¬µüÓ™rŒã@]\â*s€IOêÓ:­U°ãôAñC—	´]z®ýµY©rÂXVPØõ’¦å÷)Ž¾‹—)}:{{¯K½ýÚÛ«{žAöŠT)“W ’
++zR+§kd›Ìmrm,¨8å+ã!m2¥š+Ð8_®!âmß,hwýâç¬ÊáyõIË¼]!G¸8¯TŸœ\­"÷‹úzClz¹ öÐ.ùuÎµ…Ø¬N¡|Î.5Ó¶¬bÛÐÅ'´RÙÎ(ŒüL›%ªà0]ÌÄýúöu¯ª:^±jÎR@(".	qÂÄ—KZ2!ZºÊà¢Så‡•_,×<&†Ø:j}‡­ï°õö³Ð>bÍ×ØÍä¬ ©V6>i•Õä"¢Nrºv†þÁ¡NK:]ûç?þ‹¹ˆMÚ||ë\ûŸÿËìá?‹¤ðýÃüÏÿKÊ~ÞpŸŸÑ´–8óÏ*LÎ°±ýÖ´Ë5}¥®Y¹Í¼q"E÷J¥×”±	^b`çXªØ’27Œ…†šÄk²0‰…›¬êsiÑ&K“øÄ&K?ã­6kšXü>«Ì_îÉRG<}V>c Ü‰¨u(ÜÏ‹›jcÌtK…»ä÷„Å]Óž(Ê²÷Þ)Öøe1UÕVß¥Ç’…Î¥ÎBV6·<O‹µ²Ø¥°‰³KúŒOø}È¦b±¾>Â)ì_ÌH•mËOQãE¨Mš*'abW“^Èæï,C°jßéc™¼`2Ò	üàIy¨‹Â«“z^f­Ø“OŒ[IÕš#LÒgBÐUá*Ý”}
++ŸbPÊÁì	ïþ}>S&DqÏYÂL¶BI)pYÐ6!pû„Ðë‰ÑTË”(°T( Ý6Ñ~ºÔô*ù³ BÄ8VÉüÈWò½~òÆ1þ»0ÏLÀùü\ÓñåVE‰Ÿdd„ÓÊƒ?—„ð¤·¯ý¹8‘¯>½ø&?5wUcŸe"ƒ¥—…ùI}Í©Ð¥{×T>W0û1ý’ç®Ä÷þO1Ÿ1mú¦3¦£_6XÀ·Í2ÜS‹Êr6ÿV¼¶“T#T]`ª¯6ò[·Z¿pÓÝ»½ÃMq¤·j»Ï…°pÙ•¨þ|²àêÙæâLk:e}©Ñßìê%¾DðR4Ðï'p¤–èv’-Ýˆu#ÃÁ÷ OõZŒ.ð¡Ï¿Ò	ÀdAA7•åÇZ_¸3^aÈ€Ò‚øTd@]ç™ÏÅzÇÎ÷k‚k†w·>çó9°ÃþßÆZÝ@3 ®ëž9Z¡ÿ'E‹þŸ$I®ý¿¬"Qÿ/b
++Š*¬¨ ••T½Å¶ ¥°<¯ª¢)-¥)-Âÿq7ÝÿËîÖ­§¾œß¿ û¸Ô®¶[ÁÉ£|èí÷»×¢4PÕ»Ãƒëövïî±‘HØÈmPzLÉ(ËèbqÖÚa7‰UÛ(ÖIœÇáæýJˆ:Û.bÁ°.!ßhˆ•Èð5…Á×Ô‚ÏÀâî\O‹Ý±Ðª±H{â	/öÿ/F1Z¯(YÖ ßèjdF?€fÆ°ÿ7IAÿ=¿1œÀ«¼XÃÿ*… pŠ"5EV°š2+5–¢°¦)ZPdQÕ­jø§Gv0ê­»=ëh í¿m]í²ÃþÕníÈ@¼{r»úîùÃ¾â®L1†‘úìñL}Ã]“L†d®5ŠlµÙ%§ýfŒ¨z3ÊÞ‘Õ¦õ`„°·NÛ¬ë]êY˜ügÿ30þe5Oÿ^T”þW‘(ü|Ëj™:Ïê2°X‰o©lS²x–×ÁÒ%]j÷û›ÃéÛÎhÔ»±nº<··w9dÅVëåÂÚÕONF~÷¡sé_Ü½¶wD¾UŸÒ÷×LØ…©Ç+òÅ¿\kd\ $7¹	­ÑF~lósº„Ná«.Á÷3N3ý¿òøç%AUkø_Eš—w­ÛÈö/n8ùìþx¿e	û÷—/{ûÂÍÕ~s`¼Ùæð©?Rï=¯AŠ˜ØÕ?‡`'rC?ç‘ßÄÐ:›¿ù^n|‹|Ûè6ˆöJlê–B`^j˜~IoñCà»Â;ÿi*ÿ€fÒ~Ìÿ«¼Œè?¾Ôð¿Šóÿ†"È"§³Øñ.¢ÿ<d[FSeC5$½Ù”-U^*ÿ¿ëøá¡ûºÿôÍT÷èÉç-—EäYèî‡¯{ö ì¸\xp<ùbÿšÐü=ôc,/¬ùþ9S…ÿwØh„®Q‹bfÒâÿ9KÿUA¬ùÿ•$
++ÿ2àÑÖ<Ë™’ÎJäØ¦Ül²¦Z6IWÍEú?‚ÏöeôÐºÒï.­ùt~°uÒ’®:'ðâåAö­³ýŽqùæSpOd
++î7§'Ì#Ê;~'Cû}¬]½Ï‘Rþßðôš?1Í‚A(ÆD¾†ÿ•¤épÊÉ·œËkÍ·ƒÇ·×Ý½ëû§ÑÁö}t4êšðM Ê7Ü>Ø.'í6Â.öä9ä=~µ&òfÐ‰>'ÂëMŽ+CßÇ:¼ÀµTúÑ+òk¥õ"øX§ÿÅ°ð¬9^Ç^$.˜ùþ'*¥ø/_Ãÿ*¥ÿªapŠr’ÅJ¢`±@âÖÔ]´™— ðcò?‹ãzi9h3˜éÒ¹vï·Œ××ãÓÃ½«Óf GÚéÓõ³ÑÏžö;îo°ÎÈ½<8lÄÊ3ÉámÐÎân|Ø!÷€À6¡|êú´‘¨p¾ïl¢låâEN,Hš£ÂÁFÖý\*…ÌV[iÜ¢"†­%¹ãHˆ;°©ü¸g²H¤À¦o‹+7®o5‚°qÓ¯N3à_Åo~yøU¹Žÿ²’4{Ò‘xuîDá|÷%ºzÜ?Ñ_Åë¾¹³½¼¶íí(<ØÝs»“GpâÀ5F ‚H‚8¤ëZÛ ÒA†Ö¡zx„#€AˆÝ}2ÿ‡H cpañƒþ2 dþO€ƒÅ’Ÿ¨ðÿ&ó;K0JÅ'¿5HI;m:ôâ.™‘ùØ]š)£Cè2=`ÂB?ë´G/B¥#Æõ†•M ñÓ"ßauß†Ö2úˆ:¤F¡>; ~î4;Ãëp&VsÂñßvÈØ.iUÇŽ ±433Ú+‹ÚÿOš}v~³»ÉÜta~=+?2Ô¯ë…u‘N<£›tDðµ8± õ¦M}ÕÅ#ÚŽƒ–¨<c[d ´I4,3nŒe™ì¢1!=tâGøÏÊŸ€+ê{³I,|ÀsXî Ã!oCÉI‡?r$Ððò-vÇÑf°X\Î’ÊìüxëÐÎ£=sFh¬d;Ðâ9ÆÂý‘ýs 0qO¸ÅEfØ…>$y¸¼$d$Éš¬3‡az4€…®ÔóŽµù¦È63£:¬†‰!fM¸yóJ&®…nT¼s?r4ðg…Žò­‘Ó0¹ïõŸþ(Ä+EAÌåküF>&Í£îñcM¶çd1ÇƒÇÙ ©7[4^|9¤½àùR.:u²TË6îl¯÷¸ïy™ëièˆ"Và˜ã±:u%I2aˆ¡`ñ(è¦Ð.áeÂM'##'!]êÓôÙO¾ê`WšÉ‘ZÄIbþ-n•b"&iûË:b>îÂÁï	ÅÍ`6tŒÈ÷uFG X<¤uæ;C%iÌîœh ¶žG{ã3_0çä˜f>Ð½5‡|ºÑ¿•OÎoäØÑæâÕE‡éF‰Î‡oY?²Ð,ìÀz^±á…ÒØ«§*èå;§ìÞ÷œµÇ,·TA.é±HÆù‹°L‰Ùâ½`ÃÅÇKßSr¸âÆÞ}¶Ò›UálÅíNã1ãéÐëÑ¢æ“´¶ð	%O™ÑRîÿéû¶¢YÇñ‚…Ëf¾ÿªÅ÷_YRkùïJ•ÿ*M]œÉ±MVjq€m	MUù–¡¨‚iñ’¸È÷ß­íSvpÇ¿½]“ƒ3¾i¾´¯´íhÿü©ÙÞ;Ü¼ª[ÇŽÖÜ7^"Ú%ç2yû½!?òDÞŠk4üÆxã¤‰p<¢2T"‹?zñ?AJáŸHÌ—#žÿèpß%¥†ÿ•¤épª8—²|öpÚ#ýôR9{;z’ÌÐ¾äÍöóùã«¹ãõú€õµççåª±²UªŸIŸ_>zŠuš’Ö7ˆqü:þ/5þ "¹>ôúÎ‚ðÁtøW^Åú
++ÊE^±þ—"Ôú+I”þ›<§K&àYC7ý×eŽm6Už•›ÔyÄXRs™öîøfwN[èü^G/£î}çñh{ÿÌ–ZßdÿêD;S®¹±ýGö &¼Áý•p’®§›˜Óïb¹o¬DªvéÍsàëX{´³™¼¡ƒ j“bT’ÂŒˆäÍ7£ïNV…,zÜ QiÏ;Ø©(Jž¥³Ÿ]p¹º“üÄ•]š¢¦öäÔ¦Êe×Øà¦Â7Zv!2ÙÉLúlÙŽA!>3.6&)5BeLDÂñå#·Ô¿˜:ðWø«üµŒÀ_Ôæ0Áÿmj8.¶]‚}´Ådª$¦Ž±ùb9ÊtœŸ8–ú?ÿ™–­,(óÒýÆr¾Åª5Þ¯ñ~¶¼Æû5ÞÿÌ1Óg£å•9™Š˜?Sö1'©FÌåâ1ÿÒˆ¹q©:}d½u4)Šã‘jd›Ì}‡šR‡^ãa‘`/­ì«´P\M'4£L"&½ÜPìdPÅ1%vÙ5Ò§ƒ¯‘~ôk¤¿,n<Ÿ&ëUû7f<ŠŒÎz’02‹³ßÃ¢—?ýP½<œÙLúÚ)	„IY-;¯±vµóE5Ö^"ÖNc.h ãÍfØ‰N­–ðík%Àà€	áÌJØ?wä ŸØí
++i0Ž(‰phî{èCéË%¥ÑÌANÐjÆÖä¡&5yÈÕäáó“¦]ÎE$ÔÑ\„‚ÆV,†AÄˆt\2`”©Då'§nW«UÜìyUYMèàkšPÓ„š&,œ&˜ÛÆž½seØPµˆ†qÞ{8öÂwÊ¯Æ2·^É¢Õ–jl\cã/OÞÏˆŽ‰8{™Ä¨$±ÐK\¼ÛÐð™p;UL|Qç‘bÕImfK'}‹íÌ+È‡g=E´À³,ìó¨¢„:b‡“*–S'úhK*gm—o{ú*‘[„ê—Š˜i ow;Û8¶nÏ ñ8ª&v…—dUDi¯š#j(&ªZâtÁAF°Ö•²$5„½@Ã´OÂ^ÉÙ6B/)òcR•«Š—6—¢—3ôóÏüw	«l›¬¬ýóÿÅ\Ä?ó•Èò£ÿó™=ügg“m¡R¬ÿùyòØ÷‚B$Þâ,ËH*_#¥ï‡8›AÙdcÖ¦}’ì³&ÿÆðÜoŒ€þ•¹y¾AðXI!'×NÈ2mÇaØ|/Éy(·HK’¯ÏÉ¯L…—Fe“i5²«iQ2`Ú¹"A¥–ºß³1ÚÉ1ax0Iq®³…É€¯`~¼Éè0¶
++Ò5¹F¿}T>¹`¾ÅP¹¸FÒJ;ë—”bã¥¤xgP»([¦‹ƒƒAN[\ŽÆšx»B'Œð°É ©7üB›Ì’m!¨;->„¢Ç+%Aw¡¼Ì@ËÃ2×<åÃå*¢T÷9bÑHÝx‰ Om=ÛAè=C×~+` rzÆKök¿&c[«,i¡À²³{½=ÇV)!wˆç@#@ûU½ÇP\ÆW9] Ñ>'ŸY•d7Íëé¶[²œˆ³ç>ïåúË=æåþ¨t3±‡¦ì(	ÓThô›Ä;.,h‘¬Ø¶¤¿ìp¥©ÜÚ3ÐƒØ#PÎƒTlO
++nŒ:•Úx~Ô)3÷Ê¤ƒ%ìžFÍlì*=W³
++†ñ™,€K6ÒwÕ½µG4+*ïW˜/ìWÇ”O¾£úuÅhô89ApOþg±*:…£åŸ
++ü“wŸX¬`9.ÕÀ†Ï2ö6\OÛæìÊŠ(!Äò€Ò½uh›äòL7õ»Wµª,¹WÅ ÒvœÉÅÚ¸“ÒQ‰—sc¥Ò¢í.NÔTÁx)gå…?¿®iAY›wýkÿží/Azü²°^QôÝ~~¼;ÂZZ+­ÿ/Ø
++Û?¯•lYæÇmËûõñ[aÕùbFêÁ  ?^j(¦©–q&öS¥ž?G™Sòë(ì—&'”Š×¤J´¶ LZX…	|$6$XnÑù²¬_œÍOŠbñ Ì¨ê¥¥æ*'¿—«¤K­™u\~Ãâ#;ðBðØ¸ä;QXå‡+À^ã~?gúº¨Z§E!±É½/Un{Åj,¶,–ô’º3+à²by5F›~%žÒÆ‡^Ž§Œk5×äÒ«ñ'º'—@c9¸¯¤òIq^›&¿7Eè~àƒaÉµÍ~š)úqŠ¾nÔƒ¾}¿Ì@Ö¿T`ü®Ùå£Ñem§Š+ö¢Wcœãü‡¾WÒï3[2>~í³F®‘ÜÆñÙ
++A8r*TôŒ¢Bß€4J"ÿ™4oX©œ–Ì9S^zw§ÊZEˆËú.ìãsâ3IâÎ¶JzM„Lvþ:¼×W¼,§Êe9„~LØ.u¢›ü™ßußë'Ê)ã¿ËKTÕs:&;u%ãtìN>òŠdÅ2ªæ—(Ô•5Ñ¡é£s`ŠÆe?ƒ¤3Ïé]	æÆç!«CrJ22òÚ—™Iß·=¬ÛÀ:Þ°tÌ'N¨ªÕO?£
++šü¬æÜ&~¦Y•­Š‚IÑâçSI¸È}î  ¼|>Ä†=W¨sQ¯GÌ òw2‚òICôº¤?LtâÌ—ú£b¢¥‘¢iL©€fÝëQ}»¿`x,Zð‚#;}»Ê"U
++m×¨ÐMÅÖ ˆ-Ð>©í@†u1‚ Ä¶`n<á«J¶Ê“é……ºˆ¯‰oZ8LMnqCØ"ÿI’«gFÁ„BjXÿŒKˆ=EpœhòòÙ¢ÈÏ2Í‰Ûøò"SÍý0F—X¤Ç";ŒäslxãšXEn¼hD§TëÁà+l²¯èjÇ¥èD¡›¨S¾f5"YfK©"¢žü¥Åj—k3ª\duYÍ9ÿkn3ð;A¶ ÇC/¿ä]Ð±+ÿÌ<ù_ ’\~âÆ¿ŸŒ}øç(€BŒV2+T>MÓÏÚ¼[–˜\‘7¨në¾f&›Ý¨Ëkñðð`¼æñœŒ¿-^ÍÞ!iiíNV–›à±i”Ç'ÃOâ–9Úh¤Å5Nfãb[n§8\ø„âDNéøñáIb½¿Ñça¸2s¢*æ0c?#}tä“:á´¾³¬ÇB>L’E1!	´Žm€hVü/‰Çñ$…—dNe†P±ZÇÿYE¢ñZ°Ì–b±ºl¶X©©H¬.6VÕC„¦)ó:_ÿ‡• Ô»<ÜÓ,ïñ©çÞ]û­Ó¾±#mß€£]m¯Î·G;¦¶<¿…ûÝÓ4 9žIà0Æ¼k¢ jèì’S~3–dS‹—_9`ÿF‡XÇ—0Í„aHâÇÀLøG…¹øÊkø_E¢ð/I:¯Z‚z½)³’%‹lË‚Ë²)Ë ywü/"ãœþß^¹§þØéÊá7°4jFçðJN·£ÖÞÎ©ôÚQoÀíÑí®þ|HÀ¿|JS<°Cr™”ÅI8:4†„õ^£Ôn3×À&®²Ö ÃŠüØ5ÄOÏ©TÂ ‹ƒþ9à_TŠðÏK\ÿ«Hþe]nq@¬	ŽEÈ—guE”XUV- ˆ<’ºLø¿mýàíäÕ*ýo½+`ìe´£ë]8:=cï¡d]èþýýÁ~gÿ™SšBÿ5Ê›ö3ÿ¢OSÌÿcÌØ…Ù:béÏ<3þ·R ÿ¼Êñ5ý_I¢ðogZ"deCÖYIUVW9“y¶äoòŠ²Èøßê³s-Þ?øÃ·;pÑü¶×”¡ñÚ¼ööøU<·üð&Dƒ]ïÉ‘Lá|/Î ¦Ãqä„Bpï>± ÌüÆô6ÌG„‹6íµ_ ªçOë‰¸gcË`ÀgÁ¿Â)ÅøßªRÇÿ]Iš§æ‹í½Üðìèl°ûxÇ¯ºíîÞDÛ¯][	ç7g—Z³ý‰40½/ËóÙ1yÎgb±bJuÊ<T6åÂŽÚ”H7˜R«”é€.n#}úM*±i3Tfší}ú‡ä½„«ÈeÔDÅ÷åÏÕîÇíÊÿ÷ ²\cAQ¿Çi&ýGð’‡1Ÿ5ü¯"Í¸—Ë§¶åï©êþn»óÊí_*öýMsx>íEÍ­Ö¹yÖýÍQ!<xyšXû+~µaì€1"ßG êŒ˜¿81ÙÇÜCü`9&£C†vôÓG•×™›.pŸñ&óô!‘v»á]¯iù¦Êû?Ò;è.J0[þ§ïÿŠ,Ôð¿ŠDùU2­¦!µXK1-V’ŽmÁ`E’­¦ÒäLc©÷'¸|Ö=É}úÆ^jÞþñöÅþÃþýÞÓý¨^ö;m¥Ç†-ß¸òÚãûþ”¦Wƒš=— ßÄ¯(ÈðÿtMÖv^00“þáŸ—UA®á‰Â¿¡(èfÊô›+é\‹€k²‚T—ŠV'¼ÿ½ïþÏçdûx<6Ewû´+p§#–eGœx¬Û{Î É	;ÇÛÛý•÷¡3™Â÷™2AX…ß\k˜¶ŸXI8¡ßH*„¼0à£—ùÓ¦Xþ‡µNÖñžÚ†F4Pˆ–X¢5øƒRYðÏ‹Å÷?”SËÿW’¦Ãé“ù¨¶o¹ð–½žzöùP¼o†ýÇSÝBðª^ïuô—ãÛ›ÇS„,Ûµc¤?7Ñü‰R†þ÷@ë,^8“þËr‘þK_Ãÿ*Òtøß=½‡êc$]Êp‡=»µÎ¢ËöýþÖàñöìÛÅ¡í¾…»áùÙu/Ø1èøàvÖ\oqÛ:Ö’Et¸²},ê{C­½uYt—È/6&´˜í>2z^!ÃÀ„=ŸãZ:…£Œs>z±?aZß jøë‰õÿórIþ/sµüo5i:üGß‚§ÏßtÏ¹«AÔ?86.ÞNÎGwƒ{øÚ“›G77g;ž:2“TÊƒg»¯ÅŠvT[[kvÇ8ÆV’ÙxXkÊ€iÚÔ—˜ˆØyGÀ`Á¡Ya“L$µ~õ¡Ož
++]3»Øú%×.ñ‡ÄÐ¿)æãÃàçLY±~N·~Ø…xZ@÷yÕl	œ©K-:§=€ZÜoÚWêÚðw”Øæ{Ø“¿;jP¿ ±Ñ‹Gu ÒÓl2;‡wx9û ÿú¢}†~tùMæ ?Rtô?ÖÑ"þCB`ý]ý!ã?ô‡‚‘ø&sC@,™vÛ;»W­ÞÃ¡_˜½óó’|´˜ÄIßÕÍáöÉ.î>¹™]ïnßžãA€€X!µ¯wvÉ©íØÙóMûðäeéøâöyØ”gëä|ûøòõ€{ÄB”¹w¸{…3Ðñ‰¡m{gçj÷Lï§Ûç¤ñ>®}Aª ê]3 =4§ëö)žÖ³Ž6äx›9¡ïaSåë›«ó³}¼=L É ±óõÝ“6±EÝžá®^6™Küúâ–õ-xç#ñ?ºÿ	å÷ßúþ·’4CNÓlŠ`?ðC~¸ç#Óy¼•›ÒÅ·ó³íkëjÄí„ÏßZÇoºÜl`›ý8"
++VàÃÄ¯”Ò÷?X
++ìã4þ¡¤ÿÁ«5ü¯$M‡ÿç@=;{–”~×zøÞõ­5ìðÛÜãÂ
++·ÛpGrZG—î¥³s›§~}S‹¢MÆ'¾0RÑ0ÐÌ…í<o®ñÑ«òë¤Iö_ø)1À7ºˆÉÐÉx?v˜ïýÛI¼‚x„x¡ÖÿZI¢ï?¼ièˆÔ¬Á5[¬-•m6%Ž•t„“U“oñMùýö_s< +ûÛç—ìÓ…p¥›úA[~¼¿Tô›æ¶µ¯¿ø[Çç×ÛÚÃ£´+~;M€óÇs¬NršËtíN×ÁOBØ”ØvûÑ\ÆadÄ¿„qX¥þ‰ÇI=C,Bd&üËBñýGæjýï•$
++ÿMQåuÄµ³º%éØþ“cQ`±i°¤–àÜúßïÿà\”£ë‘hí÷ïŸWÜýã™¢uO_ž4Åäý>ðŸßúüh¸±þGù”¦8à%
++ ±‹“J=Iíü:* Sí¿¯×G+ò£÷‚™ðÏÉ	ýÐ/¬ÿ¥Öô5)Öÿ2Ä&xÀŠ§°’!Z,0-È6`é€ª‚ ï½ð?‡ù·Êo_·}íäìÂèDÊŽòt(ž9üqûæt{pt»·µ{Ó¾fglþŸÎè·ãŸµé÷÷¤
++û/;œ…¡Ý[ˆ.øÌ÷_…/êrjýþ»’ëé‚.p²ÀBÎ„ØþSf0eVÖe€ƒ¡*Mc‘ú_O¯Ö¶3üvxõphƒS—eïŸo¯;û·wÞùá®xÝÎ®¾9{µÿÊÉ”ÊÜœž0;qîDë¯G¶Çšÿqs°ioçµh¡*àßñÜÎBE3á_.ê*èPÃÿ*R|ÿG¾e*«·8ÌÿK-tÐU–ã9Þ€–ˆx³	÷ÿ÷Á¿×i÷Ý­è@?9ŠÛž½µûí©ór=êîmíõýö^žÖ™îøÇG2ãáºÃ™ÄþsúT1†}ç7fyú©M?'¥IôáÂÀgÂ¿X„UëûÿJRÌÿÃUÃd…&Ç±h"øçtÕa³Ùj™“ZµÿïH÷w§÷:aÐ9”zF»½w}øæ ¯ŽžßÌ¡ï¶ûÏÖã˜þã#™§ý÷(gÝdÿãþ¾†÷Y)•ÿÙ=¬ÚY´íN³àŸÅ²þWÍÿ¯$Í´Ó ÖóÑÑíM÷ îqîàÙ{]œ\ùÇû¯ƒ«§ó«Á´'û—§>ìh/pHätU®aï+¤DÿÿwÝ²ex€˜ÿª,˜þË‚"	¼(+þ¥†ÿ•$JÿuÕ²KPY1cˆÿ7E¶©Âk¶DQZ@ýýþßð©š_¸öáîÎÑ©¡ë—aç®¥´£øålÿÔÐÎòí­+ÜŠÇ½ÈiR×0øÌ&lÁùwO;žîo˜žx,$ì¤ÑÑ:`âäWÐhe“Ä±—,ÛLT^3s»„NË*€ÆŽ„w*Š’‰ìgcÏÐ\®nÁkqÜ*;Í*ˆ·Ê¡‡­ªpÃ¹ÙŽK3Sg.;ÔTzlre•CÉ„¡"å™¢ô`d3á«áDÎðV¶Í{û'Y±õŠHøé›ÊU=ðœ¨Ê#=Ã=ßÔt/rÍ’7õxˆŽc÷»½§ D:öN_.E…½ª|ÌCWÄÃ¢ŠÃñšçw#.ª
++Ô“”‘åö1­0»	ÃsrªÖù:Côûx&w”T™ÖUŠppX.DÂ¾%ðã‚Òâ‘poÐ÷ÊeÔs>9=ñ×¹Îðé.†ÃIÐY!:Ñœ°Yúîƒ´4žÙPz–ÿ ÓâÚ~7œ\¿Ó4x©üÂÓ ›=ø$vXU0„·±ÍAý·hqwšÈKi£(@kÃ®Bò}%ªqÊÓó+â¢«Þ*!Êò–]¸DVU6}T+xr½:vxÕÐèàEår%?„	Ið‹I[˜jÕÛŸWîõû,ZEÄâ`üa¡Í&Ì0†cÏ4PObGDLf‘oŠêÈY)aÐIßeKËAŠi©ïË`B'‰"=W*ð,+€•%>@¿2æ%-·l?À[T`H]0ÞÚ4Q¦<•è7&»7Ô	ôíñŽæÇK×³«	Î¡+|÷á„®0žÙ„níôðt—œ­\§5½#ƒÿ•è])\Û˜Ü•ŠjjWS» vRVBZDb¿Ubiœÿ,]øîÃ±ta<³±ôuþƒ=ÓÁ×è¹FÏ5z^&zÎaªr°aŒ²JªçBË¥¯>)—F3J.~R#e:ø)×H¹FÊKBÊºç9¸™üÄ]FÁPºMÆˆ‚ÐëUi´D#ãØdnP§ž2ñËUñ€pìQì¶†zÍ§©"º9Ñä¦ÙßKÊŸ}(e(g™Êmßñ€k„fZ®)|M!j
++QSˆ%Ql‚ØÙ^VÓˆŒ¦õ&Óƒ¦å	EŒösÕŠ`ƒ:{Cð].@t*´ûù]Uú|ùœ]j¦mYÅ¶+= %ÉŠ°‡·q›%QQÀaº8|ÃZ¡zaUeÐñŠU;>p#øD×P("„@{#	ìl¤SA.iöw“ËÒgK.KÃ™ƒ\nÓjzYÓËš^Öô²¦—Õ]þªôÇQ/QKœ9VF8ÞS¥,|’§“y5Î,™rÛ<™Hfõ oU7Ã Ñ9Ûý*WB 1ê#sÚˆ”lª²ˆû^æï¯é`Mk:øsÒADí°×gÃˆ†ñûLQ^ÕË°{Ì×sMe´³²ƒ%‰Gúø›Âr¥>sØýñ¿ü‹n»˜Óë­¡¾¿÷ôíò¬ý(´xÝ½ìû¯ÝGáî-?Ð2ˆ–à¶ðZ«ÒDøÏN³
++F$«B×5„†‡«jØ%52‚ìF6])K­°ÿIˆ>	C(gÛ½MùÆ1ÉUEnÄ¥Ð|†þaþùÿ.!±ía«˜µþã¿˜‹øgžì`¿Þù6‹c-Cv¾FJq6vjN–wmÚ'Éê2kòoÏýÆè_™›çv=¨Lít€,Óv†Í÷’ìj¹EZ’|}N~5²ëfn§xŒtd¨~Å9
++"½g‡š…!†§=âS=Ç“àn“ââ¸²¥ÉØ®àxhÙáaUÒ þ5úÅè£òþS•SDz°õ"^ÀE 0’VÚQ,Å&MIñLËa`oè…ÕAÔ›¶8¸s#äcª'Ãà¸OØ 09õ•ThG©Ý¬ž+E{iàC@ˆaü°Qä-‹åe6“*–9Ì)f˜Ãê
++Ô‚ãPÂ8ÖX¼"` lc=Y²Õ¹	#¦$¢Nø³¹ÔƒÎëW¶ü d&‹äÑ¤´ób™¢Q]/´œvNA¯LÌ+0mÒ—–U@F˜+Ï¥ŽM	Ó(û)Î–En*™Lv—ÅM{N‡G´¿µ ñ-qü„É­¡ºX¡» _ŽOÞ´%~åŽà3òÙ~õMÔGüRO‡Õ¼4Vï;•t*ùNó=Å«/ˆÂ.”AÞ-ó?‹UÑ™õ()-©ø¢Y',O®‚häTMŒž|Úc³jÇû9m¯³«[(¢¨°‚ÝB—Û$×º±ß½ªUe	K"·“‹µq'¥ã/ñÚ/ýµõ÷¿ºª¶(X$Æªê|™«°)5ÆÊ¤cMÁX¿ªÂ¤CƒZå*ŒAØÎª/ÅÈªÊ*mAèŠŽd²*iq.
++OU÷º,,UZíŸGáA˜Q•ô·Æ^‹ßƒ½‚päTÜ´õR¨¸Ã“Öˆô®ÐŽÉT%MÆ™)/Ý©åjnÔVÙqHæ>[}ÏHùÇj¢žU™è¤¸¼
++ÔÈ
++eÁ±ºG…jDò¶UzšJ\¸T|S>Ã*d¬žŸÐ”Š·½dÉ³¢“íà»S>þyo±ŒŠ¡ËÇÉ‡A{P~­’Fä'S«O=—âUåËÌ¥ïÛ~že+Þ¸«¬ó¾ÞÄoXÛ_Š&NªB-;?«9wÊ„O:s_w.E}†üL¾ÄY+a,§÷í
++GV4šI¹é êõÈCwþB†S½§¨âÈªy5?‰Ý‹SrÁŽÈâÌ\èÜ¤‘êÓ¨ºÓXR-Y¯G%ó¹ÑØ»†ÃóÆqËS7q°_×¨xxÂúˆ_.Ð>ékz†±Ê^¿†5,ËfˆnÉZ®ñä®’ÙsÚ¨žÁQ™µ¸IÛ}Îs‹Idàì›G8“5):4.#ÏKZ†À!H±^YòÊ&Rò.ófÖœeÖ°WÂˆ<å&iñûÍÚŒjD_ÊY½*–‰|'ÿkžàw‚l@‚ŸÎì ?Ò'E¹³BžEù±G@ú»‘]ØuÙ â³[Ñ3`?Ñ¯»Ì7V€š}eV‹>Âç!<˜s ðóóìì’U«FeÓŽk¢ÁU¡À•]èF—¸qNÙcãäûïâðuYÅÜ¼F¯\diA éç?3`	À&VöDÌTù†ª}mVœ´¢ËÍXrGf^²e g‚:å„/— •Ìˆ'tE#+eÙ‰Ú€€¾Vœ¬'kÅÉ…+NÒÃái+ŠÉDØç}–-|±\ì„ Q•‰E­µŸ¸ÁÖ¶F°«A°Yßý4a$Es¿‹–¾ù0<z;v€&Œc€ÓQÕè´F§5:ÍÕèt	èt5v”‹Æ¥SM)éXjZcÐƒæ‹jú³˜Jû˜e+9¶‘ü÷üÈ¾€m$_ÛF~mÛH
++4•–hiŸøÕ.wŒ88Ï–&ØÄj¿k®"F¤¬ÀÅ@úü–[ùXWT=ÉKFÝyT’úR”×ÍTôŒRz["z‡ñ AaÄüíoã½]/ûˆHç×I×ñV.GR­¿ŒQ	}’êoH€¼J:ë\–Xƒ±
++Ë,(ÚDpYG¾ÿiª:ˆ§ÅJÔž¥!zêE'ñ¤’êýÐ²}öM±F:¶	ªUÈã²£Qâ-`;“ŽcÒVe\KÛ‡ qE]Ÿp£Åq 6ó™‰!jÙ8•ª+g¶r¬Pß>ÛIsãZ_G]9÷;é3u^æŸ
++ÂÊb¬Ù
++Äº*kOz$&kû”;‹·ÂóË—™Ç4íÛ²D4?­/¡;XÒSýºú¹Ï¿˜
++dµ«„²ªVå5*fò™±RW>s¬Å—Ï§øº‰Ç\Ìš¬–jºr3ÞŠÕcºS•žŸ\ñ¬RÁréÚh±;±%õ­¶\%¯‹ýË¤|üwm>F(‹?=þ;¯ª‚Çç™“ŽWxI¨ã¿¯"Ñøï¼Ä[¼Ùj±¯¶XIV ÛÍ&ËK¢.ÓBEâwÄ§Ý“øï8ÜûzÌéâc¦!†
++®»ø?~Ì®BMù°ò¸¬1Æ'3ÂÊ?ìîym~wûèíøÛ™t×ww^^®.ÏYÏ	£G³÷ô4Øß}Ü9þÿö®n¹mäXŸk=Ê7L¶LŠ ARTíº"[òÏÆò¿²ö&)ÖŠ@Yt*Uyóçn/·R¹ØÊÕÙÜ-ßä<É™ž@` H‚¶8]•¬€ÁÌtOOÿ|}àŸñ²ò!+D¥å£áÁ€u )°Á¤ˆ`ªz‘	ñ°¡xDñÆ˜?‘m×ËêÍÃC¹‰ðEQ¢ä¼ý¥•œ6¨P%HìJVÍ‘3‡ì†UÇTòÚoÿTÃ?O+ÈZ{Nÿ£üöiMÜw+{(ÐGáý½øh®Aîh:µâv!	 È	)_+rÜfÝëÙïÌ´‡— ¨‹ö•hë¡[ž2ÄØ³Q•ößý‰e‘Ol?úÎáïî†to¿¼§Œ<úîÞØóè±kÿÓ§OÃñ§Èjç|ß :œ(àÌFu¼í}“nú×p—Þ{pFQžÀ/ßî£°ébE—¯oZ ´•ñ…î.=6CäÛ<ÿ?Á6l´XÎÞù@X|ÚÓ-Òé‰y_zç¦B—âAËºUvqðY*v±4[ˆ­7ÌÂÛÊsA¨„ü€-L0,¹?Ãú:„Ô¨¿†÷sœÆ˜„™…„âW³×O\KUêÆŠ—ˆ$ô&6ÎéfÁöq|òöQÖ‘ØÂÇ%	ˆ#¼?‚J2÷Mk—NCõåË–ÎÃÒòeàÓÙè,¤ßž3BY Óý#¼­$˜ipÈg2¸|‹™Lß¹Õ™Lwg9KEŽ³Úw‚/ª5±ï9p[©ø™"¼-1~ìÆKåA¶„7…®•Š’ûB‘µ$VîÏUà÷•Ø¢Å’Á7ØOóñöÒÌ3&ÏæåqWd¼†5¼~‹Í¸u«²:£?±ù
++™Ò:11²µo¾ùæùÑ‹'gGONb:<ý­vXÜDJþ»&ù%*bÔÉ- "ÆÍÖ‹OÞt ewåÏðü×‚eZµeýŒ`
++œ@w0)þË—‡”çÖÎvd×˜'›í”p”¢—Í(‹g2ÂØˆñ¿÷âŸ"Æà@ ‰>œQøCI“LïŒKbàœ%½3¹n—Lžý}9/Èå×\®cŸX6‡ÍSA–j01>]<¦LpmÝ¸ž„RŒT¬þC0«1<L m¢‹#ŽÅ?:ˆ5>¸>XÏr/‹õ*Ô×VÆÂ*1G‘nùõ‹”øÿûîÌ¥<Üà±ñüÅÕ#ˆ—_9dyüG³©u4ˆ@Ð´^§­¶{J³Õìv{2þ£
++âñÍa«o¨ÝQý`„Gu­ÕíÔûÆH¯Q·µV³×ì÷nÿ‘¨±<:ãEóÍñÃwÍ?jÆÉmª‘ZÍ·O~˜éÆÓÙÑó3Ü?­¿Mú<:#c•†qµWüräóâ.²Ú^ì J“¬§ñîùNågƒÒ"þP¹Æ™«³{ŠŠø¿Ým'ù_í´:2þ«âüßöû}½gÔZj³®­ƒzÿ€Šƒ¡5éÝQ³¯—åÎ+Ëùýuëj_ŒÈ³?]6Gí·×ß¿ïªÃÙ›×ÿôðh8ýüáøõKóCýÒ&Œßa]F~JÿPltež3æ¬	1Xo©v¾–4ÅàJk{Ñ/£8ÜmùEÿ3ÏüÚYŸQñþßø_k·UÉÿUÐr>=š½ë»/ÏtÝ=s20'g/OÏ½Õ>~i}4w??kO{³$)¸XuU£‹G]*QºmúX¯#½¯Ö›:•.­êôÞ2=«åVª2[{–ÇlÂÀ×h2µpC'“=×"çˆòØi“v[k¶ƒ3ÖÔ‚±íþPaÁ*ûô*;¸}™>cJ÷÷àÇÏ‘^50^¨–gØæ^8‰¯Úödm€ûá9%ˆ¾¥ÿY·(Üÿ)ÏûGkJþ¯‚8£¶{N³‡zõV{u­¯©uÔmµ¨@'¬Ù¥£Ó®sÿ·¾?žÇ¯Þ¿öœÑ»ï_îéÅ›ï¿?9™}xKÞ|ßDºqõô¹û>Úã´áîbŸ[¦;Þ3L't6Xž³· I·zÎÝÛÞ/žû,ÆÞÅ„¹Ñ ŠøŸò¾¸ÿwÕ®äÿ*h9Ÿ¶^ž¾ôVöòùÛÏŽûõéøâ¥ö±ÝµmþðâÌ:¾>ùøãç'êÙ¸ù6ëñKü*¨±Ï2oÐ @`ñ¼Ïœ¬í8P¸ÿ§ø¿×’ú5Ä÷ÿƒþp¨ÑA]=P©¶ÞÒ:êP•½wÐÂ­á¨‹º¯sÿ?¥'SÿpyÖîŽßÌ:Ó¾á¡'šãñÙ±úræ_<¦^÷Û?ž°ý?Z’‘àé»ÓçÊ;zE8ÜO‘ðnÐâÐ<¤GÿmðNý!Œ_ƒÿ?ðÂå`è Bö«âÊö)þW;’ÿ« ÎÿºÖµ:ÝN½mhÍº6ÔQ«¥×[Z¯94:Ý–ÞÝÚþÏLô®„Wa©ˆ‰Ñ›?¾ñ°¯ž]_œ^~~ôæàÇ‡.ú4zÔ}üq8Á­s±Ù>÷µ½ F0¶|÷=„¿ÉÁçì´ÀCb†©C®L…`Cvbèà½Ž6`²êÉÐeöÆÌV‹`fŒ­…?Â,Î Ìê¢ÑX6&¹EÎIä"Ž®r£‰x5´°ëW¦kMËŒ°Á2ç?‹ÿ=B¬už
++ù¿'žÿ»žôÿUBœÿ1êªqÐ©7´v]ÓZzQþ×z:6†Ív»ÛiÞ:ÿ;î`bKkâúÑKóâ¹ñP­Ÿ¿¿~ÝGÍcu05®®_œŒG§öõûõƒ‹ã§nLBð^dŠ—òá9–´[,%j `%™²‡×R’"¿e$-Þƒ#ÈÆÈ,G*CN©Ð* iˆÚŠ¯§Tä°üÚ šŽÆÒ2aaÿÛÇîþfÖÛâ;ùüüB¹¿«©tÛgøm*
++þKél¦;IÚqþOÎ?-Y»-¨HþÃ‚þ×Ôäù¯ŠÕ„?²çÿ¶Í	‘G¦¢$ÿgÛ‚f9v]È¹Q¨ÿÛ-!þ«ÝnJûo%!˜a}ŒdûÈRÀ¶"'»AIþa[Äu‘3[ƒPÀÿªÖêŠñŸ­f[òðÿ:ÛÈ1‰KõŽDÁ!¦•iû
++²Fh8ÿ²¡ ³Ð<ò0©Äb¬¯ˆ°î‘Ú²hm±”j
++Ó"</Íÿåù‰~`F‘t³#ß#Nt9£¨}(çÿcyæ„JAÝ£bÐüŒt“jD90ý¹Å€MQ†ã	¯³@\eJe:ÿ	0®Ê",Å0“Øe‚&Åð}èFÞ·ï©†TøœXƒp#–Cªc'5:"ÄÑKÇÀ6r`à+ç!}Ì@ÉÕÌEtd\øü;âibÞ ÏekL(ÑÌï‹¸`Û\YåÊÿOc2p6ý×Ê@‘üoöBûWëhmÿ2þ¯"
++ùðµoÎ¶ì*¶¯ˆT{êSžvâÛH^D9@×)ºOy•þ× ü[˜G™Ìr¨ÉÛüb),Ig;EØ>ÕûUÅ\>¾Û„³þåˆ®ìO)HkJÎÕ™Í§ˆîtVØSÜpr"hBÞ‡ä9£È›Bòó9àì3þ¨’w˜2ÎÿËPXoµžÿUÁÿÓjõÚÒÿ[	-¤À=IžÞ5JòF.¨oOý!„ÜÞ>´ÿ;âù¿­Éó5ª(GŽªt
++›nŸ}™òþ¥MðîQþþJ3ßÿ™WÐ	jho‚ÿ[Í”ý_•ùŸ•P´ÿÃì:R©ß5Jò*l-A 7æ(	¢Iþ¯‚Â´*wŠæ¿KòÿŽÑrþÿ|}½yÿý#åÿS;’ÿ+¡PÿAÄœ;CK=w(óüÏBuY.ßZb ‹ø_USû§'ã*¡ÐG“' ~î¼?'¶…tæÊ’!¹›µ÷Ì+$Ó¬¾ZÊõÿ"G›WkÉ-àU÷ªÿw$ÿWB!ÿ³Ù.þá*z,Üœ/7è
++Dh¸>²døM…á7Ë<Ó-ò‘¥›•¼Ùöª–T–òõ?Ä\…ýGUUñü×lJÿo%¡fšÔ»Hæ*€ \ïLbî!Û#À¯”’üŸÎfÂžI÷ÛK‚BûOGôÿ¨½–Ôÿ*¡xšj(‚¸ê„<Øv?%m†ÊÄ¬Š^Èÿ]ÿ»­µdüo%´8™NÑYGø†€oý¦.·ú»EKì¿ºN|Û«Àÿ£vRú¿ªIüJ(ÕÆöüW`rÐ‹çÏ;@¥ŠL„•ýaÝlEÙ °k\I¡ñ¥R™üï[¦}GT¸ÿ‹ø-UkJüßJ(™ÿ-3¿wÊðÿ„ª„ã@1ÿ‹øjWâ?TC‹ýß•Ü¿ƒ”ä^ß½0ÿÔB€æŒ¯W<ò
++ÿEU5iÿ¯„8díd¢¸¦­ð¹—
++ûŽP‘ýQ`…ü¯µÅóOæUCö1lÛ]”´AZfÿ‡¼¯oó öÇí\ …üßíšªJþ¯„Býÿ»Càƒ-¬w$ŽàõâCƒŸTîœÿÝ1qVvó¿èÿoJüïŠ(iÿ£óï!El.
++jû“ýJ]yzhJö¿+TèÿŸ Kp=S¿œÝN(ÖÿEþ×dýŸŠ(¶ÿ+#ó‚îþña—¨ ÿØ–i¯šRÀÿ­f7ÿ×”õÿª¡ÿytÌíÏ|úTàÚ~6 E[Ùd2tp ‡bsA€+Î@ÔØó_'Ø!ŠG<zìˆ¿>¸«
++Ô@oþÓâkWÜp’k8™z³E' )ê:]ÏdïæTDC3¥¹`l+Öü_6Fð©Üüû8¤ëØ-L²Iâç~IfÅ¤ 
++ÃÅ‚ÙBƒ²+ FÓ ¾ƒhÏaz02úÅ°²Ü©?ÿ™­¶1}«ÅQ<Â`)Ã@5Ð^ç¿r$ß+ü9ú8^øiÑs:+ÑJGêˆ! 3|cúž}þb*àÿŒ>€U™F1.5ƒ*/ËQ3–ÞÁã€œq®vfÏ·cœ`‡ÈÍüÉK± …n[^IZ/eÔqˆ…È÷Æ °ŸÆ¦íÿíNÊþß•þ¿J(”Ýga¸žïñi—Ì¾”¯ÿ#OdE@‹ôÿV;eÿSÛÿ­
++ë?Pî7Lª+ˆš>¶]tE<o'€‹Ûœn^øâPcM–Š°‰76íó¸VÇk’ßùŒª2‹‚.¾ÂŽW¤#eö‰ƒ®°ŒE‰€Ù4³…9]<*Óu2™f4dÖè2mçRžËh|xQQ‹„;ºlÚ—Í^N±Ã¢´±+óè£#ÚczÎqHì÷jNh¹«Ð—à˜1	=ÕåÃ•Î…ØPÒmÄGhqZ¹éÝ©cž¸¶—òë=‹–Üã©i´ø%‚ÀV©Ðÿ¯#[ÇÖ*îÿþ?Qÿo÷šÒÿW	…è›f† ý;÷÷A"ü+f×‹E ÀOò|p(÷üÖ­ÿ1ÿ`%ÿWA©óPV2÷nPîù?P/ôü…WÌ.âÿ®–Šÿow¤ÿ¿J÷EÉÿá±{î·»çX`1è„èÔºèÖ:˜³§Ñcþü'·àÚfç¿ þo‚ÓŸlÚþŸÒÿ›½–´ÿWBÉø?˜ndçF ßWdàÝ¢¢ý¿ü¿¶šÚÿ¡¥äÿ*(àÿhãO}À:pè9‹a>ÇP‚6ž³èRhµ¼]UèÃ},™ðdì6)UHš.Ïw3š°Ú›q=&–cµ ¾ÃzÅ`„,é­i‡¸œÚ’öžãƒµ”·Œ½-¿¼õQXÕ:Öš€{ ¥w­à;ðø™6SwèwûL¡T$?kêà+“ÐTjÿ÷ÿUŽhz¿Ýt\xÊoÿT^9&Œ%·û9@úí?«qmÉC°U3mßYe™¿€}–€-a©4·,yPŠƒÎâO =šýâ“¨Üm¼z]rÏ wTò!Š¢Š"!”f0N­Ü;r8vYe‡ò™a’	ÚÛH•sQ°Ò5,Þ—ÛVä£ûXŠL÷‡sÊ -dùWD¥ëÿº*P4ðMkÛÅú?š*õ¿j(ŠÝýoÛ0u >œÿê~ô±!Q_w€
++ý¿+g—ÁMÕÿíÈú_ÕP2ÿC&ï•ÞÿG¾eÝÒT¼ÿ‹øTø•Pÿ(u2™ZX"@í•ÁœÑ}a³ø¯"þ“ªµdüw%òÿÑü" wŠðß,r^þ[/íÿ•çÿJ(«þË3VçL.v¹!uÛÝ”´!Êˆÿœ ó¶š~6ðOk
++þ_µ+ó¿*¢)rÝOÄ1ÌÁRÀõ‡X_ÓŒ'tC2ê¾Å`bBB™")†%t¸#êàHý+dÈÿÙ5=|Èþdu&‰1;Tîe4¾ÿç/6üÛ§Ø3õÅ³¼p¸±jÌ5íâù/,ûÝõÃúc¤¸<ˆ;<‘Ð…Fø’£1¡Ïú8ü äDŸ3F"ËÔáˆ ³ê
++“¦/g‹(3ÚÓóðÚ’öÄFWøÄ9ßÅ?–Ø¸ibu¶±Ö}ÇúkØà$ö|žÄûEïR|Ü[€rp…?óÁ»;S,¬X¾BÎü'% b3×<.6„0`‹!l(áë(²àÓ¹žÿÑ§CÐ¿BtßqLxk*6d@×¢á¬×åÄRðG?pÆÆüÞÏI;"Ë}ÒéìxÜS½Xrgv,Ì€ŽL%4¾>˜_6 ”q±qÛµ%¼%ªc(<¯èõåTÄÖÑ-V‚Ÿ¿˜åCW]&_@Vjý~É_@aOŽc(·õ}è`K )ú¬dð_4‹Oech)#ßó0NÂèEô‚ÑÄòUaÄfZ<Z¼ýPy›èMb,_›Ðtê+dQ©I;â*>Æ¢¬è%´âËfmòñ	Äf žxdû!ÇÅ¢¤[ßE_ØúÌpÔÝÅ:¥“J•úh™æ¯Î›-MåwìÉ,Œ}ú0Ð`ÒOˆÕß¯y)Ó¡‡Îç|sŠx+k`Öäõ´¡œë rÆhè
++¼‰AgBß‡l‘È Õ‰ã`(ƒNGÏä¡%"—ÀÌêóOˆ¸Lîç¯0ºªá0|Jnº“ŠÍ·Ö/sº™VÆ§/¹Ÿ6’"¦ÇxéÞb~Ç«´®°Ê‡³MÊ.Ñ·‘n™Vøòa}4sÆÔ“iYé{ùUh˜$¡a²/,+ˆéWÒÓÏp\b#«Œ(NÜp?x_ðì2²Ø÷LPÿã"X¼AÃz$€“ï<T>ßQÂ3R†N°e°\™ù¬œJ Œ]bµÈÜZÛržXRâŸÆ“Á×Éˆü‰ëäÄð‰e?mÛ'ðíR~ýOkÙ¿Åö_U´ÿª½nWæÿVBÍ÷)vŽ­‚ÜœzŸ ¹kScÊsñ©d kª×¦Ã°'ó¾%F¾`ÊÍÿá_ÌR3Ådj­ \ÀÿíNKŒÿjÑ‹’ÿ« $œTš÷3Â»Á4ä†:Ç5!kƒªÀó_CõÙÓ6—õ˜_³ƒxì¢o]
++©/W”ÃO4äR¾0¨–:Ä/ËqXCFP˜'d d%1ÀäE&ÐÂ¾*~Ã©‰éG08]¤«ãÅG¤!‹à}ï|E[GÊS*3I§ÜdÚ¥ŒæË5Êxt ð2†,H$J1ê-Ó†Vä”Ÿ3”æqÀàqtg:§S`%Çç±¢ËtqML×9^îæWì†°\Á„Ãl é¹™óõo@Áë–d9	{‰Ø‰'üÅöÊNžî}>?Ì*Ã-®ÎÞ¶wõòT&þ—El4þWŒÿkišŒÿ­„¢øßÈ ©5Ûîš¤
++¨°þ“A÷Xß:÷èñÿÝ¶´ÿTB¥Õ¤Gý8²ƒ »@…üï¢«Õ¸ÿVû»%÷ÿJ(ä /Ùç¨ ÿg„,kˆôËâ?65Ñþ«¶š2þ·ŠðßØ|3ïèˆAÁ1ywŠ,)
++î2eûØSlp¤W€ÿÖT»iü·¶Ìÿ¯„ÂB$JíÏað‡0E€›–ƒà$pénÛn(¯Â~ñÃ– Bƒ4”xHŸë+SêD¯|U¶±] BýŸAY¹ãUŽ 7?ÿ·%ÿWDáþ ÉÀŽQ’ÿÃ>€†o¯Zû¨˜ÿÕTý‡¦Œÿ¨„BþÔBªîcÝqàÂmwLR%tSü?^5ùfB¡ÿ{âþ¯µ[Òþ_	…üz¼Îê?)àp‡lÏ ¢4ŸrV=Z¢Þ5*Ôÿ'è\ÏÔ/g«ÿ–ÚÿÛÝnWòÙÿÌ©üï •ŽÿX8Êÿ·9òK¬ÿÜV¥ÿ¯Šê?°Ù%’íwŒ
++ü±W¯ _ÈÿZêüßîÉó%”¬ÿd!ç\¨þ´íJÚ(•Áÿü„ñJ Åû¿Xÿþ%ñÿ*¡Èþ‡'PøM"€îåæŽLÀ#Y`ÿk­NGÌÿÖ4¹ÿWBaq0G›W©üÏ‡¾«§j¿¡ íær;£Þð«bn',ÍœôLž –h91³9Y±ªÓg§'µDs×üœYUMÐü—EšÒFr=ßá	Õ½µ¤eP÷Ók6dB–I÷|t¹þÐ4b©ˆùÅâ÷LˆÁ\BBE-†›’uã’ÁQÓ-¥{Ê|Ím—¨ÅD¬B›_¢.‹§Kd‚¸O’‹E¦/¬Z—·«V·$;²F'Â§«ŒÅWšú;€ŠoX&W2&Ù»ZÙï:ã	‰Vrh–‹Üœ›ÒÂ7°òoÏôg‹žTßÄ¼ýbè©¼ñ3ëzÖN9šHg›)!Þ`–´Ixj‘b‰}n±XBÎ9,X/Á£B"²Ž¹¢xv° àµ¿s¿—ú¡öL@¦³ãc—cGýío‹P]ÔPþþwy.Ù åëÿÞ	Ëjõ3@þßR›bþO³­Jÿ_%Åÿ ~Ö»&œ˜‰—õ¤²ŽLÈC>Œ#OÓÖÍ)²6p8À!_¦"z4e‘£_ &z4ÿÕ`Ê@Þ6=ŒÁõX	e¼À¯íÊ·Cç]7°¼¿E
++‡âøîÞ`Hååå=eìàÑw÷Æž7u÷÷?}úÔ0Ö=qÎA’DçåtåL¸òÒ©`Q½÷à‰¨ê néößî£|çÓ!Âþ3œ³¡‹TËñM'g‘QÔ9ä§‡tR¯ø—!Xz„é`ç¨¨,› ì>b
++j	Äm‹0I+Pqü?úÕ  
++íÿéúŸM‰ÿXEû?L³ ÜD’1Y GÚÁ¶{-i]”ÿ
++I€•Øÿ›ªš¶ÿ·¥ÿ¯ŠìiM< w•xñƒ‚uy9`ì.j§H±ðR&ÿƒÎ¸Æ
++`…ûŠÿ»Yÿ·b6wå˜]$ÿî-ÏÿÃkÑ Šù?…ÿÞkIÿ%ìÿÏìskþ³+%À®Q™ø?¨&Syýoyþ¯„Býÿ)T(’Ñ;GEõ¿×Q¦ÿ51ÿ§ÙëHþ¯„2ê'jÁl»’$I’$i3ôÿ->è Ä 
+\ No newline at end of file
+diff --git a/core/themes/claro/claro.info.yml b/core/themes/claro/claro.info.yml
+index dc9b06eada0..e60f8f8f312 100644
+--- a/core/themes/claro/claro.info.yml
++++ b/core/themes/claro/claro.info.yml
+@@ -102,6 +102,11 @@ libraries-override:
+       state:
+         css/toolbar.menu.css: css/state/toolbar.menu.css
+ 
++  views/views.bulk_form:
++    css:
++      component:
++        css/views.bulk_form.css: css/components/views.bulk_form.css
++
+   views_ui/admin.styling:
+     css:
+       component:
+diff --git a/core/themes/claro/css/components/views.bulk_form.css b/core/themes/claro/css/components/views.bulk_form.css
+new file mode 100644
+index 00000000000..2cae782ff1a
+--- /dev/null
++++ b/core/themes/claro/css/components/views.bulk_form.css
+@@ -0,0 +1,12 @@
++tr.draggable td {
++  width: 100%;
++}
++tr.draggable td:first-child {
++  display: flex;
++  align-items: center;
++  width: 5rem;
++}
++/* Ensure a space between checkbox and the 'Changed' asterisk */
++tr.draggable td:first-child input[type="checkbox"] {
++  margin-right: 3px;
++}
+diff --git a/core/themes/stable9/css/views/views.bulk_form.css b/core/themes/stable9/css/views/views.bulk_form.css
+new file mode 100644
+index 00000000000..488c792d63f
+--- /dev/null
++++ b/core/themes/stable9/css/views/views.bulk_form.css
+@@ -0,0 +1,12 @@
++tr.draggable td {
++  width: 100%;
++}
++tr.draggable td:first-child {
++  display: flex;
++  align-items: center;
++  width: 2.5rem;
++}
++/* Ensure a space between checkbox and the 'Changed' asterisk */
++tr.draggable td:first-child input[type="checkbox"] {
++  margin-right: 3px;
++}
+diff --git a/core/themes/stable9/stable9.info.yml b/core/themes/stable9/stable9.info.yml
+index 6cde0aa03bc..b0513f8a53d 100644
+--- a/core/themes/stable9/stable9.info.yml
++++ b/core/themes/stable9/stable9.info.yml
+@@ -310,6 +310,11 @@ libraries-override:
+       component:
+         css/views.module.css: css/views/views.module.css
+ 
++  views/views.bulk_form:
++    css:
++      component:
++        css/views.bulk_form.css: css/views/views.bulk_form.css
++
+   views_ui/admin.styling:
+     css:
+       component:

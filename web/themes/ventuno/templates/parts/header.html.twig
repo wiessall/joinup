@@ -8,52 +8,53 @@
   </nav>
 </div>
 {% set items = logged_in ? [{
-  type: "mmenu",
-  breakpoint: "xl",
-  classes: ["order-1"],
-  id: "landing-pages",
-  icon: {name: "justify"},
-  label: "Toggle menu"|t,
+  type: 'mmenu',
+  breakpoint: 'xl',
+  classes: ['order-1'],
+  id: 'landing-pages',
+  icon: {name: 'justify'},
+  label: 'Toggle menu'|t,
   links: landing_page_links,
 }] : [] %}
 {% set items = items|merge([{
-  type: logged_in ? "dropdown" : "mmenu",
-  breakpoint: logged_in ? "" : "xl",
-  id: logged_in ? "account" : "navbar-toggler",
+  type: logged_in ? 'dropdown' : 'mmenu',
+  breakpoint: logged_in ? '' : 'xl',
+  id: logged_in ? 'account' : 'navbar-toggler',
   icon: {
-    name: logged_in ? "person-circle" : "justify",
+    name: logged_in ? 'person-circle' : 'justify',
   },
-  label: logged_in ? user_name : "Toggle menu"|t,
+  label: logged_in ? user_name : 'Toggle menu'|t,
   links: logged_in ? profile_links : anonymous_links,
 }]) %}
 {% if bookmark_link %}
   {% set items = items|merge([{
-    breakpoint: "all",
-    label: "Bookmark"|t,
+    breakpoint: 'all',
+    label: 'Bookmarks'|t,
     links: [bookmark_link|merge({order: 1})],
   }]) %}
 {% endif %}
 {% if not hide_searchbar %}
   {% set items = items|merge([{
-    type: "search",
-    breakpoint: "",
-    classes: ["order-1 dropdown-search"],
-    id: "search-box-dropdown",
+    type: 'search',
+    breakpoint: '',
+    classes: ['order-1 dropdown-search'],
+    id: 'search-box-dropdown',
     icon: {
-      name: "search",
+      name: 'search',
     },
-    label: "Toggle search box"|t,
+    label: 'Toggle search box'|t,
     links: search,
   }]) %}
 {% endif %}
-{% include directory ~ '/templates/navigation/navbar.html.twig' with {
+{{ include(directory ~ '/templates/navigation/navbar.html.twig', {
   brand: {
-    src: path('<front>') ~ "themes/ventuno/assets/images/logo-interoperable-europe.svg",
-    alt: "Interoperable Europe logo"|t,
+    title: 'Interoperable Europe Portal'|t,
+    src: path('<front>') ~ 'themes/ventuno/assets/images/logo-interoperable-europe.svg',
+    alt: 'Interoperable Europe logo'|t,
     link: path('<front>'),
   },
-  collapse_id: "main-navbar",
-  list_id: "main-navbar-list",
+  collapse_id: 'main-navbar',
+  list_id: 'main-navbar-list',
   items: items,
   search: hide_searchbar ? '' : searchbar,
-} %}
+}) }}

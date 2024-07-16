@@ -872,6 +872,23 @@ class JoinupContext extends RawDrupalContext {
         'state' => 'field_state',
         'author' => 'uid',
       ],
+      'distribution' => [
+        'access url' => 'access_url',
+        'creation date' => 'created',
+        'description' => 'description',
+        'downloads' => 'downloads',
+        'file size' => 'file_size',
+        'format' => 'format',
+        'licence' => 'field_licence',
+        'modification date' => 'changed',
+        'representation technique' => 'representation_technique',
+        'parent' => 'distribution_parent',
+        'state' => 'field_state',
+        'status' => 'process_status',
+        'title' => 'title',
+        'uri' => 'uri',
+        'publication date' => 'published_at',
+      ],
       'shared' => [
         'collection' => OgGroupAudienceHelperInterface::DEFAULT_FIELD,
         'shared on' => 'field_shared_in',
@@ -1117,22 +1134,27 @@ class JoinupContext extends RawDrupalContext {
   /**
    * Checks the current workflow state on the given entity.
    *
-   * @param string $label
-   *   The label of the entity.
    * @param string $type
    *   The entity type ID of the entity.
    * @param string $stateExpected
    *   The expected workflow state's label.
+   * @param string|null $label
+   *   The label of the entity.
+   * @param string|null $id
+   *   The ID of the entity.
    *
    * @Given the workflow state of the :label :type should be :stateExpected
+   * @Given the workflow state of the :type with ID :id should be :stateExpected
    */
-  public function assertEntityWorkflowState(string $label, string $type, string $stateExpected): void {
+  public function assertEntityWorkflowState(string $type, string $stateExpected, ?string $label = NULL, ?string $id = NULL): void {
     $mapping = [
       'content' => 'node',
       'rdf entity' => 'rdf_entity',
     ];
-    $entityTypeId = $mapping[$type] ?? $type;
-    $entity = $this->getEntityByLabel($entityTypeId, $label);
+    $entityTypeId = $mapping[$type] ?? static::translateEntityTypeAlias($type);
+    $entity = $label
+      ? $this->getEntityByLabel($entityTypeId, $label)
+      : $this->getEntityById($entityTypeId, $id);
     Assert::assertInstanceOf(
       EntityWorkflowStateInterface::class,
       $entity,
@@ -1145,7 +1167,7 @@ class JoinupContext extends RawDrupalContext {
       $actual = $entity->getWorkflowState(),
       sprintf(
         "Workflow state of '%s' '%s' is different than expected. Expected state is '%s', while the actual one is '%s'.",
-        $label,
+        $label ?? $id,
         $type,
         $stateIdExpected,
         $actual,
@@ -1287,13 +1309,21 @@ class JoinupContext extends RawDrupalContext {
    *
    * @Then the page should show( only) the tiles :headings
    */
-  public function assertUnorderedTilesPresent($headings) {
+  public function assertUnorderedTilesPresent(string $headings): void {
     $tiles_in_page = array_keys($this->getTiles());
     $headings = $this->explodeCommaSeparatedStepArgument($headings);
 
     sort($headings);
     sort($tiles_in_page);
-    Assert::assertEquals($headings, $tiles_in_page, 'The found tiles mismatch the expected ones.');
+    Assert::assertEquals(
+      $headings,
+      $tiles_in_page,
+      sprintf(
+        "The found tiles mismatch the expected ones.\nExpected: %s\nActual:%s",
+        implode(', ', $headings),
+        implode(', ', $tiles_in_page),
+      )
+    );
   }
 
   /**
@@ -1357,9 +1387,9 @@ class JoinupContext extends RawDrupalContext {
    *
    * @Then I( should) see the link :text in the :heading tile
    */
-  public function assertTileContainsLink($heading, $link) {
+  public function assertTileContainsLink(string $heading, string $link): void {
     $element = $this->getTileByHeading($heading);
-    if (!$element->findLink($link)) {
+    if (!$element->findLink($link) && !$element->find('xpath', '//a[@aria-label=contains(text(), "' . $link . '")]')) {
       throw new \Exception("The link '$link' was not found in the tile '$heading'.");
     }
   }
@@ -1382,11 +1412,12 @@ class JoinupContext extends RawDrupalContext {
     $this->scrollElementIntoView($element);
 
     $linkElement = $element->findLink($link);
-    if (!$linkElement) {
+    $linkElementAriaLabel = $element->find('xpath', '//a[@aria-label=contains(text(), "' . $link . '")]');
+    if (!$linkElement && !$linkElementAriaLabel) {
       throw new \Exception("The link '$link' was not found in the tile '$heading'.");
     }
 
-    $linkElement->click();
+    $linkElement ? $linkElement->click() : $linkElementAriaLabel->click();
   }
 
   /**
@@ -2027,9 +2058,7 @@ class JoinupContext extends RawDrupalContext {
    * @Then I wait up to :seconds seconds for Glide animations to finish
    */
   public function waitForGlideAnimations(string $seconds): void {
-    $this->assertWaitJs($seconds, '(function() {
-        return typeof jQuery === "undefined" || jQuery("glide--slider.glide-animating").length === 0;
-    }())');
+    $this->assertWaitJs((int) $seconds, 'document.querySelector(".glide--slider.glide-animating") === null');
   }
 
   /**
@@ -2041,9 +2070,19 @@ class JoinupContext extends RawDrupalContext {
    * @Then I wait up to :seconds seconds for Slick animations to finish
    */
   public function waitForSlickAnimations(string $seconds): void {
-    $this->assertWaitJs($seconds, '(function() {
-        return typeof jQuery === "undefined" || jQuery("[data-slick].slick-animating").length === 0;
-    }())');
+    $this->assertWaitJs((int) $seconds, 'document.querySelector("[data-slick].slick-animating") === null');
+  }
+
+  /**
+   * Waits until Bootstrap collapse animations finish.
+   *
+   * @param string $seconds
+   *   Number of seconds to wait.
+   *
+   * @Then I wait up to :seconds seconds for Bootstrap collapse animations to finish
+   */
+  public function waitForBsCollapseAnimations(string $seconds): void {
+    $this->assertWaitJs((int) $seconds, 'document.querySelector(".collapsing") === null');
   }
 
   /**

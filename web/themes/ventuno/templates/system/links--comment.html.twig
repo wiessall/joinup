@@ -58,12 +58,12 @@
           {% elseif item.link|render|striptags|trim is same as 'Reply' %}
             {% set icon = 'reply' %}
           {% endif %}
-          <a href="{{ item.link["#url"] }}">
+          <a href="{{ item.link['#url'] }}">
             {{ pattern('icon', {
                 name: icon,
                 size: 'xs'
               }) }}
-            {{ item.link["#title"] }}
+            {{ item.link['#title'] }}
           </a>
         {%- elseif item.text_attributes -%}
           <span{{ item.text_attributes }}>{{ item.text }}</span>

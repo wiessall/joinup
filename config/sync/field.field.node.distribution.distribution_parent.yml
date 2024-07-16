@@ -1,0 +1,31 @@
+uuid: 45325078-9d72-42f3-b50b-6de72001c397
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.distribution_parent
+    - node.type.distribution
+    - rdf_entity.rdfentity.asset_release
+    - rdf_entity.rdfentity.solution
+id: node.distribution.distribution_parent
+field_name: distribution_parent
+entity_type: node
+bundle: distribution
+label: Parent
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:rdf_entity'
+  handler_settings:
+    target_bundles:
+      asset_release: asset_release
+      solution: solution
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: asset_release
+field_type: entity_reference

@@ -6,7 +6,7 @@
   width: $size;
   height: $size;
   content: "";
-  vertical-align: $size * -0.16;
+  vertical-align: -0.125em;
   background-color: $icon-color;
   mask-image: url("#{$bootstrap-icons-path}/#{$icon-name}.svg");
   mask-repeat: no-repeat;

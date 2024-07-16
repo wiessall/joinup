@@ -10,7 +10,6 @@ dependencies:
     - field.field.rdf_entity.solution.field_is_content
     - field.field.rdf_entity.solution.field_is_content_creation
     - field.field.rdf_entity.solution.field_is_description
-    - field.field.rdf_entity.solution.field_is_distribution
     - field.field.rdf_entity.solution.field_is_documentation
     - field.field.rdf_entity.solution.field_is_has_version
     - field.field.rdf_entity.solution.field_is_included_asset
@@ -180,6 +179,7 @@ hidden:
   changed: true
   collections: true
   created: true
+  distributions: true
   download_total: true
   featured: true
   field_is_affiliations_requests: true
@@ -187,7 +187,6 @@ hidden:
   field_is_content: true
   field_is_content_creation: true
   field_is_description: true
-  field_is_distribution: true
   field_is_documentation: true
   field_is_has_version: true
   field_is_included_asset: true
@@ -217,6 +216,7 @@ hidden:
   members: true
   og_group: true
   pinned_in: true
+  published_at: true
   rdf_entity_solution_field_is_content_inline_facets: true
   rdf_entity_solution_field_is_content_top: true
   related_solution: true

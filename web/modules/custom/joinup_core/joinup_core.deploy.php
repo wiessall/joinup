@@ -15,20 +15,12 @@
 declare(strict_types=1);
 
 use Drupal\Core\Url;
-use Drupal\joinup_core\DeployAndSmokeTestHelper;
 use Drupal\joinup_oss_catalogue\OssCatalogueCollectionInterface;
-
-/**
- * Create Interoperable Europe Act document as custom page.
- */
-function joinup_core_deploy_110900(): string {
-  return DeployAndSmokeTestHelper::createIeaCustomPage();
-}
 
 /**
  * Update path alias for EU OSS catalogue.
  */
-function joinup_core_deploy_110901(): void {
+function joinup_core_deploy_111000(): void {
   /** @var \Drupal\collection\Entity\CollectionInterface $collection */
   $collection = \Drupal::entityTypeManager()->getStorage('rdf_entity')
     ->load(OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID);
@@ -42,7 +34,7 @@ function joinup_core_deploy_110901(): void {
 /**
  * Update title of EU OSS catalogue collection.
  */
-function joinup_core_deploy_110902(): void {
+function joinup_core_deploy_111001(): void {
   /** @var \Drupal\collection\Entity\CollectionInterface $collection */
   $collection = \Drupal::entityTypeManager()->getStorage('rdf_entity')
     ->load(OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID);
@@ -55,7 +47,7 @@ function joinup_core_deploy_110902(): void {
 /**
  * Import content for EU OpenSource Software Solutions Catalogue.
  */
-function joinup_core_deploy_110903(): void {
+function joinup_core_deploy_111002(): void {
   /** @var \Drupal\Core\Extension\ModuleInstallerInterface $moduleInstaller */
   $moduleInstaller = \Drupal::service('module_installer');
   /** @var \Drupal\Core\Entity\EntityRepositoryInterface $entityRepository */
@@ -88,7 +80,7 @@ function joinup_core_deploy_110903(): void {
 /**
  * Rename menu items for EU OSS catalogue.
  */
-function joinup_core_deploy_110904(): void {
+function joinup_core_deploy_111003(): void {
   $entityTypeManager = \Drupal::entityTypeManager();
   /** @var  \Drupal\menu_link_content\MenuLinkContentStorageInterface $menuLinkContentStorage */
   $menuLinkContentStorage = $entityTypeManager->getStorage('menu_link_content');
@@ -124,7 +116,7 @@ function joinup_core_deploy_110904(): void {
 /**
  * Make sure that oss_archived has a default value.
  */
-function joinup_core_deploy_110905(array &$sandbox): string {
+function joinup_core_deploy_111004(array &$sandbox): string {
   $entityTypeManager = \Drupal::entityTypeManager();
   /** @var \Drupal\node\NodeStorage $nodeStorage */
   $nodeStorage = $entityTypeManager->getStorage('node');
@@ -155,6 +147,6 @@ function joinup_core_deploy_110905(array &$sandbox): string {
 /**
  * Delete stale page.
  */
-function joinup_core_deploy_110906(): void {
+function joinup_core_deploy_111005(): void {
   \Drupal::entityTypeManager()->getStorage('node')->load(703013)?->delete();
 }

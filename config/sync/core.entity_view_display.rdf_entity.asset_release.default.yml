@@ -5,7 +5,6 @@ dependencies:
   config:
     - field.field.rdf_entity.asset_release.field_isr_contact_information
     - field.field.rdf_entity.asset_release.field_isr_description
-    - field.field.rdf_entity.asset_release.field_isr_distribution
     - field.field.rdf_entity.asset_release.field_isr_documentation
     - field.field.rdf_entity.asset_release.field_isr_included_asset
     - field.field.rdf_entity.asset_release.field_isr_is_version_of
@@ -24,7 +23,10 @@ dependencies:
     - field.field.rdf_entity.asset_release.field_topic
     - rdf_entity.rdfentity.asset_release
   module:
+    - field_delimiter
+    - field_formatter_range
     - file_url
+    - joinup_slick
     - state_machine
     - template_suggestion
     - text
@@ -47,6 +49,27 @@ content:
       template_suggestion:
         template_suggestion: no_wrappers
     weight: 1
+    region: content
+  distributions:
+    type: entity_reference_entity_view
+    label: hidden
+    settings:
+      view_mode: view_mode_tile
+      link: false
+    third_party_settings:
+      field_delimiter:
+        delimiter: ''
+      field_formatter_range:
+        order: 0
+        limit: 0
+        offset: 0
+      joinup_slick:
+        preset: ''
+        field_label: true
+        custom_label: ''
+      template_suggestion:
+        template_suggestion: entity_reference__listing_tile
+    weight: 5
     region: content
   field_isr_affiliations_requests:
     type: entity_reference_label
@@ -72,17 +95,6 @@ content:
     third_party_settings: {  }
     weight: 4
     region: content
-  field_isr_distribution:
-    type: entity_reference_entity_view
-    label: hidden
-    settings:
-      view_mode: view_mode_tile
-      link: false
-    third_party_settings:
-      template_suggestion:
-        template_suggestion: entity_reference__listing_tile
-    weight: 2
-    region: content
   field_isr_documentation:
     type: file_url_default
     label: above
@@ -91,7 +103,7 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
-    weight: 5
+    weight: 4
     region: content
   field_isr_issue_tracker:
     type: link
@@ -154,7 +166,7 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
-    weight: 3
+    weight: 2
     region: content
   field_isr_source_code_repository:
     type: link
@@ -175,7 +187,7 @@ content:
       require_confirmation: false
       use_modal: false
     third_party_settings: {  }
-    weight: 4
+    weight: 3
     region: content
   field_isr_webdav_creation:
     type: boolean
@@ -240,4 +252,5 @@ hidden:
   field_topic: true
   langcode: true
   og_audience: true
+  published_at: true
   search_api_excerpt: true

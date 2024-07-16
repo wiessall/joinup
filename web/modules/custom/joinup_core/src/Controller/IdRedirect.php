@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup_core\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\joinup_distribution\Entity\Distribution;
 use Drupal\joinup_licence\Entity\Licence;
 use Drupal\rdf_sync\RdfSyncMapper;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -66,6 +67,10 @@ class IdRedirect extends ControllerBase {
     elseif ($licence = Licence::loadByUri($id)) {
       $entity_type_id = 'node';
       $id = $licence->id();
+    }
+    elseif ($distribution = Distribution::loadByUri($id)) {
+      $entity_type_id = 'node';
+      $id = $distribution->id();
     }
 
     return $this->redirect("entity.$entity_type_id.canonical", [

@@ -4,15 +4,19 @@
 # settings in a centralized config object which is editable.
 # See joinup_core_config_readonly_whitelist_patterns().
 joinup_core.outdated_content_threshold:
-  type: sequence
+  type: config_object
   label: 'Entity types'
-  sequence:
-    type: sequence
-    label: 'Bundles'
-    sequence:
-      type: integer
-      label: 'Years'
-      nullable: true
+  mapping:
+    thresholds:
+      type: sequence
+      label: 'Entity types'
+      sequence:
+        type: sequence
+        label: 'Bundles'
+        sequence:
+          type: integer
+          label: 'Years'
+          nullable: true
 
 field.formatter.third_party.joinup:
   type: mapping

@@ -7,7 +7,8 @@ namespace Drupal\joinup_oss_catalogue\Logger\Handler;
 use Drupal\Core\DestructableInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Monolog\Handler\AbstractProcessingHandler;
-use Monolog\Logger;
+use Monolog\Level;
+use Monolog\LogRecord;
 
 /**
  * EU OSS catalogue handler.
@@ -33,7 +34,7 @@ class EuOssCatalogueHandler extends AbstractProcessingHandler implements Destruc
    */
   public function __construct(
     protected EntityTypeManagerInterface $entityTypeManager,
-    int $level = Logger::DEBUG,
+    int $level = Level::Debug->value,
     bool $bubble = TRUE,
   ) {
     parent::__construct($level, $bubble);
@@ -42,7 +43,7 @@ class EuOssCatalogueHandler extends AbstractProcessingHandler implements Destruc
   /**
    * {@inheritdoc}
    */
-  public function write(array $record): void {
+  public function write(LogRecord $record): void {
     $this->records[] = $record;
   }
 
@@ -51,27 +52,30 @@ class EuOssCatalogueHandler extends AbstractProcessingHandler implements Destruc
    */
   public function destruct(): void {
     foreach ($this->records as $record) {
+      $logContext = $record->context;
+
       /** @var \Drupal\message\MessageInterface $message */
       $message = $this->entityTypeManager->getStorage('message')->create([
         'template' => 'eu_oss_catalogue_log',
         'oss_message' => [
-          'value' => $record['message'],
+          'value' => $record->message,
           'format' => 'content_editor',
         ],
         'oss_severity' => $record['level'],
       ]);
 
       foreach (['oss_landing_url', 'oss_source', 'oss_solution'] as $item) {
-        if (!isset($record['context'][$item])) {
+        if (!isset($logContext[$item])) {
           continue;
         }
 
-        $message->set($item, $record['context'][$item]);
+        $message->set($item, $logContext[$item]);
       }
 
-      // Remove backtrace and exception as they may contain unserializable vars.
-      unset($record['context']['backtrace'], $record['context']['exception']);
-      $message->setArguments($record['context']);
+      // Remove backtrace and exception
+      // since they may contain an unserializable variable.
+      unset($logContext['backtrace'], $logContext['exception']);
+      $message->setArguments($logContext);
 
       $message->save();
     }
