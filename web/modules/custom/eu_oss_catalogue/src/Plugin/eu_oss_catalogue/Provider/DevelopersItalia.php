@@ -244,17 +244,17 @@ class DevelopersItalia extends EuOssCatalogueProviderPluginBase {
    */
   protected function logResults(): void {
     if ($unProcessed = array_diff($this->fetchedUrls, $this->processedUrls)) {
-      $this->logger->warning('Processed {processed} out of {fetched} fetched solutions from Developers Italia. The following {unprocessed} solutions failed: ' . implode(', ', $unProcessed), [
-        'processed' => count($this->processedUrls),
-        'fetched' => $this->numberOfProvidedSolutions,
-        'unprocessed' => count($unProcessed),
+      $this->logger->warning('Processed @processed out of @fetched fetched solutions from Developers Italia. The following @unprocessed solutions failed: ' . implode(', ', $unProcessed), [
+        '@processed' => count($this->processedUrls),
+        '@fetched' => $this->numberOfProvidedSolutions,
+        '@unprocessed' => count($unProcessed),
         'list' => $unProcessed,
       ]);
     }
     else {
-      $this->logger->info('Processed {processed} out of {fetched} fetched solutions from Developers Italia.', [
-        'processed' => count($this->processedUrls),
-        'fetched' => $this->numberOfProvidedSolutions,
+      $this->logger->info('Processed @processed out of @fetched fetched solutions from Developers Italia.', [
+        '@processed' => count($this->processedUrls),
+        '@fetched' => $this->numberOfProvidedSolutions,
       ]);
     }
   }
