@@ -28,7 +28,7 @@ Feature: "Edit" visibility options.
       | owner               | Awesome person             |
       | contact information | Awesome contact            |
       | state               | published                  |
-      | creation date       | 2020-11-19 20:45           |
+      | published at        | 2020-11-19 20:45           |
       | modification date   | 2022-11-19 20:45           |
 
   Scenario: "Edit" button should only be shown to solution facilitators and moderators.
