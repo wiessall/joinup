@@ -356,6 +356,54 @@ third_party_settings:
               region_styles: null
               region_data: null
         components:
+          7c81a8bc-3cf9-43a7-bf01-cfb03b2b4cde:
+            uuid: 7c81a8bc-3cf9-43a7-bf01-cfb03b2b4cde
+            region: content
+            configuration:
+              id: 'field_block:rdf_entity:collection:published_at'
+              label: 'Published on'
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: timestamp
+                label: above
+                settings:
+                  date_format: date_only
+                  custom_date_format: ''
+                  timezone: ''
+                  tooltip:
+                    date_format: long
+                    custom_date_format: ''
+                  time_diff:
+                    enabled: false
+                    future_format: '@interval hence'
+                    past_format: '@interval ago'
+                    granularity: 1
+                    refresh: 60
+                third_party_settings:
+                  template_suggestion:
+                    template_suggestion: ''
+            weight: 0
+            additional:
+              component_attributes:
+                block_attributes:
+                  id: ''
+                  class: 'pe-5 pb-4'
+                  style: ''
+                  data: ''
+                block_title_attributes:
+                  id: ''
+                  class: ''
+                  style: ''
+                  data: ''
+                block_content_attributes:
+                  id: ''
+                  class: ''
+                  style: ''
+                  data: ''
           504f9a8c-ab74-424a-b513-12f70ba3aef4:
             uuid: 504f9a8c-ab74-424a-b513-12f70ba3aef4
             region: content
@@ -381,7 +429,7 @@ third_party_settings:
                     offset: 0
                   template_suggestion:
                     template_suggestion: ''
-            weight: 1
+            weight: 2
             additional:
               component_attributes:
                 block_attributes:
@@ -414,14 +462,14 @@ third_party_settings:
                 type: timestamp
                 label: above
                 settings:
-                  date_format: medium
+                  date_format: date_only
                   custom_date_format: ''
                   timezone: ''
                   tooltip:
                     date_format: long
                     custom_date_format: ''
                   time_diff:
-                    enabled: true
+                    enabled: false
                     future_format: '@interval hence'
                     past_format: '@interval ago'
                     granularity: 1
@@ -429,7 +477,7 @@ third_party_settings:
                 third_party_settings:
                   template_suggestion:
                     template_suggestion: ''
-            weight: 0
+            weight: 1
             additional:
               component_attributes:
                 block_attributes:
@@ -615,6 +663,7 @@ hidden:
   last_update: true
   members: true
   og_group: true
+  published_at: true
   rdf_entity_collection_field_collection_content_inline_facets: true
   rdf_entity_collection_field_collection_content_top: true
   read_more: true
