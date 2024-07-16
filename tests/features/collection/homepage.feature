@@ -28,6 +28,8 @@ Feature: Collection homepage
       | content creation    | members                          |
       | state               | published                        |
       | topic               | Employment and Support Allowance |
+      | published at        | 2012-12-01 9:00am                |
+      | modification date   | 2017-12-01 9:00am                |
     And the following solution:
       | title            | Bilbo's book          |
       | collection       | Middle earth daily    |
@@ -167,6 +169,8 @@ Feature: Collection homepage
       | Owner              |
       | Bilbo Baggins      |
       | Middle earth daily |
+      | Published on       |
+      | 01/12/2012         |
       | Last updated       |
       | Open collection    |
       | Moderated          |
@@ -225,6 +229,7 @@ Feature: Collection homepage
       | Economy and Welfare (1)  |
       | Finance in EU (1)        |
       | Detailed information     |
+      | Published on             |
       | Last updated             |
      # Exclude "last update" string.
       | Moderation               |
