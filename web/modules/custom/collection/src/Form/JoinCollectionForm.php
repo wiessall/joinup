@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Drupal\collection\Form;
 
-use Drupal\Component\Utility\Html;
 use Drupal\Core\Access\AccessManagerInterface;
 use Drupal\Core\Ajax\AfterCommand;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\OpenModalDialogCommand;
 use Drupal\Core\Ajax\ReplaceCommand;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\EventSubscriber\MainContentViewSubscriber;
 use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Messenger\MessengerInterface;
@@ -65,7 +65,7 @@ class JoinCollectionForm extends JoinGroupFormBase {
     // @todo Move this into the joinup_subscription module to solve a circular
     //   dependency.
     // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-6330
-    $membership = $this->getUserNonBlockedMembership($user, $group);
+    $membership = $this->getUserNonBlockedMembership();
     if (empty($membership)) {
       // Show the subscription dialog in a modal on join.
       $form['join']['#ajax'] = ['callback' => '::showSubscribeDialog'];
@@ -103,6 +103,11 @@ class JoinCollectionForm extends JoinGroupFormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state): void {
     \assert($this->group instanceof CollectionInterface);
+    $form_state->setRedirect(
+      'collection.subscribe_to_collection_form',
+      ['rdf_entity' => $this->group->id()],
+    );
+
     if ($this->group->hasCodeOfConductToAccept()) {
       // Membership is created only after user accepted the code of conduct
       // document.
@@ -140,24 +145,14 @@ class JoinCollectionForm extends JoinGroupFormBase {
       // button or the "Membership is pending" button.
       $rebuiltForm = $this->formBuilder->rebuildForm($this->getFormId(), $form_state, $form);
       $response->addCommand(new ReplaceCommand("#{$this->ajaxWrapperId()}", $rebuiltForm));
-
-      $title = $this->t('Welcome to the community!');
-      $greetingField = $this->group instanceof CollectionInterface
-        ? $this->group->getSetting('greeting')
-        : NULL;
-      if ($greetingField && !$greetingField->isEmpty()) {
-        $title = Html::escape($greetingField->first()->getString());
-      }
-
       $modal_form = $this->formBuilder->getForm(SubscribeToCollectionForm::class, $this->group);
       $modal_form['#attached']['library'][] = 'core/drupal.dialog.ajax';
 
       // Allow modules to alter or replace the Ajax command.
-      $event = new AjaxCommandEvent(new OpenModalDialogCommand($title, $modal_form, [
+      $event = new AjaxCommandEvent(new OpenModalDialogCommand(SubscribeToCollectionForm::title($this->group), $modal_form, [
         'width' => '500',
       ]), [
         'instance' => 'join_collection.subscribe_dialog.open',
-        'title' => $title,
         'content' => $modal_form,
       ]);
       $this->eventDispatcher->dispatch($event);
@@ -218,6 +213,29 @@ class JoinCollectionForm extends JoinGroupFormBase {
    */
   protected function ajaxWrapperId(): string {
     return $this->getFormId() . '_ajax_wrapper';
+  }
+
+  /**
+   * Determines if the current request is via AJAX.
+   *
+   * @return bool
+   *   TRUE if the current request is via AJAX, FALSE otherwise.
+   */
+  protected function isAjax(): bool {
+    $wrapper_format = $this->getRequestWrapperFormat() ?? '';
+    return str_contains($wrapper_format, 'drupal_ajax') ||
+      str_contains($wrapper_format, 'drupal_modal') ||
+      str_contains($wrapper_format, 'drupal_dialog');
+  }
+
+  /**
+   * Gets the wrapper format of the current request.
+   *
+   * @return string
+   *   The wrapper format. Empty string if the wrapper format is not set.
+   */
+  protected function getRequestWrapperFormat(): string {
+    return $this->getRequest()->get(MainContentViewSubscriber::WRAPPER_FORMAT, '');
   }
 
 }

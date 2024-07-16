@@ -8,7 +8,9 @@ use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Core\Url;
 use Drupal\cas\Event\CasPostLoginEvent;
+use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\og\OgMembershipInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -75,6 +77,13 @@ class JoinGroupSubscriber extends RedirectedEuLoginAuthenticatedSubscriberBase {
         // appropriate message.
         $this->messenger->addStatus($group->getExistingMembershipMessage($membership));
         $this->deleteCookie();
+      }
+      elseif ($group instanceof CollectionInterface && $group->hasCodeOfConductToAccept()) {
+        $this->deleteCookie();
+        return Url::fromRoute(
+          'collection.subscribe_to_collection_form',
+          ['rdf_entity' => $group->id()],
+        )->toString();
       }
       else {
         // Subscribe the user to the group.
