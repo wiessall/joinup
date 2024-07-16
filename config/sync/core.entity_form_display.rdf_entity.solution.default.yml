@@ -346,5 +346,6 @@ hidden:
   field_is_wiki: true
   field_site_featured: true
   langcode: true
+  published_at: true
   translation: true
   uid: true
