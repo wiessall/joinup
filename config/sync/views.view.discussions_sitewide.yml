@@ -3,10 +3,9 @@ langcode: en
 status: true
 dependencies:
   config:
-    - core.entity_view_mode.node.view_mode_tile
+    - core.entity_view_mode.node.view_mode_tile_horizontal
     - node.type.discussion
   module:
-    - joinup_tiles
     - node
     - other_view_filter
     - state_machine
@@ -263,16 +262,16 @@ display:
             default_group_multiple: {  }
             group_items: {  }
       style:
-        type: tiles
+        type: default
         options:
-          row_class: tile
+          row_class: col-xl-9
           default_row_class: false
           uses_fields: false
       row:
         type: 'entity:node'
         options:
           relationship: none
-          view_mode: view_mode_tile
+          view_mode: view_mode_tile_horizontal
       query:
         type: views_query
         options:
