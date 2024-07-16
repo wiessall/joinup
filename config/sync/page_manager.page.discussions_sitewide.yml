@@ -1,0 +1,12 @@
+uuid: eec36ad0-79b5-4039-89bd-2c5ecb6e3b4e
+langcode: en
+status: true
+dependencies: {  }
+id: discussions_sitewide
+label: Forum
+description: 'Aggregates discussions from all collections / solutions and shows the 4 most active and the 4 most recent items'
+use_admin_theme: false
+path: /discussions
+access_logic: and
+access_conditions: {  }
+parameters: {  }
