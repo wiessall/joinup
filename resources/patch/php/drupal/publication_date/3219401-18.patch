@@ -1,0 +1,295 @@
+diff --git a/publication_date.api.php b/publication_date.api.php
+new file mode 100644
+index 0000000..f556044
+--- /dev/null
++++ b/publication_date.api.php
+@@ -0,0 +1,18 @@
++<?php
++
++/**
++ * @file
++ * Hooks provided by the Publication date module.
++ */
++
++/**
++ * Allow to change the list of entity types having the Publication date field.
++ *
++ * @param array $entity_types
++ *   The list of entity types having the Publication date field.
++ *
++ * @ingroup publication_date_api
++ */
++function hook_publication_date_entity_types_alter(array &$entity_types): void {
++  $entity_types[] = 'taxonomy_term';
++}
+diff --git a/publication_date.module b/publication_date.module
+index 9d9d15a..c7846fd 100755
+--- a/publication_date.module
++++ b/publication_date.module
+@@ -5,8 +5,10 @@
+  * Add a field to nodes containing the publication date.
+  */
+
+-use Drupal\Core\Field\BaseFieldDefinition;
++use Drupal\Core\Entity\EntityFormInterface;
+ use Drupal\Core\Entity\EntityTypeInterface;
++use Drupal\Core\Entity\FieldableEntityInterface;
++use Drupal\Core\Field\BaseFieldDefinition;
+ use Drupal\Core\Form\FormStateInterface;
+
+ /**
+@@ -29,7 +31,7 @@ const PUBLICATION_DATE_DEFAULT = 2147483647;
+ function publication_date_entity_base_field_info(EntityTypeInterface $entity_type) {
+   $fields = [];
+
+-  if ($entity_type->id() == 'node') {
++  if(\Drupal::service('publication_date.enabled_entity_types')->isEnabled($entity_type->id())) {
+     $fields['published_at'] = BaseFieldDefinition::create('published_at')
+       ->setLabel(t('Published on'))
+       ->setDescription(t('Keep the publication timestamp for each node.'))
+@@ -50,21 +52,33 @@ function publication_date_entity_base_field_info(EntityTypeInterface $entity_typ
+ }
+
+ /**
+- * Implements hook_form_BASE_ID_alter().
++ * Implements hook_form_alter().
+  *
+- * Display the publication date on the node edit form.
++ * Display the publication date on the entity edit form.
+  *
+  * @note: This won't work where you have Display Suite/REL enabled.
+  */
+-function publication_date_form_node_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+-  $account = \Drupal::currentUser();
+-  $node = $form_state->getFormObject()->getEntity();
+-
+-  if (isset($form['published_at'])) {
+-    // Check if the user has permission to edit the publication date.
+-    $form['published_at']['#access'] = $account->hasPermission('set any published on date') || $account->hasPermission('set ' . $node->bundle() . ' published on date');
+-    $form['published_at']['#group'] = 'revision_information';
++function publication_date_form_alter(&$form, FormStateInterface $form_state, $form_id) {
++  if (empty($form['published_at'])) {
++    return;
++  }
++  $form_object = $form_state->getFormObject();
++  if (!$form_object instanceof EntityFormInterface) {
++    return;
+   }
++  $entity = $form_object->getEntity();
++  if (!$entity instanceof FieldableEntityInterface) {
++    return;
++  }
++  $entity_type_id = $entity->getEntityTypeId();
++  if (!\Drupal::service('publication_date.enabled_entity_types')->isEnabled($entity_type_id)) {
++    return;
++  }
++
++  $account = \Drupal::currentUser();
++  // Check if the user has permission to edit the publication date.
++  $form['published_at']['#access'] = $account->hasPermission('set any published on date') || $account->hasPermission('set ' . $entity->bundle() . ' published on date');
++  $form['published_at']['#group'] = 'revision_information';
+ }
+
+ /**
+diff --git a/publication_date.services.yml b/publication_date.services.yml
+index e938b94..1e399f0 100644
+--- a/publication_date.services.yml
++++ b/publication_date.services.yml
+@@ -1,5 +1,9 @@
+ services:
++  publication_date.enabled_entity_types:
++    class: Drupal\publication_date\PublicationDateEnabledTypes
++    arguments: ['@module_handler']
+   publication_date.event_subscriber:
+     class: Drupal\publication_date\EventSubscriber\PublicationDateSubscriber
++    arguments: ['@publication_date.enabled_entity_types']
+     tags:
+       - { name: event_subscriber }
+diff --git a/publication_date.tokens.inc b/publication_date.tokens.inc
+index a20da20..e99c8d1 100644
+--- a/publication_date.tokens.inc
++++ b/publication_date.tokens.inc
+@@ -13,11 +13,14 @@ use Drupal\Core\Render\BubbleableMetadata;
+  * Implements hook_token_info().
+  */
+ function publication_date_token_info_alter(&$data) {
+-  $data['tokens']['node']['published'] = [
+-    'name' => t("Date published"),
+-    'description' => t("The date the node was published."),
+-    'type' => 'date',
+-  ];
++  $enabled_types = \Drupal::service('publication_date.enabled_entity_types')->getEnabled();
++  foreach($enabled_types as $type) {
++    $data['tokens'][$type]['published'] = [
++      'name' => t("Date published"),
++      'description' => t("The date the {$type} was published."),
++      'type' => 'date',
++    ];
++  }
+ }
+
+ /**
+@@ -35,22 +38,20 @@ function publication_date_tokens($type, $tokens, array $data, array $options, Bu
+   }
+   $replacements = [];
+
+-  if ($type == 'node' && !empty($data['node'])) {
+-    /** @var \Drupal\node\NodeInterface $node */
+-    $node = $data['node'];
+-
++  if (\Drupal::service('publication_date.enabled_entity_types')->isEnabled($type) && !empty($data[$type])) {
++    $entity = $data[$type];
+     foreach ($tokens as $name => $original) {
+       switch ($name) {
+         case 'published':
+           $date_format = DateFormat::load('medium');
+           $bubbleable_metadata->addCacheableDependency($date_format);
+-          $replacements[$original] = $dateFormatter->format($node->published_at->value, 'medium', '', NULL, $langcode);
++          $replacements[$original] = $dateFormatter->format($entity->published_at->value, 'medium', '', NULL, $langcode);
+           break;
+       }
+     }
+
+     if ($published_tokens = $tokenService->findWithPrefix($tokens, 'published')) {
+-      $replacements += $tokenService->generate('date', $published_tokens, ['date' => $node->published_at->value], $options, $bubbleable_metadata);
++      $replacements += $tokenService->generate('date', $published_tokens, ['date' => $entity->published_at->value], $options, $bubbleable_metadata);
+     }
+   }
+
+diff --git a/publication_date.views.inc b/publication_date.views.inc
+index 6ac0ec2..2a4542e 100644
+--- a/publication_date.views.inc
++++ b/publication_date.views.inc
+@@ -9,11 +9,21 @@
+  * Implements hook_views_data_alter().
+  */
+ function publication_date_views_data_alter(array &$data) {
+-  $data['node_field_data']['published_at']['argument']['id'] = 'date';
+-  $data['node_field_data']['published_at']['filter']['id'] = 'date';
+-  $data['node_field_data']['published_at']['sort']['id'] = 'date';
++  $entity_manager = \Drupal::entityTypeManager();
++  $db_schema = \Drupal::database()->schema();
++  $enabled_types = \Drupal::service('publication_date.enabled_entity_types')->getEnabled();
++  foreach($enabled_types as $type) {
++    $entity_type = $entity_manager->getStorage($type)->getEntityType();
++    if ($db_schema->fieldExists($entity_type->getDataTable(), 'published_at')) {
++      $data["{$type}_field_data"]['published_at']['argument']['id'] = 'date';
++      $data["{$type}_field_data"]['published_at']['filter']['id'] = 'date';
++      $data["{$type}_field_data"]['published_at']['sort']['id'] = 'date';
+
+-  $data['node_field_revision']['published_at']['argument']['id'] = 'date';
+-  $data['node_field_revision']['published_at']['filter']['id'] = 'date';
+-  $data['node_field_revision']['published_at']['sort']['id'] = 'date';
++      if ($entity_type->isRevisionable()) {
++        $data["{$type}_field_revision"]['published_at']['argument']['id'] = 'date';
++        $data["{$type}_field_revision"]['published_at']['filter']['id'] = 'date';
++        $data["{$type}_field_revision"]['published_at']['sort']['id'] = 'date';
++      }
++    }
++  }
+ }
+diff --git a/src/EventSubscriber/PublicationDateSubscriber.php b/src/EventSubscriber/PublicationDateSubscriber.php
+index e3b8585..01370a6 100644
+--- a/src/EventSubscriber/PublicationDateSubscriber.php
++++ b/src/EventSubscriber/PublicationDateSubscriber.php
+@@ -2,6 +2,7 @@
+
+ namespace Drupal\publication_date\EventSubscriber;
+
++use Drupal\publication_date\PublicationDateEnabledTypes;
+ use Drupal\workbench_moderation\Event\WorkbenchModerationEvents;
+ use Drupal\workbench_moderation\Event\WorkbenchModerationTransitionEvent;
+ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+@@ -11,11 +12,25 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+  */
+ class PublicationDateSubscriber implements EventSubscriberInterface {
+
++  /**
++   * The helper to get info about enabled entity types.
++   *
++   * @var \Drupal\publication_date\PublicationDateEnabledTypes
++   */
++  protected PublicationDateEnabledTypes $enabledTypes;
++
++  /**
++   * @param \Drupal\publication_date\PublicationDateEnabledTypes $enabledTypes
++   */
++  public function __construct(PublicationDateEnabledTypes $enabledTypes) {
++    $this->enabledTypes = $enabledTypes;
++  }
++
+   /**
+    * Handle workbench moderation state transition.
+    */
+   public function onWorkbenchModerationStateTransition(WorkbenchModerationTransitionEvent $event) {
+-    if ($event->getEntity()->getEntityTypeId() == 'node') {
++    if ($this->enabledTypes->isEnabled($event->getEntity()->getEntityTypeId())) {
+       $event->getEntity()->get('published_at')->preSave();
+     }
+   }
+diff --git a/src/PublicationDateEnabledTypes.php b/src/PublicationDateEnabledTypes.php
+new file mode 100644
+index 0000000..ad777e0
+--- /dev/null
++++ b/src/PublicationDateEnabledTypes.php
+@@ -0,0 +1,60 @@
++<?php
++
++namespace Drupal\publication_date;
++
++use Drupal\Core\Extension\ModuleHandlerInterface;
++
++/**
++ * The class for the service to list entity types with publication date.
++ */
++class PublicationDateEnabledTypes {
++
++  /**
++   * The list of enabled entity types.
++   */
++  protected array $entityTypes = ['node'];
++
++  /**
++   * The module handler.
++   *
++   * @var \Drupal\Core\Extension\ModuleHandlerInterface
++   */
++  protected ModuleHandlerInterface $moduleHandler;
++
++  /**
++   * Constructs a SearchLinks object.
++   *
++   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
++   *   The module handler.
++   */
++  public function __construct(ModuleHandlerInterface $module_handler) {
++    $this->moduleHandler = $module_handler;
++  }
++
++  /**
++   * Read the enabled types from the configuration.
++   *
++   * @return array
++   *   The enabled entity types.
++   */
++  public function getEnabled(): array {
++    // Invoke hook_publication_date_entity_types_alter() to allow to change the list of
++    // entity types having the Publication date field.
++    $this->moduleHandler->alter('publication_date_entity_types', $this->entityTypes);
++    return $this->entityTypes;
++  }
++
++  /**
++   * Determine if the supplied type is enabled.
++   *
++   * @param string $type
++   *   The entity type ID.
++   *
++   * @return bool
++   *   Whether the entity type is enabled.
++   */
++  public function isEnabled(string $type): bool {
++    return in_array($type, $this->getEnabled());
++  }
++
++}

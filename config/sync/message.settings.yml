@@ -8,5 +8,5 @@ purge_methods:
   days:
     id: days
     data:
-      days: 30
+      days: 183
     weight: 0
