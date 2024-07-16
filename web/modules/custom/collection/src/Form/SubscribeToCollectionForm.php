@@ -6,6 +6,7 @@ namespace Drupal\collection\Form;
 
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Component\Utility\Html;
+use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Ajax\AfterCommand;
@@ -21,9 +22,12 @@ use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Messenger\MessengerInterface;
+use Drupal\Core\Path\PathValidatorInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_core\Event\AjaxCommandEvent;
+use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\Traits\MembershipCreateTrait;
 use Drupal\joinup_subscription\JoinupSubscriptionsHelper;
 use Drupal\og\MembershipManagerInterface;
@@ -47,64 +51,16 @@ class SubscribeToCollectionForm extends FormBase {
 
   use MembershipCreateTrait;
 
-  /**
-   * The entity type manager service.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected EntityTypeManagerInterface $entityTypeManager;
-
-  /**
-   * The membership manager service.
-   *
-   * @var \Drupal\og\MembershipManagerInterface
-   */
-  protected MembershipManagerInterface $membershipManager;
-
-  /**
-   * The form builder.
-   *
-   * @var \Drupal\Core\Form\FormBuilderInterface
-   */
-  protected FormBuilderInterface $formBuilder;
-
-  /**
-   * The time keeping service.
-   *
-   * @var \Drupal\Component\Datetime\TimeInterface
-   */
-  protected TimeInterface $time;
-
-  /**
-   * The event dispatcher service.
-   *
-   * @var \Psr\EventDispatcher\EventDispatcherInterface
-   */
-  protected EventDispatcherInterface $eventDispatcher;
-
-  /**
-   * Constructs a SubscribeToCollectionForm.
-   *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   The entity type manager service.
-   * @param \Drupal\og\MembershipManagerInterface $membership_manager
-   *   The membership manager service.
-   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
-   *   The messenger service.
-   * @param \Drupal\Core\Form\FormBuilderInterface $form_builder
-   *   The form builder.
-   * @param \Drupal\Component\Datetime\TimeInterface $time
-   *   The time keeping service.
-   * @param \Psr\EventDispatcher\EventDispatcherInterface $event_dispatcher
-   *   The event dispatcher service.
-   */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, MembershipManagerInterface $membership_manager, MessengerInterface $messenger, FormBuilderInterface $form_builder, TimeInterface $time, EventDispatcherInterface $event_dispatcher) {
-    $this->entityTypeManager = $entity_type_manager;
-    $this->membershipManager = $membership_manager;
+  public function __construct(
+    protected EntityTypeManagerInterface $entityTypeManager,
+    protected MembershipManagerInterface $membershipManager,
+    MessengerInterface $messenger,
+    protected FormBuilderInterface $formBuilder,
+    protected TimeInterface $time,
+    protected EventDispatcherInterface $eventDispatcher,
+    protected PathValidatorInterface $pathValidator,
+  ) {
     $this->messenger = $messenger;
-    $this->formBuilder = $form_builder;
-    $this->time = $time;
-    $this->eventDispatcher = $event_dispatcher;
   }
 
   /**
@@ -118,6 +74,7 @@ class SubscribeToCollectionForm extends FormBase {
       $container->get('form_builder'),
       $container->get('datetime.time'),
       $container->get('event_dispatcher'),
+      $container->get('path.validator'),
     );
   }
 
@@ -126,6 +83,53 @@ class SubscribeToCollectionForm extends FormBase {
    */
   public function getFormId(): string {
     return 'subscribe_to_collection_form';
+  }
+
+  /**
+   * Title callback of the form.
+   *
+   * @param \Drupal\joinup_group\Entity\GroupInterface $rdf_entity
+   *   The collection to join or subscribe to.
+   *
+   * @return \Drupal\Core\StringTranslation\TranslatableMarkup|string
+   *   The title.
+   */
+  public static function title(GroupInterface $rdf_entity): TranslatableMarkup|string {
+    $greetingField = NULL;
+    try {
+      $greetingField = $rdf_entity->getSetting('greeting');
+    }
+    catch (\Exception) {
+    }
+    return $greetingField && !$greetingField->isEmpty()
+      ? Html::escape($greetingField->first()->getString())
+      : t('Welcome to the community!');
+  }
+
+  /**
+   * Returns the referer URL if form was accessed from an internal route.
+   *
+   * @return \Drupal\Core\Url|null
+   *   The referer URL if form was accessed from an internal route, NULL
+   *   otherwise.
+   */
+  protected function getRefererUrl(): ?Url {
+    static $originalUrl;
+    if (!isset($originalUrl)) {
+      $referer = $this->getRequest()->headers->get('referer');
+      if ($referer && UrlHelper::externalIsLocal($referer, $this->getRequest()->getSchemeAndHttpHost())) {
+        $originalUri = parse_url($referer, PHP_URL_PATH);
+        if ($query = parse_url($referer, PHP_URL_QUERY)) {
+          $originalUri .= "?$query";
+        }
+        $originalUrl = $this->pathValidator->getUrlIfValid($originalUri);
+      }
+      else {
+        $originalUrl = FALSE;
+      }
+    }
+
+    return $originalUrl instanceof Url ? $originalUrl : NULL;
   }
 
   /**
@@ -145,6 +149,12 @@ class SubscribeToCollectionForm extends FormBase {
         '#value' => $intro_message,
         '#weight' => -1,
       ],
+    ];
+
+    $referer = $form_state->getUserInput()['referer'] ?? $this->getRefererUrl()->toString();
+    $form['referer'] = [
+      '#type' => 'hidden',
+      '#default_value' => $referer,
     ];
     // Submit buttons (excluding "Cancel") must be disabled unless the checkbox
     // of CoC is checked.
@@ -184,7 +194,7 @@ class SubscribeToCollectionForm extends FormBase {
 
     $submit_button_base = [
       '#type' => 'submit',
-      // This form is opened via AJAX in a modal dialog that is triggered by
+      // This form can be opened via AJAX in a modal dialog that is triggered by
       // submitting the JoinCollectionForm. By default, Drupal will send the
       // AJAX requests to the route of the original form, which in this case
       // would be the JoinCollectionForm. We need to manually specify the
@@ -209,21 +219,33 @@ class SubscribeToCollectionForm extends FormBase {
       '#states' => $submit_states,
       '#op' => 'subscribe',
     ] + $submit_button_base;
-    $form['actions']['cancel'] = [
-      '#type' => 'button',
-      '#extra_suggestion' => 'light_blue',
-      '#weight' => 10,
-      '#value' => $this->t("Don't subscribe"),
-      '#op' => 'cancel',
-      '#limit_validation_errors' => [],
-      '#ajax' => $submit_button_base['#ajax'],
-    ];
+    if ($this->isAjax()) {
+      $form['actions']['cancel'] = [
+        '#type' => 'button',
+        '#extra_suggestion' => 'light_blue',
+        '#weight' => 10,
+        '#value' => $this->t("Don't subscribe"),
+        '#op' => 'cancel',
+        '#limit_validation_errors' => [],
+        '#ajax' => $submit_button_base['#ajax'],
+      ];
+    }
+    else {
+      $form['actions']['cancel'] = [
+        '#type' => 'link',
+        '#attributes' => ['class' => ['button']],
+        '#url' => Url::fromUserInput($referer),
+        '#weight' => 10,
+        '#title' => $this->t("Don't subscribe"),
+      ];
+    }
 
     if (!$has_coc) {
       return $form;
     }
 
     $form['actions']['cancel']['#value'] = $this->t('Cancel');
+    $form['actions']['cancel']['#title'] = $this->t('Cancel');
     $form['actions']['confirm_membership_only'] = [
       '#value' => $this->t("Don't subscribe"),
       '#states' => $submit_states,
@@ -304,6 +326,15 @@ class SubscribeToCollectionForm extends FormBase {
     $parameters = ['%collection' => $collection->getName()];
     $codeOfConductHasBeenApproved = !empty($form_state->getValue('code_of_conduct_agreed'));
 
+    if (!$this->isAjax()) {
+      $referer = $form_state->getValue('referer');
+      $form_state->setRedirectUrl(
+        $referer
+          ? Url::fromUserInput($referer)
+          : $collection->toUrl()
+      );
+    }
+
     $membership = $this->getUserNonBlockedMembership($collection);
     if (!$membership && $form_state->getValue('code_of_conduct_agreed')) {
       $state = $collection->isClosed() ? OgMembershipInterface::STATE_PENDING
@@ -315,7 +346,7 @@ class SubscribeToCollectionForm extends FormBase {
       $message = isset($state) && $state === OgMembershipInterface::STATE_PENDING
         ? $this->t('You will get a notification once your membership at %collection is approved.', $parameters)
         : $this->t('You have been joined to %collection.', $parameters);
-      $this->messenger->addStatus($message);
+      $this->messenger()->addStatus($message);
       return;
     }
 
@@ -337,7 +368,7 @@ class SubscribeToCollectionForm extends FormBase {
     $message = $is_pending ?
       $this->t('You have been subscribed to %collection and will receive weekly notifications once your membership is approved.', $parameters) :
       $this->t('You have been subscribed to %collection and will receive weekly notifications. To manage your notifications go to <em>My subscriptions</em> in your user menu.', $parameters);
-    $this->messenger->addStatus($message);
+    $this->messenger()->addStatus($message);
   }
 
   /**
@@ -469,24 +500,16 @@ class SubscribeToCollectionForm extends FormBase {
    * @return \Drupal\Core\Ajax\AjaxResponse
    *   The AJAX response.
    */
-  public function showSubscribeDialog(RdfInterface $rdf_entity): AjaxResponse {
-    $greetingField = $rdf_entity instanceof CollectionInterface
-      ? $rdf_entity->getSetting('greeting')
-      : NULL;
-    $title = $greetingField && !$greetingField->isEmpty()
-      ? Html::escape($greetingField->first()->getString())
-      : $this->t('Welcome to the community!');
-
+  public function showSubscribeDialog(GroupInterface $rdf_entity): AjaxResponse {
     $modal_form = $this->formBuilder->getForm(SubscribeToCollectionForm::class, $rdf_entity);
     $modal_form['#attached']['library'][] = 'core/drupal.dialog.ajax';
 
     $response = new AjaxResponse();
     // Allow modules to alter or replace the Ajax command.
-    $event = new AjaxCommandEvent(new OpenModalDialogCommand($title, $modal_form, [
+    $event = new AjaxCommandEvent(new OpenModalDialogCommand(static::title($rdf_entity), $modal_form, [
       'width' => '500',
     ]), [
       'instance' => 'join_collection.subscribe_dialog.open',
-      'title' => $title,
       'content' => $modal_form,
     ]);
     $this->eventDispatcher->dispatch($event);
