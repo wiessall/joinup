@@ -91,9 +91,11 @@
 >
   <div class="container">
     <div class="d-flex">
-      <a class="navbar-brand" href="{{ _brand.link }}">
+      {% if is_front %}<h1 class="mb-0">{% endif %}
+      <a class="navbar-brand" href="{{ _brand.link }}" title="{{ _brand.title }}">
         <img class="navbar-brand-image" src="{{ _brand.src }}" alt="{{ _brand.alt }}" />
       </a>
+      {% if is_front %}</h1>{% endif %}
     </div>
     <nav id="{{ _collapse_id }}">
       <ul
