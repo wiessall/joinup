@@ -232,18 +232,35 @@ trait TraversingTrait {
    *
    * @param string|null $region
    *   The region label. If no region is provided, the search will be on the
-   *    whole page.
+   *   whole page.
+   * @param string|null $listTitle
+   *   Label of the list which is expected to contain the tiles. We search for
+   *   tiles in the parent element of the list heading if given.
    *
    * @return \Behat\Mink\Element\NodeElement[]
    *   An array of tiles elements, keyed by tile title.
    */
-  protected function getTiles(?string $region = NULL): array {
-    /** @var \Behat\Mink\Element\DocumentElement $regionObj */
-    if ($region === NULL) {
-      $regionObj = $this->getSession()->getPage();
-    }
-    else {
-      $regionObj = $this->getRegion($region);
+  protected function getTiles(?string $region = NULL, ?string $listTitle = NULL): array {
+    $regionObj = $region
+      ? $this->getRegion($region)
+      : $this->getSession()->getPage();
+
+    if ($listTitle) {
+      $listTitleElements = array_filter(
+        $regionObj->findAll('css', 'h1,h2,h3,h4,h5,h6'),
+        function (NodeElement $element) use ($listTitle) {
+          return trim($element->getText()) === $listTitle;
+        }
+      );
+      Assert::assertNotEmpty(
+        $listTitleElements,
+        sprintf(
+          "Cannot find the heading '%s'",
+          $listTitle,
+        )
+      );
+      // Pick the first.
+      $regionObj = reset($listTitleElements)->getParent();
     }
 
     $title_selector = implode(', ', [
