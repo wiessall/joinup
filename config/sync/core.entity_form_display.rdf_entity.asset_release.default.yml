@@ -148,5 +148,6 @@ hidden:
   field_isr_translation: true
   field_topic: true
   langcode: true
+  published_at: true
   translation: true
   uid: true
