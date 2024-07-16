@@ -39,6 +39,15 @@ function joinup_publication_date_field_info_alter(array &$info): void {
 }
 
 /**
+ * Implements hook_publication_date_entity_types_alter().
+ *
+ * Enable Publication date behavior for RDF entities.
+ */
+function joinup_publication_date_publication_date_entity_types_alter(array &$entity_types): void {
+  $entity_types[] = 'rdf_entity';
+}
+
+/**
  * Implements hook_preprocess_page_title().
  */
 function joinup_publication_date_preprocess_page_title(array &$variables): void {
