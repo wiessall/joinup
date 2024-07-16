@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\solution\Plugin\search_api\processor;
 
 use Drupal\flag\FlagServiceInterface;
@@ -25,7 +27,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   hidden = false,
  * )
  */
-class interoperableFlagProcessor extends ProcessorPluginBase {
+class InteroperableFlagProcessor extends ProcessorPluginBase {
 
   /**
    * Flag service.
@@ -60,7 +62,7 @@ class interoperableFlagProcessor extends ProcessorPluginBase {
   /**
    * {@inheritdoc}
    */
-  public function getPropertyDefinitions(DatasourceInterface $datasource = NULL): array {
+  public function getPropertyDefinitions(?DatasourceInterface $datasource = NULL): array {
     $properties = [];
 
     if ($datasource) {
