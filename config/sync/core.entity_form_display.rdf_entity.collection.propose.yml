@@ -268,4 +268,5 @@ hidden:
   field_collection_content: true
   field_newsletter: true
   field_site_featured: true
+  published_at: true
   uid: true
