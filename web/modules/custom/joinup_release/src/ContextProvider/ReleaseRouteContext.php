@@ -28,7 +28,7 @@ class ReleaseRouteContext implements ContextProviderInterface {
   protected RouteMatchInterface $routeMatch;
 
   /**
-   * Constructs a new AssetReleaseRouteContext.
+   * Constructs a new ReleaseRouteContext.
    *
    * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
    *   The route match object.
