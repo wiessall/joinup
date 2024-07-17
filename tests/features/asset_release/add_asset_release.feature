@@ -38,7 +38,7 @@ Feature: "Add release" visibility options.
       | release number | 1.0                 |
       | status         | Completed           |
       | state          | published           |
-      | creation date  | 2014-08-30 23:59:00 |
+      | published at   | 2014-08-30 23:59:00 |
 
     Then I should have 1 release
 
