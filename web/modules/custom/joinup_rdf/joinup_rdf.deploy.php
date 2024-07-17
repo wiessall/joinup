@@ -200,7 +200,7 @@ SPARQL;
   $finish = microtime(TRUE);
   $count = count($uris);
   $sandbox['#finished'] = $sandbox['progress'] / $sandbox['total'];
-  return "Progress: {$count} distributions ({$sandbox['progress']} total / {$sandbox['swapped_aliases']} aliases swapped) in " . round($finish - $start, 2) . ' s. Error messages: ' . count($error_messages ?? []);
+  return "Progress: {$count} releases ({$sandbox['progress']} total / {$sandbox['swapped_aliases']} aliases swapped) in " . round($finish - $start, 2) . ' s. Error messages: ' . count($error_messages ?? []);
 }
 
 /**
@@ -293,7 +293,7 @@ SPARQL;
   $finish = microtime(TRUE);
   $count = count($uris);
   $sandbox['#finished'] = $sandbox['progress'] / $sandbox['total'];
-  return "Progress: {$count} distributions ({$sandbox['progress']} total / {$sandbox['swapped_aliases']} aliases swapped) in " . round($finish - $start, 2) . ' s. Error messages: ' . count($error_messages ?? []);
+  return "Progress: {$count} releases ({$sandbox['progress']} total / {$sandbox['swapped_aliases']} aliases swapped) in " . round($finish - $start, 2) . ' s. Error messages: ' . count($error_messages ?? []);
 }
 
 /**
