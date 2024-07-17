@@ -152,6 +152,7 @@ Feature: Subscribing to community content in solutions
       | Products of Bulgaria |
       | Canned cherries      |
       | Rose oil             |
+      | 21/03/2021           |
       | Spring 2021          |
     And the content subscription digest sent to bisera should have the subject "Joinup: Weekly digest message"
 

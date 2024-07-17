@@ -14,14 +14,13 @@ dependencies:
     - media.type.news_logo
     - media.type.solution_logo
     - media.type.video
-    - node.type.contact_information
     - node.type.custom_page
     - node.type.discussion
     - node.type.distribution
     - node.type.document
     - node.type.glossary
-    - node.type.licence
     - node.type.owner
+    - node.type.licence
     - node.type.release
     - taxonomy.vocabulary.legal_type
   module:
@@ -29,8 +28,10 @@ dependencies:
     - contact_form
     - custom_page
     - dashboard
+    - eif
     - entity_legal
     - entityqueue
+    - field_permissions
     - file
     - filter
     - joinup

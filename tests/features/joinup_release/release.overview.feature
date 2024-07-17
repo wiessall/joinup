@@ -63,9 +63,9 @@ Feature: Asset distribution overview on solution.
 
     # Verify that the releases titles link to the release page.
     And I should see the link "The Child of the Past 1"
-    And I should see the text "Published on: 28/01/1996"
+    And I should see the text "Published on: 29/01/1996"
     And I should see the link "Thief in the Angels 2"
-    And I should see the text "Published on: 28/01/1995"
+    And I should see the text "Published on: 29/01/1995"
     When I click "The Child of the Past 1"
     Then I should see the text "The Child of the Past 1" in the "Page title" region
     And I should see the text "Latest release"
