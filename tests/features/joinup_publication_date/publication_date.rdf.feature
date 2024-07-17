@@ -19,7 +19,7 @@ Feature: Publication date works as expected on RDF entities
       | title               | state     | collection           | solution type | abstract | description | moderation | owner | contact information |
       | Solution to publish | draft     | Published collection | Business      | Abstract | Description | no         | Owner | Contact3            |
       | Published solution  | published | Published collection | Business      | Abstract | Description | no         | Owner | Contact4            |
-    And releases:
+    And release content:
       | title              | state | release number | release notes              | is version of      |
       | Release to publish | draft | 1.0.0          | Only works on flat ground. | Published solution |
 
