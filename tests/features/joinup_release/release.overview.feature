@@ -25,8 +25,8 @@ Feature: Asset distribution overview on solution.
     And release content:
       | title                 | documentation | release number | release notes | creation date    | published at     | is version of    | state     |
       | Hidden spies          | text.pdf      | 3              | Notes 3       | 28-01-1995 12:05 | 28-01-1995 12:05 | Lovely Butterfly | draft     |
-      | Thief in the Angels   | text.pdf      | 2              | Notes 2       | 28-01-1995 12:06 | 28-01-1995 12:06 | Lovely Butterfly | published |
-      | The Child of the Past | text.pdf      | 1              | Notes 1       | 28-01-1996 12:05 | 28-01-1996 12:05 | Lovely Butterfly | published |
+      | Thief in the Angels   | text.pdf      | 2              | Notes 2       | 28-01-1995 12:06 | 29-01-1995 12:06 | Lovely Butterfly | published |
+      | The Child of the Past | text.pdf      | 1              | Notes 1       | 29-01-1996 12:05 | 29-01-1996 12:05 | Lovely Butterfly | published |
     And distribution content:
       | title       | access url                          | creation date    | parent                | state     |
       | Linux       | test.zip                            | 28-01-1995 12:05 | Thief in the Angels   | published |

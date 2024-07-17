@@ -27,7 +27,7 @@ Feature: Publication date works as expected on RDF entities
     Given I am logged in as a moderator
     When I go to the edit form of the "<entity label>" <type>
     Then I should see the heading "Edit <type label> <entity label>"
-    When I fill in "label[0][value]" with "Published at test for <type>"
+    When I fill in "<label field>" with "Published at test for <type>"
     And I press "Publish"
     # Posting a release redirects to the solution canonical, so we verify the
     # success of the entity edit by checking whether the new title was saved.
@@ -35,10 +35,10 @@ Feature: Publication date works as expected on RDF entities
     Then the published_at field in "Published at test for <type>" <type> should not be empty
 
     Examples:
-      | entity label            | type         | type label |
-      | Collection to publish   | collection   | Collection |
-      | Solution to publish     | solution     | Solution   |
-      | Release to publish      | release      | Release    |
+      | entity label          | type       | type label | label field     |
+      | Collection to publish | collection | Collection | label[0][value] |
+      | Solution to publish   | solution   | Solution   | label[0][value] |
+      | Release to publish    | release    | Release    | title[0][value] |
 
   Scenario: Publication date works as expected on distributions
     Given licence content:
