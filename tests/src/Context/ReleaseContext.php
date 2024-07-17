@@ -71,7 +71,7 @@ class ReleaseContext extends RawDrupalContext {
    *
    * @When I delete the :release release
    */
-  public function deleteAssetRelease(string $release): void {
+  public function deleteRelease(string $release): void {
     $release = $this->getEntityByLabel('node', $release);
     $release->skip_notification = TRUE;
     $release->delete();

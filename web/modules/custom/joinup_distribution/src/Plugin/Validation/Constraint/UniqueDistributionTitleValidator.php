@@ -16,8 +16,6 @@ use Symfony\Component\Validator\ConstraintValidator;
 /**
  * Validates that a distribution's title is unique within the release.
  *
- * This is the validator for the UniqueAssetReleaseTitleConstraint.
- *
  * @see \Drupal\joinup_distribution\Plugin\Validation\Constraint\UniqueDistributionTitleConstraint
  */
 class UniqueDistributionTitleValidator extends ConstraintValidator implements ContainerInjectionInterface {

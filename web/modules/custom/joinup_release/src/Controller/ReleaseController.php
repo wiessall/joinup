@@ -50,7 +50,7 @@ class ReleaseController extends ControllerBase {
    * @return \Drupal\Core\Access\AccessResultInterface
    *   The access result object.
    */
-  public function createAssetReleaseAccess(RdfInterface $rdf_entity, ?AccountInterface $account = NULL): AccessResultInterface {
+  public function createReleaseAccess(RdfInterface $rdf_entity, ?AccountInterface $account = NULL): AccessResultInterface {
     if ($rdf_entity->bundle() !== 'solution') {
       throw new NotFoundHttpException();
     }

@@ -5,7 +5,7 @@ joinup_release.solution_release.add:
     _controller: '\Drupal\joinup_release\Controller\ReleaseController::add'
     _title: 'Add Release'
   requirements:
-    _custom_access: '\Drupal\joinup_release\Controller\ReleaseController::createAssetReleaseAccess'
+    _custom_access: '\Drupal\joinup_release\Controller\ReleaseController::createReleaseAccess'
     _joinup_group: 'solution'
   options:
     parameters:
