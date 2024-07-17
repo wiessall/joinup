@@ -19,6 +19,7 @@
         }
         const wrapper = document.createElement("div");
         wrapper.classList.add("table-responsive");
+        wrapper.setAttribute("tabindex", "0");
         element.classList.add("table");
         wrapper.appendChild(element.cloneNode(true));
         element.replaceWith(wrapper);
