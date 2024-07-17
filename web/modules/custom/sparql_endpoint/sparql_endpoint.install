@@ -1,0 +1,25 @@
+<?php
+
+/**
+ * @file
+ * Post update functions for the SPARQL endpoint module.
+ */
+
+declare(strict_types=1);
+
+/**
+ * Performs checks.
+ */
+function sparql_endpoint_requirements(string $phase): array {
+  if ($phase !== 'runtime') {
+    return [];
+  }
+
+  $requirements = [];
+
+  // Check the SPARQL read-only endpoint status.
+  $requirements['sparql_endpoint.readonly_endpoint'] = \Drupal::service('sparql_endpoint.readonly_endpoint')
+    ->getRequirement();
+
+  return $requirements;
+}

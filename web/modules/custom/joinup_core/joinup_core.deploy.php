@@ -18,6 +18,7 @@ use Drupal\Component\Utility\Variable;
 use Drupal\Core\Session\AccountSwitcherInterface;
 use Drupal\Core\Utility\UpdateException;
 use Drupal\joinup_workflow\WorkflowHelperInterface;
+use Drupal\menu_link_content\MenuLinkContentInterface;
 use Drupal\solution\Entity\Solution;
 use Drupal\user\Entity\User;
 use Drupal\user\UserInterface;
@@ -118,4 +119,29 @@ function joinup_core_deploy_111001(&$sandbox): string {
     $sandbox['processed'],
     $sandbox['total'],
   );
+}
+
+/**
+ * Add navbar link to sitewide discussions page.
+ */
+function joinup_core_deploy_111002(): void {
+  $menuLinkContentStorage = \Drupal::entityTypeManager()->getStorage('menu_link_content');
+  $parentId = key(
+    $menuLinkContentStorage->getQuery()
+      ->accessCheck(FALSE)
+      ->condition('title', 'Support Centre')
+      ->condition('uuid', '384488ef-3150-421c-8234-c94aea24323a')
+      ->execute()
+  );
+  $parent = $menuLinkContentStorage->load($parentId);
+  assert($parent instanceof MenuLinkContentInterface);
+  $parent->set('expanded', TRUE)->save();
+  $forumLink = $menuLinkContentStorage->create([
+    'title' => 'Discussions',
+    'menu_name' => 'navbar',
+    'link' => 'internal:/discussions',
+    'parent' => "menu_link_content:{$parent->uuid()}",
+  ]);
+  assert($forumLink instanceof MenuLinkContentInterface);
+  $forumLink->save();
 }
