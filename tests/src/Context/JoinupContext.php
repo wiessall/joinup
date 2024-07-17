@@ -1325,13 +1325,21 @@ class JoinupContext extends RawDrupalContext {
    *
    * @Then the page should show( only) the tiles :headings
    */
-  public function assertUnorderedTilesPresent($headings) {
+  public function assertUnorderedTilesPresent(string $headings): void {
     $tiles_in_page = array_keys($this->getTiles());
     $headings = $this->explodeCommaSeparatedStepArgument($headings);
 
     sort($headings);
     sort($tiles_in_page);
-    Assert::assertEquals($headings, $tiles_in_page, 'The found tiles mismatch the expected ones.');
+    Assert::assertEquals(
+      $headings,
+      $tiles_in_page,
+      sprintf(
+        "The found tiles mismatch the expected ones.\nExpected: %s\nActual:%s",
+        implode(', ', $headings),
+        implode(', ', $tiles_in_page),
+      )
+    );
   }
 
   /**
@@ -1374,12 +1382,19 @@ class JoinupContext extends RawDrupalContext {
    * | Tile title 1 |
    * | Tile title 2 |
    *
+   * @param \Behat\Gherkin\Node\TableNode $titles_table
+   *   The table node containing the headings of tiles.
+   * @param string|null $list_title
+   *   The title of the list. The assertion searches for tiles in the parent
+   *   element of the list heading if given.
+   *
    * @Then I( should) see the( following) tiles in the correct order:
+   * @Then in the :list_title list, I should see the following tiles in the correct order:
    */
-  public function assertOrderedTilesPresent(TableNode $titles_table): void {
-    $headings_in_page = array_keys($this->getTiles());
+  public function assertOrderedTilesPresent(TableNode $titles_table, ?string $list_title = NULL): void {
+    $headings = array_keys($this->getTiles(listTitle: $list_title));
     $headings_expected = $titles_table->getColumn(0);
-    Assert::assertEquals($headings_expected, $headings_in_page, 'The expected tiles were not found or were not in the proper order.');
+    Assert::assertEquals($headings_expected, $headings, 'The expected tiles were not found or were not in the proper order.');
   }
 
   /**
@@ -1395,9 +1410,9 @@ class JoinupContext extends RawDrupalContext {
    *
    * @Then I( should) see the link :text in the :heading tile
    */
-  public function assertTileContainsLink($heading, $link) {
+  public function assertTileContainsLink(string $heading, string $link): void {
     $element = $this->getTileByHeading($heading);
-    if (!$element->findLink($link)) {
+    if (!$element->findLink($link) && !$element->find('xpath', '//a[@aria-label=contains(text(), "' . $link . '")]')) {
       throw new \Exception("The link '$link' was not found in the tile '$heading'.");
     }
   }
@@ -1420,11 +1435,12 @@ class JoinupContext extends RawDrupalContext {
     $this->scrollElementIntoView($element);
 
     $linkElement = $element->findLink($link);
-    if (!$linkElement) {
+    $linkElementAriaLabel = $element->find('xpath', '//a[@aria-label=contains(text(), "' . $link . '")]');
+    if (!$linkElement && !$linkElementAriaLabel) {
       throw new \Exception("The link '$link' was not found in the tile '$heading'.");
     }
 
-    $linkElement->click();
+    $linkElement ? $linkElement->click() : $linkElementAriaLabel->click();
   }
 
   /**
@@ -1812,14 +1828,14 @@ class JoinupContext extends RawDrupalContext {
         $comment_type = 'comment';
       }
 
-      $query = \Drupal::entityQuery('user')->accessCheck(FALSE)
-        ->condition('name', $comment_values['author'])
-        ->range(0, 1);
-      $result = $query->execute();
-      $uid = reset($result);
-
-      if (empty($result)) {
-        throw new \InvalidArgumentException('Unable to load author of comment.');
+      $uid = 0;
+      if (!empty($comment_values['author'])) {
+        $query = \Drupal::entityQuery('user')->accessCheck(FALSE)
+          ->condition('name', $comment_values['author'])
+          ->range(0, 1);
+        $result = $query->execute();
+        Assert::assertNotEmpty($result, 'Unable to load author of comment.');
+        $uid = reset($result);
       }
 
       // Replace field_body alias if present.

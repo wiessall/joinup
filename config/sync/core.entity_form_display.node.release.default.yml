@@ -136,6 +136,7 @@ hidden:
   is_version_of: true
   langcode: true
   path: true
+  published_at: true
   promote: true
   solution_data: true
   status: true

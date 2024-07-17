@@ -16,9 +16,11 @@ dependencies:
     - media.type.file
     - media.type.image
     - media.type.video
+    - meta_entity.type.eif_perspective
     - node.type.contact_information
     - node.type.custom_page
     - node.type.discussion
+    - meta_entity.type.eif_perspective
     - node.type.document
     - node.type.event
     - node.type.news
@@ -27,6 +29,7 @@ dependencies:
   module:
     - comment
     - contextual
+    - eif
     - email_confirmer
     - entity_legal
     - filter

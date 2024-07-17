@@ -232,25 +232,42 @@ trait TraversingTrait {
    *
    * @param string|null $region
    *   The region label. If no region is provided, the search will be on the
-   *    whole page.
+   *   whole page.
+   * @param string|null $listTitle
+   *   Label of the list which is expected to contain the tiles. We search for
+   *   tiles in the parent element of the list heading if given.
    *
    * @return \Behat\Mink\Element\NodeElement[]
    *   An array of tiles elements, keyed by tile title.
    */
-  protected function getTiles(?string $region = NULL): array {
-    /** @var \Behat\Mink\Element\DocumentElement $regionObj */
-    if ($region === NULL) {
-      $regionObj = $this->getSession()->getPage();
-    }
-    else {
-      $regionObj = $this->getRegion($region);
+  protected function getTiles(?string $region = NULL, ?string $listTitle = NULL): array {
+    $regionObj = $region
+      ? $this->getRegion($region)
+      : $this->getSession()->getPage();
+
+    if ($listTitle) {
+      $listTitleElements = array_filter(
+        $regionObj->findAll('css', 'h1,h2,h3,h4,h5,h6'),
+        function (NodeElement $element) use ($listTitle) {
+          return trim($element->getText()) === $listTitle;
+        }
+      );
+      Assert::assertNotEmpty(
+        $listTitleElements,
+        sprintf(
+          "Cannot find the heading '%s'",
+          $listTitle,
+        )
+      );
+      // Pick the first.
+      $regionObj = reset($listTitleElements)->getParent();
     }
 
     $title_selector = implode(', ', [
       '.card-title',
       '.card-title > h1 a',
       'h2 a',
-      'h1.tile__title',
+      '.tile__title',
       '.slide__title',
     ]);
 
@@ -314,8 +331,7 @@ trait TraversingTrait {
    *   Thrown when the element is not found.
    */
   protected function getListingByHeading(string $type, string $heading): NodeElement {
-    // @todo Keep only h1 selector when tiles refactor.
-    $xpath = '//*[@class and contains(concat(" ", normalize-space(@class), " "), " ' . $type . ' ")][.//h1[normalize-space()="' . $heading . '"]]';
+    $xpath = '//*[@class and contains(concat(" ", normalize-space(@class), " "), " ' . $type . ' ")][.//h3[normalize-space()="' . $heading . '"]]';
     if (!$element = $this->getSession()->getPage()->find('xpath', $xpath)) {
       throw new ElementNotFoundException($this->getSession()->getDriver(), "'$heading' $type item.");
     }
@@ -799,7 +815,7 @@ trait TraversingTrait {
   protected function getTileCssSelector(): string {
     return implode(', ', [
       '.card .card-title',
-      'article.tile h1',
+      'article.tile .tile__title',
       'article.slide',
     ]);
   }
