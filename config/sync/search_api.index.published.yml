@@ -179,6 +179,16 @@ field_settings:
     dependencies:
       module:
         - node
+  date:
+    label: Date
+    property_path: aggregated_field
+    type: date
+    configuration:
+      type: union
+      fields:
+        - 'entity:node/field_event_date'
+        - 'entity:node/published_at'
+        - 'entity:rdf_entity/created'
   description_processed:
     label: 'Licence Description »  Processed text'
     datasource_id: 'entity:node'
@@ -221,6 +231,7 @@ field_settings:
       fields:
         - 'entity:node/type'
         - 'entity:rdf_entity/rid'
+        - 'entity:user/type'
   entity_changed:
     label: Changed
     property_path: aggregated_field

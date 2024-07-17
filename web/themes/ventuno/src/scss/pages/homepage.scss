@@ -3,8 +3,7 @@
 // Homepage Common styles
 .joinup-layout {
   .block {
-    & > h2,
-    & > .about-what__title {
+    & > h2 {
       margin-bottom: 1em;
       padding-top: 0.75em;
       text-transform: uppercase;
@@ -317,8 +316,7 @@
               height: 100%;
             }
           }
-          h1 {
-            font-size: $h3-font-size;
+          h3 {
             font-weight: $font-weight-medium;
             line-height: $line-height-base;
             a {

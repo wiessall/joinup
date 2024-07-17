@@ -22,12 +22,14 @@ solution_workflow:
       label: Proposed
     published:
       label: Published
+      published: true
     needs_update:
       label: Needs update
     blacklisted:
       label: Blacklisted
     archived:
       label: Archived
+      published: true
   transitions:
     draft:
       label: Save as draft

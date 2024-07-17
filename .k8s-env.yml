@@ -1,0 +1,6 @@
+# Used in ephemeral/demo environments.
+drupal:
+  customEnv:
+    vars:
+      DRUPAL_SPARQL_USER_READONLY: 'SPARQL_RO'
+      DRUPAL_SPARQL_PASSWORD_READONLY: 'SPARQL_RO'

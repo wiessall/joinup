@@ -114,6 +114,7 @@ hidden:
   langcode: true
   last_update: true
   og_group: true
+  published_at: true
   rdf_entity_collection_field_collection_content_inline_facets: true
   rdf_entity_collection_field_collection_content_top: true
   read_more: true

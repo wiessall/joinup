@@ -1,0 +1,10 @@
+sparql_endpoint.query:
+  path: '/sparql'
+  methods: [ GET, POST ]
+  defaults:
+    _title: 'Query SPARQL endpoint'
+    _controller: '\Drupal\sparql_endpoint\Controller\QueryController::content'
+  requirements:
+    _permission: 'sparql endpoint query'
+  options:
+    no_cache: true
