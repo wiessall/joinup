@@ -14,8 +14,8 @@ entity_type: node
 bundle: release
 label: 'Is version of'
 description: ''
-required: false
-translatable: true
+required: true
+translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:
