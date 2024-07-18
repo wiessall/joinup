@@ -46,6 +46,12 @@
     flex: 1 0 100%;
     column-gap: $spacer;
     row-gap: $spacer * 0.25;
+    .tile__bundle-icon {
+      background: none;
+      svg {
+        color: $primary !important;
+      }
+    }
   }
   &__actions {
     flex: 0 1 auto;
