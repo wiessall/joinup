@@ -128,6 +128,9 @@ class SolutionRdfSubscriber extends NotificationSubscriberBase {
     $events[NotificationEvents::RDF_ENTITY_ARCHIVE_COMPLETED] = [
       ['onCompleteArchival'],
     ];
+    $events[NotificationEvents::RDF_ENTITY_ARCHIVE_COMPLETED_CONTACT_ONLY] = [
+      ['onCompleteArchival'],
+    ];
 
     return $events;
   }
@@ -507,8 +510,10 @@ class SolutionRdfSubscriber extends NotificationSubscriberBase {
    *
    * @param \Drupal\joinup_notification\Event\NotificationEvent $event
    *   The notification event.
+   * @param string $eventName
+   *   The name of the event.
    */
-  public function onCompleteArchival(NotificationEvent $event): void {
+  public function onCompleteArchival(NotificationEvent $event, string $eventName): void {
     $this->initialize($event);
     if (!$this->appliesOnSolutions()) {
       return;
@@ -528,9 +533,11 @@ class SolutionRdfSubscriber extends NotificationSubscriberBase {
       $solution->getValidatedContactInformationEmails(),
     );
     // Notify moderators.
-    $this->sendUserDataMessages([
-      self::TEMPLATE_ARCHIVAL_COMPLETE => $this->getRecipientIdsByRole('moderator'),
-    ]);
+    if ($eventName !== NotificationEvents::RDF_ENTITY_ARCHIVE_COMPLETED_CONTACT_ONLY) {
+      $this->sendUserDataMessages([
+        self::TEMPLATE_ARCHIVAL_COMPLETE => $this->getRecipientIdsByRole('moderator'),
+      ]);
+    }
   }
 
 }
