@@ -70,10 +70,10 @@ hidden:
   documentation: true
   field_keywords: true
   field_state: true
-  og_audience: true
   langcode: true
   language: true
   links: true
+  og_audience: true
   published_at: true
   release_number: true
   report: true
