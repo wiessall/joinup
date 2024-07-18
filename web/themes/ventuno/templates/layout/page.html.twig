@@ -40,6 +40,11 @@
  * @see html.html.twig
  */
 #}
+{%
+  set main_wrapper_classes = [
+    not page_manager ? 'mb-5',
+  ]
+%}
 <div{{ attributes.addClass('layout-container') }}>
   {{ include('@ventuno/parts/header.html.twig', {
     user_name: user_name,
@@ -86,7 +91,7 @@
       {% endif %}
     {% endblock %}
 
-    <div class="mb-5">
+    <div{{ create_attribute({class: main_wrapper_classes}) }}>
       <main>
         <div id="main-content" tabindex="-1"></div>
         {% block page_content %}

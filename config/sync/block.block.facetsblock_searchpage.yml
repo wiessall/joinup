@@ -27,7 +27,7 @@ settings:
     - 'facet_block:spatial_coverage'
     - 'facet_block:status'
     - 'facet_block:interoperable_flag'
-    - 'facet_block:creation_date'
+    - 'facet_block:date'
   add_js_classes: true
 visibility:
   request_route:

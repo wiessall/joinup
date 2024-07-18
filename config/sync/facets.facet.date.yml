@@ -1,4 +1,4 @@
-uuid: 4822c59c-f27c-4540-95bf-f680b42dc2b0
+uuid: d7aac764-9f4b-4aea-b9c9-ddf28c37c4ba
 langcode: en
 status: true
 dependencies:
@@ -7,15 +7,15 @@ dependencies:
     - views.view.search
   module:
     - search_api
-id: creation_date
-name: 'Creation Date'
+id: date
+name: Date
 weight: 2
 min_count: 1
 missing: false
 missing_label: others
-url_alias: creation_date
+url_alias: date
 facet_source_id: 'search_api:views_page__search__page_1'
-field_identifier: entity_created
+field_identifier: date
 query_operator: or
 hard_limit: 0
 exclude: false
