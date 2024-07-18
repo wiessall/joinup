@@ -35,7 +35,7 @@ class SolutionLatestReleasesFieldItemList extends EntityReferenceFieldItemList {
     $ids = \Drupal::entityQuery('node')
       ->accessCheck(FALSE)
       ->condition('type', 'release')
-      ->condition('is_version_of', $solution->id())
+      ->condition('og_audience', $solution->id())
       ->condition('status', 1)
       ->sort('created', 'DESC')
       ->range(0, 1)

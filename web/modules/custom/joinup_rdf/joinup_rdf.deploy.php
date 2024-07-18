@@ -133,7 +133,7 @@ SPARQL;
         ? substr($values['http://purl.org/dc/terms/title'][0], 0, 255)
         : $values['http://purl.org/dc/terms/title'][0],
       'uri' => $uri,
-      'is_version_of' => $solution->id(),
+      'og_audience' => $solution->id(),
       'created' => $values['http://purl.org/dc/terms/issued'][0]->getTimestamp(),
       'changed' => $values['http://purl.org/dc/terms/modified'][0]->getTimestamp(),
       'published_at' => $values['http://purl.org/dc/terms/issued'][0]->getTimestamp(),

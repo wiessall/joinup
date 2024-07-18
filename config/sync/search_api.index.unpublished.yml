@@ -150,7 +150,6 @@ field_settings:
     configuration:
       type: union
       fields:
-        - 'entity:node/is_version_of'
         - 'entity:node/og_audience'
         - 'entity:rdf_entity/collection'
   field_ar_abstract:

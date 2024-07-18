@@ -174,7 +174,7 @@ class ReleaseController extends ControllerBase {
     /** @var \Drupal\rdf_entity\RdfInterface $release */
     return $this->entityTypeManager()->getStorage('node')->create([
       'type' => 'release',
-      'is_version_of' => $rdf_entity->id(),
+      'og_audience' => $rdf_entity->id(),
     ]);
   }
 

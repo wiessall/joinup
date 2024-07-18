@@ -168,7 +168,7 @@ class JoinupDistributionController extends ControllerBase {
     }
 
     if ($entity->bundle() === 'release') {
-      $this->solution = $entity->is_version_of->entity;
+      $this->solution = $entity->og_audience->entity;
     }
 
     return $this->solution;

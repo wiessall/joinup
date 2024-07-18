@@ -108,7 +108,7 @@ class SolutionReleasesAndDistributionsFieldItemList extends EntityReferenceField
       ->getQuery()
       ->accessCheck()
       ->condition('type', 'release')
-      ->condition('is_version_of', $solution->id())
+      ->condition('og_audience', $solution->id())
       ->sort('created', 'DESC')
       ->execute());
 

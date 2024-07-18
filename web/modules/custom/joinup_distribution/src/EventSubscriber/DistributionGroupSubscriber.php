@@ -21,12 +21,12 @@ class DistributionGroupSubscriber extends AddGroupContentEventSubscriberBase {
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity type manager service.
-   * @param \Drupal\Core\Plugin\Context\ContextProviderInterface $ReleaseContext
+   * @param \Drupal\Core\Plugin\Context\ContextProviderInterface $releaseContext
    *   The asset release route context service.
    */
   public function __construct(
     EntityTypeManagerInterface $entityTypeManager,
-    protected ContextProviderInterface $ReleaseContext,
+    protected ContextProviderInterface $releaseContext,
   ) {
     parent::__construct($entityTypeManager);
   }
@@ -36,7 +36,7 @@ class DistributionGroupSubscriber extends AddGroupContentEventSubscriberBase {
    */
   public function addLinks(AddGroupContentEvent $event): void {
     // Add distribution under a release.
-    $releaseContexts = $this->ReleaseContext->getRuntimeContexts(['release']);
+    $releaseContexts = $this->releaseContext->getRuntimeContexts(['release']);
     if ($releaseContexts && $releaseContexts['release']->hasContextValue()) {
       $routeParameters = [
         'node' => $releaseContexts['release']->getContextValue()->id(),
