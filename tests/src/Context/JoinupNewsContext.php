@@ -58,7 +58,7 @@ class JoinupNewsContext extends RawDrupalContext {
       $actual_data = array_shift($articles);
 
       // Check title text.
-      $actual_title = $actual_data->find('css', 'h1.tile__title')->getText();
+      $actual_title = $actual_data->find('css', '.tile__title')->getText();
       Assert::assertEquals($expected_data['title'], $actual_title, sprintf('Expected title "%s" for article %d in the "Latest news" section but instead found "%s".', $expected_data['title'], $i + 1, $actual_title));
 
       // Check that title links to the canonical page of the news article.

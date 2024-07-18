@@ -278,5 +278,6 @@ hidden:
   field_ar_affiliates: true
   field_site_featured: true
   langcode: true
+  published_at: true
   translation: true
   uid: true

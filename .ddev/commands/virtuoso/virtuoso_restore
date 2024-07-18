@@ -14,3 +14,6 @@ rm -f virtuoso-temp.db virtuoso.db virtuoso.log virtuoso.pxa virtuoso.trx
 # Restore and restart.
 cd ../tmp && $VIRTUOSO_BIN/virtuoso-t +configfile $VIRTUOSO_DB/virtuoso.ini +restore-backup VIRTUOSO_DUMP_
 test -f $VIRTUOSO_DB/virtuoso.lck || virtuoso-t +configfile $VIRTUOSO_DB/virtuoso.ini +wait
+
+echo "DB.DBA.USER_CREATE('SPARQL_RO', 'readonly');" | $VIRTUOSO_BIN/isql localhost dba dba || true
+echo 'GRANT SPARQL_SELECT to "SPARQL_RO";' | $VIRTUOSO_BIN/isql localhost dba dba || true
