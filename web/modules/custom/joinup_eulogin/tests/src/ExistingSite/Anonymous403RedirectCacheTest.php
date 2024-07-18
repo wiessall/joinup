@@ -77,7 +77,7 @@ class Anonymous403RedirectCacheTest extends JoinupExistingSiteTestBase {
       'type' => 'release',
       'field_state' => 'draft',
       'title' => $this->randomString(),
-      'is_version_of' => $solution,
+      'og_audience' => $solution,
     ]);
     $release->save();
     $entities['field_state'][] = $release;

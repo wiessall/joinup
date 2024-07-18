@@ -111,7 +111,7 @@ class ReleaseWorkflowTest extends JoinupWorkflowExistingSiteTestBase {
       // Initialize the release entity as is used in all sub-cases.
       $content = $this->createNode([
         'type' => 'release',
-        'is_version_of' => $parent->id(),
+        'og_audience' => $parent->id(),
       ]);
       foreach ($test_data_arrays as $test_data) {
         $operation = 'create';
@@ -136,7 +136,7 @@ class ReleaseWorkflowTest extends JoinupWorkflowExistingSiteTestBase {
           'type' => 'release',
           'label' => $this->randomMachineName(),
           'field_state' => $content_state,
-          'is_version_of' => $parent->id(),
+          'og_audience' => $parent->id(),
         ]);
 
         foreach ($test_data_arrays as $test_data_array) {
@@ -165,7 +165,7 @@ class ReleaseWorkflowTest extends JoinupWorkflowExistingSiteTestBase {
           'type' => 'release',
           'title' => $this->randomMachineName(),
           'field_state' => $entity_state,
-          'is_version_of' => $parent->id(),
+          'og_audience' => $parent->id(),
         ]);
         $content->save();
 

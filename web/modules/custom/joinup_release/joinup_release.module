@@ -324,7 +324,7 @@ function joinup_release_title_version_is_unique(ReleaseInterface $release, bool 
 
   // Filter all releases that do not belong to the same solution.
   if (!$check_unaffiliated_solutions) {
-    $query->condition('is_version_of', $release->get('is_version_of')->first()->getValue()['target_id']);
+    $query->condition('og_audience', $release->get('og_audience')->first()->getValue()['target_id']);
   }
 
   $result = $query->execute();

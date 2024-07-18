@@ -38,7 +38,7 @@ class TokenTest extends JoinupExistingSiteTestBase {
     $release = $this->createNode([
       'type' => 'release',
       'title' => $this->randomMachineName(),
-      'is_version_of' => $solution,
+      'og_audience' => $solution,
       'field_state' => 'published',
     ]);
 

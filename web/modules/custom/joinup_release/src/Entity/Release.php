@@ -37,7 +37,7 @@ class Release extends Node implements ReleaseInterface {
    * {@inheritdoc}
    */
   public function getGroup(): GroupInterface {
-    $group = $this->getFirstReferencedEntity('is_version_of');
+    $group = $this->getFirstReferencedEntity('og_audience');
     if (empty($group) || !$group instanceof GroupInterface) {
       throw new MissingGroupException();
     }
@@ -52,14 +52,14 @@ class Release extends Node implements ReleaseInterface {
    *   The group reference field name.
    */
   protected function getGroupFieldName(): string {
-    return 'is_version_of';
+    return 'og_audience';
   }
 
   /**
    * {@inheritdoc}
    */
   public function getGroupId(): string {
-    $ids = $this->getReferencedEntityIds('is_version_of');
+    $ids = $this->getReferencedEntityIds('og_audience');
     if (empty($ids['rdf_entity'])) {
       throw new MissingGroupException();
     }

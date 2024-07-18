@@ -24,7 +24,7 @@ class SolutionFieldsFieldItemList extends EntityReferenceFieldItemList {
 
     /** @var \Drupal\joinup_release\Entity\ReleaseInterface $release */
     $release = $this->getEntity();
-    if ($release->get('is_version_of')->isEmpty()) {
+    if ($release->get('og_audience')->isEmpty()) {
       $this->list = [];
       // Avoid breaking pages of orphaned or test releases or administration
       // pages that create sample entities, like the field UI.

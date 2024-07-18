@@ -362,7 +362,7 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
         'id' => "http://release/1.{$i}",
         'title' => "release 1.{$i}",
         'release_number' => "1.{$i}",
-        'is_version_of' => 'http://solution/1',
+        'og_audience' => 'http://solution/1',
         'field_state' => 'published',
       ]);
       // Release distributions.

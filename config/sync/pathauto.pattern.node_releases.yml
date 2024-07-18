@@ -7,7 +7,7 @@ dependencies:
 id: node_releases
 label: 'Node - releases'
 type: 'canonical_entities:node'
-pattern: '[node:is_version_of:entity:url:path]/release/[node:release_number]'
+pattern: '[node:og_audience:entity:url:path]/release/[node:release_number]'
 selection_criteria:
   47b8c34a-75f8-499b-88d2-aa72b73e3ebc:
     id: 'entity_bundle:node'

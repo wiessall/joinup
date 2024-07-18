@@ -47,7 +47,7 @@ class GroupTokensTest extends JoinupExistingSiteTestBase {
 
     $release = $this->createNode([
       'type' => 'release',
-      'is_version_of' => $solution->id(),
+      'og_audience' => $solution->id(),
       'distribution' => $release_distribution->id(),
     ]);
 

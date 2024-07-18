@@ -111,7 +111,7 @@ class Solution extends Rdf implements SolutionInterface {
       ->getQuery()
       ->accessCheck(FALSE)
       ->condition('type', 'release')
-      ->condition('is_version_of', $this->id())
+      ->condition('og_audience', $this->id())
       ->sort('created', 'ASC')
       ->execute();
   }
