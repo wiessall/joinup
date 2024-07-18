@@ -116,21 +116,21 @@
         {%- endif -%}
       </div>
       <div class="tile__footer tile__action p-3">
-        <div class="fs-xs text-muted d-flex align-items-center justify-content-between">
-          <div data-joinup-card-stats class="d-flex">
-            {% for data in _extra_data %}
-              <span class="d-flex align-items-center me-2">
-                {% if data.icon is defined and data.icon is not empty %}
-                  <svg class="bi icon--xs me-1">
-                    <use xlink:href="{{ bcl_icon_path }}#{{ data.icon }}"></use>
-                  </svg>
-                {% endif %}
-                {% if data.label is defined and data.label is not empty %}
-                  {{ data.label }}
-                {% endif %}
-              </span>
-            {% endfor %}
-          </div>
+        <div class="fs-xs text-muted d-flex align-items-center">
+
+        {% for data in _extra_data %}
+          <span class="d-flex align-items-center me-2">
+            {% if data.icon is defined and data.icon is not empty %}
+              <svg class="bi icon--xs me-1">
+                <use xlink:href="{{ bcl_icon_path }}#{{ data.icon }}"></use>
+              </svg>
+            {% endif %}
+            {% if data.label is defined and data.label is not empty %}
+              {{ data.label }}
+            {% endif %}
+          </span>
+        {% endfor %}
+
           <span class="d-flex align-items-center ms-3">
             <div class="tile__bundle-icon d-flex align-items-center justify-content-center rounded-pill me-1">
               <svg class="bi icon--xs text-warning">
