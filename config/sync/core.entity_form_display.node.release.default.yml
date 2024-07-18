@@ -133,8 +133,8 @@ content:
     settings: {  }
     third_party_settings: {  }
 hidden:
-  og_audience: true
   langcode: true
+  og_audience: true
   path: true
   promote: true
   published_at: true

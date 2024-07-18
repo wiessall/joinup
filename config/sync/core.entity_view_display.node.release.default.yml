@@ -89,10 +89,10 @@ content:
     region: content
 hidden:
   field_keywords: true
-  og_audience: true
   langcode: true
   language: true
   links: true
+  og_audience: true
   process_status: true
   published_at: true
   release_number: true
