@@ -10,7 +10,6 @@ use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
 use Drupal\joinup\Traits\EntityReferenceTrait;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\FileTrait;
-use Drupal\joinup\Traits\RdfEntityTrait;
 use Drupal\joinup\Traits\SearchTrait;
 
 /**
@@ -22,7 +21,6 @@ class ReleaseContext extends RawDrupalContext {
   use EntityTrait;
   use FileTrait;
   use SearchTrait;
-  use RdfEntityTrait;
 
   /**
    * Navigates to the canonical page display of a release.
