@@ -116,22 +116,38 @@
         {%- endif -%}
       </div>
       <div class="tile__footer tile__action p-3">
-        <div data-joinup-card-stats class="fs-xs text-muted d-flex align-items-center">
+        <div class="fs-xs text-muted d-flex flex-wrap align-items-center justify-content-between">
 
-        {% for data in _extra_data %}
+        <div data-joinup-card-stats class="d-flex align-items-center">
+        {% for key,data in _extra_data %}
+          {% if key != 'flag_interoperability' %}
+            <span class="d-flex align-items-center me-2">
+              {% if data.icon is defined and data.icon is not empty %}
+                <svg class="bi icon--xs me-1">
+                  <use xlink:href="{{ bcl_icon_path }}#{{ data.icon }}"></use>
+                </svg>
+              {% endif %}
+              {% if data.label is defined and data.label is not empty %}
+                {{ data.label }}
+              {% endif %}
+            </span>
+          {% endif %}
+        {% endfor %}
+        </div>
+        <div class="d-flex">
+        {% if _extra_data['flag_interoperability'] is defined and _extra_data['flag_interoperability'] is not empty %}
           <span class="d-flex align-items-center me-2">
-            {% if data.icon is defined and data.icon is not empty %}
+            {% if _extra_data['flag_interoperability'].icon is defined and _extra_data['flag_interoperability'].icon is not empty %}
               <svg class="bi icon--xs me-1">
-                <use xlink:href="{{ bcl_icon_path }}#{{ data.icon }}"></use>
+                <use xlink:href="{{ bcl_icon_path }}#{{ _extra_data['flag_interoperability'].icon }}"></use>
               </svg>
             {% endif %}
-            {% if data.label is defined and data.label is not empty %}
-              {{ data.label }}
+            {% if _extra_data['flag_interoperability'].label is defined and _extra_data['flag_interoperability'].label is not empty %}
+              {{ _extra_data['flag_interoperability'].label }}
             {% endif %}
           </span>
-        {% endfor %}
-
-          <span class="d-flex align-items-center ms-3">
+        {% endif %}
+          <span class="d-flex align-items-center me-2">
             <div class="tile__bundle-icon d-flex align-items-center justify-content-center rounded-pill me-1">
               <svg class="bi icon--xs text-warning">
                 <use xlink:href="{{ bcl_icon_path }}#{{ bundle.icon }}"></use>
