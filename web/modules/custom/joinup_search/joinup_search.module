@@ -15,10 +15,10 @@ use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Template\Attribute;
+use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\search_api\IndexInterface;
 use Drupal\search_api\Query\ConditionGroupInterface;
 use Drupal\views\ViewExecutable;
-use Drupal\joinup_group\Entity\GroupInterface;
 
 /**
  * Implements hook_theme().
@@ -261,7 +261,7 @@ function joinup_search_entity_prepare_view(string $entity_type_id, array $entiti
     // not narrowing the results, and we are altering the query as well, we need
     // to also dynamically hide the facet when the 'show_archived' option is set
     // to anything else than 'all' - because it will not hide automatically.
-    else if ($entity->{$field}->value['show_archived'] !== 'all') {
+    elseif ($entity->{$field}->value['show_archived'] !== 'all') {
       $value = $entity->{$field}->getValue();
       $value[0]['value']['fields'][$facet]['region'] = 'hidden';
       $entity->{$field}->setValue($value);
