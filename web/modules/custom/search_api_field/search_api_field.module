@@ -13,6 +13,7 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\custom_page\Entity\CustomPageInterface;
 use Drupal\field\Entity\FieldConfig;
+use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\paragraphs\ParagraphInterface;
 
 /**
@@ -125,7 +126,8 @@ function search_api_field_entity_view(array &$build, EntityInterface $entity, En
               'field_is_content_status',
             ])
             || (
-              $settings['show_archived'] === 'all'
+              !($entity instanceof GroupInterface && $entity->isArchived())
+              && $settings['show_archived'] === 'all'
               && $archived_items
               && $archived_items > 0
             )
