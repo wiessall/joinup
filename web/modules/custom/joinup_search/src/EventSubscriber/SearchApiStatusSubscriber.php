@@ -6,7 +6,6 @@ namespace Drupal\joinup_search\EventSubscriber;
 
 use Drupal\facets\FacetInterface;
 use Drupal\facets\FacetManager\DefaultFacetManager;
-use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\paragraphs\ParagraphInterface;
 use Drupal\search_api\Event\QueryPreExecuteEvent;
 use Drupal\search_api\Event\SearchApiEvents;
@@ -71,11 +70,6 @@ class SearchApiStatusSubscriber implements EventSubscriberInterface {
 
     $query = $event->getQuery();
     if (!($query->getSearchId() !== 'paragraph.content_listing.content_listing')) {
-      return;
-    }
-
-    $entity = $query->getOption('search_api_field entity');
-    if ($entity instanceof GroupInterface && $entity->isArchived()) {
       return;
     }
 
