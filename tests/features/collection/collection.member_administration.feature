@@ -278,6 +278,7 @@ Feature: Collection membership administration
     Given the option with text "Member" from select "Role" is selected
     When I press "Add members"
     Then I should see the success message "Successfully added the role Member to the selected users."
+    And Log entry with the message "Successfully added the role Member to the selected users." should exist.
     And I should see the link "Jeannette Belanger"
     And I should see the link "Gregory House"
     But I should not see the link "Donald Duck"
@@ -291,6 +292,7 @@ Feature: Collection membership administration
     When I select "Facilitator" from "Role"
     And I press "Add members"
     Then I should see the success message "Successfully added the role Collection facilitator to the selected users."
+    And Log entry with the message "Successfully added the role Collection facilitator to the selected users." should exist.
     And I should see the link "Christian Dwight"
 
     # Try new privileges.
@@ -441,6 +443,7 @@ Feature: Collection membership administration
     And I pick "Donald Duck (Donald Duck)" from the "Link" autocomplete suggestions
     And I press "Invite members"
     Then I should see the success message "1 user has been invited to this group."
+    And Log entry with the message "1 user has been invited to this group." should exist.
 
     When I click "Add members"
     And I type "Turkey" in the "Name" autocomplete field
@@ -457,3 +460,4 @@ Feature: Collection membership administration
       | Turkey Ham |
     And I press "Add members"
     Then I should see the success message "Successfully added the role Member to the selected users."
+    And Log entry with the message "Successfully added the role Member to the selected users." should exist.
