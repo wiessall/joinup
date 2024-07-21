@@ -37,7 +37,7 @@ class AddToGroupForm extends GroupFormBase {
   /**
    * {@inheritdoc}
    */
-  public function submitForm(array &$form, FormStateInterface $form_state) {
+  public function submitForm(array &$form, FormStateInterface $form_state): void {
     $role_id = implode('-', [
       $this->entity->getEntityTypeId(),
       $this->entity->bundle(),

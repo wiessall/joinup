@@ -55,6 +55,7 @@ Feature: As a group (collection or solution) owner or site moderator
 
     When I press "Confirm"
     Then I should see "Ownership of <title> <type> transferred from users Finnur Robertsson, Edda Agnarsdóttir to Ásdís Sigurðsdóttir."
+    And Log entry with the message "Ownership of <title> <type> transferred from users Finnur Robertsson, Edda Agnarsdóttir to Ásdís Sigurðsdóttir." should exist.
     And I should see the text "<type capitalized> owner" in the "shy" row
     # Because the 'happy' user is granted with the site-wide permission
     # ('administer {group} ownership'), he is not dependent on the ownership
@@ -139,6 +140,7 @@ Feature: As a group (collection or solution) owner or site moderator
     Then I should see "Are you sure you want to transfer the ownership of <title> <group type> to Freyja Stefánsdóttir?"
     When I press "Confirm"
     Then I should see "Ownership of <title> <group type> transferred from users Finnur Robertsson, Edda Agnarsdóttir to Freyja Stefánsdóttir."
+    And Log entry with the message "Ownership of <title> <group type> transferred from users Finnur Robertsson, Edda Agnarsdóttir to Freyja Stefánsdóttir." should exist.
     And I should see the text "<type capitalized> owner, <type capitalized> facilitator" in the "loner" row
 
     Examples:

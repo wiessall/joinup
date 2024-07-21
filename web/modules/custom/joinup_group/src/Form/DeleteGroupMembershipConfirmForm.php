@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace Drupal\joinup_group\Form;
 
 use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\ConfirmFormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\PluralTranslatableMarkup;
 use Drupal\Core\TempStore\PrivateTempStoreFactory;
@@ -22,54 +24,33 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class DeleteGroupMembershipConfirmForm extends ConfirmFormBase {
 
   /**
-   * The OG access service.
-   *
-   * @var \Drupal\og\OgAccessInterface
-   */
-  protected $ogAccess;
-
-  /**
-   * The user private tempstore.
-   *
-   * @var \Drupal\Core\TempStore\PrivateTempStore
-   */
-  protected $privateTempStore;
-
-  /**
-   * The entity type manager service.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
-
-  /**
    * The group memberships.
-   *
-   * @var \Drupal\og\OgMembershipInterface[]
    */
-  protected $memberships;
+  protected array $memberships;
 
   /**
    * The memberships group entity.
-   *
-   * @var \Drupal\rdf_entity\RdfInterface
    */
-  protected $group;
+  protected RdfInterface $group;
 
   /**
    * Constructs a new form instance.
    *
-   * @param \Drupal\og\OgAccessInterface $og_access
+   * @param \Drupal\og\OgAccessInterface $ogAccess
    *   The OG access service.
-   * @param \Drupal\Core\TempStore\PrivateTempStoreFactory $private_temp_store_factory
+   * @param \Drupal\Core\TempStore\PrivateTempStoreFactory $privateTempStore
    *   The private tempstore factory service.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity type manager service.
+   * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
+   *   The logger channel service.
    */
-  public function __construct(OgAccessInterface $og_access, PrivateTempStoreFactory $private_temp_store_factory, EntityTypeManagerInterface $entity_type_manager) {
-    $this->ogAccess = $og_access;
-    $this->privateTempStore = $private_temp_store_factory->get('joinup_group.og_membership_delete_action');
-    $this->entityTypeManager = $entity_type_manager;
+  public function __construct(
+    protected OgAccessInterface $ogAccess,
+    protected PrivateTempStoreFactory $privateTempStore,
+    protected EntityTypeManagerInterface $entityTypeManager,
+    protected LoggerChannelInterface $logger,
+  ) {
   }
 
   /**
@@ -78,8 +59,9 @@ class DeleteGroupMembershipConfirmForm extends ConfirmFormBase {
   public static function create(ContainerInterface $container): self {
     return new static(
       $container->get('og.access'),
-      $container->get('tempstore.private'),
-      $container->get('entity_type.manager')
+      $container->get('tempstore.private')->get('joinup_group.og_membership_delete_action'),
+      $container->get('entity_type.manager'),
+      $container->get('monolog.handler.business_handler'),
     );
   }
 
@@ -160,6 +142,7 @@ class DeleteGroupMembershipConfirmForm extends ConfirmFormBase {
     $storage = $this->entityTypeManager->getStorage('og_membership');
     $storage->delete($memberships);
     $this->messenger()->addStatus($message);
+    $this->logger->info($message);
   }
 
   /**
@@ -188,10 +171,10 @@ class DeleteGroupMembershipConfirmForm extends ConfirmFormBase {
    * @param \Drupal\Core\Session\AccountInterface $account
    *   The account for which to check access.
    *
-   * @return \Drupal\Core\Access\AccessResult
+   * @return \Drupal\Core\Access\AccessResultInterface
    *   The access result.
    */
-  public function access(AccountInterface $account) {
+  public function access(AccountInterface $account): AccessResultInterface {
     if ($account->isAnonymous()) {
       return AccessResult::forbidden('Anonymous');
     }

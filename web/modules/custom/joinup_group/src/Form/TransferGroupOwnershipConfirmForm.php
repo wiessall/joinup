@@ -9,7 +9,7 @@ use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Action\ActionManager;
 use Drupal\Core\Form\ConfirmFormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Messenger\MessengerInterface;
+use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\TempStore\PrivateTempStoreFactory;
@@ -25,80 +25,43 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class TransferGroupOwnershipConfirmForm extends ConfirmFormBase {
 
   /**
-   * The current user service.
-   *
-   * @var \Drupal\Core\Session\AccountInterface
-   */
-  protected $currentUser;
-
-  /**
-   * The renderer service.
-   *
-   * @var \Drupal\Core\Render\RendererInterface
-   */
-  protected $renderer;
-
-  /**
-   * The action plugin manager.
-   *
-   * @var \Drupal\Core\Action\ActionManager
-   */
-  protected $actionPluginManager;
-
-  /**
-   * The OG membership manager.
-   *
-   * @var \Drupal\og\MembershipManagerInterface
-   */
-  protected $membershipManager;
-
-  /**
    * The user private tempstore.
-   *
-   * @var \Drupal\Core\TempStore\PrivateTempStoreFactory
    */
-  protected $tempStore;
+  protected PrivateTempStoreFactory $tempStore;
 
   /**
    * The membership of the user that receives the ownership.
-   *
-   * @var \Drupal\og\OgMembershipInterface|null
    */
-  protected $membership = NULL;
-
-  /**
-   * The messenger service.
-   *
-   * @var \Drupal\Core\Messenger\MessengerInterface
-   */
-  protected $messenger;
+  protected OgMembershipInterface|null $membership = NULL;
 
   /**
    * Constructs a new confirmation form object.
    *
-   * @param \Drupal\Core\Session\AccountInterface $current_user
+   * @param \Drupal\Core\Session\AccountInterface $currentUser
    *   The current user.
    * @param \Drupal\Core\Render\RendererInterface $renderer
    *   The renderer service.
-   * @param \Drupal\Core\Action\ActionManager $action_plugin_manager
+   * @param \Drupal\Core\Action\ActionManager $actionPluginManager
    *   The action plugin manager.
-   * @param \Drupal\og\MembershipManagerInterface $membership_manager
+   * @param \Drupal\og\MembershipManagerInterface $membershipManager
    *   The OG membership manager.
-   * @param \Drupal\Core\TempStore\PrivateTempStoreFactory $temp_store_factory
+   * @param \Drupal\Core\TempStore\PrivateTempStoreFactory $tempStoreFactory
    *   The tempstore factory.
-   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
-   *   The messenger service.
+   * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
+   *   The logger channel service.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    *   If the entity storage of 'og_membership' is not found.
    */
-  public function __construct(AccountInterface $current_user, RendererInterface $renderer, ActionManager $action_plugin_manager, MembershipManagerInterface $membership_manager, PrivateTempStoreFactory $temp_store_factory, MessengerInterface $messenger) {
-    $this->currentUser = $current_user;
-    $this->renderer = $renderer;
-    $this->actionPluginManager = $action_plugin_manager;
-    $this->membershipManager = $membership_manager;
-    $this->tempStore = $temp_store_factory->get('joinup_transfer_group_ownership');
-    $this->messenger = $messenger;
+  public function __construct(
+    protected AccountInterface $currentUser,
+    protected RendererInterface $renderer,
+    protected ActionManager $actionPluginManager,
+    protected MembershipManagerInterface $membershipManager,
+    protected PrivateTempStoreFactory $tempStoreFactory,
+    protected LoggerChannelInterface $logger,
+  ) {
+    $this->tempStore = $tempStoreFactory->get('joinup_transfer_group_ownership');
 
     if ($data = $this->tempStore->get($this->currentUser->id())) {
       if (!$this->membership = OgMembership::load($data['membership'])) {
@@ -117,7 +80,7 @@ class TransferGroupOwnershipConfirmForm extends ConfirmFormBase {
       $container->get('plugin.manager.action'),
       $container->get('og.membership_manager'),
       $container->get('tempstore.private'),
-      $container->get('messenger')
+      $container->get('monolog.handler.business_handler')
     );
   }
 
@@ -255,6 +218,7 @@ class TransferGroupOwnershipConfirmForm extends ConfirmFormBase {
     else {
       $message = $this->t('Ownership of %group @label granted to %user.', $args);
     }
+    $this->logger->info($message);
     $this->messenger->addStatus($message);
   }
 
