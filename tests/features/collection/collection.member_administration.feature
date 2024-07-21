@@ -176,6 +176,7 @@ Feature: Collection membership administration
 
     Given I press "Confirm"
     Then I should see the success message "The following members were removed from the 'Medical diagnosis' collection: Gregory House, Turkey Ham"
+    And Log entry with the message "The following members were removed from the 'Medical diagnosis' collection: Gregory House, Turkey Ham" should exist.
     And I should see "Lisa Cuddy" in the "Lisa Cuddy" row
 
     # Check new privileges.

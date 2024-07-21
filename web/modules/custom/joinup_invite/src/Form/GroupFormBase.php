@@ -33,6 +33,8 @@ abstract class GroupFormBase extends InviteFormBase {
    *   The invitation message helper service.
    * @param \Drupal\og\MembershipManagerInterface $ogMembershipManager
    *   The og membership manager service.
+   * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
+   *   The logger channel service.
    */
   public function __construct(
     EntityTypeManagerInterface $entityTypeManager,
