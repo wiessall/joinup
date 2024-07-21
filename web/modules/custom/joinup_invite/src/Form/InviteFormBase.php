@@ -6,10 +6,12 @@ namespace Drupal\joinup_invite\Form;
 
 use Drupal\Component\Utility\Html;
 use Drupal\Component\Utility\NestedArray;
+use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
 use Drupal\joinup_invite\Entity\Invitation;
@@ -26,45 +28,33 @@ abstract class InviteFormBase extends FormBase {
 
   /**
    * The value indicating a successful invitation.
-   *
-   * @var string
    */
-  const RESULT_SUCCESS = 'success';
+  const string RESULT_SUCCESS = 'success';
 
   /**
    * The value indicating a failed invitation.
-   *
-   * @var string
    */
-  const RESULT_FAILED = 'failed';
+  const string RESULT_FAILED = 'failed';
 
   /**
    * The value indicating an invitation that has been resent.
-   *
-   * @var string
    */
-  const RESULT_RESENT = 'resent';
+  const string RESULT_RESENT = 'resent';
 
   /**
    * The value indicating an invitation that has been previously accepted.
-   *
-   * @var string
    */
-  const RESULT_ACCEPTED = 'accepted';
+  const string RESULT_ACCEPTED = 'accepted';
 
   /**
    * The value indicating an invitation that has been previously rejected.
-   *
-   * @var string
    */
-  const RESULT_REJECTED = 'rejected';
+  const string RESULT_REJECTED = 'rejected';
 
   /**
    * The severity of the messages displayed to the user, keyed by result type.
-   *
-   * @var string[]
    */
-  const INVITATION_MESSAGE_TYPES = [
+  const array INVITATION_MESSAGE_TYPES = [
     self::RESULT_SUCCESS => 'status',
     self::RESULT_FAILED => 'error',
     self::RESULT_RESENT => 'status',
@@ -74,10 +64,8 @@ abstract class InviteFormBase extends FormBase {
 
   /**
    * The entity related to the invitation.
-   *
-   * @var \Drupal\Core\Entity\ContentEntityInterface
    */
-  protected $entity;
+  protected ContentEntityInterface $entity;
 
   /**
    * Constructs a new InviteFormBase object.
@@ -90,6 +78,7 @@ abstract class InviteFormBase extends FormBase {
   public function __construct(
     protected EntityTypeManagerInterface $entityTypeManager,
     protected InvitationMessageHelperInterface $invitationMessageHelper,
+    protected LoggerChannelInterface $logger,
   ) {
   }
 
@@ -99,7 +88,8 @@ abstract class InviteFormBase extends FormBase {
   public static function create(ContainerInterface $container): self {
     return new static(
       $container->get('entity_type.manager'),
-      $container->get('joinup_invite.invitation_message_helper')
+      $container->get('joinup_invite.invitation_message_helper'),
+      $container->get('monolog.handler.business_handler')
     );
   }
 
@@ -261,7 +251,7 @@ abstract class InviteFormBase extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public function validateForm(array &$form, FormStateInterface $form_state) {
+  public function validateForm(array &$form, FormStateInterface $form_state): void {
     if (empty($form_state->get('user_list'))) {
       $form_state->setError($form, $this->t('Please add at least one user.'));
     }
@@ -270,7 +260,7 @@ abstract class InviteFormBase extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public function submitForm(array &$form, FormStateInterface $form_state) {
+  public function submitForm(array &$form, FormStateInterface $form_state): void {
     $users = $this->getUserList($form_state);
     $results = array_fill_keys(array_keys(static::INVITATION_MESSAGE_TYPES), 0);
 
@@ -429,7 +419,7 @@ abstract class InviteFormBase extends FormBase {
    * @return array
    *   A render array.
    */
-  public function ajaxUpdateUserList(array $form, FormStateInterface $form_state) {
+  public function ajaxUpdateUserList(array $form, FormStateInterface $form_state): array {
     return $form['users'];
   }
 
@@ -444,7 +434,7 @@ abstract class InviteFormBase extends FormBase {
    * @return array
    *   A render array.
    */
-  public function ajaxUpdateForm(array $form, FormStateInterface $form_state) {
+  public function ajaxUpdateForm(array $form, FormStateInterface $form_state): array {
     return $form;
   }
 
