@@ -91,7 +91,7 @@ abstract class InviteFormBase extends FormBase {
     return new static(
       $container->get('entity_type.manager'),
       $container->get('joinup_invite.invitation_message_helper'),
-      $container->get('monolog.handler.business_handler')
+      $container->get('logger.channel.group_membership'),
     );
   }
 

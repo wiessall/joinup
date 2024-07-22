@@ -31,18 +31,18 @@ abstract class GroupFormBase extends InviteFormBase {
    *   The entity type manager service.
    * @param \Drupal\joinup_invite\InvitationMessageHelperInterface $invitationMessageHelper
    *   The invitation message helper service.
-   * @param \Drupal\og\MembershipManagerInterface $ogMembershipManager
-   *   The og membership manager service.
    * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
    *   The logger channel service.
+   * @param \Drupal\og\MembershipManagerInterface $ogMembershipManager
+   *   The og membership manager service.
    */
   public function __construct(
     EntityTypeManagerInterface $entityTypeManager,
     InvitationMessageHelperInterface $invitationMessageHelper,
+    LoggerChannelInterface $logger,
     protected MembershipManagerInterface $ogMembershipManager,
-    protected LoggerChannelInterface $logger,
   ) {
-    parent::__construct($entityTypeManager, $invitationMessageHelper);
+    parent::__construct($entityTypeManager, $invitationMessageHelper, $logger);
   }
 
   /**
@@ -52,8 +52,8 @@ abstract class GroupFormBase extends InviteFormBase {
     return new static(
       $container->get('entity_type.manager'),
       $container->get('joinup_invite.invitation_message_helper'),
+      $container->get('logger.channel.group_membership'),
       $container->get('og.membership_manager'),
-      $container->get('monolog.handler.business_handler')
     );
   }
 
