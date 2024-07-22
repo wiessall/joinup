@@ -118,7 +118,7 @@ class SolutionContentArchiverQueue extends QueueWorkerBase implements ContainerF
 
     $this->accountSwitcher->switchTo($actor);
     try {
-      $this->performOperation($solution, $data['transition'], !empty($data['notifyContactOnly']));
+      $this->performOperation($solution, $data['transition']);
     }
     finally {
       $this->accountSwitcher->switchBack();
@@ -166,14 +166,12 @@ class SolutionContentArchiverQueue extends QueueWorkerBase implements ContainerF
    *   The solution whose sub-contents we want to archive.
    * @param \Drupal\solution\Transition $transition
    *   The transition to apply.
-   * @param bool $notifyContactOnly
-   *   Whether notification should be sent only to contact email.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
-  protected function performOperation(SolutionInterface $solution, Transition $transition, bool $notifyContactOnly): void {
+  protected function performOperation(SolutionInterface $solution, Transition $transition): void {
     foreach ($this->getSolutionGroupContent($solution) as $entity) {
       if (!$entity instanceof ArchivableEntityInterface) {
         // Continue silently.
@@ -231,10 +229,7 @@ class SolutionContentArchiverQueue extends QueueWorkerBase implements ContainerF
     }
 
     if ($transition === Transition::ARCHIVE) {
-      $eventName = $notifyContactOnly
-        ? NotificationEvents::RDF_ENTITY_ARCHIVE_COMPLETED_CONTACT_ONLY
-        : NotificationEvents::RDF_ENTITY_ARCHIVE_COMPLETED;
-      joinup_notification_dispatch_notification('update', $eventName, $solution);
+      joinup_notification_dispatch_notification('update', NotificationEvents::RDF_ENTITY_ARCHIVE_COMPLETED, $solution);
     }
   }
 

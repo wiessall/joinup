@@ -16,7 +16,7 @@ use Drupal\sparql_entity_storage\UriEncoder;
 /**
  * Disable RDF Sync for the deployment.
  */
-function joinup_rdf_deploy_111000(): void {
+function joinup_rdf_deploy_111100(): void {
   \Drupal::getContainer()->get('rdf_sync.synchronizer')->disableSynchronization();
 }
 
@@ -42,7 +42,7 @@ function _joinup_rdf_deploy_flatten_rdf_values(array $data): array {
 /**
  * Migrates published releases and their solutions.
  */
-function joinup_rdf_deploy_111001(array &$sandbox): string {
+function joinup_rdf_deploy_111101(array &$sandbox): string {
   $endpoint = \Drupal::getContainer()->get('sparql.endpoint');
   if (empty($sandbox['releases'])) {
     $query = <<<SPARQL
@@ -206,7 +206,7 @@ SPARQL;
 /**
  * Migrates forward release revisions and unpublished ones, and their solutions.
  */
-function joinup_rdf_deploy_111002(array &$sandbox): string {
+function joinup_rdf_deploy_111102(array &$sandbox): string {
   $endpoint = \Drupal::getContainer()->get('sparql.endpoint');
   if (empty($sandbox['releases'])) {
     $query = <<<SPARQL
@@ -299,7 +299,7 @@ SPARQL;
 /**
  * Clean up the search index.
  */
-function joinup_rdf_deploy_111003(): string {
+function joinup_rdf_deploy_111103(): string {
   /** @var \Drupal\search_api\Entity\Index $index */
   $index = Index::load('published');
   $results = $index->query()->addCondition('entity_bundle', 'asset_release')->execute();
@@ -317,7 +317,7 @@ function joinup_rdf_deploy_111003(): string {
 /**
  * Clean the asset release graph.
  */
-function joinup_rdf_deploy_111004(): void {
+function joinup_rdf_deploy_111104(): void {
   $endpoint = \Drupal::getContainer()->get('sparql.endpoint');
   $endpoint->query('CLEAR GRAPH <http://joinup.eu/asset_release/published>');
   $endpoint->query('CLEAR GRAPH <http://joinup.eu/asset_release/draft>');
