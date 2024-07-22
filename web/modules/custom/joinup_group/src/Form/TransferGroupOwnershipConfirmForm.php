@@ -12,6 +12,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\TempStore\PrivateTempStore;
 use Drupal\Core\TempStore\PrivateTempStoreFactory;
 use Drupal\og\Entity\OgMembership;
 use Drupal\og\Entity\OgRole;
@@ -27,7 +28,7 @@ class TransferGroupOwnershipConfirmForm extends ConfirmFormBase {
   /**
    * The user private tempstore.
    */
-  protected PrivateTempStoreFactory $tempStore;
+  protected PrivateTempStore $tempStore;
 
   /**
    * The membership of the user that receives the ownership.
@@ -214,13 +215,12 @@ class TransferGroupOwnershipConfirmForm extends ConfirmFormBase {
         'Ownership of %group @label transferred from users @users to %user.',
         $args
       );
-      $logger = strip_tags($message->render());
     }
     else {
-      $logger = $message = $this->t('Ownership of %group @label granted to %user.', $args);
+      $message = $this->t('Ownership of %group @label granted to %user.', $args);
     }
-    $this->messenger->addStatus($message);
-    $this->logger->info($logger);
+    $this->messenger()->addStatus($message);
+    $this->logger->info($former_owners ? strip_tags($message->render()) : $message);
   }
 
   /**
