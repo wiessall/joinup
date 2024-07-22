@@ -12,6 +12,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\PluralTranslatableMarkup;
+use Drupal\Core\TempStore\PrivateTempStore;
 use Drupal\Core\TempStore\PrivateTempStoreFactory;
 use Drupal\og\OgAccessInterface;
 use Drupal\og\OgMembershipInterface;
@@ -22,6 +23,11 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * Provides a confirmation form for deleting group memberships.
  */
 class DeleteGroupMembershipConfirmForm extends ConfirmFormBase {
+
+  /**
+   * The user private tempstore.
+   */
+  protected PrivateTempStore $privateTempStore;
 
   /**
    * The group memberships.
@@ -38,7 +44,7 @@ class DeleteGroupMembershipConfirmForm extends ConfirmFormBase {
    *
    * @param \Drupal\og\OgAccessInterface $ogAccess
    *   The OG access service.
-   * @param \Drupal\Core\TempStore\PrivateTempStoreFactory $privateTempStore
+   * @param \Drupal\Core\TempStore\PrivateTempStoreFactory $privateTempStoreFactory
    *   The private tempstore factory service.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity type manager service.
@@ -47,10 +53,11 @@ class DeleteGroupMembershipConfirmForm extends ConfirmFormBase {
    */
   public function __construct(
     protected OgAccessInterface $ogAccess,
-    protected PrivateTempStoreFactory $privateTempStore,
+    protected PrivateTempStoreFactory $privateTempStoreFactory,
     protected EntityTypeManagerInterface $entityTypeManager,
     protected LoggerChannelInterface $logger,
   ) {
+    $this->privateTempStore = $privateTempStoreFactory->get('joinup_group.og_membership_delete_action');
   }
 
   /**
@@ -59,9 +66,9 @@ class DeleteGroupMembershipConfirmForm extends ConfirmFormBase {
   public static function create(ContainerInterface $container): self {
     return new static(
       $container->get('og.access'),
-      $container->get('tempstore.private')->get('joinup_group.og_membership_delete_action'),
+      $container->get('tempstore.private'),
       $container->get('entity_type.manager'),
-      $container->get('monolog.handler.business_handler'),
+      $container->get('logger.channel.group_membership'),
     );
   }
 
@@ -142,7 +149,7 @@ class DeleteGroupMembershipConfirmForm extends ConfirmFormBase {
     $storage = $this->entityTypeManager->getStorage('og_membership');
     $storage->delete($memberships);
     $this->messenger()->addStatus($message);
-    $this->logger->info($message);
+    $this->logger->info(strip_tags($message->render()));
   }
 
   /**

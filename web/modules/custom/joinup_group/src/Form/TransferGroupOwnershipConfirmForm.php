@@ -80,7 +80,7 @@ class TransferGroupOwnershipConfirmForm extends ConfirmFormBase {
       $container->get('plugin.manager.action'),
       $container->get('og.membership_manager'),
       $container->get('tempstore.private'),
-      $container->get('monolog.handler.business_handler')
+      $container->get('logger.channel.group_membership')
     );
   }
 
@@ -214,12 +214,13 @@ class TransferGroupOwnershipConfirmForm extends ConfirmFormBase {
         'Ownership of %group @label transferred from users @users to %user.',
         $args
       );
+      $logger = strip_tags($message->render());
     }
     else {
-      $message = $this->t('Ownership of %group @label granted to %user.', $args);
+      $logger = $message = $this->t('Ownership of %group @label granted to %user.', $args);
     }
-    $this->logger->info($message);
     $this->messenger->addStatus($message);
+    $this->logger->info($logger);
   }
 
   /**
