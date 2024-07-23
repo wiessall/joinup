@@ -58,7 +58,7 @@ class BusinessHandler extends AbstractProcessingHandler implements DestructableI
           'message' => $record->message,
           'severity' => $record->level->value,
           'uid' => $record->extra['uid'],
-          'actor' => $record->extra['actor'] && NULL,
+          'actor' => $this->getActor($record),
           'location' => $record->extra['request_uri'],
           'referer' => $record->extra['referer'],
           'hostname' => $record->extra['ip'],
@@ -66,6 +66,20 @@ class BusinessHandler extends AbstractProcessingHandler implements DestructableI
         ]
       )->save();
     }
+  }
+
+  /**
+   * Retrieves the actor from a log record.
+   *
+   * @param LogRecord $record
+   *   The log record.
+   *
+   * @return int|null
+   *   The actor.
+   */
+  protected function getActor(LogRecord $record): ?int {
+    $actor = $record->context['actor'] ?? NULL;
+    return is_numeric($actor) ? (int) $actor : NULL;
   }
 
 }
