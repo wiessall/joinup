@@ -104,7 +104,6 @@ class JoinupLogEntityTest extends KernelTestBase {
     $values = $values + [
       'type'        => 'custom',
       'message'     => 'Joinup log test log message',
-      'variables'   => [],
       'severity'    => RfcLogLevel::NOTICE,
       'uid'         => $user->id(),
       'location'    => $base_root . \Drupal::request()->getRequestUri(),

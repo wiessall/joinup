@@ -18,42 +18,6 @@ class JoinupLogViewsData extends EntityViewsData {
     $data = parent::getViewsData();
     $base_table = $this->entityType->getBaseTable() ?: $this->entityType->id();
 
-    $data[$base_table]['message'] = [
-      'title' => $this->t('Message'),
-      'help' => $this->t('The actual message of the log entry.'),
-      'field' => [
-        // Reuse dblog_message views field plugin.
-        'id' => 'dblog_message',
-      ],
-      'argument' => [
-        'id' => 'string',
-      ],
-      'filter' => [
-        'id' => 'string',
-      ],
-      'sort' => [
-        'id' => 'standard',
-      ],
-    ];
-
-    $data[$base_table]['variables'] = [
-      'title' => $this->t('Variables'),
-      'help' => $this->t('The variables of the log entry in a serialized format.'),
-      'field' => [
-        'id' => 'serialized',
-        'click sortable' => FALSE,
-      ],
-      'argument' => [
-        'id' => 'string',
-      ],
-      'filter' => [
-        'id' => 'string',
-      ],
-      'sort' => [
-        'id' => 'standard',
-      ],
-    ];
-
     $data[$base_table]['severity'] = [
       'title' => $this->t('Severity level'),
       'help' => $this->t('The severity level of the event; ranges from 0 (Emergency) to 7 (Debug).'),
