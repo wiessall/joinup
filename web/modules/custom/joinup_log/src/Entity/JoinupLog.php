@@ -48,7 +48,15 @@ final class JoinupLog extends ContentEntityBase implements JoinupLogInterface {
   public static function baseFieldDefinitions(EntityTypeInterface $entity_type): array {
     $fields = parent::baseFieldDefinitions($entity_type);
     $fields += static::ownerBaseFieldDefinitions($entity_type);
-    $fields['uid']->setRequired(TRUE);
+    $fields['uid']->setRequired(TRUE)
+      ->setDescription(t('The user that triggered the logging'));
+
+    $fields['actor'] = BaseFieldDefinition::create('entity_reference')
+      ->setLabel(new TranslatableMarkup('Actor'))
+      ->setDescription(t('The user which is the subject of the event'))
+      ->setRequired(FALSE)
+      ->setTranslatable(FALSE)
+      ->setSetting('target_type', 'user');
 
     $fields['group'] = BaseFieldDefinition::create('entity_reference')
       ->setLabel(t('Group'))
