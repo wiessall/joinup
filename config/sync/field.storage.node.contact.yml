@@ -1,0 +1,19 @@
+uuid: 007e2bbf-2efc-4f3e-ab0e-cb8172cc88fd
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.contact
+field_name: contact
+entity_type: node
+type: entity_reference
+settings:
+  target_type: node
+module: core
+locked: false
+cardinality: -1
+translatable: false
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

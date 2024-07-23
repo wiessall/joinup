@@ -1,0 +1,11 @@
+uuid: 7e904d92-3d29-45f5-898c-c2ab7fc03ebc
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.group_header
+label: 'Group header'
+description: ''
+targetEntityType: node
+cache: true

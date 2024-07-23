@@ -1,0 +1,19 @@
+uuid: 96e6455b-16c0-4c4f-8ac2-b85f18d05246
+langcode: en
+status: true
+dependencies:
+  module:
+    - link
+    - node
+id: node.metrics_page
+field_name: metrics_page
+entity_type: node
+type: link
+settings: {  }
+module: link
+locked: false
+cardinality: 1
+translatable: false
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

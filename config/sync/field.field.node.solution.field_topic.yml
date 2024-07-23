@@ -1,0 +1,28 @@
+uuid: 74d07114-ad04-498a-8d34-02582111b99c
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_topic
+    - node.type.solution
+    - taxonomy.vocabulary.topic
+id: node.solution.field_topic
+field_name: field_topic
+entity_type: node
+bundle: solution
+label: Topic
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'grouped_rdf_taxonomy_term_selection:default'
+  handler_settings:
+    target_bundles:
+      topic: topic
+    sort:
+      field: _none
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

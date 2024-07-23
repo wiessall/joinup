@@ -1,0 +1,23 @@
+uuid: 5e3f5fbc-34dd-48a0-954a-1cbbcbf87baa
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.metrics_page
+    - node.type.solution
+  module:
+    - link
+id: node.solution.metrics_page
+field_name: metrics_page
+entity_type: node
+bundle: solution
+label: 'Metrics page'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  title: 0
+  link_type: 16
+field_type: link
