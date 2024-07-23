@@ -1,0 +1,21 @@
+uuid: bd21cc37-13d2-4b9a-9aa4-f8ae038cf7da
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.translation
+    - node.type.solution
+id: node.solution.translation
+field_name: translation
+entity_type: node
+bundle: solution
+label: Translation
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:rdf_entity'
+  handler_settings: {  }
+field_type: entity_reference

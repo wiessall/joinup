@@ -1,0 +1,11 @@
+uuid: 201502da-f725-4f34-b26d-1a7f95c525c9
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.digest_message_header
+label: 'Digest message header'
+description: ''
+targetEntityType: node
+cache: true
