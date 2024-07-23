@@ -75,7 +75,7 @@ interface JoinupLogInterface extends ContentEntityInterface, EntityOwnerInterfac
   /**
    * Returns the entity actor's entity.
    *
-   * @return \Drupal\user\UserInterface|null.
+   * @return \Drupal\user\UserInterface|null
    *   The actor user entity.
    */
   public function getActor(): ?UserInterface;
