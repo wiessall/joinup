@@ -31,45 +31,52 @@ dependencies:
     - field.field.node.solution.spatial_coverage
     - field.field.node.solution.translation
     - node.type.solution
+    - responsive_image.styles.tile
   module:
-    - link
+    - field_fallback_formatter
+    - joinup_html_stripper
+    - responsive_image
+    - template_suggestion
     - user
 id: node.solution.view_mode_tile
 targetEntityType: node
 bundle: solution
 mode: view_mode_tile
 content:
-  distributions:
-    type: entity_reference_entity_view
+  abstract:
+    type: field_fallback_formatter
     label: hidden
     settings:
-      view_mode: default
-      link: false
-    third_party_settings: {  }
+      main_field_formatter_id: string
+      main_field_formatter_settings:
+        link_to_entity: false
+      fallback_field_id: field_is_description
+      fallback_field_formatter_id: joinup_html_stripper_stripped
+      fallback_field_formatter_settings:
+        trim_length: 600
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
+    weight: 1
+    region: content
+  logo:
+    type: responsive_image
+    label: hidden
+    settings:
+      responsive_image_style: tile
+      image_link: ''
+      image_loading:
+        attribute: lazy
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: bare
     weight: 0
     region: content
-  links:
-    settings: {  }
-    third_party_settings: {  }
-    weight: 100
-    region: content
-  report:
-    type: link
-    label: hidden
-    settings:
-      trim_length: 80
-      url_only: false
-      url_plain: false
-      rel: ''
-      target: ''
-    third_party_settings: {  }
-    weight: 50
-    region: content
 hidden:
-  abstract: true
   body: true
   contact: true
   content_creation: true
+  distributions: true
   documentation: true
   field_is_description: true
   field_keywords: true
@@ -79,9 +86,9 @@ hidden:
   landing_page: true
   langcode: true
   language: true
+  links: true
   list_related_entities: true
   listing_content: true
-  logo: true
   metrics_page: true
   node_solution_listing_content_inline_facets: true
   node_solution_listing_content_top: true
@@ -90,6 +97,7 @@ hidden:
   published_at: true
   related_solutions: true
   release_number: true
+  report: true
   search_api_excerpt: true
   shared_in: true
   short_id: true
