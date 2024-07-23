@@ -6,7 +6,6 @@ namespace Drupal\collection\Form;
 
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Component\Utility\Html;
-use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Ajax\AfterCommand;
@@ -23,6 +22,7 @@ use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Path\PathValidatorInterface;
+use Drupal\Core\Routing\LocalAwareRedirectResponseTrait;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
 use Drupal\collection\Entity\CollectionInterface;
@@ -50,6 +50,9 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class SubscribeToCollectionForm extends FormBase {
 
   use MembershipCreateTrait;
+  use LocalAwareRedirectResponseTrait;
+
+  protected const string COC_CHECKBOX_KEY = 'code_of_conduct_agreed';
 
   public function __construct(
     protected EntityTypeManagerInterface $entityTypeManager,
@@ -116,16 +119,13 @@ class SubscribeToCollectionForm extends FormBase {
   protected function getRefererUrl(): ?Url {
     static $originalUrl;
     if (!isset($originalUrl)) {
+      $originalUrl = FALSE;
       $referer = $this->getRequest()->headers->get('referer');
-      if ($referer && UrlHelper::externalIsLocal($referer, $this->getRequest()->getSchemeAndHttpHost())) {
-        $originalUri = parse_url($referer, PHP_URL_PATH);
-        if ($query = parse_url($referer, PHP_URL_QUERY)) {
-          $originalUri .= "?$query";
-        }
-        $originalUrl = $this->pathValidator->getUrlIfValid($originalUri);
-      }
-      else {
-        $originalUrl = FALSE;
+      if ($referer && $this->isLocal($referer)) {
+        $quoted = preg_quote($this->getRequestContext()->getCompleteBaseUrl(), '/');
+        $originalUrl = $this->pathValidator->getUrlIfValid(
+          preg_replace("/^$quoted/", '', $referer)
+        );
       }
     }
 
@@ -151,7 +151,7 @@ class SubscribeToCollectionForm extends FormBase {
       ],
     ];
 
-    $referer = $form_state->getUserInput()['referer'] ?? $this->getRefererUrl()->toString();
+    $referer = $form_state->getUserInput()['referer'] ?? $this->getRefererUrl()?->getInternalPath();
     $form['referer'] = [
       '#type' => 'hidden',
       '#default_value' => $referer,
@@ -161,7 +161,7 @@ class SubscribeToCollectionForm extends FormBase {
     $submit_states = $has_coc
       ? [
         'disabled' => [
-          ':input[name="code_of_conduct_agreed"]' => ['checked' => FALSE],
+          ':input[name="' . static::COC_CHECKBOX_KEY . '"]' => ['checked' => FALSE],
         ],
       ]
       : [];
@@ -219,26 +219,15 @@ class SubscribeToCollectionForm extends FormBase {
       '#states' => $submit_states,
       '#op' => 'subscribe',
     ] + $submit_button_base;
-    if ($this->isAjax()) {
-      $form['actions']['cancel'] = [
-        '#type' => 'button',
-        '#extra_suggestion' => 'light_blue',
-        '#weight' => 10,
-        '#value' => $this->t("Don't subscribe"),
-        '#op' => 'cancel',
-        '#limit_validation_errors' => [],
-        '#ajax' => $submit_button_base['#ajax'],
-      ];
-    }
-    else {
-      $form['actions']['cancel'] = [
-        '#type' => 'link',
-        '#attributes' => ['class' => ['button']],
-        '#url' => Url::fromUserInput($referer),
-        '#weight' => 10,
-        '#title' => $this->t("Don't subscribe"),
-      ];
-    }
+    $form['actions']['cancel'] = [
+      '#type' => 'button',
+      '#extra_suggestion' => 'light_blue',
+      '#weight' => 10,
+      '#value' => $this->t("Don't subscribe"),
+      '#op' => 'cancel',
+      '#executes_submit_callback' => TRUE,
+      '#ajax' => $submit_button_base['#ajax'],
+    ];
 
     if (!$has_coc) {
       return $form;
@@ -286,7 +275,7 @@ class SubscribeToCollectionForm extends FormBase {
         $codeOfConductArgs,
       ),
     ];
-    $codeOfConductComponents['code_of_conduct_agreed'] = [
+    $codeOfConductComponents[static::COC_CHECKBOX_KEY] = [
       '#type' => 'checkbox',
       '#title' => $this->t('I have read and agree to the <a href=:code-of-conduct-url target="_blank">%code-of-conduct-label</a>.', $codeOfConductArgs),
       '#return_value' => $codeOfConduct->getRevisionId(),
@@ -306,13 +295,18 @@ class SubscribeToCollectionForm extends FormBase {
    * {@inheritdoc}
    */
   public function validateForm(array &$form, FormStateInterface $form_state): void {
+    $operation = $form_state->getTriggeringElement()['#op'] ?? NULL;
+    if ($operation === 'cancel') {
+      $form_state->clearErrors();
+      return;
+    }
     parent::validateForm($form, $form_state);
 
     $collection = $this->loadCollection($form_state->getValue('collection_id'));
 
     // The user should be a non-blocked member of the collection.
     $membership = $this->getUserNonBlockedMembership($collection);
-    if (!$membership && !isset($form['code_of_conduct_agreed'])) {
+    if (!$membership && !isset($form[static::COC_CHECKBOX_KEY])) {
       $form_state->setErrorByName('collection', $this->t('Please join the collection before subscribing to it.'));
     }
   }
@@ -322,31 +316,37 @@ class SubscribeToCollectionForm extends FormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state): void {
     $collection = $this->loadCollection($form_state->getValue('collection_id'));
-    $operation = $form_state->getTriggeringElement()['#op'] ?? NULL;
-    $parameters = ['%collection' => $collection->getName()];
-    $codeOfConductHasBeenApproved = !empty($form_state->getValue('code_of_conduct_agreed'));
-
     if (!$this->isAjax()) {
       $referer = $form_state->getValue('referer');
       $form_state->setRedirectUrl(
         $referer
-          ? Url::fromUserInput($referer)
+          ? Url::fromUri('internal:/' . $referer)
           : $collection->toUrl()
       );
     }
+    $operation = $form_state->getTriggeringElement()['#op'] ?? NULL;
+    if ($operation === 'cancel') {
+      return;
+    }
+    $parameters = ['%collection' => $collection->getName()];
+    $codeOfConductHasBeenApproved = !empty($form_state->getValue(static::COC_CHECKBOX_KEY));
 
     $membership = $this->getUserNonBlockedMembership($collection);
-    if (!$membership && $form_state->getValue('code_of_conduct_agreed')) {
+    $noInitialMembership = empty($membership);
+    if ($noInitialMembership && $codeOfConductHasBeenApproved) {
       $state = $collection->isClosed() ? OgMembershipInterface::STATE_PENDING
         : OgMembershipInterface::STATE_ACTIVE;
       $membership = $this->createSaveNewMembership($state, $this->getUser(), $collection);
     }
 
-    if ($operation !== 'subscribe' && $codeOfConductHasBeenApproved) {
+    if ($noInitialMembership && $membership) {
       $message = isset($state) && $state === OgMembershipInterface::STATE_PENDING
         ? $this->t('You will get a notification once your membership at %collection is approved.', $parameters)
         : $this->t('You have been joined to %collection.', $parameters);
       $this->messenger()->addStatus($message);
+    }
+
+    if ($operation !== 'subscribe') {
       return;
     }
 
@@ -359,8 +359,10 @@ class SubscribeToCollectionForm extends FormBase {
         ];
       }
     }
-    $membership->set('announcements', TRUE);
-    $membership->set('subscription_bundles', $subscription_bundles)->save();
+    $membership
+      ->set('announcements', TRUE)
+      ->set('subscription_bundles', $subscription_bundles)
+      ->save();
 
     // Check if the user is pending, so we can adapt the messages for the user.
     $is_pending = !empty($membership) && $membership->isPending();
@@ -384,11 +386,6 @@ class SubscribeToCollectionForm extends FormBase {
    */
   public function confirmSubscription(array &$form, FormStateInterface $form_state): AjaxResponse {
     $response = new AjaxResponse();
-    $operation = $form_state->getTriggeringElement()['#op'] ?? '';
-
-    if ($this->isAjax() && $operation === 'cancel') {
-      $response->addCommand(new CloseModalDialogCommand());
-    }
 
     // Output messages in the page.
     $messages = ['#type' => 'status_messages'];
@@ -404,7 +401,7 @@ class SubscribeToCollectionForm extends FormBase {
       $response->addCommand(new AfterCommand('*[data-drupal-messages-fallback]', $messages));
       $response->addCommand(new InvokeCommand('[name="join_collection_rebuild"]', 'trigger', ['mousedown']));
     }
-    elseif ($this->isAjax()) {
+    else {
       $response->addCommand(new RemoveCommand('#drupal-modal form > [data-drupal-messages], #drupal-modal form > [data-drupal-messages-fallback]'));
       $response->addCommand(new PrependCommand('#drupal-modal form', $messages));
     }
@@ -456,7 +453,7 @@ class SubscribeToCollectionForm extends FormBase {
     $hasCodeOfConductToAccept = $rdf_entity instanceof CollectionInterface && $rdf_entity->hasCodeOfConductToAccept();
     return AccessResult::allowedIf(
       $user->isAuthenticated() &&
-      (!empty($membership) ||  $hasCodeOfConductToAccept)
+      (!empty($membership) || $hasCodeOfConductToAccept)
     );
   }
 
