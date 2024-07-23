@@ -16,6 +16,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\Core\Url;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_core\Event\AjaxCommandEvent;
 use Drupal\joinup_group\Form\JoinGroupFormBase;
@@ -103,9 +104,11 @@ class JoinCollectionForm extends JoinGroupFormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state): void {
     \assert($this->group instanceof CollectionInterface);
-    $form_state->setRedirect(
-      'collection.subscribe_to_collection_form',
-      ['rdf_entity' => $this->group->id()],
+    $form_state->setRedirectUrl(
+      $this->group->toUrl('subscribe')
+        ->setOption('query', [
+          'destination' => Url::fromRoute('<current>')->toString(),
+        ])
     );
 
     if ($this->group->hasCodeOfConductToAccept()) {
