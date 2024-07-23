@@ -31,57 +31,106 @@ dependencies:
     - field.field.node.solution.spatial_coverage
     - field.field.node.solution.translation
     - node.type.solution
+    - responsive_image.styles.highlighted_content
   module:
-    - link
+    - field_delimiter
+    - field_fallback_formatter
+    - field_formatter_range
+    - joinup_html_stripper
+    - joinup_slick
+    - responsive_image
+    - template_suggestion
     - user
 id: node.solution.highlighted
 targetEntityType: node
 bundle: solution
 mode: highlighted
 content:
-  distributions:
-    type: entity_reference_entity_view
+  abstract:
+    type: field_fallback_formatter
+    label: above
+    settings:
+      main_field_formatter_id: string
+      main_field_formatter_settings:
+        link_to_entity: false
+      fallback_field_id: field_is_description
+      fallback_field_formatter_id: joinup_html_stripper_stripped
+      fallback_field_formatter_settings:
+        trim_length: 200
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
+    weight: 2
+    region: content
+  field_topic:
+    type: entity_reference_label
     label: hidden
     settings:
-      view_mode: default
-      link: false
-    third_party_settings: {  }
+      link: true
+    third_party_settings:
+      field_delimiter:
+        delimiter: ''
+      field_formatter_range:
+        order: 0
+        limit: 2
+        offset: 0
+      joinup_slick:
+        preset: ''
+        field_label: true
+        custom_label: ''
+      template_suggestion:
+        template_suggestion: ''
+    weight: 1
+    region: content
+  logo:
+    type: responsive_image
+    label: hidden
+    settings:
+      responsive_image_style: highlighted_content
+      image_link: content
+      image_loading:
+        attribute: lazy
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
     weight: 0
     region: content
-  links:
-    settings: {  }
-    third_party_settings: {  }
-    weight: 100
-    region: content
-  report:
-    type: link
+  solution_type:
+    type: entity_reference_label
     label: hidden
     settings:
-      trim_length: 80
-      url_only: false
-      url_plain: false
-      rel: ''
-      target: ''
-    third_party_settings: {  }
-    weight: 50
+      link: false
+    third_party_settings:
+      field_delimiter:
+        delimiter: ''
+      field_formatter_range:
+        order: 0
+        limit: 1
+        offset: 0
+      joinup_slick:
+        preset: ''
+        field_label: true
+        custom_label: ''
+      template_suggestion:
+        template_suggestion: ''
+    weight: 3
     region: content
 hidden:
-  abstract: true
   body: true
   contact: true
   content_creation: true
+  distributions: true
   documentation: true
   field_is_description: true
   field_keywords: true
   field_state: true
-  field_topic: true
   group_moderation: true
   landing_page: true
   langcode: true
   language: true
+  links: true
   list_related_entities: true
   listing_content: true
-  logo: true
   metrics_page: true
   node_solution_listing_content_inline_facets: true
   node_solution_listing_content_top: true
@@ -90,11 +139,11 @@ hidden:
   published_at: true
   related_solutions: true
   release_number: true
+  report: true
   search_api_excerpt: true
   shared_in: true
   short_id: true
   site_featured: true
-  solution_type: true
   spatial_coverage: true
   translation: true
   uri: true

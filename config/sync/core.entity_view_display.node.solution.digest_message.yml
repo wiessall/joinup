@@ -32,44 +32,51 @@ dependencies:
     - field.field.node.solution.translation
     - node.type.solution
   module:
-    - link
+    - field_fallback_formatter
+    - smart_trim
+    - template_suggestion
     - user
 id: node.solution.digest_message
 targetEntityType: node
 bundle: solution
 mode: digest_message
 content:
-  distributions:
-    type: entity_reference_entity_view
-    label: hidden
+  abstract:
+    type: field_fallback_formatter
+    label: above
     settings:
-      view_mode: default
-      link: false
-    third_party_settings: {  }
+      main_field_formatter_id: string
+      main_field_formatter_settings:
+        link_to_entity: false
+      fallback_field_id: field_is_description
+      fallback_field_formatter_id: smart_trim
+      fallback_field_formatter_settings:
+        trim_length: 200
+        trim_type: chars
+        trim_suffix: ...
+        wrap_output: false
+        wrap_class: trimmed
+        more:
+          display_link: false
+          target_blank: false
+          link_trim_only: false
+          class: more-link
+          text: More
+          aria_label: 'Read more about [node:title]'
+        trim_options:
+          text: true
+          trim_zero: false
+          replace_tokens: false
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
     weight: 0
     region: content
-  links:
-    settings: {  }
-    third_party_settings: {  }
-    weight: 100
-    region: content
-  report:
-    type: link
-    label: hidden
-    settings:
-      trim_length: 80
-      url_only: false
-      url_plain: false
-      rel: ''
-      target: ''
-    third_party_settings: {  }
-    weight: 50
-    region: content
 hidden:
-  abstract: true
   body: true
   contact: true
   content_creation: true
+  distributions: true
   documentation: true
   field_is_description: true
   field_keywords: true
@@ -79,6 +86,7 @@ hidden:
   landing_page: true
   langcode: true
   language: true
+  links: true
   list_related_entities: true
   listing_content: true
   logo: true
@@ -90,6 +98,7 @@ hidden:
   published_at: true
   related_solutions: true
   release_number: true
+  report: true
   search_api_excerpt: true
   shared_in: true
   short_id: true
