@@ -71,7 +71,7 @@ class BusinessHandler extends AbstractProcessingHandler implements DestructableI
   /**
    * Retrieves the actor from a log record.
    *
-   * @param LogRecord $record
+   * @param \Monolog\LogRecord $record
    *   The log record.
    *
    * @return int|null
