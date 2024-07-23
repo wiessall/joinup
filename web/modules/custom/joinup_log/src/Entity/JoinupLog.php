@@ -65,11 +65,31 @@ final class JoinupLog extends ContentEntityBase implements JoinupLogInterface {
       ->setRequired(FALSE)
       ->setSetting('target_type', 'rdf_entity');
 
-    $fields['type'] = BaseFieldDefinition::create('string')
+    $fields['type'] = BaseFieldDefinition::create('list_string')
       ->setLabel(new TranslatableMarkup('Type'))
-      ->setDescription(new TranslatableMarkup('Type of log message, for example "user" or "page not found."'))
-      ->setSetting('max_length', 64)
-      ->setRequired(TRUE);
+      ->setDescription(new TranslatableMarkup('Type of log message'))
+      ->setSettings([
+        'allowed_values' => [
+          'joinup:add_member' => new TranslatableMarkup('Add member'),
+          'joinup:invite_member' => new TranslatableMarkup('Invite Member'),
+          'joinup:add_announcement' => new TranslatableMarkup('Add announcement'),
+          'joinup:add_custom_page' => new TranslatableMarkup('Add custom page'),
+          'joinup:add_solution' => new TranslatableMarkup('Add solution'),
+          'joinup:add_news' => new TranslatableMarkup('Add news'),
+          'joinup:add_discussion' => new TranslatableMarkup('Add discussion'),
+          'joinup:add_document' => new TranslatableMarkup('Add document'),
+          'joinup:add_event' => new TranslatableMarkup('Add event'),
+          'joinup:approve_the_pending_membership' => new TranslatableMarkup('Approve the pending membership'),
+          'joinup:block_membership' => new TranslatableMarkup('Block membership'),
+          'joinup:unblock_membership' => new TranslatableMarkup('Unblock membership'),
+          'joinup:deleted_membership' => new TranslatableMarkup('Deleted membership'),
+          'joinup:add_the_author_role_to_member' => new TranslatableMarkup('Add the author role to member'),
+          'joinup:add_the_facilitator_role_to_member' => new TranslatableMarkup('Add the facilitator role to member'),
+          'joinup:transfer_the_ownership_of_the_collection_to_member' => new TranslatableMarkup('Transfer the ownership of the collection to member'),
+          'joinup:remove_the_facilitator_role_from_member' => new TranslatableMarkup('Remove the facilitator role from member'),
+          'joinup:remove_the_author_role_from_member' => new TranslatableMarkup('Remove the author role from member'),
+        ],
+      ]);
 
     $fields['message'] = BaseFieldDefinition::create('string_long')
       ->setLabel(new TranslatableMarkup('Message'))
