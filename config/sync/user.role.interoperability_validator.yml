@@ -5,7 +5,7 @@ dependencies:
   module:
     - flag
 id: interoperability_validator
-label: 'Interoperability Validator'
+label: 'Interoperability validator'
 weight: -7
 is_admin: null
 permissions:
