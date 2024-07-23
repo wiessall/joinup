@@ -21,7 +21,7 @@ Feature: User role management
       | Moderator                  |
       | Administrator              |
       | Developer                  |
-      | Interoperability Validator |
+      | Interoperability validator |
 
     Given I am logged in as "Rick Rolls"
     And I click "People" in the "Administration toolbar" region
@@ -38,7 +38,7 @@ Feature: User role management
       | Developer                  |
       | Licence manager            |
       | Moderator                  |
-      | Interoperability Validator |
+      | Interoperability validator |
 
   Scenario: Verify options available to the moderator.
     Given I am logged in as "Rick Rolls"
