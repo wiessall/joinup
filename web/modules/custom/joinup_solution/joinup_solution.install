@@ -13,7 +13,7 @@ declare(strict_types=1);
  * Adds some additional security related warnings to the status report:
  * - All solutions should have a collection.
  */
-function solution_requirements($phase) {
+function joinup_solution_requirements(string $phase): array {
   $requirements = [];
 
   if ($phase === 'runtime') {
