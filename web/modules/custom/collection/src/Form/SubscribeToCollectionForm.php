@@ -117,19 +117,14 @@ class SubscribeToCollectionForm extends FormBase {
    *   otherwise.
    */
   protected function getRefererUrl(): ?Url {
-    static $originalUrl;
-    if (!isset($originalUrl)) {
-      $originalUrl = FALSE;
-      $referer = $this->getRequest()->headers->get('referer');
-      if ($referer && $this->isLocal($referer)) {
-        $quoted = preg_quote($this->getRequestContext()->getCompleteBaseUrl(), '/');
-        $originalUrl = $this->pathValidator->getUrlIfValid(
-          preg_replace("/^$quoted/", '', $referer)
-        );
-      }
+    static $redirectUrl;
+    if (!isset($redirectUrl)) {
+      return $redirectUrl = $this->getRequest()->query->has('destination')
+        ? Url::fromUserInput($this->getRequest()->query->get('destination'))
+        : FALSE;
     }
 
-    return $originalUrl instanceof Url ? $originalUrl : NULL;
+    return $redirectUrl instanceof Url ? $redirectUrl : NULL;
   }
 
   /**
@@ -203,9 +198,7 @@ class SubscribeToCollectionForm extends FormBase {
       // @see https://www.drupal.org/project/drupal/issues/2934463
       '#ajax' => [
         'callback' => '::confirmSubscription',
-        'url' => Url::fromRoute('collection.subscribe_to_collection_form', [
-          'rdf_entity' => $rdf_entity->id(),
-        ]),
+        'url' => $rdf_entity->toUrl('subscribe'),
         'options' => [
           'query' => [
             FormBuilderInterface::AJAX_FORM_REQUEST => TRUE,
@@ -453,7 +446,10 @@ class SubscribeToCollectionForm extends FormBase {
     $hasCodeOfConductToAccept = $rdf_entity instanceof CollectionInterface && $rdf_entity->hasCodeOfConductToAccept();
     return AccessResult::allowedIf(
       $user->isAuthenticated() &&
-      (!empty($membership) || $hasCodeOfConductToAccept)
+      (
+        ($hasCodeOfConductToAccept && !$membership) ||
+        (!$hasCodeOfConductToAccept && $membership->get('subscription_bundles')->isEmpty())
+      )
     );
   }
 

@@ -8,7 +8,6 @@ use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\Core\Url;
 use Drupal\cas\Event\CasPostLoginEvent;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
@@ -80,10 +79,12 @@ class JoinGroupSubscriber extends RedirectedEuLoginAuthenticatedSubscriberBase {
       }
       elseif ($group instanceof CollectionInterface && $group->hasCodeOfConductToAccept()) {
         $this->deleteCookie();
-        return Url::fromRoute(
-          'collection.subscribe_to_collection_form',
-          ['rdf_entity' => $group->id()],
-        )->toString();
+        $url = $group->toUrl('subscribe');
+        if ($destination = parent::getRedirectDestination($event)) {
+          $queries = $url->getOption('query') ?: [];
+          $url->setOption('query', ['destination' => $destination] + $queries);
+        }
+        return $url->toString();
       }
       else {
         // Subscribe the user to the group.
