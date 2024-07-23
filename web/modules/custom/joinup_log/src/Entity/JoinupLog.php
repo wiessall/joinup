@@ -11,6 +11,7 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\user\EntityOwnerTrait;
+use Drupal\user\UserInterface;
 
 /**
  * Defines the joinup log entity class.
@@ -172,6 +173,21 @@ final class JoinupLog extends ContentEntityBase implements JoinupLogInterface {
    */
   public function getTimestamp(): int {
     return (int) $this->get('timestamp')->value;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getActor(): ?UserInterface {
+    return $this->get('actor')->entity;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getActorId(): ?int {
+    return $this->get('actor')->isEmpty() ? NULL : (int) $this->get('actor')
+      ->getString();
   }
 
 }
