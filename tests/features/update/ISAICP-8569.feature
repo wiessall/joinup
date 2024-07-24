@@ -1,7 +1,7 @@
 @api @group-clone
 Feature: Test the releases update.
 
-  @update:joinup_rdf_deploy_111001
+  @update:joinup_rdf_deploy_111101
   Scenario: Releases with their fields have migrated correctly.
     And I visit "/collection/common-assessment-method-standards-and-specifications-camss/solution/camss-assessment-prov-family-eif-scenario/release/100"
     Then I should see the text "CAMSS Assessment of PROV Family of documents 1.0.0"
@@ -23,7 +23,7 @@ Feature: Test the releases update.
     Then I should see the text "CAMSS Assessment of DNS - EIF Scenario 3.0.0"
     And I should see the link "Switch to the latest release"
 
-  @update:joinup_rdf_deploy_111002
+  @update:joinup_rdf_deploy_111102
   Scenario: Forward revisions of releases are created correctly.
     When I am logged in as a moderator
     And I visit "/collection/common-assessment-method-standards-and-specifications-camss/solution/camss-assessment-prov-family-eif-scenario/release/100"
