@@ -273,6 +273,9 @@
                 "Warning: Undefined array key @see https://www.drupal.org/project/autologout/issues/3372010": "resources/patch/php/drupal/autologout/3372010.diff",
                 "Users with no roles are logged out @see https://www.drupal.org/project/autologout/issues/3443711": "resources/patch/php/drupal/autologout/3443711.diff"
             },
+            "drupal/cas_mock_server": {
+                "Missing langcode in cas_mock_server.settings @see https://www.drupal.org/i/3463553": "resources/patch/php/drupal/cas_mock_server/3463553.diff"
+            },
             "drupal/colorbox": {
                 "Support Responsive Image module in D8 @see https://drupal.org/i/2808883": "resources/patch/php/drupal/colorbox/colorbox-responsive-image-2808883-69.patch"
             },
