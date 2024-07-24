@@ -12,6 +12,7 @@ use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\user\EntityOwnerTrait;
 use Drupal\user\UserInterface;
+use Drupal\Core\Logger\RfcLogLevel;
 
 /**
  * Defines the joinup log entity class.
@@ -70,26 +71,7 @@ final class JoinupLog extends ContentEntityBase implements JoinupLogInterface {
       ->setLabel(new TranslatableMarkup('Type'))
       ->setDescription(new TranslatableMarkup('Type of log message'))
       ->setSettings([
-        'allowed_values' => [
-          'joinup:add_member' => new TranslatableMarkup('Add member'),
-          'joinup:invite_member' => new TranslatableMarkup('Invite Member'),
-          'joinup:add_announcement' => new TranslatableMarkup('Add announcement'),
-          'joinup:add_custom_page' => new TranslatableMarkup('Add custom page'),
-          'joinup:add_solution' => new TranslatableMarkup('Add solution'),
-          'joinup:add_news' => new TranslatableMarkup('Add news'),
-          'joinup:add_discussion' => new TranslatableMarkup('Add discussion'),
-          'joinup:add_document' => new TranslatableMarkup('Add document'),
-          'joinup:add_event' => new TranslatableMarkup('Add event'),
-          'joinup:approve_the_pending_membership' => new TranslatableMarkup('Approve the pending membership'),
-          'joinup:block_membership' => new TranslatableMarkup('Block membership'),
-          'joinup:unblock_membership' => new TranslatableMarkup('Unblock membership'),
-          'joinup:deleted_membership' => new TranslatableMarkup('Deleted membership'),
-          'joinup:add_the_author_role_to_member' => new TranslatableMarkup('Add the author role to member'),
-          'joinup:add_the_facilitator_role_to_member' => new TranslatableMarkup('Add the facilitator role to member'),
-          'joinup:transfer_the_ownership_of_the_collection_to_member' => new TranslatableMarkup('Transfer the ownership of the collection to member'),
-          'joinup:remove_the_facilitator_role_from_member' => new TranslatableMarkup('Remove the facilitator role from member'),
-          'joinup:remove_the_author_role_from_member' => new TranslatableMarkup('Remove the author role from member'),
-        ],
+        'allowed_values_function' => self::class . '::allowedTypes',
       ]);
 
     $fields['message'] = BaseFieldDefinition::create('string_long')
@@ -97,11 +79,14 @@ final class JoinupLog extends ContentEntityBase implements JoinupLogInterface {
       ->setDescription(new TranslatableMarkup('Text of log message to be passed into the t() function.'))
       ->setRequired(TRUE);
 
-    $fields['severity'] = BaseFieldDefinition::create('integer')
+    $fields['severity'] = BaseFieldDefinition::create('list_integer')
       ->setLabel(new TranslatableMarkup('Severity'))
       ->setDescription(new TranslatableMarkup('The severity level of the event; ranges from 0 (Emergency) to 7 (Debug)'))
       ->setSetting('unsigned', TRUE)
       ->setSetting('size', 'tiny')
+      ->setSettings([
+        'allowed_values' => RfcLogLevel::getLevels(),
+      ])
       ->setRequired(TRUE);
 
     $fields['location'] = BaseFieldDefinition::create('string')
@@ -188,6 +173,35 @@ final class JoinupLog extends ContentEntityBase implements JoinupLogInterface {
   public function getActorId(): ?int {
     return $this->get('actor')->isEmpty() ? NULL : (int) $this->get('actor')
       ->getString();
+  }
+
+  /**
+   * Returns the allowed types.
+   *
+   * @return array
+   *   The allowed types.
+   */
+  public static function allowedTypes(): array {
+    return [
+      'joinup:add_member' => new TranslatableMarkup('Add member'),
+      'joinup:invite_member' => new TranslatableMarkup('Invite Member'),
+      'joinup:add_announcement' => new TranslatableMarkup('Add announcement'),
+      'joinup:add_custom_page' => new TranslatableMarkup('Add custom page'),
+      'joinup:add_solution' => new TranslatableMarkup('Add solution'),
+      'joinup:add_news' => new TranslatableMarkup('Add news'),
+      'joinup:add_discussion' => new TranslatableMarkup('Add discussion'),
+      'joinup:add_document' => new TranslatableMarkup('Add document'),
+      'joinup:add_event' => new TranslatableMarkup('Add event'),
+      'joinup:approve_the_pending_membership' => new TranslatableMarkup('Approve the pending membership'),
+      'joinup:block_membership' => new TranslatableMarkup('Block membership'),
+      'joinup:unblock_membership' => new TranslatableMarkup('Unblock membership'),
+      'joinup:deleted_membership' => new TranslatableMarkup('Deleted membership'),
+      'joinup:add_the_author_role_to_member' => new TranslatableMarkup('Add the author role to member'),
+      'joinup:add_the_facilitator_role_to_member' => new TranslatableMarkup('Add the facilitator role to member'),
+      'joinup:transfer_the_ownership_of_the_collection_to_member' => new TranslatableMarkup('Transfer the ownership of the collection to member'),
+      'joinup:remove_the_facilitator_role_from_member' => new TranslatableMarkup('Remove the facilitator role from member'),
+      'joinup:remove_the_author_role_from_member' => new TranslatableMarkup('Remove the author role from member'),
+    ];
   }
 
 }
