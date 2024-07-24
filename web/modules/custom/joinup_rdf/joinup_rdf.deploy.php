@@ -46,29 +46,29 @@ function joinup_rdf_deploy_111101(array &$sandbox): string {
   $endpoint = \Drupal::getContainer()->get('sparql.endpoint');
   if (empty($sandbox['releases'])) {
     $query = <<<SPARQL
-SELECT DISTINCT ?id
-FROM <http://joinup.eu/asset_release/published>
-WHERE {
-  ?id a ?type .
-}
-SPARQL;
+      SELECT DISTINCT ?id
+      FROM <http://joinup.eu/asset_release/published>
+      WHERE {
+        ?id a ?type .
+      }
+      SPARQL;
     $results = $endpoint->query($query)->getArrayCopy();
     $sandbox['releases']['published'] = array_map(fn(\stdClass $result) => $result->id->getUri(), $results);
     // Also fetch releases from the draft graph, that do not exist in the
     // published graph too - the new releases.
     $query = <<<SPARQL
-SELECT DISTINCT ?id
-FROM <http://joinup.eu/asset_release/published>
-FROM <http://joinup.eu/asset_release/draft>
-WHERE {
-  GRAPH <http://joinup.eu/asset_release/draft> { ?id a ?type } .
-  FILTER NOT EXISTS {
-    GRAPH <http://joinup.eu/asset_release/published> {
-      ?id a ?type .
-    }
-  }
-}
-SPARQL;
+      SELECT DISTINCT ?id
+      FROM <http://joinup.eu/asset_release/published>
+      FROM <http://joinup.eu/asset_release/draft>
+      WHERE {
+        GRAPH <http://joinup.eu/asset_release/draft> { ?id a ?type } .
+        FILTER NOT EXISTS {
+          GRAPH <http://joinup.eu/asset_release/published> {
+            ?id a ?type .
+          }
+        }
+      }
+      SPARQL;
     $results = $endpoint->query($query)->getArrayCopy();
     $sandbox['releases']['draft'] = array_map(fn(\stdClass $result) => $result->id->getUri(), $results);
 
@@ -86,12 +86,12 @@ SPARQL;
   $start = microtime(TRUE);
   foreach ($uris as $uri) {
     $query = <<<SPARQL
-SELECT *
-FROM <http://joinup.eu/asset_release/$source>
-WHERE {
-  <$uri> ?property ?value .
-}
-SPARQL;
+      SELECT *
+      FROM <http://joinup.eu/asset_release/$source>
+      WHERE {
+        <$uri> ?property ?value .
+      }
+      SPARQL;
     $results = $endpoint->query($query)->getArrayCopy();
     $values = _joinup_rdf_deploy_flatten_rdf_values($results);
 
@@ -210,17 +210,17 @@ function joinup_rdf_deploy_111102(array &$sandbox): string {
   $endpoint = \Drupal::getContainer()->get('sparql.endpoint');
   if (empty($sandbox['releases'])) {
     $query = <<<SPARQL
-SELECT DISTINCT ?id
-FROM <http://joinup.eu/asset_release/draft>
-WHERE {
-  GRAPH <http://joinup.eu/asset_release/draft> { ?id a ?type } .
-  FILTER EXISTS {
-    GRAPH <http://joinup.eu/asset_release/published> {
-      ?id a ?type .
-    }
-  }
-}
-SPARQL;
+      SELECT DISTINCT ?id
+      FROM <http://joinup.eu/asset_release/draft>
+      WHERE {
+        GRAPH <http://joinup.eu/asset_release/draft> { ?id a ?type } .
+        FILTER EXISTS {
+          GRAPH <http://joinup.eu/asset_release/published> {
+            ?id a ?type .
+          }
+        }
+      }
+      SPARQL;
 
     $results = $endpoint->query($query)->getArrayCopy();
     $sandbox['releases'] = array_map(fn(\stdClass $result) => $result->id->getUri(), $results);
@@ -235,12 +235,12 @@ SPARQL;
   $start = microtime(TRUE);
   foreach ($uris as $uri) {
     $query = <<<SPARQL
-SELECT *
-FROM <http://joinup.eu/asset_release/draft>
-WHERE {
-  <$uri> ?property ?value .
-}
-SPARQL;
+      SELECT *
+      FROM <http://joinup.eu/asset_release/draft>
+      WHERE {
+        <$uri> ?property ?value .
+      }
+      SPARQL;
     $results = $endpoint->query($query)->getArrayCopy();
     $values = _joinup_rdf_deploy_flatten_rdf_values($results);
 
