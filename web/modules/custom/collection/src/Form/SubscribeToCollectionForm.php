@@ -12,7 +12,6 @@ use Drupal\Core\Ajax\AfterCommand;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\CloseModalDialogCommand;
 use Drupal\Core\Ajax\InvokeCommand;
-use Drupal\Core\Ajax\OpenModalDialogCommand;
 use Drupal\Core\Ajax\PrependCommand;
 use Drupal\Core\Ajax\RemoveCommand;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -28,7 +27,6 @@ use Drupal\Core\Url;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_core\Event\AjaxCommandEvent;
 use Drupal\joinup_group\Entity\GroupInterface;
-use Drupal\joinup_group\EventSubscriber\JoinGroupSubscriber;
 use Drupal\joinup_group\Traits\MembershipCreateTrait;
 use Drupal\joinup_subscription\JoinupSubscriptionsHelper;
 use Drupal\og\MembershipManagerInterface;
@@ -455,72 +453,6 @@ class SubscribeToCollectionForm extends FormBase {
       $user->isAuthenticated() &&
       ($this->getUserNonBlockedMembership($rdf_entity) || $hasCodeOfConductToAccept)
     );
-  }
-
-  /**
-   * Access check for showing the subscribe form after authenticating a user.
-   *
-   * When an anonymous user wants to join a collection they first need to log in
-   * and are then redirected back to the collection homepage so they can opt in
-   * to the notification subscription. The desired collection is tracked in a
-   * cookie. At the moment the user is logged in they will immediately become a
-   * member of the collection but still need to opt in to notifications.
-   *
-   * This validates the following before showing the dialog:
-   * - The cookie keeping track of the collection to join is present.
-   * - The cookie tracks this collection.
-   * - The user is an unblocked member of the collection.
-   *
-   * @param \Drupal\rdf_entity\RdfInterface $rdf_entity
-   *   The collection the user has joined.
-   *
-   * @return \Drupal\Core\Access\AccessResultInterface
-   *   The access result.
-   *
-   * @see \Drupal\joinup_group\EventSubscriber\JoinGroupSubscriber::onLogin()
-   */
-  public function accessToSubscribeDialogAfterAuthenticating(RdfInterface $rdf_entity): AccessResultInterface {
-    $cookie_id = $this->getRequest()->cookies->get(JoinGroupSubscriber::ID_COOKIE_NAME, '');
-    return AccessResult::allowedIf($cookie_id === $rdf_entity->id())
-      ->andIf($this->access($rdf_entity));
-  }
-
-  /**
-   * AJAX callback showing the subscribe form in a modal dialog.
-   *
-   * This is shown in response to a cookie being present which was set when the
-   * user expressed their desire to join the collection before they logged in.
-   *
-   * @param \Drupal\rdf_entity\RdfInterface $rdf_entity
-   *   The collection the user has joined.
-   *
-   * @return \Drupal\Core\Ajax\AjaxResponse
-   *   The AJAX response.
-   */
-  public function showSubscribeDialog(GroupInterface $rdf_entity): AjaxResponse {
-    $modal_form = $this->formBuilder->getForm(SubscribeToCollectionForm::class, $rdf_entity);
-    $modal_form['#attached']['library'][] = 'core/drupal.dialog.ajax';
-
-    $response = new AjaxResponse();
-    // Allow modules to alter or replace the Ajax command.
-    $event = new AjaxCommandEvent(new OpenModalDialogCommand(static::title($rdf_entity), $modal_form, [
-      'width' => '500',
-    ]), [
-      'instance' => 'join_collection.subscribe_dialog.open',
-      'content' => $modal_form,
-    ]);
-    $this->eventDispatcher->dispatch($event);
-    $response->addCommand($event->getCommand())->addAttachments($event->getAttachments());
-
-    // This modal should only be shown once, immediately after the user logs in.
-    // Deleting the cookie ensures it will not be shown again.
-    setcookie(JoinGroupSubscriber::ID_COOKIE_NAME, '', $this->time->getRequestTime() - 86400, '/');
-
-    // Ensure the response is not cached, this code needs to run so the cookie
-    // can be deleted.
-    $response->setMaxAge(0);
-
-    return $response;
   }
 
   /**
