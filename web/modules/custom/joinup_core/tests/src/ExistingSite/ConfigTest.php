@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_core\ExistingSite;
 
-use Drupal\Core\Url;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drush\TestTraits\DrushTestTrait;
 
@@ -37,20 +36,11 @@ class ConfigTest extends JoinupExistingSiteTestBase {
    * Tests that configurations passes config_inspector checks.
    */
   public function testInspectConfiguration(): void {
-    try {
-      $this->drush('config:inspect', [], [
-        'only-error' => NULL,
-        'fields' => 'key',
-        'format' => 'csv',
-      ]);
-    }
-    catch (\Throwable $exception) {
-      // This Drush commands doesn't output a consistent JSON, we have to hack
-      // in output trying to extract the list of offended keys.
-      [, $keys] = explode('Key', $this->getOutputRaw());
-      $keys = implode(', ', array_filter(array_map('trim', explode("\n", $keys))));
-      $this->fail("Configuration(s) with errors: $keys. Check " . Url::fromRoute('config_inspector.overview')->setAbsolute()->toString() . ' for details');
-    }
+    $this->drush('config:inspect', [], [
+      'only-error' => NULL,
+      'detail' => NULL,
+      'list-constraints' => NULL,
+    ]);
   }
 
 }
