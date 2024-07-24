@@ -17,8 +17,8 @@ Feature: Solution membership administration
       | Guadalupe Norman |       | guadalupe_norman@example.com | Guadalupe  | Norman      |
       | Marcia Garcia    |       | marcia_garcia@example.com    | Marcia     | Garcia      |
     And the following solutions:
-      | title            | related solutions | description                       | documentation | moderation | logo     | topic      | state     | solution type | owner                | contact information                      |
-      | The Missing Sons |                   | Blazing fast segmentation faults. | text.pdf      | no         | logo.png | Demography | published |               | James Wilson the 2nd | Princeton-Plainsboro Teaching University |
+      | title            | related solutions | description                       | documentation | moderation | logo     | state     | solution type | owner                | contact information                      |
+      | The Missing Sons |                   | Blazing fast segmentation faults. | text.pdf      | no         | logo.png | published |               | James Wilson the 2nd | Princeton-Plainsboro Teaching University |
     And the following solution user memberships:
       | solution         | user             | roles       |
       | The Missing Sons | Guadalupe Norman | facilitator |
