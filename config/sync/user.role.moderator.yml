@@ -65,6 +65,7 @@ label: Moderator
 weight: 3
 is_admin: false
 permissions:
+  - 'access actions log'
   - 'access any webform configuration'
   - 'access compatibility document overview'
   - 'access contact form messages'
