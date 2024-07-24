@@ -841,6 +841,7 @@ display:
             timestamp: timestamp
             severity: severity
             type: type
+            message: message
             name: name
             name_1: name_1
           default: '-1'
@@ -868,6 +869,13 @@ display:
               responsive: ''
             type:
               sortable: true
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            message:
+              sortable: false
               default_sort_order: asc
               align: ''
               separator: ''
