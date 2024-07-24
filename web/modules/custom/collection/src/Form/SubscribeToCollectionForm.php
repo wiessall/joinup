@@ -28,6 +28,7 @@ use Drupal\Core\Url;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_core\Event\AjaxCommandEvent;
 use Drupal\joinup_group\Entity\GroupInterface;
+use Drupal\joinup_group\EventSubscriber\JoinGroupSubscriber;
 use Drupal\joinup_group\Traits\MembershipCreateTrait;
 use Drupal\joinup_subscription\JoinupSubscriptionsHelper;
 use Drupal\og\MembershipManagerInterface;
@@ -110,21 +111,29 @@ class SubscribeToCollectionForm extends FormBase {
   }
 
   /**
-   * Returns the referer URL if form was accessed from an internal route.
+   * Returns the destination path if it is a valid internal route.
    *
-   * @return \Drupal\Core\Url|null
-   *   The referer URL if form was accessed from an internal route, NULL
-   *   otherwise.
+   * @return string|null
+   *   The destination path if exists and valid, NULL otherwise.
    */
-  protected function getRefererUrl(): ?Url {
-    static $redirectUrl;
-    if (!isset($redirectUrl)) {
-      return $redirectUrl = $this->getRequest()->query->has('destination')
-        ? Url::fromUserInput($this->getRequest()->query->get('destination'))
+  protected function getRedirectPath(): ?string {
+    static $redirectPath;
+    if (!isset($redirectPath)) {
+      $request = $this->getRequest();
+      $rawDestination = $request->query->get('destination', '');
+      $destination = preg_replace(
+        '#^' . preg_quote($request->getBasePath(), '#') . '#',
+        '', $rawDestination
+      );
+      $redirectUrl = $destination && ($this->isLocal($destination))
+        ? $this->pathValidator->getUrlIfValid($destination)
+        : FALSE;
+      $redirectPath = $redirectUrl instanceof Url
+        ? $redirectUrl->getInternalPath()
         : FALSE;
     }
 
-    return $redirectUrl instanceof Url ? $redirectUrl : NULL;
+    return $redirectPath ?: NULL;
   }
 
   /**
@@ -146,10 +155,10 @@ class SubscribeToCollectionForm extends FormBase {
       ],
     ];
 
-    $referer = $form_state->getUserInput()['referer'] ?? $this->getRefererUrl()?->getInternalPath();
-    $form['referer'] = [
+    $redirect = $form_state->getUserInput()['redirect'] ?? $this->getRedirectPath();
+    $form['redirect'] = [
       '#type' => 'hidden',
-      '#default_value' => $referer,
+      '#default_value' => $redirect,
     ];
     // Submit buttons (excluding "Cancel") must be disabled unless the checkbox
     // of CoC is checked.
@@ -309,13 +318,16 @@ class SubscribeToCollectionForm extends FormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state): void {
     $collection = $this->loadCollection($form_state->getValue('collection_id'));
+    $idFromCookie = $this->getRequest()->cookies->get(JoinGroupSubscriber::ID_COOKIE_NAME, '');
+    if ($idFromCookie === $collection->id()) {
+      setcookie(JoinGroupSubscriber::ID_COOKIE_NAME, '', $this->time->getRequestTime() - 86400, '/');
+    }
     if (!$this->isAjax()) {
-      $referer = $form_state->getValue('referer');
-      $form_state->setRedirectUrl(
-        $referer
-          ? Url::fromUri('internal:/' . $referer)
-          : $collection->toUrl()
-      );
+      $redirectValue = $form_state->getValue('redirect');
+      $redirect = $redirectValue
+        ? $this->pathValidator->getUrlIfValid($redirectValue)
+        : NULL;
+      $form_state->setRedirectUrl($redirect ?: $collection->toUrl());
     }
     $operation = $form_state->getTriggeringElement()['#op'] ?? NULL;
     if ($operation === 'cancel') {
@@ -476,7 +488,7 @@ class SubscribeToCollectionForm extends FormBase {
    * @see \Drupal\joinup_group\EventSubscriber\JoinGroupSubscriber::onLogin()
    */
   public function accessToSubscribeDialogAfterAuthenticating(RdfInterface $rdf_entity): AccessResultInterface {
-    $cookie_id = $this->getRequest()->cookies->get('join_group', '');
+    $cookie_id = $this->getRequest()->cookies->get(JoinGroupSubscriber::ID_COOKIE_NAME, '');
     return AccessResult::allowedIf($cookie_id === $rdf_entity->id())
       ->andIf($this->access($rdf_entity));
   }
@@ -510,7 +522,7 @@ class SubscribeToCollectionForm extends FormBase {
 
     // This modal should only be shown once, immediately after the user logs in.
     // Deleting the cookie ensures it will not be shown again.
-    setcookie('join_group', '', $this->time->getRequestTime() - 86400, '/');
+    setcookie(JoinGroupSubscriber::ID_COOKIE_NAME, '', $this->time->getRequestTime() - 86400, '/');
 
     // Ensure the response is not cached, this code needs to run so the cookie
     // can be deleted.
