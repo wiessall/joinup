@@ -15,6 +15,14 @@ Feature: SEO for document content.
       | Username          | E-mail                 | First name | Family name |
       | Joinup SEO author | joinup.seo@example.com | Scrapper   | Jedi        |
 
+  Scenario: License RDF entity is correctly created
+    Then the following "http://data" graph triples should exist in the RDF backend:
+      | subject                      | predicate                                       | object                                   |
+      | https://example.com/license1 | http://www.w3.org/2000/01/rdf-schema#label      | Some license                             |
+      | https://example.com/license1 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | http://purl.org/dc/terms/LicenseDocument |
+      | https://example.com/license1 | http://purl.org/dc/terms/type                   | http://purl.org/adms/licence/PD          |
+      | https://example.com/license1 | http://joinup.eu/licence/deprecated             | 0                                        |
+
   Scenario: Basic metatags are attached as JSON schema on the page.
     Given document content:
       | title        | author            | document type | document publication date | changed                   | keywords         | short title | file type | file     | field_paragraphs_body | licence      | state     | collection                     |
