@@ -1,0 +1,81 @@
+diff --git a/core/config/schema/core.data_types.schema.yml b/core/config/schema/core.data_types.schema.yml
+index 3047561ed69cbdf667f05e0901a7abaf6c1f74db..5849124d7f8c4583358ed00b55b9d409c054ef18 100644
+--- a/core/config/schema/core.data_types.schema.yml
++++ b/core/config/schema/core.data_types.schema.yml
+@@ -84,6 +84,16 @@ required_label:
+ plural_label:
+   type: label
+   label: 'Plural variants'
++  constraints:
++    Regex:
++      # Normally, labels cannot contain invisible control characters. In this
++      # particular case, an invisible character (ASCII 3, 0x03) is used to
++      # encode translation information, so carve out an exception for that
++      # only.
++      # @see \Drupal\views\Plugin\views\field\NumericField
++      pattern: '/([^\PC\x03])/u'
++      match: false
++      message: 'Labels are not allowed to span multiple lines or contain control characters.'
+ 
+ # Internal Drupal path
+ path:
+diff --git a/core/modules/config/tests/config_test/config/schema/config_test.schema.yml b/core/modules/config/tests/config_test/config/schema/config_test.schema.yml
+index b0118f6821161dea15b8f573a70fc8f894c8aa5e..aca6378e1856151559d0d8e78654dee29579b556 100644
+--- a/core/modules/config/tests/config_test/config/schema/config_test.schema.yml
++++ b/core/modules/config/tests/config_test/config/schema/config_test.schema.yml
+@@ -293,3 +293,9 @@ config_test.validation:
+       type: string
+       constraints:
+         NotBlank: {}
++
++config_test.with_plural_label:
++  type: config_object
++  mapping:
++    label:
++      type: plural_label
+diff --git a/core/modules/views/config/schema/views.field.schema.yml b/core/modules/views/config/schema/views.field.schema.yml
+index 4a936563b31b6810f14f7887b6cf2178a1430d63..d1c3ce67fa8fcb0e909821e02ea7590161ccd34b 100644
+--- a/core/modules/views/config/schema/views.field.schema.yml
++++ b/core/modules/views/config/schema/views.field.schema.yml
+@@ -119,15 +119,6 @@ views.field.numeric:
+     format_plural_string:
+       type: plural_label
+       label: 'Plural variants'
+-      constraints:
+-        Regex:
+-          # Normally, labels cannot contain invisible control characters. In this particular
+-          # case, an invisible character (ASCII 3, 0x03) is used to encode translation
+-          # information, so carve out an exception for that only.
+-          # @see \Drupal\views\Plugin\views\field\NumericField
+-          pattern: '/([^\PC\x03])/u'
+-          match: false
+-          message: 'Labels are not allowed to span multiple lines or contain control characters.'
+     prefix:
+       type: label
+       label: 'Prefix'
+diff --git a/core/tests/Drupal/KernelTests/Core/Config/SimpleConfigValidationTest.php b/core/tests/Drupal/KernelTests/Core/Config/SimpleConfigValidationTest.php
+index 61e3e2847855cc390d510b5e415fafdc68e560f9..8714db13f5c181a32780133ca86f78c0abdd4bb6 100644
+--- a/core/tests/Drupal/KernelTests/Core/Config/SimpleConfigValidationTest.php
++++ b/core/tests/Drupal/KernelTests/Core/Config/SimpleConfigValidationTest.php
+@@ -18,7 +18,7 @@ class SimpleConfigValidationTest extends KernelTestBase {
+   /**
+    * {@inheritdoc}
+    */
+-  protected static $modules = ['system'];
++  protected static $modules = ['config_test', 'system'];
+ 
+   /**
+    * {@inheritdoc}
+@@ -113,6 +113,12 @@ public static function providerSpecialCharacters(): array {
+       '🤓',
+       NULL,
+     ];
++    $data['plural label'] = [
++      'config_test.with_plural_label',
++      'label',
++      "\x03",
++      NULL,
++    ];
+ 
+     return $data;
+   }
