@@ -11,7 +11,10 @@ use Drupal\joinup_group\Event\GroupReportsEventInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * ActionsLogGroupReportSubscriber class.
+ * Group report subscriber.
+ *
+ * Implements the EventSubscriberInterface for adding
+ * the action log report to group reports.
  */
 class ActionsLogGroupReportSubscriber implements EventSubscriberInterface {
 
