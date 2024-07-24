@@ -738,9 +738,9 @@ class SolutionContext extends RawDrupalContext {
     if (!$language_manager->getLanguage($langcode)) {
       // Temporarily bypass the read only config functionality so that we can
       // enable the language for testing.
-      static::bypassReadOnlyConfig();
+      $this->bypassReadOnlyConfig();
       ConfigurableLanguage::createFromLangcode($langcode)->save();
-      static::restoreReadOnlyConfig();
+      $this->restoreReadOnlyConfig();
     }
   }
 
