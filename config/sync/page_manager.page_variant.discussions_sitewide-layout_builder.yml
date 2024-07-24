@@ -15,7 +15,7 @@ weight: 0
 variant: layout_builder
 variant_settings:
   id: layout_builder
-  label: null
+  label: Forum
   weight: 0
   uuid: 441b33a3-08fe-4ed3-9054-942ec7163084
   sections:
