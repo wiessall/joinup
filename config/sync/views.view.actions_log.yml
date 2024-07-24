@@ -391,7 +391,7 @@ display:
         type: basic
         options:
           submit_button: Apply
-          reset_button: false
+          reset_button: true
           reset_button_label: Reset
           exposed_sorts_label: 'Sort by'
           expose_sort_order: true
@@ -479,8 +479,8 @@ display:
           transform_dash: false
           break_phrase: false
       filters:
-        timestamp:
-          id: timestamp
+        timestamp_1:
+          id: timestamp_1
           table: joinup_log
           field: timestamp
           relationship: none
@@ -489,7 +489,7 @@ display:
           entity_type: joinup_log
           entity_field: timestamp
           plugin_id: date
-          operator: between
+          operator: '>='
           value:
             min: ''
             max: ''
@@ -498,14 +498,66 @@ display:
           group: 1
           exposed: true
           expose:
-            operator_id: timestamp_op
-            label: Date
-            description: ''
+            operator_id: timestamp_1_op
+            label: 'Date from'
+            description: 'An offset from the current time such as "+1 day" or "-2 hours -30 minutes"'
             use_operator: false
-            operator: timestamp_op
+            operator: timestamp_1_op
             operator_limit_selection: false
             operator_list: {  }
-            identifier: date
+            identifier: from
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              licence_manager: '0'
+              anonymous: '0'
+              moderator: '0'
+              administrator: '0'
+              developer: '0'
+            min_placeholder: ''
+            max_placeholder: ''
+            placeholder: ''
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+        timestamp_2:
+          id: timestamp_2
+          table: joinup_log
+          field: timestamp
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: joinup_log
+          entity_field: timestamp
+          plugin_id: date
+          operator: '<='
+          value:
+            min: ''
+            max: ''
+            value: ''
+            type: date
+          group: 1
+          exposed: true
+          expose:
+            operator_id: timestamp_2_op
+            label: 'Date to'
+            description: 'An offset from the current time such as "+1 day" or "-2 hours -30 minutes"'
+            use_operator: false
+            operator: timestamp_2_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: to
             required: false
             remember: false
             multiple: false
@@ -541,8 +593,8 @@ display:
           entity_type: joinup_log
           entity_field: type
           plugin_id: string
-          operator: '='
-          value: ''
+          operator: in
+          value: {  }
           group: 1
           exposed: true
           expose:
@@ -565,6 +617,7 @@ display:
               administrator: '0'
               developer: '0'
             placeholder: ''
+            reduce: 0
           is_grouped: false
           group_info:
             label: ''
@@ -594,7 +647,7 @@ display:
           expose:
             operator_id: uid_op
             label: User
-            description: ''
+            description: "Enter a Joinup user's name to search for a user and select it with the mouse or the keyboard."
             use_operator: false
             operator: uid_op
             operator_limit_selection: false
@@ -640,7 +693,7 @@ display:
           expose:
             operator_id: uid_1_op
             label: Actor
-            description: ''
+            description: "Enter a Joinup user's name to search for a user and select it with the mouse or the keyboard."
             use_operator: false
             operator: uid_1_op
             operator_limit_selection: false
@@ -669,6 +722,10 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
+      filter_groups:
+        operator: AND
+        groups:
+          1: AND
       style:
         type: table
         options:
