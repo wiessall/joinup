@@ -82,8 +82,6 @@ class JoinupContext extends RawDrupalContext {
    * @param \Behat\Gherkin\Node\TableNode $triples
    *   The user data.
    *
-   * @todo Replace with a definitive solution in ISAICP-8859
-   *
    * @Then the following :graph graph triples should exist in the RDF backend:
    */
   public function assertTriples(string $graph, TableNode $triples): void {
@@ -95,6 +93,7 @@ class JoinupContext extends RawDrupalContext {
       $subjects[$triple['subject']][] = $rows[implode(' ', $triple)] = $triple;
     }
 
+    $unexpectedTriples = [];
     foreach (array_keys($subjects) as $subject) {
       $query = "SELECT ?p ?o WHERE { GRAPH <$graph> { <$subject> ?p ?o }}";
       $results = $connection->query($query);
@@ -108,11 +107,17 @@ class JoinupContext extends RawDrupalContext {
         if (in_array($triple, $rows)) {
           unset($rows[implode(' ', $triple)]);
         }
+        else {
+          $unexpectedTriples[implode(' ', $triple)] = $triple;
+        }
       }
     }
 
     if (!empty($rows)) {
-      throw new ExpectationFailedException(sprintf("Triple(s) %s doesn't exists in the RDF backend", implode("\n", array_keys($rows))));
+      throw new ExpectationFailedException(sprintf("Triple(s) %s doesn't exists in the RDF backend", implode(PHP_EOL, array_keys($rows))));
+    }
+    if (!empty($unexpectedTriples)) {
+      throw new ExpectationFailedException(sprintf("These triple(s) %s were unexpectedly found in the RDF backend", implode(PHP_EOL, array_keys($unexpectedTriples))));
     }
 
   }
