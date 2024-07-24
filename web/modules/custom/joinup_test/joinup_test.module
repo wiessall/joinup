@@ -11,10 +11,8 @@ declare(strict_types=1);
  * Implements hook_honeypot_form_protections_alter().
  */
 function joinup_test_honeypot_form_protections_alter(array &$options, array $form): void {
-  // Disable Honeypot entirely if form_settings is empty, used in behat.
-  /* @see \Drupal\joinup\Context\AntispamContext::disableAntispamBeforeScenario */
-  $form_settings = \Drupal::config('honeypot.settings')->get('form_settings');
-  if (!$form_settings) {
+  // Allow to disable anti-spam tools.
+  if (!\Drupal::state()->get('joinup_test.antispam.enabled', FALSE)) {
     $options = [];
   }
 }

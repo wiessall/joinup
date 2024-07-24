@@ -26,25 +26,6 @@ abstract class JoinupExistingSiteTestBase extends ExistingSiteBase {
    */
   protected array $casUsers = [];
 
-  /**
-   * Config factory under test.
-   *
-   * @var \Drupal\Core\Config\ConfigFactory
-   */
-  protected $configFactory;
-
-  /**
-   * Keep track of any config that was changed, so they can easily be reverted.
-   *
-   * @var array
-   */
-  protected array $config = [];
-
-  /**
-   * Whether to disable the spam protection.
-   */
-  protected bool $disableSpamProtection = TRUE;
-
   use ConfigReadOnlyTrait;
   use RdfEntityCreationTrait;
 
@@ -53,20 +34,19 @@ abstract class JoinupExistingSiteTestBase extends ExistingSiteBase {
    */
   protected function setUp(): void {
     parent::setUp();
-    $this->configFactory = $this->container->get('config.factory');
 
     // Disable the spam protection functionality.
-    if ($this->disableSpamProtection) {
-      $this->overrideConfig('antibot.settings', 'form_ids', []);
-      $this->overrideConfig('honeypot.settings', 'form_settings', []);
-    }
+    \Drupal::state()->delete('joinup_test.antispam.enabled');
+    $this->clearCache();
   }
 
   /**
    * {@inheritdoc}
    */
   public function tearDown(): void {
-    $this->restoreConfig();
+    // Restores the spam protection functionality.
+    \Drupal::state()->set('joinup_test.antispam.enabled', TRUE);
+    $this->clearCache();
 
     // Avoid sending notifications during test entities cleanup. First, sort the
     // entities by moving the 'user' entities at the end, as deleting a user
@@ -95,13 +75,22 @@ abstract class JoinupExistingSiteTestBase extends ExistingSiteBase {
     \Drupal::getContainer()->get('cas_mock_server.user_manager')->deleteUsers($this->casUsers);
 
     // The parent method might cleanup config entities.
-    static::bypassReadOnlyConfig();
+    $this->bypassReadOnlyConfig();
     parent::tearDown();
-    static::restoreReadOnlyConfig();
+    $this->restoreReadOnlyConfig();
 
     // Delete the OG group content orphans now because parent::tearDown() is
     // destroying the container and the registered shutdown callback will fail.
     $delete_orphans_plugin->process();
+  }
+
+  /**
+   * Clear the cache bins storing cached markup.
+   */
+  protected function clearCache(): void {
+    foreach (['page', 'dynamic_page_cache', 'render'] as $bin) {
+      \Drupal::cache($bin)->deleteAll();
+    }
   }
 
   /**
@@ -159,55 +148,6 @@ abstract class JoinupExistingSiteTestBase extends ExistingSiteBase {
       \Drupal::getContainer()->get('rdf_sync.synchronizer')->destruct();
     }
     return $term;
-  }
-
-  /**
-   * Sets a value in a configuration object.
-   *
-   * @param string $name
-   *   The name of the configuration object.
-   * @param string $key
-   *   Identifier to store value in configuration.
-   * @param mixed $value
-   *   Value to associate with identifier.
-   */
-  protected function overrideConfig(string $name, string $key, mixed $value): void {
-    static::bypassReadOnlyConfig();
-
-    $config = $this->configFactory->getEditable($name);
-    $original = $config->get($key);
-    $config->set($key, $value)->save();
-    if (!array_key_exists($name, $this->config)) {
-      $this->config[$name][$key] = $original;
-      return;
-    }
-
-    if (!array_key_exists($key, $this->config[$name])) {
-      $this->config[$name][$key] = $original;
-    }
-
-    static::restoreReadOnlyConfig();
-  }
-
-  /**
-   * Restores original config.
-   */
-  protected function restoreConfig(): void {
-    if (!$this->config) {
-      // Nothing to restore.
-      return;
-    }
-
-    static::bypassReadOnlyConfig();
-
-    foreach ($this->config as $name => $key_value) {
-      foreach ($key_value as $key => $value) {
-        $this->configFactory->getEditable($name)->set($key, $value)->save();
-      }
-    }
-    $this->config = [];
-
-    static::restoreReadOnlyConfig();
   }
 
 }
