@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_log;
 
+use Drupal\Core\Logger\RfcLogLevel;
+use Drupal\joinup_log\Entity\JoinupLog;
 use Drupal\views\EntityViewsData;
 
 /**
@@ -18,20 +20,14 @@ class JoinupLogViewsData extends EntityViewsData {
     $data = parent::getViewsData();
     $base_table = $this->entityType->getBaseTable() ?: $this->entityType->id();
 
-    $data[$base_table]['severity'] = [
-      'title' => $this->t('Severity level'),
-      'help' => $this->t('The severity level of the event; ranges from 0 (Emergency) to 7 (Debug).'),
-      'field' => [
-        'id' => 'standard',
-        'options callback' => 'Drupal\Core\Logger\RfcLogLevel::getLevels',
-      ],
-      'filter' => [
-        'id' => 'in_operator',
-        'options callback' => 'Drupal\Core\Logger\RfcLogLevel::getLevels',
-      ],
-      'sort' => [
-        'id' => 'standard',
-      ],
+    $data[$base_table]['severity']['filter'] = [
+      'id' => 'in_operator',
+      'options callback' => RfcLogLevel::class . '::getLevels',
+    ];
+
+    $data[$base_table]['type']['filter'] = [
+      'id' => 'in_operator',
+      'options callback' => JoinupLog::class . '::allowedTypes',
     ];
 
     return $data;
