@@ -12,7 +12,6 @@ group_type: rdf_entity
 group_bundle: solution
 is_admin: null
 permissions:
-  - 'access actions log'
   - 'access content moderation overview'
   - 'access group reports'
   - 'add user'
