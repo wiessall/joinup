@@ -27,6 +27,8 @@ class JoinGroupSubscriber extends RedirectedEuLoginAuthenticatedSubscriberBase {
 
   use StringTranslationTrait;
 
+  public const string ID_COOKIE_NAME = 'join_group';
+
   /**
    * The entity type manager service.
    */
@@ -59,7 +61,7 @@ class JoinGroupSubscriber extends RedirectedEuLoginAuthenticatedSubscriberBase {
    * {@inheritdoc}
    */
   protected function getCookieName(): ?string {
-    return 'join_group';
+    return self::ID_COOKIE_NAME;
   }
 
   /**
@@ -78,7 +80,7 @@ class JoinGroupSubscriber extends RedirectedEuLoginAuthenticatedSubscriberBase {
         $this->deleteCookie();
       }
       elseif ($group instanceof CollectionInterface && $group->hasCodeOfConductToAccept()) {
-        $this->deleteCookie();
+        // Cookie will be deleted if user submits the subscribe form.
         $url = $group->toUrl('subscribe');
         if ($destination = parent::getRedirectDestination($event)) {
           $queries = $url->getOption('query') ?: [];

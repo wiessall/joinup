@@ -11,6 +11,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
 use Drupal\joinup_group\Entity\GroupInterface;
+use Drupal\joinup_group\EventSubscriber\JoinGroupSubscriber;
 use Drupal\rdf_entity\RdfInterface;
 use Drupal\solution\Entity\SolutionInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -115,7 +116,7 @@ class JoinGroupAnonymousRedirectForm extends FormBase {
     // Set a cookie remembering that the user wants to subscribe to this group,
     // valid for 30 minutes. If the user takes more time to sign in or register,
     // we assume they are no longer actively engaged in the joining process.
-    setrawcookie('join_group', rawurlencode($this->group->id()), $this->time->getRequestTime() + 30 * 60, '/');
+    setrawcookie(JoinGroupSubscriber::ID_COOKIE_NAME, rawurlencode($this->group->id()), $this->time->getRequestTime() + 30 * 60, '/');
 
     // Redirect to EU Login, with a query argument instructing to redirect back
     // to the group page.
