@@ -7,6 +7,7 @@ namespace Drupal\joinup_invite\EventSubscriber;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Messenger\MessengerInterface;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\joinup_invite\Entity\InvitationInterface;
 use Drupal\joinup_invite\Event\InvitationEventInterface;
@@ -26,6 +27,7 @@ class InvitationSubscriber implements EventSubscriberInterface {
     protected MembershipManagerInterface $membershipManager,
     protected MessengerInterface $messenger,
     protected LoggerChannelInterface $logger,
+    protected AccountInterface $currentUser,
   ) {}
 
   /**
@@ -90,8 +92,12 @@ class InvitationSubscriber implements EventSubscriberInterface {
     $this->messenger->addMessage($this->t('You have been promoted to %role.', [
       '%role' => strtolower($role->label()),
     ]));
-    $this->logger->info('Invitation was accepted with @role role.', [
+    $this->logger->info('@actor accepted the invitation to @group as @role role.', [
+      '@actor' => $this->currentUser->getDisplayName(),
+      '@group' => $invitation->getEntity()->label(),
       '@role' => strtolower($role->label()),
+      'type' => 'joinup:approve_the_pending_membership',
+      'actor' => $this->currentUser->id(),
     ]);
   }
 
