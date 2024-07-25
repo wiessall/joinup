@@ -13,9 +13,9 @@ use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_community_content\Entity\CommunityContentInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\Entity\PinnableGroupContentInterface;
+use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\og\OgAccessInterface;
 use Drupal\rdf_entity\RdfInterface;
-use Drupal\joinup_solution\Entity\SolutionInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**

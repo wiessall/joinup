@@ -17,9 +17,9 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\custom_page\Entity\CustomPage;
 use Drupal\custom_page\Entity\CustomPageInterface;
+use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\menu_link_content\MenuLinkContentInterface;
 use Drupal\node\NodeInterface;
-use Drupal\joinup_solution\Entity\SolutionInterface;
 
 /**
  * Implements hook_entity_type_alter().

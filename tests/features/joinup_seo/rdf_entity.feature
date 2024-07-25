@@ -33,7 +33,7 @@ Feature: SEO for RDF entities.
       | title       | is version of | state     |
       | SEO release | SEO solution  | published |
     And distribution content:
-      | title            | parent      | state     |
+      | title            | release     | state     |
       | SEO distribution | SEO release | published |
 
     When I go to the "SEO release" release

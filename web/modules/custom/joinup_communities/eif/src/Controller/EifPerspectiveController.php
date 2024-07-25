@@ -10,8 +10,8 @@ use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
-use Drupal\meta_entity\Entity\MetaEntity;
 use Drupal\joinup_solution\Entity\SolutionInterface;
+use Drupal\meta_entity\Entity\MetaEntity;
 
 /**
  * Controller class for the solution EIF perspective.

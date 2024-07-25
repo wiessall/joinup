@@ -241,7 +241,7 @@ Feature: Global search
       | title         | release number | release notes                               | keywords | is version of  | owner             | contact information | state     |
       | Release Alpha | 1              | <p>Release notes for <em>beta</em> changes. | Alphabet | Solution alpha | Responsible owner | Go-to contact       | published |
     And distribution content:
-      | title              | description                                    | parent        | access url | state     |
+      | title              | description                                    | release       | access url | state     |
       | Distribution alpha | <p>A simple beta distribution description.</p> | Release Alpha | test.zip   | published |
     And licence content:
       | title         | description                         |
@@ -413,7 +413,7 @@ Feature: Global search
 
     # Add distribution, child of solution.
     Given distribution content:
-      | title       | parent    | description          | access url                      | licence    | format | representation technique | state     |
+      | title       | solution  | description          | access url                      | licence    | format | representation technique | state     |
       | ZzoluDistro | Zzolution | Übermensch foot size | http://example.com/zzolu-distro | Apache-2.0 | ZIP    | Datalog                  | published |
 
     When I enter "zzoludistro" in the search bar and press enter
@@ -499,7 +499,7 @@ Feature: Global search
     Then I should see "No content found for your search."
 
     Given distribution content:
-      | title         | parent  | description | access url                        | licence    | format | representation technique | state     |
+      | title         | release | description | access url                        | licence    | format | representation technique | state     |
       | ReleazzDistro | Releazz | Dracula     | http://example.com/releazz-distro | Apache-2.0 | ZIP    | Datalog                  | published |
 
     When I enter "releazzDistro" in the search bar and press enter
