@@ -371,7 +371,7 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
           'type' => 'distribution',
           'uri' => "http://distribution/1.{$i}.{$j}",
           'title' => "distribution 1.{$i}.{$j}",
-          'distribution_parent' => $this->entity['node']['release']["1.{$i}"]->id(),
+          'release' => $this->entity['node']['release']["1.{$i}"]->id(),
           'field_state' => 'published',
         ]);
       }
@@ -381,7 +381,7 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
       $this->entity['node']['distribution']["1.{$i}"] = $this->createNode([
         'type' => 'distribution',
         'title' => "distribution 1.{$i}",
-        'distribution_parent' => 'http://solution/1',
+        'og_audience' => 'http://solution/1',
         'field_state' => 'published',
       ]);
     }
