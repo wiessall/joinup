@@ -179,7 +179,7 @@ function joinup_rdf_deploy_111101(array &$sandbox): string {
     $release_node->setRevisionCreationTime($values['http://purl.org/dc/terms/modified'][0]->getTimestamp());
     $release_node->save();
 
-    _joinup_rdf_deploy_update_field_target_id('node', 'distribution_parent', 'target_id', $uri, $release_node->id());
+    _joinup_rdf_deploy_update_field_target_id('node', 'isaicp_8569', 'distribution_parent_target_id', $uri, $release_node->id());
 
     if ($has_alias) {
       $internal_url = '/' . $release_node->toUrl()->getInternalPath();
@@ -198,9 +198,8 @@ function joinup_rdf_deploy_111101(array &$sandbox): string {
   }
 
   $finish = microtime(TRUE);
-  $count = count($uris);
   $sandbox['#finished'] = $sandbox['progress'] / $sandbox['total'];
-  return "Progress: {$count} releases ({$sandbox['progress']} total / {$sandbox['swapped_aliases']} aliases swapped) in " . round($finish - $start, 2) . ' s. Error messages: ' . count($error_messages ?? []);
+  return "Progress: {$sandbox['progress']}/{$sandbox['total']} ({$sandbox['swapped_aliases']} aliases swapped) in " . round($finish - $start, 2) . 's';
 }
 
 /**
@@ -285,15 +284,14 @@ function joinup_rdf_deploy_111102(array &$sandbox): string {
       $release_node->setNewRevision();
       $release_node->setRevisionCreationTime($values['http://purl.org/dc/terms/modified'][0]->getTimestamp());
       $release_node->save();
-      _joinup_rdf_deploy_update_field_target_id('node', 'distribution_parent', 'target_id', $uri, $release_node->id());
+      _joinup_rdf_deploy_update_field_target_id('node', 'isaicp_8569', 'distribution_parent_target_id', $uri, $release_node->id());
     }
     $sandbox['progress']++;
   }
 
   $finish = microtime(TRUE);
-  $count = count($uris);
   $sandbox['#finished'] = $sandbox['progress'] / $sandbox['total'];
-  return "Progress: {$count} releases ({$sandbox['progress']} total / {$sandbox['swapped_aliases']} aliases swapped) in " . round($finish - $start, 2) . ' s. Error messages: ' . count($error_messages ?? []);
+  return "Progress: {$sandbox['progress']}/{$sandbox['total']} ({$sandbox['swapped_aliases']} aliases swapped) in " . round($finish - $start, 2) . 's';
 }
 
 /**
@@ -344,14 +342,14 @@ function joinup_rdf_deploy_111104(): void {
 function _joinup_rdf_deploy_update_field_target_id(string $base_table_prefix, string $table, string $field, string $old_target_id, string $new_target_id, bool $include_revisions = TRUE): void {
   $connection = \Drupal::database();
   $connection->update($base_table_prefix . '__' . $table)
-    ->fields([$table . '_' . $field => $new_target_id])
-    ->condition($table . '_' . $field, $old_target_id)
+    ->fields([$field => $new_target_id])
+    ->condition($field, $old_target_id)
     ->execute();
 
   if ($include_revisions) {
     $connection->update($base_table_prefix . '_revision__' . $table)
-      ->fields([$table . '_' . $field => $new_target_id])
-      ->condition($table . '_' . $field, $old_target_id)
+      ->fields([$field => $new_target_id])
+      ->condition($field, $old_target_id)
       ->execute();
   }
 }
