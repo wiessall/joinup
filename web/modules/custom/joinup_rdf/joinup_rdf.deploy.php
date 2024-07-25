@@ -99,29 +99,18 @@ function joinup_rdf_deploy_111101(array &$sandbox): string {
       throw new Exception('Release ' . $uri . ' has no solution.');
     }
 
-    /** @var \Drupal\joinup_rdf\Entity\RdfSyncEntityInterface $solution_stub */
-    // Replace the URI with a swapped ID to be able to easily identify the
-    // solutions later during the solution migration. Change the `http://` to
-    // `swap://` and `https` to `swap-s://` to avoid conflicts with the RDF
-    // sync URIs.
-    $stub_uri = str_replace([
-      'http://',
-      'https://',
-    ], [
-      'swap://',
-      'swap-s://',
-    ], $solution->id());
+    $solution_uri = $solution->id();
 
-    if (!isset($sandbox['solution_stubs'][$stub_uri])) {
+    if (!isset($sandbox['solution_stubs'][$solution_uri])) {
       $solution_stub = Node::create([
         'type' => 'solution',
         'title' => strlen($solution->label()) > 255 ? substr($solution->label(), 0, 255) : $solution->label(),
-        'uri' => $stub_uri,
+        'uri' => $solution_uri,
       ]);
       // @todo On the UI, we need to handle this when displaying values - link to
       //   the original solution.
       $solution_stub->save();
-      $sandbox['solution_stubs'][$stub_uri] = [
+      $sandbox['solution_stubs'][$solution_uri] = [
         'target_id' => $solution_stub->id(),
         'target_revision_id' => $solution_stub->getRevisionId(),
       ];
@@ -147,7 +136,7 @@ function joinup_rdf_deploy_111101(array &$sandbox): string {
       'documentation' => $values['http://xmlns.com/foaf/0.1/page'][0] ?? NULL,
       'langcode' => $values['http://joinup.eu/language'][0] ?? 'en',
     ]);
-    $release_node->set('solution_data', $sandbox['solution_stubs'][$stub_uri]);
+    $release_node->set('solution_data', $sandbox['solution_stubs'][$solution_uri]);
 
     foreach ([
       'http://purl.org/dc/terms/language' => 'language',
@@ -179,7 +168,7 @@ function joinup_rdf_deploy_111101(array &$sandbox): string {
     $release_node->setRevisionCreationTime($values['http://purl.org/dc/terms/modified'][0]->getTimestamp());
     $release_node->save();
 
-    _joinup_rdf_deploy_update_field_target_id('node', 'distribution_parent', 'target_id', $uri, $release_node->id());
+    _joinup_rdf_deploy_update_field_target_id('node', 'isaicp_8569', 'distribution_parent_target_id', $uri, $release_node->id());
 
     if ($has_alias) {
       $internal_url = '/' . $release_node->toUrl()->getInternalPath();
@@ -198,9 +187,8 @@ function joinup_rdf_deploy_111101(array &$sandbox): string {
   }
 
   $finish = microtime(TRUE);
-  $count = count($uris);
   $sandbox['#finished'] = $sandbox['progress'] / $sandbox['total'];
-  return "Progress: {$count} releases ({$sandbox['progress']} total / {$sandbox['swapped_aliases']} aliases swapped) in " . round($finish - $start, 2) . ' s. Error messages: ' . count($error_messages ?? []);
+  return "Progress: {$sandbox['progress']}/{$sandbox['total']} ({$sandbox['swapped_aliases']} aliases swapped) in " . round($finish - $start, 2) . 's';
 }
 
 /**
@@ -285,15 +273,14 @@ function joinup_rdf_deploy_111102(array &$sandbox): string {
       $release_node->setNewRevision();
       $release_node->setRevisionCreationTime($values['http://purl.org/dc/terms/modified'][0]->getTimestamp());
       $release_node->save();
-      _joinup_rdf_deploy_update_field_target_id('node', 'distribution_parent', 'target_id', $uri, $release_node->id());
+      _joinup_rdf_deploy_update_field_target_id('node', 'isaicp_8569', 'distribution_parent_target_id', $uri, $release_node->id());
     }
     $sandbox['progress']++;
   }
 
   $finish = microtime(TRUE);
-  $count = count($uris);
   $sandbox['#finished'] = $sandbox['progress'] / $sandbox['total'];
-  return "Progress: {$count} releases ({$sandbox['progress']} total / {$sandbox['swapped_aliases']} aliases swapped) in " . round($finish - $start, 2) . ' s. Error messages: ' . count($error_messages ?? []);
+  return "Progress: {$sandbox['progress']}/{$sandbox['total']} ({$sandbox['swapped_aliases']} aliases swapped) in " . round($finish - $start, 2) . 's';
 }
 
 /**
@@ -344,14 +331,14 @@ function joinup_rdf_deploy_111104(): void {
 function _joinup_rdf_deploy_update_field_target_id(string $base_table_prefix, string $table, string $field, string $old_target_id, string $new_target_id, bool $include_revisions = TRUE): void {
   $connection = \Drupal::database();
   $connection->update($base_table_prefix . '__' . $table)
-    ->fields([$table . '_' . $field => $new_target_id])
-    ->condition($table . '_' . $field, $old_target_id)
+    ->fields([$field => $new_target_id])
+    ->condition($field, $old_target_id)
     ->execute();
 
   if ($include_revisions) {
     $connection->update($base_table_prefix . '_revision__' . $table)
-      ->fields([$table . '_' . $field => $new_target_id])
-      ->condition($table . '_' . $field, $old_target_id)
+      ->fields([$field => $new_target_id])
+      ->condition($field, $old_target_id)
       ->execute();
   }
 }

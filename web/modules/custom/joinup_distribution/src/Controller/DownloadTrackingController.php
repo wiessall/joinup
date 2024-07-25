@@ -104,7 +104,6 @@ class DownloadTrackingController extends ControllerBase {
     }
     $distribution = $this->nodeStorage->load(key($usages['file']['node']));
 
-    /** @var \Drupal\solution\Entity\SolutionInterface|\Drupal\joinup_release\Entity\ReleaseInterface $parent */
     $parent = $distribution->getParent();
 
     $event = $this->eventStorage->create([

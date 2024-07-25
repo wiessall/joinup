@@ -18,15 +18,15 @@ class EntityReference extends EntityReferenceOriginal {
    */
   public function getTarget() {
     if (!isset($this->target) && isset($this->id)) {
-      if ($this->getTargetDefinition()->getEntityTypeId() === 'rdf_entity' && is_numeric($this->id)) {
-        $entity = \Drupal::entityTypeManager()
-          ->getStorage('node')
-          ->load($this->id);
-        $this->target = isset($entity) ? $entity->getTypedData() : NULL;
+      $fieldName = $this->getParent()->getParent()->getName();
+      $entityTypeId = $this->getParent()->getParent()->getParent()->getEntity()->getEntityTypeId();
+      $bundle = $this->getParent()->getParent()->getParent()->getEntity()->bundle();
+      if ($entityTypeId === 'node' && $fieldName === 'parent' && $bundle === 'distribution' && !is_numeric($this->id)) {
+        $entity = \Drupal::entityTypeManager()->getStorage('rdf_entity')->load($this->id);
+        $this->target = $entity?->getTypedData();
         return $this->target;
       }
     }
-
     return parent::getTarget();
   }
 

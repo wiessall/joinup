@@ -57,7 +57,7 @@ class ReleaseRouteContext implements ContextProviderInterface {
         && ($node = $this->routeMatch->getParameter('node'))
         && $node instanceof DistributionInterface
       ) {
-        $parent = $node->distribution_parent->entity;
+        $parent = $node->get('release')->entity;
         if ($parent instanceof ReleaseInterface) {
           $value = $parent;
         }

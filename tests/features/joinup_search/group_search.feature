@@ -51,7 +51,7 @@ Feature: Search inside groups
       | title     | release number | release notes              | is version of        | state     |
       | Pre-alpha | 0.0-alpha0     | Only works on flat ground. | Inclined foundations | published |
     And distribution content:
-      | title       | description          | parent    | access url | state     |
+      | title       | description          | release   | access url | state     |
       | Zip archive | It has files inside. | Pre-alpha | test.zip   | published |
 
   @javascript
