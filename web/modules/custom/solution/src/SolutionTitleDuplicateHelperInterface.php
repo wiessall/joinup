@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\solution;
 
-use Drupal\rdf_entity\RdfInterface;
+use Drupal\node\NodeInterface;
 
 /**
  * Provides an interface the 'solution.title_duplicate_helper' service.
@@ -14,21 +14,21 @@ interface SolutionTitleDuplicateHelperInterface {
   /**
    * Checks if the given solution's title is already in use.
    *
-   * @param \Drupal\rdf_entity\RdfInterface $solution
+   * @param \Drupal\node\NodeInterface $solution
    *   The solution to be checked.
    *
    * @return bool
    *   If other solutions with the same doesn't name exist.
    *
    * @throws \Exception
-   *   The the passed entity is not a solution.
+   *   The passed entity is not a solution.
    */
-  public function titleIsUnique(RdfInterface $solution): bool;
+  public function titleIsUnique(NodeInterface $solution): bool;
 
   /**
    * Checks if a solution's title is already in use within the same affiliation.
    *
-   * @param \Drupal\rdf_entity\RdfInterface $solution
+   * @param \Drupal\node\NodeInterface $solution
    *   The solution to be checked.
    *
    * @return bool|null
@@ -37,8 +37,8 @@ interface SolutionTitleDuplicateHelperInterface {
    *   its affiliation cannot be determined, returns NULL.
    *
    * @throws \Exception
-   *   The the passed entity is not a solution.
+   *   The passed entity is not a solution.
    */
-  public function titleIsUniqueWithinAffiliation(RdfInterface $solution): ?bool;
+  public function titleIsUniqueWithinAffiliation(NodeInterface $solution): ?bool;
 
 }

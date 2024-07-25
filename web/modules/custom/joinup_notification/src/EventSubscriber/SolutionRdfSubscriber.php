@@ -125,7 +125,7 @@ class SolutionRdfSubscriber extends NotificationSubscriberBase {
       ['onUpdate'],
       ['onDelete'],
     ];
-    $events[NotificationEvents::RDF_ENTITY_ARCHIVE_COMPLETED] = [
+    $events[NotificationEvents::GROUP_ENTITY_ARCHIVE_COMPLETED] = [
       ['onCompleteArchival'],
     ];
 

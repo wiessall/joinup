@@ -22,18 +22,6 @@ class SolutionAffiliationFieldItemList extends EntityReferenceFieldItemList {
   use ComputedItemListTrait;
 
   /**
-   * If the current solution is in one of the 'official' graphs.
-   *
-   * An 'official graph' is one of the graphs returned by
-   * SparqlEntityStorageGraphHandlerInterface::getEntityTypeDefaultGraphIds().
-   *
-   * @var bool
-   *
-   * @see \Drupal\sparql_entity_storage\SparqlEntityStorageGraphHandlerInterface::getEntityTypeDefaultGraphIds()
-   */
-  protected $solutionInOfficialGraph;
-
-  /**
    * {@inheritdoc}
    */
   protected function computeValue() {
@@ -59,7 +47,7 @@ class SolutionAffiliationFieldItemList extends EntityReferenceFieldItemList {
       // imported solutions are stored in a 'nonofficial' graph and, temporary,
       // orphan solutions are allowed. See the 'joinup_federation' module for
       // more details.
-      if ($this->solutionInOfficialGraph()) {
+      if ($this->getEntity()->isPublished()) {
         throw new \Exception("Solution '{$this->getEntity()->id()}' should have a parent collection.");
       }
     }
@@ -75,7 +63,7 @@ class SolutionAffiliationFieldItemList extends EntityReferenceFieldItemList {
     // parent collection. This is useful when solutions are allowed to be
     // temporary stored without a parent collection. Such a case is data
     // federation. See the 'joinup_federation' module for more details.
-    if ($this->solutionInOfficialGraph()) {
+    if ($this->getEntity()->isPublished) {
       $this->updateAffiliation();
     }
     return parent::postSave($update);
@@ -88,6 +76,7 @@ class SolutionAffiliationFieldItemList extends EntityReferenceFieldItemList {
    *   A list of collection IDs where the solution host entity is affiliated.
    */
   protected function getAffiliation(): array {
+    // @todo Update this in ISAICP-7584.
     return array_values(\Drupal::getContainer()->get('entity_type.manager')
       ->getStorage('rdf_entity')
       ->getQuery()
@@ -104,6 +93,11 @@ class SolutionAffiliationFieldItemList extends EntityReferenceFieldItemList {
    * order the preserve the collection's changed time. We use direct SPARQL
    * queries to update the solution affiliation, then we clear the affected
    * collection cache in order to reflect the changes on Drupal API level.
+   *
+   * @todo This whole thing should be removed and replaced with a computed field
+   *   and create a subscriber to export the data for the collection. The data
+   *   for the collection should go to the collection's graph until collections
+   *   are migrated too.
    */
   protected function updateAffiliation(): void {
     /** @var \Drupal\rdf_entity\RdfInterface $solution */
@@ -156,22 +150,6 @@ class SolutionAffiliationFieldItemList extends EntityReferenceFieldItemList {
       // Clear the cache of collections that were affected by changes.
       \Drupal::service('entity_type.manager')->getStorage('rdf_entity')->resetCache($affected_ids);
     }
-  }
-
-  /**
-   * Checks if the solution belongs to one of the 'official' graphs.
-   *
-   * @return bool
-   *   If the solution belongs to one of the 'official' graphs.
-   */
-  protected function solutionInOfficialGraph(): bool {
-    if (!isset($this->solutionInOfficialGraph)) {
-      $graph_id = $this->getEntity()->get('graph')->target_id;
-      /** @var \Drupal\sparql_entity_storage\SparqlEntityStorageGraphHandlerInterface $graph_handler */
-      $graph_handler = \Drupal::service('sparql.graph_handler');
-      $this->solutionInOfficialGraph = in_array($graph_id, $graph_handler->getEntityTypeDefaultGraphIds('rdf_entity'));
-    }
-    return $this->solutionInOfficialGraph;
   }
 
   /**

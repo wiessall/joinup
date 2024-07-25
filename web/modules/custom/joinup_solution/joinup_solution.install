@@ -18,7 +18,7 @@ function joinup_solution_requirements(string $phase): array {
 
   if ($phase === 'runtime') {
     /** @var \Drupal\solution\RequirementsHelper $requirements_helper */
-    $requirements_helper = \Drupal::service('solution.requirements_helper');
+    $requirements_helper = \Drupal::service('joinup_solution.requirements_helper');
 
     // Ensure that no solutions are orphaned.
     $results = $requirements_helper->getOrphanedSolutions();

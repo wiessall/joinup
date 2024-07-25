@@ -62,7 +62,7 @@ class SolutionLazyBuilders implements TrustedCallbackInterface {
    *   A renderable array containing the comment form.
    */
   public function renderJoinSolutionForm(string $solution_id): array {
-    $solution = $this->entityTypeManager->getStorage('rdf_entity')->load($solution_id);
+    $solution = $this->entityTypeManager->getStorage('node')->load($solution_id);
     return $this->formBuilder->getForm(JoinSolutionForm::class, $this->currentUser, $solution);
   }
 

@@ -38,6 +38,8 @@ class RequirementsHelper {
    *   An array of solution label keyed by their IDs.
    */
   public function getOrphanedSolutions(): array {
+    // @todo Convert this to check for orphaned solutions with the new version
+    //   of solutions.
     $query = <<<QUERY
 SELECT ?solution_id
 FROM <http://joinup.eu/collection/published>
