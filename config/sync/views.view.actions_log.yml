@@ -96,7 +96,6 @@ display:
               past_format: '@interval ago'
               granularity: 2
               refresh: 60
-              description: ''
           group_column: value
           group_columns: {  }
           group_rows: true
@@ -594,7 +593,6 @@ display:
           entity_field: type
           plugin_id: string
           operator: in
-          value: {  }
           group: 1
           exposed: true
           expose:
@@ -617,7 +615,6 @@ display:
               administrator: '0'
               developer: '0'
             placeholder: ''
-            reduce: 0
           is_grouped: false
           group_info:
             label: ''
@@ -663,7 +660,6 @@ display:
               moderator: '0'
               administrator: '0'
               developer: '0'
-            reduce: false
           is_grouped: false
           group_info:
             label: ''
@@ -709,7 +705,6 @@ display:
               moderator: '0'
               administrator: '0'
               developer: '0'
-            reduce: false
           is_grouped: false
           group_info:
             label: ''
