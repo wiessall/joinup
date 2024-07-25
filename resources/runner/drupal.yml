@@ -339,7 +339,7 @@ drupal:
         $settings['filecache']['directory']['bins']['geocoder'] = '../tests/fixtures/geocoding/cache';
         $settings['filecache']['strategy']['bins']['geocoder'] = 'persist';
       GitHub Token Setup: |
-        $config['github_feed.settings']['token'] = getenv('JOINUP_GITHUB_TOKEN');
+        $config['github_feed.settings']['token'] = getenv('JOINUP_GITHUB_TOKEN') ?: '';
       Development: |
         $settings['extension_discovery_scan_tests'] = TRUE;
       Verbose error logging: |
