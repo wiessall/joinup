@@ -11,14 +11,15 @@ use Drupal\joinup_distribution\Exception\MissingDistributionParentException;
 use Drupal\joinup_group\Entity\GroupContentTrait;
 use Drupal\joinup_publication_date\Entity\EntityPublicationTimeFallbackTrait;
 use Drupal\joinup_rdf\Entity\RdfSyncEntityTrait;
+use Drupal\joinup_release\Entity\ReleaseInterface;
+use Drupal\joinup_solution\Entity\SolutionContentTrait;
+use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\joinup_stats\Entity\DownloadCountAwareInterface;
 use Drupal\joinup_stats\Entity\DownloadCountAwareTrait;
 use Drupal\joinup_workflow\ArchivableEntityTrait;
 use Drupal\joinup_workflow\EntityWorkflowStateTrait;
 use Drupal\node\Entity\Node;
 use Drupal\og\OgGroupAudienceHelperInterface;
-use Drupal\joinup_solution\Entity\SolutionContentTrait;
-use Drupal\joinup_solution\Entity\SolutionInterface;
 
 /**
  * Bundle class for distributions.
@@ -69,15 +70,15 @@ class Distribution extends Node implements DistributionInterface {
     if ($this->isNew()) {
       // If the group is not assigned but the parent is, pass the group to the
       // distribution.
-      if (!$this->get(OgGroupAudienceHelperInterface::DEFAULT_FIELD)->target_id && $this->get('distribution_parent')->target_id) {
-        if ($parent = $this->getParent()) {
-          if ($parent instanceof SolutionInterface) {
-            $this->set(OgGroupAudienceHelperInterface::DEFAULT_FIELD, $parent->id());
-          }
-          else {
-            // The parent is a release, thus, get the solution instead.
-            $this->set(OgGroupAudienceHelperInterface::DEFAULT_FIELD, $parent->getGroup()->id());
-          }
+      if (!$this->get('release')->isEmpty()) {
+        $release = $this->get('release')->entity;
+        assert($release instanceof ReleaseInterface);
+        $releaseParentSolution = $release->getGroup();
+        if ($this->get(OgGroupAudienceHelperInterface::DEFAULT_FIELD)->isEmpty()) {
+          $this->set(OgGroupAudienceHelperInterface::DEFAULT_FIELD, $releaseParentSolution);
+        }
+        elseif ($this->get(OgGroupAudienceHelperInterface::DEFAULT_FIELD)->target_id != $releaseParentSolution->id()) {
+          throw new \LogicException('Cannot save distribution because its release belongs to a different solution than the solution assigned as OG audience');
         }
       }
     }
@@ -113,7 +114,12 @@ class Distribution extends Node implements DistributionInterface {
    */
   public function delete() {
     $solution = $this->get(OgGroupAudienceHelperInterface::DEFAULT_FIELD)?->entity;
-    $parent = $this->get('distribution_parent')?->entity;
+    try {
+      $parent = $this->getParent();
+    }
+    catch (\Throwable) {
+      // Nothing.
+    }
     parent::delete();
 
     // Clear the cache of the solution of the distribution.
@@ -122,7 +128,7 @@ class Distribution extends Node implements DistributionInterface {
     }
 
     // Re-index the parent of the distribution.
-    if ($parent) {
+    if (isset($parent)) {
       $this->reIndexDistributionParent($parent);
     }
   }
@@ -158,16 +164,7 @@ class Distribution extends Node implements DistributionInterface {
    * {@inheritdoc}
    */
   public function getParent(): DistributionsParentInterface {
-    $parentId = $this->get('distribution_parent')->target_id;
-    // @todo Remove this check on ISAICP-8572 and simply use `->entity` above.
-    if (is_numeric($parentId)) {
-      $parent = $this->entityTypeManager()->getStorage('node')->load($parentId);
-    }
-    else {
-      $parent = $this->get('distribution_parent')->entity;
-    }
-
-    /** @var \Drupal\joinup_distribution\Entity\DistributionsParentInterface $parent */
+    $parent = $this->get('parent')->entity;
     if (!$parent instanceof DistributionsParentInterface) {
       // During normal operation every distribution should have a parent entity,
       // so the only way a parent can be missing is because of an unexpected
@@ -175,7 +172,6 @@ class Distribution extends Node implements DistributionInterface {
       // offline.
       throw new MissingDistributionParentException();
     }
-
     return $parent;
   }
 

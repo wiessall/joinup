@@ -59,11 +59,11 @@ class TokenTest extends JoinupExistingSiteTestBase {
     $data = ['rdf_entity' => $solution];
     $this->assertTokens('rdf_entity', $data, $tokens);
 
-    $data = ['rdf_entity' => $release];
-    $this->assertTokens('rdf_entity', $data, $tokens);
+    $data = ['node' => $release];
+    $this->assertTokens('node', $data, $tokens);
 
-    $data = ['rdf_entity' => $distribution];
-    $this->assertTokens('rdf_entity', $data, $tokens);
+    $data = ['node' => $distribution];
+    $this->assertTokens('node', $data, $tokens);
   }
 
   /**

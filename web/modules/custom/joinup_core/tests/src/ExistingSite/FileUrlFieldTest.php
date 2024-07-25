@@ -86,7 +86,6 @@ class FileUrlFieldTest extends JoinupExistingSiteTestBase {
       'og_audience' => $solution->id(),
       'field_licence' => $licence->id(),
       'description' => $this->randomString(),
-      'distribution_parent' => $solution,
       'field_state' => 'published',
     ]);
 

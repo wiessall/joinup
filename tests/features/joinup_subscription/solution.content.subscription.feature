@@ -58,11 +58,11 @@ Feature: Subscribing to community content in solutions
       | title       | release number | release notes   | is version of        | state     | published at     |
       | Spring 2021 | 2021/03        | Blooming pears. | Products of Bulgaria | published | 2021-03-21 00:00 |
     And distribution content:
-      | title                 | description    | parent               | state     |
+      | title                 | description    | solution             | release     | state     |
       # A distribution linked directly to the solution.
-      | Full list of products | There are many | Products of Bulgaria | published |
+      | Full list of products | There are many | Products of Bulgaria |             | published |
       # A distribution linked to a release.
-      | Spring discounts      | Get them now   | Spring 2021          | published |
+      | Spring discounts      | Get them now   |                      | Spring 2021 | published |
 
     Then the daily group content subscription digest for hristo should match the following messages:
       | Duck liver            |
@@ -70,12 +70,8 @@ Feature: Subscribing to community content in solutions
       | Rose oil              |
       | Plovdiv               |
       | Stara Zagora          |
-      # Distributions are failing in digest for now because they are created
-      # without a group due to the workaround in
-      # \Drupal\joinup\Context\DistributionContext::afterNodeCreateDistributionParent().
-      # @todo Restore the lines below in ISAICP-8572.
-      # | Full list of products |
-      # | Spring discounts      |
+      | Full list of products |
+      | Spring discounts      |
     And the weekly group content subscription digest for bisera should match the following message:
       | Duck liver      |
       | Canned cherries |
@@ -91,12 +87,8 @@ Feature: Subscribing to community content in solutions
       | Plovdiv               |
       | Burgas                |
       | Spring 2021           |
-      # Distributions are failing in digest for now because they are created
-      # without a group due to the workaround in
-      # \Drupal\joinup\Context\DistributionContext::afterNodeCreateDistributionParent().
-      # @todo Restore the lines below in ISAICP-8572.
-      # | Full list of products |
-      # | Spring discounts      |
+      | Full list of products |
+      | Spring discounts      |
 
     # Check that only the user's chosen frequency is digested.
     But the weekly digest for hristo should not contain any messages
@@ -133,13 +125,9 @@ Feature: Subscribing to community content in solutions
       | Stara Zagora          |
       | Products of Bulgaria  |
       | Duck liver            |
-      # Distributions are failing in digest for now because they are created
-      # without a group due to the workaround in
-      # \Drupal\joinup\Context\DistributionContext::afterNodeCreateDistributionParent().
-      # @todo Restore the lines below in ISAICP-8572.
-      # | Full list of products |
+      | Full list of products |
       | Rose oil              |
-      # | Spring discounts      |
+      | Spring discounts      |
       | Sunflower seeds       |
     And the content subscription digest sent to hristo should have the subject "Joinup: Daily digest message"
 
@@ -165,14 +153,9 @@ Feature: Subscribing to community content in solutions
       | Sofia                 |
       | Products of Bulgaria  |
       | Canned cherries       |
-
-      # Distributions are failing in digest for now because they are created
-      # without a group due to the workaround in
-      # \Drupal\joinup\Context\DistributionContext::afterNodeCreateDistributionParent().
-      # @todo Restore the lines below in ISAICP-8572.
-      # | Full list of products |
+      | Full list of products |
       | Spring 2021           |
-      # | Spring discounts      |
+      | Spring discounts      |
       | Sunflower seeds       |
     And the content subscription digest sent to kalin should have the subject "Joinup: Monthly digest message"
 

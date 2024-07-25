@@ -11,8 +11,8 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
 use Drupal\joinup_group\Entity\GroupInterface;
-use Drupal\rdf_entity\RdfInterface;
 use Drupal\joinup_solution\Entity\SolutionInterface;
+use Drupal\rdf_entity\RdfInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
