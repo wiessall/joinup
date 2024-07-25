@@ -26,7 +26,7 @@ function ventuno_preprocess_meta_entity(array &$variables): void {
     return;
   }
 
-  /** @var \Drupal\solution\Entity\SolutionInterface $solution */
+  /** @var \Drupal\joinup_solution\Entity\SolutionInterface $solution */
   $solution = $meta_entity->getTargetEntity();
   $variables['solution_label'] = $solution->label();
   $variables['solution_url'] = $solution->toUrl()->setAbsolute()->toString();

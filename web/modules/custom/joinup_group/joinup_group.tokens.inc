@@ -12,8 +12,8 @@ use Drupal\collection\Entity\CollectionContentInterface;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\collection\Exception\MissingCollectionException;
 use Drupal\joinup_bundle_class\ShortIdInterface;
-use Drupal\solution\Entity\SolutionContentInterface;
-use Drupal\solution\Exception\MissingSolutionException;
+use Drupal\joinup_solution\Entity\SolutionContentInterface;
+use Drupal\joinup_solution\Exception\MissingSolutionException;
 
 /**
  * Implements hook_token_info().

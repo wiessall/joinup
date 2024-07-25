@@ -38,8 +38,8 @@ class JoinupGroupContext extends RawDrupalContext {
    */
   public function visitMembersPage(string $label): void {
     $group = $this->getEntityByLabel('rdf_entity', $label);
-    $url = Url::fromRoute('entity.rdf_entity.member_overview', [
-      'rdf_entity' => $group->id(),
+    $url = Url::fromRoute("entity.{$group->getEntityTypeId()}.member_overview", [
+      $group->getEntityTypeId() => $group->id(),
     ]);
     $this->visitPath($url->toString());
   }

@@ -13,7 +13,7 @@ use Drupal\joinup_release\Entity\ReleaseInterface;
 use Drupal\node\NodeInterface;
 use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\rdf_entity\RdfInterface;
-use Drupal\solution\Entity\SolutionInterface;
+use Drupal\joinup_solution\Entity\SolutionInterface;
 
 /**
  * Controller for asset distribution forms.

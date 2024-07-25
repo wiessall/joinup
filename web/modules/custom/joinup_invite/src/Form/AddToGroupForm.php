@@ -61,8 +61,8 @@ class AddToGroupForm extends GroupFormBase {
     $this->messenger()->addMessage($this->t('Successfully added the role %role to the selected users.', [
       '%role' => $this->role->label(),
     ]));
-    $form_state->setRedirect('entity.rdf_entity.member_overview', [
-      'rdf_entity' => $this->entity->id(),
+    $form_state->setRedirect("entity.{$this->entity->getEntityTypeId()}.member_overview", [
+      $this->entity->getEntityTypeId() => $this->entity->id(),
     ]);
   }
 

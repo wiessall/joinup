@@ -71,7 +71,7 @@ class ReleaseController extends ControllerBase {
    *   The build array for the page or a 404 response.
    */
   public function overview(RdfInterface $rdf_entity): TrustedRedirectResponse|array {
-    /** @var \Drupal\solution\SolutionReleasesAndDistributionsFieldItemList $field */
+    /** @var \Drupal\joinup_solution\SolutionReleasesAndDistributionsFieldItemList $field */
     $field = $rdf_entity->get('releases_and_distributions');
     if ($field->isEmpty()) {
       return (new TrustedRedirectResponse('/not-found'))

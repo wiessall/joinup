@@ -17,8 +17,8 @@ use Drupal\joinup_workflow\ArchivableEntityTrait;
 use Drupal\joinup_workflow\EntityWorkflowStateTrait;
 use Drupal\node\Entity\Node;
 use Drupal\og\OgGroupAudienceHelperInterface;
-use Drupal\solution\Entity\SolutionContentTrait;
-use Drupal\solution\Entity\SolutionInterface;
+use Drupal\joinup_solution\Entity\SolutionContentTrait;
+use Drupal\joinup_solution\Entity\SolutionInterface;
 
 /**
  * Bundle class for distributions.

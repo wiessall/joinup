@@ -6,7 +6,7 @@ namespace Drupal\joinup_release\EventSubscriber;
 
 use Drupal\joinup_group\Event\AddGroupContentEvent;
 use Drupal\joinup_group\EventSubscriber\AddGroupContentEventSubscriberBase;
-use Drupal\solution\Entity\SolutionInterface;
+use Drupal\joinup_solution\Entity\SolutionInterface;
 
 /**
  * Subscribes to Joinup Group events.

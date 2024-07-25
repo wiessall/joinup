@@ -6,7 +6,7 @@ namespace Drupal\eif\EventSubscriber;
 
 use Drupal\eif\Entity\EifPerspectiveInterface;
 use Drupal\rdf_sync\Event\RdfSyncNormalizeEvent;
-use Drupal\solution\Entity\Solution;
+use Drupal\joinup_solution\Entity\Solution;
 use EasyRdf\Graph;
 use EasyRdf\Literal;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;

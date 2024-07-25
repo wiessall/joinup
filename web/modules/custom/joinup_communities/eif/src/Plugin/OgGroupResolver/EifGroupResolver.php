@@ -7,7 +7,7 @@ namespace Drupal\eif\Plugin\OgGroupResolver;
 use Drupal\eif\EifInterface;
 use Drupal\og\OgResolvedGroupCollectionInterface;
 use Drupal\og\Plugin\OgGroupResolver\RouteGroupResolver;
-use Drupal\solution\Entity\SolutionInterface;
+use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\taxonomy\TermInterface;
 
 /**
@@ -43,7 +43,7 @@ class EifGroupResolver extends RouteGroupResolver {
   public function resolve(OgResolvedGroupCollectionInterface $collection): void {
     if ($entity = $this->getContentEntity()) {
       if ($entity->id() === EifInterface::EIF_ID || ($entity instanceof TermInterface && $entity->bundle() === 'eif_recommendation')) {
-        /** @var \Drupal\solution\Entity\SolutionInterface $solution */
+        /** @var \Drupal\joinup_solution\Entity\SolutionInterface $solution */
         if ($solution = $this->entityTypeManager->getStorage('rdf_entity')->load(EifInterface::EIF_ID)) {
           $collection->addGroup($solution, ['route']);
           $this->stopPropagation();

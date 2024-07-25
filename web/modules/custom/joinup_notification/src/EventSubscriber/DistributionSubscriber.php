@@ -11,7 +11,7 @@ use Drupal\joinup_notification\MessageArgumentGenerator;
 use Drupal\joinup_notification\NotificationEvents;
 use Drupal\joinup_release\Entity\ReleaseInterface;
 use Drupal\og\OgRoleInterface;
-use Drupal\solution\Exception\MissingSolutionException;
+use Drupal\joinup_solution\Exception\MissingSolutionException;
 
 /**
  * Notification handler for the notifications related to distributions.

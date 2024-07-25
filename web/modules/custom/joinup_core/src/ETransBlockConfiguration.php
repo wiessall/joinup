@@ -11,7 +11,7 @@ use Drupal\joinup_discussion\Entity\DiscussionInterface;
 use Drupal\joinup_document\Entity\DocumentInterface;
 use Drupal\joinup_event\Entity\EventInterface;
 use Drupal\joinup_news\Entity\NewsInterface;
-use Drupal\solution\Entity\SolutionInterface;
+use Drupal\joinup_solution\Entity\SolutionInterface;
 
 /**
  * Provides the Webtools eTrans block configuration for routes and bundles.

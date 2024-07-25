@@ -11,8 +11,22 @@ entity.rdf_entity.member_overview:
         type: entity:rdf_entity
         bundle:
           - collection
-          - solution
     _og_entity_type_id: rdf_entity
+
+entity.node.member_overview:
+  path: 'node/{node}/members'
+  defaults:
+    _controller: '\Drupal\joinup_group\Controller\GroupMembersController::membersList'
+    _title: 'Members'
+  requirements:
+    _custom_access: Drupal\joinup_group\Controller\GroupMembersController::access
+  options:
+    parameters:
+      rdf_entity:
+        type: entity:node
+        bundle:
+          - solution
+    _og_entity_type_id: node
 
 joinup_group.authenticate_to_join:
   path: '/rdf_entity/{rdf_entity}/authenticate-to-join'

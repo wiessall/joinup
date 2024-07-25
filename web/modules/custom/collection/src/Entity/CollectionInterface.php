@@ -24,7 +24,7 @@ interface CollectionInterface extends RdfInterface, EntityPublicationTimeInterfa
    * @param bool $only_published
    *   (optional) Whether to return only published solutions. Defaults to FALSE.
    *
-   * @return \Drupal\solution\Entity\SolutionInterface[]
+   * @return \Drupal\joinup_solution\Entity\SolutionInterface[]
    *   The solutions.
    */
   public function getSolutions(bool $only_published = FALSE): array;

@@ -72,8 +72,8 @@ class InviteToGroupForm extends GroupFormBase {
    * {@inheritdoc}
    */
   protected function getCancelButtonUrl(): Url {
-    return new Url('entity.rdf_entity.member_overview', [
-      'rdf_entity' => $this->entity->id(),
+    return new Url("entity.{$this->entity->getEntityTypeId()}.member_overview", [
+      $this->entity->getEntityTypeId() => $this->entity->id(),
     ]);
   }
 
@@ -88,8 +88,8 @@ class InviteToGroupForm extends GroupFormBase {
     ]);
     $this->role = $this->entityTypeManager->getStorage('og_role')->load($role_id);
 
-    $form_state->setRedirect('entity.rdf_entity.member_overview', [
-      'rdf_entity' => $this->entity->id(),
+    $form_state->setRedirect("entity.{$this->entity->getEntityTypeId()}.member_overview", [
+      $this->entity->getEntityTypeId() => $this->entity->id(),
     ]);
 
     parent::submitForm($form, $form_state);

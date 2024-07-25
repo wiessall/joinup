@@ -242,7 +242,7 @@ class OgMembershipSubscriber extends NotificationSubscriberBase {
    */
   protected function getMembersUrl(): string {
     $entity_type_id = $this->entity->getEntityTypeId();
-    $route_name = 'entity.rdf_entity.member_overview';
+    $route_name = "entity.$entity_type_id.member_overview";
     $route_parameters = [
       $entity_type_id => $this->entity->id(),
     ];

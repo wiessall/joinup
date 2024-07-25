@@ -20,7 +20,7 @@ use Drupal\topic\Entity\TopicReferencingEntityInterface;
  *
  * This comprises collections and solutions.
  */
-interface GroupInterface extends RdfInterface, LogoInterface, ShortIdInterface, TopicReferencingEntityInterface {
+interface GroupInterface extends LogoInterface, ShortIdInterface, TopicReferencingEntityInterface {
 
   /**
    * Flag for pre-moderated groups.

@@ -57,8 +57,8 @@ abstract class GroupFormBase extends InviteFormBase {
    * {@inheritdoc}
    */
   protected function getCancelButtonUrl(): Url {
-    return new Url('entity.rdf_entity.member_overview', [
-      'rdf_entity' => $this->entity->id(),
+    return new Url("entity.{$this->entity->getEntityTypeId()}.member_overview", [
+      $this->entity->getEntityTypeId() => $this->entity->id(),
     ]);
   }
 
