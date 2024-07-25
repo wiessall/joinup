@@ -89,6 +89,26 @@ Feature: Global search with archive content
       | Collection   | collection |
       | Solution     | solution   |
 
+  Scenario: Content listing for archived group should always display archived content.
+    Given the following collection:
+      | title | Filtration equipment |
+      | state | archived             |
+    Given the following solution:
+      | title      | Filter cartridge     |
+      | state      | archived             |
+      | collection | Filtration equipment |
+    And news content:
+      | title               | state    | solution         |
+      | TPolypropylene Spun | archived | Filter cartridge |
+    And event content:
+      | title        | state    | solution         |
+      | PTFE pleated | archived | Filter cartridge |
+
+    When I go to the homepage of the "Filter cartridge" solution
+    Then I should not see the "solution content archived toggle" facet
+    And I should see the "TPolypropylene Spun" tile
+    And I should see the "PTFE pleated" tile
+
   Scenario: Distributions directly under a solution respect the state.
     And the following solutions:
       | title         | description | state     |
