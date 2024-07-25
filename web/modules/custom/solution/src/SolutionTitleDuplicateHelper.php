@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\solution;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\node\NodeInterface;
 use Drupal\rdf_entity\RdfInterface;
 use Drupal\sparql_entity_storage\SparqlEntityStorageGraphHandlerInterface;
 
@@ -14,30 +15,17 @@ use Drupal\sparql_entity_storage\SparqlEntityStorageGraphHandlerInterface;
 class SolutionTitleDuplicateHelper implements SolutionTitleDuplicateHelperInterface {
 
   /**
-   * The entity type manager service.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
-
-  /**
-   * The SPARQL graph handler service.
-   *
-   * @var \Drupal\sparql_entity_storage\SparqlEntityStorageGraphHandlerInterface
-   */
-  protected $graphHandler;
-
-  /**
    * Constructs a new service instance.
    *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity type manager service.
-   * @param \Drupal\sparql_entity_storage\SparqlEntityStorageGraphHandlerInterface $graph_handler
+   * @param \Drupal\sparql_entity_storage\SparqlEntityStorageGraphHandlerInterface $graphHandler
    *   The SPARQL graph handler service.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, SparqlEntityStorageGraphHandlerInterface $graph_handler) {
-    $this->entityTypeManager = $entity_type_manager;
-    $this->graphHandler = $graph_handler;
+  public function __construct(
+    protected EntityTypeManagerInterface $entityTypeManager,
+    protected SparqlEntityStorageGraphHandlerInterface $graphHandler,
+  ) {
   }
 
   /**
@@ -54,9 +42,7 @@ class SolutionTitleDuplicateHelper implements SolutionTitleDuplicateHelperInterf
     if (!$solution_ids = $this->getSameTitleSolutionIds($solution)) {
       return TRUE;
     }
-
-    /** @var \Drupal\sparql_entity_storage\SparqlEntityStorageInterface $storage */
-    $storage = $this->entityTypeManager->getStorage('rdf_entity');
+    $storage = $this->entityTypeManager->getStorage('node');
 
     // Get the solution's affiliation.
     if (!$collection_ids = $this->getCollectionIdsFromSolution($solution)) {
@@ -71,7 +57,7 @@ class SolutionTitleDuplicateHelper implements SolutionTitleDuplicateHelperInterf
       return NULL;
     }
 
-    return !array_filter($storage->loadMultiple($solution_ids), function (RdfInterface $solution) use ($collection_ids): bool {
+    return !array_filter($storage->loadMultiple($solution_ids), function (NodeInterface $solution) use ($collection_ids): bool {
       return (bool) array_intersect($this->getCollectionIdsFromSolution($solution), $collection_ids);
     });
   }
@@ -97,26 +83,18 @@ class SolutionTitleDuplicateHelper implements SolutionTitleDuplicateHelperInterf
       return [];
     }
 
-    /** @var \Drupal\sparql_entity_storage\SparqlEntityStorageInterface $storage */
-    $storage = $this->entityTypeManager->getStorage('rdf_entity');
+    $storage = $this->entityTypeManager->getStorage('node');
 
     // The relationship between a solution and its collections is not on the
     // child entity but on the parent. This means we cannot use a simple query.
     // Retrieve all solutions with the same title.
     $query = $storage->getQuery()
       ->accessCheck(FALSE)
-      ->condition('label', $solution->label())
-      ->condition('rid', 'solution');
+      ->condition('title', $solution->label())
+      ->condition('node', 'solution')
+      ->condition('status', 1);
     if ($solution->id()) {
       $query->condition('id', $solution->id(), '<>');
-    }
-
-    // If the solution entity is stored in one of the 'nonofficial' graphs,
-    // limit the search to its graph.
-    // @see SparqlEntityStorageGraphHandlerInterface::getEntityTypeGraphIds()
-    $graph_id = $solution->get('graph')->target_id;
-    if (!in_array($graph_id, $this->graphHandler->getEntityTypeDefaultGraphIds('rdf_entity'))) {
-      $query->graphs([$solution->get('graph')->target_id]);
     }
 
     return array_values($query->execute());
@@ -125,13 +103,13 @@ class SolutionTitleDuplicateHelper implements SolutionTitleDuplicateHelperInterf
   /**
    * Returns the list of collection IDs where the give solution is affiliated.
    *
-   * @param \Drupal\rdf_entity\RdfInterface $solution
+   * @param \Drupal\node\NodeInterface $solution
    *   The solution.
    *
    * @return string[]
    *   A list of collection IDs.
    */
-  protected function getCollectionIdsFromSolution(RdfInterface $solution): array {
+  protected function getCollectionIdsFromSolution(NodeInterface $solution): array {
     return array_map(function (array $reference): string {
       return $reference['target_id'];
     }, $solution->get('collection')->getValue());

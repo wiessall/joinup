@@ -16,7 +16,7 @@ final class NotificationEvents {
    *
    * @var string
    */
-  const COMMUNITY_CONTENT_CREATE = 'joinup_notification.cc.create';
+  const string COMMUNITY_CONTENT_CREATE = 'joinup_notification.cc.create';
 
   /**
    * An event for sending notifications on community content update.
@@ -25,7 +25,7 @@ final class NotificationEvents {
    *
    * @var string
    */
-  const COMMUNITY_CONTENT_UPDATE = 'joinup_notification.cc.update';
+  const string COMMUNITY_CONTENT_UPDATE = 'joinup_notification.cc.update';
 
   /**
    * An event for sending notifications on community content deletion.
@@ -34,7 +34,7 @@ final class NotificationEvents {
    *
    * @var string
    */
-  const COMMUNITY_CONTENT_DELETE = 'joinup_notification.cc.delete';
+  const string COMMUNITY_CONTENT_DELETE = 'joinup_notification.cc.delete';
 
   /**
    * An event that sends notifications on RDF entity CRUD operations.
@@ -43,7 +43,7 @@ final class NotificationEvents {
    *
    * @var string
    */
-  const RDF_ENTITY_CRUD = 'joinup_notification.rdf.notify';
+  const string RDF_ENTITY_CRUD = 'joinup_notification.rdf.notify';
 
   /**
    * An event that sends notifications on comment CRUD operations.
@@ -52,7 +52,7 @@ final class NotificationEvents {
    *
    * @var string
    */
-  const COMMENT_CRUD = 'joinup_notification.comment.notify';
+  const string COMMENT_CRUD = 'joinup_notification.comment.notify';
 
   /**
    * An event that sends notifications when a membership state is changed.
@@ -61,7 +61,7 @@ final class NotificationEvents {
    *
    * @var string
    */
-  const OG_MEMBERSHIP_MANAGEMENT = 'joinup_notification.og_membership.management';
+  const string OG_MEMBERSHIP_MANAGEMENT = 'joinup_notification.og_membership.management';
 
   /**
    * Event when solution is completely archived along with its sub-items.
@@ -70,6 +70,6 @@ final class NotificationEvents {
    *
    * @var string
    */
-  const RDF_ENTITY_ARCHIVE_COMPLETED = 'joinup_notification.rdf.archive_completed.notify';
+  const string GROUP_ENTITY_ARCHIVE_COMPLETED = 'joinup_notification.group.archive_completed.notify';
 
 }
