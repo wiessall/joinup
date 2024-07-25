@@ -7,12 +7,12 @@ namespace Drupal\joinup_log\Entity;
 use Drupal\Core\Entity\ContentEntityBase;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\Logger\RfcLogLevel;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\user\EntityOwnerTrait;
 use Drupal\user\UserInterface;
-use Drupal\Core\Logger\RfcLogLevel;
 
 /**
  * Defines the joinup log entity class.
