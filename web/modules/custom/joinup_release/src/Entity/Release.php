@@ -6,8 +6,8 @@ namespace Drupal\joinup_release\Entity;
 
 use Drupal\joinup_bundle_class\DescriptionTrait;
 use Drupal\joinup_bundle_class\JoinupBundleClassFieldAccessTrait;
+use Drupal\joinup_distribution\Entity\DistributionParentTrait;
 use Drupal\joinup_group\Entity\GroupContentTrait;
-use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\Exception\MissingGroupException;
 use Drupal\joinup_publication_date\Entity\EntityPublicationTimeFallbackTrait;
 use Drupal\joinup_rdf\Entity\RdfSyncEntityTrait;
@@ -15,6 +15,7 @@ use Drupal\joinup_workflow\ArchivableEntityTrait;
 use Drupal\joinup_workflow\EntityWorkflowStateTrait;
 use Drupal\node\Entity\Node;
 use Drupal\solution\Entity\SolutionContentTrait;
+use Drupal\solution\Entity\SolutionInterface;
 use Drupal\user\EntityOwnerTrait;
 
 /**
@@ -24,6 +25,7 @@ class Release extends Node implements ReleaseInterface {
 
   use ArchivableEntityTrait;
   use DescriptionTrait;
+  use DistributionParentTrait;
   use EntityPublicationTimeFallbackTrait;
   use EntityWorkflowStateTrait;
   use GroupContentTrait;
@@ -36,12 +38,11 @@ class Release extends Node implements ReleaseInterface {
   /**
    * {@inheritdoc}
    */
-  public function getGroup(): GroupInterface {
+  public function getGroup(): SolutionInterface {
     $group = $this->getFirstReferencedEntity('og_audience');
-    if (empty($group) || !$group instanceof GroupInterface) {
+    if (empty($group) || !$group instanceof SolutionInterface) {
       throw new MissingGroupException();
     }
-
     return $group;
   }
 
@@ -100,13 +101,6 @@ class Release extends Node implements ReleaseInterface {
       return '';
     }
     return $field->value;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getDistributionIds(): array {
-    return \Drupal::getContainer()->get('joinup_distribution.parent_distribution_resolver')->getParentsDistributionIds($this->id());
   }
 
 }
