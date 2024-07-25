@@ -20,10 +20,10 @@ Feature: Asset distribution editing.
       | title        | release number | is version of | state     |
       | Winter of 95 | 6.1            | OpenBSD       | published |
     And distribution content:
-      | title          | description                 | parent       | access url                                                  | licence          | state     |
-      | i386           | The i386 version            | Winter of 95 | https://mirrors.evowise.com/pub/OpenBSD/6.1/i386/random.iso | Postcard licence | published |
-      | Changelog      | Detailed Changelog          | Winter of 95 | text.pdf                                                    | Postcard licence | published |
-      | OpenBSD images | Images for logos and flyers | OpenBSD      | test.zip                                                    | Postcard licence | published |
+      | title          | description                 | solution | release      | access url                                                  | licence          | state     |
+      | i386           | The i386 version            |          | Winter of 95 | https://mirrors.evowise.com/pub/OpenBSD/6.1/i386/random.iso | Postcard licence | published |
+      | Changelog      | Detailed Changelog          |          | Winter of 95 | text.pdf                                                    | Postcard licence | published |
+      | OpenBSD images | Images for logos and flyers | OpenBSD  |              | test.zip                                                    | Postcard licence | published |
     And users:
       | Username       | E-mail                     |
       | Bradley Emmett | bradley.emmett@example.com |
@@ -96,10 +96,10 @@ Feature: Asset distribution editing.
       | title     | is version of | state     |
       | Release 1 | Solution      | published |
     And distribution content:
-      | title          | parent    | access url | state     |
-      | Distribution 1 | Release 1 | text.pdf   | published |
-      | Distribution 2 | Solution  | test.zip   | published |
-      | Distribution 3 | Solution  | test1.zip  | published |
+      | title          | solution | release   | access url | state     |
+      | Distribution 1 |          | Release 1 | text.pdf   | published |
+      | Distribution 2 | Solution |           | test.zip   | published |
+      | Distribution 3 | Solution |           | test1.zip  | published |
     And the following distribution download events:
       | distribution   | user                |
       | Distribution 1 | visitor@example.com |

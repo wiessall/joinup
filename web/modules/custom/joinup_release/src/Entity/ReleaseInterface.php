@@ -13,6 +13,7 @@ use Drupal\joinup_workflow\ArchivableEntityInterface;
 use Drupal\joinup_workflow\EntityWorkflowStateInterface;
 use Drupal\node\NodeInterface;
 use Drupal\solution\Entity\SolutionContentInterface;
+use Drupal\solution\Entity\SolutionInterface;
 
 /**
  * Interface for asset release entities in Joinup.
@@ -37,5 +38,13 @@ interface ReleaseInterface extends NodeInterface, RdfSyncEntityInterface, Collec
    * @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-6217
    */
   public function getVersion(): ?string;
+
+  /**
+   * Returns the solution to which this release belongs to.
+   *
+   * @return \Drupal\solution\Entity\SolutionInterface
+   *   The parent solution.
+   */
+  public function getGroup(): SolutionInterface;
 
 }

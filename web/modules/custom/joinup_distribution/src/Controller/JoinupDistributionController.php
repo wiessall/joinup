@@ -123,24 +123,26 @@ class JoinupDistributionController extends ControllerBase {
   /**
    * Creates a new distribution entity.
    *
-   * @param \Drupal\Core\Entity\EntityInterface $entity
-   *   The RDF entity that the distribution is associated with. Can be either an
-   *   'release' or a 'solution'.
+   * @param \Drupal\joinup_release\Entity\ReleaseInterface|\Drupal\solution\Entity\SolutionInterface $parent
+   *   The parent of the distribution.
    *
    * @return \Drupal\joinup_distribution\Entity\DistributionInterface|null
-   *   The unsaved distribution entity or NULL if the RDF entity parameter is
-   *   neither a solution nor a release.
+   *   The unsaved distribution entity or NULL if the parent is neither a
+   *   solution nor a release.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
-  protected function createNewAssetDistribution(EntityInterface $entity): ?DistributionInterface {
-    // A solution is needed to create a distribution. If the rdf entity
-    // parameter is neither a solution or a release, the variable will be empty.
-    if (empty($this->getRelatedSolution($entity))) {
+  protected function createNewAssetDistribution(ReleaseInterface|SolutionInterface $parent): ?DistributionInterface {
+    // A solution is needed to create a distribution. If the $parent mparameter
+    // is neither a solution nor a release, the variable will be empty.
+    if (empty($this->getRelatedSolution($parent))) {
       return NULL;
     }
 
     return $this->entityTypeManager()->getStorage('node')->create([
       'type' => 'distribution',
-      'distribution_parent' => $entity->id(),
+      'release' => $parent instanceof ReleaseInterface ? $parent->id() : NULL,
       OgGroupAudienceHelperInterface::DEFAULT_FIELD => $this->solution,
     ]);
   }

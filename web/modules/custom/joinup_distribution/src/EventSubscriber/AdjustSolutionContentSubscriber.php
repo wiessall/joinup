@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_distribution\EventSubscriber;
 
-use Drupal\joinup_distribution\ParentDistributionResolverInterface;
 use Drupal\search_api\Event\QueryPreExecuteEvent;
 use Drupal\search_api\Event\SearchApiEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -13,16 +12,6 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  * Adjust solution content.
  */
 class AdjustSolutionContentSubscriber implements EventSubscriberInterface {
-
-  /**
-   * Constructs a new AdjustSolutionContentSubscriber object.
-   *
-   * @param \Drupal\joinup_distribution\ParentDistributionResolverInterface $parentDistributionResolver
-   *   The parent distribution resolver.
-   */
-  public function __construct(
-    protected ParentDistributionResolverInterface $parentDistributionResolver,
-  ) {}
 
   /**
    * {@inheritdoc}
@@ -56,7 +45,7 @@ class AdjustSolutionContentSubscriber implements EventSubscriberInterface {
     }
 
     // Get the ids of the distributions directly associated to the solution.
-    $distributions = $this->parentDistributionResolver->getParentsDistributionIds($entity->id());
+    $distributions = $entity->getDistributionIds();
 
     if (!empty($distributions)) {
       // We need to filter out all the distributions except the ones that are

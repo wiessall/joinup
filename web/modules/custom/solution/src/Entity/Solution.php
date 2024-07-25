@@ -18,6 +18,7 @@ use Drupal\joinup_bundle_class\JoinupBundleClassFieldAccessTrait;
 use Drupal\joinup_bundle_class\JoinupBundleClassMetaEntityTrait;
 use Drupal\joinup_bundle_class\LogoTrait;
 use Drupal\joinup_bundle_class\ShortIdTrait;
+use Drupal\joinup_distribution\Entity\DistributionParentTrait;
 use Drupal\joinup_featured\FeaturedContentTrait;
 use Drupal\joinup_group\Entity\GroupContentTrait;
 use Drupal\joinup_group\Entity\GroupInterface;
@@ -39,6 +40,7 @@ class Solution extends Rdf implements SolutionInterface {
 
   use AbstractTrait;
   use ArchivableEntityTrait;
+  use DistributionParentTrait;
   use EntityPublicationTimeFallbackTrait;
   use EntityWorkflowStateTrait;
   use FeaturedContentTrait;
@@ -122,13 +124,6 @@ class Solution extends Rdf implements SolutionInterface {
   public function getReleases(): array {
     return $this->entityTypeManager()->getStorage('node')
       ->loadMultiple($this->getReleaseIds());
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getDistributionIds(): array {
-    return \Drupal::getContainer()->get('joinup_distribution.parent_distribution_resolver')->getParentsDistributionIds($this->id());
   }
 
   /**
