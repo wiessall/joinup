@@ -18,7 +18,7 @@ Feature:
       | title            | release number | release notes    | is version of     | state     |
       | Pathauto release | 23             | Pathauto release | Pathauto solution | published |
     And distribution content:
-      | title                 | description           | parent            | state     |
+      | title                 | description           | solution          | state     |
       | Pathauto distribution | Pathauto distribution | Pathauto solution | published |
     And licence content:
       | title            | description      |
