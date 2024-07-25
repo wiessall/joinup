@@ -29,8 +29,14 @@ class ConfigTest extends JoinupExistingSiteTestBase {
 
   /**
    * Tests that configurations passes config_inspector checks.
+   *
+   * @usage ddev drush config:inspect --only-error --detail --list-constraints
+   *
+   * To resolve issues, inspect $raw_violations using xdebug breakpoints in:
+   * @see \Drupal\config_inspector\Commands\InspectorCommands::inspect
    */
   public function testInspectConfiguration(): void {
+    $this->expectNotToPerformAssertions();
     $this->drush('config:inspect', [], [
       'only-error' => NULL,
       'detail' => NULL,
