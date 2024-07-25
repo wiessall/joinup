@@ -154,9 +154,9 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
       | title        | release number | release notes         | is version of    | state     |
       | Summer of 69 | 6.22           | Everything was Colors | Under The Bridge | published |
     And distribution content:
-      | title   | description          | parent           | access url         | state     |
-      | Distro1 | Alphabet & CLR       | Under The Bridge | http://example.com | published |
-      | Distro2 | Colors & ABC & colrs | Summer of 69     | http://example.com | published |
+      | title   | description          | solution         | release      | access url         | state     |
+      | Distro1 | Alphabet & CLR       | Under The Bridge |              | http://example.com | published |
+      | Distro2 | Colors & ABC & colrs |                  | Summer of 69 | http://example.com | published |
     And custom_page content:
       | title    | body              | solution         | state     |
       | Schedule | Colors everywhere | Under The Bridge | published |

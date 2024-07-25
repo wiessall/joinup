@@ -11,6 +11,3 @@ field.formatter.settings.tracked_hosted_file_download:
     show_remote_files:
       type: boolean
       label: 'A boolean to indicate if the remote files should be shown'
-
-entity_reference_selection.distribution_parent:*:
-  type: entity_reference_selection.default

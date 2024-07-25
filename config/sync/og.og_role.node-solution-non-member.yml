@@ -1,0 +1,16 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.solution
+id: node-solution-non-member
+label: Non-member
+weight: 3
+group_id: null
+group_type: node
+group_bundle: solution
+is_admin: null
+permissions:
+  - 'accept facilitator invitation'
+  - subscribe
+role_type: required

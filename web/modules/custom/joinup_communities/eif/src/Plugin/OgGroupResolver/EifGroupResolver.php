@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Drupal\eif\Plugin\OgGroupResolver;
 
 use Drupal\eif\EifInterface;
+use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\og\OgResolvedGroupCollectionInterface;
 use Drupal\og\Plugin\OgGroupResolver\RouteGroupResolver;
-use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\taxonomy\TermInterface;
 
 /**

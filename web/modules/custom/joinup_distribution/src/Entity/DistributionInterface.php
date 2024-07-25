@@ -8,11 +8,11 @@ use Drupal\collection\Entity\CollectionContentInterface;
 use Drupal\joinup_bundle_class\DescriptionInterface;
 use Drupal\joinup_publication_date\Entity\EntityPublicationTimeInterface;
 use Drupal\joinup_rdf\Entity\RdfSyncEntityInterface;
+use Drupal\joinup_solution\Entity\SolutionContentInterface;
 use Drupal\joinup_stats\Entity\DownloadCountAwareInterface;
 use Drupal\joinup_workflow\ArchivableEntityInterface;
 use Drupal\joinup_workflow\EntityWorkflowStateInterface;
 use Drupal\node\NodeInterface;
-use Drupal\joinup_solution\Entity\SolutionContentInterface;
 
 /**
  * Interface for distributions.

@@ -1,0 +1,16 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.solution
+id: node-solution-administrator
+label: 'Solution owner'
+weight: 2
+group_id: null
+group_type: node
+group_bundle: solution
+is_admin: null
+permissions:
+  - 'delete any release content'
+  - 'update solution_settings meta-entity'
+role_type: null
