@@ -400,6 +400,9 @@
             "drupal/search_api_autocomplete": {
                 "Clear timeout autosubmit used in views_autosubmit. @see https://www.drupal.org/i/3314418": "resources/patch/php/drupal/search_api_autocomplete/3314418.patch"
             },
+            "drupal/search_api_solr": {
+                "Wrong schema definition @see https://www.drupal.org/i/3458986": "resources/patch/php/drupal/search_api_solr/3458986.diff"
+            },
             "drupal/search_api_spellcheck": {
                 "URL don't include the base path @see https://www.drupal.org/project/search_api_spellcheck/issues/3280372": "resources/patch/php/drupal/search_api_spellcheck/3280372.patch"
             },
