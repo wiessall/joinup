@@ -2,14 +2,24 @@
 
 declare(strict_types=1);
 
-namespace Drupal\joinup\Traits;
+namespace Drupal\joinup\Context;
+
+use Drupal\DrupalExtension\Context\RawDrupalContext;
 
 /**
- * Reusable code that allows switching Antibot & Honeypot functionality on/off.
+ * Behat step definitions to test Antibot/Honeypot.
  */
-trait AntispamTrait {
+class AntispamContext extends RawDrupalContext {
 
-  use ConfigReadOnlyTrait;
+  /**
+   * Disable anti-spam functionalities for all scenarios, except @antispam ones.
+   *
+   * @BeforeScenario ~@antispam&&@api
+   */
+  public function disableAntispamBeforeScenario(): void {
+    $this->getContext(ConfigContext::class)->setConfig('antibot.settings', 'form_ids', []);
+    $this->getContext(ConfigContext::class)->setConfig('honeypot.settings', 'form_settings', []);
+  }
 
   /**
    * Checks if the current form is protected by Antibot.
@@ -45,35 +55,6 @@ trait AntispamTrait {
     $has_js_assigned_value = (bool) $session->getPage()->find('xpath', '//form//input[@data-drupal-selector="edit-user-homepage" and @name="user_homepage"]');
     if (!$has_js_assigned_value) {
       throw new \Exception("Not an Honeypot protected form.");
-    }
-  }
-
-  /**
-   * Enable the anti-spam functionalities during @antispam tests.
-   *
-   * @BeforeScenario @antispam&&@api
-   */
-  public function enableAntispamBeforeScenarioStarts(): void {
-    \Drupal::state()->set('joinup_test.antispam.enabled', TRUE);
-    $this->clearCache();
-  }
-
-  /**
-   * Restores the anti-spam functionalities after @antispam tests.
-   *
-   * @AfterScenario @antispam&&@api
-   */
-  public function disableAntispamAfterScenarioEnds(): void {
-    \Drupal::state()->delete('joinup_test.antispam.enabled');
-    $this->clearCache();
-  }
-
-  /**
-   * Clear the cache bins storing cached markup.
-   */
-  protected function clearCache(): void {
-    foreach (['page', 'dynamic_page_cache', 'render'] as $bin) {
-      \Drupal::cache($bin)->deleteAll();
     }
   }
 

@@ -20,9 +20,11 @@
         # Third-party code injected in page with Javascript.
         - .globan
   - Drupal\joinup\Context\AdmsValidatorContext
+  - Drupal\joinup\Context\AntispamContext
   - Drupal\joinup\Context\AssetReleaseContext
   - Drupal\joinup\Context\BootstrapContext
   - Drupal\joinup\Context\CollectionContext
+  - Drupal\joinup\Context\ConfigContext
   - Drupal\joinup\Context\ContactFormContext
   - Drupal\joinup\Context\ContactInformationContext
   - Drupal\joinup\Context\CustomPageContext
