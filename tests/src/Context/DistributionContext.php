@@ -19,10 +19,10 @@ use Drupal\joinup\Traits\JavascriptTrait;
 use Drupal\joinup\Traits\RdfEntityTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup_distribution\Entity\DownloadEvent;
+use Drupal\joinup_release\Entity\Release;
 use Drupal\meta_entity\Entity\MetaEntity;
 use Drupal\node\Entity\Node;
 use Drupal\og\OgGroupAudienceHelperInterface;
-use Drupal\solution\Entity\SolutionInterface;
 
 /**
  * Behat step definitions for testing distributions.
@@ -80,12 +80,6 @@ class DistributionContext extends RawDrupalContext {
       ]);
       unset($node->downloads);
     }
-
-    // @todo Drop this once the reference target type is fixed in ISAICP-8572.
-    if ($node->type === 'distribution' && isset($node->parent)) {
-      $node->distribution_parent_dynamic = $node->parent;
-      unset($node->parent);
-    }
   }
 
   /**
@@ -100,28 +94,21 @@ class DistributionContext extends RawDrupalContext {
    */
   public function afterNodeCreateDistributionParent(AfterNodeCreateScope $event): void {
     $node = $event->getEntity();
-    if ($node->type !== 'distribution' || !isset($node->distribution_parent_dynamic)) {
+    if ($node->type !== 'distribution') {
       return;
     }
 
     $distribution = Node::load($node->nid);
-    try {
-      $parent = $this->getEntityByLabel('node', $node->distribution_parent_dynamic, 'release');
-    }
-    catch (\Exception $e) {
-      $parent = $this->getEntityByLabel('rdf_entity', $node->distribution_parent_dynamic, 'solution');
-    }
 
-    // We are mainly repeating what `::preSave` does in distributions.
-    if ($parent instanceof SolutionInterface) {
-      $distribution->set(OgGroupAudienceHelperInterface::DEFAULT_FIELD, $parent->id());
-    }
-    else {
+    // @todo Cleanup in ISAICP-8572.
+    if (!empty($node->release)) {
       // The parent is a release, thus, get the solution instead.
-      $distribution->set(OgGroupAudienceHelperInterface::DEFAULT_FIELD, $parent->getGroup()->id());
+      $distribution->set(OgGroupAudienceHelperInterface::DEFAULT_FIELD, Release::load($node->release[0])->getGroup()->id());
+    }
+    elseif (empty($node->og_audience)) {
+      throw new \InvalidArgumentException("A distribution should have, either a 'release', or a 'solution' field");
     }
 
-    $distribution->set('distribution_parent', $parent->id());
     // Keep the update date during the update.
     $distribution->setNewRevision(FALSE);
     // Temporary workaround to not change the created and changed date when they
