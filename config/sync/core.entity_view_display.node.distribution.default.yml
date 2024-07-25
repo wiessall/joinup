@@ -5,13 +5,13 @@ dependencies:
   config:
     - field.field.node.distribution.access_url
     - field.field.node.distribution.description
-    - field.field.node.distribution.distribution_parent
     - field.field.node.distribution.field_licence
     - field.field.node.distribution.field_state
     - field.field.node.distribution.file_size
     - field.field.node.distribution.format
     - field.field.node.distribution.og_audience
     - field.field.node.distribution.process_status
+    - field.field.node.distribution.release
     - field.field.node.distribution.representation_technique
     - node.type.distribution
   module:
@@ -111,7 +111,7 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
-    weight: 6
+    weight: 7
     region: content
   representation_technique:
     type: entity_reference_label
@@ -121,15 +121,15 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
-    weight: 7
+    weight: 8
     region: content
 hidden:
-  distribution_parent: true
   download_count: true
   langcode: true
   links: true
   og_audience: true
   published_at: true
+  release: true
   report: true
   search_api_excerpt: true
   uri: true
