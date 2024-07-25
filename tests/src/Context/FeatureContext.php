@@ -26,7 +26,7 @@ use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\DrupalExtension\TagTrait;
 use Drupal\image\Plugin\Field\FieldType\ImageItem;
 use Drupal\joinup\HtmlManipulator;
-use Drupal\joinup\Traits\AntispamTrait;
+use Drupal\joinup\Traits\ConfigReadOnlyTrait;
 use Drupal\joinup\Traits\ContextualLinksTrait;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\JavascriptTrait;
@@ -52,7 +52,7 @@ use WebDriver\Key;
 class FeatureContext extends RawDrupalContext {
 
   use DigitQaPipelineAwareTrait;
-  use AntispamTrait;
+  use ConfigReadOnlyTrait;
   use ContextualLinksTrait;
   use EntityTrait;
   use JavascriptTrait;

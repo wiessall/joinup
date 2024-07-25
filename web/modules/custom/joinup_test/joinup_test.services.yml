@@ -1,9 +1,4 @@
 services:
-  joinup_test.config_overrider:
-    class: Drupal\joinup_test\Config\JoinupTestConfigOverrider
-    arguments: ['@state', '@config.factory']
-    tags:
-      - { name: config.factory.override }
   joinup_test.search_api_finish_request_subscriber:
     class: Drupal\joinup_test\EventSubscriber\SearchApiFinishRequestSubscriber
     arguments: ['@state', '@search_api.post_request_indexing']
