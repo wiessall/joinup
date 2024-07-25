@@ -9,7 +9,6 @@ use Behat\Mink\Element\NodeElement;
 use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Session\AnonymousUserSession;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
-use Drupal\DrupalExtension\Hook\Scope\AfterNodeCreateScope;
 use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
 use Drupal\file_url\FileUrlHandler;
 use Drupal\joinup\Traits\EntityReferenceTrait;
@@ -19,10 +18,7 @@ use Drupal\joinup\Traits\JavascriptTrait;
 use Drupal\joinup\Traits\RdfEntityTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup_distribution\Entity\DownloadEvent;
-use Drupal\joinup_release\Entity\Release;
 use Drupal\meta_entity\Entity\MetaEntity;
-use Drupal\node\Entity\Node;
-use Drupal\og\OgGroupAudienceHelperInterface;
 
 /**
  * Behat step definitions for testing distributions.
@@ -80,48 +76,6 @@ class DistributionContext extends RawDrupalContext {
       ]);
       unset($node->downloads);
     }
-  }
-
-  /**
-   * AfterNodeCreate method to handle distribution parent.
-   *
-   * @todo Drop this once the reference target type is fixed in ISAICP-8572.
-   *
-   * @param \Drupal\DrupalExtension\Hook\Scope\AfterNodeCreateScope $event
-   *   The after node create event.
-   *
-   * @AfterNodeCreate
-   */
-  public function afterNodeCreateDistributionParent(AfterNodeCreateScope $event): void {
-    $node = $event->getEntity();
-    if ($node->type !== 'distribution') {
-      return;
-    }
-
-    $distribution = Node::load($node->nid);
-
-    // @todo Cleanup in ISAICP-8572.
-    if (!empty($node->release)) {
-      // The parent is a release, thus, get the solution instead.
-      $distribution->set(OgGroupAudienceHelperInterface::DEFAULT_FIELD, Release::load($node->release[0])->getGroup()->id());
-    }
-    elseif (empty($node->og_audience)) {
-      throw new \InvalidArgumentException("A distribution should have, either a 'release', or a 'solution' field");
-    }
-
-    // Keep the update date during the update.
-    $distribution->setNewRevision(FALSE);
-    // Temporary workaround to not change the created and changed date when they
-    // are set in the distribution. The +1 is because in
-    // \Drupal\Core\Field\Plugin\Field\FieldType\ChangedItem::preSave() the
-    // changed date is set to REQUEST_TIME if it is the same as the original
-    // value.
-    foreach (['created', 'changed'] as $field) {
-      if (isset($node->{$field})) {
-        $distribution->set($field, $node->{$field} + 1);
-      }
-    }
-    $distribution->save();
   }
 
   /**
