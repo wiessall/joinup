@@ -92,7 +92,9 @@ class InvitationSubscriber implements EventSubscriberInterface {
     $this->messenger->addMessage($this->t('You have been promoted to %role.', [
       '%role' => strtolower($role->label()),
     ]));
-    $this->logger->info('Invitation was accepted with @role role.', [
+    $this->logger->info('@actor accepted the invitation to @group as @role role.', [
+      '@actor' => $this->currentUser->getDisplayName(),
+      '@group' => $invitation->getEntity()->label(),
       '@role' => strtolower($role->label()),
       'type' => 'joinup:approve_the_pending_membership',
       'actor' => $this->currentUser->id(),
