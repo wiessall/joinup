@@ -56,3 +56,45 @@ function joinup_rdf_update_111102(): void {
   // have some dependency on the services provided by the joinup_release module.
   \Drupal::service('module_installer')->install(['joinup_release', 'joinup_solution']);
 }
+
+/**
+ * Update the OG roles for solutions - IDs and names.
+ *
+ * @todo Also update the solution IDs of the OG membership after the migration.
+ */
+function joinup_rdf_update_111103(array &$sandbox): string {
+  if (empty($sandbox['solution_ids'])) {
+    $sandbox['solution_ids'] = \Drupal::entityQuery('rdf_entity')
+      ->accessCheck(FALSE)
+      ->graph(['default', 'draft'])
+      ->condition('rid', 'solution')
+      ->execute();
+
+    $sandbox['solution_ids'] = array_values($sandbox['solution_ids']);
+    $sandbox['current'] = 0;
+    $sandbox['total'] = count($sandbox['solution_ids']);
+  }
+
+  $connection = \Drupal::database();
+  $ids = array_splice($sandbox['solution_ids'], 0, 100);
+  foreach ($ids as $id) {
+    // Replace the keyword `rdf_entity` with `node` in the column
+    // `roles_target_id` of the `og_membership__roles` where the `entity_id`
+    // is the same as the `id` column of the `og_membership` table and the`
+    // `entity_id` is the `solution_node_id`.
+    $query = <<<SQL
+UPDATE og_membership__roles
+SET roles_target_id = REPLACE(roles_target_id, 'rdf_entity', 'node')
+WHERE entity_id IN (
+  SELECT id
+  FROM og_membership
+  WHERE entity_id = :id
+)
+SQL;
+    $connection->query($query, [':id' => $id]);
+  }
+
+  $sandbox['current'] += count($ids);
+  $sandbox['#finished'] = $sandbox['current'] / $sandbox['total'];
+  return sprintf('Updated %d of %d solution OG roles.', $sandbox['current'], $sandbox['total']);
+}
