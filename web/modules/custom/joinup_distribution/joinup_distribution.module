@@ -15,6 +15,7 @@ use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\joinup_distribution\DistributionParentItemList;
 use Drupal\joinup_distribution\DistributionsFieldItemList;
 use Drupal\joinup_distribution\Entity\Distribution;
 use Drupal\joinup_distribution\Entity\DistributionInterface;
@@ -62,36 +63,54 @@ function joinup_distribution_entity_base_field_info_alter(array &$fields, Entity
  * Implements hook_entity_bundle_field_info().
  */
 function joinup_distribution_entity_bundle_field_info(EntityTypeInterface $entity_type, $bundle, array $base_field_definitions): array {
-  if (!in_array($bundle, ['release', 'solution'])) {
-    return [];
-  }
+  $fields = [];
 
-  // Define a distributions field that computes the distributions of a solution
-  // or a release and can be placed in the displays.
-  $fields['distributions'] = BaseFieldDefinition::create('entity_reference')
-    ->setLabel(t('Distributions'))
-    ->setDescription(t('The distributions of this entity.'))
-    ->setCardinality(FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED)
-    ->setComputed(TRUE)
-    ->setSetting('target_type', 'node')
-    ->setSetting('handler', 'default')
-    ->setSetting('handler_settings', [
-      'target_bundles' => [
-        'distribution' => 'distribution',
-      ],
-      'sort' => [
-        'field' => 'created',
-        'direction' => 'DESC',
-      ],
-    ])
-    ->setDisplayOptions('view', [
-      'label' => 'hidden',
-      'type' => 'entity_reference_entity_view',
-      'weight' => 0,
-    ])
-    ->setDisplayConfigurable('form', FALSE)
-    ->setDisplayConfigurable('view', TRUE)
-    ->setClass(DistributionsFieldItemList::class);
+  if (in_array($bundle, ['release', 'solution'], TRUE)) {
+    // Define a distributions field that computes the distributions of a
+    // solution or a release and can be placed in the displays.
+    $fields['distributions'] = BaseFieldDefinition::create('entity_reference')
+      ->setLabel(t('Distributions'))
+      ->setDescription(t('The distributions of this entity.'))
+      ->setCardinality(FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED)
+      ->setComputed(TRUE)
+      ->setSetting('target_type', 'node')
+      ->setSetting('handler', 'default')
+      ->setSetting('handler_settings', [
+        'target_bundles' => [
+          'distribution' => 'distribution',
+        ],
+        'sort' => [
+          'field' => 'created',
+          'direction' => 'DESC',
+        ],
+      ])
+      ->setDisplayOptions('view', [
+        'label' => 'hidden',
+        'type' => 'entity_reference_entity_view',
+        'weight' => 0,
+      ])
+      ->setDisplayConfigurable('form', FALSE)
+      ->setDisplayConfigurable('view', TRUE)
+      ->setClass(DistributionsFieldItemList::class);
+  }
+  elseif ($bundle === 'distribution') {
+    $fields['parent'] = BaseFieldDefinition::create('entity_reference')
+      ->setLabel(t('Parent'))
+      ->setDescription(t('Can be a solution or a release'))
+      ->setCardinality(1)
+      ->setComputed(TRUE)
+      ->setSetting('target_type', 'node')
+      ->setSetting('handler', 'default')
+      ->setSetting('handler_settings', [
+        'target_bundles' => [
+          'solution' => 'solution',
+          'release' => 'release',
+        ],
+      ])
+      ->setDisplayConfigurable('form', FALSE)
+      ->setDisplayConfigurable('view', FALSE)
+      ->setClass(DistributionParentItemList::class);
+  }
 
   return $fields;
 }

@@ -10,8 +10,8 @@ use Drupal\joinup_notification\Event\NotificationEvent;
 use Drupal\joinup_notification\MessageArgumentGenerator;
 use Drupal\joinup_notification\NotificationEvents;
 use Drupal\joinup_release\Entity\ReleaseInterface;
-use Drupal\og\OgRoleInterface;
 use Drupal\joinup_solution\Exception\MissingSolutionException;
+use Drupal\og\OgRoleInterface;
 
 /**
  * Notification handler for the notifications related to distributions.

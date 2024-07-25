@@ -9,7 +9,6 @@ use Behat\Mink\Element\NodeElement;
 use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Session\AnonymousUserSession;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
-use Drupal\DrupalExtension\Hook\Scope\AfterNodeCreateScope;
 use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
 use Drupal\file_url\FileUrlHandler;
 use Drupal\joinup\Traits\EntityReferenceTrait;
@@ -20,9 +19,6 @@ use Drupal\joinup\Traits\RdfEntityTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup_distribution\Entity\DownloadEvent;
 use Drupal\meta_entity\Entity\MetaEntity;
-use Drupal\node\Entity\Node;
-use Drupal\og\OgGroupAudienceHelperInterface;
-use Drupal\joinup_solution\Entity\SolutionInterface;
 
 /**
  * Behat step definitions for testing distributions.
@@ -80,61 +76,6 @@ class DistributionContext extends RawDrupalContext {
       ]);
       unset($node->downloads);
     }
-
-    // @todo Drop this once the reference target type is fixed in ISAICP-8572.
-    if ($node->type === 'distribution' && isset($node->parent)) {
-      $node->distribution_parent_dynamic = $node->parent;
-      unset($node->parent);
-    }
-  }
-
-  /**
-   * AfterNodeCreate method to handle distribution parent.
-   *
-   * @todo Drop this once the reference target type is fixed in ISAICP-8572.
-   *
-   * @param \Drupal\DrupalExtension\Hook\Scope\AfterNodeCreateScope $event
-   *   The after node create event.
-   *
-   * @AfterNodeCreate
-   */
-  public function afterNodeCreateDistributionParent(AfterNodeCreateScope $event): void {
-    $node = $event->getEntity();
-    if ($node->type !== 'distribution' || !isset($node->distribution_parent_dynamic)) {
-      return;
-    }
-
-    $distribution = Node::load($node->nid);
-    try {
-      $parent = $this->getEntityByLabel('node', $node->distribution_parent_dynamic, 'release');
-    }
-    catch (\Exception $e) {
-      $parent = $this->getEntityByLabel('rdf_entity', $node->distribution_parent_dynamic, 'solution');
-    }
-
-    // We are mainly repeating what `::preSave` does in distributions.
-    if ($parent instanceof SolutionInterface) {
-      $distribution->set(OgGroupAudienceHelperInterface::DEFAULT_FIELD, $parent->id());
-    }
-    else {
-      // The parent is a release, thus, get the solution instead.
-      $distribution->set(OgGroupAudienceHelperInterface::DEFAULT_FIELD, $parent->getGroup()->id());
-    }
-
-    $distribution->set('distribution_parent', $parent->id());
-    // Keep the update date during the update.
-    $distribution->setNewRevision(FALSE);
-    // Temporary workaround to not change the created and changed date when they
-    // are set in the distribution. The +1 is because in
-    // \Drupal\Core\Field\Plugin\Field\FieldType\ChangedItem::preSave() the
-    // changed date is set to REQUEST_TIME if it is the same as the original
-    // value.
-    foreach (['created', 'changed'] as $field) {
-      if (isset($node->{$field})) {
-        $distribution->set($field, $node->{$field} + 1);
-      }
-    }
-    $distribution->save();
   }
 
   /**

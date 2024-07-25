@@ -184,7 +184,7 @@ Feature: Add distribution through the UI
 
   Scenario: Distributions with the same name should not be allowed within the same solution.
     Given distribution content:
-      | title            | description        | access url | parent                 | state     |
+      | title            | description        | access url | solution               | state     |
       | Windows - source | Sample description | test.zip   | Solution random x name | published |
     And I am logged in as a facilitator of the "Solution random x name" solution
     When I go to the homepage of the "Solution random x name" solution
@@ -199,7 +199,7 @@ Feature: Add distribution through the UI
       | title                  | description                                                                    |
       | Boost Software License | It is a permissive license in the style of the BSD license and the MIT license |
     And distribution content:
-      | title        | licence                | parent                 | state     | creation date    | modification date |
+      | title        | licence                | solution               | state     | creation date    | modification date |
       | Hot Snake    | WTFPL                  | Solution random x name | published | 2019-11-19 20:45 | 2021-11-19 20:45  |
       | Quality Yard | Boost Software License | Solution random x name | published | 2019-12-19 20:45 | 2021-12-19 20:45  |
 

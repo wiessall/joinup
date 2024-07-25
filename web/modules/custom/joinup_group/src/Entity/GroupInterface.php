@@ -12,7 +12,6 @@ use Drupal\joinup_bundle_class\LogoInterface;
 use Drupal\joinup_bundle_class\ShortIdInterface;
 use Drupal\og\OgMembershipInterface;
 use Drupal\og\OgRoleInterface;
-use Drupal\rdf_entity\RdfInterface;
 use Drupal\topic\Entity\TopicReferencingEntityInterface;
 
 /**

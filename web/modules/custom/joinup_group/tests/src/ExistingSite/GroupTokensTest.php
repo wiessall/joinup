@@ -38,17 +38,17 @@ class GroupTokensTest extends JoinupExistingSiteTestBase {
       'field_state' => 'published',
     ]);
 
+    $release = $this->createNode([
+      'type' => 'release',
+      'og_audience' => $solution->id(),
+    ]);
+
     $release_distribution = $this->createNode([
       'type' => 'distribution',
       'title' => $this->randomString(),
       'og_audience' => $solution->id(),
       'field_state' => 'published',
-    ]);
-
-    $release = $this->createNode([
-      'type' => 'release',
-      'og_audience' => $solution->id(),
-      'distribution' => $release_distribution->id(),
+      'release' => $release->id(),
     ]);
 
     $entities_to_test = [

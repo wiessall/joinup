@@ -60,7 +60,7 @@ Feature: When a solution is archived then its sub-content also should be archive
       | Solution Custom page 3 | Solution | published |
     And the workflow state of the "Solution Custom page 3" content is changed to "archived"
     And distribution content:
-      | title                 | parent   | state     |
+      | title                 | solution | state     |
       | Solution Distribution | Solution | published |
     And release content:
       | title              | is version of | state     |

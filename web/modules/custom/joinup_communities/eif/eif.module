@@ -14,9 +14,9 @@ use Drupal\eif\Entity\EifPerspective;
 use Drupal\eif\Entity\EifPerspectiveInterface;
 use Drupal\eif\Entity\EifRecommendation;
 use Drupal\field\FieldConfigInterface;
+use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\joinup_taxonomy\Entity\MappedTerm;
 use Drupal\meta_entity\Entity\MetaEntityInterface;
-use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\views\ViewExecutable;
 
 /**

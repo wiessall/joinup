@@ -114,7 +114,7 @@ Feature: Global search with archive content
       | title         | description | state     |
       | Some solution | Description | published |
     And distribution content:
-      | title                 | description | state     | parent        |
+      | title                 | description | state     | solution      |
       | Some zip distribution | Description | published | Some solution |
       | Some rar distribution | Description | archived  | Some solution |
     And the "Some solution" solution is configured to show "All" community content in the overview
