@@ -7,6 +7,7 @@ namespace Drupal\joinup_log\Entity;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\user\EntityOwnerInterface;
+use Drupal\user\UserInterface;
 
 /**
  * Provides an interface defining a joinup log entity type.
@@ -70,5 +71,21 @@ interface JoinupLogInterface extends ContentEntityInterface, EntityOwnerInterfac
    *   The type of the event.
    */
   public function getType(): string;
+
+  /**
+   * Returns the entity actor's entity.
+   *
+   * @return \Drupal\user\UserInterface|null
+   *   The actor user entity.
+   */
+  public function getActor(): ?UserInterface;
+
+  /**
+   * Returns the entity actor's user ID.
+   *
+   * @return int|null
+   *   The actor user ID.
+   */
+  public function getActorId(): ?int;
 
 }

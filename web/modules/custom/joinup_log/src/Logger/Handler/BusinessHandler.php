@@ -51,22 +51,14 @@ class BusinessHandler extends AbstractProcessingHandler implements DestructableI
     $logStorage = $this->entityTypeManager->getStorage('joinup_log');
 
     foreach ($this->records as $record) {
-      $logMessage = $record->message;
-      $logContext = $record->context;
-      // Remove backtrace and exception
-      // since they may contain an unserializable variable.
-      unset($logContext['backtrace'], $logContext['exception']);
-
-      $messagePlaceholders = $this->parser->parseMessagePlaceholders($logMessage, $logContext);
-
       $logStorage->create(
         [
           'group' => $group?->id(),
-          'type' => mb_substr($record->channel, 0, 64),
-          'message' => $logMessage,
-          'variables' => $messagePlaceholders,
+          'type' => $record->context['type'] ?? NULL,
+          'message' => $record->message,
           'severity' => $record->level->value,
           'uid' => $record->extra['uid'],
+          'actor' => $this->getActor($record),
           'location' => $record->extra['request_uri'],
           'referer' => $record->extra['referer'],
           'hostname' => $record->extra['ip'],
@@ -74,6 +66,20 @@ class BusinessHandler extends AbstractProcessingHandler implements DestructableI
         ]
       )->save();
     }
+  }
+
+  /**
+   * Retrieves the actor from a log record.
+   *
+   * @param \Monolog\LogRecord $record
+   *   The log record.
+   *
+   * @return int|null
+   *   The actor.
+   */
+  protected function getActor(LogRecord $record): ?int {
+    $actor = $record->context['actor'] ?? NULL;
+    return is_numeric($actor) ? (int) $actor : NULL;
   }
 
 }

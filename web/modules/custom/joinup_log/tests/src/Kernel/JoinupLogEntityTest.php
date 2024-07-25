@@ -28,6 +28,7 @@ class JoinupLogEntityTest extends KernelTestBase {
     'message',
     'message_notify',
     'og',
+    'options',
     'rdf_entity',
     'state_machine_revisions',
     'system',
@@ -50,6 +51,7 @@ class JoinupLogEntityTest extends KernelTestBase {
   public function testCreateLoad(): void {
     $log_entity = $this->generateLogEntity([
       'uid' => 1,
+      'actor' => 2,
       'type' => 'system',
       'severity' => RfcLogLevel::NOTICE,
       'location' => '1.1.1.1',
@@ -59,6 +61,7 @@ class JoinupLogEntityTest extends KernelTestBase {
     ]);
 
     $this->assertEquals(1, $log_entity->getOwnerId());
+    $this->assertEquals(2, $log_entity->getActorId());
     $this->assertEquals('system', $log_entity->getType());
     $this->assertEquals(RfcLogLevel::NOTICE, $log_entity->getSeverity());
     $this->assertEquals('1.1.1.1', $log_entity->getLocation());
@@ -104,7 +107,6 @@ class JoinupLogEntityTest extends KernelTestBase {
     $values = $values + [
       'type'        => 'custom',
       'message'     => 'Joinup log test log message',
-      'variables'   => [],
       'severity'    => RfcLogLevel::NOTICE,
       'uid'         => $user->id(),
       'location'    => $base_root . \Drupal::request()->getRequestUri(),
