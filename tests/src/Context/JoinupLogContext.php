@@ -4,12 +4,16 @@ declare(strict_types=1);
 
 namespace Drupal\joinup\Context;
 
+use Drupal\Core\Url;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
+use Drupal\joinup\Traits\EntityTrait;
 
 /**
  * Behat step definitions related to joinup_log entity.
  */
 class JoinupLogContext extends RawDrupalContext {
+
+  use EntityTrait;
 
   /**
    * Timestamp when the current test scenario was started.
@@ -17,12 +21,28 @@ class JoinupLogContext extends RawDrupalContext {
   protected int $timestamp = 0;
 
   /**
-   * Prepare clean up data.
+   * Prepare clean-up data.
    *
    * @BeforeScenario
    */
   public function prepareData(): void {
     $this->timestamp = time();
+  }
+
+  /**
+   * Navigates to the actions log report for the given group.
+   *
+   * @param string $group
+   *   The name of the group.
+   *
+   * @When I go to the actions log report for :group
+   */
+  public function visitActionsLogReport(string $group): void {
+    $entityGroup = $this->getEntityByLabel('rdf_entity', $group);
+    $url = Url::fromRoute('view.actions_log.logs', [
+      'rdf_entity' => $entityGroup->id(),
+    ]);
+    $this->visitPath($url->toString());
   }
 
   /**
