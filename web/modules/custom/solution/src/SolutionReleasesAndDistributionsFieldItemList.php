@@ -113,7 +113,7 @@ class SolutionReleasesAndDistributionsFieldItemList extends EntityReferenceField
       ->execute());
 
     // Retrieve also, all standalone distributions for this solution.
-    return $ids + \Drupal::getContainer()->get('joinup_distribution.parent_distribution_resolver')->getParentsDistributionIds($solution->id());
+    return $ids + $solution->getDistributionIds();
   }
 
 }
