@@ -14,7 +14,7 @@ use Drupal\joinup_rdf\Entity\RdfSyncEntityTrait;
 use Drupal\joinup_workflow\ArchivableEntityTrait;
 use Drupal\joinup_workflow\EntityWorkflowStateTrait;
 use Drupal\node\Entity\Node;
-use Drupal\solution\Entity\SolutionContentTrait;
+use Drupal\joinup_solution\Entity\SolutionContentTrait;
 use Drupal\user\EntityOwnerTrait;
 
 /**

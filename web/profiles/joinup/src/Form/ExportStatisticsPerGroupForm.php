@@ -11,7 +11,7 @@ use Drupal\Core\Datetime\DateFormatterInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\joinup\ExportBatchedDataFormBase;
-use Drupal\solution\Entity\SolutionInterface;
+use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\sparql_entity_storage\Driver\Database\sparql\ConnectionInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -153,7 +153,7 @@ QUERY;
    */
   public function generateGroupStatistics(string $entity_id, array &$context): void {
     $rdf_storage = $this->entityTypeManager->getStorage('rdf_entity');
-    /** @var \Drupal\collection\Entity\CollectionInterface|\Drupal\solution\Entity\SolutionInterface $group */
+    /** @var \Drupal\collection\Entity\CollectionInterface|\Drupal\joinup_solution\Entity\SolutionInterface $group */
     $group = $rdf_storage->load((string) $entity_id);
     // Fetch the nodes that belong to the group.
     $group_content_data = $this->mysql->query(

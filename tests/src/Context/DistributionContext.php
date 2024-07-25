@@ -22,7 +22,7 @@ use Drupal\joinup_distribution\Entity\DownloadEvent;
 use Drupal\meta_entity\Entity\MetaEntity;
 use Drupal\node\Entity\Node;
 use Drupal\og\OgGroupAudienceHelperInterface;
-use Drupal\solution\Entity\SolutionInterface;
+use Drupal\joinup_solution\Entity\SolutionInterface;
 
 /**
  * Behat step definitions for testing distributions.

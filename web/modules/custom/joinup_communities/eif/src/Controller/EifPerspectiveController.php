@@ -11,7 +11,7 @@ use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\meta_entity\Entity\MetaEntity;
-use Drupal\solution\Entity\SolutionInterface;
+use Drupal\joinup_solution\Entity\SolutionInterface;
 
 /**
  * Controller class for the solution EIF perspective.
@@ -21,7 +21,7 @@ class EifPerspectiveController extends ControllerBase {
   /**
    * Provides a controller for the 'eif.eif_perspective_form' route title.
    *
-   * @param \Drupal\solution\Entity\SolutionInterface $rdf_entity
+   * @param \Drupal\joinup_solution\Entity\SolutionInterface $rdf_entity
    *   The solution.
    *
    * @return \Drupal\Component\Render\MarkupInterface
@@ -36,7 +36,7 @@ class EifPerspectiveController extends ControllerBase {
   /**
    * Provides a controller for the 'eif.eif_perspective' route title.
    *
-   * @param \Drupal\solution\Entity\SolutionInterface $rdf_entity
+   * @param \Drupal\joinup_solution\Entity\SolutionInterface $rdf_entity
    *   The solution.
    *
    * @return \Drupal\Component\Render\MarkupInterface
@@ -51,7 +51,7 @@ class EifPerspectiveController extends ControllerBase {
   /**
    * Provides a controller for the 'eif.eif_perspective_form' route.
    *
-   * @param \Drupal\solution\Entity\SolutionInterface $rdf_entity
+   * @param \Drupal\joinup_solution\Entity\SolutionInterface $rdf_entity
    *   The solution.
    *
    * @return array
@@ -82,7 +82,7 @@ class EifPerspectiveController extends ControllerBase {
   /**
    * Provides an access callback to view the EIF perspective.
    *
-   * @param \Drupal\solution\Entity\SolutionInterface $rdf_entity
+   * @param \Drupal\joinup_solution\Entity\SolutionInterface $rdf_entity
    *   The solution.
    *
    * @return \Drupal\Core\Access\AccessResultInterface

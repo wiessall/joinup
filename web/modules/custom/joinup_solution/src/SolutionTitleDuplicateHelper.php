@@ -52,7 +52,7 @@ class SolutionTitleDuplicateHelper implements SolutionTitleDuplicateHelperInterf
       // allowed. See the 'joinup_federation' module for more details. As an
       // effect we cannot determine if the solution title is unique as we don't
       // know yet the solution affiliation.
-      // @see \Drupal\solution\SolutionAffiliationFieldItemList
+      // @see \Drupal\joinup_solution\SolutionAffiliationFieldItemList
       return NULL;
     }
 

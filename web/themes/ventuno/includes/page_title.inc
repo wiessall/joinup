@@ -30,7 +30,7 @@ function ventuno_preprocess_page_title(array &$variables): void {
   }
 
   if (\Drupal::routeMatch()->getRouteName() === 'entity.rdf_entity.eif_perspective') {
-    /** @var \Drupal\solution\Entity\SolutionInterface $solution */
+    /** @var \Drupal\joinup_solution\Entity\SolutionInterface $solution */
     $solution = \Drupal::routeMatch()->getParameter('rdf_entity');
     $variables['title'] = t('EIF Perspective attributes of @title', ['@title' => $solution->label()]);
   }

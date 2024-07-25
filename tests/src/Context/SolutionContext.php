@@ -29,7 +29,7 @@ use Drupal\language\Entity\ConfigurableLanguage;
 use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\og\OgRoleInterface;
 use Drupal\rdf_entity\Entity\Rdf;
-use Drupal\solution\Entity\SolutionInterface;
+use Drupal\joinup_solution\Entity\SolutionInterface;
 use PHPUnit\Framework\Assert;
 
 /**
@@ -248,7 +248,7 @@ class SolutionContext extends RawDrupalContext {
    * @param array $values
    *   The solution creation values.
    *
-   * @see \Drupal\solution\SolutionAffiliationFieldItemList::preSave()
+   * @see \Drupal\joinup_solution\SolutionAffiliationFieldItemList::preSave()
    */
   protected function ensureParentCollection(array &$values): void {
     if (empty($values['collection'])) {
@@ -364,7 +364,7 @@ class SolutionContext extends RawDrupalContext {
   /**
    * Applies post-save tasks: (un)pinning and (un)featuring.
    *
-   * @param \Drupal\solution\Entity\SolutionInterface $solution
+   * @param \Drupal\joinup_solution\Entity\SolutionInterface $solution
    *   The saved solution object.
    * @param array $values
    *   The solution values.

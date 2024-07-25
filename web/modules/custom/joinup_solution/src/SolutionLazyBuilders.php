@@ -8,7 +8,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Security\TrustedCallbackInterface;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\solution\Form\JoinSolutionForm;
+use Drupal\joinup_solution\Form\JoinSolutionForm;
 
 /**
  * Defines a service for #lazy_builder callbacks for the Collection module.
