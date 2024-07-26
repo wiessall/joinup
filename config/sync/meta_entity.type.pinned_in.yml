@@ -7,10 +7,17 @@ dependencies:
     - node.type.document
     - node.type.event
     - node.type.news
-    - rdf_entity.rdfentity.solution
+    - node.type.solution
   module:
+    - joinup_stats
     - node
-    - rdf_entity
+third_party_settings:
+  joinup_stats:
+    matomo_method: ''
+    parameter_name: ''
+    parameter_method: ''
+    period: 7
+    type: null
 id: pinned_in
 label: 'Pinned in'
 description: 'A list of groups that the entity is "pinned" in. The entity will be displayed prominently on the homepages of these groups.'
@@ -28,7 +35,6 @@ mapping:
     news:
       field_name: pinned_in
       auto_create: false
-  rdf_entity:
     solution:
       field_name: pinned_in
       auto_create: false
