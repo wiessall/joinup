@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_invite\Form;
 
+use Drupal\collection\Entity\CollectionInterface;
 use Drupal\Component\Utility\Crypt;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
@@ -74,36 +75,44 @@ class InvitationForm extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state, ?InvitationInterface $invitation = NULL): array {
+    $group = $invitation->getEntity();
     $form['text'] = [
-      '#type' => 'markup',
-      '#markup' =>
-      $this->t(
+      '#type' => 'html_tag',
+      '#tag' => 'p',
+      '#value' =>
+        $this->t(
           'You have been invited by @actor to join the "@entity" as a @role.',
           [
             '@actor' => $invitation->getOwner()->getDisplayName(),
             '@entity' => $invitation->getEntity()->label(),
             '@role' => $invitation->get('field_invitation_og_role')->entity->label(),
           ]
-      ),
+        ),
     ];
 
-    $form['new_line1'] = [
-      '#type' => 'markup',
-      '#markup' => '<br /><br />',
-    ];
+    if ($group instanceof CollectionInterface && $codeOfConduct = $group->getCodeOfConduct()) {
+      $args = [
+        ':url' => $codeOfConduct->toUrl()->toString(),
+        '%label' => $codeOfConduct->label(),
+      ];
 
-    $form['question'] = [
-      '#type' => 'markup',
-      '#markup' => $this->t('Do you accept invitation?'),
-    ];
-
-    $form['new_line2'] = [
-      '#type' => 'markup',
-      '#markup' => '<br /><br />',
-    ];
+      $form['code_of_conduct'] = [
+        '#type' => 'checkbox',
+        '#title' => $this->t('I have read and agree to the <a href=":url" target="_blank">%label</a>.', $args),
+        '#required_error' => $this->t('You must agree to the <a href=":url" target="_blank>%label</a>.', $args),
+        '#return_value' => $codeOfConduct->getRevisionId(),
+        '#required' => TRUE,
+      ];
+    }
 
     $form['actions'] = [
       '#type' => 'actions',
+      'cancel' => [
+        '#type' => 'link',
+        '#title' => $this->t('Cancel'),
+        '#attributes' => ['class' => ['button']],
+        '#url' => $invitation->getEntity()->toUrl(),
+      ],
       'submit' => [
         '#type' => 'submit',
         '#value' => $this->t('Accept'),
@@ -112,13 +121,7 @@ class InvitationForm extends FormBase {
         '#type' => 'submit',
         '#value' => $this->t('Reject'),
         '#submit' => ['::rejectForm'],
-      ],
-      'cancel' => [
-        '#type' => 'submit',
-        '#value' => $this->t('Cancel'),
-        '#submit' => ['::redirectToGroup'],
         '#limit_validation_errors' => [],
-        '#weight' => -1,
       ],
     ];
 
@@ -135,7 +138,7 @@ class InvitationForm extends FormBase {
     $invitation->accept()->save();
     $this->eventDispatcher->dispatch($this->getEvent($invitation, self::ACTION_ACCEPT), InvitationEvents::ACCEPT_INVITATION_EVENT);
 
-    $this->redirectToGroup($form, $form_state);
+    $this->redirectToGroup($form_state);
   }
 
   /**
@@ -152,18 +155,16 @@ class InvitationForm extends FormBase {
     $invitation->reject()->save();
     $this->eventDispatcher->dispatch($this->getEvent($invitation, self::ACTION_REJECT), InvitationEvents::REJECT_INVITATION_EVENT);
 
-    $this->redirectToGroup($form, $form_state);
+    $this->redirectToGroup($form_state);
   }
 
   /**
    * Redirects to group.
    *
-   * @param array $form
-   *   The form array.
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The form state.
    */
-  public function redirectToGroup(array &$form, FormStateInterface $form_state): void {
+  public function redirectToGroup(FormStateInterface $form_state): void {
     /** @var \Drupal\joinup_invite\Entity\InvitationInterface $invitation */
     $invitation = $this->currentRouteMatch->getParameter('invitation');
     $url = $invitation->getEntity()->toUrl();
