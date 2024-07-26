@@ -12,7 +12,7 @@ dependencies:
   - 'drupal:text'
   - 'file_url:file_url'
   - 'inline_entity_form:inline_entity_form'
-  - 'joinup:asset_release'
+  - 'joinup:joinup_release'
   - 'joinup:contact_information'
   - 'joinup:joinup_taxonomy'
   - 'joinup:joinup_workflow'

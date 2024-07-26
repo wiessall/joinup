@@ -26,7 +26,7 @@ class CanInviteToDiscussionCacheContext extends UserCacheContextBase implements 
   protected $routeMatch;
 
   /**
-   * Constructs a new AssetReleaseCacheContext service.
+   * Constructs a new CanInviteToDiscussionCacheContext service.
    *
    * @param \Drupal\Core\Session\AccountInterface $user
    *   The current user.

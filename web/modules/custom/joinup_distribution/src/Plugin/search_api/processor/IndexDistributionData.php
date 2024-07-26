@@ -7,7 +7,7 @@ namespace Drupal\joinup_distribution\Plugin\search_api\processor;
 use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\File\FileUrlGeneratorInterface;
-use Drupal\joinup_distribution\ParentDistributionResolverInterface;
+use Drupal\joinup_distribution\Entity\DistributionsParentInterface;
 use Drupal\search_api\IndexInterface;
 use Drupal\search_api\Item\ItemInterface;
 use Drupal\search_api\Processor\ProcessorPluginBase;
@@ -45,8 +45,6 @@ class IndexDistributionData extends ProcessorPluginBase {
    *   The file URL generator service.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity type manager service.
-   * @param \Drupal\joinup_distribution\ParentDistributionResolverInterface $parentDistributionResolver
-   *   The parent distribution resolver service.
    */
   public function __construct(
     array $configuration,
@@ -54,7 +52,6 @@ class IndexDistributionData extends ProcessorPluginBase {
     $pluginDefinition,
     protected FileUrlGeneratorInterface $fileUrlGenerator,
     protected EntityTypeManagerInterface $entityTypeManager,
-    protected ParentDistributionResolverInterface $parentDistributionResolver,
   ) {
     parent::__construct($configuration, $pluginId, $pluginDefinition);
   }
@@ -69,7 +66,6 @@ class IndexDistributionData extends ProcessorPluginBase {
       $pluginDefinition,
       $container->get('file_url_generator'),
       $container->get('entity_type.manager'),
-      $container->get('joinup_distribution.parent_distribution_resolver')
     );
   }
 
@@ -111,18 +107,21 @@ class IndexDistributionData extends ProcessorPluginBase {
     $entity = $item->getOriginalObject()->getValue();
 
     // Only solutions and releases should receive distribution data.
-    if (!in_array($entity->bundle(), ['asset_release', 'solution'])) {
+    if (!$entity instanceof DistributionsParentInterface) {
       return;
     }
 
-    $distributionIds = $this->parentDistributionResolver->getParentsDistributionIds($entity->id());
+    $distributionIds = $entity->getDistributionIds();
     if (empty($distributionIds)) {
       return;
     }
 
     // Get the parent Search API field.
-    $sapiFieldName = $entity->bundle() === 'asset_release' ? 'field_isr_description' : 'field_is_description';
+    $sapiFieldName = $entity->bundle() === 'release' ? 'description_processed' : 'field_is_description';
     $sapiField = $item->getField($sapiFieldName);
+    if (empty($sapiField)) {
+      return;
+    }
 
     // Iterate over all distributions and append their data to Search API field.
     /** @var \Drupal\rdf_entity\RdfInterface $distribution */

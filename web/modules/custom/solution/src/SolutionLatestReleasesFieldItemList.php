@@ -26,24 +26,22 @@ class SolutionLatestReleasesFieldItemList extends EntityReferenceFieldItemList {
   /**
    * Returns a reference to solution's latest release.
    *
-   * @return string|null
+   * @return int|null
    *   A reference to solution's latest release
    */
-  protected function getLatestRelease(): ?string {
+  protected function getLatestRelease(): ?int {
     /** @var \Drupal\solution\Entity\SolutionInterface $solution */
     $solution = $this->getEntity();
-    /** @var string $graph_id */
-    $graph_id = $solution->get('graph')->target_id;
-
-    $ids = \Drupal::entityQuery('rdf_entity')
-      ->graphs([$graph_id])
-      ->condition('rid', 'asset_release')
-      ->condition('field_isr_is_version_of', $solution->id())
+    $ids = \Drupal::entityQuery('node')
+      ->accessCheck(FALSE)
+      ->condition('type', 'release')
+      ->condition('og_audience', $solution->id())
+      ->condition('status', 1)
       ->sort('created', 'DESC')
       ->range(0, 1)
       ->execute();
 
-    return $ids ? key($ids) : NULL;
+    return $ids ? (int) reset($ids) : NULL;
   }
 
 }

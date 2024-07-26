@@ -67,11 +67,11 @@ Feature: User authentication
       | node/add/licence                                    |
       | node/add/news                                       |
       | node/add/owner                                      |
+      | node/add/release                                    |
       | outdated-content-threshold                          |
       | propose/collection                                  |
       | propose/solution                                    |
       | rdf_entity/add                                      |
-      | rdf_entity/add/asset_release                        |
       | rdf_entity/add/collection                           |
       | rdf_entity/add/solution                             |
       | user/subscriptions                                  |
@@ -150,10 +150,10 @@ Feature: User authentication
       | node/add/licence                                    |
       | node/add/news                                       |
       | node/add/owner                                      |
+      | node/add/release                                    |
       | outdated-content-threshold                          |
       | propose/solution                                    |
       | rdf_entity/add                                      |
-      | rdf_entity/add/asset_release                        |
       | rdf_entity/add/collection                           |
       | rdf_entity/add/solution                             |
 
@@ -232,9 +232,9 @@ Feature: User authentication
       | node/add/glossary                                   |
       | node/add/news                                       |
       | node/add/owner                                      |
+      | node/add/release                                    |
       | propose/solution                                    |
       | rdf_entity/add                                      |
-      | rdf_entity/add/asset_release                        |
       | rdf_entity/add/collection                           |
       | rdf_entity/add/solution                             |
 
@@ -277,6 +277,6 @@ Feature: User authentication
       | node/add/news                              |
       | node/add/owner                             |
       | rdf_entity/add                             |
-      | rdf_entity/add/asset_release               |
+      | node/add/release                           |
       | rdf_entity/add/collection                  |
       | rdf_entity/add/solution                    |
