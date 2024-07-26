@@ -23,7 +23,7 @@ third_party_settings:
           type: 'xsd:dateTime'
       published_at:
         value:
-          predicate: 'http://purl.org/dc/terms/modified'
+          predicate: 'http://purl.org/dc/terms/issued'
           type: 'xsd:dateTime'
 label_singular: release
 label_plural: releases

@@ -3,7 +3,7 @@ sparql_endpoint_piwik.settings:
   label: 'SPARQL Endpoint PIWIK'
   mapping:
     base_uri:
-      type: uri
+      type: string
       label: 'The URL of the PIWIK PRO server.'
     site_id:
       type: string
