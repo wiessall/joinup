@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Drupal\joinup_invite;
 
 use Drupal\Core\Url;
-use Drupal\joinup_invite\Form\InvitationForm;
 use Drupal\joinup_invite\Entity\InvitationInterface;
+use Drupal\joinup_invite\Form\InvitationForm;
 use Drupal\joinup_notification\EntityMessageHelperInterface;
 use Drupal\joinup_notification\JoinupMessageDeliveryInterface;
 use Drupal\message\MessageInterface;
