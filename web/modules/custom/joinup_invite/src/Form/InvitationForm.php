@@ -11,6 +11,7 @@ use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Routing\CurrentRouteMatch;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Site\Settings;
 use Drupal\joinup_invite\Entity\InvitationInterface;
 use Drupal\joinup_invite\Event\InvitationEvent;
@@ -186,8 +187,12 @@ class InvitationForm extends FormBase {
    * @return \Drupal\Core\Access\AccessResultInterface
    *   The access result.
    */
-  public function access(InvitationInterface $invitation, string $hash): AccessResultInterface {
-    return AccessResult::allowedIf(static::generateHash($invitation) === $hash && $invitation->getStatus() === InvitationInterface::STATUS_PENDING);
+  public function access(InvitationInterface $invitation, string $hash, AccountInterface $user): AccessResultInterface {
+    return AccessResult::allowedIf(
+      $user->isAuthenticated() &&
+      static::generateHash($invitation) === $hash &&
+      $invitation->getStatus() === InvitationInterface::STATUS_PENDING
+    );
   }
 
   /**
