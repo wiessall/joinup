@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_invite\Form;
 
-use Drupal\collection\Entity\CollectionInterface;
 use Drupal\Component\Utility\Crypt;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
@@ -13,6 +12,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Routing\CurrentRouteMatch;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Site\Settings;
+use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_invite\Entity\InvitationInterface;
 use Drupal\joinup_invite\Event\InvitationEvent;
 use Drupal\joinup_invite\Event\InvitationEventInterface;
@@ -34,7 +34,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  *
  * @see \Drupal\joinup_discussion\Form\InviteToDiscussionForm
  */
-class InvitationForm extends FormBase {
+class InvitationAcceptanceForm extends FormBase {
 
   /**
    * The identifier for accepting an invitation.
@@ -81,13 +81,13 @@ class InvitationForm extends FormBase {
       '#type' => 'html_tag',
       '#tag' => 'p',
       '#value' =>
-        $this->t(
+      $this->t(
           'You have been invited by @actor to join the "@entity"',
           [
             '@actor' => $invitation->getOwner()->getDisplayName(),
             '@entity' => $invitation->getEntity()->label(),
           ]
-        ),
+      ),
     ];
 
     if ($group instanceof CollectionInterface && $codeOfConduct = $group->getCodeOfConduct()) {
@@ -182,6 +182,8 @@ class InvitationForm extends FormBase {
    *   The invitation which is being accepted or rejected.
    * @param string $hash
    *   The hash value to check.
+   * @param \Drupal\Core\Session\AccountInterface $user
+   *   Account interface.
    *
    * @return \Drupal\Core\Access\AccessResultInterface
    *   The access result.
