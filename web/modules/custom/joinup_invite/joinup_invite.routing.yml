@@ -1,11 +1,11 @@
 joinup_invite.update_invitation:
   path: 'invitation/{invitation}/{hash}'
   defaults:
-    _form: '\Drupal\joinup_invite\Form\InvitationForm'
+    _form: '\Drupal\joinup_invite\Form\InvitationAcceptanceForm'
     _title: 'Do you accept invitation?'
   requirements:
     invitation: \d+
-    _custom_access: '\Drupal\joinup_invite\Form\InvitationForm::access'
+    _custom_access: '\Drupal\joinup_invite\Form\InvitationAcceptanceForm::access'
   options:
     parameters:
       invitation:
