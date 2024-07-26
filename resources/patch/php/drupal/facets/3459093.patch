@@ -1,0 +1,26 @@
+diff --git a/config/schema/facets.processor.schema.yml b/config/schema/facets.processor.schema.yml
+index 7154952fbac82c9b61dec65dc10f31ecfcb98479..045106e1de94b452ebd8f4aadce39b3a7bdfd998 100644
+--- a/config/schema/facets.processor.schema.yml
++++ b/config/schema/facets.processor.schema.yml
+@@ -1,5 +1,5 @@
+ plugin.plugin_configuration.facets_processor.*:
+-  type: config_object
++  type: mapping
+ 
+ plugin.plugin_configuration.facets_processor.count_widget_widget_order:
+   type: mapping
+diff --git a/modules/facets_summary/config/schema/facets_summary.processor.schema.yml b/modules/facets_summary/config/schema/facets_summary.processor.schema.yml
+index 13ef5949fbe6d3072f1e63610e8da7030faa0eb9..83a2009b79c951e7eaa774a2c8c410443e87c931 100644
+--- a/modules/facets_summary/config/schema/facets_summary.processor.schema.yml
++++ b/modules/facets_summary/config/schema/facets_summary.processor.schema.yml
+@@ -1,8 +1,8 @@
+ plugin.plugin_configuration.facets_summary_processor.show_summary:
+-  type: config_object
++  type: mapping
+ 
+ plugin.plugin_configuration.facets_summary_processor.show_count:
+-  type: config_object
++  type: mapping
+ 
+ plugin.plugin_configuration.facets_summary_processor.show_text_when_empty:
+   type: mapping
