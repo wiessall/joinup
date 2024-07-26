@@ -22,7 +22,7 @@ weight: 0
 variant: layout_builder
 variant_settings:
   id: layout_builder
-  label: null
+  label: Authenticated
   weight: 0
   uuid: ed4c9549-4a3f-4017-abc1-f60cc2ed2968
   sections:
