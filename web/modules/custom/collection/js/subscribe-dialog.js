@@ -18,11 +18,14 @@
           try {
             const collectionId = decodeURIComponent(encodedCollectionId);
             if (collectionId === drupalSettings.joinGroupData.id) {
-              const { sparqlEncodedId } = drupalSettings.joinGroupData;
-              if (sparqlEncodedId) {
-                Drupal.ajax({
-                  url: `${drupalSettings.path.baseUrl}ajax/collection/${sparqlEncodedId}/subscribe/auth`,
-                }).execute();
+              cookies.remove("join_group");
+              const event = new Event("mousedown", {
+                bubbles: true,
+                cancelable: true,
+              });
+              const joinElements = document.getElementsByName("join");
+              if (joinElements.length) {
+                joinElements.item(0).dispatchEvent(event);
               }
             }
           } catch (err) {

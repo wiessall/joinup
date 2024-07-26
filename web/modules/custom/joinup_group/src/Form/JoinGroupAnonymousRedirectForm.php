@@ -96,6 +96,10 @@ class JoinGroupAnonymousRedirectForm extends FormBase {
     // In case of a modal dialog, set the cancel button to simply close the
     // dialog.
     if ($this->isModal()) {
+      $form['modal'] = [
+        '#type' => 'hidden',
+        '#value' => '1',
+      ];
       $form['actions']['cancel'] = [
         '#type' => 'button',
         '#value' => $this->t('Cancel'),
@@ -116,12 +120,22 @@ class JoinGroupAnonymousRedirectForm extends FormBase {
     // Set a cookie remembering that the user wants to subscribe to this group,
     // valid for 30 minutes. If the user takes more time to sign in or register,
     // we assume they are no longer actively engaged in the joining process.
-    setrawcookie(JoinGroupSubscriber::ID_COOKIE_NAME, rawurlencode($this->group->id()), $this->time->getRequestTime() + 30 * 60, '/');
+    $defaultExpire = $this->time->getRequestTime() + 30 * 60;
+    setrawcookie(JoinGroupSubscriber::ID_COOKIE_NAME, rawurlencode($this->group->id()), $defaultExpire, '/');
+
+    // If this was an ajax request, set another cookie to tell
+    // JoinGroupSubscriber to redirect the user to the group page instead of
+    // the subscribe form.
+    $relationship = 'subscribe';
+    if (!empty($form_state->getUserInput()['modal'])) {
+      $relationship = 'canonical';
+      setcookie(JoinGroupSubscriber::MODAL_SUBSCRIBE_COOKIE_NAME, '1', $defaultExpire, '/');
+    }
 
     // Redirect to EU Login, with a query argument instructing to redirect back
     // to the group page.
     $url = (new Url('cas.login'))->setOption('query', [
-      'destination' => $this->group->toUrl()->toString(),
+      'destination' => $this->group->toUrl($relationship)->toString(),
     ]);
     $form_state->setRedirectUrl($url);
   }

@@ -66,14 +66,12 @@ class JoinCollectionForm extends JoinGroupFormBase {
     // @todo Move this into the joinup_subscription module to solve a circular
     //   dependency.
     // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-6330
-    $membership = $this->getUserNonBlockedMembership();
-    if (empty($membership)) {
+    $operation = $form['join']['#name'] ?? NULL;
+    if ($operation === 'join') {
       // Show the subscription dialog in a modal on join.
       $form['join']['#ajax'] = ['callback' => '::showSubscribeDialog'];
-    }
-    else {
-      // Show the subscription dialog in a modal on page load, if the user has
-      // just authenticated after indicating their desire to join.
+      // Add library and the needed settings which opens the subscribe dialog if
+      // the user has just authenticated after indicating their desire to join.
       $form['#attached']['library'][] = 'collection/subscribe_dialog';
       $form['#attached']['drupalSettings']['joinGroupData'] = [
         'sparqlEncodedId' => UriEncoder::encodeUrl($group->id()),

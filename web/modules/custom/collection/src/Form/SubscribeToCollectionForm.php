@@ -318,10 +318,6 @@ class SubscribeToCollectionForm extends FormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state): void {
     $collection = $this->loadCollection($form_state->getValue('collection_id'));
-    $idFromCookie = $this->getRequest()->cookies->get(JoinGroupSubscriber::ID_COOKIE_NAME, '');
-    if ($idFromCookie === $collection->id()) {
-      setcookie(JoinGroupSubscriber::ID_COOKIE_NAME, '', $this->time->getRequestTime() - 86400, '/');
-    }
     if (!$this->isAjax()) {
       $redirectValue = $form_state->getValue('redirect');
       $redirect = $redirectValue
@@ -454,14 +450,10 @@ class SubscribeToCollectionForm extends FormBase {
    */
   public function access(RdfInterface $rdf_entity): AccessResultInterface {
     $user = $this->getUser();
-    $membership = $this->getUserNonBlockedMembership($rdf_entity);
     $hasCodeOfConductToAccept = $rdf_entity instanceof CollectionInterface && $rdf_entity->hasCodeOfConductToAccept();
     return AccessResult::allowedIf(
       $user->isAuthenticated() &&
-      (
-        ($hasCodeOfConductToAccept && !$membership) ||
-        (!$hasCodeOfConductToAccept && $membership->get('subscription_bundles')->isEmpty())
-      )
+      ($this->getUserNonBlockedMembership($rdf_entity) || $hasCodeOfConductToAccept)
     );
   }
 
