@@ -10,6 +10,7 @@ use Drupal\joinup_rdf\Entity\RdfSyncEntityInterface;
 use Drupal\joinup_release\Entity\ReleaseInterface;
 use Drupal\rdf_sync\Event\RdfSyncNormalizeEvent;
 use Drupal\rdf_sync\RdfSyncMapper;
+use Drupal\sparql_entity_storage\Driver\Database\sparql\ConnectionInterface;
 use Drupal\sparql_entity_storage\SparqlEntityStorageFieldHandlerInterface;
 use EasyRdf\Literal;
 use EasyRdf\Resource;
@@ -27,10 +28,14 @@ final class SolutionDataRdfSyncSubscriber implements EventSubscriberInterface {
    *   The mapper service.
    * @param \Drupal\sparql_entity_storage\SparqlEntityStorageFieldHandlerInterface $fieldHandler
    *   The field handler service.
+   * @param \Drupal\sparql_entity_storage\Driver\Database\sparql\ConnectionInterface $sparqlConnection
+   *   The SPARQL connection.
    */
   public function __construct(
     protected RdfSyncMapper $mapper,
     protected SparqlEntityStorageFieldHandlerInterface $fieldHandler,
+    // @todo Drop this parameter in ISAICP-8572.
+    protected ConnectionInterface $sparqlConnection,
   ) {}
 
   /**
@@ -38,9 +43,11 @@ final class SolutionDataRdfSyncSubscriber implements EventSubscriberInterface {
    */
   public static function getSubscribedEvents(): array {
     return [
-      RdfSyncNormalizeEvent::class => 'addSolutionData',
-      // @todo Add an event to export the hasVersion value of the solution in
-      //   ISAICP-8572 so that the data are not exported now in the wrong graph.
+      RdfSyncNormalizeEvent::class => [
+        ['addSolutionDataToRelease'],
+        // @todo Change this accordingly in ISAICP-8572.
+        ['addReleaseDataToSolution'],
+      ],
     ];
   }
 
@@ -50,7 +57,7 @@ final class SolutionDataRdfSyncSubscriber implements EventSubscriberInterface {
    * @param \Drupal\rdf_sync\Event\RdfSyncNormalizeEvent $event
    *   The event object.
    */
-  public function addSolutionData(RdfSyncNormalizeEvent $event): void {
+  public function addSolutionDataToRelease(RdfSyncNormalizeEvent $event): void {
     $entity = $event->getEntity();
     $normalizedArray = $event->getNormalizedArray();
     if (!$entity instanceof ReleaseInterface) {
@@ -93,8 +100,8 @@ final class SolutionDataRdfSyncSubscriber implements EventSubscriberInterface {
           if (
             ($fieldItemList instanceof EntityReferenceFieldItemList)
             && ($targetEntity = $item->entity)
-            && $targetEntity instanceof RdfSyncEntityInterface)
-          {
+            && $targetEntity instanceof RdfSyncEntityInterface
+          ) {
             $targetId = $targetEntity->getUri();
           }
           else {
@@ -106,6 +113,35 @@ final class SolutionDataRdfSyncSubscriber implements EventSubscriberInterface {
     }
 
     $event->setNormalizedArray($normalizedArray);
+  }
+
+  /**
+   * Updates the hasVersion relationship of the solution with the release.
+   *
+   * @param \Drupal\rdf_sync\Event\RdfSyncNormalizeEvent $event
+   *   The event object.
+   *
+   * @todo Use the normalizer to properly pass the data in ISAICP-8572.
+   */
+  public function addReleaseDataToSolution(RdfSyncNormalizeEvent $event): void {
+    $entity = $event->getEntity();
+    if (!$entity instanceof ReleaseInterface) {
+      return;
+    }
+
+    $solution = $entity->getSolution();
+    $solutionUri = $solution->id();
+    $releaseUri = $entity->getUri();
+
+    foreach (['default', 'draft'] as $graph) {
+      if ($solution->hasGraph($graph)) {
+        $graph = $graph === 'default' ? 'http://joinup.eu/solution/published' : 'http://joinup.eu/solution/draft';
+        $deleteQuery = "WITH <$graph> DELETE { <$solutionUri> <http://purl.org/dc/terms/hasVersion> <$releaseUri> } WHERE { <$solutionUri> <http://purl.org/dc/terms/hasVersion> <$releaseUri> }";
+        $this->sparqlConnection->update($deleteQuery);
+        $insertQuery = "WITH <$graph> INSERT { <$solutionUri> <http://purl.org/dc/terms/hasVersion> <$releaseUri> }";
+        $this->sparqlConnection->update($insertQuery);
+      }
+    }
   }
 
 }

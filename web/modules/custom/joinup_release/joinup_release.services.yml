@@ -21,6 +21,6 @@ services:
       - { name: event_subscriber }
   joinup_release.event_subscriber:
     class: Drupal\joinup_release\EventSubscriber\SolutionDataRdfSyncSubscriber
-    arguments: ['@rdf_sync.mapper', '@sparql.field_handler']
+    arguments: ['@rdf_sync.mapper', '@sparql.field_handler', '@sparql.endpoint']
     tags:
       - { name: event_subscriber }
