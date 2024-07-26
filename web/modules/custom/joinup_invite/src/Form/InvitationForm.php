@@ -82,11 +82,10 @@ class InvitationForm extends FormBase {
       '#tag' => 'p',
       '#value' =>
         $this->t(
-          'You have been invited by @actor to join the "@entity" as a @role.',
+          'You have been invited by @actor to join the "@entity"',
           [
             '@actor' => $invitation->getOwner()->getDisplayName(),
             '@entity' => $invitation->getEntity()->label(),
-            '@role' => $invitation->get('field_invitation_og_role')->entity->label(),
           ]
         ),
     ];
