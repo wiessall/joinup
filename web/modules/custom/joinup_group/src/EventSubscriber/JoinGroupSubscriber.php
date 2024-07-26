@@ -28,6 +28,7 @@ class JoinGroupSubscriber extends RedirectedEuLoginAuthenticatedSubscriberBase {
   use StringTranslationTrait;
 
   public const string ID_COOKIE_NAME = 'join_group';
+  public const string MODAL_SUBSCRIBE_COOKIE_NAME = 'join_group_modal';
 
   /**
    * The entity type manager service.
@@ -69,24 +70,28 @@ class JoinGroupSubscriber extends RedirectedEuLoginAuthenticatedSubscriberBase {
    */
   protected function getRedirectDestination(CasPostLoginEvent $event): ?string {
     if ($group = $this->getGroup()) {
+      $wasModal = $this->currentRequest->cookies->get(static::MODAL_SUBSCRIBE_COOKIE_NAME);
+      setcookie(static::MODAL_SUBSCRIBE_COOKIE_NAME, '', $this->time->getRequestTime() - 86400, '/');
       // When a user is logged in through EU login and has previously expressed
       // their desire to join a group by setting a cookie, create their
       // membership and redirect them to the group page.
       $uid = (int) $event->getAccount()->id();
       if ($membership = $group->getMembership($uid, OgMembershipInterface::ALL_STATES)) {
         // The user is already subscribed. Delete the cookie and show an
-        // appropriate message.
+        // appropriate message, and redirect the user to the group canonical
+        // page.
         $this->messenger->addStatus($group->getExistingMembershipMessage($membership));
         $this->deleteCookie();
+        return $group->toUrl()->toString();
       }
-      elseif ($group instanceof CollectionInterface && $group->hasCodeOfConductToAccept()) {
-        // Cookie will be deleted if user submits the subscribe form.
-        $url = $group->toUrl('subscribe');
-        if ($destination = parent::getRedirectDestination($event)) {
-          $queries = $url->getOption('query') ?: [];
-          $url->setOption('query', ['destination' => $destination] + $queries);
+      elseif ($group instanceof CollectionInterface) {
+        // No JS, so: if the group has no Code of Conduct, we create the
+        // membership. The Group ID cookie will be deleted when the user submits
+        // the subscribe form.
+        if (!$wasModal &&!$group->hasCodeOfConductToAccept()) {
+          $membership = $group->createMembership((int) $event->getAccount()->id());
+          $this->messenger->addStatus($group->getNewMembershipSuccessMessage($membership));
         }
-        return $url->toString();
       }
       else {
         // Subscribe the user to the group.
