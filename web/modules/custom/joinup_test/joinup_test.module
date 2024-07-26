@@ -8,6 +8,22 @@
 declare(strict_types=1);
 
 /**
+ * Implements hook_page_attachments().
+ */
+function joinup_test_page_attachments(array &$attachments): void {
+  // Attach JS errors collector (used in behat).
+  $attachments['#attached']['library'][] = 'joinup_test/js_errors_collector';
+}
+
+/**
+ * Implements hook_js_settings_alter().
+ */
+function joinup_test_js_settings_alter(&$settings): void {
+  // Output JS deprecation warnings.
+  $settings['suppressDeprecationErrors'] = FALSE;
+}
+
+/**
  * Implements hook_config_schema_info_alter().
  */
 function joinup_test_config_schema_info_alter(&$definitions): void {
