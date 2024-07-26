@@ -52,8 +52,8 @@ function joinup_workflow_entity_base_field_info(EntityTypeInterface $entity_type
  */
 function joinup_workflow_entity_extra_field_info(): array {
   $motivation_bundles = [
-    'node' => ['discussion', 'document', 'event', 'news'],
-    'rdf_entity' => ['collection', 'solution', 'asset_release'],
+    'node' => ['discussion', 'document', 'event', 'news', 'release'],
+    'rdf_entity' => ['collection', 'solution'],
   ];
   $fields = [];
   foreach ($motivation_bundles as $entity_type_id => $bundles) {
@@ -96,7 +96,7 @@ function joinup_workflow_get_motivation_form_ids() {
   return [
     'rdf_entity_collection_edit_form',
     'rdf_entity_solution_edit_form',
-    'rdf_entity_asset_release_edit_form',
+    'node_release_edit_form',
     'node_discussion_edit_form',
     'node_document_edit_form',
     'node_event_edit_form',
@@ -188,6 +188,9 @@ function joinup_workflow_is_motivation_required($entity_type_id, $workflow_id, $
         'report',
         'request_changes',
       ],
+      'release_workflow' => [
+        'request_changes',
+      ],
     ],
     'rdf_entity' => [
       'collection_workflow' => [
@@ -196,9 +199,6 @@ function joinup_workflow_is_motivation_required($entity_type_id, $workflow_id, $
       ],
       'solution_workflow' => [
         'needs_update',
-      ],
-      'asset_release_workflow' => [
-        'request_changes',
       ],
     ],
   ];

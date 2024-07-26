@@ -4,30 +4,26 @@ status: true
 dependencies:
   config:
     - field.storage.node.body
+    - field.storage.node.description
     - field.storage.node.field_event_agenda
     - field.storage.node.field_event_date
     - field.storage.node.field_location
     - field.storage.node.field_news_headline
     - field.storage.node.field_organisation
     - field.storage.node.field_paragraphs_body
-    - field.storage.node.field_paragraphs_body
     - field.storage.node.field_scope
     - field.storage.node.field_shared_in
     - field.storage.node.field_short_title
     - field.storage.paragraph.field_body
-    - field.storage.rdf_entity.field_is_contact_information
-    - field.storage.rdf_entity.field_is_description
+    - field.storage.rdf_entity.field_ar_abstract
+    - field.storage.rdf_entity.field_ar_description
     - field.storage.rdf_entity.field_is_description
     - field.storage.rdf_entity.field_is_solution_type
-    - field.storage.rdf_entity.field_is_solution_type
-    - field.storage.rdf_entity.field_isr_description
-    - field.storage.rdf_entity.field_isr_description
-    - field.storage.rdf_entity.field_isr_release_notes
-    - field.storage.rdf_entity.field_isr_release_notes
     - search_api.server.joinup
   module:
     - custom_page
     - joinup_distribution
+    - joinup_flag
     - joinup_search
     - node
     - paragraphs
@@ -55,15 +51,42 @@ third_party_settings:
         requireFieldMatch: false
         snippets: 3
         fragsize: 0
+    mlt:
+      mintf: 1
+      mindf: 1
+      maxdf: 0
+      maxdfpct: 0
+      minwl: 0
+      maxwl: 0
+      maxqt: 100
+      maxntp: 2000
+      boost: false
+      interestingTerms: none
     term_modifiers:
       slop: 10000000
       fuzzy: 2
+      fuzzy_analyzer: true
     advanced:
       index_prefix: ''
+      collection: ''
+      timezone: ''
     multilingual:
       limit_to_content_language: false
       include_language_independent: true
-      specific_languages: {  }
+      use_language_undefined_as_fallback_language: false
+      specific_languages:
+        cs: '0'
+        da: '0'
+        nl: '0'
+        en: '0'
+        et: '0'
+        fr: '0'
+        de: '0'
+        el: '0'
+        it: '0'
+        sl: '0'
+        es: '0'
+      use_universal_collation: false
 id: unpublished
 name: 'Unpublished entities index'
 description: ''
@@ -129,8 +152,6 @@ field_settings:
       fields:
         - 'entity:node/og_audience'
         - 'entity:rdf_entity/collection'
-        - 'entity:rdf_entity/field_isr_is_version_of'
-        - 'entity:rdf_entity/og_audience'
   field_ar_abstract:
     label: Abstract
     datasource_id: 'entity:rdf_entity'
@@ -179,22 +200,6 @@ field_settings:
     dependencies:
       config:
         - field.storage.rdf_entity.field_is_solution_type
-  field_isr_description:
-    label: 'Description » Processed text'
-    datasource_id: 'entity:rdf_entity'
-    property_path: 'field_isr_description:processed'
-    type: text
-    dependencies:
-      config:
-        - field.storage.rdf_entity.field_isr_description
-  field_isr_release_notes:
-    label: 'Release notes » Processed text'
-    datasource_id: 'entity:rdf_entity'
-    property_path: 'field_isr_release_notes:processed'
-    type: text
-    dependencies:
-      config:
-        - field.storage.rdf_entity.field_isr_release_notes
   field_location:
     label: Location
     datasource_id: 'entity:node'
@@ -342,7 +347,6 @@ field_settings:
         - 'entity:node/field_state'
         - 'entity:rdf_entity/field_ar_state'
         - 'entity:rdf_entity/field_is_state'
-        - 'entity:rdf_entity/field_isr_state'
   sticky:
     label: 'Sticky at top of lists'
     datasource_id: 'entity:node'
@@ -381,6 +385,7 @@ datasource_settings:
         - event
         - glossary
         - news
+        - release
         - video
     languages:
       default: true
@@ -389,11 +394,8 @@ datasource_settings:
     bundles:
       default: false
       selected:
-        - asset_release
         - collection
-        - licence
         - solution
-        - spdx_licence
     languages:
       default: true
       selected: {  }
@@ -415,8 +417,6 @@ processor_settings:
       - field_ar_description
       - field_event_agenda
       - field_is_description
-      - field_isr_description
-      - field_isr_release_notes
     title: true
     alt: true
     tags:
@@ -437,8 +437,6 @@ processor_settings:
       - field_ar_description
       - field_event_agenda
       - field_is_description
-      - field_isr_description
-      - field_isr_release_notes
       - field_location
       - field_news_headline
       - field_organisation
@@ -451,6 +449,7 @@ processor_settings:
   index_distribution_data:
     weights:
       preprocess_index: -50
+  joinup_entity_bundle: {  }
   joinup_entity_latest_revision: {  }
   joinup_entity_status:
     inverse: true
@@ -471,8 +470,6 @@ processor_settings:
       - field_ar_description
       - field_event_agenda
       - field_is_description
-      - field_isr_description
-      - field_isr_release_notes
       - field_location
       - field_news_headline
       - field_scope
@@ -528,8 +525,6 @@ processor_settings:
       - field_ar_description
       - field_event_agenda
       - field_is_description
-      - field_isr_description
-      - field_isr_release_notes
       - field_location
       - field_news_headline
       - field_organisation
@@ -554,8 +549,6 @@ processor_settings:
       - field_ar_description
       - field_event_agenda
       - field_is_description
-      - field_isr_description
-      - field_isr_release_notes
       - field_location
       - field_news_headline
       - field_organisation
@@ -576,11 +569,11 @@ processor_settings:
           event: 3.0
           licence: 0.0
           news: 5.0
+          release: 0.0
           video: 0.0
       'entity:rdf_entity':
         datasource_boost: 0.0
         bundle_boosts:
-          asset_release: 0.0
           collection: 21.0
           solution: 13.0
 tracker_settings:

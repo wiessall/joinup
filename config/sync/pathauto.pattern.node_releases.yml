@@ -1,0 +1,22 @@
+uuid: 31887d93-ca62-4298-8365-ff168cd89b48
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node_releases
+label: 'Node - releases'
+type: 'canonical_entities:node'
+pattern: '[node:og_audience:entity:url:path]/release/[node:release_number]'
+selection_criteria:
+  47b8c34a-75f8-499b-88d2-aa72b73e3ebc:
+    id: 'entity_bundle:node'
+    negate: false
+    uuid: 47b8c34a-75f8-499b-88d2-aa72b73e3ebc
+    context_mapping:
+      node: node
+    bundles:
+      release: release
+selection_logic: and
+weight: -5
+relationships: {  }

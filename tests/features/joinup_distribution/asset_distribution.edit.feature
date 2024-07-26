@@ -19,13 +19,11 @@ Feature: Asset distribution editing.
     And licence content:
       | title | description                         | deprecated |
       | LGPL  | The LGPL more permisssive than GPL. | yes        |
-    And the following release:
-      | title          | Asset release example |
-      | release number | C3PO                  |
-      | description    | Release description   |
-      | is version of  | Solution A            |
+    And release content:
+      | title                 | release number | release notes       | is version of |
+      | Asset release example | C3PO           | Release description | Solution A    |
     And distribution content:
-      | title                      | description        | licence | access url | parent                | state     | publication date | modification date |
+      | title                      | description        | licence | access url | release               | state     | publication date | modification date |
       | Asset distribution example | Sample description | LGPL    | test.zip   | Asset release example | published | 2019-11-19       | 2021-11-19        |
     And the following solution user membership:
       | solution   | user         | roles       |

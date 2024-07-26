@@ -1,0 +1,11 @@
+uuid: f1a36b6b-f600-4d3f-b6fd-725e3ea3eed7
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.release
+id: node.release
+target_entity_type_id: node
+target_bundle: release
+default_langcode: site_default
+language_alterable: false
