@@ -28,6 +28,12 @@ function joinup_group_token_info(): array {
           'module' => 'joinup_group',
           'type' => 'node',
         ],
+        'short_id_or_title' => [
+          'name' => t('Short ID or title'),
+          'description' => t('Returns short ID if available, or the title if the short ID is not.'),
+          'module' => 'joinup_group',
+          'type' => 'node',
+        ],
       ],
       'rdf_entity' => [
         'parent_collection' => [
@@ -36,6 +42,7 @@ function joinup_group_token_info(): array {
           'module' => 'joinup_group',
           'type' => 'rdf_entity',
         ],
+        // @todo Remove this in ISAICP-8574.
         'short_id_or_title' => [
           'name' => t('Short ID or title'),
           'description' => t('Returns short ID if available, or the title if the short ID is not.'),
