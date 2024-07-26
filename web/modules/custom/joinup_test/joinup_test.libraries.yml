@@ -1,0 +1,5 @@
+js_errors_collector:
+  js:
+    assets/js/js_errors_collector.js: { weight: -17.5 }
+  dependencies:
+    - core/drupal
