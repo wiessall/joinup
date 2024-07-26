@@ -98,3 +98,25 @@ SQL;
   $sandbox['#finished'] = $sandbox['current'] / $sandbox['total'];
   return sprintf('Updated %d of %d solution OG roles.', $sandbox['current'], $sandbox['total']);
 }
+
+/**
+ * Set the meta entities pointing to solutions to point to nodes.
+ *
+ * @todo Also update the solution IDs after the migration.
+ */
+function joinup_rdf_update_111104(): string {
+  $connection = \Drupal::database();
+  $ids = \Drupal::entityQuery('rdf_entity')
+    ->accessCheck(FALSE)
+    ->graph(['default', 'draft'])
+    ->condition('rid', 'solution')
+    ->execute();
+  $ids = array_values($ids);
+  $query = <<<SQL
+UPDATE meta_entity
+SET target__target_type = 'node'
+WHERE target__target_id IN (:ids)
+SQL;
+  $connection->query($query, [':ids' => $ids]);
+  return 'Updated the meta entities pointing to solutions from rdf_entity to node.';
+}

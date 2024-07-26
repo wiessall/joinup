@@ -74,10 +74,12 @@ content:
     region: content
 hidden:
   body: true
+  collections: true
   contact: true
   content_creation: true
   distributions: true
   documentation: true
+  download_total: true
   field_is_description: true
   field_keywords: true
   field_state: true
@@ -89,19 +91,24 @@ hidden:
   links: true
   list_related_entities: true
   listing_content: true
+  members: true
   metrics_page: true
   node_solution_listing_content_inline_facets: true
   node_solution_listing_content_top: true
   owner: true
   process_status: true
   published_at: true
+  read_more: true
   related_solutions: true
   release_number: true
+  releases_overview: true
   report: true
   search_api_excerpt: true
+  share_link: true
   shared_in: true
   short_id: true
   site_featured: true
+  solution_subscribe: true
   solution_type: true
   spatial_coverage: true
   translation: true
