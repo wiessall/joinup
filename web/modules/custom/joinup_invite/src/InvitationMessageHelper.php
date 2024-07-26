@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup_invite;
 
 use Drupal\Core\Url;
-use Drupal\joinup_invite\Controller\InvitationController;
+use Drupal\joinup_invite\Form\InvitationForm;
 use Drupal\joinup_invite\Entity\InvitationInterface;
 use Drupal\joinup_notification\EntityMessageHelperInterface;
 use Drupal\joinup_notification\JoinupMessageDeliveryInterface;
@@ -86,8 +86,7 @@ class InvitationMessageHelper implements InvitationMessageHelperInterface {
     foreach (['accept', 'reject'] as $action) {
       $url_arguments = [
         'invitation' => $invitation->id(),
-        'action' => $action,
-        'hash' => InvitationController::generateHash($invitation, $action),
+        'hash' => InvitationForm::generateHash($invitation),
       ];
       $url_options = ['absolute' => TRUE];
       $arguments["@invitation:{$action}_url"] = Url::fromRoute('joinup_invite.update_invitation', $url_arguments, $url_options)->toString();

@@ -1,11 +1,11 @@
 joinup_invite.update_invitation:
-  path: 'invitation/{invitation}/{action}/{hash}'
+  path: 'invitation/{invitation}/{hash}'
   defaults:
-    _controller: '\Drupal\joinup_invite\Controller\InvitationController::updateInvitation'
+    _form: '\Drupal\joinup_invite\Form\InvitationForm'
+    _title: 'Accepting an invitation'
   requirements:
     invitation: \d+
-    action: '^accept|reject$'
-    _custom_access: '\Drupal\joinup_invite\Controller\InvitationController::access'
+    _custom_access: '\Drupal\joinup_invite\Form\InvitationForm::access'
   options:
     parameters:
       invitation:
