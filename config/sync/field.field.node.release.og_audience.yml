@@ -8,6 +8,11 @@ dependencies:
     - rdf_entity.rdfentity.solution
   module:
     - og
+third_party_settings:
+  rdf_sync:
+    target_id:
+      predicate: 'http://purl.org/dc/terms/isVersionOf'
+      type: resource
 id: node.release.og_audience
 field_name: og_audience
 entity_type: node
