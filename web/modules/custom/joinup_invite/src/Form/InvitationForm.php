@@ -117,6 +117,8 @@ class InvitationForm extends FormBase {
         '#type' => 'submit',
         '#value' => $this->t('Cancel'),
         '#submit' => ['::redirectToGroup'],
+        '#limit_validation_errors' => [],
+        '#weight' => -1,
       ],
     ];
 
