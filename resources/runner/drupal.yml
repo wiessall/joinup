@@ -216,6 +216,7 @@ drupal:
           'blazy_ui',
           'cas_mock_server',
           'composer_deploy',
+          'config_inspector',
           'config_update',
           'config_update_ui',
           'dblog',
@@ -278,7 +279,7 @@ drupal:
         ];
       RDF backend: |
         $config['rdf_sync.settings']['endpoint']['host'] = getenv('DRUPAL_SPARQL_HOSTNAME');
-        $config['rdf_sync.settings']['endpoint']['port'] = getenv('DRUPAL_SPARQL_PORT');
+        $config['rdf_sync.settings']['endpoint']['port'] = (int) getenv('DRUPAL_SPARQL_PORT');
       Permissions: |
         $settings['skip_permissions_hardening'] = TRUE;
       Null mail collector: |
@@ -299,7 +300,7 @@ drupal:
         // consumed by the production environment.
         $config['search_api.server.joinup']['backend_config']['connector_config']['scheme'] = getenv('SEARCH_API_SERVER_SS_SOLR_SCHEME') ?: 'http';
         $config['search_api.server.joinup']['backend_config']['connector_config']['host'] = getenv('SEARCH_API_SERVER_SS_SOLR_HOST');
-        $config['search_api.server.joinup']['backend_config']['connector_config']['port'] = getenv('SEARCH_API_SERVER_SS_SOLR_PORT');
+        $config['search_api.server.joinup']['backend_config']['connector_config']['port'] = (int) getenv('SEARCH_API_SERVER_SS_SOLR_PORT');
         // Since Search API Solr 3.x, the Solr endpoint '/solr' (V1 API) has been
         // dropped in favour of '/'. The Solarium library automatically appends the
         // 'solr' part in Endpoint::getCoreBaseUri(). We  prevent changes of
@@ -338,7 +339,7 @@ drupal:
         $settings['filecache']['directory']['bins']['geocoder'] = '../tests/fixtures/geocoding/cache';
         $settings['filecache']['strategy']['bins']['geocoder'] = 'persist';
       GitHub Token Setup: |
-        $config['github_feed.settings']['token'] = getenv('JOINUP_GITHUB_TOKEN');
+        $config['github_feed.settings']['token'] = getenv('JOINUP_GITHUB_TOKEN') ?: '';
       Development: |
         $settings['extension_discovery_scan_tests'] = TRUE;
       Verbose error logging: |
