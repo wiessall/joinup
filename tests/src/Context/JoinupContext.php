@@ -112,7 +112,7 @@ class JoinupContext extends RawDrupalContext {
     }
 
     if (!empty($rows)) {
-      throw new ExpectationFailedException(sprintf("Triple(s) %s doesn't exists in the RDF backend", implode(', ', array_keys($rows))));
+      throw new ExpectationFailedException(sprintf("Triple(s) %s doesn't exists in the RDF backend", implode("\n", array_keys($rows))));
     }
 
   }
