@@ -92,3 +92,13 @@ function joinup_core_requirements($phase): array {
 
   return $requirements;
 }
+
+/**
+ * Fix UUID for field.field.media.video.og_audience.
+ */
+function joinup_core_update_111100(): void {
+  \Drupal::configFactory()
+    ->getEditable('field.field.media.video.og_audience')
+    ->set('uuid', '484ea427-ead5-4958-8f09-f2dc88642003')
+    ->save();
+}
