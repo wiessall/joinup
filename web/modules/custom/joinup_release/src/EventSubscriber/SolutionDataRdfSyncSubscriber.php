@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_release\EventSubscriber;
 
+use Drupal\Core\Field\EntityReferenceFieldItemList;
 use Drupal\joinup_distribution\Exception\MissingDistributionParentException;
+use Drupal\joinup_rdf\Entity\RdfSyncEntityInterface;
 use Drupal\joinup_release\Entity\ReleaseInterface;
 use Drupal\rdf_sync\Event\RdfSyncNormalizeEvent;
 use Drupal\rdf_sync\RdfSyncMapper;
@@ -69,6 +71,7 @@ final class SolutionDataRdfSyncSubscriber implements EventSubscriberInterface {
       'field_is_owner',
       'field_is_contact_information',
       'field_is_description',
+      'field_is_solution_type',
     ];
     foreach ($fields as $field) {
       if ($solution->get($field)->isEmpty()) {
@@ -87,7 +90,17 @@ final class SolutionDataRdfSyncSubscriber implements EventSubscriberInterface {
           $normalizedArray[$entity->getUri()][$predicates['solution']][] = (new Literal($item->$mainPropertyName))->toRdfPhp();
         }
         else {
-          $normalizedArray[$entity->getUri()][$predicates['solution']][] = (new Resource($item->$mainPropertyName))->toRdfPhp();
+          if (
+            ($fieldItemList instanceof EntityReferenceFieldItemList)
+            && ($targetEntity = $item->entity)
+            && $targetEntity instanceof RdfSyncEntityInterface)
+          {
+            $targetId = $targetEntity->getUri();
+          }
+          else {
+            $targetId = $item->$mainPropertyName;
+          }
+          $normalizedArray[$entity->getUri()][$predicates['solution']][] = (new Resource($targetId))->toRdfPhp();
         }
       }
     }
