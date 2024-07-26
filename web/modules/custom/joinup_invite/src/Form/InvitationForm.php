@@ -50,7 +50,7 @@ class InvitationForm extends FormBase {
 
   public function __construct(
     protected EventDispatcherInterface $eventDispatcher,
-    protected CurrentRouteMatch $currentRouteMatch
+    protected CurrentRouteMatch $currentRouteMatch,
   ) {}
 
   /**
@@ -77,14 +77,14 @@ class InvitationForm extends FormBase {
     $form['text'] = [
       '#type' => 'markup',
       '#markup' =>
-        $this->t(
+      $this->t(
           'You have been invited by @actor to join the "@entity" as a @role.',
           [
             '@actor' => $invitation->getOwner()->getDisplayName(),
             '@entity' => $invitation->getEntity()->label(),
             '@role' => $invitation->get('field_invitation_og_role')->entity->label(),
           ]
-        ),
+      ),
     ];
 
     $form['new_line1'] = [
