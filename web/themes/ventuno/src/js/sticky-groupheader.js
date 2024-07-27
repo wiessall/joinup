@@ -22,6 +22,7 @@
 
   class StickyGroupHeader {
     constructor(context) {
+      this.context = context;
       this.navbar = context.querySelector(SELECTORS.NAVBAR);
       this.header = context.querySelector(SELECTORS.HEADER);
       this.headerInner = context.querySelector(SELECTORS.HEADER_INNER);
@@ -46,6 +47,12 @@
 
       // Init the observer.
       this.updateObserver();
+
+      // Refresh the observer when Drupal.displace offsets change, for new
+      // rootMargin's to take effect.
+      $(this.context).on("drupalViewportOffsetChange", () => {
+        this.updateObserver();
+      });
     }
 
     /**
@@ -108,12 +115,6 @@
         () => {
           const stickyHeader = new StickyGroupHeader(context);
           stickyHeader.init();
-
-          // Refresh the observer when Drupal.displace offsets change, for new
-          // rootMargin's to take effect.
-          $(context).on("drupalViewportOffsetChange", () => {
-            stickyHeader.updateObserver();
-          });
         },
       );
     },
