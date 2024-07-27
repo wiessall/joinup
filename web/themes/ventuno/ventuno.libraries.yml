@@ -25,9 +25,8 @@ components:
     - ventuno/components.js
 
 components.js:
-  header: true
   js:
-    assets/js/oe-bcl-joinup.bundle.min.js: { minified: true, attributes: { defer: true } }
+    assets/js/oe-bcl-joinup.bundle.min.js: { minified: true }
   dependencies:
     - core/drupal
 
@@ -83,7 +82,7 @@ group:
     theme:
       assets/css/group.min.css: { minified: true }
   js:
-    assets/js/sticky-groupheader.min.js: { minified: true, attributes: { defer: true } }
+    assets/js/sticky-groupheader.min.js: { minified: true }
   dependencies:
     - core/drupal
     - core/drupal.displace
@@ -107,9 +106,8 @@ actions-menu:
       assets/css/actions-menu.min.css: { minified: true }
 
 ajax-throbber:
-  header: true
   js:
-    assets/js/ajax-throbber.min.js: { minified: true, attributes: { defer: true } }
+    assets/js/ajax-throbber.min.js: { minified: true }
   css:
     theme:
       assets/css/ajax-throbber.min.css: { minified: true }
@@ -122,7 +120,7 @@ alert:
     theme:
       assets/css/alert.min.css: { minified: true }
   js:
-    assets/js/alert.min.js: {  }
+    assets/js/alert.min.js: { minified: true }
   dependencies:
     - ventuno/close
     - core/drupalSettings
@@ -160,9 +158,8 @@ image-gallery:
     - ventuno/carousel-theme
 
 carousel.js:
-  header: true
   js:
-    assets/js/carousel.min.js: { minified: true, attributes: { defer: true } }
+    assets/js/carousel.min.js: { minified: true }
   dependencies:
     - ventuno/glide
     - core/drupal
@@ -203,10 +200,10 @@ etrans:
       assets/css/etrans.min.css: { minified: true }
 
 explore-block:
-  header: true
   js:
-    assets/js/explore-block.min.js: { minified: true, attributes: { defer: true } }
+    assets/js/explore-block.min.js: { minified: true }
   dependencies:
+    - core/drupal
     - ventuno/glide
 
 fieldset-show-more:
@@ -217,9 +214,8 @@ fieldset-show-more:
     - ventuno/fieldset-show-more.js
 
 fieldset-show-more.js:
-  header: true
   js:
-    assets/js/fieldset-show-more.min.js: { minified: true, attributes: { defer: true } }
+    assets/js/fieldset-show-more.min.js: { minified: true }
   dependencies:
     - core/drupal
     - core/once
@@ -247,9 +243,10 @@ webform:
       assets/css/webform.min.css: { minified: true }
 
 highlight-invalid-fields.js:
-  header: true
   js:
-    assets/js/highlight-invalid-fields.min.js: { minified: true, attributes: { defer: true } }
+    assets/js/highlight-invalid-fields.min.js: { minified: true }
+  dependencies:
+    - core/drupal
 
 glide:
   css:
@@ -327,6 +324,7 @@ navbar:
   js:
     assets/js/navbar-hover-dropdown.min.js: { minified: true }
   dependencies:
+    - core/drupal
     - core/once
 
 mmenu:
@@ -349,19 +347,15 @@ navbar-search:
     - ventuno/searchbox-focus.js
 
 searchbox-focus.js:
-  header: true
   js:
-    assets/js/searchbox-focus.min.js: { minified: true, attributes: { defer: true } }
+    assets/js/searchbox-focus.min.js: { minified: true }
+  dependencies:
+    - core/drupal
 
 navigation-bottom:
   css:
     theme:
       assets/css/navigation-bottom.min.css: { minified: true }
-
-outdated-content-notice:
-  header: true
-  js:
-    assets/js/outdated-content-notice.min.js: { minified: true, attributes: { defer: true } }
 
 page-title:
   css:
@@ -378,7 +372,10 @@ paragraph:
     theme:
       assets/css/paragraph.min.css: { minified: true }
   js:
-    assets/js/paragraph-inline-img.min.js: { minified: true, attributes: { defer: true } }
+    assets/js/paragraph-inline-img.min.js: { minified: true }
+  dependencies:
+    - core/drupal
+    - core/once
 
 paragraph__accordion:
   dependencies:
@@ -430,6 +427,9 @@ see-more:
       assets/css/see-more.min.css: { minified: true }
   js:
     assets/js/toggle-text-seemore-btn.min.js: { minified: true }
+  dependencies:
+    - core/drupal
+    - core/drupalSettings
 
 share-content-form:
   css:
@@ -437,16 +437,16 @@ share-content-form:
       assets/css/share-content-form.min.css: { minified: true }
 
 shared-entity:
-  header: true
   js:
-    assets/js/shared-entity.min.js: { minified: true, attributes: { defer: true } }
+    assets/js/shared-entity.min.js: { minified: true }
   dependencies:
     - core/drupalSettings
 
 show-accordion-invalid-fields:
-  header: true
   js:
-    assets/js/show-accordion-invalid-fields.min.js: { minified: true, attributes: { defer: true } }
+    assets/js/show-accordion-invalid-fields.min.js: { minified: true }
+  dependencies:
+    - core/drupal
 
 spinners:
   css:
@@ -471,9 +471,11 @@ tables:
     - ventuno/responsive-tables.js
 
 responsive-tables.js:
-  header: true
   js:
-    assets/js/responsive-tables.min.js: { minified: true, attributes: { defer: true } }
+    assets/js/responsive-tables.min.js: { minified: true }
+  dependencies:
+    - core/drupal
+    - core/once
 
 tabs:
   css:
@@ -496,9 +498,10 @@ toolbar:
       assets/css/toolbar.min.css: { minified: true }
 
 tour-first-balloon:
-  header: true
   js:
-    assets/js/tour-first-balloon.min.js: { minified: true, attributes: { defer: true } }
+    assets/js/tour-first-balloon.min.js: { minified: true }
+  dependencies:
+    - core/drupal
 
 user--group-header:
   css:
