@@ -9,7 +9,7 @@ dependencies:
     - field.field.node.solution.contact
     - field.field.node.solution.content_creation
     - field.field.node.solution.documentation
-    - field.field.node.solution.field_is_description
+    - field.field.node.solution.description
     - field.field.node.solution.field_keywords
     - field.field.node.solution.field_state
     - field.field.node.solution.field_topic
@@ -94,7 +94,7 @@ hidden:
   distributions: true
   documentation: true
   download_total: true
-  field_is_description: true
+  description: true
   field_keywords: true
   field_state: true
   group_moderation: true

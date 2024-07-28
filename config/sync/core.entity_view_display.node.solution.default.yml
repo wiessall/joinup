@@ -8,7 +8,7 @@ dependencies:
     - field.field.node.solution.contact
     - field.field.node.solution.content_creation
     - field.field.node.solution.documentation
-    - field.field.node.solution.field_is_description
+    - field.field.node.solution.description
     - field.field.node.solution.field_keywords
     - field.field.node.solution.field_state
     - field.field.node.solution.field_topic
