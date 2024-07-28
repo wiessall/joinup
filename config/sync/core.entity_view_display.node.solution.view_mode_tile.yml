@@ -9,7 +9,7 @@ dependencies:
     - field.field.node.solution.contact
     - field.field.node.solution.content_creation
     - field.field.node.solution.documentation
-    - field.field.node.solution.field_is_description
+    - field.field.node.solution.description
     - field.field.node.solution.field_keywords
     - field.field.node.solution.field_state
     - field.field.node.solution.field_topic
@@ -50,7 +50,7 @@ content:
       main_field_formatter_id: string
       main_field_formatter_settings:
         link_to_entity: false
-      fallback_field_id: field_is_description
+      fallback_field_id: description
       fallback_field_formatter_id: joinup_html_stripper_stripped
       fallback_field_formatter_settings:
         trim_length: 600
@@ -80,7 +80,7 @@ hidden:
   distributions: true
   documentation: true
   download_total: true
-  field_is_description: true
+  description: true
   field_keywords: true
   field_state: true
   field_topic: true
