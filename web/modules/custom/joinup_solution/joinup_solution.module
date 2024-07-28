@@ -23,7 +23,6 @@ use Drupal\joinup_rdf\Entity\RdfSyncEntityInterface;
 use Drupal\joinup_solution\Entity\Solution;
 use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\joinup_solution\SolutionAffiliationFieldItemList;
-use Drupal\joinup_solution\SolutionDistributionFieldItemList;
 use Drupal\joinup_solution\SolutionLatestReleasesFieldItemList;
 use Drupal\joinup_solution\SolutionReleasesAndDistributionsFieldItemList;
 use Drupal\joinup_taxonomy\Entity\MappedTerm;
@@ -85,20 +84,6 @@ function joinup_solution_entity_bundle_field_info_alter(&$fields, EntityTypeInte
     ->setReadOnly(TRUE)
     ->setCardinality(1)
     ->setClass(SolutionLatestReleasesFieldItemList::class);
-  // References the distributions linked to this solution.
-  // @todo Rename this to `distributions` and move to the `joinup_distribution`
-  //   module.
-  $fields['distribution'] = BaseFieldDefinition::create('entity_reference')
-    ->setLabel(t('Distributions'))
-    ->setName('distribution')
-    ->setDescription(t('The distributions linked to this solution.'))
-    ->setTargetEntityTypeId('rdf_entity')
-    ->setTargetBundle('solution')
-    ->setSetting('target_type', 'node')
-    ->setComputed(TRUE)
-    ->setReadOnly(TRUE)
-    ->setCardinality(FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED)
-    ->setClass(SolutionDistributionFieldItemList::class);
 
   // Make sure a solution's title is unique among the collections it belongs to.
   if (!empty($fields['title'])) {

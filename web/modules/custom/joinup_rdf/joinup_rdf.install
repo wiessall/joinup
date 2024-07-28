@@ -6,6 +6,8 @@
  */
 
 declare(strict_types=1);
+use Drupal\joinup_solution\Entity\Solution;
+use Drupal\node\NodeInterface;
 
 /**
  * Performs checks for the RDF entities and its storage.
@@ -64,9 +66,11 @@ function joinup_rdf_update_111102(): void {
  */
 function joinup_rdf_update_111103(array &$sandbox): string {
   if (empty($sandbox['solution_ids'])) {
-    $sandbox['solution_ids'] = \Drupal::entityQuery('rdf_entity')
+    /** @var \Drupal\sparql_entity_storage\Entity\Query\Sparql\Query $query */
+    $query = \Drupal::entityTypeManager()->getStorage('rdf_entity')->getQuery();
+    $sandbox['solution_ids'] = $query
       ->accessCheck(FALSE)
-      ->graph(['default', 'draft'])
+      ->graphs(['default', 'draft'])
       ->condition('rid', 'solution')
       ->execute();
 
@@ -108,15 +112,15 @@ function joinup_rdf_update_111104(): string {
   $connection = \Drupal::database();
   $ids = \Drupal::entityQuery('rdf_entity')
     ->accessCheck(FALSE)
-    ->graph(['default', 'draft'])
+    ->graphs(['default', 'draft'])
     ->condition('rid', 'solution')
     ->execute();
   $ids = array_values($ids);
   $query = <<<SQL
 UPDATE meta_entity
 SET target__target_type = 'node'
-WHERE target__target_id IN (:ids)
+WHERE target__target_id IN (:ids[])
 SQL;
-  $connection->query($query, [':ids' => $ids]);
+  $connection->query($query, [':ids[]' => $ids]);
   return 'Updated the meta entities pointing to solutions from rdf_entity to node.';
 }
