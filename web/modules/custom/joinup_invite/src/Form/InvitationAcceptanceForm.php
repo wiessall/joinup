@@ -191,8 +191,7 @@ class InvitationAcceptanceForm extends FormBase {
   public function access(InvitationInterface $invitation, string $hash, AccountInterface $user): AccessResultInterface {
     return AccessResult::allowedIf(
       $user->isAuthenticated() &&
-      static::generateHash($invitation) === $hash &&
-      $invitation->getStatus() === InvitationInterface::STATUS_PENDING
+      static::generateHash($invitation) === $hash
     );
   }
 
