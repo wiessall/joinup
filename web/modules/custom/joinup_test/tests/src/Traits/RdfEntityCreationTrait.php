@@ -21,10 +21,10 @@ trait RdfEntityCreationTrait {
    *
    * @const string[]
    */
-  protected const STATE_FIELDS = [
+  protected const array STATE_FIELDS = [
     'collection' => 'field_ar_state',
     'solution' => 'field_is_state',
-    'asset_release' => 'field_isr_state',
+    'release' => 'field_state',
     'owner' => 'field_owner_state',
   ];
 

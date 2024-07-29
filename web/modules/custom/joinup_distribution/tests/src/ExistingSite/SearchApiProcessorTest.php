@@ -31,7 +31,6 @@ class SearchApiProcessorTest extends JoinupExistingSiteTestBase {
       'type' => 'distribution',
       'title' => $this->randomString(),
       'og_audience' => $solution->id(),
-      'distribution_parent' => $solution->id(),
       'access_url' => 'ftp://example.com',
       'field_state' => 'published',
     ]);

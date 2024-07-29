@@ -621,9 +621,9 @@ display:
               event: view_mode_tile
               licence: default
               news: view_mode_tile
+              release: default
               video: view_mode_tile
             'entity:rdf_entity':
-              asset_release: default
               collection: view_mode_tile
               contact_information: default
               owner: ''

@@ -169,7 +169,7 @@ QUERY;
       'distribution' => 0,
       // RDF entities.
       'solution' => 0,
-      'asset_release' => 0,
+      'release' => 0,
     ];
 
     $group_content_keys = array_keys($group_content);
@@ -225,7 +225,7 @@ QUERY;
       'Events' => $group_content['event']['active'],
       'News' => $group_content['news']['active'],
       'Solutions' => $group_content['solution'],
-      'Releases' => $group_content['asset_release'],
+      'Releases' => $group_content['release'],
       'Distributions' => $group_content['distribution'],
       'Total number of items' =>
       $group_content['custom_page']['active']
@@ -233,7 +233,7 @@ QUERY;
       + $group_content['document']['active']
       + $group_content['event']['active']
       + $group_content['news']['active']
-      + $group_content['asset_release']
+      + $group_content['release']
       + $group_content['distribution'],
       'Total number of archived items' =>
       $group_content['custom_page']['archived']

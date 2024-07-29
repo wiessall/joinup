@@ -69,6 +69,55 @@ class JoinupContext extends RawDrupalContext {
   use WorkflowTrait;
 
   /**
+   * Asserts that a list of triples exists in a certain graph.
+   *
+   * Each row is a triple serialized as NTriples:
+   * | subject         | predicate         | object            |
+   * | http://subject1 | http://predicate1 | http://reference1 |
+   * | http://subject1 | http://predicate2 | value1            |
+   * | http://subject2 | http://predicate3 | value2            |
+   *
+   * @param string $graph
+   *   The graph to be queried.
+   * @param \Behat\Gherkin\Node\TableNode $triples
+   *   The user data.
+   *
+   * @todo Replace with a definitive solution in ISAICP-8859
+   *
+   * @Then the following :graph graph triples should exist in the RDF backend:
+   */
+  public function assertTriples(string $graph, TableNode $triples): void {
+    /** @var \Drupal\rdf_sync\RdfSyncConnectionInterface $connection */
+    $connection = \Drupal::service('rdf_sync.connection');
+
+    $subjects = $rows = [];
+    foreach ($triples->getHash() as $triple) {
+      $subjects[$triple['subject']][] = $rows[implode(' ', $triple)] = $triple;
+    }
+
+    foreach (array_keys($subjects) as $subject) {
+      $query = "SELECT ?p ?o WHERE { GRAPH <$graph> { <$subject> ?p ?o }}";
+      $results = $connection->query($query);
+      /** @var \EasyRdf\Sparql\Result $result */
+      foreach ($results as $result) {
+        $triple = [
+          'subject' => $subject,
+          'predicate' => (string) $result->p,
+          'object' => trim((string) $result->o),
+        ];
+        if (in_array($triple, $rows)) {
+          unset($rows[implode(' ', $triple)]);
+        }
+      }
+    }
+
+    if (!empty($rows)) {
+      throw new ExpectationFailedException(sprintf("Triple(s) %s doesn't exists in the RDF backend", implode("\n", array_keys($rows))));
+    }
+
+  }
+
+  /**
    * Creates a user with data provided in a table.
    *
    * Table format:
@@ -882,12 +931,28 @@ class JoinupContext extends RawDrupalContext {
         'licence' => 'field_licence',
         'modification date' => 'changed',
         'representation technique' => 'representation_technique',
-        'parent' => 'distribution_parent',
+        'release' => 'release',
+        'solution' => 'og_audience',
         'state' => 'field_state',
         'status' => 'process_status',
         'title' => 'title',
         'uri' => 'uri',
         'publication date' => 'published_at',
+      ],
+      'release' => [
+        'uri' => 'uri',
+        'is version of' => 'og_audience',
+        'title' => 'title',
+        'release number' => 'release_number',
+        'keywords' => 'field_keywords',
+        'spatial coverage' => 'spatial_coverage',
+        'status' => 'process_status',
+        'state' => 'field_state',
+        'creation date' => 'created',
+        'modification date' => 'changed',
+        'published at' => 'published_at',
+        'documentation' => 'documentation',
+        'release notes' => 'description',
       ],
       'shared' => [
         'collection' => OgGroupAudienceHelperInterface::DEFAULT_FIELD,

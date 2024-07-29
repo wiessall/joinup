@@ -74,7 +74,7 @@ class GroupUnsubscribeTypesConverter implements ParamConverterInterface {
       if (!isset(JoinupSubscriptionsHelper::SUBSCRIPTION_BUNDLES[$group->bundle()])) {
         return NULL;
       }
-      if (!in_array($bundle, JoinupSubscriptionsHelper::SUBSCRIPTION_BUNDLES[$group->bundle()][$entity_type_id])) {
+      if (!isset(JoinupSubscriptionsHelper::SUBSCRIPTION_BUNDLES[$group->bundle()][$entity_type_id]) || !in_array($bundle, JoinupSubscriptionsHelper::SUBSCRIPTION_BUNDLES[$group->bundle()][$entity_type_id])) {
         return NULL;
       }
       $items[$entity_type_id][] = $bundle;

@@ -18,14 +18,20 @@ class JoinupSubscriptionsHelper {
    * about all community content, and collection subscribers can also get
    * information about new solutions that are published in the collection.
    */
-  const SUBSCRIPTION_BUNDLES = [
+  const array SUBSCRIPTION_BUNDLES = [
     'collection' => [
       'rdf_entity' => ['solution'],
       'node' => CommunityContentHelper::BUNDLES,
     ],
     'solution' => [
-      'rdf_entity' => ['asset_release'],
-      'node' => ['discussion', 'document', 'event', 'news', 'distribution'],
+      'node' => [
+        'discussion',
+        'distribution',
+        'document',
+        'event',
+        'news',
+        'release',
+      ],
     ],
   ];
 

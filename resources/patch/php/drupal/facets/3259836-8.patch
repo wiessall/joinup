@@ -1,0 +1,27 @@
+diff --git a/config/schema/facets.facet.schema.yml b/config/schema/facets.facet.schema.yml
+index a3e63079e8a8554de2e4674a98ccf28f73c2eb91..342f1c148465c62bde42dff496ef2676bef33281 100644
+--- a/config/schema/facets.facet.schema.yml
++++ b/config/schema/facets.facet.schema.yml
+@@ -52,7 +52,7 @@ facets.facet.*:
+           type: string
+           label: 'Plugin id'
+         config:
+-          type: facets.facet.[%parent.type]
++          type: plugin.plugin_configuration.facets_hierarchy.[%parent.type]
+           label: 'Configuration'
+     expand_hierarchy:
+       type: boolean
+diff --git a/config/schema/facets.processor.schema.yml b/config/schema/facets.processor.schema.yml
+index 045106e1de94b452ebd8f4aadce39b3a7bdfd998..929dfed548240d6f08ecb883523b45b6ffd572c5 100644
+--- a/config/schema/facets.processor.schema.yml
++++ b/config/schema/facets.processor.schema.yml
+@@ -1,6 +1,9 @@
+ plugin.plugin_configuration.facets_processor.*:
+   type: mapping
+ 
++plugin.plugin_configuration.facets_hierarchy.*:
++  type: mapping
++
+ plugin.plugin_configuration.facets_processor.count_widget_widget_order:
+   type: mapping
+   label: 'Count widget order'
