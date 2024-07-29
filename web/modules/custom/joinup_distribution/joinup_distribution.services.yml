@@ -1,15 +1,11 @@
 services:
-  joinup_distribution.parent_distribution_resolver:
-    class: Drupal\joinup_distribution\ParentDistributionResolver
-    arguments: ['@entity_type.manager']
   joinup_distribution.group_add_content.subscriber:
     class: Drupal\joinup_distribution\EventSubscriber\DistributionGroupSubscriber
-    arguments: ['@entity_type.manager', '@asset_release.asset_release_route_context']
+    arguments: ['@entity_type.manager', '@joinup_release.release_route_context']
     tags:
       - { name: event_subscriber }
   joinup_distribution.adjust_group_content_subscriber:
     class: Drupal\joinup_distribution\EventSubscriber\AdjustSolutionContentSubscriber
-    arguments: ['@joinup_distribution.parent_distribution_resolver']
     tags:
       - { name: event_subscriber }
 

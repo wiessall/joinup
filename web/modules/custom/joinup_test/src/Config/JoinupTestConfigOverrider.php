@@ -39,6 +39,7 @@ class JoinupTestConfigOverrider implements ConfigFactoryOverrideInterface {
         'antibot.settings' => [
           // We cannot set an empty array as the indexed arrays are merged, and
           // we'll get again the list from storage.
+          // @see https://www.drupal.org/project/drupal/issues/2990549
           'form_ids' => NULL,
         ],
       ];
