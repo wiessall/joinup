@@ -263,3 +263,64 @@ Feature:
       | role                                                       | options                                                                       |
       | logged in as a facilitator of the "Vintage Art" collection | -- Select action -- , Archive content                                         |
       | logged in as a user with the moderator role                | -- Select action -- , Move to other group, Archive content, Unarchive content |
+
+  Scenario: Releases can only be transferred to solutions.
+    Given the following collections:
+      | title        | state     |
+      | Collection 1 | published |
+      | Collection 2 | published |
+    And the following solutions:
+      | title      | state     | collection   |
+      | Solution 1 | published | Collection 1 |
+      | Solution 2 | published | Collection 2 |
+    And event content:
+      | title   | solution  | state     |
+      | Event 1 | Solution 1 | published |
+    And release content:
+      | title     | release number | release notes | is version of | state     |
+      | Release 1 | 1.0            | Release notes | Solution 1    | published |
+      | Release 2 | 1.0            | Release notes | Solution 2    | published |
+    And distribution content:
+      | title          | description | release   | access url         | state     |
+      | Distribution 1 | Description | Release 1 | http://example.com | published |
+
+    When I am logged in as a moderator
+    And I go to the manage content page of "Solution 1"
+    And I select the "Release 1" row
+    # Distributions cannot be moved for now.
+    # @see ISAICP-8960
+    And I select the "Distribution 1" row
+    # Select also an event to verify that the transfer is not blocked by the
+    # release.
+    And I select the "Event 1" row
+    And I select "Move to other group" from "Action"
+    And I press "Apply to selected items"
+    And I fill in "Select the destination collection or solution" with "Collection 1"
+    And I press "Apply"
+
+    Then I should see "Release Release 1 was not moved as Collection 1 is a collection. Releases can only be moved to a different solution."
+    Then I should see "Distribution Distribution 1 was not moved in Collection 1 as it is not a standalone distribution. Please, move the parent release instead."
+    And I should see "Event Event 1 group was changed to Collection 1."
+
+    When I select the "Release 1" row
+    And I select "Move to other group" from "Action"
+    And I press "Apply to selected items"
+    And I fill in "Select the destination collection or solution" with "Solution 2"
+    And I press "Apply"
+
+    Then I should see "Release Release 1 group was changed to Solution 2."
+    # The child distribution should have been moved too.
+    And I should see "Distribution Distribution 1 group was changed to Solution 2."
+
+    # Revisit the page to get rid of the messages.
+    When I go to the manage content page of "Solution 1"
+    Then I should not see the link "Release 1"
+    And I should not see the link "Distribution 1"
+    And I should not see the link "Event 1"
+
+    When I go to the "Solution 2" solution
+    Then I should see the "Release 1" tile
+
+    When I go to the manage content page of "Solution 2"
+    Then I should see the link "Release 1"
+    And I should see the link "Distribution 1"
