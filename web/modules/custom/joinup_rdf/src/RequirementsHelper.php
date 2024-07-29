@@ -89,8 +89,6 @@ WHERE {
     ?s ?p ?o .
     FILTER NOT EXISTS { ?s <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ?o1 } .
     VALUES ?g {
-      <http://joinup.eu/asset_release/published>
-      <http://joinup.eu/asset_release/draft>
       <http://joinup.eu/collection/published>
       <http://joinup.eu/collection/draft>
       <http://joinup.eu/contact-information/published>

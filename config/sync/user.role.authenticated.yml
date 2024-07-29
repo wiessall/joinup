@@ -25,6 +25,7 @@ dependencies:
     - node.type.event
     - node.type.news
     - node.type.owner
+    - search_api_autocomplete.search.search
   module:
     - comment
     - contextual

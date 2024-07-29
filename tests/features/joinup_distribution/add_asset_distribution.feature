@@ -14,14 +14,9 @@ Feature: Add distribution through the UI
       | collection  | Asset Distribution Test          |
       | description | Some reusable random description |
       | state       | published                        |
-    And the following release:
-      | title          | Authoritarian Alpaca   |
-      | description    | First public release.  |
-      | release number | 1.0.0                  |
-      | creation date  | 2019-11-19 20:45       |
-      | is version of  | Solution random x name |
-      | status         | Completed              |
-      | state          | published              |
+    And release content:
+      | title                | release notes        | release number | creation date    | is version of          | status    | state     |
+      | Authoritarian Alpaca | First public release | 1.0.0          | 2019-11-19 20:45 | Solution random x name | Completed | published |
     And licence content:
       | title              | description                                              | deprecated |
       | WTFPL              | The WTFPL is a rather permissive licence                 | no         |
@@ -156,10 +151,9 @@ Feature: Add distribution through the UI
       | title       | Solubility of gases     |
       | description | Affected by temperature |
       | state       | published               |
-    And the following release:
-      | title         | 1.0.0 Adolf Sieverts |
-      | description   | First public release |
-      | is version of | Solubility of gases  |
+    And release content:
+      | title                | release notes        | is version of       |
+      | 1.0.0 Adolf Sieverts | First public release | Solubility of gases |
 
     # Distributions should have a unique title within a single release.
     And I am logged in as a facilitator of the "Solution random x name" solution
@@ -190,7 +184,7 @@ Feature: Add distribution through the UI
 
   Scenario: Distributions with the same name should not be allowed within the same solution.
     Given distribution content:
-      | title            | description        | access url | parent                 | state     |
+      | title            | description        | access url | solution               | state     |
       | Windows - source | Sample description | test.zip   | Solution random x name | published |
     And I am logged in as a facilitator of the "Solution random x name" solution
     When I go to the homepage of the "Solution random x name" solution
@@ -205,7 +199,7 @@ Feature: Add distribution through the UI
       | title                  | description                                                                    |
       | Boost Software License | It is a permissive license in the style of the BSD license and the MIT license |
     And distribution content:
-      | title        | licence                | parent                 | state     | creation date    | modification date |
+      | title        | licence                | solution               | state     | creation date    | modification date |
       | Hot Snake    | WTFPL                  | Solution random x name | published | 2019-11-19 20:45 | 2021-11-19 20:45  |
       | Quality Yard | Boost Software License | Solution random x name | published | 2019-12-19 20:45 | 2021-12-19 20:45  |
 

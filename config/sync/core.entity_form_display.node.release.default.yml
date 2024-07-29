@@ -1,0 +1,146 @@
+uuid: a88706cd-335a-49f9-b2de-64362cadb33e
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.release.description
+    - field.field.node.release.documentation
+    - field.field.node.release.field_keywords
+    - field.field.node.release.field_state
+    - field.field.node.release.og_audience
+    - field.field.node.release.language
+    - field.field.node.release.process_status
+    - field.field.node.release.release_number
+    - field.field.node.release.solution_data
+    - field.field.node.release.spatial_coverage
+    - node.type.release
+  module:
+    - allowed_formats
+    - file_url
+    - joinup_workflow
+    - publication_date
+    - text
+id: node.release.default
+targetEntityType: node
+bundle: release
+mode: default
+content:
+  created:
+    type: datetime_timestamp
+    weight: 8
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  current_workflow_state:
+    type: current_workflow_state_widget
+    weight: 10
+    region: content
+    settings:
+      title: 'Current workflow state'
+      title_display: before
+      show_for_new_entities: false
+    third_party_settings: {  }
+  description:
+    type: text_textarea
+    weight: 1
+    region: content
+    settings:
+      rows: 9
+      placeholder: ''
+    third_party_settings:
+      allowed_formats:
+        hide_help: '0'
+        hide_guidelines: '1'
+  documentation:
+    type: file_url_generic
+    weight: 3
+    region: content
+    settings:
+      progress_indicator: throbber
+      add_new_label: 'Upload a new file or enter a URL'
+    third_party_settings: {  }
+  field_keywords:
+    type: string_textfield
+    weight: 5
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_state:
+    type: state_machine_buttons
+    weight: 12
+    region: content
+    settings:
+      use_transition_label: 1
+    third_party_settings: {  }
+  language:
+    type: entity_reference_autocomplete
+    weight: 7
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  process_status:
+    type: options_select
+    weight: 6
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  published_at:
+    type: publication_date_timestamp
+    weight: 9
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  release_number:
+    type: string_textfield
+    weight: 1
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  simple_sitemap:
+    weight: 11
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  spatial_coverage:
+    type: entity_reference_autocomplete
+    weight: 4
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  title:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  transition_motivation:
+    weight: 13
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  langcode: true
+  og_audience: true
+  path: true
+  promote: true
+  published_at: true
+  solution_data: true
+  status: true
+  sticky: true
+  uid: true
+  uri: true
+  url_redirects: true
