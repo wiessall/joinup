@@ -1,5 +1,4 @@
 js_errors_collector:
+  header: true
   js:
-    assets/js/js_errors_collector.js: { weight: -17.5 }
-  dependencies:
-    - core/drupal
+    assets/js/js_errors_collector.js: { weight: -1000 }

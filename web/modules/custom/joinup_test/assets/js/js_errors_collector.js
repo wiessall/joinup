@@ -3,29 +3,34 @@
  * Collects JS errors and deprecations (used in behat).
  *
  * @see \Drupal\joinup\Context\JsErrorsContext
+ * @see js_testing_log.js from js_testing_log_test module
  */
-((Drupal) => {
-  // Collect errors.
-  Drupal.jsErrors = [];
-  window.addEventListener("error", function (e) {
-    Drupal.jsErrors.push([
-      `Message: ${e.message}`,
+(function () {
+  function addSessionStorageRecord(key, value) {
+    const data = JSON.parse(sessionStorage.getItem(key) || JSON.stringify([]));
+    data.push(value);
+    sessionStorage.setItem(key, JSON.stringify(data));
+  }
+
+  if (typeof console !== "undefined" && console.warn) {
+    const originalWarn = console.warn;
+    console.warn = (warning) => {
+      originalWarn(warning);
+      addSessionStorageRecord("joinup_test.js_warnings", {
+        message: warning,
+        url: window.location.href,
+      });
+    };
+  }
+
+  window.addEventListener("error", (evt) => {
+    addSessionStorageRecord("joinup_test.js_errors", [
+      `Message: ${evt.message}`,
       `URL: ${window.location.href}`,
-      `File: ${e.filename}`,
-      `Line: ${e.lineno}`,
-      `Column ${e.colno}`,
-      `Stack: ${e.error instanceof Error ? e.error.stack : "N/A"}`,
+      `File: ${evt.filename}`,
+      `Line: ${evt.lineno}`,
+      `Column ${evt.colno}`,
+      `Stack: ${evt.error instanceof Error ? evt.error.stack : "N/A"}`,
     ]);
   });
-
-  // Collect deprecations.
-  Drupal.jsDeprecations = [];
-  const originalFn = Drupal.deprecationError;
-  Drupal.deprecationError = ({ message }) => {
-    originalFn(message);
-    Drupal.jsDeprecations.push([
-      `Deprecation: ${message}`,
-      `URL: ${window.location.href}`,
-    ]);
-  };
-})(Drupal);
+})();
