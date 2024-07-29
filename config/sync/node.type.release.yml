@@ -1,0 +1,38 @@
+uuid: 963c0728-0afe-42f9-8c3a-0dd0aad1d608
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+    - rdf_sync
+third_party_settings:
+  menu_ui:
+    available_menus: {  }
+    parent: ''
+  rdf_sync:
+    type: 'http://www.w3.org/ns/dcat#Dataset'
+    uri_plugin: joinup_po_namespace
+    fields:
+      title:
+        value:
+          predicate: 'http://purl.org/dc/terms/title'
+          type: 'xsd:string'
+      changed:
+        value:
+          predicate: 'http://purl.org/dc/terms/modified'
+          type: 'xsd:dateTime'
+      published_at:
+        value:
+          predicate: 'http://purl.org/dc/terms/issued'
+          type: 'xsd:dateTime'
+label_singular: release
+label_plural: releases
+label_count:
+  no_count_capitalize: !!binary UmVsZWFzZQNSZWxlYXNlcw==
+name: Release
+type: release
+description: 'A release represents a version of a solution in time.'
+help: null
+new_revision: true
+preview_mode: 0
+display_submitted: false

@@ -44,9 +44,9 @@ settings:
       document: view_mode_tile
       event: view_mode_tile
       news: view_mode_tile
+      release: view_mode_tile
       video: view_mode_tile
     'entity:rdf_entity':
-      asset_release: view_mode_tile
       collection: view_mode_tile
       licence: view_mode_tile
       solution: view_mode_tile

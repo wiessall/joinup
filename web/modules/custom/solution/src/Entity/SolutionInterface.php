@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Drupal\solution\Entity;
 
-use Drupal\asset_release\Entity\AssetReleaseInterface;
 use Drupal\collection\Entity\CollectionContentInterface;
 use Drupal\joinup_bundle_class\AbstractInterface;
 use Drupal\joinup_bundle_class\DescriptionInterface;
@@ -13,6 +12,7 @@ use Drupal\joinup_featured\FeaturedContentInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\Entity\PinnableGroupContentInterface;
 use Drupal\joinup_publication_date\Entity\EntityPublicationTimeInterface;
+use Drupal\joinup_release\Entity\ReleaseInterface;
 use Drupal\joinup_workflow\ArchivableEntityInterface;
 use Drupal\joinup_workflow\EntityWorkflowStateInterface;
 use Drupal\rdf_entity\RdfInterface;
@@ -25,7 +25,7 @@ interface SolutionInterface extends RdfInterface, CollectionContentInterface, En
   /**
    * Returns the child releases.
    *
-   * @return \Drupal\asset_release\Entity\AssetReleaseInterface[]
+   * @return \Drupal\joinup_release\Entity\ReleaseInterface[]
    *   An array of child releases, keyed by their ID.
    */
   public function getReleases(): array;
@@ -49,10 +49,10 @@ interface SolutionInterface extends RdfInterface, CollectionContentInterface, En
   /**
    * Returns the latest release of this solution, if any.
    *
-   * @return \Drupal\asset_release\Entity\AssetReleaseInterface|null
+   * @return \Drupal\joinup_release\Entity\ReleaseInterface|null
    *   The latest release of this solution, if any.
    */
-  public function getLatestRelease(): ?AssetReleaseInterface;
+  public function getLatestRelease(): ?ReleaseInterface;
 
   /**
    * Returns the collections this solution is affiliated with.
