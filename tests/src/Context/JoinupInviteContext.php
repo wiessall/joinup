@@ -56,6 +56,7 @@ class JoinupInviteContext extends RawDrupalContext {
     $arguments = $this->getInvitationMessageHelper()->getMessage($invitation, $invitation_info['message_template'])->getArguments();
 
     $this->visitPath($arguments["@invitation:{$action}_url"]);
+    $this->getSession()->getPage()->pressButton(ucfirst($action));
   }
 
   /**
