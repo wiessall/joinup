@@ -481,8 +481,8 @@ display:
               event: view_mode_tile
               licence: default
               news: default
+              release: default
             'entity:rdf_entity':
-              asset_release: default
               collection: view_mode_tile
               solution: view_mode_tile
       query:

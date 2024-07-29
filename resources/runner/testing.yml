@@ -4,6 +4,7 @@ testing:
   modules:
     - cas_mock_server
     - composer_deploy
+    - config_inspector
     - dblog
     - filecache
     - http_request_mock

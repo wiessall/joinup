@@ -122,7 +122,7 @@ trait EntityTrait {
       'group' => 'rdf_entity',
       'news' => 'node',
       'owner' => 'node',
-      'release' => 'rdf_entity',
+      'release' => 'node',
       'solution' => 'rdf_entity',
       'spdx licence' => 'rdf_entity',
       'topic' => 'taxonomy_term',
@@ -180,7 +180,7 @@ trait EntityTrait {
       'event' => 'event',
       'glossary' => 'glossary',
       'news' => 'news',
-      'release' => 'asset_release',
+      'release' => 'release',
       'spdx licence' => 'spdx_licence',
     ];
   }

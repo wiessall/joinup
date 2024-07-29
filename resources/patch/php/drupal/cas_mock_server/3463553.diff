@@ -1,0 +1,9 @@
+diff --git a/config/install/cas_mock_server.settings.yml b/config/install/cas_mock_server.settings.yml
+index bfc74a671f1249553f2876b2144eec2eaf4d099c..0aa45a3b9c3f4fdf3fd07a79bfcf51870e2b5506 100644
+--- a/config/install/cas_mock_server.settings.yml
++++ b/config/install/cas_mock_server.settings.yml
+@@ -1,3 +1,4 @@
++langcode: en
+ login_form:
+   title: 'Login'
+   email: E-mail
