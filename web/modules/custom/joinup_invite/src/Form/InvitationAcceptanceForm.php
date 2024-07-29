@@ -134,10 +134,7 @@ class InvitationAcceptanceForm extends FormBase {
   public function submitForm(array &$form, FormStateInterface $form_state): void {
     /** @var \Drupal\joinup_invite\Entity\InvitationInterface $invitation */
     $invitation = $this->currentRouteMatch->getParameter('invitation');
-
-    $invitation->accept()->save();
-    $this->eventDispatcher->dispatch($this->getEvent($invitation, self::ACTION_ACCEPT), InvitationEvents::ACCEPT_INVITATION_EVENT);
-
+    $this->updateInvitation($invitation, self::ACTION_ACCEPT);
     $this->redirectToGroup($form_state);
   }
 
@@ -152,10 +149,35 @@ class InvitationAcceptanceForm extends FormBase {
   public function rejectForm(array &$form, FormStateInterface $form_state): void {
     /** @var \Drupal\joinup_invite\Entity\InvitationInterface $invitation */
     $invitation = $this->currentRouteMatch->getParameter('invitation');
-    $invitation->reject()->save();
-    $this->eventDispatcher->dispatch($this->getEvent($invitation, self::ACTION_REJECT), InvitationEvents::REJECT_INVITATION_EVENT);
-
+    $this->updateInvitation($invitation, self::ACTION_REJECT);
     $this->redirectToGroup($form_state);
+  }
+
+  /**
+   * Update invitation.
+   *
+   * @param \Drupal\joinup_invite\Entity\InvitationInterface $invitation
+   *   The invitation entity.
+   * @param string $action
+   *   The action to take.
+   */
+  protected function updateInvitation(InvitationInterface $invitation, string $action): void {
+    if ($invitation->getStatus() !== InvitationInterface::STATUS_PENDING) {
+      $this->eventDispatcher->dispatch($this->getEvent($invitation, $action), InvitationEvents::NOT_PENDING_EVENT);
+      return;
+    }
+
+    switch ($action) {
+      case self::ACTION_ACCEPT:
+        $invitation->accept()->save();
+        $this->eventDispatcher->dispatch($this->getEvent($invitation, $action), InvitationEvents::ACCEPT_INVITATION_EVENT);
+        break;
+
+      case self::ACTION_REJECT:
+        $invitation->reject()->save();
+        $this->eventDispatcher->dispatch($this->getEvent($invitation, $action), InvitationEvents::REJECT_INVITATION_EVENT);
+        break;
+    }
   }
 
   /**
@@ -164,7 +186,7 @@ class InvitationAcceptanceForm extends FormBase {
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The form state.
    */
-  public function redirectToGroup(FormStateInterface $form_state): void {
+  protected function redirectToGroup(FormStateInterface $form_state): void {
     /** @var \Drupal\joinup_invite\Entity\InvitationInterface $invitation */
     $invitation = $this->currentRouteMatch->getParameter('invitation');
     $url = $invitation->getEntity()->toUrl();
