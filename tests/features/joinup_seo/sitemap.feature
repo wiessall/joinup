@@ -19,12 +19,12 @@ Feature:
       | title                      | description                 | owner         | contact information | collection                   | state     |
       | Sitemap solution draft     | Sitemap keywords everywhere | Sitemap owner | Sitemap secretariat | Sitemap collection published | draft     |
       | Sitemap solution published | Sitemap keywords everywhere | Sitemap owner | Sitemap secretariat | Sitemap collection published | published |
-    And the following releases:
+    And release content:
       | title             | release number | release notes | is version of              | owner         | contact information | state     |
       | Sitemap release 1 | 1              | New release   | Sitemap solution published | Sitemap owner | Sitemap secretariat | published |
       | Sitemap release 2 | 2              | Newer release | Sitemap solution published | Sitemap owner | Sitemap secretariat | draft     |
     And distribution content:
-      | title                | description           | parent            | access url | state     |
+      | title                | description           | release           | access url | state     |
       | Sitemap distribution | Some kind of download | Sitemap release 1 | test.zip   | published |
     And licence content:
       | title           | description |
@@ -65,7 +65,6 @@ Feature:
     Then I should see the absolute urls of the following RDF entities:
       | Sitemap collection published |
       | Sitemap solution published   |
-      | Sitemap release 1            |
     And I should see the absolute urls of the following content entities:
       | Sitemap custom page of published |
       | Sitemap discussion published     |
@@ -76,11 +75,11 @@ Feature:
       | Sitemap event archived           |
       | Sitemap news published but old   |
       | Sitemap news archived            |
+      | Sitemap release 1                |
 
     But I should not see the absolute urls of the following RDF entities:
       | Sitemap collection draft |
       | Sitemap solution draft   |
-      | Sitemap release 2        |
     And I should not see the absolute urls of the following content entities:
       | Sitemap custom page of draft                    |
       | Sitemap custom page of published but in Spanish |
@@ -96,6 +95,7 @@ Feature:
       | Sitemap news published and recent               |
       | Sitemap news published but parent is not        |
       | Sitemap owner                                   |
+      | Sitemap release 2                               |
       | Sitemap secretariat                             |
     # The following piece of xhtml is used to declare an alternative language. If it exists in the page it means that
     # another language is included in the output.
@@ -112,8 +112,6 @@ Feature:
       | Sitemap collection published |
       | Sitemap solution draft       |
       | Sitemap solution published   |
-      | Sitemap release 1            |
-      | Sitemap release 2            |
     And I should not see the absolute urls of the following content entities:
       | Sitemap custom page of draft                   |
       | Sitemap discussion draft                       |
@@ -135,6 +133,8 @@ Feature:
       | Sitemap news archived                          |
       | Sitemap news published but parent is not       |
       | Sitemap owner                                  |
+      | Sitemap release 1                              |
+      | Sitemap release 2                              |
       | Sitemap secretariat                            |
 
     # Simulate that 2 days have passed since last time the sitemaps have been created.
@@ -146,7 +146,6 @@ Feature:
     Then I should see the absolute urls of the following RDF entities:
       | Sitemap collection published |
       | Sitemap solution published   |
-      | Sitemap release 1            |
     And I should see the absolute urls of the following content entities:
       | Sitemap custom page of published  |
       | Sitemap discussion published      |
@@ -158,11 +157,11 @@ Feature:
       | Sitemap news published and recent |
       | Sitemap news published but old    |
       | Sitemap news archived             |
+      | Sitemap release 1                 |
 
     But I should not see the absolute urls of the following RDF entities:
       | Sitemap collection draft |
       | Sitemap solution draft   |
-      | Sitemap release 2        |
     And I should not see the absolute urls of the following content entities:
       | Sitemap custom page of draft                   |
       | Sitemap discussion draft                       |
@@ -176,6 +175,7 @@ Feature:
       | Sitemap news draft                             |
       | Sitemap news published but parent is not       |
       | Sitemap owner                                  |
+      | Sitemap release 2                              |
       | Sitemap secretariat                            |
 
     # The hot news article is now removed from the news sitemap, and the page

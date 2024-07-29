@@ -36,12 +36,6 @@ class UriIdConversion implements EventSubscriberInterface {
    */
   private const MAP = [
     'eif_wrapper:recommendation:term',
-    'rdf_entity:asset_release:field_isr_contact_information',
-    'rdf_entity:asset_release:field_isr_language',
-    'rdf_entity:asset_release:field_isr_solution_type',
-    'rdf_entity:asset_release:field_spatial_coverage',
-    'rdf_entity:asset_release:field_status',
-    'rdf_entity:asset_release:field_topic',
     'rdf_entity:collection:field_ar_contact_information',
     'rdf_entity:collection:field_spatial_coverage',
     'rdf_entity:collection:field_topic',
@@ -62,7 +56,6 @@ class UriIdConversion implements EventSubscriberInterface {
     'rdf_meta_entity:eif_perspective:eif_model',
     'rdf_meta_entity:eif_perspective:eif_principle',
     'rdf_meta_entity:eif_perspective:field_eif_solution_type',
-    'rdf_entity:asset_release:field_isr_owner',
     'rdf_entity:collection:field_ar_owner',
     'rdf_entity:solution:field_is_owner',
   ];

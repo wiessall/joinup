@@ -13,12 +13,12 @@ use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Queue\QueueWorkerBase;
 use Drupal\Core\Session\AccountSwitcherInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\asset_release\Entity\AssetReleaseInterface;
 use Drupal\custom_page\Entity\CustomPageInterface;
 use Drupal\joinup_community_content\Entity\CommunityContentInterface;
 use Drupal\joinup_distribution\Entity\DistributionInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_notification\NotificationEvents;
+use Drupal\joinup_release\Entity\ReleaseInterface;
 use Drupal\joinup_workflow\ArchivableEntityInterface;
 use Drupal\joinup_workflow\WorkflowHelperInterface;
 use Drupal\joinup_workflow\WorkflowStateChangeMessageTrait;
@@ -44,7 +44,7 @@ class SolutionContentArchiverQueue extends QueueWorkerBase implements ContainerF
   use WorkflowStateChangeMessageTrait;
 
   private const ENTITY_CLASSES_TO_ARCHIVE = [
-    AssetReleaseInterface::class,
+    ReleaseInterface::class,
     CustomPageInterface::class,
     CommunityContentInterface::class,
     DistributionInterface::class,

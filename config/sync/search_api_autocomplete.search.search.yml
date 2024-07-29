@@ -27,9 +27,9 @@ suggester_settings:
         event: ''
         licence: ''
         news: ''
+        release: ''
         video: ''
       'entity:rdf_entity':
-        asset_release: ''
         collection: ''
         solution: ''
       'entity:taxonomy_term':

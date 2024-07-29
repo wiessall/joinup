@@ -260,7 +260,7 @@ class RefreshCountersTest extends KernelTestBase {
       [
         'nid' => 7,
         'uri' => 'http://example.com/distro/3',
-        'rid' => 'distribution',
+        'type' => 'distribution',
         'label' => 'Distro 3',
         'field_access_url' => File::create([
           'uri' => 'public://d3',
