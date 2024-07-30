@@ -149,7 +149,14 @@ class DeleteGroupMembershipConfirmForm extends ConfirmFormBase {
     $storage = $this->entityTypeManager->getStorage('og_membership');
     $storage->delete($memberships);
     $this->messenger()->addStatus($message);
-    $this->logger->info(strip_tags($message->render()));
+    foreach ($memberships as $member) {
+      $this->logger->info('The member @actor has been deleted from the @group.', [
+        '@actor' => $member->getOwner()->getDisplayName(),
+        '@group' => $this->getGroup()->label(),
+        'type' => 'joinup:deleted_membership',
+        'actor' => $member->getOwner()->id(),
+      ]);
+    }
   }
 
   /**

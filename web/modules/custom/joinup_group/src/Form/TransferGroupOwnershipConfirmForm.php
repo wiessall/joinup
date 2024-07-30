@@ -220,7 +220,6 @@ class TransferGroupOwnershipConfirmForm extends ConfirmFormBase {
       $message = $this->t('Ownership of %group @label granted to %user.', $args);
     }
     $this->messenger()->addStatus($message);
-    $this->logger->info($former_owners ? strip_tags($message->render()) : $message);
   }
 
   /**

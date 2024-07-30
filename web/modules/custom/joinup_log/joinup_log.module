@@ -1,0 +1,92 @@
+<?php
+
+/**
+ * @file
+ * Hook implementations for the Joinup Log module.
+ */
+
+declare(strict_types=1);
+
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Implements hook_form_alter().
+ */
+function joinup_log_form_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
+  // Check if the form ID corresponds to a Views exposed form.
+  if (str_starts_with($form_id, 'views_form_og_members_overview_default_')) {
+    // Add our custom submit handler.
+    $form['#submit'][] = 'joinup_log_members_views_exposed_form_submit';
+  }
+}
+
+/**
+ * Custom submit handler for Views exposed forms.
+ */
+function joinup_log_members_views_exposed_form_submit(array &$form, FormStateInterface $form_state): void {
+  $options = $form_state->getValue('og_membership_bulk_form');
+  if (empty($options)) {
+    return;
+  }
+  $type = [
+    'joinup_og_membership_delete_action' => [
+      'type' => 'joinup:deleted_membership',
+      'message' => 'Membership @actor has been deleted.',
+      ],
+    'joinup_transfer_group_ownership' => [
+      'type' => 'joinup:transfer_the_ownership_of_the_collection_to_member',
+      'message' => 'Ownership granted to @actor.',
+      ],
+    'og_membership_add_single_role_action.author' => [
+      'type' => 'joinup:add_the_author_role_to_member',
+      'message' => 'Successfully added the role @role to the @actor user.',
+      'role' => 'author'
+    ],
+    'og_membership_add_single_role_action.facilitator' => [
+      'tyep' => 'joinup:add_the_facilitator_role_to_member',
+      'message' => 'Successfully added the role @role to the @actor user.',
+      'role' => 'facilitator'
+    ],
+    'og_membership_approve_pending_action' => [
+      'type' => 'joinup:approve_the_pending_membership',
+      'message' => 'Membership @actor has been approved.',
+    ],
+    'og_membership_block_action' => [
+      'type' => 'joinup:block_membership',
+      'message' => 'Membership @actor has been blocked.',
+    ],
+    'og_membership_remove_single_role_action.author' => [
+      'type' => 'joinup:remove_the_author_role_from_member',
+      'message' => 'Successfully removed the role @role from the @actor user.',
+      'role' => 'author'
+    ],
+    'og_membership_remove_single_role_action.facilitator' => [
+      'type' => 'joinup:remove_the_facilitator_role_from_member',
+      'message' => 'Successfully removed the role @role from the @actor user.',
+      'role' => 'facilitator'
+    ],
+    'og_membership_unblock_action' => [
+      'type' => 'joinup:unblock_membership',
+      'message' => 'Membership @actor has been unblocked.',
+    ]
+  ];
+  if (!array_key_exists($form_state->getValue('action'), $type)) {
+    return;
+  }
+
+  $memberships = array_map('joinup_group_extract_bulk_form_entity_id', array_filter($options));
+  $action = $form_state->getValue('action');
+  $current_user = \Drupal::currentUser();
+  $entity_type_manager = \Drupal::entityTypeManager();
+  foreach ($memberships as $membership) {
+    $member = $entity_type_manager->getStorage('og_membership')->load($membership);
+    $user = $entity_type_manager->getStorage('user')->load($member->get('uid')->target_id);
+    \Drupal::service('logger.channel.group_membership')->info($type[$action]['message'], [
+      '@actor' => $user->getDisplayName(),
+      '@role' => $type[$action]['role'] ?? NULL,
+      'type' => $type[$action]['type'],
+      'actor' => $current_user->id(),
+    ]);
+  }
+}
+

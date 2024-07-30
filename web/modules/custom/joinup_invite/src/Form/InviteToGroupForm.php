@@ -161,7 +161,6 @@ class InviteToGroupForm extends GroupFormBase {
         default:
           throw new \Exception("Unknown result type '$result'.");
       }
-      $this->logger->info($message);
       $this->messenger()->addMessage($message, $type);
     }
   }
