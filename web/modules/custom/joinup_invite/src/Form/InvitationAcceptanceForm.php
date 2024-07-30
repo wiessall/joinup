@@ -77,15 +77,19 @@ class InvitationAcceptanceForm extends FormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state, ?InvitationInterface $invitation = NULL): array {
     $group = $invitation->getEntity();
+    $owner = $invitation->getOwner();
+
     $form['text'] = [
       '#type' => 'html_tag',
       '#tag' => 'p',
       '#value' =>
       $this->t(
-          'You have been invited by @actor to join the "@entity"',
+         'You have been invited by <a href=":owner-url" target="_blank">@owner-name</a> to join the <a href=":parent-url" target="_blank">@parent-name</a> ',
           [
-            '@actor' => $invitation->getOwner()->getDisplayName(),
-            '@entity' => $invitation->getEntity()->label(),
+            ':owner-url' => $owner->toUrl()->toString(),
+            '@owner-name' => $owner->getDisplayName(),
+            ':parent-url' => $group->toUrl()->toString(),
+            '@parent-name' => $group->label(),
           ]
       ),
     ];
