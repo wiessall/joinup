@@ -95,6 +95,7 @@ Feature: "Add custom page" visibility options.
     And I press "Save as draft"
     Then I should see the heading "About us"
     And I should see the success message "Custom page About us has been created."
+    And Log entry with the message "A new custom_page entity titled About us has been created." should exist.
     And I should see the text "Attachments"
     # The description of the file is set as the text to display.
     And I should see the link "Test file"
