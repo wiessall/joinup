@@ -9,6 +9,7 @@ use Drupal\Component\Render\MarkupInterface;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Url;
 use Drupal\joinup_group\Entity\AnnouncementInterface;
 use Drupal\joinup_notification\JoinupMessageDeliveryInterface;
@@ -25,26 +26,20 @@ class AnnouncementForm extends FormBase {
   protected AnnouncementInterface $announcement;
 
   /**
-   * The message delivery service.
-   */
-  protected JoinupMessageDeliveryInterface $messageDelivery;
-
-  /**
-   * The date/time service.
-   */
-  protected TimeInterface $time;
-
-  /**
    * Builds a new form instance.
    *
-   * @param \Drupal\joinup_notification\JoinupMessageDeliveryInterface $message_delivery
+   * @param \Drupal\joinup_notification\JoinupMessageDeliveryInterface $messageDelivery
    *   The message delivery service.
    * @param \Drupal\Component\Datetime\TimeInterface $time
    *   The date/time service.
+   * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
+   *   The logger channel service.
    */
-  public function __construct(JoinupMessageDeliveryInterface $message_delivery, TimeInterface $time) {
-    $this->messageDelivery = $message_delivery;
-    $this->time = $time;
+  public function __construct(
+    protected JoinupMessageDeliveryInterface $messageDelivery,
+    protected TimeInterface $time,
+    protected LoggerChannelInterface $logger,
+  ) {
   }
 
   /**
@@ -54,6 +49,7 @@ class AnnouncementForm extends FormBase {
     return new static(
       $container->get('joinup_notification.message_delivery'),
       $container->get('datetime.time'),
+      $container->get('logger.channel.group_membership'),
     );
   }
 
@@ -243,8 +239,9 @@ class AnnouncementForm extends FormBase {
     }
     elseif ($is_new) {
       $status = $this->t("The announcement has been created as @to. Review the announcement and, when is ready to be sent, use the 'Send' button.", $args);
-      $this->getLogger('logger.channel.group_membership')->info('The announcement has been created as @to', [
-        '@to' => $this->announcement->getWorkflowStateInstance()->getLabel(),
+      $this->logger->info('The announcement @subject has been created as @to', [
+        '@to' => strtolower($this->announcement->getWorkflowStateInstance()->getLabel()),
+        '@subject' => $form_state->getValue('subject'),
         'type' => 'joinup:add_announcement',
         'actor' => $this->currentUser()->id(),
       ]);
