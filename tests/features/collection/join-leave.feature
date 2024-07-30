@@ -119,7 +119,7 @@ Feature: Joining and leaving collections through the web interface
     And I press "Apply to selected items"
     And I press "Confirm"
     Then I should see "Ownership of Insectarium collection transferred from user insect researcher to newcomer researcher."
-    And Log entry with the message "Ownership of Insectarium collection transferred from user insect researcher to newcomer researcher." should exist.
+    And Log entry with the message "Ownership granted to newcomer researcher." should exist.
 
     When I go to the homepage of the "Insectarium" collection
     And I click "Leave this collection"
