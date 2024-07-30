@@ -116,6 +116,7 @@ class InvitationAcceptanceForm extends FormBase {
         '#title' => $this->t('Cancel'),
         '#attributes' => ['class' => ['button']],
         '#url' => $invitation->getEntity()->toUrl(),
+        '#weight' => 10
       ],
       'submit' => [
         '#type' => 'submit',
