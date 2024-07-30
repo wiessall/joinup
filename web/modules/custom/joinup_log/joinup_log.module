@@ -32,20 +32,20 @@ function joinup_log_members_views_exposed_form_submit(array &$form, FormStateInt
     'joinup_og_membership_delete_action' => [
       'type' => 'joinup:deleted_membership',
       'message' => 'Membership @actor has been deleted.',
-      ],
+    ],
     'joinup_transfer_group_ownership' => [
       'type' => 'joinup:transfer_the_ownership_of_the_collection_to_member',
       'message' => 'Ownership granted to @actor.',
-      ],
+    ],
     'og_membership_add_single_role_action.author' => [
       'type' => 'joinup:add_the_author_role_to_member',
       'message' => 'Successfully added the role @role to the @actor user.',
-      'role' => 'author'
+      'role' => 'author',
     ],
     'og_membership_add_single_role_action.facilitator' => [
       'tyep' => 'joinup:add_the_facilitator_role_to_member',
       'message' => 'Successfully added the role @role to the @actor user.',
-      'role' => 'facilitator'
+      'role' => 'facilitator',
     ],
     'og_membership_approve_pending_action' => [
       'type' => 'joinup:approve_the_pending_membership',
@@ -58,17 +58,17 @@ function joinup_log_members_views_exposed_form_submit(array &$form, FormStateInt
     'og_membership_remove_single_role_action.author' => [
       'type' => 'joinup:remove_the_author_role_from_member',
       'message' => 'Successfully removed the role @role from the @actor user.',
-      'role' => 'author'
+      'role' => 'author',
     ],
     'og_membership_remove_single_role_action.facilitator' => [
       'type' => 'joinup:remove_the_facilitator_role_from_member',
       'message' => 'Successfully removed the role @role from the @actor user.',
-      'role' => 'facilitator'
+      'role' => 'facilitator',
     ],
     'og_membership_unblock_action' => [
       'type' => 'joinup:unblock_membership',
       'message' => 'Membership @actor has been unblocked.',
-    ]
+    ],
   ];
   if (!array_key_exists($form_state->getValue('action'), $type)) {
     return;
@@ -89,4 +89,3 @@ function joinup_log_members_views_exposed_form_submit(array &$form, FormStateInt
     ]);
   }
 }
-
