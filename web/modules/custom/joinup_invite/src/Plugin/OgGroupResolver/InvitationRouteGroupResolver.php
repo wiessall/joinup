@@ -25,7 +25,7 @@ class InvitationRouteGroupResolver extends RouteGroupResolver {
    */
   protected function getContentEntityPaths(): array {
     return [
-      '/invitation/{invitation}/{hash}' => 'invitation',
+      '/invitation/{invitation}/{action}/{hash}' => 'invitation',
     ];
   }
 
