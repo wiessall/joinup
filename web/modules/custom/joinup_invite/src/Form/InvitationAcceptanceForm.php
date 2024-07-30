@@ -13,6 +13,7 @@ use Drupal\Core\Routing\CurrentRouteMatch;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Site\Settings;
 use Drupal\collection\Entity\CollectionInterface;
+use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_invite\Entity\InvitationInterface;
 use Drupal\joinup_invite\Event\InvitationEvent;
 use Drupal\joinup_invite\Event\InvitationEventInterface;
@@ -109,6 +110,19 @@ class InvitationAcceptanceForm extends FormBase {
       ];
     }
 
+    if ($group instanceof GroupInterface && self::ACTION_ACCEPT === $action) {
+      $form['subscribe'] = [
+        '#type' => 'checkbox',
+        '#title' => $this->t(
+          'Notify me when content is published in <a href=":parent-url" target="_blank">@parent-name</a>.',
+          [
+            ':parent-url' => $group->toUrl()->toString(),
+            '@parent-name' => $group->label(),
+          ]
+        ),
+      ];
+    }
+
     $form['actions'] = [
       '#type' => 'actions',
       'cancel' => [
@@ -139,9 +153,11 @@ class InvitationAcceptanceForm extends FormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state): void {
+    $subscribe = (bool) $form_state->getValue('subscribe', 0);
+
     /** @var \Drupal\joinup_invite\Entity\InvitationInterface $invitation */
     $invitation = $this->currentRouteMatch->getParameter('invitation');
-    $this->updateInvitation($invitation, self::ACTION_ACCEPT);
+    $this->updateInvitation($invitation, self::ACTION_ACCEPT, $subscribe);
     $this->redirectToGroup($form_state);
   }
 
@@ -167,22 +183,25 @@ class InvitationAcceptanceForm extends FormBase {
    *   The invitation entity.
    * @param string $action
    *   The action to take.
+   * @param bool $subscribe
+   *   Whatever subscribe or not.
    */
-  protected function updateInvitation(InvitationInterface $invitation, string $action): void {
+  protected function updateInvitation(InvitationInterface $invitation, string $action, bool $subscribe = FALSE): void {
+    $event = $this->getEvent($invitation, $action, $subscribe);
     if ($invitation->getStatus() !== InvitationInterface::STATUS_PENDING) {
-      $this->eventDispatcher->dispatch($this->getEvent($invitation, $action), InvitationEvents::NOT_PENDING_EVENT);
+      $this->eventDispatcher->dispatch($event, InvitationEvents::NOT_PENDING_EVENT);
       return;
     }
 
     switch ($action) {
       case self::ACTION_ACCEPT:
         $invitation->accept()->save();
-        $this->eventDispatcher->dispatch($this->getEvent($invitation, $action), InvitationEvents::ACCEPT_INVITATION_EVENT);
+        $this->eventDispatcher->dispatch($event, InvitationEvents::ACCEPT_INVITATION_EVENT);
         break;
 
       case self::ACTION_REJECT:
         $invitation->reject()->save();
-        $this->eventDispatcher->dispatch($this->getEvent($invitation, $action), InvitationEvents::REJECT_INVITATION_EVENT);
+        $this->eventDispatcher->dispatch($event, InvitationEvents::REJECT_INVITATION_EVENT);
         break;
     }
   }
@@ -253,14 +272,17 @@ class InvitationAcceptanceForm extends FormBase {
    *   The invitation for which to create an event.
    * @param string $action
    *   The action that has been taken on the invitation.
+   * @param bool $subscribe
+   *   Whatever subscribe or not.
    *
    * @return \Drupal\joinup_invite\Event\InvitationEventInterface
    *   The event.
    */
-  protected function getEvent(InvitationInterface $invitation, string $action): InvitationEventInterface {
+  protected function getEvent(InvitationInterface $invitation, string $action, bool $subscribe): InvitationEventInterface {
     return (new InvitationEvent())
       ->setInvitation($invitation)
-      ->setAction($action);
+      ->setAction($action)
+      ->setSubscribe($subscribe);
   }
 
 }
