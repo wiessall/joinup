@@ -44,7 +44,7 @@ class JoinupSubscriptionsHelper {
    * @return array
    *   The array of data for the field.
    */
-  static function provideDataForField(string $groupType): array {
+  public static function provideDataForField(string $groupType): array {
     $contentBundles = self::SUBSCRIPTION_BUNDLES[$groupType] ?? [];
 
     $value = [];
