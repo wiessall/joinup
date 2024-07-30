@@ -75,7 +75,7 @@ class InvitationAcceptanceForm extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state, ?InvitationInterface $invitation = NULL): array {
+  public function buildForm(array $form, FormStateInterface $form_state, ?InvitationInterface $invitation = NULL, string $action = NULL): array {
     $group = $invitation->getEntity();
     $owner = $invitation->getOwner();
 
@@ -121,13 +121,15 @@ class InvitationAcceptanceForm extends FormBase {
         '#type' => 'submit',
         '#value' => $this->t('Accept'),
       ],
-      'reject' => [
+    ];
+    if (self::ACTION_ACCEPT !== $action) {
+      $form['actions']['reject'] = [
         '#type' => 'submit',
         '#value' => $this->t('Reject'),
         '#submit' => ['::rejectForm'],
         '#limit_validation_errors' => [],
-      ],
-    ];
+      ];
+    }
 
     return $form;
   }
