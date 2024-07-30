@@ -378,7 +378,8 @@ Feature: Collection membership administration
 
     # Accept the invitation directly.
     When I am logged in as "dwightone"
-    And I accept the invitation for the "Medical diagnosis" collection group
+    And I visit the accept invitation form for the "Medical diagnosis" collection group
+    And I press "Accept"
     Then I should see the text "You have been promoted to collection facilitator"
     And I am on the members page of "Medical diagnosis"
     Then I should see the link "Add members"
@@ -387,9 +388,11 @@ Feature: Collection membership administration
     Then I should see the heading "Invite members"
 
     # Trying to take action again on the invitation again informs the user about it.
-    When I accept the invitation for the "Medical diagnosis" collection group
+    When I visit the accept invitation form for the "Medical diagnosis" collection group
+    And I press "Accept"
     Then I should see the message "You have already accepted the invitation."
-    When I reject the invitation for the "Medical diagnosis" collection group
+    When I visit the reject invitation form for the "Medical diagnosis" collection group
+    And I press "Accept"
     Then I should see the message "You have already accepted the invitation."
 
     # Join the collection manually and trigger the invitation.

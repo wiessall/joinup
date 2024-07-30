@@ -21,7 +21,7 @@ class JoinupInviteContext extends RawDrupalContext {
   use UserTrait;
 
   /**
-   * Accepts or rejects an invitation.
+   * Visists the invitation form.
    *
    * @param string $action
    *   The action being taken on the invitation, can be either 'accept' or
@@ -37,7 +37,7 @@ class JoinupInviteContext extends RawDrupalContext {
    * @throws \InvalidArgumentException
    *   Thrown when the action is anything other than 'accept' or 'reject'.
    *
-   * @When I :action the invitation for the :title :bundle :type
+   * @When I visit the :action invitation form for the :title :bundle :type
    */
   public function acceptInvitation(string $action, string $title, string $bundle, string $type): void {
     if (!in_array($type, ['group', 'content'])) {
@@ -56,7 +56,6 @@ class JoinupInviteContext extends RawDrupalContext {
     $arguments = $this->getInvitationMessageHelper()->getMessage($invitation, $invitation_info['message_template'])->getArguments();
 
     $this->visitPath($arguments["@invitation:{$action}_url"]);
-    $this->getSession()->getPage()->pressButton(ucfirst($action));
   }
 
   /**
