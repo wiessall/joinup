@@ -221,9 +221,9 @@ display:
               event: default
               licence: view_mode_search_list_item
               news: default
+              release: default
               video: default
             'entity:rdf_entity':
-              asset_release: default
               collection: default
               solution: default
             'entity:taxonomy_term':
@@ -306,9 +306,9 @@ display:
               event: default
               licence: compatibility_check
               news: default
+              release: default
               video: default
             'entity:rdf_entity':
-              asset_release: default
               collection: default
               solution: default
             'entity:taxonomy_term':

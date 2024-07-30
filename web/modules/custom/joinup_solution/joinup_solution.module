@@ -1,0 +1,24 @@
+<?php
+
+/**
+ * @file
+ * Contains hooks and functions for the joinup_solution module.
+ */
+
+declare(strict_types=1);
+
+/**
+ * @file
+ * Primary module hooks for Joinup solution module.
+ */
+
+use Drupal\joinup_solution\Entity\Solution;
+
+/**
+ * Implements hook_entity_bundle_info_alter().
+ */
+function joinup_solution_entity_bundle_info_alter(&$bundles): void {
+  if (!empty($bundles['node']['solution'])) {
+    $bundles['node']['solution']['class'] = Solution::class;
+  }
+}

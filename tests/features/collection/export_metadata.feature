@@ -17,7 +17,7 @@ Feature: Export collection metadata
       | title      | state     |
       | Solution 1 | published |
     Given distribution content:
-      | title          | description   | access_url        | state     | parent     |
+      | title          | description   | access_url        | state     | solution   |
       | Distribution 1 | Description 1 | http://access.url | published | Solution 1 |
     When I go to the "Distribution 1" distribution
     When I click "Metadata"

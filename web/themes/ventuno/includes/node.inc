@@ -153,3 +153,11 @@ function ventuno_preprocess_page_title__node__distribution(array &$variables): v
   $variables['additional_content']['file_size'] = $file_size;
   $variables['additional_content']['licence'] = $licence;
 }
+
+/**
+ * Implements hook_theme_suggestions_HOOK_alter() for the joinup_release_releases_download hook.
+ */
+function ventuno_theme_suggestions_joinup_release_releases_download_alter(array &$suggestions, array $variables): void {
+  $original_theme_hook = $variables['theme_hook_original'];
+  $suggestions[] = $original_theme_hook;
+}
