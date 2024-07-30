@@ -4,3 +4,7 @@ services:
     arguments: [ '@entity_type.manager', '@joinup_group.group_manager', '@logger.log_message_parser' ]
     tags:
       - { name: needs_destruction }
+  joinup_log.actions_log_group_report:
+    class: Drupal\joinup_log\EventSubscriber\ActionsLogGroupReportSubscriber
+    tags:
+      - { name: event_subscriber }

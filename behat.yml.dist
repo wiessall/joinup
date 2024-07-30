@@ -144,6 +144,7 @@ default:
                 - '--whitelisted-ips=*'
     LoversOfBehat\TableExtension:
       table_map:
+        'actions log report': 'table'
         'announcement list': '.announcement-list table'
         'group menu edit table': '#menu-overview'
         'eif recommendations': '.eif-recommendations table'

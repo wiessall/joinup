@@ -56,7 +56,7 @@ class BusinessHandler extends AbstractProcessingHandler implements DestructableI
           'group' => $group?->id(),
           'type' => $record->context['type'] ?? NULL,
           'message' => $record->message,
-          'severity' => $record->level->value,
+          'severity' => $record->level->toRFC5424Level(),
           'uid' => $record->extra['uid'],
           'actor' => $this->getActor($record),
           'location' => $record->extra['request_uri'],
