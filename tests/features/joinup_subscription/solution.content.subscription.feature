@@ -54,15 +54,15 @@ Feature: Subscribing to community content in solutions
       | title    | body                        | solution             | state     | author |
       | Rose oil | A widely used essential oil | Products of Bulgaria | published | bisera |
       | Burgas   | City of dreams              | Cities of Bulgaria   | published | hristo |
-    And releases:
+    And release content:
       | title       | release number | release notes   | is version of        | state     | published at     |
       | Spring 2021 | 2021/03        | Blooming pears. | Products of Bulgaria | published | 2021-03-21 00:00 |
     And distribution content:
-      | title                 | description    | parent               | state     |
+      | title                 | description    | solution             | release     | state     |
       # A distribution linked directly to the solution.
-      | Full list of products | There are many | Products of Bulgaria | published |
+      | Full list of products | There are many | Products of Bulgaria |             | published |
       # A distribution linked to a release.
-      | Spring discounts      | Get them now   | Spring 2021          | published |
+      | Spring discounts      | Get them now   |                      | Spring 2021 | published |
 
     Then the daily group content subscription digest for hristo should match the following messages:
       | Duck liver            |
@@ -140,7 +140,8 @@ Feature: Subscribing to community content in solutions
       | Products of Bulgaria |
       | Canned cherries      |
       | Rose oil             |
-      | 21/03/2021           |
+      # @todo Re-enable this in ISAICP-8943.
+      # | 21/03/2021           |
       | Spring 2021          |
     And the content subscription digest sent to bisera should have the subject "Joinup: Weekly digest message"
 

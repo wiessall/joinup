@@ -120,8 +120,8 @@ function joinup_rdf_form_rdf_entity_form_alter(array &$form, FormStateInterface 
       'rdf_entity_solution_edit_form',
       'rdf_entity_licence_add_form',
       'rdf_entity_licence_edit_form',
-      'rdf_entity_asset_release_form',
-      'rdf_entity_asset_release_edit_form',
+      'node_release_form',
+      'node_release_edit_form',
       'node_distribution_form',
       'node_distribution_edit_form',
     ];

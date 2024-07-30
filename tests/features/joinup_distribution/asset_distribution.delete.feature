@@ -15,7 +15,7 @@ Feature: Asset distribution deleting.
       | solution              | user       | roles                      |
       | Rough valentine's day | Papa roach | administrator, facilitator |
     And distribution content:
-      | title            | description    | access url | parent                | state     |
+      | title            | description    | access url | solution              | state     |
       | Francesco's cats | Sample content | test.zip   | Rough valentine's day | published |
 
     When I am logged in as a facilitator of the "Rough valentine's day" solution

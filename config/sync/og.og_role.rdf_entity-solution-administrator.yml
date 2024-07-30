@@ -14,6 +14,6 @@ group_type: rdf_entity
 group_bundle: solution
 is_admin: null
 permissions:
-  - 'delete any asset_release rdf_entity'
+  - 'delete any release content'
   - 'update solution_settings meta-entity'
 role_type: null
