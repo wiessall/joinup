@@ -111,15 +111,21 @@ class InvitationAcceptanceForm extends FormBase {
 
     $form['actions'] = [
       '#type' => 'actions',
-      'submit' => [
-        '#type' => 'submit',
-        '#value' => $this->t('Accept'),
-      ],
       'cancel' => [
         '#type' => 'link',
         '#title' => $this->t('Cancel'),
         '#attributes' => ['class' => ['button']],
         '#url' => $invitation->getEntity()->toUrl(),
+      ],
+      'submit' => [
+        '#type' => 'submit',
+        '#value' => $this->t('Accept'),
+      ],
+      'reject' => [
+        '#type' => 'submit',
+        '#value' => $this->t('Reject'),
+        '#submit' => ['::rejectForm'],
+        '#limit_validation_errors' => [],
       ],
     ];
 
@@ -133,6 +139,21 @@ class InvitationAcceptanceForm extends FormBase {
     /** @var \Drupal\joinup_invite\Entity\InvitationInterface $invitation */
     $invitation = $this->currentRouteMatch->getParameter('invitation');
     $this->updateInvitation($invitation, self::ACTION_ACCEPT);
+    $this->redirectToGroup($form_state);
+  }
+
+  /**
+   * Rejects the form.
+   *
+   * @param array $form
+   *   The form array.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The form state.
+   */
+  public function rejectForm(array &$form, FormStateInterface $form_state): void {
+    /** @var \Drupal\joinup_invite\Entity\InvitationInterface $invitation */
+    $invitation = $this->currentRouteMatch->getParameter('invitation');
+    $this->updateInvitation($invitation, self::ACTION_REJECT);
     $this->redirectToGroup($form_state);
   }
 
