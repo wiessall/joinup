@@ -243,6 +243,11 @@ class AnnouncementForm extends FormBase {
     }
     elseif ($is_new) {
       $status = $this->t("The announcement has been created as @to. Review the announcement and, when is ready to be sent, use the 'Send' button.", $args);
+      $this->getLogger('logger.channel.group_membership')->info('The announcement has been created as @to', [
+        '@to' => $this->announcement->getWorkflowStateInstance()->getLabel(),
+        'type' => 'joinup:add_announcement',
+        'actor' => $this->currentUser()->id(),
+      ]);
     }
     elseif ($initial_state->getId() == $this->announcement->getWorkflowState()) {
       $status = $this->t("The announcement has been updated but it's still in @to state. Review the announcement and, when is ready to be sent, use the 'Send' button.", $args);

@@ -7,21 +7,22 @@
 
 declare(strict_types=1);
 
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\custom_page\Entity\CustomPageInterface;
+use Drupal\joinup_community_content\Entity\CommunityContentInterface;
 
 /**
  * Implements hook_form_alter().
  */
 function joinup_log_form_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
-  // Check if the form ID corresponds to a Views exposed form.
   if (str_starts_with($form_id, 'views_form_og_members_overview_default_')) {
-    // Add our custom submit handler.
     $form['#submit'][] = 'joinup_log_members_views_exposed_form_submit';
   }
 }
 
 /**
- * Custom submit handler for Views exposed forms.
+ * Custom submit handler for Views members bulk logger.
  */
 function joinup_log_members_views_exposed_form_submit(array &$form, FormStateInterface $form_state): void {
   $options = $form_state->getValue('og_membership_bulk_form');
@@ -43,7 +44,7 @@ function joinup_log_members_views_exposed_form_submit(array &$form, FormStateInt
       'role' => 'author',
     ],
     'og_membership_add_single_role_action.facilitator' => [
-      'tyep' => 'joinup:add_the_facilitator_role_to_member',
+      'type' => 'joinup:add_the_facilitator_role_to_member',
       'message' => 'Successfully added the role @role to the @actor user.',
       'role' => 'facilitator',
     ],
@@ -88,4 +89,35 @@ function joinup_log_members_views_exposed_form_submit(array &$form, FormStateInt
       'actor' => $current_user->id(),
     ]);
   }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert() for node entities.
+ */
+function joinup_log_node_insert(EntityInterface $entity): void {
+  if ($entity instanceof CommunityContentInterface || $entity instanceof CustomPageInterface) {
+    $current_user = \Drupal::currentUser();
+    \Drupal::service('logger.channel.group_membership')->info('A new @type entity titled @title has been created.', [
+      '@type' => $entity->getType(),
+      '@title' => $entity->getTitle(),
+      'type' => 'joinup:add_' . $entity->getType(),
+      'actor' => $current_user->id(),
+    ]);
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert().
+ */
+function joinup_log_rdf_entity_insert(EntityInterface $entity): void {
+  if ($entity->bundle() !== 'solution') {
+    return;
+  }
+  $current_user = \Drupal::currentUser();
+  \Drupal::service('logger.channel.group_membership')->info('A new @type entity titled @title has been created.', [
+    '@type' => $entity->bundle(),
+    '@title' => $entity->label(),
+    'type' => 'joinup:add_solution',
+    'actor' => $current_user->id(),
+  ]);
 }
