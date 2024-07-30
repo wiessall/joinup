@@ -84,7 +84,7 @@ class InvitationAcceptanceForm extends FormBase {
       '#tag' => 'p',
       '#value' =>
       $this->t(
-         'You have been invited by <a href=":owner-url" target="_blank">@owner-name</a> to join the <a href=":parent-url" target="_blank">@parent-name</a> ',
+         'You have been invited by <a href=":owner-url" target="_blank">@owner-name</a> to join the <a href=":parent-url" target="_blank">@parent-name</a>',
           [
             ':owner-url' => $owner->toUrl()->toString(),
             '@owner-name' => $owner->getDisplayName(),
