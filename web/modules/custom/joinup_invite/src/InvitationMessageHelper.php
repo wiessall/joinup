@@ -86,7 +86,8 @@ class InvitationMessageHelper implements InvitationMessageHelperInterface {
     foreach (['accept', 'reject'] as $action) {
       $url_arguments = [
         'invitation' => $invitation->id(),
-        'hash' => InvitationAcceptanceForm::generateHash($invitation),
+        'action' => $action,
+        'hash' => InvitationAcceptanceForm::generateHash($invitation, $action),
       ];
       $url_options = ['absolute' => TRUE];
       $arguments["@invitation:{$action}_url"] = Url::fromRoute('joinup_invite.update_invitation', $url_arguments, $url_options)->toString();

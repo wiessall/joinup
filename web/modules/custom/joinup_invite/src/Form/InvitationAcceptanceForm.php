@@ -185,6 +185,8 @@ class InvitationAcceptanceForm extends FormBase {
    *
    * @param \Drupal\joinup_invite\Entity\InvitationInterface $invitation
    *   The invitation which is being accepted or rejected.
+   * @param string $action
+   *   The action which is being taken. Can be either 'accept' or 'reject'.
    * @param string $hash
    *   The hash value to check.
    * @param \Drupal\Core\Session\AccountInterface $user
@@ -193,10 +195,10 @@ class InvitationAcceptanceForm extends FormBase {
    * @return \Drupal\Core\Access\AccessResultInterface
    *   The access result.
    */
-  public function access(InvitationInterface $invitation, string $hash, AccountInterface $user): AccessResultInterface {
+  public function access(InvitationInterface $invitation, string $action, string $hash, AccountInterface $user): AccessResultInterface {
     return AccessResult::allowedIf(
       $user->isAuthenticated() &&
-      static::generateHash($invitation) === $hash
+      static::generateHash($invitation, $action) === $hash
     );
   }
 
@@ -207,15 +209,16 @@ class InvitationAcceptanceForm extends FormBase {
    *
    * @param \Drupal\joinup_invite\Entity\InvitationInterface $invitation
    *   The invitation.
+   * @param string $action
+   *   The action which is being taken. Can be either 'accept' or 'reject'.
    *
    * @return string
    *   A unique hash consisting of 8 lowercase alphanumeric characters, dashes
    *   and underscores.
    */
-  public static function generateHash(InvitationInterface $invitation): string {
+  public static function generateHash(InvitationInterface $invitation, string $action): string {
     $data = $invitation->id();
-    // Keep backward compatibility as some emails could be already sent.
-    $data .= 'accept';
+    $data .= $action;
     return strtolower(substr(Crypt::hmacBase64($data, Settings::getHashSalt()), 0, 8));
   }
 
