@@ -75,7 +75,7 @@ class InvitationAcceptanceForm extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state, ?InvitationInterface $invitation = NULL, string $action = NULL): array {
+  public function buildForm(array $form, FormStateInterface $form_state, ?InvitationInterface $invitation = NULL, ?string $action = NULL): array {
     $group = $invitation->getEntity();
     $owner = $invitation->getOwner();
 
@@ -116,7 +116,7 @@ class InvitationAcceptanceForm extends FormBase {
         '#title' => $this->t('Cancel'),
         '#attributes' => ['class' => ['button']],
         '#url' => $invitation->getEntity()->toUrl(),
-        '#weight' => 10
+        '#weight' => 10,
       ],
       'submit' => [
         '#type' => 'submit',
