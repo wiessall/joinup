@@ -53,8 +53,8 @@ interface InvitationEventInterface {
    * @param bool $subscribe
    *   Whether to subscribe or not.
    *
-   * @return InvitationEventInterface T
-   *   he updated InvitationEventInterface instance.
+   * @return InvitationEventInterface
+   *   The updated InvitationEventInterface instance.
    */
   public function setSubscribe(bool $subscribe): InvitationEventInterface;
 
