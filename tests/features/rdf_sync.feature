@@ -4,6 +4,30 @@ Feature: RDF synchronization of contents.
   in order for my news to be better visible on the web
   I need my RDF entities to be properly synchronized with the site contents.
 
+  Scenario: RDF entities for contact information are correctly created
+    Given contact_information content:
+      | uri                          | name           | email                    | website url            |
+      | https://example.com/contact1 | Jocelyn Bass   | jocelyn.bass@example.com | http://www.example.org |
+      | https://example.com/contact2 | Geoffrey Bryce | geoffrey.bryce@exam.com  |                        |
+    Then the following "http://data" graph triples should exist in the RDF backend:
+      | subject                      | predicate                                       | object                               |
+      | https://example.com/contact1 | http://www.w3.org/2006/vcard/ns#fn              | Jocelyn Bass                         |
+      | https://example.com/contact1 | http://www.w3.org/2006/vcard/ns#hasEmail        | jocelyn.bass@example.com             |
+      | https://example.com/contact1 | http://www.w3.org/2006/vcard/ns#hasURL          | http://www.example.org               |
+      | https://example.com/contact1 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | http://www.w3.org/2006/vcard/ns#Kind |
+      | https://example.com/contact2 | http://www.w3.org/2006/vcard/ns#fn              | Geoffrey Bryce                       |
+      | https://example.com/contact2 | http://www.w3.org/2006/vcard/ns#hasEmail        | geoffrey.bryce@exam.com              |
+      | https://example.com/contact2 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | http://www.w3.org/2006/vcard/ns#Kind |
+    When contact_information content "Jocelyn Bass" is updated:
+      | title | Jocelyn Bass Bryce             |
+      | email | jocelyn.bass.bryce@example.com |
+    Then the following "http://data" graph triples should exist in the RDF backend:
+      | subject                      | predicate                                       | object                               |
+      | https://example.com/contact1 | http://www.w3.org/2006/vcard/ns#fn              | Jocelyn Bass Bryce                   |
+      | https://example.com/contact1 | http://www.w3.org/2006/vcard/ns#hasEmail        | jocelyn.bass.bryce@example.com       |
+      | https://example.com/contact1 | http://www.w3.org/2006/vcard/ns#hasURL          | http://www.example.org               |
+      | https://example.com/contact1 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | http://www.w3.org/2006/vcard/ns#Kind |
+
   Scenario: RDF entities for licences are correctly created
     Given licence content:
       | uri                          | title              | description    | licence type  | deprecated  |
