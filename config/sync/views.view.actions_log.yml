@@ -730,7 +730,6 @@ display:
           columns:
             id: id
             timestamp: timestamp
-            severity: severity
             type: type
             message: message
             name: name
@@ -745,13 +744,6 @@ display:
               empty_column: false
               responsive: ''
             timestamp:
-              sortable: true
-              default_sort_order: asc
-              align: ''
-              separator: ''
-              empty_column: false
-              responsive: ''
-            severity:
               sortable: true
               default_sort_order: asc
               align: ''
@@ -874,9 +866,6 @@ display:
               alias: ''
               raw_output: false
             timestamp:
-              alias: ''
-              raw_output: false
-            severity:
               alias: ''
               raw_output: false
             type:
