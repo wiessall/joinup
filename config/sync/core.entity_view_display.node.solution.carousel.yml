@@ -92,10 +92,12 @@ hidden:
   collections: true
   contact: true
   content_creation: true
+  description: true
   distributions: true
   documentation: true
   download_total: true
-  description: true
+  eif_perspective: true
+  featured: true
   field_keywords: true
   field_state: true
   field_topic: true
@@ -111,9 +113,11 @@ hidden:
   node_solution_listing_content_inline_facets: true
   node_solution_listing_content_top: true
   owner: true
+  pinned_in: true
   process_status: true
   published_at: true
   read_more: true
+  related_solution: true
   related_solutions: true
   release_number: true
   releases_overview: true

@@ -14,11 +14,11 @@ third_party_settings:
     value:
       predicate: 'http://purl.org/dc/terms/description'
       type: null
-id: node.release.description
+id: node.solution.description
 field_name: description
 entity_type: node
-bundle: release
-label: 'Description'
+bundle: solution
+label: Description
 description: ''
 required: false
 translatable: false
