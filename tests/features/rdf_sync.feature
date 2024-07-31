@@ -69,13 +69,13 @@ Feature: RDF synchronization of contents.
       | https://example.com/contact1 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | http://www.w3.org/2006/vcard/ns#Kind |
 
   Scenario: RDF entities for Distribution are correctly created.
-    And the following solution:
+    Given the following solution:
       | title | Test solution |
       | state | published     |
-    Given release content:
+    And release content:
       | title        | is version of | state     |
       | Test release | Test solution | published |
-    Given distribution content:
+    And distribution content:
       | uri                               | title          | description                  | release      | access url                       | created              | changed              | state     |
       | https://example.com/distribution1 | Some Distro    | Übermensch foot size         | Test release | http://example.com/some-distro1  | 2024-07-31T10:19:33Z | 2024-07-31T10:19:33Z | published |
       | https://example.com/distribution2 | Another distro | Description for other distro | Test release | http://example.com/some-distro2  | 2024-08-01T10:19:33Z | 2024-08-01T10:19:33Z | published |
@@ -135,8 +135,8 @@ Feature: RDF synchronization of contents.
 
   Scenario: RDF entities for Owners are correctly created.
     Given owner content:
-     | uri                        | name       |
-     | https://example.com/owner1 | Teddy Bass |
+     | uri                        | name       | state     |
+     | https://example.com/owner1 | Teddy Bass | published |
     Then the following "http://data" graph triples exist in the RDF backend:
       | subject                    | predicate                                       | object                          |
       | https://example.com/owner1 | http://xmlns.com/foaf/0.1/name                  | Teddy Bass                      |
@@ -147,3 +147,49 @@ Feature: RDF synchronization of contents.
       | subject                    | predicate                                       | object                          |
       | https://example.com/owner1 | http://xmlns.com/foaf/0.1/name                  | Stephen Bass                    |
       | https://example.com/owner1 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | http://xmlns.com/foaf/0.1/Agent |
+
+  Scenario: RDF entities for Releases are correctly created.                          |
+    Given the following solutions:
+      | title        | state     | uri                           |
+      | Early Omega  | published | https://example.com/solution1 |
+    And release content:
+      | uri                          | title    | documentation | release number | release notes | published_at         | changed              | is version of | state     | status    | keywords   |
+      | https://example.com/release1 | Omega3   | text.pdf      | 3.0.0          | New 3.0       | 2024-07-31T10:19:33Z | 2024-07-31T10:19:33Z | Early Omega   | published | Completed | food       |
+      | https://example.com/release2 | Omega3.1 | text.pdf      | 3.1.0          | New 3.1       | 2024-08-01T10:19:33Z | 2024-08-01T10:19:33Z | Early Omega   | published | Completed | food,games |
+    Then the following "http://data" graph triples exist in the RDF backend:
+      | subject                      | predicate                                       | object                                |
+      | https://example.com/release1 | http://purl.org/dc/terms/title                  | Omega3                                |
+      | https://example.com/release1 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | http://www.w3.org/ns/dcat#Dataset     |
+      | https://example.com/release1 | http://www.w3.org/2002/07/owl#versionInfo       | 3.0.0                                 |
+      | https://example.com/release1 | http://purl.org/dc/terms/issued                 | 2024-07-31T10:19:33Z                  |
+      | https://example.com/release1 | http://purl.org/dc/terms/modified               | 2024-07-31T10:19:33Z                  |
+      | https://example.com/release1 | http://www.w3.org/ns/adms#status                | http://purl.org/adms/status/Completed |
+      | https://example.com/release1 | http://www.w3.org/ns/dcat#keyword               | food                                  |
+      | https://example.com/release1 | http://purl.org/dc/terms/isVersionOf            | https://example.com/solution1         |
+      | https://example.com/release1 | http://www.w3.org/ns/adms#versionNotes          | New 3.0                               |
+      | https://example.com/release2 | http://purl.org/dc/terms/title                  | Omega3.1                              |
+      | https://example.com/release2 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | http://www.w3.org/ns/dcat#Dataset     |
+      | https://example.com/release2 | http://www.w3.org/2002/07/owl#versionInfo       | 3.1.0                                 |
+      | https://example.com/release2 | http://purl.org/dc/terms/issued                 | 2024-08-01T10:19:33Z                  |
+      | https://example.com/release2 | http://purl.org/dc/terms/modified               | 2024-08-01T10:19:33Z                  |
+      | https://example.com/release2 | http://www.w3.org/ns/adms#status                | http://purl.org/adms/status/Completed |
+      | https://example.com/release2 | http://www.w3.org/ns/dcat#keyword               | food                                  |
+      | https://example.com/release2 | http://www.w3.org/ns/dcat#keyword               | games                                 |
+      | https://example.com/release2 | http://purl.org/dc/terms/isVersionOf            | https://example.com/solution1         |
+      | https://example.com/release2 | http://www.w3.org/ns/adms#versionNotes          | New 3.1                               |
+    When I update the entity having "https://example.com/release1" as RDF resource:
+      | title          | Omega the third      |
+      | field_keywords | food,drinks          |
+      | changed        | 2024-07-31T15:20:00Z |
+    Then the following "http://data" graph triples exist in the RDF backend:
+      | subject                      | predicate                                       | object                                |
+      | https://example.com/release1 | http://purl.org/dc/terms/title                  | Omega the third                       |
+      | https://example.com/release1 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | http://www.w3.org/ns/dcat#Dataset     |
+      | https://example.com/release1 | http://www.w3.org/2002/07/owl#versionInfo       | 3.0.0                                 |
+      | https://example.com/release1 | http://purl.org/dc/terms/issued                 | 2024-07-31T10:19:33Z                  |
+      | https://example.com/release1 | http://purl.org/dc/terms/modified               | 2024-07-31T15:20:00Z                  |
+      | https://example.com/release1 | http://www.w3.org/ns/adms#status                | http://purl.org/adms/status/Completed |
+      | https://example.com/release1 | http://www.w3.org/ns/dcat#keyword               | food                                  |
+      | https://example.com/release1 | http://www.w3.org/ns/dcat#keyword               | drinks                                |
+      | https://example.com/release1 | http://purl.org/dc/terms/isVersionOf            | https://example.com/solution1         |
+      | https://example.com/release1 | http://www.w3.org/ns/adms#versionNotes          | New 3.0                               |
