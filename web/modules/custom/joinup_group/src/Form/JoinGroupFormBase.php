@@ -182,6 +182,7 @@ abstract class JoinGroupFormBase extends FormBase implements JoinGroupFormInterf
       $form['join'] = [
         '#type' => 'submit',
         '#value' => $this->getJoinSubmitLabel(),
+        '#name' => 'join',
       ];
     }
 
