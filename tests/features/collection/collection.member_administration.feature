@@ -426,7 +426,8 @@ Feature: Collection membership administration
 
     When I am logged in as "Donald Duck"
     And I visit the accept invitation form for the "Medical diagnosis" collection group
-    And I press "Accept"
+    Then I should see the link "Medical diagnosis" in the Header region
+    When I press "Accept"
     Then I should see the error message "You must agree to the Medical diagnosis CoC."
     When I check the box "I have read and agree to the Medical diagnosis CoC."
     And I press "Accept"
