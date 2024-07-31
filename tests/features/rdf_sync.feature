@@ -133,22 +133,34 @@ Feature: RDF synchronization of contents.
       | https://example.com/license2 | http://purl.org/dc/terms/type                   | http://purl.org/adms/licence/PD          |
       | https://example.com/license2 | http://joinup.eu/licence/deprecated             | 0                                        |
 
-  Scenario: RDF entities for Owners are correctly created.
-    Given owner content:
-     | uri                        | name       | state     |
-     | https://example.com/owner1 | Teddy Bass | published |
+  Scenario: RDF entities for Owners and Owner types are correctly created.
+    Given owner_type terms:
+      | uri                          | name       |
+      | http://joinup.eu/owner-type1 | University |
+    And owner content:
+      | uri                        | name          | state     | owner type |
+      | https://example.com/owner1 | Teddy Bass    | published | University |
+      | https://example.com/owner2 | Johnny Guitar | published | University |
     Then the following "http://data" graph triples exist in the RDF backend:
-      | subject                    | predicate                                       | object                          |
-      | https://example.com/owner1 | http://xmlns.com/foaf/0.1/name                  | Teddy Bass                      |
-      | https://example.com/owner1 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | http://xmlns.com/foaf/0.1/Agent |
+      | subject                      | predicate                                       | object                                      |
+      | https://example.com/owner1   | http://xmlns.com/foaf/0.1/name                  | Teddy Bass                                  |
+      | https://example.com/owner1   | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | http://xmlns.com/foaf/0.1/Agent             |
+      | https://example.com/owner1   | http://purl.org/dc/terms/type                   | http://joinup.eu/owner-type1                |
+      | https://example.com/owner2   | http://xmlns.com/foaf/0.1/name                  | Johnny Guitar                               |
+      | https://example.com/owner2   | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | http://xmlns.com/foaf/0.1/Agent             |
+      | https://example.com/owner2   | http://purl.org/dc/terms/type                   | http://joinup.eu/owner-type1                |
+      | http://joinup.eu/owner-type1 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | http://www.w3.org/2004/02/skos/core#Concept |
+      | http://joinup.eu/owner-type1 | http://www.w3.org/2004/02/skos/core#inScheme    | http://purl.org/adms/publishertype/1.0      |
+      | http://joinup.eu/owner-type1 | http://www.w3.org/2004/02/skos/core#prefLabel   | University                                  |
     When I update the entity having "https://example.com/owner1" as RDF resource:
       | title | Stephen Bass |
     Then the following "http://data" graph triples exist in the RDF backend:
       | subject                    | predicate                                       | object                          |
       | https://example.com/owner1 | http://xmlns.com/foaf/0.1/name                  | Stephen Bass                    |
       | https://example.com/owner1 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | http://xmlns.com/foaf/0.1/Agent |
+      | https://example.com/owner1 | http://purl.org/dc/terms/type                   | http://joinup.eu/owner-type1    |
 
-  Scenario: RDF entities for Releases are correctly created.                          |
+  Scenario: RDF entities for Releases are correctly created.
     Given the following solutions:
       | title        | state     | uri                           |
       | Early Omega  | published | https://example.com/solution1 |
