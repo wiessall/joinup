@@ -1,0 +1,15 @@
+uuid: 4e4541f0-cff5-4a1a-b35a-84da98238875
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.collection
+id: node-collection-administrator
+label: Administrator
+weight: 6
+group_id: null
+group_type: node
+group_bundle: collection
+is_admin: true
+permissions: {  }
+role_type: null
