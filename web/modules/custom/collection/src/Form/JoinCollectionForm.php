@@ -4,18 +4,19 @@ declare(strict_types=1);
 
 namespace Drupal\collection\Form;
 
-use Drupal\Component\Utility\Html;
 use Drupal\Core\Access\AccessManagerInterface;
 use Drupal\Core\Ajax\AfterCommand;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\OpenModalDialogCommand;
 use Drupal\Core\Ajax\ReplaceCommand;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\EventSubscriber\MainContentViewSubscriber;
 use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\Core\Url;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_core\Event\AjaxCommandEvent;
 use Drupal\joinup_group\Form\JoinGroupFormBase;
@@ -65,14 +66,12 @@ class JoinCollectionForm extends JoinGroupFormBase {
     // @todo Move this into the joinup_subscription module to solve a circular
     //   dependency.
     // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-6330
-    $membership = $this->getUserNonBlockedMembership($user, $group);
-    if (empty($membership)) {
+    $operation = $form['join']['#name'] ?? NULL;
+    if ($operation === 'join') {
       // Show the subscription dialog in a modal on join.
       $form['join']['#ajax'] = ['callback' => '::showSubscribeDialog'];
-    }
-    else {
-      // Show the subscription dialog in a modal on page load, if the user has
-      // just authenticated after indicating their desire to join.
+      // Add library and the needed settings which opens the subscribe dialog if
+      // the user has just authenticated after indicating their desire to join.
       $form['#attached']['library'][] = 'collection/subscribe_dialog';
       $form['#attached']['drupalSettings']['joinGroupData'] = [
         'sparqlEncodedId' => UriEncoder::encodeUrl($group->id()),
@@ -103,6 +102,13 @@ class JoinCollectionForm extends JoinGroupFormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state): void {
     \assert($this->group instanceof CollectionInterface);
+    $form_state->setRedirectUrl(
+      $this->group->toUrl('subscribe')
+        ->setOption('query', [
+          'destination' => Url::fromRoute('<current>')->toString(),
+        ])
+    );
+
     if ($this->group->hasCodeOfConductToAccept()) {
       // Membership is created only after user accepted the code of conduct
       // document.
@@ -140,24 +146,14 @@ class JoinCollectionForm extends JoinGroupFormBase {
       // button or the "Membership is pending" button.
       $rebuiltForm = $this->formBuilder->rebuildForm($this->getFormId(), $form_state, $form);
       $response->addCommand(new ReplaceCommand("#{$this->ajaxWrapperId()}", $rebuiltForm));
-
-      $title = $this->t('Welcome to the community!');
-      $greetingField = $this->group instanceof CollectionInterface
-        ? $this->group->getSetting('greeting')
-        : NULL;
-      if ($greetingField && !$greetingField->isEmpty()) {
-        $title = Html::escape($greetingField->first()->getString());
-      }
-
       $modal_form = $this->formBuilder->getForm(SubscribeToCollectionForm::class, $this->group);
       $modal_form['#attached']['library'][] = 'core/drupal.dialog.ajax';
 
       // Allow modules to alter or replace the Ajax command.
-      $event = new AjaxCommandEvent(new OpenModalDialogCommand($title, $modal_form, [
+      $event = new AjaxCommandEvent(new OpenModalDialogCommand(SubscribeToCollectionForm::title($this->group), $modal_form, [
         'width' => '500',
       ]), [
         'instance' => 'join_collection.subscribe_dialog.open',
-        'title' => $title,
         'content' => $modal_form,
       ]);
       $this->eventDispatcher->dispatch($event);
@@ -218,6 +214,29 @@ class JoinCollectionForm extends JoinGroupFormBase {
    */
   protected function ajaxWrapperId(): string {
     return $this->getFormId() . '_ajax_wrapper';
+  }
+
+  /**
+   * Determines if the current request is via AJAX.
+   *
+   * @return bool
+   *   TRUE if the current request is via AJAX, FALSE otherwise.
+   */
+  protected function isAjax(): bool {
+    $wrapper_format = $this->getRequestWrapperFormat() ?? '';
+    return str_contains($wrapper_format, 'drupal_ajax') ||
+      str_contains($wrapper_format, 'drupal_modal') ||
+      str_contains($wrapper_format, 'drupal_dialog');
+  }
+
+  /**
+   * Gets the wrapper format of the current request.
+   *
+   * @return string
+   *   The wrapper format. Empty string if the wrapper format is not set.
+   */
+  protected function getRequestWrapperFormat(): string {
+    return $this->getRequest()->get(MainContentViewSubscriber::WRAPPER_FORMAT, '');
   }
 
 }

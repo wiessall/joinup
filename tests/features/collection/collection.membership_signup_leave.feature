@@ -167,6 +167,7 @@ Feature: Joining and leaving collections through the web interface
     Then I should see the "Join this community" button
 
     When I press "Join this community"
+    And I press "Don't subscribe"
     Then I should see the link "Leave this community"
 
   @javascript
