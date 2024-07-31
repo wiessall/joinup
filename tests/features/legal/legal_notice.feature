@@ -208,10 +208,11 @@ Feature:
     And I should see the warning message "You must accept this agreement before continuing."
 
     # After accepting the legal notice form we should finally be redirected to
-    # the collection homepage.
+    # the collection homepage, or, without js, to the collection subscription
+    # form.
     When I check "Accept Version 2.0!"
     And I press "Submit"
-    Then I should see the heading "Land of submarines"
+    Then I should see the text "Land of submarines" in the Header region
 
     # Quick check to see that the right messages are shown. The complete
     # workflow is described in "join-as-anonymous.feature".

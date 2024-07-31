@@ -1,22 +1,11 @@
 # Collection routing definition
-collection.subscribe_to_collection_form:
-  path: '/ajax/collection/{rdf_entity}/subscribe'
+entity.rdf_entity.subscribe:
+  path: '/rdf_entity/{rdf_entity}/subscribe'
   defaults:
     _form: \Drupal\collection\Form\SubscribeToCollectionForm
+    _title_callback: Drupal\collection\Form\SubscribeToCollectionForm::title
   requirements:
     _custom_access: \Drupal\collection\Form\SubscribeToCollectionForm::access
-  options:
-    parameters:
-      rdf_entity:
-        type: entity:rdf_entity
-        bundle:
-          - collection
-collection.subscribe_to_collection_form.after_authenticating:
-  path: '/ajax/collection/{rdf_entity}/subscribe/auth'
-  defaults:
-    _controller: Drupal\collection\Form\SubscribeToCollectionForm::showSubscribeDialog
-  requirements:
-    _custom_access: \Drupal\collection\Form\SubscribeToCollectionForm::accessToSubscribeDialogAfterAuthenticating
   options:
     parameters:
       rdf_entity:
