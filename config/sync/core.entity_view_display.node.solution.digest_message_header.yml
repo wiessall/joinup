@@ -37,7 +37,14 @@ id: node.solution.digest_message_header
 targetEntityType: node
 bundle: solution
 mode: digest_message_header
-content: {  }
+content:
+  og_group:
+    type: og_group_subscribe
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
 hidden:
   abstract: true
   body: true
