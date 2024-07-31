@@ -19,7 +19,7 @@ Feature: RDF synchronization of contents.
       | Layer       | Interoperability Layer 1: Interoperability governance |
       | Model       | Basic Component 4: Open data                          |
       | uri         | https://example.com/eif-perspective2                  |
-    Then only the following "http://data" graph triples should exist in the RDF backend:
+    Then the following "http://data" graph triples exist in the RDF backend:
       | subject                              | predicate                                       | object                                        |
       | https://example.com/eif-perspective1 | http://purl.org/dc/terms/description            | This should be in the description field.      |
       | https://example.com/eif-perspective1 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | http://data.europa.eu/eif/adms/PerspectiveEIF |
@@ -35,7 +35,7 @@ Feature: RDF synchronization of contents.
       | https://example.com/eif-perspective2 | http://data.europa.eu/eif/Model                 | http://data.europa.eu/BC4                     |
     When I update the entity having "https://example.com/eif-perspective1" as RDF resource:
       | eif_description | This should be in the new description field. |
-    Then only the following "http://data" graph triples should exist in the RDF backend:
+    Then the following "http://data" graph triples exist in the RDF backend:
       | subject                              | predicate                                       | object                                              |
       | https://example.com/eif-perspective1 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | http://data.europa.eu/eif/adms/PerspectiveEIF       |
       | https://example.com/eif-perspective1 | http://purl.org/dc/terms/description            | <p>This should be in the new description field.</p> |
@@ -49,7 +49,7 @@ Feature: RDF synchronization of contents.
       | uri                          | name           | email                    | website url            |
       | https://example.com/contact1 | Jocelyn Bass   | jocelyn.bass@example.com | http://www.example.org |
       | https://example.com/contact2 | Geoffrey Bryce | geoffrey.bryce@exam.com  |                        |
-    Then only the following "http://data" graph triples should exist in the RDF backend:
+    Then the following "http://data" graph triples exist in the RDF backend:
       | subject                      | predicate                                       | object                               |
       | https://example.com/contact1 | http://www.w3.org/2006/vcard/ns#fn              | Jocelyn Bass                         |
       | https://example.com/contact1 | http://www.w3.org/2006/vcard/ns#hasEmail        | jocelyn.bass@example.com             |
@@ -61,7 +61,7 @@ Feature: RDF synchronization of contents.
     When I update the entity having "https://example.com/contact1" as RDF resource:
       | title | Jocelyn Bass Bryce             |
       | email | jocelyn.bass.bryce@example.com |
-    Then only the following "http://data" graph triples should exist in the RDF backend:
+    Then the following "http://data" graph triples exist in the RDF backend:
       | subject                      | predicate                                       | object                               |
       | https://example.com/contact1 | http://www.w3.org/2006/vcard/ns#fn              | Jocelyn Bass Bryce                   |
       | https://example.com/contact1 | http://www.w3.org/2006/vcard/ns#hasEmail        | jocelyn.bass.bryce@example.com       |
@@ -79,7 +79,7 @@ Feature: RDF synchronization of contents.
       | uri                               | title          | description                  | release      | access url                       | created              | changed              | state     |
       | https://example.com/distribution1 | Some Distro    | Übermensch foot size         | Test release | http://example.com/some-distro1  | 2024-07-31T10:19:33Z | 2024-07-31T10:19:33Z | published |
       | https://example.com/distribution2 | Another distro | Description for other distro | Test release | http://example.com/some-distro2  | 2024-08-01T10:19:33Z | 2024-08-01T10:19:33Z | published |
-    Then only the following "http://data" graph triples should exist in the RDF backend:
+    Then the following "http://data" graph triples exist in the RDF backend:
       | subject                           | predicate                                       | object                                 |
       | https://example.com/distribution1 | http://purl.org/dc/terms/title                  | Some Distro                            |
       | https://example.com/distribution1 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | http://www.w3.org/ns/dcat#Distribution |
@@ -97,7 +97,7 @@ Feature: RDF synchronization of contents.
       | title       | Some Distro new title       |
       | description | Some Distro new description |
       | changed     | 2024-07-31T15:20:00Z        |
-    Then only the following "http://data" graph triples should exist in the RDF backend:
+    Then the following "http://data" graph triples exist in the RDF backend:
       | subject                           | predicate                                       | object                                 |
       | https://example.com/distribution1 | http://purl.org/dc/terms/title                  | Some Distro new title                  |
       | https://example.com/distribution1 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | http://www.w3.org/ns/dcat#Distribution |
@@ -111,7 +111,7 @@ Feature: RDF synchronization of contents.
       | uri                          | title              | description    | licence type  | deprecated  |
       | https://example.com/license1 | Some license       |                | Public domain | no          |
       | https://example.com/license2 | Some other license | A new licence. | Public domain | yes         |
-    Then only the following "http://data" graph triples should exist in the RDF backend:
+    Then the following "http://data" graph triples exist in the RDF backend:
       | subject                      | predicate                                       | object                                   |
       | https://example.com/license1 | http://www.w3.org/2000/01/rdf-schema#label      | Some license                             |
       | https://example.com/license1 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | http://purl.org/dc/terms/LicenseDocument |
@@ -125,7 +125,7 @@ Feature: RDF synchronization of contents.
     When I update the entity having "https://example.com/license2" as RDF resource:
       | description | A new updated licence. |
       | deprecated  | 0                      |
-    Then only the following "http://data" graph triples should exist in the RDF backend:
+    Then the following "http://data" graph triples exist in the RDF backend:
       | subject                      | predicate                                       | object                                   |
       | https://example.com/license2 | http://www.w3.org/2000/01/rdf-schema#label      | Some other license                       |
       | https://example.com/license2 | http://purl.org/dc/terms/description            | <p>A new updated licence.</p>            |
