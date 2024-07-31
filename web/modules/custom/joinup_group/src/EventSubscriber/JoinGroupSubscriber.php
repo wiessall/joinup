@@ -9,6 +9,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\cas\Event\CasPostLoginEvent;
+use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\og\OgMembershipInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -25,6 +26,9 @@ use Symfony\Component\HttpFoundation\RequestStack;
 class JoinGroupSubscriber extends RedirectedEuLoginAuthenticatedSubscriberBase {
 
   use StringTranslationTrait;
+
+  public const string ID_COOKIE_NAME = 'join_group';
+  public const string MODAL_SUBSCRIBE_COOKIE_NAME = 'join_group_modal';
 
   /**
    * The entity type manager service.
@@ -58,7 +62,7 @@ class JoinGroupSubscriber extends RedirectedEuLoginAuthenticatedSubscriberBase {
    * {@inheritdoc}
    */
   protected function getCookieName(): ?string {
-    return 'join_group';
+    return self::ID_COOKIE_NAME;
   }
 
   /**
@@ -66,15 +70,28 @@ class JoinGroupSubscriber extends RedirectedEuLoginAuthenticatedSubscriberBase {
    */
   protected function getRedirectDestination(CasPostLoginEvent $event): ?string {
     if ($group = $this->getGroup()) {
+      $wasModal = $this->currentRequest->cookies->get(static::MODAL_SUBSCRIBE_COOKIE_NAME);
+      setcookie(static::MODAL_SUBSCRIBE_COOKIE_NAME, '', $this->time->getRequestTime() - 86400, '/');
       // When a user is logged in through EU login and has previously expressed
       // their desire to join a group by setting a cookie, create their
       // membership and redirect them to the group page.
       $uid = (int) $event->getAccount()->id();
       if ($membership = $group->getMembership($uid, OgMembershipInterface::ALL_STATES)) {
         // The user is already subscribed. Delete the cookie and show an
-        // appropriate message.
+        // appropriate message, and redirect the user to the group canonical
+        // page.
         $this->messenger->addStatus($group->getExistingMembershipMessage($membership));
         $this->deleteCookie();
+        return $group->toUrl()->toString();
+      }
+      elseif ($group instanceof CollectionInterface) {
+        // No JS, so: if the group has no Code of Conduct, we create the
+        // membership. The Group ID cookie will be deleted when the user submits
+        // the subscribe form.
+        if (!$wasModal && !$group->hasCodeOfConductToAccept()) {
+          $membership = $group->createMembership((int) $event->getAccount()->id());
+          $this->messenger->addStatus($group->getNewMembershipSuccessMessage($membership));
+        }
       }
       else {
         // Subscribe the user to the group.
