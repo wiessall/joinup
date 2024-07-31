@@ -127,7 +127,7 @@ Feature: Solution membership administration
     And I visit the accept invitation form for the "The Missing Sons" solution group
     And I press "Accept"
     Then I should not be subscribed to any bundle from the "The Missing Sons" solution
-    And I go to the members page of "The Missing Sons"
+    When I go to the members page of "The Missing Sons"
     Then I should see the link "Add members"
     And I should see the link "Invite members"
     When I click "Invite members"
