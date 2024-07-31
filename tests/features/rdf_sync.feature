@@ -68,6 +68,44 @@ Feature: RDF synchronization of contents.
       | https://example.com/contact1 | http://www.w3.org/2006/vcard/ns#hasURL          | http://www.example.org               |
       | https://example.com/contact1 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | http://www.w3.org/2006/vcard/ns#Kind |
 
+  Scenario: RDF entities for Distribution are correctly created.
+    And the following solution:
+      | title | Test solution |
+      | state | published     |
+    Given release content:
+      | title        | is version of | state     |
+      | Test release | Test solution | published |
+    Given distribution content:
+      | uri                               | title          | description                  | release      | access url                       | created              | changed              | state     |
+      | https://example.com/distribution1 | Some Distro    | Übermensch foot size         | Test release | http://example.com/some-distro1  | 2024-07-31T10:19:33Z | 2024-07-31T10:19:33Z | published |
+      | https://example.com/distribution2 | Another distro | Description for other distro | Test release | http://example.com/some-distro2  | 2024-08-01T10:19:33Z | 2024-08-01T10:19:33Z | published |
+    Then only the following "http://data" graph triples should exist in the RDF backend:
+      | subject                           | predicate                                       | object                                 |
+      | https://example.com/distribution1 | http://purl.org/dc/terms/title                  | Some Distro                            |
+      | https://example.com/distribution1 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | http://www.w3.org/ns/dcat#Distribution |
+      | https://example.com/distribution1 | http://purl.org/dc/terms/description            | <p>Übermensch foot size</p>            |
+      | https://example.com/distribution1 | http://www.w3.org/ns/dcat#accessURL             | http://example.com/some-distro1        |
+      | https://example.com/distribution1 | http://purl.org/dc/terms/issued                 | 2024-07-31T10:19:33Z                   |
+      | https://example.com/distribution1 | http://purl.org/dc/terms/modified               | 2024-07-31T10:19:33Z                   |
+      | https://example.com/distribution2 | http://purl.org/dc/terms/title                  | Another distro                         |
+      | https://example.com/distribution2 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | http://www.w3.org/ns/dcat#Distribution |
+      | https://example.com/distribution2 | http://purl.org/dc/terms/description            | <p>Description for other distro</p>    |
+      | https://example.com/distribution2 | http://www.w3.org/ns/dcat#accessURL             | http://example.com/some-distro2        |
+      | https://example.com/distribution2 | http://purl.org/dc/terms/issued                 | 2024-08-01T10:19:33Z                   |
+      | https://example.com/distribution2 | http://purl.org/dc/terms/modified               | 2024-08-01T10:19:33Z                   |
+    When I update the entity having "https://example.com/distribution1" as RDF resource:
+      | title       | Some Distro new title       |
+      | description | Some Distro new description |
+      | changed     | 2024-07-31T15:20:00Z        |
+    Then only the following "http://data" graph triples should exist in the RDF backend:
+      | subject                           | predicate                                       | object                                 |
+      | https://example.com/distribution1 | http://purl.org/dc/terms/title                  | Some Distro new title                  |
+      | https://example.com/distribution1 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | http://www.w3.org/ns/dcat#Distribution |
+      | https://example.com/distribution1 | http://purl.org/dc/terms/description            | <p>Some Distro new description</p>     |
+      | https://example.com/distribution1 | http://www.w3.org/ns/dcat#accessURL             | http://example.com/some-distro1        |
+      | https://example.com/distribution1 | http://purl.org/dc/terms/issued                 | 2024-07-31T10:19:33Z                   |
+      | https://example.com/distribution1 | http://purl.org/dc/terms/modified               | 2024-07-31T15:20:00Z                   |
+
   Scenario: RDF entities for Licences are correctly created.
     Given licence content:
       | uri                          | title              | description    | licence type  | deprecated  |

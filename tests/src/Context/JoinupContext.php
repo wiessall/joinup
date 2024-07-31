@@ -3374,6 +3374,9 @@ class JoinupContext extends RawDrupalContext {
     $updated->type = $entity->bundle();
     $this->parseEntityFields($entity->getEntityTypeId(), $updated);
     foreach (array_keys($fieldsTable->getRowsHash()) as $key) {
+      if ($key === 'changed' && !is_numeric($updated->$key)) {
+        $updated->$key = strtotime($updated->$key);
+      }
       $entity->set($key, $updated->$key);
     }
     $entity->save();
