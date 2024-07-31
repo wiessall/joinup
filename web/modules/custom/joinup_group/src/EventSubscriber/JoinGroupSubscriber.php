@@ -88,7 +88,7 @@ class JoinGroupSubscriber extends RedirectedEuLoginAuthenticatedSubscriberBase {
         // No JS, so: if the group has no Code of Conduct, we create the
         // membership. The Group ID cookie will be deleted when the user submits
         // the subscribe form.
-        if (!$wasModal &&!$group->hasCodeOfConductToAccept()) {
+        if (!$wasModal && !$group->hasCodeOfConductToAccept()) {
           $membership = $group->createMembership((int) $event->getAccount()->id());
           $this->messenger->addStatus($group->getNewMembershipSuccessMessage($membership));
         }
