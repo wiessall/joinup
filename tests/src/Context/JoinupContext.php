@@ -134,7 +134,7 @@ class JoinupContext extends RawDrupalContext {
    * @param \Behat\Gherkin\Node\TableNode $triples
    *   The user data.
    *
-   * @Then only the following :graph graph triples should exist in the RDF backend:
+   * @Then the following :graph graph triples exist in the RDF backend:
    */
   public function assertOnlyTheseTriples(string $graph, TableNode $triples): void {
     /** @var \Drupal\rdf_sync\RdfSyncConnectionInterface $connection */
