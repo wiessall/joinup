@@ -409,6 +409,29 @@ Feature: Collection membership administration
     Then I should see the link "Add members"
     And I should see the link "Invite members"
 
+  Scenario: User needs to accept code of conduct on the confirmation form.
+    Given custom_page content:
+      | title                 | collection        | state     |
+      | Medical diagnosis CoC | Medical diagnosis | published |
+    And the "code of conduct" setting of the "Medical diagnosis" collection is set to "Medical diagnosis CoC" "custom page"
+
+    When I am logged in as "Lisa Cuddy"
+    And I go to the members page of "Medical diagnosis"
+    And I click "Invite members"
+    When I fill uid of "Donald Duck" in "Name"
+    And I press "Add"
+    And I select "Member" from "Role"
+    And I press "Invite members"
+    Then I should see the success message "1 user has been invited to this group."
+
+    When I am logged in as "Donald Duck"
+    And I visit the accept invitation form for the "Medical diagnosis" collection group
+    And I press "Accept"
+    Then I should see the error message "You must agree to the Medical diagnosis CoC."
+    When I check the box "I have read and agree to the Medical diagnosis CoC."
+    And I press "Accept"
+    Then I should see the text "You have been promoted to member."
+
   Scenario: Invitations can not be sent for pending users.
     Given users:
       | Username       | E-mail                     | First name | Family name |
