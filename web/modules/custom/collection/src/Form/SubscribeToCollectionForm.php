@@ -6,6 +6,7 @@ namespace Drupal\collection\Form;
 
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Component\Utility\Html;
+use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Ajax\AfterCommand;
@@ -21,7 +22,6 @@ use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Path\PathValidatorInterface;
-use Drupal\Core\Routing\LocalAwareRedirectResponseTrait;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
 use Drupal\collection\Entity\CollectionInterface;
@@ -49,7 +49,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class SubscribeToCollectionForm extends FormBase {
 
   use MembershipCreateTrait;
-  use LocalAwareRedirectResponseTrait;
 
   protected const string COC_CHECKBOX_KEY = 'code_of_conduct_agreed';
 
@@ -119,16 +118,13 @@ class SubscribeToCollectionForm extends FormBase {
     if (!isset($redirectPath)) {
       $request = $this->getRequest();
       $rawDestination = $request->query->get('destination', '');
-      $destination = preg_replace(
-        '#^' . preg_quote($request->getBasePath(), '#') . '#',
-        '', $rawDestination
-      );
-      $redirectUrl = $destination && ($this->isLocal($destination))
-        ? $this->pathValidator->getUrlIfValid($destination)
-        : FALSE;
-      $redirectPath = $redirectUrl instanceof Url
-        ? $redirectUrl->getInternalPath()
-        : FALSE;
+      $options = UrlHelper::parse($rawDestination);
+      try {
+        return $redirectPath = Url::fromUserInput('/' . ltrim($options['path'], '/'), $options)->toString();
+      }
+      catch (\InvalidArgumentException) {
+        $redirectPath = FALSE;
+      }
     }
 
     return $redirectPath ?: NULL;
