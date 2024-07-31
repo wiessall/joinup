@@ -28,7 +28,6 @@ grumphp:
 
     # https://github.com/phpro/grumphp/blob/v2.x/doc/tasks/phpstan.md
     phpstan:
-      configuration: './phpstan.neon'
       triggered_by: '%grumphp.tasks.php_extensions%'
 
     # https://github.com/phpro/grumphp/blob/v2.x/doc/tasks/stylelint.md
