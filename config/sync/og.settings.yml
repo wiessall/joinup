@@ -4,6 +4,8 @@ groups:
   rdf_entity:
     - collection
     - solution
+  node:
+    - collection
 group_manager_full_access: true
 node_access_strict: true
 delete_orphans: true
