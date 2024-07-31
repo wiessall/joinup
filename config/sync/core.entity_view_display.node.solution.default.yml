@@ -108,6 +108,21 @@ third_party_settings:
                 third_party_settings: {  }
             weight: 3
             additional: {  }
+          de169627-1414-48cd-a1c2-a47f25d14ae3:
+            uuid: de169627-1414-48cd-a1c2-a47f25d14ae3
+            region: content
+            configuration:
+              id: 'field_block:node:solution:og_group'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                type: og_group_subscribe
+                label: above
+                settings: {  }
+                third_party_settings: {  }
+            weight: 4
+            additional: {  }
         third_party_settings: {  }
 id: node.solution.default
 targetEntityType: node
@@ -134,6 +149,13 @@ content:
     settings: {  }
     third_party_settings: {  }
     weight: 100
+    region: content
+  og_group:
+    type: og_group_subscribe
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
     region: content
   report:
     type: link
