@@ -39,12 +39,12 @@ function joinup_log_members_views_exposed_form_submit(array &$form, FormStateInt
       'message' => 'Ownership granted to @actor.',
     ],
     'og_membership_add_single_role_action.author' => [
-      'type' => 'joinup:add_the_author_role_to_member',
+      'type' => 'joinup:add_role',
       'message' => 'Successfully added the role @role to the @actor user.',
       'role' => 'author',
     ],
     'og_membership_add_single_role_action.facilitator' => [
-      'type' => 'joinup:add_the_facilitator_role_to_member',
+      'type' => 'joinup:add_role',
       'message' => 'Successfully added the role @role to the @actor user.',
       'role' => 'facilitator',
     ],
@@ -57,12 +57,12 @@ function joinup_log_members_views_exposed_form_submit(array &$form, FormStateInt
       'message' => 'Membership @actor has been blocked.',
     ],
     'og_membership_remove_single_role_action.author' => [
-      'type' => 'joinup:remove_the_author_role_from_member',
+      'type' => 'joinup:remove_role',
       'message' => 'Successfully removed the role @role from the @actor user.',
       'role' => 'author',
     ],
     'og_membership_remove_single_role_action.facilitator' => [
-      'type' => 'joinup:remove_the_facilitator_role_from_member',
+      'type' => 'joinup:remove_role',
       'message' => 'Successfully removed the role @role from the @actor user.',
       'role' => 'facilitator',
     ],
@@ -79,10 +79,11 @@ function joinup_log_members_views_exposed_form_submit(array &$form, FormStateInt
   $action = $form_state->getValue('action');
   $current_user = \Drupal::currentUser();
   $entity_type_manager = \Drupal::entityTypeManager();
+  $logger = \Drupal::service('logger.channel.group_membership');
   foreach ($memberships as $membership) {
     $member = $entity_type_manager->getStorage('og_membership')->load($membership);
     $user = $entity_type_manager->getStorage('user')->load($member->get('uid')->target_id);
-    \Drupal::service('logger.channel.group_membership')->info($type[$action]['message'], [
+    $logger->info($type[$action]['message'], [
       '@actor' => $user->getDisplayName(),
       '@role' => $type[$action]['role'] ?? NULL,
       'type' => $type[$action]['type'],
@@ -100,7 +101,7 @@ function joinup_log_node_insert(EntityInterface $entity): void {
     \Drupal::service('logger.channel.group_membership')->info('A new @type entity titled @title has been created.', [
       '@type' => $entity->getType(),
       '@title' => $entity->getTitle(),
-      'type' => 'joinup:add_' . $entity->getType(),
+      'type' => 'joinup:add_content',
       'actor' => $current_user->id(),
     ]);
   }
@@ -117,7 +118,7 @@ function joinup_log_rdf_entity_insert(EntityInterface $entity): void {
   \Drupal::service('logger.channel.group_membership')->info('A new @type entity titled @title has been created.', [
     '@type' => $entity->bundle(),
     '@title' => $entity->label(),
-    'type' => 'joinup:add_solution',
+    'type' => 'joinup:add_content',
     'actor' => $current_user->id(),
   ]);
 }

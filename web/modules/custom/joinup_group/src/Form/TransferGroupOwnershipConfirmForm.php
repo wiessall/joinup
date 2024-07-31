@@ -9,7 +9,6 @@ use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Action\ActionManager;
 use Drupal\Core\Form\ConfirmFormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\TempStore\PrivateTempStore;
@@ -48,8 +47,6 @@ class TransferGroupOwnershipConfirmForm extends ConfirmFormBase {
    *   The OG membership manager.
    * @param \Drupal\Core\TempStore\PrivateTempStoreFactory $tempStoreFactory
    *   The tempstore factory.
-   * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
-   *   The logger channel service.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    *   If the entity storage of 'og_membership' is not found.
@@ -60,7 +57,6 @@ class TransferGroupOwnershipConfirmForm extends ConfirmFormBase {
     protected ActionManager $actionPluginManager,
     protected MembershipManagerInterface $membershipManager,
     protected PrivateTempStoreFactory $tempStoreFactory,
-    protected LoggerChannelInterface $logger,
   ) {
     $this->tempStore = $tempStoreFactory->get('joinup_transfer_group_ownership');
 
@@ -80,8 +76,7 @@ class TransferGroupOwnershipConfirmForm extends ConfirmFormBase {
       $container->get('renderer'),
       $container->get('plugin.manager.action'),
       $container->get('og.membership_manager'),
-      $container->get('tempstore.private'),
-      $container->get('logger.channel.group_membership')
+      $container->get('tempstore.private')
     );
   }
 

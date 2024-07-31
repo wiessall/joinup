@@ -269,6 +269,14 @@ abstract class InviteFormBase extends FormBase {
     foreach ($users as $user) {
       try {
         $result_status = $this->processUser($user);
+        if ($result_status === static::RESULT_SUCCESS) {
+          $this->logger->info('The member @actor has been invited to this @group.', [
+            '@actor' => $user->getDisplayName(),
+            '@group' => $this->entity->label(),
+            'type' => 'joinup:invite_member',
+            'actor' => $this->currentUser()->id(),
+          ]);
+        }
         $results[$result_status]++;
       }
       catch (\Exception $e) {
@@ -320,14 +328,6 @@ abstract class InviteFormBase extends FormBase {
         default:
           throw new \Exception('Unknown invitation status: "' . $invitation->getStatus() . '".');
       }
-      if ($status === static::RESULT_RESENT) {
-        $this->logger->info('The member @actor has been invited to this @group.', [
-          '@actor' => $user->getDisplayName(),
-          '@group' => $this->entity->label(),
-          'type' => 'joinup:invite_member',
-          'actor' => $user->id(),
-        ]);
-      }
       return $status;
     }
 
@@ -341,14 +341,6 @@ abstract class InviteFormBase extends FormBase {
     }
     catch (\Exception $e) {
       $status = static::RESULT_FAILED;
-    }
-    if ($status === static::RESULT_SUCCESS) {
-      $this->logger->info('The member @actor has been invited to this @group.', [
-        '@actor' => $user->getDisplayName(),
-        '@group' => $this->entity->label(),
-        'type' => 'joinup:invite_member',
-        'actor' => $user->id(),
-      ]);
     }
     return $status;
   }
