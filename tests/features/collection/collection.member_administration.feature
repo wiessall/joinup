@@ -379,8 +379,11 @@ Feature: Collection membership administration
     # Accept the invitation directly.
     When I am logged in as "dwightone"
     And I visit the accept invitation form for the "Medical diagnosis" collection group
+    And I check the box "Notify me when content is published in Medical diagnosis."
     And I press "Accept"
     Then I should see the text "You have been promoted to collection facilitator"
+    And I should have the following content subscriptions:
+      | Medical diagnosis | discussion, document, event, news, solution, announcements |
     And I am on the members page of "Medical diagnosis"
     Then I should see the link "Add members"
     And I should see the link "Invite members"
