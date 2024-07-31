@@ -61,14 +61,12 @@ class AddToGroupForm extends GroupFormBase {
         'type' => 'joinup:add_member',
         'actor' => $user->id(),
       ]);
-      if ($form_state->getValue('role') !== 'member') {
-        $this->logger->info('Successfully added the role @role to the @actor user.', [
-          '@actor' => $user->getDisplayName(),
-          '@role' => strtolower($this->role->label()),
-          'type' => 'joinup:add_the_' . $form_state->getValue('role') . '_role_to_member',
-          'actor' => $user->id(),
-        ]);
-      }
+      $this->logger->info('Successfully added the role @role to the @actor user.', [
+        '@actor' => $user->getDisplayName(),
+        '@role' => strtolower($this->role->label()),
+        'type' => 'joinup:add_the_' . $form_state->getValue('role') . '_role_to_member',
+        'actor' => $this->currentUser()->id(),
+      ]);
     }
 
     $this->messenger()->addMessage($this->t('Successfully added the role %role to the selected users.', [
