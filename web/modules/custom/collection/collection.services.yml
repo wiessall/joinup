@@ -1,10 +1,10 @@
 services:
-  cache_context.collection:
+  cache_context.collection_old:
     class: Drupal\collection\Cache\CollectionCacheContext
     arguments: ['@request_stack']
     tags:
       - { name: cache.context }
-  cache_context.collection_owner:
+  cache_context.collection_owner_old:
     class: 'Drupal\collection\Cache\Context\CollectionOwnerCacheContext'
     arguments: ['@current_user', '@entity_type.manager', '@og.membership_manager', '@database', '@private_key']
     tags:
@@ -38,6 +38,6 @@ services:
   collection.lazy_builders:
     class: Drupal\collection\CollectionLazyBuilders
     arguments: ['@entity_type.manager', '@form_builder', '@current_user']
-  logger.channel.collection:
+  logger.channel.collection_old:
     parent: logger.channel_base
     arguments: ['collection']
