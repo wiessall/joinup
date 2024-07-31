@@ -69,36 +69,6 @@ class JoinupContext extends RawDrupalContext {
   use WorkflowTrait;
 
   /**
-   * Updates contents of a given type, hinted by the title.
-   *
-   * @codingStandardsIgnoreStart
-   *  Table format:
-   *  | title               | Sample solution   |
-   *  | description         | A sample solution |
-   *  | ...                 | ...               |
-   * @codingStandardsIgnoreEnd
-   *
-   * @param string $bundle
-   *   The node bundle.
-   * @param string $title
-   *   The node title.
-   * @param \Behat\Gherkin\Node\TableNode $fieldsTable
-   *   The values of the fields to update.
-   *
-   * @When :bundle content :title is updated:
-   */
-  public function updateNode($bundle, $title, TableNode $fieldsTable): void {
-    $node = $this->getEntityByLabel('node', $title, $bundle);
-    $updated = (object) $fieldsTable->getRowsHash();
-    $updated->type = $bundle;
-    $this->parseEntityFields('node', $updated);
-    foreach (array_keys($fieldsTable->getRowsHash()) as $key) {
-      $node->set($key, $updated->$key);
-    }
-    $node->save();
-  }
-
-  /**
    * Asserts that a list of triples exists in a certain graph.
    *
    * Each row is a triple serialized as NTriples:
@@ -3371,6 +3341,42 @@ class JoinupContext extends RawDrupalContext {
       throw new \InvalidArgumentException("No entity found for URI $uri");
     }
     $this->visitPath($entity->toUrl()->toString());
+  }
+
+  /**
+   * Updates an entity, given its RDF resource (URI).
+   *
+   * @codingStandardsIgnoreStart
+   *  Table format:
+   *  | title               | Sample solution   |
+   *  | description         | A sample solution |
+   *  | ...                 | ...               |
+   * @codingStandardsIgnoreEnd
+   *
+   * @param string $uri
+   *   The entity RDF URI.
+   * @param \Behat\Gherkin\Node\TableNode $fieldsTable
+   *   The values of the fields to update.
+   *
+   * @throws \Exception
+   *    Thrown when a field name is invalid.
+   * @throws \InvalidArgumentException
+   *   When for the passed URI no entity can be found.
+   *
+   * @When I update the entity having :uri as RDF resource:
+   */
+  public function updateEntityByRdfUri(string $uri, TableNode $fieldsTable): void {
+    /** @var \Drupal\Core\Entity\ContentEntityInterface|null $entity */
+    if (!$entity = \Drupal::getContainer()->get('rdf_sync.mapper')->getEntityByUri($uri)) {
+      throw new \InvalidArgumentException("No entity found for URI $uri");
+    }
+    $updated = (object) $fieldsTable->getRowsHash();
+    $updated->type = $entity->bundle();
+    $this->parseEntityFields($entity->getEntityTypeId(), $updated);
+    foreach (array_keys($fieldsTable->getRowsHash()) as $key) {
+      $entity->set($key, $updated->$key);
+    }
+    $entity->save();
   }
 
 }
