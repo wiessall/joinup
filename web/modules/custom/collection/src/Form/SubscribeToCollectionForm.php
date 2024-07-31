@@ -114,19 +114,21 @@ class SubscribeToCollectionForm extends FormBase {
    *   The destination path if exists and valid, NULL otherwise.
    */
   protected function getRedirectPath(): ?string {
-    static $redirectPath;
-    if (!isset($redirectPath)) {
-      $request = $this->getRequest();
-      $rawDestination = $request->query->get('destination', '');
-      $options = UrlHelper::parse($rawDestination);
-      try {
-        return $redirectPath = Url::fromUserInput('/' . ltrim($options['path'], '/'), $options)->toString();
-      }
-      catch (\InvalidArgumentException) {
-        $redirectPath = FALSE;
-      }
+    $request = $this->getRequest();
+    $redirectPath = FALSE;
+    $rawDestination = $request->query->get('destination', '');
+    if (!$rawDestination) {
+      return NULL;
     }
-
+    $options = UrlHelper::parse($rawDestination);
+    try {
+      $redirectUrl = Url::fromUserInput('/' . ltrim($options['path'], '/'), $options);
+      $redirectPath = $redirectUrl->isRouted()
+        ? $redirectUrl->toString()
+        : FALSE;
+    }
+    catch (\InvalidArgumentException) {
+    }
     return $redirectPath ?: NULL;
   }
 
