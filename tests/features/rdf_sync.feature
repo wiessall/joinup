@@ -132,3 +132,18 @@ Feature: RDF synchronization of contents.
       | https://example.com/license2 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | http://purl.org/dc/terms/LicenseDocument |
       | https://example.com/license2 | http://purl.org/dc/terms/type                   | http://purl.org/adms/licence/PD          |
       | https://example.com/license2 | http://joinup.eu/licence/deprecated             | 0                                        |
+
+  Scenario: RDF entities for Owners are correctly created.
+    Given owner content:
+     | uri                        | name       |
+     | https://example.com/owner1 | Teddy Bass |
+    Then the following "http://data" graph triples exist in the RDF backend:
+      | subject                    | predicate                                       | object                          |
+      | https://example.com/owner1 | http://xmlns.com/foaf/0.1/name                  | Teddy Bass                      |
+      | https://example.com/owner1 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | http://xmlns.com/foaf/0.1/Agent |
+    When I update the entity having "https://example.com/owner1" as RDF resource:
+      | title | Stephen Bass |
+    Then the following "http://data" graph triples exist in the RDF backend:
+      | subject                    | predicate                                       | object                          |
+      | https://example.com/owner1 | http://xmlns.com/foaf/0.1/name                  | Stephen Bass                    |
+      | https://example.com/owner1 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | http://xmlns.com/foaf/0.1/Agent |
