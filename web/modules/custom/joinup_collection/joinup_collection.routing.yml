@@ -1,0 +1,38 @@
+joinup_collection.subscribe_to_collection_form:
+  path: '/ajax/collection/{node}/subscribe'
+  defaults:
+    _form: \Drupal\joinup_collection\Form\SubscribeToCollectionForm
+  requirements:
+    _custom_access: \Drupal\joinup_collection\Form\SubscribeToCollectionForm::access
+  options:
+    parameters:
+      node:
+        type: entity:node
+        bundle:
+          - collection
+joinup_collection.subscribe_to_collection_form.after_authenticating:
+  path: '/ajax/collection/{node}/subscribe/auth'
+  defaults:
+    _controller: Drupal\joinup_collection\Form\SubscribeToCollectionForm::showSubscribeDialog
+  requirements:
+    _custom_access: \Drupal\joinup_collection\Form\SubscribeToCollectionForm::accessToSubscribeDialogAfterAuthenticating
+  options:
+    parameters:
+      node:
+        type: entity:node
+        bundle:
+          - collection
+entity.node.glossary:
+  path: /node/{node}/glossary/{letter}
+  defaults:
+    _controller: Drupal\joinup_collection\Controller\GlossaryController::glossary
+    _title_callback: Drupal\joinup_collection\Controller\GlossaryController::title
+    letter: null
+  requirements:
+    _custom_access: Drupal\joinup_collection\Controller\GlossaryController::access
+  options:
+    parameters:
+      node:
+        type: entity:node
+        bundle:
+          - collection

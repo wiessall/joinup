@@ -1,0 +1,454 @@
+<?php
+
+/**
+ * @file
+ * Main functions and hook implementations of the Collection module.
+ */
+
+declare(strict_types=1);
+
+use Drupal\Component\Utility\Unicode;
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Access\AccessResultInterface;
+use Drupal\Core\Cache\Cache;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\Field\FieldDefinitionInterface;
+use Drupal\Core\Field\FieldItemListInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\joinup_collection\Entity\Collection;
+use Drupal\joinup_collection\Entity\CollectionInterface;
+use Drupal\joinup_collection\Entity\GlossaryTerm;
+use Drupal\joinup_collection\Plugin\Field\FieldType\LastUpdatedFieldItemList;
+use Drupal\joinup_subscription\JoinupSubscriptionsHelper;
+use Drupal\node\Entity\NodeType;
+use Drupal\node\NodeInterface;
+use Drupal\oe_newsroom_newsletter\Form\NewsletterSubscribeForm;
+use Drupal\og\Entity\OgRole;
+use Drupal\og\Og;
+use Drupal\og\OgMembershipInterface;
+use Drupal\og\OgRoleInterface;
+use Drupal\rdf_entity\Entity\Rdf;
+use Drupal\rdf_entity\Entity\RdfEntityType;
+use Drupal\rdf_entity\RdfInterface;
+use Drupal\sparql_entity_storage\SparqlGraphInterface;
+
+/**
+ * Implements hook_entity_type_alter().
+ */
+function joinup_collection_entity_type_alter(array &$entity_types): void {
+  /** @var \Drupal\Core\Entity\EntityTypeInterface[] $entity_types */
+  $entity_types['rdf_entity']->setLinkTemplate('glossary', '/node/{node}/glossary/{letter}');
+}
+
+/**
+ * Implements hook_theme().
+ */
+function joinup_collection_theme($existing, $type, $theme, $path): array {
+  return [
+    'collection_member_count' => [
+      'variables' => [
+        'count' => 0,
+        'view_mode' => '',
+      ],
+    ],
+
+    // The collection glossary navigation.
+    'glossary_navigator' => [
+      'variables' => [
+        'url' => NULL,
+        'letters' => [],
+        'current' => NULL,
+      ],
+    ],
+  ];
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK().
+ *
+ * Allows the collection member count to be themed differently per view mode.
+ */
+function joinup_collection_theme_suggestions_collection_member_count(array $variables): array {
+  $suggestions = [];
+  $sanitized_view_mode = strtr($variables['view_mode'], '.', '_');
+  $suggestions[] = 'collection_member_count__' . $sanitized_view_mode;
+
+  return $suggestions;
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function joinup_collection_form_block_form_alter(&$form, FormStateInterface $form_state, $form_id): void {
+  // Hide the 'negation' option for collection block visibility. There are no
+  // good use cases to show a block on all pages, except on collection pages.
+  $form['visibility']['collection']['negate']['#access'] = FALSE;
+}
+
+/**
+ * Implements hook_entity_bundle_info_alter().
+ */
+function joinup_collection_entity_bundle_info_alter(&$bundles): void {
+  if (!empty($bundles['node']['collection'])) {
+    $bundles['node']['collection']['class'] = Collection::class;
+  }
+  if (!empty($bundles['node']['glossary'])) {
+    $bundles['node']['glossary']['class'] = GlossaryTerm::class;
+  }
+}
+
+/**
+ * Implements hook_entity_bundle_field_info_alter().
+ */
+function joinup_collection_entity_bundle_field_info_alter(&$fields, EntityTypeInterface $entity_type, $bundle): void {
+  // Make sure the collection label is unique.
+  if ($entity_type->id() == 'node' && $bundle == 'collection' && !empty($fields['label'])) {
+    $fields['label']->addConstraint('UniqueFieldInBundle', ['bundles' => ['collection']]);
+  }
+  if ($entity_type->id() === 'node' && $bundle === 'glossary') {
+    $fields['title']->addConstraint('UniqueFieldValueInGroupAndBundle', [
+      'groupAudienceField' => 'og_audience',
+    ]);
+    $fields['title']->addConstraint('GlossaryTermName');
+    if (isset($fields['field_glossary_synonyms'])) {
+      $fields['field_glossary_synonyms']->addConstraint('GlossaryTermSynonyms');
+    }
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert().
+ */
+function joinup_collection_node_insert(EntityInterface $entity): void {
+  if ($entity->bundle() !== 'collection') {
+    return;
+  }
+  collection_node_update($entity);
+
+  // When a new collection is proposed, give the user the 'group owner' role.
+  // This will not occur if the user is the anonymous, i.e. the entity was
+  // created by some batch process or some importing.
+  if (!empty($entity->getOwner()) && !$entity->getOwner()->isAnonymous()) {
+    // The group owner inherits all roles of a collection member, facilitator
+    // and administrator.
+    $roles = [
+      'node-collection-' . OgRoleInterface::AUTHENTICATED,
+      'node-collection-' . OgRoleInterface::ADMINISTRATOR,
+      'node-collection-facilitator',
+    ];
+
+    $subscription_bundles = [];
+    foreach (JoinupSubscriptionsHelper::SUBSCRIPTION_BUNDLES['collection'] as $entity_type => $bundles) {
+      foreach ($bundles as $bundle) {
+        $subscription_bundles[] = [
+          'entity_type' => $entity_type,
+          'bundle' => $bundle,
+        ];
+      }
+    }
+
+    Og::createMembership($entity, $entity->getOwner())
+      ->setRoles(array_values(OgRole::loadMultiple($roles)))
+      ->set('subscription_bundles', $subscription_bundles)
+      ->set('announcements', TRUE)
+      ->save();
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_presave().
+ *
+ * Default graph is published. Draft graph is draft.
+ */
+function joinup_collection_node_presave(NodeInterface $entity): void {
+  if (!$entity instanceof CollectionInterface) {
+    return;
+  }
+
+  // Provide default values for date/time fields if were missed.
+  foreach (['created', 'changed'] as $field_name) {
+    if ($entity->get($field_name)->isEmpty()) {
+      if (!isset($request_time)) {
+        $request_time = gmdate('Y-m-d\TH:i:s', \Drupal::time()->getRequestTime());
+      }
+      $entity->set($field_name, $request_time);
+    }
+  }
+
+  // @todo Remove this as it is not needed anymore. This should be set by the
+  //   joinup_workflow module.
+  //  if (!\Drupal::service('sparql.graph_handler')->bundleHasGraph('rdf_entity', 'collection', 'draft')) {
+  //  return;
+  //  }
+  //
+  //  $state = $entity->getWorkflowState();
+  //  if (in_array($state, ['draft', 'proposed'])) {
+  //  $entity->set('graph', 'draft');
+  //  }
+  //  elseif (in_array($state, [
+  //  'published',
+  //  'archival_request',
+  //  'archived',
+  //  ])) {
+  //  $entity->set('graph', SparqlGraphInterface::DEFAULT);
+  //  }
+  //  elseif (empty($state)) {
+  //  throw new \Exception("State field not found while trying to get the appropriate graph.");
+  //  }
+  //  else {
+  //  throw new \Exception("State field value is invalid. Current value found: " . $state);
+  //  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_update().
+ *
+ * Performs the following actions:
+ * - When the entity is saved into the default graph, the draft must be deleted.
+ */
+function joinup_collection_node_update(EntityInterface $entity): void {
+  // @todo Remove this as it is not needed anymore.
+  //  if (!$entity instanceof CollectionInterface || !\Drupal::service('sparql.graph_handler')->bundleHasGraph('rdf_entity', 'collection', 'draft')) {
+  //  return;
+  //  }
+
+  //  if ($entity->getWorkflowState() === 'published') {
+  //  \Drupal::entityTypeManager()->getStorage('rdf_entity')->deleteFromGraph([$entity], 'draft');
+  //  }
+}
+
+/**
+ * Implements hook_module_implements_alter().
+ */
+function joinup_collection_module_implements_alter(&$implementations, $hook): void {
+  if ($hook === 'node_insert') {
+    // Make sure collection_entity_insert() runs after og_entity_insert(). The
+    // latter creates an OgMembership entry for the collection owner when a new
+    // collection is proposed, and collection_entity_insert() needs to modify
+    // this membership to add the required OG roles to it.
+    $group = $implementations['collection'];
+    unset($implementations['collection']);
+    $implementations['collection'] = $group;
+  }
+}
+
+/**
+ * Implements hook_entity_extra_field_info().
+ */
+function joinup_collection_entity_extra_field_info() {
+  $fields = [];
+  $collection = NodeType::load('collection');
+
+  // This hook can fire before the collection bundle config is defined, in that
+  // case we have nothing meaningful to add.
+  if (empty($collection)) {
+    return [];
+  }
+
+  // Add the join/leave collection form as field.
+  // @todo will be removed in ISAICP-2743
+  $display = &$fields['node'][$collection->id()]['display'];
+  $display['join_collection'] = [
+    'label' => t('Join collection'),
+    'description' => t('Shows the join/leave collection form'),
+    'visible' => FALSE,
+  ];
+
+  $display['members'] = [
+    'label' => t('Amount of members'),
+    'description' => t('Amount of members of the collection'),
+    'visible' => FALSE,
+  ];
+
+  $display['solutions'] = [
+    'label' => t('Amount of solutions'),
+    'description' => t('Amount of solutions of the collection'),
+    'visible' => FALSE,
+  ];
+
+  $display['read_more'] = [
+    'label' => t('Read more'),
+    'description' => t('Shows a link to the the collection'),
+    'visible' => FALSE,
+  ];
+
+  return $fields;
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_view().
+ *
+ * Shows extra fields for the collection bundle.
+ */
+function joinup_collection_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode): void {
+  if (!$entity instanceof CollectionInterface) {
+    return;
+  }
+
+  if ($display->getComponent('join_collection')) {
+    $build['join_collection'] = [
+      '#lazy_builder' => [
+        'collection.lazy_builders:renderJoinCollectionForm',
+        [$entity->id()],
+      ],
+      '#create_placeholder' => TRUE,
+      // This form varies by the role a user has inside the collection. Set the
+      // applicable cache context.
+      '#cache' => ['contexts' => ['og_role']],
+    ];
+  }
+
+  // Member count.
+  if ($display->getComponent('members')) {
+    $member_count = joinup_collection_member_count($entity);
+    // Invalidate the member count every time the group membership list changes.
+    // @see \Drupal\og\Plugin\Block\MemberCountBlock::getCacheTags()
+    $tags = Cache::buildTags(OgMembershipInterface::GROUP_MEMBERSHIP_LIST_CACHE_TAG_PREFIX, $entity->getCacheTagsToInvalidate());
+    $build['members'] = [
+      '#theme' => 'collection_member_count',
+      '#count' => $member_count,
+      '#view_mode' => $view_mode,
+      '#cache' => ['tags' => $tags],
+    ];
+  }
+
+  // Solution count.
+  if ($display->getComponent('solutions')) {
+    $solution_count = count($entity->getSolutionIds(TRUE));
+    $tags = Cache::buildTags('og-group-content', $entity->getCacheTagsToInvalidate());
+    $tags = Cache::mergeTags($tags, ['node_list']);
+    $build['solutions'] = [
+      '#markup' => \Drupal::translation()->formatPlural($solution_count, '@solution_count Solution', '@solution_count Solutions', ['@solution_count' => $solution_count]),
+      '#cache' => [
+        // Invalidate when community content is saved.
+        'tags' => $tags,
+      ],
+    ];
+  }
+
+  // Read more link to the collection.
+  if ($display->getComponent('read_more')) {
+    $text = [
+      '#type' => 'markup',
+      '#markup' => t('Read more') . '<span class="visually-hidden"> ' . t('about') . ' ' . $entity->label() . '</span>',
+    ];
+    $build['read_more'] = $entity->toLink($text, 'canonical', [
+      'attributes' => [
+        'data-drupal-group-view-mode' => $view_mode,
+        'class' => [
+          'read-more',
+          'fieldset__read-more',
+          'btn',
+          'btn-secondary',
+        ],
+        'aria-label' => t('Read more about @name.', ['@name' => $entity->getName()]),
+      ],
+    ])->toRenderable();
+  }
+}
+
+/**
+ * Amount of members of a collection.
+ *
+ * @param \Drupal\node\NodeInterface $entity
+ *   The collection.
+ *
+ * @return int
+ *   Amount of members.
+ */
+function joinup_collection_member_count(NodeInterface $entity): int {
+  // We're doing a direct database query rather than using methods in OG's
+  // MembershipManager service since we just need a count, and we need to filter
+  // out blocked user accounts.
+  $query = \Drupal::database()->select('og_membership', 'om');
+  $query->innerJoin('users_field_data', 'ufd', 'om.uid = ufd.uid');
+  $query->condition('ufd.status', 1)
+    ->condition('entity_type', 'node')
+    ->condition('entity_id', $entity->id())
+    ->condition('state', OgMembershipInterface::STATE_ACTIVE);
+  return $query->countQuery()->execute()->fetchField();
+}
+
+/**
+ * Implements hook_entity_bundle_field_info().
+ */
+function joinup_collection_entity_bundle_field_info(EntityTypeInterface $entity_type, $bundle, array $base_field_definitions): array {
+  if ($entity_type->id() === 'node' && $bundle === 'collection') {
+    return [
+      'last_update' => BaseFieldDefinition::create('timestamp')
+        ->setLabel(t('Last updated'))
+        ->setDescription(t('The last updated time considering also compounding entities.'))
+        ->setComputed(TRUE)
+        ->setClass(LastUpdatedFieldItemList::class)
+        ->setDisplayConfigurable('view', TRUE)
+        ->setCardinality(1),
+    ];
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_delete().
+ */
+function joinup_collection_node_delete(NodeInterface $node): void {
+  if (!$node->hasField('og_audience') || !$node->isPublished()) {
+    return;
+  }
+
+  /** @var \Drupal\rdf_entity\RdfInterface $group */
+  if (!$node->get('og_audience')->isEmpty() && ($group = Rdf::load($node->get('og_audience')->target_id)) && $group->bundle() === 'collection') {
+    // Touch the parent collection in order to update its changed timestamp.
+    $group->skip_notification = TRUE;
+    $group->setChangedTime(\Drupal::time()->getRequestTime())->save();
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function joinup_collection_form_meta_entity_collection_settings_form_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
+  // Remove the delete button from the 'collection_settings' edit form.
+  unset($form['actions']['delete']);
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function joinup_collection_preprocess_search_api_field__rdf_entity__field_collection_content__collection(array &$variables): void {
+  /** @var \Drupal\joinup_collection\Entity\CollectionInterface $collection */
+  $collection = $variables['entity'];
+
+  /** @var \Drupal\oe_newsroom_newsletter\Plugin\Field\FieldType\NewsletterItem $newsletter_field_item */
+  $newsletter_field_item = $collection->get('field_newsletter')->first();
+
+  $variables['newsletter_enabled'] = $newsletter_field_item && !$newsletter_field_item->isEmpty() && $newsletter_field_item->isEnabled();
+
+  // Collections might have a newsletter. Pass the necessary data that can be
+  // used to render the subscription form inside a tile.
+  if ($variables['newsletter_enabled']) {
+    $label = Unicode::truncate($collection->label(), 20, TRUE, TRUE);
+    $variables['newsletter_motivation'] = t('Keep in touch with %collection', [
+      '%collection' => $label,
+    ]);
+    $variables['newsletter_form'] = \Drupal::formBuilder()->getForm(NewsletterSubscribeForm::class, $newsletter_field_item->getUniverse(), $newsletter_field_item->getServiceId());
+  }
+}
+
+/**
+ * Implements hook_entity_field_access().
+ */
+function joinup_collection_entity_field_access(string $operation, FieldDefinitionInterface $field_definition, AccountInterface $account, ?FieldItemListInterface $items = NULL): AccessResultInterface {
+  // Until ISAICP-7223 only moderators are able to set a landing page.
+  // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7223
+  if (
+    $field_definition->getTargetEntityTypeId() === 'meta_entity'
+    && $field_definition->getTargetBundle() === 'collection_settings'
+    && $field_definition->getName() === 'landing_page'
+  ) {
+    return AccessResult::forbiddenIf(!$account->hasPermission('update collection_settings meta-entity'));
+  }
+  return AccessResult::neutral();
+}
