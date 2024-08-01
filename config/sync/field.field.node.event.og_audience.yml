@@ -4,7 +4,9 @@ status: true
 dependencies:
   config:
     - field.storage.node.og_audience
+    - node.type.collection
     - node.type.event
+    - node.type.solution
   module:
     - og
 _core:
@@ -21,5 +23,13 @@ default_value: {  }
 default_value_callback: ''
 settings:
   handler: 'default:node'
-  handler_settings: {  }
+  handler_settings:
+    target_bundles:
+      collection: collection
+      solution: solution
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: collection
 field_type: og_standard_reference
