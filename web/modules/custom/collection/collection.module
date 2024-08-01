@@ -38,7 +38,7 @@ use Drupal\rdf_entity\Entity\Rdf;
  */
 function collection_entity_type_alter(array &$entity_types): void {
   /** @var \Drupal\Core\Entity\EntityTypeInterface[] $entity_types */
-  $entity_types['rdf_entity']->setLinkTemplate('glossary', '/node/{node}/glossary/{letter}');
+  $entity_types['node']->setLinkTemplate('glossary', '/node/{node}/glossary/{letter}');
 }
 
 /**
@@ -154,67 +154,6 @@ function collection_node_insert(EntityInterface $entity): void {
       ->set('announcements', TRUE)
       ->save();
   }
-}
-
-/**
- * Implements hook_ENTITY_TYPE_presave().
- *
- * Default graph is published. Draft graph is draft.
- */
-function collection_node_presave(NodeInterface $entity): void {
-  if (!$entity instanceof CollectionInterface) {
-    return;
-  }
-
-  // Provide default values for date/time fields if were missed.
-  foreach (['created', 'changed'] as $field_name) {
-    if ($entity->get($field_name)->isEmpty()) {
-      if (!isset($request_time)) {
-        $request_time = gmdate('Y-m-d\TH:i:s', \Drupal::time()->getRequestTime());
-      }
-      $entity->set($field_name, $request_time);
-    }
-  }
-
-  // @todo Remove this as it is not needed anymore. This should be set by the
-  //   joinup_workflow module.
-  //  if (!\Drupal::service('sparql.graph_handler')->bundleHasGraph('rdf_entity', 'collection', 'draft')) {
-  //  return;
-  //  }
-  //
-  //  $state = $entity->getWorkflowState();
-  //  if (in_array($state, ['draft', 'proposed'])) {
-  //  $entity->set('graph', 'draft');
-  //  }
-  //  elseif (in_array($state, [
-  //  'published',
-  //  'archival_request',
-  //  'archived',
-  //  ])) {
-  //  $entity->set('graph', SparqlGraphInterface::DEFAULT);
-  //  }
-  //  elseif (empty($state)) {
-  //  throw new \Exception("State field not found while trying to get the appropriate graph.");
-  //  }
-  //  else {
-  //  throw new \Exception("State field value is invalid. Current value found: " . $state);
-  //  }
-}
-
-/**
- * Implements hook_ENTITY_TYPE_update().
- *
- * Performs the following actions:
- * - When the entity is saved into the default graph, the draft must be deleted.
- */
-function collection_node_update(EntityInterface $entity): void {
-  // @todo Remove this as it is not needed anymore.
-  //   if (!$entity instanceof CollectionInterface || !\Drupal::service('sparql.graph_handler')->bundleHasGraph('rdf_entity', 'collection', 'draft')) {
-  //  return;
-  //  }
-  // if ($entity->getWorkflowState() === 'published') {
-  //  \Drupal::entityTypeManager()->getStorage('rdf_entity')->deleteFromGraph([$entity], 'draft');
-  //  }.
 }
 
 /**
