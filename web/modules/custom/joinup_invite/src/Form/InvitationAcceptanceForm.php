@@ -215,8 +215,7 @@ class InvitationAcceptanceForm extends FormBase {
   protected function redirectToGroup(FormStateInterface $form_state): void {
     /** @var \Drupal\joinup_invite\Entity\InvitationInterface $invitation */
     $invitation = $this->currentRouteMatch->getParameter('invitation');
-    $url = $invitation->getEntity()->toUrl();
-    $form_state->setRedirect($url->getRouteName(), $url->getRouteParameters());
+    $form_state->setRedirectUrl($invitation->getEntity()->toUrl());
   }
 
   /**
