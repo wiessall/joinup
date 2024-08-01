@@ -55,7 +55,7 @@ Feature: As a group (collection or solution) owner or site moderator
 
     When I press "Confirm"
     Then I should see "Ownership of <title> <type> transferred from users Finnur Robertsson, Edda Agnarsdóttir to Ásdís Sigurðsdóttir."
-    And Log entry with the message "Ownership granted to Ásdís Sigurðsdóttir for Intensive Language Learning by Saga Þórirsdóttir." should exist.
+    And Log entry with the message "Ownership granted to Ásdís Sigurðsdóttir for <title> by <user name>." should exist.
     And I should see the text "<type capitalized> owner" in the "shy" row
     # Because the 'happy' user is granted with the site-wide permission
     # ('administer {group} ownership'), he is not dependent on the ownership
@@ -86,13 +86,13 @@ Feature: As a group (collection or solution) owner or site moderator
       | body      | <full name> has changed your role in <type> "<title>" to facilitator. |
 
     Examples:
-      | user  | option exists | type       | type capitalized | title                       | full name               |
-      | happy | contain       | collection | Collection       | Intensive Language Learning | The Joinup Support Team |
-      | light | contain       | collection | Collection       | Intensive Language Learning | The Joinup Support Team |
-      | cruel | not contain   | collection | Collection       | Intensive Language Learning | Finnur Robertsson       |
-      | happy | contain       | solution   | Solution         | Learn German in 1 Month     | The Joinup Support Team |
-      | light | contain       | solution   | Solution         | Learn German in 1 Month     | The Joinup Support Team |
-      | cruel | not contain   | solution   | Solution         | Learn German in 1 Month     | Finnur Robertsson       |
+      | user  | option exists | type       | type capitalized | title                       | full name               | user name            |
+      | happy | contain       | collection | Collection       | Intensive Language Learning | The Joinup Support Team | Saga Þórirsdóttir    |
+      | light | contain       | collection | Collection       | Intensive Language Learning | The Joinup Support Team | Bjartur Jóhannsson   |
+      | cruel | not contain   | collection | Collection       | Intensive Language Learning | Finnur Robertsson       | Finnur Robertsson    |
+      | happy | contain       | solution   | Solution         | Learn German in 1 Month     | The Joinup Support Team | Saga Þórirsdóttir    |
+      | light | contain       | solution   | Solution         | Learn German in 1 Month     | The Joinup Support Team | Bjartur Jóhannsson   |
+      | cruel | not contain   | solution   | Solution         | Learn German in 1 Month     | Finnur Robertsson       | Finnur Robertsson    |
 
   Scenario Outline: Group facilitators do not have access to transfer ownership.
     Given I am logged in as "shy"
