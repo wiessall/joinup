@@ -16,11 +16,9 @@ dependencies:
     - media.type.file
     - media.type.image
     - media.type.video
-    - meta_entity.type.eif_perspective
     - node.type.contact_information
     - node.type.custom_page
     - node.type.discussion
-    - meta_entity.type.eif_perspective
     - node.type.document
     - node.type.event
     - node.type.news
@@ -29,7 +27,6 @@ dependencies:
   module:
     - comment
     - contextual
-    - eif
     - email_confirmer
     - entity_legal
     - filter
@@ -125,9 +122,7 @@ permissions:
   - 'edit own owner content'
   - 'edit own polls'
   - 'flag bookmark_node'
-  - 'flag bookmark_rdf_entity'
   - 'flag like_node'
-  - 'flag like_rdf_entity'
   - 'flag subscribe_discussions'
   - 'legal re-accept legal_notice'
   - 'legal view legal_notice'
@@ -155,9 +150,7 @@ permissions:
   - 'revert all revisions'
   - 'skip comment approval'
   - 'unflag bookmark_node'
-  - 'unflag bookmark_rdf_entity'
   - 'unflag like_node'
-  - 'unflag like_rdf_entity'
   - 'unflag subscribe_discussions'
   - 'update paragraph content accordion'
   - 'update paragraph content accordion_item'
@@ -188,7 +181,6 @@ permissions:
   - 'use text format text_html'
   - 'use text format webform_default'
   - 'view bookmark_node'
-  - 'view bookmark_rdf_entity'
   - 'view compatibility documents'
   - 'view eif_perspective meta-entity'
   - 'view media'

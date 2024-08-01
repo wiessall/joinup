@@ -4,7 +4,9 @@ status: true
 dependencies:
   config:
     - field.storage.node.field_shared_in
+    - node.type.collection
     - node.type.news
+    - node.type.solution
 _core:
   default_config_hash: yLPqr6f9fDxT955i3WqhO-9TMfDJLIN2c5irLqYqXl8
 id: node.news.field_shared_in
@@ -19,5 +21,13 @@ default_value: {  }
 default_value_callback: ''
 settings:
   handler: 'default:node'
-  handler_settings: {  }
+  handler_settings:
+    target_bundles:
+      collection: collection
+      solution: solution
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: collection
 field_type: entity_reference
