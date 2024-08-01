@@ -8,9 +8,9 @@
 declare(strict_types=1);
 
 use Drupal\Core\Render\BubbleableMetadata;
-use Drupal\collection\Entity\CollectionContentInterface;
-use Drupal\collection\Entity\CollectionInterface;
-use Drupal\collection\Exception\MissingCollectionException;
+use Drupal\joinup_collection\Entity\CollectionContentInterface;
+use Drupal\joinup_collection\Entity\CollectionInterface;
+use Drupal\joinup_collection\Exception\MissingCollectionException;
 use Drupal\joinup_bundle_class\ShortIdInterface;
 use Drupal\joinup_solution\Entity\SolutionContentInterface;
 use Drupal\joinup_solution\Exception\MissingSolutionException;
