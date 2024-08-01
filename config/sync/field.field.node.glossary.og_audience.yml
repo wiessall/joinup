@@ -5,8 +5,6 @@ dependencies:
   config:
     - field.storage.node.og_audience
     - node.type.glossary
-    - rdf_entity.rdfentity.collection
-    - rdf_entity.rdfentity.solution
   module:
     - og
 id: node.glossary.og_audience
@@ -21,7 +19,5 @@ default_value: {  }
 default_value_callback: ''
 settings:
   handler: 'og:default'
-  handler_settings:
-    target_bundles:
-      collection: collection
+  handler_settings: {  }
 field_type: og_standard_reference
