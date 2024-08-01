@@ -56,15 +56,19 @@ class AddToGroupForm extends GroupFormBase {
       $membership->setState(OgMembershipInterface::STATE_ACTIVE);
       $membership->addRole($this->role);
       $membership->save();
-      $this->logger->info('@actor added as member.', [
+      $this->logger->info('@actor added as member to @group by @user.', [
         '@actor' => $user->getDisplayName(),
+        '@user' => $this->currentUser()->getDisplayName(),
+        '@group' => $this->entity->label(),
         'type' => 'joinup:add_member',
-        'actor' => $user->id(),
+        'actor' => $this->currentUser()->id(),
       ]);
-      $this->logger->info('Successfully added the role @role to the @actor user.', [
+      $this->logger->info('Successfully added the @role role in @group to @actor by @user.', [
         '@actor' => $user->getDisplayName(),
         '@role' => strtolower($this->role->label()),
-        'type' => 'joinup:add_the_' . $form_state->getValue('role') . '_role_to_member',
+        '@user' => $this->currentUser()->getDisplayName(),
+        '@group' => $this->entity->label(),
+        'type' => 'joinup:add_role',
         'actor' => $this->currentUser()->id(),
       ]);
     }

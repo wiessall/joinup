@@ -79,7 +79,7 @@ Feature: "Add document" visibility options.
     And I press "Save as draft"
     Then I should see the heading "An amazing document"
     And I should see the success message 'Document An amazing document has been created as draft. You can find it in the section "My unpublished content" located in your My account page, or in the aforementioned section under the Collection it was created in.'
-    And Log entry with the message "A new document entity titled An amazing document has been created." should exist.
+    And Log entry with the message "A new document entity titled An amazing document has been created by Eirik Andries in Hunter in the Swords." should exist.
     And I should see the link "test.zip"
     # Check that the full author name is shown instead of the username.
     And I should see the link "Eirik Andries" in the "Content" region
