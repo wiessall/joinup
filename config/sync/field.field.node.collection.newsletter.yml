@@ -1,0 +1,21 @@
+uuid: 9a6731c0-9d1d-4288-b8fa-a027d95b5073
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.newsletter
+    - node.type.collection
+  module:
+    - oe_newsroom_newsletter
+id: node.collection.newsletter
+field_name: newsletter
+entity_type: node
+bundle: collection
+label: Newsletter
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: oe_newsroom_newsletter

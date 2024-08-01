@@ -1,0 +1,21 @@
+uuid: 96237c8d-ab69-4d73-9b23-ede7fabbba97
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.group_moderation
+    - node.type.collection
+id: node.collection.group_moderation
+field_name: group_moderation
+entity_type: node
+bundle: collection
+label: Moderation
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  on_label: Moderated
+  off_label: 'Non moderated'
+field_type: boolean

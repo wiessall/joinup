@@ -72,6 +72,11 @@ content:
         template_suggestion: ''
     weight: 0
     region: content
+  flag_like_node:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 10
+    region: content
   og_group:
     type: og_group_subscribe
     label: above

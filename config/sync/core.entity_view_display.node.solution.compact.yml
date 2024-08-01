@@ -41,6 +41,11 @@ targetEntityType: node
 bundle: solution
 mode: compact
 content:
+  flag_like_node:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 10
+    region: content
   logo:
     type: image
     label: hidden

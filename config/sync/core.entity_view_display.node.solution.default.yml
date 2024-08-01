@@ -123,6 +123,16 @@ third_party_settings:
                 third_party_settings: {  }
             weight: 4
             additional: {  }
+          1e27c134-c95c-4e22-b324-cb408cd05c13:
+            uuid: 1e27c134-c95c-4e22-b324-cb408cd05c13
+            region: content
+            configuration:
+              id: 'extra_field_block:node:solution:flag_like_node'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+            weight: 5
+            additional: {  }
         third_party_settings: {  }
 id: node.solution.default
 targetEntityType: node
@@ -144,6 +154,11 @@ content:
       link: false
     third_party_settings: {  }
     weight: 0
+    region: content
+  flag_like_node:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 10
     region: content
   links:
     settings: {  }
