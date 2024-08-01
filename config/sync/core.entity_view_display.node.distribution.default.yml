@@ -15,7 +15,7 @@ dependencies:
     - field.field.node.distribution.representation_technique
     - node.type.distribution
   module:
-    - collection
+    - joinup_collection
     - digital_size_formatter
     - field_group
     - joinup_distribution

@@ -34,7 +34,7 @@ class OutdatedContentTest extends JoinupExistingSiteTestBase {
 
     $this->now = new \DateTime('now', new \DateTimeZone('UTC'));
 
-    /** @var \Drupal\collection\Entity\CollectionInterface $collection */
+    /** @var \Drupal\joinup_collection\Entity\CollectionInterface $collection */
     $collection = $this->createRdfEntity([
       'rid' => 'collection',
       'field_ar_state' => 'published',

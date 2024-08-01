@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\custom_page\Entity;
 
-use Drupal\collection\Entity\CollectionContentInterface;
+use Drupal\joinup_collection\Entity\CollectionContentInterface;
 use Drupal\joinup_bundle_class\DescriptionInterface;
 use Drupal\joinup_bundle_class\LogoInterface;
 use Drupal\joinup_group\Entity\GroupContentInterface;
