@@ -14,7 +14,7 @@ use Drupal\Core\Routing\RedirectDestinationTrait;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
 use Drupal\collection\Entity\CollectionInterface;
-use Drupal\collection\JoinupCollectionHelper;
+use Drupal\joinup_collection\JoinupCollectionHelper;
 use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\og_menu\OgMenuInstanceInterface;
 use Exception;

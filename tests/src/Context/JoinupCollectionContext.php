@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup\Context;
 
 use Drupal\DrupalExtension\Context\RawDrupalContext;
-use Drupal\collection\JoinupCollectionHelper;
+use Drupal\joinup_collection\JoinupCollectionHelper;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\SearchTrait;
 use Drupal\joinup\Traits\TopicTrait;
