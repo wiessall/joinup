@@ -90,7 +90,7 @@ function joinup_log_members_views_exposed_form_submit(array &$form, FormStateInt
       '@group' => $group ? $group->label() : NULL,
       '@user' => $current_user->getDisplayName(),
       'type' => $type[$action]['type'],
-      'actor' => $current_user->id(),
+      'actor' => $user->id(),
     ]);
   }
 }
@@ -100,16 +100,7 @@ function joinup_log_members_views_exposed_form_submit(array &$form, FormStateInt
  */
 function joinup_log_node_insert(EntityInterface $entity): void {
   if ($entity instanceof CommunityContentInterface || $entity instanceof CustomPageInterface) {
-    $current_user = \Drupal::currentUser();
-    $group = \Drupal::service('og.context')->getGroup();
-    \Drupal::service('logger.channel.group_membership')->info('A new @type entity titled @title has been created by @user in @group.', [
-      '@type' => $entity->getType(),
-      '@title' => $entity->getTitle(),
-      '@group' => $group ? $group->label() : NULL,
-      '@user' => $current_user->getDisplayName(),
-      'type' => 'joinup:add_content',
-      'actor' => $current_user->id(),
-    ]);
+    _joinup_log_logger_add_content($entity);
   }
 }
 
@@ -120,16 +111,21 @@ function joinup_log_rdf_entity_insert(EntityInterface $entity): void {
   if ($entity->bundle() !== 'solution') {
     return;
   }
+  _joinup_log_logger_add_content($entity);
+}
+
+/**
+ * Logger message for type add content.
+ */
+function _joinup_log_logger_add_content(EntityInterface $entity): void {
   $current_user = \Drupal::currentUser();
-  /** @var \Drupal\rdf_entity\Entity\Rdf $collection */
-  $collection = $entity->get('collection')->first()->entity;
+  $group = \Drupal::service('og.context')->getGroup();
   \Drupal::service('logger.channel.group_membership')->info('A new @type entity titled @title has been created by @user in @group.', [
     '@type' => $entity->bundle(),
     '@title' => $entity->label(),
-    '@group' => $collection->label(),
+    '@group' => $group ? $group->label() : NULL,
     '@user' => $current_user->getDisplayName(),
     'type' => 'joinup:add_content',
     'actor' => $current_user->id(),
-    'group' => $collection->id(),
   ]);
 }
