@@ -228,6 +228,16 @@ class AnnouncementForm extends FormBase {
       '@type' => $this->announcement->getGroup()->get('rid')->entity->getSingularLabel(),
     ];
 
+    if ($is_new) {
+      $this->logger->info('The announcement @subject has been created by @actor for @group.', [
+        '@actor' => $this->currentUser()->getDisplayName(),
+        '@subject' => $form_state->getValue('subject'),
+        '@group' => $this->announcement->getGroup()->label(),
+        'type' => 'joinup:add_announcement',
+        'actor' => $this->currentUser()->id(),
+      ]);
+    }
+
     if ($trigger['#type'] === 'submit' && !empty($trigger['#test_announcement'])) {
       $email = $this->currentUser()->getEmail();
       $this->messageDelivery->sendMessageToEmailAddresses($this->announcement, [
@@ -239,12 +249,6 @@ class AnnouncementForm extends FormBase {
     }
     elseif ($is_new) {
       $status = $this->t("The announcement has been created as @to. Review the announcement and, when is ready to be sent, use the 'Send' button.", $args);
-      $this->logger->info('The announcement @subject has been created as @to', [
-        '@to' => strtolower($this->announcement->getWorkflowStateInstance()->getLabel()),
-        '@subject' => $form_state->getValue('subject'),
-        'type' => 'joinup:add_announcement',
-        'actor' => $this->currentUser()->id(),
-      ]);
     }
     elseif ($initial_state->getId() == $this->announcement->getWorkflowState()) {
       $status = $this->t("The announcement has been updated but it's still in @to state. Review the announcement and, when is ready to be sent, use the 'Send' button.", $args);

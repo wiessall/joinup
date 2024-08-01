@@ -32,43 +32,43 @@ function joinup_log_members_views_exposed_form_submit(array &$form, FormStateInt
   $type = [
     'joinup_og_membership_delete_action' => [
       'type' => 'joinup:deleted_membership',
-      'message' => 'Membership @actor has been deleted.',
+      'message' => 'Membership for @actor in @group has been deleted by @user.',
     ],
     'joinup_transfer_group_ownership' => [
       'type' => 'joinup:transfer_the_ownership_of_the_collection_to_member',
-      'message' => 'Ownership granted to @actor.',
+      'message' => 'Ownership granted to @actor for @group by @user.',
     ],
     'og_membership_add_single_role_action.author' => [
       'type' => 'joinup:add_role',
-      'message' => 'Successfully added the role @role to the @actor user.',
+      'message' => 'Successfully added the @role role in @group to @actor by @user.',
       'role' => 'author',
     ],
     'og_membership_add_single_role_action.facilitator' => [
       'type' => 'joinup:add_role',
-      'message' => 'Successfully added the role @role to the @actor user.',
+      'message' => 'Successfully added the @role role in @group to @actor by @user.',
       'role' => 'facilitator',
     ],
     'og_membership_approve_pending_action' => [
       'type' => 'joinup:approve_the_pending_membership',
-      'message' => 'Membership @actor has been approved.',
+      'message' => 'Membership in @group for @actor has been approved by @user.',
     ],
     'og_membership_block_action' => [
       'type' => 'joinup:block_membership',
-      'message' => 'Membership @actor has been blocked.',
+      'message' => 'Membership in @group for @actor has been blocked by @user.',
     ],
     'og_membership_remove_single_role_action.author' => [
       'type' => 'joinup:remove_role',
-      'message' => 'Successfully removed the role @role from the @actor user.',
+      'message' => 'Successfully removed the @role role from @group for the @actor by @user.',
       'role' => 'author',
     ],
     'og_membership_remove_single_role_action.facilitator' => [
       'type' => 'joinup:remove_role',
-      'message' => 'Successfully removed the role @role from the @actor user.',
+      'message' => 'Successfully removed the @role role from @group for the @actor by @user.',
       'role' => 'facilitator',
     ],
     'og_membership_unblock_action' => [
       'type' => 'joinup:unblock_membership',
-      'message' => 'Membership @actor has been unblocked.',
+      'message' => 'Membership in @group for @actor has been unblocked by @user.',
     ],
   ];
   if (!array_key_exists($form_state->getValue('action'), $type)) {
@@ -80,12 +80,15 @@ function joinup_log_members_views_exposed_form_submit(array &$form, FormStateInt
   $current_user = \Drupal::currentUser();
   $entity_type_manager = \Drupal::entityTypeManager();
   $logger = \Drupal::service('logger.channel.group_membership');
+  $group = \Drupal::service('og.context')->getGroup();
   foreach ($memberships as $membership) {
     $member = $entity_type_manager->getStorage('og_membership')->load($membership);
     $user = $entity_type_manager->getStorage('user')->load($member->get('uid')->target_id);
     $logger->info($type[$action]['message'], [
       '@actor' => $user->getDisplayName(),
       '@role' => $type[$action]['role'] ?? NULL,
+      '@group' => $group ? $group->label() : NULL,
+      '@user' => $current_user->getDisplayName(),
       'type' => $type[$action]['type'],
       'actor' => $current_user->id(),
     ]);
@@ -98,9 +101,12 @@ function joinup_log_members_views_exposed_form_submit(array &$form, FormStateInt
 function joinup_log_node_insert(EntityInterface $entity): void {
   if ($entity instanceof CommunityContentInterface || $entity instanceof CustomPageInterface) {
     $current_user = \Drupal::currentUser();
-    \Drupal::service('logger.channel.group_membership')->info('A new @type entity titled @title has been created.', [
+    $group = \Drupal::service('og.context')->getGroup();
+    \Drupal::service('logger.channel.group_membership')->info('A new @type entity titled @title has been created by @user in @group.', [
       '@type' => $entity->getType(),
       '@title' => $entity->getTitle(),
+      '@group' => $group ? $group->label() : NULL,
+      '@user' => $current_user->getDisplayName(),
       'type' => 'joinup:add_content',
       'actor' => $current_user->id(),
     ]);
@@ -115,9 +121,13 @@ function joinup_log_rdf_entity_insert(EntityInterface $entity): void {
     return;
   }
   $current_user = \Drupal::currentUser();
-  \Drupal::service('logger.channel.group_membership')->info('A new @type entity titled @title has been created.', [
+  /** @var \Drupal\rdf_entity\Entity\Rdf $collection */
+  $collection = $entity->get('collection')->first()->entity;
+  \Drupal::service('logger.channel.group_membership')->info('A new @type entity titled @title has been created by @user in @group.', [
     '@type' => $entity->bundle(),
     '@title' => $entity->label(),
+    '@group' => $collection->label(),
+    '@user' => $current_user->getDisplayName(),
     'type' => 'joinup:add_content',
     'actor' => $current_user->id(),
   ]);

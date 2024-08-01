@@ -9,7 +9,6 @@ use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\ConfirmFormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\PluralTranslatableMarkup;
 use Drupal\Core\TempStore\PrivateTempStore;
@@ -48,14 +47,11 @@ class DeleteGroupMembershipConfirmForm extends ConfirmFormBase {
    *   The private tempstore factory service.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity type manager service.
-   * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
-   *   The logger channel service.
    */
   public function __construct(
     protected OgAccessInterface $ogAccess,
     protected PrivateTempStoreFactory $privateTempStoreFactory,
     protected EntityTypeManagerInterface $entityTypeManager,
-    protected LoggerChannelInterface $logger,
   ) {
     $this->privateTempStore = $privateTempStoreFactory->get('joinup_group.og_membership_delete_action');
   }
@@ -68,7 +64,6 @@ class DeleteGroupMembershipConfirmForm extends ConfirmFormBase {
       $container->get('og.access'),
       $container->get('tempstore.private'),
       $container->get('entity_type.manager'),
-      $container->get('logger.channel.group_membership'),
     );
   }
 
@@ -149,14 +144,6 @@ class DeleteGroupMembershipConfirmForm extends ConfirmFormBase {
     $storage = $this->entityTypeManager->getStorage('og_membership');
     $storage->delete($memberships);
     $this->messenger()->addStatus($message);
-    foreach ($memberships as $member) {
-      $this->logger->info('The member @actor has been deleted from the @group.', [
-        '@actor' => $member->getOwner()->getDisplayName(),
-        '@group' => $this->getGroup()->label(),
-        'type' => 'joinup:deleted_membership',
-        'actor' => $member->getOwner()->id(),
-      ]);
-    }
   }
 
   /**

@@ -270,9 +270,10 @@ abstract class InviteFormBase extends FormBase {
       try {
         $result_status = $this->processUser($user);
         if ($result_status === static::RESULT_SUCCESS) {
-          $this->logger->info('The member @actor has been invited to this @group.', [
+          $this->logger->info('The member @actor has been invited by @user to @group.', [
             '@actor' => $user->getDisplayName(),
             '@group' => $this->entity->label(),
+            '@user' => $this->currentUser()->getDisplayName(),
             'type' => 'joinup:invite_member',
             'actor' => $this->currentUser()->id(),
           ]);

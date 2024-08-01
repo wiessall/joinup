@@ -176,8 +176,8 @@ Feature: Collection membership administration
 
     Given I press "Confirm"
     Then I should see the success message "The following members were removed from the 'Medical diagnosis' collection: Gregory House, Turkey Ham"
-    And Log entry with the message "Membership Gregory House has been deleted." should exist.
-    And Log entry with the message "Membership Turkey Ham has been deleted." should exist.
+    And Log entry with the message "Membership for Kathie Cumbershot in Medical diagnosis has been deleted by Lisa Cuddy." should exist.
+    And Log entry with the message "Membership for Turkey Ham in Medical diagnosis has been deleted by Lisa Cuddy." should exist.
     And I should see "Lisa Cuddy" in the "Lisa Cuddy" row
 
     # Check new privileges.
@@ -293,7 +293,7 @@ Feature: Collection membership administration
     When I select "Facilitator" from "Role"
     And I press "Add members"
     Then I should see the success message "Successfully added the role Collection facilitator to the selected users."
-    And Log entry with the message "Successfully added the role collection facilitator to the Christian Dwight user." should exist.
+    And Log entry with the message "Successfully added the collection facilitator role in Medical diagnosis to Christian Dwight by Lisa Cuddy." should exist.
     And I should see the link "Christian Dwight"
 
     # Try new privileges.
@@ -444,7 +444,7 @@ Feature: Collection membership administration
     And I pick "Donald Duck (Donald Duck)" from the "Link" autocomplete suggestions
     And I press "Invite members"
     Then I should see the success message "1 user has been invited to this group."
-    And Log entry with the message "The member Donald Duck has been invited to this Medical diagnosis." should exist.
+    And Log entry with the message "The member Donald Duck has been invited by Lisa Cuddy to Medical diagnosis." should exist.
 
     When I click "Add members"
     And I type "Turkey" in the "Name" autocomplete field
@@ -461,4 +461,4 @@ Feature: Collection membership administration
       | Turkey Ham |
     And I press "Add members"
     Then I should see the success message "Successfully added the role Member to the selected users."
-    And Log entry with the message "Turkey Ham added as member." should exist.
+    And Log entry with the message "Turkey Ham added as member to Medical diagnosis by Lisa Cuddy." should exist.
