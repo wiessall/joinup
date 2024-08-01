@@ -7,7 +7,7 @@ namespace Drupal\joinup_group\Plugin\Action;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\TempStore\PrivateTempStoreFactory;
-use Drupal\joinup_collection\JoinupCollectionHelper;
+use Drupal\collection\JoinupCollectionHelper;
 use Drupal\og\Entity\OgMembership;
 use Drupal\og\OgAccessInterface;
 use Drupal\og\Plugin\Action\DeleteOgMembership;

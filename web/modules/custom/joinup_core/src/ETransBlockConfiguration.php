@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_core;
 
-use Drupal\joinup_collection\Entity\CollectionInterface;
-use Drupal\joinup_collection\Entity\GlossaryTermInterface;
+use Drupal\collection\Entity\CollectionInterface;
+use Drupal\collection\Entity\GlossaryTermInterface;
 use Drupal\custom_page\Entity\CustomPageInterface;
 use Drupal\joinup_discussion\Entity\DiscussionInterface;
 use Drupal\joinup_document\Entity\DocumentInterface;

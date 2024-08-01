@@ -153,7 +153,7 @@ QUERY;
    */
   public function generateGroupStatistics(string $entity_id, array &$context): void {
     $rdf_storage = $this->entityTypeManager->getStorage('rdf_entity');
-    /** @var \Drupal\joinup_collection\Entity\CollectionInterface|\Drupal\joinup_solution\Entity\SolutionInterface $group */
+    /** @var \Drupal\collection\Entity\CollectionInterface|\Drupal\joinup_solution\Entity\SolutionInterface $group */
     $group = $rdf_storage->load((string) $entity_id);
     // Fetch the nodes that belong to the group.
     $group_content_data = $this->mysql->query(

@@ -20,14 +20,14 @@ use Drupal\joinup_publication_date\Entity\EntityPublicationTimeFallbackTrait;
 use Drupal\joinup_workflow\ArchivableEntityTrait;
 use Drupal\joinup_workflow\EntityWorkflowStateTrait;
 use Drupal\meta_entity\Entity\MetaEntity;
+use Drupal\node\Entity\Node;
 use Drupal\og\OgMembershipInterface;
-use Drupal\rdf_entity\Entity\Rdf;
 use Drupal\topic\Entity\TopicReferencingEntityTrait;
 
 /**
  * Entity subclass for the 'collection' bundle.
  */
-class Collection extends Rdf implements CollectionInterface {
+class Collection extends Node implements CollectionInterface {
 
   use AbstractTrait;
   use ArchivableEntityTrait;
@@ -60,24 +60,32 @@ class Collection extends Rdf implements CollectionInterface {
   /**
    * {@inheritdoc}
    */
-  public function getSolutions(bool $only_published = FALSE): array {
-    $ids = $this->getSolutionIds($only_published);
+  public function getSolutions(bool $onlyPublished = FALSE): array {
+    $ids = $this->getSolutionIds($onlyPublished);
     if (empty($ids)) {
       return $ids;
     }
     return $this
       ->entityTypeManager()
-      ->getStorage('rdf_entity')
+      ->getStorage('node')
       ->loadMultiple($ids);
   }
 
   /**
    * {@inheritdoc}
+   *
+   * @todo Get rid of the $onlyPublished parameter as it is only used once.
+   * @todo Probably get rid of the method as we will have a computed field.
+   * @todo Make sure that access is enforced in the computed field.
+   * @todo The ::getSolutions might end up as this method.
    */
-  public function getSolutionIds(bool $only_published = FALSE): array {
+  public function getSolutionIds(bool $onlyPublished = FALSE): array {
+    // @todo Fix this after the computed field is created.
+    // @todo The computed field should be in the solution module as should the
+    //   subscriber that exports the data to the collection.
     $ids = $this->getReferencedEntityIds('field_ar_affiliates')['rdf_entity'] ?? [];
 
-    if ($ids && $only_published) {
+    if ($ids && $onlyPublished) {
       // Published solutions are stored in the 'default' graph.
       $ids = $this->entityTypeManager()
         ->getStorage('rdf_entity')
@@ -96,35 +104,35 @@ class Collection extends Rdf implements CollectionInterface {
    * {@inheritdoc}
    */
   public function getWorkflowStateFieldName(): string {
-    return 'field_ar_state';
+    return 'field_state';
   }
 
   /**
    * {@inheritdoc}
    */
   public function getLogoFieldName(): string {
-    return 'field_ar_logo';
+    return 'logo';
   }
 
   /**
    * {@inheritdoc}
    */
   public function getDescriptionField(): string {
-    return 'field_ar_description';
+    return 'description';
   }
 
   /**
    * {@inheritdoc}
    */
   public function getGroupModerationFieldName(): string {
-    return 'field_ar_moderation';
+    return 'group_moderation';
   }
 
   /**
    * {@inheritdoc}
    */
   public function getContentCreationFieldName(): string {
-    return 'field_ar_content_creation';
+    return 'content_creation';
   }
 
   /**
@@ -154,7 +162,7 @@ class Collection extends Rdf implements CollectionInterface {
    * {@inheritdoc}
    */
   public function isClosed(): bool {
-    return (bool) $this->getMainPropertyValue('field_ar_closed');
+    return (bool) $this->getMainPropertyValue('closed_group');
   }
 
   /**
@@ -162,7 +170,7 @@ class Collection extends Rdf implements CollectionInterface {
    */
   public function getNewMembershipSuccessMessage(OgMembershipInterface $membership): TranslatableMarkup {
     $parameters = [
-      '%group' => $this->getName(),
+      '%group' => $this->label(),
     ];
     return $membership->getState() === OgMembershipInterface::STATE_ACTIVE ?
       $this->t('You are now a member of %group.', $parameters) :
@@ -174,7 +182,7 @@ class Collection extends Rdf implements CollectionInterface {
    */
   public function getExistingMembershipMessage(OgMembershipInterface $membership): TranslatableMarkup {
     $parameters = [
-      '%group' => $this->getName(),
+      '%group' => $this->label(),
     ];
     switch ($membership->getState()) {
       case OgMembershipInterface::STATE_BLOCKED:
@@ -209,21 +217,21 @@ class Collection extends Rdf implements CollectionInterface {
    * {@inheritdoc}
    */
   public function getContactInformationFieldName(): string {
-    return 'field_ar_contact_information';
+    return 'contact';
   }
 
   /**
    * {@inheritdoc}
    */
   public function getWebsiteLinkFieldName(): string {
-    return 'field_ar_access_url';
+    return 'access_url';
   }
 
   /**
    * {@inheritdoc}
    */
   public function getAbstractField(): string {
-    return 'field_ar_abstract';
+    return 'abstract';
   }
 
 }

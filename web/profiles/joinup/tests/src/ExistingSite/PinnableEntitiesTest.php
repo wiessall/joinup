@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Drupal\Tests\joinup\ExistingSite;
 
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
-use Drupal\joinup_collection\Entity\Collection;
-use Drupal\joinup_collection\Entity\CollectionInterface;
+use Drupal\collection\Entity\Collection;
+use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_group\Entity\PinnableGroupContentInterface;
 use Drupal\joinup_news\Entity\News;
 use Drupal\og\OgGroupAudienceHelperInterface;

@@ -17,21 +17,12 @@ use Symfony\Component\Validator\ConstraintValidator;
 class GlossaryTermSynonymsValidator extends ConstraintValidator implements ContainerInjectionInterface {
 
   /**
-   * The entity type manager service.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
-
-  /**
    * Constructs a new constraint validator instance.
    *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity type manager service.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager) {
-    $this->entityTypeManager = $entity_type_manager;
-  }
+  public function __construct(protected EntityTypeManagerInterface $entityTypeManager) {}
 
   /**
    * {@inheritdoc}
@@ -43,89 +34,88 @@ class GlossaryTermSynonymsValidator extends ConstraintValidator implements Conta
   /**
    * {@inheritdoc}
    */
-  public function validate($items, Constraint $constraint): void {
-    /** @var \Drupal\Core\Field\FieldItemListInterface $items */
-    if ($items->isEmpty()) {
+  public function validate($value, Constraint $constraint): void {
+    if ($value->isEmpty()) {
       return;
     }
 
-    $glossary_term = $items->getEntity();
-    $field_definition = $items->getFieldDefinition();
-    if (!$glossary_term instanceof GlossaryTermInterface || $field_definition->getName() !== 'field_glossary_synonyms') {
+    $glossaryTerm = $value->getEntity();
+    $fieldDefinition = $value->getFieldDefinition();
+    if (!$glossaryTerm instanceof GlossaryTermInterface || $fieldDefinition->getName() !== 'field_glossary_synonyms') {
       throw new \InvalidArgumentException("The 'GlossaryTermSynonyms' can be used only on field 'field_glossary_synonyms' of glossary terms.");
     }
 
-    $glossary_term_label_lowercased = \mb_strtolower($glossary_term->label());
+    $labelLowercase = \mb_strtolower($glossaryTerm->label());
     $synonyms = [];
-    foreach ($items as $item) {
-      $synonym_lowercased = \mb_strtolower($item->value);
-      if ($synonym_lowercased === $glossary_term_label_lowercased) {
-        // Don' allow synonyms with the same name as the glossary term name.
+    foreach ($value as $item) {
+      $synonymLowercase = \mb_strtolower($item->value);
+      if ($synonymLowercase === $labelLowercase) {
+        // Do not allow synonyms with the same name as the glossary term name.
         $this->context->addViolation($constraint->messageSameAsTermName, [
-          '%name' => $glossary_term->label(),
+          '%name' => $glossaryTerm->label(),
         ]);
       }
-      if (in_array($synonym_lowercased, $synonyms, TRUE)) {
+      if (in_array($synonymLowercase, $synonyms, TRUE)) {
         // Don't allow synonym duplication.
         $this->context->addViolation($constraint->messageDuplicate, [
           '%synonym' => $item->value,
         ]);
       }
-      $synonyms[$synonym_lowercased] = $item->value;
+      $synonyms[$synonymLowercase] = $item->value;
     }
 
     $storage = $this->entityTypeManager->getStorage('node');
     $query = $storage->getQuery()->accessCheck(FALSE)
       ->condition('type', 'glossary')
-      ->condition('og_audience', $glossary_term->get('og_audience')->target_id);
-    if ($glossary_term_id = $glossary_term->id()) {
+      ->condition('og_audience', $glossaryTerm->get('og_audience')->target_id);
+    if ($glossaryTermId = $glossaryTerm->id()) {
       // On update, filter out the current entity.
-      $query->condition('nid', $glossary_term_id, '<>');
+      $query->condition('nid', $glossaryTermId, '<>');
     }
     $nids = array_values($query->execute());
 
-    $other_glossary_term_synonyms = [];
-    foreach ($storage->loadMultiple($nids) as $other_glossary_term) {
-      foreach ($other_glossary_term->get('field_glossary_synonyms') as $item) {
+    $otherSynonyms = [];
+    foreach ($storage->loadMultiple($nids) as $otherGlossaryTerm) {
+      foreach ($otherGlossaryTerm->get('field_glossary_synonyms') as $item) {
         // We do a case-insensitive match.
-        $other_glossary_term_synonyms[\mb_strtolower($item->value)] = $other_glossary_term;
+        $otherSynonyms[\mb_strtolower($item->value)] = $otherGlossaryTerm;
       }
     }
 
-    $used_synonyms = [];
-    foreach ($other_glossary_term_synonyms as $other_glossary_term) {
-      $other_glossary_term_label_lowercased = \mb_strtolower($other_glossary_term->label());
-      if (isset($synonyms[$other_glossary_term_label_lowercased])) {
-        $used_synonyms[$other_glossary_term_label_lowercased] = [
-          'synonym' => $synonyms[$other_glossary_term_label_lowercased],
-          'entity' => $other_glossary_term,
+    $usedSynonyms = [];
+    foreach ($otherSynonyms as $otherGlossaryTerm) {
+      $otherLabelLowercase = \mb_strtolower($otherGlossaryTerm->label());
+      if (isset($synonyms[$otherLabelLowercase])) {
+        $usedSynonyms[$otherLabelLowercase] = [
+          'synonym' => $synonyms[$otherLabelLowercase],
+          'entity' => $otherGlossaryTerm,
         ];
       }
-      foreach ($other_glossary_term->get('field_glossary_synonyms') as $item) {
-        $other_glossary_term_synonym_lowercased = \mb_strtolower($item->value);
-        if (isset($synonyms[$other_glossary_term_synonym_lowercased])) {
-          $used_synonyms[$other_glossary_term_synonym_lowercased] = [
-            'synonym' => $synonyms[$other_glossary_term_synonym_lowercased],
-            'entity' => $other_glossary_term,
+      foreach ($otherGlossaryTerm->get('field_glossary_synonyms') as $item) {
+        $otherGlossarySynonymLowercase = \mb_strtolower($item->value);
+        if (isset($synonyms[$otherGlossarySynonymLowercase])) {
+          $usedSynonyms[$otherGlossarySynonymLowercase] = [
+            'synonym' => $synonyms[$otherGlossarySynonymLowercase],
+            'entity' => $otherGlossaryTerm,
           ];
         }
       }
     }
 
-    if ($used_synonyms) {
+    if ($usedSynonyms) {
       $args = [];
       $delta = 0;
       $occurrences = [];
       // Build a readable list of already used synonyms.
-      foreach ($used_synonyms as $data) {
-        $synonym_placeholder = "%synonym_{$delta}";
-        $url_placeholder = ":url_{$delta}";
-        $label_placeholder = "@label_{$delta}";
-        $occurrences[] = "{$synonym_placeholder} in <a href=\"{$url_placeholder}\">{$label_placeholder}</a>";
+      foreach ($usedSynonyms as $data) {
+        $synonymPlaceholder = "%synonym_{$delta}";
+        $urlPlaceholder = ":url_{$delta}";
+        $labelPlaceholder = "@label_{$delta}";
+        $occurrences[] = "{$synonymPlaceholder} in <a href=\"{$urlPlaceholder}\">{$labelPlaceholder}</a>";
         $args += [
-          $synonym_placeholder => $data['synonym'],
-          $url_placeholder => $data['entity']->toUrl()->toString(),
-          $label_placeholder => $data['entity']->label(),
+          $synonymPlaceholder => $data['synonym'],
+          $urlPlaceholder => $data['entity']->toUrl()->toString(),
+          $labelPlaceholder => $data['entity']->label(),
         ];
         $delta++;
       }

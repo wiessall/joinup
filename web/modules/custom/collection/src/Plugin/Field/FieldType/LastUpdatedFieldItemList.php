@@ -17,7 +17,7 @@ class LastUpdatedFieldItemList extends FieldItemList {
   /**
    * {@inheritdoc}
    */
-  public function computeValue() {
+  public function computeValue(): void {
     $this->list[0] = $this->createItem(0, $this->collectionLastUpdate());
   }
 
@@ -37,7 +37,7 @@ class LastUpdatedFieldItemList extends FieldItemList {
    * @return int
    *   Last updated timestamp.
    */
-  protected function collectionLastUpdate() {
+  protected function collectionLastUpdate(): int {
     /** @var \Drupal\collection\Entity\CollectionInterface $collection */
     $collection = $this->getEntity();
 

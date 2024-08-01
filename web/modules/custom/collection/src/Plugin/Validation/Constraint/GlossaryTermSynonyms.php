@@ -21,20 +21,20 @@ class GlossaryTermSynonyms extends Constraint {
    *
    * @var string
    */
-  public $messageSameAsTermName = "A synonym cannot be the same as the glossary term name (%name).";
+  public string $messageSameAsTermName = "A synonym cannot be the same as the glossary term name (%name).";
 
   /**
    * The violation message for duplicate synonyms.
    *
    * @var string
    */
-  public $messageDuplicate = "The '%synonym' synonym is duplicated. Keep only one entry.";
+  public string $messageDuplicate = "The '%synonym' synonym is duplicated. Keep only one entry.";
 
   /**
    * The violation message for synonyms already in other glossary terms.
    *
    * @var string
    */
-  public $messageInOtherTerms = 'Some synonyms are already used in other glossary terms either as term name or as term synonyms: ';
+  public string $messageInOtherTerms = 'Some synonyms are already used in other glossary terms either as term name or as term synonyms: ';
 
 }

@@ -36,7 +36,7 @@ class ArchivedCollectionAccessCheck implements AccessInterface {
       throw new \Exception("Invalid value '{$requirement}' for route '_archived_collection' requirement.");
     }
 
-    $collection = $route_match->getParameter('rdf_entity');
+    $collection = $route_match->getParameter('node');
 
     // If the collection is archived, content creation is not allowed.
     if ($collection instanceof CollectionInterface && $collection->getWorkflowState() === 'archived') {

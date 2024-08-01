@@ -9,7 +9,8 @@ use Behat\Mink\Exception\ElementNotFoundException;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
-use Drupal\joinup_collection\Entity\CollectionInterface;
+use Drupal\collection\Entity\CollectionInterface;
+use Drupal\collection\JoinupCollectionHelper;
 use Drupal\joinup\Traits\EntityReferenceTrait;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\FileTrait;
@@ -21,7 +22,6 @@ use Drupal\joinup\Traits\TopicTrait;
 use Drupal\joinup\Traits\UserTrait;
 use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\joinup\Traits\WorkflowTrait;
-use Drupal\joinup_collection\JoinupCollectionHelper;
 use Drupal\joinup_community_content\CommunityContentHelper;
 use Drupal\joinup_group\ContentCreationOptions;
 use Drupal\og\OgRoleInterface;
@@ -258,7 +258,7 @@ class CollectionContext extends RawDrupalContext {
    * @param array $values
    *   An optional associative array of values, keyed by property name.
    *
-   * @return \Drupal\joinup_collection\Entity\CollectionInterface
+   * @return \Drupal\collection\Entity\CollectionInterface
    *   A new collection entity.
    *
    * @throws \Exception
@@ -281,7 +281,7 @@ class CollectionContext extends RawDrupalContext {
 
     $this->setFallbackTopic($values);
 
-    /** @var \Drupal\joinup_collection\Entity\CollectionInterface $collection */
+    /** @var \Drupal\collection\Entity\CollectionInterface $collection */
     $collection = $this->createRdfEntity('collection', $values);
 
     if ($is_featured) {
@@ -634,7 +634,7 @@ class CollectionContext extends RawDrupalContext {
 
     $failures = [];
     foreach ($this->explodeCommaSeparatedStepArgument($labels) as $label) {
-      /** @var \Drupal\joinup_collection\Entity\CollectionInterface $collection */
+      /** @var \Drupal\collection\Entity\CollectionInterface $collection */
       $collection = $this->getEntityByLabel('rdf_entity', $label, 'collection');
       if (!$collection->getMembership((int) $account->id(), [])) {
         $failures[] = $label;
@@ -667,7 +667,7 @@ class CollectionContext extends RawDrupalContext {
   /**
    * Creates the standard 'Joinup' collection.
    *
-   * @return \Drupal\joinup_collection\Entity\CollectionInterface
+   * @return \Drupal\collection\Entity\CollectionInterface
    *   The 'Joinup' collection.
    *
    * @BeforeScenario @joinup_collection&&@api

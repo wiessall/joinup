@@ -18,12 +18,9 @@
           try {
             const collectionId = decodeURIComponent(encodedCollectionId);
             if (collectionId === drupalSettings.joinGroupData.id) {
-              const { sparqlEncodedId } = drupalSettings.joinGroupData;
-              if (sparqlEncodedId) {
-                Drupal.ajax({
-                  url: `${drupalSettings.path.baseUrl}ajax/collection/${id}/subscribe/auth`,
-                }).execute();
-              }
+              Drupal.ajax({
+                url: `${drupalSettings.path.baseUrl}ajax/collection/${id}/subscribe/auth`,
+              }).execute();
             }
           } catch (err) {
             // Collection ID was not URL encoded. Remove the invalid cookie.
