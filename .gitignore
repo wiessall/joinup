@@ -58,4 +58,5 @@
 
 # Used by the CI for artifacts.
 /debug/
-.twig-cs-fixer.cache
+/.twig-cs-fixer.cache
+/.phpstan.neon
