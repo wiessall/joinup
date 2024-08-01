@@ -275,7 +275,7 @@ abstract class InviteFormBase extends FormBase {
             '@group' => $this->entity->label(),
             '@user' => $this->currentUser()->getDisplayName(),
             'type' => 'joinup:invite_member',
-            'actor' => $this->currentUser()->id(),
+            'actor' => $user->id(),
           ]);
         }
         $results[$result_status]++;

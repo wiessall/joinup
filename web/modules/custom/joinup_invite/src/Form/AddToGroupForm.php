@@ -61,7 +61,7 @@ class AddToGroupForm extends GroupFormBase {
         '@user' => $this->currentUser()->getDisplayName(),
         '@group' => $this->entity->label(),
         'type' => 'joinup:add_member',
-        'actor' => $this->currentUser()->id(),
+        'actor' => $user->id(),
       ]);
       $this->logger->info('Successfully added the @role role in @group to @actor by @user.', [
         '@actor' => $user->getDisplayName(),
@@ -69,7 +69,7 @@ class AddToGroupForm extends GroupFormBase {
         '@user' => $this->currentUser()->getDisplayName(),
         '@group' => $this->entity->label(),
         'type' => 'joinup:add_role',
-        'actor' => $this->currentUser()->id(),
+        'actor' => $user->id(),
       ]);
     }
 
