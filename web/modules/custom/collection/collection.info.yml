@@ -1,13 +1,14 @@
-name: Collection
-description: 'Provides Collections for the Joinup project.'
+name: 'Joinup collection'
 type: module
+description: 'Contains functionality related to the collection bundle.'
 package: Joinup
-core_version_requirement: ">= 9.4"
+core_version_requirement: ">= 10"
 dependencies:
   - drupal:datetime
   - drupal:image
   - drupal:link
   - drupal:meta_entity
+  - drupal:node
   - drupal:options
   - drupal:text
   - facets:facets
@@ -21,6 +22,5 @@ dependencies:
   - joinup:oe_newsroom_newsletter
   - joinup:owner
   - joinup:search_api_field
-  - rdf_entity:rdf_entity
   - smart_trim:smart_trim
   - state_machine:state_machine

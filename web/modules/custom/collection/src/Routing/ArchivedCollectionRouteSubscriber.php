@@ -15,7 +15,7 @@ class ArchivedCollectionRouteSubscriber extends RouteSubscriberBase {
   /**
    * {@inheritdoc}
    */
-  protected function alterRoutes(RouteCollection $collection) {
+  protected function alterRoutes(RouteCollection $collection): void {
     if ($route = $collection->get('joinup_group.add_content')) {
       $route->setRequirement('_archived_collection', 'TRUE');
     }

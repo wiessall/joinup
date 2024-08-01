@@ -6,7 +6,7 @@ namespace Drupal\state_machine_permissions\Guard;
 
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\joinup_collection\Entity\CollectionInterface;
+use Drupal\collection\Entity\CollectionInterface;
 use Drupal\contact_information\Entity\ContactInformationInterface;
 use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\joinup_workflow\TransitionGuardTrait;

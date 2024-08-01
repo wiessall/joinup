@@ -32,27 +32,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class Glossary extends FilterBase implements ContainerFactoryPluginInterface {
 
   /**
-   * The OG context service.
-   *
-   * @var \Drupal\og\OgContextInterface
-   */
-  protected $ogContext;
-
-  /**
-   * The entity type manager service.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
-
-  /**
-   * The logger.
-   *
-   * @var \Psr\Log\LoggerInterface
-   */
-  protected $logger;
-
-  /**
    * Constructs a new filter plugin instance.
    *
    * @param array $configuration
@@ -61,18 +40,22 @@ class Glossary extends FilterBase implements ContainerFactoryPluginInterface {
    *   The plugin_id for the plugin instance.
    * @param mixed $plugin_definition
    *   The plugin implementation definition.
-   * @param \Drupal\og\OgContextInterface $og_context
+   * @param \Drupal\og\OgContextInterface $ogContext
    *   The OG context service.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity type manager service.
    * @param \Psr\Log\LoggerInterface $logger
    *   The logger.
    */
-  public function __construct(array $configuration, string $plugin_id, $plugin_definition, OgContextInterface $og_context, EntityTypeManagerInterface $entity_type_manager, LoggerInterface $logger) {
+  public function __construct(
+    array $configuration,
+    string $plugin_id,
+    $plugin_definition,
+    protected OgContextInterface $ogContext,
+    protected EntityTypeManagerInterface $entityTypeManager,
+    protected LoggerInterface $logger,
+  ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
-    $this->ogContext = $og_context;
-    $this->entityTypeManager = $entity_type_manager;
-    $this->logger = $logger;
   }
 
   /**
@@ -261,7 +244,6 @@ class Glossary extends FilterBase implements ContainerFactoryPluginInterface {
    * @see https://www.drupal.org/project/drupal/issues/226963
    */
   protected function getCollection(): ?CollectionInterface {
-    $group = NULL;
     if ($group = $this->ogContext->getGroup()) {
       // Other kind of group? Maybe a solution which is collection content?
       if ($group instanceof CollectionContentInterface) {

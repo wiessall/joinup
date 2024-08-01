@@ -15,13 +15,12 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Url;
 use Drupal\joinup_core\Event\AjaxCommandEvent;
 use Drupal\joinup_subscription\JoinupSubscriptionsHelper;
+use Drupal\node\NodeInterface;
 use Drupal\og\MembershipManagerInterface;
 use Drupal\og\OgMembershipInterface;
-use Drupal\rdf_entity\RdfInterface;
 use Drupal\user\UserInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -39,69 +38,36 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class SubscribeToCollectionForm extends FormBase {
 
   /**
-   * The entity type manager service.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected EntityTypeManagerInterface $entityTypeManager;
-
-  /**
-   * The membership manager service.
-   *
-   * @var \Drupal\og\MembershipManagerInterface
-   */
-  protected MembershipManagerInterface $membershipManager;
-
-  /**
-   * The form builder.
-   *
-   * @var \Drupal\Core\Form\FormBuilderInterface
-   */
-  protected FormBuilderInterface $formBuilder;
-
-  /**
-   * The time keeping service.
-   *
-   * @var \Drupal\Component\Datetime\TimeInterface
-   */
-  protected TimeInterface $time;
-
-  /**
-   * The event dispatcher service.
-   *
-   * @var \Psr\EventDispatcher\EventDispatcherInterface
-   */
-  protected EventDispatcherInterface $eventDispatcher;
-
-  /**
    * Constructs a SubscribeToCollectionForm.
    *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity type manager service.
-   * @param \Drupal\og\MembershipManagerInterface $membership_manager
+   * @param \Drupal\og\MembershipManagerInterface $membershipManager
    *   The membership manager service.
    * @param \Drupal\Core\Messenger\MessengerInterface $messenger
    *   The messenger service.
-   * @param \Drupal\Core\Form\FormBuilderInterface $form_builder
+   * @param \Drupal\Core\Form\FormBuilderInterface $formBuilder
    *   The form builder.
    * @param \Drupal\Component\Datetime\TimeInterface $time
    *   The time keeping service.
-   * @param \Psr\EventDispatcher\EventDispatcherInterface $event_dispatcher
+   * @param \Psr\EventDispatcher\EventDispatcherInterface $eventDispatcher
    *   The event dispatcher service.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, MembershipManagerInterface $membership_manager, MessengerInterface $messenger, FormBuilderInterface $form_builder, TimeInterface $time, EventDispatcherInterface $event_dispatcher) {
-    $this->entityTypeManager = $entity_type_manager;
-    $this->membershipManager = $membership_manager;
-    $this->messenger = $messenger;
-    $this->formBuilder = $form_builder;
-    $this->time = $time;
-    $this->eventDispatcher = $event_dispatcher;
-  }
+  public function __construct(
+    protected EntityTypeManagerInterface $entityTypeManager,
+    protected MembershipManagerInterface $membershipManager,
+    // Defining the type for $messenger is not allowed here due to how it is
+    // defined in the paren class.
+    protected $messenger,
+    protected FormBuilderInterface $formBuilder,
+    protected TimeInterface $time,
+    protected EventDispatcherInterface $eventDispatcher,
+  ) {}
 
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container) {
+  public static function create(ContainerInterface $container): self {
     return new static(
       $container->get('entity_type.manager'),
       $container->get('og.membership_manager'),
@@ -122,16 +88,16 @@ class SubscribeToCollectionForm extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state, ?RdfInterface $rdf_entity = NULL): array {
+  public function buildForm(array $form, FormStateInterface $form_state, ?NodeInterface $node = NULL): array {
     // This form should only be accessible if the user is already a member of
     // the collection.
-    $membership = $this->getUserNonBlockedMembership($rdf_entity);
+    $membership = $this->getUserNonBlockedMembership($node);
     $form['#access'] = (bool) $membership;
 
     // Keep track of the collection we are subscribing to.
     $form['collection_id'] = [
       '#type' => 'value',
-      '#value' => $rdf_entity->id(),
+      '#value' => $node->id(),
     ];
 
     // Check if the user is pending, so we can adapt the messages for the user.
@@ -181,7 +147,7 @@ class SubscribeToCollectionForm extends FormBase {
       '#ajax' => [
         'callback' => '::confirmSubscription',
         'url' => Url::fromRoute('collection.subscribe_to_collection_form', [
-          'rdf_entity' => $rdf_entity->id(),
+          'node' => $node->id(),
         ]),
         'options' => [
           'query' => [
@@ -272,22 +238,22 @@ class SubscribeToCollectionForm extends FormBase {
   /**
    * Access check for the form.
    *
-   * @param \Drupal\rdf_entity\RdfInterface $rdf_entity
+   * @param \Drupal\node\NodeInterface $node
    *   The collection for which to check access.
    *
    * @return \Drupal\Core\Access\AccessResultInterface
    *   The access result.
    */
-  public function access(RdfInterface $rdf_entity): AccessResultInterface {
+  public function access(NodeInterface $node): AccessResultInterface {
     $user = $this->getUser();
-    return AccessResult::allowedIf($user->isAuthenticated() && !empty($this->getUserNonBlockedMembership($rdf_entity)));
+    return AccessResult::allowedIf($user->isAuthenticated() && !empty($this->getUserNonBlockedMembership($node)));
   }
 
   /**
    * Access check for showing the subscribe form after authenticating a user.
    *
    * When an anonymous user wants to join a collection they first need to log in
-   * and are then redirected back to the collection homepage so they can opt in
+   * and are then redirected back to the collection homepage, so they can opt in
    * to the notification subscription. The desired collection is tracked in a
    * cookie. At the moment the user is logged in they will immediately become a
    * member of the collection but still need to opt in to notifications.
@@ -297,7 +263,7 @@ class SubscribeToCollectionForm extends FormBase {
    * - The cookie tracks this collection.
    * - The user is an unblocked member of the collection.
    *
-   * @param \Drupal\rdf_entity\RdfInterface $rdf_entity
+   * @param \Drupal\node\NodeInterface $collection
    *   The collection the user has joined.
    *
    * @return \Drupal\Core\Access\AccessResultInterface
@@ -305,13 +271,13 @@ class SubscribeToCollectionForm extends FormBase {
    *
    * @see \Drupal\joinup_group\EventSubscriber\JoinGroupSubscriber::onLogin()
    */
-  public function accessToSubscribeDialogAfterAuthenticating(RdfInterface $rdf_entity): AccessResultInterface {
+  public function accessToSubscribeDialogAfterAuthenticating(NodeInterface $collection): AccessResultInterface {
     $cookie_id = $this->getRequest()->cookies->get('join_group', '');
     $user = $this->getUser();
     return AccessResult::allowedIf(
-      $cookie_id === $rdf_entity->id()
+      $cookie_id === $collection->id()
       && $user->isAuthenticated()
-      && !empty($this->getUserNonBlockedMembership($rdf_entity))
+      && !empty($this->getUserNonBlockedMembership($collection))
     );
   }
 
@@ -321,16 +287,16 @@ class SubscribeToCollectionForm extends FormBase {
    * This is shown in response to a cookie being present which was set when the
    * user expressed their desire to join the collection before they logged in.
    *
-   * @param \Drupal\rdf_entity\RdfInterface $rdf_entity
+   * @param \Drupal\node\NodeInterface $collection
    *   The collection the user has joined.
    *
    * @return \Drupal\Core\Ajax\AjaxResponse
    *   The AJAX response.
    */
-  public function showSubscribeDialog(RdfInterface $rdf_entity): AjaxResponse {
-    $title = $this->t('Welcome to %collection', ['%collection' => $rdf_entity->label()]);
+  public function showSubscribeDialog(NodeInterface $collection): AjaxResponse {
+    $title = $this->t('Welcome to %collection', ['%collection' => $collection->label()]);
 
-    $modal_form = $this->formBuilder->getForm(SubscribeToCollectionForm::class, $rdf_entity);
+    $modal_form = $this->formBuilder->getForm(SubscribeToCollectionForm::class, $collection);
     $modal_form['#attached']['library'][] = 'core/drupal.dialog.ajax';
 
     $response = new AjaxResponse();
@@ -359,13 +325,13 @@ class SubscribeToCollectionForm extends FormBase {
   /**
    * Returns a membership of the user that is active or pending.
    *
-   * @param \Drupal\rdf_entity\RdfInterface $collection
+   * @param \Drupal\node\NodeInterface $collection
    *   The group entity.
    *
    * @return \Drupal\og\OgMembershipInterface|null
    *   The membership of the user or null.
    */
-  protected function getUserNonBlockedMembership(RdfInterface $collection): ?OgMembershipInterface {
+  protected function getUserNonBlockedMembership(NodeInterface $collection): ?OgMembershipInterface {
     return $this->membershipManager->getMembership($collection, $this->getUser()->id(), [
       OgMembershipInterface::STATE_ACTIVE,
       OgMembershipInterface::STATE_PENDING,
@@ -378,11 +344,11 @@ class SubscribeToCollectionForm extends FormBase {
    * @param string $collection_id
    *   The collection ID.
    *
-   * @return \Drupal\rdf_entity\RdfInterface
+   * @return \Drupal\node\NodeInterface
    *   The collection.
    */
-  protected function loadCollection(string $collection_id): RdfInterface {
-    return $this->entityTypeManager->getStorage('rdf_entity')->load($collection_id);
+  protected function loadCollection(string $collection_id): NodeInterface {
+    return $this->entityTypeManager->getStorage('node')->load($collection_id);
   }
 
   /**

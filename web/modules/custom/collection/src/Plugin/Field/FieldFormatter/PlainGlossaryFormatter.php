@@ -44,7 +44,16 @@ final class PlainGlossaryFormatter extends FormatterBase {
    * @param \Drupal\filter\FilterPluginManager $filterPluginManager
    *   The filter plugin manager service.
    */
-  public function __construct($plugin_id, $plugin_definition, FieldDefinitionInterface $field_definition, array $settings, $label, $view_mode, array $third_party_settings, protected FilterPluginManager $filterPluginManager) {
+  public function __construct(
+    $plugin_id,
+    $plugin_definition,
+    FieldDefinitionInterface $field_definition,
+    array $settings,
+    $label,
+    $view_mode,
+    array $third_party_settings,
+    protected FilterPluginManager $filterPluginManager,
+  ) {
     parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $label, $view_mode, $third_party_settings);
   }
 

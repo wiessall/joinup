@@ -21,7 +21,6 @@ trait NodeCollectionContentTrait {
     if (!$group instanceof CollectionInterface) {
       return $group->getCollection();
     }
-    /** @var \Drupal\collection\Entity\CollectionInterface $group */
     return $group;
   }
 
