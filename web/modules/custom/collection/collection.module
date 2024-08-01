@@ -24,6 +24,7 @@ use Drupal\collection\Entity\CollectionInterface;
 use Drupal\collection\Entity\GlossaryTerm;
 use Drupal\collection\Plugin\Field\FieldType\LastUpdatedFieldItemList;
 use Drupal\joinup_subscription\JoinupSubscriptionsHelper;
+use Drupal\node\Entity\Node;
 use Drupal\node\Entity\NodeType;
 use Drupal\node\NodeInterface;
 use Drupal\oe_newsroom_newsletter\Form\NewsletterSubscribeForm;
@@ -31,7 +32,6 @@ use Drupal\og\Entity\OgRole;
 use Drupal\og\Og;
 use Drupal\og\OgMembershipInterface;
 use Drupal\og\OgRoleInterface;
-use Drupal\rdf_entity\Entity\Rdf;
 
 /**
  * Implements hook_entity_type_alter().
@@ -333,8 +333,8 @@ function collection_node_delete(NodeInterface $node): void {
     return;
   }
 
-  /** @var \Drupal\rdf_entity\RdfInterface $group */
-  if (!$node->get('og_audience')->isEmpty() && ($group = Rdf::load($node->get('og_audience')->target_id)) && $group->bundle() === 'collection') {
+  /** @var \Drupal\node\NodeInterface $group */
+  if (!$node->get('og_audience')->isEmpty() && ($group = Node::load($node->get('og_audience')->target_id)) && $group->bundle() === 'collection') {
     // Touch the parent collection in order to update its changed timestamp.
     $group->skip_notification = TRUE;
     $group->setChangedTime(\Drupal::time()->getRequestTime())->save();
@@ -351,15 +351,13 @@ function collection_form_meta_entity_collection_settings_form_alter(array &$form
 
 /**
  * Implements hook_preprocess_HOOK().
- *
- * @todo rename the hook for node and content_listing.
  */
-function collection_preprocess_search_api_field__rdf_entity__field_collection_content__collection(array &$variables): void {
+function collection_preprocess_search_api_field__node__listing_content__collection(array &$variables): void {
   /** @var \Drupal\collection\Entity\CollectionInterface $collection */
   $collection = $variables['entity'];
 
   /** @var \Drupal\oe_newsroom_newsletter\Plugin\Field\FieldType\NewsletterItem $newsletter_field_item */
-  $newsletter_field_item = $collection->get('field_newsletter')->first();
+  $newsletter_field_item = $collection->get('newsletter')->first();
 
   $variables['newsletter_enabled'] = $newsletter_field_item && !$newsletter_field_item->isEmpty() && $newsletter_field_item->isEnabled();
 
