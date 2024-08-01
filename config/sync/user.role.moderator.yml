@@ -207,6 +207,7 @@ permissions:
   - 'feature entity'
   - 'filter membership overview'
   - 'manage custom landing pages'
+  - 'manage group add members'
   - 'manage group announcements'
   - 'manage group content'
   - 'manage newsroom newsletter subscriptions'
