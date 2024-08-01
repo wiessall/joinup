@@ -8,11 +8,13 @@ dependencies:
 id: bookmark_node
 label: 'Bookmark (Content)'
 bundles:
+  - collection
   - custom_page
   - discussion
   - document
   - event
   - news
+  - solution
 entity_type: node
 global: false
 flag_short: Bookmark

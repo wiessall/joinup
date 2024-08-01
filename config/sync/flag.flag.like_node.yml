@@ -13,6 +13,7 @@ bundles:
   - document
   - event
   - news
+  - solution
 entity_type: node
 global: false
 flag_short: Like
