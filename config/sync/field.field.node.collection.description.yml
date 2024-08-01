@@ -1,0 +1,24 @@
+uuid: 1a11b5e3-585a-44f0-86fa-b2324160b7f2
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.description
+    - filter.format.content_editor
+    - node.type.collection
+  module:
+    - text
+id: node.collection.description
+field_name: description
+entity_type: node
+bundle: collection
+label: Description
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  allowed_formats:
+    - content_editor
+field_type: text_long

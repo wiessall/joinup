@@ -3,27 +3,32 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.field.node.collection.body
+    - field.field.node.collection.abstract
+    - field.field.node.collection.access_url
+    - field.field.node.collection.closed_group
+    - field.field.node.collection.contact
+    - field.field.node.collection.content_creation
+    - field.field.node.collection.description
+    - field.field.node.collection.field_keywords
+    - field.field.node.collection.field_state
+    - field.field.node.collection.field_topic
+    - field.field.node.collection.group_moderation
+    - field.field.node.collection.listing_content
+    - field.field.node.collection.logo
+    - field.field.node.collection.newsletter
+    - field.field.node.collection.owner
+    - field.field.node.collection.short_id
+    - field.field.node.collection.site_featured
+    - field.field.node.collection.spatial_coverage
     - node.type.collection
   module:
     - path
     - publication_date
-    - text
 id: node.collection.default
 targetEntityType: node
 bundle: collection
 mode: default
 content:
-  body:
-    type: text_textarea_with_summary
-    weight: 121
-    region: content
-    settings:
-      rows: 9
-      summary_rows: 3
-      placeholder: ''
-      show_summary: false
-    third_party_settings: {  }
   created:
     type: datetime_timestamp
     weight: 10
@@ -99,5 +104,22 @@ content:
     settings: {  }
     third_party_settings: {  }
 hidden:
+  abstract: true
+  access_url: true
+  closed_group: true
+  contact: true
+  content_creation: true
   current_workflow_state: true
+  description: true
+  field_keywords: true
+  field_state: true
+  field_topic: true
+  group_moderation: true
+  listing_content: true
+  logo: true
+  newsletter: true
+  owner: true
+  short_id: true
+  site_featured: true
+  spatial_coverage: true
   uri: true

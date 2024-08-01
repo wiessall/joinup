@@ -1,0 +1,21 @@
+uuid: 3b365b18-0817-4b4f-beb1-8cee15d8c20c
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.site_featured
+    - node.type.collection
+id: node.collection.site_featured
+field_name: site_featured
+entity_type: node
+bundle: collection
+label: 'Site featured'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

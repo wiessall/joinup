@@ -1,0 +1,19 @@
+uuid: b82c9939-ac84-4dc2-9541-49910f470efe
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - oe_newsroom_newsletter
+id: node.newsletter
+field_name: newsletter
+entity_type: node
+type: oe_newsroom_newsletter
+settings: {  }
+module: oe_newsroom_newsletter
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

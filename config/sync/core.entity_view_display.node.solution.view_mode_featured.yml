@@ -73,6 +73,11 @@ content:
         template_suggestion: ''
     weight: 1
     region: content
+  flag_like_node:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 10
+    region: content
   logo:
     type: image
     label: hidden

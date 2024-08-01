@@ -38,6 +38,11 @@ targetEntityType: node
 bundle: solution
 mode: digest_message_header
 content:
+  flag_like_node:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 10
+    region: content
   og_group:
     type: og_group_subscribe
     label: above
