@@ -153,7 +153,7 @@ class InvitationAcceptanceForm extends FormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state): void {
-    $subscribe = (bool) $form_state->getValue('subscribe', 0);
+    $subscribe = (bool) $form_state->getValue('subscribe');
 
     /** @var \Drupal\joinup_invite\Entity\InvitationInterface $invitation */
     $invitation = $this->currentRouteMatch->getParameter('invitation');
