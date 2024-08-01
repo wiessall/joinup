@@ -53,7 +53,7 @@ class BusinessHandler extends AbstractProcessingHandler implements DestructableI
     foreach ($this->records as $record) {
       $logStorage->create(
         [
-          'group' => $record->context['group'] ?? $group?->id(),
+          'group' => $group?->id(),
           'type' => $record->context['type'] ?? NULL,
           'message' => $record->message,
           'severity' => $record->level->toRFC5424Level(),
