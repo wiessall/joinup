@@ -234,7 +234,6 @@ class AnnouncementForm extends FormBase {
         '@subject' => $form_state->getValue('subject'),
         '@group' => $this->announcement->getGroup()->label(),
         'type' => 'joinup:add_announcement',
-        'actor' => $this->currentUser()->id(),
       ]);
     }
 
