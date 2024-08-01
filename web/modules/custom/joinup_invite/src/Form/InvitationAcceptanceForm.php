@@ -95,7 +95,9 @@ class InvitationAcceptanceForm extends FormBase {
       ),
     ];
 
-    if ($group instanceof CollectionInterface && $codeOfConduct = $group->getCodeOfConduct()) {
+    if ($group instanceof CollectionInterface &&
+      $group->hasCodeOfConductToAccept() &&
+      $codeOfConduct = $group->getCodeOfConduct()) {
       $args = [
         ':url' => $codeOfConduct->toUrl()->toString(),
         '%label' => $codeOfConduct->label(),
