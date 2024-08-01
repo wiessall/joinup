@@ -73,6 +73,7 @@ class Collection extends Node implements CollectionInterface {
 
   /**
    * {@inheritdoc}
+   *
    * @todo Get rid of the $onlyPublished parameter as it is only used once.
    * @todo Probably get rid of the method as we will have a computed field.
    * @todo Make sure that access is enforced in the computed field.

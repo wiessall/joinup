@@ -32,9 +32,6 @@ use Drupal\og\Og;
 use Drupal\og\OgMembershipInterface;
 use Drupal\og\OgRoleInterface;
 use Drupal\rdf_entity\Entity\Rdf;
-use Drupal\rdf_entity\Entity\RdfEntityType;
-use Drupal\rdf_entity\RdfInterface;
-use Drupal\sparql_entity_storage\SparqlGraphInterface;
 
 /**
  * Implements hook_entity_type_alter().
@@ -212,13 +209,12 @@ function joinup_collection_node_presave(NodeInterface $entity): void {
  */
 function joinup_collection_node_update(EntityInterface $entity): void {
   // @todo Remove this as it is not needed anymore.
-  //  if (!$entity instanceof CollectionInterface || !\Drupal::service('sparql.graph_handler')->bundleHasGraph('rdf_entity', 'collection', 'draft')) {
+  //   if (!$entity instanceof CollectionInterface || !\Drupal::service('sparql.graph_handler')->bundleHasGraph('rdf_entity', 'collection', 'draft')) {
   //  return;
   //  }
-
-  //  if ($entity->getWorkflowState() === 'published') {
+  // if ($entity->getWorkflowState() === 'published') {
   //  \Drupal::entityTypeManager()->getStorage('rdf_entity')->deleteFromGraph([$entity], 'draft');
-  //  }
+  //  }.
 }
 
 /**

@@ -615,8 +615,6 @@ function joinup_rdf_deploy_111104(): void {
   $endpoint->query('CLEAR GRAPH <http://joinup.eu/asset_release/draft>');
 }
 
-
-
 /**
  * Loads or creates a solution from the database.
  *
@@ -654,7 +652,6 @@ function _joinup_rdf_create_or_update_solution(string $id, array $values): NodeI
   $solution->set('field_keywords', $values['http://www.w3.org/ns/dcat#keyword'] ?? []);
   $solution->set('documentation', $values['http://xmlns.com/foaf/0.1/page'][0] ?? NULL);
   $solution->set('langcode', $values['http://joinup.eu/language'][0] ?? 'en');
-
 
   // Key is the source field name, value is the target field name. Null target
   // means skip.
@@ -712,55 +709,55 @@ function _joinup_rdf_create_or_update_solution(string $id, array $values): NodeI
     'field_topic' => 'field_topic',
   ];
 
-    $solution-> = Node::create([
-      'type' => 'release',
-      'title' => strlen($values['http://purl.org/dc/terms/title'][0]) > 255
-        ? substr($values['http://purl.org/dc/terms/title'][0], 0, 255)
-        : $values['http://purl.org/dc/terms/title'][0],
-      'uri' => $uri,
-      'og_audience' => $solution->id(),
-      'created' => $values['http://purl.org/dc/terms/issued'][0]->getTimestamp(),
-      'changed' => $values['http://purl.org/dc/terms/modified'][0]->getTimestamp(),
-      'published_at' => $values['http://purl.org/dc/terms/issued'][0]->getTimestamp(),
-      'description' => [
-        'value' => $values['http://www.w3.org/ns/adms#versionNotes'][0] ?? '',
-        'format' => 'content_editor',
-      ],
-      'release_number' => $values['http://www.w3.org/2002/07/owl#versionInfo'][0] ?? '',
-      'field_state' => $values['http://joinup.eu/isr/workflow_status'][0],
-      'field_keywords' => $values['http://www.w3.org/ns/dcat#keyword'] ?? [],
-      'documentation' => $values['http://xmlns.com/foaf/0.1/page'][0] ?? NULL,
-      'langcode' => $values['http://joinup.eu/language'][0] ?? 'en',
-    ]);
-    $release_node->set('solution_data', $sandbox['solution_stubs'][$solution_uri]);
+  $solution-> = Node::create([
+    'type' => 'release',
+    'title' => strlen($values['http://purl.org/dc/terms/title'][0]) > 255
+      ? substr($values['http://purl.org/dc/terms/title'][0], 0, 255)
+      : $values['http://purl.org/dc/terms/title'][0],
+    'uri' => $uri,
+    'og_audience' => $solution->id(),
+    'created' => $values['http://purl.org/dc/terms/issued'][0]->getTimestamp(),
+    'changed' => $values['http://purl.org/dc/terms/modified'][0]->getTimestamp(),
+    'published_at' => $values['http://purl.org/dc/terms/issued'][0]->getTimestamp(),
+    'description' => [
+      'value' => $values['http://www.w3.org/ns/adms#versionNotes'][0] ?? '',
+      'format' => 'content_editor',
+    ],
+    'release_number' => $values['http://www.w3.org/2002/07/owl#versionInfo'][0] ?? '',
+    'field_state' => $values['http://joinup.eu/isr/workflow_status'][0],
+    'field_keywords' => $values['http://www.w3.org/ns/dcat#keyword'] ?? [],
+    'documentation' => $values['http://xmlns.com/foaf/0.1/page'][0] ?? NULL,
+    'langcode' => $values['http://joinup.eu/language'][0] ?? 'en',
+  ]);
+  $release_node->set('solution_data', $sandbox['solution_stubs'][$solution_uri]);
 
-    foreach ([
-      'http://purl.org/dc/terms/language' => 'language',
-      'http://www.w3.org/ns/adms#status' => 'process_status',
-      'http://purl.org/dc/terms/spatial' => 'spatial_coverage',
+  foreach ([
+    'http://purl.org/dc/terms/language' => 'language',
+    'http://www.w3.org/ns/adms#status' => 'process_status',
+    'http://purl.org/dc/terms/spatial' => 'spatial_coverage',
       // @todo Create a follow up to merge the spatial_coverage fields in nodes.
-    ] as $predicate => $target_field) {
-      $mapped_values = [];
-      if (empty($values[$predicate])) {
-        continue;
-      }
-
-      foreach ($values[$predicate] as $value) {
-        if ($term = MappedTerm::loadByUri($value)) {
-          $mapped_values[] = [
-            'target_id' => $term->id(),
-          ];
-        }
-      }
-      $release_node->set($target_field, $mapped_values);
-    }
-    $pathauto_old_path = '/rdf_entity/' . UriEncoder::encodeUrl($uri);
-    $has_alias = $alias_repository->lookupBySystemPath($pathauto_old_path, 'en');
-    if ($has_alias) {
-      $release_node->get('path')->pathauto = PathautoState::SKIP;
+  ] as $predicate => $target_field) {
+    $mapped_values = [];
+    if (empty($values[$predicate])) {
+      continue;
     }
 
-    $release_node->set('uri', $uri);
-    $release_node->setRevisionCreationTime($values['http://purl.org/dc/terms/modified'][0]->getTimestamp());
-    $release_node->save();
+    foreach ($values[$predicate] as $value) {
+      if ($term = MappedTerm::loadByUri($value)) {
+        $mapped_values[] = [
+          'target_id' => $term->id(),
+        ];
+      }
+    }
+    $release_node->set($target_field, $mapped_values);
+  }
+  $pathauto_old_path = '/rdf_entity/' . UriEncoder::encodeUrl($uri);
+  $has_alias = $alias_repository->lookupBySystemPath($pathauto_old_path, 'en');
+  if ($has_alias) {
+    $release_node->get('path')->pathauto = PathautoState::SKIP;
+  }
+
+  $release_node->set('uri', $uri);
+  $release_node->setRevisionCreationTime($values['http://purl.org/dc/terms/modified'][0]->getTimestamp());
+  $release_node->save();
 }

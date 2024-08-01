@@ -6,8 +6,6 @@
  */
 
 declare(strict_types=1);
-use Drupal\joinup_solution\Entity\Solution;
-use Drupal\node\NodeInterface;
 
 /**
  * Performs checks for the RDF entities and its storage.

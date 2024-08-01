@@ -60,7 +60,7 @@ class SubscribeToCollectionForm extends FormBase {
     protected MessengerInterface $messenger,
     protected FormBuilderInterface $formBuilder,
     protected TimeInterface $time,
-    protected EventDispatcherInterface $eventDispatcher
+    protected EventDispatcherInterface $eventDispatcher,
   ) {}
 
   /**
