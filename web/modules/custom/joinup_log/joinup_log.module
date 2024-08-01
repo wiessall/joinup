@@ -130,5 +130,6 @@ function joinup_log_rdf_entity_insert(EntityInterface $entity): void {
     '@user' => $current_user->getDisplayName(),
     'type' => 'joinup:add_content',
     'actor' => $current_user->id(),
+    'group' => $collection->id(),
   ]);
 }
