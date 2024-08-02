@@ -18,6 +18,11 @@
     {{ content.group_attachment }}
   </div>
 {% endif %}
+{% if content.assessment|render|striptags %}
+  <div class="pb-5 border-bottom my-5">
+    {{ content.assessment }}
+  </div>
+{% endif %}
 <div class="d-flex flex-wrap align-items-end flex-row justify-content-end my-3">
   {{ content.report }}
   {{ content.share_link }}
