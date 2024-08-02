@@ -16,11 +16,9 @@ dependencies:
     - media.type.file
     - media.type.image
     - media.type.video
-    - meta_entity.type.eif_perspective
     - node.type.contact_information
     - node.type.custom_page
     - node.type.discussion
-    - meta_entity.type.eif_perspective
     - node.type.document
     - node.type.event
     - node.type.news
@@ -29,7 +27,6 @@ dependencies:
   module:
     - comment
     - contextual
-    - eif
     - email_confirmer
     - entity_legal
     - filter
@@ -187,6 +184,7 @@ permissions:
   - 'use text format simple_html'
   - 'use text format text_html'
   - 'use text format webform_default'
+  - 'view assessment meta-entity'
   - 'view bookmark_node'
   - 'view bookmark_rdf_entity'
   - 'view compatibility documents'
