@@ -44,6 +44,7 @@ permissions:
   - 'use text format basic_html'
   - 'use text format plain_text_glossary'
   - 'use text format simple_text'
+  - 'view assessment meta-entity'
   - 'view bookmark_node'
   - 'view bookmark_rdf_entity'
   - 'view compatibility documents'
