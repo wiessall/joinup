@@ -62,28 +62,28 @@ Feature: Actions log
     Given I am logged in as a moderator
     When I go to the actions log report for "Tilt and Turn"
     Then the "actions log report" table should be:
-      | Date               | Type            | Message           | User         | Actor        |
-      | 20/07/2024 - 22:41 | Add content     | Add x document    | Dave Crash   | Dave Crash   |
-      | 22/07/2024 - 02:28 | Invite Member   | Invite x member   | Dave Crash   | Dave Crash   |
-      | 23/07/2024 - 06:14 | Add content     | Add x custom page | Andre Munson | Andre Munson |
-      | 24/07/2024 - 10:01 | Add member      | Add x member      | Mary Shotgun | Mary Shotgun |
+      | Date               | Type          | Message           | User         | Actor        |
+      | 20/07/2024 - 22:41 | Add content   | Add x document    | Dave Crash   | Dave Crash   |
+      | 22/07/2024 - 02:28 | Invite Member | Invite x member   | Andre Munson | Dave Crash   |
+      | 23/07/2024 - 06:14 | Add content   | Add x custom page | Andre Munson | Andre Munson |
+      | 24/07/2024 - 10:01 | Add member    | Add x member      | Andre Munson | Mary Shotgun |
     Then the content received from clicking the link "Download CSV" contains the following strings:
-      | Date;Type;Message;User;Actor                                                             |
-      | "20/07/2024 - 22:41";"Add content";"Add x document";"Dave Crash";"Dave Crash"           |
-      | "22/07/2024 - 02:28";"Invite Member";"Invite x member";"Dave Crash";"Dave Crash"         |
+      | Date;Type;Message;User;Actor                                                         |
+      | "20/07/2024 - 22:41";"Add content";"Add x document";"Dave Crash";"Dave Crash"        |
+      | "22/07/2024 - 02:28";"Invite Member";"Invite x member";"Andre Munson";"Dave Crash"   |
       | "23/07/2024 - 06:14";"Add content";"Add x custom page";"Andre Munson";"Andre Munson" |
-      | "24/07/2024 - 10:01";"Add member";"Add x member";"Mary Shotgun";"Mary Shotgun"           |
+      | "24/07/2024 - 10:01";"Add member";"Add x member";"Andre Munson";"Mary Shotgun"       |
 
     When I go to the actions log report for "Skylight"
     Then the "actions log report" table should be:
       | Date               | Type               | Message             | User             | Actor            |
-      | 16/07/2024 - 07:34 | Add role to member | Add x author role   | Mary Shotgun     | Mary Shotgun     |
-      | 17/07/2024 - 11:21 | Deleted membership | Delete x membership | Mary Shotgun     | Mary Shotgun     |
-      | 18/07/2024 - 15:08 | Block membership   | Block x member      | Mary Shotgun     | Mary Shotgun     |
+      | 16/07/2024 - 07:34 | Add role to member | Add x author role   | Andre Munson     | Mary Shotgun     |
+      | 17/07/2024 - 11:21 | Deleted membership | Delete x membership | Andre Munson     | Mary Shotgun     |
+      | 18/07/2024 - 15:08 | Block membership   | Block x member      | Branson Winthrop | Mary Shotgun     |
       | 19/07/2024 - 18:54 | Add content        | Add x event         | Branson Winthrop | Branson Winthrop |
     Then the content received from clicking the link "Download CSV" contains the following strings:
-      | Date;Type;Message;User;Actor                                                                           |
-      | "16/07/2024 - 07:34";"Add role to member";"Add x author role";"Mary Shotgun";"Mary Shotgun" |
-      | "17/07/2024 - 11:21";"Deleted membership";"Delete x membership";"Mary Shotgun";"Mary Shotgun"          |
-      | "18/07/2024 - 15:08";"Block membership";"Block x member";"Mary Shotgun";"Mary Shotgun"                 |
-      | "19/07/2024 - 18:54";"Add content";"Add x event";"Branson Winthrop";"Branson Winthrop"                   |
+      | Date;Type;Message;User;Actor                                                                  |
+      | "16/07/2024 - 07:34";"Add role to member";"Add x author role";"Andre Munson";"Mary Shotgun"   |
+      | "17/07/2024 - 11:21";"Deleted membership";"Delete x membership";"Andre Munson";"Mary Shotgun" |
+      | "18/07/2024 - 15:08";"Block membership";"Block x member";"Branson Winthrop";"Mary Shotgun"    |
+      | "19/07/2024 - 18:54";"Add content";"Add x event";"Branson Winthrop";"Branson Winthrop"        |
