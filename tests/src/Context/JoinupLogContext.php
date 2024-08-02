@@ -94,13 +94,13 @@ class JoinupLogContext extends RawDrupalContext {
       if (!$user instanceof AccountInterface) {
         throw new \Exception("User {$values['user']} could not be found.");
       }
-      $values['user'] = $user->id();
+      $values['uid'] = $user->id();
 
       $actor = user_load_by_name($values['actor']);
       if (!$actor instanceof AccountInterface) {
         throw new \Exception("Actor {$values['actor']} could not be found.");
       }
-      $values['uid'] = $actor->id();
+      $values['actor'] = $actor->id();
 
       /** @var \Drupal\joinup_log\Entity\JoinupLogInterface $log */
       $log = $storage->create($values);
