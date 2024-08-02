@@ -126,6 +126,5 @@ function _joinup_log_logger_add_content(EntityInterface $entity): void {
     '@group' => $group ? $group->label() : NULL,
     '@user' => $current_user->getDisplayName(),
     'type' => 'joinup:add_content',
-    'actor' => $current_user->id(),
   ]);
 }
