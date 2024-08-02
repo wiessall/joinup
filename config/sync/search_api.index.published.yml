@@ -6,6 +6,7 @@ dependencies:
     - field.storage.meta_entity.count
     - field.storage.meta_entity.field_featured
     - field.storage.meta_entity.field_pinned_in
+    - field.storage.meta_entity.submission
     - field.storage.node.body
     - field.storage.node.description
     - field.storage.node.field_event_agenda
@@ -48,6 +49,7 @@ dependencies:
     - search_api_solr
     - taxonomy
     - user
+    - webform
 third_party_settings:
   search_api_solr:
     finalize: true
@@ -150,6 +152,17 @@ field_settings:
         - field.storage.rdf_entity.field_ar_owner
       module:
         - node
+  assessment_submission_id:
+    label: 'Document assessment submission id'
+    datasource_id: 'entity:node'
+    property_path: 'assessment:entity:submission:entity:sid'
+    type: integer
+    dependencies:
+      config:
+        - field.storage.meta_entity.submission
+      module:
+        - meta_entity
+        - webform
   body:
     label: 'Body » Processed text'
     datasource_id: 'entity:node'
