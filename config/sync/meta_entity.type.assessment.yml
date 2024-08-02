@@ -1,0 +1,16 @@
+uuid: 8534fcc8-6326-4902-a2ca-b85e800e99e2
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.document
+  module:
+    - node
+id: assessment
+label: ' Assessment'
+description: ''
+mapping:
+  node:
+    document:
+      field_name: assessment
+      auto_create: false
