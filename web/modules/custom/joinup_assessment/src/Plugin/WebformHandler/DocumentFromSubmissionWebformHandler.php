@@ -48,8 +48,8 @@ class DocumentFromSubmissionWebformHandler extends WebformHandlerBase {
 
     $node = $nodeStorage->create([
       'type' => 'document',
-      'status' => TRUE,
       'title' => $webformSubmission->label(),
+      'field_state' => 'published',
       'og_audience' => $group,
     ]);
     $node->save();
