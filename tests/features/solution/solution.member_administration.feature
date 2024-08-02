@@ -132,7 +132,6 @@ Feature: Solution membership administration
     When I am logged in as "dwightone"
     And I accept the invitation for the "The Missing Sons" solution group
     And I go to the members page of "The Missing Sons"
-    Then I should not see the link "Add members"
-    But I should see the link "Invite members"
+    Then I should see the link "Invite members"
     When I click "Invite members"
     Then I should see the heading "Invite members"

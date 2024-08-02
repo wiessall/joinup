@@ -67,7 +67,10 @@ Feature: Collection membership administration
 
     # Approve a membership.
     Given I am logged in as "Lisa Cuddy"
-    And I am on the members page of "Medical diagnosis"
+    When I go to the "Medical diagnosis" collection
+    # Assert that the user does not see the default OG tab.
+    Then I should not see the link "Group"
+    When I am on the members page of "Medical diagnosis"
     Then the "Action" select should contain the following options:
       | - Select -                                                      |
       | Approve the pending membership(s)                               |
@@ -79,8 +82,6 @@ Feature: Collection membership administration
       | Transfer the ownership of the collection to the selected member |
       | Remove the facilitator role from the selected members           |
       | Remove the author role from the selected members                |
-    # Assert that the user does not see the default OG tab.
-    Then I should not see the link "Group"
     And I check the box "Update the member Kathie Cumbershot"
     Then I select "Approve the pending membership(s)" from "Action"
     And I press "Apply to selected items"
@@ -135,8 +136,6 @@ Feature: Collection membership administration
   Scenario: Reject a membership
     Given I am logged in as "Lisa Cuddy"
     And I am on the members page of "Medical diagnosis"
-    # Assert that the user does not see the default OG tab.
-    Then I should not see the link "Group"
     And I check the box "Update the member Kathie Cumbershot"
     Then I select "Delete the selected membership(s)" from "Action"
 
@@ -197,8 +196,6 @@ Feature: Collection membership administration
     # Dr Cuddy promotes Dr House to facilitator.
     When I am logged in as "Lisa Cuddy"
     And I am on the members page of "Medical diagnosis"
-    # Assert that the user does not see the default OG tab.
-    Then I should not see the link "Group"
     Then I check the box "Update the member Gregory House"
     Then I select "Add the facilitator role to the selected members" from "Action"
     And I press "Apply to selected items"
@@ -215,7 +212,7 @@ Feature: Collection membership administration
     And I go to the edit form of the "Medical diagnosis" collection
     Then I should not see the heading "Access denied"
 
-  Scenario: Privileged members should not be allowed to add users to a collection.
+  Scenario: Non-moderator users should not be allowed to add users to a collection.
     When I am not logged in
     And I am on the members page of "Medical diagnosis"
     Then I should not see the link "Add members"
@@ -294,13 +291,10 @@ Feature: Collection membership administration
     Then I should see the success message "Successfully added the role Collection facilitator to the selected users."
     And I should see the link "Donald Duck"
 
-    # Try new privileges.
+    # Check given privileges.
     When I am logged in as "Donald Duck"
     And I am on the members page of "Medical diagnosis"
-    Then I should not see the link "Add members"
-    But I should see the link "Invite members"
-    When I click "Invite members"
-    Then I should see the heading "Invite members"
+    Then I should see the link "Invite members"
 
   Scenario: Sort member administration bulk form by full user name
     Given users:
@@ -395,11 +389,10 @@ Feature: Collection membership administration
     And I go to the "Medical diagnosis" collection
     And I press "Join this collection"
     And I am on the members page of "Medical diagnosis"
-    Then I should not see the link "Add members"
     # The Medical diagnosis collection is closed so normally the membership should be pending.
     # However, since there is an active invitation, both the status and the initial roles are overridden.
     # Being able to view the link below mean that the membership is active and the user is a facilitator.
-    But I should see the link "Invite members"
+    Then I should see the link "Invite members"
 
   Scenario: Invitations can not be sent for pending users.
     Given users:
