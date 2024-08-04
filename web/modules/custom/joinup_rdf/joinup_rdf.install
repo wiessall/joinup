@@ -6,6 +6,7 @@
  */
 
 declare(strict_types=1);
+use Drupal\field\Entity\FieldStorageConfig;
 
 /**
  * Performs checks for the RDF entities and its storage.
@@ -66,31 +67,30 @@ function joinup_rdf_update_111103(): string {
   $connection = \Drupal::database();
   $messages = [];
 
-  // Update the og_membership__roles table.
-  $query = <<<SQL
-UPDATE og_membership__roles
-SET roles_target_id = REPLACE(roles_target_id, 'rdf_entity', 'node')
-SQL;
-  $count = $connection->query($query);
-  $messages[] = "Updated $count rows in the og_membership__roles table.";
-
-  // Update the meta_entity table.
-  $query = <<<SQL
-UPDATE meta_entity
-SET target__target_type = 'node'
-WHERE target__target_type = 'rdf_entity'
-SQL;
-  $count = $connection->query($query);
-  $messages[] = "Updated $count rows in the meta_entity table.";
-
   // Update the file_usage table.
   $query = <<<SQL
 UPDATE file_usage
-SET entity_type = 'node'
-WHERE entity_type = 'rdf_entity'
+SET type = 'node'
+WHERE type = 'rdf_entity'
 SQL;
-  $count = $connection->query($query);
+  $query = $connection->prepareStatement($query, [], TRUE);
+  $query->execute();
+  $count = $query->rowCount();
   $messages[] = "Updated $count rows in the file_usage table.";
+
+  foreach (['like', 'bookmark'] as $flag_id) {
+    // Update both the flag_id from `*_rdf_entity` to `*_node` and the
+    // entity_type from `rdf_entity` to `node`.
+    $query = <<<SQL
+  UPDATE flagging
+  SET flag_id = '{$flag_id}_node', entity_type = 'node'
+  WHERE flag_id = '{$flag_id}_rdf_entity' AND entity_type = 'rdf_entity'
+  SQL;
+    $query = $connection->prepareStatement($query, [], TRUE);
+    $query->execute();
+    $count = $query->rowCount();
+    $messages[] = "Updated $count rows in the flagging table for the $flag_id flagging.";
+  }
 
   // Update the invitation table.
   $query = <<<SQL
@@ -98,16 +98,32 @@ UPDATE invitation
 SET entity_type = 'node'
 WHERE entity_type = 'rdf_entity'
 SQL;
-  $count = $connection->query($query);
+  $query = $connection->prepareStatement($query, [], TRUE);
+  $query->execute();
+  $count = $query->rowCount();
   $messages[] = "Updated $count rows in the invitation table.";
 
   // Update the invitation__field_invitation_og_role table.
   $query = <<<SQL
 UPDATE invitation__field_invitation_og_role
 SET field_invitation_og_role_target_id = REPLACE(field_invitation_og_role_target_id, 'rdf_entity', 'node')
+WHERE field_invitation_og_role_target_id LIKE '%rdf_entity%'
 SQL;
-  $count = $connection->query($query);
+  $query = $connection->prepareStatement($query, [], TRUE);
+  $query->execute();
+  $count = $query->rowCount();
   $messages[] = "Updated $count rows in the invitation__field_invitation_og_role table.";
+
+  // Update the meta_entity table.
+  $query = <<<SQL
+UPDATE meta_entity
+SET target__target_type = 'node'
+WHERE target__target_type = 'rdf_entity'
+SQL;
+  $query = $connection->prepareStatement($query, [], TRUE);
+  $query->execute();
+  $count = $query->rowCount();
+  $messages[] = "Updated $count rows in the meta_entity table.";
 
   // Update the joinup_group_node_access table.
   $query = <<<SQL
@@ -115,7 +131,9 @@ UPDATE joinup_group_node_access
 SET entity_type = 'node'
 WHERE entity_type = 'rdf_entity'
 SQL;
-  $count = $connection->query($query);
+  $query = $connection->prepareStatement($query, [], TRUE);
+  $query->execute();
+  $count = $query->rowCount();
   $messages[] = "Updated $count rows in the joinup_group_node_access table.";
 
   // Update the og_membership table.
@@ -124,8 +142,21 @@ UPDATE og_membership
 SET entity_type = 'node'
 WHERE entity_type = 'rdf_entity'
 SQL;
-  $count = $connection->query($query);
+  $query = $connection->prepareStatement($query, [], TRUE);
+  $query->execute();
+  $count = $query->rowCount();
   $messages[] = "Updated $count rows in the og_membership table.";
+
+  // Update the og_membership__roles table.
+  $query = <<<SQL
+UPDATE og_membership__roles
+SET roles_target_id = REPLACE(roles_target_id, 'rdf_entity', 'node')
+WHERE roles_target_id LIKE '%rdf_entity%'
+SQL;
+  $query = $connection->prepareStatement($query, [], TRUE);
+  $query->execute();
+  $count = $query->rowCount();
+  $messages[] = "Updated $count rows in the og_membership__roles table.";
 
   // Update the og_membership__subscription_bundles.
   $query = <<<SQL
@@ -133,8 +164,31 @@ UPDATE og_membership__subscription_bundles
 SET subscription_bundles_entity_type = 'node'
 WHERE subscription_bundles_entity_type = 'rdf_entity'
 SQL;
-  $count = $connection->query($query);
+  $query = $connection->prepareStatement($query, [], TRUE);
+  $query->execute();
+  $count = $query->rowCount();
   $messages[] = "Updated $count rows in the og_membership__subscription_bundles table.";
 
   return implode("\n", $messages);
+}
+
+/**
+ * Manually change fields that cannot have their schema changed with data in db.
+ */
+function joinup_rdf_update_111104(): string {
+  $fieldStorages = [
+    'field.storage.node.field_shared_in',
+    'field.storage.node.field_news_referenced_solution',
+    'field.storage.node.og_audience',
+    'field.storage.media.og_audience',
+    'field.storage.ogmenu_instance.og_audience',
+  ];
+
+  foreach ($fieldStorages as $fieldStorage) {
+    $config = \Drupal::configFactory()->getEditable($fieldStorage);
+    $config->set('settings', ['target_type' => 'node']);
+    $config->save();
+  }
+
+  return 'Updated field storages: ' . implode(', ', $fieldStorages);
 }
