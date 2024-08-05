@@ -97,10 +97,10 @@ third_party_settings:
               context_mapping:
                 entity: layout_builder.entity
               formatter:
-                settings: { }
-                third_party_settings: { }
+                settings: {  }
+                third_party_settings: {  }
             weight: 4
-            additional: { }
+            additional: {  }
           96070802-8561-40d7-9551-2ef19991a524:
             uuid: 96070802-8561-40d7-9551-2ef19991a524
             region: content
