@@ -12,7 +12,7 @@ field_name: content_creation
 entity_type: node
 bundle: collection
 label: 'Content creation'
-description: ''
+description: 'Choose which users can create content (news, events, discussions and documents) in the collection.'
 required: true
 translatable: true
 default_value: {  }
