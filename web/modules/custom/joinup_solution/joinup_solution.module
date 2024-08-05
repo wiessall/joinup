@@ -264,7 +264,6 @@ function joinup_solution_node_view(array &$build, NodeInterface $solution, Entit
 
   // @todo Should this move to releases along with the
   //   joinup_release.solution_release route?
-  /** @var \Drupal\rdf_entity\RdfInterface $entity */
   if ($display->getComponent('releases_overview')) {
     $show_button =
       // Don't show it on the release overview page.
