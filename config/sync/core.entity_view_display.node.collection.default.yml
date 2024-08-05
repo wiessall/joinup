@@ -21,10 +21,490 @@ dependencies:
     - field.field.node.collection.site_featured
     - field.field.node.collection.spatial_coverage
     - node.type.collection
+    - og_menu.ogmenu.quick_links
   module:
+    - custom_markup_block
+    - joinup_group
+    - joinup_layout
+    - layout_builder
+    - layout_discovery
     - link
     - og
     - user
+third_party_settings:
+  layout_builder:
+    enabled: true
+    allow_custom: false
+    sections:
+      -
+        layout_id: joinup_layout_group_heading
+        layout_settings:
+          label: 'Heading section'
+          context_mapping: {  }
+          custom_id: null
+          custom_classes: ''
+          custom_class_choose: null
+          custom_styles: null
+          custom_data_attributes: null
+          regions:
+            main:
+              region_id: null
+              region_class_choose: null
+              region_classes: ''
+              region_styles: null
+              region_data: null
+            left:
+              region_id: null
+              region_class_choose: null
+              region_classes: ''
+              region_styles: null
+              region_data: null
+            right:
+              region_id: null
+              region_class_choose: null
+              region_classes: ''
+              region_styles: null
+              region_data: null
+            aside:
+              region_id: null
+              region_class_choose: null
+              region_classes: ''
+              region_styles: null
+              region_data: null
+        components:
+          936efae5-5b46-476a-bcb4-ceaaf7c44291:
+            uuid: 936efae5-5b46-476a-bcb4-ceaaf7c44291
+            region: aside
+            configuration:
+              id: 'group_menu_block:quick_links'
+              label: 'Quick links'
+              label_display: visible
+              provider: joinup_group
+              context_mapping:
+                og: layout_builder.entity
+              level: 1
+              depth: 0
+            weight: 0
+            additional: {  }
+          2b802edf-b466-46ff-ad26-2ac3021f8145:
+            uuid: 2b802edf-b466-46ff-ad26-2ac3021f8145
+            region: main
+            configuration:
+              id: 'field_block:node:collection:abstract'
+              label: Abstract
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: collection_plain_glossary
+                label: hidden
+                settings: {  }
+                third_party_settings:
+                  template_suggestion:
+                    template_suggestion: p_wrapper
+            weight: 0
+            additional: {  }
+          cceefe85-5aa2-4abc-85fb-cb41542894b0:
+            uuid: cceefe85-5aa2-4abc-85fb-cb41542894b0
+            region: left
+            configuration:
+              id: 'field_block:node:collection:owner'
+              label: Owner
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: entity_reference_entity_view
+                label: above
+                settings:
+                  view_mode: about
+                third_party_settings:
+                  field_delimiter:
+                    delimiter: ''
+                  field_formatter_range:
+                    order: 0
+                    limit: 0
+                    offset: 0
+                  joinup_slick:
+                    preset: ''
+                    field_label: true
+                    custom_label: ''
+                  template_suggestion:
+                    template_suggestion: ''
+            weight: 0
+            additional: {  }
+          4380e449-9b94-4bdc-85bd-44fe34ec372d:
+            uuid: 4380e449-9b94-4bdc-85bd-44fe34ec372d
+            region: right
+            configuration:
+              id: 'field_block:node:collection:contact'
+              label: 'Contact information'
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: entity_reference_entity_view
+                label: above
+                settings:
+                  view_mode: teaser
+                third_party_settings:
+                  field_delimiter:
+                    delimiter: ''
+                  field_formatter_range:
+                    order: 0
+                    limit: 0
+                    offset: 0
+                  joinup_slick:
+                    preset: ''
+                    field_label: true
+                    custom_label: ''
+                  template_suggestion:
+                    template_suggestion: ''
+            weight: 0
+            additional: {  }
+        third_party_settings: {  }
+      -
+        layout_id: layout_onecol
+        layout_settings:
+          label: 'Description section'
+          context_mapping: {  }
+          custom_id: null
+          custom_classes: ''
+          custom_class_choose: null
+          custom_styles: null
+          custom_data_attributes: null
+          regions:
+            content:
+              region_id: null
+              region_class_choose: null
+              region_classes: ''
+              region_styles: null
+              region_data: null
+        components:
+          0d02c5e7-208f-4320-9f66-733c38ef8f33:
+            uuid: 0d02c5e7-208f-4320-9f66-733c38ef8f33
+            region: content
+            configuration:
+              id: 'field_block:node:collection:description'
+              label: Description
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: text_default
+                label: hidden
+                settings: {  }
+                third_party_settings:
+                  template_suggestion:
+                    template_suggestion: description__see__more
+            weight: 0
+            additional: {  }
+        third_party_settings: {  }
+      -
+        layout_id: layout_onecol
+        layout_settings:
+          label: 'Search section'
+          context_mapping: {  }
+          custom_id: null
+          custom_classes: mb-5
+          custom_class_choose: null
+          custom_styles: null
+          custom_data_attributes: null
+          regions:
+            content:
+              region_id: null
+              region_class_choose: null
+              region_classes: ''
+              region_styles: null
+              region_data: null
+        components:
+          0e3d3611-5a5f-402e-a5d4-f0fb7fb0b98e:
+            uuid: 0e3d3611-5a5f-402e-a5d4-f0fb7fb0b98e
+            region: content
+            configuration:
+              id: 'extra_field_block:node:collection:node_collection_listing_content_top'
+              label: 'Facet region: Collection content top'
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                settings: {  }
+                third_party_settings: {  }
+            weight: 0
+            additional: {  }
+          0d98251b-e552-45fe-8fab-90a270086d0d:
+            uuid: 0d98251b-e552-45fe-8fab-90a270086d0d
+            region: content
+            configuration:
+              id: 'extra_field_block:node:collection:node_collection_listing_content_inline_facets'
+              label: 'Facet region: Inline facets'
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                settings: {  }
+                third_party_settings: {  }
+            weight: 1
+            additional: {  }
+          f9b3f9a3-e794-45ed-8c02-c8af9144f444:
+            uuid: f9b3f9a3-e794-45ed-8c02-c8af9144f444
+            region: content
+            configuration:
+              id: 'field_block:node:collection:listing_content'
+              label: 'Collection content'
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: search_api_field
+                label: hidden
+                settings: {  }
+                third_party_settings:
+                  template_suggestion:
+                    template_suggestion: ''
+            weight: 2
+            additional: {  }
+        third_party_settings: {  }
+      -
+        layout_id: layout_onecol
+        layout_settings:
+          label: 'Detailed header'
+          context_mapping: {  }
+          custom_id: null
+          custom_classes: ''
+          custom_class_choose: null
+          custom_styles: null
+          custom_data_attributes: null
+          regions:
+            content:
+              region_id: null
+              region_class_choose: null
+              region_classes: ''
+              region_styles: null
+              region_data: null
+        components:
+          a86b60f8-92ad-412d-87cf-cd840afb68bb:
+            uuid: a86b60f8-92ad-412d-87cf-cd840afb68bb
+            region: content
+            configuration:
+              id: custom_markup
+              label: 'Custom Markup'
+              label_display: visible
+              provider: custom_markup_block
+              context_mapping: {  }
+              markup:
+                value: '<h2>Detailed information</h2>'
+                format: content_editor
+            weight: 0
+            additional: {  }
+        third_party_settings: {  }
+      -
+        layout_id: layout_onecol
+        layout_settings:
+          label: 'Detailed items'
+          context_mapping: {  }
+          custom_id: null
+          custom_classes: ''
+          custom_class_choose: null
+          custom_styles: null
+          custom_data_attributes: null
+          regions:
+            content:
+              region_id: null
+              region_class_choose: null
+              region_classes: 'joinup-group--detailed-items d-flex flex-wrap rounded-3 bg-light mt-4 mb-5 px-4 pt-4'
+              region_styles: null
+              region_data: null
+        components:
+          99b63922-d244-4cc1-810e-bfb3df7c1f9b:
+            uuid: 99b63922-d244-4cc1-810e-bfb3df7c1f9b
+            region: content
+            configuration:
+              id: 'field_block:node:collection:published_at'
+              label: 'Published on'
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: timestamp
+                label: above
+                settings:
+                  date_format: date_only
+                  custom_date_format: ''
+                  timezone: ''
+                  tooltip:
+                    date_format: long
+                    custom_date_format: ''
+                  time_diff:
+                    enabled: false
+                    future_format: '@interval hence'
+                    past_format: '@interval ago'
+                    granularity: 2
+                    refresh: 60
+                    description: ''
+                third_party_settings:
+                  template_suggestion:
+                    template_suggestion: ''
+            weight: 0
+            additional: {  }
+          be20537f-0982-40d3-b93f-f95c2ebb9c96:
+            uuid: be20537f-0982-40d3-b93f-f95c2ebb9c96
+            region: content
+            configuration:
+              id: 'field_block:node:collection:last_update'
+              label: 'Last updated'
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: timestamp
+                label: above
+                settings:
+                  date_format: date_only
+                  custom_date_format: ''
+                  timezone: ''
+                  tooltip:
+                    date_format: long
+                    custom_date_format: ''
+                  time_diff:
+                    enabled: false
+                    future_format: '@interval hence'
+                    past_format: '@interval ago'
+                    granularity: 2
+                    refresh: 60
+                    description: ''
+                third_party_settings:
+                  template_suggestion:
+                    template_suggestion: ''
+            weight: 1
+            additional: {  }
+          7d5519de-6888-4152-b22d-de8bbab509f1:
+            uuid: 7d5519de-6888-4152-b22d-de8bbab509f1
+            region: content
+            configuration:
+              id: 'field_block:node:collection:spatial_coverage'
+              label: 'Geographical coverage'
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: entity_reference_label
+                label: above
+                settings:
+                  link: false
+                third_party_settings:
+                  field_delimiter:
+                    delimiter: ''
+                  field_formatter_range:
+                    order: 0
+                    limit: 0
+                    offset: 0
+                  joinup_slick:
+                    preset: ''
+                    field_label: true
+                    custom_label: ''
+                  template_suggestion:
+                    template_suggestion: ''
+            weight: 2
+            additional: {  }
+        third_party_settings: {  }
+      -
+        layout_id: layout_onecol
+        layout_settings:
+          label: 'Moderation section'
+          context_mapping: {  }
+          custom_id: null
+          custom_classes: ''
+          custom_class_choose: null
+          custom_styles: null
+          custom_data_attributes: null
+          regions:
+            content:
+              region_id: null
+              region_class_choose: null
+              region_classes: ''
+              region_styles: null
+              region_data: null
+        components:
+          1edf18d5-0977-45b3-a553-6ff4131ccfed:
+            uuid: 1edf18d5-0977-45b3-a553-6ff4131ccfed
+            region: content
+            configuration:
+              id: custom_markup
+              label: 'Custom Markup'
+              label_display: '0'
+              provider: custom_markup_block
+              context_mapping: {  }
+              markup:
+                value: '<h3>Moderation</h3>'
+                format: content_editor
+            weight: 0
+            additional: {  }
+          c6dec25c-d2fd-459b-b354-39faa44fb841:
+            uuid: c6dec25c-d2fd-459b-b354-39faa44fb841
+            region: content
+            configuration:
+              id: 'field_block:node:collection:closed_group'
+              label: Closed
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: boolean
+                label: above
+                settings:
+                  format: default
+                  format_custom_false: ''
+                  format_custom_true: ''
+                third_party_settings:
+                  template_suggestion:
+                    template_suggestion: ''
+            weight: 1
+            additional: {  }
+          2b9bb25a-cb37-441d-891c-89c23842eee3:
+            uuid: 2b9bb25a-cb37-441d-891c-89c23842eee3
+            region: content
+            configuration:
+              id: 'field_block:node:collection:group_moderation'
+              label: Moderation
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: boolean
+                label: hidden
+                settings:
+                  format: default
+                  format_custom_false: ''
+                  format_custom_true: ''
+                third_party_settings:
+                  template_suggestion:
+                    template_suggestion: ''
+            weight: 2
+            additional: {  }
+        third_party_settings: {  }
 id: node.collection.default
 targetEntityType: node
 bundle: collection
