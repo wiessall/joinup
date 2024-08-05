@@ -10,7 +10,7 @@ field_name: short_id
 entity_type: node
 bundle: collection
 label: 'Short ID'
-description: ''
+description: "Used as the web address (URL). Example: a collection named 'European Commission' could use 'eu-commission'. Cannot be changed once the collection is published. The ID is between 4-26 characters and consists of lowercase letters, numbers and the dash symbol (-)."
 required: false
 translatable: true
 default_value: {  }
