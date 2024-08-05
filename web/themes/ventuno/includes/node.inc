@@ -10,7 +10,9 @@ declare(strict_types=1);
 use Drupal\eif\EifInterface;
 use Drupal\joinup_bundle_class\LogoInterface;
 use Drupal\joinup_group\JoinupGroupHelper;
+use Drupal\joinup_publication_date\Entity\EntityPublicationTimeInterface;
 use Drupal\joinup_workflow\ArchivableEntityInterface;
+use Drupal\node\NodeInterface;
 
 /**
  * Implements hook_preprocess_HOOK().
@@ -185,4 +187,17 @@ function ventuno_preprocess_page_title__node__distribution(array &$variables): v
 function ventuno_theme_suggestions_joinup_release_releases_download_alter(array &$suggestions, array $variables): void {
   $original_theme_hook = $variables['theme_hook_original'];
   $suggestions[] = $original_theme_hook;
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for node--digest-message.html.twig.
+ */
+function ventuno_preprocess_node__digest_message(&$variables): void {
+  $node = $variables['node'];
+  assert($node instanceof NodeInterface);
+
+  $publicationTime = $node instanceof EntityPublicationTimeInterface
+    ? $node->getPublicationTime()
+    : NULL;
+  $variables['publication_timestamp'] = $publicationTime ?: $node->getCreatedTime();
 }
