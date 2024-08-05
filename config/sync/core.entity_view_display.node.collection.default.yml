@@ -216,6 +216,51 @@ third_party_settings:
                   class: ''
                   style: ''
                   data: ''
+          a4c76f3c-d0b5-422e-bd56-26167fa486b8:
+            uuid: a4c76f3c-d0b5-422e-bd56-26167fa486b8
+            region: main
+            configuration:
+              id: 'extra_field_block:node:collection:links'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+            weight: 2
+            additional: {  }
+          4839e041-a927-4fb3-9e5e-17a55224f6d4:
+            uuid: 4839e041-a927-4fb3-9e5e-17a55224f6d4
+            region: main
+            configuration:
+              id: 'field_block:node:collection:report'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                type: link
+                label: hidden
+                settings:
+                  trim_length: 80
+                  url_only: false
+                  url_plain: false
+                  rel: ''
+                  target: ''
+                third_party_settings: {  }
+            weight: 3
+            additional: {  }
+          bf50413b-d9a3-43a9-a3b5-6067065e2f7a:
+            uuid: bf50413b-d9a3-43a9-a3b5-6067065e2f7a
+            region: main
+            configuration:
+              id: 'field_block:node:collection:og_group'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                type: og_group_subscribe
+                label: above
+                settings: {  }
+                third_party_settings: {  }
+            weight: 4
+            additional: {  }
         third_party_settings: {  }
       -
         layout_id: layout_onecol
@@ -653,7 +698,31 @@ id: node.collection.default
 targetEntityType: node
 bundle: collection
 mode: default
-content: { }
+content:
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: main
+  og_group:
+    type: og_group_subscribe
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: main
+  report:
+    type: link
+    label: hidden
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    weight: 50
+    region: main
 hidden:
   abstract: true
   access_url: true
