@@ -1,0 +1,96 @@
+uuid: 76229d7c-45ef-42cf-b746-ba0481c49299
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.view_mode_featured
+    - field.field.node.collection.abstract
+    - field.field.node.collection.access_url
+    - field.field.node.collection.closed_group
+    - field.field.node.collection.contact
+    - field.field.node.collection.content_creation
+    - field.field.node.collection.description
+    - field.field.node.collection.field_keywords
+    - field.field.node.collection.field_state
+    - field.field.node.collection.field_topic
+    - field.field.node.collection.group_moderation
+    - field.field.node.collection.listing_content
+    - field.field.node.collection.logo
+    - field.field.node.collection.newsletter
+    - field.field.node.collection.owner
+    - field.field.node.collection.short_id
+    - field.field.node.collection.site_featured
+    - field.field.node.collection.spatial_coverage
+    - image.style.vertical_medium_image
+    - node.type.collection
+  module:
+    - layout_builder
+    - svg_image
+    - template_suggestion
+    - user
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+id: node.collection.view_mode_featured
+targetEntityType: node
+bundle: collection
+mode: view_mode_featured
+content:
+  abstract:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  logo:
+    type: image
+    label: hidden
+    settings:
+      image_link: content
+      image_style: vertical_medium_image
+      image_loading:
+        attribute: lazy
+      svg_attributes:
+        width: null
+        height: null
+      svg_render_as_image: true
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
+    weight: 0
+    region: content
+hidden:
+  access_url: true
+  closed_group: true
+  collection_settings: true
+  contact: true
+  content_creation: true
+  description: true
+  featured: true
+  field_keywords: true
+  field_state: true
+  field_topic: true
+  group_moderation: true
+  join_collection: true
+  langcode: true
+  last_update: true
+  links: true
+  listing_content: true
+  members: true
+  newsletter: true
+  node_collection_listing_content_inline_facets: true
+  node_collection_listing_content_top: true
+  og_group: true
+  owner: true
+  published_at: true
+  read_more: true
+  report: true
+  search_api_excerpt: true
+  short_id: true
+  site_featured: true
+  solutions: true
+  spatial_coverage: true
+  uri: true
