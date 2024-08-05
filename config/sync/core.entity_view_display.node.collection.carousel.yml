@@ -43,7 +43,7 @@ content:
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    weight: 1
+    weight: 2
     region: content
   logo:
     type: responsive_image
@@ -56,6 +56,11 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
+    weight: 1
+    region: content
+  members:
+    settings: {  }
+    third_party_settings: {  }
     weight: 0
     region: content
 hidden:
