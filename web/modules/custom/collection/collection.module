@@ -124,7 +124,6 @@ function collection_node_insert(EntityInterface $entity): void {
   if ($entity->bundle() !== 'collection') {
     return;
   }
-  collection_node_update($entity);
 
   // When a new collection is proposed, give the user the 'group owner' role.
   // This will not occur if the user is the anonymous, i.e. the entity was
