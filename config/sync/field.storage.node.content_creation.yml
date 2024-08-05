@@ -3,8 +3,12 @@ langcode: en
 status: true
 dependencies:
   module:
+    - field_permissions
     - node
     - options
+third_party_settings:
+  field_permissions:
+    permission_type: public
 id: node.content_creation
 field_name: content_creation
 entity_type: node
@@ -14,6 +18,9 @@ settings:
     -
       value: any_user
       label: '<strong>Any user</strong> can create content.'
+    -
+      value: only_members
+      label: '<strong>Only members</strong> can create content.'
     -
       value: facilitators_and_authors
       label: '<strong>Only facilitators and authors</strong> can create content.'
