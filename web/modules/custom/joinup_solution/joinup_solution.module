@@ -360,7 +360,7 @@ function joinup_solution_node_view(array &$build, NodeInterface $solution, Entit
             'btn',
             'btn-secondary',
           ],
-          'aria-label' => t('Read more about @name.', ['@name' => $solution->getName()]),
+          'aria-label' => t('Read more about @name.', ['@name' => $solution->label()]),
         ],
       ]);
       $build['read_more'] = $link->toRenderable();
