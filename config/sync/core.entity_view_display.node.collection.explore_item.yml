@@ -24,11 +24,86 @@ dependencies:
     - node.type.collection
   module:
     - layout_builder
+    - layout_discovery
     - user
 third_party_settings:
   layout_builder:
-    enabled: false
+    enabled: true
     allow_custom: false
+    sections:
+      -
+        layout_id: layout_onecol
+        layout_settings:
+          label: ''
+          context_mapping: {  }
+          custom_id: null
+          custom_classes: ''
+          custom_class_choose: null
+          custom_styles: null
+          custom_data_attributes: null
+          regions:
+            content:
+              region_id: null
+              region_class_choose: null
+              region_classes: ''
+              region_styles: null
+              region_data: null
+        components:
+          c9a298c1-478e-477b-b54c-893a614debff:
+            uuid: c9a298c1-478e-477b-b54c-893a614debff
+            region: content
+            configuration:
+              id: 'field_block:node:collection:description'
+              label: Description
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: joinup_html_stripper_stripped
+                label: hidden
+                settings:
+                  trim_length: 220
+                third_party_settings:
+                  template_suggestion:
+                    template_suggestion: ''
+            weight: 0
+            additional: {  }
+          96070802-8561-40d7-9551-2ef19991a524:
+            uuid: 96070802-8561-40d7-9551-2ef19991a524
+            region: content
+            configuration:
+              id: 'field_block:node:collection:changed'
+              label: 'Changed on'
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: timestamp
+                label: hidden
+                settings:
+                  date_format: custom
+                  custom_date_format: d/m/Y
+                  timezone: ''
+                  tooltip:
+                    date_format: ''
+                    custom_date_format: ''
+                  time_diff:
+                    enabled: false
+                    future_format: '@interval hence'
+                    past_format: '@interval ago'
+                    granularity: 2
+                    refresh: 60
+                    description: ''
+                third_party_settings:
+                  template_suggestion:
+                    template_suggestion: ''
+            weight: 1
+            additional: {  }
+        third_party_settings: {  }
 id: node.collection.explore_item
 targetEntityType: node
 bundle: collection

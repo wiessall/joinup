@@ -1,9 +1,9 @@
-uuid: 7eb83b97-6828-4b38-a2ea-423f6de2c9e2
+uuid: 6d23fb9b-7251-4ce6-9f71-251076b2dea7
 langcode: en
 status: true
 dependencies:
   config:
-    - core.entity_view_mode.node.teaser
+    - core.entity_view_mode.node.carousel
     - field.field.node.collection.abstract
     - field.field.node.collection.access_url
     - field.field.node.collection.closed_group
@@ -22,41 +22,43 @@ dependencies:
     - field.field.node.collection.site_featured
     - field.field.node.collection.spatial_coverage
     - node.type.collection
+    - responsive_image.styles.tile
   module:
-    - link
-    - og
+    - layout_builder
+    - responsive_image
+    - template_suggestion
     - user
-id: node.collection.teaser
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+id: node.collection.carousel
 targetEntityType: node
 bundle: collection
-mode: teaser
+mode: carousel
 content:
-  links:
-    settings: {  }
-    third_party_settings: {  }
-    weight: 100
-    region: content
-  og_group:
-    type: og_group_subscribe
-    label: above
-    settings: {  }
-    third_party_settings: {  }
-    weight: 0
-    region: content
-  report:
-    type: link
+  abstract:
+    type: string
     label: hidden
     settings:
-      trim_length: 80
-      url_only: false
-      url_plain: false
-      rel: ''
-      target: ''
+      link_to_entity: false
     third_party_settings: {  }
-    weight: 50
+    weight: 1
+    region: content
+  logo:
+    type: responsive_image
+    label: above
+    settings:
+      responsive_image_style: tile
+      image_link: ''
+      image_loading:
+        attribute: lazy
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
+    weight: 0
     region: content
 hidden:
-  abstract: true
   access_url: true
   closed_group: true
   collection_settings: true
@@ -71,15 +73,17 @@ hidden:
   join_collection: true
   langcode: true
   last_update: true
+  links: true
   listing_content: true
-  logo: true
   members: true
   newsletter: true
   node_collection_listing_content_inline_facets: true
   node_collection_listing_content_top: true
+  og_group: true
   owner: true
   published_at: true
   read_more: true
+  report: true
   search_api_excerpt: true
   short_id: true
   site_featured: true
