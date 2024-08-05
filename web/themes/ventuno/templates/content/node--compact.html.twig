@@ -1,10 +1,10 @@
 {#
 /**
  * @file
- * Themeing for RDF entities.
+ * Template override for the compact view mode of nodes.
  */
 #}
-<article{{ attributes.addClass('rdf-entity--compact') }}>
+<article{{ attributes.addClass('node--compact') }}>
   {{ content }}
   <a class="ms-2" href="{{ url }}" rel="bookmark">{{ label }}</a>
 </article>
