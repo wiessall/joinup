@@ -58,7 +58,7 @@ content:
         custom_label: ''
       template_suggestion:
         template_suggestion: group_header_topic
-    weight: 1
+    weight: 5
     region: content
   logo:
     type: image
@@ -67,7 +67,7 @@ content:
       image_link: ''
       image_style: logo
       image_loading:
-        attribute: lazy
+        attribute: eager
       svg_attributes:
         width: null
         height: null
@@ -76,6 +76,21 @@ content:
       template_suggestion:
         template_suggestion: bare
     weight: 0
+    region: content
+  join_collection:
+    settings: { }
+    third_party_settings: { }
+    weight: 2
+    region: content
+  members:
+    settings: { }
+    third_party_settings: { }
+    weight: 3
+    region: content
+  solutions:
+    settings: { }
+    third_party_settings: { }
+    weight: 4
     region: content
 hidden:
   abstract: true
