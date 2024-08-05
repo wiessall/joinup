@@ -84,8 +84,8 @@ content:
     weight: 1
     region: content
   members:
-    settings: { }
-    third_party_settings: { }
+    settings: {  }
+    third_party_settings: {  }
     weight: 0
     region: content
 hidden:

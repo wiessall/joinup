@@ -68,8 +68,39 @@ third_party_settings:
                 third_party_settings:
                   template_suggestion:
                     template_suggestion: ''
-            weight: 0
-            additional: {  }
+            weight: 1
+            additional:
+              component_attributes:
+                block_attributes:
+                  id: ''
+                  class: explore-item__description
+                  style: ''
+                  data: ''
+                block_title_attributes:
+                  id: ''
+                  class: ''
+                  style: ''
+                  data: ''
+                block_content_attributes:
+                  id: ''
+                  class: ''
+                  style: ''
+                  data: ''
+          c42b84a8-b808-44a2-957a-eb2c0a2e558d:
+            uuid: c42b84a8-b808-44a2-957a-eb2c0a2e558d
+            region: content
+            configuration:
+              id: 'extra_field_block:node:collection:read_more'
+              label: 'Read more'
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                settings: { }
+                third_party_settings: { }
+            weight: 4
+            additional: { }
           96070802-8561-40d7-9551-2ef19991a524:
             uuid: 96070802-8561-40d7-9551-2ef19991a524
             region: content
@@ -101,8 +132,24 @@ third_party_settings:
                 third_party_settings:
                   template_suggestion:
                     template_suggestion: ''
-            weight: 1
-            additional: {  }
+            weight: 2
+            additional:
+              component_attributes:
+                block_attributes:
+                  id: ''
+                  class: date
+                  style: ''
+                  data: ''
+                block_title_attributes:
+                  id: ''
+                  class: ''
+                  style: ''
+                  data: ''
+                block_content_attributes:
+                  id: ''
+                  class: ''
+                  style: ''
+                  data: ''
         third_party_settings: {  }
 id: node.collection.explore_item
 targetEntityType: node

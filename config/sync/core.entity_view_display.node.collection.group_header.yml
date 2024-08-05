@@ -60,6 +60,11 @@ content:
         template_suggestion: group_header_topic
     weight: 5
     region: content
+  join_collection:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 2
+    region: content
   logo:
     type: image
     label: hidden
@@ -77,19 +82,14 @@ content:
         template_suggestion: bare
     weight: 0
     region: content
-  join_collection:
-    settings: { }
-    third_party_settings: { }
-    weight: 2
-    region: content
   members:
-    settings: { }
-    third_party_settings: { }
+    settings: {  }
+    third_party_settings: {  }
     weight: 3
     region: content
   solutions:
-    settings: { }
-    third_party_settings: { }
+    settings: {  }
+    third_party_settings: {  }
     weight: 4
     region: content
 hidden:
