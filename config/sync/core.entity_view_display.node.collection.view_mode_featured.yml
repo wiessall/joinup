@@ -43,7 +43,7 @@ content:
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    weight: 1
+    weight: 3
     region: content
   logo:
     type: image
@@ -57,10 +57,13 @@ content:
         width: null
         height: null
       svg_render_as_image: true
-    third_party_settings:
-      template_suggestion:
-        template_suggestion: ''
+    third_party_settings: {  }
     weight: 0
+    region: content
+  members:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 2
     region: content
 hidden:
   access_url: true
