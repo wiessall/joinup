@@ -32,8 +32,6 @@ dependencies:
     - inline_entity_form
     - joinup_core
     - joinup_workflow
-    - oe_newsroom_newsletter
-    - search_api_field
     - text
 third_party_settings:
   field_group:
@@ -60,7 +58,6 @@ third_party_settings:
         - field_topic
         - owner
         - contact
-        - current_workflow_state
         - transition_motivation
       label: 'Main fields'
       region: content
@@ -82,8 +79,6 @@ third_party_settings:
         - group_moderation
         - closed_group
         - content_creation
-        - newsletter
-        - listing_content
       label: 'Additional fields'
       region: content
       parent_name: group_general
@@ -149,15 +144,6 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
-  current_workflow_state:
-    type: current_workflow_state_widget
-    weight: 9
-    region: content
-    settings:
-      title: 'Current workflow state'
-      title_display: before
-      show_for_new_entities: false
-    third_party_settings: {  }
   description:
     type: text_textarea
     weight: 4
@@ -194,13 +180,6 @@ content:
     settings:
       display_label: true
     third_party_settings: {  }
-  listing_content:
-    type: search_api_field_default
-    weight: 11
-    region: content
-    settings:
-      query_builder: false
-    third_party_settings: {  }
   logo:
     type: image_library_widget
     weight: 4
@@ -210,12 +189,6 @@ content:
       preview_image_style: thumbnail
       media_type_id: collection_logo
       library_label: 'Alternatively, choose a pre-uploaded image'
-    third_party_settings: {  }
-  newsletter:
-    type: oe_newsroom_newsletter_default
-    weight: 10
-    region: content
-    settings: {  }
     third_party_settings: {  }
   owner:
     type: inline_entity_form_complex
@@ -273,7 +246,10 @@ content:
     third_party_settings: {  }
 hidden:
   created: true
+  current_workflow_state: true
   langcode: true
+  listing_content: true
+  newsletter: true
   path: true
   promote: true
   published_at: true
