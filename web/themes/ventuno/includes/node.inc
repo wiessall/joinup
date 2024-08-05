@@ -10,6 +10,7 @@ declare(strict_types=1);
 use Drupal\eif\EifInterface;
 use Drupal\joinup_bundle_class\LogoInterface;
 use Drupal\joinup_group\JoinupGroupHelper;
+use Drupal\joinup_workflow\ArchivableEntityInterface;
 
 /**
  * Implements hook_preprocess_HOOK().
@@ -62,6 +63,12 @@ function ventuno_preprocess_node(array &$variables): void {
   /** @var \Drupal\node\NodeInterface $node */
   $node = $variables['node'];
   $bundle = $node->bundle();
+
+  // Provide variable to know whether the page has been set as the landing page
+  // of a group, so we can add a <h1> title in the group header.
+  $route_match = \Drupal::routeMatch();
+  $variables['is_canonical'] = $route_match->getRouteName() === 'entity.node.canonical'
+    && in_array($bundle, ['collection', 'solution']);
 
   // Add the site URL to use in nodes.
   $variables['site_url'] = \Drupal::request()->getSchemeAndHttpHost();
@@ -120,6 +127,24 @@ function ventuno_preprocess_node(array &$variables): void {
   // Hide the white area (main content block) from the EIF Toolbox.
   if ((int) $node->id() === EifInterface::EIF_ONLINE_ASSISTANT) {
     unset($variables['content']);
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for node__solution__group-header.
+ */
+function ventuno_preprocess_node__solution__group_header(array &$variables): void {
+  $node = $variables['node'];
+  if (isset($variables['content']['releases_overview'])) {
+    $variables['content']['releases_overview']['#attributes'] = [
+      'class' => [
+        'btn',
+        'btn-secondary',
+      ],
+    ];
+  }
+  if ($node instanceof ArchivableEntityInterface) {
+    $variables['is_archived'] = $node->isArchived();
   }
 }
 
