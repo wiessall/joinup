@@ -257,7 +257,7 @@ function joinup_solution_entity_extra_field_info(): array {
 /**
  * Implements hook_ENTITY_TYPE_view().
  */
-function joinup_solution_node_view(array &$build, RdfInterface $solution, EntityViewDisplayInterface $display, string $view_mode): void {
+function joinup_solution_node_view(array &$build, NodeInterface $solution, EntityViewDisplayInterface $display, string $view_mode): void {
   if ($solution->bundle() != 'solution') {
     return;
   }
