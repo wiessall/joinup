@@ -1,7 +1,11 @@
 {#
 /**
  * @file
- * Themeing for collection header.
+ * Template override for solution header.
+ *
+ * @see ventuno_preprocess_node__solution__group_header().
+ * @see ventuno_preprocess_node().
+ * @see template_preprocess_node().
  */
 #}
 {{ attach_library('ventuno/group-banner') }}
@@ -17,7 +21,7 @@
         {% if is_canonical %}
           <h1>
         {% endif %}
-        <a class="h1 fw-bold mb-0" href="{{ path('entity.node.canonical', {node: node.id()}) }}">
+        <a class="h1 fw-bold mb-0" href="{{ url }}">
           {{ label }}
         </a>
         {% if is_canonical %}
