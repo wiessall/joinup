@@ -68,6 +68,11 @@ content:
         template_suggestion: bare
     weight: 0
     region: content
+  members:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 2
+    region: content
 hidden:
   access_url: true
   closed_group: true
