@@ -1620,10 +1620,13 @@ class FeatureContext extends RawDrupalContext {
    * wrapped in the test "page request", these operations will occur only after
    * all the steps were executed. But some tasks just need to be executed before
    * the next Behat step.
+   * After a scenario terminates, the nodes created are deleted and RDF needs
+   * to be synchronized so that also RDF entities are deleted.
    *
    * @AfterStep
+   * @AfterScenario
    */
-  public function kernelTerminateTasks(): void {
+  public function rdfSyncDestruct(): void {
     \Drupal::service('rdf_sync.synchronizer')->destruct();
   }
 

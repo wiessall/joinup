@@ -82,7 +82,7 @@ class JoinupContext extends RawDrupalContext {
    * @param \Behat\Gherkin\Node\TableNode $triples
    *   The user data.
    *
-   * @todo Replace with a definitive solution in ISAICP-8859
+   * @todo Remove after ISAICP-8569 is deployed.
    *
    * @Then the following :graph graph triples should exist in the RDF backend:
    */
@@ -112,7 +112,64 @@ class JoinupContext extends RawDrupalContext {
     }
 
     if (!empty($rows)) {
-      throw new ExpectationFailedException(sprintf("Triple(s) %s doesn't exists in the RDF backend", implode("\n", array_keys($rows))));
+      throw new ExpectationFailedException(sprintf("Triple(s) %s doesn't exists in the RDF backend", implode(PHP_EOL, array_keys($rows))));
+    }
+
+  }
+
+  /**
+   * Asserts that a list of triples exists in a certain graph.
+   *
+   * It also asserts that no other triples for a given subject
+   * exist.
+   *
+   * Each row is a triple serialized as NTriples:
+   * | subject         | predicate         | object            |
+   * | http://subject1 | http://predicate1 | http://reference1 |
+   * | http://subject1 | http://predicate2 | value1            |
+   * | http://subject2 | http://predicate3 | value2            |
+   *
+   * @param string $graph
+   *   The graph to be queried.
+   * @param \Behat\Gherkin\Node\TableNode $triples
+   *   The user data.
+   *
+   * @Then the following :graph graph triples exist in the RDF backend:
+   */
+  public function assertOnlyTheseTriples(string $graph, TableNode $triples): void {
+    /** @var \Drupal\rdf_sync\RdfSyncConnectionInterface $connection */
+    $connection = \Drupal::service('rdf_sync.connection');
+
+    $subjects = $rows = [];
+    foreach ($triples->getHash() as $triple) {
+      $subjects[$triple['subject']][] = $rows[implode(' ', $triple)] = $triple;
+    }
+
+    $unexpectedTriples = [];
+    foreach (array_keys($subjects) as $subject) {
+      $query = "SELECT ?p ?o WHERE { GRAPH <$graph> { <$subject> ?p ?o }}";
+      $results = $connection->query($query);
+      /** @var \EasyRdf\Sparql\Result $result */
+      foreach ($results as $result) {
+        $triple = [
+          'subject' => $subject,
+          'predicate' => (string) $result->p,
+          'object' => trim((string) $result->o),
+        ];
+        if (in_array($triple, $rows)) {
+          unset($rows[implode(' ', $triple)]);
+        }
+        else {
+          $unexpectedTriples[implode(' ', $triple)] = $triple;
+        }
+      }
+    }
+
+    if (!empty($rows)) {
+      throw new ExpectationFailedException(sprintf("Triple(s) %s doesn't exists in the RDF backend", implode(PHP_EOL, array_keys($rows))));
+    }
+    if (!empty($unexpectedTriples)) {
+      throw new ExpectationFailedException(sprintf("These triple(s) %s were unexpectedly found in the RDF backend", implode(PHP_EOL, array_keys($unexpectedTriples))));
     }
 
   }
@@ -3284,6 +3341,45 @@ class JoinupContext extends RawDrupalContext {
       throw new \InvalidArgumentException("No entity found for URI $uri");
     }
     $this->visitPath($entity->toUrl()->toString());
+  }
+
+  /**
+   * Updates an entity, given its RDF resource (URI).
+   *
+   * @codingStandardsIgnoreStart
+   *  Table format:
+   *  | title               | Sample solution   |
+   *  | description         | A sample solution |
+   *  | ...                 | ...               |
+   * @codingStandardsIgnoreEnd
+   *
+   * @param string $uri
+   *   The entity RDF URI.
+   * @param \Behat\Gherkin\Node\TableNode $fieldsTable
+   *   The values of the fields to update.
+   *
+   * @throws \Exception
+   *    Thrown when a field name is invalid.
+   * @throws \InvalidArgumentException
+   *   When for the passed URI no entity can be found.
+   *
+   * @When I update the entity having :uri as RDF resource:
+   */
+  public function updateEntityByRdfUri(string $uri, TableNode $fieldsTable): void {
+    /** @var \Drupal\Core\Entity\ContentEntityInterface|null $entity */
+    if (!$entity = \Drupal::getContainer()->get('rdf_sync.mapper')->getEntityByUri($uri)) {
+      throw new \InvalidArgumentException("No entity found for URI $uri");
+    }
+    $updated = (object) $fieldsTable->getRowsHash();
+    $updated->type = $entity->bundle();
+    $this->parseEntityFields($entity->getEntityTypeId(), $updated);
+    foreach (array_keys($fieldsTable->getRowsHash()) as $key) {
+      if ($key === 'changed' && !is_numeric($updated->$key)) {
+        $updated->$key = strtotime($updated->$key);
+      }
+      $entity->set($key, $updated->$key);
+    }
+    $entity->save();
   }
 
 }
