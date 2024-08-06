@@ -170,6 +170,13 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
+  field_state:
+    type: state_machine_buttons
+    weight: 2
+    region: content
+    settings:
+      use_transition_label: 0
+    third_party_settings: {  }
   field_topic:
     type: options_select
     weight: 5
@@ -299,7 +306,6 @@ hidden:
   body: true
   created: true
   description: true
-  field_state: true
   langcode: true
   og_audience: true
   path: true
