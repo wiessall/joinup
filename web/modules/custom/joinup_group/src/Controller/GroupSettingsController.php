@@ -7,7 +7,6 @@ namespace Drupal\joinup_group\Controller;
 use Drupal\Component\Render\MarkupInterface;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Controller\ControllerBase;
-use Drupal\Core\Url;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\meta_entity\Entity\MetaEntity;
 use Drupal\og\OgAccessInterface;
@@ -61,18 +60,16 @@ class GroupSettingsController extends ControllerBase {
   /**
    * Provides a controller for the 'joinup_group.settings_form' route.
    *
-   * @param \Drupal\joinup_group\Entity\GroupInterface $rdf_entity
+   * @param \Drupal\joinup_group\Entity\GroupInterface $group
    *   The group where to show settings.
    *
    * @return array
    *   The content as a render array.
    */
-  public function settings(GroupInterface $rdf_entity): array {
-    $meta_entity = MetaEntity::loadOrCreate($this->getMetaEntityBundle($rdf_entity), $rdf_entity);
+  public function settings(GroupInterface $group): array {
+    $meta_entity = MetaEntity::loadOrCreate($this->getMetaEntityBundle($group), $group);
     $form_state_additions = [
-      'redirect' => Url::fromRoute('entity.rdf_entity.canonical', [
-        'rdf_entity' => $rdf_entity->id(),
-      ]),
+      'redirect' => $group->toUrl(),
     ];
     return $this->entityFormBuilder()->getForm($meta_entity, 'default', $form_state_additions);
   }
