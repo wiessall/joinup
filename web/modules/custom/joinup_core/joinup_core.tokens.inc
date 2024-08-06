@@ -12,7 +12,7 @@ use Drupal\Core\Render\BubbleableMetadata;
 /**
  * Implements hook_token_info().
  */
-function joinup_core_token_info() {
+function joinup_core_token_info(): array {
   return [
     'tokens' => [
       'random' => [
@@ -28,7 +28,7 @@ function joinup_core_token_info() {
 /**
  * Implements hook_tokens().
  */
-function joinup_core_tokens($type, $tokens, array $data, array $options, BubbleableMetadata $bubbleable_metadata) {
+function joinup_core_tokens($type, $tokens, array $data, array $options, BubbleableMetadata $bubbleable_metadata): array {
   $replacements = [];
 
   switch ($type) {

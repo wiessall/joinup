@@ -53,7 +53,7 @@ class EndpointTracker {
         RequestOptions::HEADERS => $this->buildHeaders($request),
       ]
     )
-      ->then(NULL, function () use ($url) {
+      ->then(NULL, function () use ($url): void {
         $this->logger->error('Can\'t send track data to @url',
           ['@url' => $url]
         );

@@ -17,7 +17,7 @@ trait RandomGeneratorTrait {
    * @return string
    *   A string URI
    */
-  public function getRandomUri() {
+  public function getRandomUri(): string {
     $php = new Php();
     return 'http://example.com/' . $php->generate();
   }

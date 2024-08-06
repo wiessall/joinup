@@ -8,6 +8,7 @@
 declare(strict_types=1);
 
 use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Database\Database;
 use Drupal\Core\Datetime\DrupalDateTime;
@@ -29,7 +30,7 @@ use Drupal\views\ViewExecutable;
  *
  * Add the Sparql endpoint fields to the configure database install step.
  */
-function joinup_form_install_settings_form_alter(&$form, FormStateInterface $form_state) {
+function joinup_form_install_settings_form_alter(&$form, FormStateInterface $form_state): void {
   $form['sparql'] = [
     '#type' => 'fieldset',
     '#title' => 'Sparql endpoint',
@@ -67,7 +68,7 @@ function joinup_form_install_settings_form_alter(&$form, FormStateInterface $for
  *
  * Ensures that the connection class exists.
  */
-function joinup_form_install_settings_validate($form, FormStateInterface $form_state) {
+function joinup_form_install_settings_validate($form, FormStateInterface $form_state): void {
   $namespace = $form_state->getValue(['sparql', 'namespace']);
   $class = trim($namespace) . '\\Connection';
   // Try to load the connection class.
@@ -79,7 +80,7 @@ function joinup_form_install_settings_validate($form, FormStateInterface $form_s
 /**
  * Submit callback: Save the Sparql connection string to the settings file.
  */
-function joinup_form_install_settings_form_save($form, FormStateInterface $form_state) {
+function joinup_form_install_settings_form_save($form, FormStateInterface $form_state): void {
   $host = $form_state->getValue(['sparql', 'host']);
   $port = $form_state->getValue(['sparql', 'port']);
   $namespace = $form_state->getValue(['sparql', 'namespace']);
@@ -105,7 +106,7 @@ function joinup_form_install_settings_form_save($form, FormStateInterface $form_
 /**
  * Implements hook_entity_type_alter().
  */
-function joinup_entity_type_alter(array &$entity_types) {
+function joinup_entity_type_alter(array &$entity_types): void {
   // Add the "Propose" form operation to nodes and RDF entities so that we can
   // add propose form displays to them.
   // Skip this during installation, since the RDF entity will not yet be
@@ -119,7 +120,7 @@ function joinup_entity_type_alter(array &$entity_types) {
 /**
  * Implements hook_form_FORM_ID_alter().
  */
-function joinup_form_field_config_edit_form_alter(&$form) {
+function joinup_form_field_config_edit_form_alter(&$form): void {
   // Increase the maximum length of the file extension field to allow
   // registration of large amounts of extensions.
   if (isset($form['settings']['file_extensions']['#maxlength'])) {
@@ -135,7 +136,7 @@ function joinup_form_field_config_edit_form_alter(&$form) {
  * With this hook, we make sure that the default fields with type 'text_long'
  * have the 'content_editor' filter format as default.
  */
-function joinup_sparql_apply_default_fields_alter($type, &$values) {
+function joinup_sparql_apply_default_fields_alter($type, &$values): void {
   // Since the profile includes a filter format, we provide this as default.
   if ($type == 'text_long') {
     foreach ($values as &$value) {
@@ -149,7 +150,7 @@ function joinup_sparql_apply_default_fields_alter($type, &$values) {
 /**
  * Implements hook_entity_access().
  */
-function joinup_entity_access(EntityInterface $entity, $operation, AccountInterface $account) {
+function joinup_entity_access(EntityInterface $entity, $operation, AccountInterface $account): AccessResultInterface {
   // Moderators have the 'administer organic groups' permission so they can
   // manage all group content across all groups. However since the OG Menu
   // entities are also group content moderators are also granted access to the
@@ -171,7 +172,7 @@ function joinup_entity_access(EntityInterface $entity, $operation, AccountInterf
  *
  * Simplifies the widget buttons when only a bundle is configured.
  */
-function joinup_field_widget_inline_entity_form_complex_form_alter(&$element, FormStateInterface $form_state, $context) {
+function joinup_field_widget_inline_entity_form_complex_form_alter(&$element, FormStateInterface $form_state, $context): void {
   if (isset($element['actions']['bundle']['#type']) && $element['actions']['bundle']['#type'] == 'value') {
     $buttons = [
       'ief_add' => t('Add new'),
@@ -189,7 +190,7 @@ function joinup_field_widget_inline_entity_form_complex_form_alter(&$element, Fo
 /**
  * Implements hook_inline_entity_form_reference_form_alter().
  */
-function joinup_inline_entity_form_reference_form_alter(&$reference_form, &$form_state) {
+function joinup_inline_entity_form_reference_form_alter(&$reference_form, &$form_state): void {
   // Avoid showing two labels one after each other.
   $reference_form['entity_id']['#title_display'] = 'invisible';
 }
@@ -204,7 +205,7 @@ function joinup_inline_entity_form_reference_form_alter(&$reference_form, &$form
  * - Disable access to the meta information.
  * - Allow access to the uid field only to the moderators.
  */
-function joinup_form_node_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+function joinup_form_node_form_alter(&$form, FormStateInterface $form_state, $form_id): void {
   $form['revision_information']['#access'] = FALSE;
   $form['revision']['#access'] = FALSE;
   $form['meta']['#access'] = FALSE;
@@ -223,7 +224,7 @@ function joinup_form_node_form_alter(&$form, FormStateInterface $form_state, $fo
 /**
  * Implements hook_theme().
  */
-function joinup_theme($existing, $type, $theme, $path) {
+function joinup_theme($existing, $type, $theme, $path): array {
   $page_template = [
     'variables' => [],
     'path' => \Drupal::service('extension.list.profile')->getPath('joinup') . '/templates',
@@ -247,7 +248,7 @@ function joinup_theme($existing, $type, $theme, $path) {
  * Adds metadata needed to show relevant contextual links whenever entities are
  * displayed.
  */
-function joinup_entity_view_alter(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display) {
+function joinup_entity_view_alter(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display): void {
   if (in_array($entity->getEntityTypeId(), ['node', 'rdf_entity']) && $display->getMode() !== 'group_header') {
     // Add the "entity" contextual links group. Avoid overwriting any existing
     // data that might have been added by other modules. Because of a bug in
@@ -321,14 +322,14 @@ function joinup_entity_view_alter(array &$build, EntityInterface $entity, Entity
 /**
  * Implements hook_preprocess_rdf_entity().
  */
-function joinup_preprocess_rdf_entity(&$variables) {
+function joinup_preprocess_rdf_entity(&$variables): void {
   _joinup_preprocess_entity_tiles($variables);
 }
 
 /**
  * Implements hook_preprocess_node().
  */
-function joinup_preprocess_node(&$variables) {
+function joinup_preprocess_node(&$variables): void {
   _joinup_preprocess_entity_tiles($variables);
 }
 
@@ -338,7 +339,7 @@ function joinup_preprocess_node(&$variables) {
  * @param array $variables
  *   The variables array.
  */
-function _joinup_preprocess_entity_tiles(array &$variables) {
+function _joinup_preprocess_entity_tiles(array &$variables): void {
   // View modes where tiles are expected.
   $tile_view_modes = [
     'highlighted',
@@ -369,7 +370,7 @@ function _joinup_preprocess_entity_tiles(array &$variables) {
  * Sets the view max age to tomorrow midnight when filtering down for upcoming
  * or past events.
  */
-function joinup_views_pre_execute(ViewExecutable $view) {
+function joinup_views_pre_execute(ViewExecutable $view): void {
   $facets = _joinup_get_facets_by_facet_source_id('search_api:views_page__content_overview__page_1');
 
   if (
@@ -395,7 +396,7 @@ function joinup_views_pre_execute(ViewExecutable $view) {
  * @return \Drupal\facets\FacetInterface[]
  *   An array of facet, keyed by facet ID.
  */
-function _joinup_get_facets_by_facet_source_id($facet_source_id) {
+function _joinup_get_facets_by_facet_source_id($facet_source_id): array {
   /** @var \Drupal\facets\FacetManager\DefaultFacetManager $facet_manager */
   $facet_manager = \Drupal::service('facets.manager');
 

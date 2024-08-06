@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup\Controller;
 
 use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\rdf_entity\RdfEntityTypeInterface;
 
@@ -24,7 +25,7 @@ class JoinupController extends ControllerBase {
    * @return array
    *   A render array for the propose form.
    */
-  public function proposeRdfEntity(RdfEntityTypeInterface $rdf_type) {
+  public function proposeRdfEntity(RdfEntityTypeInterface $rdf_type): array {
     $rdf_entity = $this->entityTypeManager()->getStorage('rdf_entity')->create([
       'rid' => $rdf_type->id(),
     ]);
@@ -42,10 +43,10 @@ class JoinupController extends ControllerBase {
    * @param \Drupal\rdf_entity\RdfEntityTypeInterface $rdf_type
    *   The RDF entity type for which the proposal form is built.
    *
-   * @return \Drupal\Core\Access\AccessResult
+   * @return \Drupal\Core\Access\AccessResultInterface
    *   The access result object.
    */
-  public function createAccess(RdfEntityTypeInterface $rdf_type) {
+  public function createAccess(RdfEntityTypeInterface $rdf_type): AccessResultInterface {
     if ($rdf_type->id() !== 'collection') {
       return AccessResult::forbidden();
     }
@@ -58,7 +59,7 @@ class JoinupController extends ControllerBase {
    * @return array
    *   The page as a render array.
    */
-  public function eligibilityCriteria() {
+  public function eligibilityCriteria(): array {
     return ['#theme' => 'joinup_eligibility_criteria'];
   }
 
