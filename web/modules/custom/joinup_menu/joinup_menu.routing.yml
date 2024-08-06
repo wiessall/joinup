@@ -14,15 +14,15 @@ joinup_menu.documentation_file:
         - solution
 
 joinup_menu.website_link:
-  path: 'rdf_entity/{rdf_entity}/website-link'
+  path: 'node/{node}/website-link'
   defaults:
     _title: 'Website Link'
     _controller: '\Drupal\joinup_menu\Controller\RedirectWebsiteLinkController::websiteLink'
   requirements:
     _custom_access: '\Drupal\joinup_menu\Controller\RedirectWebsiteLinkController::websiteLinkAccess'
   options:
-    rdf_entity:
-      type: entity:rdf_entity
+    node:
+      type: entity:node
       bundles:
         - collection
         - solution

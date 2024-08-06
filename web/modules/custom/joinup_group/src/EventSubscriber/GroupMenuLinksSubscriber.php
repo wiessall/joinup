@@ -57,7 +57,7 @@ class GroupMenuLinksSubscriber implements EventSubscriberInterface {
 
     if ($menu->bundle() === 'quick_links') {
       $group = $event->getGroup();
-      $parameters = ['rdf_entity' => UriEncoder::encodeUrl($group->id())];
+      $parameters = [$group->getEntityTypeId() => $group->id()];
       $event->addMenuLink(Url::fromRoute('joinup_menu.website_link', $parameters), 'Website link');
 
       if ($group->bundle() === 'solution') {
