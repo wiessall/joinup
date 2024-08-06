@@ -568,7 +568,13 @@ class JoinupSearchContext extends RawDrupalContext {
   public function submitSearch(): void {
     $this->assertJavaScriptEnabledBrowser();
     $element = $this->getSearchBarElement();
-    $element->submit();
+
+    // Find the parent form element and submit.
+    $form = $element->getParent();
+    while ($form && $form->getTagName() !== 'form') {
+      $form = $form->getParent();
+    }
+    $form->submit();
   }
 
   /**
