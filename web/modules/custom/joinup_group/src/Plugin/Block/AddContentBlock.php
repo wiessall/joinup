@@ -7,6 +7,7 @@ namespace Drupal\joinup_group\Plugin\Block;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\joinup_core\Traits\GroupPluginCacheTrait;
+use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\Event\AddGroupContentEvent;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -66,8 +67,8 @@ class AddContentBlock extends BlockBase implements ContainerFactoryPluginInterfa
    * {@inheritdoc}
    */
   public function build() {
-    /** @var \Drupal\rdf_entity\RdfInterface $group */
     $group = $this->getContext('og')->getContextValue();
+    assert($group instanceof GroupInterface);
 
     $event = new AddGroupContentEvent($group);
     $this->eventDispatcher->dispatch($event);
