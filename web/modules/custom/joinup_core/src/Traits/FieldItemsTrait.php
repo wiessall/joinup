@@ -76,7 +76,7 @@ trait FieldItemsTrait {
    * @return mixed
    *   The field item value.
    */
-  protected function getFieldItemMainPropertyValue(FieldItemInterface $item) {
+  protected function getFieldItemMainPropertyValue(FieldItemInterface $item): mixed {
     return $item->get($item::mainPropertyName())->getValue();
   }
 

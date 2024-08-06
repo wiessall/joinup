@@ -72,7 +72,10 @@
     </properties>
   </rule>
 
-  <!-- Enforce correct formatting of return types hints. -->
+  <!-- Enforce return types hints and correct formatting. -->
+  <rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHint">
+    <exclude name="SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingTraversableTypeHintSpecification"/>
+  </rule>
   <rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHintSpacing"/>
 
   <!-- Use statements should be ordered alphabetically. -->

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup_discussion\Form;
 
 use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
@@ -145,10 +146,10 @@ class InviteToDiscussionForm extends InviteFormBase {
    * @param \Drupal\node\NodeInterface|null $node
    *   The discussion to which users will be invited.
    *
-   * @return \Drupal\Core\Access\AccessResult
+   * @return \Drupal\Core\Access\AccessResultInterface
    *   The access result object.
    */
-  public function access(AccountProxyInterface $account, ?NodeInterface $node = NULL): AccessResult {
+  public function access(AccountProxyInterface $account, ?NodeInterface $node = NULL): AccessResultInterface {
     $access = FALSE;
 
     // The node should be a published discussion.

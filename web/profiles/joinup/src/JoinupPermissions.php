@@ -26,7 +26,7 @@ class JoinupPermissions {
    * @see \Drupal\user\PermissionHandlerInterface::getPermissions()
    * @see joinup_entity_type_alter()
    */
-  public function rdfTypePermissions() {
+  public function rdfTypePermissions(): array {
     $perms = [];
     // Generate permissions to propose rdf entities of all types.
     foreach (RdfEntityType::loadMultiple() as $type) {
@@ -45,7 +45,7 @@ class JoinupPermissions {
    * @return array
    *   An associative array of permission names and descriptions.
    */
-  protected function buildProposeRdfTypePermission(RdfEntityType $type) {
+  protected function buildProposeRdfTypePermission(RdfEntityType $type): array {
     $type_id = $type->id();
     $type_params = ['%type_name' => $type->label()];
 

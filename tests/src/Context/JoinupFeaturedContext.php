@@ -28,7 +28,7 @@ class JoinupFeaturedContext extends RawDrupalContext {
    *
    * @AfterNodeCreate
    */
-  public function featureNodeAfterCreation(AfterNodeCreateScope $scope) {
+  public function featureNodeAfterCreation(AfterNodeCreateScope $scope): void {
     $node = $scope->getEntity();
 
     $is_featured = in_array(strtolower((string) ($node->featured ?? '')), [
