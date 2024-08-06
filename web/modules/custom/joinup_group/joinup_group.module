@@ -84,7 +84,7 @@ function joinup_group_entity_bundle_info_alter(array &$bundles): void {
  * Implements hook_entity_bundle_field_info_alter().
  */
 function joinup_group_entity_bundle_field_info_alter(array &$fields, EntityTypeInterface $entity_type, string $bundle): void {
-  if ($entity_type->id() === 'rdf_entity' && in_array($bundle, JoinupGroupHelper::GROUP_BUNDLES)) {
+  if ($entity_type->id() === 'node' && in_array($bundle, JoinupGroupHelper::GROUP_BUNDLES)) {
     if (!empty($fields['field_short_id'])) {
       /** @var \Drupal\field\Entity\FieldConfig[] $fields */
       $fields['field_short_id']->addPropertyConstraints('value', [
@@ -131,7 +131,7 @@ function joinup_group_preprocess_page(array &$variables): void {
   if (!empty($context['og'])) {
     $group = $context['og']->getContextValue();
 
-    if ($group && $group->getEntityTypeId() === 'rdf_entity') {
+    if ($group instanceof GroupInterface) {
       $variables['attributes']['data-joinup-group-context'] = $group->id();
     }
   }
@@ -206,7 +206,7 @@ function joinup_group_entity_type_alter(array &$entity_types): void {
  * Adds a submit handler that will show a message to the user after proposing a
  * collection or solution.
  */
-function joinup_group_form_rdf_entity_form_alter(&$form, FormStateInterface $form_state, $form_id): void {
+function joinup_group_form_node_form_alter(&$form, FormStateInterface $form_state, $form_id): void {
   /** @var \Drupal\rdf_entity\Form\RdfForm $form_object */
   $form_object = $form_state->getFormObject();
   /** @var \Drupal\rdf_entity\RdfInterface $entity */
@@ -223,7 +223,7 @@ function joinup_group_form_rdf_entity_form_alter(&$form, FormStateInterface $for
     // If the entity has been published, only moderators can edit the short ID.
     // @todo Implement the EntityPublishedInterface for collections and
     //   solutions once we have the bundle classes in.
-    $has_published_version = $entity->hasGraph('default');
+    $has_published_version = $entity->isPublished();
     if (isset($form['field_short_id']) && $has_published_version && !\Drupal::currentUser()->hasPermission('edit short id after publication')) {
       $form['field_short_id']['widget'][0]['value']['#attributes']['disabled'] = 'disabled';
     }
@@ -320,7 +320,7 @@ function joinup_group_entity_graph_access(EntityInterface $entity, string $opera
 /**
  * Implements hook_ENTITY_TYPE_insert() for RDF entities.
  */
-function joinup_group_rdf_entity_insert(RdfInterface $group): void {
+function joinup_group_node_insert(NodeInterface $group): void {
   if (!$group instanceof GroupInterface) {
     return;
   }
@@ -606,7 +606,7 @@ function joinup_group_form_views_exposed_form_alter(array &$form, FormStateInter
 
   // Insert a link to the table showing member permissions.
   $url = Url::fromRoute('joinup_group.membership_permissions_info', [
-    'rdf_entity' => $group->id(),
+    $group->getEntityTypeId() => $group->id(),
   ]);
 
   $form['member_permissions_link'] = [
