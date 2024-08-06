@@ -25,7 +25,7 @@ trait FormTrait {
    *   Thrown when an expected button is not present or when an unexpected
    *   button is present.
    */
-  public function assertSubmitButtonsVisible(array $labels, bool $strict = TRUE) {
+  public function assertSubmitButtonsVisible(array $labels, bool $strict = TRUE): void {
     $buttons = $this->getSession()->getPage()->findAll('xpath', '//main//div[contains(concat(" ", normalize-space(@class), " "), " form-actions ")]//input[@type = "submit"]');
     $actual_labels = [];
     foreach ($buttons as $button) {

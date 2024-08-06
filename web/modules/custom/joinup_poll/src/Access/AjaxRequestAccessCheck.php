@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup_poll\Access;
 
 use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Routing\Access\AccessInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Route;
@@ -22,10 +23,10 @@ class AjaxRequestAccessCheck implements AccessInterface {
    * @param \Symfony\Component\HttpFoundation\Request $request
    *   Request.
    *
-   * @return \Drupal\Core\Access\AccessResult
+   * @return \Drupal\Core\Access\AccessResultInterface
    *   Access result
    */
-  public function access(Route $route, Request $request): AccessResult {
+  public function access(Route $route, Request $request): AccessResultInterface {
     $ajaxRequirement = filter_var($route->getRequirement('_ajax_request'), FILTER_VALIDATE_BOOLEAN);
     $isAjax = $request->isXmlHttpRequest();
 

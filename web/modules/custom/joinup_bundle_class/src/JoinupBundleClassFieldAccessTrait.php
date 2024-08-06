@@ -163,7 +163,7 @@ trait JoinupBundleClassFieldAccessTrait {
    * @return mixed|null
    *   The value, or NULL if no value has been set.
    */
-  protected function getMainPropertyValue(string $field_name) {
+  protected function getMainPropertyValue(string $field_name): mixed {
     $item = $this->getFirstItem($field_name);
 
     if (!empty($item)) {

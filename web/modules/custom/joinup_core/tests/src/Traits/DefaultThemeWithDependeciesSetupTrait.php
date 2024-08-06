@@ -14,7 +14,7 @@ trait DefaultThemeWithDependeciesSetupTrait {
   /**
    * Does nothing. Themes should be installed after modules are installed.
    */
-  protected function installDefaultThemeFromClassProperty(ContainerInterface $container) {
+  protected function installDefaultThemeFromClassProperty(ContainerInterface $container): void {
   }
 
   /**
