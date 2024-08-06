@@ -1,5 +1,5 @@
-entity.rdf_entity.contact:
-  path: '/rdf_entity/{rdf_entity}/contact'
+entity.node.contact:
+  path: '/node/{node}/contact'
   defaults:
     _form: \Drupal\contact_information\Form\ContactForm
     _title: 'Contact us'
@@ -7,8 +7,8 @@ entity.rdf_entity.contact:
     _custom_access: \Drupal\contact_information\Form\ContactForm::access
   options:
     parameters:
-      rdf_entity:
-        type: entity:rdf_entity
+      node:
+        type: entity:node
         bundle:
           - collection
           - solution
