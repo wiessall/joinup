@@ -20,6 +20,7 @@ dependencies:
     - field.field.node.solution.listing_content
     - field.field.node.solution.logo
     - field.field.node.solution.metrics_page
+    - field.field.node.solution.og_audience
     - field.field.node.solution.owner
     - field.field.node.solution.process_status
     - field.field.node.solution.related_solutions
@@ -300,6 +301,7 @@ hidden:
   description: true
   field_state: true
   langcode: true
+  og_audience: true
   path: true
   promote: true
   published_at: true
