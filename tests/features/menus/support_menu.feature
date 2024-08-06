@@ -101,9 +101,6 @@ Feature:
       | an anonymous user                    | not see               | see                  |
       | logged in as an "authenticated user" | see                   | not see              |
 
-  @wip
-  # Todo: Find out why this fails on the test bot, and enable the test again.
-  # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-6836
   Scenario: A moderator is able to administer the "Help and support" menu.
     Given I am logged in as a moderator
     When I click "Menus"
