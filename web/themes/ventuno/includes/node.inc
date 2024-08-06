@@ -10,6 +10,9 @@ declare(strict_types=1);
 use Drupal\eif\EifInterface;
 use Drupal\joinup_bundle_class\LogoInterface;
 use Drupal\joinup_group\JoinupGroupHelper;
+use Drupal\joinup_publication_date\Entity\EntityPublicationTimeInterface;
+use Drupal\joinup_workflow\ArchivableEntityInterface;
+use Drupal\node\NodeInterface;
 
 /**
  * Implements hook_preprocess_HOOK().
@@ -62,6 +65,12 @@ function ventuno_preprocess_node(array &$variables): void {
   /** @var \Drupal\node\NodeInterface $node */
   $node = $variables['node'];
   $bundle = $node->bundle();
+
+  // Provide variable to know whether the page has been set as the landing page
+  // of a group, so we can add a <h1> title in the group header.
+  $route_match = \Drupal::routeMatch();
+  $variables['is_canonical'] = $route_match->getRouteName() === 'entity.node.canonical'
+    && in_array($bundle, ['collection', 'solution']);
 
   // Add the site URL to use in nodes.
   $variables['site_url'] = \Drupal::request()->getSchemeAndHttpHost();
@@ -124,6 +133,24 @@ function ventuno_preprocess_node(array &$variables): void {
 }
 
 /**
+ * Implements hook_preprocess_HOOK() for node__solution__group-header.
+ */
+function ventuno_preprocess_node__solution__group_header(array &$variables): void {
+  $node = $variables['node'];
+  if (isset($variables['content']['releases_overview'])) {
+    $variables['content']['releases_overview']['#attributes'] = [
+      'class' => [
+        'btn',
+        'btn-secondary',
+      ],
+    ];
+  }
+  if ($node instanceof ArchivableEntityInterface) {
+    $variables['is_archived'] = $node->isArchived();
+  }
+}
+
+/**
  * Implements hook_preprocess_HOOK() for node--moderation.html.twig.
  *
  * - Removes the contextual links.
@@ -160,4 +187,17 @@ function ventuno_preprocess_page_title__node__distribution(array &$variables): v
 function ventuno_theme_suggestions_joinup_release_releases_download_alter(array &$suggestions, array $variables): void {
   $original_theme_hook = $variables['theme_hook_original'];
   $suggestions[] = $original_theme_hook;
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for node--digest-message.html.twig.
+ */
+function ventuno_preprocess_node__digest_message(&$variables): void {
+  $node = $variables['node'];
+  assert($node instanceof NodeInterface);
+
+  $publicationTime = $node instanceof EntityPublicationTimeInterface
+    ? $node->getPublicationTime()
+    : NULL;
+  $variables['publication_timestamp'] = $publicationTime ?: $node->getCreatedTime();
 }
