@@ -7,7 +7,6 @@
 
 declare(strict_types=1);
 
-use Drupal\collection\Entity\CollectionInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
@@ -20,6 +19,8 @@ use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
+use Drupal\collection\Entity\Collection;
+use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_rdf\Entity\RdfSyncEntityInterface;
 use Drupal\joinup_solution\Entity\Solution;
 use Drupal\joinup_solution\Entity\SolutionInterface;
@@ -35,8 +36,6 @@ use Drupal\og\Og;
 use Drupal\og\OgGroupAudienceHelper;
 use Drupal\og\OgMembershipInterface;
 use Drupal\og\OgRoleInterface;
-use Drupal\rdf_entity\Entity\Rdf;
-use Drupal\rdf_entity\RdfInterface;
 use Drupal\user\Entity\User;
 
 /**
@@ -509,23 +508,23 @@ function joinup_solution_node_predelete(EntityInterface $entity): void {
  *   The solution.
  */
 function joinup_solution_invalidate_collection(EntityInterface $entity): void {
-  if ($entity->isNew()) {
+  if (
+    !$entity instanceof SolutionInterface ||
+    $entity->isNew()
+  ) {
     return;
   }
   // Solutions aren't group content of collections. However, they appear
   // alongside group content in collection overviews.
   // For this reason, we clear the collection group cache tags whenever a
   // solution is saved.
-  if (\Drupal::moduleHandler()->moduleExists('collection')) {
-    $ids = joinup_solution_get_collection_ids($entity);
-    if ($ids) {
-      $tags = [];
-      /** @var \Drupal\rdf_entity\RdfInterface $collection */
-      foreach (Rdf::loadMultiple($ids) as $collection) {
-        $tags = Cache::mergeTags($tags, $collection->getCacheTagsToInvalidate());
-      }
-      Cache::invalidateTags(Cache::buildTags('og-group-content', $tags));
+  if ($ids = joinup_solution_get_collection_ids($entity)) {
+    $tags = [];
+    foreach ($ids as $collectionId) {
+      $collection = Collection::load($collectionId);
+      $tags = Cache::mergeTags($tags, $collection->getCacheTagsToInvalidate());
     }
+    Cache::invalidateTags(Cache::buildTags('og-group-content', $tags));
   }
 }
 
@@ -581,19 +580,20 @@ function joinup_solution_node_update(EntityInterface $entity): void {
  * their changed timestamp updated.
  */
 function joinup_solution_node_delete(NodeInterface $solution): void {
-  if (!$solution instanceof SolutionInterface || $solution->getWorkflowState() !== 'published') {
+  if (
+    !$solution instanceof SolutionInterface ||
+    $solution->getWorkflowState() !== 'published'
+  ) {
     return;
   }
 
-  $storage = \Drupal::entityTypeManager()->getStorage('rdf_entity');
-  $ids = joinup_solution_get_collection_ids($solution);
-  if ($ids) {
+  if ($ids = joinup_solution_get_collection_ids($solution)) {
     // Touch the parent collections in order to update their changed timestamp.
-    $request_time = \Drupal::time()->getRequestTime();
-    /** @var \Drupal\rdf_entity\RdfInterface $collection */
-    foreach ($storage->loadMultiple($ids) as $collection) {
+    $requestTime = \Drupal::time()->getRequestTime();
+    foreach ($ids as $collectionId) {
+      $collection = Collection::load($collectionId);
       $collection->skip_notification = TRUE;
-      $collection->setChangedTime($request_time)->save();
+      $collection->setChangedTime($requestTime)->save();
     }
   }
 }
@@ -686,7 +686,7 @@ function joinup_solution_module_implements_alter(array &$implementations, string
 /**
  * Amount of members of a solution.
  *
- * @param \Drupal\rdf_entity\RdfInterface $entity
+ * @param \Drupal\joinup_solution\Entity\SolutionInterface $solution
  *   The solution.
  *
  * @return int
