@@ -124,7 +124,7 @@ class GroupContentSubscriptionSubscriber implements EventSubscriberInterface {
    * @param \Drupal\joinup_notification\Event\NotificationEvent $event
    *   The event object.
    */
-  public function notifyOnRdfEntityCrudOperation(NotificationEvent $event) {
+  public function notifyOnRdfEntityCrudOperation(NotificationEvent $event): void {
     // Only act on entities that are being created or updated. Subscribers are
     // not notified about entities that are being removed.
     if (!in_array($event->getOperation(), ['create', 'update'])) {
@@ -268,7 +268,7 @@ class GroupContentSubscriptionSubscriber implements EventSubscriberInterface {
    * @return mixed|null
    *   The revision ID, or NULL if there is no published revision.
    */
-  protected function getFirstPublishedRevisionId(EntityPublishedInterface $entity) {
+  protected function getFirstPublishedRevisionId(EntityPublishedInterface $entity): mixed {
     $entity_type = $entity->getEntityTypeId();
     $storage = $this->entityTypeManager->getStorage($entity_type);
     $definition = $this->entityTypeManager->getDefinition($entity_type);

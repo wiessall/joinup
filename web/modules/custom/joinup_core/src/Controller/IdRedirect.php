@@ -90,7 +90,7 @@ class IdRedirect extends ControllerBase {
    *
    * @see http://data.europa.eu/URI.html
    */
-  public static function getEntityTypeFromPersistentUriNamespace(?string $namespace = NULL) {
+  public static function getEntityTypeFromPersistentUriNamespace(?string $namespace = NULL): array|string|null {
     $namespaces = [
       'w21' => 'rdf_entity',
       'dr8' => 'taxonomy_term',

@@ -22,7 +22,7 @@ trait BootstrapTrait {
    *   Thrown when the accordion wrapper or button are not found in the page, or
    *   when the accordion doesn't become visible within a reasonable time frame.
    */
-  protected function openBootstrapAccordion(NodeElement $wrapper) {
+  protected function openBootstrapAccordion(NodeElement $wrapper): void {
     \assert(method_exists($this, 'hasJavascriptSupport'), __METHOD__ . ' depends on JavascriptTrait. Please include it in your class.');
 
     // Non-JS browsers are directly interacting with the HTML, so we can
@@ -75,7 +75,7 @@ trait BootstrapTrait {
    *   when the dropdown-menu doesn't become visible within a reasonable time
    *   frame.
    */
-  protected function openBootstrapDropdown(NodeElement $wrapper) {
+  protected function openBootstrapDropdown(NodeElement $wrapper): void {
     \assert(method_exists($this, 'hasJavascriptSupport'), __METHOD__ . ' depends on JavascriptTrait. Please include it in your class.');
 
     // Non-JS browsers are directly interacting with the HTML, so we can

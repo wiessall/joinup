@@ -13,7 +13,7 @@ use Drupal\Core\StringTranslation\TranslatableMarkup;
 /**
  * Implements hook_contextual_links_view_alter().
  */
-function curated_content_listing_contextual_links_view_alter(&$element, $items) {
+function curated_content_listing_contextual_links_view_alter(&$element, $items): void {
   // Change the title of the contextual links to edit entity subqueues. In our
   // business language these are called 'Curated content listings'.
   if (!empty($element['#links']['entityentity-subqueueedit-form']['title'])) {
@@ -27,7 +27,7 @@ function curated_content_listing_contextual_links_view_alter(&$element, $items) 
  * Updates the title of the entity subqueue edit form. In our business language
  * the subqueues are known as 'Curated content listings'.
  */
-function curated_content_listing_form_entity_subqueue_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+function curated_content_listing_form_entity_subqueue_form_alter(&$form, FormStateInterface $form_state, $form_id): void {
   // Retrieve the original title.
   $label = $form['#title'];
 
