@@ -1694,13 +1694,13 @@ class FeatureContext extends RawDrupalContext {
     }
 
     // Clear any existing data in the field before typing the new data.
-    $value = str_repeat(Key::BACKSPACE . Key::DELETE, strlen($element->attribute('value'))) . $value;
+    $value = str_repeat(Key::BACKSPACE . Key::DELETE, strlen($element->property('value'))) . $value;
 
     // Fill in the field by directly using the postValue() method of the
     // webdriver. This executes the keystrokes that make up the text but will
     // not remove focus from the field so the autocomplete results remain
     // visible and can be inspected.
-    $element->postValue(['value' => [$value]]);
+    $element->postValue(['text' => $value]);
   }
 
   /**
