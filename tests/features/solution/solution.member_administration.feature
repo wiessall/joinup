@@ -1,7 +1,7 @@
 @api @group-g
 Feature: Solution membership administration
   In order to manage a solution
-  As a solution facilitator
+  As a privileged user
   I need to be able to manage solution members
 
   Background:
@@ -12,10 +12,10 @@ Feature: Solution membership administration
       | name                                     | email                         |
       | Princeton-Plainsboro Teaching University | info@princeton-plainsboro.edu |
     And users:
-      | Username         | Roles | E-mail                       | First name | Family name |
+      | Username         | E-mail                       | First name | Family name |
       # Authenticated user.
-      | Guadalupe Norman |       | guadalupe_norman@example.com | Guadalupe  | Norman      |
-      | Marcia Garcia    |       | marcia_garcia@example.com    | Marcia     | Garcia      |
+      | Guadalupe Norman | guadalupe_norman@example.com | Guadalupe  | Norman      |
+      | Marcia Garcia    | marcia_garcia@example.com    | Marcia     | Garcia      |
     And the following solutions:
       | title            | related solutions | description                       | documentation | moderation | logo     | state     | solution type | owner                | contact information                      |
       | The Missing Sons |                   | Blazing fast segmentation faults. | text.pdf      | no         | logo.png | published |               | James Wilson the 2nd | Princeton-Plainsboro Teaching University |
@@ -24,7 +24,7 @@ Feature: Solution membership administration
       | The Missing Sons | Guadalupe Norman | facilitator |
       | The Missing Sons | Marcia Garcia    |             |
 
-  Scenario: Only privileged members should be able to add members
+  Scenario: Privileged members should not be allowed to add users to a solution.
     When I am not logged in
     And I go to the members page of "The Missing Sons"
     Then I should not see the link "Add members"
@@ -38,6 +38,14 @@ Feature: Solution membership administration
     Then I should not see the link "Add members"
 
     When I am logged in as "Guadalupe Norman"
+    And I go to the members page of "The Missing Sons"
+    Then I should not see the link "Add members"
+
+  Scenario: Moderators should be allowed to add users to a solution.
+    Given users:
+      | Username          | Roles     | E-mail                   | First name | Family name |
+      | Daniel Moder      | moderator | daniel_moder@example.com | Daniel     | Moder       |
+    When I am logged in as "Daniel Moder"
     And I go to the members page of "The Missing Sons"
     Then I should see the link "Add members"
 
@@ -56,14 +64,12 @@ Feature: Solution membership administration
     # Try new privileges.
     When I am logged in as "Marcia Garcia"
     And I go to the members page of "The Missing Sons"
-    Then I should see the link "Add members"
-    When I click "Add members"
-    Then I should see the heading "Add members"
+    When I click "Invite members"
+    Then I should see the heading "Invite members"
 
   Scenario: Assign and remove new role to a member
     When I am logged in as "Guadalupe Norman"
     And I go to the members page of "The Missing Sons"
-    Then I should see the link "Add members"
     Then I check the box "Update the member Marcia Garcia"
     Then I select "Add the facilitator role to the selected members" from "Action"
     And I press "Apply to selected items"
@@ -127,7 +133,6 @@ Feature: Solution membership administration
     And I accept the invitation for the "The Missing Sons" solution group
     And Log entry with the message "Christian Dwight accepted the invitation to The Missing Sons as solution facilitator role." should exist.
     And I go to the members page of "The Missing Sons"
-    Then I should see the link "Add members"
-    And I should see the link "Invite members"
+    Then I should see the link "Invite members"
     When I click "Invite members"
     Then I should see the heading "Invite members"

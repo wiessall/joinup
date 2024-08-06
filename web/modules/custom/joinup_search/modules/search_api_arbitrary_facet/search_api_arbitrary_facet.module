@@ -18,7 +18,7 @@ use Drupal\search_api\IndexInterface;
  * @return array
  *   Mapping of field names to Solr field names.
  */
-function search_api_arbitrary_facet_search_fieldnames_from_index(IndexInterface $index) {
+function search_api_arbitrary_facet_search_fieldnames_from_index(IndexInterface $index): array {
   $server = $index->getServerInstance();
   /** @var \Drupal\search_api_solr\SolrBackendInterface $backend */
   $backend = $server->getBackend();
@@ -28,7 +28,7 @@ function search_api_arbitrary_facet_search_fieldnames_from_index(IndexInterface 
 /**
  * Implements hook_field_widget_info_alter().
  */
-function search_api_arbitrary_facet_widget_plugin_info_alter(array &$info) {
+function search_api_arbitrary_facet_widget_plugin_info_alter(array &$info): void {
   // Set providers to exclude from Arbitrary Facet Widget.
   $providers = ['facets_form', 'facets_form_date_range'];
   foreach ($info as &$widget_info) {
@@ -43,7 +43,7 @@ function search_api_arbitrary_facet_widget_plugin_info_alter(array &$info) {
 /**
  * Implements hook_config_schema_info_alter().
  */
-function search_api_arbitrary_facet_config_schema_info_alter(array &$definitions) {
+function search_api_arbitrary_facet_config_schema_info_alter(array &$definitions): void {
   // As the decoration adds keys to the configuration,
   // we have to add these keys to the schema.
   $definitions['facet.widget.default_config']['mapping']['arbitrary_facet_plugin'] = [
@@ -55,7 +55,7 @@ function search_api_arbitrary_facet_config_schema_info_alter(array &$definitions
 /**
  * Implements hook_facets_search_api_query_type_mapping_alter().
  */
-function search_api_arbitrary_facet_facets_search_api_query_type_mapping_alter($backend_plugin_id, array &$query_types) {
+function search_api_arbitrary_facet_facets_search_api_query_type_mapping_alter($backend_plugin_id, array &$query_types): void {
   if ($backend_plugin_id === 'search_api_solr') {
     $query_types['facet_query'] = 'facet_query';
   }

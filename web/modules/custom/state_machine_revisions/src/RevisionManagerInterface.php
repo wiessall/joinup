@@ -18,11 +18,11 @@ interface RevisionManagerInterface {
    * @param \Drupal\Core\Entity\ContentEntityInterface $entity
    *   The entity itself.
    *
-   * @return string|null
+   * @return string|int|null
    *   The revision ID of the latest revision for the specified entity, or
    *   NULL if there is no such entity.
    */
-  public function getLatestRevisionId(ContentEntityInterface $entity);
+  public function getLatestRevisionId(ContentEntityInterface $entity): int|string|null;
 
   /**
    * Determines if an entity has support for revisions.
@@ -33,7 +33,7 @@ interface RevisionManagerInterface {
    * @return bool
    *   Whether or not the entity type has support for revisions.
    */
-  public function isRevisionableEntityType(EntityTypeInterface $entityType);
+  public function isRevisionableEntityType(EntityTypeInterface $entityType): bool;
 
   /**
    * Determines if an entity is a latest revision.
@@ -45,7 +45,7 @@ interface RevisionManagerInterface {
    *   TRUE if the specified object is the latest revision of its entity,
    *   FALSE otherwise.
    */
-  public function isLatestRevision(ContentEntityInterface $entity);
+  public function isLatestRevision(ContentEntityInterface $entity): bool;
 
   /**
    * Loads the revision marked as default for the given entity.
@@ -57,7 +57,7 @@ interface RevisionManagerInterface {
    *   The default entity revision or NULL if the entity type / entity doesn't
    *   exist.
    */
-  public function loadDefaultRevision(ContentEntityInterface $entity);
+  public function loadDefaultRevision(ContentEntityInterface $entity): ?ContentEntityInterface;
 
   /**
    * Loads the latest revision of the given entity.
@@ -69,6 +69,6 @@ interface RevisionManagerInterface {
    *   The latest entity revision or NULL if the entity type / entity doesn't
    *   exist.
    */
-  public function loadLatestRevision(ContentEntityInterface $entity);
+  public function loadLatestRevision(ContentEntityInterface $entity): ?ContentEntityInterface;
 
 }

@@ -240,14 +240,15 @@ Feature: CKEditor5
     And I should not see "This is Alan we love"
     And I should not see "Other Image in The Other Collection"
 
+  # Regression test for ticket ISAICP-8806, ISAICP-8865.
   Scenario: Media type error with CKEditor5.
-  # Regression test for ticket ISAICP-8806.
     Given I am logged in as a moderator
     When I go to the edit form of the "The Other Collection" collection
     And I press the button "Insert Media" in the "Description" wysiwyg editor
     Then a modal should open
+    # There should be no JS error, AJAX should complete.
+    And I press "Apply filters"
     And I press "Insert selected" in the "Modal buttons" region
-    And I wait for AJAX to finish
     Then I should see the error message "No items selected."
 
   # For 'Media video with CKEditor5' see tests/features/video/embed.feature

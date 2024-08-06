@@ -62,7 +62,7 @@ class JoinupEcVideo extends ProviderPluginBase {
         // @todo To be refactored in ISAICP-3885.
         /** @var \Psr\Http\Message\UriInterface $uri */
         \Drupal::httpClient()->get($input, [
-          'on_stats' => function (TransferStats $stats) use (&$uri) {
+          'on_stats' => function (TransferStats $stats) use (&$uri): void {
             $uri = $stats->getEffectiveUri();
           },
         ]);
@@ -94,9 +94,9 @@ class JoinupEcVideo extends ProviderPluginBase {
    * @return string
    *   A time index parameter to pass to the frame or 0 if none is found.
    */
-  protected function getTimeIndex() {
+  protected function getTimeIndex(): string {
     preg_match('#[&?]starttime=(?<time_index>\d+)#i', $this->getInput(), $matches);
-    return $matches['time_index'] ?? 0;
+    return $matches['time_index'] ?? '0';
   }
 
   /**

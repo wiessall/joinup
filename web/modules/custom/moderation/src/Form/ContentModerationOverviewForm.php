@@ -194,7 +194,7 @@ class ContentModerationOverviewForm extends FormBase {
     }
     ksort($options);
 
-    array_walk($options, function (&$value, $state) {
+    array_walk($options, function (&$value, $state): void {
       // Humanize the state IDs by removing the underscores and capitalizing the
       // first letter.
       $value = Unicode::ucfirst(strtr($state, ['_' => ' '])) . " ($value)";

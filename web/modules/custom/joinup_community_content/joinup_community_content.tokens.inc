@@ -15,7 +15,7 @@ use Drupal\joinup_community_content\Entity\CommunityContentInterface;
 /**
  * Implements hook_token_info_alter().
  */
-function joinup_community_content_token_info_alter(&$info) {
+function joinup_community_content_token_info_alter(&$info): void {
   $info['tokens']['node']['diff-url-latest'] = [
     'name' => t('Diff from previous revision'),
     'description' => t('A link to the revision comparison page between the last two revisions of the content.'),
@@ -25,7 +25,7 @@ function joinup_community_content_token_info_alter(&$info) {
 /**
  * Implements hook_tokens().
  */
-function joinup_community_content_tokens($type, array $tokens, array $data = [], array $options = [], ?BubbleableMetadata $bubbleable_metadata = NULL) {
+function joinup_community_content_tokens($type, array $tokens, array $data = [], array $options = [], ?BubbleableMetadata $bubbleable_metadata = NULL): array {
   $replacements = [];
 
   if ($type == 'node' && !empty($data['node'])) {

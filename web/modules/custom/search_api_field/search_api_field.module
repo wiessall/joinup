@@ -20,7 +20,7 @@ use Drupal\paragraphs\ParagraphInterface;
  *
  * Create a pseudo field for each facet region.
  */
-function search_api_field_entity_extra_field_info() {
+function search_api_field_entity_extra_field_info(): array {
   $map = \Drupal::service('entity_field.manager')->getFieldMapByFieldType('search_api_field');
   $extra = [];
   $ids = [];
@@ -57,7 +57,7 @@ function search_api_field_entity_extra_field_info() {
  *
  * Render the facets for each pseudo field enabled.
  */
-function search_api_field_entity_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
+function search_api_field_entity_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode): void {
   if (!$entity instanceof FieldableEntityInterface) {
     return;
   }
@@ -232,7 +232,7 @@ function _search_api_field_calculate_paragraphs_with_facets(ParagraphInterface $
 /**
  * Implements hook_theme().
  */
-function search_api_field_theme() {
+function search_api_field_theme(): array {
   $result_item_variables = [
     'variables' => [
       'value' => '',
@@ -285,7 +285,7 @@ function search_api_field_theme() {
  *
  * @see system_theme_suggestions_field()
  */
-function search_api_field_theme_suggestions_search_api_field(array $variables) {
+function search_api_field_theme_suggestions_search_api_field(array $variables): array {
   $suggestions = [];
 
   $suggestions[] = 'search_api_field__' . $variables['field_name'];

@@ -42,7 +42,7 @@ class PinnableEntitiesTest extends JoinupExistingSiteTestBase {
    * method was unexpectedly returning an array containing NULL values rather
    * than groups.
    */
-  public function testGetGroupsWherePinnedWithDeletedGroup() {
+  public function testGetGroupsWherePinnedWithDeletedGroup(): void {
     // Create a test collection.
     $collection = Collection::create([
       'label' => $this->getRandomGenerator()->string(),
@@ -87,7 +87,7 @@ class PinnableEntitiesTest extends JoinupExistingSiteTestBase {
    * @return \Drupal\rdf_entity\RdfInterface[]
    *   The groups where the entity has been pinned.
    */
-  protected function getGroupsWherePinned(PinnableGroupContentInterface $entity) {
+  protected function getGroupsWherePinned(PinnableGroupContentInterface $entity): array {
     // Refresh the entity so that our test is not affected by static caches.
     $entity = $this->entityTypeManager->getStorage($entity->getEntityTypeId())->loadUnchanged($entity->id());
     $group_ids = $entity->getPinnedGroupIds();

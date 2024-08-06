@@ -179,7 +179,7 @@ function joinup_licence_options_list_alter(array &$options, array $context): voi
 /**
  * Implements hook_theme().
  */
-function joinup_licence_theme($existing, $type, $theme, $path) {
+function joinup_licence_theme($existing, $type, $theme, $path): array {
   return [
     'licence_filter_list' => [
       'variables' => ['items' => NULL],

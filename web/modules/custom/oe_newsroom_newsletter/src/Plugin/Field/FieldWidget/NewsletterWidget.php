@@ -98,7 +98,7 @@ class NewsletterWidget extends WidgetBase {
    * When the newsletter subscription is enabled, all fields should be filled
    * in.
    */
-  public static function validateElement(&$element, FormStateInterface $form_state, $form) {
+  public static function validateElement(&$element, FormStateInterface $form_state, $form): void {
     if ($element['enabled']['#value'] == TRUE) {
       foreach (['universe', 'service_id'] as $field_id) {
         if (empty($element['settings'][$field_id]['#value'])) {

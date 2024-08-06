@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 use Drupal\Component\Render\PlainTextOutput;
 use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\BubbleableMetadata;
@@ -22,7 +23,7 @@ use Drupal\user\Entity\User;
 /**
  * Implements hook_preprocess_HOOK() for html.html.twig.
  */
-function contact_form_preprocess_html(&$variables) {
+function contact_form_preprocess_html(&$variables): void {
   /** @var \Drupal\Core\Routing\CurrentRouteMatch $route_match */
   $route_match = \Drupal::routeMatch();
   $route_name = $route_match->getRouteName();
@@ -113,7 +114,7 @@ function contact_form_form_message_contact_form_submission_form_alter(&$form, Fo
 /**
  * Form submission handler for the contact form.
  */
-function contact_form_form_message_contact_form_submission_submit(&$form, FormStateInterface $form_state) {
+function contact_form_form_message_contact_form_submission_submit(&$form, FormStateInterface $form_state): void {
   $event = new NotificationEvent('contact', $form_state->getFormObject()->getEntity());
 
   /** @var \Symfony\Component\EventDispatcher\EventDispatcherInterface $event_dispatcher */
@@ -149,7 +150,7 @@ function contact_form_validate_report_page_form_message_contact(array &$form, Fo
 /**
  * Implements hook_token_info().
  */
-function contact_form_token_info() {
+function contact_form_token_info(): array {
   $info['tokens']['site']['contact-form'] = [
     'name' => t('The contact form of the site'),
     'description' => t('The absolute url of the contact form of the site.'),
@@ -161,7 +162,7 @@ function contact_form_token_info() {
 /**
  * Implements hook_tokens().
  */
-function contact_form_tokens($type, $tokens, array $data, array $options, BubbleableMetadata $bubbleable_metadata) {
+function contact_form_tokens($type, $tokens, array $data, array $options, BubbleableMetadata $bubbleable_metadata): array {
   $replacements = [];
   if ($type === 'site' && !empty($tokens['contact-form'])) {
     $replacements[$tokens['contact-form']] = \Drupal::urlGenerator()->generateFromRoute('contact_form.contact_page', [], ['absolute' => TRUE]);
@@ -179,7 +180,7 @@ function contact_form_tokens($type, $tokens, array $data, array $options, Bubble
  *
  * @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3988
  */
-function contact_form_mail_alter(&$message) {
+function contact_form_mail_alter(&$message): void {
   if ($message['key'] !== 'contact_form_submission') {
     return;
   }
@@ -195,7 +196,7 @@ function contact_form_mail_alter(&$message) {
  *
  * Send a notification to the contact form submitter.
  */
-function contact_form_mail($key, &$message, $params) {
+function contact_form_mail($key, &$message, $params): void {
   if ($key !== 'contact_form_sender') {
     return;
   }
@@ -236,7 +237,7 @@ function contact_form_mail($key, &$message, $params) {
 /**
  * Implements hook_ENTITY_TYPE_access().
  */
-function contact_form_message_access(EntityInterface $entity, $operation, AccountInterface $account) {
+function contact_form_message_access(EntityInterface $entity, $operation, AccountInterface $account): AccessResultInterface {
   if ($entity->bundle() !== 'contact_form_submission') {
     return AccessResult::neutral();
   }

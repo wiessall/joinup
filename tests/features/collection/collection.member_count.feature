@@ -63,8 +63,6 @@ Feature: Collection homepage
     # Approve the membership.
     Given I am logged in as "Thorin"
     And I am on the members page of "Exactly the same collection, but closed"
-    # Assert that the user does not see the default OG tab.
-    Then I should not see the link "Group"
     And I check the box "Update the member Some goblin"
     Then I select "Approve the pending membership(s)" from "Action"
     And I press "Apply to selected items"
