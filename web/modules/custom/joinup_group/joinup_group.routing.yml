@@ -108,7 +108,7 @@ joinup_group.add_content:
         with_config_overrides: TRUE
 
 joinup_group.leave_confirm_form:
-  path: '/rdf_entity/{rdf_entity}/leave'
+  path: '/node/{node}/leave'
   defaults:
     _form: '\Drupal\joinup_group\Form\LeaveGroupConfirmForm'
     _title: 'Leave group'
@@ -116,8 +116,8 @@ joinup_group.leave_confirm_form:
     _custom_access: '\Drupal\joinup_group\Form\LeaveGroupConfirmForm::access'
   options:
     parameters:
-      rdf_entity:
-        type: entity:rdf_entity
+      node:
+        type: entity:node
         bundle:
           - collection
           - solution
