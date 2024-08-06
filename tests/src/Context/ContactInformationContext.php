@@ -252,7 +252,7 @@ class ContactInformationContext extends RawDrupalContext {
    *
    * @Given the following email confirmation request(s):
    */
-  public function theFollowingEmailConfirmationRequest(TableNode $table) {
+  public function theFollowingEmailConfirmationRequest(TableNode $table): void {
     $email_confirmer = \Drupal::getContainer()->get('email_confirmer');
 
     foreach ($table->getHash() as $row) {

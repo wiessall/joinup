@@ -19,6 +19,7 @@ use Drupal\Core\Session\AccountSwitcherInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\og\MembershipManagerInterface;
+use Drupal\rdf_entity\RdfInterface;
 use Drupal\state_machine\Plugin\Workflow\WorkflowInterface;
 use Drupal\state_machine\Plugin\Workflow\WorkflowTransition;
 use Stringable;
@@ -148,7 +149,7 @@ class WorkflowHelper implements WorkflowHelperInterface {
    * @return \Drupal\rdf_entity\RdfInterface|null
    *   The rdf entity the entity belongs to, or NULL when no group is found.
    */
-  protected function getEntityParent(EntityInterface $entity) {
+  protected function getEntityParent(EntityInterface $entity): ?RdfInterface {
     $groups = $this->membershipManager->getGroups($entity);
     if (empty($groups['rdf_entity'])) {
       return NULL;

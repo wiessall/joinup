@@ -204,7 +204,7 @@ abstract class InviteFormBase extends FormBase {
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The current state of the form.
    */
-  public function validateAddUser(array &$form, FormStateInterface $form_state) {
+  public function validateAddUser(array &$form, FormStateInterface $form_state): void {
     $uid = trim($form_state->getValue('autocomplete'));
     if (empty($uid)) {
       $form_state->setError($form['autocomplete'], $this->t('Name field is required.'));
@@ -228,7 +228,7 @@ abstract class InviteFormBase extends FormBase {
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The current state of the form.
    */
-  public function submitAddUser(array $form, FormStateInterface $form_state) {
+  public function submitAddUser(array $form, FormStateInterface $form_state): void {
     $list = $form_state->get('user_list');
     $list[] = trim($form_state->getValue('autocomplete'));
     $form_state->set('user_list', $list);
@@ -248,7 +248,7 @@ abstract class InviteFormBase extends FormBase {
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The current state of the form.
    */
-  public function submitRemoveUser(array $form, FormStateInterface $form_state) {
+  public function submitRemoveUser(array $form, FormStateInterface $form_state): void {
     $button = $form_state->getTriggeringElement();
     $element = NestedArray::getValue($form, array_slice($button['#array_parents'], 0, -1));
     $list = $form_state->get('user_list');
@@ -429,7 +429,7 @@ abstract class InviteFormBase extends FormBase {
    * @return array
    *   A render array.
    */
-  public function ajaxUpdateUserList(array $form, FormStateInterface $form_state) {
+  public function ajaxUpdateUserList(array $form, FormStateInterface $form_state): array {
     return $form['users'];
   }
 
@@ -444,7 +444,7 @@ abstract class InviteFormBase extends FormBase {
    * @return array
    *   A render array.
    */
-  public function ajaxUpdateForm(array $form, FormStateInterface $form_state) {
+  public function ajaxUpdateForm(array $form, FormStateInterface $form_state): array {
     return $form;
   }
 

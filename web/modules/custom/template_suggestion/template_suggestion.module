@@ -16,7 +16,7 @@ use Drupal\Core\Form\FormStateInterface;
  *
  * Allow adding template suggestions for each field.
  */
-function template_suggestion_field_formatter_third_party_settings_form(FormatterInterface $plugin, FieldDefinitionInterface $field_definition, $view_mode, $form, FormStateInterface $form_state) {
+function template_suggestion_field_formatter_third_party_settings_form(FormatterInterface $plugin, FieldDefinitionInterface $field_definition, $view_mode, $form, FormStateInterface $form_state): array {
   $element = [];
 
   $element['template_suggestion'] = [

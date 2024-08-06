@@ -60,7 +60,7 @@ class JoinupNotificationContext extends RawDrupalContext {
    *
    * @Then the following email should have been sent:
    */
-  public function assertEmailSent(TableNode $table) {
+  public function assertEmailSent(TableNode $table): void {
     /** @var string $template */
     /** @var string $recipient */
     /** @var string $recipient_mail */
@@ -193,7 +193,7 @@ class JoinupNotificationContext extends RawDrupalContext {
    *
    * @Then the following email should not have been sent:
    */
-  public function assertEmailNotSent(TableNode $table) {
+  public function assertEmailNotSent(TableNode $table): void {
     try {
       // Reusing ::assertEmailSent().
       $this->assertEmailSent($table);
@@ -222,7 +222,7 @@ class JoinupNotificationContext extends RawDrupalContext {
    *
    * @Then the email sent to :username_or_email with subject :subject contains the( following lines of) text:
    */
-  public function assertEmailSentAndContainsText(string $username_or_email, string $subject, TableNode $table) {
+  public function assertEmailSentAndContainsText(string $username_or_email, string $subject, TableNode $table): void {
     $this->emailSentHelper(TRUE, $username_or_email, $subject, $table);
   }
 
@@ -297,7 +297,7 @@ class JoinupNotificationContext extends RawDrupalContext {
    *
    * @Then the email sent to :username_or_email with subject :subject should not contain the( following lines of) text:
    */
-  public function assertEmailSentNotContainsText(string $username_or_email, string $subject, TableNode $table) {
+  public function assertEmailSentNotContainsText(string $username_or_email, string $subject, TableNode $table): void {
     $this->emailSentHelper(FALSE, $username_or_email, $subject, $table);
   }
 
@@ -356,7 +356,7 @@ class JoinupNotificationContext extends RawDrupalContext {
    *
    * @Given I mark all emails as read
    */
-  public function clearMailCollectorCache() {
+  public function clearMailCollectorCache(): void {
     \Drupal::state()->set('system.test_mail_collector', []);
     \Drupal::state()->resetCache();
   }
@@ -372,7 +372,7 @@ class JoinupNotificationContext extends RawDrupalContext {
    *
    * @Then :count e-mail(s) should have been sent
    */
-  public function assertNumberOfEmailSent($count) {
+  public function assertNumberOfEmailSent($count): void {
     $mails = $this->getMails();
     if (count($mails) != $count) {
       throw new \Exception("Invalid number of e-mail sent. Expected $count, sent " . count($mails));
@@ -390,7 +390,7 @@ class JoinupNotificationContext extends RawDrupalContext {
    *
    * @When I click the delete confirmation link for (the user ):user from the last email
    */
-  public function clickDeleteConfirmationLink($user) {
+  public function clickDeleteConfirmationLink($user): void {
     $user = $this->getUserByName($user);
     if (empty($user)) {
       throw new \Exception("User {$user->getAccountName()} was not found.");
@@ -416,7 +416,7 @@ class JoinupNotificationContext extends RawDrupalContext {
    *
    * @When I click the comment link from the last email sent to :user
    */
-  public function clickCommentLinkInEmail($user) {
+  public function clickCommentLinkInEmail($user): void {
     $user = $this->getUserByName($user);
     if (empty($user)) {
       throw new \Exception("User {$user->getAccountName()} was not found.");
