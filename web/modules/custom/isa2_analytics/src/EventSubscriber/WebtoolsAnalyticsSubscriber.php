@@ -90,7 +90,7 @@ class WebtoolsAnalyticsSubscriber implements EventSubscriberInterface {
         // while the computation of the value takes place during the rendering
         // of the page.
         // @see \Drupal\Core\Render\MainContent\HtmlRenderer::renderResponse
-        if ($collections = solution_get_collection_ids($group)) {
+        if ($collections = joinup_solution_get_collection_ids($group)) {
           // Only the first affiliated collection should be used to set the site
           // section. This is considered to be the "main" collection. Any other
           // collections are ignored since they would make the analytics results
