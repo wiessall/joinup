@@ -31,7 +31,7 @@ class SolutionOgSubscriber implements EventSubscriberInterface {
    * @param \Drupal\og\Event\PermissionEventInterface $event
    *   The OG permission event.
    */
-  public function provideOgGroupPermissions(OgPermissionEventInterface $event) {
+  public function provideOgGroupPermissions(OgPermissionEventInterface $event): void {
     $event->setPermissions([
       new GroupContentOperationPermission([
         'name' => "unshare solution rdf_entity",

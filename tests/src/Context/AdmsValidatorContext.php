@@ -17,7 +17,7 @@ class AdmsValidatorContext extends RawDrupalContext {
    *
    * @Then the ADMS-AP data of the published entities in Joinup is valid
    */
-  public function assertValidPublishedGraph() {
+  public function assertValidPublishedGraph(): void {
     /** @var \Drupal\sparql_entity_storage\SparqlEntityStorageGraphHandlerInterface $sparql_graph */
     $sparql_graph = \Drupal::service('sparql.graph_handler');
     $graphs = array_merge(

@@ -29,7 +29,7 @@ class JoinupSparqlDefaultGraphsSubscriber implements EventSubscriberInterface {
    * @param \Drupal\sparql_entity_storage\Event\DefaultGraphsEvent $event
    *   The event.
    */
-  public function limitGraphs(DefaultGraphsEvent $event) {
+  public function limitGraphs(DefaultGraphsEvent $event): void {
     $event->setDefaultGraphIds([SparqlGraphInterface::DEFAULT, 'draft']);
   }
 

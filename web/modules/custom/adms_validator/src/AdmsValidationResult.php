@@ -114,7 +114,7 @@ class AdmsValidationResult {
    * @todo Remove this hack in ISAICP-4296.
    * @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-4296
    */
-  protected function applyRules100To103($graph_uri, ConnectionInterface $sparql) {
+  protected function applyRules100To103($graph_uri, ConnectionInterface $sparql): void {
     $rules = [
       100 => [
         'prefix' => 'dcat:Dataset',

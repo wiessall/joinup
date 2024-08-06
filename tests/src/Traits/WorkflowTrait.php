@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup\Traits;
 
 use Drupal\Core\Entity\FieldableEntityInterface;
+use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\joinup_workflow\WorkflowHelperInterface;
 
@@ -27,7 +28,7 @@ trait WorkflowTrait {
    *    Thrown when the expected transitions array does not exactly match the
    *    array of available options.
    */
-  protected function assertAvailableTransitions(FieldableEntityInterface $entity, array $available_transitions, ?AccountInterface $user = NULL) {
+  protected function assertAvailableTransitions(FieldableEntityInterface $entity, array $available_transitions, ?AccountInterface $user = NULL): void {
     $allowed_transitions = $this->getAvailableTransitions($entity, $user);
     $allowed_transitions = array_values($allowed_transitions);
     sort($allowed_transitions);
@@ -79,7 +80,7 @@ trait WorkflowTrait {
    * @return array
    *   An array of transition labels.
    */
-  protected function getAvailableTransitions(FieldableEntityInterface $entity, AccountInterface $user) {
+  protected function getAvailableTransitions(FieldableEntityInterface $entity, AccountInterface $user): array {
     return $this->getWorkflowHelper()->getAvailableTransitionsLabels($entity, $user);
   }
 
@@ -99,7 +100,7 @@ trait WorkflowTrait {
    *   Returns the state field definition of the entity or NULL if none is
    *    found.
    */
-  protected function getEntityStateFieldDefinition($entity_type_id, $bundle_id) {
+  protected function getEntityStateFieldDefinition($entity_type_id, $bundle_id): ?FieldDefinitionInterface {
     return $this->getWorkflowHelper()->getEntityStateFieldDefinition($entity_type_id, $bundle_id);
   }
 
@@ -119,7 +120,7 @@ trait WorkflowTrait {
    * @return array
    *   Field mapping.
    */
-  protected static function workflowStateAliases() {
+  protected static function workflowStateAliases(): array {
     return [
       'deletion request' => 'deletion_request',
       'needs update' => 'needs_update',
@@ -136,7 +137,7 @@ trait WorkflowTrait {
    * @return string
    *   The machine name of the workflow state.
    */
-  protected static function translateWorkflowStateAlias($state) {
+  protected static function translateWorkflowStateAlias($state): string {
     $state = strtolower($state);
     $aliases = self::workflowStateAliases();
     if (array_key_exists($state, $aliases)) {
