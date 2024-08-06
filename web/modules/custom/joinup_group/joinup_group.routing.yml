@@ -90,7 +90,7 @@ joinup_group.transfer_group_ownership_confirm:
     _custom_access: 'Drupal\joinup_group\Form\TransferGroupOwnershipConfirmForm::access'
 
 joinup_group.add_content:
-  path: /rdf_entity/{rdf_entity}/{node_type}/add
+  path: /node/{node}/{node_type}/add
   defaults:
     _controller: Drupal\joinup_group\Controller\GroupNodeController::add
     _title_callback: Drupal\joinup_group\Controller\GroupNodeController::addTitle
@@ -98,8 +98,8 @@ joinup_group.add_content:
     _custom_access: Drupal\joinup_group\Controller\GroupNodeController::createAccess
   options:
     parameters:
-      rdf_entity:
-        type: entity:rdf_entity
+      node:
+        type: entity:node
         bundle:
           - collection
           - solution
