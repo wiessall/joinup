@@ -1,0 +1,8 @@
+includes:
+    - phpstan.dist.neon
+
+parameters:
+    parallel:
+        # CPUs are limited to 2 on Gitlab, without this limit PHPStan hangs.
+        # @todo Remove this once https://github.com/theofidry/cpu-core-counter/issues/125 gets in PHPStan.
+        maximumNumberOfProcesses: 2
