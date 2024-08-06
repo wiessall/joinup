@@ -10,7 +10,7 @@ field_name: abstract
 entity_type: node
 bundle: collection
 label: Abstract
-description: ''
+description: 'Short description text of the collection. Appears on the Overview page.'
 required: true
 translatable: true
 default_value: {  }
