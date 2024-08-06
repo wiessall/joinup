@@ -145,6 +145,7 @@
         "enlightn/security-checker": "^1",
         "gitonomy/gitlib": "^1.4",
         "lovers-of-behat/table-extension": "^1.4",
+        "lullabot/mink-selenium2-driver": "^1.7",
         "mikey179/vfsstream": "~1.6",
         "ml/json-ld": "^1.2",
         "nicwortel/behat-unused-step-definitions-extension": "^1.2",

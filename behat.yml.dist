@@ -123,8 +123,8 @@ default:
             loggingPrefs:
               performance: ALL
               browser: ALL
-            chromeOptions:
-              w3c: false
+            "goog:chromeOptions":
+              w3c: true
               args:
                 - '--no-sandbox'
                 - '--start-maximized'
