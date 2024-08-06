@@ -266,7 +266,7 @@ function joinup_solution_node_view(array &$build, NodeInterface $solution, Entit
         '#type' => 'link',
         '#title' => t('Download releases'),
         '#url' => Url::fromRoute('joinup_release.solution_release.overview', [
-          'rdf_entity' => $solution->id(),
+          'node' => $solution->id(),
         ]),
         '#cache' => [
           // The 'group_header_block' block cache will have different versions
