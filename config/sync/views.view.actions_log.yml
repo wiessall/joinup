@@ -303,7 +303,7 @@ display:
           id: name_1
           table: users_field_data
           field: name
-          relationship: uid
+          relationship: actor
           group_type: group
           admin_label: ''
           entity_type: user
