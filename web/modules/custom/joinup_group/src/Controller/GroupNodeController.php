@@ -8,14 +8,13 @@ use Drupal\Component\Render\MarkupInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Controller\ControllerBase;
-use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\joinup_group\Entity\GroupContentInterface;
+use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\node\NodeInterface;
 use Drupal\node\NodeTypeInterface;
 use Drupal\og\OgAccessInterface;
 use Drupal\og\OgGroupAudienceHelperInterface;
-use Drupal\rdf_entity\RdfInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -50,7 +49,7 @@ class GroupNodeController extends ControllerBase {
   /**
    * Provides a title callback for the group node add page.
    *
-   * @param \Drupal\rdf_entity\RdfInterface $rdf_entity
+   * @param \Drupal\node\NodeInterface $group
    *   The collection or solution RDF entity.
    * @param \Drupal\node\NodeTypeInterface $node_type
    *   The type of node to be added.
@@ -58,14 +57,14 @@ class GroupNodeController extends ControllerBase {
    * @return \Drupal\Component\Render\MarkupInterface
    *   The title as a markup object.
    */
-  public function addTitle(RdfInterface $rdf_entity, NodeTypeInterface $node_type): MarkupInterface {
+  public function addTitle(NodeInterface $group, NodeTypeInterface $node_type): MarkupInterface {
     return $this->t('Add @type', ['@type' => $node_type->getSingularLabel()]);
   }
 
   /**
    * Builds a node creation form.
    *
-   * @param \Drupal\rdf_entity\RdfInterface $rdf_entity
+   * @param \Drupal\node\NodeInterface $node
    *   The collection or solution rdf_entity.
    * @param \Drupal\node\NodeTypeInterface $node_type
    *   The type of node to be added.
@@ -78,15 +77,15 @@ class GroupNodeController extends ControllerBase {
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    *   Thrown when the user entity type is not defined.
    */
-  public function add(RdfInterface $rdf_entity, NodeTypeInterface $node_type): array {
-    $node = $this->createNode($rdf_entity, $node_type);
+  public function add(NodeInterface $node, NodeTypeInterface $node_type): array {
+    $node = $this->createNode($node, $node_type);
     return $this->entityFormBuilder()->getForm($node);
   }
 
   /**
    * Handles access to the content add form through RDF entity pages.
    *
-   * @param \Drupal\rdf_entity\RdfInterface $rdf_entity
+   * @param \Drupal\node\NodeInterface $node
    *   The RDF entity for which the document entity is created.
    * @param \Drupal\node\NodeTypeInterface $node_type
    *   The type of node to be added.
@@ -101,10 +100,10 @@ class GroupNodeController extends ControllerBase {
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    *   Thrown when the user entity type is not defined.
    */
-  public function createAccess(RdfInterface $rdf_entity, NodeTypeInterface $node_type, AccountInterface $account): AccessResultInterface {
+  public function createAccess(NodeInterface $node, NodeTypeInterface $node_type, AccountInterface $account): AccessResultInterface {
     // Grant access depending on whether the user has permission to create a
     // node in this group according to their OG role.
-    return $this->ogAccess->userAccessGroupContentEntityOperation('create', $rdf_entity, $this->createNode($rdf_entity, $node_type), $account);
+    return $this->ogAccess->userAccessGroupContentEntityOperation('create', $node, $this->createNode($node, $node_type), $account);
   }
 
   /**
@@ -135,9 +134,9 @@ class GroupNodeController extends ControllerBase {
   /**
    * Returns a node entity.
    *
-   * @param \Drupal\rdf_entity\RdfInterface $rdf_entity
+   * @param \Drupal\joinup_group\Entity\GroupInterface $group
    *   The parent that the community content entity belongs to.
-   * @param \Drupal\node\NodeTypeInterface $node_type
+   * @param \Drupal\node\NodeTypeInterface $nodeType
    *   The type of node to be added.
    *
    * @return \Drupal\Core\Entity\EntityInterface
@@ -148,10 +147,10 @@ class GroupNodeController extends ControllerBase {
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    *   Thrown when the user entity type is not defined.
    */
-  protected function createNode(RdfInterface $rdf_entity, NodeTypeInterface $node_type): EntityInterface {
+  protected function createNode(GroupInterface $group, NodeTypeInterface $nodeType) {
     return $this->entityTypeManager()->getStorage('node')->create([
-      'type' => $node_type->id(),
-      OgGroupAudienceHelperInterface::DEFAULT_FIELD => $rdf_entity->id(),
+      'type' => $nodeType->id(),
+      OgGroupAudienceHelperInterface::DEFAULT_FIELD => $group->id(),
     ]);
   }
 
