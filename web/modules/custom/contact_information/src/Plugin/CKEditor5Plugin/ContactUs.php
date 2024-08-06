@@ -69,7 +69,7 @@ class ContactUs extends CKEditor5PluginDefault implements ContainerFactoryPlugin
       ];
     }
 
-    $url = Url::fromRoute('entity.rdf_entity.contact', ['rdf_entity' => $group->id()])->toString();
+    $url = Url::fromRoute('entity.node.contact', ['node' => $group->id()])->toString();
 
     return [
       'contactus' => [
