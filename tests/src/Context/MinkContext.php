@@ -74,7 +74,7 @@ class MinkContext extends DrupalExtensionMinkContext {
    *
    * @Given I wait for :seconds second(s)
    */
-  public function iWaitForSeconds(string $seconds) {
+  public function iWaitForSeconds(string $seconds): void {
     $this->getSession()->wait($seconds * 1000);
   }
 

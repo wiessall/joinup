@@ -54,7 +54,7 @@ class Chip extends FormElementBase {
    * @return array
    *   The processed element.
    */
-  public static function processChip(array &$element) {
+  public static function processChip(array &$element): array {
     $element['#tree'] = TRUE;
     $element['remove'] = [
       '#type' => 'submit',

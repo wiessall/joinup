@@ -57,7 +57,7 @@ class CustomPageController implements ContainerInjectionInterface {
    *
    * @see \Drupal\custom_page\Routing\RouteSubscriber::alterRoutes()
    */
-  public function editFormTitle(OgMenuInstanceInterface $ogmenu_instance) {
+  public function editFormTitle(OgMenuInstanceInterface $ogmenu_instance): array {
     // Provide a custom title for the OG Menu instance edit form. The default
     // menu is suitable for webmasters, but we need a simpler title since this
     // form is exposed to regular visitors.
