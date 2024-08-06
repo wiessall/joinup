@@ -7,6 +7,7 @@
 
 declare(strict_types=1);
 
+use Drupal\collection\Entity\CollectionInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
@@ -32,6 +33,7 @@ use Drupal\node\Entity\NodeType;
 use Drupal\node\NodeInterface;
 use Drupal\og\Entity\OgRole;
 use Drupal\og\Og;
+use Drupal\og\OgGroupAudienceHelper;
 use Drupal\og\OgMembershipInterface;
 use Drupal\og\OgRoleInterface;
 use Drupal\rdf_entity\Entity\Rdf;
@@ -335,9 +337,9 @@ function joinup_solution_node_view(array &$build, NodeInterface $solution, Entit
   // Show the collection the solution belongs to. A solution can be affiliated
   // to multiple collections, but for now we show only the first one.
   // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3635
-  if ($display->getComponent('collections') && !$solution->get('collection')->isEmpty()) {
-    /** @var \Drupal\rdf_entity\Entity\Rdf $collection */
-    $collection = $solution->get('collection')->first()->entity;
+  if ($display->getComponent('collections') && !$solution->get(OgGroupAudienceHelper::DEFAULT_FIELD)->isEmpty()) {
+    $collection = $solution->get(OgGroupAudienceHelper::DEFAULT_FIELD)->first()->entity;
+    assert($collection instanceof CollectionInterface);
     $build['collections'] = [
       'link' => $collection->toLink($collection->label())->toRenderable(),
     ];
@@ -556,14 +558,11 @@ function joinup_solution_invalidate_collection(EntityInterface $entity): void {
  * @see \Drupal\joinup_solution\SolutionAffiliationFieldItemList
  */
 function joinup_solution_get_collection_ids(NodeInterface $solution): array {
-  if (\Drupal::moduleHandler()->moduleExists('collection')) {
-    $result = \Drupal::entityQuery('rdf_entity')->accessCheck(FALSE)
-      ->condition('rid', 'collection')
-      ->condition('field_ar_affiliates', $solution->id())
-      ->execute();
-  }
-
-  return !empty($result) ? array_keys($result) : [];
+  $collections = $solution->get(OgGroupAudienceHelper::DEFAULT_FIELD)->referencedEntities();
+  return array_map(
+    fn (CollectionInterface $collection): int => (int) $collection->id(),
+    $collections,
+  );
 }
 
 /**
