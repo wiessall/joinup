@@ -123,7 +123,7 @@ joinup_group.leave_confirm_form:
           - solution
 
 joinup_group.settings_form:
-  path: '/rdf_entity/{rdf_entity}/settings'
+  path: '/node/{node}/settings'
   defaults:
     _controller: Drupal\joinup_group\Controller\GroupSettingsController::settings
     _title_callback: Drupal\joinup_group\Controller\GroupSettingsController::title
@@ -131,8 +131,8 @@ joinup_group.settings_form:
     _custom_access: Drupal\joinup_group\Controller\GroupSettingsController::access
   options:
     parameters:
-      rdf_entity:
-        type: entity:rdf_entity
+      node:
+        type: entity:node
         bundle:
           - collection
           - solution
