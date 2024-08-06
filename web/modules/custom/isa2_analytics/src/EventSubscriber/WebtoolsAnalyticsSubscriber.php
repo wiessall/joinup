@@ -96,7 +96,7 @@ class WebtoolsAnalyticsSubscriber implements EventSubscriberInterface {
           // collections are ignored since they would make the analytics results
           // more difficult to interpret.
           $collection_id = reset($collections);
-          $collection = $this->entityTypeManager->getStorage('rdf_entity')->load($collection_id);
+          $collection = $this->entityTypeManager->getStorage('node')->load($collection_id);
         }
         $group = $collection;
       }
