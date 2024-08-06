@@ -18,7 +18,12 @@ class TelegramFormatter extends NormalizerFormatter {
    * {@inheritdoc}
    */
   public function format(LogRecord $record): string {
-    $normalized = $this->normalize($record);
+    $normalized = $this->normalize($record->toArray());
+
+    // If we don't have an array, fallback to the parent implementation.
+    if (!\is_array($normalized)) {
+      return parent::format($record);
+    }
 
     $formatted = [];
 
