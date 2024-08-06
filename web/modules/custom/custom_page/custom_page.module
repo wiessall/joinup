@@ -27,7 +27,7 @@ use Drupal\node\NodeInterface;
 function custom_page_entity_type_alter(array &$entity_types): void {
   /** @var \Drupal\Core\Entity\ContentEntityTypeInterface[] $entity_types */
   // Add a link template allow adding custom pages.
-  $entity_types['rdf_entity']->setLinkTemplate('add-custom-page', '/rdf_entity/{rdf_entity}/{node_type}/add');
+  $entity_types['node']->setLinkTemplate('add-custom-page', '/node/{node}/{node_type}/add');
 
   // Replaces the standard OG Menu Instance form with a customized one that is
   // suitable for use in the front end.
