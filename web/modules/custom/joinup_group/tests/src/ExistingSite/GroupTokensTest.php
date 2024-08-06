@@ -17,7 +17,7 @@ class GroupTokensTest extends JoinupExistingSiteTestBase {
   /**
    * Tests tokens defined by joinup_group.
    */
-  public function testGroupDefinedTokens() {
+  public function testGroupDefinedTokens(): void {
     $collection = $this->createRdfEntity([
       'rid' => 'collection',
       'label' => $this->randomString(),

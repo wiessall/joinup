@@ -59,7 +59,7 @@ function joinup_collection_form_views_form_og_members_overview_default_alter(&$f
 /**
  * Implements hook_ENTITY_TYPE_insert().
  */
-function joinup_collection_rdf_entity_insert(EntityInterface $entity) {
+function joinup_collection_rdf_entity_insert(EntityInterface $entity): void {
   // Invalidate a custom cache tag, used to rebuild the hamburger menu so that
   // the 'About us' link can be shown dependending on whether the Joinup
   // collection exists. Mainly intended for tests since in the production site
@@ -72,6 +72,6 @@ function joinup_collection_rdf_entity_insert(EntityInterface $entity) {
 /**
  * Implements hook_ENTITY_TYPE_delete().
  */
-function joinup_collection_rdf_entity_delete(EntityInterface $entity) {
+function joinup_collection_rdf_entity_delete(EntityInterface $entity): void {
   joinup_collection_rdf_entity_insert($entity);
 }

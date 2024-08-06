@@ -169,7 +169,7 @@ class RefreshCountersTest extends KernelTestBase {
    * This ensures that we are getting the actual data from the meta entities and
    * not stale data from the entity storage cache.
    */
-  protected function reloadEntities() {
+  protected function reloadEntities(): void {
     /** @var \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager */
     $entity_type_manager = $this->container->get('entity_type.manager');
     foreach ($this->entities as $entity_type_id => $entities) {

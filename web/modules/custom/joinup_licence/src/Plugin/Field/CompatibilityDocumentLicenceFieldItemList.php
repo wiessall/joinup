@@ -17,7 +17,7 @@ class CompatibilityDocumentLicenceFieldItemList extends EntityReferenceFieldItem
   /**
    * Returns the label as the field item.
    */
-  protected function computeValue() {
+  protected function computeValue(): void {
     $this->list[0] = $this->createItem(0, $this->getEntity()->value);
   }
 

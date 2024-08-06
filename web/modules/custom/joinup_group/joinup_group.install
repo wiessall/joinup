@@ -12,7 +12,7 @@ use Drupal\Core\Entity\EntityTypeInterface;
 /**
  * Implements hook_schema().
  */
-function joinup_group_schema() {
+function joinup_group_schema(): array {
   return [
     'joinup_group_node_access' => [
       'description' => 'Provides node access grant IDs that allow per-group access to specific nodes.',

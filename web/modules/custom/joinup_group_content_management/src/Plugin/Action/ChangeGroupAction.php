@@ -163,7 +163,7 @@ class ChangeGroupAction extends ViewsBulkOperationsActionBase implements Contain
         if ($isCustomPage && $children = $this->customPageOgMenuLinksManager->getChildren($node, $menuType)) {
           // Filter out child nodes that are already in the main set.
           $children = array_diff_key($children, array_flip($initialNids));
-          array_walk($children, function (NodeInterface $child) {
+          array_walk($children, function (NodeInterface $child): void {
             // Flag this as a child.
             $child->isChild = TRUE;
           });

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup_community_content\Form;
 
 use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\joinup_group\Form\UnshareForm as OriginalForm;
@@ -37,7 +38,7 @@ class UnshareForm extends OriginalForm {
    * @return \Drupal\Core\Access\AccessResultInterface
    *   The access result.
    */
-  public function access(NodeInterface $node) {
+  public function access(NodeInterface $node): AccessResultInterface {
     $this->entity = $node;
 
     return AccessResult::allowedIf(!empty($this->getGroups()));
