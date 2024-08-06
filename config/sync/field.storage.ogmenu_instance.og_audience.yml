@@ -17,7 +17,7 @@ field_name: og_audience
 entity_type: ogmenu_instance
 type: og_standard_reference
 settings:
-  target_type: rdf_entity
+  target_type: node
 module: og
 locked: false
 cardinality: 1
