@@ -31,6 +31,7 @@ use Drupal\joinup_release\Entity\ReleaseInterface;
 use Drupal\joinup_workflow\ArchivableEntityTrait;
 use Drupal\joinup_workflow\EntityWorkflowStateTrait;
 use Drupal\node\Entity\Node;
+use Drupal\og\OgGroupAudienceHelper;
 use Drupal\og\OgMembershipInterface;
 use Drupal\topic\Entity\TopicReferencingEntityTrait;
 
@@ -80,7 +81,7 @@ class Solution extends Node implements SolutionInterface {
    * @todo Update this in ISAICP-8574.
    */
   public function getGroup(): GroupInterface {
-    $field_item = $this->getFirstItem('collection');
+    $field_item = $this->getFirstItem(OgGroupAudienceHelper::DEFAULT_FIELD);
     if (!$field_item || $field_item->isEmpty()) {
       throw new MissingGroupException();
     }
@@ -152,7 +153,7 @@ class Solution extends Node implements SolutionInterface {
    */
   public function getAffiliatedCollections(): array {
     $collections = [];
-    foreach ($this->getReferencedEntities('collection') as $collection) {
+    foreach ($this->getReferencedEntities(OgGroupAudienceHelper::DEFAULT_FIELD) as $collection) {
       $collections[$collection->id()] = $collection;
     }
     return $collections;

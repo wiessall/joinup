@@ -23,7 +23,6 @@ use Drupal\Core\Url;
 use Drupal\joinup_rdf\Entity\RdfSyncEntityInterface;
 use Drupal\joinup_solution\Entity\Solution;
 use Drupal\joinup_solution\Entity\SolutionInterface;
-use Drupal\joinup_solution\SolutionAffiliationFieldItemList;
 use Drupal\joinup_solution\SolutionLatestReleasesFieldItemList;
 use Drupal\joinup_solution\SolutionReleasesAndDistributionsFieldItemList;
 use Drupal\joinup_taxonomy\Entity\MappedTerm;
@@ -49,16 +48,6 @@ function joinup_solution_entity_bundle_field_info_alter(&$fields, EntityTypeInte
     return;
   }
 
-  // Computed field, that represents the collections a solution is part of.
-  $fields['collection'] = BaseFieldDefinition::create('entity_reference')
-    ->setLabel(t('Collections'))
-    ->setName('collection')
-    ->setDescription(t('The collections this solution belongs to.'))
-    ->setTargetEntityTypeId('node')
-    ->setTargetBundle('solution')
-    ->setSetting('target_type', 'node')
-    ->setComputed(TRUE)
-    ->setClass(SolutionAffiliationFieldItemList::class);
   // References the solution releases and standalone distributions.
   // @todo This should be moved to `joinup_distribution` module.
   $fields['releases_and_distributions'] = BaseFieldDefinition::create('entity_reference')
