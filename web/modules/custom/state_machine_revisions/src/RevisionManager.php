@@ -34,7 +34,7 @@ class RevisionManager implements RevisionManagerInterface {
   /**
    * {@inheritdoc}
    */
-  public function getLatestRevisionId(ContentEntityInterface $entity) {
+  public function getLatestRevisionId(ContentEntityInterface $entity): int|string|null {
     $entity_type = $entity->getEntityTypeId();
 
     if ($storage = $this->entityTypeManager->getStorage($entity_type)) {
@@ -56,21 +56,21 @@ class RevisionManager implements RevisionManagerInterface {
   /**
    * {@inheritdoc}
    */
-  public function isRevisionableEntityType(EntityTypeInterface $entityType) {
+  public function isRevisionableEntityType(EntityTypeInterface $entityType): bool {
     return $entityType->isRevisionable();
   }
 
   /**
    * {@inheritdoc}
    */
-  public function isLatestRevision(ContentEntityInterface $entity) {
+  public function isLatestRevision(ContentEntityInterface $entity): bool {
     return $entity->getRevisionId() == $this->getLatestRevisionId($entity);
   }
 
   /**
    * {@inheritdoc}
    */
-  public function loadDefaultRevision(ContentEntityInterface $entity) {
+  public function loadDefaultRevision(ContentEntityInterface $entity): ?ContentEntityInterface {
     $default_revision = NULL;
 
     if ($storage = $this->entityTypeManager->getStorage($entity->getEntityTypeId())) {
@@ -94,9 +94,11 @@ class RevisionManager implements RevisionManagerInterface {
   /**
    * {@inheritdoc}
    */
-  public function loadLatestRevision(ContentEntityInterface $entity) {
+  public function loadLatestRevision(ContentEntityInterface $entity): ?ContentEntityInterface {
     if ($latest_revision_id = $this->getLatestRevisionId($entity)) {
-      return $this->entityTypeManager->getStorage($entity->getEntityTypeId())->loadRevision($latest_revision_id);
+      /** @var \Drupal\Core\Entity\ContentEntityInterface|NULL $revision */
+      $revision = $this->entityTypeManager->getStorage($entity->getEntityTypeId())->loadRevision($latest_revision_id);
+      return $revision;
     }
 
     return NULL;

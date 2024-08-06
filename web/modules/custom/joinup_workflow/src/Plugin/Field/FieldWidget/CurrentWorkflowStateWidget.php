@@ -119,7 +119,7 @@ class CurrentWorkflowStateWidget extends WidgetBase {
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The form state.
    */
-  public static function validateFormElement(array &$element, FormStateInterface $form_state) {
+  public static function validateFormElement(array &$element, FormStateInterface $form_state): void {
     // We have nothing to validate, this data is coming from a trusted source.
     // Just set the value for the element directly.
     $form_state->setValueForElement($element['current_workflow_state'], $element['current_workflow_state']['label']['#plain_text']);

@@ -71,7 +71,7 @@ class StateMachineRevisionsRouteSubscriber extends RouteSubscriberBase {
    * @param \Symfony\Component\Routing\Route $route
    *   The route object.
    */
-  protected function setLatestRevisionFlag(Route $route) {
+  protected function setLatestRevisionFlag(Route $route): void {
     if (!$entity_form = $route->getDefault('_entity_form')) {
       return;
     }
@@ -98,7 +98,7 @@ class StateMachineRevisionsRouteSubscriber extends RouteSubscriberBase {
    * @return bool
    *   If the entity type has state and is revisionable.
    */
-  protected function hasStateAndIsRevisionable($entity_type_id) {
+  protected function hasStateAndIsRevisionable($entity_type_id): bool {
     if (!isset($this->entityTypes[$entity_type_id])) {
       $has_state_and_is_revisionable = isset($this->entityFieldManager->getFieldMapByFieldType('state')[$entity_type_id]) && $this->entityTypeManager->getDefinition($entity_type_id)->isRevisionable();
       $this->entityTypes[$entity_type_id] = $has_state_and_is_revisionable;

@@ -323,7 +323,7 @@ class ExportUserListForm extends FormBase {
    * @return mixed
    *   The first value.
    */
-  protected function getFirstValue(array $value) {
+  protected function getFirstValue(array $value): mixed {
     if (($firstItem = reset($value)) === FALSE) {
       return NULL;
     }

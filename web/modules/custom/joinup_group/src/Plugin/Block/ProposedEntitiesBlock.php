@@ -90,7 +90,7 @@ class ProposedEntitiesBlock extends BlockBase implements ContainerFactoryPluginI
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    *   Thrown if the RDF Entity entity type is not defined.
    */
-  protected function getRows() {
+  protected function getRows(): array {
     /** @var \Drupal\sparql_entity_storage\SparqlEntityStorage $storage */
     $storage = $this->entityTypeManager->getStorage('rdf_entity');
     $query = $storage->getQuery('OR')->accessCheck(FALSE);

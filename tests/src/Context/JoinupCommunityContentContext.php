@@ -243,7 +243,7 @@ class JoinupCommunityContentContext extends RawDrupalContext {
    *
    * @AfterNodeCreate
    */
-  public function pinCommunityContentInGroup(AfterNodeCreateScope $scope) {
+  public function pinCommunityContentInGroup(AfterNodeCreateScope $scope): void {
     $node = $scope->getEntity();
 
     $is_pinned = in_array(strtolower((string) ($node->pinned ?? '')), [
