@@ -10,7 +10,7 @@ field_name: closed_group
 entity_type: node
 bundle: collection
 label: Closed
-description: ''
+description: 'If a collection is closed, new users can only join the collection after being approved by a facilitator.'
 required: false
 translatable: true
 default_value: {  }
