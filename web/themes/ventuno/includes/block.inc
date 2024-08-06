@@ -79,9 +79,7 @@ function ventuno_preprocess_block(array &$variables): void {
   // When rendering some entity within a block, e.g. a menu, in cases such as a
   // preprocess hook of the entity, there is no information about the block
   // that the entity is displayed in. This will allow us to identify such cases.
-  if ($block_id) {
-    $variables['content']['#attributes']['data-joinup-block-id'] = $block_id;
-  }
+  $variables['content']['#attributes']['data-joinup-block-id'] = $block_id;
 }
 
 /**
