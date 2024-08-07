@@ -142,16 +142,7 @@ function collection_rdf_entity_insert(EntityInterface $entity) {
       'rdf_entity-collection-facilitator',
     ];
 
-    $subscription_bundles = [];
-    foreach (JoinupSubscriptionsHelper::SUBSCRIPTION_BUNDLES['collection'] as $entity_type => $bundles) {
-      foreach ($bundles as $bundle) {
-        $subscription_bundles[] = [
-          'entity_type' => $entity_type,
-          'bundle' => $bundle,
-        ];
-      }
-    }
-
+    $subscription_bundles = JoinupSubscriptionsHelper::provideDataForField('collection');
     Og::createMembership($entity, $entity->getOwner())
       ->setRoles(array_values(OgRole::loadMultiple($roles)))
       ->set('subscription_bundles', $subscription_bundles)
