@@ -249,7 +249,7 @@ function joinup_theme($existing, $type, $theme, $path): array {
  * displayed.
  */
 function joinup_entity_view_alter(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display): void {
-  if (in_array($entity->getEntityTypeId(), ['node', 'rdf_entity']) && $display->getMode() !== 'group_header') {
+  if ($entity->getEntityTypeId() === 'node' && $display->getMode() !== 'group_header') {
     // Add the "entity" contextual links group. Avoid overwriting any existing
     // data that might have been added by other modules. Because of a bug in
     // Drupal core we cannot alter the running order of hook_entity_view_alter()

@@ -5,7 +5,7 @@ dependencies:
   config:
     - field.storage.ogmenu_instance.og_audience
     - og_menu.ogmenu.navigation
-    - rdf_entity.rdfentity.collection
+    - node.type.collection
   module:
     - og
 _core:
@@ -21,7 +21,7 @@ translatable: true
 default_value: {  }
 default_value_callback: ''
 settings:
-  handler: 'default:rdf_entity'
+  handler: 'default:node'
   handler_settings:
     target_bundles:
       collection: collection

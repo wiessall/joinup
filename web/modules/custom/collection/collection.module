@@ -124,7 +124,6 @@ function collection_node_insert(EntityInterface $entity): void {
   if ($entity->bundle() !== 'collection') {
     return;
   }
-  collection_node_update($entity);
 
   // When a new collection is proposed, give the user the 'group owner' role.
   // This will not occur if the user is the anonymous, i.e. the entity was
@@ -227,7 +226,7 @@ function collection_node_view(array &$build, EntityInterface $entity, EntityView
   if ($display->getComponent('join_collection')) {
     $build['join_collection'] = [
       '#lazy_builder' => [
-        'collection.lazy_builders:renderJoinCollectionForm',
+        'joinup_collection.lazy_builders:renderJoinCollectionForm',
         [$entity->id()],
       ],
       '#create_placeholder' => TRUE,

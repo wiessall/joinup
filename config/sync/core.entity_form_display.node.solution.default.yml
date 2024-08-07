@@ -20,6 +20,7 @@ dependencies:
     - field.field.node.solution.listing_content
     - field.field.node.solution.logo
     - field.field.node.solution.metrics_page
+    - field.field.node.solution.og_audience
     - field.field.node.solution.owner
     - field.field.node.solution.process_status
     - field.field.node.solution.related_solutions
@@ -169,6 +170,13 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
+  field_state:
+    type: state_machine_buttons
+    weight: 2
+    region: content
+    settings:
+      use_transition_label: 0
+    third_party_settings: {  }
   field_topic:
     type: options_select
     weight: 5
@@ -298,8 +306,8 @@ hidden:
   body: true
   created: true
   description: true
-  field_state: true
   langcode: true
+  og_audience: true
   path: true
   promote: true
   published_at: true
