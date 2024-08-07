@@ -6,7 +6,6 @@
  */
 
 declare(strict_types=1);
-use Drupal\field\Entity\FieldStorageConfig;
 
 /**
  * Performs checks for the RDF entities and its storage.
