@@ -951,7 +951,7 @@ class JoinupContext extends RawDrupalContext {
     // solution in a Behat test. This is by design, the URIs are not exposed to
     // end users of the site so they should not be used in BDD scenarios.
     if (!empty($node->{OgGroupAudienceHelperInterface::DEFAULT_FIELD})) {
-      $entity = $this->getEntityByLabel('rdf_entity', $node->{OgGroupAudienceHelperInterface::DEFAULT_FIELD});
+      $entity = $this->getEntityByLabel('node', $node->{OgGroupAudienceHelperInterface::DEFAULT_FIELD});
       $node->{OgGroupAudienceHelperInterface::DEFAULT_FIELD} = $entity->id();
     }
 
