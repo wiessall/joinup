@@ -38,6 +38,7 @@
     &:hover {
       text-decoration: none;
       box-shadow: $box-shadow;
+      background-color: darken(desaturate($secondary, 1.06), 5.10); // #D1E4F7
     }
     &::before {
       @include get-bootstrap-icon("translate", currentColor);
