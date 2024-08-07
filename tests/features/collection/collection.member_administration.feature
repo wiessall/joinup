@@ -1,8 +1,8 @@
 @api @group-a
 Feature: Collection membership administration
   In order to build a community
-  As a collection facilitator
-  I need to be able to manager collection members
+  As a privileged user
+  I need to be able to manage collection members
 
   Background:
     Given owner content:
@@ -12,14 +12,16 @@ Feature: Collection membership administration
       | name                                   | email                        |
       | Princeton-Plainsboro Teaching Hospital | info@princeton-plainsboro.us |
     And users:
-      | Username          | Roles | E-mail                        | First name | Family name |
+      | Username          | Roles     | E-mail                        | First name | Family name |
       # Authenticated user.
-      | Lisa Cuddy        |       | lisa_cuddy@example.com        | Lisa       | Cuddy       |
-      | Gregory House     |       | gregory_house@example.com     | Gregory    | House       |
-      | Kathie Cumbershot |       | kathie_cumbershot@example.com | Kathie     | Cumbershot  |
-      | Donald Duck       |       | donald_duck@example.com       | Donald     | Duck        |
-      | Turkey Ham        |       | turkey_ham@example.com        | Turkey     | Ham         |
-      | Cam Bridge        |       | cambridge@example.com         | Cam        | Bridge      |
+      | Lisa Cuddy        |           | lisa_cuddy@example.com        | Lisa       | Cuddy       |
+      | Gregory House     |           | gregory_house@example.com     | Gregory    | House       |
+      | Kathie Cumbershot |           | kathie_cumbershot@example.com | Kathie     | Cumbershot  |
+      | Donald Duck       |           | donald_duck@example.com       | Donald     | Duck        |
+      | Turkey Ham        |           | turkey_ham@example.com        | Turkey     | Ham         |
+      | Cam Bridge        |           | cambridge@example.com         | Cam        | Bridge      |
+      # Moderator.
+      | Daniel Moder      | moderator | daniel_moder@example.com      | Daniel     | Moder       |
     And the following collections:
       | title             | description               | logo     | owner        | contact information                    | closed | state     |
       | Medical diagnosis | 10 patients in 10 minutes | logo.png | James Wilson | Princeton-Plainsboro Teaching Hospital | yes    | published |
@@ -65,7 +67,10 @@ Feature: Collection membership administration
 
     # Approve a membership.
     Given I am logged in as "Lisa Cuddy"
-    And I am on the members page of "Medical diagnosis"
+    When I go to the "Medical diagnosis" collection
+    # Assert that the user does not see the default OG tab.
+    Then I should not see the link "Group"
+    When I am on the members page of "Medical diagnosis"
     Then the "Action" select should contain the following options:
       | - Select -                                                      |
       | Approve the pending membership(s)                               |
@@ -77,8 +82,6 @@ Feature: Collection membership administration
       | Transfer the ownership of the collection to the selected member |
       | Remove the facilitator role from the selected members           |
       | Remove the author role from the selected members                |
-    # Assert that the user does not see the default OG tab.
-    Then I should not see the link "Group"
     And I check the box "Update the member Kathie Cumbershot"
     Then I select "Approve the pending membership(s)" from "Action"
     And I press "Apply to selected items"
@@ -133,8 +136,6 @@ Feature: Collection membership administration
   Scenario: Reject a membership
     Given I am logged in as "Lisa Cuddy"
     And I am on the members page of "Medical diagnosis"
-    # Assert that the user does not see the default OG tab.
-    Then I should not see the link "Group"
     And I check the box "Update the member Kathie Cumbershot"
     Then I select "Delete the selected membership(s)" from "Action"
 
@@ -195,8 +196,6 @@ Feature: Collection membership administration
     # Dr Cuddy promotes Dr House to facilitator.
     When I am logged in as "Lisa Cuddy"
     And I am on the members page of "Medical diagnosis"
-    # Assert that the user does not see the default OG tab.
-    Then I should not see the link "Group"
     Then I check the box "Update the member Gregory House"
     Then I select "Add the facilitator role to the selected members" from "Action"
     And I press "Apply to selected items"
@@ -213,12 +212,7 @@ Feature: Collection membership administration
     And I go to the edit form of the "Medical diagnosis" collection
     Then I should not see the heading "Access denied"
 
-  Scenario: Privileged members should be allowed to add users to a collection.
-    Given users:
-      | Username  | E-mail                 | First name | Family name |
-      | jbelanger | j.belanger@example.com | Jeannette  | Belanger    |
-      | dwightone | dwight1@example.com    | Christian  | Dwight      |
-
+  Scenario: Non-moderator users should not be allowed to add users to a collection.
     When I am not logged in
     And I am on the members page of "Medical diagnosis"
     Then I should not see the link "Add members"
@@ -227,14 +221,18 @@ Feature: Collection membership administration
     And I am on the members page of "Medical diagnosis"
     Then I should not see the link "Add members"
 
-    When I am logged in as "dwightone"
+    When I am logged in as "Cam Bridge"
     And I am on the members page of "Medical diagnosis"
     Then I should not see the link "Add members"
 
     When I am logged in as "Lisa Cuddy"
     And I am on the members page of "Medical diagnosis"
-    Then I should see the link "Add members"
-    When I click "Add members"
+    Then I should not see the link "Add members"
+
+  Scenario: Moderators should be allowed to add users to a collection.
+    When I am logged in as "Daniel Moder"
+    And I am on the members page of "Medical diagnosis"
+    And I click "Add members"
     Then I should see the heading "Add members"
 
     # Verify that a message is shown when no users are selected and we try to submit the form.
@@ -256,53 +254,47 @@ Feature: Collection membership administration
     And I press "Add"
     Then I should see the error message "The selected user is already added to the list."
     # Add some other users.
-    When I fill uid of "jbelanger" in "Name"
+    When I fill uid of "Cam Bridge" in "Name"
     And I press "Add"
     Then the page should show the following chips in the Content region:
-      | Gregory House      |
-      | Jeannette Belanger |
+      | Gregory House |
+      | Cam Bridge    |
     When I fill uid of "Donald Duck" in "Name"
     And I press "Add"
     Then the page should show the following chips in the Content region:
-      | Gregory House      |
-      | Jeannette Belanger |
-      | Donald Duck        |
+      | Gregory House |
+      | Cam Bridge    |
+      | Donald Duck   |
     # Remove a user.
     When I press the remove button on the chip "Donald Duck"
     Then the page should show the following chips in the Content region:
-      | Gregory House      |
-      | Jeannette Belanger |
+      | Gregory House |
+      | Cam Bridge    |
     And I should not see the text "Donald Duck"
 
     # Add the users as members.
     Given the option with text "Member" from select "Role" is selected
     When I press "Add members"
     Then I should see the success message "Successfully added the role Member to the selected users."
-    And I should see the link "Jeannette Belanger"
+    And I should see the link "Cam Bridge"
     And I should see the link "Gregory House"
     But I should not see the link "Donald Duck"
 
     # Add a facilitator.
     When I click "Add members"
-    When I fill uid of "dwightone" in "Name"
+    When I fill uid of "Donald Duck" in "Name"
     And I press "Add"
     Then the page should show the following chips in the Content region:
-      | Christian Dwight |
+      | Donald Duck |
     When I select "Facilitator" from "Role"
     And I press "Add members"
     Then I should see the success message "Successfully added the role Collection facilitator to the selected users."
-    And I should see the link "Christian Dwight"
+    And I should see the link "Donald Duck"
 
-    # Try new privileges.
-    When I am logged in as "dwightone"
+    # Check given privileges.
+    When I am logged in as "Donald Duck"
     And I am on the members page of "Medical diagnosis"
-    Then I should see the link "Add members"
-    When I click "Add members"
-    Then I should see the heading "Add members"
-
-    When I am logged in as "jbelanger"
-    And I am on the members page of "Medical diagnosis"
-    Then I should not see the link "Add members"
+    Then I should see the link "Invite members"
 
   Scenario: Sort member administration bulk form by full user name
     Given users:
@@ -381,8 +373,8 @@ Feature: Collection membership administration
     And I accept the invitation for the "Medical diagnosis" collection group
     Then I should see the text "You have been promoted to collection facilitator"
     And I am on the members page of "Medical diagnosis"
-    Then I should see the link "Add members"
-    And I should see the link "Invite members"
+    Then I should not see the link "Add members"
+    But I should see the link "Invite members"
     When I click "Invite members"
     Then I should see the heading "Invite members"
 
@@ -399,9 +391,8 @@ Feature: Collection membership administration
     And I am on the members page of "Medical diagnosis"
     # The Medical diagnosis collection is closed so normally the membership should be pending.
     # However, since there is an active invitation, both the status and the initial roles are overridden.
-    # Being able to view the links below mean that the membership is active and the user is a facilitator.
-    Then I should see the link "Add members"
-    And I should see the link "Invite members"
+    # Being able to view the link below mean that the membership is active and the user is a facilitator.
+    Then I should see the link "Invite members"
 
   Scenario: Invitations can not be sent for pending users.
     Given users:
@@ -425,7 +416,7 @@ Feature: Collection membership administration
 
   @javascript
   Scenario: Autocomplete creates chips in both the add and the invite forms.
-    Given I am logged in as "Lisa Cuddy"
+    Given I am logged in as "Daniel Moder"
     And I am on the members page of "Medical diagnosis"
     When I click "Invite members"
     And I type "Donald" in the "Name" autocomplete field

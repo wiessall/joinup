@@ -9,6 +9,7 @@ use Drupal\Core\Action\ActionBase;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Core\TempStore\PrivateTempStore;
 use Drupal\Core\TempStore\PrivateTempStoreFactory;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\og\Entity\OgMembership;
@@ -29,25 +30,18 @@ class TransferGroupOwnershipAction extends ActionBase implements ContainerFactor
   use StringTranslationTrait;
 
   /**
-   * The tempstore service.
+   * The Joinup group transfer temporary storage.
    *
-   * @var \Drupal\Core\TempStore\PrivateTempStoreFactory
+   * @var \Drupal\Core\TempStore\PrivateTempStore
    */
-  protected $tempStore;
-
-  /**
-   * The current user service.
-   *
-   * @var \Drupal\Core\Session\AccountInterface
-   */
-  protected $currentUser;
+  protected PrivateTempStore $tempStore;
 
   /**
    * Messages collector in case of warnings or errors.
    *
    * @var array[]
    */
-  protected $messages = [];
+  protected array $messages = [];
 
   /**
    * Constructs a new action object.
@@ -58,15 +52,20 @@ class TransferGroupOwnershipAction extends ActionBase implements ContainerFactor
    *   The plugin ID for the plugin instance.
    * @param array $plugin_definition
    *   The plugin implementation definition.
-   * @param \Drupal\Core\TempStore\PrivateTempStoreFactory $temp_store_factory
+   * @param \Drupal\Core\TempStore\PrivateTempStoreFactory $tempStoreFactory
    *   The tempstore factory.
-   * @param \Drupal\Core\Session\AccountInterface $current_user
+   * @param \Drupal\Core\Session\AccountInterface $currentUser
    *   The current user.
    */
-  public function __construct(array $configuration, $plugin_id, array $plugin_definition, PrivateTempStoreFactory $temp_store_factory, AccountInterface $current_user) {
+  public function __construct(
+    array $configuration,
+    $plugin_id,
+    array $plugin_definition,
+    PrivateTempStoreFactory $tempStoreFactory,
+    protected AccountInterface $currentUser,
+  ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
-    $this->tempStore = $temp_store_factory->get('joinup_transfer_group_ownership');
-    $this->currentUser = $current_user;
+    $this->tempStore = $tempStoreFactory->get('joinup_transfer_group_ownership');
   }
 
   /**

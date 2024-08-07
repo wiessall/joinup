@@ -69,7 +69,7 @@ class CustomPage extends Node implements CustomPageInterface {
    * @return array
    *   An array of field names.
    */
-  protected function getFieldsToSkipFromTranslationChangesCheck() {
+  protected function getFieldsToSkipFromTranslationChangesCheck(): array {
     $fields = parent::getFieldsToSkipFromTranslationChangesCheck();
 
     // Prevents auto updates to changed date when we update only state.

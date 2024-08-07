@@ -7,12 +7,13 @@
 
 declare(strict_types=1);
 
+use Drupal\Component\Render\MarkupInterface;
 use Drupal\Core\StringTranslation\PluralTranslatableMarkup;
 
 /**
  * Cleanup role permissions (prevents issues on config import).
  */
-function workflow_state_permission_update_91001() {
+function workflow_state_permission_update_91001(): ?MarkupInterface {
   // Verbatim copy from user module.
   /* @see user_update_10000 */
   $cleaned_roles = [];
@@ -42,4 +43,6 @@ function workflow_state_permission_update_91001() {
       ['%role_list' => implode(', ', $cleaned_roles)]
     );
   }
+
+  return NULL;
 }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup\Controller;
 
 use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityInterface;
@@ -17,6 +18,7 @@ use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\og\OgAccessInterface;
 use Drupal\rdf_entity\RdfInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * Controller to pin/unpin entities inside groups.
@@ -60,7 +62,7 @@ class PinEntityController extends ControllerBase {
    * @return \Symfony\Component\HttpFoundation\RedirectResponse
    *   The redirect response.
    */
-  public function pin(PinnableGroupContentInterface $entity, GroupInterface $group) {
+  public function pin(PinnableGroupContentInterface $entity, GroupInterface $group): RedirectResponse {
     $entity->pin($group);
 
     $this->messenger()->addMessage($this->t('@bundle %title has been pinned in the @group_bundle %group.', [
@@ -84,7 +86,7 @@ class PinEntityController extends ControllerBase {
    * @return \Symfony\Component\HttpFoundation\RedirectResponse
    *   The redirect response.
    */
-  public function unpin(PinnableGroupContentInterface $entity, GroupInterface $group) {
+  public function unpin(PinnableGroupContentInterface $entity, GroupInterface $group): RedirectResponse {
     $entity->unpin($group);
 
     $this->messenger()->addMessage($this->t('@bundle %title has been unpinned in the @group_bundle %group.', [
@@ -110,7 +112,7 @@ class PinEntityController extends ControllerBase {
    * @return \Drupal\Core\Access\AccessResultInterface
    *   The access result.
    */
-  public function pinAccess(ContentEntityInterface $entity, AccountInterface $account, RdfInterface $group) {
+  public function pinAccess(ContentEntityInterface $entity, AccountInterface $account, RdfInterface $group): AccessResultInterface {
     if (!$this->validEntityParameters($entity, $group)) {
       return AccessResult::forbidden();
     }
@@ -140,7 +142,7 @@ class PinEntityController extends ControllerBase {
    * @return \Drupal\Core\Access\AccessResultInterface
    *   The access result.
    */
-  public function unpinAccess(ContentEntityInterface $entity, AccountInterface $account, RdfInterface $group) {
+  public function unpinAccess(ContentEntityInterface $entity, AccountInterface $account, RdfInterface $group): AccessResultInterface {
     if (!$this->validEntityParameters($entity, $group)) {
       return AccessResult::forbidden();
     }
@@ -168,7 +170,7 @@ class PinEntityController extends ControllerBase {
    * @return bool
    *   True if the entities are of the expected types, false otherwise.
    */
-  protected function validEntityParameters(ContentEntityInterface $entity, RdfInterface $group) {
+  protected function validEntityParameters(ContentEntityInterface $entity, RdfInterface $group): bool {
     // Do not make this generic because we don't want any solution appearing
     // in the solution overview - as related solutions - to retrieve the
     // pin/unpin contextual link.
@@ -190,7 +192,7 @@ class PinEntityController extends ControllerBase {
    * @return \Symfony\Component\HttpFoundation\RedirectResponse
    *   The redirect response.
    */
-  protected function getRedirect(EntityInterface $entity) {
+  protected function getRedirect(EntityInterface $entity): RedirectResponse {
     $redirect = $entity->toUrl();
 
     return $this->redirect($redirect->getRouteName(), $redirect->getRouteParameters());

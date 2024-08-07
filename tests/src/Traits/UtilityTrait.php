@@ -141,7 +141,7 @@ trait UtilityTrait {
    * @return mixed
    *   The result of the last invocation of the callback.
    */
-  protected function waitUntil(callable $callback, int $timeout = 5) {
+  protected function waitUntil(callable $callback, int $timeout = 5): mixed {
     $end = microtime(TRUE) + $timeout;
     do {
       usleep(100000);

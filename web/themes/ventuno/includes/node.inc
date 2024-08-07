@@ -156,7 +156,7 @@ function ventuno_preprocess_node__solution__group_header(array &$variables): voi
  * - Removes the contextual links.
  * - Adds an edit URL.
  */
-function ventuno_preprocess_node__moderation(&$variables) {
+function ventuno_preprocess_node__moderation(&$variables): void {
   /** @var \Drupal\node\NodeInterface $node */
   $node = $variables['node'];
   $variables['edit_url'] = $node->toUrl('edit-form')->toString();

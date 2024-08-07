@@ -47,7 +47,7 @@ class JoinupEuLoginAnonymous403Subscriber extends HttpExceptionSubscriberBase {
    * @param \Symfony\Component\HttpKernel\Event\ExceptionEvent $event
    *   The event to process.
    */
-  public function on403(ExceptionEvent $event) {
+  public function on403(ExceptionEvent $event): void {
     if (!$this->currentUser->isAnonymous()) {
       return;
     }

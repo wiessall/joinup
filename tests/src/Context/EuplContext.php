@@ -329,7 +329,7 @@ class EuplContext extends RawDrupalContext {
    *
    * @Then the :spdx_id :can be added to the compare list
    */
-  public function assertLicenceCanBeCompared(string $spdx_id, string $can) {
+  public function assertLicenceCanBeCompared(string $spdx_id, string $can): void {
     \assert(in_array($can, ['can', 'cannot']), 'The $can parameter should take one of the values "can" or "cannot" but "' . $can . '" was given.');
 
     $checkbox = $this->findLicenceTile($spdx_id)->findField('Add to compare list');
@@ -355,7 +355,7 @@ class EuplContext extends RawDrupalContext {
    *
    * @Then the :spdx_id licence should be :checked
    */
-  public function assertLicenceChecked(string $spdx_id, string $checked) {
+  public function assertLicenceChecked(string $spdx_id, string $checked): void {
     \assert(in_array($checked, ['checked', 'unchecked']), 'The $checked parameter should take one of the values "checked" or "unchecked" but "' . $checked . '" was given.');
 
     $checkbox = $this->findLicenceTile($spdx_id)->findField('Add to compare list');
