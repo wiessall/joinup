@@ -16,8 +16,8 @@ use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\joinup_core\Event\AjaxCommandEvent;
+use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\Form\JoinGroupFormBase;
-use Drupal\node\NodeInterface;
 use Drupal\og\MembershipManagerInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -55,7 +55,7 @@ class JoinCollectionForm extends JoinGroupFormBase {
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state, ?AccountProxyInterface $user = NULL, ?NodeInterface $group = NULL): array {
+  public function buildForm(array $form, FormStateInterface $form_state, ?AccountProxyInterface $user = NULL, ?GroupInterface $group = NULL): array {
     $form = parent::buildForm($form, $form_state, $user, $group);
 
     // @todo Move this into the joinup_subscription module to solve a circular

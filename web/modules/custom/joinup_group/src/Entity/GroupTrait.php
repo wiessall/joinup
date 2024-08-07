@@ -300,6 +300,8 @@ trait GroupTrait {
 
     $nids = $storage->getQuery()->accessCheck(FALSE)
       ->condition(OgGroupAudienceHelperInterface::DEFAULT_FIELD, $this->id())
+      // Only allow community content bundles to be returned.
+      ->condition('type', 'solution', '<>')
       ->execute();
 
     if (!$nids) {

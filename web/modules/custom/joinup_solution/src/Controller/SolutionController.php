@@ -8,8 +8,11 @@ use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\collection\Entity\CollectionInterface;
+use Drupal\joinup_group\Entity\GroupInterface;
+use Drupal\joinup_solution\Entity\Solution;
 use Drupal\joinup_solution\Entity\SolutionInterface;
-use Drupal\rdf_entity\RdfInterface;
+use Drupal\node\NodeInterface;
+use Drupal\og\OgGroupAudienceHelper;
 
 /**
  * Controller providing the form to add a new solution inside a collection.
@@ -23,35 +26,35 @@ class SolutionController extends ControllerBase {
    * that include the rdf_entity id in the url so that the og audience field
    * is auto completed.
    *
-   * @param \Drupal\rdf_entity\RdfInterface $rdf_entity
+   * @param \Drupal\node\NodeInterface $node
    *   The collection.
    *
    * @return array
    *   Return the form array to be rendered.
-   *
-   * @todo Change the parameter to a node in ISAICP-8574.
    */
-  public function add(RdfInterface $rdf_entity): array {
-    $solution = $this->createNewSolution($rdf_entity);
+  public function add(NodeInterface $node): array {
+    assert($node instanceof CollectionInterface);
+    $solution = $this->createNewSolution($node);
 
     // Pass the collection to the form state so that the parent connection is
     // established.
     // @see solution_add_form_parent_submit()
-    return $this->entityFormBuilder()->getForm($solution, 'default', ['collection' => $rdf_entity->id()]);
+    return $this->entityFormBuilder()->getForm($solution, 'default', [OgGroupAudienceHelper::DEFAULT_FIELD => $node->id()]);
   }
 
   /**
    * Handles access to the solution add form through collection pages.
    *
-   * @param \Drupal\rdf_entity\RdfInterface $rdf_entity
+   * @param \Drupal\node\NodeInterface $node
    *   The collection in which the solution is created.
    *
    * @return \Drupal\Core\Access\AccessResultInterface
    *   The access result object.
    */
-  public function createSolutionAccess(RdfInterface $rdf_entity): AccessResultInterface {
+  public function createSolutionAccess(NodeInterface $node): AccessResultInterface {
+    assert($node instanceof CollectionInterface);
     // If the collection is archived, content creation is not allowed.
-    if ($rdf_entity->getWorkflowState() === 'archived') {
+    if ($node->getWorkflowState() === 'archived') {
       return AccessResult::forbidden();
     }
 
@@ -62,11 +65,14 @@ class SolutionController extends ControllerBase {
       return AccessResult::allowed();
     }
 
-    if (!$rdf_entity->hasGroupPermission($user->id(), 'create solution content')) {
+    if (
+      !$node instanceof GroupInterface ||
+      !$node->hasGroupPermission($user->id(), 'create solution content')
+    ) {
       return AccessResult::forbidden();
     }
 
-    $solution = $this->createNewSolution($rdf_entity);
+    $solution = $this->createNewSolution($node);
     return AccessResult::allowedIf(!empty($solution->getWorkflow()->getAllowedTransitions($solution->getWorkflowState(), $solution)));
   }
 
@@ -80,9 +86,9 @@ class SolutionController extends ControllerBase {
    *   The unsaved solution entity.
    */
   protected function createNewSolution(CollectionInterface $collection): SolutionInterface {
-    return $this->entityTypeManager()->getStorage('node')->create([
+    return Solution::create([
       'type' => 'solution',
-      'collection' => [$collection->id()],
+      OgGroupAudienceHelper::DEFAULT_FIELD => $collection,
     ]);
   }
 
