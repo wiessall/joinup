@@ -7,10 +7,8 @@
 
 declare(strict_types=1);
 
-use Drupal\joinup_solution\Entity\Solution;
 use Drupal\joinup_taxonomy\Entity\MappedTerm;
 use Drupal\node\Entity\Node;
-use Drupal\node\NodeInterface;
 use Drupal\pathauto\PathautoState;
 use Drupal\search_api\Entity\Index;
 use Drupal\sparql_entity_storage\UriEncoder;
@@ -346,255 +344,46 @@ function _joinup_rdf_deploy_update_field_target_id(string $base_table_prefix, st
 }
 
 /**
- * Migrates published releases and their solutions.
+ * Migrates collections.
  */
 function joinup_rdf_deploy_111105(array &$sandbox): string {
   $endpoint = \Drupal::getContainer()->get('sparql.endpoint');
-  if (empty($sandbox['solutions'])) {
+  if (empty($sandbox['collections'])) {
     $query = <<<SPARQL
       SELECT DISTINCT ?id
-      FROM <http://joinup.eu/solution/published>
+      FROM <http://joinup.eu/collection/published>
+      FROM <http://joinup.eu/collection/draft>
       WHERE {
         ?id a ?type .
       }
       SPARQL;
     $results = $endpoint->query($query)->getArrayCopy();
-    $sandbox['solution']['published'] = array_map(fn(\stdClass $result) => $result->id->getUri(), $results);
-    // Also fetch solution from the draft graph, that do not exist in the
-    // published graph too - the new releases.
-    $query = <<<SPARQL
-      SELECT DISTINCT ?id
-      FROM <http://joinup.eu/solution/published>
-      FROM <http://joinup.eu/solution/draft>
-      WHERE {
-        GRAPH <http://joinup.eu/solution/draft> { ?id a ?type } .
-        FILTER NOT EXISTS {
-          GRAPH <http://joinup.eu/solution/published> {
-            ?id a ?type .
-          }
-        }
-      }
-      SPARQL;
-    $results = $endpoint->query($query)->getArrayCopy();
-    $sandbox['solution']['draft'] = array_map(fn(\stdClass $result) => $result->id->getUri(), $results);
-
+    $sandbox['collections'] = array_map(fn(\stdClass $result) => $result->id->getUri(), $results);
     $sandbox['progress'] = 0;
-    $sandbox['total'] = count($sandbox['releases']['published']) + count($sandbox['releases']['draft']);
+    $sandbox['total'] = count($sandbox['collections']);
     $sandbox['swapped_aliases'] = 0;
   }
-  $alias_repository = \Drupal::getContainer()->get('path_alias.repository');
-  $connection = \Drupal::database();
-  $rdf_storage = \Drupal::entityTypeManager()->getStorage('rdf_entity');
-  // Use this was to first create the published versions and then the new ones.
-  $source = empty($sandbox['releases']['published']) ? 'draft' : 'published';
-  $uris = array_splice($sandbox['releases'][$source], 0, 50);
+
+  $uris = array_splice($sandbox['collections'], 0, 50);
+  $migration_helper = \Drupal::getContainer()->get('joinup_rdf.migration_helper');
   $start = microtime(TRUE);
   foreach ($uris as $uri) {
-    $query = <<<SPARQL
-      SELECT *
-      FROM <http://joinup.eu/solution/$source>
-      WHERE {
-        <$uri> ?property ?value .
-      }
-      SPARQL;
-    $results = $endpoint->query($query)->getArrayCopy();
-    $values = _joinup_rdf_deploy_flatten_rdf_values($results);
-
-    if (empty($values['http://purl.org/dc/terms/isVersionOf'][0]) || !($solution = $rdf_storage->load($values['http://purl.org/dc/terms/isVersionOf'][0]))) {
-      throw new Exception('Release ' . $uri . ' has no solution.');
-    }
-
-    $solution_uri = $solution->id();
-
-    if (!isset($sandbox['solution_stubs'][$solution_uri])) {
-      $solution_stub = Node::create([
-        'type' => 'solution',
-        'title' => strlen($solution->label()) > 255 ? substr($solution->label(), 0, 255) : $solution->label(),
-        'uri' => $solution_uri,
-      ]);
-      // @todo On the UI, we need to handle this when displaying values - link to
-      //   the original solution.
-      $solution_stub->save();
-      $sandbox['solution_stubs'][$solution_uri] = [
-        'target_id' => $solution_stub->id(),
-        'target_revision_id' => $solution_stub->getRevisionId(),
-      ];
-    }
-
-    $release_node = Node::create([
-      'type' => 'release',
-      'title' => strlen($values['http://purl.org/dc/terms/title'][0]) > 255
-        ? substr($values['http://purl.org/dc/terms/title'][0], 0, 255)
-        : $values['http://purl.org/dc/terms/title'][0],
-      'uri' => $uri,
-      'og_audience' => $solution->id(),
-      'created' => $values['http://purl.org/dc/terms/issued'][0]->getTimestamp(),
-      'changed' => $values['http://purl.org/dc/terms/modified'][0]->getTimestamp(),
-      'published_at' => $values['http://purl.org/dc/terms/issued'][0]->getTimestamp(),
-      'description' => [
-        'value' => $values['http://www.w3.org/ns/adms#versionNotes'][0] ?? '',
-        'format' => 'content_editor',
-      ],
-      'release_number' => $values['http://www.w3.org/2002/07/owl#versionInfo'][0] ?? '',
-      'field_state' => $values['http://joinup.eu/isr/workflow_status'][0],
-      'field_keywords' => $values['http://www.w3.org/ns/dcat#keyword'] ?? [],
-      'documentation' => $values['http://xmlns.com/foaf/0.1/page'][0] ?? NULL,
-      'langcode' => $values['http://joinup.eu/language'][0] ?? 'en',
-    ]);
-    $release_node->set('solution_data', $sandbox['solution_stubs'][$solution_uri]);
-
-    foreach ([
-      'http://purl.org/dc/terms/language' => 'language',
-      'http://www.w3.org/ns/adms#status' => 'process_status',
-      'http://purl.org/dc/terms/spatial' => 'spatial_coverage',
-      // @todo Create a follow up to merge the spatial_coverage fields in nodes.
-    ] as $predicate => $target_field) {
-      $mapped_values = [];
-      if (empty($values[$predicate])) {
-        continue;
-      }
-
-      foreach ($values[$predicate] as $value) {
-        if ($term = MappedTerm::loadByUri($value)) {
-          $mapped_values[] = [
-            'target_id' => $term->id(),
-          ];
-        }
-      }
-      $release_node->set($target_field, $mapped_values);
-    }
-    $pathauto_old_path = '/rdf_entity/' . UriEncoder::encodeUrl($uri);
-    $has_alias = $alias_repository->lookupBySystemPath($pathauto_old_path, 'en');
-    if ($has_alias) {
-      $release_node->get('path')->pathauto = PathautoState::SKIP;
-    }
-
-    $release_node->set('uri', $uri);
-    $release_node->setRevisionCreationTime($values['http://purl.org/dc/terms/modified'][0]->getTimestamp());
-    $release_node->save();
-
-    _joinup_rdf_deploy_update_field_target_id('node', 'isaicp_8569', 'distribution_parent_target_id', $uri, $release_node->id());
-
-    if ($has_alias) {
-      $internal_url = '/' . $release_node->toUrl()->getInternalPath();
-      $connection->update('path_alias')
-        ->fields(['path' => $internal_url])
-        ->condition('path', $pathauto_old_path)
-        ->execute();
-
-      $connection->update('path_alias_revision')
-        ->fields(['path' => $internal_url])
-        ->condition('path', $pathauto_old_path)
-        ->execute();
-      $sandbox['swapped_aliases']++;
-    }
+    $migration_helper->migrateCollection($uri);
     $sandbox['progress']++;
   }
 
   $finish = microtime(TRUE);
   $sandbox['#finished'] = $sandbox['progress'] / $sandbox['total'];
-  return "Progress: {$sandbox['progress']}/{$sandbox['total']} ({$sandbox['swapped_aliases']} aliases swapped) in " . round($finish - $start, 2) . 's';
-}
-
-/**
- * Migrates forward release revisions and unpublished ones, and their solutions.
- */
-function joinup_rdf_deploy_111102(array &$sandbox): string {
-  $endpoint = \Drupal::getContainer()->get('sparql.endpoint');
-  if (empty($sandbox['releases'])) {
-    $query = <<<SPARQL
-      SELECT DISTINCT ?id
-      FROM <http://joinup.eu/asset_release/draft>
-      WHERE {
-        GRAPH <http://joinup.eu/asset_release/draft> { ?id a ?type } .
-        FILTER EXISTS {
-          GRAPH <http://joinup.eu/asset_release/published> {
-            ?id a ?type .
-          }
-        }
-      }
-      SPARQL;
-
-    $results = $endpoint->query($query)->getArrayCopy();
-    $sandbox['releases'] = array_map(fn(\stdClass $result) => $result->id->getUri(), $results);
-    $sandbox['progress'] = 0;
-    $sandbox['total'] = count($sandbox['releases']);
-    $sandbox['solution_stubs'] = [];
-    $sandbox['swapped_aliases'] = 0;
-  }
-
-  $rdf_sync = \Drupal::getContainer()->get('rdf_sync.mapper');
-  $uris = array_splice($sandbox['releases'], 0, 50);
-  $start = microtime(TRUE);
-  foreach ($uris as $uri) {
-    $query = <<<SPARQL
-      SELECT *
-      FROM <http://joinup.eu/asset_release/draft>
-      WHERE {
-        <$uri> ?property ?value .
-      }
-      SPARQL;
-    $results = $endpoint->query($query)->getArrayCopy();
-    $values = _joinup_rdf_deploy_flatten_rdf_values($results);
-
-    if ($release_node = $rdf_sync->getEntityByUri($uri)) {
-      // We need to do the same process but create a new revision instead.
-      foreach ([
-        'http://purl.org/dc/terms/language' => 'language',
-        'http://www.w3.org/ns/adms#status' => 'process_status',
-        'http://purl.org/dc/terms/spatial' => 'spatial_coverage',
-      ] as $predicate => $target_field) {
-        $mapped_values = [];
-        if (empty($values[$predicate])) {
-          continue;
-        }
-
-        foreach ($values[$predicate] as $value) {
-          if ($term = MappedTerm::loadByUri($value)) {
-            $mapped_values[] = [
-              'target_id' => $term->id(),
-            ];
-          }
-        }
-        $release_node->set($target_field, $mapped_values);
-      }
-
-      $release_node->set('title', strlen($values['http://purl.org/dc/terms/title'][0]) > 255
-        ? substr($values['http://purl.org/dc/terms/title'][0], 0, 255)
-        : $values['http://purl.org/dc/terms/title'][0]);
-      $release_node->set('created', $values['http://purl.org/dc/terms/issued'][0]->getTimestamp());
-      $release_node->set('changed', $values['http://purl.org/dc/terms/modified'][0]->getTimestamp());
-      $release_node->set('published_at', $values['http://purl.org/dc/terms/issued'][0]->getTimestamp());
-      $release_node->set('description', [
-        'value' => $values['http://www.w3.org/ns/adms#versionNotes'][0] ?? '',
-        'format' => 'content_editor',
-      ]);
-      $release_node->set('release_number', $values['http://www.w3.org/2002/07/owl#versionInfo'][0] ?? '');
-      $release_node->set('field_state', $values['http://joinup.eu/isr/workflow_status'][0]);
-      $release_node->set('field_keywords', $values['http://www.w3.org/ns/dcat#keyword'] ?? []);
-      $release_node->set('documentation', $values['http://xmlns.com/foaf/0.1/page'][0] ?? NULL);
-      $release_node->set('langcode', $values['http://joinup.eu/language'][0] ?? 'en');
-
-      $release_node->setNewRevision();
-      $release_node->setRevisionCreationTime($values['http://purl.org/dc/terms/modified'][0]->getTimestamp());
-      $release_node->save();
-      _joinup_rdf_deploy_update_field_target_id('node', 'isaicp_8569', 'distribution_parent_target_id', $uri, $release_node->id());
-    }
-    $sandbox['progress']++;
-  }
-
-  $finish = microtime(TRUE);
-  $sandbox['#finished'] = $sandbox['progress'] / $sandbox['total'];
-  return "Progress: {$sandbox['progress']}/{$sandbox['total']} ({$sandbox['swapped_aliases']} aliases swapped) in " . round($finish - $start, 2) . 's';
+  return "Progress: {$sandbox['progress']}/{$sandbox['total']} in " . round($finish - $start, 2) . 's';
 }
 
 /**
  * Clean up the search index.
  */
-function joinup_rdf_deploy_111103(): string {
+function joinup_rdf_deploy_111106(): string {
   /** @var \Drupal\search_api\Entity\Index $index */
   $index = Index::load('published');
-  $results = $index->query()->addCondition('entity_bundle', 'asset_release')->execute();
+  $results = $index->query()->addCondition('entity_bundle', 'collection')->execute();
   $ids = array_keys($results->getResultItems());
   // ::trackItems{action} re-constructs the IDs so we need to remove the prefix
   // `entity:rdf_entity:` from the IDs.
@@ -603,161 +392,14 @@ function joinup_rdf_deploy_111103(): string {
   }, $ids);
   $index->trackItemsDeleted('entity:rdf_entity', $ids);
 
-  return 'Releases have been removed from the search index.';
+  return 'Collections have been removed from the search index.';
 }
 
 /**
  * Clean the asset release graph.
  */
-function joinup_rdf_deploy_111104(): void {
+function joinup_rdf_deploy_111107(): void {
   $endpoint = \Drupal::getContainer()->get('sparql.endpoint');
-  $endpoint->query('CLEAR GRAPH <http://joinup.eu/asset_release/published>');
-  $endpoint->query('CLEAR GRAPH <http://joinup.eu/asset_release/draft>');
-}
-
-/**
- * Loads or creates a solution from the database.
- *
- * @param string $id
- *   The solution RDF URI.
- * @param array $values
- *   The values to set on the solution.
- *
- * @return \Drupal\node\NodeInterface
- *   The solution node.
- */
-function _joinup_rdf_create_or_update_solution(string $id, array $values): NodeInterface {
-
-  if (!($solution = Solution::loadByUri($id))) {
-    $solution = Solution::create([
-      'type' => 'solution',
-      'title' => 'Solution',
-      'uri' => $id,
-    ]);
-  }
-
-  $solution->set('title', strlen($values['http://purl.org/dc/terms/title'][0]) > 255
-    ? substr($values['http://purl.org/dc/terms/title'][0], 0, 255)
-    : $values['http://purl.org/dc/terms/title'][0]);
-  $solution->set('uid', $values['http://joinup.eu/owner/uid'][0]);
-  $solution->set('created', $values['http://purl.org/dc/terms/issued'][0]->getTimestamp());
-  $solution->set('changed', $values['http://purl.org/dc/terms/modified'][0]->getTimestamp());
-  $solution->set('published_at', $values['http://joinup.eu/collection/published-at'][0]->getTimestamp());
-  $solution->set('description', [
-    'value' => $values['http://www.w3.org/ns/adms#versionNotes'][0] ?? '',
-    'format' => 'content_editor',
-  ]);
-  $solution->set('release_number', $values['http://www.w3.org/2002/07/owl#versionInfo'][0] ?? '');
-  $solution->set('field_state', $values['http://joinup.eu/isr/workflow_status'][0]);
-  $solution->set('field_keywords', $values['http://www.w3.org/ns/dcat#keyword'] ?? []);
-  $solution->set('documentation', $values['http://xmlns.com/foaf/0.1/page'][0] ?? NULL);
-  $solution->set('langcode', $values['http://joinup.eu/language'][0] ?? 'en');
-
-  // Key is the source field name, value is the target field name. Null target
-  // means skip.
-  $mapper = [
-    'id' => NULL,
-    'rid' => NULL,
-    'uid' => 'uid',
-    'label' => 'title',
-    'created' => 'created',
-    'changed' => 'changed',
-    'uuid' => NULL,
-    'langcode' => 'langcode',
-    'default_langcode' => NULL,
-    // Path will be handled elsewhere.
-    'path' => NULL,
-    'current_workflow_state' => NULL,
-    'content_translation_source' => 'content_translation_source',
-    'content_translation_outdated' => 'content_translation_outdated',
-    'content_translation_uid' => 'content_translation_uid',
-    'content_translation_status' => 'content_translation_status',
-    'published_at' => 'published_at',
-    'graph' => NULL,
-    'field_is_abstract' => 'abstract',
-    'field_is_has_version' => NULL,
-    'field_is_affiliations_requests' => NULL,
-    'field_is_contact_information' => 'contact',
-    'field_is_content' => 'listing_content',
-    'field_is_content_creation' => 'content_creation',
-    'field_is_description' => 'description',
-    'field_is_documentation' => 'documentation',
-    'field_is_included_asset' => NULL,
-    'field_is_issue_tracker' => NULL,
-    'field_is_landing_page' => 'landing_page',
-    'field_is_language' => 'language',
-    'field_is_logo' => 'logo',
-    'field_is_metrics_page' => 'metrics_page',
-    'field_is_moderation' => 'group_moderation',
-    'field_is_owner' => 'owner',
-    'field_is_related_solutions' => 'related_solutions',
-    'field_is_shared_in' => 'shared_in',
-    'field_is_show_eira_related' => 'list_related_entities',
-    'field_is_solution_type' => 'solution_type',
-    'field_is_source_code_repository' => NULL,
-    'field_is_state' => 'field_state',
-    'field_is_translation' => 'translation',
-    'field_is_version' => 'release_number',
-    'field_is_webdav_creation' => NULL,
-    'field_is_webdav_url' => NULL,
-    'field_is_wiki' => NULL,
-    'field_keywords' => 'field_keywords',
-    'field_short_id' => 'short_id',
-    'field_site_featured' => 'site_featured',
-    'field_spatial_coverage' => 'spatial_coverage',
-    'field_status' => 'process_status',
-    'field_topic' => 'field_topic',
-  ];
-
-  $solution-> = Node::create([
-    'type' => 'release',
-    'title' => strlen($values['http://purl.org/dc/terms/title'][0]) > 255
-      ? substr($values['http://purl.org/dc/terms/title'][0], 0, 255)
-      : $values['http://purl.org/dc/terms/title'][0],
-    'uri' => $uri,
-    'og_audience' => $solution->id(),
-    'created' => $values['http://purl.org/dc/terms/issued'][0]->getTimestamp(),
-    'changed' => $values['http://purl.org/dc/terms/modified'][0]->getTimestamp(),
-    'published_at' => $values['http://purl.org/dc/terms/issued'][0]->getTimestamp(),
-    'description' => [
-      'value' => $values['http://www.w3.org/ns/adms#versionNotes'][0] ?? '',
-      'format' => 'content_editor',
-    ],
-    'release_number' => $values['http://www.w3.org/2002/07/owl#versionInfo'][0] ?? '',
-    'field_state' => $values['http://joinup.eu/isr/workflow_status'][0],
-    'field_keywords' => $values['http://www.w3.org/ns/dcat#keyword'] ?? [],
-    'documentation' => $values['http://xmlns.com/foaf/0.1/page'][0] ?? NULL,
-    'langcode' => $values['http://joinup.eu/language'][0] ?? 'en',
-  ]);
-  $release_node->set('solution_data', $sandbox['solution_stubs'][$solution_uri]);
-
-  foreach ([
-    'http://purl.org/dc/terms/language' => 'language',
-    'http://www.w3.org/ns/adms#status' => 'process_status',
-    'http://purl.org/dc/terms/spatial' => 'spatial_coverage',
-      // @todo Create a follow up to merge the spatial_coverage fields in nodes.
-  ] as $predicate => $target_field) {
-    $mapped_values = [];
-    if (empty($values[$predicate])) {
-      continue;
-    }
-
-    foreach ($values[$predicate] as $value) {
-      if ($term = MappedTerm::loadByUri($value)) {
-        $mapped_values[] = [
-          'target_id' => $term->id(),
-        ];
-      }
-    }
-    $release_node->set($target_field, $mapped_values);
-  }
-  $pathauto_old_path = '/rdf_entity/' . UriEncoder::encodeUrl($uri);
-  $has_alias = $alias_repository->lookupBySystemPath($pathauto_old_path, 'en');
-  if ($has_alias) {
-    $release_node->get('path')->pathauto = PathautoState::SKIP;
-  }
-
-  $release_node->set('uri', $uri);
-  $release_node->setRevisionCreationTime($values['http://purl.org/dc/terms/modified'][0]->getTimestamp());
-  $release_node->save();
+  $endpoint->query('CLEAR GRAPH <http://joinup.eu/collection/published>');
+  $endpoint->query('CLEAR GRAPH <http://joinup.eu/collection/draft>');
 }

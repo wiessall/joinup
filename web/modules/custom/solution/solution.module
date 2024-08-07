@@ -1,8 +1,0 @@
-<?php
-
-/**
- * @file
- * Contains hooks regarding the solution rdf entity bundle.
- */
-
-declare(strict_types=1);
