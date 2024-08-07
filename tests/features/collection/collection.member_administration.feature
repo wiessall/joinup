@@ -291,7 +291,7 @@ Feature: Collection membership administration
     When I select "Facilitator" from "Role"
     And I press "Add members"
     Then I should see the success message "Successfully added the role Collection facilitator to the selected users."
-    And Log entry with the message "Successfully added the collection facilitator role in Medical diagnosis to Donald Duck by Lisa Cuddy." should exist.
+    And Log entry with the message "Successfully added the collection facilitator role in Medical diagnosis to Donald Duck by Daniel Moder." should exist.
     And I should see the link "Donald Duck"
 
     # Check given privileges.
