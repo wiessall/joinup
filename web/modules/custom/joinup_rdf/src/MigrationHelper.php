@@ -354,9 +354,18 @@ final class MigrationHelper {
     ];
 
     foreach ($tableData as $table => $targetField) {
+      if ($table === 'file_usage') {
+        // Because we have created the entity and passed the file to it, there
+        // is already a file usage entry for the file. We need to simply clean
+        // up the old file usage entry.
+        $this->connection->delete($table)
+          ->condition('type', 'rdf_entity')
+          ->condition('id', $entity->getUri())
+          ->execute();
+      }
       $this->connection->update($table)
         ->fields([$targetField => $entity->id()])
-        ->condition([$targetField => $entity->getUri()])
+        ->condition($targetField, $entity->getUri())
         ->execute();
     }
   }
