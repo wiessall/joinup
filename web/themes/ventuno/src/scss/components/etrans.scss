@@ -37,8 +37,8 @@
     line-height: $btn-line-height;
     &:hover {
       text-decoration: none;
-      box-shadow: $box-shadow;
       background-color: $secondary-darker;
+      box-shadow: $box-shadow;
     }
     &::before {
       @include get-bootstrap-icon("translate", currentColor);
