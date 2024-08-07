@@ -163,7 +163,7 @@ class CondensedDateRangeFormatter extends DateTimeFormatterBase {
    * @return array
    *   A render array.
    */
-  protected function buildDateWithIsoAttribute(DrupalDateTime $date, $format = NULL) {
+  protected function buildDateWithIsoAttribute(DrupalDateTime $date, $format = NULL): array {
     $format = $format ? $format : $this->getSetting('year_diff_format');
 
     if ($this->getFieldSetting('datetime_type') == DateTimeItem::DATETIME_TYPE_DATE) {

@@ -27,7 +27,7 @@ class JoinupEcVideoTest extends UnitTestCase {
    * @covers ::getIdFromInput
    * @dataProvider providerTestGetIdFromInput
    */
-  public function testGetIdFromInput($url, $expected_id) {
+  public function testGetIdFromInput($url, $expected_id): void {
     $actual_id = JoinupEcVideo::getIdFromInput($url);
     $this->assertEquals($expected_id, $actual_id);
   }
@@ -35,7 +35,7 @@ class JoinupEcVideoTest extends UnitTestCase {
   /**
    * Provides test cases for ::testGetIdFromInput.
    */
-  public function providerTestGetIdFromInput() {
+  public function providerTestGetIdFromInput(): array {
     return [
       // Entries starting with bc are old style links.
       'bc standard url with http' => [

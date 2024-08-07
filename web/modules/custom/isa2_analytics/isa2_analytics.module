@@ -18,7 +18,7 @@ use Drupal\views\ViewExecutable;
  * @see \oe_webtools_analytics_page_attachments()
  * @see \Drupal\isa2_analytics\EventSubscriber\WebtoolsAnalyticsSubscriber::setSearchData
  */
-function isa2_analytics_views_post_execute(ViewExecutable $view) {
+function isa2_analytics_views_post_execute(ViewExecutable $view): void {
   if ($view->id() === 'search' && !empty($view->total_rows)) {
     \Drupal::requestStack()->getCurrentRequest()->attributes->set('total_rows', $view->total_rows);
   }

@@ -64,7 +64,7 @@ class GoogleDocs extends ProviderPluginBase {
    *   An array of matches related to the url. The two specific values returned
    *   are id and type.
    */
-  public static function getDataFromInput($input) {
+  public static function getDataFromInput($input): array {
     preg_match('#^(?:(?:https?:)?//)?docs\.google\.com/(?<type>[^/]+)/d/(e/)?(?<id>[^/]+).*?#i', $input, $matches);
     return $matches;
   }
@@ -87,7 +87,7 @@ class GoogleDocs extends ProviderPluginBase {
    *   The type of the document, e.g. forms or presentation. False if there is
    *   no match found.
    */
-  public static function getTypeFromInput($input) {
+  public static function getTypeFromInput($input): mixed {
     $matches = static::getDataFromInput($input);
     return $matches['type'] ?? FALSE;
   }
@@ -105,7 +105,7 @@ class GoogleDocs extends ProviderPluginBase {
    * @return string
    *   The document type.
    */
-  public function getDocType() {
+  public function getDocType(): string {
     return $this->docType;
   }
 

@@ -155,7 +155,7 @@ class CustomPageOgMenuLinksManagerTest extends KernelTestBase {
   /**
    * Tests the custom page OG menu link updater service.
    */
-  public function testCustomPageOgMenuLinkUpdater() {
+  public function testCustomPageOgMenuLinkUpdater(): void {
     // Create 2 collections.
     $collection_ids = $ogmenu_instance_ids = [];
     foreach ([1, 2] as $index) {
@@ -185,7 +185,7 @@ class CustomPageOgMenuLinksManagerTest extends KernelTestBase {
    * @param int $nid
    *   The targeted custom page node ID.
    */
-  protected function assertMenuLink($og_menu_instance_id, $nid) {
+  protected function assertMenuLink($og_menu_instance_id, $nid): void {
     $this->assertNotEmpty($this->assertMenuLinkHelper($og_menu_instance_id, $nid));
   }
 
@@ -197,7 +197,7 @@ class CustomPageOgMenuLinksManagerTest extends KernelTestBase {
    * @param int $nid
    *   The targeted custom page node ID.
    */
-  protected function assertNotMenuLink($og_menu_instance_id, $nid) {
+  protected function assertNotMenuLink($og_menu_instance_id, $nid): void {
     $this->assertEmpty($this->assertMenuLinkHelper($og_menu_instance_id, $nid));
   }
 
@@ -212,7 +212,7 @@ class CustomPageOgMenuLinksManagerTest extends KernelTestBase {
    * @return \Drupal\menu_link_content\MenuLinkContentInterface[]
    *   A list of menu link content entities.
    */
-  protected function assertMenuLinkHelper($og_menu_instance_id, $nid) {
+  protected function assertMenuLinkHelper($og_menu_instance_id, $nid): array {
     $properties = [
       'bundle' => 'menu_link_content',
       'menu_name' => "ogmenu-{$og_menu_instance_id}",

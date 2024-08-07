@@ -63,7 +63,7 @@ class DbLogTest extends KernelTestBase {
   /**
    * Tests the wrong revision update.
    */
-  public function testDbLogRevisionUpdate() {
+  public function testDbLogRevisionUpdate(): void {
     /** @var \Drupal\node\NodeStorageInterface $node_storage */
     $node_storage = $this->entityTypeManager->getStorage('node');
     $watchdog_query = "SELECT COUNT(wid) FROM {watchdog} WHERE type = 'joinup_debug'";
