@@ -129,12 +129,14 @@ Feature:
     And I click "Edit" in the "Contact Joinup Support" row
     Then I should see the heading "Edit menu link Contact Joinup Support"
 
-    Given I am on the homepage
+    Given I am an anonymous user
+    And I am on the homepage
     Then I should see the link "Contact Joinup Support"
     And I should see "Arbitrary support menu link"
     # Tour has been disabled.
     But I should not see the link "Take a tour"
 
+    Given I am logged in as a moderator
     # Restore the tour menu link.
     When I click "Menus"
     And I click "List links" in the "Help and support" row
@@ -154,6 +156,7 @@ Feature:
     Then I should see the success message "The menu link Arbitrary support menu link has been deleted."
     And I should not see the link "Arbitrary support menu link"
 
+    Given I am an anonymous user
     When I am on the homepage
     Then I should see the link "Contact Joinup Support"
     # The custom link has been deleted.
