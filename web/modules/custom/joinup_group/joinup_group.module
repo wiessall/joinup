@@ -85,12 +85,12 @@ function joinup_group_entity_bundle_info_alter(array &$bundles): void {
  */
 function joinup_group_entity_bundle_field_info_alter(array &$fields, EntityTypeInterface $entity_type, string $bundle): void {
   if ($entity_type->id() === 'rdf_entity' && in_array($bundle, JoinupGroupHelper::GROUP_BUNDLES)) {
-    if (!empty($fields['field_short_id'])) {
+    if (!empty($fields['short_id'])) {
       /** @var \Drupal\field\Entity\FieldConfig[] $fields */
-      $fields['field_short_id']->addPropertyConstraints('value', [
+      $fields['short_id']->addPropertyConstraints('value', [
         'Regex' => ['pattern' => '/^[a-z0-9-]{4,26}$/'],
       ]);
-      $fields['field_short_id']->addConstraint('UniqueShortIdInsensitive');
+      $fields['short_id']->addConstraint('UniqueShortIdInsensitive');
     }
   }
 }
@@ -224,8 +224,8 @@ function joinup_group_form_rdf_entity_form_alter(&$form, FormStateInterface $for
     // @todo Implement the EntityPublishedInterface for collections and
     //   solutions once we have the bundle classes in.
     $has_published_version = $entity->hasGraph('default');
-    if (isset($form['field_short_id']) && $has_published_version && !\Drupal::currentUser()->hasPermission('edit short id after publication')) {
-      $form['field_short_id']['widget'][0]['value']['#attributes']['disabled'] = 'disabled';
+    if (isset($form['short_id']) && $has_published_version && !\Drupal::currentUser()->hasPermission('edit short id after publication')) {
+      $form['short_id']['widget'][0]['value']['#attributes']['disabled'] = 'disabled';
     }
   }
 }

@@ -55,7 +55,7 @@ class CollectionContext extends RawDrupalContext {
     'author' => 'uid',
     'uri' => 'id',
     'title' => 'label',
-    'short ID' => 'field_short_id',
+    'short ID' => 'short_id',
     'abstract' => 'field_ar_abstract',
     'access url' => 'field_ar_access_url',
     'closed' => 'field_ar_closed',
