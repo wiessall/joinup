@@ -130,8 +130,10 @@ Feature: Solution membership administration
 
     # Accept the invitation directly.
     When I am logged in as "dwightone"
-    And I accept the invitation for the "The Missing Sons" solution group
-    And I go to the members page of "The Missing Sons"
-    Then I should see the link "Invite members"
+    And I visit the accept invitation form for the "The Missing Sons" solution group
+    And I press "Accept"
+    Then I should not be subscribed to any bundle from the "The Missing Sons" solution
+    When I go to the members page of "The Missing Sons"
+    And I should see the link "Invite members"
     When I click "Invite members"
     Then I should see the heading "Invite members"

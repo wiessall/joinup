@@ -9,13 +9,79 @@ Feature: Joining a collection as an anonymous user
       | title           | abstract                          | closed | state     |
       | Reannual plants | Harvested before they are planted | no     | published |
       | Vul nuts        | Used to brew Ghlen Livid          | yes    | published |
+      | CoC collection  | We have a Code of Conduct         | yes    | published |
+    And users:
+      | Username         |
+      | Hepzibah Whitlow |
+    And collection user membership:
+      | collection      | user             | state   |
+      | Reannual plants | Hepzibah Whitlow | blocked |
+    And CAS users:
+      | Username           | E-mail           | Password | Local username   |
+      | Hepzibah Whitlow   | hepzibah@ankh.am | wh1tl0w  | Hepzibah Whitlow |
+    And CAS users:
+      | Username           | E-mail           | Password |
+      | Iodine Maccalariat | iodine@ankh.am   | 10d1ne   |
+    And custom_page content:
+      | title                 | collection     | state     |
+      | CoC of CoC collection | CoC collection | published |
+    And the "code of conduct" setting of the "CoC collection" collection is set to "CoC of CoC collection" "custom page"
+
+  Scenario Outline: Joining collections without JavaScript
+    Given the following legal document version:
+      | Document     | Label | Published | Acceptance label                                                                                   | Content                                                    |
+      | Legal notice | 1.1   | yes       | I have read and accept the <a href="[entity_legal_document:url]">[entity_legal_document:label]</a> | The information on this site is subject to a disclaimer... |
+    And I am an anonymous user
+    When I go to the homepage of the "<collection>" collection
+    And I click "Join this collection"
+    When I press "Sign in / Register"
+    Then I should see the heading "Sign in to continue"
+    When I fill in "E-mail address" with "iodine@ankh.am"
+    And I fill in "Password" with "10d1ne"
+    And I press "Log in"
+    And I check "I have read and accept the Legal notice"
+    And I press "Submit"
+    Then I should see the text "<collection>" in the Header region
+    And I should see the heading "Welcome to the community!"
+    And I should see the success message "You have been logged in."
+    And the "<collection>" collection should have <active members> active member
+    And the "<collection>" collection should have <pending members> pending member
+    Then the following buttons should be present "<buttons>"
+
+    Examples:
+      | collection      | active members | pending members | buttons                                             |
+      | Reannual plants | 1              | 0               | Subscribe to notifications, Don't subscribe         |
+      | Vul nuts        | 0              | 1               | Subscribe to notifications, Don't subscribe         |
+      | CoC collection  | 0              | 0               | Subscribe to notifications, Don't subscribe, Cancel |
+
+  @javascript
+  Scenario: Anonymous user can join a closed collection having a Code of Conduct
+    Given the following legal document version:
+      | Document     | Label | Published | Acceptance label                                                                                   | Content                                                    |
+      | Legal notice | 1.1   | yes       | I have read and accept the <a href="[entity_legal_document:url]">[entity_legal_document:label]</a> | The information on this site is subject to a disclaimer... |
+    And I am an anonymous user
+    When I go to the homepage of the "CoC collection" collection
+    And I click "Join this collection"
+    Then a modal should open
+    When I press "Sign in / Register" in the "Modal buttons" region
+    Then I should see the heading "Sign in to continue"
+    When I fill in "E-mail address" with "iodine@ankh.am"
+    And I fill in "Password" with "10d1ne"
+    And I press "Log in"
+    And I check "I have read and accept the Legal notice"
+    And I press "Submit"
+    Then I should see the heading "CoC collection"
+    And I should see the success message "You have been logged in."
+    And the "CoC collection" collection should have 0 active member
+    And the "CoC collection" collection should have 0 pending member
+    And a modal should open
+    And I check "I have read and agree to the CoC of CoC collection."
+    And I press "Don't subscribe" in the "Modal buttons" region
+    Then the "CoC collection" collection should have 1 pending member
 
   @javascript
   Scenario: Anonymous users can join a collection after creating an account
-    And CAS users:
-      | Username           | E-mail         | Password |
-      | Iodine Maccalariat | iodine@ankh.am | 10d1ne   |
-    And the following legal document version:
+    Given the following legal document version:
       | Document     | Label | Published | Acceptance label                                                                                   | Content                                                    |
       | Legal notice | 1.1   | yes       | I have read and accept the <a href="[entity_legal_document:url]">[entity_legal_document:label]</a> | The information on this site is subject to a disclaimer... |
 
@@ -51,15 +117,15 @@ Feature: Joining a collection as an anonymous user
     And a modal should open
     # Quick check without pressing buttons, this is fully tested in the
     # subscribe-on-join scenario.
-    And I should see the text "Welcome to Reannual plants" in the "Modal title"
-    And I should see the text "Want to receive notifications, too?" in the "Modal content"
-    And I should see the button "No thanks" in the "Modal buttons" region
-    And I should see the button "Subscribe" in the "Modal buttons" region
+    And I should see the text "Welcome to the community!" in the "Modal title"
+    And I should see the text "Want to subscribe for new content notifications, too?" in the "Modal content"
+    And I should see the button "Don't subscribe" in the "Modal buttons" region
+    And I should see the button "Subscribe to notifications" in the "Modal buttons" region
 
     # The modal should not open when visiting the page for a second time.
     When I reload the page
     And I wait for AJAX to finish
-    Then I should not see the text "Welcome to Reannual plants"
+    Then I should not see the text "Welcome to the community!"
 
     # Now that the user is a member, if we log out and try to join again as an
     # anonymous user, we should be shown an appropriate message.
@@ -76,7 +142,7 @@ Feature: Joining a collection as an anonymous user
     Then I should see the heading "Reannual plants"
     And I should see the success message "You have been logged in."
     And I should see the success message "You already are a member of Reannual plants."
-    And I should not see the text "Welcome to Reannual plants"
+    And I should not see the text "Welcome to the community!"
 
     # Now repeat the whole procedure for a closed collection.
     Given I am an anonymous user
@@ -101,10 +167,10 @@ Feature: Joining a collection as an anonymous user
     And I should see the success message "Your membership to the Vul nuts collection is under approval."
     And the "Vul nuts" collection should have 1 pending member
     And a modal should open
-    And I should see the text "Welcome to Vul nuts" in the "Modal title"
-    And I should see the text "Want to receive notifications, too?" in the "Modal content"
-    And I should see the button "No thanks" in the "Modal buttons" region
-    And I should see the button "Subscribe" in the "Modal buttons" region
+    And I should see the text "Welcome to the community!" in the "Modal title"
+    And I should see the text "Want to subscribe for new content notifications, too?" in the "Modal content"
+    And I should see the button "Don't subscribe" in the "Modal buttons" region
+    And I should see the button "Subscribe to notifications" in the "Modal buttons" region
 
     Given I am an anonymous user
     When I go to the homepage of the "Vul nuts" collection
@@ -118,7 +184,7 @@ Feature: Joining a collection as an anonymous user
     And I press "Log in"
     Then I should see the heading "Vul nuts"
     And I should see the success message "You have already joined the Vul nuts collection but your membership still needs to be approved by a facilitator."
-    And I should not see the text "Welcome to Vul nuts"
+    And I should not see the text "Welcome to the community!"
 
     # Clean up the user that was created manually during the scenario.
     Then I delete the "Iodine Maccalariat" user
@@ -161,15 +227,15 @@ Feature: Joining a collection as an anonymous user
     And a modal should open
     # Quick check without pressing buttons, this is fully tested in the
     # subscribe-on-join scenario.
-    And I should see the text "Welcome to Reannual plants" in the "Modal title"
-    And I should see the text "Want to receive notifications, too?" in the "Modal content"
-    And I should see the button "No thanks" in the "Modal buttons" region
-    And I should see the button "Subscribe" in the "Modal buttons" region
+    And I should see the text "Welcome to the community!" in the "Modal title"
+    And I should see the text "Want to subscribe for new content notifications, too?" in the "Modal content"
+    And I should see the button "Don't subscribe" in the "Modal buttons" region
+    And I should see the button "Subscribe to notifications" in the "Modal buttons" region
 
     # The modal should not open when visiting the page for a second time.
     When I reload the page
     And I wait for AJAX to finish
-    Then I should not see the text "Welcome to Reannual plants"
+    Then I should not see the text "Welcome to the community!"
 
     # Repeat the scenario for a closed collection.
     Given I am an anonymous user
@@ -195,26 +261,16 @@ Feature: Joining a collection as an anonymous user
     And I should see the success message "Your membership to the Vul nuts collection is under approval."
     And the "Vul nuts" collection should have 1 pending member
     And a modal should open
-    And I should see the text "Welcome to Vul nuts" in the "Modal title"
-    And I should see the text "Want to receive notifications, too?" in the "Modal content"
-    And I should see the button "No thanks" in the "Modal buttons" region
-    And I should see the button "Subscribe" in the "Modal buttons" region
+    And I should see the text "Welcome to the community!" in the "Modal title"
+    And I should see the text "Want to subscribe for new content notifications, too?" in the "Modal content"
+    And I should see the button "Don't subscribe" in the "Modal buttons" region
+    And I should see the button "Subscribe to notifications" in the "Modal buttons" region
 
     When I reload the page
     And I wait for AJAX to finish
-    Then I should not see the text "Welcome to Vul nuts"
+    Then I should not see the text "Welcome to the community!"
 
-  Scenario: Show relevant message to a blocked user that tries to rejoin a collection as anonymous
-    Given users:
-      | Username         |
-      | Hepzibah Whitlow |
-    And CAS users:
-      | Username         | E-mail           | Password | Local username   |
-      | Hepzibah Whitlow | hepzibah@ankh.am | wh1tl0w  | Hepzibah Whitlow |
-    And collection user membership:
-      | collection      | user             | state   |
-      | Reannual plants | Hepzibah Whitlow | blocked |
-
+  Scenario: Show relevant message to a blocked user that tries to rejoin a collection as anonymous without JavaScript
     Given I am an anonymous user
     When I go to the homepage of the "Reannual plants" collection
     And I click "Join this collection"
@@ -233,3 +289,17 @@ Feature: Joining a collection as an anonymous user
     # The message should only be shown once.
     When I reload the page
     And I should not see the success message "You cannot join Reannual plants because your account has been blocked."
+
+  @javascript
+  Scenario: Show relevant message to a blocked user who tries to rejoin as anonymous
+    Given I am an anonymous user
+    When I go to the homepage of the "Reannual plants" collection
+    And I click "Join this collection"
+    And a modal should open
+    And I press "Sign in / Register" in the "Modal buttons" region
+    And I fill in "E-mail address" with "hepzibah@ankh.am"
+    And I fill in "Password" with "wh1tl0w"
+    And I press "Log in"
+    Then I should see the heading "Reannual plants"
+    And I should see the success message "You have been logged in."
+    And I should see the success message "You cannot join Reannual plants because your account has been blocked."

@@ -17,4 +17,5 @@ group_resolvers:
   - route_group
   - route_group_content
   - group_from_layout_paragraphs
+  - group_from_invitation
 auto_add_group_owner_membership: true
