@@ -11,6 +11,7 @@ use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\joinup_group\Entity\GroupContentInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
+use Drupal\node\Entity\Node;
 use Drupal\node\NodeInterface;
 use Drupal\node\NodeTypeInterface;
 use Drupal\og\OgAccessInterface;
@@ -139,7 +140,7 @@ class GroupNodeController extends ControllerBase {
    * @param \Drupal\node\NodeTypeInterface $nodeType
    *   The type of node to be added.
    *
-   * @return \Drupal\Core\Entity\EntityInterface
+   * @return \Drupal\node\NodeInterface
    *   A node entity.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
@@ -147,8 +148,8 @@ class GroupNodeController extends ControllerBase {
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    *   Thrown when the user entity type is not defined.
    */
-  protected function createNode(GroupInterface $group, NodeTypeInterface $nodeType) {
-    return $this->entityTypeManager()->getStorage('node')->create([
+  protected function createNode(GroupInterface $group, NodeTypeInterface $nodeType): NodeInterface {
+    return Node::create([
       'type' => $nodeType->id(),
       OgGroupAudienceHelperInterface::DEFAULT_FIELD => $group->id(),
     ]);
