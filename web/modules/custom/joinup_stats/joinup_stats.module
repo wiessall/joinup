@@ -169,7 +169,7 @@ function joinup_stats_form_meta_entity_type_edit_form_alter(array &$form, FormSt
  * @return array
  *   An array of select options.
  */
-function joinup_stats_get_period_options() {
+function joinup_stats_get_period_options(): array {
   // How long is a month? Somewhere between 30 and 31 days. To get a better
   // answer we can say that an average month is 1/12th of a year. And a year is
   // the time needed for the earth to orbit the sun, which is a bit more than
@@ -192,7 +192,7 @@ function joinup_stats_get_period_options() {
 /**
  * Implements hook_entity_bundle_info_alter().
  */
-function joinup_stats_entity_bundle_info_alter(&$bundles) {
+function joinup_stats_entity_bundle_info_alter(&$bundles): void {
   if (!empty($bundles['meta_entity']['download_count'])) {
     $bundles['meta_entity']['download_count']['class'] = DownloadCount::class;
   }

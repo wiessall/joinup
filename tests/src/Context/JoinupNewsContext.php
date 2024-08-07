@@ -49,7 +49,7 @@ class JoinupNewsContext extends RawDrupalContext {
    *
    * @Then the latest news section should contain the following news articles:
    */
-  public function assertLatestNews(TableNode $table) {
+  public function assertLatestNews(TableNode $table): void {
     $columns = $table->getColumnsHash();
     $articles = $this->getSession()->getPage()->findAll('css', '.view-latest-news .tile');
     Assert::assertEquals(count($columns), count($articles), sprintf('Expected %d articles in the "Latest news" section but found %d articles', count($columns), count($articles)));

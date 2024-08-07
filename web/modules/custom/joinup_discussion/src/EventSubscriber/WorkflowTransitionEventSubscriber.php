@@ -28,7 +28,7 @@ class WorkflowTransitionEventSubscriber implements EventSubscriberInterface {
    * @param \Drupal\state_machine\Event\WorkflowTransitionEvent $event
    *   The state change event.
    */
-  public function closeComments(WorkflowTransitionEvent $event) {
+  public function closeComments(WorkflowTransitionEvent $event): void {
     $event->getEntity()->get('field_replies')->status = CommentItemInterface::CLOSED;
   }
 
