@@ -87,8 +87,9 @@ function joinup_featured_entity_view_alter(array &$build, EntityInterface $entit
   if ($entity instanceof FeaturedContentInterface) {
     // Note: the 'entity' contextual link group is added by the Joinup profile.
     // @see joinup_entity_view_alter()
-    $build['#contextual_links']['entity']['metadata']['is_featured'] = (int) $entity->isFeatured();
-    $build['#contextual_links']['entity']['metadata']['token'] = \Drupal::service('csrf_token')->get(__FUNCTION__);
+    $build['#contextual_links'][$entity->getEntityTypeId()]['metadata']['is_featured'] = (int) $entity->isFeatured();
+    $build['#contextual_links'][$entity->getEntityTypeId()]['metadata']['token'] = \Drupal::service('csrf_token')
+      ->get(__FUNCTION__);
     $build['#cache']['contexts'] = Cache::mergeContexts($build['#cache']['contexts'], [
       'joinup_featured_csrf',
     ]);
