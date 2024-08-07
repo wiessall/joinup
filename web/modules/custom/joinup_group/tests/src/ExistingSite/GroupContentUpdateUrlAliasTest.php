@@ -133,7 +133,7 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
     ]));
 
     // Edit the solution and add a short ID.
-    $edit = ['field_short_id[0][value]' => 'abc123'];
+    $edit = ['short_id[0][value]' => 'abc123'];
     $this->drupalGet($this->entity['rdf_entity']['solution']['1']->toUrl('edit-form'));
     $this->submitForm($edit, 'Publish');
     $this->assertSession()
@@ -189,7 +189,7 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
     $assert->addressEquals('/collection/collection/solution/abc123/news/news-12');
 
     // Edit the the collection.
-    $edit = ['field_short_id[0][value]' => 'xyz789'];
+    $edit = ['short_id[0][value]' => 'xyz789'];
     $this->drupalGet($this->entity['rdf_entity']['collection']['1']->toUrl('edit-form'));
     $this->submitForm($edit, 'Publish');
     $this->assertSession()
@@ -273,7 +273,7 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
     $assert->addressEquals('/collection/xyz789/news/news-2');
 
     // Test the success message on short ID update.
-    $edit = ['field_short_id[0][value]' => 'other-id'];
+    $edit = ['short_id[0][value]' => 'other-id'];
     $this->drupalGet($this->entity['rdf_entity']['solution']['1']->toUrl('edit-form'));
     $this->submitForm($edit, 'Publish');
     $this->assertSession()
@@ -284,7 +284,7 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
       ->pageTextContains("You've changed the collection's short ID from xyz789 to other-id. It will take some time until the collection content URLs will be updated.");
 
     // Test the success message on short ID delete.
-    $edit = ['field_short_id[0][value]' => ''];
+    $edit = ['short_id[0][value]' => ''];
     $this->drupalGet($this->entity['rdf_entity']['solution']['1']->toUrl('edit-form'));
     $this->submitForm($edit, 'Publish');
     $this->assertSession()

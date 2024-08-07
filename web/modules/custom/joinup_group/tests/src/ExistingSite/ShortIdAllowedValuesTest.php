@@ -34,7 +34,7 @@ class ShortIdAllowedValuesTest extends JoinupExistingSiteTestBase {
     foreach (['collection', 'solution'] as $bundle) {
       $entity = Rdf::create([
         'rid' => $bundle,
-        'field_short_id' => $short_id,
+        'short_id' => $short_id,
       ]);
 
       $violations = $entity->validate()->findByCodes([RegexConstraint::REGEX_FAILED_ERROR]);

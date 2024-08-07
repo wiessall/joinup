@@ -537,7 +537,7 @@ class SolutionContext extends RawDrupalContext {
       'author' => 'uid',
       'uri' => 'id',
       'title' => 'label',
-      'short ID' => 'field_short_id',
+      'short ID' => 'short_id',
       'abstract' => 'field_is_abstract',
       'affiliations requests' => 'field_is_affiliations_requests',
       'contact information' => 'field_is_contact_information',

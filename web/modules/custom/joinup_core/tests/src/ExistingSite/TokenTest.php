@@ -84,7 +84,7 @@ class TokenTest extends JoinupExistingSiteTestBase {
     $entity = Rdf::create([
       'rid' => $bundle,
       'label' => $title,
-      'field_short_id' => $short_id,
+      'short_id' => $short_id,
     ]);
 
     $tokens = [

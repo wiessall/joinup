@@ -136,8 +136,8 @@ function joinup_solution_node_insert(EntityInterface $entity): void {
     $membership->setRoles(array_values(OgRole::loadMultiple($roles)));
     $membership->save();
   }
-  solution_invalidate_collection($entity);
-  solution_sync_settings($entity);
+  joinup_solution_invalidate_collection($entity);
+  joinup_solution_sync_settings($entity);
 }
 
 /**
@@ -290,8 +290,8 @@ function joinup_solution_node_view(array &$build, NodeInterface $solution, Entit
 
   // Attach the related solutions component.
   if ($display->getComponent('related_solutions')) {
-    $ids = solution_get_related_solutions_ids($solution);
-    $build['related_solutions'] = solution_build_related_solutions_list($ids);
+    $ids = joinup_solution_get_related_solutions_ids($solution);
+    $build['related_solutions'] = joinup_solution_build_related_solutions_list($ids);
   }
 
   // Attach the download total of all distributions in this solution.
@@ -543,7 +543,7 @@ function joinup_solution_node_presave(NodeInterface $entity): void {
  */
 function joinup_solution_node_predelete(EntityInterface $entity): void {
   if ($entity->bundle() === 'solution') {
-    solution_invalidate_collection($entity);
+    joinup_solution_invalidate_collection($entity);
   }
 }
 
@@ -562,7 +562,7 @@ function joinup_solution_invalidate_collection(EntityInterface $entity): void {
   // For this reason, we clear the collection group cache tags whenever a
   // solution is saved.
   if (\Drupal::moduleHandler()->moduleExists('collection')) {
-    $ids = solution_get_collection_ids($entity);
+    $ids = joinup_solution_get_collection_ids($entity);
     if ($ids) {
       $tags = [];
       /** @var \Drupal\rdf_entity\RdfInterface $collection */
@@ -627,8 +627,8 @@ function joinup_solution_node_update(EntityInterface $entity): void {
   if ($state == 'blacklisted') {
     \Drupal::entityTypeManager()->getStorage('rdf_entity')->deleteFromGraph([$entity], 'default');
   }
-  solution_invalidate_collection($entity);
-  solution_sync_settings($entity);
+  joinup_solution_invalidate_collection($entity);
+  joinup_solution_sync_settings($entity);
 }
 
 /**
@@ -643,7 +643,7 @@ function joinup_solution_node_delete(NodeInterface $solution): void {
   }
 
   $storage = \Drupal::entityTypeManager()->getStorage('rdf_entity');
-  $ids = solution_get_collection_ids($solution);
+  $ids = joinup_solution_get_collection_ids($solution);
   if ($ids) {
     // Touch the parent collections in order to update their changed timestamp.
     $request_time = \Drupal::time()->getRequestTime();
@@ -734,9 +734,9 @@ function joinup_solution_module_implements_alter(array &$implementations, string
   if ($hook === 'node_update') {
     // Make sure the solution update hook runs first so that the entity settings
     // are synced with its meta_entity.
-    $solution = $implementations['solution'];
-    unset($implementations['solution']);
-    $implementations = ['solution' => $solution] + $implementations;
+    $solution = $implementations['joinup_solution'];
+    unset($implementations['joinup_solution']);
+    $implementations = ['joinup_solution' => $solution] + $implementations;
   }
 }
 
