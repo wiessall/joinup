@@ -38,7 +38,7 @@ class ReleaseGroupSubscriber extends AddGroupContentEventSubscriberBase {
    */
   protected function getRouteParameters(AddGroupContentEvent $event, string $entityTypeId, string $bundleId): array {
     return [
-      'rdf_entity' => $event->getGroup()->id(),
+      'node' => $event->getGroup()->id(),
     ];
   }
 

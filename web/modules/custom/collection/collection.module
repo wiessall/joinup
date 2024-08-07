@@ -226,7 +226,7 @@ function collection_node_view(array &$build, EntityInterface $entity, EntityView
   if ($display->getComponent('join_collection')) {
     $build['join_collection'] = [
       '#lazy_builder' => [
-        'collection.lazy_builders:renderJoinCollectionForm',
+        'joinup_collection.lazy_builders:renderJoinCollectionForm',
         [$entity->id()],
       ],
       '#create_placeholder' => TRUE,

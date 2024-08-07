@@ -19,10 +19,11 @@ use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
+use Drupal\collection\Entity\Collection;
+use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_rdf\Entity\RdfSyncEntityInterface;
 use Drupal\joinup_solution\Entity\Solution;
 use Drupal\joinup_solution\Entity\SolutionInterface;
-use Drupal\joinup_solution\SolutionAffiliationFieldItemList;
 use Drupal\joinup_solution\SolutionLatestReleasesFieldItemList;
 use Drupal\joinup_solution\SolutionReleasesAndDistributionsFieldItemList;
 use Drupal\joinup_taxonomy\Entity\MappedTerm;
@@ -32,11 +33,9 @@ use Drupal\node\Entity\NodeType;
 use Drupal\node\NodeInterface;
 use Drupal\og\Entity\OgRole;
 use Drupal\og\Og;
+use Drupal\og\OgGroupAudienceHelper;
 use Drupal\og\OgMembershipInterface;
 use Drupal\og\OgRoleInterface;
-use Drupal\rdf_entity\Entity\Rdf;
-use Drupal\rdf_entity\RdfInterface;
-use Drupal\sparql_entity_storage\SparqlGraphInterface;
 use Drupal\user\Entity\User;
 
 /**
@@ -48,16 +47,6 @@ function joinup_solution_entity_bundle_field_info_alter(&$fields, EntityTypeInte
     return;
   }
 
-  // Computed field, that represents the collections a solution is part of.
-  $fields['collection'] = BaseFieldDefinition::create('entity_reference')
-    ->setLabel(t('Collections'))
-    ->setName('collection')
-    ->setDescription(t('The collections this solution belongs to.'))
-    ->setTargetEntityTypeId('node')
-    ->setTargetBundle('solution')
-    ->setSetting('target_type', 'rdf_entity')
-    ->setComputed(TRUE)
-    ->setClass(SolutionAffiliationFieldItemList::class);
   // References the solution releases and standalone distributions.
   // @todo This should be moved to `joinup_distribution` module.
   $fields['releases_and_distributions'] = BaseFieldDefinition::create('entity_reference')
@@ -276,7 +265,7 @@ function joinup_solution_node_view(array &$build, NodeInterface $solution, Entit
         '#type' => 'link',
         '#title' => t('Download releases'),
         '#url' => Url::fromRoute('joinup_release.solution_release.overview', [
-          'rdf_entity' => $solution->id(),
+          'node' => $solution->id(),
         ]),
         '#cache' => [
           // The 'group_header_block' block cache will have different versions
@@ -336,9 +325,9 @@ function joinup_solution_node_view(array &$build, NodeInterface $solution, Entit
   // Show the collection the solution belongs to. A solution can be affiliated
   // to multiple collections, but for now we show only the first one.
   // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3635
-  if ($display->getComponent('collections') && !$solution->get('collection')->isEmpty()) {
-    /** @var \Drupal\rdf_entity\Entity\Rdf $collection */
-    $collection = $solution->get('collection')->first()->entity;
+  if ($display->getComponent('collections') && !$solution->get(OgGroupAudienceHelper::DEFAULT_FIELD)->isEmpty()) {
+    $collection = $solution->get(OgGroupAudienceHelper::DEFAULT_FIELD)->first()->entity;
+    assert($collection instanceof CollectionInterface);
     $build['collections'] = [
       'link' => $collection->toLink($collection->label())->toRenderable(),
     ];
@@ -395,7 +384,7 @@ function joinup_solution_node_view(array &$build, NodeInterface $solution, Entit
 
   // Member count.
   if ($display->getComponent('members')) {
-    $member_count = solution_member_count($solution);
+    $member_count = joinup_solution_member_count($solution);
     // Invalidate the member count every time the group membership list changes.
     // @see \Drupal\og\Plugin\Block\MemberCountBlock::getCacheTags()
     $tags = Cache::buildTags(OgMembershipInterface::GROUP_MEMBERSHIP_LIST_CACHE_TAG_PREFIX, $solution->getCacheTagsToInvalidate());
@@ -445,7 +434,7 @@ function joinup_solution_get_related_solutions_ids(EntityInterface $entity): arr
 
   // Get all solutions that are referenced directly.
   $related_ids = [];
-  foreach ($entity->get('field_is_related_solutions')->getValue() as $field) {
+  foreach ($entity->get('related_solutions')->getValue() as $field) {
     $related_ids[$field['target_id']] = $field['target_id'];
   }
 
@@ -504,41 +493,6 @@ function joinup_solution_build_related_solutions_list(array $ids): array {
 }
 
 /**
- * Implements hook_ENTITY_TYPE_presave().
- *
- * Default graph is published. Draft graph is draft.
- */
-function joinup_solution_node_presave(NodeInterface $entity): void {
-  // @todo This probably needs to be changed to checking the status?
-  // @todo Fix, this seems to be a state/status setup. This should be removed?
-  if (!$entity instanceof SolutionInterface || !\Drupal::service('sparql.graph_handler')->bundleHasGraph('rdf_entity', 'solution', 'draft')) {
-    return;
-  }
-
-  // Set the graph only for new solutions or those loaded from the main graphs.
-  if (!$entity->isNew() && !in_array(
-    $entity->sparqlEntityOriginalGraph,
-    ['default', 'draft']
-    )) {
-    return;
-  }
-
-  $state = $entity->getWorkflowState();
-  if (in_array($state, ['draft', 'proposed', 'needs_update', 'blacklisted'])) {
-    $entity->set('graph', 'draft');
-  }
-  elseif (in_array($state, ['published', 'archived'], TRUE)) {
-    $entity->set('graph', SparqlGraphInterface::DEFAULT);
-  }
-  elseif (empty($state)) {
-    throw new \Exception("State field not found while trying to get the appropriate graph.");
-  }
-  else {
-    throw new \Exception("State field value is invalid. Current value found: " . $state);
-  }
-}
-
-/**
  * Implements hook_ENTITY_TYPE_predelete().
  */
 function joinup_solution_node_predelete(EntityInterface $entity): void {
@@ -554,23 +508,23 @@ function joinup_solution_node_predelete(EntityInterface $entity): void {
  *   The solution.
  */
 function joinup_solution_invalidate_collection(EntityInterface $entity): void {
-  if ($entity->isNew()) {
+  if (
+    !$entity instanceof SolutionInterface ||
+    $entity->isNew()
+  ) {
     return;
   }
   // Solutions aren't group content of collections. However, they appear
   // alongside group content in collection overviews.
   // For this reason, we clear the collection group cache tags whenever a
   // solution is saved.
-  if (\Drupal::moduleHandler()->moduleExists('collection')) {
-    $ids = joinup_solution_get_collection_ids($entity);
-    if ($ids) {
-      $tags = [];
-      /** @var \Drupal\rdf_entity\RdfInterface $collection */
-      foreach (Rdf::loadMultiple($ids) as $collection) {
-        $tags = Cache::mergeTags($tags, $collection->getCacheTagsToInvalidate());
-      }
-      Cache::invalidateTags(Cache::buildTags('og-group-content', $tags));
+  if ($ids = joinup_solution_get_collection_ids($entity)) {
+    $tags = [];
+    foreach ($ids as $collectionId) {
+      $collection = Collection::load($collectionId);
+      $tags = Cache::mergeTags($tags, $collection->getCacheTagsToInvalidate());
     }
+    Cache::invalidateTags(Cache::buildTags('og-group-content', $tags));
   }
 }
 
@@ -592,14 +546,11 @@ function joinup_solution_invalidate_collection(EntityInterface $entity): void {
  * @see \Drupal\joinup_solution\SolutionAffiliationFieldItemList
  */
 function joinup_solution_get_collection_ids(NodeInterface $solution): array {
-  if (\Drupal::moduleHandler()->moduleExists('collection')) {
-    $result = \Drupal::entityQuery('rdf_entity')->accessCheck(FALSE)
-      ->condition('rid', 'collection')
-      ->condition('field_ar_affiliates', $solution->id())
-      ->execute();
-  }
-
-  return !empty($result) ? array_keys($result) : [];
+  $collections = $solution->get(OgGroupAudienceHelper::DEFAULT_FIELD)->referencedEntities();
+  return array_map(
+    fn (CollectionInterface $collection): int => (int) $collection->id(),
+    $collections,
+  );
 }
 
 /**
@@ -612,21 +563,12 @@ function joinup_solution_get_collection_ids(NodeInterface $solution): array {
  * @todo This probably needs to be removed.
  */
 function joinup_solution_node_update(EntityInterface $entity): void {
-  if ($entity->bundle() !== 'solution' || !\Drupal::service('sparql.graph_handler')->bundleHasGraph('rdf_entity', 'solution', 'draft')) {
+  if ($entity->bundle() !== 'solution') {
     return;
   }
 
   assert($entity instanceof SolutionInterface);
 
-  // @todo Maybe we can avoid the attempt to delete from graph if there is no
-  // transition made. This should move to an event subscriber.
-  $state = $entity->getWorkflowState();
-  if ($state === 'published') {
-    \Drupal::entityTypeManager()->getStorage('rdf_entity')->deleteFromGraph([$entity], 'draft');
-  }
-  if ($state == 'blacklisted') {
-    \Drupal::entityTypeManager()->getStorage('rdf_entity')->deleteFromGraph([$entity], 'default');
-  }
   joinup_solution_invalidate_collection($entity);
   joinup_solution_sync_settings($entity);
 }
@@ -638,19 +580,20 @@ function joinup_solution_node_update(EntityInterface $entity): void {
  * their changed timestamp updated.
  */
 function joinup_solution_node_delete(NodeInterface $solution): void {
-  if (!$solution instanceof SolutionInterface || $solution->getWorkflowState() !== 'published') {
+  if (
+    !$solution instanceof SolutionInterface ||
+    $solution->getWorkflowState() !== 'published'
+  ) {
     return;
   }
 
-  $storage = \Drupal::entityTypeManager()->getStorage('rdf_entity');
-  $ids = joinup_solution_get_collection_ids($solution);
-  if ($ids) {
+  if ($ids = joinup_solution_get_collection_ids($solution)) {
     // Touch the parent collections in order to update their changed timestamp.
-    $request_time = \Drupal::time()->getRequestTime();
-    /** @var \Drupal\rdf_entity\RdfInterface $collection */
-    foreach ($storage->loadMultiple($ids) as $collection) {
+    $requestTime = \Drupal::time()->getRequestTime();
+    foreach ($ids as $collectionId) {
+      $collection = Collection::load($collectionId);
       $collection->skip_notification = TRUE;
-      $collection->setChangedTime($request_time)->save();
+      $collection->setChangedTime($requestTime)->save();
     }
   }
 }
@@ -686,11 +629,11 @@ function joinup_solution_sync_settings(SolutionInterface $entity): void {
   $meta_entity = MetaEntity::loadOrCreate('solution_settings', $entity);
 
   // Avoid saving an extra entity without need.
-  if ($meta_entity->get('field_ss_related_solutions')->equals($entity->get('field_is_related_solutions'))) {
+  if ($meta_entity->get('field_ss_related_solutions')->equals($entity->get('related_solutions'))) {
     return;
   }
 
-  $meta_entity->set('field_ss_related_solutions', $entity->get('field_is_related_solutions')->getValue());
+  $meta_entity->set('field_ss_related_solutions', $entity->get('related_solutions')->getValue());
   $meta_entity->save();
 }
 
@@ -721,7 +664,7 @@ function joinup_solution_node_load(array $entities): void {
       return;
     }
 
-    $entity->set('field_is_related_solutions', $meta_entity->get('field_ss_related_solutions')->getValue());
+    $entity->set('related_solutions', $meta_entity->get('field_ss_related_solutions')->getValue());
   }
 }
 
@@ -743,21 +686,21 @@ function joinup_solution_module_implements_alter(array &$implementations, string
 /**
  * Amount of members of a solution.
  *
- * @param \Drupal\rdf_entity\RdfInterface $entity
+ * @param \Drupal\joinup_solution\Entity\SolutionInterface $solution
  *   The solution.
  *
  * @return int
  *   Amount of members.
  */
-function joinup_solution_member_count(RdfInterface $entity): int {
+function joinup_solution_member_count(SolutionInterface $solution): int {
   // We're doing a direct database query rather than using methods in OG's
   // MembershipManager service since we just need a count, and we need to filter
   // out blocked user accounts.
   $query = \Drupal::database()->select('og_membership', 'om');
   $query->innerJoin('users_field_data', 'ufd', '[om].[uid] = [ufd].[uid]');
   $query->condition('ufd.status', 1)
-    ->condition('om.entity_type', 'rdf_entity')
-    ->condition('om.entity_id', $entity->id())
+    ->condition('om.entity_type', $solution->getEntityTypeId())
+    ->condition('om.entity_id', $solution->id())
     ->condition('om.state', OgMembershipInterface::STATE_ACTIVE);
   return (int) $query->countQuery()->execute()->fetchField();
 }

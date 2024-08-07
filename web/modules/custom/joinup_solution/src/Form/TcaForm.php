@@ -7,6 +7,7 @@ namespace Drupal\joinup_solution\Form;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_group\TcaFormBase;
+use Drupal\node\NodeInterface;
 use Drupal\rdf_entity\RdfInterface;
 
 /**
@@ -45,8 +46,9 @@ class TcaForm extends TcaFormBase {
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state, ?RdfInterface $rdf_entity = NULL): array {
-    $this->collection = $rdf_entity;
+  public function buildForm(array $form, FormStateInterface $form_state, ?NodeInterface $node = NULL): array {
+    assert($node instanceof CollectionInterface);
+    $this->collection = $node;
     return parent::buildForm($form, $form_state);
   }
 
@@ -54,17 +56,15 @@ class TcaForm extends TcaFormBase {
    * {@inheritdoc}
    */
   public function cancelSubmit(array &$form, FormStateInterface $form_state): void {
-    $form_state->setRedirect('entity.rdf_entity.canonical', [
-      'rdf_entity' => $this->collection->id(),
-    ]);
+    $form_state->setRedirectUrl($this->collection->toUrl());
   }
 
   /**
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state, ?RdfInterface $rdf_entity = NULL): void {
-    $form_state->setRedirect('solution.collection_solution.add', [
-      'rdf_entity' => $this->collection->id(),
+    $form_state->setRedirect('joinup_solution.collection_solution.add', [
+      'node' => $this->collection->id(),
     ]);
   }
 

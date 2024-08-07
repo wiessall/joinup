@@ -11,6 +11,7 @@ use Drupal\Core\Routing\Access\AccessInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\JoinupGroupHelper;
+use Drupal\joinup_release\Entity\ReleaseInterface;
 use Symfony\Component\Routing\Route;
 
 /**
@@ -77,11 +78,12 @@ class JoinupGroupAccessCheck implements AccessInterface {
     //
     // @todo Change this in ISAICP-8572 to check for nodes but also handle
     //   collections and add a new todo for the collections ticket.
-    if ($release = $route_match->getParameter('node')) {
-      $group = $release->getGroup();
+    $node = $route_match->getParameter('node');
+    if ($node instanceof GroupInterface) {
+      $group = $node;
     }
-    else {
-      $group = $route_match->getParameter('rdf_entity');
+    elseif ($node instanceof ReleaseInterface) {
+      $group = $node->getGroup();
     }
 
     // If the route wasn't configured to upcast the parameter, try to load an
@@ -89,7 +91,7 @@ class JoinupGroupAccessCheck implements AccessInterface {
     if (!$group instanceof GroupInterface) {
       // If the {rdf_entity} route parameter is missed or is not an RDF
       // entity, looks like we have a bug.
-      throw new \Exception("The {rdf_entity} route parameter is missed or is not an RDF entity.");
+      throw new \Exception("The {node} route parameter is missing or it is not an group.");
     }
     $bundle = $group->bundle();
 
