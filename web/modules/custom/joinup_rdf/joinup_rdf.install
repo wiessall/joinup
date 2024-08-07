@@ -61,23 +61,10 @@ function joinup_rdf_update_111102(): void {
 
 /**
  * Prepare various data in tables for the migration.
- *
- * @todo Also update the solution IDs of the OG membership after the migration.
  */
 function joinup_rdf_update_111103(): string {
   $connection = \Drupal::database();
   $messages = [];
-
-  // Update the file_usage table.
-  $query = <<<SQL
-UPDATE file_usage
-SET type = 'node'
-WHERE type = 'rdf_entity'
-SQL;
-  $query = $connection->prepareStatement($query, [], TRUE);
-  $query->execute();
-  $count = $query->rowCount();
-  $messages[] = "Updated $count rows in the file_usage table.";
 
   foreach (['like', 'bookmark'] as $flag_id) {
     // Update both the flag_id from `*_rdf_entity` to `*_node` and the
