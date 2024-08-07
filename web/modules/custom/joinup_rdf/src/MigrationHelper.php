@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_rdf;
 
-use Drupal\collection\Entity\CollectionInterface;
 use Drupal\Core\Database\Connection;
-use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_rdf\Entity\RdfSyncEntityInterface;
 use Drupal\joinup_taxonomy\Entity\MappedTerm;
 use Drupal\path_alias\AliasRepositoryInterface;
@@ -164,9 +163,7 @@ final class MigrationHelper {
 
     $values = $this->getEntityDataAsFlatArray($uri, 'http://joinup.eu/collection/published');
     if (!empty($values)) {
-      foreach (self::COLLECTION_FIELD_MAPPING as $property => $mapping) {
-        $this->parseCollectionFields($entity, $values);
-      }
+      $this->massageCollectionValues($entity, $values);
       $this->saveEntityWithPathPreservation($entity, $uri);
     }
 
@@ -181,7 +178,7 @@ final class MigrationHelper {
         $entity->setNewRevision();
       }
 
-      $this->parseCollectionFields($entity, $values);
+      $this->massageCollectionValues($entity, $values);
       $entity->save();
     }
 
@@ -196,7 +193,7 @@ final class MigrationHelper {
    * @param array $values
    *   The values to set.
    */
-  protected function parseCollectionFields(CollectionInterface $entity, array $values): void {
+  protected function massageCollectionValues(CollectionInterface $entity, array $values): void {
     foreach (self::COLLECTION_FIELD_MAPPING as $property => $mapping) {
       $value = $values[$property] ?? NULL;
       if ($value) {
@@ -305,8 +302,9 @@ final class MigrationHelper {
    *   The graph to query.
    *
    * @return array
-   *   The flattened RDF values in the form of an associative array. The keys are the URIs of the properties and the
-   *   values are the values of the properties.
+   *   The flattened RDF values in the form of an associative array. The keys
+   *   are the URIs of the properties and the values are the values of the
+   *   properties.
    */
   protected function getEntityDataAsFlatArray(string $uri, string $graph): array {
     $query = <<<SPARQL
