@@ -10,7 +10,7 @@ declare(strict_types=1);
 /**
  * Implements hook_config_schema_info_alter().
  */
-function joinup_test_config_schema_info_alter(&$definitions) {
+function joinup_test_config_schema_info_alter(&$definitions): void {
   if (isset($definitions['antibot.settings']['mapping']['form_ids'])) {
     // Required to pass config_inspector validation.
     /* @see \Drupal\joinup_test\Config\JoinupTestConfigOverrider::loadOverrides */

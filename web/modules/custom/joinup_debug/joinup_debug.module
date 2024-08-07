@@ -21,7 +21,7 @@ use Drupal\node\NodeInterface;
  *
  * @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-5740
  */
-function joinup_debug_node_presave(NodeInterface $node) {
+function joinup_debug_node_presave(NodeInterface $node): void {
   // At this point, if the entity is not new, the original is already loaded and
   // stored in the ::original property of the entity.
   // @see: \Drupal\Core\Entity\EntityStorageBase::doPreSave.
@@ -35,7 +35,7 @@ function joinup_debug_node_presave(NodeInterface $node) {
 /**
  * Implements hook_ENTITY_TYPE_update().
  */
-function joinup_debug_node_update(NodeInterface $node) {
+function joinup_debug_node_update(NodeInterface $node): void {
   $last_revision_id = _joinup_debug_get_last_published_node_revision_id($node);
   if (!isset($node->joinupUserCancelReassign) && !empty($last_revision_id) && $node->getRevisionId() < $last_revision_id) {
     _joinup_debug_log_wrong_revision_error($node);

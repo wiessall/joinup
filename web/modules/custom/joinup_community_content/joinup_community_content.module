@@ -8,6 +8,7 @@
 declare(strict_types=1);
 
 use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
@@ -25,7 +26,7 @@ use Drupal\node\NodeInterface;
 /**
  * Implements hook_entity_extra_field_info().
  */
-function joinup_community_content_entity_extra_field_info() {
+function joinup_community_content_entity_extra_field_info(): array {
   $fields = [];
 
   foreach (CommunityContentHelper::BUNDLES as $bundle) {
@@ -47,7 +48,7 @@ function joinup_community_content_entity_extra_field_info() {
 /**
  * Implements hook_ENTITY_TYPE_view().
  */
-function joinup_community_content_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
+function joinup_community_content_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode): void {
   // Read more link to the canonical page.
   if ($display->getComponent('read_more')) {
     $text = [
@@ -78,7 +79,7 @@ function joinup_community_content_node_view(array &$build, EntityInterface $enti
 /**
  * Implements hook_node_access().
  */
-function joinup_community_content_node_access(NodeInterface $entity, string $operation, AccountInterface $account): AccessResult {
+function joinup_community_content_node_access(NodeInterface $entity, string $operation, AccountInterface $account): AccessResultInterface {
   if (!$entity instanceof CommunityContentInterface) {
     return AccessResult::neutral();
   }
@@ -89,7 +90,7 @@ function joinup_community_content_node_access(NodeInterface $entity, string $ope
 /**
  * Implements hook_form_BASE_FORM_ID_alter().
  */
-function joinup_community_content_form_node_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+function joinup_community_content_form_node_form_alter(&$form, FormStateInterface $form_state, $form_id): void {
   // Skip if we are not on a community content form.
   $community_content_form_ids = [];
   foreach (CommunityContentHelper::BUNDLES as $bundle) {
@@ -116,7 +117,7 @@ function joinup_community_content_form_node_form_alter(&$form, FormStateInterfac
  *
  * @see \joinup_community_content_form_node_form_alter()
  */
-function joinup_community_content_attachment_file_process($element, FormStateInterface $form_state, $form) {
+function joinup_community_content_attachment_file_process(array $element, FormStateInterface $form_state, $form): array {
   if (!empty($element['description']['#title'])) {
     $element['description']['#title'] = t('File description');
   }
@@ -176,7 +177,7 @@ function joinup_community_content_views_plugins_filter_alter(array &$plugins): v
 /**
  * Implements hook_theme().
  */
-function joinup_community_content_theme($existing, $type, $theme, $path) {
+function joinup_community_content_theme($existing, $type, $theme, $path): array {
   return [
     'link_icon' => [
       'variables' => [
@@ -202,7 +203,7 @@ function joinup_community_content_theme($existing, $type, $theme, $path) {
  *   - entity: The collection or solution that is being forwarded to the search
  *     page.
  */
-function template_preprocess_advanced_search_pseudo_facet(array &$variables) {
+function template_preprocess_advanced_search_pseudo_facet(array &$variables): void {
   // Retrieve the facet arguments from the request query.
   $request = \Drupal::request();
   $facet_arguments = $request->query->get('f', []);
@@ -227,7 +228,7 @@ function template_preprocess_advanced_search_pseudo_facet(array &$variables) {
 /**
  * Implements hook_theme_suggestions_HOOK_alter().
  */
-function joinup_community_content_theme_suggestions_container_alter(array &$suggestions, array $variables) {
+function joinup_community_content_theme_suggestions_container_alter(array &$suggestions, array $variables): void {
   // Add a theme suggestion to the container of the inline facets region of
   // collections and solutions so that a fake "Advanced search" facet can be
   // appended to the inline facets.
@@ -256,7 +257,7 @@ function joinup_community_content_theme_suggestions_container_alter(array &$sugg
  * @return array
  *   The translated array.
  */
-function joinup_community_content_translate_facet_arguments(array $arguments) {
+function joinup_community_content_translate_facet_arguments(array $arguments): array {
   $mapping = [
     'collection_topic' => 'topic',
     'collection_type' => 'type',
@@ -317,7 +318,7 @@ function joinup_community_content_preprocess_links__comment(array &$variables): 
  * Trusted users (and any user in a non-moderator group) can revert without
  * approval.
  */
-function joinup_community_content_form_node_revision_revert_confirm_alter(&$form, FormStateInterface $form_state, $form_id) {
+function joinup_community_content_form_node_revision_revert_confirm_alter(&$form, FormStateInterface $form_state, $form_id): void {
   $entity = $form_state->getBuildInfo()['args'][0];
   if (!$entity instanceof CommunityContentInterface) {
     return;
@@ -363,7 +364,7 @@ function joinup_community_content_form_node_revision_revert_confirm_alter(&$form
  *
  * @see \joinup_community_content_form_node_revision_revert_confirm_alter()
  */
-function joinup_community_content_form_node_revision_revert_confirm_submit(array $form, FormStateInterface $form_state) {
+function joinup_community_content_form_node_revision_revert_confirm_submit(array $form, FormStateInterface $form_state): void {
   // We are altering the NodeRevisionRevertForm which is a simple confirmation
   // form. It does not expose the entity through any methods, but we can get it
   // from the form arguments.

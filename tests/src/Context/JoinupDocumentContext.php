@@ -30,7 +30,7 @@ class JoinupDocumentContext extends RawDrupalContext {
    *
    * @throws \Drupal\Core\Entity\EntityMalformedException
    */
-  public function visitDocument($title) {
+  public function visitDocument($title): void {
     /** @var \Drupal\node\Entity\Node $node */
     $node = $this->getEntityByLabel('node', $title, 'document');
     $this->visitPath($node->toUrl()->toString());

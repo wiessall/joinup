@@ -25,7 +25,7 @@ trait EntityReferenceTrait {
    * @throws \Exception
    *   Thrown when no entity with the given label has been found.
    */
-  public function convertEntityReferencesValues($entity_type, $entity_bundle, array $values) {
+  public function convertEntityReferencesValues($entity_type, $entity_bundle, array $values): array {
     $bundle_key = \Drupal::entityTypeManager()->getDefinition($entity_type)->getKey('bundle');
     /** @var \Drupal\Core\Field\FieldDefinitionInterface[] $definitions */
     $definitions = \Drupal::service('entity_field.manager')->getFieldDefinitions($entity_type, $entity_bundle);
@@ -75,7 +75,7 @@ trait EntityReferenceTrait {
    * @return false|mixed
    *   The id of the found entity, false otherwise.
    */
-  protected function getEntityIdByLabel($label, $entity_type, array $entity_bundle = []) {
+  protected function getEntityIdByLabel($label, $entity_type, array $entity_bundle = []): mixed {
     $label_key = $this->getEntityLabelKey($entity_type);
     $query = \Drupal::entityQuery($entity_type)->accessCheck(FALSE)
       ->condition($label_key, $label)
@@ -105,7 +105,7 @@ trait EntityReferenceTrait {
    * @throws \Exception
    *    Thrown if there is no label key or property defined.
    */
-  protected function getEntityLabelKey($entity_type) {
+  protected function getEntityLabelKey($entity_type): string {
     $label_mapping = ['user' => 'name'];
     $label_key = \Drupal::entityTypeManager()->getDefinition($entity_type)->getKey('label');
     if (empty($label_key) && !isset($label_mapping[$entity_type])) {
