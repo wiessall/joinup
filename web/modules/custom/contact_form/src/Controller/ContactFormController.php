@@ -22,7 +22,7 @@ class ContactFormController extends ControllerBase {
    * @return array
    *   The render array containing the contact form.
    */
-  public function contactPage(Request $request) {
+  public function contactPage(Request $request): array {
     $values = ['template' => 'contact_form_submission'];
 
     // Prepopulate the category if it has been passed as a query argument.
@@ -61,7 +61,7 @@ class ContactFormController extends ControllerBase {
    * @return bool
    *   TRUE if the category is valid.
    */
-  protected function isValidCategory($category) {
+  protected function isValidCategory($category): bool {
     $contact_message = $this->entityTypeManager()->getStorage('message')->create([
       'template' => 'contact_form_submission',
     ]);
@@ -80,7 +80,7 @@ class ContactFormController extends ControllerBase {
    * @return bool
    *   TRUE if the URI is valid.
    */
-  protected function isValidUri($uri) {
+  protected function isValidUri($uri): bool {
     try {
       $url = Url::fromUri('internal:/' . $uri);
       if (!$url->isExternal()) {

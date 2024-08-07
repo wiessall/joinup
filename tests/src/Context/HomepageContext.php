@@ -38,7 +38,7 @@ class HomepageContext extends RawDrupalContext {
    *
    * @Then the explore section should contain the following content:
    */
-  public function assertExplore(TableNode $table) {
+  public function assertExplore(TableNode $table): void {
     $columns = $table->getColumnsHash();
     $articles = $this->getSession()->getPage()->findAll('css', '.block-joinup-front-page-explore-block article');
     Assert::assertEquals(count($columns), count($articles), sprintf('Expected %d items in the "Explore" section but found %d items.', count($columns), count($articles)));

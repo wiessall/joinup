@@ -31,7 +31,7 @@ class CollectionEventSubscriber implements EventSubscriberInterface {
    * @param \Drupal\og\Event\PermissionEventInterface $event
    *   The OG permission event.
    */
-  public function provideDefaultOgPermissions(PermissionEventInterface $event) {
+  public function provideDefaultOgPermissions(PermissionEventInterface $event): void {
     if ($event->getGroupEntityTypeId() === 'rdf_entity' && $event->getGroupBundleId() === 'collection') {
       $event->setPermissions([
         new GroupPermission([

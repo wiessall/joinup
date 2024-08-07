@@ -10,7 +10,7 @@ declare(strict_types=1);
 /**
  * Implements hook_link_alter().
  */
-function joinup_tour_link_alter(&$variables) {
+function joinup_tour_link_alter(&$variables): void {
   // Such links are used to trigger the tour.
   if (isset($variables['options']['attributes']['data-drupal-tour-link'])) {
     $route_path = ltrim(\Drupal::routeMatch()->getRouteObject()->getPath(), '/');
