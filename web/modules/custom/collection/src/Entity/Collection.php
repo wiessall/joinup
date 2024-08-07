@@ -84,24 +84,19 @@ class Collection extends Node implements CollectionInterface {
     // @todo Fix this after the computed field is created.
     // @todo The computed field should be in the solution module as should the
     //   subscriber that exports the data to the collection.
-    $solutionStorage = $this->entityTypeManager()->getStorage('node');
-    $ids = $solutionStorage->getQuery()
+    $idsQuery = $this->entityTypeManager()->getStorage('node')
+      ->getQuery()
       ->accessCheck(FALSE)
       ->condition('type', 'solution')
-      ->condition(OgGroupAudienceHelper::DEFAULT_FIELD, $this->id())
-      ->execute();
+      ->condition(OgGroupAudienceHelper::DEFAULT_FIELD, $this->id());
 
-    if ($ids && $onlyPublished) {
-      // Published solutions are stored in the 'default' graph.
-      $ids = $solutionStorage->getQuery()
+    if ($onlyPublished) {
+      $idsQuery
         ->accessCheck()
-        ->condition('status', 1)
-        ->condition('nid', $ids, 'IN')
-        ->execute();
-      $ids = array_values($ids);
+        ->condition('status', 1);
     }
 
-    return $ids;
+    return array_values($idsQuery->execute());
   }
 
   /**
@@ -207,7 +202,7 @@ class Collection extends Node implements CollectionInterface {
     $ids = ['node' => $this->getNodeGroupContent()];
     $solutions = $this->getSolutions();
     $ids = NestedArray::mergeDeep($ids, [
-      'rdf_entity' => [
+      'node' => [
         'solution' => array_keys($solutions),
       ],
     ]);
