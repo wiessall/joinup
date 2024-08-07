@@ -57,7 +57,7 @@ class JoinupEventEventSubscriber implements EventSubscriberInterface {
    * @param \Symfony\Component\HttpKernel\Event\RequestEvent $event
    *   Response event.
    */
-  public function onKernelRequest(RequestEvent $event) {
+  public function onKernelRequest(RequestEvent $event): void {
     // Retrieve the request path, and do inbound processing so that language
     // prefixes are removed.
     $request = $event->getRequest();

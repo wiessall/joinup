@@ -159,7 +159,7 @@ class SearchWidget extends DefaultSearchWidget {
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The form state.
    */
-  public function validateEmptyQuerys(array &$element, FormStateInterface $form_state) {
+  public function validateEmptyQuerys(array &$element, FormStateInterface $form_state): void {
 
     if (empty($element['query_presets']['#value']) && empty($element['query_builder']['filters']['#value'])) {
       $form_state->setError($element, $this->t('You need to add a filter in the Content listing block'));

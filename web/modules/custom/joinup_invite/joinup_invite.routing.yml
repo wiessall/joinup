@@ -34,7 +34,7 @@ entity.rdf_entity.members.add_members:
     _form: '\Drupal\joinup_invite\Form\AddToGroupForm'
     _title: 'Add members'
   requirements:
-    _og_user_access_group: 'manage members'
+    _permission: 'manage group add members'
     _joinup_group: 'TRUE'
   options:
     parameters:
