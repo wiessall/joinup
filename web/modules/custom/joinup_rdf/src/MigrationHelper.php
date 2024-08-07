@@ -351,7 +351,6 @@ final class MigrationHelper {
       'meta_entity' => 'target__target_id',
       'joinup_group_node_access' => 'entity_id',
       'og_membership' => 'entity_id',
-      'og_membership__subscription_bundles' => 'entity_id',
     ];
 
     foreach ($tableData as $table => $targetField) {

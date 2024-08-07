@@ -159,17 +159,6 @@ SQL;
   $count = $query->rowCount();
   $messages[] = "Updated $count rows in the og_membership__roles table.";
 
-  // Update the og_membership__subscription_bundles.
-  $query = <<<SQL
-UPDATE og_membership__subscription_bundles
-SET subscription_bundles_entity_type = 'node'
-WHERE subscription_bundles_entity_type = 'rdf_entity'
-SQL;
-  $query = $connection->prepareStatement($query, [], TRUE);
-  $query->execute();
-  $count = $query->rowCount();
-  $messages[] = "Updated $count rows in the og_membership__subscription_bundles table.";
-
   return implode("\n", $messages);
 }
 
