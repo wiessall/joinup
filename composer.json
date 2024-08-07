@@ -304,7 +304,8 @@
                 "Set the toolbar to position fixed on mobile (for group banner positioning and toolbar on mobile) @see https://www.drupal.org/project/drupal/issues/2516938": "resources/patch/php/drupal/core/3809.diff",
                 "Media Library: Argument #1 ($array) must be of type array, null given in array_filter(). @see https://www.drupal.org/i/3340973": "resources/patch/php/drupal/core/3340973.diff",
                 "Add validation constraint to type: plural_label; remove work-around from views.field.numeric:format_plural_string @see https://www.drupal.org/i/3409588": "resources/patch/php/drupal/core/3409588.diff",
-                "MediaLibraryUiBuilder service does not properly allow additional contextual filter arguments @see https://www.drupal.org/i/3401726": "resources/patch/php/drupal/core/3401726.diff"
+                "MediaLibraryUiBuilder service does not properly allow additional contextual filter arguments @see https://www.drupal.org/i/3401726": "resources/patch/php/drupal/core/3401726.diff",
+                "The submit button is not following any condition while in popup/dialogs @see https://drupal.org/i/3008172": "resources/patch/php/drupal/core/3008172-43.patch"
             },
             "drupal/default_content": {
                 "Allow manual imports @see https://www.drupal.org/i/2640734": "resources/patch/php/drupal/default_content/2640734.diff"

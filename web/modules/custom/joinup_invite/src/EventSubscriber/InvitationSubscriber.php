@@ -10,6 +10,7 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\joinup_invite\Entity\InvitationInterface;
 use Drupal\joinup_invite\Event\InvitationEventInterface;
 use Drupal\joinup_invite\Event\InvitationEvents;
+use Drupal\joinup_subscription\JoinupSubscriptionsHelper;
 use Drupal\og\MembershipManagerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -110,6 +111,13 @@ class InvitationSubscriber implements EventSubscriberInterface {
     if (empty($role)) {
       // This might happen if the role is deleted in the meantime.
       throw new \RuntimeException(sprintf('Role with ID "%s" was not found in the system.', $invitation->field_invitation_og_role->target_id));
+    }
+
+    if ($event->getSubscribe()) {
+      $group = $invitation->getEntity();
+      $subscriptionBundles = JoinupSubscriptionsHelper::provideDataForField($group->bundle());
+      $membership->set('announcements', TRUE);
+      $membership->set('subscription_bundles', $subscriptionBundles)->save();
     }
 
     $membership->addRole($role);

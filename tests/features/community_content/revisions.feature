@@ -149,6 +149,7 @@ Feature:
     # If the user rejoins the group, access is restored.
     When I visit the "Goodbi world" discussion
     And I press "<join button>"
+    And I visit the "Goodbi world" discussion
     Then I should see the link "Revisions" in the "Entity actions" region
 
     # Check that a facilitator can approve the restoring of a revision that has
@@ -342,6 +343,7 @@ Feature:
     # If the user rejoins the group, access is restored.
     When I visit the "<final title>" <content type>
     And I press "<join button>"
+    When I visit the "<final title>" <content type>
     Then I should see the link "Revisions" in the "Entity actions" region
 
     # Check that a facilitator can approve the restoring of a revision that has

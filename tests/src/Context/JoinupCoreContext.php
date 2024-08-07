@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
+use Behat\Mink\Element\NodeElement;
 use Behat\Testwork\Hook\Scope\BeforeSuiteScope;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Field\FieldItemListInterface;
@@ -234,6 +235,95 @@ class JoinupCoreContext extends RawDrupalContext {
     if (!empty($found)) {
       throw new \Exception('The following fields were disabled: ' . implode(', ', $found));
     }
+  }
+
+  /**
+   * Asserts that the given buttons are not disabled.
+   *
+   * @param \Behat\Gherkin\Node\TableNode $table
+   *   The table of the buttons to check.
+   * @param string|null $regionAlias
+   *   The region alias, if any.
+   *
+   * @Then the( following) button(s) should not be disabled:
+   * @Then the( following) button(s) in the :regionAlias region should not be disabled:
+   */
+  public function assertNotDisabledButtons(TableNode $table, ?string $regionAlias = NULL): void {
+    $this->assertButtonInteractivity($table, TRUE, $regionAlias);
+  }
+
+  /**
+   * Asserts that the given buttons are disabled.
+   *
+   * @param \Behat\Gherkin\Node\TableNode $table
+   *   The table with the buttons to check.
+   * @param string|null $regionAlias
+   *   The region alias, if any.
+   *
+   * @Then the( following) button(s) should be disabled:
+   * @Then the( following) button(s) in the :regionAlias region should be disabled:
+   */
+  public function assertDisabledButtons(TableNode $table, ?string $regionAlias = NULL): void {
+    $this->assertButtonInteractivity($table, FALSE, $regionAlias);
+  }
+
+  /**
+   * Verifies that the given buttons are all disabled or not disabled.
+   *
+   * @param \Behat\Gherkin\Node\TableNode $table
+   *   The table with the buttons to check.
+   * @param bool $shouldBeInteractable
+   *   Whether all the listed buttons must be disabled, or they should be not
+   *   disabled.
+   * @param string|null $regionAlias
+   *   The region alias, if any.
+   */
+  protected function assertButtonInteractivity(
+    TableNode $table,
+    bool $shouldBeInteractable,
+    ?string $regionAlias,
+  ): void {
+    $hostElement = $regionAlias
+      ? $this->getRegion($regionAlias)
+      : $this->getSession()->getPage();
+    $actual = [];
+    $expected = $table->getColumn(0);
+    foreach ($expected as $key => $buttonLocator) {
+      $actual[$key] = $hostElement->findButton($buttonLocator);
+    }
+
+    Assert::assertEmpty(
+      $missingButtons = array_diff_key($expected, array_filter($actual)),
+      sprintf(
+        "Cannot locate the following buttons: '%s'",
+        implode(", ", $missingButtons)
+      )
+    );
+    $nonDisabledButtons = array_filter(
+      $actual,
+      function (?NodeElement $element): bool {
+        return $element && is_null($element->getAttribute('disabled'));
+      },
+    );
+
+    if ($shouldBeInteractable) {
+      Assert::assertEmpty(
+        $disabledButtons = array_diff_key($expected, $nonDisabledButtons),
+        sprintf(
+          "The following buttons are disabled: '%s'",
+          implode(", ", $disabledButtons)
+        )
+      );
+      return;
+    }
+
+    Assert::assertEmpty(
+      $nonDisabledButtons,
+      sprintf(
+        "The following buttons are not disabled: '%s'",
+        implode(", ", array_intersect_key($expected, $nonDisabledButtons))
+      )
+    );
   }
 
   /**

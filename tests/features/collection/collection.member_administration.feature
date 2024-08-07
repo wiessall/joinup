@@ -108,9 +108,9 @@ Feature: Collection membership administration
     And I go to the "Medical diagnosis" collection
     And I press "Join this collection"
     Then a modal should open
-    And I should see the text "Want to receive notifications, too?"
+    And I should see the text "Want to subscribe for new content notifications, too?"
 
-    When I press "Subscribe" in the "Modal buttons" region
+    When I press "Subscribe to notifications" in the "Modal buttons" region
     And I wait for AJAX to finish
     Then I should see the success message "You have been subscribed to Medical diagnosis and will receive weekly notifications once your membership is approved."
 
@@ -364,14 +364,18 @@ Feature: Collection membership administration
     And I press "Invite members"
     Then I should see the success message "2 users have been invited to this group."
     And the following email should have been sent:
-      | recipient | dwightone                                                                                                 |
-      | subject   | Invitation from Lisa Cuddy to join collection Medical diagnosis.                                          |
-      | body      | You have been invited by Lisa Cuddy to join the collection Medical diagnosis as a collection facilitator. |
+      | recipient | dwightone                                                                                  |
+      | subject   | Invitation from Lisa Cuddy to join collection Medical diagnosis.                           |
+      | body      | You have been invited by Lisa Cuddy to join Medical diagnosis as a collection facilitator. |
 
     # Accept the invitation directly.
     When I am logged in as "dwightone"
-    And I accept the invitation for the "Medical diagnosis" collection group
+    And I visit the accept invitation form for the "Medical diagnosis" collection group
+    And I check the box "Notify me when content is published in Medical diagnosis."
+    And I press "Accept"
     Then I should see the text "You have been promoted to collection facilitator"
+    And I should have the following content subscriptions:
+      | Medical diagnosis | discussion, document, event, news, solution, announcements |
     And I am on the members page of "Medical diagnosis"
     Then I should not see the link "Add members"
     But I should see the link "Invite members"
@@ -379,9 +383,11 @@ Feature: Collection membership administration
     Then I should see the heading "Invite members"
 
     # Trying to take action again on the invitation again informs the user about it.
-    When I accept the invitation for the "Medical diagnosis" collection group
+    When I visit the accept invitation form for the "Medical diagnosis" collection group
+    And I press "Accept"
     Then I should see the message "You have already accepted the invitation."
-    When I reject the invitation for the "Medical diagnosis" collection group
+    When I visit the reject invitation form for the "Medical diagnosis" collection group
+    And I press "Accept"
     Then I should see the message "You have already accepted the invitation."
 
     # Join the collection manually and trigger the invitation.
@@ -393,6 +399,30 @@ Feature: Collection membership administration
     # However, since there is an active invitation, both the status and the initial roles are overridden.
     # Being able to view the link below mean that the membership is active and the user is a facilitator.
     Then I should see the link "Invite members"
+
+  Scenario: User needs to accept code of conduct on the confirmation form.
+    Given custom_page content:
+      | title                 | collection        | state     |
+      | Medical diagnosis CoC | Medical diagnosis | published |
+    And the "code of conduct" setting of the "Medical diagnosis" collection is set to "Medical diagnosis CoC" "custom page"
+
+    When I am logged in as "Lisa Cuddy"
+    And I go to the members page of "Medical diagnosis"
+    And I click "Invite members"
+    When I fill uid of "Donald Duck" in "Name"
+    And I press "Add"
+    And I select "Member" from "Role"
+    And I press "Invite members"
+    Then I should see the success message "1 user has been invited to this group."
+
+    When I am logged in as "Donald Duck"
+    And I visit the accept invitation form for the "Medical diagnosis" collection group
+    Then I should see the link "Medical diagnosis" in the Header region
+    When I press "Accept"
+    Then I should see the error message "You must agree to the Medical diagnosis CoC."
+    When I check the box "I have read and agree to the Medical diagnosis CoC."
+    And I press "Accept"
+    Then I should see the text "You have been promoted to member."
 
   Scenario: Invitations can not be sent for pending users.
     Given users:

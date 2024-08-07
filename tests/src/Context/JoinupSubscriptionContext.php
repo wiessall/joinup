@@ -6,6 +6,7 @@ namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Element\NodeElement;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\DrupalExtension\TagTrait;
@@ -356,31 +357,39 @@ class JoinupSubscriptionContext extends RawDrupalContext {
    * @Then I should have the following content subscriptions:
    */
   public function assertGroupContentSubscriptions(TableNode $subscriptions): void {
-    $user = $this->getUserManager()->getCurrentUser();
-    /** @var \Drupal\Core\Session\AccountInterface $account */
-    $account = User::load($user->uid);
-
-    foreach ($subscriptions->getRowsHash() as $collection_label => $expected_bundle_ids) {
-      $group = $this->getEntityByLabel('rdf_entity', $collection_label);
-      $membership = $this->getMembershipByGroupAndUser($group, $account, OgMembershipInterface::ALL_STATES);
-      $expected_bundle_ids = $this->explodeCommaSeparatedStepArgument(strtolower($expected_bundle_ids));
-
-      $announcements = FALSE;
-      if (in_array('announcements', $expected_bundle_ids)) {
-        unset($expected_bundle_ids[array_search('announcements', $expected_bundle_ids)]);
-        $announcements = TRUE;
-      }
-      Assert::assertSame($announcements, (bool) $membership->get('announcements')->value);
-
-      $actual_bundle_ids = array_map(function (array $item): string {
-        return $item['bundle'];
-      }, $membership->get('subscription_bundles')->getValue());
-
-      sort($expected_bundle_ids);
-      sort($actual_bundle_ids);
-
-      Assert::assertEquals($expected_bundle_ids, $actual_bundle_ids);
+    foreach ($subscriptions->getRowsHash() as $groupLabel => $expectedBundleIds) {
+      $this->assertGroupContentSubscription($groupLabel, $expectedBundleIds);
     }
+  }
+
+  /**
+   * Checks that a group content subscription exists with the given bundles.
+   *
+   * @Then I should be subscribed to( the) :bundlesCommaSeparated bundle(s) from the :groupLabel collection
+   */
+  public function assertGroupContentSubscription(string $groupLabel, string $bundlesCommaSeparated): void {
+    $account = User::load($this->getUserManager()->getCurrentUser()->uid);
+    assert($account instanceof AccountInterface);
+
+    $group = $this->getEntityByLabel('rdf_entity', $groupLabel);
+    $membership = $this->getMembershipByGroupAndUser($group, $account, OgMembershipInterface::ALL_STATES);
+    $expectedBundleIds = $this->explodeCommaSeparatedStepArgument(strtolower($bundlesCommaSeparated));
+
+    $announcements = FALSE;
+    if (in_array('announcements', $expectedBundleIds)) {
+      unset($expectedBundleIds[array_search('announcements', $expectedBundleIds)]);
+      $announcements = TRUE;
+    }
+    Assert::assertSame($announcements, (bool) $membership->get('announcements')->value);
+
+    $actualBundleIds = array_map(function (array $item): string {
+      return $item['bundle'];
+    }, $membership->get('subscription_bundles')->getValue());
+
+    sort($expectedBundleIds);
+    sort($actualBundleIds);
+
+    Assert::assertEquals($expectedBundleIds, $actualBundleIds);
   }
 
   /**
@@ -394,7 +403,7 @@ class JoinupSubscriptionContext extends RawDrupalContext {
    * @throws \Exception
    *   Thrown when the user is not a member of the given group.
    *
-   * @Then I should not be subscribed to any bundle from the :label :bundle
+   * @Then I should not be subscribed to any bundle(s) from the :label :bundle
    */
   public function assertNoGroupContentSubscriptions(string $label, string $bundle): void {
     $user = $this->getUserManager()->getCurrentUser();
