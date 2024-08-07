@@ -8,6 +8,7 @@ use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\joinup_distribution\Entity\Distribution;
 use Drupal\joinup_distribution\Entity\DistributionInterface;
 use Drupal\joinup_release\Entity\ReleaseInterface;
 use Drupal\joinup_solution\Entity\SolutionInterface;
@@ -98,14 +99,14 @@ class JoinupDistributionController extends ControllerBase {
    *
    * @todo This should be merged with the default access method in ISAICP-8572.
    *
-   * @param \Drupal\joinup_release\Entity\ReleaseInterface $node
+   * @param \Drupal\node\NodeInterface $node
    *   The asset release or solution RDF entity for which the distribution
    *   is created.
    *
    * @return \Drupal\Core\Access\AccessResultInterface
    *   The access result object.
    */
-  public function createAssetDistributionOnNodeGroupAccess(ReleaseInterface $node): AccessResultInterface {
+  public function createAssetDistributionOnNodeGroupAccess(NodeInterface $node): AccessResultInterface {
     // Create a new distribution entity in order to check permissions on it.
     $distribution = $this->createNewAssetDistribution($node);
 
@@ -123,7 +124,7 @@ class JoinupDistributionController extends ControllerBase {
   /**
    * Creates a new distribution entity.
    *
-   * @param \Drupal\joinup_release\Entity\ReleaseInterface|\Drupal\solution\Entity\SolutionInterface $parent
+   * @param \Drupal\joinup_release\Entity\ReleaseInterface|\Drupal\joinup_solution\Entity\SolutionInterface $parent
    *   The parent of the distribution.
    *
    * @return \Drupal\joinup_distribution\Entity\DistributionInterface|null
@@ -140,7 +141,7 @@ class JoinupDistributionController extends ControllerBase {
       return NULL;
     }
 
-    return $this->entityTypeManager()->getStorage('node')->create([
+    return Distribution::create([
       'type' => 'distribution',
       'release' => $parent instanceof ReleaseInterface ? $parent->id() : NULL,
       OgGroupAudienceHelperInterface::DEFAULT_FIELD => $this->solution,

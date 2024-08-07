@@ -21,6 +21,7 @@ use Drupal\joinup_workflow\ArchivableEntityTrait;
 use Drupal\joinup_workflow\EntityWorkflowStateTrait;
 use Drupal\meta_entity\Entity\MetaEntity;
 use Drupal\node\Entity\Node;
+use Drupal\og\OgGroupAudienceHelper;
 use Drupal\og\OgMembershipInterface;
 use Drupal\topic\Entity\TopicReferencingEntityTrait;
 
@@ -83,21 +84,19 @@ class Collection extends Node implements CollectionInterface {
     // @todo Fix this after the computed field is created.
     // @todo The computed field should be in the solution module as should the
     //   subscriber that exports the data to the collection.
-    $ids = $this->getReferencedEntityIds('field_ar_affiliates')['rdf_entity'] ?? [];
+    $idsQuery = $this->entityTypeManager()->getStorage('node')
+      ->getQuery()
+      ->accessCheck(FALSE)
+      ->condition('type', 'solution')
+      ->condition(OgGroupAudienceHelper::DEFAULT_FIELD, $this->id());
 
-    if ($ids && $onlyPublished) {
-      // Published solutions are stored in the 'default' graph.
-      $ids = $this->entityTypeManager()
-        ->getStorage('rdf_entity')
-        ->getQuery()
-        ->graphs(['default'])
-        ->condition('rid', 'solution')
-        ->condition('id', $ids, 'IN')
-        ->execute();
-      $ids = array_values($ids);
+    if ($onlyPublished) {
+      $idsQuery
+        ->accessCheck()
+        ->condition('status', 1);
     }
 
-    return $ids;
+    return array_values($idsQuery->execute());
   }
 
   /**
@@ -203,7 +202,7 @@ class Collection extends Node implements CollectionInterface {
     $ids = ['node' => $this->getNodeGroupContent()];
     $solutions = $this->getSolutions();
     $ids = NestedArray::mergeDeep($ids, [
-      'rdf_entity' => [
+      'node' => [
         'solution' => array_keys($solutions),
       ],
     ]);

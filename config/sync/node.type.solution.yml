@@ -17,9 +17,10 @@ third_party_settings:
         value:
           predicate: 'http://purl.org/dc/terms/title'
           type: 'xsd:string'
-label_singular: null
-label_plural: null
-label_count: null
+label_singular: solution
+label_plural: solutions
+label_count:
+  no_count_capitalize: !!binary U29sdXRpb24DU29sdXRpb25z
 name: Solution
 type: solution
 description: 'A solution on Joinup is a framework, tool, or service either hosted directly on Joinup or federated from third-party repositories.'

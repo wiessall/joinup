@@ -20,7 +20,6 @@ use Drupal\joinup_workflow\ArchivableEntityInterface;
 use Drupal\og\MembershipManagerInterface;
 use Drupal\og\OgMembershipInterface;
 use Drupal\og\OgRoleInterface;
-use Drupal\rdf_entity\RdfInterface;
 use Drupal\user\UserInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -141,7 +140,7 @@ abstract class JoinGroupFormBase extends FormBase implements JoinGroupFormInterf
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state, ?AccountProxyInterface $user = NULL, ?RdfInterface $group = NULL): array {
+  public function buildForm(array $form, FormStateInterface $form_state, ?AccountProxyInterface $user = NULL, ?GroupInterface $group = NULL): array {
     assert($group instanceof GroupInterface, 'Only groups can be joined.');
 
     $form['#access'] = $this->access();
@@ -189,7 +188,7 @@ abstract class JoinGroupFormBase extends FormBase implements JoinGroupFormInterf
     // button. The confirmation form should open in a modal dialog for
     // JavaScript-enabled browsers.
     elseif ($membership->getState() === OgMembershipInterface::STATE_ACTIVE) {
-      $parameters = ['rdf_entity' => $this->group->id()];
+      $parameters = [$this->group->getEntityTypeId() => $this->group->id()];
       $form['leave'] = [
         '#theme' => 'group_leave_button',
       ];

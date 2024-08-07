@@ -9,9 +9,10 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\joinup_community_content\CommunityContentHelper;
 use Drupal\joinup_community_content\CommunityContentWorkflowAccessControlHandler;
 use Drupal\joinup_group\Controller\GroupNodeController;
+use Drupal\joinup_group\Entity\GroupInterface;
+use Drupal\node\NodeInterface;
 use Drupal\node\NodeTypeInterface;
 use Drupal\og\OgAccessInterface;
-use Drupal\rdf_entity\RdfInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -52,7 +53,7 @@ class CommunityContentController extends GroupNodeController {
   /**
    * Handles access to the content add form through RDF entity pages.
    *
-   * @param \Drupal\rdf_entity\RdfInterface $rdf_entity
+   * @param \Drupal\node\NodeInterface $node
    *   The RDF entity for which the document entity is created.
    * @param \Drupal\node\NodeTypeInterface $node_type
    *   The type of node to be added.
@@ -67,16 +68,16 @@ class CommunityContentController extends GroupNodeController {
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    *   Thrown when the user entity type is not defined.
    */
-  public function createAccess(RdfInterface $rdf_entity, NodeTypeInterface $node_type, AccountInterface $account): AccessResultInterface {
+  public function createAccess(NodeInterface $node, NodeTypeInterface $node_type, AccountInterface $account): AccessResultInterface {
     if (in_array($node_type->id(), CommunityContentHelper::BUNDLES, TRUE)) {
-      /** @var \Drupal\joinup_group\Entity\GroupInterface $rdf_entity */
-      $membership = $rdf_entity->getMembership((int) $account->id());
+      assert($node instanceof GroupInterface);
+      $membership = $node->getMembership((int) $account->id());
       return \Drupal::entityTypeManager()->getAccessControlHandler('node')->createAccess($node_type->id(), $account, [
-        'group' => $rdf_entity,
+        'group' => $node,
         'membership' => $membership?->id(),
       ], TRUE);
     }
-    return parent::createAccess($rdf_entity, $node_type, $account);
+    return parent::createAccess($node, $node_type, $account);
   }
 
 }
