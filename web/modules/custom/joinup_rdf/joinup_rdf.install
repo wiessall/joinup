@@ -7,6 +7,8 @@
 
 declare(strict_types=1);
 
+use Drupal\Component\Serialization\Yaml;
+
 /**
  * Performs checks for the RDF entities and its storage.
  *
@@ -184,9 +186,8 @@ function joinup_rdf_update_111104(): string {
   ];
 
   foreach ($fieldStorages as $fieldStorage) {
-    $config = \Drupal::configFactory()->getEditable($fieldStorage);
-    $config->set('settings', ['target_type' => 'node']);
-    $config->save();
+    $contents = Yaml::decode(file_get_contents("../config/sync/$fieldStorage.yml"));
+    \Drupal::configFactory()->getEditable($fieldStorage)->setData($contents)->save();
   }
 
   return 'Updated field storages: ' . implode(', ', $fieldStorages);
