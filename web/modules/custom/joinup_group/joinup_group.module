@@ -51,7 +51,7 @@ use Drupal\views\Views;
 /**
  * Implements hook_theme().
  */
-function joinup_group_theme($existing, $type, $theme, $path) {
+function joinup_group_theme($existing, $type, $theme, $path): array {
   return [
     // A button that (when clicked) opens a dropdown that (when clicked) opens a
     // modal with a confirmation button that (when clicked) allows the user to
@@ -101,7 +101,7 @@ function joinup_group_entity_bundle_field_info_alter(array &$fields, EntityTypeI
  * Sets the active trail for the main menu items based on the current group
  * context.
  */
-function joinup_group_preprocess_menu__main(&$variables) {
+function joinup_group_preprocess_menu__main(&$variables): void {
   $group = \Drupal::service('og.context')->getGroup();
   if ($group) {
     /** @var \Drupal\Core\Entity\ContentEntityInterface $group */
@@ -206,7 +206,7 @@ function joinup_group_entity_type_alter(array &$entity_types): void {
  * Adds a submit handler that will show a message to the user after proposing a
  * collection or solution.
  */
-function joinup_group_form_rdf_entity_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+function joinup_group_form_rdf_entity_form_alter(&$form, FormStateInterface $form_state, $form_id): void {
   /** @var \Drupal\rdf_entity\Form\RdfForm $form_object */
   $form_object = $form_state->getFormObject();
   /** @var \Drupal\rdf_entity\RdfInterface $entity */
@@ -252,7 +252,7 @@ function joinup_group_form_alter(array &$form, FormStateInterface $form_state, s
  *
  * Informs the user that a newly proposed collection or solution needs approval.
  */
-function joinup_group_propose_message_submit(&$form, FormStateInterface $form_state) {
+function joinup_group_propose_message_submit(&$form, FormStateInterface $form_state): void {
   $form_object = $form_state->getFormObject();
   $entity = $form_object->getEntity();
   if ($entity instanceof EntityWorkflowStateInterface) {
@@ -265,7 +265,7 @@ function joinup_group_propose_message_submit(&$form, FormStateInterface $form_st
 /**
  * Implements hook_ENTITY_TYPE_access().
  */
-function joinup_group_rdf_entity_access(EntityInterface $entity, $operation, AccountInterface $account) {
+function joinup_group_rdf_entity_access(EntityInterface $entity, $operation, AccountInterface $account): AccessResultInterface {
   if (!$entity instanceof GroupInterface
     || $account->isAnonymous()
     || $account->hasPermission($entity->getEntityType()->getAdminPermission())
@@ -293,7 +293,7 @@ function joinup_group_rdf_entity_access(EntityInterface $entity, $operation, Acc
  *
  * @todo hook api definition is needed.
  */
-function joinup_group_entity_graph_access(EntityInterface $entity, string $operation, AccountInterface $account, string $graph_name): AccessResult {
+function joinup_group_entity_graph_access(EntityInterface $entity, string $operation, AccountInterface $account, string $graph_name): AccessResultInterface {
   if (!$entity || !$entity instanceof GroupInterface || $operation != 'view' || $graph_name == 'default') {
     return AccessResult::neutral();
   }
@@ -351,7 +351,7 @@ function joinup_group_rdf_entity_insert(RdfInterface $group): void {
  *
  * Provide default images for collections and solutions in case they are empty.
  */
-function joinup_group_rdf_entity_presave(EntityInterface $entity) {
+function joinup_group_rdf_entity_presave(EntityInterface $entity): void {
   if (!$entity instanceof GroupInterface) {
     return;
   }
@@ -388,7 +388,7 @@ function joinup_group_rdf_entity_presave(EntityInterface $entity) {
  *
  * @see \joinup_group_rdf_entity_presave()
  */
-function joinup_group_rdf_entity_update(EntityInterface $entity) {
+function joinup_group_rdf_entity_update(EntityInterface $entity): void {
   if (!$entity instanceof GroupInterface) {
     return;
   }
@@ -867,7 +867,7 @@ function joinup_group_generate_share_link(EntityInterface $entity, string $route
  *
  * This workaround will prevent extra side loading and saving of entities.
  */
-function joinup_group_user_predelete(EntityInterface $entity) {
+function joinup_group_user_predelete(EntityInterface $entity): void {
   /** @var \Drupal\og\MembershipManagerInterface $membership_manager */
   $membership_manager = \Drupal::service('og.membership_manager');
   foreach ($membership_manager->getMemberships($entity->id(), []) as $membership) {
@@ -887,7 +887,7 @@ function joinup_group_user_predelete(EntityInterface $entity) {
  * blocked on group level through the membership state; at this time OG is not
  * acting on users that are blocked on user level.
  */
-function joinup_group_user_update(UserInterface $user) {
+function joinup_group_user_update(UserInterface $user): void {
   // Only invalidate the tags if the user is being (un)blocked.
   if ($user->isBlocked() == $user->original->isBlocked()) {
     return;

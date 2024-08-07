@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Joinup\TaskRunner\Traits;
 
+use Composer\Autoload\ClassLoader;
 use DrupalFinder\DrupalFinderComposerRuntime;
 use EcEuropa\Toolkit\TaskRunner\Runner;
 use Symfony\Component\Console\Input\StringInput;
@@ -34,7 +35,7 @@ trait TaskRunnerTrait {
    * @return \Composer\Autoload\ClassLoader
    *   The class loader.
    */
-  protected static function getClassLoader() {
+  protected static function getClassLoader(): ClassLoader {
     return require static::getPath('vendor/autoload.php');
   }
 

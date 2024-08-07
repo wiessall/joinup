@@ -24,7 +24,7 @@ use Drupal\topic\Entity\TopicMetaEntityInterface;
 /**
  * Implements hook_entity_bundle_info_alter().
  */
-function topic_entity_bundle_info_alter(&$bundles) {
+function topic_entity_bundle_info_alter(&$bundles): void {
   if (!empty($bundles['taxonomy_term']['topic'])) {
     $bundles['taxonomy_term']['topic']['class'] = Topic::class;
   }
