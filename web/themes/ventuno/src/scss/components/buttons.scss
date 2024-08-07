@@ -34,7 +34,7 @@ a.btn-link {
   color: $brand-darker;
   &:hover {
     color: $brand-darker;
-    background-color: darken(desaturate($secondary, 1.06), 5.10); // #D1E4F7
+    background-color: $secondary-darker;
   }
 }
 
