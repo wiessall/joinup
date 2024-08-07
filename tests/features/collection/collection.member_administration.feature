@@ -435,7 +435,7 @@ Feature: Collection membership administration
     And I pick "Donald Duck (Donald Duck)" from the "Link" autocomplete suggestions
     And I press "Invite members"
     Then I should see the success message "1 user has been invited to this group."
-    And Log entry with the message "The member Donald Duck has been invited by Lisa Cuddy to Medical diagnosis." should exist.
+    And Log entry with the message "The member Donald Duck has been invited by Daniel Moder to Medical diagnosis." should exist.
 
     When I click "Add members"
     And I type "Turkey" in the "Name" autocomplete field
@@ -452,4 +452,4 @@ Feature: Collection membership administration
       | Turkey Ham |
     And I press "Add members"
     Then I should see the success message "Successfully added the role Member to the selected users."
-    And Log entry with the message "Turkey Ham added as member to Medical diagnosis by Lisa Cuddy." should exist.
+    And Log entry with the message "Turkey Ham added as member to Medical diagnosis by Daniel Moder." should exist.
