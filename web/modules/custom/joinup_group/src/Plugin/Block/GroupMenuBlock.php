@@ -218,7 +218,7 @@ class GroupMenuBlock extends OgMenuBlock {
     }
     $build['#contextual_links']['group_menu_block'] = [
       'route_parameters' => [
-        'rdf_entity' => $this->getContext('og')->getContextData()->getValue()->id(),
+        'node' => $this->getContext('og')->getContextData()->getValue()->id(),
         'node_type' => 'custom_page',
       ],
     ];
