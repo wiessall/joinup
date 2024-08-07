@@ -71,7 +71,7 @@ function joinup_paragraphs_paragraph_create_access(AccountInterface $account, ar
  * @throws \Drupal\joinup_group\Exception\MissingGroupException
  *   When the paragraph parent entity is missing a group.
  */
-function joinup_paragraphs_get_access(AccessResultInterface $access_result, string $permission, AccountInterface $account, ?ParagraphInterface $paragraph = NULL) {
+function joinup_paragraphs_get_access(AccessResultInterface $access_result, string $permission, AccountInterface $account, ?ParagraphInterface $paragraph = NULL): AccessResultInterface {
   // We only act if the access has been explicitly forbidden by the hook
   // implementation of the 'paragraphs_type_permissions' module.
   if (!$access_result->isForbidden()) {
@@ -128,7 +128,7 @@ function joinup_paragraphs_preprocess_paragraph__image(array &$variables): void 
 /**
  * Implements hook_preprocess_HOOK().
  */
-function joinup_paragraphs_preprocess_layout_paragraphs_insert_component_btn(&$variables) {
+function joinup_paragraphs_preprocess_layout_paragraphs_insert_component_btn(&$variables): void {
   if (isset($variables['title']) &&
     $variables['title'] instanceof TranslatableMarkup &&
     $variables['title']->getUntranslatedString() === 'Add section') {
