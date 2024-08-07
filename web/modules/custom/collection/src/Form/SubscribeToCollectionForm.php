@@ -347,15 +347,7 @@ class SubscribeToCollectionForm extends FormBase {
       return;
     }
 
-    $subscription_bundles = [];
-    foreach (JoinupSubscriptionsHelper::SUBSCRIPTION_BUNDLES['collection'] as $entity_type => $bundles) {
-      foreach ($bundles as $bundle) {
-        $subscription_bundles[] = [
-          'entity_type' => $entity_type,
-          'bundle' => $bundle,
-        ];
-      }
-    }
+    $subscription_bundles = JoinupSubscriptionsHelper::provideDataForField('collection');
     $membership
       ->set('announcements', TRUE)
       ->set('subscription_bundles', $subscription_bundles)
