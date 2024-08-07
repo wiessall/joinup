@@ -20,6 +20,7 @@ dependencies:
     - field.field.node.solution.listing_content
     - field.field.node.solution.logo
     - field.field.node.solution.metrics_page
+    - field.field.node.solution.og_audience
     - field.field.node.solution.owner
     - field.field.node.solution.process_status
     - field.field.node.solution.related_solutions
@@ -37,6 +38,7 @@ dependencies:
     - field_formatter_range
     - joinup_core
     - joinup_slick
+    - og
     - svg_image
     - template_suggestion
     - user
@@ -45,6 +47,11 @@ targetEntityType: node
 bundle: solution
 mode: group_header
 content:
+  collections:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
   field_topic:
     type: entity_reference_custom_link
     label: hidden
@@ -90,6 +97,11 @@ content:
         template_suggestion: bare
     weight: 0
     region: content
+  members:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
   og_group:
     type: og_group_subscribe
     label: above
@@ -97,10 +109,14 @@ content:
     third_party_settings: {  }
     weight: 0
     region: content
+  solution_subscribe:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
 hidden:
   abstract: true
   body: true
-  collections: true
   contact: true
   content_creation: true
   description: true
@@ -118,10 +134,10 @@ hidden:
   links: true
   list_related_entities: true
   listing_content: true
-  members: true
   metrics_page: true
   node_solution_listing_content_inline_facets: true
   node_solution_listing_content_top: true
+  og_audience: true
   owner: true
   pinned_in: true
   process_status: true
@@ -137,7 +153,6 @@ hidden:
   shared_in: true
   short_id: true
   site_featured: true
-  solution_subscribe: true
   solution_type: true
   spatial_coverage: true
   translation: true
