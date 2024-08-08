@@ -441,6 +441,9 @@
                 "Radios or Checkboxes inside Composite not saved @see https://www.drupal.org/project/webform/issues/3216923": "resources/patch/php/drupal/webform/368.diff",
                 "Webform might create invalid link renderable arrays on submission list. @see https://www.drupal.org/project/webform/issues/3441600": "resources/patch/php/drupal/webform/3441600.patch"
             },
+            "lullabot/mink-selenium2-driver": {
+                "Add missing mouseover before clicking on radio/select elements - https://github.com/Lullabot/MinkSelenium2Driver/pull/14": "resources/patch/php/lullabot/mink-selenium2-driver/selenium2-mouseover-fixes.patch"
+            },
             "sweetrdf/easyrdf": {
                 "Add a method to remove resources from graph @see https://github.com/sweetrdf/easyrdf/pull/44": "resources/patch/php/sweetrdf/easyrdf/44.diff"
             },
