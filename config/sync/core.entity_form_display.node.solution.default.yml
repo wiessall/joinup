@@ -63,7 +63,7 @@ third_party_settings:
       children:
         - title
         - short_id
-        - description
+        - abstract
         - contact
         - field_topic
         - owner
@@ -71,6 +71,7 @@ third_party_settings:
         - group_moderation
         - content_creation
         - current_workflow_state
+        - description
       label: 'Main fields'
       region: content
       parent_name: group_general
@@ -113,6 +114,14 @@ targetEntityType: node
 bundle: solution
 mode: default
 content:
+  abstract:
+    type: string_textfield
+    weight: 3
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
   contact:
     type: inline_entity_form_complex
     weight: 4
@@ -307,7 +316,6 @@ content:
     settings: {  }
     third_party_settings: {  }
 hidden:
-  abstract: true
   body: true
   created: true
   description: true
