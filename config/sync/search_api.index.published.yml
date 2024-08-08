@@ -218,14 +218,6 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.description
-  eif_perspective:
-    label: 'EIF perspective reference'
-    datasource_id: 'entity:rdf_entity'
-    property_path: eif_perspective
-    type: string
-    dependencies:
-      module:
-        - meta_entity
   entity_author:
     label: Author
     property_path: aggregated_field
@@ -759,27 +751,6 @@ field_settings:
     type: date
     dependencies:
       module:
-        - rdf_entity
-  rdf_featured:
-    label: 'Featured site-wide'
-    datasource_id: 'entity:rdf_entity'
-    property_path: 'featured:entity:field_featured'
-    type: string
-    dependencies:
-      config:
-        - field.storage.meta_entity.field_featured
-      module:
-        - meta_entity
-  rdf_pinned_in:
-    label: 'Pinned in'
-    datasource_id: 'entity:rdf_entity'
-    property_path: 'pinned_in:entity:field_pinned_in:entity:id'
-    type: string
-    dependencies:
-      config:
-        - field.storage.meta_entity.field_pinned_in
-      module:
-        - meta_entity
         - rdf_entity
   reverse_eif_related_term_tid:
     label: 'Reverse » Related term » Term ID'
