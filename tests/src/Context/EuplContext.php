@@ -108,7 +108,6 @@ class EuplContext extends RawDrupalContext {
     if (empty($button)) {
       throw new \Exception("Could not locate a table cell with the button {$spdx}.");
     }
-    $this->scrollCssSelectedElementIntoView('.licence-comparer__header');
     $button->press();
 
     // Wait for modal dialog to be ready.
@@ -224,7 +223,6 @@ class EuplContext extends RawDrupalContext {
    */
   protected function toggleLicenceForComparison(bool $compare, string $spdx_id): void {
     $checkbox = $this->findLicenceTile($spdx_id)->findField('Add to compare list');
-    $this->scrollElementIntoView($checkbox);
     if ($compare) {
       $checkbox->check();
     }
@@ -249,7 +247,6 @@ class EuplContext extends RawDrupalContext {
   public function selectRadioButtonForLicenceCompatibilityCheck(string $spdx_id, string $label): void {
     \assert(in_array($label, ['Inbound', 'Outbound']), 'The purpose should be either "Use" or "Distribute".');
     $radio = $this->findLicenceTile($spdx_id)->findField($label);
-    $this->scrollElementIntoView($radio);
     $radio->click();
   }
 
@@ -268,7 +265,6 @@ class EuplContext extends RawDrupalContext {
    */
   public function clickLicenceTileLink(string $label, string $spdx_id): void {
     $button = $this->findLicenceTile($spdx_id)->findButton($label);
-    $this->scrollElementIntoView($button);
     $button->press();
   }
 

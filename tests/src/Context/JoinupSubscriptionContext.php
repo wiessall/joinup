@@ -275,7 +275,6 @@ class JoinupSubscriptionContext extends RawDrupalContext {
    */
   public function selectSubscriptionOptionInMySubscriptions(string $label, string $bundle): void {
     $checkbox = $this->getGroupSubscriptionCardByHeading($label)->findField($bundle);
-    $this->scrollElementIntoView($checkbox);
     $checkbox->check();
   }
 
@@ -294,7 +293,6 @@ class JoinupSubscriptionContext extends RawDrupalContext {
    */
   public function deselectSubscriptionOptionInMySubscriptions(string $label, string $bundle): void {
     $checkbox = $this->getGroupSubscriptionCardByHeading($label)->findField($bundle);
-    $this->scrollElementIntoView($checkbox);
     $checkbox->uncheck();
   }
 

@@ -218,7 +218,6 @@ class ContextualLinksHelper {
     $contextual_button = $this->waitUntil(function () use ($element): ?NodeElement {
       return $element->find('css', '.contextual > button.trigger');
     });
-    $this->scrollElementIntoView($contextual_button);
 
     // Open the contextual links menu if it is not yet open.
     $link_list = $element->find('css', '.contextual ul.contextual-links');

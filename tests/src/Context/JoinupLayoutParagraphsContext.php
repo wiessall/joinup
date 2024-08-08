@@ -87,7 +87,6 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
 
     $field = $this->getParagraphsElement($field_alias);
     $links = $field->findAll('named', ['link', 'Add layout']);
-    $this->scrollElementIntoView(end($links));
     end($links)->click();
 
     // Wait for modal to be opened.
@@ -128,7 +127,6 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
 
     // Finally, click the "Save" button to add the paragraph.
     $modalButtons = $this->getRegion('Modal buttons');
-    $this->scrollElementIntoView($modalButtons);
     $modalButtons->findButton('Save')->press();
 
     // Wait until the button pane is gone.
@@ -274,7 +272,6 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
     $actions = ['delete', 'edit', 'move up', 'move down', 'duplicate'];
     assertTrue(in_array($action, $actions), "The action '$action' is not defined in the context. Available actions are ", implode(', ', $actions));
 
-    $this->scrollElementIntoView($link);
     $link->clickLink(ucfirst($action));
     if ($action === 'delete') {
       $this->getSession()
@@ -503,8 +500,6 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
       $field = $this->getFormFieldLayoutParagraphs($field_alias)[$parent_layout_position - 1];
       $field = $field->find('css', '.layout__region--' . $parent_layout_region);
     }
-
-    $this->scrollElementIntoView($field);
 
     $links = $field->findAll('named', [
       'link',

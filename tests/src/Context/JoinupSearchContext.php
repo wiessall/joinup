@@ -285,8 +285,6 @@ class JoinupSearchContext extends RawDrupalContext {
     $node_elements = $facet->findAll('css', 'li.facet-item label');
     foreach ($node_elements as $node_element) {
       if ($node_element->getText() === $option) {
-        $facet_id = $facet->getAttribute('data-drupal-facet-id');
-        $this->scrollCssSelectedElementIntoView('[data-drupal-facet-id="' . $facet_id . '"]');
         $node_element->click();
         return;
       }
@@ -797,7 +795,6 @@ class JoinupSearchContext extends RawDrupalContext {
    */
   public function showMoreFacet(string $facet_type): void {
     $facet = $this->findFacetByAlias($facet_type);
-    $this->scrollElementIntoView($facet);
     $parent_facet = $facet->getParent();
     if (!$link = $parent_facet->findLink('Show more')) {
       throw new ElementNotFoundException($this->getSession()->getDriver(), 'Link', 'label', 'Show more');
