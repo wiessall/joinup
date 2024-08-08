@@ -73,6 +73,7 @@ third_party_settings:
         - content_creation
         - current_workflow_state
         - field_state
+        - transition_motivation
       label: 'Main fields'
       region: content
       parent_name: group_general
@@ -326,7 +327,7 @@ content:
       placeholder: ''
     third_party_settings: {  }
   transition_motivation:
-    weight: 10
+    weight: 17
     region: content
     settings: {  }
     third_party_settings: {  }
