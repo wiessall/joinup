@@ -125,6 +125,7 @@ hidden:
   metrics_page: true
   node_solution_listing_content_inline_facets: true
   node_solution_listing_content_top: true
+  og_audience: true
   owner: true
   pinned_in: true
   process_status: true
