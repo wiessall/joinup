@@ -8,8 +8,8 @@ dependencies:
     - field.field.node.solution.body
     - field.field.node.solution.contact
     - field.field.node.solution.content_creation
-    - field.field.node.solution.documentation
     - field.field.node.solution.description
+    - field.field.node.solution.documentation
     - field.field.node.solution.field_keywords
     - field.field.node.solution.field_state
     - field.field.node.solution.field_topic
@@ -64,6 +64,7 @@ third_party_settings:
         - title
         - short_id
         - abstract
+        - description
         - contact
         - field_topic
         - owner
@@ -71,7 +72,6 @@ third_party_settings:
         - group_moderation
         - content_creation
         - current_workflow_state
-        - description
       label: 'Main fields'
       region: content
       parent_name: group_general
@@ -154,6 +154,14 @@ content:
       title: 'Current workflow state'
       title_display: before
       show_for_new_entities: false
+    third_party_settings: {  }
+  description:
+    type: text_textarea
+    weight: 3
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
     third_party_settings: {  }
   documentation:
     type: file_url_generic
@@ -318,7 +326,6 @@ content:
 hidden:
   body: true
   created: true
-  description: true
   langcode: true
   og_audience: true
   path: true
