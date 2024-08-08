@@ -5,7 +5,6 @@ dependencies:
   config:
     - core.entity_view_mode.node.explore_item
     - field.field.node.collection.abstract
-    - field.field.node.collection.access_url
     - field.field.node.collection.closed_group
     - field.field.node.collection.contact
     - field.field.node.collection.content_creation
@@ -21,6 +20,7 @@ dependencies:
     - field.field.node.collection.short_id
     - field.field.node.collection.site_featured
     - field.field.node.collection.spatial_coverage
+    - field.field.node.collection.website_url
     - node.type.collection
   module:
     - layout_builder
@@ -158,7 +158,6 @@ mode: explore_item
 content: {  }
 hidden:
   abstract: true
-  access_url: true
   closed_group: true
   collection_settings: true
   contact: true
@@ -190,3 +189,4 @@ hidden:
   solutions: true
   spatial_coverage: true
   uri: true
+  website_url: true
