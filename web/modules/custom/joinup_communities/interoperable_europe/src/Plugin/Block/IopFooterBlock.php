@@ -68,7 +68,7 @@ class IopFooterBlock extends BlockBase implements ContainerFactoryPluginInterfac
     $icons = [
       'linkedin' => [
         'title' => $this->t('LinkedIn'),
-        'url' => 'https://www.linkedin.com/in/interoperableeurope/',
+        'url' => 'https://www.linkedin.com/groups/12907049/',
       ],
       'twitter' => [
         'title' => $this->t('Twitter'),
