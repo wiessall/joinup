@@ -10,7 +10,7 @@ field_name: abstract
 entity_type: node
 bundle: solution
 label: Abstract
-description: ''
+description: 'Short description text of the solution.'
 required: true
 translatable: true
 default_value: {  }
