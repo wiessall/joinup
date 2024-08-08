@@ -75,7 +75,7 @@ final class MigrationHelper {
       'mapped_term' => TRUE,
     ],
     'http://www.w3.org/ns/dcat#keyword' => [
-      'target_field_name' => 'field_keyword',
+      'target_field_name' => 'field_keywords',
       'format' => 'reference',
       'mapped_term' => TRUE,
     ],
@@ -104,10 +104,6 @@ final class MigrationHelper {
     ],
     'http://xmlns.com/foaf/spec/#term_homepage' => [
       'target_field_name' => 'access_url',
-      'format' => 'string',
-    ],
-    'http://joinup.eu/site-pinned' => [
-      'target_field_name' => 'field_pinned_in',
       'format' => 'string',
     ],
     'http://purl.org/dc/terms/spatial' => [
