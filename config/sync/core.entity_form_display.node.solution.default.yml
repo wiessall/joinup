@@ -301,6 +301,11 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
+  transition_motivation:
+    weight: 10
+    region: content
+    settings: {  }
+    third_party_settings: {  }
 hidden:
   abstract: true
   body: true

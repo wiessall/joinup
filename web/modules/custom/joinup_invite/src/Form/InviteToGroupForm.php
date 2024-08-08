@@ -18,17 +18,13 @@ class InviteToGroupForm extends GroupFormBase {
 
   /**
    * The status value for an invitation that has been accepted.
-   *
-   * @var string
    */
-  const STATUS_MEMBERSHIP_PENDING = 'membership_pending';
+  const string STATUS_MEMBERSHIP_PENDING = 'membership_pending';
 
   /**
    * The severity of the messages displayed to the user, keyed by result type.
-   *
-   * @var string[]
    */
-  const INVITATION_MESSAGE_TYPES = [
+  const array INVITATION_MESSAGE_TYPES = [
     self::RESULT_SUCCESS => 'status',
     self::RESULT_FAILED => 'error',
     self::RESULT_RESENT => 'status',
@@ -39,10 +35,8 @@ class InviteToGroupForm extends GroupFormBase {
 
   /**
    * The message templates to use for the notification mail.
-   *
-   * @var string
    */
-  const TEMPLATES = [
+  const array TEMPLATES = [
     'collection' => 'collection_membership_invitation',
     'solution' => 'solution_membership_invitation',
   ];
@@ -50,7 +44,7 @@ class InviteToGroupForm extends GroupFormBase {
   /**
    * {@inheritdoc}
    */
-  public function getFormId() {
+  public function getFormId(): string {
     return 'invite_to_group_form';
   }
 
@@ -80,7 +74,7 @@ class InviteToGroupForm extends GroupFormBase {
   /**
    * {@inheritdoc}
    */
-  public function submitForm(array &$form, FormStateInterface $form_state) {
+  public function submitForm(array &$form, FormStateInterface $form_state): void {
     $role_id = implode('-', [
       $this->entity->getEntityTypeId(),
       $this->entity->bundle(),
