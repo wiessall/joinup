@@ -81,8 +81,7 @@ third_party_settings:
         classes: ''
         show_empty_fields: false
         id: ''
-        formatter: open
-        description: ''
+        formatter: closed
         required_fields: true
     group_additional_fields:
       children:
@@ -106,8 +105,7 @@ third_party_settings:
         classes: ''
         show_empty_fields: false
         id: ''
-        formatter: closed
-        description: ''
+        formatter: open
         required_fields: true
 id: node.solution.default
 targetEntityType: node
