@@ -1053,7 +1053,6 @@ class JoinupContext extends RawDrupalContext {
       $element = $this->getSession()->getPage()->find('xpath', $xpath);
     }
 
-    $this->scrollNamedElementIntoView('button', $button, $element);
     $element->pressButton($button);
   }
 
@@ -1538,7 +1537,6 @@ class JoinupContext extends RawDrupalContext {
    */
   public function iClickLinkInTile(string $link, string $heading): void {
     $element = $this->getTileByHeading($heading);
-    $this->scrollElementIntoView($element);
 
     $linkElement = $element->findLink($link);
     $linkElementAriaLabel = $element->find('xpath', '//a[@aria-label=contains(text(), "' . $link . '")]');
@@ -1808,7 +1806,6 @@ class JoinupContext extends RawDrupalContext {
     }
 
     $button = $this->getSession()->getPage()->find('css', '#dropdown-add-content');
-    $this->scrollElementIntoView($button);
     $button->press();
   }
 
@@ -2945,7 +2942,6 @@ class JoinupContext extends RawDrupalContext {
 
     /** @var \Behat\Mink\Element\NodeElement $last_button */
     $last_button = array_pop($buttons);
-    $this->scrollElementIntoView($last_button);
     $last_button->press();
   }
 

@@ -110,7 +110,6 @@ class BootstrapContext extends RawDrupalContext {
       throw new \Exception("The '$section' accordion section is already $state");
     }
 
-    $this->scrollElementIntoView($button);
     $button->press();
     // @todo Disable animations and perform an instant expand/collapse.
     $this->waitUntil(function () use ($button, $expand): bool {

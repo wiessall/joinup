@@ -43,7 +43,6 @@ trait WysiwygTrait {
     }
     /** @var \Behat\Mink\Element\NodeElement $button */
     $button = reset($button_elements);
-    $this->scrollElementIntoView($button);
     $button->press();
   }
 
