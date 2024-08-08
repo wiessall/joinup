@@ -2120,9 +2120,9 @@ class FeatureContext extends RawDrupalContext {
   protected function getImageLibraryBrowserMapping(): array {
     return [
       'collection' => [
-        'type' => 'rdf_entity',
+        'type' => 'node',
         'fields' => [
-          'logo' => 'field_ar_logo',
+          'logo' => 'logo',
         ],
       ],
       'solution' => [
