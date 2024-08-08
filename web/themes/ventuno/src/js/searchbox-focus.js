@@ -6,11 +6,11 @@
   Drupal.behaviors.searchboxFocus = {
     attach() {
       const trigger = document.querySelector(
-        ".joinup-navbar .dropdown-toggle#search-box-dropdown"
+        ".joinup-navbar .dropdown-toggle#search-box-dropdown",
       );
       const box = document.querySelector("#dropdown-menu--search");
       const input = document.querySelector(
-        "#dropdown-menu--search #search-box"
+        "#dropdown-menu--search #search-box",
       );
       if (
         trigger === null ||
