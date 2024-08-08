@@ -39,6 +39,7 @@
   - Drupal\joinup\Context\HomepageContext
   - Drupal\joinup\Context\InputFilterContext
   - Drupal\joinup\Context\Isa2AnalyticsContext
+  - Drupal\joinup\Context\JavascriptContext
   - Drupal\joinup\Context\JoinupCollectionContext
   - Drupal\joinup\Context\JoinupCommunityContentContext
   - Drupal\joinup\Context\JoinupContext

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
-use Behat\Mink\Element\DocumentElement;
 use Behat\Mink\Element\NodeElement;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\eupl\Eupl;
@@ -111,7 +110,7 @@ class EuplContext extends RawDrupalContext {
     $button->press();
 
     // Wait for modal dialog to be ready.
-    $page->waitFor(5, function (DocumentElement $page): ?NodeElement {
+    $page->waitFor(5, function ($page): ?NodeElement {
       // Open modal dialog has `style="display:block"`.
       return $page->find('xpath', '//div[@style and contains(concat(" ", normalize-space(@class), " "), " modal-dialog ")]//button[@aria-label="Close"]');
     });

@@ -2176,66 +2176,6 @@ class JoinupContext extends RawDrupalContext {
   }
 
   /**
-   * Waits until Glide animations finish.
-   *
-   * @param string $seconds
-   *   Number of seconds to wait.
-   *
-   * @Then I wait up to :seconds seconds for Glide animations to finish
-   */
-  public function waitForGlideAnimations(string $seconds): void {
-    $this->assertWaitJs((int) $seconds, 'document.querySelector(".glide--slider.glide-animating") === null');
-  }
-
-  /**
-   * Waits until Slick animations finish.
-   *
-   * @param string $seconds
-   *   Number of seconds to wait.
-   *
-   * @Then I wait up to :seconds seconds for Slick animations to finish
-   */
-  public function waitForSlickAnimations(string $seconds): void {
-    $this->assertWaitJs((int) $seconds, 'document.querySelector("[data-slick].slick-animating") === null');
-  }
-
-  /**
-   * Waits until Bootstrap collapse animations finish.
-   *
-   * @param string $seconds
-   *   Number of seconds to wait.
-   *
-   * @Then I wait up to :seconds seconds for Bootstrap collapse animations to finish
-   */
-  public function waitForBsCollapseAnimations(string $seconds): void {
-    $this->assertWaitJs((int) $seconds, 'document.querySelector(".collapsing") === null');
-  }
-
-  /**
-   * Asserts that the default Drupal modal is opened.
-   *
-   * @throws \Exception
-   *   Thrown when the modal doesn't open within 5 seconds.
-   *
-   * @Then a modal should/will open
-   */
-  public function waitForDrupalModalToOpen(): void {
-    $this->assertModalToOpen();
-  }
-
-  /**
-   * Asserts that the default Drupal modal is closed.
-   *
-   * @throws \Exception
-   *   Thrown when the modal doesn't close within 5 seconds.
-   *
-   * @Then the modal should be closed
-   */
-  public function waitForDrupalModalToClose(): void {
-    $this->assertModalToClose();
-  }
-
-  /**
    * Asserts that a certain link contains the URL of an entity.
    *
    * @param string $link
@@ -2410,14 +2350,8 @@ class JoinupContext extends RawDrupalContext {
    */
   public function fillFieldWithNormalisedEntityReference(string $value, ?string $field = NULL): void {
     if ($this->hasJavascriptSupport()) {
-      $session = $this->getSession();
       $xpath = '//ul[contains(concat(" ", normalize-space(@class), " "), " ui-autocomplete ")]//a[text() = "' . $value . '"]';
-      $session->wait(500, 'document.querySelector(".ui-autocomplete").style.display !== "none"');
-      $element = $session->getPage()->find('xpath', $xpath);
-      if (!$element instanceof NodeElement) {
-        throw new \Exception("The value '$value' was not found in the autocomplete suggestions.");
-      }
-      $element->click();
+      $this->waitForElementVisible('xpath', $xpath)->click();
     }
     else {
       $element = $this->getSession()->getPage()->findField($field);

@@ -98,6 +98,7 @@ Feature: Pool paragraph tests.
     Then I am logged in as a moderator
     And I go to the edit form of the "Scariest things" "custom page"
     And I click "Choose component"
+    And a modal should open
     And I click "Poll"
     When the following fields should be present "Question,Choice,Poll Duration,Allow cancel votes,Show number of results,Active"
 

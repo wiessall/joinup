@@ -111,11 +111,7 @@ class BootstrapContext extends RawDrupalContext {
     }
 
     $button->press();
-    // @todo Disable animations and perform an instant expand/collapse.
-    $this->waitUntil(function () use ($button, $expand): bool {
-      return $expand xor $button->hasClass('collapsed');
-    });
-    sleep(1);
+    $this->waitForCssAnimations();
   }
 
   /**

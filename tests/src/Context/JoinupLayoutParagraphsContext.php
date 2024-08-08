@@ -90,7 +90,7 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
     end($links)->click();
 
     // Wait for modal to be opened.
-    $this->assertModalToOpen();
+    $this->waitForModalToOpen();
 
     // Get the 'layout' property from the table.
     $layout = $layout_properties->getRowsHash()['layout'];
@@ -102,8 +102,7 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
     // Select the layout.
     $xpath = "//div[contains(concat(' ', @class, ' '), ' layout-select__item ')]/input[@value='$layout']";
     $modalContent->find('xpath', $xpath)->getParent()->click();
-    // Wait until AJAX is done.
-    $this->getSession()->wait(5000, "jQuery.active === 0");
+    $this->waitForAjax();
 
     // Expand both the "Layout options" and "Settings" fieldsets.
     $modalContent->findButton('Layout Options')->click();
@@ -111,13 +110,13 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
 
     // Fill in the available fields.
     foreach ($layout_properties->getRowsHash() as $property => $value) {
-      if ($property == 'layout') {
+      if ($property === 'layout') {
         continue;
       }
 
       assertTrue(isset(self::LAYOUT_PROPERTIES_MAP[strtolower($property)]), "The layout property '$property' is not defined in the context.");
       $type = self::LAYOUT_PROPERTIES_MAP[strtolower($property)];
-      if ($type == 'select') {
+      if ($type === 'select') {
         $modalContent->selectFieldOption($property, $value);
       }
       else {
@@ -126,11 +125,11 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
     }
 
     // Finally, click the "Save" button to add the paragraph.
-    $modalButtons = $this->getRegion('Modal buttons');
-    $modalButtons->findButton('Save')->press();
+    $save = $this->waitForElementVisible('css', '.ui-dialog-buttonpane .lpb-btn--save');
+    $save->press();
 
     // Wait until the button pane is gone.
-    $this->assertModalToClose();
+    $this->waitForModalToClose();
   }
 
   /**
@@ -163,10 +162,10 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
     $region = NULL;
     $paragraph_fields = [];
     foreach ($layout_properties->getRowsHash() as $property => $value) {
-      if ($property == 'layout position') {
+      if ($property === 'layout position') {
         $layout_position = $value;
       }
-      elseif ($property == 'region') {
+      elseif ($property === 'region') {
         $region = $value;
       }
       else {
@@ -174,15 +173,17 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
       }
     }
 
+    // Click "Choose component" (opens the modal).
     $this->getChooseComponentLink($field_alias, $layout_position, $region)->click();
+    $this->waitForAjax();
+    $this->waitForModalToOpen();
 
-    // An overlay has opened, and we need to select "Layout".
-    $xpath = '//div[contains(concat(" ", @class, " "), " lpb-component-list__group--content ")]';
-    $this->getSession()->wait(5000, "document.querySelector('div.lpb-component-list__group--content') !== null");
-    $layouts_container = $this->getSession()->getPage()->find('xpath', $xpath);
-    $layouts_container->clickLink($paragraph_type);
-    $this->getSession()->wait(5000, "jQuery.active === 0");
+    // Select the paragraph type.
+    $ui_dialog = $this->getSession()->getPage()->find('css', '.ui-dialog');
+    $ui_dialog->find('named', ['link', $paragraph_type])->click();
+    $this->waitForAjax();
 
+    // Fill fields.
     foreach ($paragraph_fields as $property => $value) {
       // Split the field value into the field type and the field value.
       $field_type = NULL;
@@ -210,8 +211,7 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
 
     // Finally, click the "Save" button to add the paragraph.
     $this->getSession()->getPage()->find('css', '.ui-dialog-buttonpane')->pressButton('Save');
-    // Wait until the button pane is gone.
-    $this->getSession()->wait(5000, "document.querySelector('.ui-dialog-buttonpane') === null");
+    $this->waitForModalToClose();
   }
 
   /**
@@ -273,26 +273,27 @@ class JoinupLayoutParagraphsContext extends RawDrupalContext {
     assertTrue(in_array($action, $actions), "The action '$action' is not defined in the context. Available actions are ", implode(', ', $actions));
 
     $link->clickLink(ucfirst($action));
-    if ($action === 'delete') {
-      $this->getSession()
-        ->wait(5000, "document.querySelector('.lpb-dialog') !== null");
-      $this->getSession()
-        ->getPage()
-        ->find('css', '.ui-dialog-buttonpane')
-        ->pressButton('Delete');
-      $this->getSession()
-        ->wait(5000, "document.querySelector('.lpb-dialog') === null");
-    }
+    $this->waitForAjax();
 
-    if (in_array($action, ['move up', 'move down'])) {
-      // Move buttons initiate a specific animation that both move the paragraph
-      // and reposition the screen. We need to wait for the animation to be
-      // done. 2 seconds is a bit long, but it's the only way to be sure.
-      $this->getSession()->wait(2000);
-    }
+    switch ($action) {
+      case 'edit':
+        $this->waitForElementVisible('css', '.ui-dialog-buttonpane button');
+        break;
 
-    // Wait until AJAX is done.
-    $this->getSession()->wait(5000, "jQuery.active === 0");
+      case 'delete':
+        $btn = $this->waitForElementVisible('css', '.ui-dialog-buttonpane .lpb-btn--confirm-delete');
+        $btn->press();
+        $this->waitForAjax();
+        $this->waitForNoElement('css', '.lpb-dialog');
+        break;
+
+      case 'move up':
+      case 'move down':
+        // Move actions trigger AJAX then CSS animations.
+        // @see layout_paragraphs/js/builder.js move
+        $this->waitForCssAnimations();
+        break;
+    }
   }
 
   /**
