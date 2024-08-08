@@ -11,7 +11,7 @@ field_name: field_topic
 entity_type: node
 bundle: solution
 label: Topic
-description: ''
+description: 'You can select multiple topics using the "ctrl" key on your keyboard.'
 required: true
 translatable: true
 default_value: {  }
