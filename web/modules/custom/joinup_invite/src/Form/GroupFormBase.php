@@ -6,9 +6,11 @@ namespace Drupal\joinup_invite\Form;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Url;
 use Drupal\joinup_invite\InvitationMessageHelperInterface;
 use Drupal\og\MembershipManagerInterface;
+use Drupal\og\OgRoleInterface;
 use Drupal\rdf_entity\RdfInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -19,10 +21,8 @@ abstract class GroupFormBase extends InviteFormBase {
 
   /**
    * The OG role to assign if the invitation is accepted.
-   *
-   * @var \Drupal\og\OgRoleInterface
    */
-  protected $role;
+  protected OgRoleInterface $role;
 
   /**
    * Constructs a new InviteToGroupForm object.
@@ -31,15 +31,18 @@ abstract class GroupFormBase extends InviteFormBase {
    *   The entity type manager service.
    * @param \Drupal\joinup_invite\InvitationMessageHelperInterface $invitationMessageHelper
    *   The invitation message helper service.
+   * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
+   *   The logger channel service.
    * @param \Drupal\og\MembershipManagerInterface $ogMembershipManager
    *   The og membership manager service.
    */
   public function __construct(
     EntityTypeManagerInterface $entityTypeManager,
     InvitationMessageHelperInterface $invitationMessageHelper,
+    LoggerChannelInterface $logger,
     protected MembershipManagerInterface $ogMembershipManager,
   ) {
-    parent::__construct($entityTypeManager, $invitationMessageHelper);
+    parent::__construct($entityTypeManager, $invitationMessageHelper, $logger);
   }
 
   /**
@@ -49,7 +52,8 @@ abstract class GroupFormBase extends InviteFormBase {
     return new static(
       $container->get('entity_type.manager'),
       $container->get('joinup_invite.invitation_message_helper'),
-      $container->get('og.membership_manager')
+      $container->get('logger.channel.group_membership'),
+      $container->get('og.membership_manager'),
     );
   }
 
@@ -65,7 +69,7 @@ abstract class GroupFormBase extends InviteFormBase {
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state, ?RdfInterface $rdf_entity = NULL) {
+  public function buildForm(array $form, FormStateInterface $form_state, ?RdfInterface $rdf_entity = NULL): array {
     $this->entity = $rdf_entity;
     $form = parent::build($form, $form_state);
 

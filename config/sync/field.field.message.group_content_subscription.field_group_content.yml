@@ -46,9 +46,6 @@ settings:
         direction: ASC
       auto_create: false
       auto_create_bundle: ''
-  download_event:
-    handler: 'default:download_event'
-    handler_settings: {  }
   block:
     handler: 'default:block'
     handler_settings: {  }
@@ -118,6 +115,9 @@ settings:
   image_style:
     handler: 'default:image_style'
     handler_settings: {  }
+  download_event:
+    handler: 'default:download_event'
+    handler_settings: {  }
   invitation:
     handler: 'default:invitation'
     handler_settings: {  }
@@ -126,6 +126,9 @@ settings:
     handler_settings: {  }
   compatibility_document:
     handler: 'default:compatibility_document'
+    handler_settings: {  }
+  joinup_log:
+    handler: 'default:joinup_log'
     handler_settings: {  }
   language_content_settings:
     handler: 'default:language_content_settings'
@@ -241,6 +244,9 @@ settings:
   sitewide_alert:
     handler: 'default:sitewide_alert'
     handler_settings: {  }
+  slick:
+    handler: 'default:slick'
+    handler_settings: {  }
   sparql_graph:
     handler: 'default:sparql_graph'
     handler_settings: {  }
@@ -315,8 +321,5 @@ settings:
     handler_settings: {  }
   date_format:
     handler: 'default:date_format'
-    handler_settings: {  }
-  slick:
-    handler: 'default:slick'
     handler_settings: {  }
 field_type: dynamic_entity_reference

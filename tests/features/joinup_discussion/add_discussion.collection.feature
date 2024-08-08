@@ -82,6 +82,7 @@ Feature: Discussions added to collections
     # Verify that the author is visible on the page.
     And I should see the text "Kesha Pontecorvo"
     And I should see the success message "Discussion An amazing discussion has been created."
+    And Log entry with the message "A new discussion entity titled An amazing discussion has been created by Kesha Pontecorvo in The World of the Waves." should exist.
     And I should see the text "Discussions" in the "Navigation menu"
     And the "The World of the Waves" collection has a discussion titled "An amazing discussion"
 
