@@ -35,6 +35,7 @@ use Drupal\joinup_group\JoinupGroupHelper;
 use Drupal\joinup_workflow\EntityWorkflowStateInterface;
 use Drupal\meta_entity\Entity\MetaEntity;
 use Drupal\meta_entity\Entity\MetaEntityInterface;
+use Drupal\node\NodeForm;
 use Drupal\node\NodeInterface;
 use Drupal\og\OgAccess;
 use Drupal\og\OgGroupAudienceHelperInterface;
@@ -206,16 +207,16 @@ function joinup_group_entity_type_alter(array &$entity_types): void {
  * Adds a submit handler that will show a message to the user after proposing a
  * collection or solution.
  */
-function joinup_group_form_node_form_alter(&$form, FormStateInterface $form_state, $form_id): void {
-  /** @var \Drupal\rdf_entity\Form\RdfForm $form_object */
-  $form_object = $form_state->getFormObject();
-  /** @var \Drupal\rdf_entity\RdfInterface $entity */
-  $entity = $form_object->getEntity();
+function joinup_group_form_node_form_alter(&$form, FormStateInterface $formState): void {
+  $formObject = $formState->getFormObject();
+  assert($formObject instanceof NodeForm);
+  $entity = $formObject->getEntity();
+  assert($entity instanceof NodeInterface);
 
   // Add submit callback when the current bundle is in the list and when we are
   // in an affected operation type.
   $operation_types = ['add', 'default', 'propose'];
-  if ($entity instanceof GroupInterface && in_array($form_object->getOperation(), $operation_types)) {
+  if ($entity instanceof GroupInterface && in_array($formObject->getOperation(), $operation_types)) {
     $form['actions']['submit']['#submit'][] = 'joinup_group_propose_message_submit';
   }
 

@@ -14,6 +14,7 @@ use Drupal\Core\Database\Database;
 use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Installer\InstallerKernel;
 use Drupal\Core\Session\AccountInterface;
@@ -106,14 +107,16 @@ function joinup_form_install_settings_form_save($form, FormStateInterface $form_
 /**
  * Implements hook_entity_type_alter().
  */
-function joinup_entity_type_alter(array &$entity_types): void {
-  // Add the "Propose" form operation to nodes and RDF entities so that we can
-  // add propose form displays to them.
+function joinup_entity_type_alter(array $entityTypes): void {
+  // Add the "Propose" form operation to nodes entities so that we can add
+  // propose form displays to them.
   // Skip this during installation, since the RDF entity will not yet be
   // registered.
-  if (!InstallerKernel::installationAttempted()) {
-    /** @var \Drupal\Core\Entity\EntityTypeInterface[] $entity_types */
-    $entity_types['rdf_entity']->setFormclass('propose', 'Drupal\rdf_entity\Form\RdfForm');
+  if (
+    !InstallerKernel::installationAttempted() &&
+    $entityTypes['node'] instanceof EntityTypeInterface
+  ) {
+    $entityTypes['node']->setFormClass('propose', $entityTypes['node']->getFormClass('edit'));
   }
 }
 
