@@ -12,7 +12,7 @@ field_name: metrics_page
 entity_type: node
 bundle: solution
 label: 'Metrics page'
-description: ''
+description: 'Page of the solution metrics in an external platform'
 required: false
 translatable: true
 default_value: {  }
