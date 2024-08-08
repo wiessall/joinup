@@ -87,7 +87,8 @@ trait WysiwygTrait {
   JS;
     try {
       $this->getSession()->executeScript($function);
-      sleep(1);
+      // Some elements can trigger AJAX (e.g.: Media preview).
+      $this->waitForAjax();
     }
     catch (\Exception $e) {
       throw new \Exception("Could not fill the textarea for the '$label' field.");
