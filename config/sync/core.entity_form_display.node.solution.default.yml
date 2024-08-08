@@ -201,11 +201,14 @@ content:
     settings: {  }
     third_party_settings: {  }
   group_moderation:
-    type: options_buttons
+    type: boolean_checkbox
     weight: 8
     region: content
-    settings: {  }
-    third_party_settings: {  }
+    settings:
+      display_label: false
+    third_party_settings:
+      oe_bootstrap_theme_helper:
+        switch: false
   landing_page:
     type: link_default
     weight: 8
