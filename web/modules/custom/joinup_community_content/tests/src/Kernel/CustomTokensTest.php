@@ -70,7 +70,7 @@ class CustomTokensTest extends TokenReplaceKernelTestBase {
   /**
    * Creates a node, then tests the token replacement.
    */
-  public function testTokenReplacement() {
+  public function testTokenReplacement(): void {
     /** @var \Drupal\node\NodeInterface $node */
     $node = Node::create([
       'type' => 'article',

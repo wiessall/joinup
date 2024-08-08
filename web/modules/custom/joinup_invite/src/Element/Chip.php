@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_invite\Element;
 
-use Drupal\Core\Render\Element\FormElement;
+use Drupal\Core\Render\Element\FormElementBase;
 
 /**
  * Provides a form element for the Material design "chip" component.
@@ -28,7 +28,7 @@ use Drupal\Core\Render\Element\FormElement;
  *
  * @FormElement("chip")
  */
-class Chip extends FormElement {
+class Chip extends FormElementBase {
 
   /**
    * {@inheritdoc}
@@ -54,7 +54,7 @@ class Chip extends FormElement {
    * @return array
    *   The processed element.
    */
-  public static function processChip(array &$element) {
+  public static function processChip(array &$element): array {
     $element['#tree'] = TRUE;
     $element['remove'] = [
       '#type' => 'submit',

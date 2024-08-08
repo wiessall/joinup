@@ -15,7 +15,7 @@ provider: null
 plugin: joinup_flag_block
 settings:
   id: joinup_flag_block
-  label: Bookmark
+  label: 'My bookmarks'
   label_display: '0'
   provider: joinup_flag
   flag_type: bookmark

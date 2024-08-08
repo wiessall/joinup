@@ -94,10 +94,9 @@ Feature: Test the visibility of the quick links menu.
     But I should see the text "There are not any links to show. You can manage the quick links items through the Edit menu or you can add your links through the Edit page."
 
     # Lets not test all links in a separate list of steps to save time.
-    Given release:
-      | title         | Some release  |
-      | is version of | Some solution |
-      | state         | published     |
+    Given release content:
+      | title        | is version of | state     |
+      | Some release | Some solution | published |
     And I go to the edit form of the "Some solution" solution
     And I fill in the following:
       | Landing page | http://www.example.com |

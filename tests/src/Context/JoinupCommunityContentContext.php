@@ -243,7 +243,7 @@ class JoinupCommunityContentContext extends RawDrupalContext {
    *
    * @AfterNodeCreate
    */
-  public function pinCommunityContentInGroup(AfterNodeCreateScope $scope) {
+  public function pinCommunityContentInGroup(AfterNodeCreateScope $scope): void {
     $node = $scope->getEntity();
 
     $is_pinned = in_array(strtolower((string) ($node->pinned ?? '')), [
@@ -386,7 +386,7 @@ class JoinupCommunityContentContext extends RawDrupalContext {
    *
    * @Then the in the spotlight section should contain the following content:
    */
-  public function assertInTheSpotlight(TableNode $table) {
+  public function assertInTheSpotlight(TableNode $table): void {
     $columns = $table->getColumnsHash();
     $articles = $this->getSession()->getPage()->findAll('css', '.view-in-the-spotlight article.tile');
     Assert::assertEquals(count($columns), count($articles), sprintf('Expected %d items in the "In the spotlight" section but found %d items.', count($columns), count($articles)));
@@ -395,7 +395,7 @@ class JoinupCommunityContentContext extends RawDrupalContext {
       $actual_data = array_shift($articles);
 
       // Check title text.
-      $actual_title = $actual_data->find('css', 'h1.tile__title')->getText();
+      $actual_title = $actual_data->find('css', '.tile__title')->getText();
       Assert::assertEquals($expected_data['title'], $actual_title, sprintf('Expected title "%s" for article %d in the "In the spotlight" section but instead found "%s".', $expected_data['title'], $i + 1, $actual_title));
 
       // Check that title links to the canonical page of the article.
@@ -453,7 +453,7 @@ class JoinupCommunityContentContext extends RawDrupalContext {
     }
 
     // Check title text.
-    $actual_title = $block_element->find('css', 'article.tile h1.tile__title')->getText();
+    $actual_title = $block_element->find('css', 'article.tile .tile__title')->getText();
     Assert::assertEquals($content->label(), $actual_title, sprintf('Expected the Highlighted content to have the title "%s" but instead found "%s".', $content->label(), $actual_title));
 
     // Check that title links to the canonical page of the content.

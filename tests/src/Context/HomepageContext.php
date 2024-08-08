@@ -38,7 +38,7 @@ class HomepageContext extends RawDrupalContext {
    *
    * @Then the explore section should contain the following content:
    */
-  public function assertExplore(TableNode $table) {
+  public function assertExplore(TableNode $table): void {
     $columns = $table->getColumnsHash();
     $articles = $this->getSession()->getPage()->findAll('css', '.block-joinup-front-page-explore-block article');
     Assert::assertEquals(count($columns), count($articles), sprintf('Expected %d items in the "Explore" section but found %d items.', count($columns), count($articles)));
@@ -57,7 +57,7 @@ class HomepageContext extends RawDrupalContext {
 
       // Check that title links to the canonical page of the
       // news, event, solution and collection.
-      $xpath = '//h1/a[@href = "' . $this->getEntityUri($entity) . '" and contains(., "' . $expected_data['title'] . '")]';
+      $xpath = '//h3/a[@href = "' . $this->getEntityUri($entity) . '" and contains(., "' . $expected_data['title'] . '")]';
       Assert::assertNotEmpty($actual_data->find('xpath', $xpath), sprintf('%s "%s" does not have the correct title which links to the canonical page.', $type, $expected_data['title']));
 
       // Check the body/description text. XPath varies in case of news and

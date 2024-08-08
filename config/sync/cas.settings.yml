@@ -1,5 +1,6 @@
 _core:
   default_config_hash: tgdYSvJhMKuQncFGbzlDagPl05HoQ3rSx49j9CL3oWU
+langcode: en
 login_link_enabled: false
 login_link_label: 'EU Login'
 login_success_message: 'You have been logged in.'

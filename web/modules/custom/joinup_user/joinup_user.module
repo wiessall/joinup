@@ -12,6 +12,8 @@ use Drupal\Component\Utility\Unicode;
 use Drupal\Component\Utility\Xss;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Render\Markup;
@@ -21,6 +23,7 @@ use Drupal\joinup_notification\MessageArgumentGenerator;
 use Drupal\joinup_user\Entity\JoinupUser;
 use Drupal\joinup_user\Entity\JoinupUserInterface;
 use Drupal\joinup_user\JoinupUserViewsData;
+use Drupal\joinup_user\Plugin\Field\UserBundle;
 use Drupal\joinup_user\Plugin\Menu\LoginLogoutMenuLink;
 use Drupal\og\OgMembershipInterface;
 use Drupal\user\Entity\User;
@@ -35,7 +38,7 @@ use Drupal\user\UserInterface;
  * through the form. In other cases where a user entity is changed through the
  * API we need to avoid sending out unnecessary notifications.
  */
-function joinup_user_notify_on_account_change(array $form, FormStateInterface $form_state) {
+function joinup_user_notify_on_account_change(array $form, FormStateInterface $form_state): void {
   $form_object = $form_state->getFormObject();
   $account = $form_object->getEntity() ?? NULL;
 
@@ -65,7 +68,7 @@ function joinup_user_notify_on_account_change(array $form, FormStateInterface $f
  *
  * @see user_mail()
  */
-function joinup_user_mail($key, &$message, $params) {
+function joinup_user_mail($key, &$message, $params): void {
   $token_service = \Drupal::token();
   $language_manager = \Drupal::languageManager();
   $langcode = $message['langcode'];
@@ -120,7 +123,7 @@ function joinup_user_mail($key, &$message, $params) {
  *
  * @see user_mail_tokens()
  */
-function joinup_user_mail_tokens(array &$replacements, array $data, array $options) {
+function joinup_user_mail_tokens(array &$replacements, array $data, array $options): void {
   user_mail_tokens($replacements, $data, $options);
 
   if (isset($data['user']) && isset($data['original'])) {
@@ -132,7 +135,7 @@ function joinup_user_mail_tokens(array &$replacements, array $data, array $optio
 /**
  * Implements hook_mail_alter().
  */
-function joinup_user_mail_alter(&$message) {
+function joinup_user_mail_alter(&$message): void {
   if (isset($message['params']['account']) && $message['params']['account']->isCancelled()) {
     // Don't send email for a cancelled user account.
     $message['send'] = FALSE;
@@ -161,7 +164,7 @@ function joinup_user_mail_alter(&$message) {
 /**
  * Turn account changes into human readable text.
  */
-function joinup_user_account_changes(AccountInterface $old_account, AccountInterface $new_account) {
+function joinup_user_account_changes(AccountInterface $old_account, AccountInterface $new_account): array {
   $changes = [];
   // Roles changed.
   $old_roles = [];
@@ -204,7 +207,7 @@ function joinup_user_account_changes(AccountInterface $old_account, AccountInter
  *
  * Settings form for the email send when an admin updates a user profile.
  */
-function joinup_user_form_user_admin_settings_alter(&$form, FormStateInterface $form_state) {
+function joinup_user_form_user_admin_settings_alter(&$form, FormStateInterface $form_state): void {
   $form['#submit'][] = 'joinup_user_form_user_admin_settings_alter_submit';
   $mail_config = \Drupal::config('joinup_user.mail');
   $email_token_help = t('Available variables are: [site:name], [site:url], [user:display-name], [user:account-name], [user:mail], [site:login-url], [site:url-brief], [user:edit-url], [user:one-time-login-url], [user:cancel-url], [user:changes].');
@@ -257,7 +260,7 @@ function joinup_user_form_user_admin_settings_alter(&$form, FormStateInterface $
 /**
  * Submit callback: Save the email settings.
  */
-function joinup_user_form_user_admin_settings_alter_submit(array &$form, FormStateInterface $form_state) {
+function joinup_user_form_user_admin_settings_alter_submit(array &$form, FormStateInterface $form_state): void {
   \Drupal::configFactory()->getEditable('joinup_user.mail')
     ->set('email_admin_update.subject', $form_state->getValue('user_mail_update_account_subject'))
     ->set('email_admin_update.body', $form_state->getValue('user_mail_update_account_body'))
@@ -313,7 +316,7 @@ function joinup_user_form_user_form_alter(array &$form, FormStateInterface $form
  * @param \Drupal\Core\Form\FormStateInterface $form_state
  *   The current form state.
  */
-function joinup_user_user_form_submit(array $form, FormStateInterface $form_state) {
+function joinup_user_user_form_submit(array $form, FormStateInterface $form_state): void {
   // If the password is changed after opening a password reset link, send a
   // mail to the user.
   if ($form_state->get('user_pass_reset') && !$form_state->isValueEmpty('pass')) {
@@ -347,7 +350,7 @@ function joinup_user_user_form_submit(array $form, FormStateInterface $form_stat
  *
  * @see \Drupal\user\Controller\UserController::userTitle()
  */
-function joinup_user_canonical_title(?UserInterface $user = NULL) {
+function joinup_user_canonical_title(?UserInterface $user = NULL): string|array {
   return $user ? [
     '#markup' => $user->getDisplayName(),
     '#allowed_tags' => Xss::getHtmlTagList(),
@@ -360,7 +363,7 @@ function joinup_user_canonical_title(?UserInterface $user = NULL) {
  * - Invalidates the user cache tags when an OG membership changes.
  * - Sends an e-mail when a user's role(s) change.
  */
-function joinup_user_og_membership_presave(OgMembershipInterface $entity) {
+function joinup_user_og_membership_presave(OgMembershipInterface $entity): void {
   joinup_user_invalidate_user_cache_tags($entity);
 
   if ($entity->isNew()) {
@@ -409,7 +412,7 @@ function joinup_user_og_membership_presave(OgMembershipInterface $entity) {
 /**
  * Implements hook_ENTITY_TYPE_delete() for OG Membership entities.
  */
-function joinup_user_og_membership_delete(OgMembershipInterface $entity) {
+function joinup_user_og_membership_delete(OgMembershipInterface $entity): void {
   joinup_user_invalidate_user_cache_tags($entity);
 }
 
@@ -422,7 +425,7 @@ function joinup_user_og_membership_delete(OgMembershipInterface $entity) {
  * @param \Drupal\og\OgMembershipInterface $entity
  *   The OG membership entity.
  */
-function joinup_user_invalidate_user_cache_tags(OgMembershipInterface $entity) {
+function joinup_user_invalidate_user_cache_tags(OgMembershipInterface $entity): void {
   if (!empty($entity->get('uid')->target_id)) {
     $tags = ['user:' . $entity->get('uid')->target_id];
     /** @var \Drupal\Core\Cache\CacheTagsInvalidatorInterface $invalidator */
@@ -534,7 +537,7 @@ function joinup_user_user_cancel(array $edit, JoinupUserInterface $account, stri
  * normal usage the combination of first name and last name will always be
  * returned. Incomplete data may be present in migrated legacy accounts.
  */
-function joinup_user_user_format_name_alter(&$name, $account) {
+function joinup_user_user_format_name_alter(&$name, $account): void {
   // Skip if the user is anonymous.
   if ($account->isAnonymous()) {
     return;
@@ -589,7 +592,7 @@ function joinup_user_menu_links_discovered_alter(array &$links): void {
  *
  * @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3659
  */
-function joinup_user_local_tasks_alter(&$local_tasks) {
+function joinup_user_local_tasks_alter(&$local_tasks): void {
   if (isset($local_tasks['user.login'])) {
     $local_tasks['user.login']['title'] = t('Sign in');
   }
@@ -598,7 +601,7 @@ function joinup_user_local_tasks_alter(&$local_tasks) {
 /**
  * Implements hook_entity_type_alter().
  */
-function joinup_user_entity_type_alter(array &$entity_types) {
+function joinup_user_entity_type_alter(array &$entity_types): void {
   /** @var \Drupal\Core\Entity\ContentEntityTypeInterface $entity_type */
   $entity_type = $entity_types['user'];
   $entity_type
@@ -699,4 +702,22 @@ function joinup_user_user_logout(AccountInterface $account): void {
     $logger->info('Config read-only mode has been restored/enabled.');
     $cacheTagsInvalidator->invalidateTags(['joinup_user:read_only_config']);
   }
+}
+
+/**
+ * Implements hook_entity_base_field_info().
+ */
+function joinup_user_entity_base_field_info(EntityTypeInterface $entityType): array {
+  if ($entityType->id() !== 'user') {
+    return [];
+  }
+
+  return [
+    'type' => BaseFieldDefinition::create('string')
+      ->setLabel(t('Bundle'))
+      ->setDescription(t('User bundle (<code>user<code>) to be used by SAPI / facets'))
+      ->setComputed(TRUE)
+      ->setName('type')
+      ->setClass(UserBundle::class),
+  ];
 }

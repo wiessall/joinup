@@ -180,7 +180,7 @@ class ArbitraryFacetWidgetDecorator implements WidgetPluginInterface, ContainerF
    * @return mixed
    *   Method return value.
    */
-  public function __call($method, array $args) {
+  public function __call($method, array $args): mixed {
     return call_user_func_array([$this->original, $method], $args);
   }
 

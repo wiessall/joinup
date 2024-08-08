@@ -14,11 +14,11 @@ Feature:
     And the following solutions:
       | title         | description | owner                  | contact information      | state     |
       | Tile solution | Meh...      | Some fancy named owner | Some fancy named contact | published |
-    And the following releases:
+    And release content:
       | title        | release number | release notes | is version of | owner                  | contact information      | state     |
       | Tile release | 0.1            | Meh...        | Tile solution | Some fancy named owner | Some fancy named contact | published |
     And distribution content:
-      | title       | description | parent       | access url | state     |
+      | title       | description | release      | access url | state     |
       | Tile distro | meh...      | Tile release | test.zip   | published |
     And licence content:
       | title        | description |
@@ -39,7 +39,7 @@ Feature:
       | title            | solution      | state     |
       | Tile custom page | Tile solution | published |
     And I append "content_listing" to "field_paragraphs_body" field in "node" entity with following "Tile custom page" title:
-      | content_listing:value | a:3:{s:7:"enabled";i:1;s:13:"query_presets";s:74:"entity_bundle\|distribution,asset_release,discussion,document,event,news\|IN";s:5:"limit";s:2:"10";} |
+      | content_listing:value | a:3:{s:7:"enabled";i:1;s:13:"query_presets";s:68:"entity_bundle\|distribution,release,discussion,document,event,news\|IN";s:5:"limit";s:2:"10";} |
 
     When I am logged in as a moderator
     And I go to the "Tile custom page" custom page

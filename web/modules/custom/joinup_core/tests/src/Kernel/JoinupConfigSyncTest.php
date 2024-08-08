@@ -27,6 +27,9 @@ class JoinupConfigSyncTest extends KernelTestBase {
   protected static $modules = [
     // Blazy contains a crucial schema info alter hook implementation.
     'blazy',
+    // Offers the CKEditor5EnabledConfigurablePlugins constraint used to
+    // validate some configurations.
+    'ckeditor5',
     // Blazy depends on media.
     'media',
     // This module alters the schema of facet.widget.default_config.

@@ -77,7 +77,7 @@ class Announcement extends Message implements AnnouncementInterface {
         '#text' => $this->getBody(),
         '#format' => $this->getBodyFormat(),
       ];
-      $body = \Drupal::service('renderer')->renderPlain($build);
+      $body = \Drupal::service('renderer')->renderInIsolation($build);
       $text[0] = $this->processArguments($this->getArguments(), [$body])[0];
     }
 

@@ -100,6 +100,7 @@ display:
         type: full
         options:
           offset: 0
+          pagination_heading_level: h4
           items_per_page: 12
           total_pages: null
           id: 0
@@ -170,21 +171,21 @@ display:
           plugin_id: search_api
           order: DESC
           expose:
-            label: 'Last Updated Date'
+            label: 'Last update'
             field_identifier: last-updated-date
           exposed: true
-        entity_created:
-          id: entity_created
+        date:
+          id: date
           table: search_api_index_published
-          field: entity_created
+          field: date
           relationship: none
           group_type: group
           admin_label: ''
           plugin_id: search_api
           order: DESC
           expose:
-            label: 'Creation Date'
-            field_identifier: creation-date
+            label: Date
+            field_identifier: date
           exposed: true
       arguments: {  }
       filters:
@@ -345,9 +346,9 @@ display:
               event: view_mode_tile_horizontal
               licence: view_mode_tile_horizontal
               news: view_mode_tile_horizontal
+              release: view_mode_tile_horizontal
               video: view_mode_tile_horizontal
             'entity:rdf_entity':
-              asset_release: view_mode_tile_horizontal
               collection: view_mode_tile_horizontal
               solution: view_mode_tile_horizontal
             'entity:taxonomy_term':

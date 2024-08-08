@@ -20,7 +20,6 @@
         # Third-party code injected in page with Javascript.
         - .globan
   - Drupal\joinup\Context\AdmsValidatorContext
-  - Drupal\joinup\Context\AssetReleaseContext
   - Drupal\joinup\Context\BootstrapContext
   - Drupal\joinup\Context\CollectionContext
   - Drupal\joinup\Context\ContactFormContext
@@ -54,6 +53,7 @@
   - Drupal\joinup\Context\JoinupLayoutParagraphsContext
   - Drupal\joinup\Context\JoinupLegalContext
   - Drupal\joinup\Context\JoinupLicenceContext
+  - Drupal\joinup\Context\JoinupLogContext
   - Drupal\joinup\Context\JoinupNewsContext
   - Drupal\joinup\Context\JoinupNewsletterContext
   - Drupal\joinup\Context\JoinupNotificationContext
@@ -71,6 +71,7 @@
   - Drupal\joinup\Context\OeNewsroomNewsletterContext
   - Drupal\joinup\Context\OwnerContext
   - Drupal\joinup\Context\PollContext
+  - Drupal\joinup\Context\ReleaseContext
   - Drupal\joinup\Context\ReplicateContext
   - Drupal\joinup\Context\RssContext
   - Drupal\joinup\Context\ScreenshotContext:
@@ -143,6 +144,7 @@ default:
                 - '--whitelisted-ips=*'
     LoversOfBehat\TableExtension:
       table_map:
+        'actions log report': 'table'
         'announcement list': '.announcement-list table'
         'group menu edit table': '#menu-overview'
         'eif recommendations': '.eif-recommendations table'

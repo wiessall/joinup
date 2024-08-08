@@ -7,9 +7,9 @@
 <article{{ attributes.addClass('glide__slide') }}>
   {{ title_prefix }}
   {% if not page %}
-    <h1{{ title_attributes }}>
+    <h3{{ title_attributes }}>
       <a href="{{ url }}" rel="bookmark">{{ label }}</a>
-    </h1>
+    </h3>
   {% endif %}
   {{ title_suffix }}
   {{ content }}

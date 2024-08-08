@@ -24,7 +24,7 @@ use Drupal\solution\Entity\SolutionInterface;
 /**
  * Implements hook_entity_type_alter().
  */
-function custom_page_entity_type_alter(array &$entity_types) {
+function custom_page_entity_type_alter(array &$entity_types): void {
   /** @var \Drupal\Core\Entity\ContentEntityTypeInterface[] $entity_types */
   // Add a link template allow adding custom pages.
   $entity_types['rdf_entity']->setLinkTemplate('add-custom-page', '/rdf_entity/{rdf_entity}/{node_type}/add');
@@ -46,7 +46,7 @@ function custom_page_field_info_alter(&$info): void {
 /**
  * Implements hook_entity_bundle_info_alter().
  */
-function custom_page_entity_bundle_info_alter(array &$bundles) {
+function custom_page_entity_bundle_info_alter(array &$bundles): void {
   if (!empty($bundles['node']['custom_page'])) {
     $bundles['node']['custom_page']['class'] = CustomPage::class;
   }
@@ -55,7 +55,7 @@ function custom_page_entity_bundle_info_alter(array &$bundles) {
 /**
  * Implements hook_entity_bundle_field_info_alter().
  */
-function custom_page_entity_bundle_field_info_alter(&$fields, EntityTypeInterface $entity_type, $bundle) {
+function custom_page_entity_bundle_field_info_alter(&$fields, EntityTypeInterface $entity_type, $bundle): void {
   if ($entity_type->id() == 'node' && $bundle == 'custom_page') {
     if (!empty($fields['title'])) {
       $fields['title']->addConstraint('UniqueFieldValueInGroupAndBundle', [
@@ -120,7 +120,7 @@ function custom_page_node_insert(EntityInterface $entity): void {
  * - Reindexes the parent collection/solution so that they are searchable using
  *   the content of the new custom page.
  */
-function custom_page_node_update(NodeInterface $entity) {
+function custom_page_node_update(NodeInterface $entity): void {
   if (!$entity instanceof CustomPageInterface) {
     return;
   }
@@ -167,7 +167,7 @@ function custom_page_node_update(NodeInterface $entity) {
  * - Reindexes the parent collection/solution so that the content of the deleted
  *   custom page no longer shows up in the search results for the parent group.
  */
-function custom_page_node_delete(NodeInterface $entity) {
+function custom_page_node_delete(NodeInterface $entity): void {
   if (!$entity instanceof CustomPageInterface) {
     return;
   }
@@ -191,7 +191,7 @@ function custom_page_node_delete(NodeInterface $entity) {
  * or solution becomes enabled or disabled we need to reindex the group, since
  * the content of the custom menu should now be included or excluded.
  */
-function custom_page_menu_link_content_update(MenuLinkContentInterface $menu_link) {
+function custom_page_menu_link_content_update(MenuLinkContentInterface $menu_link): void {
   // Do a quick check to see if the menu link entity's ableness has changed.
   if ($menu_link->isEnabled() === $menu_link->original->isEnabled()) {
     return;
@@ -219,7 +219,7 @@ function custom_page_menu_link_content_update(MenuLinkContentInterface $menu_lin
 /**
  * Implements hook_menu_local_actions_alter().
  */
-function custom_page_menu_local_actions_alter(&$local_actions) {
+function custom_page_menu_local_actions_alter(&$local_actions): void {
   // Remove the 'Add link' local action from the custom page navigation menu
   // edit form. In default Drupal this is intended for webmasters, but we expose
   // this form to end users which do not interact directly with menu links.
@@ -238,7 +238,7 @@ function custom_page_menu_local_actions_alter(&$local_actions) {
 /**
  * Implements hook_ENTITY_TYPE_access() for "node".
  */
-function custom_page_node_access(NodeInterface $node, $op, AccountInterface $account) {
+function custom_page_node_access(NodeInterface $node, $op, AccountInterface $account): AccessResultInterface {
   if (!$node instanceof CustomPageInterface || !$node->hasGroup()) {
     return AccessResult::neutral();
   }
@@ -353,4 +353,36 @@ function custom_page_entity_extra_field_info(): array {
   ];
 
   return $fields;
+}
+
+/**
+ * Implements hook_pathauto_alias_alter().
+ *
+ * Aliases are generated automatic, but some words are prohibited.
+ */
+function custom_page_pathauto_alias_alter(&$alias, array $context): void {
+  if ($context['module'] !== 'node' || $context['bundle'] !== 'custom_page') {
+    return;
+  }
+
+  $node = $context['data']['node'] ?? NULL;
+  if (!$node instanceof CustomPageInterface || !$node->hasGroup()) {
+    return;
+  }
+
+  $prohibited_prefixes = [
+    '/distribution',
+    '/news',
+    '/discussion',
+    '/document',
+    '/event',
+    '/solution',
+  ];
+  foreach ($prohibited_prefixes as $prohibited) {
+    if (str_ends_with($alias, $prohibited)) {
+      // Append an incrementing numeric suffix, treat it as already taken.
+      $alias = $alias . '-0';
+      return;
+    }
+  }
 }

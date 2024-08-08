@@ -23,7 +23,7 @@ weight: 0
 variant: layout_builder
 variant_settings:
   id: layout_builder
-  label: null
+  label: Anonymous
   weight: 0
   uuid: c6b4a07e-d959-4562-a8a9-96a8c2a46ae9
   sections:
@@ -140,7 +140,7 @@ variant_settings:
             label_display: '0'
             provider: custom_markup_block
             markup:
-              value: "<p class=\"about-what__title\">What's Joinup</p>\r\n<p>The Joinup platform is the European Commission's one-stop shop for interoperable, open, and free digital government ICT solutions and an online space for e-Government professionals and enthusiasts to share and learn about digital public services and initiatives.</p>\r\n<p><strong>Joinup covers the hands-on aspects of interoperability.</strong></p>\r\n"
+              value: "<h2>What's Joinup</h2>\r\n<p>The Joinup platform is the European Commission's one-stop shop for interoperable, open, and free digital government ICT solutions and an online space for e-Government professionals and enthusiasts to share and learn about digital public services and initiatives.</p>\r\n<p><strong>Joinup covers the hands-on aspects of interoperability.</strong></p>\r\n"
               format: full_html
           weight: 0
           additional:

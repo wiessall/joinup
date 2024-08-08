@@ -51,7 +51,7 @@ class ContextualLinksHelper {
    * This allows us to use traits that are designed to be used in Behat context
    * classes.
    */
-  public function __call($name, $arguments) {
+  public function __call($name, $arguments): mixed {
     return $this->context->$name(...$arguments);
   }
 
