@@ -53,7 +53,7 @@ trait JavascriptTrait {
    */
   protected function assertModalToOpen(): void {
     // A modal can be opened only in a JavaScript-enabled browser.
-    self::assertJavaScriptEnabledBrowser();
+    $this->assertJavaScriptEnabledBrowser();
 
     $result = $this->getSession()->getPage()->waitFor(5, function (): bool {
       // Retrieve again a fresh copy of the page element at each cycle.
@@ -76,7 +76,7 @@ trait JavascriptTrait {
    */
   protected function assertModalToClose(): void {
     // A modal can be opened only in a JavaScript-enabled browser.
-    self::assertJavaScriptEnabledBrowser();
+    $this->assertJavaScriptEnabledBrowser();
 
     $result = $this->getSession()->getPage()->waitFor(5, function (): bool {
       try {
@@ -114,7 +114,7 @@ trait JavascriptTrait {
    *   The JS condition/callback to run.
    */
   protected function assertWaitJs(int $seconds, $script): void {
-    self::assertJavaScriptEnabledBrowser();
+    $this->assertJavaScriptEnabledBrowser();
 
     $res = $this->getSession()->wait(1000 * $seconds, $script);
     if (!$res) {

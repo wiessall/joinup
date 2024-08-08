@@ -47,7 +47,7 @@ class BootstrapContext extends RawDrupalContext {
    * @Given I use a device with a(n) :size display
    */
   public function changeResolution(string $size): void {
-    self::assertJavaScriptEnabledBrowser();
+    $this->assertJavaScriptEnabledBrowser();
 
     [$width, $height] = self::RESOLUTIONS[$size];
     $this->getSession()->resizeWindow($width, $height, 'current');
