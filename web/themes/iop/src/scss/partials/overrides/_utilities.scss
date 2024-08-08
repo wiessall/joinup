@@ -22,7 +22,7 @@ $utilities: map.merge(
       values: (
         0: 0,
         50vh: 50vh,
-      )
+      ),
     ),
     "max-height": null,
     "viewport-height": null,
@@ -54,7 +54,7 @@ $utilities: map.merge(
       responsive: false,
       property: column-gap,
       class: col-gap,
-      values: $spacers
+      values: $spacers,
     ),
     "link": null,
     "font-weight":
@@ -84,5 +84,5 @@ $utilities: map.merge(
             ),
         )
       ),
-  ),
+  )
 );

@@ -13,7 +13,7 @@ $border-radius: 0.5rem;
 
 // Box-shadow
 $box-shadow: 0 0.1rem 0.4rem 0.1rem rgba($black, 0.1);
-$box-shadow-lg: 0 .5rem 1rem rgba($black, .1625);
+$box-shadow-lg: 0 0.5rem 1rem rgba($black, 0.1625);
 
 // Buttons
 $btn-link-color: $link-color;
@@ -85,8 +85,8 @@ $font-family-sans-serif: "Roboto", sans-serif;
 $font-family-base: "Roboto", sans-serif;
 
 // Paths (from the compiled CSS location)
-$bootstrap-icons-path: '../icons';
-$theme-images-path: '../images';
+$bootstrap-icons-path: "../icons";
+$theme-images-path: "../images";
 
 // Regenerate $theme-colors variables map with the addition of $brand
 $theme-colors: map.merge(
@@ -104,9 +104,10 @@ $theme-colors-rgb: map-loop($theme-colors, to-rgb, "$value");
 // to avoid creating a gigantic utilities file
 $spacers: (
   0: 0,
-  1: $spacer * .25,
-  2: $spacer * .5,
-  "2-5": $spacer * 0.75, // We need this "extended-spacer"
+  1: $spacer * 0.25,
+  2: $spacer * 0.5,
+  "2-5": $spacer * 0.75,
+  // We need this "extended-spacer"
   3: $spacer,
   4: $spacer * 1.5,
   5: $spacer * 3,
