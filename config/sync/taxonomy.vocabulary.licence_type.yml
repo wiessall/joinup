@@ -32,5 +32,6 @@ _core:
   default_config_hash: baHNAkkgxY1gz5w1kDmHW02r5c_ZMb4FBXKRBQxQS5M
 name: 'Licence type'
 vid: licence_type
-description: ''
+description: null
 weight: 0
+new_revision: false

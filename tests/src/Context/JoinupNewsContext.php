@@ -49,7 +49,7 @@ class JoinupNewsContext extends RawDrupalContext {
    *
    * @Then the latest news section should contain the following news articles:
    */
-  public function assertLatestNews(TableNode $table) {
+  public function assertLatestNews(TableNode $table): void {
     $columns = $table->getColumnsHash();
     $articles = $this->getSession()->getPage()->findAll('css', '.view-latest-news .tile');
     Assert::assertEquals(count($columns), count($articles), sprintf('Expected %d articles in the "Latest news" section but found %d articles', count($columns), count($articles)));
@@ -58,7 +58,7 @@ class JoinupNewsContext extends RawDrupalContext {
       $actual_data = array_shift($articles);
 
       // Check title text.
-      $actual_title = $actual_data->find('css', 'h1.tile__title')->getText();
+      $actual_title = $actual_data->find('css', '.tile__title')->getText();
       Assert::assertEquals($expected_data['title'], $actual_title, sprintf('Expected title "%s" for article %d in the "Latest news" section but instead found "%s".', $expected_data['title'], $i + 1, $actual_title));
 
       // Check that title links to the canonical page of the news article.

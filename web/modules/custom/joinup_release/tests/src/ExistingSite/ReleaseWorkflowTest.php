@@ -1,0 +1,465 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Drupal\Tests\joinup_release\ExistingSite;
+
+use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Session\AnonymousUserSession;
+use Drupal\Tests\joinup_workflow\ExistingSite\JoinupWorkflowExistingSiteTestBase;
+use Drupal\node\Entity\Node;
+use Drupal\og\Entity\OgRole;
+use Drupal\og\OgRoleInterface;
+use Drupal\rdf_entity\RdfInterface;
+
+/**
+ * Tests crud operations and the workflow for the release rdf entity.
+ *
+ * @group joinup_release
+ */
+class ReleaseWorkflowTest extends JoinupWorkflowExistingSiteTestBase {
+
+  /**
+   * A non authenticated user.
+   *
+   * @var \Drupal\Core\Session\AnonymousUserSession
+   */
+  protected AnonymousUserSession $userAnonymous;
+
+  /**
+   * A user with the authenticated role.
+   *
+   * @var \Drupal\Core\Session\AccountInterface
+   */
+  protected AccountInterface $userAuthenticated;
+
+  /**
+   * A user with the moderator role.
+   *
+   * @var \Drupal\Core\Session\AccountInterface
+   */
+  protected AccountInterface $userModerator;
+
+  /**
+   * A user to be used as a solution facilitator.
+   *
+   * @var \Drupal\Core\Session\AccountInterface
+   */
+  protected AccountInterface $userOgFacilitator;
+
+  /**
+   * A user to be used as a solution administrator.
+   *
+   * @var \Drupal\Core\Session\AccountInterface
+   */
+  protected AccountInterface $userOgAdministrator;
+
+  /**
+   * The solution parent entity.
+   *
+   * @var \Drupal\rdf_entity\RdfInterface
+   */
+  protected RdfInterface $solutionGroup;
+
+  /**
+   * The solution facilitator role.
+   *
+   * @var \Drupal\og\OgRoleInterface
+   */
+  protected OgRoleInterface $roleFacilitator;
+
+  /**
+   * The solution administrator role.
+   *
+   * @var \Drupal\og\OgRoleInterface
+   */
+  protected OgRoleInterface $roleAdministrator;
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function setUp(): void {
+    parent::setUp();
+
+    $this->userAnonymous = new AnonymousUserSession();
+    $this->userAuthenticated = $this->createUser();
+    $this->userModerator = $this->createUser([], NULL, FALSE, ['roles' => ['moderator']]);
+    $this->userOgFacilitator = $this->createUser();
+    $this->userOgAdministrator = $this->createUser();
+
+    $this->roleFacilitator = OgRole::getRole('rdf_entity', 'solution', 'facilitator');
+    $this->roleAdministrator = OgRole::getRole('rdf_entity', 'solution', 'administrator');
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function getEntityType(): string {
+    return 'node';
+  }
+
+  /**
+   * Tests the CRUD operations for the release entities.
+   *
+   * Since the browser test is a slow test, both create access and read/update/
+   * delete access are tested below.
+   */
+  public function testCrudAccess(): void {
+    // Test create access.
+    foreach ($this->createAccessProvider() as $parent_state => $test_data_arrays) {
+      $parent = $this->createDefaultParent($parent_state);
+      // Initialize the release entity as is used in all sub-cases.
+      $content = $this->createNode([
+        'type' => 'release',
+        'og_audience' => $parent->id(),
+      ]);
+      foreach ($test_data_arrays as $test_data) {
+        $operation = 'create';
+        $user_var = $test_data[0];
+        $expected_result = $test_data[1];
+
+        $access = $this->ogAccess->userAccessEntityOperation('create', $content, $this->$user_var)->isAllowed();
+        $result = $expected_result ? $this->t('have') : $this->t('not have');
+        $message = "User {$user_var} should {$result} {$operation} access for bundle 'release' with the parent entity in {$parent_state} state.";
+        $this->assertEquals($expected_result, $access, $message);
+      }
+    }
+
+    // Test view, update, delete access.
+    foreach ($this->readUpdateDeleteAccessProvider() as $parent_state => $content_data) {
+      $parent = $this->createDefaultParent($parent_state);
+
+      foreach ($content_data as $content_state => $test_data_arrays) {
+        // Initialize the release entity as it is going to be used in all sub
+        // cases.
+        $content = $this->createNode([
+          'type' => 'release',
+          'label' => $this->randomMachineName(),
+          'field_state' => $content_state,
+          'og_audience' => $parent->id(),
+        ]);
+
+        foreach ($test_data_arrays as $test_data_array) {
+          $operation = $test_data_array[0];
+          $user_var = $test_data_array[1];
+          $expected_result = $test_data_array[2];
+
+          $access = $this->entityAccess->access($content, $operation, $this->$user_var);
+          $result = $expected_result ? $this->t('have') : $this->t('not have');
+          $message = "User {$user_var} should {$result} {$operation} access for entity {$content->label()} ({$content_state}) with the parent entity in {$parent_state} state.";
+          $this->assertEquals($expected_result, $access, $message);
+        }
+      }
+    }
+  }
+
+  /**
+   * Tests the release workflow.
+   */
+  public function testWorkflow(): void {
+    foreach ($this->workflowTransitionsProvider() as $entity_state => $workflow_data) {
+      $parent = $this->createDefaultParent('published');
+
+      foreach ($workflow_data as $user_var => $expected_target_states) {
+        $content = Node::create([
+          'type' => 'release',
+          'title' => $this->randomMachineName(),
+          'field_state' => $entity_state,
+          'og_audience' => $parent->id(),
+        ]);
+        $content->save();
+
+        // Override the user to be checked for the allowed transitions.
+        $actual_target_states = $this->workflowHelper->getAvailableTargetStates($content, $this->$user_var);
+        sort($actual_target_states);
+        sort($expected_target_states);
+
+        $this->assertEquals($expected_target_states, $actual_target_states, 'Allowed transitions match with settings.');
+      }
+    }
+  }
+
+  /**
+   * Generates a solution entity and initializes default memberships.
+   *
+   * @param string $state
+   *   The state of the entity.
+   *
+   * @return \Drupal\rdf_entity\RdfInterface
+   *   The created solution entity.
+   *
+   * @throws \Drupal\Core\Entity\EntityStorageException
+   *   If the entity fails to create.
+   */
+  protected function createDefaultParent(string $state): RdfInterface {
+    // Make sure the current user is set to anonymous when creating solutions
+    // through the API so we can assign the administrator manually. If a user is
+    // logged in during creation of the solution they will automatically become
+    // the administrator.
+    $this->setCurrentUser($this->userAnonymous);
+
+    $parent = $this->createRdfEntity([
+      'rid' => 'solution',
+      'field_is_state' => $state,
+      'label' => $this->randomMachineName(),
+      // Ensure a parent collection.
+      'collection' => $this->createRdfEntity([
+        'rid' => 'collection',
+        'label' => $this->randomString(),
+        'field_ar_state' => 'published',
+      ]),
+    ]);
+    $this->assertInstanceOf(RdfInterface::class, $parent);
+    $this->createOgMembership($parent, $this->userOgFacilitator, [$this->roleFacilitator]);
+    $this->createOgMembership($parent, $this->userOgAdministrator, [$this->roleAdministrator]);
+    return $parent;
+  }
+
+  /**
+   * Provides data for create access check.
+   *
+   * The access to create a release is checked against the parent entity as it
+   * is dependant to og permissions.
+   * The structure of the array is:
+   * @code
+   * $access_array = [
+   *  'parent_state' => [
+   *    ['user1', 'expected_result'],
+   *    ['user2', 'expected_result'],
+   * ];
+   * @endcode
+   * The user variable represents the variable defined in the test.
+   * Only two parent states need to be tested as the expected result might
+   * differ depending on whether the parent is published or not.
+   *
+   * @return array
+   *   Testing data.
+   */
+  public function createAccessProvider(): array {
+    return [
+      // Unpublished parent.
+      'draft' => [
+        ['userAnonymous', FALSE],
+        ['userAuthenticated', FALSE],
+        ['userModerator', TRUE],
+        ['userOgFacilitator', TRUE],
+        ['userOgAdministrator', FALSE],
+      ],
+      // Published parent.
+      'published' => [
+        ['userAnonymous', FALSE],
+        ['userAuthenticated', FALSE],
+        ['userModerator', TRUE],
+        ['userOgFacilitator', TRUE],
+        ['userOgAdministrator', FALSE],
+      ],
+    ];
+  }
+
+  /**
+   * Provides data for access check.
+   *
+   * The structure of the array is:
+   * @code
+   * $access_array = [
+   *   'parent_state' => [
+   *     'entity_state' => [
+   *        ['operation', 'user1', 'expected_result'],
+   *        ['operation', 'user2', 'expected_result'],
+   *     ],
+   *   ],
+   * ];
+   * @endcode
+   * Only two parent states need to be tested as the expected result might
+   * differ depending on whether the parent is published or not.
+   *
+   * The reason that this is just an array and not a proper provider is that it
+   * would take a lot of time to reinstall an instance of the site for each
+   * entry.
+   *
+   * @return array
+   *   Testing data.
+   */
+  public function readUpdateDeleteAccessProvider(): array {
+    return [
+      // Unpublished parent.
+      'draft' => [
+        'draft' => [
+          ['view', 'userAnonymous', FALSE],
+          ['view', 'userAuthenticated', FALSE],
+          ['view', 'userModerator', TRUE],
+          ['view', 'userOgFacilitator', TRUE],
+          ['view', 'userOgAdministrator', FALSE],
+          ['update', 'userAnonymous', FALSE],
+          ['update', 'userAuthenticated', FALSE],
+          ['update', 'userModerator', TRUE],
+          ['update', 'userOgFacilitator', TRUE],
+          ['update', 'userOgAdministrator', FALSE],
+          ['delete', 'userAnonymous', FALSE],
+          ['delete', 'userAuthenticated', FALSE],
+          ['delete', 'userModerator', TRUE],
+          ['delete', 'userOgFacilitator', FALSE],
+          ['delete', 'userOgAdministrator', TRUE],
+        ],
+        'published' => [
+          ['view', 'userAnonymous', FALSE],
+          ['view', 'userAuthenticated', FALSE],
+          ['view', 'userModerator', TRUE],
+          ['view', 'userOgFacilitator', TRUE],
+          ['view', 'userOgAdministrator', FALSE],
+          ['update', 'userAnonymous', FALSE],
+          ['update', 'userAuthenticated', FALSE],
+          ['update', 'userModerator', TRUE],
+          ['update', 'userOgFacilitator', TRUE],
+          ['update', 'userOgAdministrator', FALSE],
+          ['delete', 'userAnonymous', FALSE],
+          ['delete', 'userAuthenticated', FALSE],
+          ['delete', 'userModerator', TRUE],
+          ['delete', 'userOgFacilitator', FALSE],
+          ['delete', 'userOgAdministrator', TRUE],
+        ],
+        'needs_update' => [
+          ['view', 'userAnonymous', FALSE],
+          ['view', 'userAuthenticated', FALSE],
+          ['view', 'userModerator', TRUE],
+          ['view', 'userOgFacilitator', TRUE],
+          ['view', 'userOgAdministrator', FALSE],
+          ['update', 'userAnonymous', FALSE],
+          ['update', 'userAuthenticated', FALSE],
+          ['update', 'userModerator', TRUE],
+          ['update', 'userOgFacilitator', TRUE],
+          ['update', 'userOgAdministrator', FALSE],
+          ['delete', 'userAnonymous', FALSE],
+          ['delete', 'userAuthenticated', FALSE],
+          ['delete', 'userModerator', TRUE],
+          ['delete', 'userOgFacilitator', FALSE],
+          ['delete', 'userOgAdministrator', TRUE],
+        ],
+      ],
+      // Published parent.
+      'published' => [
+        'draft' => [
+          ['view', 'userAnonymous', FALSE],
+          ['view', 'userAuthenticated', FALSE],
+          ['view', 'userModerator', TRUE],
+          ['view', 'userOgFacilitator', TRUE],
+          ['view', 'userOgAdministrator', FALSE],
+          ['update', 'userAnonymous', FALSE],
+          ['update', 'userAuthenticated', FALSE],
+          ['update', 'userModerator', TRUE],
+          ['update', 'userOgFacilitator', TRUE],
+          ['update', 'userOgAdministrator', FALSE],
+          ['delete', 'userAnonymous', FALSE],
+          ['delete', 'userAuthenticated', FALSE],
+          ['delete', 'userModerator', TRUE],
+          ['delete', 'userOgFacilitator', FALSE],
+          ['delete', 'userOgAdministrator', TRUE],
+        ],
+        'published' => [
+          ['view', 'userAnonymous', TRUE],
+          ['view', 'userAuthenticated', TRUE],
+          ['view', 'userModerator', TRUE],
+          ['view', 'userOgFacilitator', TRUE],
+          ['view', 'userOgAdministrator', TRUE],
+          ['update', 'userAnonymous', FALSE],
+          ['update', 'userAuthenticated', FALSE],
+          ['update', 'userModerator', TRUE],
+          ['update', 'userOgFacilitator', TRUE],
+          ['update', 'userOgAdministrator', FALSE],
+          ['delete', 'userAnonymous', FALSE],
+          ['delete', 'userAuthenticated', FALSE],
+          ['delete', 'userModerator', TRUE],
+          ['delete', 'userOgFacilitator', FALSE],
+          ['delete', 'userOgAdministrator', TRUE],
+        ],
+        'needs_update' => [
+          ['view', 'userAnonymous', FALSE],
+          ['view', 'userAuthenticated', FALSE],
+          ['view', 'userModerator', TRUE],
+          ['view', 'userOgFacilitator', TRUE],
+          ['view', 'userOgAdministrator', FALSE],
+          ['update', 'userAnonymous', FALSE],
+          ['update', 'userAuthenticated', FALSE],
+          ['update', 'userModerator', TRUE],
+          ['update', 'userOgFacilitator', TRUE],
+          ['update', 'userOgAdministrator', FALSE],
+          ['delete', 'userAnonymous', FALSE],
+          ['delete', 'userAuthenticated', FALSE],
+          ['delete', 'userModerator', TRUE],
+          ['delete', 'userOgFacilitator', FALSE],
+          ['delete', 'userOgAdministrator', TRUE],
+        ],
+      ],
+    ];
+  }
+
+  /**
+   * Provides data for transition checks.
+   *
+   * The structure of the array is:
+   * @code
+   * $workflow_array = [
+   *   'entity_state' => [
+   *     'user' => [
+   *       'transition',
+   *       'transition',
+   *     ],
+   *   ],
+   * ];
+   * @endcode
+   * There can be multiple transitions that can lead to a specific state, so
+   * the check is being done on allowed transitions.
+   *
+   * @return array
+   *   Testing data.
+   */
+  public function workflowTransitionsProvider(): array {
+    return [
+      'draft' => [
+        'userAuthenticated' => [],
+        'userModerator' => [
+          'draft',
+          'published',
+        ],
+        'userOgFacilitator' => [
+          'draft',
+          'published',
+        ],
+        'userOgAdministrator' => [],
+      ],
+      'published' => [
+        'userAuthenticated' => [],
+        'userModerator' => [
+          'archived',
+          'draft',
+          'published',
+          'needs_update',
+        ],
+        'userOgFacilitator' => [
+          'draft',
+          'published',
+        ],
+        'userOgAdministrator' => [],
+      ],
+      'needs_update' => [
+        'userAuthenticated' => [],
+        'userModerator' => [
+          'needs_update',
+          'published',
+        ],
+        'userOgFacilitator' => [
+          'needs_update',
+        ],
+        'userOgAdministrator' => [],
+      ],
+    ];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function getEntityBundle(): string {
+    return 'release';
+  }
+
+}

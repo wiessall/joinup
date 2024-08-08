@@ -7,6 +7,7 @@
 
 declare(strict_types=1);
 
+use Drupal\Component\Render\MarkupInterface;
 use Drupal\Core\Render\Markup;
 use Drupal\semic\Semic;
 
@@ -18,7 +19,7 @@ use Drupal\semic\Semic;
  *
  * Implements hook_preprocess_HOOK().
  */
-function semic_preprocess_field(&$variables) {
+function semic_preprocess_field(&$variables): void {
   if ($variables['entity_type'] !== 'rdf_entity') {
     return;
   }
@@ -57,7 +58,7 @@ function semic_preprocess_field(&$variables) {
  * @return \Drupal\Component\Render\MarkupInterface|string
  *   The markup object, with the map.
  */
-function semic_map_markup($module_url) {
+function semic_map_markup($module_url): MarkupInterface|string {
   $markup = <<<EOD
 <script type="application/json">{
   "service": "map",

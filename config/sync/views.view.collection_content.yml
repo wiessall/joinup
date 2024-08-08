@@ -98,6 +98,7 @@ display:
         type: full
         options:
           offset: 0
+          pagination_heading_level: h4
           items_per_page: 12
           total_pages: null
           id: 0
@@ -184,9 +185,9 @@ display:
               licence: default
               news: view_mode_tile
               newsletter: view_mode_tile
+              release: default
               video: view_mode_tile
             'entity:rdf_entity':
-              asset_release: default
               collection: view_mode_tile
               solution: view_mode_tile
       query:

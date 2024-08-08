@@ -26,19 +26,17 @@ Feature: Solutions by licence report
       | title                 | state     |
       | Solution by licence 1 | published |
       | Solution by licence 2 | published |
-    And the following release:
-      | title          | Solution by licence 2 release |
-      | release number | 1                             |
-      | is version of  | Solution by licence 2         |
-      | state          | published                     |
+    And release content:
+      | title                         | release number | is version of         | state     |
+      | Solution by licence 2 release | 1              | Solution by licence 2 | published |
     # Distribution linked to the solution directly.
     And distribution content:
-      | title                     | licence      | parent                | state     |
+      | title                     | licence      | solution              | state     |
       | Solution_by_licence_1.tar | Open source  | Solution by licence 1 | published |
       | Solution_by_licence_1.exe | Free for all | Solution by licence 1 | published |
     # Distribution that belongs to the release of a solution.
     And distribution content:
-      | title                     | licence    | parent                        | state     |
+      | title                     | licence    | release                       | state     |
       | Solution_by_licence_2.tar | Commercial | Solution by licence 2 release | published |
 
     When I am logged in as a moderator

@@ -29,7 +29,6 @@ use Drupal\language\Entity\ConfigurableLanguage;
 use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\og\OgRoleInterface;
 use Drupal\rdf_entity\Entity\Rdf;
-use Drupal\rdf_entity\RdfInterface;
 use Drupal\solution\Entity\SolutionInterface;
 use PHPUnit\Framework\Assert;
 
@@ -453,35 +452,6 @@ class SolutionContext extends RawDrupalContext {
   }
 
   /**
-   * Returns the release with the given name.
-   *
-   * If multiple solution have the same name, the first one will be returned.
-   *
-   * @param string $title
-   *   The release name.
-   *
-   * @return \Drupal\rdf_entity\RdfInterface
-   *   The release.
-   *
-   * @throws \InvalidArgumentException
-   *   Thrown when a release with the given name does not exist.
-   */
-  public static function getReleaseByName(string $title): RdfInterface {
-    $query = \Drupal::entityQuery('rdf_entity')->accessCheck(FALSE)
-      ->condition('rid', 'solution')
-      ->exists('field_is_is_version_of')
-      ->condition('label', $title)
-      ->range(0, 1);
-    $result = $query->execute();
-
-    if (empty($result)) {
-      throw new \InvalidArgumentException("The release with the name '$title' was not found.");
-    }
-
-    return Rdf::load(reset($result));
-  }
-
-  /**
    * Checks the number of available solutions.
    *
    * @param int $number
@@ -600,6 +570,7 @@ class SolutionContext extends RawDrupalContext {
       'collections' => 'collection',
       'featured' => 'feature',
       'pinned in' => 'pinned_in_collection',
+      'published at' => 'published_at',
       'unpinned in' => 'unpinned_in_collection',
       'shared on' => 'field_is_shared_in',
     ];

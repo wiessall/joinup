@@ -23,18 +23,12 @@ Feature: Solution homepage
       | language            | English                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
       | status              | Completed                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
       | spatial coverage    | Belgium                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
-      | creation date       | 2017-12-01T8:43                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
-      | modification date   | 2012-12-01T8:43                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+      | published at        | 2012-12-01T8:43                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+      | modification date   | 2017-12-01T8:43                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
       | abstract            | Short abstract description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
-    And the following release:
-      | title          | Petri net v1     |
-      | description    | A sample release |
-      | documentation  | text.pdf         |
-      | release number | v1.1             |
-      | release notes  | Changed release  |
-      | is version of  | Petri net        |
-      | state          | published        |
-      | creation date  | 2022-12-21T13:00 |
+    And release content:
+      | title          | release notes    | documentation | release number | release notes   | is version of | state     | creation date    | published at     |
+      | Petri net v1.1 | A sample release | text.pdf      | 1.1            | Changed release | Petri net     | published | 2022-12-21T13:00 | 2022-12-21T13:00 |
 
     When I go to the homepage of the "Petri net" solution
     Then the page should be cacheable
@@ -44,6 +38,8 @@ Feature: Solution homepage
       | Moderation           |
     And I should see the following lines of text:
       | Short abstract description                        |
+      | Published on                                      |
+      | 01/12/2012                                        |
       | Last update                                       |
       | 21/12/2022                                        |
       | Owner                                             |
@@ -131,7 +127,7 @@ Feature: Solution homepage
 
     # The pager should only appear when there are more than 12 items.
     Given distribution content:
-      | title           | description    | parent            | state     |
+      | title           | description    | solution          | state     |
       | Distribution 1  | Description 1  | Chiricahua Server | published |
       | Distribution 2  | Description 2  | Chiricahua Server | published |
       | Distribution 3  | Description 3  | Chiricahua Server | published |
@@ -149,7 +145,7 @@ Feature: Solution homepage
     And I should not see the "Distribution 13" tile
 
     Given distribution content:
-      | title           | description    | parent            | state     |
+      | title           | description    | solution          | state     |
       | Distribution 13 | Description 13 | Chiricahua Server | published |
     When I go to the homepage of the "Chiricahua Server" solution
     Then I should see the following links:
@@ -176,7 +172,7 @@ Feature: Solution homepage
     And I should not see the "Distribution 12" tile
 
     Given distribution content:
-      | title           | description    | parent            | state     |
+      | title           | description    | solution          | state     |
       | Distribution 14 | Description 14 | Chiricahua Server | published |
       | Distribution 15 | Description 15 | Chiricahua Server | published |
       | Distribution 16 | Description 16 | Chiricahua Server | published |
@@ -247,7 +243,7 @@ Feature: Solution homepage
       | state       | published             |
       | owner       | Chiricahua Foundation |
     And distribution content:
-      | title               | description   | parent          | state     |
+      | title               | description   | solution        | state     |
       | Solr distribution 1 | Description 1 | Chiricahua Solr | published |
     When I go to the homepage of the "Chiricahua Solr" solution
     Then I should not see the "Pager" region

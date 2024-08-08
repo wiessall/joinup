@@ -114,7 +114,7 @@ class JoinupSubscriberServiceTest extends KernelTestBase {
    *
    * @covers ::getSubscribers
    */
-  public function testGetSubscribers() {
+  public function testGetSubscribers(): void {
     // Create some subscribed test users.
     $users = $this->createSubscribedUsers();
 
@@ -127,7 +127,7 @@ class JoinupSubscriberServiceTest extends KernelTestBase {
    *
    * @covers ::subscribe
    */
-  public function testSubscribe() {
+  public function testSubscribe(): void {
     $users = [];
     for ($i = 0; $i < 3; $i++) {
       $users[$i] = $this->createUser();
@@ -141,7 +141,7 @@ class JoinupSubscriberServiceTest extends KernelTestBase {
    *
    * @covers ::unsubscribe
    */
-  public function testUnsubscribe() {
+  public function testUnsubscribe(): void {
     $users = $this->createSubscribedUsers();
     foreach ($users as $key => $user) {
       $this->subscriptionService->unsubscribe($user, $this->entity, $this->testFlagId);
@@ -153,7 +153,7 @@ class JoinupSubscriberServiceTest extends KernelTestBase {
   /**
    * Tests checking if a user is subscribed.
    */
-  public function testIsSubscribed() {
+  public function testIsSubscribed(): void {
     $subscribed_users = $this->createSubscribedUsers(1);
     $subscribed_user = reset($subscribed_users);
     $unsubscribed_user = $this->createUser();

@@ -24,7 +24,7 @@ use Drupal\topic\Entity\TopicMetaEntityInterface;
 /**
  * Implements hook_entity_bundle_info_alter().
  */
-function topic_entity_bundle_info_alter(&$bundles) {
+function topic_entity_bundle_info_alter(&$bundles): void {
   if (!empty($bundles['taxonomy_term']['topic'])) {
     $bundles['taxonomy_term']['topic']['class'] = Topic::class;
   }
@@ -100,7 +100,7 @@ function topic_form_entity_subqueue_homepage_topics_edit_form_alter(array &$form
   $form['help'] = [
     '#type' => 'html_tag',
     '#tag' => 'p',
-    '#value' => \Drupal::service('renderer')->renderPlain($help),
+    '#value' => \Drupal::service('renderer')->renderInIsolation($help),
   ];
 }
 

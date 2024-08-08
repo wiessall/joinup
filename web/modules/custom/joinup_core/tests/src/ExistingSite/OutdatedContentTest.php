@@ -26,10 +26,10 @@ class OutdatedContentTest extends JoinupExistingSiteTestBase {
    */
   public function testOutdatedContent(): void {
     \Drupal::configFactory()->getEditable('joinup_core.outdated_content_threshold')
-      ->set('node.discussion', 3)
-      ->set('node.document', 3)
-      ->set('node.event', NULL)
-      ->set('node.news', 10)
+      ->set('thresholds.node.discussion', 3)
+      ->set('thresholds.node.document', 3)
+      ->set('thresholds.node.event', NULL)
+      ->set('thresholds.node.news', 10)
       ->save();
 
     $this->now = new \DateTime('now', new \DateTimeZone('UTC'));

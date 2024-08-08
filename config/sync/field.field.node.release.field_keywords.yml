@@ -1,0 +1,26 @@
+uuid: 99c2acd4-e6ce-4048-885c-51889db1576b
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_keywords
+    - node.type.release
+  module:
+    - rdf_sync
+third_party_settings:
+  rdf_sync:
+    value:
+      predicate: 'http://www.w3.org/ns/dcat#keyword'
+      type: 'xsd:string'
+id: node.release.field_keywords
+field_name: field_keywords
+entity_type: node
+bundle: release
+label: 'Search keywords'
+description: 'Add one keyword or keyword phrase per line. Relevant keywords improve the search ranking of your content.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

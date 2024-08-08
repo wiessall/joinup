@@ -15,7 +15,6 @@ use Drupal\file\Entity\File;
  * Tests the download & visit count refresh.
  *
  * @group joinup_stats
- * @group wip
  */
 class RefreshCountersTest extends KernelTestBase {
 
@@ -170,7 +169,7 @@ class RefreshCountersTest extends KernelTestBase {
    * This ensures that we are getting the actual data from the meta entities and
    * not stale data from the entity storage cache.
    */
-  protected function reloadEntities() {
+  protected function reloadEntities(): void {
     /** @var \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager */
     $entity_type_manager = $this->container->get('entity_type.manager');
     foreach ($this->entities as $entity_type_id => $entities) {
@@ -261,7 +260,7 @@ class RefreshCountersTest extends KernelTestBase {
       [
         'nid' => 7,
         'uri' => 'http://example.com/distro/3',
-        'rid' => 'distribution',
+        'type' => 'distribution',
         'label' => 'Distro 3',
         'field_access_url' => File::create([
           'uri' => 'public://d3',

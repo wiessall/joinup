@@ -20,7 +20,7 @@ use Drupal\user\UserInterface;
 /**
  * Implements hook_entity_type_build().
  */
-function joinup_subscription_entity_type_build(array &$entity_types) {
+function joinup_subscription_entity_type_build(array &$entity_types): void {
   /** @var \Drupal\Core\Entity\EntityTypeInterface[] $entity_types */
   $entity_types['user']->setFormClass('subscription_settings', 'Drupal\user\ProfileForm');
 }
@@ -32,7 +32,7 @@ function joinup_subscription_entity_type_build(array &$entity_types) {
  * field stores a reference to an entity bundle by storing the machine names of
  * the entity type and the bundle that is to be referenced.
  */
-function joinup_subscription_entity_base_field_info(EntityTypeInterface $entity_type) {
+function joinup_subscription_entity_base_field_info(EntityTypeInterface $entity_type): array {
   $fields = [];
 
   // Add the 'subscription_bundles' property to the 'og_membership' entity.
@@ -61,7 +61,7 @@ function joinup_subscription_entity_base_field_info(EntityTypeInterface $entity_
 /**
  * Implements hook_entity_bundle_info_alter().
  */
-function joinup_subscription_entity_bundle_info_alter(&$bundles) {
+function joinup_subscription_entity_bundle_info_alter(&$bundles): void {
   if (!empty($bundles['message'][GroupContentSubscriptionMessage::TEMPLATE])) {
     $bundles['message'][GroupContentSubscriptionMessage::TEMPLATE]['class'] = GroupContentSubscriptionMessage::class;
   }

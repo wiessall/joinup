@@ -1,0 +1,390 @@
+<?php
+
+/**
+ * @file
+ * Primary module hooks for Joinup release module.
+ */
+
+declare(strict_types=1);
+
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Access\AccessResultInterface;
+use Drupal\Core\Cache\Cache;
+use Drupal\Core\Datetime\DrupalDateTime;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\joinup_publication_date\Entity\EntityPublicationTimeInterface;
+use Drupal\joinup_release\Entity\Release;
+use Drupal\joinup_release\Entity\ReleaseInterface;
+use Drupal\joinup_release\SolutionFieldsFieldItemList;
+
+/**
+ * Implements hook_entity_type_alter().
+ *
+ * Adds the solution releases overview page as link template so the OG context
+ * can be resolved automatically.
+ */
+function joinup_release_entity_type_alter(array &$entity_types): void {
+  // @todo Change this to match a node on ISAICP-8572.
+  $entity_types['rdf_entity']->setLinkTemplate('solution-releases', '/rdf_entity/{rdf_entity}/releases');
+}
+
+/**
+ * Implements hook_entity_bundle_field_info().
+ */
+function joinup_release_entity_bundle_field_info(EntityTypeInterface $entity_type, $bundle, array $base_field_definitions): array {
+  $fields = [];
+  if ($entity_type->id() !== 'node' || $bundle !== 'release') {
+    return $fields;
+  }
+
+  $fields = [
+    'solution_logo' => [
+      'name' => 'solution_logo',
+      'type' => 'image',
+      // @todo Update this when the solution field is simplified in ISAICP-8572.
+      'target_field_name' => 'field_is_logo',
+      'label' => t('Solution logo'),
+      'description' => t('The logo of the solution this release belongs to.'),
+      'display' => [
+        'view' => [
+          'label' => 'hidden',
+          'type' => 'image',
+          'weight' => 0,
+        ],
+      ],
+    ],
+    'owner' => [
+      'name' => 'owner',
+      'type' => 'entity_reference',
+      // @todo Update this when the solution field is simplified in ISAICP-8572.
+      'target_field_name' => 'field_is_owner',
+      'label' => t('Owner'),
+      'description' => t('The user who owns this release.'),
+      'settings' => [
+        'target_type' => 'node',
+      ],
+      'display' => NULL,
+    ],
+    'contact' => [
+      'name' => 'contact',
+      'type' => 'entity_reference',
+      // @todo Update this when the solution field is simplified in ISAICP-8572.
+      'target_field_name' => 'field_is_contact_information',
+      'label' => t('Contact'),
+      'description' => t('The contact person for this release.'),
+      'settings' => [
+        'target_type' => 'node',
+      ],
+      'display' => NULL,
+    ],
+    // The following field is named `field_topic` because this is the name of
+    // the field that other nodes are using to refer a topic. By naming it the
+    // same, we trick search_api to index it with the same name, and we do not
+    // need to create an aggregate field in the search index.
+    'field_topic' => [
+      'name' => 'field_topic',
+      'type' => 'entity_reference',
+      // @todo Update this when the solution field is simplified in ISAICP-8572.
+      'target_field_name' => 'field_topic',
+      'label' => t('Topic'),
+      'description' => t('The topic of this release.'),
+      'settings' => [
+        'target_type' => 'taxonomy_term',
+      ],
+      'display' => NULL,
+    ],
+  ];
+
+  foreach ($fields as $field_name => $field_info) {
+    $fields[$field_name] = BaseFieldDefinition::create($field_info['type'])
+      ->setLabel($field_info['label'])
+      ->setName($field_name)
+      ->setDescription($field_info['description'])
+      ->setComputed(TRUE)
+      ->setClass(SolutionFieldsFieldItemList::class)
+      ->setSetting('target_field_name', $field_info['target_field_name'])
+      ->setDisplayConfigurable('form', FALSE)
+      ->setDisplayConfigurable('view', FALSE);
+
+    if (!empty($field_info['settings'])) {
+      $fields[$field_name]->setSetting('target_type', $field_info['settings']['target_type']);
+    }
+
+    if (!empty($field_info['display'])) {
+      $fields[$field_name]->setDisplayOptions('view', $field_info['display']);
+      $fields[$field_name]->setDisplayConfigurable('view', TRUE);
+    }
+  }
+
+  return $fields;
+}
+
+/**
+ * Implements hook_entity_bundle_info_alter().
+ */
+function joinup_release_entity_bundle_info_alter(array &$bundles): void {
+  if (!empty($bundles['node']['release'])) {
+    $bundles['node']['release']['class'] = Release::class;
+  }
+}
+
+/**
+ * Implements hook_entity_bundle_field_info_alter().
+ */
+function joinup_release_entity_bundle_field_info_alter(array &$fields, EntityTypeInterface $entity_type, string $bundle): void {
+  /** @var \Drupal\Core\Field\FieldConfigInterface[] $fields */
+  // Make sure a release's title and version number is unique in its solution.
+  if ($entity_type->id() == 'node' && $bundle == 'release' && !empty($fields['title'])) {
+    $fields['title']->addConstraint('UniqueReleaseTitleVersion', []);
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_access().
+ */
+function joinup_release_node_access(EntityInterface $release, $operation, AccountInterface $account): AccessResultInterface {
+  if (!$release instanceof ReleaseInterface || $account->hasPermission($release->getEntityType()->getAdminPermission())) {
+    return AccessResult::neutral();
+  }
+
+  $parent = $release->getSolution();
+
+  // Archived parents deny operations other than view.
+  if ($operation !== 'view' && $parent->isArchived()) {
+    return AccessResult::forbidden();
+  }
+
+  if ($operation !== 'view') {
+    return AccessResult::neutral();
+  }
+
+  $access_handler = \Drupal::service('entity_type.manager')->getAccessControlHandler('rdf_entity');
+  if (!$access_handler->access($parent, 'view', $account)) {
+    return AccessResult::forbidden();
+  }
+
+  if ($release->isPublished()) {
+    return AccessResult::neutral();
+  }
+
+  // Allow access depending to the publication status and the corresponding
+  // permission in the group.
+  return AccessResult::allowedIf(!$release->isPublished() && $parent->hasGroupPermission($account->id(), 'view any unpublished content'));
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function joinup_release_preprocess_node(array &$variables): void {
+  $release = $variables['node'];
+  if (!$release instanceof ReleaseInterface) {
+    return;
+  }
+
+  $variables['full_label'] = new TranslatableMarkup('@label @version', [
+    '@label' => $release->label(),
+    '@version' => $release->getVersion(),
+  ]);
+
+  $solution = $release->getSolution();
+  $variables['is_latest_release'] = $release->isLatestRelease();
+
+  // Whenever a new release gets created, the parent solution gets updated.
+  // Invalidate the rendered template cache of the latest release in that case,
+  // so the latest release flag gets updated.
+  if ($solution && $variables['is_latest_release']) {
+    $cache_tags = $variables['#cache']['tags'] ?? [];
+    $cache_tags = Cache::mergeTags($cache_tags, $solution->getCacheTags());
+
+    // Add the group content tag belonging to the parent too. We need to
+    // invalidate the cache also when a release is first saved as draft and then
+    // published. In that case the solution won't be updated, so we need to
+    // manually take care of this.
+    $group_tag = Cache::buildTags('og-group-content', $solution->getCacheTagsToInvalidate());
+    $variables['#cache']['tags'] = Cache::mergeTags($cache_tags, $group_tag);
+  }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function joinup_release_theme(array $existing, $type, $theme, $path): array {
+  return [
+    'joinup_release_releases_download' => [
+      'variables' => ['releases' => []],
+    ],
+  ];
+}
+
+/**
+ * Prepares variables for the 'joinup_release_releases_download' template.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - releases: a list of releases and distributions to be rendered.
+ */
+function template_preprocess_joinup_release_releases_download(array &$variables): void {
+  $releases = $variables['releases'];
+  $variables['releases'] = \Drupal::entityTypeManager()->getViewBuilder('node')->viewMultiple($releases, 'compact');
+}
+
+/**
+ * Implements hook_preprocess_page_title__node__release().
+ */
+function joinup_release_preprocess_page_title__node__release(array &$variables): void {
+  /** @var \Drupal\joinup_release\Entity\ReleaseInterface $release */
+  $release = $variables['entity'];
+  $variables['additional_content']['full_label'] = new TranslatableMarkup('@label @version', [
+    '@label' => $release->label(),
+    '@version' => $release->getVersion(),
+  ]);
+
+  $is_latest_release = $release->isLatestRelease();
+  $variables['additional_content']['is_latest_release'] = $is_latest_release;
+  if (!$is_latest_release && ($latest_release = $release->getSolution()->getLatestRelease())) {
+    $variables['additional_content']['latest_release'] = $latest_release->toUrl()->toString();
+  }
+}
+
+/**
+ * Implements hook_preprocess().
+ */
+function joinup_release_preprocess_node__release__compact(array &$variables): void {
+  $entity = $variables['node'] ?? NULL;
+  if ($entity instanceof EntityPublicationTimeInterface) {
+    joinup_publication_date_add_content_dates($entity, $variables);
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function joinup_release_form_node_release_delete_form_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
+  $form['actions']['submit']['#submit'][] = 'joinup_release_delete_redirect';
+}
+
+/**
+ * Redirect users to the solution homepage after deleting a release.
+ *
+ * @param array $form
+ *   The form array.
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ *   The form state.
+ */
+function joinup_release_delete_redirect(array &$form, FormStateInterface $form_state): void {
+  /** @var \Drupal\joinup_release\Entity\ReleaseInterface $release */
+  $release = $form_state->getFormObject()->getEntity();
+  if ($solution = $release->getSolution()) {
+    $url = $solution->toUrl();
+    $form_state->setRedirect($url->getRouteName(), $url->getRouteParameters(), $url->getOptions());
+  }
+}
+
+/**
+ * Checks if the given release has a unique combination of title and version.
+ *
+ * A solution might have releases of different software packages associated with
+ * it, and some of these might have duplicate version numbers, but to avoid
+ * confusion we should avoid having releases with identical names and versions
+ * within the same solution.
+ *
+ * @param \Drupal\joinup_release\Entity\ReleaseInterface $release
+ *   The release to check.
+ * @param bool $check_unaffiliated_solutions
+ *   Whether or not to check if the release title and version are unique in
+ *   solutions that are not related to the release.
+ *   - When this is TRUE the function will return TRUE if any other release has
+ *     the same title and version as the given release, regardless of the
+ *     solutions they are affiliated with.
+ *   - When this is FALSE the function will only return TRUE if the solution
+ *     that is affiliated with this release contains a release with a duplicate
+ *     title and version. Releases that belong to unaffiliated solutions will be
+ *     ignored.
+ *
+ * @return bool
+ *   TRUE if the title and version are unique.
+ */
+function joinup_release_title_version_is_unique(ReleaseInterface $release, bool $check_unaffiliated_solutions = FALSE): bool {
+  $query = \Drupal::entityQuery('node')
+    ->accessCheck(FALSE)
+    ->condition('title', $release->label())
+    ->condition('type', 'release');
+  if ($release->getVersion()) {
+    $query->condition('release_number', $release->getVersion());
+  }
+
+  if (!empty($release->id())) {
+    $query->condition('nid', $release->id(), '<>');
+  }
+
+  // Filter all releases that do not belong to the same solution.
+  if (!$check_unaffiliated_solutions) {
+    $query->condition('og_audience', $release->get('og_audience')->first()->getValue()['target_id']);
+  }
+
+  $result = $query->execute();
+  return empty($result);
+}
+
+/**
+ * Implements hook_sparql_bundle_load_alter().
+ *
+ * There is an initial check whether the bundle is empty because the method
+ * that invokes this hook is also called for taxonomies and the bundle is
+ * currently being skipped for the taxonomies.
+ */
+function joinup_release_sparql_bundle_load_alter(array $entity_values, array &$bundles): void {
+  // @todo Remove this in ISAICP-8572.
+  if (count($bundles) > 1 && in_array('solution', $bundles)) {
+    if (isset($entity_values['http://purl.org/dc/terms/isVersionOf'])) {
+      $bundles = array_diff($bundles, ['solution']);
+    }
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function joinup_release_form_node_release_form_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
+  // Node form by default forces some fields into the a details container and
+  // this is hardcoded. Remove the grouping of the created field as it is not
+  // in the specifications to show grouped.
+  if (isset($form['created']['#group'])) {
+    unset($form['created']['#group']);
+  }
+
+  // NodeTranslationHandler revokes access to the authored on field by default.
+  // We need to allow the facilitator to override this field.
+  if (isset($form['created']['#access']) && !$form['created']['#access']) {
+    $form['created']['#access'] = TRUE;
+  }
+
+  // Add a validator to ensure the authored on date is not in the future as it
+  // represents the release date of the solution's release.
+  $form['#validate'][] = '_joinup_release_edit_date_validate';
+}
+
+/**
+ * Validate publish time date.
+ *
+ * @param array $form
+ *   The form array.
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ *   The form state.
+ */
+function _joinup_release_edit_date_validate(array &$form, FormStateInterface $form_state): void {
+  $dt_now = new DateTime();
+  $values = $form_state->getValues();
+  $date_value = $values['created'][0]['value'];
+  if ($date_value && !$date_value instanceof DrupalDateTime) {
+    $date_value = new DateTime($date_value['date']);
+  }
+  if ($date_value && ($date_value->format('c') > $dt_now->format('c'))) {
+    $form_state->setErrorByName('created', t('Your "Authored on" field date is greater than @date', ['@date' => $dt_now->format('c')]));
+  }
+}

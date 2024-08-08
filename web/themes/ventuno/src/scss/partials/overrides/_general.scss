@@ -27,3 +27,22 @@
     text-decoration: none;
   }
 }
+
+// #ISAICP-8895 Fix Success Criterion 2.4.7 Focus Visible (AA).
+.btn,
+.accordion-button,
+.form-control,
+.form-select,
+.multiselect,
+.form-checkbox,
+.search-bar__input,
+.facets-checkbox,
+.page-item .page-link,
+button#eTransButton.wt-ecl-button {
+  &:focus,
+  &:focus-visible {
+    outline: $brand auto 2px !important;
+    outline-offset: 1px;
+    box-shadow: none !important;
+  }
+}

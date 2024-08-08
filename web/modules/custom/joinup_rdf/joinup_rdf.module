@@ -8,6 +8,7 @@
 declare(strict_types=1);
 
 use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
@@ -24,7 +25,7 @@ use Drupal\og\Og;
 /**
  * Implements hook_entity_create_access().
  */
-function joinup_rdf_entity_create_access(AccountInterface $account, array $context, $bundle) {
+function joinup_rdf_entity_create_access(AccountInterface $account, array $context, $bundle): AccessResultInterface {
   // OG handles node content in its own hook_entity_create_access(). This is the
   // RDF entity equivalent.
   $entity_type_id = $context['entity_type_id'];
@@ -120,8 +121,8 @@ function joinup_rdf_form_rdf_entity_form_alter(array &$form, FormStateInterface 
       'rdf_entity_solution_edit_form',
       'rdf_entity_licence_add_form',
       'rdf_entity_licence_edit_form',
-      'rdf_entity_asset_release_form',
-      'rdf_entity_asset_release_edit_form',
+      'node_release_form',
+      'node_release_edit_form',
       'node_distribution_form',
       'node_distribution_edit_form',
     ];
@@ -140,7 +141,7 @@ function joinup_rdf_form_rdf_entity_form_alter(array &$form, FormStateInterface 
  *
  * - Provides a 'path' field only for the 'rdf_entity' entities.
  */
-function joinup_rdf_entity_base_field_info(EntityTypeInterface $entity_type) {
+function joinup_rdf_entity_base_field_info(EntityTypeInterface $entity_type): array {
   $fields = [];
 
   // Allow alias features for RDF entities.
@@ -176,7 +177,7 @@ function joinup_rdf_entity_type_alter(array &$entity_types): void {
  * a simple RDF field mapping. Because we do this at storage level, the values
  * get cached in the 'cache_entity' bin, avoiding performance issues.
  */
-function joinup_rdf_taxonomy_term_storage_load(array $terms) {
+function joinup_rdf_taxonomy_term_storage_load(array $terms): void {
   $sparql = \Drupal::service('sparql.endpoint');
   /** @var \Drupal\sparql_entity_storage\Driver\Database\sparql\ConnectionInterface $sparql */
 
@@ -216,7 +217,7 @@ QUERY;
  * Shows an information message to users who have access to the draft version
  * of the rdf entity if the user is viewing the published version.
  */
-function joinup_rdf_rdf_entity_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
+function joinup_rdf_rdf_entity_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode): void {
   // Show only in full mode views.
   if ($view_mode !== 'full') {
     return;
@@ -255,7 +256,7 @@ function joinup_rdf_condition_info_alter(array &$definitions): void {
 /**
  * Implements hook_token_info_alter().
  */
-function joinup_rdf_token_info_alter(&$info) {
+function joinup_rdf_token_info_alter(&$info): void {
   $rdfUriInfo = [
     'name' => t('The legacy RDF uri of the entity'),
     'description' => t('The legacy RDF uri of the entity, if any.'),

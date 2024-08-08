@@ -134,7 +134,7 @@ class AnonymousDownloadForm extends FormBase {
     }
     $distribution = $this->nodeStorage->load(key($usages['file']['node']));
 
-    /** @var \Drupal\solution\Entity\SolutionInterface|\Drupal\asset_release\Entity\AssetReleaseInterface $parent */
+    /** @var \Drupal\solution\Entity\SolutionInterface|\Drupal\joinup_release\Entity\ReleaseInterface $parent */
     $parent = $distribution->getParent();
     $event = $this->eventStorage->create([
       'uid' => 0,

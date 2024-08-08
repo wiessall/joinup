@@ -69,7 +69,7 @@ class JoinupSearchContext extends RawDrupalContext {
    * @Given I am on the search( results)( page)
    * @When I visit the search( results)( page)
    */
-  public function visitSearchPage() {
+  public function visitSearchPage(): void {
     $this->visitPath('/search');
   }
 
@@ -111,7 +111,7 @@ class JoinupSearchContext extends RawDrupalContext {
    *
    * @Given the :type content tab is not displayed
    */
-  public function assertContentTabNotDisplayed(string $type) {
+  public function assertContentTabNotDisplayed(string $type): void {
     if ($this->findContentTab($type)) {
       throw new \Exception("The tab '$type' was found in the page but it should be displayed.");
     }
@@ -128,7 +128,7 @@ class JoinupSearchContext extends RawDrupalContext {
    *
    * @Given the :type content tab is displayed
    */
-  public function assertContentTabDisplayed(string $type) {
+  public function assertContentTabDisplayed(string $type): void {
     if (!$this->findContentTab($type)) {
       throw new \Exception("The tab '$type' was not found in the page but it should be displayed.");
     }
@@ -261,7 +261,7 @@ class JoinupSearchContext extends RawDrupalContext {
    *    Throws an exception when the select is not found or options are not
    *    identical.
    */
-  public function assertSelectFacetOptionsAsList($select, TableNode $table) {
+  public function assertSelectFacetOptionsAsList($select, TableNode $table): void {
     $element = $this->findFacetByAlias($select);
     $this->assertSelectAvailableOptions($element, $table);
   }
@@ -491,7 +491,16 @@ class JoinupSearchContext extends RawDrupalContext {
     }, $element->findAll('css', $css));
 
     $values = $this->explodeCommaSeparatedStepArgument($values);
-    Assert::assertEquals($values, $found, "The '{$facet}' values mismatch the expected ones.");
+    Assert::assertEquals(
+      $values,
+      $found,
+      sprintf(
+        "The '%s' values mismatch the expected ones.\nExpected values: %s\nActual values: %s",
+        $facet,
+        implode(', ', $values),
+        implode(', ', $found),
+      ),
+    );
   }
 
   /**
@@ -567,7 +576,7 @@ class JoinupSearchContext extends RawDrupalContext {
    *
    * @When I focus on the search input
    */
-  public function focusOnSearchInput() {
+  public function focusOnSearchInput(): void {
     // One can only open the search bar if JavaScript is enabled.
     $this->assertJavaScriptEnabledBrowser();
     $element = $this->getSearchBarElement();
@@ -667,7 +676,7 @@ class JoinupSearchContext extends RawDrupalContext {
    *
    * @Then I( should) see the( following) search header in the correct order:
    */
-  public function assertOrderedTilesPresent(TableNode $titles_table) {
+  public function assertOrderedTilesPresent(TableNode $titles_table): void {
     $regionObj = $this->getSession()->getPage();
 
     $result = [];

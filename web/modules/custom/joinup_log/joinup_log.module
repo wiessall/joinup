@@ -1,0 +1,131 @@
+<?php
+
+/**
+ * @file
+ * Hook implementations for the Joinup Log module.
+ */
+
+declare(strict_types=1);
+
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\custom_page\Entity\CustomPageInterface;
+use Drupal\joinup_community_content\Entity\CommunityContentInterface;
+
+/**
+ * Implements hook_form_alter().
+ */
+function joinup_log_form_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
+  if (str_starts_with($form_id, 'views_form_og_members_overview_default_')) {
+    $form['#submit'][] = 'joinup_log_members_views_exposed_form_submit';
+  }
+}
+
+/**
+ * Custom submit handler for Views members bulk logger.
+ */
+function joinup_log_members_views_exposed_form_submit(array &$form, FormStateInterface $form_state): void {
+  $options = $form_state->getValue('og_membership_bulk_form');
+  if (empty($options)) {
+    return;
+  }
+  $type = [
+    'joinup_og_membership_delete_action' => [
+      'type' => 'joinup:deleted_membership',
+      'message' => 'Membership for @actor in @group has been deleted by @user.',
+    ],
+    'joinup_transfer_group_ownership' => [
+      'type' => 'joinup:transfer_the_ownership_of_the_collection_to_member',
+      'message' => 'Ownership granted to @actor for @group by @user.',
+    ],
+    'og_membership_add_single_role_action.author' => [
+      'type' => 'joinup:add_role',
+      'message' => 'Successfully added the @role role in @group to @actor by @user.',
+      'role' => 'author',
+    ],
+    'og_membership_add_single_role_action.facilitator' => [
+      'type' => 'joinup:add_role',
+      'message' => 'Successfully added the @role role in @group to @actor by @user.',
+      'role' => 'facilitator',
+    ],
+    'og_membership_approve_pending_action' => [
+      'type' => 'joinup:approve_the_pending_membership',
+      'message' => 'Membership in @group for @actor has been approved by @user.',
+    ],
+    'og_membership_block_action' => [
+      'type' => 'joinup:block_membership',
+      'message' => 'Membership in @group for @actor has been blocked by @user.',
+    ],
+    'og_membership_remove_single_role_action.author' => [
+      'type' => 'joinup:remove_role',
+      'message' => 'Successfully removed the @role role from @group for the @actor by @user.',
+      'role' => 'author',
+    ],
+    'og_membership_remove_single_role_action.facilitator' => [
+      'type' => 'joinup:remove_role',
+      'message' => 'Successfully removed the @role role from @group for the @actor by @user.',
+      'role' => 'facilitator',
+    ],
+    'og_membership_unblock_action' => [
+      'type' => 'joinup:unblock_membership',
+      'message' => 'Membership in @group for @actor has been unblocked by @user.',
+    ],
+  ];
+  if (!array_key_exists($form_state->getValue('action'), $type)) {
+    return;
+  }
+
+  $memberships = array_map('joinup_group_extract_bulk_form_entity_id', array_filter($options));
+  $action = $form_state->getValue('action');
+  $current_user = \Drupal::currentUser();
+  $entity_type_manager = \Drupal::entityTypeManager();
+  $logger = \Drupal::service('logger.channel.group_membership');
+  $group = \Drupal::service('og.context')->getGroup();
+  foreach ($memberships as $membership) {
+    $member = $entity_type_manager->getStorage('og_membership')->load($membership);
+    $user = $entity_type_manager->getStorage('user')->load($member->get('uid')->target_id);
+    $logger->info($type[$action]['message'], [
+      '@actor' => $user->getDisplayName(),
+      '@role' => $type[$action]['role'] ?? NULL,
+      '@group' => $group ? $group->label() : NULL,
+      '@user' => $current_user->getDisplayName(),
+      'type' => $type[$action]['type'],
+      'actor' => $user->id(),
+    ]);
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert() for node entities.
+ */
+function joinup_log_node_insert(EntityInterface $entity): void {
+  if ($entity instanceof CommunityContentInterface || $entity instanceof CustomPageInterface) {
+    _joinup_log_logger_add_content($entity);
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert().
+ */
+function joinup_log_rdf_entity_insert(EntityInterface $entity): void {
+  if ($entity->bundle() !== 'solution') {
+    return;
+  }
+  _joinup_log_logger_add_content($entity);
+}
+
+/**
+ * Logger message for type add content.
+ */
+function _joinup_log_logger_add_content(EntityInterface $entity): void {
+  $current_user = \Drupal::currentUser();
+  $group = \Drupal::service('og.context')->getGroup();
+  \Drupal::service('logger.channel.group_membership')->info('A new @type entity titled @title has been created by @user in @group.', [
+    '@type' => $entity->bundle(),
+    '@title' => $entity->label(),
+    '@group' => $group ? $group->label() : NULL,
+    '@user' => $current_user->getDisplayName(),
+    'type' => 'joinup:add_content',
+    'actor' => $current_user->id(),
+  ]);
+}

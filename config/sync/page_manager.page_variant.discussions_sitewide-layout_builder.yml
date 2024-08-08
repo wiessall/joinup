@@ -1,0 +1,135 @@
+uuid: 618f77b4-e481-40ac-b417-b079378c26c5
+langcode: en
+status: true
+dependencies:
+  config:
+    - page_manager.page.discussions_sitewide
+    - views.view.discussions_sitewide
+  module:
+    - custom_markup_block
+    - layout_discovery
+    - views
+id: discussions_sitewide-layout_builder
+label: Forum
+weight: 0
+variant: layout_builder
+variant_settings:
+  id: layout_builder
+  label: Forum
+  weight: 0
+  uuid: 441b33a3-08fe-4ed3-9054-942ec7163084
+  sections:
+    -
+      layout_id: layout_onecol
+      layout_settings:
+        label: 'Main content'
+        context_mapping: {  }
+        custom_id: null
+        custom_classes: ''
+        custom_class_choose: null
+        custom_styles: null
+        custom_data_attributes: null
+        regions:
+          content:
+            region_id: null
+            region_class_choose: null
+            region_classes: ''
+            region_styles: null
+            region_data: null
+      components:
+        fc40a54a-2efc-46b4-876d-6e42f723fad8:
+          uuid: fc40a54a-2efc-46b4-876d-6e42f723fad8
+          region: content
+          configuration:
+            id: 'views_block:discussions_sitewide-most_active'
+            label: ''
+            label_display: visible
+            provider: views
+            context_mapping: {  }
+            views_label: ''
+            items_per_page: none
+          weight: 0
+          additional:
+            component_attributes:
+              block_attributes:
+                id: ''
+                class: my-5
+                style: ''
+                data: ''
+              block_title_attributes:
+                id: ''
+                class: my-4
+                style: ''
+                data: ''
+              block_content_attributes:
+                id: ''
+                class: my-4
+                style: ''
+                data: ''
+        ce35d87d-d5dc-4248-b2c4-544d6dd66dbd:
+          uuid: ce35d87d-d5dc-4248-b2c4-544d6dd66dbd
+          region: content
+          configuration:
+            id: 'views_block:discussions_sitewide-most_recent'
+            label: ''
+            label_display: visible
+            provider: views
+            context_mapping: {  }
+            views_label: ''
+            items_per_page: none
+          weight: 1
+          additional:
+            component_attributes:
+              block_attributes:
+                id: ''
+                class: my-5
+                style: ''
+                data: ''
+              block_title_attributes:
+                id: ''
+                class: my-4
+                style: ''
+                data: ''
+              block_content_attributes:
+                id: ''
+                class: my-4
+                style: ''
+                data: ''
+      third_party_settings: {  }
+    -
+      layout_id: layout_onecol
+      layout_settings:
+        label: 'CTA section'
+        context_mapping: {  }
+        custom_id: null
+        custom_classes: 'position-relative full-width-bg py-5'
+        custom_class_choose: null
+        custom_styles: null
+        custom_data_attributes: null
+        regions:
+          content:
+            region_id: null
+            region_class_choose: null
+            region_classes: text-center
+            region_styles: null
+            region_data: null
+      components:
+        d33916f4-bf51-4f77-b59b-10a2ce24b6f1:
+          uuid: d33916f4-bf51-4f77-b59b-10a2ce24b6f1
+          region: content
+          configuration:
+            id: custom_markup
+            label: 'Looking for more discussions?'
+            label_display: visible
+            provider: custom_markup_block
+            context_mapping: {  }
+            markup:
+              value: "<p class=\"text-muted\">Check out discussions from all topics on our advanced search page.</p>\r\n<p><a class=\"btn btn-primary\" href=\"/search?f[0]=type%3Adiscussion\" rel=\"nofollow\">Go to advanced search</a></p>"
+              format: full_html
+          weight: 0
+          additional: {  }
+      third_party_settings: {  }
+page: discussions_sitewide
+selection_criteria: {  }
+selection_logic: and
+static_context: {  }

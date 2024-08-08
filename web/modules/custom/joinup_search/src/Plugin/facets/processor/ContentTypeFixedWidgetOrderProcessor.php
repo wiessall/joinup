@@ -33,10 +33,11 @@ class ContentTypeFixedWidgetOrderProcessor extends SortProcessorPluginBase {
     'document' => 4,
     'discussion' => 5,
     'distribution' => 6,
-    'asset_release' => 7,
+    'release' => 7,
     'custom_page' => 9,
     'licence' => 10,
     'video' => 11,
+    'user' => 12,
   ];
 
   /**
