@@ -56,7 +56,7 @@ class WysiwygContext extends RawDrupalContext {
    * @Then I press the button :button in the :label wysiwyg editor
    */
   public function pressButtonInWysiwyg(string $button, string $label): void {
-    self::assertJavaScriptEnabledBrowser();
+    $this->assertJavaScriptEnabledBrowser();
     $this->pressWysiwygButton($label, $button);
   }
 

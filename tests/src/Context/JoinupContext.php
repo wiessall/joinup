@@ -2220,7 +2220,7 @@ class JoinupContext extends RawDrupalContext {
    * @Then a modal should/will open
    */
   public function waitForDrupalModalToOpen(): void {
-    self::assertModalToOpen();
+    $this->assertModalToOpen();
   }
 
   /**
@@ -2232,7 +2232,7 @@ class JoinupContext extends RawDrupalContext {
    * @Then the modal should be closed
    */
   public function waitForDrupalModalToClose(): void {
-    self::assertModalToClose();
+    $this->assertModalToClose();
   }
 
   /**
@@ -2783,7 +2783,7 @@ class JoinupContext extends RawDrupalContext {
    * @Then the draggable menu table of the :group_label :group_type should be:
    */
   public function assertDraggableMenuTable(TableNode $table, string $group_label, string $group_bundle): void {
-    self::assertJavaScriptEnabledBrowser();
+    $this->assertJavaScriptEnabledBrowser();
 
     $group = $this->getEntityByLabel('rdf_entity', $group_label, $group_bundle);
     /** @var \Behat\Mink\Element\NodeElement[] $rows */
@@ -2835,7 +2835,7 @@ class JoinupContext extends RawDrupalContext {
    * @Then I drag the :title table row( to the) :direction
    */
   public function dragTitledTableRowTowardsDirection($title, $direction): void {
-    self::assertJavaScriptEnabledBrowser();
+    $this->assertJavaScriptEnabledBrowser();
 
     $row = $this->findDraggableTableRowByTitle($title);
     $this->dragTableRowTowardsDirection($row, $direction);
@@ -2863,7 +2863,7 @@ class JoinupContext extends RawDrupalContext {
    * @Then I drag the table row in the :region region at position :position( to the) :direction
    */
   public function findTableRowByPositionAndDragTowardsDirection(string $position, string $direction, ?string $region = NULL): void {
-    self::assertJavaScriptEnabledBrowser();
+    $this->assertJavaScriptEnabledBrowser();
 
     $region = empty($region) ? $this->getSession()->getPage() : $this->getRegion($region);
     $row = $this->findDraggableTableRowByPosition((int) $position, $region);
