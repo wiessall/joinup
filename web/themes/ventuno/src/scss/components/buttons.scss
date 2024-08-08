@@ -33,7 +33,6 @@ a.btn-link {
   color: $brand-darker;
   &:hover {
     color: $brand-darker;
-    background-color: color.adjust($secondary, $lightness: -5%);
   }
 }
 
