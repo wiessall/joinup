@@ -34,6 +34,7 @@ joinup_solution.share_form:
     _title_callback: '\Drupal\joinup_solution\Form\ShareForm::getTitle'
   requirements:
     _access: 'TRUE'
+    _joinup_group: 'TRUE'
   options:
     parameters:
       node:

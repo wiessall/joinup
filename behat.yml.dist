@@ -53,6 +53,7 @@
   - Drupal\joinup\Context\JoinupLayoutParagraphsContext
   - Drupal\joinup\Context\JoinupLegalContext
   - Drupal\joinup\Context\JoinupLicenceContext
+  - Drupal\joinup\Context\JoinupLogContext
   - Drupal\joinup\Context\JoinupNewsContext
   - Drupal\joinup\Context\JoinupNewsletterContext
   - Drupal\joinup\Context\JoinupNotificationContext
@@ -143,6 +144,7 @@ default:
                 - '--whitelisted-ips=*'
     LoversOfBehat\TableExtension:
       table_map:
+        'actions log report': 'table'
         'announcement list': '.announcement-list table'
         'group menu edit table': '#menu-overview'
         'eif recommendations': '.eif-recommendations table'
