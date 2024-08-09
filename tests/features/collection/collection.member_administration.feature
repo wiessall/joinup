@@ -420,7 +420,7 @@ Feature: Collection membership administration
     Then I should see the link "Medical diagnosis" in the Header region
     When I press "Accept"
     Then I should see the error message "You must agree to the Medical diagnosis CoC."
-    When I check the box "I have read and agree to the Medical diagnosis CoC."
+    When I check the box "I have read and agree to the Code of conduct."
     And I press "Accept"
     Then I should see the text "You have been promoted to member."
 
