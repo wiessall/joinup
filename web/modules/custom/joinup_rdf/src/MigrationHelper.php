@@ -136,64 +136,95 @@ final class MigrationHelper {
   ];
 
   const array SOLUTION_FIELD_MAPPING = [
-    'field_is_abstract' => [
+    'http://purl.org/dc/terms/modified' => [
+      'target_field_name' => 'changed',
+      'format' => 'datetime',
+    ],
+    'http://purl.org/dc/terms/title' => [
+      'target_field_name' => 'title',
+      'format' => 'string',
+      'trim' => TRUE,
+    ],
+    'http://joinup.eu/language' => [
+      'target_field_name' => 'langcode',
+      'format' => 'string',
+    ],
+    'http://joinup.eu/language/default' => [
+      'target_field_name' => 'default_langcode',
+      'format' => 'string',
+    ],
+    'http://joinup.eu/owner/uid' => [
+      'target_field_name' => 'uid',
+      'format' => 'reference',
+    ],
+    'http://purl.org/dc/terms/issued' => [
+      'target_field_name' => 'created',
+      'format' => 'datetime',
+    ],
+    'http://purl.org/dc/terms/abstract' => [
       'target_field_name' => 'abstract',
       'format' => 'string',
       'default_values' => [
         'format' => 'content_editor',
       ],
     ],
-    'field_is_contact_information' => [
+    'http://joinup.eu/collection/published-at' => [
+      'target_field_name' => 'published_at',
+      'format' => 'datetime',
+    ],
+    'http://www.w3.org/ns/dcat#contactPoint' => [
       'target_field_name' => 'contact',
       'format' => 'reference',
     ],
-    'field_is_content' => [
+    'http://joinup.eu/search' => [
       'target_field_name' => 'listing_content',
       'format' => 'string',
     ],
-    'field_is_content_creation' => [
+    'http://joinup.eu/solution/content_creation' => [
       'target_field_name' => 'content_creation',
       'format' => 'string',
     ],
-    'field_is_description' => [
+    'http://purl.org/dc/terms/description' => [
       'target_field_name' => 'description',
       'format' => 'string',
       'default_values' => [
         'format' => 'content_editor',
       ],
     ],
-    'field_is_documentation' => [
+    'http://xmlns.com/foaf/0.1/page' => [
       'target_field_name' => 'documentation',
       'format' => 'string',
     ],
-    'field_is_landing_page' => [
+    'http://www.w3.org/ns/dcat#landingPage' => [
       'target_field_name' => 'landing_page',
       'format' => 'string',
     ],
-    'field_is_language' => [
+    'http://purl.org/dc/terms/language' => [
       'target_field_name' => 'language',
       'format' => 'reference',
     ],
-    'field_is_logo' => [
+    'http://purl.org/dc/dcmitype/StillImage' => [
       // @todo Create a follow up to merge all logo fields into one.
       'target_field_name' => 'logo',
       'format' => 'reference',
     ],
     // @todo Do we need it? Minimal data exist.
+    // @codingStandardsIgnoreStart
     // select * where { GRAPH ?g { ?s <http://joinup.eu/solution/metrics_page> ?o } }
-    'field_is_metrics_page' => [
+    // @codingStandardsIgnoreEnd
+    'http://joinup.eu/solution/metrics_page' => [
       'target_field_name' => 'metrics_page',
-      'format' => 'string',
+      'format' => 'uri',
     ],
-    'field_is_moderation' => [
+    'http://joinup.eu/solution/moderation' => [
       'target_field_name' => 'group_moderation',
       'format' => 'string',
     ],
-    'field_is_owner' => [
+    'http://purl.org/dc/terms/publisher' => [
       'target_field_name' => 'owner',
       'format' => 'reference',
     ],
-    'field_is_related_solutions' => [
+    'http://purl.org/dc/terms/relation' => [
       'target_field_name' => 'related_solutions',
       'format' => 'reference',
       'mapped_term' => TRUE,
@@ -202,7 +233,7 @@ final class MigrationHelper {
     // @todo We are going to need to reuse the same reference handler as we did
     //   for distributions so that the `field_shared_in` can accommodate the
     //   solution parents.
-    'field_is_shared_in' => [
+    'http://joinup.eu/solution/shared_in' => [
       'target_field_name' => 'shared_in',
       'format' => 'reference',
       'mapped_term' => TRUE,
@@ -210,54 +241,58 @@ final class MigrationHelper {
     // @todo Ensure we have given up on EIRA related entities and that the field
     //   should be removed. However, this might be more relevant when the
     //   vocabulary is optimized
-    'field_is_show_eira_related' => [
+    'http://joinup.eu/solution/related_by_type' => [
       'target_field_name' => 'list_related_entities',
       'format' => 'string',
     ],
-    'field_is_solution_type' => [
+    'http://purl.org/dc/terms/type' => [
       'target_field_name' => 'solution_type',
       'format' => 'reference',
       'mapped_term' => TRUE,
     ],
-    'field_is_state' => [
+    'http://joinup.eu/is/workflow_status' => [
       'target_field_name' => 'field_state',
       'format' => 'string',
     ],
     // @todo We don't seem to use this field but minimal data exist.
+    // @codingStandardsIgnoreStart
     // select * where { GRAPH ?g { ?s <http://www.w3.org/ns/adms#translation> ?o } }
-    'field_is_translation' => [
+    // @codingStandardsIgnoreEnd
+    'http://www.w3.org/ns/adms#translation' => [
       'target_field_name' => 'translation',
       'format' => 'reference',
     ],
     // @todo Minimal old data exist.
+    // @codingStandardsIgnoreStart
     // select * where { GRAPH ?g { ?s <http://www.w3.org/2002/07/owl#versionInfo> ?o } VALUES ?g { <http://joinup.eu/solution/published> <http://joinup.eu/solution/draft> } }
-    'field_is_version' => [
+    // @codingStandardsIgnoreEnd
+    'http://www.w3.org/2002/07/owl#versionInfo' => [
       'target_field_name' => 'release_number',
       'format' => 'string',
     ],
-    'field_keywords' => [
+    'http://www.w3.org/ns/dcat#keyword' => [
       'target_field_name' => 'field_keywords',
       'format' => 'reference',
       'mapped_term' => TRUE,
     ],
-    'field_short_id' => [
+    'http://purl.org/dc/terms/alternative' => [
       'target_field_name' => 'short_id',
       'format' => 'string',
     ],
-    'field_site_featured' => [
+    'http://joinup.eu/site-featured' => [
       'target_field_name' => 'site_featured',
       'format' => 'string',
     ],
-    'field_spatial_coverage' => [
+    'http://purl.org/dc/terms/spatial' => [
       'target_field_name' => 'spatial_coverage',
       'format' => 'reference',
       'mapped_term' => TRUE,
     ],
-    'field_status' => [
+    'http://www.w3.org/ns/adms#status' => [
       'target_field_name' => 'process_status',
       'format' => 'string',
     ],
-    'field_topic' => [
+    'http://joinup.eu/vocabulary/topic' => [
       'target_field_name' => 'field_topic',
       'format' => 'reference',
       'mapped_term' => TRUE,
@@ -320,14 +355,11 @@ final class MigrationHelper {
   public function migrateSolution(string $uri): void {
     // Because we have migrated solution stubs in the release migration, we need
     // to check if the entity exists already first.
-    $entity = $this->entityTypeManager->getStorage('node')->loadByProperties(['uri' => $uri]);
+    $entity = $this->rdfSyncMapper->getEntityByUri($uri);
     if (!$entity) {
       $entity = $this->entityTypeManager->getStorage('node')->create([
         'type' => 'solution',
       ]);
-    }
-    else {
-      $entity = reset($entity);
     }
 
     $values = $this->getEntityDataAsFlatArray($uri, 'http://joinup.eu/solution/published');
@@ -450,6 +482,7 @@ final class MigrationHelper {
     foreach ($values as $value) {
       $parsedValue = match ($format) {
         'string' => ['value' => $value],
+        'uri' => ['uri' => $value],
         'datetime' => ['value' => $value->getTimestamp()],
         'reference' => ['target_id' => $value],
         default => throw new \Exception('Unknown format: ' . $format),
