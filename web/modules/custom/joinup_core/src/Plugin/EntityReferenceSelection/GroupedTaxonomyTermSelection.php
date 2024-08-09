@@ -14,6 +14,8 @@ use Drupal\taxonomy\TermStorageInterface;
  *
  * This is inspired from https://www.drupal.org/project/taxonomy_container but
  * is adapted to use string ID for the parent term.
+ *
+ * The original plugin ID was "grouped_rdf_taxonomy_term_selection:default".
  */
 #[EntityReferenceSelection(
   id: "grouped_taxonomy_term_selection",
