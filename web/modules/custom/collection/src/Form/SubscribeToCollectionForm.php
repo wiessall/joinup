@@ -263,22 +263,21 @@ class SubscribeToCollectionForm extends FormBase {
     $codeOfConduct = $collection->getCodeOfConduct();
     $codeOfConductArgs = [
       ':code-of-conduct-url' => $codeOfConduct->toUrl()->toString(),
-      '%code-of-conduct-label' => $codeOfConduct->label(),
     ];
 
     $codeOfConductComponents['code_of_conduct_lead'] = [
       '#type' => 'item',
       '#markup' => $this->t(
-        'To complete your application and send it for approval, we need to make sure you agree with our <a href=:code-of-conduct-url target="_blank">%code-of-conduct-label</a>. This helps us maintain a safe and respectful environment for all our members.',
+        'To complete your application and send it for approval, we need to make sure you agree with our <a href=:code-of-conduct-url target="_blank">Code of conduct</a>. This helps us maintain a safe and respectful environment for all our members.',
         $codeOfConductArgs,
       ),
     ];
     $codeOfConductComponents[static::COC_CHECKBOX_KEY] = [
       '#type' => 'checkbox',
-      '#title' => $this->t('I have read and agree to the <a href=:code-of-conduct-url target="_blank">%code-of-conduct-label</a>.', $codeOfConductArgs),
+      '#title' => $this->t('I have read and agree to the <a href=:code-of-conduct-url target="_blank">Code of conduct</a>.', $codeOfConductArgs),
       '#return_value' => $codeOfConduct->getRevisionId(),
       '#required' => TRUE,
-      '#required_error' => $this->t('You must agree to the <a href=:code-of-conduct-url>%code-of-conduct-label</a> before asking for membership.', $codeOfConductArgs),
+      '#required_error' => $this->t('You must agree to the <a href=:code-of-conduct-url>Code of conduct</a> before asking for membership.', $codeOfConductArgs),
     ];
 
     $codeOfConductComponents['code_of_conduct_trailer'] = [
