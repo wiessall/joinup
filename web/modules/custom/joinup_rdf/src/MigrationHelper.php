@@ -104,7 +104,7 @@ final class MigrationHelper {
       'format' => 'string',
     ],
     'http://xmlns.com/foaf/spec/#term_homepage' => [
-      'target_field_name' => 'access_url',
+      'target_field_name' => 'website_url',
       'format' => 'string',
     ],
     'http://purl.org/dc/terms/spatial' => [
@@ -138,45 +138,65 @@ final class MigrationHelper {
   const array SOLUTION_FIELD_MAPPING = [
     'field_is_abstract' => [
       'target_field_name' => 'abstract',
+      'format' => 'string',
+      'default_values' => [
+        'format' => 'content_editor',
+      ],
     ],
     'field_is_contact_information' => [
       'target_field_name' => 'contact',
+      'format' => 'reference',
     ],
     'field_is_content' => [
       'target_field_name' => 'listing_content',
+      'format' => 'string',
     ],
     'field_is_content_creation' => [
       'target_field_name' => 'content_creation',
+      'format' => 'string',
     ],
     'field_is_description' => [
       'target_field_name' => 'description',
+      'format' => 'string',
+      'default_values' => [
+        'format' => 'content_editor',
+      ],
     ],
     'field_is_documentation' => [
       'target_field_name' => 'documentation',
+      'format' => 'string',
     ],
     'field_is_landing_page' => [
       'target_field_name' => 'landing_page',
+      'format' => 'string',
     ],
     'field_is_language' => [
       'target_field_name' => 'language',
+      'format' => 'reference',
     ],
     'field_is_logo' => [
       // @todo Create a follow up to merge all logo fields into one.
       'target_field_name' => 'logo',
+      'format' => 'reference',
     ],
     // @todo Do we need it? Minimal data exist.
     // select * where { GRAPH ?g { ?s <http://joinup.eu/solution/metrics_page> ?o } }
     'field_is_metrics_page' => [
       'target_field_name' => 'metrics_page',
+      'format' => 'string',
     ],
     'field_is_moderation' => [
       'target_field_name' => 'group_moderation',
+      'format' => 'string',
     ],
     'field_is_owner' => [
       'target_field_name' => 'owner',
+      'format' => 'reference',
     ],
     'field_is_related_solutions' => [
       'target_field_name' => 'related_solutions',
+      'format' => 'reference',
+      'mapped_term' => TRUE,
     ],
     // @todo Create a follow up to merge field_shared_in with this one.
     // @todo We are going to need to reuse the same reference handler as we did
@@ -184,55 +204,63 @@ final class MigrationHelper {
     //   solution parents.
     'field_is_shared_in' => [
       'target_field_name' => 'shared_in',
+      'format' => 'reference',
+      'mapped_term' => TRUE,
     ],
     // @todo Ensure we have given up on EIRA related entities and that the field
     //   should be removed. However, this might be more relevant when the
     //   vocabulary is optimized
     'field_is_show_eira_related' => [
       'target_field_name' => 'list_related_entities',
+      'format' => 'string',
     ],
     'field_is_solution_type' => [
       'target_field_name' => 'solution_type',
+      'format' => 'reference',
+      'mapped_term' => TRUE,
     ],
     'field_is_state' => [
       'target_field_name' => 'field_state',
-      'storage_exists' => TRUE,
+      'format' => 'string',
     ],
     // @todo We don't seem to use this field but minimal data exist.
     // select * where { GRAPH ?g { ?s <http://www.w3.org/ns/adms#translation> ?o } }
     'field_is_translation' => [
       'target_field_name' => 'translation',
+      'format' => 'reference',
     ],
     // @todo Minimal old data exist.
     // select * where { GRAPH ?g { ?s <http://www.w3.org/2002/07/owl#versionInfo> ?o } VALUES ?g { <http://joinup.eu/solution/published> <http://joinup.eu/solution/draft> } }
     'field_is_version' => [
       'target_field_name' => 'release_number',
+      'format' => 'string',
     ],
-    // @todo Not exposed or used anywhere but data exist. Agree with the business
-    //   that it can be removed. NOT an ADMS property. Data exist.
-    // select * where { GRAPH ?g { ?s <http://joinup.eu/solution/webdav_creation> ?o } VALUES ?g { <http://joinup.eu/solution/published> <http://joinup.eu/solution/draft> } }
-    'field_is_webdav_creation' => ['skip' => TRUE],
-    // @todo Not exposed or used anywhere but data exist. Agree with the business
-    //   that it can be removed. NOT an ADMS property. Data empty.
-    // select * where { GRAPH ?g { ?s <http://joinup.eu/solution/webdav_url> ?o } VALUES ?g { <http://joinup.eu/solution/published> <http://joinup.eu/solution/draft> } }
-    'field_is_webdav_url' => ['skip' => TRUE],
     'field_keywords' => [
       'target_field_name' => 'field_keywords',
+      'format' => 'reference',
+      'mapped_term' => TRUE,
     ],
     'field_short_id' => [
       'target_field_name' => 'short_id',
+      'format' => 'string',
     ],
     'field_site_featured' => [
       'target_field_name' => 'site_featured',
+      'format' => 'string',
     ],
     'field_spatial_coverage' => [
       'target_field_name' => 'spatial_coverage',
+      'format' => 'reference',
+      'mapped_term' => TRUE,
     ],
     'field_status' => [
       'target_field_name' => 'process_status',
+      'format' => 'string',
     ],
     'field_topic' => [
       'target_field_name' => 'field_topic',
+      'format' => 'reference',
+      'mapped_term' => TRUE,
     ],
   ];
 
