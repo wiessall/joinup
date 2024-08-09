@@ -96,15 +96,7 @@ class SubscribeToCollectionForm extends FormBase {
    *   The title.
    */
   public static function title(GroupInterface $rdf_entity): TranslatableMarkup|string {
-    $greetingField = NULL;
-    try {
-      $greetingField = $rdf_entity->getSetting('greeting');
-    }
-    catch (\Exception) {
-    }
-    return $greetingField && !$greetingField->isEmpty()
-      ? Html::escape($greetingField->first()->getString())
-      : t('Welcome to the community!');
+    return t('Welcome to @title', ['@title' => $rdf_entity->label()]);
   }
 
   /**
@@ -263,18 +255,19 @@ class SubscribeToCollectionForm extends FormBase {
     $codeOfConduct = $collection->getCodeOfConduct();
     $codeOfConductArgs = [
       ':code-of-conduct-url' => $codeOfConduct->toUrl()->toString(),
+      '@group-label' => $collection->label(),
     ];
 
     $codeOfConductComponents['code_of_conduct_lead'] = [
       '#type' => 'item',
       '#markup' => $this->t(
-        'To complete your application and send it for approval, we need to make sure you agree with our <a href=:code-of-conduct-url target="_blank">Code of conduct</a>. This helps us maintain a safe and respectful environment for all our members.',
+        'To complete your membership, we need to make sure you agree with our <a href=:code-of-conduct-url target="_blank">Code of conduct</a>. This helps us maintain a safe and respectful environment for all members of @group-label',
         $codeOfConductArgs,
       ),
     ];
     $codeOfConductComponents[static::COC_CHECKBOX_KEY] = [
       '#type' => 'checkbox',
-      '#title' => $this->t('I have read and agree to the <a href=:code-of-conduct-url target="_blank">Code of conduct</a>.', $codeOfConductArgs),
+      '#title' => $this->t('I have read and agree to the <a href=:code-of-conduct-url target="_blank">Code of conduct</a> of @group-label.', $codeOfConductArgs),
       '#return_value' => $codeOfConduct->getRevisionId(),
       '#required' => TRUE,
       '#required_error' => $this->t('You must agree to the <a href=:code-of-conduct-url>Code of conduct</a> before asking for membership.', $codeOfConductArgs),
