@@ -6,6 +6,8 @@ dependencies:
     - field.storage.node.legal_type
     - node.type.licence
     - taxonomy.vocabulary.legal_type
+  module:
+    - rdf_sync
 third_party_settings:
   rdf_sync:
     target_id:
@@ -22,7 +24,7 @@ translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:
-  handler: 'grouped_rdf_taxonomy_term_selection:default'
+  handler: grouped_taxonomy_term_selection
   handler_settings:
     target_bundles:
       legal_type: legal_type
