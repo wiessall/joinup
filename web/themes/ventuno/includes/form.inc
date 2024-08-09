@@ -142,6 +142,7 @@ function ventuno_form_alter(array &$form, FormStateInterface $form_state, string
       $form['#attached']['library'][] = 'ventuno/form-simple-checkboxes';
       $form['#attributes']['class'][] = 'form-simple-checkboxes';
       break;
+
     case 'joinup_subscription_my_subscriptions':
       // Add classes for unsubscribe all link.
       if (isset($form['edit-actions']['unsubscribe_all'])) {
