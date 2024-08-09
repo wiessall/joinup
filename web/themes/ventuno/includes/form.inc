@@ -117,7 +117,6 @@ function ventuno_preprocess_form_element(array &$variables): void {
  * Implements hook_preprocess_form_element_label().
  */
 function ventuno_preprocess_form_element_label(array &$variables): void {
-  $variables['#attached']['library'][] = 'ventuno/form-checkboxes';
   $variables['attributes']['class'][] = 'h4';
 }
 
@@ -138,6 +137,11 @@ function ventuno_form_alter(array &$form, FormStateInterface $form_state, string
   }
 
   switch ($form_id) {
+    case 'invitation_form':
+    case 'subscribe_to_collection_form':
+      $form['#attached']['library'][] = 'ventuno/form-simple-checkboxes';
+      $form['#attributes']['class'][] = 'form-simple-checkboxes';
+      break;
     case 'joinup_subscription_my_subscriptions':
       // Add classes for unsubscribe all link.
       if (isset($form['edit-actions']['unsubscribe_all'])) {
