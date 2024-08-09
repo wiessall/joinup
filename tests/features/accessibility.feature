@@ -1,4 +1,4 @@
-@api @javascript
+@api @group-clone @javascript
 Feature: Accessibility
 
   Scenario Outline: Regression test for "Data protection and web accessibility
