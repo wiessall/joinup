@@ -100,13 +100,12 @@ class InvitationAcceptanceForm extends FormBase {
       $codeOfConduct = $group->getCodeOfConduct()) {
       $args = [
         ':url' => $codeOfConduct->toUrl()->toString(),
-        '%label' => $codeOfConduct->label(),
       ];
 
       $form['code_of_conduct'] = [
         '#type' => 'checkbox',
-        '#title' => $this->t('I have read and agree to the <a href=":url" target="_blank">%label</a>.', $args),
-        '#required_error' => $this->t('You must agree to the <a href=":url" target="_blank>%label</a>.', $args),
+        '#title' => $this->t('I have read and agree to the <a href=":url" target="_blank">Code of conduct</a>.', $args),
+        '#required_error' => $this->t('You must agree to the <a href=":url" target="_blank">Code of conduct</a>.', $args),
         '#return_value' => $codeOfConduct->getRevisionId(),
         '#required' => TRUE,
       ];
