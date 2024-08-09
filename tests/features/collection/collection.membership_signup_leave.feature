@@ -94,7 +94,7 @@ Feature: Joining and leaving collections through the web interface
       | Don't subscribe            |
     And the buttons in the "Modal buttons" region should not be disabled:
       | Cancel                     |
-    And I check "I have read and agree to the Code of conduct of Closed collection."
+    And I check "I have read and agree to the Code of conduct."
     Then the buttons in the "Modal buttons" region should not be disabled:
       | Subscribe to notifications |
       | Don't subscribe            |
@@ -117,7 +117,7 @@ Feature: Joining and leaving collections through the web interface
     When I go to the homepage of the "Closed collection with public CoC" collection
     And I press "Join this collection" in the Header region
     Then a modal should open
-    Given I <checkbox action> " I have read and agree to the Code of conduct."
+    Given I <checkbox action> "I have read and agree to the Code of conduct."
     And I press Cancel in the "Modal buttons" region
     Then the modal should be closed
     And I should see the button "Join this collection" in the Header region
