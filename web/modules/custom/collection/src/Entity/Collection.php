@@ -225,7 +225,7 @@ class Collection extends Node implements CollectionInterface {
    * {@inheritdoc}
    */
   public function getWebsiteLinkFieldName(): string {
-    return 'access_url';
+    return 'website_url';
   }
 
   /**

@@ -5,7 +5,6 @@ dependencies:
   config:
     - core.entity_view_mode.node.view_mode_featured
     - field.field.node.collection.abstract
-    - field.field.node.collection.access_url
     - field.field.node.collection.closed_group
     - field.field.node.collection.contact
     - field.field.node.collection.content_creation
@@ -21,6 +20,7 @@ dependencies:
     - field.field.node.collection.short_id
     - field.field.node.collection.site_featured
     - field.field.node.collection.spatial_coverage
+    - field.field.node.collection.website_url
     - image.style.vertical_medium_image
     - node.type.collection
   module:
@@ -66,7 +66,6 @@ content:
     weight: 2
     region: content
 hidden:
-  access_url: true
   closed_group: true
   collection_settings: true
   contact: true
@@ -97,3 +96,4 @@ hidden:
   solutions: true
   spatial_coverage: true
   uri: true
+  website_url: true

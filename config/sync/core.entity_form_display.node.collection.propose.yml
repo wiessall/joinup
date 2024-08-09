@@ -6,7 +6,6 @@ dependencies:
     - core.entity_form_mode.node.inline
     - core.entity_form_mode.node.propose
     - field.field.node.collection.abstract
-    - field.field.node.collection.access_url
     - field.field.node.collection.closed_group
     - field.field.node.collection.contact
     - field.field.node.collection.content_creation
@@ -22,6 +21,7 @@ dependencies:
     - field.field.node.collection.short_id
     - field.field.node.collection.site_featured
     - field.field.node.collection.spatial_coverage
+    - field.field.node.collection.website_url
     - image.style.thumbnail
     - media.type.collection_logo
     - node.type.collection
@@ -72,7 +72,7 @@ third_party_settings:
         required_fields: true
     group_additional_fields:
       children:
-        - access_url
+        - website_url
         - logo
         - field_keywords
         - spatial_coverage
@@ -102,14 +102,6 @@ content:
     settings:
       size: 200
       placeholder: ''
-    third_party_settings: {  }
-  access_url:
-    type: file_url_generic
-    weight: 3
-    region: content
-    settings:
-      progress_indicator: throbber
-      add_new_label: 'Upload a new file or enter a URL'
     third_party_settings: {  }
   closed_group:
     type: boolean_checkbox
@@ -243,6 +235,14 @@ content:
     weight: 10
     region: content
     settings: {  }
+    third_party_settings: {  }
+  website_url:
+    type: link_default
+    weight: 3
+    region: content
+    settings:
+      placeholder_url: ''
+      placeholder_title: ''
     third_party_settings: {  }
 hidden:
   created: true
