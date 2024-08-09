@@ -54,4 +54,4 @@ Feature: Footer
 
     And I am on the homepage
     Then I should see the link "How-to & video tutorials"
-    Then I should not see the link "Contact Joinup Support"
+    Then I should see the link "Contact Joinup Support"
