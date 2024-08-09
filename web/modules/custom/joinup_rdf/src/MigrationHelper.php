@@ -8,6 +8,7 @@ use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_rdf\Entity\RdfSyncEntityInterface;
+use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\joinup_taxonomy\Entity\MappedTerm;
 use Drupal\path_alias\AliasRepositoryInterface;
 use Drupal\pathauto\PathautoState;
@@ -134,6 +135,107 @@ final class MigrationHelper {
     ],
   ];
 
+  const array SOLUTION_FIELD_MAPPING = [
+    'field_is_abstract' => [
+      'target_field_name' => 'abstract',
+    ],
+    'field_is_contact_information' => [
+      'target_field_name' => 'contact',
+    ],
+    'field_is_content' => [
+      'target_field_name' => 'listing_content',
+    ],
+    'field_is_content_creation' => [
+      'target_field_name' => 'content_creation',
+    ],
+    'field_is_description' => [
+      'target_field_name' => 'description',
+    ],
+    'field_is_documentation' => [
+      'target_field_name' => 'documentation',
+    ],
+    'field_is_landing_page' => [
+      'target_field_name' => 'landing_page',
+    ],
+    'field_is_language' => [
+      'target_field_name' => 'language',
+    ],
+    'field_is_logo' => [
+      // @todo Create a follow up to merge all logo fields into one.
+      'target_field_name' => 'logo',
+    ],
+    // @todo Do we need it? Minimal data exist.
+    // select * where { GRAPH ?g { ?s <http://joinup.eu/solution/metrics_page> ?o } }
+    'field_is_metrics_page' => [
+      'target_field_name' => 'metrics_page',
+    ],
+    'field_is_moderation' => [
+      'target_field_name' => 'group_moderation',
+    ],
+    'field_is_owner' => [
+      'target_field_name' => 'owner',
+    ],
+    'field_is_related_solutions' => [
+      'target_field_name' => 'related_solutions',
+    ],
+    // @todo Create a follow up to merge field_shared_in with this one.
+    // @todo We are going to need to reuse the same reference handler as we did
+    //   for distributions so that the `field_shared_in` can accommodate the
+    //   solution parents.
+    'field_is_shared_in' => [
+      'target_field_name' => 'shared_in',
+    ],
+    // @todo Ensure we have given up on EIRA related entities and that the field
+    //   should be removed. However, this might be more relevant when the
+    //   vocabulary is optimized
+    'field_is_show_eira_related' => [
+      'target_field_name' => 'list_related_entities',
+    ],
+    'field_is_solution_type' => [
+      'target_field_name' => 'solution_type',
+    ],
+    'field_is_state' => [
+      'target_field_name' => 'field_state',
+      'storage_exists' => TRUE,
+    ],
+    // @todo We don't seem to use this field but minimal data exist.
+    // select * where { GRAPH ?g { ?s <http://www.w3.org/ns/adms#translation> ?o } }
+    'field_is_translation' => [
+      'target_field_name' => 'translation',
+    ],
+    // @todo Minimal old data exist.
+    // select * where { GRAPH ?g { ?s <http://www.w3.org/2002/07/owl#versionInfo> ?o } VALUES ?g { <http://joinup.eu/solution/published> <http://joinup.eu/solution/draft> } }
+    'field_is_version' => [
+      'target_field_name' => 'release_number',
+    ],
+    // @todo Not exposed or used anywhere but data exist. Agree with the business
+    //   that it can be removed. NOT an ADMS property. Data exist.
+    // select * where { GRAPH ?g { ?s <http://joinup.eu/solution/webdav_creation> ?o } VALUES ?g { <http://joinup.eu/solution/published> <http://joinup.eu/solution/draft> } }
+    'field_is_webdav_creation' => ['skip' => TRUE],
+    // @todo Not exposed or used anywhere but data exist. Agree with the business
+    //   that it can be removed. NOT an ADMS property. Data empty.
+    // select * where { GRAPH ?g { ?s <http://joinup.eu/solution/webdav_url> ?o } VALUES ?g { <http://joinup.eu/solution/published> <http://joinup.eu/solution/draft> } }
+    'field_is_webdav_url' => ['skip' => TRUE],
+    'field_keywords' => [
+      'target_field_name' => 'field_keywords',
+    ],
+    'field_short_id' => [
+      'target_field_name' => 'short_id',
+    ],
+    'field_site_featured' => [
+      'target_field_name' => 'site_featured',
+    ],
+    'field_spatial_coverage' => [
+      'target_field_name' => 'spatial_coverage',
+    ],
+    'field_status' => [
+      'target_field_name' => 'process_status',
+    ],
+    'field_topic' => [
+      'target_field_name' => 'field_topic',
+    ],
+  ];
+
   /**
    * Constructs a MigrationHelper object.
    */
@@ -182,6 +284,49 @@ final class MigrationHelper {
   }
 
   /**
+   * Migrate solution.
+   *
+   * @param string $uri
+   *   The URI of the solution.
+   */
+  public function migrateSolution(string $uri): void {
+    // Because we have migrated solution stubs in the release migration, we need
+    // to check if the entity exists already first.
+    $entity = $this->entityTypeManager->getStorage('node')->loadByProperties(['uri' => $uri]);
+    if (!$entity) {
+      $entity = $this->entityTypeManager->getStorage('node')->create([
+        'type' => 'solution',
+      ]);
+    }
+    else {
+      $entity = reset($entity);
+    }
+
+    $values = $this->getEntityDataAsFlatArray($uri, 'http://joinup.eu/solution/published');
+    if (!empty($values)) {
+      $this->massageSolutionValues($entity, $values);
+      $this->saveEntityWithPathPreservation($entity, $uri);
+    }
+
+    // Handle the draft content. If the entity has not been saved, it is an
+    // unpublished entity, otherwise, it is a new revision.
+    $values = $this->getEntityDataAsFlatArray($uri, 'http://joinup.eu/solution/draft');
+    if (!empty($values)) {
+      if (!$entity->isNew()) {
+        $entity->setRevisionCreationTime($values['http://purl.org/dc/terms/modified'][0]->getTimestamp());
+        $entity->setRevisionUserId($values['http://joinup.eu/owner/uid'][0]);
+        $entity->setRevisionTranslationAffected(TRUE);
+        $entity->setNewRevision();
+      }
+
+      $this->massageSolutionValues($entity, $values);
+      $entity->save();
+    }
+
+    $this->updateReferenceValues($entity);
+  }
+
+  /**
    * Set the collection fields.
    *
    * @param \Drupal\collection\Entity\CollectionInterface $entity
@@ -205,6 +350,24 @@ final class MigrationHelper {
           'service_id' => $values['http://joinup.eu/collection/field_newsletter/service_id'],
         ];
         $entity->set('newsletter', $value);
+      }
+    }
+  }
+
+  /**
+   * Set the solution fields.
+   *
+   * @param \Drupal\joinup_solution\Entity\SolutionInterface $entity
+   *   The entity to set the fields.
+   * @param array $values
+   *   The values to set.
+   */
+  protected function massageSolutionValues(SolutionInterface $entity, array $values): void {
+    foreach (self::SOLUTION_FIELD_MAPPING as $property => $mapping) {
+      $value = $values[$property] ?? NULL;
+      if ($value) {
+        $value = $this->parseValue($value, self::SOLUTION_FIELD_MAPPING[$property]);
+        $entity->set($mapping['target_field_name'], $value);
       }
     }
   }
