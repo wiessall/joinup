@@ -60,7 +60,7 @@ class CollectionContext extends RawDrupalContext {
     'title' => 'title',
     'short ID' => 'short_id',
     'abstract' => 'abstract',
-    'access url' => 'access_url',
+    'access url' => 'website_url',
     'closed' => 'closed_group',
     'contact information' => 'contact',
     'content creation' => 'content_creation',
