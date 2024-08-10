@@ -10,7 +10,6 @@ use Drupal\Core\Field\EntityReferenceFieldItemList;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\collection\Entity\CollectionInterface;
-use Drupal\collection\Exception\MissingCollectionException;
 use Drupal\contact_information\Traits\ContactInformationTrait;
 use Drupal\joinup_bundle_class\AbstractTrait;
 use Drupal\joinup_bundle_class\DescriptionTrait;
@@ -31,7 +30,7 @@ use Drupal\joinup_release\Entity\ReleaseInterface;
 use Drupal\joinup_workflow\ArchivableEntityTrait;
 use Drupal\joinup_workflow\EntityWorkflowStateTrait;
 use Drupal\node\Entity\Node;
-use Drupal\og\OgGroupAudienceHelper;
+use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\og\OgMembershipInterface;
 use Drupal\topic\Entity\TopicReferencingEntityTrait;
 
@@ -61,27 +60,16 @@ class Solution extends Node implements SolutionInterface {
 
   /**
    * {@inheritdoc}
-   *
-   * @todo Update this in ISAICP-8574.
    */
   public function getCollection(): CollectionInterface {
-    try {
-      /** @var \Drupal\collection\Entity\CollectionInterface $group */
-      $group = $this->getGroup();
-    }
-    catch (MissingGroupException $exception) {
-      throw new MissingCollectionException($exception->getMessage(), 0, $exception);
-    }
-    return $group;
+    return $this->getGroup();
   }
 
   /**
    * {@inheritdoc}
-   *
-   * @todo Update this in ISAICP-8574.
    */
   public function getGroup(): GroupInterface {
-    $field_item = $this->getFirstItem(OgGroupAudienceHelper::DEFAULT_FIELD);
+    $field_item = $this->getFirstItem(OgGroupAudienceHelperInterface::DEFAULT_FIELD);
     if (!$field_item || $field_item->isEmpty()) {
       throw new MissingGroupException();
     }
@@ -98,12 +86,11 @@ class Solution extends Node implements SolutionInterface {
    * {@inheritdoc}
    */
   public function getGroupId(): string {
-    $ids = $this->getReferencedEntityIds('collection');
-    // @todo Update this in ISAICP-8574.
-    if (empty($ids['rdf_entity'])) {
+    $ids = $this->getReferencedEntityIds(OgGroupAudienceHelperInterface::DEFAULT_FIELD);
+    if (empty($ids['node'])) {
       throw new MissingGroupException();
     }
-    return array_shift($ids['rdf_entity']);
+    return array_shift($ids['node']);
   }
 
   /**
@@ -153,7 +140,7 @@ class Solution extends Node implements SolutionInterface {
    */
   public function getAffiliatedCollections(): array {
     $collections = [];
-    foreach ($this->getReferencedEntities(OgGroupAudienceHelper::DEFAULT_FIELD) as $collection) {
+    foreach ($this->getReferencedEntities(OgGroupAudienceHelperInterface::DEFAULT_FIELD) as $collection) {
       $collections[$collection->id()] = $collection;
     }
     return $collections;
@@ -163,8 +150,7 @@ class Solution extends Node implements SolutionInterface {
    * {@inheritdoc}
    */
   public function getAffiliatedCollectionIds(): array {
-    // @todo Update this in ISAICP-8574.
-    return $this->getReferencedEntityIds('collection')['rdf_entity'] ?? [];
+    return $this->getReferencedEntityIds(OgGroupAudienceHelperInterface::DEFAULT_FIELD)['node'] ?? [];
   }
 
   /**
