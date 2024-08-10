@@ -344,7 +344,7 @@ function _joinup_rdf_deploy_update_field_target_id(string $base_table_prefix, st
 }
 
 /**
- * Migrates collections.
+ * Migrate collections.
  */
 function joinup_rdf_deploy_111105(array &$sandbox): string {
   $endpoint = \Drupal::getContainer()->get('sparql.endpoint');
@@ -395,18 +395,9 @@ function joinup_rdf_deploy_111106(): string {
 }
 
 /**
- * Clean the asset release graph.
+ * Migrate solutions.
  */
-function joinup_rdf_deploy_111107(): void {
-  $endpoint = \Drupal::getContainer()->get('sparql.endpoint');
-  $endpoint->query('CLEAR GRAPH <http://joinup.eu/collection/published>');
-  $endpoint->query('CLEAR GRAPH <http://joinup.eu/collection/draft>');
-}
-
-/**
- * Migrates collections.
- */
-function joinup_rdf_deploy_111108(array &$sandbox): string {
+function joinup_rdf_deploy_111107(array &$sandbox): string {
   $endpoint = \Drupal::getContainer()->get('sparql.endpoint');
   if (empty($sandbox['solutions'])) {
     $query = <<<SPARQL
@@ -455,10 +446,12 @@ function joinup_rdf_deploy_111109(): string {
 }
 
 /**
- * Clean the asset release graph.
+ * Clean the collection and solution graphs.
  */
 function joinup_rdf_deploy_111110(): void {
   $endpoint = \Drupal::getContainer()->get('sparql.endpoint');
+  $endpoint->query('CLEAR GRAPH <http://joinup.eu/collection/published>');
+  $endpoint->query('CLEAR GRAPH <http://joinup.eu/collection/draft>');
   $endpoint->query('CLEAR GRAPH <http://joinup.eu/solution/published>');
   $endpoint->query('CLEAR GRAPH <http://joinup.eu/solution/draft>');
 }

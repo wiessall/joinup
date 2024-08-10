@@ -10,6 +10,7 @@ use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_rdf\Entity\RdfSyncEntityInterface;
 use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\joinup_taxonomy\Entity\MappedTerm;
+use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\path_alias\AliasRepositoryInterface;
 use Drupal\pathauto\PathautoState;
 use Drupal\rdf_sync\RdfSyncMapper;
@@ -322,6 +323,7 @@ final class MigrationHelper {
       'type' => 'collection',
     ]);
 
+    $entity->set('uri', $uri);
     $values = $this->getEntityDataAsFlatArray($uri, 'http://joinup.eu/collection/published');
     if (!empty($values)) {
       $this->massageCollectionValues($entity, $values);
@@ -340,6 +342,7 @@ final class MigrationHelper {
       }
 
       $this->massageCollectionValues($entity, $values);
+      $entity->skip_notification = TRUE;
       $entity->save();
     }
 
@@ -362,6 +365,7 @@ final class MigrationHelper {
       ]);
     }
 
+    $entity->set('uri', $uri);
     $values = $this->getEntityDataAsFlatArray($uri, 'http://joinup.eu/solution/published');
     if (!empty($values)) {
       $this->massageSolutionValues($entity, $values);
@@ -380,6 +384,7 @@ final class MigrationHelper {
       }
 
       $this->massageSolutionValues($entity, $values);
+      $entity->skip_notification = TRUE;
       $entity->save();
     }
 
@@ -430,6 +435,30 @@ final class MigrationHelper {
         $entity->set($mapping['target_field_name'], $value);
       }
     }
+
+    // Set the collection. We need to get the collection URI from SPARQL, load
+    // the collection by mapped URI from node storage, and pass it to the
+    // solution.
+    $query = <<<SPARQL
+      SELECT ?s
+      FROM <http://joinup.eu/collection/published>
+      FROM <http://joinup.eu/collection/draft>
+      WHERE {
+        ?s <http://www.w3.org/ns/dcat#dataset> <{$entity->getUri()}> .
+      }
+      SPARQL;
+
+    $results = $this->sparqlEndpoint->query($query)->getArrayCopy();
+    if ($results) {
+      $collectionUri = $results[0]->s->getUri();
+      $collection = $this->rdfSyncMapper->getEntityByUri($collectionUri);
+      if ($collection) {
+        $entity->set(OgGroupAudienceHelperInterface::DEFAULT_FIELD, $collection->id());
+      }
+      else {
+        throw new \Exception('Collection not found for solution: ' . $entity->getUri());
+      }
+    }
   }
 
   /**
@@ -441,13 +470,13 @@ final class MigrationHelper {
    *   The URI of the entity.
    */
   protected function saveEntityWithPathPreservation(RdfSyncEntityInterface $entity, string $uri): void {
-    $entity->set('uri', $uri);
     $pathautoOldPath = '/rdf_entity/' . UriEncoder::encodeUrl($entity->getUri());
     $has_alias = $this->pathAliasRepository->lookupBySystemPath($pathautoOldPath, 'en');
     if ($has_alias) {
       $entity->get('path')->pathauto = PathautoState::SKIP;
     }
 
+    $entity->skip_notification = TRUE;
     $entity->save();
 
     if ($has_alias) {
