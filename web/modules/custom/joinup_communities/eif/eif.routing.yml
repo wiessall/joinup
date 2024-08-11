@@ -1,5 +1,5 @@
 eif.eif_perspective_form:
-  path: '/rdf_entity/{rdf_entity}/eif-perspective/edit'
+  path: '/node/{node}/eif-perspective/edit'
   defaults:
     _controller: Drupal\eif\Controller\EifPerspectiveController::settings
     _title_callback: Drupal\eif\Controller\EifPerspectiveController::title
@@ -13,15 +13,15 @@ eif.eif_perspective_form:
           - solution
 
 entity.rdf_entity.eif_perspective:
-  path: '/rdf_entity/{rdf_entity}/eif-perspective'
+  path: '/node/{node}/eif-perspective'
   defaults:
-    _entity_view: 'rdf_entity.eif_perspective'
+    _entity_view: 'node.eif_perspective'
     _title_callback: Drupal\eif\Controller\EifPerspectiveController::getTitle
   requirements:
     _custom_access: Drupal\eif\Controller\EifPerspectiveController::viewAccess
   options:
     parameters:
       rdf_entity:
-        type: entity:rdf_entity
+        type: entity:node
         bundle:
           - solution
