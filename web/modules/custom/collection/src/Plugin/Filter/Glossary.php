@@ -111,7 +111,7 @@ class Glossary extends FilterBase implements ContainerFactoryPluginInterface {
 
     $link_only_first = $collection->getGlossarySettings()['link_only_first'];
     // Invalidate the cache when the collection glossary settings are changing.
-    $cache_metadata->addCacheableDependency($collection->get('settings')->entity);
+    $cache_metadata->addCacheableDependency($collection->get('collection_settings')->entity);
 
     $document = Html::load($text);
     $text_nodes = (new \DOMXPath($document))->evaluate("//text()");

@@ -154,7 +154,7 @@ class CommunityContentWorkflowAccessControlHandler {
    *   The access result.
    */
   protected function hasParentViewAccess(CommunityContentInterface $content, AccountInterface $account): AccessResultInterface {
-    $access_handler = $this->entityTypeManager->getAccessControlHandler('rdf_entity');
+    $access_handler = $this->entityTypeManager->getAccessControlHandler('node');
     return $access_handler->access($content->getGroup(), 'view', $account, TRUE);
   }
 
