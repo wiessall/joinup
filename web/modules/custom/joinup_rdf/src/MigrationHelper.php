@@ -600,6 +600,13 @@ final class MigrationHelper {
       'meta_entity' => 'target__target_id',
       'joinup_group_node_access' => 'entity_id',
       'og_membership' => 'entity_id',
+      'node__og_audience' => 'og_audience_target_id',
+      'node_revision__og_audience' => 'og_audience_target_id',
+      'node__field_shared_in' => 'field_shared_in_target_id',
+      'node_revision__field_shared_in' => 'field_shared_in_target_id',
+      'media__og_audience' => 'og_audience_target_id',
+      'media_revision__og_audience' => 'og_audience_target_id',
+      'ogmenu_instance__og_audience' => 'og_audience_target_id',
     ];
 
     foreach ($tableData as $table => $targetField) {
