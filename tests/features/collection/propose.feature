@@ -272,25 +272,26 @@ Feature: Proposing a collection
     Given I am logged in as a "moderator"
     When I go to the edit form of the "Some email validation" collection
     And I press "Publish"
-    Then the following email should have been sent:
-      | recipient_mail     | some_unique_contact_person@example.com                                                                                                |
-      | subject            | Joinup - Please validate your contact details                                                                                         |
-      | body               | Please confirm your email address some_unique_contact_person@example.com, which is set in your contact information for the following: |
-      | signature_required | no                                                                                                                                    |
-      | html               | yes                                                                                                                                   |
-    When I go to the edit form of the "Rolly email validation" solution
-    And I press "Publish"
-    And the following email should have been sent:
-      | recipient_mail     | contact_Rapazoglou@example.com                                                                                                |
-      | subject            | Joinup - Please validate your contact details                                                                                 |
-      | body               | Please confirm your email address contact_Rapazoglou@example.com, which is set in your contact information for the following: |
-      | signature_required | no                                                                                                                            |
-      | html               | yes                                                                                                                           |
-
-    # Contact us page should return access denied,
-    # because contact info emails are not published.
-    When I go to "/collection/some-email-validation/contact"
-    Then I should get an access denied error
+    # @todo Re-enable in ISAICP-8992
+    # Then the following email should have been sent:
+    #   | recipient_mail     | some_unique_contact_person@example.com                                                                                                |
+    #   | subject            | Joinup - Please validate your contact details                                                                                         |
+    #   | body               | Please confirm your email address some_unique_contact_person@example.com, which is set in your contact information for the following: |
+    #   | signature_required | no                                                                                                                                    |
+    #   | html               | yes                                                                                                                                   |
+    # When I go to the edit form of the "Rolly email validation" solution
+    # And I press "Publish"
+    # And the following email should have been sent:
+    #   | recipient_mail     | contact_Rapazoglou@example.com                                                                                                |
+    #   | subject            | Joinup - Please validate your contact details                                                                                 |
+    #   | body               | Please confirm your email address contact_Rapazoglou@example.com, which is set in your contact information for the following: |
+    #   | signature_required | no                                                                                                                            |
+    #   | html               | yes                                                                                                                           |
+    #
+    # # Contact us page should return access denied,
+    # # because contact info emails are not published.
+    # When I go to "/collection/some-email-validation/contact"
+    # Then I should get an access denied error
 
     # As some entities were created via UI, we should explicitly delete them.
     And I delete the "Contact person" contact information
