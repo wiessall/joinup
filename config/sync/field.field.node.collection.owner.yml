@@ -6,6 +6,11 @@ dependencies:
     - field.storage.node.owner
     - node.type.collection
     - node.type.owner
+third_party_settings:
+  rdf_sync:
+    target_id:
+      predicate: 'http://purl.org/dc/terms/publisher'
+      type: resource
 id: node.collection.owner
 field_name: owner
 entity_type: node

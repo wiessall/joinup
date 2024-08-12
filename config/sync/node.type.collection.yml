@@ -25,9 +25,10 @@ third_party_settings:
         value:
           predicate: 'http://purl.org/dc/terms/issued'
           type: 'xsd:dateTime'
-label_singular: null
-label_plural: null
-label_count: null
+label_singular: collection
+label_plural: collections
+label_count:
+  no_count_capitalize: !!binary Q29sbGVjdGlvbgNDb2xsZWN0aW9ucw==
 name: Collection
 type: collection
 description: 'The collection is the main content type for catalogues, communities etc. A group of groups and community content.'
