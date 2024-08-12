@@ -332,7 +332,7 @@ class SubscribeToCollectionForm extends FormBase {
         ->set('subscription_bundles', $subscription_bundles)
         ->save();
 
-      // Check if the user is pending, so we can adapt the messages for the user.
+      // Check if the user is pending, so we can adapt the message for the user.
       $is_pending = !empty($membership) && $membership->isPending();
 
       $message = $is_pending ?
