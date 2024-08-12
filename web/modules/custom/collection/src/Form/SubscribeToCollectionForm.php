@@ -139,6 +139,19 @@ class SubscribeToCollectionForm extends FormBase {
         '#value' => $intro_message,
         '#weight' => -3,
       ],
+      'proposal' => [
+        '#type' => 'html_tag',
+        '#tag' => 'h2',
+        '#attributes' => [
+          'class' => ['fs-6'],
+        ],
+        '#value' => $this->t('Want to subscribe for new content notifications, too?'),
+      ],
+      'description' => [
+        '#type' => 'html_tag',
+        '#tag' => 'p',
+        '#value' => $this->t('You can update your notification preferences from your profile page at any time.'),
+      ],
     ];
 
     $form['subscribe'] = [
@@ -167,19 +180,6 @@ class SubscribeToCollectionForm extends FormBase {
       '#value' => $rdf_entity->id(),
     ];
 
-    $form['proposal'] = [
-      '#type' => 'html_tag',
-      '#tag' => 'h2',
-      '#attributes' => [
-        'class' => ['fs-6'],
-      ],
-      '#value' => $this->t('Want to subscribe for new content notifications, too?'),
-    ];
-    $form['description'] = [
-      '#type' => 'html_tag',
-      '#tag' => 'p',
-      '#value' => $this->t('You can update your notification preferences from your profile page at any time.'),
-    ];
     $form['actions'] = [
       '#type' => 'actions',
     ];
@@ -263,7 +263,7 @@ class SubscribeToCollectionForm extends FormBase {
 
     $codeOfConductComponents['code_of_conduct_trailer'] = [
       '#type' => 'item',
-      '#markup' => $this->t('You will receive a confirmation email once your application has been approved. We look forward to having you as a valued member of our community!<br><br>If you have any questions or need assistance, please feel free to contact us.'),
+      '#markup' => $this->t('You will receive a confirmation email once your membership has been approved.'),
       '#weight' => -1,
     ];
 
