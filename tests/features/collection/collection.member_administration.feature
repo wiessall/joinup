@@ -110,7 +110,8 @@ Feature: Collection membership administration
     Then a modal should open
     And I should see the text "Want to subscribe for new content notifications, too?"
 
-    When I press "Subscribe to notifications" in the "Modal buttons" region
+    When I check "Notify me when content is published in Medical diagnosis"
+    And I press "Confirm" in the "Modal buttons" region
     And I wait for AJAX to finish
     Then I should see the success message "You have been subscribed to Medical diagnosis and will receive weekly notifications once your membership is approved."
 

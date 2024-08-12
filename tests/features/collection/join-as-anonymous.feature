@@ -70,7 +70,7 @@ Feature: Joining a collection as an anonymous user
     And the "CoC collection" collection should have 0 pending member
     And a modal should open
     And I check "I have read and agree to the Code of conduct"
-    And I press "Don't subscribe" in the "Modal buttons" region
+    And I press "Confirm" in the "Modal buttons" region
     Then the "CoC collection" collection should have 1 pending member
 
   @javascript
