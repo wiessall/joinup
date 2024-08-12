@@ -42,7 +42,7 @@ Feature: Joining a collection as an anonymous user
     And I check "I have read and accept the Legal notice"
     And I press "Submit"
     Then I should see the text "<collection>" in the Header region
-    And I should see the heading "Welcome to Reannual plants"
+    And I should see the heading "Welcome to <collection>"
     And I should see the success message "You have been logged in."
     And the "<collection>" collection should have <active members> active member
     And the "<collection>" collection should have <pending members> pending member
