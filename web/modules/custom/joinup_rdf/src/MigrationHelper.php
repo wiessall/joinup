@@ -116,6 +116,7 @@ final class MigrationHelper {
     'http://www.w3.org/ns/dcat#contactPoint' => [
       'target_field_name' => 'contact',
       'format' => 'reference',
+      'mapped_term' => TRUE,
     ],
     'http://joinup.eu/collection/published-at' => [
       'target_field_name' => 'published_at',
