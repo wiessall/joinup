@@ -229,6 +229,7 @@ Feature: Like/unlike feature.
       | Extra classes    | test-class |
 
     And I click "Choose component"
+    And a modal should open
     And I click "Carousel"
 
     Then I select "Solution" from "Available filters"
@@ -268,9 +269,9 @@ Feature: Like/unlike feature.
     And I should see the "Likeable document" tile
     And I should see the link "Like this content" in the "Likeable document" tile
     Then I press "Next item"
-    And I wait up to 5 seconds for Glide animations to finish
+    And I wait until no ".glide-animating" element exists
     And I press "Next item"
-    And I wait up to 5 seconds for Glide animations to finish
+    And I wait until no ".glide-animating" element exists
     And I should see the "Likeable event" tile
     And I should see the link "Like this content" in the "Likeable event" tile
     And I should see the "Likeable news" tile
