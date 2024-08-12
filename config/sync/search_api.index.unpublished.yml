@@ -15,7 +15,6 @@ dependencies:
     - field.storage.node.field_shared_in
     - field.storage.node.field_short_title
     - field.storage.paragraph.field_body
-    - field.storage.rdf_entity.field_ar_abstract
     - field.storage.rdf_entity.field_ar_description
     - field.storage.rdf_entity.field_is_description
     - field.storage.rdf_entity.field_is_solution_type
@@ -152,14 +151,6 @@ field_settings:
       fields:
         - 'entity:node/og_audience'
         - 'entity:rdf_entity/collection'
-  field_ar_abstract:
-    label: Abstract
-    datasource_id: 'entity:rdf_entity'
-    property_path: field_ar_abstract
-    type: text
-    dependencies:
-      config:
-        - field.storage.rdf_entity.field_ar_abstract
   field_ar_description:
     label: 'Description » Processed text'
     datasource_id: 'entity:rdf_entity'
@@ -413,7 +404,6 @@ processor_settings:
     fields:
       - body
       - description
-      - field_ar_abstract
       - field_ar_description
       - field_event_agenda
       - field_is_description
@@ -433,7 +423,6 @@ processor_settings:
     fields:
       - body
       - description
-      - field_ar_abstract
       - field_ar_description
       - field_event_agenda
       - field_is_description
@@ -466,7 +455,6 @@ processor_settings:
     fields:
       - body
       - description
-      - field_ar_abstract
       - field_ar_description
       - field_event_agenda
       - field_is_description
@@ -521,7 +509,6 @@ processor_settings:
     fields:
       - body
       - description
-      - field_ar_abstract
       - field_ar_description
       - field_event_agenda
       - field_is_description
@@ -545,7 +532,6 @@ processor_settings:
     fields:
       - body
       - description
-      - field_ar_abstract
       - field_ar_description
       - field_event_agenda
       - field_is_description

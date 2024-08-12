@@ -18,7 +18,6 @@ dependencies:
     - field.storage.node.field_short_title
     - field.storage.node.spdx_licence
     - field.storage.paragraph.field_body
-    - field.storage.rdf_entity.field_ar_abstract
     - field.storage.rdf_entity.field_ar_contact_information
     - field.storage.rdf_entity.field_ar_description
     - field.storage.rdf_entity.field_ar_owner
@@ -275,22 +274,6 @@ field_settings:
         - 'entity:node/field_state'
         - 'entity:rdf_entity/field_ar_state'
         - 'entity:rdf_entity/field_is_state'
-  field_ar_abstract:
-    label: Abstract
-    datasource_id: 'entity:rdf_entity'
-    property_path: field_ar_abstract
-    type: text
-    dependencies:
-      config:
-        - field.storage.rdf_entity.field_ar_abstract
-  field_ar_abstract_spellcheck:
-    label: 'Abstract - Spellcheck'
-    datasource_id: 'entity:rdf_entity'
-    property_path: field_ar_abstract
-    type: solr_text_spellcheck
-    dependencies:
-      config:
-        - field.storage.rdf_entity.field_ar_abstract
   field_ar_description:
     label: 'Description » Processed text'
     datasource_id: 'entity:rdf_entity'
@@ -951,8 +934,6 @@ processor_settings:
       - body_spellcheck
       - description_processed
       - description_processed_spellcheck
-      - field_ar_abstract
-      - field_ar_abstract_spellcheck
       - field_ar_description
       - field_ar_description_spellcheck
       - field_event_agenda
@@ -974,8 +955,6 @@ processor_settings:
       - body_spellcheck
       - description_processed
       - description_processed_spellcheck
-      - field_ar_abstract
-      - field_ar_abstract_spellcheck
       - field_ar_description
       - field_ar_description_spellcheck
       - field_event_agenda
@@ -1023,8 +1002,6 @@ processor_settings:
       - body_spellcheck
       - description_processed
       - description_processed_spellcheck
-      - field_ar_abstract
-      - field_ar_abstract_spellcheck
       - field_ar_description
       - field_ar_description_spellcheck
       - field_event_agenda
@@ -1086,8 +1063,6 @@ processor_settings:
       - body_spellcheck
       - description_processed
       - description_processed_spellcheck
-      - field_ar_abstract
-      - field_ar_abstract_spellcheck
       - field_ar_description
       - field_ar_description_spellcheck
       - field_event_agenda
@@ -1125,8 +1100,6 @@ processor_settings:
       - body_spellcheck
       - description_processed
       - description_processed_spellcheck
-      - field_ar_abstract
-      - field_ar_abstract_spellcheck
       - field_ar_description
       - field_ar_description_spellcheck
       - field_event_agenda

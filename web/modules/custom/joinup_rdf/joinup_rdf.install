@@ -159,6 +159,22 @@ function joinup_rdf_update_111104(): string {
     'field.storage.node.og_audience',
     'field.storage.media.og_audience',
     'field.storage.ogmenu_instance.og_audience',
+    'field.field.media.image.og_audience',
+    'field.field.node.news.field_news_referenced_solution',
+    'field.field.node.video.og_audience',
+    'field.field.media.file.og_audience',
+    'field.field.node.news.og_audience',
+    'field.field.node.news.field_shared_in',
+    'field.field.node.glossary.og_audience',
+    'field.field.node.event.og_audience',
+    'field.field.node.event.field_shared_in',
+    'field.field.node.document.og_audience',
+    'field.field.node.document.field_shared_in',
+    'field.field.node.distribution.og_audience',
+    'field.field.node.discussion.og_audience',
+    'field.field.node.discussion.field_shared_in',
+    'field.field.node.custom_page.og_audience',
+    'field.field.node.release.og_audience',
   ];
 
   foreach ($fieldStorages as $fieldStorage) {
