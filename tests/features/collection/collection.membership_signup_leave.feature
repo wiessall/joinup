@@ -117,7 +117,7 @@ Feature: Joining and leaving collections through the web interface
     When I go to the homepage of the "Closed collection with public CoC" collection
     And I press "Join this collection" in the Header region
     Then a modal should open
-    Given I <checkbox action> "I have read and agree to the Code of conduct."
+    Given I <checkbox action> "I have read and agree to the Code of conduct of Closed collection with public CoC."
     And I press Cancel in the "Modal buttons" region
     Then the modal should be closed
     And I should see the button "Join this collection" in the Header region
