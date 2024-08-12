@@ -110,7 +110,7 @@ trait EntityTrait {
    */
   protected static function entityTypeAliases(): array {
     return [
-      'collection' => 'rdf_entity',
+      'collection' => 'node',
       'contact information' => 'rdf_entity',
       'content' => 'node',
       'custom page' => 'node',
