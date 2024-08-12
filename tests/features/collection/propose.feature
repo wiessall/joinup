@@ -96,9 +96,9 @@ Feature: Proposing a collection
     And I delete the "Contact person" contact information
 
   Scenario: Propose a collection with a duplicate name
-    Given the following collection:
-      | title | The Ratcatcher's Guild |
-      | state | published              |
+    Given collection content:
+      | title                  | state     |
+      | The Ratcatcher's Guild | published |
     Given I am logged in as a user with the "authenticated" role
     When I go to the propose collection form
     And I fill in the following:
