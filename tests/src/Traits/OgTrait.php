@@ -10,7 +10,6 @@ use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\og\Entity\OgMembership;
 use Drupal\og\Entity\OgRole;
 use Drupal\og\OgMembershipInterface;
-use Drupal\rdf_entity\RdfInterface;
 use PHPUnit\Framework\Assert;
 
 /**
@@ -209,7 +208,7 @@ trait OgTrait {
   /**
    * Creates a group membership using the given group and table values.
    *
-   * @param \Drupal\rdf_entity\RdfInterface $group
+   * @param \Drupal\joinup_group\Entity\GroupInterface $group
    *   The group to which the user will be subscribed.
    * @param array $values
    *   Associative array containing table values from a Behat scenario. The
@@ -223,7 +222,7 @@ trait OgTrait {
    * @throws \Exception
    *   Thrown when a user with the given user name is not found.
    */
-  protected function givenUserMembership(RdfInterface $group, array $values): void {
+  protected function givenUserMembership(GroupInterface $group, array $values): void {
     // Load member.
     $member = user_load_by_name($values['user']);
     if (empty($member)) {
