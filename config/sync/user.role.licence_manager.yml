@@ -15,7 +15,7 @@ dependencies:
     - toolbar
 id: licence_manager
 label: 'Licence manager'
-weight: -8
+weight: -10
 is_admin: null
 permissions:
   - 'access compatibility document overview'
