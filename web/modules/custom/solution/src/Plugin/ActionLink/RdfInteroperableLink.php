@@ -47,6 +47,7 @@ class RdfInteroperableLink extends AJAXactionLink {
       return [
         '#theme' => 'flag_interoperable_text',
         '#flagged' => $flag->isFlagged($entity),
+        '#view_mode' => $view_mode,
         '#cache' => [
           'tags' => ['flagging_list:' . $flag->id()],
         ],
