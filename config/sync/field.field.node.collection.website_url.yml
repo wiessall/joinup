@@ -7,6 +7,11 @@ dependencies:
     - node.type.collection
   module:
     - link
+third_party_settings:
+  rdf_sync:
+    uri:
+      predicate: 'http://xmlns.com/foaf/spec/#term_homepage'
+      type: 'xsd:anyUri'
 id: node.collection.website_url
 field_name: website_url
 entity_type: node
