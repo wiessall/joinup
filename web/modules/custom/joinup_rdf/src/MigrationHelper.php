@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup_rdf;
 
 use Drupal\Core\Database\Connection;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_rdf\Entity\RdfSyncEntityInterface;
@@ -319,6 +320,10 @@ final class MigrationHelper {
    *   The URI of the collection.
    */
   public function migrateCollection(string $uri): void {
+    if ($entity = $this->rdfSyncMapper->getEntityByUri($uri)) {
+      $entity->delete();
+    }
+
     /** @var \Drupal\collection\Entity\CollectionInterface $entity */
     $entity = $this->entityTypeManager->getStorage('node')->create([
       'type' => 'collection',
@@ -329,7 +334,9 @@ final class MigrationHelper {
     if (!empty($values)) {
       $this->massageCollectionValues($entity, $values);
       $this->saveEntityWithPathPreservation($entity, $uri);
+      $this->assertMigratedEntity($entity, $values);
     }
+
 
     // Handle the draft content. If the entity has not been saved, it is an
     // unpublished entity, otherwise, it is a new revision.
@@ -345,6 +352,7 @@ final class MigrationHelper {
       $this->massageCollectionValues($entity, $values);
       $entity->skip_notification = TRUE;
       $entity->save();
+      $this->assertMigratedEntity($entity, $values);
     }
 
     $this->updateReferenceValues($entity);
@@ -371,6 +379,7 @@ final class MigrationHelper {
     if (!empty($values)) {
       $this->massageSolutionValues($entity, $values);
       $this->saveEntityWithPathPreservation($entity, $uri);
+      $this->assertMigratedEntity($entity, $values);
     }
 
     // Handle the draft content. If the entity has not been saved, it is an
@@ -387,6 +396,7 @@ final class MigrationHelper {
       $this->massageSolutionValues($entity, $values);
       $entity->skip_notification = TRUE;
       $entity->save();
+      $this->assertMigratedEntity($entity, $values);
     }
 
     $this->updateReferenceValues($entity);
@@ -624,6 +634,33 @@ final class MigrationHelper {
         ->fields([$targetField => $entity->id()])
         ->condition($targetField, $entity->getUri())
         ->execute();
+    }
+  }
+
+  /**
+   * Asserts that the entity has been migrated properly.
+   *
+   * @param \Drupal\Core\Entity\EntityInterface $entity
+   *   The entity to assert.
+   * @param array $values
+   *   The values to assert.
+   */
+  protected function assertMigratedEntity(EntityInterface $entity, array $values): void {
+    // Reload the entity to get the values from the database.
+    $loaded = $this->entityTypeManager->getStorage($entity->getEntityTypeId())->load($entity->id());
+    foreach ($values as $uri => $value) {
+      $fieldData = $loaded instanceof CollectionInterface ? self::COLLECTION_FIELD_MAPPING[$uri] : self::SOLUTION_FIELD_MAPPING[$uri];
+      if (!$fieldData) {
+        print sprintf('The field %s is not found in the mapping.', $uri);
+        continue;
+      }
+
+      $targetFieldName = $fieldData['target_field_name'];
+      $field = $loaded->get($targetFieldName);
+      $value = $this->parseValue($value, $fieldData);
+      if ($value !== $field->value) {
+        print sprintf('The value of the field %s is not correct. Expected: %s, got: %s', $targetFieldName, print_r($value, TRUE), print_r($field->value, TRUE));
+      }
     }
   }
 
