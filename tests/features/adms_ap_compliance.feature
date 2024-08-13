@@ -1,4 +1,4 @@
-@api
+@api @group-i
 Feature: Joinup should be ADMS-AP compliant.
 
   Scenario: Validate the entities in the published graph.

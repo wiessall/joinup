@@ -1,4 +1,4 @@
-@api @group-h
+@api @group-e
 Feature: Pinning discussion entities
   As a facilitator of a solution/collection
   I want to pin content at the top of the discussions page

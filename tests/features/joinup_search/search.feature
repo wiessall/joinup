@@ -1,4 +1,4 @@
-@api @group-i
+@api @group-g
 Feature: Global search
   As a user of the site I can find content through the global search.
 

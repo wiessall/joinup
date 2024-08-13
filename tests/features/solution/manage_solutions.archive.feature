@@ -1,4 +1,4 @@
-@api @group-g
+@api @group-h
 Feature: When a solution is archived then its sub-content also should be archived.
 
   Background:

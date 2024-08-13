@@ -1,4 +1,4 @@
-@api @group-b
+@api @group-d
 Feature:
   In order to have better presentation of my content
   as a user of the website

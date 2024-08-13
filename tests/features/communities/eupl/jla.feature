@@ -1,4 +1,4 @@
-@api @eupl @group-e
+@api @eupl @group-b
 Feature:
   As the owner of the EUPL community
   in order to make it easier for users to find appropriate licences

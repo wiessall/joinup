@@ -1,4 +1,4 @@
-@api @casMockServer @group-f
+@api @casMockServer @group-e
 Feature:
   As a user of the website
   When I try to login
