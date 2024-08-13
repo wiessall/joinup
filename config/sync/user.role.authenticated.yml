@@ -43,6 +43,7 @@ dependencies:
     - rdf_entity
     - search_api_autocomplete
     - sitewide_alert
+    - sparql_endpoint
     - state_machine_permissions
     - system
     - tour
@@ -151,6 +152,7 @@ permissions:
   - 'propose collection rdf entity'
   - 'revert all revisions'
   - 'skip comment approval'
+  - 'sparql endpoint query'
   - 'unflag bookmark_node'
   - 'unflag bookmark_rdf_entity'
   - 'unflag like_node'
