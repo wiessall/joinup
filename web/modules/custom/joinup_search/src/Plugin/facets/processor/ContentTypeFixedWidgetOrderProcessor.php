@@ -26,7 +26,6 @@ class ContentTypeFixedWidgetOrderProcessor extends SortProcessorPluginBase {
    * The order in which the facet results should be shown.
    */
   protected const CONTENT_TYPE_ORDER = [
-    'user' => -1,
     'collection' => 0,
     'solution' => 1,
     'news' => 2,
@@ -37,7 +36,8 @@ class ContentTypeFixedWidgetOrderProcessor extends SortProcessorPluginBase {
     'release' => 7,
     'custom_page' => 9,
     'licence' => 10,
-    'video' => 11,
+    'user' => 11,
+    'video' => 12,
   ];
 
   /**

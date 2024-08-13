@@ -141,13 +141,13 @@ Feature: Global search
     Given I click "Clear filters"
     When I check the "News (5)" checkbox from the "Content types" facet
     Then the "News" content checkbox item should be selected
-    And the "Content types" checkbox facet should allow selecting the following values "User profiles (1), Collection (1), Solutions (2), News (5)"
+    And the "Content types" checkbox facet should allow selecting the following values "Collection (1), Solutions (2), News (5), User profiles (1)"
 
     When I check the "Solutions (2)" checkbox from the "Content types" facet
     Then the "Solutions" content checkbox item should be selected
     And the "News" content checkbox item should be selected
     And I should see the following facet summary "Solutions, News"
-    Then the "Content types" checkbox facet should allow selecting the following values "User profiles (1), Collection (1), Solutions (2), News (5)"
+    Then the "Content types" checkbox facet should allow selecting the following values "Collection (1), Solutions (2), News (5), User profiles (1)"
     And the "topic" checkbox facet should allow selecting the following values "eGov (1), Info (1), Statistics and Analysis (1), Social and Political (5), Demography (1), E-inclusion (4)"
     Then I click show more from the "spatial coverage" facet
     And the "spatial coverage" checkbox facet should allow selecting the following values "European Union (1), Luxembourg (5)"
@@ -271,7 +271,7 @@ Feature: Global search
       | ulyssesfrees | ulysses.freeman@example.com | Ulysses    | Freeman     | Omero snc    |
 
     When I visit the search page
-    Then the "Content types" checkbox facet should allow selecting the following values "User profiles (2), Collections (2), Solution (1), News (1), Events (2), Document (1), Discussion (1), Release (1), Custom page (1), Licence (1), Video (1)"
+    Then the "Content types" checkbox facet should allow selecting the following values "Collections (2), Solution (1), News (1), Events (2), Document (1), Discussion (1), Release (1), Custom page (1), Licence (1), User profiles (2), Video (1)"
 
     # "A beta" word does not show "You must include at least one positive keyword with 3 characters or more." error message.
     When I enter "A beta" in the search bar and press enter
