@@ -88,13 +88,13 @@ Feature: Joining and leaving collections through the web interface
     Then I should see the button "Join this collection" in the Header region
     And I should not see the text "To complete your application and send it for approval, we need to make sure you agree with our Public CoC of Closed collection. This helps us maintain a safe and respectful environment for all our members."
     And I should see the link "Public CoC of Closed collection"
-    Then the "I have read and agree to the Public CoC of Closed collection." checkbox should not be checked
+    Then the "I have read and agree to the Code of conduct." checkbox should not be checked
     And the buttons in the "Modal buttons" region should be disabled:
       | Subscribe to notifications |
       | Don't subscribe            |
     And the buttons in the "Modal buttons" region should not be disabled:
       | Cancel                     |
-    And I check "I have read and agree to the Public CoC of Closed collection."
+    And I check "I have read and agree to the Code of conduct."
     Then the buttons in the "Modal buttons" region should not be disabled:
       | Subscribe to notifications |
       | Don't subscribe            |
@@ -117,7 +117,7 @@ Feature: Joining and leaving collections through the web interface
     When I go to the homepage of the "Closed collection with public CoC" collection
     And I press "Join this collection" in the Header region
     Then a modal should open
-    Given I <checkbox action> "I have read and agree to the Public CoC of Closed collection."
+    Given I <checkbox action> "I have read and agree to the Code of conduct."
     And I press Cancel in the "Modal buttons" region
     Then the modal should be closed
     And I should see the button "Join this collection" in the Header region
