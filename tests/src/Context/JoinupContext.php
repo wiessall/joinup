@@ -2322,11 +2322,9 @@ class JoinupContext extends RawDrupalContext {
     $actual_href = $element->getAttribute('href');
 
     // Remove the leading base URL or base path from the link href.
-    if (strpos($actual_href, $GLOBALS['base_url']) === 0) {
-      $actual_href = ltrim(substr($actual_href, strlen($GLOBALS['base_url'])), '/');
-    }
-    elseif (($base_path = trim(base_path(), '/')) && strpos($actual_href, $base_path) === 0) {
-      $actual_href = trim(substr($actual_href, strlen($base_path)), '/');
+    $base_url = rtrim($this->getMinkParameter('base_url') ?? '', '/');
+    if (str_starts_with($actual_href, $base_url)) {
+      $actual_href = ltrim(substr($actual_href, strlen($base_url)), '/');
     }
 
     Assert::assertSame($expected_href, $actual_href, "The link '$link' doesn't point to the expected path '$expected_href'.");
