@@ -5,7 +5,6 @@ module:
   adms_validator: 0
   allowed_formats: 0
   antibot: 0
-  asset_release: 0
   autologout: 0
   blazy: 0
   block: 0
@@ -104,6 +103,7 @@ module:
   joinup_legal: 0
   joinup_licence: 0
   joinup_like: 0
+  joinup_log: 0
   joinup_media: 0
   joinup_menu: 0
   joinup_modal: 0
@@ -115,12 +115,14 @@ module:
   joinup_poll: 0
   joinup_publication_date: 0
   joinup_rdf: 0
+  joinup_release: 0
   joinup_replicate: 0
   joinup_rss: 0
   joinup_search: 0
   joinup_seo: 0
   joinup_sitewide_alert: 0
   joinup_slick: 0
+  joinup_solution: 0
   joinup_sparql: 0
   joinup_stats: 0
   joinup_subscription: 0
@@ -174,6 +176,7 @@ module:
   og: 0
   og_menu: 0
   options: 0
+  other_view_filter: 0
   owner: 0
   page_cache: 0
   page_manager: 0
@@ -222,6 +225,8 @@ module:
   social_media_links: 0
   social_media_links_field: 0
   solution: 0
+  sparql_endpoint: 0
+  sparql_endpoint_piwik: 0
   sparql_entity_storage: 0
   state_machine: 0
   state_machine_permissions: 0

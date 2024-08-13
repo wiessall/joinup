@@ -1,0 +1,30 @@
+uuid: 6cbded71-f5a0-4f68-a823-504bce418c35
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.description
+    - filter.format.content_editor
+    - node.type.release
+  module:
+    - rdf_sync
+    - text
+third_party_settings:
+  rdf_sync:
+    value:
+      predicate: 'http://www.w3.org/ns/adms#versionNotes'
+      type: 'xsd:string'
+id: node.release.description
+field_name: description
+entity_type: node
+bundle: release
+label: 'Release notes'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  allowed_formats:
+    - content_editor
+field_type: text_long

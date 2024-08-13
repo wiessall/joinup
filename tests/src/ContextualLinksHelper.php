@@ -51,7 +51,7 @@ class ContextualLinksHelper {
    * This allows us to use traits that are designed to be used in Behat context
    * classes.
    */
-  public function __call($name, $arguments) {
+  public function __call($name, $arguments): mixed {
     return $this->context->$name(...$arguments);
   }
 
@@ -156,7 +156,7 @@ class ContextualLinksHelper {
 
     // Wait until the contextual module JavaScript is executed. Markup will be
     // appended upon completion.
-    $contextual_button = $this->waitUntil(function () use ($element) {
+    $contextual_button = $this->waitUntil(function () use ($element): ?NodeElement {
       return $element->find('css', '.contextual > button.trigger');
     });
 
@@ -215,10 +215,7 @@ class ContextualLinksHelper {
 
     // Wait until the contextual module JavaScript is executed. Markup will be
     // appended upon completion.
-    $contextual_button = $this->waitUntil(function () use ($element): ?NodeElement {
-      return $element->find('css', '.contextual > button.trigger');
-    });
-    $this->scrollElementIntoView($contextual_button);
+    $contextual_button = $this->waitForElement('css', '.contextual > button.trigger', $element);
 
     // Open the contextual links menu if it is not yet open.
     $link_list = $element->find('css', '.contextual ul.contextual-links');

@@ -169,23 +169,21 @@ QUERY;
       'distribution' => 0,
       // RDF entities.
       'solution' => 0,
-      'asset_release' => 0,
+      'release' => 0,
     ];
 
-    $group_content_keys = array_keys($group_content);
     foreach ($group_content_data as $data) {
-      if (!in_array($data->type, $group_content_keys)) {
+      if (!isset($group_content[$data->type])) {
         continue;
       }
 
-      if ($data->type === 'distribution') {
+      if (is_int($group_content[$data->type])) {
         $group_content[$data->type] += $data->entities;
+        continue;
       }
-      elseif ($data->state === 'archived') {
-        $group_content[$data->type]['archived'] += $data->entities;
-      }
-      else {
-        $group_content[$data->type]['active'] += $data->entities;
+
+      if (is_array($group_content[$data->type]) && isset($group_content[$data->type][$data->state])) {
+        $group_content[$data->type][$data->state] += $data->entities;
       }
     }
 
@@ -193,7 +191,7 @@ QUERY;
     $content = $group->getGroupContentIds();
     $content_ids = [];
 
-    array_walk_recursive($content, function ($value) use (&$content_ids) {
+    array_walk_recursive($content, function ($value) use (&$content_ids): void {
       $content_ids[] = $value;
     });
 
@@ -225,7 +223,7 @@ QUERY;
       'Events' => $group_content['event']['active'],
       'News' => $group_content['news']['active'],
       'Solutions' => $group_content['solution'],
-      'Releases' => $group_content['asset_release'],
+      'Releases' => $group_content['release'],
       'Distributions' => $group_content['distribution'],
       'Total number of items' =>
       $group_content['custom_page']['active']
@@ -233,7 +231,7 @@ QUERY;
       + $group_content['document']['active']
       + $group_content['event']['active']
       + $group_content['news']['active']
-      + $group_content['asset_release']
+      + $group_content['release']
       + $group_content['distribution'],
       'Total number of archived items' =>
       $group_content['custom_page']['archived']

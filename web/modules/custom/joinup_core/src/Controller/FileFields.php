@@ -42,7 +42,7 @@ class FileFields extends ControllerBase {
   /**
    * Generates the list.
    */
-  public function listing() {
+  public function listing(): array {
     $fields_structure = [];
     $fields_structure = array_merge_recursive($fields_structure, $this->entityFieldManager->getFieldMapByFieldType('file'));
     $fields_structure = array_merge_recursive($fields_structure, $this->entityFieldManager->getFieldMapByFieldType('file_url'));
@@ -79,7 +79,7 @@ class FileFields extends ControllerBase {
    * @return array
    *   The render array of one row.
    */
-  protected function buildRow($entity_type, $bundle, $field_name) {
+  protected function buildRow($entity_type, $bundle, $field_name): array {
     $info = $this->entityFieldManager->getFieldDefinitions($entity_type, $bundle);
     /** @var \Drupal\field\Entity\FieldConfig $field_info */
     $field_info = $info[$field_name];
@@ -100,7 +100,7 @@ class FileFields extends ControllerBase {
    * @return array
    *   Render array of table header.
    */
-  protected function buildHeader() {
+  protected function buildHeader(): array {
     $header = [
       'entity_type' => [
         'data' => $this->t('Entity type'),

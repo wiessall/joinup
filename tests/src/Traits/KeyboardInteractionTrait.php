@@ -55,7 +55,7 @@ trait KeyboardInteractionTrait {
    *   The escape code for the key, or the originally passed string if the key
    *   name is not defined in the mapping.
    */
-  protected function translateKey(string $key_name) {
+  protected function translateKey(string $key_name): string|int {
     $keyboard_escape_codes = [
       'alt' => 18,
       'backspace' => 8,

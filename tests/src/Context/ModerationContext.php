@@ -24,7 +24,7 @@ class ModerationContext extends RawDrupalContext {
    *
    * @Then the moderation preview of :title should contain the text :text
    */
-  public function assertModerationPreviewContainsText($title, $text) {
+  public function assertModerationPreviewContainsText($title, $text): void {
     $node = $this->getEntityByLabel('node', $title);
     $xpath = '//h1/a[@href = "' . $node->toUrl('canonical', [
       'base_url' => rtrim($GLOBALS['base_path'], '/'),
@@ -42,7 +42,7 @@ class ModerationContext extends RawDrupalContext {
    *
    * @When I click the :link_text link in the :title moderation preview
    */
-  public function clickLinkInModerationPreview($link_text, $title) {
+  public function clickLinkInModerationPreview($link_text, $title): void {
     $node = $this->getEntityByLabel('node', $title);
     $xpath = '//h1/a[@href = "' . $node->toUrl('canonical', [
       'base_url' => rtrim($GLOBALS['base_path'], '/'),

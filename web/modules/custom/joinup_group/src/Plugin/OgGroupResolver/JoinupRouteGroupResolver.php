@@ -32,6 +32,9 @@ class JoinupRouteGroupResolver extends RouteGroupResolver {
       '/rdf_entity/{rdf_entity}/announcements/list' => 'rdf_entity',
       '/rdf_entity/{rdf_entity}/announcements/send' => 'rdf_entity',
       '/rdf_entity/{rdf_entity}/glossary_export/{arg_1}' => 'rdf_entity',
+      '/rdf_entity/{rdf_entity}/reports/actions-log' => 'rdf_entity',
+      '/rdf_entity/{rdf_entity}/reports/actions-log/csv' => 'rdf_entity',
+      '/rdf_entity/{rdf_entity}/solution/add' => 'rdf_entity',
     ];
   }
 

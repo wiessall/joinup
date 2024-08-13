@@ -1,0 +1,7 @@
+name: 'SPARQL Endpoint'
+type: module
+description: 'A module that allows to run queries against a SPARQL endpoint.'
+package: Custom
+core_version_requirement: ^10 || ^11
+dependencies:
+  - joinup:joinup_rdf

@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Drupal\joinup_notification\EventSubscriber;
 
 use Drupal\Core\Entity\EntityInterface;
-use Drupal\asset_release\Entity\AssetReleaseInterface;
 use Drupal\joinup_distribution\Entity\DistributionInterface;
 use Drupal\joinup_notification\Event\NotificationEvent;
 use Drupal\joinup_notification\MessageArgumentGenerator;
 use Drupal\joinup_notification\NotificationEvents;
+use Drupal\joinup_release\Entity\ReleaseInterface;
 use Drupal\og\OgRoleInterface;
 use Drupal\solution\Exception\MissingSolutionException;
 
@@ -30,15 +30,15 @@ use Drupal\solution\Exception\MissingSolutionException;
  */
 class DistributionSubscriber extends NotificationSubscriberBase {
 
-  const TEMPLATE_UPDATE = 'distribution_update';
-  const TEMPLATE_DELETE = 'distribution_delete';
+  const string TEMPLATE_UPDATE = 'distribution_update';
+  const string TEMPLATE_DELETE = 'distribution_delete';
 
   /**
    * The notification event.
    *
    * @var \Drupal\joinup_notification\Event\NotificationEvent
    */
-  protected $event;
+  protected NotificationEvent $event;
 
   /**
    * {@inheritdoc}
@@ -185,7 +185,7 @@ class DistributionSubscriber extends NotificationSubscriberBase {
 
     // Add arguments related to the parent collection or solution.
     $parent = $entity->getParent();
-    if (!empty($parent) && $parent instanceof AssetReleaseInterface) {
+    if (!empty($parent) && $parent instanceof ReleaseInterface) {
       $arguments['@release:info:with_version'] = $this->t('of the release @release, @version', [
         '@release' => $parent->label(),
         '@version' => $parent->getVersion(),
@@ -243,7 +243,7 @@ class DistributionSubscriber extends NotificationSubscriberBase {
    *   The current state.
    */
   protected function getReleaseState(): string {
-    return $this->entity->get('field_is_state')->first()->value;
+    return $this->entity->get('field_state')->first()->value;
   }
 
 }

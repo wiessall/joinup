@@ -1,0 +1,75 @@
+uuid: b9f766f6-a0b1-41b0-9758-0a8a9ecbb6e2
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.view_mode_featured
+    - field.field.node.release.description
+    - field.field.node.release.documentation
+    - field.field.node.release.field_keywords
+    - field.field.node.release.field_state
+    - field.field.node.release.og_audience
+    - field.field.node.release.language
+    - field.field.node.release.process_status
+    - field.field.node.release.release_number
+    - field.field.node.release.solution_data
+    - field.field.node.release.spatial_coverage
+    - node.type.release
+  module:
+    - svg_image
+    - template_suggestion
+    - user
+id: node.release.view_mode_featured
+targetEntityType: node
+bundle: release
+mode: view_mode_featured
+content:
+  process_status:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: false
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
+    weight: 2
+    region: content
+  release_number:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  solution_logo:
+    type: image
+    label: hidden
+    settings:
+      image_link: ''
+      image_style: ''
+      image_loading:
+        attribute: lazy
+      svg_attributes:
+        width: null
+        height: null
+      svg_render_as_image: true
+    third_party_settings: {  }
+    weight: 1
+    region: content
+hidden:
+  description: true
+  distributions: true
+  documentation: true
+  field_keywords: true
+  field_state: true
+  langcode: true
+  language: true
+  links: true
+  og_audience: true
+  published_at: true
+  report: true
+  search_api_excerpt: true
+  solution_data: true
+  spatial_coverage: true
+  uri: true
