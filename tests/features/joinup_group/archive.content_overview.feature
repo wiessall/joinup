@@ -1,4 +1,4 @@
-@api @group-i
+@api @group-f
 Feature: Global search with archive content
 
   Scenario Outline: Group content has an 'Show archived' facet.

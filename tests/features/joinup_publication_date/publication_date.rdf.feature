@@ -1,4 +1,4 @@
-@api @group-i
+@api @group-f
 Feature: Publication date works as expected on RDF entities
 
   Background:

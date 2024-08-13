@@ -1,4 +1,4 @@
-@api @group-i
+@api @group-f
 # This features tests the workflow transitions.
 #
 # The steps @Then I go to the "news" content :title edit screen

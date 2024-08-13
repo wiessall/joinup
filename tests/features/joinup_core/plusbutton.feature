@@ -1,4 +1,4 @@
-@api @group-f
+@api @group-e
 Feature: Plus button
   In order be able to create content
   As a user of the website

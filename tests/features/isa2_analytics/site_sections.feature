@@ -1,4 +1,4 @@
-@api @group-b
+@api @group-d
 Feature: Site sections
   As an analytics engineer
   I want visitor statistics to be grouped in sections
