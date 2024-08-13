@@ -1,0 +1,6 @@
+services:
+  # Uncomment this to report groups and features execution times.
+  #joinup.feature_time_logger.subscriber:
+  #  class: Drupal\joinup\Listener\FeatureTimeLoggerListener
+  #  tags:
+  #    - { name: event_dispatcher.subscriber }
