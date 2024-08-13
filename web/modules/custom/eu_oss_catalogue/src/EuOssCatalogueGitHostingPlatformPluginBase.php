@@ -112,7 +112,7 @@ abstract class EuOssCatalogueGitHostingPlatformPluginBase extends EuOssCatalogue
     }
 
     $projects = $formState->getValue('projects', []);
-    array_walk($projects, function (array &$candidate) {
+    array_walk($projects, function (array &$candidate): void {
       if (empty($candidate['namespace'])) {
         $candidate = [];
         return;
