@@ -37,7 +37,7 @@ class EuOssCatalogueCommands extends DrushCommands {
    */
   #[CLI\Command(name: 'eu-oss:fetch')]
   #[CLI\Argument(name: 'provider', description: 'The provider plugin ID')]
-  public function fetch(string $provider) {
+  public function fetch(string $provider): string {
     if ($fetched = $this->euOssCatalogueService->fetch($provider)) {
       return dt('@count OSS solutions fetched from @provider. The solutions are queued to be processed later', [
         '@count' => $fetched,
