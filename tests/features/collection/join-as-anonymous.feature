@@ -41,11 +41,11 @@ Feature: Joining a collection as an anonymous user
     And I press "Log in"
     And I check "I have read and accept the Legal notice"
     And I press "Submit"
-    Then I should see the text "<collection>" in the Header region
-    And I should see the heading "Welcome to <collection>"
+    Then I should see the text "Reannual plants" in the Header region
+    And I should see the heading "Welcome to Reannual plants"
     And I should see the success message "You have been logged in."
-    And the "<collection>" collection should have 1 active member
-    And the "<collection>" collection should have 0 pending member
+    And the "Reannual plants" collection should have 1 active member
+    And the "Reannual plants" collection should have 0 pending member
     Then the following buttons should be present "Confirm, Cancel"
 
   @javascript
