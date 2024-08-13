@@ -108,7 +108,7 @@ permissions:
   - 'administer webform element access'
   - 'administer webform submission'
   - 'assign licence_manager role'
-  - 'create collection rdf entity'
+  - 'create collection content'
   - 'create collection_logo media'
   - 'create contact_information content'
   - 'create content for any_user option'
