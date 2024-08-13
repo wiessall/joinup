@@ -33,9 +33,9 @@ settings:
       document: carousel
       event: carousel
       news: carousel
+      release: carousel
       video: carousel
     'entity:rdf_entity':
-      asset_release: carousel
       collection: carousel
       licence: eif_perspective
       solution: carousel

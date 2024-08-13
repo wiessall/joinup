@@ -7,7 +7,10 @@ namespace Drupal\joinup_distribution\Controller;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\joinup_distribution\Entity\DistributionInterface;
+use Drupal\joinup_release\Entity\ReleaseInterface;
+use Drupal\node\NodeInterface;
 use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\rdf_entity\RdfInterface;
 use Drupal\solution\Entity\SolutionInterface;
@@ -45,6 +48,27 @@ class JoinupDistributionController extends ControllerBase {
   }
 
   /**
+   * Controller for the base form.
+   *
+   * We need to override the functionality of the create form for pages
+   * that include the rdf_entity id in the url so that the asset release or the
+   * solution refers to this asset distribution.
+   *
+   * @todo This should be merged with the default add method in ISAICP-8572.
+   *
+   * @param \Drupal\node\NodeInterface $node
+   *   The asset release or solution rdf entity.
+   *
+   * @return array
+   *   Return the form array to be rendered.
+   */
+  public function addOnNode(NodeInterface $node): array {
+    $distribution = $this->createNewAssetDistribution($node);
+    $form_state_additions = ['redirect' => $node->toUrl()];
+    return $this->entityFormBuilder()->getForm($distribution, 'default', $form_state_additions);
+  }
+
+  /**
    * Handles access to the distribution add form.
    *
    * @param \Drupal\rdf_entity\RdfInterface $rdf_entity
@@ -70,26 +94,55 @@ class JoinupDistributionController extends ControllerBase {
   }
 
   /**
+   * Handles access to the distribution add form.
+   *
+   * @todo This should be merged with the default access method in ISAICP-8572.
+   *
+   * @param \Drupal\joinup_release\Entity\ReleaseInterface $node
+   *   The asset release or solution RDF entity for which the distribution
+   *   is created.
+   *
+   * @return \Drupal\Core\Access\AccessResultInterface
+   *   The access result object.
+   */
+  public function createAssetDistributionOnNodeGroupAccess(ReleaseInterface $node): AccessResultInterface {
+    // Create a new distribution entity in order to check permissions on it.
+    $distribution = $this->createNewAssetDistribution($node);
+
+    // If the distribution entity isn't created correctly, forbid access to the
+    // page.
+    if (!$distribution) {
+      return AccessResult::forbidden();
+    }
+
+    return $this->entityTypeManager()->getAccessControlHandler('node')->createAccess('distribution', NULL, [
+      'group' => $this->getRelatedSolution($node),
+    ], TRUE);
+  }
+
+  /**
    * Creates a new distribution entity.
    *
-   * @param \Drupal\rdf_entity\RdfInterface $rdf_entity
-   *   The RDF entity that the distribution is associated with. Can be either an
-   *   'asset_release' or a 'solution'.
+   * @param \Drupal\joinup_release\Entity\ReleaseInterface|\Drupal\solution\Entity\SolutionInterface $parent
+   *   The parent of the distribution.
    *
    * @return \Drupal\joinup_distribution\Entity\DistributionInterface|null
-   *   The unsaved distribution entity or NULL if the RDF entity parameter is
-   *   neither a solution nor a release.
+   *   The unsaved distribution entity or NULL if the parent is neither a
+   *   solution nor a release.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
-  protected function createNewAssetDistribution(RdfInterface $rdf_entity): ?DistributionInterface {
-    // A solution is needed to create a distribution. If the rdf entity
-    // parameter is neither a solution or a release, the variable will be empty.
-    if (empty($this->getRelatedSolution($rdf_entity))) {
+  protected function createNewAssetDistribution(ReleaseInterface|SolutionInterface $parent): ?DistributionInterface {
+    // A solution is needed to create a distribution. If the $parent mparameter
+    // is neither a solution nor a release, the variable will be empty.
+    if (empty($this->getRelatedSolution($parent))) {
       return NULL;
     }
 
     return $this->entityTypeManager()->getStorage('node')->create([
       'type' => 'distribution',
-      'distribution_parent' => $rdf_entity->id(),
+      'release' => $parent instanceof ReleaseInterface ? $parent->id() : NULL,
       OgGroupAudienceHelperInterface::DEFAULT_FIELD => $this->solution,
     ]);
   }
@@ -97,7 +150,9 @@ class JoinupDistributionController extends ControllerBase {
   /**
    * Returns the solution entity from the rdf entity parameter.
    *
-   * @param \Drupal\rdf_entity\RdfInterface $rdf_entity
+   * @todo Parameter should change to NodeInterface in ISAICP-8572.
+   *
+   * @param \Drupal\Core\Entity\EntityInterface $entity
    *   The rdf entity parameter.
    *
    * @return \Drupal\rdf_entity\RdfInterface|null
@@ -105,17 +160,17 @@ class JoinupDistributionController extends ControllerBase {
    *   itself if the entity is a solution. Returns NULL if the entity is neither
    *   a release nor a solution.
    */
-  protected function getRelatedSolution(RdfInterface $rdf_entity): ?SolutionInterface {
+  protected function getRelatedSolution(EntityInterface $entity): ?SolutionInterface {
     if ($this->solution) {
       return $this->solution;
     }
 
-    if ($rdf_entity->bundle() === 'solution') {
-      $this->solution = $rdf_entity;
+    if ($entity->bundle() === 'solution') {
+      $this->solution = $entity;
     }
 
-    if ($rdf_entity->bundle() === 'asset_release') {
-      $this->solution = $rdf_entity->field_isr_is_version_of->entity;
+    if ($entity->bundle() === 'release') {
+      $this->solution = $entity->og_audience->entity;
     }
 
     return $this->solution;

@@ -13,7 +13,7 @@ use Drupal\joinup_document\Entity\Document;
 /**
  * Implements hook_entity_bundle_field_info_alter().
  */
-function joinup_document_entity_bundle_field_info_alter(&$fields, EntityTypeInterface $entity_type, $bundle) {
+function joinup_document_entity_bundle_field_info_alter(&$fields, EntityTypeInterface $entity_type, $bundle): void {
   if ($entity_type->id() !== 'node' || $bundle !== 'document') {
     return;
   }
@@ -31,7 +31,7 @@ function joinup_document_entity_bundle_field_info_alter(&$fields, EntityTypeInte
 /**
  * Implements hook_entity_bundle_info_alter().
  */
-function joinup_document_entity_bundle_info_alter(&$bundles) {
+function joinup_document_entity_bundle_info_alter(&$bundles): void {
   if (!empty($bundles['node']['document'])) {
     $bundles['node']['document']['class'] = Document::class;
   }

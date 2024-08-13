@@ -3,6 +3,10 @@ langcode: en
 status: true
 dependencies:
   config:
+    - entityqueue.entity_queue.highlighted_content
+    - entityqueue.entity_queue.highlighted_event
+    - entityqueue.entity_queue.homepage_topics
+    - entityqueue.entity_queue.spotlight
     - filter.format.plain_text_glossary
     - media.type.collection_logo
     - media.type.discussion_logo
@@ -18,6 +22,7 @@ dependencies:
     - node.type.glossary
     - node.type.licence
     - node.type.owner
+    - node.type.release
     - taxonomy.vocabulary.legal_type
   module:
     - comment
@@ -105,7 +110,6 @@ permissions:
   - 'administer webform element access'
   - 'administer webform submission'
   - 'assign licence_manager role'
-  - 'create asset_release rdf entity'
   - 'create collection rdf entity'
   - 'create collection_logo media'
   - 'create contact_information content'
@@ -143,11 +147,11 @@ permissions:
   - 'create paragraph content video'
   - 'create paragraph content webform'
   - 'create rdf entity news'
+  - 'create release content'
   - 'create solution_logo media'
   - 'create video media'
   - 'create webform'
   - 'delete all sitewide alert revisions'
-  - 'delete any asset_release rdf entity'
   - 'delete any collection_logo media'
   - 'delete any contact_information content'
   - 'delete any custom_page content'
@@ -158,6 +162,7 @@ permissions:
   - 'delete any licence content'
   - 'delete any news_logo media'
   - 'delete any owner content'
+  - 'delete any release content'
   - 'delete any solution_logo media'
   - 'delete paragraph content 1_column_layout'
   - 'delete paragraph content 2_column_featured_left'
@@ -206,6 +211,7 @@ permissions:
   - 'feature entity'
   - 'filter membership overview'
   - 'manage custom landing pages'
+  - 'manage group add members'
   - 'manage group announcements'
   - 'manage group content'
   - 'manage newsroom newsletter subscriptions'
@@ -215,15 +221,6 @@ permissions:
   - 'perform announcement workflow reject transition on any entity'
   - 'perform announcement workflow send transition on any entity'
   - 'perform announcement workflow undo transition on any entity'
-  - 'perform asset_release_workflow workflow archive transition on any entity'
-  - 'perform asset_release_workflow workflow draft transition on any entity'
-  - 'perform asset_release_workflow workflow provide_changes transition on any entity'
-  - 'perform asset_release_workflow workflow request_changes transition on any entity'
-  - 'perform asset_release_workflow workflow unarchive transition on any entity'
-  - 'perform asset_release_workflow workflow update_archived transition on any entity'
-  - 'perform asset_release_workflow workflow update_published transition on any entity'
-  - 'perform asset_release_workflow workflow validate transition on any entity'
-  - 'perform asset_release_workflow workflow validate_changes transition on any entity'
   - 'perform collection_workflow workflow archive transition on any entity'
   - 'perform collection_workflow workflow draft transition on any entity'
   - 'perform collection_workflow workflow propose transition on any entity'
@@ -268,6 +265,15 @@ permissions:
   - 'perform owner_workflow workflow retract_deletion_request transition on any entity'
   - 'perform owner_workflow workflow update_needs_changes transition on any entity'
   - 'perform owner_workflow workflow validate transition on any entity'
+  - 'perform release_workflow workflow archive transition on any entity'
+  - 'perform release_workflow workflow draft transition on any entity'
+  - 'perform release_workflow workflow provide_changes transition on any entity'
+  - 'perform release_workflow workflow request_changes transition on any entity'
+  - 'perform release_workflow workflow unarchive transition on any entity'
+  - 'perform release_workflow workflow update_archived transition on any entity'
+  - 'perform release_workflow workflow update_published transition on any entity'
+  - 'perform release_workflow workflow validate transition on any entity'
+  - 'perform release_workflow workflow validate_changes transition on any entity'
   - 'perform solution_workflow workflow archive transition on any entity'
   - 'perform solution_workflow workflow blacklist transition on any entity'
   - 'perform solution_workflow workflow draft transition on any entity'

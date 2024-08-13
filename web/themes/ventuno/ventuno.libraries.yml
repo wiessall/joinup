@@ -11,6 +11,11 @@ layout:
     layout:
       assets/css/layout.min.css: { minified: true }
 
+full-width-bg:
+  css:
+    layout:
+      assets/css/full-width-bg.min.css: { minified: true }
+
 components:
   version: VERSION
   css:
@@ -39,6 +44,10 @@ homepage:
       assets/css/homepage.min.css: { minified: true }
   dependencies:
     - ventuno/tour-first-balloon
+
+page_manager.forum_sitewide:
+  dependencies:
+    - ventuno/full-width-bg
 
 glossary:
   css:

@@ -30,7 +30,7 @@ use Drupal\solution\Entity\SolutionInterface;
  *   buttons are used the current workflow state is not indicated, so this field
  *   can be used to expose this information.
  */
-function joinup_workflow_entity_base_field_info(EntityTypeInterface $entity_type) {
+function joinup_workflow_entity_base_field_info(EntityTypeInterface $entity_type): array {
   $fields = [];
 
   if ($entity_type->id() === 'rdf_entity' || $entity_type->id() === 'node') {
@@ -52,8 +52,8 @@ function joinup_workflow_entity_base_field_info(EntityTypeInterface $entity_type
  */
 function joinup_workflow_entity_extra_field_info(): array {
   $motivation_bundles = [
-    'node' => ['discussion', 'document', 'event', 'news'],
-    'rdf_entity' => ['collection', 'solution', 'asset_release'],
+    'node' => ['discussion', 'document', 'event', 'news', 'release'],
+    'rdf_entity' => ['collection', 'solution'],
   ];
   $fields = [];
   foreach ($motivation_bundles as $entity_type_id => $bundles) {
@@ -73,7 +73,7 @@ function joinup_workflow_entity_extra_field_info(): array {
 /**
  * Implements hook_form_alter().
  */
-function joinup_workflow_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+function joinup_workflow_form_alter(&$form, FormStateInterface $form_state, $form_id): void {
   if (!in_array($form_id, joinup_workflow_get_motivation_form_ids())) {
     return;
   }
@@ -92,11 +92,11 @@ function joinup_workflow_form_alter(&$form, FormStateInterface $form_state, $for
  * @return array
  *   An array of form IDs.
  */
-function joinup_workflow_get_motivation_form_ids() {
+function joinup_workflow_get_motivation_form_ids(): array {
   return [
     'rdf_entity_collection_edit_form',
     'rdf_entity_solution_edit_form',
-    'rdf_entity_asset_release_edit_form',
+    'node_release_edit_form',
     'node_discussion_edit_form',
     'node_document_edit_form',
     'node_event_edit_form',
@@ -112,7 +112,7 @@ function joinup_workflow_get_motivation_form_ids() {
  * @param \Drupal\Core\Form\FormStateInterface $form_state
  *   The form state object.
  */
-function joinup_workflow_motivation_form_validate(array &$form, FormStateInterface $form_state) {
+function joinup_workflow_motivation_form_validate(array &$form, FormStateInterface $form_state): void {
   /** @var \Drupal\node\NodeInterface|\Drupal\joinup_workflow\EntityWorkflowStateInterface $entity */
   $entity = $form_state->getFormObject()->getEntity();
 
@@ -174,7 +174,7 @@ function joinup_workflow_motivation_form_validate(array &$form, FormStateInterfa
  * @return bool
  *   Whether the transition requires a motivation.
  */
-function joinup_workflow_is_motivation_required($entity_type_id, $workflow_id, $transition_id) {
+function joinup_workflow_is_motivation_required($entity_type_id, $workflow_id, $transition_id): bool {
   $required_transitions = [
     'node' => [
       'node:pre_moderated' => [
@@ -188,6 +188,9 @@ function joinup_workflow_is_motivation_required($entity_type_id, $workflow_id, $
         'report',
         'request_changes',
       ],
+      'release_workflow' => [
+        'request_changes',
+      ],
     ],
     'rdf_entity' => [
       'collection_workflow' => [
@@ -196,9 +199,6 @@ function joinup_workflow_is_motivation_required($entity_type_id, $workflow_id, $
       ],
       'solution_workflow' => [
         'needs_update',
-      ],
-      'asset_release_workflow' => [
-        'request_changes',
       ],
     ],
   ];

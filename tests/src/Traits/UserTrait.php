@@ -17,7 +17,7 @@ trait UserTrait {
    * @return array
    *   Field mapping.
    */
-  protected static function userFieldAliases() {
+  protected static function userFieldAliases(): array {
     return [
       'Username' => 'name',
       'Password' => 'pass',
@@ -50,7 +50,7 @@ trait UserTrait {
    * @throws \Exception
    *   Thrown when a human readable key doesn't exist in the list of aliases.
    */
-  protected function translateUserFieldAliases(array $values) {
+  protected function translateUserFieldAliases(array $values): array {
     $translated_values = [];
     $aliases = self::userFieldAliases();
     foreach ($values as $key => $value) {
@@ -71,7 +71,7 @@ trait UserTrait {
    *   An associative array, keyed by field aliases, containing the field values
    *   used to create the user.
    */
-  protected function createUser(array $values) {
+  protected function createUser(array $values): void {
     // Replace the column aliases with the actual field names.
     $values = $this->translateUserFieldAliases($values);
 

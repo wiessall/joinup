@@ -162,7 +162,7 @@ class SearchItem extends FieldItemBase implements SearchItemInterface {
    *
    * @see \Drupal\search_api\Plugin\views\row\SearchApiRow::buildOptionsForm()
    */
-  protected function buildViewModesElements($index_id) {
+  protected function buildViewModesElements($index_id): array {
     $element = [];
     $settings = $this->getSetting('view_modes');
 
@@ -211,7 +211,7 @@ class SearchItem extends FieldItemBase implements SearchItemInterface {
   /**
    * Ajax callback to update view modes fieldset when the index field changes.
    */
-  public function buildAjaxForm(array $form, FormStateInterface $form_state) {
+  public function buildAjaxForm(array $form, FormStateInterface $form_state): array {
     return $form['settings']['view_modes'];
   }
 
@@ -227,7 +227,7 @@ class SearchItem extends FieldItemBase implements SearchItemInterface {
    * @see \Drupal\options\Plugin\Field\FieldType\ListItemBase::validateAllowedValues()
    * @see \Drupal\Core\Render\Element\FormElement::processPattern()
    */
-  public static function validateAllowedValues(array $element, FormStateInterface $form_state) {
+  public static function validateAllowedValues(array $element, FormStateInterface $form_state): void {
     $values = static::extractAllowedValues($element['#value']);
 
     if (!is_array($values)) {
@@ -258,7 +258,7 @@ class SearchItem extends FieldItemBase implements SearchItemInterface {
    * @see \Drupal\options\Plugin\Field\FieldType\ListItemBase::extractAllowedValues()
    * @see \Drupal\options\Plugin\Field\FieldType\ListTextItem::allowedValuesString()
    */
-  protected static function extractAllowedValues($string) {
+  protected static function extractAllowedValues($string): ?array {
     $values = [];
 
     $list = explode("\n", $string);
@@ -309,7 +309,7 @@ class SearchItem extends FieldItemBase implements SearchItemInterface {
    *
    * @see \Drupal\options\Plugin\Field\FieldType\ListItemBase::validateAllowedValue()
    */
-  protected static function validateAllowedValue($option) {}
+  protected static function validateAllowedValue($option): void {}
 
   /**
    * Generates a string representation of an array of 'facet_regions'.
@@ -327,7 +327,7 @@ class SearchItem extends FieldItemBase implements SearchItemInterface {
    *
    * @see \Drupal\options\Plugin\Field\FieldType\ListItemBase::allowedValuesString()
    */
-  protected function allowedValuesString(array $values) {
+  protected function allowedValuesString(array $values): string {
     $lines = [];
     foreach ($values as $key => $value) {
       $lines[] = "$key|$value";
@@ -341,7 +341,7 @@ class SearchItem extends FieldItemBase implements SearchItemInterface {
    * @return string
    *   Field description.
    */
-  protected function allowedValuesDescription() {
+  protected function allowedValuesDescription(): string {
     $description = '<p>' . $this->t('The possible values this field can contain. Enter one value per line, in the format key|label.');
     $description .= '</p>';
     return $description;

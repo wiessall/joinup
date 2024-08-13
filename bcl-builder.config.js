@@ -254,6 +254,21 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
+        `${ventuno}src/scss/components/full-width-bg.scss`,
+      ),
+      dest: path.resolve(
+        outputFolder,
+        `${ventuno}assets/css/full-width-bg.min.css`,
+      ),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(
+        outputFolder,
         `${ventuno}src/scss/03-components.scss`,
       ),
       dest: path.resolve(

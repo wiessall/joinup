@@ -7,9 +7,7 @@
 
 declare(strict_types=1);
 
-use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
-use Drupal\image\Plugin\Field\FieldWidget\ImageWidget;
 use Drupal\joinup_rdf\Entity\RdfSyncEntityInterface;
 use Drupal\joinup_seo\JoinupSeoExportHelperInterface;
 use Drupal\rdf_entity\RdfInterface;
@@ -43,7 +41,7 @@ function joinup_seo_simple_sitemap_sitemap_types_alter(array &$sitemap_types): v
  * specific number of tokens with delta that ensure that all values are
  * rendered.
  */
-function joinup_seo_metatags_alter(array &$metatags, array &$context) {
+function joinup_seo_metatags_alter(array &$metatags, array &$context): void {
   if (!isset($metatags['schema_social_media_posting_shared_content'])) {
     return;
   }
@@ -76,7 +74,7 @@ function joinup_seo_metatags_alter(array &$metatags, array &$context) {
 /**
  * Implements hook_module_implements_alter().
  */
-function joinup_seo_module_implements_alter(&$implementations, $hook) {
+function joinup_seo_module_implements_alter(&$implementations, $hook): void {
   if ($hook === 'page_attachments_alter') {
     if (
       array_key_exists('schema_metatag', $implementations) &&
@@ -102,7 +100,7 @@ function joinup_seo_module_implements_alter(&$implementations, $hook) {
  *
  * @todo Remove BC layer built arount RDF entities in ISAICP-8376.
  */
-function joinup_seo_page_attachments_alter(array &$attachments) {
+function joinup_seo_page_attachments_alter(array &$attachments): void {
   // Don't do anything if HTML <head> attachments already have a
   // "schema_metatag" script.
   $pageHasSchemaMetatag = array_reduce(
@@ -165,43 +163,4 @@ function joinup_seo_page_attachments_alter(array &$attachments) {
     ],
     'joinup_seo_json_ld',
   ];
-}
-
-/**
- * Implements hook_form_FORM_ID_alter().
- */
-function joinup_seo_form_editor_image_dialog_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
-  // @see: https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7587
-  $form['attributes']['alt']['#description'] = t('The text alternative should convey the meaning or content that is displayed visually, which typically isn’t a literal description of the image. See examples at <a target="_blank" href="@wai_url">WAI</a>.', ['@wai_url' => 'https://www.w3.org/WAI/tutorials/images/informative']);
-}
-
-/**
- * Implements hook_field_widget_form_alter().
- */
-function joinup_seo_field_widget_form_alter(array &$element, FormStateInterface $form_state, array $context): void {
-  // @see: https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7587
-  if ($context['widget'] instanceof ImageWidget) {
-    $element['#process'][] = 'joinup_seo_image_field_widget_process';
-  }
-}
-
-/**
- * Changes alternative text for ImageWidget.
- *
- * @param array $element
- *   Element.
- * @param \Drupal\Core\Form\FormStateInterface $form_state
- *   FormStateInterface.
- * @param array $form
- *   Form element.
- *
- * @return array
- *   Return Element.
- */
-function joinup_seo_image_field_widget_process(array $element, FormStateInterface &$form_state, array $form): array {
-  // @see: https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7587
-  if (isset($element['alt'])) {
-    $element['alt']['#description'] = t('The text alternative should convey the meaning or content that is displayed visually, which typically isn’t a literal description of the image. See examples at <a target="_blank" href="@wai_url">WAI</a>.', ['@wai_url' => 'https://www.w3.org/WAI/tutorials/images/informative']);
-  }
-  return $element;
 }

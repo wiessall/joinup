@@ -70,10 +70,10 @@ final class StateMachineButtonsSubscriber implements EventSubscriberInterface {
 
     // The following cases are exceptions where the label should not be
     // 'Update' when the transition is to the same state:
-    // - Asset release in draft state.
-    // - Collection and solution entities in general.
+    // - Releases in draft state.
+    // - Collections and solution entities in general.
     // - Custom pages and community content for the 'save_as_draft' transition.
-    if ($entity->bundle() === 'asset_release' && $currentState === 'draft') {
+    if ($entity->bundle() === 'release' && $currentState === 'draft') {
       return;
     }
 

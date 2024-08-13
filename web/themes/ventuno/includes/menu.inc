@@ -103,7 +103,7 @@ function ventuno_preprocess_menu__og__quick_links(&$variables): void {
     $route = ($item['url'] instanceof Url) ? $item['url']->getRouteName() : NULL;
     $item['icon'] = match ($route) {
       // Release History.
-      'asset_release.solution_asset_release.overview' => 'eye',
+      'joinup_release.solution_release.overview' => 'eye',
       // Website link.
       'joinup_menu.website_link' => 'link',
       // Custom page.

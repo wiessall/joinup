@@ -66,7 +66,7 @@ filters:
     status: true
     weight: -49
     settings:
-      allowed_html: '<br> <p> <a hreflang href> <strong> <em> <u> <ul> <li> <ol>'
+      allowed_html: '<br> <p> <a hreflang href> <strong> <em> <u> <ul> <ol> <li>'
       filter_html_help: false
       filter_html_nofollow: false
   filter_html_escape:
@@ -114,12 +114,12 @@ filters:
     weight: -41
     settings:
       allowed_providers:
-        joinup_ec_video: 0
-        internal_path: 0
-        google_docs: 0
         joinup_ec_webcast_video: 0
-        prezi: 0
+        internal_path: 0
+        joinup_ec_video: 0
         slideshare: 0
+        google_docs: 0
+        prezi: 0
         vimeo: 0
         youtube: 0
         youtube_playlist: 0

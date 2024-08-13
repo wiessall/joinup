@@ -17,7 +17,7 @@ class GroupTokensTest extends JoinupExistingSiteTestBase {
   /**
    * Tests tokens defined by joinup_group.
    */
-  public function testGroupDefinedTokens() {
+  public function testGroupDefinedTokens(): void {
     $collection = $this->createRdfEntity([
       'rid' => 'collection',
       'label' => $this->randomString(),
@@ -38,25 +38,25 @@ class GroupTokensTest extends JoinupExistingSiteTestBase {
       'field_state' => 'published',
     ]);
 
+    $release = $this->createNode([
+      'type' => 'release',
+      'og_audience' => $solution->id(),
+    ]);
+
     $release_distribution = $this->createNode([
       'type' => 'distribution',
       'title' => $this->randomString(),
       'og_audience' => $solution->id(),
       'field_state' => 'published',
-    ]);
-
-    $release = $this->createRdfEntity([
-      'rid' => 'asset_release',
-      'field_isr_is_version_of' => $solution->id(),
-      'field_isr_distribution' => $release_distribution->id(),
+      'release' => $release->id(),
     ]);
 
     $entities_to_test = [
       'rdf_entity' => [
         $solution,
-        $release,
       ],
       'node' => [
+        $release,
         $release_distribution,
         $standalone_distribution,
       ],
