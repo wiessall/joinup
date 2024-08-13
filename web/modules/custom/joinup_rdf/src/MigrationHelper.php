@@ -356,6 +356,7 @@ final class MigrationHelper {
     }
 
     $this->updateReferenceValues($entity);
+    $this->updateMenuLinks($entity);
   }
 
   /**
@@ -400,6 +401,7 @@ final class MigrationHelper {
     }
 
     $this->updateReferenceValues($entity);
+    $this->updateMenuLinks($entity);
   }
 
   /**
@@ -662,6 +664,87 @@ final class MigrationHelper {
         print sprintf('The value of the field %s is not correct. Expected: %s, got: %s', $targetFieldName, print_r($value, TRUE), print_r($field->value, TRUE));
       }
     }
+  }
+
+  /**
+   * Updates the menu link items related to RDF entities.
+   *
+   * @param \Drupal\Core\Entity\EntityInterface $entity
+   *   The entity to update the menu links.
+   */
+  protected function updateMenuLinks(EntityInterface $entity): void {
+    $tables = [
+      'menu_link_content_data',
+      'menu_link_content_field_revision',
+    ];
+
+    // Replace rdf_entity with node and encoded ID with entity ID.
+    $encodedUri = UriEncoder::encodeUrl($entity->getUri());
+    foreach ($tables as $table) {
+      $this->connection->update($table)
+        ->fields([
+          'link__uri' => 'entity:node/' . $entity->id(),
+          'link__options' => serialize([]),
+        ])
+        ->condition('link__uri', sprintf('entity:rdf_entity/%s', $encodedUri))
+        ->execute();
+
+      $this->connection->update($table)
+        ->fields([
+          'link__uri' => sprintf('route:entity.node.member_overview;node=%s', $entity->id()),
+          'link__options' => serialize([]),
+        ])
+        ->condition('link__uri', sprintf('entity.rdf_entity.member_overview;rdf_entity=%s', $encodedUri))
+        ->execute();
+
+      $this->connection->update($table)
+        ->fields([
+          'link__uri' => sprintf('route:entity.node.glossary;node=%s', $entity->id()),
+          'link__options' => serialize([]),
+        ])
+        ->condition('link__uri', sprintf('entity.rdf_entity.glossary;rdf_entity=%s', $encodedUri))
+        ->execute();
+
+      $this->connection->update($table)
+        ->fields([
+          'link__uri' => sprintf('route:view.discussions.overview;node=%s', $entity->id()),
+          'link__options' => serialize([]),
+        ])
+        ->condition('link__uri', sprintf('view.discussions.overview;rdf_entity=%s', $encodedUri))
+        ->execute();
+    }
+
+    $this->connection->update('menu_link_content_data')
+      ->fields([
+        'link__uri' => sprintf('route:joinup_menu.website_link;node=%s', $entity->id()),
+        'link__options' => serialize([]),
+      ])
+      ->condition('link__uri', sprintf('joinup_menu.website_link;rdf_entity=%s', $encodedUri))
+      ->execute();
+
+    $this->connection->update('menu_link_content_data')
+      ->fields([
+        'link__uri' => sprintf('route:asset_release.solution_asset_release.overview;node=%s', $entity->id()),
+        'link__options' => serialize([]),
+      ])
+      ->condition('link__uri', sprintf('asset_release.solution_asset_release.overview;rdf_entity=%s', $encodedUri))
+      ->execute();
+
+    $this->connection->update('menu_link_content_data')
+      ->fields([
+        'link__uri' => sprintf('route:joinup_menu.documentation_file;node=%s', $entity->id()),
+        'link__options' => serialize([]),
+      ])
+      ->condition('link__uri', sprintf('joinup_menu.documentation_file;rdf_entity=%s', $encodedUri))
+      ->execute();
+
+    $this->connection->update('menu_link_content_data')
+      ->fields([
+        'link__uri' => sprintf('route:entity.node.eif_perspective;node=%s', $entity->id()),
+        'link__options' => serialize([]),
+      ])
+      ->condition('link__uri', sprintf('entity.rdf_entity.eif_perspective;rdf_entity=%s', $encodedUri))
+      ->execute();
   }
 
 }
