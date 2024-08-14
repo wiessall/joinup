@@ -5,11 +5,13 @@ dependencies:
   config:
     - node.type.collection
 id: node-collection-administrator
-label: Administrator
-weight: 6
+label: 'Collection owner'
+weight: 2
 group_id: null
 group_type: node
 group_bundle: collection
 is_admin: true
-permissions: {  }
+permissions:
+  - 'update group'
+  - 'perform collection_workflow workflow request_archival transition on any entity'
 role_type: null
