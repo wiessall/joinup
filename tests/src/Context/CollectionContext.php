@@ -615,7 +615,7 @@ class CollectionContext extends RawDrupalContext {
     $collection = $this->getEntityByLabel('node', $label, 'collection');
 
     $url = Url::fromRoute('joinup_group.leave_confirm_form', [
-      'rdf_entity' => $collection->id(),
+      'node' => $collection->id(),
     ]);
     $this->visitPath($url->toString());
   }

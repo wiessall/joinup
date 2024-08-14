@@ -29,7 +29,7 @@ entity.node.member_overview:
     _og_entity_type_id: node
 
 joinup_group.authenticate_to_join:
-  path: '/rdf_entity/{rdf_entity}/authenticate-to-join'
+  path: '/node/{node}/authenticate-to-join'
   defaults:
     _form: '\Drupal\joinup_group\Form\JoinGroupAnonymousRedirectForm'
     _title_callback: '\Drupal\joinup_group\Form\JoinGroupAnonymousRedirectForm::getTitle'
@@ -37,8 +37,8 @@ joinup_group.authenticate_to_join:
     _user_is_logged_in: 'FALSE'
   options:
     parameters:
-      rdf_entity:
-        type: entity:rdf_entity
+      node:
+        type: entity:node
         bundle:
           - collection
           - solution
