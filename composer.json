@@ -277,9 +277,6 @@
             "drupal/cas_mock_server": {
                 "Missing langcode in cas_mock_server.settings @see https://www.drupal.org/i/3463553": "resources/patch/php/drupal/cas_mock_server/3463553.diff"
             },
-            "drupal/colorbox": {
-                "Support Responsive Image module in D8 @see https://drupal.org/i/2808883": "resources/patch/php/drupal/colorbox/colorbox-responsive-image-2808883-69.patch"
-            },
             "drupal/core": {
                 "Allow image style to be selected in text editor @see https://www.drupal.org/node/2061377": "resources/patch/php/drupal/core/2061377-466-10.3.x.diff",
                 "Allow making the file description a required field @see https://www.drupal.org/node/2320877": "resources/patch/php/drupal/core/2320877-10.3.x-115.diff",
@@ -300,7 +297,6 @@
                 "Cannot implement a custom user cancellation method @see https://www.drupal.org/project/drupal/issues/3135592": "resources/patch/php/drupal/core/3135592.patch",
                 "If you don't set the \"version\" of a profile, the report/status displays an empty dash @see https://www.drupal.org/project/drupal/issues/3270892": "resources/patch/php/drupal/core/3270892.patch",
                 "Views Block Display skips preBlockBuild() call on ajax rebuild https://www.drupal.org/i/2605218": "resources/patch/php/drupal/core/2605218-135.diff",
-                "Deprecated function: strnatcasecmp(): Passing null to parameter #1 ($string1) of type string is deprecated in LayoutPluginManager https://www.drupal.org/i/3392572": "resources/patch/php/drupal/core/3392572.patch",
                 "PHP deprecation error in PhpMail::mail @see https://www.drupal.org/project/drupal/issues/3418098": "resources/patch/php/drupal/core/3418098.diff",
                 "Set the toolbar to position fixed on mobile (for group banner positioning and toolbar on mobile) @see https://www.drupal.org/project/drupal/issues/2516938": "resources/patch/php/drupal/core/3809.diff",
                 "Media Library: Argument #1 ($array) must be of type array, null given in array_filter(). @see https://www.drupal.org/i/3340973": "resources/patch/php/drupal/core/3340973.diff",
@@ -335,10 +331,6 @@
             "drupal/field_delimiter": {
                 "Doesn't work in layout builder. @see https://www.drupal.org/i/3099580": "resources/patch/php/drupal/field_delimiter/3099580.patch",
                 "str_replace(): Passing null to parameter #3 ($subject) of type array|string is deprecated in Drupal\\Component\\Utility\\Xss::filter(). @see https://www.drupal.org/i/3301169": "resources/patch/php/drupal/field_delimiter/3301169.patch"
-            },
-            "drupal/field_group": {
-                "Deprecated way of sequence schema def @see https://www.drupal.org/project/field_group/issues/3409719": "resources/patch/php/drupal/field_group/3409719.diff",
-                "Filtering and pagination error when adding existing media to nodes @see https://www.drupal.org/i/3412511": "resources/patch/php/drupal/field_group/3412511.patch"
             },
             "drupal/file_url": {
                 "Handle deleted files @see https://www.drupal.org/project/file_url/issues/3326758": "resources/patch/php/drupal/file_url/3326758.diff",
@@ -376,9 +368,6 @@
                 "The annotations for \"edit-form\" and \"delete-form\" @see https://www.drupal.org/project/og/issues/3338830": "resources/patch/php/drupal/og/3338830.diff",
                 "[Drupal 10.2] Using a translatable string as a category for field type is deprecated @see https://github.com/Gizra/og/pull/764": "resources/patch/php/drupal/og/pr764.diff"
             },
-            "drupal/page_manager": {
-                "[Drupal 10.2] Deprecated sequence type schema definition @see https://www.drupal.org/i/3410270": "resources/patch/php/drupal/page_manager/3410270.diff"
-            },
             "drupal/og_menu": {
                 "D10 deprecations @see https://www.drupal.org/project/og_menu/issues/3391985": "resources/patch/php/drupal/og_menu/3391985.patch",
                 "menu_name accessed before initialized @see https://www.drupal.org/project/og_menu/issues/3392055": "resources/patch/php/drupal/og_menu/3392055.patch"
@@ -401,9 +390,6 @@
             },
             "drupal/search_api_autocomplete": {
                 "Clear timeout autosubmit used in views_autosubmit. @see https://www.drupal.org/i/3314418": "resources/patch/php/drupal/search_api_autocomplete/3314418.patch"
-            },
-            "drupal/search_api_solr": {
-                "Wrong schema definition @see https://www.drupal.org/i/3458986": "resources/patch/php/drupal/search_api_solr/3458986.diff"
             },
             "drupal/search_api_spellcheck": {
                 "URL don't include the base path @see https://www.drupal.org/project/search_api_spellcheck/issues/3280372": "resources/patch/php/drupal/search_api_spellcheck/3280372.patch"
