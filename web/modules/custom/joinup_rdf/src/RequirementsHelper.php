@@ -50,11 +50,6 @@ class RequirementsHelper {
    */
   public function getRequirementErrors(): array {
     $errors = [];
-    if ($count = $this->getOrphanedTriples()) {
-      $errors[] = $this->translation->formatPlural($count, ':count orphaned triple was detected.', ':count orphaned triples were found.', [
-        ':count' => $count,
-      ]);
-    }
 
     if ($graphs = $this->getLeftoverFederationGraphs()) {
       $errors[] = [
@@ -73,36 +68,6 @@ class RequirementsHelper {
     }
 
     return $errors;
-  }
-
-  /**
-   * Fetches the number of orphaned triples in the RDF entity main graphs.
-   *
-   * @return int
-   *   The error message or an empty string if everything is ok.
-   */
-  protected function getOrphanedTriples(): int {
-    $query = <<<QUERY
-SELECT COUNT(*) as ?count
-WHERE {
-  GRAPH ?g {
-    ?s ?p ?o .
-    FILTER NOT EXISTS { ?s <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ?o1 } .
-    VALUES ?g {
-      <http://joinup.eu/collection/published>
-      <http://joinup.eu/collection/draft>
-      <http://joinup.eu/contact-information/published>
-      <http://joinup.eu/licence/published>
-      <http://joinup.eu/owner/published>
-      <http://joinup.eu/provenance_activity>
-      <http://joinup.eu/solution/published>
-      <http://joinup.eu/solution/draft>
-      <http://joinup.eu/spdx_licence/published>
-    }
-  }
-}
-QUERY;
-    return $this->sparql->query($query)->offsetGet(0)->count->getValue();
   }
 
   /**
