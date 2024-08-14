@@ -8,6 +8,7 @@ use Behat\Mink\Element\NodeElement;
 use Behat\Mink\Element\TraversableElement;
 use Drupal\editor\Entity\Editor;
 use Drupal\joinup\Exception\WysiwygEditorNotFoundException;
+use PHPUnit\Framework\Assert;
 
 /**
  * Helper methods for interacting with WYSIWYG editors.
@@ -33,18 +34,48 @@ trait WysiwygTrait {
    *   with the same title.
    */
   public function pressWysiwygButton(string $label, string $button, ?TraversableElement $region = NULL): void {
+    $buttonElement = $this->getWysiwygButton($label, $button, $region);
+    Assert::assertInstanceOf(
+      NodeElement::class,
+      $buttonElement,
+      sprintf(
+        "Could not find the '%s' button.",
+        $button,
+      )
+    );
+    $this->scrollElementIntoView($buttonElement);
+    $buttonElement->press();
+  }
+
+  /**
+   * Determines whether the given WYSIWYG button exists.
+   *
+   * @param string $label
+   *   The label of the field with the editor.
+   * @param string $button
+   *   The title of the button to look for.
+   * @param \Behat\Mink\Element\TraversableElement|null $region
+   *   The region where the editor is expected to be located.
+   *
+   * @return \Behat\Mink\Element\NodeElement|null
+   *   The WYSIWYG button element if it exists, or NULL if it is missing.
+   */
+  protected function getWysiwygButton(string $label, string $button, ?TraversableElement $region = NULL): ?NodeElement {
     $wysiwyg = $this->getWysiwyg($label, $region);
-    $button_elements = $wysiwyg->findAll('css', 'button[data-cke-tooltip-text*="' . $button . '"]');
-    if (empty($button_elements)) {
-      throw new \Exception("Could not find the '$button' button.");
+    $matchingButtons = $wysiwyg->findAll('css', 'button[data-cke-tooltip-text*="' . $button . '"]');
+    if (empty($matchingButtons)) {
+      return NULL;
     }
-    if (count($button_elements) > 1) {
-      throw new \Exception("Multiple '$button' buttons found in the editor.");
-    }
-    /** @var \Behat\Mink\Element\NodeElement $button */
-    $button = reset($button_elements);
-    $this->scrollElementIntoView($button);
-    $button->press();
+
+    Assert::assertCount(
+      1,
+      $matchingButtons,
+      sprintf(
+        "Multiple '%s' buttons found in the editor.",
+        $button,
+      ),
+    );
+    return current($matchingButtons);
   }
 
   /**
