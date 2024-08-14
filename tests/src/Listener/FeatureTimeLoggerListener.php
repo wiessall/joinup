@@ -10,18 +10,22 @@ use Behat\Behat\EventDispatcher\Event\FeatureTested;
 use Behat\Gherkin\Node\TaggedNodeInterface;
 use Behat\Testwork\Counter\Timer;
 use Behat\Testwork\EventDispatcher\Event\ExerciseCompleted;
+use Joinup\Traits\DigitQaPipelineAwareTrait;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Yaml\Yaml;
 
 /**
  * Reports all groups and features execution times.
  *
+ * Set JOINUP_BEHAT_STATS=true in .env to enable, enabled on Gitlab by default.
  * Useful to get info in order to split behat features into groups on Gitlab.
  * Run all clean tests: time ddev exec ./vendor/bin/behat --profile=clean
  * Warning: This keeps your environment/machine stranded for at least 1 hour.
  * Then ensure all groups are balanced and have similar execution times.
  */
 class FeatureTimeLoggerListener implements EventSubscriberInterface {
+
+  use DigitQaPipelineAwareTrait;
 
   /**
    * Stores execution times.
@@ -34,11 +38,12 @@ class FeatureTimeLoggerListener implements EventSubscriberInterface {
    * {@inheritdoc}
    */
   public static function getSubscribedEvents(): array {
-    return [
+    $enabled = self::isDigitQaPipeline() || getenv('JOINUP_BEHAT_STATS');
+    return $enabled ? [
       FeatureTested::BEFORE => 'beforeFeature',
       FeatureTested::AFTER => 'afterFeature',
       ExerciseCompleted::AFTER => 'afterExercise',
-    ];
+    ] : [];
   }
 
   /**
