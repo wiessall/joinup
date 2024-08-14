@@ -822,6 +822,25 @@ class CollectionContext extends RawDrupalContext {
   }
 
   /**
+   * Adds a default logo image to the collection if it was not defined.
+   *
+   * @param \Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope $scope
+   *   The before node create scope.
+   *
+   * @BeforeNodeCreate
+   */
+  public function ensureCollectionLogo(BeforeNodeCreateScope $scope): void {
+    $node = $scope->getEntity();
+    if ($node->type !== 'collection') {
+      return;
+    }
+    // Add logo image.
+    if (!empty($node->logo)) {
+      $node->logo = $this->getFileSourcePath($node->logo);
+    }
+  }
+
+  /**
    * Converts values from user-friendly to normal machine values.
    *
    * @param \Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope $scope
