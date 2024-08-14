@@ -131,27 +131,6 @@ trait UtilityTrait {
   }
 
   /**
-   * Executes a callback until it succeeds or until timeout is hit.
-   *
-   * @param callable $callback
-   *   The callback to execute until it returns a truthy value or timeout.
-   * @param int $timeout
-   *   The maximum wait time. Defaults to 5 seconds.
-   *
-   * @return mixed
-   *   The result of the last invocation of the callback.
-   */
-  protected function waitUntil(callable $callback, int $timeout = 5): mixed {
-    $end = microtime(TRUE) + $timeout;
-    do {
-      usleep(100000);
-      $result = $callback();
-    } while (microtime(TRUE) < $end && !$result);
-
-    return $result;
-  }
-
-  /**
    * Converts an ordinal number (1st, 2nd, 17th etc) to a normal number.
    *
    * @param string $number

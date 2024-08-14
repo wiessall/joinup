@@ -70,7 +70,7 @@ class JoinupEventContext extends RawDrupalContext {
     // virtual location. If the scenario doesn't specify either of those,
     // provide a default value so that we don't run into unspecified behaviour.
     if (empty($node->field_location) && empty($node->field_event_online_location)) {
-      $node->field_location = 'Belliardstraat 28, 1000 Brussels, Belgium';
+      $node->field_event_online_location = "0: No man's land - 1: http://www.no-mans-land-meetup.com";
     }
   }
 

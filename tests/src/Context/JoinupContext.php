@@ -1053,7 +1053,6 @@ class JoinupContext extends RawDrupalContext {
       $element = $this->getSession()->getPage()->find('xpath', $xpath);
     }
 
-    $this->scrollNamedElementIntoView('button', $button, $element);
     $element->pressButton($button);
   }
 
@@ -1538,7 +1537,6 @@ class JoinupContext extends RawDrupalContext {
    */
   public function iClickLinkInTile(string $link, string $heading): void {
     $element = $this->getTileByHeading($heading);
-    $this->scrollElementIntoView($element);
 
     $linkElement = $element->findLink($link);
     $linkElementAriaLabel = $element->find('xpath', '//a[@aria-label=contains(text(), "' . $link . '")]');
@@ -1808,7 +1806,6 @@ class JoinupContext extends RawDrupalContext {
     }
 
     $button = $this->getSession()->getPage()->find('css', '#dropdown-add-content');
-    $this->scrollElementIntoView($button);
     $button->press();
   }
 
@@ -2179,66 +2176,6 @@ class JoinupContext extends RawDrupalContext {
   }
 
   /**
-   * Waits until Glide animations finish.
-   *
-   * @param string $seconds
-   *   Number of seconds to wait.
-   *
-   * @Then I wait up to :seconds seconds for Glide animations to finish
-   */
-  public function waitForGlideAnimations(string $seconds): void {
-    $this->assertWaitJs((int) $seconds, 'document.querySelector(".glide--slider.glide-animating") === null');
-  }
-
-  /**
-   * Waits until Slick animations finish.
-   *
-   * @param string $seconds
-   *   Number of seconds to wait.
-   *
-   * @Then I wait up to :seconds seconds for Slick animations to finish
-   */
-  public function waitForSlickAnimations(string $seconds): void {
-    $this->assertWaitJs((int) $seconds, 'document.querySelector("[data-slick].slick-animating") === null');
-  }
-
-  /**
-   * Waits until Bootstrap collapse animations finish.
-   *
-   * @param string $seconds
-   *   Number of seconds to wait.
-   *
-   * @Then I wait up to :seconds seconds for Bootstrap collapse animations to finish
-   */
-  public function waitForBsCollapseAnimations(string $seconds): void {
-    $this->assertWaitJs((int) $seconds, 'document.querySelector(".collapsing") === null');
-  }
-
-  /**
-   * Asserts that the default Drupal modal is opened.
-   *
-   * @throws \Exception
-   *   Thrown when the modal doesn't open within 5 seconds.
-   *
-   * @Then a modal should/will open
-   */
-  public function waitForDrupalModalToOpen(): void {
-    self::assertModalToOpen();
-  }
-
-  /**
-   * Asserts that the default Drupal modal is closed.
-   *
-   * @throws \Exception
-   *   Thrown when the modal doesn't close within 5 seconds.
-   *
-   * @Then the modal should be closed
-   */
-  public function waitForDrupalModalToClose(): void {
-    self::assertModalToClose();
-  }
-
-  /**
    * Asserts that a certain link contains the URL of an entity.
    *
    * @param string $link
@@ -2413,14 +2350,8 @@ class JoinupContext extends RawDrupalContext {
    */
   public function fillFieldWithNormalisedEntityReference(string $value, ?string $field = NULL): void {
     if ($this->hasJavascriptSupport()) {
-      $session = $this->getSession();
       $xpath = '//ul[contains(concat(" ", normalize-space(@class), " "), " ui-autocomplete ")]//a[text() = "' . $value . '"]';
-      $session->wait(500, 'document.querySelector(".ui-autocomplete").style.display !== "none"');
-      $element = $session->getPage()->find('xpath', $xpath);
-      if (!$element instanceof NodeElement) {
-        throw new \Exception("The value '$value' was not found in the autocomplete suggestions.");
-      }
-      $element->click();
+      $this->waitForElementVisible('xpath', $xpath)->click();
     }
     else {
       $element = $this->getSession()->getPage()->findField($field);
@@ -2786,7 +2717,7 @@ class JoinupContext extends RawDrupalContext {
    * @Then the draggable menu table of the :group_label :group_type should be:
    */
   public function assertDraggableMenuTable(TableNode $table, string $group_label, string $group_bundle): void {
-    self::assertJavaScriptEnabledBrowser();
+    $this->assertJavaScriptEnabledBrowser();
 
     $group = $this->getEntityByLabel('rdf_entity', $group_label, $group_bundle);
     /** @var \Behat\Mink\Element\NodeElement[] $rows */
@@ -2838,7 +2769,7 @@ class JoinupContext extends RawDrupalContext {
    * @Then I drag the :title table row( to the) :direction
    */
   public function dragTitledTableRowTowardsDirection($title, $direction): void {
-    self::assertJavaScriptEnabledBrowser();
+    $this->assertJavaScriptEnabledBrowser();
 
     $row = $this->findDraggableTableRowByTitle($title);
     $this->dragTableRowTowardsDirection($row, $direction);
@@ -2866,7 +2797,7 @@ class JoinupContext extends RawDrupalContext {
    * @Then I drag the table row in the :region region at position :position( to the) :direction
    */
   public function findTableRowByPositionAndDragTowardsDirection(string $position, string $direction, ?string $region = NULL): void {
-    self::assertJavaScriptEnabledBrowser();
+    $this->assertJavaScriptEnabledBrowser();
 
     $region = empty($region) ? $this->getSession()->getPage() : $this->getRegion($region);
     $row = $this->findDraggableTableRowByPosition((int) $position, $region);
@@ -2945,7 +2876,6 @@ class JoinupContext extends RawDrupalContext {
 
     /** @var \Behat\Mink\Element\NodeElement $last_button */
     $last_button = array_pop($buttons);
-    $this->scrollElementIntoView($last_button);
     $last_button->press();
   }
 
@@ -3323,6 +3253,20 @@ class JoinupContext extends RawDrupalContext {
         ])->save();
       }
     }
+  }
+
+  /**
+   * Insulates a scenario by stopping all sessions before and/or after it.
+   *
+   * Similar to "insulated" tag but also allows stopping the session after.
+   * Useful to reset the initial state before and/or after the scenario.
+   * e.g: scenarios resizing the browser window, etc.
+   *
+   * @BeforeScenario @stopSession:before
+   * @AfterScenario @stopSession:after
+   */
+  public function insulateScenario(): void {
+    $this->getMink()->stopSessions();
   }
 
   /**
