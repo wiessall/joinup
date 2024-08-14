@@ -38,7 +38,7 @@
       - MINK_DRIVER_ARGS_PHANTOMJS: Chang the driver args for phantomjs (e.g.
         ["http://127.0.0.1:8510"]).
       - MINK_DRIVER_ARGS_WEBDRIVER: Change the driver args for webdriver (e.g.
-        ["chrome", { "chromeOptions": { "w3c": false } },
+        ["chrome", { "goog:chromeOptions": { "w3c": false } },
         "http://localhost:4444/wd/hub"]). For using the Firefox browser,
         replace "chrome" with "firefox".
       - DTT_BASE_URL: Drupal Test Traits base URL (e.g. http://localhost).
