@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup\Context;
 
+use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Exception\ElementNotFoundException;
 use Drupal\Core\Datetime\DrupalDateTime;
@@ -683,6 +684,10 @@ class CollectionContext extends RawDrupalContext {
   /**
    * Creates the standard 'Joinup' collection.
    *
+   * @param \Behat\Behat\Hook\Scope\BeforeScenarioScope|null $scope
+   *   The before scenario scope. This scope object is only used if the method
+   *   is invoked as a @BeforeScenario hook.
+   *
    * @return \Drupal\collection\Entity\CollectionInterface
    *   The 'Joinup' collection.
    *
@@ -690,12 +695,24 @@ class CollectionContext extends RawDrupalContext {
    *
    * @see joinup_collection.module
    */
-  public function createJoinupCollection(): CollectionInterface {
-    return $this->createCollection([
-      'id' => JoinupCollectionHelper::getCollectionId(),
-      'label' => 'Joinup',
-      'field_ar_state' => 'published',
+  public function createJoinupCollection(?BeforeScenarioScope $scope = NULL): CollectionInterface {
+    // Use \Drupal\joinup\Context\DrupalContext to have all the entities being
+    // tracked and deleted in the same Behat context instance.
+    $environment = $scope
+      ? $scope->getEnvironment()
+      : $this->getDrupal()->getEnvironment();
+    $context = $environment->getContext(DrupalContext::class);
+    Assert::assertInstanceOf(DrupalContext::class, $context);
+    $context->nodeCreate((object) [
+      'type' => 'collection',
+      'uri' => JoinupCollectionHelper::getCollectionId(),
+      'title' => 'Joinup',
+      'field_state' => 'published',
     ]);
+
+    $collectionEntity = static::getEntityByLabel('node', 'Joinup', 'collection');
+    Assert::assertInstanceOf(CollectionInterface::class, $collectionEntity);
+    return $collectionEntity;
   }
 
   /**
