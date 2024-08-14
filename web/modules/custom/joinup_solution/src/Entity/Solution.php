@@ -98,12 +98,12 @@ class Solution extends Node implements SolutionInterface {
    * {@inheritdoc}
    */
   public function getGroupId(): string {
-    $ids = $this->getReferencedEntityIds('collection');
+    $ids = $this->getReferencedEntityIds(OgGroupAudienceHelper::DEFAULT_FIELD);
     // @todo Update this in ISAICP-8574.
-    if (empty($ids['rdf_entity'])) {
+    if (empty($ids['node'])) {
       throw new MissingGroupException();
     }
-    return array_shift($ids['rdf_entity']);
+    return array_shift($ids['node']);
   }
 
   /**
@@ -121,7 +121,7 @@ class Solution extends Node implements SolutionInterface {
       ->getQuery()
       ->accessCheck(FALSE)
       ->condition('type', 'release')
-      ->condition('og_audience', $this->id())
+      ->condition(OgGroupAudienceHelper::DEFAULT_FIELD, $this->id())
       ->sort('created')
       ->execute();
   }
@@ -164,7 +164,7 @@ class Solution extends Node implements SolutionInterface {
    */
   public function getAffiliatedCollectionIds(): array {
     // @todo Update this in ISAICP-8574.
-    return $this->getReferencedEntityIds('collection')['rdf_entity'] ?? [];
+    return $this->getReferencedEntityIds(OgGroupAudienceHelper::DEFAULT_FIELD)['node'] ?? [];
   }
 
   /**
@@ -277,7 +277,7 @@ class Solution extends Node implements SolutionInterface {
    * {@inheritdoc}
    */
   public function getContactInformationFieldName(): string {
-    return 'contact_information';
+    return 'contact';
   }
 
   /**
