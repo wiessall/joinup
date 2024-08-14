@@ -6,6 +6,7 @@ namespace Drupal\joinup_group\Entity;
 
 use Drupal\Core\Field\EntityReferenceFieldItemList;
 use Drupal\joinup_bundle_class\JoinupBundleClassFieldAccessTrait;
+use Drupal\joinup_core\Entity\PermalinkTrait;
 use Drupal\joinup_group\Exception\MissingGroupException;
 use Drupal\og\OgGroupAudienceHelperInterface;
 
@@ -15,6 +16,7 @@ use Drupal\og\OgGroupAudienceHelperInterface;
 trait GroupContentTrait {
 
   use JoinupBundleClassFieldAccessTrait;
+  use PermalinkTrait;
 
   /**
    * {@inheritdoc}
