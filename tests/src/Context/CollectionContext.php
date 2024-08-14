@@ -7,6 +7,7 @@ namespace Drupal\joinup\Context;
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Exception\ElementNotFoundException;
 use Drupal\Core\Datetime\DrupalDateTime;
+use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
@@ -869,6 +870,42 @@ class CollectionContext extends RawDrupalContext {
       );
 
       $node->$field = $value_mapping[$field][$value];
+    }
+  }
+
+  /**
+   * Converts the value of collection link fields to the expected format.
+   *
+   * \Drupal\Driver\Fields\Drupal8\LinkHandler expects multi-column link field
+   * values; this is a workaround for a not-yet-applied patch we have in the
+   * OSS catalogue EPIC branch.
+   *
+   * @param \Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope $scope
+   *   The before node create scope.
+   *
+   * @BeforeNodeCreate
+   */
+  public function convertLinkFields(BeforeNodeCreateScope $scope): void {
+    $node = $scope->getEntity();
+    if ($node->type !== 'collection') {
+      return;
+    }
+    $entityFieldManager = \Drupal::service('entity_field.manager');
+    assert($entityFieldManager instanceof EntityFieldManagerInterface);
+    $fields = $entityFieldManager->getFieldDefinitions('node', 'collection');
+
+    foreach ((array) $node as $field => $value) {
+      if ($fields[$field]->getType() !== 'link') {
+        continue;
+      }
+
+      if (strpos($value, ' - ') || strpos($field, ':')) {
+        continue;
+      }
+
+      // Column marker is ':', key-value separator is ' - '.
+      // See RawDrupalContext::parseEntityFields().
+      $node->$field = "0:  - 1: $value";
     }
   }
 
