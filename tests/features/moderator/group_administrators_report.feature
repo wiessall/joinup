@@ -1,4 +1,4 @@
-@api @group-g
+@api @group-h
 Feature: Group administrators report
   In order to have easy access to data about people with administrative roles in collections and solutions
   As a moderator

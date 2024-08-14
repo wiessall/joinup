@@ -1,4 +1,4 @@
-@api @group-f
+@api @group-e
 Feature:
   In order to understand how my group is being used
   As a facilitator

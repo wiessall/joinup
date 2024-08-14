@@ -1,4 +1,4 @@
-@api @group-g
+@api @group-h
 Feature: Solutions by licence report
   As a moderator of the site
   In order to be able to manage licences of the website

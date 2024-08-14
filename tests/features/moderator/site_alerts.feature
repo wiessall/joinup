@@ -1,4 +1,4 @@
-@api @group-g
+@api @group-h
 Feature: Site alerts
   In order to announce scheduled downtime
   As a moderator
