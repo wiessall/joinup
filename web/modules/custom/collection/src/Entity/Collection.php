@@ -17,6 +17,7 @@ use Drupal\joinup_bundle_class\ShortIdTrait;
 use Drupal\joinup_featured\FeaturedContentTrait;
 use Drupal\joinup_group\Entity\GroupTrait;
 use Drupal\joinup_publication_date\Entity\EntityPublicationTimeFallbackTrait;
+use Drupal\joinup_rdf\Entity\RdfSyncEntityTrait;
 use Drupal\joinup_workflow\ArchivableEntityTrait;
 use Drupal\joinup_workflow\EntityWorkflowStateTrait;
 use Drupal\meta_entity\Entity\MetaEntity;
@@ -46,6 +47,7 @@ class Collection extends Node implements CollectionInterface {
   use TopicReferencingEntityTrait;
   use DescriptionTrait;
   use ContactInformationTrait;
+  use RdfSyncEntityTrait;
 
   /**
    * {@inheritdoc}
