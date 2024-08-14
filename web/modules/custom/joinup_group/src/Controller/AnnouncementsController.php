@@ -47,7 +47,7 @@ class AnnouncementsController extends ControllerBase {
   /**
    * Access check for the group announcement form.
    *
-   * @param \Drupal\joinup_group\Entity\GroupInterface $rdf_entity
+   * @param \Drupal\joinup_group\Entity\GroupInterface $node
    *   The group for which the access to the reports page is being determined.
    * @param \Drupal\joinup_group\Entity\AnnouncementInterface|null $announcement
    *   The announcement, when present in the route.
@@ -55,8 +55,8 @@ class AnnouncementsController extends ControllerBase {
    * @return \Drupal\Core\Access\AccessResultInterface
    *   The access result object.
    */
-  public function access(GroupInterface $rdf_entity, ?AnnouncementInterface $announcement = NULL): AccessResultInterface {
-    $access = $this->accessAnnouncements($rdf_entity);
+  public function access(GroupInterface $node, ?AnnouncementInterface $announcement = NULL): AccessResultInterface {
+    $access = $this->accessAnnouncements($node);
     if ($announcement) {
       // If the current user has no available transition, they can't do
       // anything. The announcement is outside their control.
