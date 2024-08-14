@@ -325,6 +325,11 @@ function joinup_group_node_insert(NodeInterface $group): void {
     return;
   }
 
+  // @todo Clean this in ISAICP-8376.
+  if ($group->skip_menu_creation) {
+    return;
+  }
+
   // When a group is created, create two new navigation menus and associate them
   // with the new collection or solution. These menus can be used to link to
   // custom pages, member, overviews, etc. but come with a default set of links
