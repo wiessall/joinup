@@ -45,7 +45,7 @@
         "drupal/field_delimiter": "^2.0",
         "drupal/field_fallback_formatter": "^1.0",
         "drupal/field_formatter_range": "^1.1",
-        "drupal/field_group": "^3.1",
+        "drupal/field_group": "3.4.0",
         "drupal/field_permissions": "^1.1",
         "drupal/file_url": "~2.0",
         "drupal/flag": "^4.0",
@@ -332,6 +332,10 @@
             "drupal/field_delimiter": {
                 "Doesn't work in layout builder. @see https://www.drupal.org/i/3099580": "resources/patch/php/drupal/field_delimiter/3099580.patch",
                 "str_replace(): Passing null to parameter #3 ($subject) of type array|string is deprecated in Drupal\\Component\\Utility\\Xss::filter(). @see https://www.drupal.org/i/3301169": "resources/patch/php/drupal/field_delimiter/3301169.patch"
+            },
+            "drupal/field_group": {
+                "Deprecated way of sequence schema def @see https://www.drupal.org/project/field_group/issues/3409719": "resources/patch/php/drupal/field_group/3409719.diff",
+                "Filtering and pagination error when adding existing media to nodes @see https://www.drupal.org/i/3412511": "resources/patch/php/drupal/field_group/3412511.patch"
             },
             "drupal/file_url": {
                 "Handle deleted files @see https://www.drupal.org/project/file_url/issues/3326758": "resources/patch/php/drupal/file_url/3326758.diff",
