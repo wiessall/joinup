@@ -385,7 +385,7 @@ class JoinupContext extends RawDrupalContext {
    * @see \Drupal\DrupalExtension\Context\DrupalContext::assertAuthenticatedByRole()
    */
   public function assertAuthenticatedByOgRole($roles, $rdf_entity, $rdf_entity_bundle): void {
-    $entity = $this->getEntityByLabel('rdf_entity', $rdf_entity, $rdf_entity_bundle);
+    $entity = $this->getEntityByLabel('node', $rdf_entity, $rdf_entity_bundle);
     if (!$entity) {
       throw new \Exception("No entity found with label $rdf_entity");
     }
@@ -462,7 +462,7 @@ class JoinupContext extends RawDrupalContext {
    * @Given my membership state in the :rdf_entity :rdf_entity_bundle changes to :state
    */
   public function updateGroupState($rdf_entity, $rdf_entity_bundle, $state): void {
-    $entity = $this->getEntityByLabel('rdf_entity', $rdf_entity, $rdf_entity_bundle);
+    $entity = $this->getEntityByLabel('node', $rdf_entity, $rdf_entity_bundle);
     if (!$entity) {
       throw new \Exception("No entity found with label $rdf_entity");
     }
