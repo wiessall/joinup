@@ -784,4 +784,20 @@ class CollectionContext extends RawDrupalContext {
     return $entity;
   }
 
+  /**
+   * Replaces collection field aliases in the solution node object.
+   *
+   * @param \Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope $scope
+   *   The before node create scope.
+   *
+   * @BeforeNodeCreate
+   */
+  public function convertCollectionFieldAliases(BeforeNodeCreateScope $scope): void {
+    $node = $scope->getEntity();
+    if ($node->type !== 'collection') {
+      return;
+    }
+    $this->convertFieldAliases($node, self::FIELD_ALIASES);
+  }
+
 }
