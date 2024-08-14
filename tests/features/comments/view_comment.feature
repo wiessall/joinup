@@ -1,4 +1,4 @@
-@api @group-b
+@api @group-a
 Feature: View a comment
   As a visitor of the website I can view a comment on community content.
 

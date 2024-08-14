@@ -1,4 +1,4 @@
-@api @javascript @group-i
+@api @javascript
 Feature: CKEditor5
 
   Background:

@@ -1,4 +1,4 @@
-@api @group-i
+@api
 Feature: Content Overview
 
   Scenario: View content overview as an anonymous user
