@@ -111,7 +111,7 @@ trait EntityTrait {
   protected static function entityTypeAliases(): array {
     return [
       'collection' => 'node',
-      'contact information' => 'rdf_entity',
+      'contact information' => 'node',
       'content' => 'node',
       'custom page' => 'node',
       'discussion' => 'node',
@@ -123,7 +123,7 @@ trait EntityTrait {
       'news' => 'node',
       'owner' => 'node',
       'release' => 'node',
-      'solution' => 'rdf_entity',
+      'solution' => 'node',
       'spdx licence' => 'rdf_entity',
       'topic' => 'taxonomy_term',
     ];
