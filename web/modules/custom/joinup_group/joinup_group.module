@@ -272,7 +272,7 @@ function joinup_group_propose_message_submit(&$form, FormStateInterface $form_st
 /**
  * Implements hook_ENTITY_TYPE_access().
  */
-function joinup_group_rdf_entity_access(EntityInterface $entity, $operation, AccountInterface $account): AccessResultInterface {
+function joinup_group_node_access(EntityInterface $entity, $operation, AccountInterface $account): AccessResultInterface {
   if (!$entity instanceof GroupInterface
     || $account->isAnonymous()
     || $account->hasPermission($entity->getEntityType()->getAdminPermission())
@@ -287,7 +287,7 @@ function joinup_group_rdf_entity_access(EntityInterface $entity, $operation, Acc
   return AccessResult::allowedIf(
     $membership
     && !$entity->isPublished()
-    && $membership->hasPermission('view unpublished rdf entity'))
+    && $membership->hasPermission('view any unpublished content'))
     ->addCacheableDependency($membership);
 }
 
@@ -736,7 +736,7 @@ function joinup_group_get_og_members_overview_sort_handlers_info(string $order):
  * Implements hook_form_BASE_FORM_ID_alter().
  */
 function joinup_group_form_views_form_og_members_overview_default_alter(&$form, FormStateInterface $form_state, $form_id): void {
-  if (!($group = \Drupal::routeMatch()->getParameter('rdf_entity')) || !$group instanceof GroupInterface) {
+  if (!($group = \Drupal::routeMatch()->getParameter('node')) || !$group instanceof GroupInterface) {
     throw new \RuntimeException('Called from a wrong page.');
   }
 
@@ -752,7 +752,7 @@ function joinup_group_form_views_form_og_members_overview_default_alter(&$form, 
   }
 
   // Alter the action label in order to reflect the bundle of the group.
-  $args = ['@label' => $group->get('rid')->entity->getSingularLabel()];
+  $args = ['@label' => $group->get('type')->entity->getSingularLabel()];
   $form['header']['og_membership_bulk_form']['action']['#options']['joinup_transfer_group_ownership'] = t('Transfer the ownership of the @label to the selected member', $args);
   $form['#validate'][] = 'joinup_group_form_views_form_og_members_overview_default_validate';
 
@@ -780,7 +780,7 @@ function joinup_group_form_views_form_og_members_overview_default_validate(array
   /** @var \Drupal\og\MembershipManagerInterface $membership_manager */
   $membership_manager = \Drupal::service('og.membership_manager');
 
-  $group = \Drupal::routeMatch()->getParameter('rdf_entity');
+  $group = \Drupal::routeMatch()->getParameter('node');
   $owner_memberships = $membership_manager->getGroupMembershipsByRoleNames($group, ['administrator']);
 
   if (empty($owner_memberships)) {
