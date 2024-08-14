@@ -490,6 +490,7 @@ final class MigrationHelper {
     }
 
     $entity->skip_notification = TRUE;
+    $entity->skip_menu_creation = TRUE;
     $entity->save();
 
     if ($has_alias) {
