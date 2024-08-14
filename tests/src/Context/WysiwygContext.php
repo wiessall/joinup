@@ -42,6 +42,9 @@ class WysiwygContext extends RawDrupalContext {
       $page = $this->getSession()->getPage();
       $element = $page->find('xpath', "//*[contains(text(),'{$label}')]");
       $this->scrollElementIntoView($element);
+      if (!$this->getWysiwygButton($label, 'Source')) {
+        $this->pressWysiwygButton($label, 'Show more items');
+      }
       $this->pressWysiwygButton($label, 'Source');
       $this->setWysiwygText($label, $text);
     }
