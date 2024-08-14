@@ -31,6 +31,7 @@ use Drupal\node\NodeInterface;
 use Drupal\og\OgRoleInterface;
 use Drupal\og_menu\Tests\Traits\OgMenuTrait;
 use Drupal\user\Entity\User;
+use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\ExpectationFailedException;
 
 /**
@@ -77,6 +78,41 @@ class CollectionContext extends RawDrupalContext {
     'spatial coverage' => 'spatial_coverage',
     'state' => 'field_state',
   ];
+
+  /**
+   * Returns value mapping of human-friendly field values.
+   *
+   * Value keys are the human-friendly values used in the cucumber tables, their
+   * values are the actual field values to apply. Every value alias - value list
+   * is keyed by the un-aliased field name.
+   */
+  protected function getValueMapping(): array {
+    $mapping = [
+      'group_moderation' => ['no' => 0, 'yes' => 1],
+      'content_creation' => [
+        'facilitators and authors' => ContentCreationOptions::FACILITATORS_AND_AUTHORS,
+        'members' => ContentCreationOptions::MEMBERS,
+        'registered users' => ContentCreationOptions::REGISTERED_USERS,
+      ],
+      'closed_group' => ['no' => 0, 'yes' => 1],
+      'field_state' => [
+        'draft' => 'draft',
+        'proposed' => 'proposed',
+        'published' => 'published',
+        'archival request' => 'archival_request',
+        'archived' => 'archived',
+      ],
+    ];
+
+    Assert::assertEmpty(
+      array_diff(
+        array_keys($mapping),
+        static::FIELD_ALIASES,
+      ),
+    );
+
+    return $mapping;
+  }
 
   /**
    * Test collections.
@@ -222,22 +258,7 @@ class CollectionContext extends RawDrupalContext {
    *    Throws an exception when a mapped value is not found.
    */
   protected function convertValueAliases(array $fields): array {
-    $mapped_values = [
-      'group_moderation' => ['no' => 0, 'yes' => 1],
-      'content_creation' => [
-        'facilitators and authors' => ContentCreationOptions::FACILITATORS_AND_AUTHORS,
-        'members' => ContentCreationOptions::MEMBERS,
-        'registered users' => ContentCreationOptions::REGISTERED_USERS,
-      ],
-      'closed_group' => ['no' => 0, 'yes' => 1],
-      'field_state' => [
-        'draft' => 'draft',
-        'proposed' => 'proposed',
-        'published' => 'published',
-        'archival request' => 'archival_request',
-        'archived' => 'archived',
-      ],
-    ];
+    $mapped_values = $this->getValueMapping();
 
     foreach ($fields as $field => $value) {
       if (isset($mapped_values[$field])) {
@@ -798,6 +819,38 @@ class CollectionContext extends RawDrupalContext {
       return;
     }
     $this->convertFieldAliases($node, self::FIELD_ALIASES);
+  }
+
+  /**
+   * Converts values from user-friendly to normal machine values.
+   *
+   * @param \Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope $scope
+   *   The before node create scope.
+   *
+   * @BeforeNodeCreate
+   */
+  public function convertCollectionValueAliases(BeforeNodeCreateScope $scope): void {
+    $node = $scope->getEntity();
+    if ($node->type !== 'collection') {
+      return;
+    }
+    $value_mapping = $this->getValueMapping();
+    foreach ((array) $node as $field => $value) {
+      if (!isset($value_mapping[$field])) {
+        continue;
+      }
+      Assert::assertArrayHasKey(
+        $value,
+        $value_mapping[$field],
+        sprintf(
+          "Value '%s' is not an acceptable value for collection field %s.",
+          $value,
+          $field,
+        )
+      );
+
+      $node->$field = $value_mapping[$field][$value];
+    }
   }
 
 }
