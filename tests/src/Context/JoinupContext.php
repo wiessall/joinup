@@ -2242,6 +2242,9 @@ class JoinupContext extends RawDrupalContext {
    */
   public function thePersistentUrlShouldContain($pattern): void {
     $field_selector = $this->getSession()->getPage()->find('css', '.permalink');
+    if (empty($field_selector)) {
+      throw new \Exception("The persistent url was not found.");
+    }
     $href = $field_selector->getAttribute('href');
     Assert::assertStringContainsString($pattern, $href);
   }
