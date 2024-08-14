@@ -24,3 +24,6 @@ Feature: Subscribing to a collection after creating
     When I press "Save"
     Then I should have the following content subscriptions:
       | Rollerblade and Ancient Mythology | discussion, document, event, news, solution, announcements |
+
+    # Cleanup.
+    And I delete the "Rollerblade and Ancient Mythology" collection
