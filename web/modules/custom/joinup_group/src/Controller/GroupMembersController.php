@@ -8,7 +8,7 @@ use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Routing\RouteMatchInterface;
-use Drupal\joinup_group\Entity\GroupInterface;
+use Drupal\node\NodeInterface;
 use Drupal\og\OgAccessInterface;
 use Drupal\views\Views;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -79,14 +79,14 @@ class GroupMembersController extends ControllerBase {
   /**
    * Access check for the group members page.
    *
-   * @param \Drupal\joinup_group\Entity\GroupInterface $rdf_entity
+   * @param \Drupal\node\NodeInterface $node
    *   The group for which the access to the members page is being determined.
    *
    * @return \Drupal\Core\Access\AccessResultInterface
    *   The access result object.
    */
-  public function access(GroupInterface $rdf_entity): AccessResultInterface {
-    $access = $this->entityTypeManager()->getAccessControlHandler('rdf_entity')->access($rdf_entity, 'view', $this->currentUser(), TRUE);
+  public function access(NodeInterface $node): AccessResultInterface {
+    $access = $this->entityTypeManager()->getAccessControlHandler('node')->access($node, 'view', $this->currentUser(), TRUE);
     return $access->andIf(AccessResult::allowedIfHasPermission($this->currentUser(), 'access user profiles'));
   }
 
