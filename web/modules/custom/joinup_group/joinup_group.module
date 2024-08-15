@@ -14,6 +14,7 @@ use Drupal\Core\Block\BlockPluginInterface;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Cache\RefinableCacheableDependencyInterface;
+use Drupal\Core\Entity\ContentEntityTypeInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
@@ -29,7 +30,7 @@ use Drupal\joinup_group\Entity\GroupContentInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\Entity\PinnableGroupContentInterface;
 use Drupal\joinup_group\Event\GroupMenuLinksEvent;
-use Drupal\joinup_group\Form\RdfDeleteForm;
+use Drupal\joinup_group\Form\GroupDeleteForm;
 use Drupal\joinup_group\Form\UserCancelForm;
 use Drupal\joinup_group\JoinupGroupHelper;
 use Drupal\joinup_workflow\EntityWorkflowStateInterface;
@@ -172,32 +173,36 @@ function joinup_group_preprocess(array &$variables, string $hook): void {
 /**
  * Implements hook_entity_type_alter().
  */
-function joinup_group_entity_type_alter(array &$entity_types): void {
-  /** @var \Drupal\Core\Entity\EntityTypeInterface[] $entity_types */
+function joinup_group_entity_type_alter(array $entityTypes): void {
   // Swap the default user cancel form implementation with a custom one that
   // prevents deleting users when they are the sole owner of a group.
-  $entity_types['user']->setFormClass('cancel', UserCancelForm::class);
+  $entityTypes['user']->setFormClass('cancel', UserCancelForm::class);
 
-  if (array_key_exists('rdf_entity', $entity_types)) {
-    $rdf_entity_type = $entity_types['rdf_entity'];
-    $rdf_entity_type->setFormClass('delete', RdfDeleteForm::class);
+  $groupEntityType = $entityTypes['node'] ?? NULL;
+  if (!$groupEntityType instanceof ContentEntityTypeInterface) {
+    return;
+  }
 
-    // Add group link templates, so the OG context will be automatically solved.
-    $link_templates = [
-      'announcement-overview' => '/rdf_entity/{rdf_entity}/announcements',
-      'announcement-add' => '/rdf_entity/{rdf_entity}/announcements/add',
-      'announcement-edit' => '/rdf_entity/{rdf_entity}/announcements/edit/{message}',
-      'announcement-view' => '/rdf_entity/{rdf_entity}/announcements/view/{message}',
-      'member-overview' => '/rdf_entity/{rdf_entity}/members',
-      'discussion-overview' => '/rdf_entity/{rdf_entity}/discussions',
-      'member-add' => '/rdf_entity/{rdf_entity}/members/add',
-      'member-invite' => '/rdf_entity/{rdf_entity}/members/invite',
-      'website-link' => '/rdf_entity/{rdf_entity}/website-link',
-      'documentation-file' => '/rdf_entity/{rdf_entity}/documentation-file',
-    ];
-    foreach ($link_templates as $key => $path) {
-      $entity_types['rdf_entity']->setLinkTemplate($key, $path);
-    }
+  $groupEntityType->setFormClass('delete', GroupDeleteForm::class);
+
+  // Add group link templates, so the OG context will be automatically solved.
+  $linkTemplates = [
+    // @todo missing?..
+    'announcement-overview' => '/node/{node}/announcements',
+    'announcement-add' => '/node/{node}/announcements/add',
+    'announcement-edit' => '/node/{node}/announcements/edit/{message}',
+    'announcement-view' => '/node/{node}/announcements/view/{message}',
+    'member-overview' => '/node/{node}/members',
+    // @todo missing?..
+    'discussion-overview' => '/node/{node}/discussions',
+    'member-add' => '/node/{node}/members/add',
+    'member-invite' => '/node/{node}/members/invite',
+    'website-link' => '/node/{node}/website-link',
+    'documentation-file' => '/node/{node}/documentation-file',
+  ];
+
+  foreach ($linkTemplates as $key => $path) {
+    $groupEntityType->setLinkTemplate($key, $path);
   }
 }
 
@@ -1113,8 +1118,8 @@ function joinup_group_mail(string $key, array &$message, array $params): void {
       '@group' => $group->label(),
       '@type' => $group->get('rid')->entity->getSingularLabel(),
       '@author' => $announcement->getOwner()->getDisplayName(),
-      ':url' => Url::fromRoute('entity.rdf_entity.announcement_edit', [
-        'rdf_entity' => $group->id(),
+      ':url' => Url::fromRoute('entity.node.announcement_edit', [
+        'node' => $group->id(),
         'announcement' => $announcement->id(),
       ])->setAbsolute()->toString(),
     ];
