@@ -17,7 +17,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * @ViewsArgumentValidator(
  *   id = "joinup_group",
  *   title = @Translation("Joinup group"),
- *   entity_type = "rdf_entity",
+ *   entity_type = "node",
  * )
  */
 class JoinupGroupValidator extends ArgumentValidatorPluginBase {
@@ -59,7 +59,7 @@ class JoinupGroupValidator extends ArgumentValidatorPluginBase {
    * {@inheritdoc}
    */
   public function validateArgument($arg): bool {
-    return $this->entityTypeManager->getStorage('rdf_entity')->load((string) $arg) instanceof GroupInterface;
+    return $this->entityTypeManager->getStorage('node')->load((string) $arg) instanceof GroupInterface;
   }
 
 }
