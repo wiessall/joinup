@@ -9,6 +9,7 @@ use Behat\Gherkin\Node\TableNode;
 use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Url;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
+use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
 use Drupal\file_url\FileUrlHandler;
 use Drupal\joinup\Traits\ConfigReadOnlyTrait;
 use Drupal\joinup\Traits\EntityReferenceTrait;
@@ -495,7 +496,7 @@ class SolutionContext extends RawDrupalContext {
    */
   public function givenSolutionUserMemberships(TableNode $membership_table): void {
     foreach ($membership_table->getColumnsHash() as $values) {
-      $group = $this->getEntityByLabel('rdf_entity', $values['solution']);
+      $group = $this->getEntityByLabel('node', $values['solution']);
       $this->givenUserMembership($group, $values);
     }
   }
@@ -577,6 +578,42 @@ class SolutionContext extends RawDrupalContext {
   }
 
   /**
+   * Returns value mapping of human-friendly field values.
+   *
+   * Value keys are the human-friendly values used in the cucumber tables, their
+   * values are the actual field values to apply. Every value alias - value list
+   * is keyed by the un-aliased field name.
+   */
+  protected function getValueMapping(): array {
+    $mapping = [
+      'group_moderation' => ['no' => 0, 'yes' => 1],
+      'content_creation' => [
+        'facilitators and authors' => ContentCreationOptions::FACILITATORS_AND_AUTHORS,
+        'registered users' => ContentCreationOptions::REGISTERED_USERS,
+      ],
+      'field_is_webdav_creation' => ['no' => 0, 'yes' => 1],
+      'field_state' => [
+        'draft' => 'draft',
+        'proposed' => 'proposed',
+        'published' => 'published',
+        'needs update' => 'needs_update',
+        'blacklisted' => 'blacklisted',
+        'archived' => 'archived',
+      ],
+      'field_is_show_eira_related' => ['no' => 0, 'yes' => 1],
+    ];
+
+    Assert::assertEmpty(
+      array_diff(
+        array_keys($mapping),
+        $this->solutionFieldAliases(),
+      ),
+    );
+
+    return $mapping;
+  }
+
+  /**
    * Converts values from user-friendly to normal machine values.
    *
    * @param array $fields
@@ -589,23 +626,7 @@ class SolutionContext extends RawDrupalContext {
    *    Throws an exception when a mapped value is not found.
    */
   protected function convertValueAliases(array $fields): array {
-    $mapped_values = [
-      'field_is_moderation' => ['no' => 0, 'yes' => 1],
-      'field_is_content_creation' => [
-        'facilitators and authors' => ContentCreationOptions::FACILITATORS_AND_AUTHORS,
-        'registered users' => ContentCreationOptions::REGISTERED_USERS,
-      ],
-      'field_is_webdav_creation' => ['no' => 0, 'yes' => 1],
-      'field_is_state' => [
-        'draft' => 'draft',
-        'proposed' => 'proposed',
-        'published' => 'published',
-        'needs update' => 'needs_update',
-        'blacklisted' => 'blacklisted',
-        'archived' => 'archived',
-      ],
-      'field_is_show_eira_related' => ['no' => 0, 'yes' => 1],
-    ];
+    $mapped_values = $this->getValueMapping();
 
     foreach ($fields as $field => $value) {
       if (isset($mapped_values[$field])) {
@@ -777,6 +798,73 @@ class SolutionContext extends RawDrupalContext {
     $tile = $this->getTileByHeading($heading);
     $elements = $tile->findAll('xpath', '//span[contains(concat(" ", normalize-space(@class), " "), " icon--download ")]');
     Assert::assertEmpty($elements);
+  }
+
+  /**
+   * Replaces solution field aliases in the solution node object.
+   *
+   * @param \Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope $scope
+   *   The before node create scope.
+   *
+   * @BeforeNodeCreate
+   */
+  public function convertSolutionFieldAliases(BeforeNodeCreateScope $scope): void {
+    $node = $scope->getEntity();
+    if ($node->type !== 'solution') {
+      return;
+    }
+    $this->convertFieldAliases($node, self::solutionFieldAliases());
+  }
+
+  /**
+   * Converts values from user-friendly to normal machine values.
+   *
+   * @param \Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope $scope
+   *   The before node create scope.
+   *
+   * @BeforeNodeCreate
+   */
+  public function convertSolutionValueAliases(BeforeNodeCreateScope $scope): void {
+    $node = $scope->getEntity();
+    if ($node->type !== 'solution') {
+      return;
+    }
+    $value_mapping = $this->getValueMapping();
+    foreach ((array) $node as $field => $value) {
+      if (!isset($value_mapping[$field])) {
+        continue;
+      }
+      Assert::assertArrayHasKey(
+        $value,
+        $value_mapping[$field],
+        sprintf(
+          "Value '%s' is not an acceptable value for solution field %s.",
+          $value,
+          $field,
+        )
+      );
+
+      $node->$field = $value_mapping[$field][$value];
+    }
+  }
+
+  /**
+   * Adds a default logo image to the solution if it was not defined.
+   *
+   * @param \Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope $scope
+   *   The before node create scope.
+   *
+   * @BeforeNodeCreate
+   */
+  public function ensureSolutionLogo(BeforeNodeCreateScope $scope): void {
+    $node = $scope->getEntity();
+    if ($node->type !== 'solution') {
+      return;
+    }
+    // Add logo image.
+    if (!empty($node->logo)) {
+      $node->logo = $this->getFileSourcePath($node->logo);
+    }
   }
 
 }
