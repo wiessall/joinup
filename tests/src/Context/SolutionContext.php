@@ -91,7 +91,7 @@ class SolutionContext extends RawDrupalContext {
    */
   public function visitSolution(string $solution): void {
     /** @var \Drupal\rdf_entity\Entity\Rdf $entity */
-    $entity = $this->getEntityByLabel('rdf_entity', $solution);
+    $entity = $this->getEntityByLabel('node', $solution);
     $this->visitPath($entity->toUrl()->toString());
   }
 
@@ -301,7 +301,7 @@ class SolutionContext extends RawDrupalContext {
       throw new \Exception("User $username could not be found.");
     }
 
-    $solution = $this->getEntityByLabel('rdf_entity', $solution, 'solution');
+    $solution = $this->getEntityByLabel('node', $solution, 'solution');
     $owner_roles = [
       OgRoleInterface::ADMINISTRATOR,
       'facilitator',
