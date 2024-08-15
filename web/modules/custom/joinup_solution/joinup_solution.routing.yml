@@ -57,7 +57,7 @@ joinup_solution.unshare_form:
           - solution
 
 joinup_solution.change_collection:
-  path: '/rdf_entity/{rdf_entity}/change-collection'
+  path: '/node/{node}/change-collection'
   defaults:
     _form: Drupal\joinup_solution\Form\ChangeCollectionForm
     _title: 'Select a destination collection'
@@ -66,11 +66,11 @@ joinup_solution.change_collection:
     _joinup_group: 'collection'
   options:
     parameters:
-      rdf_entity:
-        type: entity:rdf_entity
+      node:
+        type: entity:node
 
 joinup_solution.change_state.multiple:
-  path: '/rdf_entity/{rdf_entity}/manage-solutions/change-state'
+  path: '/node/{node}/manage-solutions/change-state'
   defaults:
     _form: Drupal\joinup_solution\Form\ChangeSolutionStateForm
     _title_callback: Drupal\joinup_solution\Form\ChangeSolutionStateForm::getQuestion
@@ -78,7 +78,7 @@ joinup_solution.change_state.multiple:
     _permission: 'manage solutions'
   options:
     parameters:
-      rdf_entity:
-        type: entity:rdf_entity
+      node:
+        type: entity:node
         bundle:
           - collection
