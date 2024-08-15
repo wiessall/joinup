@@ -867,4 +867,48 @@ class SolutionContext extends RawDrupalContext {
     }
   }
 
+  /**
+   * Ensures that the solution being created has a parent collection.
+   *
+   * @param \Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope $scope
+   *   The before node create scope.
+   *
+   * @BeforeNodeCreate
+   */
+  public function ensureSolutionParentCollection(BeforeNodeCreateScope $scope): void {
+    $node = $scope->getEntity();
+    if ($node->type !== 'solution') {
+      return;
+    }
+    if (empty($node->og_audience)) {
+      $label = $this->getRandom()->sentences(3);
+      // We must use \Drupal\joinup\Context\DrupalContext to create the
+      // missing collection, since entities are removed per context class. If
+      // we do it directly in this context, then the solution was deleted after
+      // the collection which triggered destruction issues in RDF syncronizer.
+      $environment = $scope->getEnvironment();
+      $context = $environment->getContext(DrupalContext::class);
+      Assert::assertInstanceOf(DrupalContext::class, $context);
+      $collection = $context->nodeCreate((object) [
+        'type' => 'collection',
+        'title' => $label,
+        'field_state' => 'published',
+      ]);
+      $node->og_audience = $collection->nid;
+
+      // Remove any links created by this collection because they might produce
+      // name collisions with the solution. E.g. the left sidebar link 'About'.
+      // @todo Remove this workaround in ISAICP-5597.
+      // @see tests/features/custom_page/navigation_menu.feature
+      // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-5597
+      $entity_type_manager = \Drupal::entityTypeManager();
+      $storage = $entity_type_manager->getStorage('ogmenu_instance');
+      $og_menu_instance_ids = $storage->getQuery()->accessCheck(FALSE)
+        ->condition('type', 'navigation')
+        ->condition(OgGroupAudienceHelperInterface::DEFAULT_FIELD, $collection->nid)
+        ->execute();
+      $storage->delete($storage->loadMultiple($og_menu_instance_ids));
+    }
+  }
+
 }
