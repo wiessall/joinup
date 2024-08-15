@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_solution\Form;
 
+use Drupal\Core\Entity\ContentEntityStorageInterface;
 use Drupal\Core\Entity\EntityReferenceSelection\SelectionPluginManagerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
@@ -11,8 +12,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\TempStore\PrivateTempStore;
 use Drupal\Core\TempStore\PrivateTempStoreFactory;
-use Drupal\rdf_entity\RdfInterface;
-use Drupal\sparql_entity_storage\SparqlEntityStorageInterface;
+use Drupal\joinup_solution\Entity\SolutionInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -72,8 +72,7 @@ class ChangeCollectionForm extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state): array {
-    // @todo Change this in ISAICP-8574.
-    $source_collection = $this->getRouteMatch()->getParameter('rdf_entity');
+    $source_collection = $this->getRouteMatch()->getParameter('node');
 
     $form['source_collection'] = [
       '#type' => 'value',
@@ -85,15 +84,15 @@ class ChangeCollectionForm extends FormBase {
       '#title' => $this->t('The following solutions from %source collection will be moved to a new collection:', [
         '%source' => $source_collection->label(),
       ]),
-      '#items' => array_map(function (RdfInterface $solution): string {
+      '#items' => array_map(function (SolutionInterface $solution): string {
         return $solution->label();
       }, $this->getSolutions()),
       '#empty' => $this->t('No solution was selected.'),
     ];
 
     /** @var \Drupal\Core\Entity\EntityReferenceSelection\SelectionPluginBase $selection */
-    $selection = $this->selectionPluginManager->createInstance('default:rdf_entity', [
-      'target_type' => 'rdf_entity',
+    $selection = $this->selectionPluginManager->createInstance('default:node', [
+      'target_type' => 'node',
       'target_bundles' => ['collection'],
     ]);
     $selection_settings = $selection->getConfiguration() + [
@@ -103,8 +102,8 @@ class ChangeCollectionForm extends FormBase {
     $form['destination_collection'] = [
       '#title' => $this->t('Select the destination collection'),
       '#type' => 'entity_autocomplete',
-      '#target_type' => 'rdf_entity',
-      '#selection_handler' => 'default:rdf_entity',
+      '#target_type' => 'node',
+      '#selection_handler' => 'default:node',
       '#selection_settings' => $selection_settings,
       '#maxlength' => 2048,
       '#required' => TRUE,
@@ -135,12 +134,11 @@ class ChangeCollectionForm extends FormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state): void {
-    /** @var \Drupal\rdf_entity\RdfInterface $source_collection */
     $source_collection = $form_state->getValue('source_collection');
     $destination_collection_id = $form_state->getValue('destination_collection');
 
-    if (!$destination_collection = $this->getRdfEntityStorage()->load($destination_collection_id)) {
-      throw new \RuntimeException("Cannot load RDF entity with ID $destination_collection_id");
+    if (!$destination_collection = $this->getGroupStorage()->load($destination_collection_id)) {
+      throw new \RuntimeException("Cannot load collection entity with ID $destination_collection_id");
     }
 
     foreach ($this->getSolutions() as $solution) {
@@ -189,24 +187,24 @@ class ChangeCollectionForm extends FormBase {
    */
   protected function getSolutions(): array {
     $solution_ids = $this->tempStore->get('solutions');
-    return $solution_ids ? $this->getRdfEntityStorage()->loadMultiple($solution_ids) : [];
+    return $solution_ids ? $this->getGroupStorage()->loadMultiple($solution_ids) : [];
   }
 
   /**
-   * Returns the RDF entity storage.
+   * Returns the group storage.
    *
-   * @return \Drupal\sparql_entity_storage\SparqlEntityStorageInterface
-   *   The RDF entity storage.
+   * @return \Drupal\Core\Entity\ContentEntityStorageInterface
+   *   The group entity storage.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    *   Thrown if the entity type doesn't exist.
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    *   Thrown when an entity with a non-existing storage is passed.
    */
-  protected function getRdfEntityStorage(): SparqlEntityStorageInterface {
-    /** @var \Drupal\sparql_entity_storage\SparqlEntityStorageInterface $rdf_entity_storage */
-    $rdf_entity_storage = $this->entityTypeManager->getStorage('rdf_entity');
-    return $rdf_entity_storage;
+  protected function getGroupStorage(): ContentEntityStorageInterface {
+    $storage = $this->entityTypeManager->getStorage('node');
+    assert($storage instanceof ContentEntityStorageInterface);
+    return $storage;
   }
 
 }
