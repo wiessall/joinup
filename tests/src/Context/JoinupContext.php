@@ -71,55 +71,6 @@ class JoinupContext extends RawDrupalContext {
   /**
    * Asserts that a list of triples exists in a certain graph.
    *
-   * Each row is a triple serialized as NTriples:
-   * | subject         | predicate         | object            |
-   * | http://subject1 | http://predicate1 | http://reference1 |
-   * | http://subject1 | http://predicate2 | value1            |
-   * | http://subject2 | http://predicate3 | value2            |
-   *
-   * @param string $graph
-   *   The graph to be queried.
-   * @param \Behat\Gherkin\Node\TableNode $triples
-   *   The user data.
-   *
-   * @todo Remove after ISAICP-8569 is deployed.
-   *
-   * @Then the following :graph graph triples should exist in the RDF backend:
-   */
-  public function assertTriples(string $graph, TableNode $triples): void {
-    /** @var \Drupal\rdf_sync\RdfSyncConnectionInterface $connection */
-    $connection = \Drupal::service('rdf_sync.connection');
-
-    $subjects = $rows = [];
-    foreach ($triples->getHash() as $triple) {
-      $subjects[$triple['subject']][] = $rows[implode(' ', $triple)] = $triple;
-    }
-
-    foreach (array_keys($subjects) as $subject) {
-      $query = "SELECT ?p ?o WHERE { GRAPH <$graph> { <$subject> ?p ?o }}";
-      $results = $connection->query($query);
-      /** @var \EasyRdf\Sparql\Result $result */
-      foreach ($results as $result) {
-        $triple = [
-          'subject' => $subject,
-          'predicate' => (string) $result->p,
-          'object' => trim((string) $result->o),
-        ];
-        if (in_array($triple, $rows)) {
-          unset($rows[implode(' ', $triple)]);
-        }
-      }
-    }
-
-    if (!empty($rows)) {
-      throw new ExpectationFailedException(sprintf("Triple(s) %s doesn't exists in the RDF backend", implode(PHP_EOL, array_keys($rows))));
-    }
-
-  }
-
-  /**
-   * Asserts that a list of triples exists in a certain graph.
-   *
    * It also asserts that no other triples for a given subject
    * exist.
    *
@@ -136,7 +87,7 @@ class JoinupContext extends RawDrupalContext {
    *
    * @Then the following :graph graph triples exist in the RDF backend:
    */
-  public function assertOnlyTheseTriples(string $graph, TableNode $triples): void {
+  public function assertTriples(string $graph, TableNode $triples): void {
     /** @var \Drupal\rdf_sync\RdfSyncConnectionInterface $connection */
     $connection = \Drupal::service('rdf_sync.connection');
 
