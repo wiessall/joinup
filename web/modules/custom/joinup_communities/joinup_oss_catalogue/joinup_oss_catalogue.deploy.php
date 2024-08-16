@@ -13,7 +13,7 @@ use Drupal\joinup_oss_catalogue\OssCatalogueCollectionInterface;
 /**
  * Update path alias for EU OSS catalogue.
  */
-function joinup_oss_catalogue_deploy_111100(): void {
+function joinup_oss_catalogue_deploy_111200(): void {
   /** @var \Drupal\collection\Entity\CollectionInterface $collection */
   $collection = \Drupal::entityTypeManager()->getStorage('rdf_entity')
     ->load(OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID);
@@ -27,7 +27,7 @@ function joinup_oss_catalogue_deploy_111100(): void {
 /**
  * Update title of EU OSS catalogue collection.
  */
-function joinup_oss_catalogue_deploy_111101(): void {
+function joinup_oss_catalogue_deploy_111201(): void {
   /** @var \Drupal\collection\Entity\CollectionInterface $collection */
   $collection = \Drupal::entityTypeManager()->getStorage('rdf_entity')
     ->load(OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID);
@@ -40,7 +40,7 @@ function joinup_oss_catalogue_deploy_111101(): void {
 /**
  * Import content for EU OpenSource Software Solutions Catalogue.
  */
-function joinup_oss_catalogue_deploy_111102(): void {
+function joinup_oss_catalogue_deploy_111202(): void {
   /** @var \Drupal\Core\Extension\ModuleInstallerInterface $moduleInstaller */
   $moduleInstaller = \Drupal::service('module_installer');
   /** @var \Drupal\Core\Entity\EntityRepositoryInterface $entityRepository */
@@ -73,7 +73,7 @@ function joinup_oss_catalogue_deploy_111102(): void {
 /**
  * Rename menu items for EU OSS catalogue.
  */
-function joinup_oss_catalogue_deploy_111103(): void {
+function joinup_oss_catalogue_deploy_111203(): void {
   $entityTypeManager = \Drupal::entityTypeManager();
   /** @var  \Drupal\menu_link_content\MenuLinkContentStorageInterface $menuLinkContentStorage */
   $menuLinkContentStorage = $entityTypeManager->getStorage('menu_link_content');
@@ -109,7 +109,7 @@ function joinup_oss_catalogue_deploy_111103(): void {
 /**
  * Make sure that oss_archived has a default value.
  */
-function joinup_oss_catalogue_deploy_111104(array &$sandbox): string {
+function joinup_oss_catalogue_deploy_111204(array &$sandbox): string {
   $entityTypeManager = \Drupal::entityTypeManager();
   /** @var \Drupal\node\NodeStorage $nodeStorage */
   $nodeStorage = $entityTypeManager->getStorage('node');

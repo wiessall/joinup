@@ -12,7 +12,7 @@ use Drupal\Core\Serialization\Yaml;
 /**
  * Pre-creates OSS vocabularies.
  */
-function joinup_oss_catalogue_update_111100(): void {
+function joinup_oss_catalogue_update_111200(): void {
   // Pre-create the new controlled vocabularies provided by eu_oss_catalogue
   // module. Normally, these are imported as config but eu_oss_catalogue install
   // goes first and its install process is also populating them with terms, so
