@@ -62,7 +62,7 @@ function joinup_core_theme(array $existing, string $type, string $theme, string 
  * Implements hook_requirements_alter().
  */
 function joinup_core_requirements_alter(array &$requirements): void {
-  $ignored = getenv('DRUPAL_STATUS_REPORT_IGNORE') ?: 'update status,search_api_solr_schema_joinup_modifications,metatag_maintenance_mode,webform_libraries,output_buffering,deprecated_modules';
+  $ignored = getenv('DRUPAL_STATUS_REPORT_IGNORE') ?: 'update status,search_api_solr_schema_joinup_modifications,metatag_maintenance_mode,webform_libraries,output_buffering,deprecated_modules,field_group_jquery_ui_accordion';
   $ignored = array_map('trim', explode(',', $ignored));
 
   $requirements = array_filter($requirements, function (string $requirement) use ($ignored): bool {
