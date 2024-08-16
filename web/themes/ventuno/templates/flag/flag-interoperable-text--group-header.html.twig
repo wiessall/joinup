@@ -1,0 +1,16 @@
+{#
+/**
+ * @file
+ * Overriding Flag Interoperable text template.
+ *
+ * Available variables:
+ * - flagged: Is flagged?
+ */
+#}
+
+{% if flagged %}
+  <svg class="bi icon--xs">
+    <use xlink:href="{{ bcl_icon_path }}#patch-check"></use>
+  </svg>
+  <span>{{ 'Interoperable'|t }}</span>
+{% endif %}
