@@ -1,4 +1,4 @@
-@api @group-c
+@api @group-a
 Feature: Tests the collection last update time.
 
   Scenario: As a user visiting a collection, I want to see the collection last

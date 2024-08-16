@@ -1,4 +1,4 @@
-@api @group-b
+@api @group-c
 Feature: "Add custom page" visibility options.
   In order to manage custom pages
   As a group facilitator
