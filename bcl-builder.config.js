@@ -1572,6 +1572,7 @@ module.exports = {
           "mastodon.svg",
           "newspaper.svg",
           "patch-exclamation.svg",
+          "patch-check.svg",
           "pencil-square.svg",
           "people.svg",
           "person-circle.svg",
