@@ -1,4 +1,4 @@
-@api @group-a
+@api @group-c
 Feature: Contact Information moderation
   In order to manage contact information
   As a facilitator or moderator

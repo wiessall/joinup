@@ -1,4 +1,4 @@
-@api @group-f
+@api @group-h
 Feature: Quote paragraph tests.
 
   Background:

@@ -1,4 +1,4 @@
-@api @group-e
+@api @group-b
 Feature:
   As a product owner of an open source project
   In order to assert whether I can reuse software or data and redistribute it using my favorite licence

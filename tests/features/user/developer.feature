@@ -1,4 +1,4 @@
-@api @group-f
+@api @group-i
 Feature: Variety tests for the developer role.
 
   Scenario Outline: Developers can access admin pages.

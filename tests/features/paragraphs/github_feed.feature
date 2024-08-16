@@ -1,4 +1,4 @@
-@api @group-f
+@api @group-h
 Feature: Github feed paragraph tests.
   The scenarios are split into 4 tests because re-saving the entity would
   invalidate the file cache and the tests would require connecting to Github.
