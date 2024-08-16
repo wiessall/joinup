@@ -6,24 +6,7 @@
 upgrade_commands:
   default:
     - touch disable-config-readonly
-
-    # BEGIN: Remove after release, in ISAICP-8572.
-    - ./vendor/bin/drush sql:query "CREATE TABLE node__isaicp_8569 LIKE node__distribution_parent"
-    - ./vendor/bin/drush sql:query "CREATE TABLE node_revision__isaicp_8569 LIKE node_revision__distribution_parent"
-    - ./vendor/bin/drush sql:query "INSERT INTO node__isaicp_8569 (bundle, entity_id, revision_id, langcode, delta, distribution_parent_target_id) SELECT bundle, entity_id, revision_id, langcode, delta, distribution_parent_target_id FROM node__distribution_parent"
-    - ./vendor/bin/drush sql:query "INSERT INTO node_revision__isaicp_8569 (bundle, entity_id, revision_id, langcode, delta, distribution_parent_target_id) SELECT bundle, entity_id, revision_id, langcode, delta, distribution_parent_target_id FROM node_revision__distribution_parent"
-    # END: Remove after release, in ISAICP-8572.
-
     - ./vendor/bin/drush deploy --yes
-
-    # BEGIN: Remove after release, in ISAICP-8572.
-    - ./vendor/bin/drush sql:query "INSERT INTO node__release (bundle, entity_id, revision_id, langcode, delta, release_target_id) SELECT bundle, entity_id, revision_id, langcode, delta, CAST(distribution_parent_target_id AS UNSIGNED) FROM node__isaicp_8569 WHERE distribution_parent_target_id REGEXP '^[0-9]+$'"
-    - ./vendor/bin/drush sql:query "INSERT INTO node_revision__release (bundle, entity_id, revision_id, langcode, delta, release_target_id) SELECT bundle, entity_id, revision_id, langcode, delta, CAST(distribution_parent_target_id AS UNSIGNED) FROM node_revision__isaicp_8569 WHERE distribution_parent_target_id REGEXP '^[0-9]+$'"
-    - ./vendor/bin/drush sql:query "DROP TABLE node__isaicp_8569"
-    - ./vendor/bin/drush sql:query "DROP TABLE node_revision__isaicp_8569"
-    - ./vendor/bin/drush rdf_sync:synchronize node --bundle=release
-    # END: Remove after release, in ISAICP-8572.
-
     - ./vendor/bin/drush search-api:reset-tracker --yes
     - ./vendor/bin/drush joinup:node-access-rebuild
     - ./vendor/bin/drush joinup:search-api-tasks
