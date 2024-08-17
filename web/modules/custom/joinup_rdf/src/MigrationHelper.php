@@ -20,6 +20,8 @@ use Drupal\sparql_entity_storage\UriEncoder;
 
 /**
  * Helper class for the RDF2Node migration.
+ *
+ * @todo Remove this service in ISAICP-8376.
  */
 final class MigrationHelper {
 
@@ -336,7 +338,6 @@ final class MigrationHelper {
       $this->saveEntityWithPathPreservation($entity, $uri);
       $this->assertMigratedEntity($entity, $values);
     }
-
 
     // Handle the draft content. If the entity has not been saved, it is an
     // unpublished entity, otherwise, it is a new revision.
