@@ -63,7 +63,7 @@ services:
     parent: queue.database
   joinup_group.url_alias_updater:
     class: Drupal\joinup_group\JoinupGroupContentUrlAliasUpdater
-    arguments: ['@queue']
+    arguments: ['@joinup_group.group_aware_queue']
   joinup_group.page_display_variant.subscriber:
     class: Drupal\joinup_group\EventSubscriber\JoinupGroupPageDisplayVariantSubscriber
     tags:
