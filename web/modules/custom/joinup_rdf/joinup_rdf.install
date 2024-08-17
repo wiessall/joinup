@@ -40,29 +40,9 @@ function joinup_rdf_requirements(string $phase): array {
 }
 
 /**
- * Re run user_update_10000.
- */
-function joinup_rdf_update_111101(): void {
-  require_once DRUPAL_ROOT . '/core/modules/user/user.install';
-  user_update_10000();
-}
-
-/**
- * Delete the asset_release RDF bundle. Enable joinup_release, joinup_solution.
- */
-function joinup_rdf_update_111102(): void {
-  // Delete the asset_release RDF bundle.
-  \Drupal::entityTypeManager()->getStorage('rdf_type')->load('asset_release')->delete();
-
-  // Install the joinup_release module because the joinup_distribution services
-  // have some dependency on the services provided by the joinup_release module.
-  \Drupal::service('module_installer')->install(['joinup_release', 'joinup_solution']);
-}
-
-/**
  * Prepare various data in tables for the migration.
  */
-function joinup_rdf_update_111103(): string {
+function joinup_rdf_update_200001(): string {
   $connection = \Drupal::database();
   $messages = [];
 
@@ -70,10 +50,10 @@ function joinup_rdf_update_111103(): string {
     // Update both the flag_id from `*_rdf_entity` to `*_node` and the
     // entity_type from `rdf_entity` to `node`.
     $query = <<<SQL
-  UPDATE flagging
-  SET flag_id = '{$flag_id}_node', entity_type = 'node'
-  WHERE flag_id = '{$flag_id}_rdf_entity' AND entity_type = 'rdf_entity'
-  SQL;
+      UPDATE flagging
+      SET flag_id = '{$flag_id}_node', entity_type = 'node'
+      WHERE flag_id = '{$flag_id}_rdf_entity' AND entity_type = 'rdf_entity'
+      SQL;
     $query = $connection->prepareStatement($query, [], TRUE);
     $query->execute();
     $count = $query->rowCount();
@@ -82,10 +62,10 @@ function joinup_rdf_update_111103(): string {
 
   // Update the invitation table.
   $query = <<<SQL
-UPDATE invitation
-SET entity_type = 'node'
-WHERE entity_type = 'rdf_entity'
-SQL;
+    UPDATE invitation
+    SET entity_type = 'node'
+    WHERE entity_type = 'rdf_entity'
+    SQL;
   $query = $connection->prepareStatement($query, [], TRUE);
   $query->execute();
   $count = $query->rowCount();
@@ -93,10 +73,10 @@ SQL;
 
   // Update the invitation__field_invitation_og_role table.
   $query = <<<SQL
-UPDATE invitation__field_invitation_og_role
-SET field_invitation_og_role_target_id = REPLACE(field_invitation_og_role_target_id, 'rdf_entity', 'node')
-WHERE field_invitation_og_role_target_id LIKE '%rdf_entity%'
-SQL;
+    UPDATE invitation__field_invitation_og_role
+    SET field_invitation_og_role_target_id = REPLACE(field_invitation_og_role_target_id, 'rdf_entity', 'node')
+    WHERE field_invitation_og_role_target_id LIKE '%rdf_entity%'
+    SQL;
   $query = $connection->prepareStatement($query, [], TRUE);
   $query->execute();
   $count = $query->rowCount();
@@ -104,10 +84,10 @@ SQL;
 
   // Update the meta_entity table.
   $query = <<<SQL
-UPDATE meta_entity
-SET target__target_type = 'node'
-WHERE target__target_type = 'rdf_entity'
-SQL;
+    UPDATE meta_entity
+    SET target__target_type = 'node'
+    WHERE target__target_type = 'rdf_entity'
+    SQL;
   $query = $connection->prepareStatement($query, [], TRUE);
   $query->execute();
   $count = $query->rowCount();
@@ -115,10 +95,10 @@ SQL;
 
   // Update the joinup_group_node_access table.
   $query = <<<SQL
-UPDATE joinup_group_node_access
-SET entity_type = 'node'
-WHERE entity_type = 'rdf_entity'
-SQL;
+    UPDATE joinup_group_node_access
+    SET entity_type = 'node'
+    WHERE entity_type = 'rdf_entity'
+    SQL;
   $query = $connection->prepareStatement($query, [], TRUE);
   $query->execute();
   $count = $query->rowCount();
@@ -126,10 +106,10 @@ SQL;
 
   // Update the og_membership table.
   $query = <<<SQL
-UPDATE og_membership
-SET entity_type = 'node'
-WHERE entity_type = 'rdf_entity'
-SQL;
+    UPDATE og_membership
+    SET entity_type = 'node'
+    WHERE entity_type = 'rdf_entity'
+    SQL;
   $query = $connection->prepareStatement($query, [], TRUE);
   $query->execute();
   $count = $query->rowCount();
@@ -137,10 +117,10 @@ SQL;
 
   // Update the og_membership__roles table.
   $query = <<<SQL
-UPDATE og_membership__roles
-SET roles_target_id = REPLACE(roles_target_id, 'rdf_entity', 'node')
-WHERE roles_target_id LIKE '%rdf_entity%'
-SQL;
+    UPDATE og_membership__roles
+    SET roles_target_id = REPLACE(roles_target_id, 'rdf_entity', 'node')
+    WHERE roles_target_id LIKE '%rdf_entity%'
+    SQL;
   $query = $connection->prepareStatement($query, [], TRUE);
   $query->execute();
   $count = $query->rowCount();
@@ -152,7 +132,7 @@ SQL;
 /**
  * Manually change fields that cannot have their schema changed with data in db.
  */
-function joinup_rdf_update_111104(): string {
+function joinup_rdf_update_200002(): string {
   $fieldStorages = [
     'field.storage.node.field_shared_in',
     'field.storage.node.field_news_referenced_solution',
@@ -183,4 +163,12 @@ function joinup_rdf_update_111104(): string {
   }
 
   return 'Updated field storages: ' . implode(', ', $fieldStorages);
+}
+
+/**
+ * Re run user_update_10000.
+ */
+function joinup_rdf_update_200003(): void {
+  require_once DRUPAL_ROOT . '/core/modules/user/user.install';
+  user_update_10000();
 }
