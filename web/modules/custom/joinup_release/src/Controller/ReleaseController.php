@@ -186,7 +186,13 @@ class ReleaseController extends ControllerBase {
   protected function createNewRelease(RdfInterface $rdf_entity): ReleaseInterface {
     // @todo Remove solution stub workaround in ISAICP-8572.
     if (!$solution_stub = $this->rdfSyncMapper->getEntityByUri($rdf_entity->id())) {
-      $this->getLogger('php')->error("Solution {$rdf_entity->id()} lacks a solution stub.");
+      $solution_stub = $this->entityTypeManager()->getStorage('node')->create([
+        'type' => 'solution',
+        'uri' => $rdf_entity->id(),
+        'title' => substr($rdf_entity->label(), 0, 255),
+        'status' => FALSE,
+      ]);
+      $solution_stub->save();
     }
 
     /** @var \Drupal\rdf_entity\RdfInterface $release */
