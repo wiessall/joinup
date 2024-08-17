@@ -276,6 +276,7 @@ hidden:
   field_is_state: true
   field_short_id: true
   field_site_featured: true
+  flag_interoperability: true
   flag_like_rdf_entity: true
   langcode: true
   members: true
