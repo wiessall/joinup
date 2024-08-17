@@ -19,8 +19,8 @@ function joinup_rdf_deploy_200000(): void {
 /**
  * Migrate collections.
  */
-function joinup_rdf_deploy_111201(array &$sandbox): string {
-  $endpoint = \Drupal::getContainer()->get('sparql.endpoint');
+function joinup_rdf_deploy_200001(array &$sandbox): string {
+  $endpoint = \Drupal::getContainer()->get('rdf_sync.connection');
   if (empty($sandbox['collections'])) {
     $query = <<<SPARQL
       SELECT DISTINCT ?id
@@ -57,7 +57,7 @@ function joinup_rdf_deploy_200002(): string {
   $index = Index::load('published');
   $results = $index->query()->addCondition('entity_bundle', 'collection')->execute();
   $ids = array_keys($results->getResultItems());
-  // ::trackItems{action} re-constructs the IDs so we need to remove the prefix
+  // ::trackItems{action} re-constructs the IDs, so we need to remove the prefix
   // `entity:rdf_entity:` from the IDs.
   $ids = array_map(function (string $id): string {
     return str_replace('entity:rdf_entity/', '', $id);
@@ -71,7 +71,7 @@ function joinup_rdf_deploy_200002(): string {
  * Migrate solutions.
  */
 function joinup_rdf_deploy_200003(array &$sandbox): string {
-  $endpoint = \Drupal::getContainer()->get('sparql.endpoint');
+  $endpoint = \Drupal::getContainer()->get('rdf_sync.connection');
   if (empty($sandbox['solutions'])) {
     $query = <<<SPARQL
       SELECT DISTINCT ?id
@@ -122,11 +122,11 @@ function joinup_rdf_deploy_200004(): string {
  * Clean the collection and solution graphs.
  */
 function joinup_rdf_deploy_200005(): void {
-  $endpoint = \Drupal::getContainer()->get('sparql.endpoint');
-  $endpoint->query('CLEAR GRAPH <http://joinup.eu/collection/published>');
-  $endpoint->query('CLEAR GRAPH <http://joinup.eu/collection/draft>');
-  $endpoint->query('CLEAR GRAPH <http://joinup.eu/solution/published>');
-  $endpoint->query('CLEAR GRAPH <http://joinup.eu/solution/draft>');
+  $endpoint = \Drupal::getContainer()->get('rdf_sync.connection');
+  $endpoint->update('CLEAR GRAPH <http://joinup.eu/collection/published>');
+  $endpoint->update('CLEAR GRAPH <http://joinup.eu/collection/draft>');
+  $endpoint->update('CLEAR GRAPH <http://joinup.eu/solution/published>');
+  $endpoint->update('CLEAR GRAPH <http://joinup.eu/solution/draft>');
 }
 
 /**
