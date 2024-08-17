@@ -15,12 +15,25 @@ use Drupal\Core\Routing\TrustedRedirectResponse;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\joinup_release\Entity\ReleaseInterface;
 use Drupal\rdf_entity\RdfInterface;
+use Drupal\rdf_sync\RdfSyncMapper;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Controller for release forms.
  */
 class ReleaseController extends ControllerBase {
+
+  public function __construct(
+    protected readonly RdfSyncMapper $rdfSyncMapper,
+  ) {}
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container): self {
+    return new static($container->get('rdf_sync.mapper'));
+  }
 
   /**
    * Controller for the base form.
@@ -171,10 +184,19 @@ class ReleaseController extends ControllerBase {
    *   The unsaved release entity.
    */
   protected function createNewRelease(RdfInterface $rdf_entity): ReleaseInterface {
+    // @todo Remove solution stub workaround in ISAICP-8572.
+    if (!$solution_stub = $this->rdfSyncMapper->getEntityByUri($rdf_entity->id())) {
+      $this->getLogger('php')->error("Solution {$rdf_entity->id()} lacks a solution stub.");
+    }
+
     /** @var \Drupal\rdf_entity\RdfInterface $release */
     return $this->entityTypeManager()->getStorage('node')->create([
       'type' => 'release',
       'og_audience' => $rdf_entity->id(),
+      'solution_data' => [
+        'target_id' => $solution_stub?->id(),
+        'target_revision_id' => $solution_stub?->getRevisionId(),
+      ],
     ]);
   }
 
