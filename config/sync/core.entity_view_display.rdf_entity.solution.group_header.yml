@@ -96,6 +96,11 @@ content:
         template_suggestion: group_header_topic
     weight: 3
     region: content
+  flag_interoperability:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 10
+    region: content
   label:
     type: string
     label: hidden
