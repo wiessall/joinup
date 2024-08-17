@@ -47,7 +47,7 @@ services:
     tags:
       - { name: event_subscriber }
   joinup_solution.interoperable_flag_subscriber:
-    class: Drupal\solution\EventSubscriber\InteroperableFlagSubscriber
+    class: Drupal\joinup_solution\EventSubscriber\InteroperableFlagSubscriber
     arguments: [ '@search_api.entity_datasource.tracking_manager' ]
     tags:
       - { name: event_subscriber }

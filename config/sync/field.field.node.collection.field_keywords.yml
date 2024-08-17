@@ -9,7 +9,7 @@ third_party_settings:
   rdf_sync:
     value:
       predicate: 'http://www.w3.org/ns/dcat#keyword'
-      format: null
+      type: null
 id: node.collection.field_keywords
 field_name: field_keywords
 entity_type: node
