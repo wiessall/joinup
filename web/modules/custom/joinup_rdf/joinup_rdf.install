@@ -7,6 +7,8 @@
 
 declare(strict_types=1);
 
+use Drupal\joinup_release\Entity\ReleaseInterface;
+
 /**
  * Performs checks for the RDF entities and its storage.
  *
@@ -55,4 +57,43 @@ function joinup_rdf_update_111101(): void {
 function joinup_rdf_update_111102(): void {
   require_once DRUPAL_ROOT . '/core/modules/user/user.install';
   user_update_10000();
+}
+
+/**
+ * Fix releases not referring a solution stub.
+ */
+function joinup_rdf_update_111201(): string {
+  $storage = \Drupal::entityTypeManager()->getStorage('node');
+  $releaseIds = array_values($storage->getQuery()
+    ->accessCheck(FALSE)
+    ->condition('type', 'release')
+    ->notExists('solution_data')
+    ->execute());
+
+  if (!$releaseIds) {
+    return 'No releases to fix';
+  }
+
+  $mapper = \Drupal::getContainer()->get('rdf_sync.mapper');
+  foreach ($storage->loadMultiple($releaseIds) as $release) {
+    assert($release instanceof ReleaseInterface);
+
+    $solution = $release->getSolution();
+    if (!$solution_stub = $mapper->getEntityByUri($solution->id())) {
+      $solution_stub = $storage->create([
+        'type' => 'solution',
+        'uri' => $solution->id(),
+        'title' => substr($solution->label(), 0, 255),
+        'status' => FALSE,
+      ]);
+      $solution_stub->save();
+    }
+
+    $release->set('solution_data', [
+      'target_id' => $solution_stub->id(),
+      'target_revision_id' => $solution_stub->getRevisionId(),
+    ])->save();
+  }
+
+  return 'Fixed releases ' . implode(', ', $releaseIds);
 }
