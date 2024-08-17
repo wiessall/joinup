@@ -6,6 +6,7 @@
  */
 
 declare(strict_types=1);
+
 use Drupal\search_api\Entity\Index;
 
 /**
