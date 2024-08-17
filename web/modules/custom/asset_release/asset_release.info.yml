@@ -1,7 +1,0 @@
-name: Release
-description: 'The release RDF entity.'
-type: module
-package: Joinup
-core_version_requirement: ">= 9.4"
-
-dependencies: { }
