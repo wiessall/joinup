@@ -11,7 +11,7 @@ field_name: solution_type
 entity_type: node
 bundle: solution
 label: 'Solution type'
-description: ''
+description: 'EIRA Building block'
 required: true
 translatable: true
 default_value: {  }

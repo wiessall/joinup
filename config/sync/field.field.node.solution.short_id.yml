@@ -10,7 +10,7 @@ field_name: short_id
 entity_type: node
 bundle: solution
 label: 'Short ID'
-description: ''
+description: "Used as the web address (URL). Example: a solution named 'European Standards for Internet Of Things' could use 'es-iot'.\r\nCannot be changed once the solution is published.\r\nThe ID is between 4-26 characters and consists of lowercase letters, numbers and the dash symbol (-)."
 required: false
 translatable: true
 default_value: {  }
