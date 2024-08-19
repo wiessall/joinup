@@ -26,6 +26,7 @@ Feature:
     Given I am logged in as a moderator
     And I go to the edit form of the "Don't Mess with the Zohan" "custom page"
     And I click the last "Choose component" link
+    And a modal should open
     And I click "IFrame"
     Then I press "Save" in the "Modal buttons" region
     When I should see the error message "Iframe URL field is required."
@@ -42,6 +43,7 @@ Feature:
 
     And I go to the edit form of the "Don't Mess with the Zohan" "custom page"
     And I click "Choose component"
+    And a modal should open
     And I click "Map"
     # As the Webtools Map a webservice, we only test a fake JSON.
     And I fill in "JSON" with "{\"foo\":\"bar\"}"
