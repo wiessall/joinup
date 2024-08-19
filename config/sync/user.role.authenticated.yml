@@ -61,7 +61,7 @@ permissions:
   - 'access user profiles'
   - 'cancel account'
   - 'cancel own vote'
-  - 'create collection rdf entity'
+  - 'create collection content'
   - 'create contact_information content'
   - 'create content for any_user option'
   - 'create discussion content'

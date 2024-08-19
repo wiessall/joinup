@@ -2,7 +2,7 @@
 Feature: Tests membership to Joinup collection.
 
   Background:
-    Given the following collections:
+    Given collection content:
       | title                   | state     |
       | An arbitrary collection | published |
 

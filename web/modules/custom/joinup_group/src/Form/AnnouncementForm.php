@@ -281,8 +281,8 @@ class AnnouncementForm extends FormBase {
     }
 
     if (!isset($redirect)) {
-      $redirect = Url::fromRoute('entity.rdf_entity.announcement_edit', [
-        'rdf_entity' => $this->announcement->getGroupId(),
+      $redirect = Url::fromRoute('entity.node.announcement_edit', [
+        'node' => $this->announcement->getGroupId(),
         'announcement' => $this->announcement->id(),
       ]);
     }
