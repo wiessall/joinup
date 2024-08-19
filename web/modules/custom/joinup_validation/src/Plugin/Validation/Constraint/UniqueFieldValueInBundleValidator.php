@@ -6,6 +6,7 @@ namespace Drupal\joinup_validation\Plugin\Validation\Constraint;
 
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Field\FieldItemListInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
@@ -46,6 +47,7 @@ class UniqueFieldValueInBundleValidator extends ConstraintValidator implements C
    */
   public function validate($items, Constraint $constraint) {
     $bundles = $constraint->bundles;
+    assert($items instanceof FieldItemListInterface);
     if (!$item = $items->first()) {
       return;
     }
@@ -79,7 +81,7 @@ class UniqueFieldValueInBundleValidator extends ConstraintValidator implements C
       $this->context->addViolation($constraint->message, [
         '%value' => $item->{$main_property},
         '@entity_type' => $entity->getEntityType()->getSingularLabel(),
-        '@field_name' => mb_strtolower($items->getFieldDefinition()->getLabel()),
+        '@field_name' => mb_strtolower((string) $items->getFieldDefinition()->getLabel()),
       ]);
     }
   }

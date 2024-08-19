@@ -8,10 +8,10 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Url;
+use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_invite\InvitationMessageHelperInterface;
 use Drupal\og\MembershipManagerInterface;
 use Drupal\og\OgRoleInterface;
-use Drupal\rdf_entity\RdfInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -69,8 +69,8 @@ abstract class GroupFormBase extends InviteFormBase {
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state, ?RdfInterface $rdf_entity = NULL): array {
-    $this->entity = $rdf_entity;
+  public function buildForm(array $form, FormStateInterface $form_state, ?GroupInterface $node = NULL): array {
+    $this->entity = $node;
     $form = parent::build($form, $form_state);
 
     $form['role'] = [
