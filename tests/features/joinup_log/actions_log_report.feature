@@ -1,4 +1,4 @@
-@api @group-a
+@api @group-f
 Feature: Actions log
   In order to get a view on actions to our content
   As a facilitator

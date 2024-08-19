@@ -1,4 +1,4 @@
-@group-h @api
+@api @group-i
 Feature: Topic terms are redirected to search page.
 
   Background:

@@ -1,4 +1,4 @@
-@api @group-e
+@api @group-g
 Feature: Subscribing to a collection after joining
   In order to promote my collection
   As a collection owner

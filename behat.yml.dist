@@ -245,6 +245,7 @@ default:
     FriendsOfBehat\ServiceContainerExtension:
       imports:
         - ${joinup.dir}/vendor/drupaltest/behat-one-time-login/behat.services.yml
+        - ${joinup.dir}/tests/behat.services.yml
   formatters:
     ${behat.formatter.name}: ~
 

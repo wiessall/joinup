@@ -1,4 +1,4 @@
-@api @group-f
+@api @group-d
 Feature:
   As an owner of a website
   In order to guarantee data persistence
@@ -13,7 +13,7 @@ Feature:
     And the following solution:
       | title       | Persistent solution                                            |
       | collection  | Persistent collection                                          |
-      | description | Persistent solution                                            |
+      | description | Persistent solution description                                |
       | state       | published                                                      |
       | uri         | http://data.europa.eu/w21/ffb0ffc9-7704-45d3-95b3-42706b6320e5 |
     And release content:
@@ -90,6 +90,7 @@ Feature:
     # links back to the Joinup servers.
     Given I am on "data/w21/ffb0ffc9-7704-45d3-95b3-42706b6320e5"
     Then I should see the heading "Persistent solution"
+    And I should see "Persistent solution description"
 
     Given I am on "data/w21/37b8103e-26e5-4c81-8ce5-43ced02ff7d0"
     Then I should see the heading "Persistent collection"

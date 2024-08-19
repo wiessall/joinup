@@ -1,4 +1,4 @@
-@api @group-i
+@api @group-g
 Feature: Multilingual search
   As a user of the site I should only see English content
 

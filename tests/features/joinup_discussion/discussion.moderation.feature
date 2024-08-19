@@ -1,4 +1,4 @@
-@api @group-h
+@api @group-e
 Feature: Discussion moderation
   In order to manage discussions
   As a user of the website
