@@ -24,13 +24,10 @@ class ParentGroupFieldItemList extends EntityReferenceFieldItemList {
     if ($contact_info->isNew()) {
       return;
     }
-    $query = \Drupal::entityTypeManager()->getStorage('rdf_entity')->getQuery()->accessCheck(FALSE);
-    $or = $query->orConditionGroup()
-      ->condition('field_ar_contact_information', $contact_info->getUri())
-      ->condition('field_is_contact_information', $contact_info->getUri());
-    $gids = $query
-      ->condition('rid', array_values(JoinupGroupHelper::GROUP_BUNDLES), 'IN')
-      ->condition($or)
+    $gids = \Drupal::entityTypeManager()->getStorage('node')
+      ->getQuery()->accessCheck(FALSE)
+      ->condition('type', array_values(JoinupGroupHelper::GROUP_BUNDLES), 'IN')
+      ->condition('contact', $contact_info->id())
       ->execute();
     if ($gids) {
       $this->list[0] = $this->createItem(0, ['target_id' => reset($gids)]);

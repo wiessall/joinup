@@ -9,6 +9,7 @@ use Behat\Gherkin\Node\TableNode;
 use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Url;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
+use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
 use Drupal\file_url\FileUrlHandler;
 use Drupal\joinup\Traits\ConfigReadOnlyTrait;
 use Drupal\joinup\Traits\EntityReferenceTrait;
@@ -90,7 +91,7 @@ class SolutionContext extends RawDrupalContext {
    */
   public function visitSolution(string $solution): void {
     /** @var \Drupal\rdf_entity\Entity\Rdf $entity */
-    $entity = $this->getEntityByLabel('rdf_entity', $solution);
+    $entity = $this->getEntityByLabel('node', $solution);
     $this->visitPath($entity->toUrl()->toString());
   }
 
@@ -300,7 +301,7 @@ class SolutionContext extends RawDrupalContext {
       throw new \Exception("User $username could not be found.");
     }
 
-    $solution = $this->getEntityByLabel('rdf_entity', $solution, 'solution');
+    $solution = $this->getEntityByLabel('node', $solution, 'solution');
     $owner_roles = [
       OgRoleInterface::ADMINISTRATOR,
       'facilitator',
@@ -421,7 +422,7 @@ class SolutionContext extends RawDrupalContext {
    * @When I delete the :solution solution
    */
   public function deleteSolution(string $solution): void {
-    $solution = $this->getEntityByLabel('rdf_entity', $solution);
+    $solution = $this->getEntityByLabel('node', $solution);
     $solution->skip_notification = TRUE;
     $solution->delete();
   }
@@ -495,7 +496,7 @@ class SolutionContext extends RawDrupalContext {
    */
   public function givenSolutionUserMemberships(TableNode $membership_table): void {
     foreach ($membership_table->getColumnsHash() as $values) {
-      $group = $this->getEntityByLabel('rdf_entity', $values['solution']);
+      $group = $this->getEntityByLabel('node', $values['solution']);
       $this->givenUserMembership($group, $values);
     }
   }
@@ -535,45 +536,81 @@ class SolutionContext extends RawDrupalContext {
     // Mapping alias - field name.
     return [
       'author' => 'uid',
-      'uri' => 'id',
-      'title' => 'label',
+      'uri' => 'uri',
+      'title' => 'title',
       'short ID' => 'short_id',
-      'abstract' => 'field_is_abstract',
+      'abstract' => 'abstract',
       'affiliations requests' => 'field_is_affiliations_requests',
-      'contact information' => 'field_is_contact_information',
-      'content creation' => 'field_is_content_creation',
+      'contact information' => 'contact',
+      'content creation' => 'content_creation',
       'creation date' => 'created',
-      'description' => 'field_is_description',
-      'documentation' => 'field_is_documentation',
+      'description' => 'description',
+      'documentation' => 'documentation',
       'keywords' => 'field_keywords',
-      'landing page' => 'field_is_landing_page',
-      'language' => 'field_is_language',
+      'landing page' => 'landing_page',
+      'language' => 'language',
       'latest release' => 'field_is_latest_release',
-      'logo' => 'field_is_logo',
-      'metrics page' => 'field_is_metrics_page',
-      'moderation' => 'field_is_moderation',
+      'logo' => 'logo',
+      'metrics page' => 'metrics_page',
+      'moderation' => 'group_moderation',
       'modification date' => 'changed',
-      'owner' => 'field_is_owner',
+      'owner' => 'owner',
       'topic' => 'field_topic',
       'related by type' => 'field_is_show_eira_related',
       'related solutions' => 'field_is_related_solutions',
       'solution type' => 'field_is_solution_type',
       'source code repository' => 'field_is_source_code_repository',
-      'spatial coverage' => 'field_spatial_coverage',
+      'spatial coverage' => 'spatial_coverage',
       'status' => 'field_status',
       'translation' => 'field_is_translation',
       'webdav creation' => 'field_is_webdav_creation',
       'webdav url' => 'field_is_webdav_url',
       'wiki' => 'field_is_wiki',
-      'state' => 'field_is_state',
-      'collection' => 'collection',
-      'collections' => 'collection',
+      'state' => 'field_state',
+      'collection' => 'og_audience',
+      'collections' => 'og_audience',
       'featured' => 'feature',
       'pinned in' => 'pinned_in_collection',
       'published at' => 'published_at',
       'unpinned in' => 'unpinned_in_collection',
       'shared on' => 'field_is_shared_in',
     ];
+  }
+
+  /**
+   * Returns value mapping of human-friendly field values.
+   *
+   * Value keys are the human-friendly values used in the cucumber tables, their
+   * values are the actual field values to apply. Every value alias - value list
+   * is keyed by the un-aliased field name.
+   */
+  protected function getValueMapping(): array {
+    $mapping = [
+      'group_moderation' => ['no' => 0, 'yes' => 1],
+      'content_creation' => [
+        'facilitators and authors' => ContentCreationOptions::FACILITATORS_AND_AUTHORS,
+        'registered users' => ContentCreationOptions::REGISTERED_USERS,
+      ],
+      'field_is_webdav_creation' => ['no' => 0, 'yes' => 1],
+      'field_state' => [
+        'draft' => 'draft',
+        'proposed' => 'proposed',
+        'published' => 'published',
+        'needs update' => 'needs_update',
+        'blacklisted' => 'blacklisted',
+        'archived' => 'archived',
+      ],
+      'field_is_show_eira_related' => ['no' => 0, 'yes' => 1],
+    ];
+
+    Assert::assertEmpty(
+      array_diff(
+        array_keys($mapping),
+        $this->solutionFieldAliases(),
+      ),
+    );
+
+    return $mapping;
   }
 
   /**
@@ -589,23 +626,7 @@ class SolutionContext extends RawDrupalContext {
    *    Throws an exception when a mapped value is not found.
    */
   protected function convertValueAliases(array $fields): array {
-    $mapped_values = [
-      'field_is_moderation' => ['no' => 0, 'yes' => 1],
-      'field_is_content_creation' => [
-        'facilitators and authors' => ContentCreationOptions::FACILITATORS_AND_AUTHORS,
-        'registered users' => ContentCreationOptions::REGISTERED_USERS,
-      ],
-      'field_is_webdav_creation' => ['no' => 0, 'yes' => 1],
-      'field_is_state' => [
-        'draft' => 'draft',
-        'proposed' => 'proposed',
-        'published' => 'published',
-        'needs update' => 'needs_update',
-        'blacklisted' => 'blacklisted',
-        'archived' => 'archived',
-      ],
-      'field_is_show_eira_related' => ['no' => 0, 'yes' => 1],
-    ];
+    $mapped_values = $this->getValueMapping();
 
     foreach ($fields as $field => $value) {
       if (isset($mapped_values[$field])) {
@@ -777,6 +798,117 @@ class SolutionContext extends RawDrupalContext {
     $tile = $this->getTileByHeading($heading);
     $elements = $tile->findAll('xpath', '//span[contains(concat(" ", normalize-space(@class), " "), " icon--download ")]');
     Assert::assertEmpty($elements);
+  }
+
+  /**
+   * Replaces solution field aliases in the solution node object.
+   *
+   * @param \Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope $scope
+   *   The before node create scope.
+   *
+   * @BeforeNodeCreate
+   */
+  public function convertSolutionFieldAliases(BeforeNodeCreateScope $scope): void {
+    $node = $scope->getEntity();
+    if ($node->type !== 'solution') {
+      return;
+    }
+    $this->convertFieldAliases($node, self::solutionFieldAliases());
+  }
+
+  /**
+   * Converts values from user-friendly to normal machine values.
+   *
+   * @param \Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope $scope
+   *   The before node create scope.
+   *
+   * @BeforeNodeCreate
+   */
+  public function convertSolutionValueAliases(BeforeNodeCreateScope $scope): void {
+    $node = $scope->getEntity();
+    if ($node->type !== 'solution') {
+      return;
+    }
+    $value_mapping = $this->getValueMapping();
+    foreach ((array) $node as $field => $value) {
+      if (!isset($value_mapping[$field])) {
+        continue;
+      }
+      Assert::assertArrayHasKey(
+        $value,
+        $value_mapping[$field],
+        sprintf(
+          "Value '%s' is not an acceptable value for solution field %s.",
+          $value,
+          $field,
+        )
+      );
+
+      $node->$field = $value_mapping[$field][$value];
+    }
+  }
+
+  /**
+   * Adds a default logo image to the solution if it was not defined.
+   *
+   * @param \Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope $scope
+   *   The before node create scope.
+   *
+   * @BeforeNodeCreate
+   */
+  public function ensureSolutionLogo(BeforeNodeCreateScope $scope): void {
+    $node = $scope->getEntity();
+    if ($node->type !== 'solution') {
+      return;
+    }
+    // Add logo image.
+    if (!empty($node->logo)) {
+      $node->logo = $this->getFileSourcePath($node->logo);
+    }
+  }
+
+  /**
+   * Ensures that the solution being created has a parent collection.
+   *
+   * @param \Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope $scope
+   *   The before node create scope.
+   *
+   * @BeforeNodeCreate
+   */
+  public function ensureSolutionParentCollection(BeforeNodeCreateScope $scope): void {
+    $node = $scope->getEntity();
+    if ($node->type !== 'solution') {
+      return;
+    }
+    if (empty($node->og_audience)) {
+      $label = $this->getRandom()->sentences(3);
+      // We must use \Drupal\joinup\Context\DrupalContext to create the
+      // missing collection, since entities are removed per context class. If
+      // we do it directly in this context, then the solution was deleted after
+      // the collection which triggered destruction issues in RDF syncronizer.
+      $environment = $scope->getEnvironment();
+      $context = $environment->getContext(DrupalContext::class);
+      Assert::assertInstanceOf(DrupalContext::class, $context);
+      $collection = $context->nodeCreate((object) [
+        'type' => 'collection',
+        'title' => $label,
+        'field_state' => 'published',
+      ]);
+      $node->og_audience = $collection->nid;
+
+      // Remove any links created by this collection because they might produce
+      // name collisions with the solution. E.g. the left sidebar link 'About'.
+      // @todo Remove this workaround in ISAICP-5597.
+      // @see tests/features/custom_page/navigation_menu.feature
+      // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-5597
+      $entity_type_manager = \Drupal::entityTypeManager();
+      $storage = $entity_type_manager->getStorage('ogmenu_instance');
+      $og_menu_instance_ids = $storage->getQuery()->accessCheck(FALSE)
+        ->condition('type', 'navigation')
+        ->condition(OgGroupAudienceHelperInterface::DEFAULT_FIELD, $collection->nid)
+        ->execute();
+      $storage->delete($storage->loadMultiple($og_menu_instance_ids));
+    }
   }
 
 }

@@ -37,7 +37,7 @@ class JoinupGroupContext extends RawDrupalContext {
    * @When I am on the members page of :label
    */
   public function visitMembersPage(string $label): void {
-    $group = $this->getEntityByLabel('rdf_entity', $label);
+    $group = $this->getEntityByLabel('node', $label);
     $url = Url::fromRoute("entity.{$group->getEntityTypeId()}.member_overview", [
       $group->getEntityTypeId() => $group->id(),
     ]);
@@ -158,7 +158,7 @@ class JoinupGroupContext extends RawDrupalContext {
    */
   public function assertAnonGroupJoinTrackingCookiePresent(string $label): void {
     $cookie = $this->getSession()->getCookie('join_group');
-    $entity = $this->getEntityByLabel('rdf_entity', $label);
+    $entity = $this->getEntityByLabel('node', $label);
     Assert::assertEquals($entity->id(), $cookie, "A cookie was expected to track that an anonymous user wants to join the '$label' group.");
   }
 
@@ -203,7 +203,7 @@ class JoinupGroupContext extends RawDrupalContext {
     }
 
     /** @var \Drupal\joinup_group\Entity\GroupInterface $entity */
-    $entity = $this->getEntityByLabel('rdf_entity', $label, $type);
+    $entity = $this->getEntityByLabel('node', $label, $type);
     $actual = $entity->getMemberCount([$membership_state]);
 
     if ($actual != $number) {
@@ -237,17 +237,17 @@ class JoinupGroupContext extends RawDrupalContext {
    *   The announcement subject.
    * @param string $group_label
    *   The label of the group where the announcement belongs.
-   * @param string $group_type
+   * @param string $group_bundle
    *   The group bundle.
    *
    * @When I go to the :subject announcement of :group_label :group_type
    */
-  public function visitAnnouncementEditForm(string $subject, string $group_label, string $group_type): void {
-    assert(in_array($group_type, ['collection', 'solution']));
+  public function visitAnnouncementEditForm(string $subject, string $group_label, string $group_bundle): void {
+    assert(in_array($group_bundle, ['collection', 'solution']));
     $announcement = $this->getAnnouncementBySubject($subject);
-    $group = $this->getEntityByLabel('rdf_entity', $group_label, $group_type);
-    $url = Url::fromRoute('entity.rdf_entity.announcement_edit', [
-      'rdf_entity' => $group->id(),
+    $group = $this->getEntityByLabel('node', $group_label, $group_bundle);
+    $url = Url::fromRoute('entity.node.announcement_edit', [
+      'node' => $group->id(),
       'announcement' => $announcement->id(),
     ])->toString();
     $this->visitPath($url);
