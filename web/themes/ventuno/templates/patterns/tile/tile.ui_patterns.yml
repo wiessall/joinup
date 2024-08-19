@@ -8,12 +8,13 @@ tile:
       description: 'Variant of the tile.'
       preview: false
     image:
-      type: object
+      type: render
       label: 'Image'
       description: 'Tile image with path and alt.'
       preview:
-        path: 'https://placeimg.com/1000/500/people'
-        alt: 'Alternative text for tile image'
+        - theme: 'image'
+          uri: 'https://picsum.photos/1000/500'
+          alt: 'Alternative text for tile image'
     url:
       type: text
       label: 'Url'
@@ -54,12 +55,9 @@ tile:
       description: 'Descritpion of the content.'
       preview: 'Lorem ipsum dolor sit amet is the standard in typesetting industry.'
     action:
-      type: object
+      type: render
       label: 'Action'
       description: 'Call to action in the tile.'
-      preview:
-        label: 'News'
-        icon: 'newspaper'
     badges:
       type: array
       label: 'Badges'
