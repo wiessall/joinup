@@ -5,6 +5,7 @@ eu_oss_catalogue.provider.collection:
     _title: EU OSS Catalogue
   requirements:
     _permission: administer eu oss catalogue
+    _eu_oss_catalogue_check_enabled: 'TRUE'
 
 eu_oss_catalogue.hosting_platform_add:
   path: '/admin/content/eu-oss-catalogue/hosting-platform/add'
@@ -13,3 +14,4 @@ eu_oss_catalogue.hosting_platform_add:
     _title: 'Add configuration'
   requirements:
     _permission: 'administer eu oss catalogue'
+    _eu_oss_catalogue_check_enabled: 'TRUE'
