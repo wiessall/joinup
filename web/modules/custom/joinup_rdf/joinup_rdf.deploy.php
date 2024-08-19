@@ -19,7 +19,7 @@ function joinup_rdf_deploy_200000(): void {
 /**
  * Migrate collections.
  */
-function joinup_rdf_deploy_111201(array &$sandbox): string {
+function joinup_rdf_deploy_200001(array &$sandbox): string {
   $endpoint = \Drupal::getContainer()->get('sparql.endpoint');
   if (empty($sandbox['collections'])) {
     $query = <<<SPARQL
