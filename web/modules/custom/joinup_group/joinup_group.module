@@ -224,9 +224,10 @@ function joinup_group_form_node_form_alter(&$form, FormStateInterface $formState
     // If the entity has been published, only moderators can edit the short ID.
     // @todo Implement the EntityPublishedInterface for collections and
     //   solutions once we have the bundle classes in.
-    $has_published_version = $entity->isPublished();
-    if (isset($form['field_short_id']) && $has_published_version && !\Drupal::currentUser()->hasPermission('edit short id after publication')) {
-      $form['field_short_id']['widget'][0]['value']['#attributes']['disabled'] = 'disabled';
+    $has_published_version = !$entity->isNew() &&
+      \Drupal::entityTypeManager()->getStorage('node')->load($entity->id())->isPublished();
+    if (isset($form['short_id']) && $has_published_version && !\Drupal::currentUser()->hasPermission('edit short id after publication')) {
+      $form['short_id']['widget'][0]['value']['#attributes']['disabled'] = 'disabled';
     }
   }
 }
@@ -357,30 +358,22 @@ function joinup_group_node_insert(NodeInterface $group): void {
  *
  * Provide default images for collections and solutions in case they are empty.
  */
-function joinup_group_rdf_entity_presave(EntityInterface $entity): void {
+function joinup_group_node_presave(EntityInterface $entity): void {
   if (!$entity instanceof GroupInterface) {
     return;
   }
 
-  $field_data = [
-    'logo' => ['field_ar_logo', 'field_is_logo'],
-  ];
-
   $file_system = \Drupal::service('file_system');
   $fixtures_path = \Drupal::service('extension.list.module')->getPath('joinup_group') . '/fixtures/images/';
-  foreach ($field_data as $field_type => $fields) {
-    foreach ($fields as $field) {
-      if ($entity->hasField($field) && empty($entity->get($field)->getValue())) {
-        // Get files without the . and .. directories.
-        $files = array_slice(scandir($fixtures_path . $field_type), 2);
-        $random = array_rand($files);
-        $file_path = $file_system->realpath($fixtures_path . $field_type . '/' . $files[$random]);
-        $file_path = $file_system->copy($file_path, 'public://');
-        $file = File::create(['uri' => $file_path]);
-        $file->save();
-        $entity->set($field, $file->id());
-      }
-    }
+  if ($entity->hasField('logo') && empty($entity->get('logo')->getValue())) {
+    // Get files without the . and .. directories.
+    $files = array_slice(scandir($fixtures_path . 'logo'), 2);
+    $random = array_rand($files);
+    $file_path = $file_system->realpath($fixtures_path . 'logo/' . $files[$random]);
+    $file_path = $file_system->copy($file_path, 'public://');
+    $file = File::create(['uri' => $file_path]);
+    $file->save();
+    $entity->set('logo', $file->id());
   }
 }
 

@@ -200,7 +200,7 @@ trait GroupTrait {
   public function getMemberCount(array $states = [OgMembershipInterface::STATE_ACTIVE]): int {
     return \Drupal::entityQuery('og_membership')
       ->accessCheck(FALSE)
-      ->condition('entity_type', 'rdf_entity')
+      ->condition('entity_type', 'node')
       ->condition('entity_id', $this->id())
       ->condition('state', $states, 'IN')
       ->count()
@@ -269,7 +269,7 @@ trait GroupTrait {
     $query->join('users_field_data', 'u', 'og.uid = u.uid');
     // Only users which accepted the 'Legal notice' are receiving announcements.
     $query->join('entity_legal_document_acceptance', 'a', 'og.uid = a.uid');
-    return $query->condition('og.entity_type', 'rdf_entity')
+    return $query->condition('og.entity_type', 'node')
       ->fields('u', ['mail'])
       ->condition('og.entity_bundle', $this->bundle())
       ->condition('og.entity_id', $this->id())

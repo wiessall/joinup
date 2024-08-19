@@ -203,7 +203,7 @@ class JoinupGroupContext extends RawDrupalContext {
     }
 
     /** @var \Drupal\joinup_group\Entity\GroupInterface $entity */
-    $entity = $this->getEntityByLabel('rdf_entity', $label, $type);
+    $entity = $this->getEntityByLabel('node', $label, $type);
     $actual = $entity->getMemberCount([$membership_state]);
 
     if ($actual != $number) {

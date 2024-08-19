@@ -90,10 +90,10 @@ class SolutionTitleDuplicateHelper implements SolutionTitleDuplicateHelperInterf
     $query = $storage->getQuery()
       ->accessCheck(FALSE)
       ->condition('title', $solution->label())
-      ->condition('node', 'solution')
+      ->condition('type', 'solution')
       ->condition('status', 1);
     if ($solution->id()) {
-      $query->condition('id', $solution->id(), '<>');
+      $query->condition('nid', $solution->id(), '<>');
     }
 
     return array_values($query->execute());
