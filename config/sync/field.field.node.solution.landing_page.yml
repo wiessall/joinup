@@ -12,7 +12,7 @@ field_name: landing_page
 entity_type: node
 bundle: solution
 label: 'Landing page'
-description: ''
+description: 'Homepage of the solution in an external platform'
 required: false
 translatable: true
 default_value: {  }

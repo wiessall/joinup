@@ -5,19 +5,18 @@ dependencies:
   config:
     - field.storage.node.related_solutions
     - node.type.solution
-    - rdf_entity.rdfentity.solution
 id: node.solution.related_solutions
 field_name: related_solutions
 entity_type: node
 bundle: solution
 label: 'Related solutions'
-description: ''
+description: 'Related solutions (similar, same context, same application, etc.)'
 required: false
 translatable: true
 default_value: {  }
 default_value_callback: ''
 settings:
-  handler: 'default:rdf_entity'
+  handler: 'default:node'
   handler_settings:
     target_bundles:
       solution: solution

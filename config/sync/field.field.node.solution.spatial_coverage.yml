@@ -11,7 +11,7 @@ field_name: spatial_coverage
 entity_type: node
 bundle: solution
 label: 'Geographical coverage'
-description: ''
+description: 'Add a country name relevant to the content of this solution.'
 required: false
 translatable: true
 default_value: {  }
