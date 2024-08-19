@@ -1,4 +1,4 @@
-@api @group-h
+@api @group-e
 Feature: "Document" overview.
   In order to use documents
   As a user of the website

@@ -1,4 +1,4 @@
-@api @group-e
+@api @group-b
 Feature:
   Access and functionality checks for the IOP related paragraphs.
 
