@@ -44,32 +44,32 @@ class GroupSettingsController extends ControllerBase {
   /**
    * Provides a controller for the 'joinup_group.settings_form' route title.
    *
-   * @param \Drupal\joinup_group\Entity\GroupInterface $rdf_entity
+   * @param \Drupal\joinup_group\Entity\GroupInterface $node
    *   The group where to show settings.
    *
    * @return \Drupal\Component\Render\MarkupInterface
    *   The content as a render array.
    */
-  public function title(GroupInterface $rdf_entity): MarkupInterface {
+  public function title(GroupInterface $node): MarkupInterface {
     return $this->t('@label @type settings', [
-      '@label' => $rdf_entity->label(),
-      '@type' => $rdf_entity->get('rid')->entity->getSingularLabel(),
+      '@label' => $node->label(),
+      '@type' => $node->get('type')->entity->getSingularLabel(),
     ]);
   }
 
   /**
    * Provides a controller for the 'joinup_group.settings_form' route.
    *
-   * @param \Drupal\joinup_group\Entity\GroupInterface $group
+   * @param \Drupal\joinup_group\Entity\GroupInterface $node
    *   The group where to show settings.
    *
    * @return array
    *   The content as a render array.
    */
-  public function settings(GroupInterface $group): array {
-    $meta_entity = MetaEntity::loadOrCreate($this->getMetaEntityBundle($group), $group);
+  public function settings(GroupInterface $node): array {
+    $meta_entity = MetaEntity::loadOrCreate($this->getMetaEntityBundle($node), $node);
     $form_state_additions = [
-      'redirect' => $group->toUrl(),
+      'redirect' => $node->toUrl(),
     ];
     return $this->entityFormBuilder()->getForm($meta_entity, 'default', $form_state_additions);
   }
@@ -77,32 +77,32 @@ class GroupSettingsController extends ControllerBase {
   /**
    * Provides an access controller for the 'joinup_group.settings_form' route.
    *
-   * @param \Drupal\joinup_group\Entity\GroupInterface $rdf_entity
+   * @param \Drupal\joinup_group\Entity\GroupInterface $node
    *   The group where to show settings.
    *
    * @return \Drupal\Core\Access\AccessResultInterface
    *   The access result.
    */
-  public function access(GroupInterface $rdf_entity): AccessResultInterface {
-    $meta_entity = MetaEntity::loadOrCreate($this->getMetaEntityBundle($rdf_entity), $rdf_entity);
+  public function access(GroupInterface $node): AccessResultInterface {
+    $meta_entity = MetaEntity::loadOrCreate($this->getMetaEntityBundle($node), $node);
     $access_result = $meta_entity->access('update', NULL, TRUE);
     if ($access_result->isAllowed()) {
       return $access_result;
     }
-    return $access_result->orIf($this->ogAccess->userAccess($rdf_entity, 'update ' . $this->getMetaEntityBundle($rdf_entity) . ' meta-entity'));
+    return $access_result->orIf($this->ogAccess->userAccess($node, 'update ' . $this->getMetaEntityBundle($node) . ' meta-entity'));
   }
 
   /**
    * Format a meta entity bundle ID.
    *
-   * @param \Drupal\joinup_group\Entity\GroupInterface $rdf_entity
+   * @param \Drupal\joinup_group\Entity\GroupInterface $group
    *   The group where to show settings.
    *
    * @return string
    *   The meta entity bundle ID.
    */
-  protected function getMetaEntityBundle(GroupInterface $rdf_entity): string {
-    return "{$rdf_entity->bundle()}_settings";
+  protected function getMetaEntityBundle(GroupInterface $group): string {
+    return "{$group->bundle()}_settings";
   }
 
 }

@@ -18,9 +18,9 @@ class RouteSubscriber extends RouteSubscriberBase {
   protected function alterRoutes(RouteCollection $collection): void {
     // Deny access to group admin pages.
     $routes = [
-      'entity.rdf_entity.og_admin_routes',
-      'entity.rdf_entity.og_admin_routes.members',
-      'entity.rdf_entity.og_admin_routes.add_membership_page',
+      'entity.node.og_admin_routes',
+      'entity.node.og_admin_routes.members',
+      'entity.node.og_admin_routes.add_membership_page',
       'entity.og_membership.og_admin_routes',
       'entity.og_membership.og_admin_routes.members',
       'entity.og_membership.og_admin_routes.add_membership_page',

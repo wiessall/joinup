@@ -17,7 +17,7 @@ use Drupal\node\NodeInterface;
 /**
  * Interface for collection entities in Joinup.
  */
-interface CollectionInterface extends NodeInterface, RdfSyncEntityInterface, EntityPublicationTimeInterface, EntityWorkflowStateInterface, GroupInterface, FeaturedContentInterface, ArchivableEntityInterface, DescriptionInterface, AbstractInterface {
+interface CollectionInterface extends NodeInterface, EntityPublicationTimeInterface, EntityWorkflowStateInterface, GroupInterface, FeaturedContentInterface, ArchivableEntityInterface, DescriptionInterface, AbstractInterface, RdfSyncEntityInterface {
 
   /**
    * Returns the solutions that are affiliated with this collection.

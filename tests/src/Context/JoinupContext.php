@@ -210,55 +210,6 @@ class JoinupContext extends RawDrupalContext {
   /**
    * Asserts that a list of triples exists in a certain graph.
    *
-   * Each row is a triple serialized as NTriples:
-   * | subject         | predicate         | object            |
-   * | http://subject1 | http://predicate1 | http://reference1 |
-   * | http://subject1 | http://predicate2 | value1            |
-   * | http://subject2 | http://predicate3 | value2            |
-   *
-   * @param string $graph
-   *   The graph to be queried.
-   * @param \Behat\Gherkin\Node\TableNode $triples
-   *   The user data.
-   *
-   * @todo Remove after ISAICP-8569 is deployed.
-   *
-   * @Then the following :graph graph triples should exist in the RDF backend:
-   */
-  public function assertTriples(string $graph, TableNode $triples): void {
-    /** @var \Drupal\rdf_sync\RdfSyncConnectionInterface $connection */
-    $connection = \Drupal::service('rdf_sync.connection');
-
-    $subjects = $rows = [];
-    foreach ($triples->getHash() as $triple) {
-      $subjects[$triple['subject']][] = $rows[implode(' ', $triple)] = $triple;
-    }
-
-    foreach (array_keys($subjects) as $subject) {
-      $query = "SELECT ?p ?o WHERE { GRAPH <$graph> { <$subject> ?p ?o }}";
-      $results = $connection->query($query);
-      /** @var \EasyRdf\Sparql\Result $result */
-      foreach ($results as $result) {
-        $triple = [
-          'subject' => $subject,
-          'predicate' => (string) $result->p,
-          'object' => trim((string) $result->o),
-        ];
-        if (in_array($triple, $rows)) {
-          unset($rows[implode(' ', $triple)]);
-        }
-      }
-    }
-
-    if (!empty($rows)) {
-      throw new ExpectationFailedException(sprintf("Triple(s) %s doesn't exists in the RDF backend", implode(PHP_EOL, array_keys($rows))));
-    }
-
-  }
-
-  /**
-   * Asserts that a list of triples exists in a certain graph.
-   *
    * It also asserts that no other triples for a given subject
    * exist.
    *
@@ -275,7 +226,7 @@ class JoinupContext extends RawDrupalContext {
    *
    * @Then the following :graph graph triples exist in the RDF backend:
    */
-  public function assertOnlyTheseTriples(string $graph, TableNode $triples): void {
+  public function assertTriples(string $graph, TableNode $triples): void {
     /** @var \Drupal\rdf_sync\RdfSyncConnectionInterface $connection */
     $connection = \Drupal::service('rdf_sync.connection');
 
@@ -371,9 +322,9 @@ class JoinupContext extends RawDrupalContext {
    *
    * @param string $roles
    *   A comma separated list of roles to assign to the user.
-   * @param string $rdf_entity
+   * @param string $group_label
    *   The label of the collection or solution of which the user is a member.
-   * @param string $rdf_entity_bundle
+   * @param string $group_bundle
    *   The RDF entity bundle, either 'collection' or 'solution'.
    *
    * @throws \Exception
@@ -384,10 +335,10 @@ class JoinupContext extends RawDrupalContext {
    *
    * @see \Drupal\DrupalExtension\Context\DrupalContext::assertAuthenticatedByRole()
    */
-  public function assertAuthenticatedByOgRole($roles, $rdf_entity, $rdf_entity_bundle): void {
-    $entity = $this->getEntityByLabel('rdf_entity', $rdf_entity, $rdf_entity_bundle);
+  public function assertAuthenticatedByOgRole(string $roles, string $group_label, string $group_bundle): void {
+    $entity = $this->getEntityByLabel('node', $group_label, $group_bundle);
     if (!$entity) {
-      throw new \Exception("No entity found with label $rdf_entity");
+      throw new \Exception("No entity found with label $group_label");
     }
     $roles = $this->explodeCommaSeparatedStepArgument($roles);
     $roles = $this->getOgRoles($roles, $entity);
@@ -449,9 +400,9 @@ class JoinupContext extends RawDrupalContext {
    *
    * Use this to e.g. test approval of pending memberships, or blocking users.
    *
-   * @param string $rdf_entity
+   * @param string $group_label
    *   The label of the collection or solution of which the user is a member.
-   * @param string $rdf_entity_bundle
+   * @param string $group_bundle
    *   The RDF entity bundle, either 'collection' or 'solution'.
    * @param string $state
    *   The new membership state, one of 'active', 'pending' or 'blocked'.
@@ -461,10 +412,10 @@ class JoinupContext extends RawDrupalContext {
    *
    * @Given my membership state in the :rdf_entity :rdf_entity_bundle changes to :state
    */
-  public function updateGroupState($rdf_entity, $rdf_entity_bundle, $state): void {
-    $entity = $this->getEntityByLabel('rdf_entity', $rdf_entity, $rdf_entity_bundle);
+  public function updateGroupState(string $group_label, string $group_bundle, string $state): void {
+    $entity = $this->getEntityByLabel('node', $group_label, $group_bundle);
     if (!$entity) {
-      throw new \Exception("No entity found with label $rdf_entity");
+      throw new \Exception("No entity found with label $group_label");
     }
 
     $current_user = $this->getUserManager()->getCurrentUser();
@@ -1053,7 +1004,6 @@ class JoinupContext extends RawDrupalContext {
       $element = $this->getSession()->getPage()->find('xpath', $xpath);
     }
 
-    $this->scrollNamedElementIntoView('button', $button, $element);
     $element->pressButton($button);
   }
 
@@ -1538,7 +1488,6 @@ class JoinupContext extends RawDrupalContext {
    */
   public function iClickLinkInTile(string $link, string $heading): void {
     $element = $this->getTileByHeading($heading);
-    $this->scrollElementIntoView($element);
 
     $linkElement = $element->findLink($link);
     $linkElementAriaLabel = $element->find('xpath', '//a[@aria-label=contains(text(), "' . $link . '")]');
@@ -1808,7 +1757,6 @@ class JoinupContext extends RawDrupalContext {
     }
 
     $button = $this->getSession()->getPage()->find('css', '#dropdown-add-content');
-    $this->scrollElementIntoView($button);
     $button->press();
   }
 
@@ -2179,66 +2127,6 @@ class JoinupContext extends RawDrupalContext {
   }
 
   /**
-   * Waits until Glide animations finish.
-   *
-   * @param string $seconds
-   *   Number of seconds to wait.
-   *
-   * @Then I wait up to :seconds seconds for Glide animations to finish
-   */
-  public function waitForGlideAnimations(string $seconds): void {
-    $this->assertWaitJs((int) $seconds, 'document.querySelector(".glide--slider.glide-animating") === null');
-  }
-
-  /**
-   * Waits until Slick animations finish.
-   *
-   * @param string $seconds
-   *   Number of seconds to wait.
-   *
-   * @Then I wait up to :seconds seconds for Slick animations to finish
-   */
-  public function waitForSlickAnimations(string $seconds): void {
-    $this->assertWaitJs((int) $seconds, 'document.querySelector("[data-slick].slick-animating") === null');
-  }
-
-  /**
-   * Waits until Bootstrap collapse animations finish.
-   *
-   * @param string $seconds
-   *   Number of seconds to wait.
-   *
-   * @Then I wait up to :seconds seconds for Bootstrap collapse animations to finish
-   */
-  public function waitForBsCollapseAnimations(string $seconds): void {
-    $this->assertWaitJs((int) $seconds, 'document.querySelector(".collapsing") === null');
-  }
-
-  /**
-   * Asserts that the default Drupal modal is opened.
-   *
-   * @throws \Exception
-   *   Thrown when the modal doesn't open within 5 seconds.
-   *
-   * @Then a modal should/will open
-   */
-  public function waitForDrupalModalToOpen(): void {
-    self::assertModalToOpen();
-  }
-
-  /**
-   * Asserts that the default Drupal modal is closed.
-   *
-   * @throws \Exception
-   *   Thrown when the modal doesn't close within 5 seconds.
-   *
-   * @Then the modal should be closed
-   */
-  public function waitForDrupalModalToClose(): void {
-    self::assertModalToClose();
-  }
-
-  /**
    * Asserts that a certain link contains the URL of an entity.
    *
    * @param string $link
@@ -2413,14 +2301,8 @@ class JoinupContext extends RawDrupalContext {
    */
   public function fillFieldWithNormalisedEntityReference(string $value, ?string $field = NULL): void {
     if ($this->hasJavascriptSupport()) {
-      $session = $this->getSession();
       $xpath = '//ul[contains(concat(" ", normalize-space(@class), " "), " ui-autocomplete ")]//a[text() = "' . $value . '"]';
-      $session->wait(500, 'document.querySelector(".ui-autocomplete").style.display !== "none"');
-      $element = $session->getPage()->find('xpath', $xpath);
-      if (!$element instanceof NodeElement) {
-        throw new \Exception("The value '$value' was not found in the autocomplete suggestions.");
-      }
-      $element->click();
+      $this->waitForElementVisible('xpath', $xpath)->click();
     }
     else {
       $element = $this->getSession()->getPage()->findField($field);
@@ -2786,7 +2668,7 @@ class JoinupContext extends RawDrupalContext {
    * @Then the draggable menu table of the :group_label :group_type should be:
    */
   public function assertDraggableMenuTable(TableNode $table, string $group_label, string $group_bundle): void {
-    self::assertJavaScriptEnabledBrowser();
+    $this->assertJavaScriptEnabledBrowser();
 
     $group = $this->getEntityByLabel('rdf_entity', $group_label, $group_bundle);
     /** @var \Behat\Mink\Element\NodeElement[] $rows */
@@ -2838,7 +2720,7 @@ class JoinupContext extends RawDrupalContext {
    * @Then I drag the :title table row( to the) :direction
    */
   public function dragTitledTableRowTowardsDirection($title, $direction): void {
-    self::assertJavaScriptEnabledBrowser();
+    $this->assertJavaScriptEnabledBrowser();
 
     $row = $this->findDraggableTableRowByTitle($title);
     $this->dragTableRowTowardsDirection($row, $direction);
@@ -2866,7 +2748,7 @@ class JoinupContext extends RawDrupalContext {
    * @Then I drag the table row in the :region region at position :position( to the) :direction
    */
   public function findTableRowByPositionAndDragTowardsDirection(string $position, string $direction, ?string $region = NULL): void {
-    self::assertJavaScriptEnabledBrowser();
+    $this->assertJavaScriptEnabledBrowser();
 
     $region = empty($region) ? $this->getSession()->getPage() : $this->getRegion($region);
     $row = $this->findDraggableTableRowByPosition((int) $position, $region);
@@ -2945,7 +2827,6 @@ class JoinupContext extends RawDrupalContext {
 
     /** @var \Behat\Mink\Element\NodeElement $last_button */
     $last_button = array_pop($buttons);
-    $this->scrollElementIntoView($last_button);
     $last_button->press();
   }
 
@@ -3323,6 +3204,20 @@ class JoinupContext extends RawDrupalContext {
         ])->save();
       }
     }
+  }
+
+  /**
+   * Insulates a scenario by stopping all sessions before and/or after it.
+   *
+   * Similar to "insulated" tag but also allows stopping the session after.
+   * Useful to reset the initial state before and/or after the scenario.
+   * e.g: scenarios resizing the browser window, etc.
+   *
+   * @BeforeScenario @stopSession:before
+   * @AfterScenario @stopSession:after
+   */
+  public function insulateScenario(): void {
+    $this->getMink()->stopSessions();
   }
 
   /**

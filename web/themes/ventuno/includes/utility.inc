@@ -225,6 +225,12 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
           'label' => $variables['elements']['downloads']['count'],
         ];
       }
+
+      $interoperability = $variables['content']['flag_interoperability'] ?? NULL;
+      if ($interoperability !== NULL) {
+        $variables['extra_data']['flag_interoperability'] = ['label' => $interoperability];
+      }
+
       break;
 
     case 'licence':

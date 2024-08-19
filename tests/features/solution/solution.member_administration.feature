@@ -16,7 +16,7 @@ Feature: Solution membership administration
       # Authenticated user.
       | Guadalupe Norman | guadalupe_norman@example.com | Guadalupe  | Norman      |
       | Marcia Garcia    | marcia_garcia@example.com    | Marcia     | Garcia      |
-    And the following solutions:
+    And solution content:
       | title            | related solutions | description                       | documentation | moderation | logo     | state     | solution type | owner                | contact information                      |
       | The Missing Sons |                   | Blazing fast segmentation faults. | text.pdf      | no         | logo.png | published |               | James Wilson the 2nd | Princeton-Plainsboro Teaching University |
     And the following solution user memberships:

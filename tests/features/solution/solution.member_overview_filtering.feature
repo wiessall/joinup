@@ -14,14 +14,12 @@ Feature: Type something to filter the listing the member list
       | rightone     | Wright     | Jackson     |           |
       | brighty      | Lavonne    | Atkins      |           |
       | scanner      | Pucky      | Muck        |           |
-    And the following collection:
-      | title | Coffee lovers |
-      | state | published     |
-    And the following solution:
-      | title       | Coffee grinders                      |
-      | description | Grind more coffee, make more coffee. |
-      | state       | published                            |
-      | collection  | Coffee lovers                        |
+    And collection content:
+      | title         | state     |
+      | Coffee lovers | published |
+    And solution content:
+      | title           | description                          | state     | collection    |
+      | Coffee grinders | Grind more coffee, make more coffee. | published | Coffee lovers |
     And the following solution user memberships:
       | solution        | user         | roles       |
       | Coffee grinders | ledge        | owner       |

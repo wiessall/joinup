@@ -1,15 +1,14 @@
 joinup_group.announcement.add:
-  route_name: entity.rdf_entity.announcement_add
+  route_name: entity.node.announcement_add
   title: 'Add announcement'
   appears_on:
     - view.announcements.group
   cache_contexts:
     - og_role
 joinup_group.members.announcement.add:
-  route_name: entity.rdf_entity.announcement_add
+  route_name: entity.node.announcement_add
   title: 'Add announcement'
   appears_on:
-    - entity.rdf_entity.member_overview
     - entity.node.member_overview
   # Ensure it appears after page main actions.
   weight: 10

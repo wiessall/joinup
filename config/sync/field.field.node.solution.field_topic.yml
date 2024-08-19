@@ -11,13 +11,13 @@ field_name: field_topic
 entity_type: node
 bundle: solution
 label: Topic
-description: ''
+description: 'You can select multiple topics using the "ctrl" key on your keyboard.'
 required: true
 translatable: true
 default_value: {  }
 default_value_callback: ''
 settings:
-  handler: 'grouped_rdf_taxonomy_term_selection:default'
+  handler: 'grouped_taxonomy_term_selection'
   handler_settings:
     target_bundles:
       topic: topic
