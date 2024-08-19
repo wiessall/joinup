@@ -178,13 +178,14 @@ Feature: "Add custom page" visibility options.
 
     # Expand the list. The sixth element should become visible.
     When I press "Show more"
+    And I wait for CSS animations to finish
     Then the "linus.jpeg" link in the Content region should be visible
     And the "Show less" button in the Content region should be visible
     But I should not see the button "Show more" in the Content region
 
     # Collapse again the list.
     When I press "Show less"
-    And I wait up to 5 seconds for Bootstrap collapse animations to finish
+    And I wait for CSS animations to finish
     Then the "linus.jpeg" link in the Content region should not be visible
     And the "Show more" button in the Content region should be visible
     But I should not see the button "Show less" in the Content region

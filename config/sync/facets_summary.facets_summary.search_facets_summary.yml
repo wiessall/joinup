@@ -3,6 +3,11 @@ langcode: en
 status: true
 dependencies:
   config:
+    - facets.facet.group
+    - facets.facet.interoperable_flag
+    - facets.facet.spatial_coverage
+    - facets.facet.topic
+    - facets.facet.type
     - search_api.index.published
     - views.view.search
   module:
@@ -34,6 +39,12 @@ facets:
   group:
     checked: true
     label: Collection/Solution
+    separator: ', '
+    show_count: false
+    weight: 0
+  interoperable_flag:
+    checked: true
+    label: 'Interoperable flag'
     separator: ', '
     show_count: false
     weight: 0

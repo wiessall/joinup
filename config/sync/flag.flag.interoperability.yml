@@ -1,0 +1,31 @@
+uuid: 0050cad2-2013-440f-9d8b-2768a5d2d57e
+langcode: en
+status: true
+dependencies:
+  module:
+    - rdf_entity
+    - solution
+id: interoperability
+label: Interoperable
+bundles:
+  - solution
+entity_type: rdf_entity
+global: true
+flag_short: 'Set interoperable flag'
+flag_long: ''
+flag_message: ''
+unflag_short: 'Remove interoperable flag'
+unflag_long: ''
+unflag_message: ''
+unflag_denied_text: ''
+weight: 0
+flag_type: 'entity:rdf_entity'
+link_type: rdf_interoperable_link
+flagTypeConfig:
+  show_in_links: {  }
+  show_as_field: true
+  show_on_form: false
+  show_contextual_link: false
+  extra_permissions:
+    owner: '0'
+linkTypeConfig: {  }
