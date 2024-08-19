@@ -148,6 +148,7 @@ abstract class JoinGroupFormBase extends FormBase implements JoinGroupFormInterf
     $this->user = $this->loadUser((int) $user->id());
 
     $membership = $this->user->isAnonymous() ? NULL : $this->getUserNonBlockedMembership();
+    $parameters = ['node' => $this->group->id()];
 
     // User should not be allowed to subscribe if entity it archived.
     if (empty($membership) && $group instanceof ArchivableEntityInterface && $group->isArchived()) {
@@ -156,7 +157,6 @@ abstract class JoinGroupFormBase extends FormBase implements JoinGroupFormInterf
 
     // Inform anonymous users that they need to authenticate to join the group.
     elseif ($this->user->isAnonymous()) {
-      $parameters = ['rdf_entity' => $this->group->id()];
       if ($this->accessManager->checkNamedRoute('joinup_group.authenticate_to_join', $parameters)) {
         $form['authenticate'] = [
           '#type' => 'link',
@@ -188,7 +188,6 @@ abstract class JoinGroupFormBase extends FormBase implements JoinGroupFormInterf
     // button. The confirmation form should open in a modal dialog for
     // JavaScript-enabled browsers.
     elseif ($membership->getState() === OgMembershipInterface::STATE_ACTIVE) {
-      $parameters = [$this->group->getEntityTypeId() => $this->group->id()];
       $form['leave'] = [
         '#theme' => 'group_leave_button',
       ];

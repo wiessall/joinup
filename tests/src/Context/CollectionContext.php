@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Drupal\joinup\Context;
 
+use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Exception\ElementNotFoundException;
 use Drupal\Core\Datetime\DrupalDateTime;
+use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
@@ -31,6 +33,7 @@ use Drupal\node\NodeInterface;
 use Drupal\og\OgRoleInterface;
 use Drupal\og_menu\Tests\Traits\OgMenuTrait;
 use Drupal\user\Entity\User;
+use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\ExpectationFailedException;
 
 /**
@@ -77,6 +80,41 @@ class CollectionContext extends RawDrupalContext {
     'spatial coverage' => 'spatial_coverage',
     'state' => 'field_state',
   ];
+
+  /**
+   * Returns value mapping of human-friendly field values.
+   *
+   * Value keys are the human-friendly values used in the cucumber tables, their
+   * values are the actual field values to apply. Every value alias - value list
+   * is keyed by the un-aliased field name.
+   */
+  protected function getValueMapping(): array {
+    $mapping = [
+      'group_moderation' => ['no' => 0, 'yes' => 1],
+      'content_creation' => [
+        'facilitators and authors' => ContentCreationOptions::FACILITATORS_AND_AUTHORS,
+        'members' => ContentCreationOptions::MEMBERS,
+        'registered users' => ContentCreationOptions::REGISTERED_USERS,
+      ],
+      'closed_group' => ['no' => 0, 'yes' => 1],
+      'field_state' => [
+        'draft' => 'draft',
+        'proposed' => 'proposed',
+        'published' => 'published',
+        'archival request' => 'archival_request',
+        'archived' => 'archived',
+      ],
+    ];
+
+    Assert::assertEmpty(
+      array_diff(
+        array_keys($mapping),
+        static::FIELD_ALIASES,
+      ),
+    );
+
+    return $mapping;
+  }
 
   /**
    * Test collections.
@@ -222,22 +260,7 @@ class CollectionContext extends RawDrupalContext {
    *    Throws an exception when a mapped value is not found.
    */
   protected function convertValueAliases(array $fields): array {
-    $mapped_values = [
-      'group_moderation' => ['no' => 0, 'yes' => 1],
-      'content_creation' => [
-        'facilitators and authors' => ContentCreationOptions::FACILITATORS_AND_AUTHORS,
-        'members' => ContentCreationOptions::MEMBERS,
-        'registered users' => ContentCreationOptions::REGISTERED_USERS,
-      ],
-      'closed_group' => ['no' => 0, 'yes' => 1],
-      'field_state' => [
-        'draft' => 'draft',
-        'proposed' => 'proposed',
-        'published' => 'published',
-        'archival request' => 'archival_request',
-        'archived' => 'archived',
-      ],
-    ];
+    $mapped_values = $this->getValueMapping();
 
     foreach ($fields as $field => $value) {
       if (isset($mapped_values[$field])) {
@@ -593,7 +616,7 @@ class CollectionContext extends RawDrupalContext {
     $collection = $this->getEntityByLabel('node', $label, 'collection');
 
     $url = Url::fromRoute('joinup_group.leave_confirm_form', [
-      'rdf_entity' => $collection->id(),
+      'node' => $collection->id(),
     ]);
     $this->visitPath($url->toString());
   }
@@ -661,6 +684,10 @@ class CollectionContext extends RawDrupalContext {
   /**
    * Creates the standard 'Joinup' collection.
    *
+   * @param \Behat\Behat\Hook\Scope\BeforeScenarioScope|null $scope
+   *   The before scenario scope. This scope object is only used if the method
+   *   is invoked as a @BeforeScenario hook.
+   *
    * @return \Drupal\collection\Entity\CollectionInterface
    *   The 'Joinup' collection.
    *
@@ -668,12 +695,24 @@ class CollectionContext extends RawDrupalContext {
    *
    * @see joinup_collection.module
    */
-  public function createJoinupCollection(): CollectionInterface {
-    return $this->createCollection([
-      'id' => JoinupCollectionHelper::getCollectionId(),
-      'label' => 'Joinup',
-      'field_ar_state' => 'published',
+  public function createJoinupCollection(?BeforeScenarioScope $scope = NULL): CollectionInterface {
+    // Use \Drupal\joinup\Context\DrupalContext to have all the entities being
+    // tracked and deleted in the same Behat context instance.
+    $environment = $scope
+      ? $scope->getEnvironment()
+      : $this->getDrupal()->getEnvironment();
+    $context = $environment->getContext(DrupalContext::class);
+    Assert::assertInstanceOf(DrupalContext::class, $context);
+    $context->nodeCreate((object) [
+      'type' => 'collection',
+      'uri' => JoinupCollectionHelper::getCollectionId(),
+      'title' => 'Joinup',
+      'field_state' => 'published',
     ]);
+
+    $collectionEntity = static::getEntityByLabel('node', 'Joinup', 'collection');
+    Assert::assertInstanceOf(CollectionInterface::class, $collectionEntity);
+    return $collectionEntity;
   }
 
   /**
@@ -782,6 +821,109 @@ class CollectionContext extends RawDrupalContext {
     $entity->save();
 
     return $entity;
+  }
+
+  /**
+   * Replaces collection field aliases in the collection node object.
+   *
+   * @param \Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope $scope
+   *   The before node create scope.
+   *
+   * @BeforeNodeCreate
+   */
+  public function convertCollectionFieldAliases(BeforeNodeCreateScope $scope): void {
+    $node = $scope->getEntity();
+    if ($node->type !== 'collection') {
+      return;
+    }
+    $this->convertFieldAliases($node, self::FIELD_ALIASES);
+  }
+
+  /**
+   * Adds a default logo image to the collection if it was not defined.
+   *
+   * @param \Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope $scope
+   *   The before node create scope.
+   *
+   * @BeforeNodeCreate
+   */
+  public function ensureCollectionLogo(BeforeNodeCreateScope $scope): void {
+    $node = $scope->getEntity();
+    if ($node->type !== 'collection') {
+      return;
+    }
+    // Add logo image.
+    if (!empty($node->logo)) {
+      $node->logo = $this->getFileSourcePath($node->logo);
+    }
+  }
+
+  /**
+   * Converts values from user-friendly to normal machine values.
+   *
+   * @param \Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope $scope
+   *   The before node create scope.
+   *
+   * @BeforeNodeCreate
+   */
+  public function convertCollectionValueAliases(BeforeNodeCreateScope $scope): void {
+    $node = $scope->getEntity();
+    if ($node->type !== 'collection') {
+      return;
+    }
+    $value_mapping = $this->getValueMapping();
+    foreach ((array) $node as $field => $value) {
+      if (!isset($value_mapping[$field])) {
+        continue;
+      }
+      Assert::assertArrayHasKey(
+        $value,
+        $value_mapping[$field],
+        sprintf(
+          "Value '%s' is not an acceptable value for collection field %s.",
+          $value,
+          $field,
+        )
+      );
+
+      $node->$field = $value_mapping[$field][$value];
+    }
+  }
+
+  /**
+   * Converts the value of collection link fields to the expected format.
+   *
+   * \Drupal\Driver\Fields\Drupal8\LinkHandler expects multi-column link field
+   * values; this is a workaround for a not-yet-applied patch we have in the
+   * OSS catalogue EPIC branch.
+   *
+   * @param \Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope $scope
+   *   The before node create scope.
+   *
+   * @BeforeNodeCreate
+   */
+  public function convertLinkFields(BeforeNodeCreateScope $scope): void {
+    $node = $scope->getEntity();
+    if ($node->type !== 'collection') {
+      return;
+    }
+    $entityFieldManager = \Drupal::service('entity_field.manager');
+    assert($entityFieldManager instanceof EntityFieldManagerInterface);
+    $fields = $entityFieldManager->getFieldDefinitions('node', 'collection');
+
+    foreach ((array) $node as $field => $value) {
+      if ($fields[$field]->getType() !== 'link') {
+        continue;
+      }
+
+      if (strpos($value, ' - ') || strpos($field, ':')) {
+        continue;
+      }
+
+      // Column marker is ':', key-value separator is ' - '.
+      // See RawDrupalContext::parseEntityFields().
+      $node->$field = "0:  - 1: $value";
+    }
   }
 
 }

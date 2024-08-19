@@ -13,13 +13,12 @@
         // so that we can show a dialog urging the user to subscribe to email
         // notifications.
         // If the cookie is set, do an AJAX request to show the subscribe form.
-        const encodedCollectionId = cookies.get("join_group");
-        if (encodedCollectionId) {
+        const collectionId = cookies.get("join_group");
+        if (collectionId) {
           try {
-            const collectionId = decodeURIComponent(encodedCollectionId);
             if (collectionId === drupalSettings.joinGroupData.id) {
               Drupal.ajax({
-                url: `${drupalSettings.path.baseUrl}ajax/collection/${id}/subscribe/auth`,
+                url: `${drupalSettings.path.baseUrl}ajax/collection/${drupalSettings.joinGroupData.id}/subscribe/auth`,
               }).execute();
             }
           } catch (err) {

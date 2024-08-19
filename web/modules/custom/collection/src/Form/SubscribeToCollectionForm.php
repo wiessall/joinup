@@ -17,6 +17,7 @@ use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 use Drupal\joinup_core\Event\AjaxCommandEvent;
+use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_subscription\JoinupSubscriptionsHelper;
 use Drupal\node\NodeInterface;
 use Drupal\og\MembershipManagerInterface;
@@ -88,7 +89,7 @@ class SubscribeToCollectionForm extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state, ?NodeInterface $node = NULL): array {
+  public function buildForm(array $form, FormStateInterface $form_state, ?GroupInterface $node = NULL): array {
     // This form should only be accessible if the user is already a member of
     // the collection.
     $membership = $this->getUserNonBlockedMembership($node);
@@ -146,7 +147,7 @@ class SubscribeToCollectionForm extends FormBase {
       // @see https://www.drupal.org/project/drupal/issues/2934463
       '#ajax' => [
         'callback' => '::confirmSubscription',
-        'url' => Url::fromRoute('collection.subscribe_to_collection_form', [
+        'url' => Url::fromRoute('joinup_collection.subscribe_to_collection_form', [
           'node' => $node->id(),
         ]),
         'options' => [
@@ -198,7 +199,7 @@ class SubscribeToCollectionForm extends FormBase {
     // Check if the user is pending, so we can adapt the messages for the user.
     $is_pending = !empty($membership) && $membership->isPending();
 
-    $parameters = ['%collection' => $collection->getName()];
+    $parameters = ['%collection' => $collection->label()];
     $message = $is_pending ?
       $this->t('You have been subscribed to %collection and will receive weekly notifications once your membership is approved.', $parameters) :
       $this->t('You have been subscribed to %collection and will receive weekly notifications. To manage your notifications go to <em>My subscriptions</em> in your user menu.', $parameters);
@@ -263,7 +264,7 @@ class SubscribeToCollectionForm extends FormBase {
    * - The cookie tracks this collection.
    * - The user is an unblocked member of the collection.
    *
-   * @param \Drupal\node\NodeInterface $collection
+   * @param \Drupal\node\NodeInterface $node
    *   The collection the user has joined.
    *
    * @return \Drupal\Core\Access\AccessResultInterface
@@ -271,13 +272,13 @@ class SubscribeToCollectionForm extends FormBase {
    *
    * @see \Drupal\joinup_group\EventSubscriber\JoinGroupSubscriber::onLogin()
    */
-  public function accessToSubscribeDialogAfterAuthenticating(NodeInterface $collection): AccessResultInterface {
+  public function accessToSubscribeDialogAfterAuthenticating(NodeInterface $node): AccessResultInterface {
     $cookie_id = $this->getRequest()->cookies->get('join_group', '');
     $user = $this->getUser();
     return AccessResult::allowedIf(
-      $cookie_id === $collection->id()
+      $cookie_id === $node->id()
       && $user->isAuthenticated()
-      && !empty($this->getUserNonBlockedMembership($collection))
+      && !empty($this->getUserNonBlockedMembership($node))
     );
   }
 
@@ -287,16 +288,16 @@ class SubscribeToCollectionForm extends FormBase {
    * This is shown in response to a cookie being present which was set when the
    * user expressed their desire to join the collection before they logged in.
    *
-   * @param \Drupal\node\NodeInterface $collection
+   * @param \Drupal\node\NodeInterface $node
    *   The collection the user has joined.
    *
    * @return \Drupal\Core\Ajax\AjaxResponse
    *   The AJAX response.
    */
-  public function showSubscribeDialog(NodeInterface $collection): AjaxResponse {
-    $title = $this->t('Welcome to %collection', ['%collection' => $collection->label()]);
+  public function showSubscribeDialog(NodeInterface $node): AjaxResponse {
+    $title = $this->t('Welcome to %collection', ['%collection' => $node->label()]);
 
-    $modal_form = $this->formBuilder->getForm(SubscribeToCollectionForm::class, $collection);
+    $modal_form = $this->formBuilder->getForm(SubscribeToCollectionForm::class, $node);
     $modal_form['#attached']['library'][] = 'core/drupal.dialog.ajax';
 
     $response = new AjaxResponse();
