@@ -173,7 +173,7 @@ function joinup_group_preprocess(array &$variables, string $hook): void {
 /**
  * Implements hook_entity_type_alter().
  */
-function joinup_group_entity_type_alter(array $entityTypes): void {
+function joinup_group_entity_type_alter(array &$entityTypes): void {
   // Swap the default user cancel form implementation with a custom one that
   // prevents deleting users when they are the sole owner of a group.
   $entityTypes['user']->setFormClass('cancel', UserCancelForm::class);
