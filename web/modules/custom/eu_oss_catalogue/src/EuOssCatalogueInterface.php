@@ -13,6 +13,14 @@ use Drupal\eu_oss_catalogue\Model\Project;
 interface EuOssCatalogueInterface {
 
   /**
+   * Checks whether the EU OSS Catalogue functionality is enabled.
+   *
+   * @return bool
+   *   Whether the EU OSS Catalogue functionality is enabled.
+   */
+  public function isEnabled(): bool;
+
+  /**
    * Fetches and queues a list of business solutions from a provider.
    *
    * @param string $providerId
