@@ -43,7 +43,6 @@ trait WysiwygTrait {
         $button,
       )
     );
-    $this->scrollElementIntoView($buttonElement);
     $buttonElement->press();
   }
 
