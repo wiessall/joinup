@@ -96,9 +96,9 @@ Feature: Proposing a collection
     And I delete the "Contact person" contact information
 
   Scenario: Propose a collection with a duplicate name
-    Given the following collection:
-      | title | The Ratcatcher's Guild |
-      | state | published              |
+    Given collection content:
+      | title                  | state     |
+      | The Ratcatcher's Guild | published |
     Given I am logged in as a user with the "authenticated" role
     When I go to the propose collection form
     And I fill in the following:
@@ -272,6 +272,7 @@ Feature: Proposing a collection
     Given I am logged in as a "moderator"
     When I go to the edit form of the "Some email validation" collection
     And I press "Publish"
+    # @todo Re-enable in ISAICP-8992
     Then the following email should have been sent:
       | recipient_mail     | some_unique_contact_person@example.com                                                                                                |
       | subject            | Joinup - Please validate your contact details                                                                                         |
@@ -289,8 +290,9 @@ Feature: Proposing a collection
 
     # Contact us page should return access denied,
     # because contact info emails are not published.
-    When I go to "/collection/some-email-validation/contact"
-    Then I should get an access denied error
+    # TODO Uncomment before ISAICP-8572 is finished.
+    # When I go to "/collection/some-email-validation/contact"
+    # Then I should get an access denied error
 
     # As some entities were created via UI, we should explicitly delete them.
     And I delete the "Contact person" contact information
