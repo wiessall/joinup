@@ -37,7 +37,7 @@ class AddToGroupForm extends GroupFormBase {
   /**
    * {@inheritdoc}
    */
-  public function submitForm(array &$form, FormStateInterface $form_state) {
+  public function submitForm(array &$form, FormStateInterface $form_state): void {
     $role_id = implode('-', [
       $this->entity->getEntityTypeId(),
       $this->entity->bundle(),
@@ -56,6 +56,21 @@ class AddToGroupForm extends GroupFormBase {
       $membership->setState(OgMembershipInterface::STATE_ACTIVE);
       $membership->addRole($this->role);
       $membership->save();
+      $this->logger->info('@actor added as member to @group by @user.', [
+        '@actor' => $user->getDisplayName(),
+        '@user' => $this->currentUser()->getDisplayName(),
+        '@group' => $this->entity->label(),
+        'type' => 'joinup:add_member',
+        'actor' => $user->id(),
+      ]);
+      $this->logger->info('Successfully added the @role role in @group to @actor by @user.', [
+        '@actor' => $user->getDisplayName(),
+        '@role' => strtolower($this->role->label()),
+        '@user' => $this->currentUser()->getDisplayName(),
+        '@group' => $this->entity->label(),
+        'type' => 'joinup:add_role',
+        'actor' => $user->id(),
+      ]);
     }
 
     $this->messenger()->addMessage($this->t('Successfully added the role %role to the selected users.', [

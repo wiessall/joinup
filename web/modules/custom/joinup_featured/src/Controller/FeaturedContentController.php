@@ -96,7 +96,7 @@ class FeaturedContentController extends ControllerBase {
    * @return \Symfony\Component\HttpFoundation\RedirectResponse
    *   The redirect response to the node collection.
    */
-  protected function getRedirect(ContentEntityInterface $entity) {
+  protected function getRedirect(ContentEntityInterface $entity): RedirectResponse {
     if ($entity->getEntityTypeId() === 'rdf_entity') {
       $redirect = $entity->toUrl();
     }

@@ -334,7 +334,7 @@ class Invitation extends ContentEntityBase implements InvitationInterface {
    * @return array
    *   An array of default values.
    */
-  public static function getCurrentUserId() {
+  public static function getCurrentUserId(): array {
     return [\Drupal::currentUser()->id()];
   }
 

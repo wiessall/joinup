@@ -7,6 +7,7 @@ namespace Drupal\Tests\joinup_core\ExistingSite;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drupal\Tests\node\Traits\NodeCreationTrait;
 use Drupal\Tests\token\Functional\TokenTestTrait;
+use Drupal\node\Entity\Node;
 use Drupal\rdf_entity\Entity\Rdf;
 
 /**
@@ -34,11 +35,11 @@ class TokenTest extends JoinupExistingSiteTestBase {
       'field_is_state' => 'published',
     ]);
 
-    $asset_release = $this->createRdfEntity([
-      'rid' => 'asset_release',
+    $release = $this->createNode([
+      'type' => 'release',
       'title' => $this->randomMachineName(),
-      'field_isr_is_version_of' => $solution,
-      'field_isr_state' => 'published',
+      'og_audience' => $solution,
+      'field_state' => 'published',
     ]);
 
     $distribution = $this->createNode([
@@ -58,11 +59,11 @@ class TokenTest extends JoinupExistingSiteTestBase {
     $data = ['rdf_entity' => $solution];
     $this->assertTokens('rdf_entity', $data, $tokens);
 
-    $data = ['rdf_entity' => $asset_release];
-    $this->assertTokens('rdf_entity', $data, $tokens);
+    $data = ['node' => $release];
+    $this->assertTokens('node', $data, $tokens);
 
-    $data = ['rdf_entity' => $distribution];
-    $this->assertTokens('rdf_entity', $data, $tokens);
+    $data = ['node' => $distribution];
+    $this->assertTokens('node', $data, $tokens);
   }
 
   /**
@@ -98,16 +99,16 @@ class TokenTest extends JoinupExistingSiteTestBase {
    */
   public function testShortIdOrTitleInvalidBundles(): void {
     $title = $this->randomMachineName();
-    $entity = Rdf::create([
-      'rid' => 'asset_release',
-      'label' => $title,
+    $entity = Node::create([
+      'type' => 'release',
+      'title' => $title,
     ]);
 
     $tokens = [
       'short_id_or_title' => $title,
     ];
-    $data = ['rdf_entity' => $entity];
-    $this->assertTokens('rdf_entity', $data, $tokens);
+    $data = ['node' => $entity];
+    $this->assertTokens('node', $data, $tokens);
   }
 
   /**

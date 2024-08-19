@@ -73,5 +73,4 @@ hook.
 
 ## Skip notification
 In order for an entity to not send notifications during a transition it needs
-to have the `skip_notification` property set to true. See
-`asset_release_rdf_entity_update` for an example.
+to have the `skip_notification` property set to true.

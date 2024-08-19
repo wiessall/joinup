@@ -38,7 +38,7 @@ Feature: Tours
       | /solutions       | should not be |
       | /keep-up-to-date | should be     |
 
-  @javascript
+  @javascript @stopSession:after
   Scenario: A tour can be started from the 'Guided tour' button on the homepage
     Given I am on the homepage
     # Switch to a higher screen resolution. When running this test using the

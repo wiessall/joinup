@@ -10,11 +10,13 @@ declare(strict_types=1);
 use Drupal\Component\Render\MarkupInterface;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Template\Attribute;
+use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\search_api\IndexInterface;
 use Drupal\search_api\Query\ConditionGroupInterface;
 use Drupal\views\ViewExecutable;
@@ -22,7 +24,7 @@ use Drupal\views\ViewExecutable;
 /**
  * Implements hook_theme().
  */
-function joinup_search_theme($existing, $type, $theme, $path) {
+function joinup_search_theme($existing, $type, $theme, $path): array {
   return [
     'facet_widget_links_inline' => [
       'variables' => [
@@ -56,7 +58,7 @@ function joinup_search_theme($existing, $type, $theme, $path) {
  *   - items: an array of inactive facet items.
  *   - attributes: HTML attributes for the main facet wrapper.
  */
-function template_preprocess_facet_widget_links_inline(array &$variables) {
+function template_preprocess_facet_widget_links_inline(array &$variables): void {
   $variables['button_attributes'] = new Attribute([
     'id' => Html::getUniqueId('filter-button'),
   ]);
@@ -68,7 +70,7 @@ function template_preprocess_facet_widget_links_inline(array &$variables) {
  * Grant access to fields of type search only to moderators except from
  * custom_page pages.
  */
-function joinup_search_entity_field_access($operation, FieldDefinitionInterface $field_definition, AccountInterface $account, ?FieldItemListInterface $items = NULL) {
+function joinup_search_entity_field_access($operation, FieldDefinitionInterface $field_definition, AccountInterface $account, ?FieldItemListInterface $items = NULL): AccessResultInterface {
   // Limit access to search fields only on edit.
   if ($operation !== 'edit' || $field_definition->getType() !== 'search_api_field') {
     return AccessResult::neutral();
@@ -100,7 +102,7 @@ function joinup_search_entity_field_access($operation, FieldDefinitionInterface 
  * @return bool
  *   True if the condition group has the required condition or false otherwise.
  */
-function _joinup_search_search_api_has_condition($conditions, $field, $value, $operator = '=') {
+function _joinup_search_search_api_has_condition($conditions, $field, $value, $operator = '='): bool {
   foreach ($conditions->getConditions() as $c) {
     if ($c instanceof ConditionGroupInterface) {
       if (_joinup_search_search_api_has_condition($c, $field, $value, $operator)) {
@@ -117,7 +119,7 @@ function _joinup_search_search_api_has_condition($conditions, $field, $value, $o
 /**
  * Implements hook_views_pre_execute().
  */
-function joinup_search_views_pre_execute(ViewExecutable $view) {
+function joinup_search_views_pre_execute(ViewExecutable $view): void {
   if ($view->id() !== 'search') {
     return;
   }
@@ -146,7 +148,7 @@ function joinup_search_theme_suggestions_joinup_search_global_search(array $vari
 /**
  * Implements hook_form_alter().
  */
-function joinup_search_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+function joinup_search_form_alter(&$form, FormStateInterface $form_state, $form_id): void {
   if ($form_id == 'views_exposed_form') {
     $route_name = \Drupal::routeMatch()->getRouteName();
     $view = $form_state->getStorage('view');
@@ -250,11 +252,17 @@ function joinup_search_entity_prepare_view(string $entity_type_id, array $entiti
       continue;
     }
 
+    // Always force the display of archived content.
+    if ($entity instanceof GroupInterface && $entity->isArchived()) {
+      $value = $entity->{$field}->getValue();
+      $value[0]['value']['show_archived'] = 'archived';
+      $entity->{$field}->setValue($value);
+    }
     // Because we are forcing the facet to show the values even when they are
     // not narrowing the results, and we are altering the query as well, we need
     // to also dynamically hide the facet when the 'show_archived' option is set
     // to anything else than 'all' - because it will not hide automatically.
-    if ($entity->{$field}->value['show_archived'] !== 'all') {
+    elseif ($entity->{$field}->value['show_archived'] !== 'all') {
       $value = $entity->{$field}->getValue();
       $value[0]['value']['fields'][$facet]['region'] = 'hidden';
       $entity->{$field}->setValue($value);

@@ -49,7 +49,7 @@
         "drupal/field_delimiter": "^2.0",
         "drupal/field_fallback_formatter": "^1.0",
         "drupal/field_formatter_range": "^1.1",
-        "drupal/field_group": "^3.1",
+        "drupal/field_group": "3.4.0",
         "drupal/field_permissions": "^1.1",
         "drupal/file_url": "~2.0",
         "drupal/flag": "^4.0",
@@ -78,7 +78,8 @@
         "drupal/node_revision_delete": "^2.0@RC",
         "drupal/og": "^1.0-alpha8",
         "drupal/og_menu": "^2.0",
-        "drupal/page_manager": "^4.0@beta",
+        "drupal/other_view_filter": "^1.3",
+        "drupal/page_manager": "4.0.0-rc2",
         "drupal/paragraphs": "^1.12",
         "drupal/pathauto": "~1.8",
         "drupal/pluginreference": "^3.0",
@@ -119,6 +120,7 @@
         "drupal/views_multiple_permissions": "^2.0",
         "drupal/webform": "^6.2",
         "drush/drush": "^12.1",
+        "jakeasmith/http_build_url": "^1.0",
         "gitonomy/gitlib": "^1.4",
         "knplabs/github-api": "^3.13",
         "m4tthumphrey/php-gitlab-api": "^11.12",
@@ -141,6 +143,7 @@
         "drupal/cas_mock_server": "^2.0",
         "drupal/coder": "*",
         "drupal/composer_deploy": "^1.6",
+        "drupal/config_inspector": "^2.1",
         "drupal/config_update": "^2.0",
         "drupal/devel": "^5.1",
         "drupal/drupal-extension": "^5.0",
@@ -153,9 +156,10 @@
         "ec-europa/toolkit": "^10.5",
         "enlightn/security-checker": "^1",
         "lovers-of-behat/table-extension": "^1.4",
+        "lullabot/mink-selenium2-driver": "^1.7",
         "mikey179/vfsstream": "~1.6",
         "ml/json-ld": "^1.2",
-        "nicwortel/behat-unused-step-definitions-extension": "dev-master",
+        "nicwortel/behat-unused-step-definitions-extension": "^1.2",
         "palantirnet/drupal-rector": "^0.20.1",
         "pear/http_request2": "~2.4",
         "php-task-runner/composer": "dev-toolkit-runner",
@@ -287,8 +291,8 @@
                 "Warning: Undefined array key @see https://www.drupal.org/project/autologout/issues/3372010": "resources/patch/php/drupal/autologout/3372010.diff",
                 "Users with no roles are logged out @see https://www.drupal.org/project/autologout/issues/3443711": "resources/patch/php/drupal/autologout/3443711.diff"
             },
-            "drupal/colorbox": {
-                "Support Responsive Image module in D8 @see https://drupal.org/i/2808883": "resources/patch/php/drupal/colorbox/colorbox-responsive-image-2808883-69.patch"
+            "drupal/cas_mock_server": {
+                "Missing langcode in cas_mock_server.settings @see https://www.drupal.org/i/3463553": "resources/patch/php/drupal/cas_mock_server/3463553.diff"
             },
             "drupal/core": {
                 "Allow image style to be selected in text editor @see https://www.drupal.org/node/2061377": "resources/patch/php/drupal/core/2061377-466-10.3.x.diff",
@@ -310,10 +314,12 @@
                 "Cannot implement a custom user cancellation method @see https://www.drupal.org/project/drupal/issues/3135592": "resources/patch/php/drupal/core/3135592.patch",
                 "If you don't set the \"version\" of a profile, the report/status displays an empty dash @see https://www.drupal.org/project/drupal/issues/3270892": "resources/patch/php/drupal/core/3270892.patch",
                 "Views Block Display skips preBlockBuild() call on ajax rebuild https://www.drupal.org/i/2605218": "resources/patch/php/drupal/core/2605218-135.diff",
-                "Deprecated function: strnatcasecmp(): Passing null to parameter #1 ($string1) of type string is deprecated in LayoutPluginManager https://www.drupal.org/i/3392572": "resources/patch/php/drupal/core/3392572.patch",
                 "PHP deprecation error in PhpMail::mail @see https://www.drupal.org/project/drupal/issues/3418098": "resources/patch/php/drupal/core/3418098.diff",
                 "Set the toolbar to position fixed on mobile (for group banner positioning and toolbar on mobile) @see https://www.drupal.org/project/drupal/issues/2516938": "resources/patch/php/drupal/core/3809.diff",
-                "Media Library: Argument #1 ($array) must be of type array, null given in array_filter(). @see https://www.drupal.org/i/3340973": "resources/patch/php/drupal/core/3340973.diff"
+                "Media Library: Argument #1 ($array) must be of type array, null given in array_filter(). @see https://www.drupal.org/i/3340973": "resources/patch/php/drupal/core/3340973.diff",
+                "Add validation constraint to type: plural_label; remove work-around from views.field.numeric:format_plural_string @see https://www.drupal.org/i/3409588": "resources/patch/php/drupal/core/3409588.diff",
+                "MediaLibraryUiBuilder service does not properly allow additional contextual filter arguments @see https://www.drupal.org/i/3401726": "resources/patch/php/drupal/core/3401726.diff",
+                "Added deprecation suppression": "resources/patch/php/drupal/core/3467293.diff"
             },
             "drupal/default_content": {
                 "Allow manual imports @see https://www.drupal.org/i/2640734": "resources/patch/php/drupal/default_content/2640734.diff"
@@ -338,7 +344,9 @@
             "drupal/facets": {
                 "Facets breaks all AJAX views that uses pagers even without facets @see https://www.drupal.org/i/3379445": "resources/patch/php/drupal/facets/3379445.patch",
                 "Facet Summary for Facet Items with a set dependency. @see https://www.drupal.org/i/2873480": "resources/patch/php/drupal/facets/2873480.patch",
-                "Add 0 option in 'Soft limit' and apply soft limit to facet root li tags and add. @see https://www.drupal.org/i/3208580 and https://www.drupal.org/i/3307082": "resources/patch/php/drupal/facets/3208580-and-3307082.patch"
+                "Add 0 option in 'Soft limit' and apply soft limit to facet root li tags and add. @see https://www.drupal.org/i/3208580 and https://www.drupal.org/i/3307082": "resources/patch/php/drupal/facets/3208580-and-3307082.patch",
+                "Config validation error for facets_processor.* @see https://www.drupal.org/project/facets/issues/3459093": "resources/patch/php/drupal/facets/3459093.patch",
+                "Fix FacetsHierarchy config schema issue @see https://www.drupal.org/project/facets/issues/3259836": "resources/patch/php/drupal/facets/3259836-8.patch"
             },
             "drupal/field_delimiter": {
                 "Doesn't work in layout builder. @see https://www.drupal.org/i/3099580": "resources/patch/php/drupal/field_delimiter/3099580.patch",
@@ -463,8 +471,8 @@
                 "GraphQL API @see https://github.com/GitLabPHP/Client/issues/766": "resources/patch/php/drupal/m4tthumphrey/php-gitlab-api/772.diff",
                 "Add support for prefixed URIs on base path @see https://github.com/GitLabPHP/Client/issues/726": "resources/patch/php/drupal/m4tthumphrey/php-gitlab-api/726.diff"
             },
-            "nicwortel/behat-unused-step-definitions-extension": {
-                "Filters improvements (check concrete impl., include/exclude, ignore pattern aliases) - https://github.com/nicwortel/behat-unused-step-definitions-extension/pull/7": "resources/patch/php/nicwortel/behat-unused-step-definitions-extension/filters-improvements-PR_7.diff"
+            "lullabot/mink-selenium2-driver": {
+                "Add missing mouseover before clicking on radio/select elements - https://github.com/Lullabot/MinkSelenium2Driver/pull/14": "resources/patch/php/lullabot/mink-selenium2-driver/selenium2-mouseover-fixes.patch"
             },
             "sweetrdf/easyrdf": {
                 "Add a method to remove resources from graph @see https://github.com/sweetrdf/easyrdf/pull/44": "resources/patch/php/sweetrdf/easyrdf/44.diff"

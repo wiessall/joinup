@@ -14,6 +14,8 @@ use Drupal\joinup\ContextualLinksHelper;
  */
 trait ContextualLinksTrait {
 
+  use JavascriptTrait;
+
   /**
    * The contextual links helper class.
    *
@@ -75,24 +77,12 @@ trait ContextualLinksTrait {
    *
    * @return \Behat\Mink\Element\NodeElement
    *   The contextual links button.
-   *
-   * @throws \RuntimeException
-   *   Thrown when the region or the contextual links button was not found on
-   *   the page.
    */
   protected function findContextualLinkButton(TraversableElement $element): NodeElement {
     // Check if the wrapper for the contextual links is present on the page.
     // Since the button is appended by the contextual.js script, we might need
     // to wait a bit before the button itself is visible.
-    $button = $element->waitFor(30, function (NodeElement $element): ?NodeElement {
-      return $element->find('xpath', '//div[contains(concat(" ", normalize-space(@class), " "), " contextual ")]/button');
-    });
-
-    if (!$button) {
-      throw new \RuntimeException('No contextual link button found.');
-    }
-
-    return $button;
+    return $this->waitForElementVisible('xpath', '//div[contains(concat(" ", normalize-space(@class), " "), " contextual ")]/button', $element);
   }
 
 }

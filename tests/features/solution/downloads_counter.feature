@@ -12,7 +12,7 @@ Feature:
       | collection  | Ocean studies                                     |
       | state       | published                                         |
     Given distribution content:
-      | title                 | description          | parent                 | downloads | state     |
+      | title                 | description          | solution               | downloads | state     |
       | Sample distribution   | Sample description   | Climate change tracker | 10        | published |
       | Sample distribution 2 | Sample description 2 | Climate change tracker | 0         | published |
     # Checks solutions tiles to we have the correct numbers.
@@ -30,7 +30,7 @@ Feature:
     When I visit the solution overview
     Then the download icon should not be shown in the "Climate change tracker" tile
     Given distribution content:
-      | title                 | description          | parent                 | downloads | state     |
+      | title                 | description          | solution               | downloads | state     |
       | Sample distribution 3 | Sample description 3 | Climate change tracker | 20        | published |
     When I reload the page
     Then the "Climate change tracker" tile should show 20 downloads

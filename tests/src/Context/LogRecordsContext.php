@@ -96,7 +96,7 @@ class LogRecordsContext extends RawDrupalContext {
       // Keep only the first line of the message.
       array_walk(
         $logRecords,
-        function (array &$record) {
+        function (array &$record): void {
           $record['message'] = trim(explode(PHP_EOL, $record['message'])[0]);
         }
       );

@@ -1,0 +1,37 @@
+{#
+/**
+ * @file
+ * Template override for the page title of the sitewide forum.
+ */
+#}
+{{ title_prefix }}
+{% if title %}
+  {{ attach_library('ventuno/page-title') }}
+  {{ attach_library('ventuno/group-banner') }}
+  {{ attach_library('ventuno/full-width-bg') }}
+  {% set wrapper_classes = [
+    'page-title',
+    'py-4',
+    'position-relative',
+    'full-width-bg',
+    'd-flex',
+    'flex-row',
+    'align-items-start',
+  ] %}
+  <div{{ attributes.addClass(wrapper_classes) }}>
+    <div class="group-banner__logo page-title__logo me-2 p-4 bg-secondary" aria-hidden="true">
+      <svg class="page-title__icon position-relative img-fluid text-primary w-100">
+        <use xlink:href="{{ bcl_icon_path }}#chat-left-text"></use>
+      </svg>
+    </div>
+
+    <div class="w-100">
+      <h1{{ title_attributes.addClass('page-title__title', 'fw-bold') }}>{{ title }}</h1>
+      <p class="my-2 text-muted">
+          {{ 'Exchange insights, collaborate on projects and stay updated with the latest trends.'|t }}
+      </p>
+    </div>
+  </div>
+{% endif %}
+{{ title_suffix }}
+{% block metadata %}{% endblock %}

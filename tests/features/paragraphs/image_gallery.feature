@@ -19,6 +19,7 @@ Feature:
     When I am logged in as a "facilitator" of the "Paragraphs IG collection" collection
     And I go to the edit form of the "Image gallery paragraph page" "custom page"
     And I click "Choose component"
+    And a modal should open
     And I click "Image gallery"
 
     When I attach the file "logo.png" to "Add a new file" in the "Modal content" region
@@ -47,31 +48,27 @@ Feature:
     And I should not see the image "banner.jpg"
     And I should not see the image "linus.jpeg"
     Then I click on element ".slick--optionset--image-gallery button[aria-label='Next']:not([aria-disabled='true'])"
-    And I wait up to "5" seconds for Slick animations to finish
     Then I click on element ".slick--optionset--image-gallery button[aria-label='Next']:not([aria-disabled='true'])"
-    And I wait up to "5" seconds for Slick animations to finish
+    And I wait for CSS animations to finish
     And I should see the image "banner.jpg"
     And I should see the image "linus.jpeg"
     Then I click on element ".slick--optionset--image-gallery button[aria-label='Previous']:not([aria-disabled='true'])"
-    And I wait up to "5" seconds for Slick animations to finish
+    And I wait for CSS animations to finish
     And I should see the image "banner.jpg"
     And I should not see the image "linus.jpeg"
     Then I click on element ".slick--optionset--image-gallery button[aria-label='Previous']:not([aria-disabled='true'])"
-    And I wait up to "5" seconds for Slick animations to finish
+    And I wait for CSS animations to finish
     And I should not see the image "banner.jpg"
     And I should not see the image "linus.jpeg"
     And I should see a ".slick--optionset--image-gallery button[aria-label='Previous'][aria-disabled='true']" element
     Then I click on element ".slick--optionset--image-gallery .slide--0"
-    And I wait for AJAX to finish
-    And I should see a ".colorbox" element
+    And I wait until ".colorbox" element exists
     And I should see the image "logo.png"
     And I should see the button "« Prev"
     And I should see the button "Next »"
     And I should see the button "Close"
     And I press "Next »"
-    And I wait for AJAX to finish
     And I press "Next »"
-    And I wait for AJAX to finish
     And I press "Next »"
     And I should see the image "linus.jpeg"
     Then I press "Close"

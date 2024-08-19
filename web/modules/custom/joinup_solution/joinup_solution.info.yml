@@ -1,0 +1,5 @@
+name: 'Joinup solution'
+type: module
+description: 'Contains functionality related to the solution entity.'
+package: Joinuo
+core_version_requirement: ^10 || ^11

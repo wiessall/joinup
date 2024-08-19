@@ -179,8 +179,8 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
       }
       break;
 
-    case 'asset_release':
-      $variables['label'] = $entity->label();
+    case 'release':
+      $variables['title'] = $entity->label();
       $variables['highlighted']['text'] = 'v' . $entity->getVersion();
       $variables['info']['icon'] = 'calendar-event';
       if ($published_at = $entity->getPublicationTime()) {
@@ -189,7 +189,7 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
           '@published_at' => \Drupal::service('date.formatter')->format($published_at, 'date_only'),
         ]);
       }
-      $status = $variables['elements']['field_status'][0]['#plain_text'] ?? 'No status';
+      $status = $variables['elements']['process_status'][0]['#plain_text'] ?? 'No status';
       switch ($status) {
 
         case 'Completed':
@@ -237,6 +237,12 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
           'label' => $variables['elements']['downloads']['count'],
         ];
       }
+
+      $interoperability = $variables['content']['flag_interoperability'] ?? NULL;
+      if ($interoperability !== NULL) {
+        $variables['extra_data']['flag_interoperability'] = ['label' => $interoperability];
+      }
+
       break;
 
     case 'licence':
@@ -274,12 +280,12 @@ function _ventuno_get_default_icon(string $entity_type_id, string $bundle): stri
       'event' => 'calendar-event',
       'news' => 'newspaper',
       'oss_solution' => 'clipboard2-check',
+      'release' => 'file-earmark-zip',
       'video' => 'file-earmark-play',
     ],
     'rdf_entity' => [
       'collection' => 'folder2-open',
       'licence' => 'file-earmark-medical',
-      'asset_release' => 'file-earmark-zip',
       'solution' => 'clipboard2-check',
     ],
   ];

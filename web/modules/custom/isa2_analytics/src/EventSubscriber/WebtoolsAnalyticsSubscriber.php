@@ -75,7 +75,7 @@ class WebtoolsAnalyticsSubscriber implements EventSubscriberInterface {
    * @param \Drupal\oe_webtools_analytics\AnalyticsEventInterface $event
    *   Response event.
    */
-  public function setSiteSection(AnalyticsEventInterface $event) {
+  public function setSiteSection(AnalyticsEventInterface $event): void {
     // The site section varies by the active group.
     $event->addCacheContexts(['og_group_context']);
 
@@ -114,7 +114,7 @@ class WebtoolsAnalyticsSubscriber implements EventSubscriberInterface {
    * @param \Drupal\oe_webtools_analytics\AnalyticsEventInterface $event
    *   Response event.
    */
-  public function setSearchData(AnalyticsEventInterface $event) {
+  public function setSearchData(AnalyticsEventInterface $event): void {
     if ($this->routeMatch->getRouteName() !== 'view.search.page_1') {
       return;
     }

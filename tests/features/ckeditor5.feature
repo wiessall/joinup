@@ -190,9 +190,6 @@ Feature: CKEditor5
     And a modal should open
     And I select "Name (A-Z)" from "Sort by"
     And I press "Apply filters"
-    # Prevent "stale element reference" error.
-    And I wait for 1 second
-    And I wait for AJAX to finish
     Then the "Ventuno media library" table should be:
       |  | Thumbnail | Name                | Authored by | Updated                 |
       |  |           | Pager test 1        | Anonymous   | Mon, 25/07/2016 - 13:00 |
@@ -216,9 +213,6 @@ Feature: CKEditor5
 
     # Use the pager.
     When I click "Go to page 2"
-    And I wait for AJAX to finish
-    # Wait for the animation to finish.
-    And I wait for 2 second
     But I should not see "Pager test 1"
     And I should not see "Pager test 2"
     And I should not see "Pager test 3"
@@ -240,14 +234,15 @@ Feature: CKEditor5
     And I should not see "This is Alan we love"
     And I should not see "Other Image in The Other Collection"
 
+  # Regression test for ticket ISAICP-8806, ISAICP-8865.
   Scenario: Media type error with CKEditor5.
-  # Regression test for ticket ISAICP-8806.
     Given I am logged in as a moderator
     When I go to the edit form of the "The Other Collection" collection
     And I press the button "Insert Media" in the "Description" wysiwyg editor
     Then a modal should open
+    # There should be no JS error, AJAX should complete.
+    And I press "Apply filters"
     And I press "Insert selected" in the "Modal buttons" region
-    And I wait for AJAX to finish
     Then I should see the error message "No items selected."
 
   # For 'Media video with CKEditor5' see tests/features/video/embed.feature

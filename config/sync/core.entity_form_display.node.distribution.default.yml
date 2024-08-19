@@ -5,13 +5,13 @@ dependencies:
   config:
     - field.field.node.distribution.access_url
     - field.field.node.distribution.description
-    - field.field.node.distribution.distribution_parent
     - field.field.node.distribution.field_licence
     - field.field.node.distribution.field_state
     - field.field.node.distribution.file_size
     - field.field.node.distribution.format
     - field.field.node.distribution.og_audience
     - field.field.node.distribution.process_status
+    - field.field.node.distribution.release
     - field.field.node.distribution.representation_technique
     - node.type.distribution
   module:
@@ -93,13 +93,13 @@ content:
     third_party_settings: {  }
 hidden:
   created: true
-  distribution_parent: true
   file_size: true
   langcode: true
   og_audience: true
   path: true
   promote: true
   published_at: true
+  release: true
   simple_sitemap: true
   status: true
   sticky: true

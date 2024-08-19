@@ -9,7 +9,6 @@ use Drupal\Core\Cache\Cache;
 use Drupal\Core\Field\EntityReferenceFieldItemList;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
-use Drupal\asset_release\Entity\AssetReleaseInterface;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\collection\Exception\MissingCollectionException;
 use Drupal\contact_information\Traits\ContactInformationTrait;
@@ -19,6 +18,7 @@ use Drupal\joinup_bundle_class\JoinupBundleClassFieldAccessTrait;
 use Drupal\joinup_bundle_class\JoinupBundleClassMetaEntityTrait;
 use Drupal\joinup_bundle_class\LogoTrait;
 use Drupal\joinup_bundle_class\ShortIdTrait;
+use Drupal\joinup_distribution\Entity\DistributionParentTrait;
 use Drupal\joinup_featured\FeaturedContentTrait;
 use Drupal\joinup_group\Entity\GroupContentTrait;
 use Drupal\joinup_group\Entity\GroupInterface;
@@ -26,6 +26,7 @@ use Drupal\joinup_group\Entity\GroupTrait;
 use Drupal\joinup_group\Entity\PinnableGroupContentTrait;
 use Drupal\joinup_group\Exception\MissingGroupException;
 use Drupal\joinup_publication_date\Entity\EntityPublicationTimeFallbackTrait;
+use Drupal\joinup_release\Entity\ReleaseInterface;
 use Drupal\joinup_workflow\ArchivableEntityTrait;
 use Drupal\joinup_workflow\EntityWorkflowStateTrait;
 use Drupal\og\OgMembershipInterface;
@@ -39,6 +40,7 @@ class Solution extends Rdf implements SolutionInterface {
 
   use AbstractTrait;
   use ArchivableEntityTrait;
+  use DistributionParentTrait;
   use EntityPublicationTimeFallbackTrait;
   use EntityWorkflowStateTrait;
   use FeaturedContentTrait;
@@ -107,35 +109,34 @@ class Solution extends Rdf implements SolutionInterface {
    * {@inheritdoc}
    */
   public function getReleaseIds(): array {
-    return $this->getReferencedEntityIds('field_is_has_version')['rdf_entity'] ?? [];
+    return $this->entityTypeManager()->getStorage('node')
+      ->getQuery()
+      ->accessCheck(FALSE)
+      ->condition('type', 'release')
+      ->condition('og_audience', $this->id())
+      ->sort('created', 'ASC')
+      ->execute();
   }
 
   /**
    * {@inheritdoc}
    */
   public function getReleases(): array {
-    return $this->entityTypeManager()->getStorage('rdf_entity')
+    return $this->entityTypeManager()->getStorage('node')
       ->loadMultiple($this->getReleaseIds());
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getDistributionIds(): array {
-    return \Drupal::getContainer()->get('joinup_distribution.parent_distribution_resolver')->getParentsDistributionIds($this->id());
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function getLatestReleaseId(): ?string {
-    return $this->get('latest_release')->target_id;
+    return $this->get('latest_release')->isEmpty() ? NULL : (string) $this->get('latest_release')->target_id;
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getLatestRelease(): ?AssetReleaseInterface {
+  public function getLatestRelease(): ?ReleaseInterface {
     return $this->get('latest_release')->entity;
   }
 
@@ -205,11 +206,6 @@ class Solution extends Rdf implements SolutionInterface {
   public function doGetGroupContentIds(): array {
     $ids = ['node' => $this->getNodeGroupContent()];
     $releases = $this->getReleases();
-    $ids = NestedArray::mergeDeep($ids, [
-      'rdf_entity' => [
-        'asset_release' => array_keys($releases),
-      ],
-    ]);
     foreach ($releases as $release) {
       $ids = NestedArray::mergeDeep($ids, [
         'node' => [

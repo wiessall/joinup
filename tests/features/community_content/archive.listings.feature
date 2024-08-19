@@ -74,6 +74,7 @@ Feature: Archived content on content listings - groups and paragraphs.
     When I am logged in as a moderator
     And I go to the edit form of the "Some page" "custom page"
     And I click "Choose component"
+    And a modal should open
     And I click "Content listing"
     And I fill in "Query presets" with "entity_bundle|news"
     And I press "Save" in the "Modal buttons" region
@@ -130,6 +131,7 @@ Feature: Archived content on content listings - groups and paragraphs.
     And I go to the edit form of the "IOP page" "custom page"
     And I select "HR" from "Topic"
     And I click "Choose component"
+    And a modal should open
     And I click "Carousel"
     And I fill in "Query presets" with "entity_bundle|news" in the "Modal content" region
     And I press "Save" in the "Modal buttons" region

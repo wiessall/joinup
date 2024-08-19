@@ -11,7 +11,6 @@ dependencies:
     - field.field.rdf_entity.solution.field_is_content_creation
     - field.field.rdf_entity.solution.field_is_description
     - field.field.rdf_entity.solution.field_is_documentation
-    - field.field.rdf_entity.solution.field_is_has_version
     - field.field.rdf_entity.solution.field_is_included_asset
     - field.field.rdf_entity.solution.field_is_issue_tracker
     - field.field.rdf_entity.solution.field_is_landing_page
@@ -97,6 +96,11 @@ content:
         template_suggestion: group_header_topic
     weight: 3
     region: content
+  flag_interoperability:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 10
+    region: content
   label:
     type: string
     label: hidden
@@ -130,7 +134,6 @@ hidden:
   field_is_content_creation: true
   field_is_description: true
   field_is_documentation: true
-  field_is_has_version: true
   field_is_included_asset: true
   field_is_issue_tracker: true
   field_is_landing_page: true

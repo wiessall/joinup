@@ -219,6 +219,7 @@ drupal:
           'blazy_ui',
           'cas_mock_server',
           'composer_deploy',
+          'config_inspector',
           'config_update',
           'config_update_ui',
           'dblog',
@@ -267,15 +268,21 @@ drupal:
             'isolation_level' => 'SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED',
           ],
         ];
+
+        $settings['sparql']['protocol'] = getenv('DRUPAL_SPARQL_PROTOCOL') ?: 'http';
+        $settings['sparql']['hostname'] = getenv('DRUPAL_SPARQL_HOSTNAME');
+        $settings['sparql']['port'] = getenv('DRUPAL_SPARQL_PORT');
+        $settings['sparql']['user_readonly'] = getenv('DRUPAL_SPARQL_USER_READONLY');
+        $settings['sparql']['password_readonly'] = getenv('DRUPAL_SPARQL_PASSWORD_READONLY');
         $databases['sparql_default']['default'] = [
-          'host' => getenv('DRUPAL_SPARQL_HOSTNAME'),
-          'port' => getenv('DRUPAL_SPARQL_PORT'),
+          'host' => $settings['sparql']['hostname'],
+          'port' => $settings['sparql']['port'],
           'namespace' => 'Drupal\\joinup_sparql\\Driver\\Database\\joinup_sparql',
           'driver' => 'sparql',
         ];
       RDF backend: |
         $config['rdf_sync.settings']['endpoint']['host'] = getenv('DRUPAL_SPARQL_HOSTNAME');
-        $config['rdf_sync.settings']['endpoint']['port'] = getenv('DRUPAL_SPARQL_PORT');
+        $config['rdf_sync.settings']['endpoint']['port'] = (int) getenv('DRUPAL_SPARQL_PORT');
       Permissions: |
         $settings['skip_permissions_hardening'] = TRUE;
       Null mail collector: |
@@ -296,7 +303,7 @@ drupal:
         // consumed by the production environment.
         $config['search_api.server.joinup']['backend_config']['connector_config']['scheme'] = getenv('SEARCH_API_SERVER_SS_SOLR_SCHEME') ?: 'http';
         $config['search_api.server.joinup']['backend_config']['connector_config']['host'] = getenv('SEARCH_API_SERVER_SS_SOLR_HOST');
-        $config['search_api.server.joinup']['backend_config']['connector_config']['port'] = getenv('SEARCH_API_SERVER_SS_SOLR_PORT');
+        $config['search_api.server.joinup']['backend_config']['connector_config']['port'] = (int) getenv('SEARCH_API_SERVER_SS_SOLR_PORT');
         // Since Search API Solr 3.x, the Solr endpoint '/solr' (V1 API) has been
         // dropped in favour of '/'. The Solarium library automatically appends the
         // 'solr' part in Endpoint::getCoreBaseUri(). We  prevent changes of
@@ -311,6 +318,8 @@ drupal:
         $config['oe_webtools_analytics.settings']['siteID'] = getenv('OE_WEBTOOLS_ANALYTICS_SITE_ID');
         $config['oe_webtools_analytics.settings']['sitePath'] = getenv('OE_WEBTOOLS_ANALYTICS_SITE_PATH');
         $config['oe_webtools_analytics.settings']['instance'] = getenv('OE_WEBTOOLS_ANALYTICS_SITE_INSTANCE');
+        $config['sparql_endpoint_piwik.settings']['base_uri'] = getenv('OE_WEBTOOLS_ANALYTICS_SITE_PATH');
+        $config['sparql_endpoint_piwik.settings']['site_id'] = getenv('OE_WEBTOOLS_ANALYTICS_SITE_ID');
       Memcache: |
         if ($memcache_hosts = getenv('DRUPAL_MEMCACHE_HOSTS')) {
           $settings['cache']['default'] = 'cache.backend.memcache';
@@ -333,7 +342,7 @@ drupal:
         $settings['filecache']['directory']['bins']['geocoder'] = '../tests/fixtures/geocoding/cache';
         $settings['filecache']['strategy']['bins']['geocoder'] = 'persist';
       GitHub Token Setup: |
-        $config['github_feed.settings']['token'] = getenv('JOINUP_GITHUB_TOKEN');
+        $config['github_feed.settings']['token'] = getenv('JOINUP_GITHUB_TOKEN') ?: '';
       Development: |
         $settings['extension_discovery_scan_tests'] = TRUE;
       Verbose error logging: |

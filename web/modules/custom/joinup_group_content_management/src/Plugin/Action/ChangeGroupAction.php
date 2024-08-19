@@ -12,7 +12,10 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Render\Renderer;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\collection\Entity\Collection;
 use Drupal\custom_page\CustomPageOgMenuLinksManagerInterface;
+use Drupal\joinup_distribution\Entity\Distribution;
+use Drupal\joinup_release\Entity\Release;
 use Drupal\menu_link_content\MenuLinkContentInterface;
 use Drupal\node\NodeInterface;
 use Drupal\og_menu\OgMenuInstanceInterface;
@@ -148,20 +151,6 @@ class ChangeGroupAction extends ViewsBulkOperationsActionBase implements Contain
       while ($nodesToProcess) {
         $node = array_shift($nodesToProcess);
         $isCustomPage = $node->bundle() === 'custom_page';
-
-        // It might be a parent custom page.
-        if ($isCustomPage && $children = $this->customPageOgMenuLinksManager->getChildren($node, $menuType)) {
-          // Filter out child nodes that are already in the main set.
-          $children = array_diff_key($children, array_flip($initialNids));
-          array_walk($children, function (NodeInterface $child) {
-            // Flag this as a child.
-            $child->isChild = TRUE;
-          });
-          // Add children in the flow, just after the parent which is currently
-          // being processed.
-          $nodesToProcess = array_merge($children, $nodesToProcess);
-        }
-
         $args = [
           '@title' => $node->label(),
           ':url' => $node->toUrl()->toString(),
@@ -169,6 +158,44 @@ class ChangeGroupAction extends ViewsBulkOperationsActionBase implements Contain
           '@group' => $group->label(),
           ':group_url' => $group->toUrl()->toString(),
         ];
+
+        // It might be a parent custom page.
+        if ($isCustomPage && $children = $this->customPageOgMenuLinksManager->getChildren($node, $menuType)) {
+          // Filter out child nodes that are already in the main set.
+          $children = array_diff_key($children, array_flip($initialNids));
+          array_walk($children, function (NodeInterface $child): void {
+            // Flag this as a child.
+            $child->isChild = TRUE;
+          });
+          // Add children in the flow, just after the parent which is currently
+          // being processed.
+          $nodesToProcess = array_merge($children, $nodesToProcess);
+        }
+        elseif ($node instanceof Release) {
+          if ($group instanceof Collection) {
+            $message['error'][] = [
+              [
+                '#markup' => $this->t('@type <a href=":url">@title</a> was not moved as <a href=":group_url">@group</a> is a collection. Releases can only be moved to a different solution.', $args),
+              ],
+            ];
+            continue;
+          }
+          else {
+            $distributions = $node->getDistributions();
+            array_walk($distributions, function (NodeInterface $distribution): void {
+              $distribution->isChildDistribution = TRUE;
+            });
+            $nodesToProcess = array_merge($distributions, $nodesToProcess);
+          }
+        }
+        elseif (($node instanceof Distribution) && empty($node->isChildDistribution)) {
+          $message['error'][] = [
+            [
+              '#markup' => $this->t('@type <a href=":url">@title</a> was not moved in <a href=":group_url">@group</a> as it is not a standalone distribution. Please, move the parent release instead.', $args),
+            ],
+          ];
+          continue;
+        }
 
         // Avoid trying to re-assign the group if the node is already in the
         // group.

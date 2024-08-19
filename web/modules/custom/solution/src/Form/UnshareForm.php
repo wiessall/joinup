@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\solution\Form;
 
 use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\joinup_group\Form\UnshareForm as OriginalForm;
@@ -37,7 +38,7 @@ class UnshareForm extends OriginalForm {
    * @return \Drupal\Core\Access\AccessResultInterface
    *   The access result.
    */
-  public function access(RdfInterface $rdf_entity) {
+  public function access(RdfInterface $rdf_entity): AccessResultInterface {
     $this->entity = $rdf_entity;
 
     return AccessResult::allowedIf(!empty($this->getGroups()));

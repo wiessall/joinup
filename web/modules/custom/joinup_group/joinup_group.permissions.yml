@@ -13,6 +13,10 @@ edit short id after publication:
   title: 'Edit Short ID after initial group publication'
   description: 'Allows a user to edit the Short ID of the collection or solution after the initial publication of the entity.'
 
+manage group add members:
+  title: 'Add members to groups'
+  description: 'Allows to add members to any group.'
+
 manage group announcements:
   title: 'Manage group announcements'
   restrict access: true
