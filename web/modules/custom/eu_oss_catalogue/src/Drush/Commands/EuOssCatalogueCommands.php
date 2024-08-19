@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Drupal\eu_oss_catalogue\Commands;
+namespace Drupal\eu_oss_catalogue\Drush\Commands;
 
 use Consolidation\AnnotatedCommand\CommandData;
 use Consolidation\AnnotatedCommand\CommandError;
@@ -10,24 +10,21 @@ use Consolidation\AnnotatedCommand\Hooks\HookManager;
 use Drupal\eu_oss_catalogue\EuOssCatalogueInterface;
 use Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface;
 use Drush\Attributes as CLI;
+use Drush\Commands\AutowireTrait;
 use Drush\Commands\DrushCommands;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * Drush commands.
  */
 class EuOssCatalogueCommands extends DrushCommands {
 
-  /**
-   * Constructs a new Drush commands class instance.
-   *
-   * @param \Drupal\eu_oss_catalogue\EuOssCatalogueInterface $euOssCatalogueService
-   *   The EU OSS Catalogue service.
-   * @param \Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface $providerPluginManager
-   *   The EU OSS Catalogue provider plugin manager service.
-   */
+  use AutowireTrait;
+
   public function __construct(
-    protected EuOssCatalogueInterface $euOssCatalogueService,
-    protected EuOssCataloguePluginManagerInterface $providerPluginManager,
+    protected readonly EuOssCatalogueInterface $euOssCatalogueService,
+    #[Autowire(service: 'plugin.manager.eu_oss_catalogue.provider')]
+    protected readonly EuOssCataloguePluginManagerInterface $providerPluginManager,
   ) {
     parent::__construct();
   }
@@ -37,7 +34,12 @@ class EuOssCatalogueCommands extends DrushCommands {
    */
   #[CLI\Command(name: 'eu-oss:fetch')]
   #[CLI\Argument(name: 'provider', description: 'The provider plugin ID')]
-  public function fetch(string $provider): string {
+  public function fetch(string $provider): ?string {
+    if (!$this->euOssCatalogueService->isEnabled()) {
+      $this->logger()->warning(dt('EU OSS Catalogue functionality is not enabled.'));
+      return NULL;
+    }
+
     if ($fetched = $this->euOssCatalogueService->fetch($provider)) {
       return dt('@count OSS solutions fetched from @provider. The solutions are queued to be processed later', [
         '@count' => $fetched,
