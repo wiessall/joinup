@@ -2,17 +2,18 @@
 # profile rather than in the Collection module to avoid a circular dependency.
 # This route depends on the JoinupController, but Joinup already depends on the
 # Collection module.
-rdf_entity.propose_form:
-  path: '/propose/{rdf_type}'
+node.propose_form:
+  path: '/propose/{node_type}'
   defaults:
-    _controller: '\Drupal\joinup\Controller\JoinupController::proposeRdfEntity'
-    _title: 'Propose an Rdf entity'
+    _controller: '\Drupal\joinup\Controller\JoinupController::proposeEntity'
+    _title: 'Propose an node entity'
   requirements:
     _custom_access: '\Drupal\joinup\Controller\JoinupController::createAccess'
   options:
     parameters:
-      rdf_type:
-        type: entity:rdf_type
+      node_type:
+        type: entity:node_type
+        with_config_overrides: TRUE
 
 joinup.collection_tca_form:
   path: '/joinup/tca/collection'
@@ -20,7 +21,7 @@ joinup.collection_tca_form:
     _form: '\Drupal\joinup\Form\TcaForm'
     _title: 'Why create a Collection?'
   requirements:
-    _permission: 'propose collection rdf entity'
+    _permission: 'propose collection node entity'
 
 joinup.eligibility_criteria:
   path: '/joinup/eligibility-criteria'

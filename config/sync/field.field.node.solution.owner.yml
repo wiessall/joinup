@@ -11,7 +11,7 @@ field_name: owner
 entity_type: node
 bundle: solution
 label: Owner
-description: ''
+description: 'The Owner is the organisation that owns this entity and is the only responsible for it.'
 required: true
 translatable: true
 default_value: {  }

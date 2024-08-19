@@ -183,7 +183,7 @@ content:
     weight: 7
     region: content
     settings:
-      display_label: true
+      display_label: false
     third_party_settings: {  }
   listing_content:
     type: search_api_field_default

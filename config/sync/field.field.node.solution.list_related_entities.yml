@@ -10,7 +10,7 @@ field_name: list_related_entities
 entity_type: node
 bundle: solution
 label: 'Show solutions related by EIRA terms'
-description: ''
+description: 'If checked, solutions related by EIRA terms ("Solution type" field) will be displayed in the <em>Related solutions</em> section'
 required: false
 translatable: true
 default_value: {  }
