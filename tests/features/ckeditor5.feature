@@ -190,9 +190,6 @@ Feature: CKEditor5
     And a modal should open
     And I select "Name (A-Z)" from "Sort by"
     And I press "Apply filters"
-    # Prevent "stale element reference" error.
-    And I wait for 1 second
-    And I wait for AJAX to finish
     Then the "Ventuno media library" table should be:
       |  | Thumbnail | Name                | Authored by | Updated                 |
       |  |           | Pager test 1        | Anonymous   | Mon, 25/07/2016 - 13:00 |
@@ -216,9 +213,6 @@ Feature: CKEditor5
 
     # Use the pager.
     When I click "Go to page 2"
-    And I wait for AJAX to finish
-    # Wait for the animation to finish.
-    And I wait for 2 second
     But I should not see "Pager test 1"
     And I should not see "Pager test 2"
     And I should not see "Pager test 3"

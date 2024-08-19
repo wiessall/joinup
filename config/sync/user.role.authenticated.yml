@@ -49,7 +49,7 @@ dependencies:
     - video_embed_field
 id: authenticated
 label: 'Authenticated user'
-weight: 1
+weight: -8
 is_admin: false
 permissions:
   - 'access comments'
@@ -61,7 +61,7 @@ permissions:
   - 'access user profiles'
   - 'cancel account'
   - 'cancel own vote'
-  - 'create collection rdf entity'
+  - 'create collection content'
   - 'create contact_information content'
   - 'create content for any_user option'
   - 'create discussion content'
@@ -146,7 +146,7 @@ permissions:
   - 'perform owner_workflow workflow update_needs_changes transition on own entity'
   - 'perform owner_workflow workflow validate transition on own entity'
   - 'post comments'
-  - 'propose collection rdf entity'
+  - 'propose collection node entity'
   - 'revert all revisions'
   - 'skip comment approval'
   - 'unflag bookmark_node'
@@ -183,6 +183,7 @@ permissions:
   - 'view bookmark_node'
   - 'view compatibility documents'
   - 'view eif_perspective meta-entity'
+  - 'view interoperability'
   - 'view media'
   - 'view own unpublished content'
   - 'view paragraph content 1_column_layout'

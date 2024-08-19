@@ -6,9 +6,11 @@ namespace Drupal\joinup_collection\Controller;
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
+use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_collection\JoinupCollectionHelper;
 use Drupal\joinup_group\Form\LeaveGroupConfirmForm;
 use Drupal\node\NodeInterface;
+use Drupal\rdf_sync\RdfSyncMapper;
 
 /**
  * Provides an access controller for the 'collection.leave_confirm_form' route.
@@ -26,7 +28,13 @@ class JoinupCollectionLeaveController {
    */
   public static function access(NodeInterface $node): AccessResultInterface {
     // The 'Joinup' membership can not be revoked.
-    if ($node->id() === JoinupCollectionHelper::getCollectionId()) {
+    $rdfSyncMapper = \Drupal::service('rdf_sync.mapper');
+    assert($rdfSyncMapper instanceof RdfSyncMapper);
+    $uriField = $rdfSyncMapper->getRdfUriFieldName('node', $node->bundle());
+    if (
+      $node instanceof CollectionInterface &&
+      $node->get($uriField)->first()->getString() === JoinupCollectionHelper::getCollectionId()
+    ) {
       return AccessResult::forbidden();
     }
     return LeaveGroupConfirmForm::access($node);

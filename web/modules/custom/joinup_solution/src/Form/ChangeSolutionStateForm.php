@@ -84,9 +84,9 @@ class ChangeSolutionStateForm extends ConfirmFormBase {
    * {@inheritdoc}
    */
   public function getCancelUrl(): Url {
-    $collection = $this->getRouteMatch()->getParameter('rdf_entity');
+    $collection = $this->getRouteMatch()->getParameter('node');
     return Url::fromRoute('view.manage_collection_solutions.manage_solutions', [
-      'rdf_entity' => $collection->id(),
+      'node' => $collection->id(),
     ]);
   }
 

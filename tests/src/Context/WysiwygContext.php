@@ -37,11 +37,9 @@ class WysiwygContext extends RawDrupalContext {
     // 'Source' button so we can enter the text as HTML and get the same result
     // as in a non-JS browser.
     if ($this->hasJavascriptSupport()) {
-      // Scroll to the top because the button might be obscured by the floating
-      // header.
-      $page = $this->getSession()->getPage();
-      $element = $page->find('xpath', "//*[contains(text(),'{$label}')]");
-      $this->scrollElementIntoView($element);
+      if (!$this->getWysiwygButton($label, 'Source')) {
+        $this->pressWysiwygButton($label, 'Show more items');
+      }
       $this->pressWysiwygButton($label, 'Source');
       $this->setWysiwygText($label, $text);
     }
@@ -61,7 +59,7 @@ class WysiwygContext extends RawDrupalContext {
    * @Then I press the button :button in the :label wysiwyg editor
    */
   public function pressButtonInWysiwyg(string $button, string $label): void {
-    self::assertJavaScriptEnabledBrowser();
+    $this->assertJavaScriptEnabledBrowser();
     $this->pressWysiwygButton($label, $button);
   }
 

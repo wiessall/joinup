@@ -394,7 +394,7 @@ third_party_settings:
             configuration:
               id: custom_markup
               label: 'Custom Markup'
-              label_display: visible
+              label_display: '0'
               provider: custom_markup_block
               context_mapping: {  }
               markup:

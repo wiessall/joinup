@@ -7,3 +7,4 @@ package: Joinup communities
 dependencies:
   - og:og
   - drupal:filter
+  - rdf_sync:rdf_sync

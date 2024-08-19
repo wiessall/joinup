@@ -12,7 +12,7 @@ use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_solution\Entity\SolutionInterface;
-use Drupal\rdf_entity\RdfInterface;
+use Drupal\node\NodeInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -68,9 +68,9 @@ class JoinGroupAnonymousRedirectForm extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state, ?GroupInterface $rdf_entity = NULL): array {
+  public function buildForm(array $form, FormStateInterface $form_state, ?GroupInterface $node = NULL): array {
     // Store the group on the object so it can be reused.
-    $this->group = $rdf_entity;
+    $this->group = $node;
 
     $form = [
       'description' => [
@@ -115,7 +115,7 @@ class JoinGroupAnonymousRedirectForm extends FormBase {
     // Set a cookie remembering that the user wants to subscribe to this group,
     // valid for 30 minutes. If the user takes more time to sign in or register,
     // we assume they are no longer actively engaged in the joining process.
-    setrawcookie('join_group', rawurlencode($this->group->id()), $this->time->getRequestTime() + 30 * 60, '/');
+    setrawcookie('join_group', rawurlencode((string) $this->group->id()), $this->time->getRequestTime() + 30 * 60, '/');
 
     // Redirect to EU Login, with a query argument instructing to redirect back
     // to the group page.
@@ -128,16 +128,16 @@ class JoinGroupAnonymousRedirectForm extends FormBase {
   /**
    * Route title callback. Returns the title of the authenticate to join modal.
    *
-   * @param \Drupal\rdf_entity\RdfInterface $rdf_entity
+   * @param \Drupal\node\NodeInterface $node
    *   The group that the anonymous user desires to join.
    *
    * @return \Drupal\Core\StringTranslation\TranslatableMarkup
    *   The title of the modal form.
    */
-  public function getTitle(RdfInterface $rdf_entity): TranslatableMarkup {
+  public function getTitle(NodeInterface $node): TranslatableMarkup {
     // Business analysts have indicated that specific terminology should be used
     // depending on the type of group that is being joined.
-    if ($rdf_entity instanceof SolutionInterface) {
+    if ($node instanceof SolutionInterface) {
       return $this->t('Sign in to subscribe');
     }
     return $this->t('Sign in to join');

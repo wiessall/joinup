@@ -6,7 +6,7 @@ dependencies:
     - solution
 id: unarchive_solution
 label: 'Unarchive (publish) solutions'
-type: rdf_entity
-plugin: 'change_state:rdf_entity:solution'
+type: node
+plugin: 'change_state:node:solution'
 configuration:
   target_state: published

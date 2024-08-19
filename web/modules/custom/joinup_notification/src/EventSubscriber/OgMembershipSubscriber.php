@@ -71,10 +71,10 @@ class OgMembershipSubscriber extends NotificationSubscriberBase {
     $template_id = self::TEMPLATE_REQUEST_MEMBERSHIP;
     $user_data_array = [
       'og_roles' => [
-        'rdf_entity-collection-administrator' => [
+        'node-collection-administrator' => [
           $template_id,
         ],
-        'rdf_entity-collection-facilitator' => [
+        'node-collection-facilitator' => [
           $template_id,
         ],
       ],

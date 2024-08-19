@@ -7,7 +7,7 @@ namespace Drupal\joinup\Controller;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Controller\ControllerBase;
-use Drupal\rdf_entity\RdfEntityTypeInterface;
+use Drupal\node\NodeTypeInterface;
 
 /**
  * Provides route responses for Joinup.
@@ -15,24 +15,24 @@ use Drupal\rdf_entity\RdfEntityTypeInterface;
 class JoinupController extends ControllerBase {
 
   /**
-   * Provides propose forms for rdf entities.
+   * Provides propose forms for node entities.
    *
    * This is used for the propose form of collections.
    *
-   * @param \Drupal\rdf_entity\RdfEntityTypeInterface $rdf_type
-   *   The RDF bundle entity for which to generate the propose form.
+   * @param \Drupal\node\NodeTypeInterface $node_type
+   *   The node bundle entity for which to generate the proposal form.
    *
    * @return array
-   *   A render array for the propose form.
+   *   A render array for the proposal form.
    */
-  public function proposeRdfEntity(RdfEntityTypeInterface $rdf_type): array {
-    $rdf_entity = $this->entityTypeManager()->getStorage('rdf_entity')->create([
-      'rid' => $rdf_type->id(),
+  public function proposeEntity(NodeTypeInterface $node_type): array {
+    $node = $this->entityTypeManager()->getStorage('node')->create([
+      'type' => $node_type->id(),
     ]);
 
-    $form = $this->entityFormBuilder()->getForm($rdf_entity, 'propose');
+    $form = $this->entityFormBuilder()->getForm($node, 'propose');
     $form['#title'] = $this->t('Propose @type', [
-      '@type' => mb_strtolower($rdf_type->label()),
+      '@type' => mb_strtolower($node_type->label()),
     ]);
     return $form;
   }
@@ -40,17 +40,17 @@ class JoinupController extends ControllerBase {
   /**
    * Handles access to the rdf_entity proposal form.
    *
-   * @param \Drupal\rdf_entity\RdfEntityTypeInterface $rdf_type
-   *   The RDF entity type for which the proposal form is built.
+   * @param \Drupal\node\NodeTypeInterface $node_type
+   *   The node bundle entity for which to generate the proposal form.
    *
    * @return \Drupal\Core\Access\AccessResultInterface
    *   The access result object.
    */
-  public function createAccess(RdfEntityTypeInterface $rdf_type): AccessResultInterface {
-    if ($rdf_type->id() !== 'collection') {
+  public function createAccess(NodeTypeInterface $node_type): AccessResultInterface {
+    if ($node_type->id() !== 'collection') {
       return AccessResult::forbidden();
     }
-    return AccessResult::allowedIf($this->currentUser()->hasPermission("propose {$rdf_type->id()} rdf entity"));
+    return AccessResult::allowedIf($this->currentUser()->hasPermission("propose {$node_type->id()} node entity"));
   }
 
   /**

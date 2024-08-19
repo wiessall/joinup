@@ -12,5 +12,6 @@ group_type: node
 group_bundle: collection
 is_admin: null
 permissions:
+  - 'accept facilitator invitation'
   - subscribe
 role_type: required
