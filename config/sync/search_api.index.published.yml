@@ -42,6 +42,7 @@ dependencies:
     - rdf_entity
     - search_api
     - search_api_solr
+    - solution
     - taxonomy
     - user
 third_party_settings:
@@ -557,6 +558,11 @@ field_settings:
     dependencies:
       module:
         - node
+  interoperable_flag:
+    label: 'Interoperable flag'
+    datasource_id: 'entity:rdf_entity'
+    property_path: interoperable_flag
+    type: boolean
   is_contact_title:
     label: 'Solution » Contact information » Title'
     datasource_id: 'entity:node'
@@ -963,6 +969,7 @@ processor_settings:
   index_distribution_data:
     weights:
       preprocess_index: -50
+  interoperable_flag: {  }
   joinup_entity_bundle: {  }
   joinup_entity_published_revision: {  }
   joinup_entity_status:

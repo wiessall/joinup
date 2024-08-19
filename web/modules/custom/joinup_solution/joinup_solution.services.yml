@@ -46,7 +46,11 @@ services:
       - '@messenger'
     tags:
       - { name: event_subscriber }
-
+  joinup_solution.interoperable_flag_subscriber:
+    class: Drupal\joinup_solution\EventSubscriber\InteroperableFlagSubscriber
+    arguments: [ '@search_api.entity_datasource.tracking_manager' ]
+    tags:
+      - { name: event_subscriber }
   logger.channel.solution:
     parent: logger.channel_base
     arguments:

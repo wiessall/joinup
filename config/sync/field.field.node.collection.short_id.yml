@@ -5,6 +5,11 @@ dependencies:
   config:
     - field.storage.node.short_id
     - node.type.collection
+third_party_settings:
+  rdf_sync:
+    value:
+      predicate: 'http://purl.org/dc/terms/alternative'
+      type: null
 id: node.collection.short_id
 field_name: short_id
 entity_type: node

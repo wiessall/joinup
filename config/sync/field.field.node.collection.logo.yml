@@ -7,6 +7,11 @@ dependencies:
     - node.type.collection
   module:
     - image
+third_party_settings:
+  rdf_sync:
+    target_id:
+      predicate: 'http://purl.org/dc/dcmitype/StillImage'
+      type: 'xsd:string'
 id: node.collection.logo
 field_name: logo
 entity_type: node
