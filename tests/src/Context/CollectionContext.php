@@ -824,7 +824,7 @@ class CollectionContext extends RawDrupalContext {
   }
 
   /**
-   * Replaces collection field aliases in the solution node object.
+   * Replaces collection field aliases in the collection node object.
    *
    * @param \Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope $scope
    *   The before node create scope.

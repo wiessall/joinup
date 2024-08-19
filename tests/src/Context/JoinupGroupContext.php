@@ -237,15 +237,15 @@ class JoinupGroupContext extends RawDrupalContext {
    *   The announcement subject.
    * @param string $group_label
    *   The label of the group where the announcement belongs.
-   * @param string $group_type
+   * @param string $group_bundle
    *   The group bundle.
    *
    * @When I go to the :subject announcement of :group_label :group_type
    */
-  public function visitAnnouncementEditForm(string $subject, string $group_label, string $group_type): void {
-    assert(in_array($group_type, ['collection', 'solution']));
+  public function visitAnnouncementEditForm(string $subject, string $group_label, string $group_bundle): void {
+    assert(in_array($group_bundle, ['collection', 'solution']));
     $announcement = $this->getAnnouncementBySubject($subject);
-    $group = $this->getEntityByLabel('node', $group_label, $group_type);
+    $group = $this->getEntityByLabel('node', $group_label, $group_bundle);
     $url = Url::fromRoute('entity.node.announcement_edit', [
       'node' => $group->id(),
       'announcement' => $announcement->id(),
