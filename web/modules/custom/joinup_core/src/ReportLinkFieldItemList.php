@@ -51,7 +51,7 @@ class ReportLinkFieldItemList extends FieldItemList {
    *
    * @see https://www.drupal.org/node/2846554
    */
-  protected function ensureLoaded() {
+  protected function ensureLoaded(): void {
     if (!isset($this->list[0])) {
       $this->list[0] = $this->createItem(0);
     }

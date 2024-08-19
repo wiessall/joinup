@@ -243,7 +243,7 @@ class JoinupCommunityContentContext extends RawDrupalContext {
    *
    * @AfterNodeCreate
    */
-  public function pinCommunityContentInGroup(AfterNodeCreateScope $scope) {
+  public function pinCommunityContentInGroup(AfterNodeCreateScope $scope): void {
     $node = $scope->getEntity();
 
     $is_pinned = in_array(strtolower((string) ($node->pinned ?? '')), [
@@ -448,7 +448,7 @@ class JoinupCommunityContentContext extends RawDrupalContext {
     // Check that the logo is present.
     if ($logo = $content->getLogoAsFile()) {
       $filename = $logo->getFilename();
-      $logo_is_present = self::hasImage($filename, $block_element);
+      $logo_is_present = $this->hasImage($filename, $block_element);
       Assert::assertTrue($logo_is_present, sprintf('Image with filename "%s" has been found in the Highlighted content block.', $filename));
     }
 

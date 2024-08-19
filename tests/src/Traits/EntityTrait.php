@@ -123,7 +123,7 @@ trait EntityTrait {
       'news' => 'node',
       'owner' => 'node',
       'oss_solution' => 'node',
-      'release' => 'rdf_entity',
+      'release' => 'node',
       'solution' => 'rdf_entity',
       'spdx licence' => 'rdf_entity',
       'topic' => 'taxonomy_term',
@@ -182,7 +182,7 @@ trait EntityTrait {
       'glossary' => 'glossary',
       'news' => 'news',
       'oss_solution' => 'oss_solution',
-      'release' => 'asset_release',
+      'release' => 'release',
       'spdx licence' => 'spdx_licence',
     ];
   }

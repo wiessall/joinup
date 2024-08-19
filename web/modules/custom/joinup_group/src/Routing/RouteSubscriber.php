@@ -16,6 +16,22 @@ class RouteSubscriber extends RouteSubscriberBase {
    * {@inheritdoc}
    */
   protected function alterRoutes(RouteCollection $collection): void {
+    // Deny access to group admin pages.
+    $routes = [
+      'entity.rdf_entity.og_admin_routes',
+      'entity.rdf_entity.og_admin_routes.members',
+      'entity.rdf_entity.og_admin_routes.add_membership_page',
+      'entity.og_membership.og_admin_routes',
+      'entity.og_membership.og_admin_routes.members',
+      'entity.og_membership.og_admin_routes.add_membership_page',
+      'entity.og_membership.add_form',
+    ];
+    foreach ($routes as $route_name) {
+      if ($route = $collection->get($route_name)) {
+        $route->setRequirement('_access', 'FALSE');
+      }
+    }
+
     // Override the confirmation form to delete multiple users with our version
     // that prevents deletion of users that are sole owners of collections.
     if ($route = $collection->get('user.multiple_cancel_confirm')) {

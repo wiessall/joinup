@@ -69,7 +69,7 @@ class JoinupSearchContext extends RawDrupalContext {
    * @Given I am on the search( results)( page)
    * @When I visit the search( results)( page)
    */
-  public function visitSearchPage() {
+  public function visitSearchPage(): void {
     $this->visitPath('/search');
   }
 
@@ -111,7 +111,7 @@ class JoinupSearchContext extends RawDrupalContext {
    *
    * @Given the :type content tab is not displayed
    */
-  public function assertContentTabNotDisplayed(string $type) {
+  public function assertContentTabNotDisplayed(string $type): void {
     if ($this->findContentTab($type)) {
       throw new \Exception("The tab '$type' was found in the page but it should be displayed.");
     }
@@ -128,7 +128,7 @@ class JoinupSearchContext extends RawDrupalContext {
    *
    * @Given the :type content tab is displayed
    */
-  public function assertContentTabDisplayed(string $type) {
+  public function assertContentTabDisplayed(string $type): void {
     if (!$this->findContentTab($type)) {
       throw new \Exception("The tab '$type' was not found in the page but it should be displayed.");
     }
@@ -261,7 +261,7 @@ class JoinupSearchContext extends RawDrupalContext {
    *    Throws an exception when the select is not found or options are not
    *    identical.
    */
-  public function assertSelectFacetOptionsAsList($select, TableNode $table) {
+  public function assertSelectFacetOptionsAsList($select, TableNode $table): void {
     $element = $this->findFacetByAlias($select);
     $this->assertSelectAvailableOptions($element, $table);
   }
@@ -285,8 +285,6 @@ class JoinupSearchContext extends RawDrupalContext {
     $node_elements = $facet->findAll('css', 'li.facet-item label');
     foreach ($node_elements as $node_element) {
       if ($node_element->getText() === $option) {
-        $facet_id = $facet->getAttribute('data-drupal-facet-id');
-        $this->scrollCssSelectedElementIntoView('[data-drupal-facet-id="' . $facet_id . '"]');
         $node_element->click();
         return;
       }
@@ -314,7 +312,8 @@ class JoinupSearchContext extends RawDrupalContext {
     $session = $this->getSession();
     $element = $this->getSearchBarElement($input);
     $session->getDriver()->keyDown($element->getXpath(), '', NULL);
-    $session->wait(1000);
+    $this->waitForAjax();
+    $this->waitForElementVisible('css', '.ui-autocomplete a');
     $allResults = $this->getSession()->getPage()->findAll('css', 'ul.ui-autocomplete a');
     $found = array_map(function ($item) {
       /** @var \Behat\Mink\Element\NodeElement $item */
@@ -401,28 +400,6 @@ class JoinupSearchContext extends RawDrupalContext {
     $element = $this->findFacetByAlias($facet, NULL, '*', FALSE);
     // The facet might be present but with no options.
     Assert::assertTrue(empty($element) || empty($element->getText()), "The facet '{$facet}' was found in the page.");
-  }
-
-  /**
-   * Opens the dropdown for the given facet element.
-   *
-   * @param \Behat\Mink\Element\NodeElement $facet
-   *   The facet element, as returned by `TraversingTrait::findFacetByAlias()`.
-   */
-  protected function openFacetDropdown(NodeElement $facet): void {
-    // Only needed when running in a JS enabled browser.
-    if ($this->hasJavascriptSupport()) {
-      // Only open the dropdown if it is not already open.
-      if (!$this->isFacetDropdownVisible($facet)) {
-        // Click the arrow down button and wait for the animation to finish.
-        $facet->find('css', '.filter__icon.icon--arrow-down')->click();
-        $this->waitUntil(function () use ($facet): bool {
-          $is_visible = (bool) $facet->find('css', 'div.mdl-menu__container.is-visible');
-          $is_animating = (bool) $facet->find('css', 'ul.filter__menu.is-animating');
-          return $is_visible && !$is_animating;
-        });
-      }
-    }
   }
 
   /**
@@ -600,7 +577,13 @@ class JoinupSearchContext extends RawDrupalContext {
   public function submitSearch(): void {
     $this->assertJavaScriptEnabledBrowser();
     $element = $this->getSearchBarElement();
-    $element->submit();
+
+    // Find the parent form element and submit.
+    $form = $element->getParent();
+    while ($form && $form->getTagName() !== 'form') {
+      $form = $form->getParent();
+    }
+    $form->submit();
   }
 
   /**
@@ -608,7 +591,7 @@ class JoinupSearchContext extends RawDrupalContext {
    *
    * @When I focus on the search input
    */
-  public function focusOnSearchInput() {
+  public function focusOnSearchInput(): void {
     // One can only open the search bar if JavaScript is enabled.
     $this->assertJavaScriptEnabledBrowser();
     $element = $this->getSearchBarElement();
@@ -711,7 +694,7 @@ class JoinupSearchContext extends RawDrupalContext {
    *
    * @Then I( should) see the( following) search header in the correct order:
    */
-  public function assertOrderedTilesPresent(TableNode $titles_table) {
+  public function assertOrderedTilesPresent(TableNode $titles_table): void {
     $regionObj = $this->getSession()->getPage();
 
     $result = [];
@@ -826,7 +809,6 @@ class JoinupSearchContext extends RawDrupalContext {
    */
   public function showMoreFacet(string $facet_type): void {
     $facet = $this->findFacetByAlias($facet_type);
-    $this->scrollElementIntoView($facet);
     $parent_facet = $facet->getParent();
     if (!$link = $parent_facet->findLink('Show more')) {
       throw new ElementNotFoundException($this->getSession()->getDriver(), 'Link', 'label', 'Show more');

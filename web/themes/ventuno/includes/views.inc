@@ -49,7 +49,7 @@ function ventuno_theme_suggestions_views_view_unformatted_alter(array &$suggesti
 /**
  * Implements hook_preprocess_HOOK().
  */
-function ventuno_preprocess_views_view__search__page(&$variables) {
+function ventuno_preprocess_views_view__search__page(&$variables): void {
   // Add necessary class for OSS search page.
   $variables['attributes']['class'][] = 'view-search';
 }

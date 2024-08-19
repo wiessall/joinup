@@ -1,0 +1,25 @@
+uuid: 2c91a251-2655-4024-954f-3c9db72f0482
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_state
+    - node.type.release
+  module:
+    - state_machine
+id: node.release.field_state
+field_name: field_state
+entity_type: node
+bundle: release
+label: State
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  workflow: release_workflow
+  workflow_callback: ''
+  always_allow_default: false
+  current_state_first: true
+field_type: state

@@ -1,0 +1,10 @@
+sparql_endpoint_piwik.settings:
+  type: config_object
+  label: 'SPARQL Endpoint PIWIK'
+  mapping:
+    base_uri:
+      type: string
+      label: 'The URL of the PIWIK PRO server.'
+    site_id:
+      type: string
+      label: 'Application ID (previously Website ID)'

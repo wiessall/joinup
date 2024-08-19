@@ -1,0 +1,8 @@
+name: 'SPARQL Endpoint PIWIK'
+type: module
+description: 'A module that allows to track usage of SPARQL endpoint.'
+package: Custom
+core_version_requirement: ^10 || ^11
+dependencies:
+  - joinup:sparql_endpoint
+

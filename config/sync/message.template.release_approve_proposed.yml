@@ -14,7 +14,7 @@ text:
     value: 'Joinup: Your release was accepted'
     format: full_html
   -
-    value: '<p>Your proposed @entity:title, @entity:field_isr_release_number for the solution "@group:title" has been validated as per your request.</p>'
+    value: '<p>Your proposed @entity:title, @entity:release_number for the solution "@group:title" has been validated as per your request.</p>'
     format: full_html
 settings:
   'token options':

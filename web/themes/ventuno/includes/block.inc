@@ -135,7 +135,7 @@ function ventuno_preprocess_block__group_menu_block__quick_links(array &$variabl
 /**
  * Implements hook_preprocess_block() for the highlighted content block.
  */
-function ventuno_preprocess_block__entityqueue_block__highlighted_content(&$variables) {
+function ventuno_preprocess_block__entityqueue_block__highlighted_content(&$variables): void {
   /** @var \Drupal\node\NodeInterface $node */
   $node = $variables['elements']['content']['entities'][0]['#node'] ?? NULL;
 

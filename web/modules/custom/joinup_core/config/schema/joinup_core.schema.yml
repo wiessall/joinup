@@ -204,3 +204,7 @@ block.settings.entity_unpublished:
     negate_states_filter:
       type: boolean
       label: 'Negate states filter'
+
+entity_reference_selection.grouped_taxonomy_term_selection:
+  type: entity_reference_selection.default
+  label: 'Grouped taxonomy term selection handler settings'

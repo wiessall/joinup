@@ -7,6 +7,7 @@ dependencies:
     - filter.format.basic_html
     - filter.format.plain_text_glossary
     - filter.format.simple_text
+    - search_api_autocomplete.search.search
   module:
     - comment
     - email_confirmer
@@ -21,12 +22,13 @@ dependencies:
     - rdf_entity
     - search_api_autocomplete
     - sitewide_alert
+    - sparql_endpoint
     - system
     - tour
     - video_embed_field
 id: anonymous
 label: 'Anonymous user'
-weight: 0
+weight: -9
 is_admin: false
 permissions:
   - 'access comments'
@@ -37,6 +39,7 @@ permissions:
   - 'access user profiles'
   - 'legal view legal_notice'
   - 'never autoplay videos'
+  - 'sparql endpoint query'
   - 'use search_api_autocomplete for search'
   - 'use search_api_autocomplete for search_oss_catalogue'
   - 'use text format basic_html'
@@ -46,6 +49,7 @@ permissions:
   - 'view bookmark_rdf_entity'
   - 'view compatibility documents'
   - 'view eif_perspective meta-entity'
+  - 'view interoperability'
   - 'view like_node'
   - 'view like_rdf_entity'
   - 'view media'

@@ -1,0 +1,19 @@
+{#
+/**
+ * @file
+ * Default template for the Joinup release Releases download page.
+ *
+ * Available variables:
+ * - releases: An array of release render arrays.
+ */
+#}
+
+<div class="timeline">
+{% if releases %}
+    {{ releases }}
+{% else %}
+    <div class="page__content">
+      {{ 'No releases yet'|t }}
+    </div>
+{% endif %}
+</div>
