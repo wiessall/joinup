@@ -1,0 +1,13 @@
+uuid: a6aab658-361b-43e0-b3da-1c16f7c5eadf
+langcode: en
+status: true
+dependencies:
+  module:
+    - flag
+id: interoperability_validator
+label: 'Interoperability validator'
+weight: -7
+is_admin: null
+permissions:
+  - 'flag interoperability'
+  - 'unflag interoperability'

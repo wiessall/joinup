@@ -47,6 +47,7 @@ Feature:
       | Background theme | light      |
       | Extra classes    | test-class |
     And I click "Choose component"
+    And a modal should open
     And I click "Content listing"
     Then the following fields should be present "Show related content, Allow shared content"
     And the following fields should not be present "Query presets, Limit"
@@ -61,6 +62,7 @@ Feature:
       | Background theme | light      |
       | Extra classes    | test-class |
     When I click "Choose component"
+    And a modal should open
     And I click "Content listing"
     And the following fields should be present "Show related content, Allow shared content, Query presets, Limit"
     And I should see the button "Add and configure filter"
@@ -79,6 +81,7 @@ Feature:
       | Background theme | light      |
       | Extra classes    | test-class |
     When I click "Choose component"
+    And a modal should open
     And I click "Content listing"
     And I select "News" from "Available filters"
     And I press "Add and configure filter"
@@ -174,6 +177,7 @@ Feature:
       | Background theme | light      |
       | Extra classes    | test-class |
     And I click "Choose component"
+    And a modal should open
     And I click "Content listing"
     And I uncheck "Show related content"
     When the following fields should not be visible "Global search, Allow shared content"
@@ -335,6 +339,7 @@ Feature:
       | Background theme | light      |
       | Extra classes    | test-class |
     And I click "Choose component"
+    And a modal should open
     And I click "Content listing"
     And I select "Discussion" from "Available filters"
     And I press "Add and configure filter"
@@ -412,6 +417,7 @@ Feature:
       | Background theme | light      |
       | Extra classes    | test-class |
     And I click "Choose component"
+    And a modal should open
     And I click "Content listing"
     And I fill in "Query presets" with "wrongvalue"
     And I press "Save" in the "Modal buttons" region
@@ -443,6 +449,7 @@ Feature:
       | Background theme | light      |
       | Extra classes    | test-class |
     When I click "Choose component"
+    And a modal should open
     And I click "Content listing"
     And I press "Save" in the "Modal buttons" region
     Then I should see the error message "You need to add a filter in the Content listing block"
@@ -528,6 +535,7 @@ Feature:
       | Background theme | light      |
       | Extra classes    | test-class |
     When I click "Choose component"
+    And a modal should open
     And I click "Content listing"
 
     And I select "Solution" from "Available filters"
@@ -537,6 +545,7 @@ Feature:
 
     # Paragraph #2.
     When I click "Choose component"
+    And a modal should open
     And I click "Content listing"
 
     And I select "Solution" from latest "Available filters"
@@ -578,6 +587,7 @@ Feature:
       | Background theme | light      |
       | Extra classes    | test-class |
     And I click "Choose component"
+    And a modal should open
     And I click "Content listing"
 
     And I select "Solution" from "Available filters"
@@ -595,6 +605,7 @@ Feature:
 
     # Paragraph #2.
     When I click "Choose component"
+    And a modal should open
     And I click "Content listing"
 
     And I select "Solution" from latest "Available filters"

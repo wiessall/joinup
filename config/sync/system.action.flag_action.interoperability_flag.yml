@@ -1,0 +1,15 @@
+uuid: 23957f61-23fd-4109-ba09-41934b6a86ca
+langcode: en
+status: true
+dependencies:
+  config:
+    - flag.flag.interoperability
+  module:
+    - flag
+id: flag_action.interoperability_flag
+label: 'Flag this item'
+type: rdf_entity
+plugin: 'flag_action:interoperability_flag'
+configuration:
+  flag_id: interoperability
+  flag_action: flag
