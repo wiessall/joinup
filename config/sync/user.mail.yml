@@ -76,7 +76,7 @@ register_pending_approval_admin:
 
     <a href="[user:edit-url]">[user:edit-url]</a>
 status_activated:
-  subject: 'Your Joinup account has been activated.'
+  subject: 'Welcome to the Interoperable Europe Portal!'
   body: |-
     Dear [user:field_user_first_name],
 
