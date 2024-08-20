@@ -10,7 +10,6 @@ dependencies:
     - field.storage.node.body
     - field.storage.node.contact
     - field.storage.node.description
-    - field.storage.node.description
     - field.storage.node.field_event_agenda
     - field.storage.node.field_event_date
     - field.storage.node.field_location
@@ -30,10 +29,7 @@ dependencies:
     - field.storage.user.field_user_organisation
     - search_api.server.joinup
   module:
-    - custom_page
-    - joinup_distribution
     - joinup_flag
-    - joinup_release
     - joinup_search
     - meta_entity
     - node
@@ -169,8 +165,9 @@ field_settings:
     property_path: 'contact:entity:title'
     type: text
     dependencies:
+      config:
+        - field.storage.node.contact
       module:
-        - joinup_release
         - node
   contact_title_spellcheck:
     label: 'Related Contact » Title spellcheck'
@@ -178,8 +175,9 @@ field_settings:
     property_path: 'contact:entity:title'
     type: solr_text_spellcheck
     dependencies:
+      config:
+        - field.storage.node.contact
       module:
-        - joinup_release
         - node
   created:
     label: 'Authored on'
@@ -558,11 +556,6 @@ field_settings:
     dependencies:
       module:
         - node
-  interoperable_flag:
-    label: 'Interoperable flag'
-    datasource_id: 'entity:rdf_entity'
-    property_path: interoperable_flag
-    type: boolean
   is_contact_title:
     label: 'Solution » Contact information » Title'
     datasource_id: 'entity:node'
@@ -688,8 +681,9 @@ field_settings:
     property_path: 'owner:entity:title'
     type: text
     dependencies:
+      config:
+        - field.storage.node.owner
       module:
-        - joinup_release
         - node
   owner_title_spellcheck:
     label: 'Related Owner » Title spellcheck'
@@ -697,8 +691,9 @@ field_settings:
     property_path: 'owner:entity:title'
     type: solr_text_spellcheck
     dependencies:
+      config:
+        - field.storage.node.owner
       module:
-        - joinup_release
         - node
   parent:
     label: 'Term Parents'
@@ -914,14 +909,10 @@ processor_settings:
       preprocess_query: -15
     all_fields: false
     fields:
-      - abstract
-      - abstract_spellcheck
       - body
       - body_spellcheck
-      - description
       - description_processed
       - description_processed_spellcheck
-      - description_spellcheck
       - field_event_agenda
       - field_event_agenda_spellcheck
     title: true
@@ -935,14 +926,10 @@ processor_settings:
   ignorecase:
     all_fields: false
     fields:
-      - abstract
-      - abstract_spellcheck
       - body
       - body_spellcheck
-      - description
       - description_processed
       - description_processed_spellcheck
-      - description_spellcheck
       - field_event_agenda
       - field_event_agenda_spellcheck
       - field_location
@@ -963,12 +950,6 @@ processor_settings:
       - label_spellcheck
       - title
       - title_spellcheck
-  include_custom_page_content:
-    weights:
-      preprocess_index: -49
-  index_distribution_data:
-    weights:
-      preprocess_index: -50
   interoperable_flag: {  }
   joinup_entity_bundle: {  }
   joinup_entity_published_revision: {  }
@@ -983,14 +964,10 @@ processor_settings:
   stopwords:
     all_fields: false
     fields:
-      - abstract
-      - abstract_spellcheck
       - body
       - body_spellcheck
-      - description
       - description_processed
       - description_processed_spellcheck
-      - description_spellcheck
       - field_event_agenda
       - field_event_agenda_spellcheck
       - field_location
@@ -1044,14 +1021,10 @@ processor_settings:
   tokenizer:
     all_fields: false
     fields:
-      - abstract
-      - abstract_spellcheck
       - body
       - body_spellcheck
-      - description
       - description_processed
       - description_processed_spellcheck
-      - description_spellcheck
       - field_event_agenda
       - field_event_agenda_spellcheck
       - field_location
@@ -1081,14 +1054,10 @@ processor_settings:
   transliteration:
     all_fields: false
     fields:
-      - abstract
-      - abstract_spellcheck
       - body
       - body_spellcheck
-      - description
       - description_processed
       - description_processed_spellcheck
-      - description_spellcheck
       - field_event_agenda
       - field_event_agenda_spellcheck
       - field_location
