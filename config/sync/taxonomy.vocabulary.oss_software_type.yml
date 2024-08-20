@@ -7,22 +7,6 @@ dependencies:
 third_party_settings:
   joinup_taxonomy:
     locked: false
-  rdf_sync:
-    type: 'http://joinup.eu/eu-oss/rdf-type/software-type'
-    uri_plugin: null
-    fields:
-      vid:
-        target_id:
-          predicate: 'http://www.w3.org/2004/02/skos/core#inScheme'
-          type: resource
-      name:
-        value:
-          predicate: 'http://www.w3.org/2004/02/skos/core#prefLabel'
-          type: null
-      description:
-        value:
-          predicate: 'http://www.w3.org/2004/02/skos/core#definition'
-          type: null
 name: 'OSS Software Type'
 vid: oss_software_type
 description: 'Open Source Software Solution Software Type'
