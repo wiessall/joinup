@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Drupal\eu_oss_catalogue\Access;
+namespace Drupal\joinup_oss_catalogue\Access;
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
@@ -42,7 +42,7 @@ class KillSwitchCheck implements AccessInterface {
       }
     }
 
-    return $this->service->isEnabled() ? AccessResult::allowed() : AccessResult::forbidden('EU OSS Catalogue functionality is not enabled');
+    return joinup_oss_catalogue_is_enbled() ? AccessResult::allowed() : AccessResult::forbidden('EU OSS Catalogue functionality is not enabled');
   }
 
 }

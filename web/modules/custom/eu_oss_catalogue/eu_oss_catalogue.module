@@ -151,11 +151,6 @@ function eu_oss_catalogue_node_access(NodeInterface $entity, string $operation, 
  * Implements hook_cron().
  */
 function eu_oss_catalogue_cron(): void {
-  $service = \Drupal::getContainer()->get('eu_oss_catalogue');
-  if (!$service->isEnabled()) {
-    return;
-  }
-
   $state = \Drupal::state();
   $request_time = \Drupal::time()->getRequestTime();
   $last_check = $state->get('eu_oss_catalogue.last_check', 0);
@@ -169,7 +164,7 @@ function eu_oss_catalogue_cron(): void {
   $providerPluginManager = \Drupal::service('plugin.manager.eu_oss_catalogue.provider');
   foreach ($providerPluginManager->getDefinitionsAsOptions('label') as $provider => $label) {
     try {
-      $service->fetch($provider);
+      \Drupal::service('eu_oss_catalogue')->fetch($provider);
       \Drupal::logger('eu_oss_catalogue')->info('OSS fetch data ' . $provider . ' completed successfully.');
     }
     catch (\Exception $e) {

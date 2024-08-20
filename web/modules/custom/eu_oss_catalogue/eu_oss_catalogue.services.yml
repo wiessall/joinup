@@ -1,7 +1,4 @@
 services:
-  _defaults:
-    autowire: true
-    autoconfigure: true
 
   logger.channel.eu_oss_catalogue:
     parent: logger.channel_base
@@ -17,7 +14,6 @@ services:
       - '@entity_type.manager'
       - '@logger.channel.eu_oss_catalogue'
       - '@datetime.time'
-      - '@settings'
   Drupal\eu_oss_catalogue\EuOssCatalogueInterface: '@eu_oss_catalogue'
 
   plugin.manager.eu_oss_catalogue.provider:
@@ -53,11 +49,3 @@ services:
       - '@plugin.manager.eu_oss_catalogue.hosting_platform'
       - '@state'
       - '@logger.channel.eu_oss_catalogue'
-
-  eu_oss_catalogue.route_subscriber:
-    class: Drupal\eu_oss_catalogue\Routing\RouteSubscriber
-
-  eu_oss_catalogue.killswitch_check:
-    class: Drupal\eu_oss_catalogue\Access\KillSwitchCheck
-    tags:
-      - { name: access_check, applies_to: _eu_oss_catalogue_check_enabled }

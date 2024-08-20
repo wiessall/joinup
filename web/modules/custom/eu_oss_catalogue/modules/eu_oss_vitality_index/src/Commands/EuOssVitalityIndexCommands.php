@@ -2,16 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Drupal\eu_oss_vitality_index\Drush\Commands;
+namespace Drupal\eu_oss_vitality_index\Commands;
 
 use Consolidation\AnnotatedCommand\CommandData;
 use Consolidation\AnnotatedCommand\Hooks\HookManager;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
-use Drupal\eu_oss_catalogue\EuOssCatalogueInterface;
 use Drupal\eu_oss_vitality_index\VitalityIndexGeneratorInterface;
 use Drush\Attributes as CLI;
-use Drush\Commands\AutowireTrait;
 use Drush\Commands\DrushCommands;
 
 /**
@@ -19,12 +17,9 @@ use Drush\Commands\DrushCommands;
  */
 class EuOssVitalityIndexCommands extends DrushCommands {
 
-  use AutowireTrait;
-
   public function __construct(
-    protected readonly VitalityIndexGeneratorInterface $vitalityIndexGenerator,
-    protected readonly EntityTypeManagerInterface $entityTypeManager,
-    protected readonly EuOssCatalogueInterface $euOssCatalogueService,
+    protected VitalityIndexGeneratorInterface $vitalityIndexGenerator,
+    protected EntityTypeManagerInterface $entityTypeManager,
   ) {
     parent::__construct();
   }
@@ -34,12 +29,7 @@ class EuOssVitalityIndexCommands extends DrushCommands {
    */
   #[CLI\Command(name: 'eu-oss:generate-vitality-index')]
   #[CLI\Argument(name: 'nid', description: 'The solution node ID')]
-  public function generate(string $nid): ?string {
-    if (!$this->euOssCatalogueService->isEnabled()) {
-      $this->logger()->warning(dt('EU OSS Catalogue functionality is not enabled.'));
-      return NULL;
-    }
-
+  public function generate(string $nid): string {
     $solution = $this->getSolution($nid);
     $this->vitalityIndexGenerator->processSolution($solution);
 
