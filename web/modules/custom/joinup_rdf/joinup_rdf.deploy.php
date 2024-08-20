@@ -90,3 +90,27 @@ function joinup_rdf_deploy_200003(): void {
   $endpoint->query('CLEAR GRAPH <http://joinup.eu/solution/published>');
   $endpoint->query('CLEAR GRAPH <http://joinup.eu/solution/draft>');
 }
+
+/**
+ * Apply entity definition updates.
+ */
+function joinup_rdf_deploy_200004(): void {
+  $entity_update_manager = \Drupal::entityDefinitionUpdateManager();
+  if (!$entity_update_manager->needsUpdates()) {
+    return;
+  }
+
+  $entity_field_manager = \Drupal::getContainer()->get('entity_field.manager');
+  foreach ($entity_update_manager->getChangeList() as $entity_type_id => $changes) {
+    $entity_type = $entity_update_manager->getEntityType($entity_type_id);
+    if (isset($changes['field_storage_definitions'])) {
+      $field_storage_definitions = $entity_field_manager->getFieldStorageDefinitions($entity_type_id);
+      foreach ($changes['field_storage_definitions'] as $field_name => $value) {
+        /** @var \Drupal\Core\Field\FieldStorageDefinitionInterface $storage_definition */
+        $storage_definition = $field_storage_definitions[$field_name];
+        $entity_update_manager->updateFieldStorageDefinition($storage_definition);
+      }
+    }
+    $entity_update_manager->updateEntityType($entity_type);
+  }
+}
