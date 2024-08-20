@@ -14,17 +14,6 @@ use Drupal\eu_oss_catalogue\Model\Project;
 interface EuOssCatalogueParserInterface extends PluginInspectionInterface {
 
   /**
-   * Checks whether the fetched project is valid.
-   *
-   * @param \Drupal\eu_oss_catalogue\Model\Project $project
-   *   The project value object.
-   *
-   * @return string[]
-   *   A list of errors. Empty array means no errors.
-   */
-  public function isValid(Project $project): array;
-
-  /**
    * Parses fetched data and saves it as an OssSolution node.
    *
    * @param \Drupal\eu_oss_catalogue\Model\Project $project
