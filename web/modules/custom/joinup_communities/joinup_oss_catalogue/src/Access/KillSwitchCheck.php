@@ -42,7 +42,7 @@ class KillSwitchCheck implements AccessInterface {
       }
     }
 
-    return joinup_oss_catalogue_is_enbled() ? AccessResult::allowed() : AccessResult::forbidden('EU OSS Catalogue functionality is not enabled');
+    return joinup_oss_catalogue_is_enbled() ? AccessResult::allowed() : AccessResult::forbidden('EU OSS Catalogue functionality is disabled');
   }
 
 }

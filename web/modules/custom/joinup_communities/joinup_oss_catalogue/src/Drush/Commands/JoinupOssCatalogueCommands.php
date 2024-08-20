@@ -42,7 +42,7 @@ class JoinupOssCatalogueCommands extends DrushCommands {
       $commands = new EuOssCatalogueCommands($this->euOssCatalogueService, $this->providerPluginManager);
       return $commands->fetch($provider);
     }
-    return dt('EU OSS Catalogue functionality is not enabled.');
+    return dt('EU OSS Catalogue functionality is disabled.');
   }
 
   /**
@@ -54,7 +54,7 @@ class JoinupOssCatalogueCommands extends DrushCommands {
       $commands = new EuOssVitalityIndexCommands($this->vitalityIndexGenerator, $this->entityTypeManager);
       return $commands->generate($nid);
     }
-    return dt('EU OSS Catalogue functionality is not enabled.');
+    return dt('EU OSS Catalogue functionality is disabled.');
   }
 
 }
