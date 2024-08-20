@@ -319,7 +319,8 @@
                 "Media Library: Argument #1 ($array) must be of type array, null given in array_filter(). @see https://www.drupal.org/i/3340973": "resources/patch/php/drupal/core/3340973.diff",
                 "Add validation constraint to type: plural_label; remove work-around from views.field.numeric:format_plural_string @see https://www.drupal.org/i/3409588": "resources/patch/php/drupal/core/3409588.diff",
                 "MediaLibraryUiBuilder service does not properly allow additional contextual filter arguments @see https://www.drupal.org/i/3401726": "resources/patch/php/drupal/core/3401726.diff",
-                "Added deprecation suppression": "resources/patch/php/drupal/core/3467293.diff"
+                "Added deprecation suppression": "resources/patch/php/drupal/core/3467293.diff",
+                "Fix handling of unknown file extensions in FileMediaFormatterBase @see https://www.drupal.org/i/3466462": "resources/patch/php/drupal/core/3466462.diff"
             },
             "drupal/default_content": {
                 "Allow manual imports @see https://www.drupal.org/i/2640734": "resources/patch/php/drupal/default_content/2640734.diff"
