@@ -621,6 +621,8 @@ final class MigrationHelper {
       'media__og_audience' => 'og_audience_target_id',
       'media_revision__og_audience' => 'og_audience_target_id',
       'ogmenu_instance__og_audience' => 'og_audience_target_id',
+      'node__field_news_referenced_solution' => 'field_news_referenced_solution_target_id',
+      'node_revision__field_news_referenced_solution' => 'field_news_referenced_solution_target_id',
     ];
 
     foreach ($tableData as $table => $targetField) {
