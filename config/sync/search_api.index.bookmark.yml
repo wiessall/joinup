@@ -121,7 +121,6 @@ datasource_settings:
       default: false
       selected:
         - bookmark_node
-        - bookmark_rdf_entity
 processor_settings:
   add_url: {  }
   aggregated_field: {  }
