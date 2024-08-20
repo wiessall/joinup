@@ -69,24 +69,6 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
         foreach ($projects as $project) {
           \assert($project instanceof Project);
 
-          // Give parser the chance to do the validation.
-          if ($errors = $provider->getParser()->isValid($project)) {
-            $errorMarkup = '<ul><li>' . implode('</li><li>', $errors) . '</li></ul>';
-            $message = <<<MESSAGE
-            <p>Provider: @provider (<code>@provider_id</code>)</p>
-            <p>Provider's reference: <code>@reference</code></p>
-            <p>Schema errors:</p>
-            $errorMarkup
-            MESSAGE;
-            $arguments = [
-              '@provider' => $provider->getPluginDefinition()['label'],
-              '@provider_id' => $providerId,
-              '@reference' => $project->platformReference ?? '[not provided]',
-            ];
-            $this->logger->error($message, $arguments);
-            continue;
-          }
-
           // Cancellation should also cause removing this provider from the
           // preexisting OSS Solution entity.
           $solutionUrlsDiscovered[] = $project->url;
