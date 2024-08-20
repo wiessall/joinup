@@ -8,7 +8,6 @@ use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Queue\QueueFactory;
-use Drupal\Core\Site\Settings;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Utility\Error;
 use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
@@ -25,6 +24,24 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
 
   use StringTranslationTrait;
 
+  /**
+   * Constructs a new service instance.
+   *
+   * @param \Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface $providerManager
+   *   The EC OSS Catalogue provider plugin manager.
+   * @param \Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface $parserManager
+   *   The EC OSS Catalogue parser plugin manager.
+   * @param \Drupal\Core\Queue\QueueFactory $queueFactory
+   *   The queue factory service.
+   * @param \Symfony\Contracts\EventDispatcher\EventDispatcherInterface $eventDispatcher
+   *   The event dispatcher service.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
+   *   The entity type manager service.
+   * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
+   *   The EU OSS Catalogue channel logger.
+   * @param \Drupal\Component\Datetime\TimeInterface $time
+   *   The time service.
+   */
   public function __construct(
     protected EuOssCataloguePluginManagerInterface $providerManager,
     protected EuOssCataloguePluginManagerInterface $parserManager,
@@ -33,15 +50,7 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
     protected EntityTypeManagerInterface $entityTypeManager,
     protected LoggerChannelInterface $logger,
     protected TimeInterface $time,
-    protected readonly Settings $settings,
   ) {}
-
-  /**
-   * {@inheritdoc}
-   */
-  public function isEnabled(): bool {
-    return $this->settings->get('eu_oss_catalogue')['enabled'] ?? FALSE;
-  }
 
   /**
    * {@inheritdoc}

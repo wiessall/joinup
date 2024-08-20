@@ -1,4 +1,7 @@
 services:
+  _defaults:
+    autowire: true
+
   monolog.handler.eu_oss_catalogue:
     class: Drupal\joinup_oss_catalogue\Logger\Handler\EuOssCatalogueHandler
     arguments: ['@entity_type.manager', 100, TRUE]
@@ -17,3 +20,8 @@ services:
     class: Drupal\joinup_oss_catalogue\JoinupOssCatalogueImagecacheWarmer
     arguments:
       - '@queue'
+
+  joinup_oss_catalogue.killswitch_check:
+    class: Drupal\joinup_oss_catalogue\Access\KillSwitchCheck
+    tags:
+      - { name: access_check, applies_to: _eu_oss_catalogue_check_enabled }

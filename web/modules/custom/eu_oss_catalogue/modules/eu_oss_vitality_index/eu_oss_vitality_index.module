@@ -27,11 +27,6 @@ function eu_oss_vitality_index_node_insert(EntityInterface $node): void {
  * Implements hook_cron().
  */
 function eu_oss_vitality_index_cron(): void {
-  $service = \Drupal::getContainer()->get('eu_oss_catalogue');
-  if (!$service->isEnabled()) {
-    return;
-  }
-
   $lastCron = Drupal::state()->get('eu_oss_vitality_index.last_cron', 0);
   $cronFrequency = Drupal::config('eu_oss_vitality_index.settings')
     ->get('cron_frequency');

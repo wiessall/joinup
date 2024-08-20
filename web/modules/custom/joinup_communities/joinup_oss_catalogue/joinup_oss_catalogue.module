@@ -10,6 +10,7 @@ declare(strict_types=1);
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Site\Settings;
 use Drupal\Core\Url;
 use Drupal\block\BlockInterface;
 use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
@@ -182,4 +183,37 @@ function joinup_oss_catalogue_preprocess_views_view__eu_oss_catalogue_admin_caro
     ]),
     default => $url,
   };
+}
+
+/**
+ * Checks whether the EU OSS Catalogue functionality is enabled.
+ *
+ * @return bool
+ *   Whether the EU OSS Catalogue functionality is enabled.
+ */
+function joinup_oss_catalogue_is_enbled(): bool {
+  return Settings::get('eu_oss_catalogue')['enabled'] ?? FALSE;
+}
+
+/**
+ * Implements hook_module_implements_alter().
+ */
+function joinup_oss_catalogue_module_implements_alter(array &$implementations, string $hook): void {
+  if ($hook === 'cron') {
+    // Don't run original cron implementations.
+    // @see joinup_oss_catalogue_cron()
+    unset($implementations['eu_oss_catalogue']);
+    unset($implementations['eu_oss_vitality_index']);
+  }
+}
+
+/**
+ * Implements hook_cron().
+ */
+function joinup_oss_catalogue_cron(): void {
+  if (joinup_oss_catalogue_is_enbled()) {
+    // Only run if EU OSS Catalogue functionality is enabled.
+    eu_oss_catalogue_cron();
+    eu_oss_vitality_index_cron();
+  }
 }
