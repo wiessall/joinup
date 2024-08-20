@@ -133,6 +133,78 @@ third_party_settings:
                 entity: layout_builder.entity
             weight: 5
             additional: {  }
+          8a703fba-04a3-474a-a859-dba0ae84e40c:
+            uuid: 8a703fba-04a3-474a-a859-dba0ae84e40c
+            region: content
+            configuration:
+              id: 'field_block:node:solution:distributions'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                type: entity_reference_entity_view
+                label: hidden
+                settings:
+                  view_mode: default
+                  link: false
+                third_party_settings: {  }
+            weight: 6
+            additional: {  }
+          ddee0163-d8fa-4af9-9528-93024fb8d629:
+            uuid: ddee0163-d8fa-4af9-9528-93024fb8d629
+            region: content
+            configuration:
+              id: 'extra_field_block:node:solution:flag_like_node'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+            weight: 7
+            additional: {  }
+          9cd42ecc-3db2-4cef-b0bc-ef16ac79938d:
+            uuid: 9cd42ecc-3db2-4cef-b0bc-ef16ac79938d
+            region: content
+            configuration:
+              id: 'field_block:node:solution:report'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                type: link
+                label: hidden
+                settings:
+                  trim_length: 80
+                  url_only: false
+                  url_plain: false
+                  rel: ''
+                  target: ''
+                third_party_settings: {  }
+            weight: 8
+            additional: {  }
+          23ecad5e-9daf-473e-82d3-79f11426bf4d:
+            uuid: 23ecad5e-9daf-473e-82d3-79f11426bf4d
+            region: content
+            configuration:
+              id: 'extra_field_block:node:solution:links'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+            weight: 9
+            additional: {  }
+          9cc98323-437d-4265-a692-4e35cf60227c:
+            uuid: 9cc98323-437d-4265-a692-4e35cf60227c
+            region: content
+            configuration:
+              id: 'field_block:node:solution:body'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                type: text_default
+                label: hidden
+                settings: {  }
+                third_party_settings: {  }
+            weight: 10
+            additional: {  }
         third_party_settings: {  }
 id: node.solution.default
 targetEntityType: node
