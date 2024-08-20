@@ -466,10 +466,15 @@ Feature:
   @loggedErrors
   Scenario: Regression test for licences comparison.
     # Regression test for ISAICP-9014
-    Given SPDX licences:
+    Given collection:
+      | uri   | http://data.europa.eu/w21/df34e3a2-207b-4910-a804-344931654e20 |
+      | title | Joinup                                                         |
+      | state | published                                                      |
+    And SPDX licences:
       | uri                             | title     | ID        |
       | http://joinup.eu/spdx/EUPL-1.2a | EUPL-1.2a | EUPL-1.2a |
       | http://joinup.eu/spdx/LGPL-2.1b | LGPL-2.1b | LGPL-2.1b |
+
     When I go to "licence/compatibility-check/LGPL-2.1b/EUPL-1.2a"
     And there should be 1 log record
     Then I should get a 404 HTTP response
