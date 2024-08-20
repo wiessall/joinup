@@ -191,7 +191,7 @@ function joinup_oss_catalogue_preprocess_views_view__eu_oss_catalogue_admin_caro
  * @return bool
  *   Whether the EU OSS Catalogue functionality is enabled.
  */
-function joinup_oss_catalogue_is_enbled(): bool {
+function joinup_oss_catalogue_is_enabled(): bool {
   return Settings::get('eu_oss_catalogue')['enabled'] ?? FALSE;
 }
 
@@ -211,7 +211,7 @@ function joinup_oss_catalogue_module_implements_alter(array &$implementations, s
  * Implements hook_cron().
  */
 function joinup_oss_catalogue_cron(): void {
-  if (joinup_oss_catalogue_is_enbled()) {
+  if (joinup_oss_catalogue_is_enabled()) {
     // Only run if EU OSS Catalogue functionality is enabled.
     eu_oss_catalogue_cron();
     eu_oss_vitality_index_cron();
