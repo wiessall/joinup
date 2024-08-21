@@ -1,4 +1,4 @@
-@api @group-f
+@api @group-i
 Feature: Tests related to the SPARQL query endpoint.
 
   Scenario: Querying the SPARQL endpoint with a valid query

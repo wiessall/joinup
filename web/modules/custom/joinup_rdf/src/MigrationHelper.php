@@ -14,14 +14,42 @@ use Drupal\joinup_taxonomy\Entity\MappedTerm;
 use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\path_alias\AliasRepositoryInterface;
 use Drupal\pathauto\PathautoState;
+use Drupal\rdf_sync\RdfSyncConnectionInterface;
 use Drupal\rdf_sync\RdfSyncMapper;
-use Drupal\sparql_entity_storage\Driver\Database\sparql\ConnectionInterface;
-use Drupal\sparql_entity_storage\UriEncoder;
 
 /**
  * Helper class for the RDF2Node migration.
+ *
+ * @todo Remove this service in ISAICP-8376.
  */
 final class MigrationHelper {
+
+  private const array URL_ENCODE_MAP = [
+    '_' => '_a',
+    '-' => '_b',
+    '.' => '_c',
+    '~' => '_d',
+    ':' => '_e',
+    '/' => '_f',
+    '?' => '_g',
+    '#' => '_h',
+    '[' => '_i',
+    ']' => '_j',
+    '@' => '_k',
+    '!' => '_l',
+    '$' => '_m',
+    '&' => '_n',
+    '\'' => '_o',
+    '(' => '_p',
+    ')' => '_q',
+    '*' => '_r',
+    '+' => '_s',
+    ',' => '_t',
+    ';' => '_u',
+    '=' => '_v',
+    '`' => '_w',
+    '%' => '_x',
+  ];
 
   /**
    * Mapping of fields from the RDF to the node for collections.
@@ -309,7 +337,7 @@ final class MigrationHelper {
     protected EntityTypeManagerInterface $entityTypeManager,
     protected AliasRepositoryInterface $pathAliasRepository,
     protected Connection $connection,
-    protected ConnectionInterface $sparqlEndpoint,
+    protected RdfSyncConnectionInterface $sparqlEndpoint,
     protected RdfSyncMapper $rdfSyncMapper,
   ) {}
 
@@ -336,7 +364,6 @@ final class MigrationHelper {
       $this->saveEntityWithPathPreservation($entity, $uri);
       $this->assertMigratedEntity($entity, $values);
     }
-
 
     // Handle the draft content. If the entity has not been saved, it is an
     // unpublished entity, otherwise, it is a new revision.
@@ -483,7 +510,7 @@ final class MigrationHelper {
    *   The URI of the entity.
    */
   protected function saveEntityWithPathPreservation(RdfSyncEntityInterface $entity, string $uri): void {
-    $pathautoOldPath = '/rdf_entity/' . UriEncoder::encodeUrl($entity->getUri());
+    $pathautoOldPath = '/rdf_entity/' . strtr($entity->getUri(), self::URL_ENCODE_MAP);
     $has_alias = $this->pathAliasRepository->lookupBySystemPath($pathautoOldPath, 'en');
     if ($has_alias) {
       $entity->get('path')->pathauto = PathautoState::SKIP;
@@ -655,7 +682,12 @@ final class MigrationHelper {
     // Reload the entity to get the values from the database.
     $loaded = $this->entityTypeManager->getStorage($entity->getEntityTypeId())->load($entity->id());
     foreach ($values as $uri => $value) {
-      $fieldData = $loaded instanceof CollectionInterface ? self::COLLECTION_FIELD_MAPPING[$uri] : self::SOLUTION_FIELD_MAPPING[$uri];
+      if ($loaded instanceof CollectionInterface) {
+        $fieldData = self::COLLECTION_FIELD_MAPPING[$uri] ?? NULL;
+      }
+      else {
+        $fieldData = self::SOLUTION_FIELD_MAPPING[$uri] ?? NULL;
+      }
       if (!$fieldData) {
         print sprintf('The field %s is not found in the mapping.', $uri);
         continue;

@@ -1,4 +1,4 @@
-@api @group-d
+@api @group-e
 Feature: Tests the group landing page customization.
 
   Scenario Outline:

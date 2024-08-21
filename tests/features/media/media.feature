@@ -1,4 +1,4 @@
-@api @group-f
+@api @group-h
 Feature: Administer media.
 
   @uploadFiles:banner.jpg @javascript
