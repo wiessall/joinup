@@ -1,4 +1,4 @@
-@api @group-g
+@api @group-h
 Feature:
   Check downloads counter's value at different places.
 

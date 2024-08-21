@@ -45,7 +45,7 @@
         "drupal/field_delimiter": "^2.0",
         "drupal/field_fallback_formatter": "^1.0",
         "drupal/field_formatter_range": "^1.1",
-        "drupal/field_group": "3.4.0",
+        "drupal/field_group": "^3.6",
         "drupal/field_permissions": "^1.1",
         "drupal/file_url": "~2.0",
         "drupal/flag": "^4.0",
@@ -55,6 +55,7 @@
         "drupal/iframe": "^2",
         "drupal/image_library_widget": "^2.0",
         "drupal/inline_entity_form": "^3.0",
+        "drupal/jquery_ui_accordion": "^2.1",
         "drupal/json_field": "^1.0",
         "drupal/layout_builder_component_attributes": "^2.1",
         "drupal/layout_custom_section_classes": "^1.0",
@@ -304,7 +305,8 @@
                 "Media Library: Argument #1 ($array) must be of type array, null given in array_filter(). @see https://www.drupal.org/i/3340973": "resources/patch/php/drupal/core/3340973.diff",
                 "Add validation constraint to type: plural_label; remove work-around from views.field.numeric:format_plural_string @see https://www.drupal.org/i/3409588": "resources/patch/php/drupal/core/3409588.diff",
                 "MediaLibraryUiBuilder service does not properly allow additional contextual filter arguments @see https://www.drupal.org/i/3401726": "resources/patch/php/drupal/core/3401726.diff",
-                "Added deprecation suppression": "resources/patch/php/drupal/core/3467293.diff"
+                "Added deprecation suppression": "resources/patch/php/drupal/core/3467293.diff",
+                "Fix handling of unknown file extensions in FileMediaFormatterBase @see https://www.drupal.org/i/3466462": "resources/patch/php/drupal/core/3466462.diff"
             },
             "drupal/default_content": {
                 "Allow manual imports @see https://www.drupal.org/i/2640734": "resources/patch/php/drupal/default_content/2640734.diff"
@@ -334,10 +336,6 @@
             "drupal/field_delimiter": {
                 "Doesn't work in layout builder. @see https://www.drupal.org/i/3099580": "resources/patch/php/drupal/field_delimiter/3099580.patch",
                 "str_replace(): Passing null to parameter #3 ($subject) of type array|string is deprecated in Drupal\\Component\\Utility\\Xss::filter(). @see https://www.drupal.org/i/3301169": "resources/patch/php/drupal/field_delimiter/3301169.patch"
-            },
-            "drupal/field_group": {
-                "Deprecated way of sequence schema def @see https://www.drupal.org/project/field_group/issues/3409719": "resources/patch/php/drupal/field_group/3409719.diff",
-                "Filtering and pagination error when adding existing media to nodes @see https://www.drupal.org/i/3412511": "resources/patch/php/drupal/field_group/3412511.patch"
             },
             "drupal/file_url": {
                 "Handle deleted files @see https://www.drupal.org/project/file_url/issues/3326758": "resources/patch/php/drupal/file_url/3326758.diff",

@@ -1,4 +1,4 @@
-@api @group-g
+@api @group-i
 Feature: As a moderator I want to be able to move solutions to other collection.
 
   Background:
