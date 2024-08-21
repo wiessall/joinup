@@ -12,7 +12,6 @@ use Drupal\Core\TempStore\PrivateTempStoreFactory;
 use Drupal\og\GroupTypeManagerInterface;
 use Drupal\og\OgResolvedGroupCollectionInterface;
 use Drupal\og\Plugin\OgGroupResolver\RouteGroupResolver;
-use Drupal\sparql_entity_storage\UriEncoder;
 use Drupal\views_bulk_operations\Form\ViewsBulkOperationsFormTrait;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 

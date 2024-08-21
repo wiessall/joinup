@@ -6,15 +6,12 @@ namespace Drupal\Tests\custom_page\Kernel;
 
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\Tests\joinup_test\Traits\ConfigTestTrait;
-use Drupal\Tests\sparql_entity_storage\Traits\SparqlConnectionTrait;
 use Drupal\field\Entity\FieldStorageConfig;
+use Drupal\node\Entity\Node;
 use Drupal\node\Entity\NodeType;
 use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\og_menu\Entity\OgMenu;
 use Drupal\og_menu\Entity\OgMenuInstance;
-use Drupal\rdf_entity\Entity\Rdf;
-use Drupal\rdf_entity\Entity\RdfEntityType;
-use Drupal\sparql_entity_storage\Entity\SparqlMapping;
 
 /**
  * Tests the custom page OG menu link updater service.
@@ -24,7 +21,6 @@ use Drupal\sparql_entity_storage\Entity\SparqlMapping;
 class CustomPageOgMenuLinksManagerTest extends KernelTestBase {
 
   use ConfigTestTrait;
-  use SparqlConnectionTrait;
 
   /**
    * {@inheritdoc}
@@ -46,22 +42,12 @@ class CustomPageOgMenuLinksManagerTest extends KernelTestBase {
     'og_menu',
     'og_ui',
     'options',
-    'rdf_entity',
     'search_api',
-    'sparql_entity_storage',
     'state_machine',
     'state_machine_revisions',
     'system',
     'user',
   ];
-
-  /**
-   * {@inheritdoc}
-   */
-  protected function bootEnvironment() {
-    parent::bootEnvironment();
-    $this->setUpSparql();
-  }
 
   /**
    * {@inheritdoc}
@@ -73,8 +59,6 @@ class CustomPageOgMenuLinksManagerTest extends KernelTestBase {
       'language',
       'og',
       'og_menu',
-      'rdf_entity',
-      'sparql_entity_storage',
     ]);
     $this->installEntitySchema('user');
     $this->installEntitySchema('node');
@@ -87,7 +71,7 @@ class CustomPageOgMenuLinksManagerTest extends KernelTestBase {
       'type' => 'og_standard_reference',
       'entity_type' => 'ogmenu_instance',
       'field_name' => OgGroupAudienceHelperInterface::DEFAULT_FIELD,
-      'settings' => ['target_type' => 'rdf_entity'],
+      'settings' => ['target_type' => 'node'],
     ])->save();
     // Create the 'navigation' OG menu.
     OgMenu::create([
@@ -95,11 +79,11 @@ class CustomPageOgMenuLinksManagerTest extends KernelTestBase {
       'label' => 'Navigation',
     ])->save();
 
-    // We don't install the original 'collection' RDF entity and 'custom_page'
-    // node bundle definitions and fields because we want to avoid installing
-    // the whole list of dependencies. Thus we create only simplified versions
-    // of both bundles for the purpose of this test.
-    $mocked_collection_type = RdfEntityType::create([
+    // We don't install the original 'collection' and 'custom_page' node bundle
+    // definitions and fields because we want to avoid installing the whole list
+    // of dependencies. Thus, we create only simplified versions of both bundles
+    // for the purpose of this test.
+    $mocked_collection_type = NodeType::create([
       'rid' => 'collection',
       'name' => 'Mocked collection',
     ]);
@@ -108,12 +92,6 @@ class CustomPageOgMenuLinksManagerTest extends KernelTestBase {
     $mocked_collection_type->og_group_content_bundle = FALSE;
     $mocked_collection_type->save();
 
-    // Create the corresponding mapping config entity.
-    SparqlMapping::create($this->getConfigData('sparql_entity_storage.mapping.rdf_entity.collection'))
-      // Don't care about the 'draft' graph.
-      ->unsetGraphs(['draft'])
-      ->save();
-
     $mocked_custom_page_type = NodeType::create([
       'type' => 'custom_page',
       'name' => 'Mocked custom page',
@@ -121,11 +99,11 @@ class CustomPageOgMenuLinksManagerTest extends KernelTestBase {
     // @see og_ui_entity_type_save().
     $mocked_custom_page_type->og_group_content_bundle = TRUE;
     $mocked_custom_page_type->og_is_group = FALSE;
-    $mocked_custom_page_type->og_target_type = 'rdf_entity';
+    $mocked_custom_page_type->og_target_type = 'node';
     $mocked_custom_page_type->og_target_bundles = ['collection'];
     $mocked_custom_page_type->save();
 
-    // The state field plays a big part of the project so we cannot go around
+    // The state field plays a big part of the project, so we cannot go around
     // that much without it. We create it here manually.
     FieldStorageConfig::create([
       'type' => 'state',
@@ -159,21 +137,22 @@ class CustomPageOgMenuLinksManagerTest extends KernelTestBase {
     // Create 2 collections.
     $collection_ids = $ogmenu_instance_ids = [];
     foreach ([1, 2] as $index) {
-      Rdf::create([
-        'rid' => 'collection',
-        'id' => $collection_ids[$index] = "http://example.com/$index",
-        'label' => $this->randomString(),
-      ])->save();
+      $collection_ids[$index] = Node::create([
+        'type' => 'collection',
+        'uri' => "http://example.com/$index",
+        'title' => $this->randomString(),
+      ]);
+      $collection_ids[$index]->save();
       // Create also the paired OG menu link instance. Normally this is
-      // automatically accomplished by the 'joinup_core' module but we don't
+      // automatically accomplished by the 'joinup_core' module, but we don't
       // want to enable that module due to its complex dependencies.
       // @see joinup_core_rdf_entity_insert()
       $ogmenu_instance = OgMenuInstance::create([
         'type' => 'navigation',
-        OgGroupAudienceHelperInterface::DEFAULT_FIELD => $collection_ids[$index],
+        OgGroupAudienceHelperInterface::DEFAULT_FIELD => $collection_ids[$index]->id(),
       ]);
       $ogmenu_instance->save();
-      $ogmenu_instance_ids[$index] = $ogmenu_instance->id();
+      $ogmenu_instance_ids[$index] = $ogmenu_instance;
     }
   }
 
@@ -221,19 +200,6 @@ class CustomPageOgMenuLinksManagerTest extends KernelTestBase {
     $storage = $this->container->get('entity_type.manager')
       ->getStorage('menu_link_content');
     return $storage->loadByProperties($properties);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function tearDown(): void {
-    // Clean up the RDF entities that were created during the test. We clean
-    // them up here instead of at the end of the test so that this always
-    // happens, even if the test fails.
-    foreach ([1, 2] as $index) {
-      Rdf::load("http://example.com/$index")->delete();
-    }
-    parent::tearDown();
   }
 
 }
