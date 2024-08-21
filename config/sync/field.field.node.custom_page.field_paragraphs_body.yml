@@ -6,6 +6,7 @@ dependencies:
     - field.storage.node.field_paragraphs_body
     - node.type.custom_page
     - paragraphs.paragraphs_type.accordion
+    - paragraphs.paragraphs_type.block
     - paragraphs.paragraphs_type.call_to_action
     - paragraphs.paragraphs_type.carousel
     - paragraphs.paragraphs_type.configurable_listing
@@ -64,6 +65,7 @@ settings:
       text: text
       video: video
       webform: webform
+      block: block
       image_gallery: image_gallery
     negate: 0
     target_bundles_drag_drop:
@@ -88,6 +90,9 @@ settings:
       accordion_item:
         weight: -54
         enabled: false
+      block:
+        weight: 38
+        enabled: true
       call_to_action:
         weight: -53
         enabled: true
