@@ -727,31 +727,6 @@ class FeatureContext extends RawDrupalContext {
   }
 
   /**
-   * Checks whether an element with a CSS selector can be found on the page.
-   *
-   * @param string $selector
-   *   The CSS selector of the element.
-   *
-   * @return \Behat\Mink\Element\NodeElement
-   *   The first node element on the page matching the selector.
-   *
-   * @throws \Exception
-   *   If the element cannot be found.
-   *
-   * @Then the page should have an element with CSS selector :selector
-   */
-  public function getElementByCss(string $selector): NodeElement {
-    if ($element = $this->getSession()->getPage()->find('css', $selector)) {
-      return $element;
-    }
-
-    throw new \Exception(sprintf(
-      "Element with CSS selector '%s' could not be found on the page",
-      $selector
-    ));
-  }
-
-  /**
    * Click on an element by css class.
    *
    * @param string $element
@@ -760,7 +735,7 @@ class FeatureContext extends RawDrupalContext {
    * @Then /^I click on element "([^"]*)"$/
    */
   public function iClickOn(string $element): void {
-    $this->getElementByCss($element)->click();
+    $this->assertSession()->elementExists('css', $element)->click();
   }
 
   /**
@@ -2221,6 +2196,47 @@ class FeatureContext extends RawDrupalContext {
     if (!$found) {
       throw new \Exception(sprintf('The "%s" attribute is not present on the element "%s" in the "%s" region on the page %s', $atr, $tag, $region, $this->getSession()
         ->getCurrentUrl()));
+    }
+  }
+
+  /**
+   * Asserts that an element has an attribute that contains the given value.
+   *
+   * @param string $tag
+   *   Tag name.
+   * @param string $attr_name
+   *   Attribute name.
+   * @param string $attr_value
+   *   Attribute value.
+   *
+   * @Then the :tag element with :attr_name attribute should contain :value
+   */
+  public function assertElementAttributeContains(string $tag, string $attr_name, string $attr_value): void {
+    $element = $this->getSession()->getPage()->find('xpath', "//{$tag}[contains(@$attr_name,'$attr_value')]");
+    if (empty($element)) {
+      throw new \Exception(sprintf('The "%s" element with "%s" attribute value "%s" was found on the page', $tag, $attr_name, $attr_value));
+    }
+  }
+
+  /**
+   * Verifies that no elements with a title attribute contain HTML tags.
+   *
+   * @Then I should not see any HTML tags inside elements with title attribute
+   */
+  public function assertNoTagsInsideDiv(): void {
+    // Find all elements with a title attribute.
+    $elements = $this->getSession()->getPage()->findAll('css', '[title]');
+
+    foreach ($elements as $element) {
+      $inner_html = $element->getAttribute('title');
+
+      // Remove all HTML tags.
+      $stripped_html = strip_tags($inner_html);
+
+      // Check if the stripped HTML is the same as the inner HTML.
+      if ($inner_html !== $stripped_html) {
+        throw new \Exception(sprintf('Element with title attribute "%s" contains HTML tags.', $element->getAttribute('title')));
+      }
     }
   }
 

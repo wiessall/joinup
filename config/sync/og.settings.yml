@@ -12,6 +12,7 @@ group_resolvers:
   - collection_from_route
   - eif_group
   - joinup_route_group
+  - joinup_oss_catalogue_routes
   - joinup_subscription_routes
   - joinup_group_content_management
   - route_group

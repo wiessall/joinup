@@ -1,0 +1,8 @@
+langcode: en
+status: true
+dependencies: {  }
+name: 'OSS Software Type'
+vid: oss_software_type
+description: 'Open Source Software Solution Software Type'
+weight: 0
+new_revision: false

@@ -1,0 +1,22 @@
+uuid: 5965c7e7-5e50-4c21-9d70-3336cb27097f
+langcode: en
+status: true
+dependencies:
+  config:
+    - filter.format.full_html
+template: eu_oss_catalogue_log
+label: 'EU OSS catalogue log'
+description: 'Logging of OSS Catalogue events'
+text:
+  -
+    value: 'EU OSS catalogue log'
+    format: full_html
+  -
+    value: '<p>Severity: [message:oss_severity],&nbsp;Message: [message:oss_message:value]</p>'
+    format: full_html
+settings:
+  'token options':
+    clear: false
+    'token replace': true
+  purge_override: false
+  purge_methods: {  }

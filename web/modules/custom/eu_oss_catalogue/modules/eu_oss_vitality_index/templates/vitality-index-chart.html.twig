@@ -1,0 +1,21 @@
+{#
+/**
+ * @file
+ * Default theme implementation for vitality_index_chart.
+ *
+ * Available variables:
+ * - attributes: An associative array of element attributes.
+ * - info: Info text.
+ *
+ * @ingroup themeable
+ */
+#}
+
+{% set classes = ['js-vitality-index-chart'] %}
+
+{{ attach_library('eu_oss_vitality_index/vitality-index-chart') }}
+
+<div>
+  <canvas{{ attributes.addClass(classes) }}></canvas>
+  <div>{{ info }}</div>
+</div>
