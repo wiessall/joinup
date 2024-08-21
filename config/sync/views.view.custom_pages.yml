@@ -139,9 +139,9 @@ display:
             title: All
           title_enable: false
           title: ''
-          default_argument_type: rdf_entity
+          default_argument_type: node
           default_argument_options:
-            parameter_name: rdf_entity
+            parameter_name: node
           summary_options:
             base_path: ''
             count: true

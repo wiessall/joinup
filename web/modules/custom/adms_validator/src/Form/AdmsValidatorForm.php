@@ -8,7 +8,7 @@ use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\adms_validator\AdmsValidatorInterface;
 use Drupal\file\FileInterface;
-use Drupal\sparql_entity_storage\Driver\Database\sparql\ConnectionInterface;
+use Drupal\rdf_sync\RdfSyncConnectionInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Session\Session;
 
@@ -17,26 +17,11 @@ use Symfony\Component\HttpFoundation\Session\Session;
  */
 class AdmsValidatorForm extends FormBase {
 
-  /**
-   * The ADMS validator service.
-   *
-   * @var \Drupal\adms_validator\AdmsValidatorInterface
-   */
-  protected $admsValidator;
-
-  /**
-   * Current user session ID.
-   *
-   * @var string
-   */
-  protected $sessionId;
-
-  /**
-   * The SPARQL endpoint.
-   *
-   * @var \Drupal\sparql_entity_storage\Driver\Database\sparql\ConnectionInterface
-   */
-  protected $sparql;
+  public function __construct(
+    protected readonly AdmsValidatorInterface $admsValidator,
+    protected readonly Session $session,
+    protected readonly RdfSyncConnectionInterface $connection,
+  ) {}
 
   /**
    * {@inheritdoc}
@@ -45,24 +30,8 @@ class AdmsValidatorForm extends FormBase {
     return new static(
       $container->get('adms_validator.validator'),
       $container->get('session'),
-      $container->get('sparql.endpoint')
+      $container->get('rdf_sync.connection'),
     );
-  }
-
-  /**
-   * Builds a new service instance.
-   *
-   * @param \Drupal\adms_validator\AdmsValidatorInterface $adms_validator
-   *   The ADMS validator service.
-   * @param \Symfony\Component\HttpFoundation\Session\Session $session
-   *   The current user session.
-   * @param \Drupal\sparql_entity_storage\Driver\Database\sparql\ConnectionInterface $sparql
-   *   The SPARQL endpoint.
-   */
-  public function __construct(AdmsValidatorInterface $adms_validator, Session $session, ConnectionInterface $sparql) {
-    $this->admsValidator = $adms_validator;
-    $this->sessionId = $session->getId();
-    $this->sparql = $sparql;
   }
 
   /**
@@ -119,7 +88,7 @@ class AdmsValidatorForm extends FormBase {
     }
 
     try {
-      $uri = AdmsValidatorInterface::DEFAULT_VALIDATION_GRAPH . "/{$this->sessionId}";
+      $uri = AdmsValidatorInterface::DEFAULT_VALIDATION_GRAPH . "/{$this->session->getId()}";
       $schema_errors = $this->admsValidator->validateFile($file->getFileUri(), $uri);
     }
     catch (\Exception $e) {
@@ -130,7 +99,7 @@ class AdmsValidatorForm extends FormBase {
     // Delete the uploaded file from disk.
     $file->delete();
     // Clear the graph.
-    $this->sparql->query("CLEAR GRAPH <$uri>");
+    $this->connection->update("CLEAR GRAPH <$uri>");
 
     if ($schema_errors->isSuccessful()) {
       $this->messenger()->addMessage($this->t('No errors found during validation.'));

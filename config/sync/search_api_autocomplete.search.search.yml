@@ -20,6 +20,7 @@ suggester_settings:
     suggest_keys: true
     view_modes:
       'entity:node':
+        collection: ''
         custom_page: ''
         discussion: ''
         distribution: ''
@@ -28,10 +29,8 @@ suggester_settings:
         licence: ''
         news: ''
         release: ''
-        video: ''
-      'entity:rdf_entity':
-        collection: ''
         solution: ''
+        video: ''
       'entity:taxonomy_term':
         eif_conceptual_model: ''
         eif_interoperability_layer: ''

@@ -32,4 +32,4 @@ visibility:
       node-document: node-document
       node-event: node-event
       node-news: node-news
-      rdf_entity-solution: rdf_entity-solution
+      node-solution: node-solution

@@ -1,5 +1,5 @@
 moderation.content_moderation_overview:
-  path: '/rdf_entity/{rdf_entity}/moderate'
+  path: '/node/{group}/moderate'
   defaults:
     _form: '\Drupal\moderation\Form\ContentModerationOverviewForm'
     _title: 'Content moderation'
@@ -8,8 +8,8 @@ moderation.content_moderation_overview:
     _joinup_group: 'TRUE'
   options:
     parameters:
-      rdf_entity:
-        type: entity:rdf_entity
+      group:
+        type: entity:node
         bundle:
           - collection
           - solution

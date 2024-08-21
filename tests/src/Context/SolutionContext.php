@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Drupal\joinup\Context;
 
-use Behat\Behat\Hook\Scope\AfterScenarioScope;
 use Behat\Gherkin\Node\TableNode;
 use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Url;
@@ -19,6 +18,7 @@ use Drupal\joinup\Traits\FormTrait;
 use Drupal\joinup\Traits\OgTrait;
 use Drupal\joinup\Traits\RdfEntityTrait;
 use Drupal\joinup\Traits\SearchTrait;
+use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup\Traits\TopicTrait;
 use Drupal\joinup\Traits\TraversingTrait;
 use Drupal\joinup\Traits\UserTrait;
@@ -28,9 +28,9 @@ use Drupal\joinup_group\ContentCreationOptions;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\language\Entity\ConfigurableLanguage;
+use Drupal\node\Entity\Node;
 use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\og\OgRoleInterface;
-use Drupal\rdf_entity\Entity\Rdf;
 use PHPUnit\Framework\Assert;
 
 /**
@@ -45,19 +45,13 @@ class SolutionContext extends RawDrupalContext {
   use FormTrait;
   use OgTrait;
   use RdfEntityTrait;
+  use TestingEntitiesTrait;
   use SearchTrait;
   use TopicTrait;
   use TraversingTrait;
   use UserTrait;
   use UtilityTrait;
   use WorkflowTrait;
-
-  /**
-   * Keep track of created entities.
-   *
-   * @var \Drupal\rdf_entity\RdfInterface[]
-   */
-  protected array $rdfEntities = [];
 
   /**
    * Navigates to the add solution form.
@@ -69,9 +63,9 @@ class SolutionContext extends RawDrupalContext {
    * @When I visit the add solution form of the :collection collection
    */
   public function visitAddSolutionForm(string $collection): void {
-    $collection = $this->getEntityByLabel('rdf_entity', $collection);
+    $collection = $this->getEntityByLabel('node', $collection);
     $solution_url = Url::fromRoute('solution.collection_solution.add', [
-      'rdf_entity' => $collection->id(),
+      'node' => $collection->id(),
     ]);
 
     $this->visitPath($solution_url->getInternalPath());
@@ -90,7 +84,7 @@ class SolutionContext extends RawDrupalContext {
    * @throws \Drupal\Core\Entity\EntityMalformedException
    */
   public function visitSolution(string $solution): void {
-    /** @var \Drupal\rdf_entity\Entity\Rdf $entity */
+    /** @var \Drupal\joinup_solution\Entity\SolutionInterface $entity */
     $entity = $this->getEntityByLabel('node', $solution);
     $this->visitPath($entity->toUrl()->toString());
   }
@@ -228,7 +222,7 @@ class SolutionContext extends RawDrupalContext {
     $aliases = self::solutionFieldAliases();
     Assert::assertArrayHasKey($property, $aliases, "Unknown column '$property' in solution table.");
     $fieldName = $aliases[$property];
-    $solution = static::getEntityByLabel('rdf_entity', $label, 'solution');
+    $solution = static::getEntityByLabel('node', $label, 'solution');
     Assert::assertInstanceOf(SolutionInterface::class, $solution, "Cannot find any solution with label $label");
 
     $values = $this->prepareFields(
@@ -254,15 +248,15 @@ class SolutionContext extends RawDrupalContext {
   protected function ensureParentCollection(array &$values): void {
     if (empty($values['collection'])) {
       $label = $this->getRandom()->sentences(3);
-      $collection = Rdf::create([
-        'rid' => 'collection',
-        'label' => $label,
-        'field_ar_state' => 'published',
+      $collection = Node::create([
+        'type' => 'collection',
+        'title' => $label,
+        'field_state' => 'published',
       ]);
       $collection->save();
       $values['collection'] = $label;
       // Track this collection.
-      $this->rdfEntities[$collection->id()] = $collection;
+      $this->entities['node'][$collection->id()] = $collection;
 
       // Remove any links created by this collection because they might produce
       // name collisions with the solution. E.g. the left sidebar link 'About'.
@@ -317,16 +311,13 @@ class SolutionContext extends RawDrupalContext {
     $fileHandler = \Drupal::service('file_url.handler');
     Assert::assertInstanceOf(FileUrlHandler::class, $fileHandler);
 
-    $file_fields = [
-      'field_is_documentation',
-      'field_is_logo',
-    ];
+    $file_fields = ['documentation', 'logo'];
 
     foreach ($file_fields as $field_name) {
       if (!empty($values[$field_name])) {
         foreach ($values[$field_name] as &$filename) {
           $file = $this->createFile($filename);
-          if ($field_name === 'field_is_documentation') {
+          if ($field_name === 'documentation') {
             $filename = [
               'target_id' => $fileHandler::fileToUrl($file),
             ];
@@ -346,16 +337,16 @@ class SolutionContext extends RawDrupalContext {
    * @param array $values
    *   An optional associative array of values, keyed by property name.
    *
-   * @return \Drupal\rdf_entity\RdfInterface
+   * @return \Drupal\joinup_solution\Entity\SolutionInterface
    *   A new solution entity.
    */
   protected function createSolution(array $values): SolutionInterface {
-    $values = $this->prepareFields($values);
+    $values = $this->prepareFields($values) + ['type' => 'solution'];
     $this->setFallbackTopic($values);
 
-    $solution = $this->createRdfEntity('solution', $values);
+    $solution = Node::create($values);
     Assert::assertInstanceOf(SolutionInterface::class, $solution);
-    $this->rdfEntities[$solution->id()] = $solution;
+    $this->entities['node'][$solution->id()] = $solution;
 
     $this->applyPostSaveTasks($solution, $values);
 
@@ -389,7 +380,7 @@ class SolutionContext extends RawDrupalContext {
       if (!($groupLabel = trim($groupLabel))) {
         continue;
       }
-      $group = $this->getEntityByLabel('rdf_entity', $groupLabel);
+      $group = $this->getEntityByLabel('node', $groupLabel);
       Assert::assertInstanceOf(
         GroupInterface::class,
         $group,
@@ -403,7 +394,7 @@ class SolutionContext extends RawDrupalContext {
       if (!($groupLabel = trim($groupLabel))) {
         continue;
       }
-      $group = $this->getEntityByLabel('rdf_entity', $groupLabel);
+      $group = $this->getEntityByLabel('node', $groupLabel);
       Assert::assertInstanceOf(
         GroupInterface::class,
         $group,
@@ -436,7 +427,7 @@ class SolutionContext extends RawDrupalContext {
    * @When I delete documents from :solution solution
    */
   public function deleteDocumentsFromSolution(string $solution): void {
-    $solution = $this->getEntityByLabel('rdf_entity', $solution);
+    $solution = $this->getEntityByLabel('node', $solution);
 
     /** @var \Drupal\file_url\FileUrlHandler $fileHandler */
     $fileHandler = \Drupal::service('file_url.handler');
@@ -464,7 +455,7 @@ class SolutionContext extends RawDrupalContext {
    * @Then I should have :number solution(s)
    */
   public function assertSolutionCount(int $number): void {
-    $this->assertEntityCount('rdf_entity', 'solution', $number);
+    $this->assertEntityCount('node', 'solution', $number);
   }
 
   /**
@@ -499,31 +490,6 @@ class SolutionContext extends RawDrupalContext {
       $group = $this->getEntityByLabel('node', $values['solution']);
       $this->givenUserMembership($group, $values);
     }
-  }
-
-  /**
-   * Remove any created entities.
-   *
-   * @AfterScenario
-   */
-  public function clearEntities(AfterScenarioScope $event): void {
-    if (empty($this->rdfEntities)) {
-      return;
-    }
-
-    // Remove any solutions that were created.
-    foreach ($this->rdfEntities as $entity) {
-      $name = $entity->label();
-      try {
-        $entity->skip_notification = TRUE;
-        $entity->delete();
-      }
-      catch (\Throwable $e) {
-        // Throw a more helpful error if something goes wrong during cleanup.
-        throw new \Exception(sprintf('Error while cleaning up solution "%s" after completing scenario "%s" of feature "%s": "%s"', $name, $event->getFeature()->getTitle(), $event->getScenario()->getTitle(), $e->getMessage()));
-      }
-    }
-    $this->rdfEntities = [];
   }
 
   /**
@@ -761,7 +727,7 @@ class SolutionContext extends RawDrupalContext {
     $solution_values['field_is_description'] = "Catalan description";
     // Create the translation.
     $solution->addTranslation('ca', $solution_values)->save();
-    $this->rdfEntities[$solution->id()] = $solution;
+    $this->entities['node'][$solution->id()] = $solution;
   }
 
   /**

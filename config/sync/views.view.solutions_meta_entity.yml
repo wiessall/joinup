@@ -23,14 +23,14 @@ display:
     display_options:
       title: 'Solutions w/meta entity'
       fields:
-        label:
-          id: label
-          table: search_api_datasource_published_entity_rdf_entity
-          field: label
+        title:
+          id: title
+          table: search_api_datasource_published_entity_node
+          field: title
           relationship: none
           group_type: group
           admin_label: ''
-          entity_type: rdf_entity
+          entity_type: node
           plugin_id: search_api_field
           label: ''
           exclude: false
@@ -441,6 +441,7 @@ display:
         options:
           view_modes:
             'entity:node':
+              collection: default
               custom_page: default
               discussion: default
               distribution: default
@@ -449,10 +450,8 @@ display:
               licence: default
               news: default
               release: default
-              video: default
-            'entity:rdf_entity':
-              collection: default
               solution: view_mode_search_list_item
+              video: default
             'entity:taxonomy_term':
               eif_conceptual_model: default
               eif_interoperability_layer: default

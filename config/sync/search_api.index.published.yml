@@ -39,7 +39,6 @@ dependencies:
     - node
     - paragraphs
     - publication_date
-    - rdf_entity
     - search_api
     - search_api_solr
     - solution
@@ -681,7 +680,7 @@ field_settings:
         - field.storage.meta_entity.field_pinned_in
       module:
         - meta_entity
-        - rdf_entity
+        - node
   owner_title:
     label: 'Related Owner » Title'
     datasource_id: 'entity:node'

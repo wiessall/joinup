@@ -702,7 +702,6 @@ display:
               anonymous: '0'
               moderator: '0'
               administrator: '0'
-              rdf_graph_manager: '0'
           is_grouped: true
           group_info:
             label: Status
@@ -753,7 +752,6 @@ display:
               anonymous: '0'
               moderator: '0'
               administrator: '0'
-              rdf_graph_manager: '0'
             placeholder: ''
           is_grouped: false
           group_info:

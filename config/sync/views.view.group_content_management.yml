@@ -6,15 +6,15 @@ dependencies:
     - field.storage.node.field_state
     - field.storage.node.og_audience
     - field.storage.node.release_number
+    - node.type.collection
     - node.type.custom_page
     - node.type.discussion
     - node.type.document
     - node.type.event
     - node.type.news
     - node.type.release
+    - node.type.solution
     - node.type.video
-    - rdf_entity.rdfentity.collection
-    - rdf_entity.rdfentity.solution
   module:
     - csv_serialization
     - datetime
@@ -566,7 +566,7 @@ display:
             format: default_summary
           specify_validation: true
           validate:
-            type: 'entity:rdf_entity'
+            type: 'entity:node'
             fail: 'not found'
           validate_options:
             bundles:
@@ -706,7 +706,6 @@ display:
               anonymous: '0'
               moderator: '0'
               administrator: '0'
-              rdf_graph_manager: '0'
             reduce: false
           is_grouped: false
           group_info:
@@ -1374,7 +1373,7 @@ display:
         arguments: true
       display_description: ''
       display_extenders: {  }
-      path: rdf_entity/%rdf_entity/manage-content/csv
+      path: node/%node/manage-content/csv
       displays:
         manage: manage
         default: '0'
@@ -2061,7 +2060,7 @@ display:
         metatag_display_extender:
           metatags: {  }
           tokenize: false
-      path: rdf_entity/%rdf_entity/manage-content
+      path: node/%node/manage-content
       menu:
         type: tab
         title: 'Manage content'

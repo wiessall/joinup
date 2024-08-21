@@ -177,6 +177,7 @@ display:
         options:
           view_modes:
             'entity:node':
+              collection: view_mode_tile
               custom_page: view_mode_tile
               discussion: view_mode_tile
               distribution: default
@@ -186,10 +187,8 @@ display:
               news: view_mode_tile
               newsletter: view_mode_tile
               release: default
-              video: view_mode_tile
-            'entity:rdf_entity':
-              collection: view_mode_tile
               solution: view_mode_tile
+              video: view_mode_tile
       query:
         type: search_api_query
         options:
