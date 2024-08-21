@@ -1,0 +1,2 @@
+cron_frequency: 7
+process_timeout: 30

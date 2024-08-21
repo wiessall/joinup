@@ -8,7 +8,6 @@ use Drupal\Core\Cache\Cache;
 use Drupal\Core\Menu\MenuLinkDefault;
 use Drupal\Core\Menu\StaticMenuLinkOverridesInterface;
 use Drupal\Core\Routing\ResettableStackedRouteMatchInterface;
-use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\joinup_tour\TourHelperInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -16,20 +15,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * Provides a custom menu link for the tour support menu item.
  */
 class TourMenuLink extends MenuLinkDefault {
-
-  /**
-   * The tour helper service.
-   *
-   * @var \Drupal\joinup_tour\TourHelperInterface
-   */
-  protected TourHelperInterface $tourHelper;
-
-  /**
-   * The current route match.
-   *
-   * @var \Drupal\Core\Routing\ResettableStackedRouteMatchInterface
-   */
-  protected RouteMatchInterface $currentRouteMatch;
 
   /**
    * Creates a new menu link instance.
@@ -42,15 +27,13 @@ class TourMenuLink extends MenuLinkDefault {
    *   The plugin implementation definition.
    * @param \Drupal\Core\Menu\StaticMenuLinkOverridesInterface $static_override
    *   The static override storage.
-   * @param \Drupal\joinup_tour\TourHelperInterface $tour_helper
+   * @param \Drupal\joinup_tour\TourHelperInterface $tourHelper
    *   The tour helper service.
-   * @param \Drupal\Core\Routing\ResettableStackedRouteMatchInterface $current_route_match
+   * @param \Drupal\Core\Routing\ResettableStackedRouteMatchInterface $currentRouteMatch
    *   The current route match.
    */
-  public function __construct(array $configuration, string $plugin_id, $plugin_definition, StaticMenuLinkOverridesInterface $static_override, TourHelperInterface $tour_helper, ResettableStackedRouteMatchInterface $current_route_match) {
+  public function __construct(array $configuration, string $plugin_id, $plugin_definition, StaticMenuLinkOverridesInterface $static_override, protected TourHelperInterface $tourHelper, protected ResettableStackedRouteMatchInterface $currentRouteMatch) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $static_override);
-    $this->tourHelper = $tour_helper;
-    $this->currentRouteMatch = $current_route_match;
   }
 
   /**

@@ -37,6 +37,10 @@ web_environment: [ ]
 disable_settings_management: true
 nodejs_version: "20"
 
+upload_dirs:
+  - sites/default/files
+  - ../private
+
 hooks:
     pre-start:
         # Symlink the Solr config to be exposed into container. The Digit CI

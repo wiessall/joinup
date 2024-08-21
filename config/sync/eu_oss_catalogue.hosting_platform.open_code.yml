@@ -1,0 +1,11 @@
+uuid: 68ff27d3-9317-4371-9a4b-73635791dd56
+langcode: en
+status: true
+dependencies: {  }
+id: open_code
+label: 'Open CoDE'
+description: 'German National OSS Catalogue, by https://opencode.de website.'
+platformId: gitlab_self_hosted
+platformSettings:
+  baseUrl: 'https://gitlab.opencode.de'
+  projects: {  }
