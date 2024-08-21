@@ -52,7 +52,7 @@ joinup_group.membership_permissions_info:
           - solution
 
 joinup_group.reports:
-  path: '/rdf_entity/{rdf_entity}/reports'
+  path: '/node/{group}/reports'
   defaults:
     _controller: Drupal\joinup_group\Controller\GroupReportsController::reports
     _title: 'Reports'
@@ -60,12 +60,12 @@ joinup_group.reports:
     _custom_access: Drupal\joinup_group\Controller\GroupReportsController::access
   options:
     parameters:
-      rdf_entity:
-        type: entity:rdf_entity
+      group:
+        type: entity:node
         bundle:
           - collection
           - solution
-    _og_entity_type_id: rdf_entity
+    _og_entity_type_id: node
 
 joinup_group.transfer_group_ownership_confirm:
   path: '/group/transfer/ownership'

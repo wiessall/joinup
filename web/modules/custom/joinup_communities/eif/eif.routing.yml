@@ -12,7 +12,7 @@ eif.eif_perspective_form:
         bundle:
           - solution
 
-entity.rdf_entity.eif_perspective:
+entity.node.eif_perspective:
   path: '/node/{node}/eif-perspective'
   defaults:
     _entity_view: 'node.eif_perspective'

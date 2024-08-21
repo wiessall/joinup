@@ -119,12 +119,12 @@ trait EntityTrait {
       'document' => 'node',
       'event' => 'node',
       'glossary' => 'node',
-      'group' => 'rdf_entity',
+      'group' => 'node',
       'news' => 'node',
       'owner' => 'node',
       'release' => 'node',
       'solution' => 'node',
-      'spdx licence' => 'rdf_entity',
+      'spdx licence' => 'taxonomy_term',
       'topic' => 'taxonomy_term',
     ];
   }

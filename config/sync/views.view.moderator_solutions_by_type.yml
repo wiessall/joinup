@@ -3,7 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.rdf_entity.field_is_solution_type
+    - field.storage.node.solution_type
     - search_api.index.published
     - system.menu.admin
   module:
@@ -29,14 +29,14 @@ display:
     display_options:
       title: 'Moderator: Solutions by type'
       fields:
-        label:
-          id: label
-          table: search_api_datasource_published_entity_rdf_entity
-          field: label
+        title:
+          id: title
+          table: search_api_datasource_published_entity_node
+          field: title
           relationship: none
           group_type: group
           admin_label: ''
-          entity_type: rdf_entity
+          entity_type: node
           plugin_id: search_api_field
           label: Title
           exclude: false
@@ -99,14 +99,14 @@ display:
             link_to_item: false
             multi_type: separator
             multi_separator: ', '
-        field_is_solution_type:
-          id: field_is_solution_type
-          table: search_api_datasource_published_entity_rdf_entity
-          field: field_is_solution_type
+        solution_type:
+          id: solution_type
+          table: search_api_datasource_published_entity_node
+          field: solution_type
           relationship: none
           group_type: group
           admin_label: ''
-          entity_type: rdf_entity
+          entity_type: node
           plugin_id: search_api_field
           label: 'Solution type'
           exclude: false
@@ -192,12 +192,12 @@ display:
                 display_method: label
         created:
           id: created
-          table: search_api_datasource_published_entity_rdf_entity
+          table: search_api_datasource_published_entity_node
           field: created
           relationship: none
           group_type: group
           admin_label: ''
-          entity_type: rdf_entity
+          entity_type: node
           plugin_id: search_api_field
           label: 'Authored on'
           exclude: false
@@ -276,12 +276,12 @@ display:
             multi_separator: ', '
         changed:
           id: changed
-          table: search_api_datasource_published_entity_rdf_entity
+          table: search_api_datasource_published_entity_node
           field: changed
           relationship: none
           group_type: group
           admin_label: ''
-          entity_type: rdf_entity
+          entity_type: node
           plugin_id: search_api_field
           label: Changed
           exclude: false
@@ -471,7 +471,7 @@ display:
         - 'user.node_grants:view'
         - user.permissions
       tags:
-        - 'config:field.storage.rdf_entity.field_is_solution_type'
+        - 'config:field.storage.node.solution_type'
         - 'config:search_api.index.published'
         - 'config:views.view.moderator_solutions_by_type'
         - 'search_api_list:published'
@@ -535,7 +535,7 @@ display:
         - 'user.node_grants:view'
         - user.permissions
       tags:
-        - 'config:field.storage.rdf_entity.field_is_solution_type'
+        - 'config:field.storage.node.solution_type'
         - 'config:search_api.index.published'
         - 'config:views.view.moderator_solutions_by_type'
         - 'search_api_list:published'
@@ -571,7 +571,7 @@ display:
         - 'user.node_grants:view'
         - user.permissions
       tags:
-        - 'config:field.storage.rdf_entity.field_is_solution_type'
+        - 'config:field.storage.node.solution_type'
         - 'config:search_api.index.published'
         - 'config:views.view.moderator_solutions_by_type'
         - 'search_api_list:published'

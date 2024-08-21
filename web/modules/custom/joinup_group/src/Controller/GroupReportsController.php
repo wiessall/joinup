@@ -51,14 +51,14 @@ class GroupReportsController extends ControllerBase {
   /**
    * Renders the group reports page.
    *
-   * @param \Drupal\joinup_group\Entity\GroupInterface $rdf_entity
+   * @param \Drupal\joinup_group\Entity\GroupInterface $group
    *   The group for which to build the reports page.
    *
    * @return array
    *   The page as a render array.
    */
-  public function reports(GroupInterface $rdf_entity): array {
-    $reports = $this->getReports($rdf_entity);
+  public function reports(GroupInterface $group): array {
+    $reports = $this->getReports($group);
 
     if ($reports) {
       $content = [];
@@ -107,13 +107,13 @@ class GroupReportsController extends ControllerBase {
    * Only facilitators and moderators have the required 'access group reports'
    * permission.
    *
-   * @param \Drupal\joinup_group\Entity\GroupInterface $rdf_entity
+   * @param \Drupal\joinup_group\Entity\GroupInterface $group
    *   The group for which the access to the reports page is being determined.
    *
    * @return \Drupal\Core\Access\AccessResultInterface
    *   The access result object.
    */
-  public function access(GroupInterface $rdf_entity): AccessResultInterface {
+  public function access(GroupInterface $group): AccessResultInterface {
     $user = $this->currentUser();
 
     // Check if the user has the global permission to access group reports of
@@ -124,7 +124,7 @@ class GroupReportsController extends ControllerBase {
 
     // Check if the user has permission to access the group reports page of this
     // particular group (e.g. facilitators).
-    return $rdf_entity->getGroupAccess('access group reports', $user);
+    return $group->getGroupAccess('access group reports', $user);
   }
 
 }

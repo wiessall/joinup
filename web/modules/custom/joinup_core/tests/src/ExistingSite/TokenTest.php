@@ -5,34 +5,32 @@ declare(strict_types=1);
 namespace Drupal\Tests\joinup_core\ExistingSite;
 
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
-use Drupal\Tests\node\Traits\NodeCreationTrait;
 use Drupal\Tests\token\Functional\TokenTestTrait;
 use Drupal\node\Entity\Node;
-use Drupal\rdf_entity\Entity\Rdf;
 
 /**
  * Tests the community content parent URL tokens.
  */
 class TokenTest extends JoinupExistingSiteTestBase {
 
-  use NodeCreationTrait;
+  // Use NodeCreationTrait;.
   use TokenTestTrait;
 
   /**
    * Tests the parent_collection token.
    */
   public function testParentCollection(): void {
-    $collection = $this->createRdfEntity([
-      'rid' => 'collection',
+    $collection = $this->createNode([
+      'type' => 'collection',
       'title' => $this->randomMachineName(),
-      'field_ar_state' => 'published',
+      'field_state' => 'published',
     ]);
 
-    $solution = $this->createRdfEntity([
-      'rid' => 'solution',
+    $solution = $this->createNode([
+      'type' => 'solution',
       'title' => $this->randomMachineName(),
-      'collection' => $collection,
-      'field_is_state' => 'published',
+      'og_audience' => $collection,
+      'field_state' => 'published',
     ]);
 
     $release = $this->createNode([
@@ -53,11 +51,11 @@ class TokenTest extends JoinupExistingSiteTestBase {
     // tokens.
     $tokens = [
       'parent_collection' => $collection->label(),
-      'parent_collection:rid:target_id' => 'collection',
+      'parent_collection:type:target_id' => 'collection',
     ];
 
-    $data = ['rdf_entity' => $solution];
-    $this->assertTokens('rdf_entity', $data, $tokens);
+    $data = ['node' => $solution];
+    $this->assertTokens('node', $data, $tokens);
 
     $data = ['node' => $release];
     $this->assertTokens('node', $data, $tokens);
@@ -81,17 +79,17 @@ class TokenTest extends JoinupExistingSiteTestBase {
    * @dataProvider shortIdOrTitleDataProvider
    */
   public function testShortIdOrTitleToken(string $bundle, string $short_id, string $title, string $expected_token): void {
-    $entity = Rdf::create([
-      'rid' => $bundle,
-      'label' => $title,
+    $entity = Node::create([
+      'type' => $bundle,
+      'title' => $title,
       'short_id' => $short_id,
     ]);
 
     $tokens = [
       'short_id_or_title' => $expected_token,
     ];
-    $data = ['rdf_entity' => $entity];
-    $this->assertTokens('rdf_entity', $data, $tokens);
+    $data = ['node' => $entity];
+    $this->assertTokens('node', $data, $tokens);
   }
 
   /**

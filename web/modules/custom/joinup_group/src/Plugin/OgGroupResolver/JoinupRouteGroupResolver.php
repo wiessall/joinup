@@ -27,14 +27,17 @@ class JoinupRouteGroupResolver extends RouteGroupResolver {
    */
   protected function getContentEntityPaths(): array {
     return [
-      '/rdf_entity/{rdf_entity}/moderate' => 'rdf_entity',
-      '/rdf_entity/{rdf_entity}/reports' => 'rdf_entity',
+      '/node/{group}/moderate' => 'node',
+      '/node/{group}/reports' => 'node',
+
+      // @todo Can't find usages of these 2 paths.
       '/rdf_entity/{rdf_entity}/announcements/list' => 'rdf_entity',
       '/rdf_entity/{rdf_entity}/announcements/send' => 'rdf_entity',
-      '/rdf_entity/{rdf_entity}/glossary_export/{arg_1}' => 'rdf_entity',
-      '/rdf_entity/{rdf_entity}/reports/actions-log' => 'rdf_entity',
-      '/rdf_entity/{rdf_entity}/reports/actions-log/csv' => 'rdf_entity',
-      '/rdf_entity/{rdf_entity}/solution/add' => 'rdf_entity',
+
+      '/node/{node}/glossary_export/{arg_1}' => 'node',
+      '/node/{node}/reports/actions-log' => 'node',
+      '/node/{node}/reports/actions-log/csv' => 'node',
+      '/node/{node}/solution/add' => 'node',
     ];
   }
 

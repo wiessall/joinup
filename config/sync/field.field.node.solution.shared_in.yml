@@ -4,8 +4,8 @@ status: true
 dependencies:
   config:
     - field.storage.node.shared_in
+    - node.type.collection
     - node.type.solution
-    - rdf_entity.rdfentity.collection
 id: node.solution.shared_in
 field_name: shared_in
 entity_type: node
@@ -17,7 +17,7 @@ translatable: true
 default_value: {  }
 default_value_callback: ''
 settings:
-  handler: 'default:rdf_entity'
+  handler: 'default:node'
   handler_settings:
     target_bundles:
       collection: collection

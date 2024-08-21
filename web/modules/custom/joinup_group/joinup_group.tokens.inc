@@ -24,7 +24,7 @@ function joinup_group_token_info(): array {
       'node' => [
         'parent_collection' => [
           'name' => t('Parent collection'),
-          'description' => t('Returns the parent collection for any distribution.'),
+          'description' => t('Returns the parent collection for any solution, release or distribution.'),
           'module' => 'joinup_group',
           'type' => 'node',
         ],
@@ -33,21 +33,6 @@ function joinup_group_token_info(): array {
           'description' => t('Returns short ID if available, or the title if the short ID is not.'),
           'module' => 'joinup_group',
           'type' => 'node',
-        ],
-      ],
-      'rdf_entity' => [
-        'parent_collection' => [
-          'name' => t('Parent collection'),
-          'description' => t('Returns the parent collection for any solution or release.'),
-          'module' => 'joinup_group',
-          'type' => 'rdf_entity',
-        ],
-        // @todo Remove this in ISAICP-8574.
-        'short_id_or_title' => [
-          'name' => t('Short ID or title'),
-          'description' => t('Returns short ID if available, or the title if the short ID is not.'),
-          'module' => 'joinup_group',
-          'type' => 'rdf_entity',
         ],
       ],
     ],
@@ -59,7 +44,7 @@ function joinup_group_token_info(): array {
  */
 function joinup_group_tokens(string $type, array $tokens, array $data, array $options, BubbleableMetadata $bubbleable_metadata): array {
   $replacements = [];
-  if (!in_array($type, ['node', 'rdf_entity'], TRUE) || empty($data[$type])) {
+  if ($type !== 'node' || empty($data[$type])) {
     return $replacements;
   }
   $token_service = \Drupal::token();

@@ -19,7 +19,6 @@ use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\meta_entity\Entity\MetaEntity;
 use Drupal\node\Entity\Node;
 use Drupal\paragraphs\Entity\Paragraph;
-use Drupal\rdf_entity\Entity\Rdf;
 
 /**
  * Behat step definitions and related methods provided by the eif module.
@@ -53,28 +52,28 @@ class EifContext extends RawDrupalContext {
     ]);
 
     // Create the NIFO sample collection.
-    $collection = Rdf::create([
-      'rid' => 'collection',
-      'id' => 'http://nifo.collection',
-      'label' => 'NIFO collection',
-      'field_ar_state' => 'published',
+    $collection = Node::create([
+      'type' => 'collection',
+      'uri' => 'http://nifo.collection',
+      'title' => 'NIFO collection',
+      'field_state' => 'published',
       'field_topic' => $tid = $this->getRandomTopic()->id(),
-      'field_ar_owner' => $owner->nid,
-      'field_ar_contact_information' => $contact->nid,
+      'owner' => $owner->nid,
+      'contact_information' => $contact->nid,
     ]);
     $collection->save();
     $this->entities['rdf_entity'][$collection->id()] = $collection;
 
     // Create the EIF Toolbox solution.
-    $solution = Rdf::create([
-      'rid' => 'solution',
-      'id' => EifInterface::EIF_ID,
-      'label' => 'EIF Toolbox',
-      'collection' => 'http://nifo.collection',
-      'field_is_state' => 'published',
+    $solution = Node::create([
+      'type' => 'solution',
+      'uri' => EifInterface::EIF_ID,
+      'title' => 'EIF Toolbox',
+      'og_audience' => $collection,
+      'field_state' => 'published',
       'field_topic' => $tid,
-      'field_is_owner' => $owner->nid,
-      'field_is_contact_information' => $contact->nid,
+      'owner' => $owner->nid,
+      'contact_information' => $contact->nid,
     ]);
     $solution->save();
     $this->entities['rdf_entity'][$solution->id()] = $solution;
@@ -187,7 +186,7 @@ class EifContext extends RawDrupalContext {
    */
   public function goToEifPerspectiveOfSolution(string $solution): void {
     $solution = $this->getEntityByLabel('rdf_entity', $solution, 'solution');
-    $url = Url::fromRoute('entity.rdf_entity.eif_perspective', [
+    $url = Url::fromRoute('entity.node.eif_perspective', [
       'rdf_entity' => $solution->id(),
     ]);
     $this->visitPath($url->getInternalPath());

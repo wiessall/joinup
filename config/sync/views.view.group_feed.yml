@@ -4,9 +4,9 @@ status: true
 dependencies:
   config:
     - field.storage.node.body
-    - field.storage.rdf_entity.field_is_description
-    - rdf_entity.rdfentity.collection
-    - rdf_entity.rdfentity.solution
+    - field.storage.node.description
+    - node.type.solution
+    - node.type.collection
     - search_api.index.published
   module:
     - joinup_group
@@ -100,14 +100,14 @@ display:
             use_highlighting: false
             multi_type: separator
             multi_separator: ', '
-        label:
-          id: label
-          table: search_api_datasource_published_entity_rdf_entity
-          field: label
+        title_1:
+          id: title
+          table: search_api_datasource_published_entity_node
+          field: title
           relationship: none
           group_type: group
           admin_label: ''
-          entity_type: rdf_entity
+          entity_type: node
           plugin_id: search_api_field
           label: ''
           exclude: true
@@ -294,14 +294,14 @@ display:
           hide_empty: false
           empty_zero: false
           hide_alter_empty: false
-        field_is_description:
-          id: field_is_description
-          table: search_api_datasource_published_entity_rdf_entity
-          field: field_is_description
+        description:
+          id: description
+          table: search_api_datasource_published_entity_node
+          field: description
           relationship: none
           group_type: group
           admin_label: ''
-          entity_type: rdf_entity
+          entity_type: node
           plugin_id: search_api_field
           label: ''
           exclude: true
@@ -532,7 +532,7 @@ display:
           exclude: false
           alter:
             alter_text: true
-            text: "{% if body -%}\r\n{{ body }}\r\n{%- elseif processed -%}\r\n{{ processed }}\r\n{% else %}\r\n{{ field_is_description }}\r\n{%- endif %}"
+            text: "{% if body -%}\r\n{{ body }}\r\n{%- elseif processed -%}\r\n{{ processed }}\r\n{% else %}\r\n{{ description }}\r\n{%- endif %}"
             make_link: false
             path: ''
             absolute: false
@@ -646,12 +646,12 @@ display:
                 view_mode: default
         uid:
           id: uid
-          table: search_api_datasource_published_entity_rdf_entity
+          table: search_api_datasource_published_entity_node
           field: uid
           relationship: none
           group_type: group
           admin_label: ''
-          entity_type: rdf_entity
+          entity_type: node
           plugin_id: search_api_field
           label: ''
           exclude: true
@@ -855,12 +855,12 @@ display:
             multi_separator: ', '
         created_1:
           id: created_1
-          table: search_api_datasource_published_entity_rdf_entity
+          table: search_api_datasource_published_entity_node
           field: created
           relationship: none
           group_type: group
           admin_label: ''
-          entity_type: rdf_entity
+          entity_type: node
           plugin_id: search_api_field
           label: ''
           exclude: true
@@ -1042,61 +1042,6 @@ display:
           absolute: false
           use_highlighting: false
           link_to_item: false
-        view_rdf_entity:
-          id: view_rdf_entity
-          table: search_api_datasource_published_entity_rdf_entity
-          field: view_rdf_entity
-          relationship: none
-          group_type: group
-          admin_label: ''
-          entity_type: rdf_entity
-          plugin_id: search_api_entity_link
-          label: ''
-          exclude: true
-          alter:
-            alter_text: false
-            text: ''
-            make_link: false
-            path: ''
-            absolute: false
-            external: false
-            replace_spaces: false
-            path_case: none
-            trim_whitespace: false
-            alt: ''
-            rel: ''
-            link_class: ''
-            prefix: ''
-            suffix: ''
-            target: ''
-            nl2br: false
-            max_length: 0
-            word_boundary: true
-            ellipsis: true
-            more_link: false
-            more_link_text: ''
-            more_link_path: ''
-            strip_tags: false
-            trim: false
-            preserve_tags: ''
-            html: false
-          element_type: ''
-          element_class: ''
-          element_label_type: ''
-          element_label_class: ''
-          element_label_colon: false
-          element_wrapper_type: ''
-          element_wrapper_class: ''
-          element_default_classes: true
-          empty: ''
-          hide_empty: false
-          empty_zero: false
-          hide_alter_empty: true
-          text: view
-          output_url_as_text: true
-          absolute: false
-          use_highlighting: false
-          link_to_item: false
         nothing_4:
           id: nothing_4
           table: views
@@ -1109,7 +1054,7 @@ display:
           exclude: false
           alter:
             alter_text: true
-            text: "/{{ view_node|trim('/', 'left') }}{{ view_rdf_entity|trim('/', 'left') }}"
+            text: "/{{ view_node|trim('/', 'left') }}"
             make_link: false
             path: ''
             absolute: false
@@ -1229,77 +1174,6 @@ display:
             format_plural_values:
               - '1'
               - '@count'
-        id:
-          id: id
-          table: search_api_datasource_published_entity_rdf_entity
-          field: id
-          relationship: none
-          group_type: group
-          admin_label: ''
-          entity_type: rdf_entity
-          plugin_id: search_api_field
-          label: ''
-          exclude: true
-          alter:
-            alter_text: false
-            text: ''
-            make_link: false
-            path: ''
-            absolute: false
-            external: false
-            replace_spaces: false
-            path_case: none
-            trim_whitespace: false
-            alt: ''
-            rel: ''
-            link_class: ''
-            prefix: ''
-            suffix: ''
-            target: ''
-            nl2br: false
-            max_length: 0
-            word_boundary: true
-            ellipsis: true
-            more_link: false
-            more_link_text: ''
-            more_link_path: ''
-            strip_tags: false
-            trim: false
-            preserve_tags: ''
-            html: false
-          element_type: ''
-          element_class: ''
-          element_label_type: ''
-          element_label_class: ''
-          element_label_colon: false
-          element_wrapper_type: ''
-          element_wrapper_class: ''
-          element_default_classes: true
-          empty: ''
-          hide_empty: false
-          empty_zero: false
-          hide_alter_empty: true
-          click_sort_column: value
-          type: string
-          settings:
-            link_to_entity: false
-          group_column: value
-          group_columns: {  }
-          group_rows: true
-          delta_limit: 0
-          delta_offset: 0
-          delta_reversed: false
-          delta_first_last: false
-          multi_type: separator
-          separator: ', '
-          field_api_classes: false
-          field_rendering: true
-          fallback_handler: search_api
-          fallback_options:
-            link_to_item: false
-            use_highlighting: false
-            multi_type: separator
-            multi_separator: ', '
         nothing_5:
           id: nothing_5
           table: views
@@ -1312,7 +1186,7 @@ display:
           exclude: false
           alter:
             alter_text: true
-            text: "{% if nid -%}\r\nnode {{ nid }} at {{ url('<front>') }}\r\n{%- else -%}\r\n{{ id }}\r\n{%- endif %}"
+            text: "node {{ nid }} at {{ url('<front>') }}"
             make_link: false
             path: ''
             absolute: false
@@ -1757,7 +1631,7 @@ display:
         - user.permissions
       tags:
         - 'config:field.storage.node.body'
-        - 'config:field.storage.rdf_entity.field_is_description'
+        - 'config:field.storage.rdf_entity.description'
         - 'config:search_api.index.published'
         - 'search_api_list:published'
   rss_feed:
@@ -1788,7 +1662,7 @@ display:
             guid_field: nothing_5
             guid_field_is_permalink: false
       display_extenders: {  }
-      path: rdf_entity/%rdf_entity/feed.xml
+      path: node/%node/feed.xml
     cache_metadata:
       max-age: -1
       contexts:
@@ -1799,6 +1673,6 @@ display:
         - user.permissions
       tags:
         - 'config:field.storage.node.body'
-        - 'config:field.storage.rdf_entity.field_is_description'
+        - 'config:field.storage.rdf_entity.description'
         - 'config:search_api.index.published'
         - 'search_api_list:published'
