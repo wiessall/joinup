@@ -1,0 +1,1302 @@
+_meta:
+  version: '1.0'
+  entity_type: node
+  uuid: 54acbd6f-47f0-4280-ad09-0a07c397318b
+  bundle: custom_page
+  default_langcode: en
+  depends:
+    4b8712c1-bc69-4bb2-985d-33635e08466c: file
+    'http://data.europa.eu/w21/6d621a47-71ce-4f1a-90e2-8859403d3ecd': rdf_entity
+default:
+  revision_uid:
+    -
+      target_id: 1
+  status:
+    -
+      value: true
+  uid:
+    -
+      target_id: 1
+  title:
+    -
+      value: 'EU Open Source Solutions Catalogue'
+  created:
+    -
+      value: 1694498829
+  promote:
+    -
+      value: false
+  sticky:
+    -
+      value: false
+  revision_translation_affected:
+    -
+      value: true
+  report:
+    -
+      uri: 'internal:/contact'
+      title: 'Report abusive content'
+      options:
+        query:
+          category: report
+          uri: /eu-oss-catalogue/eu-open-source-solutions-catalogue
+          destination: eu-oss-catalogue/eu-open-source-solutions-catalogue
+  metatag:
+    -
+      tag: meta
+      attributes:
+        name: title
+        content: 'EU Open Source Solutions Catalogue | Joinup'
+    -
+      tag: link
+      attributes:
+        rel: canonical
+        href: 'http://web:8080/web/eu-oss-catalogue/eu-open-source-solutions-catalogue'
+    -
+      tag: meta
+      attributes:
+        property: 'og:site_name'
+        content: Joinup
+    -
+      tag: meta
+      attributes:
+        property: 'og:type'
+        content: 'Custom page'
+    -
+      tag: meta
+      attributes:
+        property: 'og:url'
+        content: 'http://web:8080/web/eu-oss-catalogue/eu-open-source-solutions-catalogue'
+    -
+      tag: meta
+      attributes:
+        property: 'og:title'
+        content: 'EU Open Source Solutions Catalogue'
+    -
+      tag: meta
+      attributes:
+        property: 'og:image'
+        content: 'http://web:8080/web/themes/ventuno/assets/images/og-image.png'
+    -
+      tag: meta
+      attributes:
+        property: 'og:image:secure_url'
+        content: 'https://web:8080/web/themes/ventuno/assets/images/og-image.png'
+    -
+      tag: meta
+      attributes:
+        property: 'og:image:type'
+        content: image/svg+xml
+  path:
+    -
+      alias: /eu-oss-catalogue/eu-open-source-solutions-catalogue
+      langcode: en
+      pathauto: 1
+  published_at:
+    -
+      value: 1700675275
+  field_paragraphs_body:
+    -
+      entity:
+        _meta:
+          version: '1.0'
+          entity_type: paragraph
+          uuid: 00b46561-49b5-4ce7-a39a-a5b6921bcfb2
+          bundle: layout
+          default_langcode: en
+        default:
+          status:
+            -
+              value: true
+          created:
+            -
+              value: 1694500393
+          behavior_settings:
+            -
+              value:
+                layout_paragraphs:
+                  layout: layout_twocol_section
+                  config:
+                    label: ''
+                    column_widths: 50-50
+                  parent_uuid: null
+                  region: null
+                background_theme: {  }
+                extra_class:
+                  extra_class: oss__discover
+          revision_translation_affected:
+            -
+              value: true
+    -
+      entity:
+        _meta:
+          version: '1.0'
+          entity_type: paragraph
+          uuid: 33957667-93da-4344-b85f-a2b389fd5982
+          bundle: text
+          default_langcode: en
+        default:
+          status:
+            -
+              value: true
+          created:
+            -
+              value: 1694500433
+          behavior_settings:
+            -
+              value:
+                layout_paragraphs:
+                  parent_uuid: 00b46561-49b5-4ce7-a39a-a5b6921bcfb2
+                  region: first
+          revision_translation_affected:
+            -
+              value: true
+          field_body:
+            -
+              value: '<p><strong>Discover</strong> our European Open Source Software</p>'
+              format: text_html
+    -
+      entity:
+        _meta:
+          version: '1.0'
+          entity_type: paragraph
+          uuid: b9891dbf-ecc7-45b9-bd0b-7689bfd94ae2
+          bundle: call_to_action
+          default_langcode: en
+        default:
+          status:
+            -
+              value: true
+          created:
+            -
+              value: 1696245578
+          behavior_settings:
+            -
+              value:
+                alignment:
+                  alignment: left
+                color:
+                  color: secondary
+                layout_paragraphs:
+                  parent_uuid: 00b46561-49b5-4ce7-a39a-a5b6921bcfb2
+                  region: first
+                styles: {  }
+          revision_translation_affected:
+            -
+              value: true
+          paragraph_action_link:
+            -
+              uri: 'internal:/eu-oss-catalogue/solutions'
+              title: 'Browse the catalogue'
+              options: {  }
+    -
+      entity:
+        _meta:
+          version: '1.0'
+          entity_type: paragraph
+          uuid: f234e706-573e-4767-a2de-47fb90f8fb1a
+          bundle: text
+          default_langcode: en
+        default:
+          status:
+            -
+              value: true
+          created:
+            -
+              value: 1700037874
+          behavior_settings:
+            -
+              value:
+                layout_paragraphs:
+                  parent_uuid: 00b46561-49b5-4ce7-a39a-a5b6921bcfb2
+                  region: second
+          revision_translation_affected:
+            -
+              value: true
+          field_body:
+            -
+              value: '<p>Repository of the Open Source Software Solutions of the Public Administrations</p>'
+              format: text_html
+    -
+      entity:
+        _meta:
+          version: '1.0'
+          entity_type: paragraph
+          uuid: 5178c23a-58bc-4ba8-b64c-863029483597
+          bundle: text
+          default_langcode: en
+        default:
+          status:
+            -
+              value: true
+          created:
+            -
+              value: 1700037894
+          behavior_settings:
+            -
+              value:
+                layout_paragraphs:
+                  parent_uuid: 00b46561-49b5-4ce7-a39a-a5b6921bcfb2
+                  region: second
+          revision_translation_affected:
+            -
+              value: true
+          field_body:
+            -
+              value: '<p>Centralized platform to discover Open Source Software Solutions for diverse needs</p>'
+              format: text_html
+    -
+      entity:
+        _meta:
+          version: '1.0'
+          entity_type: paragraph
+          uuid: d609ad2b-ceac-4491-b8f1-eba9ddc31d13
+          bundle: text
+          default_langcode: en
+        default:
+          status:
+            -
+              value: true
+          created:
+            -
+              value: 1700037933
+          behavior_settings:
+            -
+              value:
+                layout_paragraphs:
+                  parent_uuid: 00b46561-49b5-4ce7-a39a-a5b6921bcfb2
+                  region: second
+          revision_translation_affected:
+            -
+              value: true
+          field_body:
+            -
+              value: '<p>Open Source Software Solutions that empower collaboration, creativity, and efficiency across various domains</p>'
+              format: text_html
+    -
+      entity:
+        _meta:
+          version: '1.0'
+          entity_type: paragraph
+          uuid: ff539098-171f-4c69-be93-48a87b617e7a
+          bundle: layout
+          default_langcode: en
+        default:
+          status:
+            -
+              value: true
+          created:
+            -
+              value: 1694501744
+          behavior_settings:
+            -
+              value:
+                layout_paragraphs:
+                  layout: layout_onecol
+                  config:
+                    label: ''
+                  parent_uuid: null
+                  region: null
+                background_theme:
+                  background_theme: light
+                extra_class:
+                  extra_class: oss__most_recent
+          revision_translation_affected:
+            -
+              value: true
+    -
+      entity:
+        _meta:
+          version: '1.0'
+          entity_type: paragraph
+          uuid: cfee2c5e-def0-4194-97f8-91e6a636d673
+          bundle: block
+          default_langcode: en
+        default:
+          status:
+            -
+              value: true
+          created:
+            -
+              value: 1694501756
+          behavior_settings:
+            -
+              value:
+                layout_paragraphs:
+                  parent_uuid: ff539098-171f-4c69-be93-48a87b617e7a
+                  region: content
+          revision_translation_affected:
+            -
+              value: true
+          paragraph_block:
+            -
+              plugin_id: 'views_block:oss_solutions_listing-most_recent'
+              settings:
+                id: 'views_block:oss_solutions_listing-most_recent'
+                label: ''
+                label_display: false
+                provider: views
+                views_label: ''
+                items_per_page: none
+    -
+      entity:
+        _meta:
+          version: '1.0'
+          entity_type: paragraph
+          uuid: 8fbea1c6-206f-45a5-902a-45059f72bceb
+          bundle: layout
+          default_langcode: en
+        default:
+          status:
+            -
+              value: true
+          created:
+            -
+              value: 1700667486
+          behavior_settings:
+            -
+              value:
+                layout_paragraphs:
+                  layout: layout_onecol
+                  config:
+                    label: 'Most active solutions'
+                  parent_uuid: null
+                  region: null
+                background_theme: {  }
+                extra_class:
+                  extra_class: oss__most_active
+          revision_translation_affected:
+            -
+              value: true
+    -
+      entity:
+        _meta:
+          version: '1.0'
+          entity_type: paragraph
+          uuid: ce2842c9-8880-40c1-9bd5-daf9361c6f23
+          bundle: block
+          default_langcode: en
+        default:
+          status:
+            -
+              value: true
+          created:
+            -
+              value: 1700667629
+          behavior_settings:
+            -
+              value:
+                layout_paragraphs:
+                  parent_uuid: 8fbea1c6-206f-45a5-902a-45059f72bceb
+                  region: content
+          revision_translation_affected:
+            -
+              value: true
+          paragraph_block:
+            -
+              plugin_id: 'views_block:oss_solutions_listing-most_active'
+              settings:
+                id: 'views_block:oss_solutions_listing-most_active'
+                label: ''
+                label_display: false
+                provider: views
+                views_label: ''
+                items_per_page: none
+    -
+      entity:
+        _meta:
+          version: '1.0'
+          entity_type: paragraph
+          uuid: fb279d1a-794b-4504-893d-a13af243ddfa
+          bundle: layout
+          default_langcode: en
+        default:
+          status:
+            -
+              value: true
+          created:
+            -
+              value: 1694500445
+          behavior_settings:
+            -
+              value:
+                layout_paragraphs:
+                  layout: layout_onecol
+                  config:
+                    label: ''
+                  parent_uuid: null
+                  region: null
+                background_theme:
+                  background_theme: light
+                extra_class:
+                  extra_class: oss__instructions-heading
+          revision_translation_affected:
+            -
+              value: true
+    -
+      entity:
+        _meta:
+          version: '1.0'
+          entity_type: paragraph
+          uuid: d6fc21d9-2594-479e-8207-9b67071ff347
+          bundle: heading
+          default_langcode: en
+        default:
+          status:
+            -
+              value: true
+          created:
+            -
+              value: 1694500491
+          behavior_settings:
+            -
+              value:
+                heading_behavior:
+                  level: h2
+                layout_paragraphs:
+                  parent_uuid: fb279d1a-794b-4504-893d-a13af243ddfa
+                  region: content
+          revision_translation_affected:
+            -
+              value: true
+          paragraph_heading:
+            -
+              value: 'Do you want to publish your open source solution? '
+    -
+      entity:
+        _meta:
+          version: '1.0'
+          entity_type: paragraph
+          uuid: 707149d5-e099-45f9-b3e5-9fda37a098bb
+          bundle: text
+          default_langcode: en
+        default:
+          status:
+            -
+              value: true
+          created:
+            -
+              value: 1694500505
+          behavior_settings:
+            -
+              value:
+                layout_paragraphs:
+                  parent_uuid: fb279d1a-794b-4504-893d-a13af243ddfa
+                  region: content
+          revision_translation_affected:
+            -
+              value: true
+          field_body:
+            -
+              value: "<p>Just follow the guide!</p>\r\n"
+              format: text_html
+    -
+      entity:
+        _meta:
+          version: '1.0'
+          entity_type: paragraph
+          uuid: f2a1d11a-9d0a-403f-b5f1-7b4f786d81c0
+          bundle: layout
+          default_langcode: en
+        default:
+          status:
+            -
+              value: true
+          created:
+            -
+              value: 1694500517
+          behavior_settings:
+            -
+              value:
+                layout_paragraphs:
+                  layout: layout_twocol_section
+                  config:
+                    label: ''
+                    column_widths: 50-50
+                  parent_uuid: null
+                  region: null
+                background_theme:
+                  background_theme: light
+                extra_class:
+                  extra_class: oss__instructions
+          revision_translation_affected:
+            -
+              value: true
+    -
+      entity:
+        _meta:
+          version: '1.0'
+          entity_type: paragraph
+          uuid: b53f89fa-718b-470c-bbc1-e5439e50fc9d
+          bundle: heading
+          default_langcode: en
+        default:
+          status:
+            -
+              value: true
+          created:
+            -
+              value: 1694501227
+          behavior_settings:
+            -
+              value:
+                heading_behavior:
+                  level: h3
+                layout_paragraphs:
+                  parent_uuid: f2a1d11a-9d0a-403f-b5f1-7b4f786d81c0
+                  region: first
+          revision_translation_affected:
+            -
+              value: true
+          paragraph_heading:
+            -
+              value: 'Make sure you have a git repository'
+    -
+      entity:
+        _meta:
+          version: '1.0'
+          entity_type: paragraph
+          uuid: 409a0428-3146-41fd-972b-a13c1278e0f4
+          bundle: text
+          default_langcode: en
+        default:
+          status:
+            -
+              value: true
+          created:
+            -
+              value: 1694501301
+          behavior_settings:
+            -
+              value:
+                layout_paragraphs:
+                  parent_uuid: f2a1d11a-9d0a-403f-b5f1-7b4f786d81c0
+                  region: first
+          revision_translation_affected:
+            -
+              value: true
+          field_body:
+            -
+              value: "<p>In order to publish your software to this catalogue, you need to include a YAML file generated with some information inside your git repository</p>\r\n"
+              format: text_html
+    -
+      entity:
+        _meta:
+          version: '1.0'
+          entity_type: paragraph
+          uuid: fce137e1-404a-4cc2-af93-d91ccfd157c3
+          bundle: heading
+          default_langcode: en
+        default:
+          status:
+            -
+              value: true
+          created:
+            -
+              value: 1694501243
+          behavior_settings:
+            -
+              value:
+                heading_behavior:
+                  level: h3
+                layout_paragraphs:
+                  parent_uuid: f2a1d11a-9d0a-403f-b5f1-7b4f786d81c0
+                  region: first
+          revision_translation_affected:
+            -
+              value: true
+          paragraph_heading:
+            -
+              value: 'Fill the information form'
+    -
+      entity:
+        _meta:
+          version: '1.0'
+          entity_type: paragraph
+          uuid: a0ea52df-8d42-4172-aee3-01133e94eabe
+          bundle: text
+          default_langcode: en
+        default:
+          status:
+            -
+              value: true
+          created:
+            -
+              value: 1694501314
+          behavior_settings:
+            -
+              value:
+                layout_paragraphs:
+                  parent_uuid: f2a1d11a-9d0a-403f-b5f1-7b4f786d81c0
+                  region: first
+          revision_translation_affected:
+            -
+              value: true
+          field_body:
+            -
+              value: "<p>First, you will have to fill some information like the supported languages, the name of your software, the release date,…</p>\r\n"
+              format: text_html
+    -
+      entity:
+        _meta:
+          version: '1.0'
+          entity_type: paragraph
+          uuid: 6ab3f08b-a42e-4bb9-8590-aea32305c046
+          bundle: heading
+          default_langcode: en
+        default:
+          status:
+            -
+              value: true
+          created:
+            -
+              value: 1694501265
+          behavior_settings:
+            -
+              value:
+                heading_behavior:
+                  level: h3
+                layout_paragraphs:
+                  parent_uuid: f2a1d11a-9d0a-403f-b5f1-7b4f786d81c0
+                  region: first
+          revision_translation_affected:
+            -
+              value: true
+          paragraph_heading:
+            -
+              value: 'Generate the YAML file'
+    -
+      entity:
+        _meta:
+          version: '1.0'
+          entity_type: paragraph
+          uuid: 8996b62b-ccd6-47d3-a9be-2e079b8e1a84
+          bundle: text
+          default_langcode: en
+        default:
+          status:
+            -
+              value: true
+          created:
+            -
+              value: 1694501325
+          behavior_settings:
+            -
+              value:
+                layout_paragraphs:
+                  parent_uuid: f2a1d11a-9d0a-403f-b5f1-7b4f786d81c0
+                  region: first
+          revision_translation_affected:
+            -
+              value: true
+          field_body:
+            -
+              value: "<p>Once the form is filled, you will be able to generate the YAML with the button dedicated to it on the page</p>\r\n"
+              format: text_html
+    -
+      entity:
+        _meta:
+          version: '1.0'
+          entity_type: paragraph
+          uuid: 8767b124-fcdf-4a5a-bc29-f7aa3ce1c093
+          bundle: heading
+          default_langcode: en
+        default:
+          status:
+            -
+              value: true
+          created:
+            -
+              value: 1694501288
+          behavior_settings:
+            -
+              value:
+                heading_behavior:
+                  level: h3
+                layout_paragraphs:
+                  parent_uuid: f2a1d11a-9d0a-403f-b5f1-7b4f786d81c0
+                  region: first
+          revision_translation_affected:
+            -
+              value: true
+          paragraph_heading:
+            -
+              value: 'Include your YAML file inside your git !'
+    -
+      entity:
+        _meta:
+          version: '1.0'
+          entity_type: paragraph
+          uuid: 3ec2f9e7-4f71-4310-8ae7-8179a86321d4
+          bundle: text
+          default_langcode: en
+        default:
+          status:
+            -
+              value: true
+          created:
+            -
+              value: 1694501337
+          behavior_settings:
+            -
+              value:
+                layout_paragraphs:
+                  parent_uuid: f2a1d11a-9d0a-403f-b5f1-7b4f786d81c0
+                  region: first
+          revision_translation_affected:
+            -
+              value: true
+          field_body:
+            -
+              value: "<p>You must include this generated YAML file at the rooth of your git and the information will automaticly be retrieved in our platform. Your solution is now published !</p>\r\n"
+              format: text_html
+    -
+      entity:
+        _meta:
+          version: '1.0'
+          entity_type: paragraph
+          uuid: b168ee95-5818-471d-b3d2-67a2b1975b87
+          bundle: heading
+          default_langcode: en
+        default:
+          status:
+            -
+              value: true
+          created:
+            -
+              value: 1694501106
+          behavior_settings:
+            -
+              value:
+                heading_behavior:
+                  level: h3
+                layout_paragraphs:
+                  parent_uuid: f2a1d11a-9d0a-403f-b5f1-7b4f786d81c0
+                  region: second
+                alignment:
+                  alignment: left
+          revision_translation_affected:
+            -
+              value: true
+          paragraph_heading:
+            -
+              value: 'Let’s start with your software name'
+    -
+      entity:
+        _meta:
+          version: '1.0'
+          entity_type: paragraph
+          uuid: 1df58932-524a-425e-9773-1f0720ae2159
+          bundle: block
+          default_langcode: en
+        default:
+          status:
+            -
+              value: true
+          created:
+            -
+              value: 1694501075
+          behavior_settings:
+            -
+              value:
+                layout_paragraphs:
+                  parent_uuid: f2a1d11a-9d0a-403f-b5f1-7b4f786d81c0
+                  region: second
+          revision_translation_affected:
+            -
+              value: true
+          paragraph_block:
+            -
+              plugin_id: joinup_oss_software_name
+              settings:
+                id: joinup_oss_software_name
+                label: 'OSS your software name'
+                label_display: false
+                provider: joinup_oss_catalogue
+    -
+      entity:
+        _meta:
+          version: '1.0'
+          entity_type: paragraph
+          uuid: eedcfdad-600b-4786-8448-b883f13e7c30
+          bundle: layout
+          default_langcode: en
+        default:
+          status:
+            -
+              value: true
+          created:
+            -
+              value: 1694500822
+          behavior_settings:
+            -
+              value:
+                layout_paragraphs:
+                  layout: layout_onecol
+                  config:
+                    label: ''
+                  parent_uuid: null
+                  region: null
+                background_theme: {  }
+                extra_class:
+                  extra_class: oss__faq
+          revision_translation_affected:
+            -
+              value: true
+    -
+      entity:
+        _meta:
+          version: '1.0'
+          entity_type: paragraph
+          uuid: 6e1820bb-fef3-41d0-bef5-77a186772bb7
+          bundle: heading
+          default_langcode: en
+        default:
+          status:
+            -
+              value: true
+          created:
+            -
+              value: 1694500843
+          behavior_settings:
+            -
+              value:
+                heading_behavior:
+                  level: h3
+                layout_paragraphs:
+                  parent_uuid: eedcfdad-600b-4786-8448-b883f13e7c30
+                  region: content
+                alignment:
+                  alignment: center
+          revision_translation_affected:
+            -
+              value: true
+          paragraph_heading:
+            -
+              value: 'Frequently Asked Questions (FAQ)'
+    -
+      entity:
+        _meta:
+          version: '1.0'
+          entity_type: paragraph
+          uuid: 25c77fcc-85af-435f-8d09-1f1ff63bc9aa
+          bundle: accordion
+          default_langcode: en
+        default:
+          status:
+            -
+              value: true
+          created:
+            -
+              value: 1694500906
+          behavior_settings:
+            -
+              value:
+                layout_paragraphs:
+                  parent_uuid: eedcfdad-600b-4786-8448-b883f13e7c30
+                  region: content
+          revision_translation_affected:
+            -
+              value: true
+          field_accordion_item:
+            -
+              entity:
+                _meta:
+                  version: '1.0'
+                  entity_type: paragraph
+                  uuid: f714a3e0-eaf4-431e-bcea-ee9a8c7093c1
+                  bundle: accordion_item
+                  default_langcode: en
+                default:
+                  status:
+                    -
+                      value: true
+                  created:
+                    -
+                      value: 1694500906
+                  behavior_settings:
+                    -
+                      value: {  }
+                  revision_translation_affected:
+                    -
+                      value: true
+                  field_paragraphs_item_content:
+                    -
+                      entity:
+                        _meta:
+                          version: '1.0'
+                          entity_type: paragraph
+                          uuid: 57a88b74-57f9-457e-8c4f-0d8329b192db
+                          bundle: simple_paragraph
+                          default_langcode: en
+                        default:
+                          status:
+                            -
+                              value: true
+                          created:
+                            -
+                              value: 1694500906
+                          behavior_settings:
+                            -
+                              value: {  }
+                          revision_translation_affected:
+                            -
+                              value: true
+                          field_body:
+                            -
+                              value: "<p>Projects are selected for inclusion in the Open Source Catalogue based on several criteria, including their relevance, popularity, community support, active development, licensing, and adherence to open source principles. The initiative aims to feature a diverse range of high-quality open source projects across different domains and technologies.</p>\r\n\r\n<h2 id=\"heading7978\">&nbsp;</h2>\r\n"
+                              format: content_editor
+                  field_paragraphs_item_label:
+                    -
+                      value: 'How are projects selected for inclusions in the Open Source Catalogue?'
+            -
+              entity:
+                _meta:
+                  version: '1.0'
+                  entity_type: paragraph
+                  uuid: 36ad95bd-1ef8-4031-b5bc-1bce70891ed0
+                  bundle: accordion_item
+                  default_langcode: en
+                default:
+                  status:
+                    -
+                      value: true
+                  created:
+                    -
+                      value: 1694500906
+                  behavior_settings:
+                    -
+                      value: {  }
+                  revision_translation_affected:
+                    -
+                      value: true
+                  field_paragraphs_item_content:
+                    -
+                      entity:
+                        _meta:
+                          version: '1.0'
+                          entity_type: paragraph
+                          uuid: 05b2c204-6a1a-40fc-a430-8b7cabf86c3b
+                          bundle: simple_paragraph
+                          default_langcode: en
+                        default:
+                          status:
+                            -
+                              value: true
+                          created:
+                            -
+                              value: 1694500906
+                          behavior_settings:
+                            -
+                              value: {  }
+                          revision_translation_affected:
+                            -
+                              value: true
+                          field_body:
+                            -
+                              value: "<p>You can contribute to the Open Source Catalogue initiative by suggesting open source projects to be included in the catalogue. Additionally, you can assist in reviewing and organizing existing projects, providing documentation, improving project descriptions, or helping maintain and update the catalogue.</p>\r\n"
+                              format: content_editor
+                  field_paragraphs_item_label:
+                    -
+                      value: 'How can I contribute to the Open Source Catalogue initiative?'
+            -
+              entity:
+                _meta:
+                  version: '1.0'
+                  entity_type: paragraph
+                  uuid: d11694b4-9572-4d07-8935-d2e2dfad6187
+                  bundle: accordion_item
+                  default_langcode: en
+                default:
+                  status:
+                    -
+                      value: true
+                  created:
+                    -
+                      value: 1694500932
+                  behavior_settings:
+                    -
+                      value: {  }
+                  revision_translation_affected:
+                    -
+                      value: true
+                  field_paragraphs_item_content:
+                    -
+                      entity:
+                        _meta:
+                          version: '1.0'
+                          entity_type: paragraph
+                          uuid: a6b94c9d-a73c-494d-96da-928ec40f128d
+                          bundle: simple_paragraph
+                          default_langcode: en
+                        default:
+                          status:
+                            -
+                              value: true
+                          created:
+                            -
+                              value: 1694500932
+                          behavior_settings:
+                            -
+                              value: {  }
+                          revision_translation_affected:
+                            -
+                              value: true
+                          field_body:
+                            -
+                              value: "<p>An Open Source Catalogue serves as a valuable resource for developers, organizations, and individuals seeking open source solutions for various purposes. It simplifies the process of discovering and evaluating open source projects, ultimately encouraging the adoption of open source software, which can lead to cost-effective, efficient, and collaborative solutions.</p>\r\n"
+                              format: content_editor
+                  field_paragraphs_item_label:
+                    -
+                      value: 'Why is an Open Source Catalogue important?'
+            -
+              entity:
+                _meta:
+                  version: '1.0'
+                  entity_type: paragraph
+                  uuid: d00db636-77ea-4791-9e4a-0fc1c3090eea
+                  bundle: accordion_item
+                  default_langcode: en
+                default:
+                  status:
+                    -
+                      value: true
+                  created:
+                    -
+                      value: 1694500940
+                  behavior_settings:
+                    -
+                      value: {  }
+                  revision_translation_affected:
+                    -
+                      value: true
+                  field_paragraphs_item_content:
+                    -
+                      entity:
+                        _meta:
+                          version: '1.0'
+                          entity_type: paragraph
+                          uuid: 7d80abd2-ff1a-4c3e-a4d4-5990a3dce053
+                          bundle: simple_paragraph
+                          default_langcode: en
+                        default:
+                          status:
+                            -
+                              value: true
+                          created:
+                            -
+                              value: 1694500940
+                          behavior_settings:
+                            -
+                              value: {  }
+                          revision_translation_affected:
+                            -
+                              value: true
+                          field_body:
+                            -
+                              value: "<p>Projects are selected for inclusion in the Open Source Catalogue based on several criteria, including their relevance, popularity, community support, active development, licensing, and adherence to open source principles. The initiative aims to feature a diverse range of high-quality open source projects across different domains and technologies.</p>\r\n"
+                              format: content_editor
+                  field_paragraphs_item_label:
+                    -
+                      value: 'How are projects selected for inclusion in the Open Source Catalogue?'
+    -
+      entity:
+        _meta:
+          version: '1.0'
+          entity_type: paragraph
+          uuid: f66f1112-bbdb-452e-82ed-98bcb6006251
+          bundle: layout
+          default_langcode: en
+        default:
+          status:
+            -
+              value: true
+          created:
+            -
+              value: 1694500776
+          behavior_settings:
+            -
+              value:
+                layout_paragraphs:
+                  layout: layout_onecol
+                  config:
+                    label: ''
+                  parent_uuid: null
+                  region: null
+                background_theme:
+                  background_theme: light
+                extra_class: {  }
+          revision_translation_affected:
+            -
+              value: true
+    -
+      entity:
+        _meta:
+          version: '1.0'
+          entity_type: paragraph
+          uuid: 0fa38af3-6f42-4924-8186-ca84c804adea
+          bundle: heading
+          default_langcode: en
+        default:
+          status:
+            -
+              value: true
+          created:
+            -
+              value: 1694500794
+          behavior_settings:
+            -
+              value:
+                heading_behavior:
+                  level: h3
+                layout_paragraphs:
+                  parent_uuid: f66f1112-bbdb-452e-82ed-98bcb6006251
+                  region: content
+                alignment:
+                  alignment: center
+          revision_translation_affected:
+            -
+              value: true
+          paragraph_heading:
+            -
+              value: 'Do you need any help?'
+    -
+      entity:
+        _meta:
+          version: '1.0'
+          entity_type: paragraph
+          uuid: c1c08cb5-5351-4f45-99df-c85f79ba4a84
+          bundle: call_to_action
+          default_langcode: en
+        default:
+          status:
+            -
+              value: true
+          created:
+            -
+              value: 1694506899
+          behavior_settings:
+            -
+              value:
+                alignment:
+                  alignment: center
+                color:
+                  color: brand
+                layout_paragraphs:
+                  parent_uuid: f66f1112-bbdb-452e-82ed-98bcb6006251
+                  region: content
+          revision_translation_affected:
+            -
+              value: true
+          paragraph_action_link:
+            -
+              uri: 'internal:/'
+              title: 'Contact us !'
+              options: {  }
+    -
+      entity:
+        _meta:
+          version: '1.0'
+          entity_type: paragraph
+          uuid: 3a870b47-c2de-42a6-86ba-50dab1687235
+          bundle: layout
+          default_langcode: en
+        default:
+          status:
+            -
+              value: true
+          created:
+            -
+              value: 1694500571
+          behavior_settings:
+            -
+              value:
+                layout_paragraphs:
+                  layout: layout_onecol
+                  config:
+                    label: ''
+                  parent_uuid: null
+                  region: null
+                background_theme: {  }
+                extra_class:
+                  extra_class: oss__social
+          revision_translation_affected:
+            -
+              value: true
+    -
+      entity:
+        _meta:
+          version: '1.0'
+          entity_type: paragraph
+          uuid: 1d9765d5-5124-429a-8a16-9291e70fea38
+          bundle: heading
+          default_langcode: en
+        default:
+          status:
+            -
+              value: true
+          created:
+            -
+              value: 1694500636
+          behavior_settings:
+            -
+              value:
+                heading_behavior:
+                  level: h3
+                layout_paragraphs:
+                  parent_uuid: 3a870b47-c2de-42a6-86ba-50dab1687235
+                  region: content
+                alignment:
+                  alignment: center
+          revision_translation_affected:
+            -
+              value: true
+          paragraph_heading:
+            -
+              value: 'Follow our journey on the social media!'
+    -
+      entity:
+        _meta:
+          version: '1.0'
+          entity_type: paragraph
+          uuid: 3611bcd2-531b-4c78-9d72-81b9da87d45b
+          bundle: call_to_action
+          default_langcode: en
+        default:
+          status:
+            -
+              value: true
+          created:
+            -
+              value: 1694793901
+          behavior_settings:
+            -
+              value:
+                alignment:
+                  alignment: center
+                color:
+                  color: brand
+                layout_paragraphs:
+                  parent_uuid: 3a870b47-c2de-42a6-86ba-50dab1687235
+                  region: content
+          revision_translation_affected:
+            -
+              value: true
+          paragraph_action_link:
+            -
+              uri: 'https://twitter.com/'
+              title: Twitter
+              options: {  }
+            -
+              uri: 'https://www.linkedin.com/'
+              title: LinkedIn
+              options: {  }
+  field_state:
+    -
+      value: published
+  field_topic:
+    -
+      target_id: 'http://joinup.eu/ontology/topic#open-source-software'
+  og_audience:
+    -
+      entity: 'http://data.europa.eu/w21/6d621a47-71ce-4f1a-90e2-8859403d3ecd'

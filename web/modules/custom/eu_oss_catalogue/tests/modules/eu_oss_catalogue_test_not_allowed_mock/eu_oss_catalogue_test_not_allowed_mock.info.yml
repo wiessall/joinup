@@ -1,0 +1,7 @@
+type: module
+name: EU OSS Catalogue Not Allowed Service Mock
+description: Intercepts any requests made to external resources and returns 502 response code
+core_version_requirement: ">=10.0"
+package: Testing
+dependencies:
+  - http_request_mock:http_request_mock

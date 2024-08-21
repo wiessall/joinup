@@ -73,6 +73,25 @@ function ventuno_preprocess_links(array &$variables): void {
 }
 
 /**
+ * Implements hook_preprocess_menu().
+ */
+function ventuno_preprocess_menu__og__navigation(&$variables): void {
+  $searchRoute = 'view.search_oss_catalogue.search';
+  $currentRoute = \Drupal::routeMatch()->getRouteName();
+  if ($currentRoute !== $searchRoute) {
+    return;
+  }
+
+  foreach ($variables['items'] as $key => $item) {
+    /** @var \Drupal\Core\Url $url */
+    $url = $item['url'];
+    if ($url->getRouteName() === $searchRoute) {
+      $variables['items'][$key]['attributes']['class'][] = 'is-active';
+    }
+  }
+}
+
+/**
  * Implements hook_preprocess_HOOK().
  */
 function ventuno_preprocess_menu__og__quick_links(&$variables): void {

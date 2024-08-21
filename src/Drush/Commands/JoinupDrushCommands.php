@@ -8,6 +8,7 @@ use Drupal\Core\Database\Database;
 use Drupal\Core\Extension\ExtensionDiscovery;
 use Drupal\upgrade_status\ProjectCollector;
 use Drush\Attributes as CLI;
+use Drush\Boot\DrupalBootLevels;
 use Drush\Commands\DrushCommands;
 
 /**
@@ -22,6 +23,7 @@ class JoinupDrushCommands extends DrushCommands {
    * be used in circumstances when Drupal is not yet installed.
    */
   #[CLI\Command(name: 'memcache:flush-all')]
+  #[CLI\Bootstrap(level: DrupalBootLevels::NONE)]
   public function memcacheFlushAll(): void {
     if (!$memcached_hosts = getenv('DRUPAL_MEMCACHE_HOSTS')) {
       $this->logger()->warning('The DRUPAL_MEMCACHE_HOSTS environment variable is empty or not set');
@@ -73,6 +75,24 @@ class JoinupDrushCommands extends DrushCommands {
       return;
     }
     $this->logger()->notice("Node access doesn't need rebuild.");
+  }
+
+  /**
+   * Execute all Search API pending tasks.
+   */
+  #[CLI\Command(name: 'joinup:search-api-tasks')]
+  #[CLI\Bootstrap(level: DrupalBootLevels::FULL)]
+  public function executeSearchApiPendingTasks(): void {
+    /** @var \Drupal\search_api\Task\TaskManagerInterface $sapiTaskManager */
+    $sapiTaskManager = \Drupal::service('search_api.task_manager');
+    // Execute all Search API pending tasks.
+    $pending_tasks = (bool) $sapiTaskManager->getTasksCount();
+    if ($pending_tasks) {
+      $sapiTaskManager->setTasksBatch();
+      if (batch_get()) {
+        drush_backend_batch_process();
+      }
+    }
   }
 
   /**

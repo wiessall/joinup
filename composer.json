@@ -11,12 +11,16 @@
         "ext-memcached": "*",
         "ext-pdo": "*",
         "ext-simplexml": "*",
+        "bitbucket/client": "^4.5",
+        "cfpinto/graphql": "^2.0",
+        "claudiu-cristea/drupal-cache-adapter": "^1.0",
         "composer/installers": "^2",
         "cweagans/composer-patches": "^1.7",
         "drupal/addtocal": "^3.0",
         "drupal/allowed_formats": "^3.0",
         "drupal/antibot": "^2.0",
         "drupal/autologout": "^2.0",
+        "drupal/block_field": "^1.0@RC",
         "drupal/cached_computed_field": "^1.0",
         "drupal/cas": "^2.0",
         "drupal/cas_attributes": "^2.0",
@@ -54,6 +58,7 @@
         "drupal/honeypot": "~2",
         "drupal/iframe": "^2",
         "drupal/image_library_widget": "^2.0",
+        "drupal/imagecache_external": "^3.0",
         "drupal/inline_entity_form": "^3.0",
         "drupal/jquery_ui_accordion": "^2.1",
         "drupal/json_field": "^1.0",
@@ -61,6 +66,7 @@
         "drupal/layout_custom_section_classes": "^1.0",
         "drupal/layout_paragraphs": "^2.0",
         "drupal/linkit": "^6.1",
+        "drupal/markdown_easy": "^1.0",
         "drupal/memcache": "^2.5",
         "drupal/menu_admin_per_menu": "^1.3",
         "drupal/menu_link_destination": "^1.0",
@@ -69,12 +75,15 @@
         "drupal/message_notify": "~1.3",
         "drupal/meta_entity": "^1.4",
         "drupal/monolog": "^3.0",
+        "drupal/multivalue_form_element": "^1.0",
+        "drupal/node_revision_delete": "^2.0@RC",
         "drupal/og": "^1.0-alpha8",
         "drupal/og_menu": "^2.0",
         "drupal/other_view_filter": "^1.3",
         "drupal/page_manager": "4.0.0-rc2",
         "drupal/paragraphs": "^1.12",
         "drupal/pathauto": "~1.8",
+        "drupal/pluginreference": "^3.0",
         "drupal/poll": "^1.6",
         "drupal/publication_date": "^2.0",
         "drupal/queue_ui": "^3.1",
@@ -113,6 +122,9 @@
         "drupal/webform": "^6.2",
         "drush/drush": "^12.1",
         "jakeasmith/http_build_url": "^1.0",
+        "gitonomy/gitlib": "^1.4",
+        "knplabs/github-api": "^3.13",
+        "m4tthumphrey/php-gitlab-api": "^11.12",
         "openeuropa/composer-artifacts": "^1.0",
         "openeuropa/gisco-geocoding-provider": "^1.0",
         "openeuropa/oe_bootstrap_theme": "^1.0",
@@ -144,7 +156,6 @@
         "drupaltest/behat-one-time-login": "^1.0",
         "ec-europa/toolkit": "^10.5",
         "enlightn/security-checker": "^1",
-        "gitonomy/gitlib": "^1.4",
         "lovers-of-behat/table-extension": "^1.4",
         "lullabot/mink-selenium2-driver": "^1.7",
         "mikey179/vfsstream": "~1.6",
@@ -268,6 +279,12 @@
             "drupal/core": "-p2"
         },
         "patches": {
+            "bitbucket/client": {
+                "Slashes in file path used in Src and Downloads API classes are url-encoded @see https://github.com/BitbucketPHP/Client/pull/83": "resources/patch/php/bitbucket/client/fe8b7771e51d2a2852b75e7be90fc871b1bc895f.diff"
+            },
+            "cfpinto/graphql": {
+                "Enum argument https://github.com/cfpinto/graphql/issues/24": "resources/patch/php/cfpinto/graphql/25.diff"
+            },
             "drupal/addtocal": {
                 "Uncaught TypeError: $(...).once is not a function @see https://www.drupal.org/project/addtocal/issues/3372354": "resources/patch/php/drupal/addtocal/3372354.patch"
             },
@@ -309,7 +326,9 @@
                 "Allow manual imports @see https://www.drupal.org/i/2640734": "resources/patch/php/drupal/default_content/2640734.diff"
             },
             "drupal/drupal-driver": {
-                "Allow multi-property references. @see https://github.com/jhedstrom/DrupalDriver/pull/252": "resources/patch/php/drupal/drupal-driver/252.diff"
+                "Allow multi-property references. @see https://github.com/jhedstrom/DrupalDriver/pull/252": "resources/patch/php/drupal/drupal-driver/252.diff",
+                "Populate link fields only with URI if value is a string @see https://github.com/jhedstrom/DrupalDriver/pull/267": "resources/patch/php/drupal/drupal-driver/267.diff",
+                "Update Datetime field handler to support both date and datetime fields @see https://github.com/jhedstrom/DrupalDriver/pull/235": "resources/patch/php/drupal/drupal-driver/235.patch"
             },
             "drupal/embed_block": {
                 "Add support for Ckeditor 5. @see https://www.drupal.org/i/3316336": "resources/patch/php/drupal/embed_block/3316336.patch"
@@ -353,6 +372,12 @@
                 "Behat integration. @see https://www.drupal.org/project/honeypot/issues/3059040": "resources/patch/php/drupal/honeypot/3059040.patch",
                 "Provide ways to clean up old honeypot_time_restriction values @see https://www.drupal.org/project/honeypot/issues/2997609": "resources/patch/php/drupal/honeypot/2997609.patch"
             },
+            "drupal/imagecache_external": {
+                "Support SVG @see https://www.drupal.org/i/3390948": "resources/patch/php/drupal/imagecache_external/3390948.diff",
+                "Add option to override the inherited HTTP client configuration @see https://drupal.org/i/3396502": "resources/patch/php/drupal/imagecache_external/3396502-7.diff",
+                "Do not try to download failed URLs repeatedly: attempt next time only after the local cache is rebuilt @see https://drupal.org/i/3398665": "resources/patch/php/drupal/imagecache_external/3398665.diff",
+                "Imagecache External Responsive Image formatter uses wrong key to read link setting @see https://drupal.org/i/3424594": "resources/patch/php/drupal/imagecache_external/imagecache_external-wrong_setting_key-3424594-5--complete.patch"
+            },
             "drupal/inline_entity_form": {
                 "Autocomplete field doesn't allow to reference entities with long titles @see https://www.drupal.org/node/2895663": "resources/patch/php/drupal/inline_entity_form/2895663.patch",
                 "Undefined array key \"delete\". @see https://www.drupal.org/i/3416328": "resources/patch/php/drupal/inline_entity_form/3416328.patch"
@@ -361,10 +386,14 @@
                 "Link shown after the autocomplete selection is the bare node/xxx link, not the alias @see https://www.drupal.org/node/2877535": "resources/patch/php/drupal/linkit/2877535.patch"
             },
             "drupal/layout_paragraphs": {
+                "Utilize layout preview mode https://drupal.org/i/3392735": "resources/patch/php/drupal/layout_paragraphs/layout_paragraphs-utilize_layout_preview-3392735-5--fix-only.patch",
                 "Allow to drag and drop nested paragraphs @see https://www.drupal.org/project/layout_paragraphs/issues/3401176": "resources/patch/php/drupal/layout_paragraphs/3401176.patch"
             },
             "drupal/message_notify": {
                 "Allow 3rd-party to act before delivery @see https://www.drupal.org/project/message_notify/issues/3314370": "resources/patch/php/drupal/message_notify/3314370.diff"
+            },
+            "drupal/node_revision_delete": {
+                "It is possible that queue table does not exist @see https://www.drupal.org/project/node_revision_delete/issues/3436432": "resources/patch/php/drupal/node_revision_delete/3436432.patch"
             },
             "drupal/og": {
                 "The annotations for \"edit-form\" and \"delete-form\" @see https://www.drupal.org/project/og/issues/3338830": "resources/patch/php/drupal/og/3338830.diff",
@@ -433,6 +462,13 @@
             "drupal/webform": {
                 "Radios or Checkboxes inside Composite not saved @see https://www.drupal.org/project/webform/issues/3216923": "resources/patch/php/drupal/webform/368.diff",
                 "Webform might create invalid link renderable arrays on submission list. @see https://www.drupal.org/project/webform/issues/3441600": "resources/patch/php/drupal/webform/3441600.patch"
+            },
+            "gitonomy/gitlib": {
+                "Edge case: Empty message in the first commit @see https://github.com/gitonomy/gitlib/pull/217": "resources/patch/gitonomy/gitlib/217.diff"
+            },
+            "m4tthumphrey/php-gitlab-api": {
+                "GraphQL API @see https://github.com/GitLabPHP/Client/issues/766": "resources/patch/php/drupal/m4tthumphrey/php-gitlab-api/772.diff",
+                "Add support for prefixed URIs on base path @see https://github.com/GitLabPHP/Client/issues/726": "resources/patch/php/drupal/m4tthumphrey/php-gitlab-api/726.diff"
             },
             "lullabot/mink-selenium2-driver": {
                 "Add missing mouseover before clicking on radio/select elements - https://github.com/Lullabot/MinkSelenium2Driver/pull/14": "resources/patch/php/lullabot/mink-selenium2-driver/selenium2-mouseover-fixes.patch"

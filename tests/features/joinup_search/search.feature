@@ -669,13 +669,13 @@ Feature: Global search
     Given I am logged in as a user with the "authenticated" role
     When I visit the search page
     And I should not see search bar icon in navbar
-    And I enter "fu" in the search bar
+    And I enter "fu" in the "search bar"
     And I wait for AJAX to finish
     Then I should see the following search suggestions:
       | Radio cooking collection |
       | Spheres                  |
 
-    When I enter "cook" in the search bar
+    When I enter "cook" in the "search bar"
     And I wait for AJAX to finish
     Then I should see the following search suggestions:
       | Movistar                 |
@@ -701,7 +701,7 @@ Feature: Global search
     When I visit the collection overview
     And I should see search bar icon in navbar
     Then I should toggle search bar in navbar
-    And I enter "fu" in the search bar
+    And I enter "fu" in the "search bar"
     And I wait for AJAX to finish
     Then I should see the following search suggestions:
       | Radio cooking collection |
@@ -710,7 +710,7 @@ Feature: Global search
     # Check if search autocomplete works in homepage's header search bar.
     Given I am on the homepage
     Then I should see the search bar in homepage's header
-    And I enter "fu" in the search bar
+    And I enter "fu" in the "search bar"
     And I wait for AJAX to finish
     Then I should see the following search suggestions:
       | Radio cooking collection |
@@ -718,20 +718,20 @@ Feature: Global search
 
     # Check if search did you mean works.
     Given I visit the search page
-    And I enter "histore" in the search bar
+    And I enter "histore" in the "search bar"
     Then I submit the search by pressing enter
     And I should see the text "Did you mean: history ?"
     And I click "history"
     Then I should see the text "SEARCH RESULTS (1)"
 
-    Then I enter "cosine" in the search bar
+    Then I enter "cosine" in the "search bar"
     And I submit the search by pressing enter
     And I should see the text "Did you mean: cuisine ?"
     And I click "cuisine"
     Then I should see the text "SEARCH RESULTS (1)"
     And I should see the "Movistar" tile
 
-    Then I enter "spheres" in the search bar
+    Then I enter "spheres" in the "search bar"
     And I wait for AJAX to finish
     Then I should see the following search suggestions:
       | Spheres |
