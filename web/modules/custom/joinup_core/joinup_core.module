@@ -55,6 +55,9 @@ function joinup_core_theme(array $existing, string $type, string $theme, string 
         'rows' => [],
       ],
     ],
+    'field__in_modal' => [
+      'base hook' => 'field',
+    ],
   ];
 }
 
@@ -131,6 +134,13 @@ function joinup_core_node_links_alter(array &$links, NodeInterface $entity, arra
  */
 function joinup_core_field_formatter_info_alter(array &$info): void {
   $info['link']['field_types'][] = 'report_link';
+  $allPluginIds = array_keys(\Drupal::service('plugin.manager.field.field_type')->getDefinitions());
+
+  foreach (['joinup_core_more_in_modal', 'joinup_core_item_count'] as $id) {
+    if (isset($info[$id])) {
+      $info[$id]['field_types'] = $allPluginIds;
+    }
+  }
 }
 
 /**

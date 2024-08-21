@@ -1,0 +1,27 @@
+uuid: 4512ddd2-a1e3-44f3-81c7-7c04daa8e39e
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.oss_publiccode_yml_version
+    - node.type.oss_solution
+third_party_settings:
+  eu_oss_catalogue:
+    publiccode_yml:
+      resolvers:
+        -
+          plugin: default
+          config:
+            path: publiccodeYmlVersion
+id: node.oss_solution.oss_publiccode_yml_version
+field_name: oss_publiccode_yml_version
+entity_type: node
+bundle: oss_solution
+label: 'Version of publiccode.yml'
+description: 'The version to which the current publiccode.yml adheres'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

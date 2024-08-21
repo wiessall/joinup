@@ -1,4 +1,4 @@
 eif.eif_perspective_form:
   route_name: eif.eif_perspective_form
   title: 'EIF perspective'
-  base_route: entity.rdf_entity.canonical
+  base_route: entity.node.canonical

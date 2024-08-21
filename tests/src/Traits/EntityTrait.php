@@ -122,6 +122,7 @@ trait EntityTrait {
       'group' => 'node',
       'news' => 'node',
       'owner' => 'node',
+      'oss_solution' => 'node',
       'release' => 'node',
       'solution' => 'node',
       'spdx licence' => 'taxonomy_term',
@@ -180,6 +181,7 @@ trait EntityTrait {
       'event' => 'event',
       'glossary' => 'glossary',
       'news' => 'news',
+      'oss_solution' => 'oss_solution',
       'release' => 'release',
       'spdx licence' => 'spdx_licence',
     ];

@@ -62,6 +62,7 @@ function ventuno_form_join_group_form_alter(array &$form, FormStateInterface $fo
 function ventuno_form_views_exposed_form_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
   $route_name = \Drupal::routeMatch()->getRouteName();
   $view = $form_state->get('view');
+
   if ($view->id() === 'search') {
     $form['keys']['#theme'] = 'input__search_expose_form';
     $form['keys']['#title_display'] = 'invisible';
@@ -73,10 +74,22 @@ function ventuno_form_views_exposed_form_alter(array &$form, FormStateInterface 
     $form['#id'] = Html::getUniqueId($form['#id']);
   }
 
-  if ($route_name != 'view.search.page_1' && $view->id() === 'search') {
+  if ($view->id() === 'search_oss_catalogue') {
+    $form['results_count'] = [
+      '#type' => 'item',
+      '#weight' => 0,
+      '#markup' => '',
+    ];
+    $form['oss_keys']['#theme'] = 'input__search_expose_form';
+    $form['oss_keys']['#title_display'] = 'invisible';
+    $form['oss_keys']['#attributes']['placeholder'] = t('Start typing to search…');
+    $form['oss_keys']['#joinup_parent'] = $form_id . '_' . $view->id();
+  }
+
+  if ($route_name != 'view.search.page_1' && $view->id() === 'search' || $route_name != 'view.search_oss_catalogue.search' && $view->id() === 'search_oss_catalogue') {
     // When re-using the exposed search form anywhere other than the search
     // page, hide the "Sort by" select.
-    $form['sort_by']['#type'] = 'hidden';
+    unset($form['sort_by']);
   }
 }
 

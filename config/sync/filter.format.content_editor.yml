@@ -18,6 +18,7 @@ dependencies:
     - joinup_core
     - joinup_video
     - linkit
+    - markdown_easy
     - media
     - slick
 name: 'Content Editor'
@@ -138,14 +139,14 @@ filters:
     weight: -49
     settings:
       allowed_providers:
-        joinup_ec_video: joinup_ec_video
-        internal_path: internal_path
-        google_docs: google_docs
-        joinup_ec_webcast_video: joinup_ec_webcast_video
-        prezi: prezi
         slideshare: slideshare
-        vimeo: vimeo
+        internal_path: internal_path
+        prezi: prezi
+        joinup_ec_video: joinup_ec_video
+        joinup_ec_webcast_video: joinup_ec_webcast_video
+        google_docs: google_docs
         youtube: youtube
+        vimeo: vimeo
         youtube_playlist: 0
       autoplay: false
       responsive: true
@@ -156,6 +157,14 @@ filters:
     weight: -36
     settings:
       title: true
+  markdown_easy:
+    id: markdown_easy
+    provider: markdown_easy
+    status: false
+    weight: 0
+    settings:
+      flavor: standard
+      tips: ''
   media_embed:
     id: media_embed
     provider: media

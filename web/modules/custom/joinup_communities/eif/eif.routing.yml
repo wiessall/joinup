@@ -7,8 +7,8 @@ eif.eif_perspective_form:
     _custom_access: Drupal\eif\Controller\EifPerspectiveController::editAccess
   options:
     parameters:
-      rdf_entity:
-        type: entity:rdf_entity
+      node:
+        type: entity:node
         bundle:
           - solution
 
@@ -21,7 +21,7 @@ entity.node.eif_perspective:
     _custom_access: Drupal\eif\Controller\EifPerspectiveController::viewAccess
   options:
     parameters:
-      rdf_entity:
+      node:
         type: entity:node
         bundle:
           - solution

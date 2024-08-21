@@ -1,0 +1,38 @@
+uuid: 8dfcd2dc-3182-4bbc-a2f6-79fb5dd4d7bb
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.oss_maintenance_contacts
+    - node.type.oss_contact
+    - node.type.oss_solution
+third_party_settings:
+  eu_oss_catalogue:
+    publiccode_yml:
+      resolvers:
+        -
+          plugin: contact
+          config:
+            path: maintenance/contacts
+            node_type: oss_contact
+id: node.oss_solution.oss_maintenance_contacts
+field_name: oss_maintenance_contacts
+entity_type: node
+bundle: oss_solution
+label: 'Technical Contacts'
+description: 'Contacts maintaining this software'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      oss_contact: oss_contact
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference
