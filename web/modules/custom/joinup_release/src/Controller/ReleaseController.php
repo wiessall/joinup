@@ -12,17 +12,29 @@ use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Routing\TrustedRedirectResponse;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\joinup_release\Entity\Release;
 use Drupal\joinup_release\Entity\ReleaseInterface;
 use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\node\NodeInterface;
-use Drupal\og\OgGroupAudienceHelper;
+use Drupal\og\OgGroupAudienceHelperInterface;
+use Drupal\rdf_sync\RdfSyncMapper;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Controller for release forms.
  */
 class ReleaseController extends ControllerBase {
+
+  public function __construct(
+    protected readonly RdfSyncMapper $rdfSyncMapper,
+  ) {}
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container): self {
+    return new static($container->get('rdf_sync.mapper'));
+  }
 
   /**
    * Controller for the base form.
@@ -171,10 +183,16 @@ class ReleaseController extends ControllerBase {
    *   The unsaved release entity.
    */
   protected function createNewRelease(SolutionInterface $solution): ReleaseInterface {
-    return Release::create([
+    $release = $this->entityTypeManager()->getStorage('node')->create([
       'type' => 'release',
-      OgGroupAudienceHelper::DEFAULT_FIELD => $solution->id(),
+      OgGroupAudienceHelperInterface::DEFAULT_FIELD => $solution->id(),
+      'solution_data' => [
+        'target_id' => $solution->id(),
+        'target_revision_id' => $solution->getRevisionId(),
+      ],
     ]);
+    assert($release instanceof ReleaseInterface);
+    return $release;
   }
 
 }

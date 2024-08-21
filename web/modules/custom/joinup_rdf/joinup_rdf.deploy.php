@@ -18,7 +18,7 @@ function joinup_rdf_deploy_200000(): void {
  * Migrate collections.
  */
 function joinup_rdf_deploy_200001(array &$sandbox): string {
-  $endpoint = \Drupal::getContainer()->get('sparql.endpoint');
+  $endpoint = \Drupal::getContainer()->get('rdf_sync.connection');
   if (empty($sandbox['collections'])) {
     $query = <<<SPARQL
       SELECT DISTINCT ?id
@@ -51,7 +51,7 @@ function joinup_rdf_deploy_200001(array &$sandbox): string {
  * Migrate solutions.
  */
 function joinup_rdf_deploy_200002(array &$sandbox): string {
-  $endpoint = \Drupal::getContainer()->get('sparql.endpoint');
+  $endpoint = \Drupal::getContainer()->get('rdf_sync.connection');
   if (empty($sandbox['solutions'])) {
     $query = <<<SPARQL
       SELECT DISTINCT ?id
@@ -84,11 +84,11 @@ function joinup_rdf_deploy_200002(array &$sandbox): string {
  * Clean the collection and solution graphs.
  */
 function joinup_rdf_deploy_200003(): void {
-  $endpoint = \Drupal::getContainer()->get('sparql.endpoint');
-  $endpoint->query('CLEAR GRAPH <http://joinup.eu/collection/published>');
-  $endpoint->query('CLEAR GRAPH <http://joinup.eu/collection/draft>');
-  $endpoint->query('CLEAR GRAPH <http://joinup.eu/solution/published>');
-  $endpoint->query('CLEAR GRAPH <http://joinup.eu/solution/draft>');
+  $endpoint = \Drupal::getContainer()->get('rdf_sync.connection');
+  $endpoint->update('CLEAR GRAPH <http://joinup.eu/collection/published>');
+  $endpoint->update('CLEAR GRAPH <http://joinup.eu/collection/draft>');
+  $endpoint->update('CLEAR GRAPH <http://joinup.eu/solution/published>');
+  $endpoint->update('CLEAR GRAPH <http://joinup.eu/solution/draft>');
 }
 
 /**

@@ -1,4 +1,4 @@
-@api @group-g
+@api @group-h
 Feature: "Add solution" visibility options.
   In order to manage solutions
   As a moderator

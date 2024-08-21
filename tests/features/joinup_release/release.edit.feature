@@ -1,4 +1,4 @@
-@api
+@api @group-g
 Feature: "Edit" visibility options.
   In order to manage releases
   As a solution facilitator

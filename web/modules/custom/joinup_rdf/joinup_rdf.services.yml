@@ -37,4 +37,4 @@ services:
 
   joinup_rdf.migration_helper:
     class: Drupal\joinup_rdf\MigrationHelper
-    arguments: ['@entity_type.manager', '@path_alias.repository', '@database', '@sparql.endpoint', '@rdf_sync.mapper']
+    arguments: ['@entity_type.manager', '@path_alias.repository', '@database', '@rdf_sync.connection', '@rdf_sync.mapper']
