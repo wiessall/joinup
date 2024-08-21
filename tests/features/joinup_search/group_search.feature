@@ -1,4 +1,4 @@
-@api @group-i
+@api @group-g
 Feature: Search inside groups
   In order to quickly find content inside the group I am currently perusing
   As a user of Joinup
