@@ -16,7 +16,6 @@ use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\Entity\PinnableGroupContentInterface;
 use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\og\OgAccessInterface;
-use Drupal\rdf_entity\RdfInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
@@ -106,13 +105,13 @@ class PinEntityController extends ControllerBase {
    *   The content entity being pinned.
    * @param \Drupal\Core\Session\AccountInterface $account
    *   The user account to check access for.
-   * @param \Drupal\rdf_entity\RdfInterface $group
+   * @param \Drupal\joinup_group\Entity\GroupInterface $group
    *   The group where to pin the content.
    *
    * @return \Drupal\Core\Access\AccessResultInterface
    *   The access result.
    */
-  public function pinAccess(ContentEntityInterface $entity, AccountInterface $account, RdfInterface $group): AccessResultInterface {
+  public function pinAccess(ContentEntityInterface $entity, AccountInterface $account, GroupInterface $group): AccessResultInterface {
     if (!$this->validEntityParameters($entity, $group)) {
       return AccessResult::forbidden();
     }
@@ -136,13 +135,13 @@ class PinEntityController extends ControllerBase {
    *   The content entity being unpinned.
    * @param \Drupal\Core\Session\AccountInterface $account
    *   The user account to check access for.
-   * @param \Drupal\rdf_entity\RdfInterface $group
+   * @param \Drupal\joinup_group\Entity\GroupInterface $group
    *   The group where to pin the content.
    *
    * @return \Drupal\Core\Access\AccessResultInterface
    *   The access result.
    */
-  public function unpinAccess(ContentEntityInterface $entity, AccountInterface $account, RdfInterface $group): AccessResultInterface {
+  public function unpinAccess(ContentEntityInterface $entity, AccountInterface $account, GroupInterface $group): AccessResultInterface {
     if (!$this->validEntityParameters($entity, $group)) {
       return AccessResult::forbidden();
     }
@@ -164,13 +163,13 @@ class PinEntityController extends ControllerBase {
    *
    * @param \Drupal\Core\Entity\ContentEntityInterface $entity
    *   The entity that is going to be pinned.
-   * @param \Drupal\rdf_entity\RdfInterface $group
+   * @param \Drupal\joinup_group\Entity\GroupInterface $group
    *   The group where to pin the entity.
    *
    * @return bool
    *   True if the entities are of the expected types, false otherwise.
    */
-  protected function validEntityParameters(ContentEntityInterface $entity, RdfInterface $group): bool {
+  protected function validEntityParameters(ContentEntityInterface $entity, GroupInterface $group): bool {
     // Do not make this generic because we don't want any solution appearing
     // in the solution overview - as related solutions - to retrieve the
     // pin/unpin contextual link.
@@ -178,7 +177,7 @@ class PinEntityController extends ControllerBase {
       return $group instanceof CollectionInterface;
     }
     elseif ($entity instanceof CommunityContentInterface) {
-      return $group instanceof GroupInterface;
+      return TRUE;
     }
     return FALSE;
   }
