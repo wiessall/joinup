@@ -1,4 +1,4 @@
-@api @group-c
+@api @group-b
 Feature: Sharing content between collections
   As a privileged user
   I want to share content between collections
@@ -313,6 +313,7 @@ Feature: Sharing content between collections
     And I add a layout paragraph in the "Custom page body" form field with the following properties:
       | layout | one column |
     And I click "Choose component"
+    And a modal should open
     And I click "Carousel"
     And I check "Global search"
     And I check "Allow shared content"

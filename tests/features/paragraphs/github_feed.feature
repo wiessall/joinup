@@ -1,4 +1,4 @@
-@api @group-f
+@api @group-h
 Feature: Github feed paragraph tests.
   The scenarios are split into 4 tests because re-saving the entity would
   invalidate the file cache and the tests would require connecting to Github.
@@ -17,6 +17,7 @@ Feature: Github feed paragraph tests.
     When I am logged in as a moderator
     And I go to the edit form of the "Catalogue of paragraphs" "custom page"
     Then I click "Choose component"
+    And a modal should open
     And I click "Github feed"
     And I fill in "Repository" with "https://github.com/openeuropa/oe_bootstrap_theme.git" in the "Modal content" region
     And I fill in "Type" with "pull_request" in the "Modal content" region
@@ -89,6 +90,7 @@ Feature: Github feed paragraph tests.
     When I am logged in as a facilitator of the "Paragraphs <group>" <group>
     And I go to the edit form of the "Catalogue of paragraphs" "custom page"
     And I click "Choose component"
+    And a modal should open
     And I click "Github feed"
     And I fill in the following:
       | Repository | https://github.com/openeuropa/oe_bootstrap_theme.git |

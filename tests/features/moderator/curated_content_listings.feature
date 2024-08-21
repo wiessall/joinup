@@ -1,4 +1,4 @@
-@api @group-c
+@api @group-h
 Feature: Curated content listings
   In order to manage the content which is highlighted on the frontpage
   As a moderator
