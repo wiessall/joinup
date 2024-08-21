@@ -15,11 +15,15 @@ upgrade_commands:
     - ./vendor/bin/drush joinup:unpublish-alert --category
     - ./scripts/check_status_report.php
   append:
+    production:
+      - touch disable-eu-oss-catalogue
     acceptance:
       - touch disable-config-readonly
       - ./vendor/bin/drush joinup:acc
       - ./vendor/bin/drush cache:rebuild
       - rm disable-config-readonly
+      # Remove this line when deploying to POC.
+      - touch disable-eu-oss-catalogue
       - ./vendor/bin/drush eu-oss:fetch developers_italia
       - ./vendor/bin/drush eu-oss:fetch hosting_platform:open_code
       - ./vendor/bin/drush queue:run eu_oss_catalogue
