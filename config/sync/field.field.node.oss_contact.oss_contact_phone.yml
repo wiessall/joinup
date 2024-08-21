@@ -1,0 +1,19 @@
+uuid: fcf0060e-5a47-4508-9b33-452a3c977ea9
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.oss_contact_phone
+    - node.type.oss_contact
+id: node.oss_contact.oss_contact_phone
+field_name: oss_contact_phone
+entity_type: node
+bundle: oss_contact
+label: Phone
+description: 'The phone number (with international prefix)'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

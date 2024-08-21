@@ -1,0 +1,66 @@
+Project 1.1:
+  en:
+    oss_git_url: https://limited.self-hosted.gitlab.example.com/group1/project-1-1
+    oss_git_description: 'Group 1: Project 1: description'
+    oss_default_branch: branch-project-1-1
+    oss_software_version: '2.0.0-alpha12'
+    oss_release_date: '2010-07-08'
+    oss_platform_reference: gid://gitlab/Project/11
+    oss_logo: https://limited.self-hosted.gitlab.example.com/group1/project-1-1/raw/HEAD/images/logo-of-project-1-1.svg
+    oss_git_forks: 206
+    oss_git_stars: 226
+    oss_git_open_issues: 246
+    oss_publiccode_yml_version: '0.2'
+    oss_git_open_pull_requests: 32
+
+Project 1.2:
+  en:
+    oss_git_url: https://limited.self-hosted.gitlab.example.com/group1/project-1-2
+    oss_git_description: 'Group 1: Project 2: description'
+    oss_default_branch: branch-project-1-2
+    oss_software_version: '220.0.1'
+    oss_release_date: '2013-08-19'
+    oss_platform_reference: gid://gitlab/Project/12
+    oss_logo: https://all.self-hosted.gitlab.example.com/uploads/-/system/project/avatar/12/logo.jpg
+    oss_git_forks: 207
+    oss_git_stars: 227
+    oss_git_open_issues: 247
+    oss_publiccode_yml_version: '0.2'
+    oss_git_open_pull_requests: 2
+
+Project 1.3:
+  en:
+    oss_git_url: https://limited.self-hosted.gitlab.example.com/group1/project-1-3
+    oss_git_description: 'Group 1: Project 3: description'
+    oss_default_branch: branch-project-1-3
+    oss_software_version: null
+    oss_release_date: null
+    oss_platform_reference: gid://gitlab/Project/13
+    oss_logo: null
+    oss_git_forks: 208
+    oss_git_stars: 228
+    oss_git_open_issues: 248
+    oss_publiccode_yml_version: '0.2'
+    oss_git_open_pull_requests: 0
+
+Project 2.1:
+  en:
+    oss_git_url: https://limited.self-hosted.gitlab.example.com/group2/project-2-1
+    oss_git_description: 'Group 2: Project 1: description'
+    oss_default_branch: branch-project-2-1
+    oss_software_version: '1.12.0-beta2'
+    oss_release_date: '2011-12-31'
+    oss_platform_reference: gid://gitlab/Project/21
+    oss_publiccode_yml_version: '0.2'
+    oss_git_open_pull_requests: 7
+
+Project 1:
+  en:
+    oss_git_url: https://limited.self-hosted.gitlab.example.com/user1/project-1
+    oss_git_description: 'User 1: Project 1: description'
+    oss_default_branch: branch-project-1
+    oss_software_version: '1.0.x-dev'
+    oss_release_date: '2020-10-22'
+    oss_platform_reference: gid://gitlab/Project/1
+    oss_publiccode_yml_version: '0.2'
+    oss_git_open_pull_requests: 1

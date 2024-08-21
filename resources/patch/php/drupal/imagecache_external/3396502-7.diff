@@ -1,0 +1,189 @@
+diff --git a/config/schema/imagecache_external.schema.yml b/config/schema/imagecache_external.schema.yml
+index 933224c..92fdf06 100644
+--- a/config/schema/imagecache_external.schema.yml
++++ b/config/schema/imagecache_external.schema.yml
+@@ -56,6 +56,15 @@ imagecache_external.settings:
+           sequence:
+             type: string
+             label: Attribute
++    http_client_config:
++      label: 'HTTP client configuration'
++      type: mapping
++      nullable: true
++      mapping:
++        timeout:
++          type: integer
++          label: 'Timeout override on top of default HTTP client config'
++          nullable: true
+ 
+ field.formatter.settings.imagecache_external_image:
+   type: mapping
+diff --git a/imagecache_external.module b/imagecache_external.module
+index fc34622..22d62dc 100644
+--- a/imagecache_external.module
++++ b/imagecache_external.module
+@@ -203,7 +203,8 @@ function imagecache_external_fetch(string $url, string $cachepath) {
+   try {
+     // Drupal httpClient.
+     $http = \Drupal::httpClient();
+-    $result = $http->request('get', $url);
++    $http_config = array_filter($config->get('http_client_config') ?? []);
++    $result = $http->request('get', $url, $http_config);
+     $code = floor($result->getStatusCode() / 100) * 100;
+     $types = imagecache_external_allowed_mimetypes();
+ 
+diff --git a/src/Form/SettingsForm.php b/src/Form/SettingsForm.php
+index 25c9b6d..16eab9f 100644
+--- a/src/Form/SettingsForm.php
++++ b/src/Form/SettingsForm.php
+@@ -179,6 +179,20 @@ class SettingsForm extends ConfigFormBase {
+       '#default_value' => implode(' ', $config->get('svg_settings.allowed_attributes')),
+     ];
+ 
++    $form['http_client_config'] = [
++      '#type' => 'fieldset',
++      '#title' => $this->t('HTTP client'),
++      '#description' => $this->t('Overrides applied on on top of the default HTTP client configuration'),
++      '#tree' => TRUE,
++    ];
++    $form['http_client_config']['timeout'] = [
++      '#type' => 'number',
++      '#title' => $this->t('Timeout configuration for HTTP client'),
++      '#default_value' => $config->get('http_client_config.timeout'),
++      '#min' => 1,
++      '#description' => $this->t('The maximum time in seconds the HTTP client can spend on connecting to the remote and get the response. Leave empty to use the inherited configuration.'),
++    ];
++
+     $form['#validate'][] = '::validateForm';
+ 
+     return parent::buildForm($form, $form_state);
+@@ -219,7 +233,8 @@ class SettingsForm extends ConfigFormBase {
+       return array_filter(preg_split('/\s+/', trim($allowed)));
+     }, $values['svg_settings']);
+ 
+-    $this->config('imagecache_external.settings')
++    $configuration = $this->config('imagecache_external.settings');
++    $configuration
+       ->set('imagecache_directory', $values['imagecache_directory'])
+       ->set('imagecache_subdirectories', $values['imagecache_subdirectories'])
+       ->set('imagecache_default_extension', $values['imagecache_default_extension'])
+@@ -228,8 +243,16 @@ class SettingsForm extends ConfigFormBase {
+       ->set('imagecache_external_hosts', $values['imagecache_external_hosts'])
+       ->set('imagecache_fallback_image', $fallback_image)
+       ->set('imagecache_external_cron_flush_frequency', $values['imagecache_external_cron_flush_frequency'])
+-      ->set('svg_settings', $svg_settings)
+-      ->save();
++      ->set('svg_settings', $svg_settings);
++
++    if ($client_config = array_filter($form_state->getValue('http_client_config'))) {
++      $configuration->set('http_client_config', $client_config);
++    }
++    else {
++      $configuration->clear('http_client_config');
++    }
++
++    $configuration->save();
+     parent::submitForm($form, $form_state);
+   }
+ 
+diff --git a/tests/src/Functional/SettingsFormTest.php b/tests/src/Functional/SettingsFormTest.php
+new file mode 100644
+index 0000000..01fbfb5
+--- /dev/null
++++ b/tests/src/Functional/SettingsFormTest.php
+@@ -0,0 +1,95 @@
++<?php
++
++declare(strict_types = 1);
++
++namespace Drupal\Tests\imagecache_external\Functional;
++
++use Drupal\Core\Url;
++use Drupal\Tests\BrowserTestBase;
++
++/**
++ * Tests Imagecache External's settings form.
++ *
++ * @group imagecache_external
++ */
++class SettingsFormTest extends BrowserTestBase {
++
++  /**
++   * {@inheritdoc}
++   */
++  protected static $modules = [
++    'imagecache_external',
++  ];
++
++  /**
++   * {@inheritdoc}
++   */
++  protected $defaultTheme = 'stark';
++
++  /**
++   * Tests access to Imagecache External's settings form.
++   */
++  public function testConfigFormAccess(): void {
++    $config_form_url = Url::fromRoute('imagecache_external.admin_settings');
++    // Anonymous cannot access.
++    $this->drupalGet($config_form_url);
++    $this->assertSession()->statusCodeEquals(403);
++
++    // ...Nor logged-in user account.
++    $this->drupalLogin($this->createUser());
++    $this->drupalGet($config_form_url);
++    $this->assertSession()->statusCodeEquals(403);
++
++    // But admin must have access.
++    $this->drupalLogin($this->createUser(['administer imagecache external']));
++    $this->drupalGet($config_form_url);
++    $this->assertSession()->statusCodeEquals(200);
++    $this->submitForm([], 'Save configuration');
++    $this->assertSession()->statusCodeEquals(200);
++  }
++
++  /**
++   * Tests Imagecache External's settings form.
++   */
++  public function testHttpClientConfig(): void {
++    $this->drupalLogin($this->createUser(['administer imagecache external']));
++    $this->drupalGet(Url::fromRoute('imagecache_external.admin_settings'));
++    $this->assertSession()->statusCodeEquals(200);
++
++    $config_factory = \Drupal::configFactory();
++    $original_config_array = $config_factory->getEditable('imagecache_external.settings')->getRawData();
++    $this->assertArrayNotHasKey('http_client_config', $original_config_array);
++
++    // If we don't set timeout override for the HTTP client, the corresponding
++    // configuration key shouldn't be created. This ensures backward
++    // compatibility.
++    $this->submitForm([], 'Save configuration');
++    $this->assertSession()->statusCodeEquals(200);
++    $this->assertEquals(
++      $original_config_array,
++      $config_factory->getEditable('imagecache_external.settings')->getRawData()
++    );
++
++    // Let's set a minimal timeout, e.g. 4 second.
++    $this->submitForm([
++      'http_client_config[timeout]' => '4',
++    ], 'Save configuration');
++
++    // Config must store this as integer, under keys http_client_config.timeout.
++    $this->assertSame(
++      $original_config_array + ['http_client_config' => ['timeout' => 4]],
++      $config_factory->getEditable('imagecache_external.settings')->getRawData()
++    );
++
++    // If user deletes the timeout configuration, the config shouldn't contain
++    // the http_client_config key anymore.
++    $this->submitForm([
++      'http_client_config[timeout]' => '',
++    ], 'Save configuration');
++    $this->assertSession()->statusCodeEquals(200);
++    $reverted_config = $config_factory->getEditable('imagecache_external.settings')->getRawData();
++    $this->assertArrayNotHasKey('http_client_config', $reverted_config);
++    $this->assertSame($original_config_array, $reverted_config);
++  }
++
++}

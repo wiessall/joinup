@@ -1,0 +1,107 @@
+diff --git a/src/Api/AbstractApi.php b/src/Api/AbstractApi.php
+index cb53f852..77582923 100644
+--- a/src/Api/AbstractApi.php
++++ b/src/Api/AbstractApi.php
+@@ -36,7 +36,7 @@ abstract class AbstractApi
+      *
+      * @var string
+      */
+-    private const URI_PREFIX = '/api/v4/';
++    protected const URI_PREFIX = '/api/v4/';
+
+     /**
+      * The access levels for groups and projects
+@@ -264,7 +264,7 @@ private static function prepareUri(string $uri, array $query = []): string
+             return null !== $value;
+         });
+
+-        return \sprintf('%s%s%s', self::URI_PREFIX, $uri, QueryStringBuilder::build($query));
++        return \sprintf('%s%s%s', static::URI_PREFIX, $uri, QueryStringBuilder::build($query));
+     }
+
+     /**
+diff --git a/src/Api/GraphQL.php b/src/Api/GraphQL.php
+new file mode 100644
+index 00000000..85897d83
+--- /dev/null
++++ b/src/Api/GraphQL.php
+@@ -0,0 +1,52 @@
++<?php
++
++declare(strict_types=1);
++
++/*
++ * This file is part of the Gitlab API library.
++ *
++ * (c) Matt Humphrey <matth@windsor-telecom.co.uk>
++ * (c) Graham Campbell <hello@gjcampbell.co.uk>
++ *
++ * For the full copyright and license information, please view the LICENSE
++ * file that was distributed with this source code.
++ */
++
++namespace Gitlab\Api;
++
++class GraphQL extends AbstractApi
++{
++    /**
++     * {@inheritDoc}
++     */
++    protected const URI_PREFIX = '/api';
++
++    /**
++     * @param string $query
++     * @param array  $variables
++     *
++     * @return array
++     */
++    public function execute(string $query, array $variables = [])
++    {
++        $params = [
++            'query' => $query,
++        ];
++        if (!empty($variables)) {
++            $params['variables'] = \json_encode($variables);
++        }
++
++        return $this->post('/graphql', $params);
++    }
++
++    /**
++     * @param string $file
++     * @param array  $variables
++     *
++     * @return array
++     */
++    public function fromFile(string $file, array $variables = [])
++    {
++        return $this->execute(\file_get_contents($file), $variables);
++    }
++}
+diff --git a/src/Client.php b/src/Client.php
+index 681b3a54..b1e8d85f 100644
+--- a/src/Client.php
++++ b/src/Client.php
+@@ -18,6 +18,7 @@
+ use Gitlab\Api\Deployments;
+ use Gitlab\Api\Environments;
+ use Gitlab\Api\Events;
++use Gitlab\Api\GraphQL;
+ use Gitlab\Api\Groups;
+ use Gitlab\Api\GroupsBoards;
+ use Gitlab\Api\GroupsEpics;
+@@ -407,6 +408,14 @@ public function wiki(): Wiki
+         return new Wiki($this);
+     }
+
++    /**
++     * @return GraphQL
++     */
++    public function graphql(): GraphQL
++    {
++        return new GraphQL($this);
++    }
++
+     /**
+      * Authenticate a user for all next requests.
+      *

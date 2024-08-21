@@ -1,0 +1,11 @@
+langcode: en
+status: true
+dependencies: {  }
+id: github_example
+label: 'Github example'
+description: ''
+platformId: github
+platformSettings:
+  projects:
+    dummy-namespace-1:
+      - dummy-name-1

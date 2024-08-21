@@ -1,0 +1,52 @@
+diff --git a/src/Collections/ArgumentsCollection.php b/src/Collections/ArgumentsCollection.php
+index 2f6fd4c..f56ca1c 100644
+--- a/src/Collections/ArgumentsCollection.php
++++ b/src/Collections/ArgumentsCollection.php
+@@ -21,7 +21,7 @@ class ArgumentsCollection extends CollectionAbstract
+     public function __construct(array $array)
+     {
+         foreach ($array as $key => $value) {
+-            if (!is_object($value)) {
++            if (!is_object($value) || enum_exists(get_class($value))) {
+                 $array[$key] = new Argument($value, $key);
+             }
+         }
+diff --git a/src/Entities/Argument.php b/src/Entities/Argument.php
+index 038a4ee..99f6e8f 100644
+--- a/src/Entities/Argument.php
++++ b/src/Entities/Argument.php
+@@ -43,6 +43,9 @@ public function toString(): string
+ 
+             return json_encode($this->value);
+         }
++        elseif (is_object($this->value) && enum_exists(get_class($this->value))) {
++            return $this->key . ': ' . $this->value->name;
++        }
+ 
+         return $this->key . ': ' . json_encode($this->value);
+     }
+diff --git a/tests/Unit/Collections/ArgumentsCollectionTest.php b/tests/Unit/Collections/ArgumentsCollectionTest.php
+index 89719fb..56b848a 100644
+--- a/tests/Unit/Collections/ArgumentsCollectionTest.php
++++ b/tests/Unit/Collections/ArgumentsCollectionTest.php
+@@ -65,6 +65,10 @@ public function testArguments()
+         $this->assertCount(2, $this->collection->getArguments());
+         $this->collection->clear();
+         $this->assertCount(0, $this->collection->getArguments());
++        $this->collection->addArgument(new Argument(TestingEnum::OPTION1, 'baz1'));
++        $this->collection->addArgument(new Argument(TestingEnum::OPTION2, 'baz2'));
++        $this->assertCount(2, $this->collection->getArguments());
++        $this->assertSame('baz1: OPTION1 baz2: OPTION2', $this->collection->toString());
+     }
+ 
+     public function testInvalidArguments()
+@@ -87,3 +91,9 @@ public function testScalarTypes() {
+         $this->assertEquals('test: 1', $collection->toString());
+     }
+ }
++
++enum TestingEnum
++{
++    case OPTION1;
++    case OPTION2;
++}

@@ -6,6 +6,7 @@ dependencies:
     - field.storage.node.field_paragraphs_body
     - node.type.custom_page
     - paragraphs.paragraphs_type.accordion
+    - paragraphs.paragraphs_type.block
     - paragraphs.paragraphs_type.call_to_action
     - paragraphs.paragraphs_type.carousel
     - paragraphs.paragraphs_type.configurable_listing
@@ -44,6 +45,7 @@ settings:
   handler_settings:
     target_bundles:
       accordion: accordion
+      block: block
       call_to_action: call_to_action
       carousel: carousel
       configurable_listing: configurable_listing
@@ -88,6 +90,9 @@ settings:
       accordion_item:
         weight: -54
         enabled: false
+      block:
+        weight: -50
+        enabled: true
       call_to_action:
         weight: -53
         enabled: true

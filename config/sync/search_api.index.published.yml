@@ -792,6 +792,14 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.spdx_licence
+  status:
+    label: Published
+    datasource_id: 'entity:node'
+    property_path: status
+    type: boolean
+    dependencies:
+      module:
+        - node
   sticky:
     label: 'Sticky at top of lists'
     datasource_id: 'entity:node'
@@ -812,7 +820,7 @@ field_settings:
     label: Title
     datasource_id: 'entity:node'
     property_path: title
-    type: text
+    type: 'solr_text_custom:ngram'
     boost: 5.0
     dependencies:
       module:
@@ -885,6 +893,7 @@ datasource_settings:
         - eif_interoperability_layer
         - eif_principle
         - eif_recommendation
+        - oss_category
         - topic
     languages:
       default: true
@@ -974,6 +983,7 @@ processor_settings:
   joinup_entity_status:
     inverse: false
   language_with_fallback: {  }
+  oss_solution_rendered_item: {  }
   rendered_item: {  }
   reverse_entity_references: {  }
   solr_date_range:
