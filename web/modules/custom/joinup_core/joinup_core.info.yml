@@ -12,6 +12,4 @@ dependencies:
   - 'message_notify:message_notify'
   - 'monolog:monolog'
   - 'og:og'
-  - 'rdf_entity:rdf_draft'
-  - 'rdf_entity:rdf_entity'
   - 'redirect:redirect'
