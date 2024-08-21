@@ -17,6 +17,7 @@
         "drupal/allowed_formats": "^3.0",
         "drupal/antibot": "^2.0",
         "drupal/autologout": "^2.0",
+        "drupal/block_field": "^1.0@RC",
         "drupal/cached_computed_field": "^1.0",
         "drupal/cas": "^2.0",
         "drupal/cas_attributes": "^2.0",
