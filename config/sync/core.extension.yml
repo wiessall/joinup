@@ -186,7 +186,6 @@ module:
   purge_queuer_coretags: 0
   queue_ui: 0
   rdf_draft: 0
-  rdf_entity: 0
   rdf_sync: 0
   redirect: 0
   replicate: 0
@@ -221,7 +220,6 @@ module:
   solution: 0
   sparql_endpoint: 0
   sparql_endpoint_piwik: 0
-  sparql_entity_storage: 0
   state_machine: 0
   state_machine_permissions: 0
   state_machine_revisions: 0
