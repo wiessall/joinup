@@ -6,7 +6,7 @@ dependencies:
     - solution
 id: archive_solution
 label: 'Archive solutions'
-type: rdf_entity
-plugin: 'change_state:rdf_entity:solution'
+type: node
+plugin: 'change_state:node:solution'
 configuration:
   target_state: archived

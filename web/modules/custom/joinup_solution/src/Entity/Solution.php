@@ -108,7 +108,7 @@ class Solution extends Node implements SolutionInterface {
       ->getQuery()
       ->accessCheck(FALSE)
       ->condition('type', 'release')
-      ->condition('og_audience', $this->id())
+      ->condition(OgGroupAudienceHelper::DEFAULT_FIELD, $this->id())
       ->sort('created')
       ->execute();
   }
@@ -263,7 +263,7 @@ class Solution extends Node implements SolutionInterface {
    * {@inheritdoc}
    */
   public function getContactInformationFieldName(): string {
-    return 'contact_information';
+    return 'contact';
   }
 
   /**

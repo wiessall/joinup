@@ -10,7 +10,6 @@ use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\og\Entity\OgMembership;
 use Drupal\og\Entity\OgRole;
 use Drupal\og\OgMembershipInterface;
-use Drupal\rdf_entity\RdfInterface;
 use PHPUnit\Framework\Assert;
 
 /**
@@ -209,7 +208,7 @@ trait OgTrait {
   /**
    * Creates a group membership using the given group and table values.
    *
-   * @param \Drupal\rdf_entity\RdfInterface $group
+   * @param \Drupal\joinup_group\Entity\GroupInterface $group
    *   The group to which the user will be subscribed.
    * @param array $values
    *   Associative array containing table values from a Behat scenario. The
@@ -223,7 +222,7 @@ trait OgTrait {
    * @throws \Exception
    *   Thrown when a user with the given user name is not found.
    */
-  protected function givenUserMembership(RdfInterface $group, array $values): void {
+  protected function givenUserMembership(GroupInterface $group, array $values): void {
     // Load member.
     $member = user_load_by_name($values['user']);
     if (empty($member)) {
@@ -296,6 +295,29 @@ trait OgTrait {
     $group_name = $group->label();
     $message = "The $operation operation should " . ($expected_result ? '' : 'not ') . "be accessible for $user_name in $group_name";
     Assert::assertEquals($expected_result, $group->access($operation, $user), $message);
+  }
+
+  /**
+   * Re-maps the keys in the given object following the alias mapping.
+   *
+   * @param \stdClass $entity
+   *   The object representation of a Drupal entity before it is saved.
+   * @param string[] $aliases
+   *   The alias-field mapping to apply. Keys are the aliases, values are the
+   *   the actual entity fields.
+   */
+  protected function convertFieldAliases(\stdClass $entity, array $aliases): void {
+    foreach (array_keys((array) $entity) as $alias) {
+      if (!array_key_exists($alias, $aliases)) {
+        continue;
+      }
+      $key = $aliases[$alias];
+      if ($key === $alias) {
+        continue;
+      }
+      $entity->$key = $entity->$alias;
+      unset($entity->$alias);
+    }
   }
 
 }

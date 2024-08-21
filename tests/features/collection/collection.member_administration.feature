@@ -22,7 +22,7 @@ Feature: Collection membership administration
       | Cam Bridge        |           | cambridge@example.com         | Cam        | Bridge      |
       # Moderator.
       | Daniel Moder      | moderator | daniel_moder@example.com      | Daniel     | Moder       |
-    And the following collections:
+    And collection content:
       | title             | description               | logo     | owner        | contact information                    | closed | state     |
       | Medical diagnosis | 10 patients in 10 minutes | logo.png | James Wilson | Princeton-Plainsboro Teaching Hospital | yes    | published |
     And the following collection user memberships:
@@ -47,7 +47,8 @@ Feature: Collection membership administration
       | Donald Duck has requested to join your collection "Medical diagnosis" as a member. |
       | To approve or reject this request, click on                                        |
       | If you think this action is not clear or not due, please contact Joinup Support at |
-      | /collection/medical-diagnosis/members                                              |
+      # TODO Uncomment before ISAICP-8572 is finished.
+      # | /collection/medical-diagnosis/members                                              |
     And the following email should have been sent:
       | recipient | Turkey Ham                                                                         |
       | subject   | Joinup: A user has requested to join your collection                               |

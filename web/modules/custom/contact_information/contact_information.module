@@ -50,9 +50,9 @@ function contact_information_entity_bundle_field_info_alter(array &$fields, Enti
       ->setLabel(t('Related group'))
       ->setName('related_group')
       ->setDescription(t('The related group where this contact information entity is attached.'))
-      ->setTargetEntityTypeId('rdf_entity')
+      ->setTargetEntityTypeId('node')
       ->setTargetBundle('contact_information')
-      ->setSetting('target_type', 'rdf_entity')
+      ->setSetting('target_type', 'node')
       ->setSetting('handler_settings', [
         'target_bundles' => [
           'collection' => 'collection',
@@ -147,7 +147,7 @@ function contact_information_email_confirmer(string $op, EmailConfirmationInterf
     /** @var \Drupal\contact_information\ContactInformationEmailConfirmInterface $email_confirm */
     $email_confirm = \Drupal::service('contact_information.email_confirm');
     if ($gids = $email_confirm->getGroupsUsingContactInfoWithEmail($confirmation->getEmail())) {
-      if ($groups = \Drupal::entityTypeManager()->getStorage('rdf_entity')->loadMultiple($gids)) {
+      if ($groups = \Drupal::entityTypeManager()->getStorage('node')->loadMultiple($gids)) {
         // When an email is confirmed, invalidate the cache of groups where the
         // contact information entities with this email so that each group about
         // page will refresh from backend and will show the contact form link.
@@ -162,7 +162,7 @@ function contact_information_email_confirmer(string $op, EmailConfirmationInterf
 /**
  * Implements hook_form_BASE_FORM_ID_alter().
  */
-function contact_information_form_rdf_entity_form_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
+function contact_information_form_node_form_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
   if ($form_state->getFormObject()->getEntity() instanceof GroupInterface) {
     $form['actions']['submit']['#submit'][] = 'contact_information_confirm_emails';
   }
