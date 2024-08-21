@@ -1,0 +1,80 @@
+{% if content %}
+  <div {{ attributes.addClass('l-oss-heading row') }}>
+    <div class="l-oss-heading__content col-12 col-md-7 py-5">
+      {% if content.top_left or content.top_right %}
+        <div class="l-oss-heading__row l-oss-heading__row--branding mb-4">
+          {% if content.top_left %}
+            <div {{ region_attributes.top_left.addClass('l-oss-heading__top-left') }}>
+              {{ content.top_left }}
+            </div>
+          {% endif %}
+
+          {% if content.top_right %}
+            <div {{ region_attributes.top_right.addClass('l-oss-heading__top-right') }}>
+              {{ content.top_right }}
+            </div>
+          {% endif %}
+        </div>
+      {% endif %}
+
+      {% if content.first_left or content.first_right %}
+        <div class="l-oss-heading__row mb-3 flex-wrap">
+          {% if content.first_left %}
+            <div {{ region_attributes.first_left.addClass('l-oss-heading__first-left') }}>
+              {{ content.first_left }}
+            </div>
+          {% endif %}
+
+          {% if content.first_right %}
+            <div {{ region_attributes.first_right.addClass('l-oss-heading__first-right') }}>
+              {{ content.first_right }}
+            </div>
+          {% endif %}
+        </div>
+      {% endif %}
+
+      {% if content.second %}
+        <div class="l-oss-heading__row mb-4">
+          <div {{ region_attributes.second.addClass('l-oss-heading__second') }}>
+            {{ content.second }}
+          </div>
+        </div>
+      {% endif %}
+
+      {% if content.third_left or content.third_right %}
+        <div class="l-oss-heading__row d-flex flex-wrap">
+          {% if content.third_left %}
+            <div {{ region_attributes.third_left.addClass('l-oss-heading__third-left mb-2') }}>
+              {{ content.third_left }}
+            </div>
+          {% endif %}
+
+          {% if content.third_right %}
+            <div {{ region_attributes.third_right.addClass('l-oss-heading--third-right mb-2') }}>
+              {{ content.third_right }}
+            </div>
+          {% endif %}
+        </div>
+      {% endif %}
+    </div>
+
+    {% if content.indicator or content.aside %}
+      <div {{ region_attributes.aside.addClass('l-oss-heading__right col-12 col-md-5 py-5 ps-3 ps-md-5') }}>
+
+      {% if content.indicator %}
+        <div {{ region_attributes.indicator.addClass('l-oss-heading__indicator d-flex flex-wrap') }}>
+          {{ content.indicator }}
+        </div>
+      {% endif %}
+
+      {% if content.aside %}
+        <div class="l-oss-heading__aside">
+          {{ content.aside }}
+        </div>
+      {% endif %}
+
+    </div>
+    {% endif %}
+
+  </div>
+{% endif %}

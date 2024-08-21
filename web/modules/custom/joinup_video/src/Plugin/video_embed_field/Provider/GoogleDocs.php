@@ -12,7 +12,7 @@ use GuzzleHttp\ClientInterface;
  *
  * @VideoEmbedProvider(
  *   id = "google_docs",
- *   title = @Translation("Google document (docs.google.com)")
+ *   title = @Translation("Google Docs")
  * )
  */
 class GoogleDocs extends ProviderPluginBase {
@@ -27,7 +27,7 @@ class GoogleDocs extends ProviderPluginBase {
   /**
    * Create a plugin with the given input.
    *
-   * @param string $configuration
+   * @param array $configuration
    *   The configuration of the plugin.
    * @param string $plugin_id
    *   The plugin id.
@@ -44,14 +44,19 @@ class GoogleDocs extends ProviderPluginBase {
   /**
    * {@inheritdoc}
    */
-  public function renderEmbedCode($width, $height, $autoplay) {
-    $iframe = [
+  public function renderEmbedCode($width, $height, $autoplay): array {
+    return [
       '#type' => 'video_embed_iframe',
       '#provider' => 'google_docs',
       '#url' => sprintf('https://docs.google.com/%s/d/%s/viewform?embedded=true', $this->getDocType(), $this->getVideoId()),
+      '#attributes' => [
+        'title' => $this->getName(),
+        'width' => $width,
+        'height' => $height,
+        'frameborder' => '0',
+        'allowfullscreen' => 'allowfullscreen',
+      ],
     ];
-
-    return $iframe;
   }
 
   /**
@@ -72,7 +77,7 @@ class GoogleDocs extends ProviderPluginBase {
   /**
    * {@inheritdoc}
    */
-  public static function getIdFromInput($input) {
+  public static function getIdFromInput($input): string|false {
     $matches = static::getDataFromInput($input);
     return $matches['id'] ?? FALSE;
   }
@@ -83,11 +88,11 @@ class GoogleDocs extends ProviderPluginBase {
    * @param string $input
    *   The input url.
    *
-   * @return mixed
+   * @return string|false
    *   The type of the document, e.g. forms or presentation. False if there is
    *   no match found.
    */
-  public static function getTypeFromInput($input): mixed {
+  public static function getTypeFromInput($input): string|false {
     $matches = static::getDataFromInput($input);
     return $matches['type'] ?? FALSE;
   }
@@ -95,7 +100,7 @@ class GoogleDocs extends ProviderPluginBase {
   /**
    * {@inheritdoc}
    */
-  public function getRemoteThumbnailUrl() {
+  public function getRemoteThumbnailUrl(): string {
     return '';
   }
 
@@ -107,6 +112,16 @@ class GoogleDocs extends ProviderPluginBase {
    */
   public function getDocType(): string {
     return $this->docType;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getName(): string|\Stringable {
+    return $this->t('@provider | @id', [
+      '@provider' => $this->getPluginDefinition()['title'],
+      '@id' => $this->videoId,
+    ]);
   }
 
 }

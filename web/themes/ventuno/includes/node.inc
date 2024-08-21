@@ -10,6 +10,7 @@ declare(strict_types=1);
 use Drupal\eif\EifInterface;
 use Drupal\joinup_bundle_class\LogoInterface;
 use Drupal\joinup_group\JoinupGroupHelper;
+use Drupal\joinup_oss_catalogue\OssCatalogueCollectionInterface;
 use Drupal\joinup_publication_date\Entity\EntityPublicationTimeInterface;
 use Drupal\joinup_workflow\ArchivableEntityInterface;
 use Drupal\node\NodeInterface;
@@ -130,6 +131,11 @@ function ventuno_preprocess_node(array &$variables): void {
   if ((int) $node->id() === EifInterface::EIF_ONLINE_ASSISTANT) {
     unset($variables['content']);
   }
+
+  // Add library specific to OSS Catalogue landing page.
+  if ($variables['view_mode'] === 'full' && $node->uuid() === OssCatalogueCollectionInterface::LANDING_PAGE) {
+    $variables['#attached']['library'][] = 'ventuno/oss-landing';
+  }
 }
 
 /**
@@ -160,6 +166,14 @@ function ventuno_preprocess_node__moderation(&$variables): void {
   /** @var \Drupal\node\NodeInterface $node */
   $node = $variables['node'];
   $variables['edit_url'] = $node->toUrl('edit-form')->toString();
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for node__oss_solution__full.
+ */
+function ventuno_preprocess_node__oss_solution__full(array &$variables): void {
+  $variables['#attached']['library'][] = 'ventuno/oss-solution-full';
+  $variables['content_attributes']['class'][] = 'layout--stack';
 }
 
 /**

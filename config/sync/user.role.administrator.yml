@@ -4,6 +4,7 @@ status: true
 dependencies:
   module:
     - custom_page
+    - eu_oss_catalogue
     - role_delegation
     - system
     - toolbar
@@ -15,6 +16,7 @@ weight: -5
 is_admin: false
 permissions:
   - 'access toolbar'
+  - 'administer eu oss catalogue'
   - 'administer users'
   - 'assign all roles'
   - 'manage custom landing pages'
