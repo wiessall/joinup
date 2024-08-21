@@ -34,13 +34,10 @@ Feature: Pinning content entities inside solutions
 
     When I am an anonymous user
     And I go to the homepage of the "Blue Wrench" solution
-    # Todo: Due to an environment related issue on CPHP this is causing random
-    #   failures which cannot be replicated in production. Re-enable this check
-    #   once we have updated to a more recent version of Solr. See ISAICP-6245.
-    # Then I should see the following tiles in the correct order:
-    #   | Very important             |
-    #   | What is the HEX for lemon? |
-    #   | Useful information         |
+    Then I should see the following tiles in the correct order:
+      | Very important             |
+      | What is the HEX for lemon? |
+      | Useful information         |
     Then I should not see the contextual links "Pin, Unpin" in the "Useful information" tile
     And I should not see the contextual links "Pin, Unpin" in the "Very important" tile
 
@@ -75,25 +72,19 @@ Feature: Pinning content entities inside solutions
 
     When I click the contextual link "Unpin" in the "Very important" tile
     Then I should see the success message "<label> Very important has been unpinned in the solution Blue Wrench."
-    # Todo: Due to an environment related issue on CPHP this is causing random
-    #   failures which cannot be replicated in production. Re-enable this check
-    #   once we have updated to a more recent version of Solr. See ISAICP-6245.
-    # And I should see the following tiles in the correct order:
-    #   | What is the HEX for lemon? |
-    #   | Useful information         |
-    #   | Very important             |
+    And I should see the following tiles in the correct order:
+      | What is the HEX for lemon? |
+      | Useful information         |
+      | Very important             |
     And I should see the contextual link "Pin" in the "Very important" tile
     But I should not see the contextual link "Unpin" in the "Very important" tile
 
     When I click the contextual link "Pin" in the "Useful information" tile
     Then I should see the success message "<label> Useful information has been pinned in the solution Blue Wrench."
-    # Todo: Due to an environment related issue on CPHP this is causing random
-    #   failures which cannot be replicated in production. Re-enable this check
-    #   once we have updated to a more recent version of Solr. See ISAICP-6245.
-    # And I should see the following tiles in the correct order:
-    #   | Useful information         |
-    #   | What is the HEX for lemon? |
-    #   | Very important             |
+    And I should see the following tiles in the correct order:
+      | Useful information         |
+      | What is the HEX for lemon? |
+      | Very important             |
     And I should see the contextual link "Unpin" in the "Useful information" tile
     But I should not see the contextual link "Pin" in the "Useful information" tile
 
