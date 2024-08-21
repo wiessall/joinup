@@ -29,4 +29,4 @@ visibility:
     id: request_route
     negate: false
     routes:
-      - entity.rdf_entity.unpublished_content
+      - entity.node.unpublished_content

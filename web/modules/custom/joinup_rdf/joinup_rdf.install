@@ -40,16 +40,9 @@ function joinup_rdf_requirements(string $phase): array {
 }
 
 /**
- * Delete the asset_release RDF bundle. Enable joinup_release, joinup_solution.
- */
-function joinup_rdf_update_200001(): void {
-  \Drupal::service('module_installer')->install(['joinup_solution']);
-}
-
-/**
  * Prepare various data in tables for the migration.
  */
-function joinup_rdf_update_200002(): string {
+function joinup_rdf_update_200001(): string {
   $connection = \Drupal::database();
   $messages = [];
 
@@ -139,7 +132,7 @@ function joinup_rdf_update_200002(): string {
 /**
  * Manually change fields that cannot have their schema changed with data in db.
  */
-function joinup_rdf_update_200003(): string {
+function joinup_rdf_update_200002(): string {
   $fieldStorages = [
     'field.storage.node.field_shared_in',
     'field.storage.node.field_news_referenced_solution',
@@ -175,7 +168,7 @@ function joinup_rdf_update_200003(): string {
 /**
  * Re run user_update_10000.
  */
-function joinup_rdf_update_200004(): void {
+function joinup_rdf_update_200003(): void {
   require_once DRUPAL_ROOT . '/core/modules/user/user.install';
   user_update_10000();
 }

@@ -20,8 +20,6 @@ content:
     settings:
       node:
         view_mode: digest_message
-      rdf_entity:
-        view_mode: digest_message
       comment:
         view_mode: default
         link: false

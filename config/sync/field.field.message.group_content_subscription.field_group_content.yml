@@ -9,7 +9,7 @@ dependencies:
     - node.type.document
     - node.type.event
     - node.type.news
-    - rdf_entity.rdfentity.solution
+    - node.type.solution
   module:
     - dynamic_entity_reference
 id: message.group_content_subscription.field_group_content
@@ -31,21 +31,12 @@ settings:
         document: document
         event: event
         news: news
-      sort:
-        field: _none
-        direction: ASC
-      auto_create: false
-      auto_create_bundle: discussion
-  rdf_entity:
-    handler: 'default:rdf_entity'
-    handler_settings:
-      target_bundles:
         solution: solution
       sort:
         field: _none
         direction: ASC
       auto_create: false
-      auto_create_bundle: ''
+      auto_create_bundle: discussion
   block:
     handler: 'default:block'
     handler_settings: {  }

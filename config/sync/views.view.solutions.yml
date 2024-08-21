@@ -135,14 +135,14 @@ display:
           format_plural_string: !!binary MQNAY291bnQ=
           prefix: ''
           suffix: ''
-        label:
-          id: label
-          table: search_api_datasource_published_entity_rdf_entity
-          field: label
+        title:
+          id: title
+          table: search_api_datasource_published_entity_node
+          field: title
           relationship: none
           group_type: group
           admin_label: ''
-          entity_type: rdf_entity
+          entity_type: node
           plugin_id: search_api_field
           label: ''
           exclude: false
@@ -475,6 +475,7 @@ display:
         options:
           view_modes:
             'entity:node':
+              collection: view_mode_tile
               custom_page: default
               distribution: default
               document: default
@@ -482,8 +483,6 @@ display:
               licence: default
               news: default
               release: default
-            'entity:rdf_entity':
-              collection: view_mode_tile
               solution: view_mode_tile
       query:
         type: search_api_query

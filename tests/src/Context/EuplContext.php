@@ -14,7 +14,7 @@ use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\JavascriptTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup_licence\Entity\CompatibilityDocument;
-use Drupal\rdf_entity\Entity\Rdf;
+use Drupal\node\Entity\Node;
 use LoversOfBehat\TableExtension\Hook\Scope\AfterTableFetchScope;
 use PHPUnit\Framework\Assert;
 
@@ -45,22 +45,22 @@ class EuplContext extends RawDrupalContext {
     ]);
 
     // Create the EUPL entity.
-    $collection = Rdf::create([
-      'rid' => 'collection',
-      'id' => Eupl::EUPL_COMMUNITY_ID,
-      'label' => 'EUPL',
+    $collection = Node::create([
+      'type' => 'collection',
+      'uri' => Eupl::EUPL_COMMUNITY_ID,
+      'title' => 'EUPL',
       'field_ar_state' => 'published',
       'field_ar_owner' => $owner->nid,
     ]);
     $collection->save();
     $this->entities['rdf_entity'][$collection->id()] = $collection;
 
-    $solution = Rdf::create([
-      'rid' => 'solution',
-      'collection' => Eupl::EUPL_COMMUNITY_ID,
-      'id' => Eupl::JLA_SOLUTION,
-      'label' => 'Joinup Licensing Assistant',
-      'field_is_state' => 'published',
+    $solution = Node::create([
+      'type' => 'solution',
+      'collection' => $collection,
+      'uri' => Eupl::JLA_SOLUTION,
+      'title' => 'Joinup Licensing Assistant',
+      'field_state' => 'published',
     ]);
     $solution->save();
     $this->entities['rdf_entity'][$solution->id()] = $solution;

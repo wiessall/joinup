@@ -35,8 +35,8 @@ class CollectionCacheContext implements CacheContextInterface {
    * {@inheritdoc}
    */
   public function getContext(): string {
-    /** @var \Drupal\rdf_entity\RdfInterface $collection */
-    if (($collection = $this->requestStack->getCurrentRequest()->get('node')) && $collection->bundle() == 'collection') {
+    /** @var \Drupal\collection\Entity\CollectionInterface $collection */
+    if (($collection = $this->requestStack->getCurrentRequest()->get('node')) && $collection->bundle() === 'collection') {
       return 'collection.' . $collection->id();
     }
     return 'collection.none';

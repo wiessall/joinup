@@ -24,24 +24,23 @@ settings:
     inline_facets: 'Inline facets'
   view_modes:
     'entity:node':
+      collection: view_mode_tile
       custom_page: view_mode_tile
       discussion: view_mode_tile
       distribution: view_mode_tile
       document: view_mode_tile
       event: view_mode_tile
+      licence: default
       news: view_mode_tile
       release: default
-      video: view_mode_tile
-    'entity:rdf_entity':
-      collection: view_mode_tile
-      licence: default
       solution: view_mode_tile
-      spdx_licence: default
+      video: view_mode_tile
     'entity:taxonomy_term':
       eif_conceptual_model: default
       eif_interoperability_layer: default
       eif_principle: default
       eif_recommendation: default
+      spdx_licence: default
       topic: default
     'entity:user':
       user: default

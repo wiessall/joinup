@@ -22,7 +22,7 @@ class GroupAnnouncementsEnabledValidator extends JoinupGroupUserPermissionValida
    * {@inheritdoc}
    */
   public function validateArgument($arg): bool {
-    if (!$arg || !($group = $this->entityTypeManager->getStorage('rdf_entity')->load($arg)) || !$group instanceof GroupInterface || !$group->isPublished()) {
+    if (!$arg || !($group = $this->entityTypeManager->getStorage('node')->load($arg)) || !$group instanceof GroupInterface || !$group->isPublished()) {
       return FALSE;
     }
     $settings = MetaEntity::loadOrCreate("{$group->bundle()}_settings", $group);

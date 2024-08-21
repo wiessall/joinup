@@ -19,7 +19,6 @@ dependencies:
     - meta_entity
     - paragraphs_type_permissions
     - poll
-    - rdf_entity
     - search_api_autocomplete
     - sitewide_alert
     - sparql_endpoint
@@ -81,5 +80,4 @@ permissions:
   - 'view paragraph content video'
   - 'view paragraph content webform'
   - 'view published sitewide alert entities'
-  - 'view rdf entity'
   - 'view topic meta-entity'

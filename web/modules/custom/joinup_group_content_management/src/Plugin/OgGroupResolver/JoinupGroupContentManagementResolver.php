@@ -25,8 +25,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * @OgGroupResolver(
  *   id = "joinup_group_content_management",
  *   label = "Group content management resolver",
- *   description = @Translation("Checks if the current route is an entity path
- *   that belongs to a group entity.")
+ *   description = @Translation("Checks if the current route is an entity path that belongs to a group entity."),
  * )
  */
 class JoinupGroupContentManagementResolver extends RouteGroupResolver {
@@ -131,9 +130,7 @@ class JoinupGroupContentManagementResolver extends RouteGroupResolver {
       return NULL;
     }
 
-    $rdfId = UriEncoder::decodeUrl($data['arguments'][0]);
-    return $this->entityTypeManager->getStorage('rdf_entity')
-      ->load($rdfId);
+    return $this->entityTypeManager->getStorage('node')->load($data['arguments'][0]);
   }
 
   /**
@@ -141,8 +138,8 @@ class JoinupGroupContentManagementResolver extends RouteGroupResolver {
    */
   protected function getContentEntityPaths(): array {
     return [
-      '/rdf_entity/{rdf_entity}/manage-content' => 'rdf_entity',
-      '/rdf_entity/{rdf_entity}/manage-content/csv' => 'rdf_entity',
+      '/node/{node}/manage-content' => 'node',
+      '/node/{node}/manage-content/csv' => 'node',
     ];
   }
 

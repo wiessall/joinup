@@ -5,15 +5,15 @@ create:
         moderator:
           - cc_transition_propose
       og_roles:
-        rdf_entity-collection-administrator:
+        node-collection-administrator:
           - cc_transition_propose
-        rdf_entity-solution-administrator:
+        node-administrator:
           - cc_transition_propose
     publish:
       og_roles:
-        rdf_entity-collection-administrator:
+        node-collection-administrator:
           - cc_transition_publish
-        rdf_entity-solution-administrator:
+        node-administrator:
           - cc_transition_publish
   'node:post_moderated':
     propose:
@@ -21,15 +21,15 @@ create:
         moderator:
           - cc_transition_propose
       og_roles:
-        rdf_entity-collection-administrator:
+        node-collection-administrator:
           - cc_transition_propose
-        rdf_entity-solution-administrator:
+        node-administrator:
           - cc_transition_propose
     publish:
       og_roles:
-        rdf_entity-collection-administrator:
+        node-collection-administrator:
           - cc_transition_publish
-        rdf_entity-solution-administrator:
+        node-administrator:
           - cc_transition_publish
 update:
   'node:pre_moderated':
@@ -38,24 +38,24 @@ update:
         moderator:
           - cc_transition_propose
       og_roles:
-        rdf_entity-collection-administrator:
+        node-collection-administrator:
           - cc_transition_propose
-        rdf_entity-solution-administrator:
+        node-administrator:
           - cc_transition_propose
     propose_from_reported:
       roles:
         moderator:
           - cc_transition_propose_reported
       og_roles:
-        rdf_entity-collection-administrator:
+        node-collection-administrator:
           - cc_transition_propose_reported
-        rdf_entity-solution-administrator:
+        node-administrator:
           - cc_transition_propose_reported
     publish:
       og_roles:
-        rdf_entity-collection-administrator:
+        node-collection-administrator:
           - cc_transition_publish
-        rdf_entity-solution-administrator:
+        node-administrator:
           - cc_transition_publish
     approve_proposed:
       owner:
@@ -70,18 +70,18 @@ update:
         moderator:
           - cc_transition_propose
       og_roles:
-        rdf_entity-collection-administrator:
+        node-collection-administrator:
           - cc_transition_propose
-        rdf_entity-solution-administrator:
+        node-administrator:
           - cc_transition_propose
     request_deletion:
       roles:
         moderator:
           - cc_transition_request_deletion
       og_roles:
-        rdf_entity-collection-administrator:
+        node-collection-administrator:
           - cc_transition_request_deletion
-        rdf_entity-solution-administrator:
+        node-administrator:
           - cc_transition_request_deletion
     reject_deletion:
       owner:
@@ -92,9 +92,9 @@ update:
         moderator:
           - cc_transition_publish
       og_roles:
-        rdf_entity-collection-administrator:
+        node-collection-administrator:
           - cc_transition_publish
-        rdf_entity-solution-administrator:
+        node-administrator:
           - cc_transition_publish
     approve_proposed:
       owner:
@@ -110,9 +110,9 @@ update:
         moderator:
           - cc_transition_propose_reported
       og_roles:
-        rdf_entity-collection-administrator:
+        node-collection-administrator:
           - cc_transition_propose_reported
-        rdf_entity-solution-administrator:
+        node-administrator:
           - cc_transition_propose_reported
 delete:
   'node:pre_moderated':

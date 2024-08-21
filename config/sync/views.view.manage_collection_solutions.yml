@@ -3,8 +3,8 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.rdf_entity.field_is_state
-    - rdf_entity.rdfentity.collection
+    - field.storage.node.field_state
+    - node.type.collection
     - search_api.index.published
   module:
     - joinup_group
@@ -326,14 +326,14 @@ display:
             use_highlighting: false
             multi_type: separator
             multi_separator: ', '
-        field_is_state:
-          id: field_is_state
-          table: search_api_datasource_published_entity_rdf_entity
-          field: field_is_state
+        field_state:
+          id: field_state
+          table: search_api_datasource_published_entity_node
+          field: field_state
           relationship: none
           group_type: group
           admin_label: ''
-          entity_type: rdf_entity
+          entity_type: node
           plugin_id: search_api_field
           label: State
           exclude: false
@@ -607,7 +607,7 @@ display:
         - 'user.node_grants:view'
         - user.permissions
       tags:
-        - 'config:field.storage.rdf_entity.field_is_state'
+        - 'config:field.storage.node.field_state'
         - 'config:search_api.index.published'
         - 'config:views.view.manage_collection_solutions'
         - 'search_api_list:published'
@@ -621,7 +621,7 @@ display:
         metatag_display_extender:
           metatags: {  }
           tokenize: false
-      path: rdf_entity/%rdf_entity/manage-solutions
+      path: node/%node/manage-solutionsmanage-solutions
       menu:
         type: tab
         title: 'Manage solutions'
