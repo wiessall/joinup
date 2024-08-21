@@ -1,4 +1,4 @@
-@api @group-d
+@api @group-f
 Feature:
   As a moderator of the website
   I need to be able to see the unpublished content even for groups that don't

@@ -1,4 +1,4 @@
-@api @group-h
+@api @group-e
 Feature: Document moderation
   In order to manage documents
   As a user of the website
