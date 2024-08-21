@@ -184,7 +184,7 @@ function _eif_add_eif_link_to_group_menus(MetaEntityInterface $meta_entity): voi
         if ($og_menu = reset($og_menu)) {
           $menu_name = 'ogmenu-' . $og_menu->id();
           $link = [
-            'uri' => Url::fromRoute('entity.rdf_entity.eif_perspective', [
+            'uri' => Url::fromRoute('entity.node.eif_perspective', [
               'rdf_entity' => $solution->id(),
             ])->toUriString(),
           ];

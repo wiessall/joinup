@@ -27,24 +27,23 @@ settings:
   facet_regions: {  }
   view_modes:
     'entity:node':
+      collection: carousel
       custom_page: carousel
       discussion: carousel
       distribution: carousel
       document: carousel
       event: carousel
+      licence: eif_perspective
       news: carousel
       release: carousel
-      video: carousel
-    'entity:rdf_entity':
-      collection: carousel
-      licence: eif_perspective
       solution: carousel
-      spdx_licence: eif_perspective
+      video: carousel
     'entity:taxonomy_term':
       eif_conceptual_model: default
       eif_interoperability_layer: default
       eif_principle: default
       eif_recommendation: default
+      spdx_licence: eif_perspective
       topic: default
     'entity:user':
       user: default

@@ -14,6 +14,7 @@ dependencies:
     - media.type.news_logo
     - media.type.solution_logo
     - media.type.video
+    - node.type.collection
     - node.type.contact_information
     - node.type.custom_page
     - node.type.discussion
@@ -23,6 +24,7 @@ dependencies:
     - node.type.licence
     - node.type.owner
     - node.type.release
+    - node.type.solution
     - taxonomy.vocabulary.legal_type
   module:
     - comment
@@ -53,7 +55,6 @@ dependencies:
     - node
     - og
     - paragraphs_type_permissions
-    - rdf_entity
     - replicate_ui
     - role_delegation
     - sitewide_alert
@@ -143,7 +144,6 @@ permissions:
   - 'create paragraph content testimony'
   - 'create paragraph content video'
   - 'create paragraph content webform'
-  - 'create rdf entity news'
   - 'create release content'
   - 'create solution_logo media'
   - 'create video media'
@@ -183,7 +183,7 @@ permissions:
   - 'delete paragraph content webform'
   - 'delete sitewide alert entities'
   - 'download subscribers report'
-  - 'edit any collection rdf entity'
+  - 'edit any collection content'
   - 'edit any collection_logo media'
   - 'edit any contact_information content'
   - 'edit any custom_page content'
@@ -195,7 +195,7 @@ permissions:
   - 'edit any licence content'
   - 'edit any news_logo media'
   - 'edit any owner content'
-  - 'edit any solution rdf entity'
+  - 'edit any solution content'
   - 'edit any solution_logo media'
   - 'edit any webform'
   - 'edit own document content'
@@ -316,6 +316,5 @@ permissions:
   - 'view all sitewide alert revisions'
   - 'view any unpublished content'
   - 'view licence overview page'
-  - 'view rdf entity overview'
   - 'view the administration theme'
   - 'view unpublished sitewide alert entities'

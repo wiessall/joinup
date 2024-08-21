@@ -82,7 +82,6 @@ class IncludeCustomPageContent extends ProcessorPluginBase {
   public function preprocessIndexItems(array $items): void {
     /** @var \Drupal\search_api\Item\ItemInterface $item */
     foreach ($items as $item) {
-      /** @var \Drupal\rdf_entity\RdfInterface $entity */
       $entity = $item->getOriginalObject()->getValue();
 
       // Only process groups.

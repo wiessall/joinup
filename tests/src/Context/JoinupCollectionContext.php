@@ -9,7 +9,7 @@ use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\SearchTrait;
 use Drupal\joinup\Traits\TopicTrait;
 use Drupal\joinup_collection\JoinupCollectionHelper;
-use Drupal\rdf_entity\Entity\Rdf;
+use Drupal\node\Entity\Node;
 
 /**
  * Behat step definitions and related methods related to the Joinup collection.
@@ -44,14 +44,14 @@ class JoinupCollectionContext extends RawDrupalContext {
     ]);
 
     // Create the Joinup collection.
-    Rdf::create([
-      'rid' => 'collection',
-      'id' => JoinupCollectionHelper::JOINUP_COLLECTION_DEFAULT_ENTITY_ID,
-      'label' => 'Joinup',
-      'field_ar_state' => 'published',
+    Node::create([
+      'type' => 'collection',
+      'uri' => JoinupCollectionHelper::JOINUP_COLLECTION_DEFAULT_ENTITY_ID,
+      'title' => 'Joinup',
+      'field_state' => 'published',
       'field_topic' => $this->getRandomTopic()->id(),
-      'field_ar_owner' => $owner->nid,
-      'field_ar_contact_information' => $contact->nid,
+      'owner' => $owner->nid,
+      'contact_information' => $contact->nid,
     ])->save();
   }
 
@@ -64,7 +64,7 @@ class JoinupCollectionContext extends RawDrupalContext {
    * @AfterScenario @joinup&&@api
    */
   public function cleanJoinupData(): void {
-    $collection = Rdf::load(JoinupCollectionHelper::JOINUP_COLLECTION_DEFAULT_ENTITY_ID);
+    $collection = \Drupal::getContainer()->get('rdf_sync.mapper')->getEntityByUri(JoinupCollectionHelper::JOINUP_COLLECTION_DEFAULT_ENTITY_ID);
     $collection->skip_notification = TRUE;
     $collection->delete();
   }

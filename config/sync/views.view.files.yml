@@ -1522,7 +1522,6 @@ display:
               anonymous: '0'
               moderator: '0'
               administrator: '0'
-              rdf_graph_manager: '0'
             reduce: false
           is_grouped: false
           group_info:

@@ -160,15 +160,15 @@ class SubscribersReportController extends ControllerBase {
   /**
    * Returns a subscribers report for a single group.
    *
-   * @param \Drupal\joinup_group\Entity\GroupInterface $rdf_entity
+   * @param \Drupal\joinup_group\Entity\GroupInterface $group
    *   The group for which to return the report.
    *
    * @return array[]
    *   A render array containing subscriber data.
    */
-  public function groupReport(GroupInterface $rdf_entity): array {
-    $data = $this->getSubscriberData($rdf_entity);
-    $group_data = $data[$rdf_entity->id()] ?? NULL;
+  public function groupReport(GroupInterface $group): array {
+    $data = $this->getSubscriberData($group);
+    $group_data = $data[$group->id()] ?? NULL;
 
     if (!empty($group_data)) {
       $rows = [

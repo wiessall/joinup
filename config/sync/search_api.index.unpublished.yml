@@ -15,9 +15,6 @@ dependencies:
     - field.storage.node.field_shared_in
     - field.storage.node.field_short_title
     - field.storage.paragraph.field_body
-    - field.storage.rdf_entity.field_ar_description
-    - field.storage.rdf_entity.field_is_description
-    - field.storage.rdf_entity.field_is_solution_type
     - search_api.server.joinup
   module:
     - custom_page
@@ -26,7 +23,6 @@ dependencies:
     - joinup_search
     - node
     - paragraphs
-    - rdf_entity
     - search_api
     - search_api_solr
 third_party_settings:
@@ -151,14 +147,6 @@ field_settings:
       fields:
         - 'entity:node/og_audience'
         - 'entity:rdf_entity/collection'
-  field_ar_description:
-    label: 'Description » Processed text'
-    datasource_id: 'entity:rdf_entity'
-    property_path: 'field_ar_description:processed'
-    type: text
-    dependencies:
-      config:
-        - field.storage.rdf_entity.field_ar_description
   field_event_agenda:
     label: 'Agenda » Processed text'
     datasource_id: 'entity:node'
@@ -175,22 +163,6 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.field_event_date
-  field_is_description:
-    label: 'Description » Processed text'
-    datasource_id: 'entity:rdf_entity'
-    property_path: 'field_is_description:processed'
-    type: text
-    dependencies:
-      config:
-        - field.storage.rdf_entity.field_is_description
-  field_is_solution_type:
-    label: 'Solution type'
-    datasource_id: 'entity:rdf_entity'
-    property_path: field_is_solution_type
-    type: string
-    dependencies:
-      config:
-        - field.storage.rdf_entity.field_is_solution_type
   field_location:
     label: Location
     datasource_id: 'entity:node'
@@ -240,14 +212,6 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.field_short_title
-  id:
-    label: ID
-    datasource_id: 'entity:rdf_entity'
-    property_path: id
-    type: string
-    dependencies:
-      module:
-        - rdf_entity
   keywords:
     label: Keywords
     property_path: aggregated_field
@@ -257,15 +221,6 @@ field_settings:
       fields:
         - 'entity:node/field_keywords'
         - 'entity:rdf_entity/field_keywords'
-  label:
-    label: Title
-    datasource_id: 'entity:rdf_entity'
-    property_path: label
-    type: text
-    boost: 5.0
-    dependencies:
-      module:
-        - rdf_entity
   nid:
     label: ID
     datasource_id: 'entity:node'
@@ -285,30 +240,6 @@ field_settings:
         - field.storage.paragraph.field_body
       module:
         - paragraphs
-  rdf_changed:
-    label: Changed
-    datasource_id: 'entity:rdf_entity'
-    property_path: changed
-    type: date
-    dependencies:
-      module:
-        - rdf_entity
-  rdf_created:
-    label: 'Authored on'
-    datasource_id: 'entity:rdf_entity'
-    property_path: created
-    type: date
-    dependencies:
-      module:
-        - rdf_entity
-  rid:
-    label: 'Rdf Type'
-    datasource_id: 'entity:rdf_entity'
-    property_path: rid
-    type: string
-    dependencies:
-      module:
-        - rdf_entity
   site_featured:
     label: Featured
     property_path: aggregated_field
@@ -369,6 +300,7 @@ datasource_settings:
     bundles:
       default: false
       selected:
+        - collection
         - custom_page
         - discussion
         - distribution
@@ -377,16 +309,8 @@ datasource_settings:
         - glossary
         - news
         - release
-        - video
-    languages:
-      default: true
-      selected: {  }
-  'entity:rdf_entity':
-    bundles:
-      default: false
-      selected:
-        - collection
         - solution
+        - video
     languages:
       default: true
       selected: {  }
@@ -548,6 +472,7 @@ processor_settings:
       'entity:node':
         datasource_boost: 0.0
         bundle_boosts:
+          collection: 21.0
           custom_page: 8.0
           discussion: 2.0
           distribution: 0.0
@@ -556,12 +481,8 @@ processor_settings:
           licence: 0.0
           news: 5.0
           release: 0.0
-          video: 0.0
-      'entity:rdf_entity':
-        datasource_boost: 0.0
-        bundle_boosts:
-          collection: 21.0
           solution: 13.0
+          video: 0.0
 tracker_settings:
   default:
     indexing_order: fifo

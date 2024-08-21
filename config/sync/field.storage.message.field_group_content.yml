@@ -7,7 +7,6 @@ dependencies:
     - field_permissions
     - message
     - node
-    - rdf_entity
 third_party_settings:
   field_permissions:
     permission_type: public
@@ -19,7 +18,6 @@ settings:
   exclude_entity_types: false
   entity_type_ids:
     node: node
-    rdf_entity: rdf_entity
 module: dynamic_entity_reference
 locked: false
 cardinality: 1

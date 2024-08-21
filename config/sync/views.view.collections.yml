@@ -136,13 +136,13 @@ display:
           prefix: ''
           suffix: ''
         label:
-          id: label
-          table: search_api_datasource_published_entity_rdf_entity
-          field: label
+          id: title
+          table: search_api_datasource_published_entity_ndoe
+          field: title
           relationship: none
           group_type: group
           admin_label: ''
-          entity_type: rdf_entity
+          entity_type: node
           plugin_id: search_api_field
           label: ''
           exclude: false
@@ -252,10 +252,10 @@ display:
             link_to_item: false
             multi_type: separator
             multi_separator: ', '
-        field_ar_description:
-          id: field_ar_description
+        description:
+          id: description
           table: search_api_index_published
-          field: field_ar_description
+          field: description
           relationship: none
           group_type: group
           admin_label: ''

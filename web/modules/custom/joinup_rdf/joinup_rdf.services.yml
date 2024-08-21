@@ -14,10 +14,6 @@ services:
     arguments: ['@language_manager', '@renderer']
     tags:
       - { name: twig.extension }
-  joinup_rdf.decode_rdf_url.param_converter:
-    class: Drupal\joinup_rdf\ParamConverter\DecodeRdfUrlConverter
-    tags:
-      - { name: paramconverter, priority: 10 }
   # TODO: Drop in ISAICP-8376
   joinup_rdf.outbound_value.tid:
     class: Drupal\joinup_rdf\EventSubscriber\UriIdConversion
