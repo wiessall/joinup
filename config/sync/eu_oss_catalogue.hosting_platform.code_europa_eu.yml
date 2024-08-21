@@ -1,0 +1,11 @@
+uuid: 10d1e611-57d8-4f37-805d-1f015f931c7c
+langcode: en
+status: true
+dependencies: {  }
+id: code_europa_eu
+label: 'Code Europa EU'
+description: 'Code Europa EU / European Commission OSS Catalogue, by https://code.europa.eu.'
+platformId: gitlab_self_hosted
+platformSettings:
+  baseUrl: 'https://code.europa.eu'
+  projects: {  }

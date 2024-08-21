@@ -1,0 +1,17 @@
+uuid: 8b5364de-3837-4582-adde-addd4938002f
+langcode: en
+status: true
+dependencies:
+  module:
+    - joinup_taxonomy
+  enforced:
+    module:
+      - eu_oss_catalogue
+third_party_settings:
+  joinup_taxonomy:
+    locked: false
+name: 'OSS Intended Audience'
+vid: oss_intended_audience_scope
+description: 'Intended Audience of Open Source Software Solutions'
+weight: 0
+new_revision: false

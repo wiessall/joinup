@@ -1,0 +1,35 @@
+{#
+/**
+ * @file
+ * Default theme implementation for vitality_index_chart.
+ *
+ * Available variables:
+ * - attributes: An associative array of element attributes.
+ * - info: Info text.
+ *
+ * @ingroup themeable
+ */
+#}
+
+{{ attach_library('ventuno/modals') }}
+
+{% set classes = ['js-vitality-index-chart'] %}
+{{ attach_library('eu_oss_vitality_index/vitality-index-chart') }}
+
+<button class="btn btn-link vitality-index-info-button btn-md px-0 pt-1" type="button" data-bs-toggle="modal" data-bs-target="#vitality-index-info">
+  {{ pattern('icon', {
+    name: 'info-circle',
+    size: 'm'
+  }) }}
+</button>
+{{ pattern('modal', {
+  attributes: {
+    id: 'vitality-index-info',
+  },
+  title: 'Vitality index info'|t,
+  verticaly_centered: 1,
+  show_close_button: true,
+  body: info,
+}) }}
+
+<canvas{{ attributes.addClass(classes) }}></canvas>

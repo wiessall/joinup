@@ -11,7 +11,7 @@
  * @ingroup themeable
  */
 #}
-{% if content %}
+{% if in_preview or content|render is not empty %}
   <div{{ attributes.removeClass('layout--twocol-section').addClass('row') }}>
 
     <div {{ region_attributes.first.addClass(first_col_class) }}>

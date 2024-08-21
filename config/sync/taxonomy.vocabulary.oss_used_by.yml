@@ -1,0 +1,14 @@
+uuid: 0741bc36-3166-43cf-9101-fbcedb3efee9
+langcode: en
+status: true
+dependencies:
+  module:
+    - joinup_taxonomy
+third_party_settings:
+  joinup_taxonomy:
+    locked: false
+name: 'OSS Used By'
+vid: oss_used_by
+description: 'Prominent public administrations (that will serve as “testimonials”) that are currently known to the software maintainer to be using this software'
+weight: 0
+new_revision: false
