@@ -1,0 +1,14 @@
+diff --git a/core/.deprecation-ignore.txt b/core/.deprecation-ignore.txt
+index 9b307fe460..72c9186590 100644
+--- a/core/.deprecation-ignore.txt
++++ b/core/.deprecation-ignore.txt
+@@ -43,6 +43,9 @@
+ %Expecting E_WARNING and E_USER_WARNING is deprecated and will no longer be possible in PHPUnit 10%
+ %Expecting E_ERROR and E_USER_ERROR is deprecated and will no longer be possible in PHPUnit 10%
+ 
++# Twig 3.11.0
++%Since twig/twig 3.11: Changing the value of a "filter" node in a NodeVisitor class is not supported anymore.%
++
+ # Skip deprecations for EditorMediaDialog, EditorImageDialog and EditorLinkDialog triggered by
+ # \Drupal\Core\Entity\EntityResolverManager::setRouteOptions().
+ %Drupal\\media\\Form\\EditorMediaDialog is deprecated in drupal:10.1.0 and is removed from drupal:11.0.0. There is no replacement. See https://www.drupal.org/node/3291493%

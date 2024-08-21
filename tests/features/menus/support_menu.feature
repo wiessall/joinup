@@ -1,4 +1,4 @@
-@api @group-i
+@api @group-h
 Feature:
   - As a moderator, in order to maintain the support dropdown, I am able to administer the 'support' menu.
   - As a user, I should see the the 'Take a tour' menu item only on pages that are implementing tours.

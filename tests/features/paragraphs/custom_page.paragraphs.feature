@@ -1,4 +1,4 @@
-@api @group-f
+@api @group-h
 Feature:
   As a site builder of the site
   In order to be able to better control the structure of my content
@@ -43,6 +43,7 @@ Feature:
     Then I open the header local tasks menu
     And I click "Edit"
     And I click "Choose component"
+    And a modal should open
     Then I should not see the link "Simple paragraph"
 
   @javascript
@@ -68,6 +69,7 @@ Feature:
     When I am logged in as "Zohan"
     And I go to the edit form of the "Don't Mess with the Zohan" "custom page"
     And I click "Choose component"
+    And a modal should open
     Then I should not see the link "Layout"
     And I should see the link "Accordion"
     And I should see the link "Call to action(s)"
@@ -92,6 +94,7 @@ Feature:
     When I am logged in as "Gilfoyle"
     And I go to the edit form of the "Don't Mess with the Zohan" "custom page"
     And I click "Choose component"
+    And a modal should open
     Then I should not see the link "Layout"
     And I should see the link "Accordion"
     And I should see the link "Call to action(s)"
@@ -116,6 +119,7 @@ Feature:
     Given I am logged in as a moderator
     And I go to the edit form of the "Don't Mess with the Zohan" "custom page"
     And I click "Choose component"
+    And a modal should open
     Then I should not see the link "Layout"
     And I should see the link "Accordion"
     And I should see the link "Call to action(s)"

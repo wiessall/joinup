@@ -91,16 +91,6 @@
         $(document).on("drupalViewportOffsetChange", () => {
           Drupal.joinupSlickVariableWidth.deferredRecalculate(slickNode);
         });
-
-        // Event listener to add class when animating.
-        // Used in behat to detect when Slick finished animating.
-        $(slickNode)
-          .on("beforeChange", function addClass() {
-            $(this).addClass("slick-animating");
-          })
-          .on("afterChange", function removeClass() {
-            $(this).removeClass("slick-animating");
-          });
       }
       once("joinupSlickVariableWidth", "[data-slick]", context).forEach(
         (slickNode) => {

@@ -1,4 +1,4 @@
-@api @group-e
+@api @group-g
 Feature: Subscribing to a collection after joining
   In order to promote my collection
   As a collection owner
@@ -40,11 +40,6 @@ Feature: Subscribing to a collection after joining
     When I go to the homepage of the "Drop bears" collection
     And I press "Join this collection"
     Then a modal should open
-    # The modal uses animation to scroll into the view.
-    # Since selenium does not know how to wait for this, we wait for the
-    # animation to finish manually otherwise, the button is clicked too fast
-    # and the modal is not dismissed.
-    And I wait for 1 second
     When I press "Subscribe" in the "Modal buttons" region
     Then the modal should be closed
     And I should see the success message "You have been subscribed to Drop bears and will receive weekly notifications. To manage your notifications go to My subscriptions in your user menu."
@@ -69,8 +64,6 @@ Feature: Subscribing to a collection after joining
     When I go to the homepage of the "Swamp dragons" collection
     And I press "Join this collection"
     Then a modal should open
-    # Wait for the animation to finish.
-    And I wait for 1 second
     When I press "Subscribe" in the "Modal buttons" region
     Then the modal should be closed
     And I should see the success message "You have been subscribed to Swamp dragons and will receive weekly notifications once your membership is approved."

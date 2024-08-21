@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Drupal\joinup_core\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
-use Drupal\joinup_distribution\Entity\Distribution;
-use Drupal\joinup_licence\Entity\Licence;
+use Drupal\joinup_rdf\Entity\RdfSyncEntityInterface;
+use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\rdf_sync\RdfSyncMapper;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -56,21 +56,16 @@ class IdRedirect extends ControllerBase {
     $uuid = urldecode($uuid);
 
     $id = "http://data.europa.eu/$namespace/$uuid";
-    if ($entity_type_id === 'taxonomy_term') {
-      if (!$term = $this->mapper->getEntityByUri($id)) {
-        return $this->redirect('joinup_core.not_found');
-      }
-      $id = $term->id();
-    }
+
     // @todo This a temporary solution during conversion of RDF entities to
     //   nodes. Convert to a stable solution in ISAICP-8376.
-    elseif ($licence = Licence::loadByUri($id)) {
-      $entity_type_id = 'node';
-      $id = $licence->id();
-    }
-    elseif ($distribution = Distribution::loadByUri($id)) {
-      $entity_type_id = 'node';
-      $id = $distribution->id();
+    if ($entity = $this->mapper->getEntityByUri($id)) {
+      // @todo Remove the solution stub exception in ISAICP-8572.
+      if (!$entity instanceof SolutionInterface) {
+        assert($entity instanceof RdfSyncEntityInterface);
+        $entity_type_id = $entity->getEntityTypeId();
+        $id = $entity->id();
+      }
     }
 
     return $this->redirect("entity.$entity_type_id.canonical", [

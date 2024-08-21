@@ -43,13 +43,14 @@ dependencies:
     - rdf_entity
     - search_api_autocomplete
     - sitewide_alert
+    - sparql_endpoint
     - state_machine_permissions
     - system
     - tour
     - video_embed_field
 id: authenticated
 label: 'Authenticated user'
-weight: 1
+weight: -8
 is_admin: false
 permissions:
   - 'access comments'
@@ -151,6 +152,7 @@ permissions:
   - 'propose collection rdf entity'
   - 'revert all revisions'
   - 'skip comment approval'
+  - 'sparql endpoint query'
   - 'unflag bookmark_node'
   - 'unflag bookmark_rdf_entity'
   - 'unflag like_node'
@@ -188,6 +190,7 @@ permissions:
   - 'view bookmark_rdf_entity'
   - 'view compatibility documents'
   - 'view eif_perspective meta-entity'
+  - 'view interoperability'
   - 'view media'
   - 'view own unpublished content'
   - 'view paragraph content 1_column_layout'

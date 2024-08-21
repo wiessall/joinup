@@ -1,4 +1,4 @@
-@api @group-h
+@api @group-e
 Feature: Sitewide forum
 
   Background:

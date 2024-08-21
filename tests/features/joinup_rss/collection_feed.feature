@@ -1,4 +1,4 @@
-@api @group-h
+@api @group-g
 Feature: Collection RSS feed.
   In order to stay up to date with collection updates
   As a user of Joinup
