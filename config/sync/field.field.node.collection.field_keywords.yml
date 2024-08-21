@@ -15,7 +15,7 @@ field_name: field_keywords
 entity_type: node
 bundle: collection
 label: 'Search keywords'
-description: ''
+description: 'Add one keyword or keyword phrase per line. Relevant keywords improve the search ranking of your content.'
 required: false
 translatable: true
 default_value: {  }

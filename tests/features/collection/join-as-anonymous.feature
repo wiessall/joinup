@@ -5,7 +5,7 @@ Feature: Joining a collection as an anonymous user
   I need to be able to join a collection after authenticating
 
   Background:
-    Given collections:
+    Given collection content:
       | title           | abstract                          | closed | state     |
       | Reannual plants | Harvested before they are planted | no     | published |
       | Vul nuts        | Used to brew Ghlen Livid          | yes    | published |

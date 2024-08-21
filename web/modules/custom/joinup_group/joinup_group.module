@@ -14,6 +14,7 @@ use Drupal\Core\Block\BlockPluginInterface;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Cache\RefinableCacheableDependencyInterface;
+use Drupal\Core\Entity\ContentEntityTypeInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
@@ -29,12 +30,13 @@ use Drupal\joinup_group\Entity\GroupContentInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\Entity\PinnableGroupContentInterface;
 use Drupal\joinup_group\Event\GroupMenuLinksEvent;
-use Drupal\joinup_group\Form\RdfDeleteForm;
+use Drupal\joinup_group\Form\GroupDeleteForm;
 use Drupal\joinup_group\Form\UserCancelForm;
 use Drupal\joinup_group\JoinupGroupHelper;
 use Drupal\joinup_workflow\EntityWorkflowStateInterface;
 use Drupal\meta_entity\Entity\MetaEntity;
 use Drupal\meta_entity\Entity\MetaEntityInterface;
+use Drupal\node\NodeForm;
 use Drupal\node\NodeInterface;
 use Drupal\og\OgAccess;
 use Drupal\og\OgGroupAudienceHelperInterface;
@@ -171,32 +173,36 @@ function joinup_group_preprocess(array &$variables, string $hook): void {
 /**
  * Implements hook_entity_type_alter().
  */
-function joinup_group_entity_type_alter(array &$entity_types): void {
-  /** @var \Drupal\Core\Entity\EntityTypeInterface[] $entity_types */
+function joinup_group_entity_type_alter(array &$entityTypes): void {
   // Swap the default user cancel form implementation with a custom one that
   // prevents deleting users when they are the sole owner of a group.
-  $entity_types['user']->setFormClass('cancel', UserCancelForm::class);
+  $entityTypes['user']->setFormClass('cancel', UserCancelForm::class);
 
-  if (array_key_exists('rdf_entity', $entity_types)) {
-    $rdf_entity_type = $entity_types['rdf_entity'];
-    $rdf_entity_type->setFormClass('delete', RdfDeleteForm::class);
+  $groupEntityType = $entityTypes['node'] ?? NULL;
+  if (!$groupEntityType instanceof ContentEntityTypeInterface) {
+    return;
+  }
 
-    // Add group link templates, so the OG context will be automatically solved.
-    $link_templates = [
-      'announcement-overview' => '/rdf_entity/{rdf_entity}/announcements',
-      'announcement-add' => '/rdf_entity/{rdf_entity}/announcements/add',
-      'announcement-edit' => '/rdf_entity/{rdf_entity}/announcements/edit/{message}',
-      'announcement-view' => '/rdf_entity/{rdf_entity}/announcements/view/{message}',
-      'member-overview' => '/rdf_entity/{rdf_entity}/members',
-      'discussion-overview' => '/rdf_entity/{rdf_entity}/discussions',
-      'member-add' => '/rdf_entity/{rdf_entity}/members/add',
-      'member-invite' => '/rdf_entity/{rdf_entity}/members/invite',
-      'website-link' => '/rdf_entity/{rdf_entity}/website-link',
-      'documentation-file' => '/rdf_entity/{rdf_entity}/documentation-file',
-    ];
-    foreach ($link_templates as $key => $path) {
-      $entity_types['rdf_entity']->setLinkTemplate($key, $path);
-    }
+  $groupEntityType->setFormClass('delete', GroupDeleteForm::class);
+
+  // Add group link templates, so the OG context will be automatically solved.
+  $linkTemplates = [
+    // @todo missing?..
+    'announcement-overview' => '/node/{node}/announcements',
+    'announcement-add' => '/node/{node}/announcements/add',
+    'announcement-edit' => '/node/{node}/announcements/edit/{message}',
+    'announcement-view' => '/node/{node}/announcements/view/{message}',
+    'member-overview' => '/node/{node}/members',
+    // @todo missing?..
+    'discussion-overview' => '/node/{node}/discussions',
+    'member-add' => '/node/{node}/members/add',
+    'member-invite' => '/node/{node}/members/invite',
+    'website-link' => '/node/{node}/website-link',
+    'documentation-file' => '/node/{node}/documentation-file',
+  ];
+
+  foreach ($linkTemplates as $key => $path) {
+    $groupEntityType->setLinkTemplate($key, $path);
   }
 }
 
@@ -206,16 +212,16 @@ function joinup_group_entity_type_alter(array &$entity_types): void {
  * Adds a submit handler that will show a message to the user after proposing a
  * collection or solution.
  */
-function joinup_group_form_node_form_alter(&$form, FormStateInterface $form_state, $form_id): void {
-  /** @var \Drupal\rdf_entity\Form\RdfForm $form_object */
-  $form_object = $form_state->getFormObject();
-  /** @var \Drupal\rdf_entity\RdfInterface $entity */
-  $entity = $form_object->getEntity();
+function joinup_group_form_node_form_alter(&$form, FormStateInterface $formState): void {
+  $formObject = $formState->getFormObject();
+  assert($formObject instanceof NodeForm);
+  $entity = $formObject->getEntity();
+  assert($entity instanceof NodeInterface);
 
   // Add submit callback when the current bundle is in the list and when we are
   // in an affected operation type.
   $operation_types = ['add', 'default', 'propose'];
-  if ($entity instanceof GroupInterface && in_array($form_object->getOperation(), $operation_types)) {
+  if ($entity instanceof GroupInterface && in_array($formObject->getOperation(), $operation_types)) {
     $form['actions']['submit']['#submit'][] = 'joinup_group_propose_message_submit';
   }
 
@@ -223,7 +229,8 @@ function joinup_group_form_node_form_alter(&$form, FormStateInterface $form_stat
     // If the entity has been published, only moderators can edit the short ID.
     // @todo Implement the EntityPublishedInterface for collections and
     //   solutions once we have the bundle classes in.
-    $has_published_version = $entity->isPublished();
+    $has_published_version = !$entity->isNew() &&
+      \Drupal::entityTypeManager()->getStorage('node')->load($entity->id())->isPublished();
     if (isset($form['short_id']) && $has_published_version && !\Drupal::currentUser()->hasPermission('edit short id after publication')) {
       $form['short_id']['widget'][0]['value']['#attributes']['disabled'] = 'disabled';
     }
@@ -255,17 +262,22 @@ function joinup_group_form_alter(array &$form, FormStateInterface $form_state, s
 function joinup_group_propose_message_submit(&$form, FormStateInterface $form_state): void {
   $form_object = $form_state->getFormObject();
   $entity = $form_object->getEntity();
-  if ($entity instanceof EntityWorkflowStateInterface) {
-    if ($entity->getWorkflowState() === 'proposed') {
-      \Drupal::messenger()->addStatus(t('Thank you for proposing a @entity_label. Your request is currently pending approval by the site administrator.', ['@entity_label' => $entity->get('rid')->entity->getSingularLabel()]));
-    }
+  if (
+    $entity instanceof EntityWorkflowStateInterface &&
+    $entity->getWorkflowState() === 'proposed'
+  ) {
+    $bundleKey = $entity->getEntityType()->getKey('bundle');
+    \Drupal::messenger()->addStatus(t(
+      'Thank you for proposing a @entity_label. Your request is currently pending approval by the site administrator.',
+      ['@entity_label' => $entity->get($bundleKey)->entity->getSingularLabel()],
+    ));
   }
 }
 
 /**
  * Implements hook_ENTITY_TYPE_access().
  */
-function joinup_group_rdf_entity_access(EntityInterface $entity, $operation, AccountInterface $account): AccessResultInterface {
+function joinup_group_node_access(EntityInterface $entity, $operation, AccountInterface $account): AccessResultInterface {
   if (!$entity instanceof GroupInterface
     || $account->isAnonymous()
     || $account->hasPermission($entity->getEntityType()->getAdminPermission())
@@ -280,7 +292,7 @@ function joinup_group_rdf_entity_access(EntityInterface $entity, $operation, Acc
   return AccessResult::allowedIf(
     $membership
     && !$entity->isPublished()
-    && $membership->hasPermission('view unpublished rdf entity'))
+    && $membership->hasPermission('view any unpublished content'))
     ->addCacheableDependency($membership);
 }
 
@@ -351,30 +363,22 @@ function joinup_group_node_insert(NodeInterface $group): void {
  *
  * Provide default images for collections and solutions in case they are empty.
  */
-function joinup_group_rdf_entity_presave(EntityInterface $entity): void {
+function joinup_group_node_presave(EntityInterface $entity): void {
   if (!$entity instanceof GroupInterface) {
     return;
   }
 
-  $field_data = [
-    'logo' => ['field_ar_logo', 'field_is_logo'],
-  ];
-
   $file_system = \Drupal::service('file_system');
   $fixtures_path = \Drupal::service('extension.list.module')->getPath('joinup_group') . '/fixtures/images/';
-  foreach ($field_data as $field_type => $fields) {
-    foreach ($fields as $field) {
-      if ($entity->hasField($field) && empty($entity->get($field)->getValue())) {
-        // Get files without the . and .. directories.
-        $files = array_slice(scandir($fixtures_path . $field_type), 2);
-        $random = array_rand($files);
-        $file_path = $file_system->realpath($fixtures_path . $field_type . '/' . $files[$random]);
-        $file_path = $file_system->copy($file_path, 'public://');
-        $file = File::create(['uri' => $file_path]);
-        $file->save();
-        $entity->set($field, $file->id());
-      }
-    }
+  if ($entity->hasField('logo') && empty($entity->get('logo')->getValue())) {
+    // Get files without the . and .. directories.
+    $files = array_slice(scandir($fixtures_path . 'logo'), 2);
+    $random = array_rand($files);
+    $file_path = $file_system->realpath($fixtures_path . 'logo/' . $files[$random]);
+    $file_path = $file_system->copy($file_path, 'public://');
+    $file = File::create(['uri' => $file_path]);
+    $file->save();
+    $entity->set('logo', $file->id());
   }
 }
 
@@ -737,7 +741,7 @@ function joinup_group_get_og_members_overview_sort_handlers_info(string $order):
  * Implements hook_form_BASE_FORM_ID_alter().
  */
 function joinup_group_form_views_form_og_members_overview_default_alter(&$form, FormStateInterface $form_state, $form_id): void {
-  if (!($group = \Drupal::routeMatch()->getParameter('rdf_entity')) || !$group instanceof GroupInterface) {
+  if (!($group = \Drupal::routeMatch()->getParameter('node')) || !$group instanceof GroupInterface) {
     throw new \RuntimeException('Called from a wrong page.');
   }
 
@@ -753,7 +757,7 @@ function joinup_group_form_views_form_og_members_overview_default_alter(&$form, 
   }
 
   // Alter the action label in order to reflect the bundle of the group.
-  $args = ['@label' => $group->get('rid')->entity->getSingularLabel()];
+  $args = ['@label' => $group->get('type')->entity->getSingularLabel()];
   $form['header']['og_membership_bulk_form']['action']['#options']['joinup_transfer_group_ownership'] = t('Transfer the ownership of the @label to the selected member', $args);
   $form['#validate'][] = 'joinup_group_form_views_form_og_members_overview_default_validate';
 
@@ -781,7 +785,7 @@ function joinup_group_form_views_form_og_members_overview_default_validate(array
   /** @var \Drupal\og\MembershipManagerInterface $membership_manager */
   $membership_manager = \Drupal::service('og.membership_manager');
 
-  $group = \Drupal::routeMatch()->getParameter('rdf_entity');
+  $group = \Drupal::routeMatch()->getParameter('node');
   $owner_memberships = $membership_manager->getGroupMembershipsByRoleNames($group, ['administrator']);
 
   if (empty($owner_memberships)) {
@@ -1114,8 +1118,8 @@ function joinup_group_mail(string $key, array &$message, array $params): void {
       '@group' => $group->label(),
       '@type' => $group->get('rid')->entity->getSingularLabel(),
       '@author' => $announcement->getOwner()->getDisplayName(),
-      ':url' => Url::fromRoute('entity.rdf_entity.announcement_edit', [
-        'rdf_entity' => $group->id(),
+      ':url' => Url::fromRoute('entity.node.announcement_edit', [
+        'node' => $group->id(),
         'announcement' => $announcement->id(),
       ])->setAbsolute()->toString(),
     ];

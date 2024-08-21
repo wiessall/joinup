@@ -170,7 +170,7 @@ content:
     weight: 7
     region: content
     settings:
-      display_label: true
+      display_label: false
     third_party_settings: {  }
   logo:
     type: image_library_widget

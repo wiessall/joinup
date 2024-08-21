@@ -102,10 +102,6 @@ function collection_entity_bundle_info_alter(&$bundles): void {
  * Implements hook_entity_bundle_field_info_alter().
  */
 function collection_entity_bundle_field_info_alter(&$fields, EntityTypeInterface $entity_type, $bundle): void {
-  // Make sure the collection label is unique.
-  if ($entity_type->id() == 'node' && $bundle == 'collection' && !empty($fields['label'])) {
-    $fields['label']->addConstraint('UniqueFieldInBundle', ['bundles' => ['collection']]);
-  }
   if ($entity_type->id() === 'node' && $bundle === 'glossary') {
     $fields['title']->addConstraint('UniqueFieldValueInGroupAndBundle', [
       'groupAudienceField' => 'og_audience',
@@ -114,6 +110,19 @@ function collection_entity_bundle_field_info_alter(&$fields, EntityTypeInterface
     if (isset($fields['field_glossary_synonyms'])) {
       $fields['field_glossary_synonyms']->addConstraint('GlossaryTermSynonyms');
     }
+  }
+}
+
+/**
+ * Implements hook_entity_base_field_info_alter().
+ */
+function collection_entity_base_field_info_alter($fields, EntityTypeInterface $entity_type): void {
+  // Make sure the collection label is unique.
+  if ($entity_type->id() === 'node' && !empty($fields['title'])) {
+    assert($fields['title'] instanceof FieldDefinitionInterface);
+    $uniqueFieldConstraintConfig = $fields['title']->getConstraint('UniqueFieldInBundle') ?? [];
+    $uniqueFieldConstraintConfig['bundles'][] = 'collection';
+    $fields['title']->addConstraint('UniqueFieldInBundle', $uniqueFieldConstraintConfig);
   }
 }
 

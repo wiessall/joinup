@@ -101,7 +101,7 @@ class JoinGroupSubscriber extends RedirectedEuLoginAuthenticatedSubscriberBase {
    */
   protected function getGroup(): ?GroupInterface {
     if ($group_id = $this->currentRequest->cookies->get($this->getCookieName())) {
-      $group = $this->entityTypeManager->getStorage('rdf_entity')->load($group_id);
+      $group = $this->entityTypeManager->getStorage('node')->load($group_id);
       if ($group instanceof GroupInterface) {
         return $group;
       }

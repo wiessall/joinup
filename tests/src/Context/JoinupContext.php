@@ -322,9 +322,9 @@ class JoinupContext extends RawDrupalContext {
    *
    * @param string $roles
    *   A comma separated list of roles to assign to the user.
-   * @param string $rdf_entity
+   * @param string $group_label
    *   The label of the collection or solution of which the user is a member.
-   * @param string $rdf_entity_bundle
+   * @param string $group_bundle
    *   The RDF entity bundle, either 'collection' or 'solution'.
    *
    * @throws \Exception
@@ -335,10 +335,10 @@ class JoinupContext extends RawDrupalContext {
    *
    * @see \Drupal\DrupalExtension\Context\DrupalContext::assertAuthenticatedByRole()
    */
-  public function assertAuthenticatedByOgRole($roles, $rdf_entity, $rdf_entity_bundle): void {
-    $entity = $this->getEntityByLabel('rdf_entity', $rdf_entity, $rdf_entity_bundle);
+  public function assertAuthenticatedByOgRole(string $roles, string $group_label, string $group_bundle): void {
+    $entity = $this->getEntityByLabel('node', $group_label, $group_bundle);
     if (!$entity) {
-      throw new \Exception("No entity found with label $rdf_entity");
+      throw new \Exception("No entity found with label $group_label");
     }
     $roles = $this->explodeCommaSeparatedStepArgument($roles);
     $roles = $this->getOgRoles($roles, $entity);
@@ -400,9 +400,9 @@ class JoinupContext extends RawDrupalContext {
    *
    * Use this to e.g. test approval of pending memberships, or blocking users.
    *
-   * @param string $rdf_entity
+   * @param string $group_label
    *   The label of the collection or solution of which the user is a member.
-   * @param string $rdf_entity_bundle
+   * @param string $group_bundle
    *   The RDF entity bundle, either 'collection' or 'solution'.
    * @param string $state
    *   The new membership state, one of 'active', 'pending' or 'blocked'.
@@ -412,10 +412,10 @@ class JoinupContext extends RawDrupalContext {
    *
    * @Given my membership state in the :rdf_entity :rdf_entity_bundle changes to :state
    */
-  public function updateGroupState($rdf_entity, $rdf_entity_bundle, $state): void {
-    $entity = $this->getEntityByLabel('rdf_entity', $rdf_entity, $rdf_entity_bundle);
+  public function updateGroupState(string $group_label, string $group_bundle, string $state): void {
+    $entity = $this->getEntityByLabel('node', $group_label, $group_bundle);
     if (!$entity) {
-      throw new \Exception("No entity found with label $rdf_entity");
+      throw new \Exception("No entity found with label $group_label");
     }
 
     $current_user = $this->getUserManager()->getCurrentUser();

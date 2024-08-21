@@ -50,15 +50,13 @@ class GroupNodeController extends ControllerBase {
   /**
    * Provides a title callback for the group node add page.
    *
-   * @param \Drupal\node\NodeInterface $group
-   *   The collection or solution RDF entity.
    * @param \Drupal\node\NodeTypeInterface $node_type
    *   The type of node to be added.
    *
    * @return \Drupal\Component\Render\MarkupInterface
    *   The title as a markup object.
    */
-  public function addTitle(NodeInterface $group, NodeTypeInterface $node_type): MarkupInterface {
+  public function addTitle(NodeTypeInterface $node_type): MarkupInterface {
     return $this->t('Add @type', ['@type' => $node_type->getSingularLabel()]);
   }
 
