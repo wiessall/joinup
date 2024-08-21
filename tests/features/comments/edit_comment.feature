@@ -1,4 +1,4 @@
-@api @group-e
+@api @group-a
 Feature: Edit a comment
   As a moderator of the site,
   I should receive notifications when someone edits a comment.

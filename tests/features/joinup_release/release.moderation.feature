@@ -1,4 +1,4 @@
-@api
+@api @group-g
 Feature: Asset release moderation
   In order to manage releases
   As a user of the website

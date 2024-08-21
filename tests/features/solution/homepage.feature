@@ -1,4 +1,4 @@
-@api @group-g
+@api @group-h
 Feature: Solution homepage
   In order get an idea of what a solution is about
   As a user of the website

@@ -1,4 +1,4 @@
-@api @group-b
+@api @group-d
 Feature: As a moderator or group facilitator I want to be able to add, edit and
   delete glossary terms. As a user I want to be able to see glossary terms as
   links to their definition page.
