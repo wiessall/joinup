@@ -1,0 +1,22 @@
+uuid: 7dc078cc-ce0d-4521-890f-09b869a0551a
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node__oss_solution
+label: 'OSS Solution node pattern'
+type: 'canonical_entities:node'
+pattern: '/eu-oss-catalogue/solutions/[node:title]'
+selection_criteria:
+  3a66051e-c651-499e-bce5-e491b519dfe0:
+    id: 'entity_bundle:node'
+    negate: false
+    uuid: 3a66051e-c651-499e-bce5-e491b519dfe0
+    context_mapping:
+      node: node
+    bundles:
+      oss_solution: oss_solution
+selection_logic: and
+weight: -5
+relationships: {  }

@@ -8,6 +8,7 @@ module:
   autologout: 0
   blazy: 0
   block: 0
+  block_field: 0
   breakpoint: 0
   cached_computed_field: 0
   cas: 0
@@ -48,6 +49,8 @@ module:
   entityqueue: 0
   entityqueue_block: 0
   error_page: 0
+  eu_oss_catalogue: 0
+  eu_oss_vitality_index: 0
   eupl: 0
   facets: 0
   facets_block: 0
@@ -76,6 +79,7 @@ module:
   iframe: 0
   image: 0
   image_library_widget: 0
+  imagecache_external: 0
   inline_entity_form: 0
   interoperable_europe: 0
   isa2_analytics: 0
@@ -107,6 +111,7 @@ module:
   joinup_news: 0
   joinup_newsletter: 0
   joinup_notification: 0
+  joinup_oss_catalogue: 0
   joinup_paragraphs: 0
   joinup_poll: 0
   joinup_publication_date: 0
@@ -142,6 +147,7 @@ module:
   link: 0
   linkit: 0
   mailsystem: 0
+  markdown_easy: 0
   media: 0
   media_library: 0
   memcache: 0
@@ -156,8 +162,10 @@ module:
   metatag_views: 0
   moderation: 0
   monolog: 0
+  multivalue_form_element: 0
   mysql: 0
   node: 0
+  node_revision_delete: 0
   oe_bootstrap_theme_helper: 0
   oe_dashboard_agent: 0
   oe_gisco_geocoding: 0
@@ -178,6 +186,7 @@ module:
   paragraphs_type_permissions: 0
   path: 0
   path_alias: 0
+  pluginreference: 0
   poll: 0
   purge: 0
   purge_drush: 0

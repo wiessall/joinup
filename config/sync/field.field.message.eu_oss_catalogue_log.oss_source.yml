@@ -1,0 +1,26 @@
+uuid: ad0125b4-8b15-4e03-9290-fe63f2c7936d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.message.oss_source
+    - message.template.eu_oss_catalogue_log
+  module:
+    - pluginreference
+id: message.eu_oss_catalogue_log.oss_source
+field_name: oss_source
+entity_type: message
+bundle: eu_oss_catalogue_log
+label: 'Source catalogue'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:eu_oss_catalogue.provider'
+  handler_settings:
+    sort:
+      key: label
+      direction: ASC
+field_type: plugin_reference

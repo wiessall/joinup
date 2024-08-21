@@ -1,0 +1,23 @@
+uuid: dbc0b185-b9cb-4691-8098-a95faa4e5220
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.oss_git_open_pull_requests
+    - node.type.oss_solution
+id: node.oss_solution.oss_git_open_pull_requests
+field_name: oss_git_open_pull_requests
+entity_type: node
+bundle: oss_solution
+label: 'Open Pull / Merge Requests'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer
