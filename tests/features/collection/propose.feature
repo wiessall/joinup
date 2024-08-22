@@ -175,7 +175,6 @@ Feature: Proposing a collection
 
     # Upload also works.
     When I attach the file "logo.png" to "Logo"
-    And I wait for AJAX to finish
     And I press "Propose"
 
     When I go to the edit form of the "Just a proposal" collection
@@ -322,10 +321,8 @@ Feature: Proposing a collection
     When I expand the "Additional fields" accordion section
     # Shows error when svg is invalid or unsafe and fails to upload.
     And I attach the file "error.svg" to "Logo"
-    And I wait for AJAX to finish
     Then I should see the error message "Invalid or unsafe SVG file."
     And I attach the file "simple.svg" to "Logo"
-    And I wait for AJAX to finish
     Then I should not see the error message "Invalid or unsafe SVG file."
     And I check "Moderated"
     And I press "Propose"

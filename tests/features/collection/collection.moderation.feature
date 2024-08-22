@@ -225,7 +225,6 @@ Feature: Collection moderation
     And I expand the "Additional fields" accordion section
     Then the "Additional fields" accordion section should be active
     And I attach the file "logo.png" to "Logo"
-    And I wait for AJAX to finish
     And I select the radio button "Any user can create content."
 
     # Regression test for a bug that caused the content creation setting to be
@@ -283,7 +282,6 @@ Feature: Collection moderation
     And I check the box "Company"
     And I expand the "Additional fields" accordion section
     And I attach the file "logo.png" to "Logo"
-    And I wait for AJAX to finish
     And I select the radio button "Any user can create content."
 
     # Save the collection.
@@ -323,7 +321,6 @@ Feature: Collection moderation
     And I check the box "Company"
     And I expand the "Additional fields" accordion section
     And I attach the file "logo.png" to "Logo"
-    And I wait for AJAX to finish
     And I select the radio button "Only facilitators and authors can create content."
 
     # Save the collection.
@@ -364,7 +361,6 @@ Feature: Collection moderation
     And I check the box "Company"
     And I expand the "Additional fields" accordion section
     And I attach the file "logo.png" to "Logo"
-    And I wait for AJAX to finish
     When I press "Add another item" at the "Geographical coverage" field
     And I wait for AJAX to finish
     And I select the radio button "Only facilitators and authors can create content."
@@ -406,7 +402,6 @@ Feature: Collection moderation
     And I check the box "Company"
     And I expand the "Additional fields" accordion section
     And I attach the file "logo.png" to "Logo"
-    And I wait for AJAX to finish
     And I select the radio button "Only facilitators and authors can create content."
 
     When I press "Add another item" at the "Geographical coverage" field

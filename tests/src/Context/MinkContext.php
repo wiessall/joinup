@@ -64,6 +64,11 @@ class MinkContext extends DrupalExtensionMinkContext {
     }
 
     parent::attachFileToField($field, $path);
+
+    // Wait for AJAX if applicable, saves us from repeating it every time.
+    if ($this->hasJavascriptSupport()) {
+      $this->iWaitForAjaxToFinish();
+    }
   }
 
   /**
