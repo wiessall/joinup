@@ -134,8 +134,6 @@ Feature: "Add event" visibility options.
 
     # Picking-up pre-uploaded images works.
     When I remove the file from "Logo"
-    And I wait for AJAX to finish
     And I select image #7 as event logo
-    And I wait for AJAX to finish
     And I press "Update"
     And the "The Great Opening" event logo is image #7

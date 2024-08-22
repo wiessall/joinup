@@ -28,7 +28,6 @@ Feature: Test SVG attachments.
     Then I should not see the error message "Invalid or unsafe SVG file."
     When I fill in "Alternative text" with "Example SVG"
     And I press "Save" in the "Modal buttons" region
-    And I wait for AJAX to finish
 
     When I press "Insert selected" in the "Modal buttons" region
     Then the modal should be closed
