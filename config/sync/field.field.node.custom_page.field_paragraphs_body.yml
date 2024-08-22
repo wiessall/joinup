@@ -66,7 +66,6 @@ settings:
       text: text
       video: video
       webform: webform
-      block: block
       image_gallery: image_gallery
     negate: 0
     target_bundles_drag_drop:
