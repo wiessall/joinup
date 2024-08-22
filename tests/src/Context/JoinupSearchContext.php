@@ -298,17 +298,19 @@ class JoinupSearchContext extends RawDrupalContext {
    *
    * This function asserts also the order of the items.
    *
+   * @param string $input
+   *   Search bar name.
    * @param \Behat\Gherkin\Node\TableNode $table
    *   A list of items to be present.
    *
    * @throws \Exception
    *    Thrown when the suggestions are not present in the page.
    *
-   * @Then I should see the (following )search suggestion(s):
+   * @Then I should see the (following ) :input suggestion(s):
    */
-  public function iShouldSeeTheSuggestions(TableNode $table): void {
+  public function iShouldSeeTheSuggestions(string $input, TableNode $table): void {
     $session = $this->getSession();
-    $element = $this->getSearchBarElement();
+    $element = $this->getSearchBarElement($input);
     $session->getDriver()->keyDown($element->getXpath(), '', NULL);
     $this->waitForAjax();
     $this->waitForElementVisible('css', '.ui-autocomplete a');
@@ -320,6 +322,33 @@ class JoinupSearchContext extends RawDrupalContext {
     $missing_suggestions = array_diff($table->getColumn(0), $found);
     if (!empty($missing_suggestions)) {
       $missing_suggestions = implode(', ', $missing_suggestions);
+      throw new \RuntimeException("The expected suggestions '$missing_suggestions' were not found in autocomplete.");
+    }
+  }
+
+  /**
+   * Asserts the autocomplete items not found from search.
+   *
+   * @param string $input
+   *   Search bar name.
+   *
+   * @throws \Exception
+   *    Thrown when the suggestions are present in the page.
+   *
+   * @Then I should not see any suggestion at :input
+   */
+  public function iShouldNotSeeTheSuggestions(string $input): void {
+    $session = $this->getSession();
+    $element = $this->getSearchBarElement($input);
+    $session->getDriver()->keyDown($element->getXpath(), '', NULL);
+    $session->wait(1000);
+    $allResults = $this->getSession()->getPage()->findAll('css', 'ul.ui-autocomplete a');
+    $found = array_map(function ($item) {
+      /** @var \Behat\Mink\Element\NodeElement $item */
+      return $item->getText();
+    }, $allResults);
+    if (!empty(array_filter($found))) {
+      $missing_suggestions = implode(', ', $found);
       throw new \RuntimeException("The expected suggestions '$missing_suggestions' were not found in autocomplete.");
     }
   }
@@ -487,14 +516,17 @@ class JoinupSearchContext extends RawDrupalContext {
    *
    * @param string $keywords
    *   A list of words to search.
+   * @param string $input
+   *   Search bar name.
    *
    * @throws \Exception
    *   Thrown when the header search bar is not found.
    *
    * @When I enter :keywords in the search bar
+   * @When I enter :keywords in the :input
    */
-  public function enterSearchKeywords(string $keywords): void {
-    $element = $this->getSearchBarElement();
+  public function enterSearchKeywords(string $keywords, ?string $input = 'search bar'): void {
+    $element = $this->getSearchBarElement($input);
     $element->setValue($keywords);
   }
 
@@ -524,7 +556,7 @@ class JoinupSearchContext extends RawDrupalContext {
       $page = $this->getSession()->getPage();
       $page->fillField('keys', $keywords);
       $page->pressButton("Search site-wide");
-      $this->assertCurrentUrl($this->locatePath('search?keys=' . $keywords . '&sort_by=relevance'));
+      $this->assertCurrentUrl($this->locatePath('search?keys=' . $keywords));
     }
   }
 
@@ -569,11 +601,14 @@ class JoinupSearchContext extends RawDrupalContext {
   /**
    * Returns the search bar as a Mink page element.
    *
+   * @param string|null $input
+   *   Search bar name.
+   *
    * @return \Behat\Mink\Element\NodeElement
    *   The search bar.
    */
-  protected function getSearchBarElement(): NodeElement {
-    $elements = $this->getElementsMatchingElementAlias('search bar');
+  protected function getSearchBarElement(?string $input = 'search bar'): NodeElement {
+    $elements = $this->getElementsMatchingElementAlias($input);
 
     Assert::assertNotEmpty($elements, 'Could not find the search field in the page.');
     Assert::assertCount(1, $elements, 'There are multiple search fields on the page.');
@@ -594,7 +629,7 @@ class JoinupSearchContext extends RawDrupalContext {
    */
   public function assertFacetSummary(string $labels): void {
     $present_labels = $this->explodeCommaSeparatedStepArgument($labels);
-    $xpath = "//div[contains(concat(' ', normalize-space(@class), ' '), ' block-facets-summary-blocksearch-facets-summary ')]//li[contains(concat(' ', normalize-space(@class), ' '), ' facet-summary-item--facet ')]";
+    $xpath = "//div[contains(concat(' ', normalize-space(@class), ' '), ' block-facets-summary ')]//li[contains(concat(' ', normalize-space(@class), ' '), ' facet-summary-item--facet ')]";
     $elements = $this->getSession()->getPage()->findAll('xpath', $xpath);
     $present = [];
 

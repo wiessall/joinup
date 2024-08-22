@@ -1,0 +1,8 @@
+langcode: en
+status: true
+dependencies: {  }
+name: 'OSS Used By'
+vid: oss_used_by
+description: 'Prominent public administrations (that will serve as “testimonials”) that are currently known to the software maintainer to be using this software'
+weight: 0
+new_revision: false

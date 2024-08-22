@@ -293,15 +293,15 @@ Feature:
     Then the "See more" collapse is collapsed
     And I should see the text "See more"
 
-    # Open collapse
+    # Open collapse.
     When I press "See more"
-    Then I wait until the page contains the text "See less"
+    Then I wait for CSS animations to finish
     And I should not see the text "See more"
     Then the "See less" collapse is expanded
 
-    # Close collapse again
+    # Close collapse again.
     When I press "See less"
-    Then I wait until the page contains the text "See more"
+    Then I wait for CSS animations to finish
     And I should not see the text "See less"
     Then the "See more" collapse is collapsed
 
