@@ -1,0 +1,257 @@
+@import "../partials/core";
+@import "@openeuropa/bcl-bootstrap/scss/utilities";
+@import "@openeuropa/bcl-bootstrap/scss/utilities/api";
+@import "../partials/overrides/eu-oss-catalogue";
+
+// Ugly hacks
+.region-featured {
+  height: 0;
+}
+.block-local-actions-block {
+  margin: 0 !important;
+}
+.oss {
+  &__header {
+    position: relative;
+    color: $white;
+    &::before {
+      position: absolute;
+      z-index: -1;
+      bottom: 0;
+      left: $spacer * -0.75; // -12px
+      width: 100vw;
+      height: 100%;
+      content: "";
+      background-color: $ec-blue;
+      @include media-breakpoint-up(sm) {
+        left: calc(-50vw + 258px);
+      }
+      @include media-breakpoint-up(md) {
+        left: calc(-50vw + 348px);
+      }
+      @include media-breakpoint-up(lg) {
+        left: calc(-50vw + 468px);
+      }
+      @include media-breakpoint-up(xl) {
+        left: calc(-50vw + 558px);
+      }
+      @include media-breakpoint-up(xxl) {
+        left: calc(-50vw + 648px);
+      }
+    }
+    .search-bar__input {
+      border-style: none;
+      border-top-left-radius: 50rem;
+      border-bottom-left-radius: 50rem;
+    }
+    .btn-search {
+      color: $primary;
+      border-top-right-radius: 50rem;
+      border-bottom-right-radius: 50rem;
+      background-color: $white;
+      &::before {
+        @include get-bootstrap-icon("search", $primary);
+
+        font-size: 1rem;
+      }
+    }
+  }
+  &__instructions-heading {
+    padding-bottom: $spacer;
+    p {
+      color: $primary;
+      font-size: $font-size-lg;
+    }
+  }
+  &__instructions {
+    padding-top: 0;
+    .layout__region--first {
+      position: relative;
+      padding-inline-start: $spacer * 4;
+      .paragraph {
+        h3 {
+          position: relative;
+          margin-bottom: $spacer * 0.5 !important;
+          color: $black;
+          &::before {
+            position: absolute;
+            top: $spacer * 0.25;
+            left: $spacer * -2.5;
+            width: $spacer;
+            height: $spacer;
+            content: "";
+            color: $primary;
+            background-color: $primary;
+            mask-size: cover;
+          }
+        }
+        &:nth-of-type(1) {
+          h3::before {
+            mask: url("#{$bootstrap-icons-path}/git.svg") no-repeat 50% 50%;
+          }
+        }
+        &:nth-of-type(3) {
+          h3::before {
+            mask: url("#{$bootstrap-icons-path}/file-earmark-text.svg")
+              no-repeat 50% 50%;
+          }
+        }
+        &:nth-of-type(5) {
+          h3::before {
+            mask: url("#{$bootstrap-icons-path}/code-slash.svg") no-repeat 50%
+              50%;
+          }
+        }
+        &:nth-of-type(7) {
+          h3::before {
+            mask: url("#{$bootstrap-icons-path}/folder2-open.svg") no-repeat 50%
+              50%;
+          }
+        }
+      }
+      p {
+        margin-bottom: $spacer * 2;
+      }
+      &::before {
+        position: absolute;
+        top: $spacer * -0.5;
+        bottom: $spacer;
+        left: $spacer;
+        width: $spacer * 2;
+        content: "";
+        border-radius: 50rem;
+        background-color: $secondary;
+      }
+    }
+    .layout__region--second {
+      h3 {
+        margin-bottom: $spacer * 0.5;
+      }
+    }
+    @include media-breakpoint-up(md) {
+      .layout__region--first {
+        padding-inline-end: $spacer * 5;
+        border-right: $spacer * 0.25 solid $gray-300;
+      }
+      .layout__region--second {
+        padding-inline-start: $spacer * 5;
+      }
+    }
+  }
+  &__faq {
+    padding-bottom: 0;
+    .paragraph--accordion {
+      @include media-breakpoint-up(lg) {
+        width: 80%;
+        margin-right: auto;
+        margin-left: auto;
+      }
+    }
+  }
+  &__social {
+    .paragraph--call-to-action {
+      margin-block-end: 1rem;
+      a {
+        width: $spacer * 3 !important;
+        height: $spacer * 3 !important;
+        padding: $spacer * 0.5;
+        color: $brand;
+        border: 0;
+        border-radius: $border-radius-pill;
+        background-color: transparent;
+        box-shadow: none;
+        font-size: 0;
+        &::before {
+          display: inline-block;
+          width: $spacer * 2;
+          height: $spacer * 2;
+          content: "";
+          background-color: $brand;
+          mask-size: $spacer * 2;
+        }
+        &:hover {
+          box-shadow: none !important;
+          &::before {
+            background-color: $primary;
+          }
+        }
+        &[href*="twitter"] {
+          &::before {
+            mask-image: url("#{$bootstrap-icons-path}/twitter-x.svg");
+          }
+        }
+        &[href*="linkedin"] {
+          &::before {
+            mask-image: url("#{$bootstrap-icons-path}/linkedin.svg");
+          }
+        }
+      }
+    }
+  }
+  &__discover {
+    @extend .mt-4;
+    .layout__region--first {
+      @extend .mb-5;
+      @extend .mb-md-0;
+      .paragraph--text p {
+        @extend .text-primary;
+
+        font-size: $spacer * 3.5;
+        strong {
+          @extend .text-secondary;
+          @extend .bg-secondary;
+          @extend .fw-normal;
+          @extend .px-1;
+        }
+      }
+      .paragraph--call-to-action {
+        margin-block-end: 1rem;
+      }
+    }
+    .layout__region--second {
+      .paragraph--text {
+        p {
+          position: relative;
+          margin-bottom: $spacer * 2.5 !important;
+          padding-left: $spacer * 3.5;
+          &::before {
+            position: absolute;
+            left: $spacer * -0.5;
+            width: 3rem;
+            height: 3rem;
+            content: "";
+            color: $oss-bg;
+            background-color: $oss-bg;
+          }
+        }
+        &:nth-of-type(1) {
+          p::before {
+            mask: url("#{$bootstrap-icons-path}/files.svg") no-repeat 50% 50%;
+            mask-size: contain;
+          }
+        }
+        &:nth-of-type(2) {
+          p::before {
+            mask: url("#{$bootstrap-icons-path}/file-text.svg") no-repeat 50%
+              50%;
+            mask-size: contain;
+          }
+        }
+        &:nth-of-type(3) {
+          p::before {
+            mask: url("#{$bootstrap-icons-path}/eye.svg") no-repeat 50% 50%;
+            mask-size: contain;
+          }
+        }
+      }
+    }
+    @include media-breakpoint-up(lg) {
+      max-width: calc(100% - 320px);
+    }
+  }
+  &__most-recent {
+    .tile__text {
+      -webkit-line-clamp: 2;
+    }
+  }
+}

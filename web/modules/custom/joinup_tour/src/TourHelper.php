@@ -13,30 +13,14 @@ use Drupal\Core\Routing\RouteMatchInterface;
 class TourHelper implements TourHelperInterface {
 
   /**
-   * The entity type manager.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected EntityTypeManagerInterface $entityTypeManager;
-
-  /**
-   * The current route match.
-   *
-   * @var \Drupal\Core\Routing\RouteMatchInterface
-   */
-  protected RouteMatchInterface $currentRouteMatch;
-
-  /**
    * Constructs a TourHelper object.
    *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity type manager.
-   * @param \Drupal\Core\Routing\RouteMatchInterface $current_route_match
+   * @param \Drupal\Core\Routing\RouteMatchInterface $currentRouteMatch
    *   The current route match.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, RouteMatchInterface $current_route_match) {
-    $this->entityTypeManager = $entity_type_manager;
-    $this->currentRouteMatch = $current_route_match;
+  public function __construct(protected EntityTypeManagerInterface $entityTypeManager, protected RouteMatchInterface $currentRouteMatch) {
   }
 
   /**

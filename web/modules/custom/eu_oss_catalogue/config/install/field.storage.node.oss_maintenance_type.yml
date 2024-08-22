@@ -1,0 +1,32 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - options
+id: node.oss_maintenance_type
+field_name: oss_maintenance_type
+entity_type: node
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: internal
+      label: '[internal] Internally maintained by the repository owner'
+    -
+      value: contract
+      label: '[contract] Maintenance is commercially contracted'
+    -
+      value: community
+      label: '[community] Maintained by people donating their time to the project'
+    -
+      value: none
+      label: '[none] Not actively maintained'
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

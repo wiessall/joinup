@@ -1,0 +1,12 @@
+uuid: 9554b7bd-1630-457a-82c1-47079f9cdc66
+langcode: en
+status: true
+dependencies:
+  config:
+    - flag.flag.interoperability
+id: flagging.interoperability.default
+targetEntityType: flagging
+bundle: interoperability
+mode: default
+content: {  }
+hidden: {  }

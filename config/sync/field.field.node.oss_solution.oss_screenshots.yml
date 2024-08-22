@@ -1,0 +1,35 @@
+uuid: 5b0e0522-9132-44f6-83dd-67793a8dfd6f
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.oss_screenshots
+    - node.type.oss_solution
+  module:
+    - link
+  enforced:
+    module:
+      - eu_oss_catalogue
+third_party_settings:
+  eu_oss_catalogue:
+    publiccode_yml:
+      resolvers:
+        -
+          plugin: absolute_url
+          config:
+            path: 'description/[lang]/screenshots'
+            verify: true
+id: node.oss_solution.oss_screenshots
+field_name: oss_screenshots
+entity_type: node
+bundle: oss_solution
+label: 'Gallery [stored]'
+description: 'URLs to files showing screenshots of the software.'
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  title: 0
+  link_type: 16
+field_type: link

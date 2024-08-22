@@ -1,4 +1,4 @@
-@api @group-g
+@api @group-h
 Feature: "Add solution" visibility options.
   In order to manage solutions
   As a moderator
@@ -110,6 +110,7 @@ Feature: "Add solution" visibility options.
       | Wendell Silva has proposed a new Interoperability solution: "Espresso is the solution" on Joinup. |
       | If you think this action is not clear or not due, please contact Joinup Support at                |
     And I should see "Thank you for proposing a solution. Your request is currently pending approval by the site administrator."
+    And Log entry with the message "A new solution entity titled Espresso is the solution has been created by Wendell Silva in Belgian barista's." should exist.
 
     # Regression test for the non required field, 'Logo'.
     # @see: https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3328

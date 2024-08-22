@@ -1,4 +1,4 @@
-@api @group-i
+@api @group-g
 Feature: SEO for news articles.
   As an owner of the website
   in order for my news to be better visible on the web

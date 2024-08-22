@@ -1,4 +1,4 @@
-@api @group-f
+@api @group-h
 Feature:
   As a site builder of the site
   I need to be able to use "image" paragraphs for content.
@@ -19,6 +19,7 @@ Feature:
     When I am logged in as a moderator
     And I go to the edit form of the "Image paragraph page" "custom page"
     And I click "Choose component"
+    And a modal should open
     And I click "Image"
 
     When I attach the file "logo.png" to "Image"

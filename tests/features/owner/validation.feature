@@ -1,4 +1,4 @@
-@api @group-i
+@api @group-h
 Feature: Validation of owners created through UI
   In order to ensure that my data is complete
   As a collection owner

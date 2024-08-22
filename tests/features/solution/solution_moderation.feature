@@ -1,4 +1,4 @@
-@api @group-g
+@api @group-i
 Feature: Solution moderation
   In order to manage solutions programmatically
   As a user of the website

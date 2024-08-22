@@ -1,4 +1,4 @@
-@api @group-d
+@api @group-c
 Feature: Notification test for the discussion transitions on a pre moderated parent.
   In order to manage my collections
   As an owner of the collection
