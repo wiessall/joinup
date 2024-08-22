@@ -10,15 +10,15 @@ use Drupal\og\OgResolvedGroupCollectionInterface;
 use Drupal\og\Plugin\OgGroupResolver\RouteGroupResolver;
 
 /**
- * Resolves the collection from the route.
+ * Resolves a group from the invite route.
  *
  * @OgGroupResolver(
- *   id = "group_from_invitation",
- *   label = "Group from invitation",
- *   description = @Translation("Sets group context from invitation route."),
+ *   id = "group_from_invite",
+ *   label = "Group from Invite",
+ *   description = @Translation("Resolves group from the invite."),
  * )
  */
-class InvitationRouteGroupResolver extends RouteGroupResolver {
+class InviteRouteGroupResolver extends RouteGroupResolver {
 
   /**
    * {@inheritdoc}
@@ -33,15 +33,18 @@ class InvitationRouteGroupResolver extends RouteGroupResolver {
    * {@inheritdoc}
    */
   public function resolve(OgResolvedGroupCollectionInterface $collection): void {
-    $invitation = $this->getContentEntity();
-    if (!$invitation instanceof InvitationInterface) {
+    $invite = $this->getContentEntity();
+    if (!$invite instanceof InvitationInterface) {
       return;
     }
 
-    if (($group = $invitation->getEntity()) && $group instanceof GroupInterface) {
-      $collection->addGroup($group, ['route']);
-      $this->stopPropagation();
+    $entity = $invite->getEntity();
+    if (!$entity instanceof GroupInterface) {
+      return;
     }
+
+    $collection->addGroup($entity, ['route']);
+    $this->stopPropagation();
   }
 
 }
