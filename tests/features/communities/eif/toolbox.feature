@@ -1,4 +1,4 @@
-@api @eif_community @group-e
+@api @eif_community @group-a
 Feature:
   As the owner of the EIF toolbox
   in order to make it easier for users to find appropriate solutions

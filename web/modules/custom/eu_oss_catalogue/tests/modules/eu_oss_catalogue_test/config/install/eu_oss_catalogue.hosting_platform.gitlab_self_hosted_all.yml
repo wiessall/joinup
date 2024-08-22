@@ -1,0 +1,9 @@
+langcode: en
+status: true
+dependencies: {  }
+id: gitlab_self_hosted_all
+label: 'GitLab self-hosted (all)'
+platformId: gitlab_self_hosted
+platformSettings:
+  baseUrl: https://all.self-hosted.gitlab.example.com
+  projects: {  }

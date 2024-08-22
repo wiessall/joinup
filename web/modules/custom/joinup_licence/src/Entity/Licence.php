@@ -108,6 +108,10 @@ class Licence extends Node implements LicenceInterface {
       ->condition('spdx_licence.target_id', $tids, 'IN')
       ->execute();
 
+    if (!$nids) {
+      return NULL;
+    }
+
     /** @var \Drupal\joinup_licence\Entity\LicenceInterface $licence */
     $licence = \Drupal::entityTypeManager()->getStorage('node')->load(reset($nids));
 

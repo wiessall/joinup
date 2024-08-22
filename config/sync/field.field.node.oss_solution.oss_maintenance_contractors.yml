@@ -1,0 +1,38 @@
+uuid: c0844281-e77d-4a03-914b-7c22198f7b66
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.oss_maintenance_contractors
+    - node.type.oss_contractor
+    - node.type.oss_solution
+third_party_settings:
+  eu_oss_catalogue:
+    publiccode_yml:
+      resolvers:
+        -
+          plugin: contact
+          config:
+            path: maintenance/contractors
+            node_type: oss_contractor
+id: node.oss_solution.oss_maintenance_contractors
+field_name: oss_maintenance_contractors
+entity_type: node
+bundle: oss_solution
+label: 'Technical Maintainers'
+description: 'The entities, if any, that are currently contracted for maintaining the software. They can be companies, organizations, or other collective names'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      oss_contractor: oss_contractor
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

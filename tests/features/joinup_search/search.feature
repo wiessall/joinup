@@ -1,4 +1,4 @@
-@api @group-i
+@api @group-g
 Feature: Global search
   As a user of the site I can find content through the global search.
 
@@ -271,7 +271,7 @@ Feature: Global search
       | ulyssesfrees | ulysses.freeman@example.com | Ulysses    | Freeman     | Omero snc    |
 
     When I visit the search page
-    Then the "Content types" checkbox facet should allow selecting the following values "Collections (2), Solution (1), News (1), Events (2), Document (1), Discussion (1), Release (1), Custom page (1), Licence (1), Video (1), User profiles (2)"
+    Then the "Content types" checkbox facet should allow selecting the following values "Collections (2), Solution (1), News (1), Events (2), Document (1), Discussion (1), Release (1), Custom page (1), Licence (1), User profiles (2), Video (1)"
 
     # "A beta" word does not show "You must include at least one positive keyword with 3 characters or more." error message.
     When I enter "A beta" in the search bar and press enter
@@ -669,13 +669,13 @@ Feature: Global search
     Given I am logged in as a user with the "authenticated" role
     When I visit the search page
     And I should not see search bar icon in navbar
-    And I enter "fu" in the search bar
+    And I enter "fu" in the "search bar"
     And I wait for AJAX to finish
     Then I should see the following search suggestions:
       | Radio cooking collection |
       | Spheres                  |
 
-    When I enter "cook" in the search bar
+    When I enter "cook" in the "search bar"
     And I wait for AJAX to finish
     Then I should see the following search suggestions:
       | Movistar                 |
@@ -701,7 +701,7 @@ Feature: Global search
     When I visit the collection overview
     And I should see search bar icon in navbar
     Then I should toggle search bar in navbar
-    And I enter "fu" in the search bar
+    And I enter "fu" in the "search bar"
     And I wait for AJAX to finish
     Then I should see the following search suggestions:
       | Radio cooking collection |
@@ -710,7 +710,7 @@ Feature: Global search
     # Check if search autocomplete works in homepage's header search bar.
     Given I am on the homepage
     Then I should see the search bar in homepage's header
-    And I enter "fu" in the search bar
+    And I enter "fu" in the "search bar"
     And I wait for AJAX to finish
     Then I should see the following search suggestions:
       | Radio cooking collection |
@@ -718,20 +718,20 @@ Feature: Global search
 
     # Check if search did you mean works.
     Given I visit the search page
-    And I enter "histore" in the search bar
+    And I enter "histore" in the "search bar"
     Then I submit the search by pressing enter
     And I should see the text "Did you mean: history ?"
     And I click "history"
     Then I should see the text "SEARCH RESULTS (1)"
 
-    Then I enter "cosine" in the search bar
+    Then I enter "cosine" in the "search bar"
     And I submit the search by pressing enter
     And I should see the text "Did you mean: cuisine ?"
     And I click "cuisine"
     Then I should see the text "SEARCH RESULTS (1)"
     And I should see the "Movistar" tile
 
-    Then I enter "spheres" in the search bar
+    Then I enter "spheres" in the "search bar"
     And I wait for AJAX to finish
     Then I should see the following search suggestions:
       | Spheres |

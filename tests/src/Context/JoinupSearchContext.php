@@ -285,8 +285,6 @@ class JoinupSearchContext extends RawDrupalContext {
     $node_elements = $facet->findAll('css', 'li.facet-item label');
     foreach ($node_elements as $node_element) {
       if ($node_element->getText() === $option) {
-        $facet_id = $facet->getAttribute('data-drupal-facet-id');
-        $this->scrollCssSelectedElementIntoView('[data-drupal-facet-id="' . $facet_id . '"]');
         $node_element->click();
         return;
       }
@@ -300,19 +298,22 @@ class JoinupSearchContext extends RawDrupalContext {
    *
    * This function asserts also the order of the items.
    *
+   * @param string $input
+   *   Search bar name.
    * @param \Behat\Gherkin\Node\TableNode $table
    *   A list of items to be present.
    *
    * @throws \Exception
    *    Thrown when the suggestions are not present in the page.
    *
-   * @Then I should see the (following )search suggestion(s):
+   * @Then I should see the (following ) :input suggestion(s):
    */
-  public function iShouldSeeTheSuggestions(TableNode $table): void {
+  public function iShouldSeeTheSuggestions(string $input, TableNode $table): void {
     $session = $this->getSession();
-    $element = $this->getSearchBarElement();
+    $element = $this->getSearchBarElement($input);
     $session->getDriver()->keyDown($element->getXpath(), '', NULL);
-    $session->wait(1000);
+    $this->waitForAjax();
+    $this->waitForElementVisible('css', '.ui-autocomplete a');
     $allResults = $this->getSession()->getPage()->findAll('css', 'ul.ui-autocomplete a');
     $found = array_map(function ($item) {
       /** @var \Behat\Mink\Element\NodeElement $item */
@@ -321,6 +322,33 @@ class JoinupSearchContext extends RawDrupalContext {
     $missing_suggestions = array_diff($table->getColumn(0), $found);
     if (!empty($missing_suggestions)) {
       $missing_suggestions = implode(', ', $missing_suggestions);
+      throw new \RuntimeException("The expected suggestions '$missing_suggestions' were not found in autocomplete.");
+    }
+  }
+
+  /**
+   * Asserts the autocomplete items not found from search.
+   *
+   * @param string $input
+   *   Search bar name.
+   *
+   * @throws \Exception
+   *    Thrown when the suggestions are present in the page.
+   *
+   * @Then I should not see any suggestion at :input
+   */
+  public function iShouldNotSeeTheSuggestions(string $input): void {
+    $session = $this->getSession();
+    $element = $this->getSearchBarElement($input);
+    $session->getDriver()->keyDown($element->getXpath(), '', NULL);
+    $session->wait(1000);
+    $allResults = $this->getSession()->getPage()->findAll('css', 'ul.ui-autocomplete a');
+    $found = array_map(function ($item) {
+      /** @var \Behat\Mink\Element\NodeElement $item */
+      return $item->getText();
+    }, $allResults);
+    if (!empty(array_filter($found))) {
+      $missing_suggestions = implode(', ', $found);
       throw new \RuntimeException("The expected suggestions '$missing_suggestions' were not found in autocomplete.");
     }
   }
@@ -372,28 +400,6 @@ class JoinupSearchContext extends RawDrupalContext {
     $element = $this->findFacetByAlias($facet, NULL, '*', FALSE);
     // The facet might be present but with no options.
     Assert::assertTrue(empty($element) || empty($element->getText()), "The facet '{$facet}' was found in the page.");
-  }
-
-  /**
-   * Opens the dropdown for the given facet element.
-   *
-   * @param \Behat\Mink\Element\NodeElement $facet
-   *   The facet element, as returned by `TraversingTrait::findFacetByAlias()`.
-   */
-  protected function openFacetDropdown(NodeElement $facet): void {
-    // Only needed when running in a JS enabled browser.
-    if ($this->hasJavascriptSupport()) {
-      // Only open the dropdown if it is not already open.
-      if (!$this->isFacetDropdownVisible($facet)) {
-        // Click the arrow down button and wait for the animation to finish.
-        $facet->find('css', '.filter__icon.icon--arrow-down')->click();
-        $this->waitUntil(function () use ($facet): bool {
-          $is_visible = (bool) $facet->find('css', 'div.mdl-menu__container.is-visible');
-          $is_animating = (bool) $facet->find('css', 'ul.filter__menu.is-animating');
-          return $is_visible && !$is_animating;
-        });
-      }
-    }
   }
 
   /**
@@ -510,14 +516,17 @@ class JoinupSearchContext extends RawDrupalContext {
    *
    * @param string $keywords
    *   A list of words to search.
+   * @param string $input
+   *   Search bar name.
    *
    * @throws \Exception
    *   Thrown when the header search bar is not found.
    *
    * @When I enter :keywords in the search bar
+   * @When I enter :keywords in the :input
    */
-  public function enterSearchKeywords(string $keywords): void {
-    $element = $this->getSearchBarElement();
+  public function enterSearchKeywords(string $keywords, ?string $input = 'search bar'): void {
+    $element = $this->getSearchBarElement($input);
     $element->setValue($keywords);
   }
 
@@ -547,7 +556,7 @@ class JoinupSearchContext extends RawDrupalContext {
       $page = $this->getSession()->getPage();
       $page->fillField('keys', $keywords);
       $page->pressButton("Search site-wide");
-      $this->assertCurrentUrl($this->locatePath('search?keys=' . $keywords . '&sort_by=relevance'));
+      $this->assertCurrentUrl($this->locatePath('search?keys=' . $keywords));
     }
   }
 
@@ -568,7 +577,13 @@ class JoinupSearchContext extends RawDrupalContext {
   public function submitSearch(): void {
     $this->assertJavaScriptEnabledBrowser();
     $element = $this->getSearchBarElement();
-    $element->submit();
+
+    // Find the parent form element and submit.
+    $form = $element->getParent();
+    while ($form && $form->getTagName() !== 'form') {
+      $form = $form->getParent();
+    }
+    $form->submit();
   }
 
   /**
@@ -586,11 +601,14 @@ class JoinupSearchContext extends RawDrupalContext {
   /**
    * Returns the search bar as a Mink page element.
    *
+   * @param string|null $input
+   *   Search bar name.
+   *
    * @return \Behat\Mink\Element\NodeElement
    *   The search bar.
    */
-  protected function getSearchBarElement(): NodeElement {
-    $elements = $this->getElementsMatchingElementAlias('search bar');
+  protected function getSearchBarElement(?string $input = 'search bar'): NodeElement {
+    $elements = $this->getElementsMatchingElementAlias($input);
 
     Assert::assertNotEmpty($elements, 'Could not find the search field in the page.');
     Assert::assertCount(1, $elements, 'There are multiple search fields on the page.');
@@ -611,7 +629,7 @@ class JoinupSearchContext extends RawDrupalContext {
    */
   public function assertFacetSummary(string $labels): void {
     $present_labels = $this->explodeCommaSeparatedStepArgument($labels);
-    $xpath = "//div[contains(concat(' ', normalize-space(@class), ' '), ' block-facets-summary-blocksearch-facets-summary ')]//li[contains(concat(' ', normalize-space(@class), ' '), ' facet-summary-item--facet ')]";
+    $xpath = "//div[contains(concat(' ', normalize-space(@class), ' '), ' block-facets-summary ')]//li[contains(concat(' ', normalize-space(@class), ' '), ' facet-summary-item--facet ')]";
     $elements = $this->getSession()->getPage()->findAll('xpath', $xpath);
     $present = [];
 
@@ -791,7 +809,6 @@ class JoinupSearchContext extends RawDrupalContext {
    */
   public function showMoreFacet(string $facet_type): void {
     $facet = $this->findFacetByAlias($facet_type);
-    $this->scrollElementIntoView($facet);
     $parent_facet = $facet->getParent();
     if (!$link = $parent_facet->findLink('Show more')) {
       throw new ElementNotFoundException($this->getSession()->getDriver(), 'Link', 'label', 'Show more');

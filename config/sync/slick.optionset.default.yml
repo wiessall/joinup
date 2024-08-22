@@ -75,4 +75,4 @@ options:
     variableWidth: false
     vertical: false
     verticalSwiping: false
-    waitForAnimate: true
+    waitForAnimate: false

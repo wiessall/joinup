@@ -1,4 +1,4 @@
-@api @group-e
+@api @group-g
 Feature: Subscribing to community content in solutions
   As a member of a solution
   I want to receive a periodic digest listing newly published content

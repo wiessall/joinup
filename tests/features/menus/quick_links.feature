@@ -1,4 +1,4 @@
-@api @group-i
+@api @group-h
 Feature: Test the visibility of the quick links menu.
 
   Background:

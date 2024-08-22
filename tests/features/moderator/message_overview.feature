@@ -1,4 +1,4 @@
-@api @group-d
+@api @group-h
 Feature: Solutions message overview
   As a moderator of the site
   In order to be able to manage incoming requests

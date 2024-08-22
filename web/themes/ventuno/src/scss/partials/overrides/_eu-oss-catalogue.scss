@@ -1,0 +1,106 @@
+@use "sass:color";
+
+// OSS Catalogue green flavour overrides.
+.eu-oss-catalogue {
+  .btn-secondary {
+    color: $oss-brand-darker;
+    background-color: $oss-secondary;
+    &:hover {
+      background-color: $oss-secondary;
+    }
+  }
+  .bg-brand {
+    background-color: $oss-brand-darker !important;
+  }
+  .bg-secondary {
+    background-color: $oss-secondary !important;
+  }
+  .btn-link,
+  .button--link {
+    color: $oss-brand-darker !important;
+  }
+  .btn-brand,
+  .btn-primary {
+    border: 1px solid color.adjust($oss-brand, $lightness: -5%);
+    background-color: $oss-brand !important;
+  }
+  .btn-outline-brand {
+    color: $oss-brand;
+    border: 1px solid $oss-brand;
+    &:hover {
+      color: $white;
+      background-color: $oss-brand;
+    }
+  }
+  .text-bg-primary {
+    background-color: $oss-secondary !important;
+    &.badge {
+      color: $oss-brand !important;
+    }
+  }
+  .text-secondary {
+    color: $oss-brand-darker !important;
+  }
+
+  .oss__instructions {
+    .layout__region--first {
+      &::before {
+        background-color: $oss-secondary;
+      }
+      .paragraph h3::before {
+        background-color: $oss-brand-darker;
+      }
+    }
+  }
+  .oss__social .paragraph--call-to-action a {
+    background-color: transparent !important;
+    &::before {
+      background-color: $oss-brand;
+    }
+  }
+
+  .joinup-search-filters {
+    .facets-checkbox {
+      -webkit-appearance: none; /* remove default appearance on Webkit-based browsers */
+      -moz-appearance: none; /* remove default appearance on Mozilla-based browsers */
+      appearance: none; /* remove default appearance on all other browsers */
+      &:checked[type="checkbox"] {
+        border-color: color.adjust($oss-brand, $lightness: -5%);
+        background-color: $oss-brand;
+      }
+    }
+    .facets-soft-limit-link {
+      color: $oss-brand;
+      &::after {
+        display: inline-block;
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23249866' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M2 5l6 6 6-6'/%3e%3c/svg%3e"); // Corresponding BS variable '$form-select-indicator' don't work bc of '<' and '>' characters
+      }
+    }
+  }
+  .view-search-oss-catalogue {
+    .js-form-item {
+      .btn-search {
+        background-color: $oss-brand;
+      }
+    }
+  }
+  .pagination {
+    .page-item {
+      .page-link {
+        color: $oss-brand;
+        &:hover {
+          background-color: $oss-secondary;
+        }
+        .bi {
+          color: $oss-brand;
+        }
+      }
+      &.active {
+        .page-link {
+          color: $oss-brand;
+          background-color: $oss-secondary;
+        }
+      }
+    }
+  }
+}
