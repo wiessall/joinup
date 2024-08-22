@@ -1,0 +1,14 @@
+name: EU OSS Catalogue
+type: module
+description: Implementation of European Open Source Solutions Catalogue (MVP)
+package: EU OSS Catalogue
+core_version_requirement: ">=10.0"
+dependencies:
+  - drupal:datetime
+  - drupal:link
+  - drupal:node
+  - drupal:markdown_easy
+  - drupal:options
+  - drupal:taxonomy
+  - multivalue_form_element:multivalue_form_element
+  - pluginreference:pluginreference

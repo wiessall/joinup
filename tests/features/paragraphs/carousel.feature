@@ -1,4 +1,4 @@
-@api @group-f
+@api @group-h
 Feature:
   Access and functionality checks for carousel paragraphs in custom pages.
 
@@ -32,6 +32,7 @@ Feature:
       | Background theme | light      |
       | Extra classes    | test-class |
     And I click "Choose component"
+    And a modal should open
     And I click "Carousel"
     And I select "Custom page" from "Available filters"
     And I press "Add and configure filter"

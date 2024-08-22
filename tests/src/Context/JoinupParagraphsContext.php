@@ -145,7 +145,6 @@ class JoinupParagraphsContext extends RawDrupalContext {
    */
   public function clickLinkInParagraphsField(string $label, string $field, ?int $delta = NULL): void {
     $paragraph_item = ($delta === NULL) ? $this->getParagraphsElement($field) : $this->getParagraphsElementItem($field, --$delta);
-    $this->scrollElementIntoView($paragraph_item);
     if (!$link = $paragraph_item->findButton($label)) {
       throw new ElementNotFoundException($this->getSession()->getDriver(), 'button', 'label');
     }
@@ -227,7 +226,6 @@ class JoinupParagraphsContext extends RawDrupalContext {
     if (!$input) {
       throw new ElementNotFoundException($this->getSession()->getDriver(), "Button contained $filter filter from $paragraph paragraph");
     }
-    $this->scrollElementIntoView($input);
     $input->click();
   }
 

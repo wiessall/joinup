@@ -1,0 +1,171 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Drupal\eu_oss_catalogue\Plugin\eu_oss_catalogue\Parser;
+
+use Drupal\Component\Serialization\Exception\InvalidDataTypeException;
+use Drupal\Core\Config\TypedConfigManagerInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Language\LanguageManagerInterface;
+use Drupal\Core\Logger\LoggerChannelInterface;
+use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\Serialization\Yaml;
+use Drupal\Core\Utility\Error;
+use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
+use Drupal\eu_oss_catalogue\EuOssCatalogueParserPluginBase;
+use Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface;
+use Drupal\eu_oss_catalogue\EuOssCatalogueProviderInterface;
+use Drupal\eu_oss_catalogue\Exception\UnresolvableValueException;
+use Drupal\eu_oss_catalogue\Model\FieldOverridingPolicy;
+use Drupal\eu_oss_catalogue\Model\Project;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+
+/**
+ * Parser for publiccode.yml data.
+ *
+ * @see https://yml.publiccode.tools
+ *
+ * @EuOssCatalogueParser(
+ *   id = "publiccode_yml",
+ *   label = @Translation("publiccode.yml data"),
+ * )
+ */
+class PublicCodeYml extends EuOssCatalogueParserPluginBase implements ContainerFactoryPluginInterface {
+
+  /**
+   * Constructs a new plugin instance.
+   *
+   * @param array $configuration
+   *   A configuration array containing information about the plugin instance.
+   * @param string $plugin_id
+   *   The plugin ID for the plugin instance.
+   * @param mixed $plugin_definition
+   *   The plugin implementation definition.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
+   *   The entity type manager service.
+   * @param \Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface $resolverManager
+   *   The EU OSS Catalogue resolver plugin manager service.
+   * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
+   *   The EU catalogue logger channel.
+   * @param \Drupal\Core\Language\LanguageManagerInterface $languageManager
+   *   The language manager service.
+   * @param \Drupal\Core\Config\TypedConfigManagerInterface $typedConfigManager
+   *   The typed config manager interface.
+   */
+  public function __construct(
+    array $configuration,
+    $plugin_id,
+    $plugin_definition,
+    protected EntityTypeManagerInterface $entityTypeManager,
+    protected EuOssCataloguePluginManagerInterface $resolverManager,
+    protected LoggerChannelInterface $logger,
+    protected LanguageManagerInterface $languageManager,
+    protected TypedConfigManagerInterface $typedConfigManager,
+  ) {
+    parent::__construct($configuration, $plugin_id, $plugin_definition, $this->entityTypeManager, $this->resolverManager, $logger, $this->languageManager);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): self {
+    return new static(
+      $configuration,
+      $plugin_id,
+      $plugin_definition,
+      $container->get('entity_type.manager'),
+      $container->get('plugin.manager.eu_oss_catalogue.resolver'),
+      $container->get('logger.channel.eu_oss_catalogue'),
+      $container->get('language_manager'),
+      $container->get('config.typed'),
+    );
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function doParse(OssSolutionInterface $solution, Project $project, array $metadata, EuOssCatalogueProviderInterface $provider): void {
+    foreach ($solution->getFields(FALSE) as $fieldName => $fieldItemList) {
+      // It's a convention that all fields are prefixed with oss_*.
+      if (!str_starts_with($fieldName, 'oss_')) {
+        continue;
+      }
+
+      $settings = $this->getFieldSettings($fieldItemList);
+      if ($settings === NULL) {
+        // This field has no EU OSS Catalogue third-party settings.
+        continue;
+      }
+
+      /** @var array[] $resolvers */
+      $resolvers =& $settings['resolvers'];
+      $override = FieldOverridingPolicy::from($settings['override']);
+
+      if ($override === FieldOverridingPolicy::PRESERVE_NOT_EMPTY && !$fieldItemList->isEmpty()) {
+        // Don't override a field not-empty field.
+        continue;
+      }
+
+      // We don't allow resolvers to modify directly the original field item
+      // list because this is passed only for read-only purposes. Resolvers
+      // should use this object only to extract useful info about the field or
+      // the host entity.
+      $fieldItemListCopy = clone $fieldItemList;
+
+      $resolved = NULL;
+      foreach ($resolvers as ['plugin' => $pluginId, 'config' => $config]) {
+        $resolver = $this->getResolver($pluginId, $config);
+        try {
+          $resolver->resolve($resolved, $project, $metadata, $fieldItemListCopy);
+          $this->checkResolved($resolved, $resolver);
+        }
+        catch (UnresolvableValueException $exception) {
+          Error::logException($this->logger, $exception);
+          // Fail softly, don't set this field.
+          continue 2;
+        }
+      }
+
+      if ($override !== FieldOverridingPolicy::RESOLVED_NOT_EMPTY || $resolved) {
+        // Populate the node field.
+        foreach ($resolved as $langcode => $values) {
+          // Create a new translation on demand.
+          if (!$solution->hasTranslation($langcode)) {
+            $solution->addTranslation($langcode, $solution->toArray());
+          }
+          // An empty array unsets the field.
+          $solution->getTranslation($langcode)->set($fieldName, $values ?: NULL);
+        }
+      }
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function getMetadata(Project $project): array {
+    if (!isset($project->files['publiccodeYml'])) {
+      $project->addSilentError("publiccodeYml does not exist for $project->url");
+      return [];
+    }
+    try {
+      return Yaml::decode($project->files['publiccodeYml']) ?? [];
+    }
+    catch (InvalidDataTypeException $exception) {
+      $project->addSilentError("Cannot decode publiccode.yml of $project->url. Message: {$exception->getMessage()}");
+      return [];
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function getTitle(Project $project, array $metadata): string {
+    $title = $metadata['name'] ?? parent::getTitle($project, $metadata);
+    // Eliminate multiple spaces.
+    $title = preg_replace('/\s+/', ' ', $title);
+    return trim($title);
+  }
+
+}

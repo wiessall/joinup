@@ -82,3 +82,9 @@ tile:
       preview:
         label: 'News'
         icon: 'newspaper'
+    indicators:
+      label: 'Indicators'
+      description: 'GIT indicators'
+      preview:
+        - '1 stars'
+        - '2 forks'

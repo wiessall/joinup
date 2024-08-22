@@ -1,4 +1,4 @@
-@api @grouped @group-f
+@api @grouped @group-h
 Feature:
   As a site builder of the site
   In order to be able to better control the structure of my content
@@ -46,6 +46,7 @@ Feature:
     When I am logged in as a moderator
     And I go to the edit form of the "Table icon check" "custom page"
     And I click "Choose component"
+    And a modal should open
     And I click "Text"
     And the "Insert table" button should be available in the "Body" wysiwyg editor
     And I press the button "Insert table" in the "Body" wysiwyg editor

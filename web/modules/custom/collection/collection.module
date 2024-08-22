@@ -31,7 +31,6 @@ use Drupal\og\Og;
 use Drupal\og\OgMembershipInterface;
 use Drupal\og\OgRoleInterface;
 use Drupal\rdf_entity\Entity\Rdf;
-use Drupal\rdf_entity\Entity\RdfEntityType;
 use Drupal\rdf_entity\RdfInterface;
 use Drupal\sparql_entity_storage\SparqlGraphInterface;
 
@@ -230,17 +229,9 @@ function collection_module_implements_alter(&$implementations, $hook): void {
  */
 function collection_entity_extra_field_info(): array {
   $fields = [];
-  $collection = RdfEntityType::load('collection');
-
-  // This hook can fire before the collection bundle config is defined, in that
-  // case we have nothing meaningful to add.
-  if (empty($collection)) {
-    return [];
-  }
-
   // Add the join/leave collection form as field.
   // @todo will be removed in ISAICP-2743
-  $display = &$fields['rdf_entity'][$collection->id()]['display'];
+  $display = &$fields['rdf_entity']['collection']['display'];
   $display['join_collection'] = [
     'label' => t('Join collection'),
     'description' => t('Shows the join/leave collection form'),

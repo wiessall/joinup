@@ -1,4 +1,4 @@
-@api @group-f
+@api @group-h
 Feature:
   As a site builder of the site
   I need to be able to use "Call to action(s)" paragraphs for content.
@@ -19,6 +19,7 @@ Feature:
     Then I am logged in as a moderator
     And I go to the edit form of the "Call to action page" "custom page"
     And I click "Choose component"
+    And a modal should open
     And I click "Call to action(s)"
     And I fill in "Action" with "https://european-union.europa.eu" in the "Modal content" region
     And I fill in "Link text" with "european-union.europa.eu" in the "Modal content" region
@@ -41,6 +42,7 @@ Feature:
     Then I am logged in as a moderator
     And I go to the edit form of the "Pilled call to action" "custom page"
     And I click "Choose component"
+    And a modal should open
     And I click "Call to action(s)"
     And I fill in "Action" with "https://european-union.europa.eu" in the "Modal content" region
     And I fill in "Link text" with "europa.eu" in the "Modal content" region

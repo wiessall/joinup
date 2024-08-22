@@ -1,0 +1,27 @@
+diff --git a/core/modules/file/src/Plugin/Field/FieldFormatter/FileMediaFormatterBase.php b/core/modules/file/src/Plugin/Field/FieldFormatter/FileMediaFormatterBase.php
+index f55d95e65e04d33641dac0d1ede9f3b2a04f0b5a..5996105bf13fcfc4b0b75148f03975846e844328 100644
+--- a/core/modules/file/src/Plugin/Field/FieldFormatter/FileMediaFormatterBase.php
++++ b/core/modules/file/src/Plugin/Field/FieldFormatter/FileMediaFormatterBase.php
+@@ -81,7 +81,7 @@ public static function isApplicable(FieldDefinitionInterface $field_definition)
+ 
+     foreach ($extension_list as $extension) {
+       $mime_type = $extension_mime_type_guesser->guessMimeType('fakedFile.' . $extension);
+-      if (static::mimeTypeApplies($mime_type)) {
++      if (isset($mime_type) && static::mimeTypeApplies($mime_type)) {
+         return TRUE;
+       }
+     }
+diff --git a/core/modules/file/tests/src/Functional/Formatter/FileAudioFormatterTest.php b/core/modules/file/tests/src/Functional/Formatter/FileAudioFormatterTest.php
+index 3564bf1ed8b919a14ce7630fc68244e27fb76d3b..d9d8cb36821693f93ce5c4dd456bcd4fc84fef8a 100644
+--- a/core/modules/file/tests/src/Functional/Formatter/FileAudioFormatterTest.php
++++ b/core/modules/file/tests/src/Functional/Formatter/FileAudioFormatterTest.php
+@@ -25,7 +25,8 @@ class FileAudioFormatterTest extends FileMediaFormatterTestBase {
+    * @dataProvider dataProvider
+    */
+   public function testRender($tag_count, $formatter_settings): void {
+-    $field_config = $this->createMediaField('file_audio', 'mp3', $formatter_settings);
++    // Create a file field that accepts .mp3 and an unknown file extension.
++    $field_config = $this->createMediaField('file_audio', 'unknown-extension, mp3', $formatter_settings);
+ 
+     file_put_contents('public://file.mp3', str_repeat('t', 10));
+     $file1 = File::create([
