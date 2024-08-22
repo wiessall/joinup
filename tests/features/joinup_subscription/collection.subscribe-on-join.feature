@@ -38,13 +38,12 @@ Feature: Subscribing to a collection after joining
     When I go to the homepage of the "Drop bears" collection
     And I press "Join this collection"
     Then a modal should open
-    When I press "Subscribe" in the "Modal buttons" region
     # The modal uses animation to scroll into the view.
     # Since selenium does not know how to wait for this, we wait for the
     # animation to finish manually otherwise, the button is clicked too fast
     # and the modal is not dismissed.
     And I wait for 1 second
-    When I check "Notify me when content is published in Drop bears"
+    And I check "Notify me when content is published in Drop bears"
     And I press "Confirm" in the "Modal buttons" region
     Then the modal should be closed
     And I should see the success message "You have been subscribed to Drop bears and will receive weekly notifications. To manage your notifications go to My subscriptions in your user menu."
