@@ -23,7 +23,7 @@ settings:
     plugin_ids:
       'views_block:oss_solutions_listing-most_active': 'views_block:oss_solutions_listing-most_active'
       'views_block:oss_solutions_listing-most_recent': 'views_block:oss_solutions_listing-most_recent'
+      'views_block:recommended_solutions-recommended': 'views_block:recommended_solutions-recommended'
       joinup_oss_software_name: joinup_oss_software_name
       'views_exposed_filter_block:search_oss_catalogue-search': 'views_exposed_filter_block:search_oss_catalogue-search'
-      'views_block:recommended_solutions-recommended': 'views_block:recommended_solutions-recommended'
 field_type: block_field
