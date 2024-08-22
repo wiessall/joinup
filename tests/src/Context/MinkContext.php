@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup\Context;
 
+use Behat\Mink\Element\ElementInterface;
 use Behat\Mink\Selector\Xpath\Escaper;
 use Drupal\DrupalExtension\Context\MinkContext as DrupalExtensionMinkContext;
 use Drupal\joinup\Traits\JavascriptTrait;
@@ -47,28 +48,6 @@ class MinkContext extends DrupalExtensionMinkContext {
    */
   public function iWaitForSeconds(string $seconds): void {
     $this->getSession()->wait($seconds * 1000);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function attachFileToField($field, $path): void {
-    // Wait for the file upload element to be active.
-    // See Drupal.file.disableFields which disables all file upload elements
-    // when any .js-form-submit (e.g. AJAX buttons) get triggered.
-    if ($this->hasJavascriptSupport()) {
-      $element = $this->assertSession()->fieldExists($field);
-      $this->waitUntil(function () use ($element): bool {
-        return !$element->hasAttribute('disabled');
-      });
-    }
-
-    parent::attachFileToField($field, $path);
-
-    // Wait for AJAX if applicable, saves us from repeating it every time.
-    if ($this->hasJavascriptSupport()) {
-      $this->iWaitForAjaxToFinish();
-    }
   }
 
   /**
@@ -139,6 +118,13 @@ class MinkContext extends DrupalExtensionMinkContext {
   }
 
   /**
+   * {@inheritdoc}
+   */
+  public function attachFileToField($field, $path): void {
+    $this->attachFile($field, $path);
+  }
+
+  /**
    * Change the attachments file to field in the specified region.
    *
    * Example: And I attach the file "hi.png" to "image" in the "Modal" region.
@@ -146,8 +132,27 @@ class MinkContext extends DrupalExtensionMinkContext {
    * @Given /^(?:|I )attach the file "(?P<path>[^"]*)" to "(?P<field>(?:[^"]|\\")*)" in the "(?P<region>[^"]*)" region$/
    */
   public function attachRegionFileToField(string $field, string $path, string $region): void {
-    $field = $this->fixStepArgument($field);
+    $this->attachFile($field, $path, $this->getRegion($region));
+  }
 
+  /**
+   * Helper to attach a file to a field.
+   */
+  protected function attachFile(string $field, string $path, ?ElementInterface $container = NULL): void {
+    $container = $container ?: $this->getSession()->getPage();
+    $field = $this->fixStepArgument($field);
+    $field_element = $this->assertSession()->fieldExists($field, $container);
+
+    // Wait for the file upload element to be active.
+    // See Drupal.file.disableFields which disables all file upload elements
+    // when any .js-form-submit (e.g. AJAX buttons) get triggered.
+    if ($this->hasJavascriptSupport()) {
+      $this->waitUntil(function () use ($field_element): bool {
+        return !$field_element->hasAttribute('disabled');
+      });
+    }
+
+    // Resolve path.
     if ($this->getMinkParameter('files_path')) {
       $fullPath = rtrim(realpath($this->getMinkParameter('files_path')), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $path;
       if (is_file($fullPath)) {
@@ -155,8 +160,13 @@ class MinkContext extends DrupalExtensionMinkContext {
       }
     }
 
-    $regionObj = $this->getRegion($region);
-    $regionObj->attachFileToField($field, $path);
+    // Attach the file.
+    $field_element->attachFile($path);
+
+    // Wait for AJAX if applicable, saves us from repeating it every time.
+    if ($this->hasJavascriptSupport()) {
+      $this->iWaitForAjaxToFinish();
+    }
   }
 
 }
