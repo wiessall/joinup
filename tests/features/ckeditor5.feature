@@ -76,7 +76,6 @@ Feature: CKEditor5
     And I should not see "Pager test fourteen"
 
     When I attach the file "alan.jpg" to "Add file"
-    And I wait for AJAX to finish
 
     When I fill in "Name" with "This is Alan we love"
     And I fill in "Alternative text" with "This is Alan portrait"

@@ -110,7 +110,6 @@ Feature: Creation of news through the UI.
     # Upload works.
     When I go to the edit form of the "The Great Opening" news
     And I attach the file "logo.png" to "Logo"
-    And I wait for AJAX to finish
 
     # Picking-up pre-uploaded images works.
     When I remove the file from "Logo"

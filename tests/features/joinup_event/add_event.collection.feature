@@ -131,7 +131,6 @@ Feature: "Add event" visibility options.
     # Upload works.
     When I go to the edit form of the "The Great Opening" event
     And I attach the file "logo.png" to "Logo"
-    And I wait for AJAX to finish
 
     # Picking-up pre-uploaded images works.
     When I remove the file from "Logo"
