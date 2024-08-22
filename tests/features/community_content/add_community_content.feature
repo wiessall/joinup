@@ -243,7 +243,6 @@ Feature: Add community content
     And I attach the file "logo.png" to "Add file"
     When I fill in "Alternative text" with "Example logo"
     And I press "Save" in the "Modal buttons" region
-    And I wait for AJAX to finish
 
     When I press "Insert selected" in the "Modal buttons" region
     Then the modal should be closed

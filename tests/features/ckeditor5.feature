@@ -80,7 +80,6 @@ Feature: CKEditor5
     When I fill in "Name" with "This is Alan we love"
     And I fill in "Alternative text" with "This is Alan portrait"
     And I press "Save" in the "Modal buttons" region
-    And I wait for AJAX to finish
 
     Then I should see "The Image in Shaping of disruption"
     And I should see "This is Alan we love"
@@ -164,7 +163,6 @@ Feature: CKEditor5
 
     # Use the pager.
     When I click "Go to page 2"
-    And I wait for AJAX to finish
     Then I should not see "Too angry for Angry Birds"
     And I should not see "Pager test 1"
     And I should not see "Pager test 2"

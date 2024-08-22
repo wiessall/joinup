@@ -163,7 +163,6 @@ Feature: Proposing a collection
     # be able to pick-up a pre-uploaded image when editing the logo as an
     # alternative to the image upload.
     And I select image #3 as collection logo
-    And I wait for AJAX to finish
     And I press "Propose"
     Then I should see the success message "Thank you for proposing a collection. Your request is currently pending approval by the site administrator."
     And the "Just a proposal" collection logo is image #3
@@ -171,7 +170,6 @@ Feature: Proposing a collection
     Given I go to the edit form of the "Just a proposal" collection
     And I expand the "Additional fields" accordion section
     And I remove the file from the "Logo" field
-    But I wait for AJAX to finish
 
     # Upload also works.
     When I attach the file "logo.png" to "Logo"
