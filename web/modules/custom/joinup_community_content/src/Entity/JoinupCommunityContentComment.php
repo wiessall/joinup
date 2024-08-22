@@ -17,10 +17,12 @@ class JoinupCommunityContentComment extends Comment implements PermalinkInterfac
    * {@inheritdoc}
    */
   public function getPermalink(): ?Url {
-    if (!$this->in_preview) {
+    try {
       return $this->permalink();
     }
-    return NULL;
+    catch (\Exception $e) {
+      return NULL;
+    }
   }
 
 }
