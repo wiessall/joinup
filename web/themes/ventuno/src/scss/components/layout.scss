@@ -19,3 +19,7 @@
     margin: 0;
   }
 }
+
+.layout--stack > * + * {
+  margin-block-start: $spacer * 2;
+}

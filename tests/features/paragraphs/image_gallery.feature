@@ -60,7 +60,7 @@ Feature:
     And I wait for CSS animations to finish
     And I should not see the image "banner.jpg"
     And I should not see the image "linus.jpeg"
-    And the page should have an element with CSS selector ".slick--optionset--image-gallery button[aria-label='Previous'][aria-disabled='true']"
+    And I should see a ".slick--optionset--image-gallery button[aria-label='Previous'][aria-disabled='true']" element
     Then I click on element ".slick--optionset--image-gallery .slide--0"
     And I wait until ".colorbox" element exists
     And I should see the image "logo.png"

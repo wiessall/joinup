@@ -43,6 +43,7 @@ dependencies:
     - joinup_licence
     - joinup_news
     - joinup_newsletter
+    - joinup_oss_catalogue
     - joinup_search
     - joinup_subscription
     - media
@@ -206,6 +207,7 @@ permissions:
   - 'edit sitewide alert entities'
   - 'edit terms in legal_type'
   - 'edit webform variants'
+  - 'eu oss catalogue log'
   - 'feature entity'
   - 'filter membership overview'
   - 'manage custom landing pages'

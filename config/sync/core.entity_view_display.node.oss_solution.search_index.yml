@@ -1,0 +1,234 @@
+uuid: ee46250b-14c6-4250-ad80-a490523534a3
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.search_index
+    - field.field.node.oss_solution.oss_archived
+    - field.field.node.oss_solution.oss_available_languages
+    - field.field.node.oss_solution.oss_categories
+    - field.field.node.oss_solution.oss_default_branch
+    - field.field.node.oss_solution.oss_development_status
+    - field.field.node.oss_solution.oss_documentation
+    - field.field.node.oss_solution.oss_features
+    - field.field.node.oss_solution.oss_git_description
+    - field.field.node.oss_solution.oss_git_forks
+    - field.field.node.oss_solution.oss_git_open_issues
+    - field.field.node.oss_solution.oss_git_open_pull_requests
+    - field.field.node.oss_solution.oss_git_stars
+    - field.field.node.oss_solution.oss_git_url
+    - field.field.node.oss_solution.oss_hosting_platform
+    - field.field.node.oss_solution.oss_landing_url
+    - field.field.node.oss_solution.oss_license
+    - field.field.node.oss_solution.oss_logo
+    - field.field.node.oss_solution.oss_long_description
+    - field.field.node.oss_solution.oss_maintenance_contacts
+    - field.field.node.oss_solution.oss_maintenance_contractors
+    - field.field.node.oss_solution.oss_maintenance_type
+    - field.field.node.oss_solution.oss_owner
+    - field.field.node.oss_solution.oss_platform_reference
+    - field.field.node.oss_solution.oss_platforms
+    - field.field.node.oss_solution.oss_publiccode_yml_content
+    - field.field.node.oss_solution.oss_publiccode_yml_version
+    - field.field.node.oss_solution.oss_release_date
+    - field.field.node.oss_solution.oss_scope
+    - field.field.node.oss_solution.oss_screenshots
+    - field.field.node.oss_solution.oss_short_description
+    - field.field.node.oss_solution.oss_software_type
+    - field.field.node.oss_solution.oss_software_version
+    - field.field.node.oss_solution.oss_source
+    - field.field.node.oss_solution.oss_source_hash
+    - field.field.node.oss_solution.oss_used_by
+    - field.field.node.oss_solution.oss_vitality_index
+    - field.field.node.oss_solution.oss_vitality_index_range
+    - node.type.oss_solution
+  module:
+    - field_delimiter
+    - field_formatter_range
+    - layout_builder
+    - template_suggestion
+    - user
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+id: node.oss_solution.search_index
+targetEntityType: node
+bundle: oss_solution
+mode: search_index
+content:
+  oss_categories:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: false
+    third_party_settings:
+      field_delimiter:
+        delimiter: ''
+      field_formatter_range:
+        order: 0
+        limit: 0
+        offset: 0
+      template_suggestion:
+        template_suggestion: ''
+    weight: 5
+    region: content
+  oss_features:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings:
+      field_delimiter:
+        delimiter: ''
+      field_formatter_range:
+        order: 0
+        limit: 0
+        offset: 0
+      template_suggestion:
+        template_suggestion: ''
+    weight: 7
+    region: content
+  oss_git_description:
+    type: basic_string
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  oss_long_description:
+    type: basic_string
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  oss_maintenance_contacts:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: false
+    third_party_settings:
+      field_delimiter:
+        delimiter: ''
+      field_formatter_range:
+        order: 0
+        limit: 0
+        offset: 0
+      template_suggestion:
+        template_suggestion: ''
+    weight: 9
+    region: content
+  oss_maintenance_contractors:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: false
+    third_party_settings:
+      field_delimiter:
+        delimiter: ''
+      field_formatter_range:
+        order: 0
+        limit: 0
+        offset: 0
+      template_suggestion:
+        template_suggestion: ''
+    weight: 8
+    region: content
+  oss_platforms:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: false
+    third_party_settings:
+      field_delimiter:
+        delimiter: ''
+      field_formatter_range:
+        order: 0
+        limit: 0
+        offset: 0
+      template_suggestion:
+        template_suggestion: ''
+    weight: 1
+    region: content
+  oss_short_description:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  oss_software_type:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: false
+    third_party_settings:
+      field_delimiter:
+        delimiter: ''
+      field_formatter_range:
+        order: 0
+        limit: 0
+        offset: 0
+      joinup_slick:
+        preset: ''
+      template_suggestion:
+        template_suggestion: ''
+    weight: 4
+    region: content
+  oss_used_by:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: false
+    third_party_settings:
+      field_delimiter:
+        delimiter: ''
+      field_formatter_range:
+        order: 0
+        limit: 0
+        offset: 0
+      template_suggestion:
+        template_suggestion: ''
+    weight: 6
+    region: content
+hidden:
+  description: true
+  langcode: true
+  links: true
+  oss__description: true
+  oss__documentation: true
+  oss__features: true
+  oss__long_description: true
+  oss__screenshots: true
+  oss_archived: true
+  oss_available_languages: true
+  oss_default_branch: true
+  oss_development_status: true
+  oss_documentation: true
+  oss_git_forks: true
+  oss_git_open_issues: true
+  oss_git_open_pull_requests: true
+  oss_git_stars: true
+  oss_git_url: true
+  oss_hosting_platform: true
+  oss_landing_url: true
+  oss_license: true
+  oss_logo: true
+  oss_maintenance_type: true
+  oss_owner: true
+  oss_platform_reference: true
+  oss_publiccode_yml_content: true
+  oss_publiccode_yml_version: true
+  oss_release_date: true
+  oss_scope: true
+  oss_screenshots: true
+  oss_software_version: true
+  oss_source: true
+  oss_source_hash: true
+  oss_vitality_index: true
+  oss_vitality_index_range: true
+  published_at: true
+  report: true
+  search_api_excerpt: true
