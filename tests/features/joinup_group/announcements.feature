@@ -2,7 +2,7 @@
 @api
 Feature: Messaging group announcements
 
-  @group-d
+  @group-e
   Scenario Outline: Announcement creation and transitions
 
     Given the following <group>s:
@@ -103,6 +103,7 @@ Feature: Messaging group announcements
 
     When I press "Create"
     Then I should see the success message "The announcement has been created as Draft. Review the announcement and, when is ready to be sent, use the 'Send' button."
+    And Log entry with the message "The announcement The Big Opening has been created by Sons of tweets for Fail pension." should exist.
     And the "Subject" field should contain "The Big Opening"
     And the "Body" field should contain "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
     And I should see "Announcement state: Draft"
@@ -400,7 +401,7 @@ Feature: Messaging group announcements
       | collection |
       | solution   |
 
-  @javascript @group-d
+  @javascript @group-e
   Scenario: Announcement moderation
     Given the following collections:
       | title       | state     |

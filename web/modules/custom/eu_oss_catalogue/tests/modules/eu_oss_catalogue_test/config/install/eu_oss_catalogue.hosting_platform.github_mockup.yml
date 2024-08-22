@@ -1,0 +1,12 @@
+langcode: en
+status: true
+dependencies: {  }
+id: github_mockup
+label: 'Github mockup'
+description: 'Test GitHub hosting provider'
+platformId: github
+platformSettings:
+  projects:
+    dummy-namespace-1:
+      - dummy-name-1
+    dummy-namespace-2: null

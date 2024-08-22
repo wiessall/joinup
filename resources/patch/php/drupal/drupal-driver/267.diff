@@ -1,0 +1,167 @@
+diff --git a/src/Drupal/Driver/Fields/Drupal8/LinkHandler.php b/src/Drupal/Driver/Fields/Drupal8/LinkHandler.php
+index a6c87bf..6634c63 100644
+--- a/src/Drupal/Driver/Fields/Drupal8/LinkHandler.php
++++ b/src/Drupal/Driver/Fields/Drupal8/LinkHandler.php
+@@ -16,14 +16,18 @@ public function expand($values) {
+       // 'options' is required to be an array, otherwise the utility class
+       // Drupal\Core\Utility\UnroutedUrlAssembler::assemble() will complain.
+       $options = [];
++      // Instantiate the value as URI-only if $value is a string.
++      if (is_string($value)) {
++        $value = [NULL, $value];
++      }
+       if (!empty($value[2])) {
+         parse_str($value[2], $options);
+       }
+-      $return[] = [
++      $return[] = array_filter([
+         'options' => $options,
+         'title' => $value[0],
+         'uri' => $value[1],
+-      ];
++      ], fn ($value) => !is_null($value));
+     }
+     return $return;
+   }
+diff --git a/tests/Drupal/Tests/Driver/Field/LinkHandlerTest.php b/tests/Drupal/Tests/Driver/Field/LinkHandlerTest.php
+new file mode 100644
+index 0000000..0444370
+--- /dev/null
++++ b/tests/Drupal/Tests/Driver/Field/LinkHandlerTest.php
+@@ -0,0 +1,136 @@
++<?php
++
++namespace Drupal\Tests\Driver\Field;
++
++use Drupal\Core\DependencyInjection\ContainerBuilder;
++use Drupal\Core\Entity\EntityFieldManagerInterface;
++use Drupal\Core\Entity\EntityTypeInterface;
++use Drupal\Core\Entity\EntityTypeManagerInterface;
++use Drupal\Core\Field\FieldDefinitionInterface;
++use Drupal\Driver\Fields\Drupal8\LinkHandler;
++use PHPUnit\Framework\TestCase;
++
++/**
++ * Tests LinkHandler.
++ *
++ * @coversDefaultClass \Drupal\Driver\Fields\Drupal8\LinkHandler
++ */
++class LinkHandlerTest extends TestCase {
++
++  const TEST_ENTITY_TYPE_ID = 'test_entity';
++  const TEST_FIELD_ID = 'test_field';
++
++  /**
++   * {@inheritdoc}
++   */
++  protected function setUp(): void {
++    parent::setUp();
++
++    $entityType = $this->getMockBuilder(EntityTypeInterface::class)
++      ->disableOriginalConstructor()
++      ->getMock();
++    $entityType->method('getKey')
++      ->with('bundle')
++      ->willReturn('bundle');
++
++    $entityTypeManager = $this->getMockBuilder(EntityTypeManagerInterface::class)
++      ->disableOriginalConstructor()
++      ->getMock();
++    $entityTypeManager->method('getDefinition')
++      ->with(self::TEST_ENTITY_TYPE_ID)
++      ->willReturn($entityType);
++
++    $fieldDefinition = $this->getMockBuilder(FieldDefinitionInterface::class)
++      ->disableOriginalConstructor()
++      ->getMock();
++    $entityFieldManager = $this->getMockBuilder(EntityFieldManagerInterface::class)
++      ->disableOriginalConstructor()
++      ->getMock();
++    $entityFieldManager->method('getFieldStorageDefinitions')
++      ->with(self::TEST_ENTITY_TYPE_ID)
++      ->willReturn([
++        self::TEST_FIELD_ID => [],
++      ]);
++    $entityFieldManager->method('getFieldDefinitions')
++      ->with(self::TEST_ENTITY_TYPE_ID, self::TEST_ENTITY_TYPE_ID)
++      ->willReturn([
++        self::TEST_FIELD_ID => $fieldDefinition,
++      ]);
++
++    $container = new ContainerBuilder();
++    $container->set('entity_type.manager', $entityTypeManager);
++    $container->set('entity_field.manager', $entityFieldManager);
++    \Drupal::setContainer($container);
++  }
++
++  /**
++   * @covers ::expand
++   *
++   * @dataProvider providerTestLinkHandler
++   */
++  public function testLinkHandler(array $values, array $expected): void {
++    $entityObject = [
++      'bundle' => self::TEST_ENTITY_TYPE_ID,
++      self::TEST_FIELD_ID => $values,
++    ];
++    $linkHandler = new LinkHandler(
++      (object) $entityObject,
++      self::TEST_ENTITY_TYPE_ID,
++      self::TEST_FIELD_ID,
++    );
++
++    $this->assertSame($expected, $linkHandler->expand($entityObject[self::TEST_FIELD_ID]));
++  }
++
++  /**
++   * Data provider for ::testLinkHandler.
++   *
++   * @return array[][]
++   *   The test cases.
++   */
++  public function providerTestLinkHandler(): array {
++    return [
++      'Link with only URI' => [
++        'values' => [
++          'https://example.com',
++        ],
++        'expected' => [
++          [
++            'options' => [],
++            'uri' => 'https://example.com',
++          ],
++        ],
++      ],
++      'Link with title and URI' => [
++        'values' => [
++          ['Link title', 'https://example.com'],
++        ],
++        'expected' => [
++          [
++            'options' => [],
++            'title' => 'Link title',
++            'uri' => 'https://example.com',
++          ],
++        ],
++      ],
++      'A link with title and another with only URI' => [
++        'values' => [
++          'https://example.com/first',
++          ['Second link', 'https://example.com/second'],
++        ],
++        'expected' => [
++          [
++            'options' => [],
++            'uri' => 'https://example.com/first',
++          ],
++          [
++            'options' => [],
++            'title' => 'Second link',
++            'uri' => 'https://example.com/second',
++          ],
++        ],
++      ],
++    ];
++  }
++
++}

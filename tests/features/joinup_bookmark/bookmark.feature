@@ -1,4 +1,4 @@
-@api @javascript @group-a
+@api @javascript @group-d
 Feature: Bookmark/Unbookmark feature.
   In order to express appreciation or approval of a content item
   As a user

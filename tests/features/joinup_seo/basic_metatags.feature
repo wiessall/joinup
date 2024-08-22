@@ -1,4 +1,4 @@
-@api @group-i
+@api @group-g
 Feature:
   As the owner of the website
   In order for my site to be more appealing to the search engines

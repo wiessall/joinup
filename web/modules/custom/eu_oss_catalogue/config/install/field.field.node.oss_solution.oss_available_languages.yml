@@ -1,0 +1,28 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.oss_available_languages
+    - node.type.oss_solution
+  enforced:
+    module:
+      - eu_oss_catalogue
+third_party_settings:
+  eu_oss_catalogue:
+    publiccode_yml:
+      resolvers:
+        - plugin: default
+          config:
+            path: localisation/availableLanguages
+id: node.oss_solution.oss_available_languages
+field_name: oss_available_languages
+entity_type: node
+bundle: oss_solution
+label: 'Supported languages'
+description: 'The list of languages in which the software is available (at least one language).'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

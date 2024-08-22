@@ -1,0 +1,41 @@
+uuid: 9ec7c8d7-d0db-4a4a-aecb-c9f6ce569157
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.oss_platforms
+    - node.type.oss_solution
+    - taxonomy.vocabulary.oss_platform
+  module:
+    - dynamic_entity_reference
+third_party_settings:
+  eu_oss_catalogue:
+    publiccode_yml:
+      resolvers:
+        -
+          plugin: taxonomy_term
+          config:
+            path: platforms
+            vid: oss_platform
+            controlled: false
+id: node.oss_solution.oss_platforms
+field_name: oss_platforms
+entity_type: node
+bundle: oss_solution
+label: Platforms
+description: 'The platform(s) where the solution runs on'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      oss_platform: oss_platform
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference
