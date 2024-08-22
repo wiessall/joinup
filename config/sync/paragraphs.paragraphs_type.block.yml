@@ -1,0 +1,12 @@
+uuid: ada57514-7e2d-4198-936a-740b4ecae441
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'file:file:e143ce1d-d546-4562-ae4b-271a91b623c1'
+id: block
+label: Block
+icon_uuid: e143ce1d-d546-4562-ae4b-271a91b623c1
+icon_default: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgZmlsbD0iY3VycmVudENvbG9yIiBjbGFzcz0iYmkgYmktYXBwIiB2aWV3Qm94PSIwIDAgMTYgMTYiPgogIDxwYXRoIGQ9Ik0xMSAyYTMgMyAwIDAgMSAzIDN2NmEzIDMgMCAwIDEtMyAzSDVhMyAzIDAgMCAxLTMtM1Y1YTMgMyAwIDAgMSAzLTNoNnpNNSAxYTQgNCAwIDAgMC00IDR2NmE0IDQgMCAwIDAgNCA0aDZhNCA0IDAgMCAwIDQtNFY1YTQgNCAwIDAgMC00LTRINXoiLz4KPC9zdmc+'
+description: 'The Block provides a field that allows a content entity to reference and configure custom block instances.'
+behavior_plugins: {  }

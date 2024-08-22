@@ -1,0 +1,12 @@
+diff --git a/src/Element/LayoutParagraphsBuilder.php b/src/Element/LayoutParagraphsBuilder.php
+index 187530b..9e9c0da 100644
+--- a/src/Element/LayoutParagraphsBuilder.php
++++ b/src/Element/LayoutParagraphsBuilder.php
+@@ -166,6 +166,7 @@ class LayoutParagraphsBuilder extends RenderElement implements ContainerFactoryP
+       if ($component->isLayout()) {
+         $section = $this->layoutParagraphsLayout->getLayoutSection($component->getEntity());
+         $layout_plugin_instance = $this->layoutPluginInstance($section);
++        $layout_plugin_instance->setInPreview(TRUE);
+         foreach (array_keys($element['#components'][$uuid]['regions']) as $region_name) {
+           foreach ($section->getComponentsForRegion($region_name) as $child_component) {
+             $child_uuid = $child_component->getEntity()->uuid();

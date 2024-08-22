@@ -1,0 +1,82 @@
+<?php
+
+/**
+ * @file
+ * Hook implementations for EU OSS Vitality index module.
+ */
+
+declare(strict_types=1);
+
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
+
+/**
+ * Implements hook_ENTITY_TYPE_insert().
+ */
+function eu_oss_vitality_index_node_insert(EntityInterface $node): void {
+  if (!$node instanceof OssSolutionInterface) {
+    return;
+  }
+
+  /** @var \Drupal\eu_oss_vitality_index\VitalityIndexQueueInterface $vitalityIndexQueue */
+  $vitalityIndexQueue = Drupal::service('eu_oss_vitality_index.queue');
+  $vitalityIndexQueue->addToQueue((int) $node->id());
+}
+
+/**
+ * Implements hook_cron().
+ */
+function eu_oss_vitality_index_cron(): void {
+  $lastCron = Drupal::state()->get('eu_oss_vitality_index.last_cron', 0);
+  $cronFrequency = Drupal::config('eu_oss_vitality_index.settings')
+    ->get('cron_frequency');
+  $requestTime = Drupal::time()->getRequestTime();
+
+  // Create items after a specific period of time.
+  if ($cronFrequency < 1 || ($requestTime - $lastCron) / (3600 * 24) < $cronFrequency) {
+    return;
+  }
+
+  // Update last cron run.
+  Drupal::state()->set('eu_oss_vitality_index.last_cron', $requestTime);
+
+  // Add items to queue.
+  /** @var \Drupal\node\NodeStorageInterface $nodeStorage */
+  $nodeStorage = Drupal::service('entity_type.manager')->getStorage('node');
+  /** @var \Drupal\eu_oss_vitality_index\VitalityIndexQueueInterface $vitalityIndexQueue */
+  $vitalityIndexQueue = Drupal::service('eu_oss_vitality_index.queue');
+
+  $nodeIds = $nodeStorage->getQuery()->accessCheck(FALSE)
+    ->condition('type', 'oss_solution')
+    ->condition('status', TRUE)
+    ->condition('oss_archived', FALSE)
+    ->execute();
+
+  foreach ($nodeIds as $nid) {
+    $vitalityIndexQueue->addToQueue((int) $nid);
+  }
+
+  \Drupal::logger('eu_oss_catalogue')
+    ->info('Added items to eu_oss_vitality_index queue.');
+}
+
+/**
+ * Implements hook_theme().
+ */
+function eu_oss_vitality_index_theme(): array {
+  return [
+    'vitality_index_chart' => [
+      'variables' => [
+        'info' => [],
+        'range' => [],
+      ],
+    ],
+  ];
+}
+
+/**
+ * Prepares variables for vitality-index-chart.html.twig templates.
+ */
+function template_preprocess_vitality_index_chart(&$variables): void {
+  $variables['attributes']['data-vitality-index-range'] = $variables['range'];
+}

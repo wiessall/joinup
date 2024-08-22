@@ -6,12 +6,16 @@ all:
   - language_url
 configurable:
   - language_interface
+  - language_content
 negotiation:
   language_content:
     enabled:
-      language-interface: 0
+      oss-language-content-entity: -9
+      language-interface: 9
+      language-selected: 12
     method_weights:
       language-content-entity: -9
+      oss-language-content-entity: -9
       language-url: -8
       language-session: -6
       language-user: -4

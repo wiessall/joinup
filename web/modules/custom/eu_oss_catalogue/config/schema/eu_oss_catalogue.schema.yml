@@ -1,0 +1,75 @@
+field.field.*.*.*.third_party.eu_oss_catalogue:
+  type: sequence
+  label: Parsers
+  sequence:
+    type: mapping
+    label: Parser
+    # TODO: Validate that keys of this sequence are all parser plugin IDs.
+    # constraints:
+    mapping:
+      override:
+        type: string
+        label: Whether to override an exsting value
+        constraints:
+          # Available starting with Drupal 10.2.0.
+          # See \Drupal\eu_oss_catalogue\Model\FieldResolvingOverridePolicy
+          Choice:
+            - always
+            - preserve_not_empty
+            - resolved_not_empty
+      resolvers:
+        type: sequence
+        label: Resolvers
+        sequence:
+          type: mapping
+          label: Resolver
+          mapping:
+            plugin:
+              type: string
+              label: The resolver plugin ID
+              constraints:
+                PluginExists:
+                  manager: plugin.manager.eu_oss_catalogue.resolver
+                  interface: \Drupal\eu_oss_catalogue\EuOssCatalogueResolverInterface
+            config:
+              type: eu_oss_catalogue.resolver_schema.[%parent.plugin]
+              label: Resolver plugin config
+
+eu_oss_catalogue.resolver_config_base:
+  type: mapping
+  label: Resolver schema
+  mapping:
+    path:
+      type: string
+      label: Path to data nested value
+
+eu_oss_catalogue.resolver_schema.*:
+  type: eu_oss_catalogue.resolver_config_base
+  label: Default resolver config
+
+eu_oss_catalogue.resolver_schema.taxonomy_term:
+  type: eu_oss_catalogue.resolver_config_base
+  label: Language code resolver config
+  mapping:
+    vid:
+      type: string
+      label: Vocabulary
+    controlled:
+      type: boolean
+      label: Whether is a controlled vocabulary
+
+eu_oss_catalogue.resolver_schema.contact:
+  type: eu_oss_catalogue.resolver_config_base
+  label: Contact resolver config
+  mapping:
+    node_type:
+      type: string
+      label: Node type
+
+eu_oss_catalogue.resolver_schema.absolute_url:
+  type: eu_oss_catalogue.resolver_config_base
+  label: Absolute URL resolver config
+  mapping:
+    verify:
+      type: boolean
+      label: Whether to verify the URL
