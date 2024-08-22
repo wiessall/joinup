@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_core\Entity;
 
+use Drupal\Core\Url;
 use Drupal\joinup_core\Controller\IdRedirect;
 use Drupal\joinup_rdf\Entity\RdfSyncEntityInterface;
 
@@ -17,12 +18,12 @@ trait PermalinkTrait {
   /**
    * {@inheritdoc}
    */
-  public function getPermalink(): ?string {
+  public function getPermalink(): ?Url {
     // Entity ID is pointing to the publication office redirect.
     $namespaces = implode('|', array_keys(IdRedirect::getEntityTypeFromPersistentUriNamespace()));
     $uri = $this instanceof RdfSyncEntityInterface ? $this->getUri() : $this->id();
     if (preg_match('{^http://data.europa.eu/(?:' . $namespaces . ')/}', $uri)) {
-      return $uri;
+      return Url::fromUri($uri);
     }
 
     try {
@@ -30,7 +31,7 @@ trait PermalinkTrait {
       return $this->toUrl('canonical', [
         'path_processing' => FALSE,
         'absolute' => TRUE,
-      ])->toString();
+      ]);
     }
     catch (\Exception $e) {
       return NULL;
