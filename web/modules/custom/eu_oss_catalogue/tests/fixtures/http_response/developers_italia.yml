@@ -1,0 +1,107 @@
+data:
+
+  - id: 00valid1-0000-0000-0000-000000000000
+    url: https://github.com/italia-software/dummy-name-1.git
+    aliases:
+      - https://github.com/dummy-namespace-1/dummy-name-1.git
+    publiccodeYml: |
+      url: https://github.com/dummy-namespace-1/dummy-name-1.git
+    active: true
+    createdAt: '2023-07-17T19:01:50.417665Z'
+    updatedAt: '2023-07-20T23:06:56.580871Z'
+
+  - id: 00valid2-0000-0000-0000-000000000000
+    url: https://limited.self-hosted.gitlab.example.com/group1/project-1-1.git
+    aliases:
+      - https://limited.self-hosted.gitlab.example.com/group1/project-1-1.git
+    publiccodeYml: |
+      url: https://limited.self-hosted.gitlab.example.com/group1/project-1-1.git
+    active: true
+    createdAt: '2023-07-03T18:02:09.536128Z'
+    updatedAt: '2023-07-03T22:07:09.288625Z'
+
+  - id: invalid1-0000-0000-0000-000000000000
+    url: https://limited.self-hosted.gitlab.example.com/group1/project-1-2.git
+    aliases:
+      - https://limited.self-hosted.gitlab.example.com/group1/project-1-2.git
+    publiccodeYml: |
+      url: https://limited.self-hosted.gitlab.example.com/group1/project-1-2.git
+    active: true
+    createdAt: '2023-06-15T18:04:37.975817Z'
+    updatedAt: '2023-07-20T22:09:23.352593Z'
+
+  - id: 00valid4-0000-0000-0000-000000000000
+    url: https://example.de/arbitrary/project-4
+    publiccodeYml: |
+      publiccodeYmlVersion: '0.2'
+      name: 'Project 1.4'
+      url: 'https://limited.self-hosted.gitlab.example.com/group1/project-1-4.git'
+      # This returns 404.
+      logo: doesn-t/exist.png
+      applicationSuite: Suite1
+      categories:
+        - data-collection
+        - data-analytics
+      dependsOn:
+        open:
+          - name: Bar
+            optional: false
+            versionMin: 15.0.2
+      description:
+        # DE and IT have the same amount of features but this is the 1st.
+        de:
+          genericName: '[DE] Group1: Project 4: Generic name'
+          documentation: https://example.com/group1/project-1-4/de/docs.md
+          shortDescription: '[DE] Group1: Project 4: Short description'
+          longDescription: '[DE] Group1: Project 4: Long description'
+          features:
+            - '[DE] feat 4'
+      developmentStatus: concept
+      intendedAudience:
+        countries:
+          - de
+      legal:
+        license: EUPL-1.2
+        mainCopyrightOwner: Townhall
+        repoOwner: Townhall
+      localisation:
+        availableLanguages:
+          - de
+        localisationReady: true
+      maintenance:
+        contacts:
+            - name: John Doe
+            - name: Jane Roe
+        type: internal
+      platforms:
+        - web
+      releaseDate: '2022-12-16'
+      softwareType: standalone/desktop
+      softwareVersion: 1.0.0
+    active: true
+    createdAt: '2023-07-03T18:02:09.536128Z'
+    updatedAt: '2023-07-03T22:07:09.288625Z'
+
+  - id: invalid2-0000-0000-0000-000000000000
+    url: https://limited.self-hosted.gitlab.example.com/user1/project-1.git
+    aliases:
+      - https://limited.self-hosted.gitlab.example.com/user1/project-1.git
+    publiccodeYml: |
+      url: https://limited.self-hosted.gitlab.example.com/user1/project-1.git
+    active: true
+    createdAt: '2023-06-15T18:04:37.975817Z'
+    updatedAt: '2023-07-20T22:09:23.352593Z'
+
+  # Malformed publiccodeYml, no URL inside.
+  - id: invalid3-0000-0000-0000-000000000000
+    url: https://limited.self-hosted.gitlab.example.com/user2/project-1.git
+    publiccodeYml: |
+      This file content is not relevant as we only use Developers Italia to
+      fetch a list of URLs. Then we use specific code hosting platform API to
+      get fresh data, including pubbliccode.yml content.
+    active: true
+
+# Pagination
+links:
+  prev: null
+  next: null

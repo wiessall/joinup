@@ -192,7 +192,7 @@ class LogRecordsContext extends RawDrupalContext {
    * @AfterScenario @loggedErrors
    */
   public function cleanupLoggerIfNeeded(): void {
-    if (!$this->dblogStatusOriginal) {
+    if ($this->dblogStatusOriginal) {
       \Drupal::database()->delete('watchdog')
         ->condition('timestamp', $this->timeStamp, '>=')
         ->execute();

@@ -1,0 +1,57 @@
+{#
+/**
+ * @file
+ * Themeing for OSS solution default field.
+ */
+#}
+{%
+  set classes = [
+    'field--name-' ~ field_name|clean_class,
+    bundle|clean_class ~ '__' ~ field_name_clean|clean_class,
+    'ps-0',
+  ]
+%}
+{%
+  set title_classes = [
+    'field__label',
+    'fw-bold',
+    label_display == 'visually_hidden' ? 'visually-hidden',
+  ]
+%}
+{% if multiple %}
+  {% if items|length < 5 %}
+    <ul{{ attributes.addClass(classes) }}>
+      {% for item in items %}
+        <li{{ item.attributes.addClass('field__item') }}>{{ item.content }}</li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <ul{{ attributes.addClass(classes) }}>
+      {% for item in items|slice(0, 4) %}
+        <li{{ item.attributes.addClass('field__item') }}>{{ item.content }}</li>
+      {% endfor %}
+      <div class="collapse oss-solution__oss-features" id="collapseFeatures">
+        {% for item in items|slice(5) %}
+          <li{{ item.attributes.addClass('field__item') }}>{{ item.content }}</li>
+        {% endfor %}
+      </div>
+    </ul>
+    <button
+      class="mt-3 mb-5 btn btn-link p-0 oss-solution__see-more-btn js-see-more-btn"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#collapseFeatures"
+      aria-expanded="false"
+      aria-controls="collapseFeatures">
+      {{ 'See more'|t }}
+      <svg class="bi icon--s">
+        <use xlink:href="{{ bcl_icon_path }}#chevron-down"></use>
+      </svg>
+    </button>
+  {% endif %}
+  </ul>
+{% else %}
+  {% for item in items %}
+    <div{{ attributes.addClass(classes) }}>{{ item.content }}</div>
+  {% endfor %}
+{% endif %}
