@@ -52,6 +52,23 @@ class MinkContext extends DrupalExtensionMinkContext {
   /**
    * {@inheritdoc}
    */
+  public function attachFileToField($field, $path): void {
+    // Wait for the file upload element to be active.
+    // See Drupal.file.disableFields which disables all file upload elements
+    // when any .js-form-submit (e.g. AJAX buttons) get triggered.
+    if ($this->hasJavascriptSupport()) {
+      $element = $this->assertSession()->fieldExists($field);
+      $this->waitUntil(function () use ($element): bool {
+        return !$element->hasAttribute('disabled');
+      });
+    }
+
+    parent::attachFileToField($field, $path);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function assertSelectRadioById($label, $id = ''): void {
     $page = $this->getSession()->getPage();
     if ($id) {
