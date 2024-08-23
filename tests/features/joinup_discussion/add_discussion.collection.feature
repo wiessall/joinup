@@ -136,14 +136,11 @@ Feature: Discussions added to collections
     # Upload works.
     When I go to the edit form of the "Yellow Zeus" discussion
     And I attach the file "logo.png" to "Logo"
-    And I wait for AJAX to finish
 
     # Picking-up pre-uploaded images works.
     When I remove the file from "Logo"
-    And I wait for AJAX to finish
 
     And I select image #4 as discussion logo
-    And I wait for AJAX to finish
     And I press "Update"
     And the "Yellow Zeus" discussion logo is image #4
 
