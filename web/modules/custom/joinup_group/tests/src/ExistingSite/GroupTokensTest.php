@@ -52,13 +52,11 @@ class GroupTokensTest extends JoinupExistingSiteTestBase {
     ]);
 
     $entities_to_test = [
-      'rdf_entity' => [
-        $solution,
-      ],
       'node' => [
         $release,
         $release_distribution,
         $standalone_distribution,
+        $solution,
       ],
     ];
 

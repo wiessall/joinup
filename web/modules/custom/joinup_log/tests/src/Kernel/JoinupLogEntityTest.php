@@ -29,7 +29,7 @@ class JoinupLogEntityTest extends KernelTestBase {
     'message_notify',
     'og',
     'options',
-    'rdf_entity',
+    'node',
     'state_machine_revisions',
     'system',
     'user',

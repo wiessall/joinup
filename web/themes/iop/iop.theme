@@ -255,22 +255,6 @@ function iop_preprocess_page_title(array &$variables): void {
 }
 
 /**
- * Implements hook_preprocess_HOOK().
- */
-function iop_preprocess_rdf_entity(array &$variables): void {
-  if ($variables['view_mode'] === 'carousel' && !empty($variables['image'])) {
-    $variables['image'] = $variables['rdf_entity']->getLogoAsRenderArray([
-      'label' => 'hidden',
-      'type' => 'responsive_image',
-      'settings' => [
-        'responsive_image_style' => 'iop_carousel',
-        'image_link' => 'none',
-      ],
-    ]);
-  }
-}
-
-/**
  * Implements hook_preprocess_select().
  */
 function iop_preprocess_select(array &$variables): void {

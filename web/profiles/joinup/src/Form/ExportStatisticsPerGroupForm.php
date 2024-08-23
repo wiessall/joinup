@@ -152,7 +152,7 @@ QUERY;
    *   The batch context.
    */
   public function generateGroupStatistics(string $entity_id, array &$context): void {
-    $rdf_storage = $this->entityTypeManager->getStorage('rdf_entity');
+    $rdf_storage = $this->entityTypeManager->getStorage('node');
     /** @var \Drupal\collection\Entity\CollectionInterface|\Drupal\joinup_solution\Entity\SolutionInterface $group */
     $group = $rdf_storage->load((string) $entity_id);
     // Fetch the nodes that belong to the group.
@@ -257,7 +257,7 @@ QUERY;
   private function getLikesCount(array $entity_ids): string {
     $query = $this->mysql->select('flag_counts', 'fc');
     $query->addExpression('IFNULL(SUM(count), 0)', 'sum');
-    $query->condition('flag_id', ['like_node', 'like_rdf_entity'], 'IN');
+    $query->condition('flag_id', 'like_node');
     $query->condition('entity_id', $entity_ids, 'IN');
     return $query->execute()->fetchField();
   }

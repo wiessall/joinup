@@ -28,8 +28,6 @@ class RouteSubscriber extends RouteSubscriberBase {
     $routes = [
       'node.add',
       'node.add_page',
-      'rdf_entity.rdf_add',
-      'rdf_entity.rdf_add_page',
       'view.frontpage.feed_1',
       'view.frontpage.page_1',
     ];

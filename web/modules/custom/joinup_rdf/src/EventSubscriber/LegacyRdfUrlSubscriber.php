@@ -35,6 +35,7 @@ class LegacyRdfUrlSubscriber extends HttpExceptionSubscriberBase {
   public function on404(ExceptionEvent $event): void {
     $path = $event->getRequest()->getPathInfo();
     // Extracts the encoded URI and everything that comes after.
+    // @todo Check if this is still needed.
     $pattern = '@^(?<prefix>/rdf_entity/|/taxonomy/term/)(?<uri>http_e_f_f[^/]*)(?<suffix>/(?:.*))?$@';
     if (!preg_match($pattern, $path, $found)) {
       return;

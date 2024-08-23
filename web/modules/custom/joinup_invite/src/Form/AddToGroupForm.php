@@ -9,7 +9,7 @@ use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\og\OgMembershipInterface;
 
 /**
- * Form to add a member with a certain role in a rdf entity group.
+ * Form to add a member with a certain role in a group.
  */
 class AddToGroupForm extends GroupFormBase {
 

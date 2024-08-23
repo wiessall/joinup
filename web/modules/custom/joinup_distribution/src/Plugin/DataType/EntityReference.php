@@ -22,7 +22,7 @@ class EntityReference extends EntityReferenceOriginal {
       $entityTypeId = $this->getParent()->getParent()->getParent()->getEntity()->getEntityTypeId();
       $bundle = $this->getParent()->getParent()->getParent()->getEntity()->bundle();
       if ($entityTypeId === 'node' && $fieldName === 'parent' && $bundle === 'distribution' && !is_numeric($this->id)) {
-        $entity = \Drupal::entityTypeManager()->getStorage('rdf_entity')->load($this->id);
+        $entity = \Drupal::entityTypeManager()->getStorage('node')->load($this->id);
         $this->target = $entity?->getTypedData();
         return $this->target;
       }

@@ -10,7 +10,7 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\joinup_group\Form\UnshareForm as OriginalForm;
-use Drupal\rdf_entity\RdfInterface;
+use Drupal\node\NodeInterface;
 
 /**
  * Form to unshare a solution from within collections.
@@ -20,36 +20,37 @@ use Drupal\rdf_entity\RdfInterface;
  * have the `{rdf_entity}` parameter named differently and also, even if the
  * rdf entity is implementing the EntityInterface, the ArgumentResolver would
  * not automatically assign it to another entity of the same type.
+ *
+ * @todo Is this needed anymore?
  */
 class UnshareForm extends OriginalForm {
 
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state, ?RdfInterface $rdf_entity = NULL): array {
-    return parent::doBuildForm($form, $form_state, $rdf_entity);
+  public function buildForm(array $form, FormStateInterface $form_state, ?NodeInterface $node = NULL): array {
+    return parent::doBuildForm($form, $form_state, $node);
   }
 
   /**
    * Access callback for the unshare form.
    *
-   * @param \Drupal\rdf_entity\RdfInterface $rdf_entity
+   * @param \Drupal\node\NodeInterface $node
    *   The node entity.
    *
    * @return \Drupal\Core\Access\AccessResultInterface
    *   The access result.
    */
-  public function access(RdfInterface $rdf_entity): AccessResultInterface {
-    $this->entity = $rdf_entity;
-
+  public function access(NodeInterface $node): AccessResultInterface {
+    $this->entity = $node;
     return AccessResult::allowedIf(!empty($this->getGroups()));
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getTitle(EntityInterface $rdf_entity): TranslatableMarkup {
-    return $this->t('Unshare %title from', ['%title' => $rdf_entity->label()]);
+  public function getTitle(EntityInterface $node): TranslatableMarkup {
+    return $this->t('Unshare %title from', ['%title' => $node->label()]);
   }
 
 }

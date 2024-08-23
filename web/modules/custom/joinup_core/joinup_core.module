@@ -334,7 +334,6 @@ function joinup_core_get_etrans_block_config_for_current_page(array &$build = []
   $contexts = $context_repository->getRuntimeContexts(
     [
       '@node.node_route_context:node',
-      '@rdf_entity.rdf_entity_route_context:rdf_entity',
     ]
   );
   $cachableMetadata = CacheableMetadata::createFromRenderArray($build);
@@ -448,7 +447,6 @@ function joinup_core_entity_view_alter(array &$build, EntityInterface $entity, E
 function joinup_core_menu_local_tasks_alter(&$data, $route_name, RefinableCacheableDependencyInterface &$cacheability): void {
   $routes = [
     'entity.node.canonical',
-    'entity.rdf_entity.canonical',
     'entity.user.canonical',
   ];
   if (in_array($route_name, $routes) && isset($data['tabs'][0][$route_name])) {

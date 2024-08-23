@@ -4,5 +4,6 @@ description: Provides a module for testing joinup_sparql.module.
 core_version_requirement: ">= 9.4"
 package: Testing
 
+# @todo These tests should either be removed or updated.
 dependencies:
   - rdf_entity:rdf_entity

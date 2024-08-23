@@ -5,4 +5,4 @@ package: Joinup
 core_version_requirement: ">= 9.4"
 
 dependencies:
-  - rdf_entity:rdf_entity
+  - og:og

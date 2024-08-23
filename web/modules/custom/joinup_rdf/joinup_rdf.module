@@ -25,7 +25,7 @@ use Drupal\og\Og;
 /**
  * Implements hook_entity_create_access().
  */
-function joinup_rdf_entity_create_access(AccountInterface $account, array $context, $bundle): AccessResultInterface {
+function joinup_node_create_access(AccountInterface $account, array $context, $bundle): AccessResultInterface {
   // OG handles node content in its own hook_entity_create_access(). This is the
   // RDF entity equivalent.
   $entity_type_id = $context['entity_type_id'];
@@ -93,15 +93,15 @@ function joinup_rdf_entity_create_access(AccountInterface $account, array $conte
  * useless since weights are currently not stored and the ordering of the values
  * is not retained after submitting the form.
  */
-function joinup_rdf_form_rdf_entity_form_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
+function joinup_rdf_form_node_form_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
   /** @var \Drupal\rdf_entity\Form\RdfForm $form_object */
   $form_object = $form_state->getFormObject();
-  /** @var \Drupal\rdf_entity\RdfInterface $rdf */
-  $rdf = $form_object->getEntity();
+  /** @var \Drupal\node\NodeInterface $node */
+  $node = $form_object->getEntity();
   $exceptions = ['field_is_related_solutions'];
 
   /** @var \Drupal\Core\Field\FieldDefinitionInterface[] $field_definitions */
-  $field_definitions = \Drupal::service('entity_field.manager')->getFieldDefinitions($rdf->getEntityTypeId(), $rdf->bundle());
+  $field_definitions = \Drupal::service('entity_field.manager')->getFieldDefinitions($node->getEntityTypeId(), $node->bundle());
   // Keep only fields that are on the form.
   $field_definitions = array_intersect_key($field_definitions, $form);
   foreach ($field_definitions as $field_name => $field_definition) {
@@ -115,16 +115,16 @@ function joinup_rdf_form_rdf_entity_form_alter(array &$form, FormStateInterface 
   $module_handler = \Drupal::service('module_handler');
   if ($module_handler->moduleExists('honeypot')) {
     $honeypot_forms = [
-      'rdf_entity_collection_propose_form',
-      'rdf_entity_collection_edit_form',
-      'rdf_entity_solution_form',
-      'rdf_entity_solution_edit_form',
-      'rdf_entity_licence_add_form',
-      'rdf_entity_licence_edit_form',
-      'node_release_form',
-      'node_release_edit_form',
+      'node_collection_propose_form',
+      'node_collection_edit_form',
       'node_distribution_form',
       'node_distribution_edit_form',
+      'node_licence_add_form',
+      'node_licence_edit_form',
+      'node_release_form',
+      'node_release_edit_form',
+      'node_solution_form',
+      'node_solution_edit_form',
     ];
     if (in_array($form_id, $honeypot_forms)) {
       \Drupal::service('honeypot')->addFormProtection(
@@ -133,39 +133,6 @@ function joinup_rdf_form_rdf_entity_form_alter(array &$form, FormStateInterface 
         ['honeypot', 'time_restriction']
       );
     }
-  }
-}
-
-/**
- * Implements hook_entity_base_field_info().
- *
- * - Provides a 'path' field only for the 'rdf_entity' entities.
- */
-function joinup_rdf_entity_base_field_info(EntityTypeInterface $entity_type): array {
-  $fields = [];
-
-  // Allow alias features for RDF entities.
-  if (($entity_type->id() === 'rdf_entity') && \Drupal::moduleHandler()->moduleExists('path')) {
-    $fields['path'] = BaseFieldDefinition::create('path')
-      ->setLabel(t('URL alias'))
-      ->setTranslatable(TRUE)
-      ->setComputed(TRUE);
-  }
-
-  return $fields;
-}
-
-/**
- * Implements hook_entity_type_alter().
- */
-function joinup_rdf_entity_type_alter(array &$entity_types): void {
-  /** @var \Drupal\Core\Entity\EntityTypeInterface[] $entity_types */
-  if (isset($entity_types['rdf_entity'])) {
-    // Add validation constraint to the node entity.
-    // @todo Adapt in ISAICP-8376.
-    $entity_types['rdf_entity']->addConstraint('IDMaxLength');
-    // @todo Remove in ISAICP-8376.
-    $entity_types['rdf_entity']->setLinkTemplate('rdf-export', '/rdf_entity/{rdf_entity}/export-metadata');
   }
 }
 
@@ -209,48 +176,6 @@ QUERY;
       }
     }
   }
-}
-
-/**
- * Implements hook_ENTITY_TYPE_view().
- *
- * Shows an information message to users who have access to the draft version
- * of the rdf entity if the user is viewing the published version.
- */
-function joinup_rdf_rdf_entity_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode): void {
-  // Show only in full mode views.
-  if ($view_mode !== 'full') {
-    return;
-  }
-  $graph = $entity->get('graph')->target_id;
-  if ($graph !== 'default' || !$entity->hasGraph('draft')) {
-    return;
-  }
-
-  // The draft link is already set in the list of the link templates of the rdf
-  // entity as 'rdf-draft-{$graph_name}'.
-  $url = $entity->toUrl('rdf-draft-draft');
-  if (!$url->access()) {
-    return;
-  }
-
-  $link = Link::fromTextAndUrl(t('here'), $url)->toString();
-  \Drupal::messenger()->addMessage(t('You are viewing the published version. To view the latest draft version, click @here.', [
-    '@here' => $link,
-  ]), 'warning');
-}
-
-/**
- * Implements hook_condition_info_alter().
- */
-function joinup_rdf_condition_info_alter(array &$definitions): void {
-  if (!isset($definitions['rdf_entity_bundle'])) {
-    throw new \Exception("The deprecated 'rdf_entity_bundle' condition plugin has been removed. Drop joinup_rdf_condition_info_alter() implementation");
-  }
-  // The 'rdf_entity_bundle' condition plugin is deprecated and replaced with
-  // 'entity_bundle:rdf_entity'.
-  // @see https://www.drupal.org/node/3283076
-  unset($definitions['rdf_entity_bundle']);
 }
 
 /**

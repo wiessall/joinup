@@ -15,7 +15,7 @@ use Drupal\og\OgRoleInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Form to add a member with a certain role in a rdf entity group.
+ * Form to add a member with a certain role in a group.
  */
 abstract class GroupFormBase extends InviteFormBase {
 

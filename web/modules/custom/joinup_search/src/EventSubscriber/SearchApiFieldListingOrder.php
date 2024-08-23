@@ -7,8 +7,8 @@ namespace Drupal\joinup_search\EventSubscriber;
 use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\facets\Utility\FacetsDateHandler;
 use Drupal\joinup_group\Entity\GroupContentInterface;
+use Drupal\node\NodeInterface;
 use Drupal\paragraphs\ParagraphInterface;
-use Drupal\rdf_entity\RdfInterface;
 use Drupal\search_api\Query\QueryInterface as SearchApiQueryInterface;
 use Drupal\search_api_solr\Event\PreQueryEvent;
 use Solarium\Core\Query\QueryInterface as SolariumApiQueryInterface;
@@ -63,8 +63,8 @@ class SearchApiFieldListingOrder implements EventSubscriberInterface {
 
     // In case the user has filtered by event, first sort by the event date.
     // @todo This will be generic when event calendar will be implemented for
-    // the rdf_entity.field_is_content and the paragraph.content_listing
-    // instances of the search api field listing.
+    // the node.listing_content and the paragraph.content_listing instances of
+    // the search api field listing.
     if (_joinup_search_search_api_has_condition($searchApiQuery->getConditionGroup(), 'entity_bundle', 'event')) {
       // If the upcoming events are selected, set the order to 'ASC'.
       // @see \Drupal\joinup\Plugin\ArbitraryFacet\EventsArbitraryFacet::getFacetDefinition
@@ -113,15 +113,11 @@ class SearchApiFieldListingOrder implements EventSubscriberInterface {
    * @param \Drupal\search_api\Query\QueryInterface $searchApiQuery
    *   Search API query.
    *
-   * @return \Drupal\rdf_entity\RdfInterface|null
-   *   RDF entity.
+   * @return \Drupal\node\NodeInterface|null
+   *   The related node entity of the query.
    */
-  protected function getEntityFromQuery(SearchApiQueryInterface $searchApiQuery): ?RdfInterface {
+  protected function getEntityFromQuery(SearchApiQueryInterface $searchApiQuery): ?NodeInterface {
     $entity = $searchApiQuery->getOption('search_api_field entity');
-    if ($entity instanceof RdfInterface) {
-      return $entity;
-    }
-
     while ($entity instanceof ParagraphInterface) {
       $entity = $entity->getParentEntity();
     }
@@ -130,7 +126,7 @@ class SearchApiFieldListingOrder implements EventSubscriberInterface {
       $entity = $entity->getGroup();
     }
 
-    return $entity instanceof RdfInterface ? $entity : NULL;
+    return $entity instanceof NodeInterface ? $entity : NULL;
   }
 
   /**
@@ -138,10 +134,10 @@ class SearchApiFieldListingOrder implements EventSubscriberInterface {
    *
    * @param \Solarium\Core\Query\QueryInterface $solariumApiQuery
    *   Solarium query.
-   * @param \Drupal\rdf_entity\RdfInterface $entity
-   *   Rdf entity.
+   * @param \Drupal\node\NodeInterface $entity
+   *   The related node entity of the query.
    */
-  protected function addPinnedSorting(SolariumApiQueryInterface $solariumApiQuery, RdfInterface $entity): void {
+  protected function addPinnedSorting(SolariumApiQueryInterface $solariumApiQuery, NodeInterface $entity): void {
     // In order to sort by the pinned status of the entity, we need to create a
     // sort function query. The values that are used for sort are evaluated at
     // runtime instead of being retrieved from the index.
@@ -155,8 +151,8 @@ class SearchApiFieldListingOrder implements EventSubscriberInterface {
     // above zero to infinite.
     // Example:
     // @codingStandardsIgnoreStart
-    // "or(and(bs_sticky, query({!v='sm_entity_groups:<id>'},0)), query({!v='sm_rdf_pinned_in:<id>'},0))"
-    // "query({!v='(bs_sticky:true AND sm_entity_groups:<id>) OR (sm_rdf_pinned_in:<id>)'})"
+    // "or(and(bs_sticky, query({!v='sm_entity_groups:<id>'},0)), query({!v='sm_node_pinned_in:<id>'},0))"
+    // "query({!v='(bs_sticky:true AND sm_entity_groups:<id>) OR (sm_node_pinned_in:<id>)'})"
     // @codingStandardsIgnoreEnd
     // The and() operator will return false when the subquery score is lower
     // than 1, so both of the above will fail the sorting.
@@ -164,8 +160,8 @@ class SearchApiFieldListingOrder implements EventSubscriberInterface {
     // than y. By using gt(), any positive score can be transformed to true.
     // Example:
     // @codingStandardsIgnoreStart
-    // "or(and(bs_sticky, gt(query({!v='sm_entity_groups:<id>'},0),0)), gt(query({!v='sm_rdf_pinned_in:<id>'},0),0))"
-    // "gt(query({!v='(bs_sticky:true AND sm_entity_groups:<id>) OR (sm_rdf_pinned_in:<id>)'}),0)"
+    // "or(and(bs_sticky, gt(query({!v='sm_entity_groups:<id>'},0),0)), gt(query({!v='sm_node_pinned_in:<id>'},0),0))"
+    // "gt(query({!v='(bs_sticky:true AND sm_entity_groups:<id>) OR (sm_node_pinned_in:<id>)'}),0)"
     // @codingStandardsIgnoreEnd
     // Unfortunately, Solr 5.x doesn't support the gt() function.
     // Both Solr versions support the termfreq() function, which will return the
@@ -174,11 +170,11 @@ class SearchApiFieldListingOrder implements EventSubscriberInterface {
     // with the query() function, but it looks more expensive.
     // Example:
     // @codingStandardsIgnoreLine
-    // "or(and(bs_sticky,exists(query({!v='sm_entity_groups:<id>'},0))),exists(query({!v='sm_rdf_pinned_in:<id>'},0)))"
+    // "or(and(bs_sticky,exists(query({!v='sm_entity_groups:<id>'},0))),exists(query({!v='sm_node_pinned_in:<id>'},0)))"
     // @see https://lucene.apache.org/solr/guide/6_6/function-queries.html#function-queries
     // @see http://archive.apache.org/dist/lucene/solr/ref-guide/apache-solr-ref-guide-5.5.pdf
     $computed_sort = sprintf(
-      "or(termfreq(sm_node_pinned_in,%1\$s),termfreq(sm_rdf_pinned_in,%1\$s))",
+      "or(termfreq(sm_node_pinned_in,%1\$s),termfreq(sm_node_pinned_in,%1\$s))",
       $solariumApiQuery->getHelper()->escapePhrase($entity->id())
     );
     $solariumApiQuery->addSort($computed_sort, Query::SORT_DESC);

@@ -66,7 +66,7 @@ function joinup_solution_entity_bundle_field_info_alter(&$fields, EntityTypeInte
     ->setLabel(t('Latest release'))
     ->setName('latest_release')
     ->setDescription(t('The latest release, if any.'))
-    ->setTargetEntityTypeId('rdf_entity')
+    ->setTargetEntityTypeId('node')
     ->setTargetBundle('solution')
     ->setSetting('target_type', 'node')
     ->setComputed(TRUE)

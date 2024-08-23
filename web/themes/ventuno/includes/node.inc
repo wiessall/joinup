@@ -78,7 +78,6 @@ function ventuno_preprocess_node(array &$variables): void {
 
   // Add the group ID and label as data attributes in tiles.
   if (in_array($variables['view_mode'], ['carousel', 'view_mode_tile'])) {
-    /** @var \Drupal\rdf_entity\RdfInterface|null $parent */
     $parent = JoinupGroupHelper::getGroup($node);
     if ($parent) {
       $variables['attributes']['data-joinup-parent-id'] = $parent->id();
@@ -184,7 +183,7 @@ function ventuno_preprocess_page_title__node__distribution(array &$variables): v
   $entity = $variables['entity'];
 
   // Get the view builder service from the entity type manager.
-  $view_builder = \Drupal::entityTypeManager()->getViewBuilder('rdf_entity');
+  $view_builder = \Drupal::entityTypeManager()->getViewBuilder('node');
   // Get the file size and licence fields.
   $file_size = $entity->file_size;
   $licence = $entity->field_licence;

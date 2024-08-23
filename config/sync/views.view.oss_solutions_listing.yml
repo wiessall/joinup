@@ -274,13 +274,11 @@ display:
               news: default
               oss_solution: view_mode_tile
               video: default
-            'entity:rdf_entity':
-              asset_distribution: default
-              asset_release: default
+              distribution: default
+              release: default
               collection: default
               licence: default
               solution: default
-              spdx_licence: default
             'entity:taxonomy_term':
               eif_conceptual_model: default
               eif_interoperability_layer: default

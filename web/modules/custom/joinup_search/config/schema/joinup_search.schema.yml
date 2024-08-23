@@ -29,13 +29,10 @@ plugin.plugin_configuration.search_api_processor.joinup_entity_status:
       type: boolean
       label: 'Inverse'
 
+# @todo Is this used anywhere?
 search_api_field.plugin.filter.node_entity_autocomplete:
   type: joinup_search_filter_plugin_entity_autocomplete
   label: 'Node entity label autocomplete'
-
-search_api_field.plugin.filter.rdf_entity_autocomplete:
-  type: joinup_search_filter_plugin_entity_autocomplete
-  label: 'Rdf entity label autocomplete'
 
 views.field.search_api_entity_link:
   type: views.field.entity_link

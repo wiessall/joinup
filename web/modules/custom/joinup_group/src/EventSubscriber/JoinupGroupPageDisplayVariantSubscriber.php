@@ -32,7 +32,7 @@ class JoinupGroupPageDisplayVariantSubscriber implements EventSubscriberInterfac
    */
   public function groupLandingPage(PageDisplayVariantSelectionEvent $event): void {
     $route_match = $event->getRouteMatch();
-    if ($route_match->getRouteName() === 'entity.rdf_entity.canonical' && ($group = $route_match->getParameter('rdf_entity')) && $group instanceof GroupInterface) {
+    if ($route_match->getRouteName() === 'entity.node.canonical' && ($group = $route_match->getParameter('node')) && $group instanceof GroupInterface) {
       $event
         ->setPluginId('joinup_group_canonical_page')
         ->setPluginConfiguration(['group' => $group]);

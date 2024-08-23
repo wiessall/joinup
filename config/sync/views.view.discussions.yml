@@ -184,7 +184,7 @@ display:
             format: default_summary
           specify_validation: true
           validate:
-            type: 'entity:rdf_entity'
+            type: 'entity:node'
             fail: 'not found'
           validate_options:
             bundles:

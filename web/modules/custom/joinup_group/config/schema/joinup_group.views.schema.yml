@@ -1,13 +1,4 @@
 # Schema for the views plugins of the Joinup group module.
-
-views.argument_validator.joinup_group_entity_id:
-  type: views.argument_validator_entity
-  label: 'Joinup group entity ID'
-  mapping:
-    rdf_entity_id:
-      type: string
-      label: 'RDF entity ID'
-
 views.access.og_permission:
   type: mapping
   label: 'OG permission'

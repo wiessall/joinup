@@ -119,7 +119,6 @@ field_settings:
       type: union
       fields:
         - 'entity:node/uid'
-        - 'entity:rdf_entity/uid'
   entity_bundle:
     label: Bundle
     property_path: aggregated_field
@@ -128,7 +127,6 @@ field_settings:
       type: union
       fields:
         - 'entity:node/type'
-        - 'entity:rdf_entity/rid'
   entity_created:
     label: 'Authored on'
     property_path: aggregated_field
@@ -137,7 +135,6 @@ field_settings:
       type: union
       fields:
         - 'entity:node/created'
-        - 'entity:rdf_entity/created'
   entity_groups:
     label: Groups
     property_path: aggregated_field
@@ -146,7 +143,6 @@ field_settings:
       type: union
       fields:
         - 'entity:node/og_audience'
-        - 'entity:rdf_entity/collection'
   field_event_agenda:
     label: 'Agenda » Processed text'
     datasource_id: 'entity:node'
@@ -220,7 +216,6 @@ field_settings:
       type: union
       fields:
         - 'entity:node/field_keywords'
-        - 'entity:rdf_entity/field_keywords'
   nid:
     label: ID
     datasource_id: 'entity:node'
@@ -248,7 +243,6 @@ field_settings:
       type: union
       fields:
         - 'entity:node/field_site_featured'
-        - 'entity:rdf_entity/field_site_featured'
   spatial_coverage:
     label: 'Geographical coverage'
     property_path: aggregated_field
@@ -258,7 +252,6 @@ field_settings:
       fields:
         - 'entity:node/field_document_spatial_coverage'
         - 'entity:node/field_news_spatial_coverage'
-        - 'entity:rdf_entity/field_spatial_coverage'
   state:
     label: State
     property_path: aggregated_field
@@ -267,8 +260,6 @@ field_settings:
       type: union
       fields:
         - 'entity:node/field_state'
-        - 'entity:rdf_entity/field_ar_state'
-        - 'entity:rdf_entity/field_is_state'
   sticky:
     label: 'Sticky at top of lists'
     datasource_id: 'entity:node'
@@ -294,7 +285,6 @@ field_settings:
       type: union
       fields:
         - 'entity:node/field_topic'
-        - 'entity:rdf_entity/field_topic'
 datasource_settings:
   'entity:node':
     bundles:

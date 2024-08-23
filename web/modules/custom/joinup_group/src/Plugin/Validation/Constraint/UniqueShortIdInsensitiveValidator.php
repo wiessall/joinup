@@ -46,11 +46,12 @@ class UniqueShortIdInsensitiveValidator extends ConstraintValidator implements C
 
   /**
    * {@inheritdoc}
+   * @todo This needs to be updated.
    */
   public function validate($items, Constraint $constraint) {
     /** @var \Drupal\rdf_entity\RdfInterface $entity */
     $entity = $items->getEntity();
-    if ($entity->getEntityTypeId() !== 'rdf_entity') {
+    if ($entity->getEntityTypeId() !== 'node') {
       throw new \RuntimeException('UniqueShortidInsensitiveConstraint can only be applied to collections and solutions because the SQL like condition is not case insensitive.');
     }
 

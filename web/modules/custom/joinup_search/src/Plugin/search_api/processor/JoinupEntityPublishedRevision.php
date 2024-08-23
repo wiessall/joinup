@@ -6,7 +6,6 @@ namespace Drupal\joinup_search\Plugin\search_api\processor;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\node\NodeInterface;
-use Drupal\rdf_entity\RdfInterface;
 use Drupal\search_api\IndexInterface;
 use Drupal\search_api\Processor\ProcessorPluginBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -65,9 +64,8 @@ class JoinupEntityPublishedRevision extends ProcessorPluginBase {
    * {@inheritdoc}
    */
   public static function supportsIndex(IndexInterface $index) {
-    $supported_entity_types = ['node', 'rdf_entity'];
     foreach ($index->getDatasources() as $datasource) {
-      if (in_array($datasource->getEntityTypeId(), $supported_entity_types)) {
+      if ($datasource->getEntityTypeId() === 'node') {
         return TRUE;
       }
     }
@@ -86,18 +84,6 @@ class JoinupEntityPublishedRevision extends ProcessorPluginBase {
         if (!$object->isPublished()) {
           $published = $this->entityTypeManager->getStorage('node')->load($object->id());
           if (!empty($published) && $published->isPublished()) {
-            $original_object->setValue($published);
-            $item->setOriginalObject($original_object);
-            $items[$item_id] = $item;
-          }
-        }
-      }
-      elseif ($object instanceof RdfInterface) {
-        if (!$object->isPublished()) {
-          /** @var \Drupal\sparql_entity_storage\SparqlEntityStorage $sparql_storage */
-          $sparql_storage = $this->entityTypeManager->getStorage('rdf_entity');
-          $published = $sparql_storage->load($object->id(), ['default']);
-          if (!empty($published)) {
             $original_object->setValue($published);
             $item->setOriginalObject($original_object);
             $items[$item_id] = $item;

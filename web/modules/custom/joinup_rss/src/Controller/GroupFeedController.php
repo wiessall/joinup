@@ -7,6 +7,7 @@ namespace Drupal\joinup_rss\Controller;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\sparql_entity_storage\SparqlEntityStorageInterface;
 use Drupal\sparql_entity_storage\UriEncoder;
@@ -18,42 +19,16 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class GroupFeedController extends ControllerBase {
 
   /**
-   * The SPARQL storage.
-   *
-   * @var \Drupal\sparql_entity_storage\SparqlEntityStorageInterface
-   */
-  private $sparqlStorage;
-
-  /**
-   * Instantiates a new GroupFeedController object.
-   *
-   * @param \Drupal\sparql_entity_storage\SparqlEntityStorageInterface $sparql_storage
-   *   The RDF entity storage.
-   */
-  public function __construct(SparqlEntityStorageInterface $sparql_storage) {
-    $this->sparqlStorage = $sparql_storage;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container) {
-    return new static(
-      $container->get('entity_type.manager')->getStorage('rdf_entity')
-    );
-  }
-
-  /**
    * Access check for the group feed view route.
    *
-   * @param string $rdf_entity
+   * @param string $node
    *   The encoded ID of an RDF entity.
    *
    * @return \Drupal\Core\Access\AccessResultInterface
    *   The access result object.
    */
-  public function access(string $rdf_entity): AccessResultInterface {
-    $loaded_entity = $this->sparqlStorage->load(UriEncoder::decodeUrl($rdf_entity));
+  public function access(string $node): AccessResultInterface {
+    $loaded_entity = $this->entityTypeManager()->getStorage('node')->load($node);
     return AccessResult::allowedIf(
       $loaded_entity instanceof GroupInterface &&
       $loaded_entity->isPublished()

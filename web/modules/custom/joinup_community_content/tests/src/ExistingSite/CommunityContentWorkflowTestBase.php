@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\Tests\joinup_community_content\ExistingSite;
 
 use Drupal\Core\Session\AnonymousUserSession;
+use Drupal\node\NodeInterface;
 use Drupal\Tests\joinup_test\Traits\NodeCreationTrait;
 use Drupal\Tests\joinup_workflow\ExistingSite\JoinupWorkflowExistingSiteTestBase;
 use Drupal\joinup_group\ContentCreationOptions;
@@ -13,12 +14,11 @@ use Drupal\node\Entity\Node;
 use Drupal\og\Entity\OgRole;
 use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\og\OgMembershipInterface;
-use Drupal\rdf_entity\RdfInterface;
 
 /**
  * Base setup for a Joinup workflow test for community content.
  *
- * @group rdf_entity
+ * @group joinup_community_content
  */
 abstract class CommunityContentWorkflowTestBase extends JoinupWorkflowExistingSiteTestBase {
 
@@ -53,21 +53,21 @@ abstract class CommunityContentWorkflowTestBase extends JoinupWorkflowExistingSi
   protected $userModerator;
 
   /**
-   * A user with the administrator role in the parent rdf entity.
+   * A user with the administrator role in the parent group.
    *
    * @var \Drupal\Core\Session\AccountInterface
    */
   protected $userOgAdministrator;
 
   /**
-   * A user with the facilitator role in the parent rdf entity.
+   * A user with the facilitator role in the parent group.
    *
    * @var \Drupal\Core\Session\AccountInterface
    */
   protected $userOgFacilitator;
 
   /**
-   * A user with the member role in the parent rdf entity.
+   * A user with the member role in the parent group.
    *
    * @var \Drupal\Core\Session\AccountInterface
    */
@@ -1174,18 +1174,18 @@ abstract class CommunityContentWorkflowTestBase extends JoinupWorkflowExistingSi
    *   The bundle of the entity to create.
    * @param string $state
    *   The state of the entity.
-   * @param string $moderation
+   * @param string|null $moderation
    *   Whether the parent is pre or post moderated.
    * @param string $content_creation
    *   The content creation value of the parent entity.
    *
-   * @return \Drupal\rdf_entity\RdfInterface
+   * @return \Drupal\node\NodeInterface
    *   The created parent entity.
    *
    * @throws \Drupal\Core\Entity\EntityStorageException
    *   If entity creation fails.
    */
-  protected function createParent($bundle, $state = 'published', $moderation = NULL, $content_creation = NULL): RdfInterface {
+  protected function createParent(string $bundle, string $state = 'published', string $moderation = NULL, string $content_creation = NULL): NodeInterface {
     // Make sure the current user is set to anonymous when creating groups
     // through the API so we can assign the administrator manually. If a user is
     // logged in during creation of the group they will automatically become the
@@ -1207,19 +1207,19 @@ abstract class CommunityContentWorkflowTestBase extends JoinupWorkflowExistingSi
 
     // It's not possible to create orphan solutions.
     if ($bundle === 'solution') {
-      $values['collection'] = $this->createRdfEntity([
-        'rid' => 'collection',
-        'label' => $this->randomString(),
+      $values['collection'] = $this->createNode([
+        'type' => 'collection',
+        'title' => $this->randomString(),
         'field_ar_state' => 'published',
       ]);
     }
 
-    $parent = $this->createRdfEntity($values);
-    $this->assertInstanceOf(RdfInterface::class, $parent, "The $bundle group was created.");
+    $parent = $this->createNode($values);
+    $this->assertInstanceOf(NodeInterface::class, $parent, "The $bundle group was created.");
 
-    $member_role = OgRole::getRole('rdf_entity', $bundle, 'member');
-    $facilitator_role = OgRole::getRole('rdf_entity', $bundle, 'facilitator');
-    $administrator_role = OgRole::getRole('rdf_entity', $bundle, 'administrator');
+    $member_role = OgRole::getRole('node', $bundle, 'member');
+    $facilitator_role = OgRole::getRole('node', $bundle, 'facilitator');
+    $administrator_role = OgRole::getRole('node', $bundle, 'administrator');
     $this->createOgMembership($parent, $this->userOgMember, [$member_role]);
     $this->createOgMembership($parent, $this->userOgFacilitator, [$facilitator_role]);
     $this->createOgMembership($parent, $this->userOgAdministrator, [$administrator_role]);

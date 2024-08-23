@@ -187,7 +187,7 @@ function joinup_discussion_preprocess_block(array &$variables): void {
   if ($variables['plugin_id'] !== 'facet_block:entity_status') {
     return;
   }
-  $routeEntity = \Drupal::routeMatch()->getParameter('rdf_entity');
+  $routeEntity = \Drupal::routeMatch()->getParameter('node');
   $storage = \Drupal::entityTypeManager()->getStorage('node');
   $queryStorage = $storage->getQuery();
 

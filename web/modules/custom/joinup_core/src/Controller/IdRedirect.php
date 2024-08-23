@@ -87,7 +87,7 @@ class IdRedirect extends ControllerBase {
    */
   public static function getEntityTypeFromPersistentUriNamespace(?string $namespace = NULL): array|string|null {
     $namespaces = [
-      'w21' => 'rdf_entity',
+      'w21' => 'node',
       'dr8' => 'taxonomy_term',
     ];
 

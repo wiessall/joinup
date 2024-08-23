@@ -104,7 +104,7 @@ class UserMultipleCancelConfirm extends CoreUserMultipleCancelConfirm {
           if (!empty($group_data[$bundle])) {
             $build[$account->id()][$bundle] = [
               '#theme' => 'item_list',
-              '#title' => $this->bundleInfo->getBundleCountLabel('rdf_entity', $bundle, count($group_data[$bundle]), 'no_count_capitalize'),
+              '#title' => $this->bundleInfo->getBundleCountLabel('node', $bundle, count($group_data[$bundle]), 'no_count_capitalize'),
               '#items' => $group_data[$bundle],
             ];
           }

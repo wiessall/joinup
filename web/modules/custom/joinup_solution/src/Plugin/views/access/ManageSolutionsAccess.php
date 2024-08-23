@@ -9,6 +9,7 @@ use Drupal\Core\Cache\CacheableDependencyInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Routing\ResettableStackedRouteMatchInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\node\NodeInterface;
 use Drupal\sparql_entity_storage\UriEncoder;
 use Drupal\views\Plugin\views\access\AccessPluginBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -81,16 +82,15 @@ class ManageSolutionsAccess extends AccessPluginBase implements CacheableDepende
       return FALSE;
     }
 
-    // @todo Update this in ISAICP-7584.
-    if ($id = $this->routeMatch->getRawParameter('rdf_entity')) {
-      $ids = $this->entityTypeManager->getStorage('rdf_entity')
-        ->getQuery()
-        ->accessCheck(FALSE)
-        ->condition('rid', 'collection')
-        ->condition('id', UriEncoder::decodeUrl($id))
-        ->execute();
-      if ($ids) {
+    if ($node = $this->routeMatch->getParameter('node')) {
+      if ($node instanceof NodeInterface) {
         return TRUE;
+      }
+      elseif (is_numeric($node)) {
+        $node = $this->entityTypeManager->getStorage('node')->load($node);
+        if ($node instanceof NodeInterface) {
+          return TRUE;
+        }
       }
     }
 

@@ -20,8 +20,14 @@ class JoinupSubscriptionsHelper {
    */
   const array SUBSCRIPTION_BUNDLES = [
     'collection' => [
-      'rdf_entity' => ['solution'],
-      'node' => CommunityContentHelper::BUNDLES,
+      'node' => [
+        'discussion',
+        'distribution',
+        'document',
+        'event',
+        'news',
+        'solution',
+      ],
     ],
     'solution' => [
       'node' => [

@@ -6,7 +6,8 @@ _meta:
   default_langcode: en
   depends:
     4b8712c1-bc69-4bb2-985d-33635e08466c: file
-    'http://data.europa.eu/w21/6d621a47-71ce-4f1a-90e2-8859403d3ecd': rdf_entity
+#    'http://data.europa.eu/w21/6d621a47-71ce-4f1a-90e2-8859403d3ecd': rdf_entity
+    6d621a47-71ce-4f1a-90e2-8859403d3ecd: node
 default:
   revision_uid:
     -

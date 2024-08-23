@@ -1,4 +1,4 @@
-# Route to create a release that belongs to an rdf_entity.solution
+# Route to create a release that belongs to a solution
 joinup_release.solution_release.add:
   path: 'node/{node}/release/add'
   defaults:

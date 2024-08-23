@@ -14,7 +14,6 @@ use Drupal\joinup_release\Entity\ReleaseInterface;
 use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\node\NodeInterface;
 use Drupal\og\OgGroupAudienceHelperInterface;
-use Drupal\rdf_entity\RdfInterface;
 
 /**
  * Controller for asset distribution forms.
@@ -28,25 +27,6 @@ class JoinupDistributionController extends ControllerBase {
    * The solution parent.
    */
   protected SolutionInterface|null $solution = NULL;
-
-  /**
-   * Controller for the base form.
-   *
-   * We need to override the functionality of the create form for pages
-   * that include the rdf_entity id in the url so that the asset release or the
-   * solution refers to this asset distribution.
-   *
-   * @param \Drupal\rdf_entity\RdfInterface $rdf_entity
-   *   The asset release or solution rdf entity.
-   *
-   * @return array
-   *   Return the form array to be rendered.
-   */
-  public function add(RdfInterface $rdf_entity): array {
-    $distribution = $this->createNewAssetDistribution($rdf_entity);
-    $form_state_additions = ['redirect' => $rdf_entity->toUrl()];
-    return $this->entityFormBuilder()->getForm($distribution, 'default', $form_state_additions);
-  }
 
   /**
    * Controller for the base form.
@@ -72,16 +52,16 @@ class JoinupDistributionController extends ControllerBase {
   /**
    * Handles access to the distribution add form.
    *
-   * @param \Drupal\rdf_entity\RdfInterface $rdf_entity
+   * @param \Drupal\node\NodeInterface $node
    *   The asset release or solution RDF entity for which the distribution
    *   is created.
    *
    * @return \Drupal\Core\Access\AccessResultInterface
    *   The access result object.
    */
-  public function createAssetDistributionAccess(RdfInterface $rdf_entity): AccessResultInterface {
+  public function createAssetDistributionAccess(NodeInterface $node): AccessResultInterface {
     // Create a new distribution entity in order to check permissions on it.
-    $distribution = $this->createNewAssetDistribution($rdf_entity);
+    $distribution = $this->createNewAssetDistribution($node);
 
     // If the distribution entity isn't created correctly, forbid access to the
     // page.
@@ -90,7 +70,7 @@ class JoinupDistributionController extends ControllerBase {
     }
 
     return $this->entityTypeManager()->getAccessControlHandler('node')->createAccess('distribution', NULL, [
-      'group' => $this->getRelatedSolution($rdf_entity),
+      'group' => $this->getRelatedSolution($node),
     ], TRUE);
   }
 
@@ -156,7 +136,7 @@ class JoinupDistributionController extends ControllerBase {
    * @param \Drupal\Core\Entity\EntityInterface $entity
    *   The rdf entity parameter.
    *
-   * @return \Drupal\rdf_entity\RdfInterface|null
+   * @return \Drupal\node\NodeInterface|null
    *   The solution of the release, if the entity is a release, or the solution
    *   itself if the entity is a solution. Returns NULL if the entity is neither
    *   a release nor a solution.

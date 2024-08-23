@@ -11,6 +11,7 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\custom_page\Entity\CustomPageInterface;
 use Drupal\joinup_community_content\Entity\CommunityContentInterface;
+use Drupal\joinup_solution\Entity\SolutionInterface;
 
 /**
  * Implements hook_form_alter().
@@ -99,19 +100,13 @@ function joinup_log_members_views_exposed_form_submit(array &$form, FormStateInt
  * Implements hook_ENTITY_TYPE_insert() for node entities.
  */
 function joinup_log_node_insert(EntityInterface $entity): void {
-  if ($entity instanceof CommunityContentInterface || $entity instanceof CustomPageInterface) {
+  if (
+    $entity instanceof CommunityContentInterface
+    || $entity instanceof CustomPageInterface
+    || $entity instanceof SolutionInterface
+  ) {
     _joinup_log_logger_add_content($entity);
   }
-}
-
-/**
- * Implements hook_ENTITY_TYPE_insert().
- */
-function joinup_log_rdf_entity_insert(EntityInterface $entity): void {
-  if ($entity->bundle() !== 'solution') {
-    return;
-  }
-  _joinup_log_logger_add_content($entity);
 }
 
 /**

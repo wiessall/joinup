@@ -132,9 +132,9 @@ class SubscribersReportController extends ControllerBase {
 
     // Turn the group labels into links.
     array_walk($data, function (array &$row): void {
-      $route_params = ['rdf_entity' => $row['entity_id']];
+      $route_params = ['node' => $row['entity_id']];
       $row['label'] = new FormattableMarkup('<a href=":uri">@label</a>', [
-        ':uri' => (new Url('entity.rdf_entity.canonical', $route_params))->toString(),
+        ':uri' => (new Url('entity.node.canonical', $route_params))->toString(),
         '@label' => $row['label'],
       ]);
       unset($row['entity_id']);

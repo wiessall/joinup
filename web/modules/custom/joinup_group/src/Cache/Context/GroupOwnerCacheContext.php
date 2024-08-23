@@ -29,8 +29,8 @@ class GroupOwnerCacheContext extends OgRoleCacheContext {
    * @var string[]
    */
   protected $roleIds = [
-    'rdf_entity-collection-administrator',
-    'rdf_entity-solution-administrator',
+    'node-collection-administrator',
+    'node-solution-administrator',
   ];
 
   /**
@@ -43,7 +43,7 @@ class GroupOwnerCacheContext extends OgRoleCacheContext {
       $group_ids = $this->membershipManager->getUserGroupIdsByRoleIds($this->user->id(), $this->roleIds);
 
       // Discard the parent array, we know that groups are RDF entities.
-      $group_ids = $group_ids['rdf_entity'] ?? [];
+      $group_ids = $group_ids['node'] ?? [];
 
       // Sort the groups, so that the same key can be generated, even if the
       // groups were returned in a different order.

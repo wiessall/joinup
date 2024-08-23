@@ -26,6 +26,7 @@ joinup_core.id_redirect:
     # @see \Drupal\Core\Routing\Router::doMatchCollection()
     uuid: '.+'
 
+# @todo Convert this to convert through rdf_sync.mapper.
 joinup_core.rdf_entity_uri_web_converter_page:
   path: '/rdf'
   defaults:

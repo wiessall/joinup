@@ -6,8 +6,8 @@ namespace Drupal\joinup_group;
 
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\node\Entity\NodeType;
 use Drupal\og\GroupTypeManagerInterface;
-use Drupal\rdf_entity\Entity\RdfEntityType;
 use Drupal\state_machine\WorkflowManagerInterface;
 use Drupal\state_machine_permissions\StateMachinePermissionStringConstructor;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -60,9 +60,9 @@ class JoinupGroupPermissions implements ContainerInjectionInterface {
    */
   public function groupOwnershipPermissions(): array {
     $permissions = [];
-    $bundle_ids = $this->groupTypeManager->getGroupBundleIdsByEntityType('rdf_entity');
-    /** @var \Drupal\rdf_entity\RdfEntityTypeInterface[] $bundles */
-    $bundles = RdfEntityType::loadMultiple($bundle_ids);
+    $bundle_ids = $this->groupTypeManager->getGroupBundleIdsByEntityType('node');
+    /** @var \Drupal\node\NodeTypeInterface[] $bundles */
+    $bundles = NodeType::loadMultiple($bundle_ids);
     foreach ($bundles as $bundle_id => $bundle) {
       $permissions["administer $bundle_id ownership"] = [
         'title' => $this->t('Administer @plural_label ownership', ['@plural_label' => $bundle->getPluralLabel()]),

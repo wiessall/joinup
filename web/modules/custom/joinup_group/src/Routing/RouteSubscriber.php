@@ -41,9 +41,10 @@ class RouteSubscriber extends RouteSubscriberBase {
     }
 
     // Fix the group route param for devel module.
+    // @todo I think this was added to fix devel for RDF. Node is already fixed so this is probably not needed anymore.
     if ($route = $collection->get('entity.og_membership.devel_load_with_references')) {
       $options = $route->getOptions();
-      $options['parameters']['group'] = ['type' => 'entity:rdf_entity'];
+      $options['parameters']['group'] = ['type' => 'entity:node'];
       $route->setOptions($options);
     }
 

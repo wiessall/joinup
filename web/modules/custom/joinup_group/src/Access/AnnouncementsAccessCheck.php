@@ -38,7 +38,7 @@ class AnnouncementsAccessCheck implements AccessInterface {
     if ($requirement !== 'TRUE') {
       throw new \Exception("The '_joinup_group_announcements' route requirement should be 'TRUE', but '$requirement' was given.");
     }
-    $group = $route_match->getParameter('rdf_entity');
+    $group = $route_match->getParameter('node');
     if ($group instanceof GroupInterface) {
       return $this->accessAnnouncements($group);
     }

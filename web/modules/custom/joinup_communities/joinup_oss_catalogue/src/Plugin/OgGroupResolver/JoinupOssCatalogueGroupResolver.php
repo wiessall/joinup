@@ -28,7 +28,7 @@ class JoinupOssCatalogueGroupResolver extends OgRouteGroupResolverBase {
     }
 
     /** @var \Drupal\collection\Entity\CollectionInterface $ossCatalogueGroup */
-    $ossCatalogueGroup = $this->entityTypeManager->getStorage('rdf_entity')
+    $ossCatalogueGroup = $this->entityTypeManager->getStorage('node')
       ->load(OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID);
     if ($ossCatalogueGroup) {
       $collection->addGroup($ossCatalogueGroup, ['route']);

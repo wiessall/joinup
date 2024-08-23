@@ -80,10 +80,10 @@ class DistributionSubscriber extends NotificationSubscriberBase {
 
     $user_data = [
       'og_roles' => [
-        'rdf_entity-solution-administrator' => [
+        'node-solution-administrator' => [
           self::TEMPLATE_UPDATE,
         ],
-        'rdf_entity-solution-facilitator' => [
+        'node-solution-facilitator' => [
           self::TEMPLATE_UPDATE,
         ],
       ],
@@ -125,10 +125,10 @@ class DistributionSubscriber extends NotificationSubscriberBase {
 
     $user_data = [
       'og_roles' => [
-        'rdf_entity-solution-administrator' => [
+        'node-solution-administrator' => [
           self::TEMPLATE_DELETE,
         ],
-        'rdf_entity-solution-facilitator' => [
+        'node-solution-facilitator' => [
           self::TEMPLATE_DELETE,
         ],
       ],

@@ -13,7 +13,6 @@ use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\node\NodeInterface;
-use Drupal\rdf_entity\RdfInterface;
 use Drupal\search_api\Query\ResultSetInterface;
 use Drupal\search_api\SearchApiException;
 use Drupal\state_machine_revisions\RevisionManagerInterface;
@@ -155,12 +154,8 @@ class UserUnpublishedBlock extends BlockBase implements ContainerFactoryPluginIn
         if ($entity instanceof NodeInterface) {
           $entity = $this->revisionManager->loadLatestRevision($entity);
         }
-        elseif ($entity instanceof RdfInterface) {
-          $entity_id = $item->getOriginalObject()->getValue()->id();
-          $entity = $this->getDraftRdf($entity_id);
-        }
         else {
-          throw new \Exception('Only nodes and Rdf entities should be loaded.');
+          throw new \Exception('Only nodes should be loaded.');
         }
       }
       catch (SearchApiException $e) {
@@ -180,23 +175,6 @@ class UserUnpublishedBlock extends BlockBase implements ContainerFactoryPluginIn
   }
 
   /**
-   * Loads the latest revision on an rdf entity.
-   *
-   * @param string $entityId
-   *   The content id.
-   *
-   * @return \Drupal\rdf_entity\RdfInterface|null
-   *   The loaded RDF entity.
-   */
-  protected function getDraftRdf(string $entityId): ?RdfInterface {
-    /** @var \Drupal\sparql_entity_storage\SparqlEntityStorageInterface $sparqlStorage */
-    $sparqlStorage = $this->entityTypeManager->getStorage('rdf_entity');
-    /** @var \Drupal\rdf_entity\RdfInterface|null $entity */
-    $entity = $sparqlStorage->load($entityId, ['draft']);
-    return $entity;
-  }
-
-  /**
    * {@inheritdoc}
    */
   public function getCacheContexts(): array {
@@ -209,11 +187,8 @@ class UserUnpublishedBlock extends BlockBase implements ContainerFactoryPluginIn
    */
   public function getCacheTags(): array {
     $cacheTags = parent::getCacheTags();
-    foreach (['node', 'rdf_entity'] as $type) {
-      $entityType = $this->entityTypeManager->getStorage($type)->getEntityType();
-      $cacheTags = Cache::mergeTags($cacheTags, $entityType->getListCacheTags());
-    }
-    return $cacheTags;
+    $entityType = $this->entityTypeManager->getStorage('node')->getEntityType();
+    return Cache::mergeTags($cacheTags, $entityType->getListCacheTags());
   }
 
   /**

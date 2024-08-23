@@ -40,8 +40,8 @@ class ReleaseController extends ControllerBase {
    * Controller for the base form.
    *
    * We need to override the functionality of the create form for pages
-   * that include the rdf_entity id in the url so that the OG audience field
-   * is auto completed.
+   * that include the node id in the url so that the OG audience field is
+   * auto completed.
    *
    * @param \Drupal\node\NodeInterface $node
    *   The solution entity.
@@ -57,9 +57,9 @@ class ReleaseController extends ControllerBase {
    * Handles access to the release add form through solution pages.
    *
    * @param \Drupal\node\NodeInterface $node
-   *   The RDF entity for which the custom page is created.
+   *   The group for which the custom page is created.
    * @param \Drupal\Core\Session\AccountInterface|null $account
-   *   The RDF entity for which the custom page is created.
+   *   The group for which the release is created.
    *
    * @return \Drupal\Core\Access\AccessResultInterface
    *   The access result object.
@@ -147,7 +147,7 @@ class ReleaseController extends ControllerBase {
    * Access callback for the solution releases overview.
    *
    * @param \Drupal\node\NodeInterface $node
-   *   The solution rdf entity.
+   *   The solution entity.
    * @param \Drupal\Core\Session\AccountInterface $account
    *   The account being checked.
    *
@@ -155,7 +155,7 @@ class ReleaseController extends ControllerBase {
    *   The access result.
    *
    * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
-   *   Thrown when the rdf entity is not a solution.
+   *   Thrown when the entity is not a solution.
    */
   public function overviewAccess(NodeInterface $node, AccountInterface $account): AccessResultInterface {
     // @todo This is probably not needed now that we have added the bundle to

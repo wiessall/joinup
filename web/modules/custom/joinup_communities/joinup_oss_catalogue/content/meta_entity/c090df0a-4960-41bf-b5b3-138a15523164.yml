@@ -4,7 +4,7 @@ _meta:
   uuid: c090df0a-4960-41bf-b5b3-138a15523164
   bundle: collection_settings
   depends:
-    'http://data.europa.eu/w21/6d621a47-71ce-4f1a-90e2-8859403d3ecd': rdf_entity
+    6d621a47-71ce-4f1a-90e2-8859403d3ecd: node
     54acbd6f-47f0-4280-ad09-0a07c397318b: node
 default:
   label:

@@ -34,7 +34,7 @@ function ventuno_preprocess_meta_entity(array &$variables): void {
   $url_options = [
     'query' => [
       'destination' => Url::fromRoute('entity.node.eif_perspective', [
-        'rdf_entity' => $solution->id(),
+        'node' => $solution->id(),
       ])->getInternalPath(),
     ],
   ];

@@ -641,15 +641,15 @@ final class MigrationHelper {
       'meta_entity' => 'target__target_id',
       'joinup_group_node_access' => 'entity_id',
       'og_membership' => 'entity_id',
-      'node__og_audience' => 'og_audience_target_id',
-      'node_revision__og_audience' => 'og_audience_target_id',
-      'node__field_shared_in' => 'field_shared_in_target_id',
-      'node_revision__field_shared_in' => 'field_shared_in_target_id',
-      'media__og_audience' => 'og_audience_target_id',
-      'media_revision__og_audience' => 'og_audience_target_id',
-      'ogmenu_instance__og_audience' => 'og_audience_target_id',
-      'node__field_news_referenced_solution' => 'field_news_referenced_solution_target_id',
-      'node_revision__field_news_referenced_solution' => 'field_news_referenced_solution_target_id',
+      'node__og_audience_backup' => 'og_audience_target_id',
+      'node_revision__og_audience_backup' => 'og_audience_target_id',
+      'node__field_shared_in_backup' => 'field_shared_in_target_id',
+      'node_revision__field_shared_in_backup' => 'field_shared_in_target_id',
+      'media__og_audience_backup' => 'og_audience_target_id',
+      'media_revision__og_audience_backup' => 'og_audience_target_id',
+      'ogmenu_instance__og_audience_backup' => 'og_audience_target_id',
+      'node__field_news_referenced_solution_backup' => 'field_news_referenced_solution_target_id',
+      'node_revision__field_news_referenced_solution_backup' => 'field_news_referenced_solution_target_id',
     ];
 
     foreach ($tableData as $table => $targetField) {
@@ -666,6 +666,30 @@ final class MigrationHelper {
         ->fields([$targetField => $entity->id()])
         ->condition($targetField, $entity->getUri())
         ->execute();
+
+      if (str_ends_with($table, '_backup')) {
+        // Move the data to the main table (without the _backup suffix) and
+        // clean up the backup table.
+        $dataToMove = $this->connection->select($table)
+          ->fields($table)
+          ->execute()
+          ->fetchAll();
+
+        $fields = $this->connection->schema()->fieldNames($table);
+        $arrayData = [];
+        foreach ($dataToMove as $data) {
+          $arrayData[] = (array) $data;
+        }
+
+        foreach ($arrayData as $data) {
+          $this->connection->insert(str_replace('_backup', '', $table))
+            ->fields($fields)
+            ->values($data)
+            ->execute();
+        }
+
+        $this->connection->delete($table)->execute();
+      }
     }
   }
 
