@@ -76,19 +76,35 @@ register_pending_approval_admin:
 
     <a href="[user:edit-url]">[user:edit-url]</a>
 status_activated:
-  subject: 'Your Joinup account has been activated.'
+  subject: 'Welcome to the Interoperable Europe Portal!'
   body: |-
     Dear [user:field_user_first_name],
 
-    Your account at [site:name] has been activated.
+    Your account has been activated and we are excited to have you join our growing community of innovators, policy makers, and technology enthusiasts working together to enhance digital public services across Europe.
 
-    You may now log in with EU Login credentials by clicking this link or copying and pasting it into your browser:
+    Here’s how you can get started:
 
-    <a href="[site:url]">[site:url]</a>
+    <strong>1. Login to the Portal</strong>
+    You may now log in with EU Login credentials by clicking this link or copying and pasting it into your browser: <a href="[site:url]">[site:url]</a>
 
-    Kind regards,
+    <strong>2. Explore the Portal</strong>
+    Visit the <a href="[site:url]">Homepage</a> to discover the platform’s content. You can browse through the main topics, view highlighted content and use the <a href="[site:url]search?keys=&sort_by=relevance">advanced search</a> to find specific information. The top menu also provides quick access to key areas.
 
-    The Joinup Support Team.
+    <strong>3. Participate and contribute</strong>
+    Add content by becoming a member of a Collection. Click on the button “Join this collection” at the top right of any Collection that matches your interests and share with the community new content (events, news, documents, etc.) related to interoperability and digital government.
+
+    <strong>4. Stay informed</strong>
+    Subscribe to your favourite Collections or Solutions and receive email updates when new content or announcements are published. You can configure your subscription settings by visiting the <a href="[site:url]user/subscriptions">My subscriptions</a> page.
+
+    <strong>5. Connect with the community</strong>
+    Subscribe to the <a href="https://ec.europa.eu/newsroom/informatics/user-subscriptions/1115/create">Interoperable Europe Newsletter</a>, and receive updates on important news on interoperability and digital transformation, as well as upcoming events.
+    Follow us on social media, such as <a href="https://www.linkedin.com/groups/12907049/">LinkedIn</a> and <a href="https://x.com/Joinup_eu">X</a> to stay engaged with what is happening in the world of digital public services.
+
+    If you need any assistance, our support team is here to help through the <a href="[site:url]contact">support contact form</a>. Before contacting us, be sure to check our <a href="[site:url]collection/joinup/faq">FAQ</a> and <a href="[site:url]collection/joinup/how-video-tutorials">How-To sections</a>.
+
+    Best regards,
+
+    The Interoperable Europe Portal Team
 status_blocked:
   subject: 'Your account was just blocked.'
   body: |-
