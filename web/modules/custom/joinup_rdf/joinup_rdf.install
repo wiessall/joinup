@@ -8,6 +8,7 @@
 declare(strict_types=1);
 
 use Drupal\Component\Serialization\Yaml;
+use Drupal\field\Entity\FieldStorageConfig;
 
 /**
  * Performs checks for the RDF entities and its storage.
@@ -151,11 +152,13 @@ function joinup_rdf_update_200002(): string {
  */
 function joinup_rdf_update_200003(): string {
   $fieldStorages = [
-    'field.storage.node.field_shared_in',
-    'field.storage.node.field_news_referenced_solution',
-    'field.storage.node.og_audience',
-    'field.storage.media.og_audience',
-    'field.storage.ogmenu_instance.og_audience',
+    'node.field_shared_in',
+    'node.field_news_referenced_solution',
+    'node.og_audience',
+    'media.og_audience',
+    'ogmenu_instance.og_audience',
+  ];
+  $fieldInstances = [
     'field.field.media.image.og_audience',
     'field.field.media.video.og_audience',
     'field.field.media.file.og_audience',
@@ -176,11 +179,19 @@ function joinup_rdf_update_200003(): string {
   ];
 
   foreach ($fieldStorages as $fieldStorage) {
-    $contents = Yaml::decode(file_get_contents("../config/sync/$fieldStorage.yml"));
-    \Drupal::configFactory()->getEditable($fieldStorage)->setData($contents)->save();
+    FieldStorageConfig::load($fieldStorage)->setSetting('target_type', 'node')->save();
   }
 
-  return 'Updated field storages: ' . implode("\n", $fieldStorages);
+  $configFactory = \Drupal::configFactory();
+  foreach ($fieldInstances as $fieldInstance) {
+    $contents = Yaml::decode(file_get_contents("../config/sync/$fieldInstance.yml"));
+    $configFactory->getEditable($fieldInstance)->setData($contents)->save();
+  }
+
+  \Drupal::getContainer()->get('entity_type.manager')->clearCachedDefinitions();
+  \Drupal::getContainer()->get('entity_field.manager')->clearCachedFieldDefinitions();
+
+  return 'Updated field storages: ' . implode(', ', $fieldStorages);
 }
 
 /**

@@ -6,6 +6,42 @@
 upgrade_commands:
   default:
     - touch disable-config-readonly
+
+    # BEGIN: Remove in ISAICP-8376
+    # field.storage.node.field_shared_in
+    - vendor/bin/drush sql:query "CREATE TABLE n__field_shared_in LIKE node__field_shared_in"
+    - vendor/bin/drush sql:query "INSERT INTO n__field_shared_in SELECT * FROM node__field_shared_in"
+    - vendor/bin/drush sql:query "TRUNCATE node__field_shared_in"
+    - vendor/bin/drush sql:query "CREATE TABLE nr__field_shared_in LIKE node_revision__field_shared_in"
+    - vendor/bin/drush sql:query "INSERT INTO nr__field_shared_in SELECT * FROM node_revision__field_shared_in"
+    - vendor/bin/drush sql:query "TRUNCATE node_revision__field_shared_in"
+    # field.storage.node.field_news_referenced_solution
+    - vendor/bin/drush sql:query "CREATE TABLE n__field_news_referenced_solution LIKE node__field_news_referenced_solution"
+    - vendor/bin/drush sql:query "INSERT INTO n__field_news_referenced_solution SELECT * FROM node__field_news_referenced_solution"
+    - vendor/bin/drush sql:query "TRUNCATE node__field_news_referenced_solution"
+    - vendor/bin/drush sql:query "CREATE TABLE nr__field_news_referenced_solution LIKE node_revision__field_news_referenced_solution"
+    - vendor/bin/drush sql:query "INSERT INTO nr__field_news_referenced_solution SELECT * FROM node_revision__field_news_referenced_solution"
+    - vendor/bin/drush sql:query "TRUNCATE node_revision__field_news_referenced_solution"
+    # field.storage.node.og_audience
+    - vendor/bin/drush sql:query "CREATE TABLE n__og_audience LIKE node__og_audience"
+    - vendor/bin/drush sql:query "INSERT INTO n__og_audience SELECT * FROM node__og_audience"
+    - vendor/bin/drush sql:query "TRUNCATE node__og_audience"
+    - vendor/bin/drush sql:query "CREATE TABLE nr__og_audience LIKE node_revision__og_audience"
+    - vendor/bin/drush sql:query "INSERT INTO nr__og_audience SELECT * FROM node_revision__og_audience"
+    - vendor/bin/drush sql:query "TRUNCATE node_revision__og_audience"
+    # field.storage.media.og_audience
+    - vendor/bin/drush sql:query "CREATE TABLE m__og_audience LIKE media__og_audience"
+    - vendor/bin/drush sql:query "INSERT INTO m__og_audience SELECT * FROM media__og_audience"
+    - vendor/bin/drush sql:query "TRUNCATE media__og_audience"
+    - vendor/bin/drush sql:query "CREATE TABLE mr__og_audience LIKE media_revision__og_audience"
+    - vendor/bin/drush sql:query "INSERT INTO mr__og_audience SELECT * FROM media_revision__og_audience"
+    - vendor/bin/drush sql:query "TRUNCATE media_revision__og_audience"
+    # field.storage.ogmenu_instance.og_audience
+    - vendor/bin/drush sql:query "CREATE TABLE o__og_audience LIKE ogmenu_instance__og_audience"
+    - vendor/bin/drush sql:query "INSERT INTO o__og_audience SELECT * FROM ogmenu_instance__og_audience"
+    - vendor/bin/drush sql:query "TRUNCATE ogmenu_instance__og_audience"
+    # END: Remove in ISAICP-8376
+
     - ./vendor/bin/drush deploy --yes
 
     # BEGIN: Remove in ISAICP-8376
