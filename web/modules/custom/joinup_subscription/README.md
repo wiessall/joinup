@@ -63,7 +63,7 @@ $subscriptions = $membership->get('subscription_bundles');
 $subscription_bundles = [
   ['entity_type' => 'node', 'bundle' => 'event'],
   ['entity_type' => 'node', 'bundle' => 'news'],
-  ['entity_type' => 'rdf_entity', 'bundle' => 'solution'],
+  ['entity_type' => 'node', 'bundle' => 'solution'],
 ];
 $membership->set('subscription_bundles', $subscription_bundles)->save();
 ```

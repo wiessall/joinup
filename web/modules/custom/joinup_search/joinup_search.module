@@ -226,28 +226,18 @@ function joinup_search_views_pre_render(ViewExecutable $view): void {
  * Implements hook_entity_prepare_view().
  */
 function joinup_search_entity_prepare_view(string $entity_type_id, array $entities, array $displays, string $view_mode): void {
-  if ($entity_type_id !== 'rdf_entity') {
+  if ($entity_type_id !== 'node') {
     return;
   }
 
-  $entity_fields = [
-    'collection' => [
-      'field' => 'field_collection_content',
-      'facet' => 'field_collection_content_status',
-    ],
-    'solution' => [
-      'field' => 'field_is_content',
-      'facet' => 'field_is_content_status',
-    ],
-  ];
-
+  $bundles = ['collection', 'solution'];
   foreach ($entities as $entity) {
-    if (!isset($entity_fields[$entity->bundle()])) {
+    if (!in_array($entity->bundle(), $bundles)) {
       continue;
     }
 
-    $field = $entity_fields[$entity->bundle()]['field'];
-    $facet = $entity_fields[$entity->bundle()]['facet'];
+    $field = 'listing_content';
+    $facet = 'listing_content_status';
     if (!isset($entity->{$field}) || $entity->{$field}->value['enabled'] === 0 || !isset($entity->{$field}->value['fields'][$facet])) {
       continue;
     }

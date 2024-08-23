@@ -71,7 +71,7 @@ abstract class ShareForm extends ShareFormBase {
       if (!empty($form['groups'][$bundle])) {
         $form['groups'][$bundle] += [
           '#theme_wrappers' => ['fieldset'],
-          '#title' => $this->bundleInfo->getBundleCountLabel('rdf_entity', $bundle, count($groups), 'no_count_capitalize'),
+          '#title' => $this->bundleInfo->getBundleCountLabel('node', $bundle, count($groups), 'no_count_capitalize'),
           '#tree' => TRUE,
           '#access' => !empty($groups),
         ];
@@ -165,7 +165,7 @@ abstract class ShareForm extends ShareFormBase {
   protected function getShareableGroups(): array {
     // Being part also for the access check, do not allow the user to access
     // this page for entities without a field to store groups it is shared in.
-    if (!$this->entity->hasField($this->getSharedOnFieldName())) {
+    if (!$this->entity->hasField(self::FIELD_NAME_SHARED_IN)) {
       return [];
     }
 
@@ -199,7 +199,7 @@ abstract class ShareForm extends ShareFormBase {
     // Entity references do not ensure uniqueness.
     $current_ids = array_unique($current_ids);
 
-    $this->entity->get($this->getSharedOnFieldName())->setValue($current_ids);
+    $this->entity->get(self::FIELD_NAME_SHARED_IN)->setValue($current_ids);
     $this->entity->skip_notification = TRUE;
     $this->entity->save();
 

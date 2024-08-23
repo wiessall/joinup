@@ -35,7 +35,7 @@ class SolutionCacheContext implements CacheContextInterface {
    */
   public function getContext(): string {
     /** @var \Drupal\rdf_entity\RdfInterface $solution */
-    if (($solution = $this->requestStack->getCurrentRequest()->get('rdf_entity')) && $solution->bundle() == 'solution') {
+    if (($solution = $this->requestStack->getCurrentRequest()->get('node')) && $solution->bundle() == 'solution') {
       return 'solution.' . $solution->id();
     }
     return 'solution.none';

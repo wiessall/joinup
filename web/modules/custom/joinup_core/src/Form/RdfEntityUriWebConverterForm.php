@@ -74,8 +74,8 @@ class RdfEntityUriWebConverterForm extends FormBase {
         $entity_type_id = NULL;
 
         // Potential RDF entity ID.
-        if ($this->entityTypeManager->getStorage('rdf_entity')->load($id)) {
-          $entity_type_id = 'rdf_entity';
+        if ($this->entityTypeManager->getStorage('node')->load($id)) {
+          $entity_type_id = 'node';
         }
 
         // It might be a mapped taxonomy term.
@@ -104,9 +104,9 @@ class RdfEntityUriWebConverterForm extends FormBase {
     if ($url->isRouted()) {
       // This path contains an RDF parameter.
       $parameters = $url->getRouteParameters();
-      if (!empty($parameters['rdf_entity'])) {
+      if (!empty($parameters['node'])) {
         $form_state->set('passed_as', 'url');
-        $form_state->setValue('entity_id', UriEncoder::decodeUrl($parameters['rdf_entity']));
+        $form_state->setValue('entity_id', UriEncoder::decodeUrl($parameters['node']));
         return;
       }
     }
@@ -136,7 +136,7 @@ class RdfEntityUriWebConverterForm extends FormBase {
    * {@inheritdoc}
    */
   public function getFormId() {
-    return 'rdf_entity_uri_web_converter';
+    return 'node_uri_web_converter';
   }
 
 }

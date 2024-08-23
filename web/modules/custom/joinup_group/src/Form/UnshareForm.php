@@ -142,7 +142,7 @@ abstract class UnshareForm extends ShareFormBase {
     // Flipping is needed to easily unset the value.
     $current_ids = array_flip($this->getAlreadySharedGroupIds());
     unset($current_ids[$group->id()]);
-    $this->entity->get($this->getSharedOnFieldName())->setValue(array_flip($current_ids));
+    $this->entity->get(self::FIELD_NAME_SHARED_IN)->setValue(array_flip($current_ids));
     $this->entity->skip_notification = TRUE;
     $this->entity->save();
     $this->invalidator->invalidateTags($group->getCacheTagsToInvalidate());

@@ -141,7 +141,7 @@ entity.node.announcement_add:
           - solution
     _og_entity_type_id: node
 
-entity.rdf_entity.announcement_edit:
+entity.node.announcement_edit:
   path: /node/{node}/announcements/edit/{announcement}
   defaults:
     _controller: Drupal\joinup_group\Controller\AnnouncementsController::editForm
@@ -184,8 +184,8 @@ entity.node.announcement_view:
           - announcement
     _og_entity_type_id: node
 
-entity.rdf_entity.unpublished_content:
-  path: 'rdf_entity/{rdf_entity}/unpublished'
+entity.node.unpublished_content:
+  path: 'node/{node}/unpublished'
   defaults:
     _controller: '\Drupal\joinup_group\Controller\UnpublishedContentPageController::unpublishedContent'
     _title: 'Unpublished content'
@@ -194,8 +194,8 @@ entity.rdf_entity.unpublished_content:
     _joinup_group: 'TRUE'
   options:
     parameters:
-      rdf_entity:
-        type: entity:rdf_entity
+      node:
+        type: entity:node
         bundle:
           - collection
           - solution

@@ -12,7 +12,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\JoinupGroupManagerInterface;
-use Drupal\rdf_entity\RdfInterface;
+use Drupal\node\NodeInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -180,8 +180,8 @@ class GroupContextCondition extends ConditionPluginBase implements ContainerFact
    */
   public function getCacheTags(): array {
     $tags = Cache::mergeTags(parent::getCacheTags(), [
-      'rdf_entity_list:collection',
-      'rdf_entity_list:solution',
+      'node_list:collection',
+      'node_list:solution',
     ]);
     foreach ($this->getGroups() as $group) {
       $tags = Cache::mergeTags($tags, $group->getCacheTagsToInvalidate());
@@ -201,9 +201,9 @@ class GroupContextCondition extends ConditionPluginBase implements ContainerFact
   protected function getGroups(?array $ids = NULL): array {
     $ids ??= $this->getConfiguration()['limit_to_groups'];
     return array_filter(
-      $ids ? $this->entityTypeManager->getStorage('rdf_entity')->loadMultiple($ids) : [],
-      function (RdfInterface $rdf_entity): bool {
-        return $rdf_entity instanceof GroupInterface;
+      $ids ? $this->entityTypeManager->getStorage('node')->loadMultiple($ids) : [],
+      function (NodeInterface $node): bool {
+        return $node instanceof GroupInterface;
       }
     );
   }

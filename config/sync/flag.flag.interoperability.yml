@@ -19,7 +19,7 @@ unflag_long: ''
 unflag_message: ''
 unflag_denied_text: ''
 weight: 0
-flag_type: 'entity:rdf_entity'
+flag_type: 'entity:node'
 link_type: interoperable_link
 flagTypeConfig:
   show_in_links: {  }

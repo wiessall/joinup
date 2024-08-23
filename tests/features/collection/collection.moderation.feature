@@ -344,7 +344,7 @@ Feature: Collection moderation
     # Regression test for a bug that happens when an "Add more" button on a
     # multi-value widget is clicked and then the "Closed collection" checkbox
     # is checked.
-    # @see collection_form_rdf_entity_form_alter()
+    # @see collection_form_node_form_alter()
     # Note that the "Closed collection" option no longer exists but we are
     # keeping the coverage for now.
     Given I am logged in as a user with the "authenticated" role
@@ -386,7 +386,7 @@ Feature: Collection moderation
   Scenario: Changing Content creation value - regression #4
     # Regression test for a bug that happens when the "Closed collection" checkbox
     # is checked and then an "Add more" button on a multi-value widget is clicked.
-    # @see collection_form_rdf_entity_form_alter()
+    # @see collection_form_node_form_alter()
     # Note that the "Closed collection" option no longer exists but we are
     # keeping the coverage for now.
     Given I am logged in as a user with the "authenticated" role

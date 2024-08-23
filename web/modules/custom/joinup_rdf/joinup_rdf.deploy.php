@@ -94,77 +94,32 @@ function joinup_rdf_deploy_200003(): void {
 /**
  * Apply entity definition updates.
  */
-function joinup_rdf_deploy_200004(): void {
+function joinup_rdf_post_update_200003(): string {
   $entity_update_manager = \Drupal::entityDefinitionUpdateManager();
   if (!$entity_update_manager->needsUpdates()) {
-    return;
+    return 'No updates needed.';
   }
 
+  $messages = [];
   $entity_field_manager = \Drupal::getContainer()->get('entity_field.manager');
-  $database = \Drupal::database();
   foreach ($entity_update_manager->getChangeList() as $entity_type_id => $changes) {
     $entity_type = $entity_update_manager->getEntityType($entity_type_id);
     if (isset($changes['field_storage_definitions'])) {
       $field_storage_definitions = $entity_field_manager->getFieldStorageDefinitions($entity_type_id);
       foreach ($changes['field_storage_definitions'] as $field_name => $value) {
+        if ($field_name !== 'og_audience' || $field_name !== 'field_news_referenced_solution') {
+          continue;
+        }
+
         /** @var \Drupal\Core\Field\FieldStorageDefinitionInterface $storage_definition */
         $storage_definition = $field_storage_definitions[$field_name];
-        $table_name = $entity_type_id . '__' . $field_name;
-        $revision_table_name = $entity_type_id . '_revision__' . $field_name;
-        $revision_table_exists = $database->schema()
-          ->tableExists($revision_table_name);
-
-        // The target ID has already been converted from string to numeric
-        // during the migration process. We need to only extract the data so
-        // that the field storage definition can be updated.
-        $data = $database->select($table_name, 't')
-          ->fields('t')
-          ->execute()
-          ->fetchAllAssoc('revision_id');
-        $database->truncate($table_name)->execute();
-        if ($revision_table_exists) {
-          $revision_data = $database->select($revision_table_name, 't')
-            ->fields('t')
-            ->execute()
-            ->fetchAllAssoc('revision_id');
-          $database->truncate($revision_table_name)->execute();
-        }
-
         $entity_update_manager->updateFieldStorageDefinition($storage_definition);
-        $fields = [
-          'bundle',
-          'deleted',
-          'entity_id',
-          'revision_id',
-          'langcode',
-          'delta',
-          $field_name . '_target_id',
-        ];
-
-        if (!empty($data)) {
-          $values = [];
-          foreach ($data as $row) {
-            $values = array_map(fn($field) => $row->$field, $fields);
-          }
-          $database->insert($table_name)
-            ->fields($fields)
-            ->values($values)
-            ->execute();
-        }
-
-        if ($revision_table_exists && !empty($revision_data)) {
-          $values = [];
-          foreach ($revision_data as $row) {
-            $values = array_map(fn($field) => $row->$field, $fields);
-          }
-
-          $database->insert($revision_table_name)
-            ->fields($fields)
-            ->values($values)
-            ->execute();
-        }
+        $messages[] = "Updated field storage definition for $field_name.";
       }
     }
     $entity_update_manager->updateEntityType($entity_type);
+    $messages[] = "Updated entity type $entity_type_id.\n";
   }
+
+  return implode("\n", $messages);
 }

@@ -8,7 +8,6 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_group\TcaFormBase;
 use Drupal\node\NodeInterface;
-use Drupal\rdf_entity\RdfInterface;
 
 /**
  * A simple page that presents a TCA form for the solution creation.
@@ -62,7 +61,7 @@ class TcaForm extends TcaFormBase {
   /**
    * {@inheritdoc}
    */
-  public function submitForm(array &$form, FormStateInterface $form_state, ?RdfInterface $rdf_entity = NULL): void {
+  public function submitForm(array &$form, FormStateInterface $form_state, ?NodeInterface $node = NULL): void {
     $form_state->setRedirect('joinup_solution.collection_solution.add', [
       'node' => $this->collection->id(),
     ]);

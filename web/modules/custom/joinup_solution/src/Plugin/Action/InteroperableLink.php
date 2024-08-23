@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Drupal\solution\Plugin\ActionLink;
+namespace Drupal\joinup_solution\Plugin\ActionLink;
 
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\flag\FlagInterface;

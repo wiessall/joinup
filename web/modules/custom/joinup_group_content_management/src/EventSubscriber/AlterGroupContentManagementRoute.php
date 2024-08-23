@@ -18,7 +18,7 @@ class AlterGroupContentManagementRoute extends RouteSubscriberBase {
   protected function alterRoutes(RouteCollection $collection) {
     if ($route = $collection->get('view.group_content_management.manage')) {
       $options = $route->getOptions();
-      $options['parameters']['rdf_entity']['bundle'] = [
+      $options['parameters']['node']['bundle'] = [
         'collection',
         'solution',
       ];

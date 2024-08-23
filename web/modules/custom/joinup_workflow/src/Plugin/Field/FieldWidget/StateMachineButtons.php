@@ -119,8 +119,7 @@ class StateMachineButtons extends OptionsSelectWidget implements ContainerFactor
 
     // Avoid using this widget in places other than the entity edit forms.
     $base_form_id = $form_state->getFormObject()->getBaseFormId();
-    // @todo Remove 'rdf_entity_form' in ISAICP-8376.
-    if (!in_array($base_form_id, ['node_form', 'rdf_entity_form'], TRUE)) {
+    if ($base_form_id !== 'node_form') {
       return $element;
     }
 

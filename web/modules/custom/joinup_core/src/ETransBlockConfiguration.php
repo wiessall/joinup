@@ -74,7 +74,7 @@ class ETransBlockConfiguration {
     ],
     'routes' => [
       // The "Glossary" page of a collection.
-      'entity.rdf_entity.glossary' => [
+      'entity.node.glossary' => [
         'include' => '.view-glossary',
         'exclude' => 'h2.h3,.views-field-title-1,.views-field-field-glossary-synonyms',
       ],

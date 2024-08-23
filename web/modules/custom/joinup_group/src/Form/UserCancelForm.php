@@ -76,7 +76,7 @@ class UserCancelForm extends CoreUserCancelForm {
           $form[$bundle] = [
             '#theme' => 'item_list',
             '#items' => $group_data[$bundle],
-            '#title' => $this->entityTypeBundleInfo->getBundleCountLabel('rdf_entity', $bundle, count($group_data[$bundle]), 'no_count_capitalize'),
+            '#title' => $this->entityTypeBundleInfo->getBundleCountLabel('node', $bundle, count($group_data[$bundle]), 'no_count_capitalize'),
           ];
         }
       }

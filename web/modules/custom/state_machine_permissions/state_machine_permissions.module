@@ -19,36 +19,14 @@ use Drupal\owner\Entity\OwnerInterface;
 /**
  * Implements hook_ENTITY_TYPE_create_access().
  */
-function state_machine_permissions_rdf_entity_create_access(AccountInterface $account, array $context, string $entity_bundle): AccessResultInterface {
-  $ignored_bundles = ['collection', 'contact_information', 'licence'];
-  if (in_array($entity_bundle, $ignored_bundles)) {
-    return AccessResult::neutral();
-  }
-  if (empty($context['group'])) {
-    return AccessResult::forbidden('Cannot create RDF entities outside a group context.');
-  }
-
-  $workflow_helper = \Drupal::getContainer()->get('joinup_workflow.workflow_helper');
-  /** @var \Drupal\joinup_group\Entity\GroupContentInterface $entity */
-  $entity = \Drupal::entityTypeManager()->getStorage('rdf_entity')->create(['rid' => $entity_bundle]);
-  $entity->setGroup($context['group']);
-  if (empty($workflow_helper->getAvailableTransitions($entity, $account))) {
-    return AccessResult::forbidden('No available transitions for the entity.');
-  }
-
-  return AccessResult::neutral();
-}
-
-/**
- * Implements hook_ENTITY_TYPE_create_access().
- */
 function state_machine_permissions_node_create_access(AccountInterface $account, array $context, string $entity_bundle): AccessResultInterface {
   if ($entity_bundle === 'owner') {
     // Owners are not group content. The rest of the API will decide.
     return AccessResult::neutral();
   }
 
-  if (empty($context['group']) && in_array($entity_bundle, ['custom_page', 'licence'], TRUE)) {
+  $ignored_bundles = ['collection', 'contact_information', 'licence'];
+  if (empty($context['group']) && in_array($entity_bundle, $ignored_bundles, TRUE)) {
     return AccessResult::neutral('Custom pages and licences can be created as individual pages.');
   }
 
@@ -81,18 +59,8 @@ function state_machine_permissions_node_create_access(AccountInterface $account,
 /**
  * Implements hook_ENTITY_TYPE_access().
  */
-function state_machine_permissions_rdf_entity_access(EntityInterface $entity, $operation, AccountInterface $account): AccessResultInterface {
-  if ($operation === 'view' || !$entity instanceof EntityWorkflowStateInterface) {
-    // View permission is already covered.
-    return AccessResult::neutral();
-  }
-  return _state_machine_permissions_check_transition_access($entity, $operation, $account);
-}
-
-/**
- * Implements hook_ENTITY_TYPE_access().
- */
 function state_machine_permissions_node_access(EntityInterface $entity, string $operation, AccountInterface $account): AccessResultInterface {
+  // @todo Check if additions are needed
   if (!$entity instanceof ContactInformationInterface && !$entity instanceof OwnerInterface) {
     // This is only for contact information and owner entities.
     return AccessResult::neutral();

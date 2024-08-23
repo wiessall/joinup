@@ -8,8 +8,6 @@ use Drupal\joinup_bundle_class\JoinupBundleClassFieldAccessTrait;
 use Drupal\joinup_rdf\Entity\RdfSyncEntityTrait;
 use Drupal\joinup_workflow\EntityWorkflowStateTrait;
 use Drupal\node\Entity\Node;
-use Drupal\rdf_entity\Entity\Rdf;
-use Drupal\sparql_entity_storage\Entity\Query\Sparql\SparqlArg;
 
 /**
  * Bundle class for the 'owner' bundle.
@@ -31,11 +29,14 @@ class Owner extends Node implements OwnerInterface {
    * {@inheritdoc}
    */
   public function isReferencedByGroups(): bool {
-    if (empty($this->id())) {
-      return FALSE;
-    }
-    $sparql_endpoint = \Drupal::getContainer()->get('sparql.endpoint');
-    return $sparql_endpoint->query("ASK { ?s ?p " . SparqlArg::uri($this->getUri()) . " }")->isTrue();
+    $count = \Drupal::entityQuery('node')
+      ->accessCheck(FALSE)
+      ->condition('type', ['collection', 'solution'])
+      ->condition('owner', $this->id())
+      ->count()
+      ->execute();
+
+    return $count > 0;
   }
 
   /**
@@ -46,13 +47,13 @@ class Owner extends Node implements OwnerInterface {
       return [];
     }
 
-    $query = \Drupal::entityQuery('rdf_entity')->accessCheck(FALSE);
-    $result = $query
-      ->condition('rid', 'collection')
-      ->condition('field_ar_owner', $this->getUri())
+    $groupIds = \Drupal::entityQuery('node')
+      ->accessCheck(FALSE)
+      ->condition('type', ['collection', 'solution'])
+      ->condition('owner', $this->id())
       ->execute();
 
-    return !empty($result) ? Rdf::loadMultiple($result) : [];
+    return !empty($result) ? Node::loadMultiple($groupIds) : [];
   }
 
 }

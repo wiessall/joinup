@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup_seo;
 
 use Drupal\joinup_rdf\Entity\RdfSyncEntityInterface;
-use Drupal\rdf_entity\RdfInterface;
+use Drupal\node\NodeInterface;
 use Drupal\sparql_entity_storage\SparqlSerializerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
@@ -37,7 +37,7 @@ class JoinupSeoExportHelper implements JoinupSeoExportHelperInterface {
   /**
    * {@inheritdoc}
    */
-  public function exportRdfEntityMetadata(RdfInterface $entity): string {
+  public function exportRdfEntityMetadata(RdfSyncEntityInterface $entity): string {
     $output = $this->sparQlSerializer->serializeEntity($entity, self::SERIALIZATION_FORMAT, self::getOptions());
     // The serializer returns also data where the entity is referred, thus, not
     // related to the metadata. Keep only the entry that has a "@type" property.
@@ -54,12 +54,7 @@ class JoinupSeoExportHelper implements JoinupSeoExportHelperInterface {
   /**
    * {@inheritdoc}
    */
-  public function getEntityJsonLdString(RdfSyncEntityInterface|RdfInterface $entity): string {
-    // @todo Remove this BC layer in ISAICP-8376.
-    if ($entity instanceof RdfInterface) {
-      return $this->exportRdfEntityMetadata($entity);
-    }
-
+  public function getEntityJsonLdString(RdfSyncEntityInterface $entity): string {
     assert($entity instanceof RdfSyncEntityInterface);
     return $this->exportEntityJsonLd($entity);
   }

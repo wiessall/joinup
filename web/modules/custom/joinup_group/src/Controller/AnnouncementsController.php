@@ -69,7 +69,7 @@ class AnnouncementsController extends ControllerBase {
   /**
    * Access check for the group announcement form in read-only mode.
    *
-   * @param \Drupal\joinup_group\Entity\GroupInterface $rdf_entity
+   * @param \Drupal\joinup_group\Entity\GroupInterface $node
    *   The group for which the access to the reports page is being determined.
    * @param \Drupal\joinup_group\Entity\AnnouncementInterface|null $announcement
    *   The announcement, when present in the route.
@@ -77,14 +77,14 @@ class AnnouncementsController extends ControllerBase {
    * @return \Drupal\Core\Access\AccessResultInterface
    *   The access result object.
    */
-  public function accessReadOnly(GroupInterface $rdf_entity, ?AnnouncementInterface $announcement = NULL): AccessResultInterface {
-    return AccessResult::allowedIf($rdf_entity->isPublished())->addCacheableDependency($rdf_entity);
+  public function accessReadOnly(GroupInterface $node, ?AnnouncementInterface $announcement = NULL): AccessResultInterface {
+    return AccessResult::allowedIf($node->isPublished())->addCacheableDependency($node);
   }
 
   /**
    * Provide a callback to add or edit announcements.
    *
-   * @param \Drupal\joinup_group\Entity\GroupInterface $rdf_entity
+   * @param \Drupal\joinup_group\Entity\GroupInterface $node
    *   The group where the announcement belongs.
    * @param \Drupal\joinup_group\Entity\AnnouncementInterface|null $announcement
    *   (optional) The announcement. If omitted, will create a new announcement.
@@ -92,17 +92,17 @@ class AnnouncementsController extends ControllerBase {
    * @return array
    *   The form render array.
    */
-  public function editForm(GroupInterface $rdf_entity, ?AnnouncementInterface $announcement = NULL): array {
+  public function editForm(GroupInterface $node, ?AnnouncementInterface $announcement = NULL): array {
     if (!$announcement) {
       $announcement = $this->entityTypeManager()->getStorage('message')->create([
         'template' => 'announcement',
-        'group' => $rdf_entity,
+        'group' => $node,
         'state' => 'draft',
         'uid' => $this->currentUser()->id(),
       ]);
     }
-    elseif ($announcement->getGroupId() != $rdf_entity->id()) {
-      throw new \LogicException("Announcement {$announcement->id()} doesn't belong to group {$rdf_entity->id()}");
+    elseif ($announcement->getGroupId() != $node->id()) {
+      throw new \LogicException("Announcement {$announcement->id()} doesn't belong to group {$node->id()}");
     }
     $form = $this->classResolver->getInstanceFromDefinition(AnnouncementForm::class)
       ->setAnnouncement($announcement);

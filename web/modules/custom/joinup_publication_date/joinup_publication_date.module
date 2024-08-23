@@ -44,7 +44,7 @@ function joinup_publication_date_field_info_alter(array &$info): void {
  * Enable Publication date behavior for RDF entities.
  */
 function joinup_publication_date_publication_date_entity_types_alter(array &$entity_types): void {
-  $entity_types[] = 'rdf_entity';
+  $entity_types[] = 'node';
 }
 
 /**

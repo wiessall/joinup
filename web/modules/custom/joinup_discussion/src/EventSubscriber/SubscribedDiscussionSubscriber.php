@@ -19,7 +19,6 @@ use Drupal\joinup_notification\JoinupMessageDeliveryInterface;
 use Drupal\joinup_notification\MessageArgumentGenerator;
 use Drupal\joinup_subscription\JoinupDiscussionSubscriptionInterface;
 use Drupal\node\NodeInterface;
-use Drupal\rdf_entity\RdfInterface;
 use Drupal\user\Entity\User;
 use Drupal\user\UserInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -262,11 +261,10 @@ class SubscribedDiscussionSubscriber implements EventSubscriberInterface {
    * @param \Drupal\node\NodeInterface $discussion
    *   The discussion for which to return the group.
    *
-   * @return \Drupal\rdf_entity\RdfInterface|null
-   *   The group (which is an RDF entity of type 'collection' or 'solution'),
-   *   or NULL if no group is found.
+   * @return \Drupal\node\NodeInterface|null
+   *   The group or NULL if no group is found.
    */
-  protected function getDiscussionGroup(NodeInterface $discussion): ?RdfInterface {
+  protected function getDiscussionGroup(NodeInterface $discussion): ?NodeInterface {
     return $discussion->get('og_audience')->entity;
   }
 

@@ -9,8 +9,8 @@ declare(strict_types=1);
 
 use Drupal\Core\Template\Attribute;
 use Drupal\interoperable_europe\InteroperableEuropeCollectionInterface;
+use Drupal\node\NodeInterface;
 use Drupal\page_manager\PageInterface;
-use Drupal\rdf_entity\RdfInterface;
 use Drupal\topic\Entity\TopicMetaEntityInterface;
 
 /**
@@ -25,8 +25,8 @@ function ventuno_preprocess_page(array &$variables): void {
   $variables['version_url'] = $joinup_version->getUrl();
 
   // Export the URL of the Interoperable Europe landing page.
-  $landing_page = \Drupal::entityTypeManager()->getStorage('rdf_entity')->load(InteroperableEuropeCollectionInterface::COLLECTION_ENTITY_ID);
-  if ($landing_page instanceof RdfInterface) {
+  $landing_page = \Drupal::getContainer()->get('rdf_sync.mapper')->getEntityByUri(InteroperableEuropeCollectionInterface::COLLECTION_ENTITY_ID);
+  if ($landing_page instanceof NodeInterface) {
     $variables['interoperable_europe_url'] = $landing_page->toUrl()->toString();
   }
 

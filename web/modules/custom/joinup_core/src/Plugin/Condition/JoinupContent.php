@@ -20,8 +20,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   context_definitions = {
  *     "node" = @ContextDefinition("entity:node", label = @Translation("Node"),
  *   required = FALSE),
- *     "rdf" = @ContextDefinition("entity:rdf_entity", label =
- *   @Translation("RDF entity"), required = FALSE),
  *   }
  * )
  */

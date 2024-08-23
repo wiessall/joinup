@@ -42,7 +42,6 @@ use Drupal\og\OgAccess;
 use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\og\OgMembershipInterface;
 use Drupal\og_menu\Entity\OgMenuInstance;
-use Drupal\rdf_entity\RdfInterface;
 use Drupal\symfony_mailer_lite\Plugin\Mail\SymfonyMailer;
 use Drupal\user\UserInterface;
 use Drupal\views\Plugin\views\query\QueryPluginBase;
@@ -143,7 +142,7 @@ function joinup_group_preprocess_page(array &$variables): void {
  * Implements hook_preprocess().
  */
 function joinup_group_preprocess(array &$variables, string $hook): void {
-  if (!in_array($hook, ['rdf_entity', 'node'], TRUE)) {
+  if ($hook !== 'node') {
     return;
   }
 
@@ -397,7 +396,7 @@ function joinup_group_node_presave(EntityInterface $entity): void {
  *
  * @see \joinup_group_rdf_entity_presave()
  */
-function joinup_group_rdf_entity_update(EntityInterface $entity): void {
+function joinup_group_node_update(EntityInterface $entity): void {
   if (!$entity instanceof GroupInterface) {
     return;
   }
@@ -535,7 +534,7 @@ function joinup_group_og_user_access_alter(array &$permissions, CacheableMetadat
 function joinup_group_form_views_exposed_form_alter(array &$form, FormStateInterface $form_state): void {
   /** @var \Drupal\views\ViewExecutable $view */
   $view = $form_state->get('view');
-  $rdf_storage = \Drupal::entityTypeManager()->getStorage('rdf_entity');
+  $rdf_storage = \Drupal::entityTypeManager()->getStorage('node');
   $view_id = $view->id();
   $display = $view->current_display;
 
@@ -544,8 +543,8 @@ function joinup_group_form_views_exposed_form_alter(array &$form, FormStateInter
     $form['group'] = [
       '#title' => t('Group'),
       '#type' => 'entity_autocomplete',
-      '#target_type' => 'rdf_entity',
-      '#selection_handler' => 'default:rdf_entity',
+      '#target_type' => 'node',
+      '#selection_handler' => 'default:node',
       '#selection_settings' => [
         'target_bundles' => ['collection', 'solution'],
         'match_operator' => 'CONTAINS',
@@ -1024,7 +1023,7 @@ function joinup_group_block_view_group_header_block_alter(array &$build, BlockPl
 /**
  * Implements hook_ENTITY_TYPE_view_alter().
  */
-function joinup_group_rdf_entity_view_alter(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display): void {
+function joinup_group_node_view_alter(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display): void {
   if ($entity instanceof GroupInterface && $display->getMode() === 'group_header') {
     // Hide contextual links for group header block.
     unset($build['#contextual_links']);
@@ -1091,7 +1090,7 @@ function joinup_group_entity_field_access(string $operation, FieldDefinitionInte
 /**
  * Implements hook_ENTITY_TYPE_delete().
  */
-function joinup_group_rdf_entity_delete(RdfInterface $group): void {
+function joinup_group_node_delete(RdfInterface $group): void {
   if ($group instanceof GroupInterface) {
     // Cleanup the {joinup_group_node_access} table.
     \Drupal::database()->delete('joinup_group_node_access')
@@ -1117,7 +1116,7 @@ function joinup_group_mail(string $key, array &$message, array $params): void {
     /** @var \Drupal\joinup_group\Entity\AnnouncementInterface $announcement */
     $announcement = $params['announcement'];
     $group = $announcement->getGroup();
-    $data = ['rdf_entity' => $group];
+    $data = ['node' => $group];
     $args = [
       '@subject' => $token->replace($announcement->getSubject(), $data),
       '@group' => $group->label(),
@@ -1157,7 +1156,7 @@ function joinup_group_mail_alter(array &$message): void {
  * Implements hook_menu_local_tasks_alter().
  */
 function joinup_group_menu_local_tasks_alter(array &$data, string $route_name, RefinableCacheableDependencyInterface &$cacheability): void {
-  if ($route_name != 'entity.rdf_entity.canonical') {
+  if ($route_name != 'entity.node.canonical') {
     return;
   }
 
@@ -1187,9 +1186,9 @@ function joinup_group_menu_local_tasks_alter(array &$data, string $route_name, R
 /**
  * Implements hook_preprocess_HOOK().
  */
-function joinup_group_preprocess_rdf_entity(array &$variables): void {
+function joinup_group_preprocess_node(array &$variables): void {
   if ($variables['view_mode'] === 'group_header') {
-    $group = $variables['rdf_entity'];
+    $group = $variables['node'];
     if ($group instanceof GroupInterface) {
       $bundle = "{$group->bundle()}_settings";
       $meta_entity = MetaEntity::loadOrCreate($bundle, $group);

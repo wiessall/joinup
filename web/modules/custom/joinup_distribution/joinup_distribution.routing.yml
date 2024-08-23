@@ -1,16 +1,3 @@
-joinup_distribution.distribution.add:
-  path: 'rdf_entity/{rdf_entity}/distribution/add'
-  defaults:
-    _controller: '\Drupal\joinup_distribution\Controller\JoinupDistributionController::add'
-    _title: 'Add Distribution'
-  requirements:
-    _custom_access: '\Drupal\joinup_distribution\Controller\JoinupDistributionController::createAssetDistributionAccess'
-    _joinup_group: 'solution'
-  options:
-    parameters:
-      rdf_entity:
-        type: entity:rdf_entity
-
 joinup_distribution.group.add:
   path: 'node/{node}/distribution/add'
   defaults:

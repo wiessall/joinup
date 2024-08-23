@@ -8,7 +8,7 @@ use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Url;
 use Drupal\joinup_group\Entity\GroupInterface;
-use Drupal\rdf_entity\RdfInterface;
+use Drupal\node\NodeInterface;
 use Drupal\sparql_entity_storage\UriEncoder;
 use Symfony\Contracts\EventDispatcher\Event;
 
@@ -91,51 +91,12 @@ class GroupMenuLinksEvent extends Event {
       'title' => $label,
       'menu_name' => $this->getMenuName(),
       'link' => [
-        'uri' => $this->getUriString($url),
+        'uri' => $url->toUriString(),
         'options' => $url->getOptions(),
       ],
       'weight' => $weight,
     ] + $values)->save();
     return $this;
-  }
-
-  /**
-   * Returns the URL as URI string.
-   *
-   * We cannot use \Drupal\Core\Url::toUriString() for RDF entities because the
-   * `rdf_entity` route parameter should be encoded. Most of the code is copied
-   * from Url::toUriString().
-   *
-   * @param \Drupal\Core\Url $url
-   *   The URL object.
-   *
-   * @return string
-   *   The URI as string.
-   *
-   * @see \Drupal\Core\Url::toUriString()
-   * @see \Drupal\sparql_entity_storage\UriEncoder::encodeUrl()
-   */
-  protected function getUriString(Url $url): string {
-    if ($url->getOption('entity_type') !== 'rdf_entity' || !$url->getOption('entity') instanceof RdfInterface) {
-      // Fallback to original method.
-      return $url->toUriString();
-    }
-
-    // Canonical routes are getting a special treatment.
-    if ($url->getRouteName() === 'entity.rdf_entity.canonical') {
-      return 'entity:rdf_entity/' . UriEncoder::encodeUrl($url->getOption('entity')->id());
-    }
-
-    $uri = 'route:' . $url->getRouteName();
-    if ($parameters = $url->getRouteParameters()) {
-      if (isset($parameters['rdf_entity'])) {
-        $parameters['rdf_entity'] = UriEncoder::encodeUrl($parameters['rdf_entity']);
-      }
-      $uri .= ';' . UrlHelper::buildQuery($parameters);
-    }
-    $query = !empty($this->options['query']) ? ('?' . UrlHelper::buildQuery($this->options['query'])) : '';
-    $fragment = isset($this->options['fragment']) && strlen($this->options['fragment']) ? '#' . $this->options['fragment'] : '';
-    return $uri . $query . $fragment;
   }
 
 }

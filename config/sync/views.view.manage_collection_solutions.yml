@@ -488,7 +488,7 @@ display:
             format: default_summary
           specify_validation: true
           validate:
-            type: 'entity:rdf_entity'
+            type: 'entity:node'
             fail: 'not found'
           validate_options:
             bundles:
@@ -642,7 +642,7 @@ display:
         - 'user.node_grants:view'
         - user.permissions
       tags:
-        - 'config:field.storage.rdf_entity.field_is_state'
+        - 'config:field.storage.node.field_state'
         - 'config:search_api.index.published'
         - 'config:views.view.manage_collection_solutions'
         - 'search_api_list:published'

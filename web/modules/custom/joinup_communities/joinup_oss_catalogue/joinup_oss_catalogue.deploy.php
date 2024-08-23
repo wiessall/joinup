@@ -15,7 +15,8 @@ use Drupal\joinup_oss_catalogue\OssCatalogueCollectionInterface;
  */
 function joinup_oss_catalogue_deploy_111200(): void {
   /** @var \Drupal\collection\Entity\CollectionInterface $collection */
-  $collection = \Drupal::entityTypeManager()->getStorage('rdf_entity')
+  // @todo Change this to use the rdf sync mapper.
+  $collection = \Drupal::entityTypeManager()->getStorage('node')
     ->load(OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID);
 
   $collection
@@ -29,7 +30,8 @@ function joinup_oss_catalogue_deploy_111200(): void {
  */
 function joinup_oss_catalogue_deploy_111201(): void {
   /** @var \Drupal\collection\Entity\CollectionInterface $collection */
-  $collection = \Drupal::entityTypeManager()->getStorage('rdf_entity')
+  // @todo Change this to use the rdf sync mapper.
+  $collection = \Drupal::entityTypeManager()->getStorage('node')
     ->load(OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID);
 
   $collection

@@ -136,7 +136,7 @@ function _eif_reindex_parent_solution(MetaEntityInterface $entity): void {
     return;
   }
 
-  $solution = \Drupal::entityTypeManager()->getStorage('rdf_entity')->loadUnchanged($entity->target->target_id);
+  $solution = \Drupal::entityTypeManager()->getStorage('node')->loadUnchanged($entity->target->target_id);
 
   // In case the solutions was deleted prior to the perspective, the solution
   // will be NULL.
@@ -185,7 +185,7 @@ function _eif_add_eif_link_to_group_menus(MetaEntityInterface $meta_entity): voi
           $menu_name = 'ogmenu-' . $og_menu->id();
           $link = [
             'uri' => Url::fromRoute('entity.node.eif_perspective', [
-              'rdf_entity' => $solution->id(),
+              'node' => $solution->id(),
             ])->toUriString(),
           ];
           \Drupal::entityTypeManager()->getStorage('menu_link_content')->create([

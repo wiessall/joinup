@@ -19,7 +19,7 @@ settings:
   label_display: visible
   provider: joinup_group
   context_mapping:
-    og: '@rdf_entity.rdf_entity_route_context:rdf_entity'
+    og: '@node.node_route_context:node'
   states_filter:
     - draft
     - proposed

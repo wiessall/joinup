@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Drupal\solution\Plugin\search_api\processor;
+namespace Drupal\joinup_solution\Plugin\search_api\processor;
 
 use Drupal\flag\FlagServiceInterface;
+use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\search_api\Datasource\DatasourceInterface;
 use Drupal\search_api\Item\ItemInterface;
 use Drupal\search_api\Processor\ProcessorPluginBase;
 use Drupal\search_api\Processor\ProcessorProperty;
 use Drupal\search_api\SearchApiException;
-use Drupal\solution\Entity\SolutionInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -105,7 +105,7 @@ class InteroperableFlagProcessor extends ProcessorPluginBase {
   /**
    * Check is solution is interoperable.
    *
-   * @param \Drupal\solution\Entity\SolutionInterface $solution
+   * @param \Drupal\joinup_solution\Entity\SolutionInterface $solution
    *   Solution entity.
    *
    * @return bool

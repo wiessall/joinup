@@ -26,7 +26,7 @@ class RefreshCountersTest extends KernelTestBase {
    *
    * @var array
    */
-  protected $entities = [];
+  protected array $entities = [];
 
   /**
    * {@inheritdoc}
@@ -44,7 +44,6 @@ class RefreshCountersTest extends KernelTestBase {
     'node',
     'og',
     'options',
-    'rdf_entity',
     'sparql_entity_storage',
     'system',
     'user',
@@ -55,7 +54,6 @@ class RefreshCountersTest extends KernelTestBase {
    */
   protected function bootEnvironment() {
     parent::bootEnvironment();
-    $this->setUpSparql();
   }
 
   /**
@@ -73,7 +71,6 @@ class RefreshCountersTest extends KernelTestBase {
     $this->installConfig([
       'cached_computed_field',
       'joinup_stats_test',
-      'sparql_entity_storage',
     ]);
     FieldStorageConfig::create($this->getConfigData('field.storage.meta_entity.count'))->save();
 
@@ -104,8 +101,8 @@ class RefreshCountersTest extends KernelTestBase {
     // Check that creating entities the meta entities are also created. Only
     // test one RDF entity and one node.
     $this->reloadEntities();
-    $distro = $this->entities['rdf_entity']['http://example.com/distro/2'];
-    $this->assertSame('http://example.com/distro/2', $distro->download_count->entity->target->target_id);
+    $distro = $this->entities['node'][7];
+    $this->assertSame(7, $distro->download_count->entity->target->target_id);
     $node = $this->entities['node'][3];
     $this->assertEquals(3, $node->visit_count->entity->target->target_id);
 
@@ -126,9 +123,9 @@ class RefreshCountersTest extends KernelTestBase {
 
     // Check that the cached computed fields were updated.
     // @see \Drupal\joinup_stats_test\Mocks\TestQuery::getMockedResponseArray()
-    $this->assertEquals(55, $this->entities['rdf_entity']['http://example.com/distro/1']->getDownloadCount());
-    $this->assertEquals(2034, $this->entities['rdf_entity']['http://example.com/distro/2']->getDownloadCount());
-    $this->assertEquals(0, $this->entities['rdf_entity']['http://example.com/distro/3']->getDownloadCount());
+    $this->assertEquals(55, $this->entities['node'][6]->getDownloadCount());
+    $this->assertEquals(2034, $this->entities['node'][7]->getDownloadCount());
+    $this->assertEquals(0, $this->entities['node'][8]->getDownloadCount());
     $this->assertEquals(3846545, $this->entities['node'][1]->getVisitCount());
     $this->assertEquals(234, $this->entities['node'][2]->getVisitCount());
     $this->assertEquals(8766, $this->entities['node'][3]->getVisitCount());
@@ -136,9 +133,9 @@ class RefreshCountersTest extends KernelTestBase {
 
     // Pretend that the stats were incremented on Matomo side.
     $this->container->get('state')->set('joinup_stats_test.increment', [
-      'http://example.com/distro/1' => 1000,
-      'http://example.com/distro/2' => 10000,
-      'http://example.com/distro/3' => 39,
+      '6' => 1000,
+      '7' => 10000,
+      '8' => 39,
       '1' => 1000000,
       '2' => 10000,
       '3' => 20000,
@@ -154,9 +151,9 @@ class RefreshCountersTest extends KernelTestBase {
     // reload in order to get the new values.
     cached_computed_field_cron();
     $this->reloadEntities();
-    $this->assertEquals(1055, $this->entities['rdf_entity']['http://example.com/distro/1']->getDownloadCount());
-    $this->assertEquals(12034, $this->entities['rdf_entity']['http://example.com/distro/2']->getDownloadCount());
-    $this->assertEquals(39, $this->entities['rdf_entity']['http://example.com/distro/3']->getDownloadCount());
+    $this->assertEquals(1055, $this->entities['node'][6]->getDownloadCount());
+    $this->assertEquals(12034, $this->entities['node'][7]->getDownloadCount());
+    $this->assertEquals(39, $this->entities['node'][8]->getDownloadCount());
     $this->assertEquals(4846545, $this->entities['node'][1]->getVisitCount());
     $this->assertEquals(10234, $this->entities['node'][2]->getVisitCount());
     $this->assertEquals(28766, $this->entities['node'][3]->getVisitCount());
@@ -206,13 +203,6 @@ class RefreshCountersTest extends KernelTestBase {
     file_put_contents('public://d3', $this->randomString());
 
     return [
-      'rdf_entity' => [
-        [
-          'id' => 'http://example.com/solution/1',
-          'rid' => 'solution',
-          'label' => 'Solution 1',
-        ],
-      ],
       // Enforce predictable NIDs.
       'node' => [
         [
@@ -235,20 +225,26 @@ class RefreshCountersTest extends KernelTestBase {
           'nid' => 4,
           'title' => 'News',
         ],
+        [
+          'id' => 5,
+          'uri' => 'http://example.com/solution/1',
+          'type' => 'solution',
+          'label' => 'Solution 1',
+        ],
       ],
       [
-        'nid' => 5,
+        'nid' => 6,
         'uri' => 'http://example.com/distro/1',
         'type' => 'distribution',
         'label' => 'Distro 1',
         'field_access_url' => File::create([
           'uri' => 'public://d1',
         ]),
-        'og_audience' => 'http://example.com/solution/1',
+        'og_audience' => 5,
         'field_state' => 'published',
       ],
       [
-        'nid' => 6,
+        'nid' => 7,
         'uri' => 'http://example.com/distro/2',
         'type' => 'distribution',
         'label' => 'Distro 2',
@@ -258,7 +254,7 @@ class RefreshCountersTest extends KernelTestBase {
         'field_state' => 'published',
       ],
       [
-        'nid' => 7,
+        'nid' => 8,
         'uri' => 'http://example.com/distro/3',
         'type' => 'distribution',
         'label' => 'Distro 3',
@@ -274,8 +270,8 @@ class RefreshCountersTest extends KernelTestBase {
    * {@inheritdoc}
    */
   public function tearDown(): void {
-    $storage = $this->container->get('entity_type.manager')->getStorage('rdf_entity');
-    $storage->delete($this->entities['rdf_entity']);
+    $storage = $this->container->get('entity_type.manager')->getStorage('node');
+    $storage->delete($this->entities['node']);
     parent::tearDown();
   }
 

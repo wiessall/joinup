@@ -61,10 +61,10 @@ class Release extends Node implements ReleaseInterface {
    */
   public function getGroupId(): string {
     $ids = $this->getReferencedEntityIds('og_audience');
-    if (empty($ids['rdf_entity'])) {
+    if (empty($ids['node'])) {
       throw new MissingGroupException();
     }
-    return array_shift($ids['rdf_entity']);
+    return array_shift($ids['node']);
   }
 
   /**

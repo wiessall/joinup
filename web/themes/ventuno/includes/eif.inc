@@ -10,9 +10,9 @@ declare(strict_types=1);
 /**
  * Implements hook_preprocess_HOOK().
  */
-function ventuno_preprocess_rdf_entity__solution__eif_perspective(array &$variables): void {
+function ventuno_preprocess_node__solution__eif_perspective(array &$variables): void {
   /** @var \Drupal\joinup_solution\Entity\SolutionInterface $solution */
-  $solution = $variables['rdf_entity'];
+  $solution = $variables['node'];
   if (empty($solution)) {
     return;
   }

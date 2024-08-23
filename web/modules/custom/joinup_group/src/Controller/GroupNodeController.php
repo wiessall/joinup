@@ -64,7 +64,7 @@ class GroupNodeController extends ControllerBase {
    * Builds a node creation form.
    *
    * @param \Drupal\node\NodeInterface $node
-   *   The collection or solution rdf_entity.
+   *   The collection or solution group.
    * @param \Drupal\node\NodeTypeInterface $node_type
    *   The type of node to be added.
    *

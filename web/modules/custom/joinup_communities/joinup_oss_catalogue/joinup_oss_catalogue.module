@@ -98,7 +98,7 @@ function joinup_oss_catalogue_preprocess_field__in_modal(&$variables): void {
  */
 function joinup_oss_catalogue_preprocess_node(array &$variables): void {
   // Disables the "Report" link for OSS pages.
-  $group = \Drupal::routeMatch()->getParameter('rdf_entity');
+  $group = \Drupal::routeMatch()->getParameter('node');
   if (
     $group instanceof GroupInterface &&
     $group->id() === OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID

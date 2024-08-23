@@ -286,7 +286,7 @@ class CollectionRdfSubscriber extends NotificationSubscriberBase {
           ],
         ],
         'og_roles' => [
-          'rdf_entity-collection-administrator' => [
+          'node-collection-administrator' => [
             self::TEMPLATE_PROPOSE_EDIT_OWNER,
           ],
         ],
@@ -307,7 +307,7 @@ class CollectionRdfSubscriber extends NotificationSubscriberBase {
     $template_id = $this->hasPublished ? self::TEMPLATE_APPROVE_EDIT : self::TEMPLATE_APPROVE_NEW;
     $user_data = [
       'og_roles' => [
-        'rdf_entity-collection-administrator' => [
+        'node-collection-administrator' => [
           $template_id,
         ],
       ],
@@ -335,7 +335,7 @@ class CollectionRdfSubscriber extends NotificationSubscriberBase {
     $template_id = self::TEMPLATE_ARCHIVE_DELETE_REJECT;
     $user_data = [
       'og_roles' => [
-        'rdf_entity-collection-administrator' => [
+        'node-collection-administrator' => [
           $template_id,
         ],
       ],
@@ -368,7 +368,7 @@ class CollectionRdfSubscriber extends NotificationSubscriberBase {
 
     $user_data = [
       'og_roles' => [
-        'rdf_entity-collection-administrator' => [
+        'node-collection-administrator' => [
           $template_id,
         ],
       ],
@@ -394,7 +394,7 @@ class CollectionRdfSubscriber extends NotificationSubscriberBase {
     // Last, send an email to all members of the collection.
     $user_data = [
       'og_roles' => [
-        'rdf_entity-collection-member' => [
+        'node-collection-member' => [
           self::TEMPLATE_ARCHIVE_DELETE_MEMBERS,
         ],
       ],
@@ -430,18 +430,20 @@ class CollectionRdfSubscriber extends NotificationSubscriberBase {
   protected function notifySolutionOwners(EntityInterface $solution): void {
     // Count collections that are not archived and are affiliated to the
     // solution.
-    $collection_count = $this->entityTypeManager->getStorage('rdf_entity')->getQuery()
+    // @todo Update this because affiliates does not exist as a field.
+    // @todo If we make affiliates a computed field, adapt.
+    $collection_count = $this->entityTypeManager->getStorage('node')->getQuery()
       ->accessCheck(FALSE)
-      ->condition('rid', 'collection')
+      ->condition('type', 'collection')
       ->condition('field_ar_affiliates', $solution->id())
-      ->condition('field_ar_state', 'archived', '!=')
+      ->condition('field_state', 'archived', '!=')
       ->count()
       ->execute();
 
     $template_id = $collection_count ? self::TEMPLATE_ARCHIVE_DELETE_SOLUTIONS_ALL : self::TEMPLATE_ARCHIVE_DELETE_SOLUTIONS_ORPHANED;
     $user_data = [
       'og_roles' => [
-        'rdf_entity-solution-administrator' => [
+        'node-solution-administrator' => [
           $template_id,
         ],
       ],

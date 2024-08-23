@@ -92,9 +92,8 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
           (int) $this->entity['node']['news']['2']->id(),
         ],
         'release' => $releases,
-      ],
-      'rdf_entity' => [
         'solution' => [
+          // @todo Update this to be the same as the releases.
           'http://solution/1',
         ],
       ],

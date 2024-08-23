@@ -34,9 +34,9 @@ class KillSwitchCheck implements AccessInterface {
       throw new \Exception("The _eu_oss_catalogue_check_enabled route requirement when present can only have 'TRUE' as value but '$requirement' was given.");
     }
 
-    if ($routeMatch->getRouteName() === 'entity.rdf_entity.canonical') {
-      $rdf_entity = $routeMatch->getParameter('rdf_entity');
-      if (!$rdf_entity instanceof CollectionInterface || $rdf_entity->id() !== OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID) {
+    if ($routeMatch->getRouteName() === 'entity.node.canonical') {
+      $node = $routeMatch->getParameter('node');
+      if (!$node instanceof CollectionInterface || $node->id() !== OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID) {
         // Any page except the EU OSS Catalogue landing page is allowed.
         return AccessResult::allowed();
       }

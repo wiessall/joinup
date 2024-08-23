@@ -323,13 +323,6 @@ function joinup_entity_view_alter(array &$build, EntityInterface $entity, Entity
 }
 
 /**
- * Implements hook_preprocess_rdf_entity().
- */
-function joinup_preprocess_rdf_entity(&$variables): void {
-  _joinup_preprocess_entity_tiles($variables);
-}
-
-/**
  * Implements hook_preprocess_node().
  */
 function joinup_preprocess_node(&$variables): void {

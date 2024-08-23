@@ -159,7 +159,6 @@ class TransferGroupOwnershipConfirmForm extends ConfirmFormBase {
     // Cleanup the bulk form selection.
     $this->tempStore->delete($this->currentUser->id());
 
-    /** @var \Drupal\rdf_entity\RdfInterface $group */
     $group = $this->membership->getGroup();
     $memberships = $this->membershipManager->getGroupMembershipsByRoleNames($group, [
       'administrator',

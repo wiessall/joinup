@@ -1317,7 +1317,7 @@ display:
             format: default_summary
           specify_validation: true
           validate:
-            type: 'entity:rdf_entity'
+            type: 'entity:node'
             fail: 'not found'
           validate_options:
             bundles:
@@ -1631,7 +1631,7 @@ display:
         - user.permissions
       tags:
         - 'config:field.storage.node.body'
-        - 'config:field.storage.rdf_entity.description'
+        - 'config:field.storage.node.description'
         - 'config:search_api.index.published'
         - 'search_api_list:published'
   rss_feed:
@@ -1673,6 +1673,6 @@ display:
         - user.permissions
       tags:
         - 'config:field.storage.node.body'
-        - 'config:field.storage.rdf_entity.description'
+        - 'config:field.storage.node.description'
         - 'config:search_api.index.published'
         - 'search_api_list:published'

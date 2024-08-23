@@ -37,14 +37,14 @@ class SolutionOgSubscriber implements EventSubscriberInterface {
         'name' => "unshare solution content",
         'title' => $this->t('solution: Unshare from a group'),
         'operation' => 'unshare',
-        'entity type' => 'rdf_entity',
+        'entity type' => 'node',
         'bundle' => 'solution',
       ]),
       new GroupContentOperationPermission([
         'name' => "share solution content",
         'title' => $this->t('solution: Unshare from a group'),
         'operation' => 'share',
-        'entity type' => 'rdf_entity',
+        'entity type' => 'node',
         'bundle' => 'solution',
       ]),
     ]);

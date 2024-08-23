@@ -68,7 +68,6 @@ function joinup_stats_invalidate_solution_download_count_cache(MetaEntityInterfa
  */
 function joinup_stats_invalidate_solution_download_count_cache_by_distribution(DistributionInterface $distribution): void {
   if ($distribution->bundle() === 'distribution') {
-    /** @var \Drupal\rdf_entity\RdfInterface $solution */
     if ($solution = $distribution->get('og_audience')->entity) {
       // On solution page we show the sum of all compounded distributions
       // download count. When a distribution download count changes, we need to

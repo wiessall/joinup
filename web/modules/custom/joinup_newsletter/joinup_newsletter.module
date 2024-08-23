@@ -16,7 +16,7 @@ use Drupal\collection\Entity\CollectionInterface;
  * Hides the form elements to configure the Newsroom newsletter parameters for
  * all users except moderators.
  */
-function joinup_newsletter_form_rdf_entity_collection_edit_form_alter(&$form, FormStateInterface $form_state, string $form_id): void {
+function joinup_newsletter_form_node_collection_edit_form_alter(&$form, FormStateInterface $form_state, string $form_id): void {
   $current_user = \Drupal::currentUser();
   $form['field_newsletter']['#access'] = $current_user->hasPermission('manage newsroom newsletter subscriptions');
 }
@@ -29,7 +29,7 @@ function joinup_newsletter_form_rdf_entity_collection_edit_form_alter(&$form, Fo
  * newsletter subscription is enabled.
  */
 function joinup_newsletter_entity_prepare_view(string $entity_type_id, array $entities, array $displays, string $view_mode): void {
-  if ($entity_type_id !== 'rdf_entity') {
+  if ($entity_type_id !== 'node') {
     return;
   }
 

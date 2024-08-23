@@ -21,5 +21,4 @@ dependencies:
   - 'joinup:owner'
   - 'joinup:solution'
   - 'og:og'
-  - 'rdf_entity:rdf_entity'
   - 'state_machine:state_machine'

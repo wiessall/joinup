@@ -12,7 +12,7 @@ use Drupal\og\OgMembershipInterface;
 use Drupal\user\UserInterface;
 
 /**
- * Form to invite a member with a certain role in a rdf entity group.
+ * Form to invite a member with a certain role in a group.
  */
 class InviteToGroupForm extends GroupFormBase {
 

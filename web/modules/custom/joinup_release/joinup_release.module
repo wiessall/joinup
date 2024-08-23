@@ -163,7 +163,7 @@ function joinup_release_node_access(EntityInterface $release, $operation, Accoun
     return AccessResult::neutral();
   }
 
-  $access_handler = \Drupal::service('entity_type.manager')->getAccessControlHandler('rdf_entity');
+  $access_handler = \Drupal::entityTypeManager()->getAccessControlHandler('node');
   if (!$access_handler->access($parent, 'view', $account)) {
     return AccessResult::forbidden();
   }

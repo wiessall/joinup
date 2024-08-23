@@ -330,8 +330,8 @@ class JoinupContext extends RawDrupalContext {
    * @throws \Exception
    *   Thrown when a collection or solution with the given label doesn't exist.
    *
-   * @Given I am logged in as a user with the :role role(s) of the :rdf_entity :rdf_entity_bundle
-   * @Given I am logged in as a/an :role of the :rdf_entity :rdf_entity_bundle
+   * @Given I am logged in as a user with the :role role(s) of the :group_label :group_bundle
+   * @Given I am logged in as a/an :role of the :group_label :group_bundle
    *
    * @see \Drupal\DrupalExtension\Context\DrupalContext::assertAuthenticatedByRole()
    */
@@ -368,9 +368,9 @@ class JoinupContext extends RawDrupalContext {
    *
    * Use this to e.g. test promotion or demotion of facilitators.
    *
-   * @param string $rdf_entity
+   * @param string $group_label
    *   The label of the collection or solution of which the user is a member.
-   * @param string $rdf_entity_bundle
+   * @param string $group_bundle
    *   The RDF entity bundle, either 'collection' or 'solution'.
    * @param string $roles
    *   A comma separated list of roles to assign to the user. All previously
@@ -379,12 +379,12 @@ class JoinupContext extends RawDrupalContext {
    * @throws \Exception
    *   Thrown when a collection or solution with the given label doesn't exist.
    *
-   * @Given my role(s) in the :rdf_entity :rdf_entity_bundle change(s) to :roles
+   * @Given my role(s) in the :group_label :group_bundle change(s) to :roles
    */
-  public function updateGroupRoles($rdf_entity, $rdf_entity_bundle, $roles): void {
-    $entity = $this->getEntityByLabel('rdf_entity', $rdf_entity, $rdf_entity_bundle);
+  public function updateGroupRoles(string $group_label, string $group_bundle, string $roles): void {
+    $entity = $this->getEntityByLabel('rdf_entity', $group_label, $group_bundle);
     if (!$entity) {
-      throw new \Exception("No entity found with label $rdf_entity");
+      throw new \Exception("No entity found with label $group_label");
     }
     $roles = $this->explodeCommaSeparatedStepArgument($roles);
     $roles = $this->getOgRoles($roles, $entity);
@@ -410,7 +410,7 @@ class JoinupContext extends RawDrupalContext {
    * @throws \Exception
    *   Thrown when a collection or solution with the given label doesn't exist.
    *
-   * @Given my membership state in the :rdf_entity :rdf_entity_bundle changes to :state
+   * @Given my membership state in the :group_label :group_bundle changes to :state
    */
   public function updateGroupState(string $group_label, string $group_bundle, string $state): void {
     $entity = $this->getEntityByLabel('node', $group_label, $group_bundle);

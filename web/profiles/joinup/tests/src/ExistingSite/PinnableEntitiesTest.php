@@ -91,7 +91,7 @@ class PinnableEntitiesTest extends JoinupExistingSiteTestBase {
     // Refresh the entity so that our test is not affected by static caches.
     $entity = $this->entityTypeManager->getStorage($entity->getEntityTypeId())->loadUnchanged($entity->id());
     $group_ids = $entity->getPinnedGroupIds();
-    return $this->entityTypeManager->getStorage('rdf_entity')->loadMultiple($group_ids);
+    return $this->entityTypeManager->getStorage('node')->loadMultiple($group_ids);
   }
 
 }

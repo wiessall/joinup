@@ -69,7 +69,7 @@ class IncludeCustomPageContent extends ProcessorPluginBase {
    */
   public static function supportsIndex(IndexInterface $index): bool {
     foreach ($index->getDatasources() as $datasource) {
-      if ($datasource->getEntityTypeId() == 'rdf_entity') {
+      if ($datasource->getEntityTypeId() == 'node') {
         return TRUE;
       }
     }

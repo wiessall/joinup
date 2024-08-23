@@ -43,10 +43,15 @@ function joinup_rdf_requirements(string $phase): array {
  * Delete the collection and solution entity types.
  */
 function joinup_rdf_update_200001(): string {
-  $entityTypeManager = \Drupal::entityTypeManager();
-  $entityTypeManager->getStorage('rdf_type')->delete([
-    'type' => ['collection', 'solution'],
-  ]);
+  \Drupal::entityTypeManager()->getStorage('rdf_type')->delete(
+    \Drupal::entityTypeManager()->getStorage('rdf_type')->loadByProperties([
+      'rid' => [
+        'collection',
+        'solution',
+        ],
+      ]
+    )
+  );
 
   return 'Deleted collection and solution entity types.';
 }
@@ -152,9 +157,10 @@ function joinup_rdf_update_200003(): string {
     'field.storage.media.og_audience',
     'field.storage.ogmenu_instance.og_audience',
     'field.field.media.image.og_audience',
+    'field.field.media.video.og_audience',
+    'field.field.media.file.og_audience',
     'field.field.node.news.field_news_referenced_solution',
     'field.field.node.video.og_audience',
-    'field.field.media.file.og_audience',
     'field.field.node.news.og_audience',
     'field.field.node.news.field_shared_in',
     'field.field.node.glossary.og_audience',
@@ -174,13 +180,83 @@ function joinup_rdf_update_200003(): string {
     \Drupal::configFactory()->getEditable($fieldStorage)->setData($contents)->save();
   }
 
-  return 'Updated field storages: ' . implode(', ', $fieldStorages);
+  return 'Updated field storages: ' . implode("\n", $fieldStorages);
+}
+
+/**
+ * Copy data to a backup table.
+ */
+function joinup_rdf_update_200004(): string {
+  // Now that we have disabled rdf_entity, we cannot simply import
+  // configuration as it breaks because of the og audience pointing to
+  // rdf_entity at this stage. We also cannot leave the table with data
+  // because the storage will fail to update because of the existing data.
+  // Lastly, the data cannot remain as they are, because they point to a
+  // non-numeric entity id. Thus, we need to copy data over to a backup
+  // table and then truncate the original table. Then, after the migration
+  // has run, and data are updated to point to the correct entity type, we
+  // can copy the data back to the original table and delete the backup
+  // table.
+  $tables = [
+    'node__field_news_referenced_solution' => 'field_news_referenced_solution_target_id',
+    'node_revision__field_news_referenced_solution' => 'field_news_referenced_solution_target_id',
+    'node__og_audience' => 'og_audience_target_id',
+    'node_revision__og_audience' => 'og_audience_target_id',
+    'media__og_audience' => 'og_audience_target_id',
+    'media_revision__og_audience' => 'og_audience_target_id',
+  ];
+
+  $messages = [];
+  $base_fields = [
+    'bundle',
+    'deleted',
+    'entity_id',
+    'revision_id',
+    'langcode',
+    'delta',
+  ];
+
+  foreach ($tables as $table => $target_column) {
+    $database = \Drupal::database();
+    $query = "CREATE TABLE IF NOT EXISTS {$table}_backup LIKE $table";
+    $database->query($query);
+    $messages[] = "Created backup table {$table}_backup LIKE $table.";
+
+    $data = $database->select($table, 't')
+      ->fields('t')
+      ->execute()
+      ->fetchAllAssoc('revision_id');
+
+    if (!empty($data)) {
+      $fields = $base_fields;
+      $fields[] = $target_column;
+      $values = [];
+      foreach ($data as $row) {
+        $values = (array) $row;
+        // If any of the fields do not exist in the original table, we need to
+        // throw an exception.
+        if (array_diff(array_keys($values), $fields)) {
+          throw new \Exception("Fields in the backup table do not match the original table.");
+        }
+      }
+      $database->insert($table . '_backup')
+        ->fields($fields)
+        ->values($values)
+        ->execute();
+      $messages[] = "Inserted backup rows into $table.";
+    }
+
+    $database->truncate($table)->execute();
+    $messages[] = "Truncated table $table.";
+  }
+
+  return implode("\n", $messages);
 }
 
 /**
  * Re run user_update_10000.
  */
-function joinup_rdf_update_200004(): void {
+function joinup_rdf_update_200005(): void {
   require_once DRUPAL_ROOT . '/core/modules/user/user.install';
   user_update_10000();
 }

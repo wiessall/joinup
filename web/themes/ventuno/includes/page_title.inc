@@ -31,7 +31,7 @@ function ventuno_preprocess_page_title(array &$variables): void {
 
   if (\Drupal::routeMatch()->getRouteName() === 'entity.node.eif_perspective') {
     /** @var \Drupal\joinup_solution\Entity\SolutionInterface $solution */
-    $solution = \Drupal::routeMatch()->getParameter('rdf_entity');
+    $solution = \Drupal::routeMatch()->getParameter('node');
     $variables['title'] = t('EIF Perspective attributes of @title', ['@title' => $solution->label()]);
   }
 }
@@ -46,14 +46,10 @@ function ventuno_theme_suggestions_page_title_alter(array &$suggestions, array &
   $route_match = \Drupal::routeMatch();
   $route_name = $route_match->getRouteName();
 
-  $entity_types = ['rdf_entity', 'node'];
-  foreach ($entity_types as $entity_type) {
-    if ($route_name === "entity.{$entity_type}.canonical") {
-      /** @var \Drupal\core\Entity\EntityInterface $entity */
-      $entity = $route_match->getParameter($entity_type);
-      $suggestions[] = 'page_title__' . $entity_type . '__' . $entity->bundle();
-      $variables['entity'] = $entity;
-    }
+  if ($route_name === "entity.node.canonical") {
+    $entity = $route_match->getParameter('node');
+    $suggestions[] = 'page_title__node__' . $entity->bundle();
+    $variables['entity'] = $entity;
   }
 
   // Add Page Manager page specific libraries if we have any.

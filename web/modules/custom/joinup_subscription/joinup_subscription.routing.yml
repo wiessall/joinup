@@ -78,7 +78,7 @@ joinup_subscription.unsubscribe:
       user:
         type: entity:user
       group:
-        type: entity:rdf_entity
+        type: entity:node
         bundle:
           - collection
           - solution

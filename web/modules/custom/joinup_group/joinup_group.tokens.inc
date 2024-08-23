@@ -104,7 +104,7 @@ function joinup_group_tokens(string $type, array $tokens, array $data, array $op
 
   // Allow to descend further into the solution's parent collection.
   if (($collection_tokens = $token_service->findWithPrefix($tokens, 'parent_collection')) && $entity instanceof CollectionContentInterface && $collection = $get_parent_collection($entity)) {
-    $replacements += $token_service->generate('rdf_entity', $collection_tokens, ['rdf_entity' => $collection], $options, $bubbleable_metadata);
+    $replacements += $token_service->generate('node', $collection_tokens, ['node' => $collection], $options, $bubbleable_metadata);
   }
 
   return $replacements;

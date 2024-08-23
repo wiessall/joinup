@@ -80,13 +80,13 @@ class ExploreBlock extends BlockBase implements ContainerFactoryPluginInterface 
       'collections' => [
         'label' => $this->t('Collections'),
         'plural_type' => $this->t('collections'),
-        'data' => $this->getRdfEntities('collection', 'field_ar_state'),
+        'data' => $this->getContent('collection'),
         'url' => $get_url('collection'),
       ],
       'solutions' => [
         'label' => $this->t('Solutions'),
         'plural_type' => $this->t('solutions'),
-        'data' => $this->getRdfEntities('solution', 'field_is_state'),
+        'data' => $this->getContent('solution'),
         'url' => $get_url('solution'),
       ],
       'news' => [
@@ -172,41 +172,6 @@ class ExploreBlock extends BlockBase implements ContainerFactoryPluginInterface 
     }
 
     return $content;
-  }
-
-  /**
-   * Returns the 12 most recent RDF entities of the given type as render arrays.
-   *
-   * @param string $type
-   *   The RDF entity type to return.
-   * @param string $field_state
-   *   Name of field state in RDF entity.
-   *
-   * @return array
-   *   List of rdf entity with view mode "explore_item".
-   *
-   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
-   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
-   */
-  protected function getRdfEntities(string $type, string $field_state): array {
-    $rdf = [];
-    $entity = $this->entityTypeManager->getStorage('rdf_entity');
-    $view_builder = $this->entityTypeManager->getViewBuilder('rdf_entity');
-    $query = $entity->getQuery()->accessCheck(FALSE);
-    $ids = $query->condition('rid', $type)
-      ->condition($field_state, 'archived', '!=')
-      ->graphs(['default'])
-      ->sort('changed', 'DESC')
-      ->range(0, 12)
-      ->execute();
-
-    $entities = $entity->loadMultiple($ids);
-
-    foreach ($entities as $rdf_entity) {
-      $rdf[] = $view_builder->view($rdf_entity, $this->viewMode);
-    }
-
-    return $rdf;
   }
 
 }
