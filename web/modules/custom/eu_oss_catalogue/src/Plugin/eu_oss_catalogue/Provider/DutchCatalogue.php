@@ -122,7 +122,7 @@ class DutchCatalogue extends EuOssCatalogueProviderPluginBase {
           if (isset($project->files['publiccodeYaml'])) {
             $values = $project->toArray();
             $values['files']['publiccodeYml'] = $values['files']['publiccodeYaml'];
-            unset ($values['files']['publiccodeYaml']);
+            unset($values['files']['publiccodeYaml']);
             yield new Project(...$values);
             continue;
           }
