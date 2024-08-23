@@ -6,7 +6,6 @@ dependencies:
     - field.field.meta_entity.collection_settings.announcements_enabled
     - field.field.meta_entity.collection_settings.code_of_conduct
     - field.field.meta_entity.collection_settings.glossary_link_only_first
-    - field.field.meta_entity.collection_settings.greeting
     - field.field.meta_entity.collection_settings.label_join
     - field.field.meta_entity.collection_settings.label_leave
     - field.field.meta_entity.collection_settings.landing_page
@@ -95,7 +94,6 @@ content:
     region: content
 hidden:
   code_of_conduct: true
-  greeting: true
   label_join: true
   label_leave: true
   landing_page: true

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Drupal\collection\Form;
 
 use Drupal\Component\Datetime\TimeInterface;
-use Drupal\Component\Utility\Html;
 use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
@@ -96,15 +95,7 @@ class SubscribeToCollectionForm extends FormBase {
    *   The title.
    */
   public static function title(GroupInterface $rdf_entity): TranslatableMarkup|string {
-    $greetingField = NULL;
-    try {
-      $greetingField = $rdf_entity->getSetting('greeting');
-    }
-    catch (\Exception) {
-    }
-    return $greetingField && !$greetingField->isEmpty()
-      ? Html::escape($greetingField->first()->getString())
-      : t('Welcome to the community!');
+    return t('Welcome to @title', ['@title' => $rdf_entity->label()]);
   }
 
   /**
@@ -137,7 +128,6 @@ class SubscribeToCollectionForm extends FormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state, ?RdfInterface $rdf_entity = NULL): array {
     $coc_components = $this->getCodeOfConductComponents($rdf_entity);
-    $has_coc = !empty($coc_components);
     $membership = $this->getUserNonBlockedMembership($rdf_entity);
     $intro_message = $membership && $membership->isPending() ?
       $this->t('When your membership is approved you will be able to publish content in it.') :
@@ -147,24 +137,39 @@ class SubscribeToCollectionForm extends FormBase {
         '#type' => 'html_tag',
         '#tag' => 'p',
         '#value' => $intro_message,
-        '#weight' => -1,
+        '#weight' => -3,
+      ],
+      'proposal' => [
+        '#type' => 'html_tag',
+        '#tag' => 'h2',
+        '#attributes' => [
+          'class' => ['fs-6'],
+        ],
+        '#value' => $this->t('Want to subscribe for new content notifications, too?'),
+      ],
+      'description' => [
+        '#type' => 'html_tag',
+        '#tag' => 'p',
+        '#value' => $this->t('You can update your notification preferences from your profile page at any time.'),
       ],
     ];
 
-    $redirect = $form_state->getUserInput()['redirect'] ?? $this->getRedirectPath();
+    $form['subscribe'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t(
+        'Notify me when content is published in <a href=":parent-url" target="_blank">@parent-name</a>.',
+        [
+          ':parent-url' => $rdf_entity->toUrl()->toString(),
+          '@parent-name' => $rdf_entity->label(),
+        ]
+      ),
+      '#weight' => -2,
+    ];
+
     $form['redirect'] = [
       '#type' => 'hidden',
-      '#default_value' => $redirect,
+      '#default_value' => $form_state->getUserInput()['redirect'] ?? $this->getRedirectPath(),
     ];
-    // Submit buttons (excluding "Cancel") must be disabled unless the checkbox
-    // of CoC is checked.
-    $submit_states = $has_coc
-      ? [
-        'disabled' => [
-          ':input[name="' . static::COC_CHECKBOX_KEY . '"]' => ['checked' => FALSE],
-        ],
-      ]
-      : [];
 
     // This form should only be accessible if the user is already a member of
     // the collection.
@@ -175,69 +180,42 @@ class SubscribeToCollectionForm extends FormBase {
       '#value' => $rdf_entity->id(),
     ];
 
-    $form['proposal'] = [
-      '#type' => 'html_tag',
-      '#tag' => 'h2',
-      '#attributes' => [
-        'class' => ['fs-6'],
-      ],
-      '#value' => $this->t('Want to subscribe for new content notifications, too?'),
-    ];
-    $form['description'] = [
-      '#type' => 'html_tag',
-      '#tag' => 'p',
-      '#value' => $this->t('You can update your notification preferences from your profile page at any time.'),
-    ];
     $form['actions'] = [
       '#type' => 'actions',
     ];
 
-    $submit_button_base = [
-      '#type' => 'submit',
-      // This form can be opened via AJAX in a modal dialog that is triggered by
-      // submitting the JoinCollectionForm. By default, Drupal will send the
-      // AJAX requests to the route of the original form, which in this case
-      // would be the JoinCollectionForm. We need to manually specify the
-      // callback URL and the query argument that triggers AJAX so that this
-      // form will be loaded.
-      // @see https://www.drupal.org/project/drupal/issues/2934463
-      '#ajax' => [
-        'callback' => '::confirmSubscription',
-        'url' => $rdf_entity->toUrl('subscribe'),
-        'options' => [
-          'query' => [
-            FormBuilderInterface::AJAX_FORM_REQUEST => TRUE,
-          ],
+    // This form can be opened via AJAX in a modal dialog that is triggered by
+    // submitting the JoinCollectionForm. By default, Drupal will send the
+    // AJAX requests to the route of the original form, which in this case
+    // would be the JoinCollectionForm. We need to manually specify the
+    // callback URL and the query argument that triggers AJAX so that this
+    // form will be loaded.
+    // @see https://www.drupal.org/project/drupal/issues/2934463
+    $ajax_callback = [
+      'callback' => '::confirmSubscription',
+      'url' => $rdf_entity->toUrl('subscribe'),
+      'options' => [
+        'query' => [
+          FormBuilderInterface::AJAX_FORM_REQUEST => TRUE,
         ],
       ],
     ];
 
     $form['actions']['confirm_subscribe'] = [
-      '#value' => $this->t('Subscribe to notifications'),
-      '#states' => $submit_states,
+      '#value' => $this->t('Confirm'),
       '#op' => 'subscribe',
-    ] + $submit_button_base;
+      '#type' => 'submit',
+      '#ajax' => $ajax_callback,
+    ];
     $form['actions']['cancel'] = [
       '#type' => 'button',
       '#extra_suggestion' => 'light_blue',
       '#weight' => 10,
-      '#value' => $this->t("Don't subscribe"),
+      '#value' => $this->t('Cancel'),
       '#op' => 'cancel',
       '#executes_submit_callback' => TRUE,
-      '#ajax' => $submit_button_base['#ajax'],
+      '#ajax' => $ajax_callback,
     ];
-
-    if (!$has_coc) {
-      return $form;
-    }
-
-    $form['actions']['cancel']['#value'] = $this->t('Cancel');
-    $form['actions']['cancel']['#title'] = $this->t('Cancel');
-    $form['actions']['confirm_membership_only'] = [
-      '#value' => $this->t("Don't subscribe"),
-      '#states' => $submit_states,
-      '#op' => 'no_subscribe',
-    ] + $submit_button_base;
 
     return $form;
   }
@@ -263,26 +241,30 @@ class SubscribeToCollectionForm extends FormBase {
     $codeOfConduct = $collection->getCodeOfConduct();
     $codeOfConductArgs = [
       ':code-of-conduct-url' => $codeOfConduct->toUrl()->toString(),
+      '@group-label' => $collection->label(),
     ];
 
     $codeOfConductComponents['code_of_conduct_lead'] = [
       '#type' => 'item',
       '#markup' => $this->t(
-        'To complete your application and send it for approval, we need to make sure you agree with our <a href=:code-of-conduct-url target="_blank">Code of conduct</a>. This helps us maintain a safe and respectful environment for all our members.',
+        'To complete your membership, we need to make sure you agree with our <a href=":code-of-conduct-url" target="_blank">Code of conduct</a>. This helps us maintain a safe and respectful environment for all members of @group-label',
         $codeOfConductArgs,
       ),
+      '#weight' => -5,
     ];
     $codeOfConductComponents[static::COC_CHECKBOX_KEY] = [
       '#type' => 'checkbox',
-      '#title' => $this->t('I have read and agree to the <a href=:code-of-conduct-url target="_blank">Code of conduct</a>.', $codeOfConductArgs),
+      '#title' => $this->t('I have read and agree to the <a href=":code-of-conduct-url" target="_blank">Code of conduct</a> of @group-label.', $codeOfConductArgs),
       '#return_value' => $codeOfConduct->getRevisionId(),
       '#required' => TRUE,
-      '#required_error' => $this->t('You must agree to the <a href=:code-of-conduct-url>Code of conduct</a> before asking for membership.', $codeOfConductArgs),
+      '#required_error' => $this->t('You must agree to the <a href=":code-of-conduct-url">Code of conduct</a> before asking for membership.', $codeOfConductArgs),
+      '#weight' => -3,
     ];
 
     $codeOfConductComponents['code_of_conduct_trailer'] = [
       '#type' => 'item',
-      '#markup' => $this->t('You will receive a confirmation email once your application has been approved. We look forward to having you as a valued member of our community!<br><br>If you have any questions or need assistance, please feel free to contact us.'),
+      '#markup' => $this->t('You will receive a confirmation email once your membership has been approved.'),
+      '#weight' => -1,
     ];
 
     return $codeOfConductComponents;
@@ -342,23 +324,22 @@ class SubscribeToCollectionForm extends FormBase {
       $this->messenger()->addStatus($message);
     }
 
-    if ($operation !== 'subscribe') {
-      return;
+    $subscribe = (bool) $form_state->getValue('subscribe');
+    if ($subscribe) {
+      $subscription_bundles = JoinupSubscriptionsHelper::provideDataForField('collection');
+      $membership
+        ->set('announcements', TRUE)
+        ->set('subscription_bundles', $subscription_bundles)
+        ->save();
+
+      // Check if the user is pending, so we can adapt the message for the user.
+      $is_pending = !empty($membership) && $membership->isPending();
+
+      $message = $is_pending ?
+        $this->t('You have been subscribed to %collection and will receive weekly notifications once your membership is approved.', $parameters) :
+        $this->t('You have been subscribed to %collection and will receive weekly notifications. To manage your notifications go to <em>My subscriptions</em> in your user menu.', $parameters);
+      $this->messenger()->addStatus($message);
     }
-
-    $subscription_bundles = JoinupSubscriptionsHelper::provideDataForField('collection');
-    $membership
-      ->set('announcements', TRUE)
-      ->set('subscription_bundles', $subscription_bundles)
-      ->save();
-
-    // Check if the user is pending, so we can adapt the messages for the user.
-    $is_pending = !empty($membership) && $membership->isPending();
-
-    $message = $is_pending ?
-      $this->t('You have been subscribed to %collection and will receive weekly notifications once your membership is approved.', $parameters) :
-      $this->t('You have been subscribed to %collection and will receive weekly notifications. To manage your notifications go to <em>My subscriptions</em> in your user menu.', $parameters);
-    $this->messenger()->addStatus($message);
   }
 
   /**

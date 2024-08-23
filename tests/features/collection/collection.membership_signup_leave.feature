@@ -43,10 +43,8 @@ Feature: Joining and leaving collections through the web interface
       | <modal text>                                                                     |
       | Want to subscribe for new content notifications, too?                            |
       | You can update your notification preferences from your profile page at any time. |
-    And the buttons in the "Modal buttons" region should not be disabled:
-      | Subscribe to notifications |
-      | Don't subscribe            |
-    And I press "<button to click>" in the "Modal buttons" region
+    And I <checkbox action> "Notify me when content is published in <collection>"
+    And I press "Confirm" in the "Modal buttons" region
     Then the modal should be closed
     And I should see the success message "<expected final success message>"
     And I <subscription expectation> bundles from the "<collection>" collection
@@ -67,14 +65,14 @@ Feature: Joining and leaving collections through the web interface
     And I should see the "Join this collection" button
 
     Examples:
-      | collection                            | button to click            | state link after click | success message after click                                                                | modal text                                                                    | subscription expectation                                                             | expected final success message                                                                                                                            |
-      | Open collection                       | Subscribe to notifications | Leave this collection  | You are now a member of Open collection.                                                   | You have joined the collection and you are now able to publish content in it. | should be subscribed to "announcements, discussion, document, event, news, solution" | You have been subscribed to Open collection and will receive weekly notifications. To manage your notifications go to My subscriptions in your user menu. |
-      | Open collection                       | Don't subscribe            | Leave this collection  | You are now a member of Open collection.                                                   | You have joined the collection and you are now able to publish content in it. | should not be subscribed to any                                                      | You are now a member of Open collection.                                                                                                                  |
-      | Open collection with public CoC       | Don't subscribe            | Leave this collection  | You are now a member of Open collection with public CoC.                                   | You have joined the collection and you are now able to publish content in it. | should not be subscribed to any                                                      | You are now a member of Open collection with public CoC.                                                                                                  |
-      | Closed collection                     | Subscribe to notifications | Membership is pending  | Your membership to the Closed collection collection is under approval.                     | When your membership is approved you will be able to publish content in it.   | should be subscribed to "announcements, discussion, document, event, news, solution" | You have been subscribed to Closed collection and will receive weekly notifications once your membership is approved.                                     |
-      | Closed collection                     | Don't subscribe            | Membership is pending  | Your membership to the Closed collection collection is under approval.                     | When your membership is approved you will be able to publish content in it.   | should not be subscribed to any                                                      | Your membership to the Closed collection collection is under approval.                                                                                    |
-      | Closed collection with non-public CoC | Subscribe to notifications | Membership is pending  | Your membership to the Closed collection with non-public CoC collection is under approval. | When your membership is approved you will be able to publish content in it.   | should be subscribed to "announcements, discussion, document, event, news, solution" | You have been subscribed to Closed collection with non-public CoC and will receive weekly notifications once your membership is approved.                 |
-      | Closed collection with non-public CoC | Don't subscribe            | Membership is pending  | Your membership to the Closed collection with non-public CoC collection is under approval. | When your membership is approved you will be able to publish content in it.   | should not be subscribed to any                                                      | Your membership to the Closed collection with non-public CoC collection is under approval.                                                                |
+      | collection                            | checkbox action | state link after click | success message after click                                                                | modal text                                                                    | subscription expectation                                                             | expected final success message                                                                                                                            |
+      | Open collection                       | check           | Leave this collection  | You are now a member of Open collection.                                                   | You have joined the collection and you are now able to publish content in it. | should be subscribed to "announcements, discussion, document, event, news, solution" | You have been subscribed to Open collection and will receive weekly notifications. To manage your notifications go to My subscriptions in your user menu. |
+      | Open collection                       | uncheck         | Leave this collection  | You are now a member of Open collection.                                                   | You have joined the collection and you are now able to publish content in it. | should not be subscribed to any                                                      | You are now a member of Open collection.                                                                                                                  |
+      | Open collection with public CoC       | uncheck         | Leave this collection  | You are now a member of Open collection with public CoC.                                   | You have joined the collection and you are now able to publish content in it. | should not be subscribed to any                                                      | You are now a member of Open collection with public CoC.                                                                                                  |
+      | Closed collection                     | check           | Membership is pending  | Your membership to the Closed collection collection is under approval.                     | When your membership is approved you will be able to publish content in it.   | should be subscribed to "announcements, discussion, document, event, news, solution" | You have been subscribed to Closed collection and will receive weekly notifications once your membership is approved.                                     |
+      | Closed collection                     | uncheck         | Membership is pending  | Your membership to the Closed collection collection is under approval.                     | When your membership is approved you will be able to publish content in it.   | should not be subscribed to any                                                      | Your membership to the Closed collection collection is under approval.                                                                                    |
+      | Closed collection with non-public CoC | check           | Membership is pending  | Your membership to the Closed collection with non-public CoC collection is under approval. | When your membership is approved you will be able to publish content in it.   | should be subscribed to "announcements, discussion, document, event, news, solution" | You have been subscribed to Closed collection with non-public CoC and will receive weekly notifications once your membership is approved.                 |
+      | Closed collection with non-public CoC | uncheck         | Membership is pending  | Your membership to the Closed collection with non-public CoC collection is under approval. | When your membership is approved you will be able to publish content in it.   | should not be subscribed to any                                                      | Your membership to the Closed collection with non-public CoC collection is under approval.                                                                |
 
   @javascript
   Scenario Outline: As a user I can ask for a membership in a closed collection with a Code of Conduct document
@@ -86,20 +84,14 @@ Feature: Joining and leaving collections through the web interface
     # There is a Code of Conduct document, what the user must accept before
     # requesting for membership, so the button text must not change.
     Then I should see the button "Join this collection" in the Header region
-    And I should not see the text "To complete your application and send it for approval, we need to make sure you agree with our Public CoC of Closed collection. This helps us maintain a safe and respectful environment for all our members."
+    And I should see the text "To complete your membership, we need to make sure you agree with our Code of conduct. This helps us maintain a safe and respectful environment for all members of Closed collection with public CoC"
+    And I should not see the following lines of text:
+      | You have joined the collection and you are now able to publish content in it. |
+      | When your membership is approved you will be able to publish content in it.   |
     And I should see the link "Public CoC of Closed collection"
-    Then the "I have read and agree to the Code of conduct." checkbox should not be checked
-    And the buttons in the "Modal buttons" region should be disabled:
-      | Subscribe to notifications |
-      | Don't subscribe            |
-    And the buttons in the "Modal buttons" region should not be disabled:
-      | Cancel                     |
-    And I check "I have read and agree to the Code of conduct."
-    Then the buttons in the "Modal buttons" region should not be disabled:
-      | Subscribe to notifications |
-      | Don't subscribe            |
-      | Cancel                     |
-    And I press "<button to click>" in the "Modal buttons" region
+    Then I check "I have read and agree to the Code of conduct of Closed collection with public CoC."
+    And I <checkbox action> "Notify me when content is published in Closed collection with public CoC."
+    And I press "Confirm" in the "Modal buttons" region
     Then the modal should be closed
     And I should not see the button "Join this collection" in the Header region
     But I should see the link "Membership is pending" in the Header region
@@ -107,9 +99,9 @@ Feature: Joining and leaving collections through the web interface
     And I <subscription expectation> bundles from the "Closed collection with public CoC" collection
 
     Examples:
-      | button to click            | subscription expectation                                                             | expected success message                                                                                                              |
-      | Subscribe to notifications | should be subscribed to "announcements, discussion, document, event, news, solution" | You have been subscribed to Closed collection with public CoC and will receive weekly notifications once your membership is approved. |
-      | Don't subscribe            | should not be subscribed to any                                                      | You will get a notification once your membership at Closed collection with public CoC is approved.                                    |
+      | checkbox action | subscription expectation                                                             | expected success message                                                                                                              |
+      | check           | should be subscribed to "announcements, discussion, document, event, news, solution" | You have been subscribed to Closed collection with public CoC and will receive weekly notifications once your membership is approved. |
+      | uncheck         | should not be subscribed to any                                                      | You will get a notification once your membership at Closed collection with public CoC is approved.                                    |
 
   @javascript
   Scenario Outline: No membership is created when pressing Cancel on a modal of a closed collection with CoC
@@ -117,7 +109,7 @@ Feature: Joining and leaving collections through the web interface
     When I go to the homepage of the "Closed collection with public CoC" collection
     And I press "Join this collection" in the Header region
     Then a modal should open
-    Given I <checkbox action> "I have read and agree to the Code of conduct."
+    Given I <checkbox action> "I have read and agree to the Code of conduct of Closed collection with public CoC."
     And I press Cancel in the "Modal buttons" region
     Then the modal should be closed
     And I should see the button "Join this collection" in the Header region
@@ -167,7 +159,7 @@ Feature: Joining and leaving collections through the web interface
     Then I should see the "Join this community" button
 
     When I press "Join this community"
-    And I press "Don't subscribe"
+    And I press "Confirm"
     Then I should see the link "Leave this community"
 
   @javascript
