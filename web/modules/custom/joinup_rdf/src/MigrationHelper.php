@@ -347,9 +347,6 @@ final class MigrationHelper {
     ],
   ];
 
-  /**
-   * Constructs a MigrationHelper object.
-   */
   public function __construct(
     protected EntityTypeManagerInterface $entityTypeManager,
     protected AliasRepositoryInterface $pathAliasRepository,
@@ -372,9 +369,9 @@ final class MigrationHelper {
     /** @var \Drupal\collection\Entity\CollectionInterface $entity */
     $entity = $this->entityTypeManager->getStorage('node')->create([
       'type' => 'collection',
+      'uri' => $uri,
     ]);
 
-    $entity->set('uri', $uri);
     $values = $this->getEntityDataAsFlatArray($uri, 'http://joinup.eu/collection/published');
     if (!empty($values)) {
       $this->massageCollectionValues($entity, $values);
@@ -399,7 +396,6 @@ final class MigrationHelper {
       $this->assertMigratedEntity($entity, $values);
     }
 
-    $this->updateReferenceValues($entity);
     $this->updateMenuLinks($entity);
   }
 
@@ -444,7 +440,6 @@ final class MigrationHelper {
       $this->assertMigratedEntity($entity, $values);
     }
 
-    $this->updateReferenceValues($entity);
     $this->updateMenuLinks($entity);
   }
 
@@ -645,72 +640,6 @@ final class MigrationHelper {
   }
 
   /**
-   * Update the reference values.
-   *
-   * @param \Drupal\joinup_rdf\Entity\RdfSyncEntityInterface $entity
-   *   The entity to update the reference values.
-   */
-  protected function updateReferenceValues(RdfSyncEntityInterface $entity): void {
-    $tableData = [
-      'file_usage' => 'id',
-      'flagging' => 'entity_id',
-      'invitation' => 'entity_id',
-      'meta_entity' => 'target__target_id',
-      'joinup_group_node_access' => 'entity_id',
-      'og_membership' => 'entity_id',
-      'node__og_audience_backup' => 'og_audience_target_id',
-      'node_revision__og_audience_backup' => 'og_audience_target_id',
-      'node__field_shared_in_backup' => 'field_shared_in_target_id',
-      'node_revision__field_shared_in_backup' => 'field_shared_in_target_id',
-      'media__og_audience_backup' => 'og_audience_target_id',
-      'media_revision__og_audience_backup' => 'og_audience_target_id',
-      'ogmenu_instance__og_audience_backup' => 'og_audience_target_id',
-      'node__field_news_referenced_solution_backup' => 'field_news_referenced_solution_target_id',
-      'node_revision__field_news_referenced_solution_backup' => 'field_news_referenced_solution_target_id',
-    ];
-
-    foreach ($tableData as $table => $targetField) {
-      if ($table === 'file_usage') {
-        // Because we have created the entity and passed the file to it, there
-        // is already a file usage entry for the file. We need to simply clean
-        // up the old file usage entry.
-        $this->connection->delete($table)
-          ->condition('type', 'rdf_entity')
-          ->condition('id', $entity->getUri())
-          ->execute();
-      }
-      $this->connection->update($table)
-        ->fields([$targetField => $entity->id()])
-        ->condition($targetField, $entity->getUri())
-        ->execute();
-
-      if (str_ends_with($table, '_backup')) {
-        // Move the data to the main table (without the _backup suffix) and
-        // clean up the backup table.
-        $dataToMove = $this->connection->select($table)
-          ->fields($table)
-          ->execute()
-          ->fetchAll();
-
-        $fields = $this->connection->schema()->fieldNames($table);
-        $arrayData = [];
-        foreach ($dataToMove as $data) {
-          $arrayData[] = (array) $data;
-        }
-
-        foreach ($arrayData as $data) {
-          $this->connection->insert(str_replace('_backup', '', $table))
-            ->fields($fields)
-            ->values($data)
-            ->execute();
-        }
-
-        $this->connection->delete($table)->execute();
-      }
-    }
-  }
-
-  /**
    * Asserts that the entity has been migrated properly.
    *
    * @param \Drupal\Core\Entity\EntityInterface $entity
@@ -756,7 +685,7 @@ final class MigrationHelper {
     ];
 
     // Replace rdf_entity with node and encoded ID with entity ID.
-    $encodedUri = UriEncoder::encodeUrl($entity->getUri());
+    $encodedUri = strtr($entity->getUri(), self::URL_ENCODE_MAP);
     foreach ($tables as $table) {
       $this->connection->update($table)
         ->fields([

@@ -60,12 +60,14 @@ function joinup_rdf_update_200002(): void {
     // Update both the flag_id from `*_rdf_entity` to `*_node` and the
     // entity_type from `rdf_entity` to `node`.
     $query = <<<SQL
-      UPDATE flagging
-      SET flag_id = '{$flag_id}_node', entity_type = 'node'
-      WHERE flag_id = '{$flag_id}_rdf_entity' AND entity_type = 'rdf_entity'
+      UPDATE {flagging}
+      SET flag_id = :id, entity_type = 'node'
+      WHERE flag_id IN (:ids[]) AND entity_type IN ('rdf_entity', 'node')
       SQL;
-    $query = $connection->prepareStatement($query, [], TRUE);
-    $query->execute();
+    $connection->query($query, [
+      ':id' => $flag_id,
+      ':ids[]' => ["{$flag_id}_node", "{$flag_id}_rdf_entity"],
+    ]);
   }
 
   // Update the invitation table.
@@ -74,17 +76,15 @@ function joinup_rdf_update_200002(): void {
     SET entity_type = 'node'
     WHERE entity_type = 'rdf_entity'
     SQL;
-  $query = $connection->prepareStatement($query, [], TRUE);
-  $query->execute();
+  $connection->query($query);
 
   // Update the invitation__field_invitation_og_role table.
   $query = <<<SQL
     UPDATE invitation__field_invitation_og_role
     SET field_invitation_og_role_target_id = REPLACE(field_invitation_og_role_target_id, 'rdf_entity', 'node')
-    WHERE field_invitation_og_role_target_id LIKE '%rdf_entity%'
+    WHERE field_invitation_og_role_target_id LIKE 'rdf_entity%'
     SQL;
-  $query = $connection->prepareStatement($query, [], TRUE);
-  $query->execute();
+  $connection->query($query);
 
   // Update the meta_entity table.
   $query = <<<SQL
@@ -92,8 +92,7 @@ function joinup_rdf_update_200002(): void {
     SET target__target_type = 'node'
     WHERE target__target_type = 'rdf_entity'
     SQL;
-  $query = $connection->prepareStatement($query, [], TRUE);
-  $query->execute();
+  $connection->query($query);
 
   // Update the joinup_group_node_access table.
   $query = <<<SQL
@@ -101,8 +100,7 @@ function joinup_rdf_update_200002(): void {
     SET entity_type = 'node'
     WHERE entity_type = 'rdf_entity'
     SQL;
-  $query = $connection->prepareStatement($query, [], TRUE);
-  $query->execute();
+  $connection->query($query);
 
   // Update the og_membership table.
   $query = <<<SQL
@@ -110,17 +108,15 @@ function joinup_rdf_update_200002(): void {
     SET entity_type = 'node'
     WHERE entity_type = 'rdf_entity'
     SQL;
-  $query = $connection->prepareStatement($query, [], TRUE);
-  $query->execute();
+  $connection->query($query);
 
   // Update the og_membership__roles table.
   $query = <<<SQL
     UPDATE og_membership__roles
     SET roles_target_id = REPLACE(roles_target_id, 'rdf_entity', 'node')
-    WHERE roles_target_id LIKE '%rdf_entity%'
+    WHERE roles_target_id LIKE 'rdf_entity%'
     SQL;
-  $query = $connection->prepareStatement($query, [], TRUE);
-  $query->execute();
+  $connection->query($query);
 }
 
 /**

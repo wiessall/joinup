@@ -7,6 +7,9 @@
 
 declare(strict_types=1);
 
+use Drupal\collection\Entity\Collection;
+use Drupal\Core\Url;
+use Drupal\joinup_oss_catalogue\OssCatalogueCollectionInterface;
 use Drupal\joinup_rdf\MigrationHelper;
 
 /**
@@ -148,6 +151,20 @@ function joinup_rdf_deploy_200004(): void {
         ->from($query)->execute();
       $schema->dropTable("b_$table");
     }
+  }
+
+  // Change references from URI to integer for tables that didn't need field
+  // storage definition update.
+  $tables = [
+    'file_usage' => 'id',
+    'flagging' => 'entity_id',
+    'invitation' => 'entity_id',
+    'meta_entity' => 'target__target_id',
+    'joinup_group_node_access' => 'entity_id',
+    'og_membership' => 'entity_id',
+  ];
+  foreach ($tables as $table => $field) {
+    $db->query("UPDATE {{$table}} t INNER JOIN {rdf_sync_uri} u ON t.$field = u.uri SET t.$field = u.entity_id");
   }
 }
 
