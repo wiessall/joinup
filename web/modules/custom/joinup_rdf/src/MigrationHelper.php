@@ -24,6 +24,23 @@ use Drupal\rdf_sync\RdfSyncMapper;
  */
 final class MigrationHelper {
 
+  public const array GROUP_REF_TABLES = [
+    ['node', 'field_shared_in', TRUE],
+    ['node', 'field_news_referenced_solution', TRUE],
+    ['node', 'og_audience', TRUE],
+    ['media', 'og_audience', TRUE],
+    ['ogmenu_instance', 'og_audience', FALSE],
+  ];
+
+  public const array DEDICATED_TABLE_COLUMNS = [
+    'bundle',
+    'deleted',
+    'entity_id',
+    'revision_id',
+    'langcode',
+    'delta',
+  ];
+
   private const array URL_ENCODE_MAP = [
     '_' => '_a',
     '-' => '_b',

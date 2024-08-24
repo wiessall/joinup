@@ -7,6 +7,8 @@
 
 declare(strict_types=1);
 
+use Drupal\joinup_rdf\MigrationHelper;
+
 /**
  * Disable RDF Sync for the deployment.
  */
@@ -122,4 +124,29 @@ function joinup_rdf_post_update_200003(): string {
   }
 
   return implode("\n", $messages);
+}
+
+/**
+ * Restore group reference tables.
+ */
+function joinup_rdf_deploy_200004(): void {
+  $db = \Drupal::database();
+  $schema = $db->schema();
+  foreach (MigrationHelper::GROUP_REF_TABLES as [$entityTypeId, $fieldName, $hasRevisions]) {
+    $tables = ["{$entityTypeId}__$fieldName"];
+    if ($hasRevisions) {
+      $tables[] = "{$entityTypeId}_revision__$fieldName";
+    }
+    foreach ($tables as $table) {
+      $query = $db->select("b_$table", 'b');
+      $query->innerJoin('rdf_sync_uri', 'u', "u.entity_type = '$entityTypeId' AND b.{$fieldName}_target_id = u.uri");
+      $query
+        ->fields('b', MigrationHelper::DEDICATED_TABLE_COLUMNS)
+        ->fields('u', ['entity_id']);
+      $db->insert($table)
+        ->fields([...MigrationHelper::DEDICATED_TABLE_COLUMNS, "{$fieldName}_target_id"])
+        ->from($query)->execute();
+      $schema->dropTable("b_$table");
+    }
+  }
 }
