@@ -1,12 +1,12 @@
-uuid: 3f657e67-5c9c-471d-a988-4005e8f1fd15
+uuid: d44f7f74-d506-40ad-904a-e257bae5be63
 langcode: en
 status: true
 dependencies:
   config:
-    - flag.flag.bookmark_node
-id: flagging.bookmark_node.default
+    - flag.flag.bookmark
+id: flagging.bookmark.default
 targetEntityType: flagging
-bundle: bookmark_node
+bundle: bookmark
 mode: default
 content:
   flag_entity_render:

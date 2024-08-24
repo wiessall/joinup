@@ -102,7 +102,7 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
   }
 
   // Like flag. Meant to be the first "extra-data" displayed in tile's footer.
-  $like = $variables['content']['flag_like_node'] ?? $variables['content']['flag_like_node'] ?? NULL;
+  $like = $variables['content']['flag_like'] ?? $variables['content']['flag_like'] ?? NULL;
   if ($like !== NULL) {
     $variables['extra_data'][] = ['label' => $like];
   }

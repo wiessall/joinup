@@ -41,7 +41,7 @@ targetEntityType: node
 bundle: solution
 mode: compact
 content:
-  flag_like_node:
+  flag_like:
     settings: {  }
     third_party_settings: {  }
     weight: 10

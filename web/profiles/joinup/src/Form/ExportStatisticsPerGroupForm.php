@@ -257,7 +257,7 @@ QUERY;
   private function getLikesCount(array $entity_ids): string {
     $query = $this->mysql->select('flag_counts', 'fc');
     $query->addExpression('IFNULL(SUM(count), 0)', 'sum');
-    $query->condition('flag_id', 'like_node');
+    $query->condition('flag_id', 'like');
     $query->condition('entity_id', $entity_ids, 'IN');
     return $query->execute()->fetchField();
   }
