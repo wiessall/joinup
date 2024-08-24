@@ -3,13 +3,13 @@ langcode: en
 status: true
 dependencies:
   config:
-    - flag.flag.like_node
+    - flag.flag.like
   module:
     - flag
-id: flag_action.like_node_flag
+id: flag_action.like_flag
 label: Like
 type: node
-plugin: 'flag_action:like_node_flag'
+plugin: 'flag_action:like_flag'
 configuration:
-  flag_id: like_node
+  flag_id: like
   flag_action: flag

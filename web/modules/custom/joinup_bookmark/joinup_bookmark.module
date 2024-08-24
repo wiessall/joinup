@@ -50,7 +50,7 @@ function joinup_bookmark_theme_suggestions_flag_alter(array &$suggestions, array
   /** @var \Drupal\flag\FlagInterface $flag */
   $flag = $variables['flag'];
 
-  if ($flag->id() === 'bookmark_node') {
+  if ($flag->id() === 'bookmark') {
     array_unshift($suggestions, 'flag__bookmark');
   }
 }

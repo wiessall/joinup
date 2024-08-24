@@ -75,7 +75,7 @@ content:
         template_suggestion: group_header_topic
     weight: 1
     region: content
-  flag_like_node:
+  flag_like:
     settings: {  }
     third_party_settings: {  }
     weight: 10

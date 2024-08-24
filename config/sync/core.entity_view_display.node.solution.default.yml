@@ -127,7 +127,7 @@ third_party_settings:
             uuid: 1e27c134-c95c-4e22-b324-cb408cd05c13
             region: content
             configuration:
-              id: 'extra_field_block:node:solution:flag_like_node'
+              id: 'extra_field_block:node:solution:flag_like'
               label_display: '0'
               context_mapping:
                 entity: layout_builder.entity
@@ -154,7 +154,7 @@ third_party_settings:
             uuid: ddee0163-d8fa-4af9-9528-93024fb8d629
             region: content
             configuration:
-              id: 'extra_field_block:node:solution:flag_like_node'
+              id: 'extra_field_block:node:solution:flag_like'
               label_display: '0'
               context_mapping:
                 entity: layout_builder.entity
@@ -226,7 +226,7 @@ third_party_settings:
             uuid: 5527a975-e835-4342-b7cb-b39e5d25edfd
             region: content
             configuration:
-              id: 'extra_field_block:node:solution:flag_like_node'
+              id: 'extra_field_block:node:solution:flag_like'
               label_display: '0'
               context_mapping:
                 entity: layout_builder.entity
@@ -299,7 +299,7 @@ content:
     third_party_settings: {  }
     weight: 0
     region: content
-  flag_like_node:
+  flag_like:
     settings: {  }
     third_party_settings: {  }
     weight: 10

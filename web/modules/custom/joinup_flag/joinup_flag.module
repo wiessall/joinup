@@ -20,7 +20,7 @@ function joinup_flag_preprocess_views_view_field(array &$variables): void {
     $entity_type_manager = \Drupal::entityTypeManager();
     $flag = $variables['row']->_entity;
 
-    if (in_array($flag->bundle(), ['bookmark_node', 'bookmark_node'])) {
+    if (in_array($flag->bundle(), ['bookmark', 'bookmark'])) {
       $entity_type = $flag->get('entity_type')->value;
       $entity = $entity_type_manager->getStorage($entity_type)->load($flag->get('entity_id')->value);
       $build = $entity_type_manager->getViewBuilder($entity->getEntityTypeId())->view($entity, 'view_mode_tile');

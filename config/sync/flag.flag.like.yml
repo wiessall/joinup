@@ -1,14 +1,13 @@
-uuid: 1f0a4825-bf77-4e1d-96d9-4f10dfac32c6
+uuid: 09a24c92-9b17-4b0d-b5c5-d68de99f10e9
 langcode: en
 status: true
 dependencies:
   module:
-    - joinup_bookmark
+    - joinup_like
     - node
-id: bookmark_node
-label: 'Bookmark (Content)'
+id: like
+label: 'Like'
 bundles:
-  - collection
   - custom_page
   - discussion
   - document
@@ -17,19 +16,20 @@ bundles:
   - solution
 entity_type: node
 global: false
-flag_short: Bookmark
-flag_long: 'Add this page to bookmarks'
+flag_short: Like
+flag_long: ''
 flag_message: ''
-unflag_short: Bookmarked
-unflag_long: 'Remove this page from bookmarks'
+unflag_short: Unlike
+unflag_long: ''
 unflag_message: ''
 unflag_denied_text: ''
 weight: 0
 flag_type: 'entity:node'
-link_type: node_bookmark_link
+link_type: count_link_node
 flagTypeConfig:
-  show_in_links: {  }
-  show_as_field: false
+  show_in_links:
+    view_mode_tile: view_mode_tile
+  show_as_field: true
   show_on_form: false
   show_contextual_link: false
   extra_permissions:
