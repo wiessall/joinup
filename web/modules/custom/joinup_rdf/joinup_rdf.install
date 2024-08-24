@@ -9,6 +9,8 @@ declare(strict_types=1);
 
 use Drupal\Component\Serialization\Yaml;
 use Drupal\field\Entity\FieldStorageConfig;
+use Drupal\joinup_rdf\MigrationHelper;
+use Drupal\search_api\Entity\Server;
 
 /**
  * Performs checks for the RDF entities and its storage.
@@ -43,26 +45,16 @@ function joinup_rdf_requirements(string $phase): array {
 /**
  * Delete the collection and solution entity types.
  */
-function joinup_rdf_update_200001(): string {
-  \Drupal::entityTypeManager()->getStorage('rdf_type')->delete(
-    \Drupal::entityTypeManager()->getStorage('rdf_type')->loadByProperties([
-      'rid' => [
-        'collection',
-        'solution',
-        ],
-      ]
-    )
-  );
-
-  return 'Deleted collection and solution entity types.';
+function joinup_rdf_update_200001(): void {
+  $storage = \Drupal::entityTypeManager()->getStorage('rdf_type');
+  $storage->delete($storage->loadMultiple(['collection', 'solution']));
 }
 
 /**
  * Prepare various data in tables for the migration.
  */
-function joinup_rdf_update_200002(): string {
+function joinup_rdf_update_200002(): void {
   $connection = \Drupal::database();
-  $messages = [];
 
   foreach (['like', 'bookmark'] as $flag_id) {
     // Update both the flag_id from `*_rdf_entity` to `*_node` and the
@@ -74,8 +66,6 @@ function joinup_rdf_update_200002(): string {
       SQL;
     $query = $connection->prepareStatement($query, [], TRUE);
     $query->execute();
-    $count = $query->rowCount();
-    $messages[] = "Updated $count rows in the flagging table for the $flag_id flagging.";
   }
 
   // Update the invitation table.
@@ -86,8 +76,6 @@ function joinup_rdf_update_200002(): string {
     SQL;
   $query = $connection->prepareStatement($query, [], TRUE);
   $query->execute();
-  $count = $query->rowCount();
-  $messages[] = "Updated $count rows in the invitation table.";
 
   // Update the invitation__field_invitation_og_role table.
   $query = <<<SQL
@@ -97,8 +85,6 @@ function joinup_rdf_update_200002(): string {
     SQL;
   $query = $connection->prepareStatement($query, [], TRUE);
   $query->execute();
-  $count = $query->rowCount();
-  $messages[] = "Updated $count rows in the invitation__field_invitation_og_role table.";
 
   // Update the meta_entity table.
   $query = <<<SQL
@@ -108,8 +94,6 @@ function joinup_rdf_update_200002(): string {
     SQL;
   $query = $connection->prepareStatement($query, [], TRUE);
   $query->execute();
-  $count = $query->rowCount();
-  $messages[] = "Updated $count rows in the meta_entity table.";
 
   // Update the joinup_group_node_access table.
   $query = <<<SQL
@@ -119,8 +103,6 @@ function joinup_rdf_update_200002(): string {
     SQL;
   $query = $connection->prepareStatement($query, [], TRUE);
   $query->execute();
-  $count = $query->rowCount();
-  $messages[] = "Updated $count rows in the joinup_group_node_access table.";
 
   // Update the og_membership table.
   $query = <<<SQL
@@ -130,8 +112,6 @@ function joinup_rdf_update_200002(): string {
     SQL;
   $query = $connection->prepareStatement($query, [], TRUE);
   $query->execute();
-  $count = $query->rowCount();
-  $messages[] = "Updated $count rows in the og_membership table.";
 
   // Update the og_membership__roles table.
   $query = <<<SQL
@@ -141,16 +121,51 @@ function joinup_rdf_update_200002(): string {
     SQL;
   $query = $connection->prepareStatement($query, [], TRUE);
   $query->execute();
-  $count = $query->rowCount();
-  $messages[] = "Updated $count rows in the og_membership__roles table.";
-
-  return implode("\n", $messages);
 }
 
 /**
- * Manually change fields that cannot have their schema changed with data in db.
+ * Clean up the search index from old collections/solutions.
  */
-function joinup_rdf_update_200003(): string {
+function joinup_rdf_update_200003(): void {
+  /** @var \Drupal\search_api_solr\SolrConnectorInterface $connector */
+  $connector = Server::load('joinup')->getBackend()->getSolrConnector();
+  $updateQuery = $connector
+    ->getUpdateQuery()
+    ->addDeleteQuery('ss_search_api_datasource:"entity:rdf_entity"')
+    ->addCommit();
+  // Update directly the Solr backend.
+  $connector->update($updateQuery);
+  // Update SAPI items.
+  \Drupal::database()->delete('search_api_item')
+    ->condition('datasource', 'entity:rdf_entity')
+    ->execute();
+}
+
+/**
+ * Backup group reference tables.
+ */
+function joinup_rdf_update_200004(): void {
+  $db = \Drupal::database();
+  foreach (MigrationHelper::GROUP_REF_TABLES as [$entityTypeId, $fieldName, $hasRevisions]) {
+    $tables = ["{$entityTypeId}__$fieldName"];
+    if ($hasRevisions) {
+      $tables[] = "{$entityTypeId}_revision__$fieldName";
+    }
+    $columns = [...MigrationHelper::DEDICATED_TABLE_COLUMNS, "{$fieldName}_target_id"];
+    foreach ($tables as $table) {
+      $db->query("CREATE TABLE b_$table LIKE $table");
+      $db->insert("b_$table")
+        ->from($db->select($table)->fields($table, $columns))
+        ->execute();
+      $db->truncate($table)->execute();
+    }
+  }
+}
+
+/**
+ * Manually change fields and configs to prevent errors on config import.
+ */
+function joinup_rdf_update_200005(): void {
   $fieldStorages = [
     'node.field_shared_in',
     'node.field_news_referenced_solution',
@@ -158,7 +173,12 @@ function joinup_rdf_update_200003(): string {
     'media.og_audience',
     'ogmenu_instance.og_audience',
   ];
-  $fieldInstances = [
+
+  foreach ($fieldStorages as $fieldStorage) {
+    FieldStorageConfig::load($fieldStorage)->setSetting('target_type', 'node')->save();
+  }
+
+  $configs = [
     'field.field.media.image.og_audience',
     'field.field.media.video.og_audience',
     'field.field.media.file.og_audience',
@@ -176,98 +196,23 @@ function joinup_rdf_update_200003(): string {
     'field.field.node.discussion.field_shared_in',
     'field.field.node.custom_page.og_audience',
     'field.field.node.release.og_audience',
+    'search_api.index.bookmark',
+    'search_api.index.oss_catalogue',
+    'search_api.index.published',
+    'search_api.index.unpublished',
   ];
 
-  foreach ($fieldStorages as $fieldStorage) {
-    FieldStorageConfig::load($fieldStorage)->setSetting('target_type', 'node')->save();
-  }
-
   $configFactory = \Drupal::configFactory();
-  foreach ($fieldInstances as $fieldInstance) {
+  foreach ($configs as $fieldInstance) {
     $contents = Yaml::decode(file_get_contents("../config/sync/$fieldInstance.yml"));
     $configFactory->getEditable($fieldInstance)->setData($contents)->save();
   }
-
-  \Drupal::getContainer()->get('entity_type.manager')->clearCachedDefinitions();
-  \Drupal::getContainer()->get('entity_field.manager')->clearCachedFieldDefinitions();
-
-  return 'Updated field storages: ' . implode(', ', $fieldStorages);
 }
 
 /**
- * Copy data to a backup table.
+ * Rerun user_update_10000.
  */
-function joinup_rdf_update_200004(): string {
-  // Now that we have disabled rdf_entity, we cannot simply import
-  // configuration as it breaks because of the og audience pointing to
-  // rdf_entity at this stage. We also cannot leave the table with data
-  // because the storage will fail to update because of the existing data.
-  // Lastly, the data cannot remain as they are, because they point to a
-  // non-numeric entity id. Thus, we need to copy data over to a backup
-  // table and then truncate the original table. Then, after the migration
-  // has run, and data are updated to point to the correct entity type, we
-  // can copy the data back to the original table and delete the backup
-  // table.
-  $tables = [
-    'node__field_news_referenced_solution' => 'field_news_referenced_solution_target_id',
-    'node_revision__field_news_referenced_solution' => 'field_news_referenced_solution_target_id',
-    'node__og_audience' => 'og_audience_target_id',
-    'node_revision__og_audience' => 'og_audience_target_id',
-    'media__og_audience' => 'og_audience_target_id',
-    'media_revision__og_audience' => 'og_audience_target_id',
-  ];
-
-  $messages = [];
-  $base_fields = [
-    'bundle',
-    'deleted',
-    'entity_id',
-    'revision_id',
-    'langcode',
-    'delta',
-  ];
-
-  foreach ($tables as $table => $target_column) {
-    $database = \Drupal::database();
-    $query = "CREATE TABLE IF NOT EXISTS {$table}_backup LIKE $table";
-    $database->query($query);
-    $messages[] = "Created backup table {$table}_backup LIKE $table.";
-
-    $data = $database->select($table, 't')
-      ->fields('t')
-      ->execute()
-      ->fetchAllAssoc('revision_id');
-
-    if (!empty($data)) {
-      $fields = $base_fields;
-      $fields[] = $target_column;
-      $values = [];
-      foreach ($data as $row) {
-        $values = (array) $row;
-        // If any of the fields do not exist in the original table, we need to
-        // throw an exception.
-        if (array_diff(array_keys($values), $fields)) {
-          throw new \Exception("Fields in the backup table do not match the original table.");
-        }
-      }
-      $database->insert($table . '_backup')
-        ->fields($fields)
-        ->values($values)
-        ->execute();
-      $messages[] = "Inserted backup rows into $table.";
-    }
-
-    $database->truncate($table)->execute();
-    $messages[] = "Truncated table $table.";
-  }
-
-  return implode("\n", $messages);
-}
-
-/**
- * Re run user_update_10000.
- */
-function joinup_rdf_update_200005(): void {
+function joinup_rdf_update_200006(): void {
   require_once DRUPAL_ROOT . '/core/modules/user/user.install';
   user_update_10000();
 }
