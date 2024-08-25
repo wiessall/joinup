@@ -183,6 +183,11 @@ function joinup_rdf_deploy_200004(): void {
   foreach ($tables as $table => $field) {
     $db->query("UPDATE {{$table}} t INNER JOIN {rdf_sync_uri} u ON t.$field = u.uri SET t.$field = u.entity_id");
   }
+
+  // Update subscription table.
+  $db->query("UPDATE {og_membership__subscription_bundles} SET subscription_bundles_entity_type = 'node' WHERE subscription_bundles_entity_type = 'rdf_entity'");
+  // Leftover from release conversion.
+  $db->query("UPDATE {og_membership__subscription_bundles} SET subscription_bundles_bundle = 'release' WHERE subscription_bundles_bundle = 'asset_release'");
 }
 
 /**
