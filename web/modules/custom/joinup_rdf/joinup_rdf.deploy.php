@@ -7,8 +7,8 @@
 
 declare(strict_types=1);
 
-use Drupal\collection\Entity\Collection;
 use Drupal\Core\Url;
+use Drupal\collection\Entity\Collection;
 use Drupal\joinup_oss_catalogue\OssCatalogueCollectionInterface;
 use Drupal\joinup_rdf\MigrationHelper;
 
@@ -58,6 +58,29 @@ function joinup_rdf_deploy_200001(array &$sandbox): string {
 function joinup_rdf_deploy_200002(array &$sandbox): string {
   $endpoint = \Drupal::getContainer()->get('rdf_sync.connection');
   if (empty($sandbox['solutions'])) {
+    $collections = \Drupal::database()->select('rdf_sync_uri')
+      ->fields('rdf_sync_uri', ['uri', 'entity_id'])
+      ->condition('entity_type', 'node')
+      ->condition('bundle', 'collection')
+      ->execute()
+      ->fetchAllKeyed();
+
+    $query = <<<SPARQL
+      SELECT ?collection ?solution
+      FROM <http://joinup.eu/collection/published>
+      FROM <http://joinup.eu/collection/draft>
+      WHERE {
+        ?collection <http://www.w3.org/ns/dcat#dataset> ?solution .
+      }
+      SPARQL;
+    $results = $endpoint->query($query)->getArrayCopy();
+
+    // Store the relation between solution URI and collection NID.
+    $sandbox['solution_to_collection'] = [];
+    foreach ($results as $row) {
+      $sandbox['solution_to_collection'][$row->solution->getUri()] = (int) $collections[$row->collection->geturi()];
+    }
+
     $query = <<<SPARQL
       SELECT DISTINCT ?id
       FROM <http://joinup.eu/solution/published>
@@ -76,7 +99,10 @@ function joinup_rdf_deploy_200002(array &$sandbox): string {
   $migration_helper = \Drupal::getContainer()->get('joinup_rdf.migration_helper');
   $start = microtime(TRUE);
   foreach ($uris as $uri) {
-    $migration_helper->migrateSolution($uri);
+    if (!$collectionNid ??= $sandbox['solution_to_collection'][$uri]) {
+      throw new \Exception("Collection not found for solution: $uri");
+    }
+    $migration_helper->migrateSolution($uri, $collectionNid);
     $sandbox['progress']++;
   }
 

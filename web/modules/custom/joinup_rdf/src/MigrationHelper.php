@@ -362,41 +362,35 @@ final class MigrationHelper {
    *   The URI of the collection.
    */
   public function migrateCollection(string $uri): void {
-    if ($entity = $this->rdfSyncMapper->getEntityByUri($uri)) {
-      $entity->delete();
-    }
-
-    /** @var \Drupal\collection\Entity\CollectionInterface $entity */
-    $entity = $this->entityTypeManager->getStorage('node')->create([
+    /** @var \Drupal\collection\Entity\CollectionInterface $collection */
+    $collection = $this->entityTypeManager->getStorage('node')->create([
       'type' => 'collection',
       'uri' => $uri,
     ]);
 
     $values = $this->getEntityDataAsFlatArray($uri, 'http://joinup.eu/collection/published');
     if (!empty($values)) {
-      $this->massageCollectionValues($entity, $values);
-      $this->saveEntityWithPathPreservation($entity, $uri);
-      $this->assertMigratedEntity($entity, $values);
+      $this->massageCollectionValues($collection, $values);
+      $this->saveEntityWithPathPreservation($collection, $uri);
     }
 
     // Handle the draft content. If the entity has not been saved, it is an
     // unpublished entity, otherwise, it is a new revision.
     $values = $this->getEntityDataAsFlatArray($uri, 'http://joinup.eu/collection/draft');
     if (!empty($values)) {
-      if (!$entity->isNew()) {
-        $entity->setRevisionCreationTime($values['http://purl.org/dc/terms/modified'][0]->getTimestamp());
-        $entity->setRevisionUserId($values['http://joinup.eu/owner/uid'][0]);
-        $entity->setRevisionTranslationAffected(TRUE);
-        $entity->setNewRevision();
+      if (!$collection->isNew()) {
+        $collection->setRevisionCreationTime($values['http://purl.org/dc/terms/modified'][0]->getTimestamp());
+        $collection->setRevisionUserId($values['http://joinup.eu/owner/uid'][0]);
+        $collection->setRevisionTranslationAffected(TRUE);
+        $collection->setNewRevision();
       }
 
-      $this->massageCollectionValues($entity, $values);
-      $entity->skip_notification = TRUE;
-      $entity->save();
-      $this->assertMigratedEntity($entity, $values);
+      $this->massageCollectionValues($collection, $values);
+      $collection->skip_notification = TRUE;
+      $collection->save();
     }
 
-    $this->updateMenuLinks($entity);
+    $this->updateMenuLinks($collection);
   }
 
   /**
@@ -404,43 +398,44 @@ final class MigrationHelper {
    *
    * @param string $uri
    *   The URI of the solution.
+   * @param int $collectionNid
+   *   The parent collection node ID.
    */
-  public function migrateSolution(string $uri): void {
+  public function migrateSolution(string $uri, int $collectionNid): void {
     // Because we have migrated solution stubs in the release migration, we need
     // to check if the entity exists already first.
-    $entity = $this->rdfSyncMapper->getEntityByUri($uri);
-    if (!$entity) {
-      $entity = $this->entityTypeManager->getStorage('node')->create([
+    $solution = $this->rdfSyncMapper->getEntityByUri($uri);
+    if (!$solution) {
+      $solution = $this->entityTypeManager->getStorage('node')->create([
         'type' => 'solution',
+        'uri' => $uri,
       ]);
     }
 
-    $entity->set('uri', $uri);
+    $solution->set(OgGroupAudienceHelperInterface::DEFAULT_FIELD, $collectionNid);
     $values = $this->getEntityDataAsFlatArray($uri, 'http://joinup.eu/solution/published');
     if (!empty($values)) {
-      $this->massageSolutionValues($entity, $values);
-      $this->saveEntityWithPathPreservation($entity, $uri);
-      $this->assertMigratedEntity($entity, $values);
+      $this->massageSolutionValues($solution, $values);
+      $this->saveEntityWithPathPreservation($solution, $uri);
     }
 
     // Handle the draft content. If the entity has not been saved, it is an
     // unpublished entity, otherwise, it is a new revision.
     $values = $this->getEntityDataAsFlatArray($uri, 'http://joinup.eu/solution/draft');
     if (!empty($values)) {
-      if (!$entity->isNew()) {
-        $entity->setRevisionCreationTime($values['http://purl.org/dc/terms/modified'][0]->getTimestamp());
-        $entity->setRevisionUserId($values['http://joinup.eu/owner/uid'][0]);
-        $entity->setRevisionTranslationAffected(TRUE);
-        $entity->setNewRevision();
+      if (!$solution->isNew()) {
+        $solution->setRevisionCreationTime($values['http://purl.org/dc/terms/modified'][0]->getTimestamp());
+        $solution->setRevisionUserId($values['http://joinup.eu/owner/uid'][0]);
+        $solution->setRevisionTranslationAffected(TRUE);
+        $solution->setNewRevision();
       }
 
-      $this->massageSolutionValues($entity, $values);
-      $entity->skip_notification = TRUE;
-      $entity->save();
-      $this->assertMigratedEntity($entity, $values);
+      $this->massageSolutionValues($solution, $values);
+      $solution->skip_notification = TRUE;
+      $solution->save();
     }
 
-    $this->updateMenuLinks($entity);
+    $this->updateMenuLinks($solution);
   }
 
   /**
@@ -485,30 +480,6 @@ final class MigrationHelper {
       if ($value) {
         $value = $this->parseValue($value, self::SOLUTION_FIELD_MAPPING[$property]);
         $entity->set($mapping['target_field_name'], $value);
-      }
-    }
-
-    // Set the collection. We need to get the collection URI from SPARQL, load
-    // the collection by mapped URI from node storage, and pass it to the
-    // solution.
-    $query = <<<SPARQL
-      SELECT ?s
-      FROM <http://joinup.eu/collection/published>
-      FROM <http://joinup.eu/collection/draft>
-      WHERE {
-        ?s <http://www.w3.org/ns/dcat#dataset> <{$entity->getUri()}> .
-      }
-      SPARQL;
-
-    $results = $this->sparqlEndpoint->query($query)->getArrayCopy();
-    if ($results) {
-      $collectionUri = $results[0]->s->getUri();
-      $collection = $this->rdfSyncMapper->getEntityByUri($collectionUri);
-      if ($collection) {
-        $entity->set(OgGroupAudienceHelperInterface::DEFAULT_FIELD, $collection->id());
-      }
-      else {
-        throw new \Exception('Collection not found for solution: ' . $entity->getUri());
       }
     }
   }
@@ -648,7 +619,6 @@ final class MigrationHelper {
    *   The values to assert.
    */
   protected function assertMigratedEntity(EntityInterface $entity, array $values): void {
-    return;
     // Reload the entity to get the values from the database.
     $loaded = $this->entityTypeManager->getStorage($entity->getEntityTypeId())->load($entity->id());
     foreach ($values as $uri => $value) {
