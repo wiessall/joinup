@@ -904,14 +904,16 @@ function joinup_group_entity_update(EntityInterface $group): void {
         '%original' => $group_original_entity->getShortId() ?? '',
         '%actual' => $group->getShortId() ?? '',
       ];
-      if ($group_original_entity->getShortId() && $group->getShortId()) {
-        \Drupal::messenger()->addStatus(t("You've changed the @bundle's short ID from %original to %actual. It will take some time until the @bundle content URLs will be updated.", $arguments));
-      }
-      elseif (!$group_original_entity->getShortId()) {
-        \Drupal::messenger()->addStatus(t("You've added a @bundle short ID: %actual. It will take some time until the @bundle content URLs will be updated.", $arguments));
-      }
-      elseif (!$group->getShortId()) {
-        \Drupal::messenger()->addStatus(t("You've removed the @bundle's short ID: %original. It will take some time until the @bundle content URLs will be updated.", $arguments));
+      if (empty($group->skip_notification)) {
+        if ($group_original_entity->getShortId() && $group->getShortId()) {
+          \Drupal::messenger()->addStatus(t("You've changed the @bundle's short ID from %original to %actual. It will take some time until the @bundle content URLs will be updated.", $arguments));
+        }
+        elseif (!$group_original_entity->getShortId()) {
+          \Drupal::messenger()->addStatus(t("You've added a @bundle short ID: %actual. It will take some time until the @bundle content URLs will be updated.", $arguments));
+        }
+        elseif (!$group->getShortId()) {
+          \Drupal::messenger()->addStatus(t("You've removed the @bundle's short ID: %original. It will take some time until the @bundle content URLs will be updated.", $arguments));
+        }
       }
     }
   }
