@@ -1,7 +1,7 @@
 @api @group-clone
 Feature: Test the converted videos into document.
 
-  @update:joinup_core_update_112000
+  @update:joinup_core_update_111200
   Scenario: Videos have migrated correctly.
     When I visit "node/125946"
     Then I should see the heading "eGovernment Reduction of Administrative Burden-ePractice TV interview: Mr Siim Sikkut"
