@@ -22,7 +22,6 @@ use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\Core\Test\Exception\MissingGroupException;
 use Drupal\Core\Url;
 use Drupal\file\Entity\File;
 use Drupal\joinup_group\Entity\Announcement;
@@ -277,6 +276,13 @@ function joinup_group_propose_message_submit(&$form, FormStateInterface $form_st
  * Implements hook_ENTITY_TYPE_access().
  */
 function joinup_group_node_access(EntityInterface $entity, $operation, AccountInterface $account): AccessResultInterface {
+  if ($operation === 'view' && $entity instanceof GroupContentInterface) {
+    $group = $entity->getGroup();
+    $membership = \Drupal::getContainer()->get('og.membership_manager')->getMembership($group, $account->id());
+    return AccessResult::allowedIf($membership && $membership->hasPermission('view any unpublished content'))
+      ->addCacheableDependency($membership);
+  }
+
   if (!$entity instanceof GroupInterface
     || $account->isAnonymous()
     || $account->hasPermission($entity->getEntityType()->getAdminPermission())
@@ -293,39 +299,6 @@ function joinup_group_node_access(EntityInterface $entity, $operation, AccountIn
     && !$entity->isPublished()
     && $membership->hasPermission('view any unpublished content'))
     ->addCacheableDependency($membership);
-}
-
-/**
- * Implements hook_entity_graph_access().
- *
- * The same procedure as the global access check is followed here. The purpose
- * is to override the results of the global access check if the user has the
- * appropriate OG permissions.
- *
- * @todo hook api definition is needed.
- */
-function joinup_group_entity_graph_access(EntityInterface $entity, string $operation, AccountInterface $account, string $graph_name): AccessResultInterface {
-  if (!$entity || !$entity instanceof GroupInterface || $operation != 'view' || $graph_name == 'default') {
-    return AccessResult::neutral();
-  }
-
-  $membership = $entity->getMembership((int) $account->id());
-  if (empty($membership)) {
-    return AccessResult::neutral();
-  }
-
-  // Following the same logic as the global access check.
-  $map = ['view' => 'view all graphs'];
-  $entity_type_id = $entity->getEntityTypeId();
-  $type_map = ['view' => "view $entity_type_id $graph_name graph"];
-
-  // If the operation is not supported, do not allow access.
-  if (!isset($map[$operation]) || !isset($type_map[$operation])) {
-    return AccessResult::forbidden();
-  }
-
-  $has_permission = $membership->hasPermission($map[$operation]) || $membership->hasPermission($type_map[$operation]);
-  return $has_permission ? AccessResult::allowed() : AccessResult::neutral();
 }
 
 /**
@@ -917,66 +890,6 @@ function joinup_group_user_update(UserInterface $user): void {
 }
 
 /**
- * Implements hook_node_access_records().
- *
- * Creates access records for unpublished nodes that are group content, to allow
- * them to be viewed by group members with the 'view any unpublished content'
- * permission.
- */
-function joinup_group_node_access_records(NodeInterface $node): array {
-  /** @var \Drupal\joinup_group\JoinupGroupNodeAccessGrantsInterface $access_grants_helper */
-  $access_grants_helper = \Drupal::service('joinup_group.node_access_grants');
-  $grants = [];
-
-  foreach ($node->getTranslationLanguages() as $langcode => $language) {
-    $translated_node = $node->getTranslation($langcode);
-    if ($translated_node instanceof GroupContentInterface && $translated_node->hasGroup() && !$translated_node->isPublished()) {
-      try {
-        $group = $translated_node->getGroup();
-        $grants[] = [
-          'realm' => 'joinup_group_view_unpublished',
-          'gid' => $access_grants_helper->getNodeAccessGrantId($group),
-          'grant_view' => 1,
-          'grant_update' => 0,
-          'grant_delete' => 0,
-          'priority' => 0,
-          'langcode' => $langcode,
-        ];
-      }
-      catch (MissingGroupException $e) {
-      }
-    }
-  }
-
-  return $grants;
-}
-
-/**
- * Implements hook_node_grants().
- */
-function joinup_group_node_grants(AccountInterface $account, string $op): array {
-  $grants = [];
-
-  if ($op === 'view') {
-    /** @var \Drupal\og\MembershipManagerInterface $membership_manager */
-    $membership_manager = \Drupal::service('og.membership_manager');
-    /** @var \Drupal\joinup_group\JoinupGroupNodeAccessGrantsInterface $access_grants_helper */
-    $access_grants_helper = \Drupal::service('joinup_group.node_access_grants');
-
-    foreach ($membership_manager->getMemberships($account->id()) as $membership) {
-      if ($membership->hasPermission('view any unpublished content')) {
-        $group = $membership->getGroup();
-        if ($group instanceof GroupInterface) {
-          $grants['joinup_group_view_unpublished'][] = $access_grants_helper->getNodeAccessGrantId($group);
-        }
-      }
-    }
-  }
-
-  return $grants;
-}
-
-/**
  * Implements hook_entity_update().
  */
 function joinup_group_entity_update(EntityInterface $group): void {
@@ -1090,14 +1003,9 @@ function joinup_group_entity_field_access(string $operation, FieldDefinitionInte
 /**
  * Implements hook_ENTITY_TYPE_delete().
  */
-function joinup_group_node_delete(RdfInterface $group): void {
+function joinup_group_node_delete(NodeInterface $group): void {
   if ($group instanceof GroupInterface) {
-    // Cleanup the {joinup_group_node_access} table.
-    \Drupal::database()->delete('joinup_group_node_access')
-      ->condition('entity_type', $group->getEntityTypeId())
-      ->condition('entity_id', $group->id())
-      ->execute();
-    // Delete also announcements belonging to this group.
+    // Delete all announcements belonging to this group.
     $storage = \Drupal::entityTypeManager()->getStorage('message');
     $mids = $storage->getQuery()->accessCheck(FALSE)
       ->condition('template', 'announcement')

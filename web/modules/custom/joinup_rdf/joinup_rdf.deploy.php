@@ -160,7 +160,6 @@ function joinup_rdf_deploy_200004(): void {
     'flagging' => 'entity_id',
     'invitation' => 'entity_id',
     'meta_entity' => 'target__target_id',
-    'joinup_group_node_access' => 'entity_id',
     'og_membership' => 'entity_id',
   ];
   foreach ($tables as $table => $field) {

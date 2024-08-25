@@ -94,13 +94,9 @@ function joinup_rdf_update_200002(): void {
     SQL;
   $connection->query($query);
 
-  // Update the joinup_group_node_access table.
-  $query = <<<SQL
-    UPDATE joinup_group_node_access
-    SET entity_type = 'node'
-    WHERE entity_type = 'rdf_entity'
-    SQL;
-  $connection->query($query);
+  // Drop the joinup_group_node_access table.
+  $db->schema()->dropTable('joinup_group_node_access');
+  $db->query("DELETE FROM {node_access} WHERE realm = 'joinup_group_view_unpublished'");
 
   // Update the og_membership table.
   $query = <<<SQL
