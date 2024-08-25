@@ -98,8 +98,7 @@ function joinup_core_requirements($phase): array {
 /**
  * Convert videos into document.
  */
-function joinup_core_update_112000(): void {
-  $database = \Drupal::database();
+function joinup_core_update_111201(): void {
   $entity_type_manager = \Drupal::entityTypeManager();
   $video_nids = \Drupal::entityQuery('node')
     ->accessCheck()
@@ -114,7 +113,7 @@ function joinup_core_update_112000(): void {
       'field_body' => [
         'value' => $video_node->get('body')->value,
         'format' => 'text_html',
-      ]
+      ],
     ]);
     $body_paragraph->save();
     $video_paragraph = Paragraph::create([
@@ -154,11 +153,11 @@ function joinup_core_update_112000(): void {
     $document_node->set('field_paragraphs_body', [
       [
         'target_id' => $body_paragraph->id(),
-        'target_revision_id' => $body_paragraph->getRevisionId()
+        'target_revision_id' => $body_paragraph->getRevisionId(),
       ],
       [
         'target_id' => $video_paragraph->id(),
-        'target_revision_id' => $video_paragraph->getRevisionId()
+        'target_revision_id' => $video_paragraph->getRevisionId(),
       ],
     ]);
 
