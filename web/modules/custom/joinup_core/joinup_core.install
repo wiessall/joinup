@@ -8,6 +8,8 @@
 declare(strict_types=1);
 
 use Drupal\Core\Site\Settings;
+use Drupal\node\Entity\Node;
+use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\user\Entity\User;
 
 /**
@@ -91,4 +93,75 @@ function joinup_core_requirements($phase): array {
   }
 
   return $requirements;
+}
+
+/**
+ * Convert videos into document.
+ */
+function joinup_core_update_112000(): void {
+  $database = \Drupal::database();
+  $entity_type_manager = \Drupal::entityTypeManager();
+  $video_nids = \Drupal::entityQuery('node')
+    ->accessCheck()
+    ->condition('type', 'video')
+    ->execute();
+
+  $video_nodes = $entity_type_manager->getStorage('node')->loadMultiple($video_nids);
+
+  foreach ($video_nodes as $video_node) {
+    $body_paragraph = Paragraph::create([
+      'type' => 'text',
+      'field_body' => [
+        'value' => $video_node->get('body')->value,
+        'format' => 'text_html',
+      ]
+    ]);
+    $body_paragraph->save();
+    $video_paragraph = Paragraph::create([
+      'type' => 'video',
+      'paragraph_video_url' => $video_node->get('field_video')->getValue(),
+    ]);
+    $video_paragraph->save();
+
+    $video = [
+      'nid' => $video_node->id(),
+      'title' => $video_node->getTitle(),
+      'uid' => $video_node->getOwnerId(),
+      'status' => $video_node->isPublished(),
+      'created' => $video_node->getCreatedTime(),
+      'changed' => $video_node->getChangedTime(),
+      'og_audience' => $video_node->get('og_audience')->target_id,
+      'field_document_spatial_coverage' => $video_node->get('field_video_spatial_coverage')->target_id,
+      'field_keywords' => $video_node->get('field_keywords')->getValue(),
+    ];
+    // Delete video.
+    $video_node->delete();
+
+    $document_node = Node::create([
+      'type' => 'document',
+      'nid' => $video['nid'],
+      'title' => $video['title'],
+      'uid' => $video['uid'],
+      'status' => $video['status'],
+      'created' => $video['created'],
+      'changed' => $video['changed'],
+      'og_audience' => $video['og_audience'],
+      'field_document_spatial_coverage' => $video['field_document_spatial_coverage'],
+      'field_keywords' => $video['field_keywords'],
+      'field_state' => 'archived',
+    ]);
+
+    $document_node->set('field_paragraphs_body', [
+      [
+        'target_id' => $body_paragraph->id(),
+        'target_revision_id' => $body_paragraph->getRevisionId()
+      ],
+      [
+        'target_id' => $video_paragraph->id(),
+        'target_revision_id' => $video_paragraph->getRevisionId()
+      ],
+    ]);
+
+    $document_node->save();
+  }
 }
