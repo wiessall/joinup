@@ -54,7 +54,10 @@ function joinup_rdf_update_200001(): void {
  * Prepare various data in tables for the migration.
  */
 function joinup_rdf_update_200002(): void {
-  $connection = \Drupal::database();
+  $db = \Drupal::database();
+
+  // Update file_usage table.
+  $db->query("DELETE FROM {file_usage} WHERE type = 'rdf_entity'");
 
   foreach (['like', 'bookmark'] as $flag_id) {
     // Update both the flag_id from `*_rdf_entity` to `*_node` and the
@@ -64,19 +67,14 @@ function joinup_rdf_update_200002(): void {
       SET flag_id = :id, entity_type = 'node'
       WHERE flag_id IN (:ids[]) AND entity_type IN ('rdf_entity', 'node')
       SQL;
-    $connection->query($query, [
+    $db->query($query, [
       ':id' => $flag_id,
       ':ids[]' => ["{$flag_id}_node", "{$flag_id}_rdf_entity"],
     ]);
   }
 
   // Update the invitation table.
-  $query = <<<SQL
-    UPDATE invitation
-    SET entity_type = 'node'
-    WHERE entity_type = 'rdf_entity'
-    SQL;
-  $connection->query($query);
+  $db->query("UPDATE {invitation} SET entity_type = 'node'  WHERE entity_type = 'rdf_entity'");
 
   // Update the invitation__field_invitation_og_role table.
   $query = <<<SQL
@@ -84,35 +82,20 @@ function joinup_rdf_update_200002(): void {
     SET field_invitation_og_role_target_id = REPLACE(field_invitation_og_role_target_id, 'rdf_entity', 'node')
     WHERE field_invitation_og_role_target_id LIKE 'rdf_entity%'
     SQL;
-  $connection->query($query);
+  $db->query($query);
 
   // Update the meta_entity table.
-  $query = <<<SQL
-    UPDATE meta_entity
-    SET target__target_type = 'node'
-    WHERE target__target_type = 'rdf_entity'
-    SQL;
-  $connection->query($query);
+  $db->query("UPDATE {meta_entity} SET target__target_type = 'node' WHERE target__target_type = 'rdf_entity'");
 
   // Drop the joinup_group_node_access table.
   $db->schema()->dropTable('joinup_group_node_access');
   $db->query("DELETE FROM {node_access} WHERE realm = 'joinup_group_view_unpublished'");
 
   // Update the og_membership table.
-  $query = <<<SQL
-    UPDATE og_membership
-    SET entity_type = 'node'
-    WHERE entity_type = 'rdf_entity'
-    SQL;
-  $connection->query($query);
+  $db->query("UPDATE {og_membership} SET entity_type = 'node' WHERE entity_type = 'rdf_entity'");
 
   // Update the og_membership__roles table.
-  $query = <<<SQL
-    UPDATE og_membership__roles
-    SET roles_target_id = REPLACE(roles_target_id, 'rdf_entity', 'node')
-    WHERE roles_target_id LIKE 'rdf_entity%'
-    SQL;
-  $connection->query($query);
+  $db->query("UPDATE {og_membership__roles} SET roles_target_id = REPLACE(roles_target_id, 'rdf_entity', 'node') WHERE roles_target_id LIKE 'rdf_entity%'");
 }
 
 /**
