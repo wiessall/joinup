@@ -61,11 +61,14 @@ final class JoinupLog extends ContentEntityBase implements JoinupLogInterface {
       ->setSetting('target_type', 'user');
 
     $fields['group'] = BaseFieldDefinition::create('entity_reference')
+      ->setName('group')
       ->setLabel(t('Group'))
-      ->setDescription(t('Group that this log entry relates to, if any.'))
-      ->setTargetEntityTypeId('node')
+      ->setDescription(t('Group where this log entry relates to, if any.'))
+      ->setTargetEntityTypeId('joinup_log')
       ->setRequired(FALSE)
-      ->setSetting('target_type', 'node');
+      ->setSetting('target_type', 'node')
+      ->setDefaultValue(NULL)
+      ->setInitialValue(NULL);
 
     $fields['type'] = BaseFieldDefinition::create('list_string')
       ->setLabel(new TranslatableMarkup('Type'))

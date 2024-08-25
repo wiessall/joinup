@@ -11,6 +11,8 @@ use Drupal\Core\Url;
 use Drupal\collection\Entity\Collection;
 use Drupal\joinup_oss_catalogue\OssCatalogueCollectionInterface;
 use Drupal\joinup_rdf\MigrationHelper;
+use Drupal\meta_entity\Entity\MetaEntity;
+use Drupal\og\OgGroupAudienceHelperInterface;
 
 /**
  * Disable RDF Sync for the deployment.
@@ -123,39 +125,6 @@ function joinup_rdf_deploy_200003(): void {
 }
 
 /**
- * Apply entity definition updates.
- */
-function joinup_rdf_post_update_200003(): string {
-  $entity_update_manager = \Drupal::entityDefinitionUpdateManager();
-  if (!$entity_update_manager->needsUpdates()) {
-    return 'No updates needed.';
-  }
-
-  $messages = [];
-  $entity_field_manager = \Drupal::getContainer()->get('entity_field.manager');
-  foreach ($entity_update_manager->getChangeList() as $entity_type_id => $changes) {
-    $entity_type = $entity_update_manager->getEntityType($entity_type_id);
-    if (isset($changes['field_storage_definitions'])) {
-      $field_storage_definitions = $entity_field_manager->getFieldStorageDefinitions($entity_type_id);
-      foreach ($changes['field_storage_definitions'] as $field_name => $value) {
-        if ($field_name !== 'og_audience' || $field_name !== 'field_news_referenced_solution') {
-          continue;
-        }
-
-        /** @var \Drupal\Core\Field\FieldStorageDefinitionInterface $storage_definition */
-        $storage_definition = $field_storage_definitions[$field_name];
-        $entity_update_manager->updateFieldStorageDefinition($storage_definition);
-        $messages[] = "Updated field storage definition for $field_name.";
-      }
-    }
-    $entity_update_manager->updateEntityType($entity_type);
-    $messages[] = "Updated entity type $entity_type_id.\n";
-  }
-
-  return implode("\n", $messages);
-}
-
-/**
  * Restore group reference tables.
  */
 function joinup_rdf_deploy_200004(): void {
@@ -178,6 +147,29 @@ function joinup_rdf_deploy_200004(): void {
       $schema->dropTable("b_$table");
     }
   }
+
+  // Joinup log table.
+  $query = $db->select('b_joinup_log', 'b');
+  $query->innerJoin('rdf_sync_uri', 'u', 'b.group = u.uri');
+  $columns = [
+    'id',
+    'uid',
+    'actor',
+    'type',
+    'message',
+    'severity',
+    'location',
+    'referer',
+    'hostname',
+    'timestamp',
+  ];
+  $query
+    ->fields('b', $columns)
+    ->fields('u', ['entity_id']);
+  $db->insert('joinup_log')
+    ->fields([...$columns, 'group'])
+    ->from($query)->execute();
+  $schema->dropTable('b_joinup_log');
 
   // Change references from URI to integer for tables that didn't need field
   // storage definition update.
