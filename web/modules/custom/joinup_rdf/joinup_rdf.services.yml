@@ -3,10 +3,10 @@ services:
     autowire: true
   joinup_rdf.vocabulary_fixtures.helper:
     class: Drupal\joinup_rdf\VocabularyFixturesHelper
-    arguments: [ '@sparql.endpoint' ]
+    arguments: [ 'rdf_sync.connection' ]
   joinup_rdf.requirements_helper:
     class: Drupal\joinup_rdf\RequirementsHelper
-    arguments: ['@sparql.endpoint', '@string_translation']
+    arguments: ['rdf_sync.connection', '@string_translation']
   # Move this to sparql_entity_storage in ISAICP-7374.
   # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7374
   joinup_rdf.twig_extension:
@@ -14,12 +14,6 @@ services:
     arguments: ['@language_manager', '@renderer']
     tags:
       - { name: twig.extension }
-  # TODO: Drop in ISAICP-8376
-  joinup_rdf.outbound_value.tid:
-    class: Drupal\joinup_rdf\EventSubscriber\UriIdConversion
-    arguments: ['@database', '@entity_field.manager', '@logger.channel.php']
-    tags:
-      - { name: event_subscriber }
   joinup_rdf.legacy_rdf_url.subscriber:
     class: Drupal\joinup_rdf\EventSubscriber\LegacyRdfUrlSubscriber
     arguments: ['@rdf_sync.mapper']

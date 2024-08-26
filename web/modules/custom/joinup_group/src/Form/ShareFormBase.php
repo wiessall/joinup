@@ -6,7 +6,6 @@ namespace Drupal\joinup_group\Form;
 
 use Drupal\Core\Cache\CacheTagsInvalidatorInterface;
 use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
-use Drupal\Core\Entity\EntityViewBuilderInterface;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\EventSubscriber\MainContentViewSubscriber;
 use Drupal\Core\Form\FormBase;
@@ -18,7 +17,6 @@ use Drupal\joinup_group\Exception\MissingGroupException;
 use Drupal\og\MembershipManagerInterface;
 use Drupal\og\OgMembershipInterface;
 use Drupal\og\OgRoleManagerInterface;
-use Drupal\sparql_entity_storage\SparqlEntityStorage;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -46,10 +44,6 @@ abstract class ShareFormBase extends FormBase {
   /**
    * Constructs a new ShareContentFormBase object.
    *
-   * @param \Drupal\sparql_entity_storage\SparqlEntityStorage $sparqlStorage
-   *   The RDF entity storage.
-   * @param \Drupal\Core\Entity\EntityViewBuilderInterface $rdfBuilder
-   *   The RDF view builder.
    * @param \Drupal\og\MembershipManagerInterface $membershipManager
    *   The OG membership manager.
    * @param \Drupal\og\OgRoleManagerInterface $roleManager

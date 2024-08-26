@@ -6,7 +6,7 @@ namespace Drupal\joinup_rdf;
 
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslationManager;
-use Drupal\sparql_entity_storage\Driver\Database\sparql\ConnectionInterface;
+use Drupal\rdf_sync\RdfSyncConnectionInterface;
 
 /**
  * Implements helper methods related to the requirements.
@@ -16,31 +16,17 @@ class RequirementsHelper {
   use StringTranslationTrait;
 
   /**
-   * The SQL connection class for the SPARQL database storage.
-   *
-   * @var \Drupal\sparql_entity_storage\Driver\Database\sparql\ConnectionInterface
-   */
-  protected $sparql;
-
-  /**
-   * The translation manager service.
-   *
-   * @var \Drupal\Core\StringTranslation\TranslationManager
-   */
-  protected $translation;
-
-  /**
    * Constructs a new RequirementsHelper.
    *
-   * @param \Drupal\sparql_entity_storage\Driver\Database\sparql\ConnectionInterface $sparql
+   * @param \Drupal\rdf_sync\RdfSyncConnectionInterface $sparql
    *   The SQL connection class for the SPARQL database storage.
    * @param \Drupal\Core\StringTranslation\TranslationManager $translation
    *   The translation manager service.
    */
-  public function __construct(ConnectionInterface $sparql, TranslationManager $translation) {
-    $this->sparql = $sparql;
-    $this->translation = $translation;
-  }
+  public function __construct(
+    protected RdfSyncConnectionInterface $sparql,
+    protected TranslationManager $translation,
+  ) {}
 
   /**
    * Returns a list of error messages for the joinup_rdf requirements.

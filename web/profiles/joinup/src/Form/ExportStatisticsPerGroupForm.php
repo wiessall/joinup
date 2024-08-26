@@ -12,7 +12,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\joinup\ExportBatchedDataFormBase;
 use Drupal\joinup_solution\Entity\SolutionInterface;
-use Drupal\sparql_entity_storage\Driver\Database\sparql\ConnectionInterface;
+use Drupal\rdf_sync\RdfSyncConnectionInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -33,7 +33,7 @@ class ExportStatisticsPerGroupForm extends ExportBatchedDataFormBase {
    *   The entity type manager.
    * @param \Drupal\Core\Database\Connection $mysql
    *   The MySQL connection instance.
-   * @param \Drupal\sparql_entity_storage\Driver\Database\sparql\ConnectionInterface $sparql
+   * @param \Drupal\rdf_sync\RdfSyncConnectionInterface $sparql
    *   The SPARQL connection instance.
    */
   public function __construct(
@@ -42,7 +42,7 @@ class ExportStatisticsPerGroupForm extends ExportBatchedDataFormBase {
     protected TimeInterface $time,
     protected EntityTypeManagerInterface $entityTypeManager,
     protected Connection $mysql,
-    protected ConnectionInterface $sparql,
+    protected RdfSyncConnectionInterface $sparql,
   ) {
     parent::__construct($cache, $dateFormatter, $time);
   }
@@ -57,7 +57,7 @@ class ExportStatisticsPerGroupForm extends ExportBatchedDataFormBase {
       $container->get('datetime.time'),
       $container->get('entity_type.manager'),
       $container->get('database'),
-      $container->get('sparql.endpoint'),
+      $container->get('rdf_sync.connection'),
     );
   }
 

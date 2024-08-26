@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_solution;
 
-use Drupal\joinup_sparql\Driver\Database\joinup_sparql\Connection;
-use Drupal\sparql_entity_storage\Driver\Database\sparql\ConnectionInterface;
+use Drupal\rdf_sync\RdfSyncConnectionInterface;
 
 /**
  * Implements helper methods related to installation requirements for solutions.
@@ -13,23 +12,14 @@ use Drupal\sparql_entity_storage\Driver\Database\sparql\ConnectionInterface;
 class RequirementsHelper {
 
   /**
-   * The SPARQL connection class.
-   *
-   * @var \Drupal\joinup_sparql\Driver\Database\joinup_sparql\Connection
-   */
-  protected Connection $sparqlConnection;
-
-  /**
    * Constructs a new RequirementsHelper.
    *
-   * @param \Drupal\sparql_entity_storage\Driver\Database\sparql\ConnectionInterface $sparql
+   * @param \Drupal\rdf_sync\RdfSyncConnectionInterface $sparql
    *   The SPARQL connection class.
    */
-  public function __construct(ConnectionInterface $sparql) {
-    // @todo Add the entity type manager here too.
-    // @todo Use parameter promotion.
-    $this->sparqlConnection = $sparql;
-  }
+  public function __construct(
+    protected RdfSyncConnectionInterface $sparql,
+  ) {}
 
   /**
    * Returns solutions without an affiliated collection.
@@ -60,7 +50,7 @@ WHERE {
 QUERY;
 
     $return = [];
-    $results = $this->sparqlConnection->query($query);
+    $results = $this->sparql->query($query);
     if (!empty($results)) {
       foreach ($results as $result) {
         $return[$result->solution_id->getUri()] = $result->solution_id->getUri();

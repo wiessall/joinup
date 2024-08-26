@@ -24,8 +24,8 @@ class AdmsValidatorContext extends RawDrupalContext {
       $sparql_graph->getEntityTypeGraphUris('rdf_entity'),
       [['default' => \Drupal::config('rdf_sync.settings')->get('graph_uri')]]
     );
-    /** @var \Drupal\sparql_entity_storage\Driver\Database\sparql\ConnectionInterface $sparql_endpoint */
-    $sparql_endpoint = \Drupal::service('sparql.endpoint');
+    /** @var \Drupal\rdf_sync\RdfSyncConnectionInterface $sparql_endpoint */
+    $sparql_endpoint = \Drupal::service('rdf_sync.connection');
     // Create a query to copy all the triples from the published graphs to
     // a validation one.
     $query = '';

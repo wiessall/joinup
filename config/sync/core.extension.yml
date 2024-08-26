@@ -227,7 +227,6 @@ module:
   solution: 0
   sparql_endpoint: 0
   sparql_endpoint_piwik: 0
-  sparql_entity_storage: 0
   state_machine: 0
   state_machine_permissions: 0
   state_machine_revisions: 0

@@ -14,7 +14,7 @@ use Drupal\csv_serialization\Encoder\CsvEncoder;
 use Drupal\joinup_community_content\CommunityContentHelper;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\JoinupGroupHelper;
-use Drupal\sparql_entity_storage\Driver\Database\sparql\ConnectionInterface;
+use Drupal\rdf_sync\RdfSyncConnectionInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,41 +25,20 @@ use Symfony\Component\HttpFoundation\Response;
 class SubscribersReportController extends ControllerBase {
 
   /**
-   * The SQL database connection.
-   *
-   * @var \Drupal\Core\Database\Connection
-   */
-  protected $sqlConnection;
-
-  /**
-   * The SPARQL database connection.
-   *
-   * @var \Drupal\sparql_entity_storage\Driver\Database\sparql\ConnectionInterface
-   */
-  protected $sparqlConnection;
-
-  /**
-   * The Symfony request stack.
-   *
-   * @var \Symfony\Component\HttpFoundation\RequestStack
-   */
-  protected $requestStack;
-
-  /**
    * Constructs a new SubscribersReportController.
    *
    * @param \Drupal\Core\Database\Connection $sqlConnection
    *   The SQL connection.
-   * @param \Drupal\sparql_entity_storage\Driver\Database\sparql\ConnectionInterface $sparqlConnection
+   * @param \Drupal\rdf_sync\RdfSyncConnectionInterface $sparqlConnection
    *   The SPARQL connection.
    * @param \Symfony\Component\HttpFoundation\RequestStack $requestStack
    *   The request stack.
    */
-  public function __construct(Connection $sqlConnection, ConnectionInterface $sparqlConnection, RequestStack $requestStack) {
-    $this->sqlConnection = $sqlConnection;
-    $this->sparqlConnection = $sparqlConnection;
-    $this->requestStack = $requestStack;
-  }
+  public function __construct(
+    protected Connection $sqlConnection,
+    protected RdfSyncConnectionInterface $sparqlConnection,
+    protected RequestStack $requestStack,
+  ) {}
 
   /**
    * {@inheritdoc}
@@ -67,7 +46,7 @@ class SubscribersReportController extends ControllerBase {
   public static function create(ContainerInterface $container): self {
     return new static(
       $container->get('database'),
-      $container->get('sparql.endpoint'),
+      $container->get('rdf_sync.connection'),
       $container->get('request_stack')
     );
   }

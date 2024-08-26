@@ -4,12 +4,10 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_sparql\Kernel;
 
-use Drupal\Core\Database\Query\Query;
 use Drupal\Core\Entity\Query\QueryInterface;
 use Drupal\KernelTests\KernelTestBase;
-use Drupal\node\Entity\Node;
 use Drupal\Tests\sparql_entity_storage\Traits\SparqlConnectionTrait;
-use Drupal\sparql_entity_storage\Entity\Query\Sparql\SparqlQueryInterface;
+use Drupal\node\Entity\Node;
 
 /**
  * Tests the default graphs event subscriber.
