@@ -7,8 +7,8 @@
 
 declare(strict_types=1);
 
+use Drupal\Core\Template\Attribute;
 use Drupal\interoperable_europe\InteroperableEuropeCollectionInterface;
-use Drupal\page_manager\PageInterface;
 use Drupal\rdf_entity\RdfInterface;
 use Drupal\topic\Entity\TopicMetaEntityInterface;
 
@@ -71,17 +71,14 @@ function ventuno_preprocess_page(array &$variables): void {
     }
   }
 
-  $pageManagerPage = $route_match->getParameter('page_manager_page');
-  $pageManagerPageId = $pageManagerPage instanceof PageInterface
-    ? $pageManagerPage->id()
-    : NULL;
+  $pageManagerPageId = $route_match->getRouteObject()?->getDefault('_page_manager_page');
   if ($pageManagerPageId) {
     // Indicate that the page is a page manager page.
     $variables['page_manager']['id'] = $pageManagerPageId;
 
     // Add Page Manager page specific libraries if we have any.
     if (array_key_exists("page_manager.$pageManagerPageId", \Drupal::service('library.discovery')->getLibrariesByExtension('ventuno'))) {
-      $variables['#attached']['library'][] = "ventuno/page_manager.$pmid";
+      $variables['#attached']['library'][] = "ventuno/page_manager.$pageManagerPageId";
     }
   }
 }
@@ -133,6 +130,12 @@ function ventuno_theme_suggestions_page_alter(array &$suggestions, array $variab
   if ($node = \Drupal::routeMatch()->getParameter('node')) {
     $content_type = $node->bundle();
     $suggestions[] = 'page__' . $content_type;
+  }
+
+  // Reuse search template for OSS catalogue search page.
+  if (($view_id = \Drupal::routeMatch()->getParameter('view_id'))
+    && $view_id === 'search_oss_catalogue') {
+    $suggestions[] = 'page__search';
   }
 }
 
@@ -253,4 +256,32 @@ function ventuno_preprocess_layout__threecol_section(array &$variables): void {
   $variables['first_col_class'] = $first_col_class;
   $variables['second_col_class'] = $second_col_class;
   $variables['third_col_class'] = $third_col_class;
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function ventuno_preprocess_layout(array &$variables): void {
+  $base = 'l-ventuno--' . $variables['layout']->id();
+  $bases[] = $base;
+  if (!empty($variables['content']['#settings']['label'])) {
+    $labelLower = mb_strtolower($variables['content']['#settings']['label']);
+    $labelVariant = preg_replace('/[\W]/', '_', $labelLower);
+    $labelVariant = preg_replace('/_+/', '-', $labelVariant);
+    $bases[] = "$base--section-label-{$labelVariant}";
+  }
+
+  $variables['attributes']['class'] = array_unique(
+    array_merge(
+      $variables['attributes']['class'] ?? [],
+      $bases,
+    )
+  );
+
+  foreach ($variables['region_attributes'] as $region_name => $attribute) {
+    assert($attribute instanceof Attribute);
+    foreach ($bases as $baseClass) {
+      $attribute->addClass("{$baseClass}__region-$region_name");
+    }
+  }
 }

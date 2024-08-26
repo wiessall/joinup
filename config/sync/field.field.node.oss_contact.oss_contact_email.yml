@@ -1,0 +1,19 @@
+uuid: bef38d49-5c67-4cdc-9a6b-8eb589e517f4
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.oss_contact_email
+    - node.type.oss_contact
+id: node.oss_contact.oss_contact_email
+field_name: oss_contact_email
+entity_type: node
+bundle: oss_contact
+label: Email
+description: 'Email address of the technical contact'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: email

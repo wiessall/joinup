@@ -33,6 +33,7 @@ class SolutionAffiliationTest extends KernelTestBase {
     'sparql_entity_storage',
     'state_machine',
     'system',
+    'search_api',
     'taxonomy',
     'user',
   ];

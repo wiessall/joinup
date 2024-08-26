@@ -119,6 +119,7 @@ Feature: Joining and leaving collections through the web interface
     And I press "Apply to selected items"
     And I press "Confirm"
     Then I should see "Ownership of Insectarium collection transferred from user insect researcher to newcomer researcher."
+    And Log entry with the message "Ownership granted to newcomer researcher for Insectarium by insect researcher." should exist.
 
     When I go to the homepage of the "Insectarium" collection
     And I click "Leave this collection"
@@ -169,7 +170,6 @@ Feature: Joining and leaving collections through the web interface
     And I should see the text "Sign in to join"
 
     When I press "Cancel" in the "Modal buttons" region
-    And I wait for AJAX to finish
     # Since this is a modal, the dialog simply closes instead of redirecting to
     # another page. This is why the collection title is still displayed.
     Then I should see the heading "Sapient Pearwood"
@@ -182,5 +182,4 @@ Feature: Joining and leaving collections through the web interface
     Then a modal should open
 
     When I press "Cancel" in the "Modal buttons" region
-    And I wait for AJAX to finish
     Then I should see the heading "Sapient Pearwood"

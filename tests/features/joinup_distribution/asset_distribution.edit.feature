@@ -1,4 +1,4 @@
-@api
+@api @group-e
 Feature: Asset distribution editing.
   In order to manage distributions
   As a solution owner or solution facilitator

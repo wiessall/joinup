@@ -262,7 +262,6 @@ class DistributionContext extends RawDrupalContext {
       throw new \Exception("The tile '$heading' was not found on the page.");
     }
 
-    $this->scrollElementIntoView($element);
     $element->clickLink($link);
   }
 

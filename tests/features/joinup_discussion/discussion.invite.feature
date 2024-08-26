@@ -1,4 +1,4 @@
-@api @group-h
+@api @group-e
 Feature: Invite members to subscribe to discussions
   In order to promote discussion of topics
   As a discussion author or moderator
@@ -130,24 +130,20 @@ Feature: Invite members to subscribe to discussions
     And I should not see the text "Shaquila Paternoster (paternoster)"
 
     When I type "Glory Ruskin" in the "Name" autocomplete field
-    And I wait for AJAX to finish
     And I wait until the page contains the text "Glory Ruskin (Glory Ruskin)"
     And I pick "Glory Ruskin (Glory Ruskin)" from the autocomplete suggestions
-    And I wait for AJAX to finish
     Then the page should show only the chips:
       | Glory Ruskin |
 
     When I type "Lynwood Crawford" in the "Name" autocomplete field
     And I wait until the page contains the text "Lynwood Crawford (Lynwood Crawford)"
     And I pick "Lynwood Crawford (Lynwood Crawford)" from the autocomplete suggestions
-    And I wait for AJAX to finish
     Then the page should show the chips:
       | Glory Ruskin     |
       | Lynwood Crawford |
 
     # Delete a chip.
     When I press the remove button on the chip "Lynwood Crawford"
-    And I wait for AJAX to finish
     Then the page should show only the chips:
       | Glory Ruskin |
 
@@ -155,7 +151,6 @@ Feature: Invite members to subscribe to discussions
     When I type "paternoster" in the "Name" autocomplete field
     And I wait until the page contains the text "Shaquila Paternoster (paternoster)"
     And I pick "Shaquila Paternoster (paternoster)" from the autocomplete suggestions
-    And I wait for AJAX to finish
     Then the page should show the chips:
       | Glory Ruskin         |
       | Shaquila Paternoster |
@@ -176,10 +171,7 @@ Feature: Invite members to subscribe to discussions
 
     # Try if it is possible to resend an invitation.
     When I type "Glory Ruskin" in the "Name" autocomplete field
-    And I wait for AJAX to finish
-    And I wait until the page contains the text "Glory Ruskin (Glory Ruskin)"
     And I pick "Glory Ruskin (Glory Ruskin)" from the autocomplete suggestions
-    And I wait for AJAX to finish
     Then the page should show only the chips:
       | Glory Ruskin |
     When I press "Invite to discussion"
@@ -214,7 +206,6 @@ Feature: Invite members to subscribe to discussions
     When I type "Glory Ruskin" in the "Name" autocomplete field
     And I wait until the page contains the text "Glory Ruskin (Glory Ruskin)"
     And I pick "Glory Ruskin (Glory Ruskin)" from the autocomplete suggestions
-    And I wait for AJAX to finish
     Then the page should show only the chips:
       | Glory Ruskin |
     When I press "Invite to discussion"

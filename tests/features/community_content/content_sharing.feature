@@ -1,4 +1,4 @@
-@api @group-c
+@api @group-b
 Feature: Sharing content between collections
   As a privileged user
   I want to share content between collections
@@ -81,7 +81,6 @@ Feature: Sharing content between collections
     Given I mark all emails as read
     When I check "Classic Rock"
     And I press "Share" in the "Modal buttons" region
-    And I wait for AJAX to finish
     Then I should see the success message "Item was shared on the following groups: Classic Rock."
     Then 0 e-mails should have been sent
     # Verify that the groups where the content has already been shared are not shown anymore in the list.
@@ -127,7 +126,6 @@ Feature: Sharing content between collections
     # Unshare the content.
     When I check "Classic Rock"
     And I press "Submit" in the "Modal buttons" region
-    And I wait for AJAX to finish
 
     # I should still be on the same page, but the group content should be
     # changed. The "Interesting content" should no longer be visible.
@@ -196,7 +194,6 @@ Feature: Sharing content between collections
     And the following fields should be present "Essos city"
     When I check "Essos city"
     And I press "Share" in the "Modal buttons" region
-    And I wait for AJAX to finish
     Then I should see the success message "Item was shared on the following groups: Essos city."
 
     When I visit the content overview
@@ -313,6 +310,7 @@ Feature: Sharing content between collections
     And I add a layout paragraph in the "Custom page body" form field with the following properties:
       | layout | one column |
     And I click "Choose component"
+    And a modal should open
     And I click "Carousel"
     And I check "Global search"
     And I check "Allow shared content"
@@ -364,7 +362,6 @@ Feature: Sharing content between collections
       | Other groups on Joinup |
     When I check "Gossip"
     And I press "Share" in the "Modal buttons" region
-    And I wait for AJAX to finish
     Then I should see the success message "Item was shared on the following groups: Gossip."
     And I should see the heading "Shared on"
     And I should see the "Gossip" tile

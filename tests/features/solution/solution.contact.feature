@@ -1,4 +1,4 @@
-@api @group-g
+@api @group-i
 Feature: Contact form for solution
   User can use contact form.
 

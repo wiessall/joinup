@@ -1,4 +1,4 @@
-@api @group-g
+@api @group-e
 Feature: View discussion API
   As a visitor of the website I can view a discussion content.
 

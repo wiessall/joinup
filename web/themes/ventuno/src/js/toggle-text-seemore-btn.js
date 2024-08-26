@@ -1,26 +1,33 @@
 /**
  * @file
- * Toggles text inside the "See more" button in topic header, Collections and Solutions description field.
+ * Toggles text inside the "See more" buttons.
  */
-((Drupal, drupalSettings) => {
+
+((Drupal) => {
   Drupal.behaviors.toggleTextSeemoreBtn = {
-    attach() {
-      const collapseSeeMore = document.getElementById("collapseSeeMore");
-      const button = document.getElementById("seeMoreBtn");
-      const seeMore = Drupal.t("See more");
-      const seeLess = Drupal.t("See less");
-      const chevronDown = `<svg class="bi icon--s"><use xlink:href="${drupalSettings.bcl_icon_path}#chevron-down"></use></svg>`;
-      const chevronUp = `<svg class="bi icon--s"><use xlink:href="${drupalSettings.bcl_icon_path}#chevron-up"></use></svg>`;
-
-      if (button) {
-        collapseSeeMore.addEventListener("hidden.bs.collapse", () => {
-          button.innerHTML = `${seeMore} ${chevronDown}`;
-        });
-
-        collapseSeeMore.addEventListener("shown.bs.collapse", () => {
-          button.innerHTML = `${seeLess} ${chevronUp}`;
-        });
+    attach(context) {
+      const buttons = context.querySelectorAll(".js-see-more-btn");
+      if (buttons.length === 0) {
+        return;
       }
+
+      const seeMore = `${Drupal.t("See more")} <svg class="bi icon--s"><use xlink:href="${drupalSettings.bcl_icon_path}#chevron-down"></use></svg>`;
+      const seeLess = `${Drupal.t("See less")} <svg class="bi icon--s"><use xlink:href="${drupalSettings.bcl_icon_path}#chevron-up"></use></svg>`;
+      buttons.forEach((button) => {
+        const collapse = context.querySelector(
+          button.getAttribute("data-bs-target"),
+        );
+        if (!collapse) {
+          return;
+        }
+
+        collapse.addEventListener("hidden.bs.collapse", () => {
+          button.innerHTML = seeMore;
+        });
+        collapse.addEventListener("shown.bs.collapse", () => {
+          button.innerHTML = seeLess;
+        });
+      });
     },
   };
 })(Drupal, drupalSettings);

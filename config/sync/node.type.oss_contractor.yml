@@ -1,0 +1,21 @@
+uuid: d2c59add-6d25-4b23-9414-411403dd5e60
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+third_party_settings:
+  menu_ui:
+    available_menus: {  }
+    parent: ''
+label_singular: 'open source software contractor'
+label_plural: 'open source software contractors'
+label_count:
+  - '1 open source software contractor\x03@count open source software contractors'
+name: 'Open Source Software Contractor'
+type: oss_contractor
+description: 'An open source software contractor'
+help: null
+new_revision: true
+preview_mode: 0
+display_submitted: false

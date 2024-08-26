@@ -111,7 +111,6 @@ Feature: Collection membership administration
     And I should see the text "Want to receive notifications, too?"
 
     When I press "Subscribe" in the "Modal buttons" region
-    And I wait for AJAX to finish
     Then I should see the success message "You have been subscribed to Medical diagnosis and will receive weekly notifications once your membership is approved."
 
     # Approve a membership.
@@ -177,6 +176,8 @@ Feature: Collection membership administration
 
     Given I press "Confirm"
     Then I should see the success message "The following members were removed from the 'Medical diagnosis' collection: Gregory House, Turkey Ham"
+    And Log entry with the message "Membership for Kathie Cumbershot in Medical diagnosis has been deleted by Lisa Cuddy." should exist.
+    And Log entry with the message "Membership for Turkey Ham in Medical diagnosis has been deleted by Lisa Cuddy." should exist.
     And I should see "Lisa Cuddy" in the "Lisa Cuddy" row
 
     # Check new privileges.
@@ -289,6 +290,7 @@ Feature: Collection membership administration
     When I select "Facilitator" from "Role"
     And I press "Add members"
     Then I should see the success message "Successfully added the role Collection facilitator to the selected users."
+    And Log entry with the message "Successfully added the collection facilitator role in Medical diagnosis to Donald Duck by Daniel Moder." should exist.
     And I should see the link "Donald Duck"
 
     # Check given privileges.
@@ -372,6 +374,7 @@ Feature: Collection membership administration
     When I am logged in as "dwightone"
     And I accept the invitation for the "Medical diagnosis" collection group
     Then I should see the text "You have been promoted to collection facilitator"
+    And Log entry with the message "Christian Dwight accepted the invitation to Medical diagnosis as collection facilitator role." should exist.
     And I am on the members page of "Medical diagnosis"
     Then I should not see the link "Add members"
     But I should see the link "Invite members"
@@ -431,6 +434,7 @@ Feature: Collection membership administration
     And I pick "Donald Duck (Donald Duck)" from the "Link" autocomplete suggestions
     And I press "Invite members"
     Then I should see the success message "1 user has been invited to this group."
+    And Log entry with the message "The member Donald Duck has been invited by Daniel Moder to Medical diagnosis." should exist.
 
     When I click "Add members"
     And I type "Turkey" in the "Name" autocomplete field
@@ -447,3 +451,4 @@ Feature: Collection membership administration
       | Turkey Ham |
     And I press "Add members"
     Then I should see the success message "Successfully added the role Member to the selected users."
+    And Log entry with the message "Turkey Ham added as member to Medical diagnosis by Daniel Moder." should exist.

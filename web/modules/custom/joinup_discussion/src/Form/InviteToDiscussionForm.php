@@ -8,6 +8,7 @@ use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
@@ -40,6 +41,8 @@ class InviteToDiscussionForm extends InviteFormBase {
    *   The entity type manager service.
    * @param \Drupal\joinup_invite\InvitationMessageHelperInterface $invitationMessageHelper
    *   The helper service for creating messages for invitations.
+   * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
+   *   The logger channel service.
    * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
    *   The event dispatcher.
    * @param \Drupal\joinup_subscription\JoinupDiscussionSubscriptionInterface $subscription
@@ -50,11 +53,12 @@ class InviteToDiscussionForm extends InviteFormBase {
   public function __construct(
     EntityTypeManagerInterface $entityTypeManager,
     InvitationMessageHelperInterface $invitationMessageHelper,
+    LoggerChannelInterface $logger,
     protected EventDispatcherInterface $eventDispatcher,
     protected JoinupDiscussionSubscriptionInterface $subscription,
     protected OgAccessInterface $ogAccess,
   ) {
-    parent::__construct($entityTypeManager, $invitationMessageHelper);
+    parent::__construct($entityTypeManager, $invitationMessageHelper, $logger);
   }
 
   /**
@@ -64,6 +68,7 @@ class InviteToDiscussionForm extends InviteFormBase {
     return new static(
       $container->get('entity_type.manager'),
       $container->get('joinup_invite.invitation_message_helper'),
+      $container->get('logger.channel.group_membership'),
       $container->get('event_dispatcher'),
       $container->get('joinup_subscription.discussion_subscription'),
       $container->get('og.access')

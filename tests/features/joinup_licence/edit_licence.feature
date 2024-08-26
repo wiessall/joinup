@@ -1,4 +1,4 @@
-@api @group-a
+@api @group-f
 Feature: Edit licence through UI
   In order to manage licences
   As a moderator or a licence_manager

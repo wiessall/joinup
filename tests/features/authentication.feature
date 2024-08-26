@@ -96,6 +96,7 @@ Feature: User authentication
       | propose/collection |
       | user               |
       | user/subscriptions |
+      | sparql             |
 
   Scenario Outline: Authenticated user cannot access site administration
     Given I am logged in as a user with the "authenticated" role

@@ -1,4 +1,4 @@
-@api @group-g
+@api @group-i
 Feature: Solution membership administration
   In order to manage a solution
   As a privileged user
@@ -17,8 +17,8 @@ Feature: Solution membership administration
       | Guadalupe Norman | guadalupe_norman@example.com | Guadalupe  | Norman      |
       | Marcia Garcia    | marcia_garcia@example.com    | Marcia     | Garcia      |
     And the following solutions:
-      | title            | related solutions | description                       | documentation | moderation | logo     | topic      | state     | solution type | owner                | contact information                      |
-      | The Missing Sons |                   | Blazing fast segmentation faults. | text.pdf      | no         | logo.png | Demography | published |               | James Wilson the 2nd | Princeton-Plainsboro Teaching University |
+      | title            | related solutions | description                       | documentation | moderation | logo     | state     | solution type | owner                | contact information                      |
+      | The Missing Sons |                   | Blazing fast segmentation faults. | text.pdf      | no         | logo.png | published |               | James Wilson the 2nd | Princeton-Plainsboro Teaching University |
     And the following solution user memberships:
       | solution         | user             | roles       |
       | The Missing Sons | Guadalupe Norman | facilitator |
@@ -131,6 +131,7 @@ Feature: Solution membership administration
     # Accept the invitation directly.
     When I am logged in as "dwightone"
     And I accept the invitation for the "The Missing Sons" solution group
+    And Log entry with the message "Christian Dwight accepted the invitation to The Missing Sons as solution facilitator role." should exist.
     And I go to the members page of "The Missing Sons"
     Then I should see the link "Invite members"
     When I click "Invite members"
