@@ -1,5 +1,5 @@
 moderation.content_moderation_overview:
-  path: '/node/{group}/moderate'
+  path: '/node/{node}/moderate'
   defaults:
     _form: '\Drupal\moderation\Form\ContentModerationOverviewForm'
     _title: 'Content moderation'
@@ -8,7 +8,7 @@ moderation.content_moderation_overview:
     _joinup_group: 'TRUE'
   options:
     parameters:
-      group:
+      node:
         type: entity:node
         bundle:
           - collection

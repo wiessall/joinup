@@ -10,7 +10,6 @@ declare(strict_types=1);
 use Drupal\Core\Url;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\node\Entity\Node;
-use Drupal\sparql_entity_storage\UriEncoder;
 
 /**
  * Implements hook_preprocess_views_view_rss__group_feed__rss_feed().
@@ -20,9 +19,8 @@ use Drupal\sparql_entity_storage\UriEncoder;
 function joinup_rss_preprocess_views_view_rss__group_feed__rss_feed(&$variables): void {
   // Load the entity from the first view argument. The argument has been already
   // published early, so we can expect a group to be loaded successfully.
-  // @todo Update this with the RDF entity data changed to node.
-  $encoded_uri_id = $variables['view']->args[0];
-  $group = Node::load(UriEncoder::decodeUrl($encoded_uri_id));
+  $id = $variables['view']->args[0];
+  $group = Node::load($id);
 
   $replacements = [
     '@label' => $group->label(),
@@ -59,7 +57,7 @@ function joinup_rss_page_attachments(array &$attachments): void {
   }
 
   $url = Url::fromRoute('view.group_feed.rss_feed', [
-    'node' => UriEncoder::encodeUrl($entity->id()),
+    'node' => $entity->id(),
   ])->setAbsolute();
 
   if ($url->access()) {
