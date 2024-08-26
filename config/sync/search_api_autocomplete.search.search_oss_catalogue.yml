@@ -1,0 +1,39 @@
+uuid: bd542bda-413c-43c6-a654-32eba0e2a074
+langcode: en
+status: true
+dependencies:
+  config:
+    - search_api.index.oss_catalogue
+    - views.view.search_oss_catalogue
+  module:
+    - views
+    - search_api_autocomplete
+id: search_oss_catalogue
+label: 'Search oss catalogue'
+index_id: oss_catalogue
+suggester_settings:
+  live_results:
+    fields: {  }
+    highlight:
+      enabled: false
+      field: ''
+    suggest_keys: true
+    view_modes:
+      'entity:node':
+        oss_solution: ''
+suggester_weights:
+  live_results: 0
+suggester_limits:
+  live_results: 10
+search_settings:
+  'views:search_oss_catalogue':
+    displays:
+      default: true
+      selected: {  }
+options:
+  limit: 10
+  min_length: 3
+  show_count: false
+  delay: null
+  submit_button_selector: ':submit'
+  autosubmit: true

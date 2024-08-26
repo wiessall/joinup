@@ -1,4 +1,4 @@
-@api @group-f
+@api @group-h
 Feature:
   As a site builder of the site
   I need to be able to use "Social media" paragraphs for content.
@@ -19,6 +19,7 @@ Feature:
     Then I am logged in as a facilitator of the "Paragraphs collection" collection
     And I go to the edit form of the "Social media page" "custom page"
     And I click "Choose component"
+    And a modal should open
     And I click "Social media"
     When the available options in the "Platform" select should be "- None -, X, LinkedIn, Youtube, Mastodon, Facebook, Whatsapp, Vimeo, Instagram, GitHub"
     Then I select "X" from "Platform" in the "Modal content" region

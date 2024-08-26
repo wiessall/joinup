@@ -1,0 +1,26 @@
+uuid: 555a66b5-437c-4e3a-b094-8933a3f3a588
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.oss_source
+    - node.type.oss_solution
+  module:
+    - pluginreference
+id: node.oss_solution.oss_source
+field_name: oss_source
+entity_type: node
+bundle: oss_solution
+label: 'Source catalogue'
+description: 'The source Catalogue or any other provider the specific OSS Solution belongs to or is federated from'
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:eu_oss_catalogue.provider'
+  handler_settings:
+    sort:
+      key: label
+      direction: ASC
+field_type: plugin_reference

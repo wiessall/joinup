@@ -1,0 +1,42 @@
+uuid: 3ce6b8f9-aae1-43e8-98ff-b5c7d42bde38
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+    - node_revision_delete
+third_party_settings:
+  menu_ui:
+    available_menus: {  }
+    parent: ''
+  node_revision_delete:
+    amount:
+      status: true
+      settings:
+        amount: 15
+    created:
+      status: false
+      settings:
+        age: 1
+    drafts:
+      status: false
+      settings:
+        age: 1
+    only_drafts:
+      status: false
+      settings:
+        age: 0
+_core:
+  default_config_hash: D4RUL67nUPtd5VbJ908K4vuxx4rq48Px0mexni3yPJY
+label_singular: 'OSS Solution'
+label_plural: 'OSS Solutions'
+label_count:
+  0: !!binary MSBvcGVuIHNvdXJjZSBzb2Z0d2FyZSBzb2x1dGlvbgNAY291bnQgb3BlbiBzb3VyY2Ugc29mdHdhcmUgc29sdXRpb25z
+  no_count_capitalize: !!binary T3BlbiBzb3VyY2Ugc29mdHdhcmUgc29sdXRpb24DT3BlbiBzb3VyY2Ugc29mdHdhcmUgc29sdXRpb25z
+name: 'Open Source Software Solution'
+type: oss_solution
+description: 'A federated open source software business solution'
+help: null
+new_revision: true
+preview_mode: 0
+display_submitted: false

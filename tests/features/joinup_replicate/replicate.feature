@@ -1,4 +1,4 @@
-@api @group_c
+@api @group-g
 Feature: Cloning of entities
 
   Background:

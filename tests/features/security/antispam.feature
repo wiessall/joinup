@@ -1,4 +1,4 @@
-@api @javascript @antispam @group-i
+@api @javascript @antispam @group-h
 Feature: As a visitor or logged-in user, when I want to post content, the form
   should be protected by Antibot & Honeypot.
 
@@ -69,7 +69,6 @@ Feature: As a visitor or logged-in user, when I want to post content, the form
     And the form is protected by Honeypot
 
     When I click "Share"
-    And I wait for AJAX to finish
     Then the form is protected by Antibot
     And the form is protected by Honeypot
 

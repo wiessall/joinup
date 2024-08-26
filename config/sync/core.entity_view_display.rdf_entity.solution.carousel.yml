@@ -172,6 +172,7 @@ hidden:
   field_spatial_coverage: true
   field_status: true
   field_topic: true
+  flag_interoperability: true
   langcode: true
   members: true
   og_group: true

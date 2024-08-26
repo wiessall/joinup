@@ -76,12 +76,10 @@ Feature: CKEditor5
     And I should not see "Pager test fourteen"
 
     When I attach the file "alan.jpg" to "Add file"
-    And I wait for AJAX to finish
 
     When I fill in "Name" with "This is Alan we love"
     And I fill in "Alternative text" with "This is Alan portrait"
     And I press "Save" in the "Modal buttons" region
-    And I wait for AJAX to finish
 
     Then I should see "The Image in Shaping of disruption"
     And I should see "This is Alan we love"
@@ -165,7 +163,6 @@ Feature: CKEditor5
 
     # Use the pager.
     When I click "Go to page 2"
-    And I wait for AJAX to finish
     Then I should not see "Too angry for Angry Birds"
     And I should not see "Pager test 1"
     And I should not see "Pager test 2"
@@ -190,9 +187,6 @@ Feature: CKEditor5
     And a modal should open
     And I select "Name (A-Z)" from "Sort by"
     And I press "Apply filters"
-    # Prevent "stale element reference" error.
-    And I wait for 1 second
-    And I wait for AJAX to finish
     Then the "Ventuno media library" table should be:
       |  | Thumbnail | Name                | Authored by | Updated                 |
       |  |           | Pager test 1        | Anonymous   | Mon, 25/07/2016 - 13:00 |
@@ -216,9 +210,6 @@ Feature: CKEditor5
 
     # Use the pager.
     When I click "Go to page 2"
-    And I wait for AJAX to finish
-    # Wait for the animation to finish.
-    And I wait for 2 second
     But I should not see "Pager test 1"
     And I should not see "Pager test 2"
     And I should not see "Pager test 3"

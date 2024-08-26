@@ -1,0 +1,342 @@
+default:
+  data:
+    search:
+      nodes:
+        - id: GitHub-solution-1-internal-ID
+          description: Description of GitHub solution 1
+          name: dummy-name-1
+          forkCount: 101
+          stargazerCount: 121
+          issues:
+            totalCount: 141
+          # This logo is ignored as a valid one is provided in publiccode.yml.
+          openGraphImageUrl: https://repository-images.githubusercontent.com/123123123/012345678901234567890123456789012345
+          owner:
+            login: dummy-namespace-1
+          defaultBranchRef:
+            name: default-branch-of-GitHub-solution-1
+          latestRelease:
+            tagName: '2.3.0'
+            createdAt: '2023-04-19'
+          pullRequests:
+            totalCount: 8
+          file__publiccodeYml:
+            text: |
+              publiccodeYmlVersion: "0.2"
+              name: GitHub solution 1
+              url: http://example.com/vendor/solution1
+              softwareVersion: '1.4'
+              releaseDate: "2017-05-01"
+              logo: images/logo-solution-1.png
+              platforms:
+                - web
+              categories:
+                - digital-citizenship
+              developmentStatus: stable
+              softwareType: standalone/web
+              description:
+                it:
+                  genericName: '[IT] ACME Solution 1'
+                  shortDescription: '[IT] Solution 1: **Short description**'
+                  longDescription: |
+                    [IT] Solution 1: Long description
+                    **Some bold text**
+                    * Some list item
+                    * Another list item
+                    _Some italic text_
+                  features:
+                    - '[IT] Solution 1: Feature 1'
+                    - '[IT] Solution 1: Feature 2'
+                  screenshots:
+                    - 'Solution_1_IT_Screenshot1.jpg'
+                en:
+                  genericName: '[EN] ACME Solution 1'
+                  shortDescription: '[EN] Solution 1: **Short description**'
+                  longDescription: |
+                    [EN] Solution 1: Long description
+                    **Some bold text**
+                    * Some list item
+                    * Another list item
+                    _Some italic text_
+                  features:
+                    - '[EN] Solution 1: Feature 1'
+                    - '[EN] Solution 1: Feature 2'
+                    - '[EN] Solution 1: Feature 3'
+                  screenshots:
+                    - 'Solution_1_EN_Screenshot1.jpg'
+                de:
+                  genericName: '[DE] ACME Solution 1'
+                  shortDescription: '[DE] Solution 1: **Short description**'
+                  longDescription: |
+                    [DE] Solution 1: Long description
+                    **Some bold text**
+                    * Some list item
+                    * Another list item
+                    _Some italic text_
+                  features:
+                    - '[DE] Solution 1: Feature 1'
+                  screenshots:
+                    - 'Solution_1_DE_Screenshot1.jpg'
+              legal:
+                license: AGPL-3.0-or-later
+                mainCopyrightOwner: Sin City
+                repoOwner: Sin City Master
+              maintenance:
+                type: contract
+                contractors:
+                  - name: ACME Ltd
+                    until: "2023-12-31"
+                    email: acme@example.com
+                    website: http://www.example.com/acme
+                  - name: Das Auto GmbH
+                    until: "2023-11-12"
+                    email: das-auto@example.com
+                    website: http://www.example.com/auto
+                contacts:
+                  - name: Peter Gregory
+                    email: pieter@raviga.com
+                    phone: RESERVED@
+                    affiliation: Pied Piper
+              localisation:
+                localisationReady: false
+                availableLanguages:
+                  - it
+                  - en
+                  - de
+              dependsOn:
+                proprietary:
+                  - name: Microsoft .NET
+                    versionMin: ""
+                    versionMax: ""
+                    optional: false
+                    version: "4.8"
+              it:
+                countryExtensionVersion: "0.2"
+                conforme:
+                  lineeGuidaDesign: true
+                  modelloInteroperabilita: false
+                  misureMinimeSicurezza: false
+                  gdpr: true
+                riuso:
+                  codiceIPA: r_emiro
+                piattaforme:
+                  spid: false
+                  pagopa: false
+                  cie: false
+                  anpr: false
+                  io: false
+
+        - id: GitHub-solution-2-internal-ID
+          description: Description of GitHub solution 2
+          name: dummy-name-2
+          forkCount: 102
+          stargazerCount: 122
+          issues:
+            totalCount: 142
+          # This will be used as logo from publiccode.yml doesn't exist.
+          openGraphImageUrl: https://repository-images.githubusercontent.com/234234234/012345678901234567890123456789012345
+          owner:
+            login: dummy-namespace-2
+          defaultBranchRef:
+            name: default-branch-of-GitHub-solution-2
+          pullRequests:
+            totalCount: 0
+          file__publiccodeYml:
+            text: |
+              publiccodeYmlVersion: "0.4"
+              name: GitHub solution 2
+              url: http://example.com/vendor/solution2.git
+              landingURL: http://landing.example.com/vendor/solution2
+              # This file doesn't exist.
+              logo: path/to/images/logo.jpg
+              isBasedOn:
+                - Bootstrap
+              softwareVersion: 'v2.4'
+              releaseDate: "2016-02-09"
+              platforms:
+                - web
+              categories:
+                - website-builder
+              roadmap: http://roadmap.example.com/vendor/solution2
+              developmentStatus: development
+              softwareType: library
+              description:
+                it:
+                  genericName: '[IT] ACME Solution 2'
+                  shortDescription: '[IT] Solution 2: Short description Lorem ipsum'
+                  longDescription: |
+                    [IT] Solution 2: Long description Lorem ipsum dolor sit amet, consectetur
+                    adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
+                    aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi
+                    ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in
+                    voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
+                    occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim
+                    id est laborum.
+                  documentation: http://it.docs.example.com/vendor/solution2
+                  features:
+                    - '[IT] Solution 2: Feature 1'
+                    - '[IT] Solution 2: Feature 2'
+                    - '[IT] Solution 2: Feature 3'
+                    - '[IT] Solution 2: Feature 4'
+              legal:
+                license: BSD-3-Clause
+                mainCopyrightOwner: Narnia
+                authorsFile: http://authors.example.com/vendor/solution2
+              maintenance:
+                type: community
+                contacts:
+                  - name: FOSS Conference
+                    email: foss@example.com
+                    phone: '0040675555453'
+                    affiliation: OSS Affiliation
+                  - name: Pirate Initiative
+                    email: pirate@example.com
+                    phone: '0049689887764'
+                    affiliation: On The Sea
+              localisation:
+                localisationReady: false
+                availableLanguages:
+                  - it
+              it:
+                countryExtensionVersion: "1.0"
+                conforme:
+                  modelloInteroperabilita: false
+                  misureMinimeSicurezza: false
+                  gdpr: false
+                riuso:
+                  codiceIPA: pcm
+                piattaforme:
+                  spid: false
+                  pagopa: false
+                  cie: false
+                  anpr: false
+                  io: false
+developers_italia:
+  data:
+    search:
+      nodes:
+        - id: GitHub-solution-1-internal-ID
+          description: Description of GitHub solution 1
+          name: dummy-name-1
+          forkCount: 103
+          stargazerCount: 123
+          issues:
+            totalCount: 143
+          owner:
+            login: dummy-namespace-1
+          defaultBranchRef:
+            name: default-branch-of-GitHub-solution-1
+          pullRequests:
+            totalCount: 3
+          file__publiccodeYml:
+            text: |
+              publiccodeYmlVersion: "0.2"
+              name: GitHub solution 1
+              url: http://example.com/vendor/solution1
+              softwareVersion: '1.4'
+              releaseDate: "2017-05-01"
+              logo: images/logo-solution-1.png
+              platforms:
+                - web
+              categories:
+                - digital-citizenship
+              developmentStatus: stable
+              softwareType: standalone/web
+              description:
+                it:
+                  genericName: '[IT] ACME Solution 1'
+                  longDescription: |
+                    [IT] Solution 1: Long description
+                    **Some bold text**
+                    * Some list item
+                    * Another list item
+
+                    _Some italic text_
+                  shortDescription: '[IT] Solution 1: **Short description**'
+                  features:
+                    - '[IT] Solution 1: Feature 1'
+                    - '[IT] Solution 1: Feature 2'
+                  screenshots:
+                    - 'Solution_1_IT_Screenshot1.jpg'
+                en:
+                  genericName: '[EN] ACME Solution 1'
+                  longDescription: |
+                    [EN] Solution 1: Long description
+                    **Some bold text**
+                    * Some list item
+                    * Another list item
+
+                    _Some italic text_
+                  shortDescription: '[EN] Solution 1: **Short description**'
+                  features:
+                    - '[EN] Solution 1: Feature 1'
+                    - '[EN] Solution 1: Feature 2'
+                    - '[EN] Solution 1: Feature 3'
+                  screenshots:
+                    - 'Solution_1_EN_Screenshot1.jpg'
+                    - 'Solution_1_EN_Screenshot2.jpg'
+                de:
+                  genericName: '[DE] ACME Solution 1'
+                  longDescription: |
+                    [DE] Solution 1: Long description
+                    **Some bold text**
+                    * Some list item
+                    * Another list item
+
+                    _Some italic text_
+                  shortDescription: '[DE] Solution 1: **Short description**'
+                  features:
+                    - '[DE] Solution 1: Feature 1'
+                  screenshots:
+                    - 'Solution_1_DE_Screenshot1.jpg'
+                    - 'Solution_1_DE_Screenshot2-missing.jpg'
+                    - 'Solution_1_DE_Screenshot3.jpg'
+                    - 'Solution_1_DE_Screenshot4.jpg'
+              legal:
+                license: AGPL-3.0-or-later
+                mainCopyrightOwner: Sin City
+                repoOwner: Sin City Master
+              maintenance:
+                type: contract
+                contractors:
+                  - name: ACME Ltd
+                    until: "2023-12-31"
+                    email: acme@example.com
+                    website: http://www.example.com/acme
+                  - name: Das Auto GmbH
+                    until: "2023-11-12"
+                    email: das-auto@example.com
+                    website: http://www.example.com/auto
+                contacts:
+                  - name: Peter Gregory
+                    email: pieter@raviga.com
+                    phone: RESERVED@
+                    affiliation: Pied Piper
+              localisation:
+                localisationReady: false
+                availableLanguages:
+                  - it
+                  - en
+                  - de
+              dependsOn:
+                proprietary:
+                  - name: Microsoft .NET
+                    versionMin: ""
+                    versionMax: ""
+                    optional: false
+                    version: "4.8"
+              it:
+                countryExtensionVersion: "0.2"
+                conforme:
+                  lineeGuidaDesign: true
+                  modelloInteroperabilita: false
+                  misureMinimeSicurezza: false
+                  gdpr: true
+                riuso:
+                  codiceIPA: r_emiro
+                piattaforme:
+                  spid: false
+                  pagopa: false
+                  cie: false
+                  anpr: false
+                  io: false

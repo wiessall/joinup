@@ -1,0 +1,36 @@
+uuid: b048b4d7-c78e-40f9-bbfa-7be6688d7bc5
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.message.mail_body
+    - field.field.message.eu_oss_catalogue_log.oss_landing_url
+    - field.field.message.eu_oss_catalogue_log.oss_message
+    - field.field.message.eu_oss_catalogue_log.oss_severity
+    - field.field.message.eu_oss_catalogue_log.oss_solution
+    - field.field.message.eu_oss_catalogue_log.oss_source
+    - message.template.eu_oss_catalogue_log
+  module:
+    - layout_builder
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+id: message.eu_oss_catalogue_log.mail_body
+targetEntityType: message
+bundle: eu_oss_catalogue_log
+mode: mail_body
+content:
+  partial_1:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  oss_landing_url: true
+  oss_message: true
+  oss_severity: true
+  oss_solution: true
+  oss_source: true
+  partial_0: true
+  search_api_excerpt: true

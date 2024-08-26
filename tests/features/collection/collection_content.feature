@@ -89,7 +89,6 @@ Feature: Collection content
     When I go to the homepage of the "Turin Egyptian Collection" collection
     And I press "Join this collection"
     And I press "Subscribe" in the "Modal buttons" region
-    And I wait for AJAX to finish
     Then I go to "/user"
     # Assert that the "Collection" tile is present and contains number of members, label and bundle type.
     Then I should see the "Turin Egyptian Collection" tile
@@ -158,7 +157,7 @@ Feature: Collection content
     # Check the event tile.
     And I should see the "Opening of the Hellenistic Period Section" tile
     And I should see the text "15/03/2016" in the "Opening of the Hellenistic Period Section" tile
-    And I should see the text "Physical event" in the "Opening of the Hellenistic Period Section" tile
+    And I should see the text "Virtual event" in the "Opening of the Hellenistic Period Section" tile
     And I should see the link "Opening of the Hellenistic Period Section" in the "Opening of the Hellenistic Period Section" tile
     And I should see the text "Supplier exchange" in the "Opening of the Hellenistic Period Section" tile
     And I should see the text "Event" in the "Opening of the Hellenistic Period Section" tile

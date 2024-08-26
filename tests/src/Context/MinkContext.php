@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup\Context;
 
+use Behat\Mink\Element\ElementInterface;
 use Behat\Mink\Selector\Xpath\Escaper;
 use Drupal\DrupalExtension\Context\MinkContext as DrupalExtensionMinkContext;
 use Drupal\joinup\Traits\JavascriptTrait;
@@ -15,35 +16,6 @@ use PHPUnit\Framework\ExpectationFailedException;
 class MinkContext extends DrupalExtensionMinkContext {
 
   use JavascriptTrait;
-
-  /**
-   * {@inheritdoc}
-   */
-  public function checkOption($option): void {
-    $this->scrollNamedElementIntoView('checkbox', $option);
-    parent::checkOption($option);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function uncheckOption($option): void {
-    $this->scrollNamedElementIntoView('checkbox', $option);
-    parent::uncheckOption($option);
-  }
-
-  /**
-   * {@inheritdoc}
-   *
-   * @Then the :radio radio button should be selected
-   */
-  public function assertCheckboxChecked($radio) {
-    // We're just adding a step definition, not changing the actual code. Trick
-    // PHP_CodeSniffer so it doesn't throw 'Useless method detected.'.
-    // @codingStandardsIgnoreLine
-    $tricksy = TRUE;
-    parent::assertCheckboxChecked($radio);
-  }
 
   /**
    * {@inheritdoc}
@@ -81,48 +53,6 @@ class MinkContext extends DrupalExtensionMinkContext {
   /**
    * {@inheritdoc}
    */
-  public function clickLink($link): void {
-    // Overriding the base method for Javascript tests.
-    $this->scrollNamedElementIntoView('link', $link);
-    parent::clickLink($link);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function pressButton($button): void {
-    // Overriding the base method for Javascript tests.
-    $this->scrollNamedElementIntoView('button', $button);
-    parent::pressButton($button);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function assertLinkVisible($link): void {
-    $this->scrollNamedElementIntoView('link', $link);
-    parent::assertLinkVisible($link);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function fillField($field, $value): void {
-    $this->scrollNamedElementIntoView('field', $field);
-    parent::fillField($field, $value);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function attachFileToField($field, $path): void {
-    $this->scrollNamedElementIntoView('field', $field);
-    parent::attachFileToField($field, $path);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function assertSelectRadioById($label, $id = ''): void {
     $page = $this->getSession()->getPage();
     if ($id) {
@@ -144,7 +74,6 @@ class MinkContext extends DrupalExtensionMinkContext {
       throw new \Exception(sprintf("Button with id '%s' has label '%s' instead of '%s' on the page %s", $id, $label_on_page, $label, $this->getSession()->getCurrentUrl()));
     }
 
-    $this->scrollElementIntoView($radio);
     $radio->selectOption($value);
   }
 
@@ -153,10 +82,9 @@ class MinkContext extends DrupalExtensionMinkContext {
    */
   public function assertRegionPressButton($button, $region): void {
     $region_node = $this->getRegion($region);
-    if (!$button_node = $region_node->findButton($button)) {
+    if (!$region_node->findButton($button)) {
       throw new \Exception("The button '$button' was not found in the region '$region' on the page {$this->getSession()->getCurrentUrl()}");
     }
-    $this->scrollElementIntoView($button_node);
     $region_node->pressButton($button);
   }
 
@@ -171,7 +99,6 @@ class MinkContext extends DrupalExtensionMinkContext {
     if (empty($link_obj)) {
       throw new \Exception(sprintf('The link "%s" was not found in the region "%s" on the page %s', $link, $region, $this->getSession()->getCurrentUrl()));
     }
-    $this->scrollElementIntoView($link_obj);
     $link_obj->click();
   }
 
@@ -191,6 +118,13 @@ class MinkContext extends DrupalExtensionMinkContext {
   }
 
   /**
+   * {@inheritdoc}
+   */
+  public function attachFileToField($field, $path): void {
+    $this->attachFile($field, $path);
+  }
+
+  /**
    * Change the attachments file to field in the specified region.
    *
    * Example: And I attach the file "hi.png" to "image" in the "Modal" region.
@@ -198,8 +132,27 @@ class MinkContext extends DrupalExtensionMinkContext {
    * @Given /^(?:|I )attach the file "(?P<path>[^"]*)" to "(?P<field>(?:[^"]|\\")*)" in the "(?P<region>[^"]*)" region$/
    */
   public function attachRegionFileToField(string $field, string $path, string $region): void {
-    $field = $this->fixStepArgument($field);
+    $this->attachFile($field, $path, $this->getRegion($region));
+  }
 
+  /**
+   * Helper to attach a file to a field.
+   */
+  protected function attachFile(string $field, string $path, ?ElementInterface $container = NULL): void {
+    $container = $container ?: $this->getSession()->getPage();
+    $field = $this->fixStepArgument($field);
+    $field_element = $this->assertSession()->fieldExists($field, $container);
+
+    // Wait for the file upload element to be active.
+    // See Drupal.file.disableFields which disables all file upload elements
+    // when any .js-form-submit (e.g. AJAX buttons) get triggered.
+    if ($this->hasJavascriptSupport()) {
+      $this->waitUntil(function () use ($field_element): bool {
+        return !$field_element->hasAttribute('disabled');
+      });
+    }
+
+    // Resolve path.
     if ($this->getMinkParameter('files_path')) {
       $fullPath = rtrim(realpath($this->getMinkParameter('files_path')), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $path;
       if (is_file($fullPath)) {
@@ -207,8 +160,13 @@ class MinkContext extends DrupalExtensionMinkContext {
       }
     }
 
-    $regionObj = $this->getRegion($region);
-    $regionObj->attachFileToField($field, $path);
+    // Attach the file.
+    $field_element->attachFile($path);
+
+    // Wait for AJAX if applicable, saves us from repeating it every time.
+    if ($this->hasJavascriptSupport()) {
+      $this->iWaitForAjaxToFinish();
+    }
   }
 
 }

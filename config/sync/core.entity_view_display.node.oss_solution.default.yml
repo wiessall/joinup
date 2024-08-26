@@ -1,0 +1,914 @@
+uuid: 5cbc5838-68bb-4381-bb96-43e8b1ed9f0f
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.oss_solution.oss_archived
+    - field.field.node.oss_solution.oss_available_languages
+    - field.field.node.oss_solution.oss_categories
+    - field.field.node.oss_solution.oss_default_branch
+    - field.field.node.oss_solution.oss_development_status
+    - field.field.node.oss_solution.oss_documentation
+    - field.field.node.oss_solution.oss_features
+    - field.field.node.oss_solution.oss_git_description
+    - field.field.node.oss_solution.oss_git_forks
+    - field.field.node.oss_solution.oss_git_open_issues
+    - field.field.node.oss_solution.oss_git_open_pull_requests
+    - field.field.node.oss_solution.oss_git_stars
+    - field.field.node.oss_solution.oss_git_url
+    - field.field.node.oss_solution.oss_hosting_platform
+    - field.field.node.oss_solution.oss_landing_url
+    - field.field.node.oss_solution.oss_license
+    - field.field.node.oss_solution.oss_logo
+    - field.field.node.oss_solution.oss_long_description
+    - field.field.node.oss_solution.oss_maintenance_contacts
+    - field.field.node.oss_solution.oss_maintenance_contractors
+    - field.field.node.oss_solution.oss_maintenance_type
+    - field.field.node.oss_solution.oss_owner
+    - field.field.node.oss_solution.oss_platform_reference
+    - field.field.node.oss_solution.oss_platforms
+    - field.field.node.oss_solution.oss_publiccode_yml_content
+    - field.field.node.oss_solution.oss_publiccode_yml_version
+    - field.field.node.oss_solution.oss_release_date
+    - field.field.node.oss_solution.oss_scope
+    - field.field.node.oss_solution.oss_screenshots
+    - field.field.node.oss_solution.oss_short_description
+    - field.field.node.oss_solution.oss_software_type
+    - field.field.node.oss_solution.oss_software_version
+    - field.field.node.oss_solution.oss_source
+    - field.field.node.oss_solution.oss_source_hash
+    - field.field.node.oss_solution.oss_used_by
+    - field.field.node.oss_solution.oss_vitality_index
+    - field.field.node.oss_solution.oss_vitality_index_range
+    - node.type.oss_solution
+  module:
+    - custom_markup_block
+    - joinup_layout
+    - layout_builder
+    - layout_discovery
+    - user
+third_party_settings:
+  layout_builder:
+    enabled: true
+    allow_custom: false
+    sections:
+      -
+        layout_id: joinup_layout_oss_heading
+        layout_settings:
+          label: 'OSS heading'
+          context_mapping: {  }
+        components:
+          2bf5ff54-60d8-4a77-9be5-85a1378f577c:
+            uuid: 2bf5ff54-60d8-4a77-9be5-85a1378f577c
+            region: aside
+            configuration:
+              id: 'field_block:node:oss_solution:oss_git_url'
+              label: URL
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: joinup_core_link_custom_title
+                label: visually_hidden
+                settings:
+                  trim_length: 80
+                  url_only: false
+                  url_plain: false
+                  rel: nofollow
+                  target: _blank
+                  link_title: 'Source code repository'
+                third_party_settings:
+                  template_suggestion:
+                    template_suggestion: ''
+            weight: 4
+            additional: {  }
+          613fb544-14e1-441e-bb81-629db2f729a3:
+            uuid: 613fb544-14e1-441e-bb81-629db2f729a3
+            region: aside
+            configuration:
+              id: 'field_block:node:oss_solution:oss_landing_url'
+              label: 'Landing URL'
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: joinup_core_link_custom_title
+                label: visually_hidden
+                settings:
+                  trim_length: 80
+                  url_only: false
+                  url_plain: false
+                  rel: nofollow
+                  target: _blank
+                  link_title: 'Project’s website'
+                third_party_settings:
+                  template_suggestion:
+                    template_suggestion: ''
+            weight: 5
+            additional: {  }
+          f6501de4-478f-49fe-adbb-2e541ba9d0c3:
+            uuid: f6501de4-478f-49fe-adbb-2e541ba9d0c3
+            region: aside
+            configuration:
+              id: 'field_block:node:oss_solution:oss__documentation'
+              label: Documentation
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: joinup_core_link_custom_title
+                label: visually_hidden
+                settings:
+                  trim_length: 80
+                  url_only: false
+                  url_plain: false
+                  rel: nofollow
+                  target: _blank
+                  link_title: Documentation
+                third_party_settings:
+                  template_suggestion:
+                    template_suggestion: ''
+            weight: 6
+            additional: {  }
+          592281dd-6140-43f3-9ec5-9c88b1db0477:
+            uuid: 592281dd-6140-43f3-9ec5-9c88b1db0477
+            region: second
+            configuration:
+              id: 'field_block:node:oss_solution:oss__description'
+              label: 'Short description (computed)'
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: basic_string
+                label: visually_hidden
+                settings: {  }
+                third_party_settings:
+                  template_suggestion:
+                    template_suggestion: ''
+            weight: 3
+            additional: {  }
+          f31a259b-6855-4c9e-bb7b-e6140b976366:
+            uuid: f31a259b-6855-4c9e-bb7b-e6140b976366
+            region: third_left
+            configuration:
+              id: 'field_block:node:oss_solution:oss_owner'
+              label: 'Copyrights owner'
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: string
+                label: above
+                settings:
+                  link_to_entity: false
+                third_party_settings:
+                  template_suggestion:
+                    template_suggestion: ''
+            weight: 4
+            additional: {  }
+          ab56894c-60e1-4c04-b715-e90c61b13029:
+            uuid: ab56894c-60e1-4c04-b715-e90c61b13029
+            region: third_right
+            configuration:
+              id: 'field_block:node:oss_solution:oss_source'
+              label: 'OSS Source'
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: joinup_oss_catalogue_link_to_solution_search
+                label: above
+                settings:
+                  facet_id: source
+                  use_label: false
+                third_party_settings:
+                  field_delimiter:
+                    delimiter: ', '
+                  field_formatter_range:
+                    order: 0
+                    limit: 0
+                    offset: 0
+                  template_suggestion:
+                    template_suggestion: ''
+            weight: 0
+            additional: {  }
+          f53e33d4-6b58-455b-a427-e92ba2dcdba9:
+            uuid: f53e33d4-6b58-455b-a427-e92ba2dcdba9
+            region: top_right
+            configuration:
+              id: 'field_block:node:oss_solution:title'
+              label: Title
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: string
+                label: hidden
+                settings:
+                  link_to_entity: false
+                third_party_settings:
+                  template_suggestion:
+                    template_suggestion: ''
+            weight: 0
+            additional: {  }
+          fb3220ec-638b-4859-8111-dc4cb5d8fcba:
+            uuid: fb3220ec-638b-4859-8111-dc4cb5d8fcba
+            region: first_left
+            configuration:
+              id: 'field_block:node:oss_solution:oss_software_version'
+              label: Version
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: string
+                label: above
+                settings:
+                  link_to_entity: false
+                third_party_settings:
+                  template_suggestion:
+                    template_suggestion: ''
+            weight: 0
+            additional: {  }
+          8de553f0-2037-4c11-826b-875d5a7b19fb:
+            uuid: 8de553f0-2037-4c11-826b-875d5a7b19fb
+            region: first_right
+            configuration:
+              id: 'field_block:node:oss_solution:oss_categories'
+              label: Categories
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: joinup_oss_catalogue_link_to_solution_search
+                label: above
+                settings:
+                  facet_id: category
+                  use_label: true
+                third_party_settings:
+                  field_delimiter:
+                    delimiter: ''
+                  field_formatter_range:
+                    order: 0
+                    limit: 0
+                    offset: 0
+                  template_suggestion:
+                    template_suggestion: ''
+            weight: 0
+            additional: {  }
+          54ce6670-7f26-40cf-bb97-1d04443b7c76:
+            uuid: 54ce6670-7f26-40cf-bb97-1d04443b7c76
+            region: top_left
+            configuration:
+              id: 'field_block:node:oss_solution:oss_logo'
+              label: Logo
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: imagecache_external_image
+                label: visually_hidden
+                settings:
+                  imagecache_external_link: ''
+                  imagecache_external_style: logo
+                third_party_settings:
+                  template_suggestion:
+                    template_suggestion: ''
+            weight: 0
+            additional: {  }
+          b118901a-e3fe-4597-990b-f73bb23d4b8e:
+            uuid: b118901a-e3fe-4597-990b-f73bb23d4b8e
+            region: aside
+            configuration:
+              id: custom_markup
+              label: 'Quick links'
+              label_display: '0'
+              provider: custom_markup_block
+              context_mapping: {  }
+              markup:
+                value: '<h2>Quick links</h2>'
+                format: content_editor
+            weight: 3
+            additional: {  }
+          7e8557ef-a668-4f97-84ab-436bdd1e1a94:
+            uuid: 7e8557ef-a668-4f97-84ab-436bdd1e1a94
+            region: aside
+            configuration:
+              id: 'field_block:node:oss_solution:oss_vitality_index'
+              label: Vitality
+              label_display: visible
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: joinup_oss_catalogue_vitality_percentage
+                label: hidden
+                settings: {  }
+                third_party_settings:
+                  template_suggestion:
+                    template_suggestion: ''
+            weight: 0
+            additional: {  }
+          9e4488e0-c6e8-41bb-8f5a-8f0ed703f5a2:
+            uuid: 9e4488e0-c6e8-41bb-8f5a-8f0ed703f5a2
+            region: indicator
+            configuration:
+              id: 'field_block:node:oss_solution:oss_git_stars'
+              label: Stars
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: number_integer
+                label: visually_hidden
+                settings:
+                  thousand_separator: ''
+                  prefix_suffix: false
+                third_party_settings:
+                  template_suggestion:
+                    template_suggestion: git_indicator
+            weight: 0
+            additional: {  }
+          5fd354d9-fecf-4319-8a2f-e09a11961c90:
+            uuid: 5fd354d9-fecf-4319-8a2f-e09a11961c90
+            region: indicator
+            configuration:
+              id: 'field_block:node:oss_solution:oss_git_open_issues'
+              label: 'Open Issues'
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: number_integer
+                label: visually_hidden
+                settings:
+                  thousand_separator: ''
+                  prefix_suffix: false
+                third_party_settings:
+                  template_suggestion:
+                    template_suggestion: git_indicator
+            weight: 1
+            additional: {  }
+          451af157-5f2a-4d80-9f82-8d9794f7122b:
+            uuid: 451af157-5f2a-4d80-9f82-8d9794f7122b
+            region: indicator
+            configuration:
+              id: 'field_block:node:oss_solution:oss_git_open_pull_requests'
+              label: 'Open Pull / Merge Requests'
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: number_integer
+                label: visually_hidden
+                settings:
+                  thousand_separator: ''
+                  prefix_suffix: false
+                third_party_settings:
+                  template_suggestion:
+                    template_suggestion: git_indicator
+            weight: 2
+            additional: {  }
+          68bdaeb3-5329-42cc-be0a-6263b0e1c4dd:
+            uuid: 68bdaeb3-5329-42cc-be0a-6263b0e1c4dd
+            region: indicator
+            configuration:
+              id: 'field_block:node:oss_solution:oss_git_forks'
+              label: Forks
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: number_integer
+                label: visually_hidden
+                settings:
+                  thousand_separator: ''
+                  prefix_suffix: false
+                third_party_settings:
+                  template_suggestion:
+                    template_suggestion: git_indicator
+            weight: 3
+            additional: {  }
+          b99c2317-850f-40f9-a4f5-a37e7df86571:
+            uuid: b99c2317-850f-40f9-a4f5-a37e7df86571
+            region: aside
+            configuration:
+              id: 'field_block:node:oss_solution:oss_vitality_index_range'
+              label: 'Vitality index range'
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: vitality_index_chart
+                label: hidden
+                settings:
+                  info:
+                    value: '<p>The vitality index indicates the degree of activity carried out in the last time period on each OSS Solution repository indexed in the Catalogue.</p><p>It reproduces exactly (in its definition and calculation) that envisaged by the guidelines on acquisition and reuse of software for Public Administrations defined by the <a href="https://www.agid.gov.it/it/agenzia" target="_blank">Agency for Digital Italy - AGID</a>, and currently officially implemented within the <a href="https://developers.italia.it/en/software" target="blank">Developers.Italia OSS Solutions Catalogue</a>.</p><p>This vitality index is calculated on the time window of the last 60 days (and updated once a week within this catalogue) taking into consideration the following four categories:</p><ul><li><strong>Code activity</strong>: the number of commits and merges per day,</li><li><strong>Release history</strong>: the number of releases per day,</li><li><strong>User community</strong>: the number of unique authors,</li><li><strong>Longevity</strong>: the age of the project,</li></ul><p>The ranges of each measurement can be found in the file <a href="https://github.com/italia/publiccode-crawler/blob/main/vitality-ranges.yml" target="blank">vitality-ranges.yml</a>.</p>'
+                    format: text_html
+                third_party_settings:
+                  template_suggestion:
+                    template_suggestion: ''
+            weight: 1
+            additional: {  }
+        third_party_settings: {  }
+      -
+        layout_id: layout_onecol
+        layout_settings:
+          label: Gallery
+          context_mapping: {  }
+        components:
+          47b9fb75-bf99-42bc-b2a4-31851abf70f6:
+            uuid: 47b9fb75-bf99-42bc-b2a4-31851abf70f6
+            region: content
+            configuration:
+              id: 'field_block:node:oss_solution:oss__screenshots'
+              label: Gallery
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: imagecache_external_responsive_image
+                label: hidden
+                settings:
+                  imagecache_external_link: ''
+                  imagecache_external_responsive_style: image_gallery
+                third_party_settings:
+                  field_delimiter:
+                    delimiter: ''
+                  field_formatter_range:
+                    order: 0
+                    limit: 0
+                    offset: 0
+                  joinup_slick:
+                    preset: image_gallery
+                  template_suggestion:
+                    template_suggestion: ''
+            weight: 1
+            additional: {  }
+        third_party_settings: {  }
+      -
+        layout_id: layout_twocol_section
+        layout_settings:
+          label: 'Long description'
+          context_mapping: {  }
+          column_widths: 67-33
+        components:
+          7e17db81-4af4-4c6b-b6df-2b052f018e25:
+            uuid: 7e17db81-4af4-4c6b-b6df-2b052f018e25
+            region: first
+            configuration:
+              id: 'field_block:node:oss_solution:oss__long_description'
+              label: Description
+              label_display: visible
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: text_default
+                label: hidden
+                settings: {  }
+                third_party_settings:
+                  template_suggestion:
+                    template_suggestion: ''
+            weight: 0
+            additional: {  }
+        third_party_settings: {  }
+      -
+        layout_id: layout_twocol_section
+        layout_settings:
+          label: 'Features and Audience'
+          context_mapping: {  }
+          column_widths: 50-50
+        components:
+          eb1487bc-7a20-40e5-9c0f-d4b997f0e11b:
+            uuid: eb1487bc-7a20-40e5-9c0f-d4b997f0e11b
+            region: second
+            configuration:
+              id: 'field_block:node:oss_solution:oss__features'
+              label: Features
+              label_display: visible
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: string
+                label: hidden
+                settings:
+                  link_to_entity: false
+                third_party_settings:
+                  field_delimiter:
+                    delimiter: ''
+                  field_formatter_range:
+                    order: 0
+                    limit: 0
+                    offset: 0
+                  template_suggestion:
+                    template_suggestion: ''
+            weight: 0
+            additional: {  }
+          bedf9535-e494-4215-8413-ef9fa62c9367:
+            uuid: bedf9535-e494-4215-8413-ef9fa62c9367
+            region: second
+            configuration:
+              id: 'field_block:node:oss_solution:oss_scope'
+              label: 'Intended audience'
+              label_display: visible
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: joinup_oss_catalogue_link_to_solution_search
+                label: hidden
+                settings:
+                  facet_id: scope
+                  use_label: true
+                third_party_settings:
+                  field_delimiter:
+                    delimiter: ''
+                  field_formatter_range:
+                    order: 0
+                    limit: 0
+                    offset: 0
+                  template_suggestion:
+                    template_suggestion: ''
+            weight: 1
+            additional: {  }
+          9568bae7-195f-4e8c-88ab-c963049f5e79:
+            uuid: 9568bae7-195f-4e8c-88ab-c963049f5e79
+            region: first
+            configuration:
+              id: custom_markup
+              label: Illustration
+              label_display: '0'
+              provider: custom_markup_block
+              context_mapping: {  }
+              markup:
+                value: '<div class="oss-solution__illustration"></div>'
+                format: full_html
+            weight: 0
+            additional: {  }
+        third_party_settings: {  }
+      -
+        layout_id: layout_onecol
+        layout_settings:
+          label: 'Detailed information section label'
+          context_mapping: {  }
+        components:
+          2014ec0e-5c65-4cc8-b778-aa44b0c417d9:
+            uuid: 2014ec0e-5c65-4cc8-b778-aa44b0c417d9
+            region: content
+            configuration:
+              id: custom_markup
+              label: 'Detailed information section label'
+              label_display: '0'
+              provider: custom_markup_block
+              context_mapping: {  }
+              markup:
+                value: "<h2>Detailed information</h2>\r\n"
+                format: content_editor
+            weight: 0
+            additional: {  }
+        third_party_settings: {  }
+      -
+        layout_id: joinup_layout_four_column_grid
+        layout_settings:
+          label: 'Detailed information'
+          context_mapping: {  }
+        components:
+          bccc0ab9-3d36-4077-a0f9-411649036a9b:
+            uuid: bccc0ab9-3d36-4077-a0f9-411649036a9b
+            region: content
+            configuration:
+              id: 'field_block:node:oss_solution:oss_release_date'
+              label: 'Release date'
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: datetime_default
+                label: above
+                settings:
+                  timezone_override: ''
+                  format_type: date_only
+                third_party_settings:
+                  template_suggestion:
+                    template_suggestion: ''
+            weight: 0
+            additional: {  }
+          7f00d028-88a5-45b8-bb95-c11da435813b:
+            uuid: 7f00d028-88a5-45b8-bb95-c11da435813b
+            region: content
+            configuration:
+              id: 'field_block:node:oss_solution:oss_development_status'
+              label: 'Development status'
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: list_default
+                label: above
+                settings: {  }
+                third_party_settings:
+                  template_suggestion:
+                    template_suggestion: ''
+            weight: 2
+            additional: {  }
+          309f6ae9-ca44-497b-8bba-fe5dec465201:
+            uuid: 309f6ae9-ca44-497b-8bba-fe5dec465201
+            region: content
+            configuration:
+              id: 'field_block:node:oss_solution:oss_license'
+              label: License
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: entity_reference_label
+                label: above
+                settings:
+                  link: false
+                third_party_settings:
+                  template_suggestion:
+                    template_suggestion: ''
+            weight: 3
+            additional: {  }
+          9b64ad87-97d9-45b6-8a93-3c59d8073f83:
+            uuid: 9b64ad87-97d9-45b6-8a93-3c59d8073f83
+            region: content
+            configuration:
+              id: 'field_block:node:oss_solution:oss_platforms'
+              label: Platforms
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: entity_reference_label
+                label: above
+                settings:
+                  link: false
+                third_party_settings:
+                  field_delimiter:
+                    delimiter: ''
+                  field_formatter_range:
+                    order: 0
+                    limit: 0
+                    offset: 0
+                  template_suggestion:
+                    template_suggestion: ''
+            weight: 4
+            additional: {  }
+          4ebe0f3e-b36f-49e8-9108-74f9a80e9d3f:
+            uuid: 4ebe0f3e-b36f-49e8-9108-74f9a80e9d3f
+            region: content
+            configuration:
+              id: 'field_block:node:oss_solution:oss_maintenance_type'
+              label: 'Maintenance type'
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: list_default
+                label: above
+                settings: {  }
+                third_party_settings:
+                  template_suggestion:
+                    template_suggestion: ''
+            weight: 5
+            additional: {  }
+          838bf83b-44d2-4a77-a40b-4cae3b31236e:
+            uuid: 838bf83b-44d2-4a77-a40b-4cae3b31236e
+            region: content
+            configuration:
+              id: 'field_block:node:oss_solution:oss_software_type'
+              label: 'Software type'
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: joinup_entity_reference_label_tooltip
+                label: above
+                settings:
+                  link: false
+                  tooltip_text: '[term:description]'
+                third_party_settings: {  }
+            weight: 6
+            additional: {  }
+          0d2a18ed-d3bf-4cf5-bcce-bc96c04faa71:
+            uuid: 0d2a18ed-d3bf-4cf5-bcce-bc96c04faa71
+            region: content
+            configuration:
+              id: 'field_block:node:oss_solution:oss_used_by'
+              label: 'Used by'
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: joinup_core_more_in_modal
+                label: above
+                settings:
+                  max_items_to_show: 5
+                  modal_link_label_single: 'Show administration'
+                  modal_link_label_multiple: 'Show all @count administrations'
+                  modal_view_mode: modal
+                third_party_settings:
+                  field_delimiter:
+                    delimiter: ''
+                  field_formatter_range:
+                    order: 0
+                    limit: 0
+                    offset: 0
+                  template_suggestion:
+                    template_suggestion: ''
+            weight: 7
+            additional: {  }
+          af8e91d0-3383-449b-be1a-91f0ba9eb394:
+            uuid: af8e91d0-3383-449b-be1a-91f0ba9eb394
+            region: content
+            configuration:
+              id: 'field_block:node:oss_solution:oss_maintenance_contractors'
+              label: 'Technical Maintainers'
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: entity_reference_label
+                label: above
+                settings:
+                  link: false
+                third_party_settings:
+                  field_delimiter:
+                    delimiter: ', '
+                  field_formatter_range:
+                    order: 0
+                    limit: 0
+                    offset: 0
+                  template_suggestion:
+                    template_suggestion: ''
+            weight: 8
+            additional: {  }
+          31cfd476-9b72-4c45-8678-61e6a057ec17:
+            uuid: 31cfd476-9b72-4c45-8678-61e6a057ec17
+            region: content
+            configuration:
+              id: 'field_block:node:oss_solution:oss_maintenance_contacts'
+              label: 'Technical Contacts'
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: entity_reference_label
+                label: above
+                settings:
+                  link: false
+                third_party_settings:
+                  field_delimiter:
+                    delimiter: ', '
+                  field_formatter_range:
+                    order: 0
+                    limit: 0
+                    offset: 0
+                  template_suggestion:
+                    template_suggestion: ''
+            weight: 9
+            additional: {  }
+          d955f088-9c59-4966-97f2-99b2f1e429f5:
+            uuid: d955f088-9c59-4966-97f2-99b2f1e429f5
+            region: content
+            configuration:
+              id: 'field_block:node:oss_solution:oss_available_languages'
+              label: 'Supported languages'
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: joinup_core_more_in_modal
+                label: above
+                settings:
+                  max_items_to_show: 10
+                  modal_link_label_single: 'Show language'
+                  modal_link_label_multiple: 'Show all @count languages'
+                  modal_view_mode: modal
+                third_party_settings:
+                  field_delimiter:
+                    delimiter: ''
+                  field_formatter_range:
+                    order: 0
+                    limit: 0
+                    offset: 0
+                  template_suggestion:
+                    template_suggestion: ''
+            weight: 1
+            additional: {  }
+        third_party_settings: {  }
+id: node.oss_solution.default
+targetEntityType: node
+bundle: oss_solution
+mode: default
+content: {  }
+hidden:
+  description: true
+  langcode: true
+  links: true
+  oss__description: true
+  oss__documentation: true
+  oss__features: true
+  oss__long_description: true
+  oss__screenshots: true
+  oss__short_description: true
+  oss_archived: true
+  oss_available_languages: true
+  oss_categories: true
+  oss_default_branch: true
+  oss_development_status: true
+  oss_documentation: true
+  oss_features: true
+  oss_git_description: true
+  oss_git_forks: true
+  oss_git_open_issues: true
+  oss_git_open_pull_requests: true
+  oss_git_stars: true
+  oss_git_url: true
+  oss_hosting_platform: true
+  oss_landing_url: true
+  oss_license: true
+  oss_logo: true
+  oss_long_description: true
+  oss_maintenance_contacts: true
+  oss_maintenance_contractors: true
+  oss_maintenance_type: true
+  oss_owner: true
+  oss_platform_reference: true
+  oss_platforms: true
+  oss_publiccode_yml_content: true
+  oss_publiccode_yml_version: true
+  oss_release_date: true
+  oss_scope: true
+  oss_screenshots: true
+  oss_short_description: true
+  oss_software_type: true
+  oss_software_version: true
+  oss_source: true
+  oss_source_hash: true
+  oss_used_by: true
+  oss_vitality_index: true
+  oss_vitality_index_range: true
+  published_at: true
+  report: true
+  search_api_excerpt: true

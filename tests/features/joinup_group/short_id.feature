@@ -1,4 +1,4 @@
-@api @group-d
+@api @group-f
 Feature:
   As an owner of a group
   In order to make the URL of my group easier to read
