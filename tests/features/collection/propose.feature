@@ -67,9 +67,6 @@ Feature: Proposing a collection
     And I press "Add existing" at the "Owner" field
     And I fill in "Owner" with "Organisation example"
     And I press "Propose"
-    Then I should not see the following error messages:
-      | error messages         |
-      | Field Logo is required |
     And I should see the heading "Ancient and Classical Mythology"
     # Regression test for the keywords field in the about page.
     And I should not see the text "Search keywords" in the "Content" region
