@@ -54,7 +54,6 @@ Feature: Editing collections
     When I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
     And I press the button "Insert Media" in the "Description" wysiwyg editor
-    Then I wait for AJAX to finish
     And a modal should open
     And I click "Video"
     When I fill in "Add Video URL" with "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
