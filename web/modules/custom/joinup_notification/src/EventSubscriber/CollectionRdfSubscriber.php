@@ -377,6 +377,7 @@ class CollectionRdfSubscriber extends NotificationSubscriberBase {
     $this->sendUserDataMessages($user_data);
 
     // Next, notify all owners of affiliated solutions.
+    // @todo Update this to get related solutions through the computed field.
     if (!$this->entity->get('field_ar_affiliates')->isEmpty()) {
       foreach ($this->entity->get('field_ar_affiliates')->referencedEntities() as $solution) {
         if (!empty($solution)) {

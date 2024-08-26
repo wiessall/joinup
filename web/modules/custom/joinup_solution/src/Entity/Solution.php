@@ -233,7 +233,7 @@ class Solution extends Node implements SolutionInterface {
    */
   public function getExistingMembershipMessage(OgMembershipInterface $membership): TranslatableMarkup {
     $parameters = [
-      '%group' => $this->getName(),
+      '%group' => $this->label(),
     ];
     switch ($membership->getState()) {
       case OgMembershipInterface::STATE_BLOCKED:

@@ -11,7 +11,6 @@ use Drupal\ckeditor5\Plugin\CKEditor5PluginDefinition;
 use Drupal\editor\EditorInterface;
 use Drupal\joinup_group\JoinupGroupManagerInterface;
 use Drupal\media_library\MediaLibraryState;
-use Drupal\sparql_entity_storage\UriEncoder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
