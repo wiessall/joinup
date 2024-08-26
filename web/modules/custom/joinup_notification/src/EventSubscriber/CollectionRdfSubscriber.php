@@ -377,12 +377,9 @@ class CollectionRdfSubscriber extends NotificationSubscriberBase {
     $this->sendUserDataMessages($user_data);
 
     // Next, notify all owners of affiliated solutions.
-    // @todo Update this to get related solutions through the computed field.
-    if (!$this->entity->get('field_ar_affiliates')->isEmpty()) {
-      foreach ($this->entity->get('field_ar_affiliates')->referencedEntities() as $solution) {
-        if (!empty($solution)) {
-          $this->notifySolutionOwners($solution);
-        }
+    foreach ($this->entity->get('solutions')->referencedEntities() as $solution) {
+      if (!empty($solution)) {
+        $this->notifySolutionOwners($solution);
       }
     }
 
@@ -431,17 +428,8 @@ class CollectionRdfSubscriber extends NotificationSubscriberBase {
   protected function notifySolutionOwners(EntityInterface $solution): void {
     // Count collections that are not archived and are affiliated to the
     // solution.
-    // @todo Update this because affiliates does not exist as a field.
-    // @todo If we make affiliates a computed field, adapt.
-    $collection_count = $this->entityTypeManager->getStorage('node')->getQuery()
-      ->accessCheck(FALSE)
-      ->condition('type', 'collection')
-      ->condition('field_ar_affiliates', $solution->id())
-      ->condition('field_state', 'archived', '!=')
-      ->count()
-      ->execute();
-
-    $template_id = $collection_count ? self::TEMPLATE_ARCHIVE_DELETE_SOLUTIONS_ALL : self::TEMPLATE_ARCHIVE_DELETE_SOLUTIONS_ORPHANED;
+    $has_parent = !$solution->get('og_audience')?->entity;
+    $template_id = $has_parent ? self::TEMPLATE_ARCHIVE_DELETE_SOLUTIONS_ALL : self::TEMPLATE_ARCHIVE_DELETE_SOLUTIONS_ORPHANED;
     $user_data = [
       'og_roles' => [
         'node-solution-administrator' => [

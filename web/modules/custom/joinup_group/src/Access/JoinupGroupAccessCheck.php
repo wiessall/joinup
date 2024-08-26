@@ -9,9 +9,9 @@ use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Routing\Access\AccessInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\joinup_group\Entity\GroupContentInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\JoinupGroupHelper;
-use Drupal\joinup_release\Entity\ReleaseInterface;
 use Symfony\Component\Routing\Route;
 
 /**
@@ -82,8 +82,11 @@ class JoinupGroupAccessCheck implements AccessInterface {
     if ($node instanceof GroupInterface) {
       $group = $node;
     }
-    elseif ($node instanceof ReleaseInterface) {
+    elseif ($node instanceof GroupContentInterface) {
       $group = $node->getGroup();
+    }
+    else {
+      return AccessResult::forbidden();
     }
 
     // If the route wasn't configured to upcast the parameter, try to load an

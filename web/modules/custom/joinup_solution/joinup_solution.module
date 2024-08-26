@@ -22,6 +22,7 @@ use Drupal\Core\Url;
 use Drupal\collection\Entity\Collection;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_rdf\Entity\RdfSyncEntityInterface;
+use Drupal\joinup_solution\CollectionSolutionsFieldItemList;
 use Drupal\joinup_solution\Entity\Solution;
 use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\joinup_solution\SolutionLatestReleasesFieldItemList;
@@ -42,41 +43,58 @@ use Drupal\user\Entity\User;
  * Implements hook_entity_bundle_field_info_alter().
  */
 function joinup_solution_entity_bundle_field_info_alter(&$fields, EntityTypeInterface $entity_type, $bundle): void {
-  /** @var \Drupal\Core\Field\FieldConfigInterface[] $fields */
-  if ($entity_type->id() !== 'node' || $bundle !== 'solution') {
+  if ($entity_type->id() !== 'node') {
     return;
   }
 
-  // References the solution releases and standalone distributions.
-  // @todo This should be moved to `joinup_distribution` module.
-  $fields['releases_and_distributions'] = BaseFieldDefinition::create('entity_reference')
-    ->setLabel(t('Releases and standalone distributions'))
-    ->setName('releases_and_distributions')
-    ->setDescription(t('The Releases and standalone distributions of this solution.'))
-    ->setTargetEntityTypeId('node')
-    ->setTargetBundle('solution')
-    ->setSetting('target_type', 'node')
-    ->setComputed(TRUE)
-    ->setReadOnly(TRUE)
-    ->setCardinality(FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED)
-    ->setClass(SolutionReleasesAndDistributionsFieldItemList::class);
-  // References the latest release, if any.
-  // @todo This should be moved to the `joinup_release` module.
-  $fields['latest_release'] = BaseFieldDefinition::create('entity_reference')
-    ->setLabel(t('Latest release'))
-    ->setName('latest_release')
-    ->setDescription(t('The latest release, if any.'))
-    ->setTargetEntityTypeId('node')
-    ->setTargetBundle('solution')
-    ->setSetting('target_type', 'node')
-    ->setComputed(TRUE)
-    ->setReadOnly(TRUE)
-    ->setCardinality(1)
-    ->setClass(SolutionLatestReleasesFieldItemList::class);
+  /** @var \Drupal\Core\Field\FieldConfigInterface[] $fields */
+  if ($bundle === 'solution') {
+    // References the solution releases and standalone distributions.
+    // @todo This should be moved to `joinup_distribution` module.
+    $fields['releases_and_distributions'] = BaseFieldDefinition::create('entity_reference')
+      ->setLabel(t('Releases and standalone distributions'))
+      ->setName('releases_and_distributions')
+      ->setDescription(t('The Releases and standalone distributions of this solution.'))
+      ->setTargetEntityTypeId('node')
+      ->setTargetBundle('solution')
+      ->setSetting('target_type', 'node')
+      ->setComputed(TRUE)
+      ->setReadOnly(TRUE)
+      ->setCardinality(FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED)
+      ->setClass(SolutionReleasesAndDistributionsFieldItemList::class);
+    // References the latest release, if any.
+    // @todo This should be moved to the `joinup_release` module.
+    $fields['latest_release'] = BaseFieldDefinition::create('entity_reference')
+      ->setLabel(t('Latest release'))
+      ->setName('latest_release')
+      ->setDescription(t('The latest release, if any.'))
+      ->setTargetEntityTypeId('node')
+      ->setTargetBundle('solution')
+      ->setSetting('target_type', 'node')
+      ->setComputed(TRUE)
+      ->setReadOnly(TRUE)
+      ->setCardinality(1)
+      ->setClass(SolutionLatestReleasesFieldItemList::class);
 
-  // Make sure a solution's title is unique among the collections it belongs to.
-  if (!empty($fields['title'])) {
-    $fields['title']->addConstraint('UniqueSolutionTitle', []);
+    // Make sure a solution's title is unique among the collections it belongs
+    // to.
+    if (!empty($fields['title'])) {
+      $fields['title']->addConstraint('UniqueSolutionTitle', []);
+    }
+  }
+
+  if ($bundle === 'collection') {
+    $fields['solutions'] = BaseFieldDefinition::create('entity_reference')
+      ->setLabel(t('Solutions'))
+      ->setName('solutions')
+      ->setDescription(t('The solutions in this collection.'))
+      ->setTargetEntityTypeId('node')
+      ->setTargetBundle('solution')
+      ->setSetting('target_type', 'node')
+      ->setComputed(TRUE)
+      ->setReadOnly(TRUE)
+      ->setCardinality(FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED)
+      ->setClass(CollectionSolutionsFieldItemList::class);
   }
 }
 
