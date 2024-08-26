@@ -191,6 +191,56 @@ function joinup_rdf_deploy_200004(): void {
 }
 
 /**
+ * Fix the group menu links.
+ */
+function joinup_rdf_deploy_200005()/*: void*/ {
+  $db = \Drupal::database();
+  $linkManager = \Drupal::getContainer()->get('plugin.manager.menu.link');
+  $tables = ['data', 'field_revision'];
+  foreach ($tables as $table) {
+    $table = "menu_link_content_$table";
+    $expression = MigrationHelper::sqlUriDecode('SUBSTRING(m.link__uri,  19)');
+    $sql = <<<SQL
+      UPDATE {{$table}} m
+      INNER JOIN {rdf_sync_uri} u ON $expression = u.uri
+      SET m.link__uri = CONCAT('entity:node/', u.entity_id)
+      WHERE m.link__uri LIKE 'entity:rdf_entity/%'
+      SQL;
+    $db->query($sql, [], ['allow_delimiter_in_query' => TRUE]);
+
+    $expression = MigrationHelper::sqlUriDecode('SUBSTRING(m.link__uri,  44)');
+    $sql = <<<SQL
+      UPDATE {{$table}} m
+      INNER JOIN {rdf_sync_uri} u ON $expression = u.uri
+      SET m.link__uri = CONCAT('route:view.discussions.overview;node=', u.entity_id)
+      WHERE m.link__uri LIKE 'route:view.discussions.overview;rdf_entity=%'
+      SQL;
+    $db->query($sql, [], ['allow_delimiter_in_query' => TRUE]);
+
+    $expression = MigrationHelper::sqlUriDecode('SUBSTRING(m.link__uri,  53)');
+    $sql = <<<SQL
+      UPDATE {{$table}} m
+      INNER JOIN {rdf_sync_uri} u ON $expression = u.uri
+      SET m.link__uri = CONCAT('route:entity.node.glossary;letter=&node=', u.entity_id)
+      WHERE m.link__uri LIKE 'route:entity.rdf_entity.glossary;letter=&rdf_entity=%'
+      SQL;
+    $db->query($sql, [], ['allow_delimiter_in_query' => TRUE]);
+
+    $expression = MigrationHelper::sqlUriDecode('SUBSTRING(m.link__uri,  52)');
+    $sql = <<<SQL
+      UPDATE {{$table}} m
+      INNER JOIN {rdf_sync_uri} u ON $expression = u.uri
+      SET m.link__uri = CONCAT('route:entity.node.member_overview;node=', u.entity_id)
+      WHERE m.link__uri LIKE 'route:entity.rdf_entity.member_overview;rdf_entity=%'
+      SQL;
+    $db->query($sql, [], ['allow_delimiter_in_query' => TRUE]);
+  }
+  \Drupal::entityTypeManager()->getStorage('menu_link_content')->resetCache();
+  $linkManager->rebuild();
+  return $sql;
+}
+
+/**
  * Section moved from joinup_oss_catalogue.
  *
  * @todo Remove if joinup_oss_catalogue is deployed first.
@@ -199,7 +249,7 @@ function joinup_rdf_deploy_200004(): void {
 /**
  * Update path alias and label for EU OSS catalogue.
  */
-function joinup_rdf_deploy_200005(): void {
+function joinup_rdf_deploy_200006(): void {
   /** @var \Drupal\collection\Entity\CollectionInterface $collection */
   $collection = Collection::loadByUri(OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID);
 
@@ -212,7 +262,7 @@ function joinup_rdf_deploy_200005(): void {
 /**
  * Import content for EU OpenSource Software Solutions Catalogue.
  */
-function joinup_rdf_deploy_200006(): void {
+function joinup_rdf_deploy_200007(): void {
   /** @var \Drupal\Core\Extension\ModuleInstallerInterface $moduleInstaller */
   $moduleInstaller = \Drupal::service('module_installer');
   /** @var \Drupal\Core\Entity\EntityRepositoryInterface $entityRepository */
@@ -249,7 +299,7 @@ function joinup_rdf_deploy_200006(): void {
 /**
  * Rename menu items for EU OSS catalogue.
  */
-function joinup_rdf_deploy_200007(): void {
+function joinup_rdf_deploy_200008(): void {
   $entityTypeManager = \Drupal::entityTypeManager();
   /** @var  \Drupal\menu_link_content\MenuLinkContentStorageInterface $menuLinkContentStorage */
   $menuLinkContentStorage = $entityTypeManager->getStorage('menu_link_content');
@@ -285,7 +335,7 @@ function joinup_rdf_deploy_200007(): void {
 /**
  * Make sure that oss_archived has a default value.
  */
-function joinup_rdf_deploy_200008(array &$sandbox): string {
+function joinup_rdf_deploy_200009(array &$sandbox): string {
   $entityTypeManager = \Drupal::entityTypeManager();
   /** @var \Drupal\node\NodeStorage $nodeStorage */
   $nodeStorage = $entityTypeManager->getStorage('node');
@@ -316,7 +366,7 @@ function joinup_rdf_deploy_200008(array &$sandbox): string {
 /**
  * Fix references from/to EU OSS Catalogue landing page.
  */
-function joinup_rdf_deploy_200009(): void {
+function joinup_rdf_deploy_200010(): void {
   $mapper = \Drupal::getContainer()->get('rdf_sync.mapper');
   $repository = \Drupal::getContainer()->get('entity.repository');
   $collection = $mapper->getEntityByUri(OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID);
