@@ -338,7 +338,7 @@ function joinup_solution_node_view(array &$build, NodeInterface $solution, Entit
     try {
       $text = [
         '#type' => 'markup',
-        '#markup' => t('Read more') . '<span class="visually-hidden"> ' . t('about') . ' ' . $solution->getName() . '</span>',
+        '#markup' => t('Read more') . '<span class="visually-hidden"> ' . t('about') . ' ' . $solution->label() . '</span>',
       ];
       $link = $solution->toLink($text, 'canonical', [
         'attributes' => [

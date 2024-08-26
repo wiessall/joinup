@@ -288,7 +288,7 @@ function collection_node_view(array &$build, EntityInterface $entity, EntityView
           'btn',
           'btn-secondary',
         ],
-        'aria-label' => t('Read more about @name.', ['@name' => $entity->getName()]),
+        'aria-label' => t('Read more about @name.', ['@name' => $entity->label()]),
       ],
     ])->toRenderable();
   }

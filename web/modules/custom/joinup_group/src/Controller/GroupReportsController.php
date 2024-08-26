@@ -31,7 +31,7 @@ class GroupReportsController extends ControllerBase {
    *   The event dispatcher.
    */
   public function __construct(
-    protected EventDispatcherInterface $dispatcher
+    protected EventDispatcherInterface $dispatcher,
   ) {}
 
   /**

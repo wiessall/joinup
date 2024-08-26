@@ -50,7 +50,7 @@ class JoinupController extends ControllerBase {
     if ($node_type->id() !== 'collection') {
       return AccessResult::forbidden();
     }
-    return AccessResult::allowedIf($this->currentUser()->hasPermission("propose {$node_type->id()} node entity"));
+    return AccessResult::allowedIf($this->currentUser()->hasPermission("propose {$node_type->id()} content"));
   }
 
   /**

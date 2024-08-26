@@ -193,7 +193,7 @@ function joinup_rdf_deploy_200004(): void {
 /**
  * Fix the group menu links.
  */
-function joinup_rdf_deploy_200005()/*: void*/ {
+function joinup_rdf_deploy_200005(): void {
   $db = \Drupal::database();
   $linkManager = \Drupal::getContainer()->get('plugin.manager.menu.link');
   $tables = ['data', 'field_revision'];
@@ -237,7 +237,6 @@ function joinup_rdf_deploy_200005()/*: void*/ {
   }
   \Drupal::entityTypeManager()->getStorage('menu_link_content')->resetCache();
   $linkManager->rebuild();
-  return $sql;
 }
 
 /**
