@@ -1,0 +1,14 @@
+uuid: 56d19468-c5c7-42c5-9cd0-ba3c921cc9e8
+langcode: en
+status: true
+dependencies:
+  module:
+    - joinup_taxonomy
+third_party_settings:
+  joinup_taxonomy:
+    locked: false
+name: 'OSS Platform'
+vid: oss_platform
+description: 'Open Source Software Solution Platform'
+weight: 0
+new_revision: false

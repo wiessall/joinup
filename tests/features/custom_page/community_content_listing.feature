@@ -1,4 +1,4 @@
-@api @group-b
+@api @group-d
 Feature:
   In order to make it easy to browse to specific content
   As a moderator
@@ -47,6 +47,7 @@ Feature:
       | Background theme | light      |
       | Extra classes    | test-class |
     And I click "Choose component"
+    And a modal should open
     And I click "Content listing"
     Then the following fields should be present "Show related content, Allow shared content"
     And the following fields should not be present "Query presets, Limit"
@@ -61,6 +62,7 @@ Feature:
       | Background theme | light      |
       | Extra classes    | test-class |
     When I click "Choose component"
+    And a modal should open
     And I click "Content listing"
     And the following fields should be present "Show related content, Allow shared content, Query presets, Limit"
     And I should see the button "Add and configure filter"
@@ -79,6 +81,7 @@ Feature:
       | Background theme | light      |
       | Extra classes    | test-class |
     When I click "Choose component"
+    And a modal should open
     And I click "Content listing"
     And I select "News" from "Available filters"
     And I press "Add and configure filter"
@@ -174,6 +177,7 @@ Feature:
       | Background theme | light      |
       | Extra classes    | test-class |
     And I click "Choose component"
+    And a modal should open
     And I click "Content listing"
     And I uncheck "Show related content"
     When the following fields should not be visible "Global search, Allow shared content"
@@ -278,9 +282,7 @@ Feature:
     And I drag the table row in the "Content listing field filter form" region at position 1 down
     # Remove the first two rows.
     And I press "Remove filter"
-    And I wait for AJAX to finish
     And I press "Remove filter"
-    And I wait for AJAX to finish
     And I select "Solution" from "Available filters"
     And I press "Add and configure filter"
     And I fill in "Solution" with "N64 cartridge cleaner"
@@ -335,6 +337,7 @@ Feature:
       | Background theme | light      |
       | Extra classes    | test-class |
     And I click "Choose component"
+    And a modal should open
     And I click "Content listing"
     And I select "Discussion" from "Available filters"
     And I press "Add and configure filter"
@@ -412,6 +415,7 @@ Feature:
       | Background theme | light      |
       | Extra classes    | test-class |
     And I click "Choose component"
+    And a modal should open
     And I click "Content listing"
     And I fill in "Query presets" with "wrongvalue"
     And I press "Save" in the "Modal buttons" region
@@ -443,6 +447,7 @@ Feature:
       | Background theme | light      |
       | Extra classes    | test-class |
     When I click "Choose component"
+    And a modal should open
     And I click "Content listing"
     And I press "Save" in the "Modal buttons" region
     Then I should see the error message "You need to add a filter in the Content listing block"
@@ -528,6 +533,7 @@ Feature:
       | Background theme | light      |
       | Extra classes    | test-class |
     When I click "Choose component"
+    And a modal should open
     And I click "Content listing"
 
     And I select "Solution" from "Available filters"
@@ -537,6 +543,7 @@ Feature:
 
     # Paragraph #2.
     When I click "Choose component"
+    And a modal should open
     And I click "Content listing"
 
     And I select "Solution" from latest "Available filters"
@@ -578,6 +585,7 @@ Feature:
       | Background theme | light      |
       | Extra classes    | test-class |
     And I click "Choose component"
+    And a modal should open
     And I click "Content listing"
 
     And I select "Solution" from "Available filters"
@@ -595,6 +603,7 @@ Feature:
 
     # Paragraph #2.
     When I click "Choose component"
+    And a modal should open
     And I click "Content listing"
 
     And I select "Solution" from latest "Available filters"

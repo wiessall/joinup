@@ -320,6 +320,36 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
+        `${ventuno}src/scss/pages/oss-landing.scss`,
+      ),
+      dest: path.resolve(
+        outputFolder,
+        `${ventuno}assets/css/oss-landing.min.css`,
+      ),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(
+        outputFolder,
+        `${ventuno}src/scss/pages/oss-solution-full.scss`,
+      ),
+      dest: path.resolve(
+        outputFolder,
+        `${ventuno}assets/css/oss-solution-full.min.css`,
+      ),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(
+        outputFolder,
         `${ventuno}src/scss/pages/searchpage.scss`,
       ),
       dest: path.resolve(
@@ -845,6 +875,36 @@ module.exports = {
       dest: path.resolve(
         outputFolder,
         `${ventuno}assets/css/image-gallery.min.css`,
+      ),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(
+        outputFolder,
+        `${ventuno}src/scss/components/oss-solution-indicator.scss`,
+      ),
+      dest: path.resolve(
+        outputFolder,
+        `${ventuno}assets/css/oss-solution-indicator.min.css`,
+      ),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(
+        outputFolder,
+        `${ventuno}src/scss/components/oss-solution-screenshots-carousel.scss`,
+      ),
+      dest: path.resolve(
+        outputFolder,
+        `${ventuno}assets/css/oss-solution-screenshots-carousel.min.css`,
       ),
       options: {
         includePaths,
@@ -1512,6 +1572,7 @@ module.exports = {
           "mastodon.svg",
           "newspaper.svg",
           "patch-exclamation.svg",
+          "patch-check.svg",
           "pencil-square.svg",
           "people.svg",
           "person-circle.svg",

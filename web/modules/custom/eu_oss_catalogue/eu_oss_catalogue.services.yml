@@ -1,0 +1,51 @@
+services:
+
+  logger.channel.eu_oss_catalogue:
+    parent: logger.channel_base
+    arguments: ['eu_oss_catalogue']
+
+  eu_oss_catalogue:
+    class: Drupal\eu_oss_catalogue\EuOssCatalogue
+    arguments:
+      - '@plugin.manager.eu_oss_catalogue.provider'
+      - '@plugin.manager.eu_oss_catalogue.parser'
+      - '@queue'
+      - '@event_dispatcher'
+      - '@entity_type.manager'
+      - '@logger.channel.eu_oss_catalogue'
+      - '@datetime.time'
+  Drupal\eu_oss_catalogue\EuOssCatalogueInterface: '@eu_oss_catalogue'
+
+  plugin.manager.eu_oss_catalogue.provider:
+    class: Drupal\eu_oss_catalogue\EuOssCataloguePluginManager
+    parent: default_plugin_manager
+    arguments: [provider]
+
+  plugin.manager.eu_oss_catalogue.parser:
+    class: Drupal\eu_oss_catalogue\EuOssCataloguePluginManager
+    parent: default_plugin_manager
+    arguments: [parser]
+
+  plugin.manager.eu_oss_catalogue.resolver:
+    class: Drupal\eu_oss_catalogue\EuOssCataloguePluginManager
+    parent: default_plugin_manager
+    arguments: [resolver]
+
+  plugin.manager.eu_oss_catalogue.hosting_platform:
+    class: Drupal\eu_oss_catalogue\EuOssCataloguePluginManager
+    parent: default_plugin_manager
+    arguments: [hosting_platform]
+
+  cache.eu_oss_catalogue:
+    class: Drupal\Core\Cache\CacheBackendInterface
+    tags:
+      - { name: cache.bin }
+    factory: ['@cache_factory', 'get']
+    arguments: [eu_oss_catalogue]
+
+  eu_oss_catalogue.git_remote.api_guesser:
+    class: Drupal\eu_oss_catalogue\ApiGuesser
+    arguments:
+      - '@plugin.manager.eu_oss_catalogue.hosting_platform'
+      - '@state'
+      - '@logger.channel.eu_oss_catalogue'

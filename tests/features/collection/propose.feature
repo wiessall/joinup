@@ -1,4 +1,4 @@
-@api @group-b
+@api @group-a
 Feature: Proposing a collection
   In order to create a new collection on Joinup
   As the product owner of a collection of software solutions
@@ -163,7 +163,6 @@ Feature: Proposing a collection
     # be able to pick-up a pre-uploaded image when editing the logo as an
     # alternative to the image upload.
     And I select image #3 as collection logo
-    And I wait for AJAX to finish
     And I press "Propose"
     Then I should see the success message "Thank you for proposing a collection. Your request is currently pending approval by the site administrator."
     And the "Just a proposal" collection logo is image #3
@@ -171,11 +170,9 @@ Feature: Proposing a collection
     Given I go to the edit form of the "Just a proposal" collection
     And I expand the "Additional fields" accordion section
     And I remove the file from the "Logo" field
-    But I wait for AJAX to finish
 
     # Upload also works.
     When I attach the file "logo.png" to "Logo"
-    And I wait for AJAX to finish
     And I press "Propose"
 
     When I go to the edit form of the "Just a proposal" collection
@@ -322,10 +319,8 @@ Feature: Proposing a collection
     When I expand the "Additional fields" accordion section
     # Shows error when svg is invalid or unsafe and fails to upload.
     And I attach the file "error.svg" to "Logo"
-    And I wait for AJAX to finish
     Then I should see the error message "Invalid or unsafe SVG file."
     And I attach the file "simple.svg" to "Logo"
-    And I wait for AJAX to finish
     Then I should not see the error message "Invalid or unsafe SVG file."
     And I check "Moderated"
     And I press "Propose"

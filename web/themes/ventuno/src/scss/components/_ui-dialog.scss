@@ -106,4 +106,7 @@
       background-image: none;
     }
   }
+  &:not(.ui-dialog-off-canvas) {
+    max-width: 95%;
+  }
 }

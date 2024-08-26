@@ -21,6 +21,7 @@
     - badges (array) (default: [])
     - extra_data (array of objects) (default: [])
     - bundle (object) (default: {})
+    - indicators (array) (default: [])
   #}
 
   {% set _horizontal = horizontal|default(false) %}
@@ -37,6 +38,7 @@
   {% set _badges = badges|default([]) %}
   {% set _extra_data = extra_data|default([]) %}
   {% set _bundle = bundle|default({}) %}
+  {% set _indicators = indicators|default([]) %}
 
   {{ attach_library('ventuno/tile') }}
 
@@ -71,7 +73,7 @@
       </figure>
       <div class="tile__body d-flex flex-column justify-content-between{% if _highlighted is not empty %} position-relative{% endif %}">
         {% if _highlighted.text is not empty %}
-          <div class="tile__standout-info position-absolute d-flex align-items-center bg-brand rounded text-white fw-bold px-2 py-1">
+          <div class="tile__standout-info position-absolute bg-brand rounded text-white fw-bold px-2 py-1">
             {% if _highlighted.icon is not empty %}
               <svg class="tile__standout-info-icon bi icon--xs me-1">
                 <use xlink:href="{{ bcl_icon_path }}#{{ _highlighted.icon }}"></use>
@@ -114,30 +116,53 @@
             {% endfor %}
           </div>
         {%- endif -%}
-      </div>
-      <div class="tile__footer tile__action p-3">
-        <div class="fs-xs text-muted d-flex align-items-center justify-content-between">
-          <div data-joinup-card-stats class="d-flex">
-            {% for data in _extra_data %}
-              <span class="d-flex align-items-center me-2">
-                {% if data.icon is defined and data.icon is not empty %}
-                  <svg class="bi icon--xs me-1">
-                    <use xlink:href="{{ bcl_icon_path }}#{{ data.icon }}"></use>
-                  </svg>
-                {% endif %}
-                {% if data.label is defined and data.label is not empty %}
-                  {{ data.label }}
-                {% endif %}
-              </span>
+        {%- if _indicators is not empty and _indicators is iterable -%}
+          <div class="mt-2 d-flex flex-wrap">
+            {% for _indicator in _indicators %}
+              {{ _indicator }}
             {% endfor %}
           </div>
-          <span class="d-flex align-items-center ms-3">
+        {%- endif -%}
+      </div>
+      <div class="tile__footer tile__action p-3">
+        <div class="fs-xs text-muted d-flex flex-wrap align-items-center justify-content-between">
+
+        <div data-joinup-card-stats class="d-flex align-items-center">
+        {% for key, data in _extra_data %}
+          {% if key != 'flag_interoperability' %}
+            <span class="d-flex align-items-center me-2">
+              {% if data.icon is defined and data.icon is not empty %}
+                <svg class="bi icon--xs me-1">
+                  <use xlink:href="{{ bcl_icon_path }}#{{ data.icon }}"></use>
+                </svg>
+              {% endif %}
+              {% if data.label is defined and data.label is not empty %}
+                {{ data.label }}
+              {% endif %}
+            </span>
+          {% endif %}
+        {% endfor %}
+        </div>
+        <div class="d-flex flex-wrap">
+        {% if _extra_data['flag_interoperability'] is defined and _extra_data['flag_interoperability'] is not empty %}
+          <span class="d-flex align-items-center me-2">
+            {% if _extra_data['flag_interoperability'].icon is defined and _extra_data['flag_interoperability'].icon is not empty %}
+              <svg class="bi icon--xs me-1">
+                <use xlink:href="{{ bcl_icon_path }}#{{ _extra_data['flag_interoperability'].icon }}"></use>
+              </svg>
+            {% endif %}
+            {% if _extra_data['flag_interoperability'].label is defined and _extra_data['flag_interoperability'].label is not empty %}
+              {{ _extra_data['flag_interoperability'].label }}
+            {% endif %}
+          </span>
+        {% endif %}
+          <span class="d-flex align-items-center me-2">
             <div class="tile__bundle-icon d-flex align-items-center justify-content-center rounded-pill me-1">
               <svg class="bi icon--xs text-warning">
-                <use xlink:href="{{ bcl_icon_path }}#{{ bundle.icon }}"></use>
+                <use xlink:href="{{ bcl_icon_path }}#{{ _bundle.icon }}"></use>
               </svg>
             </div>
-            {{ bundle.label }}
+            {{ _bundle.label }}
           </span>
         </div>
       </div>

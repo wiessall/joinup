@@ -47,7 +47,7 @@ class BootstrapContext extends RawDrupalContext {
    * @Given I use a device with a(n) :size display
    */
   public function changeResolution(string $size): void {
-    self::assertJavaScriptEnabledBrowser();
+    $this->assertJavaScriptEnabledBrowser();
 
     [$width, $height] = self::RESOLUTIONS[$size];
     $this->getSession()->resizeWindow($width, $height, 'current');
@@ -110,13 +110,8 @@ class BootstrapContext extends RawDrupalContext {
       throw new \Exception("The '$section' accordion section is already $state");
     }
 
-    $this->scrollElementIntoView($button);
     $button->press();
-    // @todo Disable animations and perform an instant expand/collapse.
-    $this->waitUntil(function () use ($button, $expand): bool {
-      return $expand xor $button->hasClass('collapsed');
-    });
-    sleep(1);
+    $this->waitForCssAnimations();
   }
 
   /**

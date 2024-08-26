@@ -1,4 +1,4 @@
-@api @group-g
+@api @group-e
 Feature: Event moderation
   In order to manage events
   As a user of the website
@@ -69,7 +69,6 @@ Feature: Event moderation
     And I click "Edit" in the "Entity actions" region
     And I expand the "Additional fields" accordion section
     And I check "Closed collection"
-    And I wait for AJAX to finish
     And I select the radio button "Only members can create content."
     And I press "Publish"
     # I should now have the possibility to add events.

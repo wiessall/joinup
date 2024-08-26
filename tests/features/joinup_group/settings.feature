@@ -1,4 +1,4 @@
-@api @group-d
+@api @group-f
 Feature: Collections/Solutions settings
   In order to edit collections/solutions settings
   As a collection/solution owner or moderator
@@ -73,6 +73,9 @@ Feature: Collections/Solutions settings
     And I click "Settings" in the "Entity actions" region
     Then I should see the heading "Solution Beta solution settings"
     And the "Announcements enabled" checkbox should be checked
+
+    # Cleanup.
+    And I delete the "Solution Beta" solution
 
   Scenario: Testing group settings permissions
     Given the following collection:

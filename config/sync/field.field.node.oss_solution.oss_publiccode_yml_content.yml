@@ -1,0 +1,26 @@
+uuid: 32a5c8b3-7f27-469c-b95e-2611250bb892
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.oss_publiccode_yml_content
+    - node.type.oss_solution
+third_party_settings:
+  eu_oss_catalogue:
+    publiccode_yml:
+      resolvers:
+        -
+          plugin: metadata_content
+          config: {  }
+id: node.oss_solution.oss_publiccode_yml_content
+field_name: oss_publiccode_yml_content
+entity_type: node
+bundle: oss_solution
+label: 'Content of publiccode.yml'
+description: 'All content of the publiccode.yml metadata file'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

@@ -1,4 +1,4 @@
-@api @group-h
+@api @group-e
 Feature: Discussions added to collections
   In order to manage discussions
   As a collection member
@@ -82,6 +82,7 @@ Feature: Discussions added to collections
     # Verify that the author is visible on the page.
     And I should see the text "Kesha Pontecorvo"
     And I should see the success message "Discussion An amazing discussion has been created."
+    And Log entry with the message "A new discussion entity titled An amazing discussion has been created by Kesha Pontecorvo in The World of the Waves." should exist.
     And I should see the text "Discussions" in the "Navigation menu"
     And the "The World of the Waves" collection has a discussion titled "An amazing discussion"
 
@@ -135,14 +136,11 @@ Feature: Discussions added to collections
     # Upload works.
     When I go to the edit form of the "Yellow Zeus" discussion
     And I attach the file "logo.png" to "Logo"
-    And I wait for AJAX to finish
 
     # Picking-up pre-uploaded images works.
     When I remove the file from "Logo"
-    And I wait for AJAX to finish
 
     And I select image #4 as discussion logo
-    And I wait for AJAX to finish
     And I press "Update"
     And the "Yellow Zeus" discussion logo is image #4
 

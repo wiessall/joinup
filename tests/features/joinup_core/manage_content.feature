@@ -1,4 +1,4 @@
-@api @group-f
+@api @group-d
 Feature:
   In order to better organize the content
   I need to be able to move content between groups

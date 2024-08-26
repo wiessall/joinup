@@ -1,4 +1,4 @@
-@api @group-i
+@api @group-f
 Feature: Creation of news through the UI.
   In order to manage news
   As a user
@@ -70,6 +70,7 @@ Feature: Creation of news through the UI.
     And I select "EU and European Policies" from "Topic"
     And I press "Publish"
     Then I should see the success message "News Ytterbium metal of the year has been created."
+    And Log entry with the message "A new news entity titled Ytterbium metal of the year has been created by Milana Laninga in Density catalogue project." should exist.
     # Verify that the author is visible.
     And I should see the text "Milana Laninga"
     # Verify that the referenced solution is rendered as tile.
@@ -109,13 +110,10 @@ Feature: Creation of news through the UI.
     # Upload works.
     When I go to the edit form of the "The Great Opening" news
     And I attach the file "logo.png" to "Logo"
-    And I wait for AJAX to finish
 
     # Picking-up pre-uploaded images works.
     When I remove the file from "Logo"
-    And I wait for AJAX to finish
 
     And I select image #6 as news logo
-    And I wait for AJAX to finish
     And I press "Update"
     And the "The Great Opening" news logo is image #6
