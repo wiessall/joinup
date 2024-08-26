@@ -1,0 +1,58 @@
+data:
+
+  - id: 3248
+    source: github
+    owner_name: Amsterdam
+    name: signals-frontend
+    url: 'https://github.com/Amsterdam/signals-frontend'
+    description: 'Frontend of the SIA (Signalen Informatievoorziening Amsterdam)'
+    last_change: '2024-07-08T14:56:18.000Z'
+    stars: 8
+    avatar_url: 'https://avatars.githubusercontent.com/u/14022058?v=4'
+    fork_count: 24
+    issue_open_count: 0
+    last_fetched_at: '2024-07-11T13:01:28.157Z'
+    merge_request_open_count: 15
+    archived: false
+    organization_id: 15
+    readme_url: ''
+    slug: 'amsterdam-signals-frontend-25698'
+    publiccode_url: 'https://github.com/Amsterdam/signals-frontend/blob/main/publiccode.yml'
+
+  - id: 6011
+    source: 'github'
+    owner_name: 'GemeenteNijmegen'
+    name: 'verwerkingenlogging',
+    url: 'https://github.com/GemeenteNijmegen/verwerkingenlogging'
+    description: 'Implementatie mbv IaC van de verwerkinglogging standaard'
+    last_change: '2024-07-11T00:05:41.000Z'
+    stars: 5
+    avatar_url: 'https://avatars.githubusercontent.com/u/29945117?v=4'
+    fork_count: 0
+    issue_open_count: 14
+    last_fetched_at: '2024-07-11T13:22:46.916Z'
+    merge_request_open_count: 0
+    archived: false
+    organization_id: 9
+    readme_url: ''
+    slug: 'gemeentenijmegen-verwerkingenlogging-33391'
+    publiccode_url: 'https://github.com/GemeenteNijmegen/verwerkingenlogging/blob/main/publiccode.yaml'
+
+  - id: 5967
+    source: 'github'
+    owner_name: 'Haarlem'
+    name: 'zds-stuf-to-zgw-api-translator'
+    url: 'https://github.com/Haarlem/zds-stuf-to-zgw-api-translator'
+    description: 'This project is a proof of concept of a service that can translate StUF ZDS 1.2 SOAP messages to their corresponding ZGW 1.0 API calls.'
+    last_change: '2024-02-13T10:41:21.000Z'
+    stars: 0
+    avatar_url: 'https://avatars.githubusercontent.com/u/15446184?v=4'
+    fork_count: 8
+    issue_open_count: 1
+    last_fetched_at: '2024-07-11T13:22:04.801Z'
+    merge_request_open_count: 4
+    archived: false
+    organization_id: 8
+    readme_url: ''
+    slug: 'haarlem-zds-stuf-to-zgw-api-translator-38688'
+    publiccode_url: 'https://github.com/Haarlem/zds-stuf-to-zgw-api-translator/blob/master/publiccode.yml'
