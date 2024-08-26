@@ -1,4 +1,4 @@
-@api @group-f
+@api @group-h
 Feature:
   As a site builder of the site
   I need to be able to use "Webform" paragraph for content.
@@ -25,6 +25,7 @@ Feature:
     When I am logged in as a moderator
     And I go to the edit form of the "Webform example" "custom page"
     And I click "Choose component"
+    And a modal should open
     And I click "Webform"
     And I select "Test webform" from "Webform" in the "Modal content" region
     And I press "Save" in the "Modal buttons" region

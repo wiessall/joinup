@@ -21,11 +21,12 @@ class InternalPath extends ProviderPluginBase {
   /**
    * {@inheritdoc}
    */
-  public function renderEmbedCode($width, $height, $autoplay) {
+  public function renderEmbedCode($width, $height, $autoplay): array {
     $path = $this->getVideoId();
     if (UrlHelper::isExternal($path)) {
       return [];
     }
+
     return [
       '#type' => 'video_embed_iframe',
       '#provider' => 'internal_path',
@@ -33,13 +34,20 @@ class InternalPath extends ProviderPluginBase {
         ->setOption('base_url', $GLOBALS['base_url'])
         ->setAbsolute()
         ->toString(),
+      '#attributes' => [
+        'title' => $this->getName(),
+        'width' => $width,
+        'height' => $height,
+        'frameborder' => '0',
+        'allowfullscreen' => 'allowfullscreen',
+      ],
     ];
   }
 
   /**
    * {@inheritdoc}
    */
-  public static function isApplicable($input) {
+  public static function isApplicable($input): bool {
     return !UrlHelper::isExternal($input) || UrlHelper::externalIsLocal($input, $GLOBALS['base_url']);
   }
 
@@ -47,10 +55,10 @@ class InternalPath extends ProviderPluginBase {
    * {@inheritdoc}
    */
   public static function getIdFromInput($input): string {
-    if (strpos($input, $GLOBALS['base_url']) === 0) {
+    if (str_starts_with($input, $GLOBALS['base_url'])) {
       $input = substr($input, strlen($GLOBALS['base_url']));
     }
-    elseif (strpos($input, base_path()) === 0) {
+    elseif (str_starts_with($input, base_path())) {
       $input = substr($input, strlen(base_path()) - 1);
     }
     return ltrim($input, '/');
@@ -59,8 +67,18 @@ class InternalPath extends ProviderPluginBase {
   /**
    * {@inheritdoc}
    */
-  public function getRemoteThumbnailUrl() {
+  public function getRemoteThumbnailUrl(): string {
     return '';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getName(): string|\Stringable {
+    return $this->t('@provider | @id', [
+      '@provider' => $this->getPluginDefinition()['title'],
+      '@id' => $this->videoId,
+    ]);
   }
 
 }

@@ -33,13 +33,15 @@
   - Drupal\joinup\Context\EifContext
   - Drupal\joinup\Context\EntityQueueContext
   - Drupal\joinup\Context\EuplContext
-  - Drupal\joinup\Context\FileFieldContext
   - Drupal\joinup\Context\FaviconContext
+  - Drupal\joinup\Context\FileFieldContext
   - Drupal\joinup\Context\FooterContext
+  - Drupal\joinup\Context\GitHubContext
   - Drupal\joinup\Context\HeaderContext
   - Drupal\joinup\Context\HomepageContext
   - Drupal\joinup\Context\InputFilterContext
   - Drupal\joinup\Context\Isa2AnalyticsContext
+  - Drupal\joinup\Context\JavascriptContext
   - Drupal\joinup\Context\JoinupCollectionContext
   - Drupal\joinup\Context\JoinupCommunityContentContext
   - Drupal\joinup\Context\JoinupContext
@@ -55,9 +57,11 @@
   - Drupal\joinup\Context\JoinupLegalContext
   - Drupal\joinup\Context\JoinupLicenceContext
   - Drupal\joinup\Context\JoinupLogContext
+  - Drupal\joinup\Context\JoinupMultilingualContentContext
   - Drupal\joinup\Context\JoinupNewsContext
   - Drupal\joinup\Context\JoinupNewsletterContext
   - Drupal\joinup\Context\JoinupNotificationContext
+  - Drupal\joinup\Context\JoinupOSSSolutionContext
   - Drupal\joinup\Context\JoinupParagraphsContext
   - Drupal\joinup\Context\JoinupSearchContext
   - Drupal\joinup\Context\JoinupSeoContext
@@ -124,28 +128,37 @@ default:
             loggingPrefs:
               performance: ALL
               browser: ALL
-            chromeOptions:
-              w3c: false
+            "goog:chromeOptions":
+              w3c: true
               args:
-                - '--no-sandbox'
-                - '--start-maximized'
-                - '--disable-gpu'
+                # Window size (sync with docker selenium).
                 - '--window-size=1600,1200'
-                - '--disable-dev-shm-usage'
+                # Ignore cert. errors with HTTPS.
+                - '--ignore-certificate-errors'
+                # Additional test-related params.
+                - '--no-sandbox'
                 - '--disable-setuid-sandbox'
                 - '--disable-web-security'
+                - '--disable-dev-shm-usage'
+                - '--disable-gpu'
+                - '--disable-background-timer-throttling'
+                - '--disable-backgrounding-occluded-windows'
+                - '--disable-renderer-backgrounding'
+                - '--disable-software-rasterizer'
                 - '--DNS-prefetch-disable'
-                - '--disable-translate'
-                - '--ignore-certificate-errors'
-                - '--test-type'
                 - '--disable-extensions'
-                - '--incognito'
                 - '--disable-infobars'
+                - '--disable-translate'
+                - '--incognito'
+                - '--no-first-run'
+                - '--disable-popup-blocking'
                 - '--allowed-ips=*'
                 - '--whitelisted-ips=*'
+                - '--test-type'
     LoversOfBehat\TableExtension:
       table_map:
         'actions log report': 'table'
+        'EU OSS Catalogue administration': '[data-drupal-selector="views-form-eu-oss-catalogue-admin-admin"] table.vbo-table'
         'announcement list': '.announcement-list table'
         'group menu edit table': '#menu-overview'
         'eif recommendations': '.eif-recommendations table'
@@ -193,6 +206,8 @@ default:
         Modal buttons: '.ui-dialog-buttonpane'
         Modal content: '.ui-dialog-content'
         Modal title: '.ui-dialog-titlebar'
+        Most recent solutions: '#block-views-block-oss-solutions-listing-most-recent'
+        Most active solutions : '#block-views-block-oss-solutions-listing-most-active'
         My unpublished content area: '.block-user-unpublished'
         Navigation bar: '.joinup-navbar'
         Navigation menu: '#block-ventuno-navigation'
@@ -203,6 +218,7 @@ default:
         Quick links: '.block-group-menu-blockquick-links'
         Related solutions: '.field--name-field-is-related-solutions'
         SevenHeader: '.region-header'
+        Search filters: '.joinup-search-filters'
         Statistics: '#block-ventuno-statistics'
         Table of contents: '#block-ventuno-table-of-contents'
         Table of contents outline: '#block-ventuno-toc-outline'
@@ -212,6 +228,8 @@ default:
         Visually hidden title: '#block-ventuno-pagetitle .visually-hidden'
       drupal:
         drupal_root: ${joinup.site_dir}
+      drush:
+        root: ${joinup.site_dir}
       selectors:
         message_selector: '.alert, .messages'
         error_message_selector: '.alert.alert--error, .messages.messages--error, .alert.alert-danger'
@@ -228,6 +246,7 @@ default:
     FriendsOfBehat\ServiceContainerExtension:
       imports:
         - ${joinup.dir}/vendor/drupaltest/behat-one-time-login/behat.services.yml
+        - ${joinup.dir}/tests/behat.services.yml
   formatters:
     ${behat.formatter.name}: ~
 

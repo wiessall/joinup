@@ -1,0 +1,20 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.oss_contractor_until
+    - node.type.oss_contractor
+  module:
+    - datetime
+id: node.oss_contractor.oss_contractor_until
+field_name: oss_contractor_until
+entity_type: node
+bundle: oss_contractor
+label: Until
+description: 'The date at which the maintenance is going to end. In case of community maintenance, the value should not be more than 2 years in the future, and thus will need to be regularly updated as the community continues working on the project'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: datetime

@@ -1,10 +1,10 @@
 /**
 * Mixin to generate bootstrap icon
 */
-@mixin get-bootstrap-icon($icon-name, $icon-color: currentColor) {
+@mixin get-bootstrap-icon($icon-name, $icon-color: currentColor, $size: 1em) {
   display: inline-block;
-  width: 1em;
-  height: 1em;
+  width: $size;
+  height: $size;
   content: "";
   vertical-align: -0.125em;
   background-color: $icon-color;

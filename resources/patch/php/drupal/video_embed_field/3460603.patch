@@ -1,0 +1,13 @@
+diff --git a/src/Plugin/Field/FieldType/VideoEmbedField.php b/src/Plugin/Field/FieldType/VideoEmbedField.php
+index 48b1b541731b25dc41667fa30883e2c0ac0ac7d5..6b8b3deb362e1781cddda73a7d812d411685ee76 100644
+--- a/src/Plugin/Field/FieldType/VideoEmbedField.php
++++ b/src/Plugin/Field/FieldType/VideoEmbedField.php
+@@ -15,7 +15,7 @@ use Drupal\Core\TypedData\TraversableTypedDataInterface;
+  *   id = "video_embed_field",
+  *   label = @Translation("Video Embed"),
+  *   description = @Translation("Stores a video and then outputs some embed code."),
+- *   category = @Translation("Media"),
++ *   category = "Media",
+  *   default_widget = "video_embed_field_textfield",
+  *   default_formatter = "video_embed_field_video",
+  *   constraints = {"VideoEmbedValidation" = {}}

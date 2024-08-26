@@ -1,4 +1,4 @@
-@api @group-e
+@api @group-a
 Feature: Freeze comments on archived content
   As a visitor of the website I can only view comment on archived community content.
 

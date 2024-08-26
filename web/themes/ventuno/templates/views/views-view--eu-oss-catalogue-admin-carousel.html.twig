@@ -1,0 +1,80 @@
+{#
+/**
+ * @file
+ * Theme override for a main view template.
+ *
+ * Available variables:
+ * - attributes: Remaining HTML attributes for the element.
+ * - css_name: A CSS-safe version of the view name.
+ * - css_class: The user-specified classes names, if any.
+ * - header: The optional header.
+ * - footer: The optional footer.
+ * - rows: The results of the view query, if any.
+ * - empty: The content to display if there are no rows.
+ * - pager: The optional pager next/prev links to display.
+ * - exposed: Exposed widget form/info to display.
+ * - feed_icons: Optional feed icons to display.
+ * - more: An optional link to the next page of results.
+ * - title: Title of the view, only used when displaying in the admin preview.
+ * - title_prefix: Additional output populated by modules, intended to be
+ *   displayed in front of the view title.
+ * - title_suffix: Additional output populated by modules, intended to be
+ *   displayed after the view title.
+ * - attachment_before: An optional attachment view to be displayed before the
+ *   view content.
+ * - attachment_after: An optional attachment view to be displayed after the
+ *   view content.
+ * - dom_id: Unique id for every view being printed to give unique class for
+ *   Javascript.
+ *
+ * @see template_preprocess_views_view()
+ */
+#}
+{%
+  set classes = [
+    'view',
+    'view-' ~ id|clean_class,
+    'view-id-' ~ id,
+    'view-display-id-' ~ display_id,
+    dom_id ? 'js-view-dom-id-' ~ dom_id,
+    'carousel',
+  ]
+%}
+
+{{ attach_library('ventuno/carousel') }}
+
+<div{{ attributes.addClass(classes) }}>
+  {% if rows %}
+    <div class="glide__outer overflow-hidden p-2">
+      <div class="glide">
+        <div class="d-flex flex-wrap align-items-baseline justify-content-end">
+          {{ title_prefix }}
+          <h2 class="carousel__title mt-0 mb-3">{{ view.title }}</h2>
+          {{ title_suffix }}
+          <a href="{{ search_url }}" class="btn btn-secondary mb-3 ms-3">{{ 'View all'|t }}</a>
+          <div class="glide__arrows mb-3 ms-3" data-glide-el="controls">
+            <button class="glide__arrow glide__arrow--left btn btn-lg btn-secondary rounded-circle p-0 me-2" data-glide-dir="<" title="{{ 'Previous item'|t }}">
+              <svg class="icon--m">
+                <use xlink:href="{{ bcl_icon_path }}#chevron-left"></use>
+              </svg>
+            </button>
+            <button class="glide__arrow glide__arrow--right btn btn-lg btn-secondary rounded-circle p-0" data-glide-dir=">" title="{{ 'Next item'|t }}">
+              <svg class="icon--m">
+                <use xlink:href="{{ bcl_icon_path }}#chevron-right"></use>
+              </svg>
+            </button>
+          </div>
+        </div>
+        <div class="glide__track overflow-visible" data-glide-el="track">
+          <div class="glide__slides overflow-visible row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 g-0 mb-3">
+            {{ rows }}
+          </div>
+        </div>
+      </div>
+    </div>
+  {% elseif empty %}
+    <div class="view-empty">
+      {{ empty }}
+    </div>
+  {% endif %}
+</div>

@@ -1,0 +1,15 @@
+diff --git a/src/Gitonomy/Git/Parser/LogParser.php b/src/Gitonomy/Git/Parser/LogParser.php
+index 2672186..4397a46 100644
+--- a/src/Gitonomy/Git/Parser/LogParser.php
++++ b/src/Gitonomy/Git/Parser/LogParser.php
+@@ -49,7 +49,9 @@ protected function doParse()
+             $this->consumeGPGSignature();
+ 
+             $this->consumeNewLine();
+-            $this->consumeNewLine();
++            if ($this->cursor < strlen($this->content)) {
++                $this->consumeNewLine();
++            }
+ 
+             $message = '';
+             if ($this->expects('    ')) {

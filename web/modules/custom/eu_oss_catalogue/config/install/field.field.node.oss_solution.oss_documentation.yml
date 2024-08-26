@@ -1,0 +1,32 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.oss_documentation
+    - node.type.oss_solution
+  module:
+    - link
+  enforced:
+    module:
+      - eu_oss_catalogue
+third_party_settings:
+  eu_oss_catalogue:
+    publiccode_yml:
+      resolvers:
+        - plugin: default
+          config:
+            path: description/[lang]/documentation
+id: node.oss_solution.oss_documentation
+field_name: oss_documentation
+entity_type: node
+bundle: oss_solution
+label: 'Documentation [stored]'
+description: 'The available documentation of the solution.'
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  title: 0
+  link_type: 16
+field_type: link

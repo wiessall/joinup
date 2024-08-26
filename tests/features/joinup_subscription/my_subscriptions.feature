@@ -1,4 +1,4 @@
-@api @group-e
+@api @group-g
 Feature: My subscriptions
   As a user I must be able to manage my subscriptions and related settings.
 
@@ -132,7 +132,6 @@ Feature: My subscriptions
     Given I check the "Discussion" checkbox of the "Alpha Centauri" subscription
     And I check the "Announcements" checkbox of the "Alpha Centauri" subscription
     When I press "Save changes" on the "Alpha Centauri" subscription card
-    And I wait for AJAX to finish
     Then I should not see the "Save changes" button on the "Alpha Centauri" subscription card
     But I should see the "Saved!" button on the "Alpha Centauri" subscription card
     And the "Saved!" button on the "Alpha Centauri" subscription card should be disabled
@@ -167,7 +166,6 @@ Feature: My subscriptions
     And the "Save changes" button on the "Barnard's Star" subscription card should be disabled
     And the "Save changes" button on the "Wolf 359" subscription card should be enabled
     Given I press "Save changes" on the "Alpha Centauri" subscription card
-    And I wait for AJAX to finish
     # No subscriptions actually exist even though one is selected.
     And I should not see the link "Unsubscribe from all"
     Then I should not see the "Save changes" button on the "Alpha Centauri" subscription card

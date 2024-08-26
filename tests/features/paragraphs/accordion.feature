@@ -1,4 +1,4 @@
-@api @javascript @group-f
+@api @javascript @group-h
 Feature:
   As a site builder of the site
   I need to be able to use "Accordion" paragraph for content.
@@ -22,9 +22,9 @@ Feature:
       | Background theme | light      |
       | Extra classes    | test-class |
     And I click "Choose component"
+    And a modal should open
     Then I click "Accordion"
     And press "Add Accordion item"
-    And I wait for AJAX to finish
 
     Given I fill in the 1st "Item label" with "Super" in the "Accordion item" field
     And I enter "Clumsy text" in the 1st "Body" wysiwyg editor in the "Accordion item" field
@@ -43,13 +43,13 @@ Feature:
 
     And I press "Duper"
     # Wait for the animation to finish.
-    And I wait for 2 second
+    And I wait for CSS animations to finish
     Then I should see the text "Crunchy text"
     But I should not see the text "Clumsy text"
 
     And I press "Super"
     # Wait for the animation to finish.
-    And I wait for 2 second
+    And I wait for CSS animations to finish
     Then I should see the text "Clumsy text"
     But I should not see the text "Crunchy text"
 
@@ -70,6 +70,7 @@ Feature:
     Then I am logged in as a moderator
     And I go to the edit form of the "Nested paragraphs" "custom page"
     And I click "Choose component"
+    And a modal should open
     And I click "Accordion"
     And press "Add Accordion item"
 

@@ -1,0 +1,684 @@
+api.bitbucket.org:
+  /2.0/repositories/test_namespace:
+    values:
+      - type: repository
+        full_name: test_namespace/bar
+        links:
+          self:
+            href: https://api.bitbucket.org/2.0/repositories/test_namespace/bar
+          html:
+            href: https://bitbucket.org/test_namespace/bar
+          avatar:
+            href: https://bytebucket.org/ravatar/%7Ba81fa4a1-7339-4a19-8ea5-e64d5eb02865%7D?ts=default
+          pullrequests:
+            href: https://api.bitbucket.org/2.0/repositories/test_namespace/bar/pullrequests
+          commits:
+            href: https://api.bitbucket.org/2.0/repositories/test_namespace/bar/commits
+          forks:
+            href: https://api.bitbucket.org/2.0/repositories/test_namespace/bar/forks
+          watchers:
+            href: https://api.bitbucket.org/2.0/repositories/test_namespace/bar/watchers
+          branches:
+            href: https://api.bitbucket.org/2.0/repositories/test_namespace/bar/refs/branches
+          tags:
+            href: https://api.bitbucket.org/2.0/repositories/test_namespace/bar/refs/tags
+          downloads:
+            href: https://api.bitbucket.org/2.0/repositories/test_namespace/bar/downloads
+          source:
+            href: https://api.bitbucket.org/2.0/repositories/test_namespace/bar/src
+          clone:
+            - name: https
+              href: https://bitbucket.org/test_namespace/bar.git
+            - name: ssh
+              href: git@bitbucket.org:test_namespace/bar.git
+          hooks:
+            href: https://api.bitbucket.org/2.0/repositories/test_namespace/bar/hooks
+        name: bar
+        slug: bar
+        description: ''
+        scm: git
+        website: ~
+        owner:
+          display_name: MAPS SPA
+          links:
+            self:
+              href: https://api.bitbucket.org/2.0/users/%7B2dbe0a81-f937-4a7c-8736-19f12ec24564%7D
+            avatar:
+              href: https://secure.gravatar.com/avatar/087a0ae07ad215e1734abad73b27cc22?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FMS-2.png
+            html:
+              href: https://bitbucket.org/%7B2dbe0a81-f937-4a7c-8736-19f12ec24564%7D/
+          type: user
+          uuid: "{2dbe0a81-f937-4a7c-8736-19f12ec24564}"
+          account_id: 5f719b803fe076006936e504
+          nickname: MAPS SPA
+        workspace:
+          type: workspace
+          uuid: "{2dbe0a81-f937-4a7c-8736-19f12ec24564}"
+          name: MAPS SPA
+          slug: test_namespace
+          links:
+            avatar:
+              href: https://bitbucket.org/workspaces/test_namespace/avatar/?ts=1669713722
+            html:
+              href: https://bitbucket.org/test_namespace/
+            self:
+              href: https://api.bitbucket.org/2.0/workspaces/test_namespace
+        is_private: false
+        project:
+          type: project
+          key: GZOOM
+          uuid: "{5738d41a-6540-4579-800d-4b5865c41127}"
+          name: gzoom
+          links:
+            self:
+              href: https://api.bitbucket.org/2.0/workspaces/test_namespace/projects/GZOOM
+            html:
+              href: https://bitbucket.org/test_namespace/workspace/projects/GZOOM
+            avatar:
+              href: https://bitbucket.org/account/user/test_namespace/projects/GZOOM/avatar/32?ts=1622453373
+        fork_policy: allow_forks
+        created_on: '2021-06-01T08:33:55.994840+00:00'
+        updated_on: '2023-07-11T14:09:33.151218+00:00'
+        size: 277683613
+        language: ''
+        uuid: "{a81fa4a1-7339-4a19-8ea5-e64d5eb02865}"
+        mainbranch:
+          name: master
+          type: branch
+        override_settings:
+          default_merge_strategy: false
+          branching_model: false
+        parent: ~
+        has_issues: false
+        has_wiki: false
+      - type: repository
+        full_name: test_namespace/baz
+        links:
+          self:
+            href: https://api.bitbucket.org/2.0/repositories/test_namespace/baz
+          html:
+            href: https://bitbucket.org/test_namespace/baz
+          avatar:
+            href: https://bytebucket.org/ravatar/%7Bf9883d63-17c1-44b6-8fb1-0478c7b9e557%7D?ts=453345
+          pullrequests:
+            href: https://api.bitbucket.org/2.0/repositories/test_namespace/baz/pullrequests
+          commits:
+            href: https://api.bitbucket.org/2.0/repositories/test_namespace/baz/commits
+          forks:
+            href: https://api.bitbucket.org/2.0/repositories/test_namespace/baz/forks
+          watchers:
+            href: https://api.bitbucket.org/2.0/repositories/test_namespace/baz/watchers
+          branches:
+            href: https://api.bitbucket.org/2.0/repositories/test_namespace/baz/refs/branches
+          tags:
+            href: https://api.bitbucket.org/2.0/repositories/test_namespace/baz/refs/tags
+          downloads:
+            href: https://api.bitbucket.org/2.0/repositories/test_namespace/baz/downloads
+          source:
+            href: https://api.bitbucket.org/2.0/repositories/test_namespace/baz/src
+          clone:
+            - name: https
+              href: https://bitbucket.org/test_namespace/baz.git
+            - name: ssh
+              href: git@bitbucket.org:test_namespace/baz.git
+          hooks:
+            href: https://api.bitbucket.org/2.0/repositories/test_namespace/baz/hooks
+        name: baz
+        slug: baz
+        description: 'This is the Baz Project Git description'
+        scm: git
+        website: ~
+        owner:
+          display_name: MAPS SPA
+          links:
+            self:
+              href: https://api.bitbucket.org/2.0/users/%7B2dbe0a81-f937-4a7c-8736-19f12ec24564%7D
+            avatar:
+              href: https://secure.gravatar.com/avatar/087a0ae07ad215e1734abad73b27cc22?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FMS-2.png
+            html:
+              href: https://bitbucket.org/%7B2dbe0a81-f937-4a7c-8736-19f12ec24564%7D/
+          type: user
+          uuid: "{2dbe0a81-f937-4a7c-8736-19f12ec24564}"
+          account_id: 5f719b803fe076006936e504
+          nickname: MAPS SPA
+        workspace:
+          type: workspace
+          uuid: "{2dbe0a81-f937-4a7c-8736-19f12ec24564}"
+          name: MAPS SPA
+          slug: test_namespace
+          links:
+            avatar:
+              href: https://bitbucket.org/workspaces/test_namespace/avatar/?ts=1669713722
+            html:
+              href: https://bitbucket.org/test_namespace/
+            self:
+              href: https://api.bitbucket.org/2.0/workspaces/test_namespace
+        is_private: false
+        project:
+          type: project
+          key: baz
+          uuid: "{5738d41a-6540-4579-800d-4b5865c41127}"
+          name: baz
+          links:
+            self:
+              href: https://api.bitbucket.org/2.0/workspaces/test_namespace/projects/baz
+            html:
+              href: https://bitbucket.org/test_namespace/workspace/projects/baz
+            avatar:
+              href: https://bitbucket.org/account/user/test_namespace/projects/baz/avatar/32?ts=1622453373
+        fork_policy: allow_forks
+        created_on: '2021-06-01T08:37:14.385781+00:00'
+        updated_on: '2023-07-11T14:08:52.134256+00:00'
+        size: 1665652
+        language: ''
+        uuid: "{f9883d63-17c1-44b6-8fb1-0478c7b9e557}"
+        mainbranch:
+          name: master
+          type: branch
+        override_settings:
+          default_merge_strategy: false
+          branching_model: false
+        parent: ~
+        has_issues: false
+        has_wiki: false
+    pagelen: 2
+    size: 2
+    page: 1
+
+  # Tags of Bar project.
+  /2.0/repositories/test_namespace/bar/refs/tags?pagelen=1&sort=-target.date:
+    values:
+      - name: 2.7.1
+        type: tag
+        message: null
+        date: null
+        tagger: null
+        target:
+          type: commit
+          hash: da001cdf6ce8f3fd3f178f0ef189ef0c524bdc97 # da001cdf6ce8f3fd3f178f0ef189ef0c524bdc97
+          date: '2021-05-24T09:05:31+00:00'
+          author:
+            type: author
+            raw: 'Antonio Calò <antonio.calo@mapsgroup.it>'
+            user:
+              display_name: 'Antonio Calò'
+              links:
+                self:
+                  href: 'https://api.bitbucket.org/2.0/users/%7B153cb5e0-c45d-4750-8232-1d54fab87dad%7D'
+                avatar:
+                  href: 'https://secure.gravatar.com/avatar/e9e669ba0d1cc498d0478a71f3ff4624?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FAC-4.png'
+                html:
+                  href: 'https://bitbucket.org/%7B153cb5e0-c45d-4750-8232-1d54fab87dad%7D/'
+              type: user
+              uuid: '{153cb5e0-c45d-4750-8232-1d54fab87dad}'
+              account_id: 5f89649656eec0007684e9e7
+              nickname: 'Antonio Calò'
+          message: |
+            release version 2.7.1
+          links:
+            self:
+              href: 'https://api.bitbucket.org/2.0/repositories/test_namespace/bar/commit/da001cdf6ce8f3fd3f178f0ef189ef0c524bdc97'
+            html:
+              href: 'https://bitbucket.org/test_namespace/bar/commits/da001cdf6ce8f3fd3f178f0ef189ef0c524bdc97'
+            diff:
+              href: 'https://api.bitbucket.org/2.0/repositories/test_namespace/bar/diff/da001cdf6ce8f3fd3f178f0ef189ef0c524bdc97'
+            approve:
+              href: 'https://api.bitbucket.org/2.0/repositories/test_namespace/bar/commit/da001cdf6ce8f3fd3f178f0ef189ef0c524bdc97/approve'
+            comments:
+              href: 'https://api.bitbucket.org/2.0/repositories/test_namespace/bar/commit/da001cdf6ce8f3fd3f178f0ef189ef0c524bdc97/comments'
+            statuses:
+              href: 'https://api.bitbucket.org/2.0/repositories/test_namespace/bar/commit/da001cdf6ce8f3fd3f178f0ef189ef0c524bdc97/statuses'
+            patch:
+              href: 'https://api.bitbucket.org/2.0/repositories/test_namespace/bar/patch/da001cdf6ce8f3fd3f178f0ef189ef0c524bdc97'
+          parents:
+            - hash: ef37db02b210953056d083bf5ab492d77e1081ba
+              links:
+                self:
+                  href: 'https://api.bitbucket.org/2.0/repositories/test_namespace/bar/commit/ef37db02b210953056d083bf5ab492d77e1081ba'
+                html:
+                  href: 'https://bitbucket.org/test_namespace/bar/commits/ef37db02b210953056d083bf5ab492d77e1081ba'
+              type: commit
+          repository:
+            type: repository
+            full_name: test_namespace/bar
+            links:
+              self:
+                href: 'https://api.bitbucket.org/2.0/repositories/test_namespace/bar'
+              html:
+                href: 'https://bitbucket.org/test_namespace/bar'
+              avatar:
+                href: 'https://bytebucket.org/ravatar/%7Ba81fa4a1-7339-4a19-8ea5-e64d5eb02865%7D?ts=default'
+            name: bar
+            uuid: '{a81fa4a1-7339-4a19-8ea5-e64d5eb02865}'
+        links:
+          self:
+            href: 'https://api.bitbucket.org/2.0/repositories/test_namespace/bar/refs/tags/2.7.1'
+          commits:
+            href: 'https://api.bitbucket.org/2.0/repositories/test_namespace/bar/commits/2.7.1'
+          html:
+            href: 'https://bitbucket.org/test_namespace/bar/commits/tag/2.7.1'
+    pagelen: 1
+    size: 15
+    page: 1
+    next: 'https://api.bitbucket.org/2.0/repositories/test_namespace/bar/refs/tags?sort=-target.date&pagelen=1&page=2'
+
+  # Forks of Bar project 1.
+  /2.0/repositories/test_namespace/bar/forks?pagelen=1:
+    values:
+      - type: repository
+        full_name: anotherNamespace/bar
+        links:
+          self:
+            href: https://api.bitbucket.org/2.0/repositories/anotherNamespace/bar
+          html:
+            href: https://bitbucket.org/anotherNamespace/bar
+          avatar:
+            href: https://bytebucket.org/ravatar/%7Bc304fbcb-813f-4e96-b08f-cde9f0e92625%7D?ts=java
+          pullrequests:
+            href: https://api.bitbucket.org/2.0/repositories/anotherNamespace/bar/pullrequests
+          commits:
+            href: https://api.bitbucket.org/2.0/repositories/anotherNamespace/bar/commits
+          forks:
+            href: https://api.bitbucket.org/2.0/repositories/anotherNamespace/bar/forks
+          watchers:
+            href: https://api.bitbucket.org/2.0/repositories/anotherNamespace/bar/watchers
+          branches:
+            href: https://api.bitbucket.org/2.0/repositories/anotherNamespace/bar/refs/branches
+          tags:
+            href: https://api.bitbucket.org/2.0/repositories/anotherNamespace/bar/refs/tags
+          downloads:
+            href: https://api.bitbucket.org/2.0/repositories/anotherNamespace/bar/downloads
+          source:
+            href: https://api.bitbucket.org/2.0/repositories/anotherNamespace/bar/src
+          clone:
+            - name: https
+              href: https://bitbucket.org/anotherNamespace/bar.git
+            - name: ssh
+              href: git@bitbucket.org:anotherNamespace/bar.git
+          hooks:
+            href: https://api.bitbucket.org/2.0/repositories/anotherNamespace/bar/hooks
+        name: Bar Project
+        slug: bar
+        description: ''
+        scm: git
+        website: ~
+        owner:
+          display_name: Andrew Imeson
+          links:
+            self:
+              href: https://api.bitbucket.org/2.0/users/%7B98683c80-92ed-47dd-888a-8b689346e243%7D
+            avatar:
+              href: https://secure.gravatar.com/avatar/29ff985dd829222d17ae9f9c7cacc235?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FAI-3.png
+            html:
+              href: https://bitbucket.org/%7B98683c80-92ed-47dd-888a-8b689346e243%7D/
+          type: user
+          uuid: "{98683c80-92ed-47dd-888a-8b689346e243}"
+          account_id: 557058:672b287b-2b85-4a00-8f7d-1efd86e76912
+          nickname: Andrew Imeson
+        workspace:
+          type: workspace
+          uuid: "{98683c80-92ed-47dd-888a-8b689346e243}"
+          name: Another Namespace
+          slug: anotherNamespace
+          links:
+            avatar:
+              href: https://bitbucket.org/workspaces/anotherNamespace/avatar/?ts=1543727472
+            html:
+              href: https://bitbucket.org/anotherNamespace/
+            self:
+              href: https://api.bitbucket.org/2.0/workspaces/anotherNamespace
+        is_private: false
+        project:
+          type: project
+          key: PROJ
+          uuid: "{2defdf4d-29e7-4ad6-9043-04f52473f9bf}"
+          name: Untitled project
+          links:
+            self:
+              href: https://api.bitbucket.org/2.0/workspaces/anotherNamespace/projects/PROJ
+            html:
+              href: https://bitbucket.org/anotherNamespace/workspace/projects/PROJ
+            avatar:
+              href: https://bitbucket.org/account/user/anotherNamespace/projects/PROJ/avatar/32?ts=1543727472
+        fork_policy: allow_forks
+        created_on: '2017-12-27T18:21:17.765164+00:00'
+        updated_on: '2017-12-27T18:21:17.917381+00:00'
+        size: 23320946
+        language: java
+        uuid: "{c304fbcb-813f-4e96-b08f-cde9f0e92625}"
+        mainbranch:
+          name: master
+          type: branch
+        override_settings:
+          default_merge_strategy: false
+          branching_model: false
+        parent:
+          type: repository
+          full_name: test_namespace/bar
+          links:
+            self:
+              href: https://api.bitbucket.org/2.0/repositories/test_namespace/bar
+            html:
+              href: https://bitbucket.org/test_namespace/bar
+            avatar:
+              href: https://bytebucket.org/ravatar/%7Badb790ac-5b02-4c66-aa1c-8c7d6dbac2c2%7D?ts=167544
+          name: Bar Project
+          uuid: "{adb790ac-5b02-4c66-aa1c-8c7d6dbac2c2}"
+        has_issues: false
+        has_wiki: false
+    pagelen: 1
+    size: 5
+    page: 1
+
+  # PRs of Bar project.
+  /2.0/repositories/test_namespace/bar/pullrequests?state=OPEN&pagelen=1:
+    values:
+      - comment_count: 34
+        task_count: 0
+        type: pullrequest
+        id: 3244
+        title: Remove slash in publiccode.yml that caused validation failure
+        description: Remove slash in publiccode.yml that caused validation failure
+        state: OPEN
+        merge_commit: ~
+        close_source_branch: false
+        closed_by: ~
+    pagelen: 1
+    size: 2
+    page: 1
+    next: https://api.bitbucket.org/2.0/repositories/test_namespace/bar/pullrequests?state=OPEN&pagelen=1&page=2
+
+  # Publiccode of Bar project 1.
+  /2.0/repositories/test_namespace/bar/src/master/publiccode.yml: |-
+    # This repository adheres to the publiccode.yml standard by including this
+    # metadata file that makes public software easily discoverable.
+    # More info at https://github.com/italia/publiccode.yml
+
+    publiccodeYmlVersion: '0.2'
+    name: Bar Project
+    releaseDate: '2018-09-28'
+    url: 'https://bitbucket.org/test_namespace/bar.git'
+    developmentStatus: stable
+    softwareType: standalone/backend
+    softwareVersion: 6.0.2
+    landingURL: 'https://bar-project.examle.com/'
+    logo: assets/logo.png
+    platforms:
+      - web
+    dependsOn:
+      open:
+        - name: Karaf
+    categories:
+      - knowledge-management
+    maintenance:
+      type: contract
+      contractors:
+        - name: infeurope
+          until: '2020-07-31'
+    legal:
+      license: BSD-3-Clause
+      mainCopyrightOwner: University of Rome Tor Vergata
+      repoOwner: University of Rome Tor Vergata
+    localisation:
+      localisationReady: false
+      availableLanguages:
+        - en
+    description:
+      it:
+        longDescription: |-
+          [IT] Bar Project: Long description
+          **Some bold text**
+          * Some list item
+          * Another list item
+
+          _Some italic text_
+        genericName: Bar Management Service Platform
+        localisedName: Bar Project
+        documentation: 'https://bar-project.examle.com/doc/'
+        apiDocumentation: 'https://bar-project.examle.com/doc/api/'
+        features:
+          - RDF Management Services
+        shortDescription: '[IT] Bar Project: Short description'
+        screenshots:
+          - 'assets/Bar-Screenshot-1.png'
+          - 'assets/Bar-Screenshot-2.png'
+          - 'assets/Bar-Screenshot-3.png'
+
+
+  # Logo metadata of Bar project.
+  /2.0/repositories/test_namespace/bar/src/master/assets/logo.png?format=meta:
+    path: assets/logo.png
+    commit:
+      hash: da001cdf6ce8f3fd3f178f0ef189ef0c524bdc97
+      links:
+        self:
+          href: https://api.bitbucket.org/2.0/repositories/test_namespace/bar/commit/da001cdf6ce8f3fd3f178f0ef189ef0c524bdc97
+        html:
+          href: https://bitbucket.org/test_namespace/bar/commits/da001cdf6ce8f3fd3f178f0ef189ef0c524bdc97
+      type: commit
+    type: commit_file
+    attributes: [ ]
+    escaped_path: assets/logo.png
+    size: 2129
+    mimetype: image/png
+    links:
+      self:
+        href: https://api.bitbucket.org/2.0/repositories/test_namespace/bar/src/da001cdf6ce8f3fd3f178f0ef189ef0c524bdc97/assets/logo.png
+      meta:
+        href: https://api.bitbucket.org/2.0/repositories/test_namespace/bar/src/da001cdf6ce8f3fd3f178f0ef189ef0c524bdc97/assets/logo.png?format=meta
+      history:
+        href: https://api.bitbucket.org/2.0/repositories/test_namespace/bar/filehistory/da001cdf6ce8f3fd3f178f0ef189ef0c524bdc97/assets/logo.png
+
+  # Logo of Bar project - binary file response.
+  /2.0/repositories/test_namespace/bar/src/da001cdf6ce8f3fd3f178f0ef189ef0c524bdc97/assets/logo.png: !!binary iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg==
+
+  # Screenshot 1 metadata of Bar project.
+  /2.0/repositories/test_namespace/bar/src/master/assets/Bar-Screenshot-1.png?format=meta:
+    path: assets/Bar-Screenshot-1.png
+    commit:
+      hash: da001cdf6ce8f3fd3f178f0ef189ef0c524bdc97
+      links:
+        self:
+          href: https://api.bitbucket.org/2.0/repositories/test_namespace/bar/commit/da001cdf6ce8f3fd3f178f0ef189ef0c524bdc97
+        html:
+          href: https://bitbucket.org/test_namespace/bar/commits/da001cdf6ce8f3fd3f178f0ef189ef0c524bdc97
+      type: commit
+    type: commit_file
+    attributes: [ ]
+    escaped_path: assets/Bar-Screenshot-1.png
+    size: 2129
+    mimetype: image/png
+    links:
+      self:
+        href: https://api.bitbucket.org/2.0/repositories/test_namespace/bar/src/da001cdf6ce8f3fd3f178f0ef189ef0c524bdc97/assets/Bar-Screenshot-1.png
+      meta:
+        href: https://api.bitbucket.org/2.0/repositories/test_namespace/bar/src/da001cdf6ce8f3fd3f178f0ef189ef0c524bdc97/assets/Bar-Screenshot-1.png?format=meta
+      history:
+        href: https://api.bitbucket.org/2.0/repositories/test_namespace/bar/filehistory/da001cdf6ce8f3fd3f178f0ef189ef0c524bdc97/assets/Bar-Screenshot-1.png
+
+  # Bar Screenshot 1 - binary file response.
+  /2.0/repositories/test_namespace/bar/src/da001cdf6ce8f3fd3f178f0ef189ef0c524bdc97/assets/Bar-Screenshot-1.png: !!binary iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg==
+
+  # Screenshot 2 metadata of Bar project.
+  /2.0/repositories/test_namespace/bar/src/master/assets/Bar-Screenshot-2.png?format=meta:
+    path: assets/Bar-Screenshot-2.png
+    commit:
+      hash: da001cdf6ce8f3fd3f178f0ef189ef0c524bdc97
+      links:
+        self:
+          href: https://api.bitbucket.org/2.0/repositories/test_namespace/bar/commit/da001cdf6ce8f3fd3f178f0ef189ef0c524bdc97
+        html:
+          href: https://bitbucket.org/test_namespace/bar/commits/da001cdf6ce8f3fd3f178f0ef189ef0c524bdc97
+      type: commit
+    type: commit_file
+    attributes: [ ]
+    escaped_path: assets/Bar-Screenshot-2.png
+    size: 2129
+    mimetype: image/png
+    links:
+      self:
+        href: https://api.bitbucket.org/2.0/repositories/test_namespace/bar/src/da001cdf6ce8f3fd3f178f0ef189ef0c524bdc97/assets/Bar-Screenshot-2.png
+      meta:
+        href: https://api.bitbucket.org/2.0/repositories/test_namespace/bar/src/da001cdf6ce8f3fd3f178f0ef189ef0c524bdc97/assets/Bar-Screenshot-2.png?format=meta
+      history:
+        href: https://api.bitbucket.org/2.0/repositories/test_namespace/bar/filehistory/da001cdf6ce8f3fd3f178f0ef189ef0c524bdc97/assets/Bar-Screenshot-2.png
+
+  # Bar Screenshot 2 - binary file response.
+  /2.0/repositories/test_namespace/bar/src/da001cdf6ce8f3fd3f178f0ef189ef0c524bdc97/assets/Bar-Screenshot-2.png: !!binary iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR4nGMAAQAABQABDQottAAAAABJRU5ErkJggg==
+
+  # Screenshot 3 metadata of Bar project.
+  /2.0/repositories/test_namespace/bar/src/master/assets/Bar-Screenshot-3.png?format=meta:
+    _http_status: 404
+    type: error
+    error:
+      message: 'No such file or directory: assets/Bar-Screenshot-3.png'
+
+  # Tags of Baz project.
+  /2.0/repositories/test_namespace/baz/refs/tags?pagelen=1&sort=-target.date:
+    values:
+      - name: v10.2.345
+        type: tag
+        message: null
+        date: null
+        tagger: null
+        target:
+          type: commit
+          hash: dea1f1703f493ba5c992f7c5c5636b768d9b7842
+          date: '2024-01-29T09:22:33+03:00'
+          message: 'Tagging v10.2.345'
+          links:
+            self:
+              href: 'https://api.bitbucket.org/2.0/repositories/test_namespace/baz/commit/dea1f1703f493ba5c992f7c5c5636b768d9b7842'
+            html:
+              href: 'https://bitbucket.org/test_namespace/baz/commits/dea1f1703f493ba5c992f7c5c5636b768d9b7842'
+            diff:
+              href: 'https://api.bitbucket.org/2.0/repositories/test_namespace/baz/diff/dea1f1703f493ba5c992f7c5c5636b768d9b7842'
+            approve:
+              href: 'https://api.bitbucket.org/2.0/repositories/test_namespace/baz/commit/dea1f1703f493ba5c992f7c5c5636b768d9b7842/approve'
+            comments:
+              href: 'https://api.bitbucket.org/2.0/repositories/test_namespace/baz/commit/dea1f1703f493ba5c992f7c5c5636b768d9b7842/comments'
+            statuses:
+              href: 'https://api.bitbucket.org/2.0/repositories/test_namespace/baz/commit/dea1f1703f493ba5c992f7c5c5636b768d9b7842/statuses'
+            patch:
+              href: 'https://api.bitbucket.org/2.0/repositories/test_namespace/baz/patch/dea1f1703f493ba5c992f7c5c5636b768d9b7842'
+          parents:
+            - hash: ef37db02b210953056d083bf5ab492d77e1081ba
+              links:
+                self:
+                  href: 'https://api.bitbucket.org/2.0/repositories/test_namespace/baz/commit/ef37db02b210953056d083bf5ab492d77e1081ba'
+                html:
+                  href: 'https://bitbucket.org/test_namespace/baz/commits/ef37db02b210953056d083bf5ab492d77e1081ba'
+              type: commit
+          repository:
+            type: repository
+            full_name: test_namespace/baz
+            links:
+              self:
+                href: 'https://api.bitbucket.org/2.0/repositories/test_namespace/baz'
+              html:
+                href: 'https://bitbucket.org/test_namespace/baz'
+              avatar:
+                href: 'https://bytebucket.org/ravatar/%7Ba81fa4a1-7339-4a19-8ea5-e64d5eb02865%7D?ts=default'
+            name: baz
+            uuid: '{a81fa4a1-7339-4a19-8ea5-e64d5eb02865}'
+        links:
+          self:
+            href: 'https://api.bitbucket.org/2.0/repositories/test_namespace/baz/refs/tags/v10.2.345'
+          commits:
+            href: 'https://api.bitbucket.org/2.0/repositories/test_namespace/baz/commits/v10.2.345'
+          html:
+            href: 'https://bitbucket.org/test_namespace/baz/commits/tag/v10.2.345'
+    pagelen: 1
+    size: 231
+    page: 1
+    next: 'https://api.bitbucket.org/2.0/repositories/test_namespace/baz/refs/tags?sort=-target.date&pagelen=1&page=2'
+
+  # Forks of Baz project 2.
+  /2.0/repositories/test_namespace/baz/forks?pagelen=1:
+    values: [  ]
+    pagelen: 1
+    size: 0
+    page: 1
+
+  # PRs of Baz project.
+  /2.0/repositories/test_namespace/baz/pullrequests?state=OPEN&pagelen=1:
+    _http_status: 500
+    type: error
+    error:
+      message: 'Internal server error'
+
+
+  # Publiccode of Baz project 2.
+  /2.0/repositories/test_namespace/baz/src/master/publiccode.yml:
+    _http_status: 404
+    type: error
+    error:
+      message: 'No such file or directory: publiccode.yml'
+
+  # Responses for ::getFileRawUrl test.
+  # A limited repository response.
+  /2.0/repositories/fooNamespace/bar-project:
+    type: repository
+    full_name: fooNamespace/bar-project
+    name: Bar Project
+    slug: bar-project
+    uuid: "{e2aabf8d-c8ce-4508-a21b-320c259764f6}"
+    mainbranch:
+      name: master
+      type: branch
+
+  # Missing file response.
+  /2.0/repositories/fooNamespace/bar-project/src/master/missing.csv?format=meta:
+    _http_status: 404
+    type: error
+    error:
+      message: 'No such file or directory: missing.csv'
+
+  # Publiccode.yml file url response (from root).
+  /2.0/repositories/fooNamespace/bar-project/src/master/publiccode.yml?format=meta:
+    path: publiccode.yml
+    commit:
+      hash: 792a6afb90c17383af0a5c3f9642c2a5cb55f6fe
+      links:
+        self:
+          href: https://api.bitbucket.org/2.0/repositories/fooNamespace/bar-project/commit/792a6afb90c17383af0a5c3f9642c2a5cb55f6fe
+        html:
+          href: https://bitbucket.org/fooNamespace/bar-project/commits/792a6afb90c17383af0a5c3f9642c2a5cb55f6fe
+      type: commit
+    type: commit_file
+    attributes: [ ]
+    escaped_path: publiccode.yml
+    size: 2129
+    mimetype: text/plain
+    links:
+      self:
+        href: https://api.bitbucket.org/2.0/repositories/fooNamespace/bar-project/src/792a6afb90c17383af0a5c3f9642c2a5cb55f6fe/publiccode.yml
+      meta:
+        href: https://api.bitbucket.org/2.0/repositories/fooNamespace/bar-project/src/792a6afb90c17383af0a5c3f9642c2a5cb55f6fe/publiccode.yml?format=meta
+      history:
+        href: https://api.bitbucket.org/2.0/repositories/fooNamespace/bar-project/filehistory/792a6afb90c17383af0a5c3f9642c2a5cb55f6fe/publiccode.yml
+
+  # Logo file response (in subfolder).
+  /2.0/repositories/fooNamespace/bar-project/src/master/images/bar_logo.png?format=meta:
+    path: images/bar_logo.png
+    commit:
+      hash: 792a6afb90c17383af0a5c3f9642c2a5cb55f6fe
+      links:
+        self:
+          href: 'https://api.bitbucket.org/2.0/repositories/fooNamespace/bar-project/commit/792a6afb90c17383af0a5c3f9642c2a5cb55f6fe'
+        html:
+          href: 'https://bitbucket.org/fooNamespace/bar-project/commits/792a6afb90c17383af0a5c3f9642c2a5cb55f6fe'
+      type: commit
+    type: commit_file
+    attributes:
+      - binary
+    escaped_path: images/bar_logo.png
+    size: 2147
+    mimetype: image/png
+    links:
+      self:
+        href: 'https://api.bitbucket.org/2.0/repositories/fooNamespace/bar-project/src/792a6afb90c17383af0a5c3f9642c2a5cb55f6fe/images/bar_logo.png'
+      meta:
+        href: 'https://api.bitbucket.org/2.0/repositories/fooNamespace/bar-project/src/792a6afb90c17383af0a5c3f9642c2a5cb55f6fe/images/bar_logo.png?format=meta'
+      history:
+        href: 'https://api.bitbucket.org/2.0/repositories/fooNamespace/bar-project/filehistory/792a6afb90c17383af0a5c3f9642c2a5cb55f6fe/images/bar_logo.png'

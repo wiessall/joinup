@@ -1,7 +1,6 @@
-@api
+@api @group-clone
 Feature: Tests related to topic meta entities
 
-  @group-clone
   Scenario: Regression test for orphaned topic meta entities on admin page
     Given I am logged in as a moderator
     And I visit "/admin/homepage-topics"

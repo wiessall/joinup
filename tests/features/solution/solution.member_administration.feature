@@ -1,4 +1,4 @@
-@api @group-g
+@api @group-i
 Feature: Solution membership administration
   In order to manage a solution
   As a privileged user

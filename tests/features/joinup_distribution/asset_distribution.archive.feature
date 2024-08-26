@@ -1,4 +1,4 @@
-@api
+@api @group-e
 Feature: Asset distribution content archival.
 
   Scenario: Asset distribution content can be archived any time.
