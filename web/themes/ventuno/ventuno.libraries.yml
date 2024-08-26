@@ -45,7 +45,7 @@ homepage:
   dependencies:
     - ventuno/tour-first-balloon
 
-page_manager.forum_sitewide:
+page_manager.discussions_sitewide:
   dependencies:
     - ventuno/full-width-bg
 

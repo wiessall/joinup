@@ -219,13 +219,11 @@ Feature: Collection moderation
     And I enter "The samurai are attacking the railroads" in the "Description" wysiwyg editor
     And I select "Employment and Support Allowance" from "Topic"
     And I press "Add new" at the "Owner" field
-    And I wait for AJAX to finish
     And I fill in "Name" with "Katsumoto"
     And I check the box "Company"
     And I expand the "Additional fields" accordion section
     Then the "Additional fields" accordion section should be active
     And I attach the file "logo.png" to "Logo"
-    And I wait for AJAX to finish
     And I select the radio button "Any user can create content."
 
     # Regression test for a bug that caused the content creation setting to be
@@ -234,7 +232,6 @@ Feature: Collection moderation
     # has been replaced with the Content creation radio buttons, but we are
     # keeping the coverage for now.
     When I press "Add another item" at the "Geographical coverage" field
-    And I wait for AJAX to finish
     Then the radio button "Any user can create content." from field "Content creation" should be selected
 
     # Submit the form and approve it as a moderator. This should not cause the
@@ -278,12 +275,10 @@ Feature: Collection moderation
     And I select "Statistics and Analysis" from "Topic"
     # An ajax callback is executed now.
     And I press "Add new" at the "Owner" field
-    And I wait for AJAX to finish
     And I fill in "Name" with "Garnett Clifton"
     And I check the box "Company"
     And I expand the "Additional fields" accordion section
     And I attach the file "logo.png" to "Logo"
-    And I wait for AJAX to finish
     And I select the radio button "Any user can create content."
 
     # Save the collection.
@@ -318,12 +313,10 @@ Feature: Collection moderation
     And I select "Supplier exchange" from "Topic"
     # An ajax callback is executed now.
     And I press "Add new" at the "Owner" field
-    And I wait for AJAX to finish
     And I fill in "Name" with "Coretta Simonson"
     And I check the box "Company"
     And I expand the "Additional fields" accordion section
     And I attach the file "logo.png" to "Logo"
-    And I wait for AJAX to finish
     And I select the radio button "Only facilitators and authors can create content."
 
     # Save the collection.
@@ -359,14 +352,11 @@ Feature: Collection moderation
     And I select "Data gathering and processing" from "Topic"
     # An ajax callback is executed now.
     And I press "Add new" at the "Owner" field
-    And I wait for AJAX to finish
     And I fill in "Name" with "Terrance Nash"
     And I check the box "Company"
     And I expand the "Additional fields" accordion section
     And I attach the file "logo.png" to "Logo"
-    And I wait for AJAX to finish
     When I press "Add another item" at the "Geographical coverage" field
-    And I wait for AJAX to finish
     And I select the radio button "Only facilitators and authors can create content."
 
     # Save the collection.
@@ -401,16 +391,13 @@ Feature: Collection moderation
     And I select "Employment and Support Allowance" from "Topic"
     # An ajax callback is executed now.
     And I press "Add new" at the "Owner" field
-    And I wait for AJAX to finish
     And I fill in "Name" with "Mable Pelley"
     And I check the box "Company"
     And I expand the "Additional fields" accordion section
     And I attach the file "logo.png" to "Logo"
-    And I wait for AJAX to finish
     And I select the radio button "Only facilitators and authors can create content."
 
     When I press "Add another item" at the "Geographical coverage" field
-    And I wait for AJAX to finish
 
     # Save the collection.
     When I press "Propose"

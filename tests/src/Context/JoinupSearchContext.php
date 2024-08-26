@@ -341,7 +341,7 @@ class JoinupSearchContext extends RawDrupalContext {
     $session = $this->getSession();
     $element = $this->getSearchBarElement($input);
     $session->getDriver()->keyDown($element->getXpath(), '', NULL);
-    $session->wait(1000);
+    $this->waitForAjax();
     $allResults = $this->getSession()->getPage()->findAll('css', 'ul.ui-autocomplete a');
     $found = array_map(function ($item) {
       /** @var \Behat\Mink\Element\NodeElement $item */

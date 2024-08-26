@@ -192,35 +192,28 @@ Feature: OSS catalogue search
     When I visit the OSS search page
 
     Then I enter "app" in the "oss search bar"
-    And I wait for AJAX to finish
     Then I should see the following "oss search" suggestions:
       | Another Open Source App  |
     Then I enter "data" in the "oss search bar"
-    And I wait for AJAX to finish
     Then I should see the following "oss search" suggestions:
       | Community Data Tracker   |
       | Magic Data Converter     |
       | Data Security Sentinel   |
     Then I enter "ope" in the "oss search bar"
-    And I wait for AJAX to finish
     Then I should see the following "oss search" suggestions:
       | Another Open Source App   |
       | Open AI Helper            |
     Then I enter "open" in the "oss search bar"
-    And I wait for AJAX to finish
     Then I should see the following "oss search" suggestions:
       | Another Open Source App   |
       | Open AI Helper            |
     Then I enter "lib" in the "oss search bar"
-    And I wait for AJAX to finish
     Then I should see the following "oss search" suggestions:
       | LibreOffice              |
     Then I enter "libre" in the "oss search bar"
-    And I wait for AJAX to finish
     Then I should see the following "oss search" suggestions:
       | LibreOffice              |
     Then I enter "underneath" in the "oss search bar"
-    And I wait for AJAX to finish
     Then I should not see any suggestion at "oss search"
 
     # Check sort by filters.
