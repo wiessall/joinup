@@ -52,7 +52,7 @@ joinup_group.membership_permissions_info:
           - solution
 
 joinup_group.reports:
-  path: '/node/{group}/reports'
+  path: '/node/{node}/reports'
   defaults:
     _controller: Drupal\joinup_group\Controller\GroupReportsController::reports
     _title: 'Reports'
@@ -60,7 +60,7 @@ joinup_group.reports:
     _custom_access: Drupal\joinup_group\Controller\GroupReportsController::access
   options:
     parameters:
-      group:
+      node:
         type: entity:node
         bundle:
           - collection

@@ -68,8 +68,8 @@ class ContentModerationOverviewForm extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state, ?GroupInterface $group = NULL): array {
-    $result = $this->getModerationItems($group);
+  public function buildForm(array $form, FormStateInterface $form_state, ?GroupInterface $node = NULL): array {
+    $result = $this->getModerationItems($node);
     $count = $this->getModerationItemCount($result);
 
     // Generate the filter form elements.
@@ -108,13 +108,13 @@ class ContentModerationOverviewForm extends FormBase {
   /**
    * Access check for the content moderation overview.
    *
-   * @param \Drupal\joinup_group\Entity\GroupInterface $group
+   * @param \Drupal\joinup_group\Entity\GroupInterface $node
    *   The collection or solution that is being moderated.
    *
    * @return \Drupal\Core\Access\AccessResultInterface
    *   The access result object.
    */
-  public function access(GroupInterface $group): AccessResultInterface {
+  public function access(GroupInterface $node): AccessResultInterface {
     // The content moderation overview is accessible by moderators and]
     // facilitators, so access varies by user role and OG role.
     $cache_metadata = (new CacheableMetadata())->addCacheContexts(
@@ -129,7 +129,7 @@ class ContentModerationOverviewForm extends FormBase {
     // If the user doesn't have global permission, check if they have permission
     // inside the group.
     if (!$access) {
-      $access = $group->hasGroupPermission($user->id(), 'access content moderation overview');
+      $access = $node->hasGroupPermission($user->id(), 'access content moderation overview');
     }
 
     return AccessResult::allowedIf($access)->addCacheableDependency($cache_metadata);
@@ -283,15 +283,15 @@ class ContentModerationOverviewForm extends FormBase {
   /**
    * Build a  list of entities that need moderation.
    *
-   * @param \Drupal\joinup_group\Entity\GroupInterface $group
+   * @param \Drupal\joinup_group\Entity\GroupInterface $node
    *   The collection or solution that is being moderated.
    *
    * @return \Drupal\Core\Entity\EntityInterface[]
    *   The related entities.
    */
-  protected function getModerationItems(GroupInterface $group): array {
+  protected function getModerationItems(GroupInterface $node): array {
     $entities = $this->nodeStorage->getQuery()->accessCheck(FALSE)
-      ->condition('og_audience.target_id', $group->id())
+      ->condition('og_audience.target_id', $node->id())
       ->condition('field_state', CommunityContentHelper::getModeratorAttentionNeededStates(), 'IN')
       ->condition('type', CommunityContentHelper::BUNDLES, 'IN')
       ->allRevisions()

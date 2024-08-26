@@ -78,7 +78,7 @@ class JoinupMediaLibrary extends MediaLibrary {
     extract($query);
 
     // Add the group ID to be passed to the media library.
-    $media_library_opener_parameters['group_id'] = UriEncoder::encodeUrl($group->id());
+    $media_library_opener_parameters['group_id'] = $group->id();
 
     $state = MediaLibraryState::create($media_library_opener_id, $media_library_allowed_types, $media_library_selected_type, $media_library_remaining, $media_library_opener_parameters);
     $dynamic_plugin_config['drupalMedia']['libraryURL'] = Url::fromRoute('media_library.ui')
