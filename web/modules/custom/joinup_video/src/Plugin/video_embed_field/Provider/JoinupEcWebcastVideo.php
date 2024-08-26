@@ -20,16 +20,17 @@ class JoinupEcWebcastVideo extends ProviderPluginBase {
    * {@inheritdoc}
    */
   public function renderEmbedCode($width, $height, $autoplay): array {
-    $iframe = [
+    return [
       '#type' => 'video_embed_iframe',
       '#provider' => 'joinup_ec_webcast_video',
       '#url' => '//webcast.ec.europa.eu/' . $this->getVideoId() . '/embed',
       '#query' => [
         'lg' => $this->getLanguagePreference(),
-        'starttime' => $this->getTimeIndex(),
+        'starttime' => $this->getTimeIndex() ?? NULL,
         'autostart' => $autoplay ? 'true' : 'false',
       ],
       '#attributes' => [
+        'title' => $this->getName(),
         'width' => $width,
         'height' => $height,
         'frameborder' => '0',
@@ -38,30 +39,25 @@ class JoinupEcWebcastVideo extends ProviderPluginBase {
         'webkitallowfullscreen' => 'true',
       ],
     ];
-
-    return $iframe;
   }
 
   /**
    * {@inheritdoc}
    */
-  public static function getIdFromInput($input) {
+  public static function getIdFromInput($input): string|false {
     preg_match('#^(?:(?:https?:)?//)?webcast\.ec\.europa\.eu/(.*)/embed#i', $input, $webcast);
-    if (isset($webcast[1])) {
-      return $webcast[1];
-    }
-    return FALSE;
+    return $webcast[1] ?? FALSE;
   }
 
   /**
    * Gets the time index from the URL.
    *
-   * @return string
+   * @return string|false
    *   A time index parameter to pass to the frame or 0 if none is found.
    */
-  protected function getTimeIndex(): string {
+  protected function getTimeIndex(): false|string {
     preg_match('#[&?]starttime=(?<time_index>\d+)#i', $this->getInput(), $matches);
-    return $matches['time_index'] ?? '0';
+    return $matches['time_index'] ?? FALSE;
   }
 
   /**
@@ -80,6 +76,16 @@ class JoinupEcWebcastVideo extends ProviderPluginBase {
    */
   public function getRemoteThumbnailUrl(): string {
     return '';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getName(): string|\Stringable {
+    return $this->t('@provider | @id', [
+      '@provider' => $this->getPluginDefinition()['title'],
+      '@id' => $this->videoId,
+    ]);
   }
 
 }
