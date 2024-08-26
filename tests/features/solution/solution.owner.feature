@@ -63,7 +63,6 @@ Feature:
       | E-mail address | solutionAPI@example.com                      |
     And I attach the file "logo.png" to "Logo"
     And I press "Add existing" at the "Owner" field
-    # Then I wait for AJAX to finish
     And I fill in "Owner" with "Leechidna"
     And I select "Flemish" from "Language"
     And I select "EU and European Policies" from "Topic"

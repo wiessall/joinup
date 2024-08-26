@@ -111,7 +111,6 @@ Feature: Collection membership administration
     And I should see the text "Want to receive notifications, too?"
 
     When I press "Subscribe" in the "Modal buttons" region
-    And I wait for AJAX to finish
     Then I should see the success message "You have been subscribed to Medical diagnosis and will receive weekly notifications once your membership is approved."
 
     # Approve a membership.
