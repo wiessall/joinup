@@ -6,7 +6,6 @@ namespace Drupal\joinup_solution;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\node\NodeInterface;
-use Drupal\sparql_entity_storage\SparqlEntityStorageGraphHandlerInterface;
 
 /**
  * Default class for the 'joinup_solution.title_duplicate_helper' service.
@@ -18,14 +17,10 @@ class SolutionTitleDuplicateHelper implements SolutionTitleDuplicateHelperInterf
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity type manager service.
-   * @param \Drupal\sparql_entity_storage\SparqlEntityStorageGraphHandlerInterface $graphHandler
-   *   The SPARQL graph handler service.
    */
   public function __construct(
     protected EntityTypeManagerInterface $entityTypeManager,
-    protected SparqlEntityStorageGraphHandlerInterface $graphHandler,
-  ) {
-  }
+  ) {}
 
   /**
    * {@inheritdoc}

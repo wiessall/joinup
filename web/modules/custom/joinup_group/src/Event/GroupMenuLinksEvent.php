@@ -4,12 +4,9 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_group\Event;
 
-use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Url;
 use Drupal\joinup_group\Entity\GroupInterface;
-use Drupal\node\NodeInterface;
-use Drupal\sparql_entity_storage\UriEncoder;
 use Symfony\Contracts\EventDispatcher\Event;
 
 /**

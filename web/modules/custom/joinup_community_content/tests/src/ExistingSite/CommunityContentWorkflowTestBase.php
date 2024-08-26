@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Drupal\Tests\joinup_community_content\ExistingSite;
 
 use Drupal\Core\Session\AnonymousUserSession;
-use Drupal\node\NodeInterface;
 use Drupal\Tests\joinup_test\Traits\NodeCreationTrait;
 use Drupal\Tests\joinup_workflow\ExistingSite\JoinupWorkflowExistingSiteTestBase;
 use Drupal\joinup_group\ContentCreationOptions;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\node\Entity\Node;
+use Drupal\node\NodeInterface;
 use Drupal\og\Entity\OgRole;
 use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\og\OgMembershipInterface;
@@ -1185,7 +1185,7 @@ abstract class CommunityContentWorkflowTestBase extends JoinupWorkflowExistingSi
    * @throws \Drupal\Core\Entity\EntityStorageException
    *   If entity creation fails.
    */
-  protected function createParent(string $bundle, string $state = 'published', string $moderation = NULL, string $content_creation = NULL): NodeInterface {
+  protected function createParent(string $bundle, string $state = 'published', ?string $moderation = NULL, ?string $content_creation = NULL): NodeInterface {
     // Make sure the current user is set to anonymous when creating groups
     // through the API so we can assign the administrator manually. If a user is
     // logged in during creation of the group they will automatically become the

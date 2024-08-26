@@ -9,9 +9,8 @@ use Drupal\joinup_distribution\Exception\MissingDistributionParentException;
 use Drupal\joinup_rdf\Entity\RdfSyncEntityInterface;
 use Drupal\joinup_release\Entity\ReleaseInterface;
 use Drupal\rdf_sync\Event\RdfSyncNormalizeEvent;
+use Drupal\rdf_sync\RdfSyncConnectionInterface;
 use Drupal\rdf_sync\RdfSyncMapper;
-use Drupal\sparql_entity_storage\Driver\Database\sparql\ConnectionInterface;
-use Drupal\sparql_entity_storage\SparqlEntityStorageFieldHandlerInterface;
 use EasyRdf\Literal;
 use EasyRdf\Resource;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -26,16 +25,12 @@ final class SolutionDataRdfSyncSubscriber implements EventSubscriberInterface {
    *
    * @param \Drupal\rdf_sync\RdfSyncMapper $mapper
    *   The mapper service.
-   * @param \Drupal\sparql_entity_storage\SparqlEntityStorageFieldHandlerInterface $fieldHandler
-   *   The field handler service.
-   * @param \Drupal\sparql_entity_storage\Driver\Database\sparql\ConnectionInterface $sparqlConnection
+   * @param \Drupal\rdf_sync\RdfSyncConnectionInterface $sparqlConnection
    *   The SPARQL connection.
    */
   public function __construct(
     protected RdfSyncMapper $mapper,
-    protected SparqlEntityStorageFieldHandlerInterface $fieldHandler,
-    // @todo Drop this parameter in ISAICP-8572.
-    protected ConnectionInterface $sparqlConnection,
+    protected RdfSyncConnectionInterface $sparqlConnection,
   ) {}
 
   /**

@@ -6,7 +6,7 @@ services:
 
   topic.vocabulary_manager:
     class: Drupal\topic\VocabularyManager
-    arguments: ['@entity_type.manager', '@database', '@sparql.endpoint', '@meta_entity.repository']
+    arguments: ['@entity_type.manager', '@database', '@rdf_sync.connection', '@meta_entity.repository']
 
   topic.event_subscriber:
     class: Drupal\topic\EventSubscriber\HomepageTopicsSectionSubscriber

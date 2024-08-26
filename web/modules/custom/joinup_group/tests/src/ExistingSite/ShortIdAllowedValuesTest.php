@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Drupal\Tests\joinup_group\ExistingSite;
 
 use Drupal\Core\Validation\Plugin\Validation\Constraint\RegexConstraint;
-use Drupal\node\Entity\Node;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
+use Drupal\node\Entity\Node;
 
 /**
  * Tests the short ID allowed values.

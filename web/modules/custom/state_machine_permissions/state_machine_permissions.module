@@ -13,7 +13,6 @@ use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\contact_information\Entity\ContactInformationInterface;
-use Drupal\joinup_workflow\EntityWorkflowStateInterface;
 use Drupal\owner\Entity\OwnerInterface;
 
 /**

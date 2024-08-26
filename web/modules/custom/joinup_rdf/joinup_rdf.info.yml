@@ -6,4 +6,3 @@ core_version_requirement: ">= 9.4"
 
 dependencies:
   - 'rdf_sync:rdf_sync'
-  - 'sparql_entity_storage:sparql_entity_storage'

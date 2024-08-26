@@ -7,7 +7,7 @@ namespace Drupal\topic;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\meta_entity\MetaEntityRepositoryInterface;
-use Drupal\sparql_entity_storage\Driver\Database\sparql\ConnectionInterface;
+use Drupal\rdf_sync\RdfSyncConnectionInterface;
 
 /**
  * Helper class for managing the topic vocabulary.
@@ -23,15 +23,15 @@ class VocabularyManager {
    *   The entity type manager.
    * @param \Drupal\Core\Database\Connection $database
    *   The database connection.
-   * @param \Drupal\sparql_entity_storage\Driver\Database\sparql\ConnectionInterface $sparqlEndpoint
-   *   The sparql.endpoint service.
+   * @param \Drupal\rdf_sync\RdfSyncConnectionInterface $sparqlEndpoint
+   *   The SPARQL endpoint connection.
    * @param \Drupal\meta_entity\MetaEntityRepositoryInterface $metaEntityRepository
    *   The meta_entity.repository service.
    */
   public function __construct(
     protected EntityTypeManagerInterface $entityTypeManager,
     protected Connection $database,
-    protected ConnectionInterface $sparqlEndpoint,
+    protected RdfSyncConnectionInterface $sparqlEndpoint,
     protected MetaEntityRepositoryInterface $metaEntityRepository,
   ) {
   }

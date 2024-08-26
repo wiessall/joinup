@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace Drupal\joinup_seo;
 
 use Drupal\joinup_rdf\Entity\RdfSyncEntityInterface;
-use Drupal\node\NodeInterface;
-use Drupal\sparql_entity_storage\SparqlSerializerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
 /**
@@ -24,32 +22,12 @@ class JoinupSeoExportHelper implements JoinupSeoExportHelperInterface {
   /**
    * Constructs a JoinupSeoExportHelper object.
    *
-   * @param \Drupal\sparql_entity_storage\SparqlSerializerInterface $sparQlSerializer
-   *   The SPARQL serializer service.
    * @param \Symfony\Component\Serializer\SerializerInterface $serializer
    *   The general serializer service.
    */
   public function __construct(
-    protected SparqlSerializerInterface $sparQlSerializer,
     protected SerializerInterface $serializer,
   ) {}
-
-  /**
-   * {@inheritdoc}
-   */
-  public function exportRdfEntityMetadata(RdfSyncEntityInterface $entity): string {
-    $output = $this->sparQlSerializer->serializeEntity($entity, self::SERIALIZATION_FORMAT, self::getOptions());
-    // The serializer returns also data where the entity is referred, thus, not
-    // related to the metadata. Keep only the entry that has a "@type" property.
-    $output = json_decode($output);
-    foreach ($output->{"@graph"} as $object) {
-      if (isset($object->{"@type"})) {
-        $output->{"@graph"} = [$object];
-        return json_encode($output, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
-      }
-    }
-    return '';
-  }
 
   /**
    * {@inheritdoc}

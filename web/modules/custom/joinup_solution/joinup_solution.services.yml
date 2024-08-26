@@ -22,10 +22,10 @@ services:
       - { name: state_machine.guard, group: solution, priority: 5}
   joinup_solution.requirements_helper:
     class: Drupal\joinup_solution\RequirementsHelper
-    arguments: ['@sparql.endpoint']
+    arguments: ['@rdf_sync.connection']
   joinup_solution.title_duplicate_helper:
     class: 'Drupal\joinup_solution\SolutionTitleDuplicateHelper'
-    arguments: ['@entity_type.manager', '@sparql.graph_handler']
+    arguments: ['@entity_type.manager']
   joinup_solution.group_add_content.subscriber:
     class: Drupal\joinup_solution\EventSubscriber\SolutionGroupSubscriber
     arguments: ['@entity_type.manager']

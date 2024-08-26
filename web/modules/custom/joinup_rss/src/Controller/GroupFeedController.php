@@ -7,11 +7,7 @@ namespace Drupal\joinup_rss\Controller;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Controller\ControllerBase;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
-use Drupal\sparql_entity_storage\SparqlEntityStorageInterface;
-use Drupal\sparql_entity_storage\UriEncoder;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provide additional access checks for the collection feed view.

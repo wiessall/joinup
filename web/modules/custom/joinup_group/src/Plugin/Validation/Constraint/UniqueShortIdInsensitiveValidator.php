@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup_group\Plugin\Validation\Constraint;
 
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
-use Drupal\sparql_entity_storage\Driver\Database\sparql\ConnectionInterface;
+use Drupal\rdf_sync\RdfSyncConnectionInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
@@ -19,33 +19,25 @@ use Symfony\Component\Validator\ConstraintValidator;
 class UniqueShortIdInsensitiveValidator extends ConstraintValidator implements ContainerInjectionInterface {
 
   /**
-   * The SPARQL database connection.
-   *
-   * @var \Drupal\sparql_entity_storage\Driver\Database\sparql\ConnectionInterface
-   */
-  protected $connection;
-
-  /**
    * Creates a new UniqueShortIdInsensitiveValidator.
    *
-   * @param \Drupal\sparql_entity_storage\Driver\Database\sparql\ConnectionInterface $connection
+   * @param \Drupal\rdf_sync\RdfSyncConnectionInterface $connection
    *   The SPARQL database connection.
    */
-  public function __construct(ConnectionInterface $connection) {
-    $this->connection = $connection;
-  }
+  public function __construct(protected RdfSyncConnectionInterface $connection) {}
 
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container) {
+  public static function create(ContainerInterface $container): self {
     return new static(
-      $container->get('sparql.endpoint')
+      $container->get('rdf_sync.connection')
     );
   }
 
   /**
    * {@inheritdoc}
+   *
    * @todo This needs to be updated.
    */
   public function validate($items, Constraint $constraint) {
