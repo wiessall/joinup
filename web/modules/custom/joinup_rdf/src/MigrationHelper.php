@@ -389,8 +389,6 @@ final class MigrationHelper {
       $collection->skip_notification = TRUE;
       $collection->save();
     }
-
-    $this->updateMenuLinks($collection);
   }
 
   /**
@@ -434,8 +432,6 @@ final class MigrationHelper {
       $solution->skip_notification = TRUE;
       $solution->save();
     }
-
-    $this->updateMenuLinks($solution);
   }
 
   /**
@@ -643,84 +639,21 @@ final class MigrationHelper {
   }
 
   /**
-   * Updates the menu link items related to RDF entities.
+   * Builds the expression that decodes a URI.
    *
-   * @param \Drupal\Core\Entity\EntityInterface $entity
-   *   The entity to update the menu links.
+   * @param string $baseExpression
+   *   The base expression.
+   *
+   * @return string
+   *   An MySQL expression that decodes an encoded URI.
    */
-  protected function updateMenuLinks(EntityInterface $entity): void {
-    $tables = [
-      'menu_link_content_data',
-      'menu_link_content_field_revision',
-    ];
-
-    // Replace rdf_entity with node and encoded ID with entity ID.
-    $encodedUri = strtr($entity->getUri(), self::URL_ENCODE_MAP);
-    foreach ($tables as $table) {
-      $this->connection->update($table)
-        ->fields([
-          'link__uri' => 'entity:node/' . $entity->id(),
-          'link__options' => serialize([]),
-        ])
-        ->condition('link__uri', sprintf('entity:rdf_entity/%s', $encodedUri))
-        ->execute();
-
-      $this->connection->update($table)
-        ->fields([
-          'link__uri' => sprintf('route:entity.node.member_overview;node=%s', $entity->id()),
-          'link__options' => serialize([]),
-        ])
-        ->condition('link__uri', sprintf('entity.rdf_entity.member_overview;rdf_entity=%s', $encodedUri))
-        ->execute();
-
-      $this->connection->update($table)
-        ->fields([
-          'link__uri' => sprintf('route:entity.node.glossary;node=%s', $entity->id()),
-          'link__options' => serialize([]),
-        ])
-        ->condition('link__uri', sprintf('entity.rdf_entity.glossary;rdf_entity=%s', $encodedUri))
-        ->execute();
-
-      $this->connection->update($table)
-        ->fields([
-          'link__uri' => sprintf('route:view.discussions.overview;node=%s', $entity->id()),
-          'link__options' => serialize([]),
-        ])
-        ->condition('link__uri', sprintf('view.discussions.overview;rdf_entity=%s', $encodedUri))
-        ->execute();
+  public static function sqlUriDecode(string $baseExpression): string {
+    $expression = ["$baseExpression,"];
+    foreach (array_reverse(self::URL_ENCODE_MAP) as $key => $value) {
+      array_unshift($expression, "REPLACE(");
+      $expression[] = "'$value', '" . addslashes($key) . "'),";
     }
-
-    $this->connection->update('menu_link_content_data')
-      ->fields([
-        'link__uri' => sprintf('route:joinup_menu.website_link;node=%s', $entity->id()),
-        'link__options' => serialize([]),
-      ])
-      ->condition('link__uri', sprintf('joinup_menu.website_link;rdf_entity=%s', $encodedUri))
-      ->execute();
-
-    $this->connection->update('menu_link_content_data')
-      ->fields([
-        'link__uri' => sprintf('route:asset_release.solution_asset_release.overview;node=%s', $entity->id()),
-        'link__options' => serialize([]),
-      ])
-      ->condition('link__uri', sprintf('asset_release.solution_asset_release.overview;rdf_entity=%s', $encodedUri))
-      ->execute();
-
-    $this->connection->update('menu_link_content_data')
-      ->fields([
-        'link__uri' => sprintf('route:joinup_menu.documentation_file;node=%s', $entity->id()),
-        'link__options' => serialize([]),
-      ])
-      ->condition('link__uri', sprintf('joinup_menu.documentation_file;rdf_entity=%s', $encodedUri))
-      ->execute();
-
-    $this->connection->update('menu_link_content_data')
-      ->fields([
-        'link__uri' => sprintf('route:entity.node.eif_perspective;node=%s', $entity->id()),
-        'link__options' => serialize([]),
-      ])
-      ->condition('link__uri', sprintf('entity.rdf_entity.eif_perspective;rdf_entity=%s', $encodedUri))
-      ->execute();
+    return trim(implode('', $expression), ',');
   }
 
 }
