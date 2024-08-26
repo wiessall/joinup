@@ -169,7 +169,7 @@ class DutchCatalogue extends EuOssCatalogueProviderPluginBase {
 
     $this->numberOfProvidedSolutions = count($responseData);
     foreach ($responseData as $row) {
-      $required = ['url', 'owner_name', 'name', 'publiccode_url'];
+      $required = ['url', 'owner_name', 'name'];
       foreach ($required as $field) {
         if (empty($row[$field])) {
           $this->logger->error('Lacks the mandatory @field in @row', [
