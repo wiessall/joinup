@@ -6,6 +6,8 @@ services:
       - '@logger.channel.eu_oss_catalogue'
       - '@file_system'
       - '@config.factory'
+  Drupal\eu_oss_vitality_index\VitalityIndexGeneratorInterface: '@eu_oss_vitality_index.generator'
+
   eu_oss_vitality_index.queue:
     class: Drupal\eu_oss_vitality_index\VitalityIndexQueue
     arguments:

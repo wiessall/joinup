@@ -23,7 +23,6 @@ Feature:
     And I click "Image"
 
     When I attach the file "logo.png" to "Image"
-    And I wait for AJAX to finish
     And I fill in "Alternative text" with "european-union.europa.eu"
     And I fill in "URL" with "https://european-union.europa.eu" in the "Modal content" region
     And I press "Settings" in the "Modal content" region

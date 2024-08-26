@@ -21,16 +21,13 @@ Feature: Test SVG attachments.
     Then a modal should open
 
     When I attach the file "error.svg" to "Add file"
-    And I wait for AJAX to finish
     Then I should see the error message "The specified file error.svg could not be uploaded."
     And I should see the error message "Invalid or unsafe SVG file."
 
     But I attach the file "simple.svg" to "Add file"
-    And I wait for AJAX to finish
     Then I should not see the error message "Invalid or unsafe SVG file."
     When I fill in "Alternative text" with "Example SVG"
     And I press "Save" in the "Modal buttons" region
-    And I wait for AJAX to finish
 
     When I press "Insert selected" in the "Modal buttons" region
     Then the modal should be closed
