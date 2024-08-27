@@ -10,7 +10,6 @@ declare(strict_types=1);
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\joinup_media\JoinupMediaLibrary;
 use Drupal\og\OgGroupAudienceHelperInterface;
-use Drupal\sparql_entity_storage\UriEncoder;
 
 /**
  * Implements hook_field_widget_info_alter().

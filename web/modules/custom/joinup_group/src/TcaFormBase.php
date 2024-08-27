@@ -23,7 +23,7 @@ abstract class TcaFormBase extends FormBase {
    *   The block manager service.
    */
   public function __construct(
-    protected BlockManagerInterface $blockManager
+    protected BlockManagerInterface $blockManager,
   ) {}
 
   /**
