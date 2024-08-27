@@ -61,15 +61,15 @@ class FileUrlFieldTest extends JoinupExistingSiteTestBase {
     $account = $this->createUser([], NULL, FALSE, ['roles' => ['moderator']]);
     $this->drupalLogin($account);
 
-    $solution = $this->createRdfEntity([
-      'rid' => 'solution',
-      'label' => $this->randomString(),
-      'field_is_state' => 'published',
+    $solution = $this->createNode([
+      'type' => 'solution',
+      'title' => $this->randomString(),
+      'field_state' => 'published',
       // Ensure a parent collection.
-      'collection' => $this->createRdfEntity([
-        'rid' => 'collection',
-        'label' => $this->randomString(),
-        'field_ar_state' => 'published',
+      'collection' => $this->createNode([
+        'type' => 'collection',
+        'title' => $this->randomString(),
+        'field_state' => 'published',
       ]),
     ]);
     $licence = $this->createNode([

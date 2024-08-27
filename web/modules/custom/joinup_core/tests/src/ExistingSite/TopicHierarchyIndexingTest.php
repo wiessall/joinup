@@ -37,9 +37,9 @@ class TopicHierarchyIndexingTest extends JoinupExistingSiteTestBase {
       'name' => 'Child',
       'parent' => $this->terms['parent']->id(),
     ]);
-    $collection = $this->createRdfEntity([
-      'rid' => 'collection',
-      'field_ar_state' => 'published',
+    $collection = $this->createNode([
+      'type' => 'collection',
+      'field_state' => 'published',
       'field_topic' => $this->terms['child']->id(),
     ]);
     $index = Index::load('published');

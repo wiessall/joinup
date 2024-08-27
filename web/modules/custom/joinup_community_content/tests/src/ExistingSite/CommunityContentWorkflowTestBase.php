@@ -1192,17 +1192,12 @@ abstract class CommunityContentWorkflowTestBase extends JoinupWorkflowExistingSi
     // administrator.
     $this->setCurrentUser($this->userAnonymous);
 
-    $field_identifier = [
-      'collection' => 'field_ar_',
-      'solution' => 'field_is_',
-    ];
-
     $values = [
-      'label' => $this->randomMachineName(),
-      'rid' => $bundle,
-      $field_identifier[$bundle] . 'state' => $state,
-      $field_identifier[$bundle] . 'moderation' => $moderation,
-      $field_identifier[$bundle] . 'content_creation' => $content_creation ?? ContentCreationOptions::REGISTERED_USERS,
+      'title' => $this->randomMachineName(),
+      'type' => $bundle,
+      'field_state' => $state,
+      'group_moderation' => $moderation,
+      'content_creation' => $content_creation ?? ContentCreationOptions::REGISTERED_USERS,
     ];
 
     // It's not possible to create orphan solutions.

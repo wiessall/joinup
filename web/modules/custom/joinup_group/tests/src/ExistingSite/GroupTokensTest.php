@@ -18,17 +18,17 @@ class GroupTokensTest extends JoinupExistingSiteTestBase {
    * Tests tokens defined by joinup_group.
    */
   public function testGroupDefinedTokens(): void {
-    $collection = $this->createRdfEntity([
-      'rid' => 'collection',
-      'label' => $this->randomString(),
-      'field_ar_state' => 'published',
+    $collection = $this->createNode([
+      'type' => 'collection',
+      'title' => $this->randomString(),
+      'field_state' => 'published',
     ]);
 
-    $solution = $this->createRdfEntity([
-      'rid' => 'solution',
-      'field_is_state' => 'published',
-      'label' => $this->randomString(),
-      'collection' => $collection->id(),
+    $solution = $this->createNode([
+      'type' => 'solution',
+      'field_state' => 'published',
+      'title' => $this->randomString(),
+      'og_audience' => $collection->id(),
     ]);
 
     $standalone_distribution = $this->createNode([

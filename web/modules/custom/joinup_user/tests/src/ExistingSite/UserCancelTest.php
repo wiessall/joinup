@@ -32,16 +32,16 @@ class UserCancelTest extends JoinupExistingSiteTestBase {
     /** @var \Drupal\user\UserDataInterface $user_data */
     $user_data = $this->container->get('user.data');
 
-    $collection = $this->createRdfEntity([
-      'rid' => 'collection',
-      'label' => 'Collection',
-      'field_ar_state' => 'published',
+    $collection = $this->createNode([
+      'type' => 'collection',
+      'title' => 'Collection',
+      'field_state' => 'published',
     ]);
-    $solution = $this->createRdfEntity([
-      'rid' => 'solution',
-      'label' => 'Solution',
-      'collection' => $collection,
-      'field_is_state' => 'published',
+    $solution = $this->createNode([
+      'type' => 'solution',
+      'title' => 'Solution',
+      'og_audience' => $collection,
+      'field_state' => 'published',
     ]);
 
     $photo_field_definition = $this->container->get('entity_field.manager')->getFieldDefinitions('user', 'user')['field_user_photo'];

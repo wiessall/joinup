@@ -84,8 +84,8 @@ class CustomPageOgMenuLinksManagerTest extends KernelTestBase {
     // of dependencies. Thus, we create only simplified versions of both bundles
     // for the purpose of this test.
     $mocked_collection_type = NodeType::create([
-      'rid' => 'collection',
-      'name' => 'Mocked collection',
+      'type' => 'collection',
+      'title' => 'Mocked collection',
     ]);
     // @see og_ui_entity_type_save().
     $mocked_collection_type->og_is_group = TRUE;

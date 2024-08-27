@@ -22,12 +22,12 @@ final class ExceptionHandleTest extends JoinupExistingSiteTestBase {
    */
   public function testFormatQueryArgument(): void {
     // Create an RDF entity.
-    $entity = $this->createRdfEntity([
-      'rid' => 'collection',
-      'field_ar_state' => 'published',
+    $entity = $this->createNode([
+      'type' => 'collection',
+      'field_state' => 'published',
     ]);
     $this->assertNotEmpty($entity->id());
-    $this->assertNotEmpty(\Drupal::entityTypeManager()->getStorage('rdf_entity')->load($entity->id()));
+    $this->assertNotEmpty(\Drupal::entityTypeManager()->getStorage('node')->load($entity->id()));
 
     $this->visit($entity->toUrl('canonical')->setAbsolute()->toString());
     $this->assertSession()->statusCodeEquals(200);
