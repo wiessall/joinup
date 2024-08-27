@@ -5,7 +5,6 @@ dependencies:
   config:
     - field.storage.meta_entity.count
     - field.storage.meta_entity.field_featured
-    - field.storage.meta_entity.field_pinned_in
     - field.storage.node.abstract
     - field.storage.node.body
     - field.storage.node.contact
@@ -30,14 +29,15 @@ dependencies:
     - search_api.server.joinup
   module:
     - joinup_flag
+    - joinup_oss_catalogue
     - joinup_search
+    - joinup_solution
     - meta_entity
     - node
     - paragraphs
     - publication_date
     - search_api
     - search_api_solr
-    - solution
     - taxonomy
     - user
 third_party_settings:
@@ -102,46 +102,32 @@ name: 'Published entities index'
 description: ''
 read_only: false
 field_settings:
-  ar_contact_title:
-    label: 'Collection » Contact information » Title'
+  abstract:
+    label: Abstract
     datasource_id: 'entity:node'
-    property_path: 'contact:entity:title'
+    property_path: abstract
     type: text
     dependencies:
       config:
-        - field.storage.node.contact
-      module:
-        - node
-  ar_contact_title_spellcheck:
-    label: 'Collection » Contact information » Title - Spellcheck'
+        - field.storage.node.abstract
+  abstract_spellcheck:
+    label: 'Abstract Spellcheck'
     datasource_id: 'entity:node'
-    property_path: 'contact:entity:title'
+    property_path: abstract
     type: solr_text_spellcheck
     dependencies:
       config:
-        - field.storage.node.contact
-      module:
-        - node
-  ar_owner:
-    label: 'Collection » Owner » Name'
-    datasource_id: 'entity:node'
-    property_path: 'owner:entity:title'
+        - field.storage.node.abstract
+  aggregated_field:
+    label: 'Aggregated field'
+    property_path: aggregated_field
     type: string
-    dependencies:
-      config:
-        - field.storage.node.owner
-      module:
-        - node
-  ar_owner_spellcheck:
-    label: 'Collection » Owner » Name - Spellcheck'
-    datasource_id: 'entity:node'
-    property_path: 'owner:entity:title'
-    type: solr_text_spellcheck
-    dependencies:
-      config:
-        - field.storage.node.owner
-      module:
-        - node
+    configuration:
+      type: union
+      separator: |+
+
+
+      fields: {  }
   body:
     label: 'Body » Processed text'
     datasource_id: 'entity:node'
@@ -176,14 +162,6 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.contact
-      module:
-        - node
-  created:
-    label: 'Authored on'
-    datasource_id: 'entity:node'
-    property_path: created
-    type: date
-    dependencies:
       module:
         - node
   date:
@@ -271,38 +249,6 @@ field_settings:
       type: union
       fields:
         - 'entity:node/field_state'
-  field_ar_abstract:
-    label: Abstract
-    datasource_id: 'entity:node'
-    property_path: abstract
-    type: text
-    dependencies:
-      config:
-        - field.storage.node.abstract
-  field_ar_abstract_spellcheck:
-    label: 'Abstract - Spellcheck'
-    datasource_id: 'entity:node'
-    property_path: abstract
-    type: solr_text_spellcheck
-    dependencies:
-      config:
-        - field.storage.node.abstract
-  field_ar_description:
-    label: 'Description » Processed text'
-    datasource_id: 'entity:node'
-    property_path: 'description:processed'
-    type: text
-    dependencies:
-      config:
-        - field.storage.node.description
-  field_ar_description_spellcheck:
-    label: 'Description » Processed text - Spellcheck'
-    datasource_id: 'entity:node'
-    property_path: 'description:processed'
-    type: solr_text_spellcheck
-    dependencies:
-      config:
-        - field.storage.node.description
   field_eif_identifier:
     label: Identifier
     datasource_id: 'entity:taxonomy_term'
@@ -367,46 +313,6 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.field_event_date
-  field_is_abstract:
-    label: Abstract
-    datasource_id: 'entity:node'
-    property_path: abstract
-    type: text
-    dependencies:
-      config:
-        - field.storage.node.abstract
-  field_is_abstract_spellcheck:
-    label: 'Abstract - Spellcheck'
-    datasource_id: 'entity:node'
-    property_path: abstract
-    type: solr_text_spellcheck
-    dependencies:
-      config:
-        - field.storage.node.abstract
-  field_is_description:
-    label: 'Description » Processed text'
-    datasource_id: 'entity:node'
-    property_path: 'description:processed'
-    type: text
-    dependencies:
-      config:
-        - field.storage.node.description
-  field_is_description_spellcheck:
-    label: 'Description » Processed text - Spellcheck'
-    datasource_id: 'entity:node'
-    property_path: 'description:processed'
-    type: solr_text_spellcheck
-    dependencies:
-      config:
-        - field.storage.node.description
-  field_is_solution_type:
-    label: 'Solution type'
-    datasource_id: 'entity:node'
-    property_path: solution_type
-    type: string
-    dependencies:
-      config:
-        - field.storage.node.solution_type
   field_location:
     label: Location
     datasource_id: 'entity:node'
@@ -547,54 +453,11 @@ field_settings:
         - field.storage.meta_entity.count
       module:
         - meta_entity
-  id:
-    label: ID
+  interoperable_flag:
+    label: 'Interoperable flag'
     datasource_id: 'entity:node'
-    property_path: nid
-    type: string
-    dependencies:
-      module:
-        - node
-  is_contact_title:
-    label: 'Solution » Contact information » Title'
-    datasource_id: 'entity:node'
-    property_path: 'contact:entity:title'
-    type: text
-    dependencies:
-      config:
-        - field.storage.node.contact
-      module:
-        - node
-  is_contact_title_spellcheck:
-    label: 'Solution » Contact information » Title - Spellcheck'
-    datasource_id: 'entity:node'
-    property_path: 'contact:entity:title'
-    type: solr_text_spellcheck
-    dependencies:
-      config:
-        - field.storage.node.contact
-      module:
-        - node
-  is_owner:
-    label: 'Solution » Owner » Name'
-    datasource_id: 'entity:node'
-    property_path: 'owner:entity:title'
-    type: text
-    dependencies:
-      config:
-        - field.storage.node.owner
-      module:
-        - node
-  is_owner_spellcheck:
-    label: 'Solution » Owner » Name - Spellcheck'
-    datasource_id: 'entity:node'
-    property_path: 'owner:entity:title'
-    type: solr_text_spellcheck
-    dependencies:
-      config:
-        - field.storage.node.owner
-      module:
-        - node
+    property_path: interoperable_flag
+    type: boolean
   keywords:
     label: Keywords
     property_path: aggregated_field
@@ -611,24 +474,6 @@ field_settings:
       type: union
       fields:
         - 'entity:node/field_keywords'
-  label:
-    label: Title
-    datasource_id: 'entity:node'
-    property_path: title
-    type: text
-    boost: 5.0
-    dependencies:
-      module:
-        - node
-  label_spellcheck:
-    label: 'Title - Spellcheck'
-    datasource_id: 'entity:node'
-    property_path: title
-    type: solr_text_spellcheck
-    boost: 5.0
-    dependencies:
-      module:
-        - node
   name:
     label: Name
     datasource_id: 'entity:taxonomy_term'
@@ -663,17 +508,6 @@ field_settings:
         - field.storage.meta_entity.field_featured
       module:
         - meta_entity
-  node_pinned_in:
-    label: 'Pinned in'
-    datasource_id: 'entity:node'
-    property_path: 'pinned_in:entity:field_pinned_in:entity:id'
-    type: string
-    dependencies:
-      config:
-        - field.storage.meta_entity.field_pinned_in
-      module:
-        - meta_entity
-        - node
   owner_title:
     label: 'Related Owner » Title'
     datasource_id: 'entity:node'
@@ -768,6 +602,14 @@ field_settings:
       type: union
       fields:
         - 'entity:node/featured:entity:field_featured'
+  solution_type:
+    label: 'Solution type'
+    datasource_id: 'entity:node'
+    property_path: solution_type
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.solution_type
   spatial_coverage:
     label: 'Geographical coverage'
     property_path: aggregated_field
@@ -954,8 +796,6 @@ processor_settings:
       - field_user_first_name_spellcheck
       - field_user_organisation
       - field_user_organisation_spellcheck
-      - label
-      - label_spellcheck
       - title
       - title_spellcheck
   interoperable_flag: {  }
@@ -987,8 +827,6 @@ processor_settings:
       - field_scope_spellcheck
       - field_short_title
       - field_short_title_spellcheck
-      - label
-      - label_spellcheck
       - title
       - title_spellcheck
     stopwords:
@@ -1052,8 +890,6 @@ processor_settings:
       - field_user_first_name_spellcheck
       - field_user_organisation
       - field_user_organisation_spellcheck
-      - label
-      - label_spellcheck
       - title
       - title_spellcheck
     spaces: ''
@@ -1083,8 +919,6 @@ processor_settings:
       - field_user_first_name_spellcheck
       - field_user_organisation
       - field_user_organisation_spellcheck
-      - label
-      - label_spellcheck
       - title
       - title_spellcheck
   type_boost:

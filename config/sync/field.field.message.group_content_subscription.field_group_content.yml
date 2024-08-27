@@ -190,9 +190,6 @@ settings:
   poll_choice:
     handler: 'default:poll_choice'
     handler_settings: {  }
-  rdf_type:
-    handler: 'default:rdf_type'
-    handler_settings: {  }
   redirect:
     handler: 'default:redirect'
     handler_settings: {  }
@@ -240,12 +237,6 @@ settings:
     handler_settings: {  }
   slick:
     handler: 'default:slick'
-    handler_settings: {  }
-  sparql_graph:
-    handler: 'default:sparql_graph'
-    handler_settings: {  }
-  sparql_mapping:
-    handler: 'default:sparql_mapping'
     handler_settings: {  }
   symfony_mailer_lite_transport:
     handler: 'default:symfony_mailer_lite_transport'
