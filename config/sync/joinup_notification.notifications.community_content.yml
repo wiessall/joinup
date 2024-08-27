@@ -7,13 +7,13 @@ create:
       og_roles:
         node-collection-administrator:
           - cc_transition_propose
-        node-administrator:
+        node-solution-administrator:
           - cc_transition_propose
     publish:
       og_roles:
         node-collection-administrator:
           - cc_transition_publish
-        node-administrator:
+        node-solution-administrator:
           - cc_transition_publish
   'node:post_moderated':
     propose:
@@ -23,13 +23,13 @@ create:
       og_roles:
         node-collection-administrator:
           - cc_transition_propose
-        node-administrator:
+        node-solution-administrator:
           - cc_transition_propose
     publish:
       og_roles:
         node-collection-administrator:
           - cc_transition_publish
-        node-administrator:
+        node-solution-administrator:
           - cc_transition_publish
 update:
   'node:pre_moderated':
@@ -40,7 +40,7 @@ update:
       og_roles:
         node-collection-administrator:
           - cc_transition_propose
-        node-administrator:
+        node-solution-administrator:
           - cc_transition_propose
     propose_from_reported:
       roles:
@@ -49,13 +49,13 @@ update:
       og_roles:
         node-collection-administrator:
           - cc_transition_propose_reported
-        node-administrator:
+        node-solution-administrator:
           - cc_transition_propose_reported
     publish:
       og_roles:
         node-collection-administrator:
           - cc_transition_publish
-        node-administrator:
+        node-solution-administrator:
           - cc_transition_publish
     approve_proposed:
       owner:
@@ -72,7 +72,7 @@ update:
       og_roles:
         node-collection-administrator:
           - cc_transition_propose
-        node-administrator:
+        node-solution-administrator:
           - cc_transition_propose
     request_deletion:
       roles:
@@ -81,7 +81,7 @@ update:
       og_roles:
         node-collection-administrator:
           - cc_transition_request_deletion
-        node-administrator:
+        node-solution-administrator:
           - cc_transition_request_deletion
     reject_deletion:
       owner:
@@ -94,7 +94,7 @@ update:
       og_roles:
         node-collection-administrator:
           - cc_transition_publish
-        node-administrator:
+        node-solution-administrator:
           - cc_transition_publish
     approve_proposed:
       owner:
@@ -112,7 +112,7 @@ update:
       og_roles:
         node-collection-administrator:
           - cc_transition_propose_reported
-        node-administrator:
+        node-solution-administrator:
           - cc_transition_propose_reported
 delete:
   'node:pre_moderated':

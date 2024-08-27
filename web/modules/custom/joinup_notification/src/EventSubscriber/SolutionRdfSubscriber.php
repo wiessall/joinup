@@ -221,7 +221,7 @@ class SolutionRdfSubscriber extends NotificationSubscriberBase {
       case 'blacklist':
         $user_data = [
           'og_roles' => [
-            'rdf_entity-solution-administrator' => [
+            'node-solution-administrator' => [
               self::TEMPLATE_BLACKLIST,
             ],
           ],
@@ -233,7 +233,7 @@ class SolutionRdfSubscriber extends NotificationSubscriberBase {
       case 'needs_update':
         $user_data = [
           'og_roles' => [
-            'rdf_entity-solution-administrator' => [
+            'node-solution-administrator' => [
               self::TEMPLATE_REQUEST_CHANGES,
             ],
           ],
@@ -287,7 +287,7 @@ class SolutionRdfSubscriber extends NotificationSubscriberBase {
       case 'published':
         $user_data = [
           'og_roles' => [
-            'rdf_entity-solution-administrator' => [
+            'node-solution-administrator' => [
               self::TEMPLATE_PROPOSE_CHANGES,
             ],
           ],
@@ -326,7 +326,7 @@ class SolutionRdfSubscriber extends NotificationSubscriberBase {
       case 'proposed':
         $user_data = [
           'og_roles' => [
-            'rdf_entity-solution-administrator' => [
+            'node-solution-administrator' => [
               self::TEMPLATE_APPROVE,
             ],
           ],
@@ -336,7 +336,7 @@ class SolutionRdfSubscriber extends NotificationSubscriberBase {
       case 'blacklisted':
         $user_data = [
           'og_roles' => [
-            'rdf_entity-solution-administrator' => [
+            'node-solution-administrator' => [
               self::TEMPLATE_PUBLISH_BLACKLISTED,
             ],
           ],
@@ -367,7 +367,7 @@ class SolutionRdfSubscriber extends NotificationSubscriberBase {
     $template_id = self::TEMPLATE_DELETION_BY_MODERATOR;
     $user_data = [
       'og_roles' => [
-        'rdf_entity-solution-administrator' => [
+        'node-solution-administrator' => [
           $template_id,
         ],
       ],
