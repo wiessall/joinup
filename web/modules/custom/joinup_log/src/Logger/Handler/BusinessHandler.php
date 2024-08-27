@@ -54,7 +54,7 @@ class BusinessHandler extends AbstractProcessingHandler implements DestructableI
       $logStorage->create(
         [
           'group' => $group?->id(),
-          'type' => $record->context['type'] ?? NULL,
+          'type' => $record->context['type'] ?? 'joinup:undefined',
           'message' => $record->message,
           'severity' => $record->level->toRFC5424Level(),
           'uid' => $record->extra['uid'],

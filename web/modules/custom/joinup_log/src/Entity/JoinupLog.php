@@ -197,6 +197,7 @@ final class JoinupLog extends ContentEntityBase implements JoinupLogInterface {
       'joinup:transfer_the_ownership_of_the_collection_to_member' => new TranslatableMarkup('Transfer the ownership of the collection to member'),
       'joinup:add_role' => new TranslatableMarkup('Add role to member'),
       'joinup:remove_role' => new TranslatableMarkup('Remove role to member'),
+      'joinup:undefined' => new TranslatableMarkup('Undefined'),
     ];
   }
 
