@@ -6,7 +6,7 @@ dependencies:
     - joinup_like
     - node
 id: like
-label: 'Like'
+label: Like
 bundles:
   - custom_page
   - discussion

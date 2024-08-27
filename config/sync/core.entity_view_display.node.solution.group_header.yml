@@ -75,6 +75,11 @@ content:
         template_suggestion: group_header_topic
     weight: 1
     region: content
+  flag_interoperability:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 10
+    region: content
   flag_like:
     settings: {  }
     third_party_settings: {  }

@@ -38,6 +38,11 @@ targetEntityType: node
 bundle: solution
 mode: digest_message_header
 content:
+  flag_interoperability:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 10
+    region: content
   flag_like:
     settings: {  }
     third_party_settings: {  }
