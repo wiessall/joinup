@@ -18,8 +18,8 @@ class EifRdfSyncTest extends JoinupExistingSiteTestBase {
    * Tests synchronization of EIF perspective data.
    */
   public function testRdfSync(): void {
-    $solution = $this->createRdfEntity([
-      'rid' => 'solution',
+    $solution = $this->createNode([
+      'type' => 'solution',
       'label' => $this->randomString(),
     ]);
     /** @var \Drupal\eif\Entity\EifPerspectiveInterface $eif */

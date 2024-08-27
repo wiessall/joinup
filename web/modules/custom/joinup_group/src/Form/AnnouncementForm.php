@@ -193,7 +193,7 @@ class AnnouncementForm extends FormBase {
       if (!$group->getAnnouncementRecipientsCount()) {
         $form_state->setError($form, $this->t('Cannot send this announcement to %group @type because none of its members are subscribed to receive announcements.', [
           '%group' => $group->label(),
-          '@type' => $group->get('rid')->entity->getSingularLabel(),
+          '@type' => $group->get('type')->entity->getSingularLabel(),
         ]));
       }
     }
@@ -225,7 +225,7 @@ class AnnouncementForm extends FormBase {
     $args = [
       '@to' => $this->announcement->getWorkflowStateInstance()->getLabel(),
       '%group' => $this->announcement->getGroup()->label(),
-      '@type' => $this->announcement->getGroup()->get('rid')->entity->getSingularLabel(),
+      '@type' => $this->announcement->getGroup()->get('type')->entity->getSingularLabel(),
     ];
 
     if ($is_new) {
@@ -301,7 +301,7 @@ class AnnouncementForm extends FormBase {
   protected function getArguments(): array {
     $group = $this->announcement->getGroup();
     $sender = $this->announcement->getOwner();
-    $vars = ['@label' => $group->get('rid')->entity->getSingularLabel()];
+    $vars = ['@label' => $group->get('type')->entity->getSingularLabel()];
 
     return [
       '@group_title' => [

@@ -329,30 +329,30 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
       'email' => $this->randomMachineName() . '@example.com',
     ]);
 
-    $this->entity['rdf_entity']['collection']['1'] = $this->createRdfEntity([
-      'rid' => 'collection',
-      'id' => 'http://collection',
-      'label' => 'collection',
-      'field_ar_abstract' => $this->randomString(),
-      'field_ar_description' => $this->randomString(),
-      'field_ar_state' => 'published',
-      'field_ar_owner' => $owner->id(),
+    $this->entity['rdf_entity']['collection']['1'] = $this->createNode([
+      'type' => 'collection',
+      'uri' => 'http://collection',
+      'title' => 'collection',
+      'abstract' => $this->randomString(),
+      'description' => $this->randomString(),
+      'field_state' => 'published',
+      'owner' => $owner->id(),
       'field_topic' => Topic::loadByUri('http://joinup.eu/ontology/topic#finance-in-eu'),
-      'field_ar_contact_information' => $contact->id(),
+      'contact_information' => $contact->id(),
     ]);
 
-    $this->entity['rdf_entity']['solution']['1'] = $this->createRdfEntity([
-      'rid' => 'solution',
-      'id' => "http://solution/1",
-      'label' => "solution 1",
-      'collection' => 'http://collection',
-      'field_is_abstract' => $this->randomString(),
-      'field_is_description' => $this->randomString(),
-      'field_is_state' => 'published',
-      'field_is_owner' => $owner->id(),
+    $this->entity['rdf_entity']['solution']['1'] = $this->createNode([
+      'type' => 'solution',
+      'uri' => "http://solution/1",
+      'title' => "solution 1",
+      'og_audience' => 'http://collection',
+      'abstract' => $this->randomString(),
+      'description' => $this->randomString(),
+      'field_state' => 'published',
+      'owner' => $owner->id(),
       'field_topic' => Topic::loadByUri('http://joinup.eu/ontology/topic#finance-in-eu')->id(),
-      'field_is_solution_type' => MappedTerm::loadByUri('http://data.europa.eu/dr8/PublicServiceProvider')->id(),
-      'field_is_contact_information' => $contact->id(),
+      'solution_type' => MappedTerm::loadByUri('http://data.europa.eu/dr8/PublicServiceProvider')->id(),
+      'contact_information' => $contact->id(),
     ]);
     // Releases.
     for ($i = 1; $i <= 2; $i++) {

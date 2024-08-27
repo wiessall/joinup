@@ -64,7 +64,7 @@ function joinup_rdf_node_create_access(AccountInterface $account, array $context
   // transitions.
   /** @var \Drupal\joinup_group\Entity\GroupContentInterface $entity */
   $entity = \Drupal::entityTypeManager()->getStorage($entity_type_id)->create([
-    'rid' => $bundle,
+    'type' => $bundle,
   ]);
 
   // If the entity does not have a workflow, do not run a check.
