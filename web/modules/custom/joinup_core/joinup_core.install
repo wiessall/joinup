@@ -98,16 +98,33 @@ function joinup_core_requirements($phase): array {
 /**
  * Convert videos into document.
  */
-function joinup_core_update_111200(): void {
-  $entity_type_manager = \Drupal::entityTypeManager();
-  $video_nids = \Drupal::entityQuery('node')
-    ->accessCheck()
-    ->condition('type', 'video')
-    ->execute();
+function joinup_core_update_111200(array &$sandbox): string {
+  if (!isset($sandbox['video_nids'])) {
+    $video_nids = \Drupal::entityQuery('node')
+      ->accessCheck()
+      ->condition('type', 'video')
+      ->execute();
 
+    $sandbox['max'] = count($video_nids);
+    $sandbox['count'] = 0;
+    $sandbox['video_nids'] = $video_nids;
+  }
+
+  $video_nids = array_slice($sandbox['video_nids'], $sandbox['count'], 20);
+
+  $entity_type_manager = \Drupal::entityTypeManager();
   $video_nodes = $entity_type_manager->getStorage('node')->loadMultiple($video_nids);
 
   foreach ($video_nodes as $video_node) {
+    // Perform the conversion for each video node.
+    $layoutParagraph = Paragraph::create(['type' => 'layout']);
+    $layoutParagraph->setBehaviorSettings('layout_paragraphs', [
+      'layout' => 'layout_onecol',
+      'config' => ['label' => ''],
+      'parent_uuid' => NULL,
+      'region' => NULL,
+    ]);
+
     $body_paragraph = Paragraph::create([
       'type' => 'text',
       'field_body' => [
@@ -115,12 +132,19 @@ function joinup_core_update_111200(): void {
         'format' => 'text_html',
       ],
     ]);
-    $body_paragraph->save();
+    $body_paragraph->setBehaviorSettings('layout_paragraphs', [
+      'parent_uuid' => $layoutParagraph->uuid(),
+      'region' => 'content',
+    ]);
+
     $video_paragraph = Paragraph::create([
       'type' => 'video',
       'paragraph_video_url' => $video_node->get('field_video')->getValue(),
     ]);
-    $video_paragraph->save();
+    $video_paragraph->setBehaviorSettings('layout_paragraphs', [
+      'parent_uuid' => $layoutParagraph->uuid(),
+      'region' => 'content',
+    ]);
 
     $video = [
       'nid' => $video_node->id(),
@@ -148,19 +172,22 @@ function joinup_core_update_111200(): void {
       'field_document_spatial_coverage' => $video['field_document_spatial_coverage'],
       'field_keywords' => $video['field_keywords'],
       'field_state' => 'archived',
+      'field_document_publication_date' => $video['created'],
+      'published_at' => $video['created'],
     ]);
 
     $document_node->set('field_paragraphs_body', [
-      [
-        'target_id' => $body_paragraph->id(),
-        'target_revision_id' => $body_paragraph->getRevisionId(),
-      ],
-      [
-        'target_id' => $video_paragraph->id(),
-        'target_revision_id' => $video_paragraph->getRevisionId(),
-      ],
+      ['entity' => $layoutParagraph],
+      ['entity' => $body_paragraph],
+      ['entity' => $video_paragraph],
     ]);
 
+    $document_node->setRevisionCreationTime($video['created']);
     $document_node->save();
+
+    $sandbox['count']++;
   }
+
+  $sandbox['#finished'] = $sandbox['count'] === $sandbox['max'];
+  return "{$sandbox['count']} out of {$sandbox['max']} video nodes processed.";
 }
