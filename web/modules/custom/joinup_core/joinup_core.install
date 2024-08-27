@@ -7,7 +7,9 @@
 
 declare(strict_types=1);
 
+use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Site\Settings;
+use Drupal\datetime\Plugin\Field\FieldType\DateTimeItemInterface;
 use Drupal\node\Entity\Node;
 use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\user\Entity\User;
@@ -159,7 +161,7 @@ function joinup_core_update_111200(array &$sandbox): string {
     ];
     // Delete video.
     $video_node->delete();
-
+    $formatted_date = (new DrupalDateTime())->setTimestamp($video['created'])->format(DateTimeItemInterface::DATETIME_STORAGE_FORMAT);
     $document_node = Node::create([
       'type' => 'document',
       'nid' => $video['nid'],
@@ -171,9 +173,9 @@ function joinup_core_update_111200(array &$sandbox): string {
       'og_audience' => $video['og_audience'],
       'field_document_spatial_coverage' => $video['field_document_spatial_coverage'],
       'field_keywords' => $video['field_keywords'],
-      'field_state' => 'archived',
-      'field_document_publication_date' => $video['created'],
+      'field_document_publication_date' => $formatted_date,
       'published_at' => $video['created'],
+      'field_state' => 'published',
     ]);
 
     $document_node->set('field_paragraphs_body', [
@@ -183,6 +185,10 @@ function joinup_core_update_111200(array &$sandbox): string {
     ]);
 
     $document_node->setRevisionCreationTime($video['created']);
+    $document_node->save();
+
+    $document_node->set('field_state', 'archived');
+    $document_node->setNewRevision();
     $document_node->save();
 
     $sandbox['count']++;
