@@ -399,20 +399,9 @@ display:
           entity_type: joinup_log
           entity_field: type
           plugin_id: in_operator
-          operator: 'not in'
+          operator: in
           value:
-            all: all
-            'joinup:add_member': 'joinup:add_member'
-            'joinup:invite_member': 'joinup:invite_member'
-            'joinup:add_announcement': 'joinup:add_announcement'
-            'joinup:add_content': 'joinup:add_content'
-            'joinup:approve_the_pending_membership': 'joinup:approve_the_pending_membership'
-            'joinup:block_membership': 'joinup:block_membership'
-            'joinup:unblock_membership': 'joinup:unblock_membership'
-            'joinup:deleted_membership': 'joinup:deleted_membership'
-            'joinup:transfer_the_ownership_of_the_collection_to_member': 'joinup:transfer_the_ownership_of_the_collection_to_member'
-            'joinup:add_role': 'joinup:add_role'
-            'joinup:remove_role': 'joinup:remove_role'
+            'joinup:undefined': 'joinup:undefined'
           group: 1
           exposed: false
           expose:
