@@ -1,0 +1,22 @@
+uuid: 32252337-e1e8-41f2-9424-c49c83a96afd
+langcode: en
+status: false
+dependencies:
+  module:
+    - private_message
+  theme:
+    - ventuno
+id: ventuno_privatemessagenotification
+theme: ventuno
+region: header
+weight: 0
+provider: null
+plugin: private_message_notification_block
+settings:
+  id: private_message_notification_block
+  label: 'Private Message Notification'
+  label_display: '0'
+  provider: private_message
+  ajax_refresh_rate: 15
+  count_method: messages
+visibility: {  }

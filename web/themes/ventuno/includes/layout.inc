@@ -8,6 +8,7 @@
 declare(strict_types=1);
 
 use Drupal\Core\Template\Attribute;
+use Drupal\block\Entity\Block;
 use Drupal\interoperable_europe\InteroperableEuropeCollectionInterface;
 use Drupal\rdf_entity\RdfInterface;
 use Drupal\topic\Entity\TopicMetaEntityInterface;
@@ -80,6 +81,16 @@ function ventuno_preprocess_page(array &$variables): void {
     if (array_key_exists("page_manager.$pageManagerPageId", \Drupal::service('library.discovery')->getLibrariesByExtension('ventuno'))) {
       $variables['#attached']['library'][] = "ventuno/page_manager.$pageManagerPageId";
     }
+  }
+
+  $block = Block::load('ventuno_privatemessagenotification');
+
+  if ($block) {
+    $block_content = \Drupal::entityTypeManager()
+      ->getViewBuilder('block')
+      ->view($block);
+
+    $variables['private_message'] = $block_content;
   }
 }
 
