@@ -5,13 +5,15 @@
  * Install and update hooks.
  */
 
+declare(strict_types=1);
+
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 
 /**
  * Add the `variables` field.
  */
-function joinup_log_update_111200(): string {
+function joinup_log_update_111200(): TranslatableMarkup {
   $definition_update_manager = \Drupal::entityDefinitionUpdateManager();
 
   $field = BaseFieldDefinition::create('map')
