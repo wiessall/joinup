@@ -24,6 +24,7 @@ dependencies:
     - node.type.news
     - node.type.owner
     - search_api_autocomplete.search.search
+    - search_api_autocomplete.search.search_oss_catalogue
   module:
     - comment
     - contextual
@@ -40,6 +41,7 @@ dependencies:
     - paragraphs
     - paragraphs_type_permissions
     - poll
+    - private_message
     - rdf_entity
     - search_api_autocomplete
     - sitewide_alert
@@ -92,6 +94,7 @@ permissions:
   - 'create polls'
   - 'create video media'
   - 'delete own comments'
+  - 'delete own private message'
   - 'delete paragraph content accordion'
   - 'delete paragraph content accordion_item'
   - 'delete paragraph content call_to_action'
@@ -176,6 +179,7 @@ permissions:
   - 'update paragraph content tile'
   - 'update paragraph content tiles'
   - 'update paragraph content video'
+  - 'use private messaging system'
   - 'use search_api_autocomplete for search'
   - 'use search_api_autocomplete for search_oss_catalogue'
   - 'use text format basic_html'
