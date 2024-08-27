@@ -310,7 +310,7 @@ function custom_page_node_presave(NodeInterface $entity): void {
     return;
   }
   if (!$entity->isPublished() && $entity->isGroupLandingPage()) {
-    throw new Exception("This page acts as landing page for the {$entity->getGroup()->get('rid')->entity->getSingularLabel()}. In order to unpublished it should be first unset as landing page.");
+    throw new Exception("This page acts as landing page for the {$entity->getGroup()->get('type')->entity->getSingularLabel()}. In order to unpublished it should be first unset as landing page.");
   }
 }
 
@@ -322,7 +322,7 @@ function custom_page_node_predelete(NodeInterface $entity): void {
     return;
   }
   if ($entity->isGroupLandingPage()) {
-    throw new Exception("This page acts as landing page for the {$entity->getGroup()->get('rid')->entity->getSingularLabel()}. In order to delete it should be first unset as landing page.");
+    throw new Exception("This page acts as landing page for the {$entity->getGroup()->get('type')->entity->getSingularLabel()}. In order to delete it should be first unset as landing page.");
   }
 }
 
@@ -334,7 +334,7 @@ function custom_page_form_node_custom_page_delete_form_alter(array &$form, FormS
   if ($entity->isGroupLandingPage()) {
     $form['#title'] = t('You can not delete this landing page!');
     $form['description'] = [
-      '#markup' => t('This page acts as landing page for the @group. In order to delete it should be first unset as landing page.', ['@group' => $entity->getGroup()->get('rid')->entity->getSingularLabel()]),
+      '#markup' => t('This page acts as landing page for the @group. In order to delete it should be first unset as landing page.', ['@group' => $entity->getGroup()->get('type')->entity->getSingularLabel()]),
     ];
     $form['actions']['submit']['#access'] = FALSE;
   }

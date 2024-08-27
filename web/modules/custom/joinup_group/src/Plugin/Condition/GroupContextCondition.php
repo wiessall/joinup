@@ -136,7 +136,7 @@ class GroupContextCondition extends ConditionPluginBase implements ContainerFact
 
     if ($groups = $this->getGroups()) {
       $group_labels = array_map(function (GroupInterface $group): string {
-        return $group->get('rid')->entity->label() . ': ' . $group->label();
+        return $group->get('type')->entity->label() . ': ' . $group->label();
       }, $groups);
       $args = ['@groups' => implode(', ', $group_labels)];
       if (!$this->isNegated()) {

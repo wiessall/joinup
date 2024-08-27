@@ -1030,7 +1030,7 @@ function joinup_group_mail(string $key, array &$message, array $params): void {
     $args = [
       '@subject' => $token->replace($announcement->getSubject(), $data),
       '@group' => $group->label(),
-      '@type' => $group->get('rid')->entity->getSingularLabel(),
+      '@type' => $group->get('type')->entity->getSingularLabel(),
       '@author' => $announcement->getOwner()->getDisplayName(),
       ':url' => Url::fromRoute('entity.node.announcement_edit', [
         'node' => $group->id(),

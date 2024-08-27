@@ -106,7 +106,7 @@ class UnsubscribeForm extends ConfirmFormBase {
     }
     return $this->t('Unsubscribe from %group @type?', [
       '%group' => $this->group->label(),
-      '@type' => $this->group->get('rid')->entity->getSingularLabel(),
+      '@type' => $this->group->get('type')->entity->getSingularLabel(),
     ]);
   }
 
@@ -119,7 +119,7 @@ class UnsubscribeForm extends ConfirmFormBase {
     }
     $arguments = [
       '%group' => $this->group->label(),
-      '@type' => $this->group->get('rid')->entity->getSingularLabel(),
+      '@type' => $this->group->get('type')->entity->getSingularLabel(),
     ];
     if (!$this->types) {
       return $this->t('Are you sure you want to unsubscribe from %group @type? You will stop receiving news and updates, including the pending memberships, from this @type.', $arguments);
@@ -190,7 +190,7 @@ class UnsubscribeForm extends ConfirmFormBase {
       static::membershipUnsubscribeTypes($membership, $types);
       $arguments = [
         '%group' => $this->group->label(),
-        '@type' => $this->group->get('rid')->entity->getSingularLabel(),
+        '@type' => $this->group->get('type')->entity->getSingularLabel(),
         '@types' => implode(', ', $this->getTypesLabels()),
       ];
       if (!$this->types) {
@@ -374,7 +374,7 @@ class UnsubscribeForm extends ConfirmFormBase {
 
     $arguments = [
       '@group' => $group->label(),
-      '@type' => $group->get('rid')->entity->getSingularLabel(),
+      '@type' => $group->get('type')->entity->getSingularLabel(),
     ];
 
     if (!$types) {

@@ -235,7 +235,7 @@ function joinup_workflow_message_form_submit_draft(array &$form, FormStateInterf
         '%title' => $node->toLink()->toString(),
         '%state' => $node->get('field_state')->getString(),
         ':user' => Url::fromRoute('user.page')->toString(),
-        '@audience' => $node->get('og_audience')->entity->get('rid')->entity->label(),
+        '@audience' => $node->get('og_audience')->entity->get('type')->entity->label(),
       ];
 
       foreach ($status_messages as $message) {
