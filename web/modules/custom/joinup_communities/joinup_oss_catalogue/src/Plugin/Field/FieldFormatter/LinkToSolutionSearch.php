@@ -191,6 +191,7 @@ class LinkToSolutionSearch extends FormatterBase {
     $currentBundleInfo = $entityBundleInfo->getBundleInfo($fieldDefinition->getTargetEntityTypeId());
     $targetBundle = $fieldDefinition->getTargetBundle();
     return array_key_exists($targetBundle, $currentBundleInfo)
+      && isset($currentBundleInfo[$targetBundle]['class'])
       && $currentBundleInfo[$targetBundle]['class'] === JoinupOssSolution::class;
   }
 
