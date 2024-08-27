@@ -2,11 +2,6 @@ services:
   _defaults:
     autowire: true
 
-  monolog.handler.eu_oss_catalogue:
-    class: Drupal\joinup_oss_catalogue\Logger\Handler\EuOssCatalogueHandler
-    arguments: ['@entity_type.manager', 100, TRUE]
-    tags:
-      - { name: needs_destruction }
   joinup_oss_catalogue.access_checker:
     class: Drupal\joinup_oss_catalogue\Access\OssAccessCheck
     tags:
