@@ -1,0 +1,7 @@
+name: 'Joinup private message'
+type: module
+description: 'Provides private message functionality'
+package: Joinup
+core_version_requirement: ">= 10.3"
+dependencies:
+  - private_message:private_message
