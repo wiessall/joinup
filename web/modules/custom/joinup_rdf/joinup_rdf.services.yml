@@ -6,7 +6,7 @@ services:
     arguments: [ 'rdf_sync.connection' ]
   joinup_rdf.requirements_helper:
     class: Drupal\joinup_rdf\RequirementsHelper
-    arguments: ['rdf_sync.connection', '@string_translation']
+    arguments: ['@rdf_sync.connection', '@string_translation']
   # Move this to sparql_entity_storage in ISAICP-7374.
   # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7374
   joinup_rdf.twig_extension:
