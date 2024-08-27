@@ -17,21 +17,14 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 abstract class TcaFormBase extends FormBase {
 
   /**
-   * The block manager service.
-   *
-   * @var \Drupal\Core\Block\BlockManagerInterface
-   */
-  protected $blockManager;
-
-  /**
    * Constructs a TcaFormBase object.
    *
-   * @param \Drupal\Core\Block\BlockManagerInterface $block_manager
+   * @param \Drupal\Core\Block\BlockManagerInterface $blockManager
    *   The block manager service.
    */
-  public function __construct(BlockManagerInterface $block_manager) {
-    $this->blockManager = $block_manager;
-  }
+  public function __construct(
+    protected BlockManagerInterface $blockManager
+  ) {}
 
   /**
    * {@inheritdoc}
@@ -46,7 +39,7 @@ abstract class TcaFormBase extends FormBase {
    * Returns the bundle of the type the user is trying to create.
    *
    * @return string
-   *   The bundle in a human readable format.
+   *   The bundle in a human-readable format.
    */
   abstract protected function getEntityBundle(): string;
 

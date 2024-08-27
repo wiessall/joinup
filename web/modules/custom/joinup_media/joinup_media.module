@@ -65,7 +65,6 @@ function joinup_media_set_media_group(array $form, FormStateInterface $form_stat
   $media_library_state = $form_state->get('media_library_state');
   $group_id = $media_library_state->getOpenerParameters()['group_id'] ?? NULL;
   if ($group_id) {
-    $group_id = UriEncoder::decodeUrl($group_id);
     /** @var \Drupal\media\MediaInterface $media */
     foreach ($media_items as $media) {
       if ($media->hasField(OgGroupAudienceHelperInterface::DEFAULT_FIELD)) {
