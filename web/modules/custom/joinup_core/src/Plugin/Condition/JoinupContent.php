@@ -4,25 +4,31 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_core\Plugin\Condition;
 
+use Drupal\Core\Condition\Attribute\Condition;
 use Drupal\Core\Condition\ConditionPluginBase;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\Plugin\Context\ContextDefinition;
 use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides a condition for joinup content.
- *
- * @Condition(
- *   id = "joinup_content",
- *   label = @Translation("Joinup content"),
- *   context_definitions = {
- *     "node" = @ContextDefinition("entity:node", label = @Translation("Node"),
- *   required = FALSE),
- *   }
- * )
  */
+#[Condition(
+  id: 'joinup_content',
+  label: new TranslatableMarkup('Joinup content'),
+  context_definitions: [
+    'node' => new ContextDefinition(
+      data_type: 'node',
+      label: new TranslatableMarkup('Node'),
+      required: FALSE,
+    ),
+  ]
+)
+  ]
 class JoinupContent extends ConditionPluginBase implements ContainerFactoryPluginInterface {
 
   /**
@@ -92,15 +98,12 @@ class JoinupContent extends ConditionPluginBase implements ContainerFactoryPlugi
   protected function getContentOptions(): array {
     $options = [];
 
-    foreach (['node_type', 'rdf_type'] as $type) {
-      $storage = $this->entityTypeManager->getStorage($type);
+    $storage = $this->entityTypeManager->getStorage('node_type');
+    foreach ($storage->loadMultiple() as $bundle) {
+      $type = $this->getUniqueContentIdentifier($storage->getEntityType()
+        ->get('bundle_of'), $bundle->id());
 
-      foreach ($storage->loadMultiple() as $bundle) {
-        $type = $this->getUniqueContentIdentifier($storage->getEntityType()
-          ->get('bundle_of'), $bundle->id());
-
-        $options[$type] = $bundle->label();
-      }
+      $options[$type] = $bundle->label();
     }
 
     return $options;

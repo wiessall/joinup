@@ -16,7 +16,7 @@ class TcaForm extends TcaFormBase {
   /**
    * {@inheritdoc}
    */
-  public function getFormId() {
+  public function getFormId(): string {
     return 'collection_tca_form';
   }
 

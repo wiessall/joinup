@@ -4,44 +4,31 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_group\Plugin\Block;
 
+use Drupal\Core\Block\Attribute\Block;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Config\Entity\ConfigEntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Routing\CurrentRouteMatch;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * A block showing the introduction text on collection and solution overviews.
- *
- * @Block(
- *  id = "overview_message_block",
- *  admin_label = @Translation("Overview message"),
- * )
  */
+#[Block(
+  id: 'overview_message_block',
+  admin_label: new TranslatableMarkup('Overview message'),
+)]
 class OverviewMessageBlock extends BlockBase implements ContainerFactoryPluginInterface {
-
-  /**
-   * Drupal\Core\Routing\CurrentRouteMatch definition.
-   *
-   * @var \Drupal\Core\Routing\CurrentRouteMatch
-   */
-  protected $currentRouteMatch;
-
-  /**
-   * The entity type manager service.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
 
   /**
    * Static cache of the RDF Entity Type storage.
    *
    * @var \Drupal\Core\Config\Entity\ConfigEntityStorageInterface
    */
-  protected $rdfEntityTypeStorage;
+  protected ConfigEntityStorageInterface $nodeStorage;
 
   /**
    * Constructs a new OverviewMessageBlock object.
@@ -52,15 +39,19 @@ class OverviewMessageBlock extends BlockBase implements ContainerFactoryPluginIn
    *   The plugin_id for the plugin instance.
    * @param string $plugin_definition
    *   The plugin implementation definition.
-   * @param \Drupal\Core\Routing\CurrentRouteMatch $current_route_match
+   * @param \Drupal\Core\Routing\CurrentRouteMatch $currentRouteMatch
    *   The current route match service.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity type manager service.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, CurrentRouteMatch $current_route_match, EntityTypeManagerInterface $entity_type_manager) {
+  public function __construct(
+    array $configuration,
+    $plugin_id,
+    $plugin_definition,
+    protected CurrentRouteMatch $currentRouteMatch,
+    protected EntityTypeManagerInterface $entityTypeManager,
+  ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
-    $this->currentRouteMatch = $current_route_match;
-    $this->entityTypeManager = $entity_type_manager;
   }
 
   /**
@@ -80,18 +71,18 @@ class OverviewMessageBlock extends BlockBase implements ContainerFactoryPluginIn
    * {@inheritdoc}
    */
   public function build(): array {
-    $route_name = $this->currentRouteMatch->getRouteName();
+    $routeName = $this->currentRouteMatch->getRouteName();
     $build = [];
-    if ($route_name === 'view.solutions.page_1') {
+    if ($routeName === 'view.solutions.page_1') {
       $build['header_description'] = [
         '#type' => 'inline_template',
-        '#template' => '<p>' . $this->getRdfEntityTypeStorage()->load('solution')->getDescription() . '</p>',
+        '#template' => '<p>' . $this->getNodeStorage()->load('solution')->getDescription() . '</p>',
       ];
     }
-    elseif ($route_name === 'view.collections.page_1') {
+    elseif ($routeName === 'view.collections.page_1') {
       $build['header_description'] = [
         '#type' => 'inline_template',
-        '#template' => '<p>' . $this->getRdfEntityTypeStorage()->load('collection')->getDescription() . '</p>',
+        '#template' => '<p>' . $this->getNodeStorage()->load('collection')->getDescription() . '</p>',
       ];
     }
 
@@ -102,31 +93,31 @@ class OverviewMessageBlock extends BlockBase implements ContainerFactoryPluginIn
    * {@inheritdoc}
    */
   public function getCacheContexts(): array {
-    $cache_contexts = parent::getCacheContexts();
-    return Cache::mergeContexts($cache_contexts, ['route']);
+    $cacheContexts = parent::getCacheContexts();
+    return Cache::mergeContexts($cacheContexts, ['route']);
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getCacheTags() {
+  public function getCacheTags(): array {
     return Cache::mergeTags(parent::getCacheTags(), Cache::mergeTags(
-      $this->getRdfEntityTypeStorage()->load('collection')->getCacheTagsToInvalidate(),
-      $this->getRdfEntityTypeStorage()->load('solution')->getCacheTagsToInvalidate()
+      $this->getNodeStorage()->load('collection')->getCacheTagsToInvalidate(),
+      $this->getNodeStorage()->load('solution')->getCacheTagsToInvalidate()
     ));
   }
 
   /**
-   * Returns the RDF Entity Type storage.
+   * Returns the node type storage.
    *
    * @return \Drupal\Core\Config\Entity\ConfigEntityStorageInterface
-   *   The RDF Entity Type storage.
+   *   The node type storage.
    */
-  protected function getRdfEntityTypeStorage(): ConfigEntityStorageInterface {
-    if (!isset($this->rdfEntityTypeStorage)) {
-      $this->rdfEntityTypeStorage = $this->entityTypeManager->getStorage('rdf_type');
+  protected function getNodeStorage(): ConfigEntityStorageInterface {
+    if (!isset($this->nodeStorage)) {
+      $this->nodeStorage = $this->entityTypeManager->getStorage('node_type');
     }
-    return $this->rdfEntityTypeStorage;
+    return $this->nodeStorage;
   }
 
 }
