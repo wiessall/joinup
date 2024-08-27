@@ -22,7 +22,7 @@ class JoinupOssCatalogueServiceProvider implements ServiceModifierInterface {
 
     $monologChannelHandlers = $container->getParameter('monolog.channel_handlers');
     $monologChannelHandlers['eu_oss_catalogue'] = $monologChannelHandlers['default'];
-    $monologChannelHandlers['eu_oss_catalogue'][] = 'eu_oss_catalogue';
+    $monologChannelHandlers['eu_oss_catalogue'][] = 'business_handler';
 
     $container->setParameter('monolog.channel_handlers', $monologChannelHandlers);
   }
