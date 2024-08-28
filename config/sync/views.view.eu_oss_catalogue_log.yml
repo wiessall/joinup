@@ -233,7 +233,7 @@ display:
           group_type: group
           admin_label: ''
           entity_type: joinup_log
-          plugin_id: serialized
+          plugin_id: log-unserialize
           label: Variables
           exclude: false
           alter:
@@ -275,8 +275,6 @@ display:
           hide_empty: false
           empty_zero: false
           hide_alter_empty: true
-          format: unserialized
-          key: ''
       pager:
         type: full
         options:
