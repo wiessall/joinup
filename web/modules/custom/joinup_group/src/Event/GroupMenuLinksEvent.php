@@ -89,7 +89,14 @@ class GroupMenuLinksEvent extends Event {
       'menu_name' => $this->getMenuName(),
       'link' => [
         'uri' => $url->toUriString(),
-        'options' => $url->getOptions(),
+        'options' => array_diff_key(
+          $url->getOptions(),
+          // We don't want to serialize the entity.
+          // @see \Drupal\Core\Entity\EntityBase::toUrl()
+          // @todo This affects link alterers because they'll not have access to
+          //   the entity. Maybe move it to hook_menu_link_content_presave()?
+          array_flip(['entity_type', 'entity', 'language']),
+        ),
       ],
       'weight' => $weight,
     ] + $values)->save();

@@ -310,7 +310,7 @@ function joinup_group_node_insert(NodeInterface $group): void {
   }
 
   // @todo Clean this in ISAICP-8376.
-  if ($group->skip_menu_creation) {
+  if (!empty($group->skip_menu_creation)) {
     return;
   }
 
