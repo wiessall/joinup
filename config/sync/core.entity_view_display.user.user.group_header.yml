@@ -16,8 +16,8 @@ dependencies:
     - field.field.user.user.field_user_professional_domain
     - image.style.profile_icon_big
   module:
-    - image
     - social_media_links_field
+    - svg_image
     - template_suggestion
     - user
 id: user.user.group_header
@@ -94,6 +94,10 @@ content:
       image_style: profile_icon_big
       image_loading:
         attribute: lazy
+      svg_attributes:
+        width: null
+        height: null
+      svg_render_as_image: true
     third_party_settings:
       template_suggestion:
         template_suggestion: bare
@@ -115,8 +119,12 @@ content:
     weight: 7
     region: content
 hidden:
+  block_user: true
   field_user_content: true
   field_user_frequency: true
   langcode: true
+  linked_username: true
+  masquerade: true
+  private_message_link: true
   search_api_excerpt: true
   user_user_field_user_content_top: true

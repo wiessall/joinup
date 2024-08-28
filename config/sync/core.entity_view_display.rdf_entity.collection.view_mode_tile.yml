@@ -27,6 +27,7 @@ dependencies:
   module:
     - field_fallback_formatter
     - responsive_image
+    - smart_trim
     - template_suggestion
     - user
 id: rdf_entity.collection.view_mode_tile
