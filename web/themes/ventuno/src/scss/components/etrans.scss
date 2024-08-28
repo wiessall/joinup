@@ -40,6 +40,9 @@
       background-color: $secondary-darker;
       box-shadow: $box-shadow;
     }
+    &:focus-visible {
+      box-shadow: 0 0 0 0.25rem rgba(196, 205, 213, 0.5) !important;
+    }
     &::before {
       @include get-bootstrap-icon("translate", currentColor);
 
