@@ -189,6 +189,7 @@ module:
   pluginreference: 0
   poll: 0
   private_message: 0
+  private_message_notify: 0
   purge: 0
   purge_drush: 0
   purge_processor_cron: 0
