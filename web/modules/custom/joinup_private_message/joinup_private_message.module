@@ -6,3 +6,23 @@
  */
 
 declare(strict_types=1);
+
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Implements hook_form_alter().
+ */
+function joinup_private_message_form_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
+  if ($form_id === 'private_message_add_form') {
+    $form['actions']['submit']['#submit'][] = 'joinup_private_message_form_submit';
+  }
+}
+
+/**
+ * Custom form submit handler for redirect.
+ */
+function joinup_private_message_form_submit(array &$form, FormStateInterface $form_state): void {
+  // The entity.private_message_thread.canonical route has been removed,
+  // so we will redirect to the Private Messages page.
+  $form_state->setRedirect('private_message.private_message_page');
+}
