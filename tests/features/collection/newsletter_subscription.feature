@@ -107,7 +107,6 @@ Feature: Subscribing to collection newsletters
 
     # When the user subscribes a success message should be shown.
     When I press "Subscribe"
-    And I wait for AJAX to finish
     Then I should see the following success messages:
       | success messages                             |
       | Thank you for subscribing to our newsletter. |
@@ -115,7 +114,6 @@ Feature: Subscribing to collection newsletters
     # When a user resubscribes it is polite to inform about this.
     When I go to the "Volkor X" collection
     And I press "Subscribe"
-    And I wait for AJAX to finish
     Then I should see the following success messages:
       | success messages                              |
       | You are already subscribed to our newsletter. |

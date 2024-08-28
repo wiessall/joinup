@@ -62,7 +62,6 @@ Feature: Pool paragraph tests.
     When I should not see the button "Hide results"
 
     Then I click on label "Game of Thrones"
-    And I wait for AJAX to finish
     When I should see "1 vote"
 
   Scenario: Use who voted can cancel own vote
@@ -83,7 +82,6 @@ Feature: Pool paragraph tests.
     And I should see "4 days 23 hours left to vote"
 
     Then I click on label "Just cheese"
-    And I wait for AJAX to finish
     When the following fields should not be present "Pepperoni,Pineapple,Just cheese,Mushrooms"
     And I press "Cancel vote"
     And the following fields should be present "Pepperoni,Pineapple,Just cheese,Mushrooms"

@@ -8,7 +8,6 @@
 declare(strict_types=1);
 
 use Drupal\joinup_community_content\Entity\CommunityContentInterface;
-use Drupal\page_manager\PageInterface;
 
 /**
  * Implements hook_preprocess_page_title().
@@ -53,11 +52,11 @@ function ventuno_theme_suggestions_page_title_alter(array &$suggestions, array &
   }
 
   // Add Page Manager page specific libraries if we have any.
-  $pageManagerPage = $route_match->getParameter('page_manager_page');
-  if ($pageManagerPage instanceof PageInterface) {
+  $pageManagerPageId = $route_match->getRouteObject()?->getDefault('_page_manager_page');
+  if ($pageManagerPageId) {
     $suggestions[] = implode('__', [
       $variables['theme_hook_original'],
-      $pageManagerPage->id(),
+      $pageManagerPageId,
     ]);
   }
 }

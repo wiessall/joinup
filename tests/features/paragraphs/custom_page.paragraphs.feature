@@ -72,6 +72,7 @@ Feature:
     And a modal should open
     Then I should not see the link "Layout"
     And I should see the link "Accordion"
+    And I should not see the link "Block"
     And I should see the link "Call to action(s)"
     And I should see the link "Carousel"
     And I should see the link "Content listing"
@@ -97,6 +98,7 @@ Feature:
     And a modal should open
     Then I should not see the link "Layout"
     And I should see the link "Accordion"
+    And I should not see the link "Block"
     And I should see the link "Call to action(s)"
     And I should see the link "Carousel"
     And I should see the link "Content listing"
@@ -122,6 +124,7 @@ Feature:
     And a modal should open
     Then I should not see the link "Layout"
     And I should see the link "Accordion"
+    And I should see the link "Block"
     And I should see the link "Call to action(s)"
     And I should see the link "Carousel"
     And I should see the link "Content listing"
