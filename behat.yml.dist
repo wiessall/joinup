@@ -13,6 +13,7 @@
       standardTags:
         wcag21a: WCAG 2.1 A
         wcag21aa: WCAG 2.1 AA
+        wcag141: Criterion 1.4.1
         wcag143: Criterion 1.4.3
         wcag411: Criterion 4.1.1
         'cat.text-alternatives': Image text alternative
