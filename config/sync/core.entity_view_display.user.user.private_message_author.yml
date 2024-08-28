@@ -24,19 +24,19 @@ bundle: user
 mode: private_message_author
 content:
   block_user:
-    weight: 0
     settings: {  }
     third_party_settings: {  }
+    weight: 0
     region: content
   linked_username:
+    settings: {  }
+    third_party_settings: {  }
     weight: 0
     region: content
-    settings: {  }
-    third_party_settings: {  }
   masquerade:
-    weight: 50
     settings: {  }
     third_party_settings: {  }
+    weight: 50
     region: content
 hidden:
   field_social_media: true
