@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_log\Plugin\views\field;
 
+use Drupal\Component\Serialization\PhpSerialize;
 use Drupal\views\Attribute\ViewsField;
 use Drupal\views\Plugin\views\field\FieldPluginBase;
 use Drupal\views\ResultRow;
 use Symfony\Component\Yaml\Yaml;
-use Drupal\Component\Serialization\PhpSerialize;
 
 /**
  * Field handler to show data of serialized fields.
