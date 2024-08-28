@@ -12,40 +12,40 @@ bundle: private_message_thread
 mode: default
 content:
   clear_history_link:
-    weight: -100
     settings: {  }
     third_party_settings: {  }
+    weight: -100
     region: content
   delete_link:
-    weight: -100
     settings: {  }
     third_party_settings: {  }
+    weight: -100
     region: content
   members:
-    label: above
     type: private_message_thread_member_formatter
-    weight: 0
-    region: content
+    label: above
     settings:
       display_type: entity
       entity_display_mode: private_message_author
     third_party_settings: {  }
-  private_message_form:
-    weight: 2
+    weight: 0
     region: content
+  private_message_form:
     settings: {  }
     third_party_settings: {  }
+    weight: 2
+    region: content
   private_messages:
     type: private_message_thread_message_formatter
-    weight: 1
-    region: content
     label: above
     settings:
       message_count: 7
       ajax_previous_load_count: 5
-      ajax_refresh_rate: 20
       message_order: asc
+      ajax_refresh_rate: 20
     third_party_settings: {  }
+    weight: 1
+    region: content
 hidden:
   last_message: true
   no_active_users: true
