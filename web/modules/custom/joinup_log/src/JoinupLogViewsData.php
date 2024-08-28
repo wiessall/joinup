@@ -30,24 +30,7 @@ class JoinupLogViewsData extends EntityViewsData {
       'options callback' => JoinupLog::class . '::allowedTypes',
     ];
 
-    $data[$base_table]['variables'] = [
-      'title' => $this->t('Variables'),
-      'help' => $this->t('The variables of the log entry in a serialized format.'),
-      'field' => [
-        'id' => 'serialized',
-        'click sortable' => FALSE,
-      ],
-      'argument' => [
-        'id' => 'string',
-      ],
-      'filter' => [
-        'id' => 'string',
-      ],
-      'sort' => [
-        'id' => 'standard',
-      ],
-    ];
-
+    $data[$base_table]['variables']['field']['id'] = 'log-unserializer';
     $data[$base_table]['group']['argument']['id'] = 'og_audience_group';
 
     return $data;
