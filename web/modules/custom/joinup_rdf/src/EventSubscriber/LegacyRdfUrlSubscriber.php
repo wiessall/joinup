@@ -120,14 +120,14 @@ class LegacyRdfUrlSubscriber extends HttpExceptionSubscriberBase {
    *
    * @const string[]
    */
-  private const URI_TYPO_MAP = [
+  private const array URI_TYPO_MAP = [
     'http://joinup.eu/ontology/topic#statistics-and-informatino' => 'http://joinup.eu/ontology/topic#statistics-and-information',
   ];
 
   /**
    * Conversion for path prefix.
    */
-  private const PREFIX = [
+  private const array PREFIX = [
     '/rdf_entity/' => '/node/',
     '/taxonomy/term/' => '/taxonomy/term/',
   ];
