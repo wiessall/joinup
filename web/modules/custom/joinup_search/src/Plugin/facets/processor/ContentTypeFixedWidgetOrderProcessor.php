@@ -37,7 +37,6 @@ class ContentTypeFixedWidgetOrderProcessor extends SortProcessorPluginBase {
     'custom_page' => 9,
     'licence' => 10,
     'user' => 11,
-    'video' => 12,
   ];
 
   /**
