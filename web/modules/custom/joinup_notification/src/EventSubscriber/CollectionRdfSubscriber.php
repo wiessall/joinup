@@ -549,7 +549,7 @@ class CollectionRdfSubscriber extends NotificationSubscriberBase {
   protected function isTransitionRequested(): bool {
     assert($this->entity instanceof EntityWorkflowStateInterface);
     $state = $this->entity->getWorkflowState();
-    return $state === 'archived' && $this->transition->getId() === 'archive';
+    return $state === 'archived' && $this->transition && $this->transition->getId() === 'archive';
   }
 
 }
