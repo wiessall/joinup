@@ -4,8 +4,8 @@ status: true
 dependencies:
   config:
     - field.field.node.contact_information.email
-    - field.field.node.contact_information.webpage
     - field.field.node.contact_information.field_state
+    - field.field.node.contact_information.webpage
     - node.type.contact_information
   module:
     - link
@@ -38,6 +38,7 @@ hidden:
   field_state: true
   langcode: true
   links: true
+  private_message_link: true
   published_at: true
   report: true
   search_api_excerpt: true

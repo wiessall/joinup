@@ -23,22 +23,13 @@ targetEntityType: user
 bundle: user
 mode: private_message_author
 content:
-  block_user:
-    settings: {  }
-    third_party_settings: {  }
-    weight: 0
-    region: content
   linked_username:
     settings: {  }
     third_party_settings: {  }
     weight: 0
     region: content
-  masquerade:
-    settings: {  }
-    third_party_settings: {  }
-    weight: 50
-    region: content
 hidden:
+  block_user: true
   field_social_media: true
   field_user_business_title: true
   field_user_content: true
@@ -50,6 +41,7 @@ hidden:
   field_user_photo: true
   field_user_professional_domain: true
   langcode: true
+  masquerade: true
   member_for: true
   private_message_link: true
   search_api_excerpt: true

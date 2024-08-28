@@ -34,6 +34,7 @@ content:
     weight: 0
     region: content
 hidden:
+  block_user: true
   field_social_media: true
   field_user_business_title: true
   field_user_family_name: true
@@ -44,5 +45,8 @@ hidden:
   field_user_photo: true
   field_user_professional_domain: true
   langcode: true
+  linked_username: true
+  masquerade: true
   member_for: true
+  private_message_link: true
   search_api_excerpt: true
