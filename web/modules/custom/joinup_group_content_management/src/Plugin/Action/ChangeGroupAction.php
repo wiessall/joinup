@@ -17,7 +17,6 @@ use Drupal\custom_page\CustomPageOgMenuLinksManagerInterface;
 use Drupal\joinup_distribution\Entity\Distribution;
 use Drupal\joinup_release\Entity\Release;
 use Drupal\menu_link_content\MenuLinkContentInterface;
-use Drupal\node\Entity\Node;
 use Drupal\node\NodeInterface;
 use Drupal\og_menu\OgMenuInstanceInterface;
 use Drupal\sparql_entity_storage\UriEncoder;
@@ -132,7 +131,7 @@ class ChangeGroupAction extends ViewsBulkOperationsActionBase implements Contain
   public function executeMultiple(array $nodes): void {
     $message = array_fill_keys(['error', 'warning', 'status'], []);
     $groupId = $this->getConfiguration()['group'];
-    if (!$group = Node::load($groupId)) {
+    if (!$group = $this->entityTypeManager->getStorage('node')->load($groupId)) {
       throw new \RuntimeException("Cannot load group entity with ID $groupId");
     }
 
@@ -297,7 +296,7 @@ class ChangeGroupAction extends ViewsBulkOperationsActionBase implements Contain
     $url = $formState->get('views_bulk_operations')['redirect_url'];
     if ($url->isRouted() && ($parameters = $url->getRouteParameters()) && !empty($parameters['node'])) {
       /** @var \Drupal\node\NodeInterface $sourceEntity */
-      $sourceEntity = Node::load(UriEncoder::decodeUrl($parameters['node']));
+      $sourceEntity = $this->entityTypeManager->getStorage('node')->load(UriEncoder::decodeUrl($parameters['node']));
       if ($sourceEntity->id() === $formState->getValue('group')) {
         $formState->setErrorByName('group', $this->t("The destination group is the same as the source group: %group. Please, select other destination group.", [
           '%group' => $sourceEntity->label(),

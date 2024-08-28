@@ -69,7 +69,7 @@ final class MigrationHelper {
   ];
 
   /**
-   * Used as SQL expression that decodes an URO
+   * Used as SQL expression that decodes an URI.
    *
    * Constant value computed with this code snippet:
    * @code
@@ -86,7 +86,7 @@ final class MigrationHelper {
   private const string URL_DECODE_SQL_EXPRESSION = "REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(%s, '_x', '%%'), '_w', '`'), '_v', '='), '_u', ';'), '_t', ','), '_s', '+'), '_r', '*'), '_q', ')'), '_p', '('), '_o', '\''), '_n', '&'), '_m', '$'), '_l', '!'), '_k', '@'), '_j', ']'), '_i', '['), '_h', '#'), '_g', '?'), '_f', '/'), '_e', ':'), '_d', '~'), '_c', '.'), '_b', '-'), '_a', '_')";
 
   /**
-   * Used as SQL expression that decodes an URO
+   * Used as SQL expression that decodes an URI.
    *
    * Constant value computed with this code snippet:
    * @code
