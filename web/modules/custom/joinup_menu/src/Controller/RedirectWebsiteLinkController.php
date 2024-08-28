@@ -18,30 +18,30 @@ final class RedirectWebsiteLinkController extends ControllerBase {
   /**
    * Redirects to the website link.
    *
-   * @param \Drupal\joinup_group\Entity\GroupInterface $group
+   * @param \Drupal\joinup_group\Entity\GroupInterface $node
    *   The group entity.
    *
    * @return \Drupal\Core\Routing\TrustedRedirectResponse
    *   The redirect response.
    */
-  public function websiteLink(GroupInterface $group): TrustedRedirectResponse {
-    $url = $group->{$group->getWebsiteLinkFieldName()}->uri;
+  public function websiteLink(GroupInterface $node): TrustedRedirectResponse {
+    $url = $node->{$node->getWebsiteLinkFieldName()}->uri;
     $response = new TrustedRedirectResponse($url);
-    $response->addCacheableDependency($group);
+    $response->addCacheableDependency($node);
     return $response;
   }
 
   /**
    * Checks access to the website link.
    *
-   * @param \Drupal\joinup_group\Entity\GroupInterface $group
+   * @param \Drupal\joinup_group\Entity\GroupInterface $node
    *   The RDF entity.
    *
    * @return \Drupal\Core\Access\AccessResultInterface
    *   The access result.
    */
-  public static function websiteLinkAccess(GroupInterface $group): AccessResultInterface {
-    return AccessResult::allowedIf(!empty($group->{$group->getWebsiteLinkFieldName()}->uri));
+  public static function websiteLinkAccess(GroupInterface $node): AccessResultInterface {
+    return AccessResult::allowedIf(!empty($node->{$node->getWebsiteLinkFieldName()}->uri));
   }
 
 }
