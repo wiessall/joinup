@@ -282,9 +282,7 @@ Feature:
     And I drag the table row in the "Content listing field filter form" region at position 1 down
     # Remove the first two rows.
     And I press "Remove filter"
-    And I wait for AJAX to finish
     And I press "Remove filter"
-    And I wait for AJAX to finish
     And I select "Solution" from "Available filters"
     And I press "Add and configure filter"
     And I fill in "Solution" with "N64 cartridge cleaner"

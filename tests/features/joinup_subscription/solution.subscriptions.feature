@@ -175,7 +175,6 @@ Feature: Subscribing to a solution
     Given I uncheck the "Discussion" checkbox of the "Some solution to subscribe" subscription
     Then the "Save changes" button on the "Some solution to subscribe" subscription card should be enabled
     When I press "Save changes" on the "Some solution to subscribe" subscription card
-    And I wait for AJAX to finish
     Then I should not see the "Save changes" button on the "Some solution to subscribe" subscription card
     But I should see the "Saved!" button on the "Some solution to subscribe" subscription card
     And the following content subscriptions should be selected:
