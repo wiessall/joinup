@@ -185,9 +185,9 @@ class EifContext extends RawDrupalContext {
    * @Given I go to the EIF perspective page of the :solution solution
    */
   public function goToEifPerspectiveOfSolution(string $solution): void {
-    $solution = $this->getEntityByLabel('rdf_entity', $solution, 'solution');
+    $solution = $this->getEntityByLabel('node', $solution, 'solution');
     $url = Url::fromRoute('entity.node.eif_perspective', [
-      'rdf_entity' => $solution->id(),
+      'node' => $solution->id(),
     ]);
     $this->visitPath($url->getInternalPath());
   }

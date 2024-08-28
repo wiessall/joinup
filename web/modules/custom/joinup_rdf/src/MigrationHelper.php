@@ -41,7 +41,7 @@ final class MigrationHelper {
     'delta',
   ];
 
-  private const array URL_ENCODE_MAP = [
+  public const array URL_ENCODE_MAP = [
     '_' => '_a',
     '-' => '_b',
     '.' => '_c',
@@ -67,6 +67,40 @@ final class MigrationHelper {
     '`' => '_w',
     '%' => '_x',
   ];
+
+  /**
+   * Used as SQL expression that decodes an URI.
+   *
+   * Constant value computed with this code snippet:
+   * @code
+   * $expression = ["%s, "];
+   * foreach (array_reverse(self::URL_ENCODE_MAP) as $key => $value) {
+   *   array_unshift($expression, "REPLACE(");
+   *   $expression[] = "'$value', '" . addslashes($key) . "'), ";
+   * }
+   * return trim(implode('', $expression), ',');
+   * @endcode
+   *
+   * @see self::sqlExpressionUriDecode()
+   */
+  private const string URL_DECODE_SQL_EXPRESSION = "REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(%s, '_x', '%%'), '_w', '`'), '_v', '='), '_u', ';'), '_t', ','), '_s', '+'), '_r', '*'), '_q', ')'), '_p', '('), '_o', '\''), '_n', '&'), '_m', '$'), '_l', '!'), '_k', '@'), '_j', ']'), '_i', '['), '_h', '#'), '_g', '?'), '_f', '/'), '_e', ':'), '_d', '~'), '_c', '.'), '_b', '-'), '_a', '_')";
+
+  /**
+   * Used as SQL expression that decodes an URI.
+   *
+   * Constant value computed with this code snippet:
+   * @code
+   * $expression = ["%s, "];
+   * foreach (MigrationHelper::URL_ENCODE_MAP as $key => $value) {
+   *   array_unshift($expression, "REPLACE(");
+   *   $expression[] = "'" . addslashes($key) . "', '$value'), ";
+   * }
+   * $return = trim(implode('', $expression), ',');
+   * @endcode
+   *
+   * @see self::sqlExpressionUriEncode()
+   */
+  private const string URL_ENCODE_SQL_EXPRESSION = "REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(%s, '_', '_a'), '-', '_b'), '.', '_c'), '~', '_d'), ':', '_e'), '/', '_f'), '?', '_g'), '#', '_h'), '[', '_i'), ']', '_j'), '@', '_k'), '!', '_l'), '$', '_m'), '&', '_n'), '\'', '_o'), '(', '_p'), ')', '_q'), '*', '_r'), '+', '_s'), ',', '_t'), ';', '_u'), '=', '_v'), '`', '_w'), '%%', '_x')";
 
   /**
    * Mapping of fields from the RDF to the node for collections.
@@ -409,6 +443,7 @@ final class MigrationHelper {
         'uri' => $uri,
       ]);
     }
+    assert($solution instanceof SolutionInterface);
 
     $solution->set(OgGroupAudienceHelperInterface::DEFAULT_FIELD, $collectionNid);
     $values = $this->getEntityDataAsFlatArray($uri, 'http://joinup.eu/solution/published');
@@ -647,13 +682,21 @@ final class MigrationHelper {
    * @return string
    *   An MySQL expression that decodes an encoded URI.
    */
-  public static function sqlUriDecode(string $baseExpression): string {
-    $expression = ["$baseExpression,"];
-    foreach (array_reverse(self::URL_ENCODE_MAP) as $key => $value) {
-      array_unshift($expression, "REPLACE(");
-      $expression[] = "'$value', '" . addslashes($key) . "'),";
-    }
-    return trim(implode('', $expression), ',');
+  public static function sqlExpressionUriDecode(string $baseExpression): string {
+    return sprintf(self::URL_DECODE_SQL_EXPRESSION, $baseExpression);
+  }
+
+  /**
+   * Builds the expression that encodes a URI.
+   *
+   * @param string $baseExpression
+   *   The base expression.
+   *
+   * @return string
+   *   An MySQL expression that encodes an encoded URI.
+   */
+  public static function sqlExpressionUriEncode(string $baseExpression): string {
+    return sprintf(self::URL_ENCODE_SQL_EXPRESSION, $baseExpression);
   }
 
 }

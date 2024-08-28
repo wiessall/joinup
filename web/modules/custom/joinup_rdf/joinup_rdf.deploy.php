@@ -8,7 +8,8 @@
 declare(strict_types=1);
 
 use Drupal\Core\Url;
-use Drupal\collection\Entity\Collection;
+use Drupal\collection\Entity\CollectionInterface;
+use Drupal\custom_page\Entity\CustomPageInterface;
 use Drupal\joinup_oss_catalogue\OssCatalogueCollectionInterface;
 use Drupal\joinup_rdf\MigrationHelper;
 use Drupal\meta_entity\Entity\MetaEntity;
@@ -191,52 +192,132 @@ function joinup_rdf_deploy_200004(): void {
 }
 
 /**
+ * Remove serialized entities from menu link content.
+ */
+function joinup_rdf_deploy_200005(?array &$sandbox = NULL): void {
+  $tables = ['menu_link_content_data', 'menu_link_content_field_revision'];
+  $db = \Drupal::database();
+  $keys = ['entity_type' => FALSE, 'entity' => FALSE, 'language' => FALSE];
+
+  if (!isset($sandbox['rows'])) {
+    $sandbox['rows'] = [];
+    foreach ($tables as $table) {
+      // Cleanup stale links.
+      $db->query("DELETE FROM {{$table}} WHERE id IN(9617, 9618, 10017, 10018, 10046, 10047, 14169, 14279, 14286, 19582, 19692, 19699)");
+
+      // Get rows that potentially contain serialized entities.
+      $sandbox['rows'] = [
+        ...$sandbox['rows'],
+        ...$db->query("SELECT '$table', id, link__options FROM {{$table}} WHERE link__options <> :empty", [':empty' => 'a:0:{}'])->fetchAll(\PDO::FETCH_NUM),
+      ];
+    }
+    // Stale records in menu_tree table.
+    $db->query("DELETE FROM {menu_tree} WHERE mlid IN(9725, 9726, 10133, 10134, 10162, 10163, 19790, 19900, 19907)");
+  }
+
+  $rows = array_splice($sandbox['rows'], 0, 250);
+  foreach ($rows as [$table, $id, $options]) {
+    $options = unserialize($options, ['allowed_classes' => FALSE]);
+    if (array_intersect_key($options, $keys)) {
+      $options = serialize(array_diff_key($options, $keys));
+      $db->query("UPDATE {{$table}} SET link__options = :options WHERE id = :id", [':options' => $options, ':id' => $id]);
+    }
+  }
+
+  $sandbox['#finished'] = (int) empty($sandbox['rows']);
+}
+
+/**
  * Fix the group menu links.
  */
-function joinup_rdf_deploy_200005(): void {
+function joinup_rdf_deploy_200006(?array &$sandbox = NULL): void {
   $db = \Drupal::database();
-  $linkManager = \Drupal::getContainer()->get('plugin.manager.menu.link');
-  $tables = ['data', 'field_revision'];
+  $tables = ['menu_link_content_data', 'menu_link_content_field_revision'];
+
+  if (!isset($sandbox['patterns'])) {
+    $sandbox['patterns'] = [
+      ['entity:node/', 'entity:rdf_entity/%', 19],
+      [
+        'route:view.discussions.overview;node=',
+        'route:view.discussions.overview;rdf_entity=%',
+        44,
+      ],
+      [
+        'route:entity.node.glossary;node=',
+        'route:entity.rdf_entity.glossary;letter=&rdf_entity=%',
+        53,
+      ],
+      [
+        'route:entity.node.glossary;node=',
+        'route:entity.rdf_entity.glossary;rdf_entity=%',
+        45,
+      ],
+      [
+        'route:entity.node.member_overview;node=',
+        'route:entity.rdf_entity.member_overview;rdf_entity=%',
+        52,
+      ],
+      [
+        'route:joinup_menu.website_link;node=',
+        'route:joinup_menu.website_link;rdf_entity=%',
+        43,
+      ],
+      [
+        'route:joinup_release.solution_release.overview;node=',
+        'route:asset_release.solution_asset_release.overview;rdf_entity=%',
+        64,
+      ],
+      [
+        'route:joinup_release.solution_release.overview;node=',
+        'route:joinup_release.solution_release.overview;rdf_entity=%',
+        59,
+      ],
+      [
+        'route:entity.node.eif_perspective;node=',
+        'route:entity.rdf_entity.eif_perspective;rdf_entity=%',
+        52,
+      ],
+      [
+        'route:joinup_menu.documentation_file;node=',
+        'route:joinup_menu.documentation_file;rdf_entity=%',
+        49,
+      ],
+    ];
+
+    // Fix an inconsistency in some link URIs.
+    foreach ($tables as $table) {
+      $expression = MigrationHelper::sqlExpressionUriEncode("SUBSTRING(REPLACE(link__uri, '%3A', ':'), 52)");
+      $sql = "UPDATE {{$table}} SET link__uri = CONCAT(:prefix, $expression) WHERE link__uri LIKE :like";
+      $db->query($sql, [
+        ':prefix' => 'route:entity.rdf_entity.eif_perspective;rdf_entity=',
+        ':like' => 'route:entity.rdf_entity.eif_perspective;rdf_entity=%',
+      ], ['allow_delimiter_in_query' => TRUE]);
+    }
+  }
+
+  [$prefix, $like, $cutoff] = array_shift($sandbox['patterns']);
   foreach ($tables as $table) {
-    $table = "menu_link_content_$table";
-    $expression = MigrationHelper::sqlUriDecode('SUBSTRING(m.link__uri,  19)');
+    $expression = MigrationHelper::sqlExpressionUriDecode("SUBSTRING(m.link__uri, $cutoff)");
+    $setRediscover = $table === 'menu_link_content_data' ? ', m.rediscover = 1' : '';
     $sql = <<<SQL
       UPDATE {{$table}} m
       INNER JOIN {rdf_sync_uri} u ON $expression = u.uri
-      SET m.link__uri = CONCAT('entity:node/', u.entity_id)
-      WHERE m.link__uri LIKE 'entity:rdf_entity/%'
-      SQL;
-    $db->query($sql, [], ['allow_delimiter_in_query' => TRUE]);
-
-    $expression = MigrationHelper::sqlUriDecode('SUBSTRING(m.link__uri,  44)');
-    $sql = <<<SQL
-      UPDATE {{$table}} m
-      INNER JOIN {rdf_sync_uri} u ON $expression = u.uri
-      SET m.link__uri = CONCAT('route:view.discussions.overview;node=', u.entity_id)
-      WHERE m.link__uri LIKE 'route:view.discussions.overview;rdf_entity=%'
-      SQL;
-    $db->query($sql, [], ['allow_delimiter_in_query' => TRUE]);
-
-    $expression = MigrationHelper::sqlUriDecode('SUBSTRING(m.link__uri,  53)');
-    $sql = <<<SQL
-      UPDATE {{$table}} m
-      INNER JOIN {rdf_sync_uri} u ON $expression = u.uri
-      SET m.link__uri = CONCAT('route:entity.node.glossary;letter=&node=', u.entity_id)
-      WHERE m.link__uri LIKE 'route:entity.rdf_entity.glossary;letter=&rdf_entity=%'
-      SQL;
-    $db->query($sql, [], ['allow_delimiter_in_query' => TRUE]);
-
-    $expression = MigrationHelper::sqlUriDecode('SUBSTRING(m.link__uri,  52)');
-    $sql = <<<SQL
-      UPDATE {{$table}} m
-      INNER JOIN {rdf_sync_uri} u ON $expression = u.uri
-      SET m.link__uri = CONCAT('route:entity.node.member_overview;node=', u.entity_id)
-      WHERE m.link__uri LIKE 'route:entity.rdf_entity.member_overview;rdf_entity=%'
+      SET m.link__uri = CONCAT('$prefix', u.entity_id)$setRediscover
+      WHERE m.link__uri LIKE '$like'
       SQL;
     $db->query($sql, [], ['allow_delimiter_in_query' => TRUE]);
   }
-  \Drupal::entityTypeManager()->getStorage('menu_link_content')->resetCache();
-  $linkManager->rebuild();
+
+  $sandbox['#finished'] = (int) empty($sandbox['patterns']);
+
+  if ($sandbox['#finished']) {
+    // Make sure we're picking up fresh values while rebuilding menu tree.
+    \Drupal::entityTypeManager()->getStorage('menu_link_content')->resetCache();
+    // Rebuild menu_tree table.
+    \Drupal::getContainer()->get('plugin.manager.menu.link')->rebuild();
+    // Restore 'rediscover' flag.
+    $db->query("UPDATE {menu_link_content_data} SET rediscover = 0 WHERE menu_name LIKE 'ogmenu-%'");
+  }
 }
 
 /**
@@ -246,95 +327,24 @@ function joinup_rdf_deploy_200005(): void {
  */
 
 /**
- * Update path alias and label for EU OSS catalogue.
- */
-function joinup_rdf_deploy_200006(): void {
-  /** @var \Drupal\collection\Entity\CollectionInterface $collection */
-  $collection = Collection::loadByUri(OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID);
-
-  $collection?->set('field_state', 'published')
-    ->set('path', ['alias' => '/eu-oss-catalogue', 'pathauto' => 0])
-    ->set('title', 'EU Open Source Solutions Catalogue')
-    ->save();
-}
-
-/**
  * Import content for EU OpenSource Software Solutions Catalogue.
  */
 function joinup_rdf_deploy_200007(): void {
-  /** @var \Drupal\Core\Extension\ModuleInstallerInterface $moduleInstaller */
-  $moduleInstaller = \Drupal::service('module_installer');
-  /** @var \Drupal\Core\Entity\EntityRepositoryInterface $entityRepository */
-  $entityRepository = \Drupal::service('entity.repository');
+  $moduleInstaller = \Drupal::getContainer()->get('module_installer');
+  $entityRepository = \Drupal::getContainer()->get('entity.repository');
 
   // Delete faulty meta entity.
-  $entityRepository
-    ->loadEntityByUuid('meta_entity', 'ad9be48e-7116-44b3-8df2-db8cb9343268')
-    ?->delete();
+  $entityRepository->loadEntityByUuid('meta_entity', 'ad9be48e-7116-44b3-8df2-db8cb9343268')?->delete();
 
   $moduleInstaller->install(['default_content']);
   \Drupal::service('default_content.importer')->importContent('joinup_rdf', TRUE);
   $moduleInstaller->uninstall(['default_content']);
-
-  // Disable auto-created left-side menu link.
-  $landingPage = $entityRepository->loadEntityByUuid(
-    'node',
-    '54acbd6f-47f0-4280-ad09-0a07c397318b'
-  );
-  $linkPlugins = \Drupal::service('plugin.manager.menu.link')
-    ->loadLinksByRoute(
-      'entity.node.canonical',
-      ['node' => $landingPage->id()],
-      'ogmenu-3728'
-    );
-  /** @var \Drupal\menu_link_content\Plugin\Menu\MenuLinkContent $linkPlugin */
-  $linkPlugin = reset($linkPlugins);
-  $entityRepository
-    ->loadEntityByUuid('menu_link_content', $linkPlugin->getDerivativeId())
-    ->setUnpublished()
-    ->save();
-}
-
-/**
- * Rename menu items for EU OSS catalogue.
- */
-function joinup_rdf_deploy_200008(): void {
-  $entityTypeManager = \Drupal::entityTypeManager();
-  /** @var  \Drupal\menu_link_content\MenuLinkContentStorageInterface $menuLinkContentStorage */
-  $menuLinkContentStorage = $entityTypeManager->getStorage('menu_link_content');
-
-  $menuName = 'ogmenu-3728';
-  // Collect the IDs of links to the custom page.
-  $ids = $menuLinkContentStorage->getQuery()->accessCheck(FALSE)
-    ->condition('bundle', 'menu_link_content')
-    ->condition('menu_name', $menuName)
-    ->execute();
-
-  $links = $menuLinkContentStorage->loadMultiple($ids);
-  foreach ($links as $link) {
-    $title = $link->getTitle();
-    if ($title === 'About' || $title === 'Members') {
-      $link->setUnpublished()->save();
-    }
-    elseif ($title === 'Overview') {
-      $link->set('title', 'Welcome')->save();
-    }
-  }
-  $link = [
-    'uri' => Url::fromRoute('view.search_oss_catalogue.search')->toUriString(),
-  ];
-  $menuLinkContentStorage->create([
-    'title' => t('Search'),
-    'menu_name' => $menuName,
-    'link' => $link,
-    'weight' => -6,
-  ])->save();
 }
 
 /**
  * Make sure that oss_archived has a default value.
  */
-function joinup_rdf_deploy_200009(array &$sandbox): string {
+function joinup_rdf_deploy_200008(array &$sandbox): string {
   $entityTypeManager = \Drupal::entityTypeManager();
   /** @var \Drupal\node\NodeStorage $nodeStorage */
   $nodeStorage = $entityTypeManager->getStorage('node');
@@ -365,14 +375,79 @@ function joinup_rdf_deploy_200009(array &$sandbox): string {
 /**
  * Fix references from/to EU OSS Catalogue landing page.
  */
-function joinup_rdf_deploy_200010(): void {
+function joinup_rdf_deploy_200009(): void {
+  $menuName = 'ogmenu-3728';
   $mapper = \Drupal::getContainer()->get('rdf_sync.mapper');
   $repository = \Drupal::getContainer()->get('entity.repository');
-  $collection = $mapper->getEntityByUri(OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID);
+
+  $collection = $mapper->getEntityByUri(OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID)
+    // Update path alias and label for EU OSS catalogue.
+    ->set('path', ['alias' => '/eu-oss-catalogue', 'pathauto' => 0])
+    ->set('title', 'EU Open Source Solutions Catalogue');
+  assert($collection instanceof CollectionInterface);
+
   $landingPage = $repository->loadEntityByUuid('node', '54acbd6f-47f0-4280-ad09-0a07c397318b');
+  assert($landingPage instanceof CustomPageInterface);
   $landingPage->set(OgGroupAudienceHelperInterface::DEFAULT_FIELD, $collection)->save();
+
+  if (joinup_oss_catalogue_is_enabled()) {
+    // Make EU OSS Catalogue public.
+    $collection->setPublished();
+  }
+
+  $collection->save();
+
   MetaEntity::loadOrCreate('collection_settings', $collection)
     ->set('label', 'EU OpenSource Software Solutions Catalogue node (Collection settings)')
     ->set('landing_page', $landingPage)
     ->save();
+
+  // @see custom_page_node_insert()
+  \Drupal::getContainer()->get('custom_page.og_menu_links_manager')
+    ->addLink($landingPage, 'navigation', ['menu_name' => $menuName]);
+
+  // Disable auto-created left-side menu link.
+  $linkPlugins = \Drupal::service('plugin.manager.menu.link')
+    ->loadLinksByRoute(
+      'entity.node.canonical',
+      ['node' => $landingPage->id()],
+      $menuName,
+    );
+
+  /** @var \Drupal\menu_link_content\Plugin\Menu\MenuLinkContent $linkPlugin */
+  $linkPlugin = reset($linkPlugins);
+
+  $repository
+    ->loadEntityByUuid('menu_link_content', $linkPlugin->getDerivativeId())
+    ->setUnpublished()
+    ->save();
+
+  // Rename menu items for EU OSS catalogue.
+  $menuLinkContentStorage = \Drupal::entityTypeManager()->getStorage('menu_link_content');
+
+  // Collect the IDs of links to the custom page.
+  $ids = $menuLinkContentStorage->getQuery()->accessCheck(FALSE)
+    ->condition('bundle', 'menu_link_content')
+    ->condition('menu_name', $menuName)
+    ->execute();
+
+  foreach ($menuLinkContentStorage->loadMultiple($ids) as $link) {
+    $title = $link->getTitle();
+    if ($title === 'About' || $title === 'Members') {
+      $link->setUnpublished()->save();
+    }
+    elseif ($title === 'Overview') {
+      $link->set('title', 'Welcome')->save();
+    }
+  }
+
+  $link = [
+    'uri' => Url::fromRoute('view.search_oss_catalogue.search')->toUriString(),
+  ];
+  $menuLinkContentStorage->create([
+    'title' => t('Search'),
+    'menu_name' => $menuName,
+    'link' => $link,
+    'weight' => -6,
+  ])->save();
 }

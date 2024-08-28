@@ -670,13 +670,11 @@ Feature: Global search
     When I visit the search page
     And I should not see search bar icon in navbar
     And I enter "fu" in the "search bar"
-    And I wait for AJAX to finish
     Then I should see the following search suggestions:
       | Radio cooking collection |
       | Spheres                  |
 
     When I enter "cook" in the "search bar"
-    And I wait for AJAX to finish
     Then I should see the following search suggestions:
       | Movistar                 |
       | Radio cooking collection |
@@ -702,7 +700,6 @@ Feature: Global search
     And I should see search bar icon in navbar
     Then I should toggle search bar in navbar
     And I enter "fu" in the "search bar"
-    And I wait for AJAX to finish
     Then I should see the following search suggestions:
       | Radio cooking collection |
       | Spheres                  |
@@ -711,7 +708,6 @@ Feature: Global search
     Given I am on the homepage
     Then I should see the search bar in homepage's header
     And I enter "fu" in the "search bar"
-    And I wait for AJAX to finish
     Then I should see the following search suggestions:
       | Radio cooking collection |
       | Spheres                  |
@@ -732,7 +728,6 @@ Feature: Global search
     And I should see the "Movistar" tile
 
     Then I enter "spheres" in the "search bar"
-    And I wait for AJAX to finish
     Then I should see the following search suggestions:
       | Spheres |
 
