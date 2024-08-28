@@ -6,7 +6,7 @@ dependencies:
     - joinup_bookmark
     - node
 id: bookmark
-label: 'Bookmark'
+label: Bookmark
 bundles:
   - collection
   - custom_page
