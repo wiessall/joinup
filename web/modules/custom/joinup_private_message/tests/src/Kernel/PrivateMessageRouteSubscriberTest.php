@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_private_message\Kernel;
 
-use Drupal\KernelTests\KernelTestBase;
 use Drupal\Core\Routing\RouteProviderInterface;
+use Drupal\KernelTests\KernelTestBase;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
 
 /**
@@ -97,7 +97,7 @@ class PrivateMessageRouteSubscriberTest extends KernelTestBase {
       $this->fail($message);
     }
     catch (RouteNotFoundException $e) {
-      $this->assertTrue(true, $message);
+      $this->assertTrue(TRUE, $message);
     }
   }
 

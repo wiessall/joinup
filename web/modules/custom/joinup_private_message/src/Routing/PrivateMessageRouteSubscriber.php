@@ -30,7 +30,8 @@ class PrivateMessageRouteSubscriber extends RouteSubscriberBase {
       $route->setPath('/user/messages/{private_message_thread}/delete');
     }
 
-    // Alter the path of the clear personal history form for a private message thread.
+    // Alter the path of the clear personal history form
+    // for a private message thread.
     if ($route = $collection->get('entity.private_message_thread.clear_personal_history_form')) {
       $route->setPath('/user/messages/{private_message_thread}/clear-personal-history');
     }
@@ -60,4 +61,5 @@ class PrivateMessageRouteSubscriber extends RouteSubscriberBase {
     // Remove the unban user form route.
     $collection->remove('private_message.unban_user_form');
   }
+
 }
