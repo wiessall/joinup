@@ -1,0 +1,5 @@
+services:
+  joinup_private_message_route_alter.route_subscriber:
+    class: Drupal\joinup_private_message\Routing\PrivateMessageRouteSubscriber
+    tags:
+      - { name: event_subscriber }
