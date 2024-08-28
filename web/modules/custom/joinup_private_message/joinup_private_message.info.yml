@@ -4,4 +4,4 @@ description: 'Provides private message functionality'
 package: Joinup
 core_version_requirement: ">= 10.3"
 dependencies:
-  - private_message:private_message
+  - private_message_notify:private_message_notify
