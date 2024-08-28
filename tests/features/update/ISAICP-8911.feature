@@ -19,3 +19,8 @@ Feature: Test the converted videos into document.
     And I should see the text "EIF workshop, 16 April 2012"
     And I should see the text "Interviewees: Soeren Bittins, Massimiliano Massi, Fraunhofer Fokus"
     And I should see the text "Published on: 11/05/2012"
+
+    When I visit "/community/epractice/video/egov-reduction-admininstrative-burden-epractice-tv-interview-kris-blancke"
+    Then I should see the heading "eGov Reduction of Admininstrative Burden-ePractice TV interview: Kris Blancke"
+    And I should see the text "Mr Kris Blancke, Chancellery of the Prime Minister, Administrative Simplification Agency (DAV/ASA)"
+    And I should see the text "Published on: 10/06/2014"

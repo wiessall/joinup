@@ -148,6 +148,16 @@ function joinup_core_update_111200(array &$sandbox): string {
       'region' => 'content',
     ]);
 
+    $query = \Drupal::entityQuery('redirect')
+      ->accessCheck()
+      ->condition('redirect_redirect.uri', 'internal:/node/' . $video_node->id());
+    $rids = $query->execute();
+    $redirects = $entity_type_manager->getStorage('redirect')->loadMultiple($rids);
+    $video_redirects = [];
+    foreach ($redirects as $redirect) {
+      $video_redirects[] = $redirect->getSourcePathWithQuery();
+    }
+
     $video = [
       'nid' => $video_node->id(),
       'title' => $video_node->getTitle(),
@@ -186,6 +196,16 @@ function joinup_core_update_111200(array &$sandbox): string {
 
     $document_node->setRevisionCreationTime($video['created']);
     $document_node->save();
+
+    foreach ($video_redirects as $redirect) {
+      $redirect = $entity_type_manager->getStorage('redirect')->create([
+        'redirect_source' => ['path' => $redirect],
+        'redirect_redirect' => ['uri' => 'internal:/node/' . $video['nid']],
+        'language' => 'und',
+        'status_code' => 301,
+      ]);
+      $redirect->save();
+    }
 
     $document_node->set('field_state', 'archived');
     $document_node->setNewRevision();
