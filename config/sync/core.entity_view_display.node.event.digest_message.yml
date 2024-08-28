@@ -115,6 +115,7 @@ hidden:
   langcode: true
   og_audience: true
   pinned_in: true
+  private_message_link: true
   published_at: true
   read_more: true
   report: true
