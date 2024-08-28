@@ -69,7 +69,6 @@ Feature: User interface for the File URL field
     Then I should see the error message "The URL foo is not valid"
     And I select the radio button "Upload file"
     And I attach the file "logo.png" to "files[field_file_0][]"
-    Then I wait for AJAX to finish
     And I should not see the text "Oops, something went wrong. Check your browser's developer console for more details."
     And I press "Publish"
     Then I should see the heading "Document title"
