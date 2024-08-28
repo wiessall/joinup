@@ -161,6 +161,7 @@ hidden:
   oss_used_by: true
   oss_vitality_index: true
   oss_vitality_index_range: true
+  private_message_link: true
   published_at: true
   report: true
   search_api_excerpt: true
