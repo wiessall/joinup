@@ -119,8 +119,8 @@ function joinup_core_update_111200(array &$sandbox): string {
 
   foreach ($video_nodes as $video_node) {
     // Perform the conversion for each video node.
-    $layoutParagraph = Paragraph::create(['type' => 'layout']);
-    $layoutParagraph->setBehaviorSettings('layout_paragraphs', [
+    $layout_paragraph = Paragraph::create(['type' => 'layout']);
+    $layout_paragraph->setBehaviorSettings('layout_paragraphs', [
       'layout' => 'layout_onecol',
       'config' => ['label' => ''],
       'parent_uuid' => NULL,
@@ -135,7 +135,7 @@ function joinup_core_update_111200(array &$sandbox): string {
       ],
     ]);
     $body_paragraph->setBehaviorSettings('layout_paragraphs', [
-      'parent_uuid' => $layoutParagraph->uuid(),
+      'parent_uuid' => $layout_paragraph->uuid(),
       'region' => 'content',
     ]);
 
@@ -144,7 +144,7 @@ function joinup_core_update_111200(array &$sandbox): string {
       'paragraph_video_url' => $video_node->get('field_video')->getValue(),
     ]);
     $video_paragraph->setBehaviorSettings('layout_paragraphs', [
-      'parent_uuid' => $layoutParagraph->uuid(),
+      'parent_uuid' => $layout_paragraph->uuid(),
       'region' => 'content',
     ]);
 
@@ -179,7 +179,7 @@ function joinup_core_update_111200(array &$sandbox): string {
     ]);
 
     $document_node->set('field_paragraphs_body', [
-      ['entity' => $layoutParagraph],
+      ['entity' => $layout_paragraph],
       ['entity' => $body_paragraph],
       ['entity' => $video_paragraph],
     ]);
