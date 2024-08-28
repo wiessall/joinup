@@ -1671,6 +1671,9 @@ class FeatureContext extends RawDrupalContext {
     // not remove focus from the field so the autocomplete results remain
     // visible and can be inspected.
     $element->postValue(['text' => $value]);
+
+    // Wait for AJAX returning autocomplete results.
+    $this->waitForAjax();
   }
 
   /**
@@ -2042,6 +2045,8 @@ class FeatureContext extends RawDrupalContext {
     $clicks = $state->get('image_library_widget.clicks', []);
     $clicks[$content_type]['logo'][$offset] = $image_fid;
     $state->set('image_library_widget.clicks', $clicks);
+
+    $this->waitForAjax();
   }
 
   /**
@@ -2165,6 +2170,7 @@ class FeatureContext extends RawDrupalContext {
     $field = $label->find('xpath', './ancestor::*[contains(concat(" ", @class, " "), " form-item ")][1]');
     $button = $field->findButton('Remove');
     $button->press();
+    $this->waitForAjax();
   }
 
   /**
