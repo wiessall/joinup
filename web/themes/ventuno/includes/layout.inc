@@ -30,8 +30,9 @@ function ventuno_preprocess_page(array &$variables): void {
     $variables['interoperable_europe_url'] = $landing_page->toUrl()->toString();
   }
 
+  $current_user = \Drupal::currentUser();
   // Export the username to display in the header.
-  $variables['user_name'] = \Drupal::currentUser()->getDisplayName();
+  $variables['user_name'] = $current_user->getDisplayName();
 
   /** @var \Drupal\joinup_bookmark\JoinupBookmarkInterface $joinupBookmark */
   $joinupBookmark = \Drupal::service('joinup_bookmark.bookmark');
@@ -85,7 +86,7 @@ function ventuno_preprocess_page(array &$variables): void {
 
   $block = Block::load('ventuno_privatemessagenotification');
 
-  if ($block) {
+  if ($block && $current_user->isAuthenticated()) {
     $block_content = \Drupal::entityTypeManager()
       ->getViewBuilder('block')
       ->view($block);
