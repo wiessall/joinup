@@ -37,6 +37,7 @@
     line-height: $btn-line-height;
     &:hover {
       text-decoration: none;
+      background-color: $secondary-darker;
       box-shadow: $box-shadow;
     }
     &:focus-visible {
