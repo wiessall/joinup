@@ -277,6 +277,16 @@ third_party_settings:
                 third_party_settings: {  }
             weight: 15
             additional: {  }
+          d5348db4-2aae-4f7a-b09b-fc811b15fb75:
+            uuid: d5348db4-2aae-4f7a-b09b-fc811b15fb75
+            region: content
+            configuration:
+              id: 'extra_field_block:node:solution:flag_interoperability'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+            weight: 16
+            additional: {  }
         third_party_settings: {  }
 id: node.solution.default
 targetEntityType: node
@@ -298,6 +308,11 @@ content:
       link: false
     third_party_settings: {  }
     weight: 0
+    region: content
+  flag_interoperability:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 10
     region: content
   flag_like:
     settings: {  }

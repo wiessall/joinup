@@ -391,7 +391,7 @@ trait TraversingTrait {
    */
   protected static function getFacetIdFromAlias(string $alias): string {
     $mappings = [
-      'Collection event date' => 'collection_event_type',
+      'Collection event date' => 'collection_event_date',
       'Content listing types' => 'content_listing_type',
       'Content types' => 'type',
       'EIF recommendations' => 'category',
@@ -403,14 +403,14 @@ trait TraversingTrait {
       'My solutions content' => 'solution_my_content',
       'Status' => 'status',
       'User content' => 'user_content_bundle',
-      'collection content archived toggle' => 'field_collection_content_status',
+      'collection content archived toggle' => 'collection_content_status',
       'collection topic' => 'collection_topic',
       'collection type' => 'collection_type',
       'collection/solution' => 'group',
       'eif conceptual model' => 'conceptual_model',
       'eif interoperability layer' => 'interoperability_layer',
       'eif principle' => 'principle',
-      'solution content archived toggle' => 'field_is_content_status',
+      'solution content archived toggle' => 'solution_content_status',
       'solution spatial coverage' => 'solution_spatial_coverage',
       'solution topic' => 'solution_topic',
       'spatial coverage' => 'spatial_coverage',
