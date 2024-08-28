@@ -237,15 +237,51 @@ function joinup_rdf_deploy_200006(?array &$sandbox = NULL): void {
   if (!isset($sandbox['patterns'])) {
     $sandbox['patterns'] = [
       ['entity:node/', 'entity:rdf_entity/%', 19],
-      ['route:view.discussions.overview;node=', 'route:view.discussions.overview;rdf_entity=%', 44],
-      ['route:entity.node.glossary;node=', 'route:entity.rdf_entity.glossary;letter=&rdf_entity=%', 53],
-      ['route:entity.node.glossary;node=', 'route:entity.rdf_entity.glossary;rdf_entity=%', 45],
-      ['route:entity.node.member_overview;node=', 'route:entity.rdf_entity.member_overview;rdf_entity=%', 52],
-      ['route:joinup_menu.website_link;node=', 'route:joinup_menu.website_link;rdf_entity=%', 43],
-      ['route:joinup_release.solution_release.overview;node=', 'route:asset_release.solution_asset_release.overview;rdf_entity=%', 64],
-      ['route:joinup_release.solution_release.overview;node=', 'route:joinup_release.solution_release.overview;rdf_entity=%', 59],
-      ['route:entity.node.eif_perspective;node=', 'route:entity.rdf_entity.eif_perspective;rdf_entity=%', 52],
-      ['route:joinup_menu.documentation_file;node=', 'route:joinup_menu.documentation_file;rdf_entity=%', 49],
+      [
+        'route:view.discussions.overview;node=',
+        'route:view.discussions.overview;rdf_entity=%',
+        44,
+      ],
+      [
+        'route:entity.node.glossary;node=',
+        'route:entity.rdf_entity.glossary;letter=&rdf_entity=%',
+        53,
+      ],
+      [
+        'route:entity.node.glossary;node=',
+        'route:entity.rdf_entity.glossary;rdf_entity=%',
+        45,
+      ],
+      [
+        'route:entity.node.member_overview;node=',
+        'route:entity.rdf_entity.member_overview;rdf_entity=%',
+        52,
+      ],
+      [
+        'route:joinup_menu.website_link;node=',
+        'route:joinup_menu.website_link;rdf_entity=%',
+        43,
+      ],
+      [
+        'route:joinup_release.solution_release.overview;node=',
+        'route:asset_release.solution_asset_release.overview;rdf_entity=%',
+        64,
+      ],
+      [
+        'route:joinup_release.solution_release.overview;node=',
+        'route:joinup_release.solution_release.overview;rdf_entity=%',
+        59,
+      ],
+      [
+        'route:entity.node.eif_perspective;node=',
+        'route:entity.rdf_entity.eif_perspective;rdf_entity=%',
+        52,
+      ],
+      [
+        'route:joinup_menu.documentation_file;node=',
+        'route:joinup_menu.documentation_file;rdf_entity=%',
+        49,
+      ],
     ];
 
     // Fix an inconsistency in some link URIs.
@@ -254,7 +290,7 @@ function joinup_rdf_deploy_200006(?array &$sandbox = NULL): void {
       $sql = "UPDATE {{$table}} SET link__uri = CONCAT(:prefix, $expression) WHERE link__uri LIKE :like";
       $db->query($sql, [
         ':prefix' => 'route:entity.rdf_entity.eif_perspective;rdf_entity=',
-        ':like' => 'route:entity.rdf_entity.eif_perspective;rdf_entity=%'
+        ':like' => 'route:entity.rdf_entity.eif_perspective;rdf_entity=%',
       ], ['allow_delimiter_in_query' => TRUE]);
     }
   }

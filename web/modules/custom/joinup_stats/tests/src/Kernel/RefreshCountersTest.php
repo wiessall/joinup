@@ -52,13 +52,6 @@ class RefreshCountersTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function bootEnvironment() {
-    parent::bootEnvironment();
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   protected function setUp(): void {
     parent::setUp();
 
