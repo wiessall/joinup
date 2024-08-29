@@ -16,6 +16,18 @@
   }
 }
 
+// Underline content links for accessibility #ISAICP-8890.
+.layout-content {
+  a[href] {
+    &:not(.btn, .nav-link, .page-link, .tab, .flag, .glossary-term) {
+      text-decoration: underline;
+    }
+  }
+  .facet-item > a[href] {
+    text-decoration: none;
+  }
+}
+
 // #ISAICP-8895 Fix Success Criterion 2.4.7 Focus Visible (AA).
 .btn,
 .accordion-button,
