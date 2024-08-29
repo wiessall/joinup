@@ -29,8 +29,9 @@ Feature: Private messages
     When I am logged in as "Bob Rolls"
     And I am on the homepage
     And I should see 1 unread private message
+    Then I open the account menu
     And I click "My messages"
-    Then I should see the heading "Private Messages"
+    And I should see the heading "Private Messages"
     And I should not see the text "You do not have any messages"
     And I should see 1 private message
     Then I should see a private message containing the text "This is a private message to Bob."
@@ -45,7 +46,8 @@ Feature: Private messages
     Given I am logged in as "Rui Mint"
     And I am on the homepage
     And I should see 0 unread private message
-    When I click "My messages"
+    Then I open the account menu
+    And I click "My messages"
     Then I should see the heading "Private Messages"
     And I should see 0 private message
     And I should see the text "You do not have any messages"
