@@ -81,6 +81,7 @@ final class JoinupLog extends ContentEntityBase implements JoinupLogInterface {
 
     $fields['variables'] = BaseFieldDefinition::create('map')
       ->setLabel(new TranslatableMarkup('Variables'))
+      ->setDefaultValue(serialize([]))
       ->setDescription(new TranslatableMarkup('Serialized array of variables that match the message string and that is passed into the t() function.'));
 
     $fields['severity'] = BaseFieldDefinition::create('list_integer')

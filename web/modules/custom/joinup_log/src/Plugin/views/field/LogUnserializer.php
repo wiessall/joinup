@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_log\Plugin\views\field;
 
-use Drupal\Component\Serialization\PhpSerialize;
+use Drupal\Component\Serialization\Yaml as YamlSerializer;
 use Drupal\views\Attribute\ViewsField;
 use Drupal\views\Plugin\views\field\FieldPluginBase;
 use Drupal\views\ResultRow;
@@ -15,7 +15,7 @@ use Symfony\Component\Yaml\Yaml;
  *
  * @ingroup views_field_handlers
  */
-#[ViewsField("log-unserializer")]
+#[ViewsField("log_unserializer")]
 class LogUnserializer extends FieldPluginBase {
 
   /**
@@ -24,7 +24,7 @@ class LogUnserializer extends FieldPluginBase {
   public function render(ResultRow $values) {
     $value = $values->{$this->field_alias};
 
-    $data = PhpSerialize::decode($values->{$this->field_alias});
+    $data = YamlSerializer::decode($values->{$this->field_alias});
     if ($data === FALSE) {
       return $value;
     }
