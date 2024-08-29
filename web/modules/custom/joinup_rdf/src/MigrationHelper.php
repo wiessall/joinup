@@ -146,6 +146,7 @@ final class MigrationHelper {
     'http://joinup.eu/search' => [
       'target_field_name' => 'listing_content',
       'format' => 'string',
+      'serialized' => TRUE,
     ],
     'http://purl.org/dc/dcmitype/StillImage' => [
       'target_field_name' => 'logo',
@@ -261,6 +262,7 @@ final class MigrationHelper {
     'http://joinup.eu/search' => [
       'target_field_name' => 'listing_content',
       'format' => 'string',
+      'serialized' => TRUE,
     ],
     'http://joinup.eu/solution/content_creation' => [
       'target_field_name' => 'content_creation',
@@ -565,7 +567,7 @@ final class MigrationHelper {
 
     foreach ($values as $value) {
       $parsedValue = match ($format) {
-        'string' => ['value' => $value],
+        'string' => ['value' => !empty($mappingData['serialized']) ? unserialize($value, ['allowed_classes' => FALSE]) : $value],
         'uri' => ['uri' => $value],
         'datetime' => ['value' => $value->getTimestamp()],
         'reference' => ['target_id' => $value],
