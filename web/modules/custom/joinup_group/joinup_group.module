@@ -277,6 +277,9 @@ function joinup_group_propose_message_submit(&$form, FormStateInterface $form_st
  */
 function joinup_group_node_access(EntityInterface $entity, $operation, AccountInterface $account): AccessResultInterface {
   if ($operation === 'view' && $entity instanceof GroupContentInterface) {
+    if (!$entity->hasGroup()) {
+      return AccessResult::neutral();
+    }
     $group = $entity->getGroup();
     $membership = \Drupal::getContainer()->get('og.membership_manager')->getMembership($group, $account->id());
     return AccessResult::allowedIf($membership && $membership->hasPermission('view any unpublished content'))
