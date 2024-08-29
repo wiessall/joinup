@@ -20,7 +20,7 @@ Feature: Private messages
     And I wait until the page contains the text "Bob Rolls"
     And I pick "Bob Rolls" from the private message user autocomplete suggestions
     And I fill in "Subject" with "Hello Bob"
-    And I fill in "Message" with "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
+    And I enter "This is a private message to Bob." in the "Message" wysiwyg editor
     And I press "Send"
     And I should see "Your message has been sent."
 
@@ -32,7 +32,7 @@ Feature: Private messages
     And I should not see the text "You do not have any messages"
     And I should see 1 private message
     Then I should see a private message containing the text "This is a private message to Bob."
-    And I fill in "Message" with "This is a private message to Alice."
+    And I enter "This is a private message to Alice." in the "Message" wysiwyg editor
     And I press "Send"
     And I should see 2 private message
     Then I should see the following texts in private messages:

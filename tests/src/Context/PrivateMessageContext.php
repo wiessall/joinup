@@ -6,10 +6,8 @@ namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Element\NodeElement;
-use Drupal\Component\Utility\UrlHelper;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\JavascriptTrait;
-use GuzzleHttp\Client;
 
 /**
  * Behat step definitions for testing private messages.
@@ -51,13 +49,13 @@ class PrivateMessageContext extends RawDrupalContext {
    *
    * @Then I should see a private message containing the text :messageText
    */
-  public function iShouldSeeAPrivateMessageContainingTheText(string $messageText): void {
+  public function iShouldSeePrivateMessageContainingText(string $messageText): void {
     $messagesContainer = $this->getMessagesContainer();
 
     $messageElements = $messagesContainer->findAll('css', '.private-message-wrapper');
 
     foreach ($messageElements as $messageElement) {
-      if (strpos($messageElement->getText(), $messageText) !== false) {
+      if (strpos($messageElement->getText(), $messageText) !== FALSE) {
         return;
       }
     }
@@ -74,10 +72,12 @@ class PrivateMessageContext extends RawDrupalContext {
    * | Another message  |
    *
    * @param \Behat\Gherkin\Node\TableNode $table
-   *   A table node containing the texts to be checked. Each row should contain one text string.
+   *   A table node containing the texts to be checked.
+   *   Each row should contain one text string.
    *
    * @throws \Exception
-   *   Thrown when any of the specified texts are not found in the private messages.
+   *   Thrown when any of the specified texts are not
+   *   found in the private messages.
    *
    * @Then I should see the following texts in private messages:
    */
@@ -88,14 +88,14 @@ class PrivateMessageContext extends RawDrupalContext {
     $texts = $table->getColumn(0);
 
     foreach ($texts as $text) {
-      if (strpos($messageText, $text) === false) {
+      if (strpos($messageText, $text) === FALSE) {
         throw new \Exception(sprintf('The text "%s" was not found in any private message.', $text));
       }
     }
   }
 
   /**
-   * Verifies that the notification displays the correct number of unread threads.
+   * Checks that the notification shows the correct number of unread threads.
    *
    * @param int $expectedCount
    *   The expected number of unread private message threads.
@@ -109,7 +109,7 @@ class PrivateMessageContext extends RawDrupalContext {
     $page = $this->getSession()->getPage();
     $notificationElement = $page->find('css', '.private-message-notification-wrapper .private-message-page-link');
 
-    if (null === $notificationElement) {
+    if (NULL === $notificationElement) {
       throw new \Exception('The private message notification element was not found.');
     }
 
@@ -140,7 +140,6 @@ class PrivateMessageContext extends RawDrupalContext {
     $this->waitForElementVisible('xpath', $xpath)->click();
   }
 
-
   /**
    * Retrieves the messages container element from the page.
    *
@@ -154,7 +153,7 @@ class PrivateMessageContext extends RawDrupalContext {
     $page = $this->getSession()->getPage();
     $messagesContainer = $page->find('css', '.private-message-thread-messages .field__items');
 
-    if (null === $messagesContainer) {
+    if (NULL === $messagesContainer) {
       throw new \Exception('There are currently no messages available.');
     }
 
