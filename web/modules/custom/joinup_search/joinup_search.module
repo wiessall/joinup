@@ -239,7 +239,7 @@ function joinup_search_entity_prepare_view(string $entity_type_id, array $entiti
     $field = 'listing_content';
     // @todo This throws a warning for null offset. This should go away when
     //   facets for fields are re-implemented.
-    $facet = 'listing_content_status';
+    $facet = $entity->bundle() . '_content_status';
     if (!isset($entity->{$field}) || $entity->{$field}->value['enabled'] === 0 || !isset($entity->{$field}->value['fields'][$facet])) {
       continue;
     }
