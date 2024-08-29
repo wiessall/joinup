@@ -35,4 +35,29 @@ class JoinupSubscriptionsHelper {
     ],
   ];
 
+  /**
+   * Provides data for a field based on the group type.
+   *
+   * @param string $groupType
+   *   The group type.
+   *
+   * @return array
+   *   The array of data for the field.
+   */
+  public static function provideDataForField(string $groupType): array {
+    $contentBundles = self::SUBSCRIPTION_BUNDLES[$groupType] ?? [];
+
+    $value = [];
+    foreach ($contentBundles as $entityType => $bundles) {
+      foreach ($bundles as $bundle) {
+        $value[] = [
+          'entity_type' => $entityType,
+          'bundle' => $bundle,
+        ];
+      }
+    }
+
+    return $value;
+  }
+
 }

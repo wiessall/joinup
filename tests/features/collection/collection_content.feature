@@ -85,7 +85,8 @@ Feature: Collection content
     Given I am logged in as a moderator
     When I go to the homepage of the "Turin Egyptian Collection" collection
     And I press "Join this collection"
-    And I press "Subscribe" in the "Modal buttons" region
+    And I press "Confirm" in the "Modal buttons" region
+    And I wait for AJAX to finish
     Then I go to "/user"
     # Assert that the "Collection" tile is present and contains number of members, label and bundle type.
     Then I should see the "Turin Egyptian Collection" tile
