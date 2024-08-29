@@ -15,7 +15,26 @@ label: 'Solution content'
 description: ''
 required: false
 translatable: true
-default_value: {  }
+default_value:
+  -
+    value:
+      fields:
+        solution_content_bundle:
+          weight: 0
+          region: top
+        solution_content_status:
+          weight: 1
+          region: top
+        solution_spatial_coverage:
+          weight: 2
+          region: inline_facets
+        solution_topic:
+          weight: 3
+          region: inline_facets
+      enabled: 1
+      query_presets: ''
+      limit: 12
+      show_archived: unarchived
 default_value_callback: ''
 settings:
   index: published
