@@ -24,3 +24,16 @@ function joinup_log_update_111200(): TranslatableMarkup {
 
   return t('The variables fields have been added to Joinup log.');
 }
+
+/**
+ * Set the `variables` field.
+ */
+function joinup_log_update_111201(): TranslatableMarkup {
+  $query = \Drupal::database()->update('joinup_log')
+    ->fields([
+      'variables' => serialize([]),
+    ]);
+  $query->execute();
+
+  return t('Updated Joinup log entities.');
+}
