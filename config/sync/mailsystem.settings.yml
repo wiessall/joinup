@@ -1,6 +1,6 @@
 _core:
   default_config_hash: 64LU75RdzlSfkiiUC4Eu9sKHY8bk3Ahqsrlmdz9G4xk
-theme: current
+theme: ventuno
 defaults:
   sender: php_mail
   formatter: symfony_mailer_lite

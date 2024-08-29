@@ -301,10 +301,8 @@ Feature: "Add solution" visibility options.
     Given I am logged in as a moderator
     When I go to the edit form of the "Cleaning solution" solution
     When I expand the "Additional fields" accordion section
-    And  I remove the first file from "Logo"
-    And I wait for AJAX to finish
+    And I remove the first file from "Logo"
 
     When I select image #2 as solution logo
-    And I wait for AJAX to finish
     And I press "Publish"
     And the "Cleaning solution" solution logo is image #2
