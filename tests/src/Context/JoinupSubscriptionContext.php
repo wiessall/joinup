@@ -92,7 +92,7 @@ class JoinupSubscriptionContext extends RawDrupalContext {
    * @When I go to the subscribers report for :group
    */
   public function visitSubscribersReport(string $group): void {
-    $group_entity = $this->getEntityByLabel('rdf_entity', $group);
+    $group_entity = $this->getEntityByLabel('node', $group);
     $url = Url::fromRoute('joinup_subscription.group_subscribers_report', [
       'rdf_entity' => $group_entity->id(),
     ]);
@@ -143,7 +143,7 @@ class JoinupSubscriptionContext extends RawDrupalContext {
   public function subscribeToGroupContent(TableNode $subscription_table, string $bundle): void {
     foreach ($subscription_table->getColumnsHash() as $values) {
       /** @var \Drupal\joinup_group\Entity\GroupContentInterface $group */
-      $group = $this->getEntityByLabel('rdf_entity', $values[$bundle], $bundle);
+      $group = $this->getEntityByLabel('node', $values[$bundle], $bundle);
       $user = $this->getUserByName($values['user']);
       $membership = $this->getMembershipByGroupAndUser($group, $user, OgMembershipInterface::ALL_STATES);
       $subscriptions = [];
@@ -318,7 +318,7 @@ class JoinupSubscriptionContext extends RawDrupalContext {
   public function assertSubscriptionOptionsInSubscriptions(TableNode $subscription_options): void {
     foreach ($subscription_options->getRowsHash() as $group_label => $expected_options) {
       $expected_options = $this->explodeCommaSeparatedStepArgument(strtolower($expected_options));
-      $group = $this->getEntityByLabel('rdf_entity', $group_label);
+      $group = $this->getEntityByLabel('node', $group_label);
       $subscription_bundles = JoinupSubscriptionsHelper::SUBSCRIPTION_BUNDLES[$group->bundle()];
       foreach ($subscription_bundles as $entity_type_id => $bundle_ids) {
         foreach ($bundle_ids as $bundle_id) {
@@ -359,7 +359,7 @@ class JoinupSubscriptionContext extends RawDrupalContext {
     $account = User::load($user->uid);
 
     foreach ($subscriptions->getRowsHash() as $collection_label => $expected_bundle_ids) {
-      $group = $this->getEntityByLabel('rdf_entity', $collection_label);
+      $group = $this->getEntityByLabel('node', $collection_label);
       $membership = $this->getMembershipByGroupAndUser($group, $account, OgMembershipInterface::ALL_STATES);
       $expected_bundle_ids = $this->explodeCommaSeparatedStepArgument(strtolower($expected_bundle_ids));
 
@@ -397,7 +397,7 @@ class JoinupSubscriptionContext extends RawDrupalContext {
   public function assertNoGroupContentSubscriptions(string $label, string $bundle): void {
     $user = $this->getUserManager()->getCurrentUser();
     $account = User::load($user->uid);
-    $group = $this->getEntityByLabel('rdf_entity', $label, $bundle);
+    $group = $this->getEntityByLabel('node', $label, $bundle);
     $membership = $this->getMembershipByGroupAndUser($group, $account, OgMembershipInterface::ALL_STATES);
     Assert::assertEmpty($membership->get('subscription_bundles')->getValue());
   }
@@ -682,7 +682,7 @@ class JoinupSubscriptionContext extends RawDrupalContext {
       throw new \InvalidArgumentException("Invalid user name: $username");
     }
     /** @var \Drupal\joinup_group\Entity\GroupInterface $group */
-    $group = $this->getEntityByLabel('rdf_entity', $group_label, $group_type);
+    $group = $this->getEntityByLabel('node', $group_label, $group_type);
     $this->getMembershipByGroupAndUser($group, $account)->set('announcements', TRUE)->save();
   }
 
@@ -705,7 +705,7 @@ class JoinupSubscriptionContext extends RawDrupalContext {
       throw new \InvalidArgumentException("Invalid user name: $username");
     }
     /** @var \Drupal\joinup_group\Entity\GroupInterface $group */
-    $group = $this->getEntityByLabel('rdf_entity', $group_label, $group_type);
+    $group = $this->getEntityByLabel('node', $group_label, $group_type);
     $this->getMembershipByGroupAndUser($group, $account)->set('announcements', FALSE)->save();
   }
 
@@ -734,7 +734,7 @@ class JoinupSubscriptionContext extends RawDrupalContext {
    */
   public function unsubscribeFromGroup(string $group_label, string $group_type, ?string $types = NULL, ?TableNode $table = NULL): void {
     assert(isset(JoinupGroupHelper::GROUP_BUNDLES[$group_type]));
-    $group = $this->getEntityByLabel('rdf_entity', $group_label, $group_type);
+    $group = $this->getEntityByLabel('node', $group_label, $group_type);
     $url = Url::fromRoute('joinup_subscription.unsubscribe', [
       'user' => $this->userManager->getCurrentUser()->uid,
       'group' => $group->id(),
