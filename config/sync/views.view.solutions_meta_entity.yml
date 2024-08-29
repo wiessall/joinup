@@ -449,7 +449,6 @@ display:
               licence: default
               news: default
               release: default
-              video: default
             'entity:rdf_entity':
               collection: default
               solution: view_mode_search_list_item

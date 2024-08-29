@@ -42,7 +42,6 @@ settings:
       event: view_mode_tile
       news: view_mode_tile
       release: view_mode_tile
-      video: view_mode_tile
     'entity:rdf_entity':
       collection: view_mode_tile
       licence: view_mode_tile

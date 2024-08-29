@@ -12,7 +12,6 @@ dependencies:
     - node.type.event
     - node.type.news
     - node.type.release
-    - node.type.video
     - rdf_entity.rdfentity.collection
     - rdf_entity.rdfentity.solution
   module:
@@ -600,7 +599,6 @@ display:
             event: event
             news: news
             release: release
-            video: video
           group: 1
           exposed: true
           expose:
