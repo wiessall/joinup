@@ -10,7 +10,7 @@ declare(strict_types=1);
 use Drupal\facets\FacetInterface;
 
 /**
- * Implements ventuno_preprocess_facets_item_list__archived__status().
+ * Implements hook_preprocess_HOOK().
  *
  * Adds the necessary classes to theme the facet checkbox as a switch.
  */
