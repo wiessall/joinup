@@ -19,6 +19,7 @@ function joinup_log_update_111200(): TranslatableMarkup {
   $field = BaseFieldDefinition::create('map')
     ->setLabel(new TranslatableMarkup('Variables'))
     ->setDefaultValue(serialize([]))
+    ->setRequired(TRUE)
     ->setDescription(new TranslatableMarkup('Serialized array of variables that match the message string and that is passed into the t() function.'));
   $definition_update_manager->installFieldStorageDefinition('variables', 'joinup_log', 'joinup_log', $field);
 
