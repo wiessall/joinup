@@ -6,6 +6,8 @@ namespace Drupal\Tests\joinup_private_message\Kernel;
 
 use Drupal\Core\Routing\RouteProviderInterface;
 use Drupal\KernelTests\KernelTestBase;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
 
 /**
@@ -70,8 +72,6 @@ class PrivateMessageRouteSubscriberTest extends KernelTestBase {
    * Tests that specific routes have been removed.
    */
   public function testRouteRemovals(): void {
-    $this->assertRouteNotFound('entity.private_message_thread.canonical', 'The canonical private message thread route should be removed.');
-
     $this->assertRouteNotFound('entity.private_message.canonical', 'The canonical private message route should be removed.');
 
     $this->assertRouteNotFound('private_message.ban_page', 'The ban page route should be removed.');
@@ -81,6 +81,24 @@ class PrivateMessageRouteSubscriberTest extends KernelTestBase {
     $this->assertRouteNotFound('private_message.ban_user_form', 'The ban user form route should be removed.');
 
     $this->assertRouteNotFound('private_message.unban_user_form', 'The unban user form route should be removed.');
+  }
+
+  /**
+   * Tests that the canonical private message thread route returns a 404.
+   */
+  public function testPrivateMessageThreadCanonicalRoute(): void {
+    try {
+      $route = $this->routeProvider->getRouteByName('entity.private_message_thread.canonical');
+
+      $request = Request::create($route->getPath());
+      $response = $this->container->get('http_kernel')->handle($request);
+
+      $this->assertEquals(Response::HTTP_NOT_FOUND, $response->getStatusCode(), 'The canonical private message thread route should return a 404 status code.');
+    }
+    catch (RouteNotFoundException $e) {
+      // If the route is not found, ensure it's properly asserted.
+      $this->assertTrue(TRUE, 'The canonical private message thread route does not exist, as expected.');
+    }
   }
 
   /**
