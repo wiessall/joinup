@@ -1,0 +1,17 @@
+diff --git a/config/schema/private_message.schema.yml b/config/schema/private_message.schema.yml
+index d8f0a395ad8ba13139d1a80044c3cf940bf0cb77..1aed24ed427f6c6dd3af2b11c9f1e35668a6c686 100644
+--- a/config/schema/private_message.schema.yml
++++ b/config/schema/private_message.schema.yml
+@@ -64,6 +64,12 @@ field.formatter.settings.private_message_thread_member_formatter:
+     separator:
+       type: string
+       label: 'Separator'
++    prefix_separator:
++      type: boolean
++      label: 'Prefix Separator'
++    display_current_user:
++      type: boolean
++      label: 'Display Current User'
+ 
+ field.formatter.settings.private_message_thread_message_formatter:
+   type: mapping

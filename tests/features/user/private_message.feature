@@ -22,7 +22,9 @@ Feature: Private messages
     And I fill in "Subject" with "Hello Bob"
     And I enter "This is a private message to Bob." in the "Message" wysiwyg editor
     And I press "Send"
-    And I should see "Your message has been sent."
+    Then I should see the heading "Private Messages"
+    And I should see 1 private message
+    Then I should see a private message containing the text "This is a private message to Bob."
 
     When I am logged in as "Bob Rolls"
     And I am on the homepage
