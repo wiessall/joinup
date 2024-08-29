@@ -17,7 +17,7 @@ use Drupal\flag\Plugin\ActionLink\AJAXactionLink;
  * @ActionLinkType(
  *   id = "interoperable_link",
  *   label = @Translation("Interoperable link"),
- *   description = @Translation("An AJAX JavaScript request will be made without reloading the page.").
+ *   description = @Translation("An AJAX JavaScript request will be made without reloading the page."),
  * )
  */
 class InteroperableLink extends AJAXactionLink {

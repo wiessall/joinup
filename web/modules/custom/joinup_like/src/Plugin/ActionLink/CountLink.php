@@ -7,7 +7,7 @@ namespace Drupal\joinup_like\Plugin\ActionLink;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\flag\ActionLink\ActionLinkTypePluginInterface;
 use Drupal\flag\FlagInterface;
-use Drupal\flag_count\Plugin\ActionLink\CountLink;
+use Drupal\flag_count\Plugin\ActionLink\CountLink as OriginalCountLink;
 use Drupal\joinup_workflow\ArchivableEntityInterface;
 
 /**
@@ -17,12 +17,12 @@ use Drupal\joinup_workflow\ArchivableEntityInterface;
  * provide flag count.
  *
  * @ActionLinkType(
- *   id = "count_link_node",
+ *   id = "count_link",
  *   label = @Translation("Joinup Count link node entity"),
  *   description = "An AJAX action link which displays the count with the flag."
  * )
  */
-class NodeCountLink extends CountLink {
+class CountLink extends OriginalCountLink {
 
   /**
    * Get the action link formatted for use in entity links.
