@@ -25,7 +25,7 @@ class PrivateMessageContext extends RawDrupalContext {
    * @throws \Exception
    *   Thrown when the actual count does not match the expected count.
    *
-   * @And I should see :expectedCount private message(s)
+   * @Then I should see :expectedCount private message(s)
    */
   public function iShouldSeePrivateMessages(int $expectedCount): void {
     $messagesContainer = $this->getMessagesContainer();
