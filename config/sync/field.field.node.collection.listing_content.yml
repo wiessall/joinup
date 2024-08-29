@@ -15,7 +15,26 @@ label: 'Collection content'
 description: ''
 required: false
 translatable: true
-default_value: {  }
+default_value:
+  -
+    value:
+      fields:
+        collection_type:
+          weight: 0
+          region: top
+        collection_content_status:
+          weight: 1
+          region: top
+        collection_event_type:
+          weight: 0
+          region: inline_facets
+        collection_topic:
+          weight: 0
+          region: inline_facets
+      enabled: 1
+      query_presets: ''
+      limit: 12
+      show_archived: unarchived
 default_value_callback: ''
 settings:
   index: published

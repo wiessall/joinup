@@ -2,7 +2,7 @@ uuid: 8af3c194-9a16-4308-aca1-129c641c28a4
 langcode: en
 status: true
 dependencies: {  }
-id: collection_event_date
+id: collection_event_type
 name: 'Event date'
 weight: 0
 min_count: 1
