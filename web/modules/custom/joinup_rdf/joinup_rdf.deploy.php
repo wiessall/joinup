@@ -138,13 +138,14 @@ function joinup_rdf_deploy_200004(): void {
     }
     foreach ($tables as $table) {
       $query = $db->select("b_$table", 'b');
-      $query->innerJoin('rdf_sync_uri', 'u', "u.entity_type = '$entityTypeId' AND b.{$fieldName}_target_id = u.uri");
+      $query->innerJoin('rdf_sync_uri', 'u', "b.{$fieldName}_target_id = u.uri");
       $query
         ->fields('b', MigrationHelper::DEDICATED_TABLE_COLUMNS)
         ->fields('u', ['entity_id']);
       $db->insert($table)
         ->fields([...MigrationHelper::DEDICATED_TABLE_COLUMNS, "{$fieldName}_target_id"])
-        ->from($query)->execute();
+        ->from($query)
+        ->execute();
       $schema->dropTable("b_$table");
     }
   }
