@@ -39,7 +39,9 @@ use Drupal\sparql_entity_storage\SparqlGraphInterface;
  */
 function collection_entity_type_alter(array &$entity_types): void {
   /** @var \Drupal\Core\Entity\EntityTypeInterface[] $entity_types */
-  $entity_types['rdf_entity']->setLinkTemplate('glossary', '/rdf_entity/{rdf_entity}/glossary/{letter}');
+  $entity_types['rdf_entity']
+    ->setLinkTemplate('glossary', '/rdf_entity/{rdf_entity}/glossary/{letter}')
+    ->setLinkTemplate('subscribe', '/rdf_entity/{rdf_entity}/subscribe');
 }
 
 /**
@@ -139,16 +141,7 @@ function collection_rdf_entity_insert(EntityInterface $entity): void {
       'rdf_entity-collection-facilitator',
     ];
 
-    $subscription_bundles = [];
-    foreach (JoinupSubscriptionsHelper::SUBSCRIPTION_BUNDLES['collection'] as $entity_type => $bundles) {
-      foreach ($bundles as $bundle) {
-        $subscription_bundles[] = [
-          'entity_type' => $entity_type,
-          'bundle' => $bundle,
-        ];
-      }
-    }
-
+    $subscription_bundles = JoinupSubscriptionsHelper::provideDataForField('collection');
     Og::createMembership($entity, $entity->getOwner())
       ->setRoles(array_values(OgRole::loadMultiple($roles)))
       ->set('subscription_bundles', $subscription_bundles)
@@ -428,14 +421,25 @@ function collection_preprocess_search_api_field__rdf_entity__field_collection_co
  * Implements hook_entity_field_access().
  */
 function collection_entity_field_access(string $operation, FieldDefinitionInterface $field_definition, AccountInterface $account, ?FieldItemListInterface $items = NULL): AccessResultInterface {
+  if (
+    $field_definition->getTargetEntityTypeId() !== 'meta_entity' ||
+    $field_definition->getTargetBundle() !== 'collection_settings'
+  ) {
+    return AccessResult::neutral();
+  }
+
   // Until ISAICP-7223 only moderators are able to set a landing page.
   // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7223
-  if (
-    $field_definition->getTargetEntityTypeId() === 'meta_entity'
-    && $field_definition->getTargetBundle() === 'collection_settings'
-    && $field_definition->getName() === 'landing_page'
-  ) {
-    return AccessResult::forbiddenIf(!$account->hasPermission('update collection_settings meta-entity'));
+  $field_name = $field_definition->getName();
+  switch ($field_name) {
+    case 'landing_page':
+      return AccessResult::forbiddenIf(!$account->hasPermission('update collection_settings meta-entity'));
+
+    case 'code_of_conduct':
+      if ($operation === 'edit') {
+        return AccessResult::forbiddenIf(!$account->hasPermission('update collection_settings meta-entity'));
+      }
   }
+
   return AccessResult::neutral();
 }
