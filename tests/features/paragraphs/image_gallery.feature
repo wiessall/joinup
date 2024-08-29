@@ -23,13 +23,9 @@ Feature:
     And I click "Image gallery"
 
     When I attach the file "logo.png" to "Add a new file" in the "Modal content" region
-    And I wait for AJAX to finish
     And I attach the file "topic.png" to "Add a new file" in the "Modal content" region
-    And I wait for AJAX to finish
     And I attach the file "banner.jpg" to "Add a new file" in the "Modal content" region
-    And I wait for AJAX to finish
     And I attach the file "linus.jpeg" to "Add a new file" in the "Modal content" region
-    And I wait for AJAX to finish
     And I fill in the 1st "Alternative text" field of the "Image" file field with "Logo" in the "Modal content" region
     And I fill in the 2nd "Alternative text" field of the "Image" file field with "Topic" in the "Modal content" region
     And I fill in the 3rd "Alternative text" field of the "Image" file field with "Banner" in the "Modal content" region

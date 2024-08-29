@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c74bf53d98d34cd4c7beb45df25f1866",
+    "content-hash": "611aa7faada4705d01ba368086f6006d",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1932,26 +1932,26 @@
         },
         {
             "name": "drupal/block_field",
-            "version": "1.0.0-rc4",
+            "version": "1.0.0-rc5",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/block_field.git",
-                "reference": "8.x-1.0-rc4"
+                "reference": "8.x-1.0-rc5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/block_field-8.x-1.0-rc4.zip",
-                "reference": "8.x-1.0-rc4",
-                "shasum": "97958ceace8ca80852f40b734ff7197e172d726e"
+                "url": "https://ftp.drupal.org/files/projects/block_field-8.x-1.0-rc5.zip",
+                "reference": "8.x-1.0-rc5",
+                "shasum": "b87e43e9bbaaf6cff6d8946d5e45db492978cbb6"
             },
             "require": {
-                "drupal/core": "^9 || ^10"
+                "drupal/core": "^9 || ^10 || ^11"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-1.0-rc4",
-                    "datestamp": "1667511464",
+                    "version": "8.x-1.0-rc5",
+                    "datestamp": "1723550576",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "RC releases are not covered by Drupal security advisories."
@@ -1968,7 +1968,7 @@
                     "homepage": "https://www.drupal.org/user/1036766"
                 },
                 {
-                    "name": "Berdir",
+                    "name": "berdir",
                     "homepage": "https://www.drupal.org/user/214652"
                 },
                 {
@@ -6425,27 +6425,27 @@
         },
         {
             "name": "drupal/page_manager",
-            "version": "4.0.0-rc2",
+            "version": "4.0.0-rc3",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/page_manager.git",
-                "reference": "8.x-4.0-rc2"
+                "reference": "8.x-4.0-rc3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/page_manager-8.x-4.0-rc2.zip",
-                "reference": "8.x-4.0-rc2",
-                "shasum": "4a1e96284c5775343fbb4612072a2abfc83ebc33"
+                "url": "https://ftp.drupal.org/files/projects/page_manager-8.x-4.0-rc3.zip",
+                "reference": "8.x-4.0-rc3",
+                "shasum": "9c68ed3e87196e42ceeb80d53064494d7a104abc"
             },
             "require": {
-                "drupal/core": "^9.3 || ^10",
-                "drupal/ctools": "^3.11 || ^4.0"
+                "drupal/core": "^9.5 || ^10 || ^11",
+                "drupal/ctools": "^3.15 || ^4.1"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-4.0-rc2",
-                    "datestamp": "1671210021",
+                    "version": "8.x-4.0-rc3",
+                    "datestamp": "1721976404",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "RC releases are not covered by Drupal security advisories."
