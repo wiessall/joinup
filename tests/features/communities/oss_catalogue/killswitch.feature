@@ -5,7 +5,9 @@ Feature: Test EU OSS Catalogue killswitch
 
     When I go to "/eu-oss-catalogue"
     Then the response status code should be 200
+    But I should not see the heading "Sign in to continue"
     And I go to "/eu-oss-catalogue/solutions"
+    But I should not see the heading "Sign in to continue"
     Then the response status code should be 200
 
     Given I am logged in as an "authenticated"
@@ -61,7 +63,9 @@ Feature: Test EU OSS Catalogue killswitch
     Given I am an anonymous user
     When I go to "/eu-oss-catalogue"
     Then the response status code should be 200
+    But I should not see the heading "Sign in to continue"
     And I go to "/eu-oss-catalogue/solutions"
+    But I should not see the heading "Sign in to continue"
     Then the response status code should be 200
 
     Given I am logged in as an "authenticated"
