@@ -53,7 +53,7 @@ class JoinupGroupContext extends RawDrupalContext {
    * @When I go to the member(ship) permissions table of :label
    */
   public function visitMembershipPermissionsTable(string $label): void {
-    $group = $this->getEntityByLabel('rdf_entity', $label);
+    $group = $this->getEntityByLabel('node', $label);
     $url = Url::fromRoute('joinup_group.membership_permissions_info', [
       'rdf_entity' => $group->id(),
     ]);
@@ -69,7 +69,7 @@ class JoinupGroupContext extends RawDrupalContext {
    * @Given I go to the discussions page of :label
    */
   public function visitDiscussionPage(string $label): void {
-    $group = $this->getEntityByLabel('rdf_entity', $label);
+    $group = $this->getEntityByLabel('node', $label);
 
     $url = Url::fromRoute('view.discussions.overview', [
       'rdf_entity' => $group->id(),
@@ -87,7 +87,7 @@ class JoinupGroupContext extends RawDrupalContext {
    * @Given I go to the manage content page of :label
    */
   public function visitManageContentPage(string $label): void {
-    $group = $this->getEntityByLabel('rdf_entity', $label);
+    $group = $this->getEntityByLabel('node', $label);
 
     $url = Url::fromRoute('view.group_content_management.manage', [
       'rdf_entity' => $group->id(),
@@ -116,7 +116,7 @@ class JoinupGroupContext extends RawDrupalContext {
    * @Then the :group_label :group_type should have a community content titled :group_title
    */
   public function assertNodeOgMembership(string $group_label, string $group_type, string $content_title): void {
-    $group = $this->getEntityByLabel('rdf_entity', $group_label, $group_type);
+    $group = $this->getEntityByLabel('node', $group_label, $group_type);
     $node = $this->getEntityByLabel('node', $content_title);
     if ($node->get(OgGroupAudienceHelperInterface::DEFAULT_FIELD)->target_id !== $group->id()) {
       throw new \Exception("The node '$content_title' is not associated with collection '{$group->label()}'.");
@@ -223,9 +223,10 @@ class JoinupGroupContext extends RawDrupalContext {
    */
   public function visitGroupAnnouncementsPage(string $group_label, string $group_type): void {
     assert(in_array($group_type, ['collection', 'solution']));
-    $group = $this->getEntityByLabel('rdf_entity', $group_label, $group_type);
+    $group = $this->getEntityByLabel('node', $group_label, $group_type);
+    assert($group instanceof GroupInterface);
     $url = Url::fromRoute('view.announcements.group', [
-      'rdf_entity' => $group->id(),
+      'node' => $group->id(),
     ])->toString();
     $this->visitPath($url);
   }
@@ -311,7 +312,7 @@ class JoinupGroupContext extends RawDrupalContext {
       ];
       foreach ($row as $key => $value) {
         if ($key === 'group') {
-          $group = $this->getEntityByLabel('rdf_entity', $value);
+          $group = $this->getEntityByLabel('node', $value);
           if (!$group instanceof GroupInterface) {
             throw new \InvalidArgumentException("'$value' should be either a collection or a solution");
           }

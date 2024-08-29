@@ -42,7 +42,7 @@ class JoinupLogContext extends RawDrupalContext {
    * @When I go to the actions log report for :group
    */
   public function visitActionsLogReport(string $group): void {
-    $entityGroup = $this->getEntityByLabel('rdf_entity', $group);
+    $entityGroup = $this->getEntityByLabel('node', $group);
     $url = Url::fromRoute('view.actions_log.logs', [
       'rdf_entity' => $entityGroup->id(),
     ]);
@@ -87,7 +87,7 @@ class JoinupLogContext extends RawDrupalContext {
         }
       }
 
-      $entityGroup = $this->getEntityByLabel('rdf_entity', $values['group']);
+      $entityGroup = $this->getEntityByLabel('node', $values['group']);
       $values['group'] = $entityGroup->id();
 
       $user = user_load_by_name($values['user']);

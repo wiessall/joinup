@@ -183,7 +183,7 @@ trait OgTrait {
    *   Thrown when a event with the given title does not exist.
    */
   public function assertOgMembership(string $parent, string $parent_bundle, string $content, string $content_bundle): void {
-    $parent = $this->getEntityByLabel('rdf_entity', $parent, $parent_bundle);
+    $parent = $this->getEntityByLabel('node', $parent, $parent_bundle);
 
     $results = \Drupal::entityTypeManager()
       ->getStorage('node')

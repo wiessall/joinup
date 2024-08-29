@@ -382,7 +382,7 @@ class JoinupContext extends RawDrupalContext {
    * @Given my role(s) in the :group_label :group_bundle change(s) to :roles
    */
   public function updateGroupRoles(string $group_label, string $group_bundle, string $roles): void {
-    $entity = $this->getEntityByLabel('rdf_entity', $group_label, $group_bundle);
+    $entity = $this->getEntityByLabel('node', $group_label, $group_bundle);
     if (!$entity) {
       throw new \Exception("No entity found with label $group_label");
     }
@@ -2667,7 +2667,7 @@ class JoinupContext extends RawDrupalContext {
   public function assertDraggableMenuTable(TableNode $table, string $group_label, string $group_bundle): void {
     $this->assertJavaScriptEnabledBrowser();
 
-    $group = $this->getEntityByLabel('rdf_entity', $group_label, $group_bundle);
+    $group = $this->getEntityByLabel('node', $group_label, $group_bundle);
     /** @var \Behat\Mink\Element\NodeElement[] $rows */
     $rows = $this->getSession()->getPage()->findAll('css', '#menu-overview tbody tr.draggable');
     $expected = $table->getColumnsHash();
