@@ -52,7 +52,7 @@ function joinup_newsletter_entity_prepare_view(string $entity_type_id, array $en
     // should reduce the number of tiles retrieved from 12 to 11, so that there
     // is room to show the form as the final tile.
     /** @var \Drupal\search_api_field\Plugin\Field\FieldType\SearchItemInterface $collection_content */
-    $collection_content = $entity->get('field_collection_content')->first();
+    $collection_content = $entity->get('listing_content')->first();
     $collection_content->setLimit(11);
   }
 
