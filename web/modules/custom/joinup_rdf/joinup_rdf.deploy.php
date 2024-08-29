@@ -393,7 +393,7 @@ function joinup_rdf_deploy_200009(): void {
 
   if (joinup_oss_catalogue_is_enabled()) {
     // Make EU OSS Catalogue public.
-    $collection->setPublished();
+    $collection->set('field_state', 'published');
   }
 
   $collection->save();
