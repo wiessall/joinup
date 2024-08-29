@@ -262,16 +262,13 @@ Feature: Global search
     And custom_page content:
       | title      | body                                     | collection       | state     | keywords |
       | Page omega | This is just an epsilon but should work. | Collection alpha | published | Alphabet |
-    And video content:
-      | title       | body          | field_video                                 | collection       |
-      | Video alpha | Slap like now | https://www.youtube.com/watch?v=JhGf8ZY0tN8 | Collection alpha |
     And users:
       | Username     | E-mail                      | First name | Family name | Organisation |
       | jenlyle      | jenessa.carlyle@example.com | Jenessa    | Carlyle     | Clyffco      |
       | ulyssesfrees | ulysses.freeman@example.com | Ulysses    | Freeman     | Omero snc    |
 
     When I visit the search page
-    Then the "Content types" checkbox facet should allow selecting the following values "Collections (2), Solution (1), News (1), Events (2), Document (1), Discussion (1), Release (1), Custom page (1), Licence (1), User profiles (2), Video (1)"
+    Then the "Content types" checkbox facet should allow selecting the following values "Collections (2), Solution (1), News (1), Events (2), Document (1), Discussion (1), Release (1), Custom page (1), Licence (1), User profiles (2)"
 
     # "A beta" word does not show "You must include at least one positive keyword with 3 characters or more." error message.
     When I enter "A beta" in the search bar and press enter
@@ -280,10 +277,10 @@ Feature: Global search
     # "Alpha" is used in all the rdf entities titles.
     When I enter "Alpha" in the search bar and press enter
     And I should see the following search header in the correct order:
-      | SEARCH RESULTS (5) |
+      | SEARCH RESULTS (4) |
       | Sort by:           |
-    Then I should see the text "SEARCH RESULTS (5)"
-    And the page should show the tiles "Collection alpha, Solution alpha, Release Alpha, Licence Alpha, Video alpha"
+    Then I should see the text "SEARCH RESULTS (4)"
+    And the page should show the tiles "Collection alpha, Solution alpha, Release Alpha, Licence Alpha"
 
     # "Omega" is used in all the node entities titles. Since the content of
     # custom pages is added to their collection, we also match the collection.

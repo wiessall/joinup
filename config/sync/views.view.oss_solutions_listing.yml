@@ -273,7 +273,6 @@ display:
               event: default
               news: default
               oss_solution: view_mode_tile
-              video: default
             'entity:rdf_entity':
               asset_distribution: default
               asset_release: default
