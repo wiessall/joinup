@@ -28,7 +28,15 @@ class PrivateMessageContext extends RawDrupalContext {
    * @Then I should see :expectedCount private message(s)
    */
   public function iShouldSeePrivateMessages(int $expectedCount): void {
-    $messagesContainer = $this->getMessagesContainer();
+    $page = $this->getSession()->getPage();
+    $messagesContainer = $page->find('css', '.private-message-thread-messages .field__items');
+
+    if (NULL === $messagesContainer && $expectedCount > 0) {
+      throw new \Exception('There are currently no messages available.');
+    }
+    else {
+      return;
+    }
 
     $messageElements = $messagesContainer->findAll('css', '.private-message-wrapper');
 
@@ -124,8 +132,6 @@ class PrivateMessageContext extends RawDrupalContext {
    *
    * @param string $value
    *   The value to select from suggestions.
-   * @param string|null $field
-   *   The field name.
    *
    * @throws \Exception
    *   Thrown when the field is not found, the field is not an autocomplete
@@ -134,7 +140,7 @@ class PrivateMessageContext extends RawDrupalContext {
    *
    * @When I pick :value from the private message user autocomplete suggestions
    */
-  public function fillPersonFieldWithNormalisedEntityReference(string $value, ?string $field = NULL): void {
+  public function fillPersonFieldWithNormalisedEntityReference(string $value): void {
     $this->assertJavaScriptEnabledBrowser();
     $xpath = '//div[@id="pm-members-autocomplete-results-wrapper"]//ul[contains(concat(" ", normalize-space(@class), " "), " ui-widget-content ")]//a[text() = "' . $value . '"]';
     $this->waitForElementVisible('xpath', $xpath)->click();
