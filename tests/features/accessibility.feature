@@ -23,6 +23,7 @@ Feature: Accessibility
       | /collection/open-data/news/discover-new-series-webinars-data-providers                                                          |
       | /collection/open-data/news/register-finals-eu-datathon-2022                                                                     |
       | /collection/open-source-observatory-osor/event/open-source-summit-europe                                                        |
+      | /collection/open-source-observatory-osor/event/pass-salt-conference                                                             |
       | /collection/open-source-observatory-osor/news/co2-tool-accounting-code                                                          |
       | /collection/shared-solutions-public-sector-catalonia-aoc-consortium/solution/tools-e-procurement-local-authorities-catalonia    |
       | /interoperable-europe/event/register-biggest-2023-open-source-conference-brussels                                               |
