@@ -9,8 +9,10 @@ commands:
   # Config readonly kill-switch.
   config-readonly:enable:
     - task: exec
-      command: (test "${config_readonly}" = "1" && rm -f ${joinup.dir}/disable-config-readonly) || true
+      command: (test "${config_readonly}" = "1" && rm -f ${joinup.files_private_dir}/file-switcher/disable-config-readonly) || true
 
   config-readonly:disable:
+    - task: mkdir
+      dir: ${joinup.files_private_dir}/file-switcher
     - task: touch
-      file: ${joinup.dir}/disable-config-readonly
+      file: ${joinup.files_private_dir}/file-switcher/disable-config-readonly
