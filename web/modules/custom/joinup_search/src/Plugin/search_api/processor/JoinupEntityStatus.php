@@ -9,6 +9,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\PluginFormInterface;
 use Drupal\joinup_group\Entity\GroupContentInterface;
+use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\Exception\MissingGroupException;
 use Drupal\node\NodeInterface;
 use Drupal\search_api\IndexInterface;
@@ -130,6 +131,9 @@ class JoinupEntityStatus extends ProcessorPluginBase implements PluginFormInterf
       }
       elseif ($object instanceof UserInterface) {
         $enabled = $object->isActive();
+      }
+      elseif ($object instanceof GroupInterface) {
+        $enabled = $object->isPublished();
       }
 
       $enabled = $inverse ? !$enabled : $enabled;
