@@ -12,7 +12,6 @@ use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\EventSubscriber\JoinGroupSubscriber;
-use Drupal\rdf_entity\RdfInterface;
 use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\node\NodeInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
