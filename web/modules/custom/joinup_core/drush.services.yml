@@ -1,6 +1,12 @@
 services:
   joinup_core.sanitize.commands:
     class: Drupal\joinup_core\Commands\JoinupDataSanitizationCommands
-    arguments: ['@database', '@entity_field.manager', '@entity_type.manager', '@keyvalue', '@plugin.manager.field.field_type']
+    arguments: [ '@database', '@entity_field.manager', '@entity_type.manager', '@keyvalue', '@plugin.manager.field.field_type' ]
+    tags:
+      - { name: drush.command }
+
+  joinup_core.private_file_kill_switch.commands:
+    class: Drupal\joinup_core\Commands\PrivateFileKillSwitchCommands
+    arguments: [ '@joinup_core.private_file_kill_switch' ]
     tags:
       - { name: drush.command }

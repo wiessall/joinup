@@ -42,9 +42,13 @@ services:
     tags:
       - { name: event_subscriber }
 
+  joinup_core.private_file_kill_switch:
+    class: Drupal\joinup_core\PrivateFileKillSwitch
+    arguments: [ '@file_system' ]
+
   joinup_core.file_config_read_only:
     class: Drupal\joinup_core\FileConfigReadOnly
-    arguments: [ '@file_system' ]
+    arguments: [ '@joinup_core.private_file_kill_switch' ]
 
   # Prevent errors in twigc by implementing the missing get_dummy_text function,
   # which is referenced in BCL component templates.
