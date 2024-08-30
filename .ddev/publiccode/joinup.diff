@@ -51,6 +51,19 @@ index 6c2e55c..e6373f9 100644
 +export const validatorUrl = `https://publiccode-validator.developers.italia.it/pc/validate`;
 +export const validatorRemoteUrl = `https://publiccode-validator.developers.italia.it/pc/validateURL`;
  export const APP_FORM = "appForm";
+diff --git a/src/app/contents/fields/index.js b/src/app/contents/fields/index.js
+index 4b4550a..715fd00 100644
+--- a/src/app/contents/fields/index.js
++++ b/src/app/contents/fields/index.js
+@@ -11,7 +11,7 @@ const sections = [
+   "Description & Features",
+   "Logo & Screenshots",
+   "Purpose & Audience",
+-  "Maintainance"
++  "Maintenance"
+ ];
+ 
+ const groups = [
 diff --git a/src/asset/language_switcher.scss b/src/asset/language_switcher.scss
 index 5c6068b..263ca74 100644
 --- a/src/asset/language_switcher.scss

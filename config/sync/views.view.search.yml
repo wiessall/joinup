@@ -391,7 +391,6 @@ display:
               licence: view_mode_tile_horizontal
               news: view_mode_tile_horizontal
               release: view_mode_tile_horizontal
-              video: view_mode_tile_horizontal
             'entity:rdf_entity':
               collection: view_mode_tile_horizontal
               solution: view_mode_tile_horizontal
