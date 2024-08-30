@@ -5,13 +5,13 @@
 # See \EcEuropa\Toolkit\TaskRunner\Commands\CloneCommands::runDeploy().
 upgrade_commands:
   default:
-    - ./vendor/bin/drush joinup-core:kill-switch-create disable-config-readonly
+    - ./vendor/bin/run config-readonly:disable
     - ./vendor/bin/drush deploy --yes
     - ./vendor/bin/drush search-api:reset-tracker --yes
     - ./vendor/bin/drush joinup:node-access-rebuild
     - ./vendor/bin/drush joinup:search-api-tasks
     - ./vendor/bin/drush twigc --yes
-    - ./vendor/bin/drush joinup-core:kill-switch-remove disable-config-readonly
+    - ./vendor/bin/run config-readonly:enable
     - ./vendor/bin/drush joinup:unpublish-alert --category
     - ./scripts/check_status_report.php
   append:
