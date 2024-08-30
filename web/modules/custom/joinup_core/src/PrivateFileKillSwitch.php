@@ -31,12 +31,12 @@ class PrivateFileKillSwitch implements KillSwitchInterface {
    * {@inheritdoc}
    */
   public function create(string $type): void {
-    $file = $this->getFilePath($type);
-    $directory = $this->fileSystem->dirname($file);
+    $realPath = $this->fileSystem->realpath($this->getFilePath($type));
+    $directory = $this->fileSystem->dirname($realPath);
     if (!$this->fileSystem->prepareDirectory($directory, FileSystemInterface::CREATE_DIRECTORY | FileSystemInterface::MODIFY_PERMISSIONS)) {
       throw new FileWriteException("Could not create or write to directory '$directory'");
     }
-    $this->fileSystem->saveData('', $file, FileExists::Replace);
+    $this->fileSystem->saveData('', $realPath, FileExists::Replace);
   }
 
   /**
