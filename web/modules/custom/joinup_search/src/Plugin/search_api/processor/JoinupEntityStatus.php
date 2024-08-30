@@ -40,12 +40,12 @@ class JoinupEntityStatus extends ProcessorPluginBase implements PluginFormInterf
    *
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
-  protected $entityTypeManager;
+  protected EntityTypeManagerInterface $entityTypeManager;
 
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): self {
     /** @var static $processor */
     $processor = parent::create($container, $configuration, $plugin_id, $plugin_definition);
     $processor->setEntityTypeManager($container->get('entity_type.manager'));
@@ -81,7 +81,7 @@ class JoinupEntityStatus extends ProcessorPluginBase implements PluginFormInterf
   /**
    * {@inheritdoc}
    */
-  public function defaultConfiguration() {
+  public function defaultConfiguration(): array {
     return [
       'inverse' => FALSE,
     ];
@@ -90,7 +90,7 @@ class JoinupEntityStatus extends ProcessorPluginBase implements PluginFormInterf
   /**
    * {@inheritdoc}
    */
-  public function buildConfigurationForm(array $form, FormStateInterface $form_state) {
+  public function buildConfigurationForm(array $form, FormStateInterface $form_state): array {
     $form['inverse'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Inverse'),
@@ -104,7 +104,7 @@ class JoinupEntityStatus extends ProcessorPluginBase implements PluginFormInterf
   /**
    * {@inheritdoc}
    */
-  public function alterIndexedItems(array &$items) {
+  public function alterIndexedItems(array &$items): void {
     foreach ($items as $item_id => $item) {
       assert($item instanceof ItemInterface);
       $object = $item->getOriginalObject()->getValue();

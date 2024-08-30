@@ -164,6 +164,9 @@ Feature: Collection moderation
     When I press "Delete"
     Then I should be on the homepage
 
+  # @covers \joinup_workflow_entity_presave partially.
+  # @covers \Drupal\joinup_search\Plugin\search_api\processor\JoinupEntityStatus::alterIndexedItems
+  # for collections.
   Scenario: Published collections should be shown in the collections overview page.
     # Regression test for ticket ISAICP-2889.
     Given owner content:
