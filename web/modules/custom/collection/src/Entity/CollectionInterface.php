@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\collection\Entity;
 
+use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 
 /**
