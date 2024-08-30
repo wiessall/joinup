@@ -32,3 +32,11 @@ Feature: Interoperable solution flag
     Then I should not see the text "Interoperable" in the "Header" region
     When I go to the homepage of the "Colours identity" solution
     Then I should see the text "Interoperable" in the "Header" region
+
+    Given I am logged in as a moderator
+    When I go to the homepage of the "Crest identity" solution
+    And I click "Set interoperable flag" in the "Header" region
+    And I click "Remove interoperable flag" in the "Header" region
+    When I go to the homepage of the "Colours identity" solution
+    And I click "Remove interoperable flag" in the "Header" region
+    And I click "Set interoperable flag" in the "Header" region
