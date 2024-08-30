@@ -6,7 +6,7 @@ namespace Drupal\Tests\joinup_core\ExistingSite;
 
 use Drupal\Core\Logger\RfcLogLevel;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
-use Drupal\sparql_entity_storage\Encoder\SparqlEncoder;
+use Drupal\rdf_sync\Encoder\RdfSyncEncoder;
 
 /**
  * Test description.
@@ -63,7 +63,7 @@ final class ExceptionHandleTest extends JoinupExistingSiteTestBase {
     $this->assertSession()->responseHeaderEquals('Content-Type', 'text/turtle; charset=UTF-8');
     $this->assertNoExceptionsLogged('turtle');
 
-    foreach (array_keys(SparqlEncoder::getSupportedFormats()) as $format) {
+    foreach (array_keys(RdfSyncEncoder::getSupportedFormats()) as $format) {
       // Regression test that passing rdfxml does not cause an empty format type
       // case.
       $this->visit('/non-existing-page?_format=' . $format);
