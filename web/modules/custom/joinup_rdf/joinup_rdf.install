@@ -163,7 +163,6 @@ function joinup_rdf_update_200005(): void {
     'field.field.media.video.og_audience',
     'field.field.media.file.og_audience',
     'field.field.node.news.field_news_referenced_solution',
-    'field.field.node.video.og_audience',
     'field.field.node.news.og_audience',
     'field.field.node.news.field_shared_in',
     'field.field.node.glossary.og_audience',
