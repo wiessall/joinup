@@ -452,7 +452,7 @@ class SubscribeToCollectionForm extends FormBase {
    */
   protected function loadCollection(string $collection_id): CollectionInterface {
     $collection = $this->entityTypeManager->getStorage('node')->load($collection_id);
-    assert ($collection instanceof CollectionInterface);
+    assert($collection instanceof CollectionInterface);
     return $collection;
   }
 
