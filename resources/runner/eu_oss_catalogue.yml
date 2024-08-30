@@ -1,5 +1,9 @@
 commands:
 
+  eu-oss-catalogue:enable:
+    - task: exec
+      command: rm -f ${joinup.files_private_dir}/file-switcher/disable-eu-oss-catalogue
+
   eu-oss-catalogue:disable:
     - task: exec
       command: mkdir ${joinup.files_private_dir}/file-switcher -p -m ug=rwx,o=
