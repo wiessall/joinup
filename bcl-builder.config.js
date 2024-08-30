@@ -591,11 +591,11 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
-        `${ventuno}src/scss/components/form-checkboxes.scss`,
+        `${ventuno}src/scss/components/form-simple-checkboxes.scss`,
       ),
       dest: path.resolve(
         outputFolder,
-        `${ventuno}assets/css/form-checkboxes.min.css`,
+        `${ventuno}assets/css/form-simple-checkboxes.min.css`,
       ),
       options: {
         includePaths,
