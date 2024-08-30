@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_core;
 
+use Drupal\Core\File\Exception\FileWriteException;
 use Drupal\Core\File\FileExists;
 use Drupal\Core\File\FileSystemInterface;
 
@@ -31,9 +32,11 @@ class PrivateFileKillSwitch implements KillSwitchInterface {
    */
   public function create(string $type): void {
     $file = $this->getFilePath($type);
-    $directory = dirname($file);
-    $this->fileSystem->prepareDirectory($directory, FileSystemInterface::CREATE_DIRECTORY | FileSystemInterface::MODIFY_PERMISSIONS);
-    $this->fileSystem->saveData('', $this->getFilePath($type), FileExists::Replace);
+    $directory = $this->fileSystem->dirname($file);
+    if (!$this->fileSystem->prepareDirectory($directory, FileSystemInterface::CREATE_DIRECTORY | FileSystemInterface::MODIFY_PERMISSIONS)) {
+      throw new FileWriteException("Could not create or write to directory '$directory'");
+    }
+    $this->fileSystem->saveData('', $file, FileExists::Replace);
   }
 
   /**
