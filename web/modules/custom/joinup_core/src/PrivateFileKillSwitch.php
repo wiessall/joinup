@@ -32,7 +32,7 @@ class PrivateFileKillSwitch implements KillSwitchInterface {
   public function create(string $type): void {
     $file = $this->getFilePath($type);
     $directory = dirname($file);
-    $this->fileSystem->prepareDirectory($directory, FileSystemInterface::CREATE_DIRECTORY);
+    $this->fileSystem->prepareDirectory($directory, FileSystemInterface::CREATE_DIRECTORY | FileSystemInterface::MODIFY_PERMISSIONS);
     $this->fileSystem->saveData('', $this->getFilePath($type), FileExists::Replace);
   }
 
