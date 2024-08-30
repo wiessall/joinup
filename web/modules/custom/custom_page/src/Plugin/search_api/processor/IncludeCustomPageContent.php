@@ -92,10 +92,10 @@ class IncludeCustomPageContent extends ProcessorPluginBase {
       foreach ($this->customPageProvider->getCustomPagesByGroupId($entity->id()) as $custom_page) {
         // Index the title and body text of the custom page data inside the
         // collection or solution.
-        $label_field = $item->getField('label');
+        $label_field = $item->getField('title');
         $label_field->addValue($custom_page->label());
 
-        $body_field_name = $entity->bundle() === 'collection' ? 'field_ar_description' : 'field_is_description';
+        $body_field_name = 'description';
         $body_field = $item->getField($body_field_name);
 
         // The search_api indexes fields for each entity (there is an HTML
