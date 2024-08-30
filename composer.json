@@ -419,10 +419,6 @@
             "drupal/rdf_entity": {
                 "Allow bundle label plural variants @see https://github.com/ec-europa/rdf_entity/pull/12": "resources/patch/php/drupal/rdf_entity/ea8f6af001fca732e89a4be0e29643953f49a88f.diff"
             },
-            "drupal/rdf_sync": {
-                "Fix serialization @see https://www.drupal.org/i/3470788": "resources/patch/php/drupal/rdf_sync/3470788-mr22-note366402.diff",
-                "Retrieve multiple entities by a list of URIs @see https://www.drupal.org/i/3471160": "resources/patch/php/drupal/rdf_sync/3471160-comment-15750646.diff"
-            },
             "drupal/search_api": {
                 "item_id column is too short @see https://www.drupal.org/node/2829696": "resources/patch/php/drupal/search_api/2829696.patch",
                 "Some bulk form field options are missing schema @see https://www.drupal.org/project/search_api/issues/3195199": "resources/patch/php/drupal/search_api/3195199.patch",
@@ -471,7 +467,7 @@
                 "Webform might create invalid link renderable arrays on submission list. @see https://www.drupal.org/project/webform/issues/3441600": "resources/patch/php/drupal/webform/3441600.patch"
             },
             "gitonomy/gitlib": {
-                "Edge case: Empty message in the first commit @see https://github.com/gitonomy/gitlib/pull/217": "resources/patch/gitonomy/gitlib/217.diff"
+                "Edge case: Empty message in the first commit @see https://github.com/gitonomy/gitlib/pull/217": "resources/patch/php/gitonomy/gitlib/217.diff"
             },
             "m4tthumphrey/php-gitlab-api": {
                 "GraphQL API @see https://github.com/GitLabPHP/Client/issues/766": "resources/patch/php/drupal/m4tthumphrey/php-gitlab-api/772.diff",
