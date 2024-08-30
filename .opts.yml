@@ -16,23 +16,23 @@ upgrade_commands:
     - ./scripts/check_status_report.php
   append:
     production:
-      - ./vendor/bin/drush joinup-core:kill-switch-create disable-eu-oss-catalogue
+      - ./vendor/bin/run config-readonly:disable
     acceptance:
-      - ./vendor/bin/drush joinup-core:kill-switch-create disable-config-readonly
+      - ./vendor/bin/run config-readonly:disable
       - ./vendor/bin/drush joinup:acc
       - ./vendor/bin/drush cache:rebuild
-      - ./vendor/bin/drush joinup-core:kill-switch-remove disable-config-readonly
+      - ./vendor/bin/run config-readonly:enable
       # Remove this line when deploying to POC.
-      - ./vendor/bin/drush joinup-core:kill-switch-create disable-eu-oss-catalogue
+      - ./vendor/bin/run eu-oss-catalogue:disable
       - ./vendor/bin/drush eu-oss:fetch developers_italia
       - ./vendor/bin/drush eu-oss:fetch hosting_platform:open_code
       - ./vendor/bin/drush queue:run eu_oss_catalogue
       - ./vendor/bin/drush queue:run joinup_oss_catalogue_imagecache_warmer
     ephemeral:
-      - ./vendor/bin/drush joinup-core:kill-switch-create disable-config-readonly
+      - ./vendor/bin/run config-readonly:disable
       - ./vendor/bin/drush joinup:acc
       - ./vendor/bin/drush cache:rebuild
-      - ./vendor/bin/drush joinup-core:kill-switch-remove disable-config-readonly
+      - ./vendor/bin/run config-readonly:enable
       - ./vendor/bin/drush eu-oss:fetch developers_italia
       - ./vendor/bin/drush eu-oss:fetch hosting_platform:open_code
       - ./vendor/bin/drush queue:run eu_oss_catalogue
