@@ -392,7 +392,6 @@ display:
               news: view_mode_tile_horizontal
               release: view_mode_tile_horizontal
               solution: view_mode_tile_horizontal
-              video: view_mode_tile_horizontal
             'entity:taxonomy_term':
               eif_conceptual_model: default
               eif_interoperability_layer: default

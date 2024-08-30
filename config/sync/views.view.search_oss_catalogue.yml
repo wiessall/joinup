@@ -391,13 +391,12 @@ display:
               oss_solution: view_mode_tile_horizontal
               release: default
               solution: default
-              tallinn_report: default
-              video: default
             'entity:taxonomy_term':
               eif_conceptual_model: default
               eif_interoperability_layer: default
               eif_principle: default
               eif_recommendation: default
+              spdx_licence: default
               topic: default
             'entity:user':
               user: default
