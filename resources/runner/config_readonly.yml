@@ -16,3 +16,9 @@ commands:
       command: mkdir ${joinup.files_private_dir}/file-switcher -p -m ug=rwx,o=
     - task: touch
       file: ${joinup.files_private_dir}/file-switcher/disable-config-readonly
+
+  eu-oss-catalogue:disable:
+    - task: exec
+      command: mkdir ${joinup.files_private_dir}/file-switcher -p -m ug=rwx,o=
+    - task: touch
+      file: ${joinup.files_private_dir}/file-switcher/disable-eu-oss-catalogue
