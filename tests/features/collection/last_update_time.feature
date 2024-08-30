@@ -14,12 +14,9 @@ Feature: Tests the collection last update time.
     And owner content:
       | name | owner type |
       | Sean | Company    |
-    And the following collection:
-      | title             | Household Wizard |
-      | state             | published        |
-      | modification date | 2011-05-06T21:56 |
-      | creation date     | 2001-01-03       |
-      | author            | The Cleaner      |
+    And collection content:
+      | title            | state     | modification date | creation date | author      |
+      | Household Wizard | published | 2011-05-06T21:56  | 2001-01-03    | The Cleaner |
     And the following solutions:
       | title           | collection       | state     | modification date | creation date | author      | contact information   | owner | description                    |
       | Roof Hole Cover | Household Wizard | published | 2010-07-05T23:03  | 2001-01-01    | The Cleaner | Your Cleaning Company | Sean  | Keep your roof in a good shape |

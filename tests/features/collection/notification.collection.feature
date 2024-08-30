@@ -20,7 +20,7 @@ Feature: Notification test for the collection transitions.
       | NC member1     |           | nc_member1@test.com     | NC         | Member1     |
       | NC member2     |           | nc_member2@test.com     | NC         | Member2     |
       | NCS owner      |           | ncs_owner@test.com      | NC         | Owner       |
-    And collections:
+    And collection content:
       | title                  | state            | abstract     | description   | topic             | owner      | contact information        |
       | NC to propose          | draft            | No one cares | No one cares. | Supplier exchange | NC for all | Notificationous absolutous |
       | NC to publish          | proposed         | No one cares | No one cares. | Supplier exchange | NC for all | Notificationous absolutous |
