@@ -188,7 +188,6 @@ display:
               newsletter: view_mode_tile
               release: default
               solution: view_mode_tile
-              video: view_mode_tile
       query:
         type: search_api_query
         options:

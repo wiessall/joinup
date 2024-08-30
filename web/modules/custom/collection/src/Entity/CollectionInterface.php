@@ -55,4 +55,21 @@ interface CollectionInterface extends GroupInterface {
    */
   public function isClosed(): bool;
 
+  /**
+   * Whether there is any Code of Conduct what new members must accept.
+   *
+   * @return bool
+   *   TRUE if the collection is closed and there is also a published
+   *   Code of Conduct, FALSE otherwise.
+   */
+  public function hasCodeOfConductToAccept(): bool;
+
+  /**
+   * Returns the Code of Conduct, if any.
+   *
+   * @return \Drupal\Core\Entity\ContentEntityInterface|null
+   *   The Code of Conduct if it is set, NULL otherwise.
+   */
+  public function getCodeOfConduct(): ?ContentEntityInterface;
+
 }

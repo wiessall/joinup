@@ -451,7 +451,6 @@ display:
               news: default
               release: default
               solution: view_mode_search_list_item
-              video: default
             'entity:taxonomy_term':
               eif_conceptual_model: default
               eif_interoperability_layer: default
