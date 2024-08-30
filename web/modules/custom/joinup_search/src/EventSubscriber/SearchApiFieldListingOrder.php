@@ -69,7 +69,7 @@ class SearchApiFieldListingOrder implements EventSubscriberInterface {
       // If the upcoming events are selected, set the order to 'ASC'.
       // @see \Drupal\joinup\Plugin\ArbitraryFacet\EventsArbitraryFacet::getFacetDefinition
       $value = $this->facetDateHandler->isoDate((new DrupalDateTime('today'))->getTimestamp());
-      $order = _joinup_search_search_api_has_condition($searchApiQuery->getConditionGroup(), 'field_event_date', $value, '>=') ? Query::SORT_ASC : Query::SORT_DESC;
+      $order = _joinup_search_search_api_has_condition($searchApiQuery->getConditionGroup(), 'field_event_date_end', $value, '>=') ? Query::SORT_ASC : Query::SORT_DESC;
 
       $solariumApiQuery->addSort('ds_field_event_date', $order);
     }
@@ -93,8 +93,7 @@ class SearchApiFieldListingOrder implements EventSubscriberInterface {
     SearchApiQueryInterface $searchApiQuery,
     SolariumApiQueryInterface $solariumApiQuery,
   ): bool {
-    if (!($searchApiQuery->hasTag('search_api_field_field_collection_content') ||
-      $searchApiQuery->hasTag('search_api_field_field_is_content') ||
+    if (!($searchApiQuery->hasTag('search_api_field_listing_content') ||
       $searchApiQuery->hasTag('search_api_field_content_listing'))) {
       return FALSE;
     }
