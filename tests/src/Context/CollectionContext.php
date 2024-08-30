@@ -7,11 +7,10 @@ namespace Drupal\joinup\Context;
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Exception\ElementNotFoundException;
-use Drupal\Core\Datetime\DrupalDateTime;
-use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
+use Drupal\DrupalExtension\Hook\Scope\AfterNodeCreateScope;
 use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup\Traits\EntityReferenceTrait;
@@ -28,8 +27,6 @@ use Drupal\joinup\Traits\WorkflowTrait;
 use Drupal\joinup_collection\JoinupCollectionHelper;
 use Drupal\joinup_community_content\CommunityContentHelper;
 use Drupal\joinup_group\ContentCreationOptions;
-use Drupal\node\Entity\Node;
-use Drupal\node\NodeInterface;
 use Drupal\og\OgRoleInterface;
 use Drupal\og_menu\Tests\Traits\OgMenuTrait;
 use Drupal\user\Entity\User;
@@ -53,68 +50,6 @@ class CollectionContext extends RawDrupalContext {
   use UserTrait;
   use UtilityTrait;
   use WorkflowTrait;
-
-  /**
-   * Mapping of human readable field labels to machine names.
-   */
-  protected const FIELD_ALIASES = [
-    'author' => 'uid',
-    'uri' => 'uri',
-    'title' => 'title',
-    'short ID' => 'short_id',
-    'abstract' => 'abstract',
-    'access url' => 'website_url',
-    'closed' => 'closed_group',
-    'contact information' => 'contact',
-    'content creation' => 'content_creation',
-    'creation date' => 'created',
-    'description' => 'description',
-    'featured' => 'site_featured',
-    'keywords' => 'field_keywords',
-    'logo' => 'logo',
-    'moderation' => 'group_moderation',
-    'modification date' => 'changed',
-    'owner' => 'owner',
-    'published at' => 'published_at',
-    'topic' => 'field_topic',
-    'spatial coverage' => 'spatial_coverage',
-    'state' => 'field_state',
-  ];
-
-  /**
-   * Returns value mapping of human-friendly field values.
-   *
-   * Value keys are the human-friendly values used in the cucumber tables, their
-   * values are the actual field values to apply. Every value alias - value list
-   * is keyed by the un-aliased field name.
-   */
-  protected function getValueMapping(): array {
-    $mapping = [
-      'group_moderation' => ['no' => 0, 'yes' => 1],
-      'content_creation' => [
-        'facilitators and authors' => ContentCreationOptions::FACILITATORS_AND_AUTHORS,
-        'members' => ContentCreationOptions::MEMBERS,
-        'registered users' => ContentCreationOptions::REGISTERED_USERS,
-      ],
-      'closed_group' => ['no' => 0, 'yes' => 1],
-      'field_state' => [
-        'draft' => 'draft',
-        'proposed' => 'proposed',
-        'published' => 'published',
-        'archival request' => 'archival_request',
-        'archived' => 'archived',
-      ],
-    ];
-
-    Assert::assertEmpty(
-      array_diff(
-        array_keys($mapping),
-        static::FIELD_ALIASES,
-      ),
-    );
-
-    return $mapping;
-  }
 
   /**
    * Test collections.
@@ -179,191 +114,82 @@ class CollectionContext extends RawDrupalContext {
   }
 
   /**
-   * Creates a number of collections with data provided in a table.
-   *
-   * Table format:
-   * @codingStandardsIgnoreStart
-   * | title                   | abstract                                   | access url                             | closed | creation date    | description                                                                                                        | content creation                                  | featured | logo | moderation | modification date | owner | state                                              |
-   * | Dog owner collection    | Read up on all about <strong>dogs</strong> | http://dogtime.com/dog-breeds/profiles | yes|no | 28-01-1995 12:05 | The Afghan Hound is elegance personified.                                                                          | facilitators and authors|members|registered users | yes      |      | yes        |                   |       |                                                    |
-   * | Cats collection 4 ever! | Cats are cool!                             | http://mashable.com/category/cats/     | yes|no | 28-01-1995 12:06 | The domestic cat (Felis catus or Felis silvestris catus) is a small usually furry domesticated carnivorous mammal. | facilitators and authors|members|registered users | no       |      | no         |                   |       | draft|proposed|published|archival request|archived |
-   * @codingStandardsIgnoreEnd
-   *
-   * Only the title field is required.
-   *
-   * @param \Behat\Gherkin\Node\TableNode $collection_table
-   *   The collection data.
-   *
-   * @throws \Exception
-   *   Thrown when a column name is incorrect.
-   *
-   * @Given (the following )collections:
-   */
-  public function givenCollections(TableNode $collection_table): void {
-    $aliases = self::FIELD_ALIASES;
-
-    foreach ($collection_table->getColumnsHash() as $collection) {
-      $values = [];
-      // Replace the column aliases with the actual field names.
-      foreach ($collection as $key => $value) {
-        if (array_key_exists($key, $aliases)) {
-          $values[$aliases[$key]] = $value;
-        }
-        else {
-          throw new \Exception("Unknown column '$key' in collection table.");
-        }
-      }
-
-      // Convert user friendly values to machine values.
-      $values = $this->convertValueAliases($values);
-
-      // Provide default values.
-      $values = $this->provideDefaultValues($values);
-
-      $this->createCollection($values);
-    }
-  }
-
-  /**
    * Enriches the provided field values with defaults for missing values.
    *
-   * @param array $fields
-   *   An array of fields keyed by field name.
+   * @param \Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope $scope
+   *   The before node create scope.
    *
-   * @return array
-   *   The array with default values added.
+   * @BeforeNodeCreate
    */
-  protected function provideDefaultValues(array $fields): array {
+  public function defaultCollectionValues(BeforeNodeCreateScope $scope): void {
+    $node = $scope->getEntity();
+    if ($node->type !== 'collection') {
+      return;
+    }
+
     $default_values = [
-      'field_state' => 'draft',
+      'state' => 'draft',
       'abstract' => 'This is a test abstract.',
     ];
 
     foreach ($default_values as $field => $default_value) {
-      if (!isset($fields[$field])) {
-        $fields[$field] = $default_value;
+      if (!isset($node->{$field})) {
+        $node->{$field} = $default_value;
       }
     }
 
-    return $fields;
-  }
+    $mapping = [
+      'moderation' => ['no' => 0, 'yes' => 1],
+      'content creation' => [
+        'facilitators and authors' => ContentCreationOptions::FACILITATORS_AND_AUTHORS,
+        'members' => ContentCreationOptions::MEMBERS,
+        'registered users' => ContentCreationOptions::REGISTERED_USERS,
+      ],
+      'closed' => ['no' => 0, 'yes' => 1],
+      'state' => [
+        'draft' => 'draft',
+        'proposed' => 'proposed',
+        'published' => 'published',
+        'archival request' => 'archival_request',
+        'archived' => 'archived',
+      ],
+    ];
 
-  /**
-   * Converts values from user friendly to normal machine values.
-   *
-   * @param array $fields
-   *   An array of fields keyed by field name.
-   *
-   * @return array
-   *   The array with the values converted.
-   *
-   * @throws \Exception
-   *    Throws an exception when a mapped value is not found.
-   */
-  protected function convertValueAliases(array $fields): array {
-    $mapped_values = $this->getValueMapping();
-
-    foreach ($fields as $field => $value) {
-      if (isset($mapped_values[$field])) {
-        if (!isset($mapped_values[$field][$value])) {
-          throw new \Exception("Value $value is not an acceptable value for field $field.");
-        }
-
-        $fields[$field] = $mapped_values[$field][$value];
+    foreach ($mapping as $field => $values) {
+      if (isset($node->{$field}) && isset($values[$node->{$field}])) {
+        $node->{$field} = $values[$node->{$field}];
       }
     }
 
-    // Convert any entity reference field label value with the entity id.
-    $fields = $this->convertEntityReferencesValues('node', 'collection', $this->parseRdfEntityFields($fields));
-
-    return $fields;
+    // @todo Should this be merged with the other node bundles? Does it create
+    //   random test failures in search tests? Is the field optional somewhere?
+    if (empty($node->field_topic)) {
+      $node->field_topic = $this->getRandomTopic()->getName();
+    }
   }
 
   /**
-   * Creates a collection from the given property and field data.
+   * Actions to be performed after creating a collection.
    *
-   * @param array $values
-   *   An optional associative array of values, keyed by property name.
-   *
-   * @return \Drupal\collection\Entity\CollectionInterface
-   *   A new collection entity.
-   *
-   * @throws \Exception
-   *   Thrown when a given image is not found.
+   * @param \Drupal\DrupalExtension\Hook\Scope\AfterNodeCreateScope $scope
+   *   The after node create scope.
    */
-  protected function createCollection(array $values): CollectionInterface {
-    // Add logo image.
-    if (!empty($values['logo'])) {
-      $values['logo'] = [$this->createFile($values['logo'])->id()];
+  public function afterCollectionCreate(AfterNodeCreateScope $scope): void {
+    $node = $scope->getEntity();
+    if ($node->type !== 'collection') {
+      return;
     }
 
     // If the collection is featured we need to create the meta entity that
     // stores this information after creating the collection.
-    $is_featured = in_array(strtolower((string) ($values['feature'] ?? '')), [
+    $is_featured = in_array(strtolower((string) ($node->feature ?? '')), [
       'y',
       'yes',
     ]);
 
-    $this->setFallbackTopic($values);
-
-    /** @var \Drupal\collection\Entity\CollectionInterface $collection */
-    $collection = $this->createNode('collection', $values);
-
     if ($is_featured) {
-      $collection->feature();
+      $node->feature();
     }
-
-    $this->collections[$collection->id()] = $collection;
-
-    return $collection;
-  }
-
-  /**
-   * Creates a collection with data provided in a table.
-   *
-   * @codingStandardsIgnoreStart
-   * Table format:
-   * | title            | Open Data Initiative                               |
-   * | author           | Mightily Oats                                      |
-   * | logo             | logo.png                                           |
-   * | featured         | yes|no                                             |
-   * | moderation       | yes|no                                             |
-   * | closed           | yes|no                                             |
-   * | content creation | facilitators and authors|members|registered users  |
-   * | metadata url     | https://ec.europa.eu/my/url                        |
-   * | state            | draft|proposed|published|archival request|archived |
-   * @codingStandardsIgnoreEnd
-   *
-   * Only the title field is required.
-   *
-   * @param \Behat\Gherkin\Node\TableNode $collection_table
-   *   The collection data.
-   *
-   * @throws \Exception
-   *   Thrown when a column name is incorrect.
-   *
-   * @Given (the following )collection:
-   */
-  public function givenCollection(TableNode $collection_table): void {
-    $aliases = self::FIELD_ALIASES;
-
-    $values = [];
-    // Replace the column aliases with the actual field names.
-    foreach ($collection_table->getRowsHash() as $key => $value) {
-      if (array_key_exists($key, $aliases)) {
-        $values[$aliases[$key]] = $value;
-      }
-      else {
-        throw new \Exception("Unknown column '$key' in collection table.");
-      }
-    }
-
-    // Convert user friendly values to machine values.
-    $values = $this->convertValueAliases($values);
-
-    // Provide default values.
-    $values = $this->provideDefaultValues($values);
-
-    $this->createCollection($values);
   }
 
   /**
@@ -792,138 +618,6 @@ class CollectionContext extends RawDrupalContext {
     }
 
     $node->collection = $collection->label();
-  }
-
-  /**
-   * Creates and saves an node of a specific bundle.
-   *
-   * @param string $bundle
-   *   The group entity bundle.
-   * @param array $values
-   *   An array of field values.
-   *
-   * @return \Drupal\node\NodeInterface
-   *   The newly created entity.
-   *
-   * @throws \Drupal\Core\Entity\EntityStorageException
-   *   Thrown when the entity cannot be saved.
-   */
-  protected static function createNode(string $bundle, array $values): NodeInterface {
-    foreach (['changed', 'created', 'published_at'] as $field) {
-      if (isset($values[$field])) {
-        $date = new DrupalDateTime($values[$field]);
-        $values[$field] = $date->getTimestamp();
-      }
-    }
-
-    $values['type'] = $bundle;
-    $entity = Node::create($values);
-    $entity->save();
-
-    return $entity;
-  }
-
-  /**
-   * Replaces collection field aliases in the collection node object.
-   *
-   * @param \Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope $scope
-   *   The before node create scope.
-   *
-   * @BeforeNodeCreate
-   */
-  public function convertCollectionFieldAliases(BeforeNodeCreateScope $scope): void {
-    $node = $scope->getEntity();
-    if ($node->type !== 'collection') {
-      return;
-    }
-    $this->convertFieldAliases($node, self::FIELD_ALIASES);
-  }
-
-  /**
-   * Adds a default logo image to the collection if it was not defined.
-   *
-   * @param \Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope $scope
-   *   The before node create scope.
-   *
-   * @BeforeNodeCreate
-   */
-  public function ensureCollectionLogo(BeforeNodeCreateScope $scope): void {
-    $node = $scope->getEntity();
-    if ($node->type !== 'collection') {
-      return;
-    }
-    // Add logo image.
-    if (!empty($node->logo)) {
-      $node->logo = $this->getFileSourcePath($node->logo);
-    }
-  }
-
-  /**
-   * Converts values from user-friendly to normal machine values.
-   *
-   * @param \Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope $scope
-   *   The before node create scope.
-   *
-   * @BeforeNodeCreate
-   */
-  public function convertCollectionValueAliases(BeforeNodeCreateScope $scope): void {
-    $node = $scope->getEntity();
-    if ($node->type !== 'collection') {
-      return;
-    }
-    $value_mapping = $this->getValueMapping();
-    foreach ((array) $node as $field => $value) {
-      if (!isset($value_mapping[$field])) {
-        continue;
-      }
-      Assert::assertArrayHasKey(
-        $value,
-        $value_mapping[$field],
-        sprintf(
-          "Value '%s' is not an acceptable value for collection field %s.",
-          $value,
-          $field,
-        )
-      );
-
-      $node->$field = $value_mapping[$field][$value];
-    }
-  }
-
-  /**
-   * Converts the value of collection link fields to the expected format.
-   *
-   * \Drupal\Driver\Fields\Drupal8\LinkHandler expects multi-column link field
-   * values; this is a workaround for a not-yet-applied patch we have in the
-   * OSS catalogue EPIC branch.
-   *
-   * @param \Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope $scope
-   *   The before node create scope.
-   *
-   * @BeforeNodeCreate
-   */
-  public function convertLinkFields(BeforeNodeCreateScope $scope): void {
-    $node = $scope->getEntity();
-    if ($node->type !== 'collection') {
-      return;
-    }
-    $entityFieldManager = \Drupal::service('entity_field.manager');
-    assert($entityFieldManager instanceof EntityFieldManagerInterface);
-    $fields = $entityFieldManager->getFieldDefinitions('node', 'collection');
-
-    foreach ((array) $node as $field => $value) {
-      if ($fields[$field]->getType() !== 'link') {
-        continue;
-      }
-
-      if (strpos($value, ' - ') || strpos($field, ':')) {
-        continue;
-      }
-
-      // Column marker is ':', key-value separator is ' - '.
-      // See RawDrupalContext::parseEntityFields().
-      $node->$field = "0:  - 1: $value";
-    }
   }
 
 }
