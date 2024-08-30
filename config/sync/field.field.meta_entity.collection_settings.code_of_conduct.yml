@@ -1,0 +1,25 @@
+uuid: 00d07c8c-c71f-4aa0-a6dd-c8e0bcbcd6f3
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.meta_entity.code_of_conduct
+    - meta_entity.type.collection_settings
+id: meta_entity.collection_settings.code_of_conduct
+field_name: code_of_conduct
+entity_type: meta_entity
+bundle: collection_settings
+label: 'Code of Conduct'
+description: 'Users should accept and agree to the content of this custom page before they ask for membership. <em>This only applies for closed collections.</em>'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: views
+  handler_settings:
+    view:
+      view_name: custom_pages
+      display_name: entity_reference_1
+      arguments: {  }
+field_type: entity_reference
