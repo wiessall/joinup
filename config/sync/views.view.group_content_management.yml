@@ -14,7 +14,6 @@ dependencies:
     - node.type.news
     - node.type.release
     - node.type.solution
-    - node.type.video
   module:
     - csv_serialization
     - datetime
@@ -600,7 +599,6 @@ display:
             event: event
             news: news
             release: release
-            video: video
           group: 1
           exposed: true
           expose:

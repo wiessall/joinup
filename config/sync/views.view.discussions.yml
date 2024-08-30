@@ -261,7 +261,6 @@ display:
               news: default
               release: default
               solution: default
-              video: default
             'entity:taxonomy_term':
               eif_conceptual_model: default
               eif_interoperability_layer: default

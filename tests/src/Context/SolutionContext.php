@@ -675,7 +675,7 @@ class SolutionContext extends RawDrupalContext {
   public function verifyDeleteLinkVisibility(TableNode $check_table): void {
     foreach ($check_table->getColumnsHash() as $values) {
       $user = $this->getUserByName($values['user']);
-      $solution = $this->getEntityByLabel('rdf_entity', $values['solution']);
+      $solution = $this->getEntityByLabel('node', $values['solution']);
       $visible = $values['delete link'] === 'yes';
       $this->assertGroupEntityOperation($visible, 'delete', $solution, $user);
     }
@@ -707,7 +707,7 @@ class SolutionContext extends RawDrupalContext {
    * @Given the multilingual :title solution of :collection collection
    */
   public function theMultilingualSolution(string $title, string $collection): void {
-    $collection = $this->getEntityByLabel('rdf_entity', $collection, 'collection');
+    $collection = $this->getEntityByLabel('node', $collection, 'collection');
     $values = [
       'label' => $title,
       'field_is_state' => 'published',

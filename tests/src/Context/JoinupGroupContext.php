@@ -13,6 +13,7 @@ use Drupal\joinup\Traits\MailCollectorTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup_group\Entity\AnnouncementInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
+use Drupal\meta_entity\Entity\MetaEntity;
 use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\og\OgMembershipInterface;
 use PHPUnit\Framework\Assert;
@@ -53,7 +54,7 @@ class JoinupGroupContext extends RawDrupalContext {
    * @When I go to the member(ship) permissions table of :label
    */
   public function visitMembershipPermissionsTable(string $label): void {
-    $group = $this->getEntityByLabel('rdf_entity', $label);
+    $group = $this->getEntityByLabel('node', $label);
     $url = Url::fromRoute('joinup_group.membership_permissions_info', [
       'rdf_entity' => $group->id(),
     ]);
@@ -69,7 +70,7 @@ class JoinupGroupContext extends RawDrupalContext {
    * @Given I go to the discussions page of :label
    */
   public function visitDiscussionPage(string $label): void {
-    $group = $this->getEntityByLabel('rdf_entity', $label);
+    $group = $this->getEntityByLabel('node', $label);
 
     $url = Url::fromRoute('view.discussions.overview', [
       'rdf_entity' => $group->id(),
@@ -87,7 +88,7 @@ class JoinupGroupContext extends RawDrupalContext {
    * @Given I go to the manage content page of :label
    */
   public function visitManageContentPage(string $label): void {
-    $group = $this->getEntityByLabel('rdf_entity', $label);
+    $group = $this->getEntityByLabel('node', $label);
 
     $url = Url::fromRoute('view.group_content_management.manage', [
       'rdf_entity' => $group->id(),
@@ -116,7 +117,7 @@ class JoinupGroupContext extends RawDrupalContext {
    * @Then the :group_label :group_type should have a community content titled :group_title
    */
   public function assertNodeOgMembership(string $group_label, string $group_type, string $content_title): void {
-    $group = $this->getEntityByLabel('rdf_entity', $group_label, $group_type);
+    $group = $this->getEntityByLabel('node', $group_label, $group_type);
     $node = $this->getEntityByLabel('node', $content_title);
     if ($node->get(OgGroupAudienceHelperInterface::DEFAULT_FIELD)->target_id !== $group->id()) {
       throw new \Exception("The node '$content_title' is not associated with collection '{$group->label()}'.");
@@ -223,9 +224,10 @@ class JoinupGroupContext extends RawDrupalContext {
    */
   public function visitGroupAnnouncementsPage(string $group_label, string $group_type): void {
     assert(in_array($group_type, ['collection', 'solution']));
-    $group = $this->getEntityByLabel('rdf_entity', $group_label, $group_type);
+    $group = $this->getEntityByLabel('node', $group_label, $group_type);
+    assert($group instanceof GroupInterface);
     $url = Url::fromRoute('view.announcements.group', [
-      'rdf_entity' => $group->id(),
+      'node' => $group->id(),
     ])->toString();
     $this->visitPath($url);
   }
@@ -311,7 +313,7 @@ class JoinupGroupContext extends RawDrupalContext {
       ];
       foreach ($row as $key => $value) {
         if ($key === 'group') {
-          $group = $this->getEntityByLabel('rdf_entity', $value);
+          $group = $this->getEntityByLabel('node', $value);
           if (!$group instanceof GroupInterface) {
             throw new \InvalidArgumentException("'$value' should be either a collection or a solution");
           }
@@ -407,6 +409,65 @@ class JoinupGroupContext extends RawDrupalContext {
     /** @var \Drupal\joinup_group\Entity\AnnouncementInterface $announcement */
     $announcement = $storage->load(reset($mids));
     return $announcement;
+  }
+
+  /**
+   * Sets a group settings (meta entity) field to the given value.
+   *
+   * @param string $config
+   *   The configuration (field name) of the collection's settings meta entity.
+   * @param string $groupLabel
+   *   The label of the collection or solution.
+   * @param string $group
+   *   The type of the group ("collection" or "solution").
+   * @param string $value
+   *   The new value of the meta entity field. This should be an entity label if
+   *   the field is an entity reference field.
+   * @param string|null $entityTypeId
+   *   The entity type ID (or alias) if the value is an entity reference.
+   *
+   * @Given the :config setting of the :collectionLabel :group is set to :value
+   * @Given the :config setting of the :collectionLabel :group is set to :value :entityTypeId
+   */
+  public function givenCollectionSetting(
+    string $config,
+    string $groupLabel,
+    string $group,
+    string $value,
+    ?string $entityTypeId = NULL,
+  ): void {
+    Assert::assertTrue(in_array($group, ['collection', 'solution']));
+    $groupEntity = $this->getEntityByLabel('rdf_entity', $groupLabel, $group);
+    Assert::assertInstanceOf(GroupInterface::class, $groupEntity);
+    $fieldName = preg_replace('/\s+/', '_', mb_strtolower($config));
+
+    try {
+      $groupEntity->getSetting($fieldName);
+    }
+    catch (\InvalidArgumentException) {
+      Assert::fail(sprintf(
+        "The '%s' setting does not exist. (Tried to get field name '%s'.)",
+        $config,
+        $fieldName,
+      ));
+    }
+
+    // Assume entity reference field and an entity label in the $value variable.
+    if (is_string($entityTypeId)) {
+      $value = $this->getEntityByLabel(static::translateEntityTypeAlias($entityTypeId), $labelToSearchFor = $value);
+      Assert::assertNotEmpty(
+        $value,
+        sprintf(
+          "Cannot find '%s' entity with label '%s'.",
+          $entityTypeId,
+          $labelToSearchFor
+        ),
+      );
+    }
+
+    MetaEntity::loadOrCreate("{$group}_settings", $groupEntity)
+      ->set($fieldName, $value)
+      ->save();
   }
 
 }

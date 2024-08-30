@@ -8,8 +8,16 @@ use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\joinup_bundle_class\AbstractInterface;
+use Drupal\joinup_bundle_class\DescriptionInterface;
 use Drupal\joinup_bundle_class\LogoInterface;
 use Drupal\joinup_bundle_class\ShortIdInterface;
+use Drupal\joinup_featured\FeaturedContentInterface;
+use Drupal\joinup_publication_date\Entity\EntityPublicationTimeInterface;
+use Drupal\joinup_rdf\Entity\RdfSyncEntityInterface;
+use Drupal\joinup_workflow\ArchivableEntityInterface;
+use Drupal\joinup_workflow\EntityWorkflowStateInterface;
+use Drupal\node\NodeInterface;
 use Drupal\og\OgMembershipInterface;
 use Drupal\og\OgRoleInterface;
 use Drupal\topic\Entity\TopicReferencingEntityInterface;
@@ -19,7 +27,18 @@ use Drupal\topic\Entity\TopicReferencingEntityInterface;
  *
  * This comprises collections and solutions.
  */
-interface GroupInterface extends LogoInterface, ShortIdInterface, TopicReferencingEntityInterface {
+interface GroupInterface extends
+  NodeInterface,
+  EntityPublicationTimeInterface,
+  EntityWorkflowStateInterface,
+  FeaturedContentInterface,
+  ArchivableEntityInterface,
+  DescriptionInterface,
+  AbstractInterface,
+  LogoInterface,
+  ShortIdInterface,
+  TopicReferencingEntityInterface,
+  RdfSyncEntityInterface {
 
   /**
    * Flag for pre-moderated groups.

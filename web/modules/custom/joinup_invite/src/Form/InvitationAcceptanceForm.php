@@ -1,0 +1,288 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Drupal\joinup_invite\Form;
+
+use Drupal\Component\Utility\Crypt;
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Access\AccessResultInterface;
+use Drupal\Core\Form\FormBase;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Routing\CurrentRouteMatch;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Site\Settings;
+use Drupal\collection\Entity\CollectionInterface;
+use Drupal\joinup_group\Entity\GroupInterface;
+use Drupal\joinup_invite\Entity\InvitationInterface;
+use Drupal\joinup_invite\Event\InvitationEvent;
+use Drupal\joinup_invite\Event\InvitationEventInterface;
+use Drupal\joinup_invite\Event\InvitationEvents;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+
+/**
+ * Form that accepts a user's invitation to a group's entity.
+ *
+ * It is possible for certain users such as content owners, facilitators and
+ * moderators to invite any user to look at certain content. The user will
+ * receive an e-mail with an invitation link. The link leads to this page, which
+ * will accept (or reject) the invitation. It also changes the status of the
+ * invitation from 'pending' to 'accepted' (or 'rejected'). This data is stored
+ * in the Message entity that was used to send the notification.
+ *
+ * For an example implementation, see the InviteToDiscussionForm.
+ *
+ * @see \Drupal\joinup_discussion\Form\InviteToDiscussionForm
+ */
+class InvitationAcceptanceForm extends FormBase {
+
+  /**
+   * The identifier for accepting an invitation.
+   *
+   * @var string
+   */
+  const string ACTION_ACCEPT = 'accept';
+
+  /**
+   * The identifier for rejecting an invitation.
+   *
+   * @var string
+   */
+  const string ACTION_REJECT = 'reject';
+
+  public function __construct(
+    protected EventDispatcherInterface $eventDispatcher,
+    protected CurrentRouteMatch $currentRouteMatch,
+  ) {}
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container): self {
+    return new static(
+      $container->get('event_dispatcher'),
+      $container->get('current_route_match'),
+    );
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getFormId(): string {
+    return 'invitation_form';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function buildForm(array $form, FormStateInterface $form_state, ?InvitationInterface $invitation = NULL, ?string $action = NULL): array {
+    $group = $invitation->getEntity();
+    $owner = $invitation->getOwner();
+
+    $form['text'] = [
+      '#type' => 'html_tag',
+      '#tag' => 'p',
+      '#value' =>
+      $this->t(
+         'You have been invited by <a href=":owner-url" target="_blank">@owner-name</a> to join the <a href=":parent-url" target="_blank">@parent-name</a>',
+          [
+            ':owner-url' => $owner->toUrl()->toString(),
+            '@owner-name' => $owner->getDisplayName(),
+            ':parent-url' => $group->toUrl()->toString(),
+            '@parent-name' => $group->label(),
+          ]
+      ),
+    ];
+
+    if ($group instanceof CollectionInterface &&
+      $group->hasCodeOfConductToAccept() &&
+      $codeOfConduct = $group->getCodeOfConduct()) {
+      $args = [
+        ':url' => $codeOfConduct->toUrl()->toString(),
+      ];
+
+      $form['code_of_conduct'] = [
+        '#type' => 'checkbox',
+        '#title' => $this->t('I have read and agree to the <a href=":url" target="_blank">Code of conduct</a>.', $args),
+        '#required_error' => $this->t('You must agree to the <a href=":url" target="_blank">Code of conduct</a>.', $args),
+        '#return_value' => $codeOfConduct->getRevisionId(),
+        '#required' => TRUE,
+      ];
+    }
+
+    if ($group instanceof GroupInterface && self::ACTION_ACCEPT === $action) {
+      $form['subscribe'] = [
+        '#type' => 'checkbox',
+        '#title' => $this->t(
+          'Notify me when content is published in <a href=":parent-url" target="_blank">@parent-name</a>.',
+          [
+            ':parent-url' => $group->toUrl()->toString(),
+            '@parent-name' => $group->label(),
+          ]
+        ),
+      ];
+    }
+
+    $form['actions'] = [
+      '#type' => 'actions',
+      'cancel' => [
+        '#type' => 'link',
+        '#title' => $this->t('Cancel'),
+        '#attributes' => ['class' => ['button']],
+        '#url' => $invitation->getEntity()->toUrl(),
+        '#weight' => 10,
+      ],
+      'submit' => [
+        '#type' => 'submit',
+        '#value' => $this->t('Accept'),
+      ],
+    ];
+    if (self::ACTION_ACCEPT !== $action) {
+      $form['actions']['reject'] = [
+        '#type' => 'submit',
+        '#value' => $this->t('Reject'),
+        '#submit' => ['::rejectForm'],
+        '#limit_validation_errors' => [],
+      ];
+    }
+
+    return $form;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function submitForm(array &$form, FormStateInterface $form_state): void {
+    $subscribe = (bool) $form_state->getValue('subscribe');
+
+    /** @var \Drupal\joinup_invite\Entity\InvitationInterface $invitation */
+    $invitation = $this->currentRouteMatch->getParameter('invitation');
+    $this->updateInvitation($invitation, self::ACTION_ACCEPT, $subscribe);
+    $this->redirectToGroup($form_state);
+  }
+
+  /**
+   * Rejects the form.
+   *
+   * @param array $form
+   *   The form array.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The form state.
+   */
+  public function rejectForm(array &$form, FormStateInterface $form_state): void {
+    /** @var \Drupal\joinup_invite\Entity\InvitationInterface $invitation */
+    $invitation = $this->currentRouteMatch->getParameter('invitation');
+    $this->updateInvitation($invitation, self::ACTION_REJECT);
+    $this->redirectToGroup($form_state);
+  }
+
+  /**
+   * Update invitation.
+   *
+   * @param \Drupal\joinup_invite\Entity\InvitationInterface $invitation
+   *   The invitation entity.
+   * @param string $action
+   *   The action to take.
+   * @param bool $subscribe
+   *   Whatever subscribe or not.
+   */
+  protected function updateInvitation(InvitationInterface $invitation, string $action, bool $subscribe = FALSE): void {
+    $event = $this->getEvent($invitation, $action, $subscribe);
+    if ($invitation->getStatus() !== InvitationInterface::STATUS_PENDING) {
+      $this->eventDispatcher->dispatch($event, InvitationEvents::NOT_PENDING_EVENT);
+      return;
+    }
+
+    switch ($action) {
+      case self::ACTION_ACCEPT:
+        $invitation->accept()->save();
+        $this->eventDispatcher->dispatch($event, InvitationEvents::ACCEPT_INVITATION_EVENT);
+        break;
+
+      case self::ACTION_REJECT:
+        $invitation->reject()->save();
+        $this->eventDispatcher->dispatch($event, InvitationEvents::REJECT_INVITATION_EVENT);
+        break;
+    }
+  }
+
+  /**
+   * Redirects to group.
+   *
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The form state.
+   */
+  protected function redirectToGroup(FormStateInterface $form_state): void {
+    /** @var \Drupal\joinup_invite\Entity\InvitationInterface $invitation */
+    $invitation = $this->currentRouteMatch->getParameter('invitation');
+    $form_state->setRedirectUrl($invitation->getEntity()->toUrl());
+  }
+
+  /**
+   * Access check for the invitation route.
+   *
+   * Access is granted only if the hash value is correct. This allows users to
+   * accept the invitation even if they are not currently logged in to the
+   * website.
+   *
+   * @param \Drupal\joinup_invite\Entity\InvitationInterface $invitation
+   *   The invitation which is being accepted or rejected.
+   * @param string $action
+   *   The action which is being taken. Can be either 'accept' or 'reject'.
+   * @param string $hash
+   *   The hash value to check.
+   * @param \Drupal\Core\Session\AccountInterface $user
+   *   Account interface.
+   *
+   * @return \Drupal\Core\Access\AccessResultInterface
+   *   The access result.
+   */
+  public function access(InvitationInterface $invitation, string $action, string $hash, AccountInterface $user): AccessResultInterface {
+    return AccessResult::allowedIf(
+      $user->isAuthenticated() &&
+      static::generateHash($invitation, $action) === $hash
+    );
+  }
+
+  /**
+   * Returns a unique hash based on the invitation and action.
+   *
+   * This protects the invitations from being brute forced.
+   *
+   * @param \Drupal\joinup_invite\Entity\InvitationInterface $invitation
+   *   The invitation.
+   * @param string $action
+   *   The action which is being taken. Can be either 'accept' or 'reject'.
+   *
+   * @return string
+   *   A unique hash consisting of 8 lowercase alphanumeric characters, dashes
+   *   and underscores.
+   */
+  public static function generateHash(InvitationInterface $invitation, string $action): string {
+    $data = $invitation->id();
+    $data .= $action;
+    return strtolower(substr(Crypt::hmacBase64($data, Settings::getHashSalt()), 0, 8));
+  }
+
+  /**
+   * Returns an InvitationEvent for the given invitation and action.
+   *
+   * @param \Drupal\joinup_invite\Entity\InvitationInterface $invitation
+   *   The invitation for which to create an event.
+   * @param string $action
+   *   The action that has been taken on the invitation.
+   * @param bool $subscribe
+   *   Whatever subscribe or not.
+   *
+   * @return \Drupal\joinup_invite\Event\InvitationEventInterface
+   *   The event.
+   */
+  protected function getEvent(InvitationInterface $invitation, string $action, bool $subscribe): InvitationEventInterface {
+    return (new InvitationEvent())
+      ->setInvitation($invitation)
+      ->setAction($action)
+      ->setSubscribe($subscribe);
+  }
+
+}

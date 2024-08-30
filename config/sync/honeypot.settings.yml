@@ -21,6 +21,5 @@ form_settings:
   node_glossary_form: true
   node_news_form: true
   node_newsletter_form: true
-  node_video_form: false
   user_pass: false
   user_register_form: false

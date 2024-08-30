@@ -39,7 +39,6 @@ settings:
       news: view_mode_tile
       release: view_mode_tile
       solution: view_mode_tile
-      video: view_mode_tile
     'entity:taxonomy_term':
       eif_conceptual_model: default
       eif_interoperability_layer: default

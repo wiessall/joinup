@@ -178,7 +178,7 @@ class LinkContext extends RawDrupalContext {
         //   a follow up should be created for the entity ID being numeric. For
         //   RDF entities, it was already just ID - might not needed.
         try {
-          $entity = $this->getEntityByLabel('rdf_entity', $matches[1]);
+          $entity = $this->getEntityByLabel('node', $matches[1]);
         }
         catch (\Exception $e) {
           $entity = $this->getEntityByLabel('node', $matches[1]);
