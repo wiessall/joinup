@@ -833,11 +833,11 @@ class JoinupSearchContext extends RawDrupalContext {
     $option = strtolower($option);
     $options = ['all', 'archived', 'unarchived'];
     Assert::assertTrue(in_array($option, $options), sprintf('The option should be one of: %s', implode(', ', $options)));
-    $entity = $this->getEntityByLabel('rdf_entity', $label, $bundle);
+    $entity = $this->getEntityByLabel('node', $label, $bundle);
     $data = $entity->get('listing_content')->getValue();
     if (!empty($data)) {
       $data[0]['value']['show_archived'] = 'all';
-      $entity->set($field_name, $data);
+      $entity->set('listing_content', $data);
       $entity->save();
     }
   }
@@ -859,7 +859,7 @@ class JoinupSearchContext extends RawDrupalContext {
   public function setGroupContentFacet(string $label, string $bundle, string $facet, string $region): void {
     $facet = strtolower($facet);
     $facet = self::getFacetIdFromAlias($facet);
-    $entity = $this->getEntityByLabel('rdf_entity', $label, $bundle);
+    $entity = $this->getEntityByLabel('node', $label, $bundle);
     $region = strtolower($region);
     $data = $entity->get('listing_content')->getValue();
     if (!empty($data)) {

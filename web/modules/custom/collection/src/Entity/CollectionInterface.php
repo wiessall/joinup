@@ -4,20 +4,13 @@ declare(strict_types=1);
 
 namespace Drupal\collection\Entity;
 
-use Drupal\joinup_bundle_class\AbstractInterface;
-use Drupal\joinup_bundle_class\DescriptionInterface;
-use Drupal\joinup_featured\FeaturedContentInterface;
+use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
-use Drupal\joinup_publication_date\Entity\EntityPublicationTimeInterface;
-use Drupal\joinup_rdf\Entity\RdfSyncEntityInterface;
-use Drupal\joinup_workflow\ArchivableEntityInterface;
-use Drupal\joinup_workflow\EntityWorkflowStateInterface;
-use Drupal\node\NodeInterface;
 
 /**
  * Interface for collection entities in Joinup.
  */
-interface CollectionInterface extends NodeInterface, EntityPublicationTimeInterface, EntityWorkflowStateInterface, GroupInterface, FeaturedContentInterface, ArchivableEntityInterface, DescriptionInterface, AbstractInterface, RdfSyncEntityInterface {
+interface CollectionInterface extends GroupInterface {
 
   /**
    * Returns the solutions that are affiliated with this collection.
@@ -62,5 +55,22 @@ interface CollectionInterface extends NodeInterface, EntityPublicationTimeInterf
    *   TRUE if the collection is closed, FALSE if it is open.
    */
   public function isClosed(): bool;
+
+  /**
+   * Whether there is any Code of Conduct what new members must accept.
+   *
+   * @return bool
+   *   TRUE if the collection is closed and there is also a published
+   *   Code of Conduct, FALSE otherwise.
+   */
+  public function hasCodeOfConductToAccept(): bool;
+
+  /**
+   * Returns the Code of Conduct, if any.
+   *
+   * @return \Drupal\Core\Entity\ContentEntityInterface|null
+   *   The Code of Conduct if it is set, NULL otherwise.
+   */
+  public function getCodeOfConduct(): ?ContentEntityInterface;
 
 }

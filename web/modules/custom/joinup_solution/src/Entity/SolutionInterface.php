@@ -5,23 +5,15 @@ declare(strict_types=1);
 namespace Drupal\joinup_solution\Entity;
 
 use Drupal\collection\Entity\CollectionContentInterface;
-use Drupal\joinup_bundle_class\AbstractInterface;
-use Drupal\joinup_bundle_class\DescriptionInterface;
 use Drupal\joinup_distribution\Entity\DistributionsParentInterface;
-use Drupal\joinup_featured\FeaturedContentInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\Entity\PinnableGroupContentInterface;
-use Drupal\joinup_publication_date\Entity\EntityPublicationTimeInterface;
-use Drupal\joinup_rdf\Entity\RdfSyncEntityInterface;
 use Drupal\joinup_release\Entity\ReleaseInterface;
-use Drupal\joinup_workflow\ArchivableEntityInterface;
-use Drupal\joinup_workflow\EntityWorkflowStateInterface;
-use Drupal\node\NodeInterface;
 
 /**
  * Interface for solution entities in Joinup.
  */
-interface SolutionInterface extends NodeInterface, CollectionContentInterface, EntityPublicationTimeInterface, EntityWorkflowStateInterface, FeaturedContentInterface, PinnableGroupContentInterface, GroupInterface, DistributionsParentInterface, ArchivableEntityInterface, DescriptionInterface, AbstractInterface, RdfSyncEntityInterface {
+interface SolutionInterface extends GroupInterface, CollectionContentInterface, PinnableGroupContentInterface, DistributionsParentInterface {
 
   /**
    * Returns the child releases.

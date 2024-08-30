@@ -5,7 +5,7 @@ Feature: Messaging group announcements
   @group-e
   Scenario Outline: Announcement creation and transitions
 
-    Given the following <group>s:
+    Given <group> content:
       | title        | state     |
       | Fail pension | published |
       | Hidden gems  | draft     |
@@ -403,11 +403,11 @@ Feature: Messaging group announcements
 
   @javascript @group-e
   Scenario: Announcement moderation
-    Given the following collections:
+    Given collection content:
       | title       | state     |
       | Collection1 | published |
       | Collection2 | published |
-    And the following solutions:
+    And solution content:
       | title                 | collection  | state     |
       | Collection1 Solution1 | Collection1 | published |
       | Collection1 Solution2 | Collection1 | published |

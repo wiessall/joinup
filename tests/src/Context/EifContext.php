@@ -126,7 +126,7 @@ class EifContext extends RawDrupalContext {
    * @Given the following EIF perspective data for the :solution solution:
    */
   public function givenEifPerspectiveOfSolution(TableNode $table_data, string $solution): void {
-    $solution = $this->getEntityByLabel('rdf_entity', $solution, 'solution');
+    $solution = $this->getEntityByLabel('node', $solution, 'solution');
     $fields = [];
     foreach ($table_data->getRows() as $row) {
       if ($row[0] === 'uri') {
@@ -201,7 +201,7 @@ class EifContext extends RawDrupalContext {
    * @Given there should be an EIF perspective associated with the :solution solution
    */
   public function assertSolutionWithPerspective(string $solution): void {
-    $solution = $this->getEntityByLabel('rdf_entity', $solution, 'solution');
+    $solution = $this->getEntityByLabel('node', $solution, 'solution');
     if (empty(\Drupal::getContainer()->get('meta_entity.repository')->getMetaEntityForEntity($solution, 'eif_perspective'))) {
       throw new \Exception('No perspective was found for the solution');
     }
@@ -216,7 +216,7 @@ class EifContext extends RawDrupalContext {
    * @Given I delete the EIF perspective of the :solution_label solution
    */
   public function deletePerspectiveOfSolution(string $solution_label): void {
-    $solution = $this->getEntityByLabel('rdf_entity', $solution_label, 'solution');
+    $solution = $this->getEntityByLabel('node', $solution_label, 'solution');
     $eif_perspective = $solution->get('eif_perspective')->entity;
     $eif_perspective->delete();
   }
