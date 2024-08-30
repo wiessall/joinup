@@ -16,7 +16,7 @@ Feature: Subscribing to collection newsletters
     And owner content:
       | name              |
       | Antonios Katsaros |
-    And the following collections:
+    And collection content:
       | title    | description             | logo     | owner             | contact information   | state     | topic                   |
       | Volkor X | We do not come in peace | logo.png | Antonios Katsaros | Charalambos Demetriou | published | Statistics and Analysis |
     And "news" content:
