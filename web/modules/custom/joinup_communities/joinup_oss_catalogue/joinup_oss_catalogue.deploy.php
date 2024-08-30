@@ -17,9 +17,9 @@ function joinup_oss_catalogue_deploy_111200(): void {
   /** @var \Drupal\collection\Entity\CollectionInterface $collection */
   $collection = \Drupal::entityTypeManager()->getStorage('rdf_entity')
     ->load(OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID);
-
+  $state = joinup_oss_catalogue_is_enabled() ? 'published' : 'draft';
   $collection
-    ?->set('field_ar_state', 'published')
+    ?->set('field_ar_state', $state)
       ->set('path', ['alias' => '/eu-oss-catalogue', 'pathauto' => 0])
       ->save();
 }
