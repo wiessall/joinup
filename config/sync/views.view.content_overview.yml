@@ -622,7 +622,6 @@ display:
               licence: default
               news: view_mode_tile
               release: default
-              video: view_mode_tile
             'entity:rdf_entity':
               collection: view_mode_tile
               contact_information: default

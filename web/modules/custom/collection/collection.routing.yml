@@ -1,21 +1,11 @@
-joinup_collection.subscribe_to_collection_form:
-  path: '/ajax/collection/{node}/subscribe'
+# Collection routing definition
+entity.node.subscribe:
+  path: '/node/{node}/subscribe'
   defaults:
     _form: \Drupal\collection\Form\SubscribeToCollectionForm
+    _title_callback: Drupal\collection\Form\SubscribeToCollectionForm::title
   requirements:
     _custom_access: \Drupal\collection\Form\SubscribeToCollectionForm::access
-  options:
-    parameters:
-      node:
-        type: entity:node
-        bundle:
-          - collection
-joinup_collection.subscribe_to_collection_form.after_authenticating:
-  path: '/ajax/collection/{node}/subscribe/auth'
-  defaults:
-    _controller: Drupal\collection\Form\SubscribeToCollectionForm::showSubscribeDialog
-  requirements:
-    _custom_access: \Drupal\collection\Form\SubscribeToCollectionForm::accessToSubscribeDialogAfterAuthenticating
   options:
     parameters:
       node:

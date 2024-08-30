@@ -6,8 +6,10 @@ namespace Drupal\joinup_solution\Form;
 
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\joinup_community_content\CommunityContentHelper;
+use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\Form\JoinGroupFormBase;
 use Drupal\og\OgMembershipInterface;
+use Drupal\user\UserInterface;
 
 /**
  * A simple form with a button to join or leave a solution.
@@ -46,8 +48,8 @@ class JoinSolutionForm extends JoinGroupFormBase {
   /**
    * {@inheritdoc}
    */
-  protected function createMembership(string $state, array $roles): OgMembershipInterface {
-    $membership = parent::createMembership($state, $roles);
+  protected function createMembership(string $state, array $roles, UserInterface $user, GroupInterface $group): OgMembershipInterface {
+    $membership = parent::createMembership($state, $roles, $user, $group);
 
     $bundles = [];
     foreach (CommunityContentHelper::BUNDLES as $bundle) {

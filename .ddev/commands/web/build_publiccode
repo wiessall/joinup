@@ -18,7 +18,6 @@ cp web/themes/ventuno/assets/images/favicon/favicon-32x32.png $EDITOR_DIR/src/as
 # Build the distribution. It needs Node 10 :(
 nvm install 10
 yarn --cwd $EDITOR_DIR install
-yarn --cwd $EDITOR_DIR build
 yarn --cwd $EDITOR_DIR build-prod
 
 # Copy the distribution under webroot.
