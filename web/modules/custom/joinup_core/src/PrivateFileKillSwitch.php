@@ -56,6 +56,7 @@ class PrivateFileKillSwitch implements KillSwitchInterface {
    *   Type.
    *
    * @return string
+   *   The file path.
    */
   protected function getFilePath(string $type): string {
     return self::DIRECTORY . DIRECTORY_SEPARATOR . basename($type);

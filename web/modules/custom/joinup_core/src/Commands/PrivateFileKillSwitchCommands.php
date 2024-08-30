@@ -7,12 +7,9 @@ namespace Drupal\joinup_core\Commands;
 use Drupal\joinup_core\KillSwitchInterface;
 use Drush\Attributes as CLI;
 use Drush\Commands\DrushCommands;
-use Drush\Drupal\Commands\sql\SanitizeCommands;
 
 /**
  * Private file kill switch commands.
- *
- * @see \Drush\Drupal\Commands\sql\SanitizeCommands::sanitize()
  */
 class PrivateFileKillSwitchCommands extends DrushCommands {
 
