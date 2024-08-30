@@ -22,8 +22,8 @@ class PrivateFileKillSwitch implements KillSwitchInterface {
    */
   public function remove(string $type): void {
     if ($this->exists($type)) {
-      $file = $this->getFilePath($type);
-      $this->fileSystem->unlink($file);
+      $realPath = $this->fileSystem->realpath($this->getFilePath($type));
+      $this->fileSystem->unlink($realPath);
     }
   }
 
