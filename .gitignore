@@ -45,8 +45,6 @@
 
 # Ignore the cookie consent killswitch.
 /disable-cookie-consent
-# Ignore the EU OSS Catalogue killswitch.
-/disable-eu-oss-catalogue
 
 # Ignore temporary and auto-generated files.
 /tmp/
