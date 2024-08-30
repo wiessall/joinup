@@ -13,6 +13,7 @@ use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\JoinupGroupManagerInterface;
 use Drupal\node\NodeInterface;
+use Drupal\rdf_sync\RdfSyncMapper;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -25,34 +26,15 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class GroupContextCondition extends ConditionPluginBase implements ContainerFactoryPluginInterface {
 
-  /**
-   * The entity type manager service.
-   */
-  protected EntityTypeManagerInterface $entityTypeManager;
-
-  /**
-   * The group manager service.
-   */
-  protected JoinupGroupManagerInterface $groupManager;
-
-  /**
-   * Constructs a new group context condition plugin instance.
-   *
-   * @param array $configuration
-   *   A configuration array containing information about the plugin instance.
-   * @param string $plugin_id
-   *   The plugin_id for the plugin instance.
-   * @param mixed $plugin_definition
-   *   The plugin implementation definition.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   The entity type manager service.
-   * @param \Drupal\joinup_group\JoinupGroupManagerInterface $group_manager
-   *   The group manager service.
-   */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager, JoinupGroupManagerInterface $group_manager) {
+  public function __construct(
+    array $configuration,
+    $plugin_id,
+    $plugin_definition,
+    protected readonly EntityTypeManagerInterface $entityTypeManager,
+    protected readonly JoinupGroupManagerInterface $groupManager,
+    protected readonly RdfSyncMapper $mapper,
+  ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
-    $this->entityTypeManager = $entity_type_manager;
-    $this->groupManager = $group_manager;
   }
 
   /**
@@ -64,7 +46,8 @@ class GroupContextCondition extends ConditionPluginBase implements ContainerFact
       $plugin_id,
       $plugin_definition,
       $container->get('entity_type.manager'),
-      $container->get('joinup_group.group_manager')
+      $container->get('joinup_group.group_manager'),
+      $container->get('rdf_sync.mapper'),
     );
   }
 
@@ -91,7 +74,7 @@ class GroupContextCondition extends ConditionPluginBase implements ContainerFact
       '#type' => 'textarea',
       '#title' => $this->t('Limit to groups'),
       '#default_value' => implode("\n", $this->getConfiguration()['limit_to_groups']),
-      '#description' => $this->t('Enter one group ID per line.'),
+      '#description' => $this->t('Enter one group URI per line.'),
     ];
     return parent::buildConfigurationForm($form, $form_state);
   }
@@ -100,16 +83,16 @@ class GroupContextCondition extends ConditionPluginBase implements ContainerFact
    * {@inheritdoc}
    */
   public function validateConfigurationForm(array &$form, FormStateInterface $form_state): void {
-    $ids = $this->textToArray($form_state->getValue('limit_to_groups'));
-    if ($ids) {
-      $groups = $this->getGroups($ids);
-      if ($invalid_ids = array_diff($ids, array_keys($groups))) {
-        $form_state->setErrorByName('limit_to_groups', $this->t('The following group identifiers are invalid: @ids', [
-          '@ids' => implode(', ', $invalid_ids),
+    $uris = $this->textToArray($form_state->getValue('limit_to_groups'));
+    if ($uris) {
+      $groups = $this->getGroups($uris);
+      if ($invalid_uris = array_diff($uris, array_keys($groups))) {
+        $form_state->setErrorByName('limit_to_groups', $this->t('The following group URIs are invalid: @uris', [
+          '@uris' => implode(', ', $invalid_uris),
         ]));
       }
     }
-    $form_state->setValue('limit_to_groups', $ids);
+    $form_state->setValue('limit_to_groups', $uris);
     parent::validateConfigurationForm($form, $form_state);
   }
 
@@ -172,7 +155,7 @@ class GroupContextCondition extends ConditionPluginBase implements ContainerFact
       return TRUE;
     }
 
-    return in_array($group_from_context->id(), $limit_to_groups);
+    return in_array($group_from_context->getUri(), $limit_to_groups);
   }
 
   /**
@@ -192,30 +175,28 @@ class GroupContextCondition extends ConditionPluginBase implements ContainerFact
   /**
    * Returns a list of groups this condition is limited to.
    *
-   * @param array|null $ids
-   *   (optional) A list of group IDs candidates.
+   * @param array|null $uris
+   *   (optional) A list of group URIs candidates.
    *
    * @return \Drupal\joinup_group\Entity\GroupInterface[]
    *   The list of groups this condition is limited to.
    */
-  protected function getGroups(?array $ids = NULL): array {
-    $ids ??= $this->getConfiguration()['limit_to_groups'];
+  protected function getGroups(?array $uris = NULL): array {
+    $uris ??= $this->getConfiguration()['limit_to_groups'];
     return array_filter(
-      $ids ? $this->entityTypeManager->getStorage('node')->loadMultiple($ids) : [],
-      function (NodeInterface $node): bool {
-        return $node instanceof GroupInterface;
-      }
+      $uris ? $this->entityTypeManager->getStorage('node')->loadMultiple($uris) : [],
+      fn(NodeInterface $node): bool => $node instanceof GroupInterface,
     );
   }
 
   /**
-   * Converts the list of IDs from text blob to an array.
+   * Converts the list of URIs from text blob to an array.
    *
    * @param string $text
    *   The text blob.
    *
    * @return array
-   *   A list of group IDs.
+   *   A list of group URIs.
    */
   protected function textToArray(string $text): array {
     return array_values(

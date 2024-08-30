@@ -1,0 +1,51 @@
+diff --git a/src/RdfSyncMapper.php b/src/RdfSyncMapper.php
+index 79d78fac7f871e1d89aa42ed2983686bb2b31c9a..bf8ba5f2d0c4170156992f61e834c63d3e820986 100644
+--- a/src/RdfSyncMapper.php
++++ b/src/RdfSyncMapper.php
+@@ -200,6 +200,46 @@ public function getEntityByUri(string $uri): ?ContentEntityInterface {
+     return $this->entityTypeManager->getStorage($entityTypeId)->load($entityId);
+   }
+ 
++  /**
++   * Returns a list entities given a list of URIs.
++   *
++   * @param string[] $uris
++   *   List of URIs
++   *
++   * @return \Drupal\Core\Entity\ContentEntityInterface[]
++   *   Associative array of entities keyed by their ID.
++   */
++  public function getEntitiesByUris(array $uris): array {
++    $rows = $this->database->select('rdf_sync_uri')
++      ->fields('rdf_sync_uri', ['uri', 'entity_type', 'entity_id'])
++      ->condition('uri', [$uris], 'IN')
++      ->execute()
++      ->fetchAllAssoc('uri', \PDO::FETCH_NUM);
++
++    $byEntityTypeId = $byUri = $return = [];
++
++    foreach ($rows as $uri => [$entityTypeId, $entityId]) {
++      $byEntityTypeId[$entityTypeId][] = $entityId;
++      $byUri[$uri][$entityTypeId][] = $entityId;
++    }
++
++    foreach ($byEntityTypeId as $entityTypeId => $entityIds) {
++      $storage = $this->entityTypeManager->getStorage($entityTypeId);
++      $byEntityTypeId[$entityTypeId] = $storage->loadMultiple($entityIds);
++    }
++
++    // Preserve the original URIs order.
++    foreach ($byUri as $uri => $types) {
++      foreach ($types as $entityTypeId => $entityIds) {
++        foreach ($entityIds as $entityId) {
++          $return[$entityId] = $byEntityTypeId[$entityTypeId][$entityId];
++        }
++      }
++    }
++
++    return $return;
++  }
++
+   /**
+    * Returns a list of URIs keyed by their entity ID.
+    *
