@@ -7,9 +7,8 @@ namespace Drupal\joinup_rdf;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\collection\Entity\CollectionInterface;
+use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_rdf\Entity\RdfSyncEntityInterface;
-use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\joinup_taxonomy\Entity\MappedTerm;
 use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\path_alias\AliasRepositoryInterface;
@@ -103,283 +102,284 @@ final class MigrationHelper {
   private const string URL_ENCODE_SQL_EXPRESSION = "REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(%s, '_', '_a'), '-', '_b'), '.', '_c'), '~', '_d'), ':', '_e'), '/', '_f'), '?', '_g'), '#', '_h'), '[', '_i'), ']', '_j'), '@', '_k'), '!', '_l'), '$', '_m'), '&', '_n'), '\'', '_o'), '(', '_p'), ')', '_q'), '*', '_r'), '+', '_s'), ',', '_t'), ';', '_u'), '=', '_v'), '`', '_w'), '%%', '_x')";
 
   /**
-   * Mapping of fields from the RDF to the node for collections.
+   * Mapping of fields from the RDF to the node.
    */
-  const array COLLECTION_FIELD_MAPPING = [
-    'http://purl.org/dc/terms/modified' => [
-      'target_field_name' => 'changed',
-      'format' => 'datetime',
-    ],
-    'http://purl.org/dc/terms/title' => [
-      'target_field_name' => 'title',
-      'format' => 'string',
-      'trim' => TRUE,
-    ],
-    'http://joinup.eu/language' => [
-      'target_field_name' => 'langcode',
-      'format' => 'string',
-    ],
-    'http://joinup.eu/language/default' => [
-      'target_field_name' => 'default_langcode',
-      'format' => 'string',
-    ],
-    'http://purl.org/dc/terms/description' => [
-      'target_field_name' => 'description',
-      'format' => 'string',
-      'default_values' => [
-        'format' => 'content_editor',
+  private const array FIELD_MAPPING = [
+    'collection' => [
+      'http://purl.org/dc/terms/modified' => [
+        'target_field_name' => 'changed',
+        'format' => 'datetime',
+      ],
+      'http://purl.org/dc/terms/title' => [
+        'target_field_name' => 'title',
+        'format' => 'string',
+        'trim' => TRUE,
+      ],
+      'http://joinup.eu/language' => [
+        'target_field_name' => 'langcode',
+        'format' => 'string',
+      ],
+      'http://joinup.eu/language/default' => [
+        'target_field_name' => 'default_langcode',
+        'format' => 'string',
+      ],
+      'http://purl.org/dc/terms/description' => [
+        'target_field_name' => 'description',
+        'format' => 'string',
+        'default_values' => [
+          'format' => 'content_editor',
+        ],
+      ],
+      'http://joinup.eu/owner/uid' => [
+        'target_field_name' => 'uid',
+        'format' => 'reference',
+      ],
+      'http://purl.org/dc/terms/issued' => [
+        'target_field_name' => 'created',
+        'format' => 'datetime',
+      ],
+      // There is 1 case where the logo has a different value.
+      'http://xmlns.com/foaf/0.1/#term_Image' => [
+        'target_field_name' => 'logo',
+        'format' => 'reference',
+      ],
+      'http://joinup.eu/search' => [
+        'target_field_name' => 'listing_content',
+        'format' => 'string',
+        'serialized' => TRUE,
+      ],
+      'http://purl.org/dc/dcmitype/StillImage' => [
+        'target_field_name' => 'logo',
+        'format' => 'reference',
+      ],
+      'http://purl.org/dc/terms/publisher' => [
+        'target_field_name' => 'owner',
+        'format' => 'reference',
+        'mapped_term' => TRUE,
+      ],
+      'http://www.w3.org/ns/dcat#keyword' => [
+        'target_field_name' => 'field_keywords',
+        'format' => 'reference',
+        'mapped_term' => TRUE,
+      ],
+      'http://joinup.eu/site-featured' => [
+        'target_field_name' => 'site_featured',
+        'format' => 'string',
+      ],
+      'http://purl.org/dc/terms/abstract' => [
+        'target_field_name' => 'abstract',
+        'format' => 'string',
+        'default_values' => [
+          'format' => 'content_editor',
+        ],
+      ],
+      'http://purl.org/dc/terms/RightsStatement' => [
+        'target_field_name' => 'closed_group',
+        'format' => 'string',
+      ],
+      'http://joinup.eu/collection/moderation' => [
+        'target_field_name' => 'group_moderation',
+        'format' => 'string',
+      ],
+      'http://joinup.eu/ar/workflow_status' => [
+        'target_field_name' => 'field_state',
+        'format' => 'string',
+      ],
+      'http://xmlns.com/foaf/spec/#term_homepage' => [
+        'target_field_name' => 'website_url',
+        'format' => 'string',
+      ],
+      'http://purl.org/dc/terms/spatial' => [
+        'target_field_name' => 'spatial_coverage',
+        'format' => 'reference',
+        'mapped_term' => TRUE,
+      ],
+      'http://www.w3.org/ns/dcat#contactPoint' => [
+        'target_field_name' => 'contact',
+        'format' => 'reference',
+        'mapped_term' => TRUE,
+      ],
+      'http://joinup.eu/collection/published-at' => [
+        'target_field_name' => 'published_at',
+        'format' => 'datetime',
+      ],
+      'http://purl.org/dc/terms/alternative' => [
+        'target_field_name' => 'short_id',
+        'format' => 'string',
+      ],
+      'http://joinup.eu/collection/content_creation' => [
+        'target_field_name' => 'content_creation',
+        'format' => 'string',
+      ],
+      'http://joinup.eu/vocabulary/topic' => [
+        'target_field_name' => 'field_topic',
+        'format' => 'reference',
+        'mapped_term' => TRUE,
       ],
     ],
-    'http://joinup.eu/owner/uid' => [
-      'target_field_name' => 'uid',
-      'format' => 'reference',
-    ],
-    'http://purl.org/dc/terms/issued' => [
-      'target_field_name' => 'created',
-      'format' => 'datetime',
-    ],
-    // There is 1 case where the logo has a different value.
-    'http://xmlns.com/foaf/0.1/#term_Image' => [
-      'target_field_name' => 'logo',
-      'format' => 'reference',
-    ],
-    'http://joinup.eu/search' => [
-      'target_field_name' => 'listing_content',
-      'format' => 'string',
-      'serialized' => TRUE,
-    ],
-    'http://purl.org/dc/dcmitype/StillImage' => [
-      'target_field_name' => 'logo',
-      'format' => 'reference',
-    ],
-    'http://purl.org/dc/terms/publisher' => [
-      'target_field_name' => 'owner',
-      'format' => 'reference',
-      'mapped_term' => TRUE,
-    ],
-    'http://www.w3.org/ns/dcat#keyword' => [
-      'target_field_name' => 'field_keywords',
-      'format' => 'reference',
-      'mapped_term' => TRUE,
-    ],
-    'http://joinup.eu/site-featured' => [
-      'target_field_name' => 'site_featured',
-      'format' => 'string',
-    ],
-    'http://purl.org/dc/terms/abstract' => [
-      'target_field_name' => 'abstract',
-      'format' => 'string',
-      'default_values' => [
-        'format' => 'content_editor',
+    'solution' => [
+      'http://purl.org/dc/terms/modified' => [
+        'target_field_name' => 'changed',
+        'format' => 'datetime',
       ],
-    ],
-    'http://purl.org/dc/terms/RightsStatement' => [
-      'target_field_name' => 'closed_group',
-      'format' => 'string',
-    ],
-    'http://joinup.eu/collection/moderation' => [
-      'target_field_name' => 'group_moderation',
-      'format' => 'string',
-    ],
-    'http://joinup.eu/ar/workflow_status' => [
-      'target_field_name' => 'field_state',
-      'format' => 'string',
-    ],
-    'http://xmlns.com/foaf/spec/#term_homepage' => [
-      'target_field_name' => 'website_url',
-      'format' => 'string',
-    ],
-    'http://purl.org/dc/terms/spatial' => [
-      'target_field_name' => 'spatial_coverage',
-      'format' => 'reference',
-      'mapped_term' => TRUE,
-    ],
-    'http://www.w3.org/ns/dcat#contactPoint' => [
-      'target_field_name' => 'contact',
-      'format' => 'reference',
-      'mapped_term' => TRUE,
-    ],
-    'http://joinup.eu/collection/published-at' => [
-      'target_field_name' => 'published_at',
-      'format' => 'datetime',
-    ],
-    'http://purl.org/dc/terms/alternative' => [
-      'target_field_name' => 'short_id',
-      'format' => 'string',
-    ],
-    'http://joinup.eu/collection/content_creation' => [
-      'target_field_name' => 'content_creation',
-      'format' => 'string',
-    ],
-    'http://joinup.eu/vocabulary/topic' => [
-      'target_field_name' => 'field_topic',
-      'format' => 'reference',
-      'mapped_term' => TRUE,
-    ],
-  ];
-
-  const array SOLUTION_FIELD_MAPPING = [
-    'http://purl.org/dc/terms/modified' => [
-      'target_field_name' => 'changed',
-      'format' => 'datetime',
-    ],
-    'http://purl.org/dc/terms/title' => [
-      'target_field_name' => 'title',
-      'format' => 'string',
-      'trim' => TRUE,
-    ],
-    'http://joinup.eu/language' => [
-      'target_field_name' => 'langcode',
-      'format' => 'string',
-    ],
-    'http://joinup.eu/language/default' => [
-      'target_field_name' => 'default_langcode',
-      'format' => 'string',
-    ],
-    'http://joinup.eu/owner/uid' => [
-      'target_field_name' => 'uid',
-      'format' => 'reference',
-    ],
-    'http://purl.org/dc/terms/issued' => [
-      'target_field_name' => 'created',
-      'format' => 'datetime',
-    ],
-    'http://purl.org/dc/terms/abstract' => [
-      'target_field_name' => 'abstract',
-      'format' => 'string',
-      'default_values' => [
-        'format' => 'content_editor',
+      'http://purl.org/dc/terms/title' => [
+        'target_field_name' => 'title',
+        'format' => 'string',
+        'trim' => TRUE,
       ],
-    ],
-    'http://joinup.eu/collection/published-at' => [
-      'target_field_name' => 'published_at',
-      'format' => 'datetime',
-    ],
-    'http://www.w3.org/ns/dcat#contactPoint' => [
-      'target_field_name' => 'contact',
-      'format' => 'reference',
-    ],
-    'http://joinup.eu/search' => [
-      'target_field_name' => 'listing_content',
-      'format' => 'string',
-      'serialized' => TRUE,
-    ],
-    'http://joinup.eu/solution/content_creation' => [
-      'target_field_name' => 'content_creation',
-      'format' => 'string',
-    ],
-    'http://purl.org/dc/terms/description' => [
-      'target_field_name' => 'description',
-      'format' => 'string',
-      'default_values' => [
-        'format' => 'content_editor',
+      'http://joinup.eu/language' => [
+        'target_field_name' => 'langcode',
+        'format' => 'string',
       ],
-    ],
-    'http://xmlns.com/foaf/0.1/page' => [
-      'target_field_name' => 'documentation',
-      'format' => 'string',
-    ],
-    'http://www.w3.org/ns/dcat#landingPage' => [
-      'target_field_name' => 'landing_page',
-      'format' => 'string',
-    ],
-    'http://purl.org/dc/terms/language' => [
-      'target_field_name' => 'language',
-      'format' => 'reference',
-    ],
-    'http://purl.org/dc/dcmitype/StillImage' => [
-      // @todo Create a follow up to merge all logo fields into one.
-      'target_field_name' => 'logo',
-      'format' => 'reference',
-    ],
-    // @todo Do we need it? Minimal data exist.
-    // @codingStandardsIgnoreStart
-    // select * where { GRAPH ?g { ?s <http://joinup.eu/solution/metrics_page> ?o } }
-    // @codingStandardsIgnoreEnd
-    'http://joinup.eu/solution/metrics_page' => [
-      'target_field_name' => 'metrics_page',
-      'format' => 'uri',
-    ],
-    'http://joinup.eu/solution/moderation' => [
-      'target_field_name' => 'group_moderation',
-      'format' => 'string',
-    ],
-    'http://purl.org/dc/terms/publisher' => [
-      'target_field_name' => 'owner',
-      'format' => 'reference',
-    ],
-    'http://purl.org/dc/terms/relation' => [
-      'target_field_name' => 'related_solutions',
-      'format' => 'reference',
-      'mapped_term' => TRUE,
-    ],
-    // @todo Create a follow up to merge field_shared_in with this one.
-    // @todo We are going to need to reuse the same reference handler as we did
-    //   for distributions so that the `field_shared_in` can accommodate the
-    //   solution parents.
-    'http://joinup.eu/solution/shared_in' => [
-      'target_field_name' => 'shared_in',
-      'format' => 'reference',
-      'mapped_term' => TRUE,
-    ],
-    // @todo Ensure we have given up on EIRA related entities and that the field
-    //   should be removed. However, this might be more relevant when the
-    //   vocabulary is optimized
-    'http://joinup.eu/solution/related_by_type' => [
-      'target_field_name' => 'list_related_entities',
-      'format' => 'string',
-    ],
-    'http://purl.org/dc/terms/type' => [
-      'target_field_name' => 'solution_type',
-      'format' => 'reference',
-      'mapped_term' => TRUE,
-    ],
-    'http://joinup.eu/is/workflow_status' => [
-      'target_field_name' => 'field_state',
-      'format' => 'string',
-    ],
-    // @todo We don't seem to use this field but minimal data exist.
-    // @codingStandardsIgnoreStart
-    // select * where { GRAPH ?g { ?s <http://www.w3.org/ns/adms#translation> ?o } }
-    // @codingStandardsIgnoreEnd
-    'http://www.w3.org/ns/adms#translation' => [
-      'target_field_name' => 'translation',
-      'format' => 'reference',
-    ],
-    // @todo Minimal old data exist.
-    // @codingStandardsIgnoreStart
-    // select * where { GRAPH ?g { ?s <http://www.w3.org/2002/07/owl#versionInfo> ?o } VALUES ?g { <http://joinup.eu/solution/published> <http://joinup.eu/solution/draft> } }
-    // @codingStandardsIgnoreEnd
-    'http://www.w3.org/2002/07/owl#versionInfo' => [
-      'target_field_name' => 'release_number',
-      'format' => 'string',
-    ],
-    'http://www.w3.org/ns/dcat#keyword' => [
-      'target_field_name' => 'field_keywords',
-      'format' => 'reference',
-      'mapped_term' => TRUE,
-    ],
-    'http://purl.org/dc/terms/alternative' => [
-      'target_field_name' => 'short_id',
-      'format' => 'string',
-    ],
-    'http://joinup.eu/site-featured' => [
-      'target_field_name' => 'site_featured',
-      'format' => 'string',
-    ],
-    'http://purl.org/dc/terms/spatial' => [
-      'target_field_name' => 'spatial_coverage',
-      'format' => 'reference',
-      'mapped_term' => TRUE,
-    ],
-    'http://www.w3.org/ns/adms#status' => [
-      'target_field_name' => 'process_status',
-      'format' => 'string',
-    ],
-    'http://joinup.eu/vocabulary/topic' => [
-      'target_field_name' => 'field_topic',
-      'format' => 'reference',
-      'mapped_term' => TRUE,
+      'http://joinup.eu/language/default' => [
+        'target_field_name' => 'default_langcode',
+        'format' => 'string',
+      ],
+      'http://joinup.eu/owner/uid' => [
+        'target_field_name' => 'uid',
+        'format' => 'reference',
+      ],
+      'http://purl.org/dc/terms/issued' => [
+        'target_field_name' => 'created',
+        'format' => 'datetime',
+      ],
+      'http://purl.org/dc/terms/abstract' => [
+        'target_field_name' => 'abstract',
+        'format' => 'string',
+        'default_values' => [
+          'format' => 'content_editor',
+        ],
+      ],
+      'http://joinup.eu/collection/published-at' => [
+        'target_field_name' => 'published_at',
+        'format' => 'datetime',
+      ],
+      'http://www.w3.org/ns/dcat#contactPoint' => [
+        'target_field_name' => 'contact',
+        'format' => 'reference',
+      ],
+      'http://joinup.eu/search' => [
+        'target_field_name' => 'listing_content',
+        'format' => 'string',
+        'serialized' => TRUE,
+      ],
+      'http://joinup.eu/solution/content_creation' => [
+        'target_field_name' => 'content_creation',
+        'format' => 'string',
+      ],
+      'http://purl.org/dc/terms/description' => [
+        'target_field_name' => 'description',
+        'format' => 'string',
+        'default_values' => [
+          'format' => 'content_editor',
+        ],
+      ],
+      'http://xmlns.com/foaf/0.1/page' => [
+        'target_field_name' => 'documentation',
+        'format' => 'string',
+      ],
+      'http://www.w3.org/ns/dcat#landingPage' => [
+        'target_field_name' => 'landing_page',
+        'format' => 'string',
+      ],
+      'http://purl.org/dc/terms/language' => [
+        'target_field_name' => 'language',
+        'format' => 'reference',
+      ],
+      'http://purl.org/dc/dcmitype/StillImage' => [
+        // @todo Create a follow up to merge all logo fields into one.
+        'target_field_name' => 'logo',
+        'format' => 'reference',
+      ],
+      // @todo Do we need it? Minimal data exist.
+      // @codingStandardsIgnoreStart
+      // select * where { GRAPH ?g { ?s <http://joinup.eu/solution/metrics_page> ?o } }
+      // @codingStandardsIgnoreEnd
+      'http://joinup.eu/solution/metrics_page' => [
+        'target_field_name' => 'metrics_page',
+        'format' => 'uri',
+      ],
+      'http://joinup.eu/solution/moderation' => [
+        'target_field_name' => 'group_moderation',
+        'format' => 'string',
+      ],
+      'http://purl.org/dc/terms/publisher' => [
+        'target_field_name' => 'owner',
+        'format' => 'reference',
+      ],
+      'http://purl.org/dc/terms/relation' => [
+        'target_field_name' => 'related_solutions',
+        'format' => 'reference',
+        'mapped_term' => TRUE,
+      ],
+      // @todo Create a follow up to merge field_shared_in with this one.
+      // @todo We are going to need to reuse the same reference handler as we did
+      //   for distributions so that the `field_shared_in` can accommodate the
+      //   solution parents.
+      'http://joinup.eu/solution/shared_in' => [
+        'target_field_name' => 'shared_in',
+        'format' => 'reference',
+        'mapped_term' => TRUE,
+      ],
+      // @todo Ensure we have given up on EIRA related entities and that the field
+      //   should be removed. However, this might be more relevant when the
+      //   vocabulary is optimized
+      'http://joinup.eu/solution/related_by_type' => [
+        'target_field_name' => 'list_related_entities',
+        'format' => 'string',
+      ],
+      'http://purl.org/dc/terms/type' => [
+        'target_field_name' => 'solution_type',
+        'format' => 'reference',
+        'mapped_term' => TRUE,
+      ],
+      'http://joinup.eu/is/workflow_status' => [
+        'target_field_name' => 'field_state',
+        'format' => 'string',
+      ],
+      // @todo We don't seem to use this field but minimal data exist.
+      // @codingStandardsIgnoreStart
+      // select * where { GRAPH ?g { ?s <http://www.w3.org/ns/adms#translation> ?o } }
+      // @codingStandardsIgnoreEnd
+      'http://www.w3.org/ns/adms#translation' => [
+        'target_field_name' => 'translation',
+        'format' => 'reference',
+      ],
+      // @todo Minimal old data exist.
+      // @codingStandardsIgnoreStart
+      // select * where { GRAPH ?g { ?s <http://www.w3.org/2002/07/owl#versionInfo> ?o } VALUES ?g { <http://joinup.eu/solution/published> <http://joinup.eu/solution/draft> } }
+      // @codingStandardsIgnoreEnd
+      'http://www.w3.org/2002/07/owl#versionInfo' => [
+        'target_field_name' => 'release_number',
+        'format' => 'string',
+      ],
+      'http://www.w3.org/ns/dcat#keyword' => [
+        'target_field_name' => 'field_keywords',
+        'format' => 'reference',
+        'mapped_term' => TRUE,
+      ],
+      'http://purl.org/dc/terms/alternative' => [
+        'target_field_name' => 'short_id',
+        'format' => 'string',
+      ],
+      'http://joinup.eu/site-featured' => [
+        'target_field_name' => 'site_featured',
+        'format' => 'string',
+      ],
+      'http://purl.org/dc/terms/spatial' => [
+        'target_field_name' => 'spatial_coverage',
+        'format' => 'reference',
+        'mapped_term' => TRUE,
+      ],
+      'http://www.w3.org/ns/adms#status' => [
+        'target_field_name' => 'process_status',
+        'format' => 'string',
+      ],
+      'http://joinup.eu/vocabulary/topic' => [
+        'target_field_name' => 'field_topic',
+        'format' => 'reference',
+        'mapped_term' => TRUE,
+      ],
     ],
   ];
 
@@ -392,127 +392,122 @@ final class MigrationHelper {
   ) {}
 
   /**
-   * Migrate collection.
+   * Migrates a group.
    *
+   * @param string $type
+   *   Could be 'collection' or 'solution'.
    * @param string $uri
-   *   The URI of the collection.
+   *   The URI of the group.
+   * @param int|null $collectionNid
+   *   (optional) Only for solutions. The parent collection node ID.
    */
-  public function migrateCollection(string $uri): void {
-    /** @var \Drupal\collection\Entity\CollectionInterface $collection */
-    $collection = $this->entityTypeManager->getStorage('node')->create([
-      'type' => 'collection',
-      'uri' => $uri,
-    ]);
+  public function migrateGroup(string $type, string $uri, ?int $collectionNid = NULL): void {
+    $group = $this->getGroup($type, $uri, $collectionNid);
+    $isNew = TRUE;
 
-    $values = $this->getEntityDataAsFlatArray($uri, 'http://joinup.eu/collection/published');
+    $values = $this->getEntityData($uri, "http://joinup.eu/$type/published");
     if (!empty($values)) {
-      $this->massageCollectionValues($collection, $values);
-      $this->saveEntityWithPathPreservation($collection, $uri);
+      $this->massageValues($group, $values);
+      $this->save($group);
+      $isNew = FALSE;
     }
 
     // Handle the draft content. If the entity has not been saved, it is an
     // unpublished entity, otherwise, it is a new revision.
-    $values = $this->getEntityDataAsFlatArray($uri, 'http://joinup.eu/collection/draft');
+    $values = $this->getEntityData($uri, "http://joinup.eu/$type/draft");
     if (!empty($values)) {
-      if (!$collection->isNew()) {
-        $collection->setRevisionCreationTime($values['http://purl.org/dc/terms/modified'][0]->getTimestamp());
-        $collection->setRevisionUserId($values['http://joinup.eu/owner/uid'][0]);
-        $collection->setRevisionTranslationAffected(TRUE);
-        $collection->setNewRevision();
+      $this->massageValues($group, $values);
+      if ($isNew) {
+        $this->save($group);
       }
-
-      $this->massageCollectionValues($collection, $values);
-      $collection->skip_notification = TRUE;
-      $collection->save();
+      else {
+        $group->setRevisionCreationTime($values['http://purl.org/dc/terms/modified'][0]->getTimestamp());
+        $group->setRevisionUserId($values['http://joinup.eu/owner/uid'][0]);
+        $group->setRevisionTranslationAffected(TRUE);
+        $group->setNewRevision();
+        $group->skip_notification = TRUE;
+        $group->save();
+      }
     }
   }
 
   /**
-   * Migrate solution.
+   * Returns the initial group.
    *
+   * @param string $type
+   *   Could be 'collection' or 'solution'.
    * @param string $uri
-   *   The URI of the solution.
-   * @param int $collectionNid
-   *   The parent collection node ID.
+   *   The URI of the group.
+   * @param int|null $collectionNid
+   *   Only for solutions. The parent collection node ID.
+   *
+   * @return \Drupal\joinup_group\Entity\GroupInterface
+   *   The initial group entity.
    */
-  public function migrateSolution(string $uri, int $collectionNid): void {
-    // Because we have migrated solution stubs in the release migration, we need
-    // to check if the entity exists already first.
-    $solution = $this->rdfSyncMapper->getEntityByUri($uri);
-    if (!$solution) {
-      $solution = $this->entityTypeManager->getStorage('node')->create([
-        'type' => 'solution',
-        'uri' => $uri,
-      ]);
+  private function getGroup(string $type, string $uri, ?int $collectionNid): GroupInterface {
+    assert(in_array($type, ['solution', 'collection'], TRUE));
+    if ($type === 'collection') {
+      return $this->createGroup($type, $uri);
     }
-    assert($solution instanceof SolutionInterface);
-
-    $solution->set(OgGroupAudienceHelperInterface::DEFAULT_FIELD, $collectionNid);
-    $values = $this->getEntityDataAsFlatArray($uri, 'http://joinup.eu/solution/published');
-    if (!empty($values)) {
-      $this->massageSolutionValues($solution, $values);
-      $this->saveEntityWithPathPreservation($solution, $uri);
+    // Because we have migrated solution stubs in the release migration, we
+    // need to check if the entity exists already first.
+    if (!$group = $this->rdfSyncMapper->getEntityByUri($uri)) {
+      $group = $this->createGroup($type, $uri);
     }
-
-    // Handle the draft content. If the entity has not been saved, it is an
-    // unpublished entity, otherwise, it is a new revision.
-    $values = $this->getEntityDataAsFlatArray($uri, 'http://joinup.eu/solution/draft');
-    if (!empty($values)) {
-      if (!$solution->isNew()) {
-        $solution->setRevisionCreationTime($values['http://purl.org/dc/terms/modified'][0]->getTimestamp());
-        $solution->setRevisionUserId($values['http://joinup.eu/owner/uid'][0]);
-        $solution->setRevisionTranslationAffected(TRUE);
-        $solution->setNewRevision();
-      }
-
-      $this->massageSolutionValues($solution, $values);
-      $solution->skip_notification = TRUE;
-      $solution->save();
-    }
+    return $group->set(OgGroupAudienceHelperInterface::DEFAULT_FIELD, $collectionNid);
   }
 
   /**
-   * Set the collection fields.
+   * Creates a new group with ony the URI set.
    *
-   * @param \Drupal\collection\Entity\CollectionInterface $entity
+   * @param string $type
+   *   Could be 'collection' or 'solution'.
+   * @param string $uri
+   *   The URI of the group.
+   *
+   * @return \Drupal\joinup_group\Entity\GroupInterface
+   *   The group.
+   */
+  private function createGroup(string $type, string $uri): GroupInterface {
+    $values = ['type' => $type, 'uri' => $uri];
+
+    // Try to preserve the UUID from URI.
+    if (str_starts_with($uri, 'http://data.europa.eu/w21/')) {
+      $uuid = str_replace('http://data.europa.eu/w21/', '', $uri);
+      if (preg_match('/^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/', $uuid)) {
+        $values['uuid'] = $uuid;
+      }
+    }
+
+    $group = $this->entityTypeManager->getStorage('node')->create($values);
+    assert($group instanceof GroupInterface);
+    return $group;
+  }
+
+  /**
+   * Sets the group node fields.
+   *
+   * @param \Drupal\joinup_group\Entity\GroupInterface $group
    *   The entity to set the fields.
    * @param array $values
    *   The values to set.
    */
-  protected function massageCollectionValues(CollectionInterface $entity, array $values): void {
-    foreach (self::COLLECTION_FIELD_MAPPING as $property => $mapping) {
+  protected function massageValues(GroupInterface $group, array $values): void {
+    foreach (self::FIELD_MAPPING[$group->bundle()] as $property => $mapping) {
       $value = $values[$property] ?? NULL;
       if ($value) {
-        $value = $this->parseValue($value, self::COLLECTION_FIELD_MAPPING[$property]);
-        $entity->set($mapping['target_field_name'], $value);
+        $value = $this->parseValue($value, $mapping);
+        $group->set($mapping['target_field_name'], $value);
       }
 
-      // Handle the newsletter field.
+      // Handle the collection's newsletter field.
       if ($property === 'http://joinup.eu/collection/field_newsletter/enabled') {
         $value = [
           'enabled' => $values['http://joinup.eu/collection/field_newsletter/enabled'],
           'universe' => $values['http://joinup.eu/collection/field_newsletter/universe'],
           'service_id' => $values['http://joinup.eu/collection/field_newsletter/service_id'],
         ];
-        $entity->set('newsletter', $value);
-      }
-    }
-  }
-
-  /**
-   * Set the solution fields.
-   *
-   * @param \Drupal\joinup_solution\Entity\SolutionInterface $entity
-   *   The entity to set the fields.
-   * @param array $values
-   *   The values to set.
-   */
-  protected function massageSolutionValues(SolutionInterface $entity, array $values): void {
-    foreach (self::SOLUTION_FIELD_MAPPING as $property => $mapping) {
-      $value = $values[$property] ?? NULL;
-      if ($value) {
-        $value = $this->parseValue($value, self::SOLUTION_FIELD_MAPPING[$property]);
-        $entity->set($mapping['target_field_name'], $value);
+        $group->set('newsletter', $value);
       }
     }
   }
@@ -522,13 +517,11 @@ final class MigrationHelper {
    *
    * @param \Drupal\joinup_rdf\Entity\RdfSyncEntityInterface $entity
    *   The entity to save.
-   * @param string $uri
-   *   The URI of the entity.
    */
-  protected function saveEntityWithPathPreservation(RdfSyncEntityInterface $entity, string $uri): void {
+  protected function save(RdfSyncEntityInterface $entity): void {
     $pathautoOldPath = '/rdf_entity/' . strtr($entity->getUri(), self::URL_ENCODE_MAP);
-    $has_alias = $this->pathAliasRepository->lookupBySystemPath($pathautoOldPath, 'en');
-    if ($has_alias) {
+    $alias = $this->pathAliasRepository->lookupBySystemPath($pathautoOldPath, 'en');
+    if ($alias) {
       $entity->get('path')->pathauto = PathautoState::SKIP;
     }
 
@@ -536,16 +529,16 @@ final class MigrationHelper {
     $entity->skip_menu_creation = TRUE;
     $entity->save();
 
-    if ($has_alias) {
+    if ($alias) {
       $internalUrl = '/' . $entity->toUrl()->getInternalPath();
       $this->connection->update('path_alias')
         ->fields(['path' => $internalUrl])
-        ->condition('path', $pathautoOldPath)
+        ->condition('id', $alias['id'])
         ->execute();
 
       $this->connection->update('path_alias_revision')
         ->fields(['path' => $internalUrl])
-        ->condition('path', $pathautoOldPath)
+        ->condition('id', $alias['id'])
         ->execute();
     }
   }
@@ -612,7 +605,7 @@ final class MigrationHelper {
    *   are the URIs of the properties and the values are the values of the
    *   properties.
    */
-  protected function getEntityDataAsFlatArray(string $uri, string $graph): array {
+  protected function getEntityData(string $uri, string $graph): array {
     $query = <<<SPARQL
       SELECT *
       FROM <$graph>
@@ -655,12 +648,7 @@ final class MigrationHelper {
     // Reload the entity to get the values from the database.
     $loaded = $this->entityTypeManager->getStorage($entity->getEntityTypeId())->load($entity->id());
     foreach ($values as $uri => $value) {
-      if ($loaded instanceof CollectionInterface) {
-        $fieldData = self::COLLECTION_FIELD_MAPPING[$uri] ?? NULL;
-      }
-      else {
-        $fieldData = self::SOLUTION_FIELD_MAPPING[$uri] ?? NULL;
-      }
+      $fieldData = self::FIELD_MAPPING[$loaded->bundle()][$uri] ?? NULL;
       if (!$fieldData) {
         print sprintf('The field %s is not found in the mapping.', $uri);
         continue;
