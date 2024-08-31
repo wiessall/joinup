@@ -7,11 +7,7 @@
 
 declare(strict_types=1);
 
-use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Site\Settings;
-use Drupal\datetime\Plugin\Field\FieldType\DateTimeItemInterface;
-use Drupal\node\Entity\Node;
-use Drupal\paragraphs\Entity\Paragraph;
 use Drupal\user\Entity\User;
 
 /**
@@ -98,122 +94,40 @@ function joinup_core_requirements($phase): array {
 }
 
 /**
- * Convert videos into document.
+ * Implements hook_update_dependencies().
+ *
+ * @todo Remove after v1.112.0 is released, in ISAICP-9045.
+ */
+function joinup_core_update_dependencies(): array {
+  // joinup_core_update_111200() should run before joinup_rdf_update_200001().
+  return [
+    'joinup_rdf' => [
+      200001 => ['joinup_core' => 111200],
+    ],
+  ];
+}
+
+/**
+ * Convert videos into document (remove in ISAICP-9045).
  */
 function joinup_core_update_111200(array &$sandbox): string {
+  $storage = \Drupal::entityTypeManager()->getStorage('node');
+
   if (!isset($sandbox['video_nids'])) {
-    $video_nids = \Drupal::entityQuery('node')
-      ->accessCheck()
+    $sandbox['video_nids'] = $storage->getQuery()
+      ->accessCheck(FALSE)
       ->condition('type', 'video')
       ->execute();
-
-    $sandbox['max'] = count($video_nids);
-    $sandbox['count'] = 0;
-    $sandbox['video_nids'] = $video_nids;
+    $sandbox['total'] = count($sandbox['video_nids']);
+    $sandbox['progress'] = 0;
   }
 
-  $video_nids = array_slice($sandbox['video_nids'], $sandbox['count'], 20);
+  $video_nids = array_splice($sandbox['video_nids'], 0, 25);
+  // The video conversion will be released in v1.112.0. For now, we only delete
+  // the videos to not impact collection/solution conversion.
+  $storage->delete($storage->loadMultiple($video_nids));
+  $sandbox['progress'] += count($video_nids);
+  $sandbox['#finished'] = (int) empty($sandbox['video_nids']);
 
-  $entity_type_manager = \Drupal::entityTypeManager();
-  $video_nodes = $entity_type_manager->getStorage('node')->loadMultiple($video_nids);
-
-  foreach ($video_nodes as $video_node) {
-    // Perform the conversion for each video node.
-    $layout_paragraph = Paragraph::create(['type' => 'layout']);
-    $layout_paragraph->setBehaviorSettings('layout_paragraphs', [
-      'layout' => 'layout_onecol',
-      'config' => ['label' => ''],
-      'parent_uuid' => NULL,
-      'region' => NULL,
-    ]);
-
-    $body_paragraph = Paragraph::create([
-      'type' => 'text',
-      'field_body' => [
-        'value' => $video_node->get('body')->value,
-        'format' => 'text_html',
-      ],
-    ]);
-    $body_paragraph->setBehaviorSettings('layout_paragraphs', [
-      'parent_uuid' => $layout_paragraph->uuid(),
-      'region' => 'content',
-    ]);
-
-    $video_paragraph = Paragraph::create([
-      'type' => 'video',
-      'paragraph_video_url' => $video_node->get('field_video')->getValue(),
-    ]);
-    $video_paragraph->setBehaviorSettings('layout_paragraphs', [
-      'parent_uuid' => $layout_paragraph->uuid(),
-      'region' => 'content',
-    ]);
-
-    $query = \Drupal::entityQuery('redirect')
-      ->accessCheck()
-      ->condition('redirect_redirect.uri', 'internal:/node/' . $video_node->id());
-    $rids = $query->execute();
-    $redirects = $entity_type_manager->getStorage('redirect')->loadMultiple($rids);
-    $video_redirects = [];
-    foreach ($redirects as $redirect) {
-      $video_redirects[] = $redirect->getSourcePathWithQuery();
-    }
-
-    $video = [
-      'nid' => $video_node->id(),
-      'title' => $video_node->getTitle(),
-      'uid' => $video_node->getOwnerId(),
-      'status' => $video_node->isPublished(),
-      'created' => $video_node->getCreatedTime(),
-      'changed' => $video_node->getChangedTime(),
-      'og_audience' => $video_node->get('og_audience')->target_id,
-      'field_document_spatial_coverage' => $video_node->get('field_video_spatial_coverage')->target_id,
-      'field_keywords' => $video_node->get('field_keywords')->getValue(),
-    ];
-    // Delete video.
-    $video_node->delete();
-    $formatted_date = (new DrupalDateTime())->setTimestamp($video['created'])->format(DateTimeItemInterface::DATETIME_STORAGE_FORMAT);
-    $document_node = Node::create([
-      'type' => 'document',
-      'nid' => $video['nid'],
-      'title' => $video['title'],
-      'uid' => $video['uid'],
-      'status' => $video['status'],
-      'created' => $video['created'],
-      'changed' => $video['changed'],
-      'og_audience' => $video['og_audience'],
-      'field_document_spatial_coverage' => $video['field_document_spatial_coverage'],
-      'field_keywords' => $video['field_keywords'],
-      'field_document_publication_date' => $formatted_date,
-      'published_at' => $video['created'],
-      'field_state' => 'published',
-    ]);
-
-    $document_node->set('field_paragraphs_body', [
-      ['entity' => $layout_paragraph],
-      ['entity' => $body_paragraph],
-      ['entity' => $video_paragraph],
-    ]);
-
-    $document_node->setRevisionCreationTime($video['created']);
-    $document_node->save();
-
-    foreach ($video_redirects as $redirect) {
-      $redirect = $entity_type_manager->getStorage('redirect')->create([
-        'redirect_source' => ['path' => $redirect],
-        'redirect_redirect' => ['uri' => 'internal:/node/' . $video['nid']],
-        'language' => 'und',
-        'status_code' => 301,
-      ]);
-      $redirect->save();
-    }
-
-    $document_node->set('field_state', 'archived');
-    $document_node->setNewRevision();
-    $document_node->save();
-
-    $sandbox['count']++;
-  }
-
-  $sandbox['#finished'] = $sandbox['count'] === $sandbox['max'];
-  return "{$sandbox['count']} out of {$sandbox['max']} video nodes processed.";
+  return "{$sandbox['progress']} out of {$sandbox['total']} video nodes processed.";
 }
