@@ -378,10 +378,9 @@ function joinup_rdf_deploy_200008(array &$sandbox): string {
  */
 function joinup_rdf_deploy_200009(): void {
   $menuName = 'ogmenu-3728';
-  $mapper = \Drupal::getContainer()->get('rdf_sync.mapper');
   $repository = \Drupal::getContainer()->get('entity.repository');
 
-  $collection = $mapper->getEntityByUri(OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID)
+  $collection = $repository->loadEntityByUuid('node', OssCatalogueCollectionInterface::COLLECTION_UUID)
     // Update path alias and label for EU OSS catalogue.
     ->set('path', ['alias' => '/eu-oss-catalogue', 'pathauto' => 0])
     ->set('title', 'EU Open Source Solutions Catalogue');
