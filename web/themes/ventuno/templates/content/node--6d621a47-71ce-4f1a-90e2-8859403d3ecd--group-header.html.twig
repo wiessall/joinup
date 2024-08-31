@@ -1,10 +1,8 @@
 {#
 /**
  * @file
- * Themeing for solution header.
+ * Themeing for EU OSS Catalogue header.
  */
-
-  @todo Delete this file after the migration of collections is done.
 #}
 {{ attach_library('ventuno/group-banner') }}
 <header{{ attributes.addClass(['group-banner', 'bg-light', 'py-2']) }}>
@@ -18,7 +16,7 @@
         {% if is_canonical %}
           <h1>
         {% endif %}
-        <a class="h1 fw-bold mb-0" href="{{ path('entity.rdf_entity.canonical', {rdf_entity: rdf_entity.id()}) }}">
+        <a class="h1 fw-bold mb-0" href="{{ path('entity.node.canonical', {node: node.id()}) }}">
           {{ label }}
         </a>
         {% if is_canonical %}

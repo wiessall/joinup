@@ -47,11 +47,10 @@ function joinup_oss_catalogue_block_access(BlockInterface $block, string $operat
     $operation === 'view' &&
     $block->id() === 'ventuno_three_dots_menu'
   ) {
-    $group = \Drupal::service('joinup_group.group_manager')
-      ->getGroupFromContext();
+    $group = \Drupal::service('joinup_group.group_manager')->getGroupFromContext();
     if (
-      $group &&
-      $group->id() === OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID
+      $group instanceof GroupInterface &&
+      $group->uuid() === OssCatalogueCollectionInterface::COLLECTION_UUID
     ) {
       /** @var \Drupal\joinup_workflow\WorkflowHelperInterface $workflow_helper */
       $workflow_helper = \Drupal::service('joinup_workflow.workflow_helper');
@@ -101,7 +100,7 @@ function joinup_oss_catalogue_preprocess_node(array &$variables): void {
   $group = \Drupal::routeMatch()->getParameter('node');
   if (
     $group instanceof GroupInterface &&
-    $group->id() === OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID
+    $group->uuid() === OssCatalogueCollectionInterface::COLLECTION_UUID
   ) {
     $variables['content']['report']['#access'] = FALSE;
   }
@@ -115,7 +114,7 @@ function joinup_oss_catalogue_preprocess_html(array &$variables): void {
   /** @var \Drupal\og\OgContextInterface $ogContext */
   $ogContext = \Drupal::service('og.context');
 
-  if (($group = $ogContext->getGroup()) && $group->id() === OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID) {
+  if (($group = $ogContext->getGroup()) && $group->uuid() === OssCatalogueCollectionInterface::COLLECTION_UUID) {
     $variables['attributes']['class'][] = 'eu-oss-catalogue';
   }
 }
@@ -216,4 +215,15 @@ function joinup_oss_catalogue_cron(): void {
     eu_oss_catalogue_cron();
     eu_oss_vitality_index_cron();
   }
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK_alter().
+ */
+function joinup_oss_catalogue_theme_suggestions_node_alter(array &$suggestions, array $variables): void {
+  $node = $variables['elements']['#node'];
+  $sanitizedUuid = strtr($node->uuid(), '-', '_');
+  $sanitizedViewMode = strtr($variables['elements']['#view_mode'], '.', '_');
+  $suggestions[] = "node__$sanitizedUuid";
+  $suggestions[] = "node__{$sanitizedUuid}__$sanitizedViewMode";
 }
