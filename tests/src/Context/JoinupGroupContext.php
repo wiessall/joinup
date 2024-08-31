@@ -437,7 +437,7 @@ class JoinupGroupContext extends RawDrupalContext {
     ?string $entityTypeId = NULL,
   ): void {
     Assert::assertTrue(in_array($group, ['collection', 'solution']));
-    $groupEntity = $this->getEntityByLabel('rdf_entity', $groupLabel, $group);
+    $groupEntity = $this->getEntityByLabel('node', $groupLabel, $group);
     Assert::assertInstanceOf(GroupInterface::class, $groupEntity);
     $fieldName = preg_replace('/\s+/', '_', mb_strtolower($config));
 

@@ -5,7 +5,7 @@ Feature: Collection content
   So that I can find the information I'm looking for.
 
   Background:
-    Given the following collections:
+    Given collection content:
       | title                     | state     |
       | Turin Egyptian Collection | published |
     And the following solution:

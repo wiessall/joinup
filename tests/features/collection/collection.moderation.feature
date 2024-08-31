@@ -35,7 +35,7 @@ Feature: Collection moderation
       | Erika Reid      |           |
       # Facilitator of all the collections.
       | Carole James    |           |
-    And the following collections:
+    And collection content:
       | title               | description         | logo     | owner          | contact information | state            |
       | Deep Past           | Azure ship          | logo.png | Simon Sandoval | Francis             | draft            |
       | The Licking Silence | The Licking Silence | logo.png | Simon Sandoval | Francis             | proposed         |
@@ -164,6 +164,9 @@ Feature: Collection moderation
     When I press "Delete"
     Then I should be on the homepage
 
+  # @covers \joinup_workflow_entity_presave partially.
+  # @covers \Drupal\joinup_search\Plugin\search_api\processor\JoinupEntityStatus::alterIndexedItems
+  # for collections.
   Scenario: Published collections should be shown in the collections overview page.
     # Regression test for ticket ISAICP-2889.
     Given owner content:
@@ -172,14 +175,9 @@ Feature: Collection moderation
     And contact_information content:
       | name        | email                   |
       | Partyanimal | partyanimal@example.com |
-    And collection:
-      | title               | Some berry pie     |
-      | description         | Berries are tasty. |
-      | logo                | logo.png           |
-      | owner               | Carpet Sandation   |
-      | contact information | Partyanimal        |
-      | topic               | Supplier exchange  |
-      | state               | proposed           |
+    And collection content:
+      | title          | description        | abstract           | logo     | owner            | contact information | topic             | state    |
+      | Some berry pie | Berries are tasty. | Berries are tasty. | logo.png | Carpet Sandation | Partyanimal         | Supplier exchange | proposed |
     When I visit the collection overview
     Then I should not see the heading "Some berry pie"
     When I am logged in as a moderator
