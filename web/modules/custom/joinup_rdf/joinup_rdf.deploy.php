@@ -431,12 +431,13 @@ function joinup_rdf_deploy_200009(): void {
     ->condition('menu_name', $menuName)
     ->execute();
 
+  /** @var \Drupal\menu_link_content\MenuLinkContentInterface $link */
   foreach ($menuLinkContentStorage->loadMultiple($ids) as $link) {
     $title = $link->getTitle();
-    if ($title === 'About' || $title === 'Members') {
+    if ($title === 'Members') {
       $link->setUnpublished()->save();
     }
-    elseif ($title === 'Overview') {
+    elseif ($title === 'Welcome') {
       $link->set('title', 'Welcome')->save();
     }
   }
