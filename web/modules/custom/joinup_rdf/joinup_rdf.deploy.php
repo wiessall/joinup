@@ -324,7 +324,7 @@ function joinup_rdf_deploy_200006(?array &$sandbox = NULL): void {
 /**
  * Section moved from joinup_oss_catalogue.
  *
- * @todo Remove if joinup_oss_catalogue is deployed first.
+ * @todo Remove after v1.112.0 is released, in ISAICP-9045.
  */
 
 /**
