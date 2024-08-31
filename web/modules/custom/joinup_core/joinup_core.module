@@ -488,3 +488,17 @@ function joinup_core_mail_alter(&$message): void {
   $html_mail_body = implode(PHP_EOL . PHP_EOL, $message['body']);
   $message['body'] = [Markup::create(_filter_autop($html_mail_body))];
 }
+
+/**
+ * Implements hook_update_dependencies().
+ *
+ * @todo Remove after v1.112.0 is released, in ISAICP-9045.
+ */
+function joinup_core_update_dependencies(): array {
+  // joinup_core_update_111200() should run before joinup_rdf_update_200001().
+  return [
+    'joinup_rdf' => [
+      200001 => ['joinup_core' => 111200],
+    ],
+  ];
+}
