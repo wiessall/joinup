@@ -81,6 +81,28 @@ class JoinupContext extends RawDrupalContext {
    */
   protected static function getNodeFieldNameFromAlias(string $type, string $alias): string {
     $aliases = [
+      'collection' => [
+        'author' => 'uid',
+        'uri' => 'uri',
+        'title' => 'title',
+        'short ID' => 'short_id',
+        'abstract' => 'abstract',
+        'access url' => 'website_url',
+        'closed' => 'closed_group',
+        'contact information' => 'contact',
+        'content creation' => 'content_creation',
+        'creation date' => 'created',
+        'description' => 'description',
+        'featured' => 'site_featured',
+        'keywords' => 'field_keywords',
+        'logo' => 'logo',
+        'moderation' => 'group_moderation',
+        'modification date' => 'changed',
+        'owner' => 'owner',
+        'published at' => 'published_at',
+        'spatial coverage' => 'spatial_coverage',
+        'state' => 'field_state',
+      ],
       'contact_information' => [
         'email' => 'email',
         'name' => 'title',
@@ -950,6 +972,7 @@ class JoinupContext extends RawDrupalContext {
       'field_document_logo',
       'field_event_logo',
       'field_news_logo',
+      'logo',
     ];
     foreach ($image_fields as $image_field) {
       if (!empty($node->$image_field)) {
