@@ -41,23 +41,19 @@ class RouteSubscriber extends RouteSubscriberBase {
     }
 
     // Fix the group route param for devel module.
-    // @todo I think this was added to fix devel for RDF. Node is already fixed so this is probably not needed anymore.
     if ($route = $collection->get('entity.og_membership.devel_load_with_references')) {
       $options = $route->getOptions();
-      $options['parameters']['group'] = ['type' => 'entity:node'];
+      $options['parameters']['group'] = [
+        'type' => 'entity:node',
+        'bundle' => ['collection', 'solution'],
+      ];
       $route->setOptions($options);
     }
 
-    // Add the '_joinup_group' requirement to 'common' routes.
-    $routes = [
-      'view.group_content_management.manage',
-      'view.group_content_management.csv_export',
-      'view.moderated_content.moderated_content',
-    ];
-    foreach ($routes as $route_name) {
-      if ($route = $collection->get($route_name)) {
-        $route->setRequirement('_joinup_group', 'TRUE');
-      }
+    if ($route = $collection->get('view.group_content_management.csv_export')) {
+      $parameters = $route->getOption('parameters');
+      $parameters['node']['bundle'] = ['collection', 'solution'];
+      $route->setOption('parameters', $parameters);
     }
   }
 

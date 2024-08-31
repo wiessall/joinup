@@ -6,13 +6,12 @@ joinup_release.solution_release.add:
     _title: 'Add Release'
   requirements:
     _custom_access: '\Drupal\joinup_release\Controller\ReleaseController::createReleaseAccess'
-    _joinup_group: 'solution'
   options:
     parameters:
       node:
         type: entity:node
-      bundle:
-        type: 'solution'
+        bundle:
+          - solution
 
 # Route to show an overview of releases belonging to a solution.
 joinup_release.solution_release.overview:
