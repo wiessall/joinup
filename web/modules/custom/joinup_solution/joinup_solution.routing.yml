@@ -34,7 +34,6 @@ joinup_solution.share_form:
     _title_callback: '\Drupal\joinup_solution\Form\ShareForm::getTitle'
   requirements:
     _access: 'TRUE'
-    _joinup_group: 'TRUE'
   options:
     parameters:
       node:
@@ -63,11 +62,12 @@ joinup_solution.change_collection:
     _title: 'Select a destination collection'
   requirements:
     _permission: 'manage solutions'
-    _joinup_group: 'collection'
   options:
     parameters:
       node:
         type: entity:node
+        bundle:
+          - collection
 
 joinup_solution.change_state.multiple:
   path: '/node/{node}/manage-solutions/change-state'

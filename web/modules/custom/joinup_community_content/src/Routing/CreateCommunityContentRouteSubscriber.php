@@ -19,7 +19,6 @@ class CreateCommunityContentRouteSubscriber extends RouteSubscriberBase {
   protected function alterRoutes(RouteCollection $collection) {
     if ($route = $collection->get('joinup_group.add_content')) {
       $route->setRequirement('_custom_access', CommunityContentController::class . '::createAccess');
-      $route->setRequirement('_joinup_group', 'TRUE');
     }
   }
 
