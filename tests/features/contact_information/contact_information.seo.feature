@@ -1,5 +1,5 @@
 @api @group-clone
-Feature: Contant Information entities don't cause exceptions because of their invalid schema
+Feature: Contact Information entities don't cause exceptions because of their invalid schema
 
   Scenario: Check the page of an entity which had schema issues before
     Given I am logged in as a user with the "moderator" role
@@ -20,13 +20,13 @@ Feature: Contant Information entities don't cause exceptions because of their in
 
   @javascript
   Scenario: Create contact info entity through IEF in a collection.
-    Given collection:
-      | title          | Contact Info Content Test |
-      | state          | published                 |
+    Given collection content:
+      | title                     | state     |
+      | Contact Info Content Test | published |
     Given I am logged in as a user with the "moderator" role
     When I go to the edit form of the "Contact Info Content Test" collection
     Then I should see the text "Edit Collection Contact Info Content Test"
-    And the HTML title of the page should be "Edit Rdf"
+    And the HTML title of the page should be "Contact Info Content Test"
 
     Then I fill in "Short ID" with "contact-info-test"
     And I enter "Some description" in the "Description" wysiwyg editor
