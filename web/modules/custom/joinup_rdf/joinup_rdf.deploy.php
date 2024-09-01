@@ -406,6 +406,12 @@ function joinup_rdf_deploy_200007(): void {
     ->condition('redirect_redirect__uri', $toDelete, 'IN')
     ->execute();
 
+  // Delete stale pathauto key_value entries.
+  $db->delete('key_value')
+    ->condition('collection', 'pathauto_state.rdf_entity')
+    ->execute();
+}
+
 /**
  * Embedded entities.
  */
