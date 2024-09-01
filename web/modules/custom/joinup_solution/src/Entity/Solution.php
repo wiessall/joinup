@@ -108,7 +108,7 @@ class Solution extends Node implements SolutionInterface {
       ->getQuery()
       ->accessCheck(FALSE)
       ->condition('type', 'release')
-      ->condition(OgGroupAudienceHelper::DEFAULT_FIELD, $this->id())
+      ->condition(OgGroupAudienceHelperInterface::DEFAULT_FIELD, $this->id())
       ->sort('created')
       ->execute();
   }
