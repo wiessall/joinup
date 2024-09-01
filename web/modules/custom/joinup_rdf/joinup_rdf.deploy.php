@@ -405,6 +405,79 @@ function joinup_rdf_deploy_200007(): void {
   $db->delete('redirect')
     ->condition('redirect_redirect__uri', $toDelete, 'IN')
     ->execute();
+
+/**
+ * Embedded entities.
+ */
+function joinup_rdf_deploy_200008(?array &$sandbox = NULL): string {
+  $db = \Drupal::database();
+  if (!isset($sandbox['tables'])) {
+    $sandbox['tables'] = [
+       ['comment__field_body', 'entity_id', 'field_body_value'],
+       ['meta_entity__eif_description', 'entity_id', 'eif_description_value'],
+       ['node__body', 'entity_id', 'body_value'],
+       ['node_revision__body', 'entity_id', 'body_value'],
+       ['node__description', 'entity_id', 'description_value'],
+       ['node_revision__description', 'entity_id', 'description_value'],
+       ['node__field_event_agenda', 'entity_id', 'field_event_agenda_value'],
+       ['node_revision__field_event_agenda', 'entity_id', 'field_event_agenda_value'],
+       ['paragraph__field_body', 'entity_id', 'field_body_value'],
+       ['paragraph_revision__field_body', 'entity_id', 'field_body_value'],
+    ];
+    $query = $db->select('rdf_sync_uri', 'u')
+      ->fields('u', ['uri'])
+      ->condition('entity_type', 'node');
+    $query->innerJoin('node', 'n', 'n.nid = u.entity_id');
+    $sandbox['uri_to_uuid'] = $query->fields('n', ['uuid'])
+      ->execute()
+      ->fetchAllKeyed();
+    $sandbox['uri_to_nid'] = $db->select('rdf_sync_uri')
+      ->fields('rdf_sync_uri', ['uri', 'entity_id'])
+      ->condition('entity_type', 'node')
+      ->execute()
+      ->fetchAllKeyed();
+  }
+
+  $ids = [];
+  [$table, $idField, $updatedField] = array_shift($sandbox['tables']);
+  $rows = $db->select($table)
+    ->fields($table, [$idField, $updatedField])
+    ->condition($updatedField, '%rdf_entity%', 'LIKE')
+    ->execute()
+    ->fetchAllKeyed();
+  foreach ($rows as $id => $value) {
+    $original = $value;
+
+    $dataEntityCallback = static function (array $matches) use ($sandbox): string {
+      if (!$uuid = $sandbox['uri_to_uuid'][$matches['uri']] ?? NULL) {
+        // Remove the attributes if they don't refer a valid entity.
+        return '';
+      }
+      return 'data-entity-type="node" data-entity-uuid="' . $uuid . '"';
+    };
+
+    $callbacks = [
+      '@data-entity-type="rdf_entity"\s+data-entity-uuid="(?<uri>[^\"]*)"@' => $dataEntityCallback,
+      '@data-entity-uuid="(?<uri>[^\"]*)"\s+data-entity-type="rdf_entity"@' => $dataEntityCallback,
+      '@href="(?:https://joinup.ec.europa.eu)?/?rdf_entity/(?<uri>[^\"]*)"@' => static function (array $matches) use ($sandbox): string {
+        $uri = strtr($matches['uri'], array_reverse(array_flip(MigrationHelper::URL_ENCODE_MAP), TRUE));
+        if (!$nid = $sandbox['uri_to_nid'][$uri] ?? NULL) {
+          // Remove the attribute if it doesn't point to valid content.
+          return 'href=""';
+        }
+        return 'href="/node/' . $nid . '"';
+      },
+    ];
+
+    $value = preg_replace_callback_array($callbacks, $value);
+    if ($value !== $original) {
+      $ids[] = $id;
+      $db->update($table)->fields([$updatedField => $value])->condition($idField, $id)->execute();
+    }
+  }
+
+  $sandbox['#finished'] = (int) empty($sandbox['tables']);
+  return "Processed table $table (field $updatedField). Affected IDs: " . implode(', ', $ids);
 }
 
 /**
@@ -416,7 +489,7 @@ function joinup_rdf_deploy_200007(): void {
 /**
  * Import content for EU OpenSource Software Solutions Catalogue.
  */
-function joinup_rdf_deploy_200008(): void {
+function joinup_rdf_deploy_200009(): void {
   $moduleInstaller = \Drupal::getContainer()->get('module_installer');
   $entityRepository = \Drupal::getContainer()->get('entity.repository');
 
@@ -431,7 +504,7 @@ function joinup_rdf_deploy_200008(): void {
 /**
  * Make sure that oss_archived has a default value.
  */
-function joinup_rdf_deploy_200009(array &$sandbox): string {
+function joinup_rdf_deploy_200010(array &$sandbox): string {
   $entityTypeManager = \Drupal::entityTypeManager();
   /** @var \Drupal\node\NodeStorage $nodeStorage */
   $nodeStorage = $entityTypeManager->getStorage('node');
@@ -462,7 +535,7 @@ function joinup_rdf_deploy_200009(array &$sandbox): string {
 /**
  * Fix references from/to EU OSS Catalogue landing page.
  */
-function joinup_rdf_deploy_200010(): void {
+function joinup_rdf_deploy_200011(): void {
   $menuName = 'ogmenu-3728';
   $repository = \Drupal::getContainer()->get('entity.repository');
 
