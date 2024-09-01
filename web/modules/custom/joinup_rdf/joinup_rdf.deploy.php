@@ -487,6 +487,32 @@ function joinup_rdf_deploy_200008(?array &$sandbox = NULL): string {
 }
 
 /**
+ * Meta entity fix.
+ */
+function joinup_rdf_deploy_200009(): void {
+  $db = \Drupal::database();
+
+  // Clear stale data.
+  $db->delete('meta_entity')->condition('id', 5609)->execute();
+  $db->delete('meta_entity__count')->condition('entity_id', 5609)->execute();
+
+  // Fix labels referring RDF entities.
+  $sql = <<<SQL
+    UPDATE {meta_entity} m
+    INNER JOIN {rdf_sync_uri} u ON SUBSTRING(m.label, 13) = u.uri AND u.entity_type = 'node'
+    SET m.label = CONCAT('node: ', u.entity_id)
+    WHERE m.label LIKE 'rdf_entity: %'
+    SQL;
+  $db->query($sql, [], ['allow_delimiter_in_query' => TRUE]);
+
+  // Fill the integer version of ID.
+  $db->query("UPDATE {meta_entity} SET target__target_id_int = target__target_id");
+
+  // Fix 'rdf entity' ocuurrences in label.
+  $db->query("UPDATE meta_entity SET label = REPLACE(label, 'rdf entity (', 'content item (')");
+}
+
+/**
  * Section moved from joinup_oss_catalogue.
  *
  * @todo Remove after v1.112.0 is released, in ISAICP-9045.
@@ -495,7 +521,7 @@ function joinup_rdf_deploy_200008(?array &$sandbox = NULL): string {
 /**
  * Import content for EU OpenSource Software Solutions Catalogue.
  */
-function joinup_rdf_deploy_200009(): void {
+function joinup_rdf_deploy_200010(): void {
   $moduleInstaller = \Drupal::getContainer()->get('module_installer');
   $entityRepository = \Drupal::getContainer()->get('entity.repository');
 
@@ -510,7 +536,7 @@ function joinup_rdf_deploy_200009(): void {
 /**
  * Make sure that oss_archived has a default value.
  */
-function joinup_rdf_deploy_200010(array &$sandbox): string {
+function joinup_rdf_deploy_200011(array &$sandbox): string {
   $entityTypeManager = \Drupal::entityTypeManager();
   /** @var \Drupal\node\NodeStorage $nodeStorage */
   $nodeStorage = $entityTypeManager->getStorage('node');
@@ -541,7 +567,7 @@ function joinup_rdf_deploy_200010(array &$sandbox): string {
 /**
  * Fix references from/to EU OSS Catalogue landing page.
  */
-function joinup_rdf_deploy_200011(): void {
+function joinup_rdf_deploy_200012(): void {
   $menuName = 'ogmenu-3728';
   $repository = \Drupal::getContainer()->get('entity.repository');
 
