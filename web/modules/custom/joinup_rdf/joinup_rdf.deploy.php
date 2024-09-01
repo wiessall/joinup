@@ -429,6 +429,8 @@ function joinup_rdf_deploy_200008(?array &$sandbox = NULL): string {
        ['node_revision__field_event_agenda', 'entity_id', 'field_event_agenda_value'],
        ['paragraph__field_body', 'entity_id', 'field_body_value'],
        ['paragraph_revision__field_body', 'entity_id', 'field_body_value'],
+       ['taxonomy_term_field_data', 'tid', 'description__value'],
+       ['taxonomy_term_field_revision', 'tid', 'description__value'],
     ];
     $query = $db->select('rdf_sync_uri', 'u')
       ->fields('u', ['uri'])
