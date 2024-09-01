@@ -208,9 +208,23 @@ function joinup_rdf_update_200006(): void {
 }
 
 /**
- * Rerun user_update_10000.
+ * Recreate pathauto patterns data.
  */
 function joinup_rdf_update_200007(): void {
+  $db = \Drupal::database();
+  $db->delete('key_value')
+    ->condition('collection', 'config.entity.key_store.pathauto_pattern')
+    ->execute();
+  $db->delete('config')
+    ->condition('collection', '')
+    ->condition('name', 'pathauto.pattern.%', 'LIKE')
+    ->execute();
+}
+
+/**
+ * Rerun user_update_10000.
+ */
+function joinup_rdf_update_200008(): void {
   require_once DRUPAL_ROOT . '/core/modules/user/user.install';
   user_update_10000();
 }
