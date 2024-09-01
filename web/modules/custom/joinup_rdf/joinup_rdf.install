@@ -208,17 +208,20 @@ function joinup_rdf_update_200006(): void {
 }
 
 /**
- * Recreate pathauto patterns data.
+ * Recreate pathauto patterns and tour data.
  */
 function joinup_rdf_update_200007(): void {
   $db = \Drupal::database();
   $db->delete('key_value')
-    ->condition('collection', 'config.entity.key_store.pathauto_pattern')
-    ->execute();
-  $db->delete('config')
-    ->condition('collection', '')
-    ->condition('name', 'pathauto.pattern.%', 'LIKE')
-    ->execute();
+    ->condition('collection', [
+      'config.entity.key_store.pathauto_pattern',
+      'config.entity.key_store.tour',
+      'config.entity.key_store.rdf_entity_graph',
+    ], 'IN')->execute();
+  $db->query("DELETE FROM {config} WHERE name LIKE 'pathauto.pattern.%' OR name LIKE 'tour.tour.%'");
+
+  // Other leftovers.
+  $db->query("DELETE FROM {key_value} WHERE collection = 'entity.definitions.bundle_field_map' AND name IN('eif_wrapper', 'rdf_entity', 'rdf_meta_entity')");
 }
 
 /**
