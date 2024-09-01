@@ -177,6 +177,7 @@ function joinup_rdf_deploy_200004(): void {
   // storage definition update.
   $tables = [
     'file_usage' => 'id',
+    'flag_counts' => 'entity_id',
     'flagging' => 'entity_id',
     'invitation' => 'entity_id',
     'meta_entity' => 'target__target_id',
