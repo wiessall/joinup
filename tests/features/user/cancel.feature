@@ -7,8 +7,8 @@ Feature:
   Background:
 
     Given users:
-      | Username      | Roles     | E-mail                   | First name | Family name |
-      | alicia__1997  |           | AliciaPotter@example.com | Alicia     | Potter      |
+      | Username     | Roles | E-mail                   | First name | Family name |
+      | alicia__1997 |       | AliciaPotter@example.com | Alicia     | Potter      |
 
   Scenario: A moderator cancels a user account.
     Given I am logged in as a moderator
@@ -21,8 +21,8 @@ Feature:
     When I press "Confirm"
     And I wait for the batch process to finish
     And the following email should have been sent:
-      | recipient_mail | AliciaPotter@example.com                                                                                                                                                                                                                                            |
-      | subject        | Your account has been deleted.                                                                                                                                                                                                                                      |
+      | recipient_mail | AliciaPotter@example.com                                                                                                                                                                                                                                             |
+      | subject        | Your account has been deleted.                                                                                                                                                                                                                                       |
       | body           | Your account alicia__1997 has been deleted. This action has been done in the framework of moderation activities regularly conducted on the Joinup platform. If you believe that this action has been performed by mistake, please contact The Joinup Support Team at |
     And 1 e-mail should have been sent
     And the "alicia__1997" user account is cancelled
@@ -34,9 +34,9 @@ Feature:
     And the following fields should be disabled "First name,Family name,Allow user to log in via CAS,CAS Username,Email,Username,Photo,Country of origin,Professional domain,Business title,Organisation,Enable the search field,Facebook,GitHub,LinkedIn,SlideShare,X,Vimeo,Youtube,Save"
 
   Scenario: A moderator deletes a user using the administrative UI.
-    Given the following collection:
-      | title | Test collection      |
-      | state | published |
+    Given collection content:
+      | title           | state     |
+      | Test collection | published |
     And news content:
       | title     | author       | collection      | state     |
       | News item | alicia__1997 | Test collection | published |
@@ -56,8 +56,8 @@ Feature:
     Then I should see the success message "Alicia Potter has been deleted."
     And I should not see the link "Alicia Potter"
     And the following email should have been sent:
-      | recipient_mail | AliciaPotter@example.com                                                                                                                                                                                                                                            |
-      | subject        | Your account has been deleted.                                                                                                                                                                                                                                      |
+      | recipient_mail | AliciaPotter@example.com                                                                                                                                                                                                                                             |
+      | subject        | Your account has been deleted.                                                                                                                                                                                                                                       |
       | body           | Your account alicia__1997 has been deleted. This action has been done in the framework of moderation activities regularly conducted on the Joinup platform. If you believe that this action has been performed by mistake, please contact The Joinup Support Team at |
     # We cannot assert the number of emails because of created content that
     # sends messages to administrators and moderators. Depending on environment
@@ -74,9 +74,9 @@ Feature:
     Then the response status code should be 404
 
   Scenario: Cancel own account.
-    Given the following collection:
-      | title | Test collection      |
-      | state | published |
+    Given collection content:
+      | title           | state     |
+      | Test collection | published |
     And news content:
       | title     | author       | collection      | state     |
       | News item | alicia__1997 | Test collection | published |

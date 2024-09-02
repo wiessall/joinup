@@ -5,7 +5,7 @@ Feature: Pinning content entities inside solutions
   So that important content has more visibility
 
   Background:
-    Given the following solutions:
+    Given solution content:
       | title       | state     |
       | Blue Wrench | published |
       | Sunny Beam  | published |
@@ -94,17 +94,17 @@ Feature: Pinning content entities inside solutions
     And I should not see the contextual links "Pin, Unpin" in the "Very important" tile
 
     Examples:
-      | content type | label      |
-      | event        | Event      |
-      | document     | Document   |
-      | news         | News       |
+      | content type | label    |
+      | event        | Event    |
+      | document     | Document |
+      | news         | News     |
 
   @javascript
   Scenario Outline: Pinned content tiles should show a visual cue only in their solution homepage.
     Given <content type> content:
-      | title       | headline | solution    | state     | pinned |
-      | Lantern FAQ | Lantern FAQ |Blue Wrench | published | yes    |
-      | Lantern TCA | Lantern TCA |Blue Wrench | published | no     |
+      | title       | headline    | solution    | state     | pinned |
+      | Lantern FAQ | Lantern FAQ | Blue Wrench | published | yes    |
+      | Lantern TCA | Lantern TCA | Blue Wrench | published | no     |
 
     When I go to the homepage of the "Blue Wrench" solution
     Then the "Lantern FAQ" tile should be marked as pinned

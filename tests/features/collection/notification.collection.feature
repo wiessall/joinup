@@ -32,7 +32,7 @@ Feature: Notification test for the collection transitions.
       | NC to archive          | archival request | No one cares | No one cares. | Supplier exchange | NC for all | Notificationous absolutous |
       | NC to delete           | published        | No one cares | No one cares. | Supplier exchange | NC for all | Notificationous absolutous |
       | NC to delete by mod    | published        | No one cares | No one cares. | Supplier exchange | NC for all | Notificationous absolutous |
-    And the following solutions:
+    Given solution content:
       | title        | collections                          | logo     | state     |
       # Has only one affiliate.
       | NC Solution1 | NC to archive                        | logo.png | published |

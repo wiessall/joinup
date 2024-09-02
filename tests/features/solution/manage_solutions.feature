@@ -2,11 +2,11 @@
 Feature: As a moderator I want to be able to move solutions to other collection.
 
   Background:
-    Given the following collections:
+    Given collection content:
       | uri                            | title       | state     |
       | http://example.com/source      | Source      | published |
       | http://example.com/destination | Destination | published |
-    And solutions:
+    Given solution content:
       | title      | collection | state     | creation date    | modification date |
       | Solution 1 | Source     | published | 2017-11-18T10:00 | 2017-12-18T10:00  |
       | Solution 2 | Source     | published | 2018-11-19T10:00 | 2018-12-19T10:00  |
@@ -99,7 +99,7 @@ Feature: As a moderator I want to be able to move solutions to other collection.
     When I press "Confirm"
     # Two solution were changed.
     Then I should see the following success messages:
-      | Success messages                         |
+      | Success messages                                                                   |
       | The following solutions' state was changed to <target state>: <changed solutions>. |
     And the "manage solutions" table should contain the following columns:
       # Skip last update since it is not under our control.

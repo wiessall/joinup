@@ -7,7 +7,7 @@ Feature: Administer media.
       | Username | Roles     |
       | joe      |           |
       | theOne   | moderator |
-    And collections:
+    And collection content:
       | title | state     |
       | Mars  | published |
       | Venus | published |
@@ -39,16 +39,16 @@ Feature: Administer media.
 
     When I click "Library"
     Then the "media admin" table should contain the following columns:
-      | Media name            | Type              | Status      | Group | Author |
-      | The Collection Logo   | Collection logo   | Published   |       | joe    |
-      | The Solution Logo     | Solution logo     | Published   |       | joe    |
-      | The Event Logo        | Event logo        | Published   |       | joe    |
-      | The News Logo         | News logo         | Published   |       | joe    |
-      | The Image             | Image             | Published   | Mars  | joe    |
-      | Other Image           | Image             | Published   | Venus | joe    |
-      | The File              | File              | Published   | Mars  | joe    |
-      | Other File            | File              | Published   | Venus | joe    |
-      | The Video             | Video             | Unpublished | Mars  | joe    |
+      | Media name          | Type            | Status      | Group | Author |
+      | The Collection Logo | Collection logo | Published   |       | joe    |
+      | The Solution Logo   | Solution logo   | Published   |       | joe    |
+      | The Event Logo      | Event logo      | Published   |       | joe    |
+      | The News Logo       | News logo       | Published   |       | joe    |
+      | The Image           | Image           | Published   | Mars  | joe    |
+      | Other Image         | Image           | Published   | Venus | joe    |
+      | The File            | File            | Published   | Mars  | joe    |
+      | Other File          | File            | Published   | Venus | joe    |
+      | The Video           | Video           | Unpublished | Mars  | joe    |
 
     When I type "Venus" in the "group" autocomplete field
     Then I wait until the page contains the text "Venus"
@@ -61,16 +61,16 @@ Feature: Administer media.
 
     When I press "Reset"
     Then the "media admin" table should contain the following columns:
-      | Media name            | Type              | Status      | Group | Author |
-      | The Collection Logo   | Collection logo   | Published   |       | joe    |
-      | The Solution Logo     | Solution logo     | Published   |       | joe    |
-      | The Event Logo        | Event logo        | Published   |       | joe    |
-      | The News Logo         | News logo         | Published   |       | joe    |
-      | The Image             | Image             | Published   | Mars  | joe    |
-      | Other Image           | Image             | Published   | Venus | joe    |
-      | The File              | File              | Published   | Mars  | joe    |
-      | Other File            | File              | Published   | Venus | joe    |
-      | The Video             | Video             | Unpublished | Mars  | joe    |
+      | Media name          | Type            | Status      | Group | Author |
+      | The Collection Logo | Collection logo | Published   |       | joe    |
+      | The Solution Logo   | Solution logo   | Published   |       | joe    |
+      | The Event Logo      | Event logo      | Published   |       | joe    |
+      | The News Logo       | News logo       | Published   |       | joe    |
+      | The Image           | Image           | Published   | Mars  | joe    |
+      | Other Image         | Image           | Published   | Venus | joe    |
+      | The File            | File            | Published   | Mars  | joe    |
+      | Other File          | File            | Published   | Venus | joe    |
+      | The Video           | Video           | Unpublished | Mars  | joe    |
 
     When I select "Unpublished" from "Status"
     And I press "Filter"
@@ -93,14 +93,14 @@ Feature: Administer media.
     And I attach the file "banner.jpg" to "Add a new file"
     When I press "Save"
     Then the "media admin" table should contain the following columns:
-      | Media name            | Type              | Status      | Group | Author |
-      | Just a doc            | File              | Published   | Mars  | theOne |
-      | The Collection Logo   | Collection logo   | Published   |       | joe    |
-      | The Solution Logo     | Solution logo     | Published   |       | joe    |
-      | The Event Logo        | Event logo        | Published   |       | joe    |
-      | The News Logo         | News logo         | Published   |       | joe    |
-      | The Image             | Image             | Published   | Mars  | joe    |
-      | Other Image           | Image             | Published   | Venus | joe    |
-      | The File              | File              | Published   | Mars  | joe    |
-      | Other File            | File              | Published   | Venus | joe    |
-      | The Video             | Video             | Unpublished | Mars  | joe    |
+      | Media name          | Type            | Status      | Group | Author |
+      | Just a doc          | File            | Published   | Mars  | theOne |
+      | The Collection Logo | Collection logo | Published   |       | joe    |
+      | The Solution Logo   | Solution logo   | Published   |       | joe    |
+      | The Event Logo      | Event logo      | Published   |       | joe    |
+      | The News Logo       | News logo       | Published   |       | joe    |
+      | The Image           | Image           | Published   | Mars  | joe    |
+      | Other Image         | Image           | Published   | Venus | joe    |
+      | The File            | File            | Published   | Mars  | joe    |
+      | Other File          | File            | Published   | Venus | joe    |
+      | The Video           | Video           | Unpublished | Mars  | joe    |

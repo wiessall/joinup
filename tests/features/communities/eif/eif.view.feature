@@ -3,26 +3,22 @@ Feature:
   Basic test steps for the EIF perspective meta entity.
 
   Scenario: Create an EIF perspective and view the data.
-    Given the following solutions:
+    Given solution content:
       | title         | description                                      | state     |
       | EIF solution  | Some description not to be shown in the EIF page | published |
       | EIF only type | Some description not to be shown in the EIF page | published |
-    Given the following EIF perspective data for the "EIF solution" solution:
-      | Description    | This should be in the description field.                                                       |
-      | Solution type  | Common frameworks                                                                              |
-      | Principle      | Underlying Principle 1: Subsidiarity and proportionality, Underlying Principle 3: Transparency |
-      | Layer          | Interoperability Layer 3: Legal interoperability                                               |
-      | Recommendation | name: Recommendation 21, description: This is recommended                                      |
-      | Recommendation | name: Recommendation 15, description: This is also recommended                                 |
-    Given the following EIF perspective data for the "EIF only type" solution:
-      | Description   | This should be in the description field. |
-      | Solution type | Common frameworks                        |
+    Given solution content:
+      | Description                              | Solution type     | Principle                                                                                      | Layer                                            | Recommendation                                            | Recommendation                                                 |
+      | This should be in the description field. | Common frameworks | Underlying Principle 1: Subsidiarity and proportionality, Underlying Principle 3: Transparency | Interoperability Layer 3: Legal interoperability | name: Recommendation 21, description: This is recommended | name: Recommendation 15, description: This is also recommended |
+    Given solution content:
+      | Description                              | Solution type     |
+      | This should be in the description field. | Common frameworks |
 
     # Verify that solution group menu contains correct links.
     When I go to the "EIF solution" solution
     Then I should see the following navigation menu items in the specified order:
-      | text            |
-      | Overview        |
+      | text     |
+      | Overview |
     And I should see the following quick links menu items in the specified order:
       | text            |
       | EIF Perspective |

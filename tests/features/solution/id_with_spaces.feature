@@ -5,27 +5,9 @@ Feature: Solution API
   I need to be able to store them
 
   Scenario: Programmatically create a solution
-    Given the following solution:
-      | uri              | http://example.com/this%20has%20spaces |
-      | title            | Solution with spaces                   |
-      | description      | A sample solution                      |
-      | logo             | logo.png                               |
-      | documentation    | text.pdf                               |
-      | content creation | registered users                       |
-      | landing page     | http://foo-example.com/landing         |
-      | webdav creation  | no                                     |
-      | webdav url       | http://joinup.eu/solution/foo/webdav   |
-      | wiki             | http://example.wiki/foobar/wiki        |
-      | state            | published                              |
-    And the following solution:
-      | uri              | http://www.it-planungsrat.de/DE/Projekte/Koordinierungsprojekte/OsiP/Online_Sicherheitspr%C3%BCfung.html |
-      | title            | Solution with unicode                                                                                    |
-      | description      | A sample solution                                                                                        |
-      | logo             | logo.png                                                                                                 |
-      | documentation    | text.pdf                                                                                                 |
-      | content creation | registered users                                                                                         |
-      | landing page     | http://foo-example.com/landing                                                                           |
-      | webdav creation  | no                                                                                                       |
-      | webdav url       | http://joinup.eu/solution/foo/webdav                                                                     |
-      | wiki             | http://example.wiki/foobar/wiki                                                                          |
-      | state            | published                                                                                                |
+    Given solution content:
+      | uri                                    | title                | description       | logo     | documentation | content creation | landing page                   | webdav creation | webdav url                           | wiki                            | state     |
+      | http://example.com/this%20has%20spaces | Solution with spaces | A sample solution | logo.png | text.pdf      | registered users | http://foo-example.com/landing | no              | http://joinup.eu/solution/foo/webdav | http://example.wiki/foobar/wiki | published |
+    And solution content:
+      | uri                                                                                                      | title                 | description       | logo     | documentation | content creation | landing page                   | webdav creation | webdav url                           | wiki                            | state     |
+      | http://www.it-planungsrat.de/DE/Projekte/Koordinierungsprojekte/OsiP/Online_Sicherheitspr%C3%BCfung.html | Solution with unicode | A sample solution | logo.png | text.pdf      | registered users | http://foo-example.com/landing | no              | http://joinup.eu/solution/foo/webdav | http://example.wiki/foobar/wiki | published |

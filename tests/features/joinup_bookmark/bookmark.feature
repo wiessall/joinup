@@ -12,7 +12,7 @@ Feature: Bookmark/Unbookmark feature.
     Given the following collections:
       | title  | state     |
       | Batman | published |
-    Given the following solutions:
+    Given solution content:
       | title         | state     | collection |
       | Batman Begins | published | Batman     |
 

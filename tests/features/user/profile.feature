@@ -103,11 +103,11 @@ Feature: User profile
       | Anise Edwardson   | anise.edwardson@example.com   |            |             |
       | Jayson Granger    | jayson.granger@example.com    |            |             |
       | Clarette Fairburn | clarette.fairburn@example.com | Clarette   | Fairburn    |
-    And the following collections:
+    And collection content:
       | title                 | description                           | logo     | state     | creation date    |
       | Botanic E.D.E.N.      | European Deep Earth Nurturing project | logo.png | published | 2017-02-23 10:00 |
       | Ethic flower handling | Because even flowers have feelings.   | logo.png | published | 2017-02-23 12:00 |
-    And the following solutions:
+    Given solution content:
       | title              | collection            | description                                     | logo     | state     | creation date    |
       | E.C.O. fertilizers | Botanic E.D.E.N.      | Ecologic cool organic fertilizers production.   | logo.png | published | 2017-02-23 13:00 |
       | SOUND project      | Ethic flower handling | Music playlist for growing flowers with rhythm. | logo.png | published | 2017-02-23 14:01 |
@@ -185,9 +185,9 @@ Feature: User profile
     Given users:
       | Username      | E-mail                           |
       | Korben Dallas | k.dallas@cabs.services.zorg.corp |
-    And collection:
-      | title | Federated Army Veterans |
-      | state | published               |
+    And collection content:
+      | title                   | state     |
+      | Federated Army Veterans | published |
     # Visit the user profile page for the first time. It should not yet be
     # cached and we should not see anything about the collection since we are
     # not a member.
@@ -243,12 +243,12 @@ Feature: User profile
       | Username          | E-mail                        |
       | Janny Robert      | janny.robert@example.com      |
       | Clarise Edwardson | clarise.edwardson@example.com |
-    And the following collections:
+    And collection content:
       | title         | description                           | logo     | state     | creation date    | author            |
       | Lake E.D.E.N. | European Deep Earth Nurturing project | logo.png | published | 2017-02-23 10:00 | Janny Robert      |
       | Rose is red   | Better descriptions ever              | logo.png | published | 2017-02-23 10:00 | Clarise Edwardson |
       | Lone handling | Because even flowers have feelings.   | logo.png | archived  | 2017-02-23 12:00 | Janny Robert      |
-    And the following solutions:
+    Given solution content:
       | title          | collection    | state     | creation date   | author       |
       | Sugar is sweet | Lake E.D.E.N. | archived  | 2015-03-03T8:00 | Janny Robert |
       | Salt is salty  | Lake E.D.E.N. | published | 2015-02-03T7:00 | Janny Robert |

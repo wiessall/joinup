@@ -5,10 +5,9 @@ Feature:
   I need to be able to place paragraphs for content.
 
   Background:
-    Given the following collection:
-      | title | Paragraphs collection |
-      | state | published             |
-      | topic | HR                    |
+    Given collection content:
+      | title                 | state     | topic |
+      | Paragraphs collection | published | HR    |
 
   @javascript
   Scenario: Custom page content is trimmed properly.
@@ -59,7 +58,7 @@ Feature:
       | Anchor link | Paragraphs collection | published |
     And I append "text" to "field_paragraphs_body" field in "node" entity with following "Anchor link" title:
       | field_body:value  | <a id="anchorlinkid"></a> |
-      | field_body:format | text_html                                                         |
+      | field_body:format | text_html                 |
 
     When I go to the "Anchor link" custom page
     Then the response should contain "<a id=\"anchorlinkid\"></a>"

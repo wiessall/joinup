@@ -7,7 +7,7 @@ Feature: Global Interoperable search
     Given the following collections:
       | title          | state     |
       | Open standards | published |
-    And the following solutions:
+    Given solution content:
       | title           | state     | collection     | description                                                                  |
       | eGovernment     | published | Open standards | It refers to the collaboration ability of cross-border services for citizens |
       | Military forces | published | Open standards | the ability of the forces of two or more nations to train                    |

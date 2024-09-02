@@ -3,9 +3,9 @@ Feature: View a comment
   As a visitor of the website I can view a comment on community content.
 
   Scenario Outline: View comments on community content
-    Given collection:
-      | title | Hashrate, shares & workers |
-      | state | published                  |
+    Given collection content:
+      | title                      | state     |
+      | Hashrate, shares & workers | published |
     And <content type> content:
       | title                      | body                                  | collection                 | state     |
       | Current effective hashrate | Ethash is the proof of work algorithm | Hashrate, shares & workers | published |

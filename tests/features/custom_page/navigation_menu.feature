@@ -26,7 +26,7 @@ Feature: Navigation menu for custom pages
     When I click the contextual link "Add new page" in the "Header" region
     Then I should see the heading "Add custom page"
     When I fill in the following:
-      | Title  | About us    |
+      | Title | About us |
     And I select "HR" from "Topic"
     And I press "Publish"
     Then I should see the success message "Custom page About us has been created."
@@ -116,9 +116,9 @@ Feature: Navigation menu for custom pages
 
   @javascript
   Scenario: Menus with items that do not fit in available space should be wrapped in a dropdown
-    Given collection:
-      | title | Plaster molds |
-      | state | published     |
+    Given collection content:
+      | title         | state     |
+      | Plaster molds | published |
     And custom_page content:
       | title              | body                   | collection    | state     | topic |
       | Molds for candles  | This is a sample body. | Plaster molds | published | HR    |
@@ -133,9 +133,9 @@ Feature: Navigation menu for custom pages
     But I should not see the text "See more" in the "Navigation menu"
     # A menu with items that do not fit the available space are in a dropdown
     Given custom_page content:
-      | title              | body                   | collection    | state     | topic |
-      | Vintage molds      | This is a sample body. | Plaster molds | published | HR    |
-      | Plaster casting    | This is a sample body. | Plaster molds | published | HR    |
+      | title           | body                   | collection    | state     | topic |
+      | Vintage molds   | This is a sample body. | Plaster molds | published | HR    |
+      | Plaster casting | This is a sample body. | Plaster molds | published | HR    |
     When I go to the "Plaster molds" collection
     Then I should see the text "See more" in the "Navigation menu"
     But I should not see the text "Plaster casting" in the "Navigation menu"

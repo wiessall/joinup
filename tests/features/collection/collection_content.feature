@@ -8,13 +8,9 @@ Feature: Collection content
     Given collection content:
       | title                     | state     |
       | Turin Egyptian Collection | published |
-    And the following solution:
-      | title             | Tomb Of Unknown Restoration |
-      | collection        | Turin Egyptian Collection   |
-      | state             | published                   |
-      | creation date     | 2017-11-11T11:11            |
-      | modification date | 2017-11-30T11:11            |
-      | topic             | HR                          |
+    And solution content:
+      | title                       | collection                | state     | creation date    | modification date | topic |
+      | Tomb Of Unknown Restoration | Turin Egyptian Collection | published | 2017-11-11T11:11 | 2017-11-30T11:11  | HR    |
     And discussion content:
       | title                                 | body                                                                    | state     | collection                | topic                                                 | created          | changed                   |
       | Bigger than Egyptian Museum of Cairo? | <p><a href="#link">Link to the museum</a> web<strong>site</strong>.</p> | published | Turin Egyptian Collection | Finance in EU, Supplier exchange, E-health, E-justice | 2017-11-11T11:11 | Wed, 25 Dec 2019 15:00:00 |
@@ -101,10 +97,9 @@ Feature: Collection content
     And I should see the link "1 News"
     And I should see the link "1 Solution"
 
-    Given the following solution:
-      | title      | Protecting Artifacts      |
-      | collection | Turin Egyptian Collection |
-      | state      | published                 |
+    Given solution content:
+      | title                | collection                | state     |
+      | Protecting Artifacts | Turin Egyptian Collection | published |
     And discussion content:
       | title                              | state     | collection                |
       | Is the entrance free for children? | published | Turin Egyptian Collection |

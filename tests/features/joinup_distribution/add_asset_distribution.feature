@@ -5,15 +5,12 @@ Feature: Add distribution through the UI
   I need to be able to add "Distribution" RDF entities through the UI.
 
   Background:
-    Given the following collection:
-      | title | Asset Distribution Test |
-      | logo  | logo.png                |
-      | state | published               |
-    And the following solution:
-      | title       | Solution random x name           |
-      | collection  | Asset Distribution Test          |
-      | description | Some reusable random description |
-      | state       | published                        |
+    Given collection content:
+      | title                   | logo     | state     |
+      | Asset Distribution Test | logo.png | published |
+    And solution content:
+      | title                  | collection              | description                      | state     |
+      | Solution random x name | Asset Distribution Test | Some reusable random description | published |
     And release content:
       | title                | release notes        | release number | creation date    | is version of          | status    | state     |
       | Authoritarian Alpaca | First public release | 1.0.0          | 2019-11-19 20:45 | Solution random x name | Completed | published |
@@ -147,10 +144,9 @@ Feature: Add distribution through the UI
     Then I should see the description "Allowed types: 7z adf archimate asc aspx bak bat bin bmp bz2 cab cer cml conf css csv dbf deb dgn diff dmg doc docx dwg dxf eap ear ecw emf exe gdms gid gif gml gsb gvl gvp gvspkg gvspki gvt gz hdr hlp jar java jp2 jpeg jpg jpgw js json jsonld jsp kml ksh lan log lograster mht msi odg odp ods odt ogv org ott out oxt patch path pdf pem pkg png pod pps ppt pptx prj ps rar raw rdf rmf rst rtf sbn sh shp shx sld sp0 sp1 spx sql swf sym tar tgz tif tiff torrent trig ttf ttl txt type vmdk vmx vrt vsd war wld wsdl xls xlsm xlsx xmi xml xsd xsl xslt zip." for the "Access URL" field
 
   Scenario: Adding a distribution with a duplicate title
-    Given the following solution:
-      | title       | Solubility of gases     |
-      | description | Affected by temperature |
-      | state       | published               |
+    Given solution content:
+      | title               | description             | state     |
+      | Solubility of gases | Affected by temperature | published |
     And release content:
       | title                | release notes        | is version of       |
       | 1.0.0 Adolf Sieverts | First public release | Solubility of gases |

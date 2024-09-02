@@ -39,11 +39,11 @@ Feature:
 
   # This scenario is a light test to avoid regressions.
   Scenario: Moderators can access the list of published solutions and filter them by dates and type.
-    Given the following collections:
+    Given collection content:
       | title               | state     |
       | Monday's Artificial | published |
       | Restless Burst      | published |
-    And solutions:
+    Given solution content:
       | title           | collection          | state     | creation date    | modification date | solution type                                   |
       | Worthy Puppet   | Monday's Artificial | published | 2003-01-31T23:00 | 2015-12-07T13:57  | Interoperability Specification, Logging Service |
       | Long Artificial | Restless Burst      | published | 2012-09-14T00:00 | 2012-12-04T16:19  | Networking Infrastructure Enablers              |

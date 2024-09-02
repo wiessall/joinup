@@ -146,7 +146,7 @@ Feature: Messaging group announcements
       | The Fail pension <group> team                                                                                                                                                                                                                              |
       | You received this e-mail because, as a registered user of Joinup and a member of Fail pension <group>, you agreed to receive information sent to you by the Fail pension <group> owner/administrator (based on Article 5(d) of Regulation (EU) 2018/1725). |
       | In case you do not want to receive such e-mails, you can unsubscribe from group announcement notifications or manage all your subscription notifications from the user subscriptions page.                                                                 |
-      | This is an unmonitored email address, please do not reply. You can contact directly Fail pension <group> via the Overview page.                                                                                                                               |
+      | This is an unmonitored email address, please do not reply. You can contact directly Fail pension <group> via the Overview page.                                                                                                                            |
 
     When I press "Send for approval"
     Then I should see the success message "Your announcement has been sent for validation by Joinup moderators. Once approved, will reach the Fail pension <group> members."
@@ -210,7 +210,7 @@ Feature: Messaging group announcements
       | The Fail pension <group> team                                                                                                                                                                                                                              |
       | You received this e-mail because, as a registered user of Joinup and a member of Fail pension <group>, you agreed to receive information sent to you by the Fail pension <group> owner/administrator (based on Article 5(d) of Regulation (EU) 2018/1725). |
       | In case you do not want to receive such e-mails, you can unsubscribe from group announcement notifications or manage all your subscription notifications from the user subscriptions page.                                                                 |
-      | This is an unmonitored email address, please do not reply. You can contact directly Fail pension <group> via the Overview page.                                                                                                                               |
+      | This is an unmonitored email address, please do not reply. You can contact directly Fail pension <group> via the Overview page.                                                                                                                            |
 
     Given I am logged in as "Sons of tweets"
 
@@ -271,7 +271,7 @@ Feature: Messaging group announcements
       | The Fail pension <group> team                                                                                                                                                                                                                              |
       | You received this e-mail because, as a registered user of Joinup and a member of Fail pension <group>, you agreed to receive information sent to you by the Fail pension <group> owner/administrator (based on Article 5(d) of Regulation (EU) 2018/1725). |
       | In case you do not want to receive such e-mails, you can unsubscribe from group announcement notifications or manage all your subscription notifications from the user subscriptions page.                                                                 |
-      | This is an unmonitored email address, please do not reply. You can contact directly Fail pension <group> via the Overview page.                                                                                                                               |
+      | This is an unmonitored email address, please do not reply. You can contact directly Fail pension <group> via the Overview page.                                                                                                                            |
     And the email sent to "Greedy" with subject "The Big Opening is postponed" contains the following lines of text:
       | Dear Greedy,                                                                                                                                                                                                                                               |
       | Fail pension <group> has an announcement for its members:                                                                                                                                                                                                  |
@@ -287,7 +287,7 @@ Feature: Messaging group announcements
       | The Fail pension <group> team                                                                                                                                                                                                                              |
       | You received this e-mail because, as a registered user of Joinup and a member of Fail pension <group>, you agreed to receive information sent to you by the Fail pension <group> owner/administrator (based on Article 5(d) of Regulation (EU) 2018/1725). |
       | In case you do not want to receive such e-mails, you can unsubscribe from group announcement notifications or manage all your subscription notifications from the user subscriptions page.                                                                 |
-      | This is an unmonitored email address, please do not reply. You can contact directly Fail pension <group> via the Overview page.                                                                                                                               |
+      | This is an unmonitored email address, please do not reply. You can contact directly Fail pension <group> via the Overview page.                                                                                                                            |
     And the email sent to "Sons of tweets" with subject "The Big Opening is postponed" contains the following lines of text:
       | Dear Sons of tweets,                                                                                                                                                                                                                                       |
       | Fail pension <group> has an announcement for its members:                                                                                                                                                                                                  |
@@ -303,7 +303,7 @@ Feature: Messaging group announcements
       | The Fail pension <group> team                                                                                                                                                                                                                              |
       | You received this e-mail because, as a registered user of Joinup and a member of Fail pension <group>, you agreed to receive information sent to you by the Fail pension <group> owner/administrator (based on Article 5(d) of Regulation (EU) 2018/1725). |
       | In case you do not want to receive such e-mails, you can unsubscribe from group announcement notifications or manage all your subscription notifications from the user subscriptions page.                                                                 |
-      | This is an unmonitored email address, please do not reply. You can contact directly Fail pension <group> via the Overview page.                                                                                                                               |
+      | This is an unmonitored email address, please do not reply. You can contact directly Fail pension <group> via the Overview page.                                                                                                                            |
     # Accepted 'Legal notice' but it's not subscribed to group announcements.
     But no email has been sent to "Envious"
     # Subscribed to group announcements but didn't accept the 'Legal notice'.

@@ -2,9 +2,9 @@
 Feature: When a solution is archived then its sub-content also should be archived.
 
   Background:
-    Given the following collection:
-      | title | Collection |
-      | state | published  |
+    Given collection content:
+      | title      | state     |
+      | Collection | published |
     And owner content:
       | name        | owner type |
       | The Company | Company    |
@@ -12,18 +12,9 @@ Feature: When a solution is archived then its sub-content also should be archive
       | name                 | email                      |
       | Liam Smith           | liam.smith@example.com     |
       | Jennifer Unconfirmed | jennifer.smith@example.com |
-    And solution:
-      | title               | Solution                         |
-      | collection          | Collection                       |
-      | state               | published                        |
-      | abstract            | Abstract                         |
-      | description         | Description                      |
-      | topic               | Demography                       |
-      | solution type       | Innovation                       |
-      | creation date       | 2018-11-19T10:00                 |
-      | modification date   | 2018-12-19T10:00                 |
-      | owner               | The Company                      |
-      | contact information | Jennifer Unconfirmed, Liam Smith |
+    And solution content:
+      | title    | collection | state     | abstract | description | topic      | solution type | creation date    | modification date | owner       | contact information              |
+      | Solution | Collection | published | Abstract | Description | Demography | Innovation    | 2018-11-19T10:00 | 2018-12-19T10:00  | The Company | Jennifer Unconfirmed, Liam Smith |
     And users:
       | Username           | E-mail                     | First name | Family name | Roles     |
       | Anne Group Admin   | anne.smith@example.com     | Anne       | Smith       |           |

@@ -8,7 +8,7 @@ Feature: Revoke privileges from former and blocked members
     Given users:
       | Username  |
       | Lord Hong |
-    And the following collections:
+    And collection content:
       | title             | state     |
       | Interesting times | published |
     And the following collection user memberships:

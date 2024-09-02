@@ -16,7 +16,7 @@ Feature:
     Then I should see the heading "Public Service Provider"
 
   Scenario Outline: Convert a URL of an entity.
-    Given collections:
+    Given collection content:
       | uri   | title     | state     |
       | <uri> | <heading> | published |
 

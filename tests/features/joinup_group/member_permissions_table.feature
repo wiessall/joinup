@@ -14,7 +14,7 @@ Feature: Group member permissions table
       | Dr. John Hicks   |
       | Hex              |
       | Mustrum Ridcully |
-    Given the following collections:
+    Given collection content:
       | title                                       | state     | content creation         | moderation |
       | Applied astrology                           | published | facilitators and authors | yes        |
       | Illiberal studies                           | published | facilitators and authors | no         |
@@ -22,7 +22,7 @@ Feature: Group member permissions table
       | Dust, miscellaneous particles and filaments | published | members                  | no         |
       | Creative uncertainty                        | published | registered users         | yes        |
       | Woolly thinking                             | published | registered users         | no         |
-    And the following solutions:
+    Given solution content:
       | title                         | state     | content creation         | moderation |
       | Applied anthropics            | published | facilitators and authors | yes        |
       | Extreme horticulture          | published | facilitators and authors | no         |
@@ -462,7 +462,7 @@ Feature: Group member permissions table
       | Valid Bibliomancy    | published |
       | Draft Bibliomancy    | draft     |
       | Proposed Bibliomancy | proposed  |
-    And the following solutions:
+    Given solution content:
       | title             | state       |
       | Valid Dynamics    | published   |
       | Draft Dynamics    | draft       |

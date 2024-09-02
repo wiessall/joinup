@@ -16,10 +16,10 @@ Feature: Add a licence through the UI
 
     When I press "Save"
     Then I should see the following error messages:
-      | error messages                    |
-      | Title field is required.          |
-      | Description field is required.    |
-      | Type field is required.           |
+      | error messages                 |
+      | Title field is required.       |
+      | Description field is required. |
+      | Type field is required.        |
 
     When I fill in "Title" with "GNU GPL 2+"
     And I fill in "Description" with "The classic open source licence without copyleft."

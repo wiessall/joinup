@@ -8,11 +8,11 @@ Feature: CKEditor5
     And contact_information content:
       | name    | email                |
       | ReachMe | reach.me@example.com |
-    And collections:
+    And collection content:
       | title                 | state     | topic                   | owner    | contact information |
       | Shaping of disruption | published | Supplier exchange       | Landlord | ReachMe             |
       | The Other Collection  | published | Statistics and Analysis | Landlord | ReachMe             |
-    And solutions:
+    Given solution content:
       | title       | collection            | state     | topic             | owner    | contact information |
       | Angry Birds | Shaping of disruption | published | Supplier exchange | Landlord | ReachMe             |
 

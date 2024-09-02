@@ -26,11 +26,11 @@ Feature: Solution membership overview
       | Pocahontas Mathieu  | Pocahontas | Mathieu     | blaise.jpg   | Chief Communications Officer    |
       | Callista Wronski    | Callista   | Wronski     | richard.jpg  | Founder                         |
     And collection content:
-      | title | state |
-      | Growing collection | published          |
+      | title              | state     |
+      | Growing collection | published |
     And solution content:
-      | title       |   description     |state | collection |
-      | Growing zone | Soil and gravel    | published          | Growing collection |
+      | title        | description     | state     | collection         |
+      | Growing zone | Soil and gravel | published | Growing collection |
     And the following solution user memberships:
       | solution     | user                | roles       | state   |
       | Growing zone | Ariadna Astrauskas  | owner       |         |

@@ -11,7 +11,7 @@ Feature: Notification test for the discussion transitions on a pre moderated par
       | CC owner         |           | notify_owner@test.com       | CC         | Owner       |
       | CC facilitator   |           | notify_facilitator@test.com | CC         | Facilitator |
       | CC member        |           | notify_member@test.com      | CC         | Member      |
-    And collections:
+    And collection content:
       | title             | state     | content creation | moderation |
       | CC pre collection | published | members          | yes        |
     And the following collection user memberships:
@@ -56,8 +56,8 @@ Feature: Notification test for the discussion transitions on a pre moderated par
     And I select "Statistics and Analysis" from "Topic"
     And I press "Publish"
     Then the following email should have been sent:
-      | recipient | CC owner                                                                                                                                                                       |
-      | subject   | Joinup: Content has been published                                                                                                                                             |
+      | recipient | CC owner                                                                                                                                                                        |
+      | subject   | Joinup: Content has been published                                                                                                                                              |
       | body      | CC Facilitator has published the new discussion - "CC notify create publish" in the collection: "CC pre collection". You can access the new content at the following link: http |
 
     # Test 'update' operation.
@@ -162,7 +162,7 @@ Feature: Notification test for the discussion transitions on a pre moderated par
     And I click "Delete"
     And I press "Delete"
     Then the following email should have been sent:
-      | recipient | CC member                                                                                                                                            |
+      | recipient | CC member                                                                                                        |
       | subject   | Joinup: The discussion "CC notify pre delete" was deleted in the space of "CC pre collection"                    |
       | body      | for your information, the discussion "CC notify pre delete" was deleted from the "CC pre collection" collection. |
 
@@ -172,7 +172,7 @@ Feature: Notification test for the discussion transitions on a pre moderated par
     And I click "Delete"
     And I press "Delete"
     Then the following email should have been sent:
-      | recipient | CC member                                                                                                                                                      |
+      | recipient | CC member                                                                                                                  |
       | subject   | Joinup: The discussion "CC notify pre request deletion" was deleted in the space of "CC pre collection"                    |
       | body      | for your information, the discussion "CC notify pre request deletion" was deleted from the "CC pre collection" collection. |
 
@@ -183,6 +183,6 @@ Feature: Notification test for the discussion transitions on a pre moderated par
     And I click "Delete"
     And I press "Delete"
     Then the following email should have been sent:
-      | recipient | CC member                                                                                                                       |
+      | recipient | CC member                                                                                                                 |
       | subject   | Joinup: The discussion "CC notify published to delete" was deleted in the space of "CC pre collection"                    |
       | body      | for your information, the discussion "CC notify published to delete" was deleted from the "CC pre collection" collection. |

@@ -161,60 +161,60 @@ Feature:
       | Detailed information   |
       | Gallery                |
     And I should see the following lines of text:
-      | Source catalogue                                                                                   |
-      | The short description                                                                              |
-      | Description                                                                                        |
-      |   The long description. A patient developer can make this long enough to be at least 5 lines long. |
-      | Copyrights owner                                                                                   |
-      |   FOSS Conference                                                                                  |
-      | Features                                                                                           |
-      |   Feature A                                                                                        |
-      |   Feature B                                                                                        |
-      | Supported languages                                                                                |
-      |   Italian,                                                                                         |
-      |   English,                                                                                         |
-      |   German,                                                                                          |
-      |   error,                                                                                           |
-      |   Portuguese, International                                                                        |
-      | Development status                                                                                 |
-      |   Stable                                                                                           |
-      | License                                                                                            |
-      |   GPL-2.0-or-later                                                                                 |
-      | Platforms                                                                                          |
-      |   macOs                                                                                            |
-      | Maintenance type                                                                                   |
-      |   Maintained by people donating their time to the project                                          |
-      | Software type                                                                                      |
-      |   standalone/desktop                                                                               |
-      | Used by                                                                                            |
-      |   Administration 1,                                                                                |
-      |   Administration 2,                                                                                |
-      |   Administration 3                                                                                 |
-      | Technical Maintainers                                                                              |
-      |   ACME Ltd.                                                                                        |
-      | Technical Contacts                                                                                 |
-      |   FOSS Conference                                                                                  |
-      | Vitality                                                                                           |
-      | 41%                                                                                                |
+      | Source catalogue                                                                                 |
+      | The short description                                                                            |
+      | Description                                                                                      |
+      | The long description. A patient developer can make this long enough to be at least 5 lines long. |
+      | Copyrights owner                                                                                 |
+      | FOSS Conference                                                                                  |
+      | Features                                                                                         |
+      | Feature A                                                                                        |
+      | Feature B                                                                                        |
+      | Supported languages                                                                              |
+      | Italian,                                                                                         |
+      | English,                                                                                         |
+      | German,                                                                                          |
+      | error,                                                                                           |
+      | Portuguese, International                                                                        |
+      | Development status                                                                               |
+      | Stable                                                                                           |
+      | License                                                                                          |
+      | GPL-2.0-or-later                                                                                 |
+      | Platforms                                                                                        |
+      | macOs                                                                                            |
+      | Maintenance type                                                                                 |
+      | Maintained by people donating their time to the project                                          |
+      | Software type                                                                                    |
+      | standalone/desktop                                                                               |
+      | Used by                                                                                          |
+      | Administration 1,                                                                                |
+      | Administration 2,                                                                                |
+      | Administration 3                                                                                 |
+      | Technical Maintainers                                                                            |
+      | ACME Ltd.                                                                                        |
+      | Technical Contacts                                                                               |
+      | FOSS Conference                                                                                  |
+      | Vitality                                                                                         |
+      | 41%                                                                                              |
     And the "div" element with "title" attribute should contain "The software is typically installed and run in a a desktop operating system environment."
     And I should not see any HTML tags inside elements with title attribute
     And the "canvas" element with "data-vitality-index-range" attribute should contain "[12,45,56,7,90,29,34,20,47,48,50,80]"
     And I should see the following links:
       # Categories.
-      | document-management              |
-      | collaboration                    |
+      | document-management    |
+      | collaboration          |
       # Providers.
-      | Developers Italia                |
+      | Developers Italia      |
       # Links to resources.
-      | Source code repository           |
-      | Project’s website                |
-      | Documentation                    |
+      | Source code repository |
+      | Project’s website      |
+      | Documentation          |
       # Audience
-      | science-and-technology           |
-      | security                         |
+      | science-and-technology |
+      | security               |
     And I should not see the following links:
-      | Show all 3 administrations |
-      | Show administration        |
+      | Show all 3 administrations       |
+      | Show administration              |
       # We should see the actual images instead.
       | https://placehold.co/600x400.png |
       | https://placehold.co/400x400.png |
@@ -335,8 +335,8 @@ Feature:
   @javascript
   Scenario: Screenshot carousel with 4 items works as expected.
     Given oss_solution content:
-      | title | oss_screenshots                                                                                    | oss_development_status | oss_source        | oss_categories   | status    | oss_release_date |
-      | Four  | https://placehold.co/800x400.jpg,https://placehold.co/500x400.png,https://placehold.co/700x400.png,https://placehold.co/600x400.png | stable                 | developers_italia | data-analytics   | published | 2014-11-19       |
+      | title | oss_screenshots                                                                                                                     | oss_development_status | oss_source        | oss_categories | status    | oss_release_date |
+      | Four  | https://placehold.co/800x400.jpg,https://placehold.co/500x400.png,https://placehold.co/700x400.png,https://placehold.co/600x400.png | stable                 | developers_italia | data-analytics | published | 2014-11-19       |
     When I go to the content page of the type "oss_solution" with the title "Four"
     Then I should see the text "Gallery"
     And I should have the following images on the page in this order

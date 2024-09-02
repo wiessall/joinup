@@ -5,7 +5,7 @@ Feature: Discussions added to collections
   I need to be able to add "Discussion" content through UI.
 
   Scenario: "Add discussion" button should not be shown to normal members, authenticated users and anonymous users.
-    Given the following collections:
+    Given collection content:
       | title              | logo     | state     |
       | The Fallen History | logo.png | published |
       | White Sons         | logo.png | published |
@@ -124,9 +124,9 @@ Feature: Discussions added to collections
 
   @javascript @generateMedia @generateMediaTypes:discussion_logo @uploadFiles:logo.png
   Scenario: Test the image library widget.
-    Given the following collection:
-      | title | Stream of Dreams |
-      | state | published        |
+    Given collection content:
+      | title            | state     |
+      | Stream of Dreams | published |
     And discussion content:
       | title       | collection       | state     | created   | content         |
       | Yellow Zeus | Stream of Dreams | published | yesterday | Sample content. |
@@ -146,9 +146,9 @@ Feature: Discussions added to collections
 
   @javascript
   Scenario: Ensures deleting the last discussion, using contextual links, leads back to the collection HP (and not the discussion page as 403).
-    Given the following collection:
-      | title | Snack ideas |
-      | state | published   |
+    Given collection content:
+      | title       | state     |
+      | Snack ideas | published |
     And discussion content:
       | title                | collection  | state     | content         |
       | Quick and easy snack | Snack ideas | published | Sample content. |

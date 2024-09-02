@@ -5,9 +5,9 @@ Feature: SEO for RDF entities.
   I need proper meta information to be encapsulated in the html code.
 
   Scenario Outline: Basic JSON meta information for collections and solutions.
-    Given the following <type>:
-      | title | SEO entity |
-      | state | published  |
+    Given <type> content:
+      | title      | state     |
+      | SEO entity | published |
 
     When I visit the "SEO entity" <type>
     And the metatag graph of the item with "title" "SEO entity" should be present
@@ -26,9 +26,9 @@ Feature: SEO for RDF entities.
       | solution   | http://www.w3.org/ns/dcat#Dataset |
 
   Scenario: Basic JSON meta information for releases and distributions.
-    Given the following solution:
-      | title | SEO solution |
-      | state | published    |
+    Given solution content:
+      | title        | state     |
+      | SEO solution | published |
     And release content:
       | title       | is version of | state     |
       | SEO release | SEO solution  | published |

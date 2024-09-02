@@ -275,7 +275,7 @@ Feature: Sharing content between collections
       | news         | solution   |
 
   Scenario: Shared pinned content is erroneously shown first.
-    Given collections:
+    Given collection content:
       | title         | state     |
       | Milky Way     | published |
       | Chocolate Way | published |

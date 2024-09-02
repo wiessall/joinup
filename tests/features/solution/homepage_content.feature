@@ -11,7 +11,7 @@ Feature: Solution homepage
     And contact_information content:
       | name    | email               |
       | Placebo | Placebo@example.com |
-    And the following solutions:
+    Given solution content:
       | title                        | abstract                              | description                           | logo     | state     | status | related by type | owner         | contact information | solution type | topic       |
       | Information sharing protocol | Handling information sharing securely | Handling information sharing securely | logo.png | published |        | yes             | Kostas Agathe | Placebo             | Business      | E-inclusion |
       | Security audit tools         | Automated test of security            | Automated test of security            | logo.png | published |        | yes             | Kostas Agathe | Placebo             | Business      | E-inclusion |

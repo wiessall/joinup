@@ -114,10 +114,10 @@ Feature: Tests the group landing page customization.
   # This scenario might be removed in ISAICP-7223.
   # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7223
   Scenario: As a group facilitator I cannot set the landing page.
-    Given the following collections:
+    Given collection content:
       | title            | state     | description                          |
       | collection group | published | The collection arbitrary description |
-    And the following solutions:
+    Given solution content:
       | title          | state     | description                        |
       | solution group | published | The solution arbitrary description |
 
@@ -131,7 +131,7 @@ Feature: Tests the group landing page customization.
     Then I should not see the link "Settings"
 
   Scenario: Do not allow to unpublish or delete a custom page set as landing page
-    Given collections:
+    Given collection content:
       | title          | state     |
       | Rally fanatics | published |
     And "custom_page" content:
@@ -162,7 +162,7 @@ Feature: Tests the group landing page customization.
     And I should not see "This page acts as landing page for the collection. In order to delete it should be first unset as landing page."
 
   Scenario: Landing custom page redirects to group page.
-    Given collections:
+    Given collection content:
       | title         | state     |
       | United States | published |
     And "custom_page" content:

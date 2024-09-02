@@ -5,9 +5,9 @@ Feature: "Add solution" visibility options.
   I need to be able to add "Solution" rdf entities through UI.
 
   Scenario: Required fields should be filled in
-    Given the following collection:
-      | title | Language parsers |
-      | state | published        |
+    Given collection content:
+      | title            | state     |
+      | Language parsers | published |
     And I am logged in as a facilitator of the "Language parsers" collection
     And I go to the homepage of the "Language parsers" collection
     And I click "Add solution"
@@ -28,10 +28,9 @@ Feature: "Add solution" visibility options.
       | Solution type field is required.  |
 
   Scenario: "Add solution" button should only be shown to moderators and facilitators.
-    Given the following collection:
-      | title | Collection solution test |
-      | logo  | logo.png                 |
-      | state | published                |
+    Given collection content:
+      | title                    | logo     | state     |
+      | Collection solution test | logo.png | published |
 
     When I am logged in as a moderator
     And I go to the homepage of the "Collection solution test" collection
@@ -54,10 +53,9 @@ Feature: "Add solution" visibility options.
 
   @uploadFiles:logo.png
   Scenario: Add solution as a collection facilitator.
-    Given the following collection:
-      | title | Belgian barista's |
-      | logo  | logo.png          |
-      | state | published         |
+    Given collection content:
+      | title             | logo     | state     |
+      | Belgian barista's | logo.png | published |
     And owner content:
       | name                 | owner type                   |
       | Organisation example | Company, Industry consortium |
@@ -179,9 +177,9 @@ Feature: "Add solution" visibility options.
     # buttons to leak into the solution create form, causing critical errors
     # when an invalid state button was pressed.
     # @see issue ISAICP-3209
-    Given the following collection:
-      | title | Language parsers |
-      | state | published        |
+    Given collection content:
+      | title            | state     |
+      | Language parsers | published |
     When I am logged in as a facilitator of the "Language parsers" collection
     And I go to the homepage of the "Language parsers" collection
     And I click "Add solution"
@@ -214,16 +212,13 @@ Feature: "Add solution" visibility options.
     And I should not see the button "Update"
 
   Scenario: Create a solution with a name that already exists
-    Given the following collections:
+    Given collection content:
       | title              | state     |
       | Ocean studies      | published |
       | Glacier monitoring | published |
-    And the following solution:
-      | title       | Climate change tracker                            |
-      | abstract    | Tracks climate change                             |
-      | description | Atlantic salmon arrived after the Little Ice Age. |
-      | collection  | Ocean studies                                     |
-      | state       | published                                         |
+    And solution content:
+      | title                  | abstract              | description                                       | collection    | state     |
+      | Climate change tracker | Tracks climate change | Atlantic salmon arrived after the Little Ice Age. | Ocean studies | published |
     And owner content:
       | name                | owner type          |
       | University of Basel | Industry consortium |
@@ -288,15 +283,9 @@ Feature: "Add solution" visibility options.
     And contact_information content:
       | name          | email                     |
       | Invisible Man | invisible.man@example.com |
-    And the following solution:
-      | title               | Cleaning solution                |
-      | abstract            | Cleans anything dirty            |
-      | description         | Use on metal surfaces.           |
-      | owner               | Organisation example             |
-      | state               | published                        |
-      | solution type       | Non-binding Instrument           |
-      | topic               | Employment and Support Allowance |
-      | contact information | Invisible Man                    |
+    And solution content:
+      | title             | abstract              | description            | owner                | state     | solution type          | topic                            | contact information |
+      | Cleaning solution | Cleans anything dirty | Use on metal surfaces. | Organisation example | published | Non-binding Instrument | Employment and Support Allowance | Invisible Man       |
 
     Given I am logged in as a moderator
     When I go to the edit form of the "Cleaning solution" solution

@@ -2,7 +2,7 @@
 Feature: Pool paragraph tests.
 
   Background:
-    Given the following collections:
+    Given collection content:
       | title           | state     |
       | Poll collection | published |
 

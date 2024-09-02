@@ -4,10 +4,9 @@ Feature:
   I need to be able to use "iframe" and "map" paragraphs for content.
 
   Background:
-    Given the following collection:
-      | title | Paragraphs collection |
-      | state | published             |
-      | topic | HR                    |
+    Given collection content:
+      | title                 | state     | topic |
+      | Paragraphs collection | published | HR    |
 
   @javascript
   Scenario: Moderator can manage map and iframe paragraph.

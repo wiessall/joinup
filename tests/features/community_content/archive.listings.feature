@@ -26,7 +26,7 @@ Feature: Archived content on content listings - groups and paragraphs.
     And the workflow state of the "Archived news" content is set to "archived"
 
   Scenario: Collection content listing can control archived content visibility.
-    Given the following solutions:
+    Given solution content:
       | title         | collection      | state     | creation date   |
       | Skewb cube    | Some collection | archived  | 2015-03-03T8:00 |
       | Pyraminx cube | Some collection | published | 2015-02-03T8:00 |
@@ -113,10 +113,9 @@ Feature: Archived content on content listings - groups and paragraphs.
 
   @javascript
   Scenario: Carousel listings can also control archived items visibility.
-    Given collection:
-      | uri   | http://data.europa.eu/w21/8e30f798-ff2b-478b-9c09-5ed5a63b4c8c |
-      | title | Interoperable Europe                                           |
-      | state | published                                                      |
+    Given collection content:
+      | uri                                                            | title                | state     |
+      | http://data.europa.eu/w21/8e30f798-ff2b-478b-9c09-5ed5a63b4c8c | Interoperable Europe | published |
     And news content:
       | title              | headline           | state     | collection           | body | content |
       | IOP archived news  | IOP archived news  | archived  | Interoperable Europe | Test | Test    |

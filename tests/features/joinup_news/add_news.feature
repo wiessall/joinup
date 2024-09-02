@@ -11,12 +11,12 @@ Feature: Creation of news through the UI.
       | First name  | Milana             |
       | Family name | Laninga            |
       | E-mail      | milana@example.com |
-    And the following collections:
+    And collection content:
       | title            | description                                 | logo     | state     |
       | Metal fans       | "Share the love for nickel, tungsten & co." | logo.png | published |
       | Hardcore diggers | We dig up stuff hidden beneath the earth.   | logo.png | published |
       | Cool blacksmiths | Keeping it cool while working on hot stuff. | logo.png | published |
-    And solutions:
+    Given solution content:
       | title                     | description                               | logo     | state     |
       | Density catalogue project | Catalog density on metals with ease.      | logo.png | published |
       | Dig do's and don'ts       | How to dig up stuff with style.           | logo.png | published |
@@ -47,10 +47,10 @@ Feature: Creation of news through the UI.
       | This value should not be null.                 |
 
     When I fill in the following:
-      | Short title      | Ytterbium has won the ultimate heavy metal of the year award of 2020!                         |
-      | Headline         | Strong request for this rare metal that is on the mouth of everybody                          |
-      | Abstract         | Abstract of Strong request for... news                                                        |
-      | File description | Comparison materials                                                                          |
+      | Short title      | Ytterbium has won the ultimate heavy metal of the year award of 2020! |
+      | Headline         | Strong request for this rare metal that is on the mouth of everybody  |
+      | Abstract         | Abstract of Strong request for... news                                |
+      | File description | Comparison materials                                                  |
     And I append "text" to "field_paragraphs_body" layout paragraphs field
       | field_body:value  | Thanks to its lower density compared to thulium and lutetium its applications have increased. |
       | field_body:format | content_editor                                                                                |
@@ -98,9 +98,9 @@ Feature: Creation of news through the UI.
 
   @javascript @generateMedia @generateMediaTypes:news_logo @uploadFiles:logo.png
   Scenario: Test the image library widget.
-    Given the following collection:
-      | title | Stream of Dreams |
-      | state | published        |
+    Given collection content:
+      | title            | state     |
+      | Stream of Dreams | published |
     And news content:
       | title             | collection       | headline      | abstract           | field_paragraphs_body | state     |
       | The Great Opening | Stream of Dreams | Here we go... | Image library test | It opens!             | published |

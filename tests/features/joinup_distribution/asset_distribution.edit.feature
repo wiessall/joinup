@@ -9,10 +9,10 @@ Feature: Asset distribution editing.
       | Username     | E-mail                   | First name | Family name | Roles |
       | Gregg Hill   | Gregg.Hill@example.com   | Gregg      | Hill        |       |
       | Pedro Torres | Pedro.Torres@example.com | Pedro      | Torres      |       |
-    And the following collection:
-      | title | Collection example |
-      | state | published          |
-    And the following solutions:
+    And collection content:
+      | title              | state     |
+      | Collection example | published |
+    Given solution content:
       | title      | collection         | description        | state     |
       | Solution A | Collection example | Sample description | published |
       | Solution B | Collection example | Sample description | published |

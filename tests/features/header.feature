@@ -32,9 +32,9 @@ Feature: Header
     Then I should see the heading "Sign in to continue"
 
     Examples:
-      | page         |
+      | page                |
       # A page with the new Ventuno theme.
-      | search page |
+      | search page         |
       # A page with the old Joinup Theme theme.
       | collection overview |
 
@@ -61,8 +61,8 @@ Feature: Header
     Then I should see the heading "Sign in to continue"
 
     Examples:
-      | page         |
+      | page                |
       # A page with the new Ventuno theme.
-      | search page |
+      | search page         |
       # A page with the old Joinup Theme theme.
       | collection overview |

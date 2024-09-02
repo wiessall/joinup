@@ -13,7 +13,7 @@ Feature: Deletion of collection and solution owners
       | Site moderator | moderator | Site       | moderator   |
     And the following <type>:
       | title | An owned group |
-      | state | published           |
+      | state | published      |
     And the following <type> user memberships:
       | <type>         | user          | roles |
       | An owned group | Group owner 1 | owner |

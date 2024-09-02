@@ -5,7 +5,7 @@ Feature: SEO for news articles.
   I need proper metatag to be encapsulated in the html code.
 
   Scenario: Basic metatags are attached as JSON schema on the page.
-    Given collections:
+    Given collection content:
       | title                      | state     |
       | Joinup SEO news collection | published |
     And users:
@@ -35,8 +35,8 @@ Feature: SEO for news articles.
       # The test files are assigned a random name so it is very hard to assert the real url. However, when the file is
       # found and added to the page, the dimensions are added as well. Asserting the dimensions also asserts the url in
       # a way.
-      | width                | 377         |
-      | height               | 139         |
+      | width                | 377                           |
+      | height               | 139                           |
     And the metatag graph of the item with "name" "Joinup SEO news" should have the following "author" properties:
       | property | value                             |
       | @type    | http://schema.org/Person          |

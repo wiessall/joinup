@@ -5,20 +5,15 @@ Feature: RDF synchronization of contents.
   I need my RDF entities to be properly synchronized with the site contents.
 
   Scenario: RDF entities for EIF perspective are correctly created.
-    Given the following solutions:
+    Given solution content:
       | title        | description                                      | state     | uri                             |
       | EIF solution | Some description not to be shown in the EIF page | published | https://example.com/collection1 |
-    Given the following EIF perspective data for the "EIF solution" solution:
-      | Description | This should be in the description field.                                                       |
-      | Principle   | Underlying Principle 1: Subsidiarity and proportionality, Underlying Principle 3: Transparency |
-      | Layer       | Interoperability Layer 3: Legal interoperability                                               |
-      | uri         | https://example.com/eif-perspective1                                                           |
-    And the following EIF perspective data for the "EIF solution" solution:
-      | Description | Description field of the second item.                 |
-      | Principle   | Underlying Principle 3: Transparency                  |
-      | Layer       | Interoperability Layer 1: Interoperability governance |
-      | Model       | Basic Component 4: Open data                          |
-      | uri         | https://example.com/eif-perspective2                  |
+    Given solution content:
+      | Description                              | Principle                                                                                      | Layer                                            | uri                                  |
+      | This should be in the description field. | Underlying Principle 1: Subsidiarity and proportionality, Underlying Principle 3: Transparency | Interoperability Layer 3: Legal interoperability | https://example.com/eif-perspective1 |
+    And solution content:
+      | Description                           | Principle                            | Layer                                                 | Model                        | uri                                  |
+      | Description field of the second item. | Underlying Principle 3: Transparency | Interoperability Layer 1: Interoperability governance | Basic Component 4: Open data | https://example.com/eif-perspective2 |
     Then the following "http://data" graph triples exist in the RDF backend:
       | subject                              | predicate                                       | object                                        |
       | https://example.com/eif-perspective1 | http://purl.org/dc/terms/description            | This should be in the description field.      |
@@ -69,16 +64,16 @@ Feature: RDF synchronization of contents.
       | https://example.com/contact1 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | http://www.w3.org/2006/vcard/ns#Kind |
 
   Scenario: RDF entities for Distribution are correctly created.
-    Given the following solution:
-      | title | Test solution |
-      | state | published     |
+    Given solution content:
+      | title         | state     |
+      | Test solution | published |
     And release content:
       | title        | is version of | state     |
       | Test release | Test solution | published |
     And distribution content:
-      | uri                               | title          | description                  | release      | access url                       | created              | changed              | state     |
-      | https://example.com/distribution1 | Some Distro    | Übermensch foot size         | Test release | http://example.com/some-distro1  | 2024-07-31T10:19:33Z | 2024-07-31T10:19:33Z | published |
-      | https://example.com/distribution2 | Another distro | Description for other distro | Test release | http://example.com/some-distro2  | 2024-08-01T10:19:33Z | 2024-08-01T10:19:33Z | published |
+      | uri                               | title          | description                  | release      | access url                      | created              | changed              | state     |
+      | https://example.com/distribution1 | Some Distro    | Übermensch foot size         | Test release | http://example.com/some-distro1 | 2024-07-31T10:19:33Z | 2024-07-31T10:19:33Z | published |
+      | https://example.com/distribution2 | Another distro | Description for other distro | Test release | http://example.com/some-distro2 | 2024-08-01T10:19:33Z | 2024-08-01T10:19:33Z | published |
     Then the following "http://data" graph triples exist in the RDF backend:
       | subject                           | predicate                                       | object                                 |
       | https://example.com/distribution1 | http://purl.org/dc/terms/title                  | Some Distro                            |
@@ -108,9 +103,9 @@ Feature: RDF synchronization of contents.
 
   Scenario: RDF entities for Licences are correctly created.
     Given licence content:
-      | uri                          | title              | description    | licence type  | deprecated  |
-      | https://example.com/license1 | Some license       |                | Public domain | no          |
-      | https://example.com/license2 | Some other license | A new licence. | Public domain | yes         |
+      | uri                          | title              | description    | licence type  | deprecated |
+      | https://example.com/license1 | Some license       |                | Public domain | no         |
+      | https://example.com/license2 | Some other license | A new licence. | Public domain | yes        |
     Then the following "http://data" graph triples exist in the RDF backend:
       | subject                      | predicate                                       | object                                   |
       | https://example.com/license1 | http://www.w3.org/2000/01/rdf-schema#label      | Some license                             |
@@ -161,9 +156,9 @@ Feature: RDF synchronization of contents.
       | https://example.com/owner1 | http://purl.org/dc/terms/type                   | http://joinup.eu/owner-type1    |
 
   Scenario: RDF entities for Releases are correctly created.
-    Given the following solutions:
-      | title        | state     | uri                           |
-      | Early Omega  | published | https://example.com/solution1 |
+    Given solution content:
+      | title       | state     | uri                           |
+      | Early Omega | published | https://example.com/solution1 |
     And release content:
       | uri                          | title    | documentation | release number | release notes | published_at         | changed              | is version of | state     | status    | keywords   |
       | https://example.com/release1 | Omega3   | text.pdf      | 3.0.0          | New 3.0       | 2024-07-31T10:19:33Z | 2024-07-31T10:19:33Z | Early Omega   | published | Completed | food       |
