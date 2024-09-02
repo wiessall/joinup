@@ -38,6 +38,7 @@ drupal:
         - Custom error handler
         - Permissions
         - Null mail collector
+        - EU OSS Catalogue
       site-clone:
         - Main settings
         - Databases
@@ -116,6 +117,7 @@ drupal:
         - Custom queue services
         - Test mail collector
         - Monolog
+        - EU OSS Catalogue
       phpunit:
         - Main settings
         - Databases
@@ -133,6 +135,7 @@ drupal:
         - Verbose error logging
         - Custom queue services
         - Test mail collector
+        - EU OSS Catalogue
       prod:
         - Main settings
         - Site email
