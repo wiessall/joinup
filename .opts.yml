@@ -16,7 +16,7 @@ upgrade_commands:
     - ./scripts/check_status_report.php
   append:
     production:
-      - ./vendor/bin/run config-readonly:disable
+      - ./vendor/bin/run eu-oss-catalogue:disable
     acceptance:
       - ./vendor/bin/run config-readonly:disable
       - ./vendor/bin/drush joinup:acc
