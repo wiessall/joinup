@@ -3,3 +3,11 @@ testing.js_errors_log:
   header: true
   js:
     /core/modules/system/tests/modules/js_testing_log_test/js/js_testing_log.js: { weight: -1000 }
+
+# Relies on core css_disable_transitions_test.
+testing.css_disable_transitions:
+  css:
+    theme:
+      /core/modules/system/tests/modules/css_disable_transitions_test/css/disable_transitions.theme.css: { weight: 100 }
+  js:
+    /core/modules/system/tests/modules/css_disable_transitions_test/js/disable_transitions.theme.js: { }

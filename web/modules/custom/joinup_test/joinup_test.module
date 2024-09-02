@@ -14,6 +14,7 @@ function joinup_test_page_attachments(array &$attachments): void {
   // @todo Inject this conditionally, when behat is active.
   // Attach JS errors collector (used in behat).
   $attachments['#attached']['library'][] = 'joinup_test/testing.js_errors_log';
+  $attachments['#attached']['library'][] = 'joinup_test/testing.css_disable_transitions';
 }
 
 /**
