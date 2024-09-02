@@ -521,7 +521,6 @@ function joinup_rdf_deploy_200008(?array &$sandbox = NULL): string {
       ->fetchAllKeyed();
   }
 
-  $ids = [];
   [$table, $idField, $updatedField] = array_shift($sandbox['tables']);
   $rows = $db->select($table)
     ->fields($table, [$idField, $updatedField])
@@ -545,7 +544,7 @@ function joinup_rdf_deploy_200008(?array &$sandbox = NULL): string {
       '@href="(?:https://joinup.ec.europa.eu)?/?rdf_entity/(?<uri>[^\"]*)"@' => static function (array $matches) use ($sandbox): string {
         $uri = strtr($matches['uri'], array_reverse(array_flip(MigrationHelper::URL_ENCODE_MAP), TRUE));
         if (!$nid = $sandbox['uri_to_nid'][$uri] ?? NULL) {
-          // Remove the attribute if it doesn't point to valid content.
+          // Remove the URL if it doesn't point to valid content.
           return 'href=""';
         }
         return 'href="/node/' . $nid . '"';
@@ -554,13 +553,12 @@ function joinup_rdf_deploy_200008(?array &$sandbox = NULL): string {
 
     $value = preg_replace_callback_array($callbacks, $value);
     if ($value !== $original) {
-      $ids[] = $id;
       $db->update($table)->fields([$updatedField => $value])->condition($idField, $id)->execute();
     }
   }
 
   $sandbox['#finished'] = (int) empty($sandbox['tables']);
-  return "Processed table $table (field $updatedField). Affected IDs: " . implode(', ', $ids);
+  return "Processed table $table (field $updatedField)";
 }
 
 /**
