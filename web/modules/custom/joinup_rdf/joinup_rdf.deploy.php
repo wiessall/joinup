@@ -214,7 +214,7 @@ function joinup_rdf_deploy_200005(?array &$sandbox = NULL): void {
       ];
     }
     // Stale records in menu_tree table.
-    $db->query("DELETE FROM {menu_tree} WHERE mlid IN(9725, 9726, 10133, 10134, 10162, 10163, 19790, 19900, 19907)");
+    $db->query("DELETE FROM {menu_tree} WHERE mlid IN(9725, 9726, 10133, 10134, 10162, 10163, 14335, 14445, 14452, 19790, 19900, 19907)");
   }
 
   $rows = array_splice($sandbox['rows'], 0, 250);
@@ -323,7 +323,7 @@ function joinup_rdf_deploy_200006(?array &$sandbox = NULL): void {
 }
 
 /**
- * Fix redirects.
+ * Fix redirects and paths.
  */
 function joinup_rdf_deploy_200007(): void {
   $db = \Drupal::database();
@@ -410,6 +410,11 @@ function joinup_rdf_deploy_200007(): void {
   $db->delete('key_value')
     ->condition('collection', 'pathauto_state.rdf_entity')
     ->execute();
+
+  // Stale path alias entries.
+  $ids = [19326, 19828, 19829, 19836, 20819, 20854, 20920, 20921, 20923, 21164, 21165, 21202, 21210, 21466, 21495, 21681, 21685, 21701, 21749, 22536, 24841, 24842, 24843, 24844, 24845, 24846, 24847, 24848, 28783, 47350, 47908, 47909, 47910, 47911, 47912];
+  $db->delete('path_alias')->condition('id', $ids, 'IN')->execute();
+  $db->delete('path_alias_revision')->condition('id', $ids, 'IN')->execute();
 }
 
 /**
