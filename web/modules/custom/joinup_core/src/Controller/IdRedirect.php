@@ -69,15 +69,13 @@ class IdRedirect extends ControllerBase {
         $entity_type_id => $id,
       ], [], 301);
     }
-    elseif ($entity = $this->mapper->getEntityByUri($id)) {
-      // @todo Remove the solution stub exception in ISAICP-8572.
-      if (!$entity instanceof SolutionInterface) {
-        assert($entity instanceof RdfSyncEntityInterface);
-        $entity_type_id = $entity->getEntityTypeId();
-        return $this->redirect("entity.$entity_type_id.canonical", [
-          $entity_type_id => $entity->id(),
-        ], [], 301);
-      }
+    // @todo Remove the second condition, for solution stub exception, in ISAICP-8572.
+    elseif (($entity = $this->mapper->getEntityByUri($id)) && !$entity instanceof SolutionInterface) {
+      assert($entity instanceof RdfSyncEntityInterface);
+      $entity_type_id = $entity->getEntityTypeId();
+      return $this->redirect("entity.$entity_type_id.canonical", [
+        $entity_type_id => $entity->id(),
+      ], [], 301);
     }
 
     return $this->redirect('joinup_core.not_found');
