@@ -6,20 +6,17 @@ namespace Drupal\joinup\Context;
 
 use Behat\Behat\Hook\Scope\AfterScenarioScope;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
-use Drupal\joinup\Traits\JavascriptTrait;
 use Symfony\Component\Yaml\Yaml;
 use WebDriver\Exception\JavaScriptError;
 
 /**
  * Context to report JS errors.
  *
- * Relies on js_errors_collector.js in joinup_test module.
+ * Relies on js_testing_log.js injected from joinup_test.
  * JS errors will throw exceptions; making behat fail.
  * Drupal JS deprecations are logged in PHP (E_USER_DEPRECATED).
  */
 class JsErrorsContext extends RawDrupalContext {
-
-  use JavascriptTrait;
 
   /**
    * Constructs a new context.
@@ -40,12 +37,12 @@ class JsErrorsContext extends RawDrupalContext {
    * @beforeScenario @javascript
    */
   public function prepare(): void {
-    if (!$this->hasJavascriptSupport() || !$this->getSession()->isStarted()) {
+    if (!$this->getSession()->isStarted()) {
       return;
     }
 
     // Clear the session storage.
-    $this->getSession()->executeScript("['joinup_test.js_errors', 'joinup_test.js_warnings'].forEach(key => sessionStorage.removeItem(key))");
+    $this->getSession()->executeScript("['js_testing_log_test.errors', 'js_testing_log_test.warnings'].forEach(key => sessionStorage.removeItem(key))");
   }
 
   /**
@@ -56,14 +53,14 @@ class JsErrorsContext extends RawDrupalContext {
    * @throws \WebDriver\Exception\JavaScriptError
    */
   public function report(AfterScenarioScope $scope): void {
-    if (!$this->hasJavascriptSupport() || !$this->getSession()->isStarted()) {
+    if (!$this->getSession()->isStarted()) {
       return;
     }
 
     // Get warnings/errors and clear them from storage.
-    $warnings = $this->getSession()->evaluateScript("JSON.parse(sessionStorage.getItem('joinup_test.js_warnings') || JSON.stringify([]))");
-    $errors = $this->getSession()->evaluateScript("JSON.parse(sessionStorage.getItem('joinup_test.js_errors') || JSON.stringify([]))");
-    $this->getSession()->executeScript("['joinup_test.js_errors', 'joinup_test.js_warnings'].forEach(key => sessionStorage.removeItem(key))");
+    $warnings = $this->getSession()->evaluateScript("JSON.parse(sessionStorage.getItem('js_testing_log_test.warnings') || JSON.stringify([]))");
+    $errors = $this->getSession()->evaluateScript("JSON.parse(sessionStorage.getItem('js_testing_log_test.errors') || JSON.stringify([]))");
+    $this->getSession()->executeScript("['js_testing_log_test.errors', 'js_testing_log_test.warnings'].forEach(key => sessionStorage.removeItem(key))");
 
     // Report.
     $this->reportWarnings($warnings, $scope);
@@ -79,9 +76,9 @@ class JsErrorsContext extends RawDrupalContext {
     }
 
     foreach ($warnings as $warning) {
-      if (str_starts_with($warning['message'], '[Deprecation]')) {
+      if (str_starts_with($warning, '[Deprecation]')) {
         $path = sprintf("%s:%d", $scope->getFeature()->getFile(), $scope->getScenario()->getLine());
-        @trigger_error(sprintf("%s\n  JS deprecation: %s\n  URL: %s", $path, substr($warning['message'], 13), $warning['url']), E_USER_DEPRECATED);
+        @trigger_error(sprintf("%s\n  JS deprecation: %s", $path, substr($warning, 13)), E_USER_DEPRECATED);
       }
     }
   }
