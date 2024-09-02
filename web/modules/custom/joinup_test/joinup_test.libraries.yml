@@ -1,4 +1,5 @@
-js_errors_collector:
+# Relies on core js_testing_log_test.
+testing.js_errors_log:
   header: true
   js:
-    assets/js/js_errors_collector.js: { weight: -1000 }
+    /core/modules/system/tests/modules/js_testing_log_test/js/js_testing_log.js: { weight: -1000 }

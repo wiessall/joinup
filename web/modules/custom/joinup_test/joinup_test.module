@@ -11,8 +11,9 @@ declare(strict_types=1);
  * Implements hook_page_attachments().
  */
 function joinup_test_page_attachments(array &$attachments): void {
+  // @todo Inject this conditionally, when behat is active.
   // Attach JS errors collector (used in behat).
-  $attachments['#attached']['library'][] = 'joinup_test/js_errors_collector';
+  $attachments['#attached']['library'][] = 'joinup_test/testing.js_errors_log';
 }
 
 /**
