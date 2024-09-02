@@ -46,7 +46,7 @@ function joinup_rdf_deploy_200001(array &$sandbox): string {
   $migration_helper = \Drupal::getContainer()->get('joinup_rdf.migration_helper');
   $start = microtime(TRUE);
   foreach ($uris as $uri) {
-    $migration_helper->migrateCollection($uri);
+    $migration_helper->migrateGroup('collection', $uri);
     $sandbox['progress']++;
   }
 
@@ -105,7 +105,7 @@ function joinup_rdf_deploy_200002(array &$sandbox): string {
     if (!$collectionNid ??= $sandbox['solution_to_collection'][$uri]) {
       throw new \Exception("Collection not found for solution: $uri");
     }
-    $migration_helper->migrateSolution($uri, $collectionNid);
+    $migration_helper->migrateGroup('solution', $uri, $collectionNid);
     $sandbox['progress']++;
   }
 
@@ -177,6 +177,7 @@ function joinup_rdf_deploy_200004(): void {
   // storage definition update.
   $tables = [
     'file_usage' => 'id',
+    'flag_counts' => 'entity_id',
     'flagging' => 'entity_id',
     'invitation' => 'entity_id',
     'meta_entity' => 'target__target_id',
@@ -213,7 +214,7 @@ function joinup_rdf_deploy_200005(?array &$sandbox = NULL): void {
       ];
     }
     // Stale records in menu_tree table.
-    $db->query("DELETE FROM {menu_tree} WHERE mlid IN(9725, 9726, 10133, 10134, 10162, 10163, 19790, 19900, 19907)");
+    $db->query("DELETE FROM {menu_tree} WHERE mlid IN(9725, 9726, 10133, 10134, 10162, 10163, 14335, 14445, 14452, 19790, 19900, 19907)");
   }
 
   $rows = array_splice($sandbox['rows'], 0, 250);
@@ -322,15 +323,248 @@ function joinup_rdf_deploy_200006(?array &$sandbox = NULL): void {
 }
 
 /**
+ * Fix redirects and paths.
+ */
+function joinup_rdf_deploy_200007(): void {
+  $db = \Drupal::database();
+
+  $patterns = [
+    ['SUBSTRING(r.redirect_redirect__uri, 22)', 'internal:/rdf_entity/%', ''],
+    ["TRIM(TRAILING '/releases' FROM SUBSTRING(r.redirect_redirect__uri, 22))", 'internal:/rdf_entity/%', '/releases'],
+  ];
+  foreach ($patterns as [$base, $like, $suffix]) {
+    $expression = MigrationHelper::sqlExpressionUriDecode($base);
+    $sql = <<<SQL
+      UPDATE {redirect} r
+      INNER JOIN {rdf_sync_uri} u ON $expression = u.uri
+      SET r.redirect_redirect__uri = CONCAT(:prefix, u.entity_id, :suffix)
+      WHERE r.redirect_redirect__uri LIKE :like
+      SQL;
+    $db->query($sql, [
+      ':prefix' => 'internal:/node/',
+      ':like' => $like,
+      ':suffix' => $suffix,
+    ], ['allow_delimiter_in_query' => TRUE]);
+  }
+
+  // Delete stale redirects.
+  $toDelete = [
+    'internal:/rdf_entity/http_e_f_fndl_cgo_cjp_fdcndl_fterms_gtype_vdistribution',
+    'internal:/rdf_entity/http_e_f_fwww_cw3_corg_fTR_f2007_fWD_bxhtml_brdfa_bscenarios_b20070330_f_gtype_vdistribution',
+    'internal:/rdf_entity/http_e_f_fid_cesd_corg_cuk_fFunctionList_f1_c00_crdf',
+    'internal:/rdf_entity/http_e_f_ftools_cietf_corg_fhtml_frfc4518',
+    'internal:/rdf_entity/http_e_f_feur_blex_ceuropa_ceu_fLexUriServ_fLexUriServ_cdo_guri_vOJ_eC_e2010_e083_e0329_e0334_een_ePDF',
+    'internal:/rdf_entity/http_e_f_fwww_cw3_corg_fTR_f2013_fNOTE_brdf_bjson_b20131107_f_gtype_vdistribution',
+    'internal:/rdf_entity/http_e_f_fwww_cyap_cgov_cgr_fe_bgif_fschemas_fcurrent_fBusinessInformationEntities_feGIF_aTravellerPerson_aABIE_bv1_b1_cxsd',
+    'internal:/rdf_entity/http_e_f_fdata_ceuropa_ceu_fw21_f28879981_b50a6_b4f9b_bbdb6_ba31d85e19393',
+    'internal:/rdf_entity/http_e_f_fdata_ceuropa_ceu_fw21_fc03f8496_bc80c_b4308_ba23d_bc77f6b7f55c2',
+    'internal:/rdf_entity/http_e_f_fdata_ceuropa_ceu_fw21_f73995620_b6076_b4c3c_b8291_bab079293b2e3',
+    'internal:/rdf_entity/http_e_f_fdata_ceuropa_ceu_fw21_f8605058e_be9d7_b4dee_bb5bd_bed0464bacb4b',
+    'internal:/rdf_entity/http_e_f_fdata_ceuropa_ceu_fw21_fba59083a_b3283_b4285_bbced_ba243d80839b1',
+    'internal:/rdf_entity/http_e_f_fdata_ceuropa_ceu_fw21_fb8a02cb3_bc36d_b4f28_b991d_b75a53432d082',
+    'internal:/rdf_entity/http_e_f_fec_ceuropa_ceu_fleos_fprototype_fv3_c1_c1_fzip',
+    'internal:/rdf_entity/http_e_f_fwww_cxrepository_cde_fns_fadms_fPublisher_fStatistischesBundesamt',
+    'internal:/rdf_entity/http_e_f_fwww_cxrepository_cde_fns_fadms_fPublisher_fNieders_xC3_xA4chsischesMinisteriumf_xC3_xBCrWirtschaftArbeitundVerkehr',
+    'internal:/rdf_entity/http_e_f_fwww_cxrepository_cde_fns_fadms_fPublisher_fKoopAADV',
+    'internal:/rdf_entity/http_e_f_fwww_cxrepository_cde_fns_fadms_fPublisher_fArbeitskreisIderInnenministerkonferenz',
+    'internal:/rdf_entity/http_e_f_fwww_cxrepository_cde_fns_fadms_fPublisher_fDieInnenministervonBundundL_xC3_xA4ndern',
+    'internal:/rdf_entity/http_e_f_fwww_cxrepository_cde_fns_fadms_fPublisher_fAGVEMAGS_x2816Bundesl_xC3_xA4nder_x2BBunddurchVerwaltungsvereinbarungVEMAGS_x29',
+    'internal:/rdf_entity/http_e_f_fwww_cxrepository_cde_fns_fadms_fPublisher_fBundesministeriumdesInnernReferatKM5',
+    'internal:/rdf_entity/http_e_f_fwww_cxrepository_cde_fns_fadms_fPublisher_fFederalStatisticalOfficeofGermany_x28Destatis_x29Wiesbaden',
+    'internal:/rdf_entity/http_e_f_fwww_cxrepository_cde_fns_fadms_fPublisher_fBundesministeriumdesInneren',
+    'internal:/rdf_entity/http_e_f_fwww_cxrepository_cde_fns_fadms_fPublisher_fBundesministeriumdesInnerenimAuftragderBundL_xC3_xA4nderArbeitsgruppeNWRVorhabenDeutschlandOnlineNationalesWaffenregister',
+    'internal:/rdf_entity/http_e_f_fwww_cxrepository_cde_fns_fadms_fPublisher_fBundesvereinigungderKommunalenSpitzenverb_xC3_xA4nde_x2FFederalMinistryoftheInterior',
+    'internal:/rdf_entity/http_e_f_fwww_cxrepository_cde_fns_fadms_fPublisher_fFederalOfficeofJustice',
+    'internal:/rdf_entity/http_e_f_fwww_cxrepository_cde_fns_fadms_fPublisher_fFederalInstituteofHydrology',
+    'internal:/rdf_entity/http_e_f_fwww_cxrepository_cde_fns_fadms_fPublisher_fX_xC3_x96V_bKoordination',
+    'internal:/rdf_entity/http_e_f_fwww_cxrepository_cde_fns_fadms_fPublisher_fBund_bL_xC3_xA4nderkommissionf_xC3_xBCrDatenverarbeitungundRationalisierunginderJustiz_x28BLK_x29',
+    'internal:/rdf_entity/http_e_f_fdigst_cdk',
+    'internal:/rdf_entity/http_e_f_fadministracionelectronica_cgob_ces_fctt_fpublisher_fE04921301',
+    'internal:/rdf_entity/http_e_f_fdata_ceuropa_ceu_fw21_fa92d78c7_b2fad_b4c81_ba402_be6338b565c37',
+    'internal:/rdf_entity/http_e_f_fwww_cengisis_ccom_f',
+    'internal:/rdf_entity/http_e_f_fwww_ccen_ceu_fwork_fareas_fict_febusiness_fpages_fws_bgitb_caspx',
+    'internal:/rdf_entity/http_e_f_fadministracionelectronica_cgob_ces_fctt_fpublisher_fE04921801',
+    'internal:/rdf_entity/http_e_f_fadministracionelectronica_cgob_ces_fctt_fpublisher_fE04921701',
+    'internal:/rdf_entity/http_e_f_fadministracionelectronica_cgob_ces_fctt_fpublisher_fU00000031',
+    'internal:/rdf_entity/http_e_f_fadministracionelectronica_cgob_ces_fctt_fpublisher_fA15002917',
+    'internal:/rdf_entity/http_e_f_fdata_ceuropa_ceu_fw21_ff734ba46_b39ad_b4ee3_b92d9_b0417939a3c57',
+    'internal:/rdf_entity/http_e_f_fdata_ceuropa_ceu_fw21_fc98bcbb9_b48b3_b4f3d_bbab5_b2d74c0a7d290',
+    'internal:/rdf_entity/http_e_f_fdata_ceuropa_ceu_fw21_f5849022d_baf10_b4840_b97b1_b44644f261790/releases',
+    'internal:/rdf_entity/http_e_f_fdata_ceuropa_ceu_fw21_f5849022d_baf10_b4840_b97b1_b44644f261790',
+    'internal:/rdf_entity/http_e_f_fdata_ceuropa_ceu_fw21_f897bf318_b7b14_b4076_ba6e3_b0c5bdcde8a6b/releases',
+    'internal:/rdf_entity/http_e_f_fdata_ceuropa_ceu_fw21_f897bf318_b7b14_b4076_ba6e3_b0c5bdcde8a6b',
+    'internal:/rdf_entity/http_e_f_fdata_ceuropa_ceu_fw21_f40efb363_b12b5_b4220_b83b3_b51214cbec99c/releases',
+    'internal:/rdf_entity/http_e_f_fdata_ceuropa_ceu_fw21_f40efb363_b12b5_b4220_b83b3_b51214cbec99c',
+    'internal:/rdf_entity/http_e_f_fdata_ceuropa_ceu_fw21_f90880605_b4f93_b4e02_b8aa7_b250c11432d7a/releases',
+    'internal:/rdf_entity/http_e_f_fdata_ceuropa_ceu_fw21_f90880605_b4f93_b4e02_b8aa7_b250c11432d7a',
+    'internal:/rdf_entity/http_e_f_fdata_ceuropa_ceu_fw21_f465b11f8_b1dc6_b49e9_b90b1_b2c4912f6296f',
+    'internal:/rdf_entity/http_e_f_fdata_ceuropa_ceu_fw21_fa0f8175e_b7f9f_b4c8e_b9bfe_b212da0371273',
+    'internal:/rdf_entity/https_e_f_fwww_cxrepository_cdeutschland_bonline_cde_fDatei_furn_euuid_e9601829d_b6aa2_b4aa4_ba2e3_b975fa07ab459_cxsd',
+    'internal:/rdf_entity/https_e_f_fdigitaliser_cdk_f',
+  ];
+  $db->delete('redirect')
+    ->condition('redirect_redirect__uri', $toDelete, 'IN')
+    ->execute();
+
+  // Delete stale pathauto key_value entries.
+  $db->delete('key_value')
+    ->condition('collection', 'pathauto_state.rdf_entity')
+    ->execute();
+
+  // Stale path alias entries.
+  $ids = [
+    19326,
+    19828,
+    19829,
+    19836,
+    20819,
+    20854,
+    20920,
+    20921,
+    20923,
+    21164,
+    21165,
+    21202,
+    21210,
+    21466,
+    21495,
+    21681,
+    21685,
+    21701,
+    21749,
+    22536,
+    24841,
+    24842,
+    24843,
+    24844,
+    24845,
+    24846,
+    24847,
+    24848,
+    28783,
+    47350,
+    47908,
+    47909,
+    47910,
+    47911,
+    47912,
+  ];
+  $db->delete('path_alias')->condition('id', $ids, 'IN')->execute();
+  $db->delete('path_alias_revision')->condition('id', $ids, 'IN')->execute();
+}
+
+/**
+ * Embedded entities.
+ */
+function joinup_rdf_deploy_200008(?array &$sandbox = NULL): string {
+  $db = \Drupal::database();
+  if (!isset($sandbox['tables'])) {
+    $sandbox['tables'] = [
+       ['comment__field_body', 'entity_id', 'field_body_value'],
+       ['meta_entity__eif_description', 'entity_id', 'eif_description_value'],
+       ['node__body', 'entity_id', 'body_value'],
+       ['node_revision__body', 'entity_id', 'body_value'],
+       ['node__description', 'entity_id', 'description_value'],
+       ['node_revision__description', 'entity_id', 'description_value'],
+       ['node__field_event_agenda', 'entity_id', 'field_event_agenda_value'],
+       ['node_revision__field_event_agenda', 'entity_id', 'field_event_agenda_value'],
+       ['paragraph__field_body', 'entity_id', 'field_body_value'],
+       ['paragraph_revision__field_body', 'entity_id', 'field_body_value'],
+       ['taxonomy_term_field_data', 'tid', 'description__value'],
+       ['taxonomy_term_field_revision', 'tid', 'description__value'],
+    ];
+    $query = $db->select('rdf_sync_uri', 'u')
+      ->fields('u', ['uri'])
+      ->condition('entity_type', 'node');
+    $query->innerJoin('node', 'n', 'n.nid = u.entity_id');
+    $sandbox['uri_to_uuid'] = $query->fields('n', ['uuid'])
+      ->execute()
+      ->fetchAllKeyed();
+    $sandbox['uri_to_nid'] = $db->select('rdf_sync_uri')
+      ->fields('rdf_sync_uri', ['uri', 'entity_id'])
+      ->condition('entity_type', 'node')
+      ->execute()
+      ->fetchAllKeyed();
+  }
+
+  $ids = [];
+  [$table, $idField, $updatedField] = array_shift($sandbox['tables']);
+  $rows = $db->select($table)
+    ->fields($table, [$idField, $updatedField])
+    ->condition($updatedField, '%rdf_entity%', 'LIKE')
+    ->execute()
+    ->fetchAllKeyed();
+  foreach ($rows as $id => $value) {
+    $original = $value;
+
+    $dataEntityCallback = static function (array $matches) use ($sandbox): string {
+      if (!$uuid = $sandbox['uri_to_uuid'][$matches['uri']] ?? NULL) {
+        // Remove the attributes if they don't refer a valid entity.
+        return '';
+      }
+      return 'data-entity-type="node" data-entity-uuid="' . $uuid . '"';
+    };
+
+    $callbacks = [
+      '@data-entity-type="rdf_entity"\s+data-entity-uuid="(?<uri>[^\"]*)"@' => $dataEntityCallback,
+      '@data-entity-uuid="(?<uri>[^\"]*)"\s+data-entity-type="rdf_entity"@' => $dataEntityCallback,
+      '@href="(?:https://joinup.ec.europa.eu)?/?rdf_entity/(?<uri>[^\"]*)"@' => static function (array $matches) use ($sandbox): string {
+        $uri = strtr($matches['uri'], array_reverse(array_flip(MigrationHelper::URL_ENCODE_MAP), TRUE));
+        if (!$nid = $sandbox['uri_to_nid'][$uri] ?? NULL) {
+          // Remove the attribute if it doesn't point to valid content.
+          return 'href=""';
+        }
+        return 'href="/node/' . $nid . '"';
+      },
+    ];
+
+    $value = preg_replace_callback_array($callbacks, $value);
+    if ($value !== $original) {
+      $ids[] = $id;
+      $db->update($table)->fields([$updatedField => $value])->condition($idField, $id)->execute();
+    }
+  }
+
+  $sandbox['#finished'] = (int) empty($sandbox['tables']);
+  return "Processed table $table (field $updatedField). Affected IDs: " . implode(', ', $ids);
+}
+
+/**
+ * Meta entity fix.
+ */
+function joinup_rdf_deploy_200009(): void {
+  $db = \Drupal::database();
+
+  // Clear stale data.
+  $db->delete('meta_entity')->condition('id', 5609)->execute();
+  $db->delete('meta_entity__count')->condition('entity_id', 5609)->execute();
+
+  // Fix labels referring RDF entities.
+  $sql = <<<SQL
+    UPDATE {meta_entity} m
+    INNER JOIN {rdf_sync_uri} u ON SUBSTRING(m.label, 13) = u.uri AND u.entity_type = 'node'
+    SET m.label = CONCAT('node: ', u.entity_id)
+    WHERE m.label LIKE 'rdf_entity: %'
+    SQL;
+  $db->query($sql, [], ['allow_delimiter_in_query' => TRUE]);
+
+  // Fill the integer version of ID.
+  $db->query("UPDATE {meta_entity} SET target__target_id_int = target__target_id");
+
+  // Fix 'rdf entity' ocuurrences in label.
+  $db->query("UPDATE meta_entity SET label = REPLACE(label, 'rdf entity (', 'content item (')");
+}
+
+/**
  * Section moved from joinup_oss_catalogue.
  *
- * @todo Remove if joinup_oss_catalogue is deployed first.
+ * @todo Remove after v1.112.0 is released, in ISAICP-9045.
  */
 
 /**
  * Import content for EU OpenSource Software Solutions Catalogue.
  */
-function joinup_rdf_deploy_200007(): void {
+function joinup_rdf_deploy_200010(): void {
   $moduleInstaller = \Drupal::getContainer()->get('module_installer');
   $entityRepository = \Drupal::getContainer()->get('entity.repository');
 
@@ -345,7 +579,7 @@ function joinup_rdf_deploy_200007(): void {
 /**
  * Make sure that oss_archived has a default value.
  */
-function joinup_rdf_deploy_200008(array &$sandbox): string {
+function joinup_rdf_deploy_200011(array &$sandbox): string {
   $entityTypeManager = \Drupal::entityTypeManager();
   /** @var \Drupal\node\NodeStorage $nodeStorage */
   $nodeStorage = $entityTypeManager->getStorage('node');
@@ -376,12 +610,11 @@ function joinup_rdf_deploy_200008(array &$sandbox): string {
 /**
  * Fix references from/to EU OSS Catalogue landing page.
  */
-function joinup_rdf_deploy_200009(): void {
+function joinup_rdf_deploy_200012(): void {
   $menuName = 'ogmenu-3728';
-  $mapper = \Drupal::getContainer()->get('rdf_sync.mapper');
   $repository = \Drupal::getContainer()->get('entity.repository');
 
-  $collection = $mapper->getEntityByUri(OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID)
+  $collection = $repository->loadEntityByUuid('node', OssCatalogueCollectionInterface::COLLECTION_UUID)
     // Update path alias and label for EU OSS catalogue.
     ->set('path', ['alias' => '/eu-oss-catalogue', 'pathauto' => 0])
     ->set('title', 'EU Open Source Solutions Catalogue');
@@ -432,12 +665,13 @@ function joinup_rdf_deploy_200009(): void {
     ->condition('menu_name', $menuName)
     ->execute();
 
+  /** @var \Drupal\menu_link_content\MenuLinkContentInterface $link */
   foreach ($menuLinkContentStorage->loadMultiple($ids) as $link) {
     $title = $link->getTitle();
-    if ($title === 'About' || $title === 'Members') {
+    if ($title === 'Members') {
       $link->setUnpublished()->save();
     }
-    elseif ($title === 'Overview') {
+    elseif ($title === 'Welcome') {
       $link->set('title', 'Welcome')->save();
     }
   }

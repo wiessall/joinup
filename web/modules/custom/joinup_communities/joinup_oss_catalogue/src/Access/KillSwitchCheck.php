@@ -36,7 +36,7 @@ class KillSwitchCheck implements AccessInterface {
 
     if ($routeMatch->getRouteName() === 'entity.node.canonical') {
       $node = $routeMatch->getParameter('node');
-      if (!$node instanceof CollectionInterface || $node->getUri() !== OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID) {
+      if (!$node instanceof CollectionInterface || $node->uuid() !== OssCatalogueCollectionInterface::COLLECTION_UUID) {
         // Any page except the EU OSS Catalogue landing page is allowed.
         return AccessResult::allowed();
       }

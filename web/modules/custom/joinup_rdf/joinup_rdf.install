@@ -61,17 +61,19 @@ function joinup_rdf_update_200002(): void {
   $db->query("DELETE FROM {file_usage} WHERE type = 'rdf_entity'");
 
   foreach (['like', 'bookmark'] as $flag_id) {
-    // Update both the flag_id from `*_rdf_entity` to `*_node` and the
-    // entity_type from `rdf_entity` to `node`.
-    $query = <<<SQL
-      UPDATE {flagging}
-      SET flag_id = :id, entity_type = 'node'
-      WHERE flag_id IN (:ids[]) AND entity_type IN ('rdf_entity', 'node')
-      SQL;
-    $db->query($query, [
-      ':id' => $flag_id,
-      ':ids[]' => ["{$flag_id}_node", "{$flag_id}_rdf_entity"],
-    ]);
+    foreach (['flag_counts', 'flagging'] as $table) {
+      // Update both the flag_id from `*_rdf_entity` to `*_node` and the
+      // entity_type from `rdf_entity` to `node`.
+      $query = <<<SQL
+        UPDATE {{$table}}
+        SET flag_id = :id, entity_type = 'node'
+        WHERE flag_id IN (:ids[]) AND entity_type IN ('rdf_entity', 'node')
+        SQL;
+      $db->query($query, [
+        ':id' => $flag_id,
+        ':ids[]' => ["{$flag_id}_node", "{$flag_id}_rdf_entity"],
+      ]);
+    }
   }
 
   // Update the invitation table.
@@ -206,9 +208,26 @@ function joinup_rdf_update_200006(): void {
 }
 
 /**
- * Rerun user_update_10000.
+ * Recreate pathauto patterns and tour data.
  */
 function joinup_rdf_update_200007(): void {
+  $db = \Drupal::database();
+  $db->delete('key_value')
+    ->condition('collection', [
+      'config.entity.key_store.pathauto_pattern',
+      'config.entity.key_store.tour',
+      'config.entity.key_store.rdf_entity_graph',
+    ], 'IN')->execute();
+  $db->query("DELETE FROM {config} WHERE name LIKE 'pathauto.pattern.%' OR name LIKE 'tour.tour.%'");
+
+  // Other leftovers.
+  $db->query("DELETE FROM {key_value} WHERE collection = 'entity.definitions.bundle_field_map' AND name IN('eif_wrapper', 'rdf_entity', 'rdf_meta_entity')");
+}
+
+/**
+ * Rerun user_update_10000.
+ */
+function joinup_rdf_update_200008(): void {
   require_once DRUPAL_ROOT . '/core/modules/user/user.install';
   user_update_10000();
 }

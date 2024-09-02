@@ -27,7 +27,7 @@ joinup_core.id_redirect:
     uuid: '.+'
 
 # @todo Convert this to convert through rdf_sync.mapper.
-joinup_core.rdf_entity_uri_web_converter_page:
+joinup_core.rdf_uri_web_converter_page:
   path: '/rdf'
   defaults:
     _form: 'Drupal\joinup_core\Form\RdfEntityUriWebConverterForm'

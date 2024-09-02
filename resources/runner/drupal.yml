@@ -134,7 +134,7 @@ drupal:
         - GitHub Feed Cache
         - Verbose error logging
         - Custom queue services
-        - Test mail collecto
+        - Test mail collector
         - EU OSS Catalogue
       prod:
         - Main settings
