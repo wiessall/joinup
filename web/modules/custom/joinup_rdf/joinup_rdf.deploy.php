@@ -454,11 +454,45 @@ function joinup_rdf_deploy_200007(): void {
 }
 
 /**
- * Embedded entities.
+ * Embedded entity references.
  */
 function joinup_rdf_deploy_200008(?array &$sandbox = NULL): string {
   $db = \Drupal::database();
   if (!isset($sandbox['tables'])) {
+    // First cleanup orphan revisions to lower the work with rich text blob
+    // fields embed entity references.
+    $tables = [
+      'body',
+      'field_attachment',
+      'field_custom_page_logo',
+      'field_document_publication_date',
+      'field_document_spatial_coverage',
+      'field_event_agenda',
+      'field_event_contact_email',
+      'field_event_logo',
+      'field_event_online_location',
+      'field_event_web_url',
+      'field_file',
+      'field_glossary_synonyms',
+      'field_keywords',
+      'field_licence',
+      'field_location',
+      'field_news_logo',
+      'field_news_referenced_solution',
+      'field_news_source_url',
+      'field_news_spatial_coverage',
+      'field_organisation_type',
+      'field_paragraphs_body',
+      'field_scope',
+      'field_shared_in',
+      'field_short_title',
+      'field_topic',
+      'owner_type',
+    ];
+    foreach ($tables as $table) {
+      $db->query("DELETE r FROM {node_revision__{$table}} r LEFT JOIN {node__{$table}} n ON r.entity_id = n.entity_id WHERE n.entity_id IS NULL");
+    }
+
     $sandbox['tables'] = [
        ['comment__field_body', 'entity_id', 'field_body_value'],
        ['meta_entity__eif_description', 'entity_id', 'eif_description_value'],
