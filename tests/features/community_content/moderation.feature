@@ -5,14 +5,12 @@ Feature: Moderate community content
   I need to be able to see a list of content that requires moderation
 
   Scenario: Content moderation overview
-    Given the following collection:
-      | title            | Black hole research |
-      | state            | published           |
-      | content creation | members             |
-      | moderation       | yes                 |
-    And the following solution:
-      | title | Survey For Supernovae |
-      | state | published             |
+    Given collection content:
+      | title               | state     | content creation | moderation |
+      | Black hole research | published | members          | yes        |
+    And solution content:
+      | title                 | state     |
+      | Survey For Supernovae | published |
     And users:
       | Username       | E-mail                   | First name | Family name |
       | Marco Farfarer | marco.farfar@example.com | Marco      | Farfarer    |
@@ -304,9 +302,9 @@ Feature: Moderate community content
   @javascript
   Scenario: Filtering the content moderation overview
 
-    Given the following collection:
-      | title | Neutron stars |
-      | state | published     |
+    Given collection content:
+      | title         | state     |
+      | Neutron stars | published |
 
     And discussion content:
       | title                       | body                  | collection    | state    |
@@ -378,10 +376,9 @@ Feature: Moderate community content
 
     Given user:
       | Username | leo |
-    And the following collection:
-      | title      | Black hole research |
-      | state      | published           |
-      | moderation | yes                 |
+    And collection content:
+      | title               | state     | moderation |
+      | Black hole research | published | yes        |
     And the following collection user membership:
       | collection          | user |
       | Black hole research | leo  |

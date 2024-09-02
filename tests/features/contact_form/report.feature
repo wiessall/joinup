@@ -10,7 +10,7 @@ Feature: Submit the contact form
       | Report moderator | moderator | report_moderator@test.com | Frank      | Sinatra     |
       | Report user      |           | report_user@test.com      | Rudi       | Sinatra     |
       | Report owner     |           | report_owner@test.com     | Clark      | The machine |
-    And collections:
+    And collection content:
       | title                                 | state     | abstract     | description   |
       | Collection with inappropriate content | published | No one cares | No one cares. |
     And the following collection user memberships:

@@ -3,10 +3,10 @@ Feature: Block paragraph tests.
 
   @javascript
   Scenario: Recommended solutions
-    Given the following collection:
-      | title | Block collection |
-      | state | published        |
-    And the following solutions:
+    Given collection content:
+      | title            | state     |
+      | Block collection | published |
+    Given solution content:
       | title        | collection       | state     |
       | Early Omega  | Block collection | published |
       | Snake Timely | Block collection | published |

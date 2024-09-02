@@ -5,10 +5,9 @@ Feature: Input filter
   The HTML I can use in the WYSIWYG editor gets filtered
 
   Background:
-    Given the following collection:
-      | title | Netflix group |
-      | logo  | logo.png      |
-      | state | published     |
+    Given collection content:
+      | title         | logo     | state     |
+      | Netflix group | logo.png | published |
 
   Scenario: Ensure all required formats are supported in the content editor.
     Given the following "Image" media:

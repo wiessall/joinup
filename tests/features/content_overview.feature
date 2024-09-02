@@ -7,7 +7,7 @@ Feature: Content Overview
       | batbull      | Simba      | Hobson      | simba3000@hotmail.de |
       | welshbuzzard | Titus      | Nicotera    | nicotito@example.org |
       | hatchingegg  | Korinna    | Morin       | korimor@example.com  |
-    And the following collections:
+    And collection content:
       | title             | description        | state     | moderation |
       | Rumble collection | Sample description | published | yes        |
     And "event" content:
@@ -87,7 +87,7 @@ Feature: Content Overview
       | Username        | E-mail                       |
       | michaelanewport | michaela.newport@example.com |
       | nenaroberts     | nena.roberts@example.com     |
-    And the following collections:
+    And collection content:
       | title            | state     |
       | Timely Xylophone | published |
     And "event" content:
@@ -171,9 +171,9 @@ Feature: Content Overview
       | Username        | E-mail                       |
       | claricemitchell | clarice.mitchell@example.com |
       | jeffreypayne    | jeffrey.payne@example.com    |
-    And collection:
-      | title | Barbaric Avenue |
-      | state | published       |
+    And collection content:
+      | title           | state     |
+      | Barbaric Avenue | published |
     And event content:
       | title                | collection      | start date   | end date            | created    | state     | author          |
       | Bitter Finger        | Barbaric Avenue | now -1 years | now -1 years +1 day | now -4 day | published | claricemitchell |

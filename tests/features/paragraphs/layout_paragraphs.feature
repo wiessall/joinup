@@ -5,9 +5,9 @@ Feature:
   environment will be included.
 
   Background:
-    Given collection:
-      | title | Plaster molds |
-      | state | published     |
+    Given collection content:
+      | title         | state     |
+      | Plaster molds | published |
     And custom_page content:
       | title                  | collection    |
       | Layout paragraphs test | Plaster molds |

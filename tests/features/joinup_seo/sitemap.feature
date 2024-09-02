@@ -11,11 +11,11 @@ Feature:
     And contact_information content:
       | name                | email                           |
       | Sitemap secretariat | sitemap.secretariat@example.com |
-    And the following collections:
+    And collection content:
       | title                        | state     |
       | Sitemap collection draft     | draft     |
       | Sitemap collection published | published |
-    And the following solutions:
+    Given solution content:
       | title                      | description                 | owner         | contact information | collection                   | state     |
       | Sitemap solution draft     | Sitemap keywords everywhere | Sitemap owner | Sitemap secretariat | Sitemap collection published | draft     |
       | Sitemap solution published | Sitemap keywords everywhere | Sitemap owner | Sitemap secretariat | Sitemap collection published | published |

@@ -18,26 +18,12 @@ Feature: Collection homepage
     And contact_information content:
       | name        | email                   |
       | Kalikatoura | kalikatoura@example.com |
-    And the following collection:
-      | title               | Middle earth daily               |
-      | description         | Middle earth daily               |
-      | owner               | Bilbo Baggins                    |
-      | contact information | Kalikatoura                      |
-      | logo                | logo.png                         |
-      | moderation          | yes                              |
-      | content creation    | members                          |
-      | state               | published                        |
-      | topic               | Employment and Support Allowance |
-      | published at        | 2012-12-01 9:00am                |
-      | modification date   | 2017-12-01 9:00am                |
-    And the following solution:
-      | title            | Bilbo's book          |
-      | collection       | Middle earth daily    |
-      | description      | Bilbo's autobiography |
-      | content creation | registered users      |
-      | creation date    | 2014-10-17 8:32am     |
-      | state            | published             |
-      | topic            | Info                  |
+    And collection content:
+      | title              | description        | owner         | contact information | logo     | moderation | content creation | state     | topic                            | published at      | modification date |
+      | Middle earth daily | Middle earth daily | Bilbo Baggins | Kalikatoura         | logo.png | yes        | members          | published | Employment and Support Allowance | 2012-12-01 9:00am | 2017-12-01 9:00am |
+    And solution content:
+      | title        | collection         | description           | content creation | creation date     | state     | topic |
+      | Bilbo's book | Middle earth daily | Bilbo's autobiography | registered users | 2014-10-17 8:32am | published | Info  |
     And the following collection user memberships:
       | collection         | user    | roles       |
       | Middle earth daily | Frodo   | facilitator |

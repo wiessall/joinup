@@ -11,7 +11,7 @@ Feature: Notification test for the document transitions on a post moderated pare
       | CC owner         |           | notify_owner@test.com       | CC         | Owner       |
       | CC facilitator   |           | notify_facilitator@test.com | CC         | Facilitator |
       | CC member        |           | notify_member@test.com      | CC         | Member      |
-    And collections:
+    And collection content:
       | title         | state     | content creation | moderation   |
       | CC collection | published | members          | <moderation> |
     And the following collection user memberships:
@@ -41,8 +41,8 @@ Feature: Notification test for the document transitions on a post moderated pare
     And I select "Statistics and Analysis" from "Topic"
     And I press "Publish"
     Then the following email should have been sent:
-      | recipient | CC owner                                                                                                                                                            |
-      | subject   | Joinup: Content has been published                                                                                                                                  |
+      | recipient | CC owner                                                                                                                                                             |
+      | subject   | Joinup: Content has been published                                                                                                                                   |
       | body      | CC Member has published the new document - "CC notify create publish" in the collection: "CC collection". You can access the new content at the following link: http |
 
     # Test 'update' operation.

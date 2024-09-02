@@ -10,7 +10,7 @@ Feature: Collection RSS feed.
       | alejake  | Aleta      | Jakeman     |
       | forest   | Forest     | Robinson    |
       | otto     | Otto       | Drake       |
-    And collections:
+    And collection content:
       | title             | state     |
       | Indigo Monkey     | published |
       | Dreaded Scissors  | published |
@@ -20,7 +20,7 @@ Feature: Collection RSS feed.
       | Indigo Monkey    | alejake | facilitator |
       | Indigo Monkey    | forest  | facilitator |
       | Dreaded Scissors | otto    | facilitator |
-    And solutions:
+    Given solution content:
       | title           | state     | author  | creation date    | collection       |
       | Lantern Global  | published | alejake | 2018-12-18 08:00 | Indigo Monkey    |
       | Proton Lonesome | published | alejake | 2019-01-05 10:00 | Indigo Monkey    |

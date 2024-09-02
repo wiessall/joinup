@@ -5,9 +5,9 @@ Feature: Following discussions
   So that I can stay up to date with its evolvement
 
   Background:
-    Given the following collection:
-      | title | Dairy products |
-      | state | published      |
+    Given collection content:
+      | title          | state     |
+      | Dairy products | published |
     And user:
       | Username | Dr. Hans Zarkov  |
       | E-mail   | hans@example.com |

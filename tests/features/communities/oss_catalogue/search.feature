@@ -34,10 +34,9 @@ Feature: OSS catalogue search
 
   Scenario: User is able to search.
     # Mimic the "EU OSSC" collection.
-    Given collection:
-      | uri   | http://data.europa.eu/w21/6d621a47-71ce-4f1a-90e2-8859403d3ecd |
-      | title | EU Open Source Solutions Catalogue                             |
-      | state | published                                                      |
+    Given collection content:
+      | uri                                                            | title                              | state     |
+      | http://data.europa.eu/w21/6d621a47-71ce-4f1a-90e2-8859403d3ecd | EU Open Source Solutions Catalogue | published |
 
     When I visit the OSS search page
     Then I see the text "EU Open Source Solutions Catalogue" in the "Header" region
@@ -174,45 +173,45 @@ Feature: OSS catalogue search
   @javascript
   Scenario: User is able to use autocomplete.
     Given oss_solution content:
-      | title                     | oss_development_status | oss_source        | oss_categories                                                   | oss_short_description                                                                 | status      | oss_release_date | oss_vitality_index |
-      | Another Open Source App   | alpha                  | developers_italia | data-analytics,data-collection                                   | A new open-source application that simplifies data management and analysis.           | published   | 2023-01-15       | 0.56               |
-      | Magic Data Converter      | stable                 | developers_italia | application-development,it-development                           | A reliable tool to convert various data formats into more usable ones.                | published   | 2022-11-30       | 0.51               |
-      | Creative Content Creator  | development            | developers_italia | application-development,it-development,digital-asset-management  | An exciting project for creating unique and stunning digital content.                 | published   |                  | 0.98               |
-      | Data Security Sentinel    | stable                 | developers_italia | content-management                                               | Enhance your data security with this robust and well-maintained application.          | published   | 2022-09-12       | 0.67               |
-      | Smart IoT Manager         | beta                   | developers_italia | it-development                                                   | An IoT management system that helps you control and monitor your devices smartly.     | published   | 2021-08-20       | 0.78               |
-      | Open AI Helper            | development            | developers_italia | data-analytics,data-collection                                   | An AI-powered assistant to make your tasks easier and more efficient.                 | published   |                  | 0.50               |
-      | Community Data Tracker    | stable                 | developers_italia | application-development,it-development                           | Track and analyze community data with this reliable tool.                             | published   | 2022-12-10       | 0.99               |
-      | Digital Artistry Studio   | beta                   | developers_italia | application-development,it-development,digital-asset-management  | Express your creativity with powerful digital art tools.                              | published   | 2021-07-05       | 0.76               |
-      | Secure Password Manager   | stable                 | developers_italia | content-management                                               | Manage your passwords securely and keep your data safe with this trusted application. | published   | 2022-06-18       | 0.69               |
-      | Health Tracker Pro        | development            | developers_italia | it-development                                                   | An upcoming health and fitness app to help you stay on top of your well-being goals.  | published   |                  | 0.55               |
-      | LibreOffice               | development            | developers_italia | it-development                                                   | LibreOffice is a free and powerful office suite, and a successor to OpenOffice.       | published   | 2023-06-15       | 0.88               |
-      | Random Lite               | development            | developers_italia | it-development                                                   | Underneath the starry night, whispers of dreams dance amidst the shadows.             | unpublished | 2023-06-15       | 0.88               |
-      | Random Boat               | development            | developers_italia | it-development                                                   | Underneath the starry night, weaving tales of forgotten memories and possibilities.   | unpublished | 2023-06-15       | 0.88               |
+      | title                    | oss_development_status | oss_source        | oss_categories                                                  | oss_short_description                                                                 | status      | oss_release_date | oss_vitality_index |
+      | Another Open Source App  | alpha                  | developers_italia | data-analytics,data-collection                                  | A new open-source application that simplifies data management and analysis.           | published   | 2023-01-15       | 0.56               |
+      | Magic Data Converter     | stable                 | developers_italia | application-development,it-development                          | A reliable tool to convert various data formats into more usable ones.                | published   | 2022-11-30       | 0.51               |
+      | Creative Content Creator | development            | developers_italia | application-development,it-development,digital-asset-management | An exciting project for creating unique and stunning digital content.                 | published   |                  | 0.98               |
+      | Data Security Sentinel   | stable                 | developers_italia | content-management                                              | Enhance your data security with this robust and well-maintained application.          | published   | 2022-09-12       | 0.67               |
+      | Smart IoT Manager        | beta                   | developers_italia | it-development                                                  | An IoT management system that helps you control and monitor your devices smartly.     | published   | 2021-08-20       | 0.78               |
+      | Open AI Helper           | development            | developers_italia | data-analytics,data-collection                                  | An AI-powered assistant to make your tasks easier and more efficient.                 | published   |                  | 0.50               |
+      | Community Data Tracker   | stable                 | developers_italia | application-development,it-development                          | Track and analyze community data with this reliable tool.                             | published   | 2022-12-10       | 0.99               |
+      | Digital Artistry Studio  | beta                   | developers_italia | application-development,it-development,digital-asset-management | Express your creativity with powerful digital art tools.                              | published   | 2021-07-05       | 0.76               |
+      | Secure Password Manager  | stable                 | developers_italia | content-management                                              | Manage your passwords securely and keep your data safe with this trusted application. | published   | 2022-06-18       | 0.69               |
+      | Health Tracker Pro       | development            | developers_italia | it-development                                                  | An upcoming health and fitness app to help you stay on top of your well-being goals.  | published   |                  | 0.55               |
+      | LibreOffice              | development            | developers_italia | it-development                                                  | LibreOffice is a free and powerful office suite, and a successor to OpenOffice.       | published   | 2023-06-15       | 0.88               |
+      | Random Lite              | development            | developers_italia | it-development                                                  | Underneath the starry night, whispers of dreams dance amidst the shadows.             | unpublished | 2023-06-15       | 0.88               |
+      | Random Boat              | development            | developers_italia | it-development                                                  | Underneath the starry night, weaving tales of forgotten memories and possibilities.   | unpublished | 2023-06-15       | 0.88               |
 
     When I visit the OSS search page
 
     Then I enter "app" in the "oss search bar"
     Then I should see the following "oss search" suggestions:
-      | Another Open Source App  |
+      | Another Open Source App |
     Then I enter "data" in the "oss search bar"
     Then I should see the following "oss search" suggestions:
-      | Community Data Tracker   |
-      | Magic Data Converter     |
-      | Data Security Sentinel   |
+      | Community Data Tracker |
+      | Magic Data Converter   |
+      | Data Security Sentinel |
     Then I enter "ope" in the "oss search bar"
     Then I should see the following "oss search" suggestions:
-      | Another Open Source App   |
-      | Open AI Helper            |
+      | Another Open Source App |
+      | Open AI Helper          |
     Then I enter "open" in the "oss search bar"
     Then I should see the following "oss search" suggestions:
-      | Another Open Source App   |
-      | Open AI Helper            |
+      | Another Open Source App |
+      | Open AI Helper          |
     Then I enter "lib" in the "oss search bar"
     Then I should see the following "oss search" suggestions:
-      | LibreOffice              |
+      | LibreOffice |
     Then I enter "libre" in the "oss search bar"
     Then I should see the following "oss search" suggestions:
-      | LibreOffice              |
+      | LibreOffice |
     Then I enter "underneath" in the "oss search bar"
     Then I should not see any suggestion at "oss search"
 

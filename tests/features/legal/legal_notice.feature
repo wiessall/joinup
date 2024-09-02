@@ -1,14 +1,14 @@
 @api @group-h
 Feature:
   - As a visitor, in order to register to Joinup, I have to accept the site's
-    'Legal notice', otherwise I cannot register.
+  'Legal notice', otherwise I cannot register.
   - As registered user, in order to login when a new version of 'Legal notice'
-    has been released, I have to accept the new version, otherwise I cannot
-    login.
+  has been released, I have to accept the new version, otherwise I cannot
+  login.
   - As a moderator, I want to be able to release new versions of 'Legal notice'
-    or to edit the existing ones.
+  or to edit the existing ones.
   - As a visitor, in order to send a support request on the `/contact` page, I
-    have to accept the site's 'Legal notice', otherwise I cannot submit.
+  have to accept the site's 'Legal notice', otherwise I cannot submit.
 
   Background:
     Given the following legal document version:
@@ -178,7 +178,7 @@ Feature:
     And CAS users:
       | Username        | E-mail                  | Password | Local username  |
       | Sergeant Pepper | pepper@royalnavy.mod.uk | p3pp3r   | Sergeant Pepper |
-    And collections:
+    And collection content:
       | title              | state     |
       | Land of submarines | published |
 

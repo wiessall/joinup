@@ -7,7 +7,7 @@ Feature:
   I need to be able to mark the new menu item with special styling.
 
   Background:
-    Given the following collections:
+    Given collection content:
       | title               | state     |
       | Flagging collection | published |
     And news content:

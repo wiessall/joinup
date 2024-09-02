@@ -5,7 +5,7 @@ Feature: "Add document" visibility options.
   I need to be able to add "Document" content through UI.
 
   Scenario: "Add document" button should not be shown to normal members, authenticated users and anonymous users.
-    Given the following collections:
+    Given collection content:
       | title                   | logo     | state     |
       | Ring of Truth           | logo.png | published |
       | The Storms of the Waves | logo.png | published |
@@ -40,7 +40,7 @@ Feature: "Add document" visibility options.
       | First name  | Eirik             |
       | Family name | Andries           |
       | E-mail      | eandr@example.com |
-    And collections:
+    And collection content:
       | title                | logo     | state     |
       | Hunter in the Swords | logo.png | published |
     And the following collection user membership:
@@ -94,9 +94,9 @@ Feature: "Add document" visibility options.
   # revision is created for a document that has a remote file attached.
   # @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3670
   Scenario: Remote URLs can be used in documents.
-    Given the following collection:
-      | title | Strong Lasers |
-      | state | published     |
+    Given collection content:
+      | title         | state     |
+      | Strong Lasers | published |
     And licence content:
       | title                 | description                                                         | licence type  |
       | Creative Commons Zero | CC0 is a legal tool for waiving as many rights as legally possible. | Public domain |

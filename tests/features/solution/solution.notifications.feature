@@ -7,10 +7,9 @@ Feature: Solution notifications
   I need to receive email that inform me regarding solution transitions.
 
   Scenario: Notifications are sent every time a related transition is applied to a solution.
-    Given the following collection:
-      | title | Collection of random solutions |
-      | logo  | logo.png                       |
-      | state | published                      |
+    Given collection content:
+      | title                          | logo     | state     |
+      | Collection of random solutions | logo.png | published |
     And owner content:
       | name               | owner type |
       | Karanikolas Kitsos | Company    |
@@ -23,7 +22,7 @@ Feature: Solution notifications
       | Jack Harper  | moderator | Jack       | Harper      | jack.harper@example.com  |
       | Ramiro Myers |           | Ramiro     | Myers       | ramiro.myers@example.com |
       | Edith Poole  |           | Edith      | Poole       | edith.poole@example.com  |
-    And the following solutions:
+    Given solution content:
       | title                                                 | author       | abstract       | description | logo     | owner              | contact information | state        | topic       | solution type | collection                     |
       | Solution notification to propose changes              | Ramiro Myers | Short abstract | Sample text | logo.png | Karanikolas Kitsos | Information Desk    | published    | E-inclusion | Business      | Collection of random solutions |
       | Solution notification to blacklist                    | Ramiro Myers | Short abstract | Sample text | logo.png | Karanikolas Kitsos | Information Desk    | published    | E-inclusion | Business      | Collection of random solutions |

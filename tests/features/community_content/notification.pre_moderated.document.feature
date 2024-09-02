@@ -11,7 +11,7 @@ Feature: Notification test for the document transitions on a pre moderated paren
       | CC owner         |           | notify_owner@test.com       | CC         | Owner       |
       | CC facilitator   |           | notify_facilitator@test.com | CC         | Facilitator |
       | CC member        |           | notify_member@test.com      | CC         | Member      |
-    And collections:
+    And collection content:
       | title             | state     | content creation | moderation |
       | CC pre collection | published | members          | yes        |
     And the following collection user memberships:
@@ -64,8 +64,8 @@ Feature: Notification test for the document transitions on a pre moderated paren
     And I select "Statistics and Analysis" from "Topic"
     And I press "Publish"
     Then the following email should have been sent:
-      | recipient | CC owner                                                                                                                                                                     |
-      | subject   | Joinup: Content has been published                                                                                                                                           |
+      | recipient | CC owner                                                                                                                                                                      |
+      | subject   | Joinup: Content has been published                                                                                                                                            |
       | body      | CC Facilitator has published the new document - "CC notify create publish" in the collection: "CC pre collection". You can access the new content at the following link: http |
 
     # Test 'update' operation.

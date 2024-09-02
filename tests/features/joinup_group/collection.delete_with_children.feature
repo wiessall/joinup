@@ -5,13 +5,12 @@ Feature:
   I need to be unable to delete collections that have children entities.
 
   Scenario Outline: Delete a collection with a child solution
-    Given collection:
-      | title | Collection with child |
-      | state | <collection state>    |
-    And solution:
-      | title      | Child of collection with child |
-      | state      | <solution state>               |
-      | collection | Collection with child          |
+    Given collection content:
+      | title                 | state              |
+      | Collection with child | <collection state> |
+    And solution content:
+      | title                          | state            | collection            |
+      | Child of collection with child | <solution state> | Collection with child |
 
     When I am logged in as a moderator
     And I go to the delete form of the "Collection with child" collection

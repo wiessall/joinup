@@ -6,9 +6,9 @@ Feature: Machine translation
 
   @javascript
   Scenario: Translation link is only visible on content focused pages
-    Given collection:
-      | title | Brexit    |
-      | state | published |
+    Given collection content:
+      | title  | state     |
+      | Brexit | published |
     And event content:
       | title                      | collection | state     |
       | Confiscating of sandwiches | Brexit     | published |
@@ -27,10 +27,9 @@ Feature: Machine translation
     And glossary content:
       | title               | abbreviation | summary                 | definition                | collection |
       | Digital portability | DP           | Availability of content | Across streaming services | Brexit     |
-    And solution:
-      | title      | Rejoin the EU |
-      | state      | published     |
-      | collection | Brexit        |
+    And solution content:
+      | title         | state     | collection |
+      | Rejoin the EU | published | Brexit     |
 
     When I am logged in as a moderator
     # Inside a collection sidebar, only custom pages, glossary terms (but not

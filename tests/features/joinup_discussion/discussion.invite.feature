@@ -12,18 +12,16 @@ Feature: Invite members to subscribe to discussions
       | Glory Ruskin     | gloruskin.hr@example.com         | Glory      | Ruskin      |
       | paternoster      | shaquila.paternoster@example.com | Shaquila   | Paternoster |
       | theacuteone      | hargrave.hr@example.com          | Shannon    | Hargrave    |
-    And the following solution:
-      | title       | Stainless Steel Siphons |
-      | description | Will last forever       |
-      | state       | published               |
+    And solution content:
+      | title                   | description       | state     |
+      | Stainless Steel Siphons | Will last forever | published |
     And the following solution user membership:
       | solution                | user         | roles       |
       | Stainless Steel Siphons | theacuteone  | member      |
       | Stainless Steel Siphons | Glory Ruskin | facilitator |
-    And the following collection:
-      | title       | The Siphon Community |
-      | description | We just love siphons |
-      | state       | published            |
+    And collection content:
+      | title                | description          | state     |
+      | The Siphon Community | We just love siphons | published |
     And the following collection user membership:
       | collection           | user             | roles       |
       | The Siphon Community | Lynwood Crawford | member      |

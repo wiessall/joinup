@@ -3,11 +3,11 @@ Feature: Cloning of entities
 
   Background:
     Given collections:
-      | title            | state     |
-      | Collection       | published |
-    And solutions:
-      | title          | collection       | state     |
-      | Solution       | Collection       | published |
+      | title      | state     |
+      | Collection | published |
+    Given solution content:
+      | title    | collection | state     |
+      | Solution | Collection | published |
     And "custom_page" content:
       | title                  | collection | field_paragraphs_body          | state     |
       | Collection Custom Page | Collection | Collection custom page content | published |
@@ -22,20 +22,20 @@ Feature: Cloning of entities
     # Yes, because testing with an only-admin user would fail.
     Examples:
       | role                                                    | content                | link availability |
-      | an anonymous user                                       | Collection Custom Page | should not see |
-      | an anonymous user                                       | Solution Custom Page   | should not see |
-      | logged in as an authenticated                           | Collection Custom Page | should not see |
-      | logged in as an authenticated                           | Solution Custom Page   | should not see |
-      | logged in as a moderator                                | Collection Custom Page | should see     |
-      | logged in as a moderator                                | Solution Custom Page   | should see     |
-      | logged in as a member of the Collection collection      | Collection Custom Page | should not see |
-      | logged in as a member of the Collection collection      | Solution Custom Page   | should not see |
-      | logged in as a facilitator of the Collection collection | Collection Custom Page | should see     |
-      | logged in as a facilitator of the Collection collection | Solution Custom Page   | should not see |
-      | logged in as a member of the Solution solution          | Collection Custom Page | should not see |
-      | logged in as a member of the Solution solution          | Solution Custom Page   | should not see |
-      | logged in as a facilitator of the Solution solution     | Collection Custom Page | should not see |
-      | logged in as a facilitator of the Solution solution     | Solution Custom Page   | should see     |
+      | an anonymous user                                       | Collection Custom Page | should not see    |
+      | an anonymous user                                       | Solution Custom Page   | should not see    |
+      | logged in as an authenticated                           | Collection Custom Page | should not see    |
+      | logged in as an authenticated                           | Solution Custom Page   | should not see    |
+      | logged in as a moderator                                | Collection Custom Page | should see        |
+      | logged in as a moderator                                | Solution Custom Page   | should see        |
+      | logged in as a member of the Collection collection      | Collection Custom Page | should not see    |
+      | logged in as a member of the Collection collection      | Solution Custom Page   | should not see    |
+      | logged in as a facilitator of the Collection collection | Collection Custom Page | should see        |
+      | logged in as a facilitator of the Collection collection | Solution Custom Page   | should not see    |
+      | logged in as a member of the Solution solution          | Collection Custom Page | should not see    |
+      | logged in as a member of the Solution solution          | Solution Custom Page   | should not see    |
+      | logged in as a facilitator of the Solution solution     | Collection Custom Page | should not see    |
+      | logged in as a facilitator of the Solution solution     | Solution Custom Page   | should see        |
 
   Scenario Outline: Only custom page nodes should have the Replicate link
     Given <type> content:

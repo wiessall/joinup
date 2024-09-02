@@ -3,13 +3,12 @@ Feature:
   Functionality checks for content_listing paragraphs in custom pages.
 
   Background:
-    Given collection:
-      | title | Roman ruins |
-      | state | published   |
-      | topic | HR          |
+    Given collection content:
+      | title       | state     | topic |
+      | Roman ruins | published | HR    |
 
   Scenario: Test that content listing options are working correctly.
-    Given the following collections:
+    Given collection content:
       | title  | state     |
       | Sparta | published |
     And news content:

@@ -15,7 +15,7 @@ Feature: Publication date works as expected on RDF entities
       | title                 | state     | description | owner | contact information |
       | Collection to publish | draft     | Description | Owner | Contact1            |
       | Published collection  | published | Description | Owner | Contact2            |
-    And solutions:
+    Given solution content:
       | title               | state     | collection           | solution type | abstract | description | moderation | owner | contact information |
       | Solution to publish | draft     | Published collection | Business      | Abstract | Description | no         | Owner | Contact3            |
       | Published solution  | published | Published collection | Business      | Abstract | Description | no         | Owner | Contact4            |

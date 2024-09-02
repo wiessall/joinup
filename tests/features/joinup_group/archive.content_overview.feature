@@ -90,13 +90,12 @@ Feature: Global search with archive content
       | Solution     | solution   |
 
   Scenario: Content listing for archived group should always display archived content.
-    Given the following collection:
-      | title | Filtration equipment |
-      | state | archived             |
-    Given the following solution:
-      | title      | Filter cartridge     |
-      | state      | archived             |
-      | collection | Filtration equipment |
+    Given collection content:
+      | title                | state    |
+      | Filtration equipment | archived |
+    Given solution content:
+      | title            | state    | collection           |
+      | Filter cartridge | archived | Filtration equipment |
     And news content:
       | title               | state    | solution         |
       | TPolypropylene Spun | archived | Filter cartridge |
@@ -110,7 +109,7 @@ Feature: Global search with archive content
     And I should see the "PTFE pleated" tile
 
   Scenario: Distributions directly under a solution respect the state.
-    And the following solutions:
+    Given solution content:
       | title         | description | state     |
       | Some solution | Description | published |
     And distribution content:
@@ -139,7 +138,7 @@ Feature: Global search with archive content
       | title      | description                | topic             | owner      | contact information | state     |
       | Rubik Cube | combination puzzle         | Supplier exchange | Erno Rubik | Tom Kremer          | published |
       | Speed cube | also known as speedsolving | Supplier exchange | Erno Rubik | Tom Kremer          | published |
-    And solutions:
+    Given solution content:
       | title    | state     | collection | shared on  |
       | Megaminx | published | Rubik Cube | Speed cube |
       | 4x4 cube | archived  | Rubik Cube | Speed cube |

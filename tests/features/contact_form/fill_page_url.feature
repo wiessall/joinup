@@ -48,12 +48,9 @@ Feature: Fill Page URL field in Technical problem / bug report on contact form
     And owner content:
       | name              |
       | Martinez Gonzalez |
-    And collection:
-      | title               | Rumba                |
-      | description         | Destruction of Rumba |
-      | owner               | Martinez Gonzalez    |
-      | contact information | Rarty Kelley         |
-      | state               | published            |
+    And collection content:
+      | title | description          | owner             | contact information | state     |
+      | Rumba | Destruction of Rumba | Martinez Gonzalez | Rarty Kelley        | published |
     And news content:
       | title         | headline | body | collection | field_state |
       | Tumba spatial | headline | body | Rumba      | published   |

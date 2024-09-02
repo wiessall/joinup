@@ -5,9 +5,9 @@ Feature: "Custom page" editing.
   I need to be able to edit "Custom Page" content through UI.
 
   Scenario: User should not be allowed unarchiving content of an archived solution.
-    Given the following solution:
-      | title | Cartridge cleaner |
-      | state | archived          |
+    Given solution content:
+      | title             | state    |
+      | Cartridge cleaner | archived |
     And "custom_page" content:
       | title          | solution          | state    |
       | Cyclone filter | Cartridge cleaner | archived |

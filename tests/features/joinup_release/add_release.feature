@@ -5,11 +5,9 @@ Feature: "Add release" visibility options.
   I need to be able to add "Release" rdf entities through UI.
 
   Scenario: "Add release" button should only be shown to solution facilitators.
-    Given the following solution:
-      | title         | Release solution test |
-      | description   | My awesome solution   |
-      | documentation | text.pdf              |
-      | state         | published             |
+    Given solution content:
+      | title                 | description         | documentation | state     |
+      | Release solution test | My awesome solution | text.pdf      | published |
 
     When I am logged in as a "facilitator" of the "Release solution test" solution
     And I go to the homepage of the "Release solution test" solution
@@ -29,7 +27,7 @@ Feature: "Add release" visibility options.
     Given owner content:
       | name                 | owner type |
       | Organisation example | Company    |
-    And the following solutions:
+    Given solution content:
       | title          | description        | documentation | owner                | state     |
       | Release Test 1 | test description 1 | text.pdf      | Organisation example | published |
     And release content:
@@ -101,10 +99,9 @@ Feature: "Add release" visibility options.
     And I delete the "Chasing flares" release
 
   Scenario: Do not allow access to the page if the parent is not a solution.
-    Given the following collection:
-      | uri   | http://example1regression |
-      | title | The Stripped Stream       |
-      | state | published                 |
+    Given collection content:
+      | uri                       | title               | state     |
+      | http://example1regression | The Stripped Stream | published |
 
     When I am not logged in
     And I go to "/rdf_entity/http_e_f_fexample1regression/release/add"
@@ -118,7 +115,7 @@ Feature: "Add release" visibility options.
     Given owner content:
       | name                     | owner type |
       | Organisation example two | Company    |
-    And the following solutions:
+    Given solution content:
       | title          | description        | documentation | owner                    | state     |
       | Release Test 2 | test description 2 | text.pdf      | Organisation example two | published |
     When I am logged in as a "facilitator" of the "Release Test 2" solution

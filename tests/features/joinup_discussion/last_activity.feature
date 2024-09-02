@@ -4,16 +4,16 @@ Feature: Last Activity feature
   I want to be able to see last activity inside a tile.
 
   Scenario: The discussion tile should show the last activity box.
-    Given the following collections:
+    Given collection content:
       | title                         | description       | state     |
       | Development through bricolage | Bricolage 101.    | published |
       | Carrots love tomatoes         | Truth is out now. | published |
     And discussion content:
-      | title         | state     | collection                    | shared on             | created          | changed    |
-      | Tools cabinet | published | Development through bricolage | Carrots love tomatoes | 01-01-2023       | 01-01-2023 |
+      | title         | state     | collection                    | shared on             | created    | changed    |
+      | Tools cabinet | published | Development through bricolage | Carrots love tomatoes | 01-01-2023 | 01-01-2023 |
     And users:
-      | Username      | Roles     | E-mail                   | First name | Family name |
-      | alicia__1997  |           | AliciaPotter@example.com | Alicia     | Potter      |
+      | Username     | Roles | E-mail                   | First name | Family name |
+      | alicia__1997 |       | AliciaPotter@example.com | Alicia     | Potter      |
     When I go to the "Development through bricolage" collection
     Then I should see the text "Discussions" in the "Navigation menu"
     When I go to the discussions page of "Development through bricolage"

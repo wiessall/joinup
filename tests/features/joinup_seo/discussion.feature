@@ -5,7 +5,7 @@ Feature: SEO for discussion forum posts.
   I need proper metatag to be encapsulated in the html code.
 
   Scenario: Basic metatags are attached as JSON schema on the page.
-    Given collections:
+    Given collection content:
       | title                            | state     |
       | Joinup SEO discussion collection | published |
     And users:

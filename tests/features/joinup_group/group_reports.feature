@@ -6,29 +6,29 @@ Feature:
 
   Background:
     Given users:
-      | Username | Roles     | First name | Family name |
-      | keiko    |           | Keiko      | Kuroki      |
-      | juro     |           | Juro       | Yamasaki    |
-      | daichi   |           | Daichi     | Ogawa       |
-      | yumiko   |           | Yumiko     | Ueda        |
-      | kyouko   |           | Kyouko     | Kato        |
-      | tsubasa  |           | Tsubasa    | Akiyama     |
-      | hoshiko  |           | Hoshiko    | Watanabe    |
-      | takehiko |           | Takehiko   | Moto        |
-    And collections:
+      | Username | Roles | First name | Family name |
+      | keiko    |       | Keiko      | Kuroki      |
+      | juro     |       | Juro       | Yamasaki    |
+      | daichi   |       | Daichi     | Ogawa       |
+      | yumiko   |       | Yumiko     | Ueda        |
+      | kyouko   |       | Kyouko     | Kato        |
+      | tsubasa  |       | Tsubasa    | Akiyama     |
+      | hoshiko  |       | Hoshiko    | Watanabe    |
+      | takehiko |       | Takehiko   | Moto        |
+    And collection content:
       | title                    | state     |
       | Muscle tissue formation  | published |
       | Cultured meat technology | published |
-    And solutions:
+    Given solution content:
       | title                         | state     | collection               |
       | Aligning myotubes             | published | Muscle tissue formation  |
       | Increasing global meat demand | published | Cultured meat technology |
     And collection user memberships:
-      | collection                  | user   | roles       |
-      | Muscle tissue formation     | keiko  | facilitator |
-      | Muscle tissue formation     | juro   |             |
-      | Cultured meat technology    | daichi | facilitator |
-      | Cultured meat technology    | yumiko |             |
+      | collection               | user   | roles       |
+      | Muscle tissue formation  | keiko  | facilitator |
+      | Muscle tissue formation  | juro   |             |
+      | Cultured meat technology | daichi | facilitator |
+      | Cultured meat technology | yumiko |             |
     And solution user memberships:
       | solution                      | user     | roles       |
       | Aligning myotubes             | kyouko   | facilitator |

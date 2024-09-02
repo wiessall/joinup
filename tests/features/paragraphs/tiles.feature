@@ -4,9 +4,9 @@ Feature:
   I need to be able to use "Tiles" paragraph for content.
 
   Background:
-    Given the following collection:
-      | title | Paragraphs collection |
-      | state | published             |
+    Given collection content:
+      | title                 | state     |
+      | Paragraphs collection | published |
 
   @javascript @uploadFiles:topic.png
   Scenario: Add tiles paragraph to one column layout.

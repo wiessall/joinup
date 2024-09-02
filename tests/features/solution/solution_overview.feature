@@ -5,7 +5,7 @@ Feature: Solutions Overview
   I should see a list of all solutions
 
   Scenario: Solution overview paging
-    Given solutions:
+    Given solution content:
       | title      | creation date     | state     |
       | Arctic fox | 2018-10-04 8:21am | published |
       | Alpaca     | 2018-10-04 8:31am | published |
@@ -58,11 +58,10 @@ Feature: Solutions Overview
     Given users:
       | Username      | E-mail                            |
       | Madam Shirley | i.dont.see.the.future@example.com |
-    And the following collection:
-      | title | Pikachu, I choose you |
-      | logo  | logo.png              |
-      | state | published             |
-    And solutions:
+    And collection content:
+      | title                 | logo     | state     |
+      | Pikachu, I choose you | logo.png | published |
+    Given solution content:
     # As of ISAICP-3618 descriptions should not be visible in regular tiles.
       | title                 | description                    | state     |
       | Non electronic health | Supports health-related fields | published |
@@ -161,10 +160,10 @@ Feature: Solutions Overview
       | Marjorie Parker | marjorie.parker@example.com |
       | Ryker Brandon   | ryker.brandon@example.com   |
       | Joann Womack    | joann.womack@example.com    |
-    And the following collections:
+    And collection content:
       | title                 | state     |
       | Insane Wooden Crystal | published |
-    And the following solutions:
+    Given solution content:
       | title                        | collection            | state     | featured | author          |
       | Subdivision Morbid           | Insane Wooden Crystal | published | yes      | Marjorie Parker |
       | Long Tungsten                | Insane Wooden Crystal | published | no       | Ryker Brandon   |
@@ -173,11 +172,9 @@ Feature: Solutions Overview
       | Lost Scattered Fish          | Insane Wooden Crystal | published | no       | Joann Womack    |
       | Silver Gravel                | Insane Wooden Crystal | published | no       | Joann Womack    |
     # Technical: use a separate step to create a collection associated to the anonymous user.
-    And the following solution:
-      | title      | Flag Rough            |
-      | collection | Insane Wooden Crystal |
-      | state      | published             |
-      | featured   | no                    |
+    And solution content:
+      | title      | collection            | state     | featured |
+      | Flag Rough | Insane Wooden Crystal | published | no       |
 
     When I am logged in as "Joann Womack"
     And I visit the solution overview

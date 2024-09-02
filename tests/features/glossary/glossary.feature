@@ -7,16 +7,15 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
     Given users:
       | Username | Roles  |
       | <user>   | <role> |
-    And the following collection:
-      | title | A World of Things |
-      | state | published         |
+    And collection content:
+      | title             | state     |
+      | A World of Things | published |
     And the following collection user membership:
       | collection        | user   | roles     |
       | A World of Things | <user> | <og role> |
-    And the following solution:
-      | title      | Things To Come    |
-      | collection | A World of Things |
-      | state      | published         |
+    And solution content:
+      | title          | collection        | state     |
+      | Things To Come | A World of Things | published |
 
     Given I am logged in as <user>
     When I go to the "A World of Things" collection
@@ -140,16 +139,12 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
       | wade |           | facilitator | should not see  |
 
   Scenario: Glossary terms should be shown as links in collection content
-    Given collection:
-      | title       | Collection With Glossary                                                                          |
-      | state       | published                                                                                         |
-      | description | Colors of Paradise. Abbreviated as CLR. <a href="../contact"><strong>Colors of Dream</strong></a> |
-      | abstract    | The Alphabet is back and it's s/ashy.                                                             |
-    And solution:
-      | title       | Under The Bridge         |
-      | description | No Colors                |
-      | state       | published                |
-      | collection  | Collection With Glossary |
+    Given collection content:
+      | title                    | state     | description                                                                                       | abstract                              |
+      | Collection With Glossary | published | Colors of Paradise. Abbreviated as CLR. <a href="../contact"><strong>Colors of Dream</strong></a> | The Alphabet is back and it's s/ashy. |
+    And solution content:
+      | title            | description | state     | collection               |
+      | Under The Bridge | No Colors   | published | Collection With Glossary |
     And release content:
       | title        | release number | release notes         | is version of    | state     |
       | Summer of 69 | 6.22           | Everything was Colors | Under The Bridge | published |
@@ -247,7 +242,7 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
       | fac      |           |
       | mod      | moderator |
       | fac1     |           |
-    And the following collections:
+    And collection content:
       | title                    | description                                                                                            | abstract                                                                                               | state     |
       | Collection With Glossary | The Battle of Evermore of the batTle and the BATTLE. Call it everMore or EVERmore. Also, battle again. | The Battle of Evermore of the batTle and the BATTLE. Call it everMore or EVERmore. Also, battle again. | published |
       | The Other Collection     | desc                                                                                                   | desc                                                                                                   | published |
@@ -325,7 +320,7 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
     Given users:
       | Username |
       | ben      |
-    And the following collections:
+    And collection content:
       | title             | state     |
       | A World of Things | published |
       | Other collection  | published |
@@ -421,7 +416,7 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
     Given users:
       | Username | Roles     |
       | mod      | moderator |
-    And the following collections:
+    And collection content:
       | title                    | description                                                                                                             | state     |
       | Collection With Glossary | The Battle of Evermore of the <strong>batTle</strong> and the BATTLE. Call it everMore or EVERmore. Also, battle again. | published |
     And the following collection user membership:
@@ -446,7 +441,7 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
       | auth     |           |
       | fac      |           |
       | mod      | moderator |
-    And the following collections:
+    And collection content:
       | title                    | description                   | abstract                         | state     | author | uri                      |
       | Collection With Glossary | The Battle of Evermore again. | The Battle of Evermore abstract. | published | auth   | http://collection-battle |
     And the following collection user membership:

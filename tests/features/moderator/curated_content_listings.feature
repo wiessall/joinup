@@ -56,11 +56,11 @@ Feature: Curated content listings
   Scenario: Regression test for ISAICP-6658
   See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-6658
 
-    Given collection:
-      | title | Spacex in space |
-      | state | published       |
+    Given collection content:
+      | title           | state     |
+      | Spacex in space | published |
     And news content:
-      | title          | collection    | topic                                      | state     |
+      | title          | collection      | topic                                      | state     |
       | Cardio atrophy | Spacex in space | Finance in EU, Supplier exchange, E-health | published |
     And discussion content:
       | title                | collection      | topic                            | state     |
@@ -75,8 +75,8 @@ Feature: Curated content listings
       | type    | label           |
       | content | Stay at the CSS |
     And the "Highlighted content" content listing contains:
-      | type     | label           |
-      | document | Licrogravity    |
+      | type     | label        |
+      | document | Licrogravity |
     And the "In the spotlight" content listing contains:
       | type    | label                |
       | content | Cardio atrophy       |
@@ -119,9 +119,9 @@ Feature: Curated content listings
   Scenario: Regression test for ISAICP-8152
   See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-8152
 
-    Given collection:
-      | title | Spacex in space |
-      | state | published       |
+    Given collection content:
+      | title           | state     |
+      | Spacex in space | published |
     And news content:
       | title          | collection      | topic                                      | state     |
       | Cardio atrophy | Spacex in space | Finance in EU, Supplier exchange, E-health | published |

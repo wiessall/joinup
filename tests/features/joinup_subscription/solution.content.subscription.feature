@@ -5,10 +5,10 @@ Feature: Subscribing to community content in solutions
   So that I can stay informed
 
   Background:
-    Given the following collections:
+    Given collection content:
       | title    | state     |
       | Bulgaria | published |
-    Given the following solutions:
+    Given solution content:
       | title                | state     | collection |
       | Products of Bulgaria | published | Bulgaria   |
       | Cities of Bulgaria   | published | Bulgaria   |

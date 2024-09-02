@@ -31,7 +31,7 @@ Feature: Unsubscribe from collections
     And the following collection content subscriptions:
       | collection     | user         | subscriptions                     |
       | Koon's hideout | Eric Cartman | discussion, document, event, news |
-    And solutions:
+    Given solution content:
       | title              | state     |
       | Poor man's Shelter | published |
       | Anna's house       | draft     |
@@ -112,7 +112,7 @@ Feature: Unsubscribe from collections
       | Greg's foxhole       |  |
 
   Scenario: Unsubscribe from a specific group.
-    Given solutions:
+    Given solution content:
       | title                  | state     |
       | Not member in this one | published |
 

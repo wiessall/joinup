@@ -9,12 +9,12 @@ Feature:
     Given owner content:
       | name | owner type |
       | ACDC | Company    |
-    And collections:
+    And collection content:
       | title   | state     |
       | Killjoy | published |
       | Sage    | published |
       | Phoenix | draft     |
-    And solutions:
+    Given solution content:
       | title    | collection | state     |
       | Jordan 1 | Killjoy    | published |
       | Jordan 2 | Sage       | published |
@@ -38,38 +38,22 @@ Feature:
       | Jordan 4 |
       | Jordan 5 |
 
-    Given the following EIF perspective data for the "Jordan 1" solution:
-      | Description      | It will be an amazing principle.                                                                                     |
-      | Type of solution | Common services                                                                                                      |
-      | Solution type    | Assessment tools, Generic tools                                                                                      |
-      | Layer            | Interoperability Layer 3: Legal interoperability                                                                     |
-      | Model            | Basic Component 1: Coordination function                                                                             |
-      | Principle        | Underlying Principle 2: Openness, Underlying Principle 3: Transparency, Underlying Principle 8: Security and privacy |
-    And the following EIF perspective data for the "Jordan 2" solution:
-      | Description   | It will be an amazing principle.                 |
-      | Solution type | Assessment tools, Generic tools                  |
-      | Layer         | Interoperability Layer 3: Legal interoperability |
-      | Model         | Basic Component 1: Coordination function         |
-      | Principle     | Underlying Principle 3: Transparency             |
-    And the following EIF perspective data for the "Jordan 3" solution:
-      | Description   | It will be an amazing principle.                      |
-      | Solution type | Common services                                       |
-      | Principle     | Underlying Principle 11: Preservation of information  |
-      | Layer         | Interoperability Layer 1: Interoperability governance |
-      | Model         | Basic Component 4: Open data                          |
-    And the following EIF perspective data for the "Jordan 4" solution:
-      | Description   | It will be an amazing principle.                      |
-      | Solution type | Common services                                       |
-      | Principle     | Underlying Principle 11: Preservation of information  |
-      | Layer         | Interoperability Layer 1: Interoperability governance |
-      | Model         | Basic Component 4: Open data                          |
+    Given solution content:
+      | Description                      | Type of solution | Solution type                   | Layer                                            | Model                                    | Principle                                                                                                            |
+      | It will be an amazing principle. | Common services  | Assessment tools, Generic tools | Interoperability Layer 3: Legal interoperability | Basic Component 1: Coordination function | Underlying Principle 2: Openness, Underlying Principle 3: Transparency, Underlying Principle 8: Security and privacy |
+    And solution content:
+      | Description                      | Solution type                   | Layer                                            | Model                                    | Principle                            |
+      | It will be an amazing principle. | Assessment tools, Generic tools | Interoperability Layer 3: Legal interoperability | Basic Component 1: Coordination function | Underlying Principle 3: Transparency |
+    And solution content:
+      | Description                      | Solution type   | Principle                                            | Layer                                                 | Model                        |
+      | It will be an amazing principle. | Common services | Underlying Principle 11: Preservation of information | Interoperability Layer 1: Interoperability governance | Basic Component 4: Open data |
+    And solution content:
+      | Description                      | Solution type   | Principle                                            | Layer                                                 | Model                        |
+      | It will be an amazing principle. | Common services | Underlying Principle 11: Preservation of information | Interoperability Layer 1: Interoperability governance | Basic Component 4: Open data |
     # Regression test for ticket ISAICP-7303.
-    And the following EIF perspective data for the "Jordan 6" solution:
-      | Description   | <p>This is v1.0.0 of the <strong>SMASS</strong> survey.</p> |
-      | Solution type | Common services                                             |
-      | Principle     | Underlying Principle 11: Preservation of information        |
-      | Layer         | Interoperability Layer 1: Interoperability governance       |
-      | Model         | Basic Component 4: Open data                                |
+    And solution content:
+      | Description                                                 | Solution type   | Principle                                            | Layer                                                 | Model                        |
+      | <p>This is v1.0.0 of the <strong>SMASS</strong> survey.</p> | Common services | Underlying Principle 11: Preservation of information | Interoperability Layer 1: Interoperability governance | Basic Component 4: Open data |
 
     When I visit the "Online Assistant" custom page
     And I should see the text "The EIF Solutions page counts with an online assistant that helps users to find operational solutions covering the alignment and implementation of the European Interoperability Framework and filter them by attributes."

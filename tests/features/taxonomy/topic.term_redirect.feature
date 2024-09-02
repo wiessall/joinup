@@ -5,10 +5,9 @@ Feature: Topic terms are redirected to search page.
     Given "topic" terms:
       | uri                                 | tid  | name     |
       | http://joinup.eu/ontology/topic#foo | 5000 | Foo term |
-    And collection:
-      | title | Bar collection |
-      | state | published      |
-      | topic | Foo term       |
+    And collection content:
+      | title          | state     | topic    |
+      | Bar collection | published | Foo term |
 
   Scenario Outline: Topic terms are redirected to search page.
     Given I go to "<inbound url>"

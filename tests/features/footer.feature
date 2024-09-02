@@ -11,14 +11,14 @@ Feature: Footer
     And I should see the Joinup version in the footer
 
     Examples:
-      | page                             |
+      | page                  |
       # Pages rendered with Ventuno theme.
-      | /                                |
-      | /search                          |
+      | /                     |
+      | /search               |
       # Page rendered with Interoperable Europe theme.
-      | /interoperable-europe            |
+      | /interoperable-europe |
       # Page rendered with the legacy Joinup Theme theme.
-      | /collection/joinup               |
+      | /collection/joinup    |
 
   Scenario: Regression test to show/hide menu item.
     # Regression test for ticket ISAICP-6301.

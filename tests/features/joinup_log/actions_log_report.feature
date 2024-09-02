@@ -8,7 +8,7 @@ Feature: Actions log
     Given collections:
       | title         | state     |
       | Tilt and Turn | published |
-    And solutions:
+    Given solution content:
       | title    | state     | collection    |
       | Skylight | published | Tilt and Turn |
 
@@ -49,15 +49,15 @@ Feature: Actions log
       | Mary Shotgun     | mary.shotgun@example.com     |
       | Dave Crash       | dave.crash@example.com       |
     And the following joinup log:
-      | user             | actor            | group         | type                        | message             | timestamp  |
-      | Andre Munson     | Mary Shotgun     | Tilt and Turn | joinup:add_member           | Add x member        | 1721815281 |
-      | Andre Munson     | Andre Munson     | Tilt and Turn | joinup:add_content          | Add x custom page   | 1721715282 |
-      | Andre Munson     | Dave Crash       | Tilt and Turn | joinup:invite_member        | Invite x member     | 1721615283 |
-      | Dave Crash       | Dave Crash       | Tilt and Turn | joinup:add_content          | Add x document      | 1721515284 |
-      | Branson Winthrop | Branson Winthrop | Skylight      | joinup:add_content          | Add x event         | 1721415285 |
-      | Branson Winthrop | Mary Shotgun     | Skylight      | joinup:block_membership     | Block x member      | 1721315286 |
-      | Andre Munson     | Mary Shotgun     | Skylight      | joinup:deleted_membership   | Delete x membership | 1721215287 |
-      | Andre Munson     | Mary Shotgun     | Skylight      | joinup:add_role             | Add x author role   | 1721115288 |
+      | user             | actor            | group         | type                      | message             | timestamp  |
+      | Andre Munson     | Mary Shotgun     | Tilt and Turn | joinup:add_member         | Add x member        | 1721815281 |
+      | Andre Munson     | Andre Munson     | Tilt and Turn | joinup:add_content        | Add x custom page   | 1721715282 |
+      | Andre Munson     | Dave Crash       | Tilt and Turn | joinup:invite_member      | Invite x member     | 1721615283 |
+      | Dave Crash       | Dave Crash       | Tilt and Turn | joinup:add_content        | Add x document      | 1721515284 |
+      | Branson Winthrop | Branson Winthrop | Skylight      | joinup:add_content        | Add x event         | 1721415285 |
+      | Branson Winthrop | Mary Shotgun     | Skylight      | joinup:block_membership   | Block x member      | 1721315286 |
+      | Andre Munson     | Mary Shotgun     | Skylight      | joinup:deleted_membership | Delete x membership | 1721215287 |
+      | Andre Munson     | Mary Shotgun     | Skylight      | joinup:add_role           | Add x author role   | 1721115288 |
 
     Given I am logged in as a moderator
     When I go to the actions log report for "Tilt and Turn"

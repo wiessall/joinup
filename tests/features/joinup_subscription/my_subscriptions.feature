@@ -187,9 +187,9 @@ Feature: My subscriptions
 
   @javascript
   Scenario Outline: Change the notification frequency of my digests
-    Given collection:
-      | title | Malicious plans |
-      | state | published       |
+    Given collection content:
+      | title           | state     |
+      | Malicious plans | published |
     And the following collection user memberships:
       | collection      | user             |
       | Malicious plans | Auric Goldfinger |

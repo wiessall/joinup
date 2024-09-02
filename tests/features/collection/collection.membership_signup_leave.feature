@@ -22,9 +22,9 @@ Feature: Joining and leaving collections through the web interface
       | Public CoC of Closed collection | Closed collection with public CoC     | published |
       | Draft CoC of Closed collection  | Closed collection with non-public CoC | draft     |
     And the following collection user memberships:
-      | collection      | user              | roles             |
-      | Open collection | Collection author | owner             |
-      | Open collection | Stewe Griffin     |                   |
+      | collection      | user              | roles |
+      | Open collection | Collection author | owner |
+      | Open collection | Stewe Griffin     |       |
     And the "code of conduct" setting of the "Open collection with public CoC" collection is set to "Public CoC of Open collection" "custom page"
     And the "code of conduct" setting of the "Closed collection with public CoC" collection is set to "Public CoC of Closed collection" "custom page"
     And the "code of conduct" setting of the "Closed collection with non-public CoC" collection is set to "Draft CoC of Closed collection" "custom page"

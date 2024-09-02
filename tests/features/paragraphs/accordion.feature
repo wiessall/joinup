@@ -4,10 +4,9 @@ Feature:
   I need to be able to use "Accordion" paragraph for content.
 
   Background:
-    Given the following collection:
-      | title | Paragraphs collection |
-      | state | published             |
-      | topic | HR                    |
+    Given collection content:
+      | title                 | state     | topic |
+      | Paragraphs collection | published | HR    |
 
   Scenario Outline: Add an accordion to the custom page.
     Given I am logged in as a <role>

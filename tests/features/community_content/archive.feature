@@ -2,12 +2,12 @@
 Feature: Content archival.
 
   Scenario: All community content can be archived any time.
-    Given collection:
-      | title      | Some collection |
-      | state      | published       |
+    Given collection content:
+      | title           | state     |
+      | Some collection | published |
       # Set the moderation to yes to be able to access all states.
       # Deletion request is not available in a post moderation workflow.
-      | moderation | yes             |
+      | moderation      | yes       |
     Given discussion content:
       | title           | state     | collection      | body | content | headline        | changed          |
       | Test discussion | published | Some collection | Test | Test    | Test discussion | 2017-11-17 20:00 |
@@ -32,12 +32,12 @@ Feature: Content archival.
     And the current workflow state should be "Published"
 
   Scenario Outline: All community content using layout paragraphs can be archived any time.
-    Given collection:
-      | title      | Some collection |
-      | state      | published       |
+    Given collection content:
+      | title           | state     |
+      | Some collection | published |
       # Set the moderation to yes to be able to access all states.
       # Deletion request is not available in a post moderation workflow.
-      | moderation | yes             |
+      | moderation      | yes       |
     And <type> content:
       | title       | state     | collection      | abstract | content | headline    | changed          | field_paragraphs_body |
       | Test <type> | published | Some collection | Test     | Test    | Test <type> | 2019-11-12 20:00 | Some text             |
@@ -69,9 +69,9 @@ Feature: Content archival.
       | news     | News       |
 
   Scenario Outline: User should not be allowed unarchiving content of an archived solution.
-    Given the following solution:
-      | title | Cartridge cleaner |
-      | state | archived          |
+    Given solution content:
+      | title             | state    |
+      | Cartridge cleaner | archived |
     Given <type> content:
       | title                | state    | solution          | state    |
       | Test archived <type> | archived | Cartridge cleaner | archived |

@@ -10,7 +10,7 @@ Feature: Related solution
     And owner content:
       | name         | owner type |
       | Kalikatoures | Company    |
-    And solutions:
+    Given solution content:
       | title      | related solutions | abstract                         | description                         | documentation | related by type | moderation | logo     | topic      | state     | solution type | owner        | contact information |
       | C          |                   | Blazing fast segmentation faults | Blazing fast segmentation faults.   | text.pdf      | yes             | no         | logo.png | Demography | published |               | Kalikatoures | Kalikatoura         |
       | Java       | C                 | Because inheritance is cool      | Because inheritance is cool.        | text.pdf      | yes             | no         | logo.png | Demography | published | Citizen       | Kalikatoures | Kalikatoura         |

@@ -16,16 +16,9 @@ Feature: Event moderation
     And contact_information content:
       | name        | email                   |
       | Evs contact | evs.contact@example.com |
-    And the following collection:
-      | title               | Wet Lords             |
-      | description         | The Forgotten Female. |
-      | logo                | logo.png              |
-      | content creation    | registered users      |
-      | moderation          | no                    |
-      | state               | published             |
-      | owner               | Alma Lee              |
-      | contact information | Evs contact           |
-      | topic               | E-inclusion           |
+    And collection content:
+      | title     | description           | logo     | content creation | moderation | state     | owner    | contact information | topic       |
+      | Wet Lords | The Forgotten Female. | logo.png | registered users | no         | published | Alma Lee | Evs contact         | E-inclusion |
     And the following collection user membership:
       | collection | user           | roles       |
       | Wet Lords  | Rosa Vaughn    | member      |

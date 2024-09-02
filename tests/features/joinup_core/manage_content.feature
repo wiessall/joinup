@@ -4,7 +4,7 @@ Feature:
   I need to be able to move content between groups
 
   Scenario: Use the content management UI
-    Given the following collections:
+    Given collection content:
       | title        | state     |
       | Vintage Art  | published |
       | Decadent Art | published |
@@ -30,9 +30,9 @@ Feature:
       | title                | collection  | state     | changed          |
       | HOWTOs               | Vintage Art | published | 2016-11-19 20:00 |
       | Looking for Support? | Vintage Art | published | 2015-11-19 20:00 |
-    And the following custom page navigation menu structure for the "Vintage Art" collection:
-      | title                | parent | weight |
-      | Looking for Support? | HOWTOs | 1      |
+    And collection content:
+      | title  | Looking for Support? |
+      | parent | HOWTOs               |
 
     Given I am an anonymous user
     And I go to the homepage of the "Vintage Art" collection
@@ -217,10 +217,10 @@ Feature:
     Then I should not see the "Looking for Support?" tile
 
   Scenario: Move a custom page to a solution
-    Given the following collections:
-      | title        | state     |
-      | Vintage Art  | published |
-    And the following solutions:
+    Given collection content:
+      | title       | state     |
+      | Vintage Art | published |
+    Given solution content:
       | title                | state     |
       | Vintage Solution Art | published |
     And custom_page content:
@@ -241,7 +241,7 @@ Feature:
 
   @javascript
   Scenario Outline: Able to select all items on the content management UI
-    Given the following collections:
+    Given collection content:
       | title       | state     |
       | Vintage Art | published |
     And event content:
@@ -265,16 +265,16 @@ Feature:
       | logged in as a user with the moderator role                | -- Select action -- , Move to other group, Archive content, Unarchive content |
 
   Scenario: Releases can only be transferred to solutions.
-    Given the following collections:
+    Given collection content:
       | title        | state     |
       | Collection 1 | published |
       | Collection 2 | published |
-    And the following solutions:
+    Given solution content:
       | title      | state     | collection   |
       | Solution 1 | published | Collection 1 |
       | Solution 2 | published | Collection 2 |
     And event content:
-      | title   | solution  | state     |
+      | title   | solution   | state     |
       | Event 1 | Solution 1 | published |
     And release content:
       | title     | release number | release notes | is version of | state     |

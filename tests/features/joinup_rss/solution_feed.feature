@@ -8,10 +8,10 @@ Feature: Solution RSS feed.
     Given users:
       | Username | First name | Family name |
       | scorlan  | Sartin     | Corlan      |
-    And collection:
-      | title | Unrandomed collection |
-      | state | published             |
-    And solutions:
+    And collection content:
+      | title                 | state     |
+      | Unrandomed collection | published |
+    Given solution content:
       | title             | state     | author  | creation date    | collection            |
       | Lantern Domestic  | published | scorlan | 2018-12-18 08:00 | Unrandomed collection |
       | Deuteron Lonesome | draft     | scorlan | 2019-01-05 10:00 | Unrandomed collection |

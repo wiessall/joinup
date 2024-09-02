@@ -5,11 +5,11 @@ Feature: Featuring content site-wide
   So that important content has more visibility
 
   Background:
-    Given the following collections:
+    Given collection content:
       | title                | state     | featured |
       | Tidy Neutron         | published | yes      |
       | Reborn Eternal Gamma | published | no       |
-    And the following solutions:
+    Given solution content:
       | title                         | collection           | state     | featured |
       | Opensource neutron generators | Tidy Neutron         | published | yes      |
       | Gamma-sensible spectroscopy   | Reborn Eternal Gamma | published | no       |
@@ -83,10 +83,10 @@ Feature: Featuring content site-wide
     And the "Ionizing radiation types" <content type> tile should not be marked as featured
 
     Examples:
-      | content type | label      |
-      | event        | Event      |
-      | document     | Document   |
-      | news         | News       |
+      | content type | label    |
+      | event        | Event    |
+      | document     | Document |
+      | news         | News     |
 
   Scenario Outline: Moderators can feature and unfeature collections and solutions site-wide.
     When I am an anonymous user

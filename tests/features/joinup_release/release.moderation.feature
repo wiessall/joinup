@@ -17,13 +17,9 @@ Feature: Asset release moderation
       | Felix Russell   | Felix.Russell@example.com   | Felix      | Russell     |           |
       | Wilson Mendoza  | Wilson.Mendoza@example.com  | Wilson     | Mendoza     | moderator |
       | Patric Sereira  | Patric.Sereira@example.com  | Patric     | Sereira     | moderator |
-    And the following solution:
-      | title               | Dark Ship   |
-      | description         | Dark ship   |
-      | logo                | logo.png    |
-      | owner               | Kenny Logan |
-      | contact information | SheriMoore  |
-      | state               | published   |
+    And solution content:
+      | title     | description | logo     | owner       | contact information | state     |
+      | Dark Ship | Dark ship   | logo.png | Kenny Logan | SheriMoore          | published |
     And the following solution user membership:
       | solution  | user            | roles       |
       | Dark Ship | Bonnie Holloway | owner       |
