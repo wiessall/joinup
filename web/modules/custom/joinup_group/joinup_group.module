@@ -18,8 +18,10 @@ use Drupal\Core\Entity\ContentEntityTypeInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
+use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
@@ -32,6 +34,7 @@ use Drupal\joinup_group\Event\GroupMenuLinksEvent;
 use Drupal\joinup_group\Form\GroupDeleteForm;
 use Drupal\joinup_group\Form\UserCancelForm;
 use Drupal\joinup_group\JoinupGroupHelper;
+use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\joinup_workflow\EntityWorkflowStateInterface;
 use Drupal\meta_entity\Entity\MetaEntity;
 use Drupal\meta_entity\Entity\MetaEntityInterface;
@@ -1108,4 +1111,17 @@ function joinup_group_preprocess_node(array &$variables): void {
       $variables['meta_banner_disabled'] = (bool) $meta_entity->get('metadata_banner_disabled')->value;
     }
   }
+}
+
+/**
+ * Callback for options_allowed_values for the content_creation field.
+ */
+function joinup_group_content_creation_allowed_values(FieldStorageDefinitionInterface $definition, ?FieldableEntityInterface $entity = NULL, &$cacheable = TRUE): array {
+  $values = $definition->getSetting('allowed_values');
+  if (empty($entity) || !$entity instanceof SolutionInterface) {
+    return $values;
+  }
+
+  unset($values['only_members']);
+  return $values;
 }
