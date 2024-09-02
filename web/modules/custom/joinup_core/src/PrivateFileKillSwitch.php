@@ -13,7 +13,7 @@ use Drupal\Core\File\FileSystemInterface;
  */
 class PrivateFileKillSwitch implements KillSwitchInterface {
 
-  const string DIRECTORY = 'private://file-switcher';
+  const string DIRECTORY = 'private://kill-switch';
 
   public function __construct(protected FileSystemInterface $fileSystem) {}
 

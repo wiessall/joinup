@@ -74,7 +74,7 @@ trait ConfigReadOnlyTrait {
     /** @var \Drupal\Core\DrupalKernelInterface $kernel */
     $kernel = \Drupal::service('kernel');
     $site_path = $kernel->getSitePath();
-    $needle = "\$settings['config_readonly'] = !file_exists(\$settings['file_private_path'] . '/file-switcher/disable-config-readonly');";
+    $needle = "\$settings['config_readonly'] = !file_exists(\$settings['file_private_path'] . '/kill-switch/disable-config-readonly');";
     $settings_php = file_get_contents("{$site_path}/settings.php");
     if (strpos($settings_php, $needle) === FALSE) {
       throw new \Exception("The following line is missing from web/sites/default/settings.php\n$needle");
