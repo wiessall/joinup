@@ -21,9 +21,9 @@ Feature: Test migration of collections/solutions to node.
     Then I should see "DCAT Application Profile for Data Portals in Europe - Draft 1 0.01"
 
     # Links inside node description fields.
-    Given I visit "/collection/common-assessment-method-standards-and-specifications-camss/solution/camss-assessment-odf-scenario-2/release/v100"
-    When I click "v1.0.0"
-    Then I should see "CAMSS Assessment of GTIN - v1.0.0"
+    Given I visit "/collection/european-interoperability-reference-architecture-eira/solution/eira/release/v210"
+    When I click "EIRA v2.1.0 Overview.pdf"
+    Then I should see "EIRA_v2_1_0_Overview.pdf"
 
     # Links in events agenda.
     Given I visit "/collection/joinup/event/2nd-cesar-workshop-reaping-benefits-europes-collections-reusable-interoperability-assets"
