@@ -46,8 +46,7 @@ function joinup_release_entity_bundle_field_info(EntityTypeInterface $entity_typ
     'solution_logo' => [
       'name' => 'solution_logo',
       'type' => 'image',
-      // @todo Update this when the solution field is simplified in ISAICP-8572.
-      'target_field_name' => 'field_is_logo',
+      'target_field_name' => 'logo',
       'label' => t('Solution logo'),
       'description' => t('The logo of the solution this release belongs to.'),
       'display' => [
@@ -58,40 +57,33 @@ function joinup_release_entity_bundle_field_info(EntityTypeInterface $entity_typ
         ],
       ],
     ],
-    'owner' => [
-      'name' => 'owner',
+    'solution_owner' => [
+      'name' => 'solution_owner',
       'type' => 'entity_reference',
-      // @todo Update this when the solution field is simplified in ISAICP-8572.
-      'target_field_name' => 'field_is_owner',
-      'label' => t('Owner'),
+      'target_field_name' => 'owner',
+      'label' => t('Solution owner'),
       'description' => t('The user who owns this release.'),
       'settings' => [
         'target_type' => 'node',
       ],
       'display' => NULL,
     ],
-    'contact' => [
-      'name' => 'contact',
+    'solution_contact' => [
+      'name' => 'solution_contact',
       'type' => 'entity_reference',
-      // @todo Update this when the solution field is simplified in ISAICP-8572.
-      'target_field_name' => 'field_is_contact_information',
-      'label' => t('Contact'),
+      'target_field_name' => 'contact',
+      'label' => t('Solution contact'),
       'description' => t('The contact person for this release.'),
       'settings' => [
         'target_type' => 'node',
       ],
       'display' => NULL,
     ],
-    // The following field is named `field_topic` because this is the name of
-    // the field that other nodes are using to refer a topic. By naming it the
-    // same, we trick search_api to index it with the same name, and we do not
-    // need to create an aggregate field in the search index.
-    'field_topic' => [
-      'name' => 'field_topic',
+    'solution_topic' => [
+      'name' => 'solution_topic',
       'type' => 'entity_reference',
-      // @todo Update this when the solution field is simplified in ISAICP-8572.
       'target_field_name' => 'field_topic',
-      'label' => t('Topic'),
+      'label' => t('Solution topic'),
       'description' => t('The topic of this release.'),
       'settings' => [
         'target_type' => 'taxonomy_term',
