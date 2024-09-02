@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Drupal\joinup_release\EventSubscriber;
 
 use Drupal\Core\Field\EntityReferenceFieldItemList;
-use Drupal\joinup_distribution\Exception\MissingDistributionParentException;
 use Drupal\joinup_rdf\Entity\RdfSyncEntityInterface;
 use Drupal\joinup_release\Entity\ReleaseInterface;
+use Drupal\joinup_solution\Exception\MissingSolutionException;
 use Drupal\rdf_sync\Event\RdfSyncNormalizeEvent;
 use Drupal\rdf_sync\RdfSyncConnectionInterface;
 use Drupal\rdf_sync\RdfSyncMapper;
@@ -54,7 +54,6 @@ final class SolutionDataRdfSyncSubscriber implements EventSubscriberInterface {
    */
   public function addSolutionDataToRelease(RdfSyncNormalizeEvent $event): void {
     $entity = $event->getEntity();
-    $normalizedArray = $event->getNormalizedArray();
     if (!$entity instanceof ReleaseInterface) {
       return;
     }
@@ -62,30 +61,29 @@ final class SolutionDataRdfSyncSubscriber implements EventSubscriberInterface {
     try {
       $solution = $entity->getSolution();
     }
-    catch (MissingDistributionParentException $e) {
+    catch (MissingSolutionException) {
       // The parent is missing, so we cannot add the relationship. This can
-      // happen during during complex operations like entities cleanup where
-      // the order of the cleanup can be unpredictable.
+      // happen during complex operations like entities cleanup where the order
+      // of the cleanup can be unpredictable.
       return;
     }
 
-    $fields = [
-      'field_is_owner',
-      'field_is_contact_information',
-      'field_is_description',
-      'field_is_solution_type',
-    ];
+    $normalizedArray = $event->getNormalizedArray();
+
+    $fields = ['owner', 'contact', 'description', 'solution_type'];
     foreach ($fields as $field) {
-      if ($solution->get($field)->isEmpty()) {
+      $fieldItemList = $solution->get($field);
+      if ($fieldItemList->isEmpty()) {
         continue;
       }
+
       // @todo Change the predicate calculation from the field storage to the
       //   field third party settings once solutions are nodes in ISAICP-8572.
       $storageDefinition = $solution->getFieldDefinition($field)->getFieldStorageDefinition();
       $mainPropertyName = $storageDefinition->getMainPropertyName();
+
       $predicates = $this->fieldHandler->getFieldPredicates($solution->getEntityTypeId(), $field, $mainPropertyName, 'solution');
 
-      $fieldItemList = $solution->get($field);
       $fieldItemList->filterEmptyItems();
       foreach ($fieldItemList as $item) {
         if ($mainPropertyName === 'value') {

@@ -19,8 +19,9 @@ services:
     arguments: ['@entity_type.manager']
     tags:
       - { name: event_subscriber }
-  joinup_release.event_subscriber:
-    class: Drupal\joinup_release\EventSubscriber\SolutionDataRdfSyncSubscriber
-    arguments: ['@rdf_sync.mapper', '@rdf_sync.connection']
-    tags:
-      - { name: event_subscriber }
+# Temporarily disabled. Refactor the service in ISAICP-9049
+#  joinup_release.event_subscriber:
+#    class: Drupal\joinup_release\EventSubscriber\SolutionDataRdfSyncSubscriber
+#    arguments: ['@rdf_sync.mapper', '@rdf_sync.connection']
+#    tags:
+#      - { name: event_subscriber }
