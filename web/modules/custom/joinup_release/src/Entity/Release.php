@@ -13,6 +13,7 @@ use Drupal\joinup_publication_date\Entity\EntityPublicationTimeFallbackTrait;
 use Drupal\joinup_rdf\Entity\RdfSyncEntityTrait;
 use Drupal\joinup_solution\Entity\SolutionContentTrait;
 use Drupal\joinup_solution\Entity\SolutionInterface;
+use Drupal\joinup_solution\Exception\MissingSolutionException;
 use Drupal\joinup_workflow\ArchivableEntityTrait;
 use Drupal\joinup_workflow\EntityWorkflowStateTrait;
 use Drupal\node\Entity\Node;
@@ -101,6 +102,19 @@ class Release extends Node implements ReleaseInterface {
       return '';
     }
     return $field->value;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getSolution(): SolutionInterface {
+    // For releases, this method returns the solution revision at the time the
+    // release has been created.
+    $solution = $this->get('solution_data')->entity;
+    if ($solution instanceof SolutionInterface) {
+      return $solution;
+    }
+    throw new MissingSolutionException();
   }
 
 }
