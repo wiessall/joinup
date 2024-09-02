@@ -68,9 +68,10 @@ class ManageSolutionsAccess extends AccessPluginBase implements CacheableDepende
    * {@inheritdoc}
    */
   public function alterRouteDefinition(Route $route): void {
-    $route
-      ->setRequirement('_permission', 'manage solutions')
-      ->setRequirement('_joinup_group', 'collection');
+    $parameters = $route->getOption('parameters');
+    $parameters['node']['bundle'] = ['collection'];
+    $route->setOption('parameters', $parameters);
+    $route->setRequirement('_permission', 'manage solutions');
   }
 
   /**

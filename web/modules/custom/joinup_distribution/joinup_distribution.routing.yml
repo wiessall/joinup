@@ -5,11 +5,13 @@ joinup_distribution.group.add:
     _title: 'Add Distribution'
   requirements:
     _custom_access: '\Drupal\joinup_distribution\Controller\JoinupDistributionController::createAssetDistributionOnNodeGroupAccess'
-    _joinup_group: 'solution'
   options:
     parameters:
       node:
         type: entity:node
+        bundle:
+          - solution
+
 
 joinup_distribution.track_download:
   path: 'distribution/track/{file}'

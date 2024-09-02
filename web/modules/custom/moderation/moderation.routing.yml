@@ -5,7 +5,6 @@ moderation.content_moderation_overview:
     _title: 'Content moderation'
   requirements:
     _custom_access: '\Drupal\moderation\Form\ContentModerationOverviewForm::access'
-    _joinup_group: 'TRUE'
   options:
     parameters:
       node:
