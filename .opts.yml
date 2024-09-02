@@ -33,11 +33,6 @@ upgrade_commands:
       - ./vendor/bin/drush joinup:acc
       - ./vendor/bin/drush cache:rebuild
       - rm disable-config-readonly
-      - ./vendor/bin/drush eu-oss:fetch developers_italia
-      - ./vendor/bin/drush eu-oss:fetch hosting_platform:open_code
-      - ./vendor/bin/drush queue:run eu_oss_catalogue
-      - ./vendor/bin/drush queue:run joinup_oss_catalogue_imagecache_warmer
-
 php_version: 8.3
 extra_pkgs:
   - php8.3-apcu
