@@ -24,3 +24,16 @@ Feature: Test the converted videos into document.
     Then I should see the heading "eGov Reduction of Admininstrative Burden-ePractice TV interview: Kris Blancke"
     And I should see the text "Mr Kris Blancke, Chancellery of the Prime Minister, Administrative Simplification Agency (DAV/ASA)"
     And I should see the text "Published on: 10/06/2014"
+
+  @update:joinup_core_update_111200
+  Scenario Outline: Ensure old /elibrary/video/* redirects are maintained and are pointing to the new document nodes.
+    Given I visit "<source>"
+    Then I should be on "<destination>"
+
+    Examples:
+      | source                                                                                                | destination                                                                                                                                 |
+      | /elibrary/video/us-national-information-exchange-model-niem-explained                                 | /collection/semic-support-centre/document/us-national-information-exchange-model-niem-explained                                             |
+      | /elibrary/video/e-codex-e-justice-communication-online-data-exchange                                  | /collection/justice-law-and-security/document/e-codex-e-justice-communication-online-data-exchange                                          |
+      | /elibrary/video/eu-declan-deasy-about-digital-single-market                                           | /collection/egovernment/document/eu-declan-deasy-about-digital-single-market                                                                |
+      | /elibrary/video/eu-story-explaining-digital-single-market-and-large-scale-pilots                      | /collection/egovernment/document/eu-story-explaining-digital-single-market-and-large-scale-pilots                                           |
+      | /elibrary/video/presenting-osepa-project-share-knowledge-and-experience-about-foss-public-administrat | /collection/open-source-observatory-osor/document/presenting-osepa-project-share-knowledge-and-experience-about-foss-public-administrations |
