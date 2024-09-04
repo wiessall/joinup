@@ -31,17 +31,17 @@ class PrivateMessageContext extends RawDrupalContext {
     $page = $this->getSession()->getPage();
     $messagesContainer = $page->find('css', '.private-message-thread-messages .field__items');
 
-    if (NULL === $messagesContainer && $expectedCount > 0) {
-      throw new \Exception('There are currently no messages available.');
+    if (empty($messagesContainer) && $expectedCount > 0) {
+      throw new \Exception('Private messages were not found in the page.');
     }
-    else {
+    elseif ($expectedCount === 0) {
       return;
     }
 
     $messageElements = $messagesContainer->findAll('css', '.private-message-wrapper');
 
     $actualCount = count($messageElements);
-    if ($actualCount !== (int) $expectedCount) {
+    if ($actualCount !== $expectedCount) {
       throw new \Exception(sprintf('Expected to find %d private messages, but found %d.', $expectedCount, $actualCount));
     }
   }
