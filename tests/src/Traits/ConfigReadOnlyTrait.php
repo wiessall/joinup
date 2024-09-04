@@ -24,7 +24,7 @@ trait ConfigReadOnlyTrait {
    */
   public static function bypassReadOnlyConfig(): void {
     static::checkConfigReadOnlyKillSwitch();
-    \Drupal::getContainer()->get('joinup_core.file_config_read_only')->isReadOnlyEnabled();
+    \Drupal::getContainer()->get('joinup_core.switcher')->disable('config-readonly');
     // Ensure the new value also for the current request.
     new Settings(['config_readonly' => FALSE] + Settings::getAll());
   }
@@ -33,7 +33,7 @@ trait ConfigReadOnlyTrait {
    * Restores the read only configuration functionality if available.
    */
   public static function restoreReadOnlyConfig(): void {
-    \Drupal::getContainer()->get('joinup_core.file_config_read_only')->enableReadOnly();
+    \Drupal::getContainer()->get('joinup_core.switcher')->enable('config-readonly');
     // Ensure the new value also for the current request.
     new Settings([
       'config_readonly' => getenv('CONFIG_READONLY') !== 'false',

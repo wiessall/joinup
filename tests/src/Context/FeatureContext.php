@@ -2439,10 +2439,10 @@ class FeatureContext extends RawDrupalContext {
   public function theConfigurationState(string $state): void {
     \assert(in_array($state, ['locked', 'unlocked']));
 
-    /** @var \Drupal\joinup_core\ConfigReadOnlyInterface $fileReadOnly */
-    $fileReadOnly = \Drupal::service('joinup_core.file_config_read_only');
+    /** @var \Drupal\joinup_core\JoinupSwitcherInterface $fileReadOnly */
+    $fileReadOnly = \Drupal::service('joinup_core.switcher');
 
-    Assert::assertTrue($fileReadOnly->isReadOnlyEnabled() === ($state === 'locked'));
+    Assert::assertTrue($fileReadOnly->isEnabled('config-readonly') === ($state === 'locked'));
   }
 
   /**
