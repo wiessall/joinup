@@ -14,6 +14,7 @@ upgrade_commands:
     - scripts/switch config-readonly on
     - ./vendor/bin/drush joinup:unpublish-alert --category
     - ./scripts/check_status_report.php
+    - test ! -f vendor/bin/run || vendor/bin/run eu-oss-catalogue:enable
   append:
     production:
       - scripts/switch eu-oss-catalogue off

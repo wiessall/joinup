@@ -6,3 +6,11 @@ joinup:
   files_private_dir: ${joinup.site_dir}/${env.DRUPAL_PRIVATE_FILE_SYSTEM}
   files_temp_dir: ${joinup.site_dir}/${env.DRUPAL_FILE_TEMP_PATH}
   ddev_dir: ${joinup.dir}/.ddev
+
+
+commands:
+  # Drop when EU OSS Catalogue is enabled in production, in ISAICP-9053.
+  eu-oss-catalogue:enable:
+    - task: exec
+      command: ${drush.bin} eval 'if (joinup_oss_catalogue_is_enabled()) \Drupal::entityTypeManager()->getStorage("rdf_entity")->load("http://data.europa.eu/w21/6d621a47-71ce-4f1a-90e2-8859403d3ecd")->set("field_ar_state", "published")->save();'
+
