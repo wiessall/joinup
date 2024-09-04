@@ -11,7 +11,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
 use Drupal\Core\State\StateInterface;
 use Drupal\Core\Url;
-use Drupal\joinup_core\ConfigReadOnlyInterface;
+use Drupal\joinup_core\JoinupSwitcherInterface;
 use Drupal\joinup_core\Logger\Handler\MailHandler;
 use Drupal\joinup_core\Logger\Handler\TelegramHandler;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -23,7 +23,7 @@ class DashboardForm extends FormBase {
 
   public function __construct(
     protected StateInterface $state,
-    protected ConfigReadOnlyInterface $fileConfigReadOnly,
+    protected JoinupSwitcherInterface $switcher,
     protected CacheTagsInvalidatorInterface $invalidator,
   ) {
   }
@@ -34,7 +34,7 @@ class DashboardForm extends FormBase {
   public static function create(ContainerInterface $container): self {
     return new static(
       $container->get('state'),
-      $container->get('joinup_core.file_config_read_only'),
+      $container->get('joinup_core.switcher'),
       $container->get('cache_tags.invalidator')
     );
   }
@@ -103,17 +103,18 @@ class DashboardForm extends FormBase {
     ];
 
     $hasEnableDisablePermission = $this->currentUser()->hasPermission('enable/disable config readonly');
+    $configReadonlyIsEnabled = $this->switcher->isEnabled('config-readonly');
     $form['actions']['enable'] = [
       '#type' => 'submit',
       '#value' => $this->t('Enable config readonly'),
       '#submit' => ['::enableConfigSubmitForm'],
-      '#access' => $hasEnableDisablePermission && !$this->fileConfigReadOnly->isReadOnlyEnabled(),
+      '#access' => $hasEnableDisablePermission && !$configReadonlyIsEnabled,
     ];
     $form['actions']['disable'] = [
       '#type' => 'submit',
       '#value' => $this->t('Disable config readonly'),
       '#submit' => ['::disableConfigSubmitForm'],
-      '#access' => $hasEnableDisablePermission && $this->fileConfigReadOnly->isReadOnlyEnabled(),
+      '#access' => $hasEnableDisablePermission && $configReadonlyIsEnabled,
     ];
 
     return $form;
@@ -123,7 +124,7 @@ class DashboardForm extends FormBase {
    * Enable the configuration submit form.
    */
   public function enableConfigSubmitForm(): void {
-    $this->fileConfigReadOnly->enableReadOnly();
+    $this->switcher->enable('config-readonly');
     $this->invalidator->invalidateTags(['joinup_user:read_only_config']);
     $this->messenger()->addStatus($this->t('Enabled config readonly'));
   }
@@ -132,7 +133,7 @@ class DashboardForm extends FormBase {
    * Disables the config submit form.
    */
   public function disableConfigSubmitForm(): void {
-    $this->fileConfigReadOnly->disableReadOnly();
+    $this->switcher->disable('config-readonly');
     $this->invalidator->invalidateTags(['joinup_user:read_only_config']);
     $this->messenger()->addStatus($this->t('Disabled config readonly'));
   }
