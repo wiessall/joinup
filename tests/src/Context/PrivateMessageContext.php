@@ -63,7 +63,7 @@ class PrivateMessageContext extends RawDrupalContext {
     $messageElements = $messagesContainer->findAll('css', '.private-message-wrapper');
 
     foreach ($messageElements as $messageElement) {
-      if (strpos($messageElement->getText(), $messageText) !== FALSE) {
+      if (str_contains($messageElement->getText(), $messageText)) {
         return;
       }
     }
@@ -75,9 +75,9 @@ class PrivateMessageContext extends RawDrupalContext {
    * Checks that multiple texts are present within private messages.
    *
    * Example table format:
-   * | Message one      |
-   * | Message 2 reply  |
-   * | Another message  |
+   * | Message one     |
+   * | Message 2 reply |
+   * | Another message |
    *
    * @param \Behat\Gherkin\Node\TableNode $table
    *   A table node containing the texts to be checked.
