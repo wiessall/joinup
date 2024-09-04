@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_core;
 
+use Drupal\Core\File\FileExists;
 use Drupal\Core\File\FileSystemInterface;
 
 /**
@@ -11,12 +12,7 @@ use Drupal\Core\File\FileSystemInterface;
  */
 class FileConfigReadOnly implements ConfigReadOnlyInterface {
 
-  /**
-   * File name of the disabled config readonly.
-   *
-   * @var string
-   */
-  protected const string FILE_NAME = 'disable-config-readonly';
+  protected const string FILE = 'private://killswitch/disable-config-readonly';
 
   public function __construct(protected FileSystemInterface $fileSystem) {}
 
@@ -24,7 +20,11 @@ class FileConfigReadOnly implements ConfigReadOnlyInterface {
    * {@inheritdoc}
    */
   public function isReadOnlyEnabled(): bool {
-    return !file_exists($this->pathToReadOnlyFile());
+    $file = $this->fileSystem->realpath(static::FILE);
+    if ($file && file_exists($file)) {
+      return TRUE;
+    }
+    return FALSE;
   }
 
   /**
@@ -32,7 +32,8 @@ class FileConfigReadOnly implements ConfigReadOnlyInterface {
    */
   public function enableReadOnly(): void {
     if (!$this->isReadOnlyEnabled()) {
-      $this->fileSystem->unlink($this->pathToReadOnlyFile());
+      $file = $this->fileSystem->realpath(static::FILE);
+      $this->fileSystem->unlink($file);
     }
   }
 
@@ -40,17 +41,8 @@ class FileConfigReadOnly implements ConfigReadOnlyInterface {
    * {@inheritdoc}
    */
   public function disableReadOnly(): void {
-    touch($this->pathToReadOnlyFile());
-  }
-
-  /**
-   * Returns the file path to disable the config readonly flag.
-   *
-   * @return string
-   *   The file path
-   */
-  protected function pathToReadOnlyFile(): string {
-    return DRUPAL_ROOT . '/../' . self::FILE_NAME;
+    $file = $this->fileSystem->realpath(static::FILE);
+    $this->fileSystem->saveData('', $file, FileExists::Replace);
   }
 
 }
