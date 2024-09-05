@@ -17,6 +17,13 @@ use Drupal\Core\Site\Settings;
 trait ConfigReadOnlyTrait {
 
   /**
+   * The initial state of config_readonly.
+   *
+   * @var bool
+   */
+  protected static $isConfigReadonlyEnabled;
+
+  /**
    * Temporarily disables read only configuration.
    *
    * Make sure to call restoreReadOnlyConfig() after making the necessary config
@@ -24,7 +31,17 @@ trait ConfigReadOnlyTrait {
    */
   public static function bypassReadOnlyConfig(): void {
     static::checkConfigReadOnlyKillSwitch();
-    \Drupal::getContainer()->get('joinup_core.switcher')->disable('config-readonly');
+
+    /** @var \Drupal\joinup_core\ConfigReadOnlyInterface $fileReadOnly */
+    $fileReadOnly = \Drupal::service('joinup_core.file_config_read_only');
+
+    if (!isset(static::$isConfigReadonlyEnabled)) {
+      // Save the initial state of config_readonly kill-switch.
+      static::$isConfigReadonlyEnabled = $fileReadOnly->isReadOnlyEnabled();
+    }
+
+    $fileReadOnly->disableReadOnly();
+
     // Ensure the new value also for the current request.
     new Settings(['config_readonly' => FALSE] + Settings::getAll());
   }
@@ -33,11 +50,18 @@ trait ConfigReadOnlyTrait {
    * Restores the read only configuration functionality if available.
    */
   public static function restoreReadOnlyConfig(): void {
-    \Drupal::getContainer()->get('joinup_core.switcher')->enable('config-readonly');
-    // Ensure the new value also for the current request.
-    new Settings([
-      'config_readonly' => getenv('CONFIG_READONLY') !== 'false',
-    ] + Settings::getAll());
+    /** @var \Drupal\joinup_core\ConfigReadOnlyInterface $fileReadOnly */
+    $fileReadOnly = \Drupal::service('joinup_core.file_config_read_only');
+
+    // Restore as enabled only if initially has been enabled. This allows to
+    // keep config_readonly disabled on a local development environment (i.e.
+    // where the Task Runner config `config_readonly` was set to `false`), after
+    // the tests had finished.
+    if (static::$isConfigReadonlyEnabled) {
+      $fileReadOnly->enableReadOnly();
+      // Ensure the new value also for the current request.
+      new Settings(['config_readonly' => TRUE] + Settings::getAll());
+    }
   }
 
   /**
@@ -50,9 +74,9 @@ trait ConfigReadOnlyTrait {
     /** @var \Drupal\Core\DrupalKernelInterface $kernel */
     $kernel = \Drupal::service('kernel');
     $site_path = $kernel->getSitePath();
-    $needle = "\$settings['config_readonly'] = getenv('CONFIG_READONLY') !== 'false' && !file_exists(getenv('DRUPAL_PRIVATE_FILE_SYSTEM') . '/killswitch/disable-config-readonly');";
-    $settingsPhp = file_get_contents("{$site_path}/settings.php");
-    if (!str_contains($settingsPhp, $needle)) {
+    $needle = "\$settings['config_readonly'] = !file_exists(getcwd() . '/../disable-config-readonly');";
+    $settings_php = file_get_contents("{$site_path}/settings.php");
+    if (strpos($settings_php, $needle) === FALSE) {
       throw new \Exception("The following line is missing from web/sites/default/settings.php\n$needle");
     }
   }
