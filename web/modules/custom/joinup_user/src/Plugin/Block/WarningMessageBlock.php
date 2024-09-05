@@ -11,7 +11,7 @@ use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
-use Drupal\joinup_core\ConfigReadOnlyInterface;
+use Drupal\joinup_core\JoinupSwitcherInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -28,7 +28,7 @@ final class WarningMessageBlock extends BlockBase implements ContainerFactoryPlu
     array $configuration,
     string $pluginId,
     mixed $pluginDefinition,
-    protected ConfigReadOnlyInterface $fileConfigReadOnly,
+    protected JoinupSwitcherInterface $fileConfigReadOnly,
   ) {
     parent::__construct($configuration, $pluginId, $pluginDefinition);
   }
@@ -41,7 +41,7 @@ final class WarningMessageBlock extends BlockBase implements ContainerFactoryPlu
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('joinup_core.file_config_read_only')
+      $container->get('joinup_core.switcher')
     );
   }
 
@@ -53,7 +53,7 @@ final class WarningMessageBlock extends BlockBase implements ContainerFactoryPlu
       $this->t('You are working on production. Please, be extra cautious!'),
     ];
 
-    if (!$this->fileConfigReadOnly->isReadOnlyEnabled()) {
+    if (!$this->fileConfigReadOnly->isEnabled('config-readonly')) {
       $warnings[] = $this->t('Config readonly is disabled!');
     }
 

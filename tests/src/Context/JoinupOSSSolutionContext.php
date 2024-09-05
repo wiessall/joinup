@@ -63,15 +63,14 @@ class JoinupOSSSolutionContext extends RawDrupalContext {
   public function toggleEuOssCatalogue(string $toggle): void {
     assert(in_array($toggle, ['enable', 'disable'], TRUE));
 
-    /** @var \Drupal\joinup_core\KillSwitchInterface $killSwitch */
-    $killSwitch = \Drupal::service('joinup_core.private_file_kill_switch');
-    $type = 'disable-eu-oss-catalogue';
+    $switcher = \Drupal::getContainer()->get('joinup_core.switcher');
     if ($toggle === 'enable') {
-      $killSwitch->remove($type);
+      $switcher->enable('eu-oss-catalogue');
     }
     else {
-      $killSwitch->create($type);
+      $switcher->enable('eu-oss-catalogue');
     }
+
     \Drupal::getContainer()->get('cache.page')->deleteAll();
   }
 
