@@ -15,8 +15,10 @@ use Symfony\Component\Routing\Route;
 
 /**
  * Access checker for _eu_oss_catalogue_check_enabled routes.
+ *
+ * @todo Remove this service in ISAICP-9053.
  */
-class KillSwitchCheck implements AccessInterface {
+final readonly class KillSwitchCheck implements AccessInterface {
 
   public function __construct(
     protected readonly EuOssCatalogueInterface $service,

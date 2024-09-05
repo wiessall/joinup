@@ -10,7 +10,6 @@ declare(strict_types=1);
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\Core\Site\Settings;
 use Drupal\Core\Url;
 use Drupal\block\BlockInterface;
 use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
@@ -18,6 +17,7 @@ use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_oss_catalogue\Entity\JoinupOssSolution;
 use Drupal\joinup_oss_catalogue\OssCatalogueCollectionInterface;
 use Drupal\node\NodeInterface;
+use Drupal\rdf_entity\RdfInterface;
 
 /**
  * Implements hook_views_plugins_argument_alter().
@@ -190,13 +190,29 @@ function joinup_oss_catalogue_preprocess_views_view__eu_oss_catalogue_admin_caro
  *
  * @return bool
  *   Whether the EU OSS Catalogue functionality is enabled.
+ *
+ * @todo Remove this function in ISAICP-9053.
  */
 function joinup_oss_catalogue_is_enabled(): bool {
-  return Settings::get('eu_oss_catalogue')['enabled'] ?? FALSE;
+  return !\Drupal::state()->get('joinup.oss_catalogue_is_disabled', FALSE);
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_access().
+ *
+ * @todo Remove this function in ISAICP-9053.
+ */
+function joinup_oss_catalogue_rdf_entity_access(RdfInterface $entity, $operation, AccountInterface $account): AccessResultInterface {
+  if ($entity->id() === OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID) {
+    return AccessResult::forbiddenIf(!joinup_oss_catalogue_is_enabled())->addCacheableDependency($entity);
+  }
+  return AccessResult::neutral();
 }
 
 /**
  * Implements hook_module_implements_alter().
+ *
+ * @todo Remove this function in ISAICP-9053.
  */
 function joinup_oss_catalogue_module_implements_alter(array &$implementations, string $hook): void {
   if ($hook === 'cron') {
@@ -209,6 +225,8 @@ function joinup_oss_catalogue_module_implements_alter(array &$implementations, s
 
 /**
  * Implements hook_cron().
+ *
+ * @todo Remove this function in ISAICP-9053.
  */
 function joinup_oss_catalogue_cron(): void {
   if (joinup_oss_catalogue_is_enabled()) {
