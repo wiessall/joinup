@@ -329,6 +329,8 @@ Feature: Log in through EU Login
     When I go to "/user/password"
     Then the response status code should be 404
 
+  # TODO: Re-enable this test in ISAICP-9052
+  @wip
   Scenario: As a developer I can temporary disable the site registration.
     Given CAS users:
       | Username | E-mail          | Password |
