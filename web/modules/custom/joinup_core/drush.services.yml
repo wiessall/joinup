@@ -1,6 +1,6 @@
 services:
   joinup_core.sanitize.commands:
     class: Drupal\joinup_core\Commands\JoinupDataSanitizationCommands
-    arguments: [ '@database', '@entity_field.manager', '@entity_type.manager', '@keyvalue', '@plugin.manager.field.field_type' ]
+    arguments: ['@database', '@entity_field.manager', '@entity_type.manager', '@keyvalue', '@plugin.manager.field.field_type']
     tags:
       - { name: drush.command }

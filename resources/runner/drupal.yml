@@ -380,11 +380,7 @@ drupal:
         $settings['reverse_proxy'] = (bool) getenv('DRUPAL_REVERSE_PROXY_ENABLE');
         $settings['reverse_proxy_addresses'] = array_filter(explode(',', (string) getenv('DRUPAL_REVERSE_PROXY_ADDRESSES')));
       EU OSS Catalogue: |
-<<<<<<< HEAD
-        $settings['eu_oss_catalogue']['enabled'] = !file_exists($settings['file_private_path'] . '/kill-switch/disable-eu-oss-catalogue');
-=======
         $settings['eu_oss_catalogue']['enabled'] = !file_exists(getenv('DRUPAL_PRIVATE_FILE_SYSTEM') . '/killswitch/disable-eu-oss-catalogue');
->>>>>>> origin/develop
         $settings['eu_oss_catalogue']['platform_github']['access_token'] = getenv('JOINUP_GITHUB_TOKEN');
       Stage file proxy: |
         $config['stage_file_proxy.settings']['hotlink'] = TRUE;
