@@ -49,7 +49,7 @@ Feature: User profile
     And I should see the text "Supplier exchange"
     And I should see the link "Edit"
     And the link "Facebook" in the "Header" region should point to "https://www.facebook.com/leodavinci"
-    And the link "X" in the "Header" region should point to "https://www.x.com/therealdavinci"
+    And the link "X" in the "Header" region should point to "https://x.com/therealdavinci"
     And the link "LinkedIn" in the "Header" region should point to "https://www.linkedin.com/leonardo.davinci"
     And the link "GitHub" in the "Header" region should point to "https://github.com/davinci"
     And the link "Mastodon" in the "Header" region should point to "https://myaccount.pl"
