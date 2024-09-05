@@ -31,6 +31,14 @@ interface CollectionInterface extends RdfInterface, EntityPublicationTimeInterfa
   public function getSolutions(bool $only_published = FALSE): array;
 
   /**
+   * Returns the number of active members in this collection.
+   *
+   * @return int
+   *   The number of active members.
+   */
+  public function getActiveMemberCount(): int;
+
+  /**
    * Returns the IDs of the solutions that are affiliated with this collection.
    *
    * @param bool $only_published
