@@ -26,6 +26,13 @@ trait GroupTrait {
   use OutdatedContentTrait;
 
   /**
+   * The number of active members.
+   *
+   * @var int
+   */
+  protected $activeMemberCount;
+
+  /**
    * {@inheritdoc}
    */
   public function getMembership(?int $uid = NULL, array $states = [OgMembershipInterface::STATE_ACTIVE]): ?OgMembershipInterface {
@@ -322,6 +329,26 @@ trait GroupTrait {
    */
   protected function getMembershipManager(): MembershipManagerInterface {
     return \Drupal::service('og.membership_manager');
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getActiveMemberCount(): int {
+    if (isset($this->activeMemberCount)) {
+      return $this->activeMemberCount;
+    }
+
+    // We're doing a direct database query rather than using methods in OG's
+    // MembershipManager service since we just need a count, and we need to
+    // filter out blocked user accounts.
+    $query = \Drupal::database()->select('og_membership', 'om');
+    $query->innerJoin('users_field_data', 'ufd', '[om].[uid] = [ufd].[uid]');
+    $query->condition('ufd.status', 1)
+      ->condition('entity_type', 'rdf_entity')
+      ->condition('entity_id', $this->id())
+      ->condition('state', OgMembershipInterface::STATE_ACTIVE);
+    return $this->activeMemberCount = (int) $query->countQuery()->execute()->fetchField();
   }
 
 }
