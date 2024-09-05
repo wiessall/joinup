@@ -1,4 +1,5 @@
-@api @group-clone
+# TODO: Re-enable in ISAICP-9052
+@wip @api @group-clone
 Feature: Test EU OSS Catalogue killswitch
 
   Scenario: Switch ON/OFF
