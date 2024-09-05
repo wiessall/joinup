@@ -1,0 +1,20 @@
+<?php
+
+/**
+ * @file
+ * Install, update hooks for Joinup OSS Catalogue module.
+ */
+
+declare(strict_types=1);
+
+use Drupal\joinup_oss_catalogue\OssCatalogueCollectionInterface;
+
+/**
+ * Publish the EU OSS Catalogue collection.
+ */
+function joinup_oss_catalogue_update_200001(): void {
+  $collection = \Drupal::entityTypeManager()->getStorage('rdf_entity')
+    ->load(OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID);
+  $collection->skip_notification = TRUE;
+  $collection->set('field_ar_state', 'published')->save();
+}

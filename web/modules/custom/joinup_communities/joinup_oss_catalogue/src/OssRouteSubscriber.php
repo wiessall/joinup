@@ -26,6 +26,7 @@ class OssRouteSubscriber extends RouteSubscriberBase {
       $route->setRequirement('_oss_access_check', 'TRUE');
     }
 
+    // @todo Remove this route alteration in ISAICP-9053.
     $routeNames = [
       'eu_oss_catalogue.provider.collection',
       'eu_oss_catalogue.hosting_platform_add',

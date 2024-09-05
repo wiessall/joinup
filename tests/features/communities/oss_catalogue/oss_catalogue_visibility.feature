@@ -1,3 +1,4 @@
+# TODO: Remove this test in ISAICP-9053
 @api @group-clone
 Feature: Test EU OSS Catalogue killswitch
 
@@ -28,7 +29,9 @@ Feature: Test EU OSS Catalogue killswitch
     And I go to "/admin/content/eu-oss-catalogue/log"
     Then the response status code should be 200
 
-    Given I disable EU OSS Catalogue
+    Given I visit "/dashboard"
+    When I press "Disable EU OSS Catalogue"
+    Then I should see the success message "EU OSS Catalogue has been disabled"
 
     Given I am an anonymous user
     When I go to "/eu-oss-catalogue"
@@ -56,7 +59,9 @@ Feature: Test EU OSS Catalogue killswitch
     And I go to "/admin/content/eu-oss-catalogue/log"
     Then the response status code should be 403
 
-    Given I enable EU OSS Catalogue
+    Given I visit "/dashboard"
+    When I press "Enable EU OSS Catalogue"
+    Then I should see the success message "EU OSS Catalogue has been enabled"
 
     Given I am an anonymous user
     When I go to "/eu-oss-catalogue"
