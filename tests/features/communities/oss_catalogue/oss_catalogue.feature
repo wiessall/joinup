@@ -131,6 +131,7 @@ Feature:
     When I go to the content page of the type "oss_solution" with the title "Foo"
     Then I should see the text "Foo's GIT description"
 
+  # TODO: Re-enable this test in ISAICP-9055.
   @wip @loggedErrors
   Scenario: All necessary OSS Solution fields are visible on node page.
     Given oss_contact content:
