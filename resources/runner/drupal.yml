@@ -245,7 +245,7 @@ drupal:
         ];
         // Location of the site configuration files.
         $settings['config_sync_directory'] = '../config/sync';
-        $settings['config_readonly'] = getenv('CONFIG_READONLY') !== 'false' && !file_exists(getenv('DRUPAL_PRIVATE_FILE_SYSTEM') . '/killswitch/disable-config-readonly');
+        $settings['config_readonly'] = !file_exists(getcwd() . '/../disable-config-readonly');
       Testing configuration alters: |
         // The video from the home page interacts with Selenium tests.
         $config['page_manager.page_variant.homepage-layout_builder-0']['variant_settings']['sections'][4]['components']['6ab0ceea-4541-4153-8b64-227e02369d30']['configuration']['text'] = 'Some joinup video';
@@ -380,7 +380,6 @@ drupal:
         $settings['reverse_proxy'] = (bool) getenv('DRUPAL_REVERSE_PROXY_ENABLE');
         $settings['reverse_proxy_addresses'] = array_filter(explode(',', (string) getenv('DRUPAL_REVERSE_PROXY_ADDRESSES')));
       EU OSS Catalogue: |
-        $settings['eu_oss_catalogue']['enabled'] = !file_exists(getenv('DRUPAL_PRIVATE_FILE_SYSTEM') . '/killswitch/disable-eu-oss-catalogue');
         $settings['eu_oss_catalogue']['platform_github']['access_token'] = getenv('JOINUP_GITHUB_TOKEN');
       Stage file proxy: |
         $config['stage_file_proxy.settings']['hotlink'] = TRUE;

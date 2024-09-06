@@ -43,6 +43,8 @@
 /.vscode/
 /.devcontainer/
 
+# Ignore the config_readonly killswitch.
+/disable-config-readonly
 # Ignore the cookie consent killswitch.
 /disable-cookie-consent
 

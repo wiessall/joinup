@@ -47,6 +47,8 @@ class JoinupDataSanitizationCommands extends DrushCommands implements SanitizePl
     $this->sanitizeLogAlertsSettings();
     $this->sanitizeEmailConfirmerData();
     $this->sanitizeDownloadEventData();
+    // @todo Remove this call in ISAICP-9053.
+    $this->sanitizeEuOssCatalogueSwitcher();
   }
 
   /**
@@ -60,6 +62,8 @@ class JoinupDataSanitizationCommands extends DrushCommands implements SanitizePl
     $messages[] = dt('Sanitize log alerts settings.');
     $messages[] = dt('Sanitize email confirmer data.');
     $messages[] = dt('Sanitize download event data.');
+    // @todo Remove this message in ISAICP-9053.
+    $messages[] = dt('Sanitize EU OSS Catalogue switcher.');
   }
 
   /**
@@ -177,6 +181,19 @@ class JoinupDataSanitizationCommands extends DrushCommands implements SanitizePl
       // Reset the entity cache.
       $this->entityTypeManager->getStorage($entityType)->resetCache();
     }
+  }
+
+  /**
+   * Sanitizes the EU OSS Catalogue switcher.
+   *
+   * @todo Remove this method in ISAICP-9053.
+   */
+  protected function sanitizeEuOssCatalogueSwitcher(): void {
+    $this->db->delete('key_value')
+      ->condition('collection', 'state')
+      ->condition('name', 'joinup.oss_catalogue_is_disabled')
+      ->execute();
+    $this->logger()->success(dt('joinup.oss_catalogue_is_disabled state var sanitized.'));
   }
 
 }
