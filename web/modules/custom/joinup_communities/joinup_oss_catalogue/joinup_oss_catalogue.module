@@ -9,15 +9,17 @@ declare(strict_types=1);
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\block\BlockInterface;
+use Drupal\collection\Entity\CollectionInterface;
+use Drupal\custom_page\Entity\CustomPageInterface;
 use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_oss_catalogue\Entity\JoinupOssSolution;
 use Drupal\joinup_oss_catalogue\OssCatalogueCollectionInterface;
 use Drupal\node\NodeInterface;
-use Drupal\rdf_entity\RdfInterface;
 
 /**
  * Implements hook_views_plugins_argument_alter().
@@ -198,13 +200,23 @@ function joinup_oss_catalogue_is_enabled(): bool {
 }
 
 /**
- * Implements hook_ENTITY_TYPE_access().
+ * Implements hook_entity_access().
  *
  * @todo Remove this function in ISAICP-9053.
  */
-function joinup_oss_catalogue_rdf_entity_access(RdfInterface $entity, $operation, AccountInterface $account): AccessResultInterface {
-  if ($entity->id() === OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID) {
-    return AccessResult::forbiddenIf(!joinup_oss_catalogue_is_enabled())->addCacheableDependency($entity);
+function joinup_oss_catalogue_entity_access(EntityInterface $entity): AccessResultInterface {
+  if (
+    // The entity is the EU OSS Catalogue collection...
+    ($entity instanceof CollectionInterface && $entity->id() === OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID) ||
+    // ...or the EU OSS Catalogue collection landing page...
+    ($entity instanceof CustomPageInterface && $entity->uuid() === OssCatalogueCollectionInterface::LANDING_PAGE) ||
+    // ...or an OSS Solution.
+    ($entity instanceof OssSolutionInterface)
+  ) {
+    return AccessResult::forbiddenIf(
+      !joinup_oss_catalogue_is_enabled(),
+      'EU OSS Catalogue is disabled',
+    )->addCacheableDependency($entity);
   }
   return AccessResult::neutral();
 }
