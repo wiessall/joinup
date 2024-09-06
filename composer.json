@@ -338,7 +338,8 @@
                 "The submit button is not following any condition while in popup/dialogs @see https://drupal.org/i/3008172": "resources/patch/php/drupal/core/3008172-43.patch",
                 "Added deprecation suppression": "resources/patch/php/drupal/core/3467293.diff",
                 "Fix handling of unknown file extensions in FileMediaFormatterBase @see https://www.drupal.org/i/3466462": "resources/patch/php/drupal/core/3466462.diff",
-                "Allow ChangedItem to skip updating the entity's \"changed\" timestamp when synchronizing @see https://drupal.org/i/2329253": "resources/patch/php/drupal/core/2329253-10.x.patch"
+                "Allow ChangedItem to skip updating the entity's \"changed\" timestamp when synchronizing @see https://drupal.org/i/2329253": "resources/patch/php/drupal/core/2329253-10.x.patch",
+                "JS errors from Drupal.dialog.resetSize when rapidly closing dialogs @see https://www.drupal.org/i/3472624": "resources/patch/php/drupal/core/3472624.diff"
             },
             "drupal/default_content": {
                 "Allow manual imports @see https://www.drupal.org/i/2640734": "resources/patch/php/drupal/default_content/2640734.diff"
