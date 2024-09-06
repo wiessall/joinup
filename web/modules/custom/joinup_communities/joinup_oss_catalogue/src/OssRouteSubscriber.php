@@ -34,7 +34,6 @@ class OssRouteSubscriber extends RouteSubscriberBase {
       'view.eu_oss_catalogue_admin.page',
       'view.eu_oss_catalogue_log.page',
       'view.search_oss_catalogue.search',
-      'entity.rdf_entity.canonical',
     ];
     foreach ($routeNames as $routeName) {
       if ($route = $collection->get($routeName)) {

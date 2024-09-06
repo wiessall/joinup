@@ -3,11 +3,19 @@
 Feature: Test EU OSS Catalogue killswitch
 
   Scenario: Switch ON/OFF
+    Given oss_solution content:
+      | title                  | oss_development_status | oss_source        | oss_categories     | oss_short_description | status    |
+      | The Opensource Panacea | development            | developers_italia | content-management | The cure              | published |
 
     When I go to "/eu-oss-catalogue"
     Then the response status code should be 200
+    But I should not see "Sign in to continue"
     And I go to "/eu-oss-catalogue/solutions"
     Then the response status code should be 200
+    But I should not see "Sign in to continue"
+    And I go to the content page of the type "oss_solution" with the title "The Opensource Panacea"
+    Then the response status code should be 200
+    But I should not see "Sign in to continue"
 
     Given I am logged in as an "authenticated"
     When I go to "/eu-oss-catalogue"
@@ -15,6 +23,8 @@ Feature: Test EU OSS Catalogue killswitch
     And I press "Submit"
     Then the response status code should be 200
     And I go to "/eu-oss-catalogue/solutions"
+    Then the response status code should be 200
+    And I go to the content page of the type "oss_solution" with the title "The Opensource Panacea"
     Then the response status code should be 200
 
     Given I am logged in as a "developer"
@@ -27,6 +37,8 @@ Feature: Test EU OSS Catalogue killswitch
     And I go to "/admin/content/eu-oss-catalogue/oss-solutions"
     Then the response status code should be 200
     And I go to "/admin/content/eu-oss-catalogue/log"
+    Then the response status code should be 200
+    And I go to the content page of the type "oss_solution" with the title "The Opensource Panacea"
     Then the response status code should be 200
 
     Given I visit "/dashboard"
@@ -38,6 +50,8 @@ Feature: Test EU OSS Catalogue killswitch
     Then I should see the heading "Sign in to continue"
     And I go to "/eu-oss-catalogue/solutions"
     Then I should see the heading "Sign in to continue"
+    And I go to the content page of the type "oss_solution" with the title "The Opensource Panacea"
+    Then I should see the heading "Sign in to continue"
 
     Given I am logged in as an "authenticated"
     When I go to "/eu-oss-catalogue"
@@ -45,6 +59,8 @@ Feature: Test EU OSS Catalogue killswitch
     And I press "Submit"
     Then the response status code should be 403
     And I go to "/eu-oss-catalogue/solutions"
+    Then the response status code should be 403
+    And I go to the content page of the type "oss_solution" with the title "The Opensource Panacea"
     Then the response status code should be 403
 
     Given I am logged in as a "developer"
@@ -58,26 +74,14 @@ Feature: Test EU OSS Catalogue killswitch
     Then the response status code should be 403
     And I go to "/admin/content/eu-oss-catalogue/log"
     Then the response status code should be 403
+    # Developer is and amin role, they can still see the node.
+    And I go to the content page of the type "oss_solution" with the title "The Opensource Panacea"
+    Then the response status code should be 200
 
     Given I visit "/dashboard"
     When I press "Enable EU OSS Catalogue"
     Then I should see the success message "EU OSS Catalogue has been enabled"
 
-    Given I am an anonymous user
-    When I go to "/eu-oss-catalogue"
-    Then the response status code should be 200
-    And I go to "/eu-oss-catalogue/solutions"
-    Then the response status code should be 200
-
-    Given I am logged in as an "authenticated"
-    When I go to "/eu-oss-catalogue"
-    And I check "I agree to the Legal notice document"
-    And I press "Submit"
-    Then the response status code should be 200
-    And I go to "/eu-oss-catalogue/solutions"
-    Then the response status code should be 200
-
-    Given I am logged in as a "developer"
     When I go to "/eu-oss-catalogue"
     Then the response status code should be 200
     And I go to "/eu-oss-catalogue/solutions"
@@ -87,4 +91,27 @@ Feature: Test EU OSS Catalogue killswitch
     And I go to "/admin/content/eu-oss-catalogue/oss-solutions"
     Then the response status code should be 200
     And I go to "/admin/content/eu-oss-catalogue/log"
+    Then the response status code should be 200
+    And I go to the content page of the type "oss_solution" with the title "The Opensource Panacea"
+    Then the response status code should be 200
+
+    Given I am an anonymous user
+    When I go to "/eu-oss-catalogue"
+    Then the response status code should be 200
+    But I should not see "Sign in to continue"
+    And I go to "/eu-oss-catalogue/solutions"
+    Then the response status code should be 200
+    But I should not see "Sign in to continue"
+    And I go to the content page of the type "oss_solution" with the title "The Opensource Panacea"
+    Then the response status code should be 200
+    But I should not see "Sign in to continue"
+
+    Given I am logged in as an "authenticated"
+    When I go to "/eu-oss-catalogue"
+    And I check "I agree to the Legal notice document"
+    And I press "Submit"
+    Then the response status code should be 200
+    And I go to "/eu-oss-catalogue/solutions"
+    Then the response status code should be 200
+    And I go to the content page of the type "oss_solution" with the title "The Opensource Panacea"
     Then the response status code should be 200
