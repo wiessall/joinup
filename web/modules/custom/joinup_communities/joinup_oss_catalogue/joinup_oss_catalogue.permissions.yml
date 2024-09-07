@@ -1,2 +1,6 @@
 eu oss catalogue log:
   title: 'Access eu oss catalogue log'
+# TODO: Drop this permission in ISAICP-9053.
+toggle eu oss catalogue state:
+  title: 'Toggle ON/OFF the EU OSS Catalogue'
+  restrict access: true

@@ -92,28 +92,3 @@ function joinup_core_requirements($phase): array {
 
   return $requirements;
 }
-
-/**
- * Convert videos into document (remove in ISAICP-9045).
- */
-function joinup_core_update_111200(array &$sandbox): string {
-  $storage = \Drupal::entityTypeManager()->getStorage('node');
-
-  if (!isset($sandbox['video_nids'])) {
-    $sandbox['video_nids'] = $storage->getQuery()
-      ->accessCheck(FALSE)
-      ->condition('type', 'video')
-      ->execute();
-    $sandbox['total'] = count($sandbox['video_nids']);
-    $sandbox['progress'] = 0;
-  }
-
-  $video_nids = array_splice($sandbox['video_nids'], 0, 25);
-  // The video conversion will be released in v1.112.0. For now, we only delete
-  // the videos to not impact collection/solution conversion.
-  $storage->delete($storage->loadMultiple($video_nids));
-  $sandbox['progress'] += count($video_nids);
-  $sandbox['#finished'] = (int) empty($sandbox['video_nids']);
-
-  return "{$sandbox['progress']} out of {$sandbox['total']} video nodes processed.";
-}
