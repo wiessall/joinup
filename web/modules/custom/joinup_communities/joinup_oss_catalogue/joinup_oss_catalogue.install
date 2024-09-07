@@ -13,8 +13,8 @@ use Drupal\joinup_oss_catalogue\OssCatalogueCollectionInterface;
  * Publish the EU OSS Catalogue collection.
  */
 function joinup_oss_catalogue_update_200001(): void {
-  $collection = \Drupal::entityTypeManager()->getStorage('rdf_entity')
-    ->load(OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID);
+  $collection = \Drupal::getContainer()->get('entity.repository')
+    ->loadEntityByUuid('node', OssCatalogueCollectionInterface::COLLECTION_UUID);
   $collection->skip_notification = TRUE;
-  $collection->set('field_ar_state', 'published')->save();
+  $collection->set('field_state', 'published')->save();
 }
