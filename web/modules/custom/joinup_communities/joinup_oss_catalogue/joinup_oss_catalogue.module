@@ -9,7 +9,6 @@ declare(strict_types=1);
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
-use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\block\BlockInterface;
@@ -199,14 +198,14 @@ function joinup_oss_catalogue_is_enabled(): bool {
 }
 
 /**
- * Implements hook_entity_access().
+ * Implements hook_ENTITY_TYPE_access().
  *
  * @todo Remove this function in ISAICP-9053.
  */
-function joinup_oss_catalogue_entity_access(EntityInterface $entity): AccessResultInterface {
+function joinup_oss_catalogue_node_access(NodeInterface $entity): AccessResultInterface {
   if (
     // The entity is the EU OSS Catalogue collection...
-    ($entity instanceof CollectionInterface && $entity->id() === OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID) ||
+    ($entity instanceof CollectionInterface && $entity->uuid() === OssCatalogueCollectionInterface::COLLECTION_UUID) ||
     // ...or the EU OSS Catalogue collection landing page...
     ($entity instanceof CustomPageInterface && $entity->uuid() === OssCatalogueCollectionInterface::LANDING_PAGE) ||
     // ...or an OSS Solution.
@@ -214,7 +213,7 @@ function joinup_oss_catalogue_entity_access(EntityInterface $entity): AccessResu
   ) {
     return AccessResult::forbiddenIf(
       !joinup_oss_catalogue_is_enabled(),
-      'EU OSS Catalogue is disabled',
+      'EU OSS Catalogue functionality is disabled',
     )->addCacheableDependency($entity);
   }
   return AccessResult::neutral();
