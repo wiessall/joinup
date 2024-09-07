@@ -15,10 +15,7 @@ Feature:
       | Semantic Turkey    | development            | developers_italia | application-development,it-development,digital-asset-management | Software Registry makes software development phase simplier by showing extended information about projects and allowing source code searches. | published   |              | 2000-04-13       | 0.50               |
       | Cristian Gagliardi | obsolete               | developers_italia | data-collection                                                 | Immuni is a mobile app that helps us to fight the COVID-19 pandemic by notifying users at risk of carrying the virus as early as possible     | published   |              | 2020-09-13       | 0.99               |
 
-    Given I visit "/collection/eu-oss-catalogue"
-
-    # User is redirected from the standard collection URL.
-    Then I should be on "/eu-oss-catalogue"
+    Given I visit "/eu-oss-catalogue"
     And I should not see the link "Report abusive content"
     And I see the text "Solutions created by and for European Public Services" in the "Header" region
 
