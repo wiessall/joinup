@@ -52,26 +52,4 @@ class JoinupOSSSolutionContext extends RawDrupalContext {
     $state->set('eu_oss_catalogue.last_check', strtotime('- 1 hour'));
   }
 
-  /**
-   * Toggles ON/OFF EU OSS Catalogue functionality.
-   *
-   * @param string $toggle
-   *   Could be 'enable', 'disable'.
-   *
-   * @Given I :toggle EU OSS Catalogue
-   */
-  public function toggleEuOssCatalogue(string $toggle): void {
-    assert(in_array($toggle, ['enable', 'disable'], TRUE));
-
-    $switcher = \Drupal::getContainer()->get('joinup_core.switcher');
-    if ($toggle === 'enable') {
-      $switcher->enable('eu-oss-catalogue');
-    }
-    else {
-      $switcher->enable('eu-oss-catalogue');
-    }
-
-    \Drupal::getContainer()->get('cache.page')->deleteAll();
-  }
-
 }
