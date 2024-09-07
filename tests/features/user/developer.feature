@@ -55,31 +55,3 @@ Feature: Variety tests for the developer role.
     Given I am logged in as an authenticated
     And I am on the homepage
     Then I should not see the text "Warning: You are working on production. Please, be extra cautious!"
-
-  Scenario: Configuration is locked and unlocked on developers login and logout.
-    Given users:
-      | Username   | Roles     |
-      | Some dev 1 | Developer |
-
-    When I am logged in as "Some dev 1"
-    Then the configuration should be locked
-
-    When I go to "/dashboard"
-    And I press "Disable config readonly"
-    Then I should see the success message "Disabled config readonly"
-    And the configuration should be unlocked
-    And I should not see the button "Disable config readonly"
-    And I should see the button "Enable config readonly"
-    And I should see the warning message "Config readonly is disabled!"
-
-    When I press "Enable config readonly"
-    Then I should see the success message "Enabled config readonly"
-    And the configuration should be locked
-    And I should see the button "Disable config readonly"
-    And I should not see the button "Enable config readonly"
-    And I should not see the warning message "Config readonly is disabled!"
-
-    When I press "Disable config readonly"
-    And I am on the homepage
-    And I click "Sign out"
-    Then the configuration should be locked

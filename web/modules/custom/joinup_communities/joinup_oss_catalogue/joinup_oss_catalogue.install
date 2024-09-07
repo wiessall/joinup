@@ -2,31 +2,19 @@
 
 /**
  * @file
- * Install, update, and uninstall functions for the Joinup OSS module.
+ * Install, update hooks for Joinup OSS Catalogue module.
  */
 
 declare(strict_types=1);
 
-use Drupal\Core\Serialization\Yaml;
+use Drupal\joinup_oss_catalogue\OssCatalogueCollectionInterface;
 
 /**
- * Pre-creates OSS vocabularies.
+ * Publish the EU OSS Catalogue collection.
  */
-function joinup_oss_catalogue_update_111200(): void {
-  // Pre-create the new controlled vocabularies provided by eu_oss_catalogue
-  // module. Normally, these are imported as config but eu_oss_catalogue install
-  // goes first and its install process is also populating them with terms, so
-  // they should be available at that point.
-  $config_factory = \Drupal::configFactory();
-  foreach ([
-    'category',
-    'licence',
-    'intended_audience_scope',
-    'software_type',
-  ] as $vocab) {
-    $name = "taxonomy.vocabulary.oss_$vocab";
-    $config_factory->getEditable($name)
-      ->setData(Yaml::decode(file_get_contents(DRUPAL_ROOT . "/../config/sync/$name.yml")))
-      ->save();
-  }
+function joinup_oss_catalogue_update_200001(): void {
+  $collection = \Drupal::entityTypeManager()->getStorage('rdf_entity')
+    ->load(OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID);
+  $collection->skip_notification = TRUE;
+  $collection->set('field_ar_state', 'published')->save();
 }

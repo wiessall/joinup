@@ -653,11 +653,5 @@ display:
         - url
         - url.query_args
       tags:
-        - 'config:core.entity_view_display.user.user.compact'
-        - 'config:core.entity_view_display.user.user.default'
-        - 'config:core.entity_view_display.user.user.group_header'
-        - 'config:core.entity_view_display.user.user.inline'
-        - 'config:core.entity_view_display.user.user.view_mode_featured'
-        - 'config:core.entity_view_display.user.user.view_mode_tile'
         - 'config:field.storage.user.field_user_family_name'
         - 'config:field.storage.user.field_user_first_name'
