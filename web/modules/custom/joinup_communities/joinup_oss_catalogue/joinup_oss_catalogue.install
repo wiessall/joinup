@@ -7,14 +7,12 @@
 
 declare(strict_types=1);
 
-use Drupal\joinup_oss_catalogue\OssCatalogueCollectionInterface;
-
 /**
  * Publish the EU OSS Catalogue collection.
  */
 function joinup_oss_catalogue_update_200001(): void {
   $collection = \Drupal::getContainer()->get('entity.repository')
-    ->loadEntityByUuid('node', OssCatalogueCollectionInterface::COLLECTION_UUID);
+    ->loadEntityByUuid('rdf_entity', 'http://data.europa.eu/w21/6d621a47-71ce-4f1a-90e2-8859403d3ecd');
   $collection->skip_notification = TRUE;
-  $collection->set('field_state', 'published')->save();
+  $collection->set('field_ar_state', 'published')->save();
 }
