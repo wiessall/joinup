@@ -21,7 +21,7 @@ function interoperable_europe_form_join_group_form_alter(&$form, FormStateInterf
   $form_object = $form_state->getFormObject();
   if ($form_object instanceof JoinGroupFormInterface) {
     $group = $form_object->getGroup();
-    if ($group->id() === InteroperableEuropeCollectionInterface::COLLECTION_ENTITY_ID) {
+    if ($group->uuid() === InteroperableEuropeCollectionInterface::COLLECTION_UUID) {
       if (isset($form['authenticate']['#title'])) {
         $form['authenticate']['#title'] = t('Subscribe for fresh content');
       }
