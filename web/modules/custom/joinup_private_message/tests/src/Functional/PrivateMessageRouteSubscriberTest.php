@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace Drupal\Tests\joinup_private_message\Kernel;
 
 use Drupal\Core\Routing\RouteProviderInterface;
-use Drupal\KernelTests\KernelTestBase;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Drupal\Tests\BrowserTestBase;
+use Drupal\Tests\UiHelperTrait;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
 
 /**
@@ -15,7 +14,9 @@ use Symfony\Component\Routing\Exception\RouteNotFoundException;
  *
  * @group joinup_private_message
  */
-class PrivateMessageRouteSubscriberTest extends KernelTestBase {
+class PrivateMessageRouteSubscriberTest extends BrowserTestBase {
+
+  use UiHelperTrait;
 
   /**
    * {@inheritdoc}
@@ -37,9 +38,13 @@ class PrivateMessageRouteSubscriberTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
+  protected $defaultTheme = 'stark';
+
+  /**
+   * {@inheritdoc}
+   */
   protected function setUp(): void {
     parent::setUp();
-    $this->installEntitySchema('user');
     $this->routeProvider = $this->container->get('router.route_provider');
   }
 
@@ -90,10 +95,8 @@ class PrivateMessageRouteSubscriberTest extends KernelTestBase {
     try {
       $route = $this->routeProvider->getRouteByName('entity.private_message_thread.canonical');
 
-      $request = Request::create($route->getPath());
-      $response = $this->container->get('http_kernel')->handle($request);
-
-      $this->assertEquals(Response::HTTP_NOT_FOUND, $response->getStatusCode(), 'The canonical private message thread route should return a 404 status code.');
+      $this->drupalGet($route->getPath());
+      $this->assertSession()->statusCodeEquals(404);
     }
     catch (RouteNotFoundException $e) {
       // If the route is not found, ensure it's properly asserted.
