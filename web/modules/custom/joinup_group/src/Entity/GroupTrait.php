@@ -26,13 +26,6 @@ trait GroupTrait {
   use OutdatedContentTrait;
 
   /**
-   * The number of active members.
-   *
-   * @var int
-   */
-  protected $activeMemberCount;
-
-  /**
    * {@inheritdoc}
    */
   public function getMembership(?int $uid = NULL, array $states = [OgMembershipInterface::STATE_ACTIVE]): ?OgMembershipInterface {
@@ -335,10 +328,6 @@ trait GroupTrait {
    * {@inheritdoc}
    */
   public function getActiveMemberCount(): int {
-    if (isset($this->activeMemberCount)) {
-      return $this->activeMemberCount;
-    }
-
     // We're doing a direct database query rather than using methods in OG's
     // MembershipManager service since we just need a count, and we need to
     // filter out blocked user accounts.
