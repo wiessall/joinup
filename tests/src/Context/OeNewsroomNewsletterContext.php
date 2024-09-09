@@ -6,7 +6,6 @@ namespace Drupal\joinup\Context;
 
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\DrupalExtension\TagTrait;
-use Drupal\joinup\Traits\ConfigReadOnlyTrait;
 use Drupal\oe_newsroom_newsletter\NewsletterSubscriber\MockNewsletterSubscriber;
 use PHPUnit\Framework\Assert;
 
@@ -15,7 +14,6 @@ use PHPUnit\Framework\Assert;
  */
 class OeNewsroomNewsletterContext extends RawDrupalContext {
 
-  use ConfigReadOnlyTrait;
   use TagTrait;
 
   /**
@@ -71,13 +69,9 @@ class OeNewsroomNewsletterContext extends RawDrupalContext {
     // Set up the mock subscriber. This is only needed if we aren't already
     // using it.
     if (!$mock_subscriber_is_used) {
-      self::bypassReadOnlyConfig();
-
       $config = \Drupal::configFactory()->getEditable('oe_newsroom_newsletter.subscriber');
       $this->originalNewsletterSubscriber = $config->get('class');
       $config->set('class', MockNewsletterSubscriber::class)->save();
-
-      self::restoreReadOnlyConfig();
     }
   }
 
@@ -89,14 +83,8 @@ class OeNewsroomNewsletterContext extends RawDrupalContext {
   public function afterNewsletterScenario(): void {
     $config = \Drupal::configFactory()->get('oe_newsroom_newsletter.subscriber');
     if ($config->get('class') !== $this->originalNewsletterSubscriber) {
-      // Temporarily bypass read only config so that we can disable the mock
-      // service.
-      self::bypassReadOnlyConfig();
-
       $config = \Drupal::configFactory()->getEditable('oe_newsroom_newsletter.subscriber');
       $config->set('class', $this->originalNewsletterSubscriber)->save();
-
-      self::restoreReadOnlyConfig();
     }
 
     // Clear out any subscriptions that might be left behind by the scenario.
