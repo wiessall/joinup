@@ -15,9 +15,7 @@ use Drupal\Core\State\StateInterface;
 use Drupal\Core\Url;
 use Drupal\joinup_core\Logger\Handler\MailHandler;
 use Drupal\joinup_core\Logger\Handler\TelegramHandler;
-use Drupal\joinup_oss_catalogue\OssCatalogueCollectionInterface;
 use Drupal\rdf_sync\RdfSyncConnectionInterface;
-use Solarium\Core\Query\Helper;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -135,11 +133,7 @@ class DashboardForm extends FormBase {
    * @todo Remove this method in ISAICP-9053.
    */
   public function enableEuOssCatalogueSubmitForm(): void {
-    $this->state->delete('joinup.oss_catalogue_is_disabled');
-    $this->entityTypeManager->getStorage('rdf_entity')
-      ->load(OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID)
-      ->set('field_ar_state', 'published')
-      ->save();
+    joinup_oss_catalogue_toggle('enable');
     // Only clear cache for anonymous.
     $this->pageCache->deleteAll();
     $this->messenger()->addStatus($this->t('EU OSS Catalogue has been enabled'));
@@ -151,36 +145,7 @@ class DashboardForm extends FormBase {
    * @todo Remove this method in ISAICP-9053.
    */
   public function disableEuOssCatalogueSubmitForm(): void {
-    $this->state->set('joinup.oss_catalogue_is_disabled', TRUE);
-    $uri = OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID;
-    $collection = $this->entityTypeManager->getStorage('rdf_entity')->load($uri);
-    $collection->set('field_ar_state', 'draft')->save();
-
-    // Unfortunately, we cannot unpublish a collection. When setting the state
-    // to 'draft', we're creating a forward revision. In order to unpublish, we:
-    // - Remove the published triples.
-    // - Remove the document from Solr and from search_api_item table.
-    $sparql = <<<SPARQL
-      WITH <http://joinup.eu/collection/published>
-      DELETE { <$uri> ?p ?o }
-      WHERE  { <$uri> ?p ?o }
-      SPARQL;
-    $this->rdfSyncConnection->update($sparql);
-    $sapiId = 'entity:rdf_entity/' . $uri;
-    $solrHelper = new Helper();
-    /** @var \Drupal\search_api_solr\SolrConnectorInterface $connector */
-    $connector = $this->entityTypeManager->getStorage('search_api_server')
-      ->load('joinup')->getBackend()->getSolrConnector();
-    $updateQuery = $connector
-      ->getUpdateQuery()
-      ->addDeleteQuery('ss_search_api_id:' . $solrHelper->escapePhrase($sapiId))
-      ->addCommit();
-    $connector->update($updateQuery);
-    $this->db->delete('search_api_item')
-      ->condition('index_id', ['published', 'unpublished'], 'IN')
-      ->condition('item_id', $sapiId)
-      ->execute();
-
+    joinup_oss_catalogue_toggle('disable');
     // Only clear cache for anonymous.
     $this->pageCache->deleteAll();
     $this->messenger()->addStatus($this->t('EU OSS Catalogue has been disabled'));
