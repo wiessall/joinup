@@ -96,7 +96,6 @@ permissions:
   - 'administer footer-european-commission menu items'
   - 'administer footer-follow-us menu items'
   - 'administer footer-help-and-support menu items'
-  - 'administer matomo integration'
   - 'administer navbar menu items'
   - 'administer nodes'
   - 'administer organic groups'
