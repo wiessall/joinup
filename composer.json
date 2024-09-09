@@ -111,7 +111,7 @@
         "drupal/svg_image": "^3.0",
         "drupal/symfony_mailer_lite": "^1.0",
         "drupal/theme_rule": "^1.0",
-        "drupal/tmgmt_ec_etranslation": "^1.0",
+        "drupal/tmgmt_ec_etranslation": "^1.1",
         "drupal/token": "~1.7",
         "drupal/video_embed_field": "^2",
         "drupal/view_unpublished": "^1.0",
