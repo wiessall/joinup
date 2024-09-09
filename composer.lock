@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "486747bcc153a93ce7eccf5be8985611",
+    "content-hash": "1d3ce595887470c71a55f78d705de8fe",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -8900,27 +8900,31 @@
         },
         {
             "name": "drupal/tmgmt_ec_etranslation",
-            "version": "1.0.0",
+            "version": "1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/tmgmt_ec_etranslation.git",
-                "reference": "1.0.0"
+                "reference": "1.1.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/tmgmt_ec_etranslation-1.0.0.zip",
-                "reference": "1.0.0",
-                "shasum": "dbdae0176227b239bfff140467171480e080fde0"
+                "url": "https://ftp.drupal.org/files/projects/tmgmt_ec_etranslation-1.1.0.zip",
+                "reference": "1.1.0",
+                "shasum": "017703c1d307a53983140a1b3b090cd934ff4da3"
             },
             "require": {
-                "drupal/core": "^8 || ^9 || ^10",
-                "drupal/tmgmt": "*"
+                "drupal/core": "^9.2 || ^10",
+                "drupal/tmgmt": "^1.5",
+                "php": ">=8.0"
+            },
+            "require-dev": {
+                "drupal/http_request_mock": "^1.1"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "1.0.0",
-                    "datestamp": "1685699050",
+                    "version": "1.1.0",
+                    "datestamp": "1725891728",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -8929,7 +8933,7 @@
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
             "license": [
-                "GPL-2.0-or-later"
+                "GPL-2.0+"
             ],
             "authors": [
                 {
@@ -8943,6 +8947,11 @@
             ],
             "description": "TMGMT plugin for eTranslation, an online machine translation service provided by the European Commission (EC).",
             "homepage": "https://www.drupal.org/project/tmgmt_ec_etranslation",
+            "keywords": [
+                "Drupal",
+                "tmgmt",
+                "translation"
+            ],
             "support": {
                 "source": "https://git.drupalcode.org/project/tmgmt_ec_etranslation"
             }
