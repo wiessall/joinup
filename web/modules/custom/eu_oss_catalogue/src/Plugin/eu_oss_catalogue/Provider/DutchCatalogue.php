@@ -21,21 +21,19 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * @EuOssCatalogueProvider(
  *   id = "dutch_catalogue",
  *   label = @Translation("Dutch catalogue"),
- *   description = @Translation("Dutch catalogue onboarding."),
+ *   description = @Translation("Dutch open source software solutions for the public administrations."),
  *   parser = "publiccode_yml",
  * )
  */
 class DutchCatalogue extends EuOssCatalogueProviderPluginBase {
 
   /**
-   * Developers Italia API endpoint.
-   *
-   * @var string
+   * Dutch catalogue endpoint.
    */
   protected const string ENDPOINT = 'https://gist.githubusercontent.com/dvh/95a09cf9df9b4567c256c188a0e8f4b2/raw';
 
   /**
-   * List of projects fetched from Developers Italia API.
+   * List of projects fetched from Dutch catalogue API.
    *
    * @var array[][]
    *   A list of fetched projects keyed by the coding platform base URL. The
