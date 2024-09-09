@@ -6,6 +6,7 @@ namespace Drupal\joinup_release\Entity;
 
 use Drupal\collection\Entity\CollectionContentInterface;
 use Drupal\joinup_bundle_class\DescriptionInterface;
+use Drupal\joinup_core\Entity\PermalinkInterface;
 use Drupal\joinup_distribution\Entity\DistributionsParentInterface;
 use Drupal\joinup_publication_date\Entity\EntityPublicationTimeInterface;
 use Drupal\joinup_rdf\Entity\RdfSyncEntityInterface;
@@ -18,7 +19,7 @@ use Drupal\solution\Entity\SolutionInterface;
 /**
  * Interface for asset release entities in Joinup.
  */
-interface ReleaseInterface extends NodeInterface, RdfSyncEntityInterface, CollectionContentInterface, SolutionContentInterface, EntityPublicationTimeInterface, EntityWorkflowStateInterface, DistributionsParentInterface, DescriptionInterface, ArchivableEntityInterface {
+interface ReleaseInterface extends NodeInterface, RdfSyncEntityInterface, CollectionContentInterface, SolutionContentInterface, EntityPublicationTimeInterface, EntityWorkflowStateInterface, DistributionsParentInterface, DescriptionInterface, ArchivableEntityInterface, PermalinkInterface {
 
   /**
    * Checks whether this release is the latest release of the parent solution.
