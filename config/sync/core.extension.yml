@@ -243,6 +243,7 @@ module:
   text: 0
   theme_rule: 0
   tmgmt: 0
+  tmgmt_content: 0
   tmgmt_ec_etranslation: 0
   token: 0
   toolbar: 0
