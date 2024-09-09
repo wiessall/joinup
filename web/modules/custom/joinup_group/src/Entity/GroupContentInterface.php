@@ -6,7 +6,6 @@ namespace Drupal\joinup_group\Entity;
 
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Field\EntityReferenceFieldItemList;
-use Drupal\joinup_core\Entity\PermalinkInterface;
 
 /**
  * Interface for entities that are group content.
@@ -15,7 +14,7 @@ use Drupal\joinup_core\Entity\PermalinkInterface;
  * - collections: community content, custom pages, and solutions.
  * - solutions: asset releases and asset distributions.
  */
-interface GroupContentInterface extends ContentEntityInterface, PermalinkInterface {
+interface GroupContentInterface extends ContentEntityInterface {
 
   /**
    * Returns whether or not the entity is associated with a group.
