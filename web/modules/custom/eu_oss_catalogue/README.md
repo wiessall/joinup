@@ -246,7 +246,7 @@ Run the following, to fetch from
 ```
 
 Run the following, to fetch from
-Dutch catalogue onboarding
+Fetch solutions from Dutch catalogue
 ```bash
 ./vendor/bin/drush eu-oss:fetch dutch_catalogue
 
