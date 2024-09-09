@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup\Form;
 
 use Drupal\Core\Access\CsrfTokenGenerator;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Form\FormBase;
@@ -12,6 +13,10 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 use Drupal\csv_serialization\Encoder\CsvEncoder;
 use Drupal\joinup_user\EntityAuthorshipHelperInterface;
+use Drupal\og\MembershipManagerInterface;
+use Drupal\og\OgMembershipInterface;
+use Drupal\og\OgRoleInterface;
+use Drupal\taxonomy\TermInterface;
 use Drupal\user\UserInterface;
 use Drupal\user\UserStorageInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -72,53 +77,31 @@ class ExportUserListForm extends FormBase {
       'input' => ['getFieldValues', ['uid']],
       'output' => ['getFirstValue', 'formatProfileLink'],
     ],
+    'Country of origin' => [
+      'input' => ['getFieldValues', ['field_user_nationality']],
+      'output' => ['formatTaxonomyTermLabel'],
+    ],
+    'Professional domain' => [
+      'input' => ['getFieldValues', ['field_user_professional_domain']],
+      'output' => ['formatTaxonomyTermLabel'],
+    ],
+    'Organisation' => [
+      'input' => ['getFieldValues', ['field_user_organisation']],
+      'output' => ['getAllValues', 'formatString'],
+    ],
+    'Business title' => [
+      'input' => ['getFieldValues', ['field_user_business_title']],
+      'output' => ['getFirstValue', 'formatString'],
+    ],
   ];
 
-  /**
-   * The entity type manager.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
-
-  /**
-   * The entity authorship helper service.
-   *
-   * @var \Drupal\joinup_user\EntityAuthorshipHelperInterface
-   */
-  protected $entityAuthorshipHelper;
-
-  /**
-   * The filesystem service.
-   *
-   * @var \Drupal\Core\File\FileSystemInterface
-   */
-  protected $fileSystem;
-
-  /**
-   * The CSRF token generator.
-   *
-   * @var \Drupal\Core\Access\CsrfTokenGenerator
-   */
-  protected $csrfTokenGenerator;
-
-  /**
-   * Constructs an ExportUserListForm.
-   *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *   The entity type manager.
-   * @param \Drupal\joinup_user\EntityAuthorshipHelperInterface $entityAuthorshipHelper
-   *   The entity authorship helper service.
-   * @param \Drupal\Core\File\FileSystemInterface $fileSystem
-   *   The filesystem service.
-   * @param \Drupal\Core\Access\CsrfTokenGenerator $csrfTokenGenerator
-   *   The CSRF token generator service.
-   */
-  public function __construct(EntityTypeManagerInterface $entityTypeManager, EntityAuthorshipHelperInterface $entityAuthorshipHelper, FileSystemInterface $fileSystem, CsrfTokenGenerator $csrfTokenGenerator) {
-    $this->entityTypeManager = $entityTypeManager;
-    $this->entityAuthorshipHelper = $entityAuthorshipHelper;
-    $this->fileSystem = $fileSystem;
-    $this->csrfTokenGenerator = $csrfTokenGenerator;
+  public function __construct(
+    protected EntityTypeManagerInterface $entityTypeManager,
+    protected EntityAuthorshipHelperInterface $entityAuthorshipHelper,
+    protected MembershipManagerInterface $membershipManager,
+    protected FileSystemInterface $fileSystem,
+    protected CsrfTokenGenerator $csrfTokenGenerator,
+  ) {
   }
 
   /**
@@ -128,6 +111,7 @@ class ExportUserListForm extends FormBase {
     return new static(
       $container->get('entity_type.manager'),
       $container->get('joinup_user.entity_authorship_helper'),
+      $container->get('og.membership_manager'),
       $container->get('file_system'),
       $container->get('csrf_token')
     );
@@ -153,6 +137,17 @@ class ExportUserListForm extends FormBase {
       '#required' => TRUE,
     ];
 
+    $form['group'] = [
+      '#type' => 'entity_autocomplete',
+      '#title' => $this->t('Group'),
+      '#description' => $this->t('Filter on a specific collection / solution.'),
+      '#maxlength' => 1024,
+      '#target_type' => 'rdf_entity',
+      '#selection_settings' => [
+        'target_bundles' => ['collection', 'solution'],
+      ],
+    ];
+
     $form['actions'] = [
       '#type' => 'actions',
     ];
@@ -168,9 +163,18 @@ class ExportUserListForm extends FormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    // Retrieve all user IDs, but exclude the anonymous user.
-    $user_ids = $this->getUserStorage()->getQuery()->accessCheck(FALSE)->execute();
-    unset($user_ids[0]);
+    $group_id = $form_state->getValue('group');
+    if ($group_id) {
+      // Retrieve all user IDs for a specific group.
+      $group_entity = $this->entityTypeManager->getStorage('rdf_entity')->load($group_id);
+      \assert($group_entity instanceof EntityInterface);
+      $user_ids = $this->getGroupMemberUids($group_entity);
+    }
+    else {
+      // Retrieve all user IDs, but exclude the anonymous user.
+      $user_ids = $this->getUserStorage()->getQuery()->accessCheck(FALSE)->execute();
+      unset($user_ids[0]);
+    }
 
     // Split up the work in batches of 250 users.
     $form_class = $this;
@@ -315,6 +319,19 @@ class ExportUserListForm extends FormBase {
   }
 
   /**
+   * Output processor; returns all field values of a multivalue array.
+   *
+   * @param array $value
+   *   The multivalue array.
+   *
+   * @return mixed
+   *   The first value.
+   */
+  protected function getAllValues(array $value): mixed {
+    return array_filter(array_column($value, 'value'));
+  }
+
+  /**
    * Output processor; returns the first value of a multivalue array.
    *
    * @param array $value
@@ -343,6 +360,10 @@ class ExportUserListForm extends FormBase {
    *   The value as a string.
    */
   protected function formatString($value): string {
+    if (\is_array($value)) {
+      return implode(PHP_EOL, $value);
+    }
+
     return (string) $value;
   }
 
@@ -373,7 +394,7 @@ class ExportUserListForm extends FormBase {
       return $value['target_id'];
     }, $values);
     sort($values);
-    return implode(',', $values);
+    return implode(PHP_EOL, $values);
   }
 
   /**
@@ -420,6 +441,28 @@ class ExportUserListForm extends FormBase {
   }
 
   /**
+   * Output processor; returns taxonomy term labels.
+   *
+   * @param array $values
+   *   The field values.
+   *
+   * @return string
+   *   The term labels.
+   */
+  protected function formatTaxonomyTermLabel(array $values): string {
+    $ids = array_filter(array_column($values, 'target_id'));
+    if (empty($ids)) {
+      return '';
+    }
+
+    $storage = $this->entityTypeManager->getStorage('taxonomy_term');
+    $labels = array_map(static function (TermInterface $term): string {
+      return $term->label();
+    }, $storage->loadMultiple($ids));
+    return implode(PHP_EOL, $labels);
+  }
+
+  /**
    * Returns the user storage.
    *
    * @return \Drupal\user\UserStorageInterface
@@ -427,6 +470,27 @@ class ExportUserListForm extends FormBase {
    */
   protected function getUserStorage(): UserStorageInterface {
     return $this->entityTypeManager->getStorage('user');
+  }
+
+  /**
+   * Returns user IDs of all active members for the given OG group.
+   *
+   * @param \Drupal\Core\Entity\EntityInterface $group
+   *   The group entity.
+   *
+   * @return array
+   *   An array of user IDs.
+   */
+  public function getGroupMemberUids(EntityInterface $group): array {
+    $og_membership_ids = $this->membershipManager->getGroupMembershipIdsByRoleNames($group, [OgRoleInterface::AUTHENTICATED]);
+    if (empty($og_membership_ids)) {
+      return [];
+    }
+
+    $memberships = $this->entityTypeManager->getStorage('og_membership')->loadMultiple($og_membership_ids);
+    return array_values(array_map(static function (OgMembershipInterface $membership): int {
+      return (int) $membership->getOwnerId();
+    }, $memberships));
   }
 
 }

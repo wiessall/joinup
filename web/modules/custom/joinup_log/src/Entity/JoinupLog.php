@@ -79,6 +79,11 @@ final class JoinupLog extends ContentEntityBase implements JoinupLogInterface {
       ->setDescription(new TranslatableMarkup('Text of log message to be passed into the t() function.'))
       ->setRequired(TRUE);
 
+    $fields['variables'] = BaseFieldDefinition::create('map')
+      ->setLabel(new TranslatableMarkup('Variables'))
+      ->setDefaultValue(serialize([]))
+      ->setDescription(new TranslatableMarkup('Serialized array of variables that match the message string and that is passed into the t() function.'));
+
     $fields['severity'] = BaseFieldDefinition::create('list_integer')
       ->setLabel(new TranslatableMarkup('Severity'))
       ->setDescription(new TranslatableMarkup('The severity level of the event; ranges from 0 (Emergency) to 7 (Debug)'))
@@ -194,6 +199,7 @@ final class JoinupLog extends ContentEntityBase implements JoinupLogInterface {
       'joinup:transfer_the_ownership_of_the_collection_to_member' => new TranslatableMarkup('Transfer the ownership of the collection to member'),
       'joinup:add_role' => new TranslatableMarkup('Add role to member'),
       'joinup:remove_role' => new TranslatableMarkup('Remove role to member'),
+      'joinup:undefined' => new TranslatableMarkup('Undefined'),
     ];
   }
 

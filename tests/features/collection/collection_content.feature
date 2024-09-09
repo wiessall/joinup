@@ -27,9 +27,6 @@ Feature: Collection content
     And news content:
       | title                          | body                                                           | state     | collection                | changed    | topic             |
       | Turin Egyptian Museum Reopened | <p>After <em>more than</em> <a href="#link">two years</a>.</p> | published | Turin Egyptian Collection | 2019-11-19 | Supplier exchange |
-    And video content:
-      | title                                  | state     | collection                | creation date    | changed          |
-      | Watch the mummy conservation technique | published | Turin Egyptian Collection | 2017-11-29T11:11 | 2017-11-30T17:30 |
 
   Scenario: Publishing new solutions should result in counters being properly updated.
     Given owner content:
@@ -88,7 +85,8 @@ Feature: Collection content
     Given I am logged in as a moderator
     When I go to the homepage of the "Turin Egyptian Collection" collection
     And I press "Join this collection"
-    And I press "Subscribe" in the "Modal buttons" region
+    And I press "Confirm" in the "Modal buttons" region
+    And I wait for AJAX to finish
     Then I go to "/user"
     # Assert that the "Collection" tile is present and contains number of members, label and bundle type.
     Then I should see the "Turin Egyptian Collection" tile
@@ -102,7 +100,6 @@ Feature: Collection content
     And the "Event" content tab is displayed
     And I should see the link "1 News"
     And I should see the link "1 Solution"
-    And I should see the link "1 Video"
 
     Given the following solution:
       | title      | Protecting Artifacts      |
@@ -120,9 +117,6 @@ Feature: Collection content
     And news content:
       | title                                  | state     | collection                |
       | Museum Temporary Closed Next Wednesday | published | Turin Egyptian Collection |
-    And video content:
-      | title                              | state     | collection                |
-      | Understand the restoration process | published | Turin Egyptian Collection |
 
     Given I reload the page
     Then the "Discussions" content tab is not displayed
@@ -130,7 +124,6 @@ Feature: Collection content
     And the "Events" content tab is displayed
     And I should see the link "2 News"
     And I should see the link "2 Solutions"
-    And I should see the link "2 Videos"
 
     Then I visit "/collection/turin-egyptian-collection?f=&page=9"
     When the response status code should be 200
@@ -168,11 +161,6 @@ Feature: Collection content
     And I should not see the text "After more than two years." in the "Turin Egyptian Museum Reopened" tile
     And I should see the text "Supplier exchange" in the "Turin Egyptian Museum Reopened" tile
     And I should see the text "News" in the "Turin Egyptian Museum Reopened" tile
-    # Check the video tile.
-    And I should see the "Watch the mummy conservation technique" tile
-    And I should see the text "Last update: 30/11/2017" in the "Watch the mummy conservation technique" tile
-    And I should see the link "Watch the mummy conservation technique" in the "Watch the mummy conservation technique" tile
-    And I should see the text "Video" in the "Watch the mummy conservation technique" tile
 
     # Check the discussion tile.
     When I go to the discussions page of "Turin Egyptian Collection"

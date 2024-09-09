@@ -4,6 +4,7 @@ status: true
 dependencies:
   config:
     - field.field.meta_entity.collection_settings.announcements_enabled
+    - field.field.meta_entity.collection_settings.code_of_conduct
     - field.field.meta_entity.collection_settings.glossary_link_only_first
     - field.field.meta_entity.collection_settings.label_join
     - field.field.meta_entity.collection_settings.label_leave
@@ -23,7 +24,7 @@ content:
       format_custom_false: ''
       format_custom_true: ''
     third_party_settings: {  }
-    weight: 4
+    weight: 24
     region: content
   changed:
     type: timestamp
@@ -42,7 +43,7 @@ content:
         granularity: 2
         refresh: 60
     third_party_settings: {  }
-    weight: 2
+    weight: 22
     region: content
   created:
     type: timestamp
@@ -61,7 +62,7 @@ content:
         granularity: 2
         refresh: 60
     third_party_settings: {  }
-    weight: 1
+    weight: 20
     region: content
   glossary_link_only_first:
     type: boolean
@@ -71,7 +72,7 @@ content:
       format_custom_false: ''
       format_custom_true: ''
     third_party_settings: {  }
-    weight: 3
+    weight: 23
     region: content
   label:
     type: string
@@ -79,7 +80,7 @@ content:
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    weight: 0
+    weight: -5
     region: content
   metadata_banner_disabled:
     type: boolean
@@ -89,9 +90,10 @@ content:
       format_custom_false: ''
       format_custom_true: ''
     third_party_settings: {  }
-    weight: 5
+    weight: 25
     region: content
 hidden:
+  code_of_conduct: true
   label_join: true
   label_leave: true
   landing_page: true

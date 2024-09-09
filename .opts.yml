@@ -6,38 +6,30 @@
 upgrade_commands:
   default:
     - touch disable-config-readonly
-    - ./vendor/bin/drush deploy --yes
-    - ./vendor/bin/drush search-api:reset-tracker --yes
-    - ./vendor/bin/drush joinup:node-access-rebuild
-    - ./vendor/bin/drush joinup:search-api-tasks
-    - ./vendor/bin/drush twigc --yes
+    - vendor/bin/drush deploy --yes
+    - vendor/bin/drush search-api:reset-tracker --yes
+    - vendor/bin/drush joinup:node-access-rebuild
+    - vendor/bin/drush joinup:search-api-tasks
+    - vendor/bin/drush twigc --yes
     - rm disable-config-readonly
-    - ./vendor/bin/drush joinup:unpublish-alert --category
-    - ./scripts/check_status_report.php
+    - vendor/bin/drush joinup:unpublish-alert --category
+    - scripts/check_status_report.php
   append:
     production:
-      - touch disable-eu-oss-catalogue
+      # TODO: Remove this command in ISAICP-9053.
+      - vendor/bin/drush state:set joinup.oss_catalogue_is_disabled 1 --input-format=boolean
     acceptance:
       - touch disable-config-readonly
-      - ./vendor/bin/drush joinup:acc
-      - ./vendor/bin/drush cache:rebuild
+      - vendor/bin/drush joinup:acc
+      - vendor/bin/drush cache:rebuild
       - rm disable-config-readonly
-      # Remove this line when deploying to POC.
-      - touch disable-eu-oss-catalogue
-      - ./vendor/bin/drush eu-oss:fetch developers_italia
-      - ./vendor/bin/drush eu-oss:fetch hosting_platform:open_code
-      - ./vendor/bin/drush queue:run eu_oss_catalogue
-      - ./vendor/bin/drush queue:run joinup_oss_catalogue_imagecache_warmer
+      # TODO: Remove this command in ISAICP-9053.
+      - vendor/bin/drush state:set joinup.oss_catalogue_is_disabled 1 --input-format=boolean
     ephemeral:
       - touch disable-config-readonly
-      - ./vendor/bin/drush joinup:acc
-      - ./vendor/bin/drush cache:rebuild
+      - vendor/bin/drush joinup:acc
+      - vendor/bin/drush cache:rebuild
       - rm disable-config-readonly
-      - ./vendor/bin/drush eu-oss:fetch developers_italia
-      - ./vendor/bin/drush eu-oss:fetch hosting_platform:open_code
-      - ./vendor/bin/drush queue:run eu_oss_catalogue
-      - ./vendor/bin/drush queue:run joinup_oss_catalogue_imagecache_warmer
-
 php_version: 8.3
 extra_pkgs:
   - php8.3-apcu
