@@ -203,16 +203,3 @@ function joinup_rdf_tokens($type, $tokens, array $data, array $options, Bubbleab
     $tokens['rdf-uri'] => $entity->getUri(),
   ];
 }
-
-/**
- * Implements hook_update_dependencies().
- *
- * @todo Remove after v1.112.1 is released, in ISAICP-8376.
- */
-function joinup_rdf_update_dependencies(): array {
-  return [
-    'joinup_rdf' => [
-      200001 => ['joinup_oss_catalogue' => 200001],
-    ],
-  ];
-}
