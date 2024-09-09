@@ -108,3 +108,9 @@ Feature:
     Then I should see the heading "Dream Domain"
     And I should see "You're safe from pain in the dream domain."
     And the url should match "/taxonomy/term/\d+"
+
+  Scenario: Test paths corresponding to EU persistent URI namespaces without a matching uuid
+    Given I am on "data/dr8/non-existing-uiid"
+    Then I should see the heading "Page not found"
+    When I am on "data/w21/non-existing-uiid"
+    Then I should see the heading "Page not found"

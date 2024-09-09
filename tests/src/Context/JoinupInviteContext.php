@@ -21,7 +21,7 @@ class JoinupInviteContext extends RawDrupalContext {
   use UserTrait;
 
   /**
-   * Accepts or rejects an invitation.
+   * Visits the invitation form.
    *
    * @param string $action
    *   The action being taken on the invitation, can be either 'accept' or
@@ -37,9 +37,9 @@ class JoinupInviteContext extends RawDrupalContext {
    * @throws \InvalidArgumentException
    *   Thrown when the action is anything other than 'accept' or 'reject'.
    *
-   * @When I :action the invitation for the :title :bundle :type
+   * @When I visit the :action invitation form for the :title :bundle :type
    */
-  public function acceptInvitation(string $action, string $title, string $bundle, string $type): void {
+  public function visitInvitationForm(string $action, string $title, string $bundle, string $type): void {
     if (!in_array($type, ['group', 'content'])) {
       throw new \InvalidArgumentException("Unknown type '$action'. Valid actions are 'group' and 'content'.");
     }

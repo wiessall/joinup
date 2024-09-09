@@ -47,4 +47,23 @@ interface InvitationEventInterface {
    */
   public function setAction(string $action): self;
 
+  /**
+   * Sets whether to subscribe or not.
+   *
+   * @param bool $subscribe
+   *   Whether to subscribe or not.
+   *
+   * @return InvitationEventInterface
+   *   The updated InvitationEventInterface instance.
+   */
+  public function setSubscribe(bool $subscribe): InvitationEventInterface;
+
+  /**
+   * Gets the subscribe value.
+   *
+   * @return bool
+   *   The subscribe value.
+   */
+  public function getSubscribe(): bool;
+
 }

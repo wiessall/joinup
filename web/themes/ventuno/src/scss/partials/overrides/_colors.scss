@@ -10,6 +10,12 @@ $secondary: color.adjust(
   $lightness: 47.84%
 ); // #e7f1fb
 
+$secondary-darker: color.adjust(
+  $secondary,
+  $saturation: -1.06%,
+  $lightness: -5.1%
+); // #d1e4f7
+
 $brand-darker: color.adjust($brand, $lightness: -15%); // #0b4e97
 $primary-darker: color.adjust(
   $primary,

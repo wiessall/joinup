@@ -38,6 +38,7 @@ drupal:
         - Custom error handler
         - Permissions
         - Null mail collector
+        - EU OSS Catalogue
       site-clone:
         - Main settings
         - Databases
@@ -116,6 +117,7 @@ drupal:
         - Custom queue services
         - Test mail collector
         - Monolog
+        - EU OSS Catalogue
       phpunit:
         - Main settings
         - Databases
@@ -133,6 +135,7 @@ drupal:
         - Verbose error logging
         - Custom queue services
         - Test mail collector
+        - EU OSS Catalogue
       prod:
         - Main settings
         - Site email
@@ -377,7 +380,6 @@ drupal:
         $settings['reverse_proxy'] = (bool) getenv('DRUPAL_REVERSE_PROXY_ENABLE');
         $settings['reverse_proxy_addresses'] = array_filter(explode(',', (string) getenv('DRUPAL_REVERSE_PROXY_ADDRESSES')));
       EU OSS Catalogue: |
-        $settings['eu_oss_catalogue']['enabled'] = !file_exists(getcwd() . '/../disable-eu-oss-catalogue');
         $settings['eu_oss_catalogue']['platform_github']['access_token'] = getenv('JOINUP_GITHUB_TOKEN');
       Stage file proxy: |
         $config['stage_file_proxy.settings']['hotlink'] = TRUE;

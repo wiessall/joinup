@@ -49,7 +49,7 @@ Feature: User profile
     And I should see the text "Supplier exchange"
     And I should see the link "Edit"
     And the link "Facebook" in the "Header" region should point to "https://www.facebook.com/leodavinci"
-    And the link "X" in the "Header" region should point to "https://www.x.com/therealdavinci"
+    And the link "X" in the "Header" region should point to "https://x.com/therealdavinci"
     And the link "LinkedIn" in the "Header" region should point to "https://www.linkedin.com/leonardo.davinci"
     And the link "GitHub" in the "Header" region should point to "https://github.com/davinci"
     And the link "Mastodon" in the "Header" region should point to "https://myaccount.pl"
@@ -124,9 +124,6 @@ Feature: User profile
     And news content:
       | title                         | author        | collection       | state     | created         |
       | Discovered new flower species | Corwin Robert | Botanic E.D.E.N. | published | 2018-11-15 9:01 |
-    And video content:
-      | title                 | author        | collection       | state     | created         |
-      | Planting a tree howto | Corwin Robert | Botanic E.D.E.N. | published | 2017-10-30 9:30 |
     # Contact information and owner tiles should never be shown.
     And contact_information content:
       | name           | email                      | website url        | author        |
@@ -149,11 +146,10 @@ Feature: User profile
       | Discovered new flower species |
       | Spring blossom party          |
       | Repopulating blue iris        |
-      | Planting a tree howto         |
       | Cherry blossoms schedule      |
       | SOUND project                 |
       | Botanic E.D.E.N.              |
-    And I should see the following facet items "Collection, Discussion, Document, Event, News, Solution, Video" in this order
+    And I should see the following facet items "Collection, Discussion, Document, Event, News, Solution" in this order
 
     # A message should be shown when visiting a profile of a user without
     # content.

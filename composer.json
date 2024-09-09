@@ -58,7 +58,7 @@
         "drupal/honeypot": "~2",
         "drupal/iframe": "^2",
         "drupal/image_library_widget": "^2.0",
-        "drupal/imagecache_external": "^3.0",
+        "drupal/imagecache_external": "3.0.1",
         "drupal/inline_entity_form": "^3.0",
         "drupal/jquery_ui_accordion": "^2.1",
         "drupal/json_field": "^1.0",
@@ -279,9 +279,6 @@
             "drupal/core": "-p2"
         },
         "patches": {
-            "bitbucket/client": {
-                "Slashes in file path used in Src and Downloads API classes are url-encoded @see https://github.com/BitbucketPHP/Client/pull/83": "resources/patch/php/bitbucket/client/fe8b7771e51d2a2852b75e7be90fc871b1bc895f.diff"
-            },
             "cfpinto/graphql": {
                 "Enum argument https://github.com/cfpinto/graphql/issues/24": "resources/patch/php/cfpinto/graphql/25.diff"
             },
@@ -289,7 +286,7 @@
                 "Uncaught TypeError: $(...).once is not a function @see https://www.drupal.org/project/addtocal/issues/3372354": "resources/patch/php/drupal/addtocal/3372354.patch"
             },
             "drupal/autologout": {
-                "Warning: Undefined array key @see https://www.drupal.org/project/autologout/issues/3372010": "resources/patch/php/drupal/autologout/3372010.diff",
+                "Warning: Undefined array key @see https://www.drupal.org/project/autologout/issues/3372010": "resources/patch/php/drupal/autologout/3372010-29.patch",
                 "Users with no roles are logged out @see https://www.drupal.org/project/autologout/issues/3443711": "resources/patch/php/drupal/autologout/3443711.diff"
             },
             "drupal/cas_mock_server": {
@@ -319,6 +316,7 @@
                 "Media Library: Argument #1 ($array) must be of type array, null given in array_filter(). @see https://www.drupal.org/i/3340973": "resources/patch/php/drupal/core/3340973.diff",
                 "Add validation constraint to type: plural_label; remove work-around from views.field.numeric:format_plural_string @see https://www.drupal.org/i/3409588": "resources/patch/php/drupal/core/3409588.diff",
                 "MediaLibraryUiBuilder service does not properly allow additional contextual filter arguments @see https://www.drupal.org/i/3401726": "resources/patch/php/drupal/core/3401726.diff",
+                "The submit button is not following any condition while in popup/dialogs @see https://drupal.org/i/3008172": "resources/patch/php/drupal/core/3008172-43.patch",
                 "Added deprecation suppression": "resources/patch/php/drupal/core/3467293.diff",
                 "Fix handling of unknown file extensions in FileMediaFormatterBase @see https://www.drupal.org/i/3466462": "resources/patch/php/drupal/core/3466462.diff"
             },
@@ -364,9 +362,7 @@
             "drupal/flag": {
                 "TypeError: Argument 1 passed to FlagCount::count() must implement interface @see https://www.drupal.org/project/flag/issues/3168014": "resources/patch/php/drupal/flag/3168014.diff",
                 "AJAX link broken if flaggable entity id is string @see https://www.drupal.org/project/flag/issues/3359007": "resources/patch/php/drupal/flag/3359007-47.patch",
-                "Disclose flagging view mode in flag theming @see https://www.drupal.org/project/flag/issues/3049155": "resources/patch/php/drupal/flag/3049155-16.patch",
-                "[Drupal 10.2] Deprecated sequence type schema definition @see https://www.drupal.org/i/3410265": "resources/patch/php/drupal/flag/3410265.diff",
-                "[Drupal 10.2] Merge::key() with array is deprecated @see https://www.drupal.org/i/3410363": "resources/patch/php/drupal/flag/3410363.diff"
+                "Disclose flagging view mode in flag theming @see https://www.drupal.org/project/flag/issues/3049155": "resources/patch/php/drupal/flag/3049155-16.patch"
             },
             "drupal/honeypot": {
                 "Behat integration. @see https://www.drupal.org/project/honeypot/issues/3059040": "resources/patch/php/drupal/honeypot/3059040.patch",
@@ -429,10 +425,7 @@
                 "URL don't include the base path @see https://www.drupal.org/project/search_api_spellcheck/issues/3280372": "resources/patch/php/drupal/search_api_spellcheck/3280372.patch"
             },
             "drupal/social_media_links": {
-                "Missing config schema for field, widget and formatter @see https://www.drupal.org/node/2898680": "resources/patch/php/drupal/social_media_links/2898680.patch",
-                "Mastodon should not have a fixed URL prefix. @see https://www.drupal.org/project/social_media_links/issues/3319694": "resources/patch/php/drupal/social_media_links/3319694.patch",
-                "Theme suggestions for social_media_links_field. @see https://www.drupal.org/project/social_media_links/issues/3397614": "resources/patch/php/drupal/social_media_links/3397614.patch",
-                "Convert Twitter to X @see https://www.drupal.org/project/social_media_links/issues/3384469": "resources/patch/php/drupal/social_media_links/3384469-7.patch"
+                "Missing config schema for field, widget and formatter @see https://www.drupal.org/node/2898680": "resources/patch/php/drupal/social_media_links/2898680.patch"
             },
             "drupal/sparql_entity_storage": {
                 "Interface contract violation @see https://drupal.org/i/3379328": "resources/patch/php/drupal/sparql_entity_storage/3379328.patch",
@@ -464,11 +457,11 @@
                 "Webform might create invalid link renderable arrays on submission list. @see https://www.drupal.org/project/webform/issues/3441600": "resources/patch/php/drupal/webform/3441600.patch"
             },
             "gitonomy/gitlib": {
-                "Edge case: Empty message in the first commit @see https://github.com/gitonomy/gitlib/pull/217": "resources/patch/gitonomy/gitlib/217.diff"
+                "Edge case: Empty message in the first commit @see https://github.com/gitonomy/gitlib/pull/217": "resources/patch/php/gitonomy/gitlib/217.diff"
             },
             "m4tthumphrey/php-gitlab-api": {
-                "GraphQL API @see https://github.com/GitLabPHP/Client/issues/766": "resources/patch/php/drupal/m4tthumphrey/php-gitlab-api/772.diff",
-                "Add support for prefixed URIs on base path @see https://github.com/GitLabPHP/Client/issues/726": "resources/patch/php/drupal/m4tthumphrey/php-gitlab-api/726.diff"
+                "GraphQL API @see https://github.com/GitLabPHP/Client/issues/766": "resources/patch/php/m4tthumphrey/php-gitlab-api/772.diff",
+                "Add support for prefixed URIs on base path @see https://github.com/GitLabPHP/Client/issues/726": "resources/patch/php/m4tthumphrey/php-gitlab-api/726.diff"
             },
             "lullabot/mink-selenium2-driver": {
                 "Add missing mouseover before clicking on radio/select elements - https://github.com/Lullabot/MinkSelenium2Driver/pull/14": "resources/patch/php/lullabot/mink-selenium2-driver/selenium2-mouseover-fixes.patch"

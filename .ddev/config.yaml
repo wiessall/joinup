@@ -12,6 +12,8 @@ webimage_extra_packages:
     # Both required by mydumper.
     - libatomic1
     - zstd
+    # Required by python2.
+    - mime-support
 
 # It's not possible to use fpfis/httpd-php because DDEV is strongly advising
 # against using a non-DDEV image. But this has no impact on the Joinup code runs
