@@ -6,6 +6,8 @@ namespace Drupal\dashboard\Form;
 
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Cache\CacheBackendInterface;
+use Drupal\Core\Database\Connection;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
@@ -13,6 +15,9 @@ use Drupal\Core\State\StateInterface;
 use Drupal\Core\Url;
 use Drupal\joinup_core\Logger\Handler\MailHandler;
 use Drupal\joinup_core\Logger\Handler\TelegramHandler;
+use Drupal\joinup_oss_catalogue\OssCatalogueCollectionInterface;
+use Drupal\rdf_sync\RdfSyncConnectionInterface;
+use Solarium\Core\Query\Helper;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -23,6 +28,9 @@ class DashboardForm extends FormBase {
   public function __construct(
     protected StateInterface $state,
     protected CacheBackendInterface $pageCache,
+    protected EntityTypeManagerInterface $entityTypeManager,
+    protected RdfSyncConnectionInterface $rdfSyncConnection,
+    protected Connection $db,
   ) {
   }
 
@@ -33,6 +41,9 @@ class DashboardForm extends FormBase {
     return new static(
       $container->get('state'),
       $container->get('cache.page'),
+      $container->get('entity_type.manager'),
+      $container->get('rdf_sync.connection'),
+      $container->get('database'),
     );
   }
 
@@ -125,6 +136,10 @@ class DashboardForm extends FormBase {
    */
   public function enableEuOssCatalogueSubmitForm(): void {
     $this->state->delete('joinup.oss_catalogue_is_disabled');
+    $this->entityTypeManager->getStorage('rdf_entity')
+      ->load(OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID)
+      ->set('field_ar_state', 'published')
+      ->save();
     // Only clear cache for anonymous.
     $this->pageCache->deleteAll();
     $this->messenger()->addStatus($this->t('EU OSS Catalogue has been enabled'));
@@ -137,6 +152,35 @@ class DashboardForm extends FormBase {
    */
   public function disableEuOssCatalogueSubmitForm(): void {
     $this->state->set('joinup.oss_catalogue_is_disabled', TRUE);
+    $uri = OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID;
+    $collection = $this->entityTypeManager->getStorage('rdf_entity')->load($uri);
+    $collection->set('field_ar_state', 'draft')->save();
+
+    // Unfortunately, we cannot unpublish a collection. When setting the state
+    // to 'draft', we're creating a forward revision. In order to unpublish, we:
+    // - Remove the published triples.
+    // - Remove the document from Solr and from search_api_item table.
+    $sparql = <<<SPARQL
+      WITH <http://joinup.eu/collection/published>
+      DELETE { <$uri> ?p ?o }
+      WHERE  { <$uri> ?p ?o }
+      SPARQL;
+    $this->rdfSyncConnection->update($sparql);
+    $sapiId = 'entity:rdf_entity/' . $uri;
+    $solrHelper = new Helper();
+    /** @var \Drupal\search_api_solr\SolrConnectorInterface $connector */
+    $connector = $this->entityTypeManager->getStorage('search_api_server')
+      ->load('joinup')->getBackend()->getSolrConnector();
+    $updateQuery = $connector
+      ->getUpdateQuery()
+      ->addDeleteQuery('ss_search_api_id:' . $solrHelper->escapePhrase($sapiId))
+      ->addCommit();
+    $connector->update($updateQuery);
+    $this->db->delete('search_api_item')
+      ->condition('index_id', ['published', 'unpublished'], 'IN')
+      ->condition('item_id', $sapiId)
+      ->execute();
+
     // Only clear cache for anonymous.
     $this->pageCache->deleteAll();
     $this->messenger()->addStatus($this->t('EU OSS Catalogue has been disabled'));
