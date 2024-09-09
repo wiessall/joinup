@@ -1,9 +1,0 @@
-joinup_stats.settings:
-  path: '/admin/statistics/settings'
-  defaults:
-    _form: Drupal\joinup_stats\Form\JoinupStatsSettingsForm
-    _title: 'Statistics settings'
-  requirements:
-    _permission: 'administer matomo integration'
-  options:
-    _admin_route: TRUE
