@@ -1731,9 +1731,7 @@ class FeatureContext extends RawDrupalContext {
 
     $error_level = $error_level ?: $original_error_level;
     if ($current_error_level !== $error_level) {
-      static::bypassReadOnlyConfig();
       $config->set('error_level', $error_level)->save();
-      static::restoreReadOnlyConfig();
     }
   }
 
@@ -2341,9 +2339,7 @@ class FeatureContext extends RawDrupalContext {
     $settings = ['extension_discovery_scan_tests' => TRUE] + Settings::getAll();
     new Settings($settings);
 
-    static::bypassReadOnlyConfig();
     \Drupal::service('module_installer')->$method($module_name);
-    static::restoreReadOnlyConfig();
   }
 
   /**
