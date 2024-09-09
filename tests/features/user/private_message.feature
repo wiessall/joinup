@@ -1,4 +1,4 @@
-@api @group-f @javascript
+@api @group-f
 Feature: Private messages
   As an authenticated user
   I want to send a private message to another user
@@ -9,8 +9,8 @@ Feature: Private messages
       | Username  | E-mail                |
       | Alice M   | alice.m@example.com   |
       | Bob Rolls | bob.rolls@example.com |
-      | Rui Mint  | rui.mint@example.com  |
 
+  @javascript
   Scenario: Send a private message
     Given I am logged in as "Alice M"
     And I am on the homepage
@@ -42,12 +42,11 @@ Feature: Private messages
       | This is a private message to Bob.   |
       | This is a private message to Alice. |
 
-    # Check a user without messages.
-    Given I am logged in as "Rui Mint"
+  Scenario: Check a user without messages
+    Given I am logged in as "Alice M"
     And I am on the homepage
     And I should see 0 unread private message
-    Then I open the account menu
-    And I click "My messages"
+    When I click "My messages" in the "Navigation bar" region
     Then I should see the heading "Private Messages"
     And I should see 0 private message
     And I should see the text "You do not have any messages"
