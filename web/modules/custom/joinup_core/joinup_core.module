@@ -208,30 +208,6 @@ function joinup_core_preprocess_responsive_image_formatter(&$variables): void {
 }
 
 /**
- * Implements hook_config_readonly_whitelist_patterns().
- */
-function joinup_core_config_readonly_whitelist_patterns(): array {
-  return [
-    // The 'support' and footer menus are editable by moderators. This includes
-    // the menu links static overrides config.
-    'system.menu.footer-about-us',
-    'system.menu.footer-european-commission',
-    'system.menu.footer-follow-us',
-    'system.menu.footer-help-and-support',
-    'system.menu.support',
-    'system.menu.navbar',
-    // The outdated content threshold is editable by moderators.
-    'joinup_core.outdated_content_threshold',
-    'core.menu.static_menu_link_overrides',
-    // Moderators can create webforms.
-    'webform.webform.*',
-    // Prevent simple sitemap to interfere with webform deletion.
-    /* @see \Drupal\simple_sitemap\Entity\SimpleSitemapStorage::doDelete */
-    'simple_sitemap.bundle_settings.*.webform_submission.*',
-  ];
-}
-
-/**
  * Implements hook_module_implements_alter().
  */
 function joinup_core_module_implements_alter(array &$implementations, $hook): void {

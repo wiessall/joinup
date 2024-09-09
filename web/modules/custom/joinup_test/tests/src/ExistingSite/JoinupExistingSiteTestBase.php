@@ -8,7 +8,6 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\Tests\joinup_test\Traits\RdfEntityCreationTrait;
-use Drupal\joinup\Traits\ConfigReadOnlyTrait;
 use Drupal\taxonomy\VocabularyInterface;
 use weitzman\DrupalTestTraits\ExistingSiteBase;
 
@@ -26,7 +25,6 @@ abstract class JoinupExistingSiteTestBase extends ExistingSiteBase {
    */
   protected array $casUsers = [];
 
-  use ConfigReadOnlyTrait;
   use RdfEntityCreationTrait;
 
   /**
@@ -75,9 +73,7 @@ abstract class JoinupExistingSiteTestBase extends ExistingSiteBase {
     \Drupal::getContainer()->get('cas_mock_server.user_manager')->deleteUsers($this->casUsers);
 
     // The parent method might cleanup config entities.
-    $this->bypassReadOnlyConfig();
     parent::tearDown();
-    $this->restoreReadOnlyConfig();
 
     // Delete the OG group content orphans now because parent::tearDown() is
     // destroying the container and the registered shutdown callback will fail.

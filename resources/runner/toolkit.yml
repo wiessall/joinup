@@ -51,9 +51,6 @@ toolkit:
             arguments:
               - install
         after:
-          # The `toolkit:run-deploy` command has enabled config read-only.
-          - task: run
-            command: config-readonly:disable
           - task: run
             command: testing:install-modules
           - task: exec
@@ -72,8 +69,6 @@ toolkit:
             command: drupal:settings
             arguments:
               - site-clone
-          - task: run
-            command: config-readonly:enable
           - task: exec
             command: test ! -z "$CI" || vendor/bin/run solr:build-core-config
 
@@ -114,8 +109,6 @@ commands:
       arguments:
         - install
     - task: run
-      command: config-readonly:disable
-    - task: run
       command: drupal:site-install
       options:
         existing-config: null
@@ -146,8 +139,6 @@ commands:
       arguments:
         - php:eval
         - if (node_access_needs_rebuild()) { node_access_rebuild(); }
-    - task: run
-      command: config-readonly:enable
     - task: exec
       command: test ! -z "$CI" || vendor/bin/run solr:build-core-config
 
