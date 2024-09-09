@@ -8,7 +8,6 @@
 declare(strict_types=1);
 
 use Drupal\joinup_oss_catalogue\OssCatalogueCollectionInterface;
-use Solarium\Core\Query\Helper;
 
 /**
  * Publish the EU OSS Catalogue collection.
@@ -24,38 +23,12 @@ function joinup_oss_catalogue_update_200001(): void {
  * Fix OSS Catalogue collection fields.
  */
 function joinup_oss_catalogue_update_200002(): void {
-  $entityTypeManger = \Drupal::entityTypeManager();
-  $uri = OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID;
-  $collection = $entityTypeManger->getStorage('rdf_entity')->load($uri);
-  $collection->skip_notification = TRUE;
-  $collection
-    ->set('field_ar_state', 'draft')
-    ->set('field_topic', 11195)
-    ->save();
+  joinup_oss_catalogue_toggle('disable');
 
-  // Unfortunately, we cannot unpublish a collection. When setting the state
-  // to 'draft', we're creating a forward revision.
-  $sparql = <<<SPARQL
-      WITH <http://joinup.eu/collection/published>
-      DELETE { <$uri> ?p ?o }
-      WHERE  { <$uri> ?p ?o }
-      SPARQL;
-  \Drupal::getContainer()->get('rdf_sync.connection')->update($sparql);
-  $sapiId = 'entity:rdf_entity/' . $uri;
-  $solrHelper = new Helper();
-  /** @var \Drupal\search_api_solr\SolrConnectorInterface $connector */
-  $connector = $entityTypeManger->getStorage('search_api_server')
-    ->load('joinup')->getBackend()->getSolrConnector();
-  $updateQuery = $connector
-    ->getUpdateQuery()
-    ->addDeleteQuery('ss_search_api_id:' . $solrHelper->escapePhrase($sapiId))
-    ->addCommit();
-  $connector->update($updateQuery);
-  // Update SAPI items.
-  \Drupal::database()->delete('search_api_item')
-    ->condition('index_id', ['published', 'unpublished'], 'IN')
-    ->condition('item_id', $sapiId)
-    ->execute();
+  $collection = \Drupal::entityTypeManager()->getStorage('rdf_entity')
+    ->load(OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID);
+  $collection->skip_notification = TRUE;
+  $collection->set('field_topic', 11195)->save();
 
   \Drupal::getContainer()->get('entity.repository')
     ->loadEntityByUuid('node', OssCatalogueCollectionInterface::LANDING_PAGE)

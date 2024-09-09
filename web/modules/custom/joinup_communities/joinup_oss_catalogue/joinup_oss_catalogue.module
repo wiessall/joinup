@@ -20,6 +20,7 @@ use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_oss_catalogue\Entity\JoinupOssSolution;
 use Drupal\joinup_oss_catalogue\OssCatalogueCollectionInterface;
 use Drupal\node\NodeInterface;
+use Solarium\Core\Query\Helper;
 
 /**
  * Implements hook_views_plugins_argument_alter().
@@ -246,4 +247,60 @@ function joinup_oss_catalogue_cron(): void {
     eu_oss_catalogue_cron();
     eu_oss_vitality_index_cron();
   }
+}
+
+/**
+ * Toggles the state of EU OSS Catalogue functionality.
+ *
+ * @param string $toggle
+ *   The state: 'enable', 'disable'.
+ *
+ * @todo Remove this function in ISAICP-9053.
+ */
+function joinup_oss_catalogue_toggle(string $toggle): void {
+  assert(in_array($toggle, ['enable', 'disable'], TRUE));
+  $entityTypeManager = \Drupal::entityTypeManager();
+  $state = \Drupal::state();
+
+  if ($toggle === 'enable') {
+    $state->delete('joinup.oss_catalogue_is_disabled');
+    $collection = $entityTypeManager->getStorage('rdf_entity')
+      ->load(OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID);
+    $collection->skip_notification = TRUE;
+    $collection->set('field_ar_state', 'published')->save();
+    return;
+  }
+
+  $state->set('joinup.oss_catalogue_is_disabled', TRUE);
+
+  $uri = OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID;
+  $collection = \Drupal::entityTypeManager()->getStorage('rdf_entity')->load($uri);
+  $collection->skip_notification = TRUE;
+  $collection->set('field_ar_state', 'draft')->save();
+
+  // Unfortunately, we cannot unpublish a collection. When setting the state
+  // to 'draft', we're creating a forward revision. In order to unpublish, we:
+  // - Remove the published triples.
+  // - Remove the document from Solr and from search_api_item table.
+  $sparql = <<<SPARQL
+    WITH <http://joinup.eu/collection/published>
+    DELETE { <$uri> ?p ?o }
+    WHERE  { <$uri> ?p ?o }
+    SPARQL;
+  \Drupal::getContainer()->get('rdf_sync.connection')->update($sparql);
+  $sapiId = 'entity:rdf_entity/' . $uri;
+  $solrHelper = new Helper();
+  /** @var \Drupal\search_api_solr\SolrConnectorInterface $connector */
+  $connector = $entityTypeManager->getStorage('search_api_server')->load('joinup')
+    ->getBackend()
+    ->getSolrConnector();
+  $deleteQuery = $connector
+    ->getUpdateQuery()
+    ->addDeleteQuery('ss_search_api_id:' . $solrHelper->escapePhrase($sapiId))
+    ->addCommit();
+  $connector->update($deleteQuery);
+  \Drupal::database()->delete('search_api_item')
+    ->condition('index_id', ['published', 'unpublished'], 'IN')
+    ->condition('item_id', $sapiId)
+    ->execute();
 }
