@@ -70,12 +70,4 @@ interface SolutionInterface extends RdfInterface, CollectionContentInterface, En
    */
   public function getAffiliatedCollectionIds(): array;
 
-  /**
-   * Returns the number of active members in this solution.
-   *
-   * @return int
-   *   The number of active members.
-   */
-  public function getActiveMemberCount(): int;
-
 }
