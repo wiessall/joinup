@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_oss_catalogue\Access;
 
-use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Routing\Access\AccessInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
@@ -33,7 +32,7 @@ final readonly class KillSwitchCheck implements AccessInterface {
     if ($requirement !== 'TRUE') {
       throw new \Exception("The _eu_oss_catalogue_check_enabled route requirement when present can only have 'TRUE' as value but '$requirement' was given.");
     }
-    return joinup_oss_catalogue_is_enabled() ? AccessResult::allowed() : AccessResult::forbidden('EU OSS Catalogue functionality is disabled');
+    return joinup_oss_catalogue_feature();
   }
 
 }
