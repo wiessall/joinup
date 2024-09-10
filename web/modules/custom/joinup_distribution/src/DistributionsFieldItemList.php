@@ -7,7 +7,7 @@ namespace Drupal\joinup_distribution;
 use Drupal\Core\Field\EntityReferenceFieldItemList;
 use Drupal\Core\TypedData\ComputedItemListTrait;
 use Drupal\joinup_release\Entity\ReleaseInterface;
-use Drupal\solution\Entity\SolutionInterface;
+use Drupal\joinup_solution\Entity\SolutionInterface;
 
 /**
  * Defines a field item list class for the 'distributions' field.
