@@ -99,7 +99,11 @@ Feature: Test EU OSS Catalogue killswitch
     Then I should see the success message "EU OSS Catalogue has been disabled"
 
     When I go to "/eu-oss-catalogue"
-    Then the response status code should be 403
+
+    # Developers are admin users, this they have 'bypass node access'
+    # permission. As an effect, they're able to access the node but not the
+    # other routes.
+    Then the response status code should be 200
     And I go to "/eu-oss-catalogue/solutions"
     Then the response status code should be 403
     And I go to "/admin/content/eu-oss-catalogue"
