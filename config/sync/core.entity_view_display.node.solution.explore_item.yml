@@ -8,8 +8,8 @@ dependencies:
     - field.field.node.solution.body
     - field.field.node.solution.contact
     - field.field.node.solution.content_creation
-    - field.field.node.solution.documentation
     - field.field.node.solution.description
+    - field.field.node.solution.documentation
     - field.field.node.solution.field_keywords
     - field.field.node.solution.field_state
     - field.field.node.solution.field_topic
@@ -20,6 +20,7 @@ dependencies:
     - field.field.node.solution.listing_content
     - field.field.node.solution.logo
     - field.field.node.solution.metrics_page
+    - field.field.node.solution.og_audience
     - field.field.node.solution.owner
     - field.field.node.solution.process_status
     - field.field.node.solution.related_solutions
@@ -32,8 +33,107 @@ dependencies:
     - field.field.node.solution.translation
     - node.type.solution
   module:
+    - layout_builder
+    - layout_discovery
     - link
+    - og
     - user
+third_party_settings:
+  layout_builder:
+    enabled: true
+    allow_custom: false
+    sections:
+      -
+        layout_id: layout_onecol
+        layout_settings:
+          label: ''
+        components:
+          73ce1577-5416-4823-bbd4-fcb800b4419c:
+            uuid: 73ce1577-5416-4823-bbd4-fcb800b4419c
+            region: content
+            configuration:
+              id: 'field_block:node:solution:description'
+              label: Description
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: joinup_html_stripper_stripped
+                label: hidden
+                settings:
+                  trim_length: 220
+                third_party_settings:
+                  template_suggestion:
+                    template_suggestion: ''
+            weight: 0
+            additional:
+              component_attributes:
+                block_attributes:
+                  id: ''
+                  class: explore-item__description
+                  style: ''
+                  data: ''
+                block_title_attributes:
+                  id: ''
+                  class: ''
+                  style: ''
+                  data: ''
+                block_content_attributes:
+                  id: ''
+                  class: ''
+                  style: ''
+                  data: ''
+          182f9caa-1221-4dcc-a2f4-17885b1f7452:
+            uuid: 182f9caa-1221-4dcc-a2f4-17885b1f7452
+            region: content
+            configuration:
+              id: 'field_block:node:solution:changed'
+              label: Changed
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: timestamp
+                label: hidden
+                settings:
+                  date_format: custom
+                  custom_date_format: d/m/Y
+                  timezone: ''
+                  tooltip:
+                    date_format: ''
+                    custom_date_format: ''
+                  time_diff:
+                    enabled: false
+                    future_format: '@interval hence'
+                    past_format: '@interval ago'
+                    granularity: 2
+                    refresh: 60
+                    description: ''
+                third_party_settings:
+                  template_suggestion:
+                    template_suggestion: ''
+            weight: 1
+            additional: {  }
+          43c5fe98-a110-493c-82bf-8a5c9a930274:
+            uuid: 43c5fe98-a110-493c-82bf-8a5c9a930274
+            region: content
+            configuration:
+              id: 'extra_field_block:node:solution:read_more'
+              label: 'Read more'
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                settings: {  }
+                third_party_settings: {  }
+            weight: 2
+            additional: {  }
+        third_party_settings: {  }
 id: node.solution.explore_item
 targetEntityType: node
 bundle: solution
