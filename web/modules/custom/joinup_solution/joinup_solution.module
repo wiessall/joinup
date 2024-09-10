@@ -265,7 +265,7 @@ function joinup_solution_entity_extra_field_info(): array {
  * Implements hook_ENTITY_TYPE_view().
  */
 function joinup_solution_node_view(array &$build, NodeInterface $solution, EntityViewDisplayInterface $display, string $view_mode): void {
-  if ($solution->bundle() != 'solution') {
+  if (!$solution instanceof SolutionInterface) {
     return;
   }
 
@@ -308,8 +308,7 @@ function joinup_solution_node_view(array &$build, NodeInterface $solution, Entit
   if ($display->getComponent('download_total')) {
     $total = 0;
     if (!$solution->isNew()) {
-      $distributions = \Drupal::getContainer()->get('joinup_distribution.parent_distribution_resolver')->getParentsDistributions($solution->id());
-      foreach ($distributions as $distribution) {
+      foreach ($solution->getDistributions() as $distribution) {
         $total += $distribution->getDownloadCount();
       }
     }
