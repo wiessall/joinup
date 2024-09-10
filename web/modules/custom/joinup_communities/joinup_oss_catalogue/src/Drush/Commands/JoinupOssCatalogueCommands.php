@@ -18,6 +18,8 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * EU OSS Catalogue commands replacements.
+ *
+ * @todo Remove this class in ISAICP-9053.
  */
 class JoinupOssCatalogueCommands extends DrushCommands {
 

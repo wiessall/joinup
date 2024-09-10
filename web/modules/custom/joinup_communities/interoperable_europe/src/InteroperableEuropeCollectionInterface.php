@@ -10,9 +10,9 @@ namespace Drupal\interoperable_europe;
 interface InteroperableEuropeCollectionInterface {
 
   /**
-   * The RDF entity ID of the Interoperable Europe collection.
+   * The node UUID of the Interoperable Europe collection.
    */
-  public const COLLECTION_ENTITY_ID = 'http://data.europa.eu/w21/8e30f798-ff2b-478b-9c09-5ed5a63b4c8c';
+  public const COLLECTION_UUID = '8e30f798-ff2b-478b-9c09-5ed5a63b4c8c';
 
   /**
    * The UUID of the news listing page.

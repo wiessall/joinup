@@ -51,11 +51,15 @@ class BusinessHandler extends AbstractProcessingHandler implements DestructableI
     $logStorage = $this->entityTypeManager->getStorage('joinup_log');
 
     foreach ($this->records as $record) {
+      $logContext = $record->context;
+      unset($logContext['backtrace'], $logContext['exception'], $logContext['severity_level']);
+
       $logStorage->create(
         [
           'group' => $group?->id(),
-          'type' => $record->context['type'] ?? NULL,
+          'type' => $record->context['type'] ?? 'joinup:undefined',
           'message' => $record->message,
+          'variables' => $logContext ?? [],
           'severity' => $record->level->toRFC5424Level(),
           'uid' => $record->extra['uid'],
           'actor' => $this->getActor($record),

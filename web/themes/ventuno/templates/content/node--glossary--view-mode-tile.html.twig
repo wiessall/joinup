@@ -70,10 +70,11 @@
  *   in different view modes.
  */
 #}
-{% set view_mode_featured = view_mode is same as 'view_mode_featured' %}
 {% set image %}
   <a href="{{ url }}" class="d-block">
-    <svg class="bi img-fluid{{ view_mode_featured ? ' text-primary' : ' text-secondary' }}"><use xlink:href="{{ bcl_icon_path }}#type"></use></svg>
+    <svg class="bi img-fluid text-secondary">
+      <use xlink:href="{{ bcl_icon_path }}#type"></use>
+    </svg>
   </a>
 {% endset %}
 {{ pattern('tile', {

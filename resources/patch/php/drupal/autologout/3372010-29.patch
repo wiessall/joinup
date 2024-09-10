@@ -1,10 +1,10 @@
 diff --git a/src/EventSubscriber/AutologoutSubscriber.php b/src/EventSubscriber/AutologoutSubscriber.php
-index c40f33e797579f8ed2efa5e2b065864766e14eb7..46daa9f2e7e8c3881480cdf7b2043c3c957fe93f 100644
+index c40f33e79..7ea8044f1 100644
 --- a/src/EventSubscriber/AutologoutSubscriber.php
 +++ b/src/EventSubscriber/AutologoutSubscriber.php
-@@ -118,46 +118,21 @@ class AutologoutSubscriber implements EventSubscriberInterface {
+@@ -118,46 +118,22 @@ public function onRequest(RequestEvent $event) {
      }
- 
+
      // If user is not anonymous.
 -    if ($uid != 0) {
 -      $session = $this->requestStack->getCurrentRequest()->getSession();
@@ -52,22 +52,60 @@ index c40f33e797579f8ed2efa5e2b065864766e14eb7..46daa9f2e7e8c3881480cdf7b2043c3c
 +    // If http referer url has 'destination' and session is not set,
 +    // then only redirect to user page if uid doesn't match.
 +    if (empty($auto_redirect) && ($destination = $this->getDestination())) {
-+      $match = preg_match('#^destination=(/[a-z]+)?/user/([0-9]+)$#', $destination, $matches);
++      $match = preg_match('#^destination=(/[a-z])?/user/([0-9])$#', $destination, $matches);
 +
 +      if ($match && $matches[2] != $uid) {
 +        $session->set('auto_redirect', 1);
-+        $login_url = Url::fromRoute('user.page', [], ['absolute' => TRUE])->toString();
++        $login_url = Url::fromRoute('user.page', [], ['absolute' => TRUE])
++          ->toString();
 +
 +        // Redirect user to user page.
 +        $response = new RedirectResponse($login_url);
 +        $event->setResponse($response);
        }
      }
- 
-@@ -206,4 +181,23 @@ class AutologoutSubscriber implements EventSubscriberInterface {
+
+@@ -170,11 +146,15 @@ public function onRequest(RequestEvent $event) {
+     // javascript but will keep the login alive whilst that page is opened.
+     $refresh_only = $autologout_manager->refreshOnly();
+     $timeout = $autologout_manager->getUserTimeout();
+-    $timeout_padding = $this->config->get('autologout.settings')->get('padding');
+-    $is_altlogout = strpos($event->getRequest()->getRequestUri(), '/autologout_alt_logout') !== FALSE;
++    $timeout_padding = $this->config->get('autologout.settings')
++      ->get('padding');
++    $is_altlogout = strpos($event->getRequest()
++        ->getRequestUri(), '/autologout_alt_logout') !== FALSE;
+
+     // We need a backup plan if JS is disabled.
+-    $session = $this->requestStack->getCurrentRequest()->getSession()->get('autologout_last');
++    $session = $this->requestStack->getCurrentRequest()
++      ->getSession()
++      ->get('autologout_last');
+     if (!$is_altlogout && !$refresh_only && isset($session)) {
+       // If time since last access is > timeout + padding, log them out.
+       $diff = $now - $session;
+@@ -189,11 +169,15 @@ public function onRequest(RequestEvent $event) {
+         $autologout_manager->inactivityMessage();
+       }
+       else {
+-        $this->requestStack->getCurrentRequest()->getSession()->set('autologout_last', $now);
++        $this->requestStack->getCurrentRequest()
++          ->getSession()
++          ->set('autologout_last', $now);
+       }
+     }
+     else {
+-      $this->requestStack->getCurrentRequest()->getSession()->set('autologout_last', $now);
++      $this->requestStack->getCurrentRequest()
++        ->getSession()
++        ->set('autologout_last', $now);
+     }
+   }
+
+@@ -206,4 +190,23 @@ public static function getSubscribedEvents(): array {
      return $events;
    }
- 
+
 +  /**
 +   * Get destination from referer.
 +   *
@@ -90,10 +128,10 @@ index c40f33e797579f8ed2efa5e2b065864766e14eb7..46daa9f2e7e8c3881480cdf7b2043c3c
  }
 diff --git a/tests/src/FunctionalJavascript/UserDestinationLogoutTest.php b/tests/src/FunctionalJavascript/UserDestinationLogoutTest.php
 new file mode 100644
-index 0000000000000000000000000000000000000000..44c0219116ed1b31f95e8b5988717453a7f058b2
+index 000000000..9edd30700
 --- /dev/null
 +++ b/tests/src/FunctionalJavascript/UserDestinationLogoutTest.php
-@@ -0,0 +1,97 @@
+@@ -0,0 +1,103 @@
 +<?php
 +
 +namespace Drupal\Tests\autologout\FunctionalJavascript;
@@ -109,6 +147,7 @@ index 0000000000000000000000000000000000000000..44c0219116ed1b31f95e8b5988717453
 + * @group Autologout
 + */
 +class UserDestinationLogoutTest extends WebDriverTestBase {
++
 +  /**
 +   * Modules to enable.
 +   *
@@ -152,12 +191,14 @@ index 0000000000000000000000000000000000000000..44c0219116ed1b31f95e8b5988717453
 +  protected function setUp(): void {
 +    parent::setUp();
 +
-+    $this->baseUrl = Url::fromRoute('<front>', [], ['absolute' => TRUE])->toString();
++    $this->baseUrl = Url::fromRoute('<front>', [], ['absolute' => TRUE])
++      ->toString();
 +
 +    $this->privilegedUser = $this->drupalCreateUser();
 +    $this->testUser = $this->drupalCreateUser();
 +
-+    $this->moduleConfig = $this->container->get('config.factory')->getEditable('autologout.settings');
++    $this->moduleConfig = $this->container->get('config.factory')
++      ->getEditable('autologout.settings');
 +
 +    // For testing purposes set the timeout to 5 seconds.
 +    $this->moduleConfig->set('timeout', 5)->set('padding', 2)->save();
@@ -176,18 +217,21 @@ index 0000000000000000000000000000000000000000..44c0219116ed1b31f95e8b5988717453
 +    self::assertTrue($this->drupalUserIsLoggedIn($this->privilegedUser));
 +    $this->drupalGet('user/' . $this->privilegedUser->id());
 +    // Used later because of the way that the url is built.
-+    $user_uri = Url::fromRoute('entity.user.canonical', ['user' => $this->privilegedUser->id()])->toString();
++    $user_uri = Url::fromRoute('entity.user.canonical', ['user' => $this->privilegedUser->id()])
++      ->toString();
 +    // Wait for timeout.
 +    $this->getSession()->wait(10000);
 +    // Check that destination is set after logout and privilegedUser user
 +    // is logged out.
 +    $this->assertSession()->addressEquals($this->getUrl());
-+    $this->assertStringContainsString('/user/login?destination=' . $user_uri, $this->getSession()->getCurrentUrl());
++    $this->assertStringContainsString('/user/login?destination=' . $user_uri, $this->getSession()
++      ->getCurrentUrl());
 +    self::assertFalse($this->drupalUserIsLoggedIn($this->privilegedUser));
 +
 +    // Login testUser and check that user was redirected to its own profile.
 +    $this->drupalLogin($this->testUser);
-+    $this->assertSession()->addressEquals($this->baseUrl . '/user/' . $this->testUser->id());
++    $this->assertSession()
++      ->addressEquals($this->baseUrl . '/user/' . $this->testUser->id());
 +  }
 +
 +}

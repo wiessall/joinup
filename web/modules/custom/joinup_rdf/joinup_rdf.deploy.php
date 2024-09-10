@@ -7,13 +7,7 @@
 
 declare(strict_types=1);
 
-use Drupal\Core\Url;
-use Drupal\collection\Entity\CollectionInterface;
-use Drupal\custom_page\Entity\CustomPageInterface;
-use Drupal\joinup_oss_catalogue\OssCatalogueCollectionInterface;
 use Drupal\joinup_rdf\MigrationHelper;
-use Drupal\meta_entity\Entity\MetaEntity;
-use Drupal\og\OgGroupAudienceHelperInterface;
 
 /**
  * Disable RDF Sync for the deployment.
@@ -454,11 +448,45 @@ function joinup_rdf_deploy_200007(): void {
 }
 
 /**
- * Embedded entities.
+ * Embedded entity references.
  */
 function joinup_rdf_deploy_200008(?array &$sandbox = NULL): string {
   $db = \Drupal::database();
   if (!isset($sandbox['tables'])) {
+    // First cleanup orphan revisions to lower the work with rich text blob
+    // fields embed entity references.
+    $tables = [
+      'body',
+      'field_attachment',
+      'field_custom_page_logo',
+      'field_document_publication_date',
+      'field_document_spatial_coverage',
+      'field_event_agenda',
+      'field_event_contact_email',
+      'field_event_logo',
+      'field_event_online_location',
+      'field_event_web_url',
+      'field_file',
+      'field_glossary_synonyms',
+      'field_keywords',
+      'field_licence',
+      'field_location',
+      'field_news_logo',
+      'field_news_referenced_solution',
+      'field_news_source_url',
+      'field_news_spatial_coverage',
+      'field_organisation_type',
+      'field_paragraphs_body',
+      'field_scope',
+      'field_shared_in',
+      'field_short_title',
+      'field_topic',
+      'owner_type',
+    ];
+    foreach ($tables as $table) {
+      $db->query("DELETE r FROM {node_revision__{$table}} r LEFT JOIN {node__{$table}} n ON r.entity_id = n.entity_id WHERE n.entity_id IS NULL");
+    }
+
     $sandbox['tables'] = [
        ['comment__field_body', 'entity_id', 'field_body_value'],
        ['meta_entity__eif_description', 'entity_id', 'eif_description_value'],
@@ -487,7 +515,6 @@ function joinup_rdf_deploy_200008(?array &$sandbox = NULL): string {
       ->fetchAllKeyed();
   }
 
-  $ids = [];
   [$table, $idField, $updatedField] = array_shift($sandbox['tables']);
   $rows = $db->select($table)
     ->fields($table, [$idField, $updatedField])
@@ -511,7 +538,7 @@ function joinup_rdf_deploy_200008(?array &$sandbox = NULL): string {
       '@href="(?:https://joinup.ec.europa.eu)?/?rdf_entity/(?<uri>[^\"]*)"@' => static function (array $matches) use ($sandbox): string {
         $uri = strtr($matches['uri'], array_reverse(array_flip(MigrationHelper::URL_ENCODE_MAP), TRUE));
         if (!$nid = $sandbox['uri_to_nid'][$uri] ?? NULL) {
-          // Remove the attribute if it doesn't point to valid content.
+          // Remove the URL if it doesn't point to valid content.
           return 'href=""';
         }
         return 'href="/node/' . $nid . '"';
@@ -520,13 +547,12 @@ function joinup_rdf_deploy_200008(?array &$sandbox = NULL): string {
 
     $value = preg_replace_callback_array($callbacks, $value);
     if ($value !== $original) {
-      $ids[] = $id;
       $db->update($table)->fields([$updatedField => $value])->condition($idField, $id)->execute();
     }
   }
 
   $sandbox['#finished'] = (int) empty($sandbox['tables']);
-  return "Processed table $table (field $updatedField). Affected IDs: " . implode(', ', $ids);
+  return "Processed table $table (field $updatedField)";
 }
 
 /**
@@ -553,136 +579,4 @@ function joinup_rdf_deploy_200009(): void {
 
   // Fix 'rdf entity' ocuurrences in label.
   $db->query("UPDATE meta_entity SET label = REPLACE(label, 'rdf entity (', 'content item (')");
-}
-
-/**
- * Section moved from joinup_oss_catalogue.
- *
- * @todo Remove after v1.112.0 is released, in ISAICP-9045.
- */
-
-/**
- * Import content for EU OpenSource Software Solutions Catalogue.
- */
-function joinup_rdf_deploy_200010(): void {
-  $moduleInstaller = \Drupal::getContainer()->get('module_installer');
-  $entityRepository = \Drupal::getContainer()->get('entity.repository');
-
-  // Delete faulty meta entity.
-  $entityRepository->loadEntityByUuid('meta_entity', 'ad9be48e-7116-44b3-8df2-db8cb9343268')?->delete();
-
-  $moduleInstaller->install(['default_content']);
-  \Drupal::service('default_content.importer')->importContent('joinup_rdf', TRUE);
-  $moduleInstaller->uninstall(['default_content']);
-}
-
-/**
- * Make sure that oss_archived has a default value.
- */
-function joinup_rdf_deploy_200011(array &$sandbox): string {
-  $entityTypeManager = \Drupal::entityTypeManager();
-  /** @var \Drupal\node\NodeStorage $nodeStorage */
-  $nodeStorage = $entityTypeManager->getStorage('node');
-
-  if (empty($sandbox['ids'])) {
-    $results = $nodeStorage->getQuery()->accessCheck(FALSE)
-      ->condition('type', 'oss_solution')
-      ->notExists('oss_archived')
-      ->execute();
-
-    $sandbox['ids'] = array_values($results);
-    $sandbox['progress'] = 0;
-    $sandbox['count'] = count($sandbox['ids']);
-  }
-
-  $ids = array_splice($sandbox['ids'], 0, 50);
-  foreach ($nodeStorage->loadMultiple($ids) as $solution) {
-    $solution->set('oss_archived', 0);
-    $solution->save();
-  }
-
-  $sandbox['progress'] += count($ids);
-  $sandbox['#finished'] = (int) empty($sandbox['ids']);
-
-  return "Processed {$sandbox['progress']} out of {$sandbox['count']} solutions.";
-}
-
-/**
- * Fix references from/to EU OSS Catalogue landing page.
- */
-function joinup_rdf_deploy_200012(): void {
-  $menuName = 'ogmenu-3728';
-  $repository = \Drupal::getContainer()->get('entity.repository');
-
-  $collection = $repository->loadEntityByUuid('node', OssCatalogueCollectionInterface::COLLECTION_UUID)
-    // Update path alias and label for EU OSS catalogue.
-    ->set('path', ['alias' => '/eu-oss-catalogue', 'pathauto' => 0])
-    ->set('title', 'EU Open Source Solutions Catalogue');
-  assert($collection instanceof CollectionInterface);
-
-  $landingPage = $repository->loadEntityByUuid('node', '54acbd6f-47f0-4280-ad09-0a07c397318b');
-  assert($landingPage instanceof CustomPageInterface);
-  $landingPage->set(OgGroupAudienceHelperInterface::DEFAULT_FIELD, $collection)->save();
-
-  if (joinup_oss_catalogue_is_enabled()) {
-    // Make EU OSS Catalogue public.
-    $collection->set('field_state', 'published');
-  }
-
-  $collection->save();
-
-  MetaEntity::loadOrCreate('collection_settings', $collection)
-    ->set('label', 'EU OpenSource Software Solutions Catalogue node (Collection settings)')
-    ->set('landing_page', $landingPage)
-    ->save();
-
-  // @see custom_page_node_insert()
-  \Drupal::getContainer()->get('custom_page.og_menu_links_manager')
-    ->addLink($landingPage, 'navigation', ['menu_name' => $menuName]);
-
-  // Disable auto-created left-side menu link.
-  $linkPlugins = \Drupal::service('plugin.manager.menu.link')
-    ->loadLinksByRoute(
-      'entity.node.canonical',
-      ['node' => $landingPage->id()],
-      $menuName,
-    );
-
-  /** @var \Drupal\menu_link_content\Plugin\Menu\MenuLinkContent $linkPlugin */
-  $linkPlugin = reset($linkPlugins);
-
-  $repository
-    ->loadEntityByUuid('menu_link_content', $linkPlugin->getDerivativeId())
-    ->setUnpublished()
-    ->save();
-
-  // Rename menu items for EU OSS catalogue.
-  $menuLinkContentStorage = \Drupal::entityTypeManager()->getStorage('menu_link_content');
-
-  // Collect the IDs of links to the custom page.
-  $ids = $menuLinkContentStorage->getQuery()->accessCheck(FALSE)
-    ->condition('bundle', 'menu_link_content')
-    ->condition('menu_name', $menuName)
-    ->execute();
-
-  /** @var \Drupal\menu_link_content\MenuLinkContentInterface $link */
-  foreach ($menuLinkContentStorage->loadMultiple($ids) as $link) {
-    $title = $link->getTitle();
-    if ($title === 'Members') {
-      $link->setUnpublished()->save();
-    }
-    elseif ($title === 'Welcome') {
-      $link->set('title', 'Welcome')->save();
-    }
-  }
-
-  $link = [
-    'uri' => Url::fromRoute('view.search_oss_catalogue.search')->toUriString(),
-  ];
-  $menuLinkContentStorage->create([
-    'title' => t('Search'),
-    'menu_name' => $menuName,
-    'link' => $link,
-    'weight' => -6,
-  ])->save();
 }

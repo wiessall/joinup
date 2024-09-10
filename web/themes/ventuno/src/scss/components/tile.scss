@@ -40,10 +40,7 @@
   &__standout-info {
     top: $spacer * -1;
     right: $spacer * 0.5;
-    overflow: hidden;
     max-width: 9.3rem;
-    white-space: nowrap;
-    text-overflow: ellipsis;
     font-size: 0.875rem;
   }
   &__standout-info-icon,
