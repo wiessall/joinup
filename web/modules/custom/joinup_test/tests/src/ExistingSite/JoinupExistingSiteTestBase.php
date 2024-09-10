@@ -7,7 +7,6 @@ namespace Drupal\Tests\joinup_test\ExistingSite;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
-use Drupal\Tests\joinup_test\Traits\RdfEntityCreationTrait;
 use Drupal\joinup\Traits\ConfigReadOnlyTrait;
 use Drupal\taxonomy\VocabularyInterface;
 use weitzman\DrupalTestTraits\ExistingSiteBase;
@@ -27,7 +26,6 @@ abstract class JoinupExistingSiteTestBase extends ExistingSiteBase {
   protected array $casUsers = [];
 
   use ConfigReadOnlyTrait;
-  use RdfEntityCreationTrait;
 
   /**
    * {@inheritdoc}
