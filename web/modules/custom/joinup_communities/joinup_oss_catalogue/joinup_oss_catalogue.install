@@ -7,6 +7,8 @@
 
 declare(strict_types=1);
 
+use Drupal\joinup_oss_catalogue\OssCatalogueCollectionInterface;
+
 /**
  * Publish the EU OSS Catalogue collection.
  */
@@ -24,7 +26,8 @@ function joinup_oss_catalogue_update_200002(): void {
   joinup_oss_catalogue_toggle('disable');
 
   $collection = \Drupal::entityTypeManager()->getStorage('rdf_entity')
-    ->load(OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID);
+    ->load('http://data.europa.eu/w21/6d621a47-71ce-4f1a-90e2-8859403d3ecd');
+
   $collection->skip_notification = TRUE;
   $collection->set('field_topic', 11195)->save();
 
