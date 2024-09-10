@@ -53,17 +53,12 @@ final class WarningMessageBlock extends BlockBase implements ContainerFactoryPlu
       $this->t('You are working on production. Please, be extra cautious!'),
     ];
 
-    if (!$this->fileConfigReadOnly->isReadOnlyEnabled()) {
-      $warnings[] = $this->t('Config readonly is disabled!');
-    }
-
     $build['content'] = [
       '#theme' => 'status_messages',
       '#message_list' => [
         'warning' => $warnings,
       ],
     ];
-    $build['#cache']['tags'][] = 'joinup_user:read_only_config';
 
     return $build;
   }

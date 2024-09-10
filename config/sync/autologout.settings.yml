@@ -8,8 +8,9 @@ padding: 20
 logout_regardless_of_activity: false
 no_individual_logout_threshold: false
 role_logout: true
-role_logout_max: false
+role_logout_max: true
 redirect_url: /user/login
+include_destination: false
 no_dialog: true
 message: 'Your session is about to expire. Do you want to reset it?'
 inactivity_message: 'You have been logged out due to inactivity.'

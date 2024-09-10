@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup_core\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_rdf\Entity\RdfSyncEntityInterface;
 use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\rdf_sync\RdfSyncMapper;
@@ -59,18 +60,25 @@ class IdRedirect extends ControllerBase {
 
     // @todo This a temporary solution during conversion of RDF entities to
     //   nodes. Convert to a stable solution in ISAICP-8376.
-    if ($entity = $this->mapper->getEntityByUri($id)) {
-      // @todo Remove the solution stub exception in ISAICP-8572.
-      if (!$entity instanceof SolutionInterface) {
-        assert($entity instanceof RdfSyncEntityInterface);
-        $entity_type_id = $entity->getEntityTypeId();
-        $id = $entity->id();
-      }
+    if (
+      $entity_type_id === 'rdf_entity' &&
+      ($entity = $this->entityTypeManager()->getStorage('rdf_entity')->load($id)) &&
+      $entity instanceof GroupInterface
+    ) {
+      return $this->redirect("entity.rdf_entity.canonical", [
+        $entity_type_id => $id,
+      ], [], 301);
+    }
+    // @todo Remove the second condition, for solution stub exception, in ISAICP-8572.
+    elseif (($entity = $this->mapper->getEntityByUri($id)) && !$entity instanceof SolutionInterface) {
+      assert($entity instanceof RdfSyncEntityInterface);
+      $entity_type_id = $entity->getEntityTypeId();
+      return $this->redirect("entity.$entity_type_id.canonical", [
+        $entity_type_id => $entity->id(),
+      ], [], 301);
     }
 
-    return $this->redirect("entity.$entity_type_id.canonical", [
-      $entity_type_id => $id,
-    ], [], 301);
+    return $this->redirect('joinup_core.not_found');
   }
 
   /**
