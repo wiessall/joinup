@@ -2100,9 +2100,9 @@ class FeatureContext extends RawDrupalContext {
         ],
       ],
       'solution' => [
-        'type' => 'rdf_entity',
+        'type' => 'node',
         'fields' => [
-          'logo' => 'field_is_logo',
+          'logo' => 'logo',
         ],
       ],
       'event' => [
