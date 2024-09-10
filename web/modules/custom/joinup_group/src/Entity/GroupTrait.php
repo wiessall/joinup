@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Drupal\joinup_group\Entity;
 
 use Drupal\Core\Access\AccessResultInterface;
-use Drupal\Core\Database\Query\SelectInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\joinup_core\Entity\OutdatedContentTrait;
@@ -237,7 +236,7 @@ trait GroupTrait {
     sort($uids);
     return $entity_type_manager->getStorage('user')->loadMultiple($uids);
   }
-  
+
   /**
    * Processes and returns a list of group content entities.
    *
