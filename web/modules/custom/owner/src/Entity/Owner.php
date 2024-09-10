@@ -31,7 +31,7 @@ class Owner extends Node implements OwnerInterface {
   public function isReferencedByGroups(): bool {
     $count = \Drupal::entityQuery('node')
       ->accessCheck(FALSE)
-      ->condition('type', ['collection', 'solution'])
+      ->condition('type', ['collection', 'solution'], 'IN')
       ->condition('owner', $this->id())
       ->count()
       ->execute();
