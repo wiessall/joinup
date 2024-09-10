@@ -10,6 +10,8 @@ use Drupal\joinup_notification\NotificationEvents;
 use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\joinup_workflow\EntityWorkflowStateInterface;
 use Drupal\og\OgRoleInterface;
+use Drupal\state_machine\Plugin\Workflow\WorkflowInterface;
+use Drupal\state_machine\Plugin\Workflow\WorkflowTransition;
 
 /**
  * Notification handler for the notifications related to solutions.
@@ -62,59 +64,59 @@ use Drupal\og\OgRoleInterface;
  *   Recipients: contacts, moderators
  * @codingStandardsIgnoreEnd
  */
-class SolutionRdfSubscriber extends NotificationSubscriberBase {
+class SolutionNotificationSubscriber extends NotificationSubscriberBase {
 
-  const TEMPLATE_APPROVE = 'sol_approve_proposed';
-  const TEMPLATE_BLACKLIST = 'sol_blacklist';
-  const TEMPLATE_DELETION_BY_MODERATOR = 'sol_deletion_by_moderator';
-  const TEMPLATE_PROPOSE_CHANGES = 'sol_propose_changes';
-  const TEMPLATE_PROPOSE_NEW = 'sol_propose_new';
-  const TEMPLATE_PROPOSE_FROM_REQUEST_CHANGES = 'sol_propose_requested_changes';
-  const TEMPLATE_PUBLISH_BLACKLISTED = 'sol_publish_backlisted';
-  const TEMPLATE_REQUEST_CHANGES = 'sol_request_changes';
-  const TEMPLATE_ARCHIVAL_COMPLETE = 'solution_content_archive';
+  const string TEMPLATE_APPROVE = 'sol_approve_proposed';
+  const string TEMPLATE_BLACKLIST = 'sol_blacklist';
+  const string TEMPLATE_DELETION_BY_MODERATOR = 'sol_deletion_by_moderator';
+  const string TEMPLATE_PROPOSE_CHANGES = 'sol_propose_changes';
+  const string TEMPLATE_PROPOSE_NEW = 'sol_propose_new';
+  const string TEMPLATE_PROPOSE_FROM_REQUEST_CHANGES = 'sol_propose_requested_changes';
+  const string TEMPLATE_PUBLISH_BLACKLISTED = 'sol_publish_backlisted';
+  const string TEMPLATE_REQUEST_CHANGES = 'sol_request_changes';
+  const string TEMPLATE_ARCHIVAL_COMPLETE = 'solution_content_archive';
 
   /**
    * The transition object.
    *
    * @var \Drupal\state_machine\Plugin\Workflow\WorkflowTransition
    */
-  protected $transition;
+  protected WorkflowTransition $transition;
 
   /**
    * The workflow object.
    *
-   * @var \Drupal\state_machine\Plugin\Workflow\Workflow
+   * @var \Drupal\state_machine\Plugin\Workflow\WorkflowInterface
    */
-  protected $workflow;
+  protected WorkflowInterface $workflow;
 
   /**
    * The motivation text passed in the entity.
    *
    * @var string
    */
-  protected $motivation;
+  protected string $motivation;
 
   /**
    * Whether the entity has a published version.
    *
    * @var bool
    */
-  protected $hasPublished;
+  protected bool $hasPublished;
 
   /**
    * The notification event.
    *
    * @var \Drupal\joinup_notification\Event\NotificationEvent
    */
-  protected $event;
+  protected NotificationEvent $event;
 
   /**
    * The source state of the solution.
    *
    * @var string
    */
-  protected $fromState;
+  protected string $fromState;
 
   /**
    * {@inheritdoc}
@@ -400,11 +402,7 @@ class SolutionRdfSubscriber extends NotificationSubscriberBase {
    *   Whether the event applies.
    */
   protected function appliesOnSolutions(): bool {
-    if ($this->entity->getEntityTypeId() !== 'rdf_entity') {
-      return FALSE;
-    }
-
-    if ($this->entity->bundle() !== 'solution') {
+    if (!$this->entity instanceof SolutionInterface) {
       return FALSE;
     }
 
