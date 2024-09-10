@@ -1,4 +1,4 @@
-@api @group-clone
+@api @group-clone @eu-oss-catalogue
 Feature:
   In order to present the details about EU OSS catalogue
   I want to view a dedicated collection and landing page

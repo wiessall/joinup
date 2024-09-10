@@ -20,16 +20,11 @@ upgrade_commands:
     - vendor/bin/drush joinup:unpublish-alert --category
     - scripts/check_status_report.php
   append:
-    production:
-      # TODO: Remove this command in ISAICP-9053.
-      - vendor/bin/drush state:set joinup.oss_catalogue_is_disabled 1 --input-format=boolean
     acceptance:
       - touch disable-config-readonly
       - vendor/bin/drush joinup:acc
       - vendor/bin/drush cache:rebuild
       - rm disable-config-readonly
-      # TODO: Remove this command in ISAICP-9053.
-      - vendor/bin/drush state:set joinup.oss_catalogue_is_disabled 1 --input-format=boolean
     ephemeral:
       - touch disable-config-readonly
       - vendor/bin/drush joinup:acc
