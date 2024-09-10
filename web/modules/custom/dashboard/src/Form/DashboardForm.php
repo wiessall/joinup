@@ -114,14 +114,14 @@ class DashboardForm extends FormBase {
       '#type' => 'submit',
       '#value' => $this->t('Enable EU OSS Catalogue'),
       '#submit' => ['::enableEuOssCatalogueSubmitForm'],
-      '#access' => $hasEnableDisablePermission && !joinup_oss_catalogue_is_enabled(),
+      '#access' => $hasEnableDisablePermission && !joinup_oss_catalogue_feature()->isAllowed(),
     ];
     // @todo Remove this button in ISAICP-9053.
     $form['actions']['disable'] = [
       '#type' => 'submit',
       '#value' => $this->t('Disable EU OSS Catalogue'),
       '#submit' => ['::disableEuOssCatalogueSubmitForm'],
-      '#access' => $hasEnableDisablePermission && joinup_oss_catalogue_is_enabled(),
+      '#access' => $hasEnableDisablePermission && joinup_oss_catalogue_feature()->isAllowed(),
     ];
 
     return $form;

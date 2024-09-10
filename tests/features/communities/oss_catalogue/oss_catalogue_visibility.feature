@@ -62,6 +62,8 @@ Feature: Test EU OSS Catalogue killswitch
     Then the response status code should be 200
     And I go to the content page of the type "oss_solution" with the title "The Opensource Panacea"
     Then the response status code should be 200
+    When I am on the homepage
+    Then I should see "EU Open Source Solutions Catalogue"
 
     Given I am an anonymous user
     When I go to "/eu-oss-catalogue"

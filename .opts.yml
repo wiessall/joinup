@@ -14,8 +14,6 @@ upgrade_commands:
     - rm disable-config-readonly
     - vendor/bin/drush joinup:unpublish-alert --category
     - scripts/check_status_report.php
-    # TODO: Remove this command in ISAICP-9053.
-    - vendor/bin/drush state:set joinup.oss_catalogue_is_disabled 1 --input-format=boolean
   append:
     acceptance:
       - touch disable-config-readonly
