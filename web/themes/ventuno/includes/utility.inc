@@ -16,6 +16,7 @@ use Drupal\joinup_core\Controller\IdRedirect;
 use Drupal\joinup_oss_catalogue\Entity\JoinupOssSolution;
 use Drupal\joinup_rdf\Entity\RdfSyncEntityInterface;
 use Drupal\joinup_workflow\ArchivableEntityInterface;
+use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\smart_trim\TruncateHTML;
 use Drupal\topic\Entity\TopicReferencingEntityInterface;
 
@@ -224,9 +225,9 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
     case 'solution':
       // Add attributes that will allow JS to mark this tile as "Shared from".
       $node = $variables['node'];
-      if (!$node->get('collection')->isEmpty()) {
+      if (!$node->get(OgGroupAudienceHelperInterface::DEFAULT_FIELD)->isEmpty()) {
         /** @var \Drupal\node\NodeInterface|null $parent */
-        $parent = $node->get('collection')->first()->entity;
+        $parent = $node->get(OgGroupAudienceHelperInterface::DEFAULT_FIELD)->first()->entity;
         $variables['attributes']['data-joinup-parent-id'] = $parent->id();
         $variables['attributes']['data-joinup-parent-label'] = $parent->label();
       }

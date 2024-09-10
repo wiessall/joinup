@@ -239,7 +239,7 @@ function ventuno_preprocess_select(array &$variables): void {
   if (isset($variables['element']['#name'])) {
     switch ($variables['element']['#name']) {
       case 'field_topic':
-      case 'field_is_solution_type':
+      case 'solution_type':
         $variables['attributes']['class'][] = 'h-50vh';
         break;
     }

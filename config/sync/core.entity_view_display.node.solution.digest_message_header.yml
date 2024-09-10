@@ -8,8 +8,8 @@ dependencies:
     - field.field.node.solution.body
     - field.field.node.solution.contact
     - field.field.node.solution.content_creation
-    - field.field.node.solution.documentation
     - field.field.node.solution.description
+    - field.field.node.solution.documentation
     - field.field.node.solution.field_keywords
     - field.field.node.solution.field_state
     - field.field.node.solution.field_topic
@@ -20,6 +20,7 @@ dependencies:
     - field.field.node.solution.listing_content
     - field.field.node.solution.logo
     - field.field.node.solution.metrics_page
+    - field.field.node.solution.og_audience
     - field.field.node.solution.owner
     - field.field.node.solution.process_status
     - field.field.node.solution.related_solutions
@@ -37,24 +38,7 @@ id: node.solution.digest_message_header
 targetEntityType: node
 bundle: solution
 mode: digest_message_header
-content:
-  flag_interoperability:
-    settings: {  }
-    third_party_settings: {  }
-    weight: 10
-    region: content
-  flag_like:
-    settings: {  }
-    third_party_settings: {  }
-    weight: 10
-    region: content
-  og_group:
-    type: og_group_subscribe
-    label: above
-    settings: {  }
-    third_party_settings: {  }
-    weight: 0
-    region: content
+content: {  }
 hidden:
   abstract: true
   body: true
@@ -70,6 +54,8 @@ hidden:
   field_keywords: true
   field_state: true
   field_topic: true
+  flag_interoperability: true
+  flag_like: true
   group_moderation: true
   landing_page: true
   langcode: true
@@ -83,6 +69,7 @@ hidden:
   node_solution_listing_content_inline_facets: true
   node_solution_listing_content_top: true
   og_audience: true
+  og_group: true
   owner: true
   pinned_in: true
   process_status: true
