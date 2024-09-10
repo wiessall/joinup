@@ -522,9 +522,9 @@ class SolutionContext extends RawDrupalContext {
       'modification date' => 'changed',
       'owner' => 'owner',
       'topic' => 'field_topic',
-      'related by type' => 'field_is_show_eira_related',
+      'related by type' => 'list_related_entities',
       'related solutions' => 'field_is_related_solutions',
-      'solution type' => 'field_is_solution_type',
+      'solution type' => 'solution_type',
       'source code repository' => 'field_is_source_code_repository',
       'spatial coverage' => 'spatial_coverage',
       'status' => 'field_status',
@@ -566,7 +566,7 @@ class SolutionContext extends RawDrupalContext {
         'blacklisted' => 'blacklisted',
         'archived' => 'archived',
       ],
-      'field_is_show_eira_related' => ['no' => 0, 'yes' => 1],
+      'list_related_entities' => ['no' => 0, 'yes' => 1],
     ];
 
     Assert::assertEmpty(

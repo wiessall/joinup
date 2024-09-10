@@ -435,16 +435,15 @@ function joinup_solution_get_related_solutions_ids(EntityInterface $entity): arr
 
   $term_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
   $eira_ids = [];
-  if ($entity->get('field_is_show_eira_related')->value === '1') {
+  if ($entity->get('list_related_entities')->value === '1') {
     // Get all solutions that reference the same EIRA building block.
-    $tids = array_map(fn(array $field) => $field['target_id'], $entity->get('field_is_solution_type')->getValue());
+    $tids = array_map(fn(array $field) => $field['target_id'], $entity->get('solution_type')->getValue());
     $eira = array_map(fn(RdfSyncEntityInterface $term): string => $term->getUri(), $term_storage->loadMultiple($tids));
     if ($eira) {
-      // @todo We probably need to change the accessCheck to true here. Check
-      // the feature for the related solutions if any.
-      $query = \Drupal::entityQuery('node')->accessCheck(FALSE)
+      $query = \Drupal::entityQuery('node')
+        ->accessCheck(TRUE)
         ->condition('type', 'solution')
-        ->condition('field_is_solution_type', $eira, 'IN')
+        ->condition('solution_type', $eira, 'IN')
         ->range(0, 4);
       $eira_ids = $query->execute();
     }

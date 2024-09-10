@@ -89,7 +89,7 @@ Feature: "Add solution" visibility options.
       | Name                  | Ernst Brice               |
       | E-mail address        | ernsy1999@gmail.com       |
     And I select "Flemish" from "Language"
-    Then I select "Data Owner" from "Solution type"
+    And I select "Data Owner" from "Solution type"
     And I select "Demography" from "Topic"
     # Attach a PDF to the documentation.
     And I upload the file "text.pdf" to "Upload a new file or enter a URL"
@@ -99,9 +99,10 @@ Feature: "Add solution" visibility options.
     And I press "Add existing" at the "Owner" field
     And I fill in "Owner" with "Organisation example"
     And I press "Add owner"
+    And I select "Completed" from "Status"
     # Ensure that the Status field is a dropdown.
     # @see: https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3342
-    And the option with text "Completed" from select "Status" is selected
+    And I select "Completed" from "Status"
     And the "Show solutions related by EIRA terms" checkbox should not be checked
     And I press "Propose"
     Then the email sent to "Ruth Lee" with subject "Joinup: A new solution has been proposed" contains the following lines of text:
