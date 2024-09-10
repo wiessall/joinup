@@ -111,9 +111,8 @@ class AnnouncementTransitionSubscriber implements EventSubscriberInterface {
   public function onAnnouncementApproved(WorkflowTransitionEvent $event): void {
     /** @var \Drupal\joinup_group\Entity\AnnouncementInterface $announcement */
     $announcement = $event->getEntity();
-    $group = $announcement->getGroup();
 
-    if (!$recipients_count = $group->getAnnouncementRecipientsCount()) {
+    if (!$recipients_count = $announcement->getRecipientsCount()) {
       // Normally, this cannot happen because we're handling this in the form.
       // @see \Drupal\joinup_group\Form\AnnouncementForm::validateForm()
       return;
@@ -121,7 +120,7 @@ class AnnouncementTransitionSubscriber implements EventSubscriberInterface {
 
     // For smaller groups we send the announcements instantly.
     if ($recipients_count <= 50) {
-      $recipients = $group->getAnnouncementRecipients(0, 50);
+      $recipients = $announcement->getRecipients(0, 50);
       $this->messageDelivery->sendMessageToEmailAddresses($announcement, $recipients);
       return;
     }

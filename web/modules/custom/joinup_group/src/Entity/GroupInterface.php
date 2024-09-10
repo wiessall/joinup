@@ -319,35 +319,6 @@ interface GroupInterface extends RdfInterface, LogoInterface, ShortIdInterface, 
   public function getMembers(int $offset = 0, ?int $limit = NULL, array $roles = [OgRoleInterface::AUTHENTICATED], array $states = [OgMembershipInterface::STATE_ACTIVE]): array;
 
   /**
-   * Returns a list of emails of members subscribed to receive announcements.
-   *
-   * Note that this method is not using the entity API as some groups may have
-   * tens of thousands of members, and we need a fast way to queue them. Doing a
-   * direct database query is faster.
-   *
-   * Also, passing an offset and a limit is mandatory in order to avoid huge
-   * return arrays. It's the caller responsibility to pass the correct range and
-   * reassemble the results according to its functionality.
-   *
-   * @param int $offset
-   *   The query offset.
-   * @param int $limit
-   *   The query limit.
-   *
-   * @return string[]
-   *   A list of groups members emails.
-   */
-  public function getAnnouncementRecipients(int $offset, int $limit): array;
-
-  /**
-   * Returns the number of active members subscribed to receive announcements.
-   *
-   * @return int
-   *   The number of active members subscribed to receive announcements.
-   */
-  public function getAnnouncementRecipientsCount(): int;
-
-  /**
    * Returns the contact information field name.
    *
    * @return string

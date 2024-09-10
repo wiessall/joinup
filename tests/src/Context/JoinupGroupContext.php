@@ -374,8 +374,7 @@ class JoinupGroupContext extends RawDrupalContext {
     $body = $announcement->getBody();
     $offset = 0;
     $limit = 250;
-    $group = $announcement->getGroup();
-    while ($member_emails = $group->getAnnouncementRecipients($offset, $limit)) {
+    while ($member_emails = $announcement->getRecipients($offset, $limit)) {
       foreach ($member_emails as $member_email) {
         $emails = $this->getEmailsBySubjectAndMail($announcement->getSubject(), $member_email);
         $email = reset($emails);

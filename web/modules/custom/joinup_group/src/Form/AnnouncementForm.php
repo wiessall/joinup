@@ -190,7 +190,7 @@ class AnnouncementForm extends FormBase {
     $transition = $form_state->getTriggeringElement()['#state_machine_transition'] ?? NULL;
     if ($transition === 'approve') {
       $group = $this->announcement->getGroup();
-      if (!$group->getAnnouncementRecipientsCount()) {
+      if (!$this->announcement->getRecipientsCount()) {
         $form_state->setError($form, $this->t('Cannot send this announcement to %group @type because none of its members are subscribed to receive announcements.', [
           '%group' => $group->label(),
           '@type' => $group->get('rid')->entity->getSingularLabel(),
@@ -265,7 +265,7 @@ class AnnouncementForm extends FormBase {
       $status = $this->t("The announcement has been restored.");
     }
     elseif ($this->announcement->getWorkflowState() === 'delivered') {
-      if ($this->announcement->getGroup()->getAnnouncementRecipientsCount() > 50) {
+      if ($this->announcement->getRecipientsCount() > 50) {
         $status = $this->t("The announcement has been scheduled to be delivered to the %group @type members. Because the @type has a large amount of members the emails will be sent in several batches.", $args);
       }
       else {
