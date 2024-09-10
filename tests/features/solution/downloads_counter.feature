@@ -5,8 +5,8 @@ Feature:
   Scenario: Check solution downloads counter
     # Create the dummy data to work with.
     Given collection content:
-      | title         |
-      | Ocean studies |
+      | title         | state     |
+      | Ocean studies | published |
     Given solution content:
       | title                  | description                                       | collection    | state     |
       | Climate change tracker | Atlantic salmon arrived after the Little Ice Age. | Ocean studies | published |
