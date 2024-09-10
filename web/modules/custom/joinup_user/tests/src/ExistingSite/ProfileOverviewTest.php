@@ -60,7 +60,7 @@ class ProfileOverviewTest extends JoinupExistingSiteTestBase {
     // Sign a user up for more than 100 groups in total. Also, the owner will
     // transparently become a member of all these groups.
     for ($count = 0; $count < 52; $count++) {
-      $collection = $this->createRdfEntity([
+      $collection = $this->createNode([
         'type' => 'collection',
         'title' => 'Collection ' . $count,
         'field_state' => 'published',
