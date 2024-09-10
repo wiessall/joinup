@@ -517,7 +517,7 @@ third_party_settings:
                 type: entity_reference_label
                 label: above
                 settings:
-                  link: true
+                  link: false
                 third_party_settings:
                   field_delimiter:
                     delimiter: ','
