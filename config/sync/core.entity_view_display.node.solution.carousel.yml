@@ -8,8 +8,8 @@ dependencies:
     - field.field.node.solution.body
     - field.field.node.solution.contact
     - field.field.node.solution.content_creation
-    - field.field.node.solution.documentation
     - field.field.node.solution.description
+    - field.field.node.solution.documentation
     - field.field.node.solution.field_keywords
     - field.field.node.solution.field_state
     - field.field.node.solution.field_topic
@@ -20,6 +20,7 @@ dependencies:
     - field.field.node.solution.listing_content
     - field.field.node.solution.logo
     - field.field.node.solution.metrics_page
+    - field.field.node.solution.og_audience
     - field.field.node.solution.owner
     - field.field.node.solution.process_status
     - field.field.node.solution.related_solutions
@@ -77,12 +78,12 @@ content:
   flag_interoperability:
     settings: {  }
     third_party_settings: {  }
-    weight: 10
+    weight: 2
     region: content
   flag_like:
     settings: {  }
     third_party_settings: {  }
-    weight: 10
+    weight: 4
     region: content
   logo:
     type: responsive_image
@@ -97,12 +98,10 @@ content:
         template_suggestion: ''
     weight: 0
     region: content
-  og_group:
-    type: og_group_subscribe
-    label: above
+  read_more:
     settings: {  }
     third_party_settings: {  }
-    weight: 0
+    weight: 3
     region: content
 hidden:
   body: true
@@ -130,11 +129,11 @@ hidden:
   node_solution_listing_content_inline_facets: true
   node_solution_listing_content_top: true
   og_audience: true
+  og_group: true
   owner: true
   pinned_in: true
   process_status: true
   published_at: true
-  read_more: true
   related_solution: true
   related_solutions: true
   release_number: true
