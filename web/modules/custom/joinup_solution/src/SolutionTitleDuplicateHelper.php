@@ -6,6 +6,7 @@ namespace Drupal\joinup_solution;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\node\NodeInterface;
+use Drupal\og\OgGroupAudienceHelperInterface;
 
 /**
  * Default class for the 'joinup_solution.title_duplicate_helper' service.
@@ -106,7 +107,7 @@ class SolutionTitleDuplicateHelper implements SolutionTitleDuplicateHelperInterf
   protected function getCollectionIdsFromSolution(NodeInterface $solution): array {
     return array_map(function (array $reference): string {
       return $reference['target_id'];
-    }, $solution->get('collection')->getValue());
+    }, $solution->get(OgGroupAudienceHelperInterface::DEFAULT_FIELD)->getValue());
   }
 
 }
