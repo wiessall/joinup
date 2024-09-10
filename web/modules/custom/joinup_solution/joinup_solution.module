@@ -40,6 +40,17 @@ use Drupal\og\OgRoleInterface;
 use Drupal\user\Entity\User;
 
 /**
+ * Implements hook_entity_base_field_info_alter().
+ */
+function joinup_solution_entity_base_field_info_alter(array $fields, EntityTypeInterface $entity_type): void {
+  if ($entity_type->id() !== 'node') {
+    return;
+  }
+
+  $fields['title']->addConstraint('UniqueSolutionTitle', []);
+}
+
+/**
  * Implements hook_entity_bundle_field_info_alter().
  */
 function joinup_solution_entity_bundle_field_info_alter(&$fields, EntityTypeInterface $entity_type, $bundle): void {
@@ -75,12 +86,6 @@ function joinup_solution_entity_bundle_field_info_alter(&$fields, EntityTypeInte
       ->setReadOnly(TRUE)
       ->setCardinality(1)
       ->setClass(SolutionLatestReleasesFieldItemList::class);
-
-    // Make sure a solution's title is unique among the collections it belongs
-    // to.
-    if (!empty($fields['title'])) {
-      $fields['title']->addConstraint('UniqueSolutionTitle', []);
-    }
   }
 
   if ($bundle === 'collection') {

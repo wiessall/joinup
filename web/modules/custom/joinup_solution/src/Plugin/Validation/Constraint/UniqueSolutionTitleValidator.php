@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup_solution\Plugin\Validation\Constraint;
 
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
+use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\joinup_solution\SolutionTitleDuplicateHelperInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Validator\Constraint;
@@ -47,11 +48,12 @@ class UniqueSolutionTitleValidator extends ConstraintValidator implements Contai
       return;
     }
 
-    /** @var \Drupal\rdf_entity\RdfInterface $solution */
-    $solution = $items->getEntity();
-
-    if ($solution->bundle() !== 'solution') {
-      throw new \InvalidArgumentException("This validator is designated only for solutions.");
+    /** @var \Drupal\joinup_solution\Entity\SolutionInterface $entity */
+    $entity = $items->getEntity();
+    if (!$entity instanceof SolutionInterface) {
+      // In nodes, the title is a base field and the constraint cannot be set
+      // per bundle. So, escape early if the entity is not a solution.
+      return;
     }
 
     // Either the solution's title is not unique within affiliation, or the
@@ -59,10 +61,10 @@ class UniqueSolutionTitleValidator extends ConstraintValidator implements Contai
     // affiliation. In the first case ::titleIsUniqueWithinAffiliation() returns
     // FALSE, in the latter NULL.
     // @see \Drupal\joinup_solution\SolutionTitleDuplicateHelperInterface::titleIsUniqueWithinAffiliation()
-    if (!$this->solutionTitleHelper->titleIsUniqueWithinAffiliation($solution)) {
+    if (!$this->solutionTitleHelper->titleIsUniqueWithinAffiliation($entity)) {
       $this->context->addViolation($constraint->message, [
         '%value' => $item->value,
-        '@entity_type' => $solution->getEntityType()->getSingularLabel(),
+        '@entity_type' => $entity->getEntityType()->getSingularLabel(),
         '@field_name' => $items->getFieldDefinition()->getLabel(),
       ]);
     }
