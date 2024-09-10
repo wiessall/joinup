@@ -1,0 +1,29 @@
+uuid: a9fb9c7e-bdfe-47a5-b909-1f3343482aa8
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.message.professional_domain
+    - message.template.announcement
+    - taxonomy.vocabulary.topic
+id: message.announcement.professional_domain
+field_name: professional_domain
+entity_type: message
+bundle: announcement
+label: 'Professional domain'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      topic: topic
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference
