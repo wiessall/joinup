@@ -580,3 +580,12 @@ function joinup_rdf_deploy_200009(): void {
   // Fix 'rdf entity' ocuurrences in label.
   $db->query("UPDATE meta_entity SET label = REPLACE(label, 'rdf entity (', 'content item (')");
 }
+
+/**
+ * Fix EU OSS Catalogue menu link.
+ */
+function joinup_rdf_deploy_200010(): void {
+  \Drupal::getContainer()->get('entity.repository')
+    ->loadEntityByUuid('menu_link_content', '686904d4-8e5f-4dfd-baea-e4e6c6496984')
+    ->save();
+}
