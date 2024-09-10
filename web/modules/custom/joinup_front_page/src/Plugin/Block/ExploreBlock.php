@@ -138,7 +138,7 @@ class ExploreBlock extends BlockBase implements ContainerFactoryPluginInterface 
     // whenever any of the content types shown in it change. The front page is
     // heavily trafficked and too frequent cache invalidations might affect
     // performance.
-    return [];
+    return ['homepage_explore_block'];
   }
 
   /**

@@ -6,6 +6,8 @@ namespace Drupal\dashboard\Form;
 
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Cache\CacheBackendInterface;
+use Drupal\Core\Database\Connection;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
@@ -13,6 +15,7 @@ use Drupal\Core\State\StateInterface;
 use Drupal\Core\Url;
 use Drupal\joinup_core\Logger\Handler\MailHandler;
 use Drupal\joinup_core\Logger\Handler\TelegramHandler;
+use Drupal\rdf_sync\RdfSyncConnectionInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -23,6 +26,9 @@ class DashboardForm extends FormBase {
   public function __construct(
     protected StateInterface $state,
     protected CacheBackendInterface $pageCache,
+    protected EntityTypeManagerInterface $entityTypeManager,
+    protected RdfSyncConnectionInterface $rdfSyncConnection,
+    protected Connection $db,
   ) {
   }
 
@@ -33,6 +39,9 @@ class DashboardForm extends FormBase {
     return new static(
       $container->get('state'),
       $container->get('cache.page'),
+      $container->get('entity_type.manager'),
+      $container->get('rdf_sync.connection'),
+      $container->get('database'),
     );
   }
 
@@ -105,14 +114,14 @@ class DashboardForm extends FormBase {
       '#type' => 'submit',
       '#value' => $this->t('Enable EU OSS Catalogue'),
       '#submit' => ['::enableEuOssCatalogueSubmitForm'],
-      '#access' => $hasEnableDisablePermission && !joinup_oss_catalogue_is_enabled(),
+      '#access' => $hasEnableDisablePermission && !joinup_oss_catalogue_feature()->isAllowed(),
     ];
     // @todo Remove this button in ISAICP-9053.
     $form['actions']['disable'] = [
       '#type' => 'submit',
       '#value' => $this->t('Disable EU OSS Catalogue'),
       '#submit' => ['::disableEuOssCatalogueSubmitForm'],
-      '#access' => $hasEnableDisablePermission && joinup_oss_catalogue_is_enabled(),
+      '#access' => $hasEnableDisablePermission && joinup_oss_catalogue_feature()->isAllowed(),
     ];
 
     return $form;
@@ -124,7 +133,7 @@ class DashboardForm extends FormBase {
    * @todo Remove this method in ISAICP-9053.
    */
   public function enableEuOssCatalogueSubmitForm(): void {
-    $this->state->delete('joinup.oss_catalogue_is_disabled');
+    joinup_oss_catalogue_toggle('enable');
     // Only clear cache for anonymous.
     $this->pageCache->deleteAll();
     $this->messenger()->addStatus($this->t('EU OSS Catalogue has been enabled'));
@@ -136,7 +145,7 @@ class DashboardForm extends FormBase {
    * @todo Remove this method in ISAICP-9053.
    */
   public function disableEuOssCatalogueSubmitForm(): void {
-    $this->state->set('joinup.oss_catalogue_is_disabled', TRUE);
+    joinup_oss_catalogue_toggle('disable');
     // Only clear cache for anonymous.
     $this->pageCache->deleteAll();
     $this->messenger()->addStatus($this->t('EU OSS Catalogue has been disabled'));
