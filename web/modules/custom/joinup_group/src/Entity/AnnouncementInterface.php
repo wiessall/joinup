@@ -85,4 +85,22 @@ interface AnnouncementInterface extends MessageInterface, GroupContentInterface,
    */
   public function getRecipientsCount(): int;
 
+  /**
+   * Sets the professional domains reference value.
+   *
+   * @param array $ids
+   *   The entity IDs of the topic terms.
+   *
+   * @return $this
+   */
+  public function setProfessionalDomains(array $ids): self;
+
+  /**
+   * Returns the professional domains reference value.
+   *
+   * @return array
+   *   The IDs of the professional domain terms.
+   */
+  public function getProfessionalDomainIds(): array;
+
 }

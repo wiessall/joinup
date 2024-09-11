@@ -140,6 +140,7 @@ class AnnouncementForm extends FormBase {
       '#title' => $this->t('Professional domain'),
       '#description' => $this->t('By picking any value, you will limit the recipients of the announcement.'),
       '#options' => $this->getOptions(),
+      '#default_value' => $this->announcement->getProfessionalDomainIds(),
       '#multiple' => TRUE,
       '#required' => FALSE,
       '#size' => 10,
@@ -217,6 +218,7 @@ class AnnouncementForm extends FormBase {
 
     $this->announcement
       ->setSubject($form_state->getValue('subject'))
+      ->setProfessionalDomains($form_state->getValue('professional_domain'))
       ->setBody($form_state->getValue(['body', 'value']))
       // Only save the arguments having a 'value' key. Some arguments depend on
       // the email recipient and will be dynamically set when the email is sent.
