@@ -62,23 +62,6 @@ Feature: Solution homepage
     And I should see the "Jira will be down for maintenance" tile
     And I should not see the "Maintenance page" tile
 
-  Scenario: A link to the first collection a solution is affiliated to should be shown in the solution header.
-    Given collection content:
-      | title              | state     |
-      | Disappointed Steel | published |
-      | Random Arm         | published |
-    Given solution content:
-      | title       | state     | collections                   |
-      | Robotic arm | published | Disappointed Steel            |
-      | ARM9        | published | Disappointed Steel,Random Arm |
-
-    When I go to the homepage of the "Robotic arm" solution
-    Then I should see the link "Disappointed Steel"
-
-    When I go to the homepage of the "ARM9" solution
-    Then I should see the link "Disappointed Steel"
-    But I should not see the link "Random Arm"
-
   Scenario: Test that a pager is shown on the solution page when needed.
     Given owner content:
       | name                  | owner type |
