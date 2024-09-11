@@ -8,6 +8,7 @@ dependencies:
     - filter.format.plain_text_glossary
     - filter.format.simple_text
     - search_api_autocomplete.search.search
+    - search_api_autocomplete.search.search_oss_catalogue
   module:
     - comment
     - email_confirmer

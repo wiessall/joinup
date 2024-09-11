@@ -325,4 +325,13 @@ settings:
   date_format:
     handler: 'default:date_format'
     handler_settings: {  }
+  private_message_thread:
+    handler: 'default:private_message_thread'
+    handler_settings: {  }
+  private_message:
+    handler: 'default:private_message'
+    handler_settings: {  }
+  private_message_ban:
+    handler: 'default:private_message_ban'
+    handler_settings: {  }
 field_type: dynamic_entity_reference

@@ -96,9 +96,13 @@ content:
     weight: 6
     region: content
 hidden:
+  block_user: true
   field_social_media: true
   field_user_content: true
   field_user_frequency: true
   langcode: true
+  linked_username: true
+  masquerade: true
+  private_message_link: true
   search_api_excerpt: true
   user_user_field_user_content_top: true

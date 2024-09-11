@@ -105,6 +105,7 @@ hidden:
   flag_like_node: true
   langcode: true
   og_audience: true
+  private_message_link: true
   published_at: true
   read_more: true
   search_api_excerpt: true

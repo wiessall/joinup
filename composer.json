@@ -85,6 +85,7 @@
         "drupal/pathauto": "~1.8",
         "drupal/pluginreference": "^3.0",
         "drupal/poll": "^1.6",
+        "drupal/private_message": "^3.0",
         "drupal/publication_date": "^2.0",
         "drupal/queue_ui": "^3.1",
         "drupal/rdf_entity": "^2.0",
@@ -121,8 +122,8 @@
         "drupal/views_multiple_permissions": "^2.0",
         "drupal/webform": "^6.2",
         "drush/drush": "^12.1",
-        "jakeasmith/http_build_url": "^1.0",
         "gitonomy/gitlib": "^1.4",
+        "jakeasmith/http_build_url": "^1.0",
         "knplabs/github-api": "^3.13",
         "m4tthumphrey/php-gitlab-api": "^11.12",
         "openeuropa/composer-artifacts": "^1.0",
@@ -405,6 +406,9 @@
             "drupal/poll": {
                 "Add permissions to edit all polls @see https://www.drupal.org/project/poll/issues/3274724": "resources/patch/php/drupal/poll/3274724-4.patch",
                 "User can stuck on View results @see https://www.drupal.org/project/poll/issues/3405509": "resources/patch/php/drupal/poll/3405509.patch"
+            },
+            "drupal/private_message": {
+                "Add missing fields to private message thread members formatter settings @see https://www.drupal.org/i/3470928": "resources/patch/php/drupal/private_message/3470928.diff"
             },
             "drupal/publication_date": {
                 "Expand Publication Date to all Entity Types @see https://www.drupal.org/project/publication_date/issues/3219401": "resources/patch/php/drupal/publication_date/3219401-18.patch"

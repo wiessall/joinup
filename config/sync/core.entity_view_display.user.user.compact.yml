@@ -16,7 +16,7 @@ dependencies:
     - field.field.user.user.field_user_professional_domain
     - image.style.profile_icon
   module:
-    - image
+    - svg_image
     - template_suggestion
     - user
 id: user.user.compact
@@ -32,12 +32,17 @@ content:
       image_style: profile_icon
       image_loading:
         attribute: lazy
+      svg_attributes:
+        width: null
+        height: null
+      svg_render_as_image: true
     third_party_settings:
       template_suggestion:
         template_suggestion: bare
     weight: 0
     region: content
 hidden:
+  block_user: true
   field_social_media: true
   field_user_business_title: true
   field_user_content: true
@@ -48,6 +53,9 @@ hidden:
   field_user_organisation: true
   field_user_professional_domain: true
   langcode: true
+  linked_username: true
+  masquerade: true
   member_for: true
+  private_message_link: true
   search_api_excerpt: true
   user_user_field_user_content_top: true
