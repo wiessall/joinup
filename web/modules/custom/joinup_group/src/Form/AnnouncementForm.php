@@ -7,6 +7,7 @@ namespace Drupal\joinup_group\Form;
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Component\Render\MarkupInterface;
 use Drupal\Core\Cache\CacheableMetadata;
+use Drupal\Core\Database\Connection;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
@@ -40,6 +41,7 @@ class AnnouncementForm extends FormBase {
     protected JoinupMessageDeliveryInterface $messageDelivery,
     protected TimeInterface $time,
     protected LoggerChannelInterface $logger,
+    protected Connection $connection,
   ) {
   }
 
@@ -51,6 +53,7 @@ class AnnouncementForm extends FormBase {
       $container->get('joinup_notification.message_delivery'),
       $container->get('datetime.time'),
       $container->get('logger.channel.group_membership'),
+      $container->get('database'),
     );
   }
 
@@ -145,9 +148,9 @@ class AnnouncementForm extends FormBase {
     $form['professional_domain'] = [
       '#type' => 'select',
       '#title' => $this->t('Professional domain'),
-      '#description' => $this->t('description?'),
+      '#description' => $this->t('By picking any value, you will limit the recipients of the announcement.'),
       '#options' => $this->getOptions(),
-      '#multiple' => TRUE, // Allows multiple selections.
+      '#multiple' => TRUE,
       '#required' => FALSE,
       '#size' => 10,
     ];
@@ -364,9 +367,8 @@ class AnnouncementForm extends FormBase {
    *   Option list.
    */
   protected function getOptions(): array {
-    $membership = $this->getMembershipCount();
+    $topic_assignment = $this->getUsersTopicAssignment();
 
-    $count = 0;
     $options = [];
     $definition = $this->announcement->get('professional_domain')
       ->getFieldDefinition();
@@ -382,66 +384,50 @@ class AnnouncementForm extends FormBase {
         continue;
       }
 
-      $number_of_users = $membership[$key] ?? NULL;
+      $number_of_users = isset($topic_assignment[$key]) ? count($topic_assignment[$key]) : NULL;
       if (isset($parent) && $number_of_users) {
         $options[$parent][$key] = $domain . ' (' . $number_of_users . ')';
-        $count += $number_of_users;
       }
     }
-
-    dpm('count:' . $count);
 
     return $options;
   }
 
-  public function getMembershipCount(): array {
+  /**
+   * Gets user's topic assignment.
+   *
+   * @return array
+   *   List of assignments.
+   */
+  public function getUsersTopicAssignment(): array {
     $group = $this->announcement->getGroup();
 
-    $query = \Drupal::database()->select('og_membership', 'og');
+    $list = [];
+
+    $query = $this->connection->select('og_membership', 'og');
     $query->join('users_field_data', 'u', 'og.uid = u.uid');
     $query->join('user__field_user_professional_domain', 'pd', 'pd.entity_id = og.uid');
-    $query->fields('pd', ['field_user_professional_domain_target_id']);
+    $query->addExpression('pd.field_user_professional_domain_target_id', 'term');
     $query->fields('u', ['uid']);
 
-    $membership = [];
-    $domain_assigments = $query->condition('og.entity_type', 'rdf_entity')
+    $assignments = $query->condition('og.entity_type', 'rdf_entity')
       ->condition('og.entity_bundle', $group->bundle())
       ->condition('og.entity_id', $group->id())
       ->condition('og.state', OgMembershipInterface::STATE_ACTIVE)
       ->condition('og.announcements', 1)
       ->condition('u.status', 1)
-      ->execute()
-      ->fetchAllKeyed();
-    foreach ($domain_assigments as $domain_assigment) {
-      dpm($domain_assigment);
-      //      if (isset($membership[$domain_assigment])) {
-      //        $membership[$domain_assigment->field_user_professional_domain_target_id] = [];
-      //      }
-      //
-      //      if (!in_array($domain_assigment->uid, $membership[$domain_assigment->field_user_professional_domain_target_id])) {
-      //        $membership[$domain_assigment->field_user_professional_domain_target_id][] = $domain_assigment->uid;
-      //      }
+      ->execute();
+    foreach ($assignments as $assignment) {
+      if (!isset($list[$assignment->term])) {
+        $list[$assignment->term] = [];
+      }
+
+      if (!in_array($assignment->uid, $list[$assignment->term])) {
+        $list[$assignment->term][] = $assignment->uid;
+      }
     }
 
-    dpm($membership);
-    return [];
-
-    $query = \Drupal::database()->select('og_membership', 'og');
-    $query->join('users_field_data', 'u', 'og.uid = u.uid');
-    //$query->join('entity_legal_document_acceptance', 'a', 'og.uid = a.uid');
-    $query->join('user__field_user_professional_domain', 'pd', 'pd.entity_id = og.uid');
-    $query->addExpression('COUNT(pd.entity_id)', 'users');
-    $query->groupBy('pd.field_user_professional_domain_target_id');
-    $query->fields('pd', ['field_user_professional_domain_target_id']);
-
-    return $query->condition('og.entity_type', 'rdf_entity')
-      ->condition('og.entity_bundle', $group->bundle())
-      ->condition('og.entity_id', $group->id())
-      ->condition('og.state', OgMembershipInterface::STATE_ACTIVE)
-      ->condition('og.announcements', 1)
-      ->condition('u.status', 1)
-      ->execute()
-      ->fetchAllKeyed();
+    return $list;
   }
 
 }
