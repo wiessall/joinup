@@ -7,9 +7,11 @@ namespace Drupal\joinup_core\Plugin\Field\FieldType;
 use Drupal\Core\Field\FieldItemList;
 use Drupal\Core\TypedData\ComputedItemListTrait;
 use Drupal\Core\Url;
+use Drupal\comment\CommentInterface;
 use Drupal\joinup_core\Controller\IdRedirect;
 use Drupal\joinup_core\Entity\PermalinkInterface;
 use Drupal\joinup_rdf\Entity\RdfSyncEntityInterface;
+use Drupal\node\NodeInterface;
 
 /**
  * Field item list class for the 'permalink' bundle base field.
@@ -32,23 +34,31 @@ class PermalinkFieldItemList extends FieldItemList {
       return;
     }
 
-    // Entity ID is pointing to the publication office redirect.
-    $namespaces = implode('|', array_keys(IdRedirect::getEntityTypeFromPersistentUriNamespace()));
-    $uri = $entity instanceof RdfSyncEntityInterface ? $entity->getUri() : $entity->id();
-    if ($uri && preg_match('{^http://data.europa.eu/(?:' . $namespaces . ')/}', $uri)) {
-      $value = Url::fromUri($uri)->toString();
-    }
-    else {
-      try {
-        // Don't process the path to avoid pathauto aliasing.
-        $value = $entity->toUrl('canonical', [
-          'path_processing' => FALSE,
-          'absolute' => TRUE,
-        ])->toString();
+    try {
+      if ($entity instanceof NodeInterface) {
+        // Entity ID is pointing to the publication office redirect.
+        $namespaces = implode('|', array_keys(IdRedirect::getEntityTypeFromPersistentUriNamespace()));
+        $uri = $entity instanceof RdfSyncEntityInterface ? $entity->getUri() : $entity->id();
+        if ($uri && preg_match('{^http://data.europa.eu/(?:' . $namespaces . ')/}', $uri)) {
+          $value = Url::fromUri($uri)->toString();
+        }
+        else {
+          // Don't process the path to avoid pathauto aliasing.
+          $value = $entity->toUrl('canonical', [
+            'path_processing' => FALSE,
+            'absolute' => TRUE,
+          ])->toString();
+        }
       }
-      catch (\Exception $e) {
+      elseif ($entity instanceof CommentInterface) {
+        $value = $entity->permalink()->setOption('absolute', TRUE)->toString();
+      }
+      else {
         $value = NULL;
       }
+    }
+    catch (\Exception $e) {
+      $value = NULL;
     }
 
     $this->list[0] = $this->createItem(0, $value);

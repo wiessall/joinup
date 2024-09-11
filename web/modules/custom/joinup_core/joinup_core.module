@@ -416,6 +416,7 @@ function joinup_core_entity_bundle_field_info(EntityTypeInterface $entity_type, 
 
   $permalink_bundles = [
     'node' => ['custom_page', 'discussion', 'distribution', 'document', 'event', 'licence', 'news', 'release'],
+    'comment' => ['comment', 'reply'],
   ];
   if (in_array($bundle, $permalink_bundles[$entity_type->id()] ?? [])) {
     $fields['permalink'] = BaseFieldDefinition::create('link')
