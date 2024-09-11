@@ -815,25 +815,6 @@ class SolutionContext extends RawDrupalContext {
   }
 
   /**
-   * Adds a default logo image to the solution if it was not defined.
-   *
-   * @param \Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope $scope
-   *   The before node create scope.
-   *
-   * @BeforeNodeCreate
-   */
-  public function ensureSolutionLogo(BeforeNodeCreateScope $scope): void {
-    $node = $scope->getEntity();
-    if ($node->type !== 'solution') {
-      return;
-    }
-    // Add logo image.
-    if (!empty($node->logo)) {
-      $node->logo = $this->getFileSourcePath($node->logo);
-    }
-  }
-
-  /**
    * Ensures that the solution being created has a parent collection.
    *
    * @param \Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope $scope
