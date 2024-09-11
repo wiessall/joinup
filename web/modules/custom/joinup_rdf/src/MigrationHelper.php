@@ -689,4 +689,34 @@ final class MigrationHelper {
     return sprintf(self::URL_ENCODE_SQL_EXPRESSION, $baseExpression);
   }
 
+  /**
+   * Maps URIs to node UUIDs.
+   *
+   * @return array
+   *   Associative array with URIs as keys and node UUIDs as values.
+   */
+  public function getUriToUuid(): array {
+    $query = $this->connection->select('rdf_sync_uri', 'u')
+      ->fields('u', ['uri'])
+      ->condition('entity_type', 'node');
+    $query->innerJoin('node', 'n', 'n.nid = u.entity_id');
+    return $query->fields('n', ['uuid'])
+      ->execute()
+      ->fetchAllKeyed();
+  }
+
+  /**
+   * Maps URIs to node IDs.
+   *
+   * @return array
+   *   Associative array with URIs as keys and node IDs as values.
+   */
+  public function getUriToNid(): array {
+    return $this->connection->select('rdf_sync_uri')
+      ->fields('rdf_sync_uri', ['uri', 'entity_id'])
+      ->condition('entity_type', 'node')
+      ->execute()
+      ->fetchAllKeyed();
+  }
+
 }
