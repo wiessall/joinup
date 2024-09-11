@@ -10,9 +10,8 @@ dependencies:
     - dashboard
     - filter
     - joinup_licence
-    - paragraphs_type_permissions
-    - rdf_entity
     - node
+    - paragraphs_type_permissions
     - taxonomy
     - toolbar
 id: licence_manager

@@ -37,7 +37,7 @@
   {% set items = items|merge([{
     type: 'search',
     breakpoint: '',
-    classes: ['order-1 dropdown-search'],
+    classes: ['order-2 dropdown-search'],
     id: 'search-box-dropdown',
     icon: {
       name: 'search',
@@ -56,5 +56,6 @@
   collapse_id: 'main-navbar',
   list_id: 'main-navbar-list',
   items: items,
+  private_message: private_message,
   search: hide_searchbar ? '' : searchbar,
 }) }}

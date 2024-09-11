@@ -50,6 +50,7 @@ hidden:
   langcode: true
   links: true
   og_audience: true
+  private_message_link: true
   process_status: true
   published_at: true
   release: true

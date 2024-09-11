@@ -1,0 +1,48 @@
+uuid: 6ed4c99d-19fa-48c0-9086-107bb42e080d
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.user.private_message_author
+    - field.field.user.user.field_social_media
+    - field.field.user.user.field_user_business_title
+    - field.field.user.user.field_user_content
+    - field.field.user.user.field_user_family_name
+    - field.field.user.user.field_user_first_name
+    - field.field.user.user.field_user_frequency
+    - field.field.user.user.field_user_nationality
+    - field.field.user.user.field_user_organisation
+    - field.field.user.user.field_user_photo
+    - field.field.user.user.field_user_professional_domain
+  module:
+    - user
+_core:
+  default_config_hash: 5VkjdDDe_kM-giLC61z36ACn6Z2eMjaH63Rh6adWWpw
+id: user.user.private_message_author
+targetEntityType: user
+bundle: user
+mode: private_message_author
+content:
+  linked_username:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  block_user: true
+  field_social_media: true
+  field_user_business_title: true
+  field_user_content: true
+  field_user_family_name: true
+  field_user_first_name: true
+  field_user_frequency: true
+  field_user_nationality: true
+  field_user_organisation: true
+  field_user_photo: true
+  field_user_professional_domain: true
+  langcode: true
+  masquerade: true
+  member_for: true
+  private_message_link: true
+  search_api_excerpt: true
+  user_user_field_user_content_top: true

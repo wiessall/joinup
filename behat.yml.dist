@@ -22,6 +22,7 @@
         - .globan
   - Drupal\joinup\Context\AdmsValidatorContext
   - Drupal\joinup\Context\BootstrapContext
+  - Drupal\joinup\Context\PrivateMessageContext
   - Drupal\joinup\Context\CollectionContext
   - Drupal\joinup\Context\ContactFormContext
   - Drupal\joinup\Context\ContactInformationContext

@@ -1,0 +1,5 @@
+joinup_private_message.private_message:
+  title: 'My messages'
+  route_name: private_message.private_message_page
+  menu_name: account
+  weight: 1
