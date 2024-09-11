@@ -585,56 +585,67 @@ function joinup_rdf_deploy_200010(): void {
 /**
  * Filters in content listings.
  */
-function joinup_rdf_deploy_200011(): void {
-  $db = \Drupal::database();
-  $entityTypeManager = \Drupal::entityTypeManager();
-  $fieldManager = \Drupal::getContainer()->get('entity_field.manager');
-  $like = '%' . $db->escapeLike('bundle_autocomplete:rdf_entity:') . '%';
-  $uriToNid = \Drupal::getContainer()->get('joinup_rdf.migration_helper')->getUriToNid();
+function joinup_rdf_deploy_200011(?array &$sandbox = NULL): void {
+  if (!isset($sandbox['tables'])) {
+    $sandbox['tables'] = [];
 
-  // Converts legacy RDF filter to node. If NULL is returned, this filter is
-  // marked for removal because the target entity doesn't exist anymore.
-  $fixFilter = static function (array $filter) use ($uriToNid): ?array {
+    $fieldManager = \Drupal::getContainer()->get('entity_field.manager');
+    $entityTypeManager = \Drupal::entityTypeManager();
+
+    // Iterate over all search_api_field fields. Collect tables using them.
+    foreach ($fieldManager->getFieldMapByFieldType('search_api_field') as $entityTypeId => $fields) {
+      $storage = $entityTypeManager->getStorage($entityTypeId);
+      assert($storage instanceof SqlEntityStorageInterface);
+
+      $fieldStorageDefinitions = $fieldManager->getFieldStorageDefinitions($entityTypeId);
+      $tableMapping = $storage->getTableMapping();
+
+      foreach ($fields as $fieldName => $info) {
+        foreach ($tableMapping->getAllFieldTableNames($fieldName) as $table) {
+          $column = $tableMapping->getFieldColumnName($fieldStorageDefinitions[$fieldName], 'value');
+          $sandbox['tables'][] = [$table, $column];
+        }
+      }
+    }
+    $sandbox['uri_to_nid'] = \Drupal::getContainer()->get('joinup_rdf.migration_helper')->getUriToNid();
+  }
+
+  // Converts the legacy RDF filter to a node filter. NULL to mark this filter
+  // for removal because the target entity doesn't exist anymore.
+  $fixFilter = static function (array $filter) use ($sandbox): ?array {
     if (str_starts_with($filter['plugin'], 'bundle_autocomplete:rdf_entity:')) {
       $filter['plugin'] = str_replace(':rdf_entity:', ':node:', $filter['plugin']);
-      if (empty($uriToNid[$filter['target_id']])) {
-        // We remove this filter as it points to an invalid entity.
+      if (empty($sandbox['uri_to_nid'][$filter['target_id']])) {
+        // Remove this filter as it points to an invalid entity.
         return NULL;
       }
-      $filter['target_id'] = $uriToNid[$filter['target_id']];
+      $filter['target_id'] = $sandbox['uri_to_nid'][$filter['target_id']];
       $filter['field'] = 'nid';
     }
     return $filter;
   };
 
-  foreach ($fieldManager->getFieldMapByFieldType('search_api_field') as $entityTypeId => $fields) {
-    $storage = $entityTypeManager->getStorage($entityTypeId);
-    assert($storage instanceof SqlEntityStorageInterface);
+  $db = \Drupal::database();
+  $like = '%' . $db->escapeLike('bundle_autocomplete:rdf_entity:') . '%';
 
-    $fieldStorageDefinitions = $fieldManager->getFieldStorageDefinitions($entityTypeId);
-    $tableMapping = $storage->getTableMapping();
+  [$table, $column] = array_shift($sandbox['tables']);
 
-    foreach ($fields as $fieldName => $info) {
-      foreach ($tableMapping->getAllFieldTableNames($fieldName) as $table) {
-        $column = $tableMapping->getFieldColumnName($fieldStorageDefinitions[$fieldName], 'value');
+  $rows = $db->query("SELECT revision_id, $column FROM {{$table}} WHERE $column LIKE :like", [
+    ':like' => $like,
+  ], ['allow_delimiter_in_query' => TRUE])->fetchAllKeyed();
 
-        $rows = $db->query("SELECT revision_id, $column FROM {{$table}} WHERE $column LIKE :like", [
-          ':like' => $like,
-        ], ['allow_delimiter_in_query' => TRUE])->fetchAllKeyed();
-
-        foreach ($rows as $revisionId => $value) {
-          $value = unserialize($value, ['allowed_classes' => FALSE]);
-          $value['query_builder']['filters'] = array_values(
-            array_filter(
-              array_map($fixFilter, $value['query_builder']['filters'] ?? [])
-            )
-          );
-          $db->query("UPDATE {{$table}} SET $column = :value WHERE revision_id = :revision_id", [
-            ':value' => serialize($value),
-            ':revision_id' => $revisionId,
-          ]);
-        }
-      }
-    }
+  foreach ($rows as $revisionId => $value) {
+    $value = unserialize($value, ['allowed_classes' => FALSE]);
+    $value['query_builder']['filters'] = array_values(
+      array_filter(
+        array_map($fixFilter, $value['query_builder']['filters'] ?? [])
+      )
+    );
+    $db->query("UPDATE {{$table}} SET $column = :value WHERE revision_id = :revision_id", [
+      ':value' => serialize($value),
+      ':revision_id' => $revisionId,
+    ]);
   }
+
+  $sandbox['#finished'] = (int) empty($sandbox['tables']);
 }
