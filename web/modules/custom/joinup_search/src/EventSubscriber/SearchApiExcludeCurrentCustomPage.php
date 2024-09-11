@@ -41,7 +41,7 @@ class SearchApiExcludeCurrentCustomPage implements EventSubscriberInterface {
       }
 
       if ($parentEntity) {
-        $query->addCondition('id', $parentEntity->id(), '<>');
+        $query->addCondition('nid', $parentEntity->id(), '<>');
       }
     }
   }
