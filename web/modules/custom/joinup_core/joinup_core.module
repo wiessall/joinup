@@ -24,9 +24,11 @@ use Drupal\joinup_core\ETransBlockConfiguration;
 use Drupal\joinup_core\Element\Datetime;
 use Drupal\joinup_core\Entity\OutdatedContentInterface;
 use Drupal\joinup_core\Plugin\Field\FieldType\OutdatedContentFieldItemList;
+use Drupal\joinup_core\Plugin\Field\FieldType\PermalinkFieldItemList;
 use Drupal\joinup_core\Plugin\Field\FieldWidget\ImageLibraryWidget;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_workflow\ArchivableEntityInterface;
+use Drupal\link\LinkItemInterface;
 use Drupal\node\NodeInterface;
 use Drupal\symfony_mailer_lite\Plugin\Mail\SymfonyMailer;
 
@@ -411,6 +413,27 @@ function joinup_core_entity_bundle_field_info(EntityTypeInterface $entity_type, 
       ->setCardinality(1)
       ->setDefaultValue(NULL);
   }
+
+  $permalink_bundles = [
+    'node' => ['custom_page', 'discussion', 'distribution', 'document', 'event', 'licence', 'news', 'release'],
+  ];
+  if (in_array($bundle, $permalink_bundles[$entity_type->id()] ?? [])) {
+    $fields['permalink'] = BaseFieldDefinition::create('link')
+      ->setLabel(t('Permalink'))
+      ->setDescription(t('The permalink for the entity.'))
+      ->setComputed(TRUE)
+      ->setRequired(FALSE)
+      ->setClass(PermalinkFieldItemList::class)
+      ->setCardinality(1)
+      ->setDefaultValue(NULL)
+      ->setSettings([
+        'link_type' => LinkItemInterface::LINK_INTERNAL,
+        'title' => DRUPAL_DISABLED,
+      ])
+      ->setDisplayConfigurable('form', FALSE)
+      ->setDisplayConfigurable('display', FALSE);
+  }
+
   return $fields;
 }
 
