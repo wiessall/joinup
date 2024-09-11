@@ -139,4 +139,22 @@ class Announcement extends Message implements AnnouncementInterface {
       ->orderBy('og.uid');
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function setProfessionalDomains(array $ids): self {
+    $this->set('professional_domain', $ids);
+    return $this;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getProfessionalDomainIds(): array {
+    return array_map(
+      fn(array $value) => $value['target_id'],
+      $this->get('professional_domain')->getValue(),
+    );
+  }
+
 }
