@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 use Drupal\Core\Entity\Sql\SqlEntityStorageInterface;
 use Drupal\joinup_rdf\MigrationHelper;
+use Drupal\search_api_solr\SolrConnectorInterface;
 
 /**
  * Disable RDF Sync for the deployment.
@@ -648,4 +649,66 @@ function joinup_rdf_deploy_200011(?array &$sandbox = NULL): void {
   }
 
   $sandbox['#finished'] = (int) empty($sandbox['tables']);
+}
+
+/**
+ * Reindex group content.
+ */
+function joinup_rdf_deploy_200012(?array &$sandbox = NULL): string {
+  if (!isset($sandbox['nids'])) {
+    $sandbox['nids'] = \Drupal::database()->select('node__og_audience')
+      ->fields('node__og_audience', ['entity_id'])
+      ->condition('bundle', [
+        'custom_page',
+        'discussion',
+        'distribution',
+        'document',
+        'event',
+        'glossary',
+        'news',
+        'release',
+      ], 'IN')
+      ->execute()
+      ->fetchCol();
+    $sandbox['uri_to_nid'] = \Drupal::getContainer()->get('joinup_rdf.migration_helper')->getUriToNid();
+    $sandbox['total'] = count($sandbox['nids']);
+    $sandbox['progress'] = 0;
+  }
+
+  $amount = 100;
+  $nids = array_splice($sandbox['nids'], 0, $amount);
+  $sandbox['progress'] += count($nids);
+
+  $solr = \Drupal::entityTypeManager()
+    ->getStorage('search_api_server')
+    ->load('joinup')
+    ->getBackend()
+    ->getSolrConnector();
+  assert($solr instanceof SolrConnectorInterface);
+
+  $query = $solr->getSelectQuery()
+    ->setQuery('its_nid:(' . implode(' OR ', $nids) . ') AND sm_entity_groups:[* TO *]')
+    ->setRows($amount);
+
+  $documents = $solr->execute($query)->getData()['response']['docs'] ?? [];
+  $updateQuery = $solr->getUpdateQuery();
+  foreach ($documents as &$document) {
+    $document['sm_entity_groups'] = array_map(function (string $group) use ($sandbox): string {
+      if (!isset($sandbox['uri_to_nid'][$group])) {
+        throw new \RuntimeException("Group '$group' doesn't have a NID");
+      }
+      return $sandbox['uri_to_nid'][$group];
+    }, $document['sm_entity_groups']);
+    // Convert to a document object.
+    $document = $updateQuery->createDocument($document);
+  }
+
+  $updateQuery = $solr
+    ->getUpdateQuery()
+    ->addDocuments($documents)
+    ->addCommit();
+  $solr->update($updateQuery);
+
+  $sandbox['#finished'] = (int) empty($sandbox['nids']);
+  return "Reindexed {$sandbox['progress']}/{$sandbox['total']} nodes";
 }
