@@ -129,14 +129,21 @@ class Announcement extends Message implements AnnouncementInterface {
     $query->join('users_field_data', 'u', 'og.uid = u.uid');
     // Only users which accepted the 'Legal notice' are receiving announcements.
     $query->join('entity_legal_document_acceptance', 'a', 'og.uid = a.uid');
+
+    if ($professionalDomainIds = $this->getProfessionalDomainIds()) {
+      $query->join('user__field_user_professional_domain', 'pd', 'u.uid = pd.entity_id');
+      $query->condition('pd.field_user_professional_domain_target_id', $professionalDomainIds, 'IN');
+    }
+
     return $query->condition('og.entity_type', 'rdf_entity')
       ->fields('u', ['mail'])
+      ->distinct()
       ->condition('og.entity_bundle', $group->bundle())
       ->condition('og.entity_id', $group->id())
       ->condition('og.state', OgMembershipInterface::STATE_ACTIVE)
       ->condition('og.announcements', 1)
       ->condition('u.status', 1)
-      ->orderBy('og.uid');
+      ->orderBy('u.mail');
   }
 
   /**
