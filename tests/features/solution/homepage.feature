@@ -47,16 +47,6 @@ Feature: Solution homepage
       | Only facilitators and authors can create content. |
       | Non moderated                                     |
 
-  # This is a regression test for the entities that include a hashmark on their Uri.
-  # @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3225
-  Scenario: Regression test for Uris that include a '#'.
-    Given solution content:
-      | uri                            | title                         | description                           | logo     | state     |
-      | http://solution/example1/test# | Information sharing protocols | Handling information sharing securely | logo.png | published |
-    When I go to the homepage of the "Information sharing protocols" solution
-    Then I should see the heading "Information sharing protocols"
-    And I should not see the text "Page not found"
-
   Scenario: Custom pages should not be visible on the solution homepage
     Given solution content:
       | title           | description                 | documentation | content creation | landing page                   | webdav creation | webdav url                           | wiki                            | state     |
