@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_release\Entity;
 
+use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\joinup_bundle_class\DescriptionTrait;
 use Drupal\joinup_bundle_class\JoinupBundleClassFieldAccessTrait;
 use Drupal\joinup_distribution\Entity\DistributionParentTrait;
@@ -35,6 +36,23 @@ class Release extends Node implements ReleaseInterface {
   use SolutionContentTrait;
   use EntityOwnerTrait;
   use EntityPublicationTimeFallbackTrait;
+
+  /**
+   * {@inheritdoc}
+   */
+  public function preSave(EntityStorageInterface $storage) {
+    if (!$this->isNew()) {
+      return;
+    }
+    // Set the solution data if a solution is passed as a group, or the group
+    // if the solution is passed as the solution data.
+    if ($this->get('solution_data')->isEmpty() && !$this->get('og_audience')->isEmpty()) {
+      $this->set('solution_data', $this->get('og_audience')->entity);
+    }
+    elseif ($this->get('og_audience')->isEmpty() && !$this->get('solution_data')->isEmpty()) {
+      $this->set('og_audience', $this->get('solution_data')->entity);
+    }
+  }
 
   /**
    * {@inheritdoc}
