@@ -27,16 +27,6 @@ class AnnouncementForm extends FormBase {
    */
   protected AnnouncementInterface $announcement;
 
-  /**
-   * Builds a new form instance.
-   *
-   * @param \Drupal\joinup_notification\JoinupMessageDeliveryInterface $messageDelivery
-   *   The message delivery service.
-   * @param \Drupal\Component\Datetime\TimeInterface $time
-   *   The date/time service.
-   * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
-   *   The logger channel service.
-   */
   public function __construct(
     protected JoinupMessageDeliveryInterface $messageDelivery,
     protected TimeInterface $time,
