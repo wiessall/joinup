@@ -68,6 +68,7 @@ Feature: Messaging group announcements
     When I go to the members page of "Fail pension"
     And I click "Add announcement"
     Then the following fields should be present "Subject,Body"
+    But the following fields should not be present "Professional domain"
     And I should see the following lines of text:
       | Select dynamic placeholders for your announcement                                                                                                                                                  |
       | Copy and paste, in the message body, one or more placeholder(s) (e.g. @recipient_name) and the corresponding shortcut link(s) will be displayed in the announcement email. Available placeholders: |
