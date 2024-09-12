@@ -1,0 +1,4 @@
+<http://purl.org/adms/licence/PD> <http://www.w3.org/2004/02/skos/core#inScheme> <http://purl.org/adms/licencetype/1.1> .
+<http://purl.org/adms/licence/PD> <http://www.w3.org/2004/02/skos/core#prefLabel> "Public domain"@en .
+<http://purl.org/adms/licence/PD> <http://www.w3.org/2004/02/skos/core#definition> ""@en .
+<http://purl.org/adms/licence/PD> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2004/02/skos/core#Concept> .

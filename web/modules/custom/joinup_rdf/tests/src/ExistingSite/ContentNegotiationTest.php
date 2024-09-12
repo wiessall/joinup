@@ -2,42 +2,20 @@
 
 declare(strict_types=1);
 
-namespace Drupal\Tests\joinup_sparql\Functional;
+namespace Drupal\Tests\joinup_rdf\ExistingSite;
 
 use Drupal\Core\Entity\ContentEntityInterface;
-use Drupal\Core\Session\AccountInterface;
-use Drupal\Tests\BrowserTestBase;
-use Drupal\Tests\sparql_entity_storage\Traits\SparqlConnectionTrait;
-use Drupal\rdf_entity\Entity\Rdf;
-use Drupal\taxonomy\Entity\Term;
+use Drupal\rdf_sync\Encoder\RdfSyncEncoder;
+use Drupal\taxonomy\Entity\Vocabulary;
+use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use EasyRdf\Format;
 
 /**
- * Tests RDF entities content negotiation.
+ * Tests content negotiation.
  *
- * @group joinup
+ * @group joinup_rdf
  */
-class ContentNegotiationTest extends BrowserTestBase {
-
-  use SparqlConnectionTrait;
-
-  /**
-   * {@inheritdoc}
-   */
-  protected $defaultTheme = 'stark';
-
-  /**
-   * Formats to be tested.
-   *
-   * @var string[]
-   */
-  const FORMATS = [
-    'jsonld',
-    'n3',
-    'ntriples',
-    'rdfxml',
-    'turtle',
-  ];
+class ContentNegotiationTest extends JoinupExistingSiteTestBase {
 
   /**
    * Memory cache for expected mime types.
@@ -54,52 +32,21 @@ class ContentNegotiationTest extends BrowserTestBase {
   protected $expectedBody;
 
   /**
-   * {@inheritdoc}
-   */
-  protected static $modules = [
-    'joinup_content_negotiation_test',
-    'joinup_rdf',
-    'page_cache',
-  ];
-
-  /**
-   * {@inheritdoc}
-   */
-  protected function setUp(): void {
-    parent::setUp();
-    $this->setUpSparql();
-    user_role_grant_permissions(AccountInterface::ANONYMOUS_ROLE, ['view rdf entity']);
-  }
-
-  /**
    * Tests content negotiation.
    */
   public function testContentNegotiation(): void {
-    $parent = Term::create([
-      'vid' => 'fruit_type',
-      'uri' => 'http://example.com/exotic',
-      'name' => 'Exotic fruits',
+    [$term] = array_values(\Drupal::entityTypeManager()->getStorage('taxonomy_term')
+      ->loadByProperties(['name' => 'Public domain']));
+    $entity = $this->createNode([
+      'type' => 'licence',
+      'uri' => 'http://example.com/apple',
+      'title' => 'Apple',
     ]);
-    $term = Term::create([
-      'vid' => 'fruit_type',
-      'uri' => 'http://example.com/citrus-fruits',
-      'name' => 'Citrus fruits',
-      'description' => 'Amazing fruits http://example.com/very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-long.html',
-      'parent' => $parent,
-    ]);
-    $term->save();
 
-    $entity = Rdf::create([
-      'rid' => 'fruit',
-      'id' => 'http://example.com/apple',
-      'label' => 'Apple',
-    ]);
-    $entity->save();
-
-    foreach (static::FORMATS as $format_name) {
+    foreach (RdfSyncEncoder::getSupportedFormats() as $format_name => $format) {
       // An unambiguous RDF mime type as 'Accept' header.
       // Example: application/rdf+xml.
-      $mime_type = Format::getFormat($format_name)->getDefaultMimeType();
+      $mime_type = $format->getDefaultMimeType();
       $this->assertContent($format_name, $entity, $mime_type);
       $this->assertContent($format_name, $term, $mime_type);
 
@@ -207,7 +154,7 @@ class ContentNegotiationTest extends BrowserTestBase {
     if (!isset($this->mimeType)) {
       $this->mimeType = ['html' => 'text/html'] + array_map(function (Format $format) {
         return $format->getDefaultMimeType();
-      }, Format::getFormats());
+      }, RdfSyncEncoder::getSupportedFormats());
     }
     return $this->mimeType[$format_name];
   }
@@ -223,17 +170,17 @@ class ContentNegotiationTest extends BrowserTestBase {
    * @return string
    *   The expected response body.
    */
-  protected function getExpectedBody(string $format_name, ContentEntityInterface $entity): string {
+  protected function getExpectedBody(string $expected_format_name, ContentEntityInterface $entity): string {
     if (!isset($this->expectedBody)) {
       $fixtures_dir = __DIR__ . '/../../fixtures/content-negotiation';
-      foreach (static::FORMATS as $format) {
-        foreach (['rdf_entity', 'taxonomy_term'] as $entity_type_id) {
-          $path = realpath("$fixtures_dir/$entity_type_id/$format");
-          $this->expectedBody[$entity_type_id][$format] = trim(file_get_contents($path));
+      foreach (RdfSyncEncoder::getSupportedFormats() as $format_name => $format) {
+        foreach (['node', 'taxonomy_term'] as $entity_type_id) {
+          $path = realpath("$fixtures_dir/$entity_type_id/$format_name");
+          $this->expectedBody[$entity_type_id][$format_name] = trim(file_get_contents($path));
         }
       }
     }
-    return $this->expectedBody[$entity->getEntityTypeId()][$format_name];
+    return $this->expectedBody[$entity->getEntityTypeId()][$expected_format_name];
   }
 
   /**
@@ -244,14 +191,6 @@ class ContentNegotiationTest extends BrowserTestBase {
    */
   protected function getBody(): string {
     return trim($this->getSession()->getPage()->getContent());
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function tearDown(): void {
-    Rdf::load('http://example.com/apple')->delete();
-    parent::tearDown();
   }
 
 }

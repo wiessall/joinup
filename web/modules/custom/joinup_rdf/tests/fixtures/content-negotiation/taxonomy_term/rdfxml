@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns:skos="http://www.w3.org/2004/02/skos/core#">
+
+  <skos:Concept rdf:about="http://purl.org/adms/licence/PD">
+    <skos:inScheme rdf:resource="http://purl.org/adms/licencetype/1.1"/>
+    <skos:prefLabel xml:lang="en">Public domain</skos:prefLabel>
+    <skos:definition xml:lang="en"></skos:definition>
+  </skos:Concept>
+
+</rdf:RDF>
