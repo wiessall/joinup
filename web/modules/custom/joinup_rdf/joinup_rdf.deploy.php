@@ -528,13 +528,14 @@ function joinup_rdf_deploy_200008(?array &$sandbox = NULL): string {
     $callbacks = [
       '@data-entity-type="rdf_entity"\s+data-entity-uuid="(?<uri>[^\"]*)"@' => $dataEntityCallback,
       '@data-entity-uuid="(?<uri>[^\"]*)"\s+data-entity-type="rdf_entity"@' => $dataEntityCallback,
-      '@href="(?:https://joinup.ec.europa.eu)?/?rdf_entity/(?<uri>[^\"]*)"@' => static function (array $matches) use ($sandbox): string {
+      '@href="(?:https://joinup.ec.europa.eu)?/?rdf_entity/(?<uri>[^"/]*)(?<subpath>/.*)?"@' => static function (array $matches) use ($sandbox): string {
         $uri = strtr($matches['uri'], array_reverse(array_flip(MigrationHelper::URL_ENCODE_MAP), TRUE));
         if (!$nid = $sandbox['uri_to_nid'][$uri] ?? NULL) {
           // Remove the URL if it doesn't point to valid content.
           return 'href=""';
         }
-        return 'href="/node/' . $nid . '"';
+        $subPath = $matches['subpath'] ?? '';
+        return 'href="/node/' . $nid . $subPath . '"';
       },
     ];
 
