@@ -1,0 +1,1 @@
+[{"@id":"http://example.com/apple","@type":["http://purl.org/dc/terms/LicenseDocument"],"http://www.w3.org/2000/01/rdf-schema#label":[{"@value":"Apple","@language":"en"}],"http://joinup.eu/licence/deprecated":[{"@value":false}]},{"@id":"http://purl.org/dc/terms/LicenseDocument"}]
