@@ -447,7 +447,9 @@ function joinup_solution_get_related_solutions_ids(EntityInterface $entity): arr
       $query = \Drupal::entityQuery('node')
         ->accessCheck(TRUE)
         ->condition('type', 'solution')
-        ->condition('solution_type', $eira, 'IN')
+        ->condition('solution_type', array_keys($eira), 'IN')
+        // Exclude current solution.
+        ->condition('nid', $entity->id(), '<>')
         ->range(0, 4);
       $eira_ids = $query->execute();
     }
