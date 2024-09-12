@@ -428,7 +428,7 @@ function joinup_core_entity_bundle_field_info(EntityTypeInterface $entity_type, 
       ->setCardinality(1)
       ->setDefaultValue(NULL)
       ->setSettings([
-        'link_type' => LinkItemInterface::LINK_INTERNAL,
+        'link_type' => LinkItemInterface::LINK_EXTERNAL,
         'title' => DRUPAL_DISABLED,
       ])
       ->setDisplayConfigurable('form', FALSE)
