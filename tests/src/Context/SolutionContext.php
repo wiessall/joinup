@@ -839,7 +839,12 @@ class SolutionContext extends RawDrupalContext {
       $collection = $context->nodeCreate((object) [
         'type' => 'collection',
         'title' => $label,
-        'field_state' => 'published',
+        // Collection context will ensure that there is a state property set to
+        // draft. We set the state here to allow joinup context to convert it
+        // to a field properly.
+        // @see \Drupal\joinup\Context\CollectionContext::defaultCollectionValues
+        // @see \Drupal\joinup\Context\JoinupContext::massageFieldsBeforeNodeCreate
+        'state' => 'published',
       ]);
       $node->og_audience = $collection->nid;
 
