@@ -461,7 +461,6 @@
                 "Extend support for embed URLs. Option to force privacy @see https://www.drupal.org/project/video_embed_field/issues/3060201 (originally on https://www.drupal.org/node/2899093)": "resources/patch/php/drupal/video_embed_field/3060201.patch",
                 "WYSIWYG Video URL max length limited to 128 characters @see https://www.drupal.org/project/video_embed_field/issues/2908562": "resources/patch/php/drupal/video_embed_field/2908562.patch",
                 "Add support for Ckeditor 5. @see https://www.drupal.org/project/video_embed_field/issues/3311063": "resources/patch/php/drupal/video_embed_field/3311063_42.patch",
-                "Deprecation warning: translatable category in field definition @see https://www.drupal.org/project/video_embed_field/issues/3460603": "resources/patch/php/drupal/video_embed_field/3460603.patch",
                 "AssertionError: \"media\" must be defined in MODULE_NAME.field_type_categories.yml @see https://www.drupal.org/project/video_embed_field/issues/3469668": "resources/patch/php/drupal/video_embed_field/3469668.patch"
             },
             "drupal/views_autosubmit": {
