@@ -32,7 +32,8 @@ Feature: Test migration of collections/solutions to node.
 
     # Links in paragraph field_body.
     Given I visit "/collection/open-source-observatory-osor/document/joinup-open-source-news-service-december-2015"
-    When I click "Open Source Observatory"
+    When the page should contain the html text '<a href="/community/osor/">Open Source Observatory</a>'
+    Then I visit "/community/osor"
     Then I should see the heading "Open Source Observatory (OSOR)"
     When I visit "/collection/e-government-innovation-center-egiz/news/moa-id-release-310-veroffen"
     And I click "https://joinup.ec.europa.eu/release/moa-id-310"
