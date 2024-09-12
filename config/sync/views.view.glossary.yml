@@ -342,8 +342,7 @@ display:
           title_enable: false
           title: ''
           default_argument_type: node
-          default_argument_options:
-            parameter_name: node
+          default_argument_options: {  }
           summary_options:
             base_path: ''
             count: true

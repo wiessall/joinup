@@ -53,36 +53,6 @@ third_party_settings:
         layout_settings:
           label: 'Heading section'
           context_mapping: {  }
-          custom_id: null
-          custom_classes: ''
-          custom_class_choose: null
-          custom_styles: null
-          custom_data_attributes: null
-          regions:
-            main:
-              region_id: null
-              region_class_choose: null
-              region_classes: ''
-              region_styles: null
-              region_data: null
-            left:
-              region_id: null
-              region_class_choose: null
-              region_classes: ''
-              region_styles: null
-              region_data: null
-            right:
-              region_id: null
-              region_class_choose: null
-              region_classes: ''
-              region_styles: null
-              region_data: null
-            aside:
-              region_id: null
-              region_class_choose: null
-              region_classes: ''
-              region_styles: null
-              region_data: null
         components:
           bfd2860a-fd1e-4c2e-a040-a48d4a81dcc5:
             uuid: bfd2860a-fd1e-4c2e-a040-a48d4a81dcc5
@@ -384,7 +354,6 @@ third_party_settings:
                     past_format: '@interval ago'
                     granularity: 2
                     refresh: 60
-                    description: ''
                 third_party_settings:
                   template_suggestion:
                     template_suggestion: ''
@@ -433,7 +402,6 @@ third_party_settings:
                     past_format: '@interval ago'
                     granularity: 2
                     refresh: 60
-                    description: ''
                 third_party_settings:
                   template_suggestion:
                     template_suggestion: solution_last_update_date

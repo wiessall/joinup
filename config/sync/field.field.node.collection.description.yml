@@ -8,12 +8,7 @@ dependencies:
     - node.type.collection
   module:
     - text
-third_party_settings:
-  sparql_entity_storage:
-    mapping:
-      value:
-        predicate: 'http://purl.org/dc/terms/description'
-        format: null
+third_party_settings: {  }
 id: node.collection.description
 field_name: description
 entity_type: node
