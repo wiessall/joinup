@@ -8,7 +8,6 @@ use Drupal\KernelTests\KernelTestBase;
 use Drupal\Tests\joinup_core\Traits\ConfigInstallTestTrait;
 use Drupal\Tests\joinup_core\Traits\MailTestTrait;
 use Drupal\Tests\joinup_core\Traits\ModuleSetupTestTrait;
-use Drupal\Tests\sparql_entity_storage\Traits\SparqlConnectionTrait;
 use Drupal\joinup_test_time\Datetime\TestTime;
 use Drupal\user\Entity\User;
 
@@ -20,7 +19,6 @@ abstract class JoinupMailKernelTestBase extends KernelTestBase {
   use ConfigInstallTestTrait;
   use ModuleSetupTestTrait;
   use MailTestTrait;
-  use SparqlConnectionTrait;
 
   /**
    * {@inheritdoc}
@@ -36,6 +34,8 @@ abstract class JoinupMailKernelTestBase extends KernelTestBase {
     'filter',
     'joinup_core',
     'joinup_test_time',
+    'rdf_sync',
+    'serialization',
     'system',
     'user',
     'token',
@@ -56,8 +56,6 @@ abstract class JoinupMailKernelTestBase extends KernelTestBase {
     'interoperable_europe',
     'joinup_menu',
     'joinup_collection',
-    'rdf_entity',
-    'sparql_entity_storage',
   ];
 
   /**
@@ -66,12 +64,10 @@ abstract class JoinupMailKernelTestBase extends KernelTestBase {
   public function setUp(): void {
     parent::setUp();
 
-    $this->setUpSparql();
+    $this->installSchema('rdf_sync', ['rdf_sync_uri']);
 
     $this->fullyInstallModuleIfExists([
       'tecla',
-      'rdf_entity',
-      'sparql_entity_storage',
       'user',
       'system',
       'filter',
@@ -82,8 +78,6 @@ abstract class JoinupMailKernelTestBase extends KernelTestBase {
       'message_notify',
       'joinup_workflow',
       'state_machine_revisions',
-      'rdf_entity',
-      'sparql_entity_storage',
       'mailsystem',
       'symfony_mailer_lite',
     ]);
