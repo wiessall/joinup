@@ -21,7 +21,7 @@ class SearchApiProcessorTest extends JoinupExistingSiteTestBase {
       'field_state' => 'published',
       'title' => $this->randomMachineName(),
       // Ensure a parent collection.
-      'collection' => $this->createNode([
+      'og_audience' => $this->createNode([
         'type' => 'collection',
         'title' => $this->randomString(),
         'field_state' => 'published',
