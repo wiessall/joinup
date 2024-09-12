@@ -1,0 +1,37 @@
+From f50e823e8f1bb4d048457d93e05c6423442bd55a Mon Sep 17 00:00:00 2001
+From: Pravin Gaikwad <33942-Rajeshreeputra@users.noreply.drupalcode.org>
+Date: Mon, 26 Aug 2024 05:22:03 +0000
+Subject: [PATCH] Add field type categories file
+
+---
+ src/Plugin/Field/FieldType/VideoEmbedField.php | 2 +-
+ video_embed_field.field_type_categories.yml    | 4 ++++
+ 2 files changed, 5 insertions(+), 1 deletion(-)
+ create mode 100644 video_embed_field.field_type_categories.yml
+
+diff --git a/src/Plugin/Field/FieldType/VideoEmbedField.php b/src/Plugin/Field/FieldType/VideoEmbedField.php
+index 48b1b54..6b8b3de 100644
+--- a/src/Plugin/Field/FieldType/VideoEmbedField.php
++++ b/src/Plugin/Field/FieldType/VideoEmbedField.php
+@@ -15,7 +15,7 @@ use Drupal\Core\TypedData\TraversableTypedDataInterface;
+  *   id = "video_embed_field",
+  *   label = @Translation("Video Embed"),
+  *   description = @Translation("Stores a video and then outputs some embed code."),
+- *   category = @Translation("Media"),
++ *   category = "Media",
+  *   default_widget = "video_embed_field_textfield",
+  *   default_formatter = "video_embed_field_video",
+  *   constraints = {"VideoEmbedValidation" = {}}
+diff --git a/video_embed_field.field_type_categories.yml b/video_embed_field.field_type_categories.yml
+new file mode 100644
+index 0000000..38e27c3
+--- /dev/null
++++ b/video_embed_field.field_type_categories.yml
+@@ -0,0 +1,4 @@
++Media:
++  label: 'Video Embed'
++  description: 'Stores a video and then outputs some embed code.'
++  weight: -50
+\ No newline at end of file
+-- 
+GitLab
