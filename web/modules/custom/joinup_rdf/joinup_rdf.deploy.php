@@ -535,7 +535,7 @@ function joinup_rdf_deploy_200008(?array &$sandbox = NULL): string {
           return 'href=""';
         }
         $subPath = $matches['subpath'] ?? '';
-        return 'href="/node/' . $nid . $subPath . '"';
+        return 'href="' . base_path() . 'node/' . $nid . $subPath . '"';
       },
     ];
 
