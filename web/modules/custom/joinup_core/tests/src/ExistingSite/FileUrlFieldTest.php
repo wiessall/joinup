@@ -66,7 +66,7 @@ class FileUrlFieldTest extends JoinupExistingSiteTestBase {
       'title' => $this->randomString(),
       'field_state' => 'published',
       // Ensure a parent collection.
-      'collection' => $this->createNode([
+      'og_audience' => $this->createNode([
         'type' => 'collection',
         'title' => $this->randomString(),
         'field_state' => 'published',
