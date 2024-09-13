@@ -48,7 +48,6 @@ dependencies:
     - joinup_oss_catalogue
     - layout_builder
     - template_suggestion
-    - user
 third_party_settings:
   layout_builder:
     enabled: false
@@ -94,6 +93,7 @@ hidden:
   langcode: true
   links: true
   oss__description: true
+  oss__documentation: true
   oss__screenshots: true
   oss_archived: true
   oss_categories: true

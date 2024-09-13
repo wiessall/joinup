@@ -97,7 +97,11 @@ function eu_oss_catalogue_entity_bundle_field_info_alter(array &$fields, EntityT
     ->setComputed(TRUE)
     ->setClass(RelevantLanguageCode::class);
 
-  foreach (['oss_screenshots' => $fields['oss_screenshots']] as $originalFieldName => $fieldDefinition) {
+  $computedFieldCandidates = [
+    'oss_screenshots' => $fields['oss_screenshots'],
+    'oss_documentation' => $fields['oss_documentation'],
+  ];
+  foreach ($computedFieldCandidates as $originalFieldName => $fieldDefinition) {
     \assert($fieldDefinition instanceof FieldDefinitionInterface);
     $computedName = preg_replace('#^oss_(.*)$#', 'oss__$1', $originalFieldName);
 

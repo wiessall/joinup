@@ -46,7 +46,6 @@ dependencies:
     - joinup_layout
     - layout_builder
     - layout_discovery
-    - user
 third_party_settings:
   layout_builder:
     enabled: true
@@ -114,7 +113,7 @@ third_party_settings:
             uuid: f6501de4-478f-49fe-adbb-2e541ba9d0c3
             region: aside
             configuration:
-              id: 'field_block:node:oss_solution:oss_documentation'
+              id: 'field_block:node:oss_solution:oss__documentation'
               label: Documentation
               label_display: '0'
               provider: layout_builder
@@ -867,6 +866,7 @@ hidden:
   langcode: true
   links: true
   oss__description: true
+  oss__documentation: true
   oss__screenshots: true
   oss_archived: true
   oss_available_languages: true

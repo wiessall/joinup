@@ -48,7 +48,6 @@ dependencies:
     - joinup_html_stripper
     - layout_builder
     - template_suggestion
-    - user
 third_party_settings:
   layout_builder:
     enabled: false
@@ -124,6 +123,7 @@ content:
 hidden:
   langcode: true
   links: true
+  oss__documentation: true
   oss__screenshots: true
   oss_archived: true
   oss_available_languages: true
