@@ -33,7 +33,7 @@ class ShortIdAllowedValuesTest extends JoinupExistingSiteTestBase {
   public function testShortIdAllowedValues(string $short_id, bool $violation_expected): void {
     foreach (['collection', 'solution'] as $bundle) {
       $entity = Node::create([
-        'node' => $bundle,
+        'type' => $bundle,
         'short_id' => $short_id,
       ]);
 
