@@ -74,6 +74,7 @@ function eu_oss_catalogue_entity_bundle_field_info(EntityTypeInterface $entityTy
           'oss_git_description',
         ]
       )
+      ->setSetting(RelevantField::RICHEST_FIELDS_SETTING_KEY, FALSE)
       ->setClass(RelevantField::class);
   }
   return $fields;
@@ -113,6 +114,7 @@ function eu_oss_catalogue_entity_bundle_field_info_alter(array &$fields, EntityT
       ->setName($computedName)
       ->setLabel($relevantLabel)
       ->setSetting(RelevantField::SOURCE_FIELDS_SETTING_KEY, [$originalFieldName])
+      ->setSetting(RelevantField::RICHEST_FIELDS_SETTING_KEY, TRUE)
       ->setComputed(TRUE)
       ->setDisplayConfigurable('view', TRUE)
       ->setClass(RelevantField::class);
