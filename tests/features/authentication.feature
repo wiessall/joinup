@@ -27,7 +27,6 @@ Feature: User authentication
       | admin/content                                       |
       | admin/content/files                                 |
       | admin/content/media                                 |
-      | admin/content/rdf                                   |
       | admin/custom-landing-pages                          |
       | admin/custom-landing-pages/add                      |
       | admin/homepage-topics                               |
@@ -57,6 +56,7 @@ Feature: User authentication
       | media/add/solution_logo                             |
       | media/add/video                                     |
       | node/add                                            |
+      | node/add/collection                                 |
       | node/add/contact_information                        |
       | node/add/custom_page                                |
       | node/add/discussion                                 |
@@ -68,12 +68,10 @@ Feature: User authentication
       | node/add/news                                       |
       | node/add/owner                                      |
       | node/add/release                                    |
+      | node/add/solution                                   |
       | outdated-content-threshold                          |
       | propose/collection                                  |
       | propose/solution                                    |
-      | rdf_entity/add                                      |
-      | rdf_entity/add/collection                           |
-      | rdf_entity/add/solution                             |
       | user/subscriptions                                  |
 
   Scenario Outline: Anonymous user cannot access restricted non-HTML URLs.
@@ -111,7 +109,6 @@ Feature: User authentication
       | admin/content/files                                 |
       | admin/content/media                                 |
       | admin/content/messages                              |
-      | admin/content/rdf                                   |
       | admin/custom-landing-pages                          |
       | admin/custom-landing-pages/add                      |
       | admin/homepage-topics                               |
@@ -141,6 +138,7 @@ Feature: User authentication
       | media/add/solution_logo                             |
       | media/add/video                                     |
       | node/add                                            |
+      | node/add/collection                                 |
       | node/add/contact_information                        |
       | node/add/custom_page                                |
       | node/add/discussion                                 |
@@ -152,11 +150,9 @@ Feature: User authentication
       | node/add/news                                       |
       | node/add/owner                                      |
       | node/add/release                                    |
+      | node/add/solution                                   |
       | outdated-content-threshold                          |
       | propose/solution                                    |
-      | rdf_entity/add                                      |
-      | rdf_entity/add/collection                           |
-      | rdf_entity/add/solution                             |
 
   Scenario Outline: Authenticated user cannot access restricted non-HTML URLs.
     Given I am logged in as a user with the "authenticated" role
@@ -178,7 +174,6 @@ Feature: User authentication
       | path                                        |
       | admin/content/files                         |
       | admin/content/media                         |
-      | admin/content/rdf                           |
       | admin/homepage-topics                       |
       | admin/legal-notice                          |
       | admin/legal-notice/add                      |
@@ -192,6 +187,8 @@ Feature: User authentication
       | admin/reporting/solutions-by-type           |
       | admin/reporting/subscribers-report          |
       | admin/structure/compatibility-document      |
+      | admin/structure/webform                     |
+      | admin/structure/webform/submissions/manage  |
       | announcements                               |
       | dashboard                                   |
       | licence                                     |
@@ -205,8 +202,6 @@ Feature: User authentication
       | media/add/video                             |
       | outdated-content-threshold                  |
       | propose/collection                          |
-      | admin/structure/webform                     |
-      | admin/structure/webform/submissions/manage  |
 
   Scenario Outline: Moderator cannot access restricted pages
     Given I am logged in as a user with the "moderator" role
@@ -224,6 +219,7 @@ Feature: User authentication
       | admin/structure/compatibility-document/form-display |
       | admin/structure/media                               |
       | node/add                                            |
+      | node/add/collection                                 |
       | node/add/contact_information                        |
       | node/add/custom_page                                |
       | node/add/discussion                                 |
@@ -234,10 +230,8 @@ Feature: User authentication
       | node/add/news                                       |
       | node/add/owner                                      |
       | node/add/release                                    |
+      | node/add/solution                                   |
       | propose/solution                                    |
-      | rdf_entity/add                                      |
-      | rdf_entity/add/collection                           |
-      | rdf_entity/add/solution                             |
 
   Scenario Outline: Administrator can access pages they are authorized to
     Given I am logged in as a user with the "administrator" role
@@ -261,13 +255,13 @@ Feature: User authentication
       | admin/content                              |
       | admin/content/files                        |
       | admin/content/media                        |
-      | admin/content/rdf                          |
       | admin/legal-notice                         |
       | admin/legal-notice/add                     |
       | admin/reporting/distribution-downloads     |
       | admin/reporting/distribution-downloads/csv |
       | admin/structure                            |
       | node/add                                   |
+      | node/add/collection                        |
       | node/add/contact_information               |
       | node/add/custom_page                       |
       | node/add/discussion                        |
@@ -277,7 +271,5 @@ Feature: User authentication
       | node/add/licence                           |
       | node/add/news                              |
       | node/add/owner                             |
-      | rdf_entity/add                             |
       | node/add/release                           |
-      | rdf_entity/add/collection                  |
-      | rdf_entity/add/solution                    |
+      | node/add/solution                          |
