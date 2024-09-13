@@ -326,4 +326,39 @@ trait GroupTrait {
     return \Drupal::service('og.membership_manager');
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function getLogoFieldName(): string {
+    return 'logo';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getContactInformationFieldName(): string {
+    return 'contact';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getGroupModerationFieldName(): string {
+    return 'group_moderation';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getAbstractField(): string {
+    return 'abstract';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getContentCreationFieldName(): string {
+    return 'content_creation';
+  }
+
 }

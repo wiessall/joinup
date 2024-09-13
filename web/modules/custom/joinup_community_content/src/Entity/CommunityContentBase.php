@@ -50,13 +50,6 @@ abstract class CommunityContentBase extends Node implements CommunityContentInte
   /**
    * {@inheritdoc}
    */
-  public function getWorkflowStateFieldName(): string {
-    return 'field_state';
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function getPinnableGroups(): array {
     try {
       $group = $this->getGroup();

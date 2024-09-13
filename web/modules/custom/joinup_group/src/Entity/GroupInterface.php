@@ -43,12 +43,12 @@ interface GroupInterface extends
   /**
    * Flag for pre-moderated groups.
    */
-  public const PRE_MODERATION = 1;
+  public const int PRE_MODERATION = 1;
 
   /**
    * Flag for post-moderated groups.
    */
-  public const POST_MODERATION = 0;
+  public const int POST_MODERATION = 0;
 
   /**
    * Returns the given user's membership for this group entity.

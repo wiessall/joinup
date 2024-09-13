@@ -47,13 +47,6 @@ class CustomPage extends Node implements CustomPageInterface {
   /**
    * {@inheritdoc}
    */
-  public function getWorkflowStateFieldName(): string {
-    return 'field_state';
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function isGroupLandingPage(): bool {
     if ($this->hasGroup()) {
       $group = $this->getGroup();
