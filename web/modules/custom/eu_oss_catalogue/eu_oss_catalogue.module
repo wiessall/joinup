@@ -90,12 +90,12 @@ function eu_oss_catalogue_entity_bundle_field_info_alter(array &$fields, EntityT
   // If there are field candidates, also add the richest language code computed
   // field.
   $fields[RelevantLanguageCode::FIELD_NAME] = BaseFieldDefinition::create('language')
-      ->setName(RelevantLanguageCode::FIELD_NAME)
-      ->setTargetEntityTypeId($entityType->id())
-      ->setTargetBundle($bundle)
-      ->setLabel(t('Relevant language code'))
-      ->setComputed(TRUE)
-      ->setClass(RelevantLanguageCode::class);
+    ->setName(RelevantLanguageCode::FIELD_NAME)
+    ->setTargetEntityTypeId($entityType->id())
+    ->setTargetBundle($bundle)
+    ->setLabel(t('Relevant language code'))
+    ->setComputed(TRUE)
+    ->setClass(RelevantLanguageCode::class);
 
   foreach (['oss_screenshots' => $fields['oss_screenshots']] as $originalFieldName => $fieldDefinition) {
     \assert($fieldDefinition instanceof FieldDefinitionInterface);
