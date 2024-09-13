@@ -106,4 +106,11 @@ trait EntityWorkflowStateTrait {
     }, $this->getAllowedTransitions()));
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function getWorkflowStateFieldName(): string {
+    return 'field_state';
+  }
+
 }

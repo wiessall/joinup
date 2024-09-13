@@ -118,11 +118,4 @@ class Licence extends Node implements LicenceInterface {
     return $licence;
   }
 
-  /**
-   * {@inheritdoc}
-   */
-  public function getDescriptionField(): string {
-    return 'description';
-  }
-
 }

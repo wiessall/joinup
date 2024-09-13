@@ -89,13 +89,6 @@ class Release extends Node implements ReleaseInterface {
   /**
    * {@inheritdoc}
    */
-  public function getWorkflowStateFieldName(): string {
-    return 'field_state';
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function getDescriptionField(): string {
     return 'description';
   }

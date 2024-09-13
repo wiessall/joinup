@@ -106,41 +106,6 @@ class Collection extends Node implements CollectionInterface {
   /**
    * {@inheritdoc}
    */
-  public function getWorkflowStateFieldName(): string {
-    return 'field_state';
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getLogoFieldName(): string {
-    return 'logo';
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getDescriptionField(): string {
-    return 'description';
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getGroupModerationFieldName(): string {
-    return 'group_moderation';
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getContentCreationFieldName(): string {
-    return 'content_creation';
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function getGlossarySettings(): array {
     $meta_entity = MetaEntity::loadOrCreate('collection_settings', $this);
     return [
@@ -242,22 +207,8 @@ class Collection extends Node implements CollectionInterface {
   /**
    * {@inheritdoc}
    */
-  public function getContactInformationFieldName(): string {
-    return 'contact';
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function getWebsiteLinkFieldName(): string {
     return 'website_url';
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getAbstractField(): string {
-    return 'abstract';
   }
 
 }

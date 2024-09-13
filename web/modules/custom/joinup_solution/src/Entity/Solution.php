@@ -96,13 +96,6 @@ class Solution extends Node implements SolutionInterface {
   /**
    * {@inheritdoc}
    */
-  public function getWorkflowStateFieldName(): string {
-    return 'field_state';
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function getReleaseIds(): array {
     return $this->entityTypeManager()->getStorage('node')
       ->getQuery()
@@ -165,34 +158,6 @@ class Solution extends Node implements SolutionInterface {
    */
   public function getPinnableGroupIds(): array {
     return $this->getAffiliatedCollectionIds();
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getLogoFieldName(): string {
-    return 'logo';
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getDescriptionField(): string {
-    return 'description';
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getGroupModerationFieldName(): string {
-    return 'group_moderation';
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getContentCreationFieldName(): string {
-    return 'content_creation';
   }
 
   /**
@@ -262,22 +227,8 @@ class Solution extends Node implements SolutionInterface {
   /**
    * {@inheritdoc}
    */
-  public function getContactInformationFieldName(): string {
-    return 'contact';
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function getWebsiteLinkFieldName(): string {
     return 'landing_page';
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getAbstractField(): string {
-    return 'abstract';
   }
 
 }

@@ -21,13 +21,6 @@ class Owner extends Node implements OwnerInterface {
   /**
    * {@inheritdoc}
    */
-  public function getWorkflowStateFieldName(): string {
-    return 'field_state';
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function isReferencedByGroups(): bool {
     $count = \Drupal::entityQuery('node')
       ->accessCheck(FALSE)
