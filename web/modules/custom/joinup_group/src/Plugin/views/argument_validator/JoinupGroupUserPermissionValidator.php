@@ -22,7 +22,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * @ViewsArgumentValidator(
  *   id = "joinup_group_user_permission",
  *   title = @Translation("User permissions on group"),
- *   entity_type = "rdf_entity",
+ *   entity_type = "node",
  * )
  */
 class JoinupGroupUserPermissionValidator extends ArgumentValidatorPluginBase {

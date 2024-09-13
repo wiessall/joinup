@@ -13,7 +13,7 @@ use Drupal\meta_entity\Entity\MetaEntity;
  * @ViewsArgumentValidator(
  *   id = "joinup_group_announcements_enabled",
  *   title = @Translation("Group announcements"),
- *   entity_type = "rdf_entity",
+ *   entity_type = "node",
  * )
  */
 class GroupAnnouncementsEnabledValidator extends JoinupGroupUserPermissionValidator {
