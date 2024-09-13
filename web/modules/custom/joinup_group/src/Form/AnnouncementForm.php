@@ -140,7 +140,7 @@ class AnnouncementForm extends FormBase {
       $form['professional_domain'] = [
         '#type' => 'select',
         '#title' => $this->t('Professional domain filter'),
-        '#description' => $this->t('Narrow your announcement\'s audience by targeting only members based on their professional domain.'),
+        '#description' => $this->t("Narrow your announcement's audience by targeting only members based on their professional domain."),
         '#options' => $this->getOptions(),
         '#default_value' => $this->announcement->getProfessionalDomainIds(),
         '#multiple' => TRUE,
