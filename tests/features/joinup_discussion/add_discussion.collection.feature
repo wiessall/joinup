@@ -40,7 +40,7 @@ Feature: Discussions added to collections
       | First name  | Kesha                                 |
       | Family name | Pontecorvo                            |
       | E-mail      | kesha.pontecorvo@ec-europa.example.eu |
-    And collections:
+    And collection content:
       | title                  | logo     | state     |
       | The World of the Waves | logo.png | published |
     And the following collection user membership:

@@ -2,7 +2,7 @@
 Feature: Cloning of entities
 
   Background:
-    Given collections:
+    Given collection content:
       | title      | state     |
       | Collection | published |
     Given solution content:

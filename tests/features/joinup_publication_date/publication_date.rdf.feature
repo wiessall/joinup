@@ -11,7 +11,7 @@ Feature: Publication date works as expected on RDF entities
       | Contact2 |
       | Contact3 |
       | Contact4 |
-    And the following collections:
+    And collection content:
       | title                 | state     | description | owner | contact information |
       | Collection to publish | draft     | Description | Owner | Contact1            |
       | Published collection  | published | Description | Owner | Contact2            |

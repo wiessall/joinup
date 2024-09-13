@@ -134,7 +134,7 @@ Feature: Global search with archive content
     And contact_information content:
       | name       |
       | Tom Kremer |
-    And collections:
+    And collection content:
       | title      | description                | topic             | owner      | contact information | state     |
       | Rubik Cube | combination puzzle         | Supplier exchange | Erno Rubik | Tom Kremer          | published |
       | Speed cube | also known as speedsolving | Supplier exchange | Erno Rubik | Tom Kremer          | published |

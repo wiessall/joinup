@@ -3,7 +3,7 @@ Feature: Interoperable solution flag
 
   @javascript
   Scenario: Flag/un-flag solution as interoperable.
-    Given collections:
+    Given collection content:
       | title        | state     |
       | Derby County | published |
     Given solution content:

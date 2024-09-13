@@ -457,7 +457,7 @@ Feature: Group member permissions table
 
   # The permissions table should not be accessible for non-public groups.
   Scenario: Access the membership permissions information table
-    Given the following collections:
+    Given collection content:
       | title                | state     |
       | Valid Bibliomancy    | published |
       | Draft Bibliomancy    | draft     |

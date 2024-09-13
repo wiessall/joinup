@@ -290,7 +290,7 @@ Feature: Sharing content between collections
 
   @javascript
   Scenario: Carousel tiles should show the "Shared from" visual cue.
-    Given collections:
+    Given collection content:
       | title | state     |
       | Earth | published |
       | Mars  | published |
@@ -326,7 +326,7 @@ Feature: Sharing content between collections
 
   @javascript
   Scenario Outline: The sharing options should be shown in a modal window.
-    Given collections:
+    Given collection content:
       | title   | state     |
       | Secrets | published |
       | Gossip  | published |

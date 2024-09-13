@@ -193,7 +193,7 @@ Feature: Global search
     And contact_information content:
       | name          | email             |
       | Go-to contact | go-to@example.com |
-    And the following collections:
+    And collection content:
       | title            | description                                          | abstract                       | state     |
       | Collection alpha | <p>collection <strong>beta</strong> description.</p> | The collection gamma abstract. | published |
       | Col for Sol      | <p>collection for the solution.</p>                  | The col for sol abstract.      | published |
@@ -226,7 +226,7 @@ Feature: Global search
     And contact_information content:
       | name          | email             | state     |
       | Go-to contact | go-to@example.com | validated |
-    And the following collections:
+    And collection content:
       | title            | description                                          | abstract                       | state     |
       | Collection alpha | <p>collection <strong>beta</strong> description.</p> | The collection gamma abstract. | published |
       | Col for Sol      | <p>collection for the solution.</p>                  | The col for sol abstract.      | published |
@@ -354,7 +354,7 @@ Feature: Global search
   # This tests shows a regression to be fixed in ISAICP-6917.
   # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-6917
   Scenario: Collections and solutions are shown first in search results with the same relevance.
-    Given collections:
+    Given collection content:
       | title                           | description                         | state     |
       | Ornithology: the study of birds | Ornithology is a branch of zoology. | published |
       | Husky Flying Xylophone          | A strange instrument.               | published |
@@ -578,7 +578,7 @@ Feature: Global search
 
   @javascript
   Scenario: Users are able to select the sort order.
-    Given collections:
+    Given collection content:
       | title             | description       | state     |
       | Custom collection | Some custom data. | published |
     And news content:
@@ -766,7 +766,7 @@ Feature: Global search
     And I should see the text "+3 topics" in the "Max 2 topic collection" card
 
   Scenario: In search result I can see updated date label.
-    Given collections:
+    Given collection content:
       | title             | description       | state     |
       | Custom collection | Some custom data. | published |
     And news content:
@@ -808,7 +808,7 @@ Feature: Global search
     And contact_information content:
       | name           | email              |
       | Gor-to contact | gor-to@example.com |
-    And the following collections:
+    And collection content:
       | title            | description                                          | abstract                      | state     |
       | Pull alpha       | <p>collection <strong>pull</strong> description.</p> | The collection pull abstract. | published |
       | Col for Sol javi | <p>collection for the solution javi.</p>             | Random abstract.              | published |

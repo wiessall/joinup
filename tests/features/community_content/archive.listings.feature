@@ -8,7 +8,7 @@ Feature: Archived content on content listings - groups and paragraphs.
     And contact_information content:
       | name         |
       | Some contact |
-    And collections:
+    And collection content:
       | title           | description | topic             | owner      | contact information | state     |
       | Some collection | Test        | Supplier exchange | Some owner | Some contact        | published |
       | Poly screens    | Test        | Supplier exchange | Some owner | Some contact        | published |
@@ -187,7 +187,7 @@ Feature: Archived content on content listings - groups and paragraphs.
     And I should see the "collection content archived toggle" facet
 
   Scenario: "Show archived" facet on Discussions page content listing.
-    Given collections:
+    Given collection content:
       | title                      | description | topic             | owner      | contact information | state     |
       | Some discussion collection | Test        | Supplier exchange | Some owner | Some contact        | published |
     And discussion content:
