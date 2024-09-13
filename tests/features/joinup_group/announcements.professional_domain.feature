@@ -48,20 +48,20 @@ Feature: Filter announcements by professional domain
     Given I am logged in as a moderator
 
     When I go to the "Demography announcement" announcement of "Pension funds" <group>
-    Then the following fields should be present "Professional domain"
-    And  the "Professional domain" field should contain the "E-health Dpt., HR Dpt., Law and Justice, Social and Political" option groups
-    And the "Professional domain" select should contain the following options:
+    Then the following fields should be present "Professional domain filter"
+    And  the "Professional domain filter" field should contain the "E-health Dpt., HR Dpt., Law and Justice, Social and Political" option groups
+    And the "Professional domain filter" select should contain the following options:
       | -E-health (3)   |
       | -HR (1)         |
       | -E-justice (2)  |
       | -Demography (6) |
-    When I select "-Demography (6)" from "Professional domain"
+    When I select "-Demography (6)" from "Professional domain filter"
     And I press "Approve"
     Then 5 e-mails should have been sent
 
     When I mark all emails as read
     And I go to the "E-health and E-justice announcement" announcement of "Pension funds" <group>
-    And I select "-E-justice (2)" from "Professional domain"
+    And I select "-E-justice (2)" from "Professional domain filter"
     And I press "Approve"
     Then 2 e-mails should have been sent
 
