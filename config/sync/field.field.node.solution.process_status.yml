@@ -15,7 +15,7 @@ description: ''
 required: false
 translatable: true
 default_value: {  }
-default_value_callback: '_joinup_solution_status_default_value'
+default_value_callback: _joinup_solution_status_default_value
 settings:
   handler: 'default:taxonomy_term'
   handler_settings:
