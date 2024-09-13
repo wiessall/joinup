@@ -62,7 +62,7 @@ class Anonymous403RedirectCacheTest extends JoinupExistingSiteTestBase {
       'title' => $this->randomString(),
     ]);
     $collection->save();
-    $entities['field_ar_state'][] = $collection;
+    $entities['field_state'][] = $collection;
 
     $solution = $this->createNode([
       'type' => 'solution',
@@ -71,7 +71,7 @@ class Anonymous403RedirectCacheTest extends JoinupExistingSiteTestBase {
       'og_audience' => $collection,
     ]);
     $solution->save();
-    $entities['field_is_state'][] = $solution;
+    $entities['field_state'][] = $solution;
 
     $release = $this->createNode([
       'type' => 'release',
