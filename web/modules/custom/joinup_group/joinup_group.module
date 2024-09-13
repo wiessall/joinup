@@ -279,7 +279,7 @@ function joinup_group_propose_message_submit(&$form, FormStateInterface $form_st
  * Implements hook_ENTITY_TYPE_access().
  */
 function joinup_group_node_access(EntityInterface $entity, $operation, AccountInterface $account): AccessResultInterface {
-  if ($operation === 'view' && $entity instanceof GroupContentInterface) {
+  if ($operation === 'view' && $entity instanceof GroupContentInterface && !$entity instanceof SolutionInterface) {
     if (!$entity->hasGroup()) {
       return AccessResult::neutral();
     }
