@@ -41,3 +41,7 @@ Feature: Test migration of collections/solutions to node.
     When I visit "/collection/semic-support-centre/news/presentation-adms-1"
     And I click "ADMS"
     Then I should see "Asset Description Metadata Schema (ADMS)"
+    When I visit "/collection/nifo-national-interoperability-framework-observatory/solution/eif-toolbox/solution-asset-description-metadata-schema-adms"
+    And I click "working group of experts"
+    Then I should see "Asset Description Metadata Schema (ADMS)"
+    Then I should see the heading "Members"
