@@ -99,12 +99,12 @@ function eu_oss_catalogue_entity_bundle_field_info_alter(array &$fields, EntityT
     ->setClass(RelevantLanguageCode::class);
 
   $computedFieldCandidates = [
-    'oss_screenshots' => $fields['oss_screenshots'],
-    'oss_documentation' => $fields['oss_documentation'],
+    $fields['oss_screenshots'],
+    $fields['oss_documentation'],
   ];
-  foreach ($computedFieldCandidates as $originalFieldName => $fieldDefinition) {
+  foreach ($computedFieldCandidates as $fieldDefinition) {
     \assert($fieldDefinition instanceof FieldDefinitionInterface);
-    $computedName = preg_replace('#^oss_(.*)$#', 'oss__$1', $originalFieldName);
+    $computedName = preg_replace('#^oss_(.*)$#', 'oss__$1', $fieldDefinition->getName());
 
     // Field config labels have the " [stored]" suffix, what we remove here.
     // This original label might be a string or a (translatable)
@@ -113,7 +113,7 @@ function eu_oss_catalogue_entity_bundle_field_info_alter(array &$fields, EntityT
     $fields[$computedName] = BaseFieldDefinition::createFromFieldStorageDefinition($fieldDefinition->getFieldStorageDefinition())
       ->setName($computedName)
       ->setLabel($relevantLabel)
-      ->setSetting(RelevantField::SOURCE_FIELDS_SETTING_KEY, [$originalFieldName])
+      ->setSetting(RelevantField::SOURCE_FIELDS_SETTING_KEY, [$fieldDefinition->getName()])
       ->setSetting(RelevantField::RICHEST_FIELDS_SETTING_KEY, TRUE)
       ->setComputed(TRUE)
       ->setDisplayConfigurable('view', TRUE)
