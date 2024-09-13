@@ -91,10 +91,10 @@ field_settings:
     indexed_locked: true
     type_locked: true
     hidden: true
-  oss__features:
+  oss_features:
     label: Features
     datasource_id: 'entity:node'
-    property_path: oss__features
+    property_path: oss_features
     type: string
     dependencies:
       module:
