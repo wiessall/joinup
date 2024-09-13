@@ -203,8 +203,8 @@ class ReleaseWorkflowTest extends JoinupWorkflowExistingSiteTestBase {
       'field_state' => $state,
       'title' => $this->randomMachineName(),
       // Ensure a parent collection.
-      'collection' => $this->createNode([
-        'node' => 'collection',
+      'og_audience' => $this->createNode([
+        'type' => 'collection',
         'title' => $this->randomString(),
         'field_state' => 'published',
       ]),

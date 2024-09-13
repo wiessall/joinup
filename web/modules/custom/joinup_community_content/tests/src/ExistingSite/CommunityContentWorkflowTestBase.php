@@ -1174,9 +1174,9 @@ abstract class CommunityContentWorkflowTestBase extends JoinupWorkflowExistingSi
    *   The bundle of the entity to create.
    * @param string $state
    *   The state of the entity.
-   * @param string|null $moderation
+   * @param int|null $moderation
    *   Whether the parent is pre or post moderated.
-   * @param string $content_creation
+   * @param string|null $content_creation
    *   The content creation value of the parent entity.
    *
    * @return \Drupal\node\NodeInterface
@@ -1185,7 +1185,7 @@ abstract class CommunityContentWorkflowTestBase extends JoinupWorkflowExistingSi
    * @throws \Drupal\Core\Entity\EntityStorageException
    *   If entity creation fails.
    */
-  protected function createParent(string $bundle, string $state = 'published', ?string $moderation = NULL, ?string $content_creation = NULL): NodeInterface {
+  protected function createParent(string $bundle, string $state = 'published', ?int $moderation = NULL, ?string $content_creation = NULL): NodeInterface {
     // Make sure the current user is set to anonymous when creating groups
     // through the API so we can assign the administrator manually. If a user is
     // logged in during creation of the group they will automatically become the
@@ -1202,10 +1202,10 @@ abstract class CommunityContentWorkflowTestBase extends JoinupWorkflowExistingSi
 
     // It's not possible to create orphan solutions.
     if ($bundle === 'solution') {
-      $values['collection'] = $this->createNode([
+      $values['og_audience'] = $this->createNode([
         'type' => 'collection',
         'title' => $this->randomString(),
-        'field_ar_state' => 'published',
+        'field_state' => 'published',
       ]);
     }
 
