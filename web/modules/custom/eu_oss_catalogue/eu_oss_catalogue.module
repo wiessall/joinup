@@ -87,34 +87,17 @@ function eu_oss_catalogue_entity_bundle_field_info_alter(array &$fields, EntityT
     return;
   }
 
-  $computedFieldCandidates = array_filter(
-    $fields,
-    function (FieldDefinitionInterface $definition) {
-      // Include every translatable field which is not computed and can be
-      // configured on entity view display.
-      return $definition->isTranslatable()
-        && !$definition->isComputed()
-        && $definition->isDisplayConfigurable('view')
-        // Short description already has a relevant field with fallback.
-        && $definition->getName() !== 'oss_short_description';
-    }
-  );
-
   // If there are field candidates, also add the richest language code computed
   // field.
-  if (!empty($computedFieldCandidates)) {
-    $fields[RelevantLanguageCode::FIELD_NAME] = BaseFieldDefinition::create('language')
+  $fields[RelevantLanguageCode::FIELD_NAME] = BaseFieldDefinition::create('language')
       ->setName(RelevantLanguageCode::FIELD_NAME)
       ->setTargetEntityTypeId($entityType->id())
       ->setTargetBundle($bundle)
       ->setLabel(t('Relevant language code'))
       ->setComputed(TRUE)
       ->setClass(RelevantLanguageCode::class);
-  }
 
-  // Create a computed field for every translatable fields which than will
-  // display the field value fetched from the richest language code.
-  foreach ($computedFieldCandidates as $originalFieldName => $fieldDefinition) {
+  foreach (['oss_screenshots' => $fields['oss_screenshots']] as $originalFieldName => $fieldDefinition) {
     \assert($fieldDefinition instanceof FieldDefinitionInterface);
     $computedName = preg_replace('#^oss_(.*)$#', 'oss__$1', $originalFieldName);
 

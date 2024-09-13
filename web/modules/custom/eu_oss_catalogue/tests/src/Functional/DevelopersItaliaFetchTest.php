@@ -187,7 +187,7 @@ class DevelopersItaliaFetchTest extends FetchTestBase {
     $this->assertStringContainsString('[EN] Solution 1: <strong>Short description</strong>', $rendered);
 
     // Assert that markdown is converted for long description.
-    $field_items = $solution->get('oss__long_description');
+    $field_items = $solution->get('oss_long_description');
     $render_array = $entity_view_builder->viewField($field_items);
     $rendered = (string) $renderer->renderInIsolation($render_array);
     $this->assertStringContainsString('<strong>Some bold text</strong>', $rendered);

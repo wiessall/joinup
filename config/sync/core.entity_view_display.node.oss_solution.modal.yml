@@ -94,11 +94,7 @@ hidden:
   langcode: true
   links: true
   oss__description: true
-  oss__documentation: true
-  oss__features: true
-  oss__long_description: true
   oss__screenshots: true
-  oss__short_description: true
   oss_archived: true
   oss_categories: true
   oss_default_branch: true
