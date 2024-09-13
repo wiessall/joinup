@@ -7,7 +7,7 @@ dependencies:
 id: collection
 label: Collection
 type: 'canonical_entities:node'
-pattern: '[node:type:target_id]/[node:short_id_or_title]'
+pattern: 'collection/[node:short_id_or_title]'
 selection_criteria:
   3685b7f3-9d5a-4be2-b8b9-255f3fbcfaec:
     id: 'entity_bundle:node'

@@ -7,7 +7,7 @@ dependencies:
 id: solution
 label: Solution
 type: 'canonical_entities:node'
-pattern: '[node:parent_collection:url:path]/[node:type:target_id]/[node:short_id_or_title]'
+pattern: '[node:og_audience:entity:url:path]/solution/[node:short_id_or_title]'
 selection_criteria:
   179b128e-5a0b-4c39-8da7-9f3c6de55956:
     id: 'entity_bundle:node'

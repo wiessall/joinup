@@ -85,7 +85,7 @@ function joinup_collection_node_insert(EntityInterface $entity): void {
   $rdfSyncMapper = \Drupal::service('rdf_sync.mapper');
   assert($rdfSyncMapper instanceof RdfSyncMapper);
   $uriField = $rdfSyncMapper->getRdfUriFieldName('node', 'collection');
-  if ($entity->get($uriField)->first()->getString() === JoinupCollectionHelper::getCollectionId()) {
+  if (!$entity->get($uriField)->isEmpty() && ($entity->get($uriField)->first()->getString() === JoinupCollectionHelper::getCollectionId())) {
     Cache::invalidateTags(['joinup_collection:exists']);
   }
 }

@@ -17,54 +17,6 @@ class TokenTest extends JoinupExistingSiteTestBase {
   use TokenTestTrait;
 
   /**
-   * Tests the parent_collection token.
-   */
-  public function testParentCollection(): void {
-    $collection = $this->createNode([
-      'type' => 'collection',
-      'title' => $this->randomMachineName(),
-      'field_state' => 'published',
-    ]);
-
-    $solution = $this->createNode([
-      'type' => 'solution',
-      'title' => $this->randomMachineName(),
-      'og_audience' => $collection,
-      'field_state' => 'published',
-    ]);
-
-    $release = $this->createNode([
-      'type' => 'release',
-      'title' => $this->randomMachineName(),
-      'og_audience' => $solution,
-      'field_state' => 'published',
-    ]);
-
-    $distribution = $this->createNode([
-      'type' => 'distribution',
-      'title' => $this->randomMachineName(),
-      'og_audience' => $solution->id(),
-      'field_state' => 'published',
-    ]);
-
-    // Check both the token itself and one of the recursively generated
-    // tokens.
-    $tokens = [
-      'parent_collection' => $collection->label(),
-      'parent_collection:type:target_id' => 'collection',
-    ];
-
-    $data = ['node' => $solution];
-    $this->assertTokens('node', $data, $tokens);
-
-    $data = ['node' => $release];
-    $this->assertTokens('node', $data, $tokens);
-
-    $data = ['node' => $distribution];
-    $this->assertTokens('node', $data, $tokens);
-  }
-
-  /**
    * Tests the 'short_id_or_title' token.
    *
    * @param string $bundle

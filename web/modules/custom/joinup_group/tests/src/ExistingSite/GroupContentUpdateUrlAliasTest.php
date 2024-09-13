@@ -24,9 +24,9 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
   /**
    * Testing entities.
    *
-   * @var \Drupal\Core\Entity\ContentEntityInterface[][][]
+   * @var \Drupal\node\NodeInterface[][]
    */
-  protected array $entity = [];
+  protected array $node = [];
 
   /**
    * Tests group content URL aliases update when the group short ID changes.
@@ -37,95 +37,95 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
     $this->createContent();
 
     $distributions = [
-      (int) $this->entity['node']['distribution']['1.2.2']->id(),
-      (int) $this->entity['node']['distribution']['1.1']->id(),
-      (int) $this->entity['node']['distribution']['1.1.1']->id(),
-      (int) $this->entity['node']['distribution']['1.2']->id(),
-      (int) $this->entity['node']['distribution']['1.2.1']->id(),
-      (int) $this->entity['node']['distribution']['1.1.2']->id(),
+      (int) $this->node['distribution']['1.2.2']->id(),
+      (int) $this->node['distribution']['1.1']->id(),
+      (int) $this->node['distribution']['1.1.1']->id(),
+      (int) $this->node['distribution']['1.2']->id(),
+      (int) $this->node['distribution']['1.2.1']->id(),
+      (int) $this->node['distribution']['1.1.2']->id(),
     ];
     sort($distributions);
 
     $releases = [
-      (int) $this->entity['node']['release']['1.1']->id(),
-      (int) $this->entity['node']['release']['1.2']->id(),
+      (int) $this->node['release']['1.1']->id(),
+      (int) $this->node['release']['1.2']->id(),
     ];
     sort($releases);
+    $solutions = [
+      (int) $this->node['solution']['1']->id(),
+    ];
 
     // Check that the collection content is correctly computed and predictable.
     $this->assertSame([
       // The creation order is determined, same is the node IDs order.
       'node' => [
         'custom_page' => [
-          (int) $this->entity['node']['custom_page']['1.1']->id(),
-          (int) $this->entity['node']['custom_page']['1.2']->id(),
-          (int) $this->entity['node']['custom_page']['1']->id(),
-          (int) $this->entity['node']['custom_page']['2']->id(),
+          (int) $this->node['custom_page']['1.1']->id(),
+          (int) $this->node['custom_page']['1.2']->id(),
+          (int) $this->node['custom_page']['1']->id(),
+          (int) $this->node['custom_page']['2']->id(),
         ],
         'discussion' => [
-          (int) $this->entity['node']['discussion']['1.1']->id(),
-          (int) $this->entity['node']['discussion']['1.2']->id(),
-          (int) $this->entity['node']['discussion']['1']->id(),
-          (int) $this->entity['node']['discussion']['2']->id(),
+          (int) $this->node['discussion']['1.1']->id(),
+          (int) $this->node['discussion']['1.2']->id(),
+          (int) $this->node['discussion']['1']->id(),
+          (int) $this->node['discussion']['2']->id(),
         ],
         'distribution' => $distributions,
         'document' => [
-          (int) $this->entity['node']['document']['1.1']->id(),
-          (int) $this->entity['node']['document']['1.2']->id(),
-          (int) $this->entity['node']['document']['1']->id(),
-          (int) $this->entity['node']['document']['2']->id(),
+          (int) $this->node['document']['1.1']->id(),
+          (int) $this->node['document']['1.2']->id(),
+          (int) $this->node['document']['1']->id(),
+          (int) $this->node['document']['2']->id(),
         ],
         'event' => [
-          (int) $this->entity['node']['event']['1.1']->id(),
-          (int) $this->entity['node']['event']['1.2']->id(),
-          (int) $this->entity['node']['event']['1']->id(),
-          (int) $this->entity['node']['event']['2']->id(),
+          (int) $this->node['event']['1.1']->id(),
+          (int) $this->node['event']['1.2']->id(),
+          (int) $this->node['event']['1']->id(),
+          (int) $this->node['event']['2']->id(),
         ],
         'glossary' => [
-          (int) $this->entity['node']['glossary']['1']->id(),
-          (int) $this->entity['node']['glossary']['2']->id(),
+          (int) $this->node['glossary']['1']->id(),
+          (int) $this->node['glossary']['2']->id(),
         ],
         'news' => [
-          (int) $this->entity['node']['news']['1.1']->id(),
-          (int) $this->entity['node']['news']['1.2']->id(),
-          (int) $this->entity['node']['news']['1']->id(),
-          (int) $this->entity['node']['news']['2']->id(),
+          (int) $this->node['news']['1.1']->id(),
+          (int) $this->node['news']['1.2']->id(),
+          (int) $this->node['news']['1']->id(),
+          (int) $this->node['news']['2']->id(),
         ],
         'release' => $releases,
-        'solution' => [
-          // @todo Update this to be the same as the releases.
-          'http://solution/1',
-        ],
+        'solution' => $solutions,
       ],
-    ], $this->entity['rdf_entity']['collection']['1']->getGroupContentIds());
+    ], $this->node['collection']['1']->getGroupContentIds());
 
     // Check that the solution content is correctly computed and predictable.
     $this->assertSame([
       'node' => [
         'custom_page' => [
-          (int) $this->entity['node']['custom_page']['1.1']->id(),
-          (int) $this->entity['node']['custom_page']['1.2']->id(),
+          (int) $this->node['custom_page']['1.1']->id(),
+          (int) $this->node['custom_page']['1.2']->id(),
         ],
         'discussion' => [
-          (int) $this->entity['node']['discussion']['1.1']->id(),
-          (int) $this->entity['node']['discussion']['1.2']->id(),
+          (int) $this->node['discussion']['1.1']->id(),
+          (int) $this->node['discussion']['1.2']->id(),
         ],
         'distribution' => $distributions,
         'document' => [
-          (int) $this->entity['node']['document']['1.1']->id(),
-          (int) $this->entity['node']['document']['1.2']->id(),
+          (int) $this->node['document']['1.1']->id(),
+          (int) $this->node['document']['1.2']->id(),
         ],
         'event' => [
-          (int) $this->entity['node']['event']['1.1']->id(),
-          (int) $this->entity['node']['event']['1.2']->id(),
+          (int) $this->node['event']['1.1']->id(),
+          (int) $this->node['event']['1.2']->id(),
         ],
         'news' => [
-          (int) $this->entity['node']['news']['1.1']->id(),
-          (int) $this->entity['node']['news']['1.2']->id(),
+          (int) $this->node['news']['1.1']->id(),
+          (int) $this->node['news']['1.2']->id(),
         ],
         'release' => $releases,
       ],
-    ], $this->entity['rdf_entity']['solution']['1']->getGroupContentIds());
+    ], $this->node['solution']['1']->getGroupContentIds());
 
     $this->drupalLogin($this->createUser([], NULL, FALSE, [
       'roles' => ['moderator'],
@@ -133,7 +133,7 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
 
     // Edit the solution and add a short ID.
     $edit = ['short_id[0][value]' => 'abc123'];
-    $this->drupalGet($this->entity['rdf_entity']['solution']['1']->toUrl('edit-form'));
+    $this->drupalGet($this->node['solution']['1']->toUrl('edit-form'));
     $this->submitForm($edit, 'Publish');
     $this->assertSession()
       ->pageTextContains("You've added a solution short ID: abc123. It will take some time until the solution content URLs will be updated.");
@@ -143,53 +143,53 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
     $this->drush('queue:run', ['joinup_group:group_content_update']);
 
     // Check that solution content URL aliases were updated.
-    $this->drupalGet($this->entity['rdf_entity']['solution']['1']->toUrl());
-    $assert->addressEquals('/collection/collection/solution/abc123');
+    $this->drupalGet($this->node['solution']['1']->toUrl());
+    $assert->addressEquals('/collection/big-collection/solution/abc123');
     // Releases.
-    $this->drupalGet($this->entity['node']['release']['1.1']->toUrl());
-    $assert->addressEquals('/collection/collection/solution/abc123/release/11');
-    $this->drupalGet($this->entity['node']['release']['1.2']->toUrl());
-    $assert->addressEquals('/collection/collection/solution/abc123/release/12');
+    $this->drupalGet($this->node['release']['1.1']->toUrl());
+    $assert->addressEquals('/collection/big-collection/solution/abc123/release/11');
+    $this->drupalGet($this->node['release']['1.2']->toUrl());
+    $assert->addressEquals('/collection/big-collection/solution/abc123/release/12');
     // Release 1.1 distributions.
-    $this->drupalGet($this->entity['node']['distribution']['1.1.1']->toUrl());
-    $assert->addressEquals('/collection/collection/solution/abc123/distribution/distribution-111');
-    $this->drupalGet($this->entity['node']['distribution']['1.1.2']->toUrl());
-    $assert->addressEquals('/collection/collection/solution/abc123/distribution/distribution-112');
+    $this->drupalGet($this->node['distribution']['1.1.1']->toUrl());
+    $assert->addressEquals('/collection/big-collection/solution/abc123/distribution/distribution-111');
+    $this->drupalGet($this->node['distribution']['1.1.2']->toUrl());
+    $assert->addressEquals('/collection/big-collection/solution/abc123/distribution/distribution-112');
     // Release 1.2 distributions.
-    $this->drupalGet($this->entity['node']['distribution']['1.2.1']->toUrl());
-    $assert->addressEquals('/collection/collection/solution/abc123/distribution/distribution-121');
-    $this->drupalGet($this->entity['node']['distribution']['1.2.2']->toUrl());
-    $assert->addressEquals('/collection/collection/solution/abc123/distribution/distribution-122');
+    $this->drupalGet($this->node['distribution']['1.2.1']->toUrl());
+    $assert->addressEquals('/collection/big-collection/solution/abc123/distribution/distribution-121');
+    $this->drupalGet($this->node['distribution']['1.2.2']->toUrl());
+    $assert->addressEquals('/collection/big-collection/solution/abc123/distribution/distribution-122');
     // Solution distributions.
-    $this->drupalGet($this->entity['node']['distribution']['1.1']->toUrl());
-    $assert->addressEquals('/collection/collection/solution/abc123/distribution/distribution-11');
-    $this->drupalGet($this->entity['node']['distribution']['1.2']->toUrl());
-    $assert->addressEquals('/collection/collection/solution/abc123/distribution/distribution-12');
+    $this->drupalGet($this->node['distribution']['1.1']->toUrl());
+    $assert->addressEquals('/collection/big-collection/solution/abc123/distribution/distribution-11');
+    $this->drupalGet($this->node['distribution']['1.2']->toUrl());
+    $assert->addressEquals('/collection/big-collection/solution/abc123/distribution/distribution-12');
     // Solution nodes.
-    $this->drupalGet($this->entity['node']['custom_page']['1.1']->toUrl());
-    $assert->addressEquals('/collection/collection/solution/abc123/custompage-11');
-    $this->drupalGet($this->entity['node']['custom_page']['1.2']->toUrl());
-    $assert->addressEquals('/collection/collection/solution/abc123/custompage-12');
-    $this->drupalGet($this->entity['node']['discussion']['1.1']->toUrl());
-    $assert->addressEquals('/collection/collection/solution/abc123/discussion/discussion-11');
-    $this->drupalGet($this->entity['node']['discussion']['1.2']->toUrl());
-    $assert->addressEquals('/collection/collection/solution/abc123/discussion/discussion-12');
-    $this->drupalGet($this->entity['node']['document']['1.1']->toUrl());
-    $assert->addressEquals('/collection/collection/solution/abc123/document/document-11');
-    $this->drupalGet($this->entity['node']['document']['1.2']->toUrl());
-    $assert->addressEquals('/collection/collection/solution/abc123/document/document-12');
-    $this->drupalGet($this->entity['node']['event']['1.1']->toUrl());
-    $assert->addressEquals('/collection/collection/solution/abc123/event/event-11');
-    $this->drupalGet($this->entity['node']['event']['1.2']->toUrl());
-    $assert->addressEquals('/collection/collection/solution/abc123/event/event-12');
-    $this->drupalGet($this->entity['node']['news']['1.1']->toUrl());
-    $assert->addressEquals('/collection/collection/solution/abc123/news/news-11');
-    $this->drupalGet($this->entity['node']['news']['1.2']->toUrl());
-    $assert->addressEquals('/collection/collection/solution/abc123/news/news-12');
+    $this->drupalGet($this->node['custom_page']['1.1']->toUrl());
+    $assert->addressEquals('/collection/big-collection/solution/abc123/custompage-11');
+    $this->drupalGet($this->node['custom_page']['1.2']->toUrl());
+    $assert->addressEquals('/collection/big-collection/solution/abc123/custompage-12');
+    $this->drupalGet($this->node['discussion']['1.1']->toUrl());
+    $assert->addressEquals('/collection/big-collection/solution/abc123/discussion/discussion-11');
+    $this->drupalGet($this->node['discussion']['1.2']->toUrl());
+    $assert->addressEquals('/collection/big-collection/solution/abc123/discussion/discussion-12');
+    $this->drupalGet($this->node['document']['1.1']->toUrl());
+    $assert->addressEquals('/collection/big-collection/solution/abc123/document/document-11');
+    $this->drupalGet($this->node['document']['1.2']->toUrl());
+    $assert->addressEquals('/collection/big-collection/solution/abc123/document/document-12');
+    $this->drupalGet($this->node['event']['1.1']->toUrl());
+    $assert->addressEquals('/collection/big-collection/solution/abc123/event/event-11');
+    $this->drupalGet($this->node['event']['1.2']->toUrl());
+    $assert->addressEquals('/collection/big-collection/solution/abc123/event/event-12');
+    $this->drupalGet($this->node['news']['1.1']->toUrl());
+    $assert->addressEquals('/collection/big-collection/solution/abc123/news/news-11');
+    $this->drupalGet($this->node['news']['1.2']->toUrl());
+    $assert->addressEquals('/collection/big-collection/solution/abc123/news/news-12');
 
     // Edit the the collection.
     $edit = ['short_id[0][value]' => 'xyz789'];
-    $this->drupalGet($this->entity['rdf_entity']['collection']['1']->toUrl('edit-form'));
+    $this->drupalGet($this->node['collection']['1']->toUrl('edit-form'));
     $this->submitForm($edit, 'Publish');
     $this->assertSession()
       ->pageTextContains("You've added a collection short ID: xyz789. It will take some time until the collection content URLs will be updated.");
@@ -199,96 +199,96 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
     $this->drush('queue:run', ['joinup_group:group_content_update']);
 
     // Check that group content URL aliases were updated.
-    $this->drupalGet($this->entity['rdf_entity']['collection']['1']->toUrl());
+    $this->drupalGet($this->node['collection']['1']->toUrl());
     $assert->addressEquals('/collection/xyz789');
     // Solution.
-    $this->drupalGet($this->entity['rdf_entity']['solution']['1']->toUrl());
+    $this->drupalGet($this->node['solution']['1']->toUrl());
     $assert->addressEquals('/collection/xyz789/solution/abc123');
     // Releases.
-    $this->drupalGet($this->entity['node']['release']['1.1']->toUrl());
+    $this->drupalGet($this->node['release']['1.1']->toUrl());
     $assert->addressEquals('/collection/xyz789/solution/abc123/release/11');
-    $this->drupalGet($this->entity['node']['release']['1.2']->toUrl());
+    $this->drupalGet($this->node['release']['1.2']->toUrl());
     $assert->addressEquals('/collection/xyz789/solution/abc123/release/12');
     // Release 1.1 distributions.
-    $this->drupalGet($this->entity['node']['distribution']['1.1.1']->toUrl());
+    $this->drupalGet($this->node['distribution']['1.1.1']->toUrl());
     $assert->addressEquals('/collection/xyz789/solution/abc123/distribution/distribution-111');
-    $this->drupalGet($this->entity['node']['distribution']['1.1.2']->toUrl());
+    $this->drupalGet($this->node['distribution']['1.1.2']->toUrl());
     $assert->addressEquals('/collection/xyz789/solution/abc123/distribution/distribution-112');
     // Release 1.2 distributions.
-    $this->drupalGet($this->entity['node']['distribution']['1.2.1']->toUrl());
+    $this->drupalGet($this->node['distribution']['1.2.1']->toUrl());
     $assert->addressEquals('/collection/xyz789/solution/abc123/distribution/distribution-121');
-    $this->drupalGet($this->entity['node']['distribution']['1.2.2']->toUrl());
+    $this->drupalGet($this->node['distribution']['1.2.2']->toUrl());
     $assert->addressEquals('/collection/xyz789/solution/abc123/distribution/distribution-122');
     // Solution distributions.
-    $this->drupalGet($this->entity['node']['distribution']['1.1']->toUrl());
+    $this->drupalGet($this->node['distribution']['1.1']->toUrl());
     $assert->addressEquals('/collection/xyz789/solution/abc123/distribution/distribution-11');
-    $this->drupalGet($this->entity['node']['distribution']['1.2']->toUrl());
+    $this->drupalGet($this->node['distribution']['1.2']->toUrl());
     $assert->addressEquals('/collection/xyz789/solution/abc123/distribution/distribution-12');
     // Solution nodes.
-    $this->drupalGet($this->entity['node']['custom_page']['1.1']->toUrl());
+    $this->drupalGet($this->node['custom_page']['1.1']->toUrl());
     $assert->addressEquals('/collection/xyz789/solution/abc123/custompage-11');
-    $this->drupalGet($this->entity['node']['custom_page']['1.2']->toUrl());
+    $this->drupalGet($this->node['custom_page']['1.2']->toUrl());
     $assert->addressEquals('/collection/xyz789/solution/abc123/custompage-12');
-    $this->drupalGet($this->entity['node']['discussion']['1.1']->toUrl());
+    $this->drupalGet($this->node['discussion']['1.1']->toUrl());
     $assert->addressEquals('/collection/xyz789/solution/abc123/discussion/discussion-11');
-    $this->drupalGet($this->entity['node']['discussion']['1.2']->toUrl());
+    $this->drupalGet($this->node['discussion']['1.2']->toUrl());
     $assert->addressEquals('/collection/xyz789/solution/abc123/discussion/discussion-12');
-    $this->drupalGet($this->entity['node']['document']['1.1']->toUrl());
+    $this->drupalGet($this->node['document']['1.1']->toUrl());
     $assert->addressEquals('/collection/xyz789/solution/abc123/document/document-11');
-    $this->drupalGet($this->entity['node']['document']['1.2']->toUrl());
+    $this->drupalGet($this->node['document']['1.2']->toUrl());
     $assert->addressEquals('/collection/xyz789/solution/abc123/document/document-12');
-    $this->drupalGet($this->entity['node']['event']['1.1']->toUrl());
+    $this->drupalGet($this->node['event']['1.1']->toUrl());
     $assert->addressEquals('/collection/xyz789/solution/abc123/event/event-11');
-    $this->drupalGet($this->entity['node']['event']['1.2']->toUrl());
+    $this->drupalGet($this->node['event']['1.2']->toUrl());
     $assert->addressEquals('/collection/xyz789/solution/abc123/event/event-12');
-    $this->drupalGet($this->entity['node']['news']['1.1']->toUrl());
+    $this->drupalGet($this->node['news']['1.1']->toUrl());
     $assert->addressEquals('/collection/xyz789/solution/abc123/news/news-11');
-    $this->drupalGet($this->entity['node']['news']['1.2']->toUrl());
+    $this->drupalGet($this->node['news']['1.2']->toUrl());
     $assert->addressEquals('/collection/xyz789/solution/abc123/news/news-12');
-    $this->drupalGet($this->entity['node']['custom_page']['1']->toUrl());
+    $this->drupalGet($this->node['custom_page']['1']->toUrl());
     // Collection's nodes.
     $assert->addressEquals('/collection/xyz789/custompage-1');
-    $this->drupalGet($this->entity['node']['custom_page']['2']->toUrl());
+    $this->drupalGet($this->node['custom_page']['2']->toUrl());
     $assert->addressEquals('/collection/xyz789/custompage-2');
-    $this->drupalGet($this->entity['node']['discussion']['1']->toUrl());
+    $this->drupalGet($this->node['discussion']['1']->toUrl());
     $assert->addressEquals('/collection/xyz789/discussion/discussion-1');
-    $this->drupalGet($this->entity['node']['discussion']['2']->toUrl());
+    $this->drupalGet($this->node['discussion']['2']->toUrl());
     $assert->addressEquals('/collection/xyz789/discussion/discussion-2');
-    $this->drupalGet($this->entity['node']['document']['1']->toUrl());
+    $this->drupalGet($this->node['document']['1']->toUrl());
     $assert->addressEquals('/collection/xyz789/document/document-1');
-    $this->drupalGet($this->entity['node']['document']['2']->toUrl());
+    $this->drupalGet($this->node['document']['2']->toUrl());
     $assert->addressEquals('/collection/xyz789/document/document-2');
-    $this->drupalGet($this->entity['node']['event']['1']->toUrl());
+    $this->drupalGet($this->node['event']['1']->toUrl());
     $assert->addressEquals('/collection/xyz789/event/event-1');
-    $this->drupalGet($this->entity['node']['event']['2']->toUrl());
+    $this->drupalGet($this->node['event']['2']->toUrl());
     $assert->addressEquals('/collection/xyz789/event/event-2');
-    $this->drupalGet($this->entity['node']['glossary']['1']->toUrl());
+    $this->drupalGet($this->node['glossary']['1']->toUrl());
     $assert->addressEquals('/collection/xyz789/glossary/term/glossary-1');
-    $this->drupalGet($this->entity['node']['glossary']['2']->toUrl());
+    $this->drupalGet($this->node['glossary']['2']->toUrl());
     $assert->addressEquals('/collection/xyz789/glossary/term/glossary-2');
-    $this->drupalGet($this->entity['node']['news']['1']->toUrl());
+    $this->drupalGet($this->node['news']['1']->toUrl());
     $assert->addressEquals('/collection/xyz789/news/news-1');
-    $this->drupalGet($this->entity['node']['news']['2']->toUrl());
+    $this->drupalGet($this->node['news']['2']->toUrl());
     $assert->addressEquals('/collection/xyz789/news/news-2');
 
     // Test the success message on short ID update.
     $edit = ['short_id[0][value]' => 'other-id'];
-    $this->drupalGet($this->entity['rdf_entity']['solution']['1']->toUrl('edit-form'));
+    $this->drupalGet($this->node['solution']['1']->toUrl('edit-form'));
     $this->submitForm($edit, 'Publish');
     $this->assertSession()
       ->pageTextContains("You've changed the solution's short ID from abc123 to other-id. It will take some time until the solution content URLs will be updated.");
-    $this->drupalGet($this->entity['rdf_entity']['collection']['1']->toUrl('edit-form'));
+    $this->drupalGet($this->node['collection']['1']->toUrl('edit-form'));
     $this->submitForm($edit, 'Publish');
     $this->assertSession()
       ->pageTextContains("You've changed the collection's short ID from xyz789 to other-id. It will take some time until the collection content URLs will be updated.");
 
     // Test the success message on short ID delete.
     $edit = ['short_id[0][value]' => ''];
-    $this->drupalGet($this->entity['rdf_entity']['solution']['1']->toUrl('edit-form'));
+    $this->drupalGet($this->node['solution']['1']->toUrl('edit-form'));
     $this->submitForm($edit, 'Publish');
     $this->assertSession()
       ->pageTextContains("You've removed the solution's short ID: other-id. It will take some time until the solution content URLs will be updated.");
-    $this->drupalGet($this->entity['rdf_entity']['collection']['1']->toUrl('edit-form'));
+    $this->drupalGet($this->node['collection']['1']->toUrl('edit-form'));
     $this->submitForm($edit, 'Publish');
     $this->assertSession()
       ->pageTextContains("You've removed the collection's short ID: other-id. It will take some time until the collection content URLs will be updated.");
@@ -329,68 +329,68 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
       'email' => $this->randomMachineName() . '@example.com',
     ]);
 
-    $this->entity['rdf_entity']['collection']['1'] = $this->createNode([
+    $this->node['collection']['1'] = $this->createNode([
       'type' => 'collection',
       'uri' => 'http://collection',
-      'title' => 'collection',
+      'title' => 'The Big Collection',
       'abstract' => $this->randomString(),
       'description' => $this->randomString(),
       'field_state' => 'published',
       'owner' => $owner->id(),
       'field_topic' => Topic::loadByUri('http://joinup.eu/ontology/topic#finance-in-eu'),
-      'contact_information' => $contact->id(),
+      'contact' => $contact->id(),
     ]);
 
-    $this->entity['rdf_entity']['solution']['1'] = $this->createNode([
+    $this->node['solution']['1'] = $this->createNode([
       'type' => 'solution',
       'uri' => "http://solution/1",
       'title' => "solution 1",
-      'og_audience' => 'http://collection',
+      'og_audience' => $this->node['collection']['1'],
       'abstract' => $this->randomString(),
       'description' => $this->randomString(),
       'field_state' => 'published',
       'owner' => $owner->id(),
       'field_topic' => Topic::loadByUri('http://joinup.eu/ontology/topic#finance-in-eu')->id(),
       'solution_type' => MappedTerm::loadByUri('http://data.europa.eu/dr8/PublicServiceProvider')->id(),
-      'contact_information' => $contact->id(),
+      'contact' => $contact->id(),
     ]);
     // Releases.
     for ($i = 1; $i <= 2; $i++) {
-      $this->entity['node']['release']["1.{$i}"] = $this->createNode([
+      $this->node['release']["1.{$i}"] = $this->createNode([
         'type' => 'release',
         'id' => "http://release/1.{$i}",
         'title' => "release 1.{$i}",
         'release_number' => "1.{$i}",
-        'og_audience' => 'http://solution/1',
+        'og_audience' => $this->node['solution']['1'],
         'field_state' => 'published',
       ]);
       // Release distributions.
       for ($j = 1; $j <= 2; $j++) {
-        $this->entity['node']['distribution']["1.{$i}.{$j}"] = $this->createNode([
+        $this->node['distribution']["1.{$i}.{$j}"] = $this->createNode([
           'type' => 'distribution',
           'uri' => "http://distribution/1.{$i}.{$j}",
           'title' => "distribution 1.{$i}.{$j}",
-          'release' => $this->entity['node']['release']["1.{$i}"]->id(),
+          'release' => $this->node['release']["1.{$i}"]->id(),
           'field_state' => 'published',
         ]);
       }
     }
     // Solution standalone distributions.
     for ($i = 1; $i <= 2; $i++) {
-      $this->entity['node']['distribution']["1.{$i}"] = $this->createNode([
+      $this->node['distribution']["1.{$i}"] = $this->createNode([
         'type' => 'distribution',
         'title' => "distribution 1.{$i}",
-        'og_audience' => 'http://solution/1',
+        'og_audience' => $this->node['solution']['1'],
         'field_state' => 'published',
       ]);
     }
     // Solution nodes.
     for ($i = 1; $i <= 2; $i++) {
       foreach ($solution_node_bundles as $bundle) {
-        $this->entity['node'][$bundle]["1.{$i}"] = $this->createNode([
+        $this->node[$bundle]["1.{$i}"] = $this->createNode([
           'type' => $bundle,
           'title' => "{$bundle} 1.{$i}",
-          'og_audience' => 'http://solution/1',
+          'og_audience' => $this->node['solution']['1'],
           'field_state' => 'published',
         ]);
       }
@@ -398,10 +398,10 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
     // Collection nodes.
     for ($i = 1; $i <= 2; $i++) {
       foreach ($collection_node_bundles as $bundle) {
-        $this->entity['node'][$bundle]["{$i}"] = $this->createNode([
+        $this->node[$bundle]["{$i}"] = $this->createNode([
           'type' => $bundle,
           'title' => "{$bundle} {$i}",
-          'og_audience' => 'http://collection',
+          'og_audience' => $this->node['collection']['1'],
           'field_state' => 'published',
         ]);
       }
@@ -416,13 +416,11 @@ class GroupContentUpdateUrlAliasTest extends JoinupExistingSiteTestBase {
    * Used to refresh the entity reference fields.
    */
   protected function reloadEntities(): void {
-    array_walk($this->entity, function (array $bundles, string $entity_type_id): void {
-      array_walk($bundles, function (array $entities, string $bundle) use ($entity_type_id): void {
-        array_walk($entities, function (ContentEntityInterface $entity, string $index) use ($entity_type_id, $bundle): void {
-          $this->entity[$entity_type_id][$bundle][$index] = \Drupal::entityTypeManager()
-            ->getStorage($entity->getEntityTypeId())
-            ->load($entity->id());
-        });
+    array_walk($this->node, function (array $entities, string $bundle): void {
+      array_walk($entities, function (ContentEntityInterface $entity, string $index) use ($bundle): void {
+        $this->node[$bundle][$index] = \Drupal::entityTypeManager()
+          ->getStorage('node')
+          ->load($entity->id());
       });
     });
   }
