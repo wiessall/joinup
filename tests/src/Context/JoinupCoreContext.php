@@ -385,8 +385,7 @@ class JoinupCoreContext extends RawDrupalContext {
    * Checks whether the field of an entity is or is not empty.
    *
    * @param string $entityTypeId
-   *   The entity type ID of the entity. "content" or "rdf" are converted
-   *   automatically to "node" and "rdf_entity".
+   *   The entity type ID ("content" is converted automatically to "node").
    * @param string $label
    *   The label of the entity.
    * @param string $fieldName
@@ -463,8 +462,7 @@ class JoinupCoreContext extends RawDrupalContext {
    * is not revealed for the current user anywhere on the UI.
    *
    * @param string $entityTypeId
-   *   The entity type ID of the entity. "content" or "rdf" are converted
-   *   automatically to "node" and "rdf_entity".
+   *   The entity type ID ("content" is converted automatically to "node").
    * @param string $label
    *   The label of the entity.
    * @param string $fieldName

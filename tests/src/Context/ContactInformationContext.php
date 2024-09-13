@@ -44,7 +44,6 @@ class ContactInformationContext extends RawDrupalContext {
    * @throws \Drupal\Core\Entity\EntityMalformedException
    */
   public function visitContactInformationPage(string $label): void {
-    /** @var \Drupal\rdf_entity\Entity\Rdf $entity */
     $entity = $this->getEntityByLabel('node', $label, 'contact_information');
     $this->visitPath($entity->toUrl()->toString());
   }
