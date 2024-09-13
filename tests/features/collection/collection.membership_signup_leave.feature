@@ -9,7 +9,7 @@ Feature: Joining and leaving collections through the web interface
       | Username          |
       | Collection author |
       | Stewe Griffin     |
-    Given the following collections:
+    Given collection content:
       | title                                 | state     | closed | author            |
       | Open collection                       | published | no     | Collection author |
       | Open collection with public CoC       | published | no     |                   |

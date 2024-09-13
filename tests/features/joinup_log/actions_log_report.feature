@@ -5,7 +5,7 @@ Feature: Actions log
   I want to have access the actions log report
 
   Background:
-    Given collections:
+    Given collection content:
       | title         | state     |
       | Tilt and Turn | published |
     Given solution content:

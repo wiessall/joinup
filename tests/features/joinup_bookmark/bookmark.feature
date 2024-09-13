@@ -9,7 +9,7 @@ Feature: Bookmark/Unbookmark feature.
       | Username         | E-mail               | Password        | First name | Family name |
       | Lisa Bookmark    | lisa@bookmark.com    | bookmark123!#$l | Lisa       | Bookmark    |
       | Gregory Bookmark | gregory@bookmark.com | bookmark123!#$g | Gregory    | Bookmark    |
-    Given the following collections:
+    Given collection content:
       | title  | state     |
       | Batman | published |
     Given solution content:

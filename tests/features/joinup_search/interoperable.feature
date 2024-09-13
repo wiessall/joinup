@@ -4,7 +4,7 @@ Feature: Global Interoperable search
 
   @javascript
   Scenario: User can find Interoperable items
-    Given the following collections:
+    Given collection content:
       | title          | state     |
       | Open standards | published |
     Given solution content:

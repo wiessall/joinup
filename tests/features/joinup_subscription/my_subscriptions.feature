@@ -56,7 +56,7 @@ Feature: My subscriptions
 
   @javascript
   Scenario: Manage my subscriptions
-    Given collections:
+    Given collection content:
       | title          | state     | abstract                                                       |
       | Alpha Centauri | published | A triple star system at a distance of 4.3 light years.         |
       | Barnard's Star | draft     | A low mass red dwarf at around 6 light years distance.         |
@@ -241,7 +241,7 @@ Feature: My subscriptions
   # checked after save.
   Scenario: Regression test "My subscriptions"
 
-    Given the following collections:
+    Given collection content:
       | title     | state     |
       | Fireblade | published |
       | Lopitopes | published |
