@@ -241,13 +241,27 @@
     },
     "extra": {
         "installer-paths": {
-            "drush/Commands/{$name}": ["type:drupal-drush"],
-            "drush/contrib/{$name}": ["type:drupal-drush"],
-            "web/core": ["type:drupal-core"],
-            "web/libraries/{$name}": ["type:drupal-library"],
-            "web/modules/contrib/{$name}": ["type:drupal-module"],
-            "web/profiles/contrib/{$name}": ["type:drupal-profile"],
-            "web/themes/contrib/{$name}": ["type:drupal-theme"]
+            "drush/Commands/{$name}": [
+                "type:drupal-drush"
+            ],
+            "drush/contrib/{$name}": [
+                "type:drupal-drush"
+            ],
+            "web/core": [
+                "type:drupal-core"
+            ],
+            "web/libraries/{$name}": [
+                "type:drupal-library"
+            ],
+            "web/modules/contrib/{$name}": [
+                "type:drupal-module"
+            ],
+            "web/profiles/contrib/{$name}": [
+                "type:drupal-profile"
+            ],
+            "web/themes/contrib/{$name}": [
+                "type:drupal-theme"
+            ]
         },
         "drupal-scaffold": {
             "locations": {
@@ -451,10 +465,10 @@
                 "Extend support for embed URLs. Option to force privacy @see https://www.drupal.org/project/video_embed_field/issues/3060201 (originally on https://www.drupal.org/node/2899093)": "resources/patch/php/drupal/video_embed_field/3060201.patch",
                 "WYSIWYG Video URL max length limited to 128 characters @see https://www.drupal.org/project/video_embed_field/issues/2908562": "resources/patch/php/drupal/video_embed_field/2908562.patch",
                 "Add support for Ckeditor 5. @see https://www.drupal.org/project/video_embed_field/issues/3311063": "resources/patch/php/drupal/video_embed_field/3311063_42.patch",
-                "Deprecation warning: translatable category in field definition @see https://www.drupal.org/project/video_embed_field/issues/3460603": "resources/patch/php/drupal/video_embed_field/3460603.patch"
+                "AssertionError: \"media\" must be defined in MODULE_NAME.field_type_categories.yml @see https://www.drupal.org/project/video_embed_field/issues/3469668": "resources/patch/php/drupal/video_embed_field/3469668.patch"
             },
             "drupal/views_autosubmit": {
-                "Stop auto submitting first character entered in an Autocomplete Filter field. @see https://www.drupal.org/project/views_autosubmit/issues/3160600" : "resources/patch/php/drupal/views_autosubmit/3160600.patch"
+                "Stop auto submitting first character entered in an Autocomplete Filter field. @see https://www.drupal.org/project/views_autosubmit/issues/3160600": "resources/patch/php/drupal/views_autosubmit/3160600.patch"
             },
             "drupal/webform": {
                 "Radios or Checkboxes inside Composite not saved @see https://www.drupal.org/project/webform/issues/3216923": "resources/patch/php/drupal/webform/368.diff",

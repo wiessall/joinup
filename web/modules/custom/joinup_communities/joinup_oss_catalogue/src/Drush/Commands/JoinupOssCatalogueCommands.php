@@ -40,7 +40,7 @@ class JoinupOssCatalogueCommands extends DrushCommands {
    */
   #[CLI\Hook(type: HookManager::REPLACE_COMMAND_HOOK, target: 'eu-oss:fetch')]
   public function fetch(string $provider): string {
-    if (joinup_oss_catalogue_is_enabled()) {
+    if (joinup_oss_catalogue_feature()->isAllowed()) {
       $commands = new EuOssCatalogueCommands($this->euOssCatalogueService, $this->providerPluginManager);
       return $commands->fetch($provider);
     }
@@ -52,7 +52,7 @@ class JoinupOssCatalogueCommands extends DrushCommands {
    */
   #[CLI\Hook(type: HookManager::REPLACE_COMMAND_HOOK, target: 'eu-oss:generate-vitality-index')]
   public function generate(string $nid): string {
-    if (joinup_oss_catalogue_is_enabled()) {
+    if (joinup_oss_catalogue_feature()->isAllowed()) {
       $commands = new EuOssVitalityIndexCommands($this->vitalityIndexGenerator, $this->entityTypeManager);
       return $commands->generate($nid);
     }
