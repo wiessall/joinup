@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace Drupal\Tests\joinup_rdf\ExistingSite;
 
 use Drupal\Core\Entity\ContentEntityInterface;
-use Drupal\rdf_sync\Encoder\RdfSyncEncoder;
-use Drupal\taxonomy\Entity\Vocabulary;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
+use Drupal\rdf_sync\Encoder\RdfSyncEncoder;
 use EasyRdf\Format;
 
 /**
@@ -162,7 +161,7 @@ class ContentNegotiationTest extends JoinupExistingSiteTestBase {
   /**
    * Returns the expected response body given an entity and a format name.
    *
-   * @param string $format_name
+   * @param string $expected_format_name
    *   The format name (e.g. 'rdfxml', 'n3', etc).
    * @param \Drupal\Core\Entity\ContentEntityInterface $entity
    *   The entity.
