@@ -91,7 +91,6 @@ class MetaEntityContext extends RawDrupalContext {
       throw new \Exception("The related entity type '$related_entity_type' is not supported. Only the following types are supported: " . implode(', ', $allowed_types));
     }
 
-    /** @var \Drupal\rdf_entity\Entity\Rdf $entity */
     $entity = $this->getEntityByLabel($related_entity_type, $related_entity);
 
     return \Drupal::getContainer()->get('meta_entity.repository')->getMetaEntityForEntity($entity, $bundle);
