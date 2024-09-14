@@ -4,7 +4,9 @@ Feature: Solution homepage
   As a user of the website
   I need to be able see all content related to a solution on the solution homepage
 
-  Background:
+  # @covers \Drupal\joinup_release\Plugin\search_api\processor\ReleaseSolutionData::preprocessIndexItems
+  # @covers \Drupal\joinup_search\Plugin\search_api\processor\AddAggregatedTopicHierarchy::preprocessIndexItems
+  Scenario: The solution homepage shows related content.
     Given owner content:
       | name          | owner type |
       | Kostas Agathe | Company    |
@@ -38,7 +40,6 @@ Feature: Solution homepage
       | title               | document type | short title | created           | field_paragraphs_body   | spatial coverage | topic       | solution                     | state     |
       | IS protocol draft 2 | Document      | IS draft 2  | 2018-10-04 8:08am | Next proposition draft. | European Union   | E-inclusion | Information sharing protocol | published |
 
-  Scenario: The solution homepage shows related content.
     When I go to the homepage of the "Information sharing protocol" solution
     # I should see only the related release.
     # And the distribution directly associated.
