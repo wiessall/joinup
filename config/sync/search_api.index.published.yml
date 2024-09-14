@@ -30,6 +30,7 @@ dependencies:
   module:
     - joinup_flag
     - joinup_oss_catalogue
+    - joinup_release
     - joinup_search
     - joinup_solution
     - meta_entity
@@ -125,6 +126,7 @@ field_settings:
     configuration:
       type: union
       separator: |+
+
 
 
 
@@ -807,6 +809,9 @@ processor_settings:
     inverse: false
   language_with_fallback: {  }
   oss_solution_rendered_item: {  }
+  release_solution_data:
+    weights:
+      preprocess_index: -60
   rendered_item: {  }
   reverse_entity_references: {  }
   solr_date_range:
@@ -940,7 +945,6 @@ processor_settings:
           news: 5.0
           release: 0.0
           solution: 13.0
-          video: 0.0
       'entity:taxonomy_term':
         datasource_boost: 0.0
         bundle_boosts:
@@ -948,7 +952,6 @@ processor_settings:
           eif_interoperability_layer: 0.0
           eif_principle: 0.0
           eif_recommendation: 0.0
-          spdx_licence: 0.0
           topic: 0.0
       'entity:user':
         datasource_boost: 0.0
