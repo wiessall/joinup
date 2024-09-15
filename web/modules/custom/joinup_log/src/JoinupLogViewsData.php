@@ -31,7 +31,6 @@ class JoinupLogViewsData extends EntityViewsData {
     ];
 
     $data[$base_table]['variables']['field']['id'] = 'log_unserializer';
-    $data[$base_table]['group']['argument']['id'] = 'og_audience_group';
 
     return $data;
   }

@@ -72,6 +72,7 @@ class ManageSolutionsAccess extends AccessPluginBase implements CacheableDepende
     $parameters['node']['bundle'] = ['collection'];
     $route->setOption('parameters', $parameters);
     $route->setRequirement('_permission', 'manage solutions');
+    $route->setRequirement('_archived_group', 'TRUE');
   }
 
   /**

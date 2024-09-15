@@ -131,6 +131,7 @@ entity.node.announcement_add:
   requirements:
     _custom_access: Drupal\joinup_group\Controller\AnnouncementsController::access
     _og_user_access_group: 'manage group announcements'
+    _archived_group: 'TRUE'
   options:
     parameters:
       node:
@@ -148,6 +149,7 @@ entity.node.announcement_edit:
   requirements:
     _custom_access: Drupal\joinup_group\Controller\AnnouncementsController::access
     _og_user_access_group: 'manage group announcements'
+    _archived_group: 'TRUE'
   options:
     parameters:
       node:
@@ -189,6 +191,7 @@ entity.node.unpublished_content:
     _title: 'Unpublished content'
   requirements:
     _custom_access: Drupal\joinup_group\Controller\UnpublishedContentPageController::access
+    _archived_group: 'TRUE'
   options:
     parameters:
       node:

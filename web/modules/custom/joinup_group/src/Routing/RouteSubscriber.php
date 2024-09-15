@@ -55,6 +55,19 @@ class RouteSubscriber extends RouteSubscriberBase {
       $parameters['node']['bundle'] = ['collection', 'solution'];
       $route->setOption('parameters', $parameters);
     }
+
+    $archivedGroupRoutes = [
+      'joinup_group.add_content',
+      'moderation.content_moderation_overview',
+      'view.group_content_management.manage',
+      'view.group_content_management.csv_export',
+      'view.moderated_content.moderated_content',
+    ];
+    foreach ($archivedGroupRoutes as $route_name) {
+      if ($route = $collection->get($route_name)) {
+        $route->setRequirement('_archived_group', 'TRUE');
+      }
+    }
   }
 
 }

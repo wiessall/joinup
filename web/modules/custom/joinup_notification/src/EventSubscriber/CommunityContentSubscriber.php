@@ -320,24 +320,4 @@ class CommunityContentSubscriber extends NotificationSubscriberBase {
     return $arguments;
   }
 
-  /**
-   * Checks whether the entity has a published version.
-   *
-   * @param \Drupal\Core\Entity\EntityInterface $entity
-   *   The entity object.
-   *
-   * @return bool
-   *   Whether the entity has a published version.
-   */
-  protected function hasPublishedVersion(EntityInterface $entity): bool {
-    if ($entity->isNew()) {
-      return FALSE;
-    }
-    if ($entity->isPublished()) {
-      return TRUE;
-    }
-    $published = $this->entityTypeManager->getStorage('node')->load($entity->id());
-    return !empty($published) && $published->isPublished();
-  }
-
 }

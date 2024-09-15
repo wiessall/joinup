@@ -131,7 +131,7 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
-          plugin_id: og_audience_group
+          plugin_id: string
           default_action: default
           exception:
             value: all

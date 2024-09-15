@@ -7,6 +7,10 @@ services:
     arguments: ['@current_user', '@entity_type.manager', '@og.membership_manager', '@database', '@private_key']
     tags:
       - { name: 'cache.context'}
+  joinup_group.achived_collection.access_check:
+    class: Drupal\joinup_group\Access\ArchivedGroupAccessCheck
+    tags:
+      - { name: access_check, applies_to: _archived_group }
   joinup_group.group_manager:
     class: Drupal\joinup_group\JoinupGroupManager
     arguments: ['@og.membership_manager', '@entity_type.manager', '@og.context', '@current_user', '@og.access']

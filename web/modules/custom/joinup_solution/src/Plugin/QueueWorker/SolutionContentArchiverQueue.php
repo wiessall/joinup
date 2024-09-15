@@ -179,13 +179,9 @@ class SolutionContentArchiverQueue extends QueueWorkerBase implements ContainerF
       }
 
       $storage = $this->entityTypeManager->getStorage($entity->getEntityTypeId());
-      if (
-        $storage instanceof SparqlEntityStorageInterface &&
-        $entity->get('graph')->getString() !== SparqlGraphInterface::DEFAULT
-      ) {
-        // Load from the default (assuming "published") graph, because we want
-        // to archive only the publicly accessible instance.
-        $entity = $storage->load($entity->id(), [SparqlGraphInterface::DEFAULT]) ?? $entity;
+      // Load the published version of the entity if the entity is published.
+      if (!$entity->isPublished()) {
+        $entity = $storage->load($entity->id()) ?? $entity;
       }
 
       // Current user cannot change the state to "archived" or "unarchived"

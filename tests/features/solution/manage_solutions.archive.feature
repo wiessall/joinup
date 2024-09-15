@@ -64,6 +64,8 @@ Feature: When a solution is archived then its sub-content also should be archive
       | Solution   | Announcement1 C1     | draft | 2005-11-05 | Blahman |
       | Collection | Some announcement C2 | draft | 2005-11-05 | Blahman |
 
+  # @covers \Drupal\joinup_group\Access\ArchivedGroupAccessCheck::access and the
+  #   `_archived_group` route access requirement for solutions.
   @loggedErrors
   Scenario: Archiving / unarchiving a solution must archive / unarchive its sub-content.
     Given I am logged in as "John Moderator"

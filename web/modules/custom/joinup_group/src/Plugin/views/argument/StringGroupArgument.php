@@ -11,7 +11,7 @@ use Drupal\views\Plugin\views\argument\StringArgument;
  *
  * @ingroup views_argument_handlers
  *
- * @todo Replace this with 'string' argument in every view in ISAICP-8572.
+ * @todo Remove this in ISAICP-8573.
  *
  * @ViewsArgument("og_audience_group")
  */
@@ -21,9 +21,7 @@ class StringGroupArgument extends StringArgument {
    * {@inheritdoc}
    */
   public function setArgument($arg): bool {
-    return $arg
-      ? parent::setArgument($arg)
-      : FALSE;
+    return $arg ? parent::setArgument($arg) : FALSE;
   }
 
 }

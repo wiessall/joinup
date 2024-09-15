@@ -2,19 +2,20 @@
 
 declare(strict_types=1);
 
-namespace Drupal\collection\Access;
+namespace Drupal\joinup_group\Access;
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Routing\Access\AccessInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\collection\Entity\CollectionInterface;
+use Drupal\joinup_group\Entity\GroupInterface;
 use Symfony\Component\Routing\Route;
 
 /**
- * Provides an access checker for the '_archived_collection' requirement.
+ * Provides an access checker for the '_archived_group' requirement.
  */
-class ArchivedCollectionAccessCheck implements AccessInterface {
+class ArchivedGroupAccessCheck implements AccessInterface {
 
   /**
    * Checks access for routes having the '_archived_collection' requirement.
@@ -28,21 +29,20 @@ class ArchivedCollectionAccessCheck implements AccessInterface {
    *   The access result.
    *
    * @throws \Exception
-   *   If the '_archived_collection' has an invalid value.
+   *   If the '_archived_group' has an invalid value.
    */
   public function access(Route $route, RouteMatchInterface $route_match): AccessResultInterface {
-    $requirement = $route->getRequirement('_archived_collection');
-    if ($requirement !== 'TRUE') {
-      throw new \Exception("Invalid value '{$requirement}' for route '_archived_collection' requirement.");
-    }
+    $requirement = $route->getRequirement('_archived_group');
+    assert($requirement === 'TRUE', 'Invalid value for route "_archived_group" requirement. Expected "TRUE".');
+    $group = $route_match->getParameter('node');
 
-    $collection = $route_match->getParameter('node');
-
-    // If the collection is archived, content creation is not allowed.
-    if ($collection instanceof CollectionInterface && $collection->getWorkflowState() === 'archived') {
+    // If the group is archived, access is denied.
+    if ($group instanceof GroupInterface && $group->getWorkflowState() === 'archived') {
       return AccessResult::forbidden();
     }
 
+    // @todo Why return allowed here? Why not neutral? Is this the sole access
+    //   check for some route?
     return AccessResult::allowed();
   }
 

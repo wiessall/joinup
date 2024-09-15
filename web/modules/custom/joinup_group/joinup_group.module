@@ -513,7 +513,7 @@ function joinup_group_og_user_access_alter(array &$permissions, CacheableMetadat
 function joinup_group_form_views_exposed_form_alter(array &$form, FormStateInterface $form_state): void {
   /** @var \Drupal\views\ViewExecutable $view */
   $view = $form_state->get('view');
-  $rdf_storage = \Drupal::entityTypeManager()->getStorage('node');
+  $storage = \Drupal::entityTypeManager()->getStorage('node');
   $view_id = $view->id();
   $display = $view->current_display;
 
@@ -531,7 +531,7 @@ function joinup_group_form_views_exposed_form_alter(array &$form, FormStateInter
       ],
       '#validate_reference' => FALSE,
       '#maxlength' => 1024,
-      '#default_value' => $rdf_storage->load($form['group']['#default_value']),
+      '#default_value' => $form['group']['#default_value'],
     ];
   }
 
