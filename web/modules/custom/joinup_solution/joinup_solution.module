@@ -159,8 +159,6 @@ function joinup_solution_node_insert(EntityInterface $entity): void {
  * solution with the same name already exists in a different collection. They
  * can then evaluate if the conflict is acceptable or not before approving a
  * proposed solution.
- *
- * @todo Ensure this is still applying. The form ID is correct?.
  */
 function joinup_solution_form_node_solution_edit_form_alter(array &$form, FormStateInterface $form_state): void {
   // Bail out if the user is not a moderator.

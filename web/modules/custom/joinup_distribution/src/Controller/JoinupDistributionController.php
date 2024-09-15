@@ -59,33 +59,6 @@ class JoinupDistributionController extends ControllerBase {
    * @return \Drupal\Core\Access\AccessResultInterface
    *   The access result object.
    */
-  public function createAssetDistributionAccess(NodeInterface $node): AccessResultInterface {
-    // Create a new distribution entity in order to check permissions on it.
-    $distribution = $this->createNewAssetDistribution($node);
-
-    // If the distribution entity isn't created correctly, forbid access to the
-    // page.
-    if (!$distribution) {
-      return AccessResult::forbidden();
-    }
-
-    return $this->entityTypeManager()->getAccessControlHandler('node')->createAccess('distribution', NULL, [
-      'group' => $this->getRelatedSolution($node),
-    ], TRUE);
-  }
-
-  /**
-   * Handles access to the distribution add form.
-   *
-   * @todo This should be merged with the default access method in ISAICP-8572.
-   *
-   * @param \Drupal\node\NodeInterface $node
-   *   The asset release or solution RDF entity for which the distribution
-   *   is created.
-   *
-   * @return \Drupal\Core\Access\AccessResultInterface
-   *   The access result object.
-   */
   public function createAssetDistributionOnNodeGroupAccess(NodeInterface $node): AccessResultInterface {
     // Create a new distribution entity in order to check permissions on it.
     $distribution = $this->createNewAssetDistribution($node);

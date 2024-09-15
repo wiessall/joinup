@@ -56,7 +56,7 @@ class JoinupGroupContext extends RawDrupalContext {
   public function visitMembershipPermissionsTable(string $label): void {
     $group = $this->getEntityByLabel('node', $label);
     $url = Url::fromRoute('joinup_group.membership_permissions_info', [
-      'rdf_entity' => $group->id(),
+      'node' => $group->id(),
     ]);
     $this->visitPath($url->toString());
   }
@@ -73,7 +73,7 @@ class JoinupGroupContext extends RawDrupalContext {
     $group = $this->getEntityByLabel('node', $label);
 
     $url = Url::fromRoute('view.discussions.overview', [
-      'rdf_entity' => $group->id(),
+      'node' => $group->id(),
     ]);
 
     $this->visitPath($url->toString());
@@ -91,7 +91,7 @@ class JoinupGroupContext extends RawDrupalContext {
     $group = $this->getEntityByLabel('node', $label);
 
     $url = Url::fromRoute('view.group_content_management.manage', [
-      'rdf_entity' => $group->id(),
+      'node' => $group->id(),
     ]);
 
     $this->visitPath($url->toString());

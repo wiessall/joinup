@@ -441,7 +441,7 @@ display:
           admin_label: ''
           entity_type: joinup_log
           entity_field: group
-          plugin_id: og_audience_group
+          plugin_id: string
           default_action: default
           exception:
             value: all

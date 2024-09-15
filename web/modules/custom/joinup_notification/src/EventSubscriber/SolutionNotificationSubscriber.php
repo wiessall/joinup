@@ -79,7 +79,7 @@ class SolutionNotificationSubscriber extends NotificationSubscriberBase {
   /**
    * The transition object.
    *
-   * @var \Drupal\state_machine\Plugin\Workflow\WorkflowTransition
+   * @var \Drupal\state_machine\Plugin\Workflow\WorkflowTransition|null
    */
   protected WorkflowTransition $transition;
 
@@ -150,6 +150,9 @@ class SolutionNotificationSubscriber extends NotificationSubscriberBase {
     $this->workflow = $this->entity->getWorkflow();
     $this->fromState = isset($this->entity->original) ? $this->entity->original->getWorkflowState() : '__new__';
     $to_state = $this->entity->getWorkflowState();
+    if (!$this->workflow->findTransition($this->fromState, $to_state)) {
+      return;
+    }
     $this->transition = $this->workflow->findTransition($this->fromState, $to_state);
     $this->motivation = empty($this->entity->motivation) ? '' : $this->entity->motivation;
     $this->hasPublished = $this->hasPublishedVersion($this->entity);
@@ -437,25 +440,6 @@ class SolutionNotificationSubscriber extends NotificationSubscriberBase {
     }
 
     return $arguments;
-  }
-
-  /**
-   * Checks whether the rdf entity has a published version.
-   *
-   * @param \Drupal\Core\Entity\EntityInterface $entity
-   *   The entity object.
-   *
-   * @return bool
-   *   Whether the entity has a published version.
-   *
-   * @see joinup_notification_rdf_entity_presave()
-   */
-  protected function hasPublishedVersion(EntityInterface $entity): bool {
-    if (isset($entity->hasPublished)) {
-      return ($entity->hasPublished);
-    }
-
-    return FALSE;
   }
 
   /**

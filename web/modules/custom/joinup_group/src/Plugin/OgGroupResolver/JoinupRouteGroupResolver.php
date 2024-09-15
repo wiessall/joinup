@@ -31,8 +31,8 @@ class JoinupRouteGroupResolver extends RouteGroupResolver {
       '/node/{group}/reports' => 'node',
 
       // @todo Can't find usages of these 2 paths.
-      '/node/{node}/announcements/list' => 'rdf_entity',
-      '/node/{node}/announcements/send' => 'rdf_entity',
+      '/node/{node}/announcements/list' => 'node',
+      '/node/{node}/announcements/send' => 'node',
 
       '/node/{node}/glossary_export/{arg_1}' => 'node',
       '/node/{node}/reports/actions-log' => 'node',

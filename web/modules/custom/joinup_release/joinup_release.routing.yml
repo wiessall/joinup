@@ -6,6 +6,7 @@ joinup_release.solution_release.add:
     _title: 'Add Release'
   requirements:
     _custom_access: '\Drupal\joinup_release\Controller\ReleaseController::createReleaseAccess'
+    _archived_group: 'TRUE'
   options:
     parameters:
       node:
