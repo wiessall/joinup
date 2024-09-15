@@ -24,8 +24,6 @@ use Drupal\joinup_solution\Transition;
 use Drupal\joinup_workflow\ArchivableEntityInterface;
 use Drupal\joinup_workflow\WorkflowHelperInterface;
 use Drupal\joinup_workflow\WorkflowStateChangeMessageTrait;
-use Drupal\sparql_entity_storage\SparqlEntityStorageInterface;
-use Drupal\sparql_entity_storage\SparqlGraphInterface;
 use Drupal\user\UserInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 

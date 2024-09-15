@@ -19,6 +19,7 @@ use Drupal\Core\Template\Attribute;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\search_api\IndexInterface;
 use Drupal\search_api\Query\ConditionGroupInterface;
+use Drupal\views\Plugin\views\query\QueryPluginBase;
 use Drupal\views\ViewExecutable;
 
 /**
@@ -129,6 +130,37 @@ function joinup_search_views_pre_execute(ViewExecutable $view): void {
   // method to ensure legacy support.
   // Selecting the entity_created option itself won't affect the query.
   $view->getQuery()->sort('entity_created', 'DESC');
+}
+
+/**
+ * Implements hook_views_query_alter().
+ *
+ * Remove the query condition with field set to
+ * message__group.group_target_id set to null. This is a temporary workaround
+ * for the announcements view's autocomplete filter.
+ *
+ * @todo This should be dropped. There should be a ticket to fix the view. This
+ *   is a TEMPORARY workaround.
+ */
+function joinup_search_views_query_alter(ViewExecutable $view, QueryPluginBase $query): void {
+  if ($view->id() !== 'announcements' || $view->current_display !== 'all') {
+    return;
+  }
+
+  // Iterate through the query conditions and remove the query condition with
+  // field set to message__group.group_target_id set to null.
+  $conditions = &$query->where;
+  foreach ($conditions as $key => $condition_group) {
+    if (empty($condition_group['conditions'])) {
+      continue;
+    }
+
+    foreach ($condition_group['conditions'] as $subkey => $condition) {
+      if ($condition['field'] === 'message__group.group_target_id' && $condition['value'] === NULL) {
+        unset($conditions[$key]['conditions'][$subkey]);
+      }
+    }
+  }
 }
 
 /**

@@ -531,7 +531,7 @@ function joinup_group_form_views_exposed_form_alter(array &$form, FormStateInter
       ],
       '#validate_reference' => FALSE,
       '#maxlength' => 1024,
-      '#default_value' => $form['group']['#default_value'],
+      '#default_value' => !empty($form['group']['#default_value']) ? $storage->load($form['group']['#default_value']) : NULL,
     ];
   }
 
