@@ -66,6 +66,10 @@ Feature: When a solution is archived then its sub-content also should be archive
 
   # @covers \Drupal\joinup_group\Access\ArchivedGroupAccessCheck::access and the
   #   `_archived_group` route access requirement for solutions.
+  # @covers \joinup_search_views_query_alter but should be removed and fixed on
+  #   \joinup_group_form_views_exposed_form_alter where the default value forces
+  #   a wrong empty ID value to the query.
+  # @see \joinup_group_form_views_exposed_form_alter.
   @loggedErrors
   Scenario: Archiving / unarchiving a solution must archive / unarchive its sub-content.
     Given I am logged in as "John Moderator"

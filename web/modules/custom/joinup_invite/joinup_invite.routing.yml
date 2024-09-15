@@ -19,6 +19,7 @@ entity.node.members.invite:
     _title: 'Invite members'
   requirements:
     _og_user_access_group: 'manage members'
+    _archived_group: 'TRUE'
   options:
     parameters:
       node:
@@ -37,6 +38,7 @@ entity.node.members.add_members:
     _title: 'Add members'
   requirements:
     _permission: 'manage group add members'
+    _archived_group: 'TRUE'
   options:
     parameters:
       node:

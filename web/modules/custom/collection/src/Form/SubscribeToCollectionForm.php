@@ -223,14 +223,14 @@ class SubscribeToCollectionForm extends FormBase {
   /**
    * Adds the necessary code of conduct form elements to the form.
    *
-   * @param \Drupal\rdf_entity\RdfInterface|null $collection
+   * @param \Drupal\node\NodeInterface|null $collection
    *   The collection.
    *
    * @return array[]|null
    *   The form components about accepting the Code of Conduct document, or
    *   NULL if there is nothing what users should agree to.
    */
-  protected function getCodeOfConductComponents(?RdfInterface $collection): ?array {
+  protected function getCodeOfConductComponents(?NodeInterface $collection): ?array {
     if (
       !$collection instanceof CollectionInterface ||
       !$collection->hasCodeOfConductToAccept()
