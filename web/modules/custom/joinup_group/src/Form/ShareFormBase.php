@@ -6,6 +6,7 @@ namespace Drupal\joinup_group\Form;
 
 use Drupal\Core\Cache\CacheTagsInvalidatorInterface;
 use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\EventSubscriber\MainContentViewSubscriber;
 use Drupal\Core\Form\FormBase;
@@ -13,7 +14,6 @@ use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\joinup_group\Entity\GroupContentInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
-use Drupal\joinup_group\Exception\MissingGroupException;
 use Drupal\og\MembershipManagerInterface;
 use Drupal\og\OgMembershipInterface;
 use Drupal\og\OgRoleManagerInterface;
@@ -44,6 +44,8 @@ abstract class ShareFormBase extends FormBase {
   /**
    * Constructs a new ShareContentFormBase object.
    *
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
+   *   The entity type manager.
    * @param \Drupal\og\MembershipManagerInterface $membershipManager
    *   The OG membership manager.
    * @param \Drupal\og\OgRoleManagerInterface $roleManager
@@ -56,6 +58,7 @@ abstract class ShareFormBase extends FormBase {
    *   The cache tag invalidator service.
    */
   public function __construct(
+    protected EntityTypeManagerInterface $entityTypeManager,
     protected MembershipManagerInterface $membershipManager,
     protected OgRoleManagerInterface $roleManager,
     protected AccountInterface $currentUser,
@@ -68,6 +71,7 @@ abstract class ShareFormBase extends FormBase {
    */
   public static function create(ContainerInterface $container): self {
     return new static(
+      $container->get('entity_type.manager'),
       $container->get('og.membership_manager'),
       $container->get('og.role_manager'),
       $container->get('current_user'),
@@ -146,14 +150,9 @@ abstract class ShareFormBase extends FormBase {
    *   The affiliated or parent group, if one exists.
    */
   protected function getExcludedParent(): ?GroupInterface {
-    if ($this->entity instanceof GroupContentInterface) {
-      try {
-        return $this->entity->getGroup();
-      }
-      catch (MissingGroupException $e) {
-      }
-    }
-    return NULL;
+    return $this->entity instanceof GroupContentInterface && $this->entity->hasGroup()
+      ? $this->entity->getGroup()
+      : NULL;
   }
 
   /**

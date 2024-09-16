@@ -11,6 +11,7 @@ dependencies:
     - field.field.node.solution.description
     - field.field.node.solution.documentation
     - field.field.node.solution.field_keywords
+    - field.field.node.solution.field_shared_in
     - field.field.node.solution.field_state
     - field.field.node.solution.field_topic
     - field.field.node.solution.group_moderation
@@ -25,7 +26,6 @@ dependencies:
     - field.field.node.solution.process_status
     - field.field.node.solution.related_solutions
     - field.field.node.solution.release_number
-    - field.field.node.solution.shared_in
     - field.field.node.solution.short_id
     - field.field.node.solution.site_featured
     - field.field.node.solution.solution_type
@@ -336,13 +336,13 @@ content:
 hidden:
   body: true
   created: true
+  field_shared_in: true
   langcode: true
   og_audience: true
   path: true
   promote: true
   published_at: true
   release_number: true
-  shared_in: true
   site_featured: true
   status: true
   sticky: true
