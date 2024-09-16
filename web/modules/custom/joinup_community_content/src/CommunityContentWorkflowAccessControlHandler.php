@@ -74,11 +74,6 @@ class CommunityContentWorkflowAccessControlHandler {
     }
 
     $parent = $content->getGroup();
-    // Anything other than view, is denied if the parent is archived.
-    if ($operation !== 'view' && $parent->isArchived()) {
-      return AccessResult::forbidden();
-    }
-
     switch ($operation) {
       case 'view':
         return $this->entityViewAccess($content, $account);

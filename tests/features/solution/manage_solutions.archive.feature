@@ -204,6 +204,7 @@ Feature: When a solution is archived then its sub-content also should be archive
     When I go to the homepage of the "Solution" solution
     Then I should not see the text "Archived" in the "Header"
 
+  # @covers \state_machine_permissions_node_access.
   Scenario Outline: Users must not be able to edit the sub-content of an archived solution
     Given the workflow state of the "Solution" "content" is changed to "archived"
     And I am logged in as "<User>"
