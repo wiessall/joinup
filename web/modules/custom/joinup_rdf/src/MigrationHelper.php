@@ -317,7 +317,7 @@ final class MigrationHelper {
       //   for distributions so that the `field_shared_in` can accommodate the
       //   solution parents.
       'http://joinup.eu/solution/shared_in' => [
-        'target_field_name' => 'shared_in',
+        'target_field_name' => 'field_shared_in',
         'format' => 'reference',
         'mapped_term' => TRUE,
       ],

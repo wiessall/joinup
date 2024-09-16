@@ -260,7 +260,7 @@ class JoinupContext extends RawDrupalContext {
         // ??
         'unpinned in' => 'unpinned_in_collection',
         // ??
-        'shared on' => 'field_is_shared_in',
+        'shared on' => 'field_shared_in',
       ],
       'shared' => [
         'collection' => OgGroupAudienceHelperInterface::DEFAULT_FIELD,

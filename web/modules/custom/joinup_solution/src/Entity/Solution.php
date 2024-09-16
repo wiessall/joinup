@@ -213,7 +213,7 @@ class Solution extends Node implements SolutionInterface {
    * {@inheritdoc}
    */
   public function getSharedInField(): ?EntityReferenceFieldItemList {
-    return $this->get('shared_in');
+    return $this->get('field_shared_in');
   }
 
   /**
