@@ -67,7 +67,7 @@ function joinup_community_content_node_view(array &$build, EntityInterface $enti
   }
 
   if ($display->getComponent('share_link')) {
-    $build['share_link'] = joinup_group_generate_share_link($entity, 'joinup_community_content.share_content_form');
+    $build['share_link'] = joinup_group_generate_share_link($entity, 'joinup_group.share_content_form');
     $build['#cache'] = [
       'contexts' => [
         'og_role',
