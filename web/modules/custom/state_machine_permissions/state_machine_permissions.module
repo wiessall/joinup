@@ -13,6 +13,7 @@ use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\contact_information\Entity\ContactInformationInterface;
+use Drupal\joinup_group\Entity\GroupContentInterface;
 use Drupal\owner\Entity\OwnerInterface;
 
 /**
@@ -59,7 +60,11 @@ function state_machine_permissions_node_create_access(AccountInterface $account,
  * Implements hook_ENTITY_TYPE_access().
  */
 function state_machine_permissions_node_access(EntityInterface $entity, string $operation, AccountInterface $account): AccessResultInterface {
-  // @todo Check if additions are needed
+  // Group content only allow view operation if the parent is archived.
+  if ($entity instanceof GroupContentInterface && $operation !== 'view' && $entity->hasGroup() && $entity->getGroup()->getWorkflowState() === 'archived') {
+    return AccessResult::forbidden('Cannot update archived content.');
+  }
+
   if (!$entity instanceof ContactInformationInterface && !$entity instanceof OwnerInterface) {
     // This is only for contact information and owner entities.
     return AccessResult::neutral();
