@@ -7,10 +7,9 @@ dependencies:
     - node.type.collection
     - search_api.index.published
   module:
-    - joinup_group
+    - joinup_solution
     - options
     - search_api
-    - solution
 id: manage_collection_solutions
 label: 'Manage collection solutions'
 module: views
@@ -88,85 +87,16 @@ display:
             - unarchive_solution
           link_to_item: false
           use_highlighting: false
-        label:
-          id: label
-          table: search_api_index_published
-          field: label
+        title:
+          id: title
+          table: search_api_datasource_published_entity_node
+          field: title
           relationship: none
           group_type: group
           admin_label: ''
+          entity_type: node
           plugin_id: search_api_field
           label: Title
-          exclude: false
-          alter:
-            alter_text: false
-            text: ''
-            make_link: false
-            path: ''
-            absolute: false
-            external: false
-            replace_spaces: false
-            path_case: none
-            trim_whitespace: false
-            alt: ''
-            rel: ''
-            link_class: ''
-            prefix: ''
-            suffix: ''
-            target: ''
-            nl2br: false
-            max_length: 0
-            word_boundary: true
-            ellipsis: true
-            more_link: false
-            more_link_text: ''
-            more_link_path: ''
-            strip_tags: false
-            trim: false
-            preserve_tags: ''
-            html: false
-          element_type: ''
-          element_class: ''
-          element_label_type: ''
-          element_label_class: ''
-          element_label_colon: true
-          element_wrapper_type: ''
-          element_wrapper_class: ''
-          element_default_classes: true
-          empty: ''
-          hide_empty: false
-          empty_zero: false
-          hide_alter_empty: true
-          click_sort_column: value
-          type: string
-          settings:
-            link_to_entity: false
-          group_column: value
-          group_columns: {  }
-          group_rows: true
-          delta_limit: 0
-          delta_offset: 0
-          delta_reversed: false
-          delta_first_last: false
-          multi_type: separator
-          separator: ', '
-          field_api_classes: false
-          field_rendering: false
-          fallback_handler: search_api
-          fallback_options:
-            link_to_item: true
-            use_highlighting: false
-            multi_type: separator
-            multi_separator: ', '
-        rdf_created:
-          id: rdf_created
-          table: search_api_index_published
-          field: rdf_created
-          relationship: none
-          group_type: group
-          admin_label: ''
-          plugin_id: search_api_field
-          label: 'Created on'
           exclude: false
           alter:
             alter_text: false
@@ -208,20 +138,9 @@ display:
           empty_zero: false
           hide_alter_empty: true
           click_sort_column: value
-          type: timestamp
+          type: string
           settings:
-            date_format: medium
-            custom_date_format: ''
-            timezone: ''
-            tooltip:
-              date_format: ''
-              custom_date_format: ''
-            time_diff:
-              enabled: false
-              future_format: '@interval hence'
-              past_format: '@interval ago'
-              granularity: 2
-              refresh: 60
+            link_to_entity: false
           group_column: value
           group_columns: {  }
           group_rows: true
@@ -232,23 +151,21 @@ display:
           multi_type: separator
           separator: ', '
           field_api_classes: false
-          field_rendering: false
-          fallback_handler: search_api_date
+          field_rendering: true
+          fallback_handler: search_api
           fallback_options:
-            date_format: short
-            custom_date_format: ''
-            timezone: ''
             link_to_item: false
             use_highlighting: false
             multi_type: separator
             multi_separator: ', '
-        rdf_changed:
-          id: rdf_changed
-          table: search_api_index_published
-          field: rdf_changed
+        changed:
+          id: changed
+          table: search_api_datasource_published_entity_node
+          field: changed
           relationship: none
           group_type: group
           admin_label: ''
+          entity_type: node
           plugin_id: search_api_field
           label: 'Last update'
           exclude: false
@@ -298,7 +215,7 @@ display:
             custom_date_format: ''
             timezone: ''
             tooltip:
-              date_format: ''
+              date_format: long
               custom_date_format: ''
             time_diff:
               enabled: false
@@ -306,6 +223,7 @@ display:
               past_format: '@interval ago'
               granularity: 2
               refresh: 60
+              description: ''
           group_column: value
           group_columns: {  }
           group_rows: true
@@ -319,7 +237,7 @@ display:
           field_rendering: false
           fallback_handler: search_api_date
           fallback_options:
-            date_format: short
+            date_format: medium
             custom_date_format: ''
             timezone: ''
             link_to_item: false
@@ -396,6 +314,92 @@ display:
             use_highlighting: false
             multi_type: separator
             multi_separator: ', '
+        created:
+          id: created
+          table: search_api_datasource_published_entity_node
+          field: created
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: node
+          plugin_id: search_api_field
+          label: 'Created on'
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: value
+          type: timestamp
+          settings:
+            date_format: medium
+            custom_date_format: ''
+            timezone: ''
+            tooltip:
+              date_format: long
+              custom_date_format: ''
+            time_diff:
+              enabled: false
+              future_format: '@interval hence'
+              past_format: '@interval ago'
+              granularity: 2
+              refresh: 60
+              description: ''
+          group_column: value
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
+          field_rendering: false
+          fallback_handler: search_api_date
+          fallback_options:
+            date_format: medium
+            custom_date_format: ''
+            timezone: ''
+            link_to_item: false
+            use_highlighting: false
+            multi_type: separator
+            multi_separator: ', '
       pager:
         type: full
         options:
@@ -449,10 +453,10 @@ display:
             format: content_editor
           tokenize: false
       sorts:
-        label:
-          id: label
+        title:
+          id: title
           table: search_api_index_published
-          field: label
+          field: title
           relationship: none
           group_type: group
           admin_label: ''
@@ -460,7 +464,7 @@ display:
           order: ASC
           expose:
             label: ''
-            field_identifier: label
+            field_identifier: ''
           exposed: false
       arguments:
         entity_groups:

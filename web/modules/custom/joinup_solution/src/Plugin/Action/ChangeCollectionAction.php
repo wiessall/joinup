@@ -20,7 +20,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   id = "change_collection",
  *   label = @Translation("Move to other collection"),
  *   type = "node",
- *   confirm_form_route_name = "solution.change_collection",
+ *   confirm_form_route_name = "joinup_solution.change_collection",
  * )
  */
 class ChangeCollectionAction extends ActionBase implements ContainerFactoryPluginInterface {

@@ -13,6 +13,7 @@ use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\TempStore\PrivateTempStore;
 use Drupal\Core\TempStore\PrivateTempStoreFactory;
 use Drupal\joinup_solution\Entity\SolutionInterface;
+use Drupal\og\OgGroupAudienceHelperInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -125,7 +126,8 @@ class ChangeCollectionForm extends FormBase {
    */
   public function validateForm(array &$form, FormStateInterface $form_state): void {
     parent::validateForm($form, $form_state);
-    if ($form_state->getValue('source_collection')->id() === $form_state->getValue('destination_collection')) {
+    // Entity ID is returned as string, but we need to compare it with integer.
+    if ($form_state->getValue('source_collection')->id() == $form_state->getValue('destination_collection')) {
       $form_state->setErrorByName('destination_collection', $this->t('The destination collection cannot be the same as the source collection.'));
     }
   }
@@ -156,7 +158,7 @@ class ChangeCollectionForm extends FormBase {
         // Prevent notification dispatching.
         // @see joinup_notification_dispatch_notification()
         $solution->skip_notification = TRUE;
-        $solution->set('collection', $destination_collection_id)->save();
+        $solution->set(OgGroupAudienceHelperInterface::DEFAULT_FIELD, $destination_collection_id)->save();
         $this->messenger()->addStatus($this->t('Solution %solution has been moved to %destination_collection.', $messenger_arguments));
         $this->logger->info("Solution '@solution' moved from '@source_collection' to '@destination_collection' collection.", $logger_arguments);
       }
