@@ -213,7 +213,7 @@ joinup_group.share_content_form:
           - document
           - event
           - news
-          # - solution
+          - solution
 
 joinup_group.unshare_content_form:
   path: '/node/{node}/unshare'
@@ -231,4 +231,4 @@ joinup_group.unshare_content_form:
           - document
           - event
           - news
-          # - solution
+          - solution
