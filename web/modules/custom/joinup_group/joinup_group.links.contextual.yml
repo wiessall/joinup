@@ -1,5 +1,5 @@
-joinup_community_content.share:
-  route_name: joinup_community_content.share_content_form
+joinup_group.share:
+  route_name: joinup_group.share_content_form
   title: Share
   group: node
   options:
@@ -8,8 +8,8 @@ joinup_community_content.share:
       data-dialog-type: 'modal'
       data-dialog-options: '{"width":"auto","height":"auto"}'
 
-joinup_community_content.unshare:
-  route_name: joinup_community_content.unshare_content_form
+joinup_group.unshare:
+  route_name: joinup_group.unshare_content_form
   title: Unshare
   group: node
   options:

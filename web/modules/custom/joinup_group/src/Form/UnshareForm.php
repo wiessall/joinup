@@ -4,16 +4,49 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_group\Form;
 
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\RedirectCommand;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
+use Drupal\node\NodeInterface;
 
 /**
  * Form to unshare a community content from within groups.
  */
-abstract class UnshareForm extends ShareFormBase {
+class UnshareForm extends ShareFormBase {
+
+  /**
+   * {@inheritdoc}
+   */
+  public function buildForm(array $form, FormStateInterface $form_state, ?NodeInterface $node = NULL): array {
+    return $this->doBuildForm($form, $form_state, $node);
+  }
+
+  /**
+   * Access callback for the unshare form.
+   *
+   * @param \Drupal\node\NodeInterface $node
+   *   The node entity.
+   *
+   * @return \Drupal\Core\Access\AccessResultInterface
+   *   The access result.
+   */
+  public function access(NodeInterface $node): AccessResultInterface {
+    $this->entity = $node;
+
+    return AccessResult::allowedIf(!empty($this->getGroups()));
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getTitle(EntityInterface $node) {
+    return $this->t('Unshare %title from', ['%title' => $node->label()]);
+  }
 
   /**
    * {@inheritdoc}

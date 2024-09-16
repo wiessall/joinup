@@ -12,11 +12,32 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\JoinupGroupHelper;
+use Drupal\node\NodeInterface;
 
 /**
- * Form to share a community content inside collections.
+ * Form to share content inside collections.
  */
-abstract class ShareForm extends ShareFormBase {
+class ShareForm extends ShareFormBase {
+
+  /**
+   * {@inheritdoc}
+   */
+  public function buildForm(array $form, FormStateInterface $form_state, ?NodeInterface $node = NULL): array {
+    return $this->doBuildForm($form, $form_state, $node);
+  }
+
+  /**
+   * Gets the title for the form route.
+   *
+   * @param \Drupal\node\NodeInterface $node
+   *   The entity being shared.
+   *
+   * @return \Drupal\Core\StringTranslation\TranslatableMarkup
+   *   The page/modal title.
+   */
+  public function getTitle(NodeInterface $node): TranslatableMarkup {
+    return $this->buildTitle($node);
+  }
 
   /**
    * {@inheritdoc}
