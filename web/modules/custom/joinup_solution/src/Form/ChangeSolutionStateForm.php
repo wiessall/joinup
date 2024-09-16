@@ -67,7 +67,7 @@ class ChangeSolutionStateForm extends ConfirmFormBase {
    * {@inheritdoc}
    */
   public function getFormId(): string {
-    return 'solution.change_state.multiple';
+    return 'joinup_solution.change_state.multiple';
   }
 
   /**

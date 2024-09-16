@@ -27,7 +27,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   id = "change_state:node:solution",
  *   label = @Translation("Change solution state action"),
  *   type = "node",
- *   confirm_form_route_name = "solution.change_state.multiple",
+ *   confirm_form_route_name = "joinup_solution.change_state.multiple",
  *   requirements = {
  *     "_permission" = "manage solutions",
  *   },
@@ -40,7 +40,7 @@ class ChangeSolutionStateAction extends ViewsBulkOperationsActionBase implements
    *
    * @const string
    */
-  public const string TEMPSTORE_COLLECTION = 'solution.change_state.multiple';
+  public const string TEMPSTORE_COLLECTION = 'joinup_solution.change_state.multiple';
 
   /**
    * The key in tempstore collection containing the solutions.

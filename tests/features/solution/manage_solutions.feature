@@ -15,6 +15,7 @@ Feature: As a moderator I want to be able to move solutions to other collection.
       | Solution 5 | Source     | archived  | 2021-11-22T10:00 | 2021-12-22T10:00  |
       | Solution 6 | Source     | archived  | 2022-11-23T10:00 | 2022-12-23T10:00  |
 
+  # @covers \Drupal\joinup_solution\Form\ChangeCollectionForm.
   Scenario: Moderators can move a solution to a different collection.
     # Only moderators should be able to access this feature.
     Given I am an anonymous user
@@ -73,6 +74,7 @@ Feature: As a moderator I want to be able to move solutions to other collection.
       | Solution 3 |
       | Solution 2 |
 
+  # @covers \Drupal\joinup_solution\Plugin\Action\ChangeSolutionStateAction.
   Scenario Outline: Manage solutions page must have a bulk-archive and bulk-unarchive option.
     Given I am logged in as a moderator
     When I go to the homepage of the "Source" collection
