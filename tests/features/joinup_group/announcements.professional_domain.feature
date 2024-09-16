@@ -49,7 +49,7 @@ Feature: Filter announcements by professional domain
 
     When I go to the "Demography announcement" announcement of "Pension funds" <group>
     Then the following fields should be present "Professional domain filter"
-    And  the "Professional domain filter" field should contain the "E-health Dpt., HR Dpt., Law and Justice, Social and Political" option groups
+    And the "Professional domain filter" field should contain the "E-health Dpt., HR Dpt., Law and Justice, Social and Political" option groups
     And the "Professional domain filter" select should contain the following options:
       | -E-health (3)   |
       | -HR (1)         |
