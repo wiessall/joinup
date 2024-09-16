@@ -55,8 +55,8 @@ Feature: Filter announcements by professional domain
       | -E-health (3)   |
       | -HR (1)         |
       | -E-justice (2)  |
-      | -Demography (5) |
-    When I select "-Demography (5)" from "Professional domain filter"
+      | -Demography (4) |
+    When I select "-Demography (4)" from "Professional domain filter"
     And I press "Approve"
     Then 4 e-mails should have been sent
 
