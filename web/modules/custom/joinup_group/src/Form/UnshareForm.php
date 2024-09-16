@@ -6,7 +6,7 @@ namespace Drupal\joinup_group\Form;
 
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\RedirectCommand;
-use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 
@@ -29,19 +29,19 @@ abstract class UnshareForm extends ShareFormBase {
    *   An associative array containing the structure of the form.
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The current state of the form.
-   * @param \Drupal\Core\Entity\EntityInterface|null $entity
+   * @param \Drupal\Core\Entity\FieldableEntityInterface|null $entity
    *   The entity being unshared.
    *
    * @return array
    *   The form structure.
    */
-  public function doBuildForm(array $form, FormStateInterface $form_state, ?EntityInterface $entity = NULL): array {
+  public function doBuildForm(array $form, FormStateInterface $form_state, ?FieldableEntityInterface $entity = NULL): array {
     $this->entity = $entity;
 
-    $options = array_map(function ($group) {
-      /** @var \Drupal\joinup_group\Entity\GroupInterface $group */
-      return $group->label();
-    }, $this->getGroups());
+    $options = array_map(
+      fn (GroupInterface $group) => $group->label(),
+      $this->getGroups()
+    );
 
     $form['groups'] = [
       '#type' => 'checkboxes',
@@ -74,7 +74,8 @@ abstract class UnshareForm extends ShareFormBase {
     // already by Drupal.
     foreach ($form_state->getValue('groups') as $id => $checked) {
       if ($checked) {
-        $group = $this->sparqlStorage->load($id);
+        $group = $this->entityTypeManager->getStorage('node')->load($id);
+        assert($group instanceof GroupInterface);
         $this->removeFromGroup($group);
         $groups[] = $group->label();
       }
@@ -121,7 +122,7 @@ abstract class UnshareForm extends ShareFormBase {
     }
 
     if ($this->currentUser->hasPermission('administer shared entities')) {
-      return $this->sparqlStorage->loadMultiple($groups);
+      return $this->entityTypeManager->getStorage('node')->loadMultiple($groups);
     }
     return array_intersect_key($this->getUserGroupsByPermission($this->getPermissionForAction('unshare')), array_flip($groups));
   }
