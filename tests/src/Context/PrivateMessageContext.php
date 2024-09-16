@@ -103,6 +103,59 @@ class PrivateMessageContext extends RawDrupalContext {
   }
 
   /**
+   * Checks that multiple texts are present within private thread messages.
+   *
+   * Example table format:
+   * | Message one     |
+   * | Thread 2 reply |
+   * | Another thread |
+   *
+   * @param \Behat\Gherkin\Node\TableNode $table
+   *   A table node containing the texts to be checked.
+   *   Each row should contain one text string.
+   *
+   * @throws \Exception
+   *   Thrown when any of the specified texts are not
+   *   found in the private messages thread.
+   *
+   * @Then I should see the following threads in private messages:
+   */
+  public function iShouldSeeTheFollowingThreadInPrivateMessages(TableNode $table): void {
+    $messagesContainer = $this->getThreadsContainer();
+
+    $messageText = $messagesContainer->getText();
+    $texts = $table->getColumn(0);
+
+    foreach ($texts as $text) {
+      if (strpos($messageText, $text) === FALSE) {
+        throw new \Exception(sprintf('The text "%s" was not found in any private message thread.', $text));
+      }
+    }
+  }
+
+  /**
+   * Clicks on a private message thread card with the specified subject.
+   *
+   * @param string $subject
+   *   The subject of the private message thread to click on.
+   *
+   * @throws \Exception
+   *   Thrown if the thread with the specified subject is not found or if there
+   *   are no thread messages available.
+   *
+   * @Then I click :subject in thread message card
+   */
+  public function clickPrivateMessageThread(string $subject): void {
+    $messagesContainer = $this->getThreadsContainer();
+    $xpath = '//div[contains(concat(" ", normalize-space(@class), " "), " private-message-thread__subject ")]//div[text() = "' . $subject . '"]';
+    $threadCard = $messagesContainer->find('xpath', $xpath);
+    if (NULL === $threadCard) {
+      throw new \Exception('There are currently no thread messages available.');
+    }
+    $threadCard->getParent()->getParent()->find('css', '.private-message-inbox-thread-link')->click();
+  }
+
+  /**
    * Checks that the notification shows the correct number of unread threads.
    *
    * @param int $expectedCount
@@ -161,6 +214,26 @@ class PrivateMessageContext extends RawDrupalContext {
 
     if (NULL === $messagesContainer) {
       throw new \Exception('There are currently no messages available.');
+    }
+
+    return $messagesContainer;
+  }
+
+  /**
+   * Retrieves the messages thread container element from the page.
+   *
+   * @return \Behat\Mink\Element\NodeElement
+   *   The messages thread container element.
+   *
+   * @throws \Exception
+   *   Thrown when the messages thread container is not found on the page.
+   */
+  private function getThreadsContainer(): NodeElement {
+    $page = $this->getSession()->getPage();
+    $messagesContainer = $page->find('css', '.private-message-thread--full-container');
+
+    if (NULL === $messagesContainer) {
+      throw new \Exception('There are currently no messages thread available.');
     }
 
     return $messagesContainer;

@@ -3,7 +3,6 @@ langcode: en
 status: true
 dependencies:
   module:
-    - joinup_private_message
     - layout_builder
     - private_message
 third_party_settings:
@@ -136,17 +135,6 @@ third_party_settings:
               ajax_load_count: 5
               ajax_refresh_rate: 15
             weight: 2
-            additional: {  }
-          e268241a-5f82-4707-8a27-1422496422fe:
-            uuid: e268241a-5f82-4707-8a27-1422496422fe
-            region: first
-            configuration:
-              id: joinup_private_message_block
-              label: 'Create Private Message'
-              label_display: '0'
-              provider: joinup_private_message
-              context_mapping: {  }
-            weight: 1
             additional: {  }
         third_party_settings: {  }
 _core:
