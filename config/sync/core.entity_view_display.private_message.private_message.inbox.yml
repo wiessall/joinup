@@ -6,6 +6,7 @@ dependencies:
     - core.entity_view_mode.private_message.inbox
   module:
     - private_message
+    - template_suggestion
     - text
 _core:
   default_config_hash: DSe40vfjJBrkIMbZHHW3VnRrZh3v25yhysRszdjwuwY
@@ -18,11 +19,11 @@ content:
     type: timestamp
     label: hidden
     settings:
-      date_format: medium
+      date_format: short
       custom_date_format: ''
       timezone: ''
       tooltip:
-        date_format: long
+        date_format: short
         custom_date_format: ''
       time_diff:
         enabled: false
@@ -30,8 +31,11 @@ content:
         past_format: '@interval ago'
         granularity: 2
         refresh: 60
-    third_party_settings: {  }
-    weight: 0
+        description: ''
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
+    weight: 1
     region: content
   message:
     type: text_trimmed
@@ -48,7 +52,7 @@ content:
       view_mode: private_message_author
       link: false
     third_party_settings: {  }
-    weight: 1
+    weight: 0
     region: content
 hidden:
   search_api_excerpt: true

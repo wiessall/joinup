@@ -14,6 +14,17 @@ use Drupal\Core\Form\FormStateInterface;
  */
 function joinup_private_message_form_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
   if ($form_id === 'private_message_add_form') {
+    $current_route_name = \Drupal::routeMatch()->getRouteName();
+    if (isset($form['message'])) {
+      if ($current_route_name !== 'private_message.private_message_create') {
+        // Change the label from "Message" to "Reply".
+        $form['message']['widget'][0]['#title'] = t('Reply');
+      }
+      // Set the default format to 'Minimal'
+      // and limit the allowed formats to only 'Minimal'.
+      $form['message']['widget'][0]['#format'] = 'minimal';
+      $form['message']['widget'][0]['#allowed_formats'] = ['minimal'];
+    }
     $form['actions']['submit']['#submit'][] = 'joinup_private_message_form_submit';
   }
 }
