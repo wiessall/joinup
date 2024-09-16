@@ -10,7 +10,7 @@ dependencies:
 id: ventuno_pagetitle
 theme: ventuno
 region: content
-weight: -24
+weight: -23
 provider: null
 plugin: page_title_block
 settings:
