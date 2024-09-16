@@ -6,15 +6,15 @@ Feature: Filter announcements by professional domain
       | title         | state     |
       | Pension funds | published |
     And users:
-      | Username | E-mail             | Professional domain                     | Status  |
-      | Mogul    | mogul@example.com  | Demography, E-health, E-justice, HR, HR | active  |
-      | Greedy   | greedy@example.com | Demography, E-health, E-justice         | active  |
-      | Envious  | envy@example.com   | Demography, E-health                    | active  |
-      | Coward   | coward@example.com | Demography                              | active  |
-      | Nick     | nick@example.com   | Demography                              | active  |
-      | Mark     | mark@example.com   | Demography                              | active  |
-      | Anthony  | mark@example.com   | Demography                              | active  |
-      | Frank    | frank@example.com  | Demography                              | blocked |
+      | Username | E-mail              | Professional domain                     | Status  |
+      | Mogul    | mogul@example.com   | Demography, E-health, E-justice, HR, HR | active  |
+      | Greedy   | greedy@example.com  | Demography, E-health, E-justice         | active  |
+      | Envious  | envy@example.com    | Demography, E-health                    | active  |
+      | Coward   | coward@example.com  | Demography                              | active  |
+      | Nick     | nick@example.com    | Demography                              | active  |
+      | Mark     | mark@example.com    | Demography                              | active  |
+      | Anthony  | anthony@example.com | Demography                              | active  |
+      | Frank    | frank@example.com   | Demography                              | blocked |
     And the following <group> user membership:
       | <group>       | user    | announcements | state   |
       | Pension funds | Mogul   | 1             | active  |
