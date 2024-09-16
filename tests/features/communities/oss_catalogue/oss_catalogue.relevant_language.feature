@@ -12,11 +12,11 @@ Feature:
       |            |           | 1690000000 |                   |                  | it       | 0                   | IT Feature 1,IT Feature 2 | ~~~                  | IT Short description     | IT file 1.jpg   | ~~~                | ~~~                                                                                                                                        |
     When I go to the content page of the type "oss_solution" with the title "EN Title"
     Then I should see the heading "EN Title"
-    And I should not see the following lines of text:
+    And I should see the following lines of text:
       | En Feature 1         |
       | EN Short description |
       | EN Long description  |
-    But I should see the following lines of text:
+    But I should not see the following lines of text:
       | IT Short description |
       | IT Feature 1         |
       | IT Feature 2         |
@@ -27,11 +27,11 @@ Feature:
 
     When I visit "/eu-oss-catalogue"
     Then I should see the "EN Title" tile
-    And I should see the text "IT Short description"
+    And I should see the text "EN Short description"
 
     When I visit "/eu-oss-catalogue/solutions"
     Then I should see the "EN Title" tile
-    And I should see the text "IT Short description"
+    And I should see the text "EN Short description"
 
     Given I am logged in as a user with the "administrator" role
     And I accept the "Legal notice" agreement
@@ -40,7 +40,7 @@ Feature:
     And I should see the "EU OSS Catalogue administration" table
     And the "EU OSS Catalogue administration" table should contain the following columns:
       | Title    | URL                | Short description    | Source Catalogue  | Languages | Published | Changed            |
-      | EN Title | https://github.com | IT Short description | Developers Italia | EN, IT    | Yes       | 22/07/2023 - 04:26 |
+      | EN Title | https://github.com | EN Short description | Developers Italia | EN, IT    | Yes       | 22/07/2023 - 04:26 |
 
     # Ensures content translation edit forms can be accessed.
     Given I am logged in as a user with the "developer" role
@@ -67,7 +67,6 @@ Feature:
       | EL Short description |
       | EL Feature 1         |
       | EL Feature 2         |
-    But I should see the following lines of text:
       | DE Feature 1         |
       | DE Feature 2         |
 
