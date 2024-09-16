@@ -16,15 +16,16 @@ Feature: Filter announcements by professional domain
       | Anthony  | anthony@example.com | Demography                              | active  |
       | Frank    | frank@example.com   | Demography                              | blocked |
     And the following <group> user membership:
-      | <group>       | user    | announcements | state   |
-      | Pension funds | Mogul   | 1             | active  |
-      | Pension funds | Greedy  | 1             | active  |
-      | Pension funds | Envious | 1             | active  |
-      | Pension funds | Coward  | 1             | active  |
-      | Pension funds | Nick    | 1             | active  |
-      | Pension funds | Mark    | 0             | active  |
-      | Pension funds | Anthony | 1             | blocked |
-      | Pension funds | Frank   | 1             | active  |
+      | <group>       | user    | state   |
+      | Pension funds | Mogul   | active  |
+      | Pension funds | Greedy  | active  |
+      | Pension funds | Envious | active  |
+      | Pension funds | Coward  | active  |
+      | Pension funds | Nick    | active  |
+      | Pension funds | Mark    | active  |
+      | Pension funds | Anthony | blocked |
+      | Pension funds | Frank   | active  |
+    And the "Mark" user unsubscribes from "Pension funds" <group> announcements
     And the following legal document version:
       | Document     | Label | Published | Acceptance label       | Content                             |
       | Legal notice | 1.1   | yes       | I have read and accept | The information on this site is ... |
@@ -54,10 +55,10 @@ Feature: Filter announcements by professional domain
       | -E-health (3)   |
       | -HR (1)         |
       | -E-justice (2)  |
-      | -Demography (6) |
-    When I select "-Demography (6)" from "Professional domain filter"
+      | -Demography (5) |
+    When I select "-Demography (5)" from "Professional domain filter"
     And I press "Approve"
-    Then 5 e-mails should have been sent
+    Then 4 e-mails should have been sent
 
     When I mark all emails as read
     And I go to the "E-health and E-justice announcement" announcement of "Pension funds" <group>
