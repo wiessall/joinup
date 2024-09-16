@@ -4,16 +4,49 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_group\Form;
 
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\RedirectCommand;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
+use Drupal\node\NodeInterface;
 
 /**
  * Form to unshare a community content from within groups.
  */
-abstract class UnshareForm extends ShareFormBase {
+class UnshareForm extends ShareFormBase {
+
+  /**
+   * {@inheritdoc}
+   */
+  public function buildForm(array $form, FormStateInterface $form_state, ?NodeInterface $node = NULL): array {
+    return $this->doBuildForm($form, $form_state, $node);
+  }
+
+  /**
+   * Access callback for the unshare form.
+   *
+   * @param \Drupal\node\NodeInterface $node
+   *   The node entity.
+   *
+   * @return \Drupal\Core\Access\AccessResultInterface
+   *   The access result.
+   */
+  public function access(NodeInterface $node): AccessResultInterface {
+    $this->entity = $node;
+
+    return AccessResult::allowedIf(!empty($this->getGroups()));
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getTitle(EntityInterface $node) {
+    return $this->t('Unshare %title from', ['%title' => $node->label()]);
+  }
 
   /**
    * {@inheritdoc}
@@ -29,19 +62,19 @@ abstract class UnshareForm extends ShareFormBase {
    *   An associative array containing the structure of the form.
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The current state of the form.
-   * @param \Drupal\Core\Entity\EntityInterface|null $entity
+   * @param \Drupal\Core\Entity\FieldableEntityInterface|null $entity
    *   The entity being unshared.
    *
    * @return array
    *   The form structure.
    */
-  public function doBuildForm(array $form, FormStateInterface $form_state, ?EntityInterface $entity = NULL): array {
+  public function doBuildForm(array $form, FormStateInterface $form_state, ?FieldableEntityInterface $entity = NULL): array {
     $this->entity = $entity;
 
-    $options = array_map(function ($group) {
-      /** @var \Drupal\joinup_group\Entity\GroupInterface $group */
-      return $group->label();
-    }, $this->getGroups());
+    $options = array_map(
+      fn (GroupInterface $group) => $group->label(),
+      $this->getGroups()
+    );
 
     $form['groups'] = [
       '#type' => 'checkboxes',
@@ -74,7 +107,8 @@ abstract class UnshareForm extends ShareFormBase {
     // already by Drupal.
     foreach ($form_state->getValue('groups') as $id => $checked) {
       if ($checked) {
-        $group = $this->sparqlStorage->load($id);
+        $group = $this->entityTypeManager->getStorage('node')->load($id);
+        assert($group instanceof GroupInterface);
         $this->removeFromGroup($group);
         $groups[] = $group->label();
       }
@@ -121,7 +155,7 @@ abstract class UnshareForm extends ShareFormBase {
     }
 
     if ($this->currentUser->hasPermission('administer shared entities')) {
-      return $this->sparqlStorage->loadMultiple($groups);
+      return $this->entityTypeManager->getStorage('node')->loadMultiple($groups);
     }
     return array_intersect_key($this->getUserGroupsByPermission($this->getPermissionForAction('unshare')), array_flip($groups));
   }
