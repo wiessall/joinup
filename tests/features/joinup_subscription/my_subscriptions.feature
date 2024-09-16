@@ -129,7 +129,6 @@ Feature: My subscriptions
     And I uncheck the "News" checkbox of the "Alpha Centauri" subscription
     Then the "Save changes" button on the "Alpha Centauri" subscription card should be disabled
 
-
     Given I check the "Discussion" checkbox of the "Alpha Centauri" subscription
     And I check the "Announcements" checkbox of the "Alpha Centauri" subscription
     When I press "Save changes" on the "Alpha Centauri" subscription card
@@ -262,7 +261,6 @@ Feature: My subscriptions
     And the following content subscriptions should be selected:
       | Fireblade | Announcements |
       | Lopitopes | Announcements |
-
 
     When I uncheck the "Announcements" checkbox of the "Fireblade" subscription
     And I press "Save changes" on the "Fireblade" subscription card
