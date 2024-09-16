@@ -312,12 +312,11 @@ final class MigrationHelper {
         'format' => 'reference',
         'mapped_term' => TRUE,
       ],
-      // @todo Create a follow up to merge field_shared_in with this one.
       // @todo We are going to need to reuse the same reference handler as we did
       //   for distributions so that the `field_shared_in` can accommodate the
       //   solution parents.
       'http://joinup.eu/solution/shared_in' => [
-        'target_field_name' => 'shared_in',
+        'target_field_name' => 'field_shared_in',
         'format' => 'reference',
         'mapped_term' => TRUE,
       ],

@@ -3,11 +3,11 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.node.shared_in
+    - field.storage.node.field_shared_in
     - node.type.collection
     - node.type.solution
-id: node.solution.shared_in
-field_name: shared_in
+id: node.solution.field_shared_in
+field_name: field_shared_in
 entity_type: node
 bundle: solution
 label: 'Shared on'

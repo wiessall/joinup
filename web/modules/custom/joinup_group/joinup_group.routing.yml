@@ -199,3 +199,39 @@ entity.node.unpublished_content:
         bundle:
           - collection
           - solution
+
+joinup_group.share_content_form:
+  path: '/node/{node}/share'
+  defaults:
+    _form: '\Drupal\joinup_group\Form\ShareForm'
+    _title_callback: '\Drupal\joinup_group\Form\ShareForm::getTitle'
+  requirements:
+    _access: 'TRUE'
+  options:
+    parameters:
+      node:
+        type: entity:node
+        bundle:
+          - discussion
+          - document
+          - event
+          - news
+          - solution
+
+joinup_group.unshare_content_form:
+  path: '/node/{node}/unshare'
+  defaults:
+    _form: '\Drupal\joinup_group\Form\UnshareForm'
+    _title_callback: '\Drupal\joinup_group\Form\UnshareForm::getTitle'
+  requirements:
+    _custom_access: '\Drupal\joinup_group\Form\UnshareForm::access'
+  options:
+    parameters:
+      node:
+        type: entity:node
+        bundle:
+          - discussion
+          - document
+          - event
+          - news
+          - solution
