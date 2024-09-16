@@ -27,34 +27,6 @@ joinup_solution.collection_solution.tca:
         bundle:
           - collection
 
-joinup_solution.share_form:
-  path: '/node/{node}/share'
-  defaults:
-    _form: '\Drupal\joinup_solution\Form\ShareForm'
-    _title_callback: '\Drupal\joinup_solution\Form\ShareForm::getTitle'
-  requirements:
-    _access: 'TRUE'
-  options:
-    parameters:
-      node:
-        type: entity:node
-        bundle:
-          - solution
-
-joinup_solution.unshare_form:
-  path: '/node/{node}/unshare'
-  defaults:
-    _form: '\Drupal\joinup_solution\Form\UnshareForm'
-    _title_callback: '\Drupal\joinup_solution\Form\UnshareForm::getTitle'
-  requirements:
-    _custom_access: '\Drupal\joinup_solution\Form\UnshareForm::access'
-  options:
-    parameters:
-      node:
-        type: entity:node
-        bundle:
-          - solution
-
 joinup_solution.change_collection:
   path: '/node/{node}/change-collection'
   defaults:

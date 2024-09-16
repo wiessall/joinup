@@ -539,7 +539,7 @@ class SolutionContext extends RawDrupalContext {
       'pinned in' => 'pinned_in_collection',
       'published at' => 'published_at',
       'unpinned in' => 'unpinned_in_collection',
-      'shared on' => 'field_is_shared_in',
+      'shared on' => 'field_shared_in',
     ];
   }
 
