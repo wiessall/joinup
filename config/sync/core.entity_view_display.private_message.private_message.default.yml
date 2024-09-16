@@ -3,8 +3,14 @@ langcode: en
 status: true
 dependencies:
   module:
+    - layout_builder
     - private_message
+    - template_suggestion
     - text
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
 _core:
   default_config_hash: cSla1miGIdpvla86ElTu6Q25Z9cwtElFBWl_yNLqZRM
 id: private_message.private_message.default
@@ -20,7 +26,7 @@ content:
       custom_date_format: ''
       timezone: ''
       tooltip:
-        date_format: long
+        date_format: short
         custom_date_format: ''
       time_diff:
         enabled: false
@@ -28,7 +34,10 @@ content:
         past_format: '@interval ago'
         granularity: 2
         refresh: 60
-    third_party_settings: {  }
+        description: ''
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
     weight: -1
     region: content
   message:

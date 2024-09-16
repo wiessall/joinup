@@ -3,7 +3,152 @@ langcode: en
 status: true
 dependencies:
   module:
+    - joinup_private_message
+    - layout_builder
     - private_message
+third_party_settings:
+  layout_builder:
+    enabled: true
+    allow_custom: false
+    sections:
+      -
+        layout_id: layout_twocol_section
+        layout_settings:
+          label: ''
+          context_mapping: {  }
+          column_widths: 33-67
+          custom_id: null
+          custom_classes: ''
+          custom_class_choose: null
+          custom_styles: null
+          custom_data_attributes: null
+          regions:
+            first:
+              region_id: null
+              region_class_choose: null
+              region_classes: ''
+              region_styles: null
+              region_data: null
+            second:
+              region_id: null
+              region_class_choose: null
+              region_classes: ''
+              region_styles: null
+              region_data: null
+        components:
+          78e3bbd5-0008-4b9d-a293-e621e25d45ff:
+            uuid: 78e3bbd5-0008-4b9d-a293-e621e25d45ff
+            region: second
+            configuration:
+              id: 'extra_field_block:private_message_thread:private_message_thread:delete_link'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+            weight: 1
+            additional: {  }
+          08f03fb2-d152-4f7c-8afc-d42d3f1f2d8c:
+            uuid: 08f03fb2-d152-4f7c-8afc-d42d3f1f2d8c
+            region: second
+            configuration:
+              id: 'extra_field_block:private_message_thread:private_message_thread:clear_history_link'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+            weight: 2
+            additional: {  }
+          5e7b4c4d-f1d0-41d1-8adc-e4c955527754:
+            uuid: 5e7b4c4d-f1d0-41d1-8adc-e4c955527754
+            region: second
+            configuration:
+              id: 'field_block:private_message_thread:private_message_thread:members'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                type: private_message_thread_member_formatter
+                label: above
+                settings:
+                  display_type: entity
+                  entity_display_mode: private_message_author
+                  members_prefix: You
+                  separator: ', '
+                  prefix_separator: true
+                  display_current_user: false
+                third_party_settings: {  }
+            weight: 3
+            additional: {  }
+          42d58d69-bf8a-4fa4-b1f7-03a780cbd221:
+            uuid: 42d58d69-bf8a-4fa4-b1f7-03a780cbd221
+            region: second
+            configuration:
+              id: 'field_block:private_message_thread:private_message_thread:subject'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                type: string
+                label: above
+                settings:
+                  link_to_entity: false
+                third_party_settings: {  }
+            weight: 4
+            additional: {  }
+          ddc1e08f-87e5-48cc-9023-45908dba5563:
+            uuid: ddc1e08f-87e5-48cc-9023-45908dba5563
+            region: second
+            configuration:
+              id: 'field_block:private_message_thread:private_message_thread:private_messages'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                type: private_message_thread_message_formatter
+                label: above
+                settings:
+                  message_count: 7
+                  ajax_previous_load_count: 5
+                  message_order: asc
+                  ajax_refresh_rate: 20
+                  view_mode: default
+                third_party_settings: {  }
+            weight: 5
+            additional: {  }
+          c0f2f151-a6af-494c-940c-46d468deaaf9:
+            uuid: c0f2f151-a6af-494c-940c-46d468deaaf9
+            region: second
+            configuration:
+              id: 'extra_field_block:private_message_thread:private_message_thread:private_message_form'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+            weight: 6
+            additional: {  }
+          2eaaa191-ae48-4755-a4de-95e4e8a840bc:
+            uuid: 2eaaa191-ae48-4755-a4de-95e4e8a840bc
+            region: first
+            configuration:
+              id: private_message_inbox_block
+              label: 'Private Message Inbox'
+              label_display: '0'
+              provider: private_message
+              context_mapping: {  }
+              thread_count: 5
+              ajax_load_count: 5
+              ajax_refresh_rate: 15
+            weight: 2
+            additional: {  }
+          e268241a-5f82-4707-8a27-1422496422fe:
+            uuid: e268241a-5f82-4707-8a27-1422496422fe
+            region: first
+            configuration:
+              id: joinup_private_message_block
+              label: 'Create Private Message'
+              label_display: '0'
+              provider: joinup_private_message
+              context_mapping: {  }
+            weight: 1
+            additional: {  }
+        third_party_settings: {  }
 _core:
   default_config_hash: UW70Shyu4Z_hAePqer7HsVOLh52E0vjLlb8dJaPT3hg
 id: private_message_thread.private_message_thread.default
