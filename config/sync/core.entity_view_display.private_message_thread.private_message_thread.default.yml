@@ -16,24 +16,6 @@ third_party_settings:
           label: ''
           context_mapping: {  }
           column_widths: 33-67
-          custom_id: null
-          custom_classes: ''
-          custom_class_choose: null
-          custom_styles: null
-          custom_data_attributes: null
-          regions:
-            first:
-              region_id: null
-              region_class_choose: null
-              region_classes: ''
-              region_styles: null
-              region_data: null
-            second:
-              region_id: null
-              region_class_choose: null
-              region_classes: ''
-              region_styles: null
-              region_data: null
         components:
           78e3bbd5-0008-4b9d-a293-e621e25d45ff:
             uuid: 78e3bbd5-0008-4b9d-a293-e621e25d45ff
