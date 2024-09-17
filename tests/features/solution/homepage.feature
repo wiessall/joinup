@@ -49,8 +49,8 @@ Feature: Solution homepage
 
   Scenario: Custom pages should not be visible on the solution homepage
     Given solution content:
-      | title           | description                 | documentation | content creation | landing page                   | webdav creation | webdav url                           | wiki                            | state     |
-      | Jira restarters | Rebooting solves all issues | text.pdf      | registered users | http://foo-example.com/landing | no              | http://joinup.eu/solution/foo/webdav | http://example.wiki/foobar/wiki | published |
+      | title           | description                 | documentation | content creation | landing page                   | state     |
+      | Jira restarters | Rebooting solves all issues | text.pdf      | registered users | http://foo-example.com/landing | published |
     And news content:
       | title                             | body                             | solution        | topic                   | spatial coverage | state     |
       | Jira will be down for maintenance | As always, during business hours | Jira restarters | Statistics and Analysis | Luxembourg       | published |

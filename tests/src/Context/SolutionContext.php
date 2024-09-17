@@ -8,6 +8,7 @@ use Behat\Gherkin\Node\TableNode;
 use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Url;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
+use Drupal\DrupalExtension\Hook\Scope\AfterNodeCreateScope;
 use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
 use Drupal\joinup\Traits\ConfigReadOnlyTrait;
 use Drupal\joinup\Traits\EntityReferenceTrait;
@@ -25,6 +26,7 @@ use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\joinup\Traits\WorkflowTrait;
 use Drupal\joinup_group\ContentCreationOptions;
 use Drupal\joinup_group\Entity\GroupInterface;
+use Drupal\joinup_group\Entity\PinnableGroupContentInterface;
 use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\language\Entity\ConfigurableLanguage;
 use Drupal\node\Entity\Node;
@@ -207,55 +209,54 @@ class SolutionContext extends RawDrupalContext {
   }
 
   /**
-   * Applies post-save tasks: (un)pinning and (un)featuring.
+   * Applies post-save tasks: Pinning and unpinning.
    *
-   * @param \Drupal\joinup_solution\Entity\SolutionInterface $solution
-   *   The saved solution object.
-   * @param array $values
-   *   The solution values.
+   * @param \Drupal\DrupalExtension\Hook\Scope\AfterNodeCreateScope $scope
+   *   The Behat hook scope object containing the metadata of the node that was
+   *   created.
    *
-   * @todo This method needs to be a postNodeCreate hook.
+   * @AfterNodeCreate
    */
-  protected function applyPostSaveTasks(SolutionInterface $solution, array $values): void {
-    // If the solution is featured we need to create the meta entity that stores
-    // this information after creating the solution.
-    $is_featured = in_array(strtolower((string) ($values['feature'] ?? '')), [
-      'y',
-      'yes',
-    ]);
-    if ($is_featured) {
-      $solution->feature();
-    }
-    else {
-      $solution->unfeature();
+  public function afterNodeCreateHandlePinning(AfterNodeCreateScope $scope): void {
+    $node = $scope->getEntity();
+    if ($node->type !== 'solution') {
+      return;
     }
 
-    // Pin solution in collection where needed.
-    foreach (explode(',', $values['pinned_in_collection'] ?? '') as $groupLabel) {
-      if (!($groupLabel = trim($groupLabel))) {
-        continue;
-      }
-      $group = $this->getEntityByLabel('node', $groupLabel);
-      Assert::assertInstanceOf(
-        GroupInterface::class,
-        $group,
-        "Cannot pin solution {$solution->label()} in $groupLabel since it does not exist or is not a group."
-      );
-      $solution->pin($group);
+    if (!isset($node->pinned_in_collection) && !isset($node->unpinned_in_collection)) {
+      return;
     }
 
-    // Unpin where needed.
-    foreach (explode(',', $values['unpinned_in_collection'] ?? '') as $groupLabel) {
-      if (!($groupLabel = trim($groupLabel))) {
-        continue;
+    if (($entity = Node::load((int) $node->nid)) && $entity instanceof PinnableGroupContentInterface) {
+      // Pin solution in collection where needed.
+      foreach (explode(',', $node->pinned_in_collection ?? '') as $groupLabel) {
+        if (!($groupLabel = trim($groupLabel))) {
+          continue;
+        }
+        $group = $this->getEntityByLabel('node', $groupLabel);
+        Assert::assertInstanceOf(
+          GroupInterface::class,
+          $group,
+          "Cannot pin solution {$entity->label()} in $groupLabel since it does not exist or is not a group."
+        );
+        $entity->pin($group);
       }
-      $group = $this->getEntityByLabel('node', $groupLabel);
-      Assert::assertInstanceOf(
-        GroupInterface::class,
-        $group,
-        "Cannot unpin solution {$solution->label()} in $groupLabel since it does not exist or is not a group."
-      );
-      $solution->unpin($group);
+    }
+
+    if (($entity = Node::load((int) $node->nid)) && $entity instanceof PinnableGroupContentInterface) {
+      // Pin solution in collection where needed.
+      foreach (explode(',', $node->unpinned_in_collection ?? '') as $groupLabel) {
+        if (!($groupLabel = trim($groupLabel))) {
+          continue;
+        }
+        $group = $this->getEntityByLabel('node', $groupLabel);
+        Assert::assertInstanceOf(
+          GroupInterface::class,
+          $group,
+          "Cannot pin solution {$entity->label()} in $groupLabel since it does not exist or is not a group."
+        );
+        $entity->unpin($group);
+      }
     }
   }
 

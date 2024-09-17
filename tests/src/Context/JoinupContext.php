@@ -216,8 +216,6 @@ class JoinupContext extends RawDrupalContext {
         'title' => 'title',
         'short ID' => 'short_id',
         'abstract' => 'abstract',
-        // ??
-        'affiliations requests' => 'field_is_affiliations_requests',
         'contact information' => 'contact',
         'content creation' => 'content_creation',
         'creation date' => 'created',
@@ -226,8 +224,6 @@ class JoinupContext extends RawDrupalContext {
         'keywords' => 'field_keywords',
         'landing page' => 'landing_page',
         'language' => 'language',
-        // ??
-        'latest release' => 'field_is_latest_release',
         'logo' => 'logo',
         'metrics page' => 'metrics_page',
         'moderation' => 'group_moderation',
@@ -237,29 +233,15 @@ class JoinupContext extends RawDrupalContext {
         'related by type' => 'list_related_entities',
         'related solutions' => 'related_solutions',
         'solution type' => 'solution_type',
-        // ??
-        'source code repository' => 'field_is_source_code_repository',
         'spatial coverage' => 'spatial_coverage',
         'status' => 'field_status',
-        // ??
-        'translation' => 'field_is_translation',
-        // ??
-        'webdav creation' => 'field_is_webdav_creation',
-        // ??
-        'webdav url' => 'field_is_webdav_url',
-        // ??
-        'wiki' => 'field_is_wiki',
         'state' => 'field_state',
         'collection' => 'og_audience',
         'collections' => 'og_audience',
         'featured' => 'featured',
-        // ??
         'pinned in' => 'pinned_in_collection',
         'published at' => 'published_at',
-        // ??
         'unpinned in' => 'unpinned_in_collection',
-        // ??
-        'shared on' => 'field_shared_in',
       ],
       'shared' => [
         'collection' => OgGroupAudienceHelperInterface::DEFAULT_FIELD,
