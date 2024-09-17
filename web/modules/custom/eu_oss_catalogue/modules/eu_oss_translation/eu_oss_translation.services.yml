@@ -1,0 +1,8 @@
+services:
+  eu_oss_translation.job_builder:
+    class: Drupal\eu_oss_translation\JobBuilder
+    arguments:
+      - '@current_user'
+      - '@entity_type.manager'
+      - '@logger.channel.eu_oss_catalogue'
+      - '@config.factory'
