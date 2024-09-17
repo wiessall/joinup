@@ -1600,6 +1600,7 @@ class FeatureContext extends RawDrupalContext {
     catch (\Exception $e) {
       // @todo Find out why the exception is needed. Run all solutions tests at
       //   once and some scenarios are failing in their first step.
+      // @see ISAICP-9092.
     }
   }
 
@@ -1611,7 +1612,7 @@ class FeatureContext extends RawDrupalContext {
    *
    * @AfterScenario
    */
-  public function rdfSyncdDestruct(): void {
+  public function afterScenarioRdfSyncDestruct(): void {
     try {
       \Drupal::service('rdf_sync.synchronizer')->destruct();
     }
@@ -1623,6 +1624,7 @@ class FeatureContext extends RawDrupalContext {
       //   before with RDF entities. Solution notification feature throws a
       //   post scenario exception without this try/catch block.
       // @see solution.notifications.feature.
+      // @see ISAICP-9092.
     }
   }
 
