@@ -52,23 +52,11 @@ function joinup_private_message_form_submit(array &$form, FormStateInterface $fo
 function joinup_private_message_private_message_thread_view_alter(array &$build, EntityInterface $node, EntityViewDisplayInterface $display): void {
   if (isset($build['delete_link'])) {
     // Open form in a modal.
-    $build['delete_link']['#attributes'] = [
-      'class' => ['use-ajax'],
-      'data-dialog-type' => 'modal',
-      'data-dialog-options' => Json::encode([
-        'width' => 'auto',
-      ]),
-    ];
+    $build['delete_link']['#attributes'] = _joinup_private_message_get_ajax_modal_attributes();
   }
   if (isset($build['clear_history_link'])) {
     // Open form in a modal.
-    $build['clear_history_link']['#attributes'] = [
-      'class' => ['use-ajax'],
-      'data-dialog-type' => 'modal',
-      'data-dialog-options' => Json::encode([
-        'width' => 'auto',
-      ]),
-    ];
+    $build['clear_history_link']['#attributes'] = _joinup_private_message_get_ajax_modal_attributes();
   }
 
 }
@@ -76,15 +64,26 @@ function joinup_private_message_private_message_thread_view_alter(array &$build,
 /**
  * Implements hook_contextual_links_view_alter().
  */
-function joinup_private_message_contextual_links_view_alter(&$element, $items): void {
+function joinup_private_message_contextual_links_view_alter(array &$element, array $items): void {
   if (isset($element['#links']['private-messagedelete'])) {
-    $element['#links']['private-messagedelete']['attributes'] = [
-      'class' => ['use-ajax'],
-      'data-dialog-type' => 'modal',
-      'data-dialog-options' => Json::encode([
-        'width' => 'auto',
-      ]),
-    ];
+    // Open form in a modal.
+    $element['#links']['private-messagedelete']['attributes'] = _joinup_private_message_get_ajax_modal_attributes();
   }
 
+}
+
+/**
+ * Gets the attributes for use with an AJAX modal.
+ *
+ * @return array
+ *   The attributes for use with an AJAX modal.
+ */
+function _joinup_private_message_get_ajax_modal_attributes(): array {
+  return [
+    'class' => ['use-ajax'],
+    'data-dialog-type' => 'modal',
+    'data-dialog-options' => Json::encode([
+      'width' => 'auto',
+    ]),
+  ];
 }
