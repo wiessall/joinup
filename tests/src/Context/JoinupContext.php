@@ -235,8 +235,7 @@ class JoinupContext extends RawDrupalContext {
         'owner' => 'owner',
         'topic' => 'field_topic',
         'related by type' => 'list_related_entities',
-        // ??
-        'related solutions' => 'field_is_related_solutions',
+        'related solutions' => 'related_solutions',
         'solution type' => 'solution_type',
         // ??
         'source code repository' => 'field_is_source_code_repository',
@@ -1053,6 +1052,13 @@ class JoinupContext extends RawDrupalContext {
       // allowed to omit an explicit topic. We're assigning a random topic term,
       // to satisfy data integrity and prevent form validation errors.
       $node->field_topic = $this->getRandomTopic()->label();
+    }
+
+    // Handle file URL fields.
+    if (!empty($node->documentation)) {
+      $fileHandler = \Drupal::service('file_url.handler');
+      $file = $this->createFile($node->documentation);
+      $node->documentation = $fileHandler::fileToUrl($file);
     }
   }
 
