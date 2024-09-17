@@ -1582,7 +1582,7 @@ class FeatureContext extends RawDrupalContext {
   }
 
   /**
-   * Performs the RDF synchronization.
+   * Performs the RDF synchronization after each behat step.
    *
    * When a request terminates, all services implementing DestructableInterface
    * are called to perform tasks after the response has been sent back to the
@@ -1590,14 +1590,34 @@ class FeatureContext extends RawDrupalContext {
    * wrapped in the test "page request", these operations will occur only after
    * all the steps were executed. But some tasks just need to be executed before
    * the next Behat step.
+   *
+   * @AfterStep
+   */
+  public function afterStepRdfSyncDestruct(): void {
+    \Drupal::service('rdf_sync.synchronizer')->destruct();
+  }
+
+  /**
+   * Performs the RDF synchronization after each scenario.
+   *
    * After a scenario terminates, the nodes created are deleted and RDF needs
    * to be synchronized so that also RDF entities are deleted.
    *
-   * @AfterStep
    * @AfterScenario
    */
-  public function rdfSyncDestruct(): void {
-    \Drupal::service('rdf_sync.synchronizer')->destruct();
+  public function rdfSyncdDestruct(): void {
+    try {
+      \Drupal::service('rdf_sync.synchronizer')->destruct();
+    }
+    catch (\Exception $e) {
+      // Sometimes, due to the cleanup of the entities, the synchronization
+      // has already run, and the `rdf_sync_uri` table has been cleaned up.
+      // This causes the entity to fail to return a URI and an error is thrown.
+      // @todo Find out why it is happening with nodes but was not happening
+      //   before with RDF entities. Solution notification feature throws a
+      //   post scenario exception without this try/catch block.
+      // @see solution.notifications.feature.
+    }
   }
 
   /**
