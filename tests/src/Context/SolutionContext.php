@@ -413,14 +413,6 @@ class SolutionContext extends RawDrupalContext {
         'registered users' => ContentCreationOptions::REGISTERED_USERS,
       ],
       'field_is_webdav_creation' => ['no' => 0, 'yes' => 1],
-      'field_state' => [
-        'draft' => 'draft',
-        'proposed' => 'proposed',
-        'published' => 'published',
-        'needs update' => 'needs_update',
-        'blacklisted' => 'blacklisted',
-        'archived' => 'archived',
-      ],
       'list_related_entities' => ['no' => 0, 'yes' => 1],
     ];
 
