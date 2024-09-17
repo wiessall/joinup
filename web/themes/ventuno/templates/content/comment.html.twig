@@ -4,6 +4,8 @@
  * Template for a comment.
  */
 #}
+
+{% set permalink = comment.getPermalink() %}
 <article{{ attributes.addClass('js-comment', 'comment', 'my-3') }}>
   {#
     Hide the "new" indicator by default, let a piece of JavaScript ask the
@@ -23,7 +25,7 @@
         <span class="comment__detail">{{ created }}</span>
         {% if permalink %}
           <span class="comment__detail">
-            <a class="permalink" href="{{ permalink_raw }}" title="{{ 'Permalink'|t }}">
+            <a class="permalink" href="{{ permalink }}" title="{{ 'Permalink'|t }}">
               {{ pattern('icon', {
                 name: 'link-45deg',
                 size: 's'
