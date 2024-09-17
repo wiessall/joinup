@@ -63,7 +63,7 @@ class SolutionContext extends RawDrupalContext {
    */
   public function visitAddSolutionForm(string $collection): void {
     $collection = $this->getEntityByLabel('node', $collection);
-    $solution_url = Url::fromRoute('solution.collection_solution.add', [
+    $solution_url = Url::fromRoute('joinup_solution.collection_solution.add', [
       'node' => $collection->id(),
     ]);
 
