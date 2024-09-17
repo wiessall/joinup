@@ -6,14 +6,11 @@ namespace Drupal\joinup\Context;
 
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
-use Drupal\joinup\Traits\ConfigReadOnlyTrait;
 
 /**
  * Behat context to clean up bundle entity types created during tests.
  */
 class ContentTypeContext extends RawDrupalContext {
-
-  use ConfigReadOnlyTrait;
 
   /**
    * List of entity bundle IDs before the test grouped by bundle entity type ID.
@@ -28,7 +25,6 @@ class ContentTypeContext extends RawDrupalContext {
    * @BeforeScenario @content_type
    */
   public function takeNodeTypeSnapshot(): void {
-    self::bypassReadOnlyConfig();
     $this->bundleTypeIds = $this->getEntityBundleTypes();
   }
 
@@ -55,9 +51,6 @@ class ContentTypeContext extends RawDrupalContext {
         $storage->delete($storage->loadMultiple($idsToDelete));
       }
     }
-
-    // Restore config readonly status.
-    self::restoreReadOnlyConfig();
   }
 
   /**
