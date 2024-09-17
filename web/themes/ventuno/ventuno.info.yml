@@ -50,6 +50,10 @@ libraries-override:
   layout_builder/twocol_section: false
   layout_builder/threecol_section: false
   layout_builder/fourcol_section: false
+  private_message/notification_block_style:
+    css:
+      theme:
+        css/private_message_notification_block.css: false
 
 regions:
   search_bar: 'Search bar'
