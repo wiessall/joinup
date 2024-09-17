@@ -69,7 +69,6 @@ abstract class JoinupExistingSiteTestBase extends ExistingSiteBase {
     // Cleanup the cas mock server.
     \Drupal::getContainer()->get('cas_mock_server.user_manager')->deleteUsers($this->casUsers);
 
-    // The parent method might cleanup config entities.
     parent::tearDown();
 
     // Delete the OG group content orphans now because parent::tearDown() is
