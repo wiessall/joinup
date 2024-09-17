@@ -7,12 +7,23 @@ dependencies:
 name: ec_etranslation
 label: 'European Commission eTranslation'
 description: "Allows the European Commission's eTranslation service to process translation jobs."
-auto_accept: null
+auto_accept: true
 weight: null
 plugin: ec_etranslation
 settings:
-  username: null
-  password: null
+  username: ''
+  password: ''
   domain: SPD
-  email: null
-remote_languages_mappings: {  }
+  email: ''
+remote_languages_mappings:
+  cs: cs
+  da: da
+  nl: nl
+  en: en
+  et: et
+  fr: fr
+  de: de
+  el: el
+  it: it
+  sl: sl
+  es: es
