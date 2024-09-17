@@ -348,119 +348,6 @@ class SolutionContext extends RawDrupalContext {
   }
 
   /**
-   * Field alias mapping.
-   *
-   * @return array
-   *   Mapping.
-   */
-  protected static function solutionFieldAliases(): array {
-    // Mapping alias - field name.
-    return [
-      'author' => 'uid',
-      'uri' => 'uri',
-      'title' => 'title',
-      'short ID' => 'short_id',
-      'abstract' => 'abstract',
-      'affiliations requests' => 'field_is_affiliations_requests',
-      'contact information' => 'contact',
-      'content creation' => 'content_creation',
-      'creation date' => 'created',
-      'description' => 'description',
-      'documentation' => 'documentation',
-      'keywords' => 'field_keywords',
-      'landing page' => 'landing_page',
-      'language' => 'language',
-      'latest release' => 'field_is_latest_release',
-      'logo' => 'logo',
-      'metrics page' => 'metrics_page',
-      'moderation' => 'group_moderation',
-      'modification date' => 'changed',
-      'owner' => 'owner',
-      'topic' => 'field_topic',
-      'related by type' => 'list_related_entities',
-      'related solutions' => 'field_is_related_solutions',
-      'solution type' => 'solution_type',
-      'source code repository' => 'field_is_source_code_repository',
-      'spatial coverage' => 'spatial_coverage',
-      'status' => 'field_status',
-      'translation' => 'field_is_translation',
-      'webdav creation' => 'field_is_webdav_creation',
-      'webdav url' => 'field_is_webdav_url',
-      'wiki' => 'field_is_wiki',
-      'state' => 'field_state',
-      'collection' => 'og_audience',
-      'collections' => 'og_audience',
-      'featured' => 'feature',
-      'pinned in' => 'pinned_in_collection',
-      'published at' => 'published_at',
-      'unpinned in' => 'unpinned_in_collection',
-      'shared on' => 'field_shared_in',
-    ];
-  }
-
-  /**
-   * Returns value mapping of human-friendly field values.
-   *
-   * Value keys are the human-friendly values used in the cucumber tables, their
-   * values are the actual field values to apply. Every value alias - value list
-   * is keyed by the un-aliased field name.
-   */
-  protected function getValueMapping(): array {
-    $mapping = [
-      'group_moderation' => ['no' => 0, 'yes' => 1],
-      'content_creation' => [
-        'facilitators and authors' => ContentCreationOptions::FACILITATORS_AND_AUTHORS,
-        'registered users' => ContentCreationOptions::REGISTERED_USERS,
-      ],
-      'field_is_webdav_creation' => ['no' => 0, 'yes' => 1],
-      'list_related_entities' => ['no' => 0, 'yes' => 1],
-    ];
-
-    Assert::assertEmpty(
-      array_diff(
-        array_keys($mapping),
-        $this->solutionFieldAliases(),
-      ),
-    );
-
-    return $mapping;
-  }
-
-  /**
-   * Converts values from user-friendly to normal machine values.
-   *
-   * @param array $fields
-   *   An array of fields keyed by field name.
-   *
-   * @return array
-   *   The array with the values converted.
-   *
-   * @throws \Exception
-   *    Throws an exception when a mapped value is not found.
-   */
-  protected function convertValueAliases(array $fields): array {
-    $mapped_values = $this->getValueMapping();
-
-    foreach ($fields as $field => $value) {
-      if (isset($mapped_values[$field])) {
-        if (!isset($mapped_values[$field][$value])) {
-          throw new \Exception("Value $value is not an acceptable value for field $field.");
-        }
-
-        $fields[$field] = $mapped_values[$field][$value];
-      }
-    }
-
-    // The solution affiliation could be multi-value.
-    if (isset($fields['collection'])) {
-      $fields['collection'] = $this->explodeCommaSeparatedStepArgument($fields['collection']);
-    }
-
-    // Convert any entity reference field label value with the entity ID.
-    return $this->convertEntityReferencesValues('rdf_entity', 'solution', $this->parseRdfEntityFields($fields));
-  }
-
-  /**
    * Checks that a user has the available state options for the solution.
    *
    * The method also checks that these options are the only options available.
@@ -614,22 +501,6 @@ class SolutionContext extends RawDrupalContext {
   }
 
   /**
-   * Replaces solution field aliases in the solution node object.
-   *
-   * @param \Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope $scope
-   *   The before node create scope.
-   *
-   * @BeforeNodeCreate
-   */
-  public function convertSolutionFieldAliases(BeforeNodeCreateScope $scope): void {
-    $node = $scope->getEntity();
-    if ($node->type !== 'solution') {
-      return;
-    }
-    $this->convertFieldAliases($node, self::solutionFieldAliases());
-  }
-
-  /**
    * Converts values from user-friendly to normal machine values.
    *
    * @param \Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope $scope
@@ -642,7 +513,17 @@ class SolutionContext extends RawDrupalContext {
     if ($node->type !== 'solution') {
       return;
     }
-    $value_mapping = $this->getValueMapping();
+
+    $value_mapping = [
+      'group_moderation' => ['no' => 0, 'yes' => 1],
+      'content_creation' => [
+        'facilitators and authors' => ContentCreationOptions::FACILITATORS_AND_AUTHORS,
+        'registered users' => ContentCreationOptions::REGISTERED_USERS,
+      ],
+      'field_is_webdav_creation' => ['no' => 0, 'yes' => 1],
+      'list_related_entities' => ['no' => 0, 'yes' => 1],
+    ];
+
     foreach ((array) $node as $field => $value) {
       if (!isset($value_mapping[$field])) {
         continue;
