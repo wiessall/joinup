@@ -33,11 +33,9 @@ Feature: Notification test for the collection transitions.
       | NC to delete           | published        | No one cares | No one cares. | Supplier exchange | NC for all | Notificationous absolutous |
       | NC to delete by mod    | published        | No one cares | No one cares. | Supplier exchange | NC for all | Notificationous absolutous |
     Given solution content:
-      | title        | collections                          | logo     | state     |
-      # Has only one affiliate.
-      | NC Solution1 | NC to archive                        | logo.png | published |
-      # Has more than one affiliate.
-      | NC Solution2 | NC to request archival,NC to archive | logo.png | published |
+      | title        | collections   | logo     | state     |
+      | NC Solution1 | NC to archive | logo.png | published |
+      | NC Solution2 | NC to archive | logo.png | published |
     And the following solution user memberships:
       | solution     | user      | roles |
       | NC Solution1 | NCS owner | owner |
