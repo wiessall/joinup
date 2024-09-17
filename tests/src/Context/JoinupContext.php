@@ -252,7 +252,7 @@ class JoinupContext extends RawDrupalContext {
         'state' => 'field_state',
         'collection' => 'og_audience',
         'collections' => 'og_audience',
-        'featured' => 'feature',
+        'featured' => 'featured',
         // ??
         'pinned in' => 'pinned_in_collection',
         'published at' => 'published_at',
