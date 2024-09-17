@@ -17,6 +17,11 @@ use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
 class JobBuilder implements JobBuilderInterface {
 
   /**
+   * Target language.
+   */
+  const string TARGET_LANGUAGE = 'en';
+
+  /**
    * Module config.
    *
    * @var \Drupal\Core\Config\ImmutableConfig
@@ -40,7 +45,9 @@ class JobBuilder implements JobBuilderInterface {
       return;
     }
 
-    $this->createJob($entity);
+    if ($this->needsTranslation($entity)) {
+      $this->createJob($entity);
+    }
   }
 
   /**
@@ -59,6 +66,19 @@ class JobBuilder implements JobBuilderInterface {
   }
 
   /**
+   * Checks if node needs translation.
+   *
+   * @param \Drupal\eu_oss_catalogue\Entity\OssSolutionInterface $entity
+   *   Oss solution.
+   *
+   * @return bool
+   *   True if a node needs translation.
+   */
+  protected function needsTranslation(OssSolutionInterface $entity): bool {
+    return $entity->getRelevantLangCode() !== self::TARGET_LANGUAGE;
+  }
+
+  /**
    * Creates tmgmt job.
    *
    * @param \Drupal\eu_oss_catalogue\Entity\OssSolutionInterface $entity
@@ -72,7 +92,7 @@ class JobBuilder implements JobBuilderInterface {
       $job = $jobStorage->create(
         [
           'source_language' => $entity->getRelevantLangCode(),
-          'target_language' => 'en',
+          'target_language' => self::TARGET_LANGUAGE,
           'uid' => $this->currentUser->id(),
           'translator' => $this->config->get('translator'),
         ]
