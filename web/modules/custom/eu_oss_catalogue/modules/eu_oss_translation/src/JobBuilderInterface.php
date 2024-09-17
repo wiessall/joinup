@@ -15,7 +15,7 @@ interface JobBuilderInterface {
    * Creates the tmgmt job.
    *
    * @param \Drupal\eu_oss_catalogue\Entity\OssSolutionInterface $entity
-   *  OSS solution entity.
+   *   OSS solution entity.
    */
   public function create(OssSolutionInterface $entity): void;
 
