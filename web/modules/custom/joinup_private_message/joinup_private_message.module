@@ -28,6 +28,9 @@ function joinup_private_message_form_alter(array &$form, FormStateInterface $for
       $form['message']['widget'][0]['#format'] = 'minimal';
       $form['message']['widget'][0]['#allowed_formats'] = ['minimal'];
     }
+  }
+
+  if (in_array($form_id, ['private_message_add_form', 'private_message_delete_form'])) {
     $form['actions']['submit']['#submit'][] = 'joinup_private_message_form_submit';
   }
 }
@@ -57,4 +60,20 @@ function joinup_private_message_private_message_thread_view_alter(array &$build,
       ]),
     ];
   }
+}
+
+/**
+ * Implements hook_contextual_links_view_alter().
+ */
+function joinup_private_message_contextual_links_view_alter(&$element, $items): void {
+  if (isset($element['#links']['private-messagedelete'])) {
+    $element['#links']['private-messagedelete']['attributes'] = [
+      'class' => ['use-ajax'],
+      'data-dialog-type' => 'modal',
+      'data-dialog-options' => Json::encode([
+        'width' => 'auto',
+      ]),
+    ];
+  }
+
 }
