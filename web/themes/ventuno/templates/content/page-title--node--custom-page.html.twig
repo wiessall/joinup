@@ -4,6 +4,7 @@
  * Template for the page title.
  */
 #}
+{% set permalink = entity.getPermalink() %}
 {{ attach_library('ventuno/page-title') }}
 {{ title_prefix }}
 
