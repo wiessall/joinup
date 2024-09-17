@@ -6,3 +6,9 @@ services:
       - '@entity_type.manager'
       - '@logger.channel.eu_oss_catalogue'
       - '@config.factory'
+
+  eu_oss_translation.solution_post_save_subscriber:
+    class: Drupal\eu_oss_translation\EventSubscriber\SolutionPostSaveSubscriber
+    arguments: [ '@queue' ]
+    tags:
+      - { name: event_subscriber }
