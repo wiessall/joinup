@@ -119,6 +119,17 @@ class SolutionContext extends RawDrupalContext {
     $fieldName = JoinupContext::getNodeFieldNameFromAlias('solution', $fieldName);
     $solution = static::getEntityByLabel('node', $label, 'solution');
     Assert::assertInstanceOf(SolutionInterface::class, $solution, "Cannot find any solution with label $label");
+    $fieldManager = \Drupal::service('entity_field.manager');
+    $fieldDefinitions = $fieldManager->getFieldDefinitions('node', 'solution');
+    Assert::assertArrayHasKey($fieldName, $fieldDefinitions, "Field $fieldName does not exist in the solution entity");
+
+    // For reference fields, we need to convert the value to the entity ID.
+    if ($fieldDefinitions[$fieldName]->getType() === 'entity_reference') {
+      $targetType = $fieldDefinitions[$fieldName]->getSetting('target_type');
+      $entity = $this->getEntityByLabel($targetType, $fieldValue);
+      $fieldValue = $entity->id();
+    }
+
     $solution->set($fieldName, $fieldValue);
     Assert::assertSame(SAVED_UPDATED, $solution->save(), "Solution cannot be updated");
   }
