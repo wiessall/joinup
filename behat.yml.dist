@@ -174,7 +174,6 @@ default:
       api_driver: 'drupal'
       blackbox: ~
       region_map:
-        Additional fields accordion: '.accordion .accordion-item #management'
         Administration toolbar: '#toolbar-administration'
         Bookmark block: '#block-ventuno-bookmark'
         Comment: 'section.comments'
@@ -198,9 +197,6 @@ default:
         Layout paragraphs widget: '.field--type-entity-reference-revisions .fieldset-wrapper .js-lpb-component'
         Left sidebar: 'aside.layout-sidebar'
         Like block: '#block-ventuno-like'
-        Main fields accordion: '.accordion .accordion-item #main'
-        Main solution vertical tab: '#edit-group-main'
-        Management solution vertical tab: '#edit-group-management'
         Members admin form actions: '#edit-action'
         Members admin form header: '#edit-header'
         Modal buttons: '.ui-dialog-buttonpane'
@@ -219,6 +215,8 @@ default:
         Related solutions: '.field--name-related-solutions'
         SevenHeader: '.region-header'
         Search filters: '.joinup-search-filters'
+        Solution edit form additional fields accordion: '.accordion .accordion-item #additional-fields'
+        Solution edit form main fields accordion: '.accordion .accordion-item #main-fields'
         Statistics: '#block-ventuno-statistics'
         Table of contents: '#block-ventuno-table-of-contents'
         Table of contents outline: '#block-ventuno-toc-outline'
