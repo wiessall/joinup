@@ -7,7 +7,11 @@
 
 declare(strict_types=1);
 
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Access\AccessResultInterface;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\entity_legal\Entity\EntityLegalDocument;
 use Drupal\entity_legal\Entity\EntityLegalDocumentAcceptance;
 
@@ -136,4 +140,12 @@ function joinup_legal_form_cas_account_link_form_submit(array &$form, FormStateI
       'vid' => $legal_notice->getPublishedVersion()->id(),
     ])->save();
   }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_access() for entity_legal_document_version.
+ */
+function joinup_legal_entity_legal_document_version_access(EntityInterface $entity, $operation, AccountInterface $account): AccessResultInterface {
+  // Allow moderators to manage document versions.
+  return AccessResult::allowedIfHasPermission($account, 'administer entity legal document versions');
 }
