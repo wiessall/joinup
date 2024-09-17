@@ -1,0 +1,7 @@
+name: EU OSS Translate
+type: module
+description: Translate functionality
+package: EU OSS Catalogue
+core_version_requirement: ">=10.0"
+dependencies:
+  - eu_oss_catalogue:eu_oss_catalogue
