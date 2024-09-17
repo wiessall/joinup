@@ -79,7 +79,7 @@ class JoinupContext extends RawDrupalContext {
    * @return string
    *   The actual field name, or the original string if the alias is not known.
    */
-  protected static function getNodeFieldNameFromAlias(string $type, string $alias): string {
+  public static function getNodeFieldNameFromAlias(string $type, string $alias): string {
     $aliases = [
       'collection' => [
         'author' => 'uid',
@@ -1349,18 +1349,7 @@ class JoinupContext extends RawDrupalContext {
     /** @var \Drupal\joinup_workflow\EntityWorkflowStateInterface|\Drupal\Core\Entity\EntityInterface $entity */
     $entity = $this->getEntityByLabel($entity_type, $title);
     $entity->setWorkflowState($state);
-
-    // Only create a new revision if the entity type supports it.
-    if ($entity->getEntityType()->isRevisionable()) {
-      $entity->setNewRevision(TRUE);
-    }
-    else {
-      // If the entity does not support revisioning the static cache in the
-      // access control handler will become stale. Force a cache reset since the
-      // changing of the workflow state might affect entity access.
-      \Drupal::entityTypeManager()->getAccessControlHandler($entity->getEntityTypeId())->resetCache();
-    }
-
+    $entity->setNewRevision(TRUE);
     $entity->save();
   }
 

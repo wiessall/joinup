@@ -9,7 +9,6 @@ use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Url;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
-use Drupal\file_url\FileUrlHandler;
 use Drupal\joinup\Traits\ConfigReadOnlyTrait;
 use Drupal\joinup\Traits\EntityReferenceTrait;
 use Drupal\joinup\Traits\EntityTrait;
@@ -105,111 +104,9 @@ class SolutionContext extends RawDrupalContext {
   }
 
   /**
-   * Creates a number of solutions with data provided in a table.
-   *
-   * Table format:
-   * @codingStandardsIgnoreStart
-   * | title        | description            | state                                             | collection      | documentation | closed | creation date    | content creation | featured | moderation | modification date | landing page               | webdav creation | webdav url                  | wiki                        |
-   * | Foo solution | This is a foo solution | draft|proposed|published|needs update|blacklisted | Some collection | text.pdf      | yes    | 28-01-1995 12:05 | no               | yes      | yes        |                   | http://foo-url-example.com | yes             | http://joinup.eu/foo/webdav | http://foo-wiki-example.com |
-   * | Bar solution | This is a bar solution | published                                         |                 | text.pdf      | no     | 28-01-1995 12:06 | yes              | no       | no         |                   | http://bar-url-example.com | no              |                             | http://bar-wiki-example.com |
-   * @codingStandardsIgnoreEnd
-   *
-   * Fields title and state are mandatory.
-   *
-   * @param \Behat\Gherkin\Node\TableNode $solution_table
-   *   The solution data.
-   *
-   * @throws \Exception
-   *   Thrown when a column name is incorrect.
-   *
-   * @Given (the following )solutions:
-   */
-  public function givenSolutions(TableNode $solution_table): void {
-    $aliases = self::solutionFieldAliases();
-
-    foreach ($solution_table->getColumnsHash() as $solution) {
-      $values = [];
-      // Replace the column aliases with the actual field names.
-      foreach ($solution as $key => $value) {
-        if (array_key_exists($key, $aliases)) {
-          $values[$aliases[$key]] = $value;
-        }
-        else {
-          throw new \Exception("Unknown column '$key' in solution table.");
-        }
-      }
-
-      $this->ensureParentCollection($values);
-      $values = $this->convertValueAliases($values);
-
-      $this->createSolution($values);
-    }
-  }
-
-  /**
-   * Creates a solution with data provided in a table.
-   *
-   * @codingStandardsIgnoreStart
-   * Table format:
-   * | title               | Sample solution                                                |
-   * | description         | A sample solution                                              |
-   * | logo                | logo.jpg                                                       |
-   * | moderation          | no|yes                                                         |
-   * | closed              | no|yes                                                         |
-   * | collection          | Example collection                                             |
-   * | contact information | Grahame Paterson, Aulay MacFarlane                             |
-   * | documentation       | text.pdf                                                       |
-   * | content creation    | facilitators|members|registered users                          |
-   * | featured            | yes|no                                                         |
-   * | landing page        | http://example.com/foobar/landing                              |
-   * | language            | Greek, German                                                  |
-   * | owner               | Zapsum, Holdline Accountants                                   |
-   * | topic               | Demography, E-inclusion                                        |
-   * | related solutions   | Solution 2, Solution 3                                         |
-   * | solution type       | [ABB159] Service Discovery Service, ...                        |
-   * | spatial coverage    | Denmark, Serbia                                                |
-   * | state               | published|...                                                  |
-   * | status              | Under development                                              |
-   * | webdav creation     | no|yes                                                         |
-   * | webdav url          | http://joinup.eu/solution/foobar/webdav                        |
-   * | wiki                | http://example.wiki/foobar/wiki                                |
-   * | uri                 | http://data.europa.eu/w21/fc2dee5a-88fb-4aff-b3bf-9b1d66903296 |
-   * @codingStandardsIgnoreEnd
-   *
-   * Fields "title", "description" and "state" are required.
-   *
-   * @param \Behat\Gherkin\Node\TableNode $solution_table
-   *   The solution data.
-   *
-   * @throws \Exception
-   *   Thrown when a column name is incorrect.
-   *
-   * @Given (the following )solution:
-   */
-  public function givenSolution(TableNode $solution_table): void {
-    $aliases = self::solutionFieldAliases();
-
-    $values = [];
-    // Replace the column aliases with the actual field names.
-    foreach ($solution_table->getRowsHash() as $key => $value) {
-      if (array_key_exists($key, $aliases)) {
-        $values[$aliases[$key]] = $value;
-      }
-      else {
-        throw new \Exception("Unknown column '$key' in solution table.");
-      }
-    }
-
-    $this->ensureParentCollection($values);
-    $values = $this->convertValueAliases($values);
-
-    $this->createSolution($values);
-  }
-
-  /**
    * Changes a value of a solution by API.
    *
-   * @param string $property
+   * @param string $fieldName
    *   The alias of the solution field.
    * @param string $label
    *   The label of the solution entity.
@@ -218,18 +115,12 @@ class SolutionContext extends RawDrupalContext {
    *
    * @Given the :fieldName of :label solution is changed to :fieldValue
    */
-  public function givenSolutionNewValue(string $property, string $label, string $fieldValue): void {
-    $aliases = self::solutionFieldAliases();
-    Assert::assertArrayHasKey($property, $aliases, "Unknown column '$property' in solution table.");
-    $fieldName = $aliases[$property];
+  public function givenSolutionNewValue(string $fieldName, string $label, string $fieldValue): void {
+    $fieldName = JoinupContext::getNodeFieldNameFromAlias('solution', $fieldName);
     $solution = static::getEntityByLabel('node', $label, 'solution');
     Assert::assertInstanceOf(SolutionInterface::class, $solution, "Cannot find any solution with label $label");
-
-    $values = $this->prepareFields(
-      $this->convertValueAliases([$fieldName => $fieldValue])
-    );
-    Assert::assertSame(SAVED_UPDATED, $solution->set(key($values), current($values))->save(), "Solution cannot be updated");
-    $this->applyPostSaveTasks($solution, $values);
+    $solution->set($fieldName, $fieldValue);
+    Assert::assertSame(SAVED_UPDATED, $solution->save(), "Solution cannot be updated");
   }
 
   /**
@@ -305,61 +196,14 @@ class SolutionContext extends RawDrupalContext {
   }
 
   /**
-   * Prepares the fields of the solution for being saved.
-   */
-  protected function prepareFields(array $values): array {
-    $fileHandler = \Drupal::service('file_url.handler');
-    Assert::assertInstanceOf(FileUrlHandler::class, $fileHandler);
-
-    $file_fields = ['documentation', 'logo'];
-
-    foreach ($file_fields as $field_name) {
-      if (!empty($values[$field_name])) {
-        foreach ($values[$field_name] as &$filename) {
-          $file = $this->createFile($filename);
-          if ($field_name === 'documentation') {
-            $filename = [
-              'target_id' => $fileHandler::fileToUrl($file),
-            ];
-          }
-          else {
-            $filename = [$file->id()];
-          }
-        }
-      }
-    }
-    return $values;
-  }
-
-  /**
-   * Creates a solution from the given property and field data.
-   *
-   * @param array $values
-   *   An optional associative array of values, keyed by property name.
-   *
-   * @return \Drupal\joinup_solution\Entity\SolutionInterface
-   *   A new solution entity.
-   */
-  protected function createSolution(array $values): SolutionInterface {
-    $values = $this->prepareFields($values) + ['type' => 'solution'];
-    $this->setFallbackTopic($values);
-
-    $solution = Node::create($values);
-    Assert::assertInstanceOf(SolutionInterface::class, $solution);
-    $this->entities['node'][$solution->id()] = $solution;
-
-    $this->applyPostSaveTasks($solution, $values);
-
-    return $solution;
-  }
-
-  /**
    * Applies post-save tasks: (un)pinning and (un)featuring.
    *
    * @param \Drupal\joinup_solution\Entity\SolutionInterface $solution
    *   The saved solution object.
    * @param array $values
    *   The solution values.
+   *
+   * @todo This method needs to be a postNodeCreate hook.
    */
   protected function applyPostSaveTasks(SolutionInterface $solution, array $values): void {
     // If the solution is featured we need to create the meta entity that stores
