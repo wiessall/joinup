@@ -34,7 +34,7 @@ Feature: Solution editing.
     And I click "Add solution"
     And I check "I have read and accept the legal notice and I commit to manage my solution on a regular basis."
     And I press "Yes"
-    Then I should see the heading "Add Solution"
+    Then I should see the heading "Add solution"
     When I fill in the following:
       | Title          | Solution A         |
       | Abstract       | Abstract of "A"    |
@@ -57,8 +57,8 @@ Feature: Solution editing.
     And I should see the link "Edit"
     When I go to the edit form of the "Solution A" solution
     Then I should see the heading "Edit Solution Solution A"
-    Then the fields "Title, Description, Contact information, Topic, Owner, Solution type, Moderated, Content creation" should be correctly ordered in the region "Main fields accordion"
-    Then the fields "Logo, Upload a new file or enter a URL, Geographical coverage, Search keywords, Related solutions, Status, Languages, Landing page, Metrics page" should be correctly ordered in the region "Additional fields accordion"
+    Then the fields "Title, Description, Contact information, Topic, Owner, Solution type, Moderated, Content creation" should be correctly ordered in the region "Solution edit form main fields accordion"
+    Then the fields "Logo, Upload a new file or enter a URL, Geographical coverage, Search keywords, Related solutions, Status, Languages, Landing page, Metrics page" should be correctly ordered in the region "Solution edit form additional fields accordion"
 
     And the following fields should not be present "Issue tracker, Wiki, Langcode, Translation"
     And the following fieldsets should be present "Contact information, Owner, Content creation"
