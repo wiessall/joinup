@@ -20,7 +20,6 @@ class JoinupSubscriptionsHelper {
     'collection' => [
       'node' => [
         'discussion',
-        'distribution',
         'document',
         'event',
         'news',
