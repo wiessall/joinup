@@ -216,7 +216,7 @@ default:
         Plus button menu: '#block-ventuno-joinup-add-content'
         Primary menu: '.region-primary-menu'
         Quick links: '.block-group-menu-blockquick-links'
-        Related solutions: '.field--name-field-is-related-solutions'
+        Related solutions: '.field--name-related-solutions'
         SevenHeader: '.region-header'
         Search filters: '.joinup-search-filters'
         Statistics: '#block-ventuno-statistics'
