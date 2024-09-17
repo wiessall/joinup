@@ -20,6 +20,11 @@ Run the following, to create translation job:
 ./vendor/bin/drush eu-oss:generate-translation-job SOLUTION_ID
 ```
 
+Use the queue system to trigger a translation job creation for all updated/created solutions:
+```bash
+./vendor/bin/drush queue:run eu_oss_translation_requester
+```
+
 Use the queue system to process translations retrieved from the eTranslation service:
 ```bash
 ./vendor/bin/drush queue:run tmgmt_ec_etranslation_translation
