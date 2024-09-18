@@ -8,7 +8,7 @@ Feature: Global search with archive content
     And contact_information content:
       | name         | email                    |
       | Some contact | some-contact@example.com |
-    And the following <group type>s:
+    And <group type> content:
       | title             | description | state     |
       | Some <group type> | Description | published |
       | Rare <group type> | Description | published |
