@@ -1,0 +1,34 @@
+<?php
+
+/**
+ * @file
+ * Hook implementations for EU OSS Translation module.
+ */
+
+declare(strict_types=1);
+
+use Drupal\Core\Entity\ContentEntityInterface;
+use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
+use Drupal\eu_oss_translation\JobBuilder;
+
+/**
+ * Implements hook_tmgmt_translatable_fields_alter().
+ */
+function eu_oss_translation_tmgmt_translatable_fields_alter(ContentEntityInterface $entity, array &$translatableFields): void {
+  if (!$entity instanceof OssSolutionInterface || !$entity->hasTranslation(JobBuilder::TARGET_LANGUAGE)) {
+    return;
+  }
+
+  $translated = $entity->getTranslation(JobBuilder::TARGET_LANGUAGE);
+
+  // Skip already translated data.
+  foreach ($translatableFields as $translatableKey => $translatableField) {
+    if (!$translated->hasField($translatableKey)) {
+      continue;
+    }
+
+    if (!$translated->get($translatableKey)->isEmpty()) {
+      unset($translatableFields[$translatableKey]);
+    }
+  }
+}

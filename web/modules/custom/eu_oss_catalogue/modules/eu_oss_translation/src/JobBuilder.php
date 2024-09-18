@@ -19,7 +19,7 @@ class JobBuilder implements JobBuilderInterface {
   /**
    * Target language.
    */
-  const string TARGET_LANGUAGE = 'en';
+  public const string TARGET_LANGUAGE = 'en';
 
   /**
    * Module config.
@@ -101,6 +101,11 @@ class JobBuilder implements JobBuilderInterface {
 
       $item = $job->addItem('content', $entity->getEntityTypeId(), $entity->id());
       $item->save();
+
+      $canRequest = $job->canRequestTranslation();
+      if (!$canRequest->getSuccess()) {
+        throw new \Exception($canRequest->getReason());
+      }
 
       $job->requestTranslation();
     }
