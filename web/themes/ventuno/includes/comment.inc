@@ -62,8 +62,4 @@ function ventuno_preprocess_comment(array &$variables): void {
   $cache_metadata
     ->addCacheTags($user->getEntityType()->getListCacheTags())
     ->applyTo($variables['user_picture']);
-
-  if (!$comment->in_preview) {
-    $variables['permalink_raw'] = $comment->permalink();
-  }
 }

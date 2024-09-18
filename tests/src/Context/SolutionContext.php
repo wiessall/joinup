@@ -9,7 +9,6 @@ use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Url;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
-use Drupal\joinup\Traits\ConfigReadOnlyTrait;
 use Drupal\joinup\Traits\EntityReferenceTrait;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\FileTrait;
@@ -37,7 +36,6 @@ use PHPUnit\Framework\Assert;
  */
 class SolutionContext extends RawDrupalContext {
 
-  use ConfigReadOnlyTrait;
   use EntityReferenceTrait;
   use EntityTrait;
   use FileTrait;
@@ -548,11 +546,7 @@ class SolutionContext extends RawDrupalContext {
     // Create the needed language.
     $language_manager = \Drupal::languageManager();
     if (!$language_manager->getLanguage($langcode)) {
-      // Temporarily bypass the read only config functionality so that we can
-      // enable the language for testing.
-      $this->bypassReadOnlyConfig();
       ConfigurableLanguage::createFromLangcode($langcode)->save();
-      $this->restoreReadOnlyConfig();
     }
   }
 

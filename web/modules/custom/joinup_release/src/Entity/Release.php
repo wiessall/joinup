@@ -7,6 +7,7 @@ namespace Drupal\joinup_release\Entity;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\joinup_bundle_class\DescriptionTrait;
 use Drupal\joinup_bundle_class\JoinupBundleClassFieldAccessTrait;
+use Drupal\joinup_core\Entity\PermalinkTrait;
 use Drupal\joinup_distribution\Entity\DistributionParentTrait;
 use Drupal\joinup_group\Entity\GroupContentTrait;
 use Drupal\joinup_group\Exception\MissingGroupException;
@@ -28,14 +29,14 @@ class Release extends Node implements ReleaseInterface {
   use ArchivableEntityTrait;
   use DescriptionTrait;
   use DistributionParentTrait;
+  use EntityOwnerTrait;
   use EntityPublicationTimeFallbackTrait;
   use EntityWorkflowStateTrait;
   use GroupContentTrait;
   use JoinupBundleClassFieldAccessTrait;
+  use PermalinkTrait;
   use RdfSyncEntityTrait;
   use SolutionContentTrait;
-  use EntityOwnerTrait;
-  use EntityPublicationTimeFallbackTrait;
 
   /**
    * {@inheritdoc}
