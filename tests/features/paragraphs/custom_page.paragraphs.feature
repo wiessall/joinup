@@ -47,7 +47,7 @@ Feature:
 
   @javascript
   Scenario Outline: Privileged users can add paragraphs.
-    Given the following <group type>:
+    Given <group type> content:
       | title | Paragraphs group type |
       | state | published             |
     And users:

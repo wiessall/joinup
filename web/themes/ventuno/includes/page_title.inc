@@ -13,12 +13,6 @@ use Drupal\joinup_community_content\Entity\CommunityContentInterface;
  * Implements hook_preprocess_page_title().
  */
 function ventuno_preprocess_page_title(array &$variables): void {
-  // @todo Move the permalink computing outside the theme layer, in ISAICP-4724.
-  // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-4724
-  if ($permalink = _ventuno_build_permalink()) {
-    $variables['permalink'] = $permalink;
-  }
-
   $entity = $variables['entity'] ?? NULL;
   if ($entity instanceof CommunityContentInterface) {
     $variables['bundle'] = $entity->get('type')->entity->bundle();
@@ -105,7 +99,7 @@ function ventuno_preprocess_page_title__node__glossary(array &$variables): void 
  * Implements hook_preprocess_HOOK() for page-title--node--document.html.twig.
  */
 function ventuno_preprocess_page_title__node__document(&$variables): void {
-  /** @var \Drupal\joinup_document\Entity\DocumentInterface $node */
+  /** @var \Drupal\joinup_document\Entity\Document $node */
   $node = $variables['entity'];
 
   /** @var \Drupal\Core\Entity\EntityViewBuilderInterface $view_builder */
