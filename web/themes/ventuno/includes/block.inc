@@ -63,7 +63,7 @@ function ventuno_preprocess_block(array &$variables): void {
 
     case 'ventuno_like':
       // Avoid ajax throbber being  hidden under eTrans button.
-      $variables['attributes']['class'][] = 'zi-2';
+      $variables['attributes']['class'][] = 'zi-1';
       break;
   }
 

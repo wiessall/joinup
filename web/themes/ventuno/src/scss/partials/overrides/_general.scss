@@ -46,3 +46,8 @@ button#eTransButton.wt-ecl-button {
     box-shadow: none !important;
   }
 }
+
+// Remove z-index inline style on Global Banner.
+.globan {
+  z-index: unset !important;
+}
