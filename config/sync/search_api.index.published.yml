@@ -119,19 +119,6 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.abstract
-  aggregated_field:
-    label: 'Aggregated field'
-    property_path: aggregated_field
-    type: string
-    configuration:
-      type: union
-      separator: |+
-
-
-
-
-
-      fields: {  }
   body:
     label: 'Body » Processed text'
     datasource_id: 'entity:node'
