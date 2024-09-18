@@ -49,6 +49,7 @@ function joinup_core_deploy_111300(): string {
     }
     $release->skip_notification = TRUE;
     $release
+      ->setSyncing(TRUE)
       ->set('release_number', 'no-version')
       ->set('path', ['pathauto' => PathautoState::CREATE])
       ->save();
