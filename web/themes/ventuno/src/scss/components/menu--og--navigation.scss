@@ -2,9 +2,12 @@
 @import "../partials/mixins/bootstrap-icons";
 
 .menu--og--navigation {
-  position: relative;
-  z-index: 2;
   width: 100%;
+  position: relative;
+  .wt-etrans-modal & {
+    position: static; // If .wt-etrans-modal is visoble change .menu--og--navigation position to static.
+  }
+  z-index: 2;
   .nav {
     &:not(.nav-pills) {
       flex-wrap: nowrap;
