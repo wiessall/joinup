@@ -80,7 +80,7 @@ function ventuno_preprocess_block(array &$variables): void {
   // preprocess hook of the entity, there is no information about the block
   // that the entity is displayed in. This will allow us to identify such cases.
   // Only add attribute if this block isn't lazy-rendered.
-  if (!array_key_exists('#lazy_builder', $variables['content'])) {
+  if (isset($variables['content']) && !array_key_exists('#lazy_builder', $variables['content'])) {
     $variables['content']['#attributes']['data-joinup-block-id'] = $block_id;
   }
 }
