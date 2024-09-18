@@ -13,6 +13,7 @@
   // Make some optional elements be interactable over the tile itself.
   &__action {
     position: relative;
+    z-index: 2;
   }
   &__figure {
     display: flex;
