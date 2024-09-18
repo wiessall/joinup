@@ -9,7 +9,7 @@ Feature: "Custom page" deleteing.
       | Username     | E-mail                   |
       | Mickey Mouse | mickey.mouse@example.com |
       | Pluto        | pluto@example.com        |
-    And the following <group>:
+    And <group> content:
       | title       | Dumbo Collective                                                            |
       | description | Featuring a semi-anthropomorphic elephant who is cruelly nicknamed "Dumbo". |
       | logo        | logo.png                                                                    |

@@ -88,7 +88,7 @@ Feature: Content archival.
       | news       |
 
   Scenario Outline: Group facilitators can not unarchived community content
-    Given <group type>:
+    Given <group type> content:
       | title      | Some group |
       | state      | published  |
       # Set the moderation to yes to be able to access all states.
@@ -113,7 +113,7 @@ Feature: Content archival.
       | solution   |
 
   Scenario Outline: Group facilitators can not unarchived community content which is usgin layout paragraphs
-    Given <group type>:
+    Given <group type> content:
       | title      | Some group |
       | state      | published  |
       # Set the moderation to yes to be able to access all states.
