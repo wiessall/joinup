@@ -109,6 +109,7 @@ permissions:
   - 'administer webform element access'
   - 'administer webform submission'
   - 'assign licence_manager role'
+  - 'bypass entity legal acceptance'
   - 'create collection content'
   - 'bypass entity legal acceptance'
   - 'create collection_logo media'

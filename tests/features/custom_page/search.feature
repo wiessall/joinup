@@ -5,7 +5,7 @@ Feature: Custom pages enhance search results for their collections/solutions
   I want search results for keywords that match content in my custom pages to include my group
 
   Scenario Outline: Collections and solutions are found when searching for keywords in custom pages
-    Given the following <group>s:
+    Given <group> content:
       | title           | state     |
       | Buddy system    | draft     |
       | Slab allocation | published |

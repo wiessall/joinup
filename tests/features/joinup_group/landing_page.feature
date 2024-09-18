@@ -12,7 +12,7 @@ Feature: Tests the group landing page customization.
   # This may be uncommented in ISAICP-7223.
   # - As a group facilitator, when I visit my group, I can set a landing page.
 
-    Given the following <group>s:
+    Given <group> content:
       | title               | state     | description                         |
       | <group> group       | published | The <group> arbitrary description   |
       | other <group> group | published | Other <group> arbitrary description |

@@ -8,12 +8,17 @@ Feature: RDF synchronization of contents.
     Given solution content:
       | title        | description                                      | state     | uri                             |
       | EIF solution | Some description not to be shown in the EIF page | published | https://example.com/collection1 |
-    Given solution content:
-      | Description                              | Principle                                                                                      | Layer                                            | uri                                  |
-      | This should be in the description field. | Underlying Principle 1: Subsidiarity and proportionality, Underlying Principle 3: Transparency | Interoperability Layer 3: Legal interoperability | https://example.com/eif-perspective1 |
-    And solution content:
-      | Description                           | Principle                            | Layer                                                 | Model                        | uri                                  |
-      | Description field of the second item. | Underlying Principle 3: Transparency | Interoperability Layer 1: Interoperability governance | Basic Component 4: Open data | https://example.com/eif-perspective2 |
+    Given the following EIF perspective data for the "EIF solution" solution:
+      | Description | This should be in the description field.                                                       |
+      | Principle   | Underlying Principle 1: Subsidiarity and proportionality, Underlying Principle 3: Transparency |
+      | Layer       | Interoperability Layer 3: Legal interoperability                                               |
+      | uri         | https://example.com/eif-perspective1                                                           |
+    And the following EIF perspective data for the "EIF solution" solution:
+      | Description | Description field of the second item.                 |
+      | Principle   | Underlying Principle 3: Transparency                  |
+      | Layer       | Interoperability Layer 1: Interoperability governance |
+      | Model       | Basic Component 4: Open data                          |
+      | uri         | https://example.com/eif-perspective2                  |
     Then the following "http://data" graph triples exist in the RDF backend:
       | subject                              | predicate                                       | object                                        |
       | https://example.com/eif-perspective1 | http://purl.org/dc/terms/description            | This should be in the description field.      |

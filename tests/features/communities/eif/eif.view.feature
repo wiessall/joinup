@@ -7,9 +7,14 @@ Feature:
       | title         | description                                      | state     |
       | EIF solution  | Some description not to be shown in the EIF page | published |
       | EIF only type | Some description not to be shown in the EIF page | published |
-    Given solution content:
-      | Description                              | Solution type     | Principle                                                                                      | Layer                                            | Recommendation                                            | Recommendation                                                 |
-      | This should be in the description field. | Common frameworks | Underlying Principle 1: Subsidiarity and proportionality, Underlying Principle 3: Transparency | Interoperability Layer 3: Legal interoperability | name: Recommendation 21, description: This is recommended | name: Recommendation 15, description: This is also recommended |
+    Given the following EIF perspective data for the "EIF solution" solution:
+      | Description    | This should be in the description field.                                                       |
+      | Solution type  | Common frameworks                                                                              |
+      | Principle      | Underlying Principle 1: Subsidiarity and proportionality, Underlying Principle 3: Transparency |
+      | Layer          | Interoperability Layer 3: Legal interoperability                                               |
+      | Recommendation | name: Recommendation 21, description: This is recommended                                      |
+      | Recommendation | name: Recommendation 15, description: This is also recommended                                 |
+
     Given solution content:
       | Description                              | Solution type     |
       | This should be in the description field. | Common frameworks |
