@@ -84,7 +84,7 @@ class ShowOnlyUserContentSubscriber implements EventSubscriberInterface {
       $or = $query->createConditionGroup('OR');
 
       // Show all the content the user is author of.
-      $or->addCondition('id', $groups, 'IN');
+      $or->addCondition('nid', $groups, 'IN');
       // Or all the groups they belong to.
       $or->addCondition('entity_author', $user->id());
       $query->addConditionGroup($or);
