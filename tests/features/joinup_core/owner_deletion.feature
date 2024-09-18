@@ -11,7 +11,7 @@ Feature: Deletion of collection and solution owners
       | Group owner 2  |           | Group      | owner 2     |
       | Group member   |           | Group      | member      |
       | Site moderator | moderator | Site       | moderator   |
-    And the following <type>:
+    And <type> content:
       | title | An owned group |
       | state | published      |
     And the following <type> user memberships:

@@ -12,7 +12,7 @@ Feature: Sharing content between collections
       | Deryck Lynn   | deryck.lynn@example.com   |
       | Marjolein Rye | marjolein.rye@example.com |
       | Group owner   | group.owner@example.com   |
-    And the following <group type>s:
+    And <group type> content:
       | title        | state     |
       | Classic Rock | published |
       | Hip-Hop      | published |
@@ -161,7 +161,7 @@ Feature: Sharing content between collections
 
   @javascript
   Scenario Outline: Share/Unshare should be visible according to the group permissions.
-    Given <group type>s:
+    Given <group type> content:
       | title      | state     |
       | Westeros   | published |
       | Essos city | published |
@@ -231,7 +231,7 @@ Feature: Sharing content between collections
 
   @javascript
   Scenario Outline: Shared content should show visual cues in the groups they are shared into.
-    Given <group type>s:
+    Given <group type> content:
       | title | state     |
       | Earth | published |
       | Mars  | published |

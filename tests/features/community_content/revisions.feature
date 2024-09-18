@@ -5,7 +5,7 @@ Feature:
   I need to be able to see revisions of content
 
   Scenario Outline: Community content revisions
-    Given <group type>:
+    Given <group type> content:
       | title       | Hellow world                              |
       | description | Because I do not know how to spell Hello. |
       | moderation  | <moderation>                              |
@@ -199,7 +199,7 @@ Feature:
       | solution   | no         | Subscribe to this solution | Unsubscribe           |
 
   Scenario Outline: Community content revisions (with layout paragraphs)
-    Given <group type>:
+    Given <group type> content:
       | title       | Hellow world                              |
       | description | Because I do not know how to spell Hello. |
       | moderation  | <moderation>                              |
