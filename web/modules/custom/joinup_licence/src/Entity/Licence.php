@@ -6,6 +6,7 @@ namespace Drupal\joinup_licence\Entity;
 
 use Drupal\joinup_bundle_class\DescriptionTrait;
 use Drupal\joinup_bundle_class\JoinupBundleClassFieldAccessTrait;
+use Drupal\joinup_core\Entity\PermalinkTrait;
 use Drupal\joinup_rdf\Entity\RdfSyncEntityTrait;
 use Drupal\node\Entity\Node;
 
@@ -16,6 +17,7 @@ class Licence extends Node implements LicenceInterface {
 
   use DescriptionTrait;
   use JoinupBundleClassFieldAccessTrait;
+  use PermalinkTrait;
   use RdfSyncEntityTrait;
 
   /**

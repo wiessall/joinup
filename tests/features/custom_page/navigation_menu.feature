@@ -5,7 +5,7 @@ Feature: Navigation menu for custom pages
   I need to be able to manage the navigation menu
 
   Scenario Outline: Access the navigation menu through the contextual link
-    Given the following <group>s:
+    Given <group> content:
       | title            | logo     | state     |
       | Rainbow tables   | logo.png | published |
       | Cripple Mr Onion | logo.png | published |
@@ -149,7 +149,7 @@ Feature: Navigation menu for custom pages
     # In order to easily discover that I can manage the items in the navigation menu
     # As a group facilitator
     # I should see a button in the navigation menu that displays options when clicked
-    Given the following <group>:
+    Given <group> content:
       | title | Prism Gazers |
       | logo  | logo.png     |
       | state | published    |
@@ -177,7 +177,7 @@ Feature: Navigation menu for custom pages
       | solution   |
 
   Scenario Outline: Synchronize titles of custom pages and menu links
-    Given the following <group>:
+    Given <group> content:
       | title | Ravenous wood-munching alphabeavers |
       | state | published                           |
     And custom_page content:
@@ -202,7 +202,7 @@ Feature: Navigation menu for custom pages
       | solution   |
 
   Scenario Outline: Only the links below the topmost page are rendered in TOC.
-    Given the following <group>s:
+    Given <group> content:
       | title                   | state     |
       | Table of contents group | published |
     And custom_page content:
@@ -300,7 +300,7 @@ Feature: Navigation menu for custom pages
 
   @javascript
   Scenario Outline: Only custom page entries can be nested in the navigation menu.
-    Given the following <group>:
+    Given <group> content:
       | title | Ergonomic backpacks |
       | state | published           |
     And custom_page content:
@@ -424,7 +424,7 @@ Feature: Navigation menu for custom pages
       | solution   |
 
   Scenario Outline: Show appropriate menu entries in the table of contents outline.
-    Given the following <group>s:
+    Given <group> content:
       | title                     | state     |
       | Table of contents outline | published |
     And custom_page content:
@@ -511,7 +511,7 @@ Feature: Navigation menu for custom pages
 
   @javascript
   Scenario Outline: Assert cache invalidation of the TOC outline.
-    Given the following <group>s:
+    Given <group> content:
       | title                            | state     |
       | Table of contents outline cached | published |
     And custom_page content:

@@ -21,7 +21,7 @@ Feature: "Custom page" editing.
       | Username     | E-mail                   |
       | Mickey Mouse | mickey.mouse@example.com |
       | Pluto        | pluto@example.com        |
-    And the following <group>:
+    And <group> content:
       | title | Dumbo Collective |
       | state | published        |
     And the following <group> user memberships:
