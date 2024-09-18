@@ -97,10 +97,7 @@ class JobBuilder implements JobBuilderInterface {
           'translator' => $this->config->get('translator'),
         ]
       );
-      $job->save();
-
-      $item = $job->addItem('content', $entity->getEntityTypeId(), $entity->id());
-      $item->save();
+      $job->addItem('content', $entity->getEntityTypeId(), $entity->id());
 
       $canRequest = $job->canRequestTranslation();
       if (!$canRequest->getSuccess()) {
