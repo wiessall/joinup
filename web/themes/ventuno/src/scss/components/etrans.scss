@@ -9,6 +9,7 @@
     // Override webtools eTrans button styles
     // Make it look like "btn btn-secondary"
     display: inline-block;
+    min-height: unset;
     padding: $btn-padding-y $btn-padding-x;
     cursor: pointer;
     -webkit-user-select: none;

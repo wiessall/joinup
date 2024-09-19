@@ -23,3 +23,11 @@
 .layout--stack > * + * {
   margin-block-start: $spacer * 2;
 }
+
+// ISAICP-9090: Make sure .region-content-top contents are on top.
+.region-content-top {
+  z-index: 1;
+  .wt-etrans-modal & {
+    z-index: $zindex-modal;
+  }
+}
