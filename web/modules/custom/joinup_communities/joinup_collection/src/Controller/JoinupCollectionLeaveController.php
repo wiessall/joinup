@@ -30,7 +30,6 @@ class JoinupCollectionLeaveController {
     // The 'Joinup' membership can not be revoked.
     $rdfSyncMapper = \Drupal::service('rdf_sync.mapper');
     assert($rdfSyncMapper instanceof RdfSyncMapper);
-    $uriField = $rdfSyncMapper->getRdfUriFieldName('node', $node->bundle());
     if (
       $node instanceof CollectionInterface &&
       $node->getUri() === JoinupCollectionHelper::JOINUP_COLLECTION_URI
