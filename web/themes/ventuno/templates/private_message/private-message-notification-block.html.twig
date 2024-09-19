@@ -1,7 +1,7 @@
-{% if unread_notification_class  %}
-  <li class="nav-item d-inline-block order-0">
-    <span class="private-message-notification-wrapper {{ unread_notification_class }}">
-      {{ private_message_page_link }}
-    </span>
-  </li>
-{% endif %}
+{{ attach_library('ventuno/private-message') }}
+
+<li class="order-0 private-message-notification">
+  <span class="rounded-pill fs-xs private-message-notification-wrapper {{ unread_notification_class }}">
+    {{ private_message_page_link }}
+  </span>
+</li>
