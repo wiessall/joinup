@@ -44,7 +44,7 @@ class JoinupLogContext extends RawDrupalContext {
   public function visitActionsLogReport(string $group): void {
     $entityGroup = $this->getEntityByLabel('node', $group);
     $url = Url::fromRoute('view.actions_log.logs', [
-      'rdf_entity' => $entityGroup->id(),
+      'node' => $entityGroup->id(),
     ]);
     $this->visitPath($url->toString());
   }
