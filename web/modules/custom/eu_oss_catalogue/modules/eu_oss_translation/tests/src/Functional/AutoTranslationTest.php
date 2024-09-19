@@ -9,8 +9,8 @@ use Drupal\Core\Queue\QueueFactory;
 use Drupal\Core\Queue\QueueInterface;
 use Drupal\Core\Queue\QueueWorkerInterface;
 use Drupal\Core\Queue\QueueWorkerManagerInterface;
-use Drupal\eu_oss_translation\Plugin\QueueWorker\TranslationRequester;
 use Drupal\Tests\eu_oss_catalogue\Functional\FetchTestBase;
+use Drupal\eu_oss_translation\Plugin\QueueWorker\TranslationRequester;
 use Drupal\tmgmt\TranslatorInterface;
 use Drupal\tmgmt_ec_etranslation\Plugin\QueueWorker\TranslationQueueWorker;
 
@@ -133,7 +133,7 @@ class AutoTranslationTest extends FetchTestBase {
    * @param \Drupal\Core\Queue\QueueWorkerInterface $queueWorker
    *   Queue worker.
    * @param \Drupal\Core\Queue\QueueInterface $queue
-   *  Queue.
+   *   Queue.
    * @param int $limit
    *   Limit of queue elements.
    */
