@@ -7,6 +7,7 @@ namespace Drupal\joinup_distribution\Entity;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\file_url\FileUrlHandler;
 use Drupal\joinup_bundle_class\DescriptionTrait;
+use Drupal\joinup_core\Entity\PermalinkTrait;
 use Drupal\joinup_distribution\Exception\MissingDistributionParentException;
 use Drupal\joinup_group\Entity\GroupContentTrait;
 use Drupal\joinup_publication_date\Entity\EntityPublicationTimeFallbackTrait;
@@ -29,11 +30,12 @@ class Distribution extends Node implements DistributionInterface {
   use ArchivableEntityTrait;
   use DescriptionTrait;
   use DownloadCountAwareTrait;
+  use EntityPublicationTimeFallbackTrait;
   use EntityWorkflowStateTrait;
   use GroupContentTrait;
+  use PermalinkTrait;
   use RdfSyncEntityTrait;
   use SolutionContentTrait;
-  use EntityPublicationTimeFallbackTrait;
 
   /**
    * Fields populated with statistical information by the joinup_stats module.

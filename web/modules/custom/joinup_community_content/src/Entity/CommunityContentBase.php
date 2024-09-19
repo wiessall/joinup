@@ -9,6 +9,7 @@ use Drupal\collection\Entity\NodeCollectionContentTrait;
 use Drupal\joinup_bundle_class\DescriptionTrait;
 use Drupal\joinup_bundle_class\JoinupBundleClassMetaEntityTrait;
 use Drupal\joinup_core\Entity\OutdatedContentTrait;
+use Drupal\joinup_core\Entity\PermalinkTrait;
 use Drupal\joinup_featured\FeaturedContentTrait;
 use Drupal\joinup_group\Entity\PinnableGroupContentTrait;
 use Drupal\joinup_group\Exception\MissingGroupException;
@@ -39,6 +40,7 @@ abstract class CommunityContentBase extends Node implements CommunityContentInte
   use VisitCountAwareTrait;
   use GroupArchivableEntityTrait;
   use DescriptionTrait;
+  use PermalinkTrait;
 
   /**
    * Fields populated with statistical information by the joinup_stats module.
