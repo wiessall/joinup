@@ -12,6 +12,7 @@ use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Core\Url;
+use Drupal\ctools\Form\AjaxFormTrait;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -26,6 +27,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * )
  */
 class CreatePrivateMessageBlock extends BlockBase implements ContainerFactoryPluginInterface {
+
+  use AjaxFormTrait;
 
   /**
    * Constructs a PrivateMessageForm object.
@@ -81,6 +84,7 @@ class CreatePrivateMessageBlock extends BlockBase implements ContainerFactoryPlu
       '#type' => 'link',
       '#title' => $this->configFactory->get('private_message.settings')->get("create_message_label"),
       '#url' => $url,
+      '#attributes' => $this->getAjaxAttributes(),
     ];
 
     return $block;
