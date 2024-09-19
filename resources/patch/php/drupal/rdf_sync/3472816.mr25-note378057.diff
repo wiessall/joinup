@@ -1,0 +1,24 @@
+diff --git a/src/RdfSyncSynchronizer.php b/src/RdfSyncSynchronizer.php
+index 0cb89bc0bc34f1e85f31711f31dc44c28f054e58..ef21555f0f047037fa868488531523633a6e87b7 100644
+--- a/src/RdfSyncSynchronizer.php
++++ b/src/RdfSyncSynchronizer.php
+@@ -109,12 +109,18 @@ class RdfSyncSynchronizer implements DestructableInterface {
+           $entities,
+         )
+       );
++      if ($uris) {
++        $this->rdfSyncTriples->deleteTriples($uris);
++      }
+     }
+ 
+     if (in_array($method, [SyncMethod::INSERT, SyncMethod::UPDATE], TRUE)) {
+       $triples = [];
+       foreach ($entities as $entity) {
+-        $triples += $this->normalizer->normalize($entity);
++        $fieldName = $this->mapper->getRdfUriFieldName(entity: $entity);
++        if (!$entity->get($fieldName)->isEmpty()) {
++          $triples += $this->normalizer->normalize($entity);
++        }
+       }
+       $this->rdfSyncTriples->insertTriples($triples);
+     }
