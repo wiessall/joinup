@@ -13,7 +13,7 @@
   // Make some optional elements be interactable over the tile itself.
   &__action {
     position: relative;
-    z-index: 2;
+    z-index: 3;
   }
   &__figure {
     display: flex;
@@ -101,6 +101,7 @@
   }
   .mark {
     position: absolute;
+    z-index: 1;
     top: $spacer * 0.5;
     right: $spacer * 0.5;
     display: flex;
