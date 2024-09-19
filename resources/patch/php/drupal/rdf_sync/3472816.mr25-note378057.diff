@@ -1,38 +1,30 @@
 diff --git a/rdf_sync.module b/rdf_sync.module
-index 80f55ba3e83a109107d7ebbd399994a851232699..4df8790b5be7f024ceccae2e9c188fa719d67707 100644
+index 80f55ba3e83a109107d7ebbd399994a851232699..4cfb1405e40fbd26fa33df7f5438d3f9340dfd3c 100644
 --- a/rdf_sync.module
 +++ b/rdf_sync.module
-@@ -174,15 +174,6 @@ function rdf_sync_entity_update(EntityInterface $entity): void {
- function rdf_sync_entity_delete(EntityInterface $entity): void {
-   $mapper = \Drupal::getContainer()->get('rdf_sync.mapper');
-   if ($entity instanceof ContentEntityInterface && $mapper->isMappedEntity($entity)) {
--    // Compute the URI so that is cached in the field item list to be available
--    // in destruction phase.
--    $fieldName = \Drupal::getContainer()->get('rdf_sync.mapper')->getRdfUriFieldName(entity: $entity);
+@@ -177,9 +177,10 @@ function rdf_sync_entity_delete(EntityInterface $entity): void {
+     // Compute the URI so that is cached in the field item list to be available
+     // in destruction phase.
+     $fieldName = \Drupal::getContainer()->get('rdf_sync.mapper')->getRdfUriFieldName(entity: $entity);
 -    $entity->get($fieldName)->value;
--
-     \Drupal::getContainer()->get('rdf_sync.synchronizer')->synchronize(SyncMethod::DELETE, [$entity]);
--    \Drupal::database()->delete('rdf_sync_uri')
--      ->condition('entity_type', $entity->getEntityTypeId())
--      ->condition('entity_id', $entity->id())
--      ->execute();
-   }
- }
++    if ($entity->get($fieldName)->value) {
++      \Drupal::getContainer()->get('rdf_sync.synchronizer')->synchronize(SyncMethod::DELETE, [$entity]);
++    }
+ 
+-    \Drupal::getContainer()->get('rdf_sync.synchronizer')->synchronize(SyncMethod::DELETE, [$entity]);
+     \Drupal::database()->delete('rdf_sync_uri')
+       ->condition('entity_type', $entity->getEntityTypeId())
+       ->condition('entity_id', $entity->id())
 diff --git a/src/RdfSyncSynchronizer.php b/src/RdfSyncSynchronizer.php
-index 0cb89bc0bc34f1e85f31711f31dc44c28f054e58..937aadb1e88d8aba8b1738fe6c1fe6b40bbf0ce8 100644
+index 0cb89bc0bc34f1e85f31711f31dc44c28f054e58..ef21555f0f047037fa868488531523633a6e87b7 100644
 --- a/src/RdfSyncSynchronizer.php
 +++ b/src/RdfSyncSynchronizer.php
-@@ -109,12 +109,23 @@ class RdfSyncSynchronizer implements DestructableInterface {
+@@ -109,12 +109,18 @@ class RdfSyncSynchronizer implements DestructableInterface {
            $entities,
          )
        );
 +      if ($uris) {
 +        $this->rdfSyncTriples->deleteTriples($uris);
-+        if ($method === SyncMethod::DELETE) {
-+          \Drupal::database()->delete('rdf_sync_uri')
-+            ->condition('uri', $uris, 'IN')
-+            ->execute();
-+        }
 +      }
      }
  
