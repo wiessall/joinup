@@ -15,12 +15,17 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * Defines 'eu_oss_translation_requester' queue worker.
  *
  * @QueueWorker(
- *   id = "eu_oss_translation_requester",
+ *   id = \Drupal\eu_oss_translation\Plugin\QueueWorker\TranslationRequester::ID,
  *   title = @Translation("Translation requester"),
  *   cron = {"time" = 60},
  * )
  */
 class TranslationRequester extends QueueWorkerBase implements ContainerFactoryPluginInterface {
+
+  /**
+   * Queue id.
+   */
+  public const string ID = 'eu_oss_translation_requester';
 
   public function __construct(
     array $configuration,
