@@ -19,15 +19,22 @@ function eu_oss_translation_tmgmt_translatable_fields_alter(ContentEntityInterfa
     return;
   }
 
-  $translated = $entity->getTranslation(JobBuilder::TARGET_LANGUAGE);
+  $source = $entity->getTranslation($entity->getRelevantLangCode());
+  $target = $entity->getTranslation(JobBuilder::TARGET_LANGUAGE);
 
   // Skip already translated data.
   foreach ($translatableFields as $translatableKey => $translatableField) {
-    if (!$translated->hasField($translatableKey)) {
+    if (!$target->hasField($translatableKey)) {
       continue;
     }
 
-    if (!$translated->get($translatableKey)->isEmpty()) {
+    // If the source language field is empty, there is nothing to translate.
+    if ($source->get($translatableKey)->isEmpty()) {
+      unset($translatableFields[$translatableKey]);
+    }
+
+    // The field in the target language is already set.
+    if (!$target->get($translatableKey)->isEmpty()) {
       unset($translatableFields[$translatableKey]);
     }
   }
