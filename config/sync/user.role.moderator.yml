@@ -111,7 +111,6 @@ permissions:
   - 'assign licence_manager role'
   - 'bypass entity legal acceptance'
   - 'create collection content'
-  - 'bypass entity legal acceptance'
   - 'create collection_logo media'
   - 'create contact_information content'
   - 'create content for any_user option'
