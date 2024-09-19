@@ -1,0 +1,18 @@
+Index: src/RdfSyncSynchronizer.php
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/RdfSyncSynchronizer.php b/src/RdfSyncSynchronizer.php
+--- a/src/RdfSyncSynchronizer.php	
++++ b/src/RdfSyncSynchronizer.php	(date 1726729193577)
+@@ -109,6 +109,9 @@
+           $entities,
+         )
+       );
++      if ($uris) {
++        $this->rdfSyncTriples->deleteTriples($uris);
++      }
+     }
+ 
+     if (in_array($method, [SyncMethod::INSERT, SyncMethod::UPDATE], TRUE)) {
