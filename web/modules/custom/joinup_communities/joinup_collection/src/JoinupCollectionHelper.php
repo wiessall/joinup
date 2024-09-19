@@ -10,8 +10,8 @@ namespace Drupal\joinup_collection;
 class JoinupCollectionHelper {
 
   /**
-   * The default entity ID of the Joinup collection.
+   * The URI of the Joinup collection.
    */
-  public const JOINUP_COLLECTION_URI = 'df34e3a2-207b-4910-a804-344931654e20';
+  public const string JOINUP_COLLECTION_URI = 'http://data.europa.eu/w21/df34e3a2-207b-4910-a804-344931654e20';
 
 }
