@@ -419,6 +419,11 @@ paragraph__video:
     theme:
       assets/css/paragraph--video.min.css: { minified: true }
 
+private-message:
+  css:
+    theme:
+      assets/css/private-message.min.css: { minified: true }
+
 releases:
   css:
     theme:
