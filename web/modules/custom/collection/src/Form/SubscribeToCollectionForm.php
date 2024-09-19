@@ -88,14 +88,14 @@ class SubscribeToCollectionForm extends FormBase {
   /**
    * Title callback of the form.
    *
-   * @param \Drupal\joinup_group\Entity\GroupInterface $group
+   * @param \Drupal\joinup_group\Entity\GroupInterface $node
    *   The collection to join or subscribe to.
    *
    * @return \Drupal\Core\StringTranslation\TranslatableMarkup|string
    *   The title.
    */
-  public static function title(GroupInterface $group): TranslatableMarkup|string {
-    return t('Welcome to @title', ['@title' => $group->label()]);
+  public static function title(GroupInterface $node): TranslatableMarkup|string {
+    return t('Welcome to @title', ['@title' => $node->label()]);
   }
 
   /**

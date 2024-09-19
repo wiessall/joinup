@@ -1,6 +1,6 @@
 # Collection routing definition
 entity.node.subscribe:
-  path: '/node/{node}/subscribe'
+  path: /node/{node}/subscribe
   defaults:
     _form: \Drupal\collection\Form\SubscribeToCollectionForm
     _title_callback: Drupal\collection\Form\SubscribeToCollectionForm::title
