@@ -7,6 +7,9 @@
 
 declare(strict_types=1);
 
+use Drupal\Component\Serialization\Json;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
@@ -36,4 +39,22 @@ function joinup_private_message_form_submit(array &$form, FormStateInterface $fo
   // The entity.private_message_thread.canonical route has been removed,
   // so we will redirect to the Private Messages page.
   $form_state->setRedirect('private_message.private_message_page');
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_view_alter().
+ *
+ * @see private_message_private_message_thread_view_alter()
+ */
+function joinup_private_message_private_message_thread_view_alter(array &$build, EntityInterface $node, EntityViewDisplayInterface $display): void {
+  if (isset($build['delete_link'])) {
+    // Open delete form in a modal.
+    $build['delete_link']['#attributes'] = [
+      'class' => ['use-ajax'],
+      'data-dialog-type' => 'modal',
+      'data-dialog-options' => Json::encode([
+        'width' => 'auto',
+      ]),
+    ];
+  }
 }
