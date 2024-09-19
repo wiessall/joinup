@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup_core\Entity;
 
 /**
- * Reusable code for classed implementing OutdatedContentInterface interface.
+ * Reusable code for classes implementing OutdatedContentInterface interface.
  *
  * @see \Drupal\joinup_core\Entity\OutdatedContentInterface
  */
