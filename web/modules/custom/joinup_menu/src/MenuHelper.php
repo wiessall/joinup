@@ -17,6 +17,7 @@ use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_collection\JoinupCollectionHelper;
 use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\og_menu\OgMenuInstanceInterface;
+use Drupal\rdf_sync\RdfSyncMapperInterface;
 use Exception;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -28,26 +29,13 @@ class MenuHelper implements MenuHelperInterface {
   use StringTranslationTrait;
   use RedirectDestinationTrait;
 
-  /**
-   * Constructs an instance of the MenuHelper service.
-   *
-   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger
-   *   The logger channel factory.
-   * @param \Drupal\Core\Menu\MenuLinkTreeInterface $menuLinkTree
-   *   The menu link tree service.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *   The entity type manager.
-   * @param \Symfony\Component\HttpFoundation\RequestStack $requestStack
-   *   The request stack.
-   * @param \Drupal\Core\Path\PathMatcherInterface $pathMatcher
-   *   The path matcher.
-   */
   public function __construct(
     protected LoggerChannelFactoryInterface $logger,
     protected MenuLinkTreeInterface $menuLinkTree,
     protected EntityTypeManagerInterface $entityTypeManager,
     protected RequestStack $requestStack,
     protected PathMatcherInterface $pathMatcher,
+    protected readonly RdfSyncMapperInterface $mapper,
   ) {}
 
   /**
@@ -114,8 +102,7 @@ class MenuHelper implements MenuHelperInterface {
     // Generate a link to the Joinup collection, to show as the "About us" link
     // in the hamburger menu for anonymous users.
     try {
-      $joinup_collection = \Drupal::getContainer()->get('rdf_sync.mapper')
-        ->getEntityByUri(JoinupCollectionHelper::JOINUP_COLLECTION_URI);
+      $joinup_collection = $this->mapper->getEntityByUri(JoinupCollectionHelper::JOINUP_COLLECTION_URI);
       if (!$joinup_collection instanceof CollectionInterface) {
         throw new Exception();
       }
