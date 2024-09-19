@@ -46,7 +46,7 @@ class JoinupCollectionContext extends RawDrupalContext {
     // Create the Joinup collection.
     Node::create([
       'type' => 'collection',
-      'uri' => JoinupCollectionHelper::JOINUP_COLLECTION_DEFAULT_ENTITY_ID,
+      'uri' => JoinupCollectionHelper::JOINUP_COLLECTION_URI,
       'title' => 'Joinup',
       'field_state' => 'published',
       'field_topic' => $this->getRandomTopic()->id(),
@@ -64,7 +64,7 @@ class JoinupCollectionContext extends RawDrupalContext {
    * @AfterScenario @joinup&&@api
    */
   public function cleanJoinupData(): void {
-    $collection = \Drupal::getContainer()->get('rdf_sync.mapper')->getEntityByUri(JoinupCollectionHelper::JOINUP_COLLECTION_DEFAULT_ENTITY_ID);
+    $collection = \Drupal::getContainer()->get('rdf_sync.mapper')->getEntityByUri(JoinupCollectionHelper::JOINUP_COLLECTION_URI);
     $collection->skip_notification = TRUE;
     $collection->delete();
   }

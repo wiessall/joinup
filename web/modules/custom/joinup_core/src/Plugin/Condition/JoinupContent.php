@@ -149,7 +149,7 @@ class JoinupContent extends ConditionPluginBase implements ContainerFactoryPlugi
    */
   public function evaluate(): bool {
     /** @var \Drupal\Core\Entity\ContentEntityInterface $entity */
-    $entity = $this->getContextValue('rdf') ?? $this->getContextValue('node');
+    $entity = $this->getContextValue('node');
     if (!$entity) {
       return FALSE;
     }

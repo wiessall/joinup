@@ -1589,43 +1589,13 @@ class FeatureContext extends RawDrupalContext {
    * client. This is OK when operating manually the site, but when this is
    * wrapped in the test "page request", these operations will occur only after
    * all the steps were executed. But some tasks just need to be executed before
-   * the next Behat step.
+   * the next Behat step. After a scenario terminates, the nodes created are
+   * deleted and RDF needs to be synchronized so that also triples are deleted.
    *
    * @AfterStep
    */
-  public function afterStepRdfSyncDestruct(): void {
-    try {
-      \Drupal::service('rdf_sync.synchronizer')->destruct();
-    }
-    catch (\Exception $e) {
-      // @todo Find out why the exception is needed. Run all solutions tests at
-      //   once and some scenarios are failing in their first step.
-      // @see ISAICP-9092.
-    }
-  }
-
-  /**
-   * Performs the RDF synchronization after each scenario.
-   *
-   * After a scenario terminates, the nodes created are deleted and RDF needs
-   * to be synchronized so that also RDF entities are deleted.
-   *
-   * @AfterScenario
-   */
   public function afterScenarioRdfSyncDestruct(): void {
-    try {
-      \Drupal::service('rdf_sync.synchronizer')->destruct();
-    }
-    catch (\Exception $e) {
-      // Sometimes, due to the cleanup of the entities, the synchronization
-      // has already run, and the `rdf_sync_uri` table has been cleaned up.
-      // This causes the entity to fail to return a URI and an error is thrown.
-      // @todo Find out why it is happening with nodes but was not happening
-      //   before with RDF entities. Solution notification feature throws a
-      //   post scenario exception without this try/catch block.
-      // @see solution.notifications.feature.
-      // @see ISAICP-9092.
-    }
+    \Drupal::service('rdf_sync.synchronizer')->destruct();
   }
 
   /**

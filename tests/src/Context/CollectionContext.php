@@ -531,7 +531,7 @@ class CollectionContext extends RawDrupalContext {
     Assert::assertInstanceOf(DrupalContext::class, $context);
     $context->nodeCreate((object) [
       'type' => 'collection',
-      'uri' => JoinupCollectionHelper::getCollectionId(),
+      'uri' => JoinupCollectionHelper::JOINUP_COLLECTION_URI,
       'title' => 'Joinup',
       'field_state' => 'published',
     ]);

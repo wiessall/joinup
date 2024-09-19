@@ -25,7 +25,7 @@ use Drupal\user\UserInterface;
 function joinup_collection_user_insert(UserInterface $account): void {
   $rdfSyncMapper = \Drupal::service('rdf_sync.mapper');
   assert($rdfSyncMapper instanceof RdfSyncMapper);
-  $joinupCollection = $rdfSyncMapper->getEntityByUri(JoinupCollectionHelper::getCollectionId());
+  $joinupCollection = $rdfSyncMapper->getEntityByUri(JoinupCollectionHelper::JOINUP_COLLECTION_URI);
   if (!$joinupCollection instanceof CollectionInterface) {
     return;
   }
@@ -59,7 +59,7 @@ function joinup_collection_form_views_form_og_members_overview_default_alter(&$f
   if (isset($view->args[0]) && $view->args[0] === 'node') {
     $rdfSyncMapper = \Drupal::service('rdf_sync.mapper');
     assert($rdfSyncMapper instanceof RdfSyncMapper);
-    $joinupCollection = $rdfSyncMapper->getEntityByUri(JoinupCollectionHelper::getCollectionId());
+    $joinupCollection = $rdfSyncMapper->getEntityByUri(JoinupCollectionHelper::JOINUP_COLLECTION_URI);
     // The second view argument is the group entity ID.
     if (
       $joinupCollection &&
@@ -85,7 +85,7 @@ function joinup_collection_node_insert(EntityInterface $entity): void {
   $rdfSyncMapper = \Drupal::service('rdf_sync.mapper');
   assert($rdfSyncMapper instanceof RdfSyncMapper);
   $uriField = $rdfSyncMapper->getRdfUriFieldName('node', 'collection');
-  if (!$entity->get($uriField)->isEmpty() && ($entity->get($uriField)->first()->getString() === JoinupCollectionHelper::getCollectionId())) {
+  if (!$entity->get($uriField)->isEmpty() && ($entity->get($uriField)->first()->getString() === JoinupCollectionHelper::JOINUP_COLLECTION_URI)) {
     Cache::invalidateTags(['joinup_collection:exists']);
   }
 }

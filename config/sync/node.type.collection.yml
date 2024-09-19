@@ -31,7 +31,7 @@ label_count:
   no_count_capitalize: !!binary Q29sbGVjdGlvbgNDb2xsZWN0aW9ucw==
 name: Collection
 type: collection
-description: 'The collection is the main content type for catalogues, communities etc. A group of groups and community content.'
+description: 'Collections are the main collaborative space where the content items are organised around a common topic or domain and where the users can share their content and engage their community.'
 help: null
 new_revision: true
 preview_mode: 0

@@ -110,7 +110,6 @@ permissions:
   - 'administer webform submission'
   - 'assign licence_manager role'
   - 'bypass entity legal acceptance'
-  - 'bypass entity legal acceptance'
   - 'create collection content'
   - 'create collection_logo media'
   - 'create contact_information content'
