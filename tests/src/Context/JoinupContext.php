@@ -93,7 +93,7 @@ class JoinupContext extends RawDrupalContext {
         'content creation' => 'content_creation',
         'creation date' => 'created',
         'description' => 'description',
-        'featured' => 'site_featured',
+        'featured' => 'featured',
         'keywords' => 'field_keywords',
         'logo' => 'logo',
         'moderation' => 'group_moderation',

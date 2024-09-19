@@ -11,6 +11,16 @@ use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\joinup_like\Plugin\ActionLink\CountLink;
+
+/**
+ * Implements hook_flag_link_type_info_alter().
+ */
+function joinup_flag_flag_link_type_info_alter(array &$link_types): void {
+  if (isset($link_types['count_link'])) {
+    $link_types['count_link']['class'] = CountLink::class;
+  }
+}
 
 /**
  * Implements hook_preprocess_views_view_fields().

@@ -45,7 +45,7 @@ Feature: Collections/Solutions settings
     And I click "Add solution" in the plus button menu
     And I check "I have read and accept the legal notice and I commit to manage my solution on a regular basis."
     And I press "Yes"
-    Then I should see the heading "Add Solution"
+    Then I should see the heading "Add solution"
 
     When I fill in the following:
       | Title          | Solution Beta    |
