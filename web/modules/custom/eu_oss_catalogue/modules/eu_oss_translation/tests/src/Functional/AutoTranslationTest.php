@@ -54,11 +54,8 @@ class AutoTranslationTest extends FetchTestBase {
    * {@inheritdoc}
    */
   protected static $modules = [
-    'dblog',
-    'editor',
     'eu_oss_catalogue_test',
     'language',
-    'markdown_easy',
     'tmgmt',
     'tmgmt_content',
     'tmgmt_ec_etranslation',
