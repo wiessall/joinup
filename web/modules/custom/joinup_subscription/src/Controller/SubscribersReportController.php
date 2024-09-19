@@ -147,7 +147,7 @@ class SubscribersReportController extends ControllerBase {
    */
   public function groupReport(GroupInterface $group): array {
     $data = $this->getSubscriberData($group);
-    $group_data = $data[$group->id()] ?? NULL;
+    $group_data = $data[$group->getUri()] ?? NULL;
 
     if (!empty($group_data)) {
       $rows = [
