@@ -111,11 +111,11 @@ class MenuHelper implements MenuHelperInterface {
       'popover' => $popover,
     ];
 
-    // Generate a link to the Joinup collection, to show as
-    // the "About us" link in the hamburger menu for anonymous users.
-    $rdf_storage = $this->entityTypeManager->getStorage('node');
+    // Generate a link to the Joinup collection, to show as the "About us" link
+    // in the hamburger menu for anonymous users.
     try {
-      $joinup_collection = $rdf_storage->load(JoinupCollectionHelper::getCollectionId());
+      $joinup_collection = \Drupal::getContainer()->get('rdf_sync.mapper')
+        ->getEntityByUri(JoinupCollectionHelper::JOINUP_COLLECTION_URI);
       if (!$joinup_collection instanceof CollectionInterface) {
         throw new Exception();
       }

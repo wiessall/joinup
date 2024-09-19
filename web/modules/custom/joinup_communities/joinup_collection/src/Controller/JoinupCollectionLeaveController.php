@@ -33,7 +33,7 @@ class JoinupCollectionLeaveController {
     $uriField = $rdfSyncMapper->getRdfUriFieldName('node', $node->bundle());
     if (
       $node instanceof CollectionInterface &&
-      $node->get($uriField)->first()->getString() === JoinupCollectionHelper::getCollectionId()
+      $node->getUri() === JoinupCollectionHelper::JOINUP_COLLECTION_URI
     ) {
       return AccessResult::forbidden();
     }
