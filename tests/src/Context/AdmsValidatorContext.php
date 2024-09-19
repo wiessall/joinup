@@ -18,12 +18,16 @@ class AdmsValidatorContext extends RawDrupalContext {
    * @Then the ADMS-AP data of the published entities in Joinup is valid
    */
   public function assertValidPublishedGraph(): void {
-    /** @var \Drupal\rdf_sync\RdfSyncConnectionInterface $sparql_endpoint */
-    $sparql_endpoint = \Drupal::service('rdf_sync.connection');
+    $config = \Drupal::config('rdf_sync.settings');
+    $graphUri = $config->get('graph_uri');
+    /** @var \Drupal\rdf_sync\RdfSyncConnectionInterface $sparqlEndpoint */
+    $sparqlEndpoint = \Drupal::service('rdf_sync.connection');
+    // Copy the data to a new graph to avoid deleting the original data.
+    $sparqlEndpoint->query("ADD <$graphUri> TO GRAPH <http://adms-validation>");
     /** @var \Drupal\adms_validator\AdmsValidatorInterface $validator */
     $validator = \Drupal::service('adms_validator.validator');
-    $result = $validator->validateByGraphUri('http://data');
-    $sparql_endpoint->query('CLEAR GRAPH <http://data>');
+    $result = $validator->validateByGraphUri('http://adms-validation');
+    $sparqlEndpoint->query('CLEAR GRAPH <http://adms-validation>');
     Assert::assertTrue($result->isSuccessful(), 'The published graph is not ADMS-AP compliant.');
   }
 
