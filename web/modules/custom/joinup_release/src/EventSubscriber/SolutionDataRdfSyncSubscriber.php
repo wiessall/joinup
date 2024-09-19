@@ -77,30 +77,22 @@ final class SolutionDataRdfSyncSubscriber implements EventSubscriberInterface {
         continue;
       }
 
-      // @todo Change the predicate calculation from the field storage to the
-      //   field third party settings once solutions are nodes in ISAICP-8572.
-      $storageDefinition = $solution->getFieldDefinition($field)->getFieldStorageDefinition();
-      $mainPropertyName = $storageDefinition->getMainPropertyName();
-
-      $predicates = $this->fieldHandler->getFieldPredicates($solution->getEntityTypeId(), $field, $mainPropertyName, 'solution');
-
+      $fieldDefinition = $solution->getFieldDefinition($field);
       $fieldItemList->filterEmptyItems();
       foreach ($fieldItemList as $item) {
-        if ($mainPropertyName === 'value') {
-          $normalizedArray[$entity->getUri()][$predicates['solution']][] = (new Literal($item->$mainPropertyName))->toRdfPhp();
-        }
-        else {
-          if (
-            ($fieldItemList instanceof EntityReferenceFieldItemList)
-            && ($targetEntity = $item->entity)
-            && $targetEntity instanceof RdfSyncEntityInterface
-          ) {
-            $targetId = $targetEntity->getUri();
+        foreach ($fieldDefinition->getThirdPartySettings('rdf_sync') as $property => $mapping) {
+          if (empty($mapping['predicate']) || empty($item->$property)) {
+            continue;
+          }
+
+          if ($fieldItemList instanceof EntityReferenceFieldItemList) {
+            $targetEntity = $item->entity;
+            $targetId = ($targetEntity instanceof RdfSyncEntityInterface) ? $targetEntity->getUri() : $item->$property;
+            $normalizedArray[$entity->getUri()][$mapping['predicate']][] = (new Resource($targetId))->toRdfPhp();
           }
           else {
-            $targetId = $item->$mainPropertyName;
+            $normalizedArray[$entity->getUri()][$mapping['predicate']][] = (new Literal($item->$property))->toRdfPhp();
           }
-          $normalizedArray[$entity->getUri()][$predicates['solution']][] = (new Resource($targetId))->toRdfPhp();
         }
       }
     }
@@ -122,19 +114,18 @@ final class SolutionDataRdfSyncSubscriber implements EventSubscriberInterface {
       return;
     }
 
+    $data = $event->getNormalizedArray();
     $solution = $entity->getSolution();
-    $solutionUri = $solution->id();
+    $solutionUri = $solution->getUri();
     $releaseUri = $entity->getUri();
 
-    foreach (['default', 'draft'] as $graph) {
-      if ($solution->hasGraph($graph)) {
-        $graph = $graph === 'default' ? 'http://joinup.eu/solution/published' : 'http://joinup.eu/solution/draft';
-        $deleteQuery = "WITH <$graph> DELETE { <$solutionUri> <http://purl.org/dc/terms/hasVersion> <$releaseUri> } WHERE { <$solutionUri> <http://purl.org/dc/terms/hasVersion> <$releaseUri> }";
-        $this->sparqlConnection->update($deleteQuery);
-        $insertQuery = "WITH <$graph> INSERT { <$solutionUri> <http://purl.org/dc/terms/hasVersion> <$releaseUri> }";
-        $this->sparqlConnection->update($insertQuery);
-      }
-    }
+    // @todo Should we be getting the graph from the settings?
+    $deleteQuery = "WITH <http://data> DELETE { <$solutionUri> <http://purl.org/dc/terms/hasVersion> <$releaseUri> } WHERE { <$solutionUri> <http://purl.org/dc/terms/hasVersion> <$releaseUri> }";
+    $this->sparqlConnection->update($deleteQuery);
+    // @todo Check if passing the solution as a single property, deletes all
+    //   other properties.
+    $data[$solutionUri]['http://purl.org/dc/terms/hasVersion'][] = (new Resource($releaseUri))->toRdfPhp();
+    $event->setNormalizedArray($data);
   }
 
 }
