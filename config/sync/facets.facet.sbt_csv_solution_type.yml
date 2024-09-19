@@ -1,4 +1,4 @@
-uuid: 9fa0e3ab-48f9-4aee-b953-e16358da9ab8
+uuid: 52358a51-f2fd-4b71-b0fe-f1f1d20550b9
 langcode: en
 status: true
 dependencies:
@@ -6,7 +6,7 @@ dependencies:
     - search_api.index.published
   module:
     - views_data_export
-id: csv_solution_type
+id: sbt_csv_solution_type
 name: 'Solution type'
 weight: 0
 min_count: 1
@@ -14,7 +14,7 @@ missing: false
 missing_label: others
 url_alias: solution_type
 facet_source_id: 'search_api:views_data_export__moderator_solutions_by_type__csv_export'
-field_identifier: field_is_solution_type
+field_identifier: solution_type
 query_operator: or
 hard_limit: 0
 exclude: false
@@ -34,25 +34,25 @@ widget:
 empty_behavior:
   behavior: none
 only_visible_when_facet_source_is_visible: true
-show_only_one_result: false
+show_only_one_result: true
 show_title: false
 processor_configs:
   active_widget_order:
     processor_id: active_widget_order
     weights:
-      sort: -10
+      sort: 20
     settings:
       sort: DESC
   count_widget_order:
     processor_id: count_widget_order
     weights:
-      sort: -10
+      sort: 30
     settings:
       sort: DESC
   display_value_widget_order:
     processor_id: display_value_widget_order
     weights:
-      sort: -10
+      sort: 40
     settings:
       sort: ASC
   hierarchy_processor:
@@ -60,14 +60,9 @@ processor_configs:
     weights:
       build: 100
     settings: {  }
-  translate_entity:
-    processor_id: translate_entity
-    weights:
-      build: 5
-    settings: {  }
   url_processor_handler:
     processor_id: url_processor_handler
     weights:
-      pre_query: -10
-      build: -10
+      pre_query: 50
+      build: 15
     settings: {  }
