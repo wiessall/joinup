@@ -101,7 +101,7 @@ class JobBuilder implements JobBuilderInterface {
 
       $canRequest = $job->canRequestTranslation();
       if (!$canRequest->getSuccess()) {
-        throw new \Exception($canRequest->getReason());
+        throw new \Exception((string) $canRequest->getReason());
       }
 
       $job->requestTranslation();
