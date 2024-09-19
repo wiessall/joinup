@@ -46,7 +46,6 @@ dependencies:
     - joinup_layout
     - layout_builder
     - layout_discovery
-    - user
 third_party_settings:
   layout_builder:
     enabled: true
@@ -491,7 +490,7 @@ third_party_settings:
             uuid: 7e17db81-4af4-4c6b-b6df-2b052f018e25
             region: first
             configuration:
-              id: 'field_block:node:oss_solution:oss__long_description'
+              id: 'field_block:node:oss_solution:oss_long_description'
               label: Description
               label_display: visible
               provider: layout_builder
@@ -519,7 +518,7 @@ third_party_settings:
             uuid: eb1487bc-7a20-40e5-9c0f-d4b997f0e11b
             region: second
             configuration:
-              id: 'field_block:node:oss_solution:oss__features'
+              id: 'field_block:node:oss_solution:oss_features'
               label: Features
               label_display: visible
               provider: layout_builder
@@ -868,10 +867,7 @@ hidden:
   links: true
   oss__description: true
   oss__documentation: true
-  oss__features: true
-  oss__long_description: true
   oss__screenshots: true
-  oss__short_description: true
   oss_archived: true
   oss_available_languages: true
   oss_categories: true
