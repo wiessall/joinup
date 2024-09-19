@@ -24,9 +24,11 @@ use Drupal\joinup_core\ETransBlockConfiguration;
 use Drupal\joinup_core\Element\Datetime;
 use Drupal\joinup_core\Entity\OutdatedContentInterface;
 use Drupal\joinup_core\Plugin\Field\FieldType\OutdatedContentFieldItemList;
+use Drupal\joinup_core\Plugin\Field\FieldType\PermalinkFieldItemList;
 use Drupal\joinup_core\Plugin\Field\FieldWidget\ImageLibraryWidget;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_workflow\ArchivableEntityInterface;
+use Drupal\link\LinkItemInterface;
 use Drupal\node\NodeInterface;
 use Drupal\symfony_mailer_lite\Plugin\Mail\SymfonyMailer;
 
@@ -205,30 +207,6 @@ function joinup_core_preprocess_responsive_image_formatter(&$variables): void {
   if ($variables['responsive_image']['#attributes']['alt'] === NULL) {
     $variables['responsive_image']['#attributes']['alt'] = '';
   }
-}
-
-/**
- * Implements hook_config_readonly_whitelist_patterns().
- */
-function joinup_core_config_readonly_whitelist_patterns(): array {
-  return [
-    // The 'support' and footer menus are editable by moderators. This includes
-    // the menu links static overrides config.
-    'system.menu.footer-about-us',
-    'system.menu.footer-european-commission',
-    'system.menu.footer-follow-us',
-    'system.menu.footer-help-and-support',
-    'system.menu.support',
-    'system.menu.navbar',
-    // The outdated content threshold is editable by moderators.
-    'joinup_core.outdated_content_threshold',
-    'core.menu.static_menu_link_overrides',
-    // Moderators can create webforms.
-    'webform.webform.*',
-    // Prevent simple sitemap to interfere with webform deletion.
-    /* @see \Drupal\simple_sitemap\Entity\SimpleSitemapStorage::doDelete */
-    'simple_sitemap.bundle_settings.*.webform_submission.*',
-  ];
 }
 
 /**
@@ -412,6 +390,28 @@ function joinup_core_entity_bundle_field_info(EntityTypeInterface $entity_type, 
       ->setCardinality(1)
       ->setDefaultValue(NULL);
   }
+
+  $permalink_bundles = [
+    'node' => ['custom_page', 'discussion', 'distribution', 'document', 'event', 'licence', 'news', 'release'],
+    'comment' => ['comment', 'reply'],
+  ];
+  if (in_array($bundle, $permalink_bundles[$entity_type->id()] ?? [])) {
+    $fields['permalink'] = BaseFieldDefinition::create('link')
+      ->setLabel(t('Permalink'))
+      ->setDescription(t('The permalink for the entity.'))
+      ->setComputed(TRUE)
+      ->setRequired(FALSE)
+      ->setClass(PermalinkFieldItemList::class)
+      ->setCardinality(1)
+      ->setDefaultValue(NULL)
+      ->setSettings([
+        'link_type' => LinkItemInterface::LINK_EXTERNAL,
+        'title' => DRUPAL_DISABLED,
+      ])
+      ->setDisplayConfigurable('form', FALSE)
+      ->setDisplayConfigurable('display', FALSE);
+  }
+
   return $fields;
 }
 
