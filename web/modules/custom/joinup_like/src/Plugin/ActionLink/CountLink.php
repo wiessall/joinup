@@ -11,16 +11,10 @@ use Drupal\flag_count\Plugin\ActionLink\CountLink as OriginalCountLink;
 use Drupal\joinup_workflow\ArchivableEntityInterface;
 
 /**
- * Provides the Count link type for node entities.
+ * Provides and alternative Count link type.
  *
- * This class is an extension of the Ajax link type, but modified to
- * provide flag count.
- *
- * @ActionLinkType(
- *   id = "count_link",
- *   label = @Translation("Joinup Count link node entity"),
- *   description = "An AJAX action link which displays the count with the flag."
- * )
+ * This class is an extension of the Ajax link type, but modified to allow
+ * entity archival.
  */
 class CountLink extends OriginalCountLink {
 
