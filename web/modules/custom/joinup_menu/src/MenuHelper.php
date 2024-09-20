@@ -35,7 +35,7 @@ class MenuHelper implements MenuHelperInterface {
     protected EntityTypeManagerInterface $entityTypeManager,
     protected RequestStack $requestStack,
     protected PathMatcherInterface $pathMatcher,
-    protected readonly RdfSyncMapperInterface $mapper,
+    protected RdfSyncMapperInterface $mapper,
   ) {}
 
   /**
