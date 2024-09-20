@@ -10,6 +10,8 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
+use Drupal\tmgmt\SourceManager;
+use Drupal\tmgmt_content\Plugin\tmgmt\Source\ContentEntitySource;
 
 /**
  * Job builder service.
@@ -28,13 +30,22 @@ class JobBuilder implements JobBuilderInterface {
    */
   protected ImmutableConfig $config;
 
+  /**
+   * Content source.
+   *
+   * @var \Drupal\tmgmt_content\Plugin\tmgmt\Source\ContentEntitySource
+   */
+  protected ContentEntitySource $contentSource;
+
   public function __construct(
     protected AccountInterface $currentUser,
     protected EntityTypeManagerInterface $entityTypeManager,
     protected LoggerChannelInterface $logger,
+    protected SourceManager $sourcePluginManager,
     ConfigFactoryInterface $configFactory,
   ) {
     $this->config = $configFactory->get('eu_oss_translation.settings');
+    $this->contentSource = $this->sourcePluginManager->createInstance('content');
   }
 
   /**
@@ -75,7 +86,12 @@ class JobBuilder implements JobBuilderInterface {
    *   True if a node needs translation.
    */
   protected function needsTranslation(OssSolutionInterface $entity): bool {
-    return $entity->getRelevantLangCode() !== self::TARGET_LANGUAGE;
+    if ($entity->getRelevantLangCode() === self::TARGET_LANGUAGE) {
+      return FALSE;
+    }
+
+    $fields = $this->contentSource->extractTranslatableData($entity);
+    return !empty($fields);
   }
 
   /**
