@@ -161,6 +161,8 @@ class StateMachineButtons extends OptionsSelectWidget implements ContainerFactor
    * @see \Drupal\content_moderation\Plugin\Field\FieldWidget\ModerationStateWidget::processActions()
    */
   public static function processActions($element, FormStateInterface $form_state, array &$form): array {
+    // No preview button.
+    unset($form['actions']['preview']);
     // We'll steal most of the button configuration from the default submit
     // button. However, NodeForm also hides that button for admins (as it adds
     // its own, too), so we have to restore it.
