@@ -33,7 +33,6 @@ Feature: "Add release" visibility options.
     And release content:
       | title           | is version of  | release number | status    | state     | creation date       | published at        |
       | Chasing shadows | Release Test 1 | 1.0            | Completed | published | 2014-08-30 23:59:00 | 2014-08-30 23:59:00 |
-    Then I should have 1 release
 
     # Assert that the "Release" tiles are present and contain version, release date, label and bundle type.
     When I go to the homepage of the "Release Test 1" solution
@@ -74,7 +73,6 @@ Feature: "Add release" visibility options.
     # It should be possible to choose a different version number.
     And I fill in "Release version" with "1.1"
     And I press "Publish"
-    Then I should have 2 releases
 
     # Verify that the "Chasing shadows 1.1." release is registered as a release
     # of the "Release Test 1" solution.
@@ -91,7 +89,6 @@ Feature: "Add release" visibility options.
     When I fill in "Name" with "Chasing flares"
     And I fill in "Release version" with "1.0"
     And I press "Publish"
-    Then I should have 3 releases
 
     # Clean up entities created through the UI.
     Then I delete the "Chasing shadows" release

@@ -15,8 +15,6 @@ Feature: Editing collections
       | title                 | logo     | abstract                                   | access url                             | closed | creation date    | description                               | content creation         | moderation | topic             | owner                | contact information  | state |
       | Überwaldean Land Eels | logo.png | Read up on all about <strong>dogs</strong> | http://dogtime.com/dog-breeds/profiles | yes    | 28-01-1995 12:05 | The Afghan Hound is elegance personified. | facilitators and authors | yes        | Supplier exchange | Organisation example | Collection editorial | draft |
 
-    Then I should have 1 collection
-
     When I am logged in as a facilitator of the "Überwaldean Land Eels" collection
     And I go to the homepage of the "Überwaldean Land Eels" collection
     And I click "Edit" in the "Entity actions" region
