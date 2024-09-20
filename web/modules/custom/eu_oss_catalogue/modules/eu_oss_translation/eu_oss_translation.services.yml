@@ -5,6 +5,7 @@ services:
       - '@current_user'
       - '@entity_type.manager'
       - '@logger.channel.eu_oss_catalogue'
+      - '@plugin.manager.tmgmt.source'
       - '@config.factory'
 
   eu_oss_translation.solution_post_save_subscriber:
