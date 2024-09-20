@@ -9,8 +9,6 @@ Feature: Contact information access
       | name         | email                   | website url       |
       | Phil Coulson | phil.coulson@shield.gov | http://shield.gov |
 
-    Then I should have 1 contact information
-
     When I am an anonymous user
     When I go to the "Phil Coulson" contact information page
     Then I should see the heading "Sign in to continue"

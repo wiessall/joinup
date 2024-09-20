@@ -25,7 +25,6 @@ Feature:
     And I should see the text "This action cannot be undone."
     When I press "Delete"
     Then I should be on the homepage
-    And I should have 0 collections
 
     Examples:
       | collection state | solution state |

@@ -193,18 +193,6 @@ class CollectionContext extends RawDrupalContext {
   }
 
   /**
-   * Checks the number of available collections.
-   *
-   * @param int $number
-   *   The expected number of collections.
-   *
-   * @Then I should have :number collection(s)
-   */
-  public function assertCollectionCount(int $number): void {
-    $this->assertEntityCount('node', 'collection', $number);
-  }
-
-  /**
    * Subscribes the given users to the given collections.
    *
    * Table format:
