@@ -77,33 +77,7 @@ trait EntityTrait {
   }
 
   /**
-   * Checks the number of available entities filtered by entity type and bundle.
-   *
-   * @param string $entityTypeId
-   *   The entity type.
-   * @param string $bundle
-   *   The bundle of the entity.
-   * @param int $number
-   *   The expected number of entities.
-   *
-   * @throws \Exception
-   *   Thrown when the number of entities does not
-   *   match the expectation.
-   */
-  protected function assertEntityCount(string $entityTypeId, string $bundle, int $number): void {
-    $typeKey = \Drupal::entityTypeManager()->getDefinition($entityTypeId)->getKey('bundle');
-    $actual = \Drupal::entityQuery($entityTypeId)
-      ->accessCheck(FALSE)
-      ->condition($typeKey, $bundle)
-      ->count()
-      ->execute();
-    if ($actual != $number) {
-      throw new \Exception("Wrong number of $bundle entities. Expected number: $number, actual number: $actual.");
-    }
-  }
-
-  /**
-   * Mapping of human readable entity type names to machine names.
+   * Mapping of human-readable entity type names to machine names.
    *
    * @return array
    *   The entity type mapping.

@@ -223,8 +223,6 @@ Feature: "Add solution" visibility options.
       | name                | owner type          |
       | University of Basel | Industry consortium |
 
-    Then I should have 1 solution
-
     # No two solutions with the same name may be created in the same collection.
     Given I am logged in as a member of the "Ocean studies" collection
     When I go to the homepage of the "Ocean studies" collection

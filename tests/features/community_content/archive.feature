@@ -3,11 +3,10 @@ Feature: Content archival.
 
   Scenario: All community content can be archived any time.
     Given collection content:
-      | title           | state     |
-      | Some collection | published |
-      # Set the moderation to yes to be able to access all states.
-      # Deletion request is not available in a post moderation workflow.
-      | moderation      | yes       |
+      # Set the moderation to yes to be able to access all states. Deletion
+      # request is not available in a post moderation workflow.
+      | title           | state     | moderation |
+      | Some collection | published | yes        |
     Given discussion content:
       | title           | state     | collection      | body | content | headline        | changed          |
       | Test discussion | published | Some collection | Test | Test    | Test discussion | 2017-11-17 20:00 |
@@ -33,11 +32,10 @@ Feature: Content archival.
 
   Scenario Outline: All community content using layout paragraphs can be archived any time.
     Given collection content:
-      | title           | state     |
-      | Some collection | published |
-      # Set the moderation to yes to be able to access all states.
-      # Deletion request is not available in a post moderation workflow.
-      | moderation      | yes       |
+      # Set the moderation to yes to be able to access all states. Deletion
+      # request is not available in a post moderation workflow.
+      | title           | state     | moderation |
+      | Some collection | published | yes        |
     And <type> content:
       | title       | state     | collection      | abstract | content | headline    | changed          | field_paragraphs_body |
       | Test <type> | published | Some collection | Test     | Test    | Test <type> | 2019-11-12 20:00 | Some text             |
@@ -89,11 +87,10 @@ Feature: Content archival.
 
   Scenario Outline: Group facilitators can not unarchived community content
     Given <group type> content:
-      | title      | Some group |
-      | state      | published  |
-      # Set the moderation to yes to be able to access all states.
-      # Deletion request is not available in a post moderation workflow.
-      | moderation | yes        |
+      # Set the moderation to yes to be able to access all states. Deletion
+      # request is not available in a post moderation workflow.
+      | title      | state     | moderation |
+      | Some group | published | yes        |
     Given discussion content:
       | title           | state     | <group type> | body | content | headline        |
       | Test discussion | published | Some group   | Test | Test    | Test discussion |
@@ -114,11 +111,10 @@ Feature: Content archival.
 
   Scenario Outline: Group facilitators can not unarchived community content which is usgin layout paragraphs
     Given <group type> content:
-      | title      | Some group |
-      | state      | published  |
-      # Set the moderation to yes to be able to access all states.
-      # Deletion request is not available in a post moderation workflow.
-      | moderation | yes        |
+      # Set the moderation to yes to be able to access all states. Deletion
+      # request is not available in a post moderation workflow.
+      | title      | state     | moderation |
+      | Some group | published | yes        |
     Given <type> content:
       | title       | state     | <group type> | abstract | content | headline    | field_paragraphs_body |
       | Test <type> | published | Some group   | Test     | Test    | Test <type> | Test paragraph        |

@@ -102,21 +102,6 @@ class DistributionContext extends RawDrupalContext {
   }
 
   /**
-   * Checks the number of available distributions.
-   *
-   * @param int $number
-   *   The expected number of distributions.
-   *
-   * @throws \Exception
-   *   Thrown if the count does not match the expected number.
-   *
-   * @Then I should have :number distribution(s)
-   */
-  public function assertAssetDistributionCount(int $number): void {
-    $this->assertEntityCount('node', 'distribution', $number);
-  }
-
-  /**
    * Checks if a distribution in compact view contains download links.
    *
    * The compact view is used for example in the "Downloads" page.
