@@ -67,7 +67,7 @@ function joinup_test_install($is_syncing): void {
       $termIds[] = $parentTermId;
       foreach ($data['children'] ?? [] as $childWeight => $child) {
         $term = $createTerm($vid, $childWeight, $child, $definitions, $parentTermId);
-        $termIds[] = $term->id();
+        $termIds[] = (int) $term->id();
       }
       $rdfSync->destruct();
     }
@@ -88,4 +88,5 @@ function joinup_test_uninstall($is_syncing): void {
     $storage->delete($storage->loadMultiple($tids));
   }
   $state->delete('joinup_test.testing_terms');
+  \Drupal::getContainer()->get('rdf_sync.synchronizer')->destruct();
 }
