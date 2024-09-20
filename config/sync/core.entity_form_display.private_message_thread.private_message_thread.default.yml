@@ -18,7 +18,7 @@ content:
     settings:
       match_operator: CONTAINS
       match_limit: 10
-      max_members: 0
+      max_members: 1
       size: 60
       placeholder: ''
     third_party_settings: {  }
