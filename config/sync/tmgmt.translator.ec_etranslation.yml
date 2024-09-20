@@ -7,7 +7,7 @@ dependencies:
 name: ec_etranslation
 label: 'European Commission eTranslation'
 description: "Allows the European Commission's eTranslation service to process translation jobs."
-auto_accept: null
+auto_accept: true
 weight: null
 plugin: ec_etranslation
 settings:
