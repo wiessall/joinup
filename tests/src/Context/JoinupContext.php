@@ -2558,16 +2558,14 @@ class JoinupContext extends RawDrupalContext {
    * @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-4849
    * @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-4352
    */
-  public function assertTileNotMarkedAsFeatured($heading, $type): void {
-    if (in_array($type, ['collection', 'solution'])) {
-      $entity_type_id = 'rdf_entity';
-    }
-    elseif (in_array($type, CommunityContentHelper::BUNDLES)) {
-      $entity_type_id = 'node';
-    }
-    else {
-      throw new \Exception("Invalid bundle '$type'.");
-    }
+  public function assertTileNotMarkedAsFeatured(string $heading, string $type): void {
+    assert(in_array($type,
+      array_merge(CommunityContentHelper::BUNDLES, [
+        'solution',
+        'collection',
+      ])
+    ), 'Invalid bundle type.');
+    $entity_type_id = self::translateEntityTypeAlias($type);
     $entity = $this->getEntityByLabel($entity_type_id, $heading);
 
     if ($entity instanceof PinnableGroupContentInterface && $entity->isPinned()) {
