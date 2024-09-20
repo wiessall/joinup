@@ -4,19 +4,19 @@ declare(strict_types=1);
 
 namespace Drupal\eu_oss_catalogue\Plugin\QueueWorker;
 
+use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Queue\QueueWorkerBase;
 use Drupal\eu_oss_catalogue\EuOssCatalogueInterface;
-use Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Consumes the 'eu_oss_catalogue' queue.
+ * Consumes the 'eu_oss_catalogue_fetcher' queue.
  *
  * @QueueWorker(
  *   id = "eu_oss_catalogue_fetcher",
  *   title = @Translation("EU OSS Catalogue fetcher"),
- *   cron = {"time" = 10},
+ *   cron = {"time" = 60}
  * )
  */
 class EuOssCatalogueFetcher extends QueueWorkerBase implements ContainerFactoryPluginInterface {
@@ -25,7 +25,8 @@ class EuOssCatalogueFetcher extends QueueWorkerBase implements ContainerFactoryP
     array $configuration,
     $pluginId,
     $pluginDefinition,
-    protected EuOssCataloguePluginManagerInterface $providerPluginManager,
+    protected EuOssCatalogueInterface $euOssCatalogue,
+    protected LoggerChannelInterface $logger,
   ) {
     parent::__construct($configuration, $pluginId, $pluginDefinition);
   }
@@ -38,13 +39,24 @@ class EuOssCatalogueFetcher extends QueueWorkerBase implements ContainerFactoryP
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('plugin.manager.eu_oss_catalogue.provider'),
+      $container->get('eu_oss_catalogue'),
+      $container->get('logger.channel.eu_oss_catalogue')
     );
   }
 
   /**
    * {@inheritdoc}
    */
-  public function processItem($data): void {}
+  public function processItem($data): void {
+    try {
+      $provider = $data['provider'];
+
+      $this->euOssCatalogue->fetch($provider);
+      $this->logger->info('OSS fetch data ' . $provider . ' completed successfully.');
+    }
+    catch (\Exception $e) {
+      $this->logger->error('An error occurred while processing the data retrieval of ' . $provider . ': @error', ['@error' => $e->getMessage()]);
+    }
+  }
 
 }
