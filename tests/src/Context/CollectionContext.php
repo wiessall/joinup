@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Drupal\joinup\Context;
 
-use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Exception\ElementNotFoundException;
 use Drupal\Core\Session\AccountInterface;
@@ -13,24 +12,18 @@ use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\DrupalExtension\Hook\Scope\AfterNodeCreateScope;
 use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
 use Drupal\collection\Entity\CollectionInterface;
-use Drupal\joinup\Traits\EntityReferenceTrait;
 use Drupal\joinup\Traits\EntityTrait;
-use Drupal\joinup\Traits\FileTrait;
 use Drupal\joinup\Traits\FormTrait;
 use Drupal\joinup\Traits\OgTrait;
-use Drupal\joinup\Traits\RdfEntityTrait;
-use Drupal\joinup\Traits\SearchTrait;
 use Drupal\joinup\Traits\TopicTrait;
 use Drupal\joinup\Traits\UserTrait;
 use Drupal\joinup\Traits\UtilityTrait;
-use Drupal\joinup\Traits\WorkflowTrait;
 use Drupal\joinup_collection\JoinupCollectionHelper;
 use Drupal\joinup_community_content\CommunityContentHelper;
 use Drupal\joinup_group\ContentCreationOptions;
+use Drupal\node\Entity\Node;
 use Drupal\og\OgRoleInterface;
-use Drupal\og_menu\Tests\Traits\OgMenuTrait;
 use Drupal\user\Entity\User;
-use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\ExpectationFailedException;
 
 /**
@@ -38,25 +31,17 @@ use PHPUnit\Framework\ExpectationFailedException;
  */
 class CollectionContext extends RawDrupalContext {
 
-  use EntityReferenceTrait;
   use EntityTrait;
-  use FileTrait;
   use FormTrait;
-  use OgMenuTrait;
   use OgTrait;
-  use RdfEntityTrait;
-  use SearchTrait;
   use TopicTrait;
   use UserTrait;
   use UtilityTrait;
-  use WorkflowTrait;
 
   /**
-   * Test collections.
-   *
-   * @var \Drupal\collection\Entity\CollectionInterface[]
+   * Storing the JoinupCollection for convenience.
    */
-  protected array $collections = [];
+  protected CollectionInterface $joinupCollection;
 
   /**
    * Navigates to the propose collection form.
@@ -346,24 +331,6 @@ class CollectionContext extends RawDrupalContext {
   }
 
   /**
-   * Removes any created collections.
-   *
-   * @AfterScenario @api
-   */
-  public function cleanCollections(): void {
-    if (empty($this->collections)) {
-      return;
-    }
-
-    // Remove any collections that were created.
-    foreach ($this->collections as $collection) {
-      $collection->skip_notification = TRUE;
-      $collection->delete();
-    }
-    $this->collections = [];
-  }
-
-  /**
    * Checks that a user has the available state options for the collection.
    *
    * The method also checks that these options are the only options available.
@@ -508,40 +475,6 @@ class CollectionContext extends RawDrupalContext {
   }
 
   /**
-   * Creates the standard 'Joinup' collection.
-   *
-   * @param \Behat\Behat\Hook\Scope\BeforeScenarioScope|null $scope
-   *   The before scenario scope. This scope object is only used if the method
-   *   is invoked as a @BeforeScenario hook.
-   *
-   * @return \Drupal\collection\Entity\CollectionInterface
-   *   The 'Joinup' collection.
-   *
-   * @BeforeScenario @joinup_collection&&@api
-   *
-   * @see joinup_collection.module
-   */
-  public function createJoinupCollection(?BeforeScenarioScope $scope = NULL): CollectionInterface {
-    // Use \Drupal\joinup\Context\DrupalContext to have all the entities being
-    // tracked and deleted in the same Behat context instance.
-    $environment = $scope
-      ? $scope->getEnvironment()
-      : $this->getDrupal()->getEnvironment();
-    $context = $environment->getContext(DrupalContext::class);
-    Assert::assertInstanceOf(DrupalContext::class, $context);
-    $context->nodeCreate((object) [
-      'type' => 'collection',
-      'uri' => JoinupCollectionHelper::JOINUP_COLLECTION_URI,
-      'title' => 'Joinup',
-      'field_state' => 'published',
-    ]);
-
-    $collectionEntity = static::getEntityByLabel('node', 'Joinup', 'collection');
-    Assert::assertInstanceOf(CollectionInterface::class, $collectionEntity);
-    return $collectionEntity;
-  }
-
-  /**
    * Asserts that a glossary navigator is present or not on the page.
    *
    * @param string|null $expected_navigator
@@ -575,49 +508,92 @@ class CollectionContext extends RawDrupalContext {
   }
 
   /**
-   * Sets a random collection on content that requires one.
+   * Sets a collection on content that requires one.
    *
    * Some tests deal with collection content but don't care about which
    * collection the content belongs to. It is tedious to manually define a
    * collection and link it to the content for every single test. If it is
-   * omitted in the definition of the test we assign an existing collection, or
-   * if none exist we assign the "Joinup" collection. This ensures data
-   * integrity and prevents form validation errors.
+   * omitted in the definition of the test we assign the existing Joinup
+   * collection. This ensures data integrity and prevents validation errors.
    *
    * @param \Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope $scope
    *   An object containing the entity properties and fields that are to be used
    *   for creating the node as properties on the object.
    *
-   * @BeforeNodeCreate
+   * @BeforeNodeCreate @api
    */
   public function provideCollection(BeforeNodeCreateScope $scope): void {
     $node = $scope->getEntity();
 
+    // Skip if a collection or solution has been assigned.
+    if (!empty($node->collection)) {
+      return;
+    }
+
+    $collection_content_bundles = [
+      'custom_page',
+      'glossary',
+      'solution',
+      ...CommunityContentHelper::BUNDLES,
+    ];
+
     // Only deal with collection content.
-    $collection_content_bundles = array_merge(['custom_page'], CommunityContentHelper::BUNDLES);
-    if (!in_array($node->type, $collection_content_bundles, TRUE)) {
-      return;
+    if (in_array($node->type, $collection_content_bundles, TRUE)) {
+      $node->collection = $this->joinupCollection->label();
     }
+  }
 
-    // Skip if a collection or solution has been defined.
-    if (!empty($node->collection) || !empty($node->solution)) {
-      return;
-    }
+  /**
+   * Creates the 'Joinup' collection and related data.
+   *
+   * @throws \Drupal\Core\Entity\EntityStorageException
+   *   Thrown when one of the entities could not be created, for example because
+   *   it already exists.
+   *
+   * @BeforeScenario @api
+   */
+  public function createJoinupCollection(): void {
+    // Create the owner.
+    $owner = $this->nodeCreate((object) [
+      'type' => 'owner',
+      'title' => 'ISA²',
+    ]);
 
-    // Use an existing published collection if one is available.
-    foreach ($this->collections as $candidate_collection) {
-      if ($candidate_collection instanceof CollectionInterface && $candidate_collection->isPublished()) {
-        $collection = $candidate_collection;
-        break;
-      }
-    }
+    // Create the contact.
+    $contact = $this->nodeCreate((object) [
+      'type' => 'contact_information',
+      'title' => 'Contact name',
+      'email' => 'contact.email@example.com',
+    ]);
 
-    // If no suitable candidate is found, use the default "Joinup" collection.
-    if (empty($collection)) {
-      $collection = $this->createJoinupCollection();
-    }
+    // Create the Joinup collection.
+    $collection = Node::create([
+      'type' => 'collection',
+      'uri' => JoinupCollectionHelper::JOINUP_COLLECTION_URI,
+      'title' => 'Joinup',
+      'field_state' => 'published',
+      'field_topic' => $this->getRandomTopic()->id(),
+      'owner' => $owner->nid,
+      'contact_information' => $contact->nid,
+    ]);
+    $collection->save();
 
-    $node->collection = $collection->label();
+    // Storing for convenience.
+    // @see \Drupal\joinup\Context\CollectionContext::provideCollection()
+    $this->joinupCollection = $collection;
+    $this->nodes[] = $collection;
+  }
+
+  /**
+   * Clears the Joinup collection created before the scenario.
+   *
+   * @throws \Drupal\Core\Entity\EntityStorageException
+   *   Thrown when one of the created entities could not be deleted.
+   *
+   * @AfterScenario @api
+   */
+  public function deleteJoinupCollection(): void {
+    $this->joinupCollection->delete();
   }
 
 }
