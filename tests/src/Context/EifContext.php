@@ -17,7 +17,6 @@ use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup\Traits\TopicTrait;
 use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\meta_entity\Entity\MetaEntity;
-use Drupal\node\Entity\Node;
 use Drupal\paragraphs\Entity\Paragraph;
 
 /**

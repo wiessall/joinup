@@ -14,10 +14,10 @@ Feature:
       | Layer          | Interoperability Layer 3: Legal interoperability                                               |
       | Recommendation | name: Recommendation 21, description: This is recommended                                      |
       | Recommendation | name: Recommendation 15, description: This is also recommended                                 |
+    Given the following EIF perspective data for the "EIF only type" solution:
+      | Description   | This should be in the description field. |
+      | Solution type | Common frameworks                        |
 
-    Given solution content:
-      | Description                              | Solution type     |
-      | This should be in the description field. | Common frameworks |
 
     # Verify that solution group menu contains correct links.
     When I go to the "EIF solution" solution
