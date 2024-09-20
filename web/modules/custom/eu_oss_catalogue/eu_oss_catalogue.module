@@ -159,17 +159,13 @@ function eu_oss_catalogue_cron(): void {
   if (($request_time - $last_check) < $interval) {
     return;
   }
+  $queue_fetcher = \Drupal::queue('eu_oss_catalogue_fetcher');
 
   /** @var \Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface $providerPluginManager */
   $providerPluginManager = \Drupal::service('plugin.manager.eu_oss_catalogue.provider');
   foreach ($providerPluginManager->getDefinitionsAsOptions('label') as $provider => $label) {
-    try {
-      \Drupal::service('eu_oss_catalogue')->fetch($provider);
-      \Drupal::logger('eu_oss_catalogue')->info('OSS fetch data ' . $provider . ' completed successfully.');
-    }
-    catch (\Exception $e) {
-      \Drupal::logger('eu_oss_catalogue')->error('An error occurred while processing the data retrieval of ' . $provider . ': @error', ['@error' => $e->getMessage()]);
-    }
+    $queue_fetcher->createQueue();
+    $queue_fetcher->createItem(['provider' => $provider]);
   }
   // Establish the timestamp as 2 AM of the current day.
   $state->set('eu_oss_catalogue.last_check', strtotime(date('Y-m-d', $request_time) . ' 2:00:00'));
