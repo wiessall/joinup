@@ -15,6 +15,7 @@ settings:
   password: ''
   domain: SPD
   email: ''
+  callback_hostname: ''
 remote_languages_mappings:
   cs: cs
   da: da
