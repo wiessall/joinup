@@ -7,13 +7,10 @@ namespace Drupal\joinup\Context;
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Element\NodeElement;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
-use Drupal\eupl\Eupl;
 use Drupal\joinup\HtmlManipulator;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\JavascriptTrait;
-use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup_licence\Entity\CompatibilityDocument;
-use Drupal\node\Entity\Node;
 use LoversOfBehat\TableExtension\Hook\Scope\AfterTableFetchScope;
 use PHPUnit\Framework\Assert;
 
@@ -24,7 +21,6 @@ class EuplContext extends RawDrupalContext {
 
   use EntityTrait;
   use JavascriptTrait;
-  use TestingEntitiesTrait;
 
   /**
    * Creates the standard 'EUPL' collection and several dependencies.
@@ -36,32 +32,11 @@ class EuplContext extends RawDrupalContext {
    * @BeforeScenario @eupl&&@api
    */
   public function setupEuplData(): void {
-    // Create an owner.
-    $owner = $this->nodeCreate((object) [
-      'type' => 'owner',
-      'title' => 'Owner',
-    ]);
-
-    // Create the EUPL entity.
-    $collection = Node::create([
-      'type' => 'collection',
-      'uri' => Eupl::EUPL_COMMUNITY_ID,
-      'title' => 'EUPL',
-      'field_ar_state' => 'published',
-      'field_ar_owner' => $owner->nid,
-    ]);
-    $collection->save();
-    $this->entities['rdf_entity'][$collection->id()] = $collection;
-
-    $solution = Node::create([
+    $solution = $this->nodeCreate((object) [
       'type' => 'solution',
-      'collection' => $collection,
-      'uri' => Eupl::JLA_SOLUTION,
       'title' => 'Joinup Licensing Assistant',
       'field_state' => 'published',
     ]);
-    $solution->save();
-    $this->entities['rdf_entity'][$solution->id()] = $solution;
 
     // The 'Joinup Licensing Assistant' standard custom page.
     $this->nodeCreate((object) [
@@ -69,7 +44,7 @@ class EuplContext extends RawDrupalContext {
       'type' => 'custom_page',
       'uuid' => '3bee8b04-75fd-46a8-94b3-af0d8f5a4c41',
       'title' => 'JLA',
-      'og_audience' => Eupl::JLA_SOLUTION,
+      'solution' => $solution->title,
       'field_state' => 'published',
     ]);
 
@@ -79,7 +54,7 @@ class EuplContext extends RawDrupalContext {
       'type' => 'custom_page',
       'uuid' => '431f631f-e973-4fae-8368-c31f346a9616',
       'title' => 'JLC',
-      'og_audience' => Eupl::JLA_SOLUTION,
+      'solution' => $solution->title,
       'field_state' => 'published',
     ]);
 

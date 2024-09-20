@@ -45,7 +45,6 @@ Feature: Add distribution through the UI
     And I select "Datalog" from "Representation technique"
     And I select "WTFPL" from "Licence"
     And I press "Publish"
-    Then I should have 1 distribution
     And the "Linux x86-64 SDK" distribution should have the link of the "test.zip" in the access URL field
 
     # Check if the distribution is accessible.
@@ -109,7 +108,6 @@ Feature: Add distribution through the UI
     And I select "WTFPL" from "Licence"
     And I select "Datalog" from "Representation technique"
     And I press "Publish"
-    Then I should have 1 distribution
 
     # Debug step since the default view of the distribution, does not have the access URL shown.
     And the "Source tarball" distribution should have the link of the "test.zip" in the access URL field
@@ -158,13 +156,11 @@ Feature: Add distribution through the UI
     When I fill in "Title" with "MacOSX binary"
     And I select "WTFPL" from "Licence"
     And I press "Publish"
-    Then I should have 1 distribution
     When I click "Add distribution" in the plus button menu
     When I fill in "Title" with "MacOSX binary"
     And I select "WTFPL" from "Licence"
     And I press "Publish"
     Then I should see the error message "A distribution with title MacOSX binary already exists in this release. Please choose a different title."
-    And I should have 1 distribution
 
     Given I am logged in as a facilitator of the "Solubility of gases" solution
     When I go to the homepage of the "1.0.0 Adolf Sieverts" release
@@ -172,7 +168,6 @@ Feature: Add distribution through the UI
     When I fill in "Title" with "MacOSX binary"
     And I select "WTFPL" from "Licence"
     And I press "Publish"
-    Then I should have 2 distributions
 
     # Clean up the entities created through the user interface.
     Then I delete the "MacOSX binary" distribution

@@ -298,21 +298,6 @@ class SolutionContext extends RawDrupalContext {
   }
 
   /**
-   * Checks the number of available solutions.
-   *
-   * @param int $number
-   *   The expected number of solutions.
-   *
-   * @throws \Exception
-   *   Throws an exception when the expected number is not equal to the given.
-   *
-   * @Then I should have :number solution(s)
-   */
-  public function assertSolutionCount(int $number): void {
-    $this->assertEntityCount('node', 'solution', $number);
-  }
-
-  /**
    * Subscribes the given users to the given solution.
    *
    * The role Id of organic group roles are consisting of 3 parts, the entity

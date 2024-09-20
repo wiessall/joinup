@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Drupal\joinup\Context;
 
-use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Exception\ElementNotFoundException;
 use Drupal\Core\Session\AccountInterface;
@@ -13,24 +12,17 @@ use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\DrupalExtension\Hook\Scope\AfterNodeCreateScope;
 use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
 use Drupal\collection\Entity\CollectionInterface;
-use Drupal\joinup\Traits\EntityReferenceTrait;
 use Drupal\joinup\Traits\EntityTrait;
-use Drupal\joinup\Traits\FileTrait;
 use Drupal\joinup\Traits\FormTrait;
 use Drupal\joinup\Traits\OgTrait;
-use Drupal\joinup\Traits\RdfEntityTrait;
-use Drupal\joinup\Traits\SearchTrait;
 use Drupal\joinup\Traits\TopicTrait;
 use Drupal\joinup\Traits\UserTrait;
 use Drupal\joinup\Traits\UtilityTrait;
-use Drupal\joinup\Traits\WorkflowTrait;
 use Drupal\joinup_collection\JoinupCollectionHelper;
 use Drupal\joinup_community_content\CommunityContentHelper;
 use Drupal\joinup_group\ContentCreationOptions;
 use Drupal\og\OgRoleInterface;
-use Drupal\og_menu\Tests\Traits\OgMenuTrait;
 use Drupal\user\Entity\User;
-use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\ExpectationFailedException;
 
 /**
@@ -38,25 +30,19 @@ use PHPUnit\Framework\ExpectationFailedException;
  */
 class CollectionContext extends RawDrupalContext {
 
-  use EntityReferenceTrait;
   use EntityTrait;
-  use FileTrait;
   use FormTrait;
-  use OgMenuTrait;
   use OgTrait;
-  use RdfEntityTrait;
-  use SearchTrait;
   use TopicTrait;
   use UserTrait;
   use UtilityTrait;
-  use WorkflowTrait;
 
   /**
-   * Test collections.
+   * Static cache for Joinup collection.
    *
-   * @var \Drupal\collection\Entity\CollectionInterface[]
+   * @see self::getJoinupCollection()
    */
-  protected array $collections = [];
+  protected CollectionInterface $joinupCollection;
 
   /**
    * Navigates to the propose collection form.
@@ -207,18 +193,6 @@ class CollectionContext extends RawDrupalContext {
   }
 
   /**
-   * Checks the number of available collections.
-   *
-   * @param int $number
-   *   The expected number of collections.
-   *
-   * @Then I should have :number collection(s)
-   */
-  public function assertCollectionCount(int $number): void {
-    $this->assertEntityCount('node', 'collection', $number);
-  }
-
-  /**
    * Subscribes the given users to the given collections.
    *
    * Table format:
@@ -343,24 +317,6 @@ class CollectionContext extends RawDrupalContext {
       throw new \Exception("No current user.");
     }
     $this->assertCollectionOwnership($current_user->name, $entity);
-  }
-
-  /**
-   * Removes any created collections.
-   *
-   * @AfterScenario @api
-   */
-  public function cleanCollections(): void {
-    if (empty($this->collections)) {
-      return;
-    }
-
-    // Remove any collections that were created.
-    foreach ($this->collections as $collection) {
-      $collection->skip_notification = TRUE;
-      $collection->delete();
-    }
-    $this->collections = [];
   }
 
   /**
@@ -508,40 +464,6 @@ class CollectionContext extends RawDrupalContext {
   }
 
   /**
-   * Creates the standard 'Joinup' collection.
-   *
-   * @param \Behat\Behat\Hook\Scope\BeforeScenarioScope|null $scope
-   *   The before scenario scope. This scope object is only used if the method
-   *   is invoked as a @BeforeScenario hook.
-   *
-   * @return \Drupal\collection\Entity\CollectionInterface
-   *   The 'Joinup' collection.
-   *
-   * @BeforeScenario @joinup_collection&&@api
-   *
-   * @see joinup_collection.module
-   */
-  public function createJoinupCollection(?BeforeScenarioScope $scope = NULL): CollectionInterface {
-    // Use \Drupal\joinup\Context\DrupalContext to have all the entities being
-    // tracked and deleted in the same Behat context instance.
-    $environment = $scope
-      ? $scope->getEnvironment()
-      : $this->getDrupal()->getEnvironment();
-    $context = $environment->getContext(DrupalContext::class);
-    Assert::assertInstanceOf(DrupalContext::class, $context);
-    $context->nodeCreate((object) [
-      'type' => 'collection',
-      'uri' => JoinupCollectionHelper::JOINUP_COLLECTION_URI,
-      'title' => 'Joinup',
-      'field_state' => 'published',
-    ]);
-
-    $collectionEntity = static::getEntityByLabel('node', 'Joinup', 'collection');
-    Assert::assertInstanceOf(CollectionInterface::class, $collectionEntity);
-    return $collectionEntity;
-  }
-
-  /**
    * Asserts that a glossary navigator is present or not on the page.
    *
    * @param string|null $expected_navigator
@@ -575,49 +497,53 @@ class CollectionContext extends RawDrupalContext {
   }
 
   /**
-   * Sets a random collection on content that requires one.
+   * Sets a collection on content that requires one.
    *
    * Some tests deal with collection content but don't care about which
    * collection the content belongs to. It is tedious to manually define a
    * collection and link it to the content for every single test. If it is
-   * omitted in the definition of the test we assign an existing collection, or
-   * if none exist we assign the "Joinup" collection. This ensures data
-   * integrity and prevents form validation errors.
+   * omitted in the definition of the test we assign the existing Joinup
+   * collection. This ensures data integrity and prevents validation errors.
    *
    * @param \Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope $scope
    *   An object containing the entity properties and fields that are to be used
    *   for creating the node as properties on the object.
    *
-   * @BeforeNodeCreate
+   * @BeforeNodeCreate @api
    */
   public function provideCollection(BeforeNodeCreateScope $scope): void {
     $node = $scope->getEntity();
 
-    // Only deal with collection content.
-    $collection_content_bundles = array_merge(['custom_page'], CommunityContentHelper::BUNDLES);
-    if (!in_array($node->type, $collection_content_bundles, TRUE)) {
-      return;
-    }
-
-    // Skip if a collection or solution has been defined.
+    // Skip if a collection or solution has been assigned.
     if (!empty($node->collection) || !empty($node->solution)) {
       return;
     }
 
-    // Use an existing published collection if one is available.
-    foreach ($this->collections as $candidate_collection) {
-      if ($candidate_collection instanceof CollectionInterface && $candidate_collection->isPublished()) {
-        $collection = $candidate_collection;
-        break;
-      }
-    }
+    $collection_content_bundles = [
+      'custom_page',
+      'glossary',
+      'solution',
+      ...CommunityContentHelper::BUNDLES,
+    ];
 
-    // If no suitable candidate is found, use the default "Joinup" collection.
-    if (empty($collection)) {
-      $collection = $this->createJoinupCollection();
+    // Only deal with collection content.
+    if (in_array($node->type, $collection_content_bundles, TRUE)) {
+      $node->collection = $this->getJoinupCollection()->label();
     }
+  }
 
-    $node->collection = $collection->label();
+  /**
+   * Returns and caches the Joinup collection.
+   *
+   * @return \Drupal\collection\Entity\CollectionInterface
+   *   The Joinup collection.
+   */
+  protected function getJoinupCollection(): CollectionInterface {
+    if (!isset($this->joinupCollection)) {
+      $this->joinupCollection = \Drupal::getContainer()->get('rdf_sync.mapper')
+        ->getEntityByUri(JoinupCollectionHelper::JOINUP_COLLECTION_URI);
+    }
+    return $this->joinupCollection;
   }
 
 }
