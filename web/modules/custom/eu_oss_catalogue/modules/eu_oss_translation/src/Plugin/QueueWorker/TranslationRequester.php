@@ -23,7 +23,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class TranslationRequester extends QueueWorkerBase implements ContainerFactoryPluginInterface {
 
   /**
-   * Queue id.
+   * Queue ID.
    */
   public const string ID = 'eu_oss_translation_requester';
 
