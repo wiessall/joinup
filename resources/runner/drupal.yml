@@ -325,8 +325,8 @@ drupal:
         $config['search_api.server.joinup']['backend_config']['connector_config']['path'] = '/';
         $config['search_api.server.joinup']['backend_config']['connector_config']['core'] = getenv('SEARCH_API_SERVER_SS_SOLR_CORE');
       European Commission eTranslation: |
-        $config['tmgmt.translator.ec_etranslation']['settings']['username'] = getenv('TMGMT_ETRANSLATION_USERNAME');
-        $config['tmgmt.translator.ec_etranslation']['settings']['password'] = getenv('TMGMT_ETRANSLATION_PASSWORD');
+        $config['tmgmt.translator.ec_etranslation']['settings']['username'] = getenv('TMGMT_ETRANSLATION_USERNAME') ?: '';
+        $config['tmgmt.translator.ec_etranslation']['settings']['password'] = getenv('TMGMT_ETRANSLATION_PASSWORD') ?: '';
       OpenEuropa Webtools Analytics: |
         $config['oe_webtools_analytics.settings']['siteID'] = getenv('OE_WEBTOOLS_ANALYTICS_SITE_ID');
         $config['oe_webtools_analytics.settings']['sitePath'] = getenv('OE_WEBTOOLS_ANALYTICS_SITE_PATH');
