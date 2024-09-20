@@ -7,3 +7,4 @@ dependencies:
   - drupal:tmgmt
   - drupal:tmgmt_ec_etranslation
   - http_request_mock:http_request_mock
+  - tmgmt_ec_etranslation:tmgmt_ec_etranslation_test
