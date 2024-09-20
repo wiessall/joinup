@@ -466,10 +466,7 @@ Feature:
   @loggedErrors
   Scenario: Regression test for licences comparison.
     # Regression test for ISAICP-9014
-    Given collection content:
-      | uri                                                            | title  | state     |
-      | http://data.europa.eu/w21/df34e3a2-207b-4910-a804-344931654e20 | Joinup | published |
-    And SPDX licences:
+    Given SPDX licences:
       | uri                             | title     | ID        |
       | http://joinup.eu/spdx/EUPL-1.2a | EUPL-1.2a | EUPL-1.2a |
       | http://joinup.eu/spdx/LGPL-2.1b | LGPL-2.1b | LGPL-2.1b |

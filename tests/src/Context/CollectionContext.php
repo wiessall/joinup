@@ -21,7 +21,6 @@ use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\joinup_collection\JoinupCollectionHelper;
 use Drupal\joinup_community_content\CommunityContentHelper;
 use Drupal\joinup_group\ContentCreationOptions;
-use Drupal\node\Entity\Node;
 use Drupal\og\OgRoleInterface;
 use Drupal\user\Entity\User;
 use PHPUnit\Framework\ExpectationFailedException;
@@ -39,7 +38,9 @@ class CollectionContext extends RawDrupalContext {
   use UtilityTrait;
 
   /**
-   * Storing the JoinupCollection for convenience.
+   * Static cache for Joinup collection.
+   *
+   * @see self::getJoinupCollection()
    */
   protected CollectionInterface $joinupCollection;
 
@@ -526,7 +527,7 @@ class CollectionContext extends RawDrupalContext {
     $node = $scope->getEntity();
 
     // Skip if a collection or solution has been assigned.
-    if (!empty($node->collection)) {
+    if (!empty($node->collection) || !empty($node->solution)) {
       return;
     }
 
@@ -539,61 +540,22 @@ class CollectionContext extends RawDrupalContext {
 
     // Only deal with collection content.
     if (in_array($node->type, $collection_content_bundles, TRUE)) {
-      $node->collection = $this->joinupCollection->label();
+      $node->collection = $this->getJoinupCollection()->label();
     }
   }
 
   /**
-   * Creates the 'Joinup' collection and related data.
+   * Returns and caches the Joinup collection.
    *
-   * @throws \Drupal\Core\Entity\EntityStorageException
-   *   Thrown when one of the entities could not be created, for example because
-   *   it already exists.
-   *
-   * @BeforeScenario @api
+   * @return \Drupal\collection\Entity\CollectionInterface
+   *   The Joinup collection.
    */
-  public function createJoinupCollection(): void {
-    // Create the owner.
-    $owner = $this->nodeCreate((object) [
-      'type' => 'owner',
-      'title' => 'ISA²',
-    ]);
-
-    // Create the contact.
-    $contact = $this->nodeCreate((object) [
-      'type' => 'contact_information',
-      'title' => 'Contact name',
-      'email' => 'contact.email@example.com',
-    ]);
-
-    // Create the Joinup collection.
-    $collection = Node::create([
-      'type' => 'collection',
-      'uri' => JoinupCollectionHelper::JOINUP_COLLECTION_URI,
-      'title' => 'Joinup',
-      'field_state' => 'published',
-      'field_topic' => $this->getRandomTopic()->id(),
-      'owner' => $owner->nid,
-      'contact_information' => $contact->nid,
-    ]);
-    $collection->save();
-
-    // Storing for convenience.
-    // @see \Drupal\joinup\Context\CollectionContext::provideCollection()
-    $this->joinupCollection = $collection;
-    $this->nodes[] = $collection;
-  }
-
-  /**
-   * Clears the Joinup collection created before the scenario.
-   *
-   * @throws \Drupal\Core\Entity\EntityStorageException
-   *   Thrown when one of the created entities could not be deleted.
-   *
-   * @AfterScenario @api
-   */
-  public function deleteJoinupCollection(): void {
-    $this->joinupCollection->delete();
+  protected function getJoinupCollection(): CollectionInterface {
+    if (!isset($this->joinupCollection)) {
+      $this->joinupCollection = \Drupal::getContainer()->get('rdf_sync.mapper')
+        ->getEntityByUri(JoinupCollectionHelper::JOINUP_COLLECTION_URI);
+    }
+    return $this->joinupCollection;
   }
 
 }
