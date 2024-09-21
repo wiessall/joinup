@@ -509,7 +509,7 @@ class CollectionContext extends RawDrupalContext {
    *   An object containing the entity properties and fields that are to be used
    *   for creating the node as properties on the object.
    *
-   * @BeforeNodeCreate @api
+   * @BeforeNodeCreate
    */
   public function provideCollection(BeforeNodeCreateScope $scope): void {
     $node = $scope->getEntity();
