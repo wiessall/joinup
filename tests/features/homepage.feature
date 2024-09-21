@@ -72,7 +72,7 @@ Feature: Homepage
       | New muscles | Muscle atrophy | Mice in space | Finance in EU, Supplier exchange, E-health, E-justice | published | blaise.jpg | <news abstract> | <news body>           |
     And discussion content:
       | title                | collection    | topic                            | state     | logo    | body                                                                                                                                                                                       |
-      | Influence of gravity | Mice in space | Employment and Support Allowance | published | ada.jpg | Space exploration has brought about many scientific and technological advances, yet manned spaceflights come at a cost to astronauts, including reduced skeletal muscle mass and strength. |
+      | Influence of gravity | Mice in space | Employment and Support Allowance | published | ada.png | Space exploration has brought about many scientific and technological advances, yet manned spaceflights come at a cost to astronauts, including reduced skeletal muscle mass and strength. |
     And document content:
       | title        | collection    | topic                                  | state     | logo     | abstract                                                                                                                                                                                        |
       | Microgravity | Mice in space | HR, Statistics and Analysis, E-justice | published | alan.jpg | Conventional studies investigating the effects of reduced gravity on muscle mass and function have used a ground control group that is not directly comparable to the space experimental group. |
