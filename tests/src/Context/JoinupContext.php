@@ -121,6 +121,7 @@ class JoinupContext extends RawDrupalContext {
         'attachments' => 'field_attachment',
         'content' => 'body',
         'keywords' => 'field_keywords',
+        'logo' => 'field_discussion_logo',
         'publication date' => 'published_at',
         'state' => 'field_state',
       ],
@@ -1002,6 +1003,7 @@ class JoinupContext extends RawDrupalContext {
     }
 
     $image_fields = [
+      'field_discussion_logo',
       'field_document_logo',
       'field_event_logo',
       'field_news_logo',
