@@ -179,8 +179,8 @@ Feature: Notification test for the collection transitions.
       | body      | Since your solution "NC Solution1" was affiliated only with this archived collection, your solution is currently no longer affiliated to any other collection.                                                                                    |
     And the following email should have been sent:
       | recipient | NCS owner                                                                                                                                                       |
-      | subject   | The collection NC to archive was archived                                                                                                                       |
-      | body      | The "NC to archive" collection, to which your "NC Solution2" solution was affiliated, was recently archived. Please verify the updated details of your solution |
+      | subject   | The collection NC to archive was archived. Your solution was affiliated only to the collection NC to archive, and as a consequence, your solution is not currently affiliated to any other collection. Please verify and take appropriate action. |
+      | body      | Since your solution "NC Solution2" was affiliated only with this archived collection, your solution is currently no longer affiliated to any other collection.                                                                                    |
     And the following email should have been sent:
       | recipient | NC member1                                                                                                                   |
       | subject   | The collection NC to archive was archived.                                                                                   |
