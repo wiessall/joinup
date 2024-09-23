@@ -17,7 +17,6 @@ use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup\Traits\TopicTrait;
 use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\meta_entity\Entity\MetaEntity;
-use Drupal\paragraphs\Entity\Paragraph;
 
 /**
  * Behat step definitions and related methods provided by the eif module.
@@ -50,15 +49,17 @@ class EifContext extends RawDrupalContext {
       'email' => 'contact.email@example.com',
     ]);
 
+    // Random topic.
+    $topic_label = $this->getRandomTopic()->label();
     // Create the NIFO sample collection.
     $collection = $this->nodeCreate((object) [
       'type' => 'collection',
       'uri' => 'http://nifo.collection',
       'title' => 'NIFO collection',
       'field_state' => 'published',
-      'field_topic' => $tid = $this->getRandomTopic()->id(),
-      'owner' => $owner->nid,
-      'contact_information' => $contact->nid,
+      'field_topic' => $topic_label,
+      'owner' => $owner->title,
+      'contact_information' => $contact->title,
     ]);
 
     // Create the EIF Toolbox solution.
@@ -68,9 +69,9 @@ class EifContext extends RawDrupalContext {
       'title' => 'EIF Toolbox',
       'og_audience' => $collection->title,
       'field_state' => 'published',
-      'field_topic' => $tid,
-      'owner' => $owner->nid,
-      'contact_information' => $contact->nid,
+      'field_topic' => $topic_label,
+      'owner' => $owner->title,
+      'contact_information' => $contact->title,
     ]);
 
     $this->nodeCreate((object) [
@@ -78,13 +79,6 @@ class EifContext extends RawDrupalContext {
       'nid' => EifInterface::EIF_ONLINE_ASSISTANT,
       'title' => 'Online Assistant',
       'og_audience' => $solution->title,
-      'field_paragraphs_body' => Paragraph::create([
-        'type' => 'simple_paragraph',
-        'field_body' => [
-          'value' => '',
-          'format' => 'content_editor',
-        ],
-      ]),
       'field_state' => 'published',
     ]);
 
