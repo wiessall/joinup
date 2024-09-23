@@ -337,7 +337,7 @@ trait GroupTrait {
       ->condition('entity_type', 'rdf_entity')
       ->condition('entity_id', $this->id())
       ->condition('state', OgMembershipInterface::STATE_ACTIVE);
-    return $this->activeMemberCount = (int) $query->countQuery()->execute()->fetchField();
+    return (int) $query->countQuery()->execute()->fetchField();
   }
 
 }
