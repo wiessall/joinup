@@ -16,7 +16,7 @@ use Drupal\state_machine\Plugin\Workflow\WorkflowTransition;
 /**
  * Handles notifications related to collections.
  */
-class CollectionRdfSubscriber extends NotificationSubscriberBase {
+class CollectionSubscriber extends NotificationSubscriberBase {
 
   const string TEMPLATE_APPROVE_EDIT = 'col_approve_edit';
   const string TEMPLATE_APPROVE_NEW = 'col_approve_new';
@@ -24,7 +24,6 @@ class CollectionRdfSubscriber extends NotificationSubscriberBase {
   const string TEMPLATE_ARCHIVE_DELETE_MEMBERS = 'col_arc_del_members';
   const string TEMPLATE_ARCHIVE_DELETE_NO_REQUEST = 'col_arc_del_no_request';
   const string TEMPLATE_ARCHIVE_DELETE_REJECT = 'col_arc_del_rej';
-  const string TEMPLATE_ARCHIVE_DELETE_SOLUTIONS_ALL = 'col_arc_del_sol_generic';
   const string TEMPLATE_ARCHIVE_DELETE_SOLUTIONS_ORPHANED = 'col_arc_del_sol_no_affiliates';
   const string TEMPLATE_DELETION_BY_MODERATOR = 'col_deletion_by_moderator';
   const string TEMPLATE_PROPOSE_EDIT_MODERATORS = 'col_propose_edit_mod';
@@ -158,6 +157,10 @@ class CollectionRdfSubscriber extends NotificationSubscriberBase {
         $this->notificationPropose();
         break;
 
+      case 'update_published':
+        $this->notificationValidate();
+        break;
+
       case 'validate':
         if ($this->fromState === 'proposed') {
           $this->notificationValidate();
@@ -202,6 +205,7 @@ class CollectionRdfSubscriber extends NotificationSubscriberBase {
       'validate',
       'request_archival',
       'archive',
+      'update_published',
     ];
     if (!in_array($this->transition->getId(), $transitions_with_notification)) {
       return FALSE;
@@ -294,7 +298,7 @@ class CollectionRdfSubscriber extends NotificationSubscriberBase {
    * modification is approved.
    */
   protected function notificationValidate(): void {
-    $template_id = $this->hasPublished &&  $this->transition->getId() === 'published' ? self::TEMPLATE_APPROVE_EDIT : self::TEMPLATE_APPROVE_NEW;
+    $template_id = $this->hasPublished &&  $this->transition->getId() === 'update_published' ? self::TEMPLATE_APPROVE_EDIT : self::TEMPLATE_APPROVE_NEW;
     $user_data = [
       'og_roles' => [
         'node-collection-administrator' => [
@@ -375,7 +379,7 @@ class CollectionRdfSubscriber extends NotificationSubscriberBase {
 
     // Avoid sending again to the owner.
     $uids_to_skip = [];
-    foreach ($user_data as $message_id => $user_ids) {
+    foreach ($user_data as $user_ids) {
       $uids_to_skip += array_values($user_ids);
     }
 
@@ -400,30 +404,19 @@ class CollectionRdfSubscriber extends NotificationSubscriberBase {
   /**
    * Sends a notification to solution owners affiliated with the collection.
    *
-   * Notification id 11, 12.
+   * Notification id 11.
    *
    * Notification 11 is sent to the solution owners in which the collection that
    * is archived/deleted is the only affiliate, prompting them to take action.
-   * Notification 12 is sent to the solution owners in which the collection that
-   * is archived/deleted is one of the affiliates. This is an information email.
-   * Only one of both are sent to the owner of a solution depending on the
-   * amount of the affiliates the solution has.
    *
    * @param \Drupal\Core\Entity\EntityInterface $solution
    *   The solution entity.
-   *
-   * @todo This might need to be moved to the solution subscriber once it is
-   *   created, in order to remove weird workarounds.
    */
   protected function notifySolutionOwners(EntityInterface $solution): void {
-    // Count collections that are not archived and are affiliated to the
-    // solution.
-    $has_parent = !$solution->get('og_audience')?->entity;
-    $template_id = $has_parent ? self::TEMPLATE_ARCHIVE_DELETE_SOLUTIONS_ALL : self::TEMPLATE_ARCHIVE_DELETE_SOLUTIONS_ORPHANED;
     $user_data = [
       'og_roles' => [
         'node-solution-administrator' => [
-          $template_id,
+          self::TEMPLATE_ARCHIVE_DELETE_SOLUTIONS_ORPHANED,
         ],
       ],
     ];
