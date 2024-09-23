@@ -10,6 +10,7 @@ use Drupal\Core\File\FileSystemInterface;
 use Drupal\Tests\UnitTestCase;
 use Drupal\joinup\Form\ExportUserListForm;
 use Drupal\joinup_user\EntityAuthorshipHelperInterface;
+use Drupal\og\MembershipManagerInterface;
 
 /**
  * Tests certain atomic methods of ExportUserListForm.
@@ -34,6 +35,7 @@ class ExportUserListFormTest extends UnitTestCase {
     $this->formInstance = new ExportUserListForm(
       $this->prophesize(EntityTypeManagerInterface::class)->reveal(),
       $this->prophesize(EntityAuthorshipHelperInterface::class)->reveal(),
+      $this->prophesize(MembershipManagerInterface::class)->reveal(),
       $this->prophesize(FileSystemInterface::class)->reveal(),
       $this->prophesize(CsrfTokenGenerator::class)->reveal()
     );

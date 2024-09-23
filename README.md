@@ -82,7 +82,7 @@ ddev composer install
 
 This will install the PHP and Node dependencies. The codebase is deployed.
 
-### Configure secrets and local settings
+### Configure sensitive data (secrets)
 
 * Copy the `.env.example` file as `.env`. The `.env` file is not under VCS
   control and is used to override values stored into `.env.dist` file but, more
@@ -90,12 +90,6 @@ This will install the PHP and Node dependencies. The codebase is deployed.
   passwords, etc.
 * You should fill the `.env` file environment variables with values. Each
   variable is documented in `.env.example`.
-* On production, the site uses the `config_readonly` module to prevent config
-  changes. This is a safety measure. You can turn this protection on/off by
-  running `ddev exec scripts/switch config-readonly [operation]`, where
-  `[operation]` is `enable` or `disable`. However, when developing locally, this
-  could become annoying. To completely turn off the protection locally, just add
-  `CONFIG_READONLY=false` in your `.env` file.
 
 ### Install Joinup
 
@@ -242,6 +236,10 @@ Note that Toolkit uses its own configuration. Few aspects:
   configuration under `resources/runner`.
 * You can override any configuration by creating a `runner.yml` file in the
   project's root directory. Note that this file is not under VCS control.
+* You can inspect the configuration. Find out how by running this command:
+  ```yaml
+  ddev run config --help
+  ```
 
 #### Developer local commands
 

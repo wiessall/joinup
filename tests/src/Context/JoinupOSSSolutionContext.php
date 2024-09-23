@@ -5,14 +5,11 @@ declare(strict_types=1);
 namespace Drupal\joinup\Context;
 
 use Drupal\DrupalExtension\Context\RawDrupalContext;
-use Drupal\joinup\Traits\EntityTrait;
 
 /**
  * Behat step definitions for testing OSS solution.
  */
 class JoinupOSSSolutionContext extends RawDrupalContext {
-
-  use EntityTrait;
 
   /**
    * OSS welcome page path.
@@ -53,25 +50,25 @@ class JoinupOSSSolutionContext extends RawDrupalContext {
   }
 
   /**
-   * Toggles ON/OFF EU OSS Catalogue functionality.
+   * Enables EU OSS Catalogue functionality.
    *
-   * @param string $toggle
-   *   Could be 'enable', 'disable'.
+   * @BeforeScenario @api&&@eu-oss-catalogue
    *
-   * @Given I :toggle EU OSS Catalogue
+   * @todo Remove this method and all @eu-oss-catalogue tags in ISAICP-9053.
    */
-  public function toggleEuOssCatalogue(string $toggle): void {
-    assert(in_array($toggle, ['enable', 'disable'], TRUE));
+  public function enableEuOssCatalogue(): void {
+    joinup_oss_catalogue_toggle('enable');
+  }
 
-    $switcher = \Drupal::getContainer()->get('joinup_core.switcher');
-    if ($toggle === 'enable') {
-      $switcher->enable('eu-oss-catalogue');
-    }
-    else {
-      $switcher->enable('eu-oss-catalogue');
-    }
-
-    \Drupal::getContainer()->get('cache.page')->deleteAll();
+  /**
+   * Disables EU OSS Catalogue functionality.
+   *
+   * @AfterScenario @api&&@eu-oss-catalogue
+   *
+   * @todo Remove this method and all @eu-oss-catalogue tags in ISAICP-9053.
+   */
+  public function disableEuOssCatalogue(): void {
+    joinup_oss_catalogue_toggle('disable');
   }
 
 }

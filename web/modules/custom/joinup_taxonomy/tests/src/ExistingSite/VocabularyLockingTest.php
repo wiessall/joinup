@@ -23,7 +23,6 @@ class VocabularyLockingTest extends JoinupExistingSiteTestBase {
     $session = $this->getSession();
     $assert = $this->assertSession();
 
-    $this->bypassReadOnlyConfig();
     $vocabulary = $this->createVocabulary();
     $vocabulary->setThirdPartySetting('joinup_taxonomy', 'locked', FALSE)->save();
     $account = $this->createUser([
@@ -34,7 +33,6 @@ class VocabularyLockingTest extends JoinupExistingSiteTestBase {
       // Bypass the legal notice form.
       'administer entity legal',
     ]);
-    $this->restoreReadOnlyConfig();
 
     $oneTimeLoginUrl = $this->user_pass_reset_url($account) . '/login';
     $session->visit($oneTimeLoginUrl);
@@ -54,9 +52,7 @@ class VocabularyLockingTest extends JoinupExistingSiteTestBase {
     $this->drupalGet($term->toUrl('delete-form'));
     $assert->statusCodeEquals(200);
 
-    $this->bypassReadOnlyConfig();
     $vocabulary->setThirdPartySetting('joinup_taxonomy', 'locked', TRUE)->save();
-    $this->restoreReadOnlyConfig();
 
     // Check that create route is not accessible.
     $this->drupalGet("admin/structure/taxonomy/manage/{$vocabulary->id()}/add");

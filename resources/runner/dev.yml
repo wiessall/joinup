@@ -32,17 +32,11 @@ commands:
       command: solr:download-snapshot
 
   dev:install-modules:
-    - task: exec
-      command: ${joinup.dir}/scripts/switch config-readonly off
     - task: run
       command: drush:module-install
       arguments: ${dev.modules}
-    - task: exec
-      command: ${joinup.dir}/scripts/switch config-readonly on
 
   dev:demo-users:
-    - task: exec
-      command: ${joinup.dir}/scripts/switch config-readonly off
     # Make sure CAS mock server module is installed.
     - task: run
       command: drush:module-install
@@ -194,8 +188,6 @@ commands:
       options:
         yes: null
         root: ${joinup.site_dir}
-    - task: exec
-      command: ${joinup.dir}/scripts/switch config-readonly on
 
   dev:import-sparql-fixtures:
     - task: run

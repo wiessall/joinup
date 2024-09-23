@@ -9,15 +9,18 @@ declare(strict_types=1);
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\Core\Site\Settings;
 use Drupal\Core\Url;
 use Drupal\block\BlockInterface;
+use Drupal\collection\Entity\CollectionInterface;
+use Drupal\custom_page\Entity\CustomPageInterface;
 use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_oss_catalogue\Entity\JoinupOssSolution;
 use Drupal\joinup_oss_catalogue\OssCatalogueCollectionInterface;
 use Drupal\node\NodeInterface;
+use Solarium\Core\Query\Helper;
 
 /**
  * Implements hook_views_plugins_argument_alter().
@@ -188,15 +191,53 @@ function joinup_oss_catalogue_preprocess_views_view__eu_oss_catalogue_admin_caro
 /**
  * Checks whether the EU OSS Catalogue functionality is enabled.
  *
- * @return bool
- *   Whether the EU OSS Catalogue functionality is enabled.
+ * @return \Drupal\Core\Access\AccessResultInterface
+ *   Access result.
+ *
+ * @todo Remove this function in ISAICP-9053.
  */
-function joinup_oss_catalogue_is_enabled(): bool {
-  return Settings::get('eu_oss_catalogue')['enabled'] ?? FALSE;
+function joinup_oss_catalogue_feature(): AccessResultInterface {
+  static $cache;
+  if (!isset($cache)) {
+    $collection = \Drupal::entityTypeManager()->getStorage('rdf_entity')
+      ->load(OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID);
+    if (!$collection instanceof CollectionInterface) {
+      $cache = AccessResult::allowed();
+    }
+    else {
+      $state = $collection->get('field_ar_state')->first()->getValue()['value'] ?? NULL;
+      $cache = AccessResult::allowedIf($state === 'published')->addCacheableDependency($collection);
+    }
+  }
+  return $cache;
+}
+
+/**
+ * Implements hook_entity_access().
+ *
+ * @todo Remove this function in ISAICP-9053.
+ */
+function joinup_oss_catalogue_entity_access(EntityInterface $entity): AccessResultInterface {
+  if (
+    // The entity is the EU OSS Catalogue collection...
+    ($entity instanceof CollectionInterface && $entity->id() === OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID) ||
+    // ...or the EU OSS Catalogue collection landing page...
+    ($entity instanceof CustomPageInterface && $entity->uuid() === OssCatalogueCollectionInterface::LANDING_PAGE) ||
+    // ...or an OSS Solution.
+    ($entity instanceof OssSolutionInterface)
+  ) {
+    return AccessResult::forbiddenIf(
+      !joinup_oss_catalogue_feature()->isAllowed(),
+      'EU OSS Catalogue is disabled',
+    )->addCacheableDependency($entity);
+  }
+  return AccessResult::neutral();
 }
 
 /**
  * Implements hook_module_implements_alter().
+ *
+ * @todo Remove this function in ISAICP-9053.
  */
 function joinup_oss_catalogue_module_implements_alter(array &$implementations, string $hook): void {
   if ($hook === 'cron') {
@@ -209,11 +250,69 @@ function joinup_oss_catalogue_module_implements_alter(array &$implementations, s
 
 /**
  * Implements hook_cron().
+ *
+ * @todo Remove this function in ISAICP-9053.
  */
 function joinup_oss_catalogue_cron(): void {
-  if (joinup_oss_catalogue_is_enabled()) {
+  if (joinup_oss_catalogue_feature()->isAllowed()) {
     // Only run if EU OSS Catalogue functionality is enabled.
     eu_oss_catalogue_cron();
     eu_oss_vitality_index_cron();
   }
+}
+
+/**
+ * Toggles the state of EU OSS Catalogue functionality.
+ *
+ * @param string $toggle
+ *   The state: 'enable', 'disable'.
+ *
+ * @todo Remove this function in ISAICP-9053.
+ */
+function joinup_oss_catalogue_toggle(string $toggle): void {
+  assert(in_array($toggle, ['enable', 'disable'], TRUE));
+
+  $entityTypeManager = \Drupal::entityTypeManager();
+  $uri = OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID;
+  if (!$collection = $entityTypeManager->getStorage('rdf_entity')->load($uri)) {
+    // If the EU OSS Catalogue collection is missing exit there's nothing to do.
+    return;
+  }
+
+  $collection->skip_notification = TRUE;
+  $state = $toggle === 'enable' ? 'published' : 'draft';
+  $collection->set('field_ar_state', $state)->save();
+
+  if ($toggle === 'disable') {
+    // Unfortunately, we don't have an API to  unpublish a collection because
+    // when setting the state field to 'draft', we're creating a forward
+    // revision and the published version still exist and is shown on UIs. In
+    // order to unpublish, we perform the following operations:
+    // - Remove the published triples.
+    // - Remove the document from Solr and from search_api_item table.
+    $sparql = <<<SPARQL
+      WITH <http://joinup.eu/collection/published>
+      DELETE { <$uri> ?p ?o }
+      WHERE  { <$uri> ?p ?o }
+      SPARQL;
+    \Drupal::getContainer()->get('rdf_sync.connection')->update($sparql);
+    $sapiId = 'entity:rdf_entity/' . $uri;
+    $solrHelper = new Helper();
+    /** @var \Drupal\search_api_solr\SolrConnectorInterface $connector */
+    $connector = $entityTypeManager->getStorage('search_api_server')->load('joinup')
+      ->getBackend()
+      ->getSolrConnector();
+    $deleteQuery = $connector
+      ->getUpdateQuery()
+      ->addDeleteQuery('ss_search_api_id:' . $solrHelper->escapePhrase($sapiId))
+      ->addCommit();
+    $connector->update($deleteQuery);
+    \Drupal::database()->delete('search_api_item')
+      ->condition('index_id', ['published', 'unpublished'], 'IN')
+      ->condition('item_id', $sapiId)
+      ->execute();
+  }
+
+  // The 'Explore' block caches is time-based (6h). Explicitly clear the cache.
+  \Drupal::getContainer()->get('cache_tags.invalidator')->invalidateTags(['homepage_explore_block']);
 }

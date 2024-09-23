@@ -5,13 +5,14 @@ declare(strict_types=1);
 namespace Drupal\joinup_licence\Entity;
 
 use Drupal\joinup_bundle_class\DescriptionInterface;
+use Drupal\joinup_core\Entity\PermalinkInterface;
 use Drupal\joinup_rdf\Entity\RdfSyncEntityInterface;
 use Drupal\node\NodeInterface;
 
 /**
  * Interface for licence nodes.
  */
-interface LicenceInterface extends NodeInterface, RdfSyncEntityInterface, DescriptionInterface {
+interface LicenceInterface extends NodeInterface, RdfSyncEntityInterface, DescriptionInterface, PermalinkInterface {
 
   /**
    * Returns the legal types to which this licence conforms.

@@ -6,6 +6,4 @@
 
 ddev solr:empty
 ddev exec vendor/bin/run toolkit:install-clean
-ddev exec scripts/switch config-readonly off
 ddev exec vendor/bin/run dev:install-modules
-ddev exec scripts/switch config-readonly on
