@@ -9,8 +9,6 @@ namespace Drupal\joinup\Traits;
  */
 trait AntispamTrait {
 
-  use ConfigReadOnlyTrait;
-
   /**
    * Checks if the current form is protected by Antibot.
    *

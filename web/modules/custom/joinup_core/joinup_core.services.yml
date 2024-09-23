@@ -42,10 +42,6 @@ services:
     tags:
       - { name: event_subscriber }
 
-  joinup_core.switcher:
-    class: Drupal\joinup_core\JoinupSwitcher
-    arguments: ['@file_system']
-
   # Prevent errors in twigc by implementing the missing get_dummy_text function,
   # which is referenced in BCL component templates.
   joinup_core.twig_extension:

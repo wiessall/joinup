@@ -329,8 +329,6 @@ Feature: Log in through EU Login
     When I go to "/user/password"
     Then the response status code should be 404
 
-  # TODO: Re-enable this test in ISAICP-9052
-  @wip
   Scenario: As a developer I can temporary disable the site registration.
     Given CAS users:
       | Username | E-mail          | Password |
@@ -340,8 +338,6 @@ Feature: Log in through EU Login
       | dev      | developer |
 
     Given I am logged in as dev
-    And I go to "/dashboard"
-    And I press "Disable config readonly"
     And I visit "/admin/config/people/cas"
     And I uncheck "Automatically register users"
     And I press "Save configuration"
@@ -362,8 +358,6 @@ Feature: Log in through EU Login
     And I check "Automatically register users"
     And I press "Save configuration"
     Then I should see the message "The configuration options have been saved."
-    And I go to "/dashboard"
-    And I press "Enable config readonly"
 
     Given I am an anonymous user
     And I am on the homepage

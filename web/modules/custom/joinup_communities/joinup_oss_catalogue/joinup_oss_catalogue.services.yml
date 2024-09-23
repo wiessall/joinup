@@ -16,6 +16,7 @@ services:
     arguments:
       - '@queue'
 
+  # TODO: Remove this service in ISAICP-9053.
   joinup_oss_catalogue.killswitch_check:
     class: Drupal\joinup_oss_catalogue\Access\KillSwitchCheck
     tags:

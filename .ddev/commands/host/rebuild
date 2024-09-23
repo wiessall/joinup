@@ -7,7 +7,5 @@
 ddev solr:restore
 ddev virtuoso:restore
 ddev run toolkit:install-clone
-ddev exec scripts/switch config-readonly off
 ddev run dev:install-modules
 ddev drush user:unblock --uid=1
-ddev exec scripts/switch config-readonly on

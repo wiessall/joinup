@@ -5,15 +5,17 @@ declare(strict_types=1);
 namespace Drupal\dashboard\Form;
 
 use Drupal\Core\Access\AccessResultInterface;
-use Drupal\Core\Cache\CacheTagsInvalidatorInterface;
+use Drupal\Core\Cache\CacheBackendInterface;
+use Drupal\Core\Database\Connection;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
 use Drupal\Core\State\StateInterface;
 use Drupal\Core\Url;
-use Drupal\joinup_core\JoinupSwitcherInterface;
 use Drupal\joinup_core\Logger\Handler\MailHandler;
 use Drupal\joinup_core\Logger\Handler\TelegramHandler;
+use Drupal\rdf_sync\RdfSyncConnectionInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -23,8 +25,10 @@ class DashboardForm extends FormBase {
 
   public function __construct(
     protected StateInterface $state,
-    protected JoinupSwitcherInterface $switcher,
-    protected CacheTagsInvalidatorInterface $invalidator,
+    protected CacheBackendInterface $pageCache,
+    protected EntityTypeManagerInterface $entityTypeManager,
+    protected RdfSyncConnectionInterface $rdfSyncConnection,
+    protected Connection $db,
   ) {
   }
 
@@ -34,8 +38,10 @@ class DashboardForm extends FormBase {
   public static function create(ContainerInterface $container): self {
     return new static(
       $container->get('state'),
-      $container->get('joinup_core.switcher'),
-      $container->get('cache_tags.invalidator')
+      $container->get('cache.page'),
+      $container->get('entity_type.manager'),
+      $container->get('rdf_sync.connection'),
+      $container->get('database'),
     );
   }
 
@@ -102,19 +108,20 @@ class DashboardForm extends FormBase {
       '#value' => $this->t('Submit'),
     ];
 
-    $hasEnableDisablePermission = $this->currentUser()->hasPermission('enable/disable config readonly');
-    $configReadonlyIsEnabled = $this->switcher->isEnabled('config-readonly');
+    // @todo Remove this button in ISAICP-9053.
+    $hasEnableDisablePermission = $this->currentUser()->hasPermission('toggle eu oss catalogue state');
     $form['actions']['enable'] = [
       '#type' => 'submit',
-      '#value' => $this->t('Enable config readonly'),
-      '#submit' => ['::enableConfigSubmitForm'],
-      '#access' => $hasEnableDisablePermission && !$configReadonlyIsEnabled,
+      '#value' => $this->t('Enable EU OSS Catalogue'),
+      '#submit' => ['::enableEuOssCatalogueSubmitForm'],
+      '#access' => $hasEnableDisablePermission && !joinup_oss_catalogue_feature()->isAllowed(),
     ];
+    // @todo Remove this button in ISAICP-9053.
     $form['actions']['disable'] = [
       '#type' => 'submit',
-      '#value' => $this->t('Disable config readonly'),
-      '#submit' => ['::disableConfigSubmitForm'],
-      '#access' => $hasEnableDisablePermission && $configReadonlyIsEnabled,
+      '#value' => $this->t('Disable EU OSS Catalogue'),
+      '#submit' => ['::disableEuOssCatalogueSubmitForm'],
+      '#access' => $hasEnableDisablePermission && joinup_oss_catalogue_feature()->isAllowed(),
     ];
 
     return $form;
@@ -122,20 +129,26 @@ class DashboardForm extends FormBase {
 
   /**
    * Enable the configuration submit form.
+   *
+   * @todo Remove this method in ISAICP-9053.
    */
-  public function enableConfigSubmitForm(): void {
-    $this->switcher->enable('config-readonly');
-    $this->invalidator->invalidateTags(['joinup_user:read_only_config']);
-    $this->messenger()->addStatus($this->t('Enabled config readonly'));
+  public function enableEuOssCatalogueSubmitForm(): void {
+    joinup_oss_catalogue_toggle('enable');
+    // Only clear cache for anonymous.
+    $this->pageCache->deleteAll();
+    $this->messenger()->addStatus($this->t('EU OSS Catalogue has been enabled'));
   }
 
   /**
    * Disables the config submit form.
+   *
+   * @todo Remove this method in ISAICP-9053.
    */
-  public function disableConfigSubmitForm(): void {
-    $this->switcher->disable('config-readonly');
-    $this->invalidator->invalidateTags(['joinup_user:read_only_config']);
-    $this->messenger()->addStatus($this->t('Disabled config readonly'));
+  public function disableEuOssCatalogueSubmitForm(): void {
+    joinup_oss_catalogue_toggle('disable');
+    // Only clear cache for anonymous.
+    $this->pageCache->deleteAll();
+    $this->messenger()->addStatus($this->t('EU OSS Catalogue has been disabled'));
   }
 
   /**

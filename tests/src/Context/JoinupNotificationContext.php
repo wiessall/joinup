@@ -8,7 +8,6 @@ use Behat\Gherkin\Node\TableNode;
 use Drupal\Component\Render\MarkupInterface;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\DrupalExtension\TagTrait;
-use Drupal\joinup\Traits\ConfigReadOnlyTrait;
 use Drupal\joinup\Traits\MailCollectorTrait;
 use Drupal\joinup\Traits\UserTrait;
 use Drupal\joinup\Traits\UtilityTrait;
@@ -23,7 +22,6 @@ use Symfony\Component\DomCrawler\Crawler;
  */
 class JoinupNotificationContext extends RawDrupalContext {
 
-  use ConfigReadOnlyTrait;
   use MailCollectorTrait;
   use TagTrait;
   use UserTrait;

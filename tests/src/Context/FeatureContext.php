@@ -1731,9 +1731,7 @@ class FeatureContext extends RawDrupalContext {
 
     $error_level = $error_level ?: $original_error_level;
     if ($current_error_level !== $error_level) {
-      static::bypassReadOnlyConfig();
       $config->set('error_level', $error_level)->save();
-      static::restoreReadOnlyConfig();
     }
   }
 
@@ -2341,9 +2339,7 @@ class FeatureContext extends RawDrupalContext {
     $settings = ['extension_discovery_scan_tests' => TRUE] + Settings::getAll();
     new Settings($settings);
 
-    static::bypassReadOnlyConfig();
     \Drupal::service('module_installer')->$method($module_name);
-    static::restoreReadOnlyConfig();
   }
 
   /**
@@ -2426,23 +2422,6 @@ class FeatureContext extends RawDrupalContext {
     }
 
     sleep(1);
-  }
-
-  /**
-   * Asserts that configuration is editable or locked.
-   *
-   * @param string $state
-   *   The state of the configuration. Either 'locked' or 'unlocked'.
-   *
-   * @Then the configuration should be :state
-   */
-  public function theConfigurationState(string $state): void {
-    \assert(in_array($state, ['locked', 'unlocked']));
-
-    /** @var \Drupal\joinup_core\JoinupSwitcherInterface $fileReadOnly */
-    $fileReadOnly = \Drupal::service('joinup_core.switcher');
-
-    Assert::assertTrue($fileReadOnly->isEnabled('config-readonly') === ($state === 'locked'));
   }
 
   /**
