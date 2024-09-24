@@ -75,6 +75,19 @@ function joinup_featured_meta_entity_delete(MetaEntityInterface $entity): void {
 }
 
 /**
+ * Implements hook_module_implements_alter().
+ */
+function joinup_featured_module_implements_alter(array &$implementations, string $hook): void {
+  // Ensure that for the entity_view_alter hook, the joinup_featured module runs
+  // after the joinup profile.
+  if ($hook === 'node_view_alter' && isset($implementations['joinup_featured'])) {
+    $group = $implementations['joinup_featured'];
+    unset($implementations['joinup_featured']);
+    $implementations['joinup_featured'] = $group;
+  }
+}
+
+/**
  * Implements hook_entity_view_alter().
  *
  * Adds contextual links metadata for the following:

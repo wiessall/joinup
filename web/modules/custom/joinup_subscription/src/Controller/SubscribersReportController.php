@@ -147,7 +147,7 @@ class SubscribersReportController extends ControllerBase {
    */
   public function groupReport(GroupInterface $group): array {
     $data = $this->getSubscriberData($group);
-    $group_data = $data[$group->id()] ?? NULL;
+    $group_data = $data[$group->getUri()] ?? NULL;
 
     if (!empty($group_data)) {
       $rows = [
@@ -274,22 +274,15 @@ SQL;
     $info = [];
 
     foreach (JoinupGroupHelper::GROUP_BUNDLES as $bundle) {
-      $rdf_type = $bundle === 'collection' ? 'http://www.w3.org/ns/dcat#Catalog' : 'http://www.w3.org/ns/dcat#Dataset';
-      $query = <<<SPARQL
-SELECT ?entity_id ?label
-FROM <http://joinup.eu/$bundle/published>
-WHERE {
-  ?entity_id a <$rdf_type> .
-  ?entity_id <http://purl.org/dc/terms/title> ?label .
-}
-ORDER BY ASC(?label)
-SPARQL;
-
-      foreach ($this->sparqlConnection->query($query) as $result) {
-        $info[$result->entity_id->getUri()] = [
-          $result->label->getValue(),
-          $bundle,
-        ];
+      $query = <<<SQL
+SELECT n.nid as entity_id, n.title as label
+FROM {node_field_data} n
+WHERE n.type = :bundle
+ORDER BY n.title ASC;
+SQL;
+      $result = $this->sqlConnection->query($query, [':bundle' => $bundle]);
+      foreach ($result as $row) {
+        $info[$row->entity_id] = [$row->label, $bundle];
       }
     }
     return $info;

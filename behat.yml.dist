@@ -175,7 +175,7 @@ default:
         Administration toolbar: '#toolbar-administration'
         Bookmark block: '#block-ventuno-bookmark'
         Comment: 'section.comments'
-        Contact information inline form: '#edit-field-ar-contact-information-wrapper'
+        Contact information inline form: '#edit-contact-wrapper'
         Content listing field filter form: '.field--name-content-listing'
         Content: 'main .layout-content'
         Cookie consent banner: '#cookie-consent-banner'

@@ -5,7 +5,7 @@ dependencies: {  }
 id: collection_content_status
 name: Status
 weight: 0
-min_count: 1
+min_count: 0
 missing: false
 missing_label: others
 url_alias: collection_content_status

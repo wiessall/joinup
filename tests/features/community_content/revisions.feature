@@ -6,10 +6,8 @@ Feature:
 
   Scenario Outline: Community content revisions
     Given <group type> content:
-      | title       | Hellow world                              |
-      | description | Because I do not know how to spell Hello. |
-      | moderation  | <moderation>                              |
-      | state       | published                                 |
+      | title        | description                               | moderation   | state     |
+      | Hellow world | Because I do not know how to spell Hello. | <moderation> | published |
     And users:
       | Username           | E-mail                    | Roles     |
       | Clumsy Bounce      | clumsy.bounce@example.com |           |
@@ -192,18 +190,16 @@ Feature:
     # they are posted in a pre-moderated group. The reasoning behind this is
     # everyone should always be free to start a discussion. See ISAICP-2265.
     Examples:
-      | group type | moderation | join button                | leave link            |
-      | collection | yes        | Join this collection       | Leave this collection |
+      | group type | moderation | join button          | leave link            |
+      | collection | yes        | Join this collection | Leave this collection |
       | collection | no         | Join this collection       | Leave this collection |
       | solution   | yes        | Subscribe to this solution | Unsubscribe           |
       | solution   | no         | Subscribe to this solution | Unsubscribe           |
 
   Scenario Outline: Community content revisions (with layout paragraphs)
     Given <group type> content:
-      | title       | Hellow world                              |
-      | description | Because I do not know how to spell Hello. |
-      | moderation  | <moderation>                              |
-      | state       | published                                 |
+      | title        | description                               | moderation   | state     |
+      | Hellow world | Because I do not know how to spell Hello. | <moderation> | published |
     And users:
       | Username           | E-mail                    | Roles     |
       | Clumsy Bounce      | clumsy.bounce@example.com |           |

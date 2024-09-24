@@ -60,7 +60,7 @@ Feature: Solution editing.
     Then the fields "Title, Description, Contact information, Topic, Owner, Solution type, Moderated, Content creation" should be correctly ordered in the region "Solution edit form main fields accordion"
     Then the fields "Logo, Upload a new file or enter a URL, Geographical coverage, Search keywords, Related solutions, Status, Languages, Landing page, Metrics page" should be correctly ordered in the region "Solution edit form additional fields accordion"
 
-    And the following fields should not be present "Issue tracker, Wiki, Langcode, Translation"
+    And the following fields should not be present "Issue tracker, Langcode"
     And the following fieldsets should be present "Contact information, Owner, Content creation"
     # Logo is required, so it is filled up during the creation of the solution.
     # Unfortunately, file fields with a file already attached cannot be found by

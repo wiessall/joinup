@@ -17,8 +17,6 @@ use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup\Traits\TopicTrait;
 use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\meta_entity\Entity\MetaEntity;
-use Drupal\node\Entity\Node;
-use Drupal\paragraphs\Entity\Paragraph;
 
 /**
  * Behat step definitions and related methods provided by the eif module.
@@ -51,49 +49,38 @@ class EifContext extends RawDrupalContext {
       'email' => 'contact.email@example.com',
     ]);
 
+    // Random topic.
+    $topic_label = $this->getRandomTopic()->label();
     // Create the NIFO sample collection.
-    $collection = Node::create([
+    $collection = $this->nodeCreate((object) [
       'type' => 'collection',
       'uri' => 'http://nifo.collection',
       'title' => 'NIFO collection',
       'field_state' => 'published',
-      'field_topic' => $tid = $this->getRandomTopic()->id(),
-      'owner' => $owner->nid,
-      'contact_information' => $contact->nid,
+      'field_topic' => $topic_label,
+      'owner' => $owner->title,
+      'contact_information' => $contact->title,
     ]);
-    $collection->save();
-    $this->entities['rdf_entity'][$collection->id()] = $collection;
 
     // Create the EIF Toolbox solution.
-    $solution = Node::create([
+    $solution = $this->nodeCreate((object) [
       'type' => 'solution',
       'uri' => EifInterface::EIF_ID,
       'title' => 'EIF Toolbox',
-      'og_audience' => $collection,
+      'og_audience' => $collection->title,
       'field_state' => 'published',
-      'field_topic' => $tid,
-      'owner' => $owner->nid,
-      'contact_information' => $contact->nid,
+      'field_topic' => $topic_label,
+      'owner' => $owner->title,
+      'contact_information' => $contact->title,
     ]);
-    $solution->save();
-    $this->entities['rdf_entity'][$solution->id()] = $solution;
 
-    $page = Node::create([
+    $this->nodeCreate((object) [
       'type' => 'custom_page',
       'nid' => EifInterface::EIF_ONLINE_ASSISTANT,
       'title' => 'Online Assistant',
-      'og_audience' => EifInterface::EIF_ID,
-      'field_paragraphs_body' => Paragraph::create([
-        'type' => 'simple_paragraph',
-        'field_body' => [
-          'value' => '',
-          'format' => 'content_editor',
-        ],
-      ]),
+      'og_audience' => $solution->title,
       'field_state' => 'published',
     ]);
-    $page->save();
-    $this->entities['node'][$page->id()] = $page;
 
     // Ensure the taxonomy terms are indexed.
     $vids = [

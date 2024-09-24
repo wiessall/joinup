@@ -412,45 +412,53 @@ display:
       sorts: {  }
       arguments: {  }
       filters:
-        rid:
-          id: rid
+        entity_bundle:
+          id: entity_bundle
           table: search_api_index_published
-          field: rid
+          field: entity_bundle
           relationship: none
           group_type: group
           admin_label: ''
           plugin_id: search_api_string
-          operator: or
+          operator: '='
           value:
+            min: ''
+            max: ''
             value: solution
           group: 1
           exposed: false
           expose:
-            operator_id: ''
-            label: ''
-            description: ''
+            operator_id: entity_bundle_op
+            label: Bundle
+            description: null
             use_operator: false
-            operator: ''
+            operator: entity_bundle_op
             operator_limit_selection: false
             operator_list: {  }
-            identifier: ''
+            identifier: entity_bundle
             required: false
             remember: false
             multiple: false
             remember_roles:
               authenticated: authenticated
+            min_placeholder: null
+            max_placeholder: null
+            placeholder: null
           is_grouped: false
           group_info:
-            label: ''
-            description: ''
-            identifier: ''
+            label: Bundle
+            description: null
+            identifier: entity_bundle
             optional: true
             widget: select
             multiple: false
             remember: false
             default_group: All
             default_group_multiple: {  }
-            group_items: {  }
+            group_items:
+              1: {  }
+              2: {  }
+              3: {  }
       style:
         type: table
       row:
@@ -529,12 +537,17 @@ display:
     cache_metadata:
       max-age: -1
       contexts:
+        - 'facets_filter:f'
         - 'languages:language_content'
         - 'languages:language_interface'
         - request_format
+        - url.query_args
         - 'user.node_grants:view'
         - user.permissions
       tags:
+        - 'config:facets.facet.csv_authoredon'
+        - 'config:facets.facet.csv_changed'
+        - 'config:facets.facet.sbt_csv_solution_type'
         - 'config:field.storage.node.solution_type'
         - 'config:search_api.index.published'
         - 'config:views.view.moderator_solutions_by_type'
@@ -565,12 +578,19 @@ display:
     cache_metadata:
       max-age: -1
       contexts:
+        - 'facets_filter:f'
         - 'languages:language_content'
         - 'languages:language_interface'
         - url.query_args
         - 'user.node_grants:view'
         - user.permissions
       tags:
+        - 'config:facets.facet.aggregated_changed'
+        - 'config:facets.facet.authoredon'
+        - 'config:facets.facet.csv_authoredon'
+        - 'config:facets.facet.csv_changed'
+        - 'config:facets.facet.sbt_csv_solution_type'
+        - 'config:facets.facet.sbt_solution_type'
         - 'config:field.storage.node.solution_type'
         - 'config:search_api.index.published'
         - 'config:views.view.moderator_solutions_by_type'
