@@ -44,8 +44,8 @@ Feature: Sharing content on social networks
     And I click the contextual link "Share" in the "Important solution" tile
 
     And I should see the link "Facebook"
-    And the share link "Facebook" should point to the "Important solution" rdf entity
+    And the share link "Facebook" should point to the "Important solution" content entity
     And I should see the link "Twitter"
-    And the share link "Twitter" should point to the "Important solution" rdf entity
+    And the share link "Twitter" should point to the "Important solution" content entity
     And I should see the link "Linkedin"
-    And the share link "Linkedin" should point to the "Important solution" rdf entity
+    And the share link "Linkedin" should point to the "Important solution" content entity
