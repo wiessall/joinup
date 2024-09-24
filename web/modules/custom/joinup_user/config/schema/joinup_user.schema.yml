@@ -17,3 +17,7 @@ views.filter.user_tristate_status:
 views.field.joinup_user_bulk_form:
   type: views.field.user_bulk_form
   label: 'Joinup user operations bulk form'
+
+entity_reference_selection.joinup_user_full_name:
+  type: entity_reference_selection.default:user
+  label: 'Full name selection handler settings'
