@@ -1,4 +1,4 @@
-uuid: 360402f0-5d59-499a-afc9-57fff9c5166d
+uuid: dc029d67-afe6-477c-a74c-c1c46ca64ab9
 langcode: en
 status: true
 dependencies:
@@ -7,7 +7,7 @@ dependencies:
     - views.view.moderator_solutions_by_type
   module:
     - search_api
-id: solution_type
+id: sbt_solution_type
 name: 'Solution type'
 weight: 0
 min_count: 1
@@ -15,7 +15,7 @@ missing: false
 missing_label: others
 url_alias: solution_type
 facet_source_id: 'search_api:views_page__moderator_solutions_by_type__page_1'
-field_identifier: field_is_solution_type
+field_identifier: solution_type
 query_operator: or
 hard_limit: 0
 exclude: false
@@ -41,34 +41,34 @@ processor_configs:
   active_widget_order:
     processor_id: active_widget_order
     weights:
-      sort: -10
+      sort: 20
     settings:
       sort: DESC
   count_widget_order:
     processor_id: count_widget_order
     weights:
-      sort: -10
+      sort: 30
     settings:
       sort: DESC
   display_value_widget_order:
     processor_id: display_value_widget_order
     weights:
-      sort: -10
+      sort: 40
     settings:
       sort: ASC
   hierarchy_processor:
     processor_id: hierarchy_processor
     weights:
-      build: 100
+      build: -7
     settings: {  }
   translate_entity:
     processor_id: translate_entity
     weights:
-      build: 5
+      build: -5
     settings: {  }
   url_processor_handler:
     processor_id: url_processor_handler
     weights:
-      pre_query: -10
-      build: -10
+      pre_query: 50
+      build: -6
     settings: {  }

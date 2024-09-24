@@ -6,6 +6,13 @@ dependencies:
     - field.storage.node.contact
     - node.type.contact_information
     - node.type.solution
+  module:
+    - rdf_sync
+third_party_settings:
+  rdf_sync:
+    target_id:
+      predicate: 'http://www.w3.org/ns/dcat#contactPoint'
+      type: resource
 id: node.solution.contact
 field_name: contact
 entity_type: node

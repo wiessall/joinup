@@ -35,8 +35,8 @@ Feature: OSS catalogue search
   Scenario: User is able to search.
     # Mimic the "EU OSSC" collection.
     Given collection content:
-      | uri                                                            | title                              | state     |
-      | http://data.europa.eu/w21/6d621a47-71ce-4f1a-90e2-8859403d3ecd | EU Open Source Solutions Catalogue | published |
+      | uri                                                            | uuid                                 | title                              | state     |
+      | http://data.europa.eu/w21/6d621a47-71ce-4f1a-90e2-8859403d3ecd | 6d621a47-71ce-4f1a-90e2-8859403d3ecd | EU Open Source Solutions Catalogue | published |
 
     When I visit the OSS search page
     Then I see the text "EU Open Source Solutions Catalogue" in the "Header" region

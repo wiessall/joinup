@@ -121,6 +121,7 @@ class JoinupContext extends RawDrupalContext {
         'attachments' => 'field_attachment',
         'content' => 'body',
         'keywords' => 'field_keywords',
+        'logo' => 'field_discussion_logo',
         'publication date' => 'published_at',
         'state' => 'field_state',
       ],
@@ -216,8 +217,6 @@ class JoinupContext extends RawDrupalContext {
         'title' => 'title',
         'short ID' => 'short_id',
         'abstract' => 'abstract',
-        // ??
-        'affiliations requests' => 'field_is_affiliations_requests',
         'contact information' => 'contact',
         'content creation' => 'content_creation',
         'creation date' => 'created',
@@ -226,8 +225,6 @@ class JoinupContext extends RawDrupalContext {
         'keywords' => 'field_keywords',
         'landing page' => 'landing_page',
         'language' => 'language',
-        // ??
-        'latest release' => 'field_is_latest_release',
         'logo' => 'logo',
         'metrics page' => 'metrics_page',
         'moderation' => 'group_moderation',
@@ -237,29 +234,15 @@ class JoinupContext extends RawDrupalContext {
         'related by type' => 'list_related_entities',
         'related solutions' => 'related_solutions',
         'solution type' => 'solution_type',
-        // ??
-        'source code repository' => 'field_is_source_code_repository',
         'spatial coverage' => 'spatial_coverage',
         'status' => 'field_status',
-        // ??
-        'translation' => 'field_is_translation',
-        // ??
-        'webdav creation' => 'field_is_webdav_creation',
-        // ??
-        'webdav url' => 'field_is_webdav_url',
-        // ??
-        'wiki' => 'field_is_wiki',
         'state' => 'field_state',
         'collection' => 'og_audience',
         'collections' => 'og_audience',
-        'featured' => 'feature',
-        // ??
+        'featured' => 'featured',
         'pinned in' => 'pinned_in_collection',
         'published at' => 'published_at',
-        // ??
         'unpinned in' => 'unpinned_in_collection',
-        // ??
-        'shared on' => 'field_shared_in',
       ],
       'shared' => [
         'collection' => OgGroupAudienceHelperInterface::DEFAULT_FIELD,
@@ -1020,6 +1003,7 @@ class JoinupContext extends RawDrupalContext {
     }
 
     $image_fields = [
+      'field_discussion_logo',
       'field_document_logo',
       'field_event_logo',
       'field_news_logo',
@@ -1519,7 +1503,7 @@ class JoinupContext extends RawDrupalContext {
    */
   public function assertOrderedTilesPresent(TableNode $titles_table, ?string $list_title = NULL): void {
     $headings = array_keys($this->getTiles(listTitle: $list_title));
-    $headings_expected = $titles_table->getColumn(0);
+    $headings_expected = array_filter($titles_table->getColumn(0));
     Assert::assertEquals($headings_expected, $headings, 'The expected tiles were not found or were not in the proper order.');
   }
 
@@ -2576,16 +2560,14 @@ class JoinupContext extends RawDrupalContext {
    * @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-4849
    * @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-4352
    */
-  public function assertTileNotMarkedAsFeatured($heading, $type): void {
-    if (in_array($type, ['collection', 'solution'])) {
-      $entity_type_id = 'rdf_entity';
-    }
-    elseif (in_array($type, CommunityContentHelper::BUNDLES)) {
-      $entity_type_id = 'node';
-    }
-    else {
-      throw new \Exception("Invalid bundle '$type'.");
-    }
+  public function assertTileNotMarkedAsFeatured(string $heading, string $type): void {
+    assert(in_array($type,
+      array_merge(CommunityContentHelper::BUNDLES, [
+        'solution',
+        'collection',
+      ])
+    ), 'Invalid bundle type.');
+    $entity_type_id = self::translateEntityTypeAlias($type);
     $entity = $this->getEntityByLabel($entity_type_id, $heading);
 
     if ($entity instanceof PinnableGroupContentInterface && $entity->isPinned()) {

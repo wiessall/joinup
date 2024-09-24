@@ -297,27 +297,4 @@ trait OgTrait {
     Assert::assertEquals($expected_result, $group->access($operation, $user), $message);
   }
 
-  /**
-   * Re-maps the keys in the given object following the alias mapping.
-   *
-   * @param \stdClass $entity
-   *   The object representation of a Drupal entity before it is saved.
-   * @param string[] $aliases
-   *   The alias-field mapping to apply. Keys are the aliases, values are the
-   *   the actual entity fields.
-   */
-  protected function convertFieldAliases(\stdClass $entity, array $aliases): void {
-    foreach (array_keys((array) $entity) as $alias) {
-      if (!array_key_exists($alias, $aliases)) {
-        continue;
-      }
-      $key = $aliases[$alias];
-      if ($key === $alias) {
-        continue;
-      }
-      $entity->$key = $entity->$alias;
-      unset($entity->$alias);
-    }
-  }
-
 }
