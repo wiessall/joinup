@@ -21,6 +21,7 @@ use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\joinup_collection\JoinupCollectionHelper;
 use Drupal\joinup_community_content\CommunityContentHelper;
 use Drupal\joinup_group\ContentCreationOptions;
+use Drupal\og\OgGroupAudienceHelper;
 use Drupal\og\OgRoleInterface;
 use Drupal\user\Entity\User;
 use PHPUnit\Framework\ExpectationFailedException;
@@ -515,7 +516,7 @@ class CollectionContext extends RawDrupalContext {
     $node = $scope->getEntity();
 
     // Skip if a collection or solution has been assigned.
-    if (!empty($node->collection) || !empty($node->solution)) {
+    if (!empty($node->collection) || !empty($node->solution) || !empty($node->{OgGroupAudienceHelper::DEFAULT_FIELD})) {
       return;
     }
 
