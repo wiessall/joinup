@@ -94,6 +94,9 @@ Feature: Featuring content site-wide
     Then I should see the following tiles in the correct order:
       | <featured>   |
       | <unfeatured> |
+      # Joinup collection in installed by default.
+      # @see \joinup_test_install()
+      | <extra entity>       |
     And I should not see the contextual link "Feature" in the "<featured>" tile
     And I should not see the contextual link "Remove from featured" in the "<unfeatured>" tile
 
@@ -133,6 +136,6 @@ Feature: Featuring content site-wide
     Then I should see the success message "<label> <unfeatured> has been set as featured content."
 
     Examples:
-      | featured                      | unfeatured                  | label      | content type |
-      | Tidy Neutron                  | Reborn Eternal Gamma        | Collection | collection   |
-      | Opensource neutron generators | Gamma-sensible spectroscopy | Solution   | solution     |
+      | featured                      | unfeatured                  | extra entity | label      | content type |
+      | Tidy Neutron                  | Reborn Eternal Gamma        | Joinup       | Collection | collection   |
+      | Opensource neutron generators | Gamma-sensible spectroscopy |              | Solution   | solution     |
