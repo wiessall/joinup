@@ -19,8 +19,8 @@ Feature:
       | Jordan 1 | Killjoy    | published |
       | Jordan 2 | Sage       | published |
       | Jordan 3 | Sage       | draft     |
-      | Jordan 4 | Phoenix    | published |
-      | Jordan 5 | Killjoy    | draft     |
+      | Jordan 4 | Killjoy    | published |
+      | Jordan 5 | Phoenix    | draft     |
       | Jordan 6 | Killjoy    | published |
     And glossary content:
       | title      | synonyms | definition  | collection      |
