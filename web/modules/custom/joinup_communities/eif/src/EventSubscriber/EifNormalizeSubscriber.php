@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Drupal\eif\EventSubscriber;
 
 use Drupal\eif\Entity\EifPerspectiveInterface;
-use Drupal\joinup_solution\Entity\Solution;
 use Drupal\rdf_sync\Event\RdfSyncNormalizeEvent;
 use EasyRdf\Graph;
 use EasyRdf\Literal;
@@ -35,9 +34,6 @@ class EifNormalizeSubscriber implements EventSubscriberInterface {
       return;
     }
 
-    // Just a heads-up for when solutions are being converted, in ISAICP-8572.
-    // @todo Fix $solutionUri and remove this assertion in ISAICP-8572.
-    assert(!method_exists(Solution::class, 'getUri'));
     if (!$solution = $eifPerspective->getTargetEntity()) {
       throw new \Exception("EIF perspective with ID {$eifPerspective->id()} has no valid target solution");
     }
