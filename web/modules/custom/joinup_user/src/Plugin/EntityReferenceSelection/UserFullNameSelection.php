@@ -10,6 +10,8 @@ use Drupal\Core\Entity\Query\QueryInterface;
 /**
  * Provide User selection handler that uses full name.
  *
+ * Currently, it is only used for private message logic.
+ *
  * @EntityReferenceSelection(
  *   id = "joinup_user_full_name",
  *   label = @Translation("Full name selection"),
@@ -27,6 +29,10 @@ class UserFullNameSelection extends DefaultSelection {
   protected function buildEntityQuery($match = NULL, $match_operator = 'CONTAINS'): QueryInterface {
     $query = parent::buildEntityQuery($match, $match_operator);
 
+    // Don't show the user himself.
+    $query->condition('uid', $this->currentUser->id(), '<>');
+
+    // Search for matches.
     if (isset($match)) {
       $match_chunks = explode(' ', $match);
       foreach ($match_chunks as $match_chunk) {
