@@ -96,7 +96,7 @@ class JoinupSubscriptionContext extends RawDrupalContext {
   public function visitSubscribersReport(string $group): void {
     $group_entity = $this->getEntityByLabel('node', $group);
     $url = Url::fromRoute('joinup_subscription.group_subscribers_report', [
-      'rdf_entity' => $group_entity->id(),
+      'node' => $group_entity->id(),
     ]);
     $this->visitPath($url->toString());
   }
