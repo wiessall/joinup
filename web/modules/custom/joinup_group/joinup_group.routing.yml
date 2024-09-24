@@ -212,6 +212,7 @@ joinup_group.share_content_form:
       node:
         type: entity:node
         bundle:
+          - custom_page
           - discussion
           - document
           - event
@@ -230,6 +231,7 @@ joinup_group.unshare_content_form:
       node:
         type: entity:node
         bundle:
+          - custom_page
           - discussion
           - document
           - event
