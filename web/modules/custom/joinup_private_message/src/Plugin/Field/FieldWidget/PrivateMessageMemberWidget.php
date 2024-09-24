@@ -61,8 +61,11 @@ class PrivateMessageMemberWidget extends PrivateMessageThreadMemberWidget {
   protected function formMultipleElements(FieldItemListInterface $items, array &$form, FormStateInterface $form_state): array {
     $elements = parent::formMultipleElements($items, $form, $form_state);
 
-    // Remove buttons to add or remove users.
     if ($this->getSetting('max_members') == 1) {
+      // Make the label singular by removing the suffix "(s)".
+      $elements['#title'] = rtrim((string) $elements['#title'], '(s)');
+
+      // Remove buttons to add or remove users.
       unset($elements['add_more']);
       unset($elements[0]['_actions']['delete']);
     }
