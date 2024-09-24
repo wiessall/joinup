@@ -12,7 +12,7 @@ dependencies:
 id: ventuno_table_of_contents
 theme: ventuno
 region: content
-weight: 2
+weight: -1
 provider: null
 plugin: 'custom_page_toc:navigation'
 settings:

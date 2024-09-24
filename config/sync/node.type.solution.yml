@@ -4,11 +4,29 @@ status: true
 dependencies:
   module:
     - menu_ui
+    - node_revision_delete
     - rdf_sync
 third_party_settings:
   menu_ui:
     available_menus: {  }
     parent: ''
+  node_revision_delete:
+    amount:
+      status: false
+      settings:
+        amount: 0
+    created:
+      status: false
+      settings:
+        age: 1
+    drafts:
+      status: false
+      settings:
+        age: 1
+    only_drafts:
+      status: false
+      settings:
+        age: 0
   rdf_sync:
     type: 'http://www.w3.org/ns/dcat#Dataset'
     uri_plugin: joinup_po_namespace
@@ -26,5 +44,5 @@ type: solution
 description: 'A solution on Joinup is a framework, tool, or service either hosted directly on Joinup or federated from third-party repositories.'
 help: null
 new_revision: true
-preview_mode: 1
+preview_mode: 0
 display_submitted: false

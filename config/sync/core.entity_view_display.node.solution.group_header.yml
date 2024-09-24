@@ -58,7 +58,7 @@ content:
       path: 'internal:/search'
       label: '[term:name]'
       query_parameters: "f[0]|topic:[term:tid]\r\nf[1]|type:solution"
-      limit: -1
+      limit: 7
     third_party_settings:
       field_delimiter:
         delimiter: ''

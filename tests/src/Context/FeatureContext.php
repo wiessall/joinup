@@ -1582,7 +1582,7 @@ class FeatureContext extends RawDrupalContext {
   }
 
   /**
-   * Performs the RDF synchronization.
+   * Performs the RDF synchronization after each behat step.
    *
    * When a request terminates, all services implementing DestructableInterface
    * are called to perform tasks after the response has been sent back to the
@@ -1594,7 +1594,7 @@ class FeatureContext extends RawDrupalContext {
    *
    * @AfterStep
    */
-  public function rdfSyncDestruct(): void {
+  public function afterScenarioRdfSyncDestruct(): void {
     \Drupal::service('rdf_sync.synchronizer')->destruct();
   }
 

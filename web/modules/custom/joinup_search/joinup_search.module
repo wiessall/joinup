@@ -135,20 +135,22 @@ function joinup_search_views_pre_execute(ViewExecutable $view): void {
 /**
  * Implements hook_views_query_alter().
  *
- * Remove the query condition with field set to
- * message__group.group_target_id set to null. This is a temporary workaround
- * for the announcements view's autocomplete filter.
- *
- * @todo This should be dropped. There should be a ticket to fix the view. This
- *   is a TEMPORARY workaround.
+ * @todo This is a temporary workaround.
+ * @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-9100
  */
 function joinup_search_views_query_alter(ViewExecutable $view, QueryPluginBase $query): void {
-  if ($view->id() !== 'announcements' || $view->current_display !== 'all') {
+  if (($view->id() !== 'announcements' || $view->current_display !== 'all') && ($view->id() !== 'media' || $view->current_display !== 'media_page_list')) {
     return;
   }
 
-  // Iterate through the query conditions and remove the query condition with
-  // field set to message__group.group_target_id set to null.
+  $field_mapping = [
+    // Test affected: announcements.feature.
+    'announcements' => 'message__group.group_target_id',
+    // Test affected: image_library.feature.
+    'media' => 'media__og_audience.og_audience_target_id',
+  ];
+
+  // Clean the group filter if it is empty.
   $conditions = &$query->where;
   foreach ($conditions as $key => $condition_group) {
     if (empty($condition_group['conditions'])) {
@@ -156,7 +158,7 @@ function joinup_search_views_query_alter(ViewExecutable $view, QueryPluginBase $
     }
 
     foreach ($condition_group['conditions'] as $subkey => $condition) {
-      if ($condition['field'] === 'message__group.group_target_id' && $condition['value'] === NULL) {
+      if ($condition['field'] === $field_mapping[$view->id()] && $condition['value'] === NULL) {
         unset($conditions[$key]['conditions'][$subkey]);
       }
     }
