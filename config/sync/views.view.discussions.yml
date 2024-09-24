@@ -133,10 +133,10 @@ display:
           content: 'No discussions available.'
           tokenize: false
       sorts:
-        node_pinned_in:
-          id: node_pinned_in
+        pinned_in:
+          id: pinned_in
           table: search_api_index_published
-          field: node_pinned_in
+          field: pinned_in
           relationship: none
           group_type: group
           admin_label: ''
