@@ -14,4 +14,4 @@ unban_label: Unblock
 ban_page_label: 'Block / Unblock users'
 autofocus_enable: true
 keys_send: 'Enter, 13'
-remove_css: false
+remove_css: true
