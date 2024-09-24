@@ -15,8 +15,8 @@ Feature:
       | title         | description | owner                  | contact information      | state     |
       | Tile solution | Meh...      | Some fancy named owner | Some fancy named contact | published |
     And release content:
-      | title        | release number | release notes | is version of | owner                  | contact information      | state     |
-      | Tile release | 0.1            | Meh...        | Tile solution | Some fancy named owner | Some fancy named contact | published |
+      | title        | release number | release notes | is version of | contact information      | state     |
+      | Tile release | 0.1            | Meh...        | Tile solution | Some fancy named contact | published |
     And distribution content:
       | title       | description | release      | access url | state     |
       | Tile distro | meh...      | Tile release | test.zip   | published |
