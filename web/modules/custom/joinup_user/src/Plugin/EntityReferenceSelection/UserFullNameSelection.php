@@ -25,8 +25,19 @@ class UserFullNameSelection extends DefaultSelection {
 
   /**
    * {@inheritdoc}
+   *
+   * @throws \Exception
+   *   Thrown when the user doesn't have the needed permissions.
    */
   protected function buildEntityQuery($match = NULL, $match_operator = 'CONTAINS'): QueryInterface {
+    if (
+      !(
+        $this->currentUser->hasPermission('access user profiles') &&
+        $this->currentUser->hasPermission('use private messaging system'))
+    ) {
+      throw new \Exception('Permissions missing.');
+    }
+
     $query = parent::buildEntityQuery($match, $match_operator);
 
     // Don't show the user himself.
