@@ -3,14 +3,14 @@ langcode: en
 status: true
 dependencies:
   module:
-    - joinup_collection
+    - collection
     - joinup_core
   theme:
     - ventuno
 id: ventuno_collectionsettingslink
 theme: ventuno
 region: content
-weight: -21
+weight: -19
 provider: null
 plugin: collection_settings_link
 settings:

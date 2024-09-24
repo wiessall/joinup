@@ -88,6 +88,8 @@ function joinup_test_install($is_syncing): void {
       'title' => 'Joinup',
       'field_state' => 'published',
       'field_topic' => $mapper->getEntityByUri('http://joinup.eu/ontology/topic#demography'),
+      'created' => strtotime('2015-01-01 08:00'),
+      'changed' => strtotime('2015-01-01 08:00'),
       'owner' => $nodeStorage->create([
         'type' => 'contact_information',
         'title' => 'Contact name',

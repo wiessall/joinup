@@ -17,6 +17,7 @@ dependencies:
     - field.storage.node.field_paragraphs_body
     - field.storage.node.field_scope
     - field.storage.node.field_short_title
+    - field.storage.node.field_state
     - field.storage.node.owner
     - field.storage.node.solution_type
     - field.storage.node.spdx_licence
@@ -234,12 +235,12 @@ field_settings:
         - 'entity:node/og_audience'
   entity_status:
     label: Status
-    property_path: aggregated_field
+    datasource_id: 'entity:node'
+    property_path: field_state
     type: string
-    configuration:
-      type: union
-      fields:
-        - 'entity:node/field_state'
+    dependencies:
+      config:
+        - field.storage.node.field_state
   field_eif_identifier:
     label: Identifier
     datasource_id: 'entity:taxonomy_term'

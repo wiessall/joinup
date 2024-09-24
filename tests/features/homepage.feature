@@ -72,7 +72,7 @@ Feature: Homepage
       | New muscles | Muscle atrophy | Mice in space | Finance in EU, Supplier exchange, E-health, E-justice | published | blaise.jpg | <news abstract> | <news body>           |
     And discussion content:
       | title                | collection    | topic                            | state     | logo    | body                                                                                                                                                                                       |
-      | Influence of gravity | Mice in space | Employment and Support Allowance | published | ada.jpg | Space exploration has brought about many scientific and technological advances, yet manned spaceflights come at a cost to astronauts, including reduced skeletal muscle mass and strength. |
+      | Influence of gravity | Mice in space | Employment and Support Allowance | published | ada.png | Space exploration has brought about many scientific and technological advances, yet manned spaceflights come at a cost to astronauts, including reduced skeletal muscle mass and strength. |
     And document content:
       | title        | collection    | topic                                  | state     | logo     | abstract                                                                                                                                                                                        |
       | Microgravity | Mice in space | HR, Statistics and Analysis, E-justice | published | alan.jpg | Conventional studies investigating the effects of reduced gravity on muscle mass and function have used a ground control group that is not directly comparable to the space experimental group. |
@@ -286,6 +286,7 @@ Feature: Homepage
     When I am on the homepage
     Then the explore section should contain the following content:
       | type       | title                       | date                 | description                                                                                                                                                                                                                   |
+      | collection | Joinup                      | 2015-01-01 08:00     |                                                                                                                                                                                                                               |
       | collection | Nature area                 | 2023-07-18 08:00     | Supports health                                                                                                                                                                                                               |
       | collection | Clash of vettel             | 2021-10-18 08:00     | The point is that we do have the rights to one of our films. So we could be dealing with a film that we'd normally have to show only for three or four weeks and see what happens. But it's more like a TV show. It's bigger… |
       | collection | Sarah desert                | 2020-06-18 08:00     | Watch our video! It's embedded!                                                                                                                                                                                               |

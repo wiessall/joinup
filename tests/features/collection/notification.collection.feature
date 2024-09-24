@@ -143,7 +143,7 @@ Feature: Notification test for the collection transitions.
       | body      | Your proposed collection "NC to publish" has been validated as per your request. |
 
     # Test the 'approve proposed' that was proposed through the 'propose edit' operation.
-    And I go to the homepage of the "NC to propose edit proposed" collection
+    And I go to the homepage of the "NC to propose edit" collection
     And I click "Edit" in the "Entity actions" region
     And I press "Publish"
     Then the email sent to "NC owner" with subject "Your request to edit collection NC to propose edit proposed has been approved." contains the following lines of text:
@@ -179,8 +179,8 @@ Feature: Notification test for the collection transitions.
       | body      | Since your solution "NC Solution1" was affiliated only with this archived collection, your solution is currently no longer affiliated to any other collection.                                                                                    |
     And the following email should have been sent:
       | recipient | NCS owner                                                                                                                                                       |
-      | subject   | The collection NC to archive was archived                                                                                                                       |
-      | body      | The "NC to archive" collection, to which your "NC Solution2" solution was affiliated, was recently archived. Please verify the updated details of your solution |
+      | subject   | The collection NC to archive was archived. Your solution was affiliated only to the collection NC to archive, and as a consequence, your solution is not currently affiliated to any other collection. Please verify and take appropriate action. |
+      | body      | Since your solution "NC Solution2" was affiliated only with this archived collection, your solution is currently no longer affiliated to any other collection.                                                                                    |
     And the following email should have been sent:
       | recipient | NC member1                                                                                                                   |
       | subject   | The collection NC to archive was archived.                                                                                   |

@@ -24,12 +24,12 @@ services:
   monolog.handler.default_handler:
     class: Monolog\Handler\RotatingFileHandler
     # The parameter is set in \Drupal\joinup_core\JoinupCoreServiceProvider
-    arguments: ['%joinup_core.monolog.paths.default_handler%', 10, '100']
+    arguments: ['%joinup_core.monolog.paths.default_handler%', 10, 250]
 
   monolog.handler.php_handler:
     class: Monolog\Handler\RotatingFileHandler
     # The parameter is set in \Drupal\joinup_core\JoinupCoreServiceProvider
-    arguments: ['%joinup_core.monolog.paths.php_handler%', 10, '400']
+    arguments: ['%joinup_core.monolog.paths.php_handler%', 10, 250]
 
   monolog.handler.mail:
     class: Drupal\joinup_core\Logger\Handler\MailHandler
