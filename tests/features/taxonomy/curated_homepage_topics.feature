@@ -464,9 +464,8 @@ Feature:
       | event       | 1           | grid       | published |
       | document    | 1           | list       | published |
       | document    | 1           | grid       | published |
-      # Discussions don't have logos.
-      | discussion  | 0           | list       | published |
-      | discussion  | 0           | grid       | published |
+      | discussion  | 1           | list       | published |
+      | discussion  | 1           | grid       | published |
 
   @javascript
   Scenario: Up to 4 topics should be shown for tile-two view modes.
