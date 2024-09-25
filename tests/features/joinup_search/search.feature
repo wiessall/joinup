@@ -71,7 +71,11 @@ Feature: Global search
     And I should see the "Spherification" tile
     And I should see the "Foam" tile
     # Terms are sorted alphabetically
-    And the "topic" checkbox facet should allow selecting the following values "eGov (1), Info (1), Statistics and Analysis (1), Social and Political (6), Demography (2), E-inclusion (4)"
+    #
+    # Joinup collection is always present and has 'Demography' as topic. Thus
+    # the 'Demography' and its parent, 'Social and Political', will have the
+    # count increased by one each. See joinup_test.install
+    And the "topic" checkbox facet should allow selecting the following values "eGov (1), Info (1), Statistics and Analysis (1), Social and Political (7), Demography (3), E-inclusion (4)"
     Then I click show more from the "spatial coverage" facet
     And the "spatial coverage" checkbox facet should allow selecting the following values "Belgium (1), European Union (1), Luxembourg (5)"
 
@@ -79,9 +83,12 @@ Feature: Global search
     # Joinup there were two search fields, but this was confusing users.
     And there should be exactly 1 "search field" on the page
 
-    When I check the "Social and Political (6)" checkbox from the "topic" facet
+    When I check the "Social and Political (7)" checkbox from the "topic" facet
     Then the "Social and Political" content checkbox item should be selected
-    And the "topic" checkbox facet should allow selecting the following values "eGov (1), Info (1), Statistics and Analysis (1), Social and Political (6), Demography (2), E-inclusion (4)"
+    # Joinup collection is always present and has 'Demography' as topic. Thus
+    # the 'Demography' and its parent, 'Social and Political', will have the
+    # count increased by one each. See joinup_test.install
+    And the "topic" checkbox facet should allow selecting the following values "eGov (1), Info (1), Statistics and Analysis (1), Social and Political (7), Demography (3), E-inclusion (4)"
     # The tiles appear because the parent term is selected even though they do not have a direct reference there.
     And I should see the "Dummy news 1" tile
     And I should see the "Dummy news 2" tile
@@ -91,17 +98,20 @@ Feature: Global search
     And I should not see the "Rummy news 6" tile
 
     # Test ability to tick many topics.
-    When I check the "Demography (2)" checkbox from the "topic" facet
-    Then I should see the text "SEARCH RESULTS (2)"
+    When I check the "Demography (3)" checkbox from the "topic" facet
+    # Joinup collection is included
+    Then I should see the text "SEARCH RESULTS (3)"
     When I check the "E-inclusion (4)" checkbox from the "topic" facet
-    Then I should see the text "SEARCH RESULTS (6)"
+    # Joinup collection is included
+    Then I should see the text "SEARCH RESULTS (7)"
     And the "Demography" content checkbox item should be selected
     And the "E-inclusion" content checkbox item should be selected
 
     # The selected option moves to the last position by default.
     When I click "E-inclusion"
-    Then I should see the text "SEARCH RESULTS (2)"
-    And the "topic" checkbox facet should allow selecting the following values "eGov (1), Info (1), Statistics and Analysis (1), Social and Political (6), Demography (2), E-inclusion (4)"
+    # Joinup collection is included
+    Then I should see the text "SEARCH RESULTS (3)"
+    And the "topic" checkbox facet should allow selecting the following values "eGov (1), Info (1), Statistics and Analysis (1), Social and Political (7), Demography (3), E-inclusion (4)"
     When I click show more from the "spatial coverage" facet
     Then the "spatial coverage" checkbox facet should allow selecting the following values "Belgium (1), European Union (1)"
     And I should see the "Molecular cooking collection" tile
@@ -137,13 +147,15 @@ Feature: Global search
     Given I click "Clear filters"
     When I check the "News (5)" checkbox from the "Content types" facet
     Then the "News" content checkbox item should be selected
-    And the "Content types" checkbox facet should allow selecting the following values "Collection (1), Solutions (2), News (5), User profiles (1)"
+    # Joinup collection is included
+    And the "Content types" checkbox facet should allow selecting the following values "Collections (2), Solutions (2), News (5), User profiles (1)"
 
     When I check the "Solutions (2)" checkbox from the "Content types" facet
     Then the "Solutions" content checkbox item should be selected
     And the "News" content checkbox item should be selected
     And I should see the following facet summary "Solutions, News"
-    Then the "Content types" checkbox facet should allow selecting the following values "Collection (1), Solutions (2), News (5), User profiles (1)"
+    # Joinup collection is included
+    Then the "Content types" checkbox facet should allow selecting the following values "Collections (2), Solutions (2), News (5), User profiles (1)"
     And the "topic" checkbox facet should allow selecting the following values "eGov (1), Info (1), Statistics and Analysis (1), Social and Political (5), Demography (1), E-inclusion (4)"
     Then I click show more from the "spatial coverage" facet
     And the "spatial coverage" checkbox facet should allow selecting the following values "European Union (1), Luxembourg (5)"
@@ -234,8 +246,8 @@ Feature: Global search
       | title          | description                                                | keywords | owner             | contact information | collection  | state     |
       | Solution alpha | <p>This is the solution <strong>beta</strong> description. | Alphabet | Responsible owner | Go-to contact       | Col for Sol | published |
     And release content:
-      | title         | release number | release notes                               | keywords | is version of  | owner             | contact information | state     |
-      | Release Alpha | 1              | <p>Release notes for <em>beta</em> changes. | Alphabet | Solution alpha | Responsible owner | Go-to contact       | published |
+      | title         | release number | release notes                               | keywords | is version of  | state     |
+      | Release Alpha | 1              | <p>Release notes for <em>beta</em> changes. | Alphabet | Solution alpha | published |
     And distribution content:
       | title              | description                                    | release       | access url | state     |
       | Distribution alpha | <p>A simple beta distribution description.</p> | Release Alpha | test.zip   | published |
@@ -264,7 +276,8 @@ Feature: Global search
       | ulyssesfrees | ulysses.freeman@example.com | Ulysses    | Freeman     | Omero snc    |
 
     When I visit the search page
-    Then the "Content types" checkbox facet should allow selecting the following values "Collections (2), Solution (1), News (1), Events (2), Document (1), Discussion (1), Release (1), Custom page (1), Licence (1), User profiles (2)"
+    # Joinup collection is included
+    Then the "Content types" checkbox facet should allow selecting the following values "Collections (3), Solution (1), News (1), Events (2), Document (1), Discussion (1), Release (1), Custom page (1), Licence (1), User profiles (2)"
 
     # "A beta" word does not show "You must include at least one positive keyword with 3 characters or more." error message.
     When I enter "A beta" in the search bar and press enter
@@ -324,7 +337,8 @@ Feature: Global search
     # Visit the homepage to be sure that the test fetches the correct updated page.
     When I go to the homepage
     And I enter "contact" in the search bar and press enter
-    Then the page should show the tiles "Solution alpha, Release Alpha"
+    # Joinup collection is included
+    Then the page should show the tiles "Joinup, Solution alpha, Release Alpha"
 
     # Users should be found by first name, family name and organisation.
     When I enter "Jenessa" in the search bar and press enter

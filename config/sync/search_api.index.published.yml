@@ -792,6 +792,12 @@ processor_settings:
       - field_user_organisation_spellcheck
       - title
       - title_spellcheck
+  include_custom_page_content:
+    weights:
+      preprocess_index: -49
+  index_distribution_data:
+    weights:
+      preprocess_index: -50
   interoperable_flag: {  }
   joinup_entity_bundle: {  }
   joinup_entity_published_revision: {  }
