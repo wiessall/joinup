@@ -78,10 +78,10 @@ class RdfEntityUriWebConverterForm extends FormBase {
           $entity_type_id = 'node';
         }
 
-        // It might be a mapped taxonomy term.
-        if (($term = $this->mapper->getEntityByUri($id)) && $term->getEntityTypeId() === 'taxonomy_term') {
-          $entity_type_id = 'taxonomy_term';
-          $form_state->setValue('entity_id', $term->id());
+        // It might be a mapped entity.
+        if ($contentEntity = $this->mapper->getEntityByUri($id)) {
+          $entity_type_id = $contentEntity->getEntityTypeId();
+          $form_state->setValue('entity_id', $contentEntity->id());
         }
 
         if ($entity_type_id) {
