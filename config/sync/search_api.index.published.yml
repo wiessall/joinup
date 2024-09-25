@@ -163,7 +163,6 @@ field_settings:
     configuration:
       type: union
       fields:
-        - 'entity:node/created'
         - 'entity:node/field_event_date'
         - 'entity:node/published_at'
   description_processed:

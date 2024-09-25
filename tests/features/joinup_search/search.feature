@@ -647,6 +647,8 @@ Feature: Global search
       | The earth is square |
       | The uneven universe |
       | Quantum information |
+      # Joinup collection is installed in all tests. See joinup_test.install
+      | Joinup              |
       | Red revolution      |
 
   @javascript
