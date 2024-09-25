@@ -260,8 +260,8 @@ display:
               event: default
               licence: default
               news: default
-              solution: view_mode_tile_horizontal
               release: default
+              solution: view_mode_tile_horizontal
             'entity:taxonomy_term':
               eif_conceptual_model: default
               eif_interoperability_layer: default
