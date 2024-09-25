@@ -7,6 +7,7 @@ namespace Drupal\joinup_search\EventSubscriber;
 use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\facets\Utility\FacetsDateHandler;
 use Drupal\joinup_group\Entity\GroupContentInterface;
+use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\node\NodeInterface;
 use Drupal\paragraphs\ParagraphInterface;
 use Drupal\search_api\Query\QueryInterface as SearchApiQueryInterface;
@@ -121,7 +122,7 @@ class SearchApiFieldListingOrder implements EventSubscriberInterface {
       $entity = $entity->getParentEntity();
     }
 
-    if ($entity instanceof GroupContentInterface && $entity->hasGroup()) {
+    if (!$entity instanceof SolutionInterface && $entity instanceof GroupContentInterface && $entity->hasGroup()) {
       $entity = $entity->getGroup();
     }
 
