@@ -26,5 +26,5 @@ Feature: Global Interoperable search
 
     When I visit the search page
     # Joinup in installed by default.# @see joinup_test.install
-    And I check the "Collection (2)" checkbox from the "Content types" facet
+    And I check the "Collections (2)" checkbox from the "Content types" facet
     Then I should not see the text "Show only Interoperable Solutions"

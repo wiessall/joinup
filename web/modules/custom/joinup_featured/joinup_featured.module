@@ -97,7 +97,7 @@ function joinup_featured_module_implements_alter(array &$implementations, string
  *   the user, so that the links will be refreshed when the users relogs.
  */
 function joinup_featured_entity_view_alter(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display): void {
-  if ($entity instanceof FeaturedContentInterface && isset($build['#contextual_links']['entity'])) {
+  if ($entity instanceof FeaturedContentInterface && isset($build['#contextual_links'][$entity->getEntityTypeId()])) {
     // Note: the 'entity' contextual link group is added by the Joinup profile.
     // @see joinup_entity_view_alter()
     $build['#contextual_links'][$entity->getEntityTypeId()]['metadata']['is_featured'] = (int) $entity->isFeatured();
