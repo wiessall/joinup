@@ -14,13 +14,13 @@ Feature: As a user of the website
       | title      | state     |
       | Fairy Tail | published |
     And event content:
-      | title                     | collection | start date   | end date            | created    | state     | author         | pinned |
-      | Sweet Palm                | Fairy Tail | now -1 years | now -1 years +1 day | now -5 day | published | katerpillar    | yes    |
-      | Melted Hairdresser        | Fairy Tail | now -2 day   | now +2 day          | now -4 day | published | katerpillar    | yes    |
-      | Hot Air                   | Fairy Tail | now +3 day   | now +5 day          | now -3 day | published | katerpillar    | no     |
-      | Walking Unofficial Humans | Fairy Tail | now -4 day   | now -2 day          | now        | published | trustysidekick | no     |
+      | title                     | collection | start date   | end date            | created    | state     | author         |
+      | Sweet Palm                | Fairy Tail | now -1 years | now -1 years +1 day | now -5 day | published | katerpillar    |
+      | Melted Hairdresser        | Fairy Tail | now -2 day   | now +2 day          | now -4 day | published | katerpillar    |
+      | Hot Air                   | Fairy Tail | now +3 day   | now +5 day          | now -3 day | published | katerpillar    |
+      | Walking Unofficial Humans | Fairy Tail | now -4 day   | now -2 day          | now        | published | trustysidekick |
       # The "Spring Freezing" event is associated with the anonymous user.
-      | Spring Freezing           | Fairy Tail | now +1 week  | now +1 week         | now -6 day | published |                | no     |
+      | Spring Freezing           | Fairy Tail | now +1 week  | now +1 week         | now -6 day | published |                |
     And document content:
       | title       | collection | state     | created   |
       | Yellow Zeus | Fairy Tail | published | yesterday |
