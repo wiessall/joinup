@@ -23,7 +23,7 @@ Feature: Publication date works as expected on RDF entities
       | title              | state | release number | release notes              | is version of      |
       | Release to publish | draft | 1.0.0          | Only works on flat ground. | Published solution |
 
-  Scenario Outline: Publication date works as expected on precreated draft RDF entities
+  Scenario Outline: Publication date works as expected on precreated draft groups
     Given I am logged in as a moderator
     When I go to the edit form of the "<entity label>" <type>
     Then I should see the heading "Edit <type label> <entity label>"
@@ -36,8 +36,8 @@ Feature: Publication date works as expected on RDF entities
 
     Examples:
       | entity label          | type       | type label | label field     |
-      | Collection to publish | collection | Collection | label[0][value] |
-      | Solution to publish   | solution   | Solution   | label[0][value] |
+      | Collection to publish | collection | Collection | title[0][value] |
+      | Solution to publish   | solution   | Solution   | title[0][value] |
       | Release to publish    | release    | Release    | title[0][value] |
 
   Scenario: Publication date works as expected on distributions
