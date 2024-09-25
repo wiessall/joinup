@@ -10,6 +10,7 @@ declare(strict_types=1);
 use Drupal\Component\Serialization\Yaml;
 use Drupal\Core\Field\Plugin\Field\FieldType\EntityReferenceItemInterface;
 use Drupal\joinup_collection\JoinupCollectionHelper;
+use Drupal\search_api\Plugin\search_api\datasource\ContentEntity;
 use Drupal\taxonomy\TermInterface;
 use Drupal\text\Plugin\Field\FieldType\TextItemBase;
 
@@ -82,7 +83,7 @@ function joinup_test_install($is_syncing): void {
   $nodeStorage = $entityTypeManager->getStorage('node');
   $mapper = \Drupal::getContainer()->get('rdf_sync.mapper');
   if (!$mapper->getEntityByUri(JoinupCollectionHelper::JOINUP_COLLECTION_URI)) {
-    $nodeStorage->create([
+    $collection = $nodeStorage->create([
       'type' => 'collection',
       'uri' => JoinupCollectionHelper::JOINUP_COLLECTION_URI,
       'title' => 'Joinup',
@@ -90,6 +91,10 @@ function joinup_test_install($is_syncing): void {
       'field_topic' => $mapper->getEntityByUri('http://joinup.eu/ontology/topic#demography'),
       'created' => strtotime('2015-01-01 08:00'),
       'changed' => strtotime('2015-01-01 08:00'),
+      'description' => [
+        'value' => 'Joinup is a collaborative platform created by the European Commission and funded by the European Union via the ISA² Programme. It offers several services that aim to help e-Government professionals share their experience with each other. The platform is also a repository of e-Government solutions, case studies, reusable software and components, and best practices. Joinup is a key initiative of the European Commission’s ISA² Programme, which is part of the EU’s policy to create a Digital Single Market.',
+        'format' => 'content_editor',
+      ],
       'owner' => $nodeStorage->create([
         'type' => 'contact_information',
         'title' => 'Contact name',
@@ -100,8 +105,15 @@ function joinup_test_install($is_syncing): void {
         'title' => 'ISA²',
       ]),
 
-    ])->save();
+    ]);
+    $collection->save();
     \Drupal::state()->set('joinup_test.joinup_collection.created', TRUE);
+
+    $indexes = ContentEntity::getIndexesForEntity($collection);
+    foreach ($indexes as $index) {
+      $index->setOption('index_directly', TRUE);
+      $index->trackItemsUpdated('entity:node', [$collection->id() . ':en']);
+    }
   }
 }
 
