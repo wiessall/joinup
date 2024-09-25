@@ -22,14 +22,7 @@ class Owner extends Node implements OwnerInterface {
    * {@inheritdoc}
    */
   public function isReferencedByGroups(): bool {
-    $count = \Drupal::entityQuery('node')
-      ->accessCheck(FALSE)
-      ->condition('type', ['collection', 'solution'], 'IN')
-      ->condition('owner', $this->id())
-      ->count()
-      ->execute();
-
-    return $count > 0;
+    return count($this->getReferencingGroupIds()) > 0;
   }
 
   /**
@@ -40,13 +33,22 @@ class Owner extends Node implements OwnerInterface {
       return [];
     }
 
-    $groupIds = \Drupal::entityQuery('node')
+    $groupIds = $this->getReferencingGroupIds();
+    return !empty($groupIds) ? Node::loadMultiple($groupIds) : [];
+  }
+
+  /**
+   * Returns the ID of the groups which are referencing this owner.
+   *
+   * @return string[]|int[]
+   *   An array of groups IDs that reference the owner, keyed by revision IDs.
+   */
+  protected function getReferencingGroupIds(): array {
+    return \Drupal::entityQuery('node')
       ->accessCheck(FALSE)
-      ->condition('type', ['collection', 'solution'])
+      ->condition('type', ['collection', 'solution'], 'IN')
       ->condition('owner', $this->id())
       ->execute();
-
-    return !empty($result) ? Node::loadMultiple($groupIds) : [];
   }
 
 }
