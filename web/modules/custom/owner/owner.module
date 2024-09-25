@@ -70,7 +70,7 @@ function owner_form_alter_validate(array &$form, FormStateInterface $form_state)
       return '"[' . ucfirst($collection->type->entity->getSingularLabel()) . '] ' . $collection->label() . '"';
     }, $entity->getReferencingGroups());
 
-    $form_state->setError($element, new TranslatableMarkup('The owner cannot be deleted since it owns the following groups: @groups. Please set a different owner for these collections before requesting deletion.', [
+    $form_state->setError($element, new TranslatableMarkup('The owner cannot be deleted since it owns the following groups: @groups. Please set a different owner for these groups before requesting deletion.', [
       '@groups' => implode(', ', $group_labels),
     ]));
   }
