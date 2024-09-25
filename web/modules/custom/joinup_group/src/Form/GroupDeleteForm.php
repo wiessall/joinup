@@ -9,6 +9,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\collection\Entity\CollectionInterface;
+use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_solution\Entity\SolutionInterface;
 
 /**
@@ -22,10 +23,12 @@ class GroupDeleteForm extends ContentEntityDeleteForm {
   public function getQuestion(): TranslatableMarkup {
     $entity = $this->getEntity();
     if (!$entity instanceof CollectionInterface || empty($entity->getSolutions())) {
-      return $this->t('Are you sure you want to delete @type %name?', [
-        '@type' => $entity->get('type')->entity->getSingularLabel(),
-        '%name' => $entity->label(),
-      ]);
+      return $entity instanceof GroupInterface
+        ? $this->t('Are you sure you want to delete @type %name?', [
+          '@type' => $entity->get('type')->entity->getSingularLabel(),
+          '%name' => $entity->label(),
+        ])
+        : parent::getQuestion();
     }
 
     return $this->t('The collection %collection cannot be deleted because it contains the following solutions:', [
