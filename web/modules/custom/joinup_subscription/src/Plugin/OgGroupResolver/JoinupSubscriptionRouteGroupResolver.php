@@ -23,7 +23,7 @@ class JoinupSubscriptionRouteGroupResolver extends RouteGroupResolver {
    */
   protected function getContentEntityPaths(): array {
     return [
-      '/node/{group}/reports/subscribers' => 'node',
+      '/node/{node}/reports/subscribers' => 'node',
     ];
   }
 
