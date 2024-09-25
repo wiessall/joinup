@@ -163,8 +163,8 @@ Feature:
 
   Scenario: Description and summary are displayed accordingly.
     Given news content:
-      | title  | headline | state     | collection |
-      | News 1 | News 1   | published | Joinup     |
+      | title  | headline | state     |
+      | News 1 | News 1   | published |
     And the following topics are enabled in the homepage:
       | Economy and Welfare     |
       | Info                    |
