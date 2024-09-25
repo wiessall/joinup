@@ -15,7 +15,6 @@ use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\FileTrait;
 use Drupal\joinup\Traits\FormTrait;
 use Drupal\joinup\Traits\OgTrait;
-use Drupal\joinup\Traits\RdfEntityTrait;
 use Drupal\joinup\Traits\SearchTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup\Traits\TopicTrait;
@@ -43,7 +42,6 @@ class SolutionContext extends RawDrupalContext {
   use FileTrait;
   use FormTrait;
   use OgTrait;
-  use RdfEntityTrait;
   use TestingEntitiesTrait;
   use SearchTrait;
   use TopicTrait;
@@ -421,14 +419,14 @@ class SolutionContext extends RawDrupalContext {
    * @Given the multilingual :title solution of :collection collection
    */
   public function theMultilingualSolution(string $title, string $collection): void {
-    $collection = $this->getEntityByLabel('node', $collection, 'collection');
-    $values = [
-      'label' => $title,
-      'field_is_state' => 'published',
-      'field_is_description' => "English description",
-      'collection' => $collection->id(),
-    ];
-    $solution = $this->createRdfEntity('solution', $values);
+    $solution = Node::create([
+      'type' => 'solution',
+      'title' => $title,
+      'field_state' => 'published',
+      'description' => "English description",
+      'og_audience' => $this->getEntityByLabel('node', $collection, 'collection'),
+    ]);
+    $solution->save();
     // Fill with the specific content translation fields and fall-back to
     // the remaining values from the base translation.
     $solution_values = $solution->toArray();
@@ -438,7 +436,7 @@ class SolutionContext extends RawDrupalContext {
       'content_translation_uid' => 1,
       'content_translation_outdated' => FALSE,
     ];
-    $solution_values['field_is_description'] = "Catalan description";
+    $solution_values['description'] = "Catalan description";
     // Create the translation.
     $solution->addTranslation('ca', $solution_values)->save();
     $this->entities['node'][$solution->id()] = $solution;
