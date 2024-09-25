@@ -243,9 +243,9 @@ Feature: As a moderator or group facilitator I want to be able to add, edit and
       | mod      | moderator |
       | fac1     |           |
     And collection content:
-      | title                    | description                                                                                            | abstract                                                                                               | state     |
-      | Collection With Glossary | The Battle of Evermore of the batTle and the BATTLE. Call it everMore or EVERmore. Also, battle again. | The Battle of Evermore of the batTle and the BATTLE. Call it everMore or EVERmore. Also, battle again. | published |
-      | The Other Collection     | desc                                                                                                   | desc                                                                                                   | published |
+      | title                    | description                                                                                            | abstract                                                                                              | state     |
+      | Collection With Glossary | The Battle of Evermore of the batTle and the BATTLE. Call it everMore or EVERmore. Also battle again.  | The Battle of Evermore of the batTle and the BATTLE. Call it everMore or EVERmore. Also battle again. | published |
+      | The Other Collection     | desc                                                                                                   | desc                                                                                                  | published |
     And the following collection user membership:
       | collection               | user | roles       |
       | Collection With Glossary | fac  | facilitator |
