@@ -28,7 +28,7 @@ class JoinupRouteGroupResolver extends RouteGroupResolver {
   protected function getContentEntityPaths(): array {
     return [
       '/node/{group}/moderate' => 'node',
-      '/node/{group}/reports' => 'node',
+      '/node/{node}/reports' => 'node',
 
       // @todo Can't find usages of these 2 paths.
       '/node/{node}/announcements/list' => 'node',

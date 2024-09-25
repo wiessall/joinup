@@ -134,8 +134,9 @@ Feature: Tests the group landing page customization.
     Given collection content:
       | title          | state     |
       | Rally fanatics | published |
+      | My own book    | published |
     And "custom_page" content:
-      | title         | group          | body                      | state     |
+      | title         | collection     | body                      | state     |
       | Custom Page 1 | Rally fanatics | The custom page 1 content | published |
       | Custom Page 2 | My own book    | The custom page 2 content | published |
     Given I am logged in as a moderator
@@ -166,7 +167,7 @@ Feature: Tests the group landing page customization.
       | title         | state     |
       | United States | published |
     And "custom_page" content:
-      | title    | group         | body                                                                                 | state     |
+      | title    | collection    | body                                                                                 | state     |
       | Michigan | United States | Michigan is a state in the Great Lakes region of the Upper Midwestern United States. | published |
 
     When I go to the "Michigan" custom page

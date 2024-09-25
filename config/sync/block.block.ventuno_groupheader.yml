@@ -22,9 +22,4 @@ settings:
   provider: joinup
   context_mapping:
     og: '@og.context:og'
-visibility:
-  request_route:
-    id: request_route
-    negate: true
-    routes:
-      - entity.node.edit_form
+visibility: {  }

@@ -65,7 +65,6 @@ joinup_group.reports:
         bundle:
           - collection
           - solution
-    _og_entity_type_id: node
 
 joinup_group.transfer_group_ownership_confirm:
   path: '/group/transfer/ownership'
@@ -212,6 +211,7 @@ joinup_group.share_content_form:
       node:
         type: entity:node
         bundle:
+          - custom_page
           - discussion
           - document
           - event
@@ -230,6 +230,7 @@ joinup_group.unshare_content_form:
       node:
         type: entity:node
         bundle:
+          - custom_page
           - discussion
           - document
           - event

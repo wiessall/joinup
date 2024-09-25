@@ -12,6 +12,7 @@ joinup_distribution.group.add:
         type: entity:node
         bundle:
           - solution
+          - release
 
 joinup_distribution.track_download:
   path: 'distribution/track/{file}'
