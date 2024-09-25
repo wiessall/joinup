@@ -54,11 +54,11 @@ class ReleaseSolutionData extends ProcessorPluginBase {
       $field->addValue($solution->get('field_topic')->target_id);
       $item->setField('topic', $field);
 
+      $contactLabel = $solution->get('contact')->entity?->label() ?? '';
+      $ownerLabel = $solution->get('owner')->entity?->label() ?? '';
       // Include also the contact & owner labels of the parent solution.
       $description = $this->getIndex()->getField('description_processed');
-      $description
-        ->addValue($solution->get('contact')->entity->label())
-        ->addValue($solution->get('owner')->entity->label());
+      $description->addValue($contactLabel)->addValue($ownerLabel);
       $item->setField('description_processed', $description);
     }
   }
