@@ -139,15 +139,15 @@ class SubscribersReportController extends ControllerBase {
   /**
    * Returns a subscribers report for a single group.
    *
-   * @param \Drupal\joinup_group\Entity\GroupInterface $group
+   * @param \Drupal\joinup_group\Entity\GroupInterface $node
    *   The group for which to return the report.
    *
    * @return array[]
    *   A render array containing subscriber data.
    */
-  public function groupReport(GroupInterface $group): array {
-    $data = $this->getSubscriberData($group);
-    $group_data = $data[$group->getUri()] ?? NULL;
+  public function groupReport(GroupInterface $node): array {
+    $data = $this->getSubscriberData($node);
+    $group_data = $data[$node->getUri()] ?? NULL;
 
     if (!empty($group_data)) {
       $rows = [
