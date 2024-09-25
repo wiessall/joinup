@@ -23,7 +23,6 @@ trait PinnableGroupContentTrait {
       return FALSE;
     }
 
-    /** @var \Drupal\joinup_federation\RdfEntityReferenceFieldItemList $item_list */
     $item_list = $meta_entity->get('field_pinned_in');
 
     if (empty($group)) {
