@@ -6,6 +6,8 @@ namespace Drupal\joinup_user\Plugin\EntityReferenceSelection;
 
 use Drupal\Core\Entity\Plugin\EntityReferenceSelection\DefaultSelection;
 use Drupal\Core\Entity\Query\QueryInterface;
+use Drupal\user\Entity\Role;
+use Drupal\user\RoleInterface;
 
 /**
  * Provide User selection handler that uses full name.
@@ -54,18 +56,39 @@ class UserFullNameSelection extends DefaultSelection {
       }
     }
 
+    // Only show users with permissions to use PM
+    // (unless any authenticated can use PM).
+    if (!in_array('authenticated', $roles = $this->getCanUseRids())) {
+      $query->condition('roles.target_id', $roles, 'IN');
+    }
+
     // Adding the permission check is sadly insufficient for users: core
     // requires us to also know about the concept of 'blocked' and 'active'.
     if (!$this->currentUser->hasPermission('administer users')) {
       $query->condition('status', 1);
     }
 
+    // Set the limit according to configuration.
     $configuration = $this->getConfiguration();
     if (!empty($configuration['match_limit'])) {
       $query->range(0, $configuration['match_limit']);
     }
 
     return $query;
+  }
+
+  /**
+   * Returns role ids with permission to use PM system.
+   *
+   * @return string[]
+   *   Array of role IDs.
+   *
+   * @see \Drupal\private_message\Mapper\PrivateMessageMapper::getCanUseRids()
+   */
+  protected function getCanUseRids(): array {
+    $use_pm_permission = 'use private messaging system';
+    $roles = array_filter(Role::loadMultiple(), fn(RoleInterface $role) => $role->hasPermission($use_pm_permission));
+    return array_keys($roles);
   }
 
 }
