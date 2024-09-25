@@ -10,10 +10,8 @@ Feature: "Custom page" deleteing.
       | Mickey Mouse | mickey.mouse@example.com |
       | Pluto        | pluto@example.com        |
     And <group> content:
-      | title       | Dumbo Collective                                                            |
-      | description | Featuring a semi-anthropomorphic elephant who is cruelly nicknamed "Dumbo". |
-      | logo        | logo.png                                                                    |
-      | state       | published                                                                   |
+      | title             | description                                                                 |logo       | state       |
+      | Dumbo Collective  | Featuring a semi-anthropomorphic elephant who is cruelly nicknamed "Dumbo". | logo.png  |  published  |
     And the following <group> user memberships:
       | <group>          | user         | roles       |
       | Dumbo Collective | Mickey Mouse | facilitator |

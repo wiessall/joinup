@@ -22,8 +22,8 @@ Feature: "Custom page" editing.
       | Mickey Mouse | mickey.mouse@example.com |
       | Pluto        | pluto@example.com        |
     And <group> content:
-      | title | Dumbo Collective |
-      | state | published        |
+      | title            | state           |
+      | Dumbo Collective |published        |
     And the following <group> user memberships:
       | <group>          | user         | roles       |
       | Dumbo Collective | Mickey Mouse | facilitator |
