@@ -147,7 +147,7 @@ class SubscribersReportController extends ControllerBase {
    */
   public function groupReport(GroupInterface $node): array {
     $data = $this->getSubscriberData($node);
-    $group_data = $data[$node->getUri()] ?? NULL;
+    $group_data = $data[$node->id()] ?? NULL;
 
     if (!empty($group_data)) {
       $rows = [
@@ -227,12 +227,12 @@ SQL;
 
     // Prepare the data array with empty values to be filled in.
     $data = array_fill_keys(array_keys($subscribers), [
-      'label' => $group ? $group->label() : '',
-      'bundle' => $group ? $group->bundle() : '',
+      'label' => $group?->label() ?: '',
+      'bundle' => $group?->bundle() ?: '',
       'subscribers' => 0,
       'solution' => 0,
     ] + array_fill_keys(CommunityContentHelper::BUNDLES, 0));
-    $data = NestedArray::mergeDeep($data, $subscribers);
+    $data = NestedArray::mergeDeepArray([$data, $subscribers], TRUE);
 
     // Retrieve the number of subscribers by bundle.
     $query = <<<SQL
