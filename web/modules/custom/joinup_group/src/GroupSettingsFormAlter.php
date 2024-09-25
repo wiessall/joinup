@@ -75,11 +75,15 @@ class GroupSettingsFormAlter implements GroupSettingsFormAlterInterface {
     $menuLinkContentStorage = $this->entityTypeManager->getStorage('menu_link_content');
     assert($menuLinkContentStorage instanceof MenuLinkContentStorageInterface);
 
+    $menuLinkQuery = $menuLinkContentStorage->getQuery();
     // Collect the IDs of links to the custom page.
-    $ids = $menuLinkContentStorage->getQuery()->accessCheck(FALSE)
+    $ids = $menuLinkQuery->accessCheck(FALSE)
       ->condition('bundle', 'menu_link_content')
       ->condition('menu_name', "ogmenu-{$menu->id()}")
-      ->condition('link.uri', 'entity:node/' . $group->id())
+      ->condition($menuLinkQuery->orConditionGroup()
+        ->condition('link.uri', "entity:{$group->toUrl()->getInternalPath()}")
+        ->condition('link.uri', $group->toUrl()->toUriString())
+      )
       ->range(0, 1)
       ->execute();
     if (empty($ids)) {

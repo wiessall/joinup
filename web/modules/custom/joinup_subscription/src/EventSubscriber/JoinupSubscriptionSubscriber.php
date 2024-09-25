@@ -44,7 +44,7 @@ class JoinupSubscriptionSubscriber implements EventSubscriberInterface {
       'subscribers',
       $this->t('Subscribers report'),
       Url::fromRoute('joinup_subscription.group_subscribers_report', [
-        'rdf_entity' => $event->getGroup()->id(),
+        'node' => $event->getGroup()->id(),
       ]),
       NULL
     ));

@@ -4,9 +4,14 @@ declare(strict_types=1);
 
 namespace Drupal\joinup\Plugin\Block;
 
+use Drupal\Core\Block\Attribute\Block;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\Plugin\Context\EntityContextDefinition;
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\joinup\Traits\GroupHeaderAccessTrait;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -14,40 +19,29 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *
  * This header contains the name of the group, as well as some statistics and
  * the join / leave buttons.
- *
- * @Block(
- *   id = "group_header_block",
- *   admin_label = @Translation("Group header"),
- *   context_definitions = {
- *     "og" = @ContextDefinition("entity:node", label = @Translation("Organic group"))
- *   }
- * )
  */
+#[Block(
+  id: "group_header_block",
+  admin_label: new TranslatableMarkup("Group header"),
+  context_definitions: [
+    'og' => new EntityContextDefinition(
+      data_type: 'entity:node',
+      label: new TranslatableMarkup("Organic group"),
+    ),
+  ]
+)]
 class GroupHeaderBlock extends BlockBase implements ContainerFactoryPluginInterface {
 
-  /**
-   * The entity type manager.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
+  use GroupHeaderAccessTrait;
 
-  /**
-   * Constructs an instance of the GroupHeaderBlock.
-   *
-   * @param array $configuration
-   *   A configuration array containing information about the plugin instance.
-   * @param string $plugin_id
-   *   The plugin_id for the plugin instance.
-   * @param string $plugin_definition
-   *   The plugin implementation definition.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   The entity type manager.
-   */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager) {
+  public function __construct(
+    array $configuration,
+    string $plugin_id,
+    array $plugin_definition,
+    protected EntityTypeManagerInterface $entityTypeManager,
+    protected RouteMatchInterface $routeMatch,
+  ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
-
-    $this->entityTypeManager = $entity_type_manager;
   }
 
   /**
@@ -58,7 +52,8 @@ class GroupHeaderBlock extends BlockBase implements ContainerFactoryPluginInterf
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('entity_type.manager')
+      $container->get('entity_type.manager'),
+      $container->get('current_route_match'),
     );
   }
 
