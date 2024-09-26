@@ -50,7 +50,7 @@ function eu_oss_catalogue_form_views_exposed_form_alter(array &$form, FormStateI
       '#options' => ['' => t('- Any -')] + $providerPluginManager->getDefinitionsAsOptions('label'),
       '#default_value' => $form['oss_source']['#default_value'],
     ];
-    
+
     // Use yes-no instead of true-false.
     $form['oss_archived']['#options'][1] = t('Yes');
     $form['oss_archived']['#options'][0] = t('No');
