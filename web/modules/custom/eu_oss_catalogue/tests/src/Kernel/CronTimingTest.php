@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Drupal\Tests\eu_oss_catalogue\Kernel;
 
 use Drupal\Component\Datetime\TimeInterface;
+use Drupal\Core\Queue\QueueFactory;
+use Drupal\Core\Queue\QueueInterface;
 use Drupal\KernelTests\KernelTestBase;
 
 /**
@@ -65,6 +67,21 @@ class CronTimingTest extends KernelTestBase {
     // When 1 day and 1 minute passes
     // Replace the real DrupalDateTime class with the mocked one.
     $this->container->set('datetime.time', $mocked_time);
+
+    // Mock queue to check if correct arguments were provided.
+    $mock_queue = $this->createMock(QueueInterface::class);
+    $mock_queue->expects($this->once())
+      ->method('createQueue');
+    $mock_queue->expects($this->once())
+      ->method('createItem')
+      ->with(['provider' => 'developers_italia']);
+    $this->container->set('queue', $mock_queue);
+    $queue_factory = $this->createMock(QueueFactory::class);
+    $queue_factory->expects($this->any())
+      ->method('get')
+      ->with('eu_oss_catalogue_fetcher')
+      ->willReturn($mock_queue);
+    $this->container->set('queue', $queue_factory);
 
     // And I run cron.
     $cron->run();
