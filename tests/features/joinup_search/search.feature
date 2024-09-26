@@ -674,7 +674,8 @@ Feature: Global search
     And I enter "fu" in the "search bar"
     Then I should see the following search suggestions:
       | Radio cooking collection |
-      | Spheres                  |
+      # Joinup collection is always installed
+      | Joinup                   |
 
     When I enter "cook" in the "search bar"
     Then I should see the following search suggestions:
