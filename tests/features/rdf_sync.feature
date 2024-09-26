@@ -48,10 +48,10 @@ Feature: RDF synchronization of contents.
     # The two cases cover the two possible access URL types extracted.
     # @see \Drupal\joinup_distribution\EventSubscriber\DistributionParentRdfSyncSubscriber::addDistributionParentRelation().
     And distribution content:
-      | uri                              | title                   | description                              | creation date    | publication date | changed          | access url                          | release         | solution         | downloads | licence         | format  | status    | representation technique | state     |
-      | http://example.com/distribution1 | SyncingDistribution.zip | The zipped version of Syncing release 3. | 2017-01-11T11:20 | 2017-02-11T11:20 | 2017-03-11T11:20 | http://www.example.org/release.zip  | Syncing release |                  | 232       | Syncing licence | Archive | Completed | Schema                   | published |
-      | http://example.com/distribution2 | SyncingDistribution.rdf | The RDF version of Syncing release 3.    | 2017-04-11T11:20 | 2017-05-11T11:20 | 2017-06-11T11:20 | empty.rdf                           | Syncing release |                  | 232       | Syncing licence | Archive | Completed | Schema                   | published |
-      | http://example.com/distribution3 | SyncingSolution.zip     | The ZIP version of Syncing solution 3.   | 2017-07-11T11:20 | 2017-08-11T11:20 | 2017-09-11T11:20 | http://www.example.org/solution.zip |                 | Syncing solution | 232       | Syncing licence | Archive | Completed | Schema                   | published |
+      | uri                              | title                   | description                              | creation date    | publication date | changed          | access url                            | release         | solution         | downloads | licence         | format  | status    | representation technique | state     |
+      | http://example.com/distribution1 | SyncingDistribution.zip | The zipped version of Syncing release 3. | 2017-01-11T11:20 | 2017-02-11T11:20 | 2017-03-11T11:20 | http://www.example.org/release.zip    | Syncing release |                  | 232       | Syncing licence | Archive | Completed | Schema                   | published |
+      | http://example.com/distribution2 | SyncingDistribution.rdf | The RDF version of Syncing release 3.    | 2017-04-11T11:20 | 2017-05-11T11:20 | 2017-06-11T11:20 | http://www.example.org/some_other.zip | Syncing release |                  | 232       | Syncing licence | Archive | Completed | Schema                   | published |
+      | http://example.com/distribution3 | SyncingSolution.zip     | The ZIP version of Syncing solution 3.   | 2017-07-11T11:20 | 2017-08-11T11:20 | 2017-09-11T11:20 | http://www.example.org/solution.zip   |                 | Syncing solution | 232       | Syncing licence | Archive | Completed | Schema                   | published |
 
     Then the following "http://data" graph triples exist in the RDF backend:
       | subject                     | predicate                                       | object                               |
@@ -146,12 +146,11 @@ Feature: RDF synchronization of contents.
       | http://example.com/distribution2 | http://purl.org/dc/terms/description              | <p>The RDF version of Syncing release 3.</p> |
       | http://example.com/distribution2 | http://purl.org/dc/terms/issued                   | 2017-05-11T11:20:00Z                         |
       | http://example.com/distribution2 | http://purl.org/dc/terms/modified                 | 2017-06-11T11:20:00Z                         |
-      | http://example.com/distribution2 | http://www.w3.org/ns/dcat#accessURL               | {base_url}/sites/default/files/empty.rdf     |
+      | http://example.com/distribution2 | http://www.w3.org/ns/dcat#accessURL               | http://www.example.org/some_other.zip        |
       | http://example.com/distribution2 | http://purl.org/dc/terms/format                   | http://example.com/type1                     |
       | http://example.com/distribution2 | http://www.w3.org/ns/adms#status                  | http://purl.org/adms/status/Completed        |
       | http://example.com/distribution2 | http://www.w3.org/ns/adms#representationTechnique | http://example.com/tech1                     |
       | http://example.com/distribution2 | http://purl.org/dc/terms/license                  | http://example.com/licence1                  |
-      | http://example.com/distribution2 | https://schema.org/fileSize                       | 0.0                                          |
 
     # Test that deleting an entity, removes both the entity and its references.
     Given I delete the "SyncingDistribution.rdf" distribution
