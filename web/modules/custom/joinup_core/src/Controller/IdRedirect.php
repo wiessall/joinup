@@ -7,7 +7,6 @@ namespace Drupal\joinup_core\Controller;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_rdf\Entity\RdfSyncEntityInterface;
-use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\rdf_sync\RdfSyncMapper;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -69,8 +68,7 @@ class IdRedirect extends ControllerBase {
         $entity_type_id => $id,
       ], [], 301);
     }
-    // @todo Remove the second condition, for solution stub exception, in ISAICP-8572.
-    elseif (($entity = $this->mapper->getEntityByUri($id)) && !$entity instanceof SolutionInterface) {
+    elseif (($entity = $this->mapper->getEntityByUri($id))) {
       assert($entity instanceof RdfSyncEntityInterface);
       $entity_type_id = $entity->getEntityTypeId();
       return $this->redirect("entity.$entity_type_id.canonical", [

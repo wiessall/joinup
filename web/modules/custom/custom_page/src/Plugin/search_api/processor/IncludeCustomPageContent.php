@@ -95,8 +95,10 @@ class IncludeCustomPageContent extends ProcessorPluginBase {
         $label_field = $item->getField('title');
         $label_field->addValue($custom_page->label());
 
-        $body_field_name = 'description';
-        $body_field = $item->getField($body_field_name);
+        $body_field = $item->getField('description');
+        if (empty($body_field)) {
+          return;
+        }
 
         // The search_api indexes fields for each entity (there is an HTML
         // output but it is used differently). For simple paragraphs, since this
@@ -104,17 +106,16 @@ class IncludeCustomPageContent extends ProcessorPluginBase {
         // paragraph itself is referenced by the custom page through the
         // field_paragraphs_body field. Iterate through all items in the field
         // and add the markup to the group description.
-        //
-        // @todo Automatically add the entries needed.
-        // @see: https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-5962
-        if (!$custom_page->get('field_paragraphs_body')->isEmpty()) {
+        if ($custom_page->hasField('field_paragraphs_body') && !$custom_page->get('field_paragraphs_body')->isEmpty()) {
           /** @var \Drupal\paragraphs\ParagraphInterface $paragraph */
           foreach ($custom_page->get('field_paragraphs_body')->referencedEntities() as $paragraph) {
-            if ($paragraph->hasField('field_body')) {
+            if ($paragraph->hasField('field_body') && !$paragraph->get('field_body')->isEmpty()) {
               $custom_page_paragraph_body_list = $paragraph->get('field_body');
               foreach ($custom_page_paragraph_body_list as $list_item) {
                 if (!$list_item->isEmpty()) {
-                  $body_field->addValue(check_markup($list_item->value, $list_item->format));
+                  if ($list_item->value) {
+                    $body_field->addValue(check_markup($list_item->value, $list_item->format));
+                  }
                 }
               }
             }

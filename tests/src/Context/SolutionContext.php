@@ -245,7 +245,7 @@ class SolutionContext extends RawDrupalContext {
     /** @var \Drupal\file_url\FileUrlHandler $fileHandler */
     $fileHandler = \Drupal::service('file_url.handler');
 
-    $values = $solution->get('field_is_documentation')->getValue();
+    $values = $solution->get('documentation')->getValue();
     foreach ($values as $value) {
       $file = $fileHandler::urlToFile($value['target_id']);
       if (!$file || $fileHandler::isRemote($file)) {

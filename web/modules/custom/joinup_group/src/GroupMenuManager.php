@@ -26,7 +26,7 @@ class GroupMenuManager implements GroupMenuManagerInterface {
   /**
    * {@inheritdoc}
    */
-  public function getMenuByGroupId(string $groupId, string $menuType): ?OgMenuInstanceInterface {
+  public function getMenuByGroupId(string|int $groupId, string $menuType): ?OgMenuInstanceInterface {
     $group = $this->entityTypeManager->getStorage('node')->load($groupId);
     if (!$group instanceof GroupInterface) {
       return NULL;
