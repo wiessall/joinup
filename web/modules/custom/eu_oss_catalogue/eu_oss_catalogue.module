@@ -51,6 +51,7 @@ function eu_oss_catalogue_form_views_exposed_form_alter(array &$form, FormStateI
       '#default_value' => $form['oss_source']['#default_value'],
     ];
 
+    dpm($providerPluginManager->getDefinitionsAsOptions('label'));
     // Use yes-no instead of true-false.
     $form['oss_archived']['#options'][1] = t('Yes');
     $form['oss_archived']['#options'][0] = t('No');
@@ -160,13 +161,14 @@ function eu_oss_catalogue_cron(): void {
     return;
   }
   $queue_fetcher = \Drupal::queue('eu_oss_catalogue_fetcher');
+  $queue_fetcher->createQueue();
 
   /** @var \Drupal\eu_oss_catalogue\EuOssCataloguePluginManagerInterface $providerPluginManager */
   $providerPluginManager = \Drupal::service('plugin.manager.eu_oss_catalogue.provider');
   foreach ($providerPluginManager->getDefinitionsAsOptions('label') as $provider => $label) {
-    $queue_fetcher->createQueue();
     $queue_fetcher->createItem(['provider' => $provider]);
   }
+
   // Establish the timestamp as 2 AM of the current day.
   $state->set('eu_oss_catalogue.last_check', strtotime(date('Y-m-d', $request_time) . ' 2:00:00'));
   \Drupal::logger('eu_oss_catalogue')->info('Cron eu_oss_catalogue_cron ran successfully.');
