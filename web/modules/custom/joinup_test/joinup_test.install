@@ -96,12 +96,12 @@ function joinup_test_install($is_syncing): void {
         'value' => 'Joinup is a collaborative platform created by the European Commission and funded by the European Union via the ISA² Programme. It offers several services that aim to help e-Government professionals share their experience with each other. The platform is also a repository of e-Government solutions, case studies, reusable software and components, and best practices. Joinup is a key initiative of the European Commission’s ISA² Programme, which is part of the EU’s policy to create a Digital Single Market.',
         'format' => 'content_editor',
       ],
-      'owner' => $nodeStorage->create([
+      'contact' => $nodeStorage->create([
         'type' => 'contact_information',
         'title' => 'Contact name',
         'email' => 'contact.email@example.com',
       ]),
-      'contact' => $nodeStorage->create([
+      'owner' => $nodeStorage->create([
         'type' => 'owner',
         'title' => 'ISA²',
       ]),
