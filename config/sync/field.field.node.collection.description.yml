@@ -8,6 +8,12 @@ dependencies:
     - node.type.collection
   module:
     - text
+    - rdf_sync
+third_party_settings:
+  rdf_sync:
+    value:
+      predicate: 'http://purl.org/dc/terms/description'
+      type: null
 id: node.collection.description
 field_name: description
 entity_type: node
