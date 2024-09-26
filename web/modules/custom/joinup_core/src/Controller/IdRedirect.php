@@ -7,7 +7,6 @@ namespace Drupal\joinup_core\Controller;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_rdf\Entity\RdfSyncEntityInterface;
-use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\rdf_sync\RdfSyncMapper;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
