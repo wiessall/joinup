@@ -58,7 +58,7 @@
         "drupal/honeypot": "~2",
         "drupal/iframe": "^2",
         "drupal/image_library_widget": "^2.0",
-        "drupal/imagecache_external": "3.0.1",
+        "drupal/imagecache_external": "^3.0.4",
         "drupal/inline_entity_form": "^3.0",
         "drupal/jquery_ui_accordion": "^2.1",
         "drupal/json_field": "^1.0",
@@ -387,8 +387,7 @@
             "drupal/imagecache_external": {
                 "Support SVG @see https://www.drupal.org/i/3390948": "resources/patch/php/drupal/imagecache_external/3390948.diff",
                 "Add option to override the inherited HTTP client configuration @see https://drupal.org/i/3396502": "resources/patch/php/drupal/imagecache_external/3396502-7.diff",
-                "Do not try to download failed URLs repeatedly: attempt next time only after the local cache is rebuilt @see https://drupal.org/i/3398665": "resources/patch/php/drupal/imagecache_external/3398665.diff",
-                "Imagecache External Responsive Image formatter uses wrong key to read link setting @see https://drupal.org/i/3424594": "resources/patch/php/drupal/imagecache_external/imagecache_external-wrong_setting_key-3424594-5--complete.patch"
+                "Do not try to download failed URLs repeatedly: attempt next time only after the local cache is rebuilt @see https://drupal.org/i/3398665": "resources/patch/php/drupal/imagecache_external/3398665.diff"
             },
             "drupal/inline_entity_form": {
                 "Autocomplete field doesn't allow to reference entities with long titles @see https://www.drupal.org/node/2895663": "resources/patch/php/drupal/inline_entity_form/2895663.patch",
