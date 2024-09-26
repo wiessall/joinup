@@ -74,24 +74,10 @@ class RdfContext extends RawDrupalContext {
    * @Then the following :graph graph triples exist in the RDF backend:
    */
   public function assertTriples(string $graph, TableNode $triples): void {
-    /** @var \Drupal\rdf_sync\RdfSyncConnectionInterface $connection */
-    $connection = \Drupal::service('rdf_sync.connection');
-
+    $connection = \Drupal::getContainer()->get('rdf_sync.connection');
     $subjects = $rows = [];
     foreach ($triples->getHash() as $triple) {
       $subjects[$triple['subject']][] = $rows[implode(' ', $triple)] = $triple;
-    }
-
-    // Replace the `{base_url}` token in the object with the actual base URL in
-    // order to allow local directories to be included in the tests.
-    $baseUrl = \Drupal::request()->getSchemeAndHttpHost();
-    foreach ($rows as $key => $row) {
-      if (str_contains($key, '{base_url}')) {
-        $replaced = str_replace('{base_url}', $baseUrl, $key);
-        $rows[$replaced] = $row;
-        unset($rows[$key]);
-        $rows[$replaced]['object'] = str_replace('{base_url}', $baseUrl, $row['object']);
-      }
     }
 
     $unexpectedTriples = [];
