@@ -30,6 +30,7 @@ dependencies:
     - field.storage.user.field_user_organisation
     - search_api.server.joinup
   module:
+    - custom_page
     - joinup_flag
     - joinup_oss_catalogue
     - joinup_release
@@ -168,7 +169,7 @@ field_settings:
         - 'entity:node/field_event_date'
         - 'entity:node/published_at'
   description_processed:
-    label: 'Licence Description »  Processed text'
+    label: 'Description »  Processed text'
     datasource_id: 'entity:node'
     property_path: 'description:processed'
     type: text
@@ -176,7 +177,7 @@ field_settings:
       config:
         - field.storage.node.description
   description_processed_spellcheck:
-    label: 'Licence Description » Processed text - spellcheck'
+    label: 'Description » Processed text - spellcheck'
     datasource_id: 'entity:node'
     property_path: 'description:processed'
     type: solr_text_spellcheck
@@ -804,6 +805,9 @@ processor_settings:
       - field_user_organisation_spellcheck
       - title
       - title_spellcheck
+  include_custom_page_content:
+    weights:
+      preprocess_index: 0
   interoperable_flag: {  }
   joinup_entity_bundle: {  }
   joinup_entity_published_revision: {  }
