@@ -241,6 +241,8 @@ class JoinupContext extends RawDrupalContext {
         'collections' => 'og_audience',
         'featured' => 'featured',
         'pinned in' => 'pinned_in_collection',
+        // @todo All `published at` should be changed to `publication date` or
+        //   the other way around, so that we only have one version.
         'published at' => 'published_at',
         'unpinned in' => 'unpinned_in_collection',
       ],
@@ -3208,63 +3210,6 @@ class JoinupContext extends RawDrupalContext {
    */
   public function insulateScenario(): void {
     $this->getMink()->stopSessions();
-  }
-
-  /**
-   * Visits an entity canonical page given its RDF resource (URI).
-   *
-   * @param string $uri
-   *   The entity RDF URI.
-   *
-   * @throws \InvalidArgumentException
-   *   When for the passed URI no entity can be found.
-   *
-   * @Given I visit the page of the entity having :uri as RDF resource
-   */
-  public function visitEntityCanonicalPagePageByRdfUri(string $uri): void {
-    if (!$entity = \Drupal::getContainer()->get('rdf_sync.mapper')->getEntityByUri($uri)) {
-      throw new \InvalidArgumentException("No entity found for URI $uri");
-    }
-    $this->visitPath($entity->toUrl()->toString());
-  }
-
-  /**
-   * Updates an entity, given its RDF resource (URI).
-   *
-   * @codingStandardsIgnoreStart
-   *  Table format:
-   *  | title               | Sample solution   |
-   *  | description         | A sample solution |
-   *  | ...                 | ...               |
-   * @codingStandardsIgnoreEnd
-   *
-   * @param string $uri
-   *   The entity RDF URI.
-   * @param \Behat\Gherkin\Node\TableNode $fieldsTable
-   *   The values of the fields to update.
-   *
-   * @throws \Exception
-   *    Thrown when a field name is invalid.
-   * @throws \InvalidArgumentException
-   *   When for the passed URI no entity can be found.
-   *
-   * @When I update the entity having :uri as RDF resource:
-   */
-  public function updateEntityByRdfUri(string $uri, TableNode $fieldsTable): void {
-    /** @var \Drupal\Core\Entity\ContentEntityInterface|null $entity */
-    if (!$entity = \Drupal::getContainer()->get('rdf_sync.mapper')->getEntityByUri($uri)) {
-      throw new \InvalidArgumentException("No entity found for URI $uri");
-    }
-    $updated = (object) $fieldsTable->getRowsHash();
-    $updated->type = $entity->bundle();
-    $this->parseEntityFields($entity->getEntityTypeId(), $updated);
-    foreach (array_keys($fieldsTable->getRowsHash()) as $key) {
-      if ($key === 'changed' && !is_numeric($updated->$key)) {
-        $updated->$key = strtotime($updated->$key);
-      }
-      $entity->set($key, $updated->$key);
-    }
-    $entity->save();
   }
 
 }

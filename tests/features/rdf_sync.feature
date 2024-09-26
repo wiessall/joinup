@@ -14,72 +14,143 @@ Feature: RDF synchronization of contents.
     And contact_information content:
       | uri                         | name            | email                       | website url        |
       | http://example.com/contact1 | Syncing contact | syncing.contact@example.com | http://example.com |
+    And owner_type terms:
+      | uri                            | name       |
+      | http://example.com/owner-type1 | University |
     And owner content:
       | uri                       | name          | owner type |
-      | http://example.com/owner1 | Syncing owner | Company    |
+      | http://example.com/owner1 | Syncing owner | University |
     And licence content:
       | uri                         | title           | description       | licence type  |
       | http://example.com/licence1 | Syncing licence | Some nice licence | Public domain |
+    And spatial terms:
+      | uri                         | name     |
+      | http://example.com/country1 | Atlantis |
+    And language terms:
+      | uri                          | name     |
+      | http://example.com/language1 | Atlantic |
+    And file_type terms:
+      | uri                      | name    |
+      | http://example.com/type1 | Archive |
+    And representation_technique terms:
+      | uri                      | name   |
+      | http://example.com/tech1 | Schema |
     And collection content:
       | uri                            | title              | author       | abstract  | description                    | access url                  | logo     | contact information | owner         | creation date    | published at     | modification date | closed | content creation         | moderation | topic      | spatial coverage | state     | featured |
-      | http://example.com/collection1 | Syncing collection | Owner of all | Abstract. | Description of the collection. | http://www.example.com/msm/ | logo.png | Syncing contact     | Syncing owner | 2016-06-13T13:00 | 2016-07-13T13:00 | 2017-06-30T11:27  | no     | facilitators and authors | no         | Demography | Belgium          | published | no       |
+      | http://example.com/collection1 | Syncing collection | Owner of all | Abstract. | Description of the collection. | http://www.example.com/msm/ | logo.png | Syncing contact     | Syncing owner | 2016-06-13T13:00 | 2016-07-13T13:00 | 2017-06-30T11:27  | no     | facilitators and authors | no         | Demography | Atlantis         | published | no       |
     Given solution content:
       | uri                          | title            | collection         | author       | description    | logo     | owner         | contact information | creation date   | published at    | modification date | documentation | content creation | keywords         | landing page                    | language | metrics page                    | moderation | topic                    | related solutions | solution type                      | spatial coverage | status    | state     | featured |
-      | http://example.com/solution1 | Syncing solution | Syncing collection | Owner of all | <p>content</p> | logo.png | Syncing owner | Syncing contact     | 2017-10-01T8:00 | 2017-11-01T8:00 | 2017-12-01T8:43   | text.pdf      | registered users | ADMS, validation | http://www.example.com/landing1 | Flemish  | http://www.example.org/metrics1 | no         | EU and European Policies |                   | Networking Infrastructure Enablers | Belgium          | Completed | published | no       |
+      | http://example.com/solution1 | Syncing solution | Syncing collection | Owner of all | <p>content</p> | logo.png | Syncing owner | Syncing contact     | 2017-10-01T8:00 | 2017-11-01T8:00 | 2017-12-01T8:43   | text.pdf      | registered users | ADMS, validation | http://www.example.com/landing1 | Atlantic | http://www.example.org/metrics1 | no         | EU and European Policies |                   | Networking Infrastructure Enablers | Atlantis         | Completed | published | no       |
     And release content:
-      | uri                         | title           | documentation | release number | release notes | creation date    | is version of    | state     | status    | spatial coverage | keywords | language |
-      | http://example.com/release1 | Syncing release | text.pdf      | 3.0.0          | New 3.0       | 2017-11-11T11:11 | Syncing solution | published | Completed | Belgium          | food     | English  |
+      | uri                         | title           | documentation | release number | release notes | creation date    | published at     | changed          | is version of    | state     | status    | spatial coverage | keywords | language |
+      | http://example.com/release1 | Syncing release | text.pdf      | 3.0.0          | New 3.0       | 2017-11-10T11:11 | 2017-11-11T11:11 | 2017-11-12T11:11 | Syncing solution | published | Completed | Atlantis         | food     | Atlantic |
     # The two cases cover the two possible access URL types extracted.
     # @see \Drupal\joinup_distribution\EventSubscriber\DistributionParentRdfSyncSubscriber::addDistributionParentRelation().
     And distribution content:
-      | uri                              | title                   | description                              | creation date    | access url                          | release         | solution         | downloads | licence         | format | status    | representation technique | state     |
-      | http://example.com/distribution1 | SyncingDistribution.zip | The zipped version of Syncing release 3. | 2017-11-11T11:20 | http://www.example.org/release.zip  | Syncing release |                  | 232       | Syncing licence | ZIP    | Completed | Datalog                  | published |
-      | http://example.com/distribution2 | SyncingDistribution.rdf | The RDF version of Syncing release 3.    | 2017-11-11T11:20 | empty.rdf                           | Syncing release |                  | 232       | Syncing licence | ZIP    | Completed | Datalog                  | published |
-      | http://example.com/distribution3 | SyncingSolution.zip     | The ZIP version of Syncing solution 3.   | 2017-11-11T11:20 | http://www.example.org/solution.zip |                 | Syncing solution | 232       | Syncing licence | ZIP    | Completed | Datalog                  | published |
+      | uri                              | title                   | description                              | creation date    | publication date | changed          | access url                          | release         | solution         | downloads | licence         | format  | status    | representation technique | state     |
+      | http://example.com/distribution1 | SyncingDistribution.zip | The zipped version of Syncing release 3. | 2017-01-11T11:20 | 2017-02-11T11:20 | 2017-03-11T11:20 | http://www.example.org/release.zip  | Syncing release |                  | 232       | Syncing licence | Archive | Completed | Schema                   | published |
+      | http://example.com/distribution2 | SyncingDistribution.rdf | The RDF version of Syncing release 3.    | 2017-04-11T11:20 | 2017-05-11T11:20 | 2017-06-11T11:20 | empty.rdf                           | Syncing release |                  | 232       | Syncing licence | Archive | Completed | Schema                   | published |
+      | http://example.com/distribution3 | SyncingSolution.zip     | The ZIP version of Syncing solution 3.   | 2017-07-11T11:20 | 2017-08-11T11:20 | 2017-09-11T11:20 | http://www.example.org/solution.zip |                 | Syncing solution | 232       | Syncing licence | Archive | Completed | Schema                   | published |
 
     Then the following "http://data" graph triples exist in the RDF backend:
-      | subject                        | predicate                                       | object                                                                                 |
-      | http://example.com/contact1    | http://www.w3.org/2006/vcard/ns#fn              | Syncing contact                                                                        |
-      | http://example.com/contact1    | http://www.w3.org/2006/vcard/ns#hasEmail        | syncing.contact@example.com                                                            |
-      | http://example.com/contact1    | http://www.w3.org/2006/vcard/ns#hasURL          | http://example.com                                                                     |
-      | http://example.com/contact1    | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | http://www.w3.org/2006/vcard/ns#Kind                                                   |
-      | http://example.com/owner1      | http://xmlns.com/foaf/0.1/name                  | Syncing owner                                                                          |
-      | http://example.com/owner1      | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | http://xmlns.com/foaf/0.1/Agent                                                        |
-      | http://example.com/owner1      | http://purl.org/dc/terms/type                   | https://joinup.ddev.site/taxonomy-term/owner-type/9b8413a3-2273-4329-b811-2d5d72a4327b |
-      | http://example.com/licence1    | http://www.w3.org/2000/01/rdf-schema#label      | Syncing licence                                                                        |
-      | http://example.com/licence1    | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | http://purl.org/dc/terms/LicenseDocument                                               |
-      | http://example.com/licence1    | http://purl.org/dc/terms/type                   | http://purl.org/adms/licence/PD                                                        |
-      | http://example.com/licence1    | http://purl.org/dc/terms/description            | <p>Some nice licence</p>                                                               |
+      | subject                     | predicate                                       | object                               |
+      | http://example.com/contact1 | http://www.w3.org/2006/vcard/ns#fn              | Syncing contact                      |
+      | http://example.com/contact1 | http://www.w3.org/2006/vcard/ns#hasEmail        | syncing.contact@example.com          |
+      | http://example.com/contact1 | http://www.w3.org/2006/vcard/ns#hasURL          | http://example.com                   |
+      | http://example.com/contact1 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | http://www.w3.org/2006/vcard/ns#Kind |
+    Then the following "http://data" graph triples exist in the RDF backend:
+      | subject                   | predicate                                       | object                          |
+      | http://example.com/owner1 | http://xmlns.com/foaf/0.1/name                  | Syncing owner                   |
+      | http://example.com/owner1 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | http://xmlns.com/foaf/0.1/Agent |
+      | http://example.com/owner1 | http://purl.org/dc/terms/type                   | http://example.com/owner-type1  |
+    Then the following "http://data" graph triples exist in the RDF backend:
+      | subject                     | predicate                                       | object                                   |
+      | http://example.com/licence1 | http://www.w3.org/2000/01/rdf-schema#label      | Syncing licence                          |
+      | http://example.com/licence1 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | http://purl.org/dc/terms/LicenseDocument |
+      | http://example.com/licence1 | http://purl.org/dc/terms/type                   | http://purl.org/adms/licence/PD          |
+      | http://example.com/licence1 | http://purl.org/dc/terms/description            | <p>Some nice licence</p>                 |
       # Default value for the deprecated field.
-      | http://example.com/licence1    | http://joinup.eu/licence/deprecated             | 0                                                                                      |
-      | http://example.com/collection1 | http://purl.org/dc/terms/title                  | Syncing collection                                                                     |
-      | http://example.com/collection1 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | http://www.w3.org/ns/dcat#Catalog                                                      |
-      | http://example.com/collection1 | http://purl.org/dc/terms/description            | Description of the collection.                                                         |
-      | http://example.com/collection1 | http://www.w3.org/ns/dcat#contactPoint          | http://example.com/contact1                                                            |
-      | http://example.com/collection1 | http://purl.org/dc/terms/publisher              | http://example.com/owner1                                                              |
+      | http://example.com/licence1 | http://joinup.eu/licence/deprecated             | 0                                        |
+    Then the following "http://data" graph triples exist in the RDF backend:
+      | subject                        | predicate                                       | object                            |
+      | http://example.com/collection1 | http://purl.org/dc/terms/title                  | Syncing collection                |
+      | http://example.com/collection1 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | http://www.w3.org/ns/dcat#Catalog |
+      | http://example.com/collection1 | http://purl.org/dc/terms/description            | Description of the collection.    |
+      | http://example.com/collection1 | http://www.w3.org/ns/dcat#contactPoint          | http://example.com/contact1       |
+      | http://example.com/collection1 | http://purl.org/dc/terms/publisher              | http://example.com/owner1         |
       # The `published_at` property is exported as `issued` in the RDF.
-      | http://example.com/collection1 | http://purl.org/dc/terms/issued                 | 2016-07-13T13:00:00Z                                                                   |
-      | http://example.com/collection1 | http://purl.org/dc/terms/modified               | 2017-06-30T11:27:00Z                                                                   |
+      | http://example.com/collection1 | http://purl.org/dc/terms/issued                 | 2016-07-13T13:00:00Z              |
+      | http://example.com/collection1 | http://purl.org/dc/terms/modified               | 2017-06-30T11:27:00Z              |
       # The link to the solution is exported by the
       # \Drupal\joinup_solution\EventSubscriber\SolutionRdfSyncSubscriber::addSolutionLinkToCollection.
-      | http://example.com/collection1 | http://www.w3.org/ns/dcat#dataset               | http://example.com/solution1                                                           |
-      | http://example.com/collection1 | http://xmlns.com/foaf/0.1/homepage              | http://www.example.com/msm/                                                            |
-      | http://example.com/collection1 | http://purl.org/dc/terms/spatial                | https://joinup.ddev.site/taxonomy-term/spatial/6c69e2a4-fec5-41df-b31b-91c479faf012    |
-      | http://example.com/solution1   | http://purl.org/dc/terms/title                  | Syncing solution                                                                       |
-      | http://example.com/solution1   | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | http://www.w3.org/ns/dcat#Dataset                                                      |
-      | http://example.com/solution1   | http://purl.org/dc/terms/description            | <p>content</p>                                                                         |
-      | http://example.com/solution1   | http://www.w3.org/ns/dcat#keyword               | ADMS                                                                                   |
-      | http://example.com/solution1   | http://www.w3.org/ns/dcat#keyword               | validation                                                                             |
+      | http://example.com/collection1 | http://www.w3.org/ns/dcat#dataset               | http://example.com/solution1      |
+      | http://example.com/collection1 | http://xmlns.com/foaf/0.1/homepage              | http://www.example.com/msm/       |
+      | http://example.com/collection1 | http://purl.org/dc/terms/spatial                | http://example.com/country1       |
+    Then the following "http://data" graph triples exist in the RDF backend:
+      | subject                      | predicate                                       | object                                                     |
+      | http://example.com/solution1 | http://purl.org/dc/terms/title                  | Syncing solution                                           |
+      | http://example.com/solution1 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | http://www.w3.org/ns/dcat#Dataset                          |
+      | http://example.com/solution1 | http://purl.org/dc/terms/description            | <p>content</p>                                             |
+      | http://example.com/solution1 | http://www.w3.org/ns/dcat#keyword               | ADMS                                                       |
+      | http://example.com/solution1 | http://www.w3.org/ns/dcat#keyword               | validation                                                 |
+      | http://example.com/solution1 | http://purl.org/dc/terms/language               | http://example.com/language1                               |
       # The link to the release is exported by the
       # \Drupal\joinup_release\EventSubscriber\SolutionDataRdfSyncSubscriber::addReleaseDataToSolution.
-      | http://example.com/solution1   | http://purl.org/dc/terms/hasVersion             | http://example.com/release1                                                            |
-      | http://example.com/solution1   | http://www.w3.org/ns/dcat#distribution          | http://example.com/distribution3                                                       |
+      | http://example.com/solution1 | http://purl.org/dc/terms/hasVersion             | http://example.com/release1                                |
+      | http://example.com/solution1 | http://www.w3.org/ns/dcat#distribution          | http://example.com/distribution3                           |
       # The `published_at` property is exported as `issued` in the RDF.
-      | http://example.com/solution1   | http://purl.org/dc/terms/issued                 | 2017-11-01T08:00:00Z                                                                   |
-      | http://example.com/solution1   | http://purl.org/dc/terms/modified               | 2017-12-01T08:43:00Z                                                                   |
-      | http://example.com/solution1   | http://purl.org/dc/terms/publisher              | http://example.com/owner1                                                              |
-      | http://example.com/solution1   | http://www.w3.org/ns/dcat#contactPoint          | http://example.com/contact1                                                            |
-      | http://example.com/solution1   | http://purl.org/dc/terms/type                   | http://data.europa.eu/dr8/NetworkingInfrastructureEnablers                             |
+      | http://example.com/solution1 | http://purl.org/dc/terms/issued                 | 2017-11-01T08:00:00Z                                       |
+      | http://example.com/solution1 | http://purl.org/dc/terms/modified               | 2017-12-01T08:43:00Z                                       |
+      | http://example.com/solution1 | http://purl.org/dc/terms/publisher              | http://example.com/owner1                                  |
+      | http://example.com/solution1 | http://www.w3.org/ns/dcat#contactPoint          | http://example.com/contact1                                |
+      | http://example.com/solution1 | http://purl.org/dc/terms/type                   | http://data.europa.eu/dr8/NetworkingInfrastructureEnablers |
+      | http://example.com/solution1 | http://purl.org/dc/terms/spatial                | http://example.com/country1                                |
+    And the following "http://data" graph triples exist in the RDF backend:
+      | subject                     | predicate                                       | object                                                     |
+      | http://example.com/release1 | http://purl.org/dc/terms/title                  | Syncing release                                            |
+      | http://example.com/release1 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | http://www.w3.org/ns/dcat#Dataset                          |
+      | http://example.com/release1 | http://www.w3.org/2002/07/owl#versionInfo       | 3.0.0                                                      |
+      | http://example.com/release1 | http://purl.org/dc/terms/description            | <p>content</p>                                             |
+      | http://example.com/release1 | http://purl.org/dc/terms/issued                 | 2017-11-11T11:11:00Z                                       |
+      | http://example.com/release1 | http://purl.org/dc/terms/modified               | 2017-11-12T11:11:00Z                                       |
+      | http://example.com/release1 | http://www.w3.org/ns/adms#status                | http://purl.org/adms/status/Completed                      |
+      | http://example.com/release1 | http://www.w3.org/ns/dcat#keyword               | food                                                       |
+      | http://example.com/release1 | http://purl.org/dc/terms/isVersionOf            | http://example.com/solution1                               |
+      | http://example.com/release1 | http://www.w3.org/ns/adms#versionNotes          | New 3.0                                                    |
+      | http://example.com/release1 | http://www.w3.org/ns/dcat#distribution          | http://example.com/distribution1                           |
+      | http://example.com/release1 | http://www.w3.org/ns/dcat#distribution          | http://example.com/distribution2                           |
+      # Inherited from solution.
+      | http://example.com/release1 | http://purl.org/dc/terms/publisher              | http://example.com/owner1                                  |
+      | http://example.com/release1 | http://www.w3.org/ns/dcat#contactPoint          | http://example.com/contact1                                |
+      | http://example.com/release1 | http://purl.org/dc/terms/type                   | http://data.europa.eu/dr8/NetworkingInfrastructureEnablers |
+      | http://example.com/release1 | http://purl.org/dc/terms/language               | http://example.com/language1                               |
+      | http://example.com/release1 | http://purl.org/dc/terms/spatial                | http://example.com/country1                                |
+    And the following "http://data" graph triples exist in the RDF backend:
+      | subject                          | predicate                                         | object                                          |
+      | http://example.com/distribution1 | http://purl.org/dc/terms/title                    | SyncingDistribution.zip                         |
+      | http://example.com/distribution1 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type   | http://www.w3.org/ns/dcat#Distribution          |
+      | http://example.com/distribution1 | http://purl.org/dc/terms/description              | <p>The zipped version of Syncing release 3.</p> |
+      | http://example.com/distribution1 | http://purl.org/dc/terms/issued                   | 2017-02-11T11:20:00Z                            |
+      | http://example.com/distribution1 | http://purl.org/dc/terms/modified                 | 2017-03-11T11:20:00Z                            |
+      | http://example.com/distribution1 | http://www.w3.org/ns/dcat#accessURL               | http://www.example.org/release.zip              |
+      | http://example.com/distribution1 | http://purl.org/dc/terms/format                   | http://example.com/type1                        |
+      | http://example.com/distribution1 | http://www.w3.org/ns/adms#status                  | http://purl.org/adms/status/Completed           |
+      | http://example.com/distribution1 | http://www.w3.org/ns/adms#representationTechnique | http://example.com/tech1                        |
+      | http://example.com/distribution1 | http://purl.org/dc/terms/license                  | http://example.com/licence1                     |
+      | http://example.com/distribution1 | http://www.w3.org/ns/dcat#accessURL               | http://www.example.org/release.zip              |
+    And the following "http://data" graph triples exist in the RDF backend:
+      | subject                          | predicate                                         | object                                       |
+      | http://example.com/distribution2 | http://purl.org/dc/terms/title                    | SyncingDistribution.rdf                      |
+      | http://example.com/distribution2 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type   | http://www.w3.org/ns/dcat#Distribution       |
+      | http://example.com/distribution2 | http://purl.org/dc/terms/description              | <p>The RDF version of Syncing release 3.</p> |
+      | http://example.com/distribution2 | http://purl.org/dc/terms/issued                   | 2017-05-11T11:20:00Z                         |
+      | http://example.com/distribution2 | http://purl.org/dc/terms/modified                 | 2017-06-11T11:20:00Z                         |
+      | http://example.com/distribution2 | http://www.w3.org/ns/dcat#accessURL               | {base_url}/sites/default/files/empty.rdf     |
+      | http://example.com/distribution2 | http://purl.org/dc/terms/format                   | http://example.com/type1                     |
+      | http://example.com/distribution2 | http://www.w3.org/ns/adms#status                  | http://purl.org/adms/status/Completed        |
+      | http://example.com/distribution2 | http://www.w3.org/ns/adms#representationTechnique | http://example.com/tech1                     |
+      | http://example.com/distribution2 | http://purl.org/dc/terms/license                  | http://example.com/licence1                  |
+      | http://example.com/distribution2 | https://schema.org/fileSize                       | 0.0                                          |
 
   Scenario: RDF entities for EIF perspective are correctly created.
     Given solution content:

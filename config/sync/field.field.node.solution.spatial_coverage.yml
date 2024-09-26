@@ -6,6 +6,13 @@ dependencies:
     - field.storage.node.spatial_coverage
     - node.type.solution
     - taxonomy.vocabulary.spatial
+  module:
+    - rdf_sync
+third_party_settings:
+  rdf_sync:
+    target_id:
+      predicate: 'http://purl.org/dc/terms/spatial'
+      type: resource
 id: node.solution.spatial_coverage
 field_name: spatial_coverage
 entity_type: node
