@@ -150,9 +150,8 @@ Feature: Navigation menu for custom pages
     # As a group facilitator
     # I should see a button in the navigation menu that displays options when clicked
     Given <group> content:
-      | title | Prism Gazers |
-      | logo  | logo.png     |
-      | state | published    |
+      | title        | logo     | state     |
+      | Prism Gazers | logo.png | published |
     And custom_page content:
       | title           | body                   | <group>      | state     | topic |
       | Mists of dreams | This is a sample body. | Prism Gazers | published | HR    |
@@ -178,8 +177,8 @@ Feature: Navigation menu for custom pages
 
   Scenario Outline: Synchronize titles of custom pages and menu links
     Given <group> content:
-      | title | Ravenous wood-munching alphabeavers |
-      | state | published                           |
+      | title                               | state     |
+      | Ravenous wood-munching alphabeavers | published |
     And custom_page content:
       | title       | body                                                                | <group>                             | topic | state     |
       | Tree eaters | Given time, they will most likely strip the entire region of trees. | Ravenous wood-munching alphabeavers | HR    | published |
@@ -301,8 +300,8 @@ Feature: Navigation menu for custom pages
   @javascript
   Scenario Outline: Only custom page entries can be nested in the navigation menu.
     Given <group> content:
-      | title | Ergonomic backpacks |
-      | state | published           |
+      | title               | state     |
+      | Ergonomic backpacks | published |
     And custom_page content:
       | title              | <group>             | state     | topic |
       | Types of backpacks | Ergonomic backpacks | published | HR    |

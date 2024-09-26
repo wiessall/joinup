@@ -30,9 +30,9 @@ Feature:
       | title                | collection  | state     | changed          |
       | HOWTOs               | Vintage Art | published | 2016-11-19 20:00 |
       | Looking for Support? | Vintage Art | published | 2015-11-19 20:00 |
-    And collection content:
-      | title  | Looking for Support? |
-      | parent | HOWTOs               |
+    And the following custom page navigation menu structure for the "Vintage Art" collection:
+      | title                | parent |
+      | Looking for Support? | HOWTOs |
 
     Given I am an anonymous user
     And I go to the homepage of the "Vintage Art" collection

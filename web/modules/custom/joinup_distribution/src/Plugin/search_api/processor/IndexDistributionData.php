@@ -117,8 +117,7 @@ class IndexDistributionData extends ProcessorPluginBase {
     }
 
     // Get the parent Search API field.
-    $sapiFieldName = $entity->bundle() === 'release' ? 'description_processed' : 'field_is_description';
-    $sapiField = $item->getField($sapiFieldName);
+    $sapiField = $item->getField('description');
     if (empty($sapiField)) {
       return;
     }

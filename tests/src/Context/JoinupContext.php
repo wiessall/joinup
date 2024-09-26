@@ -855,7 +855,7 @@ class JoinupContext extends RawDrupalContext {
         }
       }
       // Add the body field format.
-      if ($name === 'body') {
+      if ($name === 'body' || $name === 'description') {
         $value_key = "{$name}:value";
         $format_key = "{$name}:format";
         $node->{$value_key} = $value;

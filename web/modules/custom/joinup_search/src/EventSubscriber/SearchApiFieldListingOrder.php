@@ -174,7 +174,7 @@ class SearchApiFieldListingOrder implements EventSubscriberInterface {
     // @see https://lucene.apache.org/solr/guide/6_6/function-queries.html#function-queries
     // @see http://archive.apache.org/dist/lucene/solr/ref-guide/apache-solr-ref-guide-5.5.pdf
     $computed_sort = sprintf(
-      "or(termfreq(sm_pinned_in,%1\$s),termfreq(sm_pinned_in,%1\$s))",
+      "or(termfreq(sm_node_pinned_in,%1\$s))",
       $solariumApiQuery->getHelper()->escapePhrase($entity->id())
     );
     $solariumApiQuery->addSort($computed_sort, Query::SORT_DESC);
