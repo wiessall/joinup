@@ -1,0 +1,4 @@
+# Schema for the configuration files of the Joinup private message module.
+entity_reference_selection.joinup_user_full_name:
+  type: entity_reference_selection.default:user
+  label: 'Full name selection handler settings'
