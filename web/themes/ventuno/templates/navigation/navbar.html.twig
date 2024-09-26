@@ -101,9 +101,6 @@
       <ul
         {{ list_attributes }}
       >
-        {% if private_message %}
-          <li class="nav-item d-inline-block order-2">{{ private_message }}</li>
-        {% endif %}
         {% for item in _items %}
           {% if item.breakpoint %}
             {% for link_key, link in item.links %}
