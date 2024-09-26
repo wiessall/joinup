@@ -7,15 +7,12 @@ namespace Drupal\joinup\Context;
 use Drupal\Component\Utility\Variable;
 use Drupal\Core\Logger\RfcLogLevel;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
-use Drupal\joinup\Traits\ConfigReadOnlyTrait;
 use PHPUnit\Framework\Assert;
 
 /**
  * Behat step definitions to check log records created during tests.
  */
 class LogRecordsContext extends RawDrupalContext {
-
-  use ConfigReadOnlyTrait;
 
   /**
    * Whether Database Log module was originally enabled or not.
@@ -174,7 +171,6 @@ class LogRecordsContext extends RawDrupalContext {
    * @BeforeScenario @loggedErrors
    */
   public function ensureLogger(): void {
-    self::bypassReadOnlyConfig();
     $this->dblogStatusOriginal = \Drupal::moduleHandler()->moduleExists('dblog');
     $this->timeStamp = time();
     \Drupal::service('module_installer')->install(['dblog']);
@@ -200,7 +196,6 @@ class LogRecordsContext extends RawDrupalContext {
     else {
       \Drupal::service('module_installer')->uninstall(['dblog']);
     }
-    self::restoreReadOnlyConfig();
   }
 
   /**
