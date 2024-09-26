@@ -19,6 +19,18 @@ trait RdfSyncEntityTrait {
   }
 
   /**
+   * Returns whether the entity has a URI.
+   *
+   * @return bool
+   *   TRUE if the entity has a URI, FALSE otherwise.
+   */
+  public function hasUri(): bool {
+    assert($this instanceof RdfSyncEntityInterface);
+    $fieldName = \Drupal::getContainer()->get('rdf_sync.mapper')->getRdfUriFieldName(entity: $this);
+    return !$this->get($fieldName)->isEmpty();
+  }
+
+  /**
    * {@inheritdoc}
    */
   public static function loadByUri(string $uri): ?RdfSyncEntityInterface {

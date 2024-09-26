@@ -135,47 +135,6 @@ class SolutionContext extends RawDrupalContext {
   }
 
   /**
-   * Make sure that the solution being created has a parent collection.
-   *
-   * For some tests the solution's parent collection has no relevance. Such
-   * tests are allowed to omit an explicit collection creation. We're creating
-   * here a dummy parent collection just to satisfy the data integrity
-   * constraint.
-   *
-   * @param array $values
-   *   The solution creation values.
-   *
-   * @see \Drupal\joinup_solution\SolutionAffiliationFieldItemList::preSave()
-   */
-  protected function ensureParentCollection(array &$values): void {
-    if (empty($values['collection'])) {
-      $label = $this->getRandom()->sentences(3);
-      $collection = Node::create([
-        'type' => 'collection',
-        'title' => $label,
-        'field_state' => 'published',
-      ]);
-      $collection->save();
-      $values['collection'] = $label;
-      // Track this collection.
-      $this->entities['node'][$collection->id()] = $collection;
-
-      // Remove any links created by this collection because they might produce
-      // name collisions with the solution. E.g. the left sidebar link 'About'.
-      // @todo Remove this workaround in ISAICP-5597.
-      // @see tests/features/custom_page/navigation_menu.feature
-      // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-5597
-      $entity_type_manager = \Drupal::entityTypeManager();
-      $storage = $entity_type_manager->getStorage('ogmenu_instance');
-      $og_menu_instance_ids = $storage->getQuery()->accessCheck(FALSE)
-        ->condition('type', 'navigation')
-        ->condition(OgGroupAudienceHelperInterface::DEFAULT_FIELD, $collection->id())
-        ->execute();
-      $storage->delete($storage->loadMultiple($og_menu_instance_ids));
-    }
-  }
-
-  /**
    * Asserts that a user is an owner of the given solution.
    *
    * To be owner of a solution, a user should be an administrator and
