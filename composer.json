@@ -332,7 +332,8 @@
                 "MediaLibraryUiBuilder service does not properly allow additional contextual filter arguments @see https://www.drupal.org/i/3401726": "resources/patch/php/drupal/core/3401726.diff",
                 "The submit button is not following any condition while in popup/dialogs @see https://drupal.org/i/3008172": "resources/patch/php/drupal/core/3008172-43.patch",
                 "Added deprecation suppression": "resources/patch/php/drupal/core/3467293.diff",
-                "Fix handling of unknown file extensions in FileMediaFormatterBase @see https://www.drupal.org/i/3466462": "resources/patch/php/drupal/core/3466462.diff"
+                "Fix handling of unknown file extensions in FileMediaFormatterBase @see https://www.drupal.org/i/3466462": "resources/patch/php/drupal/core/3466462.diff",
+                "Allow ChangedItem to skip updating the entity's \"changed\" timestamp when synchronizing @see https://drupal.org/i/2329253": "resources/patch/php/drupal/core/2329253-10.x.patch"
             },
             "drupal/default_content": {
                 "Allow manual imports @see https://www.drupal.org/i/2640734": "resources/patch/php/drupal/default_content/2640734.diff"
