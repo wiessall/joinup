@@ -175,6 +175,16 @@ class RdfContext extends RawDrupalContext {
       if ($key === 'changed' && !is_numeric($updated->$key)) {
         $updated->$key = strtotime($updated->$key);
       }
+      if ($entity->getFieldDefinition($key)->getType() === 'entity_reference') {
+        $targetEntityType = $entity->getFieldDefinition($key)->getSetting('target_type');
+        foreach ($updated->$key as $delta => $value) {
+          $targetEntity = \Drupal::entityTypeManager()->getStorage($targetEntityType)->loadByProperties(['name' => $value]);
+          \assert($targetEntity, "No entity found for $key = $value");
+          $targetEntity = reset($targetEntity);
+          $updated->$key[$delta] = ['target_id' => $targetEntity->id()];
+        }
+
+      }
       $entity->set($key, $updated->$key);
     }
     $entity->save();
@@ -196,6 +206,32 @@ class RdfContext extends RawDrupalContext {
       throw new \InvalidArgumentException("No entity found for URI $uri");
     }
     $this->visitPath($entity->toUrl()->toString());
+  }
+
+  /**
+   * Asserts that no triples exist with the given URI as the given property.
+   *
+   * @param string $property
+   *   The property to check. Either 'subject' or 'object'.
+   * @param string $uri
+   *   The URI to check.
+   * @param string $graph
+   *   The graph to check.
+   *
+   * @Then there should not be any triples with the :property :uri in the :graph graph
+   */
+  public function assertNoTriplesOfUri(string $property, string $uri, string $graph): void {
+    assert(in_array($property, ['subject', 'object']), 'The property must be either "subject" or "object"');
+    $stub = $property === 'subject' ?
+      "<$uri> ?p ?o" :
+      "?s ?p <$uri>";
+
+    $query = "WITH <$graph> SELECT * WHERE { $stub }";
+
+    /** @var \Drupal\rdf_sync\RdfSyncConnectionInterface $connection */
+    $connection = \Drupal::service('rdf_sync.connection');
+    $results = $connection->query($query);
+    Assert::assertCount(0, $results, "There are triples with $property $uri in the $graph graph");
   }
 
 }
