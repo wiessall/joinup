@@ -52,6 +52,11 @@ class PrivateMessageMemberWidget extends PrivateMessageThreadMemberWidget {
 
     $element['target_id']['#selection_handler'] = 'joinup_user_full_name';
 
+    $style_disabled = $this->config->get('remove_css');
+    if (!$style_disabled) {
+      $element['#attached']['library'][] = 'private_message/members_widget_style';
+    }
+
     return $element;
   }
 
