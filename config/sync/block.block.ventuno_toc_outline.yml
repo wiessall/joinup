@@ -12,7 +12,7 @@ dependencies:
 id: ventuno_toc_outline
 theme: ventuno
 region: content
-weight: 3
+weight: 0
 provider: null
 plugin: toc_outline
 settings:

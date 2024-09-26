@@ -1,0 +1,27 @@
+uuid: 5943acf5-0994-45b8-a128-d884c6d66844
+langcode: en
+status: true
+dependencies:
+  module:
+    - joinup_core
+    - joinup_private_message
+  theme:
+    - ventuno
+id: ventuno_createprivatemessage
+theme: ventuno
+region: content
+weight: -22
+provider: null
+plugin: joinup_private_message_block
+settings:
+  id: joinup_private_message_block
+  label: 'Create Private Message'
+  label_display: '0'
+  provider: joinup_private_message
+visibility:
+  request_route:
+    id: request_route
+    negate: false
+    routes:
+      - private_message.private_message_page
+      - entity.private_message_thread.canonical
