@@ -149,16 +149,10 @@ Feature: User profile
       | Cherry blossoms schedule      |
       | SOUND project                 |
       | Botanic E.D.E.N.              |
-    And I should see the following facet items "Collection, Discussion, Document, Event, News, Solution" in this order
-
-    # A message should be shown when visiting a profile of a user without
-    # content.
-    When I go to the public profile of "Clarette Fairburn"
-    Then I should see the text "Clarette does not have any content yet."
-
-    When I go to the public profile of "Jayson Granger"
-    # This user has no first name inserted, so the message is generic.
-    Then I should see the text "This user does not have any content yet."
+      # Always present in all tests.
+      # See joinup_test.install
+      | Joinup                        |
+    And I should see the following facet items "Collections, Discussion, Document, Event, News, Solution" in this order
 
   Scenario: The user profile page title should show the full name of the user.
     Given users:
@@ -285,6 +279,9 @@ Feature: User profile
       | Cherry schedule         |
       | Lake E.D.E.N.           |
       | Salt is salty           |
+      # Always present in all tests.
+      # See joinup_test.install
+      | Joinup                  |
 
     When I click "Show archived"
     Then I should see the following tiles in the correct order:
