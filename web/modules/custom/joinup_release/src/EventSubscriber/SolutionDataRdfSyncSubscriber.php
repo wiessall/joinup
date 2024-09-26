@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_release\EventSubscriber;
 
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Field\EntityReferenceFieldItemList;
 use Drupal\joinup_rdf\Entity\RdfSyncEntityInterface;
 use Drupal\joinup_release\Entity\ReleaseInterface;
@@ -16,7 +17,7 @@ use EasyRdf\Resource;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * Listens to normalization of entities for RDF format encoding.
+ * Listens to normalization of release entities for RDF format encoding.
  */
 final class SolutionDataRdfSyncSubscriber implements EventSubscriberInterface {
 
@@ -27,10 +28,13 @@ final class SolutionDataRdfSyncSubscriber implements EventSubscriberInterface {
    *   The mapper service.
    * @param \Drupal\rdf_sync\RdfSyncConnectionInterface $sparqlConnection
    *   The SPARQL connection.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
+   *   The config factory.
    */
   public function __construct(
     protected RdfSyncMapper $mapper,
     protected RdfSyncConnectionInterface $sparqlConnection,
+    protected ConfigFactoryInterface $configFactory,
   ) {}
 
   /**
@@ -40,7 +44,6 @@ final class SolutionDataRdfSyncSubscriber implements EventSubscriberInterface {
     return [
       RdfSyncNormalizeEvent::class => [
         ['addSolutionDataToRelease'],
-        // @todo Change this accordingly in ISAICP-8572.
         ['addReleaseDataToSolution'],
       ],
     ];
@@ -105,8 +108,6 @@ final class SolutionDataRdfSyncSubscriber implements EventSubscriberInterface {
    *
    * @param \Drupal\rdf_sync\Event\RdfSyncNormalizeEvent $event
    *   The event object.
-   *
-   * @todo Use the normalizer to properly pass the data in ISAICP-8572.
    */
   public function addReleaseDataToSolution(RdfSyncNormalizeEvent $event): void {
     $entity = $event->getEntity();
@@ -119,11 +120,9 @@ final class SolutionDataRdfSyncSubscriber implements EventSubscriberInterface {
     $solutionUri = $solution->getUri();
     $releaseUri = $entity->getUri();
 
-    // @todo Should we be getting the graph from the settings?
-    $deleteQuery = "WITH <http://data> DELETE { <$solutionUri> <http://purl.org/dc/terms/hasVersion> <$releaseUri> } WHERE { <$solutionUri> <http://purl.org/dc/terms/hasVersion> <$releaseUri> }";
+    $graphUri = $this->configFactory->get('rdf_sync.settings')->get('graph_uri');
+    $deleteQuery = "WITH <$graphUri> DELETE { <$solutionUri> <http://purl.org/dc/terms/hasVersion> <$releaseUri> } WHERE { <$solutionUri> <http://purl.org/dc/terms/hasVersion> <$releaseUri> }";
     $this->sparqlConnection->update($deleteQuery);
-    // @todo Check if passing the solution as a single property, deletes all
-    //   other properties.
     $data[$solutionUri]['http://purl.org/dc/terms/hasVersion'][] = (new Resource($releaseUri))->toRdfPhp();
     $event->setNormalizedArray($data);
   }

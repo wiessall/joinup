@@ -5,11 +5,6 @@ dependencies:
   config:
     - field.storage.node.abstract
     - node.type.collection
-third_party_settings:
-  rdf_sync:
-    value:
-      predicate: 'http://purl.org/dc/terms/abstract'
-      type: null
 id: node.collection.abstract
 field_name: abstract
 entity_type: node

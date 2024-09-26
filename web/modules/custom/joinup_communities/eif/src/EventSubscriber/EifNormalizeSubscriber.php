@@ -37,7 +37,7 @@ class EifNormalizeSubscriber implements EventSubscriberInterface {
     if (!$solution = $eifPerspective->getTargetEntity()) {
       throw new \Exception("EIF perspective with ID {$eifPerspective->id()} has no valid target solution");
     }
-    $solutionUri = $solution->id();
+    $solutionUri = $solution->getUri();
 
     $normalized = $event->getNormalizedArray();
     $metaEntityUri = key($normalized);

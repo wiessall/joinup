@@ -6,6 +6,11 @@ dependencies:
     - field.storage.node.solution_type
     - node.type.solution
     - taxonomy.vocabulary.eira
+third_party_settings:
+  rdf_sync:
+    target_id:
+      predicate: 'http://purl.org/dc/terms/type'
+      type: resource
 id: node.solution.solution_type
 field_name: solution_type
 entity_type: node
