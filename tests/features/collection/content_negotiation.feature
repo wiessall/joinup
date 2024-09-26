@@ -4,8 +4,9 @@ Feature: Export collection metadata
 
   Scenario Outline: Export node data
     Given licence content:
-      | title            | description         | uri                   | licence type | deprecated |
-      | Creative commons | This is so creative | http://i-am-creative/ | Nominal cost | yes        |
+      | title            | description                | uri                   | licence type | deprecated |
+      | Creative commons | <p>This is so creative</p> | http://i-am-creative/ | Nominal cost | yes        |
+    Then I break
     When I go to the homepage of the "Creative commons" licence in the <format> serialisation
     Then the output should match the file contents of "<fixture>"
     And the content type of the response should be "<Content-Type>"
