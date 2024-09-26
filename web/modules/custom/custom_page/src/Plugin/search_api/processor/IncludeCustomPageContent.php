@@ -95,7 +95,7 @@ class IncludeCustomPageContent extends ProcessorPluginBase {
         $label_field = $item->getField('title');
         $label_field->addValue($custom_page->label());
 
-        $body_field_name = 'description';
+        $body_field_name = 'description_processed';
         $body_field = $item->getField($body_field_name);
 
         // The search_api indexes fields for each entity (there is an HTML
