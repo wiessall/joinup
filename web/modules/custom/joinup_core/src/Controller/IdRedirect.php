@@ -69,8 +69,7 @@ class IdRedirect extends ControllerBase {
         $entity_type_id => $id,
       ], [], 301);
     }
-    // @todo Remove the second condition, for solution stub exception, in ISAICP-8572.
-    elseif (($entity = $this->mapper->getEntityByUri($id)) && !$entity instanceof SolutionInterface) {
+    elseif (($entity = $this->mapper->getEntityByUri($id))) {
       assert($entity instanceof RdfSyncEntityInterface);
       $entity_type_id = $entity->getEntityTypeId();
       return $this->redirect("entity.$entity_type_id.canonical", [

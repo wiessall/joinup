@@ -114,7 +114,9 @@ class IncludeCustomPageContent extends ProcessorPluginBase {
               $custom_page_paragraph_body_list = $paragraph->get('field_body');
               foreach ($custom_page_paragraph_body_list as $list_item) {
                 if (!$list_item->isEmpty()) {
-                  $body_field->addValue(check_markup($list_item->value, $list_item->format));
+                  if ($list_item->value) {
+                    $body_field->addValue(check_markup($list_item->value, $list_item->format));
+                  }
                 }
               }
             }
