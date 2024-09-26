@@ -10,7 +10,7 @@ third_party_settings:
     available_menus: {  }
     parent: ''
   rdf_sync:
-    type: 'http://www.w3.org/ns/dcat#Catalogue'
+    type: 'http://www.w3.org/ns/dcat#Catalog'
     uri_plugin: joinup_po_namespace
     fields:
       title:
