@@ -1,23 +1,3 @@
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-new file mode 100644
-index 0000000000000000000000000000000000000000..71f942f0e424f0d260cdd56149ef4eeb7d6033f3
---- /dev/null
-+++ b/.gitlab-ci.yml
-@@ -0,0 +1,14 @@
-+include:
-+  - project: $_GITLAB_TEMPLATES_REPO
-+    ref: $_GITLAB_TEMPLATES_REF
-+    file:
-+      - '/includes/include.drupalci.main.yml'
-+      - '/includes/include.drupalci.variables.yml'
-+      - '/includes/include.drupalci.workflows.yml'
-+
-+variables:
-+  _SHOW_ENVIRONMENT_VARIABLES: 1
-+  _TARGET_PHP: "$CORE_PHP_MAX"
-+  _TARGET_DB_VERSION: "8"
-+  # The whole module needs to adhere to coding standards.
-+  SKIP_PHPCS: 1
 diff --git a/composer.json b/composer.json
 new file mode 100644
 index 0000000000000000000000000000000000000000..7f096249dab903c9b7c8d09020f1b0e8c720fc94
@@ -94,7 +74,7 @@ index 8f03bbb634d0dc65aad4be9bb0e869c033efc288..de0d854693bc9501f6b301a45fe73f61
 +    ->save(TRUE);
 +}
 diff --git a/imagecache_external.module b/imagecache_external.module
-index 851681dc3efd08b1102862768d0f4e6d34f7acb8..fc346220baddecf0618a06c6334dbc6f26d88246 100644
+index df28db52df5b5f402c0ed7ddbaa04cc46b543ece..bfd9e00965c29d6f94d366e2139892ceb4c55a87 100644
 --- a/imagecache_external.module
 +++ b/imagecache_external.module
 @@ -9,6 +9,9 @@ use Drupal\Component\Utility\UrlHelper;
@@ -107,16 +87,16 @@ index 851681dc3efd08b1102862768d0f4e6d34f7acb8..fc346220baddecf0618a06c6334dbc6f
  
  const IMAGECACHE_EXTERNAL_FLUSH_DIRECTORIES = '_IMAGECACHE_FLUSH_DIRECTORIES_';
  
-@@ -139,7 +142,7 @@ function imagecache_external_generate_path($url) {
+@@ -145,7 +148,7 @@ function imagecache_external_generate_path(?string $url) {
  
    // Add the extension for real images.
-   if ($extension = strtolower(pathinfo($url_parameters['path'], PATHINFO_EXTENSION))) {
--    if (in_array($extension, ['jpg', 'png', 'gif', 'jpeg', 'webp'])) {
-+    if (in_array($extension, ['jpg', 'png', 'gif', 'jpeg', 'webp', 'svg'])) {
-       $filename .= '.' . $extension;
-     }
+   $extension = strtolower(pathinfo($url_parameters['path'], PATHINFO_EXTENSION));
+-  if (in_array($extension, ['jpg', 'png', 'gif', 'jpeg', 'webp'])) {
++  if (in_array($extension, ['jpg', 'png', 'gif', 'jpeg', 'webp', 'svg'])) {
+     $filename .= '.' . $extension;
    }
-@@ -220,16 +223,20 @@ function imagecache_external_fetch(string $url, string $cachepath) {
+   else {
+@@ -225,16 +228,20 @@ function imagecache_external_fetch(string $url, string $cachepath) {
      $content_type_array = explode(';', $response_mimetype);
      $content_type_allowed = FALSE;
      foreach ($content_type_array as $content_type) {
@@ -141,7 +121,7 @@ index 851681dc3efd08b1102862768d0f4e6d34f7acb8..fc346220baddecf0618a06c6334dbc6f
          return $file->getFileUri();
        }
      }
-@@ -247,6 +254,36 @@ function imagecache_external_fetch(string $url, string $cachepath) {
+@@ -252,6 +259,36 @@ function imagecache_external_fetch(string $url, string $cachepath) {
    }
  }
  
@@ -340,10 +320,10 @@ index 0000000000000000000000000000000000000000..c5765c8791fb8248742d77b98dd66e93
 +  <rect height="50" width="50" fill="red"></rect>
 +</svg>
 diff --git a/tests/src/Functional/ImagecacheExternalTest.php b/tests/src/Functional/ImagecacheExternalTest.php
-index 62498131ca16cc0065f176f7b7dd1fe1ec48a564..f737bb931b33e38ac8ecc1809c687ae5e5bb0bb7 100644
+index 239096248a0798b36a5cfffadc4d482f22edece2..e48440529e30c889387dff1cd5aa14eabbd2842d 100644
 --- a/tests/src/Functional/ImagecacheExternalTest.php
 +++ b/tests/src/Functional/ImagecacheExternalTest.php
-@@ -270,6 +270,67 @@ class ImagecacheExternalTest extends BrowserTestBase {
+@@ -291,6 +291,67 @@ class ImagecacheExternalTest extends BrowserTestBase {
      $this->assertSession()->statusCodeEquals(200);
    }
  
