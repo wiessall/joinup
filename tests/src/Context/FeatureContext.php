@@ -1594,7 +1594,7 @@ class FeatureContext extends RawDrupalContext {
    *
    * @AfterStep
    */
-  public function afterScenarioRdfSyncDestruct(): void {
+  public function afterStepRdfSyncDestruct(): void {
     \Drupal::service('rdf_sync.synchronizer')->destruct();
   }
 

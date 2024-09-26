@@ -20,7 +20,6 @@
       excludeElements:
         # Third-party code injected in page with Javascript.
         - .globan
-  - Drupal\joinup\Context\AdmsValidatorContext
   - Drupal\joinup\Context\BootstrapContext
   - Drupal\joinup\Context\CollectionContext
   - Drupal\joinup\Context\ContactFormContext
@@ -75,6 +74,7 @@
   - Drupal\joinup\Context\OeNewsroomNewsletterContext
   - Drupal\joinup\Context\OwnerContext
   - Drupal\joinup\Context\PollContext
+  - Drupal\joinup\Context\RdfContext
   - Drupal\joinup\Context\ReleaseContext
   - Drupal\joinup\Context\ReplicateContext
   - Drupal\joinup\Context\RssContext

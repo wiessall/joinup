@@ -5,13 +5,6 @@ dependencies:
   config:
     - field.storage.node.closed_group
     - node.type.collection
-  module:
-    - rdf_sync
-third_party_settings:
-  rdf_sync:
-    value:
-      predicate: 'http://purl.org/dc/terms/RightsStatement'
-      type: 'xsd:boolean'
 id: node.collection.closed_group
 field_name: closed_group
 entity_type: node

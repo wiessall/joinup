@@ -35,6 +35,14 @@ third_party_settings:
         value:
           predicate: 'http://purl.org/dc/terms/title'
           type: 'xsd:string'
+      changed:
+        value:
+          predicate: 'http://purl.org/dc/terms/modified'
+          type: 'xsd:dateTime'
+      published_at:
+        value:
+          predicate: 'http://purl.org/dc/terms/issued'
+          type: 'xsd:dateTime'
 label_singular: solution
 label_plural: solutions
 label_count:
