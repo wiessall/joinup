@@ -69,6 +69,7 @@ class CronTimingTest extends KernelTestBase {
     // And I run cron.
     $cron->run();
 
+    // Failed.
     $this->assertEquals(
       strtotime(date('Y-m-d', $future_timestamp) . ' 2:00:00'),
       $state->get('eu_oss_catalogue.last_check')
