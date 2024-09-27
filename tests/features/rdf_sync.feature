@@ -69,7 +69,7 @@ Feature: RDF synchronization of contents.
       | http://example.com/licence1 | http://www.w3.org/2000/01/rdf-schema#label      | Syncing licence                          |
       | http://example.com/licence1 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | http://purl.org/dc/terms/LicenseDocument |
       | http://example.com/licence1 | http://purl.org/dc/terms/type                   | http://purl.org/adms/licence/PD          |
-      | http://example.com/licence1 | http://purl.org/dc/terms/description            | <p>Some nice licence</p>                 |
+      | http://example.com/licence1 | http://purl.org/dc/terms/description            | Some nice licence                        |
       # Default value for the deprecated field.
       | http://example.com/licence1 | http://joinup.eu/licence/deprecated             | 0                                        |
     Then the following "http://data" graph triples exist in the RDF backend:
@@ -127,30 +127,30 @@ Feature: RDF synchronization of contents.
       | http://example.com/release1 | http://purl.org/dc/terms/language               | http://example.com/language1                               |
       | http://example.com/release1 | http://purl.org/dc/terms/spatial                | http://example.com/country1                                |
     And the following "http://data" graph triples exist in the RDF backend:
-      | subject                          | predicate                                         | object                                          |
-      | http://example.com/distribution1 | http://purl.org/dc/terms/title                    | SyncingDistribution.zip                         |
-      | http://example.com/distribution1 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type   | http://www.w3.org/ns/dcat#Distribution          |
-      | http://example.com/distribution1 | http://purl.org/dc/terms/description              | <p>The zipped version of Syncing release 3.</p> |
-      | http://example.com/distribution1 | http://purl.org/dc/terms/issued                   | 2017-02-11T11:20:00Z                            |
-      | http://example.com/distribution1 | http://purl.org/dc/terms/modified                 | 2017-03-11T11:20:00Z                            |
-      | http://example.com/distribution1 | http://www.w3.org/ns/dcat#accessURL               | http://www.example.org/release.zip              |
-      | http://example.com/distribution1 | http://purl.org/dc/terms/format                   | http://example.com/type1                        |
-      | http://example.com/distribution1 | http://www.w3.org/ns/adms#status                  | http://purl.org/adms/status/Completed           |
-      | http://example.com/distribution1 | http://www.w3.org/ns/adms#representationTechnique | http://example.com/tech1                        |
-      | http://example.com/distribution1 | http://purl.org/dc/terms/license                  | http://example.com/licence1                     |
-      | http://example.com/distribution1 | http://www.w3.org/ns/dcat#accessURL               | http://www.example.org/release.zip              |
+      | subject                          | predicate                                         | object                                   |
+      | http://example.com/distribution1 | http://purl.org/dc/terms/title                    | SyncingDistribution.zip                  |
+      | http://example.com/distribution1 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type   | http://www.w3.org/ns/dcat#Distribution   |
+      | http://example.com/distribution1 | http://purl.org/dc/terms/description              | The zipped version of Syncing release 3. |
+      | http://example.com/distribution1 | http://purl.org/dc/terms/issued                   | 2017-02-11T11:20:00Z                     |
+      | http://example.com/distribution1 | http://purl.org/dc/terms/modified                 | 2017-03-11T11:20:00Z                     |
+      | http://example.com/distribution1 | http://www.w3.org/ns/dcat#accessURL               | http://www.example.org/release.zip       |
+      | http://example.com/distribution1 | http://purl.org/dc/terms/format                   | http://example.com/type1                 |
+      | http://example.com/distribution1 | http://www.w3.org/ns/adms#status                  | http://purl.org/adms/status/Completed    |
+      | http://example.com/distribution1 | http://www.w3.org/ns/adms#representationTechnique | http://example.com/tech1                 |
+      | http://example.com/distribution1 | http://purl.org/dc/terms/license                  | http://example.com/licence1              |
+      | http://example.com/distribution1 | http://www.w3.org/ns/dcat#accessURL               | http://www.example.org/release.zip       |
     And the following "http://data" graph triples exist in the RDF backend:
-      | subject                          | predicate                                         | object                                       |
-      | http://example.com/distribution2 | http://purl.org/dc/terms/title                    | SyncingDistribution.rdf                      |
-      | http://example.com/distribution2 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type   | http://www.w3.org/ns/dcat#Distribution       |
-      | http://example.com/distribution2 | http://purl.org/dc/terms/description              | <p>The RDF version of Syncing release 3.</p> |
-      | http://example.com/distribution2 | http://purl.org/dc/terms/issued                   | 2017-05-11T11:20:00Z                         |
-      | http://example.com/distribution2 | http://purl.org/dc/terms/modified                 | 2017-06-11T11:20:00Z                         |
-      | http://example.com/distribution2 | http://www.w3.org/ns/dcat#accessURL               | http://www.example.org/some_other.zip        |
-      | http://example.com/distribution2 | http://purl.org/dc/terms/format                   | http://example.com/type1                     |
-      | http://example.com/distribution2 | http://www.w3.org/ns/adms#status                  | http://purl.org/adms/status/Completed        |
-      | http://example.com/distribution2 | http://www.w3.org/ns/adms#representationTechnique | http://example.com/tech1                     |
-      | http://example.com/distribution2 | http://purl.org/dc/terms/license                  | http://example.com/licence1                  |
+      | subject                          | predicate                                         | object                                 |
+      | http://example.com/distribution2 | http://purl.org/dc/terms/title                    | SyncingDistribution.rdf                |
+      | http://example.com/distribution2 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type   | http://www.w3.org/ns/dcat#Distribution |
+      | http://example.com/distribution2 | http://purl.org/dc/terms/description              | The RDF version of Syncing release 3.  |
+      | http://example.com/distribution2 | http://purl.org/dc/terms/issued                   | 2017-05-11T11:20:00Z                   |
+      | http://example.com/distribution2 | http://purl.org/dc/terms/modified                 | 2017-06-11T11:20:00Z                   |
+      | http://example.com/distribution2 | http://www.w3.org/ns/dcat#accessURL               | http://www.example.org/some_other.zip  |
+      | http://example.com/distribution2 | http://purl.org/dc/terms/format                   | http://example.com/type1               |
+      | http://example.com/distribution2 | http://www.w3.org/ns/adms#status                  | http://purl.org/adms/status/Completed  |
+      | http://example.com/distribution2 | http://www.w3.org/ns/adms#representationTechnique | http://example.com/tech1               |
+      | http://example.com/distribution2 | http://purl.org/dc/terms/license                  | http://example.com/licence1            |
 
     # Test that deleting an entity, removes both the entity and its references.
     Given I delete the "SyncingDistribution.rdf" distribution
@@ -306,13 +306,13 @@ Feature: RDF synchronization of contents.
       | subject                          | predicate                                       | object                                 |
       | http://example.com/distribution1 | http://purl.org/dc/terms/title                  | Some Distro                            |
       | http://example.com/distribution1 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | http://www.w3.org/ns/dcat#Distribution |
-      | http://example.com/distribution1 | http://purl.org/dc/terms/description            | <p>Übermensch foot size</p>            |
+      | http://example.com/distribution1 | http://purl.org/dc/terms/description            | Übermensch foot size                   |
       | http://example.com/distribution1 | http://www.w3.org/ns/dcat#accessURL             | http://example.com/some-distro1        |
       | http://example.com/distribution1 | http://purl.org/dc/terms/issued                 | 2024-07-31T10:19:33Z                   |
       | http://example.com/distribution1 | http://purl.org/dc/terms/modified               | 2024-07-31T10:19:33Z                   |
       | http://example.com/distribution2 | http://purl.org/dc/terms/title                  | Another distro                         |
       | http://example.com/distribution2 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | http://www.w3.org/ns/dcat#Distribution |
-      | http://example.com/distribution2 | http://purl.org/dc/terms/description            | <p>Description for other distro</p>    |
+      | http://example.com/distribution2 | http://purl.org/dc/terms/description            | Description for other distro           |
       | http://example.com/distribution2 | http://www.w3.org/ns/dcat#accessURL             | http://example.com/some-distro2        |
       | http://example.com/distribution2 | http://purl.org/dc/terms/issued                 | 2024-08-01T10:19:33Z                   |
       | http://example.com/distribution2 | http://purl.org/dc/terms/modified               | 2024-08-01T10:19:33Z                   |
@@ -341,7 +341,7 @@ Feature: RDF synchronization of contents.
       | http://example.com/license1 | http://purl.org/dc/terms/type                   | http://purl.org/adms/licence/PD          |
       | http://example.com/license1 | http://joinup.eu/licence/deprecated             | 0                                        |
       | http://example.com/license2 | http://www.w3.org/2000/01/rdf-schema#label      | Some other license                       |
-      | http://example.com/license2 | http://purl.org/dc/terms/description            | <p>A new licence.</p>                    |
+      | http://example.com/license2 | http://purl.org/dc/terms/description            | A new licence.                           |
       | http://example.com/license2 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | http://purl.org/dc/terms/LicenseDocument |
       | http://example.com/license2 | http://purl.org/dc/terms/type                   | http://purl.org/adms/licence/PD          |
       | http://example.com/license2 | http://joinup.eu/licence/deprecated             | 1                                        |
