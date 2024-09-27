@@ -74,10 +74,11 @@ Feature: My subscriptions
     And I click "My subscriptions"
     Then I should see the heading "My subscriptions"
     And I should see the heading "Collection"
-    And I should see the text "No collection memberships yet. Join one or more collections to subscribe to their content!"
+    # The default collection Joinup is there.
+    # @see \joinup_test_install().
+    And I should see the text "Joinup" in the "Content" region
     And I should see the heading "Solution"
     And I should see the text "No solution memberships yet. Join one or more solutions to subscribe to their content!"
-    But I should not see the link "Unsubscribe from all"
     And I should not see the text "Alpha Centauri"
 
     # Log in as a user that is a member of 3 collections. The subscriptions for

@@ -391,10 +391,10 @@ class SubscriptionsForm extends FormBase {
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The form state of the submitted form.
    *
-   * @return string
+   * @return int
    *   The group ID that corresponds to the submit button that was clicked.
    */
-  protected function getTriggeringElementGroupId(FormStateInterface $form_state): string {
+  protected function getTriggeringElementGroupId(FormStateInterface $form_state): int {
     // Return the group ID which is stored in the third to last parent of
     // the button: `['groups'][$group_id]['options']['submit']`.
     $clicked_button_parents = array_values($form_state->getTriggeringElement()['#parents']);
