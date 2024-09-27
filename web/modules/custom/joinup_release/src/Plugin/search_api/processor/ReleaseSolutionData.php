@@ -55,7 +55,7 @@ class ReleaseSolutionData extends ProcessorPluginBase {
       $item->setField('topic', $field);
 
       // Include also the contact & owner labels of the parent solution.
-      if ($description = $this->getIndex()->getField('description')) {
+      if ($description = $item->getField('description')) {
         $contactLabel = $solution->get('contact')->entity?->label() ?? '';
         $ownerLabel = $solution->get('owner')->entity?->label() ?? '';
         $description->addValue($contactLabel)->addValue($ownerLabel);
