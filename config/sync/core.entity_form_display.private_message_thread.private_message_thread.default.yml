@@ -3,6 +3,7 @@ langcode: en
 status: true
 dependencies:
   module:
+    - joinup_private_message
     - private_message
 _core:
   default_config_hash: xVcdSTtn_Hdh0KwHYne9Hi3t1-vEq5TUN-taN_bm49w
@@ -12,13 +13,13 @@ bundle: private_message_thread
 mode: default
 content:
   members:
-    type: private_message_thread_member_widget
+    type: joinup_private_message_member_widget
     weight: -3
     region: content
     settings:
       match_operator: CONTAINS
       match_limit: 10
-      max_members: 0
+      max_members: 1
       size: 60
       placeholder: ''
     third_party_settings: {  }
