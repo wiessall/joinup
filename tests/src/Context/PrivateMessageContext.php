@@ -8,6 +8,7 @@ use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Element\NodeElement;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\JavascriptTrait;
+use Drupal\private_message\Entity\PrivateMessageBan;
 
 /**
  * Behat step definitions for testing private messages.
@@ -181,6 +182,25 @@ class PrivateMessageContext extends RawDrupalContext {
   }
 
   /**
+   * Simulates picking of an autosuggestion value from a field.
+   *
+   * @param string $value
+   *   The value to select from suggestions.
+   *
+   * @throws \Exception
+   *   Thrown when the field is not found, the field is not an autocomplete
+   *   field, when there was a failure retrieving the autocomplete suggestions
+   *   or if the wanted suggestion is not found.
+   *
+   * @When I pick :value from the private message user autocomplete suggestions
+   */
+  public function fillPersonFieldWithNormalisedEntityReference(string $value): void {
+    $this->assertJavaScriptEnabledBrowser();
+    $xpath = '//div[@id="pm-members-autocomplete-results-wrapper"]//ul[contains(concat(" ", normalize-space(@class), " "), " ui-widget-content ")]//a[text() = "' . $value . '"]';
+    $this->waitForElementVisible('xpath', $xpath)->click();
+  }
+
+  /**
    * Retrieves the messages container element from the page.
    *
    * @return \Behat\Mink\Element\NodeElement
@@ -218,6 +238,51 @@ class PrivateMessageContext extends RawDrupalContext {
     }
 
     return $messagesContainer;
+  }
+
+  /**
+   * Create private message bans.
+   *
+   * @param \Behat\Gherkin\Node\TableNode $table
+   *   The collection data.
+   *
+   * @throws \Exception
+   *    Thrown when a column name is incorrect.
+   *
+   * @Given the following private message bans:
+   */
+  public function givenPrivateMessageBans(TableNode $table): void {
+    foreach ($table->getHash() as $row) {
+      // Create a new private message ban entity.
+      $ban = PrivateMessageBan::create([
+        // Get the user ID based on username.
+        'owner' => $this->getUserIdByName($row['owner']),
+        // Get the banned user ID.
+        'target' => $this->getUserIdByName($row['target']),
+        // Convert string date to timestamp.
+        'created' => strtotime($row['created']),
+      ]);
+
+      // Save the entity.
+      $ban->save();
+    }
+  }
+
+  /**
+   * Gets user ID by name.
+   *
+   * @param string $username
+   *   Username parameter.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   */
+  protected function getUserIdByName($username): mixed {
+    $users = \Drupal::entityTypeManager()->getStorage('user')->loadByProperties(['name' => $username]);
+    if ($user = reset($users)) {
+      return $user->id();
+    }
+    throw new \Exception("User with username '$username' does not exist.");
   }
 
 }
