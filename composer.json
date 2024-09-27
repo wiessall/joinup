@@ -85,6 +85,7 @@
         "drupal/pluginreference": "^3.0",
         "drupal/poll": "^1.6",
         "drupal/private_message": "^3.0",
+        "drupal/private_message_flood": "^2.0@alpha",
         "drupal/publication_date": "^2.0",
         "drupal/queue_ui": "^3.1",
         "drupal/rdf_entity": "^2.0",
