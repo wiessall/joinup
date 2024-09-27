@@ -1,0 +1,8 @@
+# Schema for the configuration files of the Joinup private message module.
+field.widget.settings.joinup_private_message_member_widget:
+  type: field.widget.settings.private_message_thread_member_widget
+  label: 'Private message thread member widget settings'
+
+entity_reference_selection.joinup_user_full_name:
+  type: entity_reference_selection.default:user
+  label: 'Full name selection handler settings'
