@@ -217,7 +217,12 @@ class RdfContext extends RawDrupalContext {
     /** @var \Drupal\rdf_sync\RdfSyncConnectionInterface $connection */
     $connection = \Drupal::service('rdf_sync.connection');
     $results = $connection->query($query);
-    Assert::assertCount(0, $results, "There are triples with $property $uri in the $graph graph");
+    $messages = [];
+    foreach ($results as $result) {
+      $messages[] = sprintf('%s %s %s', $result->s, $result->p, $result->o);
+    }
+
+    Assert::assertCount(0, $results, "There are triples with $property $uri in the $graph graph. Results found: " . implode(', ', $messages));
   }
 
 }
