@@ -51,9 +51,6 @@ class PrivateMessageRouteSubscriber extends RouteSubscriberBase {
       $route->setPath('/user/messages/message/{private_message}/delete');
     }
 
-    // Remove the ban page route.
-    $collection->remove('private_message.ban_page');
-
     // Remove the ban autocomplete route.
     $collection->remove('private_message.ban_autocomplete');
 
@@ -61,7 +58,6 @@ class PrivateMessageRouteSubscriber extends RouteSubscriberBase {
     $collection->remove('private_message.ban_user_form');
 
     // Remove the unban user form route.
-    $collection->remove('private_message.unban_user_form');
   }
 
 }
