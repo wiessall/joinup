@@ -195,7 +195,7 @@ class PrivateMessageContext extends RawDrupalContext {
    */
   public function fillPersonFieldWithNormalisedEntityReference(string $value): void {
     $this->assertJavaScriptEnabledBrowser();
-    $xpath = '//div[@id="pm-members-autocomplete-results-wrapper"]//ul[contains(concat(" ", normalize-space(@class), " "), " ui-widget-content ")]//a[text() = "' . $value . '"]';
+    $xpath = '//form[contains(@class, "private-message-form")]/following-sibling::ul//li//a[text() = "' . $value . '"]';
     $this->waitForElementVisible('xpath', $xpath)->click();
   }
 
