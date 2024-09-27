@@ -219,7 +219,7 @@ class RdfContext extends RawDrupalContext {
     $results = $connection->query($query);
     $messages = [];
     foreach ($results as $result) {
-      $messages[] = sprintf('%s %s %s', $result->s, $result->p, $result->o);
+      $messages[] = sprintf('%s %s', $property === 'subject' ? $result->s : $result->o, $result->p);
     }
 
     Assert::assertCount(0, $results, "There are triples with $property $uri in the $graph graph. Results found: " . implode(', ', $messages));
