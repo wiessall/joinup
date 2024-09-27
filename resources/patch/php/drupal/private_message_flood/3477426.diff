@@ -1,0 +1,155 @@
+diff --git a/src/Plugin/PrivateMessageConfigForm/PrivateMessageFloodPrivateMessageConfigForm.php b/src/Plugin/PrivateMessageConfigForm/PrivateMessageFloodPrivateMessageConfigForm.php
+index 93b516e..8af36ad 100644
+--- a/src/Plugin/PrivateMessageConfigForm/PrivateMessageFloodPrivateMessageConfigForm.php
++++ b/src/Plugin/PrivateMessageConfigForm/PrivateMessageFloodPrivateMessageConfigForm.php
+@@ -68,7 +68,7 @@ class PrivateMessageFloodPrivateMessageConfigForm extends PrivateMessageConfigFo
+   /**
+    * {@inheritdoc}
+    */
+-  public function buildForm(FormStateInterface $formState) {
++  public function buildForm(FormStateInterface $formState): array {
+ 
+     $form['header'] = [
+       '#prefix' => '<p>',
+@@ -197,7 +197,7 @@ class PrivateMessageFloodPrivateMessageConfigForm extends PrivateMessageConfigFo
+   /**
+    * {@inheritdoc}
+    */
+-  public function validateForm(array &$form, FormStateInterface $formState) {
++  public function validateForm(array &$form, FormStateInterface $formState): array {
+     foreach ($formState->getValue(['private_message_flood_settings', 'roles']) as $rid => $data) {
+       if (isset($data['values'], $data['values']['details'], $data['values']['details']['elements'], $data['values']['details']['elements']['type'])) {
+         if (!empty($data['values']['details']['elements']['type']) && empty($data['values']['details']['elements']['limit'])) {
+@@ -213,7 +213,7 @@ class PrivateMessageFloodPrivateMessageConfigForm extends PrivateMessageConfigFo
+   /**
+    * {@inheritdoc}
+    */
+-  public function submitForm(array $values) {
++  public function submitForm(array $values): void {
+ 
+     foreach ($values['roles'] as $rid => $data) {
+       $duration = $data['values']['details']['elements']['duration'];
+diff --git a/src/Service/PrivateMessageFloodService.php b/src/Service/PrivateMessageFloodService.php
+index b9faf41..f532d5a 100644
+--- a/src/Service/PrivateMessageFloodService.php
++++ b/src/Service/PrivateMessageFloodService.php
+@@ -79,7 +79,7 @@ class PrivateMessageFloodService implements PrivateMessageFloodServiceInterface
+   /**
+    * {@inheritdoc}
+    */
+-  public function checkUserFlood(AccountInterface $user = NULL) {
++  public function checkUserFlood(AccountInterface $user = NULL): bool {
+     $limit_count = $this->getUserLimitCount($user);
+     $current_count = $this->getUserCurrentCount($user);
+     // 0 means no limit.
+@@ -104,7 +104,7 @@ class PrivateMessageFloodService implements PrivateMessageFloodServiceInterface
+    *   An array of flood protection data for the current user based on their
+    *   roles.
+    */
+-  private function getFloodProtectionInfo(AccountInterface $user) {
++  private function getFloodProtectionInfo(AccountInterface $user): array {
+     if (empty($this->configData[$user->id()])) {
+       $this->configData[$user->id()] = [
+         'limit' => 0,
+@@ -136,7 +136,7 @@ class PrivateMessageFloodService implements PrivateMessageFloodServiceInterface
+    *   the role ID, with the value being the weight. Roles in the array are
+    *   ordered highest to lowest priority.
+    */
+-  private function getRoleInfo() {
++  private function getRoleInfo(): array {
+     $roles = array_map(['\Drupal\Component\Utility\Html', 'escape'], user_role_names(TRUE));
+     $items = [];
+     foreach (array_keys($roles) as $role_id) {
+@@ -163,7 +163,7 @@ class PrivateMessageFloodService implements PrivateMessageFloodServiceInterface
+    *   0 if they're equal.
+    *   -1 if b is bigger.
+    */
+-  private function sortByWeight($a, $b) {
++  private function sortByWeight($a, $b): int {
+     if ($a === $b) {
+       return 0;
+     }
+@@ -174,7 +174,7 @@ class PrivateMessageFloodService implements PrivateMessageFloodServiceInterface
+   /**
+    * {@inheritdoc}
+    */
+-  public function getUserLimitCount(AccountInterface $user = NULL) {
++  public function getUserLimitCount(AccountInterface $user = NULL): int {
+     if (empty($user)) {
+       $user = $this->currentUser;
+     }
+@@ -185,7 +185,7 @@ class PrivateMessageFloodService implements PrivateMessageFloodServiceInterface
+   /**
+    * {@inheritdoc}
+    */
+-  public function getUserCurrentCount(AccountInterface $user = NULL) {
++  public function getUserCurrentCount(AccountInterface $user = NULL): int {
+     if (empty($user)) {
+       $user = $this->currentUser;
+     }
+@@ -235,7 +235,7 @@ class PrivateMessageFloodService implements PrivateMessageFloodServiceInterface
+   /**
+    * {@inheritdoc}
+    */
+-  public function getUserLimitType(AccountInterface $user = NULL) {
++  public function getUserLimitType(AccountInterface $user = NULL): string {
+     if (empty($user)) {
+       $user = $this->currentUser;
+     }
+@@ -246,7 +246,7 @@ class PrivateMessageFloodService implements PrivateMessageFloodServiceInterface
+   /**
+    * {@inheritdoc}
+    */
+-  public function getUserLimitDuration(AccountInterface $user = NULL) {
++  public function getUserLimitDuration(AccountInterface $user = NULL): int {
+     if (empty($user)) {
+       $user = $this->currentUser;
+     }
+diff --git a/src/Service/PrivateMessageFloodServiceInterface.php b/src/Service/PrivateMessageFloodServiceInterface.php
+index f34d282..49d5063 100644
+--- a/src/Service/PrivateMessageFloodServiceInterface.php
++++ b/src/Service/PrivateMessageFloodServiceInterface.php
+@@ -27,7 +27,7 @@ interface PrivateMessageFloodServiceInterface {
+    *   TRUE means they have reached the limit, and should be stopped from
+    *   posting. FALSE means they can post as normal.
+    */
+-  public function checkUserFlood(AccountInterface $user = NULL);
++  public function checkUserFlood(AccountInterface $user = NULL): bool;
+ 
+   /**
+    * Retrieve the limit the user has.
+@@ -38,7 +38,7 @@ interface PrivateMessageFloodServiceInterface {
+    * @return int
+    *   The number allowed for the user (based on role).
+    */
+-  public function getUserLimitCount(AccountInterface $user = NULL);
++  public function getUserLimitCount(AccountInterface $user = NULL): int;
+ 
+   /**
+    * Retrieve the number already used within the current duration.
+@@ -49,7 +49,7 @@ interface PrivateMessageFloodServiceInterface {
+    * @return int
+    *   The number used done by the user (based on role).
+    */
+-  public function getUserCurrentCount(AccountInterface $user = NULL);
++  public function getUserCurrentCount(AccountInterface $user = NULL): int;
+ 
+   /**
+    * Retrieve the limit type for the user.
+@@ -60,7 +60,7 @@ interface PrivateMessageFloodServiceInterface {
+    * @return string
+    *   The type of limitations for the user (based on role).
+    */
+-  public function getUserLimitType(AccountInterface $user = NULL);
++  public function getUserLimitType(AccountInterface $user = NULL): string;
+ 
+   /**
+    * Retrieve the limit duration for the user.
+@@ -71,6 +71,6 @@ interface PrivateMessageFloodServiceInterface {
+    * @return int
+    *   The duration time of the limit window for the user (base don role).
+    */
+-  public function getUserLimitDuration(AccountInterface $user = NULL);
++  public function getUserLimitDuration(AccountInterface $user = NULL): int;
+ 
+ }
