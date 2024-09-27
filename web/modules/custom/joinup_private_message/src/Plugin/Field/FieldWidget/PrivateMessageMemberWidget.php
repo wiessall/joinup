@@ -4,22 +4,22 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_private_message\Plugin\Field\FieldWidget;
 
+use Drupal\Core\Field\Attribute\FieldWidget;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\Plugin\Field\FieldWidget\EntityReferenceAutocompleteWidget;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\private_message\Plugin\Field\FieldWidget\PrivateMessageThreadMemberWidget;
 
 /**
- * Defines the private message thread member widget.
- *
- * @FieldWidget(
- *   id = "joinup_private_message_member_widget",
- *   label = @Translation("Joinup private message members autocomplete"),
- *   field_types = {
- *     "entity_reference"
- *   },
- * )
+ * Plugin implementation of the 'joinup_private_message_member_widget' widget.
  */
+#[FieldWidget(
+  id: 'joinup_private_message_member_widget',
+  label: new TranslatableMarkup('Joinup private message members autocomplete'),
+  description: new TranslatableMarkup('Defines the private message thread member widget.'),
+  field_types: ['entity_reference'],
+)]
 class PrivateMessageMemberWidget extends PrivateMessageThreadMemberWidget {
 
   /**
