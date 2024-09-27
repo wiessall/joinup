@@ -7,6 +7,7 @@ namespace Drupal\joinup_distribution\Plugin\search_api\processor;
 use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\File\FileUrlGeneratorInterface;
+use Drupal\joinup_distribution\Entity\DistributionInterface;
 use Drupal\joinup_distribution\Entity\DistributionsParentInterface;
 use Drupal\search_api\IndexInterface;
 use Drupal\search_api\Item\ItemInterface;
@@ -117,14 +118,15 @@ class IndexDistributionData extends ProcessorPluginBase {
     }
 
     // Get the parent Search API field.
-    $sapiField = $item->getField('description');
+    $sapiField = $item->getField('description_processed');
     if (empty($sapiField)) {
       return;
     }
 
     // Iterate over all distributions and append their data to Search API field.
-    /** @var \Drupal\rdf_entity\RdfInterface $distribution */
     foreach ($this->entityTypeManager->getStorage('node')->loadMultiple($distributionIds) as $distribution) {
+      assert($distribution instanceof DistributionInterface);
+
       // Add the distribution title.
       $sapiField->addValue($distribution->label());
 

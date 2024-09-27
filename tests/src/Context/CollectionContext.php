@@ -461,7 +461,7 @@ class CollectionContext extends RawDrupalContext {
    */
   public function updateCollectionName(string $collection, string $name): void {
     $entity = $this->getEntityByLabel('node', $collection);
-    $entity->setName($name)->save();
+    $entity->set('title', $name)->save();
   }
 
   /**

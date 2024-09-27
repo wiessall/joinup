@@ -15,7 +15,6 @@ use Drupal\joinup\Traits\EntityReferenceTrait;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\FileTrait;
 use Drupal\joinup\Traits\JavascriptTrait;
-use Drupal\joinup\Traits\RdfEntityTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup_distribution\Entity\DownloadEvent;
 use Drupal\meta_entity\Entity\MetaEntity;
@@ -28,7 +27,6 @@ class DistributionContext extends RawDrupalContext {
   use EntityReferenceTrait;
   use EntityTrait;
   use FileTrait;
-  use RdfEntityTrait;
   use TestingEntitiesTrait;
   use JavascriptTrait;
 

@@ -165,7 +165,6 @@ field_settings:
     configuration:
       type: union
       fields:
-        - 'entity:node/created'
         - 'entity:node/field_event_date'
         - 'entity:node/published_at'
   description:
@@ -818,7 +817,10 @@ processor_settings:
       - title_spellcheck
   include_custom_page_content:
     weights:
-      preprocess_index: 0
+      preprocess_index: -49
+  index_distribution_data:
+    weights:
+      preprocess_index: -50
   interoperable_flag: {  }
   joinup_entity_bundle: {  }
   joinup_entity_published_revision: {  }
