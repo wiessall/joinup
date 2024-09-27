@@ -118,7 +118,7 @@ class IndexDistributionData extends ProcessorPluginBase {
     }
 
     // Get the parent Search API field.
-    $sapiField = $item->getField('description_processed');
+    $sapiField = $item->getField('description');
     if (empty($sapiField)) {
       return;
     }
