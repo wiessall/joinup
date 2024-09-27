@@ -22,7 +22,10 @@ function joinup_publication_date_preprocess_node(&$variables): void {
     $publication_time = $node->getPublicationTime();
     if ($publication_time) {
       foreach (['Y', 'M', 'j'] as $format) {
-        $variables['publication_date'][$format] = date($format, $publication_time);
+        $variables['publication_date'][$format] = [
+          '#type' => 'inline_template',
+          '#template' => '{{ ' . $publication_time . '|date("' . $format . '") }}',
+        ];
       }
     }
   }
