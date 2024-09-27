@@ -1,5 +1,5 @@
 diff --git a/src/Plugin/Block/OgMenuBlock.php b/src/Plugin/Block/OgMenuBlock.php
-index 297960c..87cee17 100644
+index 297960c7643c717e46bc8b900d52bc195eac4eee..4a147d22d2e3d3263d0fcd01f400fb617a165e1b 100644
 --- a/src/Plugin/Block/OgMenuBlock.php
 +++ b/src/Plugin/Block/OgMenuBlock.php
 @@ -99,6 +99,7 @@ class OgMenuBlock extends BlockBase implements ContainerFactoryPluginInterface,
@@ -8,9 +8,9 @@ index 297960c..87cee17 100644
      $this->entityTypeManager = $entity_type_manager;
 +    $this->menuName = '';
    }
-
+ 
    /**
-@@ -284,13 +285,15 @@ class OgMenuBlock extends BlockBase implements ContainerFactoryPluginInterface,
+@@ -284,15 +285,19 @@ class OgMenuBlock extends BlockBase implements ContainerFactoryPluginInterface,
     */
    public function getOgMenuInstance() {
      $entity = $this->getContext('og')->getContextData()->getValue();
@@ -21,19 +21,24 @@ index 297960c..87cee17 100644
 -    ]);
 -    if ($instances) {
 -      return array_pop($instances);
-+    $entity_id = $entity->id();
-+    if ($entity_id) {
-+      $instances = $this->entityTypeManager->getStorage('ogmenu_instance')->loadByProperties([
-+        'type' => $this->getDerivativeId(),
-+        OgGroupAudienceHelperInterface::DEFAULT_FIELD => $entity_id,
-+      ]);
-+      if ($instances) {
-+        return array_pop($instances);
-+      }
++    if (!$entity || !$entity->id()) {
++      return NULL;
      }
-     return NULL;
+-    return NULL;
++    $instances = $this->entityTypeManager->getStorage('ogmenu_instance')
++      ->loadByProperties([
++        'type' => $this->getDerivativeId(),
++        OgGroupAudienceHelperInterface::DEFAULT_FIELD => $entity->id(),
++      ]);
++    if (!$instances) {
++      return NULL;
++    }
++
++    return array_pop($instances);
    }
-@@ -302,7 +305,7 @@ class OgMenuBlock extends BlockBase implements ContainerFactoryPluginInterface,
+ 
+   /**
+@@ -302,7 +307,7 @@ class OgMenuBlock extends BlockBase implements ContainerFactoryPluginInterface,
     *   The name of the menu, or null if no menu instance is found.
     */
    public function getMenuName() {
