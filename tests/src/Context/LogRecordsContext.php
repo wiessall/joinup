@@ -40,10 +40,16 @@ class LogRecordsContext extends RawDrupalContext {
    * @Given there should be :count log record(s) with level :level_exact
    */
   public function assertLogRecordCount(int $count, ?string $level_exact = NULL): void {
+    $logRecords = $this->getLogRecords($level_exact);
+    $messages = array_map(
+      fn (array $record) => $record['message'],
+      $logRecords
+    );
+
     Assert::assertCount(
       $count,
-      $this->getLogRecords($level_exact),
-      'Number of log records is different than expected.'
+      $logRecords,
+      'Number of log records is different than expected. Log records found: ' . implode(', ', $messages)
     );
   }
 
