@@ -21,7 +21,7 @@ Feature: Private messages
     Then a modal should open
     When I type "Bob Rolls" in the "Member(s) (value 1)" autocomplete field
     And I wait for AJAX to finish
-    And I pick "Bob Rolls" from the private message user autocomplete suggestions
+    And I pick "Bob Rolls" from the "Member" autocomplete suggestions
     And I fill in "Subject" with "Hello Bob"
     And I enter "This is a private message to Bob." in the "Message" wysiwyg editor
     And I press "Send" in the "Modal buttons" region
@@ -50,7 +50,7 @@ Feature: Private messages
     Then a modal should open
     When I type "Joan Tiff" in the "Member(s) (value 1)" autocomplete field
     And I wait until the page contains the text "Joan Tiff"
-    And I pick "Joan Tiff" from the private message user autocomplete suggestions
+    And I pick "Joan Tiff" from the "Member" autocomplete suggestions
     And I fill in "Subject" with "Hello Joan"
     And I enter "This is a private message to Joan." in the "Message" wysiwyg editor
     And I press "Send" in the "Modal buttons" region
