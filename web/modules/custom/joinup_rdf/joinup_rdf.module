@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\BubbleableMetadata;
 use Drupal\Core\Session\AccountInterface;
@@ -202,4 +203,33 @@ function joinup_rdf_tokens($type, $tokens, array $data, array $options, Bubbleab
   return [
     $tokens['rdf-uri'] => $entity->getUri(),
   ];
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_delete().
+ */
+function joinup_rdf_node_delete(EntityInterface $entity): void {
+  if (!$entity instanceof RdfSyncEntityInterface) {
+    return;
+  }
+
+  // The `hasUri` method is part of the RdfSyncEntityTrait.
+  // @see \Drupal\joinup_rdf\Entity\RdfSyncEntityTrait::hasUri()
+  if (!method_exists($entity, 'hasUri') || !$entity->hasUri()) {
+    return;
+  }
+
+  // Delete entries where the entity is the object from the default graph.
+  $graph_uri = \Drupal::config('rdf_sync.settings')->get('graph_uri');
+  $query = <<<QUERY
+WITH <{$graph_uri}>
+DELETE {
+  ?s ?p ?o .
+}
+WHERE {
+  ?s ?p ?o .
+  FILTER (?o = <{$entity->getUri()}>) .
+}
+QUERY;
+  \Drupal::service('rdf_sync.connection')->query($query);
 }
