@@ -672,6 +672,10 @@ Feature: Global search
     When I visit the search page
     And I should not see search bar icon in navbar
     And I enter "fu" in the "search bar"
+    # When the search term is less than 3 characters, the search is global and
+    # all results are fetched. Thus, the first two results are returned by
+    # score. That bring the first available collections as their score is the
+    # highest.
     Then I should see the following search suggestions:
       | Radio cooking collection |
       # Joinup collection is always installed
@@ -693,27 +697,28 @@ Feature: Global search
     # Check if facet summary was remove correctly.
     When I click "Clear filters"
     And I check the "News (5)" checkbox from the "Content types" facet
-    And I check the "Collection (1)" checkbox from the "Content types" facet
-    Then I should see the following facet summary "Collection, News"
+    # There are 2 collections given the default Joinup collection.
+    And I check the "Collections (2)" checkbox from the "Content types" facet
+    Then I should see the following facet summary "Collections, News"
     When I remove the following facet summary "News"
-    Then the page should show only the tiles "Radio cooking collection"
+    Then the page should show only the tiles "Radio cooking collection, Joinup"
 
     # Check if search autocomplete works in navbar.
     When I visit the collection overview
     And I should see search bar icon in navbar
     Then I should toggle search bar in navbar
-    And I enter "fu" in the "search bar"
+    And I enter "funn" in the "search bar"
     Then I should see the following search suggestions:
-      | Radio cooking collection |
-      | Spheres                  |
+      | Funny news 1 |
+      | Funny news 2 |
 
     # Check if search autocomplete works in homepage's header search bar.
     Given I am on the homepage
     Then I should see the search bar in homepage's header
-    And I enter "fu" in the "search bar"
+    And I enter "funn" in the "search bar"
     Then I should see the following search suggestions:
-      | Radio cooking collection |
-      | Spheres                  |
+      | Funny news 1 |
+      | Funny news 2 |
 
     # Check if search did you mean works.
     Given I visit the search page
@@ -769,7 +774,8 @@ Feature: Global search
     And I should see the text "SEARCH RESULTS (8)"
 
     Then I go to "/search?f[0]=date:(min:,max:1609113600)"
-    And I should see the text "SEARCH RESULTS (8)"
+    # One extra result due to the default Joinup collection.
+    And I should see the text "SEARCH RESULTS (9)"
 
     Then I go to "/search?f[0]=date:(min:,max:)"
     And I should see the text "SEARCH RESULTS (14)"
