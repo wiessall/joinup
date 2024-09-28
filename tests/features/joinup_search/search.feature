@@ -778,7 +778,8 @@ Feature: Global search
     And I should see the text "SEARCH RESULTS (9)"
 
     Then I go to "/search?f[0]=date:(min:,max:)"
-    And I should see the text "SEARCH RESULTS (14)"
+    # One extra result due to the default Joinup collection.
+    And I should see the text "SEARCH RESULTS (15)"
 
   Scenario: Max 2 topic terms appear in each search result with a suffix for the rest.
     Given collection content:
