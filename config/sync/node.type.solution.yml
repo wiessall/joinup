@@ -34,7 +34,7 @@ third_party_settings:
       title:
         value:
           predicate: 'http://purl.org/dc/terms/title'
-          type: 'xsd:string'
+          type: null
       changed:
         value:
           predicate: 'http://purl.org/dc/terms/modified'
