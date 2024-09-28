@@ -2992,23 +2992,6 @@ class JoinupContext extends RawDrupalContext {
   }
 
   /**
-   * Asserts that the rdf entity absolute urls exist as links.
-   *
-   * @param \Behat\Gherkin\Node\TableNode $titles
-   *   The titles of the rdf entities.
-   *
-   * @throws \Exception
-   *   Thrown if any link does not exist in the page.
-   *
-   * @Given I should see the absolute urls of the following RDF entities:
-   */
-  public function assertRdfEntityAbsoluteUrlsAsLinkInPage(TableNode $titles): void {
-    foreach ($titles->getRows() as $title) {
-      $this->assertEntityUrlInSitemap('rdf_entity', $title[0]);
-    }
-  }
-
-  /**
    * Asserts that the content absolute urls do not exist as links.
    *
    * @param \Behat\Gherkin\Node\TableNode $titles
@@ -3056,23 +3039,6 @@ class JoinupContext extends RawDrupalContext {
 
     $entity->set('published_at', $publication_date);
     $entity->save();
-  }
-
-  /**
-   * Asserts that the absolute url of an rdf entity exists as a link.
-   *
-   * @param \Behat\Gherkin\Node\TableNode $titles
-   *   The titles of the rdf entities.
-   *
-   * @throws \Exception
-   *   Thrown if the link does not exist in the page.
-   *
-   * @Given I should not see the absolute urls of the following RDF entities:
-   */
-  public function assertEmptyRdfEntityAbsoluteUrlsAsLinkInPage(TableNode $titles): void {
-    foreach ($titles->getRows() as $title) {
-      $this->assertEntityUrlInSitemap('rdf_entity', $title[0], FALSE);
-    }
   }
 
   /**

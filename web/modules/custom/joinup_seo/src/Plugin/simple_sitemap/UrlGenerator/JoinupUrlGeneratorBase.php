@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup_seo\Plugin\simple_sitemap\UrlGenerator;
 
 use Drupal\Core\Entity\Query\QueryInterface;
+use Drupal\joinup_group\Entity\GroupContentInterface;
 use Drupal\joinup_group\JoinupGroupHelper;
 use Drupal\simple_sitemap\Exception\SkipElementException;
 use Drupal\simple_sitemap\Plugin\simple_sitemap\UrlGenerator\EntityUrlGenerator;
@@ -93,7 +94,7 @@ abstract class JoinupUrlGeneratorBase extends EntityUrlGenerator {
     foreach ($this->entityTypeManager->getStorage($data_set['entity_type'])->loadMultiple((array) $data_set['id']) as $entity) {
       // In case the entity type is a node, we also need to also take into
       // account the status of the parent.
-      if ($entity->getEntityTypeId() === 'node') {
+      if ($entity instanceof GroupContentInterface) {
         $parent = JoinupGroupHelper::getGroup($entity);
         if (empty($parent) || !$parent->isPublished()) {
           continue;
