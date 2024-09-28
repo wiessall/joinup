@@ -59,5 +59,5 @@ Feature: SEO for RDF entities.
       | @type                                      | http://purl.org/dc/terms/LicenseDocument |
       | http://www.w3.org/2000/01/rdf-schema#label | SEO licence                              |
       | http://joinup.eu/licence/deprecated        | false                                    |
-      | description                                | <p>Licence to perform SEO</p>            |
+      | description                                | Licence to perform SEO                   |
       | type                                       | http://purl.org/adms/licence/PD          |
