@@ -209,8 +209,8 @@ class RdfContext extends RawDrupalContext {
   public function assertNoTriplesOfUri(string $property, string $uri, string $graph): void {
     assert(in_array($property, ['subject', 'object']), 'The property must be either "subject" or "object"');
     $stub = $property === 'subject' ?
-      "<$uri> ?p ?o" :
-      "?s ?p <$uri>";
+      "<$uri> ?p ?entity" :
+      "?entity ?p <$uri>";
 
     $query = "WITH <$graph> SELECT * WHERE { $stub }";
 
@@ -219,7 +219,7 @@ class RdfContext extends RawDrupalContext {
     $results = $connection->query($query);
     $messages = [];
     foreach ($results as $result) {
-      $messages[] = sprintf('%s %s', $property === 'subject' ? $result->s : $result->o, $result->p);
+      $messages[] = sprintf('%s %s', $result->entity, $result->p);
     }
 
     Assert::assertCount(0, $results, "There are triples with $property $uri in the $graph graph. Results found: " . implode(', ', $messages));
