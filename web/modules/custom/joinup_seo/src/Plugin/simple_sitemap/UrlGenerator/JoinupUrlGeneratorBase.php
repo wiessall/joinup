@@ -92,7 +92,7 @@ abstract class JoinupUrlGeneratorBase extends EntityUrlGenerator {
    */
   protected function processDataSet($data_set): array {
     foreach ($this->entityTypeManager->getStorage($data_set['entity_type'])->loadMultiple((array) $data_set['id']) as $entity) {
-      // In case the entity type is a node, we also need to also take into
+      // In case the entity is a group content, we also need to also take into
       // account the status of the parent.
       if ($entity instanceof GroupContentInterface) {
         $parent = JoinupGroupHelper::getGroup($entity);
