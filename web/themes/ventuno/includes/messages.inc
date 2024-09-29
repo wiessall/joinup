@@ -57,4 +57,5 @@ function ventuno_preprocess_message_digest(array &$variables): void {
  */
 function ventuno_preprocess_node__digest_message_header(array &$variables): void {
   $variables['url'] = $variables['node']->toUrl('canonical', ['absolute' => TRUE])->toString();
+  $variables['label'][0]['#template'] = '{{ value }}';
 }
