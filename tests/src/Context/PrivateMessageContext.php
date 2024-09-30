@@ -182,25 +182,6 @@ class PrivateMessageContext extends RawDrupalContext {
   }
 
   /**
-   * Simulates picking of an autosuggestion value from a field.
-   *
-   * @param string $value
-   *   The value to select from suggestions.
-   *
-   * @throws \Exception
-   *   Thrown when the field is not found, the field is not an autocomplete
-   *   field, when there was a failure retrieving the autocomplete suggestions
-   *   or if the wanted suggestion is not found.
-   *
-   * @When I pick :value from the private message user autocomplete suggestions
-   */
-  public function fillPersonFieldWithNormalisedEntityReference(string $value): void {
-    $this->assertJavaScriptEnabledBrowser();
-    $xpath = '//div[@id="pm-members-autocomplete-results-wrapper"]//ul[contains(concat(" ", normalize-space(@class), " "), " ui-widget-content ")]//a[text() = "' . $value . '"]';
-    $this->waitForElementVisible('xpath', $xpath)->click();
-  }
-
-  /**
    * Retrieves the messages container element from the page.
    *
    * @return \Behat\Mink\Element\NodeElement
