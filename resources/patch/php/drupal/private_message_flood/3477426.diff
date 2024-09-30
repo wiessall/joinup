@@ -8,7 +8,7 @@ index 93b516e..8af36ad 100644
     */
 -  public function buildForm(FormStateInterface $formState) {
 +  public function buildForm(FormStateInterface $formState): array {
- 
+
      $form['header'] = [
        '#prefix' => '<p>',
 @@ -197,7 +197,7 @@ class PrivateMessageFloodPrivateMessageConfigForm extends PrivateMessageConfigFo
@@ -16,7 +16,7 @@ index 93b516e..8af36ad 100644
     * {@inheritdoc}
     */
 -  public function validateForm(array &$form, FormStateInterface $formState) {
-+  public function validateForm(array &$form, FormStateInterface $formState): array {
++  public function validateForm(array &$form, FormStateInterface $formState): void {
      foreach ($formState->getValue(['private_message_flood_settings', 'roles']) as $rid => $data) {
        if (isset($data['values'], $data['values']['details'], $data['values']['details']['elements'], $data['values']['details']['elements']['type'])) {
          if (!empty($data['values']['details']['elements']['type']) && empty($data['values']['details']['elements']['limit'])) {
@@ -26,7 +26,7 @@ index 93b516e..8af36ad 100644
     */
 -  public function submitForm(array $values) {
 +  public function submitForm(array $values): void {
- 
+
      foreach ($values['roles'] as $rid => $data) {
        $duration = $data['values']['details']['elements']['duration'];
 diff --git a/src/Service/PrivateMessageFloodService.php b/src/Service/PrivateMessageFloodService.php
@@ -101,10 +101,16 @@ index b9faf41..f532d5a 100644
     * {@inheritdoc}
     */
 -  public function getUserLimitDuration(AccountInterface $user = NULL) {
-+  public function getUserLimitDuration(AccountInterface $user = NULL): int {
++  public function getUserLimitDuration(AccountInterface $user = NULL): string {
      if (empty($user)) {
        $user = $this->currentUser;
      }
+     $config = $this->getFloodProtectionInfo($user);
+-    return isset($config['duration']) ? $config['duration'] : 0;
++    return isset($config['duration']) ? $config['duration'] : '0';
+   }
+
+ }
 diff --git a/src/Service/PrivateMessageFloodServiceInterface.php b/src/Service/PrivateMessageFloodServiceInterface.php
 index f34d282..49d5063 100644
 --- a/src/Service/PrivateMessageFloodServiceInterface.php
@@ -115,7 +121,7 @@ index f34d282..49d5063 100644
     */
 -  public function checkUserFlood(AccountInterface $user = NULL);
 +  public function checkUserFlood(AccountInterface $user = NULL): bool;
- 
+
    /**
     * Retrieve the limit the user has.
 @@ -38,7 +38,7 @@ interface PrivateMessageFloodServiceInterface {
@@ -124,7 +130,7 @@ index f34d282..49d5063 100644
     */
 -  public function getUserLimitCount(AccountInterface $user = NULL);
 +  public function getUserLimitCount(AccountInterface $user = NULL): int;
- 
+
    /**
     * Retrieve the number already used within the current duration.
 @@ -49,7 +49,7 @@ interface PrivateMessageFloodServiceInterface {
@@ -133,7 +139,7 @@ index f34d282..49d5063 100644
     */
 -  public function getUserCurrentCount(AccountInterface $user = NULL);
 +  public function getUserCurrentCount(AccountInterface $user = NULL): int;
- 
+
    /**
     * Retrieve the limit type for the user.
 @@ -60,7 +60,7 @@ interface PrivateMessageFloodServiceInterface {
@@ -142,7 +148,7 @@ index f34d282..49d5063 100644
     */
 -  public function getUserLimitType(AccountInterface $user = NULL);
 +  public function getUserLimitType(AccountInterface $user = NULL): string;
- 
+
    /**
     * Retrieve the limit duration for the user.
 @@ -71,6 +71,6 @@ interface PrivateMessageFloodServiceInterface {
@@ -150,6 +156,6 @@ index f34d282..49d5063 100644
     *   The duration time of the limit window for the user (base don role).
     */
 -  public function getUserLimitDuration(AccountInterface $user = NULL);
-+  public function getUserLimitDuration(AccountInterface $user = NULL): int;
- 
++  public function getUserLimitDuration(AccountInterface $user = NULL): string;
+
  }
