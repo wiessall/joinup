@@ -45,6 +45,12 @@ Feature: User authentication
       | admin/structure/compatibility-document/display      |
       | admin/structure/compatibility-document/form-display |
       | admin/structure/media                               |
+      | admin/tmgmt/job_items                               |
+      | admin/tmgmt/jobs                                    |
+      | admin/tmgmt/sources                                 |
+      | admin/tmgmt/cart                                    |
+      | admin/tmgmt/translators                             |
+      | admin/tmgmt/settings                                |
       | announcements                                       |
       | dashboard                                           |
       | licence                                             |
@@ -129,6 +135,12 @@ Feature: User authentication
       | admin/structure/compatibility-document/display      |
       | admin/structure/compatibility-document/form-display |
       | admin/structure/media                               |
+      | admin/tmgmt/job_items                               |
+      | admin/tmgmt/jobs                                    |
+      | admin/tmgmt/sources                                 |
+      | admin/tmgmt/cart                                    |
+      | admin/tmgmt/translators                             |
+      | admin/tmgmt/settings                                |
       | announcements                                       |
       | dashboard                                           |
       | licence                                             |
@@ -223,6 +235,12 @@ Feature: User authentication
       | admin/structure/compatibility-document/display      |
       | admin/structure/compatibility-document/form-display |
       | admin/structure/media                               |
+      | admin/tmgmt/job_items                               |
+      | admin/tmgmt/jobs                                    |
+      | admin/tmgmt/sources                                 |
+      | admin/tmgmt/cart                                    |
+      | admin/tmgmt/translators                             |
+      | admin/tmgmt/settings                                |
       | node/add                                            |
       | node/add/contact_information                        |
       | node/add/custom_page                                |

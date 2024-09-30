@@ -49,6 +49,7 @@ module:
   entityqueue_block: 0
   error_page: 0
   eu_oss_catalogue: 0
+  eu_oss_translation: 0
   eu_oss_vitality_index: 0
   eupl: 0
   facets: 0
@@ -241,6 +242,9 @@ module:
   template_suggestion: 0
   text: 0
   theme_rule: 0
+  tmgmt: 0
+  tmgmt_content: 0
+  tmgmt_ec_etranslation: 0
   token: 0
   toolbar: 0
   topic: 0
