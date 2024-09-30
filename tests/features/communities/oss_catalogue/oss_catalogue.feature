@@ -364,3 +364,8 @@ Feature:
     And I wait for CSS animations to finish
     And I should not see the image "99ccd804281fede2d4e3dcc3a9b30a4c.png"
     And I should see a ".slick--optionset--image-gallery button[aria-label='Previous'][aria-disabled='true']" element
+
+  # Regression test for ISAICP-9113 ticket.
+  Scenario: More in modal should be limited to a specific node type.
+    When I go to "/modal/anonymous/modal/anonymous/like"
+    Then I should get a 404 HTTP response
