@@ -392,7 +392,7 @@ function solution_rdf_entity_view(array &$build, RdfInterface $solution, EntityV
 
   // Member count.
   if ($display->getComponent('members')) {
-    $member_count = solution_member_count($solution);
+    $member_count = $solution->getActiveMemberCount();
     // Invalidate the member count every time the group membership list changes.
     // @see \Drupal\og\Plugin\Block\MemberCountBlock::getCacheTags()
     $tags = Cache::buildTags(OgMembershipInterface::GROUP_MEMBERSHIP_LIST_CACHE_TAG_PREFIX, $solution->getCacheTagsToInvalidate());
@@ -727,28 +727,6 @@ function solution_module_implements_alter(&$implementations, $hook): void {
     unset($implementations['solution']);
     $implementations = ['solution' => $solution] + $implementations;
   }
-}
-
-/**
- * Amount of members of a solution.
- *
- * @param \Drupal\rdf_entity\RdfInterface $entity
- *   The solution.
- *
- * @return int
- *   Amount of members.
- */
-function solution_member_count(RdfInterface $entity): int {
-  // We're doing a direct database query rather than using methods in OG's
-  // MembershipManager service since we just need a count, and we need to filter
-  // out blocked user accounts.
-  $query = \Drupal::database()->select('og_membership', 'om');
-  $query->innerJoin('users_field_data', 'ufd', '[om].[uid] = [ufd].[uid]');
-  $query->condition('ufd.status', 1)
-    ->condition('om.entity_type', 'rdf_entity')
-    ->condition('om.entity_id', $entity->id())
-    ->condition('om.state', OgMembershipInterface::STATE_ACTIVE);
-  return (int) $query->countQuery()->execute()->fetchField();
 }
 
 /**

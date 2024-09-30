@@ -28,10 +28,10 @@ class JoinupCoreServiceProvider implements ServiceModifierInterface {
     if ($paths) {
       foreach (explode(';', $paths) as $item) {
         $item = str_replace(' ', '', $item);
-        if (strpos($item, ':') !== FALSE) {
+        if (str_contains($item, ':')) {
           [$handler, $path] = explode(':', $item);
           if ($handler && $path) {
-            $container->setParameter("joinup_core.monolog.paths.{$handler}", $path);
+            $container->setParameter("joinup_core.monolog.paths.$handler", $path);
           }
         }
       }
