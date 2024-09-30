@@ -15,6 +15,7 @@ joinup_private_message.unblock:
     _title: 'Unblock user'
   requirements:
     _permission: 'use private messaging system'
+    _custom_access: '\Drupal\private_message\Entity\PrivateMessageBan::checkAccess'
   options:
     parameters:
       private_message_ban:
