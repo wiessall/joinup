@@ -81,6 +81,7 @@ class CreatePrivateMessageBlock extends BlockBase implements ContainerFactoryPlu
       '#type' => 'link',
       '#title' => $this->configFactory->get('private_message.settings')->get("create_message_label"),
       '#url' => $url,
+      '#attributes' => _joinup_private_message_get_ajax_modal_attributes(),
     ];
 
     return $block;
