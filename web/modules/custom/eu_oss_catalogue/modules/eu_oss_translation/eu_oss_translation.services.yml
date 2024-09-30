@@ -1,0 +1,15 @@
+services:
+  eu_oss_translation.job_builder:
+    class: Drupal\eu_oss_translation\JobBuilder
+    arguments:
+      - '@current_user'
+      - '@entity_type.manager'
+      - '@logger.channel.eu_oss_catalogue'
+      - '@plugin.manager.tmgmt.source'
+      - '@config.factory'
+
+  eu_oss_translation.solution_post_save_subscriber:
+    class: Drupal\eu_oss_translation\EventSubscriber\SolutionPostSaveSubscriber
+    arguments: [ '@queue' ]
+    tags:
+      - { name: event_subscriber }
