@@ -431,7 +431,8 @@
             "drupal/private_message": {
                 "Add missing fields to private message thread members formatter settings @see https://www.drupal.org/i/3470928": "resources/patch/php/drupal/private_message/3470928.diff",
                 "404 for get_new_unread_message_count request @see https://www.drupal.org/i/3478456": "resources/patch/php/drupal/private_message/3478456.patch",
-                "Javascript files loaded twice @see https://www.drupal.org/i/3054106": "resources/patch/php/drupal/private_message/3054106.diff"
+                "Javascript files loaded twice @see https://www.drupal.org/i/3054106": "resources/patch/php/drupal/private_message/3054106.diff",
+                "Return type for PrivateMessageConfigFormBase::validateForm() should be void @see https://www.drupal.org/i/3477873": "resources/patch/php/drupal/private_message/3477873.diff"
             },
             "drupal/private_message_flood": {
                 "Add return type to methods @see https://www.drupal.org/i/3477426": "resources/patch/php/drupal/private_message_flood/3477426.diff"

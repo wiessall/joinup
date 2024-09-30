@@ -1,0 +1,40 @@
+diff --git a/src/Plugin/PrivateMessageConfigForm/PrivateMessageConfigFormBase.php b/src/Plugin/PrivateMessageConfigForm/PrivateMessageConfigFormBase.php
+index f93173e..3fa5217 100644
+--- a/src/Plugin/PrivateMessageConfigForm/PrivateMessageConfigFormBase.php
++++ b/src/Plugin/PrivateMessageConfigForm/PrivateMessageConfigFormBase.php
+@@ -68,11 +68,4 @@ abstract class PrivateMessageConfigFormBase extends PluginBase implements Privat
+     return $this->pluginDefinition['id'];
+   }
+ 
+-  /**
+-   * {@inheritdoc}
+-   */
+-  public function validateForm(array &$form, FormStateInterface $formState): array {
+-    return [];
+-  }
+-
+ }
+diff --git a/src/Plugin/PrivateMessageConfigForm/PrivateMessageConfigFormPluginInterface.php b/src/Plugin/PrivateMessageConfigForm/PrivateMessageConfigFormPluginInterface.php
+index 8cdc870..3ba99a6 100644
+--- a/src/Plugin/PrivateMessageConfigForm/PrivateMessageConfigFormPluginInterface.php
++++ b/src/Plugin/PrivateMessageConfigForm/PrivateMessageConfigFormPluginInterface.php
+@@ -38,19 +38,6 @@ interface PrivateMessageConfigFormPluginInterface extends PluginInspectionInterf
+    */
+   public function buildForm(FormStateInterface $formState);
+ 
+-  /**
+-   * Validate this section of the form.
+-   *
+-   * @param array $form
+-   *   The form render array.
+-   * @param \Drupal\Core\Form\FormStateInterface $formState
+-   *   The Drupal form state.
+-   *
+-   * @return array
+-   *   A render array containing the form elements this plugin provides.
+-   */
+-  public function validateForm(array &$form, FormStateInterface $formState);
+-
+   /**
+    * Handle submission of the form added to the settings page.
+    *
