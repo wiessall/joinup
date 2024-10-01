@@ -33,6 +33,7 @@ drupal:
         - RDF backend
         - Configuration
         - Search API
+        - European Commission eTranslation
         - OpenEuropa Webtools Analytics
         - OpenEuropa Newsroom Newsletter Settings
         - Custom error handler
@@ -45,6 +46,7 @@ drupal:
         - RDF backend
         - Configuration
         - Search API
+        - European Commission eTranslation
         - OpenEuropa Webtools Analytics
         - OpenEuropa Newsroom Newsletter Settings
         - Custom error handler
@@ -64,6 +66,7 @@ drupal:
         - RDF backend
         - Configuration
         - Search API
+        - European Commission eTranslation
         - OpenEuropa Webtools Analytics
         - Custom error handler
         - Permissions
@@ -85,6 +88,7 @@ drupal:
         - Configuration
         - Testing configuration alters
         - Search API
+        - European Commission eTranslation
         - OpenEuropa Webtools Analytics
         - Custom error handler
         - Permissions
@@ -104,6 +108,7 @@ drupal:
         - RDF backend
         - Configuration
         - Search API
+        - European Commission eTranslation
         - OpenEuropa Webtools Analytics
         - Custom error handler
         - Permissions
@@ -124,6 +129,7 @@ drupal:
         - RDF backend
         - Configuration
         - Search API
+        - European Commission eTranslation
         - OpenEuropa Webtools Analytics
         - Custom error handler
         - Permissions
@@ -144,6 +150,7 @@ drupal:
         - Configuration
         - Search API
         - OpenEuropa Newsroom Newsletter Settings
+        - European Commission eTranslation
         - OpenEuropa Webtools Analytics
         - GitHub Token Setup
         - Custom error handler
@@ -245,7 +252,6 @@ drupal:
         ];
         // Location of the site configuration files.
         $settings['config_sync_directory'] = '../config/sync';
-        $settings['config_readonly'] = !file_exists(getcwd() . '/../disable-config-readonly');
       Testing configuration alters: |
         // The video from the home page interacts with Selenium tests.
         $config['page_manager.page_variant.homepage-layout_builder-0']['variant_settings']['sections'][4]['components']['6ab0ceea-4541-4153-8b64-227e02369d30']['configuration']['text'] = 'Some joinup video';
@@ -318,6 +324,9 @@ drupal:
         // @see \Joinup\TaskRunner\Commands\SolrCommands::getUrl()
         $config['search_api.server.joinup']['backend_config']['connector_config']['path'] = '/';
         $config['search_api.server.joinup']['backend_config']['connector_config']['core'] = getenv('SEARCH_API_SERVER_SS_SOLR_CORE');
+      European Commission eTranslation: |
+        $config['tmgmt.translator.ec_etranslation']['settings']['username'] = getenv('TMGMT_ETRANSLATION_USERNAME') ?: '';
+        $config['tmgmt.translator.ec_etranslation']['settings']['password'] = getenv('TMGMT_ETRANSLATION_PASSWORD') ?: '';
       OpenEuropa Webtools Analytics: |
         $config['oe_webtools_analytics.settings']['siteID'] = getenv('OE_WEBTOOLS_ANALYTICS_SITE_ID');
         $config['oe_webtools_analytics.settings']['sitePath'] = getenv('OE_WEBTOOLS_ANALYTICS_SITE_PATH');

@@ -350,4 +350,12 @@ interface GroupInterface extends RdfInterface, LogoInterface, ShortIdInterface, 
    */
   public function getWebsiteLinkFieldName(): string;
 
+  /**
+   * Returns the number of active members in this group.
+   *
+   * @return int
+   *   The number of active members.
+   */
+  public function getActiveMemberCount(): int;
+
 }
