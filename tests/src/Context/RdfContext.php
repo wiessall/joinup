@@ -15,46 +15,6 @@ use PHPUnit\Framework\ExpectationFailedException;
 class RdfContext extends RawDrupalContext {
 
   /**
-   * Cleans the graph from the ADMS data.
-   *
-   * @param string $graph
-   *   The graph to be cleaned.
-   *
-   * @Given there are no ADMS data in the :graph graph
-   */
-  public function cleanGraphFromAdmsData(string $graph): void {
-    $admsClasses = [
-      'http://www.w3.org/ns/dcat#Catalogue',
-      'http://www.w3.org/ns/dcat#Dataset',
-      'http://www.w3.org/ns/dcat#Distribution',
-      'http://purl.org/dc/terms/LicenseDocument',
-      'http://www.w3.org/2006/vcard/ns#Kind',
-      'http://xmlns.com/foaf/0.1/Agent',
-      'http://data.europa.eu/eif/adms/PerspectiveEIF',
-    ];
-
-    $serializedClasses = implode(' ', array_map(function ($class) {
-      return "<$class>";
-    }, $admsClasses));
-
-    $query = <<<SPARQL
-      WITH <$graph>
-      DELETE {
-        ?s ?p ?o .
-      }
-      WHERE {
-        ?s ?p ?o .
-        ?s a ?class .
-        VALUES ?class { $serializedClasses }
-      }
-    SPARQL;
-
-    /** @var \Drupal\rdf_sync\RdfSyncConnectionInterface $connection */
-    $connection = \Drupal::service('rdf_sync.connection');
-    $connection->query($query);
-  }
-
-  /**
    * Asserts that a list of triples exists in a certain graph.
    *
    * It also asserts that no other triples for a given subject

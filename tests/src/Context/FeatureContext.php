@@ -1599,6 +1599,28 @@ class FeatureContext extends RawDrupalContext {
   }
 
   /**
+   * Perform cleanup after each scenario.
+   *
+   * This is needed to ensure that the RDF data is synchronized after each
+   * scenario. If this does not run, the RDF data will be left in the RDF
+   * database as stale data.
+   *
+   * The try-catch block is needed to counter the race condition where the
+   * entity is cleaned by behat during the cleanup phase but the RDF destructor
+   * is not yet called, and when called, fails to fetch the URI of the entity.
+   *
+   * @AfterScenario
+   */
+  public function afterScenarioDestruct(): void {
+    try {
+      \Drupal::service('rdf_sync.synchronizer')->destruct();
+    }
+    catch (\Exception $e) {
+      // Ignore exceptions.
+    }
+  }
+
+  /**
    * Waits until a text is dynamically added to the page.
    *
    * @param string $text

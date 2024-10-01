@@ -4,9 +4,6 @@ Feature: RDF synchronization of contents.
   in order for my news to be better visible on the web
   I need my RDF entities to be properly synchronized with the site contents.
 
-  Background:
-    Given there are no ADMS data in the "http://data" graph
-
   Scenario: ADMS basic classes are properly exported.
     Given users:
       | Username     | E-mail           |
