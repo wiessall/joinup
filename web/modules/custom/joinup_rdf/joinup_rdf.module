@@ -213,12 +213,6 @@ function joinup_rdf_node_delete(EntityInterface $entity): void {
     return;
   }
 
-  // The `hasUri` method is part of the RdfSyncEntityTrait.
-  // @see \Drupal\joinup_rdf\Entity\RdfSyncEntityTrait::hasUri()
-  if (!method_exists($entity, 'hasUri') || !$entity->hasUri()) {
-    return;
-  }
-
   // Delete entries where the entity is the object from the default graph.
   $graph_uri = \Drupal::config('rdf_sync.settings')->get('graph_uri');
   $query = <<<QUERY

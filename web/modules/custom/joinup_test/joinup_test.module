@@ -40,7 +40,7 @@ function joinup_test_node_presave(EntityInterface $entity): void {
     return;
   }
 
-  if (!$entity->hasUri() || $entity->getUri() !== JoinupCollectionHelper::JOINUP_COLLECTION_URI || $entity->isNew()) {
+  if ($entity->isNew() || $entity->getUri() !== JoinupCollectionHelper::JOINUP_COLLECTION_URI) {
     return;
   }
 
