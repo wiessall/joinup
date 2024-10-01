@@ -1592,26 +1592,15 @@ class FeatureContext extends RawDrupalContext {
    * the next Behat step. After a scenario terminates, the nodes created are
    * deleted and RDF needs to be synchronized so that also triples are deleted.
    *
+   * This is also needed to ensure that the RDF data is synchronized after each
+   * scenario because entities are cleaned after a scenario and we need to
+   * ensure that the RDF data is synchronized after each scenario. If this does
+   * not run, the RDF data will be left in the RDF database as stale data.
+   *
    * @AfterStep
-   */
-  public function afterStepRdfSyncDestruct(): void {
-    \Drupal::service('rdf_sync.synchronizer')->destruct();
-  }
-
-  /**
-   * Perform cleanup after each scenario.
-   *
-   * This is needed to ensure that the RDF data is synchronized after each
-   * scenario. If this does not run, the RDF data will be left in the RDF
-   * database as stale data.
-   *
-   * The try-catch block is needed to counter the race condition where the
-   * entity is cleaned by behat during the cleanup phase but the RDF destructor
-   * is not yet called, and when called, fails to fetch the URI of the entity.
-   *
    * @AfterScenario
    */
-  public function afterScenarioDestruct(): void {
+  public function afterStepRdfSyncDestruct(): void {
     \Drupal::service('rdf_sync.synchronizer')->destruct();
   }
 
