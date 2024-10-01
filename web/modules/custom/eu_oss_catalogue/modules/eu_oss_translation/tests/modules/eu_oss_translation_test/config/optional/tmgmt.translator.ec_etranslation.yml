@@ -1,0 +1,17 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - tmgmt_ec_etranslation
+name: ec_etranslation
+label: 'European Commission eTranslation'
+description: "Allows the European Commission's eTranslation service to process translation jobs."
+auto_accept: true
+weight: null
+plugin: ec_etranslation
+settings:
+  username: 'dummy-username'
+  password: 'dummy-password'
+  domain: SPD
+  email: ''
+remote_languages_mappings: { }

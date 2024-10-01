@@ -7,6 +7,7 @@ namespace Drupal\joinup_community_content\Entity;
 use Drupal\collection\Entity\CollectionContentInterface;
 use Drupal\joinup_bundle_class\DescriptionInterface;
 use Drupal\joinup_core\Entity\OutdatedContentInterface;
+use Drupal\joinup_core\Entity\PermalinkInterface;
 use Drupal\joinup_featured\FeaturedContentInterface;
 use Drupal\joinup_group\Entity\PinnableGroupContentInterface;
 use Drupal\joinup_group\GroupArchivableEntityInterface;
@@ -19,6 +20,6 @@ use Drupal\topic\Entity\TopicReferencingEntityInterface;
 /**
  * Interface for community content entities.
  */
-interface CommunityContentInterface extends NodeInterface, EntityPublicationTimeInterface, FeaturedContentInterface, CollectionContentInterface, EntityWorkflowStateInterface, OutdatedContentInterface, PinnableGroupContentInterface, TopicReferencingEntityInterface, VisitCountAwareInterface, GroupArchivableEntityInterface, DescriptionInterface {
+interface CommunityContentInterface extends NodeInterface, EntityPublicationTimeInterface, FeaturedContentInterface, CollectionContentInterface, EntityWorkflowStateInterface, OutdatedContentInterface, PinnableGroupContentInterface, TopicReferencingEntityInterface, VisitCountAwareInterface, GroupArchivableEntityInterface, DescriptionInterface, PermalinkInterface {
 
 }

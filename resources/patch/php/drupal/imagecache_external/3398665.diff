@@ -1,47 +1,42 @@
 diff --git a/imagecache_external.module b/imagecache_external.module
-index 22d62dc..f05cccf 100644
+index df28db5..8320382 100644
 --- a/imagecache_external.module
 +++ b/imagecache_external.module
-@@ -9,6 +9,7 @@ use Drupal\Component\Utility\UrlHelper;
- use Drupal\Core\StreamWrapper\StreamWrapperManager;
- use Drupal\Core\File\FileSystemInterface;
- use Drupal\file\Entity\File;
-+use Drupal\imagecache_external\ImagecacheExternal;
- use Drupal\imagecache_external\Svg\ImagecacheExternalAttributes;
- use Drupal\imagecache_external\Svg\ImagecacheExternalTags;
- use enshrined\svgSanitize\Sanitizer;
-@@ -104,6 +105,9 @@ function template_preprocess_imagecache_external_responsive(&$variables) {
-  *   The uri to the image.
+@@ -102,11 +102,9 @@ function template_preprocess_imagecache_external_responsive(&$variables) {
+  * @throws \GuzzleHttp\Exception\GuzzleException
   */
- function imagecache_external_generate_path($url) {
-+  if (ImagecacheExternal::isUnavailableUrl($url)) {
-+    return FALSE;
-+  }
+ function imagecache_external_generate_path(?string $url) {
+-  // If $url is null or empty, return FALSE
+-  if (empty($url)) {
++  if (empty($url) || \Drupal\imagecache_external\ImagecacheExternal::isUnavailableUrl($url)) {
+     return FALSE;
+   }
+-
    // Get configuration.
    $config = imagecache_external_config();
  
-@@ -250,6 +254,7 @@ function imagecache_external_fetch(string $url, string $cachepath) {
+@@ -247,6 +245,7 @@ function imagecache_external_fetch(string $url, string $cachepath) {
      if (!empty($fallback_image_fid) && $fallback_image = File::load($fallback_image_fid)) {
        return $fallback_image->getFileUri();
      }
-+    ImagecacheExternal::registerUnavailableUrl($url);
++    \Drupal\imagecache_external\ImagecacheExternal::registerUnavailableUrl($url);
      \Drupal::logger('imagecache_external')->notice(t('The image %url could not be retrieved', ['%url' => $url]));
      return FALSE;
    }
-@@ -444,6 +449,7 @@ function imagecache_external_flush_create_queue($path) {
+@@ -411,6 +410,7 @@ function imagecache_external_flush_create_queue($path) {
      \Drupal::service('file_system')->deleteRecursive($path);
    }
  
-+  ImagecacheExternal::resetUnavailableUrls();
++  \Drupal\imagecache_external\ImagecacheExternal::resetUnavailableUrls();
    return TRUE;
  }
  
 diff --git a/src/ImagecacheExternal.php b/src/ImagecacheExternal.php
 new file mode 100644
-index 0000000..7e911e4
+index 0000000..49b6060
 --- /dev/null
 +++ b/src/ImagecacheExternal.php
-@@ -0,0 +1,86 @@
+@@ -0,0 +1,84 @@
 +<?php
 +
 +declare(strict_types = 1);
@@ -64,8 +59,6 @@ index 0000000..7e911e4
 +
 +  /**
 +   * The state service.
-+   *
-+   * @var \Drupal\Core\State\StateInterface
 +   */
 +  protected static StateInterface $state;
 +
@@ -128,6 +121,19 @@ index 0000000..7e911e4
 +  }
 +
 +}
+diff --git a/tests/src/Kernel/ImagecacheExternalResponsiveImageFormatterTest.php b/tests/src/Kernel/ImagecacheExternalResponsiveImageFormatterTest.php
+index 92dbbec..4ab2c48 100644
+--- a/tests/src/Kernel/ImagecacheExternalResponsiveImageFormatterTest.php
++++ b/tests/src/Kernel/ImagecacheExternalResponsiveImageFormatterTest.php
+@@ -208,7 +208,7 @@ class ImagecacheExternalResponsiveImageFormatterTest extends KernelTestBase {
+    * @return string[][]
+    *   The test cases.
+    */
+-  public static function providerLinkSetting(): array {
++  public function providerLinkSetting(): array {
+     return [
+       'Field not using link' => [
+         'link setting' => '',
 diff --git a/tests/src/Kernel/TrackNonDownloadableUrlsTest.php b/tests/src/Kernel/TrackNonDownloadableUrlsTest.php
 new file mode 100644
 index 0000000..397b74c
