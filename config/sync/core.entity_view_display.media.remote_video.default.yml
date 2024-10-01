@@ -24,7 +24,7 @@ content:
         attribute: lazy
     third_party_settings:
       template_suggestion:
-        template_suggestion: ''
+        template_suggestion: iframe_ratio_16x9
     weight: 0
     region: content
 hidden:
