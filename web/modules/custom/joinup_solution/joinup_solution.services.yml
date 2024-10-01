@@ -55,8 +55,3 @@ services:
     parent: logger.channel_base
     arguments:
       - 'solution'
-  joinup_solution.rdf_sync_subscriber:
-    class: Drupal\joinup_solution\EventSubscriber\SolutionRdfSyncSubscriber
-    arguments: ['@rdf_sync.mapper', '@rdf_sync.connection', '@config.factory']
-    tags:
-      - { name: event_subscriber }

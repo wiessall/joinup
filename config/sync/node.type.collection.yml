@@ -25,6 +25,10 @@ third_party_settings:
         value:
           predicate: 'http://purl.org/dc/terms/issued'
           type: 'xsd:dateTime'
+      solutions:
+        target_id:
+          predicate: 'http://www.w3.org/ns/dcat#dataset'
+          type: resource
 label_singular: collection
 label_plural: collections
 label_count:

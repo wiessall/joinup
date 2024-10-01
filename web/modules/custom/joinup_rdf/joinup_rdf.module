@@ -15,6 +15,7 @@ use Drupal\Core\Render\BubbleableMetadata;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_rdf\Entity\RdfSyncEntityInterface;
+use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\joinup_workflow\EntityWorkflowStateInterface;
 use Drupal\og\Og;
 
@@ -203,6 +204,61 @@ function joinup_rdf_tokens($type, $tokens, array $data, array $options, Bubbleab
   return [
     $tokens['rdf-uri'] => $entity->getUri(),
   ];
+}
+
+/**
+ * Implements hook_entity_insert().
+ */
+function joinup_rdf_entity_insert(EntityInterface $entity): void {
+  # Use the entity insert, even though it is only for nodes, so that we can run
+  # this after the rdf_sync hook_entity_insert.
+  if (!$entity instanceof RdfSyncEntityInterface) {
+    return;
+  }
+
+  _joinup_rdf_resync_parent_entities($entity);
+}
+
+/**
+ * Implements hook_entity_update().
+ */
+function joinup_rdf_entity_update(EntityInterface $entity): void {
+  # Use the entity insert, even though it is only for nodes, so that we can run
+  # this after the rdf_sync hook_entity_update.
+  if (!$entity instanceof RdfSyncEntityInterface) {
+    return;
+  }
+
+  _joinup_rdf_resync_parent_entities($entity);
+}
+
+/**
+ * Resync the parent entities of the given entity.
+ *
+ * @param \Drupal\Core\Entity\EntityInterface $entity
+ *   The entity that was inserted or updated.
+ */
+function _joinup_rdf_resync_parent_entities(EntityInterface $entity): void {
+  // For solutions, set the parent collection to be re-synced as well.
+  if ($entity instanceof SolutionInterface) {
+    $collection = $entity->getCollection();
+    \Drupal::getContainer()->get('rdf_sync.synchronizer')->synchronize(
+      \Drupal\rdf_sync\Model\SyncMethod::UPDATE,
+      [$collection]
+    );
+  }
+}
+
+/**
+ * Implements hook_module_implements_alter().
+ */
+function joinup_rdf_module_implements_alter(&$implementations, $hook): void {
+  if ($hook === 'entity_insert' || $hook === 'entity_update') {
+    // Move the joinup_rdf implementation to the end of the list.
+    $group = $implementations['joinup_rdf'];
+    unset($implementations['joinup_rdf']);
+    $implementations['joinup_rdf'] = $group;
+  }
 }
 
 /**
