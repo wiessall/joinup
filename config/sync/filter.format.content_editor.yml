@@ -16,7 +16,6 @@ dependencies:
     - embed_block
     - image
     - joinup_core
-    - joinup_video
     - linkit
     - markdown_easy
     - media
@@ -132,24 +131,13 @@ filters:
     weight: -44
     settings:
       filter_url_length: 72
-  joinup_video:
-    id: joinup_video
-    provider: joinup_video
+  joinup_iframe:
+    id: joinup_iframe
+    provider: joinup_core
     status: true
-    weight: -49
+    weight: 0
     settings:
-      allowed_providers:
-        slideshare: slideshare
-        internal_path: internal_path
-        prezi: prezi
-        joinup_ec_video: joinup_ec_video
-        joinup_ec_webcast_video: joinup_ec_webcast_video
-        google_docs: google_docs
-        youtube: youtube
-        vimeo: vimeo
-        youtube_playlist: 0
-      autoplay: false
-      responsive: true
+      allowed_domains: "europa.eu\r\n*.europa.eu\r\n*.slideshare.net\r\ndocs.google.com\r\nyoutube.com\r\n*.youtube.com\r\nyoutu.be\r\nvimeo.com\r\n*.vimeo.com"
   linkit:
     id: linkit
     provider: linkit
