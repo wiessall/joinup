@@ -34,15 +34,15 @@ Feature: Footer
 
     Given I am an anonymous user
     And I am on the homepage
-    Then I should not see the link "How-to & video tutorials"
-    Then I should not see the link "Contact Joinup Support"
-    And I should see the link "Take a tour"
+    Then I should not see the link "How-to & video tutorials" in the Footer region
+    Then I should not see the link "Contact Joinup Support" in the Footer region
+    And I should see the link "Take a tour" in the Footer region
 
     Then I click "advanced search"
     And I should be on the advanced search page
-    Then I should not see the link "How-to & video tutorials"
-    Then I should not see the link "Contact Joinup Support"
-    And I should not see the text "Take a tour"
+    Then I should not see the link "How-to & video tutorials" in the Footer region
+    Then I should not see the link "Contact Joinup Support" in the Footer region
+    And I should not see the text "Take a tour" in the Footer region
 
     # Re-enable the How-to & video menu link.
     Given I am logged in as a moderator
@@ -53,5 +53,5 @@ Feature: Footer
     And I press "Save"
 
     And I am on the homepage
-    Then I should see the link "How-to & video tutorials"
-    Then I should see the link "Contact Joinup Support"
+    Then I should see the link "How-to & video tutorials" in the Footer region
+    Then I should see the link "Contact Joinup Support" in the Footer region
