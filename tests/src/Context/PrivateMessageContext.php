@@ -181,6 +181,39 @@ class PrivateMessageContext extends RawDrupalContext {
   }
 
   /**
+   * Sets the limit for messages/threads allowed.
+   *
+   * @param int|null $limit
+   *   The limit. If not passed, the original value is restored.
+   *
+   * @Given the limit for messages or threads allowed is :limit
+   */
+  public function setPrivateMessageLimit(?int $limit = NULL): void {
+    static $original_value;
+
+    $config = \Drupal::configFactory()->getEditable('private_message_flood.role.authenticated');
+    $current_value = $config->get('limit');
+    if (!isset($original_value)) {
+      $original_value = $current_value;
+    }
+
+    $limit = $limit ?: $original_value;
+    if ($current_value !== $limit) {
+      $config->set('limit', $limit)->save();
+    }
+  }
+
+  /**
+   * Uninstalls the testing module for scenarios tagged with @errorPage.
+   *
+   * @AfterScenario @PrivateMessageConfig&&@api
+   */
+  public function afterPrivateMessageTesting(): void {
+    // Restore the site's error logging verbosity.
+    $this->setPrivateMessageLimit();
+  }
+
+  /**
    * Retrieves the messages container element from the page.
    *
    * @return \Behat\Mink\Element\NodeElement
