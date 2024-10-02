@@ -10,7 +10,7 @@ Feature: Embed of videos into the page.
       | description | Beer is the real nectar of the gods. |
       | state       | published                            |
 
-  Scenario: As a community content editor I can embed video iframes from allowed providers into the content field.
+  Scenario: As a community content editor I can embed video iframes from allowed domains into the content field.
     Given I am logged in as a "facilitator" of the "Beer brewing corporation" collection
     And I go to the homepage of the "Beer brewing corporation" collection
     And I click "Add discussion" in the plus button menu
@@ -20,32 +20,28 @@ Feature: Embed of videos into the page.
     And I select "Supplier exchange" from "Topic"
     And I fill in "Content" with:
     """
-    <h2>All below videos have 'autoplay' set to TRUE</h2>
-    European Commission videos are allowed.
-    <iframe src="https://ec.europa.eu/avservices/play.cfm?ref=I072651&lg=EN&starttime=0&autostart=true" id="videoplayer" width="852" height="480" frameborder="0" scrolling="no" webkitAllowFullScreen="true" mozallowfullscreen="true" allowFullScreen="true"></iframe>
-    European Commission videos are allowed.
-    <iframe src="https://ec.europa.eu/avservices/play.cfm?ref=I-087075&lg=EN&starttime=0&autostart=true" id="videoplayer" width="852" height="480" frameborder="0" scrolling="no" webkitAllowFullScreen="true" mozallowfullscreen="true" allowFullScreen="true"></iframe>
-    European Commission videos (with short URL that will be resolved) are allowed.
+    <h2>Any europa.eu and *.europa.eu are allowed.</h2>
+    <iframe src="https://ec.europa.eu/avservices/play.cfm?ref=I072651&lg=EN" id="videoplayer" width="852" height="480" frameborder="0" scrolling="no" webkitAllowFullScreen="true" mozallowfullscreen="true" allowFullScreen="true"></iframe>
     <iframe src="http://europa.eu/!dV74uw" width="852" height="480" frameborder="0" scrolling="no" webkitAllowFullScreen="true" mozallowfullscreen="true" allowFullScreen="true"></iframe>
-    YouTube videos are allowed.
-    <iframe width="560" height="315" src="https://www.youtube.com/embed/xlnYVHRp128?autoplay=1" frameborder="0" allowfullscreen></iframe>
-    Vimeo videos are allowed.
-    <iframe src="https://player.vimeo.com/video/225133231?autoplay=1" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
-    DailyMotion videos are NOT allowed (yet).
-    <iframe frameborder="0" width="480" height="270" src="//www.dailymotion.com/embed/video/x5vl5l0?autoPlay=1" allowfullscreen></iframe>
-    European Commission Videos from webcast are allowed.
     <iframe width="600" height="340" src="https://webcast.ec.europa.eu/iprs-and-innovation-procurement-22-01-20/embed" scrolling="no" style="overflow:hidden" webkitAllowFullScreen mozAllowFullScreen allowFullScreen frameborder="0"></iframe>
+
+    <h2>YouTube videos are allowed.</h2>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/xlnYVHRp128" frameborder="0" allowfullscreen></iframe>
+
+    <h2>Vimeo videos are allowed.</h2>
+    <iframe src="https://player.vimeo.com/video/225133231" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+
+    <h2>DailyMotion videos are NOT allowed (yet).</h2>
+    <iframe frameborder="0" width="480" height="270" src="//www.dailymotion.com/embed/video/x5vl5l0" allowfullscreen></iframe>
     """
 
     Given I press "Publish"
-    # All allowed videos have now the autoplay set to FALSE.
-    Then the response should contain "//europa.eu/webtools/crs/iframe/?oriurl=%2F%2Faudiovisual.ec.europa.eu%2Fembed%2Findex.html%3Fref%3DI-072651%26lg%3DEN%26starttime%3D0%26autoplay%3Dfalse"
-    And the response should contain "//europa.eu/webtools/crs/iframe/?oriurl=%2F%2Faudiovisual.ec.europa.eu%2Fembed%2Findex.html%3Fref%3DI-087075%26lg%3Den%26starttime%3D0%26autoplay%3Dfalse"
-    And the response should contain "//europa.eu/webtools/crs/iframe/?oriurl=%2F%2Faudiovisual.ec.europa.eu%2Fembed%2Findex.html%3Fref%3DI-136289%26lg%3Den%26starttime%3D0%26autoplay%3Dfalse"
-    And the response should contain "//europa.eu/webtools/crs/iframe/?oriurl=https%3A%2F%2Fwww.youtube-nocookie.com%2Fembed%2FxlnYVHRp128%3Fautoplay%3D0%26start%3D0%26rel%3D0"
-    And the response should contain "//europa.eu/webtools/crs/iframe/?oriurl=https%3A%2F%2Fplayer.vimeo.com%2Fvideo%2F225133231"
-    And the response should not contain "//europa.eu/webtools/crs/iframe/?oriurl=%2F%2Fwww.dailymotion.com%2Fembed%2Fvideo%2Fx5vl5l0"
-    But the response should contain "//europa.eu/webtools/crs/iframe/?oriurl=%2F%2Fwebcast.ec.europa.eu%2Fiprs-and-innovation-procurement-22-01-20%2Fembed%3Flg%3Den%26starttime%3D0%26autostart%3Dfalse"
+    Then the response should contain "//webtools.europa.eu/crs/iframe/?oriurl=https%3A//ec.europa.eu/avservices/play.cfm%3Fref%3DI072651%26lg%3DEN&amp;lang=en"
+    And the response should contain "//webtools.europa.eu/crs/iframe/?oriurl=http%3A//europa.eu/%21dV74uw&amp;lang=en"
+    And the response should contain "//webtools.europa.eu/crs/iframe/?oriurl=https%3A//webcast.ec.europa.eu/iprs-and-innovation-procurement-22-01-20/embed&amp;lang=en"
+    And the response should contain "//webtools.europa.eu/crs/iframe/?oriurl=https%3A//www.youtube.com/embed/xlnYVHRp128&amp;lang=en"
+    And the response should contain "//webtools.europa.eu/crs/iframe/?oriurl=https%3A//player.vimeo.com/video/225133231&amp;lang=en"
+    And the response should not contain "//webtools.europa.eu/crs/iframe/?oriurl=https%3A//www.dailymotion.com/embed/video/x5vl5l0&amp;lang=en"
 
   @javascript
   Scenario Outline: A video embed button should be shown to community content editors.
