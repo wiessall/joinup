@@ -415,7 +415,7 @@
             },
             "drupal/og_menu": {
                 "D10 deprecations @see https://www.drupal.org/project/og_menu/issues/3391985": "resources/patch/php/drupal/og_menu/3391985.patch",
-                "menu_name accessed before initialized @see https://www.drupal.org/project/og_menu/issues/3392055": "resources/patch/php/drupal/og_menu/3392055.patch"
+                "menu_name accessed before initialized @see https://www.drupal.org/project/og_menu/issues/3392055": "resources/patch/php/drupal/og_menu/3392055.diff"
             },
             "drupal/poll": {
                 "Add permissions to edit all polls @see https://www.drupal.org/project/poll/issues/3274724": "resources/patch/php/drupal/poll/3274724-4.patch",

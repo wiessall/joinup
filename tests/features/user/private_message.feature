@@ -6,28 +6,31 @@ Feature: Private messages
 
   Background:
     Given users:
-      | Username  | E-mail                |
-      | Alice M   | alice.m@example.com   |
-      | Bob Rolls | bob.rolls@example.com |
-      | Joan Tiff | joan.tiff@example.com |
+      | Username  | First name | Family name | E-mail                |
+      | alice_m   | Alice      | Miller      | alice.m@example.com   |
+      | bob_rolls | Bob        | Rolls       | bob.rolls@example.com |
+      | joan_tiff | Joan       | Tiff        | joan.tiff@example.com |
 
   @javascript
   Scenario: Send a private message
-    Given I am logged in as "Alice M"
+    Given I am logged in as "alice_m"
     And I am on the homepage
     And I should see 0 unread private message
-    And I am on "/user/messages/message/create"
-    When I type "Bob Rolls" in the "To" autocomplete field
-    And I wait until the page contains the text "Bob Rolls"
-    And I pick "Bob Rolls" from the private message user autocomplete suggestions
+    And I am on "/user/messages"
+    And I click "New Message"
+    Then a modal should open
+    When I type "Bob Rolls" in the "Member(s) (value 1)" autocomplete field
+    And I wait for AJAX to finish
+    And I pick "Bob Rolls" from the "Member" autocomplete suggestions
     And I fill in "Subject" with "Hello Bob"
     And I enter "This is a private message to Bob." in the "Message" wysiwyg editor
-    And I press "Send"
-    Then I should see the heading "Private Messages"
+    And I press "Send" in the "Modal buttons" region
+    Then the modal should be closed
+    And I should see the heading "Private Messages"
     And I should see 1 private message
     Then I should see a private message containing the text "This is a private message to Bob."
 
-    When I am logged in as "Bob Rolls"
+    When I am logged in as "bob_rolls"
     And I am on the homepage
     And I should see 1 unread private message
     Then I open the account menu
@@ -43,17 +46,19 @@ Feature: Private messages
     Then I should see the following texts in private messages:
       | This is a private message to Bob.   |
       | This is a private message to Alice. |
-    And I click "New Message"
-    When I type "Joan Tiff" in the "To" autocomplete field
+    When I click "New Message"
+    Then a modal should open
+    When I type "Joan Tiff" in the "Member(s) (value 1)" autocomplete field
     And I wait until the page contains the text "Joan Tiff"
-    And I pick "Joan Tiff" from the private message user autocomplete suggestions
+    And I pick "Joan Tiff" from the "Member" autocomplete suggestions
     And I fill in "Subject" with "Hello Joan"
     And I enter "This is a private message to Joan." in the "Message" wysiwyg editor
-    And I press "Send"
-    Then I should see the following threads in private messages:
+    And I press "Send" in the "Modal buttons" region
+    Then the modal should be closed
+    And I should see the following threads in private messages:
       | Hello Joan |
       | Hello Bob  |
-    Then I click "Hello Joan" in thread message card
+    When I click "Hello Joan" in thread message card
     And I should see 1 private message
     Then I should see the following texts in private messages:
       | This is a private message to Joan. |
@@ -65,7 +70,7 @@ Feature: Private messages
       | This is a private message to Alice. |
 
   Scenario: Check a user without messages
-    Given I am logged in as "Alice M"
+    Given I am logged in as "alice_m"
     And I am on the homepage
     And I should see 0 unread private message
     When I click "My messages" in the "Navigation bar" region
