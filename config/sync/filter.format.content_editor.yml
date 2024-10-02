@@ -178,7 +178,7 @@ filters:
         media_library_one_third_width: media_library_one_third_width
       allowed_media_types:
         image: image
-        video: video
+        remote_video: remote_video
   slick_filter:
     id: slick_filter
     provider: slick
