@@ -1,0 +1,54 @@
+uuid: c8ebfe7a-c81f-4cc8-a71b-e611adbed5cd
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.media.remote_video.media_oembed_video
+    - field.field.media.remote_video.og_audience
+    - media.type.remote_video
+  module:
+    - media
+    - og
+id: media.remote_video.default
+targetEntityType: media
+bundle: remote_video
+mode: default
+content:
+  media_oembed_video:
+    type: oembed_textfield
+    weight: 2
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  name:
+    type: string_textfield
+    weight: 1
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  og_audience:
+    type: og_autocomplete
+    weight: 0
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  status:
+    type: boolean_checkbox
+    weight: 5
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+hidden:
+  created: true
+  langcode: true
+  path: true
+  uid: true

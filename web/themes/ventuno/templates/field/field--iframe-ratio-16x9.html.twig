@@ -1,0 +1,11 @@
+{#
+/**
+ * @file
+ * Default template for a field.
+ */
+#}
+{% for item in items %}
+  <div{{ attributes.addClass(['ratio', 'ratio-16x9']) }}>
+    {{ item.content }}
+  </div>
+{% endfor %}
