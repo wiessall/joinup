@@ -366,6 +366,12 @@ Feature:
     And I should see a ".slick--optionset--image-gallery button[aria-label='Previous'][aria-disabled='true']" element
 
   # Regression test for ISAICP-9113 ticket.
-  Scenario: More in modal should be limited to a specific node type.
-    When I go to "/modal/anonymous/modal/anonymous/like"
+  Scenario Outline: SparQL parameter does not throws exception when converting missing type
+    When I go to "<path>"
     Then I should get a 404 HTTP response
+
+    Examples:
+      | path                      |
+      | /modal/foo/modal/bar/like |
+      | /feature/foo/bar/add      |
+      | /feature/foo/bar/remove   |
