@@ -7,6 +7,8 @@
 
 declare(strict_types=1);
 
+use Drupal\Core\Language\LanguageInterface;
+
 /**
  * Add URL alias for a taxonomy term.
  */
@@ -16,24 +18,14 @@ function joinup_rdf_deploy_111326(): void {
 
   $path_alias_repository = \Drupal::service('path_alias.repository');
 
-  $existing_alias = $path_alias_repository->lookupByAlias($alias_path, 'en');
+  $existing_alias = $path_alias_repository->lookupByAlias($alias_path, LanguageInterface::LANGCODE_NOT_SPECIFIED);
   if (!$existing_alias) {
     $path_alias = \Drupal::entityTypeManager()->getStorage('path_alias')->create([
       'path' => $system_path,
       'alias' => $alias_path,
-      'langcode' => 'en',
+      'langcode' => LanguageInterface::LANGCODE_NOT_SPECIFIED,
     ]);
 
     $path_alias->save();
-
-    \Drupal::messenger()->addMessage(t('Alias %alias for %path has been created.', [
-      '%alias' => $alias_path,
-      '%path' => $system_path,
-    ]));
-  }
-  else {
-    \Drupal::messenger()->addMessage(t('The alias %alias already exists.', [
-      '%alias' => $alias_path,
-    ]), 'warning');
   }
 }
