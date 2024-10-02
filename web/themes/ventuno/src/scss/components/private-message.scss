@@ -1,0 +1,21 @@
+@import "../partials/core";
+
+// Private message module.
+
+.private-message-notification {
+  position: relative;
+  top: -0.8rem;
+  left: -1.4rem;
+  width: 0;
+  .private-message-notification-wrapper {
+    display: none;
+    background-color: $warning;
+    a {
+      padding: 0.2em 0.4em;
+      color: $white;
+    }
+    &.unread-threads {
+      display: inline-block;
+    }
+  }
+}
