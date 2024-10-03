@@ -247,7 +247,7 @@ class SubscribeToCollectionForm extends FormBase {
     $codeOfConductComponents['code_of_conduct_lead'] = [
       '#type' => 'item',
       '#markup' => $this->t(
-        'To complete your membership, we need to make sure you agree with our <a href=":code-of-conduct-url" target="_blank">Code of conduct</a>. This helps us maintain a safe and respectful environment for all members of @group-label',
+        'To validate your membership and send it for approval, please tick the box agreeing with the <a href=":code-of-conduct-url" target="_blank">Code of conduct</a>. This helps us maintain a safe and respectful environment for all members of @group-label.',
         $codeOfConductArgs,
       ),
       '#weight' => -5,
