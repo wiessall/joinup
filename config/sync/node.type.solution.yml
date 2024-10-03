@@ -43,6 +43,14 @@ third_party_settings:
         value:
           predicate: 'http://purl.org/dc/terms/issued'
           type: 'xsd:dateTime'
+      distributions:
+        value:
+          predicate: 'http://www.w3.org/ns/dcat#distribution'
+          type: resource
+      releases:
+        value:
+          predicate: 'http://purl.org/dc/terms/hasVersion'
+          type: resource
 label_singular: solution
 label_plural: solutions
 label_count:

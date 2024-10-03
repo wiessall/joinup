@@ -38,80 +38,107 @@ function joinup_release_entity_type_alter(array &$entity_types): void {
  */
 function joinup_release_entity_bundle_field_info(EntityTypeInterface $entity_type, $bundle, array $base_field_definitions): array {
   $fields = [];
-  if ($entity_type->id() !== 'node' || $bundle !== 'release') {
+  if ($entity_type->id() !== 'node') {
     return $fields;
   }
 
-  $fields = [
-    'solution_logo' => [
-      'name' => 'solution_logo',
-      'type' => 'image',
-      'target_field_name' => 'logo',
-      'label' => t('Solution logo'),
-      'description' => t('The logo of the solution this release belongs to.'),
-      'display' => [
-        'view' => [
-          'label' => 'hidden',
-          'type' => 'image',
-          'weight' => 0,
+  if ($bundle === 'release') {
+    $fields = [
+      'solution_logo' => [
+        'name' => 'solution_logo',
+        'type' => 'image',
+        'target_field_name' => 'logo',
+        'label' => t('Solution logo'),
+        'description' => t('The logo of the solution this release belongs to.'),
+        'display' => [
+          'view' => [
+            'label' => 'hidden',
+            'type' => 'image',
+            'weight' => 0,
+          ],
         ],
       ],
-    ],
-    'solution_owner' => [
-      'name' => 'solution_owner',
-      'type' => 'entity_reference',
-      'target_field_name' => 'owner',
-      'label' => t('Solution owner'),
-      'description' => t('The user who owns this release.'),
-      'settings' => [
-        'target_type' => 'node',
+      'solution_owner' => [
+        'name' => 'solution_owner',
+        'type' => 'entity_reference',
+        'target_field_name' => 'owner',
+        'label' => t('Solution owner'),
+        'description' => t('The user who owns this release.'),
+        'settings' => [
+          'target_type' => 'node',
+        ],
+        'display' => NULL,
       ],
-      'display' => NULL,
-    ],
-    'solution_contact' => [
-      'name' => 'solution_contact',
-      'type' => 'entity_reference',
-      'target_field_name' => 'contact',
-      'label' => t('Solution contact'),
-      'description' => t('The contact person for this release.'),
-      'settings' => [
-        'target_type' => 'node',
+      'solution_contact' => [
+        'name' => 'solution_contact',
+        'type' => 'entity_reference',
+        'target_field_name' => 'contact',
+        'label' => t('Solution contact'),
+        'description' => t('The contact person for this release.'),
+        'settings' => [
+          'target_type' => 'node',
+        ],
+        'display' => NULL,
       ],
-      'display' => NULL,
-    ],
-    'solution_topic' => [
-      'name' => 'solution_topic',
-      'type' => 'entity_reference',
-      'target_field_name' => 'field_topic',
-      'label' => t('Solution topic'),
-      'description' => t('The topic of this release.'),
-      'settings' => [
-        'target_type' => 'taxonomy_term',
+      'solution_topic' => [
+        'name' => 'solution_topic',
+        'type' => 'entity_reference',
+        'target_field_name' => 'field_topic',
+        'label' => t('Solution topic'),
+        'description' => t('The topic of this release.'),
+        'settings' => [
+          'target_type' => 'taxonomy_term',
+        ],
+        'display' => NULL,
       ],
-      'display' => NULL,
-    ],
-  ];
+    ];
 
-  foreach ($fields as $field_name => $field_info) {
-    $fields[$field_name] = BaseFieldDefinition::create($field_info['type'])
-      ->setLabel($field_info['label'])
-      ->setName($field_name)
-      ->setDescription($field_info['description'])
-      ->setComputed(TRUE)
-      ->setClass(SolutionFieldsFieldItemList::class)
-      ->setSetting('target_field_name', $field_info['target_field_name'])
-      ->setDisplayConfigurable('form', FALSE)
-      ->setDisplayConfigurable('view', FALSE);
+    foreach ($fields as $field_name => $field_info) {
+      $fields[$field_name] = BaseFieldDefinition::create($field_info['type'])
+        ->setLabel($field_info['label'])
+        ->setName($field_name)
+        ->setDescription($field_info['description'])
+        ->setComputed(TRUE)
+        ->setClass(SolutionFieldsFieldItemList::class)
+        ->setSetting('target_field_name', $field_info['target_field_name'])
+        ->setDisplayConfigurable('form', FALSE)
+        ->setDisplayConfigurable('view', FALSE);
 
-    if (!empty($field_info['settings'])) {
-      $fields[$field_name]->setSetting('target_type', $field_info['settings']['target_type']);
-    }
+      if (!empty($field_info['settings'])) {
+        $fields[$field_name]->setSetting('target_type', $field_info['settings']['target_type']);
+      }
 
-    if (!empty($field_info['display'])) {
-      $fields[$field_name]->setDisplayOptions('view', $field_info['display']);
-      $fields[$field_name]->setDisplayConfigurable('view', TRUE);
+      if (!empty($field_info['display'])) {
+        $fields[$field_name]->setDisplayOptions('view', $field_info['display']);
+        $fields[$field_name]->setDisplayConfigurable('view', TRUE);
+      }
     }
   }
+
+  // Add a computed field for solutions to help with syncing data to the RDF
+  // backend.
+  if ($bundle === 'solution') {
+    $fields['solution_releases'] = BaseFieldDefinition::create('entity_reference')
+      ->setLabel(t('Releases'))
+      ->setDescription(t('The releases of this solution.'))
+      ->setCardinality(BaseFieldDefinition::CARDINALITY_UNLIMITED)
+      ->setComputed(TRUE)
+      ->setSetting('target_type', 'node')
+      ->setSetting('handler', 'default')
+      ->setSetting('handler_settings', [
+        'target_bundles' => [
+          'release' => 'release',
+        ],
+        'sort' => [
+          'field' => 'created',
+          'direction' => 'DESC',
+        ],
+      ])
+      ->setDisplayConfigurable('form', FALSE)
+      ->setDisplayConfigurable('view', FALSE)
+      ->setClass(SolutionReleasesAndDistributionsFieldItemList::class);
+  }
+
 
   return $fields;
 }
