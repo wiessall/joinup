@@ -18,7 +18,7 @@ Feature: Contant Information entities don't cause exceptions because of their in
     And the HTML title of the page should be "TES team"
     And I should see the text "Edit Contact information TES team"
 
-  @javascript @insulated
+  @javascript
   Scenario: Create contact info entity through IEF in a collection.
     Given collection:
       | title          | Contact Info Content Test |
