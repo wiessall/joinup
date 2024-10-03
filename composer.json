@@ -32,7 +32,7 @@
         "drupal/core-composer-scaffold": "~10.3.0",
         "drupal/custom_markup_block": "^1.2",
         "drupal/default_content": "^2.0",
-        "drupal/diff": "~1.0",
+        "drupal/diff": "^1.8",
         "drupal/digital_size_formatter": "~2.0",
         "drupal/dropsolid_purge": "^1.0@beta",
         "drupal/dynamic_entity_reference": "^4.0",
