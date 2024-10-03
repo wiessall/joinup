@@ -213,8 +213,8 @@ function joinup_rdf_tokens($type, $tokens, array $data, array $options, Bubbleab
  * Implements hook_entity_insert().
  */
 function joinup_rdf_entity_insert(EntityInterface $entity): void {
-  # Use the entity insert, even though it is only for nodes, so that we can run
-  # this after the rdf_sync hook_entity_insert.
+  // Use the entity insert, even though it is only for nodes, so that we can run
+  // this after the rdf_sync hook_entity_insert.
   if (!$entity instanceof RdfSyncEntityInterface) {
     return;
   }
@@ -226,8 +226,8 @@ function joinup_rdf_entity_insert(EntityInterface $entity): void {
  * Implements hook_entity_update().
  */
 function joinup_rdf_entity_update(EntityInterface $entity): void {
-  # Use the entity insert, even though it is only for nodes, so that we can run
-  # this after the rdf_sync hook_entity_update.
+  // Use the entity insert, even though it is only for nodes, so that we can run
+  // this after the rdf_sync hook_entity_update.
   if (!$entity instanceof RdfSyncEntityInterface) {
     return;
   }
