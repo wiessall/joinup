@@ -21,6 +21,7 @@ use Drupal\joinup_publication_date\Entity\EntityPublicationTimeInterface;
 use Drupal\joinup_release\Entity\Release;
 use Drupal\joinup_release\Entity\ReleaseInterface;
 use Drupal\joinup_release\SolutionFieldsFieldItemList;
+use Drupal\joinup_release\SolutionReleasesFieldItemList;
 
 /**
  * Implements hook_entity_type_alter().
@@ -118,7 +119,7 @@ function joinup_release_entity_bundle_field_info(EntityTypeInterface $entity_typ
   // Add a computed field for solutions to help with syncing data to the RDF
   // backend.
   if ($bundle === 'solution') {
-    $fields['solution_releases'] = BaseFieldDefinition::create('entity_reference')
+    $fields['releases'] = BaseFieldDefinition::create('entity_reference')
       ->setLabel(t('Releases'))
       ->setDescription(t('The releases of this solution.'))
       ->setCardinality(BaseFieldDefinition::CARDINALITY_UNLIMITED)
@@ -136,7 +137,7 @@ function joinup_release_entity_bundle_field_info(EntityTypeInterface $entity_typ
       ])
       ->setDisplayConfigurable('form', FALSE)
       ->setDisplayConfigurable('view', FALSE)
-      ->setClass(SolutionReleasesAndDistributionsFieldItemList::class);
+      ->setClass(SolutionReleasesFieldItemList::class);
   }
 
 

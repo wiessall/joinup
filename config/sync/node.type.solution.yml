@@ -44,11 +44,11 @@ third_party_settings:
           predicate: 'http://purl.org/dc/terms/issued'
           type: 'xsd:dateTime'
       distributions:
-        value:
+        target_id:
           predicate: 'http://www.w3.org/ns/dcat#distribution'
           type: resource
       releases:
-        value:
+        target_id:
           predicate: 'http://purl.org/dc/terms/hasVersion'
           type: resource
 label_singular: solution

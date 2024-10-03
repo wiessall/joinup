@@ -19,11 +19,13 @@ class SolutionReleasesFieldItemList extends EntityReferenceFieldItemList {
    */
   protected function computeValue(): void {
     $releaseIds = \Drupal::entityQuery('node')
+      ->accessCheck()
       ->condition('type', 'release')
       ->condition('og_audience', $this->getEntity()->id())
       ->execute();
 
-    foreach ($releaseIds as $delta => $id) {
+    // Use array_values() to avoid using the entity ID as delta.
+    foreach (array_values($releaseIds) as $delta => $id) {
       $this->list[$delta] = $this->createItem($delta, ['target_id' => $id]);
     }
   }

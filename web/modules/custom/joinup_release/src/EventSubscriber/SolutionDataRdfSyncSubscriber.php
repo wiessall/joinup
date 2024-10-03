@@ -44,7 +44,6 @@ final class SolutionDataRdfSyncSubscriber implements EventSubscriberInterface {
     return [
       RdfSyncNormalizeEvent::class => [
         ['addSolutionDataToRelease'],
-        ['addReleaseDataToSolution'],
       ],
     ];
   }
@@ -101,30 +100,6 @@ final class SolutionDataRdfSyncSubscriber implements EventSubscriberInterface {
     }
 
     $event->setNormalizedArray($normalizedArray);
-  }
-
-  /**
-   * Updates the hasVersion relationship of the solution with the release.
-   *
-   * @param \Drupal\rdf_sync\Event\RdfSyncNormalizeEvent $event
-   *   The event object.
-   */
-  public function addReleaseDataToSolution(RdfSyncNormalizeEvent $event): void {
-    $entity = $event->getEntity();
-    if (!$entity instanceof ReleaseInterface) {
-      return;
-    }
-
-    $data = $event->getNormalizedArray();
-    $solution = $entity->getSolution();
-    $solutionUri = $solution->getUri();
-    $releaseUri = $entity->getUri();
-
-    $graphUri = $this->configFactory->get('rdf_sync.settings')->get('graph_uri');
-    $deleteQuery = "WITH <$graphUri> DELETE { <$solutionUri> <http://purl.org/dc/terms/hasVersion> <$releaseUri> } WHERE { <$solutionUri> <http://purl.org/dc/terms/hasVersion> <$releaseUri> }";
-    $this->sparqlConnection->update($deleteQuery);
-    $data[$solutionUri]['http://purl.org/dc/terms/hasVersion'][] = (new Resource($releaseUri))->toRdfPhp();
-    $event->setNormalizedArray($data);
   }
 
 }

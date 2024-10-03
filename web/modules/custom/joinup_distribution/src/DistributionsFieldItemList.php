@@ -23,14 +23,16 @@ class DistributionsFieldItemList extends EntityReferenceFieldItemList {
     $entity = $this->getEntity();
 
     if ($entity instanceof SolutionInterface) {
-      $distributionIds = \Drupal::entityQuery('node')->accessCheck(FALSE)
+      $distributionIds = \Drupal::entityQuery('node')
+        ->accessCheck(FALSE)
         ->condition('type', 'distribution')
         ->condition('og_audience', $entity->id())
         ->notExists('release')
         ->execute();
     }
     elseif ($entity instanceof ReleaseInterface) {
-      $distributionIds = \Drupal::entityQuery('node')->accessCheck(FALSE)
+      $distributionIds = \Drupal::entityQuery('node')
+        ->accessCheck(FALSE)
         ->condition('type', 'distribution')
         ->condition('release', $entity->id())
         ->execute();
@@ -39,7 +41,8 @@ class DistributionsFieldItemList extends EntityReferenceFieldItemList {
       return;
     }
 
-    foreach ($distributionIds as $delta => $id) {
+    // Use array_values() to avoid using the entity ID as delta.
+    foreach (array_values($distributionIds) as $delta => $id) {
       $this->list[$delta] = $this->createItem($delta, ['target_id' => $id]);
     }
   }
