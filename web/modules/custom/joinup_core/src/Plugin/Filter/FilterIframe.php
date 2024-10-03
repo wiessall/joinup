@@ -83,39 +83,33 @@ class FilterIframe extends FilterBase implements ContainerFactoryPluginInterface
       \assert($iframe instanceof \DOMElement);
       $src = $iframe->getAttribute('src');
 
-      // Remove iframes with empty src.
+      // Remove if src is empty.
       if (empty($src)) {
         $iframe->parentNode->removeChild($iframe);
         continue;
       }
 
-      // Skip iframes with local URLs.
-      if (!UrlHelper::isExternal($src) || UrlHelper::externalIsLocal($src, $this->requestContext->getCompleteBaseUrl())) {
-        continue;
+      if ($this->isExternal($src)) {
+        // Remove if src is external but non-allowed domain.
+        if (!$this->isAllowedDomain($src, $allowed_domains)) {
+          $iframe->parentNode->removeChild($iframe);
+          continue;
+        }
+
+        // External iframe allowed, add webtools shield.
+        $iframe->setAttribute('src', Url::fromUri(static::WEBTOOLS_COOKIE_CONSENT_EMBED_COOKIE_URL, [
+          'query' => [
+            'oriurl' => $src,
+            'lang' => $langcode,
+          ],
+        ])->toString());
       }
 
-      // Remove iframes with non-allowed domains.
-      if (!$this->isAllowedDomain($src, $allowed_domains)) {
-        $iframe->parentNode->removeChild($iframe);
-        continue;
-      }
-
-      // Iframe allowed, add webtools shield.
-      $shielded_src = Url::fromUri(static::WEBTOOLS_COOKIE_CONSENT_EMBED_COOKIE_URL, [
-        'query' => [
-          'oriurl' => $src,
-          'lang' => $langcode,
-        ],
-      ]);
-      $iframe->setAttribute('src', $shielded_src->toString());
-
-      // Add 16/9 ratio wrapper if width/height are not specified.
-      if (!$iframe->hasAttribute('width') && !$iframe->hasAttribute('height')) {
-        $wrapper = $dom->createElement('div');
-        $wrapper->setAttribute('class', 'ratio ratio-16x9');
-        $iframe->parentNode->replaceChild($wrapper, $iframe);
-        $wrapper->appendChild($iframe);
-      }
+      // Add 16/9 ratio wrapper div.
+      $wrapper = $dom->createElement('div');
+      $wrapper->setAttribute('class', 'ratio ratio-16x9');
+      $iframe->parentNode->replaceChild($wrapper, $iframe);
+      $wrapper->appendChild($iframe);
     }
 
     $response->setProcessedText(Html::serialize($dom));
@@ -123,15 +117,14 @@ class FilterIframe extends FilterBase implements ContainerFactoryPluginInterface
   }
 
   /**
-   * Returns whether an iframe src domain is allowed.
-   *
-   * @param string $src
-   *   The iframe src attribute.
-   * @param array $allowed_domains
-   *   Array of allowed domain regexes.
-   *
-   * @return bool
-   *   TRUE if this is local URL, false otherwise.
+   * Returns whether an iframe src is external.
+   */
+  protected function isExternal(string $src): bool {
+    return UrlHelper::isExternal($src) && !UrlHelper::externalIsLocal($src, $this->requestContext->getCompleteBaseUrl());
+  }
+
+  /**
+   * Returns whether an iframe src is allowed according to the domain/host.
    */
   protected function isAllowedDomain(string $src, array $allowed_domains): bool {
     $host = parse_url($src, PHP_URL_HOST);
