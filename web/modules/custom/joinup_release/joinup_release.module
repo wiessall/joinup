@@ -140,7 +140,6 @@ function joinup_release_entity_bundle_field_info(EntityTypeInterface $entity_typ
       ->setClass(SolutionReleasesFieldItemList::class);
   }
 
-
   return $fields;
 }
 

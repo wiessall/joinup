@@ -7,8 +7,6 @@ namespace Drupal\joinup_distribution\EventSubscriber;
 use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\File\FileUrlGeneratorInterface;
 use Drupal\joinup_distribution\Entity\DistributionInterface;
-use Drupal\joinup_distribution\Exception\MissingDistributionParentException;
-use Drupal\joinup_rdf\Entity\RdfSyncEntityInterface;
 use Drupal\rdf_sync\Event\RdfSyncNormalizeEvent;
 use Drupal\rdf_sync\RdfSyncMapper;
 use EasyRdf\Resource;
