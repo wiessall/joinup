@@ -95,8 +95,6 @@ Feature: RDF synchronization of contents.
       | http://example.com/solution1 | http://www.w3.org/ns/dcat#keyword               | ADMS                                                       |
       | http://example.com/solution1 | http://www.w3.org/ns/dcat#keyword               | validation                                                 |
       | http://example.com/solution1 | http://purl.org/dc/terms/language               | http://example.com/language1                               |
-      # The link to the release is exported by the
-      # \Drupal\joinup_release\EventSubscriber\SolutionDataRdfSyncSubscriber::addReleaseDataToSolution.
       | http://example.com/solution1 | http://purl.org/dc/terms/hasVersion             | http://example.com/release1                                |
       | http://example.com/solution1 | http://www.w3.org/ns/dcat#distribution          | http://example.com/distribution3                           |
       # The `published_at` property is exported as `issued` in the RDF.
@@ -188,6 +186,50 @@ Feature: RDF synchronization of contents.
       | http://example.com/collection1 | http://xmlns.com/foaf/0.1/homepage              | http://www.example.com/msm/       |
       | http://example.com/collection1 | http://purl.org/dc/terms/spatial                | http://example.com/country1       |
 
+    # Solution update.
+    When I update the entity having "http://example.com/solution1" as RDF resource:
+      | title       | Syncing solution updated |
+      | changed     | 2017-12-01T8:43:00Z      |
+      | field_state | draft                    |
+    # Since the new version is not published, data should not change.
+    Then the following "http://data" graph triples exist in the RDF backend:
+      | subject                      | predicate                                       | object                                                     |
+      | http://example.com/solution1 | http://purl.org/dc/terms/title                  | Syncing solution                                           |
+      | http://example.com/solution1 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | http://www.w3.org/ns/dcat#Dataset                          |
+      | http://example.com/solution1 | http://purl.org/dc/terms/description            | <p>content</p>                                             |
+      | http://example.com/solution1 | http://www.w3.org/ns/dcat#keyword               | ADMS                                                       |
+      | http://example.com/solution1 | http://www.w3.org/ns/dcat#keyword               | validation                                                 |
+      | http://example.com/solution1 | http://purl.org/dc/terms/language               | http://example.com/language1                               |
+      | http://example.com/solution1 | http://purl.org/dc/terms/hasVersion             | http://example.com/release1                                |
+      | http://example.com/solution1 | http://www.w3.org/ns/dcat#distribution          | http://example.com/distribution3                           |
+      | http://example.com/solution1 | http://purl.org/dc/terms/issued                 | 2017-11-01T08:00:00Z                                       |
+      | http://example.com/solution1 | http://purl.org/dc/terms/modified               | 2017-12-01T08:43:00Z                                       |
+      | http://example.com/solution1 | http://purl.org/dc/terms/publisher              | http://example.com/owner1                                  |
+      | http://example.com/solution1 | http://www.w3.org/ns/dcat#contactPoint          | http://example.com/contact1                                |
+      | http://example.com/solution1 | http://purl.org/dc/terms/type                   | http://data.europa.eu/dr8/NetworkingInfrastructureEnablers |
+      | http://example.com/solution1 | http://purl.org/dc/terms/spatial                | http://example.com/country1                                |
+    # Publish the changes.
+    When I update the entity having "http://example.com/solution1" as RDF resource:
+      | changed     | 2017-12-01T8:43:00Z |
+      | field_state | published           |
+    # The solution is now published.
+    Then the following "http://data" graph triples exist in the RDF backend:
+      | subject                      | predicate                                       | object                                                     |
+      | http://example.com/solution1 | http://purl.org/dc/terms/title                  | Syncing solution updated                                   |
+      | http://example.com/solution1 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | http://www.w3.org/ns/dcat#Dataset                          |
+      | http://example.com/solution1 | http://purl.org/dc/terms/description            | <p>content</p>                                             |
+      | http://example.com/solution1 | http://www.w3.org/ns/dcat#keyword               | ADMS                                                       |
+      | http://example.com/solution1 | http://www.w3.org/ns/dcat#keyword               | validation                                                 |
+      | http://example.com/solution1 | http://purl.org/dc/terms/language               | http://example.com/language1                               |
+      | http://example.com/solution1 | http://purl.org/dc/terms/hasVersion             | http://example.com/release1                                |
+      | http://example.com/solution1 | http://www.w3.org/ns/dcat#distribution          | http://example.com/distribution3                           |
+      | http://example.com/solution1 | http://purl.org/dc/terms/issued                 | 2017-11-01T08:00:00Z                                       |
+      | http://example.com/solution1 | http://purl.org/dc/terms/modified               | 2017-12-01T08:43:00Z                                       |
+      | http://example.com/solution1 | http://purl.org/dc/terms/publisher              | http://example.com/owner1                                  |
+      | http://example.com/solution1 | http://www.w3.org/ns/dcat#contactPoint          | http://example.com/contact1                                |
+      | http://example.com/solution1 | http://purl.org/dc/terms/type                   | http://data.europa.eu/dr8/NetworkingInfrastructureEnablers |
+      | http://example.com/solution1 | http://purl.org/dc/terms/spatial                | http://example.com/country1                                |
+
     # Test that deleting an entity, removes both the entity and its references.
     Given I delete the "SyncingDistribution.rdf" distribution
     Then there should not be any triples with the subject "http://example.com/distribution2" in the "http://data" graph
@@ -222,7 +264,7 @@ Feature: RDF synchronization of contents.
       | changed | 2019-12-01T08:44:00Z       |
     Then the following "http://data" graph triples exist in the RDF backend:
       | subject                      | predicate                                       | object                                                     |
-      | http://example.com/solution1 | http://purl.org/dc/terms/title                  | Syncing solution                                           |
+      | http://example.com/solution1 | http://purl.org/dc/terms/title                  | Syncing solution updated                                   |
       | http://example.com/solution1 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | http://www.w3.org/ns/dcat#Dataset                          |
       | http://example.com/solution1 | http://purl.org/dc/terms/description            | <p>content</p>                                             |
       | http://example.com/solution1 | http://www.w3.org/ns/dcat#keyword               | ADMS                                                       |
@@ -231,8 +273,7 @@ Feature: RDF synchronization of contents.
       # The link to the release is exported by the
       # \Drupal\joinup_release\EventSubscriber\SolutionDataRdfSyncSubscriber::addReleaseDataToSolution.
       | http://example.com/solution1 | http://purl.org/dc/terms/hasVersion             | http://example.com/release1                                |
-      # Distributions should be preserved but they are not.
-      # | http://example.com/solution1 | http://www.w3.org/ns/dcat#distribution          | http://example.com/distribution3                           |
+      | http://example.com/solution1 | http://www.w3.org/ns/dcat#distribution          | http://example.com/distribution3                           |
       # The `published_at` property is exported as `issued` in the RDF.
       | http://example.com/solution1 | http://purl.org/dc/terms/issued                 | 2017-11-01T08:00:00Z                                       |
       | http://example.com/solution1 | http://purl.org/dc/terms/modified               | 2019-12-01T08:44:00Z                                       |
@@ -252,8 +293,7 @@ Feature: RDF synchronization of contents.
       | http://example.com/release1 | http://www.w3.org/ns/dcat#keyword               | food                                                       |
       | http://example.com/release1 | http://purl.org/dc/terms/isVersionOf            | http://example.com/solution1                               |
       | http://example.com/release1 | http://www.w3.org/ns/adms#versionNotes          | New 3.0                                                    |
-      # Distributions should be preserved but they are not.
-      # | http://example.com/release1 | http://www.w3.org/ns/dcat#distribution          | http://example.com/distribution1                           |
+      | http://example.com/release1 | http://www.w3.org/ns/dcat#distribution          | http://example.com/distribution1                           |
       # Inherited from solution.
       | http://example.com/release1 | http://purl.org/dc/terms/publisher              | http://example.com/owner1                                  |
       | http://example.com/release1 | http://www.w3.org/ns/dcat#contactPoint          | http://example.com/contact1                                |
