@@ -36,6 +36,7 @@ Feature: RDF synchronization of contents.
     And collection content:
       | uri                            | title              | author       | abstract  | description                    | access url                  | logo     | contact information | owner         | creation date    | published at     | modification date | closed | content creation         | moderation | topic      | spatial coverage | state     | featured |
       | http://example.com/collection1 | Syncing collection | Owner of all | Abstract. | Description of the collection. | http://www.example.com/msm/ | logo.png | Syncing contact     | Syncing owner | 2016-06-13T13:00 | 2016-07-13T13:00 | 2017-06-30T11:27  | no     | facilitators and authors | no         | Demography | Atlantis         | published | no       |
+      | http://example.com/collection2 | Syncing collection | Owner of all | Abstract. | Description of the collection. | http://www.example.com/msm/ | logo.png | Syncing contact     | Syncing owner | 2016-06-13T13:00 | 2016-07-13T13:00 | 2017-06-30T11:27  | no     | facilitators and authors | no         | Demography | Atlantis         | draft     | no       |
     Given solution content:
       | uri                          | title            | collection         | author       | description    | logo     | owner         | contact information | creation date   | published at    | modification date | documentation | content creation | keywords         | landing page                    | language | metrics page                    | moderation | topic                    | related solutions | solution type                      | spatial coverage | status    | state     | featured |
       | http://example.com/solution1 | Syncing solution | Syncing collection | Owner of all | <p>content</p> | logo.png | Syncing owner | Syncing contact     | 2017-10-01T8:00 | 2017-11-01T8:00 | 2017-12-01T8:43   | text.pdf      | registered users | ADMS, validation | http://www.example.com/landing1 | Atlantic | http://www.example.org/metrics1 | no         | EU and European Policies |                   | Networking Infrastructure Enablers | Atlantis         | Completed | published | no       |
@@ -171,8 +172,8 @@ Feature: RDF synchronization of contents.
       | http://example.com/collection1 | http://purl.org/dc/terms/spatial                | http://example.com/country1       |
     # Publish the changes.
     When I update the entity having "http://example.com/collection1" as RDF resource:
-      | changed     | 2017-06-30T11:27:00Z       |
-      | field_state | published |
+      | changed     | 2017-06-30T11:27:00Z |
+      | field_state | published            |
     # The collection is now published.
     Then the following "http://data" graph triples exist in the RDF backend:
       | subject                        | predicate                                       | object                            |

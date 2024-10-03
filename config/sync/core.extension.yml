@@ -193,6 +193,7 @@ module:
   purge_queuer_coretags: 0
   queue_ui: 0
   rdf_sync: 0
+  rdf_sync_published: 0
   redirect: 0
   replicate: 0
   replicate_actions: 0
