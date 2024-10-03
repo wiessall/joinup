@@ -1612,12 +1612,7 @@ class FeatureContext extends RawDrupalContext {
    * @AfterScenario
    */
   public function afterScenarioDestruct(): void {
-    try {
-      \Drupal::service('rdf_sync.synchronizer')->destruct();
-    }
-    catch (\Exception $e) {
-      // Ignore exceptions.
-    }
+    \Drupal::service('rdf_sync.synchronizer')->destruct();
   }
 
   /**
