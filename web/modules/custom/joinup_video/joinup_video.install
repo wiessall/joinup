@@ -1,0 +1,20 @@
+<?php
+
+/**
+ * @file
+ * Post-update functions for Joinup Video module.
+ */
+
+declare(strict_types=1);
+
+/**
+ * Remove obsolete joinup_video filter from formats.
+ */
+function joinup_video_update_111400(): void {
+  /** @var \Drupal\Core\Config\StorageInterface $config_storage */
+  $config_storage = \Drupal::service('config.storage');
+  foreach ($config_storage->listAll('filter.format') as $config_name) {
+    $config = \Drupal::configFactory()->getEditable($config_name);
+    $config->clear('filters.joinup_video')->save(TRUE);
+  }
+}
