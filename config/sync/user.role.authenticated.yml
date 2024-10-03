@@ -16,7 +16,6 @@ dependencies:
     - media.type.file
     - media.type.image
     - media.type.remote_video
-    - media.type.video
     - node.type.contact_information
     - node.type.custom_page
     - node.type.discussion
@@ -92,7 +91,6 @@ permissions:
   - 'create paragraph content video'
   - 'create polls'
   - 'create remote_video media'
-  - 'create video media'
   - 'delete own comments'
   - 'delete paragraph content accordion'
   - 'delete paragraph content accordion_item'
