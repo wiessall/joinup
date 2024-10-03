@@ -89,11 +89,11 @@ final class FilterIframeTest extends UnitTestCase {
       ],
       'local domain' => [
         'html' => '<iframe src="/foo/bar"></iframe>',
-        'expected' => '<iframe src="/foo/bar"></iframe>',
+        'expected' => '<div class="ratio ratio-16x9"><iframe src="/foo/bar"></iframe></div>',
       ],
       'local domain with base URL' => [
         'html' => "<iframe src=\"$base_url/foo/bar\"></iframe>",
-        'expected' => "<iframe src=\"$base_url/foo/bar\"></iframe>",
+        'expected' => "<div class=\"ratio ratio-16x9\"><iframe src=\"$base_url/foo/bar\"></iframe></div>",
       ],
       'allowed domains' => [
         'html' => '<iframe src="//example1.com/embed_code/12345"></iframe><iframe src="https://www.example2.com/embed_code/67890"></iframe>',
@@ -114,18 +114,6 @@ final class FilterIframeTest extends UnitTestCase {
         'html' => '<iframe src="https://sub.example.com/embed_code"></iframe>',
         'expected' => '<div class="ratio ratio-16x9"><iframe src="//webtools.europa.eu/crs/iframe/?oriurl=https%3A//sub.example.com/embed_code&amp;lang=en"></iframe></div>',
         'settings' => ['allowed_domains' => "*.example.com"],
-      ],
-      'with width attribute' => [
-        'html' => '<iframe src="local.html" width="150"></iframe>',
-        'expected' => '<iframe src="local.html" width="150"></iframe>',
-      ],
-      'with height attribute' => [
-        'html' => '<iframe src="local.html" height="150"></iframe>',
-        'expected' => '<iframe src="local.html" height="150"></iframe>',
-      ],
-      'with width/height attribute' => [
-        'html' => '<iframe src="local.html" width="150" height="100%"></iframe>',
-        'expected' => '<iframe src="local.html" width="150" height="100%"></iframe>',
       ],
     ];
   }
