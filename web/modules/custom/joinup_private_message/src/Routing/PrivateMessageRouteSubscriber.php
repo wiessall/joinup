@@ -43,8 +43,9 @@ class PrivateMessageRouteSubscriber extends RouteSubscriberBase {
       $route->setPath('/user/messages/message/create');
     }
 
-    // Remove the route for viewing a private message.
-    $collection->remove('entity.private_message.canonical');
+    if ($route = $collection->get('entity.private_message.canonical')) {
+      $route->setRequirement('_role', 'administrator+moderator');
+    }
 
     // Alter the path for deleting a private message.
     if ($route = $collection->get('entity.private_message.delete')) {

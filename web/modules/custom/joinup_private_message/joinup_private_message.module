@@ -7,10 +7,11 @@
 
 declare(strict_types=1);
 
-use Drupal\Component\Serialization\Json;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Url;
+use Drupal\symfony_mailer_lite\Plugin\Mail\SymfonyMailer;
 
 /**
  * Implements hook_form_alter().
@@ -28,9 +29,6 @@ function joinup_private_message_form_alter(array &$form, FormStateInterface $for
       $form['message']['widget'][0]['#format'] = 'minimal';
       $form['message']['widget'][0]['#allowed_formats'] = ['minimal'];
     }
-  }
-
-  if (in_array($form_id, ['private_message_add_form', 'private_message_delete_form'])) {
     $form['actions']['submit']['#submit'][] = 'joinup_private_message_form_submit';
   }
 }
@@ -45,45 +43,49 @@ function joinup_private_message_form_submit(array &$form, FormStateInterface $fo
 }
 
 /**
- * Implements hook_ENTITY_TYPE_view_alter().
- *
- * @see private_message_private_message_thread_view_alter()
+ * Implements hook_entity_view_alter().
  */
-function joinup_private_message_private_message_thread_view_alter(array &$build, EntityInterface $node, EntityViewDisplayInterface $display): void {
-  if (isset($build['delete_link'])) {
-    // Open form in a modal.
-    $build['delete_link']['#attributes'] = _joinup_private_message_get_ajax_modal_attributes();
-  }
-  if (isset($build['clear_history_link'])) {
-    // Open form in a modal.
-    $build['clear_history_link']['#attributes'] = _joinup_private_message_get_ajax_modal_attributes();
-  }
+function joinup_private_message_entity_view_alter(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display): void {
+  $current_user = Drupal::currentUser();
+  $user_id = $current_user->id();
+  // Check if this is the custom entity you want to alter.
+  if ($entity->getEntityTypeId() === 'private_message' && $entity->getOwnerId() !== $user_id) {
+    $report_url = Url::fromRoute('joinup_private_message.report_form', [
+      'private_message' => $entity->id(),
+    ]);
 
+    // Create the button render array.
+    $report_button = [
+      '#type' => 'link',
+      '#title' => t('Report'),
+      '#url' => $report_url,
+      '#attributes' => [
+        'class' => ['button', 'report-button', 'use-ajax', 'btn', 'btn-primary'],
+        'data-dialog-type' => 'modal',
+        'data-dialog-options' => json_encode([
+          'width' => 'auto',
+          'height' => 'auto',
+        ]),
+      ],
+    ];
+
+    // Add the button to the entity view array.
+    if (!isset($build['links'])) {
+      $build['links'] = [];
+    }
+    $build['links']['report'] = $report_button;
+  }
 }
 
 /**
- * Implements hook_contextual_links_view_alter().
+ * Implements hook_mail().
  */
-function joinup_private_message_contextual_links_view_alter(array &$element, array $items): void {
-  if (isset($element['#links']['private-messagedelete'])) {
-    // Open form in a modal.
-    $element['#links']['private-messagedelete']['attributes'] = _joinup_private_message_get_ajax_modal_attributes();
+function joinup_private_message_mail($key, &$message, $params): void {
+  switch ($key) {
+    case 'report_message':
+      $message['subject'] = $params['subject'];
+      $message['body'][] = $params['message'];
+      $message['headers']['Content-Type'] = SymfonyMailer::FORMAT_HTML;
+      break;
   }
-
-}
-
-/**
- * Gets the attributes for use with an AJAX modal.
- *
- * @return array
- *   The attributes for use with an AJAX modal.
- */
-function _joinup_private_message_get_ajax_modal_attributes(): array {
-  return [
-    'class' => ['use-ajax'],
-    'data-dialog-type' => 'modal',
-    'data-dialog-options' => Json::encode([
-      'width' => 'auto',
-    ]),
-  ];
 }
