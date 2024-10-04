@@ -28,7 +28,9 @@ class ConfirmUnblockUserForm extends ConfirmUnbanUserForm implements ContainerIn
   protected $bannedUser;
 
   /**
-   * @var PrivateMessageBanInterface
+   * Selected ban.
+   *
+   * @var \Drupal\private_message\Entity\PrivateMessageBanInterface
    */
   protected $ban;
 
