@@ -7,6 +7,8 @@ namespace Drupal\joinup_media\Update;
 use Drupal\Core\Config\StorageInterface;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\joinup_group\Entity\GroupContentInterface;
+use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\media\MediaInterface;
 use Drupal\media\OEmbed\ProviderException;
 use Drupal\media\OEmbed\ResourceException;
@@ -20,14 +22,11 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 final class MediaOembedMigrate implements ContainerInjectionInterface {
 
-  protected $media_storage;
-
   public function __construct(
     protected EntityTypeManagerInterface $entityTypeManager,
     protected StorageInterface $syncStorage,
     protected UrlResolverInterface $urlResolver,
   ) {
-    $this->media_storage = $this->entityTypeManager->getStorage('media');
   }
 
   /**
@@ -42,32 +41,33 @@ final class MediaOembedMigrate implements ContainerInjectionInterface {
   }
 
   /**
-   * Runs the migration.
+   * Migrates media video to remote_video.
    */
   public function migrateMedia(array &$sandbox): void {
-    if (empty($sandbox)) {
-      $this->setup();
+    $media_storage = $this->entityTypeManager->getStorage('media');
 
-      $sandbox['mids'] = $this->media_storage->getQuery()
+    if (empty($sandbox)) {
+      $this->prepareMedia();
+
+      $sandbox['ids'] = $media_storage->getQuery()
         ->accessCheck(FALSE)
         ->condition('bundle', 'video')
         ->execute();
-      $sandbox['max'] = count($sandbox['mids']);
+      $sandbox['max'] = count($sandbox['ids']);
     }
 
-    $mids = array_splice($sandbox['mids'], 0, 100);
-    foreach ($this->media_storage->loadMultiple($mids) as $media) {
+    $ids = array_splice($sandbox['ids'], 0, 100);
+    foreach ($media_storage->loadMultiple($ids) as $media) {
       assert($media instanceof MediaInterface);
       $url = trim($media->get('video')->getString());
       $url = $this->staticMapUrl($url);
-
       if (!$this->isSupportedUrl($url)) {
         $media->delete();
         continue;
       }
 
       // Delete old media, save new one.
-      $new_media = $this->media_storage->create([
+      $new_media = $media_storage->create([
         'bundle' => 'remote_video',
         'media_oembed_video' => $url,
       ] + $media->toArray());
@@ -75,13 +75,13 @@ final class MediaOembedMigrate implements ContainerInjectionInterface {
       $new_media->setSyncing(TRUE)->save();
     }
 
-    $sandbox['#finished'] = (int) empty($sandbox['mids']);
+    $sandbox['#finished'] = (int) empty($sandbox['ids']);
   }
 
   /**
-   * Setup everything we need to start the migration.
+   * Prepare for the media migration.
    */
-  protected function setup(): void {
+  private function prepareMedia(): void {
     // Create new media type and field storages/configs from sync storage.
     $sync_storage = $this->syncStorage;
     $config_entities = [
@@ -93,6 +93,70 @@ final class MediaOembedMigrate implements ContainerInjectionInterface {
         'field.field.media.remote_video.media_oembed_video',
         'field.field.media.remote_video.og_audience',
       ],
+    ];
+
+    foreach ($config_entities as $storage => $keys) {
+      foreach ($keys as $key) {
+        $this->entityTypeManager->getStorage($storage)
+          ->create($sync_storage->read($key))
+          ->save();
+      }
+    }
+  }
+
+  /**
+   * Migrates video paragraphs field (paragraph_video_url > remote_video).
+   */
+  public function migrateParagraphs(array &$sandbox): void {
+    $paragraph_storage = $this->entityTypeManager->getStorage('paragraph');
+    $media_storage = $this->entityTypeManager->getStorage('media');
+
+    if (empty($sandbox)) {
+      $this->prepareParagraphs();
+      $sandbox['rids'] = $paragraph_storage->getQuery()
+        ->accessCheck(FALSE)
+        ->allRevisions()
+        ->condition('type', 'video')
+        ->execute();
+      $sandbox['rids'] = array_keys($sandbox['rids']);
+    }
+
+    $rids = array_splice($sandbox['rids'], 0, 100);
+    foreach ($paragraph_storage->loadMultipleRevisions($rids) as $paragraph) {
+      assert($paragraph instanceof ParagraphInterface);
+      $url = trim($paragraph->get('paragraph_video_url')->getString());
+      $url = $this->staticMapUrl($url);
+      if (!$this->isSupportedUrl($url)) {
+        continue;
+      }
+
+      // Check if a remote_video media exist, otherwise create it.
+      $values = [
+        'bundle' => 'remote_video',
+        'media_oembed_video' => $url,
+        'og_audience' => $this->getOgAudienceFromParagraph($paragraph)?->id(),
+      ];
+      $existing_media_video = $media_storage->loadByProperties($values);
+      $media_video = $existing_media_video ? array_shift($existing_media_video) : $media_storage->create($values);
+
+      // Empty old field, save new one, save paragraph revision.
+      $paragraph->set('paragraph_video_url', NULL);
+      $paragraph->set('remote_video', $media_video);
+      $paragraph->setSyncing(TRUE)->save();
+    }
+
+    $sandbox['#finished'] = (int) empty($sandbox['rids']);
+  }
+
+  /**
+   * Prepare for the paragraphs migration.
+   */
+  private function prepareParagraphs(): void {
+    // Create new field storage/config from sync storage.
+    $sync_storage = $this->syncStorage;
+    $config_entities = [
+      'field_storage_config' => ['field.storage.paragraph.remote_video'],
+      'field_config' => ['field.field.paragraph.video.remote_video'],
     ];
 
     foreach ($config_entities as $storage => $keys) {
@@ -134,97 +198,21 @@ final class MediaOembedMigrate implements ContainerInjectionInterface {
   }
 
   /**
-   *
+   * Gets the OG group from the given paragraph.
    */
-  public function migrateParagraphs(array &$sandbox): void {
-    $paragraph_storage = \Drupal::entityTypeManager()->getStorage('paragraph');
-    if (empty($sandbox)) {
-      // $this->setupParagraphs();
-      $paragraphs = $paragraph_storage->getQuery()
-        ->accessCheck(FALSE)
-        ->condition('type', 'video')
-        ->execute();
-
-      foreach ($paragraphs as $paragraph) {
-        $paragraphs_revisions[] = $paragraph->allRevisions();
-      }
-
-      $sandbox['paragraphs'] = $paragraphs;
-      $sandbox['paragraphs_revisions'] = $paragraphs_revisions;
+  private function getOgAudienceFromParagraph(ParagraphInterface $paragraph): ?GroupInterface {
+    // Get the top-level parent entity.
+    $parent_entity = $paragraph->getParentEntity();
+    while ($parent_entity instanceof ParagraphInterface) {
+      $parent_entity = $parent_entity->getParentEntity();
     }
 
-    $paragraphs_ids = array_splice($sandbox['paragraphs'], 0, 100);
-    $revision_ids = array_splice($sandbox['paragraphs_revisions'], 0, 100);
-    $this->update_remote_video_fields($paragraph_storage->loadMultiple($paragraphs_ids));
-    $this->update_remote_video_fields($paragraph_storage->loadMultipleRevisions($revision_ids));
-
-    $sandbox['#finished'] = (int) empty($sandbox['paragraphs_revisions']);
-  }
-
-  /**
-   *
-   */
-  protected function update_remote_video_fields($items): void {
-    foreach ($items as $paragraph) {
-      assert($paragraph instanceof ParagraphInterface);
-      $url = trim($paragraph->get('field_paragraph_video_url')->getString());
-
-      if ($this->isSupportedUrl($url)) {
-        $this->upsertMediaEntity($url, $paragraph);
-      }
+    // Get the parent's OG group.
+    if ($parent_entity instanceof GroupContentInterface && $parent_entity->hasGroup()) {
+      return $parent_entity->getGroup();
     }
-  }
 
-  /**
-   *
-   */
-  protected function upsertMediaEntity(string $url, ParagraphInterface $paragraph): void {
-    $remote_video = $this->media_storage->loadByProperties(
-      [
-        'bundle' => 'remote_video',
-        'field_media_image.uri' => $url,
-      ]
-    );
-
-    if (!empty($remote_video)) {
-      $existing_remote_video = array_shift($remote_video);
-      $remote_video_id = $existing_remote_video->id();
-    }
-    else {
-      $new_remote_video = $this->media_storage->create([
-        'bundle' => 'remote_video',
-        'media_oembed_video' => $url,
-      ]);
-      $remote_video_id = $new_remote_video->id();
-    }
-    $paragraph->set('field_remote_video', [
-      'target_id' => $remote_video_id,
-    ]);
-    $paragraph->save();
-  }
-
-  /**
-   * Setup everything we need to start the migration.
-   */
-  protected function setupParagraphs(): void {
-    // Create new media type and field storages/configs from sync storage.
-    $sync_storage = $this->syncStorage;
-    $config_entities = [
-      'field_storage_config' => [
-        'field.storage.paragraph.remote_video',
-      ],
-      'field_config' => [
-        'field.field.paragraph.video.remote_video',
-      ],
-    ];
-
-    foreach ($config_entities as $storage => $keys) {
-      foreach ($keys as $key) {
-        $this->entityTypeManager->getStorage($storage)
-          ->create($sync_storage->read($key))
-          ->save();
-      }
-    }
+    return NULL;
   }
 
 }
