@@ -328,7 +328,7 @@ class AnnouncementForm extends FormBase {
         'value' => $group->toUrl('member-overview')->setAbsolute()->toString(),
       ],
       '@group_logo' => [
-        'value' => $group->getLogoAsUrl()->setAbsolute()->toString(),
+        'value' => $group->getLogoAsUrl()?->setAbsolute()->toString(),
       ],
       '@author_name' => [
         'value' => $sender->getDisplayName(),
