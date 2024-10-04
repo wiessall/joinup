@@ -55,9 +55,9 @@ Feature: Embed of videos into the page.
     And I press the button "Insert Media" in the "Content" wysiwyg editor
     And a modal should open
     And I should see the following lines of text:
-      | Image |
-      | File  |
-      | Video |
+      | Image        |
+      | File         |
+      | Remote video |
     And I click "Remote video"
     And I should see the text "Allowed providers: YouTube, Vimeo."
     When I fill in "Add Remote video via URL" with "<url>"
