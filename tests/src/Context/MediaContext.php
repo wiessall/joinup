@@ -195,7 +195,7 @@ class MediaContext extends RawDrupalContext {
       'news_logo' => $imageLibraryField,
       'solution_banner' => $imageLibraryField,
       'solution_logo' => $imageLibraryField,
-      'video' => $groupField + ['video' => ['field' => 'video']],
+      'remote_video' => $groupField + ['video' => ['field' => 'media_oembed_video']],
     ];
 
     return $commonMap + $bundleMap[$mediaTypeId];
