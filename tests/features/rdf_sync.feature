@@ -44,18 +44,18 @@ Feature: RDF synchronization of contents.
       | uri                         | title           | documentation | release number | release notes | creation date    | published at     | changed          | is version of    | state     | status    | spatial coverage | keywords | language |
       | http://example.com/release1 | Syncing release | text.pdf      | 3.0.0          | New 3.0       | 2017-11-10T11:11 | 2017-11-11T11:11 | 2017-11-12T11:11 | Syncing solution | published | Completed | Atlantis         | food     | Atlantic |
       # Draft release should not be synced.
-      | http://example.com/release2 | Syncing release | text.pdf      | 3.0.0          | New 3.0       | 2017-11-10T11:11 | 2017-11-11T11:11 | 2017-11-12T11:11 | Syncing solution | draft     | Completed | Atlantis         | food     | Atlantic |
+      | http://example.com/release2 | Draft release   | text.pdf      | 3.0.0          | New 3.0       | 2017-11-10T11:11 | 2017-11-11T11:11 | 2017-11-12T11:11 | Syncing solution | draft     | Completed | Atlantis         | food     | Atlantic |
 
     # The two cases cover the two possible access URL types extracted.
     # @see \Drupal\joinup_distribution\EventSubscriber\DistributionParentRdfSyncSubscriber::addDistributionParentRelation().
     And distribution content:
-      | uri                              | title                   | description                              | creation date    | publication date | changed          | access url                            | release         | solution         | downloads | licence         | format  | status    | representation technique | state     |
-      | http://example.com/distribution1 | SyncingDistribution.zip | The zipped version of Syncing release 3. | 2017-01-11T11:20 | 2017-02-11T11:20 | 2017-03-11T11:20 | http://www.example.org/release.zip    | Syncing release |                  | 232       | Syncing licence | Archive | Completed | Schema                   | published |
-      | http://example.com/distribution2 | SyncingDistribution.rdf | The RDF version of Syncing release 3.    | 2017-04-11T11:20 | 2017-05-11T11:20 | 2017-06-11T11:20 | http://www.example.org/some_other.zip | Syncing release |                  | 232       | Syncing licence | Archive | Completed | Schema                   | published |
-      | http://example.com/distribution3 | SyncingSolution.zip     | The ZIP version of Syncing solution 3.   | 2017-07-11T11:20 | 2017-08-11T11:20 | 2017-09-11T11:20 | http://www.example.org/solution.zip   |                 | Syncing solution | 232       | Syncing licence | Archive | Completed | Schema                   | published |
+      | uri                              | title                   | description                            | creation date    | publication date | changed          | access url                            | release         | solution         | downloads | licence         | format  | status    | representation technique | state     |
+      | http://example.com/distribution1 | SyncingDistribution.zip | The zipped version of Syncing release. | 2017-01-11T11:20 | 2017-02-11T11:20 | 2017-03-11T11:20 | http://www.example.org/release.zip    | Syncing release |                  | 232       | Syncing licence | Archive | Completed | Schema                   | published |
+      | http://example.com/distribution2 | SyncingDistribution.rdf | The RDF version of Syncing release.    | 2017-04-11T11:20 | 2017-05-11T11:20 | 2017-06-11T11:20 | http://www.example.org/some_other.zip | Syncing release |                  | 232       | Syncing licence | Archive | Completed | Schema                   | published |
+      | http://example.com/distribution3 | SyncingSolution.zip 3   | The ZIP version of Syncing solution 3. | 2017-07-11T11:20 | 2017-08-11T11:20 | 2017-09-11T11:20 | http://www.example.org/solution.zip   |                 | Syncing solution | 232       | Syncing licence | Archive | Completed | Schema                   | published |
       # Draft distributions should not be synced.
-      | http://example.com/distribution4 | SyncingSolution.zip     | The ZIP version of Syncing solution 3.   | 2017-07-11T11:20 | 2017-08-11T11:20 | 2017-09-11T11:20 | http://www.example.org/solution.zip   | Syncing release |                  | 232       | Syncing licence | Archive | Completed | Schema                   | draft     |
-      | http://example.com/distribution5 | SyncingSolution.zip     | The ZIP version of Syncing solution 3.   | 2017-07-11T11:20 | 2017-08-11T11:20 | 2017-09-11T11:20 | http://www.example.org/solution.zip   |                 | Syncing solution | 232       | Syncing licence | Archive | Completed | Schema                   | draft     |
+      | http://example.com/distribution4 | SyncingSolution.zip 4   | Dummy text.                            | 2017-07-11T11:20 | 2017-08-11T11:20 | 2017-09-11T11:20 | http://www.example.org/solution.zip   | Syncing release |                  | 232       | Syncing licence | Archive | Completed | Schema                   | draft     |
+      | http://example.com/distribution5 | SyncingSolution.zip 5   | Dummy text.                            | 2017-07-11T11:20 | 2017-08-11T11:20 | 2017-09-11T11:20 | http://www.example.org/solution.zip   |                 | Syncing solution | 232       | Syncing licence | Archive | Completed | Schema                   | draft     |
 
     # Check initial exported data.
     Then the following "http://data" graph triples exist in the RDF backend:
@@ -130,23 +130,23 @@ Feature: RDF synchronization of contents.
       | http://example.com/release1 | http://purl.org/dc/terms/language               | http://example.com/language1                               |
       | http://example.com/release1 | http://purl.org/dc/terms/spatial                | http://example.com/country1                                |
     And the following "http://data" graph triples exist in the RDF backend:
-      | subject                          | predicate                                         | object                                   |
-      | http://example.com/distribution1 | http://purl.org/dc/terms/title                    | SyncingDistribution.zip                  |
-      | http://example.com/distribution1 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type   | http://www.w3.org/ns/dcat#Distribution   |
-      | http://example.com/distribution1 | http://purl.org/dc/terms/description              | The zipped version of Syncing release 3. |
-      | http://example.com/distribution1 | http://purl.org/dc/terms/issued                   | 2017-02-11T11:20:00Z                     |
-      | http://example.com/distribution1 | http://purl.org/dc/terms/modified                 | 2017-03-11T11:20:00Z                     |
-      | http://example.com/distribution1 | http://www.w3.org/ns/dcat#accessURL               | http://www.example.org/release.zip       |
-      | http://example.com/distribution1 | http://purl.org/dc/terms/format                   | http://example.com/type1                 |
-      | http://example.com/distribution1 | http://www.w3.org/ns/adms#status                  | http://purl.org/adms/status/Completed    |
-      | http://example.com/distribution1 | http://www.w3.org/ns/adms#representationTechnique | http://example.com/tech1                 |
-      | http://example.com/distribution1 | http://purl.org/dc/terms/license                  | http://example.com/licence1              |
-      | http://example.com/distribution1 | http://www.w3.org/ns/dcat#accessURL               | http://www.example.org/release.zip       |
+      | subject                          | predicate                                         | object                                 |
+      | http://example.com/distribution1 | http://purl.org/dc/terms/title                    | SyncingDistribution.zip                |
+      | http://example.com/distribution1 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type   | http://www.w3.org/ns/dcat#Distribution |
+      | http://example.com/distribution1 | http://purl.org/dc/terms/description              | The zipped version of Syncing release. |
+      | http://example.com/distribution1 | http://purl.org/dc/terms/issued                   | 2017-02-11T11:20:00Z                   |
+      | http://example.com/distribution1 | http://purl.org/dc/terms/modified                 | 2017-03-11T11:20:00Z                   |
+      | http://example.com/distribution1 | http://www.w3.org/ns/dcat#accessURL               | http://www.example.org/release.zip     |
+      | http://example.com/distribution1 | http://purl.org/dc/terms/format                   | http://example.com/type1               |
+      | http://example.com/distribution1 | http://www.w3.org/ns/adms#status                  | http://purl.org/adms/status/Completed  |
+      | http://example.com/distribution1 | http://www.w3.org/ns/adms#representationTechnique | http://example.com/tech1               |
+      | http://example.com/distribution1 | http://purl.org/dc/terms/license                  | http://example.com/licence1            |
+      | http://example.com/distribution1 | http://www.w3.org/ns/dcat#accessURL               | http://www.example.org/release.zip     |
     And the following "http://data" graph triples exist in the RDF backend:
       | subject                          | predicate                                         | object                                 |
       | http://example.com/distribution2 | http://purl.org/dc/terms/title                    | SyncingDistribution.rdf                |
       | http://example.com/distribution2 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type   | http://www.w3.org/ns/dcat#Distribution |
-      | http://example.com/distribution2 | http://purl.org/dc/terms/description              | The RDF version of Syncing release 3.  |
+      | http://example.com/distribution2 | http://purl.org/dc/terms/description              | The RDF version of Syncing release.    |
       | http://example.com/distribution2 | http://purl.org/dc/terms/issued                   | 2017-05-11T11:20:00Z                   |
       | http://example.com/distribution2 | http://purl.org/dc/terms/modified                 | 2017-06-11T11:20:00Z                   |
       | http://example.com/distribution2 | http://www.w3.org/ns/dcat#accessURL               | http://www.example.org/some_other.zip  |
@@ -235,12 +235,13 @@ Feature: RDF synchronization of contents.
       | http://example.com/solution1 | http://purl.org/dc/terms/type                   | http://data.europa.eu/dr8/NetworkingInfrastructureEnablers |
       | http://example.com/solution1 | http://purl.org/dc/terms/spatial                | http://example.com/country1                                |
 
-    # Test that deleting an entity, removes both the entity and its references.
-    Given I delete the "SyncingDistribution.rdf" distribution
-    Then there should not be any triples with the subject "http://example.com/distribution2" in the "http://data" graph
-    And there should not be any triples with the object "http://example.com/distribution2" in the "http://data" graph
-    # The reference to the distribution 2 is not there anymore.
-    And the following "http://data" graph triples exist in the RDF backend:
+    # Release update.
+    When I update the entity having "http://example.com/release1" as RDF resource:
+      | title       | Syncing release - revision |
+      | changed     | 2019-12-01T08:44:00Z       |
+      | field_state | draft                      |
+    # Since the new version is not published, data should not change.
+    Then the following "http://data" graph triples exist in the RDF backend:
       | subject                     | predicate                                       | object                                                     |
       | http://example.com/release1 | http://purl.org/dc/terms/title                  | Syncing release                                            |
       | http://example.com/release1 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | http://www.w3.org/ns/dcat#Dataset                          |
@@ -253,6 +254,31 @@ Feature: RDF synchronization of contents.
       | http://example.com/release1 | http://purl.org/dc/terms/isVersionOf            | http://example.com/solution1                               |
       | http://example.com/release1 | http://www.w3.org/ns/adms#versionNotes          | New 3.0                                                    |
       | http://example.com/release1 | http://www.w3.org/ns/dcat#distribution          | http://example.com/distribution1                           |
+      | http://example.com/release1 | http://www.w3.org/ns/dcat#distribution          | http://example.com/distribution2                           |
+      # Inherited from solution.
+      | http://example.com/release1 | http://purl.org/dc/terms/publisher              | http://example.com/owner1                                  |
+      | http://example.com/release1 | http://www.w3.org/ns/dcat#contactPoint          | http://example.com/contact1                                |
+      | http://example.com/release1 | http://purl.org/dc/terms/type                   | http://data.europa.eu/dr8/NetworkingInfrastructureEnablers |
+      | http://example.com/release1 | http://purl.org/dc/terms/language               | http://example.com/language1                               |
+      | http://example.com/release1 | http://purl.org/dc/terms/spatial                | http://example.com/country1                                |
+    # Publish the changes.
+    When I update the entity having "http://example.com/release1" as RDF resource:
+      | changed     | 2019-12-02T08:44:00Z |
+      | field_state | published            |
+    Then the following "http://data" graph triples exist in the RDF backend:
+      | subject                     | predicate                                       | object                                                     |
+      | http://example.com/release1 | http://purl.org/dc/terms/title                  | Syncing release - revision                                 |
+      | http://example.com/release1 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | http://www.w3.org/ns/dcat#Dataset                          |
+      | http://example.com/release1 | http://www.w3.org/2002/07/owl#versionInfo       | 3.0.0                                                      |
+      | http://example.com/release1 | http://purl.org/dc/terms/description            | <p>content</p>                                             |
+      | http://example.com/release1 | http://purl.org/dc/terms/issued                 | 2017-11-11T11:11:00Z                                       |
+      | http://example.com/release1 | http://purl.org/dc/terms/modified               | 2019-12-02T08:44:00Z                                       |
+      | http://example.com/release1 | http://www.w3.org/ns/adms#status                | http://purl.org/adms/status/Completed                      |
+      | http://example.com/release1 | http://www.w3.org/ns/dcat#keyword               | food                                                       |
+      | http://example.com/release1 | http://purl.org/dc/terms/isVersionOf            | http://example.com/solution1                               |
+      | http://example.com/release1 | http://www.w3.org/ns/adms#versionNotes          | New 3.0                                                    |
+      | http://example.com/release1 | http://www.w3.org/ns/dcat#distribution          | http://example.com/distribution1                           |
+      | http://example.com/release1 | http://www.w3.org/ns/dcat#distribution          | http://example.com/distribution2                           |
       # Inherited from solution.
       | http://example.com/release1 | http://purl.org/dc/terms/publisher              | http://example.com/owner1                                  |
       | http://example.com/release1 | http://www.w3.org/ns/dcat#contactPoint          | http://example.com/contact1                                |
@@ -260,32 +286,49 @@ Feature: RDF synchronization of contents.
       | http://example.com/release1 | http://purl.org/dc/terms/language               | http://example.com/language1                               |
       | http://example.com/release1 | http://purl.org/dc/terms/spatial                | http://example.com/country1                                |
 
-    When I update the entity having "http://example.com/solution1" as RDF resource:
-      | language | Aramaic              |
-      | changed  | 2019-12-01T08:44:00Z |
-    # Ensure entity revision reference work properly.
-    When I update the entity having "http://example.com/release1" as RDF resource:
-      | title   | Syncing release - revision |
-      | changed | 2019-12-01T08:44:00Z       |
+    # Distribution update.
+    When I update the entity having "http://example.com/distribution1" as RDF resource:
+      | title       | SyncingDistribution - revision |
+      | changed     | 2019-12-01T08:44:00Z           |
+      | field_state | draft                          |
+    # Since the new version is not published, data should not change.
     Then the following "http://data" graph triples exist in the RDF backend:
-      | subject                      | predicate                                       | object                                                     |
-      | http://example.com/solution1 | http://purl.org/dc/terms/title                  | Syncing solution updated                                   |
-      | http://example.com/solution1 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | http://www.w3.org/ns/dcat#Dataset                          |
-      | http://example.com/solution1 | http://purl.org/dc/terms/description            | <p>content</p>                                             |
-      | http://example.com/solution1 | http://www.w3.org/ns/dcat#keyword               | ADMS                                                       |
-      | http://example.com/solution1 | http://www.w3.org/ns/dcat#keyword               | validation                                                 |
-      | http://example.com/solution1 | http://purl.org/dc/terms/language               | http://example.com/language2                               |
-      # The link to the release is exported by the
-      # \Drupal\joinup_release\EventSubscriber\SolutionDataRdfSyncSubscriber::addReleaseDataToSolution.
-      | http://example.com/solution1 | http://purl.org/dc/terms/hasVersion             | http://example.com/release1                                |
-      | http://example.com/solution1 | http://www.w3.org/ns/dcat#distribution          | http://example.com/distribution3                           |
-      # The `published_at` property is exported as `issued` in the RDF.
-      | http://example.com/solution1 | http://purl.org/dc/terms/issued                 | 2017-11-01T08:00:00Z                                       |
-      | http://example.com/solution1 | http://purl.org/dc/terms/modified               | 2019-12-01T08:44:00Z                                       |
-      | http://example.com/solution1 | http://purl.org/dc/terms/publisher              | http://example.com/owner1                                  |
-      | http://example.com/solution1 | http://www.w3.org/ns/dcat#contactPoint          | http://example.com/contact1                                |
-      | http://example.com/solution1 | http://purl.org/dc/terms/type                   | http://data.europa.eu/dr8/NetworkingInfrastructureEnablers |
-      | http://example.com/solution1 | http://purl.org/dc/terms/spatial                | http://example.com/country1                                |
+      | subject                          | predicate                                         | object                                   |
+      | http://example.com/distribution1 | http://purl.org/dc/terms/title                    | SyncingDistribution.zip                  |
+      | http://example.com/distribution1 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type   | http://www.w3.org/ns/dcat#Distribution   |
+      | http://example.com/distribution1 | http://purl.org/dc/terms/description              | The zipped version of Syncing release. |
+      | http://example.com/distribution1 | http://purl.org/dc/terms/issued                   | 2017-02-11T11:20:00Z                     |
+      | http://example.com/distribution1 | http://purl.org/dc/terms/modified                 | 2017-03-11T11:20:00Z                     |
+      | http://example.com/distribution1 | http://www.w3.org/ns/dcat#accessURL               | http://www.example.org/release.zip       |
+      | http://example.com/distribution1 | http://purl.org/dc/terms/format                   | http://example.com/type1                 |
+      | http://example.com/distribution1 | http://www.w3.org/ns/adms#status                  | http://purl.org/adms/status/Completed    |
+      | http://example.com/distribution1 | http://www.w3.org/ns/adms#representationTechnique | http://example.com/tech1                 |
+      | http://example.com/distribution1 | http://purl.org/dc/terms/license                  | http://example.com/licence1              |
+      | http://example.com/distribution1 | http://www.w3.org/ns/dcat#accessURL               | http://www.example.org/release.zip       |
+    # Publish the changes.
+    When I update the entity having "http://example.com/distribution1" as RDF resource:
+      | changed     | 2019-12-02T08:44:00Z |
+      | field_state | published            |
+    Then the following "http://data" graph triples exist in the RDF backend:
+      | subject                          | predicate                                         | object                                   |
+      | http://example.com/distribution1 | http://purl.org/dc/terms/title                    | SyncingDistribution - revision           |
+      | http://example.com/distribution1 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type   | http://www.w3.org/ns/dcat#Distribution   |
+      | http://example.com/distribution1 | http://purl.org/dc/terms/description              | The zipped version of Syncing release. |
+      | http://example.com/distribution1 | http://purl.org/dc/terms/issued                   | 2017-02-11T11:20:00Z                     |
+      | http://example.com/distribution1 | http://purl.org/dc/terms/modified                 | 2019-12-02T08:44:00Z                     |
+      | http://example.com/distribution1 | http://www.w3.org/ns/dcat#accessURL               | http://www.example.org/release.zip       |
+      | http://example.com/distribution1 | http://purl.org/dc/terms/format                   | http://example.com/type1                 |
+      | http://example.com/distribution1 | http://www.w3.org/ns/adms#status                  | http://purl.org/adms/status/Completed    |
+      | http://example.com/distribution1 | http://www.w3.org/ns/adms#representationTechnique | http://example.com/tech1                 |
+      | http://example.com/distribution1 | http://purl.org/dc/terms/license                  | http://example.com/licence1              |
+      | http://example.com/distribution1 | http://www.w3.org/ns/dcat#accessURL               | http://www.example.org/release.zip       |
+
+    # Test that deleting a distribution, removes both the entity and
+    # its references.
+    Given I delete the "SyncingDistribution.rdf" distribution
+    Then there should not be any triples with the subject "http://example.com/distribution2" in the "http://data" graph
+    And there should not be any triples with the object "http://example.com/distribution2" in the "http://data" graph
+    # The reference to the distribution 2 is not there anymore.
     And the following "http://data" graph triples exist in the RDF backend:
       | subject                     | predicate                                       | object                                                     |
       | http://example.com/release1 | http://purl.org/dc/terms/title                  | Syncing release - revision                                 |
@@ -293,7 +336,7 @@ Feature: RDF synchronization of contents.
       | http://example.com/release1 | http://www.w3.org/2002/07/owl#versionInfo       | 3.0.0                                                      |
       | http://example.com/release1 | http://purl.org/dc/terms/description            | <p>content</p>                                             |
       | http://example.com/release1 | http://purl.org/dc/terms/issued                 | 2017-11-11T11:11:00Z                                       |
-      | http://example.com/release1 | http://purl.org/dc/terms/modified               | 2019-12-01T08:44:00Z                                       |
+      | http://example.com/release1 | http://purl.org/dc/terms/modified               | 2019-12-02T08:44:00Z                                       |
       | http://example.com/release1 | http://www.w3.org/ns/adms#status                | http://purl.org/adms/status/Completed                      |
       | http://example.com/release1 | http://www.w3.org/ns/dcat#keyword               | food                                                       |
       | http://example.com/release1 | http://purl.org/dc/terms/isVersionOf            | http://example.com/solution1                               |
@@ -303,10 +346,56 @@ Feature: RDF synchronization of contents.
       | http://example.com/release1 | http://purl.org/dc/terms/publisher              | http://example.com/owner1                                  |
       | http://example.com/release1 | http://www.w3.org/ns/dcat#contactPoint          | http://example.com/contact1                                |
       | http://example.com/release1 | http://purl.org/dc/terms/type                   | http://data.europa.eu/dr8/NetworkingInfrastructureEnablers |
-      # The language did not change because the release depends on a specific
-      # revision of the solution.
       | http://example.com/release1 | http://purl.org/dc/terms/language               | http://example.com/language1                               |
       | http://example.com/release1 | http://purl.org/dc/terms/spatial                | http://example.com/country1                                |
+
+    # Delete the distribution 3 to also test the link from solutions.
+
+
+    # Test that deleting a release, removes both the entity and
+    # its references.
+    Given I delete the "Syncing release - revision" release
+    Then there should not be any triples with the subject "http://example.com/release1" in the "http://data" graph
+    And there should not be any triples with the object "http://example.com/release1" in the "http://data" graph
+    # The reference to the release 1 is not there anymore.
+    And the following "http://data" graph triples exist in the RDF backend:
+      | subject                      | predicate                                       | object                                                     |
+      | http://example.com/solution1 | http://purl.org/dc/terms/title                  | Syncing solution updated                                   |
+      | http://example.com/solution1 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | http://www.w3.org/ns/dcat#Dataset                          |
+      | http://example.com/solution1 | http://purl.org/dc/terms/description            | <p>content</p>                                             |
+      | http://example.com/solution1 | http://www.w3.org/ns/dcat#keyword               | ADMS                                                       |
+      | http://example.com/solution1 | http://www.w3.org/ns/dcat#keyword               | validation                                                 |
+      | http://example.com/solution1 | http://purl.org/dc/terms/language               | http://example.com/language1                               |
+      | http://example.com/solution1 | http://www.w3.org/ns/dcat#distribution          | http://example.com/distribution3                           |
+      | http://example.com/solution1 | http://purl.org/dc/terms/issued                 | 2017-11-01T08:00:00Z                                       |
+      | http://example.com/solution1 | http://purl.org/dc/terms/modified               | 2017-12-01T08:43:00Z                                       |
+      | http://example.com/solution1 | http://purl.org/dc/terms/publisher              | http://example.com/owner1                                  |
+      | http://example.com/solution1 | http://www.w3.org/ns/dcat#contactPoint          | http://example.com/contact1                                |
+      | http://example.com/solution1 | http://purl.org/dc/terms/type                   | http://data.europa.eu/dr8/NetworkingInfrastructureEnablers |
+      | http://example.com/solution1 | http://purl.org/dc/terms/spatial                | http://example.com/country1                                |
+
+    # Test that deleting a solution, removes both the entity and
+    # its references.
+    Given I delete the "Syncing solution updated" solution
+    Then there should not be any triples with the subject "http://example.com/solution1" in the "http://data" graph
+    And there should not be any triples with the object "http://example.com/solution1" in the "http://data" graph
+    # The reference to the solution 1 is not there anymore.
+    And the following "http://data" graph triples exist in the RDF backend:
+      | subject                        | predicate                                       | object                            |
+      | http://example.com/collection1 | http://purl.org/dc/terms/title                  | Syncing collection updated        |
+      | http://example.com/collection1 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | http://www.w3.org/ns/dcat#Catalog |
+      | http://example.com/collection1 | http://purl.org/dc/terms/description            | Description of the collection.    |
+      | http://example.com/collection1 | http://www.w3.org/ns/dcat#contactPoint          | http://example.com/contact1       |
+      | http://example.com/collection1 | http://purl.org/dc/terms/publisher              | http://example.com/owner1         |
+      | http://example.com/collection1 | http://purl.org/dc/terms/issued                 | 2016-07-13T13:00:00Z              |
+      | http://example.com/collection1 | http://purl.org/dc/terms/modified               | __any_date_              |
+      | http://example.com/collection1 | http://xmlns.com/foaf/0.1/homepage              | http://www.example.com/msm/       |
+      | http://example.com/collection1 | http://purl.org/dc/terms/spatial                | http://example.com/country1       |
+
+    # Test that deleting a collection, removes the entity.
+    Given I delete the "Syncing collection updated" collection
+    Then there should not be any triples with the subject "http://example.com/collection1" in the "http://data" graph
+    And there should not be any triples with the object "http://example.com/collection1" in the "http://data" graph
 
   Scenario: RDF entities for EIF perspective are correctly created.
     Given solution content:
