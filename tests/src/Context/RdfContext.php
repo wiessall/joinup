@@ -37,6 +37,17 @@ class RdfContext extends RawDrupalContext {
     $connection = \Drupal::getContainer()->get('rdf_sync.connection');
     $subjects = $rows = [];
     foreach ($triples->getHash() as $triple) {
+      // Allow to skip the changed date because when performing CRUD operations
+      // on an entity, other entities are affected. For example, updating a
+      // solution, the collection is updated so that the last update date is
+      // affected.
+      if ($triple['object'] === '__changed__') {
+        $entity = \Drupal::getContainer()->get('rdf_sync.mapper')->getEntityByUri($triple['subject']);
+        $date = date(\DateTimeInterface::ATOM, $entity->getChangedTime());
+        // Copied from \EasyRdf\Literal\DateTime::__construct().
+        $date = preg_replace('/[+\-]00(:?)00$/', 'Z', $date);
+        $triple['object'] = $date;
+      }
       $subjects[$triple['subject']][] = $rows[implode(' ', $triple)] = $triple;
     }
 
