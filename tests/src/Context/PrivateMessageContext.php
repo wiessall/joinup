@@ -257,8 +257,10 @@ class PrivateMessageContext extends RawDrupalContext {
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+   *
+   * @return string
    */
-  protected function getUserIdByName($username): mixed {
+  protected function getUserIdByName($username): ?string  {
     $users = \Drupal::entityTypeManager()->getStorage('user')->loadByProperties(['name' => $username]);
     if ($user = reset($users)) {
       return $user->id();

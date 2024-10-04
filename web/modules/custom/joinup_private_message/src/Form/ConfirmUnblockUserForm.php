@@ -9,6 +9,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountProxyInterface;
+use Drupal\Core\Url;
 use Drupal\private_message\Entity\PrivateMessageBanInterface;
 use Drupal\private_message\Form\ConfirmUnbanUserForm;
 use Drupal\private_message\Service\PrivateMessageBanManagerInterface;
@@ -22,9 +23,14 @@ class ConfirmUnblockUserForm extends ConfirmUnbanUserForm implements ContainerIn
   /**
    * Banned user.
    *
-   * @var \Drupal\joinup_user\Entity\JoinupUser
+   * @var \Drupal\joinup_user\Entity\JoinupUserInterface
    */
   protected $bannedUser;
+
+  /**
+   * @var PrivateMessageBanInterface
+   */
+  protected $ban;
 
   /**
    * Constructs a new ConfirmUnblockUserForm.
@@ -48,6 +54,7 @@ class ConfirmUnblockUserForm extends ConfirmUnbanUserForm implements ContainerIn
     $this->routeMatch = $routeMatch;
     $ban = $this->routeMatch->getParameter('private_message_ban');
     if (!empty($ban) && $ban instanceof PrivateMessageBanInterface) {
+      $this->ban = $ban;
       $this->bannedUser = $ban->getTarget();
     }
   }
@@ -78,6 +85,13 @@ class ConfirmUnblockUserForm extends ConfirmUnbanUserForm implements ContainerIn
   public function getQuestion() {
 
     return $this->t('Are you sure you want to unblock user <em>%user</em>?', ['%user' => $this->bannedUser->getDisplayName()]);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getCancelUrl() {
+    return new Url('joinup_private_message.unblock', ['private_message_ban' => $this->ban->id()]);
   }
 
 }
