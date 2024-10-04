@@ -43,6 +43,8 @@ Feature: RDF synchronization of contents.
     And release content:
       | uri                         | title           | documentation | release number | release notes | creation date    | published at     | changed          | is version of    | state     | status    | spatial coverage | keywords | language |
       | http://example.com/release1 | Syncing release | text.pdf      | 3.0.0          | New 3.0       | 2017-11-10T11:11 | 2017-11-11T11:11 | 2017-11-12T11:11 | Syncing solution | published | Completed | Atlantis         | food     | Atlantic |
+      # Draft release should not be synced.
+      | http://example.com/release2 | Syncing release | text.pdf      | 3.0.0          | New 3.0       | 2017-11-10T11:11 | 2017-11-11T11:11 | 2017-11-12T11:11 | Syncing solution | draft     | Completed | Atlantis         | food     | Atlantic |
 
     # The two cases cover the two possible access URL types extracted.
     # @see \Drupal\joinup_distribution\EventSubscriber\DistributionParentRdfSyncSubscriber::addDistributionParentRelation().
@@ -51,6 +53,9 @@ Feature: RDF synchronization of contents.
       | http://example.com/distribution1 | SyncingDistribution.zip | The zipped version of Syncing release 3. | 2017-01-11T11:20 | 2017-02-11T11:20 | 2017-03-11T11:20 | http://www.example.org/release.zip    | Syncing release |                  | 232       | Syncing licence | Archive | Completed | Schema                   | published |
       | http://example.com/distribution2 | SyncingDistribution.rdf | The RDF version of Syncing release 3.    | 2017-04-11T11:20 | 2017-05-11T11:20 | 2017-06-11T11:20 | http://www.example.org/some_other.zip | Syncing release |                  | 232       | Syncing licence | Archive | Completed | Schema                   | published |
       | http://example.com/distribution3 | SyncingSolution.zip     | The ZIP version of Syncing solution 3.   | 2017-07-11T11:20 | 2017-08-11T11:20 | 2017-09-11T11:20 | http://www.example.org/solution.zip   |                 | Syncing solution | 232       | Syncing licence | Archive | Completed | Schema                   | published |
+      # Draft distributions should not be synced.
+      | http://example.com/distribution4 | SyncingSolution.zip     | The ZIP version of Syncing solution 3.   | 2017-07-11T11:20 | 2017-08-11T11:20 | 2017-09-11T11:20 | http://www.example.org/solution.zip   | Syncing release |                  | 232       | Syncing licence | Archive | Completed | Schema                   | draft     |
+      | http://example.com/distribution5 | SyncingSolution.zip     | The ZIP version of Syncing solution 3.   | 2017-07-11T11:20 | 2017-08-11T11:20 | 2017-09-11T11:20 | http://www.example.org/solution.zip   |                 | Syncing solution | 232       | Syncing licence | Archive | Completed | Schema                   | draft     |
 
     # Check initial exported data.
     Then the following "http://data" graph triples exist in the RDF backend:
