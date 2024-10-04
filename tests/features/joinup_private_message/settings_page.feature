@@ -8,19 +8,19 @@ Feature: Private message settings page management.
   Scenario: Testing setting page
     Given users:
       | Username     | Roles | E-mail           | First name | Family name |
-      | Lisa Like    |       | lisa@like.com    | Lisa       | Like        |
-      | Gregory Like |       | gregory@like.com | Gregory    | Like        |
-      | Michael Like |       | michael@like.com | Michael    | Like        |
+      | Lisa_Like    |       | lisa@like.com    | Lisa       | Like        |
+      | Gregory_Like |       | gregory@like.com | Gregory    | Like        |
+      | Michael_Like |       | michael@like.com | Michael    | Like        |
     Given the following private message bans:
       | owner        | target       | created    |
-      | Gregory Like | Lisa Like    | 2024-09-20 |
-      | Gregory Like | Michael Like | 2024-09-21 |
+      | Gregory_Like | Lisa_Like    | 2024-09-20 |
+      | Gregory_Like | Michael_Like | 2024-09-21 |
 
     Given I am an anonymous user
     When I go to "/user/messages/settings"
     Then I should see the heading "Sign in to continue"
 
-    Given I am logged in as "Gregory Like"
+    Given I am logged in as "Gregory_Like"
     When I go to "/user/messages/settings"
     Then I should see the heading "Private Messages"
     And I check "Receive email notification of private messages"
