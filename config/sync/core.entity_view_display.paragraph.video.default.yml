@@ -3,30 +3,13 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.field.paragraph.video.paragraph_video_url
     - field.field.paragraph.video.remote_video
     - paragraphs.paragraphs_type.video
-  module:
-    - template_suggestion
-    - video_embed_field
 id: paragraph.video.default
 targetEntityType: paragraph
 bundle: video
 mode: default
 content:
-  paragraph_video_url:
-    type: video_embed_field_video
-    label: hidden
-    settings:
-      autoplay: false
-      responsive: true
-      width: 854
-      height: 480
-    third_party_settings:
-      template_suggestion:
-        template_suggestion: ''
-    weight: 0
-    region: content
   remote_video:
     type: entity_reference_entity_view
     label: above

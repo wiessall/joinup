@@ -3,23 +3,15 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.field.paragraph.video.paragraph_video_url
     - field.field.paragraph.video.remote_video
     - paragraphs.paragraphs_type.video
   module:
     - media_library
-    - video_embed_field
 id: paragraph.video.default
 targetEntityType: paragraph
 bundle: video
 mode: default
 content:
-  paragraph_video_url:
-    type: video_embed_field_textfield
-    weight: 0
-    region: content
-    settings: {  }
-    third_party_settings: {  }
   remote_video:
     type: media_library_widget
     weight: 1
