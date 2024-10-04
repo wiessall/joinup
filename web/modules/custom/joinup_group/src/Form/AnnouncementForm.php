@@ -7,12 +7,14 @@ namespace Drupal\joinup_group\Form;
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Component\Render\MarkupInterface;
 use Drupal\Core\Cache\CacheableMetadata;
+use Drupal\Core\Database\Connection;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Url;
 use Drupal\joinup_group\Entity\AnnouncementInterface;
 use Drupal\joinup_notification\JoinupMessageDeliveryInterface;
+use Drupal\og\OgMembershipInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -25,20 +27,11 @@ class AnnouncementForm extends FormBase {
    */
   protected AnnouncementInterface $announcement;
 
-  /**
-   * Builds a new form instance.
-   *
-   * @param \Drupal\joinup_notification\JoinupMessageDeliveryInterface $messageDelivery
-   *   The message delivery service.
-   * @param \Drupal\Component\Datetime\TimeInterface $time
-   *   The date/time service.
-   * @param \Drupal\Core\Logger\LoggerChannelInterface $logger
-   *   The logger channel service.
-   */
   public function __construct(
     protected JoinupMessageDeliveryInterface $messageDelivery,
     protected TimeInterface $time,
     protected LoggerChannelInterface $logger,
+    protected Connection $connection,
   ) {
   }
 
@@ -50,6 +43,7 @@ class AnnouncementForm extends FormBase {
       $container->get('joinup_notification.message_delivery'),
       $container->get('datetime.time'),
       $container->get('logger.channel.group_membership'),
+      $container->get('database'),
     );
   }
 
@@ -141,6 +135,20 @@ class AnnouncementForm extends FormBase {
       }, array_keys($arguments))),
     ];
 
+    $domain_options = $this->getOptions();
+    if ($domain_options) {
+      $form['professional_domain'] = [
+        '#type' => 'select',
+        '#title' => $this->t('Professional domain filter'),
+        '#description' => $this->t("Narrow your announcement's audience by targeting only members based on their professional domain."),
+        '#options' => $this->getOptions(),
+        '#default_value' => $this->announcement->getProfessionalDomainIds(),
+        '#multiple' => TRUE,
+        '#required' => FALSE,
+        '#size' => 10,
+      ];
+    }
+
     $form['state'] = [
       '#type' => 'item',
       '#title' => $this->t('Announcement state:'),
@@ -190,7 +198,7 @@ class AnnouncementForm extends FormBase {
     $transition = $form_state->getTriggeringElement()['#state_machine_transition'] ?? NULL;
     if ($transition === 'approve') {
       $group = $this->announcement->getGroup();
-      if (!$group->getAnnouncementRecipientsCount()) {
+      if (!$this->announcement->getRecipientsCount()) {
         $form_state->setError($form, $this->t('Cannot send this announcement to %group @type because none of its members are subscribed to receive announcements.', [
           '%group' => $group->label(),
           '@type' => $group->get('rid')->entity->getSingularLabel(),
@@ -213,6 +221,7 @@ class AnnouncementForm extends FormBase {
 
     $this->announcement
       ->setSubject($form_state->getValue('subject'))
+      ->setProfessionalDomains($form_state->getValue('professional_domain', []))
       ->setBody($form_state->getValue(['body', 'value']))
       // Only save the arguments having a 'value' key. Some arguments depend on
       // the email recipient and will be dynamically set when the email is sent.
@@ -265,7 +274,7 @@ class AnnouncementForm extends FormBase {
       $status = $this->t("The announcement has been restored.");
     }
     elseif ($this->announcement->getWorkflowState() === 'delivered') {
-      if ($this->announcement->getGroup()->getAnnouncementRecipientsCount() > 50) {
+      if ($this->announcement->getRecipientsCount() > 50) {
         $status = $this->t("The announcement has been scheduled to be delivered to the %group @type members. Because the @type has a large amount of members the emails will be sent in several batches.", $args);
       }
       else {
@@ -344,6 +353,78 @@ class AnnouncementForm extends FormBase {
         'value' => $this->time->getRequestTime(),
       ],
     ];
+  }
+
+  /**
+   * Gets options for professional domain.
+   *
+   * @return array
+   *   Option list.
+   */
+  protected function getOptions(): array {
+    $topic_assignment = $this->getUsersTopicAssignment();
+
+    $options = [];
+    $definition = $this->announcement->get('professional_domain')
+      ->getFieldDefinition();
+    $domains = $definition
+      ->getFieldStorageDefinition()
+      ->getOptionsProvider('target_id', $this->announcement)
+      ->getPossibleOptions($this->currentUser());
+
+    foreach ($domains as $key => $domain) {
+      $is_parent = !str_starts_with($domain, '-');
+      if ($is_parent) {
+        $parent = $domain;
+        continue;
+      }
+
+      $number_of_users = isset($topic_assignment[$key]) ? count($topic_assignment[$key]) : NULL;
+      if (isset($parent) && $number_of_users) {
+        $options[$parent][$key] = $domain . ' (' . $number_of_users . ')';
+      }
+    }
+
+    return $options;
+  }
+
+  /**
+   * Gets user's topic assignment.
+   *
+   * @return array
+   *   List of assignments.
+   */
+  public function getUsersTopicAssignment(): array {
+    $group = $this->announcement->getGroup();
+
+    $list = [];
+
+    $query = $this->connection->select('og_membership', 'og');
+    $query->join('users_field_data', 'u', 'og.uid = u.uid');
+    $query->join('user__field_user_professional_domain', 'pd', 'pd.entity_id = og.uid');
+    $query->addExpression('pd.field_user_professional_domain_target_id', 'term');
+    $query->fields('u', ['uid']);
+    // Only users which accepted the 'Legal notice' are receiving announcements.
+    $query->join('entity_legal_document_acceptance', 'a', 'og.uid = a.uid');
+
+    $assignments = $query->condition('og.entity_type', 'rdf_entity')
+      ->condition('og.entity_bundle', $group->bundle())
+      ->condition('og.entity_id', $group->id())
+      ->condition('og.state', OgMembershipInterface::STATE_ACTIVE)
+      ->condition('og.announcements', 1)
+      ->condition('u.status', 1)
+      ->execute();
+    foreach ($assignments as $assignment) {
+      if (!isset($list[$assignment->term])) {
+        $list[$assignment->term] = [];
+      }
+
+      if (!in_array($assignment->uid, $list[$assignment->term])) {
+        $list[$assignment->term][] = $assignment->uid;
+      }
+    }
+
+    return $list;
   }
 
 }
