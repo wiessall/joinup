@@ -15,5 +15,5 @@ use Drupal\joinup_media\Update\MediaOembedMigrate;
 function joinup_media_post_update_111300(array &$sandbox): void {
   /** @var \Drupal\joinup_media\Update\MediaOembedMigrate $update */
   $update = \Drupal::classResolver(MediaOembedMigrate::class);
-  $update->run($sandbox);
+  $update->migrateMedia($sandbox);
 }
