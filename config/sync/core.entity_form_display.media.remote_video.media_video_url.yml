@@ -1,0 +1,32 @@
+uuid: ddded659-20a1-40d3-9f4e-60bfa359239c
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_form_mode.media.media_video_url
+    - field.field.media.remote_video.media_oembed_video
+    - field.field.media.remote_video.og_audience
+    - media.type.remote_video
+  module:
+    - media
+id: media.remote_video.media_video_url
+targetEntityType: media
+bundle: remote_video
+mode: media_video_url
+content:
+  media_oembed_video:
+    type: oembed_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  created: true
+  langcode: true
+  name: true
+  og_audience: true
+  path: true
+  status: true
+  uid: true

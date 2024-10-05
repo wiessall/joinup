@@ -3,21 +3,28 @@ langcode: en
 status: true
 dependencies:
   config:
+    - core.entity_form_mode.media.media_video_url
     - field.field.paragraph.video.remote_video
     - paragraphs.paragraphs_type.video
   module:
-    - media_library
+    - joinup_media
 id: paragraph.video.default
 targetEntityType: paragraph
 bundle: video
 mode: default
 content:
   remote_video:
-    type: media_library_widget
+    type: joinup_media_video_url
     weight: 1
     region: content
     settings:
-      media_types: {  }
+      form_mode: media_video_url
+      override_labels: false
+      label_singular: ''
+      label_plural: ''
+      collapsible: false
+      collapsed: false
+      revision: false
     third_party_settings: {  }
 hidden:
   created: true
