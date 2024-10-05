@@ -63,7 +63,7 @@ class SolutionReleasesAndDistributionsFieldItemList extends EntityReferenceField
       ->execute());
 
     // Retrieve also, all standalone distributions for this solution.
-    return $ids + $solution->getDistributionIds();
+    return array_merge($ids, $solution->getDistributionIds());
   }
 
 }
