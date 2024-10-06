@@ -118,7 +118,7 @@ class EifContext extends RawDrupalContext {
     foreach ($table_data->getRows() as $row) {
       if ($row[0] === 'uri') {
         $fields['uri'] = $row[1];
-        break;
+        continue;
       }
       $field_name = 'eif_' . str_replace(' ', '_', strtolower($row[0]));
       $fields[$field_name] ??= [];
