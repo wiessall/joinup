@@ -8,6 +8,8 @@ use Behat\Gherkin\Node\TableNode;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\ExpectationFailedException;
+use function PHPUnit\Framework\assertCount;
+use function PHPUnit\Framework\assertSame;
 
 /**
  * Behat step definitions to test ADMS-AP validation.
@@ -36,7 +38,10 @@ class RdfContext extends RawDrupalContext {
   public function assertTriples(string $graph, TableNode $triples): void {
     $connection = \Drupal::getContainer()->get('rdf_sync.connection');
     $subjects = $rows = [];
-    foreach ($triples->getHash() as $triple) {
+    // Run some queries in order to get the actual bnode IDs from the database
+    // and manage to assert the triples properly.
+    $tableRows = $this->parseEifData($triples->getHash());
+    foreach ($tableRows as $triple) {
       // Allow to skip the changed date because when performing CRUD operations
       // on an entity, other entities are affected. For example, updating a
       // solution, the collection is updated so that the last update date is
@@ -77,6 +82,119 @@ class RdfContext extends RawDrupalContext {
     if (!empty($unexpectedTriples)) {
       throw new ExpectationFailedException(sprintf("These triple(s) %s were unexpectedly found in the RDF backend", implode(PHP_EOL, array_keys($unexpectedTriples))));
     }
+  }
+
+  /**
+   * Asserts the triples with blank nodes in subject or object.
+   *
+   * @param array $rows
+   *   An array of data. Each row has the keys 'subject', 'predicate', 'object'.
+   *
+   * @return array
+   *   The rows to check the triples with the blank nodes replaced by their
+   *   actual blank node values in the database.
+   */
+  protected function parseEifData(array $rows): array {
+    $triplesWithBnodesAsSubject = $triplesWithBnodesAsObject = $subjects = $objects = [];
+    foreach ($rows as $index => $row) {
+      if (str_starts_with($row['subject'], 'bnode:')) {
+        $triplesWithBnodesAsSubject[$row['subject']][] = $row['predicate'] . ' ' . $row['object'];
+        // The subject here is the bnode.
+        $subjects[$row['subject']] = $row['subject'];
+      }
+      elseif (str_starts_with($row['object'], 'bnode:')) {
+        $triplesWithBnodesAsObject[$row['object']][] = $row['predicate'] . ' ' . $row['object'];
+        if (isset($objects[$row['object']]) && $objects[$row['object']] !== $row['predicate']) {
+          throw new ExpectationFailedException('Currently, only one predicate per object can be tested.');
+        }
+        // The subject here is the entity referencing the bnode.
+        $objects[$row['subject']][$row['object']] = [
+          // The predicate of the bnode.
+          'predicate' => $row['predicate'],
+          // The bnode.
+          'object' => $row['object'],
+        ];
+      }
+
+      unset($rows[$index]);
+    }
+
+    if (empty($subjects) && empty($objects)) {
+      return $rows;
+    }
+
+    $objectsSum = array_sum(array_map('count', $objects));
+    // Mainly assert that for each bnode, we have also triples to assert.
+    assertSame(count($subjects), $objectsSum, 'The number of blank node identifiers as subject must match the number of blank node identifiers as object');
+    $connection = \Drupal::getContainer()->get('rdf_sync.connection');
+
+    // Start from the objects. Get all data from the database for the given
+    // subject and the given predicate, but also get the blank node data.
+    $queryTemplate = <<<SPARQL
+SELECT ?s ?o ?bnpredicate ?bnobject WHERE {
+  GRAPH ?g {
+    ?s ?p ?o .
+    ?o ?bnpredicate ?bnobject .
+    FILTER (?s IN (<%s>))
+    FILTER (?p IN (<%s>))
+  }
+}
+SPARQL;
+
+    $findSubject = function (array $subjects, string $object): ?string {
+      foreach ($subjects as $subject => $objects) {
+        foreach ($objects as $objectData) {
+          if ($objectData['object'] === $object) {
+            return $subject;
+          }
+        }
+      }
+      return NULL;
+    };
+
+    $bnodesFound = [];
+    foreach ($triplesWithBnodesAsObject as $bnode => $triples) {
+      if (in_array($bnode, $bnodesFound)) {
+        continue;
+      }
+      $subject = $findSubject($objects, $bnode);
+      if (!$subject) {
+        throw new ExpectationFailedException('The subject for the bnode ' . $bnode . ' was not found.');
+      }
+
+      $predicate = $objects[$subject][$bnode]['predicate'];
+      $query = sprintf($queryTemplate, $subject, $predicate);
+      $results = $connection->query($query);
+      $bnodedResults = [];
+      // Setup results by bnode.
+      foreach ($results as $result) {
+        $bnodeSubject = (string) $result->o;
+        $bnpredicate = (string) $result->bnpredicate;
+        $bnobject = (string) $result->bnobject;
+        $bnodedResults[$bnodeSubject][] = $bnpredicate . ' ' . $bnobject;
+      }
+
+      foreach ($triplesWithBnodesAsSubject as $bnodeIndex => $serializedExpected) {
+        sort($serializedExpected);
+        foreach ($bnodedResults as $resultsIndex => $serializedActual) {
+          sort($serializedActual);
+          if ($serializedActual === $serializedExpected) {
+            unset($triplesWithBnodesAsSubject[$bnodeIndex]);
+            unset($bnodedResults[$resultsIndex]);
+            $bnodesFound[] = $bnodeIndex;
+          }
+        }
+      }
+
+      if (!empty($bnodedResults)) {
+        throw new ExpectationFailedException('There are still triples in the database for bnode ' . $bnode . ' that do not match the expected triples.');
+      }
+    }
+
+    // Assert that all bnodes were found and the values were matched.
+    assertCount(0, $triplesWithBnodesAsSubject, 'The triples with blank nodes as subject were not found');
+
+    return $rows;
   }
 
   /**

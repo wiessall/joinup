@@ -355,7 +355,7 @@ Feature: RDF synchronization of contents.
     And there should not be any triples with the object "http://example.com/distribution3" in the "http://data" graph
     # The reference to the distribution 3 is not there anymore.
     And the following "http://data" graph triples exist in the RDF backend:
-      | subject                     | predicate                                       | object                                                     |
+      | subject                      | predicate                                       | object                                                     |
       | http://example.com/solution1 | http://purl.org/dc/terms/title                  | Syncing solution updated                                   |
       | http://example.com/solution1 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type | http://www.w3.org/ns/dcat#Dataset                          |
       | http://example.com/solution1 | http://purl.org/dc/terms/description            | <p>content</p>                                             |
@@ -418,17 +418,21 @@ Feature: RDF synchronization of contents.
     Given solution content:
       | title        | description                                      | state     | uri                          |
       | EIF solution | Some description not to be shown in the EIF page | published | http://example.com/solution1 |
-    Given the following EIF perspective data for the "EIF solution" solution:
-      | Description | This should be in the description field.                                                       |
-      | Principle   | Underlying Principle 1: Subsidiarity and proportionality, Underlying Principle 3: Transparency |
-      | Layer       | Interoperability Layer 3: Legal interoperability                                               |
-      | uri         | http://example.com/eif-perspective1                                                            |
     And the following EIF perspective data for the "EIF solution" solution:
-      | Description | Description field of the second item.                 |
-      | Principle   | Underlying Principle 3: Transparency                  |
-      | Layer       | Interoperability Layer 1: Interoperability governance |
-      | Model       | Basic Component 4: Open data                          |
-      | uri         | http://example.com/eif-perspective2                   |
+      | Description    | This should be in the description field.                                                       |
+      | Principle      | Underlying Principle 1: Subsidiarity and proportionality, Underlying Principle 3: Transparency |
+      | Layer          | Interoperability Layer 3: Legal interoperability                                               |
+      | uri            | http://example.com/eif-perspective1                                                            |
+      | Recommendation | name: Recommendation 21, description: This is recommended 1                                    |
+      | Recommendation | name: Recommendation 15, description: This is recommended 2                                    |
+    And the following EIF perspective data for the "EIF solution" solution:
+      | Description    | Description field of the second item.                       |
+      | Principle      | Underlying Principle 3: Transparency                        |
+      | Layer          | Interoperability Layer 1: Interoperability governance       |
+      | Model          | Basic Component 4: Open data                                |
+      | uri            | http://example.com/eif-perspective2                         |
+      | Recommendation | name: Recommendation 21, description: This is recommended 3 |
+      | Recommendation | name: Recommendation 15, description: This is recommended 4 |
     Then the following "http://data" graph triples exist in the RDF backend:
       | subject                             | predicate                                       | object                                        |
       | http://example.com/eif-perspective1 | http://purl.org/dc/terms/description            | This should be in the description field.      |
@@ -443,6 +447,18 @@ Feature: RDF synchronization of contents.
       | http://example.com/eif-perspective2 | http://data.europa.eu/eif/Layer                 | http://data.europa.eu/IL1                     |
       | http://example.com/eif-perspective2 | http://data.europa.eu/eif/Principle             | http://data.europa.eu/UP3                     |
       | http://example.com/eif-perspective2 | http://data.europa.eu/eif/Model                 | http://data.europa.eu/BC4                     |
+      | http://example.com/eif-perspective1 | http://data.europa.eu/eif/Recommendation        | bnode:1                                       |
+      | http://example.com/eif-perspective1 | http://data.europa.eu/eif/Recommendation        | bnode:2                                       |
+      | http://example.com/eif-perspective2 | http://data.europa.eu/eif/Recommendation        | bnode:3                                       |
+      | http://example.com/eif-perspective2 | http://data.europa.eu/eif/Recommendation        | bnode:4                                       |
+      | bnode:1                             | http://purl.org/dc/terms/description            | This is recommended 1                         |
+      | bnode:1                             | http://data.europa.eu/eif/adms/qualifier        | http://data.europa.eu/Rec21                             |
+      | bnode:2                             | http://purl.org/dc/terms/description            | This is recommended 2                         |
+      | bnode:2                             | http://data.europa.eu/eif/adms/qualifier        | http://data.europa.eu/Rec15                             |
+      | bnode:3                             | http://purl.org/dc/terms/description            | This is recommended 3                         |
+      | bnode:3                             | http://data.europa.eu/eif/adms/qualifier        | http://data.europa.eu/Rec21                    |
+      | bnode:4                             | http://purl.org/dc/terms/description            | This is recommended 4                         |
+      | bnode:4                             | http://data.europa.eu/eif/adms/qualifier        | http://data.europa.eu/Rec15                   |
     When I update the entity having "http://example.com/eif-perspective1" as RDF resource:
       | eif_description | This should be in the new description field. |
     Then the following "http://data" graph triples exist in the RDF backend:
