@@ -404,7 +404,7 @@ function joinup_solution_node_view(array &$build, NodeInterface $solution, Entit
 
   // Member count.
   if ($display->getComponent('members')) {
-    $member_count = joinup_solution_member_count($solution);
+    $member_count = $solution->getActiveMemberCount();
     // Invalidate the member count every time the group membership list changes.
     // @see \Drupal\og\Plugin\Block\MemberCountBlock::getCacheTags()
     $tags = Cache::buildTags(OgMembershipInterface::GROUP_MEMBERSHIP_LIST_CACHE_TAG_PREFIX, $solution->getCacheTagsToInvalidate());

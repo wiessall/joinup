@@ -239,7 +239,7 @@ QUERY;
       + $group_content['document']['archived']
       + $group_content['event']['archived']
       + $group_content['news']['archived'],
-      'Number of members' => collection_member_count($group),
+      'Number of members' => $group->getActiveMemberCount(),
       'Description word count' => str_word_count(strip_tags($description)),
       'Total number of likes' => !empty($content_ids) ? $this->getLikesCount($content_ids) : 0,
     ];

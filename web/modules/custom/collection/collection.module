@@ -240,7 +240,7 @@ function collection_node_view(array &$build, EntityInterface $entity, EntityView
 
   // Member count.
   if ($display->getComponent('members')) {
-    $member_count = collection_member_count($entity);
+    $member_count = $entity->getActiveMemberCount();
     // Invalidate the member count every time the group membership list changes.
     // @see \Drupal\og\Plugin\Block\MemberCountBlock::getCacheTags()
     $tags = Cache::buildTags(OgMembershipInterface::GROUP_MEMBERSHIP_LIST_CACHE_TAG_PREFIX, $entity->getCacheTagsToInvalidate());
@@ -285,28 +285,6 @@ function collection_node_view(array &$build, EntityInterface $entity, EntityView
       ],
     ])->toRenderable();
   }
-}
-
-/**
- * Amount of members of a collection.
- *
- * @param \Drupal\node\NodeInterface $entity
- *   The collection.
- *
- * @return int
- *   Amount of members.
- */
-function collection_member_count(NodeInterface $entity): int {
-  // We're doing a direct database query rather than using methods in OG's
-  // MembershipManager service since we just need a count, and we need to filter
-  // out blocked user accounts.
-  $query = \Drupal::database()->select('og_membership', 'om');
-  $query->innerJoin('users_field_data', 'ufd', 'om.uid = ufd.uid');
-  $query->condition('ufd.status', 1)
-    ->condition('entity_type', 'node')
-    ->condition('entity_id', $entity->id())
-    ->condition('state', OgMembershipInterface::STATE_ACTIVE);
-  return (int) $query->countQuery()->execute()->fetchField();
 }
 
 /**

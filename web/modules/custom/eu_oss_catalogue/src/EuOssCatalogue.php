@@ -12,6 +12,7 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Utility\Error;
 use Drupal\eu_oss_catalogue\Entity\OssSolutionInterface;
 use Drupal\eu_oss_catalogue\Event\EuOssPostFetchEvent;
+use Drupal\eu_oss_catalogue\Event\EuOssSolutionPostSaveEvent;
 use Drupal\eu_oss_catalogue\Event\EuOssSolutionPreSaveEvent;
 use Drupal\eu_oss_catalogue\Exception\HostingPlatformFetchException;
 use Drupal\eu_oss_catalogue\Model\Project;
@@ -193,6 +194,9 @@ class EuOssCatalogue implements EuOssCatalogueInterface {
       $solution->set('oss_archived', 0);
 
       $operationResult = $solution->save();
+
+      // Allow 3rd-party to act after save.
+      $this->eventDispatcher->dispatch(new EuOssSolutionPostSaveEvent($solution, $project));
     }
     catch (\Exception $exception) {
       // The solution could not be saved.
