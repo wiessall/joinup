@@ -452,11 +452,11 @@ Feature: RDF synchronization of contents.
       | http://example.com/eif-perspective2 | http://data.europa.eu/eif/Recommendation        | bnode:3                                       |
       | http://example.com/eif-perspective2 | http://data.europa.eu/eif/Recommendation        | bnode:4                                       |
       | bnode:1                             | http://purl.org/dc/terms/description            | This is recommended 1                         |
-      | bnode:1                             | http://data.europa.eu/eif/adms/qualifier        | http://data.europa.eu/Rec21                             |
+      | bnode:1                             | http://data.europa.eu/eif/adms/qualifier        | http://data.europa.eu/Rec21                   |
       | bnode:2                             | http://purl.org/dc/terms/description            | This is recommended 2                         |
-      | bnode:2                             | http://data.europa.eu/eif/adms/qualifier        | http://data.europa.eu/Rec15                             |
+      | bnode:2                             | http://data.europa.eu/eif/adms/qualifier        | http://data.europa.eu/Rec15                   |
       | bnode:3                             | http://purl.org/dc/terms/description            | This is recommended 3                         |
-      | bnode:3                             | http://data.europa.eu/eif/adms/qualifier        | http://data.europa.eu/Rec21                    |
+      | bnode:3                             | http://data.europa.eu/eif/adms/qualifier        | http://data.europa.eu/Rec21                   |
       | bnode:4                             | http://purl.org/dc/terms/description            | This is recommended 4                         |
       | bnode:4                             | http://data.europa.eu/eif/adms/qualifier        | http://data.europa.eu/Rec15                   |
     When I update the entity having "http://example.com/eif-perspective1" as RDF resource:
