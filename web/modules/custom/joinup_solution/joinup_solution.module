@@ -218,7 +218,7 @@ function joinup_solution_entity_extra_field_info(): array {
     $display = &$fields['node'][$solution->id()]['display'];
     // Append some additional fields to the solution entity display containing
     // related information.
-    // @see solution_rdf_entity_view()
+    // @see solution_node_view()
     $display['releases_overview'] = [
       'label' => t('Releases overview'),
       'description' => t('A link to the releases overview page.'),
