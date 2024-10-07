@@ -336,31 +336,6 @@ class JoinupCoreContext extends RawDrupalContext {
   }
 
   /**
-   * Alters the state of an entity programmatically.
-   *
-   * @param string $label
-   *   The label of the entity.
-   * @param string $entity_type_id
-   *   The entity type ID of the entity.
-   * @param string $state
-   *   The state to set.
-   *
-   * @Given the workflow state of the :label :entity_type_id is set to :state
-   */
-  public function changeEntityWorkflowState(string $label, string $entity_type_id, string $state): void {
-    $mapping = [
-      'content' => 'node',
-      'rdf entity' => 'rdf_entity',
-    ];
-    Assert::assertArrayHasKey($entity_type_id, $mapping, "The entity type $entity_type_id is not supported. Use one of " . implode(', ', array_keys($mapping)));
-
-    $entity = $this->getEntityByLabel($mapping[$entity_type_id], $label);
-    $entity->setNewRevision();
-    $entity->set('field_state', $state);
-    $entity->save();
-  }
-
-  /**
    * Asserts that the given HTML list of rows exists in the page.
    *
    * @param \Behat\Gherkin\Node\TableNode $table

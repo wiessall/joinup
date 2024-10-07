@@ -294,7 +294,7 @@ trait GroupTrait {
     $query = \Drupal::database()->select('og_membership', 'om');
     $query->innerJoin('users_field_data', 'ufd', '[om].[uid] = [ufd].[uid]');
     $query->condition('ufd.status', 1)
-      ->condition('entity_type', 'rdf_entity')
+      ->condition('entity_type', 'node')
       ->condition('entity_id', $this->id())
       ->condition('state', OgMembershipInterface::STATE_ACTIVE);
     return (int) $query->countQuery()->execute()->fetchField();

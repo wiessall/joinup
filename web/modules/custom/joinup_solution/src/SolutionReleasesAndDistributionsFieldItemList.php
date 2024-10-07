@@ -44,7 +44,7 @@ class SolutionReleasesAndDistributionsFieldItemList extends EntityReferenceField
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    *   Thrown if the storage handler couldn't be loaded.
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
-   *   Thrown if the 'rdf_entity' entity type doesn't exist.
+   *   Thrown if the 'node' entity type doesn't exist.
    */
   protected function getReleasesAndDistributions(): array {
     $entityTypeManager = \Drupal::entityTypeManager();

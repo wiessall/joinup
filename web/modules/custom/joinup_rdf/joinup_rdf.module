@@ -23,67 +23,6 @@ use Drupal\og\Og;
 use Drupal\rdf_sync\Model\SyncMethod;
 
 /**
- * Implements hook_entity_create_access().
- */
-function joinup_rdf_node_create_access(AccountInterface $account, array $context, $bundle): AccessResultInterface {
-  // OG handles node content in its own hook_entity_create_access(). This is the
-  // RDF entity equivalent.
-  $entity_type_id = $context['entity_type_id'];
-  if ($entity_type_id !== 'rdf_entity') {
-    return AccessResult::neutral();
-  }
-
-  if (!Og::isGroupContent($entity_type_id, $bundle)) {
-    // Not a group content.
-    return AccessResult::neutral();
-  }
-
-  // A user with the global permission to administer all groups has full access.
-  $access_result = AccessResult::allowedIfHasPermission($account, 'administer organic groups');
-  if ($access_result->isAllowed()) {
-    return $access_result;
-  }
-
-  // This check needs the group parameter to be passed in the context. In order
-  // to do that, the access check must be called through the access control
-  // handler using:
-  // @code
-  // \Drupal::entityTypeManager()->getAccessControlHandler($entity_type_id)
-  //   ->createAccess($bundle, $account, [
-  //     'group' => $group,
-  //   ]);
-  // @endcode
-  if (empty($context['group']) || !($context['group'] instanceof GroupInterface)) {
-    // Fail silently as it might not be always the case that this is set.
-    return AccessResult::neutral();
-  }
-
-  $group = $context['group'];
-  // Note: The OG structure of the permission is used instead of the RDF entity.
-  // That is why it is `rdf_entity` and not `rdf entity`.
-  if (!$group->hasGroupPermission($account->id(), "create $bundle rdf_entity")) {
-    return AccessResult::forbidden();
-  }
-
-  // Create an empty entity with the correct group in order to check the allowed
-  // transitions.
-  /** @var \Drupal\joinup_group\Entity\GroupContentInterface $entity */
-  $entity = \Drupal::entityTypeManager()->getStorage($entity_type_id)->create([
-    'type' => $bundle,
-  ]);
-
-  // If the entity does not have a workflow, do not run a check.
-  if (!($entity instanceof EntityWorkflowStateInterface)) {
-    return AccessResult::neutral();
-  }
-
-  $entity->setGroup($group);
-  return $entity->getWorkflow()->getAllowedTransitions($entity->getWorkflowState(), $entity)
-    ? AccessResult::allowed()
-    : AccessResult::forbidden();
-}
-
-/**
  * Implements hook_form_BASE_FORM_ID_alter().
  *
  * @todo Remove this hack as part of ISAICP-3021.

@@ -1231,7 +1231,6 @@ class JoinupContext extends RawDrupalContext {
   public function assertEntityWorkflowState(string $type, string $stateExpected, ?string $label = NULL, ?string $id = NULL): void {
     $mapping = [
       'content' => 'node',
-      'rdf entity' => 'rdf_entity',
     ];
     $entityTypeId = $mapping[$type] ?? static::translateEntityTypeAlias($type);
     $entity = $label
@@ -2132,22 +2131,15 @@ class JoinupContext extends RawDrupalContext {
    *   The link text.
    * @param string $title
    *   The entity title.
-   * @param string $type
-   *   The entity type. Either 'content' or 'rdf'.
    *
    * @throws \Exception
    *   Thrown when the link is not in the page.
    *
-   * @Then /^the share link "(?P<link>[^"]+)" should point to the "(?P<title>[^"]+)" (?P<type>[^" ]+)(?:| entity)$/
+   * @Then /^the share link "(?P<link>[^"]+)" should point to the "(?P<title>[^"]+)" content(?:| entity)$/
    */
-  public function assertLinkContainsEntityUrl(string $link, string $title, string $type): void {
-    if (!in_array($type, ['content', 'rdf'])) {
-      throw new \InvalidArgumentException('Type can only be one of "content" and "rdf".');
-    }
-    $type = $type === 'content' ? 'node' : 'rdf_entity';
-
+  public function assertLinkContainsEntityUrl(string $link, string $title): void {
     /** @var \Drupal\Core\Entity\EntityInterface $entity */
-    $entity = $this->getEntityByLabel($type, $title);
+    $entity = $this->getEntityByLabel('node', $title);
     $link_element = $this->getSession()->getPage()->findLink($link);
 
     if (!$link_element) {
@@ -3015,22 +3007,16 @@ class JoinupContext extends RawDrupalContext {
    *   The title of the entity.
    * @param string $bundle
    *   The bundle of the entity.
-   * @param string $entity_type_id
-   *   The entity type id. Either 'content' or 'rdf entity' is accepted.
    * @param string $new_publication_date
    *   The new publication date.
    *
    * @throws \InvalidArgumentException
    *   Thrown when one of the parameters is not correct.
    *
-   * @Given the publication date of the :title :bundle :entity_type_id is changed to :new_value
+   * @Given the publication date of the :title :bundle content is changed to :new_value
    */
-  public function givenPublicationDateChanged(string $title, string $bundle, string $entity_type_id, string $new_publication_date): void {
-    if (!in_array($entity_type_id, ['content', 'rdf entity'])) {
-      throw new \InvalidArgumentException('Only "content" and "rdf entity" are allowed for the $entity_type_id parameter.');
-    }
-    $entity_type_id = $entity_type_id === 'content' ? 'node' : 'rdf_entity';
-    $entity = $this->getEntityByLabel($entity_type_id, $title, $bundle);
+  public function givenPublicationDateChanged(string $title, string $bundle, string $new_publication_date): void {
+    $entity = $this->getEntityByLabel('node', $title, $bundle);
     $publication_date = is_numeric($new_publication_date) ? ((int) $new_publication_date) : strtotime($new_publication_date);
 
     if (empty($new_publication_date)) {

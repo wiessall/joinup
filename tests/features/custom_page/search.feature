@@ -47,7 +47,7 @@ Feature: Custom pages enhance search results for their collections/solutions
 
     # Publish the custom page which is currently unpublished. It should now
     # appear in the search results.
-    When the publication state of the "Memory initialization overhead" custom page is changed to published
+    When the workflow state of the "Memory initialization overhead" content is changed to published
     When I enter "memory" in the search bar and press enter
     Then the page should show only the tiles "Alleviates fragmentation, Memory initialization overhead, Slab allocation"
 

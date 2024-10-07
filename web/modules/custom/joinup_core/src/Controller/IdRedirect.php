@@ -57,18 +57,7 @@ class IdRedirect extends ControllerBase {
 
     $id = "http://data.europa.eu/$namespace/$uuid";
 
-    // @todo This a temporary solution during conversion of RDF entities to
-    //   nodes. Convert to a stable solution in ISAICP-8376.
-    if (
-      $entity_type_id === 'rdf_entity' &&
-      ($entity = $this->entityTypeManager()->getStorage('rdf_entity')->load($id)) &&
-      $entity instanceof GroupInterface
-    ) {
-      return $this->redirect("entity.rdf_entity.canonical", [
-        $entity_type_id => $id,
-      ], [], 301);
-    }
-    elseif (($entity = $this->mapper->getEntityByUri($id))) {
+    if (($entity = $this->mapper->getEntityByUri($id))) {
       assert($entity instanceof RdfSyncEntityInterface);
       $entity_type_id = $entity->getEntityTypeId();
       return $this->redirect("entity.$entity_type_id.canonical", [

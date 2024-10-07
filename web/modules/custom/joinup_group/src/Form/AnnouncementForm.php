@@ -407,7 +407,7 @@ class AnnouncementForm extends FormBase {
     // Only users which accepted the 'Legal notice' are receiving announcements.
     $query->join('entity_legal_document_acceptance', 'a', 'og.uid = a.uid');
 
-    $assignments = $query->condition('og.entity_type', 'rdf_entity')
+    $assignments = $query->condition('og.entity_type', 'node')
       ->condition('og.entity_bundle', $group->bundle())
       ->condition('og.entity_id', $group->id())
       ->condition('og.state', OgMembershipInterface::STATE_ACTIVE)
