@@ -9,6 +9,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountProxyInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
 use Drupal\private_message\Entity\PrivateMessageBanInterface;
 use Drupal\private_message\Form\ConfirmUnbanUserForm;
@@ -23,7 +24,7 @@ class ConfirmUnblockUserForm extends ConfirmUnbanUserForm implements ContainerIn
   /**
    * Banned user.
    *
-   * @var \Drupal\joinup_user\Entity\JoinupUserInterface
+   * @var \Drupal\user\UserInterface
    */
   protected $bannedUser;
 
@@ -75,6 +76,9 @@ class ConfirmUnblockUserForm extends ConfirmUnbanUserForm implements ContainerIn
 
   /**
    * {@inheritdoc}
+   *
+   * @return array
+   *   returns form.
    */
   public function buildForm(array $form, FormStateInterface $form_state, $user = NULL): array {
 
@@ -83,16 +87,22 @@ class ConfirmUnblockUserForm extends ConfirmUnbanUserForm implements ContainerIn
 
   /**
    * {@inheritdoc}
+   *
+   * @return \Drupal\Core\StringTranslation\TranslatableMarkup
+   *   returns question for modal.
    */
-  public function getQuestion() {
+  public function getQuestion(): TranslatableMarkup {
 
     return $this->t('Are you sure you want to unblock user <em>%user</em>?', ['%user' => $this->bannedUser->getDisplayName()]);
   }
 
   /**
    * {@inheritdoc}
+   *
+   * @return \Drupal\Core\Url
+   *   returns cancel url for modal.
    */
-  public function getCancelUrl() {
+  public function getCancelUrl(): Url {
     return new Url('joinup_private_message.unblock', ['private_message_ban' => $this->ban->id()]);
   }
 

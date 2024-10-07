@@ -62,7 +62,6 @@ class PrivateMessageRouteSubscriber extends RouteSubscriberBase {
 
     // Remove the unban user form route.
     $collection->remove('private_message.unban_user_form');
-
   }
 
 }

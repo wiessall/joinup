@@ -47,16 +47,22 @@ class PrivateMessageSettingsForm extends ConfigFormBase implements ContainerInje
   }
 
   /**
-   * {@inheritdoc}
+   * Foorm id.
+   *
+   * @return string
+   *   returns from id.
    */
-  public function getFormId() {
+  public function getFormId(): string {
     return 'joinup_private_message_settings_form';
   }
 
   /**
    * {@inheritdoc}
+   *
+   * @return array
+   *   returns form
    */
-  public function buildForm(array $form, FormStateInterface $formState) {
+  public function buildForm(array $form, FormStateInterface $formState): array {
     $private_message_form = [];
 
     $this->moduleHandler->invoke(
@@ -103,14 +109,20 @@ class PrivateMessageSettingsForm extends ConfigFormBase implements ContainerInje
   }
 
   /**
-   * Returns current user.
+   * Override getEntity()
+   *
+   * @return \Drupal\Core\Session\AccountProxyInterface
+   *   returns current user.
    */
   public function getEntity(): AccountProxyInterface {
     return $this->currentUser;
   }
 
   /**
-   * {@inheritdoc}
+   * Config names.
+   *
+   * @return string[]
+   *   returns config namres
    */
   protected function getEditableConfigNames(): array {
     return [
