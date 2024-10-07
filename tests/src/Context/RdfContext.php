@@ -40,7 +40,7 @@ class RdfContext extends RawDrupalContext {
     $subjects = $rows = [];
     // Run some queries in order to get the actual bnode IDs from the database
     // and manage to assert the triples properly.
-    $tableRows = $this->parseEifData($triples->getHash());
+    $tableRows = $this->parseDataWithBnodes($triples->getHash());
     foreach ($tableRows as $triple) {
       // Allow to skip the changed date because when performing CRUD operations
       // on an entity, other entities are affected. For example, updating a
@@ -94,7 +94,14 @@ class RdfContext extends RawDrupalContext {
    *   The rows to check the triples with the blank nodes replaced by their
    *   actual blank node values in the database.
    */
-  protected function parseEifData(array $rows): array {
+  protected function parseDataWithBnodes(array $rows): array {
+    // $triplesWithBnodesAsSubject will be used to verify that the triples
+    // exist by unsetting values found. The $subjects will be used to assert
+    // that in the requested data, the amount of bnodes subjects and objects
+    // are the same. The $triplesWithBnodesAsObject are the actual data to check
+    // against in order to unset the values from the
+    // $triplesWithBnodesAsSubject. The $objects will be used to identify the
+    // subject and the predicate that the blank node is referred by.
     $triplesWithBnodesAsSubject = $triplesWithBnodesAsObject = $subjects = $objects = [];
     foreach ($rows as $index => $row) {
       if (str_starts_with($row['subject'], 'bnode:')) {
@@ -109,9 +116,7 @@ class RdfContext extends RawDrupalContext {
         }
         // The subject here is the entity referencing the bnode.
         $objects[$row['subject']][$row['object']] = [
-          // The predicate of the bnode.
           'predicate' => $row['predicate'],
-          // The bnode.
           'object' => $row['object'],
         ];
       }
@@ -131,15 +136,16 @@ class RdfContext extends RawDrupalContext {
     // Start from the objects. Get all data from the database for the given
     // subject and the given predicate, but also get the blank node data.
     $queryTemplate = <<<SPARQL
-SELECT ?s ?o ?bnpredicate ?bnobject WHERE {
-  GRAPH ?g {
-    ?s ?p ?o .
-    ?o ?bnpredicate ?bnobject .
-    FILTER (?s IN (<%s>))
-    FILTER (?p IN (<%s>))
-  }
-}
-SPARQL;
+      SELECT ?s ?o ?bnpredicate ?bnobject
+      WHERE {
+        GRAPH ?g {
+          ?s ?p ?o .
+          ?o ?bnpredicate ?bnobject .
+          FILTER (?s IN (<%s>))
+          FILTER (?p IN (<%s>))
+        }
+      }
+    SPARQL;
 
     $findSubject = function (array $subjects, string $object): ?string {
       foreach ($subjects as $subject => $objects) {
@@ -181,6 +187,13 @@ SPARQL;
           if ($serializedActual === $serializedExpected) {
             unset($triplesWithBnodesAsSubject[$bnodeIndex]);
             unset($bnodedResults[$resultsIndex]);
+            // The reason we are keeping the bnodes found here is because we
+            // might unset more triples than the foreach was designed to do.
+            // This is because if a given subject is referring more than one
+            // bnodes for the same predicate, we will get all of them back and
+            // all of them will be asserted. The foreach will then go to the
+            // next bnode and try to assert it again, but it will not find it
+            // because it was already asserted.
             $bnodesFound[] = $bnodeIndex;
           }
         }
@@ -191,9 +204,15 @@ SPARQL;
       }
     }
 
-    // Assert that all bnodes were found and the values were matched.
+    // The ExpectationFailedException above asserts that the triples fetched
+    // from the database do not exceed the number of expected triples. The check
+    // above is happening for all requested subjects individually, but the
+    // result works as a total because all of them are checked eventually. The
+    // assertion below, asserts that all requested triples were found in the
+    // database - The triples fetched from the database are not less than the
+    // expected. As a derivative, the number of the expected data and found data
+    // are the same.
     assertCount(0, $triplesWithBnodesAsSubject, 'The triples with blank nodes as subject were not found');
-
     return $rows;
   }
 
