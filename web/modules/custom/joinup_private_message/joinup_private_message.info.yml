@@ -5,4 +5,3 @@ package: Joinup
 core_version_requirement: ">= 10.3"
 dependencies:
   - private_message_notify:private_message_notify
-  - joinup_user:joinup_user
