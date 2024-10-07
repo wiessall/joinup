@@ -28,7 +28,14 @@ class RelevantField extends FieldItemList {
    *
    * @const string
    */
-  const SOURCE_FIELDS_SETTING_KEY = 'eu_oss_catalogue_source_fields';
+  const string SOURCE_FIELDS_SETTING_KEY = 'eu_oss_catalogue_source_fields';
+
+  /**
+   * The configuration key storing the name of the richest option.
+   *
+   * @const string
+   */
+  const string RICHEST_FIELDS_SETTING_KEY = 'eu_oss_catalogue_source_richest';
 
   /**
    * {@inheritdoc}
@@ -49,13 +56,16 @@ class RelevantField extends FieldItemList {
    *   entity or the field definition is not properly configured.
    */
   protected function getSourceField(): ?FieldItemListInterface {
-    if ($fieldName = $this->getSourceFieldName()) {
-      return $this->getEntity()
-        ->getTranslation($this->getRichestLanguageCode())
-        ->get($fieldName);
+    if (!$fieldName = $this->getSourceFieldName()) {
+      return NULL;
     }
 
-    return NULL;
+    $entity = $this->getEntity();
+    if ($this->useRichestTranslation()) {
+      $entity = $entity->getTranslation($this->getRichestLanguageCode());
+    }
+
+    return $entity->get($fieldName);
   }
 
   /**
@@ -69,8 +79,11 @@ class RelevantField extends FieldItemList {
    *   If an invalid field name is configured.
    */
   protected function getSourceFieldName(): ?string {
-    $languageCode = $this->getRichestLanguageCode();
-    $ossSolution = $this->getEntity()->getTranslation($languageCode);
+    $ossSolution = $this->getEntity();
+    if ($this->useRichestTranslation()) {
+      $ossSolution = $ossSolution
+        ->getTranslation($this->getRichestLanguageCode());
+    }
     \assert($ossSolution instanceof OssSolutionInterface);
     foreach ((array) $this->definition->getSetting(static::SOURCE_FIELDS_SETTING_KEY) as $fieldName) {
       if ($ossSolution->get($fieldName)->isEmpty()) {
@@ -96,10 +109,20 @@ class RelevantField extends FieldItemList {
    * {@inheritdoc}
    */
   public function postSave($update): bool {
-    // Force recompute after save.
+    // Force re-compute after save.
     $this->valueComputed = FALSE;
     $this->list = [];
     return parent::postSave($update);
+  }
+
+  /**
+   * Checks if we want to use the richest translation.
+   *
+   * @return bool
+   *   TRUE in case use the richest translation.
+   */
+  protected function useRichestTranslation(): bool {
+    return (bool) $this->definition->getSetting(static::RICHEST_FIELDS_SETTING_KEY);
   }
 
 }
