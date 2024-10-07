@@ -50,6 +50,11 @@ abstract class FetchTestBase extends BrowserTestBase {
   protected array $controlledVocabTerms = [];
 
   /**
+   * Module dir.
+   */
+  public ?string $dir = NULL;
+
+  /**
    * {@inheritdoc}
    */
   protected function setUp(): void {
@@ -71,6 +76,8 @@ abstract class FetchTestBase extends BrowserTestBase {
     // Add Italian and German languages.
     ConfigurableLanguage::createFromLangcode('it')->save();
     ConfigurableLanguage::createFromLangcode('de')->save();
+
+    $this->dir = __DIR__;
   }
 
   /**
@@ -121,7 +128,7 @@ abstract class FetchTestBase extends BrowserTestBase {
     // The first trace entry (0) is this method, the second (1) is its caller,
     // which is an assertion. The third (2) is the test method.
     $parts = explode('\\', $trace[2]['class']);
-    $filePath = __DIR__ . '/../../fixtures/expectancy/' . array_pop($parts) . '.' . $trace[2]['function'] . '.yml';
+    $filePath = $this->dir . '/../../fixtures/expectancy/' . array_pop($parts) . '.' . $trace[2]['function'] . '.yml';
     $this->assertFileExists($filePath);
     $expected = Yaml::decode(file_get_contents($filePath))[$nodeTitle];
     $this->assertIsArray($expected);
