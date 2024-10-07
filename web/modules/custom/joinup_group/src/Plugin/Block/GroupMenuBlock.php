@@ -172,14 +172,14 @@ class GroupMenuBlock extends OgMenuBlock {
     }
 
     $disabled_message = '';
-    if ($menu_instance && $menu_instance->bundle() === 'navigation') {
+    if ($menu_instance instanceof OgMenuInstanceInterface && $menu_instance->bundle() === 'navigation') {
       $disabled_message = $this->t('All the pages have been disabled for this :type. You can <a href=":edit_menu_url">edit the menu configuration</a> or <a href=":add_page_url">add a new page</a>.', [
         ':type' => $group->get('type')->entity->getSingularLabel(),
         ':edit_menu_url' => $edit_navigation_menu_url,
         ':add_page_url' => $create_custom_page_url->toString(),
       ]);
     }
-    elseif ($menu_instance && $menu_instance->bundle() === 'quick_links') {
+    elseif ($menu_instance instanceof OgMenuInstanceInterface && $menu_instance->bundle() === 'quick_links') {
       $disabled_message = $this->t('There are not any links to show. You can manage the quick links
       items through the <a href=":edit_menu_url">Edit menu</a>
       or you can add your links through the <a href=":group_edit">Edit page</a>.', [

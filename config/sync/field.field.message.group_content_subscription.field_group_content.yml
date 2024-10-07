@@ -70,6 +70,9 @@ settings:
   entity_subqueue:
     handler: 'default:entity_subqueue'
     handler_settings: {  }
+  hosting_platform:
+    handler: 'default:hosting_platform'
+    handler_settings: {  }
   facets_facet:
     handler: 'default:facets_facet'
     handler_settings: {  }
@@ -102,9 +105,6 @@ settings:
     handler_settings: {  }
   geocoder_provider:
     handler: 'default:geocoder_provider'
-    handler_settings: {  }
-  hosting_platform:
-    handler: 'default:hosting_platform'
     handler_settings: {  }
   image_style:
     handler: 'default:image_style'
@@ -255,6 +255,21 @@ settings:
     handler_settings: {  }
   theme_rule:
     handler: 'default:theme_rule'
+    handler_settings: {  }
+  tmgmt_job:
+    handler: 'default:tmgmt_job'
+    handler_settings: {  }
+  tmgmt_message:
+    handler: 'default:tmgmt_message'
+    handler_settings: {  }
+  tmgmt_remote:
+    handler: 'default:tmgmt_remote'
+    handler_settings: {  }
+  tmgmt_translator:
+    handler: 'default:tmgmt_translator'
+    handler_settings: {  }
+  tmgmt_job_item:
+    handler: 'default:tmgmt_job_item'
     handler_settings: {  }
   tour:
     handler: 'default:tour'

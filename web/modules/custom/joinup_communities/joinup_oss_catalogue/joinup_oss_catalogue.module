@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
+use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\block\BlockInterface;
@@ -282,6 +283,15 @@ function joinup_oss_catalogue_toggle(string $toggle): void {
 
   // The 'Explore' block caches is time-based (6h). Explicitly clear the cache.
   \Drupal::getContainer()->get('cache_tags.invalidator')->invalidateTags(['homepage_explore_block']);
+}
+
+/**
+ * Implements hook_tmgmt_translatable_fields_alter().
+ */
+function joinup_oss_catalogue_tmgmt_translatable_fields_alter(ContentEntityInterface $entity, array &$translatableFields): void {
+  if ($entity instanceof OssSolutionInterface && isset($translatableFields['metatag'])) {
+    unset($translatableFields['metatag']);
+  }
 }
 
 /**
