@@ -1,0 +1,10 @@
+name: 'EU OSS Translation Test'
+type: module
+description: 'Test module to mock eTranslation service.'
+core_version_requirement: ^9 || ^10
+package: Testing
+dependencies:
+  - drupal:tmgmt
+  - drupal:tmgmt_ec_etranslation
+  - http_request_mock:http_request_mock
+  - tmgmt_ec_etranslation:tmgmt_ec_etranslation_test

@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_group\Entity;
 
+use Drupal\Core\Database\Query\SelectInterface;
 use Drupal\joinup_workflow\EntityWorkflowStateTrait;
 use Drupal\message\Entity\Message;
+use Drupal\og\OgMembershipInterface;
 
 /**
  * Bundle class for announcement messages.
@@ -92,6 +94,74 @@ class Announcement extends Message implements AnnouncementInterface {
    */
   protected function getGroupFieldName(): string {
     return 'group';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getRecipients(int $offset, int $limit): array {
+    return $this->getRecipientsQuery()
+      ->range($offset, $limit)
+      ->execute()
+      ->fetchCol();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getRecipientsCount(): int {
+    return (int) $this->getRecipientsQuery()
+      ->countQuery()
+      ->execute()
+      ->fetchField();
+  }
+
+  /**
+   * Provides a helper function preparing a query.
+   *
+   * @return \Drupal\Core\Database\Query\SelectInterface
+   *   The database query.
+   */
+  protected function getRecipientsQuery(): SelectInterface {
+    $group = $this->getGroup();
+
+    $query = \Drupal::database()->select('og_membership', 'og');
+    $query->join('users_field_data', 'u', 'og.uid = u.uid');
+    // Only users which accepted the 'Legal notice' are receiving announcements.
+    $query->join('entity_legal_document_acceptance', 'a', 'og.uid = a.uid');
+
+    if ($professionalDomainIds = $this->getProfessionalDomainIds()) {
+      $query->join('user__field_user_professional_domain', 'pd', 'u.uid = pd.entity_id');
+      $query->condition('pd.field_user_professional_domain_target_id', $professionalDomainIds, 'IN');
+    }
+
+    return $query->condition('og.entity_type', 'rdf_entity')
+      ->fields('u', ['mail'])
+      ->distinct()
+      ->condition('og.entity_bundle', $group->bundle())
+      ->condition('og.entity_id', $group->id())
+      ->condition('og.state', OgMembershipInterface::STATE_ACTIVE)
+      ->condition('og.announcements', 1)
+      ->condition('u.status', 1)
+      ->orderBy('u.mail');
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setProfessionalDomains(array $ids): self {
+    $this->set('professional_domain', $ids);
+    return $this;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getProfessionalDomainIds(): array {
+    return array_map(
+      fn(array $value) => $value['target_id'],
+      $this->get('professional_domain')->getValue(),
+    );
   }
 
 }
