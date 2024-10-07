@@ -23,7 +23,7 @@ Feature: Archived content on content listings - groups and paragraphs.
     # We need the "Archived news" content to be archived by altering its state
     # because "Unarchiving" it restored the previous revision and thus, needs
     # to have a previous revision (created as published).
-    And the workflow state of the "Archived news" content is set to "archived"
+    And the workflow state of the "Archived news" content is changed to "archived"
 
   Scenario: Collection content listing can control archived content visibility.
     Given solution content:

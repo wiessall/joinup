@@ -83,7 +83,7 @@ Feature: Cloning of entities
     When I fill in "New label (English)" with "This is the new title of the content"
     And I press "Clone content"
     Then I should see the heading "Edit Custom page This is the new title of the content"
-    And the workflow state of the "This is the new title of the content" content is set to "draft"
+    And the workflow state of the "This is the new title of the content" content is changed to "draft"
     And I should see the text "<group label> custom page content" in the "Layout paragraphs widget" region
     And I should see the following success messages:
       | success messages                                                                                                |

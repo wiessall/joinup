@@ -12,7 +12,7 @@ Feature: Sitewide forum
       | Quite new discussion     | published | 2024-05-05 | 2024-05-05 | 2024-05-05   |
       | Very new discussion      | published | 2024-06-06 | 2024-06-06 | 2024-06-06   |
       | Archived discussion      | published |            |            |              |
-    And the workflow state of the "Archived discussion" content is set to "archived"
+    And the workflow state of the "Archived discussion" content is changed to "archived"
     And user:
       | Username | Commenter |
     And comments:
