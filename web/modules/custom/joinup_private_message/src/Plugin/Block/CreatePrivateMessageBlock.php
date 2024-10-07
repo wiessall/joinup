@@ -70,6 +70,11 @@ class CreatePrivateMessageBlock extends BlockBase implements ContainerFactoryPlu
         ->get('create_message_label'),
       '#url' => $url,
       '#attributes' => _joinup_private_message_get_ajax_modal_attributes(),
+      '#attached' => [
+        'library' => [
+          'core/drupal.dialog.ajax',
+        ],
+      ],
     ];
 
     return $block;
