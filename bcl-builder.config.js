@@ -858,6 +858,21 @@ module.exports = {
     {
       entry: path.resolve(
         outputFolder,
+        `${ventuno}src/scss/components/private-message.scss`,
+      ),
+      dest: path.resolve(
+        outputFolder,
+        `${ventuno}assets/css/private-message.min.css`,
+      ),
+      options: {
+        includePaths,
+        minify: true,
+        sourceMap: "file",
+      },
+    },
+    {
+      entry: path.resolve(
+        outputFolder,
         `${ventuno}src/scss/components/carousel.scss`,
       ),
       dest: path.resolve(outputFolder, `${ventuno}assets/css/carousel.min.css`),

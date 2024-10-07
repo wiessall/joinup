@@ -1,0 +1,30 @@
+uuid: 922f7945-f457-4a27-b77c-53eca85d902a
+langcode: en
+status: true
+dependencies:
+  module:
+    - tmgmt_ec_etranslation
+name: ec_etranslation
+label: 'European Commission eTranslation'
+description: "Allows the European Commission's eTranslation service to process translation jobs."
+auto_accept: true
+weight: null
+plugin: ec_etranslation
+settings:
+  username: ''
+  password: ''
+  domain: SPD
+  email: ''
+  callback_hostname: ''
+remote_languages_mappings:
+  cs: cs
+  da: da
+  nl: nl
+  en: en
+  et: et
+  fr: fr
+  de: de
+  el: el
+  it: it
+  sl: sl
+  es: es
