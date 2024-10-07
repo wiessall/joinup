@@ -361,3 +361,14 @@ Feature:
     And I wait for CSS animations to finish
     And I should not see the image "99ccd804281fede2d4e3dcc3a9b30a4c.png"
     And I should see a ".slick--optionset--image-gallery button[aria-label='Previous'][aria-disabled='true']" element
+
+  # Regression test for ISAICP-9113 ticket.
+  Scenario Outline: SparQL parameter does not throws exception when converting missing type
+    When I go to "<path>"
+    Then I should get a 404 HTTP response
+
+    Examples:
+      | path                      |
+      | /modal/foo/modal/bar/like |
+      | /feature/foo/bar/add      |
+      | /feature/foo/bar/remove   |
