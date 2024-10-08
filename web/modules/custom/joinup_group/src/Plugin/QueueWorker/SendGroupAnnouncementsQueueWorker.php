@@ -112,9 +112,8 @@ class SendGroupAnnouncementsQueueWorker extends QueueWorkerBase implements Conta
         $queue->createQueue();
         $offset = 0;
         $limit = 250;
-        $group = $announcement->getGroup();
         // Don't allow queue entries with tens of thousands of recipients.
-        while ($recipients = $group->getAnnouncementRecipients($offset, $limit)) {
+        while ($recipients = $announcement->getRecipients($offset, $limit)) {
           $queue->createItem([
             'announcement' => (int) $announcement->id(),
             'recipients' => $recipients,
