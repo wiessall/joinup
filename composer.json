@@ -32,7 +32,7 @@
         "drupal/core-composer-scaffold": "~10.3.0",
         "drupal/custom_markup_block": "^1.2",
         "drupal/default_content": "^2.0",
-        "drupal/diff": "~1.0",
+        "drupal/diff": "^1.8",
         "drupal/digital_size_formatter": "~2.0",
         "drupal/dropsolid_purge": "^1.0@beta",
         "drupal/dynamic_entity_reference": "^4.0",
@@ -112,6 +112,7 @@
         "drupal/svg_image": "^3.0",
         "drupal/symfony_mailer_lite": "^1.0",
         "drupal/theme_rule": "^1.0",
+        "drupal/tmgmt_ec_etranslation": "^1.1",
         "drupal/token": "~1.7",
         "drupal/video_embed_field": "^2",
         "drupal/view_unpublished": "^1.0",
@@ -197,6 +198,12 @@
             "php-http/discovery": true,
             "ec-europa/toolkit-composer-plugin": true,
             "phpro/grumphp-shim": true
+        },
+        "audit": {
+            "abandoned": "report",
+            "ignore": {
+                "CVE-2024-45440": "Seems to be a disputed report @see https://www.drupal.org/i/3471501#comment-15756190"
+            }
         }
     },
     "autoload": {
@@ -423,6 +430,7 @@
             },
             "drupal/private_message": {
                 "Add missing fields to private message thread members formatter settings @see https://www.drupal.org/i/3470928": "resources/patch/php/drupal/private_message/3470928.diff",
+                "404 for get_new_unread_message_count request @see https://www.drupal.org/i/3478456": "resources/patch/php/drupal/private_message/3478456.patch",
                 "Javascript files loaded twice @see https://www.drupal.org/i/3054106": "resources/patch/php/drupal/private_message/3054106.diff"
             },
             "drupal/publication_date": {
