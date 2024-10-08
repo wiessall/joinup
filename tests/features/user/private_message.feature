@@ -68,6 +68,10 @@ Feature: Private messages
     Then I should see the following texts in private messages:
       | This is a private message to Bob.   |
       | This is a private message to Alice. |
+    # Regression test for ISAICP-9130: second click impacts modal.
+    When I click "Hello Bob" in thread message card
+    And I click "New Message"
+    Then a modal should open
 
   Scenario: Check a user without messages
     Given I am logged in as "alice_m"
