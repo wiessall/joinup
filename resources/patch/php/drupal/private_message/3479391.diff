@@ -1,0 +1,36 @@
+diff --git a/js/private_message_thread.js b/js/private_message_thread.js
+index e63d3cfda3afc3b42e9780d83765b0b59447bfee..3d934b89ad423fb51ebfe958265a1cb4372d4d22 100644
+--- a/js/private_message_thread.js
++++ b/js/private_message_thread.js
+@@ -254,7 +254,7 @@ Drupal.PrivateMessages.threadChange = {};
+ 
+       // Change the URl if using a browser that allows it.
+       if (pushHistory) {
+-        Drupal.history.push({threadId: threadId}, $('title').text(), '/private-messages/' + threadId);
++        Drupal.history.push({threadId: threadId}, $('title').text(), drupalSettings.privateMessageThread.threadUrl);
+       }
+     }
+   }
+diff --git a/src/Plugin/Field/FieldFormatter/PrivateMessageThreadMessageFormatter.php b/src/Plugin/Field/FieldFormatter/PrivateMessageThreadMessageFormatter.php
+index 9116c583c7071502098044566781f0f80c04eca6..8f7a7aa51f4ada7e05288c6cc5e58f0f74663d48 100644
+--- a/src/Plugin/Field/FieldFormatter/PrivateMessageThreadMessageFormatter.php
++++ b/src/Plugin/Field/FieldFormatter/PrivateMessageThreadMessageFormatter.php
+@@ -250,6 +250,10 @@ class PrivateMessageThreadMessageFormatter extends FormatterBase implements Cont
+       $element = array_reverse($element);
+     }
+ 
++    $thread_url = Url::fromRoute('entity.private_message_thread.canonical',
++      ['private_message_thread' => $private_message_thread->id()]
++    );
++
+     $new_url = Url::fromRoute('private_message.ajax_callback', ['op' => 'get_new_messages']);
+     $token = $this->csrfTokenGenerator->get($new_url->getInternalPath());
+     $new_url->setOptions(['query' => ['token' => $token]]);
+@@ -264,6 +268,7 @@ class PrivateMessageThreadMessageFormatter extends FormatterBase implements Cont
+ 
+     $element['#attached']['drupalSettings']['privateMessageThread'] = [
+       'threadId' => (int) $private_message_thread->id(),
++      'threadUrl' => $thread_url->toString(),
+       'newMessageCheckUrl' => $new_url->toString(),
+       'previousMessageCheckUrl' => $prev_url->toString(),
+       'messageOrder' => $this->getSetting('message_order'),
