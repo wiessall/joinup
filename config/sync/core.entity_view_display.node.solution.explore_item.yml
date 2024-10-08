@@ -116,7 +116,23 @@ third_party_settings:
                   template_suggestion:
                     template_suggestion: ''
             weight: 1
-            additional: {  }
+            additional:
+              component_attributes:
+                block_attributes:
+                  id: ''
+                  class: date
+                  style: ''
+                  data: ''
+                block_title_attributes:
+                  id: ''
+                  class: ''
+                  style: ''
+                  data: ''
+                block_content_attributes:
+                  id: ''
+                  class: ''
+                  style: ''
+                  data: ''
           43c5fe98-a110-493c-82bf-8a5c9a930274:
             uuid: 43c5fe98-a110-493c-82bf-8a5c9a930274
             region: content
