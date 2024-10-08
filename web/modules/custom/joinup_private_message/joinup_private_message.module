@@ -92,13 +92,16 @@ function _joinup_private_message_get_ajax_modal_attributes(): array {
 
 /**
  * Implements hook_block_access().
+ *
+ * @return \Drupal\Core\Access\AccessResult
+ *   returns AccessResult
  */
-function joinup_private_message_block_access(Block $block, $account) {
+function joinup_private_message_block_access(Block $block, $account): AccessResult {
   if ($block->id() == 'ventuno_views_block__private_message_ban_settings_block_1') {
     $route_name = \Drupal::routeMatch()->getRouteName();
     if ($route_name === 'joinup_private_message.private_message_settings_page') {
       return AccessResult::allowed();
     }
-    return AccessResult::forbidden();
   }
+  return AccessResult::forbidden();
 }

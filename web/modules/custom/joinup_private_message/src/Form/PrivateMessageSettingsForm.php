@@ -4,15 +4,33 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_private_message\Form;
 
-use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\user\UserDataInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Private message mail notification settings.
  */
-class PrivateMessageSettingsForm extends FormBase implements ContainerInjectionInterface {
+class PrivateMessageSettingsForm extends FormBase {
+
+  /**
+   * Constructs a PrivateMessageSettingsForm object.
+   *
+   * @param \Drupal\user\UserDataInterface $userData
+   *   The user data service.
+   */
+  public function __construct(protected UserDataInterface $userData) {}
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('user.data')
+    );
+  }
 
   /**
    * {@inheritdoc}
@@ -44,7 +62,6 @@ class PrivateMessageSettingsForm extends FormBase implements ContainerInjectionI
    */
   public function submitForm(array &$form, FormStateInterface $form_state): void {
     $uid = $this->currentUser()->id();
-    $userData = \Drupal::service('user.data');
     $settings = [
       'receive_notification' => $form_state->getValue(['private_messages', 'receive_notification']),
       'notify_when_using' => $form_state->getValue(['private_messages', 'notify_when_using']),
@@ -56,7 +73,7 @@ class PrivateMessageSettingsForm extends FormBase implements ContainerInjectionI
     ];
 
     foreach ($settings as $key => $value) {
-      $userData->set('private_message', $uid, $key, $value);
+      $this->userData->set('private_message', $uid, $key, $value);
     }
     $this->messenger()->addStatus($this->t('Private message settings were stored'));
   }
