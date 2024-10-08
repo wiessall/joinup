@@ -93,8 +93,7 @@ function _joinup_private_message_get_ajax_modal_attributes(): array {
 /**
  * Implements hook_block_access().
  *
- * @return \Drupal\Core\Access\AccessResult
- *   returns AccessResult
+ *  {@inheritdoc}
  */
 function joinup_private_message_block_access(Block $block, $account): AccessResult {
   if ($block->id() == 'ventuno_views_block__private_message_ban_settings_block_1') {
