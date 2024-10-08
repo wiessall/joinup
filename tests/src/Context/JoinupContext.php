@@ -1216,26 +1216,15 @@ class JoinupContext extends RawDrupalContext {
   /**
    * Checks the current workflow state on the given entity.
    *
-   * @param string $type
-   *   The entity type ID of the entity.
+   * @param string $label
+   *    The label of the entity.
    * @param string $stateExpected
    *   The expected workflow state's label.
-   * @param string|null $label
-   *   The label of the entity.
-   * @param string|null $id
-   *   The ID of the entity.
    *
-   * @Given the workflow state of the :label :type should be :stateExpected
-   * @Given the workflow state of the :type with ID :id should be :stateExpected
+   * @Given the workflow state of the :label content should be :stateExpected
    */
-  public function assertEntityWorkflowState(string $type, string $stateExpected, ?string $label = NULL, ?string $id = NULL): void {
-    $mapping = [
-      'content' => 'node',
-    ];
-    $entityTypeId = $mapping[$type] ?? static::translateEntityTypeAlias($type);
-    $entity = $label
-      ? $this->getEntityByLabel($entityTypeId, $label)
-      : $this->getEntityById($entityTypeId, $id);
+  public function assertEntityWorkflowState(string $label, string $stateExpected): void {
+    $entity = $this->getEntityByLabel('node', $label);
     Assert::assertInstanceOf(
       EntityWorkflowStateInterface::class,
       $entity,
@@ -1247,9 +1236,8 @@ class JoinupContext extends RawDrupalContext {
       $stateIdExpected,
       $actual = $entity->getWorkflowState(),
       sprintf(
-        "Workflow state of '%s' '%s' is different than expected. Expected state is '%s', while the actual one is '%s'.",
-        $label ?? $id,
-        $type,
+        "Workflow state of '%s' content is different than expected. Expected state is '%s', while the actual one is '%s'.",
+        $label,
         $stateIdExpected,
         $actual,
       )
