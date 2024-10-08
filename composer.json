@@ -431,7 +431,8 @@
             "drupal/private_message": {
                 "Add missing fields to private message thread members formatter settings @see https://www.drupal.org/i/3470928": "resources/patch/php/drupal/private_message/3470928.diff",
                 "404 for get_new_unread_message_count request @see https://www.drupal.org/i/3478456": "resources/patch/php/drupal/private_message/3478456.patch",
-                "Javascript files loaded twice @see https://www.drupal.org/i/3054106": "resources/patch/php/drupal/private_message/3054106.diff"
+                "Javascript files loaded twice @see https://www.drupal.org/i/3054106": "resources/patch/php/drupal/private_message/3054106.diff",
+                "Hardcoded URL @see https://www.drupal.org/i/3479391": "resources/patch/php/drupal/private_message/3479391.diff"
             },
             "drupal/publication_date": {
                 "Expand Publication Date to all Entity Types @see https://www.drupal.org/project/publication_date/issues/3219401": "resources/patch/php/drupal/publication_date/3219401-18.patch"
