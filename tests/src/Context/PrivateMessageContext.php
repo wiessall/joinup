@@ -8,6 +8,7 @@ use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Element\NodeElement;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\JavascriptTrait;
+use Drupal\joinup\Traits\UserTrait;
 use Drupal\private_message\Entity\PrivateMessageBan;
 
 /**
@@ -16,6 +17,7 @@ use Drupal\private_message\Entity\PrivateMessageBan;
 class PrivateMessageContext extends RawDrupalContext {
 
   use JavascriptTrait;
+  use UserTrait;
 
   /**
    * Checks that the specified number of private messages are present.
@@ -228,7 +230,7 @@ class PrivateMessageContext extends RawDrupalContext {
    *   The collection data.
    *
    * @throws \Exception
-   *    Thrown when a column name is incorrect.
+   *   Thrown when a column name is incorrect.
    *
    * @Given the following private message bans:
    */
@@ -237,9 +239,9 @@ class PrivateMessageContext extends RawDrupalContext {
       // Create a new private message ban entity.
       $ban = PrivateMessageBan::create([
         // Get the user ID based on username.
-        'owner' => $this->getUserIdByName($row['owner']),
+        'owner' => $this->getUserByName($row['owner'])->id(),
         // Get the banned user ID.
-        'target' => $this->getUserIdByName($row['target']),
+        'target' => $this->getUserByName($row['target'])->id(),
         // Convert string date to timestamp.
         'created' => strtotime($row['created']),
       ]);
@@ -247,23 +249,6 @@ class PrivateMessageContext extends RawDrupalContext {
       // Save the entity.
       $ban->save();
     }
-  }
-
-  /**
-   * Gets user ID by name.
-   *
-   * @param string $username
-   *   Username parameter.
-   *
-   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
-   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
-   */
-  protected function getUserIdByName($username): ?string {
-    $users = \Drupal::entityTypeManager()->getStorage('user')->loadByProperties(['name' => $username]);
-    if ($user = reset($users)) {
-      return $user->id();
-    }
-    throw new \Exception("User with username '$username' does not exist.");
   }
 
 }
