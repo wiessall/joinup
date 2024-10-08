@@ -99,10 +99,10 @@ Feature: When a solution is archived then its sub-content also should be archive
     And the workflow state of the "Solution Custom page 1" content should be "archived"
     And the workflow state of the "Solution Custom page 2" content should be "draft"
     And the workflow state of the "Solution Custom page 3" content should be "archived"
-    And the workflow state of the "Solution Distribution" "content" should be "archived"
-    And the workflow state of the "Solution Release 1" "content" should be "archived"
-    And the workflow state of the "Solution Release 2" "content" should be "draft"
-    And the workflow state of the "Solution Release 3" "content" should be "archived"
+    And the workflow state of the "Solution Distribution" content should be "archived"
+    And the workflow state of the "Solution Release 1" content should be "archived"
+    And the workflow state of the "Solution Release 2" content should be "draft"
+    And the workflow state of the "Solution Release 3" content should be "archived"
     And the string value of the "revision_log" field in "Solution Discussion" content should be "Updated state to 'archived' by 'solution_archive_related_content' queue, from revision ID '<placeholder>' with state 'published'."
     And 2 e-mails should have been sent
     And the following email should have been sent:
@@ -195,10 +195,10 @@ Feature: When a solution is archived then its sub-content also should be archive
     And the workflow state of the "Solution Custom page 1" content should be "published"
     And the workflow state of the "Solution Custom page 2" content should be "draft"
     And the workflow state of the "Solution Custom page 3" content should be "published"
-    And the workflow state of the "Solution Distribution" "content" should be "published"
-    And the workflow state of the "Solution Release 1" "content" should be "published"
-    And the workflow state of the "Solution Release 2" "content" should be "draft"
-    And the workflow state of the "Solution Release 3" "content" should be "published"
+    And the workflow state of the "Solution Distribution" content should be "published"
+    And the workflow state of the "Solution Release 1" content should be "published"
+    And the workflow state of the "Solution Release 2" content should be "draft"
+    And the workflow state of the "Solution Release 3" content should be "published"
     And the string value of the "revision_log" field in "Solution Discussion" content should be "Updated state to 'published' by 'solution_archive_related_content' queue, from revision ID '<placeholder>' with state 'archived'."
 
     When I go to the homepage of the "Solution" solution
