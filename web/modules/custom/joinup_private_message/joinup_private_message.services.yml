@@ -3,7 +3,3 @@ services:
     class: Drupal\joinup_private_message\Routing\PrivateMessageRouteSubscriber
     tags:
       - { name: event_subscriber }
-  joinup_private_message.private_message_not_found_controller:
-    class: Drupal\joinup_private_message\Controller\PrivateMessageNotFoundController
-    tags:
-      - { name: controller.service_arguments }
