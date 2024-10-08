@@ -8,9 +8,11 @@
 declare(strict_types=1);
 
 use Drupal\Component\Serialization\Json;
+use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\block\Entity\Block;
 
 /**
  * Implements hook_form_alter().
@@ -86,4 +88,17 @@ function _joinup_private_message_get_ajax_modal_attributes(): array {
       'width' => 'auto',
     ]),
   ];
+}
+
+/**
+ * Implements hook_block_access().
+ */
+function joinup_private_message_block_access(Block $block, $account) {
+  if ($block->id() == 'ventuno_views_block__private_message_ban_settings_block_1') {
+    $route_name = \Drupal::routeMatch()->getRouteName();
+    if ($route_name === 'joinup_private_message.private_message_settings_page') {
+      return AccessResult::allowed();
+    }
+    return AccessResult::forbidden();
+  }
 }

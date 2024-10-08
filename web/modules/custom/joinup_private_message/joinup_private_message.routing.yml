@@ -1,13 +1,12 @@
 joinup_private_message.private_message_settings_page:
   path: '/user/messages/settings'
   defaults:
-    _controller: '\Drupal\joinup_private_message\Controller\PrivateMessageSettingsController::privateMessageSettingsPage'
+    _form: '\Drupal\joinup_private_message\Form\PrivateMessageSettingsForm'
     _title: 'Private Messages'
   requirements:
-    _permission: 'use private messaging system,access user profiles'
     _user_is_logged_in: 'TRUE'
   options:
-    no_cache: 'TRUE'
+    no_cache: 'FALSE'
 joinup_private_message.unblock:
   path: '/user/messages/settings/unblock/{private_message_ban}'
   defaults:

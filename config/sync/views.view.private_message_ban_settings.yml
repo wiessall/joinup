@@ -122,7 +122,7 @@ display:
       tags: {  }
   block_1:
     id: block_1
-    display_title: Block
+    display_title: 'Private message ban settings'
     display_plugin: block
     position: 1
     display_options:
@@ -397,6 +397,7 @@ display:
           plugin_id: standard
           required: true
       use_ajax: true
+      display_description: ''
       display_extenders:
         metatag_display_extender:
           metatags: {  }
