@@ -39,6 +39,6 @@ Feature: Private message report.
     And a modal should open
     When I enter "I want to report this message" in the "Report" textarea
     And I check "Also block this sender"
-    And I press "Send"
+    And I press "Send" in the "Modal content" region
     And I am on "/user/messages"
     And I should not see the link "Report"
