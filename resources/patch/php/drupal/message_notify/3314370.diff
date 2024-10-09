@@ -1,6 +1,6 @@
 diff --git a/src/Event/MessageNotifyDeliveryEvent.php b/src/Event/MessageNotifyDeliveryEvent.php
 new file mode 100644
-index 0000000..2e25e4e
+index 0000000000000000000000000000000000000000..2e25e4e0a714667e67e06c2d2fb0b1c1aa7a4ac5
 --- /dev/null
 +++ b/src/Event/MessageNotifyDeliveryEvent.php
 @@ -0,0 +1,65 @@
@@ -70,7 +70,7 @@ index 0000000..2e25e4e
 +
 +}
 diff --git a/src/Plugin/Notifier/Email.php b/src/Plugin/Notifier/Email.php
-index 97949cf..45dfc21 100644
+index a644a6402907cd82fc2d1dcd7a9503e4d9aa30bc..1779231a947ae62c01cba29c3d096b8e9ece574b 100644
 --- a/src/Plugin/Notifier/Email.php
 +++ b/src/Plugin/Notifier/Email.php
 @@ -9,6 +9,7 @@ use Drupal\Core\Render\RendererInterface;
@@ -80,7 +80,7 @@ index 97949cf..45dfc21 100644
 +use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
  
  /**
-  * Email notifier.
+  * Email notifier plugin.
 @@ -53,8 +54,10 @@ class Email extends MessageNotifierBase {
     *   ::setMessage().
     * @param \Drupal\Core\Mail\MailManagerInterface $mail_manager
@@ -102,7 +102,7 @@ index 97949cf..45dfc21 100644
  
      $this->mailManager = $mail_manager;
    }
-@@ -86,26 +89,29 @@ class Email extends MessageNotifierBase {
+@@ -86,8 +89,7 @@ class Email extends MessageNotifierBase {
    /**
     * {@inheritdoc}
     */
@@ -110,10 +110,9 @@ index 97949cf..45dfc21 100644
 -    /** @var \Drupal\user\UserInterface $account */
 +  protected function init(): void {
      $account = $this->message->getOwner();
--
-     if (!$this->configuration['mail'] && !$account->id()) {
-       // The message has no owner and no mail was passed. This will cause an
-       // exception, we just make sure it's a clear one.
+     $invalid_account = (!$account || (!$this->configuration['mail'] && !$account->id()));
+     if ($invalid_account) {
+@@ -96,16 +98,21 @@ class Email extends MessageNotifierBase {
        throw new MessageNotifyException('It is not possible to send a Message to an anonymous owner. You may set an owner using ::setOwner() or pass a "mail" to the $options array.');
      }
  
@@ -139,7 +138,7 @@ index 97949cf..45dfc21 100644
      // The subject in an email can't be with HTML, so strip it.
      $output['mail_subject'] = trim(strip_tags($output['mail_subject']));
  
-@@ -115,10 +121,10 @@ class Email extends MessageNotifierBase {
+@@ -115,10 +122,10 @@ class Email extends MessageNotifierBase {
      $result = $this->mailManager->mail(
        'message_notify',
        $this->message->getTemplate()->id(),
@@ -152,9 +151,9 @@ index 97949cf..45dfc21 100644
 +      $this->configuration['from']
      );
  
-     return isset($result['result']);
+     return $result['result'] ?? FALSE;
 diff --git a/src/Plugin/Notifier/MessageNotifierBase.php b/src/Plugin/Notifier/MessageNotifierBase.php
-index 77a93cb..7244a6d 100644
+index ee335f0be4b4ab8cc0a6c9a81ff9f246cd24c8bc..7246ad498e773badba7dc5ceb6c1e15d254ff279 100644
 --- a/src/Plugin/Notifier/MessageNotifierBase.php
 +++ b/src/Plugin/Notifier/MessageNotifierBase.php
 @@ -7,8 +7,10 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -236,7 +235,7 @@ index 77a93cb..7244a6d 100644
      $output = [];
  
      $view_builder = $this->entityTypeManager->getViewBuilder('message');
-@@ -182,4 +205,28 @@ abstract class MessageNotifierBase extends PluginBase implements MessageNotifier
+@@ -185,4 +208,28 @@ abstract class MessageNotifierBase extends PluginBase implements MessageNotifier
      $this->message = $message;
    }
  
@@ -266,7 +265,7 @@ index 77a93cb..7244a6d 100644
 +
  }
 diff --git a/src/Plugin/Notifier/MessageNotifierInterface.php b/src/Plugin/Notifier/MessageNotifierInterface.php
-index c45bc02..0cafc00 100644
+index c45bc02cb8e84ebc21acd7fe74c2d0275c9343be..0cafc00822321a112629f44b236d496a7a834486 100644
 --- a/src/Plugin/Notifier/MessageNotifierInterface.php
 +++ b/src/Plugin/Notifier/MessageNotifierInterface.php
 @@ -2,6 +2,7 @@
@@ -287,7 +286,7 @@ index c45bc02..0cafc00 100644
    /**
     * Entry point to send and process a message.
 diff --git a/tests/modules/message_notify_test/message_notify_test.info.yml b/tests/modules/message_notify_test/message_notify_test.info.yml
-index 2c32bab..a0e7786 100644
+index 2c32bab5726171ae52daf5876b46b89f938e2bc3..a0e7786c684043aaf1734a442dce4327348fc083 100644
 --- a/tests/modules/message_notify_test/message_notify_test.info.yml
 +++ b/tests/modules/message_notify_test/message_notify_test.info.yml
 @@ -1,6 +1,7 @@
@@ -300,7 +299,7 @@ index 2c32bab..a0e7786 100644
    - message_notify:message_notify
 diff --git a/tests/modules/message_notify_test/message_notify_test.module b/tests/modules/message_notify_test/message_notify_test.module
 deleted file mode 100644
-index 8927cbd..0000000
+index 8927cbd815e05eecf8b6cbfc3a3bccb7c5cb4b01..0000000000000000000000000000000000000000
 --- a/tests/modules/message_notify_test/message_notify_test.module
 +++ /dev/null
 @@ -1,15 +0,0 @@
@@ -321,7 +320,7 @@ index 8927cbd..0000000
 -}
 diff --git a/tests/modules/message_notify_test/message_notify_test.services.yml b/tests/modules/message_notify_test/message_notify_test.services.yml
 new file mode 100644
-index 0000000..66d3358
+index 0000000000000000000000000000000000000000..66d33589a59ad6708976ee06724e189783152399
 --- /dev/null
 +++ b/tests/modules/message_notify_test/message_notify_test.services.yml
 @@ -0,0 +1,5 @@
@@ -332,7 +331,7 @@ index 0000000..66d3358
 +      - { name: 'event_subscriber' }
 diff --git a/tests/modules/message_notify_test/src/MessageNotifyTestSubscriber.php b/tests/modules/message_notify_test/src/MessageNotifyTestSubscriber.php
 new file mode 100644
-index 0000000..ebc1b5a
+index 0000000000000000000000000000000000000000..ebc1b5a6835100fd1330ccb34645414a2ffc53da
 --- /dev/null
 +++ b/tests/modules/message_notify_test/src/MessageNotifyTestSubscriber.php
 @@ -0,0 +1,62 @@
@@ -399,7 +398,7 @@ index 0000000..ebc1b5a
 +
 +}
 diff --git a/tests/src/Kernel/MessageNotifyTest.php b/tests/src/Kernel/MessageNotifyTest.php
-index 6d8c72e..1ec96b9 100644
+index 4990f27b2377a2728b7e6eea9daaad80f758eb52..898a5e5ca8f6ea7e5105b3e6df6fc1b8c35c2fa4 100644
 --- a/tests/src/Kernel/MessageNotifyTest.php
 +++ b/tests/src/Kernel/MessageNotifyTest.php
 @@ -2,12 +2,14 @@
@@ -427,7 +426,7 @@ index 6d8c72e..1ec96b9 100644
    /**
     * Testing message template.
     *
-@@ -227,4 +232,28 @@ class MessageNotifyTest extends KernelTestBase {
+@@ -228,4 +233,28 @@ class MessageNotifyTest extends KernelTestBase {
      }
    }
  
@@ -457,7 +456,7 @@ index 6d8c72e..1ec96b9 100644
 +
  }
 diff --git a/tests/src/Unit/Plugin/Notifier/EmailTest.php b/tests/src/Unit/Plugin/Notifier/EmailTest.php
-index f40bc9e..4821236 100644
+index f40bc9e27da912cd33b8ee4adcfe5fa51955b897..4821236f8f869bbc305837d77f4bb1329852c4c5 100644
 --- a/tests/src/Unit/Plugin/Notifier/EmailTest.php
 +++ b/tests/src/Unit/Plugin/Notifier/EmailTest.php
 @@ -15,6 +15,7 @@ use Drupal\message_notify\Plugin\Notifier\Email;
