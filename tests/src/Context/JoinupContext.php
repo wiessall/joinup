@@ -1217,7 +1217,7 @@ class JoinupContext extends RawDrupalContext {
    * Checks the current workflow state on the given entity.
    *
    * @param string $label
-   *    The label of the entity.
+   *   The label of the entity.
    * @param string $stateExpected
    *   The expected workflow state's label.
    *
