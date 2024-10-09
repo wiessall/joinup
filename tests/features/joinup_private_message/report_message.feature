@@ -14,8 +14,6 @@ Feature: Private message report.
 
     Given I am logged in as "alice_m"
     And I am on the homepage
-    And I check "I agree to the Legal notice document"
-    Then I press "Submit"
     And I should see 0 unread private message
     And I am on "/user/messages"
     And I click "New Message"
@@ -33,8 +31,6 @@ Feature: Private message report.
 
     When I am logged in as "bob_rolls"
     And I am on the homepage
-    And I check "I agree to the Legal notice document"
-    Then I press "Submit"
     And I should see 1 unread private message
     And I am on "/user/messages"
     And I should see the heading "Private Messages"
