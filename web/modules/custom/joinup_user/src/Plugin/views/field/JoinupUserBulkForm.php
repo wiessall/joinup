@@ -9,6 +9,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\Messenger\MessengerInterface;
+use Drupal\Core\Routing\ResettableStackedRouteMatchInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\joinup_user\Entity\JoinupUserInterface;
 use Drupal\joinup_user\JoinupUserNotificationHelperInterface;
@@ -56,6 +57,8 @@ class JoinupUserBulkForm extends RoleDelegationUserBulkForm {
    *   The messenger.
    * @param \Drupal\Core\Entity\EntityRepositoryInterface $entityRepository
    *   The entity repository.
+   * @param \Drupal\Core\Routing\ResettableStackedRouteMatchInterface $routeMatch
+   *   The route match.
    * @param \Drupal\Core\Session\AccountInterface $currentUser
    *   The currently logged in user.
    * @param \Drupal\joinup_user\JoinupUserNotificationHelperInterface $notificationHelper
@@ -72,10 +75,11 @@ class JoinupUserBulkForm extends RoleDelegationUserBulkForm {
     LanguageManagerInterface $languageManager,
     MessengerInterface $messenger,
     EntityRepositoryInterface $entityRepository,
+    ResettableStackedRouteMatchInterface $routeMatch,
     AccountInterface $currentUser,
     protected JoinupUserNotificationHelperInterface $notificationHelper,
   ) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition, $entityTypeManager, $languageManager, $messenger, $entityRepository, $currentUser);
+    parent::__construct($configuration, $plugin_id, $plugin_definition, $entityTypeManager, $languageManager, $messenger, $entityRepository, $routeMatch, $currentUser);
   }
 
   /**
@@ -90,6 +94,7 @@ class JoinupUserBulkForm extends RoleDelegationUserBulkForm {
       $container->get('language_manager'),
       $container->get('messenger'),
       $container->get('entity.repository'),
+      $container->get('current_route_match'),
       $container->get('current_user'),
       $container->get('joinup_user.notification_helper')
     );
