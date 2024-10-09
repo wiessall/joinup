@@ -31,7 +31,6 @@ Feature: Private message report.
     And I should see 1 private message
     Then I should see a private message containing the text "This is a private message to Bob."
 
-
     When I am logged in as "bob_rolls"
     And I am on the homepage
     And I check "I agree to the Legal notice document"
