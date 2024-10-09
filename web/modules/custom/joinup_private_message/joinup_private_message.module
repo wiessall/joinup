@@ -7,7 +7,7 @@
 
 declare(strict_types=1);
 
-use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\Component\Serialization\Json;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
@@ -73,6 +73,22 @@ function joinup_private_message_private_message_view_alter(array &$build, Entity
     }
     $build['links']['report'] = $report_button;
   }
+}
+
+/**
+ * Gets the attributes for use with an AJAX modal.
+ *
+ * @return array
+ *   The attributes for use with an AJAX modal.
+ */
+function _joinup_private_message_get_ajax_modal_attributes(): array {
+  return [
+    'class' => ['use-ajax'],
+    'data-dialog-type' => 'modal',
+    'data-dialog-options' => Json::encode([
+      'width' => 'auto',
+    ]),
+  ];
 }
 
 /**
