@@ -11,7 +11,7 @@ Feature: Private messages
       | bob_rolls | Bob        | Rolls       | bob.rolls@example.com |
       | joan_tiff | Joan       | Tiff        | joan.tiff@example.com |
 
-  @PrivateMessageConfig @javascript
+  @javascript
   Scenario: Send a private message
     Given I am logged in as "alice_m"
     When I am on the homepage
@@ -82,6 +82,7 @@ Feature: Private messages
     When I enter "This is a fail." in the "Reply" wysiwyg editor
     And I press "Send"
     Then I should see "Sorry, you have reached your limit for posting. Please try again later."
+    Then I restore the limit for messages or threads allowed
 
   Scenario: Check a user without messages
     Given I am logged in as "alice_m"

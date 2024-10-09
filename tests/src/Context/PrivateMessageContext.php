@@ -187,6 +187,7 @@ class PrivateMessageContext extends RawDrupalContext {
    *   The limit. If not passed, the original value is restored.
    *
    * @Given the limit for messages or threads allowed is :limit
+   * @Then I restore the limit for messages or threads allowed
    */
   public function setPrivateMessageLimit(?int $limit = NULL): void {
     static $original_value;
@@ -201,16 +202,6 @@ class PrivateMessageContext extends RawDrupalContext {
     if ($current_value !== $limit) {
       $config->set('limit', $limit)->save();
     }
-  }
-
-  /**
-   * Uninstalls the testing module for scenarios tagged with @errorPage.
-   *
-   * @AfterScenario @PrivateMessageConfig&&@api
-   */
-  public function afterPrivateMessageTesting(): void {
-    // Restore the site's error logging verbosity.
-    $this->setPrivateMessageLimit();
   }
 
   /**
