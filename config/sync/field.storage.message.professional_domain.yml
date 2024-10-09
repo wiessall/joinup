@@ -1,0 +1,20 @@
+uuid: deaed812-272b-444a-be80-21253db96d78
+langcode: en
+status: true
+dependencies:
+  module:
+    - message
+    - taxonomy
+id: message.professional_domain
+field_name: professional_domain
+entity_type: message
+type: entity_reference
+settings:
+  target_type: taxonomy_term
+module: core
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false
