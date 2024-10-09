@@ -7,11 +7,14 @@ namespace Drupal\joinup_media\Update;
 use Drupal\Core\Config\StorageInterface;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\joinup_group\Entity\GroupContentInterface;
+use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\media\MediaInterface;
 use Drupal\media\OEmbed\ProviderException;
 use Drupal\media\OEmbed\ResourceException;
 use Drupal\media\OEmbed\UrlResolverInterface;
 use Drupal\media\Plugin\media\Source\OEmbedInterface;
+use Drupal\paragraphs\ParagraphInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -38,29 +41,26 @@ final class MediaOembedMigrate implements ContainerInjectionInterface {
   }
 
   /**
-   * Runs the migration.
+   * Migrates media video to remote_video.
    */
-  public function run(array &$sandbox): void {
+  public function migrateMedia(array &$sandbox): void {
     $media_storage = $this->entityTypeManager->getStorage('media');
 
     if (empty($sandbox)) {
-      $this->setup();
+      $this->prepareMedia();
 
-      $sandbox['mids'] = $media_storage->getQuery()
+      $sandbox['ids'] = $media_storage->getQuery()
         ->accessCheck(FALSE)
         ->condition('bundle', 'video')
         ->execute();
-      $sandbox['max'] = count($sandbox['mids']);
+      $sandbox['max'] = count($sandbox['ids']);
     }
 
-    $mids = array_splice($sandbox['mids'], 0, 100);
-    foreach ($media_storage->loadMultiple($mids) as $media) {
+    $ids = array_splice($sandbox['ids'], 0, 100);
+    foreach ($media_storage->loadMultiple($ids) as $media) {
       assert($media instanceof MediaInterface);
       $url = trim($media->get('video')->getString());
       $url = $this->staticMapUrl($url);
-
-      // Delete non-oEmbed supported media, these must be migrated manually,
-      // see ISAICP-9084.
       if (!$this->isSupportedUrl($url)) {
         $media->delete();
         continue;
@@ -75,22 +75,88 @@ final class MediaOembedMigrate implements ContainerInjectionInterface {
       $new_media->setSyncing(TRUE)->save();
     }
 
-    $sandbox['#finished'] = (int) empty($sandbox['mids']);
+    $sandbox['#finished'] = (int) empty($sandbox['ids']);
   }
 
   /**
-   * Setup everything we need to start the migration.
+   * Prepare for the media migration.
    */
-  protected function setup(): void {
+  private function prepareMedia(): void {
     // Create new media type and field storages/configs from sync storage.
     $sync_storage = $this->syncStorage;
     $config_entities = [
       'media_type' => ['media.type.remote_video'],
-      'field_storage_config' => ['field.storage.media.media_oembed_video'],
+      'field_storage_config' => [
+        'field.storage.media.media_oembed_video',
+      ],
       'field_config' => [
         'field.field.media.remote_video.media_oembed_video',
         'field.field.media.remote_video.og_audience',
       ],
+    ];
+
+    foreach ($config_entities as $storage => $keys) {
+      foreach ($keys as $key) {
+        $this->entityTypeManager->getStorage($storage)
+          ->create($sync_storage->read($key))
+          ->save();
+      }
+    }
+  }
+
+  /**
+   * Migrates video paragraphs field (paragraph_video_url > remote_video).
+   */
+  public function migrateParagraphs(array &$sandbox): void {
+    $paragraph_storage = $this->entityTypeManager->getStorage('paragraph');
+    $media_storage = $this->entityTypeManager->getStorage('media');
+
+    if (empty($sandbox)) {
+      $this->prepareParagraphs();
+      $sandbox['rids'] = $paragraph_storage->getQuery()
+        ->accessCheck(FALSE)
+        ->allRevisions()
+        ->condition('type', 'video')
+        ->execute();
+      $sandbox['rids'] = array_keys($sandbox['rids']);
+    }
+
+    $rids = array_splice($sandbox['rids'], 0, 100);
+    foreach ($paragraph_storage->loadMultipleRevisions($rids) as $paragraph) {
+      assert($paragraph instanceof ParagraphInterface);
+      $url = trim($paragraph->get('paragraph_video_url')->getString());
+      $url = $this->staticMapUrl($url);
+      if (!$this->isSupportedUrl($url)) {
+        continue;
+      }
+
+      // Check if a remote_video media exist, otherwise create it.
+      $values = [
+        'bundle' => 'remote_video',
+        'media_oembed_video' => $url,
+        'og_audience' => $this->getOgAudienceFromParagraph($paragraph)?->id(),
+      ];
+      $existing_media_video = $media_storage->loadByProperties($values);
+      $media_video = $existing_media_video ? array_shift($existing_media_video) : $media_storage->create($values);
+
+      // Empty old field, save new one, save paragraph revision.
+      $paragraph->set('paragraph_video_url', NULL);
+      $paragraph->set('remote_video', $media_video);
+      $paragraph->setSyncing(TRUE)->save();
+    }
+
+    $sandbox['#finished'] = (int) empty($sandbox['rids']);
+  }
+
+  /**
+   * Prepare for the paragraphs migration.
+   */
+  private function prepareParagraphs(): void {
+    // Create new field storage/config from sync storage.
+    $sync_storage = $this->syncStorage;
+    $config_entities = [
+      'field_storage_config' => ['field.storage.paragraph.remote_video'],
+      'field_config' => ['field.field.paragraph.video.remote_video'],
     ];
 
     foreach ($config_entities as $storage => $keys) {
@@ -129,6 +195,24 @@ final class MediaOembedMigrate implements ContainerInjectionInterface {
       'https://www.youtube-nocookie.com/embed/SwQDVxtwmUs?autoplay=0&start=0&rel=0' => 'https://www.youtube.com/watch?v=SwQDVxtwmUs',
       default => $url,
     };
+  }
+
+  /**
+   * Gets the OG group from the given paragraph.
+   */
+  private function getOgAudienceFromParagraph(ParagraphInterface $paragraph): ?GroupInterface {
+    // Get the top-level parent entity.
+    $parent_entity = $paragraph->getParentEntity();
+    while ($parent_entity instanceof ParagraphInterface) {
+      $parent_entity = $parent_entity->getParentEntity();
+    }
+
+    // Get the parent's OG group.
+    if ($parent_entity instanceof GroupContentInterface && $parent_entity->hasGroup()) {
+      return $parent_entity->getGroup();
+    }
+
+    return NULL;
   }
 
 }
