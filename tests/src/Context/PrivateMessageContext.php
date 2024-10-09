@@ -220,4 +220,17 @@ class PrivateMessageContext extends RawDrupalContext {
     return $messagesContainer;
   }
 
+  /**
+   * Enters the given text in the give textarea.
+   *
+   * @param string $text
+   *   The text to be entered in the WYSIWYG editor.
+   * @param string $label
+   *   The label of the field containing the WYSIWYG editor.
+   *
+   * @When I enter :text in the :label textarea
+   */
+  public function iEnterTextInTextArea(string $text, string $label): void {
+    $this->getSession()->getPage()->fillField($label, $text);
+  }
 }
