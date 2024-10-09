@@ -41,7 +41,7 @@ class CronTimingTest extends KernelTestBase {
     $state = \Drupal::state();
     $cron = \Drupal::service('cron');
     // Use \DateTime to ensure timezone consistency.
-    $today = (new \DateTime('today 2:00 AM', new \DateTimeZone('UTC')))->getTimestamp();
+    $today = (new \DateTime('now', new \DateTimeZone('UTC')))->getTimestamp();
 
     // Given the "eu_oss_catalogue_cron" job has run 0 times.
     $this->assertEquals(0, $this->getJobRunCount('eu_oss_catalogue_cron'));
@@ -87,7 +87,7 @@ class CronTimingTest extends KernelTestBase {
     // And I run cron.
     $cron->run();
 
-    // Set future time to 2:00 AM using \DateTime
+    // Set future time to 2:00 AM using \DateTime.
     $future_date = (new \DateTime('@' . $future_timestamp, new \DateTimeZone('UTC')))
       ->setTime(2, 0)
       ->getTimestamp();
