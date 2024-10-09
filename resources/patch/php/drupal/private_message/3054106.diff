@@ -1,0 +1,24 @@
+diff --git a/src/Controller/AjaxController.php b/src/Controller/AjaxController.php
+index 5e6c2031c70c4b54bec71a5161b499d84576b40a..e51095c2a53d84fe1044c8f9fdfb6150b39589ce 100644
+--- a/src/Controller/AjaxController.php
++++ b/src/Controller/AjaxController.php
+@@ -5,6 +5,7 @@ namespace Drupal\private_message\Controller;
+ use Drupal\Component\Utility\Crypt;
+ use Drupal\Component\Utility\Tags;
+ use Drupal\Core\Ajax\AjaxResponse;
++use Drupal\Core\Ajax\SettingsCommand;
+ use Drupal\Core\Config\ConfigFactoryInterface;
+ use Drupal\Core\Controller\ControllerBase;
+ use Drupal\Core\Entity\EntityTypeManagerInterface;
+@@ -469,10 +470,8 @@ class AjaxController extends ControllerBase implements AjaxControllerInterface {
+         $view_builder = $this->entityTypeManager->getViewBuilder('private_message_thread');
+         $renderable = $view_builder->view($thread);
+         $rendered_thread = $this->renderer->renderRoot($renderable);
+-        $index = array_search('private_message/private_message_thread_script', $renderable['#attached']['library']);
+-        unset($renderable['#attached']['library'][$index]);
+-        $response->setAttachments($renderable['#attached']);
+ 
++        $response->addCommand(new SettingsCommand($renderable['#attached']['drupalSettings'], TRUE));
+         $response->addCommand(new PrivateMessageInsertThreadCommand($rendered_thread));
+         $unread_thread_count = $this->privateMessageService->getUnreadThreadCount();
+         $response->addCommand(new PrivateMessageUpdateUnreadItemsCountCommand($unread_thread_count));
