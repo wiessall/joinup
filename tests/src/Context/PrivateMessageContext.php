@@ -8,6 +8,7 @@ use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Element\NodeElement;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\JavascriptTrait;
+use Drupal\joinup\Traits\TestingEntitiesTrait;
 
 /**
  * Behat step definitions for testing private messages.
@@ -15,6 +16,7 @@ use Drupal\joinup\Traits\JavascriptTrait;
 class PrivateMessageContext extends RawDrupalContext {
 
   use JavascriptTrait;
+  use TestingEntitiesTrait;
 
   /**
    * Checks that the specified number of private messages are present.
