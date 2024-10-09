@@ -1,0 +1,80 @@
+diff --git a/js/private_message_thread.js b/js/private_message_thread.js
+index e63d3cfda3afc3b42e9780d83765b0b59447bfee..15aae9f6ef3b49d08ae153cdd826c9f3d57cb256 100644
+--- a/js/private_message_thread.js
++++ b/js/private_message_thread.js
+@@ -21,6 +21,7 @@ Drupal.PrivateMessages.threadChange = {};
+   var refreshRate;
+   var dimmer;
+   var loadingThread;
++  var pushHistory;
+ 
+   /**
+    * Triggers AJAX commands when they happen outside the Form API framework.
+@@ -213,15 +214,20 @@ Drupal.PrivateMessages.threadChange = {};
+     // Attach any behaviors to the new thread.
+     Drupal.attachBehaviors(threadWrapper[0]);
+ 
++    // Change the URl if using a browser that allows it.
++    if (pushHistory) {
++      pushHistory = false;
++      Drupal.history.push({ threadId: currentThreadId }, $('title').text(), drupalSettings.privateMessageThread.threadUrl);
++    }
++
+     hideDimmer();
+   }
+ 
+   /**
+    * Loads a thread from the server.
+    * @param {string} threadId The thread ID.
+-   * @param {boolean} pushHistory True if the browser allows changing history.
+    */
+-  function loadThread(threadId, pushHistory) {
++  function loadThread(threadId) {
+     // Only try loading the thread if a thread isn't already loading, and if the
+     // requested thread is not the current thread.
+     if (!loadingThread && threadId !== currentThreadId) {
+@@ -251,11 +257,6 @@ Drupal.PrivateMessages.threadChange = {};
+       // The thread ID is changing. As such, we tell any other scripts that want
+       // to know, that the thread has changed, and what the new thread ID is.
+       Drupal.PrivateMessages.emitNewThreadId(threadId);
+-
+-      // Change the URl if using a browser that allows it.
+-      if (pushHistory) {
+-        Drupal.history.push({threadId: threadId}, $('title').text(), '/private-messages/' + threadId);
+-      }
+     }
+   }
+ 
+@@ -356,7 +357,8 @@ Drupal.PrivateMessages.threadChange = {};
+ 
+       // Lets other modules trigger the loading of a new thread into the page.
+       Drupal.PrivateMessages.loadThread = function (threadId) {
+-        loadThread(threadId, true);
++        pushHistory = true;
++        loadThread(threadId);
+       };
+ 
+       // Lets other modules trigger a retrieval of new messages from the server.
+diff --git a/src/Plugin/Field/FieldFormatter/PrivateMessageThreadMessageFormatter.php b/src/Plugin/Field/FieldFormatter/PrivateMessageThreadMessageFormatter.php
+index 9116c583c7071502098044566781f0f80c04eca6..8f7a7aa51f4ada7e05288c6cc5e58f0f74663d48 100644
+--- a/src/Plugin/Field/FieldFormatter/PrivateMessageThreadMessageFormatter.php
++++ b/src/Plugin/Field/FieldFormatter/PrivateMessageThreadMessageFormatter.php
+@@ -250,6 +250,10 @@ class PrivateMessageThreadMessageFormatter extends FormatterBase implements Cont
+       $element = array_reverse($element);
+     }
+ 
++    $thread_url = Url::fromRoute('entity.private_message_thread.canonical',
++      ['private_message_thread' => $private_message_thread->id()]
++    );
++
+     $new_url = Url::fromRoute('private_message.ajax_callback', ['op' => 'get_new_messages']);
+     $token = $this->csrfTokenGenerator->get($new_url->getInternalPath());
+     $new_url->setOptions(['query' => ['token' => $token]]);
+@@ -264,6 +268,7 @@ class PrivateMessageThreadMessageFormatter extends FormatterBase implements Cont
+ 
+     $element['#attached']['drupalSettings']['privateMessageThread'] = [
+       'threadId' => (int) $private_message_thread->id(),
++      'threadUrl' => $thread_url->toString(),
+       'newMessageCheckUrl' => $new_url->toString(),
+       'previousMessageCheckUrl' => $prev_url->toString(),
+       'messageOrder' => $this->getSetting('message_order'),
