@@ -24,7 +24,7 @@ Feature: Private message settings page management.
     When I go to "/user/messages/settings"
     Then I should see the heading "Private Messages"
     And I check "Receive email notification of private messages"
-    And I press "Save configuration"
+    And I press "Save"
     Then I should see the success message "Private message settings were stored"
     And I should see a table
 

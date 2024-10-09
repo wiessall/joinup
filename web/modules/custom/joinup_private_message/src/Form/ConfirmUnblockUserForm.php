@@ -19,15 +19,11 @@ class ConfirmUnblockUserForm extends ConfirmUnbanUserForm implements ContainerIn
 
   /**
    * Banned user.
-   *
-   * @var \Drupal\user\UserInterface
    */
   protected UserInterface $bannedUser;
 
   /**
    * Selected ban.
-   *
-   * @var \Drupal\private_message\Entity\PrivateMessageBanInterface
    */
   protected PrivateMessageBanInterface $ban;
 
@@ -47,15 +43,11 @@ class ConfirmUnblockUserForm extends ConfirmUnbanUserForm implements ContainerIn
    * {@inheritdoc}
    */
   public function getQuestion(): TranslatableMarkup {
-
     return $this->t('Are you sure you want to unblock user <em>%user</em>?', ['%user' => $this->bannedUser->getDisplayName()]);
   }
 
   /**
    * {@inheritdoc}
-   *
-   * @return \Drupal\Core\Url
-   *   returns cancel url for modal.
    */
   public function getCancelUrl(): Url {
     return new Url('joinup_private_message.unblock', ['private_message_ban' => $this->ban->id()]);
