@@ -26,11 +26,11 @@ class PrivateMessageContext extends RawDrupalContext {
    * @param \Behat\Gherkin\Node\TableNode $table
    *   The private messages data.
    *
-   * Table format:
+   *   Table format:
    *
    * @code
-   * | owner   | message | recipient |
-   * | alice_m | hello   | bob_rolls |
+   *   | owner   | message | recipient |
+   *   | alice_m | hello   | bob_rolls |
    * @endcode
    *
    * @Given the following private messages:
