@@ -456,7 +456,8 @@
             },
             "drupal/sparql_entity_storage": {
                 "Interface contract violation @see https://drupal.org/i/3379328": "resources/patch/php/drupal/sparql_entity_storage/3379328.patch",
-                "Error when deleting a vocabulary @see https://www.drupal.org/i/3421694": "resources/patch/php/drupal/sparql_entity_storage/3421694.diff"
+                "Error when deleting a vocabulary @see https://www.drupal.org/i/3421694": "resources/patch/php/drupal/sparql_entity_storage/3421694.diff",
+                "Parameter converter triggers storage exception to be thrown @see https://drupal.org/i/3478180": "resources/patch/php/drupal/sparql_entity_storage/3478180-34-bf0b91d3.diff"
             },
             "drupal/state_machine": {
                 "Do not force default state in options. @see https://www.drupal.org/project/state_machine/issues/2746091": "resources/patch/php/drupal/state_machine/2746091.diff"
