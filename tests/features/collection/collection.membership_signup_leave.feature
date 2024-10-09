@@ -84,7 +84,7 @@ Feature: Joining and leaving collections through the web interface
     # There is a Code of Conduct document, what the user must accept before
     # requesting for membership, so the button text must not change.
     Then I should see the button "Join this collection" in the Header region
-    And I should see the text "To complete your membership, we need to make sure you agree with our Code of conduct. This helps us maintain a safe and respectful environment for all members of Closed collection with public CoC"
+    And I should see the text "To validate your membership and send it for approval, please tick the box agreeing with the Code of conduct. This helps us maintain a safe and respectful environment for all members of Closed collection with public CoC"
     And I should not see the following lines of text:
       | You have joined the collection and you are now able to publish content in it. |
       | When your membership is approved you will be able to publish content in it.   |
