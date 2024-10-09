@@ -1,0 +1,27 @@
+From eb59797cb5488567341797e982d1d2c89eecdea4 Mon Sep 17 00:00:00 2001
+From: Adrian Lorenc <47258-alorenc@users.noreply.drupalcode.org>
+Date: Thu, 3 Oct 2024 08:49:53 +0000
+Subject: [PATCH] Add session context.
+
+---
+ src/Plugin/Block/PrivateMessageNotificationBlock.php | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/Plugin/Block/PrivateMessageNotificationBlock.php b/src/Plugin/Block/PrivateMessageNotificationBlock.php
+index 8c8d33a..64f3b4a 100644
+--- a/src/Plugin/Block/PrivateMessageNotificationBlock.php
++++ b/src/Plugin/Block/PrivateMessageNotificationBlock.php
+@@ -179,8 +179,8 @@ class PrivateMessageNotificationBlock extends BlockBase implements BlockPluginIn
+    * {@inheritdoc}
+    */
+   public function getCacheContexts(): array {
+-    // Vary caching of this block per user.
+-    return Cache::mergeContexts(parent::getCacheContexts(), ['user']);
++    // Vary caching of this block per user and session.
++    return Cache::mergeContexts(parent::getCacheContexts(), ['user', 'session']);
+   }
+ 
+   /**
+-- 
+GitLab
+
