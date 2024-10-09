@@ -1,16 +1,8 @@
 diff --git a/modules/svg_image_responsive/src/Plugin/Field/FieldFormatter/SvgResponsiveImageFormatter.php b/modules/svg_image_responsive/src/Plugin/Field/FieldFormatter/SvgResponsiveImageFormatter.php
-index 74804f1..5327b65 100755
+index 56771e55f5b8c58c298cbff2daafe08113fd8523..ac0bda9e6aabb4f29159aea167464367003612a4 100755
 --- a/modules/svg_image_responsive/src/Plugin/Field/FieldFormatter/SvgResponsiveImageFormatter.php
 +++ b/modules/svg_image_responsive/src/Plugin/Field/FieldFormatter/SvgResponsiveImageFormatter.php
-@@ -12,7 +12,6 @@ use Drupal\Core\Render\Markup;
- use Drupal\Core\Session\AccountInterface;
- use Drupal\Core\Utility\LinkGeneratorInterface;
- use Drupal\file\Entity\File;
--use Drupal\Core\Cache\Cache;
- use Drupal\responsive_image\Plugin\Field\FieldFormatter\ResponsiveImageFormatter;
- use Symfony\Component\DependencyInjection\ContainerInterface;
- 
-@@ -65,95 +64,26 @@ class SvgResponsiveImageFormatter extends ResponsiveImageFormatter {
+@@ -59,95 +59,26 @@ class SvgResponsiveImageFormatter extends ResponsiveImageFormatter {
     * {@inheritdoc}
     */
    public function viewElements(FieldItemListInterface $items, $langcode) {
@@ -119,7 +111,7 @@ index 74804f1..5327b65 100755
        }
        else {
          // Render as SVG tag.
-@@ -162,13 +92,20 @@ class SvgResponsiveImageFormatter extends ResponsiveImageFormatter {
+@@ -156,13 +87,20 @@ class SvgResponsiveImageFormatter extends ResponsiveImageFormatter {
            $svgRaw = str_replace('<?xml version="1.0" encoding="UTF-8"?>', '', $svgRaw);
            $svgRaw = trim($svgRaw);
  
@@ -148,18 +140,10 @@ index 74804f1..5327b65 100755
        }
      }
 diff --git a/src/Plugin/Field/FieldFormatter/SvgImageFormatter.php b/src/Plugin/Field/FieldFormatter/SvgImageFormatter.php
-index afbad29..9122570 100755
+index c56bf989ffc1cde3fa396ed4889c9f5375ca2f54..501b3e6849de173c4196b40d3fd6fa0f6f0ab2b0 100755
 --- a/src/Plugin/Field/FieldFormatter/SvgImageFormatter.php
 +++ b/src/Plugin/Field/FieldFormatter/SvgImageFormatter.php
-@@ -11,7 +11,6 @@ use Drupal\Core\Render\Markup;
- use Drupal\Core\Session\AccountInterface;
- use Drupal\file\Entity\File;
- use Drupal\image\Plugin\Field\FieldFormatter\ImageFormatter;
--use Drupal\Core\Cache\Cache;
- use Psr\Log\LoggerInterface;
- use enshrined\svgSanitize\Sanitizer;
- use Symfony\Component\DependencyInjection\ContainerInterface;
-@@ -60,74 +59,23 @@ class SvgImageFormatter extends ImageFormatter {
+@@ -55,74 +55,23 @@ class SvgImageFormatter extends ImageFormatter {
     * {@inheritdoc}
     */
    public function viewElements(FieldItemListInterface $items, $langcode) {
@@ -244,7 +228,7 @@ index afbad29..9122570 100755
        }
        else {
          // Render as SVG tag.
-@@ -135,26 +83,24 @@ class SvgImageFormatter extends ImageFormatter {
+@@ -130,26 +79,24 @@ class SvgImageFormatter extends ImageFormatter {
          if ($svgRaw) {
            $svgRaw = preg_replace(['/<\?xml.*\?>/i', '/<!DOCTYPE((.|\n|\r)*?)">/i'], '', $svgRaw);
            $svgRaw = trim($svgRaw);

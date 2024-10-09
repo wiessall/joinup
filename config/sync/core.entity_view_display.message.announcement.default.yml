@@ -1,0 +1,28 @@
+uuid: ce0bdc82-83b7-4fea-ac19-05c597b74eeb
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.message.announcement.body
+    - field.field.message.announcement.group
+    - field.field.message.announcement.professional_domain
+    - field.field.message.announcement.state
+    - field.field.message.announcement.subject
+    - message.template.announcement
+id: message.announcement.default
+targetEntityType: message
+bundle: announcement
+mode: default
+content:
+  partial_0:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  body: true
+  group: true
+  professional_domain: true
+  search_api_excerpt: true
+  state: true
+  subject: true

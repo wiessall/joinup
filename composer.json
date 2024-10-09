@@ -27,12 +27,11 @@
         "drupal/changed_fields": "^3.2",
         "drupal/colorbox": "^2.0",
         "drupal/config_ignore": "^3.0",
-        "drupal/config_readonly": "^1.0",
-        "drupal/core": "~10.3.0",
+        "drupal/core": "10.3.5",
         "drupal/core-composer-scaffold": "~10.3.0",
         "drupal/custom_markup_block": "^1.2",
         "drupal/default_content": "^2.0",
-        "drupal/diff": "~1.0",
+        "drupal/diff": "^1.8",
         "drupal/digital_size_formatter": "~2.0",
         "drupal/dropsolid_purge": "^1.0@beta",
         "drupal/dynamic_entity_reference": "^4.0",
@@ -112,6 +111,7 @@
         "drupal/svg_image": "^3.0",
         "drupal/symfony_mailer_lite": "^1.0",
         "drupal/theme_rule": "^1.0",
+        "drupal/tmgmt_ec_etranslation": "^1.1",
         "drupal/token": "~1.7",
         "drupal/video_embed_field": "^2",
         "drupal/view_unpublished": "^1.0",
@@ -197,6 +197,12 @@
             "php-http/discovery": true,
             "ec-europa/toolkit-composer-plugin": true,
             "phpro/grumphp-shim": true
+        },
+        "audit": {
+            "abandoned": "report",
+            "ignore": {
+                "CVE-2024-45440": "Seems to be a disputed report @see https://www.drupal.org/i/3471501#comment-15756190"
+            }
         }
     },
     "autoload": {
@@ -422,7 +428,9 @@
                 "User can stuck on View results @see https://www.drupal.org/project/poll/issues/3405509": "resources/patch/php/drupal/poll/3405509.patch"
             },
             "drupal/private_message": {
-                "Add missing fields to private message thread members formatter settings @see https://www.drupal.org/i/3470928": "resources/patch/php/drupal/private_message/3470928.diff"
+                "Add missing fields to private message thread members formatter settings @see https://www.drupal.org/i/3470928": "resources/patch/php/drupal/private_message/3470928.diff",
+                "404 for get_new_unread_message_count request @see https://www.drupal.org/i/3478456": "resources/patch/php/drupal/private_message/3478456.patch",
+                "Javascript files loaded twice @see https://www.drupal.org/i/3054106": "resources/patch/php/drupal/private_message/3054106.diff"
             },
             "drupal/publication_date": {
                 "Expand Publication Date to all Entity Types @see https://www.drupal.org/project/publication_date/issues/3219401": "resources/patch/php/drupal/publication_date/3219401-18.patch"
@@ -454,8 +462,7 @@
             },
             "drupal/svg_image": {
                 "SVG is not valid or cannot be sanitized, return an error. @see https://www.drupal.org/i/3350696": "resources/patch/php/drupal/svg_image/3350696.patch",
-                "SvgImageWidget should inherit from ImageWidget instead of FileWidget @see https://www.drupal.org/project/svg_image/issues/3420037": "resources/patch/php/drupal/svg_image/3420037.patch",
-                "The 'image_loading' attribute is not respected - https://www.drupal.org/project/svg_image/issues/3275057": "resources/patch/php/drupal/svg_image/3275057-14.patch"
+                "The 'image_loading' attribute is not respected - https://www.drupal.org/project/svg_image/issues/3275057": "resources/patch/php/drupal/svg_image/3275057.patch"
             },
             "drupal/stage_file_proxy": {
                 "Fetching does not respect use_imagecache_root when using converted webp image styles @see https://www.drupal.org/i/3402972": "resources/patch/php/drupal/stage_file_proxy/stage_file_proxy-3402972-MR-28f616d8--without-method.diff"
