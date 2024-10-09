@@ -6,9 +6,11 @@ namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Element\NodeElement;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\JavascriptTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
+use Drupal\private_message\Entity\PrivateMessageThreadInterface;
 
 /**
  * Behat step definitions for testing private messages.
@@ -17,6 +19,101 @@ class PrivateMessageContext extends RawDrupalContext {
 
   use JavascriptTrait;
   use TestingEntitiesTrait;
+
+  /**
+   * Creates a set of private messages.
+   *
+   * @param \Behat\Gherkin\Node\TableNode $table
+   *   The private messages data.
+   *
+   * Table format:
+   *
+   * @code
+   * | owner   | message | recipient |
+   * | alice_m | hello   | bob_rolls |
+   * @endcode
+   *
+   * @Given the following private messages:
+   */
+  public function createPrivateMessages(TableNode $table): void {
+    $storage = \Drupal::entityTypeManager()->getStorage('private_message');
+
+    foreach ($table->getColumnsHash() as $values) {
+      foreach (['owner', 'message', 'recipient'] as $required) {
+        if (!isset($values[$required])) {
+          throw new \Exception("Missing column $required");
+        }
+      }
+
+      $owner = user_load_by_name($values['owner']);
+      if (!$owner instanceof AccountInterface) {
+        throw new \Exception("Owner {$values['owner']} could not be found.");
+      }
+
+      $privateMessageThread = $this->getThread($values['owner'], $values['recipient']);
+      if ($privateMessageThread->get('subject')->isEmpty()) {
+        $privateMessageThread->set('subject', $values['message'])->save();
+      }
+
+      /** @var \Drupal\private_message\Entity\PrivateMessageInterface $privateMessage */
+      $privateMessage = $storage->create([
+        'owner' => $owner->id(),
+        'message' => [
+          'value' => $values['message'],
+          'format' => 'minimal',
+        ],
+      ]);
+      $privateMessage->save();
+
+      $privateMessageThread->addMessage($privateMessage)->save();
+
+      $this->entities['private_message'][$privateMessage->id()] = $privateMessage;
+      $this->entities['private_message_thread'][$privateMessageThread->id()] = $privateMessageThread;
+    }
+  }
+
+  /**
+   * Navigates to the canonical page display of a thread.
+   *
+   * @param string $owner
+   *   Owner username.
+   * @param string $recipient
+   *   Recipient username.
+   *
+   * @When I visit the :owner :recipient thread
+   */
+  public function visitThread(string $owner, string $recipient): void {
+    $entity = $this->getThread($owner, $recipient);
+    $this->visitPath($entity->toUrl()->toString());
+  }
+
+  /**
+   * Gets private message thread.
+   *
+   * @param string $owner
+   *   Owner username.
+   * @param string $recipient
+   *   Recipient username.
+   *
+   * @return \Drupal\private_message\Entity\PrivateMessageThreadInterface
+   *   Private message thread.
+   */
+  public function getThread(string $owner, string $recipient): PrivateMessageThreadInterface {
+    /** @var \Drupal\private_message\Service\PrivateMessageServiceInterface $service */
+    $service = \Drupal::service('private_message.service');
+
+    $ownerEntity = user_load_by_name($owner);
+    if (!$ownerEntity instanceof AccountInterface) {
+      throw new \Exception("Owner {$owner} could not be found.");
+    }
+
+    $recipientEntity = user_load_by_name($recipient);
+    if (!$recipientEntity instanceof AccountInterface) {
+      throw new \Exception("Recipient {$recipient} could not be found.");
+    }
+
+    return $service->getThreadForMembers([$ownerEntity, $recipientEntity]);
+  }
 
   /**
    * Checks that the specified number of private messages are present.
