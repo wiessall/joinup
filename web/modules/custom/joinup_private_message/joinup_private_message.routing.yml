@@ -4,6 +4,7 @@ joinup_private_message.private_message_settings_page:
     _form: '\Drupal\joinup_private_message\Form\PrivateMessageSettingsForm'
     _title: 'Private Messages'
   requirements:
+    _permission: 'use private messaging system'
     _user_is_logged_in: 'TRUE'
   options:
     no_cache: 'FALSE'

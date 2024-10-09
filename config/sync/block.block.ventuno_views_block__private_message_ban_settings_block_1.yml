@@ -5,6 +5,7 @@ dependencies:
   config:
     - views.view.private_message_ban_settings
   module:
+    - joinup_core
     - views
   theme:
     - ventuno
@@ -22,4 +23,9 @@ settings:
   context_mapping: {  }
   views_label: ''
   items_per_page: none
-visibility: {  }
+visibility:
+  request_route:
+    id: request_route
+    negate: false
+    routes:
+      - joinup_private_message.private_message_settings_page

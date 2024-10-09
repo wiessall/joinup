@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_private_message\Form;
 
+use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
@@ -20,6 +21,9 @@ class PrivateMessageSettingsForm extends FormBase {
    *
    * @param \Drupal\user\UserDataInterface $userData
    *   The user data service.
+   *
+   * @return void
+   *   returns void
    */
   public function __construct(protected UserDataInterface $userData) {}
 
@@ -27,9 +31,7 @@ class PrivateMessageSettingsForm extends FormBase {
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
-    return new static(
-      $container->get('user.data')
-    );
+    return new static($container->get('user.data'));
   }
 
   /**
@@ -41,9 +43,6 @@ class PrivateMessageSettingsForm extends FormBase {
 
   /**
    * {@inheritdoc}
-   *
-   * @return array
-   *   returns form
    */
   public function buildForm(array $form, FormStateInterface $form_state): array {
     private_message_form_user_form_alter($form, $form_state);
@@ -61,6 +60,9 @@ class PrivateMessageSettingsForm extends FormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state): void {
+    CacheableMetadata::createFromRenderArray($form)
+      ->addCacheableDependency($this->getEntity()->getAccount())
+      ->applyTo($form);
     $uid = $this->currentUser()->id();
     $settings = [
       'receive_notification' => $form_state->getValue(['private_messages', 'receive_notification']),
@@ -86,18 +88,6 @@ class PrivateMessageSettingsForm extends FormBase {
    */
   public function getEntity(): AccountInterface {
     return $this->currentUser();
-  }
-
-  /**
-   * Config names.
-   *
-   * @return string[]
-   *   returns config names
-   */
-  protected function getEditableConfigNames(): array {
-    return [
-      'joinup_private_message.settings',
-    ];
   }
 
 }
