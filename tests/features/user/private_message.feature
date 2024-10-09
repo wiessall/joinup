@@ -73,6 +73,7 @@ Feature: Private messages
     And I wait for AJAX to finish
     And I click "New Message"
     Then a modal should open
+    Then I close the modal dialog
 
     Given the limit for messages or threads allowed is 2
     When I click "New Message"
