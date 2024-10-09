@@ -45,16 +45,14 @@ function joinup_private_message_form_submit(array &$form, FormStateInterface $fo
 /**
  * Implements hook_entity_view_alter().
  */
-function joinup_private_message_entity_view_alter(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display): void {
-  $current_user = Drupal::currentUser();
-  $user_id = $current_user->id();
+function joinup_private_message_private_message_view_alter(array &$build, EntityInterface $entity): void {
+  $user_id = \Drupal::currentUser()->id();
   // Check if this is the custom entity you want to alter.
   if ($entity->getEntityTypeId() === 'private_message' && $entity->getOwnerId() !== $user_id) {
     $report_url = Url::fromRoute('joinup_private_message.report_form', [
       'private_message' => $entity->id(),
     ]);
 
-    // Create the button render array.
     $report_button = [
       '#type' => 'link',
       '#title' => t('Report'),
@@ -80,12 +78,26 @@ function joinup_private_message_entity_view_alter(array &$build, EntityInterface
 /**
  * Implements hook_mail().
  */
-function joinup_private_message_mail($key, &$message, $params): void {
-  switch ($key) {
-    case 'report_message':
-      $message['subject'] = $params['subject'];
-      $message['body'][] = $params['message'];
-      $message['headers']['Content-Type'] = SymfonyMailer::FORMAT_HTML;
-      break;
+function joinup_private_message_mail(string $key, array &$message, array $params): void {
+  if ($key == 'report_message') {
+    $recipient = $params['recipient'];
+    $sender = $params['sender'];
+    $bannedMessage = $params['message'];
+    $params = [
+      'subject' => t('User @reporter reported a message', ['@reporter' => $recipient->getDisplayName()]),
+      'message' => t(
+          'The user <a href="@reporter_url">@reporter_name</a> has reported user <a href="@sender_url">@sender_name</a> for sending an unwanted message (<a href="@message_url">view message</a>):<br>
+    <h5>Message content: </h5>',
+          [
+            '@reporter_name' => $recipient->getDisplayName(),
+            '@reporter_url' => Url::fromRoute('entity.user.canonical', ['user' => $recipient->id()], ['absolute' => TRUE])->toString(),
+            '@sender_name' => $sender->getDisplayName(),
+            '@sender_url' => Url::fromRoute('entity.user.canonical', ['user' => $sender->id()], ['absolute' => TRUE])->toString(),
+            '@message_url' => Url::fromRoute('entity.private_message.canonical', ['private_message' => $bannedMessage->id()], ['absolute' => TRUE])->toString(),
+          ]) . $bannedMessage->get('message')->value,
+    ];
+    $message['subject'] = $params['subject'];
+    $message['body'][] = $params['message'];
+    $message['headers']['Content-Type'] = SymfonyMailer::FORMAT_HTML;
   }
 }
