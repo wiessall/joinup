@@ -31,8 +31,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 )]
 class FilterIframe extends FilterBase implements ContainerFactoryPluginInterface {
 
-  const WEBTOOLS_COOKIE_CONSENT_EMBED_COOKIE_URL = '//webtools.europa.eu/crs/iframe/';
-
   public function __construct(array $configuration, $plugin_id, $plugin_definition, protected RequestContext $requestContext) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
   }
@@ -106,7 +104,7 @@ class FilterIframe extends FilterBase implements ContainerFactoryPluginInterface
         }
 
         // External iframe allowed, add webtools shield.
-        $iframe->setAttribute('src', Url::fromUri(static::WEBTOOLS_COOKIE_CONSENT_EMBED_COOKIE_URL, [
+        $iframe->setAttribute('src', Url::fromUri(\OE_WEBTOOLS_COOKIE_CONSENT_EMBED_COOKIE_URL, [
           'query' => [
             'oriurl' => $src,
             'lang' => $langcode,
