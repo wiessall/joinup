@@ -95,6 +95,18 @@ Feature: Private messages
     And I should see 0 private message
     And I should see the text "You do not have any messages"
 
+  @javascript
+  Scenario: User should see validation errors inside modal.
+    Given I am logged in as "alice_m"
+
+    When I am on "/user/messages"
+    And I click "New Message"
+    When a modal should open
+    And I press "Send" in the "Modal buttons" region
+
+    Then I should see "Message field is required." in the "Modal content" region
+    And I should see "You can not send a message to yourself only." in the "Modal content" region
+
   Scenario: User can view a selected thread.
     Given the following private messages:
       | owner   | recipient | message |
