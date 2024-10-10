@@ -698,33 +698,6 @@ third_party_settings:
                   class: ''
                   style: ''
                   data: ''
-          f4851cf0-344c-45bd-b61a-dd69097ee30d:
-            uuid: f4851cf0-344c-45bd-b61a-dd69097ee30d
-            region: content
-            configuration:
-              id: solution_release_date
-              label: 'Release date'
-              label_display: '0'
-              provider: joinup_solution
-              context_mapping: {  }
-            weight: 10
-            additional:
-              component_attributes:
-                block_attributes:
-                  id: ''
-                  class: 'pe-5 pb-4'
-                  style: ''
-                  data: ''
-                block_title_attributes:
-                  id: ''
-                  class: ''
-                  style: ''
-                  data: ''
-                block_content_attributes:
-                  id: ''
-                  class: ''
-                  style: ''
-                  data: ''
           62807d5d-f198-4b51-9b19-926f89c108d5:
             uuid: 62807d5d-f198-4b51-9b19-926f89c108d5
             region: content

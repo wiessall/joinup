@@ -315,6 +315,7 @@ function joinup_rdf_deploy_200006(?array &$sandbox = NULL): void {
     \Drupal::getContainer()->get('plugin.manager.menu.link')->rebuild();
     // Restore 'rediscover' flag.
     $db->query("UPDATE {menu_link_content_data} SET rediscover = 0 WHERE menu_name LIKE 'ogmenu-%'");
+    $db->query("UPDATE {menu_tree} SET discovered = 0 WHERE menu_name LIKE 'ogmenu-%'");
   }
 }
 
