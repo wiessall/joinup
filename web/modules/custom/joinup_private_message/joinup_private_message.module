@@ -70,10 +70,8 @@ function joinup_private_message_form_private_message_add_form_alter(array &$form
  *
  * @param array $form
  *   Form fields.
- * @param FormStateInterface $form_state
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
  *   Form state.
- *
- * @return array|\Drupal\Core\Ajax\AjaxResponse
  */
 function joinup_private_message_create_ajax_callback(array &$form, FormStateInterface $form_state): array|AjaxResponse {
   $response = new AjaxResponse();
