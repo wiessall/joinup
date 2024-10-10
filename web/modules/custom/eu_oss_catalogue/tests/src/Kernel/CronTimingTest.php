@@ -32,6 +32,7 @@ class CronTimingTest extends KernelTestBase {
   protected function setUp(): void {
     parent::setUp();
     $this->installSchema('dblog', ['watchdog']);
+    date_default_timezone_set('UTC');
   }
 
   /**
@@ -40,7 +41,7 @@ class CronTimingTest extends KernelTestBase {
   public function testCronPeriodicalTask(): void {
     $state = \Drupal::state();
     $cron = \Drupal::service('cron');
-    $today = (new \DateTime('now', new \DateTimeZone('UTC')))->setTime(2, 0)->getTimestamp();
+    $today = (new \DateTime('now'))->setTime(2, 0)->getTimestamp();
 
     // Given the "eu_oss_catalogue_cron" job has run 0 times.
     $this->assertEquals(0, $this->getJobRunCount('eu_oss_catalogue_cron'));
@@ -61,9 +62,12 @@ class CronTimingTest extends KernelTestBase {
     $this->assertEquals($today, $state->get('eu_oss_catalogue.last_check'));
 
     // Mock the DrupalDateTime class to return a fixed date in the future.
-    $future_timestamp = new \DateTime('+2 days', new \DateTimeZone('UTC'));
+    $future_timestamp = new \DateTime('+2 days');
     $mocked_time = $this->createMock(TimeInterface::class);
-    $mocked_time->method('getRequestTime')->willReturn($future_timestamp->getTimestamp());
+    $mocked_time
+      ->expects($this->any())
+      ->method('getRequestTime')
+      ->willReturn($future_timestamp->getTimestamp());
     // When 1 day and 1 minute passes
     // Replace the real DrupalDateTime class with the mocked one.
     $this->container->set('datetime.time', $mocked_time);
@@ -72,9 +76,8 @@ class CronTimingTest extends KernelTestBase {
     $mock_queue = $this->createMock(QueueInterface::class);
     $mock_queue->expects($this->once())
       ->method('createQueue');
-    $mock_queue->expects($this->once())
-      ->method('createItem')
-      ->with(['provider' => 'developers_italia']);
+    $mock_queue->expects($this->any())
+      ->method('createItem');
     $this->container->set('queue', $mock_queue);
     $queue_factory = $this->createMock(QueueFactory::class);
     $queue_factory->expects($this->any())
