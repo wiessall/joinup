@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_distribution\Entity;
 
-use Drupal\Core\Entity\ContentEntityInterface;
+use Drupal\node\NodeInterface;
 
 /**
  * Bundle class for content having distributions as children.
  */
-interface DistributionsParentInterface extends ContentEntityInterface {
+interface DistributionsParentInterface extends NodeInterface {
 
   /**
    * Returns the child distribution IDs.
