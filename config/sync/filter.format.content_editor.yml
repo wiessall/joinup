@@ -137,7 +137,16 @@ filters:
     status: true
     weight: 0
     settings:
-      allowed_domains: "europa.eu\r\n*.europa.eu\r\n*.slideshare.net\r\ndocs.google.com\r\nyoutube.com\r\n*.youtube.com\r\nyoutu.be\r\nvimeo.com\r\n*.vimeo.com"
+      allowed_domains:
+        - europa.eu
+        - '*.europa.eu'
+        - '*.slideshare.net'
+        - docs.google.com
+        - youtube.com
+        - '*.youtube.com'
+        - youtu.be
+        - vimeo.com
+        - '*.vimeo.com'
   linkit:
     id: linkit
     provider: linkit

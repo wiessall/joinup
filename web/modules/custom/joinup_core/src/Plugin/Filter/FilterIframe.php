@@ -26,7 +26,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
   type: FilterInterface::TYPE_TRANSFORM_IRREVERSIBLE,
   description: new TranslatableMarkup("Filters <code>iframe</code> tags according to allowed domains."),
   settings: [
-    "allowed_domains" => "",
+    "allowed_domains" => [],
   ]
 )]
 class FilterIframe extends FilterBase implements ContainerFactoryPluginInterface {
@@ -58,9 +58,18 @@ class FilterIframe extends FilterBase implements ContainerFactoryPluginInterface
       '#type' => 'textarea',
       '#title' => $this->t('Allowed domains'),
       '#description' => $this->t('List of domains to allow for iframe src attribute, 1 per line (* wildcard available). <br />The local domain is allowed by default.'),
-      '#default_value' => $settings['allowed_domains'],
+      '#default_value' => implode("\r\n", $settings['allowed_domains']),
+      '#element_validate' => [[static::class, 'validateAllowedDomains']],
     ];
     return $form;
+  }
+
+  /**
+   * Validates allowed domains (convert to array for config storage).
+   */
+  public static function validateAllowedDomains(array &$element, FormStateInterface $form_state): void {
+    $value = array_filter(array_map('trim', explode("\n", $element['#value'])));
+    $form_state->setValueForElement($element, $value);
   }
 
   /**
@@ -74,7 +83,7 @@ class FilterIframe extends FilterBase implements ContainerFactoryPluginInterface
       return $response->setProcessedText($text);
     }
 
-    $allowed_domains = $this->getAllowedDomains($this->settings['allowed_domains']);
+    $allowed_domains = $this->getAllowedDomainRegexes($this->settings['allowed_domains']);
     $dom = Html::load($text);
 
     // Iterate in reverse since we are removing items.
@@ -141,20 +150,17 @@ class FilterIframe extends FilterBase implements ContainerFactoryPluginInterface
   /**
    * Returns allowed domain regexes.
    *
-   * @param string $allowed
-   *   String of domains (with wildcard) to work with.
+   * @param array $allowed
+   *   Array of domains strings.
    *
    * @return array
    *   Array of regexes to match domains (with wildcard).
    */
-  protected function getAllowedDomains(string $allowed): array {
-    $regexes = explode("\n", $allowed);
+  protected function getAllowedDomainRegexes(array $allowed): array {
     return array_map(static function ($host) {
-      $host = trim($host);
-      $host = preg_quote($host, NULL);
-      $host = preg_replace('/\\\\\*/', '.*?', $host);
+      $host = preg_replace('/\\\\\*/', '.*?', preg_quote($host, NULL));
       return '/^' . $host . '$/';
-    }, $regexes);
+    }, $allowed);
   }
 
 }

@@ -61,7 +61,7 @@ final class FilterIframeTest extends UnitTestCase {
    * @dataProvider providerHtml
    */
   public function testProcess(string $html, string $expected, ?array $settings = []): void {
-    $config = ['settings' => $settings + ['allowed_domains' => '']];
+    $config = ['settings' => $settings + ['allowed_domains' => []]];
     $filter = new FilterIframe($config, 'filter_iframe', ['provider' => 'test'], $this->requestContext);
     $this->assertSame($expected, $filter->process($html, 'en')->getProcessedText());
   }
@@ -98,22 +98,22 @@ final class FilterIframeTest extends UnitTestCase {
       'allowed domains' => [
         'html' => '<iframe src="//example1.com/embed_code/12345"></iframe><iframe src="https://www.example2.com/embed_code/67890"></iframe>',
         'expected' => '<div class="ratio ratio-16x9"><iframe src="//webtools.europa.eu/crs/iframe/?oriurl=//example1.com/embed_code/12345&amp;lang=en"></iframe></div><div class="ratio ratio-16x9"><iframe src="//webtools.europa.eu/crs/iframe/?oriurl=https%3A//www.example2.com/embed_code/67890&amp;lang=en"></iframe></div>',
-        'settings' => ['allowed_domains' => "example1.com\n*.example2.com"],
+        'settings' => ['allowed_domains' => ['example1.com', '*.example2.com']],
       ],
       'not allowed domains' => [
         'html' => '<iframe src="https://untrusted.com/embed_code"></iframe><iframe src="https://very.un-trusted.com/embed_code"></iframe>',
         'expected' => '',
-        'settings' => ['allowed_domains' => "trusted.com"],
+        'settings' => ['allowed_domains' => ['trusted.com']],
       ],
       'multiple mixed domains' => [
         'html' => '<iframe src="https://trusted.com/embed_code"></iframe><iframe src="https://untrusted.com/embed_code"></iframe>',
         'expected' => '<div class="ratio ratio-16x9"><iframe src="//webtools.europa.eu/crs/iframe/?oriurl=https%3A//trusted.com/embed_code&amp;lang=en"></iframe></div>',
-        'settings' => ['allowed_domains' => "trusted.com"],
+        'settings' => ['allowed_domains' => ['trusted.com']],
       ],
       'with wildcard domain' => [
         'html' => '<iframe src="https://sub.example.com/embed_code"></iframe>',
         'expected' => '<div class="ratio ratio-16x9"><iframe src="//webtools.europa.eu/crs/iframe/?oriurl=https%3A//sub.example.com/embed_code&amp;lang=en"></iframe></div>',
-        'settings' => ['allowed_domains' => "*.example.com"],
+        'settings' => ['allowed_domains' => ['*.example.com']],
       ],
     ];
   }
