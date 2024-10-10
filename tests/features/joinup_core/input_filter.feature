@@ -29,11 +29,11 @@ Feature: Input filter
 
     # 'src' attributes are the url encoded version of the URLs that were inputted prepended by the ec cck url.
     When I go to the "Jessica Jones returns" discussion
-    Then I see the "iframe" element with the "src" attribute set to "//webtools.europa.eu/crs/iframe/?oriurl=https%3A//www.youtube.com/embed/nWHUjuJ8zxE&lang=en" in the "Content" region
+    Then I see the "iframe" element with the "src" attribute set to "https://webtools.europa.eu/crs/iframe/?oriurl=https%3A//www.youtube.com/embed/nWHUjuJ8zxE&lang=en" in the "Content" region
     When I go to the "Slideshare presentation" discussion
-    Then I see the "iframe" element with the "src" attribute set to "//webtools.europa.eu/crs/iframe/?oriurl=//www.slideshare.net/slideshow/embed_code/key/hJ3x3pTrtGaatQ&lang=en" in the "Content" region
+    Then I see the "iframe" element with the "src" attribute set to "https://webtools.europa.eu/crs/iframe/?oriurl=//www.slideshare.net/slideshow/embed_code/key/hJ3x3pTrtGaatQ&lang=en" in the "Content" region
     When I go to the "Google docs" discussion
-    Then I see the "iframe" element with the "src" attribute set to "//webtools.europa.eu/crs/iframe/?oriurl=https%3A//docs.google.com/forms/d/1dBGzMp9whY2Ibxf4pUQNadpE2C3ywxdDefSSM3BdwJ4/viewform%3Fembedded%3Dtrue&lang=en" in the "Content" region
+    Then I see the "iframe" element with the "src" attribute set to "https://webtools.europa.eu/crs/iframe/?oriurl=https%3A//docs.google.com/forms/d/1dBGzMp9whY2Ibxf4pUQNadpE2C3ywxdDefSSM3BdwJ4/viewform%3Fembedded%3Dtrue&lang=en" in the "Content" region
     When I go to the "Joinup iframe" discussion
     # Local urls are not prone to the external cookie consent check.
     Then I see the "iframe" element with the "src" attribute set to "/homepage" in the "Content" region

@@ -129,7 +129,7 @@
         "openeuropa/gisco-geocoding-provider": "^1.0",
         "openeuropa/oe_bootstrap_theme": "^1.0",
         "openeuropa/oe_dashboard_agent": "^1.0",
-        "openeuropa/oe_webtools": "^1.21",
+        "openeuropa/oe_webtools": "^1.32",
         "psr/http-factory-implementation": "*",
         "semiceu/adms-ap_validator": "1.0.0-alpha1",
         "sweetrdf/easyrdf": "^1.9",

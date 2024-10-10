@@ -36,12 +36,12 @@ Feature: Embed of videos into the page.
     """
 
     Given I press "Publish"
-    Then the response should contain "//webtools.europa.eu/crs/iframe/?oriurl=https%3A//ec.europa.eu/avservices/play.cfm%3Fref%3DI072651%26lg%3DEN&amp;lang=en"
-    And the response should contain "//webtools.europa.eu/crs/iframe/?oriurl=http%3A//europa.eu/%21dV74uw&amp;lang=en"
-    And the response should contain "//webtools.europa.eu/crs/iframe/?oriurl=https%3A//webcast.ec.europa.eu/iprs-and-innovation-procurement-22-01-20/embed&amp;lang=en"
-    And the response should contain "//webtools.europa.eu/crs/iframe/?oriurl=https%3A//www.youtube.com/embed/xlnYVHRp128&amp;lang=en"
-    And the response should contain "//webtools.europa.eu/crs/iframe/?oriurl=https%3A//player.vimeo.com/video/225133231&amp;lang=en"
-    And the response should not contain "//webtools.europa.eu/crs/iframe/?oriurl=https%3A//www.dailymotion.com/embed/video/x5vl5l0&amp;lang=en"
+    Then the response should contain "https://webtools.europa.eu/crs/iframe/?oriurl=https%3A//ec.europa.eu/avservices/play.cfm%3Fref%3DI072651%26lg%3DEN&amp;lang=en"
+    And the response should contain "https://webtools.europa.eu/crs/iframe/?oriurl=http%3A//europa.eu/%21dV74uw&amp;lang=en"
+    And the response should contain "https://webtools.europa.eu/crs/iframe/?oriurl=https%3A//webcast.ec.europa.eu/iprs-and-innovation-procurement-22-01-20/embed&amp;lang=en"
+    And the response should contain "https://webtools.europa.eu/crs/iframe/?oriurl=https%3A//www.youtube.com/embed/xlnYVHRp128&amp;lang=en"
+    And the response should contain "https://webtools.europa.eu/crs/iframe/?oriurl=https%3A//player.vimeo.com/video/225133231&amp;lang=en"
+    And the response should not contain "https://webtools.europa.eu/crs/iframe/?oriurl=https%3A//www.dailymotion.com/embed/video/x5vl5l0&amp;lang=en"
 
   @javascript
   Scenario Outline: A video embed button should be shown to community content editors.
