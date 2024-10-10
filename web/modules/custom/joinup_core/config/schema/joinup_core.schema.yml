@@ -213,5 +213,6 @@ filter_settings.joinup_iframe:
   label: 'Joinup iframe filter'
   mapping:
     allowed_domains:
-      type: string
-      label: 'Allowed domains'
+      type: sequence
+      sequence:
+        type: string
