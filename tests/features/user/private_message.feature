@@ -96,8 +96,8 @@ Feature: Private messages
     But I should see the link "Delete for me"
     When I click "Delete for me"
     Then a modal should open
-    And I should see the text "Delete conversation for me: Bob Rolls" in the "Modal title"
-    And I should see the text "This action cannot be undone." in the "Modal content"
+    And I should see the text "Delete conversation for me" in the "Modal title"
+    And I should see the text "This action cannot be undone. The conversation will be removed from your view, but it will remain accessible to the other participant." in the "Modal content"
     And I should see the button "Delete for me" in the "Modal buttons" region
     Then I press "Delete for me" in the "Modal buttons" region
     And I should see 0 private message

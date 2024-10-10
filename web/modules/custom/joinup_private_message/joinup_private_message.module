@@ -11,7 +11,6 @@ use Drupal\Component\Serialization\Json;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\StringTranslation\TranslatableMarkup;
 
 /**
  * Implements hook_form_alter().
@@ -36,7 +35,8 @@ function joinup_private_message_form_alter(array &$form, FormStateInterface $for
   }
 
   if ($form_id === 'private_message_thread_clear_personal_history_form') {
-    $form['#title'] = new TranslatableMarkup('Delete conversation for me: @others.', ['@others' => $form['#title']->getArguments()['@others']]);
+    $form['#title'] = t('Delete conversation for me');
+    $form['description']['#markup'] = t('This action cannot be undone. The conversation will be removed from your view, but it will remain accessible to the other participant.');
     // Change the submit button label from "Clear history" to "Delete for me".
     if (isset($form['actions']['submit']['#value'])) {
       $form['actions']['submit']['#value'] = t('Delete for me');
