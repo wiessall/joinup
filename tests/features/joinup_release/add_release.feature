@@ -95,6 +95,8 @@ Feature: "Add release" visibility options.
     And I delete the "Chasing shadows" release
     And I delete the "Chasing flares" release
 
+  # TODO: This test works because of the redirection but it should be adapted to
+  # use the correct URL in ISAICP-8376.
   Scenario: Do not allow access to the page if the parent is not a solution.
     Given collection content:
       | uri                       | title               | state     |
