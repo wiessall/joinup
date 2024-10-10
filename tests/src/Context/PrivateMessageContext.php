@@ -19,8 +19,6 @@ class PrivateMessageContext extends RawDrupalContext {
   use JavascriptTrait;
   use UserTrait;
 
-  protected $privateMessageBan;
-
   /**
    * Checks that the specified number of private messages are present.
    *
@@ -244,8 +242,6 @@ class PrivateMessageContext extends RawDrupalContext {
         'created' => strtotime($row['created']),
       ]);
       $ban->save();
-      $key = $row['owner'] . '-' . $row['target'];
-      $this->privateMessageBan[$key] = $ban;
     }
   }
 
