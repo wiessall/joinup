@@ -257,6 +257,7 @@ final class MigrationHelper {
       'http://www.w3.org/ns/dcat#contactPoint' => [
         'target_field_name' => 'contact',
         'format' => 'reference',
+        'mapped_term' => TRUE,
       ],
       'http://joinup.eu/search' => [
         'target_field_name' => 'listing_content',
@@ -285,6 +286,7 @@ final class MigrationHelper {
       'http://purl.org/dc/terms/language' => [
         'target_field_name' => 'language',
         'format' => 'reference',
+        'mapped_term' => TRUE,
       ],
       'http://purl.org/dc/dcmitype/StillImage' => [
         // @todo Create a follow up to merge all logo fields into one.
@@ -306,6 +308,7 @@ final class MigrationHelper {
       'http://purl.org/dc/terms/publisher' => [
         'target_field_name' => 'owner',
         'format' => 'reference',
+        'mapped_term' => TRUE,
       ],
       'http://purl.org/dc/terms/relation' => [
         'target_field_name' => 'related_solutions',
@@ -343,6 +346,7 @@ final class MigrationHelper {
       'http://www.w3.org/ns/adms#translation' => [
         'target_field_name' => 'translation',
         'format' => 'reference',
+        'mapped_term' => TRUE,
       ],
       // @todo Minimal old data exist.
       // @codingStandardsIgnoreStart
@@ -373,6 +377,7 @@ final class MigrationHelper {
       'http://www.w3.org/ns/adms#status' => [
         'target_field_name' => 'process_status',
         'format' => 'string',
+        'mapped_term' => TRUE,
       ],
       'http://joinup.eu/vocabulary/topic' => [
         'target_field_name' => 'field_topic',
