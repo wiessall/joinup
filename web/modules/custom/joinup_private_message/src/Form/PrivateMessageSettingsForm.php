@@ -12,7 +12,7 @@ use Drupal\user\UserDataInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Private message mail notification settings.
+ * Private message mail notification settings form.
  */
 class PrivateMessageSettingsForm extends FormBase {
 
@@ -21,9 +21,6 @@ class PrivateMessageSettingsForm extends FormBase {
    *
    * @param \Drupal\user\UserDataInterface $userData
    *   The user data service.
-   *
-   * @return void
-   *   returns void
    */
   public function __construct(protected UserDataInterface $userData) {}
 
@@ -81,10 +78,10 @@ class PrivateMessageSettingsForm extends FormBase {
   }
 
   /**
-   * Gets current user.
+   * Returns the current user.
    *
    * @return \Drupal\Core\Session\AccountInterface
-   *   returns current user.
+   *   The current user.
    */
   public function getEntity(): AccountInterface {
     return $this->currentUser();
