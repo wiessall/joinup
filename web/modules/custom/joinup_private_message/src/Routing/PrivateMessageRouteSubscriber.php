@@ -44,7 +44,7 @@ class PrivateMessageRouteSubscriber extends RouteSubscriberBase {
     }
 
     // Remove the ban page route.
-    $collection->remove('entity.private_message.canonical');
+    $collection->remove('private_message.ban_page');
 
     // Alter the path for deleting a private message.
     if ($route = $collection->get('entity.private_message.delete')) {
