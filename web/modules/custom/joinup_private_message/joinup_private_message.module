@@ -8,9 +8,13 @@
 declare(strict_types=1);
 
 use Drupal\Component\Serialization\Json;
+use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\CloseModalDialogCommand;
+use Drupal\Core\Ajax\RedirectCommand;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Url;
 
 /**
  * Implements hook_form_alter().
@@ -42,6 +46,48 @@ function joinup_private_message_form_submit(array &$form, FormStateInterface $fo
   // The entity.private_message_thread.canonical route has been removed,
   // so we will redirect to the Private Messages page.
   $form_state->setRedirect('private_message.private_message_page');
+}
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ */
+function joinup_private_message_form_private_message_add_form_alter(array &$form): void {
+  $current_route_name = \Drupal::routeMatch()->getRouteName();
+  if ($current_route_name === 'private_message.private_message_create') {
+    $form['#prefix'] = '<div id="private-message-create-form-wrapper">';
+    $form['#suffix'] = '</div>';
+
+    $form['actions']['submit']['#ajax'] = [
+      'callback' => 'joinup_private_message_create_ajax_callback',
+      'wrapper' => 'private-message-create-form-wrapper',
+      'effect' => 'fade',
+    ];
+  }
+}
+
+/**
+ * Ajax callback for add a new thead form.
+ *
+ * @param array $form
+ *   Form fields.
+ * @param FormStateInterface $form_state
+ *   Form state.
+ *
+ * @return array|\Drupal\Core\Ajax\AjaxResponse
+ */
+function joinup_private_message_create_ajax_callback(array &$form, FormStateInterface $form_state): array|AjaxResponse {
+  $response = new AjaxResponse();
+
+  if ($form_state->hasAnyErrors()) {
+    return $form;
+  }
+
+  $url = Url::fromRoute('private_message.private_message_page');
+
+  $response->addCommand(new CloseModalDialogCommand());
+  $response->addCommand(new RedirectCommand($url->toString()));
+
+  return $response;
 }
 
 /**
