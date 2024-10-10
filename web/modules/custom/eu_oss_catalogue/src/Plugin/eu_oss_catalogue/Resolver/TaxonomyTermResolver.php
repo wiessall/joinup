@@ -82,12 +82,15 @@ class TaxonomyTermResolver extends DefaultResolver implements ContainerFactoryPl
 
     // Retrieve existing term IDs for the given term names.
     // Uses a BINARY mysql comparison to be case and accents sensitive.
-    $records = $this->database->select($storage->getDataTable(), 't')
-      ->fields('t', ['tid', 'name'])
-      ->condition('vid', $this->getConfiguration()['vid'])
-      ->where('BINARY [t].[name] IN (:names[])', [':names[]' => $allTermNames])
-      ->execute()
-      ->fetchAllAssoc('name');
+    $records = [];
+    if (!empty($allTermNames)) {
+      $records = $this->database->select($storage->getDataTable(), 't')
+        ->fields('t', ['tid', 'name'])
+        ->condition('vid', $this->getConfiguration()['vid'])
+        ->where('BINARY [t].[name] IN (:names[])', [':names[]' => $allTermNames])
+        ->execute()
+        ->fetchAllAssoc('name');
+    }
 
     // Resolve each value item.
     $resolved = [];
