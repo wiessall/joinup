@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_private_message\Form;
 
-use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
@@ -57,9 +56,6 @@ class PrivateMessageSettingsForm extends FormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state): void {
-    CacheableMetadata::createFromRenderArray($form)
-      ->addCacheableDependency($this->getEntity()->getAccount())
-      ->applyTo($form);
     $uid = $this->currentUser()->id();
     $settings = [
       'receive_notification' => $form_state->getValue(['private_messages', 'receive_notification']),
