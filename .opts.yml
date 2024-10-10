@@ -8,13 +8,12 @@ upgrade_commands:
     - vendor/bin/drush deploy --yes
 
     # BEGIN: Remove in ISAICP-8376
-    # - vendor/bin/drush rdf_sync:synchronize node --bundle=solution,collection
+    - vendor/bin/drush rdf_sync:synchronize node --bundle=solution,collection
     # END: Remove in ISAICP-8376
 
     - vendor/bin/drush search-api:reset-tracker --yes
     - vendor/bin/drush joinup:node-access-rebuild
     - vendor/bin/drush joinup:search-api-tasks
-    # - vendor/bin/drush twigc --yes
     - vendor/bin/drush joinup:unpublish-alert --category
     - scripts/check_status_report.php
   append:
