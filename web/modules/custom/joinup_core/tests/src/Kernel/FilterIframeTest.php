@@ -4,60 +4,39 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_core\Kernel;
 
-use Drupal\Core\DependencyInjection\ContainerBuilder;
-use Drupal\Core\PathProcessor\OutboundPathProcessorInterface;
-use Drupal\Core\Routing\RequestContext;
-use Drupal\Core\Utility\UnroutedUrlAssembler;
-use Drupal\Tests\UnitTestCase;
+use Drupal\KernelTests\KernelTestBase;
 use Drupal\joinup_core\Plugin\Filter\FilterIframe;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Tests the "joinup_iframe" filter.
  *
  * @coversDefaultClass \Drupal\joinup_core\Plugin\Filter\FilterIframe
  */
-final class FilterIframeTest extends UnitTestCase {
+class FilterIframeTest extends KernelTestBase {
 
   /**
-   * Fake base URL.
+   * Mocked base URL for the test.
    */
-  const BASE_URL = 'https://example.com/path';
-
-  /**
-   * The request context service.
-   *
-   * @var \Drupal\Core\Routing\RequestContext
-   */
-  protected $requestContext;
+  protected const BASE_URL = 'http://localhost/subdir';
 
   /**
    * {@inheritdoc}
    */
-  public function setup(): void {
-    parent::setup();
+  protected static $modules = [
+    'filter',
+    'joinup_core',
+    'oe_webtools_cookie_consent',
+  ];
 
-    // Ensure the constant from oe_webtools is defined.
-    if (!defined('OE_WEBTOOLS_COOKIE_CONSENT_EMBED_COOKIE_URL')) {
-      define('OE_WEBTOOLS_COOKIE_CONSENT_EMBED_COOKIE_URL', 'https://webtools.europa.eu/crs/iframe/');
-    }
+  /**
+   * {@inheritdoc}
+   */
+  protected function setUp(): void {
+    parent::setUp();
 
-    // Mock URL assembler.
-    $request_stack = new RequestStack();
-    $request_stack->push(new Request());
-    $path_processor = $this->createMock(OutboundPathProcessorInterface::class);
-    $url_assembler = new UnroutedUrlAssembler($request_stack, $path_processor);
-
-    $container = new ContainerBuilder();
-    $container->set('unrouted_url_assembler', $url_assembler);
-    \Drupal::setContainer($container);
-
-    // Mock request context.
-    $this->requestContext = $this->createMock(RequestContext::class);
-    $this->requestContext->expects($this->any())
-      ->method('getCompleteBaseUrl')
-      ->willReturn(self::BASE_URL);
+    /** @var \Symfony\Component\Routing\RequestContext $request_context */
+    $request_context = $this->container->get('router.request_context');
+    $request_context->setCompleteBaseUrl(self::BASE_URL);
   }
 
   /**
@@ -67,7 +46,7 @@ final class FilterIframeTest extends UnitTestCase {
    */
   public function testProcess(string $html, string $expected, ?array $settings = []): void {
     $config = ['settings' => $settings + ['allowed_domains' => []]];
-    $filter = new FilterIframe($config, 'filter_iframe', ['provider' => 'test'], $this->requestContext);
+    $filter = new FilterIframe($config, 'filter_iframe', ['provider' => 'test'], $this->container->get('router.request_context'));
     $this->assertSame($expected, $filter->process($html, 'en')->getProcessedText());
   }
 
@@ -78,7 +57,6 @@ final class FilterIframeTest extends UnitTestCase {
    *   An array of test data.
    */
   public static function providerHtml(): array {
-    $base_url = self::BASE_URL;
     return [
       'no iframe' => [
         'html' => '<p>Foo Bar</p>',
@@ -97,8 +75,8 @@ final class FilterIframeTest extends UnitTestCase {
         'expected' => '<div class="ratio ratio-16x9"><iframe src="/foo/bar"></iframe></div>',
       ],
       'local domain with base URL' => [
-        'html' => "<iframe src=\"$base_url/foo/bar\"></iframe>",
-        'expected' => "<div class=\"ratio ratio-16x9\"><iframe src=\"$base_url/foo/bar\"></iframe></div>",
+        'html' => '<iframe src="' . self::BASE_URL . '/foo/bar"></iframe>',
+        'expected' => '<div class="ratio ratio-16x9"><iframe src="' . self::BASE_URL . '/foo/bar"></iframe></div>',
       ],
       'allowed domains' => [
         'html' => '<iframe src="//example1.com/embed_code/12345"></iframe><iframe src="https://www.example2.com/embed_code/67890"></iframe>',
