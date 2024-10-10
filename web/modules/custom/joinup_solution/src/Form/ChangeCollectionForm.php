@@ -179,8 +179,8 @@ class ChangeCollectionForm extends FormBase {
   /**
    * Returns a list of entities to be moved to the new collection.
    *
-   * @return \Drupal\rdf_entity\RdfInterface[]
-   *   A list of entities to be moved to the new collection.
+   * @return \Drupal\joinup_solution\Entity\SolutionInterface[]
+   *   A list of solutions to be moved to the new collection.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    *   Thrown if the entity type doesn't exist.

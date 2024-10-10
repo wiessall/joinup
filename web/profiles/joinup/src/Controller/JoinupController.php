@@ -38,7 +38,7 @@ class JoinupController extends ControllerBase {
   }
 
   /**
-   * Handles access to the rdf_entity proposal form.
+   * Handles access to the collection node proposal form.
    *
    * @param \Drupal\node\NodeTypeInterface $node_type
    *   The node bundle entity for which to generate the proposal form.

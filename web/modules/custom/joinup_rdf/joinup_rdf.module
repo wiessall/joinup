@@ -19,15 +19,13 @@ use Drupal\rdf_sync\Model\SyncMethod;
 /**
  * Implements hook_form_BASE_FORM_ID_alter().
  *
- * @todo Remove this hack as part of ISAICP-3021.
- * @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3021
- *
  * Hide the table drag handlers on multivalue fields for RDF entities. These are
  * useless since weights are currently not stored and the ordering of the values
  * is not retained after submitting the form.
+ *
+ * @todo Remove this hack in ISAICP-9153.
  */
 function joinup_rdf_form_node_form_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
-  /** @var \Drupal\rdf_entity\Form\RdfForm $form_object */
   $form_object = $form_state->getFormObject();
   /** @var \Drupal\node\NodeInterface $node */
   $node = $form_object->getEntity();
