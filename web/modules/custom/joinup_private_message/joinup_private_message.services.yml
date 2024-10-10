@@ -7,3 +7,9 @@ services:
     class: Drupal\joinup_private_message\Controller\PrivateMessageNotFoundController
     tags:
       - { name: controller.service_arguments }
+  joinup_private_message.paramconverter:
+    class: Drupal\joinup_private_message\ParamConverter\BanConverter
+    arguments: ['@entity_type.manager', '@entity.repository', '@current_user']
+    tags:
+      # Use a higher priority than EntityConverter.
+      - { name: paramconverter, priority: 6 }
