@@ -63,7 +63,6 @@ class VocabularyManager {
     }
 
     // The ID of the topic will be assigned automatically according to the name.
-    // @see \Drupal\joinup_core\Plugin\sparql_entity_storage\Id\TopicVocabulary::generate()
     $term_storage->create([
       'vid' => 'topic',
       'name' => $name,

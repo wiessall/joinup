@@ -207,8 +207,6 @@
     "autoload": {
         "classmap": [
             "web/modules/contrib/error_page/src/ErrorPageErrorHandler.php",
-            "web/modules/contrib/sparql_entity_storage/src/Driver/Database/sparql/ConnectionInterface.php",
-            "web/modules/custom/joinup_sparql/src/Driver/Database/joinup_sparql/Connection.php",
             "web/modules/custom/joinup_distribution/src/Entity/DistributionsParentInterface.php",
             "web/modules/custom/joinup_solution/src/Entity/SolutionContentTrait.php",
             "web/modules/custom/joinup_solution/src/Entity/SolutionContentInterface.php"
