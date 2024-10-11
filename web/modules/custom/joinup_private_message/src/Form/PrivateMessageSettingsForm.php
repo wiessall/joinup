@@ -4,35 +4,26 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_private_message\Form;
 
-use Drupal\Core\Cache\CacheableMetadata;
+use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\user\UserDataInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Private message mail notification settings.
+ * Private message mail notification settings form.
  */
 class PrivateMessageSettingsForm extends FormBase {
+
+  use AutowireTrait;
 
   /**
    * Constructs a PrivateMessageSettingsForm object.
    *
    * @param \Drupal\user\UserDataInterface $userData
    *   The user data service.
-   *
-   * @return void
-   *   returns void
    */
   public function __construct(protected UserDataInterface $userData) {}
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container) {
-    return new static($container->get('user.data'));
-  }
 
   /**
    * {@inheritdoc}
@@ -60,9 +51,6 @@ class PrivateMessageSettingsForm extends FormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state): void {
-    CacheableMetadata::createFromRenderArray($form)
-      ->addCacheableDependency($this->getEntity()->getAccount())
-      ->applyTo($form);
     $uid = $this->currentUser()->id();
     $settings = [
       'receive_notification' => $form_state->getValue(['private_messages', 'receive_notification']),
@@ -81,10 +69,10 @@ class PrivateMessageSettingsForm extends FormBase {
   }
 
   /**
-   * Gets current user.
+   * Returns the current user.
    *
    * @return \Drupal\Core\Session\AccountInterface
-   *   returns current user.
+   *   The current user.
    */
   public function getEntity(): AccountInterface {
     return $this->currentUser();
