@@ -112,6 +112,10 @@ class PrivateMessageReportForm extends FormBase {
     if ($blockSender) {
       $this->privateMessageBanManager->banUser((int) $sender->id());
     }
+    // Update custom fields in private message entity.
+    $message->set('report', $report);
+    $message->set('report_timestamp', strtotime('now'));
+    $message->save();
     $form_state->setRedirect('private_message.private_message_page');
   }
 

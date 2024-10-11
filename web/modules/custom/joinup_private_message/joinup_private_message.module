@@ -9,6 +9,8 @@ declare(strict_types=1);
 
 use Drupal\Component\Serialization\Json;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 use Drupal\symfony_mailer_lite\Plugin\Mail\SymfonyMailer;
@@ -109,7 +111,8 @@ function joinup_private_message_mail(string $key, array &$message, array $params
             '@reporter_url' => Url::fromRoute('entity.user.canonical', ['user' => $recipient->id()], ['absolute' => TRUE])->toString(),
             '@sender_name' => $sender->getDisplayName(),
             '@sender_url' => Url::fromRoute('entity.user.canonical', ['user' => $sender->id()], ['absolute' => TRUE])->toString(),
-            '@message_url' => Url::fromRoute('entity.private_message.canonical', ['private_message' => $bannedMessage->id()], ['absolute' => TRUE])->toString(),
+            '@message_url' => 'test'
+//            '@message_url' => Url::fromRoute('entity.private_message.canonical', ['private_message' => $bannedMessage->id()], ['absolute' => TRUE])->toString(),
           ]) . $bannedMessage->get('message')->value,
     ];
     $message['subject'] = $params['subject'];
@@ -117,3 +120,42 @@ function joinup_private_message_mail(string $key, array &$message, array $params
     $message['headers']['Content-Type'] = SymfonyMailer::FORMAT_HTML;
   }
 }
+/**
+ * Implements hook_entity_base_field_info().
+ */
+function joinup_private_message_entity_base_field_info(EntityTypeInterface $entity_type) {
+  $fields = [];
+
+  if ($entity_type->id() == 'private_message') {
+
+    $fields['report'] = BaseFieldDefinition::create('string_long')
+      ->setLabel(t('Report'))
+      ->setDescription(t('The report related to the private message.'))
+      ->setRequired(FALSE)
+      ->setSettings([
+        'max_length' => 1000,
+        'text_processing' => 0,
+      ])
+      ->setDisplayOptions('view', [
+        'label' => 'inline',
+        'type' => 'string_textarea',
+        'weight' => 0,
+      ])
+      ->setDisplayConfigurable('view', TRUE);
+
+    $fields['report_timestamp'] = BaseFieldDefinition::create('timestamp')
+      ->setLabel(t('Report timestamp'))
+      ->setDescription(t('The timestamp of the report.'))
+      ->setRequired(FALSE)
+      ->setDisplayOptions('view', [
+        'label' => 'inline',
+        'type' => 'timestamp',
+        'weight' => 1,
+      ])
+      ->setDisplayConfigurable('view', TRUE);
+  }
+
+  return $fields;
+}
+
+
