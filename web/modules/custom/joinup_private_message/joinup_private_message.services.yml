@@ -1,12 +1,13 @@
 services:
+  joinup_private_message.request_subscriber:
+    class: Drupal\joinup_private_message\EventSubscriber\RequestSubscriber
+    arguments: [ '@current_route_match', '@private_message_flood.service' ]
+    tags:
+      - { name: event_subscriber }
   joinup_private_message_route_alter.route_subscriber:
     class: Drupal\joinup_private_message\Routing\PrivateMessageRouteSubscriber
     tags:
       - { name: event_subscriber }
-  joinup_private_message.private_message_not_found_controller:
-    class: Drupal\joinup_private_message\Controller\PrivateMessageNotFoundController
-    tags:
-      - { name: controller.service_arguments }
   joinup_private_message.paramconverter:
     class: Drupal\joinup_private_message\ParamConverter\BanConverter
     arguments: ['@entity_type.manager', '@entity.repository', '@current_user']

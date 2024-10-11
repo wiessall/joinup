@@ -20,7 +20,7 @@ display:
     display_plugin: default
     position: 0
     display_options:
-      title: 'Private message ban settings'
+      title: 'Blocked users'
       fields:
         operations:
           id: operations
@@ -95,7 +95,20 @@ display:
       cache:
         type: tag
         options: {  }
-      empty: {  }
+      empty:
+        area:
+          id: area
+          table: views
+          field: area
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: text
+          empty: true
+          content:
+            value: 'There are no blocked users.'
+            format: content_editor
+          tokenize: false
       sorts: {  }
       arguments: {  }
       filters: {  }
@@ -123,8 +136,8 @@ display:
       contexts:
         - 'languages:language_interface'
       tags: {  }
-  block_1:
-    id: block_1
+  block_blocked_users:
+    id: block_blocked_users
     display_title: 'Private message ban settings'
     display_plugin: block
     position: 1
@@ -405,7 +418,7 @@ display:
         metatag_display_extender:
           metatags: {  }
           tokenize: false
-      block_description: 'Blocked users'
+      block_description: 'Private message blocked users'
     cache_metadata:
       max-age: -1
       contexts:
