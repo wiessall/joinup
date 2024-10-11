@@ -98,10 +98,10 @@ function joinup_rdf_deploy_200002(array &$sandbox): string {
   $migration_helper = \Drupal::getContainer()->get('joinup_rdf.migration_helper');
   $start = microtime(TRUE);
   foreach ($uris as $uri) {
-    if (!$collectionNid ??= $sandbox['solution_to_collection'][$uri]) {
+    if (empty($sandbox['solution_to_collection'][$uri])) {
       throw new \Exception("Collection not found for solution: $uri");
     }
-    $migration_helper->migrateGroup('solution', $uri, $collectionNid);
+    $migration_helper->migrateGroup('solution', $uri, $sandbox['solution_to_collection'][$uri]);
     $sandbox['progress']++;
   }
 
