@@ -351,22 +351,6 @@ function joinup_release_title_version_is_unique(ReleaseInterface $release, bool 
 }
 
 /**
- * Implements hook_sparql_bundle_load_alter().
- *
- * There is an initial check whether the bundle is empty because the method
- * that invokes this hook is also called for taxonomies and the bundle is
- * currently being skipped for the taxonomies.
- */
-function joinup_release_sparql_bundle_load_alter(array $entity_values, array &$bundles): void {
-  // @todo Remove this in ISAICP-8572.
-  if (count($bundles) > 1 && in_array('solution', $bundles)) {
-    if (isset($entity_values['http://purl.org/dc/terms/isVersionOf'])) {
-      $bundles = array_diff($bundles, ['solution']);
-    }
-  }
-}
-
-/**
  * Implements hook_form_FORM_ID_alter().
  */
 function joinup_release_form_node_release_form_alter(array &$form, FormStateInterface $form_state, string $form_id): void {

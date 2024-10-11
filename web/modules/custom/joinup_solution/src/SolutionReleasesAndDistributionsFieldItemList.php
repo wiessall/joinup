@@ -48,7 +48,6 @@ class SolutionReleasesAndDistributionsFieldItemList extends EntityReferenceField
    */
   protected function getReleasesAndDistributions(): array {
     $entityTypeManager = \Drupal::entityTypeManager();
-    /** @var \Drupal\sparql_entity_storage\SparqlEntityStorageInterface $storage */
     $storage = $entityTypeManager->getStorage('node');
     /** @var \Drupal\joinup_solution\Entity\SolutionInterface $solution */
     $solution = $this->getEntity();
