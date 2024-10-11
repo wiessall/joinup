@@ -18,11 +18,13 @@ services:
     tags:
       - { name: twig.extension }
 
+  # Move in joinup_rdf. See ISAICP-9156.
   joinup_rdf.legacy_rdf_url.subscriber:
     class: Drupal\joinup_rdf\EventSubscriber\LegacyRdfUrlSubscriber
     arguments: ['@rdf_sync.mapper']
     tags:
       - { name: event_subscriber }
+  Drupal\joinup_rdf\EventSubscriber\LegacyRdfUrlSubscriber: '@joinup_rdf.legacy_rdf_url.subscriber'
 
   joinup_rdf.export_route_subscriber:
     class: Drupal\joinup_rdf\Routing\RdfExportRouteSubscriber
