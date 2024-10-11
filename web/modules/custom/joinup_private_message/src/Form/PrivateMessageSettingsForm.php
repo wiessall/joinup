@@ -4,16 +4,18 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_private_message\Form;
 
+use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\user\UserDataInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Private message mail notification settings form.
  */
 class PrivateMessageSettingsForm extends FormBase {
+
+  use AutowireTrait;
 
   /**
    * Constructs a PrivateMessageSettingsForm object.
@@ -22,13 +24,6 @@ class PrivateMessageSettingsForm extends FormBase {
    *   The user data service.
    */
   public function __construct(protected UserDataInterface $userData) {}
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container): self {
-    return new static($container->get('user.data'));
-  }
 
   /**
    * {@inheritdoc}
