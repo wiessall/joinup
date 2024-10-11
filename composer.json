@@ -366,7 +366,8 @@
                 "Facet Summary for Facet Items with a set dependency. @see https://www.drupal.org/i/2873480": "resources/patch/php/drupal/facets/2873480.patch",
                 "Add 0 option in 'Soft limit' and apply soft limit to facet root li tags and add. @see https://www.drupal.org/i/3208580 and https://www.drupal.org/i/3307082": "resources/patch/php/drupal/facets/3208580-and-3307082.patch",
                 "Config validation error for facets_processor.* @see https://www.drupal.org/project/facets/issues/3459093": "resources/patch/php/drupal/facets/3459093.patch",
-                "Fix FacetsHierarchy config schema issue @see https://www.drupal.org/project/facets/issues/3259836": "resources/patch/php/drupal/facets/3259836-8.patch"
+                "Fix FacetsHierarchy config schema issue @see https://www.drupal.org/project/facets/issues/3259836": "resources/patch/php/drupal/facets/3259836-8.patch",
+                "Facets - Critical - Cross Site Scripting - SA-CONTRIB-2024-047 @see https://www.drupal.org/sa-contrib-2024-047": "resources/patch/php/drupal/facets/sa-contrib-2024-047.patch"
             },
             "drupal/field_delimiter": {
                 "Doesn't work in layout builder. @see https://www.drupal.org/i/3099580": "resources/patch/php/drupal/field_delimiter/3099580.patch",
