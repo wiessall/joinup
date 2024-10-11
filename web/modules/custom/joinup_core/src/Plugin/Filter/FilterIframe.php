@@ -77,7 +77,7 @@ class FilterIframe extends FilterBase implements ContainerFactoryPluginInterface
     $response = new FilterProcessResult();
 
     // Ensure that we have iframes in the markup.
-    if (stripos($text, '<iframe') === FALSE) {
+    if (str_contains($text, '<iframe') === FALSE) {
       return $response->setProcessedText($text);
     }
 
@@ -119,8 +119,7 @@ class FilterIframe extends FilterBase implements ContainerFactoryPluginInterface
       $wrapper->appendChild($iframe);
     }
 
-    $response->setProcessedText(Html::serialize($dom));
-    return $response;
+    return $response->setProcessedText(Html::serialize($dom));
   }
 
   /**
