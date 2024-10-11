@@ -135,7 +135,7 @@ filters:
     id: joinup_iframe
     provider: joinup_core
     status: true
-    weight: 0
+    weight: -49
     settings:
       allowed_domains:
         - europa.eu
