@@ -2,8 +2,8 @@ parameters:
   grumphp.tasks.php_extensions: [ 'php', 'module', 'inc', 'theme', 'install', 'profile', 'engine' ]
 
 grumphp:
-  # Extend timeout, PHPStan is rather slow to scan everything.
-  process_timeout: 240
+  # Disable timeout. Gitlab congestions? See DROPSEC-11197.
+  process_timeout: ~
   git_hook_variables:
     EXEC_GRUMPHP_COMMAND: ddev exec php
   ascii:
