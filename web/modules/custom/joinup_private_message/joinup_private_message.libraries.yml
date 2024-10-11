@@ -1,0 +1,5 @@
+new_message_thread_script:
+  js:
+    js/member_cardinality_one.js: {}
+  dependencies:
+    - core/jquery
