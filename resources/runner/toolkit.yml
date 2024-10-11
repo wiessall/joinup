@@ -155,6 +155,7 @@ commands:
   toolkit:test-phpmd:
     - { task: exec, command: "${runner.bin_dir}/grumphp run --tasks=phpmd" }
   toolkit:test-phpstan:
+    - { task: symlink, from: "phpstan.ci.neon", to: "phpstan.neon" }
     - { task: exec, command: "${runner.bin_dir}/grumphp run --tasks=phpstan" }
   toolkit:lint-css:
     - { task: exec, command: "${runner.bin_dir}/grumphp run --tasks=lint-css" }
