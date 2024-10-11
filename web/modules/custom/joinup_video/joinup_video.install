@@ -15,6 +15,13 @@ function joinup_video_update_111400(): void {
   $config_storage = \Drupal::service('config.storage');
   foreach ($config_storage->listAll('filter.format') as $config_name) {
     $config = \Drupal::configFactory()->getEditable($config_name);
-    $config->clear('filters.joinup_video')->save(TRUE);
+    $config->clear('filters.joinup_video');
+    $dependencies = $config->get('dependencies.module');
+    if ($dependencies) {
+      $dependencies = array_diff($dependencies, ['joinup_video']);
+      $config->set('dependencies.module', $dependencies);
+    }
+
+    $config->save(TRUE);
   }
 }
