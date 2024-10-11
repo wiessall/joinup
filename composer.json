@@ -501,12 +501,6 @@
                 }
             }
         },
-        "phpstan": {
-            "includes": [
-                "vendor/mglaman/phpstan-drupal/extension.neon",
-                "vendor/phpstan/phpstan-deprecation-rules/rules.neon"
-            ]
-        },
         "grumphp": {
             "disable-plugin": true
         }
