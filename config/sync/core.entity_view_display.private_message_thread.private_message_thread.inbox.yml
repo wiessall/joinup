@@ -21,14 +21,6 @@ content:
   last_message:
     settings: {  }
     third_party_settings: {  }
-    weight: 2
-    region: content
-  subject:
-    type: string
-    label: above
-    settings:
-      link_to_entity: false
-    third_party_settings: {  }
     weight: 1
     region: content
 hidden:
@@ -38,3 +30,4 @@ hidden:
   private_message_form: true
   private_messages: true
   search_api_excerpt: true
+  subject: true
