@@ -158,6 +158,8 @@ function eu_oss_catalogue_cron(): void {
   }
 
   // Establish the timestamp as 2 AM of the current day.
-  $state->set('eu_oss_catalogue.last_check', strtotime(date('Y-m-d', $request_time) . ' 2:00:00'));
+  $datetime = new \DateTime('@' . $request_time);
+  $datetime->setTime(2, 0);
+  $state->set('eu_oss_catalogue.last_check', $datetime->getTimestamp());
   \Drupal::logger('eu_oss_catalogue')->info('Cron eu_oss_catalogue_cron ran successfully.');
 }
