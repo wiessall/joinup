@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_rdf;
 
+use Drupal\collection\Entity\CollectionInterface;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -500,6 +501,23 @@ final class MigrationHelper {
     foreach (self::FIELD_MAPPING[$group->bundle()] as $property => $mapping) {
       $value = $values[$property] ?? NULL;
       if ($value) {
+        if ($property === 'http://joinup.eu/search') {
+          $unserialized = unserialize($value[0], ['allowed_classes' => FALSE]);
+          $submap = [
+            'collection' => [
+              'source' => 'field_collection_content_status',
+              'target' => 'collection_content_status',
+            ],
+            'solution' => [
+              'source' => 'field_is_content_status',
+              'target' => 'solution_content_status',
+            ],
+          ];
+          $data = $unserialized['fields'][$submap[$group->bundle()]['source']];
+          unset($unserialized['fields'][$submap[$group->bundle()]['source']]);
+          $unserialized['fields'][$submap[$group->bundle()]['target']] = $data;
+          $value[0] = serialize($unserialized);
+        }
         $value = $this->parseValue($value, $mapping);
         $group->set($mapping['target_field_name'], $value);
       }
@@ -563,6 +581,10 @@ final class MigrationHelper {
     $format = $mappingData['format'];
 
     foreach ($values as $value) {
+      if (empty($value)) {
+        continue;
+      }
+
       $parsedValue = match ($format) {
         'string' => ['value' => !empty($mappingData['serialized']) ? unserialize($value, ['allowed_classes' => FALSE]) : $value],
         'uri' => ['uri' => $value],
