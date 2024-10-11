@@ -14,9 +14,9 @@ Feature: Private messages
   @javascript
   Scenario: Send a private message
     Given I am logged in as "alice_m"
-    And I am on the homepage
-    And I should see 0 unread private message
-    And I am on "/user/messages"
+    When I am on the homepage
+    Then I should see 0 unread private message
+    When I am on "/user/messages"
     And I click "New Message"
     Then a modal should open
     When I type "Bob Rolls" in the "Member(s) (value 1)" autocomplete field
@@ -73,6 +73,17 @@ Feature: Private messages
     And I wait for AJAX to finish
     And I click "New Message"
     Then a modal should open
+    Then I close the modal dialog
+
+    Given the limit for messages or threads allowed is 2
+    When I click "New Message"
+    Then I should see "Sorry, you have reached your limit for posting. Please try again later."
+    When I am on "/user/messages"
+    Then I should not see "Sorry, you have reached your limit for posting. Please try again later."
+    When I enter "This is a fail." in the "Reply" wysiwyg editor
+    And I press "Send"
+    Then I should see "Sorry, you have reached your limit for posting. Please try again later."
+    Then I restore the limit for messages or threads allowed
 
   Scenario: Check a user without messages
     Given I am logged in as "alice_m"
@@ -83,3 +94,15 @@ Feature: Private messages
     And I should see the link "New Message"
     And I should see 0 private message
     And I should see the text "You do not have any messages"
+
+  Scenario: User can view a selected thread.
+    Given the following private messages:
+      | owner   | recipient | message |
+      | alice_m | bob_rolls | Hello 2 |
+      | alice_m | bob_rolls | Hello 1 |
+
+    When I am logged in as "alice_m"
+    And I visit the "alice_m" "bob_rolls" thread
+    Then I should see the following texts in private messages:
+      | Hello 1 |
+      | Hello 2 |
