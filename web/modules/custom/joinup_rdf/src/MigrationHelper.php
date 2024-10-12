@@ -282,7 +282,7 @@ final class MigrationHelper {
       ],
       'http://www.w3.org/ns/dcat#landingPage' => [
         'target_field_name' => 'landing_page',
-        'format' => 'string',
+        'format' => 'uri',
       ],
       'http://purl.org/dc/terms/language' => [
         'target_field_name' => 'language',
