@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_rdf;
 
-use Drupal\collection\Entity\CollectionInterface;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
