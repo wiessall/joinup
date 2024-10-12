@@ -287,6 +287,14 @@ drupal:
         $settings['sparql']['password_readonly'] = getenv('DRUPAL_SPARQL_PASSWORD_READONLY');
         $config['rdf_sync.settings']['endpoint']['host'] = $settings['sparql']['hostname'];
         $config['rdf_sync.settings']['endpoint']['port'] = $settings['sparql']['port'];
+
+        // @todo Remove this connection in ISAICP-8376.
+        $databases['sparql_default']['default'] = [
+          'host' => $settings['sparql']['hostname'],
+          'port' => $settings['sparql']['port'],
+          'namespace' => 'Drupal\\joinup_sparql\\Driver\\Database\\joinup_sparql',
+          'driver' => 'sparql',
+        ];
       Permissions: |
         $settings['skip_permissions_hardening'] = TRUE;
       Null mail collector: |
