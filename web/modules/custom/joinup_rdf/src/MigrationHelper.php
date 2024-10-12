@@ -517,7 +517,7 @@ final class MigrationHelper {
           $unserialized['fields'][$submap[$group->bundle()]['target']] = $data;
           $value[0] = serialize($unserialized);
         }
-        $value = $this->parseValue($value, $mapping);
+        $value = $this->parseValue($value, $mapping, $property);
         $group->set($mapping['target_field_name'], $value);
       }
 
@@ -571,19 +571,17 @@ final class MigrationHelper {
    *   The values to parse.
    * @param array $mappingData
    *   The mapping data.
+   * @param string $property
+   *   The property/predicate URI.
    *
    * @return array
    *   The parsed values.
    */
-  protected function parseValue(array $values, array $mappingData): mixed {
+  protected function parseValue(array $values, array $mappingData, string $property): mixed {
     $parsed = [];
     $format = $mappingData['format'];
 
     foreach ($values as $value) {
-      if (empty($value)) {
-        continue;
-      }
-
       $parsedValue = match ($format) {
         'string' => ['value' => !empty($mappingData['serialized']) ? unserialize($value, ['allowed_classes' => FALSE]) : $value],
         'uri' => ['uri' => $value],
@@ -681,7 +679,7 @@ final class MigrationHelper {
 
       $targetFieldName = $fieldData['target_field_name'];
       $field = $loaded->get($targetFieldName);
-      $value = $this->parseValue($value, $fieldData);
+      $value = $this->parseValue($value, $fieldData, $uri);
       if ($value !== $field->value) {
         print sprintf('The value of the field %s is not correct. Expected: %s, got: %s', $targetFieldName, print_r($value, TRUE), print_r($field->value, TRUE));
       }
