@@ -7,7 +7,8 @@ upgrade_commands:
   default:
     - vendor/bin/drush deploy --yes
     - vendor/bin/drush search-api:reset-tracker --yes
-    - # @todo Remove this after 2.0 release.
+    - # @todo Remove the next two lines after 2.0 release.
+    - vendor/bin/drush cr
     - vendor/bin/drush search-api:index
     - vendor/bin/drush joinup:node-access-rebuild
     - vendor/bin/drush joinup:search-api-tasks
