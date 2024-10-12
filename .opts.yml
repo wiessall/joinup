@@ -6,12 +6,9 @@
 upgrade_commands:
   default:
     - vendor/bin/drush deploy --yes
-
-    # BEGIN: Remove in ISAICP-8376
-    # - vendor/bin/drush rdf_sync:synchronize node --bundle=solution,collection
-    # END: Remove in ISAICP-8376
-
     - vendor/bin/drush search-api:reset-tracker --yes
+    - # @todo Remove this after 2.0 release.
+    - vendor/bin/drush search-api:index
     - vendor/bin/drush joinup:node-access-rebuild
     - vendor/bin/drush joinup:search-api-tasks
     # - vendor/bin/drush twigc --yes
