@@ -36,7 +36,6 @@ dependencies:
     - custom_markup_block
     - joinup_group
     - joinup_layout
-    - joinup_solution
     - layout_builder
     - layout_discovery
     - link
@@ -554,6 +553,103 @@ third_party_settings:
                 settings: {  }
                 third_party_settings: {  }
             weight: 27
+            additional: {  }
+          c8909e14-697f-445f-8f0c-22d3669ad822:
+            uuid: c8909e14-697f-445f-8f0c-22d3669ad822
+            region: content
+            configuration:
+              id: 'field_block:node:solution:distributions'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                type: entity_reference_entity_view
+                label: hidden
+                settings:
+                  view_mode: default
+                  link: false
+                third_party_settings: {  }
+            weight: 28
+            additional: {  }
+          e0f2b900-0797-49d2-9dd7-4d9e114b1b74:
+            uuid: e0f2b900-0797-49d2-9dd7-4d9e114b1b74
+            region: content
+            configuration:
+              id: 'field_block:node:solution:og_group'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                type: og_group_subscribe
+                label: above
+                settings: {  }
+                third_party_settings: {  }
+            weight: 29
+            additional: {  }
+          390b1c71-47b9-4268-b5a3-2dfccf963034:
+            uuid: 390b1c71-47b9-4268-b5a3-2dfccf963034
+            region: content
+            configuration:
+              id: 'extra_field_block:node:solution:flag_interoperability'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+            weight: 30
+            additional: {  }
+          f57e29aa-3ece-4d54-bdfd-8f1600579a33:
+            uuid: f57e29aa-3ece-4d54-bdfd-8f1600579a33
+            region: content
+            configuration:
+              id: 'extra_field_block:node:solution:flag_like'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+            weight: 31
+            additional: {  }
+          96cd163a-2569-4120-975f-d86137a99bde:
+            uuid: 96cd163a-2569-4120-975f-d86137a99bde
+            region: content
+            configuration:
+              id: 'field_block:node:solution:report'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                type: link
+                label: hidden
+                settings:
+                  trim_length: 80
+                  url_only: false
+                  url_plain: false
+                  rel: ''
+                  target: ''
+                third_party_settings: {  }
+            weight: 32
+            additional: {  }
+          1752c407-61f3-4235-af2a-e10959dcf971:
+            uuid: 1752c407-61f3-4235-af2a-e10959dcf971
+            region: content
+            configuration:
+              id: 'extra_field_block:node:solution:links'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+            weight: 33
+            additional: {  }
+          cf9048b9-8f1c-40a6-952b-0820d7fb24c1:
+            uuid: cf9048b9-8f1c-40a6-952b-0820d7fb24c1
+            region: content
+            configuration:
+              id: 'field_block:node:solution:body'
+              label_display: '0'
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                type: text_default
+                label: hidden
+                settings: {  }
+                third_party_settings: {  }
+            weight: 34
             additional: {  }
         third_party_settings: {  }
       -
@@ -1169,7 +1265,23 @@ third_party_settings:
                 settings: {  }
                 third_party_settings: {  }
             weight: 0
-            additional: {  }
+            additional:
+              component_attributes:
+                block_attributes:
+                  id: ''
+                  class: 'd-flex justify-content-end'
+                  style: ''
+                  data: ''
+                block_title_attributes:
+                  id: ''
+                  class: ''
+                  style: ''
+                  data: ''
+                block_content_attributes:
+                  id: ''
+                  class: ''
+                  style: ''
+                  data: ''
         third_party_settings: {  }
 id: node.solution.default
 targetEntityType: node

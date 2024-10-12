@@ -187,7 +187,7 @@ final class MigrationHelper {
       ],
       'http://xmlns.com/foaf/spec/#term_homepage' => [
         'target_field_name' => 'website_url',
-        'format' => 'string',
+        'format' => 'uri',
       ],
       'http://purl.org/dc/terms/spatial' => [
         'target_field_name' => 'spatial_coverage',

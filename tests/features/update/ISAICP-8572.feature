@@ -63,6 +63,10 @@ Feature: Test migration of collections/solutions to node.
 
   @update:joinup_rdf_deploy_200001 @update:joinup_rdf_deploy_200002
   Scenario: Validate references and contents of the groups.
+    # Ensure the Website link is migrated for collections.
+    Given I go to "/collection/are3na"
+    Then I should see the link "Website link"
+
     # Note, that since the email confirmations are not available for GDPR
     # reasons, the contact information are only text in the tests.
     Given I go to "/collection/egovernment"
@@ -116,6 +120,7 @@ Feature: Test migration of collections/solutions to node.
       | Moderation                                                 |
       | Only facilitators and authors can create content.          |
       | Non moderated                                              |
+    And I should see the link "Share"
 
     # Sample check some tiles as it might be that the tiles will change until
     # the migration is done so try to avoid too many checks.
