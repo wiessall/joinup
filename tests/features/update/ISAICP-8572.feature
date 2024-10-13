@@ -77,6 +77,10 @@ Feature: Test migration of collections/solutions to node.
       | Contact information      |
       | Joinup Support Team      |
 
+    # 12 solutions also include the 3 archived. This ensures a bug needing to
+    # clear the cache before indexing the entities.
+    And I should see the link "12 Solutions"
+
     # Assert texts in the page.
     And I should see the following lines of text:
       # Abstract.
