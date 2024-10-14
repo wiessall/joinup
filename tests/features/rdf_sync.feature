@@ -49,7 +49,7 @@ Feature: RDF synchronization of contents.
     # The two cases cover the two possible access URL types extracted.
     # @see \Drupal\joinup_distribution\EventSubscriber\DistributionParentRdfSyncSubscriber::addDistributionParentRelation().
     And distribution content:
-      | uri                              | title                   | description                            | creation date    | publication date | changed          | access url                            | release         | solution         | downloads | licence         | format  | status    | representation technique | state     |
+      | uri                              | title                   | description                            | creation date    | published at     | changed          | access url                            | release         | solution         | downloads | licence         | format  | status    | representation technique | state     |
       | http://example.com/distribution1 | SyncingDistribution.zip | The zipped version of Syncing release. | 2017-01-11T11:20 | 2017-02-11T11:20 | 2017-03-11T11:20 | http://www.example.org/release.zip    | Syncing release |                  | 232       | Syncing licence | Archive | Completed | Schema                   | published |
       | http://example.com/distribution2 | SyncingDistribution.rdf | The RDF version of Syncing release.    | 2017-04-11T11:20 | 2017-05-11T11:20 | 2017-06-11T11:20 | http://www.example.org/some_other.zip | Syncing release |                  | 232       | Syncing licence | Archive | Completed | Schema                   | published |
       | http://example.com/distribution3 | SyncingSolution.zip 3   | The ZIP version of Syncing solution 3. | 2017-07-11T11:20 | 2017-08-11T11:20 | 2017-09-11T11:20 | http://www.example.org/solution.zip   |                 | Syncing solution | 232       | Syncing licence | Archive | Completed | Schema                   | published |
@@ -502,7 +502,7 @@ Feature: RDF synchronization of contents.
       | title        | is version of | state     |
       | Test release | Test solution | published |
     And distribution content:
-      | uri                              | title          | description                  | release      | access url                      | created              | publication date     | changed              | state     |
+      | uri                              | title          | description                  | release      | access url                      | created              | published at         | changed              | state     |
       | http://example.com/distribution1 | Some Distro    | Übermensch foot size         | Test release | http://example.com/some-distro1 | 2024-07-31T10:19:33Z | 2024-07-31T10:19:33Z | 2024-07-31T10:19:33Z | published |
       | http://example.com/distribution2 | Another distro | Description for other distro | Test release | http://example.com/some-distro2 | 2024-08-01T10:19:33Z | 2024-08-01T10:19:33Z | 2024-08-01T10:19:33Z | published |
     Then the following "http://data" graph triples exist in the RDF backend:
