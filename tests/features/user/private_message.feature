@@ -71,7 +71,7 @@ Feature: Private messages
       | This is a private message to Alice. |
     # Regression test for ISAICP-9130: second click impacts modal.
     When I click "Hello Bob" in thread message card
-    And I wait for AJAX to finish
+    And I wait until the page contains the text "This is a private message to Bob."
     And I click "New Message"
     Then a modal should open
     Then I close the modal dialog
@@ -133,6 +133,18 @@ Feature: Private messages
     And I should see the link "New Message"
     And I should see 0 private message
     And I should see the text "You do not have any messages"
+
+  @javascript
+  Scenario: User should see validation errors inside modal.
+    Given I am logged in as "alice_m"
+
+    When I am on "/user/messages"
+    And I click "New Message"
+    When a modal should open
+    And I press "Send" in the "Modal buttons" region
+
+    Then I should see "Message field is required." in the "Modal content" region
+    And I should see "You can not send a message to yourself only." in the "Modal content" region
 
   Scenario: User can view a selected thread.
     Given the following private messages:
