@@ -33,6 +33,7 @@ dependencies:
     - entityqueue
     - file
     - filter
+    - flag
     - joinup
     - joinup_community_content
     - joinup_core
@@ -40,6 +41,7 @@ dependencies:
     - joinup_featured
     - joinup_group
     - joinup_group_content_management
+    - joinup_legal
     - joinup_licence
     - joinup_news
     - joinup_newsletter
@@ -53,6 +55,7 @@ dependencies:
     - node
     - og
     - paragraphs_type_permissions
+    - private_message
     - rdf_draft
     - rdf_entity
     - replicate_ui
@@ -162,6 +165,7 @@ permissions:
   - 'delete any licence content'
   - 'delete any news_logo media'
   - 'delete any owner content'
+  - 'delete any private message'
   - 'delete any release content'
   - 'delete any solution_logo media'
   - 'delete paragraph content 1_column_layout'
@@ -185,6 +189,7 @@ permissions:
   - 'delete paragraph content testimony'
   - 'delete paragraph content video'
   - 'delete paragraph content webform'
+  - 'delete private message thread for all'
   - 'delete sitewide alert entities'
   - 'download subscribers report'
   - 'edit any collection rdf entity'
