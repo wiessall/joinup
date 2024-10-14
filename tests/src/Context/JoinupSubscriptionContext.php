@@ -730,8 +730,8 @@ class JoinupSubscriptionContext extends RawDrupalContext {
    *   One of 'collection' or 'solution'.
    * @param string|null $types
    *   If passed, it's the route parameter that allows to filter the types of
-   *   content from which to unsubscribe. This is mostly used o test invalid URL
-   *   route parameters.
+   *   content from which to unsubscribe. This is mostly used to test invalid
+   *   URL route parameters.
    * @param \Behat\Gherkin\Node\TableNode|null $table
    *   A one-column table with the types of content from which to unsubscribe.
    *   Allowed values: Solution, Discussion, Document, Event, News,
@@ -765,7 +765,7 @@ class JoinupSubscriptionContext extends RawDrupalContext {
     }
 
     $map = [
-      'Solution' => 'rdf_entity:solution',
+      'Solution' => 'node:solution',
       'Discussion' => 'node:discussion',
       'Document' => 'node:document',
       'Event' => 'node:event',

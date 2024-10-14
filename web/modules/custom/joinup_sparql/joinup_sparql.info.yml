@@ -3,6 +3,3 @@ description: Contains Joinup specific overrides related to the RDF entity and th
 type: module
 package: Joinup
 core_version_requirement: ">= 9.4"
-
-dependencies:
-  - sparql_entity_storage:sparql_entity_storage

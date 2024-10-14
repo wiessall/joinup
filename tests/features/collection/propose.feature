@@ -284,9 +284,8 @@ Feature: Proposing a collection
 
     # Contact us page should return access denied,
     # because contact info emails are not published.
-    # TODO Uncomment before ISAICP-8572 is finished.
-    # When I go to "/collection/some-email-validation/contact"
-    # Then I should get an access denied error
+    When I go to "/collection/some-email-validation/contact"
+    Then I should get an access denied error
 
     # As some entities were created via UI, we should explicitly delete them.
     And I delete the "Contact person" contact information
