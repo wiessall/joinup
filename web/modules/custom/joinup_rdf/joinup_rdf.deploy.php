@@ -651,3 +651,13 @@ function joinup_rdf_deploy_200011(?array &$sandbox = NULL): void {
 
   $sandbox['#finished'] = (int) empty($sandbox['tables']);
 }
+
+/**
+ * Cleanup the simple sitemap calculated data.
+ */
+function joinup_rdf_deploy_200012(): void {
+  // Sitemap keeps stashed and queued data that might contain data from the
+  // removed "rdf_entity" entities.
+  \Drupal::keyValue('simple_sitemap')->delete('queue_stashed_results');
+  \Drupal::service('queue')->get('simple_sitemap_elements')->deleteQueue();
+}
