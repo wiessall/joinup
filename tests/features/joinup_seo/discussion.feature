@@ -12,7 +12,7 @@ Feature: SEO for discussion forum posts.
       | Username          | E-mail                 | First name | Family name |
       | Joinup SEO author | joinup.seo@example.com | Kindle     | eReader     |
     And "discussion" content:
-      | title                           | publication date          | changed                   | content                                                      | author            | attachments         | keywords                       | state     | collection                       |
+      | title                           | published at              | changed                   | content                                                      | author            | attachments         | keywords                       | state     | collection                       |
       | Discussions are now forum posts | Wed, 25 Dec 2019 13:00:00 | Wed, 01 Jan 2020 13:00:00 | This discussion is to ensure that SEO tags are set properly. | Joinup SEO author | test.zip, test1.zip | seo, tags, metatag, schema.org | published | Joinup SEO discussion collection |
 
     When I visit the "Discussions are now forum posts" discussion
