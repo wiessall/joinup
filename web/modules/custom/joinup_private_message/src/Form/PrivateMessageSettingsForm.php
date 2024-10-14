@@ -41,7 +41,7 @@ class PrivateMessageSettingsForm extends FormBase {
       '#type' => 'actions',
       'submit' => [
         '#type' => 'submit',
-        '#value' => 'Save',
+        '#value' => $this->t('Save'),
       ],
     ];
     return $form;
