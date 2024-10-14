@@ -35,7 +35,7 @@ Feature:
       | Sitemap custom page of published                | Sitemap collection published | N/A  | logo.png | en       | published |
       | Sitemap custom page of published but in Spanish | Sitemap collection published | N/A  | logo.png | es       | published |
     And news content:
-      | title                                    | headline     | body              | solution                   | state     | publication date          |
+      | title                                    | headline     | body              | solution                   | state     | published at              |
       | Sitemap news draft                       | Sitemap news | Sitemap news body | Sitemap solution published | draft     |                           |
       | Sitemap news published and recent        | Sitemap news | Sitemap news body | Sitemap solution published | published | 1 day ago                 |
       | Sitemap news published but old           | Sitemap news | Sitemap news body | Sitemap solution published | published | 2 months ago              |
