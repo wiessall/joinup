@@ -111,8 +111,7 @@ function joinup_private_message_mail(string $key, array &$message, array $params
             '@reporter_url' => Url::fromRoute('entity.user.canonical', ['user' => $recipient->id()], ['absolute' => TRUE])->toString(),
             '@sender_name' => $sender->getDisplayName(),
             '@sender_url' => Url::fromRoute('entity.user.canonical', ['user' => $sender->id()], ['absolute' => TRUE])->toString(),
-            '@message_url' => 'test'
-//            '@message_url' => Url::fromRoute('entity.private_message.canonical', ['private_message' => $bannedMessage->id()], ['absolute' => TRUE])->toString(),
+            '@message_url' => 'test',
           ]) . $bannedMessage->get('message')->value,
     ];
     $message['subject'] = $params['subject'];
@@ -120,10 +119,14 @@ function joinup_private_message_mail(string $key, array &$message, array $params
     $message['headers']['Content-Type'] = SymfonyMailer::FORMAT_HTML;
   }
 }
+
 /**
  * Implements hook_entity_base_field_info().
+ *
+ * @retrun array
+ *    return fields.
  */
-function joinup_private_message_entity_base_field_info(EntityTypeInterface $entity_type) {
+function joinup_private_message_entity_base_field_info(EntityTypeInterface $entity_type): array {
   $fields = [];
 
   if ($entity_type->id() == 'private_message') {
@@ -161,7 +164,7 @@ function joinup_private_message_entity_base_field_info(EntityTypeInterface $enti
 /**
  * Implements hook_views_data_alter().
  */
-function joinup_private_message_views_data_alter(array &$data) {
+function joinup_private_message_views_data_alter(array &$data): void {
   $data['reporting']['table']['group'] = t('Private Message');
   $data['reporting']['table']['join'] = [
     '#global' => [],
@@ -170,9 +173,8 @@ function joinup_private_message_views_data_alter(array &$data) {
     'title' => t('Actions'),
     'field' => [
       'title' => t('Actions'),
-      'help' => t(' Actions for reported private messages.'),
+      'help' => t('Actions for reported private messages.'),
       'id' => 'private_message_actions',
     ],
   ];
 }
-
