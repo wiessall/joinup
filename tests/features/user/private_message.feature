@@ -6,10 +6,10 @@ Feature: Private messages
 
   Background:
     Given users:
-      | Username  | First name | Family name | E-mail                |
-      | alice_m   | Alice      | Miller      | alice.m@example.com   |
-      | bob_rolls | Bob        | Rolls       | bob.rolls@example.com |
-      | joan_tiff | Joan       | Tiff        | joan.tiff@example.com |
+      | Username  | First name | Family name | E-mail                | Roles     |
+      | alice_m   | Alice      | Miller      | alice.m@example.com   |           |
+      | bob_rolls | Bob        | Rolls       | bob.rolls@example.com | moderator |
+      | joan_tiff | Joan       | Tiff        | joan.tiff@example.com |           |
 
   @javascript
   Scenario: Send a private message
@@ -39,6 +39,7 @@ Feature: Private messages
     And I should see the link "New Message"
     And I should not see the text "You do not have any messages"
     And I should see 1 private message
+    And I should see the link "Delete thread"
     Then I should see a private message containing the text "This is a private message to Bob."
     And I enter "This is a private message to Alice." in the "Reply" wysiwyg editor
     And I press "Send"
@@ -84,6 +85,44 @@ Feature: Private messages
     And I press "Send"
     Then I should see "Sorry, you have reached your limit for posting. Please try again later."
     Then I restore the limit for messages or threads allowed
+
+    Given I am logged in as "alice_m"
+    And I am on the homepage
+    And I should see 1 unread private message
+    Then I open the account menu
+    And I click "My messages"
+    Then I should see a private message containing the text "This is a private message to Alice."
+    And I should not see the link "Delete thread"
+    But I should see the link "Delete for me"
+    When I click "Delete for me"
+    Then a modal should open
+    And I should see the text "Delete conversation for me" in the "Modal title"
+    And I should see the text "This action cannot be undone. The conversation will be removed from your view, but it will remain accessible to the other participant." in the "Modal content"
+    And I should see the button "Delete for me" in the "Modal buttons" region
+    Then I press "Delete for me" in the "Modal buttons" region
+    And I should see 0 private message
+    And I should see the text "You do not have any messages"
+
+    # Check if Bob Rolls has the conversation.
+    When I am logged in as "bob_rolls"
+    And I am on the homepage
+    Then I open the account menu
+    And I click "My messages"
+    And I should see the following threads in private messages:
+      | Hello Joan |
+      | Hello Bob  |
+
+    # Delete full thread.
+    When I click "Hello Joan" in thread message card
+    When I click "Delete thread"
+    Then a modal should open
+    And I should see the text "Are you sure you want to delete the thread between you and the following users: Joan Tiff" in the "Modal title"
+    And I should see the text "This action cannot be undone." in the "Modal content"
+    And I should see the button "Delete thread" in the "Modal buttons" region
+    Then I press "Delete thread" in the "Modal buttons" region
+    And I should not see the text "Hello Bob message to delete"
+    And I should see the following threads in private messages:
+      | Hello Bob  |
 
   Scenario: Check a user without messages
     Given I am logged in as "alice_m"
