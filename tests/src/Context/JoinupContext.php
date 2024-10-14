@@ -241,8 +241,6 @@ class JoinupContext extends RawDrupalContext {
         'collections' => 'og_audience',
         'featured' => 'featured',
         'pinned in' => 'pinned_in_collection',
-        // @todo All `published at` should be changed to `publication date` or
-        //   the other way around, so that we only have one version.
         'published at' => 'published_at',
         'unpinned in' => 'unpinned_in_collection',
       ],
