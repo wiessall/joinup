@@ -26,12 +26,12 @@ joinup_core.id_redirect:
     # @see \Drupal\Core\Routing\Router::doMatchCollection()
     uuid: '.+'
 
-# @todo Convert this to convert through rdf_sync.mapper.
-joinup_core.rdf_uri_web_converter_page:
+# Move in joinup_rdf. See ISAICP-9156.
+joinup_core.uri_converter:
   path: '/rdf'
   defaults:
-    _form: 'Drupal\joinup_core\Form\RdfEntityUriWebConverterForm'
-    _title: 'Convert an RDF entity ID'
+    _form: 'Drupal\joinup_core\Form\UriConverterForm'
+    _title: 'Entity URI to URL and the other way around'
   requirements:
     _permission: 'access uri converter'
   options:

@@ -64,7 +64,7 @@ class VocabularyFixturesHelper implements VocabularyFixturesHelperInterface {
    * {@inheritdoc}
    */
   public function clearFixturesGraph(string $graph_uri): Response|Result {
-    return $this->connection->getSparqlClient()->clear($graph_uri);
+    return $this->connection->update("CLEAR GRAPH <$graph_uri>;");
   }
 
   /**

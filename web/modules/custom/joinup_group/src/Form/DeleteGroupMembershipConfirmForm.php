@@ -215,7 +215,7 @@ class DeleteGroupMembershipConfirmForm extends ConfirmFormBase {
   /**
    * Returns the memberships group.
    *
-   * @return \Drupal\rdf_entity\RdfInterface
+   * @return \Drupal\joinup_group\Entity\GroupInterface
    *   The memberships group entity.
    *
    * @throws \LogicException

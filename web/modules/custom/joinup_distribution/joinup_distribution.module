@@ -20,20 +20,8 @@ use Drupal\joinup_distribution\DistributionsFieldItemList;
 use Drupal\joinup_distribution\Entity\Distribution;
 use Drupal\joinup_distribution\Entity\DistributionInterface;
 use Drupal\joinup_distribution\Entity\DistributionsParentInterface;
-use Drupal\joinup_distribution\Plugin\DataType\EntityReference;
 use Drupal\joinup_taxonomy\Entity\MappedTerm;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-
-/**
- * Implements hook_data_type_info_alter().
- *
- * @todo Drop this hook in ISAICP-8572.
- */
-function joinup_distribution_data_type_info_alter(&$data_types): void {
-  if (isset($data_types['entity_reference'])) {
-    $data_types['entity_reference']['class'] = EntityReference::class;
-  }
-}
 
 /**
  * Implements hook_entity_bundle_info_alter().

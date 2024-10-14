@@ -1,5 +1,0 @@
-<http://example.com/citrus-fruits> <http://www.w3.org/2004/02/skos/core#inScheme> <http://example.com/fruit-type> .
-<http://example.com/citrus-fruits> <http://www.w3.org/2004/02/skos/core#prefLabel> "Citrus fruits"@en .
-<http://example.com/citrus-fruits> <http://www.w3.org/2004/02/skos/core#definition> "<p>Amazing fruits <a href=\"http://example.com/very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-long.html\">http://example.com/very-very-very-very-very-very-very-very-very-very-ve…</a></p>\n"@en .
-<http://example.com/citrus-fruits> <http://www.w3.org/2004/02/skos/core#broaderTransitive> <http://example.com/exotic> .
-<http://example.com/citrus-fruits> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2004/02/skos/core#Concept> .
