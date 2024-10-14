@@ -83,7 +83,7 @@ class PinnableEntitiesTest extends JoinupExistingSiteTestBase {
    * @param \Drupal\joinup_group\Entity\PinnableGroupContentInterface $entity
    *   The entity for which to return the groups.
    *
-   * @return \Drupal\rdf_entity\RdfInterface[]
+   * @return \Drupal\joinup_group\Entity\GroupInterface[]
    *   The groups where the entity has been pinned.
    */
   protected function getGroupsWherePinned(PinnableGroupContentInterface $entity): array {

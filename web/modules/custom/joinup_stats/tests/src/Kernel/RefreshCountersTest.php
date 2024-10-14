@@ -6,7 +6,6 @@ namespace Drupal\Tests\joinup_stats\Kernel;
 
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\Tests\joinup_test\Traits\ConfigTestTrait;
-use Drupal\Tests\sparql_entity_storage\Traits\SparqlConnectionTrait;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\file\Entity\File;
@@ -19,7 +18,6 @@ use Drupal\file\Entity\File;
 class RefreshCountersTest extends KernelTestBase {
 
   use ConfigTestTrait;
-  use SparqlConnectionTrait;
 
   /**
    * Testing entities.
@@ -44,7 +42,6 @@ class RefreshCountersTest extends KernelTestBase {
     'node',
     'og',
     'options',
-    'sparql_entity_storage',
     'system',
     'user',
   ];

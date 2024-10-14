@@ -83,7 +83,6 @@ class ProposedEntitiesBlock extends BlockBase implements ContainerFactoryPluginI
    *   Thrown if the Node entity type is not defined.
    */
   protected function getRows(): array {
-    /** @var \Drupal\sparql_entity_storage\SparqlEntityStorage $storage */
     $storage = $this->entityTypeManager->getStorage('node');
     $query = $storage->getQuery()
       ->accessCheck(FALSE)

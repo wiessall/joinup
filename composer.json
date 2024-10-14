@@ -368,7 +368,8 @@
                 "Facet Summary for Facet Items with a set dependency. @see https://www.drupal.org/i/2873480": "resources/patch/php/drupal/facets/2873480.patch",
                 "Add 0 option in 'Soft limit' and apply soft limit to facet root li tags and add. @see https://www.drupal.org/i/3208580 and https://www.drupal.org/i/3307082": "resources/patch/php/drupal/facets/3208580-and-3307082.patch",
                 "Config validation error for facets_processor.* @see https://www.drupal.org/project/facets/issues/3459093": "resources/patch/php/drupal/facets/3459093.patch",
-                "Fix FacetsHierarchy config schema issue @see https://www.drupal.org/project/facets/issues/3259836": "resources/patch/php/drupal/facets/3259836-8.patch"
+                "Fix FacetsHierarchy config schema issue @see https://www.drupal.org/project/facets/issues/3259836": "resources/patch/php/drupal/facets/3259836-8.patch",
+                "Facets - Critical - Cross Site Scripting - SA-CONTRIB-2024-047 @see https://www.drupal.org/sa-contrib-2024-047": "resources/patch/php/drupal/facets/sa-contrib-2024-047.patch"
             },
             "drupal/field_delimiter": {
                 "Doesn't work in layout builder. @see https://www.drupal.org/i/3099580": "resources/patch/php/drupal/field_delimiter/3099580.patch",
@@ -436,7 +437,6 @@
                 "Allow bundle label plural variants @see https://github.com/ec-europa/rdf_entity/pull/12": "resources/patch/php/drupal/rdf_entity/ea8f6af001fca732e89a4be0e29643953f49a88f.diff"
             },
             "drupal/search_api": {
-                "item_id column is too short @see https://www.drupal.org/node/2829696": "resources/patch/php/drupal/search_api/2829696.patch",
                 "Some bulk form field options are missing schema @see https://www.drupal.org/project/search_api/issues/3195199": "resources/patch/php/drupal/search_api/3195199.patch",
                 "The search_api_list:{index} cache tag is not added to the view display @see https://www.drupal.org/project/search_api/issues/3298295": "resources/patch/php/drupal/search_api/3298295.patch",
                 "View recalculated with wrong data from cache @see https://drupal.org/i/3327645": "resources/patch/php/drupal/search_api/sapi-views_cache_metadata-3327645-9--fix-only.patch"
@@ -502,12 +502,6 @@
                     "type": "zip"
                 }
             }
-        },
-        "phpstan": {
-            "includes": [
-                "vendor/mglaman/phpstan-drupal/extension.neon",
-                "vendor/phpstan/phpstan-deprecation-rules/rules.neon"
-            ]
         },
         "grumphp": {
             "disable-plugin": true

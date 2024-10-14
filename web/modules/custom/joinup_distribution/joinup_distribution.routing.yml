@@ -1,10 +1,10 @@
 joinup_distribution.group.add:
   path: 'node/{node}/distribution/add'
   defaults:
-    _controller: '\Drupal\joinup_distribution\Controller\JoinupDistributionController::addOnNode'
+    _controller: '\Drupal\joinup_distribution\Controller\JoinupDistributionController::createDistributionPage'
     _title: 'Add Distribution'
   requirements:
-    _custom_access: '\Drupal\joinup_distribution\Controller\JoinupDistributionController::createAssetDistributionOnNodeGroupAccess'
+    _custom_access: '\Drupal\joinup_distribution\Controller\JoinupDistributionController::createDistributionAccess'
     _archived_group: 'TRUE'
   options:
     parameters:

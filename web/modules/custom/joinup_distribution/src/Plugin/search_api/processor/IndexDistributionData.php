@@ -104,7 +104,6 @@ class IndexDistributionData extends ProcessorPluginBase {
    *   object could not be loaded.
    */
   protected function appendDistributionData(ItemInterface $item): void {
-    /** @var \Drupal\rdf_entity\RdfInterface $entity */
     $entity = $item->getOriginalObject()->getValue();
 
     // Only solutions and releases should receive distribution data.
