@@ -14,19 +14,19 @@ use Drupal\user\Entity\Role;
 /**
  * Migrates media video to remote_video.
  */
-function joinup_media_post_update_111400(array &$sandbox): void {
+function joinup_media_post_update_111400(array &$sandbox): string {
   /** @var \Drupal\joinup_media\Update\MediaOembedMigrate $update */
   $update = \Drupal::classResolver(MediaOembedMigrate::class);
-  $update->migrateMedia($sandbox);
+  return $update->migrateMedia($sandbox);
 }
 
 /**
  * Migrates video paragraphs field (paragraph_video_url > remote_video).
  */
-function joinup_media_post_update_111401(array &$sandbox): void {
+function joinup_media_post_update_111401(array &$sandbox): string {
   /** @var \Drupal\joinup_media\Update\MediaOembedMigrate $update */
   $update = \Drupal::classResolver(MediaOembedMigrate::class);
-  $update->migrateParagraphs($sandbox);
+  return $update->migrateParagraphs($sandbox);
 }
 
 /**
