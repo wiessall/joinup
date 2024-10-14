@@ -174,15 +174,7 @@ class LinkContext extends RawDrupalContext {
     foreach ($strings_table->getColumn(0) as $text) {
       $matches = [];
       if (preg_match('/^.*%(.*?)%.*$/', $text, $matches)) {
-        // @todo Convert this to simply check nodes in ISAICP-8572. Furthermore
-        //   a follow up should be created for the entity ID being numeric. For
-        //   RDF entities, it was already just ID - might not needed.
-        try {
-          $entity = $this->getEntityByLabel('node', $matches[1]);
-        }
-        catch (\Exception $e) {
-          $entity = $this->getEntityByLabel('node', $matches[1]);
-        }
+        $entity = $this->getEntityByLabel('node', $matches[1]);
         $text = str_replace("%{$matches[1]}%", $entity->id(), $text);
       }
       if (!str_contains($content, $text)) {

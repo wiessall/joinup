@@ -30,7 +30,6 @@ use Drupal\joinup_release\SolutionReleasesFieldItemList;
  * can be resolved automatically.
  */
 function joinup_release_entity_type_alter(array &$entity_types): void {
-  // @todo Change this to match a node on ISAICP-8572.
   $entity_types['node']->setLinkTemplate('solution-releases', '/node/{node}/releases');
 }
 
