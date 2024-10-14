@@ -386,7 +386,7 @@ display:
           sticky: false
           summary: ''
           empty_table: false
-          caption: 'Blocked users'
+          caption: ''
           description: ''
       row:
         type: fields
