@@ -30,7 +30,7 @@ drupal:
       install:
         - Main settings
         - Databases
-        - RDF backend
+        - RDF/SPARQL backend
         - Configuration
         - Search API
         - European Commission eTranslation
@@ -43,7 +43,7 @@ drupal:
       site-clone:
         - Main settings
         - Databases
-        - RDF backend
+        - RDF/SPARQL backend
         - Configuration
         - Search API
         - European Commission eTranslation
@@ -63,7 +63,7 @@ drupal:
       site-clean:
         - Main settings
         - Databases
-        - RDF backend
+        - RDF/SPARQL backend
         - Configuration
         - Search API
         - European Commission eTranslation
@@ -84,7 +84,7 @@ drupal:
       behat:
         - Main settings
         - Databases
-        - RDF backend
+        - RDF/SPARQL backend
         - Configuration
         - Testing configuration alters
         - Search API
@@ -105,7 +105,7 @@ drupal:
       error_page_test:
         - Main settings
         - Databases
-        - RDF backend
+        - RDF/SPARQL backend
         - Configuration
         - Search API
         - European Commission eTranslation
@@ -126,7 +126,7 @@ drupal:
       phpunit:
         - Main settings
         - Databases
-        - RDF backend
+        - RDF/SPARQL backend
         - Configuration
         - Search API
         - European Commission eTranslation
@@ -146,7 +146,7 @@ drupal:
         - Main settings
         - Site email
         - Databases
-        - RDF backend
+        - RDF/SPARQL backend
         - Configuration
         - Search API
         - OpenEuropa Newsroom Newsletter Settings
@@ -279,20 +279,22 @@ drupal:
           ],
         ];
 
+      RDF/SPARQL backend: |
         $settings['sparql']['protocol'] = getenv('DRUPAL_SPARQL_PROTOCOL') ?: 'http';
         $settings['sparql']['hostname'] = getenv('DRUPAL_SPARQL_HOSTNAME');
-        $settings['sparql']['port'] = getenv('DRUPAL_SPARQL_PORT');
+        $settings['sparql']['port'] = (int) getenv('DRUPAL_SPARQL_PORT');
         $settings['sparql']['user_readonly'] = getenv('DRUPAL_SPARQL_USER_READONLY');
         $settings['sparql']['password_readonly'] = getenv('DRUPAL_SPARQL_PASSWORD_READONLY');
+        $config['rdf_sync.settings']['endpoint']['host'] = $settings['sparql']['hostname'];
+        $config['rdf_sync.settings']['endpoint']['port'] = $settings['sparql']['port'];
+
+        // @todo Remove this connection in ISAICP-8376.
         $databases['sparql_default']['default'] = [
           'host' => $settings['sparql']['hostname'],
           'port' => $settings['sparql']['port'],
           'namespace' => 'Drupal\\joinup_sparql\\Driver\\Database\\joinup_sparql',
           'driver' => 'sparql',
         ];
-      RDF backend: |
-        $config['rdf_sync.settings']['endpoint']['host'] = getenv('DRUPAL_SPARQL_HOSTNAME');
-        $config['rdf_sync.settings']['endpoint']['port'] = (int) getenv('DRUPAL_SPARQL_PORT');
       Permissions: |
         $settings['skip_permissions_hardening'] = TRUE;
       Null mail collector: |

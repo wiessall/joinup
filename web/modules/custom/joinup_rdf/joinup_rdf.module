@@ -19,15 +19,13 @@ use Drupal\rdf_sync\Model\SyncMethod;
 /**
  * Implements hook_form_BASE_FORM_ID_alter().
  *
- * @todo Remove this hack as part of ISAICP-3021.
- * @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3021
- *
  * Hide the table drag handlers on multivalue fields for RDF entities. These are
  * useless since weights are currently not stored and the ordering of the values
  * is not retained after submitting the form.
+ *
+ * @todo Remove this hack in ISAICP-9153.
  */
 function joinup_rdf_form_node_form_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
-  /** @var \Drupal\rdf_entity\Form\RdfForm $form_object */
   $form_object = $form_state->getFormObject();
   /** @var \Drupal\node\NodeInterface $node */
   $node = $form_object->getEntity();
@@ -65,48 +63,6 @@ function joinup_rdf_form_node_form_alter(array &$form, FormStateInterface $form_
         $form_state,
         ['honeypot', 'time_restriction']
       );
-    }
-  }
-}
-
-/**
- * Implements hook_ENTITY_TYPE_storage_load().
- *
- * Fill $term->extension and $term->mime_type fields from 'file_type' vocabulary
- * by a direct query as, due to their RDF representation, this cannot be done by
- * a simple RDF field mapping. Because we do this at storage level, the values
- * get cached in the 'cache_entity' bin, avoiding performance issues.
- */
-function joinup_rdf_taxonomy_term_storage_load(array $terms): void {
-  $sparql = \Drupal::service('rdf_sync.connection');
-  /** @var \Drupal\sparql_entity_storage\Driver\Database\sparql\ConnectionInterface $sparql */
-
-  $query = <<<QUERY
-SELECT ?extension ?mime_type
-WHERE {
-  <%s> <http://publications.europa.eu/ontology/authority/op-mapped-code> ?op_extension .
-  ?op_extension <http://purl.org/dc/elements/1.1/source> "file-extension" .
-  ?op_extension <http://publications.europa.eu/ontology/authority/legacy-code> ?extension .
-  <%s> <http://publications.europa.eu/ontology/authority/op-mapped-code> ?op_mime_type .
-  ?op_mime_type <http://purl.org/dc/elements/1.1/source> "manifestation-type-cellar" .
-  ?op_mime_type <http://publications.europa.eu/ontology/authority/legacy-code> ?mime_type .
-}
-QUERY;
-
-  /** @var \Drupal\taxonomy\TermInterface[] $terms */
-  foreach ($terms as $term) {
-    if ($term->bundle() === 'file_type') {
-      $term_id = $term->id();
-      $results = $sparql->query(sprintf($query, $term_id, $term_id));
-      if ($results->count()) {
-        $result = &$results[0];
-        // A file type might have more than one extension separated by space.
-        $extensions = array_filter(explode(' ', trim($result->extension->getValue())));
-        foreach ($extensions as $extension) {
-          $term->get('extension')->appendItem(['value' => $extension]);
-        }
-        $term->set('mime_type', trim($result->mime_type->getValue()));
-      }
     }
   }
 }
