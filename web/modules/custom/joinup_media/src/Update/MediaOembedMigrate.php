@@ -43,7 +43,8 @@ final class MediaOembedMigrate implements ContainerInjectionInterface {
   /**
    * Migrates media video to remote_video.
    */
-  public function migrateMedia(array &$sandbox): void {
+  public function migrateMedia(array &$sandbox): string {
+    $output = [];
     $media_storage = $this->entityTypeManager->getStorage('media');
 
     if (empty($sandbox)) {
@@ -62,6 +63,7 @@ final class MediaOembedMigrate implements ContainerInjectionInterface {
       $url = trim($media->get('video')->getString());
       $url = $this->staticMapUrl($url);
       if (!$this->isSupportedUrl($url)) {
+        $output[] = sprintf('Deleting media ID %s: the "%s" URL is not supported by oEmbed.', $media->id(), $url);
         $media->delete();
         continue;
       }
@@ -76,6 +78,7 @@ final class MediaOembedMigrate implements ContainerInjectionInterface {
     }
 
     $sandbox['#finished'] = (int) empty($sandbox['ids']);
+    return implode("\n", $output);
   }
 
   /**
@@ -107,7 +110,9 @@ final class MediaOembedMigrate implements ContainerInjectionInterface {
   /**
    * Migrates video paragraphs field (paragraph_video_url > remote_video).
    */
-  public function migrateParagraphs(array &$sandbox): void {
+  public function migrateParagraphs(array &$sandbox): string {
+    $output = [];
+    /** @var \Drupal\Core\Entity\RevisionableStorageInterface $paragraph_storage */
     $paragraph_storage = $this->entityTypeManager->getStorage('paragraph');
     $media_storage = $this->entityTypeManager->getStorage('media');
 
@@ -125,8 +130,20 @@ final class MediaOembedMigrate implements ContainerInjectionInterface {
     foreach ($paragraph_storage->loadMultipleRevisions($rids) as $paragraph) {
       assert($paragraph instanceof ParagraphInterface);
       $url = trim($paragraph->get('paragraph_video_url')->getString());
+      if (!$url) {
+        $output[] = sprintf('Deleting paragraph %s-%s: URL is empty.', $paragraph->id(), $paragraph->getRevisionId());
+        $paragraph->isDefaultRevision()
+          ? $paragraph->delete()
+          : $paragraph_storage->deleteRevision($paragraph->getRevisionId());
+        continue;
+      }
+
       $url = $this->staticMapUrl($url);
       if (!$this->isSupportedUrl($url)) {
+        $output[] = sprintf('Deleting paragraph %s-%s: the "%s" URL is not supported by oEmbed.', $paragraph->id(), $paragraph->getRevisionId(), $url);
+        $paragraph->isDefaultRevision()
+          ? $paragraph->delete()
+          : $paragraph_storage->deleteRevision($paragraph->getRevisionId());
         continue;
       }
 
@@ -146,6 +163,7 @@ final class MediaOembedMigrate implements ContainerInjectionInterface {
     }
 
     $sandbox['#finished'] = (int) empty($sandbox['rids']);
+    return implode("\n", $output);
   }
 
   /**
