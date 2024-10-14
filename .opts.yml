@@ -10,9 +10,8 @@ upgrade_commands:
     # BEGIN: Remove in ISAICP-8376
     - vendor/bin/drush rdf_sync:synchronize node --bundle=solution,collection
     # END: Remove in ISAICP-8376
-
     - vendor/bin/drush search-api:reset-tracker --yes
-    - # @todo Remove the next two lines after 2.0 release.
+    # @todo Remove the next two lines after 2.0 release.
     - vendor/bin/drush cr
     - vendor/bin/drush search-api:index
     - vendor/bin/drush joinup:node-access-rebuild
