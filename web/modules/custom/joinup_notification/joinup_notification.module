@@ -27,7 +27,6 @@ use Drupal\symfony_mailer_lite\Plugin\Mail\SymfonyMailer;
  */
 function joinup_notification_node_insert(EntityInterface $entity): void {
   // @todo To be unified in ISAICP-8839 - maybe create a new interface?.
-  // @todo Add the solution interface too in ISAICP-8572.
   if ($entity instanceof CommunityContentInterface || $entity instanceof DistributionInterface || $entity instanceof ReleaseInterface) {
     joinup_notification_dispatch_notification('create', NotificationEvents::COMMUNITY_CONTENT_CREATE, $entity);
   }
@@ -53,7 +52,6 @@ function joinup_notification_node_insert(EntityInterface $entity): void {
  */
 function joinup_notification_node_presave(EntityInterface $entity): void {
   // @todo To be unified in ISAICP-8839 - maybe create a new interface?.
-  // @todo Add the solution interface too in ISAICP-8572.
   if (
     $entity->isNew()
       || !($entity instanceof CommunityContentInterface
@@ -75,7 +73,6 @@ function joinup_notification_node_update(EntityInterface $entity): void {
   $event_name = match(TRUE) {
     $entity instanceof CommunityContentInterface => NotificationEvents::COMMUNITY_CONTENT_UPDATE,
     // @todo To be unified in ISAICP-8839 - maybe create a new interface?.
-    // @todo Add the solution interface too in ISAICP-8572.
     $entity instanceof DistributionInterface => NotificationEvents::RDF_ENTITY_CRUD,
     $entity instanceof ReleaseInterface => NotificationEvents::RDF_ENTITY_CRUD,
     $entity instanceof GroupInterface => NotificationEvents::RDF_ENTITY_CRUD,
@@ -108,7 +105,6 @@ function joinup_notification_node_predelete(EntityInterface $entity): void {
   $event_name = match(TRUE) {
     $entity instanceof CommunityContentInterface => NotificationEvents::COMMUNITY_CONTENT_DELETE,
     // @todo To be unified in ISAICP-8839 - maybe create a new interface?.
-    // @todo Add the solution interface too in ISAICP-8572.
     $entity instanceof DistributionInterface => NotificationEvents::RDF_ENTITY_CRUD,
     $entity instanceof ReleaseInterface => NotificationEvents::RDF_ENTITY_CRUD,
     default => NULL,

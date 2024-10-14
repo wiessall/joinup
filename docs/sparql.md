@@ -1,4 +1,4 @@
-TODO: Completely rewrite the RDF part of docs in ISAICP-8376
+TODO: Completely rewrite the RDF/SPARQL part of docs in ISAICP-8376
 
 What is SPARQL?
 ---------------
