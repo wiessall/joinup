@@ -158,4 +158,34 @@ function joinup_private_message_entity_base_field_info(EntityTypeInterface $enti
   return $fields;
 }
 
+/**
+ * Implements hook_views_data_alter().
+ */
+function joinup_private_message_views_data_alter(array &$data) {
+  $data['reporting']['table']['group'] = t('Private Message');
+  $data['reporting']['table']['join'] = [
+    '#global' => [],
+  ];
+  $data['reporting']['private_message_actions'] = [
+    'title' => t('Actions'),
+    'field' => [
+      'title' => t('Actions'),
+      'help' => t(' Actions for reported private messages.'),
+      'id' => 'private_message_actions',
+    ],
+  ];
+
+//  $data['reporting']['table']['group'] = t('User');
+//  $data['reporting']['table']['join'] = [
+//    '#global' => [],
+//  ];
+//  $data['reporting']['user_reporting_actions_views_field'] = [
+//    'title' => t('Actions'),
+//    'field' => [
+//      'title' => t('Actions'),
+//      'help' => t('Custom actions for a user reporting.'),
+//      'id' => 'user_reporting_actions_views_field',
+//    ],
+//  ];
+}
 
