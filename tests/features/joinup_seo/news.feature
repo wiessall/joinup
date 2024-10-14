@@ -12,7 +12,7 @@ Feature: SEO for news articles.
       | Username          | E-mail                 | First name | Family name |
       | Joinup SEO author | joinup.seo@example.com | Kurk       | Smith       |
     And "news" content:
-      | title           | headline                    | logo     | field_paragraphs_body | created                   | publication date          | changed                   | state     | author            | collection                 |
+      | title           | headline                    | logo     | field_paragraphs_body | created                   | published at              | changed                   | state     | author            | collection                 |
       | Joinup SEO news | Headline of Joinup SEO news | logo.png | Body of news.         | Sun, 01 Dec 2019 13:00:00 | Wed, 25 Dec 2019 13:00:00 | Wed, 01 Jan 2020 13:00:00 | published | Joinup SEO author | Joinup SEO news collection |
 
     When I visit the "Joinup SEO news" news

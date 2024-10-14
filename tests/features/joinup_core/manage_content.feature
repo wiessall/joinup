@@ -15,7 +15,7 @@ Feature:
       | The Panama Papers | Document      | Vintage Art | published | 2019-11-19 20:00 |
       | The Area 51 File  | Document      | Vintage Art | draft     | 2018-11-19 21:00 |
     And discussion content:
-      | title               | collection  | state     | created    | publication date | changed    |
+      | title               | collection  | state     | created    | published at     | changed    |
       | The Ultimate Debate | Vintage Art | published | 2016-11-19 | 2016-11-19       | 2016-11-19 |
     And comments:
       | message             | author                 | parent              | created          | changed    |
