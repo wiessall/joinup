@@ -30,7 +30,6 @@ use Drupal\joinup_release\SolutionReleasesFieldItemList;
  * can be resolved automatically.
  */
 function joinup_release_entity_type_alter(array &$entity_types): void {
-  // @todo Change this to match a node on ISAICP-8572.
   $entity_types['node']->setLinkTemplate('solution-releases', '/node/{node}/releases');
 }
 
@@ -348,22 +347,6 @@ function joinup_release_title_version_is_unique(ReleaseInterface $release, bool 
 
   $result = $query->execute();
   return empty($result);
-}
-
-/**
- * Implements hook_sparql_bundle_load_alter().
- *
- * There is an initial check whether the bundle is empty because the method
- * that invokes this hook is also called for taxonomies and the bundle is
- * currently being skipped for the taxonomies.
- */
-function joinup_release_sparql_bundle_load_alter(array $entity_values, array &$bundles): void {
-  // @todo Remove this in ISAICP-8572.
-  if (count($bundles) > 1 && in_array('solution', $bundles)) {
-    if (isset($entity_values['http://purl.org/dc/terms/isVersionOf'])) {
-      $bundles = array_diff($bundles, ['solution']);
-    }
-  }
 }
 
 /**

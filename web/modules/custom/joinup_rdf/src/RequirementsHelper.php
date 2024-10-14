@@ -10,6 +10,8 @@ use Drupal\rdf_sync\RdfSyncConnectionInterface;
 
 /**
  * Implements helper methods related to the requirements.
+ *
+ * @todo Evaluate in ISAICP-8376 if this is still needed.
  */
 class RequirementsHelper {
 
@@ -64,14 +66,14 @@ class RequirementsHelper {
    */
   protected function getLeftoverFederationGraphs(): array {
     $query = <<<QUERY
-SELECT DISTINCT ?g WHERE { GRAPH ?g {?s ?p ?o} } ORDER BY ?g
-QUERY;
+      SELECT DISTINCT ?g WHERE { GRAPH ?g {?s ?p ?o} } ORDER BY ?g
+      QUERY;
 
     $graphs = $this->sparql->query($query);
     $errors = [];
     foreach ($graphs as $graph) {
       $uri = $graph->g->getUri();
-      if (strpos($uri, 'http://adms-validator/') === 0) {
+      if (str_starts_with($uri, 'http://adms-validator/')) {
         $errors[] = $uri;
       }
     }
