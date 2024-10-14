@@ -7,3 +7,6 @@ services:
     class: Drupal\joinup_private_message\Controller\PrivateMessageNotFoundController
     tags:
       - { name: controller.service_arguments }
+  joinup_private_message.private_message_service:
+    class: Drupal\joinup_private_message\Service\PrivateMessageService
+

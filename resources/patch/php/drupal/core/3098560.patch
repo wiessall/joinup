@@ -1,0 +1,51 @@
+From 3c7bd09cdcba42a02b5f1710086c5a22fc767df1 Mon Sep 17 00:00:00 2001
+From: Ross Keatinge <56651-tetranz@users.noreply.drupalcode.org>
+Date: Fri, 26 May 2023 15:23:21 +0300
+Subject: [PATCH] Issue #3098560 by tetranz, pankaj.singh, rgpublic,
+ chaithanya.m, Lendude, vikashson: Base field filter operators do not include
+ "Is empty (NULL )" and "Is not empty (NOT NULL)
+
+---
+ core/modules/views/src/EntityViewsData.php                | 6 +++++-
+ .../views/tests/src/Kernel/Entity/EntityViewsDataTest.php | 8 ++++++++
+ 2 files changed, 13 insertions(+), 1 deletion(-)
+
+diff --git a/core/modules/views/src/EntityViewsData.php b/core/modules/views/src/EntityViewsData.php
+index ce2ac1519cac..af2c3a3f19b9 100644
+--- a/core/modules/views/src/EntityViewsData.php
++++ b/core/modules/views/src/EntityViewsData.php
+@@ -578,8 +578,12 @@ protected function mapSingleFieldViewsData($table, $field_name, $field_type, $co
+         }
+     }
+
+-    // Do post-processing for a few field types.
++    if (!$field_definition->isRequired()) {
++      // Provides "Is empty (NULL)" and "Is not empty (NOT NULL)" operators.
++      $views_field['filter']['allow empty'] = TRUE;
++    }
+
++    // Do post-processing for a few field types.
+     $process_method = 'processViewsDataFor' . Container::camelize($field_type);
+     if (method_exists($this, $process_method)) {
+       $this->{$process_method}($table, $field_definition, $views_field, $column_name);
+diff --git a/core/modules/views/tests/src/Kernel/Entity/EntityViewsDataTest.php b/core/modules/views/tests/src/Kernel/Entity/EntityViewsDataTest.php
+index 6fc3c673d130..c65a63d62dbc 100644
+--- a/core/modules/views/tests/src/Kernel/Entity/EntityViewsDataTest.php
++++ b/core/modules/views/tests/src/Kernel/Entity/EntityViewsDataTest.php
+@@ -426,6 +426,14 @@ public function testBaseTableFields() {
+         ],
+       ],
+     ], $data['entity_test__string']['table']['join']['entity_test']);
++
++    // Check "allow empty" option for not required fields.
++    $this->assertArrayHasKey('allow empty', $data['entity_test']['name']['filter']);
++    $this->assertTrue($data['entity_test']['name']['filter']['allow empty']);
++    // Set the field required.
++    $this->commonBaseFields['name']->setRequired(TRUE);
++    $data = $this->entityTypeManager->getHandler('entity_test', 'views_data')->getViewsData();
++    $this->assertArrayNotHasKey('allow empty', $data['entity_test']['name']['filter']);
+   }
+
+   /**
+--
+GitLab

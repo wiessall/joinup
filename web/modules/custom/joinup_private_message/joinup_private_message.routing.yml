@@ -9,4 +9,15 @@ joinup_private_message.report_form:
     parameters:
       private_message:
         type: entity:private_message
+joinup_private_message.flag_as_ok:
+  path: '/dashboard/private-message-report/flag_as_ok/{private_message}'
+  defaults:
+    _controller: '\Drupal\joinup_private_message\Controller\PrivateMessageActionsController::flagAsOk'
+    _title: 'Flag as OK'
+  requirements:
+    _permission: 'Administer private messages'
+  options:
+    parameters:
+      private_message:
+        type: entity:private_message
 
