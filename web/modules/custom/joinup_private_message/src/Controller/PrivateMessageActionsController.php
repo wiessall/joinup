@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup_private_message\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\Core\Url;
 use Drupal\joinup_private_message\Service\PrivateMessageService;
 use Drupal\private_message\Entity\PrivateMessage;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -40,7 +41,22 @@ class PrivateMessageActionsController extends ControllerBase {
    */
   public function flagAsOk(PrivateMessage $private_message): RedirectResponse {
     $this->privateMessageService->flagAsOk($private_message);
-    return $this->redirect('private_message.private_message_page');
+    $url = $this->privateMessageService->getViewPath();
+    $this->messenger()->addMessage('The private message with ID ' . $private_message->id() . ' has been flagged as "ok".');
+    return new RedirectResponse($this->getRedirectUrl($url));
+  }
+
+  /**
+   * Converts path to internal url.
+   *
+   * @param string $path
+   *   Path to convert.
+   *
+   * @return \Drupal\Core\GeneratedUrl|string
+   *   view redirect url.
+   */
+  private function getRedirectUrl(string $path): string {
+    return Url::fromUri('internal:/' . $path)->toString();
   }
 
 }
