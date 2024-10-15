@@ -63,6 +63,7 @@ function joinup_private_message_form_submit(array &$form, FormStateInterface $fo
 function joinup_private_message_form_private_message_add_form_alter(array &$form): void {
   $current_route_name = \Drupal::routeMatch()->getRouteName();
   if ($current_route_name === 'private_message.private_message_create') {
+    $form['#title'] = t('New message');
     $form['#prefix'] = '<div id="private-message-create-form-wrapper">';
     $form['#suffix'] = '</div>';
 
