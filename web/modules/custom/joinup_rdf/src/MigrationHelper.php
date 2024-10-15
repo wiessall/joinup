@@ -433,6 +433,16 @@ final class MigrationHelper {
         $group->save();
       }
     }
+
+    // The group is creating one membership by default. However, in order to
+    // keep existing data, we are converting the existing memberships from the
+    // groups in joinup_rdf_deploy_200004. Remove all memberships of the groups
+    // created by the migration. Do not check if the group is new because the
+    // group might have been already created by the release migration.
+    $this->connection->delete('og_membership')
+      ->condition('entity_type', 'node')
+      ->condition('entity_id', $group->id())
+      ->execute();
   }
 
   /**
