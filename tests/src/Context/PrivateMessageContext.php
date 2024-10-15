@@ -10,6 +10,8 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\JavascriptTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
+use Drupal\joinup\Traits\UserTrait;
+use Drupal\private_message\Entity\PrivateMessageBan;
 use Drupal\private_message\Entity\PrivateMessageThreadInterface;
 
 /**
@@ -19,6 +21,7 @@ class PrivateMessageContext extends RawDrupalContext {
 
   use JavascriptTrait;
   use TestingEntitiesTrait;
+  use UserTrait;
 
   /**
    * Creates a set of private messages.
@@ -291,7 +294,8 @@ class PrivateMessageContext extends RawDrupalContext {
   public function setPrivateMessageLimit(?int $limit = NULL): void {
     static $original_value;
 
-    $config = \Drupal::configFactory()->getEditable('private_message_flood.role.authenticated');
+    $config = \Drupal::configFactory()
+      ->getEditable('private_message_flood.role.authenticated');
     $current_value = $config->get('limit');
     if (!isset($original_value)) {
       $original_value = $current_value;
@@ -341,6 +345,34 @@ class PrivateMessageContext extends RawDrupalContext {
     }
 
     return $messagesContainer;
+  }
+
+  /**
+   * Create private message bans.
+   *
+   * @param \Behat\Gherkin\Node\TableNode $table
+   *   The collection data.
+   *
+   * @throws \Exception
+   *   Thrown when a column name is incorrect.
+   *
+   * @Given the following private message bans:
+   */
+  public function givenPrivateMessageBans(TableNode $table): void {
+    foreach ($table->getHash() as $row) {
+      // Create a new private message ban entity.
+      $ban = PrivateMessageBan::create([
+        // Get the user ID based on username.
+        'owner' => $this->getUserByName($row['owner'])->id(),
+        // Get the banned user ID.
+        'target' => $this->getUserByName($row['target'])->id(),
+        // Convert string date to timestamp.
+        'created' => strtotime($row['created']),
+      ]);
+
+      // Save the entity.
+      $ban->save();
+    }
   }
 
 }
