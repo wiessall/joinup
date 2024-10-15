@@ -1,8 +1,16 @@
 diff --git a/core/lib/Drupal/Core/Entity/EntityAccessControlHandler.php b/core/lib/Drupal/Core/Entity/EntityAccessControlHandler.php
-index 5d7ba3aa5fa50456609b7537796e237fad86ece8..06b9b6953fb0cc0ea63d6235459ca841840801a6 100644
+index 5d7ba3aa5f..25bd50dd2c 100644
 --- a/core/lib/Drupal/Core/Entity/EntityAccessControlHandler.php
 +++ b/core/lib/Drupal/Core/Entity/EntityAccessControlHandler.php
-@@ -238,7 +238,7 @@ public function createAccess($entity_bundle = NULL, ?AccountInterface $account =
+@@ -2,6 +2,7 @@
+ 
+ namespace Drupal\Core\Entity;
+ 
++use Drupal\Component\Utility\Crypt;
+ use Drupal\Core\Access\AccessResult;
+ use Drupal\Core\Field\FieldItemListInterface;
+ use Drupal\Core\Field\FieldDefinitionInterface;
+@@ -238,7 +239,7 @@ public function createAccess($entity_bundle = NULL, ?AccountInterface $account =
        'langcode' => LanguageInterface::LANGCODE_DEFAULT,
      ];
  
@@ -11,7 +19,7 @@ index 5d7ba3aa5fa50456609b7537796e237fad86ece8..06b9b6953fb0cc0ea63d6235459ca841
      if (($access = $this->getCache($cid, 'create', $context['langcode'], $account)) !== NULL) {
        // Cache hit, no work necessary.
        return $return_as_object ? $access : $access->isAllowed();
-@@ -403,4 +403,19 @@ protected function checkFieldAccess($operation, FieldDefinitionInterface $field_
+@@ -403,4 +404,32 @@ protected function checkFieldAccess($operation, FieldDefinitionInterface $field_
      return AccessResult::allowed();
    }
  
@@ -26,8 +34,21 @@ index 5d7ba3aa5fa50456609b7537796e237fad86ece8..06b9b6953fb0cc0ea63d6235459ca841
 +   * @return string
 +   *   The create access result cache ID.
 +   */
-+  protected function buildCreateAccessCid(?string $entity_bundle, array $context): string {
-+    return $entity_bundle ? 'create:' . $entity_bundle : 'create';
++  protected function buildCreateAccessCid(?string $entity_bundle, array $context): ?string {
++    $cid = $entity_bundle ? 'create:' . $entity_bundle : 'create';
++
++    // Remove the context entries that are already used to vary the cache.
++    $context_array = array_diff_key($context, [
++      'langcode' => TRUE,
++      'entity_type_id' => TRUE,
++    ]);
++    if ($context_array) {
++      // Make the cache ID predictable.
++      ksort($context_array);
++      $cid .= ':' . Crypt::hashBase64(serialize($context_array));
++    }
++
++    return $cid;
 +  }
 +
  }
