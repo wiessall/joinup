@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_private_message\Plugin\views\field;
 
-use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
-use Drupal\private_message\Entity\PrivateMessage;
 use Drupal\views\Plugin\views\field\FieldPluginBase;
 use Drupal\views\ResultRow;
 
@@ -27,9 +25,7 @@ class PrivateMessageActions extends FieldPluginBase {
   /**
    * {@inheritdoc}
    */
-  public function query() {
-    // Do nothing -- to override the parent query.
-  }
+  public function query() {}
 
   /**
    * {@inheritdoc}
@@ -69,24 +65,6 @@ class PrivateMessageActions extends FieldPluginBase {
     }
 
     return '';
-  }
-
-  /**
-   * Submit handler for the Flag as OK operation.
-   */
-  public function submitFlagAsOk(array &$form, FormStateInterface $form_state): void {
-    $private_message_id = $form['#private_message'];
-    $private_message = PrivateMessage::load($private_message_id);
-
-    if ($private_message) {
-      // Clear the report_text and report_timestamp fields.
-      $private_message->set('report_text', '');
-      $private_message->set('report_timestamp', NULL);
-      $private_message->save();
-
-      // Add a message to the user.
-      drupal_set_message($this->t('The message has been flagged as OK.'));
-    }
   }
 
 }
