@@ -1,16 +1,8 @@
 diff --git a/core/lib/Drupal/Core/Entity/EntityAccessControlHandler.php b/core/lib/Drupal/Core/Entity/EntityAccessControlHandler.php
-index 5d7ba3aa5f..25bd50dd2c 100644
+index 5d7ba3aa5fa50456609b7537796e237fad86ece8..06b9b6953fb0cc0ea63d6235459ca841840801a6 100644
 --- a/core/lib/Drupal/Core/Entity/EntityAccessControlHandler.php
 +++ b/core/lib/Drupal/Core/Entity/EntityAccessControlHandler.php
-@@ -2,6 +2,7 @@
- 
- namespace Drupal\Core\Entity;
- 
-+use Drupal\Component\Utility\Crypt;
- use Drupal\Core\Access\AccessResult;
- use Drupal\Core\Field\FieldItemListInterface;
- use Drupal\Core\Field\FieldDefinitionInterface;
-@@ -238,7 +239,7 @@ public function createAccess($entity_bundle = NULL, ?AccountInterface $account =
+@@ -238,7 +238,7 @@ public function createAccess($entity_bundle = NULL, ?AccountInterface $account =
        'langcode' => LanguageInterface::LANGCODE_DEFAULT,
      ];
  
@@ -19,7 +11,7 @@ index 5d7ba3aa5f..25bd50dd2c 100644
      if (($access = $this->getCache($cid, 'create', $context['langcode'], $account)) !== NULL) {
        // Cache hit, no work necessary.
        return $return_as_object ? $access : $access->isAllowed();
-@@ -403,4 +404,32 @@ protected function checkFieldAccess($operation, FieldDefinitionInterface $field_
+@@ -403,4 +403,19 @@ protected function checkFieldAccess($operation, FieldDefinitionInterface $field_
      return AccessResult::allowed();
    }
  
@@ -34,26 +26,13 @@ index 5d7ba3aa5f..25bd50dd2c 100644
 +   * @return string
 +   *   The create access result cache ID.
 +   */
-+  protected function buildCreateAccessCid(?string $entity_bundle, array $context): ?string {
-+    $cid = $entity_bundle ? 'create:' . $entity_bundle : 'create';
-+
-+    // Remove the context entries that are already used to vary the cache.
-+    $context_array = array_diff_key($context, [
-+      'langcode' => TRUE,
-+      'entity_type_id' => TRUE,
-+    ]);
-+    if ($context_array) {
-+      // Make the cache ID predictable.
-+      ksort($context_array);
-+      $cid .= ':' . Crypt::hashBase64(serialize($context_array));
-+    }
-+
-+    return $cid;
++  protected function buildCreateAccessCid(?string $entity_bundle, array $context): string {
++    return $entity_bundle ? 'create:' . $entity_bundle : 'create';
 +  }
 +
  }
 diff --git a/core/modules/comment/comment.install b/core/modules/comment/comment.install
-index 53a0c61d59..6ec841231e 100644
+index 2a0808b5c022ef0d3c5c89e21a95f649cac2930f..9171234f3be61cdbdb3828f40380d01fb535e804 100644
 --- a/core/modules/comment/comment.install
 +++ b/core/modules/comment/comment.install
 @@ -5,8 +5,11 @@
@@ -68,15 +47,15 @@ index 53a0c61d59..6ec841231e 100644
  
  /**
   * Implements hook_uninstall().
-@@ -117,3 +120,19 @@ function comment_schema() {
- function comment_update_last_removed() {
-   return 10100;
+@@ -134,3 +137,19 @@ function comment_update_10100(&$sandbox = NULL) {
+     $connection->schema()->changeField('comment_entity_statistics', 'last_comment_timestamp', 'last_comment_timestamp', $new);
+   }
  }
 +
 +/**
 + * Set the default value of 'thread_limit' setting for all comment fields.
 + */
-+function comment_update_10300(array &$sandbox = NULL): void {
++function comment_update_10101(?array &$sandbox = NULL) {
 +  \Drupal::classResolver(ConfigEntityUpdater::class)->update($sandbox, 'field_config', function (FieldConfigInterface $field_config): bool {
 +    if ($field_config->getType() === 'comment') {
 +      $field_config->setSetting('thread_limit', [
@@ -89,7 +68,7 @@ index 53a0c61d59..6ec841231e 100644
 +  });
 +}
 diff --git a/core/modules/comment/comment.module b/core/modules/comment/comment.module
-index 0928695ed1..70b81b8473 100644
+index 0928695ed156de4b00bb5705823440f381221152..70b81b84731bfa1bfb925e2609b1ee6b9d116830 100644
 --- a/core/modules/comment/comment.module
 +++ b/core/modules/comment/comment.module
 @@ -431,13 +431,15 @@ function comment_node_search_result(EntityInterface $node) {
@@ -113,7 +92,7 @@ index 0928695ed1..70b81b8473 100644
    }
    // Do not make a string if there are no comment fields, or no comments exist
 diff --git a/core/modules/comment/config/schema/comment.schema.yml b/core/modules/comment/config/schema/comment.schema.yml
-index 33b3e55ac3..2e5603c8bf 100644
+index 33b3e55ac3ab7ea9f22df95e8f06bcde6e5edd6b..2e5603c8bf03b825a4532849670733ecd08a29c4 100644
 --- a/core/modules/comment/config/schema/comment.schema.yml
 +++ b/core/modules/comment/config/schema/comment.schema.yml
 @@ -79,6 +79,16 @@ field.field_settings.comment:
@@ -134,7 +113,7 @@ index 33b3e55ac3..2e5603c8bf 100644
        type: integer
        label: 'Comments per page'
 diff --git a/core/modules/comment/src/CommentAccessControlHandler.php b/core/modules/comment/src/CommentAccessControlHandler.php
-index 87805f3935..e1877ad73b 100644
+index 87805f39357a64f43cb648c81536bb5ac3c87a36..e1877ad73bf7c21ab9a6beef6841f0a2248bf154 100644
 --- a/core/modules/comment/src/CommentAccessControlHandler.php
 +++ b/core/modules/comment/src/CommentAccessControlHandler.php
 @@ -63,6 +63,31 @@ protected function checkAccess(EntityInterface $entity, $operation, AccountInter
@@ -185,10 +164,10 @@ index 87805f3935..e1877ad73b 100644
 +
  }
 diff --git a/core/modules/comment/src/CommentFieldItemList.php b/core/modules/comment/src/CommentFieldItemList.php
-index ab257a008a..971889162b 100644
+index 909636f13280e45208c30405b5bd431935eabdf7..c782532167576cf9134079a4270dbf7117a29212 100644
 --- a/core/modules/comment/src/CommentFieldItemList.php
 +++ b/core/modules/comment/src/CommentFieldItemList.php
-@@ -43,24 +43,88 @@ public function offsetExists($offset): bool {
+@@ -44,24 +44,88 @@ public function offsetExists($offset) {
     * {@inheritdoc}
     */
    public function access($operation = 'view', ?AccountInterface $account = NULL, $return_as_object = FALSE) {
@@ -287,7 +266,7 @@ index ab257a008a..971889162b 100644
 +
  }
 diff --git a/core/modules/comment/src/CommentForm.php b/core/modules/comment/src/CommentForm.php
-index c9daaa1859..5d2a09f258 100644
+index c9daaa1859e05cc75ce0a118667d6c87acdb216e..5d2a09f2589bd187389136f526d47ba4a9151b2d 100644
 --- a/core/modules/comment/src/CommentForm.php
 +++ b/core/modules/comment/src/CommentForm.php
 @@ -385,7 +385,7 @@ public function save(array $form, FormStateInterface $form_state) {
@@ -300,20 +279,20 @@ index c9daaa1859..5d2a09f258 100644
        $form_state->setValue('cid', $comment->id());
  
 diff --git a/core/modules/comment/src/CommentLazyBuilders.php b/core/modules/comment/src/CommentLazyBuilders.php
-index d553411b9f..7b3b4045a0 100644
+index a3d3df36848d032f27bf37381a6f9e9621a9b527..47275c33b05298650fbf0c697f03f7fc715cf24f 100644
 --- a/core/modules/comment/src/CommentLazyBuilders.php
 +++ b/core/modules/comment/src/CommentLazyBuilders.php
-@@ -185,7 +185,7 @@ protected function buildLinks(CommentInterface $entity, EntityInterface $comment
-       }
+@@ -186,7 +186,7 @@ protected function buildLinks(CommentInterface $entity, EntityInterface $comment
        $field_definition = $commented_entity->getFieldDefinition($entity->getFieldName());
-       if ($entity->access('create')
+       if ($entity->isPublished()
+         && $entity->access('create')
 -        && $field_definition->getSetting('default_mode') === CommentManagerInterface::COMMENT_MODE_THREADED) {
 +        && $field_definition->getSetting('default_mode') !== CommentManagerInterface::COMMENT_MODE_FLAT) {
          $links['comment-reply'] = [
            'title' => t('Reply'),
            'url' => Url::fromRoute('comment.reply', [
 diff --git a/core/modules/comment/src/CommentLinkBuilder.php b/core/modules/comment/src/CommentLinkBuilder.php
-index b7a12faab1..bf0f8d34e6 100644
+index b7a12faab19bafb8dbb5e9dc0f2c0c3a9b7124c7..bf0f8d34e6308156f501b3494679932beb590dde 100644
 --- a/core/modules/comment/src/CommentLinkBuilder.php
 +++ b/core/modules/comment/src/CommentLinkBuilder.php
 @@ -93,7 +93,8 @@ public function buildCommentedEntityLinks(FieldableEntityInterface $entity, arra
@@ -383,7 +362,7 @@ index b7a12faab1..bf0f8d34e6 100644
              $value = [
                'new_comment_count' => (int) $new_comments,
 diff --git a/core/modules/comment/src/CommentManager.php b/core/modules/comment/src/CommentManager.php
-index ba26943fe4..9cef6b6793 100644
+index ba26943fe470479fbe91ca424b840ff395889032..9cef6b6793804b285c77d5472dfbb2098080d602 100644
 --- a/core/modules/comment/src/CommentManager.php
 +++ b/core/modules/comment/src/CommentManager.php
 @@ -11,12 +11,12 @@
@@ -436,7 +415,7 @@ index ba26943fe4..9cef6b6793 100644
            'entity_type' => $entity->getEntityTypeId(),
            'entity' => $entity->id(),
 diff --git a/core/modules/comment/src/CommentManagerInterface.php b/core/modules/comment/src/CommentManagerInterface.php
-index 1cbac6692b..f1ea472127 100644
+index 1cbac6692bc21639f99c6a1acb445dfbdd4a80ad..f1ea4721272528f47c978f566c397dfdf42a50b5 100644
 --- a/core/modules/comment/src/CommentManagerInterface.php
 +++ b/core/modules/comment/src/CommentManagerInterface.php
 @@ -15,10 +15,15 @@ interface CommentManagerInterface {
@@ -457,7 +436,7 @@ index 1cbac6692b..f1ea472127 100644
     * Utility function to return an array of comment fields.
     *
 diff --git a/core/modules/comment/src/CommentStorageInterface.php b/core/modules/comment/src/CommentStorageInterface.php
-index 764a5e4a9b..8a90310f76 100644
+index 764a5e4a9b958067ea3b419bd745da989aba8b43..8a90310f760aa1ec876531b593bc4770bad3c2d7 100644
 --- a/core/modules/comment/src/CommentStorageInterface.php
 +++ b/core/modules/comment/src/CommentStorageInterface.php
 @@ -59,8 +59,9 @@ public function getNewCommentPageNumber($total_comments, $new_comments, Fieldabl
@@ -485,7 +464,7 @@ index 764a5e4a9b..8a90310f76 100644
     *   (optional) The amount of comments to display per page.
     *   Defaults to 0, which means show all comments.
 diff --git a/core/modules/comment/src/CommentViewBuilder.php b/core/modules/comment/src/CommentViewBuilder.php
-index 0e4e024dd5..cbb47b5baa 100644
+index 0e4e024dd574300e854de0bb3303d74f0eff55d8..cbb47b5baa1313e96beca06e0527dc2eb4827821 100644
 --- a/core/modules/comment/src/CommentViewBuilder.php
 +++ b/core/modules/comment/src/CommentViewBuilder.php
 @@ -84,7 +84,7 @@ protected function getBuildDefaults(EntityInterface $entity, $view_mode) {
@@ -548,7 +527,7 @@ index 0e4e024dd5..cbb47b5baa 100644
        $bundle = $commented_entity ? $commented_entity->bundle() : '';
        $is_node = $commented_entity ? $commented_entity->getEntityTypeId() === 'node' : NULL;
 diff --git a/core/modules/comment/src/Controller/CommentController.php b/core/modules/comment/src/Controller/CommentController.php
-index 4dfa517a7b..d3ce3fd79b 100644
+index 4dfa517a7b126f97220df3977e2ddd4144f66f15..d3ce3fd79b5c9fda1697da8af62fa7670b8fd0ed 100644
 --- a/core/modules/comment/src/Controller/CommentController.php
 +++ b/core/modules/comment/src/Controller/CommentController.php
 @@ -276,31 +276,51 @@ public function replyFormAccess(EntityInterface $entity, $field_name, $pid = NUL
@@ -624,7 +603,7 @@ index 4dfa517a7b..d3ce3fd79b 100644
    }
  
 diff --git a/core/modules/comment/src/Entity/Comment.php b/core/modules/comment/src/Entity/Comment.php
-index 43123b7a17..bfe2324d49 100644
+index 43123b7a17ff697b5a34a5d3fc85938aa4f586f3..d26bea4260d50596be6a44d9cd96ff9a2f323794 100644
 --- a/core/modules/comment/src/Entity/Comment.php
 +++ b/core/modules/comment/src/Entity/Comment.php
 @@ -11,6 +11,7 @@
@@ -642,7 +621,7 @@ index 43123b7a17..bfe2324d49 100644
 +  /**
 +   * {@inheritdoc}
 +   */
-+  public function access($operation, AccountInterface $account = NULL, $return_as_object = FALSE) {
++  public function access($operation, ?AccountInterface $account = NULL, $return_as_object = FALSE) {
 +    if ($operation === 'create') {
 +      // The commented entity and, when replying, the parent comment entity are
 +      // valuable information when comment entity 'create access' handler makes
@@ -662,7 +641,7 @@ index 43123b7a17..bfe2324d49 100644
     * Get the comment type ID for this comment.
     *
 diff --git a/core/modules/comment/src/Plugin/Field/FieldFormatter/CommentDefaultFormatter.php b/core/modules/comment/src/Plugin/Field/FieldFormatter/CommentDefaultFormatter.php
-index fbc51eac50..6945ac181f 100644
+index d46189b81044f41229cbb94ca95ded2799322527..9a3a133e239e4b2ca64f1519f61632e17e34a2a4 100644
 --- a/core/modules/comment/src/Plugin/Field/FieldFormatter/CommentDefaultFormatter.php
 +++ b/core/modules/comment/src/Plugin/Field/FieldFormatter/CommentDefaultFormatter.php
 @@ -161,13 +161,14 @@ public function viewElements(FieldItemListInterface $items, $langcode) {
@@ -692,7 +671,7 @@ index fbc51eac50..6945ac181f 100644
              '#lazy_builder' => [
                'comment.lazy_builders:renderForm',
 diff --git a/core/modules/comment/src/Plugin/Field/FieldType/CommentItem.php b/core/modules/comment/src/Plugin/Field/FieldType/CommentItem.php
-index 1f16bf7386..6b83d7b66f 100644
+index 1f16bf7386f5c48ec888e9c6331c2d15f364f3b6..6b83d7b66f4228a3318a3fd246ee088bb28c46b0 100644
 --- a/core/modules/comment/src/Plugin/Field/FieldType/CommentItem.php
 +++ b/core/modules/comment/src/Plugin/Field/FieldType/CommentItem.php
 @@ -45,6 +45,10 @@ public static function defaultStorageSettings() {
@@ -777,7 +756,7 @@ index 1f16bf7386..6b83d7b66f 100644
      $element['form_location'] = [
        '#type' => 'checkbox',
 diff --git a/core/modules/comment/src/Plugin/Field/FieldType/CommentItemInterface.php b/core/modules/comment/src/Plugin/Field/FieldType/CommentItemInterface.php
-index 1caee56297..eacccdad9b 100644
+index 1caee562975cfc9dd30f8ab7f27ce5e6df20c5ce..eacccdad9bc18a663afe6a7f78ceaf198f00a4f1 100644
 --- a/core/modules/comment/src/Plugin/Field/FieldType/CommentItemInterface.php
 +++ b/core/modules/comment/src/Plugin/Field/FieldType/CommentItemInterface.php
 @@ -32,4 +32,14 @@ interface CommentItemInterface {
@@ -796,7 +775,7 @@ index 1caee56297..eacccdad9b 100644
 +
  }
 diff --git a/core/modules/comment/tests/modules/comment_test/comment_test.module b/core/modules/comment/tests/modules/comment_test/comment_test.module
-index 3dd4f42790..57d1202c45 100644
+index 3dd4f427909aa1e0e3365046e5224dea2f891205..57d1202c45a5063f7924b16e2a6b267bc9603b0c 100644
 --- a/core/modules/comment/tests/modules/comment_test/comment_test.module
 +++ b/core/modules/comment/tests/modules/comment_test/comment_test.module
 @@ -6,6 +6,7 @@
@@ -818,7 +797,7 @@ index 3dd4f42790..57d1202c45 100644
  /**
 diff --git a/core/modules/comment/tests/modules/comment_test/src/CommentTestAccessControlHandler.php b/core/modules/comment/tests/modules/comment_test/src/CommentTestAccessControlHandler.php
 new file mode 100644
-index 0000000000..c01c8159d3
+index 0000000000000000000000000000000000000000..c01c8159d37fa30b191210ced257a486cd24d1da
 --- /dev/null
 +++ b/core/modules/comment/tests/modules/comment_test/src/CommentTestAccessControlHandler.php
 @@ -0,0 +1,29 @@
@@ -853,13 +832,13 @@ index 0000000000..c01c8159d3
 +}
 diff --git a/core/modules/comment/tests/src/Functional/Update/CommentUpdateTest.php b/core/modules/comment/tests/src/Functional/Update/CommentUpdateTest.php
 new file mode 100644
-index 0000000000..553dda3720
+index 0000000000000000000000000000000000000000..33c5b8c16dc6cfc87f26a2f25e871b4322bab04d
 --- /dev/null
 +++ b/core/modules/comment/tests/src/Functional/Update/CommentUpdateTest.php
 @@ -0,0 +1,45 @@
 +<?php
 +
-+declare(strict_types = 1);
++declare(strict_types=1);
 +
 +namespace Drupal\Tests\comment\Functional\Update;
 +
@@ -904,13 +883,13 @@ index 0000000000..553dda3720
 +}
 diff --git a/core/modules/comment/tests/src/Kernel/CommentControllerTest.php b/core/modules/comment/tests/src/Kernel/CommentControllerTest.php
 new file mode 100644
-index 0000000000..d7f2fac7f2
+index 0000000000000000000000000000000000000000..2371e3045f669c07df98a69dc6e83c02bf042f64
 --- /dev/null
 +++ b/core/modules/comment/tests/src/Kernel/CommentControllerTest.php
 @@ -0,0 +1,173 @@
 +<?php
 +
-+declare(strict_types = 1);
++declare(strict_types=1);
 +
 +namespace Drupal\Tests\comment\Kernel;
 +
@@ -1054,7 +1033,7 @@ index 0000000000..d7f2fac7f2
 +   *
 +   * @see self::testReplyFormAccess()
 +   */
-+  public function providerTestReplyFormAccess(): array {
++  public static function providerTestReplyFormAccess(): array {
 +    return [
 +      'commenter' => [
 +        ['access content', 'access comments', 'post comments'], TRUE,
@@ -1083,13 +1062,13 @@ index 0000000000..d7f2fac7f2
 +}
 diff --git a/core/modules/comment/tests/src/Kernel/CommentCreationAccessTest.php b/core/modules/comment/tests/src/Kernel/CommentCreationAccessTest.php
 new file mode 100644
-index 0000000000..90e430781a
+index 0000000000000000000000000000000000000000..ede943517512be08ec812c09051ba295f6e5cc73
 --- /dev/null
 +++ b/core/modules/comment/tests/src/Kernel/CommentCreationAccessTest.php
 @@ -0,0 +1,103 @@
 +<?php
 +
-+declare(strict_types = 1);
++declare(strict_types=1);
 +
 +namespace Drupal\Tests\comment\Kernel;
 +
@@ -1191,7 +1170,7 @@ index 0000000000..90e430781a
 +
 +}
 diff --git a/core/modules/comment/tests/src/Kernel/CommentFieldAccessTest.php b/core/modules/comment/tests/src/Kernel/CommentFieldAccessTest.php
-index 82e1e1c759..e576a1a917 100644
+index 99bbd7e2a5a7b2aebc79eaaa138cf3ccefb9703d..a7489e62595485002ce461a9856de908b14b27a8 100644
 --- a/core/modules/comment/tests/src/Kernel/CommentFieldAccessTest.php
 +++ b/core/modules/comment/tests/src/Kernel/CommentFieldAccessTest.php
 @@ -13,6 +13,7 @@
@@ -1210,7 +1189,7 @@ index 82e1e1c759..e576a1a917 100644
    use CommentTestTrait;
    use GeneratePermutationsTrait;
  
-@@ -83,6 +85,13 @@ class CommentFieldAccessTest extends EntityKernelTestBase {
+@@ -81,6 +83,13 @@ class CommentFieldAccessTest extends EntityKernelTestBase {
      'homepage',
    ];
  
@@ -1224,7 +1203,7 @@ index 82e1e1c759..e576a1a917 100644
    /**
     * {@inheritdoc}
     */
-@@ -90,6 +99,13 @@ protected function setUp(): void {
+@@ -88,6 +97,13 @@ protected function setUp(): void {
      parent::setUp();
      $this->installConfig(['user', 'comment']);
      $this->installSchema('comment', ['comment_entity_statistics']);
@@ -1238,7 +1217,7 @@ index 82e1e1c759..e576a1a917 100644
    }
  
    /**
-@@ -135,8 +151,7 @@ public function testAccessToAdministrativeFields(): void {
+@@ -133,8 +149,7 @@ public function testAccessToAdministrativeFields(): void {
  
      $anonymous_user = new AnonymousUserSession();
  
@@ -1248,7 +1227,7 @@ index 82e1e1c759..e576a1a917 100644
      $this->addDefaultCommentField('entity_test', 'entity_test', 'comment_other');
  
      // Create a comment against a test entity.
-@@ -161,7 +176,7 @@ public function testAccessToAdministrativeFields(): void {
+@@ -159,7 +174,7 @@ public function testAccessToAdministrativeFields(): void {
        'hostname' => 'magic.example.com',
        'mail' => 'tonythemagicalpony@example.com',
        'subject' => 'Bruce the Mesopotamian moose',
@@ -1257,7 +1236,7 @@ index 82e1e1c759..e576a1a917 100644
        'comment_type' => 'comment',
        'field_name' => 'comment',
        'pid' => 0,
-@@ -173,7 +188,7 @@ public function testAccessToAdministrativeFields(): void {
+@@ -171,7 +186,7 @@ public function testAccessToAdministrativeFields(): void {
        'entity_type' => 'entity_test',
        'hostname' => 'magic.example.com',
        'subject' => 'Brian the messed up lion',
@@ -1266,7 +1245,7 @@ index 82e1e1c759..e576a1a917 100644
        'comment_type' => 'comment',
        'field_name' => 'comment',
        'status' => 1,
-@@ -201,7 +216,7 @@ public function testAccessToAdministrativeFields(): void {
+@@ -199,7 +214,7 @@ public function testAccessToAdministrativeFields(): void {
        // Unpublished.
        'status' => 0,
        'subject' => 'Daniel the Cocker-Spaniel',
@@ -1275,7 +1254,7 @@ index 82e1e1c759..e576a1a917 100644
        'comment_type' => 'comment',
        'field_name' => 'comment_other',
        'pid' => 0,
-@@ -354,4 +369,48 @@ public function testAccessToAdministrativeFields(): void {
+@@ -352,4 +367,48 @@ public function testAccessToAdministrativeFields(): void {
      }
    }
  
@@ -1325,7 +1304,7 @@ index 82e1e1c759..e576a1a917 100644
 +
  }
 diff --git a/core/modules/comment/tests/src/Kernel/CommentOrphanTest.php b/core/modules/comment/tests/src/Kernel/CommentOrphanTest.php
-index 8c31076f47..b728e8d2bf 100644
+index 8c31076f47512c44f8897d3d79f5b4ae1623cfa6..b728e8d2bf3b4fa13d45aeed55f867805a59b115 100644
 --- a/core/modules/comment/tests/src/Kernel/CommentOrphanTest.php
 +++ b/core/modules/comment/tests/src/Kernel/CommentOrphanTest.php
 @@ -64,7 +64,7 @@ public function testOrphan($property): void {
@@ -1339,13 +1318,13 @@ index 8c31076f47..b728e8d2bf 100644
      ])->save();
 diff --git a/core/modules/comment/tests/src/Kernel/CommentThreadMaxDepthTest.php b/core/modules/comment/tests/src/Kernel/CommentThreadMaxDepthTest.php
 new file mode 100644
-index 0000000000..690669a051
+index 0000000000000000000000000000000000000000..275ffda8667a1e9dd19345188e837d1381eb6b2c
 --- /dev/null
 +++ b/core/modules/comment/tests/src/Kernel/CommentThreadMaxDepthTest.php
 @@ -0,0 +1,320 @@
 +<?php
 +
-+declare(strict_types = 1);
++declare(strict_types=1);
 +
 +namespace Drupal\Tests\comment\Kernel;
 +
@@ -1665,13 +1644,13 @@ index 0000000000..690669a051
 +}
 diff --git a/core/modules/comment/tests/src/Traits/CommentCreationTrait.php b/core/modules/comment/tests/src/Traits/CommentCreationTrait.php
 new file mode 100644
-index 0000000000..a2828d59de
+index 0000000000000000000000000000000000000000..079b1492bf3f3416f84515497444c78857d12856
 --- /dev/null
 +++ b/core/modules/comment/tests/src/Traits/CommentCreationTrait.php
 @@ -0,0 +1,81 @@
 +<?php
 +
-+declare(strict_types = 1);
++declare(strict_types=1);
 +
 +namespace Drupal\Tests\comment\Traits;
 +
@@ -1751,7 +1730,7 @@ index 0000000000..a2828d59de
 +
 +}
 diff --git a/core/modules/comment/tests/src/Unit/CommentLinkBuilderTest.php b/core/modules/comment/tests/src/Unit/CommentLinkBuilderTest.php
-index 1d26daaf4a..107ea6a68a 100644
+index 1d26daaf4a91a8a46a841aa2a0cc37b7f482a31d..d8f9de97ed18ac146b78e948ac6dadd9b4a873bd 100644
 --- a/core/modules/comment/tests/src/Unit/CommentLinkBuilderTest.php
 +++ b/core/modules/comment/tests/src/Unit/CommentLinkBuilderTest.php
 @@ -281,11 +281,33 @@ protected function getMockNode($has_field, $comment_status, $form_location, $com
@@ -1768,14 +1747,14 @@ index 1d26daaf4a..107ea6a68a 100644
 +      ->getMock();
 +    $field_item->expects($this->any())
 +      ->method('__get')
-+      ->will($this->returnValueMap([
++      ->willReturnMap([
 +        ['status', $comment_status],
 +        ['comment_count', $comment_count],
 +        ['last_comment_timestamp', $this->timestamp],
-+      ]));
++      ]);
 +    $field_item->expects($this->any())
 +      ->method('access')
-+      ->will($this->returnCallback(function ($operation, $account) {
++      ->willReturnCallback(function ($operation, $account) {
 +        switch ($operation) {
 +          case 'view only':
 +            return $account->hasPermission('access comments');
@@ -1789,12 +1768,26 @@ index 1d26daaf4a..107ea6a68a 100644
 +          default:
 +            return FALSE;
 +        }
-+      }));
++      });
      $node->expects($this->any())
        ->method('get')
        ->with('comment')
+diff --git a/core/modules/forum/config/optional/field.field.node.forum.comment_forum.yml b/core/modules/forum/config/optional/field.field.node.forum.comment_forum.yml
+index e5edd7e086c688ae3a9f10706479eaf9421a0b66..c8e39eac1e8a6a402faf748b96800767e47f1c8d 100644
+--- a/core/modules/forum/config/optional/field.field.node.forum.comment_forum.yml
++++ b/core/modules/forum/config/optional/field.field.node.forum.comment_forum.yml
+@@ -25,6 +25,9 @@ default_value:
+ default_value_callback: ''
+ settings:
+   default_mode: 0
++  thread_limit:
++    depth: 2
++    mode: 0
+   per_page: 50
+   anonymous: 0
+   form_location: true
 diff --git a/core/modules/system/tests/modules/entity_test/src/EntityTestAccessControlHandler.php b/core/modules/system/tests/modules/entity_test/src/EntityTestAccessControlHandler.php
-index 96d6fa4f5b..5bd83680ac 100644
+index 96d6fa4f5bcf509b23455f267cc8e23d602f661d..5bd83680ac20798e29f25dc3d9532df1fcf89e76 100644
 --- a/core/modules/system/tests/modules/entity_test/src/EntityTestAccessControlHandler.php
 +++ b/core/modules/system/tests/modules/entity_test/src/EntityTestAccessControlHandler.php
 @@ -100,4 +100,14 @@ protected function checkCreateAccess(AccountInterface $account, array $context,
@@ -1813,7 +1806,7 @@ index 96d6fa4f5b..5bd83680ac 100644
 +
  }
 diff --git a/core/profiles/standard/config/install/field.field.node.article.comment.yml b/core/profiles/standard/config/install/field.field.node.article.comment.yml
-index cf3b12af98..0f22e33e3d 100644
+index cf3b12af98f5e10296a4e896f974f8aa5487155b..0f22e33e3dce854396f0af1dab141ccc5350855b 100644
 --- a/core/profiles/standard/config/install/field.field.node.article.comment.yml
 +++ b/core/profiles/standard/config/install/field.field.node.article.comment.yml
 @@ -25,6 +25,9 @@ default_value:
@@ -1828,13 +1821,13 @@ index cf3b12af98..0f22e33e3d 100644
    form_location: true
 diff --git a/core/tests/Drupal/Tests/Core/Entity/Access/EntityCreateAccessCustomStaticCidTest.php b/core/tests/Drupal/Tests/Core/Entity/Access/EntityCreateAccessCustomStaticCidTest.php
 new file mode 100644
-index 0000000000..22cb5614b9
+index 0000000000000000000000000000000000000000..a0c22dec7ebb32f90923b081dbe325e241af6f73
 --- /dev/null
 +++ b/core/tests/Drupal/Tests/Core/Entity/Access/EntityCreateAccessCustomStaticCidTest.php
 @@ -0,0 +1,105 @@
 +<?php
 +
-+declare(strict_types = 1);
++declare(strict_types=1);
 +
 +namespace Drupal\Tests\Core\Entity\Access;
 +
@@ -1909,7 +1902,7 @@ index 0000000000..22cb5614b9
 +   * @return array[]
 +   *   A list of test cases.
 +   */
-+  public function providerTestCustomCid(): array {
++  public static function providerTestCustomCid(): array {
 +    $language_ids = array_keys(LanguageManager::getStandardLanguageList());
 +    return [
 +      'one context var' => [
