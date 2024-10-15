@@ -29,6 +29,7 @@ final class MigrationHelper {
     ['node', 'og_audience', TRUE],
     ['media', 'og_audience', TRUE],
     ['ogmenu_instance', 'og_audience', FALSE],
+    ['message', 'group', FALSE],
   ];
 
   public const array DEDICATED_TABLE_COLUMNS = [
