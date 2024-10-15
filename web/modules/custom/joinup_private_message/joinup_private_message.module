@@ -73,7 +73,7 @@ function joinup_private_message_private_message_view_alter(array &$build, Entity
     if (!isset($build['links'])) {
       $build['links'] = [];
     }
-    $build['links']['report'] = $report_button;
+    $build['wrapper']['links'] = $report_button;
   }
 }
 
