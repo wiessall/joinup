@@ -19,6 +19,7 @@ Feature: Private messages
     When I am on "/user/messages"
     And I click "New Message"
     Then a modal should open
+    And I should see the text "New message" in the "Modal title"
     When I type "Bob Rolls" in the "To:" autocomplete field
     And I wait for AJAX to finish
     And I pick "Bob Rolls" from the "Member" autocomplete suggestions
