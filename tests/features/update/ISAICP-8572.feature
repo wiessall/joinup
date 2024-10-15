@@ -133,3 +133,7 @@ Feature: Test migration of collections/solutions to node.
     # Test the website link.
     Given I go to "/collection/are3na/solution/re3gistry"
     Then I should see the link "Website link"
+
+    # Test that there are no duplicate memberships.
+    # @see web/modules/custom/joinup_rdf/src/MigrationHelper.php:442
+    And there are no duplicate memberships
