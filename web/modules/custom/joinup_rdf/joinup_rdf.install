@@ -154,6 +154,7 @@ function joinup_rdf_update_200005(): void {
     'node.og_audience',
     'media.og_audience',
     'ogmenu_instance.og_audience',
+    'message.group',
   ];
 
   foreach ($fieldStorages as $fieldStorage) {

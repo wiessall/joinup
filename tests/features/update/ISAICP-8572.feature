@@ -134,6 +134,12 @@ Feature: Test migration of collections/solutions to node.
     Given I go to "/collection/are3na/solution/re3gistry"
     Then I should see the link "Website link"
 
-    # Test that there are no duplicate memberships.
+    # Regression test that there are no duplicate memberships.
     # @see web/modules/custom/joinup_rdf/src/MigrationHelper.php:442
     And there are no duplicate memberships
+
+    # Regression test that announcements are migrated with their group
+    # and the page does not break.
+    When I am logged in as a moderator
+    And I visit "/announcements"
+    Then I should see the link "Interoperable Europe Academy"
