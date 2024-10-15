@@ -5,7 +5,6 @@ dependencies:
   module:
     - blazy
     - joinup_core
-    - joinup_video
     - markdown_easy
     - slick
 _core:
@@ -63,24 +62,6 @@ filters:
     weight: 0
     settings:
       filter_url_length: 72
-  joinup_video:
-    id: joinup_video
-    provider: joinup_video
-    status: false
-    weight: 0
-    settings:
-      allowed_providers:
-        slideshare: 0
-        internal_path: 0
-        prezi: 0
-        joinup_ec_video: 0
-        joinup_ec_webcast_video: 0
-        google_docs: 0
-        youtube: 0
-        vimeo: 0
-        youtube_playlist: 0
-      autoplay: false
-      responsive: true
   markdown_easy:
     id: markdown_easy
     provider: markdown_easy
