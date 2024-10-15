@@ -333,4 +333,28 @@ class RdfContext extends RawDrupalContext {
     Assert::assertCount(0, $results, "There are triples with $property $uri in the $graph graph. Results found: " . implode(', ', $messages));
   }
 
+  /**
+   * Asserts that there are no duplicate memberships in the database.
+   *
+   * @todo Remove this in ISAICP-8376.
+   *
+   * @Given /^there are no duplicate memberships$/
+   */
+  public function thereAreNoDuplicateMemberships(): void {
+    $query = <<<SQL
+SELECT uid, entity_id from og_membership
+GROUP BY uid, entity_id
+HAVING COUNT(*) > 1
+SQL;
+
+    $connection = \Drupal::getContainer()->get('database');
+    $results = $connection->query($query);
+    $messages = [];
+    foreach ($results as $result) {
+      $messages[] = sprintf('%s %s', $result->uid, $result->entity_id);
+    }
+
+    Assert::assertCount(0, $results, "There are duplicate memberships in the database. Results found: " . implode(', ', $messages));
+  }
+
 }
