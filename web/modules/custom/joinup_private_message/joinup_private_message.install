@@ -1,0 +1,24 @@
+<?php
+
+/**
+ * @file
+ * Holds install and update hooks for the Joinup Private Message module.
+ */
+
+declare(strict_types=1);
+
+/**
+ * Implements hook_install().
+ */
+function joinup_private_message_install(): void {
+  $entity_type = \Drupal::entityTypeManager()->getDefinition('private_message');
+  \Drupal::entityDefinitionUpdateManager()->updateEntityType($entity_type);
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function joinup_private_message_uninstall(): void {
+  $entity_type = \Drupal::entityTypeManager()->getDefinition('private_message');
+  \Drupal::entityDefinitionUpdateManager()->updateEntityType($entity_type);
+}
