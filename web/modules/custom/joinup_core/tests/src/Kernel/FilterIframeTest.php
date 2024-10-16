@@ -11,6 +11,8 @@ use Drupal\joinup_core\Plugin\Filter\FilterIframe;
  * Tests the "joinup_iframe" filter.
  *
  * @coversDefaultClass \Drupal\joinup_core\Plugin\Filter\FilterIframe
+ *
+ * @group joinup_core
  */
 class FilterIframeTest extends KernelTestBase {
 
