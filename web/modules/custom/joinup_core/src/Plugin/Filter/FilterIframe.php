@@ -77,16 +77,16 @@ class FilterIframe extends FilterBase implements ContainerFactoryPluginInterface
     $response = new FilterProcessResult();
 
     // Ensure that we have iframes in the markup.
-    if (str_contains($text, '<iframe') === FALSE) {
+    if (\str_contains($text, '<iframe') === FALSE) {
       return $response->setProcessedText($text);
     }
 
     $allowed_domains = $this->getAllowedDomainRegexes($this->settings['allowed_domains']);
     $dom = Html::load($text);
 
-    // Iterate in reverse since we are removing items.
+    // Get a static array as we may delete elements in the DOM.
     $iframes = \iterator_to_array($dom->getElementsByTagName('iframe'));
-    foreach (\array_reverse($iframes) as $iframe) {
+    foreach ($iframes as $iframe) {
       \assert($iframe instanceof \DOMElement);
       $src = $iframe->getAttribute('src');
 
@@ -147,17 +147,19 @@ class FilterIframe extends FilterBase implements ContainerFactoryPluginInterface
   /**
    * Returns allowed domain regexes.
    *
-   * @param array $allowed
+   * @param string[] $allowed
    *   Array of domains strings.
    *
-   * @return array
+   * @return string[]
    *   Array of regexes to match domains (with wildcard).
    */
   protected function getAllowedDomainRegexes(array $allowed): array {
-    return array_map(static function ($host) {
-      $host = preg_replace('/\\\\\*/', '.*?', preg_quote($host, NULL));
-      return '/^' . $host . '$/';
-    }, $allowed);
+    // Escape any regex chars but translate '*' to '.*?'.
+    // e.g: *.example.com >>> /^.*?\.example\.com$/.
+    return array_map(static fn(string $host): string =>
+      '/^' . strtr(preg_quote($host, '/'), ['\*' => '.*?']) . '$/',
+      $allowed
+    );
   }
 
 }
