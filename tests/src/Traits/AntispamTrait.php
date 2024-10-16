@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Drupal\joinup\Traits;
 
+use Drupal\DrupalExtension\Context\ConfigContext;
+
 /**
  * Reusable code that allows switching Antibot & Honeypot functionality on/off.
  */
@@ -47,32 +49,14 @@ trait AntispamTrait {
   }
 
   /**
-   * Enable the anti-spam functionalities during @antispam tests.
+   * Disable anti-spam for all scenarios unless tagged with @antispam.
    *
-   * @BeforeScenario @antispam&&@api
+   * @BeforeScenario ~@antispam&&@api
    */
-  public function enableAntispamBeforeScenarioStarts(): void {
-    \Drupal::state()->set('joinup_test.antispam.enabled', TRUE);
-    $this->clearCache();
-  }
-
-  /**
-   * Restores the anti-spam functionalities after @antispam tests.
-   *
-   * @AfterScenario @antispam&&@api
-   */
-  public function disableAntispamAfterScenarioEnds(): void {
-    \Drupal::state()->delete('joinup_test.antispam.enabled');
-    $this->clearCache();
-  }
-
-  /**
-   * Clear the cache bins storing cached markup.
-   */
-  protected function clearCache(): void {
-    foreach (['page', 'dynamic_page_cache', 'render'] as $bin) {
-      \Drupal::cache($bin)->deleteAll();
-    }
+  public function disableAntispamBeforeScenarioStarts(): void {
+    $config_context = $this->getContext(ConfigContext::class);
+    $config_context->setConfig('antibot.settings', 'form_ids', NULL);
+    $config_context->setConfig('honeypot.settings', 'form_settings', []);
   }
 
 }

@@ -3,6 +3,7 @@
   - '%paths.base%/tests/features'
 .contexts: &contexts
   - Drupal\joinup\Context\BootstrapDrupalContext
+  - Drupal\DrupalExtension\Context\ConfigContext
   - Drupal\DrupalExtension\Context\DrushContext
   - Drupal\DrupalExtension\Context\MarkupContext
   - Drupal\DrupalExtension\Context\MessageContext
