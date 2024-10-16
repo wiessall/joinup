@@ -116,6 +116,10 @@ function joinup_private_message_private_message_thread_view_alter(array &$build,
       unset($build['clear_history_link']);
     }
   }
+
+  /**
+   * Implements hook_entity_view_alter().
+   */
   function joinup_private_message_private_message_view_alter(array &$build, EntityInterface $entity): void {
     $user_id = \Drupal::currentUser()->id();
     // Check if this is the custom entity you want to alter.
@@ -248,4 +252,5 @@ function joinup_private_message_private_message_thread_view_alter(array &$build,
       ],
     ];
   }
+
 }
