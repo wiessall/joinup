@@ -388,7 +388,8 @@
             },
             "drupal/honeypot": {
                 "Behat integration. @see https://www.drupal.org/project/honeypot/issues/3059040": "resources/patch/php/drupal/honeypot/3059040.patch",
-                "Provide ways to clean up old honeypot_time_restriction values @see https://www.drupal.org/project/honeypot/issues/2997609": "resources/patch/php/drupal/honeypot/2997609.patch"
+                "Provide ways to clean up old honeypot_time_restriction values @see https://www.drupal.org/project/honeypot/issues/2997609": "resources/patch/php/drupal/honeypot/2997609.patch",
+                "Remove caching in HoneypotService::getProtectedForms preventing proper invalidation @see https://www.drupal.org/i/3481399": "resources/patch/php/drupal/honeypot/3481399.patch"
             },
             "drupal/imagecache_external": {
                 "Support SVG @see https://www.drupal.org/i/3390948": "resources/patch/php/drupal/imagecache_external/3390948.diff",
