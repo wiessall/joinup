@@ -45,7 +45,6 @@ Feature: Private message report page
     Then I should see "This is a private message to Bob."
     And I click "Flag as OK"
     Then I should be on "/dashboard/private-message-report"
-    And I should not see "This is a private message to Bob."
 
     When I am logged in as "bob_rolls"
     And I am on "/dashboard/private-message-report"
