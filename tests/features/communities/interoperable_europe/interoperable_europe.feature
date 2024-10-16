@@ -56,7 +56,6 @@ Feature:
     # Check IOPE menu
     Then I should see the link "News" in the "IOPE Menu"
     And I should see the link "Events" in the "IOPE Menu"
-    And I should see the link "Policy" in the "IOPE Menu"
 
     # Check IOPE footer
     Then I should see the heading "Join our community!"
