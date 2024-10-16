@@ -22,9 +22,9 @@ class PrivateMessageRouteSubscriber extends RouteSubscriberBase {
       $route->setPath('/user/messages');
     }
 
-    // Alter the canonical route to return a 404 page instead of removing it.
+    // Alter the path of the canonical route.
     if ($route = $collection->get('entity.private_message_thread.canonical')) {
-      $route->setDefault('_controller', '\Drupal\joinup_private_message\Controller\PrivateMessageNotFoundController::notFound');
+      $route->setPath('/user/messages/{private_message_thread}');
     }
 
     // Alter the path of the delete form for a private message thread.

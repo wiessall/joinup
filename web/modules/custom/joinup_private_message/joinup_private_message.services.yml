@@ -1,4 +1,9 @@
 services:
+  joinup_private_message.request_subscriber:
+    class: Drupal\joinup_private_message\EventSubscriber\RequestSubscriber
+    arguments: [ '@current_route_match', '@private_message_flood.service' ]
+    tags:
+      - { name: event_subscriber }
   joinup_private_message_route_alter.route_subscriber:
     class: Drupal\joinup_private_message\Routing\PrivateMessageRouteSubscriber
     tags:
