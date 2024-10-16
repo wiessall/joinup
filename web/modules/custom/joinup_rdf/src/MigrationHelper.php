@@ -29,6 +29,7 @@ final class MigrationHelper {
     ['node', 'og_audience', TRUE],
     ['media', 'og_audience', TRUE],
     ['ogmenu_instance', 'og_audience', FALSE],
+    ['meta_entity', 'field_pinned_in', FALSE],
     ['message', 'group', FALSE],
   ];
 
