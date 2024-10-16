@@ -1,0 +1,31 @@
+uuid: 98902787-58db-4635-a3ca-f7c5ddc23101
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.private_message_ban_settings
+  module:
+    - joinup_core
+    - views
+  theme:
+    - ventuno
+id: ventuno_views_block__private_message_ban_settings_block_blocked_users
+theme: ventuno
+region: content
+weight: 0
+provider: null
+plugin: 'views_block:private_message_ban_settings-block_blocked_users'
+settings:
+  id: 'views_block:private_message_ban_settings-block_blocked_users'
+  label: ''
+  label_display: visible
+  provider: views
+  context_mapping: {  }
+  views_label: ''
+  items_per_page: none
+visibility:
+  request_route:
+    id: request_route
+    negate: false
+    routes:
+      - joinup_private_message.private_message_settings_page
