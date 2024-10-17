@@ -23,13 +23,12 @@ Feature: Private messages
     When I type "Bob Rolls" in the "To:" autocomplete field
     And I wait for AJAX to finish
     And I pick "Bob Rolls" from the "Member" autocomplete suggestions
-    And I fill in "Subject" with "Hello Bob"
-    And I enter "This is a private message to Bob." in the "Message" wysiwyg editor
+    And I enter "A private message from Alice to Bob." in the "Message" wysiwyg editor
     And I press "Send" in the "Modal buttons" region
     Then the modal should be closed
     And I should see the heading "Private Messages"
     And I should see 1 private message
-    Then I should see a private message containing the text "This is a private message to Bob."
+    Then I should see a private message containing the text "A private message from Alice to Bob."
 
     When I am logged in as "bob_rolls"
     And I am on the homepage
@@ -41,38 +40,37 @@ Feature: Private messages
     And I should not see the text "You do not have any messages"
     And I should see 1 private message
     And I should see the link "Delete thread"
-    Then I should see a private message containing the text "This is a private message to Bob."
-    And I enter "This is a private message to Alice." in the "Reply" wysiwyg editor
+    And I should see a private message containing the text "A private message from Alice to Bob."
+    When I enter "Another private message from Bob to Alice." in the "Reply" wysiwyg editor
     And I press "Send"
-    And I should see 2 private message
-    Then I should see the following texts in private messages:
-      | This is a private message to Bob.   |
-      | This is a private message to Alice. |
+    Then I should see 2 private message
+    And I should see the following texts in private messages:
+      | A private message from Alice to Bob.       |
+      | Another private message from Bob to Alice. |
     When I click "New Message"
     Then a modal should open
     When I type "Joan Tiff" in the "To:" autocomplete field
     And I wait until the page contains the text "Joan Tiff"
     And I pick "Joan Tiff" from the "Member" autocomplete suggestions
-    And I fill in "Subject" with "Hello Joan"
-    And I enter "This is a private message to Joan." in the "Message" wysiwyg editor
+    And I enter "A private message from Bob to Joan." in the "Message" wysiwyg editor
     And I press "Send" in the "Modal buttons" region
     Then the modal should be closed
     And I should see the following threads in private messages:
-      | Hello Joan |
-      | Hello Bob  |
-    When I click "Hello Joan" in thread message card
+      | A private message from Bob to Joan.        |
+      | Another private message from Bob to Alice. |
+    When I click "Joan Tiff" in thread message card
     And I should see 1 private message
     Then I should see the following texts in private messages:
-      | This is a private message to Joan. |
-    Then I click "Hello Bob" in thread message card
-    And I wait until the page contains the text "This is a private message to Bob."
+      | A private message from Bob to Joan. |
+    Then I click "Alice Miller" in thread message card
+    And I wait until the page contains the text "A private message from Alice to Bob."
     And I should see 2 private message
     Then I should see the following texts in private messages:
-      | This is a private message to Bob.   |
-      | This is a private message to Alice. |
+      | A private message from Alice to Bob.       |
+      | Another private message from Bob to Alice. |
     # Regression test for ISAICP-9130: second click impacts modal.
-    When I click "Hello Bob" in thread message card
-    And I wait until the page contains the text "This is a private message to Bob."
+    Then I click "Alice Miller" in thread message card
+    And I wait until the page contains the text "A private message from Alice to Bob."
     And I click "New Message"
     Then a modal should open
     Then I close the modal dialog
@@ -92,7 +90,7 @@ Feature: Private messages
     And I should see 1 unread private message
     Then I open the account menu
     And I click "My messages"
-    Then I should see a private message containing the text "This is a private message to Alice."
+    Then I should see a private message containing the text "Another private message from Bob to Alice."
     And I should not see the link "Delete thread"
     But I should see the link "Delete for me"
     When I click "Delete for me"
@@ -110,11 +108,11 @@ Feature: Private messages
     Then I open the account menu
     And I click "My messages"
     And I should see the following threads in private messages:
-      | Hello Joan |
-      | Hello Bob  |
+      | Joan Tiff    |
+      | Alice Miller |
 
     # Delete full thread.
-    When I click "Hello Joan" in thread message card
+    When I click "Joan Tiff" in thread message card
     When I click "Delete thread"
     Then a modal should open
     And I should see the text "Are you sure you want to delete the thread between you and the following users: Joan Tiff" in the "Modal title"
@@ -123,7 +121,7 @@ Feature: Private messages
     Then I press "Delete thread" in the "Modal buttons" region
     And I should not see the text "Hello Bob message to delete"
     And I should see the following threads in private messages:
-      | Hello Bob  |
+      | Alice Miller |
 
   Scenario: Check a user without messages
     Given I am logged in as "alice_m"
