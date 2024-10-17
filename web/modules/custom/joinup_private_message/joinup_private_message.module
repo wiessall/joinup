@@ -15,6 +15,33 @@ use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
+use Drupal\private_message\Entity\PrivateMessageThread;
+
+/**
+ * Implements .
+ */
+function joinup_private_message_preprocess_private_message(&$variables): void {
+  if ($variables['view_mode'] === 'inbox') {
+    $private_message = $variables['private_message'];
+
+    // Get the other member in the conversation.
+    if ($private_message->getOwnerId() !== \Drupal::currentUser()->id()) {
+      $other_member = $private_message->getOwner();
+    }
+    else {
+      /** @var \Drupal\private_message\Entity\PrivateMessageThreadInterface $thread_id */
+      $thread_id = \Drupal::service('private_message.mapper')
+        ->getThreadIdFromMessage($private_message);
+      $thread = PrivateMessageThread::load($thread_id);
+      foreach ($thread->getMembers() as $member) {
+        if ($member->id() !== \Drupal::currentUser()->id()) {
+          $other_member = $member;
+        }
+      }
+    }
+    $variables['other_member']['#markup'] = $other_member?->getDisplayName();
+  }
+}
 
 /**
  * Implements hook_form_alter().
