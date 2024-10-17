@@ -16,9 +16,6 @@ use Symfony\Component\Routing\Route;
  */
 class BanConverter extends EntityConverter {
 
-  /**
-   * {@inheritdoc}
-   */
   public function __construct(EntityTypeManagerInterface $entityTypeManager, EntityRepositoryInterface $entityRepository, protected AccountProxyInterface $currentUser) {
     parent::__construct($entityTypeManager, $entityRepository);
   }
