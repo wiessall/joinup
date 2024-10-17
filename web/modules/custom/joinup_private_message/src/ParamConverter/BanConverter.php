@@ -30,7 +30,7 @@ class BanConverter extends EntityConverter {
   /**
    * {@inheritdoc}
    */
-  public function convert($value, $definition, $name, array $defaults) {
+  public function convert($value, $definition, $name, array $defaults): ?PrivateMessageBanInterface {
     if (!$ban = parent::convert($value, $definition, $name, $defaults)) {
       return NULL;
     }
