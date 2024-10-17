@@ -26,7 +26,7 @@ services:
 
   joinup_rdf.migration_helper:
     class: Drupal\joinup_rdf\MigrationHelper
-    arguments: ['@entity_type.manager', '@path_alias.repository', '@database', '@rdf_sync.connection', '@rdf_sync.mapper']
+    arguments: ['@entity_type.manager', '@path_alias.repository', '@database', '@rdf_sync.connection', '@rdf_sync.mapper', '@state']
 
   joinup_rdf.http_middleware.accept_based_negotiation:
     class: Drupal\joinup_rdf\Middleware\JoinupAcceptHeaderMiddleware
