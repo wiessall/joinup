@@ -268,10 +268,7 @@ class JoinupUserContext extends RawDrupalContext {
    */
   public function assertUsersAreCanceled(TableNode $usersTable): void {
     foreach ($usersTable->getHash() as $userData) {
-      $user = user_load_by_name($userData['name']);
-      if ($user && $user->isActive()) {
-        throw new ExpectationFailedException('User ' . $userData['name'] . ' is still active.');
-      }
+      $this->assertUserStatus($userData['name'], 'cancelled');
     }
   }
 
