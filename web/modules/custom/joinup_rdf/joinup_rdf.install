@@ -235,3 +235,22 @@ function joinup_rdf_update_200008(): void {
   require_once DRUPAL_ROOT . '/core/modules/user/user.install';
   user_update_10000();
 }
+
+/**
+ * Backup the field_ss_related_solutions in a state variable.
+ */
+function joinup_rdf_update_200009(): void {
+  $database = \Drupal::database();
+  $table = 'meta_entity__field_ss_related_solutions';
+  $results = $database->select($table)
+    ->fields($table, ['entity_id', 'delta', 'field_ss_related_solutions_target_id'])
+    ->execute()
+    ->fetchAll(\PDO::FETCH_ASSOC);
+
+  $state_data = [];
+  foreach ($results as $data) {
+    $state_data[$data['entity_id']][$data['delta']] = $data['field_ss_related_solutions_target_id'];
+  }
+
+  \Drupal::state()->set('joinup_rdf.related_solutions', $state_data);
+}

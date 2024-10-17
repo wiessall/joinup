@@ -661,3 +661,51 @@ function joinup_rdf_deploy_200012(): void {
   \Drupal::keyValue('simple_sitemap')->delete('queue_stashed_results');
   \Drupal::service('queue')->get('simple_sitemap_elements')->deleteQueue();
 }
+
+/**
+ * Restore related solutions.
+ */
+function joinup_rdf_deploy_200013(): void {
+  $data = \Drupal::state()->get('joinup_rdf.related_solutions', []);
+  $database = \Drupal::database();
+  $rdf_sync_mapper = \Drupal::getContainer()->get('rdf_sync.mapper');
+  $meta_entity_storage = \Drupal::entityTypeManager()->getStorage('meta_entity');
+
+  foreach ($data as $mid => $related_solutions) {
+    $meta_entity = $meta_entity_storage->load($mid);
+    $solution = $meta_entity->getTargetEntity();
+    ksort($related_solutions);
+    $target_ids = array_map(function ($uri) use ($rdf_sync_mapper) {
+      $entity = $rdf_sync_mapper->getEntityByUri($uri);
+      // Skip invalid references e.g.
+      // http://data.europa.eu/w21/5e74061e-dc4e-4734-a31f-e328b7ab4326.
+      if (!$entity) {
+        return NULL;
+      }
+      return $entity->id();
+    }, $related_solutions);
+
+    // Filter out invalid entries and reset deltas.
+    $target_ids = array_values(array_filter($target_ids));
+    foreach ($target_ids as $delta => $target_id) {
+      $values = [
+        'bundle' => 'node',
+        'deleted' => 0,
+        'entity_id' => $solution->id(),
+        'revision_id' => $solution->getRevisionId(),
+        'langcode' => $solution->language()->getId(),
+        'delta' => $delta,
+        'related_solutions_target_id' => $target_id,
+      ];
+
+      foreach (['node__related_solutions', 'node_revision__related_solutions'] as $table) {
+        $database->insert($table)
+          ->fields(array_keys($values))
+          ->values($values)
+          ->execute();
+      }
+    }
+  }
+
+  \Drupal::state()->delete('joinup_rdf.related_solutions');
+}

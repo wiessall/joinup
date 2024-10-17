@@ -7,6 +7,7 @@ namespace Drupal\joinup_rdf;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\State\StateInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_rdf\Entity\RdfSyncEntityInterface;
 use Drupal\joinup_taxonomy\Entity\MappedTerm;
@@ -395,6 +396,7 @@ final class MigrationHelper {
     protected Connection $connection,
     protected RdfSyncConnectionInterface $sparqlEndpoint,
     protected RdfSyncMapper $rdfSyncMapper,
+    protected StateInterface $state,
   ) {}
 
   /**
@@ -528,6 +530,13 @@ final class MigrationHelper {
           unset($unserialized['fields'][$submap[$group->bundle()]['source']]);
           $unserialized['fields'][$submap[$group->bundle()]['target']] = $data;
           $value[0] = serialize($unserialized);
+        }
+        elseif ($property === 'http://purl.org/dc/terms/relation') {
+          // Skip related solutions. The target entities might not have been
+          // migrated yet, so we will handle them in a separate migration.
+          // @see \joinup_rdf_update_200009.
+          // @see \joinup_rdf_deploy_200013.
+          continue;
         }
         $value = $this->parseValue($value, $mapping, $property);
         $group->set($mapping['target_field_name'], $value);
