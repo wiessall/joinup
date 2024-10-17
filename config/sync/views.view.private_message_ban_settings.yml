@@ -109,7 +109,23 @@ display:
             value: 'There are no blocked users.'
             format: content_editor
           tokenize: false
-      sorts: {  }
+      sorts:
+        created:
+          id: created
+          table: private_message_ban
+          field: created
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: private_message_ban
+          entity_field: created
+          plugin_id: date
+          order: DESC
+          expose:
+            label: ''
+            field_identifier: ''
+          exposed: false
+          granularity: second
       arguments: {  }
       filters: {  }
       style:
@@ -386,7 +402,7 @@ display:
           sticky: false
           summary: ''
           empty_table: false
-          caption: 'Blocked users'
+          caption: ''
           description: ''
       row:
         type: fields
