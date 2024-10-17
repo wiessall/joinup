@@ -29,7 +29,7 @@ function joinup_core_deploy_200000(array &$sandbox): string {
   foreach ($usernames as $username) {
     $user = user_load_by_name($username);
     if ($user) {
-      $edit = ['user_cancel_notify' => TRUE];
+      $edit = ['user_cancel_notify' => FALSE];
       // Call the user_cancel to cancel and log.
       user_cancel($edit, $user->id(), 'joinup_user_cancel');
     }
