@@ -27,7 +27,7 @@
         "drupal/changed_fields": "^3.2",
         "drupal/colorbox": "^2.0",
         "drupal/config_ignore": "^3.0",
-        "drupal/core": "10.3.5",
+        "drupal/core": "^10.3",
         "drupal/core-composer-scaffold": "~10.3.0",
         "drupal/custom_markup_block": "^1.2",
         "drupal/default_content": "^2.0",
