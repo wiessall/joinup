@@ -7,6 +7,7 @@ namespace Drupal\joinup\Context;
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Element\NodeElement;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Url;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\JavascriptTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
@@ -360,19 +361,55 @@ class PrivateMessageContext extends RawDrupalContext {
    */
   public function givenPrivateMessageBans(TableNode $table): void {
     foreach ($table->getHash() as $row) {
-      // Create a new private message ban entity.
       $ban = PrivateMessageBan::create([
-        // Get the user ID based on username.
         'owner' => $this->getUserByName($row['owner'])->id(),
-        // Get the banned user ID.
         'target' => $this->getUserByName($row['target'])->id(),
-        // Convert string date to timestamp.
         'created' => strtotime($row['created']),
       ]);
-
-      // Save the entity.
       $ban->save();
     }
+  }
+
+  /**
+   * Opens url to unblock user with private message ban param.
+   *
+   * @When I go to the unblock page to unblock user :target banned by :owner
+   */
+  public function iGoToTheUnblockPage(string $target, string $owner): void {
+    $banId = $this->getPrivateMessageBanIdByUserNames($target, $owner);
+    $url = Url::fromRoute('joinup_private_message.unblock', ['private_message_ban' => $banId])->toString();
+    $this->visitPath($url);
+  }
+
+  /**
+   * Returns ban Id by owner and target names.
+   *
+   * @param string $targetName
+   *   Ban target.
+   * @param string $ownerName
+   *   Ban owner.
+   *
+   * @return string
+   *   Ban id.
+   *
+   * @throws \Exception
+   *   If there is no ban, throws exception.
+   */
+  public function getPrivateMessageBanIdByUserNames(string $targetName, string $ownerName): string {
+    $ownerId = $this->getUserByName($ownerName)->id();
+    $targetId = $this->getUserByName($targetName)->id();
+    $query = \Drupal::entityQuery('private_message_ban')
+      ->accessCheck(FALSE)
+      ->condition('owner', $ownerId)
+      ->condition('target', $targetId)
+      ->range(0, 1);
+    $result = $query->execute();
+    if (empty($result)) {
+      throw new \Exception('There is no message ban for target ' . $targetName . ' amd owner ' . $ownerName);
+    }
+    $ban = reset($result);
+
+    return $ban;
   }
 
   /**
