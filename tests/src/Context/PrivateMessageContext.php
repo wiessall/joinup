@@ -132,7 +132,7 @@ class PrivateMessageContext extends RawDrupalContext {
    */
   public function iShouldSeePrivateMessages(int $expectedCount): void {
     $page = $this->getSession()->getPage();
-    $messagesContainer = $page->find('css', '.private-message-thread-messages .field__items');
+    $messagesContainer = $page->find('css', '.private-message-thread-messages');
 
     if (empty($messagesContainer) && $expectedCount > 0) {
       throw new \Exception('Private messages were not found in the page.');
@@ -199,7 +199,7 @@ class PrivateMessageContext extends RawDrupalContext {
     $texts = $table->getColumn(0);
 
     foreach ($texts as $text) {
-      if (strpos($messageText, $text) === FALSE) {
+      if (!str_contains($messageText, $text)) {
         throw new \Exception(sprintf('The text "%s" was not found in any private message.', $text));
       }
     }
@@ -320,7 +320,7 @@ class PrivateMessageContext extends RawDrupalContext {
    */
   private function getMessagesContainer(): NodeElement {
     $page = $this->getSession()->getPage();
-    $messagesContainer = $page->find('css', '.private-message-thread-messages .field__items');
+    $messagesContainer = $page->find('css', '.private-message-thread-messages');
 
     if (NULL === $messagesContainer) {
       throw new \Exception('There are currently no messages available.');
