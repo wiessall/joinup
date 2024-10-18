@@ -17,7 +17,7 @@ Feature: Private messages
     When I am on the homepage
     Then I should see 0 unread private message
     When I am on "/user/messages"
-    And I click "New Message"
+    And I click "New message"
     Then a modal should open
     And I should see the text "New message" in the "Modal title"
     When I type "Bob Rolls" in the "To:" autocomplete field
@@ -36,7 +36,7 @@ Feature: Private messages
     Then I open the account menu
     And I click "My messages"
     And I should see the heading "Private Messages"
-    And I should see the link "New Message"
+    And I should see the link "New message"
     And I should not see the text "You do not have any messages"
     And I should see 1 private message
     And I should see the link "Delete thread"
@@ -47,7 +47,7 @@ Feature: Private messages
     And I should see the following texts in private messages:
       | A private message from Alice to Bob.       |
       | Another private message from Bob to Alice. |
-    When I click "New Message"
+    When I click "New message"
     Then a modal should open
     When I type "Joan Tiff" in the "To:" autocomplete field
     And I wait until the page contains the text "Joan Tiff"
@@ -71,12 +71,12 @@ Feature: Private messages
     # Regression test for ISAICP-9130: second click impacts modal.
     Then I click "Alice Miller" in thread message card
     And I wait until the page contains the text "A private message from Alice to Bob."
-    And I click "New Message"
+    And I click "New message"
     Then a modal should open
     Then I close the modal dialog
 
     Given the limit for messages or threads allowed is 2
-    When I click "New Message"
+    When I click "New message"
     Then I should see "Sorry, you have reached your limit for posting. Please try again later."
     When I am on "/user/messages"
     Then I should not see "Sorry, you have reached your limit for posting. Please try again later."
@@ -129,7 +129,7 @@ Feature: Private messages
     And I should see 0 unread private message
     When I click "My messages" in the "Navigation bar" region
     Then I should see the heading "Private Messages"
-    And I should see the link "New Message"
+    And I should see the link "New message"
     And I should see 0 private message
     And I should see the text "You do not have any messages"
 
@@ -138,7 +138,7 @@ Feature: Private messages
     Given I am logged in as "alice_m"
 
     When I am on "/user/messages"
-    And I click "New Message"
+    And I click "New message"
     When a modal should open
     And I press "Send" in the "Modal buttons" region
 
