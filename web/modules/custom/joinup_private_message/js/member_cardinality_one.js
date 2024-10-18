@@ -4,7 +4,7 @@
  */
 
 ((Drupal, $) => {
-  Drupal.behaviors.cardinalityOne = {
+  Drupal.behaviors.joinupPrivateMessageCardinalityOne = {
     attach() {
       const $input = $("input[data-drupal-selector='edit-members-target-id']");
       $input.on("keydown", (event) => {
