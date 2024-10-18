@@ -8,6 +8,8 @@
     attach(context) {
       once("cardinality-one", "input[data-drupal-selector='edit-members-target-id']", context).forEach(function () {
         this.addEventListener("keydown", (event) => {
+          // A colon is used to separate members. If we restrict this character,
+          // the user will not be able to add more members and our goal here is met.
           if (event.key === ",") {
             event.preventDefault();
           }
