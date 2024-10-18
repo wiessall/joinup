@@ -3,5 +3,4 @@ new_message_thread_script:
     js/member_cardinality_one.js: {}
   dependencies:
     - core/drupal
-    - core/jquery
     - core/once
