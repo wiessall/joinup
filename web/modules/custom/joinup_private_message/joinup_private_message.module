@@ -163,8 +163,6 @@ function joinup_private_message_mail(string $key, array &$message, array $params
     $recipient = $params['recipient'];
     $sender = $params['sender'];
     $bannedMessage = $params['message'];
-    $privateMessageService = \Drupal::service('joinup_private_message.private_message_service');
-    $bannedMessageLink = $privateMessageService->getViewPath() . '/' . $bannedMessage->id();
     $params = [
       'subject' => t('User @reporter reported a message', ['@reporter' => $recipient->getDisplayName()]),
       'message' => t(
@@ -175,7 +173,7 @@ function joinup_private_message_mail(string $key, array &$message, array $params
             '@reporter_url' => Url::fromRoute('entity.user.canonical', ['user' => $recipient->id()], ['absolute' => TRUE])->toString(),
             '@sender_name' => $sender->getDisplayName(),
             '@sender_url' => Url::fromRoute('entity.user.canonical', ['user' => $sender->id()], ['absolute' => TRUE])->toString(),
-            '@message_url' => $bannedMessageLink,
+            '@message_url' => Url::fromRoute('view.private_message_report.page_1', ['private_message' => $bannedMessage->id()], ['absolute' => TRUE])->toString(),
 
           ]) . $bannedMessage->get('message')->value,
     ];

@@ -27,7 +27,7 @@ joinup_private_message.report_form:
     parameters:
       private_message:
         type: entity:private_message
-joinup_private_message.flag_as_ok:
+joinup_private_message.unreport:
   path: '/user/messages/message/{private_message}/unreport'
   defaults:
     _form: '\Drupal\joinup_private_message\Form\PrivateMessageUnreportForm'
