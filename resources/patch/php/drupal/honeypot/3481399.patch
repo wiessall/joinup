@@ -9,10 +9,59 @@ index 331a8c2..bd80d0d 100644
 -    arguments: ['@current_user', '@module_handler', '@config.factory', '@keyvalue.expirable', '@page_cache_kill_switch', '@database', '@logger.factory', '@datetime.time', '@string_translation', '@cache.default', '@request_stack']
 +    arguments: ['@current_user', '@module_handler', '@config.factory', '@keyvalue.expirable', '@page_cache_kill_switch', '@database', '@logger.factory', '@datetime.time', '@string_translation', '@request_stack']
 diff --git a/src/Form/HoneypotSettingsForm.php b/src/Form/HoneypotSettingsForm.php
-index cbf64b7..e4af9e4 100644
+index cbf64b7..2116d72 100644
 --- a/src/Form/HoneypotSettingsForm.php
 +++ b/src/Form/HoneypotSettingsForm.php
-@@ -295,12 +295,7 @@ class HoneypotSettingsForm extends ConfigFormBase {
+@@ -3,7 +3,6 @@
+ namespace Drupal\honeypot\Form;
+ 
+ use Drupal\Component\Utility\Html;
+-use Drupal\Core\Cache\CacheBackendInterface;
+ use Drupal\Core\Config\ConfigFactoryInterface;
+ use Drupal\Core\Config\TypedConfigManagerInterface;
+ use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
+@@ -40,13 +39,6 @@ class HoneypotSettingsForm extends ConfigFormBase {
+    */
+   protected $entityTypeBundleInfo;
+ 
+-  /**
+-   * A cache backend interface.
+-   *
+-   * @var \Drupal\Core\Cache\CacheBackendInterface
+-   */
+-  protected $cache;
+-
+   /**
+    * Constructs a settings controller.
+    *
+@@ -60,15 +52,12 @@ class HoneypotSettingsForm extends ConfigFormBase {
+    *   The entity type manager.
+    * @param \Drupal\Core\Entity\EntityTypeBundleInfoInterface $entity_type_bundle_info
+    *   The entity type bundle info service.
+-   * @param \Drupal\Core\Cache\CacheBackendInterface $cache_backend
+-   *   The cache backend interface.
+    */
+-  public function __construct(ConfigFactoryInterface $config_factory, TypedConfigManagerInterface $typedConfigManager, ModuleHandlerInterface $module_handler, EntityTypeManagerInterface $entity_type_manager, EntityTypeBundleInfoInterface $entity_type_bundle_info, CacheBackendInterface $cache_backend) {
++  public function __construct(ConfigFactoryInterface $config_factory, TypedConfigManagerInterface $typedConfigManager, ModuleHandlerInterface $module_handler, EntityTypeManagerInterface $entity_type_manager, EntityTypeBundleInfoInterface $entity_type_bundle_info) {
+     parent::__construct($config_factory, $typedConfigManager);
+     $this->moduleHandler = $module_handler;
+     $this->entityTypeManager = $entity_type_manager;
+     $this->entityTypeBundleInfo = $entity_type_bundle_info;
+-    $this->cache = $cache_backend;
+   }
+ 
+   /**
+@@ -80,8 +69,7 @@ class HoneypotSettingsForm extends ConfigFormBase {
+       $container->get('config.typed'),
+       $container->get('module_handler'),
+       $container->get('entity_type.manager'),
+-      $container->get('entity_type.bundle.info'),
+-      $container->get('cache.default')
++      $container->get('entity_type.bundle.info')
+     );
+   }
+ 
+@@ -295,12 +283,7 @@ class HoneypotSettingsForm extends ConfigFormBase {
      }
  
      // Save the honeypot forms from $form_state into a 'form_settings' array.
