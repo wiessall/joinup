@@ -47,12 +47,12 @@ third_party_settings:
                 entity: layout_builder.entity
               formatter:
                 type: private_message_thread_member_formatter
-                label: above
+                label: hidden
                 settings:
                   display_type: entity
                   entity_display_mode: private_message_author
-                  members_prefix: You
-                  separator: ', '
+                  members_prefix: 'Conversation with'
+                  separator: ' '
                   prefix_separator: true
                   display_current_user: false
                 third_party_settings: {  }
