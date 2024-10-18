@@ -21,12 +21,13 @@ use Drupal\private_message\Entity\PrivateMessageThread;
  * Implements hook_preprocess_HOOK().
  */
 function joinup_private_message_preprocess_private_message(&$variables): void {
-  if ($variables['view_mode'] === 'inbox') {
-    /** @var \Drupal\private_message\Entity\PrivateMessage $private_message */
-    $private_message = $variables['private_message'];
+  /** @var \Drupal\private_message\Entity\PrivateMessage $private_message */
+  $private_message = $variables['private_message'];
+  $current_user = \Drupal::currentUser();
 
+  if ($variables['view_mode'] === 'inbox') {
     // Get the other member in the conversation.
-    if ($private_message->getOwnerId() !== \Drupal::currentUser()->id()) {
+    if ($private_message->getOwnerId() !== $current_user->id()) {
       $other_member = $private_message->getOwner();
     }
     else {
@@ -35,7 +36,7 @@ function joinup_private_message_preprocess_private_message(&$variables): void {
         ->getThreadIdFromMessage($private_message);
       $thread = PrivateMessageThread::load($thread_id);
       foreach ($thread->getMembers() as $member) {
-        if ($member->id() !== \Drupal::currentUser()->id()) {
+        if ($member->id() !== $current_user->id()) {
           $other_member = $member;
         }
       }
@@ -46,6 +47,11 @@ function joinup_private_message_preprocess_private_message(&$variables): void {
     $created = (int) $private_message->getCreatedTime();
     $format = date('Y-m-d') === date('Y-m-d', $created) ? 'H:i' : 'Y-m-d';
     $variables['created']['#markup'] = date($format, $created);
+  }
+  elseif ($variables['view_mode'] === 'default') {
+    $is_owner = $private_message->getOwnerId() === $current_user->id();
+    $owner = $is_owner ? t('You') : $private_message->getOwner()->getDisplayName();
+    $variables['owner']['#markup'] = $owner;
   }
 }
 
