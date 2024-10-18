@@ -44,15 +44,17 @@ class PrivateMessageActions extends FieldPluginBase {
     $entity = $values->_entity;
 
     if ($entity->getEntityTypeId() === 'private_message') {
-      $operations['flag_as_ok'] = [
-        'title' => $this->t('Flag as OK'),
-        'url' => Url::fromRoute('joinup_private_message.flag_as_ok', ['private_message' => $entity->id()]),
-        'weight' => 0,
-      ];
 
       $operations['delete'] = [
         'title' => 'Delete',
-        'url' => Url::fromRoute('entity.private_message.delete', ['private_message' => $entity->id()]),
+        'url' => Url::fromRoute('entity.private_message.delete', ['private_message' => $entity->id()])->setOption('query', ['destination' => '/user/messages']),
+        'attributes' => _joinup_private_message_get_ajax_modal_attributes(),
+        'weight' => 0,
+      ];
+      $operations['flag_as_ok'] = [
+        'title' => $this->t('Flag as OK'),
+        'url' => Url::fromRoute('joinup_private_message.flag_as_ok', ['private_message' => $entity->id()])->setOption('query', ['destination' => '/dashboard/private-message-report']),
+        'attributes' => _joinup_private_message_get_ajax_modal_attributes(),
         'weight' => 1,
       ];
 

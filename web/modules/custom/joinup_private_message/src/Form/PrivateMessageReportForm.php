@@ -19,16 +19,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class PrivateMessageReportForm extends FormBase {
 
   /**
-   * Constructs a PrivateMessageReportForm object.
-   *
-   * @param \Drupal\private_message\Service\PrivateMessageBanManager $privateMessageBanManager
-   *   PrivateMessageBanManager service.
-   * @param \Drupal\Core\Mail\MailManager $mailManager
-   *   MailManager service.
-   * @param \Drupal\private_message\Service\PrivateMessageService $privateMessageService
-   *   PrivateMessageService service.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *   EntityTypeManagerInterface service.
+   * {@inheritdoc}
    */
   public function __construct(
     protected readonly PrivateMessageBanManager $privateMessageBanManager,
