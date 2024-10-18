@@ -31,6 +31,7 @@ function ventuno_preprocess_links__dropbutton__operations(array &$variables): vo
     $variables['button']['#options']['attributes']['class'] = [
       'btn',
       'btn-secondary',
+      'use-ajax',
     ];
   }
 }
