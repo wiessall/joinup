@@ -27,21 +27,21 @@ function joinup_private_message_preprocess_private_message(&$variables): void {
 
   if ($variables['view_mode'] === 'inbox') {
     // Get the other member in the conversation.
-    if ($private_message->getOwnerId() !== $current_user->id()) {
-      $other_member = $private_message->getOwner();
-    }
-    else {
-      /** @var \Drupal\private_message\Entity\PrivateMessageThreadInterface $thread_id */
-      $thread_id = \Drupal::service('private_message.mapper')
-        ->getThreadIdFromMessage($private_message);
-      $thread = PrivateMessageThread::load($thread_id);
-      foreach ($thread->getMembers() as $member) {
-        if ($member->id() !== $current_user->id()) {
-          $other_member = $member;
-        }
-      }
-    }
-    $variables['other_member']['#markup'] = $other_member?->getDisplayName();
+    /** @var \Drupal\private_message\Entity\PrivateMessageThreadInterface $thread_id */
+    $thread_id = \Drupal::service('private_message.mapper')
+      ->getThreadIdFromMessage($private_message);
+    $thread = PrivateMessageThread::load($thread_id);
+    $variables['other_member'] = $thread->get('members')->view([
+      'type' => 'private_message_thread_member_formatter',
+      'settings' => [
+        'display_type' => 'entity',
+        'entity_display_mode' => 'private_message_author',
+        'members_prefix' => '',
+        'separator' => '',
+        'prefix_separator' => FALSE,
+        'display_current_user' => FALSE,
+      ],
+    ]);
 
     // Get the created datetime in the right format.
     $created = (int) $private_message->getCreatedTime();
