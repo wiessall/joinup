@@ -43,7 +43,7 @@ Feature: Private messages
     And I should see a private message containing the text "A private message from Alice to Bob."
     When I enter "Another private message from Bob to Alice." in the "Reply" wysiwyg editor
     And I press "Send"
-    Then I should see 2 private message
+    Then I should see 2 private messages
     And I should see the following texts in private messages:
       | A private message from Alice to Bob.       |
       | Another private message from Bob to Alice. |
@@ -64,7 +64,7 @@ Feature: Private messages
       | A private message from Bob to Joan. |
     Then I click "Alice Miller" in thread message card
     And I wait until the page contains the text "A private message from Alice to Bob."
-    And I should see 2 private message
+    And I should see 2 private messages
     Then I should see the following texts in private messages:
       | A private message from Alice to Bob.       |
       | Another private message from Bob to Alice. |
