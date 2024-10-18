@@ -38,7 +38,7 @@ class FilterIframe extends FilterBase implements ContainerFactoryPluginInterface
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): static {
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): self {
     return new static(
       $configuration,
       $plugin_id,
@@ -154,8 +154,7 @@ class FilterIframe extends FilterBase implements ContainerFactoryPluginInterface
    *   Array of regexes to match domains (with wildcard).
    */
   protected function getAllowedDomainRegexes(array $allowed): array {
-    // Escape any regex chars but translate '*' to '.*?'.
-    // e.g: *.example.com >>> /^.*?\.example\.com$/.
+    // `preg_quote` escapes any regex char, but we want to preserve `*`.
     return array_map(static fn(string $host): string =>
       '/^' . strtr(preg_quote($host, '/'), ['\*' => '.*?']) . '$/',
       $allowed
