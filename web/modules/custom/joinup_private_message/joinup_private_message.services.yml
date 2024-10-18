@@ -14,7 +14,3 @@ services:
     tags:
       # Use a higher priority than EntityConverter.
       - { name: paramconverter, priority: 6 }
-  joinup_private_message.private_message_service:
-    class: Drupal\joinup_private_message\Service\PrivateMessageService
-    arguments:
-      - '@entity_type.manager'
