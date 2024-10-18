@@ -18,10 +18,11 @@ use Drupal\Core\Url;
 use Drupal\private_message\Entity\PrivateMessageThread;
 
 /**
- * Implements .
+ * Implements hook_preprocess_HOOK().
  */
 function joinup_private_message_preprocess_private_message(&$variables): void {
   if ($variables['view_mode'] === 'inbox') {
+    /** @var \Drupal\private_message\Entity\PrivateMessage $private_message */
     $private_message = $variables['private_message'];
 
     // Get the other member in the conversation.
@@ -40,6 +41,11 @@ function joinup_private_message_preprocess_private_message(&$variables): void {
       }
     }
     $variables['other_member']['#markup'] = $other_member?->getDisplayName();
+
+    // Get the created datetime in the right format.
+    $created = (int) $private_message->getCreatedTime();
+    $format = date('Y-m-d') === date('Y-m-d', $created) ? 'H:i' : 'Y-m-d';
+    $variables['created']['#markup'] = date($format, $created);
   }
 }
 
