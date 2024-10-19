@@ -4,7 +4,6 @@ status: true
 dependencies:
   config:
     - field.field.meta_entity.solution_settings.announcements_enabled
-    - field.field.meta_entity.solution_settings.field_ss_related_solutions
     - field.field.meta_entity.solution_settings.landing_page
     - field.field.meta_entity.solution_settings.metadata_banner_disabled
     - meta_entity.type.solution_settings
@@ -34,7 +33,6 @@ content:
       display_label: true
     third_party_settings: {  }
 hidden:
-  field_ss_related_solutions: true
   label: true
   path: true
   target: true

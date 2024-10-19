@@ -143,3 +143,32 @@ Feature: Test migration of collections/solutions to node.
     When I am logged in as a moderator
     And I visit "/announcements"
     Then I should see the link "Interoperable Europe Academy"
+
+  @update:joinup_rdf_update_200009 @update:joinup_rdf_deploy_200013
+  Scenario: Assert migrated related solutions.
+    Given I go to "/collection/eparticipation-and-evoting/solution/eci-online-collection-software-ocs"
+    Then in the "Related solutions" list, I should see the following tiles in the correct order:
+      | European Citizens' Initiative - Regulation (EU) 2019/788                                    |
+      | Crypto Tool for the European Parliament Elections and for the European Citizens' Initiative |
+    Given I go to "/collection/semic-support-centre/solution/vocbench"
+    Then in the "Related solutions" list, I should see the following tiles in the correct order:
+      # First 3 are shared solutions. Even if in production they do not show in
+      # this way, according to the migrated data, they all share the "Data
+      # management" solution type.
+      # /collection/gnu-health/solution/mygnuhealth.
+      | MyGNUHealth                                                                                                |
+      # /collection/open-data/solution/piveau.
+      | piveau                                                                                                     |
+      # /collection/free-and-open-source-software/solution/geonetwork.
+      | GeoNetwork opensource - A catalog solution to publish geospatial and non-geospatial metadata and resources |
+      # Then the rest are directly linked solutions. These follow the order of
+      # the data in the database.
+      | EuroVoc                                                                                                    |
+      | The AGROVOC Thesaurus                                                                                      |
+      | GEMET                                                                                                      |
+      | Integrated Public Sector Vocabulary                                                                        |
+      | DCAT-AP Validator                                                                                          |
+      | Asset Description Metadata Schema (ADMS)                                                                   |
+      | StatDCAT Application Profile for data portals in Europe                                                    |
+      | Asset Description Metadata Schema (ADMS) revision                                                          |
+      | ShowVoc                                                                                                    |
