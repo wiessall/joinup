@@ -180,7 +180,7 @@ function _joinup_private_message_get_ajax_modal_attributes(): array {
  * Implements hook_mail().
  */
 function joinup_private_message_mail(string $key, array &$message, array $params): void {
-  if ($key == 'report_message') {
+  if ($key === 'report_message') {
     $recipient = $params['recipient'];
     $sender = $params['sender'];
     $bannedMessage = $params['message'];
