@@ -48,7 +48,7 @@ Feature: Asset release moderation
     And 0 e-mails should have been sent
 
     When I click "Edit" in the "Entity actions" region
-    And I should see the workflow buttons "Update, Save as draft"
+    And I should see the workflow buttons "Update, Save as draft, Archive"
     When I fill in "Release notes" with "We go live soon."
     And I press "Update"
     Then I should see the text "Release of the dark ship v1" in the "Page title" region
@@ -147,6 +147,27 @@ Feature: Asset release moderation
       | subject   | Joinup: Your release was accepted                                                                  |
       | body      | Your proposed Release fix, v1 for the solution "Dark Ship" has been validated as per your request. |
 
+    # Check archive permissions author and facilitator.
+    When I am logged in as "Bonnie Holloway"
+    And I go to the "Release fix" release
+    When I click "Edit" in the "Entity actions" region
+    And I press "Archive"
+    Then I should see the text "Archived" in the "Page title" region
+
+    When I am logged in as a moderator
+    And I go to the "Release fix" release
+    And I click "Edit" in the "Entity actions" region
+    And I press "Unarchive"
+    Then I should not see the text "Archived" in the "Page title" region
+
+    When I am logged in as "Felix Russell"
+    And I go to the "Release fix" release
+    When I click "Edit" in the "Entity actions" region
+    And I press "Archive"
+    Then I should see the text "Archived" in the "Page title" region
+
+    When I am logged in as a moderator
+    And I go to the "Release fix" release
     # Delete a release as a moderator.
     When I click "Edit" in the "Entity actions" region
     And I click "Delete"
