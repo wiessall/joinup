@@ -134,6 +134,8 @@ function joinup_private_message_private_message_view_alter(array &$build, Entity
       '#title' => t('Report'),
       '#url' => $report_url,
       '#attributes' => _joinup_private_message_get_ajax_modal_attributes(),
+      '#prefix' => '<div id="private-message-from-' . $user_id . '" class="private-message-report">',
+      '#suffix' => '</div>',
     ];
 
     // Add the button to the entity view array.
@@ -238,6 +240,14 @@ function joinup_private_message_views_data_alter(array &$data): void {
       'title' => t('Actions'),
       'help' => t('Actions for reported private messages.'),
       'id' => 'private_message_actions',
+    ],
+  ];
+  $data['reporting']['private_message_members'] = [
+    'title' => t('Private message members'),
+    'field' => [
+      'title' => t('Private message members'),
+      'help' => t('Sender and recipient of private message.'),
+      'id' => 'private_message_members',
     ],
   ];
 }
