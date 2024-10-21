@@ -15,5 +15,7 @@ group_bundle: solution
 is_admin: null
 permissions:
   - 'delete any release content'
+  - 'perform release_workflow workflow archive transition on own entity'
+  - 'perform solution_workflow workflow archive transition on own entity'
   - 'update solution_settings meta-entity'
 role_type: null
