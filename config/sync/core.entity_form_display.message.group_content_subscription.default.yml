@@ -1,0 +1,23 @@
+uuid: 5d66376f-c7f5-4892-91fa-e44987845724
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.message.group_content_subscription.group_content
+    - message.template.group_content_subscription
+id: message.group_content_subscription.default
+targetEntityType: message
+bundle: group_content_subscription
+mode: default
+content:
+  group_content:
+    type: entity_reference_autocomplete
+    weight: 0
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden: {  }

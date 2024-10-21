@@ -1,0 +1,20 @@
+uuid: 86bb0bf3-343d-4d8a-8e16-33e569dd12a0
+langcode: en
+status: true
+dependencies:
+  module:
+    - message
+    - node
+id: message.group_content
+field_name: group_content
+entity_type: message
+type: entity_reference
+settings:
+  target_type: node
+module: core
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false
