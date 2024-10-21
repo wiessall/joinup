@@ -152,27 +152,28 @@ function joinup_rdf_deploy_200004(): void {
     ->execute()
     ->fetchAll();
 
-  // Look for entries with the field_group_content_target_type set to rdf_entity
-  // and swap the value to node. Also, for these entries, swap the
-  // field_group_content_target_id from the URI to the entity_id.
+  // The field_group_content has been deleted in the config sync and a new field
+  // was created called group_content.
   foreach ($results as $result) {
     if ($result->field_group_content_target_type === 'rdf_entity') {
-      $result->field_group_content_target_type = 'node';
       $result->field_group_content_target_id = $db->select('rdf_sync_uri', 'u')
         ->fields('u', ['entity_id'])
         ->condition('u.uri', $result->field_group_content_target_id)
         ->execute()
         ->fetchField();
-      $result->field_group_content_target_id_int = (int) $result->field_group_content_target_id;
     }
+    $result->group_content_target_id = $result->field_group_content_target_id;
+    unset($result->field_group_content_target_type);
+    unset($result->field_group_content_target_id);
+    unset($result->field_group_content_target_id_int);
   }
 
   // Convert all objects to array.
   $results = array_map('get_object_vars', $results);
 
-  // Insert the updated entries back to the message__field_group_content table.
+  // Insert the updated entries in the new message__group_content table.
   foreach ($results as &$result) {
-    $db->insert('message__field_group_content')
+    $db->insert('message__group_content')
       ->fields(array_keys($result))
       ->values($result)
       ->execute();
