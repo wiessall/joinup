@@ -15,6 +15,7 @@ use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
+use Drupal\private_message\Entity\PrivateMessage;
 use Drupal\symfony_mailer_lite\Plugin\Mail\SymfonyMailer;
 
 /**
@@ -117,12 +118,13 @@ function joinup_private_message_private_message_thread_view_alter(array &$build,
 }
 
 /**
- * Implements hook_entity_view_alter().
+ * Implements hook_ENTITY_TYPE_view_alter().
  */
 function joinup_private_message_private_message_view_alter(array &$build, EntityInterface $entity): void {
+  \assert($entity instanceof PrivateMessage);
   $user_id = \Drupal::currentUser()->id();
   // Check if this is the custom entity you want to alter.
-  if ($entity->getEntityTypeId() === 'private_message' && $entity->getOwnerId() !== $user_id) {
+  if ($entity->getOwnerId() !== $user_id) {
     $report_url = Url::fromRoute('joinup_private_message.report_form', [
       'private_message' => $entity->id(),
     ]);
