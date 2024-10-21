@@ -7,10 +7,10 @@ Feature: Private message report.
   @javascript
   Scenario: Send a private message
     Given users:
-      | Username  | First name | Family name | E-mail                |
-      | alice_m   | Alice      | Miller      | alice.m@example.com   |
-      | bob_rolls | Bob        | Rolls       | bob.rolls@example.com |
-      | joan_tiff | Joan       | Tiff        | joan.tiff@example.com |
+      | Username  | First name | Family name | E-mail                | Roles     |
+      | alice_m   | Alice      | Miller      | alice.m@example.com   |           |
+      | bob_rolls | Bob        | Rolls       | bob.rolls@example.com |           |
+      | joan_tiff | Joan       | Tiff        | joan.tiff@example.com | Moderator |
 
     Given I am logged in as "alice_m"
     And I am on the homepage
