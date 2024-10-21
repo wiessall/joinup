@@ -17,6 +17,7 @@ use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
+use Drupal\private_message\Entity\PrivateMessage;
 use Drupal\symfony_mailer_lite\Plugin\Mail\SymfonyMailer;
 
 /**
@@ -35,9 +36,6 @@ function joinup_private_message_form_alter(array &$form, FormStateInterface $for
       $form['message']['widget'][0]['#format'] = 'minimal';
       $form['message']['widget'][0]['#allowed_formats'] = ['minimal'];
     }
-  }
-
-  if (in_array($form_id, ['private_message_add_form', 'private_message_delete_form'])) {
     $form['actions']['submit']['#submit'][] = 'joinup_private_message_form_submit';
   }
 
@@ -101,7 +99,9 @@ function joinup_private_message_create_ajax_callback(array &$form, FormStateInte
 }
 
 /**
- * Implements hook_entity_view_alter().
+ * Implements hook_ENTITY_TYPE_view_alter().
+ *
+ * @see private_message_private_message_thread_view_alter()
  */
 function joinup_private_message_private_message_thread_view_alter(array &$build, EntityInterface $node, EntityViewDisplayInterface $display): void {
   if (isset($build['delete_link'])) {
@@ -116,15 +116,17 @@ function joinup_private_message_private_message_thread_view_alter(array &$build,
       unset($build['clear_history_link']);
     }
   }
+
 }
 
 /**
- * Implements hook_entity_view_alter().
+ * Implements hook_ENTITY_TYPE_view_alter().
  */
 function joinup_private_message_private_message_view_alter(array &$build, EntityInterface $entity): void {
+  \assert($entity instanceof PrivateMessage);
   $user_id = \Drupal::currentUser()->id();
   // Check if this is the custom entity you want to alter.
-  if ($entity->getEntityTypeId() === 'private_message' && $entity->getOwnerId() !== $user_id) {
+  if ($entity->getOwnerId() !== $user_id) {
     $report_url = Url::fromRoute('joinup_private_message.report_form', [
       'private_message' => $entity->id(),
     ]);
@@ -133,18 +135,22 @@ function joinup_private_message_private_message_view_alter(array &$build, Entity
       '#type' => 'link',
       '#title' => t('Report'),
       '#url' => $report_url,
-      '#attributes' => _joinup_private_message_get_ajax_modal_attributes(),
-      '#prefix' => '<div id="private-message-from-' . $user_id . '" class="private-message-report">',
-      '#suffix' => '</div>',
+      '#attributes' => [
+        'class' => ['button', 'report-button', 'use-ajax', 'btn', 'btn-primary'],
+        'data-dialog-type' => 'modal',
+        'data-dialog-options' => json_encode([
+          'width' => 'auto',
+          'height' => 'auto',
+        ]),
+      ],
     ];
 
     // Add the button to the entity view array.
     if (!isset($build['links'])) {
       $build['links'] = [];
     }
-    $build['wrapper']['links'] = $report_button;
+    $build['links']['report'] = $report_button;
   }
-
 }
 
 /**
@@ -161,7 +167,7 @@ function joinup_private_message_contextual_links_view_alter(array &$element, arr
  * Implements hook_mail().
  */
 function joinup_private_message_mail(string $key, array &$message, array $params): void {
-  if ($key == 'report_message') {
+  if ($key === 'report_message') {
     $recipient = $params['recipient'];
     $sender = $params['sender'];
     $bannedMessage = $params['message'];
