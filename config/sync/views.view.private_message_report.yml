@@ -87,17 +87,15 @@ display:
           multi_type: separator
           separator: ', '
           field_api_classes: false
-        owner:
-          id: owner
-          table: private_messages
-          field: owner
+        private_message_members:
+          id: private_message_members
+          table: reporting
+          field: private_message_members
           relationship: none
           group_type: group
           admin_label: ''
-          entity_type: private_message
-          entity_field: owner
-          plugin_id: field
-          label: From
+          plugin_id: private_message_members
+          label: 'Private message members'
           exclude: false
           alter:
             alter_text: false
@@ -137,21 +135,7 @@ display:
           empty: ''
           hide_empty: false
           empty_zero: false
-          hide_alter_empty: true
-          click_sort_column: target_id
-          type: entity_reference_label
-          settings:
-            link: true
-          group_column: target_id
-          group_columns: {  }
-          group_rows: true
-          delta_limit: 0
-          delta_offset: 0
-          delta_reversed: false
-          delta_first_last: false
-          multi_type: separator
-          separator: ', '
-          field_api_classes: false
+          hide_alter_empty: false
         report:
           id: report
           table: private_messages
@@ -567,22 +551,30 @@ display:
     display_plugin: page
     position: 1
     display_options:
+      sorts: {  }
+      defaults:
+        sorts: false
+      display_extenders:
+        metatag_display_extender:
+          metatags: {  }
+          tokenize: false
+      path: dashboard/private-message-report/%private_message
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_content'
+        - 'languages:language_interface'
+        - url
+        - url.query_args
+        - user.permissions
+      tags: {  }
+  page_2:
+    id: page_2
+    display_title: 'Page 2'
+    display_plugin: page
+    position: 2
+    display_options:
       sorts:
-        owner:
-          id: owner
-          table: private_messages
-          field: owner
-          relationship: none
-          group_type: group
-          admin_label: ''
-          entity_type: private_message
-          entity_field: owner
-          plugin_id: standard
-          order: ASC
-          expose:
-            label: From
-            field_identifier: owner
-          exposed: true
         message__value:
           id: message__value
           table: private_messages
@@ -623,7 +615,7 @@ display:
           entity_type: private_message
           entity_field: report_timestamp
           plugin_id: date
-          order: ASC
+          order: DESC
           expose:
             label: 'Report timestamp'
             field_identifier: report_timestamp
@@ -631,28 +623,6 @@ display:
           granularity: second
       defaults:
         sorts: false
-      display_extenders:
-        metatag_display_extender:
-          metatags: {  }
-          tokenize: false
-      path: dashboard/private-message-report/%private_message
-    cache_metadata:
-      max-age: -1
-      contexts:
-        - 'languages:language_content'
-        - 'languages:language_interface'
-        - url
-        - url.query_args
-        - 'url.query_args:sort_by'
-        - 'url.query_args:sort_order'
-        - user.permissions
-      tags: {  }
-  page_2:
-    id: page_2
-    display_title: 'Page 2'
-    display_plugin: page
-    position: 2
-    display_options:
       display_extenders:
         metatag_display_extender:
           metatags: {  }
@@ -665,5 +635,7 @@ display:
         - 'languages:language_interface'
         - url
         - url.query_args
+        - 'url.query_args:sort_by'
+        - 'url.query_args:sort_order'
         - user.permissions
       tags: {  }

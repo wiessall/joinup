@@ -23,6 +23,7 @@ joinup_private_message.report_form:
     _title: 'Report and block sender'
   requirements:
     _permission: 'use private messaging system'
+    _report_access_check: TRUE
   options:
     parameters:
       private_message:
