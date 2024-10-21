@@ -5,33 +5,21 @@ Feature: Private message report page
   I need to be able to see report page
 
   @javascript
-  Scenario: Send a private message
+  Scenario: Unreport and delete reported message
     Given users:
       | Username  | First name | Family name | E-mail                | Roles              |
       | alice_m   | Alice      | Miller      | alice.m@example.com   | developer          |
       | bob_rolls | Bob        | Rolls       | bob.rolls@example.com |                    |
       | joan_tiff | Joan       | Tiff        | joan.tiff@example.com |                    |
 
-    Given I am logged in as "alice_m"
-    And I am on the homepage
-    And I should see 0 unread private message
-    And I am on "/user/messages"
-    And I click "New Message"
-    Then a modal should open
-    When I type "Bob Rolls" in the "Member(s) (value 1)" autocomplete field
-    And I wait for AJAX to finish
-    And I pick "Bob Rolls" from the "Member" autocomplete suggestions
-    And I fill in "Subject" with "Hello Bob"
-    And I enter "This is a private message to Bob." in the "Message" wysiwyg editor
-    And I press "Send" in the "Modal buttons" region
-    Then the modal should be closed
-    And I should see the heading "Private Messages"
-    And I should see 1 private message
-    Then I should see a private message containing the text "This is a private message to Bob."
+    Given the following private messages:
+      | owner     | recipient | message |
+      | alice_m   | bob_rolls | This is message from alice |
+      | joan_tiff | bob_rolls | This is message from joan  |
 
     When I am logged in as "bob_rolls"
     And I am on the homepage
-    And I should see 1 unread private message
+    And I should see 2 unread private message
     And I am on "/user/messages"
     And I should see the heading "Private Messages"
     And I should see the link "Report"
