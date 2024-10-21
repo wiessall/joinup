@@ -351,6 +351,9 @@
                 "Populate link fields only with URI if value is a string @see https://github.com/jhedstrom/DrupalDriver/pull/267": "resources/patch/php/drupal/drupal-driver/267.diff",
                 "Update Datetime field handler to support both date and datetime fields @see https://github.com/jhedstrom/DrupalDriver/pull/235": "resources/patch/php/drupal/drupal-driver/235.patch"
             },
+            "drupal/dynamic_entity_reference": {
+                "Undefined array key on dependency removal @see https://www.drupal.org/i/3099176": "resources/patch/php/drupal/dynamic_entity_reference/3099176-3.x-16.diff"
+            },
             "drupal/embed_block": {
                 "Add support for Ckeditor 5. @see https://www.drupal.org/i/3316336": "resources/patch/php/drupal/embed_block/3316336.patch"
             },

@@ -145,6 +145,40 @@ function joinup_rdf_deploy_200004(): void {
     }
   }
 
+  // Fix the message__field_group_content.
+  $query = $db->select('b_message__field_group_content', 'b');
+  $results = $query
+    ->fields('b', [])
+    ->execute()
+    ->fetchAll();
+
+  // Look for entries with the field_group_content_target_type set to rdf_entity
+  // and swap the value to node. Also, for these entries, swap the
+  // field_group_content_target_id from the URI to the entity_id.
+  foreach ($results as $result) {
+    if ($result->field_group_content_target_type === 'rdf_entity') {
+      $result->field_group_content_target_type = 'node';
+      $result->field_group_content_target_id = $db->select('rdf_sync_uri', 'u')
+        ->fields('u', ['entity_id'])
+        ->condition('u.uri', $result->field_group_content_target_id)
+        ->execute()
+        ->fetchField();
+      $result->field_group_content_target_id_int = (int) $result->field_group_content_target_id;
+    }
+  }
+
+  // Convert all objects to array.
+  $results = array_map('get_object_vars', $results);
+
+  // Insert the updated entries back to the message__field_group_content table.
+  foreach ($results as &$result) {
+    $db->insert('message__field_group_content')
+      ->fields(array_keys($result))
+      ->values($result)
+      ->execute();
+  }
+  $schema->dropTable('b_message__field_group_content');
+
   // Joinup log table.
   $query = $db->select('b_joinup_log', 'b');
   $query->innerJoin('rdf_sync_uri', 'u', 'b.group = u.uri');
@@ -708,4 +742,21 @@ function joinup_rdf_deploy_200013(): void {
   }
 
   \Drupal::state()->delete('joinup_rdf.related_solutions');
+}
+
+/**
+ * Clear the purge_queue table of anything related to rdf_entity.
+ */
+function joinup_rdf_deploy_200014(): void {
+  $data = \Drupal::database()->select('purge_queue', 'pq')
+    ->fields('pq', ['item_id'])
+    ->condition('pq.data', '%rdf_entity%', 'LIKE')
+    ->execute()
+    ->fetchCol();
+
+  if ($data) {
+    \Drupal::database()->delete('purge_queue')
+      ->condition('item_id', $data, 'IN')
+      ->execute();
+  }
 }

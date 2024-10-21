@@ -1,0 +1,92 @@
+diff --git a/src/Plugin/Field/FieldType/DynamicEntityReferenceItem.php b/src/Plugin/Field/FieldType/DynamicEntityReferenceItem.php
+index dec3f87..5994d58 100644
+--- a/src/Plugin/Field/FieldType/DynamicEntityReferenceItem.php
++++ b/src/Plugin/Field/FieldType/DynamicEntityReferenceItem.php
+@@ -292,7 +292,7 @@ class DynamicEntityReferenceItem extends EntityReferenceItem {
+   protected function targetTypeFieldSettingsForm(array $form, FormStateInterface $form_state, $target_type) {
+     /** @var \Drupal\field\FieldConfigInterface $field */
+     $field = $form_state->getFormObject()->getEntity();
+-    $field_settings = $field->getSettings();
++    $field_settings = $field->getSettings() + self::defaultFieldSettings();
+     /** @var \Drupal\dynamic_entity_reference\SelectionPluginManager $manager */
+     $manager = \Drupal::service('plugin.manager.dynamic_entity_reference_selection');
+     // Get all selection plugins for this entity type.
+@@ -548,7 +548,7 @@ class DynamicEntityReferenceItem extends EntityReferenceItem {
+     // also covers the 'auto_create_bundle' setting, if any, because its value
+     // is included in the 'target_bundles' list.
+     $entity_type_manager = \Drupal::entityTypeManager();
+-    $settings = $field_definition->getSettings();
++    $settings = $field_definition->getSettings() + self::defaultFieldSettings();
+     foreach (static::getTargetTypes($settings) as $target_type) {
+       $handler = $settings[$target_type]['handler_settings'];
+       if (!empty($handler['target_bundles'])) {
+@@ -589,7 +589,7 @@ class DynamicEntityReferenceItem extends EntityReferenceItem {
+     $entity_type_manager = \Drupal::entityTypeManager();
+     // Update the 'target_bundles' handler setting if a bundle config dependency
+     // has been removed.
+-    $settings = $field_definition->getSettings();
++    $settings = $field_definition->getSettings() + self::defaultFieldSettings();
+     foreach (static::getTargetTypes($settings) as $target_type) {
+       $bundles_changed = FALSE;
+       $handler_settings = $settings[$target_type]['handler_settings'];
+diff --git a/src/Plugin/Field/FieldWidget/DynamicEntityReferenceWidget.php b/src/Plugin/Field/FieldWidget/DynamicEntityReferenceWidget.php
+index 24de497..d13ae39 100644
+--- a/src/Plugin/Field/FieldWidget/DynamicEntityReferenceWidget.php
++++ b/src/Plugin/Field/FieldWidget/DynamicEntityReferenceWidget.php
+@@ -119,7 +119,7 @@ class DynamicEntityReferenceWidget extends EntityReferenceAutocompleteWidget {
+     $entity = $items->getEntity();
+     $referenced_entities = $items->referencedEntities();
+ 
+-    $settings = $this->getFieldSettings();
++    $settings = $this->getFieldSettings() + DynamicEntityReferenceItem::defaultFieldSettings();
+     $labels = $this->entityTypeRepository->getEntityTypeLabels();
+     $available = DynamicEntityReferenceItem::getTargetTypes($settings);
+     $cardinality = $items->getFieldDefinition()->getFieldStorageDefinition()->getCardinality();
+@@ -250,7 +250,7 @@ class DynamicEntityReferenceWidget extends EntityReferenceAutocompleteWidget {
+         array_pop($parents);
+         $values = $form_state->getValue($parents);
+       }
+-      $settings = $this->getFieldSettings();
++      $settings = $this->getFieldSettings() + DynamicEntityReferenceItem::defaultFieldSettings();
+       $element['#target_type'] = $values['target_type'];
+       $element['#selection_handler'] = $settings[$values['target_type']]['handler'];
+       $element['#selection_settings'] = $settings[$values['target_type']]['handler_settings'];
+@@ -284,7 +284,7 @@ class DynamicEntityReferenceWidget extends EntityReferenceAutocompleteWidget {
+     if ($target_type === NULL) {
+       return parent::getSelectionHandlerSetting($setting_name);
+     }
+-    $settings = $this->getFieldSettings();
++    $settings = $this->getFieldSettings() + DynamicEntityReferenceItem::defaultFieldSettings();
+     return $settings[$target_type]['handler_settings'][$setting_name] ?? NULL;
+   }
+ 
+@@ -333,7 +333,7 @@ class DynamicEntityReferenceWidget extends EntityReferenceAutocompleteWidget {
+    */
+   protected function createAutoCompletePaths(array $target_types) {
+     $auto_complete_paths = [];
+-    $settings = $this->getFieldSettings();
++    $settings = $this->getFieldSettings() + DynamicEntityReferenceItem::defaultFieldSettings();
+     foreach ($target_types as $target_type) {
+       // Store the selection settings in the key/value store and pass a hashed
+       // key in the route parameters.
+diff --git a/src/SelectionPluginManager.php b/src/SelectionPluginManager.php
+index 4f00334..b64cc82 100644
+--- a/src/SelectionPluginManager.php
++++ b/src/SelectionPluginManager.php
+@@ -5,6 +5,7 @@ namespace Drupal\dynamic_entity_reference;
+ use Drupal\Core\Entity\EntityInterface;
+ use Drupal\Core\Entity\EntityReferenceSelection\SelectionPluginManager as CoreSelectionPluginManager;
+ use Drupal\Core\Field\FieldDefinitionInterface;
++use Drupal\dynamic_entity_reference\Plugin\Field\FieldType\DynamicEntityReferenceItem;
+ 
+ /**
+  * Plugin type manager for Dynamic Entity Reference Selection plugins.
+@@ -21,7 +22,7 @@ class SelectionPluginManager extends CoreSelectionPluginManager {
+     if ($target_type === NULL) {
+       return parent::getSelectionHandler($field_definition, $entity);
+     }
+-    $settings = $field_definition->getSettings();
++    $settings = $field_definition->getSettings() + DynamicEntityReferenceItem::defaultFieldSettings();
+     $options = $settings[$target_type]['handler_settings'] ?? [];
+     $options += [
+       'target_type' => $target_type,
