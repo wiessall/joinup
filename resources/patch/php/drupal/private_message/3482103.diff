@@ -1,0 +1,521 @@
+diff --git a/js/history_api.js b/js/history_api.js
+index 04b8d5b5a1900cfff70f42b580c11d2cfbd4f18e..7ea91b54c393b34fd1276343430f4dcdcb99f72f 100644
+--- a/js/history_api.js
++++ b/js/history_api.js
+@@ -37,7 +37,7 @@ Drupal.history = {};
+ 
+   window.addEventListener('load', function () {
+     // The timeout ensures that popstate-events will be unblocked right
+-    // after the load event occured, but not in the same event-loop cycle.
++    // after the load event occurred, but not in the same event-loop cycle.
+     window.setTimeout(function () { blockPopstateEvent = false; }, 0);
+   }, false);
+ 
+diff --git a/js/private_message_form.js b/js/private_message_form.js
+index 16c7110033226cdd958bf07ff7fb5d2809ad03e2..1afa5b70bb13ae0cfd62bba9744a8d432fc35e03 100644
+--- a/js/private_message_form.js
++++ b/js/private_message_form.js
+@@ -18,7 +18,7 @@
+     if (supportedKeys.indexOf(key) !== -1) {
+       // If it is the send key, just remove that character from the textarea.
+       $(this).val(function (index, value) {
+-        return value.substr(0, value.length - 1);
++        return value.substring(0, value.length - 1);
+       });
+ 
+       if ($(this).val() !== '') {
+diff --git a/js/private_message_inbox_block.js b/js/private_message_inbox_block.js
+index d4a13a1e134d0a848fa1ddd5e670b190747ea889..d91558e2f43453877f0399561c61b878a10b1593 100644
+--- a/js/private_message_inbox_block.js
++++ b/js/private_message_inbox_block.js
+@@ -28,7 +28,7 @@ Drupal.PrivateMessageInbox.updateInbox = {};
+       progress: false
+     });
+ 
+-    // Trigger any any ajax commands in the response.
++    // Trigger any ajax commands in the response.
+     ajaxObject.success(data, 'success');
+   }
+ 
+@@ -143,7 +143,7 @@ Drupal.PrivateMessageInbox.updateInbox = {};
+    * @param {Object} context The context.
+    */
+   function loadOlderThreadWatcher(context) {
+-    $(once('load-loder-threads-watcher', '#load-previous-threads-button', context)).each(function () {
++    $(once('load-older-threads-watcher', '#load-previous-threads-button', context)).each(function () {
+       $(this).on('click', loadOldThreadWatcherHandler);
+     });
+   }
+@@ -192,8 +192,7 @@ Drupal.PrivateMessageInbox.updateInbox = {};
+ 
+   Drupal.behaviors.privateMessageInboxBlock = {
+     attach: function (context) {
+-      window.setTimeout(init, 500);
+-      loadOlderThreadWatcher(context);
++      init();
+       inboxThreadLinkListener(context);
+ 
+       Drupal.AjaxCommands.prototype.insertInboxOldPrivateMessageThreads = function (ajax, response) {
+@@ -224,7 +223,7 @@ Drupal.PrivateMessageInbox.updateInbox = {};
+         updateInbox();
+       };
+     },
+-    detatch: function (context) {
++    detach: function (context) {
+       $(context).find('#load-previous-threads-button').unbind('click', loadOldThreadWatcherHandler);
+       $(context).find('.private-message-inbox-thread-link').unbind('click', inboxThreadLinkListenerHandler);
+     }
+diff --git a/js/private_message_members_widget.js b/js/private_message_members_widget.js
+index 3afb432651c8bad70848898ce28b1510f42d7fd5..ea8dcd97a5638ec02600fa145ceedf6832a16a58 100644
+--- a/js/private_message_members_widget.js
++++ b/js/private_message_members_widget.js
+@@ -29,7 +29,7 @@
+       progress: false
+     });
+ 
+-    // Trigger any any ajax commands in the response.
++    // Trigger any ajax commands in the response.
+     ajaxObject.success(data, 'success');
+   }
+ 
+@@ -87,7 +87,7 @@
+     var found;
+     var trimmedVal;
+ 
+-    username = $.trim(username);
++    username = username.trim();
+     // Only do something if the username isn't empty, and has not already been
+     // inserted into the members list.
+     if (username.length && !insertedUsernames[username]) {
+@@ -103,7 +103,7 @@
+       // Attempt to insert the username into an empty field in the hidden entity
+       // reference widget.
+       inputWrapper.find('input[type="text"]').each(function () {
+-        trimmedVal = $.trim($(this).val());
++        trimmedVal = $(this).val().trim();
+         if (trimmedVal === '') {
+           $(this).val(username);
+           found = true;
+@@ -354,7 +354,7 @@
+    * @param {Object} e
+    *   The event.
+    */
+-  function autompleteResultsKeydownNavigationHandler(e) {
++  function autocompleteResultsKeydownNavigationHandler(e) {
+     e.preventDefault();
+ 
+     var keyCode;
+@@ -395,7 +395,7 @@
+   }
+ 
+   /**
+-   * Focus handler for the autcomplete search results.
++   * Focus handler for the autocomplete search results.
+    *
+    * Stops autocomplete search results from being hidden when the username input
+    * field is navigated away from.
+@@ -422,7 +422,7 @@
+           // disappear.
+           .focus(autocompleteResultsFocusHandler)
+           // Act upon keydown.
+-          .keydown(autompleteResultsKeydownNavigationHandler);
++          .keydown(autocompleteResultsKeydownNavigationHandler);
+       });
+     }
+   }
+@@ -511,7 +511,7 @@
+       insertedUsernames = {};
+ 
+       // When the page is refreshed, or an error is hit, the default widget will
+-      // contain usernames. We awnt to add these to the members list for a
++      // contain usernames. We want to add these to the members list for a
+       // visual reference to users.
+       inputWrapper.find('input[type="text"]').each(function () {
+         var username = $(this).val();
+@@ -549,12 +549,12 @@
+     },
+     detach: function (context) {
+       $(context).find('.private-message-member-display-item .pm-username-remove-link').unbind('click', removeMember);
+-      $(context).find('.pm-autocomplete-search-result').unbind('click', addUserToMembersClickHandler).unbind('keydown', autompleteResultsKeydownNavigationHandler).unbind('focus', autocompleteResultsFocusHandler);
++      $(context).find('.pm-autocomplete-search-result').unbind('click', addUserToMembersClickHandler).unbind('keydown', autocompleteResultsKeydownNavigationHandler).unbind('focus', autocompleteResultsFocusHandler);
+     }
+   };
+ 
+   function extractUsernameFromAutocompleteValue(value) {
+-    var trimmedVal = $.trim(value);
++    var trimmedVal = value.trim();
+     if (trimmedVal.length) {
+       trimmedVal = trimmedVal.replace(/\s\(\d+\)$/, '');
+     }
+diff --git a/js/private_message_notification_block.js b/js/private_message_notification_block.js
+index 6157fc20fccbd5f919a512e668bc618ee3e73521..f87007a2b5c24ce413a6c3db5383167e2904ace8 100644
+--- a/js/private_message_notification_block.js
++++ b/js/private_message_notification_block.js
+@@ -26,7 +26,7 @@ Drupal.PrivateMessageNotificationBlock = {};
+       progress: false
+     });
+ 
+-    // Trigger any any ajax commands in the response.
++    // Trigger any ajax commands in the response.
+     ajaxObject.success(data, 'success');
+   }
+ 
+diff --git a/js/private_message_thread.js b/js/private_message_thread.js
+index 15aae9f6ef3b49d08ae153cdd826c9f3d57cb256..68940729bedbc74d5fee07be5d4124515414ede0 100644
+--- a/js/private_message_thread.js
++++ b/js/private_message_thread.js
+@@ -1,6 +1,6 @@
+ /**
+  * @file
+- * Adds JavaScript functionality to priveate message threads.
++ * Adds JavaScript functionality to private message threads.
+  */
+ 
+ Drupal.PrivateMessages = {};
+@@ -35,7 +35,7 @@ Drupal.PrivateMessages.threadChange = {};
+       progress: false
+     });
+ 
+-    // Trigger any any ajax commands in the response.
++    // Trigger any ajax commands in the response.
+     ajaxObject.success(data, 'success');
+   }
+ 
+diff --git a/src/Form/ConfigForm.php b/src/Form/ConfigForm.php
+index b482e65a4c2c797aaf215b6eaac026f014fc7242..bfc2b63300f841e765609508df32c02b89d3a7a0 100644
+--- a/src/Form/ConfigForm.php
++++ b/src/Form/ConfigForm.php
+@@ -3,7 +3,7 @@
+ namespace Drupal\private_message\Form;
+ 
+ use Drupal\Core\Config\ConfigFactoryInterface;
+-use Drupal\Core\Entity\EntityTypeManagerInterface;
++use Drupal\Core\Config\TypedConfigManagerInterface;
+ use Drupal\Core\Form\ConfigFormBase;
+ use Drupal\Core\Form\FormStateInterface;
+ use Drupal\private_message\PluginManager\PrivateMessageConfigFormManager;
+@@ -29,23 +29,12 @@ class ConfigForm extends ConfigFormBase {
+    */
+   protected $privateMessageConfigFormManager;
+ 
+-  /**
+-   * Constructs a PrivateMessageForm object.
+-   *
+-   * @param \Drupal\Core\Config\ConfigFactoryInterface $configFactory
+-   *   The configuration factory service.
+-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
+-   *   The entity manager service.
+-   * @param \Drupal\private_message\PluginManager\PrivateMessageConfigFormManager $privateMessageConfigFormManager
+-   *   The private message config form plugin manager.
+-   */
+   public function __construct(
+     ConfigFactoryInterface $configFactory,
+-    EntityTypeManagerInterface $entityTypeManager,
++    TypedConfigManagerInterface $typedConfigManager,
+     PrivateMessageConfigFormManager $privateMessageConfigFormManager
+   ) {
+-    parent::__construct($configFactory, $entityTypeManager);
+-
++    parent::__construct($configFactory, $typedConfigManager);
+     $this->privateMessageConfigFormManager = $privateMessageConfigFormManager;
+   }
+ 
+@@ -55,7 +44,7 @@ class ConfigForm extends ConfigFormBase {
+   public static function create(ContainerInterface $container) {
+     return new static(
+       $container->get('config.factory'),
+-      $container->get('entity_type.manager'),
++      $container->get('config.typed'),
+       $container->get('private_message.private_message_config_form_manager')
+     );
+   }
+diff --git a/tests/src/FunctionalJavascript/PrivateMessageJavascriptTest.php b/tests/src/FunctionalJavascript/PrivateMessageJavascriptTest.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..ad362024b41c9ee27c88caf6f2b51cf2694765ff
+--- /dev/null
++++ b/tests/src/FunctionalJavascript/PrivateMessageJavascriptTest.php
+@@ -0,0 +1,284 @@
++<?php
++
++declare(strict_types=1);
++
++namespace Drupal\Tests\private_message\FunctionalJavascript;
++
++use Drupal\FunctionalJavascriptTests\WebDriverTestBase;
++use Drupal\private_message\Entity\PrivateMessage;
++use Drupal\private_message\Entity\PrivateMessageThread;
++
++/**
++ * JS tests for Private Message functionalities.
++ *
++ * @group private_message
++ */
++class PrivateMessageJavascriptTest extends WebDriverTestBase {
++
++  /**
++   * {@inheritdoc}
++   */
++  protected $defaultTheme = 'stark';
++
++  /**
++   * {@inheritdoc}
++   */
++  protected static $modules = ['private_message', 'block'];
++
++  /**
++   * Users used for the test.
++   *
++   * @var \Drupal\Core\Session\AccountInterface[]
++   */
++  private $users;
++
++  /**
++   * {@inheritdoc}
++   */
++  protected function setUp(): void {
++    parent::setUp();
++
++    // Create test users.
++    foreach (['a', 'b', 'c'] as $key) {
++      $this->users[$key] = $this->drupalCreateUser([
++        'use private messaging system',
++        'access user profiles',
++      ]);
++    }
++  }
++
++  /**
++   * Tests message form.
++   */
++  public function testMessageForm(): void {
++    $this->drupalLogin($this->users['a']);
++    $this->drupalGet('/private-message/create');
++
++    // Test autocomplete.
++    $to_field = $this->assertSession()->waitForElement('css', '#thread-members-input');
++    $to_field->setValue($this->users['b']->getDisplayName());
++    $results_element = $this->assertSession()->waitForElementVisible('css', '#pm-members-autocomplete-results-wrapper');
++    $results = $results_element->findAll('css', 'li');
++    $this->assertCount(1, $results);
++    $results[0]->click();
++    $this->assertSession()->elementTextEquals('css', '.private-message-member-display-item .pm-username', $this->users['b']->getDisplayName());
++    $this->getSession()->getPage()->find('css', '.private-message-member-display-item .pm-username-remove-link')->click();
++    $this->assertSession()->elementNotExists('css', '.private-message-member-display-item');
++
++    // Create message.
++    $this->getSession()->getPage()->fillField('To', $this->users['b']->getDisplayName());
++    $this->getSession()->getPage()->fillField('Subject', 'Test Subject');
++    $this->getSession()->getPage()->fillField('Message', 'Test Message');
++    $this->getSession()->getPage()->pressButton('Send');
++
++    $this->assertSession()->addressEquals('private-messages/1');
++    $this->assertSession()->elementTextContains('css', '.private-message-thread-messages', 'Test Message');
++  }
++
++  /**
++   * Tests threads and inbox.
++   */
++  public function testThreadsInbox(): void {
++    $this->drupalPlaceBlock('private_message_inbox_block');
++    $this->drupalLogin($this->users['a']);
++
++    // Create 2 threads.
++    PrivateMessageThread::create([
++      'members' => [$this->users['a'], $this->users['b']],
++      'subject' => $this->getRandomGenerator()->word(10),
++      // Set updated time for threads to be ordered in a predictable way
++      // (sort granularity: seconds).
++      'updated' => \Drupal::time()->getRequestTime() - 3600,
++      'private_messages' => [
++        PrivateMessage::create([
++          'owner' => $this->users['a'],
++          'message' => [
++            'value' => $this->getRandomGenerator()->sentences(5),
++            'format' => 'plain_text',
++          ],
++        ]),
++      ],
++    ])->save();
++
++    PrivateMessageThread::create([
++      'members' => [$this->users['a'], $this->users['c']],
++      'subject' => $this->getRandomGenerator()->word(10),
++      'updated' => \Drupal::time()->getRequestTime(),
++      'private_messages' => [
++        PrivateMessage::create([
++          'owner' => $this->users['a'],
++          'message' => [
++            'value' => $this->getRandomGenerator()->sentences(5),
++            'format' => 'plain_text',
++          ],
++        ]),
++      ],
++    ])->save();
++
++    $threads_map = [
++      1 => $this->users['b'],
++      2 => $this->users['c'],
++    ];
++
++    // Test loading threads by clicking inbox links.
++    $this->drupalGet('/private-messages');
++    foreach ($threads_map as $threadId => $expectedUser) {
++      $this->click("#private-message-thread-$threadId .private-message-inbox-thread-link");
++      $this->assertSession()->assertWaitOnAjaxRequest();
++      $this->assertSession()->elementTextContains('css', '#private-message-page .private-message-recipients article:nth-of-type(1) .username', $expectedUser->getDisplayName());
++    }
++
++    // Test loading threads with JS.
++    $this->drupalGet('/private-messages');
++    foreach ($threads_map as $threadId => $expectedUser) {
++      $this->getSession()->executeScript("Drupal.PrivateMessages.loadThread({$threadId});");
++      $this->assertSession()->assertWaitOnAjaxRequest();
++      $this->assertSession()->elementTextContains('css', '#private-message-page .private-message-recipients article:nth-of-type(1) .username', $expectedUser->getDisplayName());
++    }
++
++    // Test loading new messages with JS.
++    $this->drupalGet('/private-messages/1');
++    $message = PrivateMessage::create([
++      'owner' => $this->users['b'],
++      'message' => [
++        'value' => 'Response from user B',
++        'format' => 'plain_text',
++      ],
++    ]);
++    $message->save();
++    PrivateMessageThread::load(1)->addMessage($message)->save();
++    $this->getSession()->executeScript('Drupal.PrivateMessages.getNewMessages();');
++    $this->assertSession()->assertWaitOnAjaxRequest();
++    $this->assertSession()->elementTextContains('css', '.private-message-thread-messages', 'Response from user B');
++
++    // Test loading old messages with JS (load previous).
++    $thread = PrivateMessageThread::load(1);
++    for ($i = 0; $i < 20; $i++) {
++      $message = PrivateMessage::create([
++        'owner' => $this->users['b'],
++        'message' => [
++          'value' => $this->getRandomGenerator()->sentences(5),
++          'format' => 'plain_text',
++        ],
++      ]);
++      $message->save();
++      $thread->addMessage($message);
++    }
++    $thread->save();
++    $this->drupalGet('/private-messages/1');
++    // Default message_count: 7.
++    $this->assertSession()->elementsCount('css', '.private-message-thread-messages .private-message', 7);
++    $load_previous = $this->assertSession()->elementExists('css', '.private-message-thread-messages #load-previous-messages');
++    $load_previous->click();
++    $this->assertSession()->assertWaitOnAjaxRequest();
++    // Default ajax_previous_load_count: 5.
++    $this->assertSession()->elementsCount('css', '.private-message-thread-messages .private-message', 12);
++
++    // Test loading new thread with JS.
++    $this->drupalGet('/private-messages');
++    PrivateMessageThread::create([
++      'members' => array_values($this->users),
++      'subject' => 'Hi all',
++      'private_messages' => [
++        PrivateMessage::create([
++          'owner' => $this->users['b'],
++          'message' => [
++            'value' => 'Howdy all, I am user B.',
++            'format' => 'plain_text',
++          ],
++        ]),
++      ],
++    ])->save();
++    $this->getSession()->executeScript('Drupal.PrivateMessageInbox.updateInbox();');
++    $this->assertSession()->assertWaitOnAjaxRequest();
++    $this->assertSession()->elementsCount('css', '.block-private-message-inbox-block .private-message-thread', 3);
++    $this->assertSession()->elementTextContains('css', '.block-private-message-inbox-block', 'Howdy all, I am user B.');
++
++    // Test loading old inbox threads with JS (load previous).
++    for ($i = 0; $i<10; $i++) {
++      PrivateMessageThread::create([
++        'members' => array_values($this->users),
++        'subject' => $this->getRandomGenerator()->word(10),
++        // Ensure threads have different timestamps.
++        'updated' => \Drupal::time()->getRequestTime() - 3600 + $i,
++        'private_messages' => [
++          PrivateMessage::create([
++            'owner' => $this->users['b'],
++            'message' => [
++              'value' => $this->getRandomGenerator()->sentences(5),
++              'format' => 'plain_text',
++            ],
++          ]),
++        ],
++      ])->save();
++    }
++    $this->drupalGet('/private-messages');
++    $this->assertSession()->elementsCount('css', '.block-private-message-inbox-block .private-message-thread', 5);
++    $load_previous = $this->assertSession()->elementExists('css', '.block-private-message-inbox-block #load-previous-threads-button');
++    $load_previous->click();
++    $this->assertSession()->assertWaitOnAjaxRequest();
++    $this->assertSession()->elementsCount('css', '.block-private-message-inbox-block .private-message-thread', 10);
++  }
++
++  /**
++   * Tests notifications.
++   */
++  public function testNotifications(): void {
++    PrivateMessageThread::create([
++      'members' => array_values($this->users),
++      'subject' => 'Notification thread 1',
++      'private_messages' => [
++        PrivateMessage::create([
++          'owner' => $this->users['b'],
++          'message' => [
++            'value' => $this->getRandomGenerator()->sentences(5),
++            'format' => 'plain_text',
++          ],
++        ]),
++      ],
++    ])->save();
++
++    // Test count_method: threads.
++    $this->drupalLogin($this->users['a']);
++    $block = $this->drupalPlaceBlock('private_message_notification_block', ['count_method' => 'threads']);
++    $this->drupalGet('<front>');
++    $this->assertSession()->elementTextEquals('css', '.block-private-message-notification-block .unread-threads', '1');
++
++    PrivateMessageThread::create([
++      'members' => array_values($this->users),
++      'subject' => 'Notification thread 2',
++      'private_messages' => [
++        PrivateMessage::create([
++          'owner' => $this->users['b'],
++          'message' => [
++            'value' => $this->getRandomGenerator()->sentences(5),
++            'format' => 'plain_text',
++          ],
++        ]),
++      ],
++    ])->save();
++    $this->getSession()->executeScript('Drupal.PrivateMessageNotificationBlock.getUnreadItemsCount();');
++    $this->assertSession()->assertWaitOnAjaxRequest();
++    $this->assertSession()->elementTextEquals('css', '.block-private-message-notification-block .unread-threads', '2');
++    $block->delete();
++
++    // Test count_method: messages.
++    $block = $this->drupalPlaceBlock('private_message_notification_block', ['count_method' => 'messages']);
++    $this->drupalGet('<front>');
++    $this->assertSession()->elementTextEquals('css', '.block-private-message-notification-block .unread-threads', '2');
++    $message = PrivateMessage::create([
++      'owner' => $this->users['b'],
++      'message' => [
++        'value' => $this->getRandomGenerator()->sentences(5),
++        'format' => 'plain_text',
++      ],
++    ]);
++    $message->save();
++    PrivateMessageThread::load(1)->addMessage($message)->save();
++    $this->getSession()->executeScript('Drupal.PrivateMessageNotificationBlock.getUnreadItemsCount();');
++    $this->assertSession()->assertWaitOnAjaxRequest();
++    $this->assertSession()->elementTextEquals('css', '.block-private-message-notification-block .unread-threads', '3');
++    $block->delete();
++  }
++
++}
