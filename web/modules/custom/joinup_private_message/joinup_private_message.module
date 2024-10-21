@@ -185,15 +185,14 @@ function joinup_private_message_mail(string $key, array &$message, array $params
   if ($key === 'report_message') {
     $recipient = $params['recipient'];
     $sender = $params['sender'];
-    /** @var \Drupal\private_message\Entity\PrivateMessageInterface $bannedMessage */
-    $bannedMessage = $params['message'];
+    /** @var \Drupal\private_message\Entity\PrivateMessageInterface $reportMessage */
+    $reportMessage = $params['message'];
     /** @var \Drupal\private_message\Entity\PrivateMessageThreadInterface $thread */
-    $thread = \Drupal::service('private_message.service')->getThreadFromMessage($bannedMessage);
+    $thread = \Drupal::service('private_message.service')->getThreadFromMessage($reportMessage);
     $params = [
       'subject' => t('User @reporter reported a message', ['@reporter' => $recipient->getDisplayName()]),
       'message' => t(
-          'The user <a href="@reporter_url">@reporter_name</a> has reported user <a href="@sender_url">@sender_name</a> for sending an unwanted message (<a href="@message_url">view message</a>):<br>
-    <h5>Message content: </h5>',
+          'The user <a href="@reporter_url">@reporter_name</a> has reported user <a href="@sender_url">@sender_name</a> for sending an unwanted message (<a href="@message_url">view message</a>):<br><h5>Message content: </h5>',
           [
             '@reporter_name' => $recipient->getDisplayName(),
             '@reporter_url' => Url::fromRoute('entity.user.canonical', ['user' => $recipient->id()], ['absolute' => TRUE])->toString(),
@@ -203,9 +202,9 @@ function joinup_private_message_mail(string $key, array &$message, array $params
               'private_message_thread' => $thread->id(),
             ], [
               'absolute' => TRUE,
-              'fragment' => 'private-message-' . $bannedMessage->id(),
+              'fragment' => 'private-message-' . $reportMessage->id(),
             ])->toString(),
-          ]) . $bannedMessage->get('message')->value,
+          ]) . $reportMessage->get('message')->value,
     ];
     $message['subject'] = $params['subject'];
     $message['body'][] = $params['message'];
