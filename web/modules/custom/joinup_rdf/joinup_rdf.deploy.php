@@ -594,6 +594,11 @@ function joinup_rdf_deploy_200009(): void {
   $db->delete('meta_entity')->condition('id', 5609)->execute();
   $db->delete('meta_entity__count')->condition('entity_id', 5609)->execute();
 
+  // Clean up meta entities that are still pointing to RDF entities, which means
+  // that the target entity was not found in the rdf_sync_uri table, thus, does
+  // not exist.
+  $db->delete('meta_entity')->condition('target__target_id', 'http://data.europa.eu/%', 'LIKE')->execute();
+
   // Fix labels referring RDF entities.
   $sql = <<<SQL
     UPDATE {meta_entity} m
