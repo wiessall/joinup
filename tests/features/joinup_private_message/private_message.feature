@@ -20,7 +20,6 @@ Feature: Private messages
     And I click "New Message"
     Then a modal should open
     When I type "Bob Rolls" in the "Member(s) (value 1)" autocomplete field
-    And I wait for AJAX to finish
     And I pick "Bob Rolls" from the "Member" autocomplete suggestions
     And I fill in "Subject" with "Hello Bob"
     And I enter "This is a private message to Bob." in the "Message" wysiwyg editor
