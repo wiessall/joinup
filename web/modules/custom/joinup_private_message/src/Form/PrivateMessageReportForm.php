@@ -52,7 +52,6 @@ class PrivateMessageReportForm extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state, ?PrivateMessage $private_message = NULL): array {
-
     $form['report'] = [
       '#type' => 'textarea',
       '#title' => $this->t('Report'),
