@@ -59,7 +59,6 @@ class PrivateMessageActions extends FieldPluginBase {
         'weight' => 0,
       ];
 
-
       $build = [
         '#type' => 'operations',
         '#links' => $operations,
