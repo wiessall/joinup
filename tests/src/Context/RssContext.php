@@ -98,7 +98,7 @@ class RssContext extends RawMinkContext {
    *
    * @codingStandardsIgnoreStart
    * Table format:
-   * | title     | link            | description          | publication date                | author        | ... |
+   * | title     | link            | description          | published at                    | author        | ... |
    * | News item | /news/news-item | Content of the news. | Thu, 24 Jan 2019 14:08:09 +0100 | Joinup editor | ... |
    * @codingStandardsIgnoreEnd
    *
@@ -158,7 +158,7 @@ class RssContext extends RawMinkContext {
   protected function massageRssItemData(array $item): array {
     // Translate aliases back to machine names.
     $aliases = [
-      'publication date' => 'pubDate',
+      'published at' => 'pubDate',
       'author' => 'dc:creator',
     ];
 
