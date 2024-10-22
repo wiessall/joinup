@@ -32,6 +32,7 @@ class PrivateMessageMemberWidget extends EntityReferenceAutocompleteWidget {
     $element['target_id']['#selection_handler'] = 'joinup_user_full_name';
     $element['#element_validate'][] = [__CLASS__, 'validateFormElement'];
     $element['target_id']['#title'] = $this->t('To:');
+    $element['target_id']['#attributes']['class'][] = 'js-joinup-private-message-cardinality';
     unset($element['target_id']['#description']);
 
     return $element;
