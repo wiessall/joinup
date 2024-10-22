@@ -38,20 +38,12 @@ content:
     region: content
   message:
     type: text_trimmed
-    label: visually_hidden
+    label: hidden
     settings:
-      trim_length: 200
+      trim_length: 50
     third_party_settings: {  }
     weight: 2
     region: content
-  owner:
-    type: entity_reference_entity_view
-    label: inline
-    settings:
-      view_mode: private_message_author
-      link: false
-    third_party_settings: {  }
-    weight: 0
-    region: content
 hidden:
+  owner: true
   search_api_excerpt: true
