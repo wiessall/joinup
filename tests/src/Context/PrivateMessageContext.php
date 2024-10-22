@@ -396,6 +396,27 @@ class PrivateMessageContext extends RawDrupalContext {
   }
 
   /**
+   * Clicks link in private message area.
+   *
+   * @When I click :linkText link in message :messageText
+   */
+  public function iClickTheLinkInPrivateMessage(string $linkText, string $messageText): void {
+    $messageId = $this->getPrivateMessageIdByMessageText($messageText);
+    $elementId = "private-message-" . $messageId;
+    $element = $this->getSession()->getPage()->find('css', '.private-message-wrapper #' . $elementId);
+
+    if (!$element) {
+      throw new \Exception("Element with id '$elementId' not found");
+    }
+    $link = $element->findLink($linkText);
+
+    if (!$link) {
+      throw new \Exception("Link with text '$linkText' not found in element with id '$elementId'");
+    }
+    $link->click();
+  }
+
+  /**
    * Returns ban Id by owner and target names.
    *
    * @param string $targetName
@@ -424,6 +445,32 @@ class PrivateMessageContext extends RawDrupalContext {
     $ban = reset($result);
 
     return $ban;
+  }
+
+  /**
+   * Returns message Id  message text.
+   *
+   * @param string $messageText
+   *   Message text.
+   *
+   * @return string
+   *   Message id.
+   *
+   * @throws \Exception
+   *   If there is no message, throws exception.
+   */
+  public function getPrivateMessageIdByMessageText(string $messageText): string {
+    $query = \Drupal::entityQuery('private_message')
+      ->accessCheck(FALSE)
+      ->condition('message__value', $messageText)
+      ->range(0, 1);
+    $result = $query->execute();
+    if (empty($result)) {
+      throw new \Exception('There is no message with text: ' . $messageText);
+    }
+    $messageId = reset($result);
+
+    return $messageId;
   }
 
 }
