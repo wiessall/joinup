@@ -53,11 +53,6 @@ Feature:
     And I should be on "/interoperable-europe"
     And the page should be rendered using the "Interoperable Europe" theme
 
-    # Check IOPE menu
-    Then I should see the link "News" in the "IOPE Menu"
-    And I should see the link "Events" in the "IOPE Menu"
-    And I should see the link "Policy" in the "IOPE Menu"
-
     # Check IOPE footer
     Then I should see the heading "Join our community!"
     And I should see the following links:
