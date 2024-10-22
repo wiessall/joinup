@@ -52,7 +52,7 @@ Feature: Private message report page
     And  I should not see "This is message from joan"
     And I should see "This is message from alice"
     When I press the button "Toggle Dropdown" in the "This is message from alice" row
-    Then I click "Delete"
+    Then I click "Delete" in the "This is message from alice" row
     And a modal should open
     And I should see "Are you sure you want to delete the private"
     And I press "Delete" in the "Modal buttons" region

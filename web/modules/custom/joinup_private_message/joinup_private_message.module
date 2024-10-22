@@ -166,10 +166,10 @@ function joinup_private_message_private_message_view_alter(array &$build, Entity
     ];
 
     // Add the button to the entity view array.
-    if (!isset($build['links'])) {
-      $build['links'] = [];
+    if (!isset($build['wrapper']['links'])) {
+      $build['wrapper']['links'] = [];
     }
-    $build['links']['report'] = $report_button;
+    $build['wrapper']['links']['report'] = $report_button;
   }
 }
 
