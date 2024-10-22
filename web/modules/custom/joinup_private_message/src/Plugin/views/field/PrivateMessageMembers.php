@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace Drupal\joinup_private_message\Plugin\views\field;
 
 use Drupal\joinup_private_message\Service\PrivateMessageService;
+//use Drupal\search_api\Plugin\views\ResultRow;
+use Drupal\user\UserInterface;
 use Drupal\views\Plugin\views\field\FieldPluginBase;
-use Drupal\views\ResultRow;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\views\ResultRow;
 
 /**
  * Plugin implementation of the 'private_message_members' field.
@@ -58,9 +60,12 @@ class PrivateMessageMembers extends FieldPluginBase {
    */
   public function render(ResultRow $values) {
     $entity = $values->_entity;
+    $target = $this->privateMessageService->getPrivateMessageTarget($entity);
+    $ownerName = ($entity instanceof UserInterface) ? $entity->getDisplayName() : '';
+    $targetName = ($target instanceof UserInterface) ? $target->getDisplayName() : '';
 
     if ($entity->getEntityTypeId() === 'private_message') {
-      $membersMarkup = '<div>From: ' . $entity->getOwner()->getDisplayName() . '<br>To: ' . $this->privateMessageService->getPrivateMessageTarget($entity)->getDisplayName() . '</div>';
+      $membersMarkup = '<div>From: ' . $ownerName . '<br>To: ' . $targetName . '</div>';
       return [
         '#type' => 'markup',
         '#markup' => $membersMarkup,
