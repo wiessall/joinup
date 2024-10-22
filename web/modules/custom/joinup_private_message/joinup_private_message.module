@@ -142,44 +142,32 @@ function joinup_private_message_private_message_thread_view_alter(array &$build,
  */
 function joinup_private_message_private_message_view_alter(array &$build, EntityInterface $entity): void {
   \assert($entity instanceof PrivateMessage);
-  $user_id = \Drupal::currentUser()->id();
-  // Check if this is the custom entity you want to alter.
-  if ($entity->getOwnerId() !== $user_id) {
+
+  // Display the report link.
+  if ($entity->getOwnerId() !== \Drupal::currentUser()->id()) {
     $report_url = Url::fromRoute('joinup_private_message.report_form', [
       'private_message' => $entity->id(),
     ]);
-
     $report_button = [
       '#type' => 'link',
       '#title' => t('Report'),
       '#url' => $report_url,
-      '#attributes' => [
-        'class' => ['button', 'report-button', 'use-ajax', 'btn', 'btn-primary'],
-        'data-dialog-type' => 'modal',
-        'data-dialog-options' => json_encode([
-          'width' => 'auto',
-          'height' => 'auto',
-        ]),
-      ],
+      '#attributes' => _joinup_private_message_get_ajax_modal_attributes(),
     ];
-
-    // Add the button to the entity view array.
-    if (!isset($build['links'])) {
-      $build['links'] = [];
-    }
     $build['links']['report'] = $report_button;
   }
-}
 
-/**
- * Implements hook_contextual_links_view_alter().
- */
-function joinup_private_message_contextual_links_view_alter(array &$element, array $items): void {
-  if (isset($element['#links']['private-messagedelete'])) {
-    // Open form in a modal.
-    $element['#links']['private-messagedelete']['attributes'] = _joinup_private_message_get_ajax_modal_attributes();
-  }
-
+  // Display the delete link.
+  $delete_url = Url::fromRoute('entity.private_message.delete', [
+    'private_message' => $entity->id(),
+  ]);
+  $build['links']['delete'] = [
+    '#type' => 'link',
+    '#title' => t('Delete'),
+    '#url' => $delete_url,
+    '#attributes' => _joinup_private_message_get_ajax_modal_attributes(),
+  ];
+  unset($build['#contextual_links']);
 }
 
 /**
