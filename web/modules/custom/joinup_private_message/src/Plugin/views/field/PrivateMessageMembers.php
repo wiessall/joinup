@@ -5,11 +5,10 @@ declare(strict_types=1);
 namespace Drupal\joinup_private_message\Plugin\views\field;
 
 use Drupal\joinup_private_message\Service\PrivateMessageService;
-//use Drupal\search_api\Plugin\views\ResultRow;
 use Drupal\user\UserInterface;
 use Drupal\views\Plugin\views\field\FieldPluginBase;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\views\ResultRow;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Plugin implementation of the 'private_message_members' field.
