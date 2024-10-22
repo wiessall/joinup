@@ -14,9 +14,9 @@ Feature: Private message report.
 
     Given I am logged in as "alice_m"
     And I am on "/user/messages"
-    And I click "New Message"
+    And I click "New message"
     Then a modal should open
-    When I type "Bob Rolls" in the "Member(s) (value 1)" autocomplete field
+    When I type "Bob Rolls" in the "To" autocomplete field
     And I wait for AJAX to finish
     And I pick "Bob Rolls" from the "Member" autocomplete suggestions
     And I enter "This is a private message to Bob." in the "Message" wysiwyg editor
