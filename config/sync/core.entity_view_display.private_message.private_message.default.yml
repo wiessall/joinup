@@ -47,7 +47,7 @@ content:
     weight: 1
     region: content
   report:
-    type: string_textarea
+    type: string
     label: inline
     settings: {  }
     third_party_settings: {  }
