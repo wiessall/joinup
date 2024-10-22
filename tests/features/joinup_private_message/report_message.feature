@@ -7,38 +7,34 @@ Feature: Private message report.
   @javascript
   Scenario: Send a private message
     Given users:
-      | Username  | First name | Family name | E-mail                |
-      | alice_m   | Alice      | Miller      | alice.m@example.com   |
-      | bob_rolls | Bob        | Rolls       | bob.rolls@example.com |
-      | joan_tiff | Joan       | Tiff        | joan.tiff@example.com |
+      | Username  | First name | Family name | E-mail                | Roles     |
+      | alice_m   | Alice      | Miller      | alice.m@example.com   |           |
+      | bob_rolls | Bob        | Rolls       | bob.rolls@example.com |           |
+      | joan_tiff | Joan       | Tiff        | joan.tiff@example.com | Moderator |
 
     Given I am logged in as "alice_m"
-    And I am on the homepage
-    And I should see 0 unread private message
     And I am on "/user/messages"
     And I click "New Message"
     Then a modal should open
     When I type "Bob Rolls" in the "Member(s) (value 1)" autocomplete field
     And I wait for AJAX to finish
     And I pick "Bob Rolls" from the "Member" autocomplete suggestions
-    And I fill in "Subject" with "Hello Bob"
     And I enter "This is a private message to Bob." in the "Message" wysiwyg editor
     And I press "Send" in the "Modal buttons" region
     Then the modal should be closed
-    And I should see the heading "Private Messages"
-    And I should see 1 private message
-    Then I should see a private message containing the text "This is a private message to Bob."
+    And I should see a private message containing the text "This is a private message to Bob."
+    And I should not see the link "Report"
 
     When I am logged in as "bob_rolls"
-    And I am on the homepage
-    And I should see 1 unread private message
     And I am on "/user/messages"
     And I should see the heading "Private Messages"
     And I should see the link "Report"
-    Then I click "Report"
-    And a modal should open
-    When I enter "I want to report this message" in the "Report" textarea
+    When I click "Report"
+    Then a modal should open
+    And I should see the text "Report and block sender" in the "Modal title"
+    When I enter "I want to report this message." in the "Report" textarea
     And I check "Also block this sender"
     And I press "Send" in the "Modal content" region
-    And I am on "/user/messages"
+    Then I should see the message "Your report has been sent: I want to report this message."
+    And I should see the message "The user alice_m has been banned."
     And I should not see the link "Report"
