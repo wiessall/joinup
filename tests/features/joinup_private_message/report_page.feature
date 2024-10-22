@@ -12,12 +12,12 @@ Feature: Private message report page
       | joan_tiff | Joan       | Tiff        | joan.tiff@example.com |                    |
 
     Given the following private messages:
-      | owner     | recipient | message |
-      | alice_m   | bob_rolls | This is message from alice |
-      | joan_tiff | bob_rolls | This is message from joan |
+      | owner     | recipient | message                    | report | report_timestamp |
+      | alice_m   | bob_rolls | This is message from alice |        |                  |
+      | joan_tiff | bob_rolls | This is message from joan  | test   | 1729593851       |
 
   @javascript
-  Scenario: Report a private message and display on list of reported messages
+  Scenario: Display, unreport and delete reported private messages
     When I am logged in as "bob_rolls"
     And I am on the homepage
     And I should see 2 unread private message
@@ -41,12 +41,22 @@ Feature: Private message report page
 
     When I am logged in as "alice_m"
     And I am on "/dashboard/private-message-report"
-    Then I should see "This is message from alice"
+    Then I should see "This is message from joan"
     And I should see "Flag as OK"
-    When I click "Flag as OK"
+    When I click "Flag as OK" in the "This is message from joan" row
     And a modal should open
     Then I should see "Flag message as OK?"
     And I press "Confirm" in the "Modal buttons" region
     Then the modal should be closed
     Then I am on "/dashboard/private-message-report"
+    And  I should not see "This is message from joan"
+    And I should see "This is message from alice"
+    When I press the button "Toggle Dropdown" in the "This is message from alice" row
+    Then I click "Delete"
+    And a modal should open
+    And I should see "Are you sure you want to delete the private"
+    And I press "Delete" in the "Modal buttons" region
+    Then the modal should be closed
     And  I should not see "This is message from alice"
+    When I go to "/user/messages"
+    Then  I should not see "This is message from alice"

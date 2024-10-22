@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
+use Behat\Mink\Element\Element;
 use Behat\Mink\Element\NodeElement;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
@@ -33,7 +34,7 @@ class PrivateMessageContext extends RawDrupalContext {
    *   Table format:
    *
    * @code
-   *   | owner   | message | recipient |
+   *   | owner   | message | recipient | report | report_timestamp |
    *   | alice_m | hello   | bob_rolls |
    * @endcode
    *
@@ -67,6 +68,10 @@ class PrivateMessageContext extends RawDrupalContext {
           'format' => 'minimal',
         ],
       ]);
+      if (!empty($values['report']) && !empty($values['report_timestamp'])) {
+        $privateMessage->set('report', $values['report']);
+        $privateMessage->set('report_timestamp', $values['report_timestamp']);
+      }
       $privateMessage->save();
 
       $privateMessageThread->addMessage($privateMessage)->save();
@@ -471,6 +476,49 @@ class PrivateMessageContext extends RawDrupalContext {
     $messageId = reset($result);
 
     return $messageId;
+  }
+
+  /**
+   * Retrieve a table row containing specified text from a given element.
+   *
+   * @param \Behat\Mink\Element\Element $element
+   *   The element.
+   * @param string $search
+   *   The text to search for in the table row.
+   *
+   * @return \Behat\Mink\Element\NodeElement
+   *   The searched element.
+   *
+   * @throws \Exception
+   *
+   * @see \Drupal\DrupalExtension\Context\DrupalContext::getTableRow
+   */
+  public function getTableRow(Element $element, string $search): NodeElement {
+    $rows = $element->findAll('css', 'tr');
+    if (empty($rows)) {
+      throw new \Exception(sprintf('No rows found on the page %s', $this->getSession()->getCurrentUrl()));
+    }
+    foreach ($rows as $row) {
+      if (strpos($row->getText(), $search) !== FALSE) {
+        return $row;
+      }
+    }
+    throw new \Exception(sprintf('Failed to find a row containing "%s" on the page %s', $search, $this->getSession()->getCurrentUrl()));
+  }
+
+  /**
+   * Press button in table row.
+   *
+   * @When I press the button :button in the :text row
+   */
+  public function iPressTheButtonInTheRowContaining($buttonText, $rowText): void {
+    $page = $this->getSession()->getPage();
+    if ($button = $this->getTableRow($page, $rowText)->findButton($buttonText)) {
+      $button->click();
+      return;
+    }
+    throw new \Exception(sprintf('Found a row containing "%s", but no "%s" button on the page %s', $rowText, $buttonText, $this->getSession()->getCurrentUrl()));
+
   }
 
 }
