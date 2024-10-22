@@ -250,12 +250,12 @@ class PrivateMessageContext extends RawDrupalContext {
    */
   public function clickPrivateMessageThread(string $subject): void {
     $messagesContainer = $this->getThreadsContainer();
-    $xpath = '//div[contains(concat(" ", normalize-space(@class), " "), " private-message-inbox ")]//div[text() = "' . $subject . '"]';
+    $xpath = '//div[contains(concat(" ", normalize-space(@class), " "), " private-message-thread-inbox ")]//div[text() = "' . $subject . '"]';
     $threadCard = $messagesContainer->find('xpath', $xpath);
     if (NULL === $threadCard) {
       throw new \Exception('There are currently no thread messages available.');
     }
-    $threadCard->getParent()->getParent()->getParent()
+    $threadCard->getParent()->getParent()
       ->find('css', '.private-message-inbox-thread-link')->click();
   }
 
