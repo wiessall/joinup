@@ -160,6 +160,10 @@ function joinup_private_message_private_message_view_alter(array &$build, Entity
   // Display the delete link.
   $delete_url = Url::fromRoute('entity.private_message.delete', [
     'private_message' => $entity->id(),
+  ], [
+    'query' => [
+      'destination' => Url::fromRoute('private_message.private_message_page')->toString(),
+    ],
   ]);
   $build['links']['delete'] = [
     '#type' => 'link',
