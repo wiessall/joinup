@@ -1,0 +1,15 @@
+{#
+/**
+ * @file
+ * Override of private-message.html.twig to display a private message in Inbox.
+ *
+ * @see joinup_private_message_preprocess_private_message()
+ */
+#}
+<div{{ attributes }}>
+  {{ title_suffix }}
+  <div class="private_message_inbox_content">
+    {{ content.message }}
+    <span class="private_message_created">{{ created }}</span>
+  </div>
+</div>

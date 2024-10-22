@@ -14,21 +14,13 @@ mode: default
 content:
   members:
     type: joinup_private_message_member_widget
-    weight: -3
+    weight: 0
     region: content
     settings:
       match_operator: CONTAINS
       match_limit: 10
-      max_members: 1
       size: 60
       placeholder: ''
     third_party_settings: {  }
-  subject:
-    type: string_textfield
-    weight: -2
-    region: content
-    settings:
-      size: 60
-      placeholder: ''
-    third_party_settings: {  }
-hidden: {  }
+hidden:
+  subject: true
