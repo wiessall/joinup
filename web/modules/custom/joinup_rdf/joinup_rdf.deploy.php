@@ -12,7 +12,7 @@ use Drupal\Core\Language\LanguageInterface;
 /**
  * Add URL alias for a taxonomy term.
  */
-function joinup_rdf_deploy_111326(): void {
+function joinup_rdf_deploy_200000(): void {
   $system_path = '/taxonomy/term/11197';
   $alias_path = '/taxonomy/term/http_e_f_fjoinup_ceu_fontology_ftopic_hstatistics_band_binformatino';
 
