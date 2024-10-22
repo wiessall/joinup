@@ -1,0 +1,17 @@
+diff --git a/src/Form/PrivateMessageForm.php b/src/Form/PrivateMessageForm.php
+index 577d688..a3c65fd 100644
+--- a/src/Form/PrivateMessageForm.php
++++ b/src/Form/PrivateMessageForm.php
+@@ -298,7 +298,11 @@ class PrivateMessageForm extends ContentEntityForm {
+       $form_state->set('pmt_form_display', $form_display);
+       $form_state->set('pmt_entity', $private_message_thread);
+
+-      $form['subject'] = $form_copy['subject'];
++      // Checking if the 'subject' field exists in $form_copy.
++      // If present, copying it to $form['subject'].
++      if (isset($form_copy['subject'])) {
++        $form['subject'] = $form_copy['subject'];
++      }
+       $form['members'] = $form_copy['members'];
+
+       $form['#validate'][] = '::validateMembers';

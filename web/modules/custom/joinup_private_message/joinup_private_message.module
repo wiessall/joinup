@@ -17,6 +17,25 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 
 /**
+ * Implements hook_preprocess_HOOK().
+ */
+function joinup_private_message_preprocess_private_message(&$variables): void {
+  /** @var \Drupal\private_message\Entity\PrivateMessage $private_message */
+  $private_message = $variables['private_message'];
+  if ($variables['view_mode'] === 'inbox') {
+    // Get the created datetime in the right format.
+    $created = (int) $private_message->getCreatedTime();
+    $format = date('Y-m-d') === date('Y-m-d', $created) ? 'H:i' : 'Y-m-d';
+    $variables['created']['#markup'] = date($format, $created);
+  }
+  elseif ($variables['view_mode'] === 'default') {
+    $is_owner = $private_message->getOwnerId() === \Drupal::currentUser()->id();
+    $owner = $is_owner ? t('You') : $private_message->getOwner()->getDisplayName();
+    $variables['owner']['#markup'] = $owner;
+  }
+}
+
+/**
  * Implements hook_form_alter().
  */
 function joinup_private_message_form_alter(array &$form, FormStateInterface $form_state, string $form_id): void {
@@ -63,6 +82,7 @@ function joinup_private_message_form_submit(array &$form, FormStateInterface $fo
 function joinup_private_message_form_private_message_add_form_alter(array &$form): void {
   $current_route_name = \Drupal::routeMatch()->getRouteName();
   if ($current_route_name === 'private_message.private_message_create') {
+    $form['#title'] = t('New message');
     $form['#prefix'] = '<div id="private-message-create-form-wrapper">';
     $form['#suffix'] = '</div>';
 
