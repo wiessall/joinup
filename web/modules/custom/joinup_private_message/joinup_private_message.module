@@ -15,7 +15,6 @@ use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
-use Drupal\private_message\Entity\PrivateMessageThread;
 
 /**
  * Implements hook_preprocess_HOOK().
@@ -23,33 +22,14 @@ use Drupal\private_message\Entity\PrivateMessageThread;
 function joinup_private_message_preprocess_private_message(&$variables): void {
   /** @var \Drupal\private_message\Entity\PrivateMessage $private_message */
   $private_message = $variables['private_message'];
-  $current_user = \Drupal::currentUser();
-
   if ($variables['view_mode'] === 'inbox') {
-    // Get the other member in the conversation.
-    /** @var \Drupal\private_message\Entity\PrivateMessageThreadInterface $thread_id */
-    $thread_id = \Drupal::service('private_message.mapper')
-      ->getThreadIdFromMessage($private_message);
-    $thread = PrivateMessageThread::load($thread_id);
-    $variables['other_member'] = $thread->get('members')->view([
-      'type' => 'private_message_thread_member_formatter',
-      'settings' => [
-        'display_type' => 'entity',
-        'entity_display_mode' => 'private_message_author',
-        'members_prefix' => '',
-        'separator' => '',
-        'prefix_separator' => FALSE,
-        'display_current_user' => FALSE,
-      ],
-    ]);
-
     // Get the created datetime in the right format.
     $created = (int) $private_message->getCreatedTime();
     $format = date('Y-m-d') === date('Y-m-d', $created) ? 'H:i' : 'Y-m-d';
     $variables['created']['#markup'] = date($format, $created);
   }
   elseif ($variables['view_mode'] === 'default') {
-    $is_owner = $private_message->getOwnerId() === $current_user->id();
+    $is_owner = $private_message->getOwnerId() === \Drupal::currentUser()->id();
     $owner = $is_owner ? t('You') : $private_message->getOwner()->getDisplayName();
     $variables['owner']['#markup'] = $owner;
   }
