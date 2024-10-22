@@ -1,6 +1,6 @@
-new_message_thread_script:
+new_message_member_cardinality_one:
   js:
-    js/member_cardinality_one.js: {}
+    js/new_message_member_cardinality_one.js: {}
   dependencies:
     - core/drupal
     - core/once

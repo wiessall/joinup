@@ -28,7 +28,7 @@ class PrivateMessageMemberWidget extends EntityReferenceAutocompleteWidget {
   public function formElement(FieldItemListInterface $items, $delta, array $element, array &$form, FormStateInterface $form_state): array {
     $element = parent::formElement($items, $delta, $element, $form, $form_state);
 
-    $element['#attached']['library'][] = 'joinup_private_message/new_message_thread_script';
+    $element['#attached']['library'][] = 'joinup_private_message/new_message_member_cardinality_one';
     $element['target_id']['#selection_handler'] = 'joinup_user_full_name';
     $element['#element_validate'][] = [__CLASS__, 'validateFormElement'];
     $element['target_id']['#title'] = $this->t('To:');
