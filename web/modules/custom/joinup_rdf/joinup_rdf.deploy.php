@@ -585,19 +585,58 @@ function joinup_rdf_deploy_200008(?array &$sandbox = NULL): string {
 }
 
 /**
- * Meta entity fix.
+ * Restore related solutions.
  */
 function joinup_rdf_deploy_200009(): void {
+  $data = \Drupal::state()->get('joinup_rdf.related_solutions', []);
+  $database = \Drupal::database();
+  $rdf_sync_mapper = \Drupal::getContainer()->get('rdf_sync.mapper');
+  $meta_entity_storage = \Drupal::entityTypeManager()->getStorage('meta_entity');
+
+  foreach ($data as $mid => $related_solutions) {
+    $meta_entity = $meta_entity_storage->load($mid);
+    $solution = $meta_entity->getTargetEntity();
+    ksort($related_solutions);
+    $target_ids = array_map(function ($uri) use ($rdf_sync_mapper) {
+      $entity = $rdf_sync_mapper->getEntityByUri($uri);
+      // Skip invalid references e.g.
+      // http://data.europa.eu/w21/5e74061e-dc4e-4734-a31f-e328b7ab4326.
+      if (!$entity) {
+        return NULL;
+      }
+      return $entity->id();
+    }, $related_solutions);
+
+    // Filter out invalid entries and reset deltas.
+    $target_ids = array_values(array_filter($target_ids));
+    foreach ($target_ids as $delta => $target_id) {
+      $values = [
+        'bundle' => 'node',
+        'deleted' => 0,
+        'entity_id' => $solution->id(),
+        'revision_id' => $solution->getRevisionId(),
+        'langcode' => $solution->language()->getId(),
+        'delta' => $delta,
+        'related_solutions_target_id' => $target_id,
+      ];
+
+      foreach (['node__related_solutions', 'node_revision__related_solutions'] as $table) {
+        $database->insert($table)
+          ->fields(array_keys($values))
+          ->values($values)
+          ->execute();
+      }
+    }
+  }
+
+  \Drupal::state()->delete('joinup_rdf.related_solutions');
+}
+
+/**
+ * Meta entity fix.
+ */
+function joinup_rdf_deploy_200010(): void {
   $db = \Drupal::database();
-
-  // Clear stale data.
-  $db->delete('meta_entity')->condition('id', 5609)->execute();
-  $db->delete('meta_entity__count')->condition('entity_id', 5609)->execute();
-
-  // Clean up meta entities that are still pointing to RDF entities, which means
-  // that the target entity was not found in the rdf_sync_uri table, thus, does
-  // not exist.
-  $db->delete('meta_entity')->condition('target__target_id', 'http://data.europa.eu/%', 'LIKE')->execute();
 
   // Fix labels referring RDF entities.
   $sql = <<<SQL
@@ -609,7 +648,11 @@ function joinup_rdf_deploy_200009(): void {
   $db->query($sql, [], ['allow_delimiter_in_query' => TRUE]);
 
   // Fill the integer version of ID.
-  $db->query("UPDATE {meta_entity} SET target__target_id_int = target__target_id");
+  $db->query("UPDATE {meta_entity} SET target__target_id_int = target__target_id WHERE target__target_id REGEXP '^[0-9]+$'");
+  // Due to a bug in production, some download_count meta entities were not
+  // properly deleted when their distribution was deleted. Delete the invalid
+  // entries.
+  $db->query("DELETE FROM {meta_entity} WHERE target__target_id_int IS NULL AND type = 'download_count'");
 
   // Fix 'rdf entity' ocuurrences in label.
   $db->query("UPDATE meta_entity SET label = REPLACE(label, 'rdf entity (', 'content item (')");
@@ -618,7 +661,7 @@ function joinup_rdf_deploy_200009(): void {
 /**
  * Fix EU OSS Catalogue menu link.
  */
-function joinup_rdf_deploy_200010(): void {
+function joinup_rdf_deploy_200011(): void {
   \Drupal::getContainer()->get('entity.repository')
     ->loadEntityByUuid('menu_link_content', '686904d4-8e5f-4dfd-baea-e4e6c6496984')
     ->save();
@@ -627,7 +670,7 @@ function joinup_rdf_deploy_200010(): void {
 /**
  * Filters in content listings.
  */
-function joinup_rdf_deploy_200011(?array &$sandbox = NULL): void {
+function joinup_rdf_deploy_200012(?array &$sandbox = NULL): void {
   if (!isset($sandbox['tables'])) {
     $sandbox['tables'] = [];
 
@@ -695,59 +738,11 @@ function joinup_rdf_deploy_200011(?array &$sandbox = NULL): void {
 /**
  * Cleanup the simple sitemap calculated data.
  */
-function joinup_rdf_deploy_200012(): void {
+function joinup_rdf_deploy_200013(): void {
   // Sitemap keeps stashed and queued data that might contain data from the
   // removed "rdf_entity" entities.
   \Drupal::keyValue('simple_sitemap')->delete('queue_stashed_results');
   \Drupal::service('queue')->get('simple_sitemap_elements')->deleteQueue();
-}
-
-/**
- * Restore related solutions.
- */
-function joinup_rdf_deploy_200013(): void {
-  $data = \Drupal::state()->get('joinup_rdf.related_solutions', []);
-  $database = \Drupal::database();
-  $rdf_sync_mapper = \Drupal::getContainer()->get('rdf_sync.mapper');
-  $meta_entity_storage = \Drupal::entityTypeManager()->getStorage('meta_entity');
-
-  foreach ($data as $mid => $related_solutions) {
-    $meta_entity = $meta_entity_storage->load($mid);
-    $solution = $meta_entity->getTargetEntity();
-    ksort($related_solutions);
-    $target_ids = array_map(function ($uri) use ($rdf_sync_mapper) {
-      $entity = $rdf_sync_mapper->getEntityByUri($uri);
-      // Skip invalid references e.g.
-      // http://data.europa.eu/w21/5e74061e-dc4e-4734-a31f-e328b7ab4326.
-      if (!$entity) {
-        return NULL;
-      }
-      return $entity->id();
-    }, $related_solutions);
-
-    // Filter out invalid entries and reset deltas.
-    $target_ids = array_values(array_filter($target_ids));
-    foreach ($target_ids as $delta => $target_id) {
-      $values = [
-        'bundle' => 'node',
-        'deleted' => 0,
-        'entity_id' => $solution->id(),
-        'revision_id' => $solution->getRevisionId(),
-        'langcode' => $solution->language()->getId(),
-        'delta' => $delta,
-        'related_solutions_target_id' => $target_id,
-      ];
-
-      foreach (['node__related_solutions', 'node_revision__related_solutions'] as $table) {
-        $database->insert($table)
-          ->fields(array_keys($values))
-          ->values($values)
-          ->execute();
-      }
-    }
-  }
-
-  \Drupal::state()->delete('joinup_rdf.related_solutions');
 }
 
 /**
