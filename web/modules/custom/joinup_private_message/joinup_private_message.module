@@ -238,7 +238,7 @@ function joinup_private_message_entity_base_field_info(EntityTypeInterface $enti
       ])
       ->setDisplayOptions('view', [
         'label' => 'inline',
-        'type' => 'string_textarea',
+        'type' => 'string',
         'weight' => 0,
       ])
       ->setDisplayConfigurable('view', TRUE);
