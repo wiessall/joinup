@@ -1,0 +1,22 @@
+uuid: 8eaf4036-0841-4e1b-8414-0151f3abc4b2
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.message.announcement.body
+    - field.field.message.announcement.group
+    - field.field.message.announcement.professional_domain
+    - field.field.message.announcement.state
+    - field.field.message.announcement.subject
+    - message.template.announcement
+id: message.announcement.default
+targetEntityType: message
+bundle: announcement
+mode: default
+content: {  }
+hidden:
+  body: true
+  group: true
+  professional_domain: true
+  state: true
+  subject: true

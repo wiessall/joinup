@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Drupal\Tests\eu_oss_catalogue\Kernel;
 
 use Drupal\Component\Datetime\TimeInterface;
+use Drupal\Core\Queue\QueueFactory;
+use Drupal\Core\Queue\QueueInterface;
 use Drupal\KernelTests\KernelTestBase;
 
 /**
@@ -30,6 +32,7 @@ class CronTimingTest extends KernelTestBase {
   protected function setUp(): void {
     parent::setUp();
     $this->installSchema('dblog', ['watchdog']);
+    date_default_timezone_set('UTC');
   }
 
   /**
@@ -38,7 +41,7 @@ class CronTimingTest extends KernelTestBase {
   public function testCronPeriodicalTask(): void {
     $state = \Drupal::state();
     $cron = \Drupal::service('cron');
-    $today = strtotime(date('Y-m-d', time()) . ' 2:00:00');
+    $today = (new \DateTime('now'))->setTime(2, 0)->getTimestamp();
 
     // Given the "eu_oss_catalogue_cron" job has run 0 times.
     $this->assertEquals(0, $this->getJobRunCount('eu_oss_catalogue_cron'));
@@ -59,18 +62,35 @@ class CronTimingTest extends KernelTestBase {
     $this->assertEquals($today, $state->get('eu_oss_catalogue.last_check'));
 
     // Mock the DrupalDateTime class to return a fixed date in the future.
-    $future_timestamp = time() + (2 * 24 * 60 * 60);
+    $future_timestamp = new \DateTime('+2 days');
     $mocked_time = $this->createMock(TimeInterface::class);
-    $mocked_time->method('getRequestTime')->willReturn($future_timestamp);
+    $mocked_time
+      ->expects($this->any())
+      ->method('getRequestTime')
+      ->willReturn($future_timestamp->getTimestamp());
     // When 1 day and 1 minute passes
     // Replace the real DrupalDateTime class with the mocked one.
     $this->container->set('datetime.time', $mocked_time);
+
+    // Mock queue to check if correct arguments were provided.
+    $mock_queue = $this->createMock(QueueInterface::class);
+    $mock_queue->expects($this->once())
+      ->method('createQueue');
+    $mock_queue->expects($this->any())
+      ->method('createItem');
+    $this->container->set('queue', $mock_queue);
+    $queue_factory = $this->createMock(QueueFactory::class);
+    $queue_factory->expects($this->any())
+      ->method('get')
+      ->with('eu_oss_catalogue_fetcher')
+      ->willReturn($mock_queue);
+    $this->container->set('queue', $queue_factory);
 
     // And I run cron.
     $cron->run();
 
     $this->assertEquals(
-      strtotime(date('Y-m-d', $future_timestamp) . ' 2:00:00'),
+      $future_timestamp->setTime(2, 0)->getTimestamp(),
       $state->get('eu_oss_catalogue.last_check')
     );
     // Then the "eu_oss_catalogue_cron" job has run 2 times.

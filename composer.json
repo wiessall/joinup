@@ -27,12 +27,11 @@
         "drupal/changed_fields": "^3.2",
         "drupal/colorbox": "^2.0",
         "drupal/config_ignore": "^3.0",
-        "drupal/config_readonly": "^1.0",
-        "drupal/core": "~10.3.0",
+        "drupal/core": "^10.3",
         "drupal/core-composer-scaffold": "~10.3.0",
         "drupal/custom_markup_block": "^1.2",
         "drupal/default_content": "^2.0",
-        "drupal/diff": "~1.0",
+        "drupal/diff": "^1.8",
         "drupal/digital_size_formatter": "~2.0",
         "drupal/dropsolid_purge": "^1.0@beta",
         "drupal/dynamic_entity_reference": "^4.0",
@@ -197,6 +196,12 @@
             "php-http/discovery": true,
             "ec-europa/toolkit-composer-plugin": true,
             "phpro/grumphp-shim": true
+        },
+        "audit": {
+            "abandoned": "report",
+            "ignore": {
+                "CVE-2024-45440": "Seems to be a disputed report @see https://www.drupal.org/i/3471501#comment-15756190"
+            }
         }
     },
     "autoload": {
@@ -312,7 +317,6 @@
                 "Allow making the file description a required field @see https://www.drupal.org/node/2320877": "resources/patch/php/drupal/core/2320877-10.3.x-115.diff",
                 "Delete should not be the default action on /admin/content @see https://www.drupal.org/project/drupal/issues/2381293": "resources/patch/php/drupal/core/2381293-10.3.x-240.patch",
                 "Upcast named arguments/named parameters in views @see https://www.drupal.org/project/drupal/issues/2528166": "resources/patch/php/drupal/core/2528166.patch",
-                "Confirmation cancel links are incorrect if installed in a subdirectory @see https://www.drupal.org/project/drupal/issues/2582295": "resources/patch/php/drupal/core/2582295.patch",
                 "Enlarge file_usage entity ID length. @see https://www.drupal.org/node/2675600": "resources/patch/php/drupal/core/2675600.diff",
                 "Allow plurals on bundle labels @see https://www.drupal.org/i/2765065": "resources/patch/php/drupal/core/2765065-10.3.x-155.diff",
                 "Add thread depth configuration to comments. Includes patch for parent issue #2879087. @see https://www.drupal.org/i/2786587 @see https://www.drupal.org/i/2879087": "resources/patch/php/drupal/core/2879087.patch",
@@ -361,7 +365,8 @@
                 "Facet Summary for Facet Items with a set dependency. @see https://www.drupal.org/i/2873480": "resources/patch/php/drupal/facets/2873480.patch",
                 "Add 0 option in 'Soft limit' and apply soft limit to facet root li tags and add. @see https://www.drupal.org/i/3208580 and https://www.drupal.org/i/3307082": "resources/patch/php/drupal/facets/3208580-and-3307082.patch",
                 "Config validation error for facets_processor.* @see https://www.drupal.org/project/facets/issues/3459093": "resources/patch/php/drupal/facets/3459093.patch",
-                "Fix FacetsHierarchy config schema issue @see https://www.drupal.org/project/facets/issues/3259836": "resources/patch/php/drupal/facets/3259836-8.patch"
+                "Fix FacetsHierarchy config schema issue @see https://www.drupal.org/project/facets/issues/3259836": "resources/patch/php/drupal/facets/3259836-8.patch",
+                "Facets - Critical - Cross Site Scripting - SA-CONTRIB-2024-047 @see https://www.drupal.org/sa-contrib-2024-047": "resources/patch/php/drupal/facets/sa-contrib-2024-047.patch"
             },
             "drupal/field_delimiter": {
                 "Doesn't work in layout builder. @see https://www.drupal.org/i/3099580": "resources/patch/php/drupal/field_delimiter/3099580.patch",
@@ -451,8 +456,7 @@
             },
             "drupal/svg_image": {
                 "SVG is not valid or cannot be sanitized, return an error. @see https://www.drupal.org/i/3350696": "resources/patch/php/drupal/svg_image/3350696.patch",
-                "SvgImageWidget should inherit from ImageWidget instead of FileWidget @see https://www.drupal.org/project/svg_image/issues/3420037": "resources/patch/php/drupal/svg_image/3420037.patch",
-                "The 'image_loading' attribute is not respected - https://www.drupal.org/project/svg_image/issues/3275057": "resources/patch/php/drupal/svg_image/3275057-14.patch"
+                "The 'image_loading' attribute is not respected - https://www.drupal.org/project/svg_image/issues/3275057": "resources/patch/php/drupal/svg_image/3275057.patch"
             },
             "drupal/stage_file_proxy": {
                 "Fetching does not respect use_imagecache_root when using converted webp image styles @see https://www.drupal.org/i/3402972": "resources/patch/php/drupal/stage_file_proxy/stage_file_proxy-3402972-MR-28f616d8--without-method.diff"
@@ -495,12 +499,6 @@
                     "type": "zip"
                 }
             }
-        },
-        "phpstan": {
-            "includes": [
-                "vendor/mglaman/phpstan-drupal/extension.neon",
-                "vendor/phpstan/phpstan-deprecation-rules/rules.neon"
-            ]
         },
         "grumphp": {
             "disable-plugin": true
