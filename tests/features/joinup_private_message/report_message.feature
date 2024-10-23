@@ -22,20 +22,33 @@ Feature: Private message report.
     And I enter "This is a mean message to Bob." in the "Message" wysiwyg editor
     And I press "Send" in the "Modal buttons" region
     Then the modal should be closed
-    And I should see a private message containing the text "This is a mean message to Bob."
+    And a message containing the text "This is a mean message to Bob." should be present
     And I should not see the link "Report"
 
     When I am logged in as "bob_rolls"
     And I am on "/user/messages"
+    And a message containing the text "This is a mean message to Bob." should be present
     When I click "Report"
     Then a modal should open
     And I should see the text "Report and block sender" in the "Modal title"
     When I fill in "Report" with "I want to report this message."
     And I check "Also block this sender"
     And I press "Send" in the "Modal content" region
-    Then I should see the message "Your report has been sent: I want to report this message."
+    Then the modal should be closed
+    And I should see the message "Your report has been sent: I want to report this message."
     And I should see the message "The user alice_m has been banned."
+    And a message containing the text "This is a mean message to Bob." should not be present
     And I should not see the link "Report"
     And the email sent to "joan.tiff@example.com" with subject "User Bob Rolls reported a message" contains the text:
       | The user Bob Rolls has reported user Alice Miller for sending an unwanted message (view message): |
-      | This is a mean message to Bob.
+      | This is a mean message to Bob.                                                                    |
+
+    When I am on "/user/messages/settings"
+    And I click "Unblock"
+    Then a modal should open
+    And I should see the text "Are you sure you want to unblock user Alice Miller?" in the "Modal title"
+    And I should see the button "Confirm"
+    # @todo make this test pass, now it results in a javascript error.
+    # When I press "Confirm" in the "Modal content" region
+    # Then the modal should be closed
+    # And a message containing the text "This is a mean message to Bob." should be present
