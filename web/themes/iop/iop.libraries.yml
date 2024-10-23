@@ -8,8 +8,9 @@ components:
     - iop/components.js
 
 components.js:
+  header: true
   js:
-    assets/js/oe-bcl-joinup.bundle.min.js: { minified: true }
+    assets/js/oe-bcl-joinup.bundle.min.js: { minified: true, attributes: { defer: true } }
   dependencies:
     - core/drupal
 
@@ -77,10 +78,9 @@ paragraph__carousel:
     - iop/paragraph__carousel.js
 
 paragraph__carousel.js:
+  header: true
   js:
-    assets/js/glide.min.js: { minified: true  }
-  dependencies:
-    - core/drupal
+    assets/js/glide.min.js: { minified: true, attributes: { defer: true }  }
 
 paragraph__image:
   css:
