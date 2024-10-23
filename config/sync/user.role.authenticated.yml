@@ -15,7 +15,7 @@ dependencies:
     - filter.format.webform_default
     - media.type.file
     - media.type.image
-    - media.type.video
+    - media.type.remote_video
     - node.type.contact_information
     - node.type.custom_page
     - node.type.discussion
@@ -49,7 +49,6 @@ dependencies:
     - state_machine_permissions
     - system
     - tour
-    - video_embed_field
 id: authenticated
 label: 'Authenticated user'
 weight: -8
@@ -92,7 +91,7 @@ permissions:
   - 'create paragraph content tiles'
   - 'create paragraph content video'
   - 'create polls'
-  - 'create video media'
+  - 'create remote_video media'
   - 'delete own comments'
   - 'delete paragraph content accordion'
   - 'delete paragraph content accordion_item'
@@ -131,7 +130,6 @@ permissions:
   - 'flag subscribe_discussions'
   - 'legal re-accept legal_notice'
   - 'legal view legal_notice'
-  - 'never autoplay videos'
   - 'perform collection_workflow workflow draft transition on own entity'
   - 'perform collection_workflow workflow propose transition on own entity'
   - 'perform contact_information_workflow workflow propose_changes transition on own entity'
