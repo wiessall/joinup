@@ -1,0 +1,37 @@
+uuid: 62bf09fd-f81b-4e84-8d95-2eea691ddb8a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.media.remote_video.media_oembed_video
+    - field.field.media.remote_video.og_audience
+    - media.type.remote_video
+  module:
+    - media
+    - template_suggestion
+id: media.remote_video.default
+targetEntityType: media
+bundle: remote_video
+mode: default
+content:
+  media_oembed_video:
+    type: oembed
+    label: visually_hidden
+    settings:
+      max_width: 854
+      max_height: 480
+      loading:
+        attribute: lazy
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: iframe_ratio_16x9
+    weight: 0
+    region: content
+hidden:
+  created: true
+  langcode: true
+  name: true
+  og_audience: true
+  search_api_excerpt: true
+  thumbnail: true
+  uid: true

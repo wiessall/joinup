@@ -53,8 +53,8 @@ Feature: Editing collections
     And I click "Edit" in the "Entity actions" region
     And I press the button "Insert Media" in the "Description" wysiwyg editor
     And a modal should open
-    And I click "Video"
-    When I fill in "Add Video URL" with "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+    And I click "Remote video"
+    When I fill in "Add Remote video via URL" with "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
     And I press "Add"
     Then I press "Save" in the "Modal buttons" region
     And I press "Insert selected" in the "Modal buttons" region
