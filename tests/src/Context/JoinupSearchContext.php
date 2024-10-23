@@ -15,7 +15,6 @@ use Drupal\joinup\Traits\KeyboardInteractionTrait;
 use Drupal\joinup\Traits\SearchTrait;
 use Drupal\joinup\Traits\TraversingTrait;
 use Drupal\joinup\Traits\UtilityTrait;
-use Drupal\joinup_test\EventSubscriber\SearchApiFinishRequestSubscriber;
 use PHPUnit\Framework\Assert;
 
 /**
@@ -35,24 +34,6 @@ class JoinupSearchContext extends RawDrupalContext {
    * Path to the search box dropdown element.
    */
   protected const SEARCH_BOX_DROPDOWN = '.joinup-navbar button#search-box-dropdown.dropdown-toggle';
-
-  /**
-   * Enable search_api indexing on finish request.
-   *
-   * @BeforeScenario
-   */
-  public function beforeScenarioFinishIndexing(): void {
-    \Drupal::state()->set(SearchApiFinishRequestSubscriber::STATE_KEY, TRUE);
-  }
-
-  /**
-   * Disable search_api indexing on finish request.
-   *
-   * @AfterScenario
-   */
-  public function afterScenarioFinishIndexing(): void {
-    \Drupal::state()->delete(SearchApiFinishRequestSubscriber::STATE_KEY);
-  }
 
   /**
    * Forces the indexing of new or changed content after each step.
