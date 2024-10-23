@@ -41,7 +41,10 @@ Feature: Private message report.
     And I should not see the link "Report"
     And the email sent to "joan.tiff@example.com" with subject "User Bob Rolls reported a message" contains the text:
       | The user Bob Rolls has reported user Alice Miller for sending an unwanted message (view message): |
+      | Message content:                                                                                  |
       | This is a mean message to Bob.                                                                    |
+      | Report reason:                                                                                    |
+      | I want to report this message.                                                                    |
 
     When I am on "/user/messages/settings"
     And I click "Unblock"

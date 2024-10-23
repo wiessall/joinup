@@ -200,32 +200,33 @@ function _joinup_private_message_get_ajax_modal_attributes(): array {
  * Implements hook_mail().
  */
 function joinup_private_message_mail(string $key, array &$message, array $params): void {
+  // @see \Drupal\joinup_private_message\Form\PrivateMessageReportForm::submitForm()
   if ($key === 'report_message') {
     $recipient = $params['recipient'];
     $sender = $params['sender'];
+    $report = $params['report'];
     /** @var \Drupal\private_message\Entity\PrivateMessageInterface $reportMessage */
     $reportMessage = $params['message'];
     /** @var \Drupal\private_message\Entity\PrivateMessageThreadInterface $thread */
     $thread = \Drupal::service('private_message.service')->getThreadFromMessage($reportMessage);
-    $params = [
-      'subject' => t('User @reporter reported a message', ['@reporter' => $recipient->getDisplayName()]),
-      'message' => t(
-          'The user <a href="@reporter_url">@reporter_name</a> has reported user <a href="@sender_url">@sender_name</a> for sending an unwanted message (<a href="@message_url">view message</a>):<br><h5>Message content: </h5>',
-          [
-            '@reporter_name' => $recipient->getDisplayName(),
-            '@reporter_url' => Url::fromRoute('entity.user.canonical', ['user' => $recipient->id()], ['absolute' => TRUE])->toString(),
-            '@sender_name' => $sender->getDisplayName(),
-            '@sender_url' => Url::fromRoute('entity.user.canonical', ['user' => $sender->id()], ['absolute' => TRUE])->toString(),
-            '@message_url' => Url::fromRoute('entity.private_message_thread.canonical', [
-              'private_message_thread' => $thread->id(),
-            ], [
-              'absolute' => TRUE,
-              'fragment' => 'private-message-' . $reportMessage->id(),
-            ])->toString(),
-          ]) . $reportMessage->get('message')->value,
+    $message['subject'] = t('User @reporter reported a message', ['@reporter' => $recipient->getDisplayName()]);
+    $message['body'] = [
+      t('The user <a href="@reporter_url">@reporter_name</a> has reported user <a href="@sender_url">@sender_name</a> for sending an unwanted message (<a href="@message_url">view message</a>):',
+        [
+          '@reporter_name' => $recipient->getDisplayName(),
+          '@reporter_url' => Url::fromRoute('entity.user.canonical', ['user' => $recipient->id()], ['absolute' => TRUE])->toString(),
+          '@sender_name' => $sender->getDisplayName(),
+          '@sender_url' => Url::fromRoute('entity.user.canonical', ['user' => $sender->id()], ['absolute' => TRUE])->toString(),
+          '@message_url' => Url::fromRoute('entity.private_message_thread.canonical', [
+            'private_message_thread' => $thread->id(),
+          ], [
+            'absolute' => TRUE,
+            'fragment' => 'private-message-' . $reportMessage->id(),
+          ])->toString(),
+        ]),
+      t('<br><h5>Message content: </h5>@report_content', ['@report_content' => $reportMessage->get('message')->value]),
+      t('<br><h5>Report reason: </h5>@report_reason', ['@report_reason' => $report]),
     ];
-    $message['subject'] = $params['subject'];
-    $message['body'][] = $params['message'];
     $message['headers']['Content-Type'] = SymfonyMailer::FORMAT_HTML;
   }
 }
