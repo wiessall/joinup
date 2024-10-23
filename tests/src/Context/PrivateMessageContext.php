@@ -372,20 +372,6 @@ class PrivateMessageContext extends RawDrupalContext {
   }
 
   /**
-   * Enters the given text in the give textarea.
-   *
-   * @param string $text
-   *   The text to be entered in the WYSIWYG editor.
-   * @param string $label
-   *   The label of the field containing the WYSIWYG editor.
-   *
-   * @When I enter :text in the :label textarea
-   */
-  public function iEnterTextInTextArea(string $text, string $label): void {
-    $this->getSession()->getPage()->fillField($label, $text);
-  }
-
-  /**
    * Opens url to unblock user with private message ban param.
    *
    * @When I go to the unblock page to unblock user :target banned by :owner
