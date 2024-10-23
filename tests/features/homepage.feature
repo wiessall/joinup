@@ -38,7 +38,7 @@ Feature: Homepage
     Given collection content:
       | title             | state     |
       | Shaping of nature | published |
-    And the following "Video" media:
+    And the following "Remote video" media:
       | name      | video                                       | group             | uuid                                 |
       | The Video | https://www.youtube.com/watch?v=C0DPdy98e4c | Shaping of nature | 32b3beae-2218-11ee-be56-0242ac120002 |
     And news content:

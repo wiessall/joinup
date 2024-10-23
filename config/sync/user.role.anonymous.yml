@@ -24,7 +24,6 @@ dependencies:
     - sparql_endpoint
     - system
     - tour
-    - video_embed_field
 id: anonymous
 label: 'Anonymous user'
 weight: -9
@@ -37,7 +36,6 @@ permissions:
   - 'access tour'
   - 'access user profiles'
   - 'legal view legal_notice'
-  - 'never autoplay videos'
   - 'sparql endpoint query'
   - 'use search_api_autocomplete for search'
   - 'use search_api_autocomplete for search_oss_catalogue'
