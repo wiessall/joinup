@@ -94,12 +94,13 @@ class PrivateMessageReportForm extends FormBase {
   public function submitForm(array &$form, FormStateInterface $form_state): void {
     $report = $form_state->getValue('report');
     $blockSender = $form_state->getValue('block_sender');
-    $message = $form['private_message']['#value'];
+    $message = $form_state->getValue('private_message');
     $sender = $message->getOwner();
     $params = [
       'sender' => $sender,
       'recipient' => $this->currentUser(),
       'message' => $message,
+      'report' => $report,
     ];
     $moderators = $this->entityTypeManager->getStorage('user')->loadByProperties(['roles' => 'moderator']);
     // Send the email.
