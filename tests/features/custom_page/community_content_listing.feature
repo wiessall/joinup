@@ -576,8 +576,8 @@ Feature:
       | Black Noise        | Nintendo64 | published |
 
     And custom_page content:
-      | title | collection | state     |
-      | Bikes | Nintendo64 | published |
+      | title | collection | state     | abstract |
+      | Bikes | Nintendo64 | published | N/A      |
 
     And I am logged in as jimmy7892
     And I go to the edit form of the "Bikes" "custom page"
