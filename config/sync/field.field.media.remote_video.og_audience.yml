@@ -1,0 +1,28 @@
+uuid: baff7b9a-682a-4942-99ae-bbbb467c8ddb
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.media.og_audience
+    - media.type.remote_video
+    - node.type.collection
+    - node.type.solution
+  module:
+    - og
+id: media.remote_video.og_audience
+field_name: og_audience
+entity_type: media
+bundle: remote_video
+label: Group
+description: 'Collection/Solution where this media file belongs.'
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      collection: collection
+      solution: solution
+field_type: og_standard_reference

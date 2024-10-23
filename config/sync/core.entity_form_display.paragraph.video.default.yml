@@ -3,20 +3,28 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.field.paragraph.video.paragraph_video_url
+    - core.entity_form_mode.media.media_video_url
+    - field.field.paragraph.video.remote_video
     - paragraphs.paragraphs_type.video
   module:
-    - video_embed_field
+    - joinup_media
 id: paragraph.video.default
 targetEntityType: paragraph
 bundle: video
 mode: default
 content:
-  paragraph_video_url:
-    type: video_embed_field_textfield
-    weight: 0
+  remote_video:
+    type: joinup_media_video_url
+    weight: 1
     region: content
-    settings: {  }
+    settings:
+      form_mode: media_video_url
+      override_labels: false
+      label_singular: ''
+      label_plural: ''
+      collapsible: false
+      collapsed: false
+      revision: false
     third_party_settings: {  }
 hidden:
   created: true
