@@ -495,25 +495,7 @@ display:
         - 'url.query_args:sort_by'
         - user
         - user.permissions
-      tags:
-        - 'config:core.entity_view_display.media.collection_logo.default'
-        - 'config:core.entity_view_display.media.collection_logo.media_library'
-        - 'config:core.entity_view_display.media.discussion_logo.default'
-        - 'config:core.entity_view_display.media.event_logo.default'
-        - 'config:core.entity_view_display.media.event_logo.media_library'
-        - 'config:core.entity_view_display.media.file.default'
-        - 'config:core.entity_view_display.media.file.media_library'
-        - 'config:core.entity_view_display.media.image.default'
-        - 'config:core.entity_view_display.media.image.media_library'
-        - 'config:core.entity_view_display.media.image.media_library_full_width'
-        - 'config:core.entity_view_display.media.image.media_library_half_width'
-        - 'config:core.entity_view_display.media.image.media_library_one_third_width'
-        - 'config:core.entity_view_display.media.news_logo.default'
-        - 'config:core.entity_view_display.media.news_logo.media_library'
-        - 'config:core.entity_view_display.media.solution_logo.default'
-        - 'config:core.entity_view_display.media.solution_logo.media_library'
-        - 'config:core.entity_view_display.media.video.default'
-        - 'config:core.entity_view_display.media.video.media_library'
+      tags: {  }
   page:
     id: page
     display_title: Page
@@ -818,25 +800,7 @@ display:
         - 'url.query_args:sort_by'
         - user
         - user.permissions
-      tags:
-        - 'config:core.entity_view_display.media.collection_logo.default'
-        - 'config:core.entity_view_display.media.collection_logo.media_library'
-        - 'config:core.entity_view_display.media.discussion_logo.default'
-        - 'config:core.entity_view_display.media.event_logo.default'
-        - 'config:core.entity_view_display.media.event_logo.media_library'
-        - 'config:core.entity_view_display.media.file.default'
-        - 'config:core.entity_view_display.media.file.media_library'
-        - 'config:core.entity_view_display.media.image.default'
-        - 'config:core.entity_view_display.media.image.media_library'
-        - 'config:core.entity_view_display.media.image.media_library_full_width'
-        - 'config:core.entity_view_display.media.image.media_library_half_width'
-        - 'config:core.entity_view_display.media.image.media_library_one_third_width'
-        - 'config:core.entity_view_display.media.news_logo.default'
-        - 'config:core.entity_view_display.media.news_logo.media_library'
-        - 'config:core.entity_view_display.media.solution_logo.default'
-        - 'config:core.entity_view_display.media.solution_logo.media_library'
-        - 'config:core.entity_view_display.media.video.default'
-        - 'config:core.entity_view_display.media.video.media_library'
+      tags: {  }
   widget:
     id: widget
     display_title: Widget

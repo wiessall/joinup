@@ -3,9 +3,3 @@ description: Provides video functionality
 type: module
 package: Joinup
 core_version_requirement: ">= 9.4"
-
-dependencies:
-  - joinup:joinup_community_content
-  - og:og
-  - smart_trim:smart_trim
-  - video_embed_media:video_embed_media

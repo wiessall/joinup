@@ -5,7 +5,7 @@
   }
 
   // Dirty hack to make videos responsive and half width.
-  figure:has(.media-video),
+  .drupal-media:has(.media-video),
   .media-video {
     width: 100%;
     max-width: 648px;
