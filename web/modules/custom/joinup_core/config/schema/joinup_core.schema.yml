@@ -207,3 +207,12 @@ block.settings.entity_unpublished:
 entity_reference_selection.grouped_taxonomy_term_selection:
   type: entity_reference_selection.default
   label: 'Grouped taxonomy term selection handler settings'
+
+filter_settings.joinup_iframe:
+  type: filter
+  label: 'Joinup iframe filter'
+  mapping:
+    allowed_domains:
+      type: sequence
+      sequence:
+        type: string
