@@ -60,7 +60,7 @@ Feature: User authentication
       | media/add/image                                     |
       | media/add/news_logo                                 |
       | media/add/solution_logo                             |
-      | media/add/video                                     |
+      | media/add/remote_video                              |
       | node/add                                            |
       | node/add/collection                                 |
       | node/add/contact_information                        |
@@ -148,7 +148,7 @@ Feature: User authentication
       | media/add/image                                     |
       | media/add/news_logo                                 |
       | media/add/solution_logo                             |
-      | media/add/video                                     |
+      | media/add/remote_video                              |
       | node/add                                            |
       | node/add/collection                                 |
       | node/add/contact_information                        |
@@ -211,7 +211,7 @@ Feature: User authentication
       | media/add/image                             |
       | media/add/news_logo                         |
       | media/add/solution_logo                     |
-      | media/add/video                             |
+      | media/add/remote_video                      |
       | outdated-content-threshold                  |
       | propose/collection                          |
 

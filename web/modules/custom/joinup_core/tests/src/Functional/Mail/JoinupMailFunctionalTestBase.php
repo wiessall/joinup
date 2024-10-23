@@ -51,7 +51,6 @@ abstract class JoinupMailFunctionalTestBase extends BrowserTestBase {
     'joinup_media',
     'joinup_notification',
     'joinup_test_time',
-    'joinup_video',
     'joinup_workflow',
     'layout_builder',
     'linkit',

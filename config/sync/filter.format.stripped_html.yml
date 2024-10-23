@@ -8,7 +8,6 @@ dependencies:
     - editor
     - embed_block
     - image
-    - joinup_video
     - linkit
     - markdown_easy
     - media
@@ -116,24 +115,6 @@ filters:
     weight: -42
     settings:
       filter_url_length: 72
-  joinup_video:
-    id: joinup_video
-    provider: joinup_video
-    status: false
-    weight: -40
-    settings:
-      allowed_providers:
-        joinup_ec_video: 0
-        internal_path: 0
-        google_docs: 0
-        joinup_ec_webcast_video: 0
-        prezi: 0
-        slideshare: 0
-        vimeo: 0
-        youtube: 0
-        youtube_playlist: 0
-      autoplay: false
-      responsive: true
   linkit:
     id: linkit
     provider: linkit

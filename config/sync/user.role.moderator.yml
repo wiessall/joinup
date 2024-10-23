@@ -13,7 +13,6 @@ dependencies:
     - media.type.event_logo
     - media.type.news_logo
     - media.type.solution_logo
-    - media.type.video
     - node.type.collection
     - node.type.contact_information
     - node.type.custom_page
@@ -148,7 +147,6 @@ permissions:
   - 'create paragraph content webform'
   - 'create release content'
   - 'create solution_logo media'
-  - 'create video media'
   - 'create webform'
   - 'delete all sitewide alert revisions'
   - 'delete any collection_logo media'
