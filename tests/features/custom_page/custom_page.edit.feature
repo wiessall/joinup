@@ -29,8 +29,8 @@ Feature: "Custom page" editing.
       | Dumbo Collective | Mickey Mouse | facilitator |
       | Dumbo Collective | Pluto        | member      |
     And "custom_page" content:
-      | title                            | <group>          | body | logo     | state     |
-      | Buena Vista Distribution Company | Dumbo Collective | N/A  | logo.png | published |
+      | title                            | <group>          |abstract | body | logo     | state     |
+      | Buena Vista Distribution Company | Dumbo Collective | N/A     | N/A  | logo.png | published |
 
     # Group owner should see the button.
     When I am logged in as "Mickey Mouse"
