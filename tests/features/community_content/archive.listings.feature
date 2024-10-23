@@ -66,8 +66,8 @@ Feature: Archived content on content listings - groups and paragraphs.
   @javascript
   Scenario: Content listing paragraph can control visibility of archived items.
     And custom_page content:
-      | title     | collection      | state     | topic             |
-      | Some page | Some collection | published | Supplier exchange |
+      | title     | abstract           | collection      | state     | topic             |
+      | Some page | Some page abstract | Some collection | published | Supplier exchange |
     And I append "layout" to "field_paragraphs_body" field in "node" entity with following "Some page" title:
       | behavior_settings | a:3:{s:17:"layout_paragraphs";a:4:{s:6:"layout";s:13:"layout_onecol";s:6:"config";a:1:{s:5:"label";s:0:"";}s:11:"parent_uuid";N;s:6:"region";N;}s:16:"background_theme";a:0:{}s:11:"extra_class";a:0:{}} |
 
@@ -122,8 +122,8 @@ Feature: Archived content on content listings - groups and paragraphs.
       | IOP archived news  | IOP archived news  | archived  | Interoperable Europe | Test | Test    |
       | IOP published news | IOP published news | published | Interoperable Europe | Test | Test    |
     And custom_page content:
-      | title    | collection           | state     |
-      | IOP page | Interoperable Europe | published |
+      | title    | abstract          | collection           | state     |
+      | IOP page | IOP page abstract | Interoperable Europe | published |
     And I append "layout" to "field_paragraphs_body" field in "node" entity with following "IOP page" title:
       | behavior_settings | a:3:{s:17:"layout_paragraphs";a:4:{s:6:"layout";s:13:"layout_onecol";s:6:"config";a:1:{s:5:"label";s:0:"";}s:11:"parent_uuid";N;s:6:"region";N;}s:16:"background_theme";a:0:{}s:11:"extra_class";a:0:{}} |
 
