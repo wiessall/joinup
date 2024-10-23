@@ -1,0 +1,11 @@
+uuid: a4137020-8419-4c07-a2b6-6b4531f352e0
+langcode: en
+status: true
+dependencies:
+  module:
+    - media
+id: media.media_video_url
+label: 'Media video URL'
+description: ''
+targetEntityType: media
+cache: true
