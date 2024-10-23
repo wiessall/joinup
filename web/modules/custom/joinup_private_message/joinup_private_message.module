@@ -14,6 +14,7 @@ use Drupal\Core\Ajax\RedirectCommand;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Render\Markup;
 use Drupal\Core\Url;
 use Drupal\private_message\Entity\PrivateMessage;
 use Drupal\symfony_mailer_lite\Plugin\Mail\SymfonyMailer;
@@ -224,7 +225,9 @@ function joinup_private_message_mail(string $key, array &$message, array $params
             'fragment' => 'private-message-' . $reportMessage->id(),
           ])->toString(),
         ]),
-      t('<br><h5>Message content: </h5>@report_content', ['@report_content' => $reportMessage->get('message')->value]),
+      t('<br><h5>Message content: </h5>@report_content', [
+        '@report_content' => Markup::create($reportMessage->get('message')->value),
+      ]),
       t('<br><h5>Report reason: </h5>@report_reason', ['@report_reason' => $report]),
     ];
     $message['headers']['Content-Type'] = SymfonyMailer::FORMAT_HTML;
