@@ -28,7 +28,7 @@ Feature: Private messages
     Then the modal should be closed
     And I should see the heading "Private Messages"
     And I should see 1 private message
-    Then I should see a private message containing the text "A private message from Alice to Bob."
+    Then a message containing the text "A private message from Alice to Bob." should be present
 
     When I am logged in as "bob_rolls"
     And I am on the homepage
@@ -40,7 +40,7 @@ Feature: Private messages
     And I should not see the text "You do not have any messages"
     And I should see 1 private message
     And I should see the link "Delete thread"
-    And I should see a private message containing the text "A private message from Alice to Bob."
+    And a message containing the text "A private message from Alice to Bob." should be present
     When I enter "Another private message from Bob to Alice." in the "Reply" wysiwyg editor
     And I press "Send"
     Then I should see 2 private messages
@@ -90,7 +90,7 @@ Feature: Private messages
     And I should see 1 unread private message
     Then I open the account menu
     And I click "My messages"
-    Then I should see a private message containing the text "Another private message from Bob to Alice."
+    Then a message containing the text "Another private message from Bob to Alice." should be present
     And I should not see the link "Delete thread"
     But I should see the link "Delete for me"
     When I click "Delete for me"
