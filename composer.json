@@ -342,7 +342,6 @@
                 "Fix handling of unknown file extensions in FileMediaFormatterBase @see https://www.drupal.org/i/3466462": "resources/patch/php/drupal/core/3466462.diff",
                 "Allow ChangedItem to skip updating the entity's \"changed\" timestamp when synchronizing @see https://drupal.org/i/2329253 @see https://www.drupal.org/project/drupal/issues/3098560": "resources/patch/php/drupal/core/2329253-10.x.patch",
                 "Add 'Is empty (NULL)' and 'Is not empty (NOT NULL)' to field filter operators": "resources/patch/php/drupal/core/3098560.patch",
-                "Allow ChangedItem to skip updating the entity's \"changed\" timestamp when synchronizing @see https://drupal.org/i/2329253": "resources/patch/php/drupal/core/2329253-10.x.patch",
                 "JS errors from Drupal.dialog.resetSize when rapidly closing dialogs @see https://www.drupal.org/i/3472624": "resources/patch/php/drupal/core/3472624.diff"
             },
             "drupal/default_content": {
