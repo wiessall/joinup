@@ -10,7 +10,7 @@ Feature: Embed of videos into the page.
       | description | Beer is the real nectar of the gods. |
       | state       | published                            |
 
-  Scenario: As a community content editor I can embed video iframes from allowed providers into the content field.
+  Scenario: As a community content editor I can embed video iframes from allowed domains into the content field.
     Given I am logged in as a "facilitator" of the "Beer brewing corporation" collection
     And I go to the homepage of the "Beer brewing corporation" collection
     And I click "Add discussion" in the plus button menu
@@ -20,32 +20,28 @@ Feature: Embed of videos into the page.
     And I select "Supplier exchange" from "Topic"
     And I fill in "Content" with:
     """
-    <h2>All below videos have 'autoplay' set to TRUE</h2>
-    European Commission videos are allowed.
-    <iframe src="https://ec.europa.eu/avservices/play.cfm?ref=I072651&lg=EN&starttime=0&autostart=true" id="videoplayer" width="852" height="480" frameborder="0" scrolling="no" webkitAllowFullScreen="true" mozallowfullscreen="true" allowFullScreen="true"></iframe>
-    European Commission videos are allowed.
-    <iframe src="https://ec.europa.eu/avservices/play.cfm?ref=I-087075&lg=EN&starttime=0&autostart=true" id="videoplayer" width="852" height="480" frameborder="0" scrolling="no" webkitAllowFullScreen="true" mozallowfullscreen="true" allowFullScreen="true"></iframe>
-    European Commission videos (with short URL that will be resolved) are allowed.
+    <h2>Any europa.eu and *.europa.eu are allowed.</h2>
+    <iframe src="https://ec.europa.eu/avservices/play.cfm?ref=I072651&lg=EN" id="videoplayer" width="852" height="480" frameborder="0" scrolling="no" webkitAllowFullScreen="true" mozallowfullscreen="true" allowFullScreen="true"></iframe>
     <iframe src="http://europa.eu/!dV74uw" width="852" height="480" frameborder="0" scrolling="no" webkitAllowFullScreen="true" mozallowfullscreen="true" allowFullScreen="true"></iframe>
-    YouTube videos are allowed.
-    <iframe width="560" height="315" src="https://www.youtube.com/embed/xlnYVHRp128?autoplay=1" frameborder="0" allowfullscreen></iframe>
-    Vimeo videos are allowed.
-    <iframe src="https://player.vimeo.com/video/225133231?autoplay=1" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
-    DailyMotion videos are NOT allowed (yet).
-    <iframe frameborder="0" width="480" height="270" src="//www.dailymotion.com/embed/video/x5vl5l0?autoPlay=1" allowfullscreen></iframe>
-    European Commission Videos from webcast are allowed.
     <iframe width="600" height="340" src="https://webcast.ec.europa.eu/iprs-and-innovation-procurement-22-01-20/embed" scrolling="no" style="overflow:hidden" webkitAllowFullScreen mozAllowFullScreen allowFullScreen frameborder="0"></iframe>
+
+    <h2>YouTube videos are allowed.</h2>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/xlnYVHRp128" frameborder="0" allowfullscreen></iframe>
+
+    <h2>Vimeo videos are allowed.</h2>
+    <iframe src="https://player.vimeo.com/video/225133231" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+
+    <h2>DailyMotion videos are NOT allowed (yet).</h2>
+    <iframe frameborder="0" width="480" height="270" src="//www.dailymotion.com/embed/video/x5vl5l0" allowfullscreen></iframe>
     """
 
     Given I press "Publish"
-    # All allowed videos have now the autoplay set to FALSE.
-    Then the response should contain "//europa.eu/webtools/crs/iframe/?oriurl=%2F%2Faudiovisual.ec.europa.eu%2Fembed%2Findex.html%3Fref%3DI-072651%26lg%3DEN%26starttime%3D0%26autoplay%3Dfalse"
-    And the response should contain "//europa.eu/webtools/crs/iframe/?oriurl=%2F%2Faudiovisual.ec.europa.eu%2Fembed%2Findex.html%3Fref%3DI-087075%26lg%3Den%26starttime%3D0%26autoplay%3Dfalse"
-    And the response should contain "//europa.eu/webtools/crs/iframe/?oriurl=%2F%2Faudiovisual.ec.europa.eu%2Fembed%2Findex.html%3Fref%3DI-136289%26lg%3Den%26starttime%3D0%26autoplay%3Dfalse"
-    And the response should contain "//europa.eu/webtools/crs/iframe/?oriurl=https%3A%2F%2Fwww.youtube-nocookie.com%2Fembed%2FxlnYVHRp128%3Fautoplay%3D0%26start%3D0%26rel%3D0"
-    And the response should contain "//europa.eu/webtools/crs/iframe/?oriurl=https%3A%2F%2Fplayer.vimeo.com%2Fvideo%2F225133231"
-    And the response should not contain "//europa.eu/webtools/crs/iframe/?oriurl=%2F%2Fwww.dailymotion.com%2Fembed%2Fvideo%2Fx5vl5l0"
-    But the response should contain "//europa.eu/webtools/crs/iframe/?oriurl=%2F%2Fwebcast.ec.europa.eu%2Fiprs-and-innovation-procurement-22-01-20%2Fembed%3Flg%3Den%26starttime%3D0%26autostart%3Dfalse"
+    Then the response should contain "https://webtools.europa.eu/crs/iframe/?oriurl=https%3A//ec.europa.eu/avservices/play.cfm%3Fref%3DI072651%26lg%3DEN&amp;lang=en"
+    And the response should contain "https://webtools.europa.eu/crs/iframe/?oriurl=http%3A//europa.eu/%21dV74uw&amp;lang=en"
+    And the response should contain "https://webtools.europa.eu/crs/iframe/?oriurl=https%3A//webcast.ec.europa.eu/iprs-and-innovation-procurement-22-01-20/embed&amp;lang=en"
+    And the response should contain "https://webtools.europa.eu/crs/iframe/?oriurl=https%3A//www.youtube.com/embed/xlnYVHRp128&amp;lang=en"
+    And the response should contain "https://webtools.europa.eu/crs/iframe/?oriurl=https%3A//player.vimeo.com/video/225133231&amp;lang=en"
+    And the response should not contain "https://webtools.europa.eu/crs/iframe/?oriurl=https%3A//www.dailymotion.com/embed/video/x5vl5l0&amp;lang=en"
 
   @javascript
   Scenario Outline: A video embed button should be shown to community content editors.
@@ -59,49 +55,21 @@ Feature: Embed of videos into the page.
     And I press the button "Insert Media" in the "Content" wysiwyg editor
     And a modal should open
     And I should see the following lines of text:
-      | Image |
-      | File  |
-      | Video |
-    And I click "Video"
-    And I should see the text "Youtube and EC videos are allowed."
-    And I should see the text "Youtube example: https://www.youtube.com/watch?v=dQw4w9WgXcQ"
-    And I should see the text "EC url example: http://europa.eu/123abc!123"
-    And I should see the text "EC video example: https://ec.europa.eu/avservices/video/player.cfm?sitelang=en&ref=ABC12345"
-    And I should see the text "EC webcast video example: https://webcast.ec.europa.eu/iprs-and-innovation-procurement-22-01-20/embed"
-    When I fill in "Add Video URL" with "<url>"
+      | Image        |
+      | File         |
+      | Remote video |
+    And I click "Remote video"
+    And I should see the text "Allowed providers: YouTube, Vimeo."
+    When I fill in "Add Remote video via URL" with "<url>"
     And I press "Add"
     Then I press "Save" in the "Modal buttons" region
     And I press "Insert selected" in the "Modal buttons" region
     Then the modal should be closed
     And I press "Save as draft"
-    Then the response should contain "<embed url>"
+    And I see the "iframe" element with the "src" attribute set to "<embed url>" in the "Content" region
     And I see the "iframe" element with the "title" attribute set to "<title attribute>" in the "Content" region
 
     Examples:
-      | url                                                                                                                                                   | embed url                                                                                                                                                                                                                                     | title attribute                                                                                                                                                                       |
-      | https://www.youtube.com/watch?v=YTaLmMsaLOg                                                                                                           | //europa.eu/webtools/crs/iframe/?oriurl=https%3A%2F%2Fwww.youtube-nocookie.com%2Fembed%2FYTaLmMsaLOg%3Fautoplay%3D0%26start%3D0%26rel%3D0                                                                                                     | YouTube \| New Joinup (1/7)                                                                                                                                                           |
-      | https://europa.eu/!dV74uw                                                                                                                             | //europa.eu/webtools/crs/iframe/?oriurl=%2F%2Faudiovisual.ec.europa.eu%2Fembed%2Findex.html%3Fref%3DI-136289%26lg%3Den%26starttime%3D0%26autoplay%3Dfalse                                                                                     | EC Audiovisual Services \| United Kingdom notification - Article 50, Brussels: press statement by Donald Tusk, President of the European Council                                      |
-      | https://ec.europa.eu/avservices/video/player.cfm?sitelang=en&ref=I156836                                                                              | //europa.eu/webtools/crs/iframe/?oriurl=%2F%2Faudiovisual.ec.europa.eu%2Fembed%2Findex.html%3Fref%3DI-156836%26lg%3Den%26starttime%3D0%26autoplay%3Dfalse                                                                                     | EC Audiovisual Services \| Opening statement by Valdis Dombrovskis, Vice-President of the EC, on the Economic and Monetary Union package, extracts from the Plenary Session of the EP |
-      | https://audiovisual.ec.europa.eu/embed/index.html?sitelang=en&ref=I-087075                                                                            | //europa.eu/webtools/crs/iframe/?oriurl=%2F%2Faudiovisual.ec.europa.eu%2Fembed%2Findex.html%3Fref%3DI-087075%26lg%3Den%26starttime%3D0%26autoplay%3Dfalse                                                                                     | EC Audiovisual Services \|  Start of the arrivals                                                                                                                                     |
-      | https://webcast.ec.europa.eu/iprs-and-innovation-procurement-22-01-20/embed                                                                           | //europa.eu/webtools/crs/iframe/?oriurl=%2F%2Fwebcast.ec.europa.eu%2Fiprs-and-innovation-procurement-22-01-20%2Fembed%3Flg%3Den%26starttime%3D0%26autostart%3Dfalse                                                                           | European Commission Webcast \| iprs-and-innovation-procurement-22-01-20                                                                                                               |
-      | https://webcast.ec.europa.eu/webinar-on-public-procurement-of-artificial-intelligence-ai-building-trust-for-citizens-and-business-2021-06-25-4c/embed | //europa.eu/webtools/crs/iframe/?oriurl=%2F%2Fwebcast.ec.europa.eu%2Fwebinar-on-public-procurement-of-artificial-intelligence-ai-building-trust-for-citizens-and-business-2021-06-25-4c%2Fembed%3Flg%3Den%26starttime%3D0%26autostart%3Dfalse | European Commission Webcast \| webinar-on-public-procurement-of-artificial-intelligence-ai-building-trust-for-citizens-and-business-2021-06-25-4c                                     |
-
-  @wip
-  Scenario: Forcing auto-play into the content of an entity will not trigger the auto-play.
-    Given I am logged in as a "facilitator" of the "Beer brewing corporation" collection
-    And I go to the homepage of the "Beer brewing corporation" collection
-    And I click "Add discussion"
-    When I fill in the following:
-      | Title | Some test video |
-    And I select "Supplier exchange" from "Topic"
-    And I fill in "Content" with:
-    """
-    <p>{"preview_thumbnail":"/sites/default/files/styles/video_embed_wysiwyg_preview/public/video_thumbnails/r5Kd7ltWS9w.jpg?itok=2PfetCfJ","video_url":"https://www.youtube.com/watch?v=r5Kd7ltWS9w","settings":{"responsive":true,"width":"854","height":"480","autoplay":true},"settings_summary":["Embedded Video (Responsive)."]}</p>
-    """
-    And I press "Publish"
-    # The response contains an encoded version of the 'autoplay=0' since it is passed to the ec cck domain.
-    Then the response should contain "autoplay%3D0"
-
-    When I am not logged in
-    And I go to the "Some test video" discussion
-    Then the response should contain "autoplay%3D0"
+      | url                                                                                                                                                   | embed url                                                                                                                                         | title attribute  |
+      | https://www.youtube.com/watch?v=YTaLmMsaLOg                                                                                                           | /media/oembed?url=https%3A//www.youtube.com/watch%3Fv%3DYTaLmMsaLOg | New Joinup (1/7)                |
+      | https://vimeo.com/7073899                                                                                                                             | /media/oembed?url=https%3A//vimeo.com/7073899                       | Drupal Rap Video - Schipulcon09 |

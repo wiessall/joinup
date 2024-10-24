@@ -18,6 +18,9 @@ class RouteSubscriber extends RouteSubscriberBase {
   protected const array ALLOWED_BUNDLES_PER_TYPE = [
     'node' => [
       'custom_page',
+      'document',
+      'event',
+      'news',
     ],
   ];
 

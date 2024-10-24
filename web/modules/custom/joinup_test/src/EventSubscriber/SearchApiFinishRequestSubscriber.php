@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_test\EventSubscriber;
 
-use Drupal\Core\State\StateInterface;
+use Drupal\joinup_test\Utils\TestUtils;
 use Drupal\search_api\Utility\PostRequestIndexing;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -21,17 +21,14 @@ use Symfony\Component\HttpKernel\KernelEvents;
  */
 class SearchApiFinishRequestSubscriber implements EventSubscriberInterface {
 
-  const STATE_KEY = 'joinup_test.index_on_finish_request';
-
-  public function __construct(protected StateInterface $state, protected PostRequestIndexing $postRequestIndexing) {
+  public function __construct(protected PostRequestIndexing $postRequestIndexing) {
   }
 
   /**
    * Indexes items on FINISH_REQUEST, if specified.
    */
   public function onKernelFinishRequest(): void {
-    $is_active = $this->state->get(self::STATE_KEY, FALSE);
-    if ($is_active) {
+    if (TestUtils::isTestMode()) {
       $this->postRequestIndexing->destruct();
     }
   }
