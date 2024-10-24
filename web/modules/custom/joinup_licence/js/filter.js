@@ -80,16 +80,17 @@
         const licenceCounterNumber = document.querySelector(
           ".licence-counter__number",
         );
-        licenceCounterNumber.textContent = licenceTiles;
+        if (licenceCounterNumber) {
+          licenceCounterNumber.textContent = licenceTiles;
+        }
 
         // Use plural only if licences count is higher than one.
         const licenceCounterText = document.querySelector(
           ".licence-counter__text",
         );
-        if (licenceTiles === 1) {
-          licenceCounterText.textContent = "licence found";
-        } else {
-          licenceCounterText.textContent = "licences found";
+        if (licenceCounterText) {
+          licenceCounterText.textContent =
+            licenceTiles === 1 ? "licence found" : "licences found";
         }
       }
 
