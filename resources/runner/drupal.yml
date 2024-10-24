@@ -253,6 +253,9 @@ drupal:
         // Location of the site configuration files.
         $settings['config_sync_directory'] = '../config/sync';
       Testing configuration alters: |
+        // Enable test_mode.
+        $config['joinup_test.settings']['test_mode'] = TRUE;
+
         // The video from the home page interacts with Selenium tests.
         $config['page_manager.page_variant.homepage-layout_builder-0']['variant_settings']['sections'][4]['components']['6ab0ceea-4541-4153-8b64-227e02369d30']['configuration']['text'] = 'Some joinup video';
         // Disable ajax refresh which causes a lot of traffic during tests.
