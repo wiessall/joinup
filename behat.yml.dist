@@ -3,6 +3,7 @@
   - '%paths.base%/tests/features'
 .contexts: &contexts
   - Drupal\joinup\Context\BootstrapDrupalContext
+  - Drupal\DrupalExtension\Context\ConfigContext
   - Drupal\DrupalExtension\Context\DrushContext
   - Drupal\DrupalExtension\Context\MarkupContext
   - Drupal\DrupalExtension\Context\MessageContext
@@ -68,6 +69,7 @@
   - Drupal\joinup\Context\JoinupSeoContext
   - Drupal\joinup\Context\JoinupSubscriptionContext
   - Drupal\joinup\Context\JoinupUserContext
+  - Drupal\joinup\Context\JsErrorsContext
   - Drupal\joinup\Context\LinkContext
   - Drupal\joinup\Context\LogRecordsContext
   - Drupal\joinup\Context\MediaContext

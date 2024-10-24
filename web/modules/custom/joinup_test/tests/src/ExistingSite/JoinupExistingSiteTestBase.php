@@ -7,6 +7,7 @@ namespace Drupal\Tests\joinup_test\ExistingSite;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
+use Drupal\Tests\joinup_test\Traits\ConfigTestTrait;
 use Drupal\Tests\joinup_test\Traits\RdfEntityCreationTrait;
 use Drupal\taxonomy\VocabularyInterface;
 use weitzman\DrupalTestTraits\ExistingSiteBase;
@@ -25,6 +26,12 @@ abstract class JoinupExistingSiteTestBase extends ExistingSiteBase {
    */
   protected array $casUsers = [];
 
+  /**
+   * Whether to disable the spam protection.
+   */
+  protected bool $disableSpamProtection = TRUE;
+
+  use ConfigTestTrait;
   use RdfEntityCreationTrait;
 
   /**
@@ -34,17 +41,17 @@ abstract class JoinupExistingSiteTestBase extends ExistingSiteBase {
     parent::setUp();
 
     // Disable the spam protection functionality.
-    \Drupal::state()->delete('joinup_test.antispam.enabled');
-    $this->clearCache();
+    if ($this->disableSpamProtection) {
+      $this->overrideConfig('antibot.settings', 'form_ids', NULL);
+      $this->overrideConfig('honeypot.settings', 'form_settings', []);
+    }
   }
 
   /**
    * {@inheritdoc}
    */
   public function tearDown(): void {
-    // Restores the spam protection functionality.
-    \Drupal::state()->set('joinup_test.antispam.enabled', TRUE);
-    $this->clearCache();
+    $this->restoreOverriddenConfig();
 
     // Avoid sending notifications during test entities cleanup. First, sort the
     // entities by moving the 'user' entities at the end, as deleting a user
@@ -77,15 +84,6 @@ abstract class JoinupExistingSiteTestBase extends ExistingSiteBase {
     // Delete the OG group content orphans now because parent::tearDown() is
     // destroying the container and the registered shutdown callback will fail.
     $delete_orphans_plugin->process();
-  }
-
-  /**
-   * Clear the cache bins storing cached markup.
-   */
-  protected function clearCache(): void {
-    foreach (['page', 'dynamic_page_cache', 'render'] as $bin) {
-      \Drupal::cache($bin)->deleteAll();
-    }
   }
 
   /**
