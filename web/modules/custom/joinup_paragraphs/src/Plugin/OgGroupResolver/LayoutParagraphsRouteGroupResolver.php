@@ -26,7 +26,7 @@ class LayoutParagraphsRouteGroupResolver extends RouteGroupResolver {
   protected function getContentEntityPaths(): array {
     return [
       '/layout-paragraphs-builder/{layout_paragraphs_layout}/choose-component' => 'layout_paragraphs_layout',
-      '/layout-paragraphs-builder/{layout_paragraphs_layout}/insert/{paragraph_type}' => 'layout_paragraphs_layout',
+      '/layout-paragraphs-builder/{layout_paragraphs_layout}/insert/{paragraph_type_id}' => 'layout_paragraphs_layout',
       '/layout-paragraphs-builder/{layout_paragraphs_layout}/edit/{component_uuid}' => 'layout_paragraphs_layout',
     ];
   }
