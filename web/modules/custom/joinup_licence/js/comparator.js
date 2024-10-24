@@ -44,7 +44,6 @@
         let licencesString = "";
         const maxCompare = 5;
         const licencesArray = [];
-        const licenceListing = document.querySelector(".listing--licences");
         let licenceName = "";
         document
           .querySelectorAll(".licence-tile .form-check-input[type='checkbox']")
@@ -61,10 +60,14 @@
               }
             }
           });
-        licenceListing.setAttribute(
-          "data-joinup-licence-compare",
-          licencesString,
-        );
+
+        const licenceListing = document.querySelector(".listing--licences");
+        if (licenceListing) {
+          licenceListing.setAttribute(
+            "data-joinup-licence-compare",
+            licencesString,
+          );
+        }
       }
 
       // Reset licence listing.
