@@ -1,0 +1,461 @@
+From 32c270d526ad5ffe5dd1042b919ee2ad3c439c5a Mon Sep 17 00:00:00 2001
+From: Adrian Lorenc <adrian.lorenc@gmail.com>
+Date: Thu, 24 Oct 2024 09:24:52 +0200
+Subject: [PATCH 01/10] Characters length limit for text-to-translate.
+
+---
+ .../Translator/ETranslationTranslator.php     | 32 +++++++++++++++++++
+ 1 file changed, 32 insertions(+)
+
+diff --git a/src/Plugin/tmgmt/Translator/ETranslationTranslator.php b/src/Plugin/tmgmt/Translator/ETranslationTranslator.php
+index 7807365..e5aa7e5 100644
+--- a/src/Plugin/tmgmt/Translator/ETranslationTranslator.php
++++ b/src/Plugin/tmgmt/Translator/ETranslationTranslator.php
+@@ -42,6 +42,13 @@ class ETranslationTranslator extends TranslatorPluginBase implements ContainerFa
+    */
+   protected const ENDPOINT = 'https://webgate.ec.europa.eu/';
+ 
++  /**
++   * Characters length limit for text-to-translate.
++   *
++   * @var integer
++   */
++  protected const MAX_TEXT_TO_TRANSLATE_LENGTH = 5000;
++
+   /**
+    * A cache bin for domain info.
+    *
+@@ -197,6 +204,12 @@ class ETranslationTranslator extends TranslatorPluginBase implements ContainerFa
+             'format' => 'html',
+           ];
+         }
++        elseif (!$this->canTextToTranslateBeUsed($field['#text'])) {
++          $data['documentToTranslateBase64'] = [
++            'content' => base64_encode($field['#text']),
++            'format' => 'txt',
++          ];
++        }
+         else {
+           $data['textToTranslate'] = $field['#text'];
+         }
+@@ -311,9 +324,28 @@ class ETranslationTranslator extends TranslatorPluginBase implements ContainerFa
+ 
+   /**
+    * Checks if the given text is HTML.
++   *
++   * @param string $text
++   *   Text to translate.
++   *
++   * @return bool
++   *   TRUE if it is HTML.
+    */
+   protected function isHtml(string $text): bool {
+     return \strip_tags($text) !== $text;
+   }
+ 
++  /**
++   * Checks if text-to-translate be used.
++   *
++   * @param string $text
++   *   Text to translate.
++   *
++   * @return bool
++   *   TRUE if text-to-translate can be used.
++   */
++  protected function canTextToTranslateBeUsed(string $text): bool {
++    return mb_strlen($text) <= self::MAX_TEXT_TO_TRANSLATE_LENGTH;
++  }
++
+ }
+-- 
+GitLab
+
+
+From 844c02cce4178bbe88115975171e5274ef63b1da Mon Sep 17 00:00:00 2001
+From: Adrian Lorenc <adrian.lorenc@gmail.com>
+Date: Thu, 24 Oct 2024 10:08:52 +0200
+Subject: [PATCH 02/10] Use statements should be sorted alphabetically.
+
+---
+ tests/src/Functional/ETranslationServiceTest.php | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tests/src/Functional/ETranslationServiceTest.php b/tests/src/Functional/ETranslationServiceTest.php
+index afee951..7e8d547 100644
+--- a/tests/src/Functional/ETranslationServiceTest.php
++++ b/tests/src/Functional/ETranslationServiceTest.php
+@@ -7,8 +7,8 @@ namespace Drupal\Tests\tmgmt_ec_etranslation\Functional;
+ use Drupal\Core\Entity\EntityTypeManagerInterface;
+ use Drupal\Core\Queue\QueueFactory;
+ use Drupal\Core\Queue\QueueWorkerManagerInterface;
+-use Drupal\Tests\tmgmt\Functional\TmgmtEntityTestTrait;
+ use Drupal\Tests\tmgmt\Functional\TMGMTTestBase;
++use Drupal\Tests\tmgmt\Functional\TmgmtEntityTestTrait;
+ use Drupal\tmgmt\Entity\Translator;
+ use Drupal\tmgmt\TranslatorInterface;
+ use Drupal\tmgmt_ec_etranslation\Plugin\QueueWorker\TranslationQueueWorker;
+-- 
+GitLab
+
+
+From 5d0eb0a29d55e3c20867593b0ef38dfa89aee2e8 Mon Sep 17 00:00:00 2001
+From: Adrian Lorenc <adrian.lorenc@gmail.com>
+Date: Thu, 24 Oct 2024 10:21:18 +0200
+Subject: [PATCH 03/10] Don't test D11 as it is not supported yet.
+
+---
+ .gitlab-ci.yml | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index 080b478..f32f8f6 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -35,3 +35,5 @@ include:
+ 
+ variables:
+   _CSPELL_WORDS: 'webgate'
++  OPT_IN_TEST_CURRENT: '0'
++  OPT_IN_TEST_PREVIOUS_MAJOR: '1'
+-- 
+GitLab
+
+
+From fe707b8c4c419bbfd7153e2afcd3a835a4b54e24 Mon Sep 17 00:00:00 2001
+From: Adrian Lorenc <adrian.lorenc@gmail.com>
+Date: Thu, 24 Oct 2024 12:21:03 +0200
+Subject: [PATCH 04/10] Checks if the given text is base64 encoded.
+
+---
+ .../QueueWorker/TranslationQueueWorker.php    | 32 +++++++++----------
+ 1 file changed, 15 insertions(+), 17 deletions(-)
+
+diff --git a/src/Plugin/QueueWorker/TranslationQueueWorker.php b/src/Plugin/QueueWorker/TranslationQueueWorker.php
+index 4e30d4a..adbd851 100644
+--- a/src/Plugin/QueueWorker/TranslationQueueWorker.php
++++ b/src/Plugin/QueueWorker/TranslationQueueWorker.php
+@@ -8,7 +8,6 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
+ use Drupal\Core\Logger\LoggerChannelInterface;
+ use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+ use Drupal\Core\Queue\QueueWorkerBase;
+-use Drupal\tmgmt\Data;
+ use Symfony\Component\DependencyInjection\ContainerInterface;
+ 
+ /**
+@@ -38,25 +37,16 @@ class TranslationQueueWorker extends QueueWorkerBase implements ContainerFactory
+    */
+   protected LoggerChannelInterface $logger;
+ 
+-  /**
+-   * The tmgmt data service.
+-   *
+-   * @var \Drupal\tmgmt\Data
+-   */
+-  protected Data $tmgmtData;
+-
+   public function __construct(
+     array $configuration,
+     $plugin_id,
+     $plugin_definition,
+     EntityTypeManagerInterface $entity_type_manager,
+     LoggerChannelInterface $logger,
+-    Data $tmgmtData,
+   ) {
+     parent::__construct($configuration, $plugin_id, $plugin_definition);
+     $this->entityTypeManager = $entity_type_manager;
+     $this->logger = $logger;
+-    $this->tmgmtData = $tmgmtData;
+   }
+ 
+   /**
+@@ -74,7 +64,6 @@ class TranslationQueueWorker extends QueueWorkerBase implements ContainerFactory
+       $plugin_definition,
+       $container->get('entity_type.manager'),
+       $container->get('logger.channel.tmgmt_ec_etranslation'),
+-      $container->get('tmgmt.data')
+     );
+   }
+ 
+@@ -91,9 +80,7 @@ class TranslationQueueWorker extends QueueWorkerBase implements ContainerFactory
+       return;
+     }
+ 
+-    $translatableFields = $this->tmgmtData->filterTranslatable($jobItem->getData());
+-
+-    if ($this->isHtml($translatableFields[$key]['#text'])) {
++    if ($this->isBase64Encoded($response)) {
+       $translation['#text'] = base64_decode($response);
+     }
+     else {
+@@ -111,10 +98,21 @@ class TranslationQueueWorker extends QueueWorkerBase implements ContainerFactory
+   }
+ 
+   /**
+-   * Checks if the given text is HTML.
++   * Checks if the given text is base64 encoded.
++   *
++   * @param string $text
++   *   Text to check.
++   *
++   * @return bool
++   *   TRUE if string is base64 encoded.
+    */
+-  protected function isHtml(string $text): bool {
+-    return \strip_tags($text) !== $text;
++  protected function isBase64Encoded(string $text): bool {
++    $decoded = base64_decode($text, TRUE);
++    if ($decoded === FALSE) {
++      return FALSE;
++    }
++
++    return base64_encode($decoded) === $text;
+   }
+ 
+ }
+-- 
+GitLab
+
+
+From 0fcb9ff2ac335e2a13505ac5e4822e77fd95403a Mon Sep 17 00:00:00 2001
+From: Adrian Lorenc <adrian.lorenc@gmail.com>
+Date: Thu, 24 Oct 2024 12:26:18 +0200
+Subject: [PATCH 05/10] Update tests.
+
+---
+ .../Functional/ETranslationServiceTest.php    | 21 ++++++++++++++++++-
+ tests/src/Unit/TranslationQueueWorkerTest.php | 20 +++++++-----------
+ 2 files changed, 27 insertions(+), 14 deletions(-)
+
+diff --git a/tests/src/Functional/ETranslationServiceTest.php b/tests/src/Functional/ETranslationServiceTest.php
+index 7e8d547..ed2daff 100644
+--- a/tests/src/Functional/ETranslationServiceTest.php
++++ b/tests/src/Functional/ETranslationServiceTest.php
+@@ -85,12 +85,20 @@ class ETranslationServiceTest extends TMGMTTestBase {
+ 
+   /**
+    * Tests basic API methods of the plugin.
++   *
++   * @dataProvider integrationDataProvider
+    */
+-  public function testIntegration(): void {
++  public function testIntegration(string $text): void {
+     $queue = $this->queueFactory->get(TranslationQueueWorker::ID);
+     $this->assertEquals(0, $queue->numberOfItems());
+ 
+     $node = $this->createTranslatableNode('page');
++    $node->set('body', [
++      'value' => $text,
++      'summary' => $this->randomMachineName(10),
++      'format' => filter_default_format(),
++    ])->save();
++
+     $job = $this->createJob('en', 'de', 0, [
+       'label' => 'Continuous job',
+       'job_type' => 'continuous',
+@@ -124,4 +132,15 @@ class ETranslationServiceTest extends TMGMTTestBase {
+     $this->assertEquals(ETranslationMock::translate($body[0]['summary'], 'en', 'de'), $data['body']['0']['summary']['#translation']['#text']);
+   }
+ 
++  /**
++   * Provider for ::testIntegration.
++   */
++  public function integrationDataProvider(): array {
++    return [
++      'Short text' => [$this->randomMachineName(10)],
++      'Long text' => [$this->randomMachineName(5001)],
++      'Html' => ['<strong>Lorem Ipsum</strong>' . $this->randomMachineName(10)],
++    ];
++  }
++
+ }
+diff --git a/tests/src/Unit/TranslationQueueWorkerTest.php b/tests/src/Unit/TranslationQueueWorkerTest.php
+index d1472cb..bef431e 100644
+--- a/tests/src/Unit/TranslationQueueWorkerTest.php
++++ b/tests/src/Unit/TranslationQueueWorkerTest.php
+@@ -57,7 +57,6 @@ class TranslationQueueWorkerTest extends TestCase {
+ 
+     $this->entityTypeManager = $this->createMock(EntityTypeManagerInterface::class);
+     $this->logger = $this->createMock(LoggerChannelInterface::class);
+-    $this->tmgmtData = $this->createMock(Data::class);
+ 
+     $this->queueWorker = new TranslationQueueWorker(
+       [],
+@@ -65,7 +64,6 @@ class TranslationQueueWorkerTest extends TestCase {
+       [],
+       $this->entityTypeManager,
+       $this->logger,
+-      $this->tmgmtData
+     );
+   }
+ 
+@@ -96,13 +94,6 @@ class TranslationQueueWorkerTest extends TestCase {
+       ->with('tmgmt_job_item')
+       ->willReturn($entityStorage);
+ 
+-    $this->tmgmtData->expects($this->once())
+-      ->method('filterTranslatable')
+-      ->with($jobItem->getData())
+-      ->willReturn([
+-        'key' => ['#text' => '<p>HTML content</p>'],
+-      ]);
+-
+     $this->logger->expects($this->once())
+       ->method('notice')
+       ->with(
+@@ -126,20 +117,23 @@ class TranslationQueueWorkerTest extends TestCase {
+   }
+ 
+   /**
+-   * Tests the isHtml method.
++   * Tests the isBase64 method.
+    *
+-   * @covers ::isHtml
++   * @covers ::isBase64
+    */
+   public function testIsHtml(): void {
+     $reflection = new \ReflectionClass($this->queueWorker);
+-    $method = $reflection->getMethod('isHtml');
++    $method = $reflection->getMethod('isBase64Encoded');
+     $method->setAccessible(TRUE);
+ 
+     $result = $method->invokeArgs($this->queueWorker, ['<p>HTML content</p>']);
+-    $this->assertTrue($result);
++    $this->assertFALSE($result);
+ 
+     $result = $method->invokeArgs($this->queueWorker, ['Plain text content']);
+     $this->assertFalse($result);
++
++    $result = $method->invokeArgs($this->queueWorker, ['UGxhaW4gdGV4dCBjb250ZW50']);
++    $this->assertTrue($result);
+   }
+ 
+   /**
+-- 
+GitLab
+
+
+From 95407766f49c25d517fcc60cc824e9e137e1a94a Mon Sep 17 00:00:00 2001
+From: Adrian Lorenc <adrian.lorenc@gmail.com>
+Date: Thu, 24 Oct 2024 12:28:00 +0200
+Subject: [PATCH 06/10] Update name.
+
+---
+ tests/src/Functional/ETranslationServiceTest.php | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tests/src/Functional/ETranslationServiceTest.php b/tests/src/Functional/ETranslationServiceTest.php
+index ed2daff..c424fa9 100644
+--- a/tests/src/Functional/ETranslationServiceTest.php
++++ b/tests/src/Functional/ETranslationServiceTest.php
+@@ -139,7 +139,7 @@ class ETranslationServiceTest extends TMGMTTestBase {
+     return [
+       'Short text' => [$this->randomMachineName(10)],
+       'Long text' => [$this->randomMachineName(5001)],
+-      'Html' => ['<strong>Lorem Ipsum</strong>' . $this->randomMachineName(10)],
++      'HTML' => ['<strong>Lorem Ipsum</strong>' . $this->randomMachineName(10)],
+     ];
+   }
+ 
+-- 
+GitLab
+
+
+From 523d2d43fd2f94f773a79e7ddee056eb2e420766 Mon Sep 17 00:00:00 2001
+From: Adrian Lorenc <adrian.lorenc@gmail.com>
+Date: Thu, 24 Oct 2024 12:30:10 +0200
+Subject: [PATCH 07/10] Rename test method.
+
+---
+ tests/src/Unit/TranslationQueueWorkerTest.php | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tests/src/Unit/TranslationQueueWorkerTest.php b/tests/src/Unit/TranslationQueueWorkerTest.php
+index bef431e..bca519c 100644
+--- a/tests/src/Unit/TranslationQueueWorkerTest.php
++++ b/tests/src/Unit/TranslationQueueWorkerTest.php
+@@ -121,7 +121,7 @@ class TranslationQueueWorkerTest extends TestCase {
+    *
+    * @covers ::isBase64
+    */
+-  public function testIsHtml(): void {
++  public function testIsBase64(): void {
+     $reflection = new \ReflectionClass($this->queueWorker);
+     $method = $reflection->getMethod('isBase64Encoded');
+     $method->setAccessible(TRUE);
+-- 
+GitLab
+
+
+From 2d3c1e58f673b9e85b644f278cf758a7d6f316bd Mon Sep 17 00:00:00 2001
+From: Adrian Lorenc <adrian.lorenc@gmail.com>
+Date: Thu, 24 Oct 2024 12:35:58 +0200
+Subject: [PATCH 08/10] Ignore encoded string.
+
+---
+ .gitlab-ci.yml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index f32f8f6..338de89 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -34,6 +34,6 @@ include:
+ #
+ 
+ variables:
+-  _CSPELL_WORDS: 'webgate'
++  _CSPELL_WORDS: 'webgate, UGxhaW4gdGV4dCBjb250ZW50'
+   OPT_IN_TEST_CURRENT: '0'
+   OPT_IN_TEST_PREVIOUS_MAJOR: '1'
+-- 
+GitLab
+
+
+From cd42758a0b09a07ba0de895873a48507614a57a6 Mon Sep 17 00:00:00 2001
+From: Adrian Lorenc <adrian.lorenc@gmail.com>
+Date: Thu, 24 Oct 2024 12:38:53 +0200
+Subject: [PATCH 09/10] Fix typo.
+
+---
+ src/Plugin/tmgmt/Translator/ETranslationTranslator.php | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/Plugin/tmgmt/Translator/ETranslationTranslator.php b/src/Plugin/tmgmt/Translator/ETranslationTranslator.php
+index e5aa7e5..a7fb2c8 100644
+--- a/src/Plugin/tmgmt/Translator/ETranslationTranslator.php
++++ b/src/Plugin/tmgmt/Translator/ETranslationTranslator.php
+@@ -336,7 +336,7 @@ class ETranslationTranslator extends TranslatorPluginBase implements ContainerFa
+   }
+ 
+   /**
+-   * Checks if text-to-translate be used.
++   * Checks if text-to-translate can be used.
+    *
+    * @param string $text
+    *   Text to translate.
+-- 
+GitLab
+
+
+From 94b103ca472c48c1e18d4c1a4c79e9b01a3d5151 Mon Sep 17 00:00:00 2001
+From: Adrian Lorenc <adrian.lorenc@gmail.com>
+Date: Thu, 24 Oct 2024 12:44:06 +0200
+Subject: [PATCH 10/10] Remove OPT_IN_TEST_CURRENT
+
+---
+ .gitlab-ci.yml | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index 338de89..091939f 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -35,5 +35,4 @@ include:
+ 
+ variables:
+   _CSPELL_WORDS: 'webgate, UGxhaW4gdGV4dCBjb250ZW50'
+-  OPT_IN_TEST_CURRENT: '0'
+   OPT_IN_TEST_PREVIOUS_MAJOR: '1'
+-- 
+GitLab
+
