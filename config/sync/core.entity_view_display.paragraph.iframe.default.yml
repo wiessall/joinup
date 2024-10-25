@@ -19,6 +19,7 @@ content:
     settings:
       url: ''
       title: ''
+      headerlevel: '3'
       class: ''
       frameborder: '0'
       scrolling: ''
