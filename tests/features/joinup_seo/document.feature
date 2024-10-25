@@ -13,7 +13,7 @@ Feature: SEO for document content.
       | https://example.com/license1 | Some license | Public domain |
     And users:
       | Username          | E-mail                 | First name | Family name |
-      | Portal SEO author | joinup.seo@example.com | Scrapper   | Jedi        |
+      | Portal SEO author | portal.seo@example.com | Scrapper   | Jedi        |
 
   Scenario: Basic metatags are attached as JSON schema on the page.
     Given document content:
@@ -61,7 +61,7 @@ Feature: SEO for document content.
     And the following meta tags should available in the html:
       | identifier     | value                                                                        |
       | description    | Document test1.zip                                                           |
-      | og:url         | __base_url__/collection/joinup-seo-document-collection/document/seo-document |
+      | og:url         | __base_url__/collection/portal-seo-document-collection/document/seo-document |
       | og:site_name   | Portal                                                                       |
       | og:title       | SEO document                                                                 |
       | og:description | Document test1.zip                                                           |
