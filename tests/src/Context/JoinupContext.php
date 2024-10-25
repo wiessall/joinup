@@ -2880,7 +2880,7 @@ class JoinupContext extends RawDrupalContext {
    *
    * Table format:
    * | URL                          | Title  |
-   * | https://joinup.ec.europa.eu/ | Joinup |
+   * | https://interoperable-europe.ec.europa.eu/ | Joinup |
    * | https://www.drupal.org/      | Drupal |
    *
    * @param \Behat\Gherkin\Node\TableNode $table

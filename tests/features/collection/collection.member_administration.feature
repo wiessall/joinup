@@ -46,7 +46,7 @@ Feature: Collection membership administration
     And the email sent to "Lisa Cuddy" with subject "Joinup: A user has requested to join your collection" contains the following lines of text:
       | Donald Duck has requested to join your collection "Medical diagnosis" as a member. |
       | To approve or reject this request, click on                                        |
-      | If you think this action is not clear or not due, please contact Joinup Support at |
+      | If you think this action is not clear or not due, please contact Portal Support at |
       | /collection/medical-diagnosis/members                                              |
     And the following email should have been sent:
       | recipient | Turkey Ham                                                                         |
@@ -93,7 +93,7 @@ Feature: Collection membership administration
     But the email sent to "Kathie Cumbershot" with subject "Joinup: Your request to join the collection Medical diagnosis was approved" should not contain the following lines of text:
       | You will receive weekly notifications for newly created content on this collection. |
       | To manage your notifications go to "My subscriptions" in the user menu.             |
-      | If you think this action is not clear or not due, please contact Joinup Support at  |
+      | If you think this action is not clear or not due, please contact Portal Support at  |
 
     # Check new privileges.
     When I am logged in as "Kathie Cumbershot"
@@ -128,7 +128,7 @@ Feature: Collection membership administration
       | Lisa Cuddy has approved your request to join and subscribe to the "Medical diagnosis" collection |
       | You will receive weekly notifications for newly created content on this collection.              |
       | To manage your notifications go to "My subscriptions" in the user menu.                          |
-      | If you think this action is not clear or not due, please contact Joinup Support at               |
+      | If you think this action is not clear or not due, please contact Portal Support at               |
 
     When I am logged in as "Cam Bridge"
     When I click the "My subscriptions" link from the email sent to "Cam Bridge"

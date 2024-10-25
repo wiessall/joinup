@@ -19,7 +19,7 @@ tile:
       type: text
       label: 'Url'
       description: 'Url leading to the article.'
-      preview: 'https://joinup.ec.europa.eu'
+      preview: 'https://interoperable-europe.ec.europa.eu'
     highlighted:
       type: object
       label: 'Highlighted info'

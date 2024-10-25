@@ -83,7 +83,7 @@ Feature: "Add event" visibility options.
     When I fill in "Physical location" with "Rue Belliard 28, Brussels, Belgium"
     And I enter the following for the "Virtual location" link field:
       | URL                          | Title           |
-      | https://joinup.ec.europa.eu/ | Joinup homepage |
+      | https://interoperable-europe.ec.europa.eu/ | Joinup homepage |
       | https://drupal.org/          |                 |
     And I select "EU and European Policies" from "Topic"
     And I press "Save as draft"

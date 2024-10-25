@@ -16,7 +16,7 @@ cancel_confirm:
 
     Kind regards,
 
-    The Joinup Support Team
+    The Portal Support Team
 password_reset:
   subject: 'Please confirm the request of a new password.'
   body: |-
@@ -30,21 +30,21 @@ password_reset:
 
     Kind regards,
 
-    The Joinup Support Team
+    The Portal Support Team
 register_admin_created:
   subject: 'Your Joinup account was created successfully.'
   body: |-
     Dear [user:field_user_first_name],
 
-    The Joinup Support Team created your account on Joinup.
+    The Portal Support Team created your account on Joinup.
     Please log in through the following link in order to set your password.
     <a href="[user:one-time-login-url]">[user:one-time-login-url]</a>
 
-    In case you think this action is not due, please contact the <a href="[site:contact-form]">Joinup Support Team</a>.
+    In case you think this action is not due, please contact the <a href="[site:contact-form]">Portal Support Team</a>.
 
     Kind regards,
 
-    The Joinup Support Team
+    The Portal Support Team
 register_no_approval_required:
   subject: "You're one step away to create your Joinup account. Please confirm your email address before you can sign in to Joinup."
   body: |-
@@ -58,7 +58,7 @@ register_no_approval_required:
 
     Kind regards,
 
-    The Joinup Support Team
+    The Portal Support Team
 register_pending_approval:
   subject: 'Your [site:name] account is pending approval.'
   body: |-
@@ -68,7 +68,7 @@ register_pending_approval:
 
     Kind regards,
 
-    The Joinup Support Team.
+    The Portal Support Team.
 register_pending_approval_admin:
   subject: 'Account details for [user:display-name] at [site:name] (pending admin approval)'
   body: |-
@@ -115,14 +115,14 @@ status_blocked:
 
     Kind regards,
 
-    The Joinup Support Team.
+    The Portal Support Team.
 status_canceled:
   subject: 'Your account has been deleted.'
   body: |-
     Dear Joinup user,
 
-    Your account [user:account-name] has been deleted.@joinup_user:moderation_text If you believe that this action has been performed by mistake, please contact The Joinup Support Team at <a href="[site:contact-form]">[site:contact-form]</a>.
+    Your account [user:account-name] has been deleted.@joinup_user:moderation_text If you believe that this action has been performed by mistake, please contact The Portal Support Team at <a href="[site:contact-form]">[site:contact-form]</a>.
 
     Kind regards,
 
-    The Joinup Support Team
+    The Portal Support Team

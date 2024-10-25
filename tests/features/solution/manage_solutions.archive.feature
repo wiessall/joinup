@@ -117,7 +117,7 @@ Feature: When a solution is archived then its sub-content also should be archive
       | archived. Even though the Solution has been archived, you can still  |
       | access its pages through the Advanced Search page by selecting 'Show |
       | only Archived items' or through the Collection it belonged to.       |
-      | If you think this action is not clear, please contact Joinup Support |
+      | If you think this action is not clear, please contact Portal Support |
       | at                                                                   |
     # The email sent to Liam (the contact person of the solution) won't contain
     # the "Dear Liam," greeting since Liam does not have a user account on
@@ -127,7 +127,7 @@ Feature: When a solution is archived then its sub-content also should be archive
       | archived. Even though the Solution has been archived, you can still  |
       | access its pages through the Advanced Search page by selecting 'Show |
       | only Archived items' or through the Collection it belonged to.       |
-      | If you think this action is not clear, please contact Joinup Support |
+      | If you think this action is not clear, please contact Portal Support |
       | at                                                                   |
 
     When I go to the homepage of the "Solution" solution

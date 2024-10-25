@@ -51,7 +51,7 @@ class IDMaxLengthConstraintValidatorTest extends UnitTestCase {
     $entity = $this->createMock(EntityInterface::class);
     $entity->expects($this->any())
       ->method('id')
-      ->willReturn('https://joinup.ec.europa.eu');
+      ->willReturn('https://interoperable-europe.ec.europa.eu');
 
     $data[] = [$entity, TRUE, 100];
     $data[] = [clone $entity, FALSE, 10];

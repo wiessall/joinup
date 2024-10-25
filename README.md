@@ -1,9 +1,9 @@
 # Joinup website
 
-This is the source code for https://joinup.ec.europa.eu.
+This is the source code for https://interoperable-europe.ec.europa.eu.
 
 Joinup is a collaborative platform created by the European Commission and funded
-by the European Union via the [Interoperable Europe](https://joinup.ec.europa.eu/interoperable-europe)
+by the European Union via the [Interoperable Europe](https://interoperable-europe.ec.europa.eu/interoperable-europe)
 Programme.
 
 It offers several services that aim to help e-Government professionals share
@@ -21,7 +21,7 @@ backwards compatibility, nor a full upgrade path between two versions.
 If you download and install your own instance, you're responsible for update and
 adapt the code when new Joinup versions are available.
 
-Joinup is licensed under the [EUPL](https://joinup.ec.europa.eu/community/eupl/og_page/eupl),
+Joinup is licensed under the [EUPL](https://interoperable-europe.ec.europa.eu/community/eupl/og_page/eupl),
 which is compatible with the GPL.
 
 ## Development

@@ -1,6 +1,6 @@
 langcode: en
 email_admin_update:
-  subject: 'The Joinup Support Team updated your account for you at [site:name]'
+  subject: 'The Portal Support Team updated your account for you at [site:name]'
   body: |-
     Dear [user:display-name],
 
@@ -8,7 +8,7 @@ email_admin_update:
 
     Kind regards,
 
-    The Joinup Support Team
+    The Portal Support Team
 password_reset_confirm:
   subject: 'Your password has been changed'
   body: |-
@@ -18,4 +18,4 @@ password_reset_confirm:
 
     Kind regards,
 
-    The Joinup Support Team
+    The Portal Support Team

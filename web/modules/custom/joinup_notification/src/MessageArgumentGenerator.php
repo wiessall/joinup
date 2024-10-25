@@ -60,7 +60,7 @@ class MessageArgumentGenerator {
       /** @var \Drupal\user\RoleInterface $role */
       $role = Role::load('moderator');
       $arguments['@actor:role'] = $role->label();
-      $arguments['@actor:full_name'] = 'The Joinup Support Team';
+      $arguments['@actor:full_name'] = 'The Portal Support Team';
     }
     elseif (!$actor->isAnonymous()) {
       $arguments['@actor:full_name'] = $actor->getDisplayName();
