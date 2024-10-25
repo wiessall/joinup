@@ -298,9 +298,8 @@ drupal:
         $config['system.mail']['interface']['default'] = 'null';
         $config['mailsystem.settings']['defaults']['sender'] = 'null';
       Development mail collector: |
-        $config['system.mail']['interface']['default'] = 'symfony_mailer_lite';
-        $config['mailsystem.settings']['defaults']['sender'] = 'symfony_mailer_lite';
-        $config['symfony_mailer_lite.settings']['default_transport'] = 'native';
+        $config['system.mail']['interface']['default'] = 'php_mail';
+        $config['mailsystem.settings']['defaults']['sender'] = 'php_mail';
       Test mail collector: |
         $config['system.mail']['interface']['default'] = 'test_mail_collector';
         $config['mailsystem.settings']['defaults']['sender'] = 'test_mail_collector';
