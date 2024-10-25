@@ -217,7 +217,7 @@ table tr td {
       <td>
         <div style="padding: 0px 0px 0px 0px;">
           <p>Dear Jane Doe</p>
-<p>Thank you for submitting your message to the Joinup Support.</p>
+<p>Thank you for submitting your message to the Portal Support.</p>
 <p>This is the message you submitted through the online form:</p>
 <p>Subject: <em class="placeholder">Question subject</em></p>
 <p>Content:</p>
@@ -225,7 +225,7 @@ table tr td {
 </blockquote>
 <p>Thank you for your interest, we will reply as soon as possible.</p>
 <p>Kind regards,</p>
-<p>The Joinup Support Team</p>
+<p>The Portal Support Team</p>
 
 
         </div>
@@ -240,7 +240,7 @@ EOS;
   const COPY_PLAIN = <<<EOS
 Dear Jane Doe
 
-Thank you for submitting your message to the Joinup Support.
+Thank you for submitting your message to the Portal Support.
 
 This is the message you submitted through the online form:
 
@@ -254,7 +254,7 @@ Thank you for your interest, we will reply as soon as possible.
 
 Kind regards,
 
-The Joinup Support Team
+The Portal Support Team
 EOS;
 
 
@@ -275,10 +275,10 @@ table tr td {
       <td>
         <div style="padding: 0px 0px 0px 0px;">
           <p>Dear Jane Doe</p>
-<p>Thank you for submitting your message to the Joinup Support.</p>
+<p>Thank you for submitting your message to the Portal Support.</p>
 <p>We will reply as soon as possible.</p>
 <p>Kind regards,</p>
-<p>The Joinup Support Team</p>
+<p>The Portal Support Team</p>
 
 
         </div>
@@ -293,13 +293,13 @@ EOS;
   const WITHOUT_COPY_PLAIN = <<<EOS
 Dear Jane Doe
 
-Thank you for submitting your message to the Joinup Support.
+Thank you for submitting your message to the Portal Support.
 
 We will reply as soon as possible.
 
 Kind regards,
 
-The Joinup Support Team
+The Portal Support Team
 EOS;
 
 }

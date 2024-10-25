@@ -208,7 +208,7 @@ function contact_form_mail($key, &$message, $params): void {
   $message['subject'] = t('Joinup: Contact form notification');
 
   $message['body'][] = t('Dear @name', ['@name' => $name]);
-  $message['body'][] = t('Thank you for submitting your message to the Joinup Support.');
+  $message['body'][] = t('Thank you for submitting your message to the Portal Support.');
 
   if ($entity->field_contact_copy->value) {
     $message['body'][] = t('This is the message you submitted through the online form:');
@@ -228,7 +228,7 @@ function contact_form_mail($key, &$message, $params): void {
   }
 
   $message['body'][] = t('Kind regards,');
-  $message['body'][] = t('The Joinup Support Team');
+  $message['body'][] = t('The Portal Support Team');
 
   // Send as HTML.
   $message['headers']['Content-Type'] = SymfonyMailer::FORMAT_HTML;

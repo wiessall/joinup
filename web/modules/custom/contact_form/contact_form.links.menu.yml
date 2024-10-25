@@ -1,5 +1,5 @@
 contact_form.contact:
-  title: 'Contact Joinup Support'
+  title: 'Contact Portal Support'
   weight: 0
   url: 'internal:/contact'
   menu_name: footer

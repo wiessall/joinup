@@ -23,7 +23,7 @@ Feature:
     And the following email should have been sent:
       | recipient_mail | AliciaPotter@example.com                                                                                                                                                                                                                                            |
       | subject        | Your account has been deleted.                                                                                                                                                                                                                                      |
-      | body           | Your account alicia__1997 has been deleted. This action has been done in the framework of moderation activities regularly conducted on the Joinup platform. If you believe that this action has been performed by mistake, please contact The Joinup Support Team at |
+      | body           | Your account alicia__1997 has been deleted. This action has been done in the framework of moderation activities regularly conducted on the Joinup platform. If you believe that this action has been performed by mistake, please contact The Portal Support Team at |
     And 1 e-mail should have been sent
     And the "alicia__1997" user account is cancelled
     And the "Alicia Potter" table row doesn't contain a checkbox
@@ -58,7 +58,7 @@ Feature:
     And the following email should have been sent:
       | recipient_mail | AliciaPotter@example.com                                                                                                                                                                                                                                            |
       | subject        | Your account has been deleted.                                                                                                                                                                                                                                      |
-      | body           | Your account alicia__1997 has been deleted. This action has been done in the framework of moderation activities regularly conducted on the Joinup platform. If you believe that this action has been performed by mistake, please contact The Joinup Support Team at |
+      | body           | Your account alicia__1997 has been deleted. This action has been done in the framework of moderation activities regularly conducted on the Joinup platform. If you believe that this action has been performed by mistake, please contact The Portal Support Team at |
     # We cannot assert the number of emails because of created content that
     # sends messages to administrators and moderators. Depending on environment
     # the list of recipients might differ. That's why we're only asserting that
@@ -115,7 +115,7 @@ Feature:
     Then the following email should have been sent:
       | recipient_mail | AliciaPotter@example.com                                                                                 |
       | subject        | Your account has been deleted.                                                                           |
-      | body           | If you believe that this action has been performed by mistake, please contact The Joinup Support Team at |
+      | body           | If you believe that this action has been performed by mistake, please contact The Portal Support Team at |
     # We cannot assert the number of emails because of created content that
     # sends messages to administrators and moderators. Depending on environment
     # the list of recipients might differ. That's why we're only asserting that

@@ -110,6 +110,6 @@ Feature: Subscribing to community content in collections and solutions
       | Marginally trapped                                                       |
       | Read more                                                                |
       | Kind regards,                                                            |
-      | The Joinup Support Team                                                  |
+      | The Portal Support Team                                                  |
       | You received this email because you opted in for Joinup digest messages. |
       | Manage your subscription notifications or unsubscribe from all.          |
