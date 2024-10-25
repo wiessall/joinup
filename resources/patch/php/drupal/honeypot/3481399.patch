@@ -1,0 +1,228 @@
+diff --git a/honeypot.services.yml b/honeypot.services.yml
+index 331a8c2..bd80d0d 100644
+--- a/honeypot.services.yml
++++ b/honeypot.services.yml
+@@ -1,4 +1,4 @@
+ services:
+   honeypot:
+     class: Drupal\honeypot\HoneypotService
+-    arguments: ['@current_user', '@module_handler', '@config.factory', '@keyvalue.expirable', '@page_cache_kill_switch', '@database', '@logger.factory', '@datetime.time', '@string_translation', '@cache.default', '@request_stack']
++    arguments: ['@current_user', '@module_handler', '@config.factory', '@keyvalue.expirable', '@page_cache_kill_switch', '@database', '@logger.factory', '@datetime.time', '@string_translation', '@request_stack']
+diff --git a/src/Form/HoneypotSettingsForm.php b/src/Form/HoneypotSettingsForm.php
+index cbf64b7..2116d72 100644
+--- a/src/Form/HoneypotSettingsForm.php
++++ b/src/Form/HoneypotSettingsForm.php
+@@ -3,7 +3,6 @@
+ namespace Drupal\honeypot\Form;
+ 
+ use Drupal\Component\Utility\Html;
+-use Drupal\Core\Cache\CacheBackendInterface;
+ use Drupal\Core\Config\ConfigFactoryInterface;
+ use Drupal\Core\Config\TypedConfigManagerInterface;
+ use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
+@@ -40,13 +39,6 @@ class HoneypotSettingsForm extends ConfigFormBase {
+    */
+   protected $entityTypeBundleInfo;
+ 
+-  /**
+-   * A cache backend interface.
+-   *
+-   * @var \Drupal\Core\Cache\CacheBackendInterface
+-   */
+-  protected $cache;
+-
+   /**
+    * Constructs a settings controller.
+    *
+@@ -60,15 +52,12 @@ class HoneypotSettingsForm extends ConfigFormBase {
+    *   The entity type manager.
+    * @param \Drupal\Core\Entity\EntityTypeBundleInfoInterface $entity_type_bundle_info
+    *   The entity type bundle info service.
+-   * @param \Drupal\Core\Cache\CacheBackendInterface $cache_backend
+-   *   The cache backend interface.
+    */
+-  public function __construct(ConfigFactoryInterface $config_factory, TypedConfigManagerInterface $typedConfigManager, ModuleHandlerInterface $module_handler, EntityTypeManagerInterface $entity_type_manager, EntityTypeBundleInfoInterface $entity_type_bundle_info, CacheBackendInterface $cache_backend) {
++  public function __construct(ConfigFactoryInterface $config_factory, TypedConfigManagerInterface $typedConfigManager, ModuleHandlerInterface $module_handler, EntityTypeManagerInterface $entity_type_manager, EntityTypeBundleInfoInterface $entity_type_bundle_info) {
+     parent::__construct($config_factory, $typedConfigManager);
+     $this->moduleHandler = $module_handler;
+     $this->entityTypeManager = $entity_type_manager;
+     $this->entityTypeBundleInfo = $entity_type_bundle_info;
+-    $this->cache = $cache_backend;
+   }
+ 
+   /**
+@@ -80,8 +69,7 @@ class HoneypotSettingsForm extends ConfigFormBase {
+       $container->get('config.typed'),
+       $container->get('module_handler'),
+       $container->get('entity_type.manager'),
+-      $container->get('entity_type.bundle.info'),
+-      $container->get('cache.default')
++      $container->get('entity_type.bundle.info')
+     );
+   }
+ 
+@@ -295,12 +283,7 @@ class HoneypotSettingsForm extends ConfigFormBase {
+     }
+ 
+     // Save the honeypot forms from $form_state into a 'form_settings' array.
+-    $config->set('form_settings', $form_state->getValue('form_settings'));
+-
+-    $config->save();
+-
+-    // Clear the honeypot protected forms cache.
+-    $this->cache->delete('honeypot_protected_forms');
++    $config->set('form_settings', $form_state->getValue('form_settings'))->save();
+ 
+     parent::submitForm($form, $form_state);
+   }
+diff --git a/src/HoneypotService.php b/src/HoneypotService.php
+index 22ea589..e767c32 100644
+--- a/src/HoneypotService.php
++++ b/src/HoneypotService.php
+@@ -4,7 +4,6 @@ namespace Drupal\honeypot;
+ 
+ use Drupal\Component\Datetime\TimeInterface;
+ use Drupal\Component\Utility\Crypt;
+-use Drupal\Core\Cache\CacheBackendInterface;
+ use Drupal\Core\Config\ConfigFactory;
+ use Drupal\Core\Database\Connection;
+ use Drupal\Core\DependencyInjection\DependencySerializationTrait;
+@@ -81,13 +80,6 @@ class HoneypotService implements HoneypotServiceInterface {
+    */
+   protected $timeService;
+ 
+-  /**
+-   * A cache backend interface.
+-   *
+-   * @var \Drupal\Core\Cache\CacheBackendInterface
+-   */
+-  protected $cacheBackend;
+-
+   /**
+    * The request stack service.
+    *
+@@ -116,12 +108,10 @@ class HoneypotService implements HoneypotServiceInterface {
+    *   The datetime.time service.
+    * @param \Drupal\Core\StringTranslation\TranslationInterface $string_translation
+    *   The string translation service.
+-   * @param \Drupal\Core\Cache\CacheBackendInterface $cache_backend
+-   *   The cache backend interface.
+    * @param \Symfony\Component\HttpFoundation\RequestStack $request_stack
+    *   The request stack service.
+    */
+-  public function __construct(AccountProxyInterface $account, ModuleHandlerInterface $module_handler, ConfigFactory $config_factory, KeyValueExpirableFactory $key_value, KillSwitch $kill_switch, Connection $connection, LoggerChannelFactoryInterface $logger_factory, TimeInterface $time_service, TranslationInterface $string_translation, CacheBackendInterface $cache_backend, RequestStack $request_stack) {
++  public function __construct(AccountProxyInterface $account, ModuleHandlerInterface $module_handler, ConfigFactory $config_factory, KeyValueExpirableFactory $key_value, KillSwitch $kill_switch, Connection $connection, LoggerChannelFactoryInterface $logger_factory, TimeInterface $time_service, TranslationInterface $string_translation, RequestStack $request_stack) {
+     $this->account = $account;
+     $this->moduleHandler = $module_handler;
+     $this->config = $config_factory->get('honeypot.settings');
+@@ -131,7 +121,6 @@ class HoneypotService implements HoneypotServiceInterface {
+     $this->loggerFactory = $logger_factory;
+     $this->timeService = $time_service;
+     $this->stringTranslation = $string_translation;
+-    $this->cacheBackend = $cache_backend;
+     $this->requestStack = $request_stack;
+   }
+ 
+@@ -139,31 +128,7 @@ class HoneypotService implements HoneypotServiceInterface {
+    * {@inheritdoc}
+    */
+   public function getProtectedForms(): array {
+-    $forms = &drupal_static(__METHOD__);
+-
+-    // If the data isn't already in memory, get from cache or look it up fresh.
+-    if (!isset($forms)) {
+-      if ($cache = $this->cacheBackend->get('honeypot_protected_forms')) {
+-        $forms = $cache->data;
+-      }
+-      else {
+-        $forms = [];
+-        $form_settings = $this->config->get('form_settings');
+-        if (!empty($form_settings)) {
+-          // Add each form that's enabled to the $forms array.
+-          foreach ($form_settings as $form_id => $enabled) {
+-            if ($enabled) {
+-              $forms[] = $form_id;
+-            }
+-          }
+-        }
+-
+-        // Save the cached data.
+-        $this->cacheBackend->set('honeypot_protected_forms', $forms);
+-      }
+-    }
+-
+-    return $forms;
++    return array_keys(array_filter($this->config->get('form_settings') ?? []));
+   }
+ 
+   /**
+diff --git a/tests/src/Kernel/HoneypotTest.php b/tests/src/Kernel/HoneypotTest.php
+new file mode 100644
+index 0000000..ae3610f
+--- /dev/null
++++ b/tests/src/Kernel/HoneypotTest.php
+@@ -0,0 +1,64 @@
++<?php
++
++declare(strict_types=1);
++
++namespace Drupal\Tests\honeypot\Kernel;
++
++use Drupal\KernelTests\KernelTestBase;
++
++/**
++ * Tests honeypot functionality.
++ *
++ * @group honeypot
++ */
++class HoneypotTest extends KernelTestBase {
++
++  /**
++   * {@inheritdoc}
++   */
++  protected static $modules = ['honeypot'];
++
++  /**
++   * The config factory service.
++   *
++   * @var \Drupal\Core\Config\ConfigFactoryInterface
++   */
++  protected $configFactory;
++
++  /**
++   * The Honeypot service.
++   *
++   * @var \Drupal\honeypot\HoneypotServiceInterface
++   */
++  protected $honeypot;
++
++  /**
++   * {@inheritdoc}
++   */
++  protected function setUp(): void {
++    parent::setUp();
++
++    $this->installSchema('honeypot', []);
++    $this->installConfig(['honeypot']);
++    $this->configFactory = $this->container->get('config.factory');
++    $this->honeypot = $this->container->get('honeypot');
++  }
++
++  /**
++   * Tests the Honeypot protected forms method.
++   *
++   * @covers \Drupal\honeypot\HoneypotService::getProtectedForms
++   */
++  public function testGetProtectedForms(): void {
++    $config = $this->configFactory->getEditable('honeypot.settings');
++
++    // Initial state: we have a protected form.
++    $config->set('form_settings', ['user_register_form' => TRUE])->save();
++    $this->assertEquals(['user_register_form'], $this->honeypot->getProtectedForms());
++
++    // Empty form_settings, expect no protected forms.
++    $config->set('form_settings', [])->save();
++    $this->assertEquals([], $this->honeypot->getProtectedForms());
++  }
++
++}
