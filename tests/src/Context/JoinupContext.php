@@ -576,15 +576,19 @@ class JoinupContext extends RawDrupalContext {
    *   The type of the node entity.
    * @param string $title
    *   The name of the news page.
+   * @param string|null $rel
+   *   (optional) The link relationship type (edit-form, delete-form,...).
+   *   Defaults to NULL (canonical).
    *
    * @When I go to the content page of the type :type with the title :title
+   * @When I go to the :rel content page of the type :type with the title :title
    *
    * @throws \Drupal\Core\Entity\EntityMalformedException
    */
-  public function visitNodePage($type, $title): void {
+  public function visitNodePage(string $type, string $title, ?string $rel = NULL): void {
     /** @var \Drupal\node\Entity\Node $node */
     $node = $this->getEntityByLabel('node', $title, $type);
-    $this->visitPath($node->toUrl()->toString());
+    $this->visitPath($node->toUrl($rel)->toString());
   }
 
   /**
@@ -601,6 +605,25 @@ class JoinupContext extends RawDrupalContext {
     /** @var \Drupal\node\NodeInterface $node */
     $node = $this->getEntityByLabel('node', $title);
     $this->visitPath($node->toUrl('version-history')->toString());
+  }
+
+  /**
+   * Assert we are on the given node path.
+   *
+   * @param string $title
+   *   The title of the node.
+   * @param string|null $rel
+   *   (optional) The link relationship type (edit-form, delete-form,...).
+   *   Defaults to NULL (canonical).
+   *
+   * @Then I should be on the :title content page
+   * @Then I should be on the :rel page of the :title content
+   */
+  public function assertNodePath(string $title, ?string $rel = NULL): void {
+    /** @var \Drupal\node\NodeInterface $node */
+    $node = $this->getEntityByLabel('node', $title);
+    $expected_path = $this->locatePath($node->toUrl($rel)->toString());
+    $this->assertSession()->addressEquals($expected_path);
   }
 
   /**
