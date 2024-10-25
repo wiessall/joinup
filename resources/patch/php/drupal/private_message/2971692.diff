@@ -1,0 +1,35 @@
+From 2ffa61e246510e42fe3c0876c080162261218280 Mon Sep 17 00:00:00 2001
+From: Justin Phelan <21286-jtphelan@users.noreply.drupalcode.org>
+Date: Wed, 23 Oct 2024 17:45:23 +0000
+Subject: [PATCH] Allow safe HTML tags in private message notifications.
+
+---
+ private_message.tokens.inc | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/private_message.tokens.inc b/private_message.tokens.inc
+index e5de4ad..c9cdf71 100644
+--- a/private_message.tokens.inc
++++ b/private_message.tokens.inc
+@@ -10,6 +10,8 @@ use Drupal\Core\Language\LanguageInterface;
+ use Drupal\Core\Render\BubbleableMetadata;
+ use Drupal\Core\Url;
+ use Drupal\user\Entity\User;
++use Drupal\Core\Render\Markup;
++use Drupal\Component\Utility\Xss;
+ 
+ /**
+  * Implements hook_token_info().
+@@ -116,7 +118,9 @@ function private_message_tokens($type, $tokens, array $data, array $options, Bub
+           break;
+ 
+         case 'message':
+-          $replacements[$original] = $private_message->getMessage();
++          $allowed_tags = ['p', 'br', 'strong', 'em', 'ul', 'ol', 'li', 'a'];
++          $sanitized_message  = Xss::filter($private_message->getMessage(), $allowed_tags);
++          $replacements[$original] = Markup::create($sanitized_message);
+           break;
+ 
+         case 'author-name':
+-- 
+GitLab
