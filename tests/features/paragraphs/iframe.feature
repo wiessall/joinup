@@ -51,3 +51,13 @@ Feature:
     And I press "Update"
     Then I should see the success message "Custom page Don't Mess with the Zohan has been updated."
     And the response should contain "{\"foo\":\"bar\"}"
+
+  Scenario: Consent declaration should be displayed for PowerBI.
+    Given custom_page content:
+      | title               | collection            | state     |
+      | Iframe page example | Paragraphs collection | published |
+    And I append "iframe" to "field_paragraphs_body" field in "node" entity with following "Iframe page example" title:
+      | field_iframe:url | https://app.powerbi.com/view?r=dummy-report |
+
+    When I go to the "Iframe page example" custom page
+    And the response should contain "src=\"https://webtools.europa.eu/crs/iframe/?oriurl=https%3A//app.powerbi.com/view%3Fr%3Ddummy-report\""
