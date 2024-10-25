@@ -8,7 +8,7 @@ use Drupal\Core\Field\Attribute\FieldFormatter;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Template\Attribute;
 use Drupal\Core\Url;
-use Drupal\iframe\Plugin\Field\FieldFormatter\IframeDefaultFormatter;
+use Drupal\iframe\Plugin\Field\FieldFormatter\IframeOnlyFormatter;
 
 /**
  * Plugin implementation of the 'iframe_with_consent_declaration' formatter.
@@ -20,7 +20,7 @@ use Drupal\iframe\Plugin\Field\FieldFormatter\IframeDefaultFormatter;
     'iframe',
   ],
 )]
-class IframeWithConsentDeclarationFormatter extends IframeDefaultFormatter {
+class IframeWithConsentDeclarationFormatter extends IframeOnlyFormatter {
 
   /**
    * {@inheritdoc}
