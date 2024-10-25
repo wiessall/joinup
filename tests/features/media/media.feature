@@ -31,7 +31,7 @@ Feature: Administer media.
       | name       | owner | file     | group |
       | The File   | joe   | text.pdf | Mars  |
       | Other File | joe   | test.zip | Venus |
-    And the following "Video" media:
+    And the following "Remote video" media:
       | name      | owner | video                                       | group | published |
       | The Video | joe   | https://www.youtube.com/watch?v=dQw4w9WgXcQ | Mars  | no        |
 
@@ -48,7 +48,7 @@ Feature: Administer media.
       | Other Image           | Image             | Published   | Venus | joe    |
       | The File              | File              | Published   | Mars  | joe    |
       | Other File            | File              | Published   | Venus | joe    |
-      | The Video             | Video             | Unpublished | Mars  | joe    |
+      | The Video             | Remote video      | Unpublished | Mars  | joe    |
 
     When I type "Venus" in the "group" autocomplete field
     Then I wait until the page contains the text "Venus"
@@ -70,13 +70,13 @@ Feature: Administer media.
       | Other Image           | Image             | Published   | Venus | joe    |
       | The File              | File              | Published   | Mars  | joe    |
       | Other File            | File              | Published   | Venus | joe    |
-      | The Video             | Video             | Unpublished | Mars  | joe    |
+      | The Video             | Remote video      | Unpublished | Mars  | joe    |
 
     When I select "Unpublished" from "Status"
     And I press "Filter"
     Then the "media admin" table should contain the following columns:
-      | Media name | Type  | Status      | Group | Author |
-      | The Video  | Video | Unpublished | Mars  | joe    |
+      | Media name | Type         | Status      | Group | Author |
+      | The Video  | Remote video | Unpublished | Mars  | joe    |
 
     When I click "Add media"
     And I should see the link "Collection logo"
@@ -85,7 +85,7 @@ Feature: Administer media.
     And I should see the link "Solution logo"
     But I should see the link "Image"
     But I should see the link "File"
-    And I should see the link "Video"
+    And I should see the link "Remote video"
 
     When I click "File"
     And I fill in "Group" with "Mars"
@@ -103,4 +103,4 @@ Feature: Administer media.
       | Other Image           | Image             | Published   | Venus | joe    |
       | The File              | File              | Published   | Mars  | joe    |
       | Other File            | File              | Published   | Venus | joe    |
-      | The Video             | Video             | Unpublished | Mars  | joe    |
+      | The Video             | Remote video      | Unpublished | Mars  | joe    |
