@@ -60,4 +60,4 @@ Feature:
       | field_iframe:url | https://app.powerbi.com/view?r=dummy-report |
 
     When I go to the "Iframe page example" custom page
-    And the response should contain "src=\"https://webtools.europa.eu/crs/iframe/?oriurl=https%3A//app.powerbi.com/view%3Fr%3Ddummy-report\""
+    And the response should contain "src=\"https://webtools.europa.eu/crs/iframe/?oriurl=https%3A//app.powerbi.com/view%3Fr%3Ddummy-report&amp;lang=en\""
