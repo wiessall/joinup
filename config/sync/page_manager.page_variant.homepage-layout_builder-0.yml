@@ -140,7 +140,7 @@ variant_settings:
             label_display: '0'
             provider: custom_markup_block
             markup:
-              value: "<h2>What's Portal</h2>\r\n<p>The Portal platform is the European Commission's one-stop shop for interoperable, open, and free digital government ICT solutions and an online space for e-Government professionals and enthusiasts to share and learn about digital public services and initiatives.</p>\r\n<p><strong>Portal covers the hands-on aspects of interoperability.</strong></p>\r\n"
+              value: "<h2>What is the Portal</h2>\r\n<p>The Portal is the European Union’s platform for promoting and supporting interoperability, collaboration, and knowledge sharing across public administrations, businesses, and citizens.</p>\r\n<p><strong>It acts as a one-stop shop for discovering, sharing, and reusing IT solutions and good practices.</strong></p>\r\n"
               format: full_html
           weight: 0
           additional:
