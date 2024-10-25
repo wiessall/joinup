@@ -1,7 +1,7 @@
 name: Statistics
-description: 'Provide statistics for Joinup entities.'
+description: 'Provide statistics for Portal entities.'
 type: module
-package: Joinup
+package: Portal
 core_version_requirement: ">= 9.4"
 
 dependencies:

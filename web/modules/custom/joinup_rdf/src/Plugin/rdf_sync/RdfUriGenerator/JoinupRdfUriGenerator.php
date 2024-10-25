@@ -13,7 +13,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *
  * @RdfUriGenerator(
  *   id = "joinup_po_namespace",
- *   name = @Translation("Joinup PO namespace (data.europa.eu/w21)"),
+ *   name = @Translation("Portal PO namespace (data.europa.eu/w21)"),
  * )
  */
 class JoinupRdfUriGenerator extends RdfUriGeneratorPluginBase {

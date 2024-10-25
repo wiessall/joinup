@@ -1,7 +1,7 @@
 @group-clone @api
 Feature: Minimal install clone testing.
 
-  Scenario: Visit Joinup collection.
+  Scenario: Visit Portal collection.
 
     Given I am an anonymous user
     When I visit "/search?keys=joinup&f[0]=type:collection"

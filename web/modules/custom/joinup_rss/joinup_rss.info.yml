@@ -1,7 +1,7 @@
-name: Joinup RSS
-description: Exposes RSS feeds in Joinup.
+name: Portal RSS
+description: Exposes RSS feeds in Portal.
 type: module
-package: Joinup
+package: Portal
 core_version_requirement: ">= 9.4"
 
 dependencies:

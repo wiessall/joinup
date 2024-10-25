@@ -1,7 +1,7 @@
-name: 'Joinup Menu'
-description: 'Reusable code to interact with menus in Joinup.'
+name: 'Portal Menu'
+description: 'Reusable code to interact with menus in Portal.'
 type: module
-package: Joinup
+package: Portal
 core_version_requirement: ">= 9.4"
 
 dependencies:

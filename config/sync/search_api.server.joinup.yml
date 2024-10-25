@@ -41,7 +41,7 @@ dependencies:
   module:
     - search_api_solr
 id: joinup
-name: 'Joinup Search API Server'
+name: 'Portal Search API Server'
 description: ''
 backend: search_api_solr
 backend_config:

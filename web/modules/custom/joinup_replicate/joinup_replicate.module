@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Hooks of Joinup Replicate module.
+ * Hooks of Portal Replicate module.
  */
 
 declare(strict_types=1);

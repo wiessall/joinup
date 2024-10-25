@@ -1,7 +1,7 @@
-name: 'Joinup log'
+name: 'Portal log'
 description: 'Contains log-related features.'
 type: module
-package: Joinup
+package: Portal
 core_version_requirement: ">= 10.1"
 dependencies:
   - drupal:user

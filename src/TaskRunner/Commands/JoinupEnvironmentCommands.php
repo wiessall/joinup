@@ -15,17 +15,17 @@ use Robo\Exception\AbortTasksException;
 use Robo\Robo;
 
 /**
- * Joinup Environment Commands.
+ * Portal Environment Commands.
  */
 class JoinupEnvironmentCommands extends AbstractCommands {
 
   /**
-   * Displays information about Joinup environment.
+   * Displays information about Portal environment.
    *
    * @command joinup:environment
    *
    * @return string
-   *   A table with Joinup environment info.
+   *   A table with Portal environment info.
    */
   public function joinupEnvironment(): string {
     $php_version = phpversion();
@@ -40,7 +40,7 @@ class JoinupEnvironmentCommands extends AbstractCommands {
       " Selenium {$this->seleniumVersion()}\n" .
       " Node     {$this->nodeVersion()}\n" .
       " NPM      {$this->npmVersion()}\n" .
-      " Joinup   {$this->joinupVersion()}";
+      " Portal   {$this->joinupVersion()}";
   }
 
   /**
@@ -109,10 +109,10 @@ class JoinupEnvironmentCommands extends AbstractCommands {
   }
 
   /**
-   * Returns the Joinup version.
+   * Returns the Portal version.
    *
    * @return string
-   *   The Joinup version.
+   *   The Portal version.
    */
   protected function joinupVersion(): string {
     $config = $this->getConfig();

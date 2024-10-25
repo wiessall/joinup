@@ -1,7 +1,7 @@
-name: 'Joinup Replicate'
-description: 'Integrates the Replicate module in Joinup.'
+name: 'Portal Replicate'
+description: 'Integrates the Replicate module in Portal.'
 type: module
-package: Joinup
+package: Portal
 core_version_requirement: ">= 10.2"
 
 dependencies:

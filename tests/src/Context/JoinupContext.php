@@ -47,7 +47,7 @@ use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\ExpectationFailedException;
 
 /**
- * Behat step definitions that are generally useful for the Joinup project.
+ * Behat step definitions that are generally useful for the Portal project.
  */
 class JoinupContext extends RawDrupalContext {
 
@@ -2880,7 +2880,7 @@ class JoinupContext extends RawDrupalContext {
    *
    * Table format:
    * | URL                          | Title  |
-   * | https://interoperable-europe.ec.europa.eu/ | Joinup |
+   * | https://interoperable-europe.ec.europa.eu/ | Portal |
    * | https://www.drupal.org/      | Drupal |
    *
    * @param \Behat\Gherkin\Node\TableNode $table

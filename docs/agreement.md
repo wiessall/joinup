@@ -1,6 +1,6 @@
-# Joinup Individual Contributor Assignment Agreement
+# Portal Individual Contributor Assignment Agreement
 
-Thank you for your interest in contributing to Joinup, owned by the European
+Thank you for your interest in contributing to Portal, owned by the European
 Union ("We" or "Us"). This contributor agreement ("Agreement") documents the
 rights granted by contributors to Us. By creating a pull request you implicitly
 agree with the contents of this document.
@@ -13,7 +13,7 @@ to it. The Agreement may cover more than one software project managed by Us.
 * "**You**" means the individual who Submits a Contribution to Us.
 * "**Contribution**" means any work of authorship that is Submitted by You to Us in
   which You own or assert ownership of the Copyright. If You do not own the
-  Copyright in the entire work of authorship, please contact Joinup legal
+  Copyright in the entire work of authorship, please contact Portal legal
   support through the form in https://interoperable-europe.ec.europa.eu/contact.
 * "**Copyright**" means all rights protecting works of authorship owned or
   controlled by You, including copyright, moral and neighboring rights, as
@@ -118,7 +118,7 @@ You confirm that:
 __(a)__ You have the legal authority to enter into this Agreement.
 __(b)__ You own the Copyright and patent claims covering the Contribution which are required to grant the rights under Section 2.
 __(c)__ The grant of rights under Section 2 does not violate any grant of rights which You have made to third parties, including Your employer. If You are an employee, You have had Your employer approve this Agreement or sign the Entity version of this document. If You are less than eighteen years old, please have Your parents or guardian sign the Agreement.
-__(d)__ You have contacted Joinup legal support https://interoperable-europe.ec.europa.eu/contact, if You do not own the Copyright in the entire work of authorship Submitted.
+__(d)__ You have contacted Portal legal support https://interoperable-europe.ec.europa.eu/contact, if You do not own the Copyright in the entire work of authorship Submitted.
 
 ## 4. Disclaimer
 

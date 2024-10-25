@@ -1,5 +1,5 @@
-name: Joinup Tiles
-description: Tiles components for Joinup
+name: Portal Tiles
+description: Tiles components for Portal
 type: module
-package: Joinup
+package: Portal
 core_version_requirement: ">= 9.4"

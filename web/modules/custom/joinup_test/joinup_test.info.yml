@@ -1,7 +1,7 @@
-name: 'Joinup Test'
-description: 'Contains functionality to test Joinup.'
+name: 'Portal Test'
+description: 'Contains functionality to test Portal.'
 type: module
-package: Joinup
+package: Portal
 core_version_requirement: ">= 9.4"
 dependencies:
   - http_request_mock:http_request_mock

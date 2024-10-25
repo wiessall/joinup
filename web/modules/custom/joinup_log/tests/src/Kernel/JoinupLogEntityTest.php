@@ -12,7 +12,7 @@ use Drupal\joinup_log\Entity\JoinupLog;
 use Drupal\joinup_log\Entity\JoinupLogInterface;
 
 /**
- * Test the Joinup log entity functionality.
+ * Test the Portal log entity functionality.
  */
 class JoinupLogEntityTest extends KernelTestBase {
 
@@ -77,7 +77,7 @@ class JoinupLogEntityTest extends KernelTestBase {
     $log_entity = $this->generateLogEntity();
 
     $this->expectException(EntityStorageException::class);
-    $this->expectExceptionMessage('Joinup log entities are read only entities. Saving them once created is not allowed.');
+    $this->expectExceptionMessage('Portal log entities are read only entities. Saving them once created is not allowed.');
     $log_entity->save();
   }
 
@@ -92,13 +92,13 @@ class JoinupLogEntityTest extends KernelTestBase {
   }
 
   /**
-   * Generates a Joinup log entity.
+   * Generates a Portal log entity.
    *
    * @param array $values
    *   Overrides the defaults values.
    *
    * @return \Drupal\joinup_log\Entity\JoinupLogInterface
-   *   The Joinup log entity.
+   *   The Portal log entity.
    */
   private function generateLogEntity(array $values = []): JoinupLogInterface {
     global $base_root;
@@ -106,7 +106,7 @@ class JoinupLogEntityTest extends KernelTestBase {
     $user = !empty($this->adminUser) ? $this->adminUser : new AnonymousUserSession();
     $values = $values + [
       'type'        => 'custom',
-      'message'     => 'Joinup log test log message',
+      'message'     => 'Portal log test log message',
       'severity'    => RfcLogLevel::NOTICE,
       'uid'         => $user->id(),
       'location'    => $base_root . \Drupal::request()->getRequestUri(),

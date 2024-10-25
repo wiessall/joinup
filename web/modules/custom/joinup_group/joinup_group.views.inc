@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Views integration for Joinup Group module.
+ * Views integration for Portal Group module.
  */
 
 declare(strict_types=1);

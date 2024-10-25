@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Deploy functions for Joinup.
+ * Deploy functions for Portal.
  *
  * This should only contain update functions that rely on the Drupal API and
  * need to run _after_ the configuration is imported.

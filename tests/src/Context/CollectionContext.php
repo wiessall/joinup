@@ -125,7 +125,7 @@ class CollectionContext extends RawDrupalContext {
   /**
    * Navigates to the collections overview page.
    *
-   * @todo This is currently dependent on the Joinup profile being installed,
+   * @todo This is currently dependent on the Portal profile being installed,
    *   since the view providing this overview page is exported in the profile.
    *   Remove this todo when ISAICP-5176 is fixed.
    *
@@ -665,10 +665,10 @@ class CollectionContext extends RawDrupalContext {
   }
 
   /**
-   * Creates the standard 'Joinup' collection.
+   * Creates the standard 'Portal' collection.
    *
    * @return \Drupal\collection\Entity\CollectionInterface
-   *   The 'Joinup' collection.
+   *   The 'Portal' collection.
    *
    * @BeforeScenario @joinup_collection&&@api
    *
@@ -677,7 +677,7 @@ class CollectionContext extends RawDrupalContext {
   public function createJoinupCollection(): CollectionInterface {
     return $this->createCollection([
       'id' => JoinupCollectionHelper::getCollectionId(),
-      'label' => 'Joinup',
+      'label' => 'Portal',
       'field_ar_state' => 'published',
     ]);
   }
@@ -722,7 +722,7 @@ class CollectionContext extends RawDrupalContext {
    * collection the content belongs to. It is tedious to manually define a
    * collection and link it to the content for every single test. If it is
    * omitted in the definition of the test we assign an existing collection, or
-   * if none exist we assign the "Joinup" collection. This ensures data
+   * if none exist we assign the "Portal" collection. This ensures data
    * integrity and prevents form validation errors.
    *
    * @param \Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope $scope
@@ -753,7 +753,7 @@ class CollectionContext extends RawDrupalContext {
       }
     }
 
-    // If no suitable candidate is found, use the default "Joinup" collection.
+    // If no suitable candidate is found, use the default "Portal" collection.
     if (empty($collection)) {
       $collection = $this->createJoinupCollection();
     }

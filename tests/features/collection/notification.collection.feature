@@ -210,5 +210,5 @@ Feature: Notification test for the collection transitions.
       | body      | The collection "NC to delete by mod", of which you are a member, has been deleted. |
     And the following email should have been sent:
       | recipient | NC owner                                                              |
-      | subject   | Joinup: Your collection has been deleted by the moderation team       |
-      | body      | The Joinup moderation team deleted the collection NC to delete by mod |
+      | subject   | Portal: Your collection has been deleted by the moderation team       |
+      | body      | The Portal moderation team deleted the collection NC to delete by mod |

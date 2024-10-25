@@ -25,7 +25,7 @@ class UnpublishedContentPageController extends ControllerBase {
    * @param \Drupal\Core\Render\RendererInterface $renderer
    *   The renderer.
    * @param \Drupal\joinup_group\JoinupGroupManagerInterface $group_manager
-   *   The Joinup group manager service.
+   *   The Portal group manager service.
    */
   public function __construct(protected BlockManagerInterface $block_plugin_manager, protected RendererInterface $renderer, protected JoinupGroupManagerInterface $group_manager) {}
 

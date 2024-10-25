@@ -1,7 +1,7 @@
-name: Joinup search
-description: Integrates the Joinup project with Solr.
+name: Portal search
+description: Integrates the Portal project with Solr.
 type: module
-package: Joinup
+package: Portal
 core_version_requirement: ">= 9.4"
 
 dependencies:

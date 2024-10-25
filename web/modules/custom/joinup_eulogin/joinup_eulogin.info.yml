@@ -1,7 +1,7 @@
-name: 'Joinup EU Login'
+name: 'Portal EU Login'
 description: 'Provides integration with EU Login.'
 type: module
-package: Joinup
+package: Portal
 core_version_requirement: ">= 9.4"
 
 dependencies:

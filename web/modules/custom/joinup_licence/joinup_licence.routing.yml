@@ -2,7 +2,7 @@ joinup_licence.comparer:
   path: '/licence/compare/{licences}'
   defaults:
     _controller: 'Drupal\joinup_licence\Controller\LicenceComparerController::compare'
-    _title: 'Joinup Licensing Assistant (JLA)'
+    _title: 'Portal Licensing Assistant (JLA)'
   requirements:
     _access: 'TRUE'
     licences: '([a-zA-Z0-9][a-zA-Z0-9. -]+;)+[a-zA-Z0-9][a-zA-Z0-9. -]+'

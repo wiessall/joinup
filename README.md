@@ -1,8 +1,8 @@
-# Joinup website
+# Portal website
 
 This is the source code for https://interoperable-europe.ec.europa.eu.
 
-Joinup is a collaborative platform created by the European Commission and funded
+Portal is a collaborative platform created by the European Commission and funded
 by the European Union via the [Interoperable Europe](https://interoperable-europe.ec.europa.eu/interoperable-europe)
 Programme.
 
@@ -10,18 +10,18 @@ It offers several services that aim to help e-Government professionals share
 their experience with each other. We also hope to support them to find, choose,
 re-use, develop and implement interoperability solutions.
 
-The Joinup platform is developed as a [Drupal](https://www.drupal.org)
+The Portal platform is developed as a [Drupal](https://www.drupal.org)
 web application, and therefore tries to follow the "open-source way" as much as
 possible.
 
 You are free to fork this project to host your own collaborative platform.
-However, Joinup is not a full reusable solution because it doesn't guarantee
+However, Portal is not a full reusable solution because it doesn't guarantee
 backwards compatibility, nor a full upgrade path between two versions.
 
 If you download and install your own instance, you're responsible for update and
-adapt the code when new Joinup versions are available.
+adapt the code when new Portal versions are available.
 
-Joinup is licensed under the [EUPL](https://interoperable-europe.ec.europa.eu/community/eupl/og_page/eupl),
+Portal is licensed under the [EUPL](https://interoperable-europe.ec.europa.eu/community/eupl/og_page/eupl),
 which is compatible with the GPL.
 
 ## Development
@@ -33,7 +33,7 @@ streamlined and unified development process.
 
 * Make sure you use a good PHP [IDE](https://en.wikipedia.org/wiki/Integrated_development_environment)
   such as [PhpStorm](https://www.jetbrains.com/phpstorm/), [VS Code](https://code.visualstudio.com)
-  or [Eclipse](https://eclipseide.org). Joinup code is complex and needs good
+  or [Eclipse](https://eclipseide.org). Portal code is complex and needs good
   tools.
 * Get familiarised with [DDEV](https://ddev.com). Check the DDEV [documentation](https://ddev.readthedocs.io).
 
@@ -46,7 +46,7 @@ streamlined and unified development process.
 * DDEV is used mostly via CLI commands. [Configure shell completion & autocomplete](https://ddev.readthedocs.io/en/stable/users/install/shell-completion/)
   according to your environment.
 * Configure your IDE to take advantage of the DDEV features. This is a critical
-  step to be able to test and debug your Joinup. Remember, the website
+  step to be able to test and debug your Portal. Remember, the website
   runs inside Docker, so pay attention to these configurations:
   - [PhpStorm Setup](https://ddev.readthedocs.io/en/stable/users/install/phpstorm/)
   - [Configure](https://ddev.readthedocs.io/en/stable/users/debugging-profiling/step-debugging/)
@@ -91,9 +91,9 @@ This will install the PHP and Node dependencies. The codebase is deployed.
 * You should fill the `.env` file environment variables with values. Each
   variable is documented in `.env.example`.
 
-### Install Joinup
+### Install Portal
 
-There are two ways to install Joinup:
+There are two ways to install Portal:
 
 ### Empty site
 
@@ -129,12 +129,12 @@ names, emails, etc. is already sanitized.
 Make sure that you followed the [Configure sensitive data (secrets)](#configure-sensitive-data-secrets)
 section, and you set the `NEXTCLOUD_*` environment variables in `.env` file. The
 values should be provided according to these [instructions](https://webgate.ec.europa.eu/fpfis/qa/how-to?nid=22351).
-These credentials are needed to be able to download the Joinup databases dumps
+These credentials are needed to be able to download the Portal databases dumps
 and snapshots.
 
 #### Download database dump/snapshots
 
-Joinup needs to restore dump/snapshots from three sources: MySQL, Virtuoso and
+Portal needs to restore dump/snapshots from three sources: MySQL, Virtuoso and
 Solr; to be able to rebuild the website with production data:
 
 ```shell
@@ -211,7 +211,7 @@ ddev ssh -s <service>
 
 #### Task runners
 
-Joinup is using two task runners:
+Portal is using two task runners:
 
 * [Drush](https://github.com/drush-ops/drush): This is the official Drupal shell tool.
 * [Toolkit](https://github.com/ec-europa/toolkit): The European Commission PHP runner.
@@ -232,7 +232,7 @@ ddev run <command>
 
 Note that Toolkit uses its own configuration. Few aspects:
 
-* Apart from configuration provided by Toolkit, Joinup exposes its own
+* Apart from configuration provided by Toolkit, Portal exposes its own
   configuration under `resources/runner`.
 * You can override any configuration by creating a `runner.yml` file in the
   project's root directory. Note that this file is not under VCS control.
@@ -279,7 +279,7 @@ Find out more on how to write custom commands [here](https://ddev.readthedocs.io
 
 ### Testing & code quality checks
 
-Testing frameworks used by Joinup:
+Testing frameworks used by Portal:
 
 #### Behat testing
 
@@ -319,7 +319,7 @@ Relies on [nicwortel/behat-unused-step-definitions-extension](https://github.com
 
 #### Static code analysis
 
-Joinup uses GrumPHP, which runs all tasks defined in [grumphp.yml.dist](grumphp.yml.dist).
+Portal uses GrumPHP, which runs all tasks defined in [grumphp.yml.dist](grumphp.yml.dist).
 See [GrumPHP documentation](https://github.com/phpro/grumphp/blob/v2.x/doc/commands.md#run).
 
 * Run all tasks:
@@ -349,7 +349,7 @@ dev:
 
 ### Upgrade process
 
-Joinup offers only _contiguous upgrades_. For details and naming conventions,
+Portal offers only _contiguous upgrades_. For details and naming conventions,
 please read documentation of [ValidUpdateNameSniff](src/CodingStandards/Sniffs/NamingConventions/ValidUpdateNameSniff.php)
 coding standards rule.
 
@@ -361,7 +361,7 @@ For some additional details in our SPARQL related functionality, see our
 ### Mailpit
 
 Mailpit is a tool that allows you to catch all emails sent by the application
-during development. Mailpit is optional, as the default setup of Joinup, is to
+during development. Mailpit is optional, as the default setup of Portal, is to
 use the devel mail server which stores the emails as text messages in the tmp
 directory. However, Mailpit is more convenient to use, as it provides a web UI
 to view the emails.

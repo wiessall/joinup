@@ -1,6 +1,6 @@
 @api @group-clone
 Feature: Export collection metadata
-  As a user of Joinup I am able to retrieve the content of entities in a machine readable format.
+  As a user of Portal I am able to retrieve the content of entities in a machine readable format.
 
   Scenario Outline: Export node data
     Given licence content:

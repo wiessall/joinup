@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Primary module hooks for Joinup release module.
+ * Primary module hooks for Portal release module.
  */
 
 declare(strict_types=1);

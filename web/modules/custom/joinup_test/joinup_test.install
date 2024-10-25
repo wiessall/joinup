@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Install, update and uninstall hooks for Joinup Test module.
+ * Install, update and uninstall hooks for Portal Test module.
  */
 
 declare(strict_types=1);

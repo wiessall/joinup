@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Hook implementations for the Joinup core module.
+ * Hook implementations for the Portal core module.
  */
 
 declare(strict_types=1);
@@ -460,7 +460,7 @@ function joinup_core_menu_local_tasks_alter(&$data, $route_name, RefinableCachea
  * Implements hook_page_attachments().
  */
 function joinup_core_page_attachments(array &$attachments): void {
-  // As Joinup uses multiple themes, we pass the active theme to the page to be
+  // As Portal uses multiple themes, we pass the active theme to the page to be
   // used in various contexts.
   $attachments['#attached']['drupalSettings']['theme'] = \Drupal::theme()->getActiveTheme()->getName();
 }

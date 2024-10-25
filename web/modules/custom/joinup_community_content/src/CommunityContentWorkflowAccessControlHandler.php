@@ -52,7 +52,7 @@ class CommunityContentWorkflowAccessControlHandler {
   }
 
   /**
-   * Main handler for access checks for group content in Joinup.
+   * Main handler for access checks for group content in Portal.
    *
    * @param \Drupal\joinup_community_content\Entity\CommunityContentInterface $content
    *   The group content entity object.

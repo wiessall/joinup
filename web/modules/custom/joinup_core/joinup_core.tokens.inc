@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Tokens support for Joinup Core module.
+ * Tokens support for Portal Core module.
  */
 
 declare(strict_types=1);

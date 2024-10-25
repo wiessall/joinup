@@ -16,7 +16,7 @@ then
   exit 0;
 fi
 
-# Parse and save the Joinup version.
+# Parse and save the Portal version.
 test \"`git rev-parse --is-shallow-repository`\" = \"false\" || git fetch --unshallow
 git describe --tags 2>/dev/null | tr -d '\\n' > web/VERSION.txt
 

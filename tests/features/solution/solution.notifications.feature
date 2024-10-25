@@ -43,7 +43,7 @@ Feature: Solution notifications
     Then I should see the error message "This action requires you to fill in the motivation field"
     When I fill in "Motivation" with "Please, check my updates"
     And I press "Propose"
-    Then the email sent to "Ramiro Myers" with subject "Joinup: Changes have been proposed for your solution" contains the following lines of text:
+    Then the email sent to "Ramiro Myers" with subject "Portal: Changes have been proposed for your solution" contains the following lines of text:
       | The Portal Support Team has requested you to modify the interoperability solution "Solution notification to propose changes", with the following motivation: Please, check my updates. |
       | If you think this action is not clear or not due, please contact Portal Support at                                                                                                     |
 
@@ -53,7 +53,7 @@ Feature: Solution notifications
     And I press "Blacklist"
     Then the following email should have been sent:
       | recipient | Ramiro Myers                                                                                                                                                 |
-      | subject   | Joinup: Your interoperability solution is blacklisted                                                                                                        |
+      | subject   | Portal: Your interoperability solution is blacklisted                                                                                                        |
       | body      | the moderator has blacklisted your interoperability solution - Solution notification to blacklist, you can contact the moderation team to resolve the issue. |
 
     # Template 14. The moderation team restores a solution from blacklisted.
@@ -62,7 +62,7 @@ Feature: Solution notifications
     And I press "Publish"
     Then the following email should have been sent:
       | recipient | Ramiro Myers                                                                                                                              |
-      | subject   | Joinup: Your interoperability solution is published again                                                                                 |
+      | subject   | Portal: Your interoperability solution is published again                                                                                 |
       | body      | the moderator has published back your interoperability solution - Solution notification to publish from blacklisted that was blacklisted. |
 
     # Template 15. The moderation team requests changes.
@@ -75,10 +75,10 @@ Feature: Solution notifications
     And I press "Request changes"
     Then the following email should have been sent:
       | recipient | Ramiro Myers                                                                                                                                                              |
-      | subject   | Joinup: You are requested to update your solution                                                                                                                         |
+      | subject   | Portal: You are requested to update your solution                                                                                                                         |
       | body      | the moderator has requested you to modify the interoperability solution - Solution notification to request changes following the following advises: Can you change this?. |
       | bcc       | pat.harper@example.com,jack.harper@example.com                                                                                                                            |
-    And the email sent to "Ramiro Myers" with subject "Joinup: You are requested to update your solution" contains the following lines of text:
+    And the email sent to "Ramiro Myers" with subject "Portal: You are requested to update your solution" contains the following lines of text:
       | the moderator has requested you to modify the interoperability solution - Solution notification to request changes following the following advises: Can you change this?. |
       | If you think this action is not clear or not due, please contact Portal Support at                                                                                        |
 
@@ -89,8 +89,8 @@ Feature: Solution notifications
     And I press "Delete"
     Then the following email should have been sent:
       | recipient | Ramiro Myers                                                                                                        |
-      | subject   | Joinup: Your solution has been deleted by the moderation team                                                       |
-      | body      | The Joinup moderation team deleted the interoperability solution Solution notification to delete by moderator team. |
+      | subject   | Portal: Your solution has been deleted by the moderation team                                                       |
+      | body      | The Portal moderation team deleted the interoperability solution Solution notification to delete by moderator team. |
 
     When I am logged in as "Ramiro Myers"
 
@@ -98,8 +98,8 @@ Feature: Solution notifications
     When I go to the homepage of the "Solution notification to propose from request changes" solution
     And I click "Edit" in the "Entity actions" region
     And I press "Propose"
-    Then the email sent to "Pat Harper" with subject "Joinup: An update of a solution has been proposed" contains the following lines of text:
-      | Ramiro Myers has proposed an update of the Interoperability solution: "Solution notification to propose from request changes" on Joinup. |
+    Then the email sent to "Pat Harper" with subject "Portal: An update of a solution has been proposed" contains the following lines of text:
+      | Ramiro Myers has proposed an update of the Interoperability solution: "Solution notification to propose from request changes" on Portal. |
       | If you think this action is not clear or not due, please contact Portal Support at                                                       |
 
     # The owner deletes their own solution. No email should be sent to the owner

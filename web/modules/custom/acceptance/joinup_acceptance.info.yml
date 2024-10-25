@@ -1,7 +1,7 @@
-name: 'Joinup Acceptance'
+name: 'Portal Acceptance'
 description: 'Tasks to performed in the acceptance environment.'
 type: module
-package: Joinup
+package: Portal
 core_version_requirement: ">= 9.4"
 
 dependencies:

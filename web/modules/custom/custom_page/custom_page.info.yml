@@ -1,7 +1,7 @@
 name: 'Custom page'
 description: 'Custom content that belongs to a collection.'
 type: module
-package: Joinup
+package: Portal
 core_version_requirement: ">= 9.4"
 
 dependencies:

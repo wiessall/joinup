@@ -1,7 +1,7 @@
-name: Joinup Sitewide alerts
+name: Portal Sitewide alerts
 description: Contains customisation for sitewide_alert module.
 type: module
-package: Joinup
+package: Portal
 core_version_requirement: ">= 9.4"
 
 dependencies:

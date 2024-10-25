@@ -45,7 +45,7 @@ class JoinupCasMockServerConfigOverrider implements ConfigFactoryOverrideInterfa
           'email' => 'E-mail address',
         ],
       ],
-      // The Joinup EU Login module customizes the validation path of the CAS
+      // The Portal EU Login module customizes the validation path of the CAS
       // ticket validation service. Restore it to the value that corresponds to
       // the CAS 3.0 specification which is implemented by the CAS mock server.
       'joinup_eulogin.settings' => [

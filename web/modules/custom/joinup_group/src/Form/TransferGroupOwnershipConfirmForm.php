@@ -182,7 +182,7 @@ class TransferGroupOwnershipConfirmForm extends ConfirmFormBase {
       $membership->save();
     }
 
-    // Add the 'owner' role, and also the 'facilitator' role, since in Joinup
+    // Add the 'owner' role, and also the 'facilitator' role, since in Portal
     // every owner is also a facilitator.
     $administrator_role = OgRole::loadByGroupAndName($group, 'administrator');
     $this->membership

@@ -71,5 +71,5 @@ Feature: Embed of videos into the page.
 
     Examples:
       | url                                                                                                                                                   | embed url                                                                                                                                         | title attribute  |
-      | https://www.youtube.com/watch?v=YTaLmMsaLOg                                                                                                           | /media/oembed?url=https%3A//www.youtube.com/watch%3Fv%3DYTaLmMsaLOg | New Joinup (1/7)                |
+      | https://www.youtube.com/watch?v=YTaLmMsaLOg                                                                                                           | /media/oembed?url=https%3A//www.youtube.com/watch%3Fv%3DYTaLmMsaLOg | New Portal (1/7)                |
       | https://vimeo.com/7073899                                                                                                                             | /media/oembed?url=https%3A//vimeo.com/7073899                       | Drupal Rap Video - Schipulcon09 |

@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Hook implementations for the Joinup workflow module.
+ * Hook implementations for the Portal workflow module.
  */
 
 declare(strict_types=1);

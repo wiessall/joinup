@@ -47,7 +47,7 @@ class UserMultipleCancelConfirm extends CoreUserMultipleCancelConfirm {
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
    * @param \Drupal\joinup_group\JoinupGroupManagerInterface $joinup_group_manager
-   *   The Joinup group manager.
+   *   The Portal group manager.
    * @param \Drupal\Core\Entity\EntityTypeBundleInfoInterface $bundle_info
    *   The entity type bundle info service.
    */

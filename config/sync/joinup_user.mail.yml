@@ -4,7 +4,7 @@ email_admin_update:
   body: |-
     Dear [user:display-name],
 
-    A moderator has edited your user profile on Joinup. Please check your profile to verify the changes done.
+    A moderator has edited your user profile on Portal. Please check your profile to verify the changes done.
 
     Kind regards,
 
@@ -14,7 +14,7 @@ password_reset_confirm:
   body: |-
     Dear [user:field_user_first_name],
 
-    Your Joinup password has been successfully changed.
+    Your Portal password has been successfully changed.
 
     Kind regards,
 

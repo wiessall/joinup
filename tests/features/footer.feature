@@ -8,7 +8,7 @@ Feature: Footer
     Given I am not logged in
     And I visit "<page>"
     Then I should see the Interoperable Europe logo in the footer
-    And I should see the Joinup version in the footer
+    And I should see the Portal version in the footer
 
     Examples:
       | page                             |
@@ -17,7 +17,7 @@ Feature: Footer
       | /search                          |
       # Page rendered with Interoperable Europe theme.
       | /interoperable-europe            |
-      # Page rendered with the legacy Joinup Theme theme.
+      # Page rendered with the legacy Portal Theme theme.
       | /collection/joinup               |
 
   Scenario: Regression test to show/hide menu item.

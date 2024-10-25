@@ -8,7 +8,7 @@ use Drupal\joinup_group\Event\AddGroupContentEvent;
 use Drupal\joinup_group\EventSubscriber\AddGroupContentEventSubscriberBase;
 
 /**
- * Subscribes to Joinup Group events.
+ * Subscribes to Portal Group events.
  */
 class CustomPageGroupSubscriber extends AddGroupContentEventSubscriberBase {
 

@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Contains hooks of Joinup ETrans Debugger.
+ * Contains hooks of Portal ETrans Debugger.
  */
 
 declare(strict_types=1);

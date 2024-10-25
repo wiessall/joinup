@@ -1,7 +1,7 @@
-name: Joinup subscription
+name: Portal subscription
 description: Allows users to subscribe to collection content.
 type: module
-package: Joinup
+package: Portal
 core_version_requirement: ">= 9.4"
 
 dependencies:

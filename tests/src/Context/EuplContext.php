@@ -57,13 +57,13 @@ class EuplContext extends RawDrupalContext {
       'rid' => 'solution',
       'collection' => Eupl::EUPL_COMMUNITY_ID,
       'id' => Eupl::JLA_SOLUTION,
-      'label' => 'Joinup Licensing Assistant',
+      'label' => 'Portal Licensing Assistant',
       'field_is_state' => 'published',
     ]);
     $solution->save();
     $this->entities['rdf_entity'][$solution->id()] = $solution;
 
-    // The 'Joinup Licensing Assistant' standard custom page.
+    // The 'Portal Licensing Assistant' standard custom page.
     $this->nodeCreate((object) [
       'nid' => 701805,
       'type' => 'custom_page',
@@ -73,7 +73,7 @@ class EuplContext extends RawDrupalContext {
       'field_state' => 'published',
     ]);
 
-    // The 'Joinup Licensing Compatibility Check' standard custom page.
+    // The 'Portal Licensing Compatibility Check' standard custom page.
     $this->nodeCreate((object) [
       'nid' => 703242,
       'type' => 'custom_page',

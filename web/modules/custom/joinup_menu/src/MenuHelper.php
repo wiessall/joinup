@@ -98,7 +98,7 @@ class MenuHelper implements MenuHelperInterface {
       'cta' => [
         // Even though the link claims to lead to an account creation form, we
         // are linking to the EU Login portal. Account creation is not handled
-        // inside the Joinup domain.
+        // inside the Portal domain.
         'link' => $cas_login_link,
         'attributes' => 'tabindex="0"',
         'text' => $this->t('Create an account'),
@@ -111,7 +111,7 @@ class MenuHelper implements MenuHelperInterface {
       'popover' => $popover,
     ];
 
-    // Generate a link to the Joinup collection, to show as
+    // Generate a link to the Portal collection, to show as
     // the "About us" link in the hamburger menu for anonymous users.
     $rdf_storage = $this->entityTypeManager->getStorage('rdf_entity');
     try {
@@ -127,15 +127,15 @@ class MenuHelper implements MenuHelperInterface {
       ];
     }
     catch (Exception $e) {
-      // The Joinup collection could not be loaded or the link to the About page
+      // The Portal collection could not be loaded or the link to the About page
       // could not be generated. This should not crash the page since the
       // collection is considered to be optional. It is for example possible for
-      // a project to reuse the Joinup open source code without hosting a
-      // "Joinup" collection.
+      // a project to reuse the Portal open source code without hosting a
+      // "Portal" collection.
       // However, in scope of the Ventuno theme the About Us link is considered
       // to be an important element, so we log a warning to alert the webmaster
       // that corrective action is required.
-      $this->logger->get('joinup_menu')->warning('"About us" link could not be rendered because the Joinup collection is not defined or doesn\'t have an About page.');
+      $this->logger->get('joinup_menu')->warning('"About us" link could not be rendered because the Portal collection is not defined or doesn\'t have an About page.');
     }
 
     return $anonymous_links;

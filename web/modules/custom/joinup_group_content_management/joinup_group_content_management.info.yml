@@ -1,7 +1,7 @@
-name: 'Joinup Group Content Management'
+name: 'Portal Group Content Management'
 description: 'Contains functionality related to managing group content.'
 type: module
-package: Joinup
+package: Portal
 core_version_requirement: ">= 9.4"
 
 dependencies:

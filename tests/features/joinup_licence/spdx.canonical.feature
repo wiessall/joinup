@@ -1,7 +1,7 @@
 @api @group-f
 Feature: SPDX Permissions
   As a moderator of the website
-  In order to better present the Joinup licences
+  In order to better present the Portal licences
   I need to control over the way the SPDX licences are shown.
 
   Scenario: Do not allow access to the canonical route of the SPDX licences.

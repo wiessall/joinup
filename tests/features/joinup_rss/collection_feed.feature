@@ -1,7 +1,7 @@
 @api @group-g
 Feature: Collection RSS feed.
   In order to stay up to date with collection updates
-  As a user of Joinup
+  As a user of Portal
   I want to subscribe to RSS feeds for each collection
 
   Scenario: Collection RSS feed.

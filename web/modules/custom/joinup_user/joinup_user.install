@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Install functions of the Joinup user module.
+ * Install functions of the Portal user module.
  */
 
 declare(strict_types=1);

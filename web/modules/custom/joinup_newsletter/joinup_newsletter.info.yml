@@ -1,7 +1,7 @@
-name: 'Joinup Newsletter'
-description: 'Provides newsletter functionality to Joinup'
+name: 'Portal Newsletter'
+description: 'Provides newsletter functionality to Portal'
 type: module
-package: Joinup
+package: Portal
 core_version_requirement: ">= 9.4"
 
 dependencies:

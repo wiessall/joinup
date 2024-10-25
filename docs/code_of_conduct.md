@@ -1,4 +1,4 @@
-# Joinup Contributor Covenant Code of Conduct
+# Portal Contributor Covenant Code of Conduct
 
 ## Our Pledge
 

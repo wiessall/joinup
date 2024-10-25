@@ -5,8 +5,8 @@
   title: 'Alter parent groups of group content'
 
 access joinup reports:
-  title: 'Access Joinup reports'
-  description: 'Users granted with this permission are able to access the Joinup reports.'
+  title: 'Access Portal reports'
+  description: 'Users granted with this permission are able to access the Portal reports.'
 
 # Move in joinup_reports module in ISAICP-7180.
 # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7180.

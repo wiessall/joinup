@@ -8,7 +8,7 @@ use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drush\TestTraits\DrushTestTrait;
 
 /**
- * Tests the Joinup configuration.
+ * Tests the Portal configuration.
  *
  * @group joinup_core
  */

@@ -1,4 +1,4 @@
-Joinup Stats
+Portal Stats
 ============
 
 This module allows entities to store usage statistics in a related meta entity.

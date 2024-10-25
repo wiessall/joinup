@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup_discussion\Event;
 
 /**
- * Defines events for the Joinup Discussion module.
+ * Defines events for the Portal Discussion module.
  */
 final class DiscussionEvents {
 

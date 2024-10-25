@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Hook implementations for the Joinup Sitewide Alert module.
+ * Hook implementations for the Portal Sitewide Alert module.
  */
 
 declare(strict_types=1);

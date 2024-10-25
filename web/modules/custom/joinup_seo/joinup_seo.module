@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Contains hook implementations for the Joinup SEO module.
+ * Contains hook implementations for the Portal SEO module.
  */
 
 declare(strict_types=1);

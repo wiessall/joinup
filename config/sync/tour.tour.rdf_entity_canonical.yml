@@ -74,4 +74,4 @@ tips:
     weight: 8
     position: left-start
     selector: .search-bar
-    body: 'Search through the entire Joinup platform and its supported content items.'
+    body: 'Search through the entire Portal platform and its supported content items.'

@@ -9,12 +9,12 @@ use Drupal\Core\Controller\ControllerBase;
 use Drupal\joinup_licence\LicenceComparerHelper;
 
 /**
- * Controller for the Joinup Licensing Assistant (JLA).
+ * Controller for the Portal Licensing Assistant (JLA).
  */
 class LicenceComparerController extends ControllerBase {
 
   /**
-   * An ordered list of Joinup licence entities keyed by their SPDX ID.
+   * An ordered list of Portal licence entities keyed by their SPDX ID.
    *
    * @var \Drupal\joinup_licence\Entity\LicenceInterface[]
    */
@@ -31,7 +31,7 @@ class LicenceComparerController extends ControllerBase {
    * Responds to a request made to 'joinup_licence.comparer' route.
    *
    * @param \Drupal\joinup_licence\Entity\LicenceInterface[] $licences
-   *   An ordered list of Joinup licence entities keyed by their SPDX ID.
+   *   An ordered list of Portal licence entities keyed by their SPDX ID.
    *
    * @return array
    *   A render array.

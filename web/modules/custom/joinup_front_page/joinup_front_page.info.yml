@@ -1,5 +1,5 @@
-name: 'Joinup front page'
-description: 'Contains functionality related to the Joinup front page.'
+name: 'Portal front page'
+description: 'Contains functionality related to the Portal front page.'
 type: module
-package: Joinup
+package: Portal
 core_version_requirement: ">= 9.4"

@@ -1,5 +1,5 @@
-name: 'Joinup Validation'
-description: 'Validation constraints that are useful for Joinup.'
+name: 'Portal Validation'
+description: 'Validation constraints that are useful for Portal.'
 type: module
-package: Joinup
+package: Portal
 core_version_requirement: ">= 9.4"

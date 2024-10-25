@@ -1,4 +1,4 @@
-# Schema for the configuration files of the Joinup user module.
+# Schema for the configuration files of the Portal user module.
 joinup_user.mail:
   type: config_object
   label: 'Email settings'
@@ -16,4 +16,4 @@ views.filter.user_tristate_status:
 
 views.field.joinup_user_bulk_form:
   type: views.field.user_bulk_form
-  label: 'Joinup user operations bulk form'
+  label: 'Portal user operations bulk form'

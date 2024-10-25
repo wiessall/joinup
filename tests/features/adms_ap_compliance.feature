@@ -1,5 +1,5 @@
 @api
-Feature: Joinup should be ADMS-AP compliant.
+Feature: Portal should be ADMS-AP compliant.
 
   Scenario: Validate the entities in the published graph.
     Given users:
@@ -47,4 +47,4 @@ Feature: Joinup should be ADMS-AP compliant.
       | title      | description                    | creation date    | access url                        | release | downloads | licence     | format | status    | representation technique | state     |
       | Omega3.zip | The zipped version of Omega 3. | 2017-11-11T11:20 | http://www.example.org/omega3.zip | Omega3  | 232       | Foo licence | ZIP    | Completed | Datalog                  | published |
       | Omega3.rdf | The RDF version of Omega 3.    | 2017-11-11T11:20 | empty.rdf                         | Omega3  | 232       | Foo licence | ZIP    | Completed | Datalog                  | published |
-    Then the ADMS-AP data of the published entities in Joinup is valid
+    Then the ADMS-AP data of the published entities in Portal is valid

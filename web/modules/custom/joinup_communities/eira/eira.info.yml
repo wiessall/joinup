@@ -2,7 +2,7 @@ name: EIRA
 type: module
 description: 'Customizations for the EIRA community.'
 core_version_requirement: ">= 9.4"
-package: 'Joinup communities'
+package: 'Portal communities'
 
 dependencies:
   - drupal:filter

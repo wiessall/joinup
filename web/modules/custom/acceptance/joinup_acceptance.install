@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Install, update, uninstall tasks for Joinup Acceptance module.
+ * Install, update, uninstall tasks for Portal Acceptance module.
  */
 
 declare(strict_types=1);

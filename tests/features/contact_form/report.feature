@@ -37,16 +37,16 @@ Feature: Submit the contact form
     Then the following email should have been sent:
       | template  | Report contact form                                                                                                                                                                             |
       | recipient | Report moderator                                                                                                                                                                                |
-      | subject   | Joinup: This content has invalid location                                                                                                                                                       |
+      | subject   | Portal: This content has invalid location                                                                                                                                                       |
       | body      | Balourdos Tsolias has reported the item "Event to report" as abusive due to The location described as "Somewhere" could not be found by my map application. You can access the reported content |
     And the following email should have been sent:
       | template  | Report contact form                                                                                                                                                                             |
       | recipient | Report owner                                                                                                                                                                                    |
-      | subject   | Joinup: This content has invalid location                                                                                                                                                       |
+      | subject   | Portal: This content has invalid location                                                                                                                                                       |
       | body      | Balourdos Tsolias has reported the item "Event to report" as abusive due to The location described as "Somewhere" could not be found by my map application. You can access the reported content |
     And the following email should have been sent:
       | recipient_mail | balourdos@example.rg               |
-      | subject        | Joinup: Contact form notification  |
+      | subject        | Portal: Contact form notification  |
       | body           | We will reply as soon as possible. |
     And I should see the heading "Event to report"
 
@@ -64,5 +64,5 @@ Feature: Submit the contact form
     Given I press "Submit"
     Then the following email should have been sent:
       | recipient_mail | gbelson@hooli.com                                                                                         |
-      | subject        | Joinup: Contact form notification                                                                         |
+      | subject        | Portal: Contact form notification                                                                         |
       | body           | I don't want to live in a world where someone else is making the world a better place better than we are. |

@@ -1,6 +1,6 @@
 taxonomy.vocabulary.*.third_party.joinup_taxonomy:
   type: mapping
-  label: 'Joinup Taxonomy third party settings'
+  label: 'Portal Taxonomy third party settings'
   mapping:
     locked:
       type: boolean

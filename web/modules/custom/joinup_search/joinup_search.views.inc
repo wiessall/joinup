@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Views hook implementations for the Joinup search module.
+ * Views hook implementations for the Portal search module.
  */
 
 declare(strict_types=1);

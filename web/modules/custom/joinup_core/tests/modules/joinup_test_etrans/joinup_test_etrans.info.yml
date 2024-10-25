@@ -1,4 +1,4 @@
-name: 'Joinup ETrans Debugger'
+name: 'Portal ETrans Debugger'
 type: module
 description: 'Developer module which visually reveals which parts of the page are translated by the ETrans service'
 package: Testing

@@ -26,5 +26,5 @@ Feature: Asset distribution deleting.
     And I press "Delete"
     Then the following email should have been sent:
       | recipient | Papa Roach                                                                                        |
-      | subject   | Joinup: A distribution has been deleted                                                           |
+      | subject   | Portal: A distribution has been deleted                                                           |
       | body      | The distribution Francesco's cats of the solution Rough valentine's day was successfully deleted. |
