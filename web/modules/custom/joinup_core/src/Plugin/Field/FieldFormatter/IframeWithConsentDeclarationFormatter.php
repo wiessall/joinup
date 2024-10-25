@@ -37,7 +37,7 @@ class IframeWithConsentDeclarationFormatter extends IframeOnlyFormatter {
         );
       }
     }
-    
+
     return $elements;
   }
 
