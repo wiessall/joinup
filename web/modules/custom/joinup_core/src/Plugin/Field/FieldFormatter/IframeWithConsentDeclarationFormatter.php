@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup_core\Plugin\Field\FieldFormatter;
 
 use Drupal\Core\Field\Attribute\FieldFormatter;
+use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Template\Attribute;
 use Drupal\Core\Url;
@@ -25,16 +26,19 @@ class IframeWithConsentDeclarationFormatter extends IframeOnlyFormatter {
   /**
    * {@inheritdoc}
    */
-  public static function iframeIframe($text, $path, $item): array {
-    $element = parent::iframeIframe($text, $path, $item);
-    if (self::isSupported($element['#src']) && $element['#attributes'] instanceof Attribute) {
-      $element['#attributes']->setAttribute(
-        'src',
-        self::replaceUrlToConsentDeclaration($element['#src'])
-      );
-    }
+  public function viewElements(FieldItemListInterface $items, $langcode) {
+    $elements = parent::viewElements($items, $langcode);
 
-    return $element;
+    foreach ($elements as &$element) {
+      if (self::isSupported($element['#src']) && $element['#attributes'] instanceof Attribute) {
+        $element['#attributes']->setAttribute(
+          'src',
+          self::replaceUrlToConsentDeclaration($element['#src'], $langcode)
+        );
+      }
+    }
+    
+    return $elements;
   }
 
   /**
@@ -42,14 +46,17 @@ class IframeWithConsentDeclarationFormatter extends IframeOnlyFormatter {
    *
    * @param string $src
    *   Iframe URL.
+   * @param string $lang
+   *   The language that should be used to render the field.
    *
    * @return string
    *   Consent declaration URL.
    */
-  public static function replaceUrlToConsentDeclaration(string $src): string {
+  protected function replaceUrlToConsentDeclaration(string $src, string $lang): string {
     return Url::fromUri(\OE_WEBTOOLS_COOKIE_CONSENT_EMBED_COOKIE_URL, [
       'query' => [
         'oriurl' => $src,
+        'lang' => $lang,
       ],
     ])->toString();
   }
@@ -63,7 +70,7 @@ class IframeWithConsentDeclarationFormatter extends IframeOnlyFormatter {
    * @return bool
    *   TRUE if consent declaration is supported
    */
-  public static function isSupported(string $src): bool {
+  protected function isSupported(string $src): bool {
     $supported = [
       'app.powerbi.com',
     ];
