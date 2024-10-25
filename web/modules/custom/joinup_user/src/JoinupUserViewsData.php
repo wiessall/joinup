@@ -7,7 +7,7 @@ namespace Drupal\joinup_user;
 use Drupal\user\UserViewsData;
 
 /**
- * Provides the views data for the Joinup user entity type.
+ * Provides the views data for the Portal user entity type.
  */
 class JoinupUserViewsData extends UserViewsData {
 

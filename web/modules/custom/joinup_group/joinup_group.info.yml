@@ -1,7 +1,7 @@
-name: 'Joinup Group'
-description: 'Services and API methods useful for Joinup groups.'
+name: 'Portal Group'
+description: 'Services and API methods useful for Portal groups.'
 type: module
-package: Joinup
+package: Portal
 core_version_requirement: ">= 9.4"
 
 dependencies:

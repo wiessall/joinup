@@ -32,11 +32,11 @@ password_reset:
 
     The Portal Support Team
 register_admin_created:
-  subject: 'Your Joinup account was created successfully.'
+  subject: 'Your Portal account was created successfully.'
   body: |-
     Dear [user:field_user_first_name],
 
-    The Portal Support Team created your account on Joinup.
+    The Portal Support Team created your account on Portal.
     Please log in through the following link in order to set your password.
     <a href="[user:one-time-login-url]">[user:one-time-login-url]</a>
 
@@ -46,13 +46,13 @@ register_admin_created:
 
     The Portal Support Team
 register_no_approval_required:
-  subject: "You're one step away to create your Joinup account. Please confirm your email address before you can sign in to Joinup."
+  subject: "You're one step away to create your Portal account. Please confirm your email address before you can sign in to Portal."
   body: |-
     Dear [user:field_user_first_name],
 
-    You are one step away from creating your account in Joinup, the European Commission collaborative platform for Interoperability solutions for public administrations, businesses and citizens.
+    You are one step away from creating your account in Portal, the European Commission collaborative platform for Interoperability solutions for public administrations, businesses and citizens.
 
-    Please confirm your email address by clicking <a href="[user:one-time-login-url]">[user:one-time-login-url]</a> to complete the creation of your new Joinup account.
+    Please confirm your email address by clicking <a href="[user:one-time-login-url]">[user:one-time-login-url]</a> to complete the creation of your new Portal account.
 
     If you think that this email was erroneously sent to you, please disregard this message.
 
@@ -110,7 +110,7 @@ status_blocked:
   body: |-
     Dear [user:field_user_first_name],
 
-    Your Joinup account was recently blocked by our moderators.
+    Your Portal account was recently blocked by our moderators.
     For more information about blocked accounts, please visit our FAQ section.
 
     Kind regards,
@@ -119,7 +119,7 @@ status_blocked:
 status_canceled:
   subject: 'Your account has been deleted.'
   body: |-
-    Dear Joinup user,
+    Dear Portal user,
 
     Your account [user:account-name] has been deleted.@joinup_user:moderation_text If you believe that this action has been performed by mistake, please contact The Portal Support Team at <a href="[site:contact-form]">[site:contact-form]</a>.
 

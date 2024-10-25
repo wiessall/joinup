@@ -17,7 +17,7 @@ use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 class BlockContextSatisfactionTest extends JoinupExistingSiteTestBase {
 
   /**
-   * An array containing the paths that contain custom Joinup code.
+   * An array containing the paths that contain custom Portal code.
    *
    * All custom blocks whose definitions reside in these paths will be subjected
    * to this test.
@@ -94,7 +94,7 @@ class BlockContextSatisfactionTest extends JoinupExistingSiteTestBase {
   }
 
   /**
-   * Returns the block definitions that are defined in custom Joinup code.
+   * Returns the block definitions that are defined in custom Portal code.
    *
    * @return array[]
    *   An associative array of block definitions, keyed by block ID.
@@ -109,7 +109,7 @@ class BlockContextSatisfactionTest extends JoinupExistingSiteTestBase {
   }
 
   /**
-   * Returns the custom extensions that are provided by Joinup.
+   * Returns the custom extensions that are provided by Portal.
    *
    * @return \Drupal\Core\Extension\Extension[]
    *   The extensions.

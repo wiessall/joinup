@@ -1,7 +1,7 @@
 name: Bookmark
 description: 'bookmark functionality'
 type: module
-package: Joinup
+package: Portal
 core_version_requirement: ">= 9.4"
 
 dependencies:

@@ -1,7 +1,7 @@
-name: 'Joinup user'
+name: 'Portal user'
 description: 'User profile fields, user notifications, ...'
 type: module
-package: Joinup
+package: Portal
 core_version_requirement: ">= 9.4"
 
 dependencies:

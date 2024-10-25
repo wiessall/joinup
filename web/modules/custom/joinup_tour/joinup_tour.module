@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Hook implementations for the Joinup Tour module.
+ * Hook implementations for the Portal Tour module.
  */
 
 declare(strict_types=1);

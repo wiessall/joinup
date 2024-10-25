@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Post update functions for the Joinup RDF module.
+ * Post update functions for the Portal RDF module.
  */
 
 declare(strict_types=1);

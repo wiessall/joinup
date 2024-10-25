@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Hook implementations for Joinup Test module.
+ * Hook implementations for Portal Test module.
  */
 
 declare(strict_types=1);

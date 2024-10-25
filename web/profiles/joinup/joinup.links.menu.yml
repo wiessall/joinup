@@ -1,7 +1,7 @@
 joinup.admin_reporting:
   route_name: joinup.admin_reporting
   parent: system.admin
-  description: 'Access Joinup reports.'
+  description: 'Access Portal reports.'
   title: 'Reporting'
   weight: 75
 

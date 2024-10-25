@@ -38,7 +38,7 @@ Feature: Notification test for the discussion transitions on a post moderated pa
     And I press "Publish"
     Then the following email should have been sent:
       | recipient | CC owner                                                                                                                                                                   |
-      | subject   | Joinup: Content has been published                                                                                                                                         |
+      | subject   | Portal: Content has been published                                                                                                                                         |
       | body      | CC Member has published the new discussion - "CC notify create publish" in the collection: "CC post collection". You can access the new content at the following link: http |
 
     # Test 'update' operation.
@@ -48,7 +48,7 @@ Feature: Notification test for the discussion transitions on a post moderated pa
     And I press "Publish"
     Then the following email should have been sent:
       | recipient | CC owner                                                                                                       |
-      | subject   | Joinup: Content has been published                                                                             |
+      | subject   | Portal: Content has been published                                                                             |
       | body      | CC Member has published the new discussion - "CC notify post publish" in the collection: "CC post collection". |
 
     When I am logged in as "CC facilitator"
@@ -60,7 +60,7 @@ Feature: Notification test for the discussion transitions on a post moderated pa
     And I press "Request changes"
     Then the following email should have been sent:
       | recipient | CC member                                                                                                                                                                                                         |
-      | subject   | Joinup: Content has been updated                                                                                                                                                                                  |
+      | subject   | Portal: Content has been updated                                                                                                                                                                                  |
       | body      | the Facilitator, CC Facilitator has requested you to modify the discussion - "CC notify post request changes" in the collection: "CC post collection", with the following motivation: "Can you do some changes?". |
 
     When I am logged in as "CC facilitator"
@@ -72,7 +72,7 @@ Feature: Notification test for the discussion transitions on a post moderated pa
     And I press "Request changes"
     Then the following email should have been sent:
       | recipient | CC member                                                                                                                                                                                                |
-      | subject   | Joinup: Content has been updated                                                                                                                                                                         |
+      | subject   | Portal: Content has been updated                                                                                                                                                                         |
       | body      | the Facilitator, CC Facilitator has requested you to modify the discussion - "CC notify post report" in the collection: "CC post collection", with the following motivation: "Your content is reported". |
 
     When I mark all emails as read
@@ -83,7 +83,7 @@ Feature: Notification test for the discussion transitions on a post moderated pa
     Then 1 e-mail should have been sent
     Then the following email should have been sent:
       | recipient | CC member                                                                                                                                                               |
-      | subject   | Joinup: Content has been updated                                                                                                                                        |
+      | subject   | Portal: Content has been updated                                                                                                                                        |
       | body      | the Facilitator, CC Facilitator has approved your request of publication of the discussion - "CC notify post approve proposed" in the collection: "CC post collection". |
 
     # Test 'delete' operation.
@@ -96,11 +96,11 @@ Feature: Notification test for the discussion transitions on a post moderated pa
     Then 1 e-mail should have been sent
     Then the following email should not have been sent:
       | recipient | CC member                                                                                                                |
-      | subject   | Joinup: Content has been deleted                                                                                         |
+      | subject   | Portal: Content has been deleted                                                                                         |
       | body      | Facilitator CC Facilitator has deleted the discussion - "CC notify post delete" in the collection: "CC post collection". |
     But the following email should have been sent:
       | recipient | CC member                                                                                                          |
-      | subject   | Joinup: The discussion "CC notify post delete" was deleted in the space of "CC post collection"                    |
+      | subject   | Portal: The discussion "CC notify post delete" was deleted in the space of "CC post collection"                    |
       | body      | for your information, the discussion "CC notify post delete" was deleted from the "CC post collection" collection. |
 
     Examples:
@@ -138,6 +138,6 @@ Feature: Notification test for the discussion transitions on a post moderated pa
     And I press "Delete"
     Then the following email should have been sent:
       | recipient | Lindsey McCray                                                            |
-      | subject   | Joinup: Your collection has been deleted by the moderation team           |
-      | body      | The Joinup moderation team deleted the collection Event Horizon Telescope |
+      | subject   | Portal: Your collection has been deleted by the moderation team           |
+      | body      | The Portal moderation team deleted the collection Event Horizon Telescope |
     And 1 e-mail should have been sent

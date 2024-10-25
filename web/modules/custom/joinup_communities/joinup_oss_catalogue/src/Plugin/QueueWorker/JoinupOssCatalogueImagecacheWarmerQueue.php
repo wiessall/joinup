@@ -11,7 +11,7 @@ use Drupal\Core\Queue\QueueWorkerBase;
  *
  * @QueueWorker(
  *   id = "joinup_oss_catalogue_imagecache_warmer",
- *   title = @Translation("Joinup OSS Catalogue remote image cache warmer"),
+ *   title = @Translation("Portal OSS Catalogue remote image cache warmer"),
  *   cron = {"time" = 60},
  * )
  */

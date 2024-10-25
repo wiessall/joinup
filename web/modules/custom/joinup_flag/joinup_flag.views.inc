@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Contains views API hooks for Joinup flag module.
+ * Contains views API hooks for Portal flag module.
  */
 
 declare(strict_types=1);

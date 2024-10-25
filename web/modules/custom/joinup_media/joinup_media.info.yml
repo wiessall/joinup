@@ -1,7 +1,7 @@
 type: module
-name: Joinup Media
+name: Portal Media
 description: Drupal Media adaptation.
-package: Joinup
+package: Portal
 core_version_requirement: ">=9.4"
 dependencies:
   - drupal:media

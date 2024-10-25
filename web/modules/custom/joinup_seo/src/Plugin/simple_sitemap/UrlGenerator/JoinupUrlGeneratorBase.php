@@ -10,7 +10,7 @@ use Drupal\simple_sitemap\Exception\SkipElementException;
 use Drupal\simple_sitemap\Plugin\simple_sitemap\UrlGenerator\EntityUrlGenerator;
 
 /**
- * Base class for Joinup Url Generators.
+ * Base class for Portal Url Generators.
  */
 abstract class JoinupUrlGeneratorBase extends EntityUrlGenerator {
 

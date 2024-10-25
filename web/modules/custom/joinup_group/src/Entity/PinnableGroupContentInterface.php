@@ -62,7 +62,7 @@ interface PinnableGroupContentInterface extends GroupContentInterface {
    *
    * @return string[]
    *   A list of group IDs in which the content is pinned. Since all groups in
-   *   Joinup are RDF entities, these are RDF entity IDs.
+   *   Portal are RDF entities, these are RDF entity IDs.
    */
   public function getPinnedGroupIds(): array;
 

@@ -7,7 +7,7 @@ namespace Drupal\joinup_subscription;
 use Drupal\joinup_community_content\CommunityContentHelper;
 
 /**
- * Helper class for Joinup subscriptions.
+ * Helper class for Portal subscriptions.
  */
 class JoinupSubscriptionsHelper {
 

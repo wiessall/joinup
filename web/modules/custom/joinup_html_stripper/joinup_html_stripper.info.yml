@@ -1,7 +1,7 @@
-name: Joinup HTML stripper
+name: Portal HTML stripper
 type: module
-description: Field formatter that strips all HTML, tailored for use in Joinup.
-package: Joinup
+description: Field formatter that strips all HTML, tailored for use in Portal.
+package: Portal
 core_version_requirement: ">= 9.4"
 
 dependencies:

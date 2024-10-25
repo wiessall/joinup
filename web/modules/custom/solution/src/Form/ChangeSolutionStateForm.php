@@ -153,7 +153,7 @@ class ChangeSolutionStateForm extends ConfirmFormBase {
         )
       );
 
-      // In Joinup, Search API indexes are updated "immediately". Actually, this
+      // In Portal, Search API indexes are updated "immediately". Actually, this
       // means that when an indexed entity is changed (or an entity is added) in
       // a PHP thread, re-indexing is triggered by
       // \Drupal\search_api\Utility\PostRequestIndexing after the response is

@@ -32,7 +32,7 @@ Feature:
       | http://joinup.eu/spdx/OFL-1.1          | OFL-1.1          | OFL-1.1          |
       | http://joinup.eu/spdx/OSL-3.0          | OSL-3.0          | OSL-3.0          |
       # The following two are non-existing licences tailored to test cases T17 and T18
-      # since none of the licences that are included in Joinup at this time match them.
+      # since none of the licences that are included in Portal at this time match them.
       | http://joinup.eu/spdx/DATA             | DATA             | DATA             |
       | http://joinup.eu/spdx/SOFT             | SOFT             | SOFT             |
 
@@ -468,7 +468,7 @@ Feature:
     # Regression test for ISAICP-9014
     Given collection:
       | uri   | http://data.europa.eu/w21/df34e3a2-207b-4910-a804-344931654e20 |
-      | title | Joinup                                                         |
+      | title | Portal                                                         |
       | state | published                                                      |
     And SPDX licences:
       | uri                             | title     | ID        |

@@ -359,7 +359,7 @@ Feature: Sharing content between collections
       | Facebook               |
       | Twitter                |
       | Linkedin               |
-      | Other groups on Joinup |
+      | Other groups on Portal |
     When I check "Gossip"
     And I press "Share" in the "Modal buttons" region
     Then I should see the success message "Item was shared on the following groups: Gossip."

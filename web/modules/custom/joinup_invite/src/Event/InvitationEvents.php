@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup_invite\Event;
 
 /**
- * Events for the Joinup Invite module.
+ * Events for the Portal Invite module.
  */
 final class InvitationEvents {
 

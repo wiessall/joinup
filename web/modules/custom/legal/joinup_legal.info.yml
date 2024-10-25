@@ -1,7 +1,7 @@
 name: Legal
-description: 'Deals with the legal aspects of using Joinup as an end-user.'
+description: 'Deals with the legal aspects of using Portal as an end-user.'
 type: module
-package: Joinup
+package: Portal
 core_version_requirement: ">= 9.4"
 
 dependencies:

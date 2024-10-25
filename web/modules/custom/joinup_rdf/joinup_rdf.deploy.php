@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Deploy hooks for Joinup RDF module.
+ * Deploy hooks for Portal RDF module.
  */
 
 declare(strict_types=1);

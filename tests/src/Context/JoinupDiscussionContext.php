@@ -51,7 +51,7 @@ class JoinupDiscussionContext extends RawDrupalContext {
   }
 
   /**
-   * Returns the Joinup subscription service.
+   * Returns the Portal subscription service.
    *
    * @return \Drupal\joinup_subscription\JoinupDiscussionSubscriptionInterface
    *   The subscription service.

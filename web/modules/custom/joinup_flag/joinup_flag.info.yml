@@ -1,7 +1,7 @@
-name: Joinup Flag
+name: Portal Flag
 description: 'Flag functionality'
 type: module
-package: Joinup
+package: Portal
 core_version_requirement: ">= 9.4"
 
 dependencies:

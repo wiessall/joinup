@@ -1,5 +1,5 @@
 name: Ventuno
-description: Custom theme for Joinup, sub-theme of OpenEuropa Bootstrap Theme.
+description: Custom theme for Portal, sub-theme of OpenEuropa Bootstrap Theme.
 package: Custom
 type: theme
 core_version_requirement: '>=9.3'

@@ -65,7 +65,7 @@ Feature: SEO for news articles.
       | identifier      | value                                                                      |
       | description     | Body of event.                                                             |
       | og:url          | __base_url__/collection/joinup-seo-event-collection/event/joinup-seo-event |
-      | og:site_name    | Joinup                                                                     |
+      | og:site_name    | Portal                                                                     |
       | og:title        | Joinup SEO event                                                           |
       | og:description  | Body of event.                                                             |
       | og:image        | __base_url__/sites/default/files/__random_text__.jpg                       |

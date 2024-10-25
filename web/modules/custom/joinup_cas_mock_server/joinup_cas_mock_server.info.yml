@@ -1,7 +1,7 @@
-name: Joinup CAS Mock Server
-description: CAS mock server customized for Joinup.
+name: Portal CAS Mock Server
+description: CAS mock server customized for Portal.
 type: module
-package: Joinup
+package: Portal
 core_version_requirement: ">= 9.4"
 dependencies:
   - cas_mock_server:cas_mock_server

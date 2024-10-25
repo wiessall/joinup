@@ -11,7 +11,7 @@ use Drupal\joinup_community_content\Entity\CommunityContentInterface;
 use Drupal\joinup_workflow\ArchivableEntityInterface;
 
 /**
- * Interface for event entities in Joinup.
+ * Interface for event entities in Portal.
  */
 interface EventInterface extends CommunityContentInterface, LogoInterface, ArchivableEntityInterface, AbstractInterface {
 

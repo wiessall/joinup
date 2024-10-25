@@ -1,5 +1,5 @@
-name: 'Joinup layout'
+name: 'Portal layout'
 type: module
-description: 'Contains custom layouts for Joinup.'
+description: 'Contains custom layouts for Portal.'
 core_version_requirement: ">= 9.4"
-package: Joinup
+package: Portal

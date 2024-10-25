@@ -1,7 +1,7 @@
-name: Joinup invite
+name: Portal invite
 description: A light invitation system for joinup.
 type: module
-package: Joinup
+package: Portal
 core_version_requirement: ">= 9.4"
 
 dependencies:

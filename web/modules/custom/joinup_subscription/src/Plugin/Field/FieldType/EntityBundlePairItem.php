@@ -16,7 +16,7 @@ use Drupal\Core\TypedData\DataDefinition;
  * This is a pseudo reference field that references bundles by storing the
  * entity type and the bundle machine name.
  *
- * @todo If this is useful for other subsystems in Joinup this can be split off
+ * @todo If this is useful for other subsystems in Portal this can be split off
  *   to a separate module.
  *
  * @FieldType(

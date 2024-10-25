@@ -1,7 +1,7 @@
 name: Curated content listings
 type: module
 description: Provides listings of content that can be hand picked by moderators.
-package: Joinup
+package: Portal
 
 core_version_requirement: ">= 9.4"
 

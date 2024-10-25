@@ -1,4 +1,4 @@
-# Joinup notification module
+# Portal notification module
 
 The joinup notification module is a custom module that depends only on message,
 message_notify, og and state machine.

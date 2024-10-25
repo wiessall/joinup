@@ -9,7 +9,7 @@ use Drupal\Core\Entity\ContentEntityInterface;
 /**
  * Interface for content entities that can be featured.
  *
- * In Joinup moderators can designate important content to be "featured site
+ * In Portal moderators can designate important content to be "featured site
  * wide". Featured content will show prominently at the top of lists, is
  * highlighted with an icon, and the user can use facet filters to only see
  * featured content.

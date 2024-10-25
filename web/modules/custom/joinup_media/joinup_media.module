@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Hook implementations for Joinup Media module.
+ * Hook implementations for Portal Media module.
  */
 
 declare(strict_types=1);

@@ -1,7 +1,7 @@
 name: Moderation
 description: Provides a moderation overview.
 type: module
-package: Joinup
+package: Portal
 core_version_requirement: ">= 9.4"
 
 dependencies:

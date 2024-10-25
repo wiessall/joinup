@@ -1,4 +1,4 @@
-# Configuration and commands specific for Joinup.
+# Configuration and commands specific for Portal.
 joinup:
   dir: ${drupal.root_absolute}/..
   site_dir: ${joinup.dir}/web

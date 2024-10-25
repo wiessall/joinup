@@ -18,7 +18,7 @@ use EasyRdf\Sparql\Result;
  */
 
 /**
- * SPARQL connection service set up for virtuoso and Joinup.
+ * SPARQL connection service set up for virtuoso and Portal.
  */
 class Connection extends BaseConnection implements ConnectionInterface {
 

@@ -9,7 +9,7 @@ use Drupal\joinup_log\Entity\JoinupLog;
 use Drupal\views\EntityViewsData;
 
 /**
- * Provides the views data for Joinup log entity type.
+ * Provides the views data for Portal log entity type.
  */
 class JoinupLogViewsData extends EntityViewsData {
 

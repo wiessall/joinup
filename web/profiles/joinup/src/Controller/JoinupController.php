@@ -10,7 +10,7 @@ use Drupal\Core\Controller\ControllerBase;
 use Drupal\rdf_entity\RdfEntityTypeInterface;
 
 /**
- * Provides route responses for Joinup.
+ * Provides route responses for Portal.
  */
 class JoinupController extends ControllerBase {
 

@@ -9,7 +9,7 @@ use Drupal\joinup_community_content\Entity\CommunityContentInterface;
 use Drupal\joinup_workflow\ArchivableEntityInterface;
 
 /**
- * Interface for discussion entities in Joinup.
+ * Interface for discussion entities in Portal.
  */
 interface DiscussionInterface extends CommunityContentInterface, ArchivableEntityInterface, LogoInterface {
 

@@ -32,7 +32,7 @@ class GroupContentSubscriptionSubscriber implements EventSubscriberInterface {
   protected $entityTypeManager;
 
   /**
-   * The Joinup message delivery service.
+   * The Portal message delivery service.
    *
    * @var \Drupal\joinup_notification\JoinupMessageDeliveryInterface
    */
@@ -51,7 +51,7 @@ class GroupContentSubscriptionSubscriber implements EventSubscriberInterface {
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity type manager.
    * @param \Drupal\joinup_notification\JoinupMessageDeliveryInterface $joinupMessageDelivery
-   *   The Joinup message delivery service.
+   *   The Portal message delivery service.
    * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger
    *   The logger channel factory.
    */

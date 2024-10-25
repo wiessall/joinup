@@ -125,12 +125,12 @@ Feature:
       | http://joinup.eu/spdx/LGPL-2.1   | LGPL-2.1   | LGPL-2.1   |
     And licence content:
       | uri                               | title             | spdx licence | legal type                                                            |
-      | http://joinup.eu/licence/apache20 | Joinup Apache-2.0 | Apache-2.0   | Strong Community, Royalty free, Modify, Governments/EU, Use/reproduce |
-      | http://joinup.eu/licence/gpl2plus | Joinup GPL-2.0+   | GPL-2.0+     | Distribute                                                            |
-      | http://joinup.eu/licence/bsl1     | Joinup BSL-1.0    | BSL-1.0      | Distribute, Modify                                                    |
-      | http://joinup.eu/licence/0bsd     | Joinup 0BSD       | 0BSD         | Distribute, Royalty free                                              |
-      | http://joinup.eu/licence/upl1     | Joinup UPL-1.0    | UPL-1.0      | Distribute, Royalty free, Governments/EU                              |
-      | http://joinup.eu/licence/lgpl21   | Joinup LGPL-2.1   | LGPL-2.1     | Distribute, Royalty free, Governments/EU, Place warranty              |
+      | http://joinup.eu/licence/apache20 | Portal Apache-2.0 | Apache-2.0   | Strong Community, Royalty free, Modify, Governments/EU, Use/reproduce |
+      | http://joinup.eu/licence/gpl2plus | Portal GPL-2.0+   | GPL-2.0+     | Distribute                                                            |
+      | http://joinup.eu/licence/bsl1     | Portal BSL-1.0    | BSL-1.0      | Distribute, Modify                                                    |
+      | http://joinup.eu/licence/0bsd     | Portal 0BSD       | 0BSD         | Distribute, Royalty free                                              |
+      | http://joinup.eu/licence/upl1     | Portal UPL-1.0    | UPL-1.0      | Distribute, Royalty free, Governments/EU                              |
+      | http://joinup.eu/licence/lgpl21   | Portal LGPL-2.1   | LGPL-2.1     | Distribute, Royalty free, Governments/EU, Place warranty              |
 
     Given I am an anonymous user
     When I visit the "JLA" custom page
@@ -205,7 +205,7 @@ Feature:
     When I am on "/licence/compare/Apache-2.0;GPL-2.0+;NOT-EXIST"
     Then I should get a 404 HTTP response
 
-    # Test the page with SPDX IDs without a corresponding Joinup licence.
+    # Test the page with SPDX IDs without a corresponding Portal licence.
     When I am on "/licence/compare/Apache-2.0;GPL-2.0+;BSL-1.0"
     Then I should get a 404 HTTP response
 
@@ -411,9 +411,9 @@ Feature:
       | http://joinup.eu/spdx/BSL-1.0    | BSL-1.0    | BSL-1.0    |
     And licence content:
       | uri                               | title             | spdx licence | legal type                                                            |
-      | http://joinup.eu/licence/apache20 | Joinup Apache-2.0 | Apache-2.0   | Strong Community, Royalty free, Modify, Governments/EU, Use/reproduce |
-      | http://joinup.eu/licence/gpl2plus | Joinup GPL-2.0+   | GPL-2.0+     | Distribute                                                            |
-      | http://joinup.eu/licence/bsl1     | Joinup BSL-1.0    | BSL-1.0      | Distribute, Modify                                                    |
+      | http://joinup.eu/licence/apache20 | Portal Apache-2.0 | Apache-2.0   | Strong Community, Royalty free, Modify, Governments/EU, Use/reproduce |
+      | http://joinup.eu/licence/gpl2plus | Portal GPL-2.0+   | GPL-2.0+     | Distribute                                                            |
+      | http://joinup.eu/licence/bsl1     | Portal BSL-1.0    | BSL-1.0      | Distribute, Modify                                                    |
 
     Given I am an anonymous user
     When I visit the "JLA" custom page

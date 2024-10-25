@@ -1,5 +1,5 @@
-name: Joinup Workflow
-description: Shared code for handling workflows in Joinup.
+name: Portal Workflow
+description: Shared code for handling workflows in Portal.
 type: module
-package: Joinup
+package: Portal
 core_version_requirement: ">= 9.4"

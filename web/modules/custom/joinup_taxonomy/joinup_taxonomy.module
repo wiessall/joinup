@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Hook implementations for Joinup taxonomy module.
+ * Hook implementations for Portal taxonomy module.
  */
 
 declare(strict_types=1);

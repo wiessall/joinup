@@ -17,7 +17,7 @@ use Drupal\Core\StringTranslation\TranslatableMarkup;
 #[Block(
   id: "developer_warning_message",
   admin_label: new TranslatableMarkup("Developers warning message"),
-  category: new TranslatableMarkup("Joinup"),
+  category: new TranslatableMarkup("Portal"),
 )]
 final class WarningMessageBlock extends BlockBase {
 

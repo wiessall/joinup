@@ -57,7 +57,7 @@ Feature: Submit the contact form
       | template           | Contact form submission                       |
       | from               | digit-joinup@ec.europa.eu                     |
       | recipient_mail     | DIGIT-JOINUP-SUPPORT-EXT-FORWARD@ec.europa.eu |
-      | subject            | Joinup - Contact form submission              |
+      | subject            | Portal - Contact form submission              |
       | body               | Dear sir, madam, ...                          |
       | signature_required | no                                            |
     And I should see the following success messages:

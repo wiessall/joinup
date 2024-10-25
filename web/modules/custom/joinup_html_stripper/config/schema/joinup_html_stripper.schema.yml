@@ -1,6 +1,6 @@
 field.formatter.settings.joinup_html_stripper_stripped:
   type: mapping
-  label: 'Joinup HTML stripper formatter settings'
+  label: 'Portal HTML stripper formatter settings'
   mapping:
     trim_length:
       type: integer

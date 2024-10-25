@@ -1,5 +1,5 @@
-name: 'Joinup Bundle Class'
-description: 'Shared code for entity types that implement bundle classes in Joinup.'
+name: 'Portal Bundle Class'
+description: 'Shared code for entity types that implement bundle classes in Portal.'
 type: module
-package: Joinup
+package: Portal
 core_version_requirement: ">= 9.4"

@@ -8,15 +8,15 @@ use Drupal\Component\Utility\Html;
 use Drupal\social_media_links\IconsetBase;
 
 /**
- * Provides the Joinup icons set.
+ * Provides the Portal icons set.
  *
  * Since the user social media field requires this class in its configuration,
- * we cannot put this in the Joinup profile.
+ * we cannot put this in the Portal profile.
  *
  * @Iconset(
  *   id = "joinup",
- *   publisher = "Joinup",
- *   name = "Joinup icons",
+ *   publisher = "Portal",
+ *   name = "Portal icons",
  * )
  */
 class JoinupIcons extends IconsetBase {

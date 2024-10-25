@@ -1,7 +1,7 @@
-name: 'Joinup RDF'
-description: 'Integrates the RDF data model in Joinup.'
+name: 'Portal RDF'
+description: 'Integrates the RDF data model in Portal.'
 type: module
-package: Joinup
+package: Portal
 core_version_requirement: ">= 9.4"
 
 dependencies:

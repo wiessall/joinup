@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Hook implementations for the Joinup front page module.
+ * Hook implementations for the Portal front page module.
  */
 
 declare(strict_types=1);

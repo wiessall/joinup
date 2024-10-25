@@ -1,7 +1,7 @@
-name: Joinup News
+name: Portal News
 description: News content type.
 type: module
-package: Joinup
+package: Portal
 core_version_requirement: ">= 9.4"
 
 dependencies:

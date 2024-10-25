@@ -1,7 +1,7 @@
-name: 'Joinup core'
-description: 'Contains shared code for Joinup.'
+name: 'Portal core'
+description: 'Contains shared code for Portal.'
 type: module
-package: Joinup
+package: Portal
 core_version_requirement: ">= 9.4"
 dependencies:
   - 'drupal:comment'

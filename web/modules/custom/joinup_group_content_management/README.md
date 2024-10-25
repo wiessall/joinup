@@ -1,4 +1,4 @@
-Joinup Group Content Management
+Portal Group Content Management
 ===============================
 
 This module contains business logic related to managing content in groups.

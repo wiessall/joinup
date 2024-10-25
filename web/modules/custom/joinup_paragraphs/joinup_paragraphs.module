@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Hook implementations for Joinup Paragraphs module.
+ * Hook implementations for Portal Paragraphs module.
  */
 
 declare(strict_types=1);

@@ -15,7 +15,7 @@ use Drupal\og\OgAccessInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * Event subscribers for the Joinup community content module.
+ * Event subscribers for the Portal community content module.
  */
 class EventSubscriber implements EventSubscriberInterface {
 

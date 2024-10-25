@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Post-update functions for Joinup Video module.
+ * Post-update functions for Portal Video module.
  */
 
 declare(strict_types=1);

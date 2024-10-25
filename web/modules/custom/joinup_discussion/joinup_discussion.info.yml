@@ -1,7 +1,7 @@
 name: Discussion
-description: 'A discussion content bundle for the Joinup project.'
+description: 'A discussion content bundle for the Portal project.'
 type: module
-package: Joinup
+package: Portal
 core_version_requirement: ">= 9.4"
 
 dependencies:

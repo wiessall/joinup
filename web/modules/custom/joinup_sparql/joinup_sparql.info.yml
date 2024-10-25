@@ -1,7 +1,7 @@
-name: Joinup SPARQL
-description: Contains Joinup specific overrides related to the RDF entity and the SPARQL endpoint.
+name: Portal SPARQL
+description: Contains Portal specific overrides related to the RDF entity and the SPARQL endpoint.
 type: module
-package: Joinup
+package: Portal
 core_version_requirement: ">= 9.4"
 
 dependencies:

@@ -9,10 +9,10 @@ label: 'Solution deleted by moderator'
 description: 'Template 17: Moderator deletes a solution'
 text:
   -
-    value: 'Joinup: Your solution has been deleted by the moderation team'
+    value: 'Portal: Your solution has been deleted by the moderation team'
     format: full_html
   -
-    value: '<p>The Joinup moderation team deleted the interoperability solution @entity:title.</p>'
+    value: '<p>The Portal moderation team deleted the interoperability solution @entity:title.</p>'
     format: full_html
 settings:
   'token options':

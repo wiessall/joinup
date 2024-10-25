@@ -1,7 +1,7 @@
 type: module
 name: Distribution
 description: Distribution functionality
-package: Joinup
+package: Portal
 core_version_requirement: ">= 10.2"
 
 dependencies:

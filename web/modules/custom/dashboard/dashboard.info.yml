@@ -1,7 +1,7 @@
 name: Dashboard
-description: Provides a dashboard for the Joinup project.
+description: Provides a dashboard for the Portal project.
 type: module
-package: Joinup
+package: Portal
 core_version_requirement: ">= 9.4"
 dependencies:
   - joinup:joinup_core

@@ -9,7 +9,7 @@ use Robo\Collection\CollectionBuilder;
 use Robo\Sparql\Tasks\Sparql\loadTasks;
 
 /**
- * Provides Joinup specific commands for Virtuoso backend.
+ * Provides Portal specific commands for Virtuoso backend.
  */
 class VirtuosoCommands extends AbstractCommands {
 

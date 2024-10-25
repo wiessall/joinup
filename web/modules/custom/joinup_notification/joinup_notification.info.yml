@@ -1,7 +1,7 @@
-name: 'Joinup notification'
+name: 'Portal notification'
 description: 'Handles notifications for joinup project.'
 type: module
-package: Joinup
+package: Portal
 core_version_requirement: ">= 9.4"
 dependencies:
   - 'joinup:joinup_workflow'

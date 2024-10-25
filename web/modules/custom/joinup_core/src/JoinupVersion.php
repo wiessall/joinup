@@ -7,7 +7,7 @@ namespace Drupal\joinup_core;
 use Drupal\Core\Url;
 
 /**
- * A service that retrieves the current Joinup version.
+ * A service that retrieves the current Portal version.
  *
  * The version is saved during building the codebase in a `VERSION.txt` file, in
  * the project's webroot directory.
@@ -22,7 +22,7 @@ class JoinupVersion implements JoinupVersionInterface {
   const UNTAGGED = 'untagged.version';
 
   /**
-   * The current Joinup version.
+   * The current Portal version.
    *
    * @var string
    */

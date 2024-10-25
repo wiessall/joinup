@@ -10,7 +10,7 @@ use Drupal\joinup_core\Traits\LegacyMultipleCardinalitySupportingFieldWidgetTrai
 /**
  * Widget for e-mail fields that support multiple cardinality for existing data.
  *
- * In the Drupal 6 version of Joinup it was possible to enter multiple e-mail
+ * In the Drupal 6 version of Portal it was possible to enter multiple e-mail
  * addresses for some e-mail fields. In the new version we only allow to enter a
  * single e-mail address for these fields. However, it should still be possible
  * to edit existing multivalue data for content that was migrated from Drupal 6.

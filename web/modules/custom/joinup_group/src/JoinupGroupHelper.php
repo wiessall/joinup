@@ -11,7 +11,7 @@ use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\Exception\MissingGroupException;
 
 /**
- * Static helper methods for dealing with groups in Joinup.
+ * Static helper methods for dealing with groups in Portal.
  */
 class JoinupGroupHelper {
 
@@ -26,7 +26,7 @@ class JoinupGroupHelper {
   /**
    * Returns the group the entity belongs to.
    *
-   * This relies on the fact that in Joinup every group content entity only
+   * This relies on the fact that in Portal every group content entity only
    * belongs to a single group.
    *
    * Call this only if you transparently need to support both comment entities

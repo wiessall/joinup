@@ -45,7 +45,7 @@ class GroupAnnouncementsAccess extends AccessPluginBase implements CacheableDepe
     if ($group = $this->groupManager->getGroupFromContext()) {
       return $this->accessAnnouncements($group)->isAllowed();
     }
-    throw new \LogicException("The Views 'joinup_group_announcements' can be used only in the context of a Joinup group.");
+    throw new \LogicException("The Views 'joinup_group_announcements' can be used only in the context of a Portal group.");
   }
 
   /**

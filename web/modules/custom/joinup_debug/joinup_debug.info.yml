@@ -1,5 +1,5 @@
-name: 'Joinup debug'
+name: 'Portal debug'
 description: 'Provides additional logging when unexpected behavior occurs.'
 type: module
-package: Joinup
+package: Portal
 core_version_requirement: ">= 9.4"

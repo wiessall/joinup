@@ -66,7 +66,7 @@ class ContactFormMailTest extends JoinupMailFunctionalTestBase {
         'field_contact_email[0][value]' => 'jane.doe@example.com',
         'field_contact_category' => 'usage',
         'field_contact_subject[0][value]' => 'Question subject',
-        'field_contact_message[0][value]' => 'Question about Joinup',
+        'field_contact_message[0][value]' => 'Question about Portal',
         'field_contact_copy[value]' => $with_copy,
       ],
       'Submit'
@@ -84,12 +84,12 @@ class ContactFormMailTest extends JoinupMailFunctionalTestBase {
           'reply-to' => NULL,
           'langcode' => 'en',
           'send' => TRUE,
-          'subject' => 'Joinup - Contact form submission',
+          'subject' => 'Portal - Contact form submission',
           'body' => self::NOTIFICATION_HTML,
           'headers' => [
             'content-transfer-encoding' => '8Bit',
             'content-type' => 'text/html',
-            'from' => 'Joinup <joinup@example.com>',
+            'from' => 'Portal <joinup@example.com>',
             'mime-version' => '1.0',
             'return-path' => 'joinup@example.com',
             'sender' => 'joinup@example.com',
@@ -106,12 +106,12 @@ class ContactFormMailTest extends JoinupMailFunctionalTestBase {
           'reply-to' => NULL,
           'langcode' => 'en',
           'send' => TRUE,
-          'subject' => 'Joinup: Contact form notification',
+          'subject' => 'Portal: Contact form notification',
           'body' => $with_copy ? self::COPY_HTML : self::WITHOUT_COPY_HTML,
           'headers' => [
             'content-transfer-encoding' => '8Bit',
             'content-type' => 'text/html',
-            'from' => 'Joinup <joinup@example.com>',
+            'from' => 'Portal <joinup@example.com>',
             'mime-version' => '1.0',
             'return-path' => 'joinup@example.com',
             'sender' => 'joinup@example.com',
@@ -178,7 +178,7 @@ table tr td {
 <div class="field--name-field-contact-message contact-form-submission__field-contact-message">
 <div class="field__label fw-bold">
       Message    </div>
-<div class="field__item">Question about Joinup</div>
+<div class="field__item">Question about Portal</div>
 </div>
 
 
@@ -197,7 +197,7 @@ First name \nJane \n
  E-mail address \njane.doe@example.com \n
  Category \nQuestion on usage \n
  Subject \nQuestion subject \n
- Message \nQuestion about Joinup
+ Message \nQuestion about Portal
 EOS;
 
   const COPY_HTML = <<<'EOS'
@@ -221,7 +221,7 @@ table tr td {
 <p>This is the message you submitted through the online form:</p>
 <p>Subject: <em class="placeholder">Question subject</em></p>
 <p>Content:</p>
-<blockquote><p>Question about Joinup</p>
+<blockquote><p>Question about Portal</p>
 </blockquote>
 <p>Thank you for your interest, we will reply as soon as possible.</p>
 <p>Kind regards,</p>
@@ -248,7 +248,7 @@ Subject: _Question subject_
 
 Content:
 
-> Question about Joinup
+> Question about Portal
 
 Thank you for your interest, we will reply as soon as possible.
 

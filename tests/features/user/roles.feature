@@ -63,8 +63,8 @@ Feature: User role management
     And I should see the success message "The user has been notified that their account has been updated."
     And the following email should have been sent:
       | recipient | Nibby Noob                                                                                                |
-      | subject   | The Portal Support Team updated your account for you at Joinup                                            |
-      | body      | A moderator has edited your user profile on Joinup. Please check your profile to verify the changes done. |
+      | subject   | The Portal Support Team updated your account for you at Portal                                            |
+      | body      | A moderator has edited your user profile on Portal. Please check your profile to verify the changes done. |
 
     Given I am on the homepage
     When I mark all emails as read
@@ -97,8 +97,8 @@ Feature: User role management
     And I should see the success message "The user has been notified that their account has been updated."
     And the following email should have been sent:
       | recipient | Nibby Noob                                                                                                |
-      | subject   | The Portal Support Team updated your account for you at Joinup                                            |
-      | body      | A moderator has edited your user profile on Joinup. Please check your profile to verify the changes done. |
+      | subject   | The Portal Support Team updated your account for you at Portal                                            |
+      | body      | A moderator has edited your user profile on Portal. Please check your profile to verify the changes done. |
 
     When I am logged in as "Nibby Noob"
     And I go to the "Open licence" licence

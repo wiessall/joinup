@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Contains the Joinup Legal module main file.
+ * Contains the Portal Legal module main file.
  */
 
 declare(strict_types=1);

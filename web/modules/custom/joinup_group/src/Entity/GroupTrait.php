@@ -78,7 +78,7 @@ trait GroupTrait {
     }
 
     // Validate the role. We cannot create additional memberships for owners /
-    // administrators since in Joinup every group has a single owner.
+    // administrators since in Portal every group has a single owner.
     if (!in_array($role, ['member', 'author', 'facilitator'])) {
       throw new \InvalidArgumentException("Cannot create membership with role '$role'.");
     }

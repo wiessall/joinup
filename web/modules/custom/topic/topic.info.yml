@@ -1,7 +1,7 @@
-name: Joinup Topic
+name: Portal Topic
 type: module
 description: Contains custom code related to the Topic vocabulary.
-package: Joinup
+package: Portal
 core_version_requirement: ">= 9.4"
 dependencies:
   - joinup:joinup_taxonomy

@@ -7,7 +7,7 @@ namespace Drupal\collection\Entity;
 use Drupal\node\NodeInterface;
 
 /**
- * Interface for glossary terms in Joinup.
+ * Interface for glossary terms in Portal.
  */
 interface GlossaryTermInterface extends NodeInterface, CollectionContentInterface {
 

@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Enables modules and site configuration for the Joinup profile.
+ * Enables modules and site configuration for the Portal profile.
  */
 
 declare(strict_types=1);

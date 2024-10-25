@@ -1,7 +1,7 @@
-Joinup Subscription
+Portal Subscription
 ===================
 
-This module handles subscribing to content in Joinup. If a user is subscribed
+This module handles subscribing to content in Portal. If a user is subscribed
 they will receive email notifications when new content is being published. At
 the moment there are two distinct subscription systems offered by the module:
 

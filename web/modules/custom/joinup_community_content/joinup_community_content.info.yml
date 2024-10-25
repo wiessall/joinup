@@ -1,7 +1,7 @@
-name: Joinup Community Content
-description: Joinup Community Content base module
+name: Portal Community Content
+description: Portal Community Content base module
 type: module
-package: Joinup
+package: Portal
 core_version_requirement: ">= 9.4"
 
 dependencies:

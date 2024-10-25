@@ -1,7 +1,7 @@
-name: Joinup Taxonomy
+name: Portal Taxonomy
 description: Customizing the core's Taxonomy module.
 type: module
-package: Joinup
+package: Portal
 core_version_requirement: ">= 9.4"
 dependencies:
   - drupal:taxonomy

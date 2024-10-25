@@ -1,6 +1,6 @@
 # Deployment workflow
 
-We have 3 repositories that Joinup uses: the
+We have 3 repositories that Portal uses: the
 [development repository](https://git.fpfis.tech.ec.europa.eu/digit/digit-joinup-dev),
 which is where the development takes place, the
 [reference repository](https://git.fpfis.tech.ec.europa.eu/ec-europa/digit-joinup-reference),
@@ -71,10 +71,10 @@ The release procedure is as follows:
    issues and move them in QA should be followed.
 5. Check all resolved tickets from the previous sprint(s) and verify that they
    have a version set in the "Fix Version" field. Some tickets might be resolved
-   but are not part of any Joinup release (for example: analysis/investigations,
+   but are not part of any Portal release (for example: analysis/investigations,
    work done upstream, infrastructure work etc.). These should get "NOVERSION".
    The tickets can be listed by browsing all tickets in Jira and using the query
-   `project = ISAICP AND Sprint = "Joinup sprint N" AND status = Resolved`.
+   `project = ISAICP AND Sprint = "Portal sprint N" AND status = Resolved`.
 6. List all tickets in Jira that have the "Fix Version" field set to the
    upcoming release, using the query `project = ISAICP AND fixVersion = x.y.z`.
    These tickets will be used to create the changelog in the next step.

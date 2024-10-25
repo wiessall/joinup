@@ -1,5 +1,5 @@
-name: Joinup video
+name: Portal video
 description: Provides video functionality
 type: module
-package: Joinup
+package: Portal
 core_version_requirement: ">= 9.4"

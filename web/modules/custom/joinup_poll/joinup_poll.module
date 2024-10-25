@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Main functions and hook implementations of the Joinup Poll module.
+ * Main functions and hook implementations of the Portal Poll module.
  */
 
 declare(strict_types=1);

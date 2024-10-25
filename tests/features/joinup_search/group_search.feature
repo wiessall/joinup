@@ -1,7 +1,7 @@
 @api @group-g
 Feature: Search inside groups
   In order to quickly find content inside the group I am currently perusing
-  As a user of Joinup
+  As a user of Portal
   I want to be able to launch a search limited to my current collection or solution
 
   Background:

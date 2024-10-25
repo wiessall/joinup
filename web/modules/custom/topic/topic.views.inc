@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Views support for Joinup Topic module.
+ * Views support for Portal Topic module.
  */
 
 declare(strict_types=1);

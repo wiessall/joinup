@@ -14,13 +14,13 @@ use PHP_CodeSniffer\Files\File;
 /**
  * Checks the naming of (post)update/deploy functions.
  *
- * Joinup offers only _contiguous upgrades_. For instance, if your project is
- * currently on Joinup `v1.39.2`, and the latest stable version is `v1.42.0`,
+ * Portal offers only _contiguous upgrades_. For instance, if your project is
+ * currently on Portal `v1.39.2`, and the latest stable version is `v1.42.0`,
  * then you cannot upgrade directly to the latest version. Instead, you should
  * upgrade first to `v1.40.0`, second to `v1.40.1` (if exists) and, finally, to
  * `v1.42.0`.
  *
- * The Joinup update, post-update and deploy scripts namings are following this
+ * The Portal update, post-update and deploy scripts namings are following this
  * pattern:
  * @code
  * function mymodule_update_106100() {...}
@@ -38,19 +38,19 @@ use PHP_CodeSniffer\Files\File;
  * - The last two digits are an integer that sets the weight within updates or
  *   post updates from the same extension (module or profile). `00` is the first
  *   (post)update/deploy that applies.
- * - The middle three digits are the Joinup minor version.
- * - The first one or two digits are the Joinup major version. It cannot start
+ * - The middle three digits are the Portal minor version.
+ * - The first one or two digits are the Portal major version. It cannot start
  *   with '0'.
  *
  * Given the above example:
  *
- * - `function mymodule_update_106100() {...}`: Was applied in Joinup `v1.61.x`
+ * - `function mymodule_update_106100() {...}`: Was applied in Portal `v1.61.x`
  *   as the first update of the `mymodule` module (`1` major version, `061`
  *   minor version, `00` update weight within the module).
- * - `function mymodule_post_update_207503() {...}`: Was applied in Joinup
+ * - `function mymodule_post_update_207503() {...}`: Was applied in Portal
  *   `v2.75.x` as the fourth post update of the `mymodule` module (`2` major
  *   version, `075` minor version, `03` post-update weight within the module).
- * - `function mymodule_deploy_1008101() {...}`: Was applied in Joinup
+ * - `function mymodule_deploy_1008101() {...}`: Was applied in Portal
  *   `v10.81.x` as the second deploy of the `mymodule` module (`10` major
  *   version, `081` minor version, `01` deploy weight within the module).
  *
@@ -117,7 +117,7 @@ class ValidUpdateNameSniff extends ValidFunctionNameSniff {
 
     $error = NULL;
     if (!ctype_digit($name) || !in_array(strlen($name), [6, 7])) {
-      $error = "Invalid '%s' identifier. Expected 6 or 7 digits:\n- 1-2 digits: Joinup major version\n- 3 digits: Joinup minor version\n- 2 digits: The %s weight";
+      $error = "Invalid '%s' identifier. Expected 6 or 7 digits:\n- 1-2 digits: Portal major version\n- 3 digits: Portal minor version\n- 2 digits: The %s weight";
       $data = [$name, $updateType];
     }
     elseif ($name[0] === '0') {

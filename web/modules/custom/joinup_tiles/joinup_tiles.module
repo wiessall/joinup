@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Hook implementations for the Joinup Tiles module.
+ * Hook implementations for the Portal Tiles module.
  */
 
 declare(strict_types=1);

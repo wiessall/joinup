@@ -110,8 +110,8 @@ Feature: When a solution is archived then its sub-content also should be archive
     And 2 e-mails should have been sent
     And the following email should have been sent:
       | recipient | John Moderator                     |
-      | subject   | Joinup: Solution has been archived |
-    And the email sent to "John Moderator" with subject "Joinup: Solution has been archived" contains the following lines of text:
+      | subject   | Portal: Solution has been archived |
+    And the email sent to "John Moderator" with subject "Portal: Solution has been archived" contains the following lines of text:
       | Dear John,                                                           |
       | The Solution, along with its associated content items, has been      |
       | archived. Even though the Solution has been archived, you can still  |
@@ -121,8 +121,8 @@ Feature: When a solution is archived then its sub-content also should be archive
       | at                                                                   |
     # The email sent to Liam (the contact person of the solution) won't contain
     # the "Dear Liam," greeting since Liam does not have a user account on
-    # Joinup.
-    And the email sent to "liam.smith@example.com" with subject "Joinup: Solution has been archived" contains the following lines of text:
+    # Portal.
+    And the email sent to "liam.smith@example.com" with subject "Portal: Solution has been archived" contains the following lines of text:
       | The Solution, along with its associated content items, has been      |
       | archived. Even though the Solution has been archived, you can still  |
       | access its pages through the Advanced Search page by selecting 'Show |

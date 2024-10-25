@@ -95,7 +95,7 @@ class FeatureTimeLoggerListener implements EventSubscriberInterface {
   }
 
   /**
-   * Get the Joinup group for the scenario.
+   * Get the Portal group for the scenario.
    */
   private function getGroup(TaggedNodeInterface $feature): string {
     foreach ($feature->getTags() as $tag) {
