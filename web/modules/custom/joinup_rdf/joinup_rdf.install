@@ -167,7 +167,7 @@ function joinup_rdf_update_200005(): void {
 
   $configs = [
     'field.field.media.image.og_audience',
-    'field.field.media.video.og_audience',
+    'field.field.media.remote_video.og_audience',
     'field.field.media.file.og_audience',
     'field.field.node.news.field_news_referenced_solution',
     'field.field.node.news.og_audience',
