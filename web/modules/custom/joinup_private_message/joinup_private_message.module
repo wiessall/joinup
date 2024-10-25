@@ -15,6 +15,8 @@ use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
+use Drupal\private_message\Entity\PrivateMessage;
+use Drupal\symfony_mailer_lite\Plugin\Mail\SymfonyMailer;
 
 /**
  * Implements hook_preprocess_HOOK().
@@ -51,9 +53,6 @@ function joinup_private_message_form_alter(array &$form, FormStateInterface $for
       $form['message']['widget'][0]['#format'] = 'minimal';
       $form['message']['widget'][0]['#allowed_formats'] = ['minimal'];
     }
-  }
-
-  if (in_array($form_id, ['private_message_add_form', 'private_message_delete_form'])) {
     $form['actions']['submit']['#submit'][] = 'joinup_private_message_form_submit';
   }
 
@@ -139,14 +138,45 @@ function joinup_private_message_private_message_thread_view_alter(array &$build,
 }
 
 /**
- * Implements hook_contextual_links_view_alter().
+ * Implements hook_ENTITY_TYPE_view_alter().
  */
-function joinup_private_message_contextual_links_view_alter(array &$element, array $items): void {
-  if (isset($element['#links']['private-messagedelete'])) {
-    // Open form in a modal.
-    $element['#links']['private-messagedelete']['attributes'] = _joinup_private_message_get_ajax_modal_attributes();
+function joinup_private_message_private_message_view_alter(array &$build, EntityInterface $entity): void {
+  \assert($entity instanceof PrivateMessage);
+
+  // We're only adding links here, but only in default view mode.
+  if (@$build['wrapper']['message']['#view_mode'] !== 'default') {
+    return;
   }
 
+  // Display the report link.
+  if ($entity->getOwnerId() !== \Drupal::currentUser()->id()) {
+    $report_url = Url::fromRoute('joinup_private_message.report_form', [
+      'private_message' => $entity->id(),
+    ]);
+    $report_button = [
+      '#type' => 'link',
+      '#title' => t('Report'),
+      '#url' => $report_url,
+      '#attributes' => _joinup_private_message_get_ajax_modal_attributes(),
+    ];
+    $build['links']['report'] = $report_button;
+  }
+
+  // Display the delete link.
+  $delete_url = Url::fromRoute('entity.private_message.delete', [
+    'private_message' => $entity->id(),
+  ], [
+    'query' => [
+      'destination' => Url::fromRoute('private_message.private_message_page')->toString(),
+    ],
+  ]);
+  $build['links']['delete'] = [
+    '#type' => 'link',
+    '#title' => t('Delete'),
+    '#url' => $delete_url,
+    '#attributes' => _joinup_private_message_get_ajax_modal_attributes(),
+  ];
+  unset($build['#contextual_links']);
 }
 
 /**
@@ -163,4 +193,38 @@ function _joinup_private_message_get_ajax_modal_attributes(): array {
       'width' => 'auto',
     ]),
   ];
+}
+
+/**
+ * Implements hook_mail().
+ */
+function joinup_private_message_mail(string $key, array &$message, array $params): void {
+  if ($key === 'report_message') {
+    $recipient = $params['recipient'];
+    $sender = $params['sender'];
+    /** @var \Drupal\private_message\Entity\PrivateMessageInterface $reportMessage */
+    $reportMessage = $params['message'];
+    /** @var \Drupal\private_message\Entity\PrivateMessageThreadInterface $thread */
+    $thread = \Drupal::service('private_message.service')->getThreadFromMessage($reportMessage);
+    $params = [
+      'subject' => t('User @reporter reported a message', ['@reporter' => $recipient->getDisplayName()]),
+      'message' => t(
+          'The user <a href="@reporter_url">@reporter_name</a> has reported user <a href="@sender_url">@sender_name</a> for sending an unwanted message (<a href="@message_url">view message</a>):<br><h5>Message content: </h5>',
+          [
+            '@reporter_name' => $recipient->getDisplayName(),
+            '@reporter_url' => Url::fromRoute('entity.user.canonical', ['user' => $recipient->id()], ['absolute' => TRUE])->toString(),
+            '@sender_name' => $sender->getDisplayName(),
+            '@sender_url' => Url::fromRoute('entity.user.canonical', ['user' => $sender->id()], ['absolute' => TRUE])->toString(),
+            '@message_url' => Url::fromRoute('entity.private_message_thread.canonical', [
+              'private_message_thread' => $thread->id(),
+            ], [
+              'absolute' => TRUE,
+              'fragment' => 'private-message-' . $reportMessage->id(),
+            ])->toString(),
+          ]) . $reportMessage->get('message')->value,
+    ];
+    $message['subject'] = $params['subject'];
+    $message['body'][] = $params['message'];
+    $message['headers']['Content-Type'] = SymfonyMailer::FORMAT_HTML;
+  }
 }

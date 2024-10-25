@@ -437,7 +437,8 @@
                 "Hardcoded URL @see https://www.drupal.org/i/3479391": "resources/patch/php/drupal/private_message/3479391.diff",
                 "Return type for PrivateMessageConfigFormBase::validateForm() should be void @see https://www.drupal.org/i/3477873": "resources/patch/php/drupal/private_message/3477873.diff",
                 "Add some FunctionalJavascript tests + fix JS error on inbox init @see https://www.drupal.org/i/3482103": "resources/patch/php/drupal/private_message/3482103.diff",
-                "Warning when the field subject is disabled @see https://www.drupal.org/i/3480219": "resources/patch/php/drupal/private_message/3480219.diff"
+                "Warning when the field subject is disabled @see https://www.drupal.org/i/3480219": "resources/patch/php/drupal/private_message/3480219.diff",
+                "Email notifications contain HTML tags @see https://www.drupal.org/project/private_message/issues/2971692": "resources/patch/php/drupal/private_message/2971692.diff"
             },
             "drupal/private_message_flood": {
                 "Add return type to methods @see https://www.drupal.org/i/3477426": "resources/patch/php/drupal/private_message_flood/3477426.diff"
