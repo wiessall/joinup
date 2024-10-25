@@ -128,7 +128,7 @@ Feature: Test migration of collections/solutions to node.
 
     # Sample check some tiles as it might be that the tiles will change until
     # the migration is done so try to avoid too many checks.
-    And I should see the "Eurotrace NET" tile
+    And I should see the "Mustangproject" tile
 
     # Test the website link.
     Given I go to "/collection/are3na/solution/re3gistry"
