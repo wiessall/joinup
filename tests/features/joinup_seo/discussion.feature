@@ -27,7 +27,7 @@ Feature: SEO for discussion forum posts.
       | datePublished       | 2019-12-25T13:00:00+0000                                                                            |
       | isAccessibleForFree | True                                                                                                |
       | dateModified        | 2020-01-01T13:00:00+0000                                                                            |
-      | mainEntityOfPage    | __base_url__/collection/joinup-seo-discussion-collection/discussion/discussions-are-now-forum-posts |
+      | mainEntityOfPage    | __base_url__/collection/portal-seo-discussion-collection/discussion/discussions-are-now-forum-posts |
     # Adding numerical property values is turning the "about" property into an array comparison.
     And the metatag graph of the item with "name" "Discussions are now forum posts" should have the following "about" properties:
       | property | value      |
@@ -77,7 +77,7 @@ Feature: SEO for discussion forum posts.
     And the following meta tags should available in the html:
       | identifier     | value                                                                                               |
       | description    | This discussion is to ensure that SEO tags are set properly.                                        |
-      | og:url         | __base_url__/collection/joinup-seo-discussion-collection/discussion/discussions-are-now-forum-posts |
+      | og:url         | __base_url__/collection/portal-seo-discussion-collection/discussion/discussions-are-now-forum-posts |
       | og:site_name   | Portal                                                                                              |
       | og:title       | Discussions are now forum posts                                                                     |
       | og:description | This discussion is to ensure that SEO tags are set properly.                                        |
