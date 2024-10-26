@@ -242,4 +242,109 @@ Feature: CKEditor5
     And I press "Insert selected" in the "Modal buttons" region
     Then I should see the error message "No items selected."
 
+  @casMockServer
+  Scenario: Add test coverage for 'Contact us' wysiwyg button.
+
+    And owner content:
+      | name  | owner type |
+      | Lotte | Company    |
+    And user:
+      | Username    | Pally Rapamichael      |
+      | First name  | Pally                  |
+      | Family name | Rapamichael            |
+      | E-mail      | p.papamichael@pally.de |
+    And contact_information content:
+      | name                 | email                      |
+      | Klim Smith           | klim.smith@example.com     |
+      | Raul Timon           | raul.timon@example.com     |
+    And the following email confirmation request:
+      | email                  | status    |
+      | klim.smith@example.com | confirmed |
+      | raul.timon@example.com | confirmed |
+    And collection:
+      | title               | Antiruin development |
+      | state               | published            |
+      | contact information | Raul Timon           |
+    And solution:
+      | title               | One exclusion advantages                          |
+      | abstract            | Separating molecules by height.                   |
+      | description         | Separating molecules by weight.                   |
+      | state               | published                                         |
+      | topic               | Demography, E-inclusion                           |
+      | owner               | Lotte                                             |
+      | solution type       | Non-binding Instrument, Data Owner                |
+      | collection          | Antiruin development                              |
+      | contact information | Klim Smith                                        |
+    And users:
+      | Username    | E-mail         | First name | Family name |
+      | jmacc_local | jodine@ankh.am | John       | Maccalariat |
+    And CAS users:
+       | First name | Last name   | Username  | E-mail         | Password | Local username |
+       | John       | Maccalariat | jmacc     | jodine@ankh.am | 10d1ne   | jmacc_local    |
+
+    Given I am logged in as a moderator
+    Then I go to "/collection/antiruin-development/solution/one-exclusion-advantages/contact"
+    And I should see the heading "Contact us"
+
+    When I go to the homepage of the "One exclusion advantages" solution
+    Then I open the header local tasks menu
+    And I click "Edit" in the "Entity actions" region
+    And I press the button "Contact us" in the "Description" wysiwyg editor
+    Then I press "Publish"
+    And I should see the heading "One exclusion advantages"
+    When I click "Contact us"
+    Then I should see the heading "Contact us"
+    Then I fill in "Your name" with "Lina Example"
+    And I fill in "Your e-mail address" with "linak@example.pt"
+    And I fill in "Subject" with "New reclamation about Owner"
+    And I select "Other" from "Type of support"
+    And I fill in "Message" with "This is reclamation test."
+    When I press "Send e-mail"
+    And I should see the success message "Your message has been sent."
+    Then I should see the heading "One exclusion advantages"
+    And I should be on "/collection/antiruin-development/solution/one-exclusion-advantages"
+
+    When I am an anonymous user
+    Then I go to the "One exclusion advantages" solution
+    And I click "Contact us"
+    And I should see the heading "Sign in to continue"
+
+    When I fill in "E-mail address" with "jodine@ankh.am"
+    And I fill in "Password" with "10d1ne"
+    And I press "Log in"
+    And I should see the heading "Contact us"
+    Then I fill in "Your name" with "V Example"
+    And I fill in "Your e-mail address" with "vnak@example.pt"
+    And I select "Other" from "Type of support"
+    And I fill in "Subject" with "v2 New reclamation about Owner"
+    And I fill in "Message" with "This is v2 reclamation test."
+    When I press "Send e-mail"
+    Then I should see the success message "Your message has been sent."
+    And I should see the heading "One exclusion advantages"
+
+    # Check layout paragraphs.
+    Given custom_page content:
+      | title                             | collection            | state     |
+      | Contact us text check             | Antiruin development  | published |
+    And I append "layout" to "field_paragraphs_body" field in "node" entity with following "Contact us text check" title:
+      | behavior_settings | a:3:{s:17:"layout_paragraphs";a:4:{s:6:"layout";s:13:"layout_onecol";s:6:"config";a:1:{s:5:"label";s:0:"";}s:11:"parent_uuid";N;s:6:"region";N;}s:16:"background_theme";a:0:{}s:11:"extra_class";a:0:{}} |
+
+    When I am logged in as a moderator
+    And I go to the edit form of the "Contact us text check" "custom page"
+    And I click "Choose component"
+    And a modal should open
+    # Not used anymore.
+    And I should not see the link "Simple paragraph"
+    And I click "Text"
+    And the "Contact us" button should be available in the "Body" wysiwyg editor
+    And I press the button "Contact us" in the "Body" wysiwyg editor
+    And I press "Save" in the "Modal buttons" region
+    And I press "Update"
+    Then I should see the success message "Custom page Contact us text check has been updated."
+    And I should see the link "Contact us"
+
+    When I am an anonymous user
+    Then I go to the "Contact us text check" custom_page
+    And I should see the link "Contact us"
+
   # For 'Media video with CKEditor5' see tests/features/video/embed.feature
