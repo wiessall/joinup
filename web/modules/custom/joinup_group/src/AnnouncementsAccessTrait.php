@@ -15,15 +15,15 @@ use Drupal\meta_entity\Entity\MetaEntity;
 trait AnnouncementsAccessTrait {
 
   /**
-   * The Portal Group manager service.
+   * The Interoperable Europe Portal Group manager service.
    */
   protected JoinupGroupManagerInterface $groupManager;
 
   /**
-   * Injects the Portal group manager service.
+   * Injects the Interoperable Europe Portal group manager service.
    *
    * @param \Drupal\joinup_group\JoinupGroupManagerInterface $group_manager
-   *   The Portal Group manager service.
+   *   The Interoperable Europe Portal Group manager service.
    *
    * @return $this
    */

@@ -1,7 +1,7 @@
-name: 'Portal log'
+name: 'Interoperable Europe Portal log'
 description: 'Contains log-related features.'
 type: module
-package: Portal
+package: Interoperable Europe Portal
 core_version_requirement: ">= 10.1"
 dependencies:
   - drupal:user

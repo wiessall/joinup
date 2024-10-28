@@ -1,7 +1,7 @@
-name: 'Portal Newsletter'
-description: 'Provides newsletter functionality to Portal'
+name: 'Interoperable Europe Portal Newsletter'
+description: 'Provides newsletter functionality to Interoperable Europe Portal'
 type: module
-package: Portal
+package: Interoperable Europe Portal
 core_version_requirement: ">= 9.4"
 
 dependencies:

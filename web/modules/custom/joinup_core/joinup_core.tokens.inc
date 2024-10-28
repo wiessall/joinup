@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Tokens support for Portal Core module.
+ * Tokens support for Interoperable Europe Portal Core module.
  */
 
 declare(strict_types=1);

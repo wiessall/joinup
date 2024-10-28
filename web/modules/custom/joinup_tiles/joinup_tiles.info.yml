@@ -1,5 +1,5 @@
-name: Portal Tiles
-description: Tiles components for Portal
+name: Interoperable Europe Portal Tiles
+description: Tiles components for Interoperable Europe Portal
 type: module
-package: Portal
+package: Interoperable Europe Portal
 core_version_requirement: ">= 9.4"

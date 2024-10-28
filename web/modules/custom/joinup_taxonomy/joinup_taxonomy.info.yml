@@ -1,7 +1,7 @@
-name: Portal Taxonomy
+name: Interoperable Europe Portal Taxonomy
 description: Customizing the core's Taxonomy module.
 type: module
-package: Portal
+package: Interoperable Europe Portal
 core_version_requirement: ">= 9.4"
 dependencies:
   - drupal:taxonomy

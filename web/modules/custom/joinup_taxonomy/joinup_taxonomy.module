@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Hook implementations for Portal taxonomy module.
+ * Hook implementations for Interoperable Europe Portal taxonomy module.
  */
 
 declare(strict_types=1);

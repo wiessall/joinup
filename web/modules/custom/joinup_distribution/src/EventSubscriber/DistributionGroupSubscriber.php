@@ -12,7 +12,7 @@ use Drupal\joinup_group\EventSubscriber\AddGroupContentEventSubscriberBase;
 use Drupal\solution\Entity\SolutionInterface;
 
 /**
- * Subscribes to Portal Group events.
+ * Subscribes to Interoperable Europe Portal Group events.
  */
 class DistributionGroupSubscriber extends AddGroupContentEventSubscriberBase {
 

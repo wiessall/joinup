@@ -87,7 +87,7 @@ Feature:
 
     # Our semantic content has a persistent canonical path at Europe's
     # official data portal: "http://data.europa.eu/w21/{uuid}". The data portal
-    # links back to the Portal servers.
+    # links back to the Interoperable Europe Portal servers.
     Given I am on "data/w21/ffb0ffc9-7704-45d3-95b3-42706b6320e5"
     Then I should see the heading "Persistent solution"
     And I should see "Persistent solution description"

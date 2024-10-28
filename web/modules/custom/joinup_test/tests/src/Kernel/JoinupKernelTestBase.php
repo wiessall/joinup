@@ -7,7 +7,7 @@ namespace Drupal\Tests\joinup_test\Kernel;
 use Drupal\Tests\rdf_entity\Kernel\RdfKernelTestBase;
 
 /**
- * Provides a base class for entity tests in Portal.
+ * Provides a base class for entity tests in Interoperable Europe Portal.
  *
  * This class is not intended for generic kernel tests but only for entity
  * tests. It will be renamed to JoinupEntityKernelTestBase to avoid confusion.

@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Post update functions for the Portal RDF module.
+ * Post update functions for the Interoperable Europe Portal RDF module.
  */
 
 declare(strict_types=1);

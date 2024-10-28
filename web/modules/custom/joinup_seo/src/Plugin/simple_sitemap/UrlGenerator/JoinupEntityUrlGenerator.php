@@ -7,11 +7,11 @@ namespace Drupal\joinup_seo\Plugin\simple_sitemap\UrlGenerator;
 use Drupal\Core\Entity\Query\QueryInterface;
 
 /**
- * Generates URLs to content on Portal for inclusion in the sitemap.
+ * Generates URLs to content on Interoperable Europe Portal for inclusion in the sitemap.
  *
  * @UrlGenerator(
  *   id = "joinup_entity",
- *   label = @Translation("Portal URL generator"),
+ *   label = @Translation("Interoperable Europe Portal URL generator"),
  *   description = @Translation("Generates URLs for entities ignoring recent news."),
  * )
  */

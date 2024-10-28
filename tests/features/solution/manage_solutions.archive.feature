@@ -110,24 +110,24 @@ Feature: When a solution is archived then its sub-content also should be archive
     And 2 e-mails should have been sent
     And the following email should have been sent:
       | recipient | John Moderator                     |
-      | subject   | Portal: Solution has been archived |
-    And the email sent to "John Moderator" with subject "Portal: Solution has been archived" contains the following lines of text:
+      | subject   | Interoperable Europe Portal: Solution has been archived |
+    And the email sent to "John Moderator" with subject "Interoperable Europe Portal: Solution has been archived" contains the following lines of text:
       | Dear John,                                                           |
       | The Solution, along with its associated content items, has been      |
       | archived. Even though the Solution has been archived, you can still  |
       | access its pages through the Advanced Search page by selecting 'Show |
       | only Archived items' or through the Collection it belonged to.       |
-      | If you think this action is not clear, please contact Portal Support |
+      | If you think this action is not clear, please contact Interoperable Europe Portal Support |
       | at                                                                   |
     # The email sent to Liam (the contact person of the solution) won't contain
     # the "Dear Liam," greeting since Liam does not have a user account on
-    # Portal.
-    And the email sent to "liam.smith@example.com" with subject "Portal: Solution has been archived" contains the following lines of text:
+    # Interoperable Europe Portal.
+    And the email sent to "liam.smith@example.com" with subject "Interoperable Europe Portal: Solution has been archived" contains the following lines of text:
       | The Solution, along with its associated content items, has been      |
       | archived. Even though the Solution has been archived, you can still  |
       | access its pages through the Advanced Search page by selecting 'Show |
       | only Archived items' or through the Collection it belonged to.       |
-      | If you think this action is not clear, please contact Portal Support |
+      | If you think this action is not clear, please contact Interoperable Europe Portal Support |
       | at                                                                   |
 
     When I go to the homepage of the "Solution" solution

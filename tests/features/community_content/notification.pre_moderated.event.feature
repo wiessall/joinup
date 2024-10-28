@@ -49,7 +49,7 @@ Feature: Notification test for the event transitions on a pre moderated parent.
     And I press "Propose"
     Then the following email should have been sent:
       | recipient | CC owner                                                                                                                 |
-      | subject   | Portal: Content has been proposed                                                                                        |
+      | subject   | Interoperable Europe Portal: Content has been proposed                                                                                        |
       | body      | CC Member has submitted a new event - "CC notify create propose" for publication in the collection: "CC pre collection". |
 
     When I am logged in as "CC facilitator"
@@ -65,7 +65,7 @@ Feature: Notification test for the event transitions on a pre moderated parent.
     And I press "Publish"
     Then the following email should have been sent:
       | recipient | CC owner                                                                                                                                                                   |
-      | subject   | Portal: Content has been published                                                                                                                                         |
+      | subject   | Interoperable Europe Portal: Content has been published                                                                                                                                         |
       | body      | CC Facilitator has published the new event - "CC notify create publish" in the collection: "CC pre collection". You can access the new content at the following link: http |
 
     # Test 'update' operation.
@@ -75,7 +75,7 @@ Feature: Notification test for the event transitions on a pre moderated parent.
     And I press "Propose"
     Then the following email should have been sent:
       | recipient | CC owner                                                                                                              |
-      | subject   | Portal: Content has been proposed                                                                                     |
+      | subject   | Interoperable Europe Portal: Content has been proposed                                                                                     |
       | body      | CC Member has submitted a new event - "CC notify pre propose" for publication in the collection: "CC pre collection". |
 
     When I go to the "CC notify pre propose from reported" event
@@ -83,7 +83,7 @@ Feature: Notification test for the event transitions on a pre moderated parent.
     And I press "Propose"
     Then the following email should have been sent:
       | recipient | CC owner                                                                                                                                                                     |
-      | subject   | Portal: Content has been updated                                                                                                                                             |
+      | subject   | Interoperable Europe Portal: Content has been updated                                                                                                                                             |
       | body      | CC Member has updated the content of the event - "CC notify pre propose from reported" as advised and requests again its publication in the collection: "CC pre collection". |
 
     When I go to the "CC notify pre request deletion" event
@@ -94,7 +94,7 @@ Feature: Notification test for the event transitions on a pre moderated parent.
     And I press "Request deletion"
     Then the following email should have been sent:
       | recipient | CC owner                                                                                                                                                                           |
-      | subject   | Portal: Content has been updated                                                                                                                                                   |
+      | subject   | Interoperable Europe Portal: Content has been updated                                                                                                                                                   |
       | body      | CC Member has requested to delete the event - "CC notify pre request deletion" in the collection: "CC pre collection", with the following motivation: "I just want to delete it.". |
 
     When I go to the "CC notify published to revise" event
@@ -102,7 +102,7 @@ Feature: Notification test for the event transitions on a pre moderated parent.
     And I press "Propose changes"
     Then the following email should have been sent:
       | recipient | CC owner                                                                                                                                 |
-      | subject   | Portal: Content has been proposed                                                                                                        |
+      | subject   | Interoperable Europe Portal: Content has been proposed                                                                                                        |
       | body      | CC Member has submitted an update of the event - "CC notify published to revise" for publication in the collection: "CC pre collection". |
 
     When I am logged in as "CC facilitator"
@@ -111,7 +111,7 @@ Feature: Notification test for the event transitions on a pre moderated parent.
     And I press "Publish"
     Then the following email should have been sent:
       | recipient | CC owner                                                                                                     |
-      | subject   | Portal: Content has been published                                                                           |
+      | subject   | Interoperable Europe Portal: Content has been published                                                                           |
       | body      | CC Facilitator has published the new event - "CC notify pre publish" in the collection: "CC pre collection". |
 
     When I am logged in as "CC facilitator"
@@ -123,11 +123,11 @@ Feature: Notification test for the event transitions on a pre moderated parent.
     And I press "Request changes"
     Then the following email should have been sent:
       | recipient | CC member                                                                                                                                                                                                  |
-      | subject   | Portal: Content has been updated                                                                                                                                                                           |
+      | subject   | Interoperable Europe Portal: Content has been updated                                                                                                                                                                           |
       | body      | the Facilitator, CC Facilitator has requested you to modify the event - "CC notify pre request changes" in the collection: "CC pre collection", with the following motivation: "Can you do some changes?". |
     But the following email should not have been sent:
       | recipient | CC owner                                                                                                                                      |
-      | subject   | Portal: Content has been proposed                                                                                                             |
+      | subject   | Interoperable Europe Portal: Content has been proposed                                                                                                             |
       | body      | CC Facilitator has submitted an update of the event - "CC notify pre request changes" for publication in the collection: "CC pre collection". |
 
     When I am logged in as "CC facilitator"
@@ -139,7 +139,7 @@ Feature: Notification test for the event transitions on a pre moderated parent.
     And I press "Request changes"
     Then the following email should have been sent:
       | recipient | CC member                                                                                                                                                                                         |
-      | subject   | Portal: Content has been updated                                                                                                                                                                  |
+      | subject   | Interoperable Europe Portal: Content has been updated                                                                                                                                                                  |
       | body      | the Facilitator, CC Facilitator has requested you to modify the event - "CC notify pre report" in the collection: "CC pre collection", with the following motivation: "Your content is reported". |
 
     When I am logged in as "CC facilitator"
@@ -148,7 +148,7 @@ Feature: Notification test for the event transitions on a pre moderated parent.
     And I press "Publish"
     Then the following email should have been sent:
       | recipient | CC member                                                                                                                                                        |
-      | subject   | Portal: Content has been updated                                                                                                                                 |
+      | subject   | Interoperable Europe Portal: Content has been updated                                                                                                                                 |
       | body      | the Facilitator, CC Facilitator has approved your request of publication of the event - "CC notify pre approve proposed" in the collection: "CC pre collection". |
 
     When I am logged in as "CC facilitator"
@@ -160,7 +160,7 @@ Feature: Notification test for the event transitions on a pre moderated parent.
     And I press "Reject deletion"
     Then the following email should have been sent:
       | recipient | CC member                                                                                                                                                                                                     |
-      | subject   | Portal: Content has been updated                                                                                                                                                                              |
+      | subject   | Interoperable Europe Portal: Content has been updated                                                                                                                                                                              |
       | body      | the Facilitator, CC Facilitator has not approved your request to delete the event - "CC notify pre reject deletion" in the collection: "CC pre collection", with the following motivation: "I still like it". |
 
     # Test 'delete' operation on an entity in 'deletion_request' state.
@@ -171,7 +171,7 @@ Feature: Notification test for the event transitions on a pre moderated parent.
     And I press "Delete"
     Then the following email should have been sent:
       | recipient | CC member                                                                                                                                       |
-      | subject   | Portal: Content has been deleted                                                                                                                |
+      | subject   | Interoperable Europe Portal: Content has been deleted                                                                                                                |
       | body      | Facilitator CC Facilitator has approved your request of deletion for the event - "CC notify pre delete" in the collection: "CC pre collection". |
 
     When I am logged in as "CC facilitator"
@@ -181,7 +181,7 @@ Feature: Notification test for the event transitions on a pre moderated parent.
     And I press "Delete"
     Then the following email should have been sent:
       | recipient | CC member                                                                                                                                                 |
-      | subject   | Portal: Content has been deleted                                                                                                                          |
+      | subject   | Interoperable Europe Portal: Content has been deleted                                                                                                                          |
       | body      | Facilitator CC Facilitator has approved your request of deletion for the event - "CC notify pre request deletion" in the collection: "CC pre collection". |
 
     # Test 'delete' operation on an entity in 'published' state.
@@ -192,5 +192,5 @@ Feature: Notification test for the event transitions on a pre moderated parent.
     And I press "Delete"
     Then the following email should have been sent:
       | recipient | CC member                                                                                                                  |
-      | subject   | Portal: Content has been deleted                                                                                           |
+      | subject   | Interoperable Europe Portal: Content has been deleted                                                                                           |
       | body      | Facilitator CC Facilitator has deleted the event - "CC notify published to delete" in the collection: "CC pre collection". |

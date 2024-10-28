@@ -10,7 +10,7 @@ field_name: link_to_external_url
 entity_type: entity_subqueue
 bundle: highlighted_event
 label: 'Link to external page'
-description: 'Check this to link directly to an external page, such as a registration form. Will link to the event page on Portal when left unchecked.'
+description: 'Check this to link directly to an external page, such as a registration form. Will link to the event page on Interoperable Europe Portal when left unchecked.'
 required: false
 translatable: false
 default_value:

@@ -43,7 +43,7 @@ class HeaderContext extends RawDrupalContext {
     Assert::assertInstanceOf(NodeElement::class, $logo_element, 'A logo is present in the navbar.');
     Assert::assertEquals('Interoperable Europe logo', $logo_element->getAttribute('alt'), 'The logo has an alt text.');
     $expected_logo_uri = base_path() . \Drupal::service('extension.list.theme')->getPath('ventuno') . '/assets/images/logo-interoperable-europe.svg';
-    Assert::assertEquals($expected_logo_uri, $logo_element->getAttribute('src'), 'The Portal logo is shown in the navbar.');
+    Assert::assertEquals($expected_logo_uri, $logo_element->getAttribute('src'), 'The Interoperable Europe Portal logo is shown in the navbar.');
   }
 
   /**

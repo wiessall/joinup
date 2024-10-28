@@ -1,4 +1,4 @@
-# Portal Contributor Covenant Code of Conduct
+# Interoperable Europe Portal Contributor Covenant Code of Conduct
 
 ## Our Pledge
 

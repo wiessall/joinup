@@ -9,7 +9,7 @@ use Drupal\joinup_workflow\EntityWorkflowStateInterface;
 use Drupal\node\NodeInterface;
 
 /**
- * Interface for owner entities in Portal.
+ * Interface for owner entities in Interoperable Europe Portal.
  */
 interface OwnerInterface extends NodeInterface, EntityWorkflowStateInterface, RdfSyncEntityInterface {
 

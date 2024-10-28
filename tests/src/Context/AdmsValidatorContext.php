@@ -15,7 +15,7 @@ class AdmsValidatorContext extends RawDrupalContext {
   /**
    * Asserts that entities in the published graph are ADMS-AP compliant.
    *
-   * @Then the ADMS-AP data of the published entities in Portal is valid
+   * @Then the ADMS-AP data of the published entities in Interoperable Europe Portal is valid
    */
   public function assertValidPublishedGraph(): void {
     /** @var \Drupal\sparql_entity_storage\SparqlEntityStorageGraphHandlerInterface $sparql_graph */

@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Hook implementations for Portal Test module.
+ * Hook implementations for Interoperable Europe Portal Test module.
  */
 
 declare(strict_types=1);

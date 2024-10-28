@@ -1,11 +1,11 @@
 @group-clone @api
 Feature: Minimal install clone testing.
 
-  Scenario: Visit Portal collection.
+  Scenario: Visit Interoperable Europe Portal collection.
 
     Given I am an anonymous user
     When I visit "/search?keys=joinup&f[0]=type:collection"
-    Then I should see the "The Portal" tile
+    Then I should see the "The Interoperable Europe Portal" tile
     And I should see "The European Commission provides this common place"
 
   Scenario: Assert that the cache backend is set to memcache.

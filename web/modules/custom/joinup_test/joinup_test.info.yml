@@ -1,7 +1,7 @@
-name: 'Portal Test'
-description: 'Contains functionality to test Portal.'
+name: 'Interoperable Europe Portal Test'
+description: 'Contains functionality to test Interoperable Europe Portal.'
 type: module
-package: Portal
+package: Interoperable Europe Portal
 core_version_requirement: ">= 9.4"
 dependencies:
   - http_request_mock:http_request_mock

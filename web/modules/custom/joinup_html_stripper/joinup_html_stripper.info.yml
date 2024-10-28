@@ -1,7 +1,7 @@
-name: Portal HTML stripper
+name: Interoperable Europe Portal HTML stripper
 type: module
-description: Field formatter that strips all HTML, tailored for use in Portal.
-package: Portal
+description: Field formatter that strips all HTML, tailored for use in Interoperable Europe Portal.
+package: Interoperable Europe Portal
 core_version_requirement: ">= 9.4"
 
 dependencies:

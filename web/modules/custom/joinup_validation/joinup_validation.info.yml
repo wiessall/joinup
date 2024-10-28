@@ -1,5 +1,5 @@
-name: 'Portal Validation'
-description: 'Validation constraints that are useful for Portal.'
+name: 'Interoperable Europe Portal Validation'
+description: 'Validation constraints that are useful for Interoperable Europe Portal.'
 type: module
-package: Portal
+package: Interoperable Europe Portal
 core_version_requirement: ">= 9.4"

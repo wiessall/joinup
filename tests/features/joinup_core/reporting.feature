@@ -2,7 +2,7 @@
 Feature:
   As a site moderator/administrator
   When I'm logged in
-  I want to be able to access the Portal reporting section.
+  I want to be able to access the Interoperable Europe Portal reporting section.
 
   Scenario Outline: Test the general access to Reporting section.
     Given I am logged in as a user with the <role> role

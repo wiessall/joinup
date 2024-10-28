@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Hook implementations for the Portal Group module.
+ * Hook implementations for the Interoperable Europe Portal Group module.
  */
 
 declare(strict_types=1);
@@ -883,7 +883,7 @@ function joinup_group_user_predelete(EntityInterface $entity): void {
  *
  * If a user gets blocked in the entire site we no longer want to include this
  * user in the collection membership counts. We handle this use case here in
- * Portal Core since Organic Groups currently only handles users that are
+ * Interoperable Europe Portal Core since Organic Groups currently only handles users that are
  * blocked on group level through the membership state; at this time OG is not
  * acting on users that are blocked on user level.
  */
@@ -1119,7 +1119,7 @@ function joinup_group_mail(string $key, array &$message, array $params): void {
         'announcement' => $announcement->id(),
       ])->setAbsolute()->toString(),
     ];
-    $message['subject'] = t("Portal: A new announcement '@subject' has been created", $args);
+    $message['subject'] = t("Interoperable Europe Portal: A new announcement '@subject' has been created", $args);
     $message['body'] = [
       t("A new announcement '@subject' has been created by @author for the @group @type.", $args),
       t('You can approve or reject the announcement at <a href=":url">:url</a>.', $args),

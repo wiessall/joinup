@@ -1,8 +1,8 @@
-name: Portal OSS Catalogue
+name: Interoperable Europe Portal OSS Catalogue
 type: module
 description: EU OSS Catalogue customisation
 core_version_requirement: ">= 9.4"
-package: Portal communities
+package: Interoperable Europe Portal communities
 
 dependencies:
   - eu_oss_catalogue:eu_oss_catalogue

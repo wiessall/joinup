@@ -11,7 +11,7 @@ use Drupal\search_api_solr\Event\SearchApiSolrEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * Apply the global settings to all search_api_field solarium queries on Portal.
+ * Apply the global settings to all search_api_field solarium queries on Interoperable Europe Portal.
  */
 class JoinupGlobalSearchApiAlter implements EventSubscriberInterface {
 

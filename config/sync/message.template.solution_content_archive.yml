@@ -15,7 +15,7 @@ text:
     value: |-
       <p>The <em>@entity:title</em>, along with its associated content items, has been archived. Even though the Solution has been archived, you can still access its pages through the Advanced Search page by selecting 'Show only Archived items' or through the Collection it belonged to.</p>
 
-      <p>If you think this action is not clear, please contact Portal Support at <a href="@site:contact_url">@site:contact_url</a></p>
+      <p>If you think this action is not clear, please contact Interoperable Europe Portal Support at <a href="@site:contact_url">@site:contact_url</a></p>
     format: full_html
 settings:
   'token options':

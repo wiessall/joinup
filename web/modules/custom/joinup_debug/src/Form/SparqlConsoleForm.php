@@ -11,7 +11,7 @@ use Drupal\sparql_entity_storage\Driver\Database\sparql\ConnectionInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Provides a Portal RDF form.
+ * Provides a Interoperable Europe Portal RDF form.
  */
 final class SparqlConsoleForm extends FormBase {
 

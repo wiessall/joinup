@@ -29,7 +29,7 @@ class FooterContext extends RawDrupalContext {
   /**
    * Checks that the version is present in the footer.
    *
-   * @Then I should see the Portal version in the footer
+   * @Then I should see the Interoperable Europe Portal version in the footer
    */
   public function assertVersion(): void {
     $element = $this->getSession()->getPage()->find('css', 'footer .joinup-version a');

@@ -1,5 +1,5 @@
-name: 'Portal layout'
+name: 'Interoperable Europe Portal layout'
 type: module
-description: 'Contains custom layouts for Portal.'
+description: 'Contains custom layouts for Interoperable Europe Portal.'
 core_version_requirement: ">= 9.4"
-package: Portal
+package: Interoperable Europe Portal

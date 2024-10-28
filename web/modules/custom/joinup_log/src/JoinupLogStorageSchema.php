@@ -8,7 +8,7 @@ use Drupal\Core\Entity\ContentEntityTypeInterface;
 use Drupal\Core\Entity\Sql\SqlContentEntityStorageSchema;
 
 /**
- * Defines the Portal log entity schema handler.
+ * Defines the Interoperable Europe Portal log entity schema handler.
  */
 class JoinupLogStorageSchema extends SqlContentEntityStorageSchema {
 

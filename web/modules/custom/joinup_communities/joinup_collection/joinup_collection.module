@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Main file of Portal module.
+ * Main file of Interoperable Europe Portal module.
  */
 
 declare(strict_types=1);
@@ -19,7 +19,7 @@ use Drupal\user\UserInterface;
 /**
  * Implements hook_ENTITY_TYPE_insert().
  *
- * Add the 'Portal' collection membership to every new user.
+ * Add the 'Interoperable Europe Portal' collection membership to every new user.
  */
 function joinup_collection_user_insert(UserInterface $account): void {
   /** @var \Drupal\collection\Entity\CollectionInterface $joinup_collection */
@@ -61,9 +61,9 @@ function joinup_collection_form_views_form_og_members_overview_default_alter(&$f
  */
 function joinup_collection_rdf_entity_insert(EntityInterface $entity): void {
   // Invalidate a custom cache tag, used to rebuild the hamburger menu so that
-  // the 'About us' link can be shown dependending on whether the Portal
+  // the 'About us' link can be shown dependending on whether the Interoperable Europe Portal
   // collection exists. Mainly intended for tests since in the production site
-  // the Portal collection is not regularly deleted.
+  // the Interoperable Europe Portal collection is not regularly deleted.
   if ($entity->id() === JoinupCollectionHelper::getCollectionId()) {
     Cache::invalidateTags(['joinup_collection:exists']);
   }

@@ -1,4 +1,4 @@
-# Additional tuning for Portal.
+# Additional tuning for Interoperable Europe Portal.
 # DDEV setup: https://github.com/ddev/ddev/blob/master/containers/ddev-dbserver/files/etc/my.cnf
 [mysqld]
 innodb_flush_log_at_trx_commit  = 2

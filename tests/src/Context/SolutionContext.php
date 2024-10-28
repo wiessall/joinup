@@ -95,7 +95,7 @@ class SolutionContext extends RawDrupalContext {
   /**
    * Navigates to the solution overview page.
    *
-   * @todo This is currently dependent on the Portal profile being installed,
+   * @todo This is currently dependent on the Interoperable Europe Portal profile being installed,
    *   since the view providing this overview page is exported in the profile.
    *   Remove this todo when ISAICP-5176 is fixed.
    *

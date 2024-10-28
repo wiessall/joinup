@@ -1,10 +1,10 @@
 block.settings.joinup_flag_block:
   type: block_settings
-  label: 'Portal flag block settings'
+  label: 'Interoperable Europe Portal flag block settings'
   mapping:
     flag_type:
       type: string
-      label: 'Portal flag type.'
+      label: 'Interoperable Europe Portal flag type.'
 
 views.field.joinup_flag_flagged_entity:
   type: views.field.field

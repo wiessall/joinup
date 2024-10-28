@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Post-update functions for Portal Video module.
+ * Post-update functions for Interoperable Europe Portal Video module.
  */
 
 declare(strict_types=1);

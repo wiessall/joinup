@@ -66,7 +66,7 @@ class FeatureContext extends RawDrupalContext {
   use UtilityTrait;
 
   /**
-   * The Portal version, retrieved from the `VERSION` file in the project root.
+   * The Interoperable Europe Portal version, retrieved from the `VERSION` file in the project root.
    *
    * Will contain the contents of the file, or FALSE if the file is not present.
    *
@@ -1063,7 +1063,7 @@ class FeatureContext extends RawDrupalContext {
   /**
    * Asserts that the page title tag equals to some text.
    *
-   * The assertion strips off the possible suffix "| Portal".
+   * The assertion strips off the possible suffix "| Interoperable Europe Portal".
    *
    * @param string $text
    *   The text to search for.
@@ -1841,7 +1841,7 @@ class FeatureContext extends RawDrupalContext {
   }
 
   /**
-   * Restores the backup of the Portal `VERSION` file.
+   * Restores the backup of the Interoperable Europe Portal `VERSION` file.
    *
    * @AfterScenario @joinupVersion&&@api
    */
@@ -1855,7 +1855,7 @@ class FeatureContext extends RawDrupalContext {
   }
 
   /**
-   * Sets the Portal version.
+   * Sets the Interoperable Europe Portal version.
    *
    * Since this overwrites the `VERSION.txt` file in the webroot directory, any
    * scenario that includes this step should be tagged with `@joinupVersion` so
@@ -1863,13 +1863,13 @@ class FeatureContext extends RawDrupalContext {
    * scenario.
    *
    * @param string $version
-   *   The Portal version to set, e.g. 'v1.57.0' or 'v1.57.0-66-g1234abcde'.
+   *   The Interoperable Europe Portal version to set, e.g. 'v1.57.0' or 'v1.57.0-66-g1234abcde'.
    *
-   * @When the Portal version is set to :version
+   * @When the Interoperable Europe Portal version is set to :version
    */
   public function setJoinupVersion(string $version): void {
     // Alert the user that the `@joinupVersion` tag is required.
-    Assert::assertTrue($this->hasTag('joinupVersion'), 'The `@joinupVersion` tag is required for scenarios that want to change the Portal version.');
+    Assert::assertTrue($this->hasTag('joinupVersion'), 'The `@joinupVersion` tag is required for scenarios that want to change the Interoperable Europe Portal version.');
 
     // We also require the Drupal API to retrieve the project root folder.
     Assert::assertTrue($this->hasTag('api'), 'The `@api` tag is required for scenarios that use the `@joinupVersion` tag.');

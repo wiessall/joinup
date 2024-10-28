@@ -7,18 +7,18 @@ Feature: SEO for document content.
   Background:
     Given collections:
       | title                          | state     |
-      | Portal SEO document collection | published |
+      | Interoperable Europe Portal SEO document collection | published |
     And licence content:
       | uri                          | title        | licence type  |
       | https://example.com/license1 | Some license | Public domain |
     And users:
       | Username          | E-mail                 | First name | Family name |
-      | Portal SEO author | portal.seo@example.com | Scrapper   | Jedi        |
+      | Interoperable Europe Portal SEO author | portal.seo@example.com | Scrapper   | Jedi        |
 
   Scenario: Basic metatags are attached as JSON schema on the page.
     Given document content:
       | title        | author            | document type | document publication date | changed                   | keywords         | short title | file type | file     | field_paragraphs_body | licence      | state     | collection                     |
-      | SEO document | Portal SEO author | document      | Wed, 25 Dec 2019 13:00:00 | Wed, 01 Jan 2020 13:00:00 | key1, key2, key3 | SEO         | upload    | test.zip | Document test1.zip    | Some license | published | Portal SEO document collection |
+      | SEO document | Interoperable Europe Portal SEO author | document      | Wed, 25 Dec 2019 13:00:00 | Wed, 01 Jan 2020 13:00:00 | key1, key2, key3 | SEO         | upload    | test.zip | Document test1.zip    | Some license | published | Interoperable Europe Portal SEO document collection |
 
     When I visit the "SEO document" document
     Then the metatag JSON should be attached in the page
@@ -76,7 +76,7 @@ Feature: SEO for document content.
   Scenario: Metatags for remote URL in documents.
     Given document content:
       | title        | author            | document publication date | changed                   | file type | file                                       | abstract                    | field_paragraphs_body   | state     | collection                     |
-      | SEO document | Portal SEO author | Wed, 25 Dec 2019 13:00:00 | Wed, 01 Jan 2020 13:00:00 | remote    | http://example.com/some-file-url.extension | Remote url example abstract | Remote url example body | published | Portal SEO document collection |
+      | SEO document | Interoperable Europe Portal SEO author | Wed, 25 Dec 2019 13:00:00 | Wed, 01 Jan 2020 13:00:00 | remote    | http://example.com/some-file-url.extension | Remote url example abstract | Remote url example body | published | Interoperable Europe Portal SEO document collection |
 
     When I visit the "SEO document" document
     Then the metatag JSON should be attached in the page

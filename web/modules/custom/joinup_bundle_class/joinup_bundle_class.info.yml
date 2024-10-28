@@ -1,5 +1,5 @@
-name: 'Portal Bundle Class'
-description: 'Shared code for entity types that implement bundle classes in Portal.'
+name: 'Interoperable Europe Portal Bundle Class'
+description: 'Shared code for entity types that implement bundle classes in Interoperable Europe Portal.'
 type: module
-package: Portal
+package: Interoperable Europe Portal
 core_version_requirement: ">= 9.4"

@@ -1,5 +1,5 @@
-name: Portal Featured
+name: Interoperable Europe Portal Featured
 description: Allows to feature content site wide. The content will appear at the top of lists.
 type: module
-package: Portal
+package: Interoperable Europe Portal
 core_version_requirement: ">= 9.4"

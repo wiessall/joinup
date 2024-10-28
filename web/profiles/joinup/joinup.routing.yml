@@ -1,6 +1,6 @@
-# The route definition of the Collection propose form is located in the Portal
+# The route definition of the Collection propose form is located in the Interoperable Europe Portal
 # profile rather than in the Collection module to avoid a circular dependency.
-# This route depends on the JoinupController, but Portal already depends on the
+# This route depends on the JoinupController, but Interoperable Europe Portal already depends on the
 # Collection module.
 rdf_entity.propose_form:
   path: '/propose/{rdf_type}'

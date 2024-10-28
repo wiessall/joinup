@@ -42,7 +42,7 @@ abstract class JoinupMailKernelTestBase extends KernelTestBase {
     'mailsystem',
     'symfony_mailer_lite',
 
-    // Portal Notification + its dependencies.
+    // Interoperable Europe Portal Notification + its dependencies.
     'joinup_notification',
     'field',
     'options',

@@ -11,10 +11,10 @@ label: 'Comment update'
 description: 'Sent when a comment is updated.'
 text:
   -
-    value: '<p>Portal: A comment has been updated.</p>'
+    value: '<p>Interoperable Europe Portal: A comment has been updated.</p>'
     format: full_html
   -
-    value: '<p>@actor:full_name updated the comment in "<a href="@entity:url">@parent:title</a>".</p><p>If you think this action is not clear or not due, please contact Portal Support at <a href="@site:contact_url">@site:contact_url</a>.</p>'
+    value: '<p>@actor:full_name updated the comment in "<a href="@entity:url">@parent:title</a>".</p><p>If you think this action is not clear or not due, please contact Interoperable Europe Portal Support at <a href="@site:contact_url">@site:contact_url</a>.</p>'
     format: full_html
 settings:
   'token options':

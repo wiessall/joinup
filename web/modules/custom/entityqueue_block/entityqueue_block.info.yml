@@ -1,7 +1,7 @@
 name: Entityqueue block
 type: module
 description: Provides a block type that displays the content of an entityqueue.
-package: Portal
+package: Interoperable Europe Portal
 core_version_requirement: ">= 9.4"
 dependencies:
   - 'drupal:block'

@@ -1,7 +1,7 @@
-name: Portal Slick
+name: Interoperable Europe Portal Slick
 description: Formats multi-item fields with Slick Carousel
 type: module
-package: Portal
+package: Interoperable Europe Portal
 core_version_requirement: ">= 10.1"
 dependencies:
   - slick:slick

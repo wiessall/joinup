@@ -13,7 +13,7 @@ use Drupal\config_test\TestInstallStorage;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
- * Tests Portal sync configuration.
+ * Tests Interoperable Europe Portal sync configuration.
  *
  * @group joinup_core
  */

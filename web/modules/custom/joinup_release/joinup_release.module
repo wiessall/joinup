@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Primary module hooks for Portal release module.
+ * Primary module hooks for Interoperable Europe Portal release module.
  */
 
 declare(strict_types=1);

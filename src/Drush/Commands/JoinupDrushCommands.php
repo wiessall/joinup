@@ -12,7 +12,7 @@ use Drush\Boot\DrupalBootLevels;
 use Drush\Commands\DrushCommands;
 
 /**
- * Specific commands to run on Portal code deployment.
+ * Specific commands to run on Interoperable Europe Portal code deployment.
  */
 class JoinupDrushCommands extends DrushCommands {
 

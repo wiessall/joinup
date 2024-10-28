@@ -36,7 +36,7 @@ class AnnouncementTransitionSubscriber implements EventSubscriberInterface {
   protected LanguageManagerInterface $languageManager;
 
   /**
-   * The Portal message delivery service.
+   * The Interoperable Europe Portal message delivery service.
    */
   protected JoinupMessageDeliveryInterface $messageDelivery;
 
@@ -55,7 +55,7 @@ class AnnouncementTransitionSubscriber implements EventSubscriberInterface {
    * @param \Drupal\Core\Language\LanguageManagerInterface $language_manager
    *   The language manager service.
    * @param \Drupal\joinup_notification\JoinupMessageDeliveryInterface $message_delivery
-   *   The Portal message delivery service.
+   *   The Interoperable Europe Portal message delivery service.
    * @param \Drupal\Core\Queue\QueueFactory $queue_factory
    *   The queue factory service.
    */

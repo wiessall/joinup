@@ -1,7 +1,7 @@
-name: 'Portal core'
-description: 'Contains shared code for Portal.'
+name: 'Interoperable Europe Portal core'
+description: 'Contains shared code for Interoperable Europe Portal.'
 type: module
-package: Portal
+package: Interoperable Europe Portal
 core_version_requirement: ">= 9.4"
 dependencies:
   - 'drupal:comment'

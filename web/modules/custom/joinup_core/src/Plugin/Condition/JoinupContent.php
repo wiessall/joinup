@@ -16,7 +16,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *
  * @Condition(
  *   id = "joinup_content",
- *   label = @Translation("Portal content"),
+ *   label = @Translation("Interoperable Europe Portal content"),
  *   context_definitions = {
  *     "node" = @ContextDefinition("entity:node", label = @Translation("Node"),
  *   required = FALSE),
@@ -76,7 +76,7 @@ class JoinupContent extends ConditionPluginBase implements ContainerFactoryPlugi
    */
   public function buildConfigurationForm(array $form, FormStateInterface $form_state): array {
     $form['content'] = [
-      '#title' => $this->t('Portal content'),
+      '#title' => $this->t('Interoperable Europe Portal content'),
       '#type' => 'checkboxes',
       '#options' => $this->getContentOptions(),
       '#default_value' => $this->configuration['content'],

@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Install functions of the Portal user module.
+ * Install functions of the Interoperable Europe Portal user module.
  */
 
 declare(strict_types=1);

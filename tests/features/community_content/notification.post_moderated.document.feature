@@ -42,7 +42,7 @@ Feature: Notification test for the document transitions on a post moderated pare
     And I press "Publish"
     Then the following email should have been sent:
       | recipient | CC owner                                                                                                                                                            |
-      | subject   | Portal: Content has been published                                                                                                                                  |
+      | subject   | Interoperable Europe Portal: Content has been published                                                                                                                                  |
       | body      | CC Member has published the new document - "CC notify create publish" in the collection: "CC collection". You can access the new content at the following link: http |
 
     # Test 'update' operation.
@@ -52,7 +52,7 @@ Feature: Notification test for the document transitions on a post moderated pare
     And I press "Publish"
     Then the following email should have been sent:
       | recipient | CC owner                                                                                                |
-      | subject   | Portal: Content has been published                                                                      |
+      | subject   | Interoperable Europe Portal: Content has been published                                                                      |
       | body      | CC Member has published the new document - "CC notify post publish" in the collection: "CC collection". |
 
     When I am logged in as "CC facilitator"
@@ -64,7 +64,7 @@ Feature: Notification test for the document transitions on a post moderated pare
     And I press "Request changes"
     Then the following email should have been sent:
       | recipient | CC member                                                                                                                                                                                                  |
-      | subject   | Portal: Content has been updated                                                                                                                                                                           |
+      | subject   | Interoperable Europe Portal: Content has been updated                                                                                                                                                                           |
       | body      | the Facilitator, CC Facilitator has requested you to modify the document - "CC notify post request changes" in the collection: "CC collection", with the following motivation: "Can you do some changes?". |
 
     When I am logged in as "CC facilitator"
@@ -76,7 +76,7 @@ Feature: Notification test for the document transitions on a post moderated pare
     And I press "Request changes"
     Then the following email should have been sent:
       | recipient | CC member                                                                                                                                                                                         |
-      | subject   | Portal: Content has been updated                                                                                                                                                                  |
+      | subject   | Interoperable Europe Portal: Content has been updated                                                                                                                                                                  |
       | body      | the Facilitator, CC Facilitator has requested you to modify the document - "CC notify post report" in the collection: "CC collection", with the following motivation: "Your content is reported". |
 
     When I am logged in as "CC facilitator"
@@ -85,7 +85,7 @@ Feature: Notification test for the document transitions on a post moderated pare
     And I press "Publish"
     Then the following email should have been sent:
       | recipient | CC member                                                                                                                                                        |
-      | subject   | Portal: Content has been updated                                                                                                                                 |
+      | subject   | Interoperable Europe Portal: Content has been updated                                                                                                                                 |
       | body      | the Facilitator, CC Facilitator has approved your request of publication of the document - "CC notify post approve proposed" in the collection: "CC collection". |
 
     # Test 'delete' operation.
@@ -96,7 +96,7 @@ Feature: Notification test for the document transitions on a post moderated pare
     And I press "Delete"
     Then the following email should have been sent:
       | recipient | CC member                                                                                                         |
-      | subject   | Portal: Content has been deleted                                                                                  |
+      | subject   | Interoperable Europe Portal: Content has been deleted                                                                                  |
       | body      | Facilitator CC Facilitator has deleted the document - "CC notify post delete" in the collection: "CC collection". |
 
     Examples:
