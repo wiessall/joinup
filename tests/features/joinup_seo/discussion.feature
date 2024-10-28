@@ -78,7 +78,7 @@ Feature: SEO for discussion forum posts.
       | identifier     | value                                                                                               |
       | description    | This discussion is to ensure that SEO tags are set properly.                                        |
       | og:url         | __base_url__/collection/portal-seo-discussion-collection/discussion/discussions-are-now-forum-posts |
-      | og:site_name   | Portal                                                                                              |
+      | og:site_name   | Interoperable Europe portal                                                                         |
       | og:title       | Discussions are now forum posts                                                                     |
       | og:description | This discussion is to ensure that SEO tags are set properly.                                        |
 

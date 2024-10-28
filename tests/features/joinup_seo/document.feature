@@ -62,7 +62,7 @@ Feature: SEO for document content.
       | identifier     | value                                                                        |
       | description    | Document test1.zip                                                           |
       | og:url         | __base_url__/collection/portal-seo-document-collection/document/seo-document |
-      | og:site_name   | Portal                                                                       |
+      | og:site_name   | Interoperable Europe portal                                                  |
       | og:title       | SEO document                                                                 |
       | og:description | Document test1.zip                                                           |
 
