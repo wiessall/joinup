@@ -279,8 +279,8 @@ Feature: CKEditor5
       | Username    | E-mail         | First name | Family name |
       | jmacc_local | jodine@ankh.am | John       | Maccalariat |
     And CAS users:
-       | First name | Last name   | Username  | E-mail         | Password | Local username |
-       | John       | Maccalariat | jmacc     | jodine@ankh.am | 10d1ne   | jmacc_local    |
+      | First name | Last name   | Username  | E-mail         | Password | Local username |
+      | John       | Maccalariat | jmacc     | jodine@ankh.am | 10d1ne   | jmacc_local    |
 
     Given I am logged in as a moderator
     Then I go to "/collection/antiruin-development/solution/one-exclusion-advantages/contact"
