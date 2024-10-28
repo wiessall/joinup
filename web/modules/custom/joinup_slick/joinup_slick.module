@@ -159,8 +159,8 @@ function joinup_slick_preprocess_slick(array &$variables): void {
  * Implements hook_preprocess_HOOK() for "slick_slide".
  */
 function joinup_slick_preprocess_slick_slide(array &$variables): void {
-  // Always use wrapper and content attributes if this is a Interoperable Europe Portal Slick
-  // instance.
+  // Always use wrapper and content attributes if this is
+  // Interoperable Europe Portal Slick instance.
   if (!empty($variables['settings']['joinup_slick'])) {
     $variables['settings']['wrapper'] = TRUE;
     $variables['settings']['use_ca'] = TRUE;

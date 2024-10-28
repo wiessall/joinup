@@ -15,7 +15,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *
  * This block is placed on the front page and shows a swipeable list of recently
  * published content of 4 types: collections, solutions, news and events. The
- * intention is that users can get a quick view of what is new on Interoperable Europe Portal.
+ * intention is that users can get a quick view of what is new on
+ * Interoperable Europe Portal.
  *
  * For each content type the 12 most recent items are shown. They are rendered
  * using the `explore_item` view mode which is exclusive for this block.

@@ -8,7 +8,7 @@ use Drupal\Core\Routing\RouteSubscriberBase;
 use Symfony\Component\Routing\RouteCollection;
 
 /**
- * Alters existing routes for the Interoperable Europe Portal user multiple cancel form.
+ * Modifies routes for Interoperable Europe Portal user multiple cancel form.
  */
 class RouteSubscriber extends RouteSubscriberBase {
 

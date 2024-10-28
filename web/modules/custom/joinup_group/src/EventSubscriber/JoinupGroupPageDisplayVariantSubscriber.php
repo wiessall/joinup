@@ -25,7 +25,7 @@ class JoinupGroupPageDisplayVariantSubscriber implements EventSubscriberInterfac
   }
 
   /**
-   * Selects the Interoperable Europe Portal group page display variant when case.
+   * Selects Interoperable Europe Portal group page display variant when case.
    *
    * @param \Drupal\Core\Render\PageDisplayVariantSelectionEvent $event
    *   The event to process.

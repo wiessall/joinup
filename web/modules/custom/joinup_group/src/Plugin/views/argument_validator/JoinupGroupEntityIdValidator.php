@@ -9,7 +9,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\views\Plugin\views\argument_validator\Entity;
 
 /**
- * Defines argument validator plugin for the Interoperable Europe Portal group entity ID.
+ * Defines argument validator plugin for Interoperable Europe Portal group ID.
  *
  * @ViewsArgumentValidator(
  *    id = "joinup_group_entity_id",

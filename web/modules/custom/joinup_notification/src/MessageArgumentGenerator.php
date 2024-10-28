@@ -51,8 +51,8 @@ class MessageArgumentGenerator {
 
     if ($actor->isAnonymous()) {
       // If an anonymous is creating content, set the first name to also be 'the
-      // Interoperable Europe Portal Moderation Team' because some emails use only the first name
-      // instead of the full name.
+      // Interoperable Europe Portal Moderation Team' because some emails use
+      // only the first name instead of the full name.
       $arguments['@actor:role'] = 'moderator';
       $arguments['@actor:full_name'] = $arguments['@actor:field_user_first_name'] = 'the Interoperable Europe Portal Moderation Team';
     }
@@ -144,9 +144,10 @@ class MessageArgumentGenerator {
       // If the user is an administrator they will also have inherited the
       // facilitator role. Having multiple roles might be confusing for
       // non-technical users. Let's just call them the 'owner'.
-      // Note that in Interoperable Europe Portal the OG admin roles don't have the `is_admin` flag
-      // set because this would unlock unwanted permissions, so we cannot use
-      // `$role->isAdmin()` here. Instead we check if the role name matches.
+      // Note that in Interoperable Europe Portal the OG admin roles don't have
+      // the `is_admin` flag set because this would unlock unwanted
+      // permissions, so we cannot use `$role->isAdmin()` here. Instead we
+      // check if the role name matches.
       if ($role->getName() === OgRoleInterface::ADMINISTRATOR) {
         $roles = ['owner'];
         break;

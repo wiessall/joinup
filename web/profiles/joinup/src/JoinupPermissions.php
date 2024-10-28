@@ -17,8 +17,9 @@ class JoinupPermissions {
   /**
    * Returns an array of permissions related to Rdf types.
    *
-   * The Interoperable Europe Portal profile alters a new form display mode into the Rdf entity type,
-   * and this provides permissions to use those forms for each type.
+   * The Interoperable Europe Portal profile alters a new form display mode
+   * into the Rdf entity type, and this provides permissions to use those
+   * forms for each type.
    *
    * @return array
    *   The permissions.

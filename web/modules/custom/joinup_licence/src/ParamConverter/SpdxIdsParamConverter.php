@@ -71,7 +71,8 @@ class SpdxIdsParamConverter implements ParamConverterInterface {
       ->condition('spdx_licence.target_id', $actual_spdx_ids, 'IN')
       ->execute();
 
-    // Some of the passed SPDX IDs don't have a related Interoperable Europe Portal licence.
+    // Some of the passed SPDX IDs don't have a related
+    // Interoperable Europe Portal licence.
     if (count($spdx_ids) > count($actual_licence_ids)) {
       return NULL;
     }
@@ -85,7 +86,8 @@ class SpdxIdsParamConverter implements ParamConverterInterface {
       return $spdx_ids_order[$licence_a_spdx_id] <=> $spdx_ids_order[$licence_b_spdx_id];
     });
 
-    // An ordered list of Interoperable Europe Portal licence entities keyed by their SPDX ID.
+    // An ordered list of Interoperable Europe Portal licence entities
+    // keyed by their SPDX ID.
     return array_combine($spdx_ids, $licences);
   }
 

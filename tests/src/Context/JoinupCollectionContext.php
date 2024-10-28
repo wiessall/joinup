@@ -12,7 +12,7 @@ use Drupal\joinup_collection\JoinupCollectionHelper;
 use Drupal\rdf_entity\Entity\Rdf;
 
 /**
- * Behat step definitions and related methods related to the Interoperable Europe Portal collection.
+ * Behat step definitions and related methods related to the Portal collection.
  */
 class JoinupCollectionContext extends RawDrupalContext {
 
@@ -56,7 +56,7 @@ class JoinupCollectionContext extends RawDrupalContext {
   }
 
   /**
-   * Clears the Interoperable Europe Portal collection created before the scenario.
+   * Clears the Portal collection created before the scenario.
    *
    * @throws \Drupal\Core\Entity\EntityStorageException
    *   Thrown when one of the created entities could not be deleted.

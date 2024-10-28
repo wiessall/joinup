@@ -153,12 +153,12 @@ class ChangeSolutionStateForm extends ConfirmFormBase {
         )
       );
 
-      // In Interoperable Europe Portal, Search API indexes are updated "immediately". Actually, this
-      // means that when an indexed entity is changed (or an entity is added) in
-      // a PHP thread, re-indexing is triggered by
-      // \Drupal\search_api\Utility\PostRequestIndexing after the response is
-      // sent to the client. This means that there will be two concurrent PHP
-      // threads:
+      // In Interoperable Europe Portal, Search API indexes are updated
+      // "immediately". Actually, this means that when an indexed entity is
+      // changed (or an entity is added) in a PHP thread, re-indexing is
+      // triggered by \Drupal\search_api\Utility\PostRequestIndexing after
+      // the response is sent to the client. This means that there will be
+      // two concurrent PHP threads:
       // - The initial thread, which is performing the re-indexing of the
       //   changed entities.
       // - The second thread, which starts to render the (VBO) form what the
