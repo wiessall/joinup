@@ -93,7 +93,7 @@ Feature: User profile
     And I should see the success message "The user has been notified that their account has been updated."
     And the following email should have been sent:
       | recipient | Leonardo Da Vinci                                                                                         |
-      | subject   | The Portal Support Team updated your account for you at Portal                                            |
+      | subject   | The Portal Support Team updated your account Interoperable Europe Portal                                            |
       | body      | A moderator has edited your user profile on Portal. Please check your profile to verify the changes done. |
 
   Scenario: The user public profile page shows the content he's author of or is member of.

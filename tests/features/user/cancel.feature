@@ -106,9 +106,9 @@ Feature:
     And I click "Cancel account"
     And I press "Confirm"
     Then the following email should have been sent:
-      | recipient_mail | AliciaPotter@example.com                                           |
-      | subject        | Account cancellation request for alicia__1997 at Portal            |
-      | body           | by clicking this link or copying and pasting it into your browser: |
+      | recipient_mail | AliciaPotter@example.com                                                     |
+      | subject        | Account cancellation request for alicia__1997 at Interoperable Europe Portal |
+      | body           | by clicking this link or copying and pasting it into your browser:           |
     # Click the confirmation link in the email.
     When I click the delete confirmation link for the user "alicia__1997" from the last email
     And I wait for the batch process to finish

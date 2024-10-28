@@ -236,7 +236,7 @@ Feature: Proposing a collection
     # Email confirmation occurs only for published groups.
     And the following email should not have been sent:
       | recipient_mail     | some_unique_contact_person@example.com                                                                                                |
-      | subject            | Portal - Please validate your contact details                                                                                         |
+      | subject            | Interoperable Europe Portal - Please validate your contact details                                                                    |
       | body               | Please confirm your email address some_unique_contact_person@example.com, which is set in your contact information for the following: |
       | signature_required | no                                                                                                                                    |
       | html               | yes                                                                                                                                   |
@@ -261,7 +261,7 @@ Feature: Proposing a collection
     # Email confirmation occurs only for published groups.
     And the following email should not have been sent:
       | recipient_mail     | contact_Rapazoglou@example.com                                                                                                |
-      | subject            | Portal - Please validate your contact details                                                                                 |
+      | subject            | Interoperable Europe Portal - Please validate your contact details                                                            |
       | body               | Please confirm your email address contact_Rapazoglou@example.com, which is set in your contact information for the following: |
       | signature_required | no                                                                                                                            |
       | html               | yes                                                                                                                           |
@@ -272,7 +272,7 @@ Feature: Proposing a collection
     And I press "Publish"
     Then the following email should have been sent:
       | recipient_mail     | some_unique_contact_person@example.com                                                                                                |
-      | subject            | Portal - Please validate your contact details                                                                                         |
+      | subject            | Interoperable Europe Portal - Please validate your contact details                                                                    |
       | body               | Please confirm your email address some_unique_contact_person@example.com, which is set in your contact information for the following: |
       | signature_required | no                                                                                                                                    |
       | html               | yes                                                                                                                                   |
@@ -280,7 +280,7 @@ Feature: Proposing a collection
     And I press "Publish"
     And the following email should have been sent:
       | recipient_mail     | contact_Rapazoglou@example.com                                                                                                |
-      | subject            | Portal - Please validate your contact details                                                                                 |
+      | subject            | Interoperable Europe Portal - Please validate your contact details                                                            |
       | body               | Please confirm your email address contact_Rapazoglou@example.com, which is set in your contact information for the following: |
       | signature_required | no                                                                                                                            |
       | html               | yes                                                                                                                           |

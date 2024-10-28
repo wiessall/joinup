@@ -48,7 +48,7 @@ class JoinupUserMailTest extends JoinupMailKernelTestBase {
           'headers' => [
             'content-transfer-encoding' => '8Bit',
             'content-type' => 'text/html',
-            'from' => 'Portal <joinup@example.com>',
+            'from' => 'Interoperable Europe Portal <joinup@example.com>',
             'mime-version' => '1.0',
             'reply-to' => 'joinup@example.com',
             'return-path' => 'joinup@example.com',
