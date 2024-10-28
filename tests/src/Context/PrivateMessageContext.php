@@ -155,28 +155,49 @@ class PrivateMessageContext extends RawDrupalContext {
   }
 
   /**
-   * Verifies that a private message contains the specified text.
+   * Verifies the existence of a message with a given text.
    *
    * @param string $messageText
    *   The text expected to be found in a private message.
+   * @param string|null $not
+   *   NULL if we want to ensure that the message is present,
+   *   or the string "not" otherwise.
    *
    * @throws \Exception
-   *   Thrown when the text is not found in any private message.
+   *   Thrown when the message exists and should not or if
+   *   it does not exist and it should.
    *
-   * @Then I should see a private message containing the text :messageText
+   * @Then a message containing the text :messageText should be present
+   * @Then a message containing the text :messageText should :not be present
    */
-  public function iShouldSeePrivateMessageContainingText(string $messageText): void {
-    $messagesContainer = $this->getMessagesContainer();
-
-    $messageElements = $messagesContainer->findAll('css', '.private-message-wrapper');
-
-    foreach ($messageElements as $messageElement) {
-      if (str_contains($messageElement->getText(), $messageText)) {
+  public function aPrivateMessageContainingTextShouldBePresent(string $messageText, ?string $not = NULL): void {
+    try {
+      $messagesContainer = $this->getMessagesContainer();
+    }
+    catch (\Exception $e) {
+      if ($not === NULL) {
+        throw $e;
+      }
+      else {
         return;
       }
     }
 
-    throw new \Exception(sprintf('The text "%s" was not found in any private message.', $messageText));
+    $messageElements = $messagesContainer->findAll('css', '.private-message-wrapper');
+    foreach ($messageElements as $messageElement) {
+      if (str_contains($messageElement->getText(), $messageText)) {
+        if ($not === NULL) {
+          return;
+        }
+        else {
+          throw new \Exception(sprintf('The text "%s" was found in a private message.', $messageText));
+        }
+      }
+    }
+
+    if ($not === NULL) {
+      throw new \Exception(sprintf('The text "%s" was not found in any private message.', $messageText));
+    }
   }
 
   /**
@@ -374,20 +395,6 @@ class PrivateMessageContext extends RawDrupalContext {
       ]);
       $ban->save();
     }
-  }
-
-  /**
-   * Enters the given text in the give textarea.
-   *
-   * @param string $text
-   *   The text to be entered in the WYSIWYG editor.
-   * @param string $label
-   *   The label of the field containing the WYSIWYG editor.
-   *
-   * @When I enter :text in the :label textarea
-   */
-  public function iEnterTextInTextArea(string $text, string $label): void {
-    $this->getSession()->getPage()->fillField($label, $text);
   }
 
   /**

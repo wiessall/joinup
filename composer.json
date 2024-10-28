@@ -342,7 +342,8 @@
                 "Fix handling of unknown file extensions in FileMediaFormatterBase @see https://www.drupal.org/i/3466462": "resources/patch/php/drupal/core/3466462.diff",
                 "Allow ChangedItem to skip updating the entity's \"changed\" timestamp when synchronizing @see https://drupal.org/i/2329253 @see https://www.drupal.org/project/drupal/issues/3098560": "resources/patch/php/drupal/core/2329253-10.x.patch",
                 "Add 'Is empty (NULL)' and 'Is not empty (NOT NULL)' to field filter operators": "resources/patch/php/drupal/core/3098560.patch",
-                "JS errors from Drupal.dialog.resetSize when rapidly closing dialogs @see https://www.drupal.org/i/3472624": "resources/patch/php/drupal/core/3472624.diff"
+                "JS errors from Drupal.dialog.resetSize when rapidly closing dialogs @see https://www.drupal.org/i/3472624": "resources/patch/php/drupal/core/3472624.diff",
+                "Deprecated function: preg_match(): Passing null to parameter #2 ($subject) of type string is deprecated in Drupal\\Core\\Routing\\UrlGenerator->doGenerate() @see https://drupal.org/i/3338057": "resources/patch/php/drupal/core/3338057.diff"
             },
             "drupal/default_content": {
                 "Allow manual imports @see https://www.drupal.org/i/2640734": "resources/patch/php/drupal/default_content/2640734.diff"
@@ -438,7 +439,8 @@
                 "Hardcoded URL @see https://www.drupal.org/i/3479391": "resources/patch/php/drupal/private_message/3479391.diff",
                 "Return type for PrivateMessageConfigFormBase::validateForm() should be void @see https://www.drupal.org/i/3477873": "resources/patch/php/drupal/private_message/3477873.diff",
                 "Add some FunctionalJavascript tests + fix JS error on inbox init @see https://www.drupal.org/i/3482103": "resources/patch/php/drupal/private_message/3482103.diff",
-                "Warning when the field subject is disabled @see https://www.drupal.org/i/3480219": "resources/patch/php/drupal/private_message/3480219.diff"
+                "Warning when the field subject is disabled @see https://www.drupal.org/i/3480219": "resources/patch/php/drupal/private_message/3480219.diff",
+                "Email notifications contain HTML tags @see https://www.drupal.org/project/private_message/issues/2971692": "resources/patch/php/drupal/private_message/2971692.diff"
             },
             "drupal/private_message_flood": {
                 "Add return type to methods @see https://www.drupal.org/i/3477426": "resources/patch/php/drupal/private_message_flood/3477426.diff"
