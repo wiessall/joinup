@@ -5,7 +5,7 @@ Feature: Minimal install clone testing.
 
     Given I am an anonymous user
     When I visit "/collection/portal"
-    Then I should see the link "Federation of solutions"
+    Then I should see the link "Federation"
 
     When I visit "/search?keys=joinup&f[0]=type:collection"
     Then I should see the "The Portal" tile
