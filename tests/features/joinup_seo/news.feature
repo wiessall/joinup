@@ -53,7 +53,7 @@ Feature: SEO for news articles.
       | identifier             | value                                                                   |
       | description            | Body of news.                                                           |
       | og:url                 | __base_url__/collection/portal-seo-news-collection/news/portal-seo-news |
-      | og:site_name           | Portal                                                                  |
+      | og:site_name           | Interoperable Europe portal                                             |
       | og:title               | Portal SEO news                                                         |
       | og:description         | Body of news.                                                           |
       | og:image               | __base_url__/sites/default/files/__random_text__.jpg                    |
