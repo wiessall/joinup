@@ -59,12 +59,12 @@ Feature: SEO for document content.
       | name     | Scrapper Jedi                     |
       | url      | __base_url__/user/__random_text__ |
     And the following meta tags should available in the html:
-      | identifier     | value                                                                        |
-      | description    | Document test1.zip                                                           |
-      | og:url         | __base_url__/collection/portal-seo-document-collection/document/seo-document |
-      | og:site_name   | Interoperable Europe Portal                                                  |
-      | og:title       | SEO document                                                                 |
-      | og:description | Document test1.zip                                                           |
+      | identifier     | value                                                                                             |
+      | description    | Document test1.zip                                                                                |
+      | og:url         | __base_url__/collection/interoperable-europe-portal-seo-document-collection/document/seo-document |
+      | og:site_name   | Interoperable Europe Portal                                                                       |
+      | og:title       | SEO document                                                                                      |
+      | og:description | Document test1.zip                                                                                |
 
     When I visit the content overview
     Then I should see the "SEO document" tile

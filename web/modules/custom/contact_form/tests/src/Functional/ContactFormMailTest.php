@@ -240,7 +240,8 @@ EOS;
   const COPY_PLAIN = <<<EOS
 Dear Jane Doe
 
-Thank you for submitting your message to the Interoperable Europe Portal Support.
+Thank you for submitting your message to the Interoperable Europe
+Portal Support.
 
 This is the message you submitted through the online form:
 
@@ -248,7 +249,7 @@ Subject: _Question subject_
 
 Content:
 
-> Question about Interoperable Europe Portal
+> Question about Interoperable Europe Portal
 
 Thank you for your interest, we will reply as soon as possible.
 
@@ -293,7 +294,8 @@ EOS;
   const WITHOUT_COPY_PLAIN = <<<EOS
 Dear Jane Doe
 
-Thank you for submitting your message to the Interoperable Europe Portal Support.
+Thank you for submitting your message to the Interoperable Europe
+Portal Support.
 
 We will reply as soon as possible.
 
