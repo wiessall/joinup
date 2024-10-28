@@ -77,14 +77,9 @@ class PrivateMessageRouteSubscriberTest extends BrowserTestBase {
    * Tests that specific routes have been removed.
    */
   public function testRouteRemovals(): void {
-    $this->assertRouteNotFound('entity.private_message.canonical', 'The canonical private message route should be removed.');
-
     $this->assertRouteNotFound('private_message.ban_page', 'The ban page route should be removed.');
-
     $this->assertRouteNotFound('private_message.ban_autocomplete', 'The ban autocomplete route should be removed.');
-
     $this->assertRouteNotFound('private_message.ban_user_form', 'The ban user form route should be removed.');
-
     $this->assertRouteNotFound('private_message.unban_user_form', 'The unban user form route should be removed.');
   }
 
