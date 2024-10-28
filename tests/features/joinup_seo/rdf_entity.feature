@@ -50,7 +50,7 @@ Feature: SEO for RDF entities.
     Then the following meta tags should available in the html:
       | identifier   | value                            |
       | og:url       | __base_url__/licence/seo-licence |
-      | og:site_name | Interoperable Europe portal      |
+      | og:site_name | Interoperable Europe Portal      |
       | og:title     | SEO licence                      |
     And the metatag JSON should be attached in the page without context
     And 1 metatag graph of type "http://purl.org/dc/terms/LicenseDocument" should exist in the page

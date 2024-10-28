@@ -63,7 +63,7 @@ Feature: User role management
     And I should see the success message "The user has been notified that their account has been updated."
     And the following email should have been sent:
       | recipient | Nibby Noob                                                                                                |
-      | subject   | The Portal Support Team updated your account for you at Portal                                            |
+      | subject   | The Portal Support Team updated your account Interoperable Europe Portal                                            |
       | body      | A moderator has edited your user profile on Portal. Please check your profile to verify the changes done. |
 
     Given I am on the homepage
@@ -97,7 +97,7 @@ Feature: User role management
     And I should see the success message "The user has been notified that their account has been updated."
     And the following email should have been sent:
       | recipient | Nibby Noob                                                                                                |
-      | subject   | The Portal Support Team updated your account for you at Portal                                            |
+      | subject   | The Portal Support Team updated your account Interoperable Europe Portal                                            |
       | body      | A moderator has edited your user profile on Portal. Please check your profile to verify the changes done. |
 
     When I am logged in as "Nibby Noob"

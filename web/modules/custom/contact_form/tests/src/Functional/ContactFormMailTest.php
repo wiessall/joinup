@@ -89,7 +89,7 @@ class ContactFormMailTest extends JoinupMailFunctionalTestBase {
           'headers' => [
             'content-transfer-encoding' => '8Bit',
             'content-type' => 'text/html',
-            'from' => 'Portal <joinup@example.com>',
+            'from' => 'Interoperable Europe Portal <joinup@example.com>',
             'mime-version' => '1.0',
             'return-path' => 'joinup@example.com',
             'sender' => 'joinup@example.com',
@@ -111,7 +111,7 @@ class ContactFormMailTest extends JoinupMailFunctionalTestBase {
           'headers' => [
             'content-transfer-encoding' => '8Bit',
             'content-type' => 'text/html',
-            'from' => 'Portal <joinup@example.com>',
+            'from' => 'Interoperable Europe Portal <joinup@example.com>',
             'mime-version' => '1.0',
             'return-path' => 'joinup@example.com',
             'sender' => 'joinup@example.com',
