@@ -31,7 +31,8 @@ class LicenceComparerController extends ControllerBase {
    * Responds to a request made to 'joinup_licence.comparer' route.
    *
    * @param \Drupal\joinup_licence\Entity\LicenceInterface[] $licences
-   *   An ordered list of Interoperable Europe Portal licence entities keyed by their SPDX ID.
+   *   An ordered list of Interoperable Europe Portal licence entities
+   *   keyed by their SPDX ID.
    *
    * @return array
    *   A render array.

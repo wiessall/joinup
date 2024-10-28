@@ -19,8 +19,8 @@ function ventuno_preprocess_licence_filter_list(array &$variables): void {
  * Implements hook_preprocess_HOOK().
  *
  * Provides variables needed for the compatibility_check view mode of licences.
- * This is used on the Interoperable Europe Portal Licence Assistant Compatibility Check overview
- * page.
+ * This is used on the Interoperable Europe Portal Licence Assistant
+ * Compatibility Check overview page.
  */
 function ventuno_preprocess_node__licence__compatibility_check(array &$variables): void {
   ventuno_preprocess_node__licence__jla($variables);
@@ -49,7 +49,8 @@ function ventuno_preprocess_node__licence__jla(array &$variables): void {
  * Implements hook_preprocess_HOOK().
  *
  * Provides variables needed for the search_list_item view mode of licences.
- * This is used on the Interoperable Europe Portal Licence Assistant overview page.
+ * This is used on the Interoperable Europe Portal Licence Assistant
+ * overview page.
  */
 function ventuno_preprocess_node__licence__view_mode_search_list_item(array &$variables): void {
   ventuno_preprocess_node__licence__jla($variables);

@@ -84,9 +84,9 @@ class SubscribedDiscussionCommentSubscriber implements EventSubscriberInterface 
    * Normally we should have split the events into more specific events, like
    * 'comment create', 'comment update', 'comment delete'. Just 'comment crud'
    * is too generic and is not actually an event. In order to keep the
-   * compatibility with Interoperable Europe Portal Notification module, we use this proxy method to
-   * delegate the reaction to a specific protected method, based on the real
-   * operation being performed.
+   * compatibility with Interoperable Europe Portal Notification module, we use
+   * this proxy method to delegate the reaction to a specific protected method,
+   * based on the real operation being performed.
    *
    * @param \Drupal\joinup_notification\Event\NotificationEvent $event
    *   The notification event object.

@@ -28,7 +28,8 @@ interface JoinupVersionInterface {
    * Returns a string that uniquely identifies the current Interoperable Europe Portal version.
    *
    * @return string
-   *   The Interoperable Europe Portal version. This is in the format as returned by `git describe`.
+   *   The Interoperable Europe Portal version. This is in the format as
+   *   returned by `git describe`.
    *   - If a release is checked out this will be the git tag, e.g. 'v1.56.0'.
    *   - If a development version is checked out, the version is composed of the
    *     closest git tag, followed by a dash, the number of commits that follow

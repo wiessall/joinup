@@ -53,7 +53,7 @@ class RssContext extends RawMinkContext {
    *
    * Table format:
    * | title       | link               | description         | ... |
-   * | Interoperable Europe Portal feed | /collection/joinup | RSS feed for Interoperable Europe Portal | ... |
+   * | Portal feed | /collection/portal | RSS feed for Portal | ... |
    *
    * @param \Behat\Gherkin\Node\TableNode $table
    *   The channel elements data.

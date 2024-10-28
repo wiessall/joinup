@@ -14,14 +14,14 @@ use PHP_CodeSniffer\Files\File;
 /**
  * Checks the naming of (post)update/deploy functions.
  *
- * Interoperable Europe Portal offers only _contiguous upgrades_. For instance, if your project is
- * currently on Interoperable Europe Portal `v1.39.2`, and the latest stable version is `v1.42.0`,
- * then you cannot upgrade directly to the latest version. Instead, you should
- * upgrade first to `v1.40.0`, second to `v1.40.1` (if exists) and, finally, to
- * `v1.42.0`.
+ * Interoperable Europe Portal offers only _contiguous upgrades_. For instance,
+ * if your project is currently on Interoperable Europe Portal `v1.39.2`,
+ * and the latest stable version is `v1.42.0`, then you cannot upgrade directly
+ * to the latest version. Instead, you should upgrade first to `v1.40.0`,
+ * second to `v1.40.1` (if exists) and, finally, to `v1.42.0`.
  *
- * The Interoperable Europe Portal update, post-update and deploy scripts namings are following this
- * pattern:
+ * The Interoperable Europe Portal update, post-update and deploy scripts
+ * namings are following this pattern:
  * @code
  * function mymodule_update_106100() {...}
  * @endcode
@@ -39,20 +39,23 @@ use PHP_CodeSniffer\Files\File;
  *   post updates from the same extension (module or profile). `00` is the first
  *   (post)update/deploy that applies.
  * - The middle three digits are the Interoperable Europe Portal minor version.
- * - The first one or two digits are the Interoperable Europe Portal major version. It cannot start
- *   with '0'.
+ * - The first one or two digits are the Interoperable Europe Portal major
+ * version. It cannot start with '0'.
  *
  * Given the above example:
  *
- * - `function mymodule_update_106100() {...}`: Was applied in Interoperable Europe Portal `v1.61.x`
- *   as the first update of the `mymodule` module (`1` major version, `061`
- *   minor version, `00` update weight within the module).
- * - `function mymodule_post_update_207503() {...}`: Was applied in Interoperable Europe Portal
- *   `v2.75.x` as the fourth post update of the `mymodule` module (`2` major
- *   version, `075` minor version, `03` post-update weight within the module).
- * - `function mymodule_deploy_1008101() {...}`: Was applied in Interoperable Europe Portal
- *   `v10.81.x` as the second deploy of the `mymodule` module (`10` major
- *   version, `081` minor version, `01` deploy weight within the module).
+ * - `function mymodule_update_106100() {...}`: Was applied in Interoperable
+ *   Europe Portal `v1.61.x` as the first update of the `mymodule` module
+ *   (`1` major version, `061` minor version, `00` update weight
+ *   within the module).
+ * - `function mymodule_post_update_207503() {...}`: Was applied in
+ *   Interoperable Europe Portal `v2.75.x` as the fourth post update of the
+ *   `mymodule` module (`2` major version, `075` minor version, `03`
+ *   post-update weight within the module).
+ * - `function mymodule_deploy_1008101() {...}`: Was applied in Interoperable
+ *   Europe Portal `v10.81.x` as the second deploy of the `mymodule` module
+ *   (`10` major version, `081` minor version, `01` deploy weight within
+ *   the module).
  *
  * This sniff checks if the (post)update or deploy is correctly formed and if
  * the version represented by the (post)update/deploy identifier was not already

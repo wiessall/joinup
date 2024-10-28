@@ -26,8 +26,8 @@ class JoinupGroupHelper {
   /**
    * Returns the group the entity belongs to.
    *
-   * This relies on the fact that in Interoperable Europe Portal every group content entity only
-   * belongs to a single group.
+   * This relies on the fact that in Interoperable Europe Portal every group
+   * content entity only belongs to a single group.
    *
    * Call this only if you transparently need to support both comment entities
    * and standard group content. If you are dealing only with group content,

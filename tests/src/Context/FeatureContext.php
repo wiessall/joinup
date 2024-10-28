@@ -66,8 +66,9 @@ class FeatureContext extends RawDrupalContext {
   use UtilityTrait;
 
   /**
-   * The Interoperable Europe Portal version, retrieved from the `VERSION` file in the project root.
+   * The Interoperable Europe Portal version.
    *
+   * Retrieved from the `VERSION` file in the project root.
    * Will contain the contents of the file, or FALSE if the file is not present.
    *
    * @var string|bool
@@ -1063,7 +1064,8 @@ class FeatureContext extends RawDrupalContext {
   /**
    * Asserts that the page title tag equals to some text.
    *
-   * The assertion strips off the possible suffix "| Interoperable Europe Portal".
+   * The assertion strips off the possible suffix
+   * "| Interoperable Europe Portal".
    *
    * @param string $text
    *   The text to search for.
@@ -1863,7 +1865,8 @@ class FeatureContext extends RawDrupalContext {
    * scenario.
    *
    * @param string $version
-   *   The Interoperable Europe Portal version to set, e.g. 'v1.57.0' or 'v1.57.0-66-g1234abcde'.
+   *   The Interoperable Europe Portal version to set, e.g. 'v1.57.0' or
+   *   'v1.57.0-66-g1234abcde'.
    *
    * @When the Interoperable Europe Portal version is set to :version
    */

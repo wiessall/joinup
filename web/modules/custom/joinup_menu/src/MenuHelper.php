@@ -127,11 +127,12 @@ class MenuHelper implements MenuHelperInterface {
       ];
     }
     catch (Exception $e) {
-      // The Interoperable Europe Portal collection could not be loaded or the link to the About page
-      // could not be generated. This should not crash the page since the
-      // collection is considered to be optional. It is for example possible for
-      // a project to reuse the Interoperable Europe Portal open source code without hosting a
-      // "Interoperable Europe Portal" collection.
+      // The Interoperable Europe Portal collection could not be loaded or the
+      // link to the About page could not be generated. This should not crash
+      // the page since the collection is considered to be optional. It is for
+      // example possible for a project to reuse the Interoperable Europe
+      // Portal open source code without hosting a "Interoperable Europe
+      // Portal" collection.
       // However, in scope of the Ventuno theme the About Us link is considered
       // to be an important element, so we log a warning to alert the webmaster
       // that corrective action is required.

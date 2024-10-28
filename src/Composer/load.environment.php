@@ -21,10 +21,10 @@ $candidates = array_filter(
     return file_exists("{$path}/{$file}");
   }
 );
-// Interoperable Europe Portal has been instructed by the devops team to use getenv() to import
-// environment variables in settings.php, so we need to use the unsafe method.
-// This means Interoperable Europe Portal is not intended to be used in environments that use
-// php-fpm. Also, this file should not be included on any production environment
-// for performance reasons.
+// Interoperable Europe Portal has been instructed by the devops team to use
+// getenv() to import environment variables in settings.php, so we need to use
+// the unsafe method. This means Interoperable Europe Portal is not intended to
+// be used in environments that use php-fpm. Also, this file should not be
+// included on any production environment for performance reasons.
 // @see https://github.com/vlucas/phpdotenv/issues/446
 Dotenv::createUnsafeImmutable($path, $candidates, FALSE)->safeLoad();

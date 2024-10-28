@@ -11,7 +11,7 @@ use Drupal\joinup\Traits\EntityTrait;
 use PHPUnit\Framework\Assert;
 
 /**
- * Behat step definitions to interact with elements on the Interoperable Europe Portal homepage.
+ * Behat step definitions to interact with elements on homepage.
  */
 class HomepageContext extends RawDrupalContext {
 

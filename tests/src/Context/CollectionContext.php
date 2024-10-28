@@ -722,8 +722,8 @@ class CollectionContext extends RawDrupalContext {
    * collection the content belongs to. It is tedious to manually define a
    * collection and link it to the content for every single test. If it is
    * omitted in the definition of the test we assign an existing collection, or
-   * if none exist we assign the "Interoperable Europe Portal" collection. This ensures data
-   * integrity and prevents form validation errors.
+   * if none exist we assign the "Interoperable Europe Portal" collection.
+   * This ensures data integrity and prevents form validation errors.
    *
    * @param \Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope $scope
    *   An object containing the entity properties and fields that are to be used
@@ -753,7 +753,8 @@ class CollectionContext extends RawDrupalContext {
       }
     }
 
-    // If no suitable candidate is found, use the default "Interoperable Europe Portal" collection.
+    // If no suitable candidate is found, use the default
+    // "Interoperable Europe Portal" collection.
     if (empty($collection)) {
       $collection = $this->createJoinupCollection();
     }

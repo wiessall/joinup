@@ -17,8 +17,9 @@ use Drupal\joinup_core\Traits\GroupPluginCacheTrait;
  * always visible so if there is only 1 tab active, it is the current one and
  * the user does not need to click to go to the current page.
  *
- * In Interoperable Europe Portal, we are hiding off the "View" tab for canonical paths. This can
- * result in cases where there is only 1 tab left but it is not the current one.
+ * In Interoperable Europe Portal, we are hiding off the "View" tab for
+ * canonical paths. This can result in cases where there is only 1 tab
+ * left but it is not the current one.
  * Thus, we need to override the primary tabs block in order to allow a single
  * tab to be viewed.
  *
