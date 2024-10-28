@@ -19,15 +19,15 @@ Feature: SEO for discussion forum posts.
     Then the metatag JSON should be attached in the page
     And 1 metatag graph of type "http://schema.org/DiscussionForumPosting" should exist in the page
     And the metatag graph of the item with "name" "Discussions are now forum posts" should have the following properties:
-      | property            | value                                                                                               |
-      | @type               | http://schema.org/DiscussionForumPosting                                                            |
-      | headline            | Discussions are now forum posts                                                                     |
-      | name                | Discussions are now forum posts                                                                     |
-      | description         | This discussion is to ensure that SEO tags are set properly.                                        |
-      | datePublished       | 2019-12-25T13:00:00+0000                                                                            |
-      | isAccessibleForFree | True                                                                                                |
-      | dateModified        | 2020-01-01T13:00:00+0000                                                                            |
-      | mainEntityOfPage    | __base_url__/collection/portal-seo-discussion-collection/discussion/discussions-are-now-forum-posts |
+      | property            | value                                                                                                                    |
+      | @type               | http://schema.org/DiscussionForumPosting                                                                                 |
+      | headline            | Discussions are now forum posts                                                                                          |
+      | name                | Discussions are now forum posts                                                                                          |
+      | description         | This discussion is to ensure that SEO tags are set properly.                                                             |
+      | datePublished       | 2019-12-25T13:00:00+0000                                                                                                 |
+      | isAccessibleForFree | True                                                                                                                     |
+      | dateModified        | 2020-01-01T13:00:00+0000                                                                                                 |
+      | mainEntityOfPage    | __base_url__/collection/interoperable-europe-portal-seo-discussion-collection/discussion/discussions-are-now-forum-posts |
     # Adding numerical property values is turning the "about" property into an array comparison.
     And the metatag graph of the item with "name" "Discussions are now forum posts" should have the following "about" properties:
       | property | value      |
@@ -75,12 +75,12 @@ Feature: SEO for discussion forum posts.
       | name     | Kindle eReader                    |
       | url      | __base_url__/user/__random_text__ |
     And the following meta tags should available in the html:
-      | identifier     | value                                                                                               |
-      | description    | This discussion is to ensure that SEO tags are set properly.                                        |
-      | og:url         | __base_url__/collection/portal-seo-discussion-collection/discussion/discussions-are-now-forum-posts |
-      | og:site_name   | Interoperable Europe Portal                                                                         |
-      | og:title       | Discussions are now forum posts                                                                     |
-      | og:description | This discussion is to ensure that SEO tags are set properly.                                        |
+      | identifier     | value                                                                                                                    |
+      | description    | This discussion is to ensure that SEO tags are set properly.                                                             |
+      | og:url         | __base_url__/collection/interoperable-europe-portal-seo-discussion-collection/discussion/discussions-are-now-forum-posts |
+      | og:site_name   | Interoperable Europe Portal                                                                                              |
+      | og:title       | Discussions are now forum posts                                                                                          |
+      | og:description | This discussion is to ensure that SEO tags are set properly.                                                             |
 
     When I visit the content overview
     Then I should see the "Discussions are now forum posts" tile
