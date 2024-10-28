@@ -43,9 +43,10 @@ class PrivateMessageRouteSubscriber extends RouteSubscriberBase {
       $route->setPath('/user/messages/message/create');
     }
 
-    // Remove the route for viewing a private message.
-    $collection->remove('entity.private_message.canonical');
-
+    // Alter the path for deleting a private message.
+    if ($route = $collection->get('entity.private_message.canonical')) {
+      $route->setDefault('_controller', '\Drupal\joinup_private_message\Controller\PrivateMessageController::redirectCanonical');
+    }
     // Alter the path for deleting a private message.
     if ($route = $collection->get('entity.private_message.delete')) {
       $route->setPath('/user/messages/message/{private_message}/delete');
