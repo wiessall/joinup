@@ -219,7 +219,7 @@ class OgMembershipSubscriber extends NotificationSubscriberBase {
 
     // Ensure that the full name is not empty.
     if (empty($actor_first_name) && empty(($actor_last_name))) {
-      $arguments['@actor:full_name'] = 'A Portal user';
+      $arguments['@actor:full_name'] = 'A Interoperable Europe Portal user';
     }
     else {
       /** @var \Drupal\user\UserInterface $actor */

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-## Description: Installs an empty Portal site
+## Description: Installs an empty Interoperable Europe Portal site
 ## Usage: install
 ## Example: ddev install
 

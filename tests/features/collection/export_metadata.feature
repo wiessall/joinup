@@ -1,6 +1,6 @@
 @api @group-a
 Feature: Export collection metadata
-  As a user of Portal I should be able to download the ADMS properties of the collections.
+  As a user of Interoperable Europe Portal I should be able to download the ADMS properties of the collections.
 
   Scenario: Export RDF data
     Given a "licence_type" term with the name "Sample Licence type"

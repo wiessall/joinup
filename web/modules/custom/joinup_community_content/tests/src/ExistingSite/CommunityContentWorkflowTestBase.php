@@ -16,7 +16,7 @@ use Drupal\og\OgMembershipInterface;
 use Drupal\rdf_entity\RdfInterface;
 
 /**
- * Base setup for a Portal workflow test for community content.
+ * Base setup for a Interoperable Europe Portal workflow test for community content.
  *
  * @group rdf_entity
  */

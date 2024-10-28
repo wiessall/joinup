@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Install, update and uninstall hooks for Portal Test module.
+ * Install, update and uninstall hooks for Interoperable Europe Portal Test module.
  */
 
 declare(strict_types=1);

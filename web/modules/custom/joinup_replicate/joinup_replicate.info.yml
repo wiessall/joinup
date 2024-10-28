@@ -1,7 +1,7 @@
-name: 'Portal Replicate'
-description: 'Integrates the Replicate module in Portal.'
+name: 'Interoperable Europe Portal Replicate'
+description: 'Integrates the Replicate module in Interoperable Europe Portal.'
 type: module
-package: Portal
+package: Interoperable Europe Portal
 core_version_requirement: ">= 10.2"
 
 dependencies:

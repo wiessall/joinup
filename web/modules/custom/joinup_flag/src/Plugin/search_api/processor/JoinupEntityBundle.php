@@ -15,7 +15,7 @@ use Drupal\search_api\SearchApiException;
  *
  * @SearchApiProcessor(
  *   id = "joinup_entity_bundle",
- *   label = @Translation("Portal entity bundle"),
+ *   label = @Translation("Interoperable Europe Portal entity bundle"),
  *   description = @Translation("Get entity bundle from flagging item."),
  *   stages = {
  *     "add_properties" = 0,

@@ -24,7 +24,7 @@ trait OgTrait {
    * @param \Drupal\Core\Session\AccountInterface $user
    *   The user to be assigned as a group member.
    * @param \Drupal\joinup_group\Entity\GroupInterface $group
-   *   The Portal group entity.
+   *   The Interoperable Europe Portal group entity.
    * @param \Drupal\og\Entity\OgRole[] $roles
    *   An array of OgRoles to be passed to the membership.
    * @param string|null $state
@@ -75,7 +75,7 @@ trait OgTrait {
   protected function convertOgRoleNamesToIds(array $roles, EntityInterface $group): array {
     $role_prefix = $group->getEntityTypeId() . '-' . $group->bundle() . '-';
     foreach ($roles as $key => $role) {
-      // What is called a "collection owner" or a "solution owner" in Portal, is
+      // What is called a "collection owner" or a "solution owner" in Interoperable Europe Portal, is
       // known as an "administrator" in OG.
       $role = $role === 'owner' ? 'administrator' : $role;
       $roles[$key] = $role_prefix . $role;
@@ -235,7 +235,7 @@ trait OgTrait {
     if (!empty($values['roles'])) {
       $role_names = explode(',', $values['roles']);
       $role_names = array_map('trim', $role_names);
-      // Every owner is also a facilitator. In Portal the facilitator role is
+      // Every owner is also a facilitator. In Interoperable Europe Portal the facilitator role is
       // assigned to the owner when they create the collection. Since in this
       // step the collections are already created, mimick this behaviour by
       // making sure every owner also has the 'facilitator' role.

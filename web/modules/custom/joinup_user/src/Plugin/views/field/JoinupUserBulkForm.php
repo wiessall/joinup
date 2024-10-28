@@ -62,7 +62,7 @@ class JoinupUserBulkForm extends RoleDelegationUserBulkForm {
    * @param \Drupal\Core\Session\AccountInterface $currentUser
    *   The currently logged in user.
    * @param \Drupal\joinup_user\JoinupUserNotificationHelperInterface $notificationHelper
-   *   The notification helper for the Portal User module.
+   *   The notification helper for the Interoperable Europe Portal User module.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException

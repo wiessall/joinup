@@ -3,7 +3,7 @@
 # but this functionality will probably be restored in the future.
 Feature:
   As a moderator of the website
-  In order to draw the attention of the users for the changes in Portal
+  In order to draw the attention of the users for the changes in Interoperable Europe Portal
   I need to be able to mark the new menu item with special styling.
 
   Background:

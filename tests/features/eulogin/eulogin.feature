@@ -2,7 +2,7 @@
 Feature: Log in through EU Login
   In order to access all website of the European Commission with the same credentials
   As a user with an existing EU Login account
-  I need to be able to register and log in to Portal using EU Login
+  I need to be able to register and log in to Interoperable Europe Portal using EU Login
 
   Scenario: A local account is auto-registered on user choice.
     Given CAS users:
@@ -23,7 +23,7 @@ Feature: Log in through EU Login
     And I press "Log in"
 
     # The user gets redirected back to Drupal.
-    Then I should see the success message "Fill in the fields below to let the Portal community learn more about you!"
+    Then I should see the success message "Fill in the fields below to let the Interoperable Europe Portal community learn more about you!"
 
     # The user has been redirected to its user account edit form.
     Then the following fields should be present "Email, First name, Family name, Photo, Country of origin, Professional domain, Business title"
@@ -80,7 +80,7 @@ Feature: Log in through EU Login
     When I fill in "E-mail address" with "007.changed@mi6.eu"
     And I fill in "Password" with "shaken_not_stirred"
     When I press "Log in"
-    Then I should see the error message "You've recently changed your EU Login account email but that email is already used in Portal by another user. You cannot login until, either you change your EU Login email or you contact support to fix the issue."
+    Then I should see the error message "You've recently changed your EU Login account email but that email is already used in Interoperable Europe Portal by another user. You cannot login until, either you change your EU Login email or you contact support to fix the issue."
     And I should see the link "contact support"
 
     # Change the EU Login account email to a unique value.
@@ -131,7 +131,7 @@ Feature: Log in through EU Login
     And I should not see "full_cas_profile"
     And I should see the following lines of text:
       | Account information                                                                                                                                                                                                       |
-      | Your name and E-mail are inherited from EU Login. To update this information, you can visit your EU Login account page. Synchronisation will take a few minutes and it will be visible the next time you login on Portal. |
+      | Your name and E-mail are inherited from EU Login. To update this information, you can visit your EU Login account page. Synchronisation will take a few minutes and it will be visible the next time you login on Interoperable Europe Portal. |
       | Your e-mail address is not made public. We will only send you necessary system notifications and you can opt in later if you wish to receive additional notifications about content you are subscribed to.                |
       | Your first name is publicly visible.                                                                                                                                                                                      |
       | Your last name is publicly visible.                                                                                                                                                                                       |
@@ -155,7 +155,7 @@ Feature: Log in through EU Login
     And the following fields should be disabled "Family name"
     But I should not see "Username"
     And I should not see "partial_cas_profile"
-    And I should see "Your name and E-mail are inherited from EU Login. To update this information, you can visit your EU Login account page. Synchronisation will take a few minutes and it will be visible the next time you login on Portal."
+    And I should see "Your name and E-mail are inherited from EU Login. To update this information, you can visit your EU Login account page. Synchronisation will take a few minutes and it will be visible the next time you login on Interoperable Europe Portal."
     But I should not see "Fail - Password length must be at least 8 characters."
     And I should not see "Password character length of at least 8"
     And I should not see "Fail - Password must contain at least 3 types of characters from the following character types: lowercase letters, uppercase letters, digits, special characters."
@@ -181,7 +181,7 @@ Feature: Log in through EU Login
     But I should not see "Username"
     # The username appears in the page header because this use has no first and
     # last name. But we check the absence of "Username" and this is enough.
-    And I should see "Your name and E-mail are inherited from EU Login. To update this information, you can visit your EU Login account page. Synchronisation will take a few minutes and it will be visible the next time you login on Portal."
+    And I should see "Your name and E-mail are inherited from EU Login. To update this information, you can visit your EU Login account page. Synchronisation will take a few minutes and it will be visible the next time you login on Interoperable Europe Portal."
     But I should not see "Fail - Password length must be at least 8 characters."
     And I should not see "Password character length of at least 8"
     And I should not see "Fail - Password must contain at least 3 types of characters from the following character types: lowercase letters, uppercase letters, digits, special characters."
@@ -224,7 +224,7 @@ Feature: Log in through EU Login
 
     Then I should see the following error message:
       | error messages                                                                                                                                                                                                                                           |
-      | While trying to register your account with Portal, we found that your EU Login email address joe@example.com is already in use on our site. Either change your EU Login email address or contact the Portal support if you feel that something is wrong. |
+      | While trying to register your account with Interoperable Europe Portal, we found that your EU Login email address joe@example.com is already in use on our site. Either change your EU Login email address or contact the Interoperable Europe Portal support if you feel that something is wrong. |
 
   Scenario: A new user tries to register with an existing username.
     Given users:
@@ -240,7 +240,7 @@ Feature: Log in through EU Login
     When I fill in "E-mail address" with "joe.cas@example.com"
     When I fill in "Password" with "123"
     And I press "Log in"
-    Then I should see the success message "Fill in the fields below to let the Portal community learn more about you!"
+    Then I should see the success message "Fill in the fields below to let the Interoperable Europe Portal community learn more about you!"
 
   Scenario: The Drupal registration tab has been removed and the /user/register
   route redirects to EU Login registration form.
@@ -349,7 +349,7 @@ Feature: Log in through EU Login
     When I fill in "E-mail address" with "joe@example.com"
     When I fill in "Password" with "123"
     And I press "Log in"
-    Then I should see the error message "Registering new accounts to Portal is temporarily disabled. Please come back later."
+    Then I should see the error message "Registering new accounts to Interoperable Europe Portal is temporarily disabled. Please come back later."
     # Check that the user is not logged in.
     And I should see the link "Sign in"
 
@@ -365,4 +365,4 @@ Feature: Log in through EU Login
     When I fill in "E-mail address" with "joe@example.com"
     When I fill in "Password" with "123"
     And I press "Log in"
-    Then I should see the success message "Fill in the fields below to let the Portal community learn more about you!"
+    Then I should see the success message "Fill in the fields below to let the Interoperable Europe Portal community learn more about you!"

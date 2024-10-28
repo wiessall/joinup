@@ -14,7 +14,7 @@ use Drupal\flag_count\Plugin\ActionLink\CountLink;
  *
  * @ActionLinkType(
  *   id = "count_link_node",
- *   label = @Translation("Portal Count link node entity"),
+ *   label = @Translation("Interoperable Europe Portal Count link node entity"),
  *   description = "An AJAX action link which displays the count with the flag."
  * )
  */

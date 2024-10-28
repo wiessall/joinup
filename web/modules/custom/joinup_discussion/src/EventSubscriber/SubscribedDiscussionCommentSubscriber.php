@@ -17,14 +17,14 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 class SubscribedDiscussionCommentSubscriber implements EventSubscriberInterface {
 
   /**
-   * The Portal subscribe service.
+   * The Interoperable Europe Portal subscribe service.
    *
    * @var \Drupal\joinup_subscription\JoinupDiscussionSubscriptionInterface
    */
   protected $subscribeService;
 
   /**
-   * The Portal message delivery service.
+   * The Interoperable Europe Portal message delivery service.
    *
    * @var \Drupal\joinup_notification\JoinupMessageDeliveryInterface
    */
@@ -62,9 +62,9 @@ class SubscribedDiscussionCommentSubscriber implements EventSubscriberInterface 
    * Constructs a new event subscriber object.
    *
    * @param \Drupal\joinup_subscription\JoinupDiscussionSubscriptionInterface $subscribe_service
-   *   The Portal subscribe service.
+   *   The Interoperable Europe Portal subscribe service.
    * @param \Drupal\joinup_notification\JoinupMessageDeliveryInterface $message_delivery
-   *   The Portal message delivery service.
+   *   The Interoperable Europe Portal message delivery service.
    */
   public function __construct(JoinupDiscussionSubscriptionInterface $subscribe_service, JoinupMessageDeliveryInterface $message_delivery) {
     $this->subscribeService = $subscribe_service;
@@ -84,7 +84,7 @@ class SubscribedDiscussionCommentSubscriber implements EventSubscriberInterface 
    * Normally we should have split the events into more specific events, like
    * 'comment create', 'comment update', 'comment delete'. Just 'comment crud'
    * is too generic and is not actually an event. In order to keep the
-   * compatibility with Portal Notification module, we use this proxy method to
+   * compatibility with Interoperable Europe Portal Notification module, we use this proxy method to
    * delegate the reaction to a specific protected method, based on the real
    * operation being performed.
    *

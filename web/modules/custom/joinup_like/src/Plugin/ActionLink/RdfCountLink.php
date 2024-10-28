@@ -15,7 +15,7 @@ use Drupal\joinup_flag\Plugin\ActionLink\RdfActionLinkTrait;
  *
  * @ActionLinkType(
  *   id = "count_link_rdf",
- *   label = @Translation("Portal Count link Rdf entity"),
+ *   label = @Translation("Interoperable Europe Portal Count link Rdf entity"),
  *   description = "An AJAX action link which displays the count with the flag."
  * )
  */

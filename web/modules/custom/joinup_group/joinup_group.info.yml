@@ -1,7 +1,7 @@
-name: 'Portal Group'
-description: 'Services and API methods useful for Portal groups.'
+name: 'Interoperable Europe Portal Group'
+description: 'Services and API methods useful for Interoperable Europe Portal groups.'
 type: module
-package: Portal
+package: Interoperable Europe Portal
 core_version_requirement: ">= 9.4"
 
 dependencies:

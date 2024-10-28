@@ -19,8 +19,8 @@ use Drupal\user\UserInterface;
  *
  * @ContentEntityType(
  *   id = "joinup_log",
- *   label = @Translation("Portal log"),
- *   label_collection = @Translation("Portal logs"),
+ *   label = @Translation("Interoperable Europe Portal log"),
+ *   label_collection = @Translation("Interoperable Europe Portal logs"),
  *   label_singular = @Translation("joinup log"),
  *   label_plural = @Translation("joinup logs"),
  *   label_count = @PluralTranslation(

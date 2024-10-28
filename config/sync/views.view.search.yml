@@ -484,7 +484,7 @@ display:
       display_extenders:
         metatag_display_extender:
           metatags:
-            description: 'Search the Portal platform for digital government information and interoperability solutions with the help of advanced filters.'
+            description: 'Search the Interoperable Europe Portal platform for digital government information and interoperability solutions with the help of advanced filters.'
           tokenize: false
       path: search
     cache_metadata:

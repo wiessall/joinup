@@ -7,7 +7,7 @@ namespace Drupal\collection\Entity;
 use Drupal\node\NodeInterface;
 
 /**
- * Interface for glossary terms in Portal.
+ * Interface for glossary terms in Interoperable Europe Portal.
  */
 interface GlossaryTermInterface extends NodeInterface, CollectionContentInterface {
 

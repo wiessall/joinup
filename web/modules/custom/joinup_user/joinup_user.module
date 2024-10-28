@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Main functions and hook implementations of the Portal user module.
+ * Main functions and hook implementations of the Interoperable Europe Portal user module.
  */
 
 declare(strict_types=1);
@@ -152,7 +152,7 @@ function joinup_user_mail_alter(&$message): void {
     $moderation_text = '</p><p>';
   }
   else {
-    $moderation_text = '</p><p>This action has been done in the framework of moderation activities regularly conducted on the Portal platform.</p><p>';
+    $moderation_text = '</p><p>This action has been done in the framework of moderation activities regularly conducted on the Interoperable Europe Portal platform.</p><p>';
   }
 
   $message['body'] = array_map(function ($text) use ($moderation_text) {

@@ -1,7 +1,7 @@
-name: Portal RSS
-description: Exposes RSS feeds in Portal.
+name: Interoperable Europe Portal RSS
+description: Exposes RSS feeds in Interoperable Europe Portal.
 type: module
-package: Portal
+package: Interoperable Europe Portal
 core_version_requirement: ">= 9.4"
 
 dependencies:

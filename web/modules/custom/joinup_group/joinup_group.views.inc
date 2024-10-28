@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Views integration for Portal Group module.
+ * Views integration for Interoperable Europe Portal Group module.
  */
 
 declare(strict_types=1);

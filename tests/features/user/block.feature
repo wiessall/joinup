@@ -24,7 +24,7 @@ Feature: Block users
     And the following email should have been sent:
       | recipient | Liam Lego                                                                                                                 |
       | subject   | Your account was just blocked.                                                                                            |
-      | body      | Your Portal account was recently blocked by our moderators. For more information about blocked accounts, please visit our |
+      | body      | Your Interoperable Europe Portal account was recently blocked by our moderators. For more information about blocked accounts, please visit our |
 
     # Empty the inbox.
     Given I mark all emails as read
@@ -51,7 +51,7 @@ Feature: Block users
     And the following email should have been sent:
       | recipient | Liam Lego                                                                                                                 |
       | subject   | Your account was just blocked.                                                                                            |
-      | body      | Your Portal account was recently blocked by our moderators. For more information about blocked accounts, please visit our |
+      | body      | Your Interoperable Europe Portal account was recently blocked by our moderators. For more information about blocked accounts, please visit our |
 
     # Empty the inbox.
     Given I mark all emails as read

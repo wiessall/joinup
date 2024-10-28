@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Deploy hooks for Portal RDF module.
+ * Deploy hooks for Interoperable Europe Portal RDF module.
  */
 
 declare(strict_types=1);

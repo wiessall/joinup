@@ -111,7 +111,7 @@ interface GroupInterface extends RdfInterface, LogoInterface, ShortIdInterface, 
   /**
    * Returns the group owners.
    *
-   * In Portal every new group has exactly one owner. However there are still a
+   * In Interoperable Europe Portal every new group has exactly one owner. However there are still a
    * number of solutions which were migrated from the legacy platform which have
    * multiple owners. Since we enforce a single owner when an ownership transfer
    * is initiated, the number of groups with multiple owners will reduce over
@@ -129,7 +129,7 @@ interface GroupInterface extends RdfInterface, LogoInterface, ShortIdInterface, 
   /**
    * Returns the user IDs of the group owners.
    *
-   * In Portal every new group has exactly one owner. However there are still a
+   * In Interoperable Europe Portal every new group has exactly one owner. However there are still a
    * number of solutions which were migrated from the legacy platform which have
    * multiple owners. Since we enforce a single owner when an ownership transfer
    * is initiated, the number of groups with multiple owners will reduce over
@@ -158,7 +158,7 @@ interface GroupInterface extends RdfInterface, LogoInterface, ShortIdInterface, 
   /**
    * Returns whether the user with the given ID is the sole group owner.
    *
-   * In Portal every new group has exactly one owner. However there are still a
+   * In Interoperable Europe Portal every new group has exactly one owner. However there are still a
    * number of solutions which were migrated from the legacy platform which have
    * multiple owners. In some cases (such as transferring group ownership) we
    * need to be able to ascertain that a user is the sole owner of a group.

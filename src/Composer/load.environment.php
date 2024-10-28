@@ -21,9 +21,9 @@ $candidates = array_filter(
     return file_exists("{$path}/{$file}");
   }
 );
-// Portal has been instructed by the devops team to use getenv() to import
+// Interoperable Europe Portal has been instructed by the devops team to use getenv() to import
 // environment variables in settings.php, so we need to use the unsafe method.
-// This means Portal is not intended to be used in environments that use
+// This means Interoperable Europe Portal is not intended to be used in environments that use
 // php-fpm. Also, this file should not be included on any production environment
 // for performance reasons.
 // @see https://github.com/vlucas/phpdotenv/issues/446

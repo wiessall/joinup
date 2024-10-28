@@ -516,7 +516,7 @@ display:
       menu:
         type: normal
         title: Solutions
-        description: 'A Solution on Portal is a framework, tool, or service either hosted directly on Portal or federated from third-party repositories.'
+        description: 'A Solution on Interoperable Europe Portal is a framework, tool, or service either hosted directly on Interoperable Europe Portal or federated from third-party repositories.'
         weight: -48
         expanded: false
         menu_name: main

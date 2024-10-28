@@ -18,7 +18,7 @@ use Drupal\joinup_bundle_class\LogoTrait;
 use Drupal\joinup_oss_catalogue\Plugin\LanguageNegotiation\OssContentNegotiation;
 
 /**
- * Portal OSS solution.
+ * Interoperable Europe Portal OSS solution.
  */
 class JoinupOssSolution extends OssSolution implements DescriptionInterface, LogoInterface {
 

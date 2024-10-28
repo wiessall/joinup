@@ -1,7 +1,7 @@
-name: 'Portal user'
+name: 'Interoperable Europe Portal user'
 description: 'User profile fields, user notifications, ...'
 type: module
-package: Portal
+package: Interoperable Europe Portal
 core_version_requirement: ">= 9.4"
 
 dependencies:

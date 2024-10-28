@@ -12,7 +12,7 @@ use Drupal\joinup_collection\JoinupCollectionHelper;
 use Drupal\rdf_entity\Entity\Rdf;
 
 /**
- * Behat step definitions and related methods related to the Portal collection.
+ * Behat step definitions and related methods related to the Interoperable Europe Portal collection.
  */
 class JoinupCollectionContext extends RawDrupalContext {
 
@@ -21,7 +21,7 @@ class JoinupCollectionContext extends RawDrupalContext {
   use TopicTrait;
 
   /**
-   * Creates the 'Portal' collection and related data.
+   * Creates the 'Interoperable Europe Portal' collection and related data.
    *
    * @throws \Drupal\Core\Entity\EntityStorageException
    *   Thrown when one of the entities could not be created, for example because
@@ -43,11 +43,11 @@ class JoinupCollectionContext extends RawDrupalContext {
       'email' => 'contact.email@example.com',
     ]);
 
-    // Create the Portal collection.
+    // Create the Interoperable Europe Portal collection.
     Rdf::create([
       'rid' => 'collection',
       'id' => JoinupCollectionHelper::JOINUP_COLLECTION_DEFAULT_ENTITY_ID,
-      'label' => 'Portal',
+      'label' => 'Interoperable Europe Portal',
       'field_ar_state' => 'published',
       'field_topic' => $this->getRandomTopic()->id(),
       'field_ar_owner' => $owner->nid,
@@ -56,7 +56,7 @@ class JoinupCollectionContext extends RawDrupalContext {
   }
 
   /**
-   * Clears the Portal collection created before the scenario.
+   * Clears the Interoperable Europe Portal collection created before the scenario.
    *
    * @throws \Drupal\Core\Entity\EntityStorageException
    *   Thrown when one of the created entities could not be deleted.

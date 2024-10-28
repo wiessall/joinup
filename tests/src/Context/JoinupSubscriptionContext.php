@@ -542,7 +542,7 @@ class JoinupSubscriptionContext extends RawDrupalContext {
   }
 
   /**
-   * Returns the Portal subscription service.
+   * Returns the Interoperable Europe Portal subscription service.
    *
    * @return \Drupal\joinup_subscription\JoinupDiscussionSubscriptionInterface
    *   The subscription service.
@@ -666,7 +666,7 @@ class JoinupSubscriptionContext extends RawDrupalContext {
     $emails = [];
 
     foreach (self::MESSAGE_INTERVALS as $interval) {
-      $emails = array_merge($emails, $this->getEmailsBySubjectAndMail("Portal: $interval digest message", $email_address, FALSE));
+      $emails = array_merge($emails, $this->getEmailsBySubjectAndMail("Interoperable Europe Portal: $interval digest message", $email_address, FALSE));
     }
 
     return $emails;

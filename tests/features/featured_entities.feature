@@ -1,6 +1,6 @@
 @api @javascript
 Feature: Featuring content site-wide
-  As a moderator of Portal
+  As a moderator of Interoperable Europe Portal
   I want to feature content in the website
   So that important content has more visibility
 

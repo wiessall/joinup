@@ -268,7 +268,7 @@ class CommentSubscriber extends NotificationSubscriberBase {
     $arguments += MessageArgumentGenerator::getGroupArguments($this->group);
 
     if ($this->currentUser->isAnonymous() || empty($arguments['@actor:full_name'])) {
-      $arguments['@actor:full_name'] = $this->currentUser->isAnonymous() ? $this->t('an anonymous user') : $this->t('a Portal user');
+      $arguments['@actor:full_name'] = $this->currentUser->isAnonymous() ? $this->t('an anonymous user') : $this->t('a Interoperable Europe Portal user');
     }
 
     return $arguments;

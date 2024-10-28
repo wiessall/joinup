@@ -31,7 +31,7 @@ class JoinupDiscussionSubscription implements JoinupDiscussionSubscriptionInterf
   protected $flagService;
 
   /**
-   * Constructs a new Portal subscription service.
+   * Constructs a new Interoperable Europe Portal subscription service.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager service.

@@ -12,7 +12,7 @@ use Drupal\joinup_log\Entity\JoinupLog;
 use Drupal\joinup_log\Entity\JoinupLogInterface;
 
 /**
- * Test the Portal log entity functionality.
+ * Test the Interoperable Europe Portal log entity functionality.
  */
 class JoinupLogEntityTest extends KernelTestBase {
 
@@ -77,7 +77,7 @@ class JoinupLogEntityTest extends KernelTestBase {
     $log_entity = $this->generateLogEntity();
 
     $this->expectException(EntityStorageException::class);
-    $this->expectExceptionMessage('Portal log entities are read only entities. Saving them once created is not allowed.');
+    $this->expectExceptionMessage('Interoperable Europe Portal log entities are read only entities. Saving them once created is not allowed.');
     $log_entity->save();
   }
 
@@ -92,13 +92,13 @@ class JoinupLogEntityTest extends KernelTestBase {
   }
 
   /**
-   * Generates a Portal log entity.
+   * Generates a Interoperable Europe Portal log entity.
    *
    * @param array $values
    *   Overrides the defaults values.
    *
    * @return \Drupal\joinup_log\Entity\JoinupLogInterface
-   *   The Portal log entity.
+   *   The Interoperable Europe Portal log entity.
    */
   private function generateLogEntity(array $values = []): JoinupLogInterface {
     global $base_root;
@@ -106,7 +106,7 @@ class JoinupLogEntityTest extends KernelTestBase {
     $user = !empty($this->adminUser) ? $this->adminUser : new AnonymousUserSession();
     $values = $values + [
       'type'        => 'custom',
-      'message'     => 'Portal log test log message',
+      'message'     => 'Interoperable Europe Portal log test log message',
       'severity'    => RfcLogLevel::NOTICE,
       'uid'         => $user->id(),
       'location'    => $base_root . \Drupal::request()->getRequestUri(),

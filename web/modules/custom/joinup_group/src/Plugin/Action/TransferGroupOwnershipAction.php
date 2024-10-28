@@ -30,7 +30,7 @@ class TransferGroupOwnershipAction extends ActionBase implements ContainerFactor
   use StringTranslationTrait;
 
   /**
-   * The Portal group transfer temporary storage.
+   * The Interoperable Europe Portal group transfer temporary storage.
    *
    * @var \Drupal\Core\TempStore\PrivateTempStore
    */

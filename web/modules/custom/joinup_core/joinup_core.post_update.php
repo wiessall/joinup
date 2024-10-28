@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Post update functions for Portal.
+ * Post update functions for Interoperable Europe Portal.
  *
  * This should only contain update functions that rely on the Drupal API but
  * need to run _before_ the configuration is imported.

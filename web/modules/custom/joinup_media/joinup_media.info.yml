@@ -1,7 +1,7 @@
 type: module
-name: Portal Media
+name: Interoperable Europe Portal Media
 description: Drupal Media adaptation.
-package: Portal
+package: Interoperable Europe Portal
 core_version_requirement: ">=9.4"
 dependencies:
   - drupal:media

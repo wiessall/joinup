@@ -24,7 +24,7 @@ function whats_new_entity_prepare_view(string $entity_type_id, array $entities, 
     return;
   }
 
-  // The only case in Portal that the entity is presented in full view is the
+  // The only case in Interoperable Europe Portal that the entity is presented in full view is the
   // entity's canonical page.
   /** @var \Drupal\Core\Entity\EntityInterface $entity */
   $entity = reset($entities);

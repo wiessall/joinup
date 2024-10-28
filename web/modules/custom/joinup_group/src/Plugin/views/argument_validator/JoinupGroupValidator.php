@@ -16,7 +16,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *
  * @ViewsArgumentValidator(
  *   id = "joinup_group",
- *   title = @Translation("Portal group"),
+ *   title = @Translation("Interoperable Europe Portal group"),
  *   entity_type = "rdf_entity",
  * )
  */

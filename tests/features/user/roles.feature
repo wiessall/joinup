@@ -64,7 +64,7 @@ Feature: User role management
     And the following email should have been sent:
       | recipient | Nibby Noob                                                                                                |
       | subject   | The Portal Support Team updated your account Interoperable Europe Portal                                            |
-      | body      | A moderator has edited your user profile on Portal. Please check your profile to verify the changes done. |
+      | body      | A moderator has edited your user profile on Interoperable Europe Portal. Please check your profile to verify the changes done. |
 
     Given I am on the homepage
     When I mark all emails as read
@@ -98,7 +98,7 @@ Feature: User role management
     And the following email should have been sent:
       | recipient | Nibby Noob                                                                                                |
       | subject   | The Portal Support Team updated your account Interoperable Europe Portal                                            |
-      | body      | A moderator has edited your user profile on Portal. Please check your profile to verify the changes done. |
+      | body      | A moderator has edited your user profile on Interoperable Europe Portal. Please check your profile to verify the changes done. |
 
     When I am logged in as "Nibby Noob"
     And I go to the "Open licence" licence

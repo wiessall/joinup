@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Post-update functions for Portal Media module.
+ * Post-update functions for Interoperable Europe Portal Media module.
  */
 
 declare(strict_types=1);

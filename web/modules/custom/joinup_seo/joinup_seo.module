@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Contains hook implementations for the Portal SEO module.
+ * Contains hook implementations for the Interoperable Europe Portal SEO module.
  */
 
 declare(strict_types=1);

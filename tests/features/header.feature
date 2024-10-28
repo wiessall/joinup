@@ -35,7 +35,7 @@ Feature: Header
       | page         |
       # A page with the new Ventuno theme.
       | search page |
-      # A page with the old Portal Theme theme.
+      # A page with the old Interoperable Europe Portal Theme theme.
       | collection overview |
 
   @joinup @javascript
@@ -64,5 +64,5 @@ Feature: Header
       | page         |
       # A page with the new Ventuno theme.
       | search page |
-      # A page with the old Portal Theme theme.
+      # A page with the old Interoperable Europe Portal Theme theme.
       | collection overview |

@@ -8,7 +8,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 
 /**
- * Helper methods for dealing with tours on Portal.
+ * Helper methods for dealing with tours on Interoperable Europe Portal.
  */
 class TourHelper implements TourHelperInterface {
 

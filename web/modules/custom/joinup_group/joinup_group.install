@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Contains the schema hook for the Portal Group module.
+ * Contains the schema hook for the Interoperable Europe Portal Group module.
  */
 
 declare(strict_types=1);

@@ -14,7 +14,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *
  * @SparqlEntityIdGenerator(
  *   id = "joinup_po_namespace",
- *   name = @Translation("Portal PO namespace (data.europa.eu/w21)"),
+ *   name = @Translation("Interoperable Europe Portal PO namespace (data.europa.eu/w21)"),
  * )
  */
 class JoinupEntityIdGenerator extends SparqlEntityStorageEntityIdPluginBase {

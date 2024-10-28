@@ -8,7 +8,7 @@ use Drupal\joinup_rdf\Entity\RdfSyncEntityInterface;
 use Drupal\taxonomy\TermInterface;
 
 /**
- * Interface for licence legal type terms in Portal.
+ * Interface for licence legal type terms in Interoperable Europe Portal.
  */
 interface LicenceLegalTypeInterface extends TermInterface, RdfSyncEntityInterface {
 

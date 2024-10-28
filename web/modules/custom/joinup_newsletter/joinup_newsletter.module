@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Main functions and hook implementations of the Portal Newsletter module.
+ * Main functions and hook implementations of the Interoperable Europe Portal Newsletter module.
  */
 
 declare(strict_types=1);

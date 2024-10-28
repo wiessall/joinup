@@ -1,8 +1,8 @@
 @api @group-a
 Feature: Proposing a collection
-  In order to create a new collection on Portal
+  In order to create a new collection on Interoperable Europe Portal
   As the product owner of a collection of software solutions
-  I need to be able to propose a collection for inclusion on Portal
+  I need to be able to propose a collection for inclusion on Interoperable Europe Portal
 
   # An anonymous user should be shown the option to add a collection, so that
   # the user will be aware that collections can be added by the public, even

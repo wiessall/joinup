@@ -1,5 +1,5 @@
-name: Portal video
+name: Interoperable Europe Portal video
 description: Provides video functionality
 type: module
-package: Portal
+package: Interoperable Europe Portal
 core_version_requirement: ">= 9.4"

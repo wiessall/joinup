@@ -8,15 +8,15 @@ use Drupal\Component\Utility\Html;
 use Drupal\social_media_links\IconsetBase;
 
 /**
- * Provides the Portal icons set.
+ * Provides the Interoperable Europe Portal icons set.
  *
  * Since the user social media field requires this class in its configuration,
- * we cannot put this in the Portal profile.
+ * we cannot put this in the Interoperable Europe Portal profile.
  *
  * @Iconset(
  *   id = "joinup",
- *   publisher = "Portal",
- *   name = "Portal icons",
+ *   publisher = "Interoperable Europe Portal",
+ *   name = "Interoperable Europe Portal icons",
  * )
  */
 class JoinupIcons extends IconsetBase {

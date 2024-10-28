@@ -53,7 +53,7 @@ class RssContext extends RawMinkContext {
    *
    * Table format:
    * | title       | link               | description         | ... |
-   * | Portal feed | /collection/joinup | RSS feed for Portal | ... |
+   * | Interoperable Europe Portal feed | /collection/joinup | RSS feed for Interoperable Europe Portal | ... |
    *
    * @param \Behat\Gherkin\Node\TableNode $table
    *   The channel elements data.
@@ -99,7 +99,7 @@ class RssContext extends RawMinkContext {
    * @codingStandardsIgnoreStart
    * Table format:
    * | title     | link            | description          | publication date                | author        | ... |
-   * | News item | /news/news-item | Content of the news. | Thu, 24 Jan 2019 14:08:09 +0100 | Portal editor | ... |
+   * | News item | /news/news-item | Content of the news. | Thu, 24 Jan 2019 14:08:09 +0100 | Interoperable Europe Portal editor | ... |
    * @codingStandardsIgnoreEnd
    *
    * @param \Behat\Gherkin\Node\TableNode $table

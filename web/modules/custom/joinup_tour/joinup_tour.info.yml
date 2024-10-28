@@ -1,7 +1,7 @@
-name: 'Portal Tour'
-description: 'Contains tours for Portal.'
+name: 'Interoperable Europe Portal Tour'
+description: 'Contains tours for Interoperable Europe Portal.'
 type: module
-package: Portal
+package: Interoperable Europe Portal
 core_version_requirement: ">= 9.4"
 
 dependencies:

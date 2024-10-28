@@ -11,7 +11,7 @@ toolkit:
         - solr
         - virtuoso
   components:
-    # Disable 'toolkit-components' job check for outdated packages. The Portal
+    # Disable 'toolkit-components' job check for outdated packages. The Interoperable Europe Portal
     # dependencies policy is to update all dependencies after each release.
     outdated:
       check: false

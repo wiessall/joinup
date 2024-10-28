@@ -13,7 +13,7 @@ use Drupal\taxonomy\VocabularyInterface;
 use weitzman\DrupalTestTraits\ExistingSiteBase;
 
 /**
- * Base class for Portal ExistingSite tests.
+ * Base class for Interoperable Europe Portal ExistingSite tests.
  */
 abstract class JoinupExistingSiteTestBase extends ExistingSiteBase {
 

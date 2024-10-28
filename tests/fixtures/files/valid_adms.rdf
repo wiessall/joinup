@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Demo file including entities to be imported.
-     This file represents a remote repository file so no Drupal/Portal properties are included.
+     This file represents a remote repository file so no Drupal/Interoperable Europe Portal properties are included.
      After import, the following properties need to be taken care of:
      Solution:
        - Title. This is a federated property but there have been cases that it is missing.

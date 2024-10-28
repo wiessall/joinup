@@ -83,7 +83,7 @@ class DeleteGroupMembership extends DeleteOgMembership {
    */
   public function access($membership, ?AccountInterface $account = NULL, $return_as_object = FALSE) {
     /** @var \Drupal\og\Entity\OgMembership $membership */
-    // 'Portal' collection membership cannot be revoked.
+    // 'Interoperable Europe Portal' collection membership cannot be revoked.
     if ($membership->getGroupId() === JoinupCollectionHelper::getCollectionId()) {
       return $return_as_object ? AccessResult::forbidden() : FALSE;
     }

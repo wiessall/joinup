@@ -30,14 +30,14 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 class SubscribedDiscussionSubscriber implements EventSubscriberInterface {
 
   /**
-   * The Portal subscribe service.
+   * The Interoperable Europe Portal subscribe service.
    *
    * @var \Drupal\joinup_subscription\JoinupDiscussionSubscriptionInterface
    */
   protected $subscribeService;
 
   /**
-   * The Portal message delivery service.
+   * The Interoperable Europe Portal message delivery service.
    *
    * @var \Drupal\joinup_notification\JoinupMessageDeliveryInterface
    */
@@ -68,9 +68,9 @@ class SubscribedDiscussionSubscriber implements EventSubscriberInterface {
    * Constructs a new event subscriber object.
    *
    * @param \Drupal\joinup_subscription\JoinupDiscussionSubscriptionInterface $subscribe_service
-   *   The Portal subscribe service.
+   *   The Interoperable Europe Portal subscribe service.
    * @param \Drupal\joinup_notification\JoinupMessageDeliveryInterface $message_delivery
-   *   The Portal message delivery service.
+   *   The Interoperable Europe Portal message delivery service.
    * @param \Drupal\Core\Session\AccountProxyInterface $current_user
    *   The current user.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager

@@ -1,7 +1,7 @@
-name: Portal Document
-description: The document content type used in Portal.
+name: Interoperable Europe Portal Document
+description: The document content type used in Interoperable Europe Portal.
 type: module
-package: Portal
+package: Interoperable Europe Portal
 core_version_requirement: ">= 9.4"
 
 dependencies:

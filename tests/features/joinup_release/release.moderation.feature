@@ -54,15 +54,15 @@ Feature: Asset release moderation
     Then I should see the text "Release of the dark ship v1" in the "Page title" region
     And the following email should have been sent:
       | recipient | Felix Russell                                                                   |
-      | subject   | Portal: A release has been updated                                              |
+      | subject   | Interoperable Europe Portal: A release has been updated                                              |
       | body      | The release Release of the dark ship, v1 of the solution Dark Ship was updated. |
     And the following email should have been sent:
       | recipient | Wilson Mendoza                                                                  |
-      | subject   | Portal: A release has been updated                                              |
+      | subject   | Interoperable Europe Portal: A release has been updated                                              |
       | body      | The release Release of the dark ship, v1 of the solution Dark Ship was updated. |
     And the following email should have been sent:
       | recipient | Patric Sereira                                                                  |
-      | subject   | Portal: A release has been updated                                              |
+      | subject   | Interoperable Europe Portal: A release has been updated                                              |
       | body      | The release Release of the dark ship, v1 of the solution Dark Ship was updated. |
 
     # Archive and unarchive as moderator.
@@ -108,13 +108,13 @@ Feature: Asset release moderation
     And I press "Request changes"
     # The published version does not change.
     Then I should see the text "Release of the dark ship v1" in the "Page title" region
-    And the email sent to "Bonnie Holloway" with subject "Portal: Modification of a release of your solution has been requested" contains the following lines of text:
-      | the Portal moderation team requires editing the release Release, v1 of the solution Dark Ship due to I don't like it. |
-      | If you think this action is not clear or not due, please contact Portal Support at                                    |
+    And the email sent to "Bonnie Holloway" with subject "Interoperable Europe Portal: Modification of a release of your solution has been requested" contains the following lines of text:
+      | the Interoperable Europe Portal moderation team requires editing the release Release, v1 of the solution Dark Ship due to I don't like it. |
+      | If you think this action is not clear or not due, please contact Interoperable Europe Portal Support at                                    |
     And the following email should have been sent:
       | recipient | Felix Russell                                                                                                         |
-      | subject   | Portal: Modification of a release of your solution has been requested                                                 |
-      | body      | the Portal moderation team requires editing the release Release, v1 of the solution Dark Ship due to I don't like it. |
+      | subject   | Interoperable Europe Portal: Modification of a release of your solution has been requested                                                 |
+      | body      | the Interoperable Europe Portal moderation team requires editing the release Release, v1 of the solution Dark Ship due to I don't like it. |
 
     # We do not show the created time in the UI so another visit to the edit screen is required.
     When I go to the "Release of the dark ship" release
@@ -144,7 +144,7 @@ Feature: Asset release moderation
     Then I should see the text "Release fix v1" in the "Page title" region
     And the following email should have been sent:
       | recipient | Bonnie Holloway                                                                                    |
-      | subject   | Portal: Your release was accepted                                                                  |
+      | subject   | Interoperable Europe Portal: Your release was accepted                                                                  |
       | body      | Your proposed Release fix, v1 for the solution "Dark Ship" has been validated as per your request. |
 
     # Check archive permissions author and facilitator.
@@ -174,13 +174,13 @@ Feature: Asset release moderation
     And I press "Delete"
     And the following email should have been sent:
       | recipient | Bonnie Holloway                                            |
-      | subject   | Portal: A release has been deleted                         |
+      | subject   | Interoperable Europe Portal: A release has been deleted                         |
       | body      | release Release fix, v1 of Dark Ship solution was deleted. |
     And the following email should have been sent:
       | recipient | Felix Russell                                              |
-      | subject   | Portal: A release has been deleted                         |
+      | subject   | Interoperable Europe Portal: A release has been deleted                         |
       | body      | release Release fix, v1 of Dark Ship solution was deleted. |
     And the following email should have been sent:
       | recipient | Patric Sereira                                             |
-      | subject   | Portal: A release has been deleted                         |
+      | subject   | Interoperable Europe Portal: A release has been deleted                         |
       | body      | release Release fix, v1 of Dark Ship solution was deleted. |

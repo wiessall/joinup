@@ -1,4 +1,4 @@
-# Configuration and commands specific for Portal.
+# Configuration and commands specific for Interoperable Europe Portal.
 joinup:
   dir: ${drupal.root_absolute}/..
   site_dir: ${joinup.dir}/web

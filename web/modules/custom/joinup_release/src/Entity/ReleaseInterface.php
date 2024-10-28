@@ -17,7 +17,7 @@ use Drupal\solution\Entity\SolutionContentInterface;
 use Drupal\solution\Entity\SolutionInterface;
 
 /**
- * Interface for asset release entities in Portal.
+ * Interface for asset release entities in Interoperable Europe Portal.
  */
 interface ReleaseInterface extends NodeInterface, RdfSyncEntityInterface, CollectionContentInterface, SolutionContentInterface, EntityPublicationTimeInterface, EntityWorkflowStateInterface, DistributionsParentInterface, DescriptionInterface, ArchivableEntityInterface, PermalinkInterface {
 

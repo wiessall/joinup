@@ -1,7 +1,7 @@
 name: Contact form
-description: The contact form for the Portal project.
+description: The contact form for the Interoperable Europe Portal project.
 type: module
-package: Portal
+package: Interoperable Europe Portal
 core_version_requirement: ">= 9.4"
 
 dependencies:

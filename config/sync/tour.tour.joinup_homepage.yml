@@ -3,7 +3,7 @@ langcode: en
 status: true
 dependencies: {  }
 id: joinup_homepage
-label: 'Portal homepage tour.'
+label: 'Interoperable Europe Portal homepage tour.'
 module: null
 routes:
   -
@@ -24,7 +24,7 @@ tips:
     weight: 2
     position: left-start
     selector: '#block-exposed-search .input-group.js-form-type-search-api-autocomplete'
-    body: 'Search through the entire Portal platform and its supported content items.'
+    body: 'Search through the entire Interoperable Europe Portal platform and its supported content items.'
   spotlight:
     id: spotlight
     plugin: text
@@ -52,7 +52,7 @@ tips:
   about:
     id: about
     plugin: text
-    label: 'About Portal'
+    label: 'About Interoperable Europe Portal'
     weight: 7
     position: left-start
     selector: .about-what
@@ -64,4 +64,4 @@ tips:
     weight: 8
     position: bottom-start
     selector: 'li a[data-drupal-link-system-path="contact"]'
-    body: 'If you have any questions or suggestions regarding the Portal platform, you can contact us through this link.'
+    body: 'If you have any questions or suggestions regarding the Interoperable Europe Portal platform, you can contact us through this link.'

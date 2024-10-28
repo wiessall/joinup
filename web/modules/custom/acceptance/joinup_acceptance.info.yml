@@ -1,7 +1,7 @@
-name: 'Portal Acceptance'
+name: 'Interoperable Europe Portal Acceptance'
 description: 'Tasks to performed in the acceptance environment.'
 type: module
-package: Portal
+package: Interoperable Europe Portal
 core_version_requirement: ">= 9.4"
 
 dependencies:

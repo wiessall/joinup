@@ -1,7 +1,7 @@
 name: Like
 description: 'Like functionality'
 type: module
-package: Portal
+package: Interoperable Europe Portal
 core_version_requirement: ">= 9.4"
 
 dependencies:

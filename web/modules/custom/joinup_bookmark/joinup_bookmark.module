@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Hook implementations for the Portal bookmark module.
+ * Hook implementations for the Interoperable Europe Portal bookmark module.
  */
 
 declare(strict_types=1);

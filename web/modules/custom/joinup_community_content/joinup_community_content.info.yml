@@ -1,7 +1,7 @@
-name: Portal Community Content
-description: Portal Community Content base module
+name: Interoperable Europe Portal Community Content
+description: Interoperable Europe Portal Community Content base module
 type: module
-package: Portal
+package: Interoperable Europe Portal
 core_version_requirement: ">= 9.4"
 
 dependencies:

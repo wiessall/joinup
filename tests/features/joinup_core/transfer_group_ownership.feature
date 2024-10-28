@@ -129,7 +129,7 @@ Feature: As a group (collection or solution) owner or site moderator
     And I am on the members page of "Babylon"
     Then the available options in the "Action" select should not include the "Transfer the ownership of the solution to the selected member" options
 
-  # In Portal every owner is also a facilitator, so if a normal member is
+  # In Interoperable Europe Portal every owner is also a facilitator, so if a normal member is
   # promoted to owner, they should also become a facilitator.
   Scenario Outline: If ownership is transferred to a normal member, it should also include the facilitator role
     Given I am logged in as "light"

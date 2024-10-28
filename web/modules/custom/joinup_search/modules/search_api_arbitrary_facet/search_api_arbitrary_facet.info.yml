@@ -1,8 +1,8 @@
-name: Portal search arbitrary facet
+name: Interoperable Europe Portal search arbitrary facet
 type: module
 description: Allows adding facets based on arbitrary queries.
 core_version_requirement: ">= 9.4"
-package: Portal
+package: Interoperable Europe Portal
 
 dependencies:
   - facets:facets

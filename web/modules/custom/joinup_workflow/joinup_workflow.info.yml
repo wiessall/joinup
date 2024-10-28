@@ -1,5 +1,5 @@
-name: Portal Workflow
-description: Shared code for handling workflows in Portal.
+name: Interoperable Europe Portal Workflow
+description: Shared code for handling workflows in Interoperable Europe Portal.
 type: module
-package: Portal
+package: Interoperable Europe Portal
 core_version_requirement: ">= 9.4"

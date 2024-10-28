@@ -13,7 +13,7 @@ use Drupal\search_api\Task\IndexTaskManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Provides a Portal debug form.
+ * Provides a Interoperable Europe Portal debug form.
  */
 final class VocabularyIndexForm extends FormBase {
 

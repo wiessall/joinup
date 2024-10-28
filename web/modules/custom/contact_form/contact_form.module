@@ -176,7 +176,7 @@ function contact_form_tokens($type, $tokens, array $data, array $options, Bubble
  * Alter the sender of outgoing mails sent from the contact form so they will be
  * handled by support desk software and turned into tickets.
  *
- * @todo This doesn't belong in the Portal distribution and should be removed.
+ * @todo This doesn't belong in the Interoperable Europe Portal distribution and should be removed.
  *
  * @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3988
  */
@@ -205,10 +205,10 @@ function contact_form_mail($key, &$message, $params): void {
   $entity = $params['message'];
   $name = "{$entity->field_contact_first_name->value} {$entity->field_contact_last_name->value}";
 
-  $message['subject'] = t('Portal: Contact form notification');
+  $message['subject'] = t('Interoperable Europe Portal: Contact form notification');
 
   $message['body'][] = t('Dear @name', ['@name' => $name]);
-  $message['body'][] = t('Thank you for submitting your message to the Portal Support.');
+  $message['body'][] = t('Thank you for submitting your message to the Interoperable Europe Portal Support.');
 
   if ($entity->field_contact_copy->value) {
     $message['body'][] = t('This is the message you submitted through the online form:');

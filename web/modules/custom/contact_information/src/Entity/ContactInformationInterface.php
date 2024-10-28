@@ -10,14 +10,14 @@ use Drupal\joinup_workflow\EntityWorkflowStateInterface;
 use Drupal\node\NodeInterface;
 
 /**
- * Interface for contact information entities in Portal.
+ * Interface for contact information entities in Interoperable Europe Portal.
  *
  * A contact information entity provides a name - title, and contact details and
  * is used by collections, solutions and asset releases. The data is linked
  * using a standard entity reference field on the parent entity, and even though
  * it can be related to groups this is not considered group content.
  *
- * In Portal a contact information entity is not shared between groups, so every
+ * In Interoperable Europe Portal a contact information entity is not shared between groups, so every
  * contact info entity belongs only to 1 single parent group. However it can
  * belong to many asset releases within a solution.
  */

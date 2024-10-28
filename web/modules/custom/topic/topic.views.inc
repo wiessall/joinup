@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Views support for Portal Topic module.
+ * Views support for Interoperable Europe Portal Topic module.
  */
 
 declare(strict_types=1);
