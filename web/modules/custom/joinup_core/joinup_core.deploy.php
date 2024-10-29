@@ -42,20 +42,3 @@ function joinup_core_deploy_200000(array &$sandbox): string {
   $sandbox['#finished'] = $sandbox['progress'] / $sandbox['total'];
   return "Progress: {$sandbox['progress']}/{$sandbox['total']} of users.";
 }
-
-/**
- * Remove queued messages for cancelled users.
- */
-function joinup_core_deploy_200001(): void {
-  $db = \Drupal::database();
-  $usernames = str_getcsv(file_get_contents(__DIR__ . "/fixtures/bounce_username.csv"));
-  $uids = $db->select('users_field_data', 'u')
-    ->fields('u', ['uid'])
-    ->condition('u.name', $usernames, 'IN')
-    ->execute()
-    ->fetchCol();
-  $pattern = 's\:3\:"uid";s\:[0-9]+\:"(' . implode('|', $uids) . ')';
-  $db->query("DELETE FROM queue WHERE name = 'message_digest' AND data RLIKE '$pattern'", [], [
-    'allow_delimiter_in_query' => TRUE,
-  ]);
-}
