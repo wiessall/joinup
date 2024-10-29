@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Hook implementations for the Interoperable Europe Portal Discussion module.
+ * Hook implementations for the Joinup Discussion module.
  */
 
 declare(strict_types=1);

@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Views hook implementations for the Interoperable Europe Portal search module.
+ * Views hook implementations for the Joinup search module.
  */
 
 declare(strict_types=1);

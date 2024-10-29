@@ -1,7 +1,7 @@
 name: Contact form
-description: The contact form for the Interoperable Europe Portal project.
+description: The contact form for the Joinup project.
 type: module
-package: Interoperable Europe Portal
+package: Joinup
 core_version_requirement: ">= 9.4"
 
 dependencies:

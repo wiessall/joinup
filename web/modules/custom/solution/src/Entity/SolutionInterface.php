@@ -18,7 +18,7 @@ use Drupal\joinup_workflow\EntityWorkflowStateInterface;
 use Drupal\rdf_entity\RdfInterface;
 
 /**
- * Interface for solution entities in Interoperable Europe Portal.
+ * Interface for solution entities in Joinup.
  */
 interface SolutionInterface extends RdfInterface, CollectionContentInterface, EntityPublicationTimeInterface, EntityWorkflowStateInterface, FeaturedContentInterface, PinnableGroupContentInterface, GroupInterface, DistributionsParentInterface, ArchivableEntityInterface, DescriptionInterface, AbstractInterface {
 

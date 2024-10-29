@@ -16,7 +16,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *
  * @SearchApiProcessor(
  *   id = "joinup_entity_published_revision",
- *   label = @Translation("Interoperable Europe Portal entity published revision"),
+ *   label = @Translation("Joinup entity published revision"),
  *   description = @Translation("Ensures that the version of the entity is the published revision."),
  *   stages = {
  *     "alter_items" = -20,

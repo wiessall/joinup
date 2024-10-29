@@ -1,7 +1,7 @@
-name: 'Interoperable Europe Portal Group'
-description: 'Services and API methods useful for Interoperable Europe Portal groups.'
+name: 'Joinup Group'
+description: 'Services and API methods useful for Joinup groups.'
 type: module
-package: Interoperable Europe Portal
+package: Joinup
 core_version_requirement: ">= 9.4"
 
 dependencies:

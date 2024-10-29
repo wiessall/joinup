@@ -17,7 +17,7 @@ use Drupal\joinup\Traits\UtilityTrait;
 use PHPUnit\Framework\Assert;
 
 /**
- * Behat step definitions for functionalities provided by Interoperable Europe Portal core module.
+ * Behat step definitions for functionalities provided by Joinup core module.
  */
 class JoinupCoreContext extends RawDrupalContext {
 

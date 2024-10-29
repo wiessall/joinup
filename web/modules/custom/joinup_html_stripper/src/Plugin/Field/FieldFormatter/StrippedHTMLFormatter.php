@@ -12,10 +12,9 @@ use Drupal\smart_trim\TruncateHTML;
 /**
  * Field formatter which strips all HTML.
  *
- * This is tailored to the use case of Interoperable Europe Portal. It relies
- * on a custom text filter format `stripped_html` which includes all of the
- * filters that are commonly used in Interoperable Europe Portal, such as
- * Interoperable Europe Portal Video, Glossary items, etc.
+ * This is tailored to the use case of Joinup. It relies on a custom text filter
+ * format `stripped_html` which includes all of the filters that are commonly
+ * used in Joinup, such as Joinup Video, Glossary items, etc.
  *
  * The goal of this is to be able to not only strip vanilla HTML elements that
  * are present in the content but also placeholder tokens which are included by

@@ -113,10 +113,10 @@ class EntityMessageHelper implements EntityMessageHelperInterface {
       $storage = $this->entityTypeManager->getStorage('message');
     }
     catch (InvalidPluginDefinitionException $e) {
-      // Since the Interoperable Europe Portal Notification module depends on
-      // the Message module we can reasonably expect that the Message entity
-      // type is available at runtime and we don't need to handle the
-      // possibility that it is not defined.
+      // Since the Joinup Notification module depends on the Message module we
+      // can reasonably expect that the Message entity type is available at
+      // runtime and we don't need to handle the possibility that it is not
+      // defined.
       // Instead of ignoring this silently, convert it in an (unchecked) runtime
       // exception. This will make sure that in the extremely rare case that
       // this exception might still be thrown, the error will still be logged,

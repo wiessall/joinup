@@ -1,5 +1,5 @@
-name: Interoperable Europe Portal Tiles
-description: Tiles components for Interoperable Europe Portal
+name: Joinup Tiles
+description: Tiles components for Joinup
 type: module
-package: Interoperable Europe Portal
+package: Joinup
 core_version_requirement: ">= 9.4"

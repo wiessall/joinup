@@ -1,7 +1,7 @@
-name: Interoperable Europe Portal SEO
+name: Joinup SEO
 description: Contains specific functionality that helps visibility of the platform in search engines.
 type: module
-package: Interoperable Europe Portal
+package: Joinup
 core_version_requirement: ">= 9.4"
 
 dependencies:

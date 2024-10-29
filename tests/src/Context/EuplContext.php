@@ -63,7 +63,7 @@ class EuplContext extends RawDrupalContext {
     $solution->save();
     $this->entities['rdf_entity'][$solution->id()] = $solution;
 
-    // 'Interoperable Europe Portal Licensing Assistant' standard custom page.
+    // The 'Joinup Licensing Assistant' standard custom page.
     $this->nodeCreate((object) [
       'nid' => 701805,
       'type' => 'custom_page',
@@ -73,8 +73,7 @@ class EuplContext extends RawDrupalContext {
       'field_state' => 'published',
     ]);
 
-    // The 'Interoperable Europe Portal Licensing Compatibility Check'
-    // standard custom page.
+    // The 'Joinup Licensing Compatibility Check' standard custom page.
     $this->nodeCreate((object) [
       'nid' => 703242,
       'type' => 'custom_page',

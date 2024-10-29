@@ -12,7 +12,7 @@ use Drupal\joinup_log\Entity\JoinupLog;
 use Drupal\joinup_log\Entity\JoinupLogInterface;
 
 /**
- * Test the Interoperable Europe Portal log entity functionality.
+ * Test the Joinup log entity functionality.
  */
 class JoinupLogEntityTest extends KernelTestBase {
 
@@ -92,13 +92,13 @@ class JoinupLogEntityTest extends KernelTestBase {
   }
 
   /**
-   * Generates a Interoperable Europe Portal log entity.
+   * Generates a Joinup log entity.
    *
    * @param array $values
    *   Overrides the defaults values.
    *
    * @return \Drupal\joinup_log\Entity\JoinupLogInterface
-   *   The Interoperable Europe Portal log entity.
+   *   The Joinup log entity.
    */
   private function generateLogEntity(array $values = []): JoinupLogInterface {
     global $base_root;

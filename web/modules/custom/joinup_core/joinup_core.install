@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Install, update, and uninstall functions for the Interoperable Europe Portal core module.
+ * Install, update, and uninstall functions for the Joinup core module.
  */
 
 declare(strict_types=1);

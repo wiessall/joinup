@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Hook implementations for the Interoperable Europe Portal Stats test module.
+ * Hook implementations for the Joinup Stats test module.
  */
 
 declare(strict_types=1);

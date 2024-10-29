@@ -542,7 +542,7 @@ class JoinupSubscriptionContext extends RawDrupalContext {
   }
 
   /**
-   * Returns the Interoperable Europe Portal subscription service.
+   * Returns the Joinup subscription service.
    *
    * @return \Drupal\joinup_subscription\JoinupDiscussionSubscriptionInterface
    *   The subscription service.

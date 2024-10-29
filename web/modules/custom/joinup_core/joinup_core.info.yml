@@ -1,7 +1,7 @@
-name: 'Interoperable Europe Portal core'
-description: 'Contains shared code for Interoperable Europe Portal.'
+name: 'Joinup core'
+description: 'Contains shared code for Joinup.'
 type: module
-package: Interoperable Europe Portal
+package: Joinup
 core_version_requirement: ">= 9.4"
 dependencies:
   - 'drupal:comment'

@@ -1,8 +1,8 @@
-name: Interoperable Europe Portal
+name: Joinup
 type: module
-description: Specificities for the Interoperable Europe Portal community.
+description: Specificities for the Joinup community.
 core_version_requirement: ">= 9.4"
-package: Interoperable Europe Portal communities
+package: Joinup communities
 
 dependencies:
   - og:og

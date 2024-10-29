@@ -1,6 +1,6 @@
 joinup_subscription.settings:
   type: config_object
-  label: 'Interoperable Europe Portal subscription settings'
+  label: 'Joinup subscription settings'
   mapping:
     frequency:
       type: string

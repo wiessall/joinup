@@ -9,7 +9,7 @@ use Drupal\Core\Entity\EntityStorageException;
 use Drupal\Core\Entity\Sql\SqlContentEntityStorage;
 
 /**
- * Defines the storage handler class for Interoperable Europe Portal log entity.
+ * Defines the storage handler class for Joinup log entity.
  */
 class JoinupLogStorage extends SqlContentEntityStorage {
 

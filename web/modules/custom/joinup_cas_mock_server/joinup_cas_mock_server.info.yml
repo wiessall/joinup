@@ -1,7 +1,7 @@
-name: Interoperable Europe Portal CAS Mock Server
-description: CAS mock server customized for Interoperable Europe Portal.
+name: Joinup CAS Mock Server
+description: CAS mock server customized for Joinup.
 type: module
-package: Interoperable Europe Portal
+package: Joinup
 core_version_requirement: ">= 9.4"
 dependencies:
   - cas_mock_server:cas_mock_server

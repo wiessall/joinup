@@ -1,7 +1,7 @@
-name: Interoperable Europe Portal Slick
+name: Joinup Slick
 description: Formats multi-item fields with Slick Carousel
 type: module
-package: Interoperable Europe Portal
+package: Joinup
 core_version_requirement: ">= 10.1"
 dependencies:
   - slick:slick

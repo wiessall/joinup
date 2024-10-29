@@ -19,7 +19,7 @@ joinup_core.outdated_content_threshold:
 
 field.formatter.third_party.joinup:
   type: mapping
-  label: 'Theme settings for Interoperable Europe Portal project.'
+  label: 'Theme settings for Joinup project.'
   mapping:
     template_suggestion:
       type: string
@@ -159,7 +159,7 @@ condition.plugin.request_route:
 
 condition.plugin.joinup_content:
   type: condition.plugin
-  label: Interoperable Europe Portal content condition
+  label: Joinup content condition
   mapping:
     content:
       type: sequence
@@ -214,7 +214,7 @@ entity_reference_selection.grouped_taxonomy_term_selection:
 
 filter_settings.joinup_iframe:
   type: filter
-  label: 'Interoperable Europe Portal iframe filter'
+  label: 'Joinup iframe filter'
   mapping:
     allowed_domains:
       type: sequence

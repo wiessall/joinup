@@ -7,7 +7,7 @@ namespace Drupal\joinup_licence\EventSubscriber;
 use Drupal\joinup_group\EventSubscriber\AddGroupContentEventSubscriberBase;
 
 /**
- * Subscribes to Interoperable Europe Portal Group events.
+ * Subscribes to Joinup Group events.
  */
 class LicenceGroupSubscriber extends AddGroupContentEventSubscriberBase {
 

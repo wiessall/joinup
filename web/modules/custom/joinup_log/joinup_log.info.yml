@@ -1,7 +1,7 @@
-name: 'Interoperable Europe Portal log'
+name: 'Joinup log'
 description: 'Contains log-related features.'
 type: module
-package: Interoperable Europe Portal
+package: Joinup
 core_version_requirement: ">= 10.1"
 dependencies:
   - drupal:user

@@ -8,7 +8,7 @@ use Drupal\Core\Routing\RouteSubscriberBase;
 use Symfony\Component\Routing\RouteCollection;
 
 /**
- * Alters existing routes for Interoperable Europe Portal specific use cases.
+ * Alters existing routes for Joinup specific use cases.
  */
 class RouteSubscriber extends RouteSubscriberBase {
 
@@ -16,7 +16,7 @@ class RouteSubscriber extends RouteSubscriberBase {
    * {@inheritdoc}
    */
   protected function alterRoutes(RouteCollection $collection) {
-    // Since all content in Interoperable Europe Portal is related to a collection we use custom
+    // Since all content in Joinup is related to a collection we use custom
     // forms that allow people to add content inside a collection. The standard
     // node / RDF entity forms should not be used for creating new content - the
     // group audience fields are hidden and dangling content would be created

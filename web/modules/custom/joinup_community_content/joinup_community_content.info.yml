@@ -1,7 +1,7 @@
-name: Interoperable Europe Portal Community Content
-description: Interoperable Europe Portal Community Content base module
+name: Joinup Community Content
+description: Joinup Community Content base module
 type: module
-package: Interoperable Europe Portal
+package: Joinup
 core_version_requirement: ">= 9.4"
 
 dependencies:

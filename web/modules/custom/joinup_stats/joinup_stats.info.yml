@@ -1,7 +1,7 @@
 name: Statistics
-description: 'Provide statistics for Interoperable Europe Portal entities.'
+description: 'Provide statistics for Joinup entities.'
 type: module
-package: Interoperable Europe Portal
+package: Joinup
 core_version_requirement: ">= 9.4"
 
 dependencies:

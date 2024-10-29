@@ -1,8 +1,8 @@
-name: Interoperable Europe Portal OSS Catalogue
+name: Joinup OSS Catalogue
 type: module
 description: EU OSS Catalogue customisation
 core_version_requirement: ">= 9.4"
-package: Interoperable Europe Portal communities
+package: Joinup communities
 
 dependencies:
   - eu_oss_catalogue:eu_oss_catalogue

@@ -1,7 +1,7 @@
-name: 'Interoperable Europe Portal Menu'
-description: 'Reusable code to interact with menus in Interoperable Europe Portal.'
+name: 'Joinup Menu'
+description: 'Reusable code to interact with menus in Joinup.'
 type: module
-package: Interoperable Europe Portal
+package: Joinup
 core_version_requirement: ">= 9.4"
 
 dependencies:

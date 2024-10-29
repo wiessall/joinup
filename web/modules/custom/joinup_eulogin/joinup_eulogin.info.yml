@@ -1,7 +1,7 @@
-name: 'Interoperable Europe Portal EU Login'
+name: 'Joinup EU Login'
 description: 'Provides integration with EU Login.'
 type: module
-package: Interoperable Europe Portal
+package: Joinup
 core_version_requirement: ">= 9.4"
 
 dependencies:

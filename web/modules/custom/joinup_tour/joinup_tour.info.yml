@@ -1,7 +1,7 @@
-name: 'Interoperable Europe Portal Tour'
-description: 'Contains tours for Interoperable Europe Portal.'
+name: 'Joinup Tour'
+description: 'Contains tours for Joinup.'
 type: module
-package: Interoperable Europe Portal
+package: Joinup
 core_version_requirement: ">= 9.4"
 
 dependencies:

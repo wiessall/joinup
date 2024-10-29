@@ -1,4 +1,4 @@
-# Schema for the configuration files of the Interoperable Europe Portal user module.
+# Schema for the configuration files of the Joinup user module.
 joinup_user.mail:
   type: config_object
   label: 'Email settings'

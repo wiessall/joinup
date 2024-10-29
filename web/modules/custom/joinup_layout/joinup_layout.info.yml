@@ -1,5 +1,5 @@
-name: 'Interoperable Europe Portal layout'
+name: 'Joinup layout'
 type: module
-description: 'Contains custom layouts for Interoperable Europe Portal.'
+description: 'Contains custom layouts for Joinup.'
 core_version_requirement: ">= 9.4"
-package: Interoperable Europe Portal
+package: Joinup

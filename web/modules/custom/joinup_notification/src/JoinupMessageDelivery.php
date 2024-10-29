@@ -33,7 +33,7 @@ class JoinupMessageDelivery implements JoinupMessageDeliveryInterface {
   protected $messageNotifier;
 
   /**
-   * Constructs a new Interoperable Europe Portal deliver service object.
+   * Constructs a new Joinup deliver service object.
    *
    * @param \Drupal\message_notify\MessageNotifier $message_notifier
    *   The message notifier service.

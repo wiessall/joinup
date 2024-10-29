@@ -1,6 +1,6 @@
 meta_entity.type.*.third_party.joinup_stats:
   type: mapping
-  label: 'Interoperable Europe Portal Statistics settings'
+  label: 'Joinup Statistics settings'
   mapping:
     matomo_method:
       type: string

@@ -1,7 +1,7 @@
-name: Interoperable Europe Portal subscription
+name: Joinup subscription
 description: Allows users to subscribe to collection content.
 type: module
-package: Interoperable Europe Portal
+package: Joinup
 core_version_requirement: ">= 9.4"
 
 dependencies:

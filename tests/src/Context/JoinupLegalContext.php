@@ -12,7 +12,7 @@ use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
 
 /**
- * Behat step definitions for the Interoperable Europe Portal Legal module.
+ * Behat step definitions for the Joinup Legal module.
  */
 class JoinupLegalContext extends RawDrupalContext {
 

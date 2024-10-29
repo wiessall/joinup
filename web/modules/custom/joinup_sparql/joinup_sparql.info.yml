@@ -1,7 +1,7 @@
-name: Interoperable Europe Portal SPARQL
-description: Contains Interoperable Europe Portal specific overrides related to the RDF entity and the SPARQL endpoint.
+name: Joinup SPARQL
+description: Contains Joinup specific overrides related to the RDF entity and the SPARQL endpoint.
 type: module
-package: Interoperable Europe Portal
+package: Joinup
 core_version_requirement: ">= 9.4"
 
 dependencies:

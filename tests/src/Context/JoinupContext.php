@@ -47,7 +47,7 @@ use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\ExpectationFailedException;
 
 /**
- * Behat step definitions that are generally useful for the Interoperable Europe Portal project.
+ * Behat step definitions that are generally useful for the Joinup project.
  */
 class JoinupContext extends RawDrupalContext {
 
@@ -2879,9 +2879,9 @@ class JoinupContext extends RawDrupalContext {
    * Title field is optional.
    *
    * Table format:
-   * | URL                                        | Title  |
-   * | https://interoperable-europe.ec.europa.eu/ | Portal |
-   * | https://www.drupal.org/                    | Drupal |
+   * | URL                          | Title  |
+   * | https://joinup.ec.europa.eu/ | Joinup |
+   * | https://www.drupal.org/      | Drupal |
    *
    * @param \Behat\Gherkin\Node\TableNode $table
    *   A table containing the data to enter in the fields.

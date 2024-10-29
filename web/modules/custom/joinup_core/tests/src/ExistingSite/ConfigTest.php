@@ -8,7 +8,7 @@ use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
 use Drush\TestTraits\DrushTestTrait;
 
 /**
- * Tests the Interoperable Europe Portal configuration.
+ * Tests the Joinup configuration.
  *
  * @group joinup_core
  */

@@ -23,7 +23,7 @@ use Drupal\user\UserInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Provides a Interoperable Europe Portal subscription form.
+ * Provides a Joinup subscription form.
  */
 class SubscriptionsForm extends FormBase {
 
@@ -42,7 +42,7 @@ class SubscriptionsForm extends FormBase {
   protected EntityTypeBundleInfoInterface $entityTypeBundleInfo;
 
   /**
-   * The Interoperable Europe Portal group manager service.
+   * The Joinup group manager service.
    *
    * @var \Drupal\joinup_group\JoinupGroupManagerInterface
    */
@@ -63,7 +63,7 @@ class SubscriptionsForm extends FormBase {
    * @param \Drupal\Core\Entity\EntityTypeBundleInfoInterface $entityTypeBundleInfo
    *   The entity type bundle info service.
    * @param \Drupal\joinup_group\JoinupGroupManagerInterface $groupManager
-   *   The Interoperable Europe Portal group manager service.
+   *   The Joinup group manager service.
    * @param \Drupal\og\MembershipManagerInterface $membershipManager
    *   The OG membership manager.
    */

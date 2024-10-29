@@ -1,7 +1,7 @@
 name: Dashboard
-description: Provides a dashboard for the Interoperable Europe Portal project.
+description: Provides a dashboard for the Joinup project.
 type: module
-package: Interoperable Europe Portal
+package: Joinup
 core_version_requirement: ">= 9.4"
 dependencies:
   - joinup:joinup_core

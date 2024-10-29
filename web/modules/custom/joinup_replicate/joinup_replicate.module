@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Hooks of Interoperable Europe Portal Replicate module.
+ * Hooks of Joinup Replicate module.
  */
 
 declare(strict_types=1);

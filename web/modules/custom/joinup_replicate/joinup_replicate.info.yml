@@ -1,7 +1,7 @@
-name: 'Interoperable Europe Portal Replicate'
-description: 'Integrates the Replicate module in Interoperable Europe Portal.'
+name: 'Joinup Replicate'
+description: 'Integrates the Replicate module in Joinup.'
 type: module
-package: Interoperable Europe Portal
+package: Joinup
 core_version_requirement: ">= 10.2"
 
 dependencies:

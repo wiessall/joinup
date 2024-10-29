@@ -1,7 +1,7 @@
 name: ADMS-AP validator
 description: Validates ADMS-AP data.
 type: module
-package: Interoperable Europe Portal
+package: Joinup
 core_version_requirement: ">= 9.4"
 
 dependencies:

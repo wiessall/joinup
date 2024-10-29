@@ -16,7 +16,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *
  * @Condition(
  *   id = "joinup_content",
- *   label = @Translation("Interoperable Europe Portal content"),
+ *   label = @Translation("Joinup content"),
  *   context_definitions = {
  *     "node" = @ContextDefinition("entity:node", label = @Translation("Node"),
  *   required = FALSE),

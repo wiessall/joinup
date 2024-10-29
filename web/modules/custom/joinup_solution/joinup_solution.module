@@ -9,7 +9,7 @@ declare(strict_types=1);
 
 /**
  * @file
- * Primary module hooks for Interoperable Europe Portal solution module.
+ * Primary module hooks for Joinup solution module.
  */
 
 use Drupal\joinup_solution\Entity\Solution;

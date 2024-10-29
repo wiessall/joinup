@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Hook implementations for the Interoperable Europe Portal flag module.
+ * Hook implementations for the Joinup flag module.
  */
 
 declare(strict_types=1);

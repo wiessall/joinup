@@ -1,7 +1,7 @@
-name: 'Interoperable Europe Portal Group Content Management'
+name: 'Joinup Group Content Management'
 description: 'Contains functionality related to managing group content.'
 type: module
-package: Interoperable Europe Portal
+package: Joinup
 core_version_requirement: ">= 9.4"
 
 dependencies:

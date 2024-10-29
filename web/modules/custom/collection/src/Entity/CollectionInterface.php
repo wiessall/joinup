@@ -15,7 +15,7 @@ use Drupal\joinup_workflow\EntityWorkflowStateInterface;
 use Drupal\rdf_entity\RdfInterface;
 
 /**
- * Interface for collection entities in Interoperable Europe Portal.
+ * Interface for collection entities in Joinup.
  */
 interface CollectionInterface extends RdfInterface, EntityPublicationTimeInterface, EntityWorkflowStateInterface, GroupInterface, FeaturedContentInterface, ArchivableEntityInterface, DescriptionInterface, AbstractInterface {
 

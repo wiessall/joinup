@@ -17,14 +17,14 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 class SubscribedDiscussionCommentSubscriber implements EventSubscriberInterface {
 
   /**
-   * The Interoperable Europe Portal subscribe service.
+   * The Joinup subscribe service.
    *
    * @var \Drupal\joinup_subscription\JoinupDiscussionSubscriptionInterface
    */
   protected $subscribeService;
 
   /**
-   * The Interoperable Europe Portal message delivery service.
+   * The Joinup message delivery service.
    *
    * @var \Drupal\joinup_notification\JoinupMessageDeliveryInterface
    */
@@ -62,9 +62,9 @@ class SubscribedDiscussionCommentSubscriber implements EventSubscriberInterface 
    * Constructs a new event subscriber object.
    *
    * @param \Drupal\joinup_subscription\JoinupDiscussionSubscriptionInterface $subscribe_service
-   *   The Interoperable Europe Portal subscribe service.
+   *   The Joinup subscribe service.
    * @param \Drupal\joinup_notification\JoinupMessageDeliveryInterface $message_delivery
-   *   The Interoperable Europe Portal message delivery service.
+   *   The Joinup message delivery service.
    */
   public function __construct(JoinupDiscussionSubscriptionInterface $subscribe_service, JoinupMessageDeliveryInterface $message_delivery) {
     $this->subscribeService = $subscribe_service;
@@ -84,9 +84,9 @@ class SubscribedDiscussionCommentSubscriber implements EventSubscriberInterface 
    * Normally we should have split the events into more specific events, like
    * 'comment create', 'comment update', 'comment delete'. Just 'comment crud'
    * is too generic and is not actually an event. In order to keep the
-   * compatibility with Interoperable Europe Portal Notification module, we use
-   * this proxy method to delegate the reaction to a specific protected method,
-   * based on the real operation being performed.
+   * compatibility with Joinup Notification module, we use this proxy method to
+   * delegate the reaction to a specific protected method, based on the real
+   * operation being performed.
    *
    * @param \Drupal\joinup_notification\Event\NotificationEvent $event
    *   The notification event object.

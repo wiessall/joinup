@@ -1377,7 +1377,7 @@ Source:
     <skos:definition xml:lang="en"><![CDATA[DEFINITION:
 Public Service Agent ABB is a Business Actor consuming or delivering a public service on behalf of a principal.
 
-Source: Interoperable Europe Portal
+Source: Joinup
 (https://joinup.ec.europa.eu/rdf_entity/http_e_f_fdata_ceuropa_ceu_fw21_f7661a4a0_bbdf9_b4e98_bb04a_b967c6a1053f9)
 
 INTEROPERABILITY SALIENCY:
@@ -1616,7 +1616,7 @@ https://webgate.ec.europa.eu/easi-micpro/application#!cogcPublicPage]]></skos:de
     <skos:prefLabel xml:lang="en"><![CDATA[Service Delivery Mode]]></skos:prefLabel>
     <skos:topConceptOf rdf:resource="http://data.europa.eu/dr8" />
     <skos:definition xml:lang="en"><![CDATA[DEFINITION:
-Service Delivery Mode ABB is a Business Interface delivering to public service consumers, or otherwise interacting with them, for the purpose of supplying specific public services with accessibility value. This involves a number of management practices to ensure that the public services are provided as agreed between the public service provider and the consumer. The service delivery mode should also ensure a constant and stable access to public service in alarm and crisis situations (e.g., COVID 19 pandemic, natural disasters, etc.). Here some examples of service delivery mode: i) Mobile App; ii) Web Interoperable Europe Portal; iii) Web Services; iv) Contact Center, etc.
+Service Delivery Mode ABB is a Business Interface delivering to public service consumers, or otherwise interacting with them, for the purpose of supplying specific public services with accessibility value. This involves a number of management practices to ensure that the public services are provided as agreed between the public service provider and the consumer. The service delivery mode should also ensure a constant and stable access to public service in alarm and crisis situations (e.g., COVID 19 pandemic, natural disasters, etc.). Here some examples of service delivery mode: i) Mobile App; ii) Web Portal; iii) Web Services; iv) Contact Center, etc.
 
 Source: Innovation Policy Platform (https://www.innovationpolicyplatform.org/printpdf/12406)
 
@@ -2802,7 +2802,7 @@ EXAMPLES:
 The following implementation is an example on how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB):
 
 EURES - Job vacancy
-Most of the jobs on the EURES Job Mobility Interoperable Europe Portal come from the job vacancies databases managed by the Public Employment Services of the countries participating in EURES. Using a technology called Web Services, the EURES search engine instantly, in real time, interrogates each national database for jobs. These jobs can be of two types:
+Most of the jobs on the EURES Job Mobility Portal come from the job vacancies databases managed by the Public Employment Services of the countries participating in EURES. Using a technology called Web Services, the EURES search engine instantly, in real time, interrogates each national database for jobs. These jobs can be of two types:
 “EURES jobs", displayed with a blue flag, which are jobs where an employer has expressed an interest in recruiting from another country, or any other jobs advertised in the national jobs databases.
 There is, in addition, a central database where EURES advisers can manually post jobs that will all be flagged as "EURES jobs". This is for the time being the only way for those few countries that are not yet fully connected to Web Services to advertise jobs on the EURES portal. This solution can, however, also be used for other specific purposes, such as when an employer wishes to publish a vacancy in several languages etc., which may not always be possible in a national database.
 
@@ -3118,7 +3118,7 @@ RAPEX - Semantic Web Gate
 Public set of RAPEX notifications are available via the Semantic Web Gate in the Open Data portal
 http://ec.europa.eu/semantic_webgate/query/dataset=rapex
 
-e-Justice Interoperable Europe Portal - Commission's approach on the security of communication and information systems in the European Commission
+e-Justice Portal - Commission's approach on the security of communication and information systems in the European Commission
 Commission Decision (EU, Euratom) 2017/46 of 10 January 2017 on the security of communication and information systems in the European Commission. The Commission's approach should take into account EU policy initiatives and legislation on network and information security, industry standards and good practices, to comply with all relevant legislation and to allow interoperability and compatibility.  This decision applies to all communication and information systems (CISs) which are owned, procured, managed or operated by or on behalf of the Commission and all usage of those CISs by the Commission.
 This decision sets out the basic principles, objectives, organisation and responsibilities regarding the security of those CISs, and in particular for Commission departments owning, procuring, managing or operating CISs and including CISs provided by an internal IT service provider.
 http://eur-lex.europa.eu/legal-content/EN/TXT/?uri=uriserv:OJ.L_.2017.006.01.0040.01.ENG]]></skos:definition>
@@ -3427,7 +3427,7 @@ The Public Service Consumer ABB is salient for organisational interoperability b
 EXAMPLES:
 The following implementation is an example on how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB):
 
-Cosmetic Product Notification Interoperable Europe Portal CPNP - Poison centre, Responsible person, Market surveillance authority, Distributor, Health advisor, Administrations
+Cosmetic Product Notification Portal CPNP - Poison centre, Responsible person, Market surveillance authority, Distributor, Health advisor, Administrations
 The CPNP is making this information available electronically to:
 •	Competent Authorities (for the purposes of market surveillance, market analysis, evaluation and consumer information)
 •	Poison Centres or similar bodies established by EU countries (for the purposes of medical treatment).
@@ -3456,7 +3456,7 @@ Source:
     <skos:definition xml:lang="en"><![CDATA[DEFINITION:
 Public Service Consumer Agent ABB is a Business Role consuming a public service on behalf of a principal.
 
-Source: Interoperable Europe Portal
+Source: Joinup
 (https://joinup.ec.europa.eu/rdf_entity/http_e_f_fdata_ceuropa_ceu_fw21_f7661a4a0_bbdf9_b4e98_bb04a_b967c6a1053f9")
 
 INTEROPERABILITY SALIENCY:
@@ -4866,7 +4866,7 @@ Source: OECD
 
 Source reference: https://stats.oecd.org/glossary/detail.asp?ID=4454
 
-Example: The following implementation is an example on how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB): EU SCIENCE HUB - The European Commission's science and knowledge service - JRC's Data policy: The JRC's data policy is driven by transparency with the aim of contributing to innovation. It is a pillar of the development and implementation of scientific knowledge management at the JRC. It follows the commitments and regulatory basis of the Commission Decision on the reuse of Commission documents (2011/833/EU). The objectives for adopting and implementing the JRC data policy include: • Share and use data on the basis of the JRC Open Data principles: fully, freely, openly and timely; • To be transparent on the reasons for restricted access to certain data; • Provide a coordinated approach to the acquisition of data by the JRC; • Facilitate management, broaden access and use of JRC data; • Reinforce goals of Horizon 2020; • Support EU implementation of the G8 Open Data Charter; • Continuously support evidence-based decision making and research; • Ensure that JRC data is made available through the EU Open Data Interoperable Europe Portal. For a successful implementation process, the JRC's data policy lays down implementation principles with respect to responsible entities, overall implementation guidelines, and their individual elements like data management plans, as well as the monitoring of its implementation. https://ec.europa.eu/jrc/en/about/jrc-in-brief/data-policy
+Example: The following implementation is an example on how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB): EU SCIENCE HUB - The European Commission's science and knowledge service - JRC's Data policy: The JRC's data policy is driven by transparency with the aim of contributing to innovation. It is a pillar of the development and implementation of scientific knowledge management at the JRC. It follows the commitments and regulatory basis of the Commission Decision on the reuse of Commission documents (2011/833/EU). The objectives for adopting and implementing the JRC data policy include: • Share and use data on the basis of the JRC Open Data principles: fully, freely, openly and timely; • To be transparent on the reasons for restricted access to certain data; • Provide a coordinated approach to the acquisition of data by the JRC; • Facilitate management, broaden access and use of JRC data; • Reinforce goals of Horizon 2020; • Support EU implementation of the G8 Open Data Charter; • Continuously support evidence-based decision making and research; • Ensure that JRC data is made available through the EU Open Data Portal. For a successful implementation process, the JRC's data policy lays down implementation principles with respect to responsible entities, overall implementation guidelines, and their individual elements like data management plans, as well as the monitoring of its implementation. https://ec.europa.eu/jrc/en/about/jrc-in-brief/data-policy
 
 IoP Dimension: Governance IoP
 
@@ -4908,7 +4908,7 @@ eira:policy_type: [ Information security policy | Privacy policy | Licensing and
     <skos:definition><![CDATA[Data Policy ABB is a Business Object aiming to form the guiding framework in which data management can operate.]]></skos:definition>
     <eira:definitionSource>OECD</eira:definitionSource>
     <eira:definitionSourceReference><![CDATA[https://stats.oecd.org/glossary/detail.asp?ID=4454]]></eira:definitionSourceReference>
-    <skos:example><![CDATA[The following implementation is an example on how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB): EU SCIENCE HUB - The European Commission's science and knowledge service - JRC's Data policy: The JRC's data policy is driven by transparency with the aim of contributing to innovation. It is a pillar of the development and implementation of scientific knowledge management at the JRC. It follows the commitments and regulatory basis of the Commission Decision on the reuse of Commission documents (2011/833/EU). The objectives for adopting and implementing the JRC data policy include: • Share and use data on the basis of the JRC Open Data principles: fully, freely, openly and timely; • To be transparent on the reasons for restricted access to certain data; • Provide a coordinated approach to the acquisition of data by the JRC; • Facilitate management, broaden access and use of JRC data; • Reinforce goals of Horizon 2020; • Support EU implementation of the G8 Open Data Charter; • Continuously support evidence-based decision making and research; • Ensure that JRC data is made available through the EU Open Data Interoperable Europe Portal. For a successful implementation process, the JRC's data policy lays down implementation principles with respect to responsible entities, overall implementation guidelines, and their individual elements like data management plans, as well as the monitoring of its implementation. https://ec.europa.eu/jrc/en/about/jrc-in-brief/data-policy]]></skos:example>
+    <skos:example><![CDATA[The following implementation is an example on how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB): EU SCIENCE HUB - The European Commission's science and knowledge service - JRC's Data policy: The JRC's data policy is driven by transparency with the aim of contributing to innovation. It is a pillar of the development and implementation of scientific knowledge management at the JRC. It follows the commitments and regulatory basis of the Commission Decision on the reuse of Commission documents (2011/833/EU). The objectives for adopting and implementing the JRC data policy include: • Share and use data on the basis of the JRC Open Data principles: fully, freely, openly and timely; • To be transparent on the reasons for restricted access to certain data; • Provide a coordinated approach to the acquisition of data by the JRC; • Facilitate management, broaden access and use of JRC data; • Reinforce goals of Horizon 2020; • Support EU implementation of the G8 Open Data Charter; • Continuously support evidence-based decision making and research; • Ensure that JRC data is made available through the EU Open Data Portal. For a successful implementation process, the JRC's data policy lays down implementation principles with respect to responsible entities, overall implementation guidelines, and their individual elements like data management plans, as well as the monitoring of its implementation. https://ec.europa.eu/jrc/en/about/jrc-in-brief/data-policy]]></skos:example>
     <eira:iopSaliency><![CDATA[The Data Policy ABB is salient for semantic interoperability because it provides a guiding framework to manage data and information according to interoperability principles as stated in the EIF recommendation n° 30: "Perceive data and information as a public asset that should be appropriately generated, collected, managed, shared, protected and preserved."]]></eira:iopSaliency>
     <skos:note><![CDATA[]]></skos:note>
     <eira:concept>eira:ArchitectureBuildingBlock</eira:concept>
@@ -5211,7 +5211,7 @@ eira:dimension: Behavioral IoP
     <skos:topConceptOf rdf:resource="http://data.europa.eu/dr8" />
     <skos:definition xml:lang="en"><![CDATA[Definition: Digital-ready Policymaking ABB is a Business Process consisting in formulating digital-ready policies and legislation by considering digital aspects from the start of the policy cycle to ensure that they are ready for the digital age, future-proof and interoperable.
 
-Source: Interoperable Europe Portal (Digital Ready Policies)
+Source: Joinup (Digital Ready Policies)
 
 Source reference: https://joinup.ec.europa.eu/collection/better-legislation-smoother-implementation/digital-ready-policymaking
 
@@ -5252,7 +5252,7 @@ Last modification: 2023-10-01
     <dcterms:modified>2023-10-1</dcterms:modified>
     <eira:synonym>Policy Cycle</eira:synonym>
     <skos:definition><![CDATA[Digital-ready Policymaking ABB is a Business Process consisting in formulating digital-ready policies and legislation by considering digital aspects from the start of the policy cycle to ensure that they are ready for the digital age, future-proof and interoperable.]]></skos:definition>
-    <eira:definitionSource>Interoperable Europe Portal (Digital Ready Policies)</eira:definitionSource>
+    <eira:definitionSource>Joinup (Digital Ready Policies)</eira:definitionSource>
     <eira:definitionSourceReference><![CDATA[https://joinup.ec.europa.eu/collection/better-legislation-smoother-implementation/digital-ready-policymaking]]></eira:definitionSourceReference>
     <skos:example><![CDATA[The following implementation is an example of how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB): Performance-based Full Policy Cycle for the Digital Single Market (http://www.europarl.europa.eu/RegData/etudes/etudes/join/2013/507457/IPOL-IMCO_ET(2013)507457_EN.pdf). The key features of a performance-based full policy cycle are a clear articulation of policy objectives, the identification and use of quantitative indicators of expected short-term and longer-term policy impacts, the identification of synergies between policies, a much greater use of quantitative data in ex-ante impact assessments, the implementation of robust, data-based, independent ex post assessments of the performance of policies relative to their expected impacts and a wide dissemination of lessons learned in such ex-post performance assessments]]></skos:example>
     <eira:iopSaliency><![CDATA[The Public Policy Cycle ABB is salient for the governance  interoperability because it impacts on the design and formulation of public policies, which are implemented through legal acts. Also, the ABB also is salient for the legal interoperability due to it establis the legal actions and directives for public administration services as the case of interoperability principles need to be taken into account during the whole public policy cycle.]]></eira:iopSaliency>
@@ -5568,7 +5568,7 @@ Last modification: 2023-11-01
     <skos:topConceptOf rdf:resource="http://data.europa.eu/dr8" />
     <skos:definition xml:lang="en"><![CDATA[Definition: Semantic interoperability agreement ABB is a Contract formalizing governance rules enabling collaboration between digital public services with ontological value.
 
-Source: Interoperable Europe Portal
+Source: Joinup
 
 Source reference: https://joinup.ec.europa.eu/sites/default/files/document/2015-03/Process
 
@@ -5605,7 +5605,7 @@ Last modification: 2023-16-01
     <dcterms:modified>2023-01-16</dcterms:modified>
     <eira:synonym></eira:synonym>
     <skos:definition><![CDATA[Semantic interoperability agreement ABB is a Contract formalizing governance rules enabling collaboration between digital public services with ontological value.]]></skos:definition>
-    <eira:definitionSource>Interoperable Europe Portal</eira:definitionSource>
+    <eira:definitionSource>Joinup</eira:definitionSource>
     <eira:definitionSourceReference><![CDATA[https://joinup.ec.europa.eu/sites/default/files/document/2015-03/Process]]></eira:definitionSourceReference>
     <skos:example><![CDATA[The following implementation is an example on how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB): e-Invoicing Semantic Data Model - The semantic data model includes only the essential information elements that an electronic invoice needs to ensure legal (including fiscal) compliance and to enable interoperability for cross-border, cross-sector and for domestic trade. The semantic data model may be used by public and private sector organisations for public procurement invoicing and took into account the physical and financial supply chain perspective, reflecting both private and public sector requirements, with a view to allowing the full straight-through processing of an electronic invoice. https://ec.europa.eu/cefdigital/wiki/display/CEFDIGITAL/2017/06/28/CEN+Publishes+eInvoicing+Semantic+Data+Model]]></skos:example>
     <eira:iopSaliency><![CDATA[The Semantic Interoperability Agreement ABB is a key interoperability enabler (*) for governance interoperability by enabling the understanding of information and collaboration between digital public services.]]></eira:iopSaliency>
@@ -5904,7 +5904,7 @@ Last modification: 2023-10-01
     <skos:topConceptOf rdf:resource="http://data.europa.eu/dr8" />
     <skos:definition xml:lang="en"><![CDATA[Definition: Semantic Agreement ABB is a Contract formalising an agreement from a peer to the common ontology that is the result of a matching or mapping process that is used to resolve their semantic discrepancies. The combination matching process consists of a linguistic base, internal and external structure comparison. The result of the matching combination will be used to develop an agreement unit as a component of the agreement. There are some assumptions for the agreement, such as using the same language to represent the schema/ontology, labels and the meaning of a concept, and there is no individual at the common ontology.
 
-Source: Interoperable Europe Portal
+Source: Joinup
 
 Source reference: https://joinup.ec.europa.eu/taxonomy/term/http_e_f_fdata_ceuropa_ceu_fdr8_fSemanticAgreement
 
@@ -5943,7 +5943,7 @@ Last modification: 2023-16-01
     <dcterms:modified>2023-01-16</dcterms:modified>
     <eira:synonym></eira:synonym>
     <skos:definition><![CDATA[Semantic Agreement ABB is a Contract formalising an agreement from a peer to the common ontology that is the result of a matching or mapping process that is used to resolve their semantic discrepancies. The combination matching process consists of a linguistic base, internal and external structure comparison. The result of the matching combination will be used to develop an agreement unit as a component of the agreement. There are some assumptions for the agreement, such as using the same language to represent the schema/ontology, labels and the meaning of a concept, and there is no individual at the common ontology.]]></skos:definition>
-    <eira:definitionSource>Interoperable Europe Portal</eira:definitionSource>
+    <eira:definitionSource>Joinup</eira:definitionSource>
     <eira:definitionSourceReference><![CDATA[https://joinup.ec.europa.eu/taxonomy/term/http_e_f_fdata_ceuropa_ceu_fdr8_fSemanticAgreement]]></eira:definitionSourceReference>
     <skos:example><![CDATA[The following implementation is an example on how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB): SEMIC - "Supporting alignments and agreements on common definitions and specifications at the semantic layer for the Member States and the EU institutions". https://joinup.ec.europa.eu/collection/semantic-interoperability-community-semic/about]]></skos:example>
     <eira:iopSaliency><![CDATA[The Semantic Agreement ABB is a key interoperability enabler because it supports semantic governance by enabling collaboration between digital public services.]]></eira:iopSaliency>
@@ -6460,7 +6460,7 @@ Last modification: 2022-17-01
     <skos:topConceptOf rdf:resource="http://data.europa.eu/dr8" />
     <skos:definition xml:lang="en"><![CDATA[Definition: National Legal Interoperability Agreement ABB is a Contract formalizing governance rules enabling collaboration amongst different levels of administrations in a State.
 
-Source: Based on the definition in the EIF about Legal Interoperability Agreement, the National Interoperability Framework Observatory (see Interoperable Europe Portal NIFO) and existing national legal interoperability agreements.
+Source: Based on the definition in the EIF about Legal Interoperability Agreement, the National Interoperability Framework Observatory (see Joinup NIFO) and existing national legal interoperability agreements.
 
 Source reference: https://ec.europa.eu/isa2/sites/isa/files/eif_brochure_final.pdf#page=27
 
@@ -6498,7 +6498,7 @@ Last modification: 2022-18-01
     <dcterms:type>eira:NationalLegalInteroperabilityAgreementContract</dcterms:type>
     <dcterms:modified>2022-01-18</dcterms:modified>
     <skos:definition><![CDATA[National Legal Interoperability Agreement ABB is a Contract formalizing governance rules enabling collaboration amongst different levels of administrations in a State.]]></skos:definition>
-    <eira:definitionSource>Based on the definition in the EIF about Legal Interoperability Agreement, the National Interoperability Framework Observatory (see Interoperable Europe Portal NIFO) and existing national legal interoperability agreements.</eira:definitionSource>
+    <eira:definitionSource>Based on the definition in the EIF about Legal Interoperability Agreement, the National Interoperability Framework Observatory (see Joinup NIFO) and existing national legal interoperability agreements.</eira:definitionSource>
     <eira:definitionSourceReference><![CDATA[https://ec.europa.eu/isa2/sites/isa/files/eif_brochure_final.pdf#page=27]]></eira:definitionSourceReference>
     <skos:example><![CDATA[The following implementation is an example of how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB): Agreement to pass the policy of e-Signture and Certificates for the interoperability between the digital public services of the Spanish Central Administration (https://www.boe.es/diario_boe/txt.php?id=BOE-A-2012-15066)]]></skos:example>
     <eira:iopSaliency><![CDATA[The European Legal Interoperability Agreement ABB is salient for the governance of interoperability because it lays the European framework between public administration to enable the interoperability between public services. The European Legal Interoperability Agreement ABB is also salient for the legal interoperability due to the legal foundations and requirements that enable the seamless exchange of data, information, and knowledge between European and EEA Member State digital public services. The European Legal Interoperability Agreement ABB is also salient for the organizational interoperability since, as a consequence of the agreement, digital business capabilities can be mapped and subsequently, the process can be aligned between the Member State and EEA Public Administrations and digital public services.]]></eira:iopSaliency>
@@ -8083,8 +8083,8 @@ Syn. CMS
 
 The following implementation is an example on how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB):
 
-CROS Interoperable Europe Portal
-The CROS Interoperable Europe Portal is a content management system based on Drupal and stands for "Interoperable Europe Portal on Collaboration in Research and Methodology for Official Statistics". The CROS Interoperable Europe Portal is dedicated to the collaboration between researchers and Official Statisticians in Europe and beyond. It provides a working space and tools for dissemination and information exchange for statistical projects and methodological topics. Services provided include hosting of statistical communities, repositories of useful documents, research results, project deliverables, CVs of experts in statistical relevant areas, and discussion fora on different topics like the future research needs in Official Statistics.
+CROS Portal
+The CROS Portal is a content management system based on Drupal and stands for "Portal on Collaboration in Research and Methodology for Official Statistics". The CROS Portal is dedicated to the collaboration between researchers and Official Statisticians in Europe and beyond. It provides a working space and tools for dissemination and information exchange for statistical projects and methodological topics. Services provided include hosting of statistical communities, repositories of useful documents, research results, project deliverables, CVs of experts in statistical relevant areas, and discussion fora on different topics like the future research needs in Official Statistics.
 https://ec.europa.eu/eurostat/cros/]]></skos:definition>
     <owl:deprecated>true</owl:deprecated>
     <eira:ContentManagementService_Properties />
@@ -8205,12 +8205,12 @@ The Open Data ABB is salient for semantic interoperability because it is a part 
 EXAMPLES:
 The following implementation is an example on how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB):
 
-European Data Interoperable Europe Portal
-The European Data Interoperable Europe Portal harvests the metadata of Public Sector Information available on public data portals across European countries. Information regarding the provision of data and the benefits of re-using data is also included.
+European Data Portal
+The European Data Portal harvests the metadata of Public Sector Information available on public data portals across European countries. Information regarding the provision of data and the benefits of re-using data is also included.
 
-Within the Interoperable Europe Portal, sections are dedicated to:
+Within the Portal, sections are dedicated to:
 •	Searching datasets: Categories have been established to structure the metadata harvested from the various countries. These categories follow the revision of the DCAT Application Profile and have been mapped against the Eurovoc Thesaurus.
-•	Providing Data: This section gives an insight into understanding Open Data from the perspective of a data provider. In addition, instructions are offered for those who wish their data portal to be harvested by the European Data Interoperable Europe Portal.
+•	Providing Data: This section gives an insight into understanding Open Data from the perspective of a data provider. In addition, instructions are offered for those who wish their data portal to be harvested by the European Data Portal.
 •	Using Data: How Open Data is being used, as well as the economic benefits of Open Data are detailed in this section.
 •	Training and Library: eLearning modules about Open Data as well as training guides and a knowledge base referencing publications around Open Data and featured projects.
 
@@ -9537,7 +9537,7 @@ EIRA concept: eira:ArchitectureBuildingBlock
     <skos:topConceptOf rdf:resource="http://data.europa.eu/dr8" />
     <skos:definition xml:lang="en"><![CDATA[Definition: Data Virtualization ABB is an Application Component that implements the functionality of retrieving and manipulating data without requiring technical details about the data format or location.
 
-Source: Interoperable Europe Portal
+Source: Joinup
 
 Source reference: https://joinup.ec.europa.eu/sites/default/files/inline-files/Data%20visualisation%20service%20definition.pdf
 
@@ -9574,7 +9574,7 @@ Last modification: 2022-23-01
     <dcterms:modified>2022-01-23</dcterms:modified>
     <eira:synonym></eira:synonym>
     <skos:definition><![CDATA[Data Virtualization ABB is an Application Component that implements the functionality of retrieving and manipulating data without requiring technical details about the data format or location.]]></skos:definition>
-    <eira:definitionSource>Interoperable Europe Portal</eira:definitionSource>
+    <eira:definitionSource>Joinup</eira:definitionSource>
     <eira:definitionSourceReference><![CDATA[https://joinup.ec.europa.eu/sites/default/files/inline-files/Data%20visualisation%20service%20definition.pdf]]></eira:definitionSourceReference>
     <skos:example><![CDATA[The following implementation is an example on how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB): Virtuoso. Virtuoso Universal Server is modern platform built on existing open standards that harnesses the power of Hyperlinks (functioning as Super Keys) for breaking down data silos that impede both user and enterprise ability. For example, Virtuoso's core SQL & SPARQL powers many Enterprise Knowledge Graph initiatives just as it does DBpedia and a majority of nodes in the Linked Open Data Cloud -- the world's largest publicly accessible Knowledge Graph. https://big-data-test-infrastructure.ec.europa.eu/service-offering/virtuoso_en]]></skos:example>
     <eira:iopSaliency><![CDATA[The Data Virtualization Component ABB is salient for technical interoperability because it realises the services established and defined by the Data Virtualization Service ABB, collaborating with enabling interoperability between public services that generate, process or consume data.]]></eira:iopSaliency>
@@ -11181,7 +11181,7 @@ Last modification: 2022-23-01
     <skos:topConceptOf rdf:resource="http://data.europa.eu/dr8" />
     <skos:definition xml:lang="en"><![CDATA[Definition: Data Virtualization ABB is an Application Service that enables the access and manipulation of data from various sources without the need for physical data integration.
 
-Source: Interoperable Europe Portal
+Source: Joinup
 
 Source reference: https://joinup.ec.europa.eu/sites/default/files/inline-files/Data%20visualisation%20service%20definition.pdf
 
@@ -11215,7 +11215,7 @@ EIRA concept: eira:ArchitectureBuildingBlock
     <dcterms:modified>2023-05-25</dcterms:modified>
     <eira:synonym></eira:synonym>
     <skos:definition><![CDATA[Data Virtualization ABB is an Application Service that enables the access and manipulation of data from various sources without the need for physical data integration.]]></skos:definition>
-    <eira:definitionSource>Interoperable Europe Portal</eira:definitionSource>
+    <eira:definitionSource>Joinup</eira:definitionSource>
     <eira:definitionSourceReference><![CDATA[https://joinup.ec.europa.eu/sites/default/files/inline-files/Data%20visualisation%20service%20definition.pdf]]></eira:definitionSourceReference>
     <skos:example><![CDATA[The following implementation is an example on how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB): Virtuoso. Virtuoso Universal Server is modern platform built on existing open standards that harnesses the power of Hyperlinks (functioning as Super Keys) for breaking down data silos that impede both user and enterprise ability. For example, Virtuoso's core SQL & SPARQL powers many Enterprise Knowledge Graph initiatives just as it does DBpedia and a majority of nodes in the Linked Open Data Cloud -- the world's largest publicly accessible Knowledge Graph. https://big-data-test-infrastructure.ec.europa.eu/service-offering/virtuoso_en]]></skos:example>
     <eira:iopSaliency><![CDATA[The Data Virtualization Application Service ABB is salient for technical interoperability because provides the tools for visualising datasets in a graphical way. These services can enable to visualise data and information from different sources, and public services, in a manner that can be better processed, understood, and therefore, interoperability can be achieved.]]></eira:iopSaliency>
@@ -11394,7 +11394,7 @@ EIRA concept: eira:ArchitectureBuildingBlock
     <skos:topConceptOf rdf:resource="http://data.europa.eu/dr8" />
     <skos:definition xml:lang="en"><![CDATA[Definition: Authorisation ABB is an Application Service that enables processes to formalise the electronic identification of a natural or legal person, or the origin and integrity of data in the electronic form to be confirmed
 
-Source: Interoperable Europe Portal
+Source: Joinup
 
 Source reference: https://joinup.ec.europa.eu/taxonomy/term/http_e_f_fdata_ceuropa_ceu_fdr8_fIdentityManagementService
 
@@ -11431,7 +11431,7 @@ Last modification: 2022-18-01
     <dcterms:modified>2022-01-18</dcterms:modified>
     <eira:synonym></eira:synonym>
     <skos:definition><![CDATA[Authorisation ABB is an Application Service that enables processes to formalise the electronic identification of a natural or legal person, or the origin and integrity of data in the electronic form to be confirmed]]></skos:definition>
-    <eira:definitionSource>Interoperable Europe Portal</eira:definitionSource>
+    <eira:definitionSource>Joinup</eira:definitionSource>
     <eira:definitionSourceReference><![CDATA[https://joinup.ec.europa.eu/taxonomy/term/http_e_f_fdata_ceuropa_ceu_fdr8_fIdentityManagementService]]></eira:definitionSourceReference>
     <skos:example><![CDATA[The following implementation is an example of how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB): Users roles are managed and linked to EU Login accounts (https://ec.europa.eu/research/participants/docs/h2020-funding-guide/user-account-and-roles/roles-and-access-rights_en.htm). EU Login is the entry gate to sign in to different European Commission services and/or other systems. EU Login verifies your identity and allows recovering your personal settings, history and access rights in a secure way. You can sign in using social media accounts or the EU Login account.]]></skos:example>
     <eira:iopSaliency><![CDATA[The Authorisation Application Service ABB is salient for interoperability because it represents the identifications of actors (natural or legal persons) involved in system interactions, ensuring that the service and the data contained are accessed by actors with granted permissions. Additionally, this can be used as part of the data integrity process to identify the origin of certain data. In general, authorisation services allow for the maintenance of control and integrity of the available data, ensuring its quality when exchanged.]]></eira:iopSaliency>
@@ -12764,7 +12764,7 @@ Source: ISA2
 
 Source reference: https://ec.europa.eu/isa2/sites/default/files/docs/publications/isa2-actions-phase2_-_poc_-_wp1_specifications_en.pdf
 
-Example: The following implementation is an example on how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB): European Data Interoperable Europe Portal - The European Data Interoperable Europe Portal harvests the metadata of Public Sector Information available on public data portals across European countries. Information regarding the provision of data and the benefits of re-using data is also included. What is Open Data? -	Open (Government) Data refers to the information collected, produced or paid for by the public bodies (also referred to as Public Sector Information) and made freely available for re-use for any purpose. The licence will specify the terms of use; -	Public sector information is information held by the public sector. The Directive on the re-use of public sector information provides a common legal framework for a European market for government-held data. It is built around the key pillars of the internal market: free flow of data, transparency and fair competition. It is important to note that not all of the public sector information is Open Data. Within the Interoperable Europe Portal, sections are dedicated to: -	Searching datasets: Categories have been established to structure the metadata harvested from the various countries. These categories follow the revision of the DCAT Application Profile and have been mapped against the Eurovoc Thesaurus; -	Providing Data: This section gives an insight into understanding Open Data from the perspective of a data provider. In addition, instructions are offered for those who wish their data portal to be harvested by the European Data Interoperable Europe Portal; -	Using Data: How Open Data is being used, as well as the economic benefits of Open Data are detailed in this section; -	Training and Library: eLearning modules about Open Data as well as training guides and a knowledge base referencing publications around Open Data and featured projects; - Portals can be national, regional, local or domain specific. They cover the 28 EU Member States, EEA, countries involved in the EU's neighbourhood policy and Switzerland. https://www.europeandataportal.eu/
+Example: The following implementation is an example on how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB): European Data Portal - The European Data Portal harvests the metadata of Public Sector Information available on public data portals across European countries. Information regarding the provision of data and the benefits of re-using data is also included. What is Open Data? -	Open (Government) Data refers to the information collected, produced or paid for by the public bodies (also referred to as Public Sector Information) and made freely available for re-use for any purpose. The licence will specify the terms of use; -	Public sector information is information held by the public sector. The Directive on the re-use of public sector information provides a common legal framework for a European market for government-held data. It is built around the key pillars of the internal market: free flow of data, transparency and fair competition. It is important to note that not all of the public sector information is Open Data. Within the Portal, sections are dedicated to: -	Searching datasets: Categories have been established to structure the metadata harvested from the various countries. These categories follow the revision of the DCAT Application Profile and have been mapped against the Eurovoc Thesaurus; -	Providing Data: This section gives an insight into understanding Open Data from the perspective of a data provider. In addition, instructions are offered for those who wish their data portal to be harvested by the European Data Portal; -	Using Data: How Open Data is being used, as well as the economic benefits of Open Data are detailed in this section; -	Training and Library: eLearning modules about Open Data as well as training guides and a knowledge base referencing publications around Open Data and featured projects; - Portals can be national, regional, local or domain specific. They cover the 28 EU Member States, EEA, countries involved in the EU's neighbourhood policy and Switzerland. https://www.europeandataportal.eu/
 
 IoP Dimension: Behavioral IoP
 
@@ -12799,7 +12799,7 @@ Last modification: 2022-23-01
     <skos:definition><![CDATA[Data Publication ABB is an Application Service that enables the processes of making data available through the adoption of discoverable, accessible, and reusable mechanisms.]]></skos:definition>
     <eira:definitionSource>ISA2</eira:definitionSource>
     <eira:definitionSourceReference><![CDATA[https://ec.europa.eu/isa2/sites/default/files/docs/publications/isa2-actions-phase2_-_poc_-_wp1_specifications_en.pdf]]></eira:definitionSourceReference>
-    <skos:example><![CDATA[The following implementation is an example on how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB): European Data Interoperable Europe Portal - The European Data Interoperable Europe Portal harvests the metadata of Public Sector Information available on public data portals across European countries. Information regarding the provision of data and the benefits of re-using data is also included. What is Open Data? -	Open (Government) Data refers to the information collected, produced or paid for by the public bodies (also referred to as Public Sector Information) and made freely available for re-use for any purpose. The licence will specify the terms of use; -	Public sector information is information held by the public sector. The Directive on the re-use of public sector information provides a common legal framework for a European market for government-held data. It is built around the key pillars of the internal market: free flow of data, transparency and fair competition. It is important to note that not all of the public sector information is Open Data. Within the Interoperable Europe Portal, sections are dedicated to: -	Searching datasets: Categories have been established to structure the metadata harvested from the various countries. These categories follow the revision of the DCAT Application Profile and have been mapped against the Eurovoc Thesaurus; -	Providing Data: This section gives an insight into understanding Open Data from the perspective of a data provider. In addition, instructions are offered for those who wish their data portal to be harvested by the European Data Interoperable Europe Portal; -	Using Data: How Open Data is being used, as well as the economic benefits of Open Data are detailed in this section; -	Training and Library: eLearning modules about Open Data as well as training guides and a knowledge base referencing publications around Open Data and featured projects; - Portals can be national, regional, local or domain specific. They cover the 28 EU Member States, EEA, countries involved in the EU's neighbourhood policy and Switzerland. https://www.europeandataportal.eu/]]></skos:example>
+    <skos:example><![CDATA[The following implementation is an example on how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB): European Data Portal - The European Data Portal harvests the metadata of Public Sector Information available on public data portals across European countries. Information regarding the provision of data and the benefits of re-using data is also included. What is Open Data? -	Open (Government) Data refers to the information collected, produced or paid for by the public bodies (also referred to as Public Sector Information) and made freely available for re-use for any purpose. The licence will specify the terms of use; -	Public sector information is information held by the public sector. The Directive on the re-use of public sector information provides a common legal framework for a European market for government-held data. It is built around the key pillars of the internal market: free flow of data, transparency and fair competition. It is important to note that not all of the public sector information is Open Data. Within the Portal, sections are dedicated to: -	Searching datasets: Categories have been established to structure the metadata harvested from the various countries. These categories follow the revision of the DCAT Application Profile and have been mapped against the Eurovoc Thesaurus; -	Providing Data: This section gives an insight into understanding Open Data from the perspective of a data provider. In addition, instructions are offered for those who wish their data portal to be harvested by the European Data Portal; -	Using Data: How Open Data is being used, as well as the economic benefits of Open Data are detailed in this section; -	Training and Library: eLearning modules about Open Data as well as training guides and a knowledge base referencing publications around Open Data and featured projects; - Portals can be national, regional, local or domain specific. They cover the 28 EU Member States, EEA, countries involved in the EU's neighbourhood policy and Switzerland. https://www.europeandataportal.eu/]]></skos:example>
     <eira:iopSaliency><![CDATA[The Data Pubblication Service ABB  is salient for technical interoperability because it provides the functionalities to make public data freely available for use and reuse by others unless restriction aoply as stated in the EIF recommendation n.2: "Publish the data you own as open data unless certain restrictions apply."]]></eira:iopSaliency>
     <skos:note><![CDATA[]]></skos:note>
     <eira:concept>eira:ArchitectureBuildingBlock</eira:concept>
@@ -13590,7 +13590,7 @@ ABB name: eira:SolutionSpecificationDataObject
     <skos:topConceptOf rdf:resource="http://data.europa.eu/dr8" />
     <skos:definition xml:lang="en"><![CDATA[Definition: Controlled Vocabulary ABB is a Data Object that enables a carefully curated set of terms used to describe concepts or objects in a specific field or domain. It is a standardized list of terms that are used to ensure consistency and accuracy in the indexing, searching, and retrieval of information
 
-Source: Interoperable Europe Portal
+Source: Joinup
 
 Source reference: https://joinup.ec.europa.eu/collection/catalogue-services/document/controlled-vocabularies
 
@@ -13627,7 +13627,7 @@ Last modification: 2022-17-01
     <dcterms:modified>2022-01-17</dcterms:modified>
     <eira:synonym></eira:synonym>
     <skos:definition><![CDATA[Controlled Vocabulary ABB is a Data Object that enables a carefully curated set of terms used to describe concepts or objects in a specific field or domain. It is a standardized list of terms that are used to ensure consistency and accuracy in the indexing, searching, and retrieval of information]]></skos:definition>
-    <eira:definitionSource>Interoperable Europe Portal</eira:definitionSource>
+    <eira:definitionSource>Joinup</eira:definitionSource>
     <eira:definitionSourceReference><![CDATA[https://joinup.ec.europa.eu/collection/catalogue-services/document/controlled-vocabularies]]></eira:definitionSourceReference>
     <skos:example><![CDATA[The following implementation is an example on how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB): EuroVoc - EuroVoc is a multilingual, multidisciplinary thesaurus covering the activities of the EU, the European Parliament in particular. It contains terms in 23 EU languages (Bulgarian, Croatian, Czech, Danish, Dutch, English, Estonian, Finnish, French, German, Greek, Hungarian, Italian, Latvian, Lithuanian, Maltese, Polish, Portuguese, Romanian, Slovak, Slovenian, Spanish and Swedish), plus in three languages of countries which are candidates for EU accession: македонски (mk), shqip (sq) and cрпски (sr). (https://op.europa.eu/en/web/eu-vocabularies/th-dataset/-/resource/dataset/eurovoc)]]></skos:example>
     <eira:iopSaliency><![CDATA[The Controlled Vocabulary ABB is salient for semantic interoperability because it ensures compatible interpretations of words and phrases used to index content and/or to retrieve content through browsing or searching.]]></eira:iopSaliency>
@@ -13699,7 +13699,7 @@ Last modification: 2022-17-01
     <skos:topConceptOf rdf:resource="http://data.europa.eu/dr8" />
     <skos:definition xml:lang="en"><![CDATA[Definition: Ontologies Catalogue ABB is a Data Object aiming at indexing the collection of ontologies with comprehensiveness and trustiness value
 
-Source: Interoperable Europe Portal
+Source: Joinup
 
 Source reference: https://joinup.ec.europa.eu/taxonomy/term/http_e_f_fdata_ceuropa_ceu_fdr8_fOntologiesCatalogue
 
@@ -13736,7 +13736,7 @@ Last modification: 2023-16-01
     <dcterms:modified>2023-01-16</dcterms:modified>
     <eira:synonym></eira:synonym>
     <skos:definition><![CDATA[Ontologies Catalogue ABB is a Data Object aiming at indexing the collection of ontologies with comprehensiveness and trustiness value]]></skos:definition>
-    <eira:definitionSource>Interoperable Europe Portal</eira:definitionSource>
+    <eira:definitionSource>Joinup</eira:definitionSource>
     <eira:definitionSourceReference><![CDATA[https://joinup.ec.europa.eu/taxonomy/term/http_e_f_fdata_ceuropa_ceu_fdr8_fOntologiesCatalogue]]></eira:definitionSourceReference>
     <skos:example><![CDATA[The following implementation is an example on how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB): BioPortal - BioPortal is a repository of over 300 biomedical ontologies and includes tools for working with these ontologies. Holds most widely used Biomedical ontologies. Allows ontologies to be browsed, searched, and reviewed. Allows uses to create notes on ontologies terms. Allows arbitrary text to be annotated with ontology terms. Also supports search of biomedical resources (e.g. PubMed) for combinations of terms from ontologies. Allows programmatic access to ontologies through a REST interface.(http://bioportal.bioontology.org/)]]></skos:example>
     <eira:iopSaliency><![CDATA[The Ontologies catalogue ABB is a key interoperability enabler (*) for structural interoperability because it ensures the provision/consumption of ontologies by digital public services.]]></eira:iopSaliency>
@@ -14652,7 +14652,7 @@ Source reference: https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX
 
 Additional information: It is useful to remember that when a common interconnecting infrastructure for base registries is available, legislation is used to force its use. The use of interconnecting infrastructure prevents the proliferation of pointto-point interconnections. Stakeholders should be involved in developing the legislation and be given enough time to prepare for implementation.
 
-Example: The following implementation is an example on how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB): European Union Data Interoperable Europe Portal - The European Union Open Data Interoperable Europe Portal (EU ODP) gives you access to open data published by EU institutions and bodies. All the data you can find via this catalogue are free to use and reuse for commercial or non-commercial purposes. (https://data.europa.eu/euodp/data/dataset)
+Example: The following implementation is an example on how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB): European Union Data Portal - The European Union Open Data Portal (EU ODP) gives you access to open data published by EU institutions and bodies. All the data you can find via this catalogue are free to use and reuse for commercial or non-commercial purposes. (https://data.europa.eu/euodp/data/dataset)
 
 IoP Dimension: Structural IoP
 
@@ -14689,7 +14689,7 @@ Last modification: 2022-16-01
     <skos:definition><![CDATA[Dataset ABB is a Data Object representing a collection of related data that is organized and presented in a structured format]]></skos:definition>
     <eira:definitionSource>Inpired in the Open Data and Re-use of public sector inforamtion directive</eira:definitionSource>
     <eira:definitionSourceReference><![CDATA[https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32019L1024&from=EN#d1e1012-56-1]]></eira:definitionSourceReference>
-    <skos:example><![CDATA[The following implementation is an example on how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB): European Union Data Interoperable Europe Portal - The European Union Open Data Interoperable Europe Portal (EU ODP) gives you access to open data published by EU institutions and bodies. All the data you can find via this catalogue are free to use and reuse for commercial or non-commercial purposes. (https://data.europa.eu/euodp/data/dataset)]]></skos:example>
+    <skos:example><![CDATA[The following implementation is an example on how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB): European Union Data Portal - The European Union Open Data Portal (EU ODP) gives you access to open data published by EU institutions and bodies. All the data you can find via this catalogue are free to use and reuse for commercial or non-commercial purposes. (https://data.europa.eu/euodp/data/dataset)]]></skos:example>
     <eira:iopSaliency><![CDATA[The Data Set ABB is salient for semantic interoperability because it provides a collection of data to be shared or exchanged between ICT systmes as stated in the EIF recommendation n° 30: "Perceive data and information as a public asset that should be appropriately generated, collected, managed, shared, protected and preserved."]]></eira:iopSaliency>
     <skos:note><![CDATA[It is useful to remember that when a common interconnecting infrastructure for base registries is available, legislation is used to force its use. The use of interconnecting infrastructure prevents the proliferation of pointto-point interconnections. Stakeholders should be involved in developing the legislation and be given enough time to prepare for implementation.]]></skos:note>
     <eira:concept>eira:ArchitectureBuildingBlock</eira:concept>
@@ -14705,7 +14705,7 @@ Last modification: 2022-16-01
     <skos:topConceptOf rdf:resource="http://data.europa.eu/dr8" />
     <skos:definition xml:lang="en"><![CDATA[Definition: Software Components Catalogue ABB is a Data Object aiming to index information about collaborative spaces that offfers eGoverment solutions and best practices.
 
-Source: Interoperable Europe Portal
+Source: Joinup
 
 Source reference: https://joinup.ec.europa.eu/topic/ict/reusable-software-components
 
@@ -14740,7 +14740,7 @@ Last modification: 2022-20-01
     <dcterms:modified>2022-01-20</dcterms:modified>
     <eira:synonym></eira:synonym>
     <skos:definition><![CDATA[Software Components Catalogue ABB is a Data Object aiming to index information about collaborative spaces that offfers eGoverment solutions and best practices.]]></skos:definition>
-    <eira:definitionSource>Interoperable Europe Portal</eira:definitionSource>
+    <eira:definitionSource>Joinup</eira:definitionSource>
     <eira:definitionSourceReference><![CDATA[https://joinup.ec.europa.eu/topic/ict/reusable-software-components]]></eira:definitionSourceReference>
     <skos:example><![CDATA[The following implementation is an example of how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB): Software ReUse Catalogue (Belgium) https://joinup.ec.europa.eu/collection/belgian-interoperability-catalogue/solution/ict-reuse/about]]></skos:example>
     <eira:iopSaliency><![CDATA[The Software Components Catalogue Data Object ABB is salient for semantic interoperability because it can act as a repository with descriptive data about digital solutions and interoperable solutions and best practices. This can contribute to expanding and enabling the reuse of artefacts, solutions, and services to implement new digital public services without starting from scratch. The reuse of such elements can infer knowledge and best practices from the collaboration between parties.]]></eira:iopSaliency>
@@ -18197,7 +18197,7 @@ Synonym:
 
 Additional information:
 
-Example: The following implementation is an example on how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB): The Single Digital Gateway from the European Commission is implemented via Your Europe Interoperable Europe Portal. This portal allows searching and exchanging information from businesses at the European and national level.  information from EU and member states. https://europa.eu/youreurope/index_en.htm
+Example: The following implementation is an example on how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB): The Single Digital Gateway from the European Commission is implemented via Your Europe Portal. This portal allows searching and exchanging information from businesses at the European and national level.  information from EU and member states. https://europa.eu/youreurope/index_en.htm
 
 IoP Dimension:
 
@@ -18231,7 +18231,7 @@ Last modification:
     <skos:definition><![CDATA[Gateway ABB is a Technology Service that enables the implementation of a component that converts information, data or other communications from one protocol or format to another]]></skos:definition>
     <eira:definitionSource>Gartner</eira:definitionSource>
     <eira:definitionSourceReference><![CDATA[https://www.gartner.com/en/information-technology/glossary/gateway]]></eira:definitionSourceReference>
-    <skos:example><![CDATA[The following implementation is an example on how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB): The Single Digital Gateway from the European Commission is implemented via Your Europe Interoperable Europe Portal. This portal allows searching and exchanging information from businesses at the European and national level.  information from EU and member states. https://europa.eu/youreurope/index_en.htm]]></skos:example>
+    <skos:example><![CDATA[The following implementation is an example on how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB): The Single Digital Gateway from the European Commission is implemented via Your Europe Portal. This portal allows searching and exchanging information from businesses at the European and national level.  information from EU and member states. https://europa.eu/youreurope/index_en.htm]]></skos:example>
     <eira:iopSaliency><![CDATA[Gateway ABB is salient for technical interoperability because it physically transforms information, data and other communications from one protocol or format into another standard protocol format.]]></eira:iopSaliency>
     <skos:note><![CDATA[]]></skos:note>
     <eira:concept>eira:ArchitectureBuildingBlock</eira:concept>
@@ -19012,7 +19012,7 @@ EIRA concept: eira:ArchitectureBuildingBlock
     <skos:topConceptOf rdf:resource="http://data.europa.eu/dr8" />
     <skos:definition xml:lang="en"><![CDATA[Definition: API Gateway ABB is a Technology Service that implements the behaviour of acting as a single entry point for multiple APIs (Application Programming Interfaces)
 
-Source: Inspired in Interoperable Europe Portal
+Source: Inspired in Joinup
 
 Source reference: https://joinup.ec.europa.eu/collection/api4dt/about
 
@@ -19046,7 +19046,7 @@ Last modification: 2022-31-01
     <dcterms:modified>2022-01-31</dcterms:modified>
     <eira:synonym></eira:synonym>
     <skos:definition><![CDATA[API Gateway ABB is a Technology Service that implements the behaviour of acting as a single entry point for multiple APIs (Application Programming Interfaces)]]></skos:definition>
-    <eira:definitionSource>Inspired in Interoperable Europe Portal</eira:definitionSource>
+    <eira:definitionSource>Inspired in Joinup</eira:definitionSource>
     <eira:definitionSourceReference><![CDATA[https://joinup.ec.europa.eu/collection/api4dt/about]]></eira:definitionSourceReference>
     <skos:example><![CDATA[The following implementation is an example on how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB): API Gateway Authentication Bundle. It authenticates requests from European Commission service API Gateway. https://joinup.ec.europa.eu/collection/ecphp/solution/api-gw-authentication-php/about]]></skos:example>
     <eira:iopSaliency><![CDATA[API Gateway ABB is salient for semantic interoperability due to its setting up the rules to share multiple public administration digital services to facilitate their accessibility, discovery and sharing across platforms (catalogue of APIs). These rules follow up existing standards and common practices in the API documentation and accessibility (Open APIs description).]]></eira:iopSaliency>
@@ -19236,7 +19236,7 @@ The new European Interoperability Framework (EIF) is part of the Communication (
     <skos:definition xml:lang="en"><![CDATA[DEFINITION:
 EULF compliance ABB is a Principle consisting of a package of case studies, specifications, guidelines, training materials, recommendations and actions required by public administrations and stakeholder communities to facilitate the implementation, use and expansion of INSPIRE in an e-government context.
 
-Source: Interoperable Europe Portal
+Source: Joinup
 (https://joinup.ec.europa.eu/sites/default/files/news/attachment/jrc103110_1-dc246-d3.2_eulf_guideline_on_location_privacy_v1.00_final_-_pubsy.pdf)
 
 EXAMPLES:
@@ -19494,7 +19494,7 @@ The following implementation is an example on how this specific Architecture Bui
     <skos:definition xml:lang="en"><![CDATA[DEFINITION:
 User-centricity ABB is a Principle refering to putting users’ needs at the centre when determining which public services should be provided and how they should be delivered. Therefore, as far as possible, user needs and requirements should guide the design and development of public services, in accordance with the following expectations: i A multi-channel service delivery approach; ii A single point of contact should be made available to users; iii Users’ feedback should be systematically collected, assessed and used to design new public services and to further improve existing ones.
 
-Source: Interoperable Europe Portal
+Source: Joinup
 (https://joinup.ec.europa.eu/collection/nifo-national-interoperability-framework-observatory/glossary/term/user-centricity)
 
 EXAMPLES:
@@ -19593,7 +19593,7 @@ Administrative Simplification ABB is a Principle refering to streamlined deliver
 - Proportional approach to control
 - Simplification of solutions
 
-Source: Interoperable Europe Portal
+Source: Joinup
 (https://joinup.ec.europa.eu/collection/nifo-national-interoperability-framework-observatory/glossary/term/administrative-simplification)
 
 EXAMPLES:
@@ -20282,7 +20282,7 @@ Source:(https://www.brainkart.com/article/Functional-Requirements---Software-Arc
     <skos:definition xml:lang="en"><![CDATA[DEFINITION:
 Legal Interoperability Requirement ABB is a Requirement that must be met to help achieve legal interoperability.
 
-Source: Interoperable Europe Portal
+Source: Joinup
 (https://joinup.ec.europa.eu/sites/default/files/document/2019-06/High-level%20Interoperability%20Requirements%20Solution%20Architecture%20Template%20%28HL%20SAT%29%20Design%20Guidelines_0.pdf)
 
 EXAMPLES:
@@ -20315,7 +20315,7 @@ Source: (https://ec.europa.eu/eusurvey/runner/SIQAT_v200?startQuiz=true&surveyla
     <skos:definition xml:lang="en"><![CDATA[DEFINITION:
 Organisational Interoperability Requirement ABB is a Requirement that must be met to help achieve organisational interoperability.
 
-Source: Interoperable Europe Portal
+Source: Joinup
 (https://joinup.ec.europa.eu/sites/default/files/document/2019-06/High-level%20Interoperability%20Requirements%20Solution%20Architecture%20Template%20%28HL%20SAT%29%20Design%20Guidelines_0.pdf)
 
 EXAMPLES:
@@ -20348,7 +20348,7 @@ Source: (https://ec.europa.eu/eusurvey/runner/SIQAT_v200?startQuiz=true&surveyla
     <skos:definition xml:lang="en"><![CDATA[DEFINITION:
 Technical Interoperability Requirement ABB is a Requirement that must be met to help achieve technical interoperability.
 
-Source: Interoperable Europe Portal
+Source: Joinup
 (https://joinup.ec.europa.eu/sites/default/files/document/2019-06/High-level%20Interoperability%20Requirements%20Solution%20Architecture%20Template%20%28HL%20SAT%29%20Design%20Guidelines_0.pdf)
 
 EXAMPLES:
@@ -20381,7 +20381,7 @@ Source: (https://ec.europa.eu/eusurvey/runner/SIQAT_v200?startQuiz=true&surveyla
     <skos:definition xml:lang="en"><![CDATA[DEFINITION:
 Semantic Interoperability Requirement ABB is a Requirement that must be met to help achieve semantic interoperability.
 
-Source: Interoperable Europe Portal
+Source: Joinup
 (https://joinup.ec.europa.eu/sites/default/files/document/2019-06/High-level%20Interoperability%20Requirements%20Solution%20Architecture%20Template%20%28HL%20SAT%29%20Design%20Guidelines_0.pdf)
 
 EXAMPLES:
@@ -20657,7 +20657,7 @@ Source reference: http://eur-lex.europa.eu/resource.html?uri=cellar:2c2f2554-0fa
 
 Additional information: Studying the implementation orientation facilitate Member States in understanding the implementation impacts on the interoperability and the functioning of the digital public services from different perspectives.
 
-Example: The following implementation is an example on how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB): The four implementation orientations identified in IDPSIO, integration, technology, governance, and legal (see the Interoperable Europe Portal IDPSIO solution home page: https://joinup.ec.europa.eu/collection/european-interoperability-reference-architecture-eira/solution/egovera/release/v210).
+Example: The following implementation is an example on how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB): The four implementation orientations identified in IDPSIO, integration, technology, governance, and legal (see the Joinup IDPSIO solution home page: https://joinup.ec.europa.eu/collection/european-interoperability-reference-architecture-eira/solution/egovera/release/v210).
 
 IoP Dimension: Governance IoP
 
@@ -20690,7 +20690,7 @@ Last modification: 2022-12-01
     <skos:definition><![CDATA[Interoperable Digital Public Service Implementation Orientation ABB is a Constraint that implements the approach that a digital public service owner has to follow to implement their digital public services.]]></skos:definition>
     <eira:definitionSource>European Interoperability Framework (EIF)</eira:definitionSource>
     <eira:definitionSourceReference><![CDATA[http://eur-lex.europa.eu/resource.html?uri=cellar:2c2f2554-0faf-11e7-8a35-01aa75ed71a1.0017.02/DOC_3&format=PDF]]></eira:definitionSourceReference>
-    <skos:example><![CDATA[The following implementation is an example on how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB): The four implementation orientations identified in IDPSIO, integration, technology, governance, and legal (see the Interoperable Europe Portal IDPSIO solution home page: https://joinup.ec.europa.eu/collection/european-interoperability-reference-architecture-eira/solution/egovera/release/v210).]]></skos:example>
+    <skos:example><![CDATA[The following implementation is an example on how this specific Architecture Building Block (ABB) can be instantiated as a Solution Building Block (SBB): The four implementation orientations identified in IDPSIO, integration, technology, governance, and legal (see the Joinup IDPSIO solution home page: https://joinup.ec.europa.eu/collection/european-interoperability-reference-architecture-eira/solution/egovera/release/v210).]]></skos:example>
     <eira:iopSaliency><![CDATA[Interoperable Digital Public Service Implementation Orientation ABB is salient for governance interoperability because it supports digital public service owners in deciding the approach to follow to implement their digital public services.]]></eira:iopSaliency>
     <skos:note><![CDATA[Studying the implementation orientation facilitate Member States in understanding the implementation impacts on the interoperability and the functioning of the digital public services from different perspectives.]]></skos:note>
     <eira:concept>eira:ArchitectureBuildingBlock</eira:concept>
@@ -25053,7 +25053,7 @@ Last modification: 2023-10-01
     <skos:topConceptOf rdf:resource="http://data.europa.eu/dr8" />
     <skos:definition xml:lang="en"><![CDATA[Definition: Shared Infrastructure Content ABB is a Grouping that refers to the set of tools and services that pools IT infrastructure provided by the service provider (e.g. hardware, operating system software, associated operating processes and tools) that can be physically used by several users at the time, thus being "shared". In particular, the service provider ensures compliance with all security standards and the logical separation of data and applications
 
-Source: Interoperable Europe Portal
+Source: Joinup
 
 Source reference: https://joinup.ec.europa.eu/collection/nifo-national-interoperability-framework-observatory/glossary/term/shared-infrastructure
 
@@ -25091,7 +25091,7 @@ Last modification: 2022-31-01
     <dcterms:modified>2022-01-31</dcterms:modified>
     <eira:synonym></eira:synonym>
     <skos:definition><![CDATA[Shared Infrastructure Content ABB is a Grouping that refers to the set of tools and services that pools IT infrastructure provided by the service provider (e.g. hardware, operating system software, associated operating processes and tools) that can be physically used by several users at the time, thus being "shared". In particular, the service provider ensures compliance with all security standards and the logical separation of data and applications]]></skos:definition>
-    <eira:definitionSource>Interoperable Europe Portal</eira:definitionSource>
+    <eira:definitionSource>Joinup</eira:definitionSource>
     <eira:definitionSourceReference><![CDATA[https://joinup.ec.europa.eu/collection/nifo-national-interoperability-framework-observatory/glossary/term/shared-infrastructure]]></eira:definitionSourceReference>
     <skos:example><![CDATA[]]></skos:example>
     <eira:iopSaliency><![CDATA[Shared Infrastructure Content ABB is a key interoperability enabler (*) for structural, behavioural and governance interoperability. It is salient for technical interoperability because it determines the tools and services that can be used by stakeholders or other digital services to interconnect services and data. This ABB also technically establish security standards compliance to deliver such public services.]]></eira:iopSaliency>

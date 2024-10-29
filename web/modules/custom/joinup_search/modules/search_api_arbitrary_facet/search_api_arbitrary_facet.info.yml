@@ -1,8 +1,8 @@
-name: Interoperable Europe Portal search arbitrary facet
+name: Joinup search arbitrary facet
 type: module
 description: Allows adding facets based on arbitrary queries.
 core_version_requirement: ">= 9.4"
-package: Interoperable Europe Portal
+package: Joinup
 
 dependencies:
   - facets:facets

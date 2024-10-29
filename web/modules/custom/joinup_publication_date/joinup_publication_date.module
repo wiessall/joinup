@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Hook implementations for the Interoperable Europe Portal Publication Date module.
+ * Hook implementations for the Joinup Publication Date module.
  */
 
 declare(strict_types=1);

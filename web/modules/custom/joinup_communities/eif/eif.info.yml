@@ -2,7 +2,7 @@ name: European Interoperability Framework
 type: module
 description: Custom functionality for the European Interoperability Framework community.
 core_version_requirement: ">= 9.4"
-package: Interoperable Europe Portal communities
+package: Joinup communities
 dependencies:
   - drupal:text
   - joinup:custom_page

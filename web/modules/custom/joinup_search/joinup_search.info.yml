@@ -1,7 +1,7 @@
-name: Interoperable Europe Portal search
-description: Integrates the Interoperable Europe Portal project with Solr.
+name: Joinup search
+description: Integrates the Joinup project with Solr.
 type: module
-package: Interoperable Europe Portal
+package: Joinup
 core_version_requirement: ">= 9.4"
 
 dependencies:

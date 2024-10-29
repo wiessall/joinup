@@ -1,7 +1,7 @@
 name: Legal
-description: 'Deals with the legal aspects of using Interoperable Europe Portal as an end-user.'
+description: 'Deals with the legal aspects of using Joinup as an end-user.'
 type: module
-package: Interoperable Europe Portal
+package: Joinup
 core_version_requirement: ">= 9.4"
 
 dependencies:

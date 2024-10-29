@@ -1,6 +1,6 @@
 type: module
 name: 'Statistics test'
-description: 'Used to test Interoperable Europe Portal Statistics.'
+description: 'Used to test Joinup Statistics.'
 core_version_requirement: ">= 9.4"
 package: Testing
 dependecies:

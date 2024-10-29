@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Hook implementations for Interoperable Europe Portal Media module.
+ * Hook implementations for Joinup Media module.
  */
 
 declare(strict_types=1);

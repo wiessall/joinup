@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Main functions and hook implementations of the Interoperable Europe Portal EU Login module.
+ * Main functions and hook implementations of the Joinup EU Login module.
  */
 
 declare(strict_types=1);
@@ -51,9 +51,9 @@ function joinup_eulogin_form_user_form_alter(array &$form, FormStateInterface $f
   $account = $form_state->getFormObject()->getEntity();
   // This hook implementation runs after cas_form_user_form_alter() because the
   // two modules have the same weight but the module list is sorted by weight
-  // and then alphabetically, making the CAS module to be placed before
-  // 'Interoperable Europe Portal EU Login'. For this reason, it's safe to use
-  // the form alter to overwrite the behavior of CAS module hook implementation.
+  // and then alphabetically, making the CAS module to be placed before 'Joinup
+  // EU Login'. For this reason, it's safe to use the form alter to overwrite
+  // the behavior of CAS module hook implementation.
   // @see module_config_sort()
   // @see cas_form_user_form_alter()
   $cas_settings = \Drupal::config('cas.settings');

@@ -37,7 +37,7 @@ class JoinupMediaLibrary extends MediaLibrary {
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity type manager.
    * @param \Drupal\joinup_group\JoinupGroupManagerInterface $groupManager
-   *   The Interoperable Europe Portal group manager service.
+   *   The Joinup group manager service.
    */
   public function __construct(array $configuration, string $pluginId, CKEditor5PluginDefinition $pluginDefinition, EntityTypeManagerInterface $entityTypeManager, protected JoinupGroupManagerInterface $groupManager) {
     parent::__construct($configuration, $pluginId, $pluginDefinition, $entityTypeManager);

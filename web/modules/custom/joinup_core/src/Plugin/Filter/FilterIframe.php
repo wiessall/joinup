@@ -22,7 +22,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 #[Filter(
   id: "joinup_iframe",
-  title: new TranslatableMarkup("Interoperable Europe Portal iframe filter"),
+  title: new TranslatableMarkup("Joinup iframe filter"),
   type: FilterInterface::TYPE_TRANSFORM_IRREVERSIBLE,
   description: new TranslatableMarkup("Filters <code>iframe</code> tags according to allowed domains."),
   settings: [

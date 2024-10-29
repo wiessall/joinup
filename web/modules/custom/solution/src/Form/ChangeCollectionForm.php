@@ -41,7 +41,7 @@ class ChangeCollectionForm extends FormBase {
   protected $selectionPluginManager;
 
   /**
-   * The Interoperable Europe Portal logger channel.
+   * The Joinup logger channel.
    *
    * @var \Drupal\Core\Logger\LoggerChannelInterface
    */

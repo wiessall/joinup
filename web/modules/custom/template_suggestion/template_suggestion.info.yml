@@ -1,5 +1,5 @@
 name: 'Template suggestion'
 description: 'Allows fields to declare custom template suggestions in third party settings.'
 type: module
-package: Interoperable Europe Portal
+package: Joinup
 core_version_requirement: ">= 9.4"
