@@ -18,8 +18,8 @@ Feature:
       | collection            | user  |
       | Paragraphs collection | Zohan |
     And custom_page content:
-      | title                     | body        | collection            | author | state     | topic |
-      | Don't Mess with the Zohan | Wanna mess? | Paragraphs collection | Zohan  | published | HR    |
+      | title                     | abstract | body        | collection            | author | state     | topic |
+      | Don't Mess with the Zohan | Wanna    | Wanna mess? | Paragraphs collection | Zohan  | published | HR    |
     And I append "layout" to "field_paragraphs_body" field in "node" entity with following "Don't Mess with the Zohan" title:
       | behavior_settings | a:3:{s:17:"layout_paragraphs";a:4:{s:6:"layout";s:13:"layout_onecol";s:6:"config";a:1:{s:5:"label";s:0:"";}s:11:"parent_uuid";N;s:6:"region";N;}s:16:"background_theme";a:0:{}s:11:"extra_class";a:0:{}} |
 
