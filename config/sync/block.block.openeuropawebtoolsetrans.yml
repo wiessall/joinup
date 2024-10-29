@@ -11,7 +11,7 @@ dependencies:
 id: openeuropawebtoolsetrans
 theme: iop
 region: content
-weight: -20
+weight: -7
 provider: null
 plugin: oe_webtools_etrans
 settings:
