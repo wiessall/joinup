@@ -74,7 +74,8 @@ Feature:
     And I click "Add custom page" in the plus button menu
     Then I should see the heading "Add custom page"
     When I fill in the following:
-      | Title | Latest content |
+      | Title    | Latest content       |
+      | Abstract | Lorem ipsum abstract |
     And I select "HR" from "Topic"
     And I add a layout paragraph in the "Custom page body" form field with the following properties:
       | layout           | one column |
@@ -171,6 +172,7 @@ Feature:
     And I click "Add custom page" in the plus button menu
     Then I should see the heading "Add custom page"
     When I fill in "Title" with "Chosen content"
+    And I fill in "Abstract" with "Abstract chosen content"
     And I select "HR" from "Topic"
     And I add a layout paragraph in the "Custom page body" form field with the following properties:
       | layout           | one column |
@@ -330,7 +332,8 @@ Feature:
 
     Then I should see the heading "Add custom page"
     When I fill in the following:
-      | Title | Collection content |
+      | Title    | Collection content          |
+      | Abstract | Abstract collection content |
     And I select "HR" from "Topic"
     And I add a layout paragraph in the "Custom page body" form field with the following properties:
       | layout           | one column |
@@ -573,8 +576,8 @@ Feature:
       | Black Noise        | Nintendo64 | published |
 
     And custom_page content:
-      | title | collection | state     |
-      | Bikes | Nintendo64 | published |
+      | title | collection | state     | abstract |
+      | Bikes | Nintendo64 | published | N/A      |
 
     And I am logged in as jimmy7892
     And I go to the edit form of the "Bikes" "custom page"

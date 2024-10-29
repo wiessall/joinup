@@ -17,6 +17,11 @@ class ConfigTest extends JoinupExistingSiteTestBase {
   use DrushTestTrait;
 
   /**
+   * {@inheritdoc}
+   */
+  protected bool $disableSpamProtection = FALSE;
+
+  /**
    * Tests that the active and sync stores are the same.
    */
   public function testConfig(): void {

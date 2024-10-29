@@ -22,6 +22,7 @@ use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Entity\EntityChangedInterface;
 use Drupal\Core\Site\Settings;
 use Drupal\Driver\Exception\UnsupportedDriverActionException as UnsupportedDrupalDriverActionException;
+use Drupal\DrupalExtension\Context\ConfigContext;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\DrupalExtension\TagTrait;
 use Drupal\image\Plugin\Field\FieldType\ImageItem;
@@ -2245,39 +2246,15 @@ class FeatureContext extends RawDrupalContext {
   }
 
   /**
-   * Disables cookie consent banner for all tests.
+   * Disable cookie consent for all scenarios unless tagged with @cookieConsent.
    *
-   * @BeforeSuite
+   * @BeforeScenario ~@cookieConsent&&@api
    */
-  public static function suiteDisableCookieConsent(): void {
-    touch(__DIR__ . '/../../../disable-cookie-consent');
-  }
-
-  /**
-   * Re-enables cookie consent banner after testing.
-   *
-   * @AfterSuite
-   */
-  public static function suiteEnableCookieConsent(): void {
-    @unlink(__DIR__ . '/../../../disable-cookie-consent');
-  }
-
-  /**
-   * Enables cookie consent banner for @cookieConsent test.
-   *
-   * @BeforeScenario @cookieConsent&&@api
-   */
-  public function scenarioEnableCookieConsent(): void {
-    @unlink(__DIR__ . '/../../../disable-cookie-consent');
-  }
-
-  /**
-   * Disables cookie consent banner after @cookieConsent test.
-   *
-   * @AfterScenario @cookieConsent&&@api
-   */
-  public function scenarioDisableCookieConsent(): void {
-    touch(__DIR__ . '/../../../disable-cookie-consent');
+  public function disableCookieConsent(): void {
+    $config_context = $this->getContext(ConfigContext::class);
+    $name = 'oe_webtools_cookie_consent.settings';
+    $config_context->setConfig($name, 'banner_popup', FALSE);
+    $config_context->setConfig($name, 'video_popup', FALSE);
   }
 
   /**
