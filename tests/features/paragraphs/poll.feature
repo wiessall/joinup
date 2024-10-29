@@ -88,8 +88,8 @@ Feature: Pool paragraph tests.
 
   Scenario: Poll paragraph can be added
     Given custom_page content:
-      | title           | collection      | state     |
-      | Scariest things | Poll collection | published |
+      | title           | collection      | state     | abstract                 |
+      | Scariest things | Poll collection | published | Scariest things abstract |
     And I append "layout" to "field_paragraphs_body" field in "node" entity with following "Scariest things" title:
       | behavior_settings | a:3:{s:17:"layout_paragraphs";a:4:{s:6:"layout";s:13:"layout_onecol";s:6:"config";a:1:{s:5:"label";s:0:"";}s:11:"parent_uuid";N;s:6:"region";N;}s:16:"background_theme";a:0:{}s:11:"extra_class";a:0:{}} |
 
