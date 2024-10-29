@@ -110,7 +110,7 @@ Feature: Asset release moderation
     Then I should see the text "Release of the dark ship v1" in the "Page title" region
     And the email sent to "Bonnie Holloway" with subject "Interoperable Europe Portal: Modification of a release of your solution has been requested" contains the following lines of text:
       | the Interoperable Europe Portal moderation team requires editing the release Release, v1 of the solution Dark Ship due to I don't like it. |
-      | If you think this action is not clear or not due, please contact Interoperable Europe Portal Support at                                    |
+      | If you think this action is not clear or not due, please contact Portal Support at                                    |
     And the following email should have been sent:
       | recipient | Felix Russell                                                                                                         |
       | subject   | Interoperable Europe Portal: Modification of a release of your solution has been requested                                                 |

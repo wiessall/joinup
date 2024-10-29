@@ -14,7 +14,7 @@ Feature: Submit the contact form
     # There should be a link to the contact form in the footer.
     Given I am not logged in
     When I visit "/?destination=collections"
-    And I click "Contact Interoperable Europe Portal Support" in the "Footer" region
+    And I click "Contact Portal Support" in the "Footer" region
     And I should see the heading "Contact"
     And the "Category" select should contain the following options:
       | - Select a value -             |
@@ -40,7 +40,7 @@ Feature: Submit the contact form
     Then I should be on "collections"
 
     And I am on the homepage
-    When I click "Contact Interoperable Europe Portal Support" in the "Footer" region
+    When I click "Contact Portal Support" in the "Footer" region
     And I fill in the following:
       | First name     | Oswine                      |
       | Last name      | Wulfric                     |
