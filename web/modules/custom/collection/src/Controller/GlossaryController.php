@@ -15,7 +15,7 @@ use Drupal\node\NodeInterface;
 use Drupal\views\Views;
 
 /**
- * Provides controllers for Interoperable Europe Portal glossary functionality.
+ * Provides controllers for Joinup glossary functionality.
  */
 class GlossaryController extends ControllerBase {
 

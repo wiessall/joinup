@@ -1,8 +1,8 @@
-# Schema for the views plugins of the Interoperable Europe Portal group module.
+# Schema for the views plugins of the Joinup group module.
 
 views.argument_validator.joinup_group_entity_id:
   type: views.argument_validator_entity
-  label: 'Interoperable Europe Portal group entity ID'
+  label: 'Joinup group entity ID'
   mapping:
     rdf_entity_id:
       type: string

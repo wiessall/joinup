@@ -1,6 +1,6 @@
-# Ventuno for Interoperable Europe Portal theme
+# Ventuno for Joinup theme
 
-Custom theme for Interoperable Europe Portal. Built on the [OpenEuropa Bootstrap
+Custom theme for Joinup. Built on the [OpenEuropa Bootstrap
 theme](https://github.com/openeuropa/oe_bootstrap_theme).
 
 The recommended development workflow is to use Docker. See the main README file
@@ -28,7 +28,7 @@ you will need to install the following dependencies:
 
 The code is publicly available at
 [https://git.fpfis.tech.ec.europa.eu/ec-europa/digit-joinup-reference](https://git.fpfis.tech.ec.europa.eu/ec-europa/digit-joinup-reference)
-as part of the Interoperable Europe Portal project. The development is coordinated in a private Jira
+as part of the Joinup project. The development is coordinated in a private Jira
 instance: [https://citnet.tech.ec.europa.eu/CITnet/jira/projects/ISAICP](https://citnet.tech.ec.europa.eu/CITnet/jira/projects/ISAICP).
 
 When frontend development is requested, in most cases this will be preceded by a
@@ -36,7 +36,7 @@ backend ticket that will be developed first. After the backend work is reviewed
 and approved in user acceptance testing a separate frontend sister ticket is
 created. Since the backend and frontend will need to be delivered to production
 simultaneously, the frontend ticket will be forked off the branch that contains
-the backend functionality. In Interoperable Europe Portal parlance the combination of both tickets is
+the backend functionality. In Joinup parlance the combination of both tickets is
 called a "mini-epic". Once the FE ticket is reviewed and accepted, both will be
 merged into the `develop` branch to be included in the next release.
 
@@ -102,7 +102,7 @@ directory.
 
 ## Notes
 
-This guide should be expanded with more practices used by the Interoperable Europe Portal project.
+This guide should be expanded with more practices used by the Joinup project.
 Things possibly missing:
 * Better way to be able to view BCL components and understand how to interact
 with them.

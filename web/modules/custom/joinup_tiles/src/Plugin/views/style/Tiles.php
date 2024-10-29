@@ -9,7 +9,7 @@ use Drupal\views\Plugin\views\style\StylePluginBase;
 /**
  * A Views style that renders markup for "Tiles".
  *
- * A "tile" is Interoperable Europe Portal terminology for a "card".
+ * A "tile" is Joinup terminology for a "card".
  *
  * How to use this:
  * 1. Create a view that uses the 'Tiles' style (called 'format' in the UI).

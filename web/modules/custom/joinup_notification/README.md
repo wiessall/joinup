@@ -1,4 +1,4 @@
-# Interoperable Europe Portal notification module
+# Joinup notification module
 
 The joinup notification module is a custom module that depends only on message,
 message_notify, og and state machine.

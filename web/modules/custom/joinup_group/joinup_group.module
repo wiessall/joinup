@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Hook implementations for the Interoperable Europe Portal Group module.
+ * Hook implementations for the Joinup Group module.
  */
 
 declare(strict_types=1);
@@ -883,9 +883,9 @@ function joinup_group_user_predelete(EntityInterface $entity): void {
  *
  * If a user gets blocked in the entire site we no longer want to include this
  * user in the collection membership counts. We handle this use case here in
- * Interoperable Europe Portal Core since Organic Groups currently only handles
- * users that are blocked on group level through the membership state; at this
- * time OG is not acting on users that are blocked on user level.
+ * Joinup Core since Organic Groups currently only handles users that are
+ * blocked on group level through the membership state; at this time OG is not
+ * acting on users that are blocked on user level.
  */
 function joinup_group_user_update(UserInterface $user): void {
   // Only invalidate the tags if the user is being (un)blocked.

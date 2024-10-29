@@ -16,7 +16,7 @@ field_name: access_url
 entity_type: node
 bundle: distribution
 label: 'Access URL'
-description: 'If the file(s) exist in an external server, you can provide the URL here directly. You can alternatively host your distribution in Interoperable Europe Portal by using the Distribution file field above.'
+description: 'If the file(s) exist in an external server, you can provide the URL here directly. You can alternatively host your distribution in Joinup by using the Distribution file field above.'
 required: false
 translatable: false
 default_value: {  }

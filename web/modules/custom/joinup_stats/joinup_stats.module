@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Interoperable Europe Portal Statistics module main file.
+ * Joinup Statistics module main file.
  */
 
 declare(strict_types=1);

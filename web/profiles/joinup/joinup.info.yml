@@ -1,10 +1,10 @@
-name: Interoperable Europe Portal
+name: Joinup
 type: profile
-description: 'Interoperable Europe Portal is a collaborative platform created by the European Commission and funded by the European Union via the Interoperability Solutions for European Public Administrations (ISA) Programme. It offers several services that aim to help e-Government professionals share their experience with each other.'
+description: 'Joinup is a collaborative platform created by the European Commission and funded by the European Union via the Interoperability Solutions for European Public Administrations (ISA) Programme. It offers several services that aim to help e-Government professionals share their experience with each other.'
 core_version_requirement: ">= 9.4"
 
 distribution:
-  name: Interoperable Europe Portal
+  name: Joinup
 themes:
   - ventuno
   - iop

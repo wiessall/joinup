@@ -1,5 +1,5 @@
-name: Interoperable Europe Portal Workflow
-description: Shared code for handling workflows in Interoperable Europe Portal.
+name: Joinup Workflow
+description: Shared code for handling workflows in Joinup.
 type: module
-package: Interoperable Europe Portal
+package: Joinup
 core_version_requirement: ">= 9.4"

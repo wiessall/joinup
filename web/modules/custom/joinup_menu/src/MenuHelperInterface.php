@@ -38,7 +38,7 @@ interface MenuHelperInterface {
    *
    * The landing pages returned are:
    *   - Interoperable Europe collection landing page.
-   *   - Interoperable Europe Portal collection landing page.
+   *   - Joinup collection landing page.
    *
    * @return array[]
    *   An array of menu links for the anonymous menu in the BCL header template

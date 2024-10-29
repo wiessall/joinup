@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Contains the Interoperable Europe Portal Legal module main file.
+ * Contains the Joinup Legal module main file.
  */
 
 declare(strict_types=1);

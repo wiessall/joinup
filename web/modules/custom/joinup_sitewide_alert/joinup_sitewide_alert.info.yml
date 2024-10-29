@@ -1,7 +1,7 @@
-name: Interoperable Europe Portal Sitewide alerts
+name: Joinup Sitewide alerts
 description: Contains customisation for sitewide_alert module.
 type: module
-package: Interoperable Europe Portal
+package: Joinup
 core_version_requirement: ">= 9.4"
 
 dependencies:

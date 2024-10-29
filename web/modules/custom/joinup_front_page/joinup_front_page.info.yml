@@ -1,5 +1,5 @@
-name: 'Interoperable Europe Portal front page'
-description: 'Contains functionality related to the Interoperable Europe Portal front page.'
+name: 'Joinup front page'
+description: 'Contains functionality related to the Joinup front page.'
 type: module
-package: Interoperable Europe Portal
+package: Joinup
 core_version_requirement: ">= 9.4"

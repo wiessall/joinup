@@ -1,5 +1,5 @@
-name: 'Interoperable Europe Portal Bundle Class'
-description: 'Shared code for entity types that implement bundle classes in Interoperable Europe Portal.'
+name: 'Joinup Bundle Class'
+description: 'Shared code for entity types that implement bundle classes in Joinup.'
 type: module
-package: Interoperable Europe Portal
+package: Joinup
 core_version_requirement: ">= 9.4"

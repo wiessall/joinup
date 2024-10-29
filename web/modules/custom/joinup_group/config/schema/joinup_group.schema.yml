@@ -64,7 +64,7 @@ views.argument_validator.joinup_group_user_permission:
 
 views.argument_validator.joinup_group:
   type: views.argument_validator.joinup_group_user_permission
-  label: Interoperable Europe Portal group
+  label: Joinup group
 
 views.argument_validator.joinup_group_announcements_enabled:
   type: views.argument_validator.joinup_group_user_permission

@@ -283,7 +283,7 @@ abstract class NotificationSubscriberBase implements EventSubscriberInterface {
    *   - Actor first name
    *   - Actor family name
    *   - Actor role
-   *   - Actor full name (This will be 'The Portal Support Team' if the user
+   *   - Actor full name (This will be 'The Joinup Support Team' if the user
    *   has the moderator role)
    *
    * @throws \Drupal\Core\Entity\EntityMalformedException

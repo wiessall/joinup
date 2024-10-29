@@ -1,6 +1,6 @@
 joinup_eulogin.settings:
   type: config_object
-  label: 'Interoperable Europe Portal EU Login Settings'
+  label: 'Joinup EU Login Settings'
   mapping:
     ticket_validation:
       type: mapping

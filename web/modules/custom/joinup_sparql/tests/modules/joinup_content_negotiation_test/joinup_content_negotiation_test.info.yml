@@ -1,4 +1,4 @@
-name: 'Interoperable Europe Portal Content Negotiation  Test'
+name: 'Joinup Content Negotiation  Test'
 type: module
 description: 'Provides a module for testing content negotiation.'
 core_version_requirement: ">= 9.4"

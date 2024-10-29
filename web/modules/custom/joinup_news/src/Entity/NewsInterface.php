@@ -10,7 +10,7 @@ use Drupal\joinup_community_content\Entity\CommunityContentInterface;
 use Drupal\joinup_workflow\ArchivableEntityInterface;
 
 /**
- * Interface for news entities in Interoperable Europe Portal.
+ * Interface for news entities in Joinup.
  */
 interface NewsInterface extends CommunityContentInterface, LogoInterface, ArchivableEntityInterface, AbstractInterface {
 

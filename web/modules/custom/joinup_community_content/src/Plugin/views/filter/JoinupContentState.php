@@ -13,7 +13,7 @@ use Drupal\state_machine_permissions\StateMachinePermissionsHelperInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Interoperable Europe Portal content state.
+ * Joinup content state.
  *
  * Workflow for nodes are calculated based on the associated group. We can not
  * use the standard approach because state filter does not use a real entity,

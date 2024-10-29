@@ -1,5 +1,5 @@
-name: 'Interoperable Europe Portal debug'
+name: 'Joinup debug'
 description: 'Provides additional logging when unexpected behavior occurs.'
 type: module
-package: Interoperable Europe Portal
+package: Joinup
 core_version_requirement: ">= 9.4"

@@ -1,8 +1,8 @@
-Interoperable Europe Portal Licence
+Joinup Licence
 ==============
 
 This module imports licences from the [SPDX Licence
-List](https://spdx.org/licenses/) and makes them available in Interoperable Europe Portal as RDF
+List](https://spdx.org/licenses/) and makes them available in Joinup as RDF
 data for use in distributions.
 
 Importing licences from SPDX

@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Main file of Interoperable Europe Portal OSS Catalogue module.
+ * Main file of Joinup OSS Catalogue module.
  */
 
 declare(strict_types=1);

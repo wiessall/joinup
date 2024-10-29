@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Enables modules and site configuration for the Interoperable Europe Portal profile.
+ * Enables modules and site configuration for the Joinup profile.
  */
 
 declare(strict_types=1);

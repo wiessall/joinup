@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Hook implementations for the Interoperable Europe Portal RDF module.
+ * Hook implementations for the Joinup RDF module.
  */
 
 declare(strict_types=1);

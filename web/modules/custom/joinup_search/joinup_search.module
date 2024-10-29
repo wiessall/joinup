@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Provides functionality for the Interoperable Europe Portal search module.
+ * Provides functionality for the Joinup search module.
  */
 
 declare(strict_types=1);

@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Main functions and hook implementations of the Interoperable Europe Portal Poll module.
+ * Main functions and hook implementations of the Joinup Poll module.
  */
 
 declare(strict_types=1);

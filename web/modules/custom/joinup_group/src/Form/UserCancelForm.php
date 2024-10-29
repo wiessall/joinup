@@ -38,7 +38,7 @@ class UserCancelForm extends CoreUserCancelForm {
    * @param \Drupal\Component\Datetime\TimeInterface $time
    *   The time service.
    * @param \Drupal\joinup_group\JoinupGroupManagerInterface $group_manager
-   *   The Interoperable Europe Portal group manager.
+   *   The Joinup group manager.
    */
   public function __construct(EntityRepositoryInterface $entity_repository, EntityTypeBundleInfoInterface $entity_type_bundle_info, TimeInterface $time, JoinupGroupManagerInterface $group_manager) {
     parent::__construct($entity_repository, $entity_type_bundle_info, $time);

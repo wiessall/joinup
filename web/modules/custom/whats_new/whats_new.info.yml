@@ -1,7 +1,7 @@
 name: Whats new
 description: Provides a way to feature a menu item and remember users that visited the entity linked.
 type: module
-package: Interoperable Europe Portal
+package: Joinup
 core_version_requirement: ">= 9.4"
 
 dependencies:

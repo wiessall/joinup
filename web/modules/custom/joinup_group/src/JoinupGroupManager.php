@@ -18,7 +18,7 @@ use Drupal\og\OgContextInterface;
 use Drupal\og\OgMembershipInterface;
 
 /**
- * Helper methods related to the Interoperable Europe Portal groups.
+ * Helper methods related to the Joinup groups.
  */
 class JoinupGroupManager implements JoinupGroupManagerInterface {
 

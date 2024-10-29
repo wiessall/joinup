@@ -29,7 +29,7 @@ class RouteSubscriber extends RouteSubscriberBase {
    */
   protected function alterRoutes(RouteCollection $collection): void {
     // @todo Consider making this configurable by additional configuration
-    // options either in Interoperable Europe Portal or in the contrib module.
+    // options either in Joinup or in the contrib module.
     foreach (static::ALLOWED_BUNDLES_PER_TYPE as $entityTypeId => $allowedBundles) {
       if (!$route = $collection->get("entity.$entityTypeId.replicate")) {
         continue;

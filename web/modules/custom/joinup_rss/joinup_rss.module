@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Provides functionality for the Interoperable Europe Portal RSS module.
+ * Provides functionality for the Joinup RSS module.
  */
 
 declare(strict_types=1);

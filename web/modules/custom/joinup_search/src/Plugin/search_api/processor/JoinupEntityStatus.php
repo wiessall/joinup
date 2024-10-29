@@ -23,7 +23,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *
  * @SearchApiProcessor(
  *   id = "joinup_entity_status",
- *   label = @Translation("Interoperable Europe Portal entity status"),
+ *   label = @Translation("Joinup entity status"),
  *   description = @Translation("Exclude unpublished content, rdf entities and users."),
  *   stages = {
  *     "alter_items" = 0,

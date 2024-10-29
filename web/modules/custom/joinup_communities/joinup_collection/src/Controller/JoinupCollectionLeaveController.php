@@ -25,7 +25,7 @@ class JoinupCollectionLeaveController {
    *   The access result object.
    */
   public static function access(RdfInterface $rdf_entity): AccessResultInterface {
-    // The 'Interoperable Europe Portal' membership can not be revoked.
+    // The 'Joinup' membership can not be revoked.
     if ($rdf_entity->id() === JoinupCollectionHelper::getCollectionId()) {
       return AccessResult::forbidden();
     }

@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Install, update and uninstall functions for Interoperable Europe Portal Search module.
+ * Install, update and uninstall functions for Joinup Search module.
  */
 
 declare(strict_types=1);

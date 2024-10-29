@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup_tour;
 
 /**
- * Helper methods for dealing with tours on Interoperable Europe Portal.
+ * Helper methods for dealing with tours on Joinup.
  */
 interface TourHelperInterface {
 

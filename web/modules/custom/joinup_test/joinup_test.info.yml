@@ -1,7 +1,7 @@
-name: 'Interoperable Europe Portal Test'
-description: 'Contains functionality to test Interoperable Europe Portal.'
+name: 'Joinup Test'
+description: 'Contains functionality to test Joinup.'
 type: module
-package: Interoperable Europe Portal
+package: Joinup
 core_version_requirement: ">= 9.4"
 dependencies:
   - http_request_mock:http_request_mock

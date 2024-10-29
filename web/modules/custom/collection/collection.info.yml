@@ -1,7 +1,7 @@
 name: Collection
-description: 'Provides Collections for the Interoperable Europe Portal project.'
+description: 'Provides Collections for the Joinup project.'
 type: module
-package: Interoperable Europe Portal
+package: Joinup
 core_version_requirement: ">= 9.4"
 dependencies:
   - drupal:datetime

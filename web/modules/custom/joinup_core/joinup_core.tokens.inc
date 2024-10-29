@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Tokens support for Interoperable Europe Portal Core module.
+ * Tokens support for Joinup Core module.
  */
 
 declare(strict_types=1);

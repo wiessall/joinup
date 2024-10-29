@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Hook implementations for the Interoperable Europe Portal Event module.
+ * Hook implementations for the Joinup Event module.
  */
 
 declare(strict_types=1);
@@ -149,7 +149,7 @@ function joinup_event_field_formatter_info_alter(array &$info): void {
 function joinup_event_token_info_alter(&$info): void {
   $info['tokens']['node']['event_url'] = [
     'name' => t('Url of the event'),
-    'description' => t('The website provided if available or the Interoperable Europe Portal event URL.'),
+    'description' => t('The website provided if available or the Joinup event URL.'),
   ];
 }
 
@@ -166,7 +166,7 @@ function joinup_event_tokens($type, array $tokens, array $data = [], array $opti
     foreach ($tokens as $name => $original) {
       switch ($name) {
         // Returns the event URL. If the event has a web URL, then this is the
-        // event URL. Otherwise use the Interoperable Europe Portal URL.
+        // event URL. Otherwise use the Joinup URL.
         case 'event_url':
           if ($node->isNew() || !$node instanceof EventInterface) {
             break;

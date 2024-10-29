@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Hook implementations for the Interoperable Europe Portal Invite module.
+ * Hook implementations for the Joinup Invite module.
  */
 
 declare(strict_types=1);

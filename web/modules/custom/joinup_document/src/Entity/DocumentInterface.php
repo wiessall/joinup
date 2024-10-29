@@ -10,7 +10,7 @@ use Drupal\joinup_community_content\Entity\CommunityContentInterface;
 use Drupal\joinup_workflow\ArchivableEntityInterface;
 
 /**
- * Interface for document entities in Interoperable Europe Portal.
+ * Interface for document entities in Joinup.
  */
 interface DocumentInterface extends CommunityContentInterface, LogoInterface, ArchivableEntityInterface, AbstractInterface {
 

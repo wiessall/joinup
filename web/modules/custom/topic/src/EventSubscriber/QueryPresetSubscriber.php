@@ -10,7 +10,7 @@ use Drupal\search_api_field\Event\AlterQueryPresetsDescriptionEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * Interoperable Europe Portal Topic event subscriber.
+ * Joinup Topic event subscriber.
  */
 class QueryPresetSubscriber implements EventSubscriberInterface {
 

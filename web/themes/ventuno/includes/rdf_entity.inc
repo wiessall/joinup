@@ -77,8 +77,7 @@ function ventuno_preprocess_rdf_entity__solution__view_mode_search_list_item(arr
   }
 
   // Provides variables needed for the search_list_item view mode of licences.
-  // This is used on the Interoperable Europe Portal Licence Assistant
-  // overview page.
+  // This is used on the Joinup Licence Assistant overview page.
   $data_property_categories = [];
 
   $parent_id = 'solution-category';

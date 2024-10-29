@@ -1,7 +1,7 @@
-name: 'Interoperable Europe Portal Acceptance'
+name: 'Joinup Acceptance'
 description: 'Tasks to performed in the acceptance environment.'
 type: module
-package: Interoperable Europe Portal
+package: Joinup
 core_version_requirement: ">= 9.4"
 
 dependencies:

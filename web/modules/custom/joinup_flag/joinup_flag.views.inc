@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Contains views API hooks for Interoperable Europe Portal flag module.
+ * Contains views API hooks for Joinup flag module.
  */
 
 declare(strict_types=1);

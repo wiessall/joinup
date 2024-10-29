@@ -1,7 +1,7 @@
 name: 'Contact information'
-description: 'Provides Contact information entities for the Interoperable Europe Portal project.'
+description: 'Provides Contact information entities for the Joinup project.'
 type: module
-package: Interoperable Europe Portal
+package: Joinup
 core_version_requirement: ">= 9.4"
 
 dependencies:

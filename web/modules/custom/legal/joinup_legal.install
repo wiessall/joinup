@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Install, update and uninstall functionality for Interoperable Europe Portal Legal module.
+ * Install, update and uninstall functionality for Joinup Legal module.
  */
 
 declare(strict_types=1);

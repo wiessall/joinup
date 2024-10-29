@@ -16,8 +16,7 @@ use Drupal\topic\Entity\TopicMetaEntityInterface;
  * Implements hook_preprocess_page().
  */
 function ventuno_preprocess_page(array &$variables): void {
-  // Retrieve the Interoperable Europe Portal version and link to display
-  // in the footer.
+  // Retrieve the Joinup version and link to display in the footer.
   // @todo Move this into a block.
   /** @var \Drupal\joinup_core\JoinupVersionInterface $joinup_version */
   $joinup_version = \Drupal::service('joinup_core.joinup_version');
@@ -47,8 +46,7 @@ function ventuno_preprocess_page(array &$variables): void {
   // Populate the links shown to anonymous users.
   $variables['anonymous_links'] = $menu_helper->getBclAnonymousMenu();
 
-  // The "About us" link is only shown if the Interoperable Europe Portal
-  // collection exists.
+  // The "About us" link is only shown if the Joinup collection exists.
   $variables['#cache']['tags'][] = 'joinup_collection:exists';
   // Moderator can change navbar links.
   $variables['#cache']['tags'][] = 'config:system.menu.navbar';

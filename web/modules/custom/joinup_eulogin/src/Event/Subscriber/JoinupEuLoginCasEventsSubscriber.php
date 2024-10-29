@@ -220,10 +220,9 @@ class JoinupEuLoginCasEventsSubscriber implements EventSubscriberInterface {
    *
    * When users are changing their EU Login account email, upstream, it might
    * happen that another user is registered with the same email address on
-   * Interoperable Europe Portal. This would lead to duplicate emails on
-   * Interoperable Europe Portal which is unacceptable with respect to data
-   * integrity. Note that Drupal allows email duplicates at API level but not
-   * when using the UI. However, Interoperable Europe Portal is enforcing email
+   * Joinup. This would lead to duplicate emails on Joinup which is unacceptable
+   * with respect to data integrity. Note that Drupal allows email duplicates at
+   * API level but not when using the UI. However, Joinup is enforcing email
    * uniqueness across users. As this edge case is very rare and unlikely, we
    * only throw an exception.
    *
@@ -232,7 +231,7 @@ class JoinupEuLoginCasEventsSubscriber implements EventSubscriberInterface {
    *
    * @throws \Exception
    *   When a user changes its EU Login email to a value that is already taken
-   *   by other Interoperable Europe Portal user.
+   *   by other Joinup user.
    */
   public function handlePotentialMailCollision(CasPreLoginEvent $event): void {
     $account = $event->getAccount();

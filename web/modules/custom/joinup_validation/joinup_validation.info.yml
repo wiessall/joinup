@@ -1,5 +1,5 @@
-name: 'Interoperable Europe Portal Validation'
-description: 'Validation constraints that are useful for Interoperable Europe Portal.'
+name: 'Joinup Validation'
+description: 'Validation constraints that are useful for Joinup.'
 type: module
-package: Interoperable Europe Portal
+package: Joinup
 core_version_requirement: ">= 9.4"

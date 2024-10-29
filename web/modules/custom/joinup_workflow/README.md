@@ -85,7 +85,7 @@ the module, it needs to be defined in its schema. The structure of the file is:
 #    this action.
 <module_name>.settings:
   type: config_object
-  label: 'Interoperable Europe Portal workflow permission settings'
+  label: 'Joinup workflow permission settings'
   mapping:
     transitions:
       type: sequence

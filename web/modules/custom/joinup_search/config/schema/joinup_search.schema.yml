@@ -23,7 +23,7 @@ joinup_search_filter_plugin_entity_autocomplete:
 
 plugin.plugin_configuration.search_api_processor.joinup_entity_status:
   type: search_api.default_processor_configuration
-  label: 'Interoperable Europe Portal entity status processor'
+  label: 'Joinup entity status processor'
   mapping:
     inverse:
       type: boolean

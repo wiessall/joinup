@@ -17,7 +17,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * @Block(
  *   id = "licence_filter_block",
  *   admin_label = @Translation("Licence filter block"),
- *   category = @Translation("Interoperable Europe Portal")
+ *   category = @Translation("Joinup")
  * )
  */
 class LicenceFilterBlock extends BlockBase implements ContainerFactoryPluginInterface {
