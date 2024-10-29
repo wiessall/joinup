@@ -86,7 +86,8 @@ Feature: Proposing a collection
     When I click the contextual link "Add new page" in the "Header" region
     Then I should see the heading "Add custom page"
     When I fill in the following:
-      | Title | About this group |
+      | Title    | About this group          |
+      | Abstract | Abstract about this group |
     And I select "HR" from "Topic"
     And I press "Publish"
     Then I should see the success message "Custom page About this group has been created."
