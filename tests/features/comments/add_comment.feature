@@ -53,20 +53,20 @@ Feature: Add comments
     And the email sent to "Comment moderator" with subject "Interoperable Europe Portal: A new comment has been created." contains the following lines of text:
       | Miss Tales posted a comment in <parent> "<parent title>".                               |
       | To view the comment click                                                               |
-      | If you think this action is not clear or not due, please contact Interoperable Europe Portal Support at http |
+      | If you think this action is not clear or not due, please contact Portal Support at http |
     And the email sent to "Layonel Sarok" with subject "Interoperable Europe Portal: A new comment has been created." contains the following lines of text:
       | Miss Tales posted a comment in <parent> "<parent title>".                               |
       | To view the comment click                                                               |
-      | If you think this action is not clear or not due, please contact Interoperable Europe Portal Support at http |
+      | If you think this action is not clear or not due, please contact Portal Support at http |
     And the email sent to "Korma Salya" with subject "Interoperable Europe Portal: A new comment has been created." contains the following lines of text:
       | Miss Tales posted a comment in <parent> "<parent title>".                               |
       | To view the comment click                                                               |
-      | If you think this action is not clear or not due, please contact Interoperable Europe Portal Support at http |
+      | If you think this action is not clear or not due, please contact Portal Support at http |
     # Owner receives an email.
     And the email sent to "Salma Coster" with subject "Interoperable Europe Portal: A new comment has been created." contains the following lines of text:
       | Miss Tales posted a comment in <parent> "<parent title>".                               |
       | To view the comment click                                                               |
-      | If you think this action is not clear or not due, please contact Interoperable Europe Portal Support at http |
+      | If you think this action is not clear or not due, please contact Portal Support at http |
 
     # Verify the anchored link works properly.
     When I am logged in as "Comment moderator"
@@ -84,7 +84,7 @@ Feature: Add comments
     And the email sent to "Miss tell tales" with subject "Interoperable Europe Portal: A new comment has been created." contains the following lines of text:
       | Salma Coster posted a comment in <parent> "<parent title>".                             |
       | To view the comment click                                                               |
-      | If you think this action is not clear or not due, please contact Interoperable Europe Portal Support at http |
+      | If you think this action is not clear or not due, please contact Portal Support at http |
     # The owner of the content does not receive a notification due to being the actor.
     And the following email should not have been sent:
       | recipient | Salma Coster                            |
@@ -141,20 +141,20 @@ Feature: Add comments
     And the email sent to "Comment moderator" with subject "Interoperable Europe Portal: A new comment has been created." contains the following lines of text:
       | Miss Tales posted a comment in <parent> "<parent title>".                               |
       | To view the comment click                                                               |
-      | If you think this action is not clear or not due, please contact Interoperable Europe Portal Support at http |
+      | If you think this action is not clear or not due, please contact Portal Support at http |
     And the email sent to "Layonel Sarok" with subject "Interoperable Europe Portal: A new comment has been created." contains the following lines of text:
       | Miss Tales posted a comment in <parent> "<parent title>".                               |
       | To view the comment click                                                               |
-      | If you think this action is not clear or not due, please contact Interoperable Europe Portal Support at http |
+      | If you think this action is not clear or not due, please contact Portal Support at http |
     And the email sent to "Korma Salya" with subject "Interoperable Europe Portal: A new comment has been created." contains the following lines of text:
       | Miss Tales posted a comment in <parent> "<parent title>".                               |
       | To view the comment click                                                               |
-      | If you think this action is not clear or not due, please contact Interoperable Europe Portal Support at http |
+      | If you think this action is not clear or not due, please contact Portal Support at http |
     # Owner receives an email.
     And the email sent to "Salma Coster" with subject "Interoperable Europe Portal: A new comment has been created." contains the following lines of text:
       | Miss Tales posted a comment in <parent> "<parent title>".                               |
       | To view the comment click                                                               |
-      | If you think this action is not clear or not due, please contact Interoperable Europe Portal Support at http |
+      | If you think this action is not clear or not due, please contact Portal Support at http |
 
     # Verify the anchored link works properly.
     When I am logged in as "Comment moderator"
@@ -172,7 +172,7 @@ Feature: Add comments
     And the email sent to "Miss tell tales" with subject "Interoperable Europe Portal: A new comment has been created." contains the following lines of text:
       | Salma Coster posted a comment in <parent> "<parent title>".                             |
       | To view the comment click                                                               |
-      | If you think this action is not clear or not due, please contact Interoperable Europe Portal Support at http |
+      | If you think this action is not clear or not due, please contact Portal Support at http |
     # The owner of the content does not receive a notification due to being the actor.
     And the following email should not have been sent:
       | recipient | Salma Coster                            |

@@ -102,5 +102,5 @@ Feature: Machine translation
     Then I should not see any Webtools eTrans elements
 
     # Pages that are not content focused should not be translatable.
-    When I click "Contact Interoperable Europe Portal Support" in the "Footer" region
+    When I click "Contact Portal Support" in the "Footer" region
     Then I should not see any Webtools eTrans elements

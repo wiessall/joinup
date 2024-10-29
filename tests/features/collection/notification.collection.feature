@@ -80,7 +80,7 @@ Feature: Notification test for the collection transitions.
     Then the email sent to "NC moderator" with subject "User NC proposed collection NC proposed new" contains the following lines of text:
       | NC User has proposed collection "NC proposed new".                                 |
       | To approve or reject this proposal, please go to                                   |
-      | If you think this action is not clear or not due, please contact Interoperable Europe Portal Support at |
+      | If you think this action is not clear or not due, please contact Portal Support at |
 
     # Clean up the manually created entities.
     Then I delete the "NC proposed new" collection
@@ -94,7 +94,7 @@ Feature: Notification test for the collection transitions.
     Then the email sent to "NC moderator" with subject "User NC proposed collection NC to propose" contains the following lines of text:
       | NC Owner has proposed collection "NC to propose".                                  |
       | To approve or reject this proposal, please go to                                   |
-      | If you think this action is not clear or not due, please contact Interoperable Europe Portal Support at |
+      | If you think this action is not clear or not due, please contact Portal Support at |
 
     # Test 'request archival' operation.
     And I go to the homepage of the "NC to request archival" collection
@@ -103,7 +103,7 @@ Feature: Notification test for the collection transitions.
     Then the email sent to "NC moderator" with subject "User NC requested to archive collection NC to request archival" contains the following lines of text:
       | NC Owner has requested to archive the collection "NC to request archival".         |
       | To approve or reject this request, please go to                                    |
-      | If you think this action is not clear or not due, please contact Interoperable Europe Portal Support at |
+      | If you think this action is not clear or not due, please contact Portal Support at |
 
     # Test deletion of a collection by the owner.
     When I mark all emails as read

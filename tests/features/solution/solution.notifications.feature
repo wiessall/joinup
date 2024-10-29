@@ -45,7 +45,7 @@ Feature: Solution notifications
     And I press "Propose"
     Then the email sent to "Ramiro Myers" with subject "Interoperable Europe Portal: Changes have been proposed for your solution" contains the following lines of text:
       | The Portal Support Team has requested you to modify the interoperability solution "Solution notification to propose changes", with the following motivation: Please, check my updates. |
-      | If you think this action is not clear or not due, please contact Interoperable Europe Portal Support at                                                                                                     |
+      | If you think this action is not clear or not due, please contact Portal Support at                                                                                                     |
 
     # Template 13. The moderation team blacklists a solution.
     When I go to the homepage of the "Solution notification to blacklist" solution
@@ -80,7 +80,7 @@ Feature: Solution notifications
       | bcc       | pat.harper@example.com,jack.harper@example.com                                                                                                                            |
     And the email sent to "Ramiro Myers" with subject "Interoperable Europe Portal: You are requested to update your solution" contains the following lines of text:
       | the moderator has requested you to modify the interoperability solution - Solution notification to request changes following the following advises: Can you change this?. |
-      | If you think this action is not clear or not due, please contact Interoperable Europe Portal Support at                                                                                        |
+      | If you think this action is not clear or not due, please contact Portal Support at                                                                                        |
 
     # Template 18. The moderation team deletes a solution without prior request.
     When I go to the homepage of the "Solution notification to delete by moderator team" solution
@@ -100,7 +100,7 @@ Feature: Solution notifications
     And I press "Propose"
     Then the email sent to "Pat Harper" with subject "Interoperable Europe Portal: An update of a solution has been proposed" contains the following lines of text:
       | Ramiro Myers has proposed an update of the Interoperability solution: "Solution notification to propose from request changes" on Interoperable Europe Portal. |
-      | If you think this action is not clear or not due, please contact Interoperable Europe Portal Support at                                                       |
+      | If you think this action is not clear or not due, please contact Portal Support at                                                       |
 
     # The owner deletes their own solution. No email should be sent to the owner
     # since we do not send notifications to the actor.
