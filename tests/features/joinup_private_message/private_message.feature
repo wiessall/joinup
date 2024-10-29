@@ -92,6 +92,7 @@ Feature: Private messages
     And I click "My messages"
     Then a message containing the text "Another private message from Bob to Alice." should be present
     And I should not see the link "Delete thread"
+    And I should not see "Delete message"
     But I should see the link "Delete for me"
     When I click "Delete for me"
     Then a modal should open
@@ -122,6 +123,17 @@ Feature: Private messages
     And I should not see the text "Hello Bob message to delete"
     And I should see the following threads in private messages:
       | Alice Miller |
+
+#    #Delete private message
+    And a message containing the text "Another private message from Bob to Alice." should be present
+    Then I should see "Delete message"
+    Then I click "Delete message"
+    And a modal should open
+    And I should see the text "Are you sure you want to delete the private message" in the "Modal title"
+    And I should see the text "This action cannot be undone." in the "Modal content"
+    And I should see the button "Delete" in the "Modal buttons" region
+    Then I press "Delete" in the "Modal buttons" region
+    And a message containing the text "Another private message from Bob to Alice." should not be present
 
   Scenario: Check a user without messages
     Given I am logged in as "alice_m"

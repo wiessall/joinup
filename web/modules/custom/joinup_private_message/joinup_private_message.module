@@ -173,7 +173,7 @@ function joinup_private_message_private_message_view_alter(array &$build, Entity
     ]);
     $build['links']['delete'] = [
       '#type' => 'link',
-      '#title' => t('Delete'),
+      '#title' => t('Delete message'),
       '#url' => $delete_url,
       '#attributes' => _joinup_private_message_get_ajax_modal_attributes(),
     ];

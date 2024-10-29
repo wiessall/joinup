@@ -51,7 +51,28 @@ Feature: Private message report.
     Then a modal should open
     And I should see the text "Are you sure you want to unblock user Alice Miller?" in the "Modal title"
     And I should see the button "Confirm"
-    # @todo make this test pass, now it results in a javascript error.
-    # When I press "Confirm" in the "Modal content" region
-    # Then the modal should be closed
-    # And a message containing the text "This is a mean message to Bob." should be present
+    When I press "Confirm" in the "Modal buttons" region
+    Then the modal should be closed
+    And a message containing the text "This is a mean message to Bob." should be present
+
+  Scenario: Unblock user.
+    Given users:
+      | Username  | First name | Family name | E-mail                | Roles     |
+      | alice_m   | Alice      | Miller      | alice.m@example.com   |           |
+      | bob_rolls | Bob        | Rolls       | bob.rolls@example.com |           |
+      | joan_tiff | Joan       | Tiff        | joan.tiff@example.com | Moderator |
+    Given the following private message bans:
+      | owner        | target       | created    |
+      | alice_m      | joan_tiff    | 2024-09-21 |
+
+    Given I am logged in as "alice_m"
+    When I go to the unblock page to unblock user "joan_tiff" banned by "alice_m"
+    Then I should see "Are you sure you want to unblock user"
+
+    Given I am logged in as "bob_rolls"
+    When I go to the unblock page to unblock user "joan_tiff" banned by "alice_m"
+    Then I should see "Page not found"
+
+    Given I am logged in as "joan_tiff"
+    When I go to the unblock page to unblock user "joan_tiff" banned by "alice_m"
+    When I should see "Page not found"
