@@ -6,7 +6,7 @@ dependencies:
     - field.field.paragraph.iframe.field_iframe
     - paragraphs.paragraphs_type.iframe
   module:
-    - iframe
+    - joinup_core
     - template_suggestion
 id: paragraph.iframe.default
 targetEntityType: paragraph
@@ -14,11 +14,12 @@ bundle: iframe
 mode: default
 content:
   field_iframe:
-    type: iframe_only
+    type: iframe_with_consent_declaration
     label: hidden
     settings:
       url: ''
       title: ''
+      headerlevel: '3'
       class: ''
       frameborder: '0'
       scrolling: ''

@@ -7,13 +7,40 @@
 
 declare(strict_types=1);
 
+use Drupal\Core\Cache\CacheableMetadata;
+use Drupal\joinup_test\Utils\TestUtils;
+
+/**
+ * Implements hook_page_attachments().
+ */
+function joinup_test_page_attachments(array &$attachments): void {
+  // Behat mode: cache metadata.
+  $settings = \Drupal::config('joinup_test.settings');
+  CacheableMetadata::createFromRenderArray($attachments)
+    ->addCacheableDependency($settings)
+    ->applyTo($attachments);
+
+  if (TestUtils::isTestMode()) {
+    // Attach JS errors collector and disable CSS animations.
+    $attachments['#attached']['library'][] = 'joinup_test/testing.js_errors_log';
+    $attachments['#attached']['library'][] = 'joinup_test/testing.css_disable_transitions';
+  }
+}
+
+/**
+ * Implements hook_js_settings_alter().
+ */
+function joinup_test_js_settings_alter(&$settings): void {
+  // Output JS deprecation warnings.
+  $settings['suppressDeprecationErrors'] = FALSE;
+}
+
 /**
  * Implements hook_config_schema_info_alter().
  */
 function joinup_test_config_schema_info_alter(&$definitions): void {
   if (isset($definitions['antibot.settings']['mapping']['form_ids'])) {
     // Required to pass config_inspector validation.
-    /* @see \Drupal\joinup_test\Config\JoinupTestConfigOverrider::loadOverrides */
     $definitions['antibot.settings']['mapping']['form_ids']['nullable'] = TRUE;
   }
 }
@@ -22,8 +49,10 @@ function joinup_test_config_schema_info_alter(&$definitions): void {
  * Implements hook_honeypot_form_protections_alter().
  */
 function joinup_test_honeypot_form_protections_alter(array &$options, array $form): void {
-  // Allow to disable anti-spam tools.
-  if (!\Drupal::state()->get('joinup_test.antispam.enabled', FALSE)) {
+  // Disable Honeypot entirely if form_settings is empty, used in behat.
+  /* @see \Drupal\joinup\Traits\AntispamTrait::disableAntispamBeforeScenarioStarts */
+  $honeypot_settings = \Drupal::config('honeypot.settings');
+  if (!$honeypot_settings->get('form_settings')) {
     $options = [];
   }
 }
