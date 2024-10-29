@@ -156,6 +156,7 @@ class JoinupUserContext extends RawDrupalContext {
     self::convertObjectPropertyValues($user, 'status', [
       'blocked' => 0,
       'active' => 1,
+      'cancelled' => -1,
     ]);
   }
 

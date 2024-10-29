@@ -364,16 +364,31 @@ class JoinupNotificationContext extends RawDrupalContext {
    *
    * @param int $count
    *   The expected count of e-mails sent.
+   * @param string|null $recipients
+   *   (optional) A list of recipient emails.
    *
    * @throws \Exception
    *   Thrown when the count doesn't match the actual number.
    *
    * @Then :count e-mail(s) should have been sent
+   * @Then :count e-mail(s) should have been sent to recipients :recipients
    */
-  public function assertNumberOfEmailSent($count): void {
+  public function assertNumberOfEmailSent(int $count, ?string $recipients = NULL): void {
     $mails = $this->getMails();
     if (count($mails) != $count) {
       throw new \Exception("Invalid number of e-mail sent. Expected $count, sent " . count($mails));
+    }
+    if ($recipients) {
+      $expected_recipients = $this->explodeCommaSeparatedStepArgument($recipients);
+      $actual_recipients = array_unique(array_map(
+        fn(array $mail): string => $mail['to'],
+        $mails,
+      ));
+      sort($expected_recipients);
+      sort($actual_recipients);
+      if ($expected_recipients !== $actual_recipients) {
+        throw new ExpectationFailedException("Expected recipients $recipients. Got " . implode(', ', $actual_recipients));
+      }
     }
   }
 
