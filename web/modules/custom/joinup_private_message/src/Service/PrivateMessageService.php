@@ -17,14 +17,21 @@ class PrivateMessageService {
   public function __construct(protected Connection $database, protected EntityTypeManagerInterface $entityTypeManager) {}
 
   /**
-   * Gets id of private message target.
+   * Gets private message target user.
    *
-   * @param \Drupal\private_message\Entity\PrivateMessage $privateMessage
+   * @param Drupal\private_message\Entity\PrivateMessage $privateMessage
    *   Private message param.
+   *
+   * @return Drupal\Core\Entity\EntityInterface|null
+   *   Returns User or null.
+   *
+   * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+   * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    */
   public function getPrivateMessageTarget(PrivateMessage $privateMessage): EntityInterface|null {
     $query = $this->database->select('private_message_thread__private_messages', 'pmtpm')
       ->distinct()
+      ->range(0, 1)
       ->fields('pmtm', ['members_target_id']);
     $query->join('private_message_thread__members', 'pmtm', 'pmtpm.entity_id = pmtm.entity_id');
     $query->join('private_messages', 'pm', 'pmtpm.private_messages_target_id = pm.id');

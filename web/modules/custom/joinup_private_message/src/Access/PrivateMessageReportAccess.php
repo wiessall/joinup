@@ -18,9 +18,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class PrivateMessageReportAccess implements AccessInterface {
 
-  /**
-   * {@inheritdoc}
-   */
   public function __construct(protected AccountInterface $currentUser, protected PrivateMessageService $privateMessageService) {}
 
   /**

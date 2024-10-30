@@ -220,7 +220,6 @@ default:
         Primary menu: '.region-primary-menu'
         Quick links: '.block-group-menu-blockquick-links'
         Related solutions: '.field--name-field-is-related-solutions'
-        Report button wrapper: '.private-message-wrapper'
         SevenHeader: '.region-header'
         Search filters: '.joinup-search-filters'
         Statistics: '#block-ventuno-statistics'
