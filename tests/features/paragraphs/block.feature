@@ -11,8 +11,8 @@ Feature: Block paragraph tests.
       | Early Omega  | Block collection | published |
       | Snake Timely | Block collection | published |
     And custom_page content:
-      | title                 | collection       | state     |
-      | Recommended solutions | Block collection | published |
+      | title                 | collection       | state     | abstract             |
+      | Recommended solutions | Block collection | published | Recommended abstract |
     And I append "block" to "field_paragraphs_body" field in "node" entity with following "Recommended solutions" title:
       | paragraph_block | views_block:recommended_solutions-recommended |
 

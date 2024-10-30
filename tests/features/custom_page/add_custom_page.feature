@@ -74,7 +74,8 @@ Feature: "Add custom page" visibility options.
     And the following fields should not be present "Groups audience, Other groups, Create new revision, Revision log message, Published"
 
     When I fill in the following:
-      | Title | About us |
+      | Title    | About us          |
+      | Abstract | About us abstract |
     And I attach the file "test.zip" to "Add a new file"
     And I press "Upload"
     # The "Description" field is the description of the file.
@@ -202,7 +203,8 @@ Feature: "Add custom page" visibility options.
     Then I should see the heading "Add custom page"
 
     When I fill in the following:
-      | Title | Rubber boots |
+      | Title    | Rubber boots          |
+      | Abstract | Rubber boots abstract |
     And I press "Save"
     Then I should see the error message "The Custom page title value (Rubber boots) is already taken by Rubber boots."
 
@@ -214,7 +216,8 @@ Feature: "Add custom page" visibility options.
     Then I should see the heading "Add custom page"
 
     When I fill in the following:
-      | Title | Rubber boots |
+      | Title    | Rubber boots          |
+      | Abstract | Rubber boots abstract |
     And I select "HR" from "Topic"
     And I press "Save"
     Then I should see the heading "Rubber boots"

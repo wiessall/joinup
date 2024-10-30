@@ -1,7 +1,7 @@
 @api @group-h
 Feature:
   As a moderator of the site
-  I need to be able to use "iframe" and "map" paragraphs for content.
+  I need to be able to use "iframe" paragraphs for content.
 
   Background:
     Given collection content:
@@ -9,7 +9,7 @@ Feature:
       | Paragraphs collection | published | HR    |
 
   @javascript
-  Scenario: Moderator can manage map and iframe paragraph.
+  Scenario: Moderator can manage iframe paragraph.
     Given users:
       | Username |
       | Zohan    |
@@ -17,8 +17,8 @@ Feature:
       | collection            | user  |
       | Paragraphs collection | Zohan |
     And custom_page content:
-      | title                     | body        | collection            | author | state     | topic |
-      | Don't Mess with the Zohan | Wanna mess? | Paragraphs collection | Zohan  | published | HR    |
+      | title                     | abstract             | body        | collection            | author | state     | topic |
+      | Don't Mess with the Zohan | Wanna mess abstract? | Wanna mess? | Paragraphs collection | Zohan  | published | HR    |
     And I append "layout" to "field_paragraphs_body" field in "node" entity with following "Don't Mess with the Zohan" title:
       | behavior_settings | a:3:{s:17:"layout_paragraphs";a:4:{s:6:"layout";s:13:"layout_onecol";s:6:"config";a:1:{s:5:"label";s:0:"";}s:11:"parent_uuid";N;s:6:"region";N;}s:16:"background_theme";a:0:{}s:11:"extra_class";a:0:{}} |
 
@@ -50,3 +50,13 @@ Feature:
     And I press "Update"
     Then I should see the success message "Custom page Don't Mess with the Zohan has been updated."
     And the response should contain "{\"foo\":\"bar\"}"
+
+  Scenario: Consent declaration should be displayed for PowerBI.
+    Given custom_page content:
+      | title               | collection            | state     |
+      | Iframe page example | Paragraphs collection | published |
+    And I append "iframe" to "field_paragraphs_body" field in "node" entity with following "Iframe page example" title:
+      | field_iframe:url | https://app.powerbi.com/view?r=dummy-report |
+
+    When I go to the "Iframe page example" custom page
+    And the response should contain "src=\"https://webtools.europa.eu/crs/iframe/?oriurl=https%3A//app.powerbi.com/view%3Fr%3Ddummy-report&amp;lang=en\""
