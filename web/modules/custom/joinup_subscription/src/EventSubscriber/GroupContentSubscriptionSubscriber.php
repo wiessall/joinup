@@ -227,9 +227,8 @@ class GroupContentSubscriptionSubscriber implements EventSubscriberInterface {
       // user's chosen digest frequency.
       foreach ($this->getSubscribers($group_content) as $subscriber) {
         $message = GroupContentSubscriptionMessage::create([
-          'field_group_content' => [
+          'group_content' => [
             0 => [
-              'target_type' => $group_content->getEntityTypeId(),
               'target_id' => $group_content->id(),
             ],
           ],

@@ -623,7 +623,7 @@ display:
         metatag_display_extender:
           metatags: {  }
           tokenize: false
-      path: node/%node/manage-solutionsmanage-solutions
+      path: node/%node/manage-solutions
       menu:
         type: tab
         title: 'Manage solutions'

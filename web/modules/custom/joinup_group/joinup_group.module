@@ -819,14 +819,12 @@ function joinup_group_extract_bulk_form_entity_id(string $bulk_form_key): string
  *
  * @param \Drupal\Core\Entity\EntityInterface $entity
  *   The entity related to the share link.
- * @param string $route
- *   The route to pass the share link in.
  *
  * @return array
  *   A link icon theme array.
  */
-function joinup_group_generate_share_link(EntityInterface $entity, string $route): array {
-  $url = Url::fromRoute($route, [$entity->getEntityTypeId() => $entity->id()]);
+function joinup_group_generate_share_link(EntityInterface $entity): array {
+  $url = Url::fromRoute('joinup_group.share_content_form', [$entity->getEntityTypeId() => $entity->id()]);
 
   return [
     '#theme' => 'link_icon',

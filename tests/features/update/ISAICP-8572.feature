@@ -45,3 +45,130 @@ Feature: Test migration of collections/solutions to node.
     And I click "working group of experts"
     Then I should see "Asset Description Metadata Schema (ADMS)"
     Then I should see the heading "Members"
+
+  @update:joinup_rdf_deploy_200006
+  Scenario: Menu links should be available as before.
+    Given I go to "/collection/statistics/solution/eurotrace"
+    Then I should see the following links:
+      | Overview        |
+      | Release history |
+
+    Given I go to "/collection/govtechconnect"
+    Then I should see the heading "GovTech Connect"
+    And I should see the following links:
+      | Overview         |
+      | Welcome on Board |
+      | GovTech4All      |
+      | Events           |
+
+  @update:joinup_rdf_deploy_200001 @update:joinup_rdf_deploy_200002
+  Scenario: Validate references and contents of the groups.
+    # Ensure the Website link is migrated for collections.
+    Given I go to "/collection/are3na"
+    Then I should see the link "Website link"
+
+    # Note, that since the email confirmations are not available for GDPR
+    # reasons, the contact information are only text in the tests.
+    Given I go to "/collection/egovernment"
+    Then I should see the following lines of text:
+      | Owner                    |
+      | European Commission      |
+      | Supra-national authority |
+      | Contact information      |
+      | Joinup Support Team      |
+
+    # 12 solutions also include the 3 archived. This ensures a bug needing to
+    # clear the cache before indexing the entities.
+    And I should see the link "12 Solutions"
+
+    # Assert texts in the page.
+    And I should see the following lines of text:
+      # Abstract.
+      | The eGovernment community aims to improve the efficiency of service delivery in the public sector.           |
+      # Body.
+      | The eGovernment community covers all aspects of Internet use to deliver government information and services. |
+      # Field headings and values.
+      | Published on                                                                                                 |
+      | 01/12/2014                                                                                                   |
+      | Last updated                                                                                                 |
+      | Moderation                                                                                                   |
+      | Open collection                                                                                              |
+      | Moderated                                                                                                    |
+
+    # Sample check some tiles as it might be that the tiles will change until
+    # the migration is done so try to avoid too many checks.
+    And I should see the "Next generation internet initiative on EU digital landscape" tile
+    And I should see the "EU report calls for stronger action on Digital Decade goals" tile
+
+    Given I go to "/collection/statistics/solution/eurotrace"
+    Then I should see the following lines of text:
+      | Owner                    |
+      | Eurostat                 |
+      | Supra-national authority |
+      | Contact information      |
+      | ESTAT EUROTRACE SUPPORT  |
+
+    # Assert texts in the page.
+    And I should see the following lines of text:
+      # Abstract.
+      | The EUROTRACE software package is composed                 |
+      # Body.
+      | Because of its modular design, the new EUROTRACE suite can |
+      # Field headings and values.
+      | Published on                                               |
+      | 14/03/2014                                                 |
+      | Last update                                                |
+      | Solution type                                              |
+      | Digital Solution                                           |
+      | Release version                                            |
+      | Moderation                                                 |
+      | Only facilitators and authors can create content.          |
+      | Non moderated                                              |
+    And I should see the link "Share"
+
+    # Sample check some tiles as it might be that the tiles will change until
+    # the migration is done so try to avoid too many checks.
+    And I should see the "Mustangproject" tile
+
+    # Test the website link.
+    Given I go to "/collection/are3na/solution/re3gistry"
+    Then I should see the link "Website link"
+
+    # Regression test that there are no duplicate memberships.
+    # @see web/modules/custom/joinup_rdf/src/MigrationHelper.php:442
+    And there are no duplicate memberships
+
+    # Regression test that announcements are migrated with their group
+    # and the page does not break.
+    When I am logged in as a moderator
+    And I visit "/announcements"
+    Then I should see the link "Interoperable Europe Academy"
+
+  @update:joinup_rdf_update_200009 @update:joinup_rdf_deploy_200013
+  Scenario: Assert migrated related solutions.
+    Given I go to "/collection/eparticipation-and-evoting/solution/eci-online-collection-software-ocs"
+    Then in the "Related solutions" list, I should see the following tiles in the correct order:
+      | European Citizens' Initiative - Regulation (EU) 2019/788                                    |
+      | Crypto Tool for the European Parliament Elections and for the European Citizens' Initiative |
+    Given I go to "/collection/semic-support-centre/solution/vocbench"
+    Then in the "Related solutions" list, I should see the following tiles in the correct order:
+      # First 3 are shared solutions. Even if in production they do not show in
+      # this way, according to the migrated data, they all share the "Data
+      # management" solution type.
+      # /collection/gnu-health/solution/mygnuhealth.
+      | MyGNUHealth                                                                                                |
+      # /collection/open-data/solution/piveau.
+      | piveau                                                                                                     |
+      # /collection/free-and-open-source-software/solution/geonetwork.
+      | GeoNetwork opensource - A catalog solution to publish geospatial and non-geospatial metadata and resources |
+      # Then the rest are directly linked solutions. These follow the order of
+      # the data in the database.
+      | EuroVoc                                                                                                    |
+      | The AGROVOC Thesaurus                                                                                      |
+      | GEMET                                                                                                      |
+      | Integrated Public Sector Vocabulary                                                                        |
+      | DCAT-AP Validator                                                                                          |
+      | Asset Description Metadata Schema (ADMS)                                                                   |
+      | StatDCAT Application Profile for data portals in Europe                                                    |
+      | Asset Description Metadata Schema (ADMS) revision                                                          |
+      | ShowVoc                                                                                                    |

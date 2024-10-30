@@ -139,6 +139,9 @@ function joinup_rdf_update_200004(): void {
     }
   }
 
+  $db->query("CREATE TABLE b_message__field_group_content LIKE message__field_group_content");
+  $db->insert('b_message__field_group_content')->from($db->select('message__field_group_content')->fields('message__field_group_content'))->execute();
+
   $db->query("CREATE TABLE b_joinup_log LIKE joinup_log");
   $db->insert('b_joinup_log')->from($db->select('joinup_log')->fields('joinup_log'))->execute();
   $db->truncate('joinup_log')->execute();
@@ -154,6 +157,8 @@ function joinup_rdf_update_200005(): void {
     'node.og_audience',
     'media.og_audience',
     'ogmenu_instance.og_audience',
+    'meta_entity.field_pinned_in',
+    'message.group',
   ];
 
   foreach ($fieldStorages as $fieldStorage) {
@@ -162,7 +167,7 @@ function joinup_rdf_update_200005(): void {
 
   $configs = [
     'field.field.media.image.og_audience',
-    'field.field.media.video.og_audience',
+    'field.field.media.remote_video.og_audience',
     'field.field.media.file.og_audience',
     'field.field.node.news.field_news_referenced_solution',
     'field.field.node.news.og_audience',
@@ -177,6 +182,8 @@ function joinup_rdf_update_200005(): void {
     'field.field.node.discussion.field_shared_in',
     'field.field.node.custom_page.og_audience',
     'field.field.node.release.og_audience',
+    'field.field.meta_entity.pinned_in.field_pinned_in',
+    'field.field.message.announcement.group',
     'search_api.index.bookmark',
     'search_api.index.oss_catalogue',
     'search_api.index.published',
@@ -230,4 +237,23 @@ function joinup_rdf_update_200007(): void {
 function joinup_rdf_update_200008(): void {
   require_once DRUPAL_ROOT . '/core/modules/user/user.install';
   user_update_10000();
+}
+
+/**
+ * Backup the field_ss_related_solutions in a state variable.
+ */
+function joinup_rdf_update_200009(): void {
+  $database = \Drupal::database();
+  $table = 'meta_entity__field_ss_related_solutions';
+  $results = $database->select($table)
+    ->fields($table, ['entity_id', 'delta', 'field_ss_related_solutions_target_id'])
+    ->execute()
+    ->fetchAll(\PDO::FETCH_ASSOC);
+
+  $state_data = [];
+  foreach ($results as $data) {
+    $state_data[$data['entity_id']][$data['delta']] = $data['field_ss_related_solutions_target_id'];
+  }
+
+  \Drupal::state()->set('joinup_rdf.related_solutions', $state_data);
 }
