@@ -26,7 +26,7 @@ Feature: Private message report page
     And I should see the link "Report"
     When I click "Report" link in message "This is message from alice"
     And a modal should open
-    When I enter "I want to report this message" in the "Report" textarea
+    When I fill in "Report" with "I want to report this message"
     And I press "Send" in the "Modal content" region
     Then the modal should be closed
 

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_private_message\Form;
 
+use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
@@ -18,14 +19,12 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class PrivateMessageReportForm extends FormBase {
 
-  /**
-   * {@inheritdoc}
-   */
   public function __construct(
     protected readonly PrivateMessageBanManager $privateMessageBanManager,
     protected readonly MailManager $mailManager,
     protected readonly PrivateMessageService $privateMessageService,
     protected readonly EntityTypeManagerInterface $entityTypeManager,
+    protected readonly TimeInterface $time,
   ) {
   }
 
@@ -38,6 +37,7 @@ class PrivateMessageReportForm extends FormBase {
       $container->get('plugin.manager.mail'),
       $container->get('private_message.service'),
       $container->get('entity_type.manager'),
+      $container->get('datetime.time')
     );
   }
 
@@ -105,7 +105,7 @@ class PrivateMessageReportForm extends FormBase {
     }
     // Update custom fields in private message entity.
     $message->set('report', $report);
-    $message->set('report_timestamp', strtotime('now'));
+    $message->set('report_timestamp', $this->time->getCurrentTime());
     $message->save();
     $form_state->setRedirect('private_message.private_message_page');
   }

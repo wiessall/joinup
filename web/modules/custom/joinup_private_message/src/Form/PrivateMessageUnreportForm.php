@@ -26,12 +26,10 @@ class PrivateMessageUnreportForm extends ConfirmFormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state, ?PrivateMessage $private_message = NULL): array {
-
     $form['private_message'] = [
       '#type' => 'value',
       '#value' => $private_message,
     ];
-
     return parent::buildForm($form, $form_state);
   }
 
@@ -39,7 +37,6 @@ class PrivateMessageUnreportForm extends ConfirmFormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state): void {
-
     $privateMessage = $form['private_message']['#value'];
     $privateMessage->set('report', '');
     $privateMessage->set('report_timestamp', NULL);
@@ -58,7 +55,7 @@ class PrivateMessageUnreportForm extends ConfirmFormBase {
    * {@inheritdoc}
    */
   public function getCancelUrl(): Url {
-    return new Url('view.private_message_report.page_2');
+    return Url::fromRoute('view.private_message_report.page_2');
   }
 
 }

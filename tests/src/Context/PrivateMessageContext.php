@@ -517,9 +517,16 @@ class PrivateMessageContext extends RawDrupalContext {
   /**
    * Press button in table row.
    *
+   * @param string $buttonText
+   *   Text of button.
+   * @param string $rowText
+   *   Text of row.
+   *
+   * @throws \Exception
+   *
    * @When I press the button :button in the :text row
    */
-  public function iPressTheButtonInTheRowContaining($buttonText, $rowText): void {
+  public function iPressTheButtonInTheRowContaining(string $buttonText, string $rowText): void {
     $page = $this->getSession()->getPage();
     if ($button = $this->getTableRow($page, $rowText)->findButton($buttonText)) {
       $button->click();

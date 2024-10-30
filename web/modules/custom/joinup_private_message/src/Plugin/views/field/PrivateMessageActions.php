@@ -18,21 +18,20 @@ class PrivateMessageActions extends FieldPluginBase {
   /**
    * {@inheritdoc}
    */
-  public function usesGroupBy() {
+  public function usesGroupBy(): bool {
     return FALSE;
   }
 
   /**
    * {@inheritdoc}
    */
-  public function query() {}
+  public function query(): void {}
 
   /**
    * {@inheritdoc}
    */
-  protected function defineOptions() {
+  protected function defineOptions(): array {
     $options = parent::defineOptions();
-
     $options['hide_alter_empty'] = ['default' => FALSE];
     return $options;
   }
@@ -40,31 +39,35 @@ class PrivateMessageActions extends FieldPluginBase {
   /**
    * {@inheritdoc}
    */
-  public function render(ResultRow $values) {
+  public function render(ResultRow $values): array|string {
     $entity = $values->_entity;
 
     if ($entity->getEntityTypeId() === 'private_message') {
-
-      $operations['unreport'] = [
-        'title' => $this->t('Flag as OK'),
-        'url' => Url::fromRoute('joinup_private_message.unreport', ['private_message' => $entity->id()])->setOption('query', ['destination' => '/dashboard/private-message-report']),
-        'attributes' => _joinup_private_message_get_ajax_modal_attributes(),
-        'weight' => 1,
+      $operations = [
+        'unreport' => [
+          'title' => $this->t('Flag as OK'),
+          'url' => Url::fromRoute(
+            'joinup_private_message.unreport',
+            ['private_message' => $entity->id()]
+          )->setOption('query', ['destination' => '/dashboard/private-message-report']),
+          'attributes' => _joinup_private_message_get_ajax_modal_attributes(),
+          'weight' => 1,
+        ],
+        'delete' => [
+          'title' => $this->t('Delete'),
+          'url' => Url::fromRoute(
+            'entity.private_message.delete',
+            ['private_message' => $entity->id()]
+          )->setOption('query', ['destination' => '/user/messages']),
+          'attributes' => _joinup_private_message_get_ajax_modal_attributes(),
+          'weight' => 0,
+        ],
       ];
 
-      $operations['delete'] = [
-        'title' => 'Delete',
-        'url' => Url::fromRoute('entity.private_message.delete', ['private_message' => $entity->id()])->setOption('query', ['destination' => '/user/messages']),
-        'attributes' => _joinup_private_message_get_ajax_modal_attributes(),
-        'weight' => 0,
-      ];
-
-      $build = [
+      return [
         '#type' => 'operations',
         '#links' => $operations,
       ];
-
-      return $build;
     }
 
     return '';
