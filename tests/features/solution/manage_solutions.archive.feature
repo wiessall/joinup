@@ -245,7 +245,7 @@ Feature: When a solution is archived then its sub-content also should be archive
       | Andrew Facilitator |
 
   Scenario Outline: Users must not be able to edit the sub-content of an archived solution
-    Given the workflow state of the "Solution" "rdf_entity" is changed to "published"
+    Given the workflow state of the "Solution" content is changed to "published"
     And I am logged in as "<User>"
 
     When I go to the homepage of the "Solution" solution
