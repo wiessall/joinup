@@ -436,10 +436,13 @@ class ReleaseWorkflowTest extends JoinupWorkflowExistingSiteTestBase {
           'needs_update',
         ],
         'userOgFacilitator' => [
+          'archived',
           'draft',
           'published',
         ],
-        'userOgAdministrator' => [],
+        'userOgAdministrator' => [
+          'archived',
+        ],
       ],
       'needs_update' => [
         'userAuthenticated' => [],

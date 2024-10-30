@@ -3,6 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.node.custom_page.abstract
     - field.field.node.custom_page.field_attachment
     - field.field.node.custom_page.field_custom_page_logo
     - field.field.node.custom_page.field_hide_title
@@ -97,6 +98,7 @@ content:
     weight: 5
     region: content
 hidden:
+  abstract: true
   field_custom_page_logo: true
   field_hide_title: true
   field_keywords: true

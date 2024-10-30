@@ -27,7 +27,6 @@ use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\joinup_solution\SolutionLatestReleasesFieldItemList;
 use Drupal\joinup_solution\SolutionReleasesAndDistributionsFieldItemList;
 use Drupal\joinup_taxonomy\Entity\MappedTerm;
-use Drupal\meta_entity\Entity\MetaEntity;
 use Drupal\node\Entity\Node;
 use Drupal\node\Entity\NodeType;
 use Drupal\node\NodeInterface;
@@ -149,7 +148,6 @@ function joinup_solution_node_insert(EntityInterface $entity): void {
     $membership->save();
   }
   joinup_solution_invalidate_collection($entity);
-  joinup_solution_sync_settings($entity);
 }
 
 /**
@@ -381,7 +379,7 @@ function joinup_solution_node_view(array &$build, NodeInterface $solution, Entit
 
   // Share link configuration.
   if ($display->getComponent('share_link')) {
-    $build['share_link'] = joinup_group_generate_share_link($solution, 'joinup_group.share_form');
+    $build['share_link'] = joinup_group_generate_share_link($solution);
     $build['#cache'] = [
       'contexts' => [
         'og_role',
@@ -588,10 +586,7 @@ function joinup_solution_node_update(EntityInterface $entity): void {
     return;
   }
 
-  assert($entity instanceof SolutionInterface);
-
   joinup_solution_invalidate_collection($entity);
-  joinup_solution_sync_settings($entity);
 }
 
 /**
@@ -616,76 +611,6 @@ function joinup_solution_node_delete(NodeInterface $solution): void {
       $collection->skip_notification = TRUE;
       $collection->setChangedTime($requestTime)->save();
     }
-  }
-}
-
-/**
- * Sync the solution settings with the corresponding entity.
- *
- * Stores the values of the related solutions of a solution to a meta entity in
- * order to handle the deltas.
- *
- * Due to a limitation in the RDF Entity module it is currently not possible to
- * store weights in multivalue fields. We work around this by storing them in a
- * meta entity (which is not subject to this problem since it uses SQL storage).
- * Once RDF entities can store deltas / weights reliably we will not need this
- * workaround anymore.
- *
- * @param \Drupal\joinup_solution\Entity\SolutionInterface $entity
- *   The solution entity.
- *
- * @todo Remove in ISAICP-9153.
- */
-function joinup_solution_sync_settings(SolutionInterface $entity): void {
-  if (!$entity->isPublished()) {
-    // Do not store any unsaved updates.
-    return;
-  }
-
-  // Avoid a hard dependency on the meta_entity module.
-  if (!\Drupal::moduleHandler()->moduleExists('meta_entity')) {
-    return;
-  }
-
-  $meta_entity = MetaEntity::loadOrCreate('solution_settings', $entity);
-
-  // Avoid saving an extra entity without need.
-  if ($meta_entity->get('field_ss_related_solutions')->equals($entity->get('related_solutions'))) {
-    return;
-  }
-
-  $meta_entity->set('field_ss_related_solutions', $entity->get('related_solutions')->getValue());
-  $meta_entity->save();
-}
-
-/**
- * Implements hook_ENTITY_TYPE_load().
- *
- * Syncs the order of the related solutions back to the entity.
- */
-function joinup_solution_node_load(array $entities): void {
-  // Avoid a hard dependency on the meta_entity module.
-  if (!\Drupal::moduleHandler()->moduleExists('meta_entity')) {
-    return;
-  }
-
-  foreach ($entities as $entity) {
-    if (!($entity instanceof SolutionInterface)) {
-      continue;
-    }
-
-    if (!$entity->isPublished()) {
-      // Do not sync anything for unpublished entities since they can be work in
-      // progress.
-      continue;
-    }
-
-    $meta_entity = MetaEntity::loadOrCreate('solution_settings', $entity);
-    if ($meta_entity->get('field_ss_related_solutions')->isEmpty()) {
-      return;
-    }
-
-    $entity->set('related_solutions', $meta_entity->get('field_ss_related_solutions')->getValue());
   }
 }
 

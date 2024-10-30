@@ -4,6 +4,7 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.node.view_mode_tile
+    - field.field.node.custom_page.abstract
     - field.field.node.custom_page.field_attachment
     - field.field.node.custom_page.field_custom_page_logo
     - field.field.node.custom_page.field_hide_title
@@ -16,6 +17,7 @@ dependencies:
     - responsive_image.styles.tile
   module:
     - field_delimiter
+    - field_fallback_formatter
     - field_formatter_range
     - joinup_core
     - responsive_image
@@ -28,6 +30,27 @@ targetEntityType: node
 bundle: custom_page
 mode: view_mode_tile
 content:
+  abstract:
+    type: field_fallback_formatter
+    label: hidden
+    settings:
+      main_field_formatter_id: string
+      main_field_formatter_settings:
+        link_to_entity: false
+      fallback_field_id: field_paragraphs_body
+      fallback_field_formatter_id: filtered_entity_reference_bundles
+      fallback_field_formatter_settings:
+        view_mode: tile
+        filtered_entity_bundles:
+          - simple_paragraph
+          - text
+        trim_length: 200
+        trim_chars: ...
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
+    weight: 1
+    region: content
   field_custom_page_logo:
     type: responsive_image
     label: hidden

@@ -23,7 +23,7 @@ Feature: When a solution is archived then its sub-content also should be archive
       | John Moderator     | john.moderator@example.com | John       | Moderator   | moderator |
     And the following solution user memberships:
       | solution | user               | roles                      |
-      | Solution | Anne Group Admin   | administrator, facilitator |
+      | Solution | Anne Group Admin   | owner                      |
       | Solution | Andrew Facilitator | facilitator                |
     And "event" content:
       | title          | solution | state     |
@@ -237,6 +237,23 @@ Feature: When a solution is archived then its sub-content also should be archive
     Then the response status code should be 403
     When I go to the edit form of the "Solution Release 3" release
     Then the response status code should be 403
+
+    Examples:
+      | User               |
+      | John Moderator     |
+      | Anne Group Admin   |
+      | Andrew Facilitator |
+
+  Scenario Outline: Users must not be able to edit the sub-content of an archived solution
+    Given the workflow state of the "Solution" content is changed to "published"
+    And I am logged in as "<User>"
+
+    When I go to the homepage of the "Solution" solution
+    Then I should not see the text "Archived" in the "Header"
+    When I go to the edit form of the "Solution" solution
+    Then I should see the button "Archive"
+    And I press "Archive"
+    Then I should see the text "Archived" in the "Header"
 
     Examples:
       | User               |

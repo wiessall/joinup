@@ -10,7 +10,6 @@ declare(strict_types=1);
 use Drupal\Core\Entity\Sql\SqlEntityStorageInterface;
 use Drupal\Core\Language\LanguageInterface;
 use Drupal\joinup_rdf\MigrationHelper;
-use Drupal\search_api_solr\SolrConnectorInterface;
 
 /**
  * Disable RDF Sync for the deployment.
@@ -99,10 +98,10 @@ function joinup_rdf_deploy_200002(array &$sandbox): string {
   $migration_helper = \Drupal::getContainer()->get('joinup_rdf.migration_helper');
   $start = microtime(TRUE);
   foreach ($uris as $uri) {
-    if (!$collectionNid ??= $sandbox['solution_to_collection'][$uri]) {
+    if (empty($sandbox['solution_to_collection'][$uri])) {
       throw new \Exception("Collection not found for solution: $uri");
     }
-    $migration_helper->migrateGroup('solution', $uri, $collectionNid);
+    $migration_helper->migrateGroup('solution', $uri, $sandbox['solution_to_collection'][$uri]);
     $sandbox['progress']++;
   }
 
@@ -146,6 +145,41 @@ function joinup_rdf_deploy_200004(): void {
       $schema->dropTable("b_$table");
     }
   }
+
+  // Fix the message__field_group_content.
+  $query = $db->select('b_message__field_group_content', 'b');
+  $results = $query
+    ->fields('b', [])
+    ->execute()
+    ->fetchAll();
+
+  // The field_group_content has been deleted in the config sync and a new field
+  // was created called group_content.
+  foreach ($results as $result) {
+    if ($result->field_group_content_target_type === 'rdf_entity') {
+      $result->field_group_content_target_id = $db->select('rdf_sync_uri', 'u')
+        ->fields('u', ['entity_id'])
+        ->condition('u.uri', $result->field_group_content_target_id)
+        ->execute()
+        ->fetchField();
+    }
+    $result->group_content_target_id = $result->field_group_content_target_id;
+    unset($result->field_group_content_target_type);
+    unset($result->field_group_content_target_id);
+    unset($result->field_group_content_target_id_int);
+  }
+
+  // Convert all objects to array.
+  $results = array_map('get_object_vars', $results);
+
+  // Insert the updated entries in the new message__group_content table.
+  foreach ($results as &$result) {
+    $db->insert('message__group_content')
+      ->fields(array_keys($result))
+      ->values($result)
+      ->execute();
+  }
+  $schema->dropTable('b_message__field_group_content');
 
   // Joinup log table.
   $query = $db->select('b_joinup_log', 'b');
@@ -316,6 +350,7 @@ function joinup_rdf_deploy_200006(?array &$sandbox = NULL): void {
     \Drupal::getContainer()->get('plugin.manager.menu.link')->rebuild();
     // Restore 'rediscover' flag.
     $db->query("UPDATE {menu_link_content_data} SET rediscover = 0 WHERE menu_name LIKE 'ogmenu-%'");
+    $db->query("UPDATE {menu_tree} SET discovered = 0 WHERE menu_name LIKE 'ogmenu-%'");
   }
 }
 
@@ -551,14 +586,58 @@ function joinup_rdf_deploy_200008(?array &$sandbox = NULL): string {
 }
 
 /**
- * Meta entity fix.
+ * Restore related solutions.
  */
 function joinup_rdf_deploy_200009(): void {
-  $db = \Drupal::database();
+  $data = \Drupal::state()->get('joinup_rdf.related_solutions', []);
+  $database = \Drupal::database();
+  $rdf_sync_mapper = \Drupal::getContainer()->get('rdf_sync.mapper');
+  $meta_entity_storage = \Drupal::entityTypeManager()->getStorage('meta_entity');
 
-  // Clear stale data.
-  $db->delete('meta_entity')->condition('id', 5609)->execute();
-  $db->delete('meta_entity__count')->condition('entity_id', 5609)->execute();
+  foreach ($data as $mid => $related_solutions) {
+    $meta_entity = $meta_entity_storage->load($mid);
+    $solution = $meta_entity->getTargetEntity();
+    ksort($related_solutions);
+    $target_ids = array_map(function ($uri) use ($rdf_sync_mapper) {
+      $entity = $rdf_sync_mapper->getEntityByUri($uri);
+      // Skip invalid references e.g.
+      // http://data.europa.eu/w21/5e74061e-dc4e-4734-a31f-e328b7ab4326.
+      if (!$entity) {
+        return NULL;
+      }
+      return $entity->id();
+    }, $related_solutions);
+
+    // Filter out invalid entries and reset deltas.
+    $target_ids = array_values(array_filter($target_ids));
+    foreach ($target_ids as $delta => $target_id) {
+      $values = [
+        'bundle' => 'node',
+        'deleted' => 0,
+        'entity_id' => $solution->id(),
+        'revision_id' => $solution->getRevisionId(),
+        'langcode' => $solution->language()->getId(),
+        'delta' => $delta,
+        'related_solutions_target_id' => $target_id,
+      ];
+
+      foreach (['node__related_solutions', 'node_revision__related_solutions'] as $table) {
+        $database->insert($table)
+          ->fields(array_keys($values))
+          ->values($values)
+          ->execute();
+      }
+    }
+  }
+
+  \Drupal::state()->delete('joinup_rdf.related_solutions');
+}
+
+/**
+ * Meta entity fix.
+ */
+function joinup_rdf_deploy_200010(): void {
+  $db = \Drupal::database();
 
   // Fix labels referring RDF entities.
   $sql = <<<SQL
@@ -570,7 +649,11 @@ function joinup_rdf_deploy_200009(): void {
   $db->query($sql, [], ['allow_delimiter_in_query' => TRUE]);
 
   // Fill the integer version of ID.
-  $db->query("UPDATE {meta_entity} SET target__target_id_int = target__target_id");
+  $db->query("UPDATE {meta_entity} SET target__target_id_int = target__target_id WHERE target__target_id REGEXP '^[0-9]+$'");
+  // Due to a bug in production, some download_count meta entities were not
+  // properly deleted when their distribution was deleted. Delete the invalid
+  // entries.
+  $db->query("DELETE FROM {meta_entity} WHERE target__target_id_int IS NULL AND type = 'download_count'");
 
   // Fix 'rdf entity' ocuurrences in label.
   $db->query("UPDATE meta_entity SET label = REPLACE(label, 'rdf entity (', 'content item (')");
@@ -579,7 +662,7 @@ function joinup_rdf_deploy_200009(): void {
 /**
  * Fix EU OSS Catalogue menu link.
  */
-function joinup_rdf_deploy_200010(): void {
+function joinup_rdf_deploy_200011(): void {
   \Drupal::getContainer()->get('entity.repository')
     ->loadEntityByUuid('menu_link_content', '686904d4-8e5f-4dfd-baea-e4e6c6496984')
     ->save();
@@ -588,7 +671,7 @@ function joinup_rdf_deploy_200010(): void {
 /**
  * Filters in content listings.
  */
-function joinup_rdf_deploy_200011(?array &$sandbox = NULL): void {
+function joinup_rdf_deploy_200012(?array &$sandbox = NULL): void {
   if (!isset($sandbox['tables'])) {
     $sandbox['tables'] = [];
 
@@ -654,71 +737,36 @@ function joinup_rdf_deploy_200011(?array &$sandbox = NULL): void {
 }
 
 /**
- * Reindex group content.
+ * Cleanup the simple sitemap calculated data.
  */
-function joinup_rdf_deploy_200012(?array &$sandbox = NULL): string {
-  if (!isset($sandbox['nids'])) {
-    $sandbox['nids'] = \Drupal::database()->select('node__og_audience')
-      ->fields('node__og_audience', ['entity_id'])
-      ->condition('bundle', [
-        'custom_page',
-        'discussion',
-        'distribution',
-        'document',
-        'event',
-        'glossary',
-        'news',
-        'release',
-      ], 'IN')
-      ->execute()
-      ->fetchCol();
-    $sandbox['uri_to_nid'] = \Drupal::getContainer()->get('joinup_rdf.migration_helper')->getUriToNid();
-    $sandbox['total'] = count($sandbox['nids']);
-    $sandbox['progress'] = 0;
+function joinup_rdf_deploy_200013(): void {
+  // Sitemap keeps stashed and queued data that might contain data from the
+  // removed "rdf_entity" entities.
+  \Drupal::keyValue('simple_sitemap')->delete('queue_stashed_results');
+  \Drupal::service('queue')->get('simple_sitemap_elements')->deleteQueue();
+}
+
+/**
+ * Clear the purge_queue table of anything related to rdf_entity.
+ */
+function joinup_rdf_deploy_200014(): void {
+  $data = \Drupal::database()->select('purge_queue', 'pq')
+    ->fields('pq', ['item_id'])
+    ->condition('pq.data', '%rdf_entity%', 'LIKE')
+    ->execute()
+    ->fetchCol();
+
+  if ($data) {
+    \Drupal::database()->delete('purge_queue')
+      ->condition('item_id', $data, 'IN')
+      ->execute();
   }
-
-  $amount = 100;
-  $nids = array_splice($sandbox['nids'], 0, $amount);
-  $sandbox['progress'] += count($nids);
-
-  $solr = \Drupal::entityTypeManager()
-    ->getStorage('search_api_server')
-    ->load('joinup')
-    ->getBackend()
-    ->getSolrConnector();
-  assert($solr instanceof SolrConnectorInterface);
-
-  $query = $solr->getSelectQuery()
-    ->setQuery('its_nid:(' . implode(' OR ', $nids) . ') AND sm_entity_groups:[* TO *]')
-    ->setRows($amount);
-
-  $documents = $solr->execute($query)->getData()['response']['docs'] ?? [];
-  $updateQuery = $solr->getUpdateQuery();
-  foreach ($documents as &$document) {
-    $document['sm_entity_groups'] = array_map(function (string $group) use ($sandbox): string {
-      if (!isset($sandbox['uri_to_nid'][$group])) {
-        throw new \RuntimeException("Group '$group' doesn't have a NID");
-      }
-      return $sandbox['uri_to_nid'][$group];
-    }, $document['sm_entity_groups']);
-    // Convert to a document object.
-    $document = $updateQuery->createDocument($document);
-  }
-
-  $updateQuery = $solr
-    ->getUpdateQuery()
-    ->addDocuments($documents)
-    ->addCommit();
-  $solr->update($updateQuery);
-
-  $sandbox['#finished'] = (int) empty($sandbox['nids']);
-  return "Reindexed {$sandbox['progress']}/{$sandbox['total']} nodes";
 }
 
 /**
  * Add URL alias for a taxonomy term.
  */
-function joinup_rdf_deploy_200013(): void {
+function joinup_rdf_deploy_200015(): void {
   $system_path = '/taxonomy/term/11197';
   $alias_path = '/taxonomy/term/http_e_f_fjoinup_ceu_fontology_ftopic_hstatistics_band_binformatino';
 

@@ -7,6 +7,7 @@ namespace Drupal\joinup_rdf;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\State\StateInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_rdf\Entity\RdfSyncEntityInterface;
 use Drupal\joinup_taxonomy\Entity\MappedTerm;
@@ -29,6 +30,8 @@ final class MigrationHelper {
     ['node', 'og_audience', TRUE],
     ['media', 'og_audience', TRUE],
     ['ogmenu_instance', 'og_audience', FALSE],
+    ['meta_entity', 'field_pinned_in', FALSE],
+    ['message', 'group', FALSE],
   ];
 
   public const array DEDICATED_TABLE_COLUMNS = [
@@ -187,7 +190,7 @@ final class MigrationHelper {
       ],
       'http://xmlns.com/foaf/spec/#term_homepage' => [
         'target_field_name' => 'website_url',
-        'format' => 'string',
+        'format' => 'uri',
       ],
       'http://purl.org/dc/terms/spatial' => [
         'target_field_name' => 'spatial_coverage',
@@ -257,6 +260,7 @@ final class MigrationHelper {
       'http://www.w3.org/ns/dcat#contactPoint' => [
         'target_field_name' => 'contact',
         'format' => 'reference',
+        'mapped_term' => TRUE,
       ],
       'http://joinup.eu/search' => [
         'target_field_name' => 'listing_content',
@@ -280,11 +284,12 @@ final class MigrationHelper {
       ],
       'http://www.w3.org/ns/dcat#landingPage' => [
         'target_field_name' => 'landing_page',
-        'format' => 'string',
+        'format' => 'uri',
       ],
       'http://purl.org/dc/terms/language' => [
         'target_field_name' => 'language',
         'format' => 'reference',
+        'mapped_term' => TRUE,
       ],
       'http://purl.org/dc/dcmitype/StillImage' => [
         // @todo Create a follow up to merge all logo fields into one.
@@ -306,6 +311,7 @@ final class MigrationHelper {
       'http://purl.org/dc/terms/publisher' => [
         'target_field_name' => 'owner',
         'format' => 'reference',
+        'mapped_term' => TRUE,
       ],
       'http://purl.org/dc/terms/relation' => [
         'target_field_name' => 'related_solutions',
@@ -343,6 +349,7 @@ final class MigrationHelper {
       'http://www.w3.org/ns/adms#translation' => [
         'target_field_name' => 'translation',
         'format' => 'reference',
+        'mapped_term' => TRUE,
       ],
       // @todo Minimal old data exist.
       // @codingStandardsIgnoreStart
@@ -373,6 +380,7 @@ final class MigrationHelper {
       'http://www.w3.org/ns/adms#status' => [
         'target_field_name' => 'process_status',
         'format' => 'string',
+        'mapped_term' => TRUE,
       ],
       'http://joinup.eu/vocabulary/topic' => [
         'target_field_name' => 'field_topic',
@@ -388,6 +396,7 @@ final class MigrationHelper {
     protected Connection $connection,
     protected RdfSyncConnectionInterface $sparqlEndpoint,
     protected RdfSyncMapper $rdfSyncMapper,
+    protected StateInterface $state,
   ) {}
 
   /**
@@ -428,6 +437,16 @@ final class MigrationHelper {
         $group->save();
       }
     }
+
+    // The group is creating one membership by default. However, in order to
+    // keep existing data, we are converting the existing memberships from the
+    // groups in joinup_rdf_deploy_200004. Remove all memberships of the groups
+    // created by the migration. Do not check if the group is new because the
+    // group might have been already created by the release migration.
+    $this->connection->delete('og_membership')
+      ->condition('entity_type', 'node')
+      ->condition('entity_id', $group->id())
+      ->execute();
   }
 
   /**
@@ -495,7 +514,31 @@ final class MigrationHelper {
     foreach (self::FIELD_MAPPING[$group->bundle()] as $property => $mapping) {
       $value = $values[$property] ?? NULL;
       if ($value) {
-        $value = $this->parseValue($value, $mapping);
+        if ($property === 'http://joinup.eu/search') {
+          $unserialized = unserialize($value[0], ['allowed_classes' => FALSE]);
+          $submap = [
+            'collection' => [
+              'source' => 'field_collection_content_status',
+              'target' => 'collection_content_status',
+            ],
+            'solution' => [
+              'source' => 'field_is_content_status',
+              'target' => 'solution_content_status',
+            ],
+          ];
+          $data = $unserialized['fields'][$submap[$group->bundle()]['source']];
+          unset($unserialized['fields'][$submap[$group->bundle()]['source']]);
+          $unserialized['fields'][$submap[$group->bundle()]['target']] = $data;
+          $value[0] = serialize($unserialized);
+        }
+        elseif ($property === 'http://purl.org/dc/terms/relation') {
+          // Skip related solutions. The target entities might not have been
+          // migrated yet, so we will handle them in a separate migration.
+          // @see \joinup_rdf_update_200009.
+          // @see \joinup_rdf_deploy_200013.
+          continue;
+        }
+        $value = $this->parseValue($value, $mapping, $property);
         $group->set($mapping['target_field_name'], $value);
       }
 
@@ -549,11 +592,13 @@ final class MigrationHelper {
    *   The values to parse.
    * @param array $mappingData
    *   The mapping data.
+   * @param string $property
+   *   The property/predicate URI.
    *
    * @return array
    *   The parsed values.
    */
-  protected function parseValue(array $values, array $mappingData): mixed {
+  protected function parseValue(array $values, array $mappingData, string $property): mixed {
     $parsed = [];
     $format = $mappingData['format'];
 
@@ -655,7 +700,7 @@ final class MigrationHelper {
 
       $targetFieldName = $fieldData['target_field_name'];
       $field = $loaded->get($targetFieldName);
-      $value = $this->parseValue($value, $fieldData);
+      $value = $this->parseValue($value, $fieldData, $uri);
       if ($value !== $field->value) {
         print sprintf('The value of the field %s is not correct. Expected: %s, got: %s', $targetFieldName, print_r($value, TRUE), print_r($field->value, TRUE));
       }

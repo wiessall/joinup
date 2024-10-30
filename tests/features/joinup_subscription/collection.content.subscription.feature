@@ -10,10 +10,12 @@ Feature: Subscribing to community content in collections
       | Products of Bulgaria | published |
       | Cities of Bulgaria   | published |
     And users:
-      | Username | E-mail            | First name | Family name  | Notification frequency |
-      | hristo   | hristo@example.bg | Hristo     | Draganov     | daily                  |
-      | bisera   | bisera@example.bg | Bisera     | Kaloyancheva | weekly                 |
-      | kalin    | kalin@primer.bg   | Kalin      | Antov        | monthly                |
+      | Username | E-mail            | First name | Family name  | Notification frequency | Status    |
+      | hristo   | hristo@example.bg | Hristo     | Draganov     | daily                  | active    |
+      | bisera   | bisera@example.bg | Bisera     | Kaloyancheva | weekly                 | active    |
+      | kalin    | kalin@primer.bg   | Kalin      | Antov        | monthly                | active    |
+      | aleks    | aleks@primer.bg   | Aleksandar | Begov        | monthly                | blocked   |
+      | penka    | penka@primer.bg   | Penka      | Ramil        | monthly                | cancelled |
     And the following collection user memberships:
       | collection           | user   | roles       |
       | Products of Bulgaria | hristo |             |
@@ -22,6 +24,8 @@ Feature: Subscribing to community content in collections
       | Cities of Bulgaria   | hristo |             |
       | Cities of Bulgaria   | bisera |             |
       | Cities of Bulgaria   | kalin  | facilitator |
+      | Cities of Bulgaria   | aleks  |             |
+      | Cities of Bulgaria   | penka  |             |
     And the following collection content subscriptions:
       | collection           | user   | subscriptions                        |
       | Products of Bulgaria | hristo | discussion, event, news, solution    |
@@ -30,10 +34,15 @@ Feature: Subscribing to community content in collections
       | Cities of Bulgaria   | hristo | document, event, solution            |
       | Cities of Bulgaria   | bisera | discussion, event, news              |
       | Cities of Bulgaria   | kalin  | discussion, document, news, solution |
+      | Cities of Bulgaria   | aleks  | discussion, document, news             |
+      | Cities of Bulgaria   | penka  | discussion, document, news             |
     And all message digests have been delivered
 
   Scenario: Receive a digest of content that is published in my collections
-    Given discussion content:
+    # Start on clean.
+    Given I mark all emails as read
+
+    And discussion content:
       | title      | body                      | collection           | state     | author |
       | Duck liver | Rich buttery and delicate | Products of Bulgaria | published | hristo |
       | Sofia      | Grows without aging       | Cities of Bulgaria   | published | kalin  |
@@ -142,6 +151,9 @@ Feature: Subscribing to community content in collections
       | Canned cherries      |
       | Sunflower seeds      |
     And the content subscription digest sent to kalin should have the subject "Joinup: Monthly digest message"
+
+    # No message for aleks@primer.bg (blocked) and penka@primer.bg (cancelled).
+    And 4 e-mails should have been sent to recipients "kalin@primer.bg, hristo@example.bg, bisera@example.bg"
 
     # Clean out the message queue for the next test.
     And I mark all emails as read
