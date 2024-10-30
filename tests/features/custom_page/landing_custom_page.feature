@@ -23,7 +23,8 @@ Feature: Landing custom page.
     When I click "Add custom landing page"
     And the following field should be present "URL alias"
     And I fill in the following:
-      | Title | Twelve Tables |
+      | Title    | Twelve Tables          |
+      | Abstract | Twelve tables abstract |
     And I select "Data gathering and processing" from "Topic"
     And I press "Publish"
 

@@ -43,7 +43,8 @@ Feature:
     And I click "Add custom page" in the plus button menu
 
     When I fill in the following:
-      | Title | Pages carousel |
+      | Title    | Pages carousel          |
+      | Abstract | Abstract pages carousel |
     And I select "Demography" from "Topic"
     And I add a layout paragraph in the "Custom page body" form field with the following properties:
       | layout           | one column |

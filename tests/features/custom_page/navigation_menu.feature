@@ -26,7 +26,8 @@ Feature: Navigation menu for custom pages
     When I click the contextual link "Add new page" in the "Header" region
     Then I should see the heading "Add custom page"
     When I fill in the following:
-      | Title | About us |
+      | Title    | About us             |
+      | Abstract | Lorem ipsum abstract |
     And I select "HR" from "Topic"
     And I press "Publish"
     Then I should see the success message "Custom page About us has been created."
@@ -180,8 +181,8 @@ Feature: Navigation menu for custom pages
       | title                               | state     |
       | Ravenous wood-munching alphabeavers | published |
     And custom_page content:
-      | title       | body                                                                | <group>                             | topic | state     |
-      | Tree eaters | Given time, they will most likely strip the entire region of trees. | Ravenous wood-munching alphabeavers | HR    | published |
+      | title       | abstract               | body                                                                | <group>                             | topic | state     |
+      | Tree eaters | entire region of trees | Given time, they will most likely strip the entire region of trees. | Ravenous wood-munching alphabeavers | HR    | published |
     When I am logged in as a facilitator of the "Ravenous wood-munching alphabeavers" "<group>"
     And I go to the homepage of the "Ravenous wood-munching alphabeavers" <group>
     Then I should see the link "Tree eaters" in the "Navigation menu"

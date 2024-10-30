@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\custom_page\Entity;
 
 use Drupal\collection\Entity\NodeCollectionContentTrait;
+use Drupal\joinup_bundle_class\AbstractTrait;
 use Drupal\joinup_bundle_class\DescriptionTrait;
 use Drupal\joinup_bundle_class\JoinupBundleClassFieldAccessTrait;
 use Drupal\joinup_bundle_class\LogoTrait;
@@ -21,6 +22,7 @@ use Drupal\topic\Entity\TopicReferencingEntityTrait;
  */
 class CustomPage extends Node implements CustomPageInterface {
 
+  use AbstractTrait;
   use ArchivableEntityTrait;
   use GroupArchivableEntityTrait;
   use DescriptionTrait;
@@ -35,8 +37,8 @@ class CustomPage extends Node implements CustomPageInterface {
   /**
    * {@inheritdoc}
    */
-  public function getLogoFieldName(): string {
-    return 'field_custom_page_logo';
+  public function getAbstractField(): string {
+    return 'abstract';
   }
 
   /**
@@ -44,6 +46,20 @@ class CustomPage extends Node implements CustomPageInterface {
    */
   public function getDescriptionField(): string {
     return 'field_paragraphs_body';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getLogoFieldName(): string {
+    return 'field_custom_page_logo';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getWorkflowStateFieldName(): string {
+    return 'field_state';
   }
 
   /**
