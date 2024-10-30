@@ -17,14 +17,24 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class PrivateMessageMembers extends FieldPluginBase {
 
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, protected PrivateMessageService $privateMessageService) {
+  public function __construct(
+    array $configuration,
+    string $plugin_id,
+    mixed $plugin_definition,
+    protected PrivateMessageService $privateMessageService,
+  ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
   }
 
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+  public static function create(
+    ContainerInterface $container,
+    array $configuration,
+    $plugin_id,
+    $plugin_definition,
+  ): self {
     return new static(
       $configuration,
       $plugin_id,
@@ -36,19 +46,19 @@ class PrivateMessageMembers extends FieldPluginBase {
   /**
    * {@inheritdoc}
    */
-  public function usesGroupBy() {
+  public function usesGroupBy(): bool {
     return FALSE;
   }
 
   /**
    * {@inheritdoc}
    */
-  public function query() {}
+  public function query(): void {}
 
   /**
    * {@inheritdoc}
    */
-  protected function defineOptions() {
+  protected function defineOptions(): array {
     $options = parent::defineOptions();
     $options['hide_alter_empty'] = ['default' => FALSE];
     return $options;
@@ -57,17 +67,17 @@ class PrivateMessageMembers extends FieldPluginBase {
   /**
    * {@inheritdoc}
    */
-  public function render(ResultRow $values) {
+  public function render(ResultRow $values): array|string {
     $entity = $values->_entity;
     $target = $this->privateMessageService->getPrivateMessageTarget($entity);
-    $ownerName = ($entity instanceof UserInterface) ? $entity->getDisplayName() : '';
+    $ownerName = ($entity->getOwner() instanceof UserInterface) ? $entity->getOwner()->getDisplayName() : '';
     $targetName = ($target instanceof UserInterface) ? $target->getDisplayName() : '';
 
     if ($entity->getEntityTypeId() === 'private_message') {
-      $membersMarkup = '<div>From: ' . $ownerName . '<br>To: ' . $targetName . '</div>';
       return [
-        '#type' => 'markup',
-        '#markup' => $membersMarkup,
+        '#theme' => 'private_message_field_members',
+        '#owner_name' => $ownerName,
+        '#target_name' => $targetName,
       ];
     }
 
