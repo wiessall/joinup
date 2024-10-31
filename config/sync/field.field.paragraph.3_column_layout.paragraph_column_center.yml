@@ -26,8 +26,8 @@ settings:
   handler: 'default:paragraph'
   handler_settings:
     target_bundles:
-      simple_paragraph: simple_paragraph
       image: image
+      simple_paragraph: simple_paragraph
       call_to_action: call_to_action
       entity_reference: entity_reference
       testimony: testimony
