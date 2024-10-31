@@ -10,15 +10,9 @@ services:
       - { name: event_subscriber }
   joinup_private_message.paramconverter:
     class: Drupal\joinup_private_message\ParamConverter\BanConverter
-    arguments: ['@entity_type.manager', '@entity.repository', '@current_user']
+    arguments: [ '@entity_type.manager', '@entity.repository', '@current_user' ]
     tags:
-      # Use a higher priority than EntityConverter.
       - { name: paramconverter, priority: 6 }
-  joinup_private_message.service:
-    class: Drupal\joinup_private_message\Service\PrivateMessageService
-    arguments: [ '@database','@entity_type.manager' ]
-  joinup_private_message.report_access:
-    class: Drupal\joinup_private_message\Access\PrivateMessageReportAccess
-    arguments: ['@current_user', '@joinup_private_message.service']
-    tags:
-      - { name: access_check, applies_to: _report_access_check }
+  joinup_private_message.user_service:
+    class: Drupal\joinup_private_message\Service\PrivateMessageUserService
+    arguments: [ '@private_message.service' ]
