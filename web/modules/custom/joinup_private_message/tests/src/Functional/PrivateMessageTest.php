@@ -1,0 +1,65 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Drupal\Tests\joinup_private_message\Functional;
+
+use Drupal\Core\Url;
+use Drupal\Tests\BrowserTestBase;
+use Drupal\private_message\Entity\PrivateMessage;
+
+/**
+ * Tests for the Private Messages.
+ *
+ * @group teste
+ */
+class PrivateMessageTest extends BrowserTestBase {
+  /**
+   * {@inheritdoc}
+   */
+  protected $defaultTheme = 'stark';
+
+  /**
+   * Modules to install.
+   *
+   * @var array
+   */
+  protected static $modules = ['joinup_private_message'];
+
+  /**
+   * The second User used for the test.
+   *
+   * @var \Drupal\Core\Session\AccountInterface
+   */
+  private $user;
+
+  /**
+   * Setup the test class.
+   */
+  public function setUp(): void {
+    parent::setUp();
+    $this->user = $this->drupalCreateUser([
+      'use private messaging system',
+      'access user profiles',
+      'delete any private message',
+    ]);
+  }
+
+  /**
+   * Tests that the canonical private message route redirects correctly.
+   */
+  public function testPrivateMessageCanonicalRoute(): void {
+    // Create a private message.
+    $message = PrivateMessage::create([
+      'owner' => $this->user->id(),
+    ]);
+    $message->save();
+
+    $this->drupalLogin($this->user);
+    $this->drupalGet(Url::fromRoute('entity.private_message.canonical', [
+      'private_message' => $message->id(),
+    ]));
+    $this->assertSession()->addressEquals('user/messages');
+  }
+
+}
