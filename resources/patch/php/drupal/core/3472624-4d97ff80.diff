@@ -1,0 +1,144 @@
+diff --git a/core/misc/dialog/dialog.position.js b/core/misc/dialog/dialog.position.js
+index 98662211595ede9a4d1a238f90c0cae8cfe006e3..390eb6ac1f4e2b760b0f2277d4b06d85fe243c00 100644
+--- a/core/misc/dialog/dialog.position.js
++++ b/core/misc/dialog/dialog.position.js
+@@ -63,6 +63,15 @@
+    * @fires event:dialogContentResize
+    */
+   function resetSize(event) {
++    // Ensure the UI dialog instance exists/is valid.
++    if (
++      !event.data ||
++      !event.data.$element ||
++      !event.data.$element.data('ui-dialog')
++    ) {
++      return;
++    }
++
+     const positionOptions = [
+       'width',
+       'height',
+@@ -119,7 +128,7 @@
+   }
+ 
+   window.addEventListener('dialog:aftercreate', (e) => {
+-    const autoResize = debounce(resetSize, 20);
++    const autoResize = debounce(resetSize, 20, true);
+     const $element = $(e.target);
+     const { settings } = e;
+     const eventData = { settings, $element };
+diff --git a/core/modules/system/tests/modules/ajax_test/ajax_test.info.yml b/core/modules/system/tests/modules/ajax_test/ajax_test.info.yml
+index 2fa40fce19205686da82b415e74f715f206bce1d..a8376f2924bdf9864ddbb169fb8bb7b7a7c44f77 100644
+--- a/core/modules/system/tests/modules/ajax_test/ajax_test.info.yml
++++ b/core/modules/system/tests/modules/ajax_test/ajax_test.info.yml
+@@ -5,3 +5,4 @@ package: Testing
+ version: VERSION
+ dependencies:
+   - drupal:contact
++  - drupal:filter
+diff --git a/core/modules/system/tests/modules/ajax_test/src/Form/AjaxTestForm.php b/core/modules/system/tests/modules/ajax_test/src/Form/AjaxTestForm.php
+index e33e2ad2a91816a4fa673315383e0530b2e82457..2678fa42e4a9eea55e5223bf0de32f62266ee0c1 100644
+--- a/core/modules/system/tests/modules/ajax_test/src/Form/AjaxTestForm.php
++++ b/core/modules/system/tests/modules/ajax_test/src/Form/AjaxTestForm.php
+@@ -35,6 +35,11 @@ public function buildForm(array $form, FormStateInterface $form_state) {
+       '#markup' => '<p>' . $this->t("Ajax Form contents description.") . '</p>',
+     ];
+ 
++    $form['ck_element'] = [
++      '#type' => 'text_format',
++      '#format' => 'test_dialog',
++    ];
++
+     $form['actions'] = [
+       '#type' => 'actions',
+     ];
+diff --git a/core/tests/Drupal/FunctionalJavascriptTests/Ajax/DialogTest.php b/core/tests/Drupal/FunctionalJavascriptTests/Ajax/DialogTest.php
+index bdd324020866d453050e89517767df29de6e6bb2..fb4b9b4ee79dfa4454308202a663a17c5fc4d696 100644
+--- a/core/tests/Drupal/FunctionalJavascriptTests/Ajax/DialogTest.php
++++ b/core/tests/Drupal/FunctionalJavascriptTests/Ajax/DialogTest.php
+@@ -6,6 +6,8 @@
+ 
+ use Drupal\ajax_test\Controller\AjaxTestController;
+ use Drupal\Core\Ajax\OpenModalDialogWithUrl;
++use Drupal\editor\Entity\Editor;
++use Drupal\filter\Entity\FilterFormat;
+ use Drupal\FunctionalJavascriptTests\WebDriverTestBase;
+ 
+ // cspell:ignore testdialog
+@@ -20,18 +22,40 @@ class DialogTest extends WebDriverTestBase {
+   /**
+    * {@inheritdoc}
+    */
+-  protected static $modules = ['ajax_test', 'ajax_forms_test', 'contact'];
++  protected static $modules = ['ajax_test', 'ajax_forms_test', 'contact', 'ckeditor5', 'editor', 'filter'];
+ 
+   /**
+    * {@inheritdoc}
+    */
+   protected $defaultTheme = 'stark';
+ 
++  /**
++   * {@inheritdoc}
++   */
++  protected function setUp(): void {
++    parent::setUp();
++
++    $format = FilterFormat::create([
++      'format' => 'test_dialog',
++      'name' => 'Test Dialog',
++    ]);
++    $format->save();
++
++    $editor = Editor::create([
++      'format' => $format->id(),
++      'editor' => 'ckeditor5',
++      'image_upload' => [
++        'status' => FALSE,
++      ],
++    ]);
++    $editor->save();
++  }
++
+   /**
+    * Tests sending non-JS and AJAX requests to open and manipulate modals.
+    */
+   public function testDialog(): void {
+-    $this->drupalLogin($this->drupalCreateUser(['administer contact forms']));
++    $this->drupalLogin($this->drupalCreateUser(['administer contact forms', 'use text format test_dialog']));
+     // Ensure the elements render without notices or exceptions.
+     $this->drupalGet('ajax-test/dialog');
+ 
+@@ -69,6 +93,17 @@ public function testDialog(): void {
+     $this->assertNotNull($close_button);
+     $close_button->press();
+ 
++    // Test opening and immediately closing modal a few times.
++    // Ensure no JS errors are thrown.
++    for ($i = 0; $i < 10; $i++) {
++      $this->getSession()->getPage()->clickLink('Link 1 (modal)');
++      $this->assertSession()->waitForElementVisible('css', 'div.ui-dialog');
++      // Use JS directly which is much faster than Element::find.
++      // We want to close it as fast as possible, within 20ms, corresponding to
++      // the debounce on Drupal.dialog.resetSize.
++      $this->getSession()->executeScript('document.querySelector(".ui-dialog button[title=\"Close\"]").click();');
++    }
++
+     // Tests a modal with a dialog-option.
+     // Link 2 is similar to Link 1, except it submits additional width
+     // information which must be echoed in the resulting  DOM update.
+@@ -188,12 +223,11 @@ public function testDialog(): void {
+     // Press buttons in the dialog to ensure there are no AJAX errors.
+     $this->assertSession()->elementExists('css', '.ui-dialog-buttonpane')->pressButton('Hello world');
+     $this->assertSession()->assertWaitOnAjaxRequest();
+-    $has_focus_text = $this->getSession()->evaluateScript('document.activeElement.textContent');
+-    $this->assertEquals('Do it', $has_focus_text);
+     $this->assertSession()->elementExists('css', '.ui-dialog-buttonpane')->pressButton('Preview');
+     $this->assertSession()->assertWaitOnAjaxRequest();
+-    $has_focus_text = $this->getSession()->evaluateScript('document.activeElement.textContent');
+-    $this->assertEquals('Do it', $has_focus_text);
++
++    // Test resizing window, ensure no JS errors are thrown.
++    $this->getSession()->resizeWindow(1200, 1200);
+ 
+     // Reset: close the form.
+     $form_dialog->findButton('Close')->press();
