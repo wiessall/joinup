@@ -545,34 +545,11 @@ display:
         - url.query_args
         - user.permissions
       tags: {  }
-  page_1:
-    id: page_1
-    display_title: Page
+  all:
+    id: all
+    display_title: All
     display_plugin: page
     position: 1
-    display_options:
-      sorts: {  }
-      defaults:
-        sorts: false
-      display_extenders:
-        metatag_display_extender:
-          metatags: {  }
-          tokenize: false
-      path: dashboard/private-message-report/%private_message
-    cache_metadata:
-      max-age: -1
-      contexts:
-        - 'languages:language_content'
-        - 'languages:language_interface'
-        - url
-        - url.query_args
-        - user.permissions
-      tags: {  }
-  page_2:
-    id: page_2
-    display_title: 'Page 2'
-    display_plugin: page
-    position: 2
     display_options:
       sorts:
         message__value:
@@ -623,6 +600,7 @@ display:
           granularity: second
       defaults:
         sorts: false
+      display_description: ''
       display_extenders:
         metatag_display_extender:
           metatags: {  }
@@ -637,5 +615,29 @@ display:
         - url.query_args
         - 'url.query_args:sort_by'
         - 'url.query_args:sort_order'
+        - user.permissions
+      tags: {  }
+  single:
+    id: single
+    display_title: Single
+    display_plugin: page
+    position: 2
+    display_options:
+      sorts: {  }
+      defaults:
+        sorts: false
+      display_description: ''
+      display_extenders:
+        metatag_display_extender:
+          metatags: {  }
+          tokenize: false
+      path: dashboard/private-message-report/%private_message
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_content'
+        - 'languages:language_interface'
+        - url
+        - url.query_args
         - user.permissions
       tags: {  }

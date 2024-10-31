@@ -41,7 +41,7 @@ class PrivateMessageUnreportForm extends ConfirmFormBase {
     $privateMessage->set('report', '');
     $privateMessage->set('report_timestamp', NULL);
     $privateMessage->save();
-    $form_state->setRedirect('view.private_message_report.page_2');
+    $form_state->setRedirect('view.private_message_report.all');
   }
 
   /**
@@ -55,7 +55,7 @@ class PrivateMessageUnreportForm extends ConfirmFormBase {
    * {@inheritdoc}
    */
   public function getCancelUrl(): Url {
-    return Url::fromRoute('view.private_message_report.page_2');
+    return Url::fromRoute('view.private_message_report.all');
   }
 
 }
