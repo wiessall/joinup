@@ -1,0 +1,30 @@
+uuid: fee3b417-824d-4a8c-a675-2cc591e1663b
+langcode: en
+status: true
+dependencies:
+  module:
+    - joinup_core
+    - private_message
+  theme:
+    - ventuno
+id: ventuno_privatemessage-inbox
+theme: ventuno
+region: sidebar
+weight: -25
+provider: null
+plugin: private_message_inbox_block
+settings:
+  id: private_message_inbox_block
+  label: 'Private Message Inbox'
+  label_display: '0'
+  provider: private_message
+  thread_count: 5
+  ajax_load_count: 5
+  ajax_refresh_rate: 15
+visibility:
+  request_route:
+    id: request_route
+    negate: false
+    routes:
+      - private_message.private_message_page
+      - entity.private_message_thread.canonical
