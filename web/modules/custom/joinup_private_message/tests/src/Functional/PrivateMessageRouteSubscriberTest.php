@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Drupal\Tests\joinup_private_message\Kernel;
+namespace Drupal\Tests\joinup_private_message\Functional;
 
 use Drupal\Core\Routing\RouteProviderInterface;
 use Drupal\Tests\BrowserTestBase;
@@ -79,19 +79,12 @@ class PrivateMessageRouteSubscriberTest extends BrowserTestBase {
   }
 
   /**
-   * Tests that the canonical private message thread route returns a 404.
+   * Tests that specific routes return a 404.
    */
-  public function testPrivateMessageThreadCanonicalRoute(): void {
-    try {
-      $route = $this->routeProvider->getRouteByName('entity.private_message_thread.canonical');
-
-      $this->drupalGet($route->getPath());
-      $this->assertSession()->statusCodeEquals(404);
-    }
-    catch (RouteNotFoundException $e) {
-      // If the route is not found, ensure it's properly asserted.
-      $this->assertTrue(TRUE, 'The canonical private message thread route does not exist, as expected.');
-    }
+  public function testRouteReturnNotFound(): void {
+    $route = $this->routeProvider->getRouteByName('entity.private_message_thread.canonical');
+    $this->drupalGet($route->getPath());
+    $this->assertSession()->statusCodeEquals(404);
   }
 
   /**
