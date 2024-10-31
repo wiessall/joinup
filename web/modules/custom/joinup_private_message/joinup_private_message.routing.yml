@@ -16,14 +16,14 @@ joinup_private_message.unblock:
     parameters:
       private_message_ban:
         type: entity:private_message_ban
-joinup_private_message.report_form:
+joinup_private_message.report:
   path: '/user/messages/message/{private_message}/report'
   defaults:
     _form: '\Drupal\joinup_private_message\Form\PrivateMessageReportForm'
     _title: 'Report and block sender'
   requirements:
     _permission: 'use private messaging system'
-    _report_access_check: TRUE
+    _custom_access: '\Drupal\joinup_private_message\Controller\PrivateMessageReportController::access'
   options:
     parameters:
       private_message:
