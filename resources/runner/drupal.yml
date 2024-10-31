@@ -306,6 +306,7 @@ drupal:
       Mail transport: |
         $config['mailsystem.settings']['defaults']['sender'] = 'php_mail';
       Site email:
+        $config['mimemail.settings']['mail'] = getenv('DRUPAL_SITE_MAIL');
         $config['system.site']['mail'] = getenv('DRUPAL_SITE_MAIL');
       Search API: |
         // Adding a fallback for the scheme in case it is not properly
