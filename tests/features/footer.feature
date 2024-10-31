@@ -25,7 +25,7 @@ Feature: Footer
     Given I am logged in as a moderator
     When I click "Menus"
     And I click "List links" in the "Help and support" row
-    Then I uncheck the "Enable How-to & video tutorials" row
+    Then I uncheck the "Enable Frequently Asked Questions (FAQ)" row
     And I press "Save"
     Then I should see the success message "Menu Help and support has been updated."
 
@@ -34,24 +34,24 @@ Feature: Footer
 
     Given I am an anonymous user
     And I am on the homepage
-    Then I should not see the link "How-to & video tutorials"
+    Then I should not see the link "Frequently Asked Questions (FAQ)"
     Then I should not see the link "Contact Joinup Support"
     And I should see the link "Take a tour"
 
     Then I click "advanced search"
     And I should be on the advanced search page
-    Then I should not see the link "How-to & video tutorials"
+    Then I should not see the link "Frequently Asked Questions (FAQ)"
     Then I should not see the link "Contact Joinup Support"
     And I should not see the text "Take a tour"
 
-    # Re-enable the How-to & video menu link.
+    # Re-enable the Frequently Asked Questions (FAQ) menu link.
     Given I am logged in as a moderator
     When I click "Menus"
     And I click "List links" in the "Help and support" row
-    Then I check the "Enable How-to & video tutorials" row
+    Then I check the "Enable Frequently Asked Questions (FAQ)" row
     Then I check the "Enable Contact Joinup Support" row
     And I press "Save"
 
     And I am on the homepage
-    Then I should see the link "How-to & video tutorials"
+    Then I should see the link "Frequently Asked Questions (FAQ)"
     Then I should see the link "Contact Joinup Support"

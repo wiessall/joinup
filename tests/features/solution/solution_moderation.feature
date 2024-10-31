@@ -92,7 +92,7 @@ Feature: Solution moderation
       # This is checked separately below.
       | Azure Ship                 | Franklin Walker  | Save as draft, Propose                                               |
       | The Last Illusion          | Franklin Walker  | Propose, Save as draft                                               |
-      | Rose of Doors              | Franklin Walker  | Publish, Save as draft, Propose                                      |
+      | Rose of Doors              | Franklin Walker  | Publish, Save as draft, Propose, Archive                             |
       | Fire Swords                | Franklin Walker  |                                                                      |
       | The Guardian of the Stream | Franklin Walker  | Save as draft, Propose                                               |
       | Flames in the Swords       | Franklin Walker  | Save as draft, Propose                                               |
@@ -101,7 +101,7 @@ Feature: Solution moderation
       # testes as shown.
       | Azure Ship                 | William Curtis   | Save as draft, Propose                                               |
       | The Last Illusion          | William Curtis   | Propose, Save as draft                                               |
-      | Rose of Doors              | William Curtis   | Publish, Save as draft, Propose                                      |
+      | Rose of Doors              | William Curtis   | Publish, Save as draft, Propose, Archive                             |
       | Fire Swords                | William Curtis   |                                                                      |
       | The Guardian of the Stream | William Curtis   | Save as draft, Propose                                               |
       | Flames in the Swords       | William Curtis   | Save as draft, Propose                                               |
