@@ -4,24 +4,27 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_private_message\Plugin\views\field;
 
-use Drupal\joinup_private_message\Service\PrivateMessageService;
+use Drupal\Core\Link;
+use Drupal\Core\Url;
+use Drupal\joinup_private_message\Service\PrivateMessageUserService;
+use Drupal\private_message\Entity\PrivateMessageInterface;
 use Drupal\user\UserInterface;
 use Drupal\views\Plugin\views\field\FieldPluginBase;
 use Drupal\views\ResultRow;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Plugin implementation of the 'private_message_members' field.
+ * Plugin implementation of the 'private_message_target' field.
  *
- * @ViewsField("private_message_members")
+ * @ViewsField("private_message_target")
  */
-class PrivateMessageMembers extends FieldPluginBase {
+class PrivateMessageTarget extends FieldPluginBase {
 
   public function __construct(
     array $configuration,
     string $plugin_id,
     mixed $plugin_definition,
-    protected PrivateMessageService $privateMessageService,
+    protected PrivateMessageUserService $privateMessageService,
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
   }
@@ -39,7 +42,7 @@ class PrivateMessageMembers extends FieldPluginBase {
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('joinup_private_message.service')
+      $container->get('joinup_private_message.user_service')
     );
   }
 
@@ -67,21 +70,15 @@ class PrivateMessageMembers extends FieldPluginBase {
   /**
    * {@inheritdoc}
    */
-  public function render(ResultRow $values): array|string {
-    $entity = $values->_entity;
-    $target = $this->privateMessageService->getPrivateMessageTarget($entity);
-    $ownerName = ($entity->getOwner() instanceof UserInterface) ? $entity->getOwner()->getDisplayName() : '';
-    $targetName = ($target instanceof UserInterface) ? $target->getDisplayName() : '';
-
-    if ($entity->getEntityTypeId() === 'private_message') {
-      return [
-        '#theme' => 'private_message_field_members',
-        '#owner_name' => $ownerName,
-        '#target_name' => $targetName,
-      ];
-    }
-
-    return '';
+  public function render(ResultRow $values) {
+    $privateMessage = $values->_entity;
+    assert($privateMessage instanceof PrivateMessageInterface);
+    $target = $this->privateMessageService->getPrivateMessageTarget($privateMessage);
+    assert($target instanceof UserInterface);
+    $url = Url::fromRoute('entity.user.canonical', ['user' => $target->id()]);
+    $link = Link::fromTextAndUrl($target->getDisplayName(), $url)
+      ->toRenderable();
+    return $link;
   }
 
 }
