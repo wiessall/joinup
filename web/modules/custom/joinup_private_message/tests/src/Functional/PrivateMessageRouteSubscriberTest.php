@@ -53,23 +53,18 @@ class PrivateMessageRouteSubscriberTest extends BrowserTestBase {
    */
   public function testRoutePathAlterations(): void {
     $route = $this->routeProvider->getRouteByName('private_message.private_message_page');
-    $this->assertNotNull($route, 'The private message page route should exist.');
     $this->assertEquals('/user/messages', $route->getPath(), 'The path for the private message page route should be "/user/messages".');
 
     $route = $this->routeProvider->getRouteByName('entity.private_message_thread.delete_form');
-    $this->assertNotNull($route, 'The private message thread delete form route should exist.');
     $this->assertEquals('/user/messages/{private_message_thread}/delete', $route->getPath(), 'The path for the delete form should be "/user/messages/{private_message_thread}/delete".');
 
     $route = $this->routeProvider->getRouteByName('entity.private_message_thread.clear_personal_history_form');
-    $this->assertNotNull($route, 'The clear personal history form route should exist.');
     $this->assertEquals('/user/messages/{private_message_thread}/clear-personal-history', $route->getPath(), 'The path for the clear personal history form should be "/user/messages/{private_message_thread}/clear-personal-history".');
 
     $route = $this->routeProvider->getRouteByName('private_message.private_message_create');
-    $this->assertNotNull($route, 'The private message creation route should exist.');
     $this->assertEquals('/user/messages/message/create', $route->getPath(), 'The path for creating a private message should be "/user/messages/message/create".');
 
     $route = $this->routeProvider->getRouteByName('entity.private_message.delete');
-    $this->assertNotNull($route, 'The private message delete route should exist.');
     $this->assertEquals('/user/messages/message/{private_message}/delete', $route->getPath(), 'The path for deleting a private message should be "/user/messages/message/{private_message}/delete".');
   }
 
