@@ -62,4 +62,19 @@ class PrivateMessageTest extends BrowserTestBase {
     $this->assertSession()->addressEquals('user/messages');
   }
 
+  /**
+   * Tests that the delete private message page has no errors.
+   */
+  public function testDeleteMessage(): void {
+    // Create a private message.
+    $message = PrivateMessage::create([
+      'owner' => $this->user->id(),
+    ]);
+    $message->save();
+
+    $this->drupalLogin($this->user);
+    $this->drupalGet('/user/messages/message/' . $message->id() . '/delete');
+    $this->assertSession()->statusCodeEquals(200);
+  }
+
 }
