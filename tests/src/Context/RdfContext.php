@@ -219,7 +219,7 @@ class RdfContext extends RawDrupalContext {
   /**
    * Asserts that entities in the published graph are ADMS-AP compliant.
    *
-   * @Then the ADMS-AP data of the published entities in Joinup is valid
+   * @Then the ADMS-AP data of the published entities in Interoperable Europe Portal is valid
    */
   public function assertValidPublishedGraph(): void {
     $config = \Drupal::config('rdf_sync.settings');
