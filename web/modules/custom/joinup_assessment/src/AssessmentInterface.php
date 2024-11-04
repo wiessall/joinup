@@ -42,4 +42,11 @@ interface AssessmentInterface {
    */
   public const string SUBMISSION_ABSTRACT = 'please_provide_the_name_of_the_initiative_project_or_action_cont';
 
+  /**
+   * Webform ID.
+   *
+   * Webform which contains assessment questions.
+   */
+  public const string WEBFORM_ID = 'online_form_for_assessments';
+
 }
