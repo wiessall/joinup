@@ -18,7 +18,7 @@
     {{ content.group_attachment }}
   </div>
 {% endif %}
-{% if content.assessment|render|striptags %}
+{% if node.field_type.value == 'interoperability_assessment' %}
   <div class="pb-5 border-bottom my-5">
     {{ content.assessment }}
   </div>
