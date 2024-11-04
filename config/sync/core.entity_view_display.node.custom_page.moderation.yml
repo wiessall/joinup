@@ -1,0 +1,84 @@
+uuid: d82b9f89-be8b-4552-9642-75f4741457bb
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.moderation
+    - field.field.node.custom_page.abstract
+    - field.field.node.custom_page.field_attachment
+    - field.field.node.custom_page.field_custom_page_logo
+    - field.field.node.custom_page.field_hide_title
+    - field.field.node.custom_page.field_keywords
+    - field.field.node.custom_page.field_paragraphs_body
+    - field.field.node.custom_page.field_state
+    - field.field.node.custom_page.field_topic
+    - field.field.node.custom_page.og_audience
+    - node.type.custom_page
+  module:
+    - field_fallback_formatter
+    - joinup_core
+    - link
+    - template_suggestion
+    - user
+id: node.custom_page.moderation
+targetEntityType: node
+bundle: custom_page
+mode: moderation
+content:
+  abstract:
+    type: field_fallback_formatter
+    label: hidden
+    settings:
+      main_field_formatter_id: string
+      main_field_formatter_settings:
+        link_to_entity: false
+      fallback_field_id: field_paragraphs_body
+      fallback_field_formatter_id: filtered_entity_reference_bundles
+      fallback_field_formatter_settings:
+        view_mode: tile
+        filtered_entity_bundles:
+          - simple_paragraph
+          - text
+        trim_length: 200
+        trim_chars: ...
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
+    weight: 1
+    region: content
+  flag_like_node:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 10
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+  report:
+    type: link
+    label: hidden
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    weight: 50
+    region: content
+hidden:
+  field_attachment: true
+  field_custom_page_logo: true
+  field_hide_title: true
+  field_keywords: true
+  field_paragraphs_body: true
+  field_state: true
+  field_topic: true
+  langcode: true
+  og_audience: true
+  private_message_link: true
+  published_at: true
+  search_api_excerpt: true
+  share_link: true

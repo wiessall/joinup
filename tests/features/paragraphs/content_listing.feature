@@ -13,9 +13,9 @@ Feature:
       | title  | state     |
       | Sparta | published |
     And news content:
-      | title       | headline    | collection  | content       | state     |
-      | Some news 1 | Some news 1 | Roman ruins | Some content. | published |
-      | Some news 2 | Some news 2 | Sparta      | Come content. | published |
+      | title       | headline    | collection  | content       | state     | abstract             |
+      | Some news 1 | Some news 1 | Roman ruins | Some content. | published | Some news 1 abstract |
+      | Some news 2 | Some news 2 | Sparta      | Come content. | published | Some news 2 abstract |
 
     And custom_page content:
       | title         | collection  | state     |
