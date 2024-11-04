@@ -12,6 +12,10 @@ dependencies:
     - paragraphs.paragraphs_type.testimony
   module:
     - entity_reference_revisions
+    - tmgmt_content
+third_party_settings:
+  tmgmt_content:
+    excluded: false
 id: paragraph.3_column_layout.paragraph_column_center
 field_name: paragraph_column_center
 entity_type: paragraph
@@ -34,45 +38,93 @@ settings:
     negate: 0
     target_bundles_drag_drop:
       1_column_layout:
-        weight: -29
+        weight: -58
+        enabled: false
+      2_column_featured_left:
+        weight: -47
+        enabled: false
+      2_column_featured_right:
+        weight: -46
         enabled: false
       2_column_layout:
-        weight: -27
+        weight: -56
         enabled: false
       3_column_layout:
-        weight: -31
+        weight: -60
         enabled: false
       accordion:
-        weight: -30
+        weight: -59
         enabled: false
       accordion_item:
-        weight: -28
+        weight: -57
+        enabled: false
+      block:
+        weight: -45
         enabled: false
       call_to_action:
-        weight: -20
+        weight: -51
         enabled: true
       carousel:
-        weight: -18
+        weight: -49
+        enabled: false
+      configurable_listing:
+        weight: -44
         enabled: false
       content_listing:
-        weight: -26
+        weight: -55
         enabled: false
       entity_reference:
-        weight: -19
+        weight: -50
         enabled: true
+      github_feed:
+        weight: -43
+        enabled: false
+      heading:
+        weight: -42
+        enabled: false
       iframe:
-        weight: -25
+        weight: -54
         enabled: false
       image:
-        weight: -21
+        weight: -61
         enabled: true
+      image_gallery:
+        weight: -41
+        enabled: false
       json_map:
-        weight: -24
+        weight: -53
+        enabled: false
+      layout:
+        weight: -40
+        enabled: false
+      poll:
+        weight: -39
+        enabled: false
+      quote:
+        weight: -38
         enabled: false
       simple_paragraph:
-        weight: -22
+        weight: -52
         enabled: true
+      social_media:
+        weight: -37
+        enabled: false
       testimony:
-        weight: -17
+        weight: -48
         enabled: true
+      text:
+        weight: -36
+        enabled: false
+      tile:
+        weight: -35
+        enabled: false
+      tiles:
+        weight: -34
+        enabled: false
+      video:
+        weight: -33
+        enabled: false
+      webform:
+        weight: -32
+        enabled: false
 field_type: entity_reference_revisions
