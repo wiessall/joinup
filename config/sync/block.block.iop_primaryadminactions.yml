@@ -1,0 +1,18 @@
+uuid: eb59d37d-98e9-4aac-919a-b110e48f9618
+langcode: en
+status: true
+dependencies:
+  theme:
+    - iop
+id: iop_primaryadminactions
+theme: iop
+region: content
+weight: -5
+provider: null
+plugin: local_actions_block
+settings:
+  id: local_actions_block
+  label: 'Primary admin actions'
+  label_display: '0'
+  provider: core
+visibility: {  }
