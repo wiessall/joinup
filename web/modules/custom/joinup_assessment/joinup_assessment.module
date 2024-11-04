@@ -10,8 +10,8 @@ declare(strict_types=1);
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Entity\EntityInterface;
-use Drupal\webform\WebformSubmissionInterface;
 use Drupal\joinup_assessment\AssessmentInterface;
+use Drupal\webform\WebformSubmissionInterface;
 
 /**
  * Implements hook_entity_access().
