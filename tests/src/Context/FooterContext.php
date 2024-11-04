@@ -35,7 +35,7 @@ class FooterContext extends RawDrupalContext {
     $element = $this->getSession()->getPage()->find('css', 'footer .joinup-version a');
     Assert::assertInstanceOf(NodeElement::class, $element, 'The version is shown in the footer.');
     Assert::assertStringStartsWith('https://git.fpfis.tech.ec.europa.eu/ec-europa/digit-joinup-reference/', $element->getAttribute('href'), 'The version links to the Gitlab instance.');
-    Assert::assertStringStartsWith('v1.', $element->getText(), 'The version number starts with the expected string "v1.".');
+    Assert::assertMatchesRegularExpression('/^v?(\d+\.){2}\d+(-\d+-g[0-9a-f]+)$/', $element->getText());
   }
 
 }
