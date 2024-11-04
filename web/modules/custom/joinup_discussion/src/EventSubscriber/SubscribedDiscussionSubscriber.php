@@ -189,7 +189,7 @@ class SubscribedDiscussionSubscriber implements EventSubscriberInterface {
     $actor = $this->getCurrentUser();
 
     if ($actor->hasRole('moderator')) {
-      $arguments['@actor:full_name'] = 'The Joinup Support Team';
+      $arguments['@actor:full_name'] = 'The Portal Support Team';
     }
     else {
       $arguments['@actor:full_name'] = $actor->getDisplayName();

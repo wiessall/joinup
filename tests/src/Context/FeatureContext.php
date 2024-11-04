@@ -1865,11 +1865,11 @@ class FeatureContext extends RawDrupalContext {
    * @param string $version
    *   The Joinup version to set, e.g. 'v1.57.0' or 'v1.57.0-66-g1234abcde'.
    *
-   * @When the Joinup version is set to :version
+   * @When the Interoperable Europe Portal version is set to :version
    */
   public function setJoinupVersion(string $version): void {
     // Alert the user that the `@joinupVersion` tag is required.
-    Assert::assertTrue($this->hasTag('joinupVersion'), 'The `@joinupVersion` tag is required for scenarios that want to change the Joinup version.');
+    Assert::assertTrue($this->hasTag('joinupVersion'), 'The `@joinupVersion` tag is required for scenarios that want to change the Interoperable Europe Portal version.');
 
     // We also require the Drupal API to retrieve the project root folder.
     Assert::assertTrue($this->hasTag('api'), 'The `@api` tag is required for scenarios that use the `@joinupVersion` tag.');

@@ -677,7 +677,7 @@ class CollectionContext extends RawDrupalContext {
   public function createJoinupCollection(): CollectionInterface {
     return $this->createCollection([
       'id' => JoinupCollectionHelper::getCollectionId(),
-      'label' => 'Joinup',
+      'label' => 'Interoperable Europe Portal',
       'field_ar_state' => 'published',
     ]);
   }

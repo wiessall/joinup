@@ -1,7 +1,7 @@
 @api @group-g
 Feature: Solution RSS feed.
   In order to stay up to date with solution updates
-  As a user of Joinup
+  As a user of Interoperable Europe Portal
   I want to subscribe to RSS feeds for each solution
 
   Scenario: Solution RSS feed.

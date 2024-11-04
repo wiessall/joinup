@@ -25037,9 +25037,9 @@
         "drupal/dropsolid_purge": 10,
         "drupal/facets_block": 10,
         "drupal/facets_date_range": 10,
+        "drupal/masquerade": 5,
         "drupal/node_revision_delete": 5,
         "drupal/views_block_area": 10,
-        "drupal/masquerade": 5,
         "php-task-runner/composer": 20,
         "php-task-runner/sparql": 20,
         "weitzman/drupal-test-traits": 20

@@ -92,9 +92,9 @@ Feature: User profile
     Then I should see the success message "The changes have been saved."
     And I should see the success message "The user has been notified that their account has been updated."
     And the following email should have been sent:
-      | recipient | Leonardo Da Vinci                                                                                         |
-      | subject   | The Joinup Support Team updated your account for you at Joinup                                            |
-      | body      | A moderator has edited your user profile on Joinup. Please check your profile to verify the changes done. |
+      | recipient | Leonardo Da Vinci                                                                                                              |
+      | subject   | The Portal Support Team updated your account for you at Interoperable Europe Portal                                            |
+      | body      | A moderator has edited your user profile on Interoperable Europe Portal. Please check your profile to verify the changes done. |
 
   Scenario: The user public profile page shows the content he's author of or is member of.
     Given users:

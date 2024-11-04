@@ -83,7 +83,7 @@ Feature: "Add event" visibility options.
     When I fill in "Physical location" with "Rue Belliard 28, Brussels, Belgium"
     And I enter the following for the "Virtual location" link field:
       | URL                          | Title           |
-      | https://joinup.ec.europa.eu/ | Joinup homepage |
+      | https://interoperable-europe.ec.europa.eu/ | Interoperable Europe Portal homepage |
       | https://drupal.org/          |                 |
     And I select "EU and European Policies" from "Topic"
     And I press "Save as draft"
@@ -100,7 +100,7 @@ Feature: "Add event" visibility options.
       | description | Rue Belliard 28, Brussels, Belgium |
       | latitude    | 50.842291                          |
       | longitude   | 4.370476                           |
-    And I should see the link "Joinup homepage"
+    And I should see the link "Interoperable Europe Portal homepage"
     And I should see the link "https://drupal.org"
     And the "Stream of Dreams" collection has a event titled "An amazing event"
     And I should not see the text "France"

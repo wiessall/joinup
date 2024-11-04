@@ -1,6 +1,6 @@
 @api @group-i
 Feature: Solutions Overview
-  As a new visitor of the Joinup website
+  As a new visitor of the Interoperable Europe Portal website
   To get an idea of the various solutions that are available
   I should see a list of all solutions
 
@@ -77,14 +77,14 @@ Feature: Solutions Overview
     Given I am an anonymous user
     When I visit the solution overview
     Then I should see the heading "Solutions"
-    And I should see the text "A solution on Joinup is a framework, tool, or service either hosted directly on Joinup or federated from third-party repositories."
+    And I should see the text "A solution on Interoperable Europe Portal is a framework, tool, or service either hosted directly on Interoperable Europe Portal or federated from third-party repositories."
     And the page should be cacheable
 
     # Access the page as a moderator to ensure proper caching.
     Given I am logged in as a "moderator"
     When I visit the solution overview
     Then I should see the heading "Solutions"
-    And I should see the text "A solution on Joinup is a framework, tool, or service either hosted directly on Joinup or federated from third-party repositories."
+    And I should see the text "A solution on Interoperable Europe Portal is a framework, tool, or service either hosted directly on Interoperable Europe Portal or federated from third-party repositories."
     And I should see the "Non electronic health" tile
     And I should see the "Closed data" tile
     And I should see the "Isolating Europe" tile
@@ -95,7 +95,7 @@ Feature: Solutions Overview
     Given I am logged in as "Madam Shirley"
     When I visit the solution overview
     Then I should see the heading "Solutions"
-    And I should see the text "A solution on Joinup is a framework, tool, or service either hosted directly on Joinup or federated from third-party repositories."
+    And I should see the text "A solution on Interoperable Europe Portal is a framework, tool, or service either hosted directly on Interoperable Europe Portal or federated from third-party repositories."
     Then I should see the "Non electronic health" tile
     And I should see the "Closed data" tile
     And I should see the "Isolating Europe" tile
@@ -106,7 +106,7 @@ Feature: Solutions Overview
     Given I am an anonymous user
     When I visit the solution overview
     Then I should see the heading "Solutions"
-    And I should see the text "A solution on Joinup is a framework, tool, or service either hosted directly on Joinup or federated from third-party repositories."
+    And I should see the text "A solution on Interoperable Europe Portal is a framework, tool, or service either hosted directly on Interoperable Europe Portal or federated from third-party repositories."
     And I should see the link "Non electronic health"
     And I should not see the text "Supports health-related fields"
     And I should see the link "Closed data"

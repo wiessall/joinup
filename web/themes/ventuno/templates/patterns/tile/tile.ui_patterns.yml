@@ -1,6 +1,6 @@
 tile:
   label: 'Tile'
-  description: 'Custom version of <a href="https://oelibrary.netlify.app/default/?path=/story/components-card--default" target="_blank">BCL''s card</a> to fit the needs of Joinup tiles display.'
+  description: 'Custom version of <a href="https://oelibrary.netlify.app/default/?path=/story/components-card--default" target="_blank">BCL''s card</a> to fit the needs of Interoperable Europe Portal tiles display.'
   fields:
     horizontal:
       type: boolean
@@ -19,7 +19,7 @@ tile:
       type: text
       label: 'Url'
       description: 'Url leading to the article.'
-      preview: 'https://joinup.ec.europa.eu'
+      preview: 'https://interoperable-europe.ec.europa.eu'
     highlighted:
       type: object
       label: 'Highlighted info'

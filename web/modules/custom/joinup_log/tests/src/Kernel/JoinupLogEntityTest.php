@@ -77,7 +77,7 @@ class JoinupLogEntityTest extends KernelTestBase {
     $log_entity = $this->generateLogEntity();
 
     $this->expectException(EntityStorageException::class);
-    $this->expectExceptionMessage('Joinup log entities are read only entities. Saving them once created is not allowed.');
+    $this->expectExceptionMessage('Interoperable Europe Portal log entities are read only entities. Saving them once created is not allowed.');
     $log_entity->save();
   }
 
@@ -106,7 +106,7 @@ class JoinupLogEntityTest extends KernelTestBase {
     $user = !empty($this->adminUser) ? $this->adminUser : new AnonymousUserSession();
     $values = $values + [
       'type'        => 'custom',
-      'message'     => 'Joinup log test log message',
+      'message'     => 'Interoperable Europe Portal log test log message',
       'severity'    => RfcLogLevel::NOTICE,
       'uid'         => $user->id(),
       'location'    => $base_root . \Drupal::request()->getRequestUri(),

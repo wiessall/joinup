@@ -1,28 +1,28 @@
 @api @joinup_collection @group-a
-Feature: Tests membership to Joinup collection.
+Feature: Tests membership to Interoperable Europe Portal collection.
 
   Background:
     Given the following collections:
       | title                   | state     |
       | An arbitrary collection | published |
 
-  Scenario: As a newly registered user, I'm automatically member of the 'Joinup'
+  Scenario: As a newly registered user, I'm automatically member of the 'Interoperable Europe Portal'
     collection and I cannot leave.
 
     Given I am logged in as a user with the member role of the "An arbitrary collection" collection
-    Then I am member of "Joinup" collection
+    Then I am member of "Interoperable Europe Portal" collection
 
     And I go to the homepage of the "An arbitrary collection" collection
     Then I should see the link "Leave this collection"
 
-    When I go to the homepage of the "Joinup" collection
+    When I go to the homepage of the "Interoperable Europe Portal" collection
     Then I should not see the link "Leave this collection"
 
-    When I am about to leave the "Joinup" collection
+    When I am about to leave the "Interoperable Europe Portal" collection
     Then I should get an access denied error
 
   Scenario: As a moderator I am able to revoke the membership of a user to any
-    arbitrary collection except 'Joinup'.
+    arbitrary collection except 'Interoperable Europe Portal'.
 
     Given users:
       | Username | E-mail           |
@@ -31,8 +31,8 @@ Feature: Tests membership to Joinup collection.
     And the following collection user membership:
       | collection              | user |
       | An arbitrary collection | joe  |
-    Then user "joe" is member of "Joinup" collection
-    And user "jane" is member of "Joinup" collection
+    Then user "joe" is member of "Interoperable Europe Portal" collection
+    And user "jane" is member of "Interoperable Europe Portal" collection
 
     Given I am logged in as a user with the moderator role
     And I am on the members page of "An arbitrary collection"
@@ -47,5 +47,5 @@ Feature: Tests membership to Joinup collection.
     When I press "Confirm"
     Then I should see the success message "The member joe has been deleted from the 'An arbitrary collection' collection."
 
-    Given I am on the members page of "Joinup"
+    Given I am on the members page of "Interoperable Europe Portal"
     Then the available options in the "Action" select should not include the "Delete the selected membership(s)" options

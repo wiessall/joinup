@@ -1119,7 +1119,7 @@ function joinup_group_mail(string $key, array &$message, array $params): void {
         'announcement' => $announcement->id(),
       ])->setAbsolute()->toString(),
     ];
-    $message['subject'] = t("Joinup: A new announcement '@subject' has been created", $args);
+    $message['subject'] = t("Interoperable Europe Portal: A new announcement '@subject' has been created", $args);
     $message['body'] = [
       t("A new announcement '@subject' has been created by @author for the @group @type.", $args),
       t('You can approve or reject the announcement at <a href=":url">:url</a>.', $args),

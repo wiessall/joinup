@@ -1,6 +1,6 @@
 @api @group-h
 Feature:
-  - As a visitor, in order to register to Joinup, I have to accept the site's
+  - As a visitor, in order to register to Interoperable Europe Portal, I have to accept the site's
     'Legal notice', otherwise I cannot register.
   - As registered user, in order to login when a new version of 'Legal notice'
     has been released, I have to accept the new version, otherwise I cannot
@@ -36,7 +36,7 @@ Feature:
     # After accepting the agreement the user can continue.
     Given I check "I have read and accept the Legal notice"
     And I press "Submit"
-    Then I should see the success message "Fill in the fields below to let the Joinup community learn more about you!"
+    Then I should see the success message "Fill in the fields below to let the Interoperable Europe Portal community learn more about you!"
 
     # The user has been redirected to its user account edit form.
     And the following fields should be present "Email, First name, Family name, Photo, Country of origin, Professional domain, Business title"

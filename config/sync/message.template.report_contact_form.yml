@@ -9,7 +9,7 @@ label: 'Report contact form'
 description: 'The message template for reporting content'
 text:
   -
-    value: '<p>Joinup: @message:subject</p>'
+    value: '<p>Interoperable Europe Portal: @message:subject</p>'
     format: content_editor
   -
     value: |-

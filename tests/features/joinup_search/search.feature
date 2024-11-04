@@ -80,7 +80,7 @@ Feature: Global search
     And the "spatial coverage" checkbox facet should allow selecting the following values "Belgium (1), European Union (1), Luxembourg (5)"
 
     # Check that only one search field is available. In an earlier version of
-    # Joinup there were two search fields, but this was confusing users.
+    # Interoperable Europe Portal there were two search fields, but this was confusing users.
     And there should be exactly 1 "search field" on the page
 
     When I check the "Social and Political (6)" checkbox from the "topic" facet
@@ -798,7 +798,7 @@ Feature: Global search
 
     Given collection:
       | uri   | http://data.europa.eu/w21/df34e3a2-207b-4910-a804-344931654e20 |
-      | title | Joinup                                                         |
+      | title | Interoperable Europe Portal                                                         |
       | state | published                                                      |
 
     # Check if suggestion does not generate any warnings.

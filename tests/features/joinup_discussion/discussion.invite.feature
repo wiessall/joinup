@@ -161,12 +161,12 @@ Feature: Invite members to subscribe to discussions
     Then I should see the success message "2 user(s) have been invited to this discussion."
     And the following email should have been sent:
       | recipient | Glory Ruskin                                                                                              |
-      | subject   | Lynwood Crawford invited you to follow a discussion on Joinup.                                            |
-      | body      | Lynwood Crawford invited you to participate in the discussion Concerned about dissolved gases? on Joinup. |
+      | subject   | Lynwood Crawford invited you to follow a discussion on Interoperable Europe Portal.                                            |
+      | body      | Lynwood Crawford invited you to participate in the discussion Concerned about dissolved gases? on Interoperable Europe Portal. |
     And the following email should have been sent:
       | recipient | paternoster                                                                                               |
-      | subject   | Lynwood Crawford invited you to follow a discussion on Joinup.                                            |
-      | body      | Lynwood Crawford invited you to participate in the discussion Concerned about dissolved gases? on Joinup. |
+      | subject   | Lynwood Crawford invited you to follow a discussion on Interoperable Europe Portal.                                            |
+      | body      | Lynwood Crawford invited you to participate in the discussion Concerned about dissolved gases? on Interoperable Europe Portal. |
     And 2 e-mails should have been sent
 
     # Try if it is possible to resend an invitation.
@@ -178,8 +178,8 @@ Feature: Invite members to subscribe to discussions
     Then I should see the success message "The invitation was resent to 1 user(s) that were already invited previously but haven't yet accepted the invitation."
     And the following email should have been sent:
       | recipient | Glory Ruskin                                                                                              |
-      | subject   | Lynwood Crawford invited you to follow a discussion on Joinup.                                            |
-      | body      | Lynwood Crawford invited you to participate in the discussion Concerned about dissolved gases? on Joinup. |
+      | subject   | Lynwood Crawford invited you to follow a discussion on Interoperable Europe Portal.                                            |
+      | body      | Lynwood Crawford invited you to participate in the discussion Concerned about dissolved gases? on Interoperable Europe Portal. |
 
     # Accept an invitation by clicking on the link in the e-mail.
     # Initially there should not be any subscriptions.

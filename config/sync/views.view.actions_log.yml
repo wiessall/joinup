@@ -644,7 +644,7 @@ display:
           expose:
             operator_id: uid_op
             label: User
-            description: "Enter a Joinup user's name to search for a user and select it with the mouse or the keyboard."
+            description: "Enter a Interoperable Europe Portal user's name to search for a user and select it with the mouse or the keyboard."
             use_operator: false
             operator: uid_op
             operator_limit_selection: false
@@ -689,7 +689,7 @@ display:
           expose:
             operator_id: uid_1_op
             label: Actor
-            description: "Enter a Joinup user's name to search for a user and select it with the mouse or the keyboard."
+            description: "Enter a Interoperable Europe Portal user's name to search for a user and select it with the mouse or the keyboard."
             use_operator: false
             operator: uid_1_op
             operator_limit_selection: false

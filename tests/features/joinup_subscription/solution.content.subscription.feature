@@ -139,7 +139,7 @@ Feature: Subscribing to community content in solutions
       | Rose oil              |
       | Spring discounts      |
       | Sunflower seeds       |
-    And the content subscription digest sent to hristo should have the subject "Joinup: Daily digest message"
+    And the content subscription digest sent to hristo should have the subject "Interoperable Europe Portal: Daily digest message"
 
     And the group content subscription digest sent to bisera contains the following sections:
       | title                |
@@ -153,7 +153,7 @@ Feature: Subscribing to community content in solutions
       # @todo Re-enable this in ISAICP-8943.
       # | 21/03/2021           |
       | Spring 2021          |
-    And the content subscription digest sent to bisera should have the subject "Joinup: Weekly digest message"
+    And the content subscription digest sent to bisera should have the subject "Interoperable Europe Portal: Weekly digest message"
 
     And the group content subscription digest sent to kalin contains the following sections:
       | title                 |
@@ -167,7 +167,7 @@ Feature: Subscribing to community content in solutions
       | Spring 2021           |
       | Spring discounts      |
       | Sunflower seeds       |
-    And the content subscription digest sent to kalin should have the subject "Joinup: Monthly digest message"
+    And the content subscription digest sent to kalin should have the subject "Interoperable Europe Portal: Monthly digest message"
 
     # No message for aleks@primer.bg (blocked) and penka@primer.bg (cancelled).
     And 4 e-mails should have been sent to recipients "kalin@primer.bg, hristo@example.bg, bisera@example.bg"
