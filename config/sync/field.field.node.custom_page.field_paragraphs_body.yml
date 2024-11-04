@@ -30,10 +30,6 @@ dependencies:
     - paragraphs.paragraphs_type.webform
   module:
     - entity_reference_revisions
-    - tmgmt_content
-third_party_settings:
-  tmgmt_content:
-    excluded: false
 id: node.custom_page.field_paragraphs_body
 field_name: field_paragraphs_body
 entity_type: node
@@ -48,9 +44,6 @@ settings:
   handler: 'default:paragraph'
   handler_settings:
     target_bundles:
-      heading: heading
-      text: text
-      image: image
       accordion: accordion
       call_to_action: call_to_action
       carousel: carousel
@@ -59,7 +52,9 @@ settings:
       content_listing: content_listing
       entity_reference: entity_reference
       github_feed: github_feed
+      heading: heading
       iframe: iframe
+      image: image
       layout: layout
       json_map: json_map
       poll: poll
@@ -68,6 +63,7 @@ settings:
       social_media: social_media
       testimony: testimony
       tiles: tiles
+      text: text
       video: video
       webform: webform
       image_gallery: image_gallery
