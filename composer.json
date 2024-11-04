@@ -86,7 +86,6 @@
         "drupal/poll": "^1.6",
         "drupal/publication_date": "^2.0",
         "drupal/queue_ui": "^3.1",
-        "drupal/rdf_entity": "^2.0",
         "drupal/rdf_sync": "^1.0",
         "drupal/redirect": "^1.6",
         "drupal/replicate_actions": "^1.5",
@@ -116,7 +115,7 @@
         "drupal/view_unpublished": "^1.0",
         "drupal/views_autosubmit": "^1.5",
         "drupal/views_block_area": "^1.0@beta",
-        "drupal/views_bulk_operations": "^4",
+        "drupal/views_bulk_operations": "4.2.7",
         "drupal/views_data_export": "^1.0",
         "drupal/views_multiple_permissions": "^2.0",
         "drupal/webform": "^6.2",
@@ -147,6 +146,7 @@
         "drupal/config_inspector": "^2.1",
         "drupal/config_update": "^2.0",
         "drupal/devel": "^5.1",
+        "drupal/drupal-driver": "v2.2.2",
         "drupal/drupal-extension": "^5.0",
         "drupal/filecache": "^1.1",
         "drupal/http_request_mock": "^1.1",
@@ -207,8 +207,6 @@
     "autoload": {
         "classmap": [
             "web/modules/contrib/error_page/src/ErrorPageErrorHandler.php",
-            "web/modules/contrib/sparql_entity_storage/src/Driver/Database/sparql/ConnectionInterface.php",
-            "web/modules/custom/joinup_sparql/src/Driver/Database/joinup_sparql/Connection.php",
             "web/modules/custom/joinup_distribution/src/Entity/DistributionsParentInterface.php",
             "web/modules/custom/joinup_solution/src/Entity/SolutionContentTrait.php",
             "web/modules/custom/joinup_solution/src/Entity/SolutionContentInterface.php"
@@ -301,9 +299,6 @@
             "drupal/core": "-p2"
         },
         "patches": {
-            "cfpinto/graphql": {
-                "Enum argument https://github.com/cfpinto/graphql/issues/24": "resources/patch/php/cfpinto/graphql/25.diff"
-            },
             "drupal/addtocal": {
                 "Uncaught TypeError: $(...).once is not a function @see https://www.drupal.org/project/addtocal/issues/3372354": "resources/patch/php/drupal/addtocal/3372354.patch"
             },
@@ -437,9 +432,6 @@
             "drupal/publication_date": {
                 "Expand Publication Date to all Entity Types @see https://www.drupal.org/project/publication_date/issues/3219401": "resources/patch/php/drupal/publication_date/3219401-18.patch"
             },
-            "drupal/rdf_entity": {
-                "Allow bundle label plural variants @see https://github.com/ec-europa/rdf_entity/pull/12": "resources/patch/php/drupal/rdf_entity/ea8f6af001fca732e89a4be0e29643953f49a88f.diff"
-            },
             "drupal/search_api": {
                 "Some bulk form field options are missing schema @see https://www.drupal.org/project/search_api/issues/3195199": "resources/patch/php/drupal/search_api/3195199.patch",
                 "The search_api_list:{index} cache tag is not added to the view display @see https://www.drupal.org/project/search_api/issues/3298295": "resources/patch/php/drupal/search_api/3298295.patch",
@@ -453,10 +445,6 @@
             },
             "drupal/social_media_links": {
                 "Missing config schema for field, widget and formatter @see https://www.drupal.org/node/2898680": "resources/patch/php/drupal/social_media_links/2898680.patch"
-            },
-            "drupal/sparql_entity_storage": {
-                "Interface contract violation @see https://drupal.org/i/3379328": "resources/patch/php/drupal/sparql_entity_storage/3379328.patch",
-                "Error when deleting a vocabulary @see https://www.drupal.org/i/3421694": "resources/patch/php/drupal/sparql_entity_storage/3421694.diff"
             },
             "drupal/state_machine": {
                 "Do not force default state in options. @see https://www.drupal.org/project/state_machine/issues/2746091": "resources/patch/php/drupal/state_machine/2746091.diff"
@@ -481,9 +469,6 @@
             "drupal/webform": {
                 "Radios or Checkboxes inside Composite not saved @see https://www.drupal.org/project/webform/issues/3216923": "resources/patch/php/drupal/webform/368.diff",
                 "Webform might create invalid link renderable arrays on submission list. @see https://www.drupal.org/project/webform/issues/3441600": "resources/patch/php/drupal/webform/3441600.patch"
-            },
-            "gitonomy/gitlib": {
-                "Edge case: Empty message in the first commit @see https://github.com/gitonomy/gitlib/pull/217": "resources/patch/php/gitonomy/gitlib/217.diff"
             },
             "m4tthumphrey/php-gitlab-api": {
                 "GraphQL API @see https://github.com/GitLabPHP/Client/issues/766": "resources/patch/php/m4tthumphrey/php-gitlab-api/772.diff",
