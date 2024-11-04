@@ -185,7 +185,7 @@ Feature: Homepage
     And the response should not contain "http://raresteaktown.com"
 
     When I click "Read more" in the "Highlighted event"
-    Then the url should match "/collection/interoperable-europe-portal/event/florentine-steak-festival"
+    Then the url should match "/collection/joinup/event/florentine-steak-festival"
 
     # The "More events" link should temporarily link to the search page with the
     # events pre-filtered. This will be replaced with the events page later.
