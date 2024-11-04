@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_assessment\Plugin\WebformHandler;
 
+use Drupal\joinup_assessment\AssessmentInterface;
 use Drupal\webform\Plugin\WebformHandlerBase;
 use Drupal\webform\webformSubmissionInterface;
 
@@ -44,13 +45,16 @@ class DocumentFromSubmissionWebformHandler extends WebformHandlerBase {
     $nodeStorage = $this->entityTypeManager->getStorage('node');
     $metaStorage = $this->entityTypeManager->getStorage('meta_entity');
 
-    $group = 'http://data.europa.eu/w21/c5e99eae-6d31-47a0-b914-a4b9f4ea82cf';
+    $submissionData = $webformSubmission->getData();
 
     $node = $nodeStorage->create([
       'type' => 'document',
       'title' => $webformSubmission->label(),
-      'field_state' => 'published',
-      'og_audience' => $group,
+      'field_state' => AssessmentInterface::DOCUMENT_STATE,
+      'og_audience' => AssessmentInterface::DOCUMENT_GROUP_URI,
+      'abstract' => substr($submissionData[AssessmentInterface::SUBMISSION_ABSTRACT] ?? '', 0, 250),
+      'field_type' => AssessmentInterface::DOCUMENT_TYPE_KEY,
+      'field_topic' => AssessmentInterface::DOCUMENT_TOPIC_ID,
     ]);
     $node->save();
 
