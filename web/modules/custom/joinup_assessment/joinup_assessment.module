@@ -1,0 +1,25 @@
+<?php
+
+/**
+ * @file
+ * Hook implementations for the Joinup assessment module.
+ */
+
+declare(strict_types=1);
+
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Access\AccessResultInterface;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\webform\WebformSubmissionInterface;
+
+/**
+ * Implements hook_entity_access().
+ */
+function joinup_assessment_entity_access(EntityInterface $entity, string $operation): AccessResultInterface {
+  if ($entity instanceof WebformSubmissionInterface && $operation === 'view' &&
+    $entity->getWebform()->id() === 'online_form_for_assessments') {
+    return AccessResult::allowed();
+  }
+
+  return AccessResult::neutral();
+}

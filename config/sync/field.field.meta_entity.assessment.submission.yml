@@ -1,0 +1,27 @@
+uuid: cc7cd31a-8772-41bd-8ee2-e19af4c5e927
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.meta_entity.submission
+    - meta_entity.type.assessment
+id: meta_entity.assessment.submission
+field_name: submission
+entity_type: meta_entity
+bundle: assessment
+label: Submission
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:webform_submission'
+  handler_settings:
+    target_bundles: {}
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

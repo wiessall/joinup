@@ -1,0 +1,31 @@
+uuid: c0c9b95f-1b94-438c-8354-4cd328b6a358
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.meta_entity.assessment.submission
+    - meta_entity.type.assessment
+  module:
+    - template_suggestion
+id: meta_entity.assessment.default
+targetEntityType: meta_entity
+bundle: assessment
+mode: default
+content:
+  submission:
+    type: entity_reference_entity_view
+    label: hidden
+    settings:
+      view_mode: default
+      link: false
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
+    weight: 0
+    region: content
+hidden:
+  changed: true
+  created: true
+  label: true
+  search_api_excerpt: true
+  target: true
