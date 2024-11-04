@@ -76,9 +76,9 @@ display:
           hide_alter_empty: true
           click_sort_column: value
           type: text_default
-          settings: {  }
+          settings: { }
           group_column: value
-          group_columns: {  }
+          group_columns: { }
           group_rows: true
           delta_limit: 0
           delta_offset: 0
@@ -140,9 +140,9 @@ display:
           hide_alter_empty: true
           click_sort_column: value
           type: basic_string
-          settings: {  }
+          settings: { }
           group_column: value
-          group_columns: {  }
+          group_columns: { }
           group_rows: true
           delta_limit: 0
           delta_offset: 0
@@ -207,7 +207,7 @@ display:
           settings:
             link: true
           group_column: target_id
-          group_columns: {  }
+          group_columns: { }
           group_rows: true
           delta_limit: 0
           delta_offset: 0
@@ -331,9 +331,8 @@ display:
               past_format: '@interval ago'
               granularity: 2
               refresh: 60
-              description: ''
           group_column: value
-          group_columns: {  }
+          group_columns: { }
           group_rows: true
           delta_limit: 0
           delta_offset: 0
@@ -429,8 +428,8 @@ display:
           perm: 'administer private messages'
       cache:
         type: tag
-        options: {  }
-      empty: {  }
+        options: { }
+      empty: { }
       sorts:
         report_timestamp:
           id: report_timestamp
@@ -482,7 +481,7 @@ display:
           validate:
             type: none
             fail: 'not found'
-          validate_options: {  }
+          validate_options: { }
           break_phrase: false
           not: false
       filters:
@@ -511,7 +510,7 @@ display:
             use_operator: false
             operator: ''
             operator_limit_selection: false
-            operator_list: {  }
+            operator_list: { }
             identifier: ''
             required: false
             remember: false
@@ -531,12 +530,12 @@ display:
             multiple: false
             remember: false
             default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
+            default_group_multiple: { }
+            group_items: { }
       style:
         type: table
         options:
-          grouping: {  }
+          grouping: { }
           row_class: ''
           default_row_class: true
           columns:
@@ -605,13 +604,13 @@ display:
           disable_sql_rewrite: false
           distinct: false
           replica: false
-          query_tags: {  }
-      relationships: {  }
-      header: {  }
-      footer: {  }
+          query_tags: { }
+      relationships: { }
+      header: { }
+      footer: { }
       display_extenders:
         metatag_display_extender:
-          metatags: {  }
+          metatags: { }
           tokenize: false
     cache_metadata:
       max-age: -1
@@ -621,7 +620,7 @@ display:
         - url
         - url.query_args
         - user.permissions
-      tags: {  }
+      tags: { }
   all:
     id: all
     display_title: All
@@ -633,7 +632,7 @@ display:
       display_description: ''
       display_extenders:
         metatag_display_extender:
-          metatags: {  }
+          metatags: { }
           tokenize: false
       path: dashboard/private-message-report
     cache_metadata:
@@ -644,20 +643,20 @@ display:
         - url
         - url.query_args
         - user.permissions
-      tags: {  }
+      tags: { }
   single:
     id: single
     display_title: Single
     display_plugin: page
     position: 2
     display_options:
-      sorts: {  }
+      sorts: { }
       defaults:
         sorts: false
       display_description: ''
       display_extenders:
         metatag_display_extender:
-          metatags: {  }
+          metatags: { }
           tokenize: false
       path: dashboard/private-message-report/%private_message
     cache_metadata:
@@ -668,4 +667,4 @@ display:
         - url
         - url.query_args
         - user.permissions
-      tags: {  }
+      tags: { }
