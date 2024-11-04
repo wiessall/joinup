@@ -14,10 +14,10 @@ Feature:
       | title  | state     |
       | Sparta | published |
     And custom_page content:
-      | title       | headline    | collection  | content       | state     |
-      | Some page 1 | Some page 1 | Roman ruins | Some content. | published |
-      | Some page 2 | Some page 2 | Sparta      | Some content. | published |
-      | Some page 3 | Some page 3 | Sparta      | Some content. | published |
+      | title       | headline    | collection  | content       | state     | abstract             |
+      | Some page 1 | Some page 1 | Roman ruins | Some content. | published | Some page 1 abstract |
+      | Some page 2 | Some page 2 | Sparta      | Some content. | published | Some page 2 abstract |
+      | Some page 3 | Some page 3 | Sparta      | Some content. | published | Some page 3 abstract |
 
     When I am logged in as a moderator
     And I go to the homepage
@@ -25,7 +25,8 @@ Feature:
     And I click "Add custom page" in the plus button menu
 
     When I fill in the following:
-      | Title | Pages carousel |
+      | Title    | Pages carousel          |
+      | Abstract | Abstract pages carousel |
     And I select "HR" from "Topic"
     And I add a layout paragraph in the "Custom page body" form field with the following properties:
       | layout           | one column |
