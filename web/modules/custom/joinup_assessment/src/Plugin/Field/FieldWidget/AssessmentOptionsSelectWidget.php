@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Drupal\joinup_assessment\Plugin\Field\FieldWidget;
 
 use Drupal\Core\Entity\FieldableEntityInterface;
@@ -28,7 +30,7 @@ class AssessmentOptionsSelectWidget extends OptionsSelectWidget {
     $options = parent::getOptions($entity);
 
     if (!$this->isAssessment($entity) && isset($options[AssessmentInterface::DOCUMENT_TYPE_KEY])) {
-      unset ($options[AssessmentInterface::DOCUMENT_TYPE_KEY]);
+      unset($options[AssessmentInterface::DOCUMENT_TYPE_KEY]);
     }
 
     return $options;
