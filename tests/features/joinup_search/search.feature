@@ -834,6 +834,13 @@ Feature: Global search
       | Solution javi | <p>This is the solution <strong>javi</strong> description. |                             | Alphabet | Renew owner | Gor-to contact      | Col for Sol javi | published |
       | Solution roll | <p>This is the solution <strong>roll</strong> description. | The solution roll abstract. | Alphabet | Renew owner | Gor-to contact      | Roll alpha       | published |
       | Solution net  | <p>This is the solution <strong>net</strong> description.  |                             | Alphabet | Renew owner | Gor-to contact      | Col for Sol net  | published |
+    And "custom_page" content:
+      | title                    | collection       | abstract             | logo     | state     |
+      | Custom example abstract  | Pull alpha       | Lorem ipsum abstract | logo.png | published |
+      | Custom example paragraph | Col for Sol javi |                      | logo.png | published |
+    And I append "text" to "field_paragraphs_body" field in "node" entity with following "Custom example paragraph" title:
+      | field_body:value  | That's one small step for a man, a giant leap for mankind. |
+      | field_body:format | text_html                                                  |
 
     When I visit the search page
     And I should see the "Pull alpha" tile
@@ -842,6 +849,8 @@ Feature: Global search
     And I should see the "Solution javi" tile
     And I should see the "Solution roll" tile
     And I should see the "Solution net" tile
+    And I should see the "Custom example abstract" tile
+    And I should see the "Custom example paragraph" tile
     And I should not see the "Roll alpha" tile
     And I should not see the "Col for Sol net" tile
     And I should see the text "The collection pull abstract." in the "Pull alpha" card
@@ -850,6 +859,8 @@ Feature: Global search
     And I should see the text "This is the solution javi description" in the "Solution javi" card
     And I should see the text "The solution roll abstract." in the "Solution roll" card
     And I should see the text "This is the solution net description" in the "Solution net" card
+    And I should see the text "Lorem ipsum abstract" in the "Custom example abstract" card
+    And I should see the text "That's one small step for a man, a giant leap for mankind." in the "Custom example paragraph" card
 
     Then I check the "Show only Archived items" checkbox from the "Status" facet
     And I should not see the "Pull alpha" tile
@@ -858,6 +869,8 @@ Feature: Global search
     And I should not see the "Solution javi" tile
     And I should not see the "Solution roll" tile
     And I should not see the "Solution net" tile
+    And I should not see the "Custom example abstract" tile
+    And I should not see the "Custom example paragraph" tile
     And I should see the "Roll alpha" tile
     And I should see the "Col for Sol net" tile
     And I should see the text "The collection roll abstract." in the "Roll alpha" card
