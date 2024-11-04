@@ -21,9 +21,9 @@ class JoinupSubscriptionRouteGroupResolver extends RouteGroupResolver {
   /**
    * {@inheritdoc}
    */
-  protected function getContentEntityPaths() {
+  protected function getContentEntityPaths(): array {
     return [
-      '/rdf_entity/{rdf_entity}/reports/subscribers' => 'rdf_entity',
+      '/node/{node}/reports/subscribers' => 'node',
     ];
   }
 

@@ -1,0 +1,191 @@
+uuid: 9a8bbc57-7757-4eee-94bb-ec849c9c708a
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.explore_item
+    - field.field.node.collection.abstract
+    - field.field.node.collection.closed_group
+    - field.field.node.collection.contact
+    - field.field.node.collection.content_creation
+    - field.field.node.collection.description
+    - field.field.node.collection.field_keywords
+    - field.field.node.collection.field_state
+    - field.field.node.collection.field_topic
+    - field.field.node.collection.group_moderation
+    - field.field.node.collection.listing_content
+    - field.field.node.collection.logo
+    - field.field.node.collection.newsletter
+    - field.field.node.collection.owner
+    - field.field.node.collection.short_id
+    - field.field.node.collection.site_featured
+    - field.field.node.collection.spatial_coverage
+    - field.field.node.collection.website_url
+    - node.type.collection
+  module:
+    - layout_builder
+    - layout_discovery
+    - user
+third_party_settings:
+  layout_builder:
+    enabled: true
+    allow_custom: false
+    sections:
+      -
+        layout_id: layout_onecol
+        layout_settings:
+          label: ''
+          context_mapping: {  }
+          custom_id: null
+          custom_classes: ''
+          custom_class_choose: null
+          custom_styles: null
+          custom_data_attributes: null
+          regions:
+            content:
+              region_id: null
+              region_class_choose: null
+              region_classes: ''
+              region_styles: null
+              region_data: null
+        components:
+          c9a298c1-478e-477b-b54c-893a614debff:
+            uuid: c9a298c1-478e-477b-b54c-893a614debff
+            region: content
+            configuration:
+              id: 'field_block:node:collection:description'
+              label: Description
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: joinup_html_stripper_stripped
+                label: hidden
+                settings:
+                  trim_length: 220
+                third_party_settings:
+                  template_suggestion:
+                    template_suggestion: ''
+            weight: 1
+            additional:
+              component_attributes:
+                block_attributes:
+                  id: ''
+                  class: explore-item__description
+                  style: ''
+                  data: ''
+                block_title_attributes:
+                  id: ''
+                  class: ''
+                  style: ''
+                  data: ''
+                block_content_attributes:
+                  id: ''
+                  class: ''
+                  style: ''
+                  data: ''
+          c42b84a8-b808-44a2-957a-eb2c0a2e558d:
+            uuid: c42b84a8-b808-44a2-957a-eb2c0a2e558d
+            region: content
+            configuration:
+              id: 'extra_field_block:node:collection:read_more'
+              label: 'Read more'
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                settings: {  }
+                third_party_settings: {  }
+            weight: 4
+            additional: {  }
+          96070802-8561-40d7-9551-2ef19991a524:
+            uuid: 96070802-8561-40d7-9551-2ef19991a524
+            region: content
+            configuration:
+              id: 'field_block:node:collection:changed'
+              label: 'Changed on'
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: timestamp
+                label: hidden
+                settings:
+                  date_format: custom
+                  custom_date_format: d/m/Y
+                  timezone: ''
+                  tooltip:
+                    date_format: ''
+                    custom_date_format: ''
+                  time_diff:
+                    enabled: false
+                    future_format: '@interval hence'
+                    past_format: '@interval ago'
+                    granularity: 2
+                    refresh: 60
+                third_party_settings:
+                  template_suggestion:
+                    template_suggestion: ''
+            weight: 2
+            additional:
+              component_attributes:
+                block_attributes:
+                  id: ''
+                  class: date
+                  style: ''
+                  data: ''
+                block_title_attributes:
+                  id: ''
+                  class: ''
+                  style: ''
+                  data: ''
+                block_content_attributes:
+                  id: ''
+                  class: ''
+                  style: ''
+                  data: ''
+        third_party_settings: {  }
+id: node.collection.explore_item
+targetEntityType: node
+bundle: collection
+mode: explore_item
+content: {  }
+hidden:
+  abstract: true
+  closed_group: true
+  collection_settings: true
+  contact: true
+  content_creation: true
+  description: true
+  featured: true
+  field_keywords: true
+  field_state: true
+  field_topic: true
+  group_moderation: true
+  join_collection: true
+  langcode: true
+  last_update: true
+  links: true
+  listing_content: true
+  logo: true
+  members: true
+  newsletter: true
+  node_collection_listing_content_inline_facets: true
+  node_collection_listing_content_top: true
+  og_group: true
+  owner: true
+  published_at: true
+  read_more: true
+  report: true
+  search_api_excerpt: true
+  short_id: true
+  site_featured: true
+  solutions: true
+  spatial_coverage: true
+  uri: true
+  website_url: true

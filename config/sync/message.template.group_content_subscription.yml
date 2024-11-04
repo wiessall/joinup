@@ -9,7 +9,7 @@ label: 'Group content subscription'
 description: "Digest message sent when new content is published in a user's subscribed collections and solutions"
 text:
   -
-    value: '<p>[message:field_group_content:entity]</p>'
+    value: '<p>[message:group_content:entity]</p>'
     format: full_html
 settings:
   'token options':

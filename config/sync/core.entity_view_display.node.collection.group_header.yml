@@ -1,0 +1,126 @@
+uuid: dd2856ed-1701-4230-88e9-46ba57e48cb6
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.group_header
+    - field.field.node.collection.abstract
+    - field.field.node.collection.closed_group
+    - field.field.node.collection.contact
+    - field.field.node.collection.content_creation
+    - field.field.node.collection.description
+    - field.field.node.collection.field_keywords
+    - field.field.node.collection.field_state
+    - field.field.node.collection.field_topic
+    - field.field.node.collection.group_moderation
+    - field.field.node.collection.listing_content
+    - field.field.node.collection.logo
+    - field.field.node.collection.newsletter
+    - field.field.node.collection.owner
+    - field.field.node.collection.short_id
+    - field.field.node.collection.site_featured
+    - field.field.node.collection.spatial_coverage
+    - field.field.node.collection.website_url
+    - image.style.logo
+    - node.type.collection
+  module:
+    - field_delimiter
+    - field_formatter_range
+    - joinup_slick
+    - layout_builder
+    - svg_image
+    - template_suggestion
+    - user
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+id: node.collection.group_header
+targetEntityType: node
+bundle: collection
+mode: group_header
+content:
+  field_topic:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: true
+    third_party_settings:
+      field_delimiter:
+        delimiter: ''
+      field_formatter_range:
+        order: 0
+        limit: 7
+        offset: 0
+      joinup_slick:
+        preset: ''
+        field_label: true
+        custom_label: ''
+      template_suggestion:
+        template_suggestion: group_header_topic
+    weight: 5
+    region: content
+  join_collection:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  logo:
+    type: image
+    label: hidden
+    settings:
+      image_link: ''
+      image_style: logo
+      image_loading:
+        attribute: eager
+      svg_attributes:
+        width: null
+        height: null
+      svg_render_as_image: true
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: bare
+    weight: 0
+    region: content
+  members:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  solutions:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 4
+    region: content
+hidden:
+  abstract: true
+  closed_group: true
+  collection_settings: true
+  contact: true
+  content_creation: true
+  description: true
+  featured: true
+  field_keywords: true
+  field_state: true
+  group_moderation: true
+  join_collection: true
+  langcode: true
+  last_update: true
+  links: true
+  listing_content: true
+  members: true
+  newsletter: true
+  node_collection_listing_content_inline_facets: true
+  node_collection_listing_content_top: true
+  og_group: true
+  owner: true
+  published_at: true
+  read_more: true
+  report: true
+  search_api_excerpt: true
+  short_id: true
+  site_featured: true
+  solutions: true
+  spatial_coverage: true
+  uri: true
+  website_url: true

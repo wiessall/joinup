@@ -47,7 +47,7 @@ class JoinupInviteContext extends RawDrupalContext {
       throw new \InvalidArgumentException("Unknown action '$action'. Valid actions are 'accept' and 'reject'.");
     }
 
-    $entity = $this->getEntityByLabel(($type === 'group' ? 'rdf_entity' : 'node'), $title, $bundle);
+    $entity = $this->getEntityByLabel('node', $title, $bundle);
     $user = $this->userManager->getCurrentUser();
     $user = $this->getUserByName($user->name);
 

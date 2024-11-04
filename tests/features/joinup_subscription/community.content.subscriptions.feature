@@ -5,10 +5,10 @@ Feature: Subscribing to community content in collections and solutions
   So that I can stay informed about everything
 
   Background:
-    Given the following collections:
+    Given collection content:
       | title              | state     |
       | Black hole imaging | published |
-    And the following solutions:
+    Given solution content:
       | title                 | state     | collection         |
       | Null geodesics        | published | Black hole imaging |
       | Bolometric appearance | published | Black hole imaging |

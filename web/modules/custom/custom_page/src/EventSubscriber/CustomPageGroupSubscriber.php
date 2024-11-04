@@ -35,7 +35,7 @@ class CustomPageGroupSubscriber extends AddGroupContentEventSubscriberBase {
    */
   protected function getRouteParameters(AddGroupContentEvent $event, string $entityTypeId, string $bundleId): array {
     return [
-      'rdf_entity' => $event->getGroup()->id(),
+      $event->getGroup()->getEntityTypeId() => $event->getGroup()->id(),
       'node_type' => $bundleId,
     ];
   }

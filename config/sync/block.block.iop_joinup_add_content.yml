@@ -29,5 +29,5 @@ visibility:
     context_mapping:
       og: '@og.context:og'
     group_types:
-      rdf_entity-collection: rdf_entity-collection
-      rdf_entity-solution: rdf_entity-solution
+      node-collection: node-collection
+      node-solution: node-solution

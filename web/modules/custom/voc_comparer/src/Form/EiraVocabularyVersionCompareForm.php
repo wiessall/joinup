@@ -10,7 +10,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\joinup_rdf\VocabularyFixturesHelperInterface;
-use Drupal\sparql_entity_storage\Driver\Database\sparql\ConnectionInterface;
+use Drupal\rdf_sync\RdfSyncConnectionInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -19,43 +19,23 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class EiraVocabularyVersionCompareForm extends FormBase {
 
   /**
-   * The entity type manager service.
-   */
-  protected EntityTypeManagerInterface $entityTypeManager;
-
-  /**
-   * The cache backend service.
-   */
-  protected CacheBackendInterface $databaseCache;
-
-  /**
-   * The vocabulary fixtures helper service.
-   */
-  protected VocabularyFixturesHelperInterface $fixtureImporter;
-
-  /**
-   * The SPARQL database connection.
-   */
-  protected ConnectionInterface $sparql;
-
-  /**
    * Constructs a new VocabularyVersionCompareForm.
    *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity type manager.
-   * @param \Drupal\Core\Cache\CacheBackendInterface $database_cache
+   * @param \Drupal\Core\Cache\CacheBackendInterface $databaseCache
    *   The cache backend service.
-   * @param \Drupal\joinup_rdf\VocabularyFixturesHelperInterface $fixture_importer
+   * @param \Drupal\joinup_rdf\VocabularyFixturesHelperInterface $fixtureImporter
    *   The vocabulary fixtures helper service.
-   * @param \Drupal\sparql_entity_storage\Driver\Database\sparql\ConnectionInterface $sparql
+   * @param \Drupal\rdf_sync\RdfSyncConnectionInterface $sparql
    *   The SPARQL database connection.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, CacheBackendInterface $database_cache, VocabularyFixturesHelperInterface $fixture_importer, ConnectionInterface $sparql) {
-    $this->entityTypeManager = $entity_type_manager;
-    $this->databaseCache = $database_cache;
-    $this->fixtureImporter = $fixture_importer;
-    $this->sparql = $sparql;
-  }
+  public function __construct(
+    protected EntityTypeManagerInterface $entityTypeManager,
+    protected CacheBackendInterface $databaseCache,
+    protected VocabularyFixturesHelperInterface $fixtureImporter,
+    protected RdfSyncConnectionInterface $sparql,
+  ) {}
 
   /**
    * {@inheritdoc}
@@ -65,14 +45,14 @@ class EiraVocabularyVersionCompareForm extends FormBase {
       $container->get('entity_type.manager'),
       $container->get('cache.default'),
       $container->get('joinup_rdf.vocabulary_fixtures.helper'),
-      $container->get('sparql.endpoint')
+      $container->get('rdf_sync.connection')
     );
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getFormId() {
+  public function getFormId(): string {
     return 'voc_comparer_vocabulary_version_compare';
   }
 

@@ -1,8 +1,8 @@
-# Add handy links to configuration forms to the administration menu.
-joinup_core.rdf_entity_uri_web_converter_page:
-  title: 'RDF ID converter'
-  route_name: joinup_core.rdf_entity_uri_web_converter_page
-  description: 'Encodes and decodes RDF entity IDs.'
+# Move in joinup_rdf. See ISAICP-9156.
+joinup_core.uri_converter:
+  title: 'RDF URI converter'
+  route_name: joinup_core.uri_converter
+  description: 'Converts entity URI to URL and vice versa.'
   parent: system.admin
   weight: 1
 

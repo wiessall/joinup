@@ -219,7 +219,6 @@ display:
               anonymous: '0'
               moderator: '0'
               administrator: '0'
-              rdf_graph_manager: '0'
             placeholder: 'Start typing to search…'
           is_grouped: false
           group_info:
@@ -383,6 +382,7 @@ display:
         options:
           view_modes:
             'entity:node':
+              collection: view_mode_tile_horizontal
               custom_page: view_mode_tile_horizontal
               discussion: view_mode_tile_horizontal
               distribution: view_mode_tile_horizontal
@@ -391,8 +391,6 @@ display:
               licence: view_mode_tile_horizontal
               news: view_mode_tile_horizontal
               release: view_mode_tile_horizontal
-            'entity:rdf_entity':
-              collection: view_mode_tile_horizontal
               solution: view_mode_tile_horizontal
             'entity:taxonomy_term':
               eif_conceptual_model: default

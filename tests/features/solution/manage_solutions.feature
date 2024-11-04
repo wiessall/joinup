@@ -2,11 +2,11 @@
 Feature: As a moderator I want to be able to move solutions to other collection.
 
   Background:
-    Given the following collections:
+    Given collection content:
       | uri                            | title       | state     |
       | http://example.com/source      | Source      | published |
       | http://example.com/destination | Destination | published |
-    And solutions:
+    Given solution content:
       | title      | collection | state     | creation date    | modification date |
       | Solution 1 | Source     | published | 2017-11-18T10:00 | 2017-12-18T10:00  |
       | Solution 2 | Source     | published | 2018-11-19T10:00 | 2018-12-19T10:00  |
@@ -15,17 +15,20 @@ Feature: As a moderator I want to be able to move solutions to other collection.
       | Solution 5 | Source     | archived  | 2021-11-22T10:00 | 2021-12-22T10:00  |
       | Solution 6 | Source     | archived  | 2022-11-23T10:00 | 2022-12-23T10:00  |
 
+  # @covers \Drupal\joinup_solution\Form\ChangeCollectionForm.
   Scenario: Moderators can move a solution to a different collection.
     # Only moderators should be able to access this feature.
     Given I am an anonymous user
     When I go to the homepage of the "Source" collection
     Then I should not see the link "Manage solutions"
+    # This URL works because of redirection. Use the correct URL in ISAICP-8376.
     When I go to "/rdf_entity/http_e_f_fexample_ccom_fsource/change-collection"
     Then I should see the heading "Sign in to continue"
 
     Given I am logged in as an "authenticated"
     When I go to the homepage of the "Source" collection
     Then I should not see the link "Manage solutions"
+    # This URL works because of redirection. Use the correct URL in ISAICP-8376.
     When I go to "/rdf_entity/http_e_f_fexample_ccom_fsource/change-collection"
     Then I should get an access denied error
 
@@ -73,6 +76,7 @@ Feature: As a moderator I want to be able to move solutions to other collection.
       | Solution 3 |
       | Solution 2 |
 
+  # @covers \Drupal\joinup_solution\Plugin\Action\ChangeSolutionStateAction.
   Scenario Outline: Manage solutions page must have a bulk-archive and bulk-unarchive option.
     Given I am logged in as a moderator
     When I go to the homepage of the "Source" collection
@@ -99,7 +103,7 @@ Feature: As a moderator I want to be able to move solutions to other collection.
     When I press "Confirm"
     # Two solution were changed.
     Then I should see the following success messages:
-      | Success messages                         |
+      | Success messages                                                                   |
       | The following solutions' state was changed to <target state>: <changed solutions>. |
     And the "manage solutions" table should contain the following columns:
       # Skip last update since it is not under our control.

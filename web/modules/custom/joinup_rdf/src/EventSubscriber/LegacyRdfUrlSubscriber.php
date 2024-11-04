@@ -6,7 +6,6 @@ namespace Drupal\joinup_rdf\EventSubscriber;
 
 use Drupal\Core\Cache\CacheableRedirectResponse;
 use Drupal\Core\EventSubscriber\HttpExceptionSubscriberBase;
-use Drupal\Core\Url;
 use Drupal\joinup_rdf\Entity\RdfSyncEntityInterface;
 use Drupal\rdf_sync\RdfSyncMapper;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
@@ -33,29 +32,45 @@ class LegacyRdfUrlSubscriber extends HttpExceptionSubscriberBase {
    *   The request event object.
    */
   public function on404(ExceptionEvent $event): void {
-    $path = $event->getRequest()->getPathInfo();
+    $request = $event->getRequest();
+    [$entity, $suffix] = $this->getTargetEntity($request->getPathInfo());
+    if (!$entity) {
+      return;
+    }
+    assert($entity instanceof RdfSyncEntityInterface);
+
+    $path = http_build_url([
+      'path' => $entity->toUrl('canonical')->toString() . $suffix,
+      'query' => http_build_query($request->query->all()),
+    ]);
+
+    $response = (new CacheableRedirectResponse($path))->addCacheableDependency($entity);
+    $event->setResponse($response);
+  }
+
+  /**
+   * Returns a tuple consisting from the target entity and path suffix.
+   *
+   * @param string $path
+   *   The legacy path.
+   *
+   * @return array
+   *   The target entity and a potential URL suffix (subdir):
+   *     - 0: Entity or NULL,
+   *     - 1: Suffix as string.
+   */
+  public function getTargetEntity(string $path): array {
     // Extracts the encoded URI and everything that comes after.
     $pattern = '@^(?<prefix>/rdf_entity/|/taxonomy/term/)(?<uri>http_e_f_f[^/]*)(?<suffix>/(?:.*))?$@';
     if (!preg_match($pattern, $path, $found)) {
-      return;
+      return [NULL, NULL];
     }
 
     if (!$entity = $this->getEntity($found['uri'])) {
-      return;
-    }
-    $path = self::PREFIX[$found['prefix']] . $entity->id();
-
-    if (isset($found['suffix'])) {
-      $path = $path . $found['suffix'];
+      return [NULL, NULL];
     }
 
-    $options = [];
-    if ($query = $event->getRequest()->query->all()) {
-      $options['query'] = $query;
-    }
-    $path = Url::fromUserInput($path, $options)->toString();
-    $response = (new CacheableRedirectResponse($path))->addCacheableDependency($entity);
-    $event->setResponse($response);
+    return [$entity, $found['suffix'] ?? ''];
   }
 
   /**
@@ -116,7 +131,7 @@ class LegacyRdfUrlSubscriber extends HttpExceptionSubscriberBase {
   /**
    * Conversion for path prefix.
    */
-  private const PREFIX = [
+  private const array PREFIX = [
     '/rdf_entity/' => '/node/',
     '/taxonomy/term/' => '/taxonomy/term/',
   ];

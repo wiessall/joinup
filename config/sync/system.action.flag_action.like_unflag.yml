@@ -1,0 +1,15 @@
+uuid: e6bf9489-ccab-434c-8e1e-303c53e5e1f5
+langcode: en
+status: true
+dependencies:
+  config:
+    - flag.flag.like
+  module:
+    - flag
+id: flag_action.like_unflag
+label: Unlike
+type: node
+plugin: 'flag_action:like_unflag'
+configuration:
+  flag_id: like
+  flag_action: unflag

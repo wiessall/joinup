@@ -9,13 +9,12 @@ Feature: Asset distribution editing.
     Given licence content:
       | title            | description                          | licence type  |
       | Postcard licence | Send a postcard from where you live. | Public domain |
-    And collection:
-      | title | Berkeley Software Distributions |
-      | state | published                       |
-    And solution:
-      | title      | OpenBSD                         |
-      | collection | Berkeley Software Distributions |
-      | state      | published                       |
+    And collection content:
+      | title                           | state     |
+      | Berkeley Software Distributions | published |
+    And solution content:
+      | title   | collection                      | state     |
+      | OpenBSD | Berkeley Software Distributions | published |
     And release content:
       | title        | release number | is version of | state     |
       | Winter of 95 | 6.1            | OpenBSD       | published |
@@ -89,9 +88,9 @@ Feature: Asset distribution editing.
       | Username | E-mail            |
       | user1    | user1@example.com |
       | user2    | user2@example.com |
-    And the following solution:
-      | title | Solution  |
-      | state | published |
+    And solution content:
+      | title    | state     |
+      | Solution | published |
     And release content:
       | title     | is version of | state     |
       | Release 1 | Solution      | published |

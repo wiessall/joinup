@@ -4,11 +4,29 @@ status: true
 dependencies:
   module:
     - menu_ui
+    - node_revision_delete
     - rdf_sync
 third_party_settings:
   menu_ui:
     available_menus: {  }
     parent: ''
+  node_revision_delete:
+    amount:
+      status: false
+      settings:
+        amount: 0
+    created:
+      status: false
+      settings:
+        age: 1
+    drafts:
+      status: false
+      settings:
+        age: 1
+    only_drafts:
+      status: false
+      settings:
+        age: 0
   rdf_sync:
     type: 'http://www.w3.org/ns/dcat#Dataset'
     uri_plugin: joinup_po_namespace
@@ -16,14 +34,31 @@ third_party_settings:
       title:
         value:
           predicate: 'http://purl.org/dc/terms/title'
-          type: 'xsd:string'
-label_singular: null
-label_plural: null
-label_count: null
+          type: null
+      changed:
+        value:
+          predicate: 'http://purl.org/dc/terms/modified'
+          type: 'xsd:dateTime'
+      published_at:
+        value:
+          predicate: 'http://purl.org/dc/terms/issued'
+          type: 'xsd:dateTime'
+      distributions:
+        target_id:
+          predicate: 'http://www.w3.org/ns/dcat#distribution'
+          type: resource
+      releases:
+        target_id:
+          predicate: 'http://purl.org/dc/terms/hasVersion'
+          type: resource
+label_singular: solution
+label_plural: solutions
+label_count:
+  no_count_capitalize: !!binary U29sdXRpb24DU29sdXRpb25z
 name: Solution
 type: solution
 description: 'A solution on Interoperable Europe Portal is a framework, tool, or service either hosted directly on Interoperable Europe Portal or federated from third-party repositories.'
 help: null
 new_revision: true
-preview_mode: 1
+preview_mode: 0
 display_submitted: false

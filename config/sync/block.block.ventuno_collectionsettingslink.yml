@@ -10,18 +10,18 @@ dependencies:
 id: ventuno_collectionsettingslink
 theme: ventuno
 region: content
-weight: -21
+weight: -19
 provider: null
 plugin: collection_settings_link
 settings:
   id: collection_settings_link
   label: 'Collection settings link'
   label_display: '0'
-  provider: collection
+  provider: joinup_collection
 visibility:
   request_route:
     id: request_route
     negate: false
     context_mapping: {  }
     routes:
-      - entity.rdf_entity.glossary
+      - entity.node.glossary

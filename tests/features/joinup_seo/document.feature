@@ -5,7 +5,7 @@ Feature: SEO for document content.
   I need proper metatag to be encapsulated in the html code.
 
   Background:
-    Given collections:
+    Given collection content:
       | title                          | state     |
       | Interoperable Europe Portal SEO document collection | published |
     And licence content:

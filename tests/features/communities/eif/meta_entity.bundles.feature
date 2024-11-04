@@ -5,7 +5,7 @@ Feature:
   I need to be able to access a page where I can configure them.
 
   Background:
-    Given solutions:
+    Given solution content:
       | title             | state     |
       | Some EIF solution | published |
 

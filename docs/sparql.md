@@ -1,3 +1,5 @@
+TODO: Completely rewrite the RDF/SPARQL part of docs in ISAICP-8376
+
 What is SPARQL?
 ---------------
 SPARQL is a query language for RDF. It is used to query data stored in a

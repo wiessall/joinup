@@ -118,6 +118,11 @@ class ValidUpdateNameSniff extends ValidFunctionNameSniff {
       return;
     }
 
+    if ($name === 'dependencies') {
+      // Exception for hook_update_dependencies() case.
+      return;
+    }
+
     $error = NULL;
     if (!ctype_digit($name) || !in_array(strlen($name), [6, 7])) {
       $error = "Invalid '%s' identifier. Expected 6 or 7 digits:\n- 1-2 digits: Interoperable Europe Portal major version\n- 3 digits: Interoperable Europe Portal minor version\n- 2 digits: The %s weight";

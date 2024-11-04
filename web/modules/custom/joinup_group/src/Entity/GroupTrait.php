@@ -199,7 +199,7 @@ trait GroupTrait {
   public function getMemberCount(array $states = [OgMembershipInterface::STATE_ACTIVE]): int {
     return \Drupal::entityQuery('og_membership')
       ->accessCheck(FALSE)
-      ->condition('entity_type', 'rdf_entity')
+      ->condition('entity_type', 'node')
       ->condition('entity_id', $this->id())
       ->condition('state', $states, 'IN')
       ->count()
@@ -258,6 +258,8 @@ trait GroupTrait {
 
     $nids = $storage->getQuery()->accessCheck(FALSE)
       ->condition(OgGroupAudienceHelperInterface::DEFAULT_FIELD, $this->id())
+      // Only allow community content bundles to be returned.
+      ->condition('type', 'solution', '<>')
       ->execute();
 
     if (!$nids) {
@@ -292,10 +294,45 @@ trait GroupTrait {
     $query = \Drupal::database()->select('og_membership', 'om');
     $query->innerJoin('users_field_data', 'ufd', '[om].[uid] = [ufd].[uid]');
     $query->condition('ufd.status', 1)
-      ->condition('entity_type', 'rdf_entity')
+      ->condition('entity_type', 'node')
       ->condition('entity_id', $this->id())
       ->condition('state', OgMembershipInterface::STATE_ACTIVE);
     return (int) $query->countQuery()->execute()->fetchField();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getLogoFieldName(): string {
+    return 'logo';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getContactInformationFieldName(): string {
+    return 'contact';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getGroupModerationFieldName(): string {
+    return 'group_moderation';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getAbstractField(): string {
+    return 'abstract';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getContentCreationFieldName(): string {
+    return 'content_creation';
   }
 
 }
