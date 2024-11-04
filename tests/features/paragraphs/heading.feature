@@ -10,8 +10,8 @@ Feature:
 
   Scenario: Heading paragraph is displayed as heading element.
     Given custom_page content:
-      | title                | collection            | state     |
-      | Heading example page | Paragraphs collection | published |
+      | title                | collection            | state     | abstract              |
+      | Heading example page | Paragraphs collection | published | Heading page abstract |
     And I append "heading" to "field_paragraphs_body" field in "node" entity with following "Heading example page" title:
       | paragraph_heading | H2 heading paragraph                                      |
       | behavior_settings | a:1:{s:16:"heading_behavior";a:1:{s:5:"level";s:2:"h2";}} |
@@ -34,8 +34,8 @@ Feature:
   @javascript
   Scenario: User should be able to edit behaviour settings.
     Given custom_page content:
-      | title                  | collection            | state     |
-      | Behaviour example page | Paragraphs collection | published |
+      | title                  | collection            | state     | abstract |
+      | Behaviour example page | Paragraphs collection | published | N/A      |
     And I append "layout" to "field_paragraphs_body" field in "node" entity with following "Behaviour example page" title:
       | behavior_settings | a:3:{s:17:"layout_paragraphs";a:4:{s:6:"layout";s:13:"layout_onecol";s:6:"config";a:1:{s:5:"label";s:0:"";}s:11:"parent_uuid";N;s:6:"region";N;}s:16:"background_theme";a:0:{}s:11:"extra_class";a:0:{}} |
 
