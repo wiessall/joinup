@@ -7,6 +7,7 @@ namespace Drupal\joinup\Context;
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Element\Element;
 use Behat\Mink\Element\NodeElement;
+use Drupal;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
@@ -15,6 +16,7 @@ use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup\Traits\UserTrait;
 use Drupal\private_message\Entity\PrivateMessageBan;
 use Drupal\private_message\Entity\PrivateMessageThreadInterface;
+use Exception;
 
 /**
  * Behat step definitions for testing private messages.
@@ -41,18 +43,18 @@ class PrivateMessageContext extends RawDrupalContext {
    * @Given the following private messages:
    */
   public function createPrivateMessages(TableNode $table): void {
-    $storage = \Drupal::entityTypeManager()->getStorage('private_message');
+    $storage = Drupal::entityTypeManager()->getStorage('private_message');
 
     foreach ($table->getColumnsHash() as $values) {
       foreach (['owner', 'message', 'recipient'] as $required) {
         if (!isset($values[$required])) {
-          throw new \Exception("Missing column $required");
+          throw new Exception("Missing column $required");
         }
       }
 
       $owner = user_load_by_name($values['owner']);
       if (!$owner instanceof AccountInterface) {
-        throw new \Exception("Owner {$values['owner']} could not be found.");
+        throw new Exception("Owner {$values['owner']} could not be found.");
       }
 
       $privateMessageThread = $this->getThread($values['owner'], $values['recipient']);
@@ -109,16 +111,16 @@ class PrivateMessageContext extends RawDrupalContext {
    */
   public function getThread(string $owner, string $recipient): PrivateMessageThreadInterface {
     /** @var \Drupal\private_message\Service\PrivateMessageServiceInterface $service */
-    $service = \Drupal::service('private_message.service');
+    $service = Drupal::service('private_message.service');
 
     $ownerEntity = user_load_by_name($owner);
     if (!$ownerEntity instanceof AccountInterface) {
-      throw new \Exception("Owner {$owner} could not be found.");
+      throw new Exception("Owner {$owner} could not be found.");
     }
 
     $recipientEntity = user_load_by_name($recipient);
     if (!$recipientEntity instanceof AccountInterface) {
-      throw new \Exception("Recipient {$recipient} could not be found.");
+      throw new Exception("Recipient {$recipient} could not be found.");
     }
 
     return $service->getThreadForMembers([$ownerEntity, $recipientEntity]);
@@ -140,7 +142,7 @@ class PrivateMessageContext extends RawDrupalContext {
     $messagesContainer = $page->find('css', '.private-message-thread-messages');
 
     if (empty($messagesContainer) && $expectedCount > 0) {
-      throw new \Exception('Private messages were not found in the page.');
+      throw new Exception('Private messages were not found in the page.');
     }
     elseif ($expectedCount === 0) {
       return;
@@ -150,7 +152,7 @@ class PrivateMessageContext extends RawDrupalContext {
 
     $actualCount = count($messageElements);
     if ($actualCount !== $expectedCount) {
-      throw new \Exception(sprintf('Expected to find %d private messages, but found %d.', $expectedCount, $actualCount));
+      throw new Exception(sprintf('Expected to find %d private messages, but found %d.', $expectedCount, $actualCount));
     }
   }
 
@@ -174,7 +176,7 @@ class PrivateMessageContext extends RawDrupalContext {
     try {
       $messagesContainer = $this->getMessagesContainer();
     }
-    catch (\Exception $e) {
+    catch (Exception $e) {
       if ($not === NULL) {
         throw $e;
       }
@@ -190,13 +192,13 @@ class PrivateMessageContext extends RawDrupalContext {
           return;
         }
         else {
-          throw new \Exception(sprintf('The text "%s" was found in a private message.', $messageText));
+          throw new Exception(sprintf('The text "%s" was found in a private message.', $messageText));
         }
       }
     }
 
     if ($not === NULL) {
-      throw new \Exception(sprintf('The text "%s" was not found in any private message.', $messageText));
+      throw new Exception(sprintf('The text "%s" was not found in any private message.', $messageText));
     }
   }
 
@@ -226,7 +228,7 @@ class PrivateMessageContext extends RawDrupalContext {
 
     foreach ($texts as $text) {
       if (!str_contains($messageText, $text)) {
-        throw new \Exception(sprintf('The text "%s" was not found in any private message.', $text));
+        throw new Exception(sprintf('The text "%s" was not found in any private message.', $text));
       }
     }
   }
@@ -257,7 +259,7 @@ class PrivateMessageContext extends RawDrupalContext {
 
     foreach ($texts as $text) {
       if (strpos($messageText, $text) === FALSE) {
-        throw new \Exception(sprintf('The text "%s" was not found in any private message thread.', $text));
+        throw new Exception(sprintf('The text "%s" was not found in any private message thread.', $text));
       }
     }
   }
@@ -279,7 +281,7 @@ class PrivateMessageContext extends RawDrupalContext {
     $xpath = '//div[contains(concat(" ", normalize-space(@class), " "), " private-message-thread-inbox ")]//div[text() = "' . $subject . '"]';
     $threadCard = $messagesContainer->find('xpath', $xpath);
     if (NULL === $threadCard) {
-      throw new \Exception('There are currently no thread messages available.');
+      throw new Exception('There are currently no thread messages available.');
     }
     $threadCard->getParent()->getParent()
       ->find('css', '.private-message-inbox-thread-link')->click();
@@ -301,12 +303,12 @@ class PrivateMessageContext extends RawDrupalContext {
     $notificationElement = $page->find('css', '.private-message-notification-wrapper .private-message-page-link');
 
     if (NULL === $notificationElement) {
-      throw new \Exception('The private message notification element was not found.');
+      throw new Exception('The private message notification element was not found.');
     }
 
     $actualCount = (int) $notificationElement->getText();
     if ($actualCount !== $expectedCount) {
-      throw new \Exception(sprintf('Expected to see %d unread private message thread(s), but found %d.', $expectedCount, $actualCount));
+      throw new Exception(sprintf('Expected to see %d unread private message thread(s), but found %d.', $expectedCount, $actualCount));
     }
   }
 
@@ -322,7 +324,7 @@ class PrivateMessageContext extends RawDrupalContext {
   public function setPrivateMessageLimit(?int $limit = NULL): void {
     static $original_value;
 
-    $config = \Drupal::configFactory()
+    $config = Drupal::configFactory()
       ->getEditable('private_message_flood.role.authenticated');
     $current_value = $config->get('limit');
     if (!isset($original_value)) {
@@ -349,7 +351,7 @@ class PrivateMessageContext extends RawDrupalContext {
     $messagesContainer = $page->find('css', '.private-message-thread-messages');
 
     if (NULL === $messagesContainer) {
-      throw new \Exception('There are currently no messages available.');
+      throw new Exception('There are currently no messages available.');
     }
 
     return $messagesContainer;
@@ -369,7 +371,7 @@ class PrivateMessageContext extends RawDrupalContext {
     $messagesContainer = $page->find('css', '.private-message-thread--full-container');
 
     if (NULL === $messagesContainer) {
-      throw new \Exception('There are currently no messages thread available.');
+      throw new Exception('There are currently no messages thread available.');
     }
 
     return $messagesContainer;
@@ -404,7 +406,8 @@ class PrivateMessageContext extends RawDrupalContext {
    */
   public function iGoToTheUnblockPage(string $target, string $owner): void {
     $banId = $this->getPrivateMessageBanIdByUserNames($target, $owner);
-    $url = Url::fromRoute('joinup_private_message.unblock', ['private_message_ban' => $banId])->toString();
+    $url = Url::fromRoute('joinup_private_message.unblock', ['private_message_ban' => $banId])
+      ->toString();
     $this->visitPath($url);
   }
 
@@ -416,15 +419,17 @@ class PrivateMessageContext extends RawDrupalContext {
   public function iClickTheLinkInPrivateMessage(string $linkText, string $messageText): void {
     $messageId = $this->getPrivateMessageIdByMessageText($messageText);
     $elementId = "private-message-" . $messageId;
-    $element = $this->getSession()->getPage()->find('css', '.private-message-wrapper #' . $elementId);
+    $element = $this->getSession()
+      ->getPage()
+      ->find('css', '.private-message-wrapper #' . $elementId);
 
     if (!$element) {
-      throw new \Exception("Element with id '$elementId' not found");
+      throw new Exception("Element with id '$elementId' not found");
     }
     $link = $element->findLink($linkText);
 
     if (!$link) {
-      throw new \Exception("Link with text '$linkText' not found in element with id '$elementId'");
+      throw new Exception("Link with text '$linkText' not found in element with id '$elementId'");
     }
     $link->click();
   }
@@ -446,14 +451,14 @@ class PrivateMessageContext extends RawDrupalContext {
   public function getPrivateMessageBanIdByUserNames(string $targetName, string $ownerName): string {
     $ownerId = $this->getUserByName($ownerName)->id();
     $targetId = $this->getUserByName($targetName)->id();
-    $query = \Drupal::entityQuery('private_message_ban')
+    $query = Drupal::entityQuery('private_message_ban')
       ->accessCheck(FALSE)
       ->condition('owner', $ownerId)
       ->condition('target', $targetId)
       ->range(0, 1);
     $result = $query->execute();
     if (empty($result)) {
-      throw new \Exception('There is no message ban for target ' . $targetName . ' amd owner ' . $ownerName);
+      throw new Exception('There is no message ban for target ' . $targetName . ' amd owner ' . $ownerName);
     }
     $ban = reset($result);
 
@@ -473,13 +478,13 @@ class PrivateMessageContext extends RawDrupalContext {
    *   If there is no message, throws exception.
    */
   public function getPrivateMessageIdByMessageText(string $messageText): string {
-    $query = \Drupal::entityQuery('private_message')
+    $query = Drupal::entityQuery('private_message')
       ->accessCheck(FALSE)
-      ->condition('message__value', $messageText)
+      ->condition('message__value', '%' . $messageText . '%', 'LIKE')
       ->range(0, 1);
     $result = $query->execute();
     if (empty($result)) {
-      throw new \Exception('There is no message with text: ' . $messageText);
+      throw new Exception('There is no message with text: ' . $messageText);
     }
     $messageId = reset($result);
 
@@ -504,14 +509,16 @@ class PrivateMessageContext extends RawDrupalContext {
   public function getTableRow(Element $element, string $search): NodeElement {
     $rows = $element->findAll('css', 'tr');
     if (empty($rows)) {
-      throw new \Exception(sprintf('No rows found on the page %s', $this->getSession()->getCurrentUrl()));
+      throw new Exception(sprintf('No rows found on the page %s', $this->getSession()
+        ->getCurrentUrl()));
     }
     foreach ($rows as $row) {
       if (strpos($row->getText(), $search) !== FALSE) {
         return $row;
       }
     }
-    throw new \Exception(sprintf('Failed to find a row containing "%s" on the page %s', $search, $this->getSession()->getCurrentUrl()));
+    throw new Exception(sprintf('Failed to find a row containing "%s" on the page %s', $search, $this->getSession()
+      ->getCurrentUrl()));
   }
 
   /**
@@ -528,12 +535,25 @@ class PrivateMessageContext extends RawDrupalContext {
    */
   public function iPressTheButtonInTheRowContaining(string $buttonText, string $rowText): void {
     $page = $this->getSession()->getPage();
-    if ($button = $this->getTableRow($page, $rowText)->findButton($buttonText)) {
+    if ($button = $this->getTableRow($page, $rowText)
+      ->findButton($buttonText)) {
       $button->click();
       return;
     }
-    throw new \Exception(sprintf('Found a row containing "%s", but no "%s" button on the page %s', $rowText, $buttonText, $this->getSession()->getCurrentUrl()));
+    throw new Exception(sprintf('Found a row containing "%s", but no "%s" button on the page %s', $rowText, $buttonText, $this->getSession()
+      ->getCurrentUrl()));
+  }
 
+  /**
+   * Visit administration page for reported private message.
+   *
+   * @When I go to admin page of reported private message with text :messageText
+   */
+  public function iGoToAdminPageOfReportedPrivateMessageWithText(string $messageText): void {
+    $messageId = $this->getPrivateMessageIdByMessageText($messageText);
+    $messageUrl = Url::fromRoute('view.private_message_report.single', ['private_message' => $messageId], ['absolute' => TRUE])
+      ->toString();
+    $this->visitPath($messageUrl);
   }
 
 }

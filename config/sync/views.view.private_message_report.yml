@@ -2,6 +2,9 @@ uuid: dbf01996-bbf2-464e-ab65-d15d8c6d2900
 langcode: en
 status: true
 dependencies:
+  config:
+    - user.role.developer
+    - user.role.moderator
   module:
     - joinup_private_message
     - private_message
@@ -650,8 +653,15 @@ display:
     display_plugin: page
     position: 2
     display_options:
+      access:
+        type: role
+        options:
+          role:
+            moderator: moderator
+            developer: developer
       sorts: { }
       defaults:
+        access: false
         sorts: false
       display_description: ''
       display_extenders:
@@ -666,5 +676,5 @@ display:
         - 'languages:language_interface'
         - url
         - url.query_args
-        - user.permissions
+        - user.roles
       tags: { }
