@@ -25,6 +25,7 @@ dependencies:
     - comment
     - datetime
     - file_url
+    - joinup_assessment
     - joinup_workflow
     - layout_paragraphs
     - svg_image
@@ -138,7 +139,7 @@ content:
     settings: {  }
     third_party_settings: {  }
   field_type:
-    type: options_select
+    type: assessment_options_select
     weight: 2
     region: content
     settings: {  }
