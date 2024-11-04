@@ -153,19 +153,11 @@ function iop_preprocess_node__custom_page__full(array &$variables): void {
  */
 function iop_preprocess_block(array &$variables): void {
   $block_id = $variables['elements']['#id'] ?? NULL;
-  switch ($block_id) {
-    case 'openeuropawebtoolsetrans':
-      $variables['#attached']['library'][] = 'ventuno/etrans';
-      break;
-
-    case 'iop_primaryadminactions':
-      $variables['attributes']['class'][] = 'd-inline-block';
-      break;
-
-    case 'iop_pagetitle':
-      $variables['attributes']['class'][] = 'd-inline-block';
-      break;
+  if ($block_id !== 'openeuropawebtoolsetrans') {
+    return;
   }
+
+  $variables['#attached']['library'][] = 'ventuno/etrans';
 }
 
 /**
