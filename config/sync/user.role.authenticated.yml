@@ -185,6 +185,7 @@ permissions:
   - 'use text format simple_html'
   - 'use text format text_html'
   - 'use text format webform_default'
+  - 'view assessment meta-entity'
   - 'view bookmark_node'
   - 'view bookmark_rdf_entity'
   - 'view compatibility documents'
