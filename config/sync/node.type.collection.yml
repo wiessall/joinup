@@ -1,0 +1,42 @@
+uuid: 95bf9ea9-3e57-4100-8cf0-c5917cc2d854
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+    - rdf_sync
+third_party_settings:
+  menu_ui:
+    available_menus: {  }
+    parent: ''
+  rdf_sync:
+    type: 'http://www.w3.org/ns/dcat#Catalog'
+    uri_plugin: joinup_po_namespace
+    fields:
+      title:
+        value:
+          predicate: 'http://purl.org/dc/terms/title'
+          type: null
+      changed:
+        value:
+          predicate: 'http://purl.org/dc/terms/modified'
+          type: 'xsd:dateTime'
+      published_at:
+        value:
+          predicate: 'http://purl.org/dc/terms/issued'
+          type: 'xsd:dateTime'
+      solutions:
+        target_id:
+          predicate: 'http://www.w3.org/ns/dcat#dataset'
+          type: resource
+label_singular: collection
+label_plural: collections
+label_count:
+  no_count_capitalize: !!binary Q29sbGVjdGlvbgNDb2xsZWN0aW9ucw==
+name: Collection
+type: collection
+description: 'Collections are the main collaborative space where the content items are organised around a common topic or domain and where the users can share their content and engage their community.'
+help: null
+new_revision: true
+preview_mode: 0
+display_submitted: false

@@ -6,7 +6,7 @@ namespace Drupal\Tests\joinup_core\ExistingSite;
 
 use Drupal\Core\Logger\RfcLogLevel;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
-use Drupal\sparql_entity_storage\Encoder\SparqlEncoder;
+use Drupal\rdf_sync\Encoder\RdfSyncEncoder;
 
 /**
  * Test description.
@@ -22,12 +22,12 @@ final class ExceptionHandleTest extends JoinupExistingSiteTestBase {
    */
   public function testFormatQueryArgument(): void {
     // Create an RDF entity.
-    $entity = $this->createRdfEntity([
-      'rid' => 'collection',
-      'field_ar_state' => 'published',
+    $entity = $this->createNode([
+      'type' => 'collection',
+      'field_state' => 'published',
     ]);
     $this->assertNotEmpty($entity->id());
-    $this->assertNotEmpty(\Drupal::entityTypeManager()->getStorage('rdf_entity')->load($entity->id()));
+    $this->assertNotEmpty(\Drupal::entityTypeManager()->getStorage('node')->load($entity->id()));
 
     $this->visit($entity->toUrl('canonical')->setAbsolute()->toString());
     $this->assertSession()->statusCodeEquals(200);
@@ -63,7 +63,7 @@ final class ExceptionHandleTest extends JoinupExistingSiteTestBase {
     $this->assertSession()->responseHeaderEquals('Content-Type', 'text/turtle; charset=UTF-8');
     $this->assertNoExceptionsLogged('turtle');
 
-    foreach (array_keys(SparqlEncoder::getSupportedFormats()) as $format) {
+    foreach (array_keys(RdfSyncEncoder::getSupportedFormats()) as $format) {
       // Regression test that passing rdfxml does not cause an empty format type
       // case.
       $this->visit('/non-existing-page?_format=' . $format);

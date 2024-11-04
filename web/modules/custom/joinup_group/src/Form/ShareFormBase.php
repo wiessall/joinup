@@ -6,7 +6,7 @@ namespace Drupal\joinup_group\Form;
 
 use Drupal\Core\Cache\CacheTagsInvalidatorInterface;
 use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
-use Drupal\Core\Entity\EntityViewBuilderInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\EventSubscriber\MainContentViewSubscriber;
 use Drupal\Core\Form\FormBase;
@@ -14,11 +14,9 @@ use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\joinup_group\Entity\GroupContentInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
-use Drupal\joinup_group\Exception\MissingGroupException;
 use Drupal\og\MembershipManagerInterface;
 use Drupal\og\OgMembershipInterface;
 use Drupal\og\OgRoleManagerInterface;
-use Drupal\sparql_entity_storage\SparqlEntityStorage;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -26,17 +24,15 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 abstract class ShareFormBase extends FormBase {
 
-  const SHARED_IN_FIELD_NAMES = [
-    'rdf_entity' => [
-      'solution' => 'field_is_shared_in',
-    ],
-    'node' => [
-      'discussion' => 'field_shared_in',
-      'document' => 'field_shared_in',
-      'event' => 'field_shared_in',
-      'news' => 'field_shared_in',
-    ],
+  const array SHAREABLE_BUNDLES = [
+    'discussion',
+    'document',
+    'event',
+    'news',
+    'solution',
   ];
+
+  const string FIELD_NAME_SHARED_IN = 'field_shared_in';
 
   /**
    * The entity being shared.
@@ -48,10 +44,8 @@ abstract class ShareFormBase extends FormBase {
   /**
    * Constructs a new ShareContentFormBase object.
    *
-   * @param \Drupal\sparql_entity_storage\SparqlEntityStorage $sparqlStorage
-   *   The RDF entity storage.
-   * @param \Drupal\Core\Entity\EntityViewBuilderInterface $rdfBuilder
-   *   The RDF view builder.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
+   *   The entity type manager.
    * @param \Drupal\og\MembershipManagerInterface $membershipManager
    *   The OG membership manager.
    * @param \Drupal\og\OgRoleManagerInterface $roleManager
@@ -64,8 +58,7 @@ abstract class ShareFormBase extends FormBase {
    *   The cache tag invalidator service.
    */
   public function __construct(
-    protected SparqlEntityStorage $sparqlStorage,
-    protected EntityViewBuilderInterface $rdfBuilder,
+    protected EntityTypeManagerInterface $entityTypeManager,
     protected MembershipManagerInterface $membershipManager,
     protected OgRoleManagerInterface $roleManager,
     protected AccountInterface $currentUser,
@@ -76,10 +69,9 @@ abstract class ShareFormBase extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container) {
+  public static function create(ContainerInterface $container): self {
     return new static(
-      $container->get('entity_type.manager')->getStorage('rdf_entity'),
-      $container->get('entity_type.manager')->getViewBuilder('rdf_entity'),
+      $container->get('entity_type.manager'),
       $container->get('og.membership_manager'),
       $container->get('og.role_manager'),
       $container->get('current_user'),
@@ -91,15 +83,15 @@ abstract class ShareFormBase extends FormBase {
   /**
    * Gets a list of group ids where the current entity is already shared.
    *
-   * @return \Drupal\joinup_group\Entity\GroupInterface[]
+   * @return array
    *   A list of group ids where the current entity is already shared on.
    */
   protected function getAlreadySharedGroupIds(): array {
-    if (!$this->getSharedOnFieldName() || !$this->entity->hasField($this->getSharedOnFieldName())) {
+    if (!in_array($this->entity->bundle(), self::SHAREABLE_BUNDLES) || !$this->entity->hasField(self::FIELD_NAME_SHARED_IN)) {
       return [];
     }
 
-    return array_column($this->entity->get($this->getSharedOnFieldName())->getValue(), 'target_id');
+    return array_column($this->entity->get(self::FIELD_NAME_SHARED_IN)->getValue(), 'target_id');
   }
 
   /**
@@ -118,7 +110,7 @@ abstract class ShareFormBase extends FormBase {
     }
 
     $groups = $this->membershipManager->getUserGroupsByRoleIds($this->currentUser->id(), array_keys($roles), [OgMembershipInterface::STATE_ACTIVE], FALSE);
-    return empty($groups) ? [] : $groups['rdf_entity'];
+    return empty($groups) ? [] : $groups['node'];
   }
 
   /**
@@ -128,7 +120,7 @@ abstract class ShareFormBase extends FormBase {
    *   The field name or null if not configured.
    */
   protected function getSharedOnFieldName(): ?string {
-    return self::SHARED_IN_FIELD_NAMES[$this->entity->getEntityTypeId()][$this->entity->bundle()] ?? NULL;
+    return in_array($this->entity->bundle(), self::SHAREABLE_BUNDLES) ? self::FIELD_NAME_SHARED_IN : NULL;
   }
 
   /**
@@ -158,14 +150,9 @@ abstract class ShareFormBase extends FormBase {
    *   The affiliated or parent group, if one exists.
    */
   protected function getExcludedParent(): ?GroupInterface {
-    if ($this->entity instanceof GroupContentInterface) {
-      try {
-        return $this->entity->getGroup();
-      }
-      catch (MissingGroupException $e) {
-      }
-    }
-    return NULL;
+    return $this->entity instanceof GroupContentInterface && $this->entity->hasGroup()
+      ? $this->entity->getGroup()
+      : NULL;
   }
 
   /**

@@ -3,13 +3,13 @@ langcode: en
 status: true
 dependencies:
   module:
-    - rdf_entity
-    - solution
+    - joinup_solution
+    - node
 id: interoperability
 label: Interoperable
 bundles:
   - solution
-entity_type: rdf_entity
+entity_type: node
 global: true
 flag_short: 'Set interoperable flag'
 flag_long: ''
@@ -19,8 +19,8 @@ unflag_long: ''
 unflag_message: ''
 unflag_denied_text: ''
 weight: 0
-flag_type: 'entity:rdf_entity'
-link_type: rdf_interoperable_link
+flag_type: 'entity:node'
+link_type: interoperable_link
 flagTypeConfig:
   show_in_links: {  }
   show_as_field: true

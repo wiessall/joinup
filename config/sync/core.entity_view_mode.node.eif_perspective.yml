@@ -1,0 +1,11 @@
+uuid: 2eada1e4-df1b-437c-b0a9-eb907e4f19ea
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.eif_perspective
+label: 'EIF Perspective'
+description: ''
+targetEntityType: node
+cache: true

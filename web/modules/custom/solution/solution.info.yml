@@ -3,23 +3,4 @@ description: 'The interoperability solution RDF entity.'
 type: module
 package: Joinup
 core_version_requirement: ">= 9.4"
-
-dependencies:
-  - 'drupal:datetime'
-  - 'drupal:image'
-  - 'drupal:link'
-  - 'drupal:options'
-  - 'drupal:text'
-  - 'file_url:file_url'
-  - 'flag:flag'
-  - 'inline_entity_form:inline_entity_form'
-  - 'joinup:joinup_release'
-  - 'joinup:contact_information'
-  - 'joinup:joinup_taxonomy'
-  - 'joinup:joinup_workflow'
-  - 'joinup:owner'
-  - 'joinup:search_api_field'
-  - 'rdf_entity:rdf_entity'
-  - 'search_api:search_api'
-  - 'state_machine:state_machine'
-  - 'token:token'
+dependencies: []

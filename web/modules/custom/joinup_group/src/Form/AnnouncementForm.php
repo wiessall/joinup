@@ -201,7 +201,7 @@ class AnnouncementForm extends FormBase {
       if (!$this->announcement->getRecipientsCount()) {
         $form_state->setError($form, $this->t('Cannot send this announcement to %group @type because none of its members are subscribed to receive announcements.', [
           '%group' => $group->label(),
-          '@type' => $group->get('rid')->entity->getSingularLabel(),
+          '@type' => $group->get('type')->entity->getSingularLabel(),
         ]));
       }
     }
@@ -234,7 +234,7 @@ class AnnouncementForm extends FormBase {
     $args = [
       '@to' => $this->announcement->getWorkflowStateInstance()->getLabel(),
       '%group' => $this->announcement->getGroup()->label(),
-      '@type' => $this->announcement->getGroup()->get('rid')->entity->getSingularLabel(),
+      '@type' => $this->announcement->getGroup()->get('type')->entity->getSingularLabel(),
     ];
 
     if ($is_new) {
@@ -264,7 +264,7 @@ class AnnouncementForm extends FormBase {
     elseif ($initial_state->getId() === 'draft' && $this->announcement->getWorkflowState() === 'sent') {
       $status = $this->t("Your announcement has been sent for validation by Interoperable Europe Portal moderators. Once approved, will reach the %group @type members.", $args);
       $redirect = Url::fromRoute('view.announcements.group', [
-        'rdf_entity' => $this->announcement->getGroupId(),
+        'node' => $this->announcement->getGroupId(),
       ]);
     }
     elseif ($this->announcement->getWorkflowState() === 'rejected') {
@@ -281,7 +281,7 @@ class AnnouncementForm extends FormBase {
         $status = $this->t("The announcement has been delivered to the %group @type members.", $args);
       }
       $redirect = Url::fromRoute('view.announcements.group', [
-        'rdf_entity' => $this->announcement->getGroupId(),
+        'node' => $this->announcement->getGroupId(),
       ]);
     }
 
@@ -290,8 +290,8 @@ class AnnouncementForm extends FormBase {
     }
 
     if (!isset($redirect)) {
-      $redirect = Url::fromRoute('entity.rdf_entity.announcement_edit', [
-        'rdf_entity' => $this->announcement->getGroupId(),
+      $redirect = Url::fromRoute('entity.node.announcement_edit', [
+        'node' => $this->announcement->getGroupId(),
         'announcement' => $this->announcement->id(),
       ]);
     }
@@ -310,7 +310,7 @@ class AnnouncementForm extends FormBase {
   protected function getArguments(): array {
     $group = $this->announcement->getGroup();
     $sender = $this->announcement->getOwner();
-    $vars = ['@label' => $group->get('rid')->entity->getSingularLabel()];
+    $vars = ['@label' => $group->get('type')->entity->getSingularLabel()];
 
     return [
       '@group_title' => [
@@ -407,7 +407,7 @@ class AnnouncementForm extends FormBase {
     // Only users which accepted the 'Legal notice' are receiving announcements.
     $query->join('entity_legal_document_acceptance', 'a', 'og.uid = a.uid');
 
-    $assignments = $query->condition('og.entity_type', 'rdf_entity')
+    $assignments = $query->condition('og.entity_type', 'node')
       ->condition('og.entity_bundle', $group->bundle())
       ->condition('og.entity_id', $group->id())
       ->condition('og.state', OgMembershipInterface::STATE_ACTIVE)

@@ -7,7 +7,7 @@ namespace Drupal\joinup_debug\Form;
 use Drupal\Component\Utility\Random;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\sparql_entity_storage\Driver\Database\sparql\ConnectionInterface;
+use Drupal\rdf_sync\RdfSyncConnectionInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -18,17 +18,17 @@ final class SparqlConsoleForm extends FormBase {
   /**
    * The SPARQL endpoint.
    *
-   * @var \Drupal\sparql_entity_storage\Driver\Database\sparql\ConnectionInterface $endpoint
+   * @var \Drupal\rdf_sync\RdfSyncConnectionInterface $endpoint
    *   The SPARQL endpoint.
    */
-  public function __construct(protected ConnectionInterface $endpoint) {}
+  public function __construct(protected RdfSyncConnectionInterface $endpoint) {}
 
   /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container): self {
     return new static(
-      $container->get('sparql.endpoint'),
+      $container->get('rdf_sync.connection'),
     );
   }
 

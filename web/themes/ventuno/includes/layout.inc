@@ -8,8 +8,8 @@
 declare(strict_types=1);
 
 use Drupal\Core\Template\Attribute;
+use Drupal\collection\Entity\CollectionInterface;
 use Drupal\interoperable_europe\InteroperableEuropeCollectionInterface;
-use Drupal\rdf_entity\RdfInterface;
 use Drupal\topic\Entity\TopicMetaEntityInterface;
 
 /**
@@ -24,8 +24,9 @@ function ventuno_preprocess_page(array &$variables): void {
   $variables['version_url'] = $joinup_version->getUrl();
 
   // Export the URL of the Interoperable Europe landing page.
-  $landing_page = \Drupal::entityTypeManager()->getStorage('rdf_entity')->load(InteroperableEuropeCollectionInterface::COLLECTION_ENTITY_ID);
-  if ($landing_page instanceof RdfInterface) {
+  $landing_page = \Drupal::getContainer()->get('entity.repository')
+    ->loadEntityByUuid('node', InteroperableEuropeCollectionInterface::COLLECTION_UUID);
+  if ($landing_page instanceof CollectionInterface) {
     $variables['interoperable_europe_url'] = $landing_page->toUrl()->toString();
   }
 
@@ -65,7 +66,7 @@ function ventuno_preprocess_page(array &$variables): void {
   }
 
   // Remove title on collection/solution canonical pages.
-  if ($route_name === 'entity.rdf_entity.canonical' && $entity = $route_match->getParameter('rdf_entity')) {
+  if ($route_name === 'entity.node.canonical' && $entity = $route_match->getParameter('node')) {
     if (in_array($entity->getType(), ['collection', 'solution']) && $entity->getSetting('landing_page')->count() === 0) {
       unset($variables['page']['content']['ventuno_pagetitle']);
     }

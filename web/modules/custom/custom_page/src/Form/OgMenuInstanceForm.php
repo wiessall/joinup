@@ -18,10 +18,11 @@ use Drupal\Core\Menu\MenuTreeParameters;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Routing\UrlGeneratorInterface;
 use Drupal\Core\Utility\LinkGeneratorInterface;
+use Drupal\custom_page\Entity\CustomPageInterface;
+use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\node\NodeInterface;
 use Drupal\og\OgAccessInterface;
 use Drupal\og_menu\Form\OgMenuInstanceForm as OriginalOgMenuInstanceForm;
-use Drupal\rdf_entity\RdfInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Routing\Matcher\UrlMatcherInterface;
 
@@ -371,54 +372,35 @@ class OgMenuInstanceForm extends OriginalOgMenuInstanceForm {
         // have access to edit menu links, so instead we are showing links to
         // edit the custom pages directly.
         $operations = [];
-        $group_edit_routes = [
-          'entity.rdf_entity.canonical',
-        ];
 
         // Skip this if this link is not pointing to the canonical view of a
-        // custom page, since this means the link has been added manually
-        // somehow, probably by an administrator.
+        // custom page or group, since this means the link has been added
+        // manually somehow, probably by an administrator.
         if (
           // The link is a canonical path of a node.
           $route_info['_route'] === 'entity.node.canonical'
-          // The node is resolved.
-          && !empty($route_info['node'])
-          && ($node = $route_info['node'])
-          // It _is_ a node too, one can never be too careful.
+          && ($node ??= $route_info['node'])
           && $node instanceof NodeInterface
-          // It should be a custom page.
-          && $node->bundle() === 'custom_page'
+          // It should be a group or a custom page.
+          && ($node instanceof GroupInterface || $node instanceof CustomPageInterface)
         ) {
-          $operations['edit'] = [
-            'title' => $this->t('Edit'),
-            'url' => $node->toUrl('edit-form'),
-            // Bring the user back to the menu overview.
-            'query' => $this->getDestinationArray(),
-          ];
-          $operations['delete'] = [
-            'title' => $this->t('Delete'),
-            'url' => $node->toUrl('delete-form'),
-            'query' => $this->getDestinationArray(),
-          ];
-        }
-        // Also add an edit link to the group in the 'Overview' and the 'About'
-        // page entries.
-        elseif (in_array($route_info['_route'], $group_edit_routes)
-          && ($rdf_entity = $route_info['rdf_entity'])
-          && $rdf_entity instanceof RdfInterface
-        ) {
-          $operations['edit'] = [
-            'title' => $this->t('Edit'),
-            'url' => $rdf_entity->toUrl('edit-form'),
-            // Bring the user back to the menu overview.
-            'query' => $this->getDestinationArray(),
-          ];
-        }
-
-        // Only display the operations to which the user has access.
-        foreach ($operations as $key => $operation) {
-          if (!$operation['url']->access()) {
-            unset($operations[$key]);
+          $url = $node->toUrl('edit-form');
+          if ($url->access()) {
+            $operations['edit'] = [
+              'title' => $this->t('Edit'),
+              'url' => $url,
+              'query' => $this->getDestinationArray(),
+            ];
+          }
+          if ($node instanceof CustomPageInterface) {
+            $url = $node->toUrl('edit-form');
+            if ($url->access()) {
+              $operations['delete'] = [
+                'title' => $this->t('Delete'),
+                'url' => $node->toUrl('delete-form'),
+                'query' => $this->getDestinationArray(),
+              ];
+            }
           }
         }
 

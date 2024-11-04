@@ -5,11 +5,10 @@ Feature: "Add document" visibility options.
   I need to be able to add "Document" content through UI.
 
   Scenario: "Add document" button should not be shown to normal members, authenticated users and anonymous users.
-    Given the following collection:
-      | title  | Collective Seventh Name |
-      | logo   | logo.png                |
-      | state  | published               |
-    And the following solutions:
+    Given collection content:
+      | title                   | logo     | state     |
+      | Collective Seventh Name | logo.png | published |
+    Given solution content:
       | title               | collection              | logo     | state     |
       | Seventh Name        | Collective Seventh Name | logo.png | published |
       | The Obsessed Stream | Collective Seventh Name | logo.png | published |
@@ -34,11 +33,10 @@ Feature: "Add document" visibility options.
     Then I should see the link "Add document"
 
   Scenario: Add document as a facilitator.
-    Given the following collection:
-      | title  | Collective Winter of Beginning |
-      | logo   | logo.png                       |
-      | state  | published                      |
-    And the following solutions:
+    Given collection content:
+      | title                          | logo     | state     |
+      | Collective Winter of Beginning | logo.png | published |
+    Given solution content:
       | title               | collection                     | logo     | state     |
       | Winter of Beginning | Collective Winter of Beginning | logo.png | published |
     And I am logged in as a facilitator of the "Winter of Beginning" solution

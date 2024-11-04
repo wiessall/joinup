@@ -9,8 +9,7 @@ declare(strict_types=1);
 
 use Drupal\Core\Url;
 use Drupal\joinup_group\Entity\GroupInterface;
-use Drupal\rdf_entity\Entity\Rdf;
-use Drupal\sparql_entity_storage\UriEncoder;
+use Drupal\node\Entity\Node;
 
 /**
  * Implements hook_preprocess_views_view_rss__group_feed__rss_feed().
@@ -19,9 +18,9 @@ use Drupal\sparql_entity_storage\UriEncoder;
  */
 function joinup_rss_preprocess_views_view_rss__group_feed__rss_feed(&$variables): void {
   // Load the entity from the first view argument. The argument has been already
-  // published early so we can expect a group to be loaded successfully.
-  $encoded_uri_id = $variables['view']->args[0];
-  $group = Rdf::load(UriEncoder::decodeUrl($encoded_uri_id));
+  // published early, so we can expect a group to be loaded successfully.
+  $id = $variables['view']->args[0];
+  $group = Node::load($id);
 
   $replacements = [
     '@label' => $group->label(),
@@ -48,18 +47,17 @@ function joinup_rss_preprocess_views_view_rss__group_feed__rss_feed(&$variables)
  */
 function joinup_rss_page_attachments(array &$attachments): void {
   $route = \Drupal::routeMatch();
-  if ($route->getRouteName() !== 'entity.rdf_entity.canonical') {
+  if ($route->getRouteName() !== 'entity.node.canonical') {
     return;
   }
 
-  /** @var \Drupal\rdf_entity\Entity\Rdf $entity */
-  $entity = $route->getParameter('rdf_entity');
+  $entity = $route->getParameter('node');
   if (!$entity instanceof GroupInterface) {
     return;
   }
 
   $url = Url::fromRoute('view.group_feed.rss_feed', [
-    'rdf_entity' => UriEncoder::encodeUrl($entity->id()),
+    'node' => $entity->id(),
   ])->setAbsolute();
 
   if ($url->access()) {

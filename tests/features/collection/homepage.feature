@@ -18,26 +18,12 @@ Feature: Collection homepage
     And contact_information content:
       | name        | email                   |
       | Kalikatoura | kalikatoura@example.com |
-    And the following collection:
-      | title               | Middle earth daily               |
-      | description         | Middle earth daily               |
-      | owner               | Bilbo Baggins                    |
-      | contact information | Kalikatoura                      |
-      | logo                | logo.png                         |
-      | moderation          | yes                              |
-      | content creation    | members                          |
-      | state               | published                        |
-      | topic               | Employment and Support Allowance |
-      | published at        | 2012-12-01 9:00am                |
-      | modification date   | 2017-12-01 9:00am                |
-    And the following solution:
-      | title            | Bilbo's book          |
-      | collection       | Middle earth daily    |
-      | description      | Bilbo's autobiography |
-      | content creation | registered users      |
-      | creation date    | 2014-10-17 8:32am     |
-      | state            | published             |
-      | topic            | Info                  |
+    And collection content:
+      | title              | description        | owner         | contact information | logo     | moderation | content creation | state     | topic                            | published at      | modification date |
+      | Middle earth daily | Middle earth daily | Bilbo Baggins | Kalikatoura         | logo.png | yes        | members          | published | Employment and Support Allowance | 2012-12-01 9:00am | 2017-12-01 9:00am |
+    And solution content:
+      | title        | collection         | description           | content creation | creation date     | state     | topic |
+      | Bilbo's book | Middle earth daily | Bilbo's autobiography | registered users | 2014-10-17 8:32am | published | Info  |
     And the following collection user memberships:
       | collection         | user    | roles       |
       | Middle earth daily | Frodo   | facilitator |
@@ -174,26 +160,6 @@ Feature: Collection homepage
       | Last updated       |
       | Open collection    |
       | Moderated          |
-
-  # Regression test to ensure that related community content does not appear in the draft view.
-  # @see: https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3262
-  Scenario: The related content should not be shown in the draft view version as part of the content.
-    When I am logged in as a facilitator of the "Middle earth daily" collection
-    And I go to the homepage of the "Middle earth daily" collection
-    And I click "Edit" in the "Entity actions" region
-    And I fill in "Title" with "Middle earth nightly"
-    And I press "Save as draft"
-    And I click "View draft" in the "Entity actions" region
-    Then I should see the text "Moderated"
-    And I should see the text "Open collection"
-    And I should see the text "Only members can create content."
-    And I should see the text "Bilbo Baggins"
-    And I should see the text "Employment and Support Allowance"
-    And I should see the heading "Middle earth nightly"
-    # But the tiles should not be visible.
-    But I should not see the "Rohirrim make extraordinary deal" tile
-    And I should not see the "Breaking: Gandalf supposedly plans his retirement" tile
-    And I should not see the "Big hobbit feast - fireworks at midnight" tile
 
   Scenario: The collection homepage should be cacheable for anonymous users.
     Given I am an anonymous user

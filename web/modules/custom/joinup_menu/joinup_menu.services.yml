@@ -1,4 +1,5 @@
 services:
+  _defaults:
+    autowire: true
   joinup_menu.menu_helper:
     class: Drupal\joinup_menu\MenuHelper
-    arguments: ['@logger.factory', '@menu.link_tree', '@entity_type.manager', '@request_stack', '@path.matcher']

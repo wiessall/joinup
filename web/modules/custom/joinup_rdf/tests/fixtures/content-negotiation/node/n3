@@ -1,0 +1,8 @@
+@prefix dc: <http://purl.org/dc/terms/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix ns0: <http://joinup.eu/licence/> .
+
+<http://example.com/apple>
+  a dc:LicenseDocument ;
+  rdfs:label "Apple"@en ;
+  ns0:deprecated false .

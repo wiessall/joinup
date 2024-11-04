@@ -2,9 +2,9 @@
 Feature: When a solution is archived then its sub-content also should be archived.
 
   Background:
-    Given the following collection:
-      | title | Collection |
-      | state | published  |
+    Given collection content:
+      | title      | state     |
+      | Collection | published |
     And owner content:
       | name        | owner type |
       | The Company | Company    |
@@ -12,18 +12,9 @@ Feature: When a solution is archived then its sub-content also should be archive
       | name                 | email                      |
       | Liam Smith           | liam.smith@example.com     |
       | Jennifer Unconfirmed | jennifer.smith@example.com |
-    And solution:
-      | title               | Solution                         |
-      | collection          | Collection                       |
-      | state               | published                        |
-      | abstract            | Abstract                         |
-      | description         | Description                      |
-      | topic               | Demography                       |
-      | solution type       | Innovation                       |
-      | creation date       | 2018-11-19T10:00                 |
-      | modification date   | 2018-12-19T10:00                 |
-      | owner               | The Company                      |
-      | contact information | Jennifer Unconfirmed, Liam Smith |
+    And solution content:
+      | title    | collection | state     | abstract | description | topic      | solution type | creation date    | modification date | owner       | contact information              |
+      | Solution | Collection | published | Abstract | Description | Demography | Innovation    | 2018-11-19T10:00 | 2018-12-19T10:00  | The Company | Jennifer Unconfirmed, Liam Smith |
     And users:
       | Username           | E-mail                     | First name | Family name | Roles     |
       | Anne Group Admin   | anne.smith@example.com     | Anne       | Smith       |           |
@@ -73,6 +64,12 @@ Feature: When a solution is archived then its sub-content also should be archive
       | Solution   | Announcement1 C1     | draft | 2005-11-05 | Blahman |
       | Collection | Some announcement C2 | draft | 2005-11-05 | Blahman |
 
+  # @covers \Drupal\joinup_group\Access\ArchivedGroupAccessCheck::access and the
+  #   `_archived_group` route access requirement for solutions.
+  # @covers \joinup_search_views_query_alter but should be removed and fixed on
+  #   \joinup_group_form_views_exposed_form_alter where the default value forces
+  #   a wrong empty ID value to the query.
+  # @see \joinup_group_form_views_exposed_form_alter.
   @loggedErrors
   Scenario: Archiving / unarchiving a solution must archive / unarchive its sub-content.
     Given I am logged in as "John Moderator"
@@ -102,10 +99,10 @@ Feature: When a solution is archived then its sub-content also should be archive
     And the workflow state of the "Solution Custom page 1" content should be "archived"
     And the workflow state of the "Solution Custom page 2" content should be "draft"
     And the workflow state of the "Solution Custom page 3" content should be "archived"
-    And the workflow state of the "Solution Distribution" "content" should be "archived"
-    And the workflow state of the "Solution Release 1" "content" should be "archived"
-    And the workflow state of the "Solution Release 2" "content" should be "draft"
-    And the workflow state of the "Solution Release 3" "content" should be "archived"
+    And the workflow state of the "Solution Distribution" content should be "archived"
+    And the workflow state of the "Solution Release 1" content should be "archived"
+    And the workflow state of the "Solution Release 2" content should be "draft"
+    And the workflow state of the "Solution Release 3" content should be "archived"
     And the string value of the "revision_log" field in "Solution Discussion" content should be "Updated state to 'archived' by 'solution_archive_related_content' queue, from revision ID '<placeholder>' with state 'published'."
     And 2 e-mails should have been sent
     And the following email should have been sent:
@@ -198,17 +195,18 @@ Feature: When a solution is archived then its sub-content also should be archive
     And the workflow state of the "Solution Custom page 1" content should be "published"
     And the workflow state of the "Solution Custom page 2" content should be "draft"
     And the workflow state of the "Solution Custom page 3" content should be "published"
-    And the workflow state of the "Solution Distribution" "content" should be "published"
-    And the workflow state of the "Solution Release 1" "content" should be "published"
-    And the workflow state of the "Solution Release 2" "content" should be "draft"
-    And the workflow state of the "Solution Release 3" "content" should be "published"
+    And the workflow state of the "Solution Distribution" content should be "published"
+    And the workflow state of the "Solution Release 1" content should be "published"
+    And the workflow state of the "Solution Release 2" content should be "draft"
+    And the workflow state of the "Solution Release 3" content should be "published"
     And the string value of the "revision_log" field in "Solution Discussion" content should be "Updated state to 'published' by 'solution_archive_related_content' queue, from revision ID '<placeholder>' with state 'archived'."
 
     When I go to the homepage of the "Solution" solution
     Then I should not see the text "Archived" in the "Header"
 
+  # @covers \state_machine_permissions_node_access.
   Scenario Outline: Users must not be able to edit the sub-content of an archived solution
-    Given the workflow state of the "Solution" "rdf_entity" is changed to "archived"
+    Given the workflow state of the "Solution" "content" is changed to "archived"
     And I am logged in as "<User>"
 
     When I go to the homepage of the "Solution" solution
@@ -247,7 +245,7 @@ Feature: When a solution is archived then its sub-content also should be archive
       | Andrew Facilitator |
 
   Scenario Outline: Users must not be able to edit the sub-content of an archived solution
-    Given the workflow state of the "Solution" "rdf_entity" is changed to "published"
+    Given the workflow state of the "Solution" content is changed to "published"
     And I am logged in as "<User>"
 
     When I go to the homepage of the "Solution" solution

@@ -10,7 +10,7 @@ declare(strict_types=1);
 use Drupal\facets\FacetInterface;
 
 /**
- * Implements hook_preprocess_facets_item_list__checkbox__field_collection_content_status().
+ * Implements hook_preprocess_HOOK().
  *
  * Adds the necessary classes to theme the facet checkbox as a switch.
  */

@@ -279,8 +279,8 @@ Feature:
       | http://joinup.eu/licence/lgpl21  | GNU Lesser General Public License 2.1 | LGPL-2.1     | GPL, For software, Lesser copyleft             |
 
     And compatibility documents:
-      | id           | description                                                                                                                                                                    |
-      | T01          | Freedom for using and re-distributing is a basic common characteristic of all open licences.                                                                                   |
+      | id           | description                                                                                                                                                                 |
+      | T01          | Freedom for using and re-distributing is a basic common characteristic of all open licences.                                                                                |
       | T10          | The hypothetical risk of 'viral effect' from @outbound-licence to the code covered by @inbound-licence in the case of dynamic or even static linking will not be published. |
       | T16          | You have to check if the text of @inbound-licence has expressly mentioned @outbound-licence as compatible.                                                                  |
       | INCOMPATIBLE | @inbound-licence is not compatible with @outbound-licence.                                                                                                                  |
@@ -361,8 +361,8 @@ Feature:
       | http://joinup.eu/licence/lgpl21  | GNU Lesser General Public License 2.1 | LGPL-2.1     | GPL, For software, Lesser copyleft             |
 
     And compatibility documents:
-      | id           | description                                                                                                                                                                    |
-      | T01          | Freedom for using and re-distributing is a basic common characteristic of all open licences.                                                                                   |
+      | id           | description                                                                                                                                                                 |
+      | T01          | Freedom for using and re-distributing is a basic common characteristic of all open licences.                                                                                |
       | T10          | The hypothetical risk of 'viral effect' from @outbound-licence to the code covered by @inbound-licence in the case of dynamic or even static linking will not be published. |
       | T16          | You have to check if the text of @inbound-licence has expressly mentioned @outbound-licence as compatible.                                                                  |
       | INCOMPATIBLE | @inbound-licence is not compatible with @outbound-licence.                                                                                                                  |
@@ -466,11 +466,7 @@ Feature:
   @loggedErrors
   Scenario: Regression test for licences comparison.
     # Regression test for ISAICP-9014
-    Given collection:
-      | uri   | http://data.europa.eu/w21/df34e3a2-207b-4910-a804-344931654e20 |
-      | title | Interoperable Europe Portal                                                         |
-      | state | published                                                      |
-    And SPDX licences:
+    Given SPDX licences:
       | uri                             | title     | ID        |
       | http://joinup.eu/spdx/EUPL-1.2a | EUPL-1.2a | EUPL-1.2a |
       | http://joinup.eu/spdx/LGPL-2.1b | LGPL-2.1b | LGPL-2.1b |

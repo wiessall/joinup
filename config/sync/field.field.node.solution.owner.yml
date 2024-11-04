@@ -1,0 +1,36 @@
+uuid: 545c1ea5-5d1b-4339-ac77-bd9eb66d2ca9
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.owner
+    - node.type.owner
+    - node.type.solution
+  module:
+    - rdf_sync
+third_party_settings:
+  rdf_sync:
+    target_id:
+      predicate: 'http://purl.org/dc/terms/publisher'
+      type: resource
+id: node.solution.owner
+field_name: owner
+entity_type: node
+bundle: solution
+label: Owner
+description: 'The Owner is the organisation that owns this entity and is the only responsible for it.'
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      owner: owner
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

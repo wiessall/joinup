@@ -22,7 +22,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * @ViewsArgumentValidator(
  *   id = "joinup_group_user_permission",
  *   title = @Translation("User permissions on group"),
- *   entity_type = "rdf_entity",
+ *   entity_type = "node",
  * )
  */
 class JoinupGroupUserPermissionValidator extends ArgumentValidatorPluginBase {
@@ -75,7 +75,7 @@ class JoinupGroupUserPermissionValidator extends ArgumentValidatorPluginBase {
     $group_options = [];
     $display_name = (string) $this->t('Group specific permissions');
     foreach (JoinupGroupHelper::GROUP_BUNDLES as $bundle) {
-      $permissions = $this->ogPermissionManager->getDefaultGroupPermissions('rdf_entity', $bundle);
+      $permissions = $this->ogPermissionManager->getDefaultGroupPermissions('node', $bundle);
       foreach ($permissions as $permission => $info) {
         $group_options[$display_name][$permission] = $info->getTitle();
       }
@@ -130,7 +130,7 @@ class JoinupGroupUserPermissionValidator extends ArgumentValidatorPluginBase {
    */
   public function validateArgument($arg): bool {
     if ($arg) {
-      $group = $this->entityTypeManager->getStorage('rdf_entity')->load($arg);
+      $group = $this->entityTypeManager->getStorage('node')->load($arg);
       if ($group instanceof GroupInterface) {
         return $this->groupManager
           ->access($group, $this->options['group_permission'], $this->options['site_permission'])
@@ -144,7 +144,7 @@ class JoinupGroupUserPermissionValidator extends ArgumentValidatorPluginBase {
    * {@inheritdoc}
    */
   public function getContextDefinition(): EntityContextDefinition {
-    return EntityContextDefinition::fromEntityTypeId('rdf_entity')
+    return EntityContextDefinition::fromEntityTypeId('node')
       ->setLabel($this->argument->adminLabel())
       ->setRequired(FALSE);
   }

@@ -32,7 +32,5 @@ visibility:
     routes:
       - entity.node.delete_form
       - entity.node.edit_form
-      - entity.rdf_entity.delete_form
-      - entity.rdf_entity.edit_form
       - entity.taxonomy_term.edit_form
       - entity.taxonomy_term.delete_form

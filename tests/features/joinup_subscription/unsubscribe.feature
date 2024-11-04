@@ -8,7 +8,7 @@ Feature: Unsubscribe from collections
     Given user:
       | Username | Eric Cartman             |
       | E-mail   | eric.cartman@example.com |
-    And collections:
+    And collection content:
       | title                | state     |
       | Southpark elementary | published |
       | Kenny's house        | draft     |
@@ -22,7 +22,7 @@ Feature: Unsubscribe from collections
       | Kenny's house        | Eric Cartman | discussion, document, event, news |
 
   Scenario: Unsubscribe from all groups
-    Given collections:
+    Given collection content:
       | title          | state    |
       | Koon's hideout | proposed |
     And the following collection user memberships:
@@ -31,7 +31,7 @@ Feature: Unsubscribe from collections
     And the following collection content subscriptions:
       | collection     | user         | subscriptions                     |
       | Koon's hideout | Eric Cartman | discussion, document, event, news |
-    And solutions:
+    Given solution content:
       | title              | state     |
       | Poor man's Shelter | published |
       | Anna's house       | draft     |
@@ -112,7 +112,7 @@ Feature: Unsubscribe from collections
       | Greg's foxhole       |  |
 
   Scenario: Unsubscribe from a specific group.
-    Given solutions:
+    Given solution content:
       | title                  | state     |
       | Not member in this one | published |
 
@@ -162,11 +162,11 @@ Feature: Unsubscribe from collections
     Then the response status code should be 404
 
     # Collection is not group content.
-    When I visit the unsubscribe from "Southpark elementary" collection form with "rdf_entity:collection" route parameter
+    When I visit the unsubscribe from "Southpark elementary" collection form with "node:collection" route parameter
     Then the response status code should be 404
 
     # Cannot subscribe to custom pages.
-    When I visit the unsubscribe from "Southpark elementary" collection form with "node:custom_page,rdf_entity:solution" route parameter
+    When I visit the unsubscribe from "Southpark elementary" collection form with "node:custom_page,node:solution" route parameter
     Then the response status code should be 404
 
     # Add the user to the solution.
@@ -178,5 +178,5 @@ Feature: Unsubscribe from collections
       | Not member in this one | Eric Cartman | discussion, document, event, news |
 
     # Solution is not solution group content.
-    When I visit the unsubscribe from "Not member in this one" solution form with "rdf_entity:solution" route parameter
+    When I visit the unsubscribe from "Not member in this one" solution form with "node:solution" route parameter
     Then the response status code should be 404

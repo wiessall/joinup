@@ -1,0 +1,62 @@
+{#
+/**
+ * @file
+ * Themeing for the search_list_item view mode of solution RDF entities.
+ *
+ * Available variables:
+ * - eif_title: The eif title.
+ * - category_lists: An array of variables with details on the category lists. Contains variables:
+ */
+#}
+{%
+  set classes = [
+    'eif-tile',
+    'shadow',
+    'p-3',
+    'mb-3',
+  ]
+%}
+<article{{ attributes.addClass(classes) }} data-joinup-eif-category="{{ eif_categories }}">
+  <div class="row">
+    <div class="col-12 col-md-5 mb-3 mb-lg-0">
+      <strong class="d-block text-center mb-3">{{ 'Attributes matching the EIF'|t }}</strong>
+      {% for category_list in category_lists %}
+        <div class="d-flex align-items-baseline eif-tile__line eif-tile__line--{{ category_list.class }} fs-sm">
+          <div class="eif-tile__label-wrapper me-2">
+            <span class="eif-tile__label badge">{{ category_list.title }}</span>
+          </div>
+          <div class="eif-tile__values">
+            {% for item in category_list.items %}
+              <span class="eif-tile__value" title="{{ item.description }}">{{ item.title }}</span>{% if loop.last == false %}, {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+    <div class="col-12 col-md-7">
+      <div class="bg-light p-1">
+        <div class="p-3">
+          <div class="row">
+            <div class="col-4 offset-4 col-lg-3 offset-lg-0 d-flex flex-column justify-content-center mb-3 mb-lg-0">
+              {{ content.logo }}
+            </div>
+            <div class="col-12 col-lg-9">
+              <div class="eif-tile__text">
+                {{ title_prefix }}
+                <h1 class="h4">{{ label }}</h1>
+                {{ title_suffix }}
+                {{ eif_perspective_description }}
+                <strong>{{ 'Solution\'s owner'|t }}:</strong>
+                {{ content.owner|render|striptags }}
+              </div>
+              <div class="d-flex justify-content-end mt-3">
+                <a class="btn btn-sm btn-link me-3" href="{{ eif_perspective }}">{{ 'View EIF Perspective'|t }}</a>
+                <a class="btn btn-sm btn-brand" href="{{ solution_url }}">{{ 'Go to Solution'|t }}</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</article>

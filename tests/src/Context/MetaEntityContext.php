@@ -61,7 +61,6 @@ class MetaEntityContext extends RawDrupalContext {
 
     $entity_type_mapping = [
       'content' => 'node',
-      'RDF entity' => 'rdf_entity',
       'taxonomy term' => 'taxonomy_term',
     ];
     if (!in_array($related_entity_type, array_keys($entity_type_mapping))) {
@@ -86,12 +85,11 @@ class MetaEntityContext extends RawDrupalContext {
    *   The meta entity.
    */
   protected function getMetaEntityForEntity(string $related_entity_type, string $related_entity, string $bundle): MetaEntityInterface {
-    $allowed_types = ['taxonomy_term', 'rdf_entity', 'node'];
+    $allowed_types = ['taxonomy_term', 'node'];
     if (!in_array($related_entity_type, $allowed_types)) {
       throw new \Exception("The related entity type '$related_entity_type' is not supported. Only the following types are supported: " . implode(', ', $allowed_types));
     }
 
-    /** @var \Drupal\rdf_entity\Entity\Rdf $entity */
     $entity = $this->getEntityByLabel($related_entity_type, $related_entity);
 
     return \Drupal::getContainer()->get('meta_entity.repository')->getMetaEntityForEntity($entity, $bundle);

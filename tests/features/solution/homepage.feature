@@ -11,21 +11,9 @@ Feature: Solution homepage
     And contact_information content:
       | name            | email                      | website url        |
       | Awesome contact | awesomecontact@example.com | http://example.com |
-    Given the following solution:
-      | title               | Petri net                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
-      | description         | "<p>A <b>Petri net</b>, also known as a <b>place/transition (PT) net</b>, is one of several <a href=\"#mathematical\">mathematical</a> modeling languages for the description of distributed systems. It is a class of discrete event dynamic system. A Petri net is a directed bipartite graph, in which the nodes represent transitions (i.e. events that may occur, represented by bars) and places (i.e. conditions, represented by circles). The directed arcs describe which places are pre- and/or postconditions for which transitions (signified by arrows). Some sources state that Petri nets were invented in August 1939 by Carl Adam Petri - at the age of 13 - for the purpose of describing chemical processes.</p>" |
-      | state               | published                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
-      | owner               | Awesome owner                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
-      | contact information | Awesome contact                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
-      | topic               | Demography, E-inclusion                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
-      | solution type       | Non-binding Instrument, Logging Service                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
-      | spatial coverage    | Greece, Belgium                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
-      | language            | English                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
-      | status              | Completed                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
-      | spatial coverage    | Belgium                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
-      | published at        | 2012-12-01T8:43                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
-      | modification date   | 2017-12-01T8:43                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
-      | abstract            | Short abstract description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+    Given solution content:
+      | title     | description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          | state     | owner         | contact information | topic                   | solution type                           | spatial coverage | language | status    | published at    | modification date | abstract                   |
+      | Petri net | "<p>A <b>Petri net</b>, also known as a <b>place/transition (PT) net</b>, is one of several <a href=\"#mathematical\">mathematical</a> modeling languages for the description of distributed systems. It is a class of discrete event dynamic system. A Petri net is a directed bipartite graph, in which the nodes represent transitions (i.e. events that may occur, represented by bars) and places (i.e. conditions, represented by circles). The directed arcs describe which places are pre- and/or postconditions for which transitions (signified by arrows). Some sources state that Petri nets were invented in August 1939 by Carl Adam Petri at the age of 13 for the purpose of describing chemical processes.</p>" | published | Awesome owner | Awesome contact     | Demography, E-inclusion | Non-binding Instrument, Logging Service | Greece, Belgium  | English  | Completed | 2012-12-01T8:43 | 2017-12-01T8:43   | Short abstract description |
     And release content:
       | title          | release notes    | documentation | release number | release notes   | is version of | state     | creation date    | published at     |
       | Petri net v1.1 | A sample release | text.pdf      | 1.1            | Changed release | Petri net     | published | 2022-12-21T13:00 | 2022-12-21T13:00 |
@@ -59,30 +47,10 @@ Feature: Solution homepage
       | Only facilitators and authors can create content. |
       | Non moderated                                     |
 
-  # This is a regression test for the entities that include a hashmark on their Uri.
-  # @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3225
-  Scenario: Regression test for Uris that include a '#'.
-    Given the following solution:
-      | uri         | http://solution/example1/test#        |
-      | title       | Information sharing protocols         |
-      | description | Handling information sharing securely |
-      | logo        | logo.png                              |
-      | state       | published                             |
-    When I go to the homepage of the "Information sharing protocols" solution
-    Then I should see the heading "Information sharing protocols"
-    And I should not see the text "Page not found"
-
   Scenario: Custom pages should not be visible on the solution homepage
-    Given the following solution:
-      | title            | Jira restarters                      |
-      | description      | Rebooting solves all issues          |
-      | documentation    | text.pdf                             |
-      | content creation | registered users                     |
-      | landing page     | http://foo-example.com/landing       |
-      | webdav creation  | no                                   |
-      | webdav url       | http://joinup.eu/solution/foo/webdav |
-      | wiki             | http://example.wiki/foobar/wiki      |
-      | state            | published                            |
+    Given solution content:
+      | title           | description                 | documentation | content creation | landing page                   | state     |
+      | Jira restarters | Rebooting solves all issues | text.pdf      | registered users | http://foo-example.com/landing | published |
     And news content:
       | title                             | body                             | solution        | topic                   | spatial coverage | state     |
       | Jira will be down for maintenance | As always, during business hours | Jira restarters | Statistics and Analysis | Luxembourg       | published |
@@ -94,23 +62,6 @@ Feature: Solution homepage
     And I should see the "Jira will be down for maintenance" tile
     And I should not see the "Maintenance page" tile
 
-  Scenario: A link to the first collection a solution is affiliated to should be shown in the solution header.
-    Given collections:
-      | title              | state     |
-      | Disappointed Steel | published |
-      | Random Arm         | published |
-    And the following solutions:
-      | title       | state     | collections                   |
-      | Robotic arm | published | Disappointed Steel            |
-      | ARM9        | published | Disappointed Steel,Random Arm |
-
-    When I go to the homepage of the "Robotic arm" solution
-    Then I should see the link "Disappointed Steel"
-
-    When I go to the homepage of the "ARM9" solution
-    Then I should see the link "Disappointed Steel"
-    But I should not see the link "Random Arm"
-
   Scenario: Test that a pager is shown on the solution page when needed.
     Given owner content:
       | name                  | owner type |
@@ -118,7 +69,7 @@ Feature: Solution homepage
     And contact_information content:
       | name     | email                |
       | Geronimo | geronimo@example.com |
-    And the following solutions:
+    Given solution content:
       | title             | description     | logo     | state     | owner                 | contact information | solution type | topic       |
       | Chiricahua Server | Serving the web | logo.png | published | Chiricahua Foundation | Geronimo            | Business      | E-inclusion |
     # There should not be a pager when the solution is empty.
@@ -237,11 +188,9 @@ Feature: Solution homepage
     Then I should not see the "Pager" region
 
     # The pager being visible in one solution should not affect other solutions.
-    Given the following solution:
-      | title       | Chiricahua Solr       |
-      | description | Searching your datas  |
-      | state       | published             |
-      | owner       | Chiricahua Foundation |
+    Given solution content:
+      | title           | description          | state     | owner                 |
+      | Chiricahua Solr | Searching your datas | published | Chiricahua Foundation |
     And distribution content:
       | title               | description   | solution        | state     |
       | Solr distribution 1 | Description 1 | Chiricahua Solr | published |
@@ -250,7 +199,7 @@ Feature: Solution homepage
 
   @javascript
   Scenario: Test that up to 7 topic terms are visible in the solution overview header.
-    Given the following solutions:
+    Given solution content:
       | title      | description        | logo     | state     | topic                                                                                                                              |
       | All topics | Bring in EVERYONE! | logo.png | published | Finance in EU, Supplier exchange, E-health, HR, Employment and Support Allowance, Statistics and Analysis, E-inclusion, Demography |
 

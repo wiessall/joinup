@@ -11,26 +11,19 @@ use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\custom_page\Entity\CustomPageInterface;
 use Drupal\joinup_licence\Entity\LicenceInterface;
 use Drupal\node\NodeInterface;
-use Drupal\rdf_entity\RdfInterface;
 
 /**
  * Implements hook_ENTITY_TYPE_view_alter().
  */
-function eupl_node_view_alter(array &$build, NodeInterface $custom_page, EntityViewDisplayInterface $display): void {
+function eupl_node_view_alter(array &$build, NodeInterface $node, EntityViewDisplayInterface $display): void {
   $assistant_pages = [701805, 703242];
-  if ($custom_page instanceof CustomPageInterface && in_array($custom_page->id(), $assistant_pages)) {
+  if ($node instanceof CustomPageInterface && in_array($node->id(), $assistant_pages)) {
     // Don't expose contextual links and the 'Report abusive content' link on
     // licence comparer and compatibility check assistants.
     unset($build['#contextual_links']);
     unset($build['report']);
   }
-}
-
-/**
- * Implements hook_ENTITY_TYPE_view_alter().
- */
-function eupl_rdf_entity_view_alter(array &$build, RdfInterface $licence, EntityViewDisplayInterface $display): void {
-  if ($licence instanceof LicenceInterface && $display->getMode() === 'compatibility_check') {
+  elseif ($node instanceof LicenceInterface && $display->getMode() === 'compatibility_check') {
     // Don't expose contextual links on licence tiles on licence comparer and
     // compatibility check assistants.
     unset($build['#contextual_links']);

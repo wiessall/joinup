@@ -8,10 +8,10 @@ Feature: Solution RSS feed.
     Given users:
       | Username | First name | Family name |
       | scorlan  | Sartin     | Corlan      |
-    And collection:
-      | title | Unrandomed collection |
-      | state | published             |
-    And solutions:
+    And collection content:
+      | title                 | state     |
+      | Unrandomed collection | published |
+    Given solution content:
       | title             | state     | author  | creation date    | collection            |
       | Lantern Domestic  | published | scorlan | 2018-12-18 08:00 | Unrandomed collection |
       | Deuteron Lonesome | draft     | scorlan | 2019-01-05 10:00 | Unrandomed collection |
@@ -47,7 +47,7 @@ Feature: Solution RSS feed.
       | link        | /collection/unrandomed-collection/solution/lantern-domestic                         |
     And the RSS feed should have 4 items
     And the RSS feed items should be:
-      | title                                     | link                                                                                                 | description                                                                                                                                                                                              | publication date                | author        |
+      | title                                     | link                                                                                                 | description                                                                                                                                                                                              | published at                    | author        |
       | News: Monkeys worst indigo amongst colors | /collection/unrandomed-collection/solution/lantern-domestic/news/monkeys-worst-indigo-amongst-colors | Research results are out.                                                                                                                                                                                | Mon, 21 Jan 2019 12:36:00 +0000 | Sartin Corlan |
       | News: Old metal alloy improves scissors   | /collection/unrandomed-collection/solution/lantern-domestic/news/old-metal-alloy-improves-scissors   | It improves sharpness but they are more subject to rust.                                                                                                                                                 | Wed, 11 Apr 2018 09:00:00 +0000 | Sartin Corlan |
       | Event: Scissor sharpening funeral         | /collection/unrandomed-collection/solution/lantern-domestic/event/scissor-sharpening-funeral         | The place where to be if you want to keep cutting the paper at the best of your scissors possibilities. Lorem ipsum dolor sit amet consectetur adipiscing elit. Etiam sed consectetur turpis. In porta l | Sun, 26 Nov 2017 14:18:00 +0000 | Sartin Corlan |

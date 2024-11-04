@@ -5,7 +5,7 @@ Feature: Joining a collection as an anonymous user
   I need to be able to join a collection after authenticating
 
   Background:
-    Given collections:
+    Given collection content:
       | title           | abstract                          | closed | state     |
       | Reannual plants | Harvested before they are planted | no     | published |
       | Vul nuts        | Used to brew Ghlen Livid          | yes    | published |
@@ -17,11 +17,11 @@ Feature: Joining a collection as an anonymous user
       | collection      | user             | state   |
       | Reannual plants | Hepzibah Whitlow | blocked |
     And CAS users:
-      | Username           | E-mail           | Password | Local username   |
-      | Hepzibah Whitlow   | hepzibah@ankh.am | wh1tl0w  | Hepzibah Whitlow |
+      | Username         | E-mail           | Password | Local username   |
+      | Hepzibah Whitlow | hepzibah@ankh.am | wh1tl0w  | Hepzibah Whitlow |
     And CAS users:
-      | Username           | E-mail           | Password |
-      | Iodine Maccalariat | iodine@ankh.am   | 10d1ne   |
+      | Username           | E-mail         | Password |
+      | Iodine Maccalariat | iodine@ankh.am | 10d1ne   |
     And custom_page content:
       | title                 | collection     | state     |
       | CoC of CoC collection | CoC collection | published |

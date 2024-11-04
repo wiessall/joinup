@@ -2,9 +2,9 @@
 Feature: Permalinks for custom page attachments.
 
   Scenario: Users can download attachments using the permalinks.
-    Given collection:
-      | title | Predictable name |
-      | state | published        |
+    Given collection content:
+      | title            | state     |
+      | Predictable name | published |
     And custom_page content:
       | title           | body        | collection       | attachments                                                          | state     |
       | Predictable CP1 | Lorem ipsum | Predictable name | empty.rdf, empty_pdf.pdf, invalid_adms.rdf, test.zip, text.pdf       | published |

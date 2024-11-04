@@ -25,40 +25,33 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 class GroupReportsController extends ControllerBase {
 
   /**
-   * The event dispatcher.
-   *
-   * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
-   */
-  protected $dispatcher;
-
-  /**
    * Constructs a GroupReportsController object.
    *
    * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher
    *   The event dispatcher.
    */
-  public function __construct(EventDispatcherInterface $dispatcher) {
-    $this->dispatcher = $dispatcher;
-  }
+  public function __construct(
+    protected EventDispatcherInterface $dispatcher,
+  ) {}
 
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container) {
+  public static function create(ContainerInterface $container): self {
     return new static($container->get('event_dispatcher'));
   }
 
   /**
    * Renders the group reports page.
    *
-   * @param \Drupal\joinup_group\Entity\GroupInterface $rdf_entity
+   * @param \Drupal\joinup_group\Entity\GroupInterface $node
    *   The group for which to build the reports page.
    *
    * @return array
    *   The page as a render array.
    */
-  public function reports(GroupInterface $rdf_entity): array {
-    $reports = $this->getReports($rdf_entity);
+  public function reports(GroupInterface $node): array {
+    $reports = $this->getReports($node);
 
     if ($reports) {
       $content = [];
@@ -88,14 +81,14 @@ class GroupReportsController extends ControllerBase {
   /**
    * Returns the available group reports.
    *
-   * @param \Drupal\joinup_group\Entity\GroupInterface $group
+   * @param \Drupal\joinup_group\Entity\GroupInterface $node
    *   The group for which to return reports.
    *
    * @return \Drupal\joinup_group\Event\GroupReport[]
    *   An array of group reports, keyed by group report ID.
    */
-  protected function getReports(GroupInterface $group): array {
-    $event = new GroupReportsEvent($group);
+  protected function getReports(GroupInterface $node): array {
+    $event = new GroupReportsEvent($node);
     $this->dispatcher->dispatch($event, GroupReportsEventInterface::EVENT_NAME);
 
     return $event->getGroupReports();
@@ -107,13 +100,13 @@ class GroupReportsController extends ControllerBase {
    * Only facilitators and moderators have the required 'access group reports'
    * permission.
    *
-   * @param \Drupal\joinup_group\Entity\GroupInterface $rdf_entity
+   * @param \Drupal\joinup_group\Entity\GroupInterface $node
    *   The group for which the access to the reports page is being determined.
    *
    * @return \Drupal\Core\Access\AccessResultInterface
    *   The access result object.
    */
-  public function access(GroupInterface $rdf_entity): AccessResultInterface {
+  public function access(GroupInterface $node): AccessResultInterface {
     $user = $this->currentUser();
 
     // Check if the user has the global permission to access group reports of
@@ -124,7 +117,7 @@ class GroupReportsController extends ControllerBase {
 
     // Check if the user has permission to access the group reports page of this
     // particular group (e.g. facilitators).
-    return $rdf_entity->getGroupAccess('access group reports', $user);
+    return $node->getGroupAccess('access group reports', $user);
   }
 
 }

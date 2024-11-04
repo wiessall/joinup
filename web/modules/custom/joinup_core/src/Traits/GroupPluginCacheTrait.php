@@ -23,7 +23,6 @@ trait GroupPluginCacheTrait {
     // the available options in the add content block depend on certain settings
     // of the parent collection, such as the workflow status and the content
     // creation option.
-    /** @var \Drupal\rdf_entity\RdfInterface $group */
     $group = $this->getContext('og')->getContextValue();
     return Cache::mergeTags(parent::getCacheTags(), $group->getCacheTagsToInvalidate());
   }

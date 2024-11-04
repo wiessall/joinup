@@ -4,19 +4,19 @@ declare(strict_types=1);
 
 namespace Drupal\joinup\Context;
 
-use Behat\Behat\Hook\Scope\AfterScenarioScope;
 use Behat\Gherkin\Node\TableNode;
 use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Url;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
-use Drupal\file_url\FileUrlHandler;
+use Drupal\DrupalExtension\Hook\Scope\AfterNodeCreateScope;
+use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
 use Drupal\joinup\Traits\EntityReferenceTrait;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\FileTrait;
 use Drupal\joinup\Traits\FormTrait;
 use Drupal\joinup\Traits\OgTrait;
-use Drupal\joinup\Traits\RdfEntityTrait;
 use Drupal\joinup\Traits\SearchTrait;
+use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup\Traits\TopicTrait;
 use Drupal\joinup\Traits\TraversingTrait;
 use Drupal\joinup\Traits\UserTrait;
@@ -24,11 +24,12 @@ use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\joinup\Traits\WorkflowTrait;
 use Drupal\joinup_group\ContentCreationOptions;
 use Drupal\joinup_group\Entity\GroupInterface;
+use Drupal\joinup_group\Entity\PinnableGroupContentInterface;
+use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\language\Entity\ConfigurableLanguage;
+use Drupal\node\Entity\Node;
 use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\og\OgRoleInterface;
-use Drupal\rdf_entity\Entity\Rdf;
-use Drupal\solution\Entity\SolutionInterface;
 use PHPUnit\Framework\Assert;
 
 /**
@@ -41,20 +42,13 @@ class SolutionContext extends RawDrupalContext {
   use FileTrait;
   use FormTrait;
   use OgTrait;
-  use RdfEntityTrait;
+  use TestingEntitiesTrait;
   use SearchTrait;
   use TopicTrait;
   use TraversingTrait;
   use UserTrait;
   use UtilityTrait;
   use WorkflowTrait;
-
-  /**
-   * Keep track of created entities.
-   *
-   * @var \Drupal\rdf_entity\RdfInterface[]
-   */
-  protected array $rdfEntities = [];
 
   /**
    * Navigates to the add solution form.
@@ -66,9 +60,9 @@ class SolutionContext extends RawDrupalContext {
    * @When I visit the add solution form of the :collection collection
    */
   public function visitAddSolutionForm(string $collection): void {
-    $collection = $this->getEntityByLabel('rdf_entity', $collection);
-    $solution_url = Url::fromRoute('solution.collection_solution.add', [
-      'rdf_entity' => $collection->id(),
+    $collection = $this->getEntityByLabel('node', $collection);
+    $solution_url = Url::fromRoute('joinup_solution.collection_solution.add', [
+      'node' => $collection->id(),
     ]);
 
     $this->visitPath($solution_url->getInternalPath());
@@ -87,8 +81,8 @@ class SolutionContext extends RawDrupalContext {
    * @throws \Drupal\Core\Entity\EntityMalformedException
    */
   public function visitSolution(string $solution): void {
-    /** @var \Drupal\rdf_entity\Entity\Rdf $entity */
-    $entity = $this->getEntityByLabel('rdf_entity', $solution);
+    /** @var \Drupal\joinup_solution\Entity\SolutionInterface $entity */
+    $entity = $this->getEntityByLabel('node', $solution);
     $this->visitPath($entity->toUrl()->toString());
   }
 
@@ -108,111 +102,9 @@ class SolutionContext extends RawDrupalContext {
   }
 
   /**
-   * Creates a number of solutions with data provided in a table.
-   *
-   * Table format:
-   * @codingStandardsIgnoreStart
-   * | title        | description            | state                                             | collection      | documentation | closed | creation date    | content creation | featured | moderation | modification date | landing page               | webdav creation | webdav url                  | wiki                        |
-   * | Foo solution | This is a foo solution | draft|proposed|published|needs update|blacklisted | Some collection | text.pdf      | yes    | 28-01-1995 12:05 | no               | yes      | yes        |                   | http://foo-url-example.com | yes             | http://joinup.eu/foo/webdav | http://foo-wiki-example.com |
-   * | Bar solution | This is a bar solution | published                                         |                 | text.pdf      | no     | 28-01-1995 12:06 | yes              | no       | no         |                   | http://bar-url-example.com | no              |                             | http://bar-wiki-example.com |
-   * @codingStandardsIgnoreEnd
-   *
-   * Fields title and state are mandatory.
-   *
-   * @param \Behat\Gherkin\Node\TableNode $solution_table
-   *   The solution data.
-   *
-   * @throws \Exception
-   *   Thrown when a column name is incorrect.
-   *
-   * @Given (the following )solutions:
-   */
-  public function givenSolutions(TableNode $solution_table): void {
-    $aliases = self::solutionFieldAliases();
-
-    foreach ($solution_table->getColumnsHash() as $solution) {
-      $values = [];
-      // Replace the column aliases with the actual field names.
-      foreach ($solution as $key => $value) {
-        if (array_key_exists($key, $aliases)) {
-          $values[$aliases[$key]] = $value;
-        }
-        else {
-          throw new \Exception("Unknown column '$key' in solution table.");
-        }
-      }
-
-      $this->ensureParentCollection($values);
-      $values = $this->convertValueAliases($values);
-
-      $this->createSolution($values);
-    }
-  }
-
-  /**
-   * Creates a solution with data provided in a table.
-   *
-   * @codingStandardsIgnoreStart
-   * Table format:
-   * | title               | Sample solution                                                |
-   * | description         | A sample solution                                              |
-   * | logo                | logo.jpg                                                       |
-   * | moderation          | no|yes                                                         |
-   * | closed              | no|yes                                                         |
-   * | collection          | Example collection                                             |
-   * | contact information | Grahame Paterson, Aulay MacFarlane                             |
-   * | documentation       | text.pdf                                                       |
-   * | content creation    | facilitators|members|registered users                          |
-   * | featured            | yes|no                                                         |
-   * | landing page        | http://example.com/foobar/landing                              |
-   * | language            | Greek, German                                                  |
-   * | owner               | Zapsum, Holdline Accountants                                   |
-   * | topic               | Demography, E-inclusion                                        |
-   * | related solutions   | Solution 2, Solution 3                                         |
-   * | solution type       | [ABB159] Service Discovery Service, ...                        |
-   * | spatial coverage    | Denmark, Serbia                                                |
-   * | state               | published|...                                                  |
-   * | status              | Under development                                              |
-   * | webdav creation     | no|yes                                                         |
-   * | webdav url          | http://joinup.eu/solution/foobar/webdav                        |
-   * | wiki                | http://example.wiki/foobar/wiki                                |
-   * | uri                 | http://data.europa.eu/w21/fc2dee5a-88fb-4aff-b3bf-9b1d66903296 |
-   * @codingStandardsIgnoreEnd
-   *
-   * Fields "title", "description" and "state" are required.
-   *
-   * @param \Behat\Gherkin\Node\TableNode $solution_table
-   *   The solution data.
-   *
-   * @throws \Exception
-   *   Thrown when a column name is incorrect.
-   *
-   * @Given (the following )solution:
-   */
-  public function givenSolution(TableNode $solution_table): void {
-    $aliases = self::solutionFieldAliases();
-
-    $values = [];
-    // Replace the column aliases with the actual field names.
-    foreach ($solution_table->getRowsHash() as $key => $value) {
-      if (array_key_exists($key, $aliases)) {
-        $values[$aliases[$key]] = $value;
-      }
-      else {
-        throw new \Exception("Unknown column '$key' in solution table.");
-      }
-    }
-
-    $this->ensureParentCollection($values);
-    $values = $this->convertValueAliases($values);
-
-    $this->createSolution($values);
-  }
-
-  /**
    * Changes a value of a solution by API.
    *
-   * @param string $property
+   * @param string $fieldName
    *   The alias of the solution field.
    * @param string $label
    *   The label of the solution entity.
@@ -221,59 +113,23 @@ class SolutionContext extends RawDrupalContext {
    *
    * @Given the :fieldName of :label solution is changed to :fieldValue
    */
-  public function givenSolutionNewValue(string $property, string $label, string $fieldValue): void {
-    $aliases = self::solutionFieldAliases();
-    Assert::assertArrayHasKey($property, $aliases, "Unknown column '$property' in solution table.");
-    $fieldName = $aliases[$property];
-    $solution = static::getEntityByLabel('rdf_entity', $label, 'solution');
+  public function givenSolutionNewValue(string $fieldName, string $label, string $fieldValue): void {
+    $fieldName = JoinupContext::getNodeFieldNameFromAlias('solution', $fieldName);
+    $solution = static::getEntityByLabel('node', $label, 'solution');
     Assert::assertInstanceOf(SolutionInterface::class, $solution, "Cannot find any solution with label $label");
+    $fieldManager = \Drupal::service('entity_field.manager');
+    $fieldDefinitions = $fieldManager->getFieldDefinitions('node', 'solution');
+    Assert::assertArrayHasKey($fieldName, $fieldDefinitions, "Field $fieldName does not exist in the solution entity");
 
-    $values = $this->prepareFields(
-      $this->convertValueAliases([$fieldName => $fieldValue])
-    );
-    Assert::assertSame(SAVED_UPDATED, $solution->set(key($values), current($values))->save(), "Solution cannot be updated");
-    $this->applyPostSaveTasks($solution, $values);
-  }
-
-  /**
-   * Make sure that the solution being created has a parent collection.
-   *
-   * For some tests the solution's parent collection has no relevance. Such
-   * tests are allowed to omit an explicit collection creation. We're creating
-   * here a dummy parent collection just to satisfy the data integrity
-   * constraint.
-   *
-   * @param array $values
-   *   The solution creation values.
-   *
-   * @see \Drupal\solution\SolutionAffiliationFieldItemList::preSave()
-   */
-  protected function ensureParentCollection(array &$values): void {
-    if (empty($values['collection'])) {
-      $label = $this->getRandom()->sentences(3);
-      $collection = Rdf::create([
-        'rid' => 'collection',
-        'label' => $label,
-        'field_ar_state' => 'published',
-      ]);
-      $collection->save();
-      $values['collection'] = $label;
-      // Track this collection.
-      $this->rdfEntities[$collection->id()] = $collection;
-
-      // Remove any links created by this collection because they might produce
-      // name collisions with the solution. E.g. the left sidebar link 'About'.
-      // @todo Remove this workaround in ISAICP-5597.
-      // @see tests/features/custom_page/navigation_menu.feature
-      // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-5597
-      $entity_type_manager = \Drupal::entityTypeManager();
-      $storage = $entity_type_manager->getStorage('ogmenu_instance');
-      $og_menu_instance_ids = $storage->getQuery()->accessCheck(FALSE)
-        ->condition('type', 'navigation')
-        ->condition(OgGroupAudienceHelperInterface::DEFAULT_FIELD, $collection->id())
-        ->execute();
-      $storage->delete($storage->loadMultiple($og_menu_instance_ids));
+    // For reference fields, we need to convert the value to the entity ID.
+    if ($fieldDefinitions[$fieldName]->getType() === 'entity_reference') {
+      $targetType = $fieldDefinitions[$fieldName]->getSetting('target_type');
+      $entity = $this->getEntityByLabel($targetType, $fieldValue);
+      $fieldValue = $entity->id();
     }
+
+    $solution->set($fieldName, $fieldValue);
+    Assert::assertSame(SAVED_UPDATED, $solution->save(), "Solution cannot be updated");
   }
 
   /**
@@ -298,7 +154,7 @@ class SolutionContext extends RawDrupalContext {
       throw new \Exception("User $username could not be found.");
     }
 
-    $solution = $this->getEntityByLabel('rdf_entity', $solution, 'solution');
+    $solution = $this->getEntityByLabel('node', $solution, 'solution');
     $owner_roles = [
       OgRoleInterface::ADMINISTRATOR,
       'facilitator',
@@ -308,105 +164,54 @@ class SolutionContext extends RawDrupalContext {
   }
 
   /**
-   * Prepares the fields of the solution for being saved.
+   * Applies post-save tasks: Pinning and unpinning.
+   *
+   * @param \Drupal\DrupalExtension\Hook\Scope\AfterNodeCreateScope $scope
+   *   The Behat hook scope object containing the metadata of the node that was
+   *   created.
+   *
+   * @AfterNodeCreate
    */
-  protected function prepareFields(array $values): array {
-    $fileHandler = \Drupal::service('file_url.handler');
-    Assert::assertInstanceOf(FileUrlHandler::class, $fileHandler);
+  public function afterNodeCreateHandlePinning(AfterNodeCreateScope $scope): void {
+    $node = $scope->getEntity();
+    if ($node->type !== 'solution') {
+      return;
+    }
 
-    $file_fields = [
-      'field_is_documentation',
-      'field_is_logo',
-    ];
+    if (!isset($node->pinned_in_collection) && !isset($node->unpinned_in_collection)) {
+      return;
+    }
 
-    foreach ($file_fields as $field_name) {
-      if (!empty($values[$field_name])) {
-        foreach ($values[$field_name] as &$filename) {
-          $file = $this->createFile($filename);
-          if ($field_name === 'field_is_documentation') {
-            $filename = [
-              'target_id' => $fileHandler::fileToUrl($file),
-            ];
-          }
-          else {
-            $filename = [$file->id()];
-          }
+    if (($entity = Node::load((int) $node->nid)) && $entity instanceof PinnableGroupContentInterface) {
+      // Pin solution in collection where needed.
+      foreach (explode(',', $node->pinned_in_collection ?? '') as $groupLabel) {
+        if (!($groupLabel = trim($groupLabel))) {
+          continue;
         }
+        $group = $this->getEntityByLabel('node', $groupLabel);
+        Assert::assertInstanceOf(
+          GroupInterface::class,
+          $group,
+          "Cannot pin solution {$entity->label()} in $groupLabel since it does not exist or is not a group."
+        );
+        $entity->pin($group);
       }
     }
-    return $values;
-  }
 
-  /**
-   * Creates a solution from the given property and field data.
-   *
-   * @param array $values
-   *   An optional associative array of values, keyed by property name.
-   *
-   * @return \Drupal\rdf_entity\RdfInterface
-   *   A new solution entity.
-   */
-  protected function createSolution(array $values): SolutionInterface {
-    $values = $this->prepareFields($values);
-    $this->setFallbackTopic($values);
-
-    $solution = $this->createRdfEntity('solution', $values);
-    Assert::assertInstanceOf(SolutionInterface::class, $solution);
-    $this->rdfEntities[$solution->id()] = $solution;
-
-    $this->applyPostSaveTasks($solution, $values);
-
-    return $solution;
-  }
-
-  /**
-   * Applies post-save tasks: (un)pinning and (un)featuring.
-   *
-   * @param \Drupal\solution\Entity\SolutionInterface $solution
-   *   The saved solution object.
-   * @param array $values
-   *   The solution values.
-   */
-  protected function applyPostSaveTasks(SolutionInterface $solution, array $values): void {
-    // If the solution is featured we need to create the meta entity that stores
-    // this information after creating the solution.
-    $is_featured = in_array(strtolower((string) ($values['feature'] ?? '')), [
-      'y',
-      'yes',
-    ]);
-    if ($is_featured) {
-      $solution->feature();
-    }
-    else {
-      $solution->unfeature();
-    }
-
-    // Pin solution in collection where needed.
-    foreach (explode(',', $values['pinned_in_collection'] ?? '') as $groupLabel) {
-      if (!($groupLabel = trim($groupLabel))) {
-        continue;
+    if (($entity = Node::load((int) $node->nid)) && $entity instanceof PinnableGroupContentInterface) {
+      // Pin solution in collection where needed.
+      foreach (explode(',', $node->unpinned_in_collection ?? '') as $groupLabel) {
+        if (!($groupLabel = trim($groupLabel))) {
+          continue;
+        }
+        $group = $this->getEntityByLabel('node', $groupLabel);
+        Assert::assertInstanceOf(
+          GroupInterface::class,
+          $group,
+          "Cannot pin solution {$entity->label()} in $groupLabel since it does not exist or is not a group."
+        );
+        $entity->unpin($group);
       }
-      $group = $this->getEntityByLabel('rdf_entity', $groupLabel);
-      Assert::assertInstanceOf(
-        GroupInterface::class,
-        $group,
-        "Cannot pin solution {$solution->label()} in $groupLabel since it does not exist or is not a group."
-      );
-      $solution->pin($group);
-    }
-
-    // Unpin where needed.
-    foreach (explode(',', $values['unpinned_in_collection'] ?? '') as $groupLabel) {
-      if (!($groupLabel = trim($groupLabel))) {
-        continue;
-      }
-      $group = $this->getEntityByLabel('rdf_entity', $groupLabel);
-      Assert::assertInstanceOf(
-        GroupInterface::class,
-        $group,
-        "Cannot unpin solution {$solution->label()} in $groupLabel since it does not exist or is not a group."
-      );
-      $solution->unpin($group);
     }
   }
 
@@ -419,7 +224,7 @@ class SolutionContext extends RawDrupalContext {
    * @When I delete the :solution solution
    */
   public function deleteSolution(string $solution): void {
-    $solution = $this->getEntityByLabel('rdf_entity', $solution);
+    $solution = $this->getEntityByLabel('node', $solution);
     $solution->skip_notification = TRUE;
     $solution->delete();
   }
@@ -433,12 +238,12 @@ class SolutionContext extends RawDrupalContext {
    * @When I delete documents from :solution solution
    */
   public function deleteDocumentsFromSolution(string $solution): void {
-    $solution = $this->getEntityByLabel('rdf_entity', $solution);
+    $solution = $this->getEntityByLabel('node', $solution);
 
     /** @var \Drupal\file_url\FileUrlHandler $fileHandler */
     $fileHandler = \Drupal::service('file_url.handler');
 
-    $values = $solution->get('field_is_documentation')->getValue();
+    $values = $solution->get('documentation')->getValue();
     foreach ($values as $value) {
       $file = $fileHandler::urlToFile($value['target_id']);
       if (!$file || $fileHandler::isRemote($file)) {
@@ -447,21 +252,6 @@ class SolutionContext extends RawDrupalContext {
 
       $file->delete();
     }
-  }
-
-  /**
-   * Checks the number of available solutions.
-   *
-   * @param int $number
-   *   The expected number of solutions.
-   *
-   * @throws \Exception
-   *   Throws an exception when the expected number is not equal to the given.
-   *
-   * @Then I should have :number solution(s)
-   */
-  public function assertSolutionCount(int $number): void {
-    $this->assertEntityCount('rdf_entity', 'solution', $number);
   }
 
   /**
@@ -493,135 +283,9 @@ class SolutionContext extends RawDrupalContext {
    */
   public function givenSolutionUserMemberships(TableNode $membership_table): void {
     foreach ($membership_table->getColumnsHash() as $values) {
-      $group = $this->getEntityByLabel('rdf_entity', $values['solution']);
+      $group = $this->getEntityByLabel('node', $values['solution']);
       $this->givenUserMembership($group, $values);
     }
-  }
-
-  /**
-   * Remove any created entities.
-   *
-   * @AfterScenario
-   */
-  public function clearEntities(AfterScenarioScope $event): void {
-    if (empty($this->rdfEntities)) {
-      return;
-    }
-
-    // Remove any solutions that were created.
-    foreach ($this->rdfEntities as $entity) {
-      $name = $entity->label();
-      try {
-        $entity->skip_notification = TRUE;
-        $entity->delete();
-      }
-      catch (\Throwable $e) {
-        // Throw a more helpful error if something goes wrong during cleanup.
-        throw new \Exception(sprintf('Error while cleaning up solution "%s" after completing scenario "%s" of feature "%s": "%s"', $name, $event->getFeature()->getTitle(), $event->getScenario()->getTitle(), $e->getMessage()));
-      }
-    }
-    $this->rdfEntities = [];
-  }
-
-  /**
-   * Field alias mapping.
-   *
-   * @return array
-   *   Mapping.
-   */
-  protected static function solutionFieldAliases(): array {
-    // Mapping alias - field name.
-    return [
-      'author' => 'uid',
-      'uri' => 'id',
-      'title' => 'label',
-      'short ID' => 'field_short_id',
-      'abstract' => 'field_is_abstract',
-      'affiliations requests' => 'field_is_affiliations_requests',
-      'contact information' => 'field_is_contact_information',
-      'content creation' => 'field_is_content_creation',
-      'creation date' => 'created',
-      'description' => 'field_is_description',
-      'documentation' => 'field_is_documentation',
-      'keywords' => 'field_keywords',
-      'landing page' => 'field_is_landing_page',
-      'language' => 'field_is_language',
-      'latest release' => 'field_is_latest_release',
-      'logo' => 'field_is_logo',
-      'metrics page' => 'field_is_metrics_page',
-      'moderation' => 'field_is_moderation',
-      'modification date' => 'changed',
-      'owner' => 'field_is_owner',
-      'topic' => 'field_topic',
-      'related by type' => 'field_is_show_eira_related',
-      'related solutions' => 'field_is_related_solutions',
-      'solution type' => 'field_is_solution_type',
-      'source code repository' => 'field_is_source_code_repository',
-      'spatial coverage' => 'field_spatial_coverage',
-      'status' => 'field_status',
-      'translation' => 'field_is_translation',
-      'webdav creation' => 'field_is_webdav_creation',
-      'webdav url' => 'field_is_webdav_url',
-      'wiki' => 'field_is_wiki',
-      'state' => 'field_is_state',
-      'collection' => 'collection',
-      'collections' => 'collection',
-      'featured' => 'feature',
-      'pinned in' => 'pinned_in_collection',
-      'published at' => 'published_at',
-      'unpinned in' => 'unpinned_in_collection',
-      'shared on' => 'field_is_shared_in',
-    ];
-  }
-
-  /**
-   * Converts values from user-friendly to normal machine values.
-   *
-   * @param array $fields
-   *   An array of fields keyed by field name.
-   *
-   * @return array
-   *   The array with the values converted.
-   *
-   * @throws \Exception
-   *    Throws an exception when a mapped value is not found.
-   */
-  protected function convertValueAliases(array $fields): array {
-    $mapped_values = [
-      'field_is_moderation' => ['no' => 0, 'yes' => 1],
-      'field_is_content_creation' => [
-        'facilitators and authors' => ContentCreationOptions::FACILITATORS_AND_AUTHORS,
-        'registered users' => ContentCreationOptions::REGISTERED_USERS,
-      ],
-      'field_is_webdav_creation' => ['no' => 0, 'yes' => 1],
-      'field_is_state' => [
-        'draft' => 'draft',
-        'proposed' => 'proposed',
-        'published' => 'published',
-        'needs update' => 'needs_update',
-        'blacklisted' => 'blacklisted',
-        'archived' => 'archived',
-      ],
-      'field_is_show_eira_related' => ['no' => 0, 'yes' => 1],
-    ];
-
-    foreach ($fields as $field => $value) {
-      if (isset($mapped_values[$field])) {
-        if (!isset($mapped_values[$field][$value])) {
-          throw new \Exception("Value $value is not an acceptable value for field $field.");
-        }
-
-        $fields[$field] = $mapped_values[$field][$value];
-      }
-    }
-
-    // The solution affiliation could be multi-value.
-    if (isset($fields['collection'])) {
-      $fields['collection'] = $this->explodeCommaSeparatedStepArgument($fields['collection']);
-    }
-
-    // Convert any entity reference field label value with the entity ID.
-    return $this->convertEntityReferencesValues('rdf_entity', 'solution', $this->parseRdfEntityFields($fields));
   }
 
   /**
@@ -686,7 +350,7 @@ class SolutionContext extends RawDrupalContext {
   public function verifyDeleteLinkVisibility(TableNode $check_table): void {
     foreach ($check_table->getColumnsHash() as $values) {
       $user = $this->getUserByName($values['user']);
-      $solution = $this->getEntityByLabel('rdf_entity', $values['solution']);
+      $solution = $this->getEntityByLabel('node', $values['solution']);
       $visible = $values['delete link'] === 'yes';
       $this->assertGroupEntityOperation($visible, 'delete', $solution, $user);
     }
@@ -714,14 +378,14 @@ class SolutionContext extends RawDrupalContext {
    * @Given the multilingual :title solution of :collection collection
    */
   public function theMultilingualSolution(string $title, string $collection): void {
-    $collection = $this->getEntityByLabel('rdf_entity', $collection, 'collection');
-    $values = [
-      'label' => $title,
-      'field_is_state' => 'published',
-      'field_is_description' => "English description",
-      'collection' => $collection->id(),
-    ];
-    $solution = $this->createRdfEntity('solution', $values);
+    $solution = Node::create([
+      'type' => 'solution',
+      'title' => $title,
+      'field_state' => 'published',
+      'description' => "English description",
+      'og_audience' => $this->getEntityByLabel('node', $collection, 'collection'),
+    ]);
+    $solution->save();
     // Fill with the specific content translation fields and fall-back to
     // the remaining values from the base translation.
     $solution_values = $solution->toArray();
@@ -731,10 +395,10 @@ class SolutionContext extends RawDrupalContext {
       'content_translation_uid' => 1,
       'content_translation_outdated' => FALSE,
     ];
-    $solution_values['field_is_description'] = "Catalan description";
+    $solution_values['description'] = "Catalan description";
     // Create the translation.
     $solution->addTranslation('ca', $solution_values)->save();
-    $this->rdfEntities[$solution->id()] = $solution;
+    $this->entities['node'][$solution->id()] = $solution;
   }
 
   /**
@@ -771,6 +435,97 @@ class SolutionContext extends RawDrupalContext {
     $tile = $this->getTileByHeading($heading);
     $elements = $tile->findAll('xpath', '//span[contains(concat(" ", normalize-space(@class), " "), " icon--download ")]');
     Assert::assertEmpty($elements);
+  }
+
+  /**
+   * Converts values from user-friendly to normal machine values.
+   *
+   * @param \Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope $scope
+   *   The before node create scope.
+   *
+   * @BeforeNodeCreate
+   */
+  public function convertSolutionValueAliases(BeforeNodeCreateScope $scope): void {
+    $node = $scope->getEntity();
+    if ($node->type !== 'solution') {
+      return;
+    }
+
+    $value_mapping = [
+      'group_moderation' => ['no' => 0, 'yes' => 1],
+      'content_creation' => [
+        'facilitators and authors' => ContentCreationOptions::FACILITATORS_AND_AUTHORS,
+        'registered users' => ContentCreationOptions::REGISTERED_USERS,
+      ],
+      'field_is_webdav_creation' => ['no' => 0, 'yes' => 1],
+      'list_related_entities' => ['no' => 0, 'yes' => 1],
+    ];
+
+    foreach ((array) $node as $field => $value) {
+      if (!isset($value_mapping[$field])) {
+        continue;
+      }
+      Assert::assertArrayHasKey(
+        $value,
+        $value_mapping[$field],
+        sprintf(
+          "Value '%s' is not an acceptable value for solution field %s.",
+          $value,
+          $field,
+        )
+      );
+
+      $node->$field = $value_mapping[$field][$value];
+    }
+  }
+
+  /**
+   * Ensures that the solution being created has a parent collection.
+   *
+   * @param \Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope $scope
+   *   The before node create scope.
+   *
+   * @BeforeNodeCreate
+   */
+  public function ensureSolutionParentCollection(BeforeNodeCreateScope $scope): void {
+    $node = $scope->getEntity();
+    if ($node->type !== 'solution') {
+      return;
+    }
+    if (empty($node->og_audience)) {
+      $label = $this->getRandom()->sentences(3);
+      // We must use \Drupal\joinup\Context\DrupalContext to create the
+      // missing collection, since entities are removed per context class. If
+      // we do it directly in this context, then the solution was deleted after
+      // the collection which triggered destruction issues in RDF syncronizer.
+      $environment = $scope->getEnvironment();
+      $context = $environment->getContext(DrupalContext::class);
+      Assert::assertInstanceOf(DrupalContext::class, $context);
+      $collection = $context->nodeCreate((object) [
+        'type' => 'collection',
+        'title' => $label,
+        // Collection context will ensure that there is a state property set to
+        // draft. We set the state here to allow joinup context to convert it
+        // to a field properly.
+        // @see \Drupal\joinup\Context\CollectionContext::defaultCollectionValues
+        // @see \Drupal\joinup\Context\JoinupContext::massageFieldsBeforeNodeCreate
+        'state' => 'published',
+      ]);
+      $node->og_audience = $collection->nid;
+
+      // Remove any links created by this collection because they might produce
+      // name collisions with the solution. E.g. the left sidebar link 'About'.
+      // @todo Remove this workaround in ISAICP-5597.
+      // @see tests/features/custom_page/navigation_menu.feature
+      // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-5597
+      $entity_type_manager = \Drupal::entityTypeManager();
+      $storage = $entity_type_manager->getStorage('ogmenu_instance');
+      $og_menu_instance_ids = $storage->getQuery()->accessCheck(FALSE)
+        ->condition('type', 'navigation')
+        ->condition(OgGroupAudienceHelperInterface::DEFAULT_FIELD, $collection->nid)
+        ->execute();
+      $storage->delete($storage->loadMultiple($og_menu_instance_ids));
+    }
   }
 
 }

@@ -267,19 +267,17 @@ display:
         options:
           view_modes:
             'entity:node':
+              collection: default
               custom_page: default
               discussion: default
+              distribution: default
               document: default
               event: default
+              licence: default
               news: default
               oss_solution: view_mode_tile
-            'entity:rdf_entity':
-              asset_distribution: default
-              asset_release: default
-              collection: default
-              licence: default
+              release: default
               solution: default
-              spdx_licence: default
             'entity:taxonomy_term':
               eif_conceptual_model: default
               eif_interoperability_layer: default

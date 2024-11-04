@@ -10,7 +10,7 @@ Feature: Related solution
     And owner content:
       | name         | owner type |
       | Kalikatoures | Company    |
-    And solutions:
+    Given solution content:
       | title      | related solutions | abstract                         | description                         | documentation | related by type | moderation | logo     | topic      | state     | solution type | owner        | contact information |
       | C          |                   | Blazing fast segmentation faults | Blazing fast segmentation faults.   | text.pdf      | yes             | no         | logo.png | Demography | published |               | Kalikatoures | Kalikatoura         |
       | Java       | C                 | Because inheritance is cool      | Because inheritance is cool.        | text.pdf      | yes             | no         | logo.png | Demography | published | Citizen       | Kalikatoures | Kalikatoura         |
@@ -19,6 +19,7 @@ Feature: Related solution
       | Python     |                   | Get stuff done                   | Get stuff done.                     | text.pdf      | yes             | no         | logo.png | Demography | published |               | Kalikatoures | Kalikatoura         |
       | Javascript | Java, PHP         | Java is related to javascript    | Java is related to javascript. Huh? | text.pdf      | no              | no         | logo.png | Demography | published | Citizen       | Kalikatoures | Kalikatoura         |
 
+  # @covers \joinup_solution_get_related_solutions_ids.
   Scenario: Related solutions
     # Scenario A. A collection owner manages his own collection.
     When I visit the "Java" solution

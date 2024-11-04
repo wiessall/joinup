@@ -24,24 +24,23 @@ use Drupal\collection\Entity\CollectionInterface;
 use Drupal\collection\Entity\GlossaryTerm;
 use Drupal\collection\Plugin\Field\FieldType\LastUpdatedFieldItemList;
 use Drupal\joinup_subscription\JoinupSubscriptionsHelper;
+use Drupal\node\Entity\Node;
+use Drupal\node\Entity\NodeType;
 use Drupal\node\NodeInterface;
 use Drupal\oe_newsroom_newsletter\Form\NewsletterSubscribeForm;
 use Drupal\og\Entity\OgRole;
 use Drupal\og\Og;
 use Drupal\og\OgMembershipInterface;
 use Drupal\og\OgRoleInterface;
-use Drupal\rdf_entity\Entity\Rdf;
-use Drupal\rdf_entity\RdfInterface;
-use Drupal\sparql_entity_storage\SparqlGraphInterface;
 
 /**
  * Implements hook_entity_type_alter().
  */
 function collection_entity_type_alter(array &$entity_types): void {
   /** @var \Drupal\Core\Entity\EntityTypeInterface[] $entity_types */
-  $entity_types['rdf_entity']
-    ->setLinkTemplate('glossary', '/rdf_entity/{rdf_entity}/glossary/{letter}')
-    ->setLinkTemplate('subscribe', '/rdf_entity/{rdf_entity}/subscribe');
+  $entity_types['node']
+    ->setLinkTemplate('glossary', '/node/{node}/glossary/{letter}')
+    ->setLinkTemplate('subscribe', '/node/{node}/subscribe');
 }
 
 /**
@@ -93,8 +92,8 @@ function collection_form_block_form_alter(&$form, FormStateInterface $form_state
  * Implements hook_entity_bundle_info_alter().
  */
 function collection_entity_bundle_info_alter(&$bundles): void {
-  if (!empty($bundles['rdf_entity']['collection'])) {
-    $bundles['rdf_entity']['collection']['class'] = Collection::class;
+  if (!empty($bundles['node']['collection'])) {
+    $bundles['node']['collection']['class'] = Collection::class;
   }
   if (!empty($bundles['node']['glossary'])) {
     $bundles['node']['glossary']['class'] = GlossaryTerm::class;
@@ -105,10 +104,6 @@ function collection_entity_bundle_info_alter(&$bundles): void {
  * Implements hook_entity_bundle_field_info_alter().
  */
 function collection_entity_bundle_field_info_alter(&$fields, EntityTypeInterface $entity_type, $bundle): void {
-  // Make sure the collection label is unique.
-  if ($entity_type->id() == 'rdf_entity' && $bundle == 'collection' && !empty($fields['label'])) {
-    $fields['label']->addConstraint('UniqueFieldInBundle', ['bundles' => ['collection']]);
-  }
   if ($entity_type->id() === 'node' && $bundle === 'glossary') {
     $fields['title']->addConstraint('UniqueFieldValueInGroupAndBundle', [
       'groupAudienceField' => 'og_audience',
@@ -121,13 +116,25 @@ function collection_entity_bundle_field_info_alter(&$fields, EntityTypeInterface
 }
 
 /**
+ * Implements hook_entity_base_field_info_alter().
+ */
+function collection_entity_base_field_info_alter($fields, EntityTypeInterface $entity_type): void {
+  // Make sure the collection label is unique.
+  if ($entity_type->id() === 'node' && !empty($fields['title'])) {
+    assert($fields['title'] instanceof FieldDefinitionInterface);
+    $uniqueFieldConstraintConfig = $fields['title']->getConstraint('UniqueFieldInBundle') ?? [];
+    $uniqueFieldConstraintConfig['bundles'][] = 'collection';
+    $fields['title']->addConstraint('UniqueFieldInBundle', $uniqueFieldConstraintConfig);
+  }
+}
+
+/**
  * Implements hook_ENTITY_TYPE_insert().
  */
-function collection_rdf_entity_insert(EntityInterface $entity): void {
+function collection_node_insert(EntityInterface $entity): void {
   if ($entity->bundle() !== 'collection') {
     return;
   }
-  collection_rdf_entity_update($entity);
 
   // When a new collection is proposed, give the user the 'group owner' role.
   // This will not occur if the user is the anonymous, i.e. the entity was
@@ -136,9 +143,9 @@ function collection_rdf_entity_insert(EntityInterface $entity): void {
     // The group owner inherits all roles of a collection member, facilitator
     // and administrator.
     $roles = [
-      'rdf_entity-collection-' . OgRoleInterface::AUTHENTICATED,
-      'rdf_entity-collection-' . OgRoleInterface::ADMINISTRATOR,
-      'rdf_entity-collection-facilitator',
+      'node-collection-' . OgRoleInterface::AUTHENTICATED,
+      'node-collection-' . OgRoleInterface::ADMINISTRATOR,
+      'node-collection-facilitator',
     ];
 
     $subscription_bundles = JoinupSubscriptionsHelper::provideDataForField('collection');
@@ -151,69 +158,10 @@ function collection_rdf_entity_insert(EntityInterface $entity): void {
 }
 
 /**
- * Implements hook_ENTITY_TYPE_presave().
- *
- * Default graph is published. Draft graph is draft.
- */
-function collection_rdf_entity_presave(RdfInterface $entity): void {
-  if (!$entity instanceof CollectionInterface) {
-    return;
-  }
-
-  // Provide default values for date/time fields if were missed.
-  foreach (['created', 'changed'] as $field_name) {
-    if ($entity->get($field_name)->isEmpty()) {
-      if (!isset($request_time)) {
-        $request_time = gmdate('Y-m-d\TH:i:s', \Drupal::time()->getRequestTime());
-      }
-      $entity->set($field_name, $request_time);
-    }
-  }
-
-  if (!\Drupal::service('sparql.graph_handler')->bundleHasGraph('rdf_entity', 'collection', 'draft')) {
-    return;
-  }
-
-  $state = $entity->getWorkflowState();
-  if (in_array($state, ['draft', 'proposed'])) {
-    $entity->set('graph', 'draft');
-  }
-  elseif (in_array($state, [
-    'published',
-    'archival_request',
-    'archived',
-  ])) {
-    $entity->set('graph', SparqlGraphInterface::DEFAULT);
-  }
-  elseif (empty($state)) {
-    throw new \Exception("State field not found while trying to get the appropriate graph.");
-  }
-  else {
-    throw new \Exception("State field value is invalid. Current value found: " . $state);
-  }
-}
-
-/**
- * Implements hook_ENTITY_TYPE_update().
- *
- * Performs the following actions:
- * - When the entity is saved into the default graph, the draft must be deleted.
- */
-function collection_rdf_entity_update(EntityInterface $entity): void {
-  if (!$entity instanceof CollectionInterface || !\Drupal::service('sparql.graph_handler')->bundleHasGraph('rdf_entity', 'collection', 'draft')) {
-    return;
-  }
-
-  if ($entity->getWorkflowState() === 'published') {
-    \Drupal::entityTypeManager()->getStorage('rdf_entity')->deleteFromGraph([$entity], 'draft');
-  }
-}
-
-/**
  * Implements hook_module_implements_alter().
  */
 function collection_module_implements_alter(&$implementations, $hook): void {
-  if ($hook === 'rdf_entity_insert') {
+  if ($hook === 'node_insert') {
     // Make sure collection_entity_insert() runs after og_entity_insert(). The
     // latter creates an OgMembership entry for the collection owner when a new
     // collection is proposed, and collection_entity_insert() needs to modify
@@ -229,9 +177,17 @@ function collection_module_implements_alter(&$implementations, $hook): void {
  */
 function collection_entity_extra_field_info(): array {
   $fields = [];
+  $collection = NodeType::load('collection');
+
+  // This hook can fire before the collection bundle config is defined, in that
+  // case we have nothing meaningful to add.
+  if (empty($collection)) {
+    return [];
+  }
+
   // Add the join/leave collection form as field.
   // @todo will be removed in ISAICP-2743
-  $display = &$fields['rdf_entity']['collection']['display'];
+  $display = &$fields['node'][$collection->id()]['display'];
   $display['join_collection'] = [
     'label' => t('Join collection'),
     'description' => t('Shows the join/leave collection form'),
@@ -264,7 +220,7 @@ function collection_entity_extra_field_info(): array {
  *
  * Shows extra fields for the collection bundle.
  */
-function collection_rdf_entity_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode): void {
+function collection_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode): void {
   if (!$entity instanceof CollectionInterface) {
     return;
   }
@@ -272,7 +228,7 @@ function collection_rdf_entity_view(array &$build, EntityInterface $entity, Enti
   if ($display->getComponent('join_collection')) {
     $build['join_collection'] = [
       '#lazy_builder' => [
-        'collection.lazy_builders:renderJoinCollectionForm',
+        'joinup_collection.lazy_builders:renderJoinCollectionForm',
         [$entity->id()],
       ],
       '#create_placeholder' => TRUE,
@@ -300,7 +256,7 @@ function collection_rdf_entity_view(array &$build, EntityInterface $entity, Enti
   if ($display->getComponent('solutions')) {
     $solution_count = count($entity->getSolutionIds(TRUE));
     $tags = Cache::buildTags('og-group-content', $entity->getCacheTagsToInvalidate());
-    $tags = Cache::mergeTags($tags, ['rdf_entity_list']);
+    $tags = Cache::mergeTags($tags, ['node_list']);
     $build['solutions'] = [
       '#markup' => \Drupal::translation()->formatPlural($solution_count, '@solution_count Solution', '@solution_count Solutions', ['@solution_count' => $solution_count]),
       '#cache' => [
@@ -314,7 +270,7 @@ function collection_rdf_entity_view(array &$build, EntityInterface $entity, Enti
   if ($display->getComponent('read_more')) {
     $text = [
       '#type' => 'markup',
-      '#markup' => t('Read more') . '<span class="visually-hidden"> ' . t('about') . ' ' . $entity->getName() . '</span>',
+      '#markup' => t('Read more') . '<span class="visually-hidden"> ' . t('about') . ' ' . $entity->label() . '</span>',
     ];
     $build['read_more'] = $entity->toLink($text, 'canonical', [
       'attributes' => [
@@ -325,7 +281,7 @@ function collection_rdf_entity_view(array &$build, EntityInterface $entity, Enti
           'btn',
           'btn-secondary',
         ],
-        'aria-label' => t('Read more about @name.', ['@name' => $entity->getName()]),
+        'aria-label' => t('Read more about @name.', ['@name' => $entity->label()]),
       ],
     ])->toRenderable();
   }
@@ -336,7 +292,7 @@ function collection_rdf_entity_view(array &$build, EntityInterface $entity, Enti
  */
 function collection_entity_bundle_field_info(EntityTypeInterface $entity_type, $bundle, array $base_field_definitions): array {
   $fields = [];
-  if ($entity_type->id() === 'rdf_entity' && $bundle === 'collection') {
+  if ($entity_type->id() === 'node' && $bundle === 'collection') {
     $fields['last_update'] = BaseFieldDefinition::create('timestamp')
       ->setLabel(t('Last updated'))
       ->setDescription(t('The last updated time considering also compounding entities.'))
@@ -356,8 +312,8 @@ function collection_node_delete(NodeInterface $node): void {
     return;
   }
 
-  /** @var \Drupal\rdf_entity\RdfInterface $group */
-  if (!$node->get('og_audience')->isEmpty() && ($group = Rdf::load($node->get('og_audience')->target_id)) && $group->bundle() === 'collection') {
+  /** @var \Drupal\node\NodeInterface $group */
+  if (!$node->get('og_audience')->isEmpty() && ($group = Node::load($node->get('og_audience')->target_id)) && $group->bundle() === 'collection') {
     // Touch the parent collection in order to update its changed timestamp.
     $group->skip_notification = TRUE;
     $group->setChangedTime(\Drupal::time()->getRequestTime())->save();
@@ -375,12 +331,12 @@ function collection_form_meta_entity_collection_settings_form_alter(array &$form
 /**
  * Implements hook_preprocess_HOOK().
  */
-function collection_preprocess_search_api_field__rdf_entity__field_collection_content__collection(array &$variables): void {
+function collection_preprocess_search_api_field__node__listing_content__collection(array &$variables): void {
   /** @var \Drupal\collection\Entity\CollectionInterface $collection */
   $collection = $variables['entity'];
 
   /** @var \Drupal\oe_newsroom_newsletter\Plugin\Field\FieldType\NewsletterItem $newsletter_field_item */
-  $newsletter_field_item = $collection->get('field_newsletter')->first();
+  $newsletter_field_item = $collection->get('newsletter')->first();
 
   $variables['newsletter_enabled'] = $newsletter_field_item && !$newsletter_field_item->isEmpty() && $newsletter_field_item->isEnabled();
 

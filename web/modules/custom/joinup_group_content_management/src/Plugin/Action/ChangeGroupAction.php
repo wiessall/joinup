@@ -19,8 +19,6 @@ use Drupal\joinup_release\Entity\Release;
 use Drupal\menu_link_content\MenuLinkContentInterface;
 use Drupal\node\NodeInterface;
 use Drupal\og_menu\OgMenuInstanceInterface;
-use Drupal\rdf_entity\Entity\Rdf;
-use Drupal\sparql_entity_storage\UriEncoder;
 use Drupal\views_bulk_operations\Action\ViewsBulkOperationsActionBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -132,8 +130,8 @@ class ChangeGroupAction extends ViewsBulkOperationsActionBase implements Contain
   public function executeMultiple(array $nodes): void {
     $message = array_fill_keys(['error', 'warning', 'status'], []);
     $groupId = $this->getConfiguration()['group'];
-    if (!$group = Rdf::load($groupId)) {
-      throw new \RuntimeException("Cannot load RDF entity with ID $groupId");
+    if (!$group = $this->entityTypeManager->getStorage('node')->load($groupId)) {
+      throw new \RuntimeException("Cannot load group entity with ID $groupId");
     }
 
     // Order the nodes, so that the custom page parent nodes are first. This is
@@ -269,8 +267,8 @@ class ChangeGroupAction extends ViewsBulkOperationsActionBase implements Contain
    */
   public function buildConfigurationForm(array $form, FormStateInterface $formState): array {
     /** @var \Drupal\Core\Entity\EntityReferenceSelection\SelectionPluginBase $selection */
-    $selection = $this->selectionPluginManager->createInstance('default:rdf_entity', [
-      'target_type' => 'rdf_entity',
+    $selection = $this->selectionPluginManager->createInstance('default:node', [
+      'target_type' => 'node',
       'target_bundles' => ['collection', 'solution'],
     ]);
     $selectionSettings = $selection->getConfiguration() + [
@@ -280,8 +278,8 @@ class ChangeGroupAction extends ViewsBulkOperationsActionBase implements Contain
     $form['group'] = [
       '#title' => $this->t('Select the destination collection or solution'),
       '#type' => 'entity_autocomplete',
-      '#target_type' => 'rdf_entity',
-      '#selection_handler' => 'default:rdf_entity',
+      '#target_type' => 'node',
+      '#selection_handler' => 'default:node',
       '#selection_settings' => $selectionSettings,
       '#maxlength' => 2048,
       '#required' => TRUE,
@@ -295,9 +293,9 @@ class ChangeGroupAction extends ViewsBulkOperationsActionBase implements Contain
   public function validateConfigurationForm(array &$form, FormStateInterface $formState): void {
     /** @var \Drupal\Core\Url $url */
     $url = $formState->get('views_bulk_operations')['redirect_url'];
-    if ($url->isRouted() && ($parameters = $url->getRouteParameters()) && !empty($parameters['rdf_entity'])) {
-      /** @var \Drupal\rdf_entity\RdfInterface $sourceEntity */
-      $sourceEntity = Rdf::load(UriEncoder::decodeUrl($parameters['rdf_entity']));
+    if ($url->isRouted() && ($parameters = $url->getRouteParameters()) && !empty($parameters['node'])) {
+      /** @var \Drupal\node\NodeInterface $sourceEntity */
+      $sourceEntity = $this->entityTypeManager->getStorage('node')->load($parameters['node']);
       if ($sourceEntity->id() === $formState->getValue('group')) {
         $formState->setErrorByName('group', $this->t("The destination group is the same as the source group: %group. Please, select other destination group.", [
           '%group' => $sourceEntity->label(),

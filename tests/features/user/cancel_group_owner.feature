@@ -7,11 +7,11 @@ Feature:
       | Username      | Roles | E-mail                   | First name | Family name |
       | Hazel Olson   |       | HazelOlson@example.com   | Hazel      | Olson       |
       | Amelia Barker |       | AmeliaBarker@example.com | Amelia     | Barker      |
-    And collections:
+    And collection content:
       | title                   | state     |
       | Lugia was just released | published |
       | Articuno is hunted      | published |
-    And solutions:
+    Given solution content:
       | title                        | state     |
       | Random chat machine learning | published |
     # Assign facilitator role in order to allow creation of a solution.

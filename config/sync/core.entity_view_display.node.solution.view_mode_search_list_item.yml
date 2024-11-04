@@ -1,0 +1,138 @@
+uuid: c1980600-aa66-444f-b890-655d684240f1
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.view_mode_search_list_item
+    - field.field.node.solution.abstract
+    - field.field.node.solution.body
+    - field.field.node.solution.contact
+    - field.field.node.solution.content_creation
+    - field.field.node.solution.description
+    - field.field.node.solution.documentation
+    - field.field.node.solution.field_keywords
+    - field.field.node.solution.field_shared_in
+    - field.field.node.solution.field_state
+    - field.field.node.solution.field_topic
+    - field.field.node.solution.group_moderation
+    - field.field.node.solution.landing_page
+    - field.field.node.solution.language
+    - field.field.node.solution.list_related_entities
+    - field.field.node.solution.listing_content
+    - field.field.node.solution.logo
+    - field.field.node.solution.metrics_page
+    - field.field.node.solution.og_audience
+    - field.field.node.solution.owner
+    - field.field.node.solution.process_status
+    - field.field.node.solution.related_solutions
+    - field.field.node.solution.release_number
+    - field.field.node.solution.short_id
+    - field.field.node.solution.site_featured
+    - field.field.node.solution.solution_type
+    - field.field.node.solution.spatial_coverage
+    - field.field.node.solution.translation
+    - node.type.solution
+    - responsive_image.styles.teaser
+  module:
+    - joinup_html_stripper
+    - responsive_image
+    - template_suggestion
+    - user
+id: node.solution.view_mode_search_list_item
+targetEntityType: node
+bundle: solution
+mode: view_mode_search_list_item
+content:
+  abstract:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 4
+    region: content
+  description:
+    type: joinup_html_stripper_stripped
+    label: hidden
+    settings:
+      trim_length: 200
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: p_wrapper
+    weight: 2
+    region: content
+  field_topic:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  logo:
+    type: responsive_image
+    label: hidden
+    settings:
+      responsive_image_style: teaser
+      image_link: ''
+      image_loading:
+        attribute: lazy
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
+    weight: 0
+    region: content
+  owner:
+    type: entity_reference_label
+    label: hidden
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 3
+    region: content
+hidden:
+  body: true
+  collections: true
+  contact: true
+  content_creation: true
+  distributions: true
+  documentation: true
+  download_total: true
+  eif_perspective: true
+  featured: true
+  field_keywords: true
+  field_shared_in: true
+  field_state: true
+  flag_interoperability: true
+  flag_like: true
+  group_moderation: true
+  landing_page: true
+  langcode: true
+  language: true
+  links: true
+  list_related_entities: true
+  listing_content: true
+  members: true
+  metrics_page: true
+  node_solution_listing_content_inline_facets: true
+  node_solution_listing_content_top: true
+  og_audience: true
+  og_group: true
+  pinned_in: true
+  process_status: true
+  published_at: true
+  read_more: true
+  related_solution: true
+  related_solutions: true
+  release_number: true
+  releases_overview: true
+  report: true
+  search_api_excerpt: true
+  share_link: true
+  short_id: true
+  site_featured: true
+  solution_subscribe: true
+  solution_type: true
+  spatial_coverage: true
+  translation: true
+  uri: true

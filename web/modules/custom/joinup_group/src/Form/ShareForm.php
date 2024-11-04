@@ -7,15 +7,37 @@ namespace Drupal\joinup_group\Form;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\RedirectCommand;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\JoinupGroupHelper;
+use Drupal\node\NodeInterface;
 
 /**
- * Form to share a community content inside collections.
+ * Form to share content inside collections.
  */
-abstract class ShareForm extends ShareFormBase {
+class ShareForm extends ShareFormBase {
+
+  /**
+   * {@inheritdoc}
+   */
+  public function buildForm(array $form, FormStateInterface $form_state, ?NodeInterface $node = NULL): array {
+    return $this->doBuildForm($form, $form_state, $node);
+  }
+
+  /**
+   * Gets the title for the form route.
+   *
+   * @param \Drupal\node\NodeInterface $node
+   *   The entity being shared.
+   *
+   * @return \Drupal\Core\StringTranslation\TranslatableMarkup
+   *   The page/modal title.
+   */
+  public function getTitle(NodeInterface $node): TranslatableMarkup {
+    return $this->buildTitle($node);
+  }
 
   /**
    * {@inheritdoc}
@@ -31,13 +53,13 @@ abstract class ShareForm extends ShareFormBase {
    *   An associative array containing the structure of the form.
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The current state of the form.
-   * @param \Drupal\Core\Entity\EntityInterface|null $entity
+   * @param \Drupal\Core\Entity\FieldableEntityInterface|null $entity
    *   The entity being shared.
    *
    * @return array
    *   The form structure.
    */
-  public function doBuildForm(array $form, FormStateInterface $form_state, ?EntityInterface $entity = NULL): array {
+  public function doBuildForm(array $form, FormStateInterface $form_state, ?FieldableEntityInterface $entity = NULL): array {
     $this->entity = $entity;
 
     $form['share'] = [
@@ -53,7 +75,7 @@ abstract class ShareForm extends ShareFormBase {
         '#attributes' => [
           'class' => ['share-box__row'],
         ],
-        'entity' => $this->rdfBuilder->view($group, 'compact'),
+        'entity' => $this->entityTypeManager->getViewBuilder($group->getEntityTypeId())->view($group, 'compact'),
         'checkbox' => [
           '#type' => 'checkbox',
           '#title' => $group->label(),
@@ -71,7 +93,7 @@ abstract class ShareForm extends ShareFormBase {
       if (!empty($form['groups'][$bundle])) {
         $form['groups'][$bundle] += [
           '#theme_wrappers' => ['fieldset'],
-          '#title' => $this->bundleInfo->getBundleCountLabel('rdf_entity', $bundle, count($groups), 'no_count_capitalize'),
+          '#title' => $this->bundleInfo->getBundleCountLabel('node', $bundle, count($groups), 'no_count_capitalize'),
           '#tree' => TRUE,
           '#access' => !empty($groups),
         ];
@@ -101,10 +123,11 @@ abstract class ShareForm extends ShareFormBase {
     // Keep only the checked entries.
     $groups = array_filter($form_state->getValue('groups'));
     $group_labels = [];
-    // We can safely loop through these ids, as unvalid options are handled
+    // We can safely loop through these ids, as invalid options are handled
     // already by Drupal.
     foreach ($groups as $id => $value) {
-      $group = $this->sparqlStorage->load($id);
+      $group = $this->entityTypeManager->getStorage('node')->load($id);
+      assert($group instanceof GroupInterface);
       $this->shareOnGroup($group);
       $group_labels[] = $group->label();
     }
@@ -165,7 +188,7 @@ abstract class ShareForm extends ShareFormBase {
   protected function getShareableGroups(): array {
     // Being part also for the access check, do not allow the user to access
     // this page for entities without a field to store groups it is shared in.
-    if (!$this->entity->hasField($this->getSharedOnFieldName())) {
+    if (!$this->entity->hasField(self::FIELD_NAME_SHARED_IN)) {
       return [];
     }
 
@@ -199,7 +222,7 @@ abstract class ShareForm extends ShareFormBase {
     // Entity references do not ensure uniqueness.
     $current_ids = array_unique($current_ids);
 
-    $this->entity->get($this->getSharedOnFieldName())->setValue($current_ids);
+    $this->entity->get(self::FIELD_NAME_SHARED_IN)->setValue($current_ids);
     $this->entity->skip_notification = TRUE;
     $this->entity->save();
 

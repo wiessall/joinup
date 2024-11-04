@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_distribution\EventSubscriber;
 
+use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\search_api\Event\QueryPreExecuteEvent;
 use Drupal\search_api\Event\SearchApiEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -18,7 +19,7 @@ class AdjustSolutionContentSubscriber implements EventSubscriberInterface {
    */
   public static function getSubscribedEvents(): array {
     return [
-      SearchApiEvents::QUERY_PRE_EXECUTE . '.search_api_field_field_is_content' => [
+      SearchApiEvents::QUERY_PRE_EXECUTE . '.search_api_field_listing_content' => [
         ['queryAlter'],
       ],
     ];
@@ -36,10 +37,14 @@ class AdjustSolutionContentSubscriber implements EventSubscriberInterface {
     /** @var \Drupal\Core\Entity\EntityInterface $entity */
     $entity = $query->getOption('search_api_field entity');
 
+    if (!$entity instanceof SolutionInterface) {
+      return;
+    }
+
     // If we don't have any releases associated to this solution, it also means
     // that any distribution available is directly associated. We don't need any
     // further filtering on the results.
-    /** @var \Drupal\solution\Entity\SolutionInterface $entity */
+    /** @var \Drupal\joinup_solution\Entity\SolutionInterface $entity */
     if (empty($entity->getReleaseIds())) {
       return;
     }

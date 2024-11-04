@@ -2,17 +2,105 @@
 
 /**
  * @file
- * Contains hooks and functions for the joinup_solution module.
+ * Contains hooks regarding the solution rdf entity bundle.
  */
 
 declare(strict_types=1);
 
-/**
- * @file
- * Primary module hooks for Joinup solution module.
- */
-
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Cache\Cache;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\EntityMalformedException;
+use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\Field\FieldStorageDefinitionInterface;
+use Drupal\Core\Form\FormBuilderInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Url;
+use Drupal\collection\Entity\Collection;
+use Drupal\collection\Entity\CollectionInterface;
+use Drupal\joinup_solution\CollectionSolutionsFieldItemList;
 use Drupal\joinup_solution\Entity\Solution;
+use Drupal\joinup_solution\Entity\SolutionInterface;
+use Drupal\joinup_solution\SolutionLatestReleasesFieldItemList;
+use Drupal\joinup_solution\SolutionReleasesAndDistributionsFieldItemList;
+use Drupal\joinup_taxonomy\Entity\MappedTerm;
+use Drupal\node\Entity\Node;
+use Drupal\node\Entity\NodeType;
+use Drupal\node\NodeInterface;
+use Drupal\og\Entity\OgRole;
+use Drupal\og\Og;
+use Drupal\og\OgGroupAudienceHelper;
+use Drupal\og\OgMembershipInterface;
+use Drupal\og\OgRoleInterface;
+use Drupal\taxonomy\TermInterface;
+use Drupal\user\Entity\User;
+
+/**
+ * Implements hook_entity_base_field_info_alter().
+ */
+function joinup_solution_entity_base_field_info_alter(array $fields, EntityTypeInterface $entity_type): void {
+  if ($entity_type->id() !== 'node') {
+    return;
+  }
+
+  $fields['title']->addConstraint('UniqueSolutionTitle', []);
+}
+
+/**
+ * Implements hook_entity_bundle_field_info_alter().
+ */
+function joinup_solution_entity_bundle_field_info_alter(&$fields, EntityTypeInterface $entity_type, $bundle): void {
+  if ($entity_type->id() !== 'node') {
+    return;
+  }
+
+  /** @var \Drupal\Core\Field\FieldConfigInterface[] $fields */
+  if ($bundle === 'solution') {
+    // References the solution releases and standalone distributions.
+    // @todo This should be moved to `joinup_distribution` module.
+    $fields['releases_and_distributions'] = BaseFieldDefinition::create('entity_reference')
+      ->setLabel(t('Releases and standalone distributions'))
+      ->setName('releases_and_distributions')
+      ->setDescription(t('The Releases and standalone distributions of this solution.'))
+      ->setTargetEntityTypeId('node')
+      ->setTargetBundle('solution')
+      ->setSetting('target_type', 'node')
+      ->setComputed(TRUE)
+      ->setReadOnly(TRUE)
+      ->setCardinality(FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED)
+      ->setClass(SolutionReleasesAndDistributionsFieldItemList::class);
+    // References the latest release, if any.
+    // @todo This should be moved to the `joinup_release` module.
+    $fields['latest_release'] = BaseFieldDefinition::create('entity_reference')
+      ->setLabel(t('Latest release'))
+      ->setName('latest_release')
+      ->setDescription(t('The latest release, if any.'))
+      ->setTargetEntityTypeId('node')
+      ->setTargetBundle('solution')
+      ->setSetting('target_type', 'node')
+      ->setComputed(TRUE)
+      ->setReadOnly(TRUE)
+      ->setCardinality(1)
+      ->setClass(SolutionLatestReleasesFieldItemList::class);
+  }
+
+  if ($bundle === 'collection') {
+    $fields['solutions'] = BaseFieldDefinition::create('entity_reference')
+      ->setLabel(t('Solutions'))
+      ->setName('solutions')
+      ->setDescription(t('The solutions in this collection.'))
+      ->setTargetEntityTypeId('node')
+      ->setTargetBundle('solution')
+      ->setSetting('target_type', 'node')
+      ->setComputed(TRUE)
+      ->setReadOnly(TRUE)
+      ->setCardinality(FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED)
+      ->setClass(CollectionSolutionsFieldItemList::class);
+  }
+}
 
 /**
  * Implements hook_entity_bundle_info_alter().
@@ -21,4 +109,598 @@ function joinup_solution_entity_bundle_info_alter(&$bundles): void {
   if (!empty($bundles['node']['solution'])) {
     $bundles['node']['solution']['class'] = Solution::class;
   }
+
+  // @todo Why is this defined here?
+  $vids = ['eira', 'language', 'solution_category', 'status'];
+  foreach ($vids as $vid) {
+    if (!empty($bundles['taxonomy_term'][$vid])) {
+      $bundles['taxonomy_term'][$vid]['class'] = MappedTerm::class;
+    }
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert().
+ *
+ * This function grants the 'owner' and 'facilitator' roles to the user that
+ * creates the solution.
+ *
+ * @see https://www.w3.org/TR/vocab-adms/#the-adms-domain-model
+ */
+function joinup_solution_node_insert(EntityInterface $entity): void {
+  if ($entity->bundle() !== 'solution') {
+    return;
+  }
+
+  // When a new solution is created, give the current user the 'group owner'
+  // role, if it is not the anonymous user.
+  if (!empty($entity->getOwner()) && !$entity->getOwner()->isAnonymous()) {
+    // The group owner inherits all roles of a solution facilitator and
+    // administrator.
+    $roles = [
+      'node-solution-' . OgRoleInterface::ADMINISTRATOR,
+      'node-solution-facilitator',
+    ];
+
+    /** @var \Drupal\og\OgMembershipInterface $membership */
+    $membership = Og::createMembership($entity, $entity->getOwner());
+    $membership->setRoles(array_values(OgRole::loadMultiple($roles)));
+    $membership->save();
+  }
+  joinup_solution_invalidate_collection($entity);
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ *
+ * When editing a solution, show a message to moderators informing them if a
+ * solution with the same name already exists in a different collection. They
+ * can then evaluate if the conflict is acceptable or not before approving a
+ * proposed solution.
+ */
+function joinup_solution_form_node_solution_edit_form_alter(array &$form, FormStateInterface $form_state): void {
+  // Bail out if the user is not a moderator.
+  if (!in_array('moderator', \Drupal::currentUser()->getRoles())) {
+    return;
+  }
+
+  // Bail out if this is an AJAX request to avoid showing duplicate messages,
+  // for example in inline forms.
+  if (\Drupal::request()->query->has(FormBuilderInterface::AJAX_FORM_REQUEST)) {
+    return;
+  }
+
+  if (!\Drupal::service('joinup_solution.title_duplicate_helper')->titleIsUnique($form_state->getFormObject()->getEntity())) {
+    \Drupal::messenger()->addMessage(t('A solution with the same name exists in a different collection.'), 'warning');
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_access().
+ *
+ * Interrupts the permissions for updating a solution. The permission is not
+ * granted if there are no transitions allowed for the current state of the
+ * node.
+ *
+ * @todo Check how is this impacted by state_machine_permissions and
+ *   joinup_workflow.
+ */
+function joinup_solution_node_access(EntityInterface $entity, $operation, AccountInterface $account): AccessResult {
+  if ($account->hasPermission($entity->getEntityType()->getAdminPermission())) {
+    return AccessResult::neutral();
+  }
+  if ($entity->bundle() != 'solution') {
+    return AccessResult::neutral();
+  }
+
+  if ($operation == 'update') {
+    /** @var \Drupal\joinup_workflow\WorkflowHelperInterface $workflow_helper */
+    $workflow_helper = \Drupal::service('joinup_workflow.workflow_helper');
+    $allowed_transitions = $workflow_helper->getAvailableTransitions($entity, $account);
+    if (empty($allowed_transitions)) {
+      return AccessResult::forbidden();
+    }
+  }
+
+  return AccessResult::neutral();
+}
+
+/**
+ * Implements hook_entity_extra_field_info().
+ */
+function joinup_solution_entity_extra_field_info(): array {
+  $fields = [];
+
+  $solution = NodeType::load('solution');
+  if ($solution) {
+    $display = &$fields['node'][$solution->id()]['display'];
+    // Append some additional fields to the solution entity display containing
+    // related information.
+    // @see solution_node_view()
+    $display['releases_overview'] = [
+      'label' => t('Releases overview'),
+      'description' => t('A link to the releases overview page.'),
+      'visible' => FALSE,
+    ];
+    $display['related_solutions'] = [
+      'label' => t('Related solutions: explicit + EIRA'),
+      'description' => t('Solutions either explicitly or referenced through EIRA.'),
+      'visible' => FALSE,
+    ];
+    $display['download_total'] = [
+      'label' => t('Total distribution downloads'),
+      'description' => t('The total downloads of all distributions in this collection.'),
+      'visible' => FALSE,
+    ];
+    $display['collections'] = [
+      'label' => t('Collections'),
+      'description' => t('The collections this solution is affiliated to.'),
+      'visible' => FALSE,
+    ];
+    $display['read_more'] = [
+      'label' => t('Read more'),
+      'description' => t('Shows a link to the about page of the solution.'),
+      'visible' => FALSE,
+    ];
+    $display['share_link'] = [
+      'label' => t('Share'),
+      'description' => t('A link to share the content'),
+      'visible' => FALSE,
+    ];
+    $display['solution_subscribe'] = [
+      'label' => t('Subscribe to this Solution'),
+      'description' => t('Subscribes the user to the solution.'),
+      'visible' => FALSE,
+    ];
+    $display['members'] = [
+      'label' => t('Amount of members'),
+      'description' => t('Amount of members of the solution'),
+      'visible' => FALSE,
+    ];
+  }
+
+  return $fields;
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_view().
+ */
+function joinup_solution_node_view(array &$build, NodeInterface $solution, EntityViewDisplayInterface $display, string $view_mode): void {
+  if (!$solution instanceof SolutionInterface) {
+    return;
+  }
+
+  // @todo Should this move to releases along with the
+  //   joinup_release.solution_release route?
+  if ($display->getComponent('releases_overview')) {
+    $show_button =
+      // Don't show it on the release overview page.
+      \Drupal::routeMatch()->getRouteName() !== 'joinup_release.solution_release.overview'
+      // Don't show if the solution has no releases or standalone distributions.
+      && !$solution->get('releases_and_distributions')->isEmpty();
+
+    if ($show_button) {
+      $build['releases_overview'] = [
+        '#type' => 'link',
+        '#title' => t('Download releases'),
+        '#url' => Url::fromRoute('joinup_release.solution_release.overview', [
+          'node' => $solution->id(),
+        ]),
+        '#cache' => [
+          // The 'group_header_block' block cache will have different versions
+          // for the 'joinup_release.solution_release.overview' route
+          // compared to the canonical solution route.
+          'contexts' => ['route.name.is_download_releases_route'],
+        ],
+      ];
+    }
+  }
+
+  // Attach the related solutions component.
+  if ($display->getComponent('related_solutions')) {
+    $ids = joinup_solution_get_related_solutions_ids($solution);
+    $build['related_solutions'] = joinup_solution_build_related_solutions_list($ids);
+  }
+
+  // Attach the download total of all distributions in this solution.
+  // @todo Add the `og-group-content` cache tag because the downloads are
+  //   contained in the distribution entities which is group content.
+  // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-5200
+  if ($display->getComponent('download_total')) {
+    $total = 0;
+    if (!$solution->isNew()) {
+      foreach ($solution->getDistributions() as $distribution) {
+        $total += $distribution->getDownloadCount();
+      }
+    }
+
+    // The '#stats_topic' property is used as the label for the statistic, and
+    // to set a template suggestion for the container.
+    // @see joinup_theme_theme_suggestions_alter()
+    // @see joinup_theme_preprocess_container__stats_topic()
+    $build['downloads'] = [
+      '#type' => 'container',
+      'count' => [
+        '#type' => 'container',
+        '#stats_topic' => t('Downloads'),
+        [
+          '#markup' => $total,
+        ],
+        // Hide the download stats when there are no downloads.
+        '#access' => $total > 0,
+      ],
+      '#cache' => [
+        // Allow clearing the render cache of this element. By using a dedicated
+        // cache tag, we avoid invalidating the solution tag as that would
+        // result in clearing of too many cache entries. We're applying the
+        // cache tag to an outer wrapper so that, when the inner element is not
+        // rendered ($total === 0), the cache tag also bubbles up to the page.
+        'tags' => ['solution_download_count:' . md5($solution->id())],
+      ],
+    ];
+  }
+
+  // Show the collection the solution belongs to. A solution can be affiliated
+  // to multiple collections, but for now we show only the first one.
+  // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3635
+  if ($display->getComponent('collections') && !$solution->get(OgGroupAudienceHelper::DEFAULT_FIELD)->isEmpty()) {
+    $collection = $solution->get(OgGroupAudienceHelper::DEFAULT_FIELD)->first()->entity;
+    assert($collection instanceof CollectionInterface);
+    $build['collections'] = [
+      'link' => $collection->toLink($collection->label())->toRenderable(),
+    ];
+  }
+
+  // Read more link to the about page.
+  if ($display->getComponent('read_more')) {
+    try {
+      $text = [
+        '#type' => 'markup',
+        '#markup' => t('Read more') . '<span class="visually-hidden"> ' . t('about') . ' ' . $solution->label() . '</span>',
+      ];
+      $link = $solution->toLink($text, 'canonical', [
+        'attributes' => [
+          'data-drupal-group-view-mode' => $view_mode,
+          'class' => [
+            'read-more',
+            'fieldset__read-more',
+            'btn',
+            'btn-secondary',
+          ],
+          'aria-label' => t('Read more about @name.', ['@name' => $solution->label()]),
+        ],
+      ]);
+      $build['read_more'] = $link->toRenderable();
+    }
+    catch (EntityMalformedException $e) {
+      // Don't include a read more link that leads to a malformed entity.
+    }
+  }
+
+  // Share link configuration.
+  if ($display->getComponent('share_link')) {
+    $build['share_link'] = joinup_group_generate_share_link($solution);
+    $build['#cache'] = [
+      'contexts' => [
+        'og_role',
+      ],
+    ];
+  }
+
+  if ($display->getComponent('solution_subscribe')) {
+    $build['solution_subscribe'] = [
+      '#lazy_builder' => [
+        'joinup_solution.lazy_builders:renderJoinSolutionForm',
+        [$solution->id()],
+      ],
+      '#create_placeholder' => TRUE,
+      // This form varies by the role a user has inside the collection. Set the
+      // applicable cache context.
+      '#cache' => ['contexts' => ['og_role']],
+    ];
+  }
+
+  // Member count.
+  if ($display->getComponent('members')) {
+    $member_count = $solution->getActiveMemberCount();
+    // Invalidate the member count every time the group membership list changes.
+    // @see \Drupal\og\Plugin\Block\MemberCountBlock::getCacheTags()
+    $tags = Cache::buildTags(OgMembershipInterface::GROUP_MEMBERSHIP_LIST_CACHE_TAG_PREFIX, $solution->getCacheTagsToInvalidate());
+    $build['members'] = [
+      '#theme' => 'solution_member_count',
+      '#count' => $member_count,
+      '#view_mode' => $view_mode,
+      '#cache' => ['tags' => $tags],
+    ];
+  }
+}
+
+/**
+ * Builds a list of entity ids of related solutions.
+ *
+ * @param \Drupal\Core\Entity\EntityInterface $entity
+ *   The solution.
+ *
+ * @return array|int
+ *   List of entity ids of related solutions.
+ */
+function joinup_solution_get_related_solutions_ids(EntityInterface $entity): array {
+  $ids = [];
+  static $recurse = FALSE;
+  if ($recurse) {
+    // Don't collapse the universe.
+    return $ids;
+  }
+  $recurse = TRUE;
+
+  $term_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
+  $eira_ids = [];
+  if ($entity->get('list_related_entities')->value === '1') {
+    // Get all solutions that reference the same EIRA building block.
+    $tids = array_map(fn(array $field) => $field['target_id'], $entity->get('solution_type')->getValue());
+    $eira = array_map(fn(TermInterface $term): string => $term->id(), $term_storage->loadMultiple($tids));
+    if ($eira) {
+      $query = \Drupal::entityQuery('node')
+        ->accessCheck(TRUE)
+        ->condition('type', 'solution')
+        ->condition('solution_type', array_keys($eira), 'IN')
+        // Exclude current solution.
+        ->condition('nid', $entity->id(), '<>')
+        ->range(0, 4);
+      $eira_ids = $query->execute();
+    }
+  }
+
+  // Get all solutions that are referenced directly.
+  $related_ids = [];
+  foreach ($entity->get('related_solutions')->getValue() as $field) {
+    $related_ids[$field['target_id']] = $field['target_id'];
+  }
+
+  // Combine the two lists.
+  $ids = $eira_ids + $related_ids;
+
+  // Exclude ourselves.
+  unset($ids[$entity->id()]);
+
+  return $ids;
+}
+
+/**
+ * Builds the render array of related solutions.
+ *
+ * @param int[] $ids
+ *   The list of solution ids.
+ *
+ * @return array
+ *   The render array of related solutions.
+ */
+function joinup_solution_build_related_solutions_list(array $ids): array {
+  $build = [];
+  $entities = Node::loadMultiple($ids);
+  $delta = 0;
+  $elements = [];
+  /** @var \Drupal\Core\Entity\EntityInterface $referenced_solution */
+  foreach ($entities as $id => $referenced_solution) {
+    // Make sure no draft content ends up in shared cache.
+    $anonymous_user = User::getAnonymousUser();
+    if (!$referenced_solution->access('view', $anonymous_user)) {
+      continue;
+    }
+    $view_builder = Drupal::entityTypeManager()->getViewBuilder($referenced_solution->getEntityTypeId());
+    $element = $view_builder->view($referenced_solution, 'view_mode_tile', $referenced_solution->language()->getId());
+    $elements[$delta] = [
+      '#type' => 'container',
+      '#extra_suggestion' => 'container__grid_item',
+      $id => $element,
+    ];
+    $delta++;
+  }
+  if ($elements) {
+    $build = [
+      '#type' => 'container',
+      '#extra_suggestion' => 'container__separated',
+      '#title' => t('Related solutions'),
+    ];
+    $build[0] = [
+      '#type' => 'container',
+      '#extra_suggestion' => 'container__grid',
+    ];
+    $build[0] += $elements;
+  }
+  return $build;
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_predelete().
+ */
+function joinup_solution_node_predelete(EntityInterface $entity): void {
+  if ($entity->bundle() === 'solution') {
+    joinup_solution_invalidate_collection($entity);
+  }
+}
+
+/**
+ * Invalidate the cache of collections the solution belongs to.
+ *
+ * @param \Drupal\Core\Entity\EntityInterface $entity
+ *   The solution.
+ */
+function joinup_solution_invalidate_collection(EntityInterface $entity): void {
+  if (
+    !$entity instanceof SolutionInterface ||
+    $entity->isNew()
+  ) {
+    return;
+  }
+  // Solutions aren't group content of collections. However, they appear
+  // alongside group content in collection overviews.
+  // For this reason, we clear the collection group cache tags whenever a
+  // solution is saved.
+  if ($ids = joinup_solution_get_collection_ids($entity)) {
+    $tags = [];
+    foreach ($ids as $collectionId) {
+      $collection = Collection::load($collectionId);
+      $tags = Cache::mergeTags($tags, $collection->getCacheTagsToInvalidate());
+    }
+    Cache::invalidateTags(Cache::buildTags('og-group-content', $tags));
+  }
+}
+
+/**
+ * Retrieves collections affiliated with the given solution from the database.
+ *
+ * Only use this function if you need to retrieve a fresh set of collections
+ * from the database. For all other cases, use the computed 'collection' field:
+ *
+ * $collections = $solution->collection->getValue();
+ *
+ * @param \Drupal\node\NodeInterface $solution
+ *   The solution for which to retrieve the affiliated collections.
+ *
+ * @return array
+ *   The collection IDs.
+ *
+ * @see solution_rdf_entity_load()
+ * @see \Drupal\joinup_solution\SolutionAffiliationFieldItemList
+ */
+function joinup_solution_get_collection_ids(NodeInterface $solution): array {
+  $collections = $solution->get(OgGroupAudienceHelper::DEFAULT_FIELD)->referencedEntities();
+  return array_map(
+    fn (CollectionInterface $collection): int => (int) $collection->id(),
+    $collections,
+  );
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_update().
+ *
+ * When the entity is saved into the default graph, the draft must be deleted.
+ * Also, when the entity is blacklisted, the published version is removed
+ * (the entity becomes unpublished).
+ *
+ * @todo This probably needs to be removed.
+ */
+function joinup_solution_node_update(EntityInterface $entity): void {
+  if ($entity->bundle() !== 'solution') {
+    return;
+  }
+
+  joinup_solution_invalidate_collection($entity);
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_delete().
+ *
+ * When a published solution is deleted, the parent collections should have
+ * their changed timestamp updated.
+ */
+function joinup_solution_node_delete(NodeInterface $solution): void {
+  if (
+    !$solution instanceof SolutionInterface ||
+    $solution->getWorkflowState() !== 'published'
+  ) {
+    return;
+  }
+
+  if ($ids = joinup_solution_get_collection_ids($solution)) {
+    // Touch the parent collections in order to update their changed timestamp.
+    $requestTime = \Drupal::time()->getRequestTime();
+    foreach ($ids as $collectionId) {
+      $collection = Collection::load($collectionId);
+      $collection->skip_notification = TRUE;
+      $collection->setChangedTime($requestTime)->save();
+    }
+  }
+}
+
+/**
+ * Implements hook_module_implements_alter().
+ *
+ * @todo If node_update is not needed, then this is also not needed.
+ */
+function joinup_solution_module_implements_alter(array &$implementations, string $hook): void {
+  if ($hook === 'node_update') {
+    // Make sure the solution update hook runs first so that the entity settings
+    // are synced with its meta_entity.
+    $solution = $implementations['joinup_solution'];
+    unset($implementations['joinup_solution']);
+    $implementations = ['joinup_solution' => $solution] + $implementations;
+  }
+}
+
+/**
+ * Amount of members of a solution.
+ *
+ * @param \Drupal\joinup_solution\Entity\SolutionInterface $solution
+ *   The solution.
+ *
+ * @return int
+ *   Amount of members.
+ */
+function joinup_solution_member_count(SolutionInterface $solution): int {
+  // We're doing a direct database query rather than using methods in OG's
+  // MembershipManager service since we just need a count, and we need to filter
+  // out blocked user accounts.
+  $query = \Drupal::database()->select('og_membership', 'om');
+  $query->innerJoin('users_field_data', 'ufd', '[om].[uid] = [ufd].[uid]');
+  $query->condition('ufd.status', 1)
+    ->condition('om.entity_type', $solution->getEntityTypeId())
+    ->condition('om.entity_id', $solution->id())
+    ->condition('om.state', OgMembershipInterface::STATE_ACTIVE);
+  return (int) $query->countQuery()->execute()->fetchField();
+}
+
+/**
+ * Implements hook_theme().
+ */
+function joinup_solution_theme(array $existing, string $type, string $theme, string $path): array {
+  return [
+    'solution_member_count' => [
+      'variables' => [
+        'count' => 0,
+        'view_mode' => '',
+      ],
+    ],
+    'flag_interoperable_text' => [
+      'variables' => [
+        'flagged' => FALSE,
+        'view_mode' => '',
+      ],
+    ],
+  ];
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK().
+ *
+ * Allows the solution member count to be themed differently per view mode.
+ */
+function joinup_solution_theme_suggestions_solution_member_count(array $variables): array {
+  $suggestions = [];
+  $sanitized_view_mode = strtr($variables['view_mode'], '.', '_');
+  $suggestions[] = 'solution_member_count__' . $sanitized_view_mode;
+
+  return $suggestions;
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK().
+ */
+function joinup_solution_theme_suggestions_flag_interoperable_text(array $variables): array {
+  $suggestions = [];
+  $sanitized_view_mode = strtr($variables['view_mode'], '.', '_');
+  $suggestions[] = 'flag_interoperable_text__' . $sanitized_view_mode;
+
+  return $suggestions;
+}
+
+/**
+ * Provides a callback for the solution status field default value.
+ *
+ * @return int
+ *   The ID of the taxonomy term serving as default value.
+ */
+function _joinup_solution_status_default_value(): int {
+  return (int) MappedTerm::loadByUri('http://purl.org/adms/status/Completed')->id();
 }

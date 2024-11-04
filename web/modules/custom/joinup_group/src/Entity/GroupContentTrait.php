@@ -54,10 +54,10 @@ trait GroupContentTrait {
    */
   public function getGroupId(): string {
     $ids = $this->getReferencedEntityIds($this->getGroupFieldName());
-    if (empty($ids['rdf_entity'])) {
+    if (empty($ids['node'])) {
       throw new MissingGroupException();
     }
-    return array_shift($ids['rdf_entity']);
+    return array_shift($ids['node']);
   }
 
   /**

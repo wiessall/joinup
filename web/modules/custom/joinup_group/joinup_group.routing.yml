@@ -1,21 +1,21 @@
-entity.rdf_entity.member_overview:
-  path: 'rdf_entity/{rdf_entity}/members'
+entity.node.member_overview:
+  path: '/node/{node}/members'
   defaults:
-    _controller: '\Drupal\joinup_group\Controller\GroupMembersController::membersList'
+    _controller: Drupal\joinup_group\Controller\GroupMembersController::membersList
     _title: 'Members'
   requirements:
     _custom_access: Drupal\joinup_group\Controller\GroupMembersController::access
   options:
     parameters:
-      rdf_entity:
-        type: entity:rdf_entity
+      node:
+        type: entity:node
         bundle:
           - collection
           - solution
-    _og_entity_type_id: rdf_entity
+    _og_entity_type_id: node
 
 joinup_group.authenticate_to_join:
-  path: '/rdf_entity/{rdf_entity}/authenticate-to-join'
+  path: '/node/{node}/authenticate-to-join'
   defaults:
     _form: '\Drupal\joinup_group\Form\JoinGroupAnonymousRedirectForm'
     _title_callback: '\Drupal\joinup_group\Form\JoinGroupAnonymousRedirectForm::getTitle'
@@ -23,8 +23,8 @@ joinup_group.authenticate_to_join:
     _user_is_logged_in: 'FALSE'
   options:
     parameters:
-      rdf_entity:
-        type: entity:rdf_entity
+      node:
+        type: entity:node
         bundle:
           - collection
           - solution
@@ -37,22 +37,22 @@ joinup_group.membership_delete_action.confirm:
     _custom_access: 'Drupal\joinup_group\Form\DeleteGroupMembershipConfirmForm::access'
 
 joinup_group.membership_permissions_info:
-  path: '/rdf_entity/{rdf_entity}/permissions-info'
+  path: '/node/{node}/permissions-info'
   defaults:
     _title: 'Member permissions'
     _form: Drupal\joinup_group\Form\GroupMembershipPermissionsInformationForm
   requirements:
-    _entity_access: rdf_entity.view
+    _entity_access: node.view
   options:
     parameters:
-      rdf_entity:
-        type: entity:rdf_entity
+      node:
+        type: entity:node
         bundle:
           - collection
           - solution
 
 joinup_group.reports:
-  path: '/rdf_entity/{rdf_entity}/reports'
+  path: '/node/{node}/reports'
   defaults:
     _controller: Drupal\joinup_group\Controller\GroupReportsController::reports
     _title: 'Reports'
@@ -60,12 +60,11 @@ joinup_group.reports:
     _custom_access: Drupal\joinup_group\Controller\GroupReportsController::access
   options:
     parameters:
-      rdf_entity:
-        type: entity:rdf_entity
+      node:
+        type: entity:node
         bundle:
           - collection
           - solution
-    _og_entity_type_id: rdf_entity
 
 joinup_group.transfer_group_ownership_confirm:
   path: '/group/transfer/ownership'
@@ -76,7 +75,7 @@ joinup_group.transfer_group_ownership_confirm:
     _custom_access: 'Drupal\joinup_group\Form\TransferGroupOwnershipConfirmForm::access'
 
 joinup_group.add_content:
-  path: /rdf_entity/{rdf_entity}/{node_type}/add
+  path: /node/{node}/{node_type}/add
   defaults:
     _controller: Drupal\joinup_group\Controller\GroupNodeController::add
     _title_callback: Drupal\joinup_group\Controller\GroupNodeController::addTitle
@@ -84,8 +83,8 @@ joinup_group.add_content:
     _custom_access: Drupal\joinup_group\Controller\GroupNodeController::createAccess
   options:
     parameters:
-      rdf_entity:
-        type: entity:rdf_entity
+      node:
+        type: entity:node
         bundle:
           - collection
           - solution
@@ -94,7 +93,7 @@ joinup_group.add_content:
         with_config_overrides: TRUE
 
 joinup_group.leave_confirm_form:
-  path: '/rdf_entity/{rdf_entity}/leave'
+  path: '/node/{node}/leave'
   defaults:
     _form: '\Drupal\joinup_group\Form\LeaveGroupConfirmForm'
     _title: 'Leave group'
@@ -102,14 +101,14 @@ joinup_group.leave_confirm_form:
     _custom_access: '\Drupal\joinup_group\Form\LeaveGroupConfirmForm::access'
   options:
     parameters:
-      rdf_entity:
-        type: entity:rdf_entity
+      node:
+        type: entity:node
         bundle:
           - collection
           - solution
 
 joinup_group.settings_form:
-  path: '/rdf_entity/{rdf_entity}/settings'
+  path: '/node/{node}/settings'
   defaults:
     _controller: Drupal\joinup_group\Controller\GroupSettingsController::settings
     _title_callback: Drupal\joinup_group\Controller\GroupSettingsController::title
@@ -117,43 +116,43 @@ joinup_group.settings_form:
     _custom_access: Drupal\joinup_group\Controller\GroupSettingsController::access
   options:
     parameters:
-      rdf_entity:
-        type: entity:rdf_entity
+      node:
+        type: entity:node
         bundle:
           - collection
           - solution
 
-entity.rdf_entity.announcement_add:
-  path: /rdf_entity/{rdf_entity}/announcements/add
+entity.node.announcement_add:
+  path: /node/{node}/announcements/add
   defaults:
     _controller: Drupal\joinup_group\Controller\AnnouncementsController::editForm
     _title: 'Add announcement'
   requirements:
     _custom_access: Drupal\joinup_group\Controller\AnnouncementsController::access
     _og_user_access_group: 'manage group announcements'
-    _joinup_group: 'TRUE'
+    _archived_group: 'TRUE'
   options:
     parameters:
-      rdf_entity:
-        type: entity:rdf_entity
+      node:
+        type: entity:node
         bundle:
           - collection
           - solution
-    _og_entity_type_id: rdf_entity
+    _og_entity_type_id: node
 
-entity.rdf_entity.announcement_edit:
-  path: /rdf_entity/{rdf_entity}/announcements/edit/{announcement}
+entity.node.announcement_edit:
+  path: /node/{node}/announcements/edit/{announcement}
   defaults:
     _controller: Drupal\joinup_group\Controller\AnnouncementsController::editForm
     _title: 'Edit announcement'
   requirements:
     _custom_access: Drupal\joinup_group\Controller\AnnouncementsController::access
     _og_user_access_group: 'manage group announcements'
-    _joinup_group: 'TRUE'
+    _archived_group: 'TRUE'
   options:
     parameters:
-      rdf_entity:
-        type: entity:rdf_entity
+      node:
+        type: entity:node
         bundle:
           - collection
           - solution
@@ -161,10 +160,10 @@ entity.rdf_entity.announcement_edit:
         type: entity:message
         bundle:
           - announcement
-    _og_entity_type_id: rdf_entity
+    _og_entity_type_id: node
 
-entity.rdf_entity.announcement_view:
-  path: /rdf_entity/{rdf_entity}/announcements/view/{announcement}
+entity.node.announcement_view:
+  path: /node/{node}/announcements/view/{announcement}
   defaults:
     _controller: Drupal\joinup_group\Controller\AnnouncementsController::editForm
     _title: 'View announcement'
@@ -173,8 +172,8 @@ entity.rdf_entity.announcement_view:
     _og_user_access_group: 'manage group announcements'
   options:
     parameters:
-      rdf_entity:
-        type: entity:rdf_entity
+      node:
+        type: entity:node
         bundle:
           - collection
           - solution
@@ -182,20 +181,58 @@ entity.rdf_entity.announcement_view:
         type: entity:message
         bundle:
           - announcement
-    _og_entity_type_id: rdf_entity
+    _og_entity_type_id: node
 
-entity.rdf_entity.unpublished_content:
-  path: 'rdf_entity/{rdf_entity}/unpublished'
+entity.node.unpublished_content:
+  path: 'node/{node}/unpublished'
   defaults:
     _controller: '\Drupal\joinup_group\Controller\UnpublishedContentPageController::unpublishedContent'
     _title: 'Unpublished content'
   requirements:
     _custom_access: Drupal\joinup_group\Controller\UnpublishedContentPageController::access
-    _joinup_group: 'TRUE'
+    _archived_group: 'TRUE'
   options:
     parameters:
-      rdf_entity:
-        type: entity:rdf_entity
+      node:
+        type: entity:node
         bundle:
           - collection
+          - solution
+
+joinup_group.share_content_form:
+  path: '/node/{node}/share'
+  defaults:
+    _form: '\Drupal\joinup_group\Form\ShareForm'
+    _title_callback: '\Drupal\joinup_group\Form\ShareForm::getTitle'
+  requirements:
+    _access: 'TRUE'
+  options:
+    parameters:
+      node:
+        type: entity:node
+        bundle:
+          - custom_page
+          - discussion
+          - document
+          - event
+          - news
+          - solution
+
+joinup_group.unshare_content_form:
+  path: '/node/{node}/unshare'
+  defaults:
+    _form: '\Drupal\joinup_group\Form\UnshareForm'
+    _title_callback: '\Drupal\joinup_group\Form\UnshareForm::getTitle'
+  requirements:
+    _custom_access: '\Drupal\joinup_group\Form\UnshareForm::access'
+  options:
+    parameters:
+      node:
+        type: entity:node
+        bundle:
+          - custom_page
+          - discussion
+          - document
+          - event
+          - news
           - solution

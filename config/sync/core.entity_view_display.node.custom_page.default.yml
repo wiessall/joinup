@@ -104,7 +104,7 @@ hidden:
   field_keywords: true
   field_state: true
   field_topic: true
-  flag_like_node: true
+  flag_like: true
   langcode: true
   og_audience: true
   published_at: true

@@ -10,7 +10,6 @@ declare(strict_types=1);
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Entity\ContentEntityInterface;
-use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\block\BlockInterface;
@@ -21,7 +20,6 @@ use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_oss_catalogue\Entity\JoinupOssSolution;
 use Drupal\joinup_oss_catalogue\OssCatalogueCollectionInterface;
 use Drupal\node\NodeInterface;
-use Solarium\Core\Query\Helper;
 
 /**
  * Implements hook_views_plugins_argument_alter().
@@ -51,11 +49,10 @@ function joinup_oss_catalogue_block_access(BlockInterface $block, string $operat
     $operation === 'view' &&
     $block->id() === 'ventuno_three_dots_menu'
   ) {
-    $group = \Drupal::service('joinup_group.group_manager')
-      ->getGroupFromContext();
+    $group = \Drupal::service('joinup_group.group_manager')->getGroupFromContext();
     if (
-      $group &&
-      $group->id() === OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID
+      $group instanceof GroupInterface &&
+      $group->uuid() === OssCatalogueCollectionInterface::COLLECTION_UUID
     ) {
       /** @var \Drupal\joinup_workflow\WorkflowHelperInterface $workflow_helper */
       $workflow_helper = \Drupal::service('joinup_workflow.workflow_helper');
@@ -102,10 +99,10 @@ function joinup_oss_catalogue_preprocess_field__in_modal(&$variables): void {
  */
 function joinup_oss_catalogue_preprocess_node(array &$variables): void {
   // Disables the "Report" link for OSS pages.
-  $group = \Drupal::routeMatch()->getParameter('rdf_entity');
+  $group = \Drupal::routeMatch()->getParameter('node');
   if (
     $group instanceof GroupInterface &&
-    $group->id() === OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID
+    $group->uuid() === OssCatalogueCollectionInterface::COLLECTION_UUID
   ) {
     $variables['content']['report']['#access'] = FALSE;
   }
@@ -119,7 +116,7 @@ function joinup_oss_catalogue_preprocess_html(array &$variables): void {
   /** @var \Drupal\og\OgContextInterface $ogContext */
   $ogContext = \Drupal::service('og.context');
 
-  if (($group = $ogContext->getGroup()) && $group->id() === OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID) {
+  if (($group = $ogContext->getGroup()) && $group->uuid() === OssCatalogueCollectionInterface::COLLECTION_UUID) {
     $variables['attributes']['class'][] = 'eu-oss-catalogue';
   }
 }
@@ -200,13 +197,13 @@ function joinup_oss_catalogue_preprocess_views_view__eu_oss_catalogue_admin_caro
 function joinup_oss_catalogue_feature(): AccessResultInterface {
   static $cache;
   if (!isset($cache)) {
-    $collection = \Drupal::entityTypeManager()->getStorage('rdf_entity')
-      ->load(OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID);
+    $collection = \Drupal::getContainer()->get('entity.repository')
+      ->loadEntityByUuid('node', OssCatalogueCollectionInterface::COLLECTION_UUID);
     if (!$collection instanceof CollectionInterface) {
       $cache = AccessResult::allowed();
     }
     else {
-      $state = $collection->get('field_ar_state')->first()->getValue()['value'] ?? NULL;
+      $state = $collection->get('field_state')->first()->getValue()['value'] ?? NULL;
       $cache = AccessResult::allowedIf($state === 'published')->addCacheableDependency($collection);
     }
   }
@@ -214,14 +211,14 @@ function joinup_oss_catalogue_feature(): AccessResultInterface {
 }
 
 /**
- * Implements hook_entity_access().
+ * Implements hook_ENTITY_TYPE_access().
  *
  * @todo Remove this function in ISAICP-9053.
  */
-function joinup_oss_catalogue_entity_access(EntityInterface $entity): AccessResultInterface {
+function joinup_oss_catalogue_node_access(NodeInterface $entity): AccessResultInterface {
   if (
     // The entity is the EU OSS Catalogue collection...
-    ($entity instanceof CollectionInterface && $entity->id() === OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID) ||
+    ($entity instanceof CollectionInterface && $entity->uuid() === OssCatalogueCollectionInterface::COLLECTION_UUID) ||
     // ...or the EU OSS Catalogue collection landing page...
     ($entity instanceof CustomPageInterface && $entity->uuid() === OssCatalogueCollectionInterface::LANDING_PAGE) ||
     // ...or an OSS Solution.
@@ -229,7 +226,7 @@ function joinup_oss_catalogue_entity_access(EntityInterface $entity): AccessResu
   ) {
     return AccessResult::forbiddenIf(
       !joinup_oss_catalogue_feature()->isAllowed(),
-      'EU OSS Catalogue is disabled',
+      'EU OSS Catalogue functionality is disabled',
     )->addCacheableDependency($entity);
   }
   return AccessResult::neutral();
@@ -273,46 +270,16 @@ function joinup_oss_catalogue_cron(): void {
 function joinup_oss_catalogue_toggle(string $toggle): void {
   assert(in_array($toggle, ['enable', 'disable'], TRUE));
 
-  $entityTypeManager = \Drupal::entityTypeManager();
-  $uri = OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID;
-  if (!$collection = $entityTypeManager->getStorage('rdf_entity')->load($uri)) {
-    // If the EU OSS Catalogue collection is missing exit there's nothing to do.
+  $collection = \Drupal::getContainer()->get('entity.repository')
+    ->loadEntityByUuid('node', OssCatalogueCollectionInterface::COLLECTION_UUID);
+  if (!$collection instanceof CollectionInterface) {
+    // Exit if the collection is missing. There's nothing we can do.
     return;
   }
 
   $collection->skip_notification = TRUE;
   $state = $toggle === 'enable' ? 'published' : 'draft';
-  $collection->set('field_ar_state', $state)->save();
-
-  if ($toggle === 'disable') {
-    // Unfortunately, we don't have an API to  unpublish a collection because
-    // when setting the state field to 'draft', we're creating a forward
-    // revision and the published version still exist and is shown on UIs. In
-    // order to unpublish, we perform the following operations:
-    // - Remove the published triples.
-    // - Remove the document from Solr and from search_api_item table.
-    $sparql = <<<SPARQL
-      WITH <http://joinup.eu/collection/published>
-      DELETE { <$uri> ?p ?o }
-      WHERE  { <$uri> ?p ?o }
-      SPARQL;
-    \Drupal::getContainer()->get('rdf_sync.connection')->update($sparql);
-    $sapiId = 'entity:rdf_entity/' . $uri;
-    $solrHelper = new Helper();
-    /** @var \Drupal\search_api_solr\SolrConnectorInterface $connector */
-    $connector = $entityTypeManager->getStorage('search_api_server')->load('joinup')
-      ->getBackend()
-      ->getSolrConnector();
-    $deleteQuery = $connector
-      ->getUpdateQuery()
-      ->addDeleteQuery('ss_search_api_id:' . $solrHelper->escapePhrase($sapiId))
-      ->addCommit();
-    $connector->update($deleteQuery);
-    \Drupal::database()->delete('search_api_item')
-      ->condition('index_id', ['published', 'unpublished'], 'IN')
-      ->condition('item_id', $sapiId)
-      ->execute();
-  }
+  $collection->set('field_state', $state)->save();
 
   // The 'Explore' block caches is time-based (6h). Explicitly clear the cache.
   \Drupal::getContainer()->get('cache_tags.invalidator')->invalidateTags(['homepage_explore_block']);
@@ -325,4 +292,15 @@ function joinup_oss_catalogue_tmgmt_translatable_fields_alter(ContentEntityInter
   if ($entity instanceof OssSolutionInterface && isset($translatableFields['metatag'])) {
     unset($translatableFields['metatag']);
   }
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK_alter().
+ */
+function joinup_oss_catalogue_theme_suggestions_node_alter(array &$suggestions, array $variables): void {
+  $node = $variables['elements']['#node'];
+  $sanitizedUuid = strtr($node->uuid(), '-', '_');
+  $sanitizedViewMode = strtr($variables['elements']['#view_mode'], '.', '_');
+  $suggestions[] = "node__$sanitizedUuid";
+  $suggestions[] = "node__{$sanitizedUuid}__$sanitizedViewMode";
 }

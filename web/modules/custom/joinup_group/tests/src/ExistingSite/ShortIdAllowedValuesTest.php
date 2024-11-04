@@ -6,7 +6,7 @@ namespace Drupal\Tests\joinup_group\ExistingSite;
 
 use Drupal\Core\Validation\Plugin\Validation\Constraint\RegexConstraint;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
-use Drupal\rdf_entity\Entity\Rdf;
+use Drupal\node\Entity\Node;
 
 /**
  * Tests the short ID allowed values.
@@ -18,7 +18,7 @@ class ShortIdAllowedValuesTest extends JoinupExistingSiteTestBase {
    */
   public function testEmptyShortId(): void {
     foreach (['collection', 'solution'] as $bundle) {
-      $entity = Rdf::create(['rid' => $bundle]);
+      $entity = Node::create(['type' => $bundle]);
       $violations = $entity->validate()->findByCodes([RegexConstraint::REGEX_FAILED_ERROR]);
       $violations = iterator_to_array($violations);
       $this->assertEmpty($violations);
@@ -32,9 +32,9 @@ class ShortIdAllowedValuesTest extends JoinupExistingSiteTestBase {
    */
   public function testShortIdAllowedValues(string $short_id, bool $violation_expected): void {
     foreach (['collection', 'solution'] as $bundle) {
-      $entity = Rdf::create([
-        'rid' => $bundle,
-        'field_short_id' => $short_id,
+      $entity = Node::create([
+        'type' => $bundle,
+        'short_id' => $short_id,
       ]);
 
       $violations = $entity->validate()->findByCodes([RegexConstraint::REGEX_FAILED_ERROR]);

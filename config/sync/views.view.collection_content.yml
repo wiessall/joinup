@@ -177,6 +177,7 @@ display:
         options:
           view_modes:
             'entity:node':
+              collection: view_mode_tile
               custom_page: view_mode_tile
               discussion: view_mode_tile
               distribution: default
@@ -186,8 +187,6 @@ display:
               news: view_mode_tile
               newsletter: view_mode_tile
               release: default
-            'entity:rdf_entity':
-              collection: view_mode_tile
               solution: view_mode_tile
       query:
         type: search_api_query
@@ -197,7 +196,7 @@ display:
       relationships: {  }
       header: {  }
       footer: {  }
-      display_comment: 'The collection content as displayed on the collection overview. This is displayed as an extra field on the Collection entity. See collection_entity_extra_field_info() and collection_rdf_entity_view().'
+      display_comment: 'The collection content as displayed on the collection overview. This is displayed as an extra field on the Collection entity. See collection_entity_extra_field_info() and collection_node_view().'
       display_extenders: {  }
     cache_metadata:
       max-age: -1

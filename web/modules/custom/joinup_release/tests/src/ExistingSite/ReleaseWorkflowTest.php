@@ -8,12 +8,12 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Session\AnonymousUserSession;
 use Drupal\Tests\joinup_workflow\ExistingSite\JoinupWorkflowExistingSiteTestBase;
 use Drupal\node\Entity\Node;
+use Drupal\node\NodeInterface;
 use Drupal\og\Entity\OgRole;
 use Drupal\og\OgRoleInterface;
-use Drupal\rdf_entity\RdfInterface;
 
 /**
- * Tests crud operations and the workflow for the release rdf entity.
+ * Tests crud operations and the workflow for the release entity.
  *
  * @group joinup_release
  */
@@ -57,9 +57,9 @@ class ReleaseWorkflowTest extends JoinupWorkflowExistingSiteTestBase {
   /**
    * The solution parent entity.
    *
-   * @var \Drupal\rdf_entity\RdfInterface
+   * @var \Drupal\node\NodeInterface
    */
-  protected RdfInterface $solutionGroup;
+  protected NodeInterface $solutionGroup;
 
   /**
    * The solution facilitator role.
@@ -87,8 +87,8 @@ class ReleaseWorkflowTest extends JoinupWorkflowExistingSiteTestBase {
     $this->userOgFacilitator = $this->createUser();
     $this->userOgAdministrator = $this->createUser();
 
-    $this->roleFacilitator = OgRole::getRole('rdf_entity', 'solution', 'facilitator');
-    $this->roleAdministrator = OgRole::getRole('rdf_entity', 'solution', 'administrator');
+    $this->roleFacilitator = OgRole::getRole('node', 'solution', 'facilitator');
+    $this->roleAdministrator = OgRole::getRole('node', 'solution', 'administrator');
   }
 
   /**
@@ -185,31 +185,31 @@ class ReleaseWorkflowTest extends JoinupWorkflowExistingSiteTestBase {
    * @param string $state
    *   The state of the entity.
    *
-   * @return \Drupal\rdf_entity\RdfInterface
+   * @return \Drupal\node\NodeInterface
    *   The created solution entity.
    *
    * @throws \Drupal\Core\Entity\EntityStorageException
    *   If the entity fails to create.
    */
-  protected function createDefaultParent(string $state): RdfInterface {
+  protected function createDefaultParent(string $state): NodeInterface {
     // Make sure the current user is set to anonymous when creating solutions
     // through the API so we can assign the administrator manually. If a user is
     // logged in during creation of the solution they will automatically become
     // the administrator.
     $this->setCurrentUser($this->userAnonymous);
 
-    $parent = $this->createRdfEntity([
-      'rid' => 'solution',
-      'field_is_state' => $state,
-      'label' => $this->randomMachineName(),
+    $parent = $this->createNode([
+      'type' => 'solution',
+      'field_state' => $state,
+      'title' => $this->randomMachineName(),
       // Ensure a parent collection.
-      'collection' => $this->createRdfEntity([
-        'rid' => 'collection',
-        'label' => $this->randomString(),
-        'field_ar_state' => 'published',
+      'og_audience' => $this->createNode([
+        'type' => 'collection',
+        'title' => $this->randomString(),
+        'field_state' => 'published',
       ]),
     ]);
-    $this->assertInstanceOf(RdfInterface::class, $parent);
+    $this->assertInstanceOf(NodeInterface::class, $parent);
     $this->createOgMembership($parent, $this->userOgFacilitator, [$this->roleFacilitator]);
     $this->createOgMembership($parent, $this->userOgAdministrator, [$this->roleAdministrator]);
     return $parent;

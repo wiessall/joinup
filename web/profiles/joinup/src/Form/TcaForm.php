@@ -16,7 +16,7 @@ class TcaForm extends TcaFormBase {
   /**
    * {@inheritdoc}
    */
-  public function getFormId() {
+  public function getFormId(): string {
     return 'collection_tca_form';
   }
 
@@ -46,8 +46,8 @@ class TcaForm extends TcaFormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state): void {
-    $form_state->setRedirect('rdf_entity.propose_form', [
-      'rdf_type' => 'collection',
+    $form_state->setRedirect('node.propose_form', [
+      'node_type' => 'collection',
     ]);
   }
 

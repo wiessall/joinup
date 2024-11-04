@@ -20,20 +20,8 @@ use Drupal\joinup_distribution\DistributionsFieldItemList;
 use Drupal\joinup_distribution\Entity\Distribution;
 use Drupal\joinup_distribution\Entity\DistributionInterface;
 use Drupal\joinup_distribution\Entity\DistributionsParentInterface;
-use Drupal\joinup_distribution\Plugin\DataType\EntityReference;
 use Drupal\joinup_taxonomy\Entity\MappedTerm;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-
-/**
- * Implements hook_data_type_info_alter().
- *
- * @todo Drop this hook in ISAICP-8572.
- */
-function joinup_distribution_data_type_info_alter(&$data_types): void {
-  if (isset($data_types['entity_reference'])) {
-    $data_types['entity_reference']['class'] = EntityReference::class;
-  }
-}
 
 /**
  * Implements hook_entity_bundle_info_alter().
@@ -119,12 +107,7 @@ function joinup_distribution_entity_bundle_field_info(EntityTypeInterface $entit
  * Implements hook_form_FORM_ID_alter().
  */
 function joinup_distribution_form_node_distribution_form_alter(array &$form, FormStateInterface $formState): void {
-  $parent = \Drupal::routeMatch()->getParameter('rdf_entity');
-  if (empty($parent)) {
-    // Try to also check if a node parameter is passed as releases are nodes.
-    // @todo This should be converted to only checking nodes in ISAICP-8572.
-    $parent = \Drupal::routeMatch()->getParameter('node');
-  }
+  $parent = \Drupal::routeMatch()->getParameter('node');
 
   // Bail out if the solution or release is not present on the route. Since this
   // form is only intended to be used in the context of a solution or  release,

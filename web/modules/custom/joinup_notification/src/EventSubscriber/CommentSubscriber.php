@@ -24,10 +24,10 @@ class CommentSubscriber extends NotificationSubscriberBase {
     'create' => [
       'roles' => ['moderator' => [self::TEMPLATE_CREATE]],
       'og_roles' => [
-        'rdf_entity-collection-administrator' => [self::TEMPLATE_CREATE],
-        'rdf_entity-solution-administrator' => [self::TEMPLATE_CREATE],
-        'rdf_entity-collection-facilitator' => [self::TEMPLATE_CREATE],
-        'rdf_entity-solution-facilitator' => [self::TEMPLATE_CREATE],
+        'node-collection-administrator' => [self::TEMPLATE_CREATE],
+        'node-solution-administrator' => [self::TEMPLATE_CREATE],
+        'node-collection-facilitator' => [self::TEMPLATE_CREATE],
+        'node-solution-facilitator' => [self::TEMPLATE_CREATE],
       ],
     ],
     'update' => ['roles' => ['moderator' => [self::TEMPLATE_UPDATE]]],

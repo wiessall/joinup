@@ -1,0 +1,19 @@
+uuid: f184e8ee-454c-41b0-b6d7-dce17579b7e2
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.owner
+field_name: owner
+entity_type: node
+type: entity_reference
+settings:
+  target_type: node
+module: core
+locked: false
+cardinality: -1
+translatable: false
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

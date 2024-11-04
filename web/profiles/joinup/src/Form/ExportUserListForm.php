@@ -142,7 +142,7 @@ class ExportUserListForm extends FormBase {
       '#title' => $this->t('Group'),
       '#description' => $this->t('Filter on a specific collection / solution.'),
       '#maxlength' => 1024,
-      '#target_type' => 'rdf_entity',
+      '#target_type' => 'node',
       '#selection_settings' => [
         'target_bundles' => ['collection', 'solution'],
       ],
@@ -166,7 +166,7 @@ class ExportUserListForm extends FormBase {
     $group_id = $form_state->getValue('group');
     if ($group_id) {
       // Retrieve all user IDs for a specific group.
-      $group_entity = $this->entityTypeManager->getStorage('rdf_entity')->load($group_id);
+      $group_entity = $this->entityTypeManager->getStorage('node')->load($group_id);
       \assert($group_entity instanceof EntityInterface);
       $user_ids = $this->getGroupMemberUids($group_entity);
     }

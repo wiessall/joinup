@@ -15,7 +15,6 @@ use Drupal\joinup\Traits\EntityReferenceTrait;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\FileTrait;
 use Drupal\joinup\Traits\JavascriptTrait;
-use Drupal\joinup\Traits\RdfEntityTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup_distribution\Entity\DownloadEvent;
 use Drupal\meta_entity\Entity\MetaEntity;
@@ -28,7 +27,6 @@ class DistributionContext extends RawDrupalContext {
   use EntityReferenceTrait;
   use EntityTrait;
   use FileTrait;
-  use RdfEntityTrait;
   use TestingEntitiesTrait;
   use JavascriptTrait;
 
@@ -99,21 +97,6 @@ class DistributionContext extends RawDrupalContext {
     }
     $entity->skip_notification = TRUE;
     $entity->delete();
-  }
-
-  /**
-   * Checks the number of available distributions.
-   *
-   * @param int $number
-   *   The expected number of distributions.
-   *
-   * @throws \Exception
-   *   Thrown if the count does not match the expected number.
-   *
-   * @Then I should have :number distribution(s)
-   */
-  public function assertAssetDistributionCount(int $number): void {
-    $this->assertEntityCount('node', 'distribution', $number);
   }
 
   /**

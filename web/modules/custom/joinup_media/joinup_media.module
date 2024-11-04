@@ -10,7 +10,6 @@ declare(strict_types=1);
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\joinup_media\JoinupMediaLibrary;
 use Drupal\og\OgGroupAudienceHelperInterface;
-use Drupal\sparql_entity_storage\UriEncoder;
 
 /**
  * Implements hook_field_widget_info_alter().
@@ -65,7 +64,6 @@ function joinup_media_set_media_group(array $form, FormStateInterface $form_stat
   $media_library_state = $form_state->get('media_library_state');
   $group_id = $media_library_state->getOpenerParameters()['group_id'] ?? NULL;
   if ($group_id) {
-    $group_id = UriEncoder::decodeUrl($group_id);
     /** @var \Drupal\media\MediaInterface $media */
     foreach ($media_items as $media) {
       if ($media->hasField(OgGroupAudienceHelperInterface::DEFAULT_FIELD)) {

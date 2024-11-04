@@ -35,9 +35,9 @@ class OssAccessCheck implements AccessInterface {
       throw new \Exception("The '_oss_access_check' route requirement should be 'TRUE', but '$requirement' was given.");
     }
 
-    $group = $route_match->getParameter('rdf_entity');
+    $group = $route_match->getParameter('node');
     if ($group instanceof GroupInterface) {
-      return AccessResult::allowedIf($group->id() !== OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID)
+      return AccessResult::allowedIf($group->uuid() !== OssCatalogueCollectionInterface::COLLECTION_UUID)
         ->addCacheTags(Cache::buildTags('og-group-content', $group->getCacheTags()))
         ->addCacheContexts(['og_group_context']);
     }

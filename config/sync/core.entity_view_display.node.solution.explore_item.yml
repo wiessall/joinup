@@ -1,0 +1,244 @@
+uuid: 9681ed74-7ea2-48a3-ba8e-297f0b4d7efc
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.explore_item
+    - field.field.node.solution.abstract
+    - field.field.node.solution.body
+    - field.field.node.solution.contact
+    - field.field.node.solution.content_creation
+    - field.field.node.solution.description
+    - field.field.node.solution.documentation
+    - field.field.node.solution.field_keywords
+    - field.field.node.solution.field_shared_in
+    - field.field.node.solution.field_state
+    - field.field.node.solution.field_topic
+    - field.field.node.solution.group_moderation
+    - field.field.node.solution.landing_page
+    - field.field.node.solution.language
+    - field.field.node.solution.list_related_entities
+    - field.field.node.solution.listing_content
+    - field.field.node.solution.logo
+    - field.field.node.solution.metrics_page
+    - field.field.node.solution.og_audience
+    - field.field.node.solution.owner
+    - field.field.node.solution.process_status
+    - field.field.node.solution.related_solutions
+    - field.field.node.solution.release_number
+    - field.field.node.solution.short_id
+    - field.field.node.solution.site_featured
+    - field.field.node.solution.solution_type
+    - field.field.node.solution.spatial_coverage
+    - field.field.node.solution.translation
+    - node.type.solution
+  module:
+    - layout_builder
+    - layout_discovery
+    - link
+    - og
+    - user
+third_party_settings:
+  layout_builder:
+    enabled: true
+    allow_custom: false
+    sections:
+      -
+        layout_id: layout_onecol
+        layout_settings:
+          label: ''
+        components:
+          73ce1577-5416-4823-bbd4-fcb800b4419c:
+            uuid: 73ce1577-5416-4823-bbd4-fcb800b4419c
+            region: content
+            configuration:
+              id: 'field_block:node:solution:description'
+              label: Description
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: joinup_html_stripper_stripped
+                label: hidden
+                settings:
+                  trim_length: 220
+                third_party_settings:
+                  template_suggestion:
+                    template_suggestion: ''
+            weight: 0
+            additional:
+              component_attributes:
+                block_attributes:
+                  id: ''
+                  class: explore-item__description
+                  style: ''
+                  data: ''
+                block_title_attributes:
+                  id: ''
+                  class: ''
+                  style: ''
+                  data: ''
+                block_content_attributes:
+                  id: ''
+                  class: ''
+                  style: ''
+                  data: ''
+          182f9caa-1221-4dcc-a2f4-17885b1f7452:
+            uuid: 182f9caa-1221-4dcc-a2f4-17885b1f7452
+            region: content
+            configuration:
+              id: 'field_block:node:solution:changed'
+              label: Changed
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+                view_mode: view_mode
+              formatter:
+                type: timestamp
+                label: hidden
+                settings:
+                  date_format: custom
+                  custom_date_format: d/m/Y
+                  timezone: ''
+                  tooltip:
+                    date_format: ''
+                    custom_date_format: ''
+                  time_diff:
+                    enabled: false
+                    future_format: '@interval hence'
+                    past_format: '@interval ago'
+                    granularity: 2
+                    refresh: 60
+                third_party_settings:
+                  template_suggestion:
+                    template_suggestion: ''
+            weight: 1
+            additional:
+              component_attributes:
+                block_attributes:
+                  id: ''
+                  class: date
+                  style: ''
+                  data: ''
+                block_title_attributes:
+                  id: ''
+                  class: ''
+                  style: ''
+                  data: ''
+                block_content_attributes:
+                  id: ''
+                  class: ''
+                  style: ''
+                  data: ''
+          43c5fe98-a110-493c-82bf-8a5c9a930274:
+            uuid: 43c5fe98-a110-493c-82bf-8a5c9a930274
+            region: content
+            configuration:
+              id: 'extra_field_block:node:solution:read_more'
+              label: 'Read more'
+              label_display: '0'
+              provider: layout_builder
+              context_mapping:
+                entity: layout_builder.entity
+              formatter:
+                settings: {  }
+                third_party_settings: {  }
+            weight: 2
+            additional: {  }
+        third_party_settings: {  }
+id: node.solution.explore_item
+targetEntityType: node
+bundle: solution
+mode: explore_item
+content:
+  distributions:
+    type: entity_reference_entity_view
+    label: hidden
+    settings:
+      view_mode: default
+      link: false
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  flag_interoperability:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 10
+    region: content
+  flag_like:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 10
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+  og_group:
+    type: og_group_subscribe
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  report:
+    type: link
+    label: hidden
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    weight: 50
+    region: content
+hidden:
+  abstract: true
+  body: true
+  collections: true
+  contact: true
+  content_creation: true
+  description: true
+  documentation: true
+  download_total: true
+  eif_perspective: true
+  featured: true
+  field_keywords: true
+  field_shared_in: true
+  field_state: true
+  field_topic: true
+  group_moderation: true
+  landing_page: true
+  langcode: true
+  language: true
+  list_related_entities: true
+  listing_content: true
+  logo: true
+  members: true
+  metrics_page: true
+  node_solution_listing_content_inline_facets: true
+  node_solution_listing_content_top: true
+  og_audience: true
+  owner: true
+  pinned_in: true
+  process_status: true
+  published_at: true
+  read_more: true
+  related_solution: true
+  related_solutions: true
+  release_number: true
+  releases_overview: true
+  search_api_excerpt: true
+  share_link: true
+  short_id: true
+  site_featured: true
+  solution_subscribe: true
+  solution_type: true
+  spatial_coverage: true
+  translation: true
+  uri: true

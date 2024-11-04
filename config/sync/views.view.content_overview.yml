@@ -135,14 +135,14 @@ display:
           format_plural_string: !!binary MQNAY291bnQ=
           prefix: ''
           suffix: ''
-        label:
-          id: label
-          table: search_api_datasource_published_entity_rdf_entity
-          field: label
+        title:
+          id: title
+          table: search_api_datasource_published_entity_node
+          field: title
           relationship: none
           group_type: group
           admin_label: ''
-          entity_type: rdf_entity
+          entity_type: node
           plugin_id: search_api_field
           label: ''
           exclude: false
@@ -252,10 +252,10 @@ display:
             link_to_item: false
             multi_type: separator
             multi_separator: ', '
-        field_ar_description:
-          id: field_ar_description
+        description:
+          id: description
           table: search_api_index_published
-          field: field_ar_description
+          field: description
           relationship: none
           group_type: group
           admin_label: ''
@@ -614,6 +614,8 @@ display:
         options:
           view_modes:
             'entity:node':
+              collection: view_mode_tile
+              contact_information: default
               custom_page: view_mode_tile
               discussion: view_mode_tile
               distribution: default
@@ -621,11 +623,8 @@ display:
               event: view_mode_tile
               licence: default
               news: view_mode_tile
-              release: default
-            'entity:rdf_entity':
-              collection: view_mode_tile
-              contact_information: default
               owner: ''
+              release: default
               solution: view_mode_tile
       query:
         type: search_api_query

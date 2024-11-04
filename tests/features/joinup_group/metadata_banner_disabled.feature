@@ -5,33 +5,32 @@ Feature: Collections/Solutions settings Metadata Banner disabled
   Moderator need to be able to disabled and enabled metadata from banner in collections/solutions
 
   Scenario: Moderator or collection/solution owner is able to disable or enable metadata from banner in collections/solutions
-    Given collections:
+    Given collection content:
       | title          | state     |
       | Rally fanatics | published |
       | Legion of Doom | published |
-    And the following solution:
-      | title      | Klop mirubes   |
-      | state      | published      |
-      | collection | Rally fanatics |
+    And solution content:
+      | title        | state     | collection     |
+      | Klop mirubes | published | Rally fanatics |
     And users:
-      | Username         | E-mail                     | First name  | Family name |
-      | Ferners Lee      | ferners-lee@example.com    | Ferners     | Lee         |
-      | Plot user        | plot.user@example.com      | Plot        | user        |
-      | Lope Facilitator | lopfacilitator@example.com | Lope        | Facilitator |
+      | Username         | E-mail                     | First name | Family name |
+      | Ferners Lee      | ferners-lee@example.com    | Ferners    | Lee         |
+      | Plot user        | plot.user@example.com      | Plot       | user        |
+      | Lope Facilitator | lopfacilitator@example.com | Lope       | Facilitator |
     And the following collection user memberships:
       | collection     | user             | roles       |
       | Rally fanatics | Lope Facilitator | facilitator |
       | Rally fanatics | Plot user        | owner       |
       | Legion of Doom | Plot user        | owner       |
     And the following solution user memberships:
-      | solution     | user               | roles       |
-      | Klop mirubes | Plot user          | owner       |
+      | solution     | user      | roles |
+      | Klop mirubes | Plot user | owner |
     And "news" content:
-      | title                         | headline                                    | body                                                                    | state            | author        | collection     |
-      | Creating Justice League       | 6 Members to start with                     | TBD                                                                     | published        | Eagle         | Rally fanatics |
+      | title                   | headline                | body | state     | author | collection     |
+      | Creating Justice League | 6 Members to start with | TBD  | published | Eagle  | Rally fanatics |
     And "news" content:
-      | title                         | headline                                    | body                                                                    | state            | author        | solution       |
-      | Hawkgirl is a spy             | Her race lies in another part of the galaxy | Hawkgirl has been giving information about Earth to Thanagarians.       | published        | Eagle         | Klop mirubes   |
+      | title             | headline                                    | body                                                              | state     | author | solution     |
+      | Hawkgirl is a spy | Her race lies in another part of the galaxy | Hawkgirl has been giving information about Earth to Thanagarians. | published | Eagle  | Klop mirubes |
 
     Given I am logged in as "Ferners Lee"
     When I go to the "Rally fanatics" collection

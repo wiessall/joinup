@@ -7,8 +7,7 @@ namespace Drupal\joinup_distribution\EventSubscriber;
 use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\File\FileUrlGeneratorInterface;
 use Drupal\joinup_distribution\Entity\DistributionInterface;
-use Drupal\joinup_distribution\Exception\MissingDistributionParentException;
-use Drupal\joinup_rdf\Entity\RdfSyncEntityInterface;
+use Drupal\joinup_distribution\Entity\DistributionsParentInterface;
 use Drupal\rdf_sync\Event\RdfSyncNormalizeEvent;
 use Drupal\rdf_sync\RdfSyncMapper;
 use EasyRdf\Resource;
@@ -37,47 +36,26 @@ final class DistributionParentRdfSyncSubscriber implements EventSubscriberInterf
    */
   public static function getSubscribedEvents(): array {
     return [
-      RdfSyncNormalizeEvent::class => 'addDistributionParentRelation',
+      RdfSyncNormalizeEvent::class => [
+        ['translateAccessUrl'],
+        ['filterOutUnpublishedDistributions'],
+      ],
     ];
   }
 
   /**
-   * Adds the dcat:distribution relationship from parent to distribution.
+   * Translates the access URL to a URL from the file field.
    *
    * @param \Drupal\rdf_sync\Event\RdfSyncNormalizeEvent $event
    *   The event object.
    */
-  public function addDistributionParentRelation(RdfSyncNormalizeEvent $event): void {
+  public function translateAccessUrl(RdfSyncNormalizeEvent $event): void {
     $entity = $event->getEntity();
     $normalizedArray = $event->getNormalizedArray();
     if ($entity instanceof DistributionInterface) {
-      try {
-        /** @var \Drupal\joinup_rdf\Entity\RdfSyncEntityInterface $parent */
-        if ($parent = $entity->getParent()) {
-          // @todo Remove these lines in ISAICP-8376. The URI should always be
-          //   fetched with the getUri() method once RDF2Node is completed.
-          if ($parent instanceof RdfSyncEntityInterface) {
-            $parentUri = $parent->getUri();
-          }
-          else {
-            // The parents have not been converted yet, we can get their ID
-            // directly.
-            $parentUri = $parent->id();
-          }
-          $normalizedArray[$parentUri]['http://www.w3.org/ns/dcat#distribution'][] = (new Resource($entity->getUri()))->toRdfPhp();
-        }
-      }
-      catch (MissingDistributionParentException $exception) {
-        // The parent is missing, so we cannot add the relationship. This can
-        // happen during during complex operations like entities cleanup where
-        // the order of the cleanup can be unpredictable.
-      }
-
-      // Export also all `access_url` values that are external URLs because RDF
-      // sync normalizer handles the `target_id` generically assuming that all
-      // entity reference fields are handled the same.
-      // @todo Re-visit this in ISAICP-8821.
-      // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-8821.
+      // Export all `access_url` values that are external URLs because RDF sync
+      // normalizer handles the `target_id` generically assuming that all entity
+      // reference fields are handled the same.
       if (!$entity->get('access_url')->isEmpty()) {
         foreach ($entity->get('access_url')->referencedEntities() as $file) {
           $file_url = $file->getFileUri();
@@ -91,6 +69,36 @@ final class DistributionParentRdfSyncSubscriber implements EventSubscriberInterf
       }
     }
     $event->setNormalizedArray($normalizedArray);
+  }
+
+  /**
+   * Removes unpublished distributions from the synced data.
+   *
+   * @param \Drupal\rdf_sync\Event\RdfSyncNormalizeEvent $event
+   *   The event object.
+   */
+  public function filterOutUnpublishedDistributions(RdfSyncNormalizeEvent $event): void {
+    $entity = $event->getEntity();
+    if (!$entity instanceof DistributionsParentInterface) {
+      return;
+    }
+
+    $distributionEntities = $entity->getDistributions();
+    $distributionByUri = [];
+    foreach ($distributionEntities as $distribution) {
+      $distributionByUri[$distribution->getUri()] = $distribution;
+    }
+
+    $normalizedArray = $event->getNormalizedArray();
+    if (isset($normalizedArray[$entity->getUri()]['http://www.w3.org/ns/dcat#distribution'])) {
+      $normalizedArray[$entity->getUri()]['http://www.w3.org/ns/dcat#distribution'] = array_filter(
+        $normalizedArray[$entity->getUri()]['http://www.w3.org/ns/dcat#distribution'],
+        static function (array $distribution) use ($distributionByUri): bool {
+          return isset($distributionByUri[$distribution['value']]) && $distributionByUri[$distribution['value']]->isPublished();
+        }
+      );
+      $event->setNormalizedArray($normalizedArray);
+    }
   }
 
 }

@@ -4,7 +4,32 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.node.teaser
+    - field.field.node.solution.abstract
     - field.field.node.solution.body
+    - field.field.node.solution.contact
+    - field.field.node.solution.content_creation
+    - field.field.node.solution.documentation
+    - field.field.node.solution.description
+    - field.field.node.solution.field_keywords
+    - field.field.node.solution.field_shared_in
+    - field.field.node.solution.field_state
+    - field.field.node.solution.field_topic
+    - field.field.node.solution.group_moderation
+    - field.field.node.solution.landing_page
+    - field.field.node.solution.language
+    - field.field.node.solution.list_related_entities
+    - field.field.node.solution.listing_content
+    - field.field.node.solution.logo
+    - field.field.node.solution.metrics_page
+    - field.field.node.solution.owner
+    - field.field.node.solution.process_status
+    - field.field.node.solution.related_solutions
+    - field.field.node.solution.release_number
+    - field.field.node.solution.short_id
+    - field.field.node.solution.site_featured
+    - field.field.node.solution.solution_type
+    - field.field.node.solution.spatial_coverage
+    - field.field.node.solution.translation
     - node.type.solution
   module:
     - link
@@ -32,10 +57,27 @@ content:
     third_party_settings: {  }
     weight: 0
     region: content
+  flag_interoperability:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 10
+    region: content
+  flag_like:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 10
+    region: content
   links:
     settings: {  }
     third_party_settings: {  }
     weight: 100
+    region: content
+  og_group:
+    type: og_group_subscribe
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
     region: content
   report:
     type: link
@@ -50,7 +92,46 @@ content:
     weight: 50
     region: content
 hidden:
+  abstract: true
+  collections: true
+  contact: true
+  content_creation: true
+  description: true
+  documentation: true
+  download_total: true
+  eif_perspective: true
+  featured: true
+  field_keywords: true
+  field_shared_in: true
+  field_state: true
+  field_topic: true
+  group_moderation: true
+  landing_page: true
   langcode: true
+  language: true
+  list_related_entities: true
+  listing_content: true
+  logo: true
+  members: true
+  metrics_page: true
+  node_solution_listing_content_inline_facets: true
+  node_solution_listing_content_top: true
+  og_audience: true
+  owner: true
+  pinned_in: true
+  process_status: true
   published_at: true
+  read_more: true
+  related_solution: true
+  related_solutions: true
+  release_number: true
+  releases_overview: true
   search_api_excerpt: true
+  share_link: true
+  short_id: true
+  site_featured: true
+  solution_subscribe: true
+  solution_type: true
+  spatial_coverage: true
+  translation: true
   uri: true

@@ -18,6 +18,7 @@ use Drupal\joinup\Traits\OgTrait;
 use Drupal\joinup\Traits\TraversingTrait;
 use Drupal\joinup\Traits\UserTrait;
 use Drupal\joinup\Traits\UtilityTrait;
+use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\JoinupGroupHelper;
 use Drupal\joinup_subscription\Entity\GroupContentSubscriptionMessageInterface;
 use Drupal\joinup_subscription\JoinupDiscussionSubscriptionInterface;
@@ -93,9 +94,9 @@ class JoinupSubscriptionContext extends RawDrupalContext {
    * @When I go to the subscribers report for :group
    */
   public function visitSubscribersReport(string $group): void {
-    $group_entity = $this->getEntityByLabel('rdf_entity', $group);
+    $group_entity = $this->getEntityByLabel('node', $group);
     $url = Url::fromRoute('joinup_subscription.group_subscribers_report', [
-      'rdf_entity' => $group_entity->id(),
+      'node' => $group_entity->id(),
     ]);
     $this->visitPath($url->toString());
   }
@@ -143,8 +144,8 @@ class JoinupSubscriptionContext extends RawDrupalContext {
    */
   public function subscribeToGroupContent(TableNode $subscription_table, string $bundle): void {
     foreach ($subscription_table->getColumnsHash() as $values) {
-      /** @var \Drupal\joinup_group\Entity\GroupContentInterface $group */
-      $group = $this->getEntityByLabel('rdf_entity', $values[$bundle], $bundle);
+      $group = $this->getEntityByLabel('node', $values[$bundle], $bundle);
+      assert($group instanceof GroupInterface);
       $user = $this->getUserByName($values['user']);
       $membership = $this->getMembershipByGroupAndUser($group, $user, OgMembershipInterface::ALL_STATES);
       $subscriptions = [];
@@ -319,7 +320,7 @@ class JoinupSubscriptionContext extends RawDrupalContext {
   public function assertSubscriptionOptionsInSubscriptions(TableNode $subscription_options): void {
     foreach ($subscription_options->getRowsHash() as $group_label => $expected_options) {
       $expected_options = $this->explodeCommaSeparatedStepArgument(strtolower($expected_options));
-      $group = $this->getEntityByLabel('rdf_entity', $group_label);
+      $group = $this->getEntityByLabel('node', $group_label);
       $subscription_bundles = JoinupSubscriptionsHelper::SUBSCRIPTION_BUNDLES[$group->bundle()];
       foreach ($subscription_bundles as $entity_type_id => $bundle_ids) {
         foreach ($bundle_ids as $bundle_id) {
@@ -369,7 +370,8 @@ class JoinupSubscriptionContext extends RawDrupalContext {
     $account = User::load($this->getUserManager()->getCurrentUser()->uid);
     assert($account instanceof AccountInterface);
 
-    $group = $this->getEntityByLabel('rdf_entity', $groupLabel);
+    $group = $this->getEntityByLabel('node', $groupLabel);
+    assert($group instanceof GroupInterface);
     $membership = $this->getMembershipByGroupAndUser($group, $account, OgMembershipInterface::ALL_STATES);
     $expectedBundleIds = $this->explodeCommaSeparatedStepArgument(strtolower($bundlesCommaSeparated));
 
@@ -406,7 +408,8 @@ class JoinupSubscriptionContext extends RawDrupalContext {
   public function assertNoGroupContentSubscriptions(string $label, string $bundle): void {
     $user = $this->getUserManager()->getCurrentUser();
     $account = User::load($user->uid);
-    $group = $this->getEntityByLabel('rdf_entity', $label, $bundle);
+    $group = $this->getEntityByLabel('node', $label, $bundle);
+    assert($group instanceof GroupInterface);
     $membership = $this->getMembershipByGroupAndUser($group, $account, OgMembershipInterface::ALL_STATES);
     Assert::assertEmpty($membership->get('subscription_bundles')->getValue());
   }
@@ -691,7 +694,7 @@ class JoinupSubscriptionContext extends RawDrupalContext {
       throw new \InvalidArgumentException("Invalid user name: $username");
     }
     /** @var \Drupal\joinup_group\Entity\GroupInterface $group */
-    $group = $this->getEntityByLabel('rdf_entity', $group_label, $group_type);
+    $group = $this->getEntityByLabel('node', $group_label, $group_type);
     $this->getMembershipByGroupAndUser($group, $account)->set('announcements', TRUE)->save();
   }
 
@@ -714,7 +717,7 @@ class JoinupSubscriptionContext extends RawDrupalContext {
       throw new \InvalidArgumentException("Invalid user name: $username");
     }
     /** @var \Drupal\joinup_group\Entity\GroupInterface $group */
-    $group = $this->getEntityByLabel('rdf_entity', $group_label, $group_type);
+    $group = $this->getEntityByLabel('node', $group_label, $group_type);
     $this->getMembershipByGroupAndUser($group, $account)->set('announcements', FALSE)->save();
   }
 
@@ -727,8 +730,8 @@ class JoinupSubscriptionContext extends RawDrupalContext {
    *   One of 'collection' or 'solution'.
    * @param string|null $types
    *   If passed, it's the route parameter that allows to filter the types of
-   *   content from which to unsubscribe. This is mostly used o test invalid URL
-   *   route parameters.
+   *   content from which to unsubscribe. This is mostly used to test invalid
+   *   URL route parameters.
    * @param \Behat\Gherkin\Node\TableNode|null $table
    *   A one-column table with the types of content from which to unsubscribe.
    *   Allowed values: Solution, Discussion, Document, Event, News,
@@ -743,7 +746,7 @@ class JoinupSubscriptionContext extends RawDrupalContext {
    */
   public function unsubscribeFromGroup(string $group_label, string $group_type, ?string $types = NULL, ?TableNode $table = NULL): void {
     assert(isset(JoinupGroupHelper::GROUP_BUNDLES[$group_type]));
-    $group = $this->getEntityByLabel('rdf_entity', $group_label, $group_type);
+    $group = $this->getEntityByLabel('node', $group_label, $group_type);
     $url = Url::fromRoute('joinup_subscription.unsubscribe', [
       'user' => $this->userManager->getCurrentUser()->uid,
       'group' => $group->id(),
@@ -762,7 +765,7 @@ class JoinupSubscriptionContext extends RawDrupalContext {
     }
 
     $map = [
-      'Solution' => 'rdf_entity:solution',
+      'Solution' => 'node:solution',
       'Discussion' => 'node:discussion',
       'Document' => 'node:document',
       'Event' => 'node:event',

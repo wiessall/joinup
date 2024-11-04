@@ -10,7 +10,7 @@ dependencies:
 id: ventuno_licencefilterblock_jlc
 theme: ventuno
 region: content
-weight: -8
+weight: -6
 provider: null
 plugin: licence_filter_block
 settings:

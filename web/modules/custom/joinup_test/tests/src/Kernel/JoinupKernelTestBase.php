@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\Tests\joinup_test\Kernel;
 
-use Drupal\Tests\rdf_entity\Kernel\RdfKernelTestBase;
+use Drupal\KernelTests\KernelTestBase;
 
 /**
  * Provides a base class for entity tests in Joinup.
@@ -27,14 +27,13 @@ use Drupal\Tests\rdf_entity\Kernel\RdfKernelTestBase;
  * cleaning it after the test. You can extend the tearDown() method for this
  * purpose.
  */
-abstract class JoinupKernelTestBase extends RdfKernelTestBase {
+abstract class JoinupKernelTestBase extends KernelTestBase {
 
   /**
    * {@inheritdoc}
    */
   protected static $modules = [
     'datetime',
-    'rdf_entity_test',
   ];
 
   /**
@@ -43,32 +42,6 @@ abstract class JoinupKernelTestBase extends RdfKernelTestBase {
   protected function setUp(): void {
     parent::setUp();
     $this->installEntitySchema('user');
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function tearDown(): void {
-    // Delete all data produced by testing module.
-    foreach (['dummy', 'with_owner', 'multifield'] as $bundle) {
-      foreach (['published', 'draft'] as $graph) {
-        $query = <<<EndOfQuery
-DELETE {
-  GRAPH <http://example.com/$bundle/$graph> {
-    ?entity ?field ?value
-  }
-}
-WHERE {
-  GRAPH <http://example.com/$bundle/$graph> {
-    ?entity ?field ?value
-  }
-}
-EndOfQuery;
-        $this->sparql->query($query);
-      }
-    }
-
-    parent::tearDown();
   }
 
 }

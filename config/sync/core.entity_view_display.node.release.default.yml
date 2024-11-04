@@ -15,7 +15,7 @@ dependencies:
     - field.field.node.release.spatial_coverage
     - node.type.release
   module:
-    - collection
+    - joinup_collection
     - field_delimiter
     - field_formatter_range
     - file_url

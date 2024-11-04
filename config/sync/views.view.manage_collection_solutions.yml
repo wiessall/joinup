@@ -3,14 +3,13 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.rdf_entity.field_is_state
-    - rdf_entity.rdfentity.collection
+    - field.storage.node.field_state
+    - node.type.collection
     - search_api.index.published
   module:
-    - joinup_group
+    - joinup_solution
     - options
     - search_api
-    - solution
 id: manage_collection_solutions
 label: 'Manage collection solutions'
 module: views
@@ -88,13 +87,14 @@ display:
             - unarchive_solution
           link_to_item: false
           use_highlighting: false
-        label:
-          id: label
-          table: search_api_index_published
-          field: label
+        title:
+          id: title
+          table: search_api_datasource_published_entity_node
+          field: title
           relationship: none
           group_type: group
           admin_label: ''
+          entity_type: node
           plugin_id: search_api_field
           label: Title
           exclude: false
@@ -129,7 +129,7 @@ display:
           element_class: ''
           element_label_type: ''
           element_label_class: ''
-          element_label_colon: true
+          element_label_colon: false
           element_wrapper_type: ''
           element_wrapper_class: ''
           element_default_classes: true
@@ -151,20 +151,21 @@ display:
           multi_type: separator
           separator: ', '
           field_api_classes: false
-          field_rendering: false
+          field_rendering: true
           fallback_handler: search_api
           fallback_options:
-            link_to_item: true
+            link_to_item: false
             use_highlighting: false
             multi_type: separator
             multi_separator: ', '
-        rdf_created:
-          id: rdf_created
-          table: search_api_index_published
-          field: rdf_created
+        created:
+          id: created
+          table: search_api_datasource_published_entity_node
+          field: created
           relationship: none
           group_type: group
           admin_label: ''
+          entity_type: node
           plugin_id: search_api_field
           label: 'Created on'
           exclude: false
@@ -214,7 +215,7 @@ display:
             custom_date_format: ''
             timezone: ''
             tooltip:
-              date_format: ''
+              date_format: long
               custom_date_format: ''
             time_diff:
               enabled: false
@@ -242,13 +243,14 @@ display:
             use_highlighting: false
             multi_type: separator
             multi_separator: ', '
-        rdf_changed:
-          id: rdf_changed
-          table: search_api_index_published
-          field: rdf_changed
+        changed:
+          id: changed
+          table: search_api_datasource_published_entity_node
+          field: changed
           relationship: none
           group_type: group
           admin_label: ''
+          entity_type: node
           plugin_id: search_api_field
           label: 'Last update'
           exclude: false
@@ -298,7 +300,7 @@ display:
             custom_date_format: ''
             timezone: ''
             tooltip:
-              date_format: ''
+              date_format: long
               custom_date_format: ''
             time_diff:
               enabled: false
@@ -326,14 +328,14 @@ display:
             use_highlighting: false
             multi_type: separator
             multi_separator: ', '
-        field_is_state:
-          id: field_is_state
-          table: search_api_datasource_published_entity_rdf_entity
-          field: field_is_state
+        field_state:
+          id: field_state
+          table: search_api_datasource_published_entity_node
+          field: field_state
           relationship: none
           group_type: group
           admin_label: ''
-          entity_type: rdf_entity
+          entity_type: node
           plugin_id: search_api_field
           label: State
           exclude: false
@@ -449,18 +451,18 @@ display:
             format: content_editor
           tokenize: false
       sorts:
-        label:
-          id: label
+        title:
+          id: title
           table: search_api_index_published
-          field: label
+          field: title
           relationship: none
           group_type: group
           admin_label: ''
           plugin_id: search_api
-          order: ASC
+          order: DESC
           expose:
             label: ''
-            field_identifier: label
+            field_identifier: ''
           exposed: false
       arguments:
         entity_groups:
@@ -488,7 +490,7 @@ display:
             format: default_summary
           specify_validation: true
           validate:
-            type: 'entity:rdf_entity'
+            type: 'entity:node'
             fail: 'not found'
           validate_options:
             bundles:
@@ -607,7 +609,7 @@ display:
         - 'user.node_grants:view'
         - user.permissions
       tags:
-        - 'config:field.storage.rdf_entity.field_is_state'
+        - 'config:field.storage.node.field_state'
         - 'config:search_api.index.published'
         - 'config:views.view.manage_collection_solutions'
         - 'search_api_list:published'
@@ -621,7 +623,7 @@ display:
         metatag_display_extender:
           metatags: {  }
           tokenize: false
-      path: rdf_entity/%rdf_entity/manage-solutions
+      path: node/%node/manage-solutions
       menu:
         type: tab
         title: 'Manage solutions'
@@ -642,7 +644,7 @@ display:
         - 'user.node_grants:view'
         - user.permissions
       tags:
-        - 'config:field.storage.rdf_entity.field_is_state'
+        - 'config:field.storage.node.field_state'
         - 'config:search_api.index.published'
         - 'config:views.view.manage_collection_solutions'
         - 'search_api_list:published'

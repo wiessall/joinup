@@ -17,9 +17,9 @@ use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_community_content\Entity\CommunityContentInterface;
+use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\joinup_workflow\ArchivableEntityInterface;
 use Drupal\joinup_workflow\EntityWorkflowStateInterface;
-use Drupal\solution\Entity\SolutionInterface;
 
 /**
  * Implements hook_entity_base_field_info().
@@ -33,7 +33,7 @@ use Drupal\solution\Entity\SolutionInterface;
 function joinup_workflow_entity_base_field_info(EntityTypeInterface $entity_type): array {
   $fields = [];
 
-  if ($entity_type->id() === 'rdf_entity' || $entity_type->id() === 'node') {
+  if ($entity_type->id() === 'node') {
     $fields['current_workflow_state'] = BaseFieldDefinition::create('current_workflow_state')
       ->setLabel(new TranslatableMarkup('Current workflow state'))
       ->setDisplayOptions('form', ['region' => 'hidden'])
@@ -52,19 +52,22 @@ function joinup_workflow_entity_base_field_info(EntityTypeInterface $entity_type
  */
 function joinup_workflow_entity_extra_field_info(): array {
   $motivation_bundles = [
-    'node' => ['discussion', 'document', 'event', 'news', 'release'],
-    'rdf_entity' => ['collection', 'solution'],
+    'collection',
+    'discussion',
+    'document',
+    'event',
+    'news',
+    'release',
+    'solution',
   ];
   $fields = [];
-  foreach ($motivation_bundles as $entity_type_id => $bundles) {
-    foreach ($bundles as $bundle) {
-      $fields[$entity_type_id][$bundle]['form']['transition_motivation'] = [
-        'label' => t('Motivation'),
-        'description' => t('The motivation for the action.'),
-        'weight' => 10,
-        'display' => TRUE,
-      ];
-    }
+  foreach ($motivation_bundles as $bundle) {
+    $fields['node'][$bundle]['form']['transition_motivation'] = [
+      'label' => t('Motivation'),
+      'description' => t('The motivation for the action.'),
+      'weight' => 10,
+      'display' => TRUE,
+    ];
   }
 
   return $fields;
@@ -94,13 +97,13 @@ function joinup_workflow_form_alter(&$form, FormStateInterface $form_state, $for
  */
 function joinup_workflow_get_motivation_form_ids(): array {
   return [
-    'rdf_entity_collection_edit_form',
-    'rdf_entity_solution_edit_form',
-    'node_release_edit_form',
+    'node_collection_edit_form',
     'node_discussion_edit_form',
     'node_document_edit_form',
     'node_event_edit_form',
     'node_news_edit_form',
+    'node_release_edit_form',
+    'node_solution_edit_form',
   ];
 }
 
@@ -174,9 +177,13 @@ function joinup_workflow_motivation_form_validate(array &$form, FormStateInterfa
  * @return bool
  *   Whether the transition requires a motivation.
  */
-function joinup_workflow_is_motivation_required($entity_type_id, $workflow_id, $transition_id): bool {
+function joinup_workflow_is_motivation_required(string $entity_type_id, string $workflow_id, string $transition_id): bool {
   $required_transitions = [
     'node' => [
+      'collection_workflow' => [
+        'validate',
+        'archive',
+      ],
       'node:pre_moderated' => [
         'report',
         'propose_new_revision',
@@ -190,12 +197,6 @@ function joinup_workflow_is_motivation_required($entity_type_id, $workflow_id, $
       ],
       'release_workflow' => [
         'request_changes',
-      ],
-    ],
-    'rdf_entity' => [
-      'collection_workflow' => [
-        'validate',
-        'archive',
       ],
       'solution_workflow' => [
         'needs_update',
@@ -234,7 +235,7 @@ function joinup_workflow_message_form_submit_draft(array &$form, FormStateInterf
         '%title' => $node->toLink()->toString(),
         '%state' => $node->get('field_state')->getString(),
         ':user' => Url::fromRoute('user.page')->toString(),
-        '@audience' => $node->get('og_audience')->entity->get('rid')->entity->label(),
+        '@audience' => $node->get('og_audience')->entity->get('type')->entity->label(),
       ];
 
       foreach ($status_messages as $message) {

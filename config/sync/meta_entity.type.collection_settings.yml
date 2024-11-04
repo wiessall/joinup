@@ -3,10 +3,10 @@ langcode: en
 status: true
 dependencies:
   config:
-    - rdf_entity.rdfentity.collection
+    - node.type.collection
   module:
     - joinup_stats
-    - rdf_entity
+    - node
 third_party_settings:
   joinup_stats:
     matomo_method: ''
@@ -18,7 +18,7 @@ id: collection_settings
 label: 'Collection settings'
 description: 'Store data about collection.'
 mapping:
-  rdf_entity:
+  node:
     collection:
-      field_name: settings
+      field_name: collection_settings
       auto_create: false

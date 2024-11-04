@@ -1,6 +1,6 @@
 # Collection routing definition
-entity.rdf_entity.subscribe:
-  path: '/rdf_entity/{rdf_entity}/subscribe'
+entity.node.subscribe:
+  path: /node/{node}/subscribe
   defaults:
     _form: \Drupal\collection\Form\SubscribeToCollectionForm
     _title_callback: Drupal\collection\Form\SubscribeToCollectionForm::title
@@ -8,12 +8,12 @@ entity.rdf_entity.subscribe:
     _custom_access: \Drupal\collection\Form\SubscribeToCollectionForm::access
   options:
     parameters:
-      rdf_entity:
-        type: entity:rdf_entity
+      node:
+        type: entity:node
         bundle:
           - collection
-entity.rdf_entity.glossary:
-  path: /rdf_entity/{rdf_entity}/glossary/{letter}
+entity.node.glossary:
+  path: /node/{node}/glossary/{letter}
   defaults:
     _controller: Drupal\collection\Controller\GlossaryController::glossary
     _title_callback: Drupal\collection\Controller\GlossaryController::title
@@ -22,7 +22,7 @@ entity.rdf_entity.glossary:
     _custom_access: Drupal\collection\Controller\GlossaryController::access
   options:
     parameters:
-      rdf_entity:
-        type: entity:rdf_entity
+      node:
+        type: entity:node
         bundle:
           - collection

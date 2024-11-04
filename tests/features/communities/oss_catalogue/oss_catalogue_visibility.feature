@@ -29,9 +29,13 @@ Feature: Test EU OSS Catalogue killswitch
     When I am on the homepage
     Then I should not see "EU Open Source Solutions Catalogue"
 
+    # Developers are admin users, this they have 'bypass node access'
+    # permission. As an effect, they're able to access the node but not the
+    # other routes.
     Given I am logged in as a "developer"
     When I go to "/eu-oss-catalogue"
-    Then the response status code should be 403
+    # Developer is admin role, they can still see the node.
+    Then the response status code should be 200
     And I go to "/eu-oss-catalogue/solutions"
     Then the response status code should be 403
     And I go to "/admin/content/eu-oss-catalogue"
@@ -40,7 +44,6 @@ Feature: Test EU OSS Catalogue killswitch
     Then the response status code should be 403
     And I go to "/admin/content/eu-oss-catalogue/log"
     Then the response status code should be 403
-    # Developer is and amin role, they can still see the node.
     And I go to the content page of the type "oss_solution" with the title "The Opensource Panacea"
     Then the response status code should be 200
     When I am on the homepage
@@ -96,7 +99,11 @@ Feature: Test EU OSS Catalogue killswitch
     Then I should see the success message "EU OSS Catalogue has been disabled"
 
     When I go to "/eu-oss-catalogue"
-    Then the response status code should be 403
+
+    # Developers are admin users, this they have 'bypass node access'
+    # permission. As an effect, they're able to access the node but not the
+    # other routes.
+    Then the response status code should be 200
     And I go to "/eu-oss-catalogue/solutions"
     Then the response status code should be 403
     And I go to "/admin/content/eu-oss-catalogue"

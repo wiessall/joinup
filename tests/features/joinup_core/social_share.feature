@@ -5,9 +5,9 @@ Feature: Sharing content on social networks
   So that useful information has more visibility
 
   Scenario Outline: Sharing content on Facebook, Twitter and Linkedin.
-    Given the following collection:
-      | title | Social networks |
-      | state | published       |
+    Given collection content:
+      | title           | state     |
+      | Social networks | published |
     And <content type> content:
       | title                 | collection      | state     |
       | Important information | Social networks | published |
@@ -32,10 +32,10 @@ Feature: Sharing content on social networks
       | custom_page  |
 
   Scenario: Sharing solutions on social media.
-    Given the following collection:
-      | title | Social networks |
-      | state | published       |
-    And solutions:
+    Given collection content:
+      | title           | state     |
+      | Social networks | published |
+    Given solution content:
       | title              | collection      | state     |
       | Important solution | Social networks | published |
 
@@ -44,8 +44,8 @@ Feature: Sharing content on social networks
     And I click the contextual link "Share" in the "Important solution" tile
 
     And I should see the link "Facebook"
-    And the share link "Facebook" should point to the "Important solution" rdf entity
+    And the share link "Facebook" should point to the "Important solution" content entity
     And I should see the link "Twitter"
-    And the share link "Twitter" should point to the "Important solution" rdf entity
+    And the share link "Twitter" should point to the "Important solution" content entity
     And I should see the link "Linkedin"
-    And the share link "Linkedin" should point to the "Important solution" rdf entity
+    And the share link "Linkedin" should point to the "Important solution" content entity

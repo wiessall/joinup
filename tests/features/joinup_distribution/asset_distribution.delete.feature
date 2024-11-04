@@ -5,7 +5,7 @@ Feature: Asset distribution deleting.
   I need to be able to delete distributions through the UI.
 
   Scenario: "Delete" button should be shown to facilitators of the related solution.
-    Given the following solutions:
+    Given solution content:
       | title                 | description        | state     |
       | Rough valentine's day | Sample description | published |
     And users:

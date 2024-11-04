@@ -13,9 +13,6 @@ access joinup reports:
 access messages overview:
   title: Access messages UI
 
-permission_callbacks:
-  - \Drupal\joinup\JoinupPermissions::rdfTypePermissions
-
 pin group content:
   title: 'Pin group content'
   description: 'Pin a group content at the top of its groups lists.'

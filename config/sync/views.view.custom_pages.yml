@@ -131,7 +131,7 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
-          plugin_id: og_audience_group
+          plugin_id: string
           default_action: default
           exception:
             value: all
@@ -139,9 +139,8 @@ display:
             title: All
           title_enable: false
           title: ''
-          default_argument_type: rdf_entity
-          default_argument_options:
-            parameter_name: rdf_entity
+          default_argument_type: node
+          default_argument_options: {  }
           summary_options:
             base_path: ''
             count: true

@@ -8,14 +8,14 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Url;
+use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_invite\InvitationMessageHelperInterface;
 use Drupal\og\MembershipManagerInterface;
 use Drupal\og\OgRoleInterface;
-use Drupal\rdf_entity\RdfInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Form to add a member with a certain role in a rdf entity group.
+ * Form to add a member with a certain role in a group.
  */
 abstract class GroupFormBase extends InviteFormBase {
 
@@ -61,16 +61,16 @@ abstract class GroupFormBase extends InviteFormBase {
    * {@inheritdoc}
    */
   protected function getCancelButtonUrl(): Url {
-    return new Url('entity.rdf_entity.member_overview', [
-      'rdf_entity' => $this->entity->id(),
+    return new Url("entity.{$this->entity->getEntityTypeId()}.member_overview", [
+      $this->entity->getEntityTypeId() => $this->entity->id(),
     ]);
   }
 
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state, ?RdfInterface $rdf_entity = NULL): array {
-    $this->entity = $rdf_entity;
+  public function buildForm(array $form, FormStateInterface $form_state, ?GroupInterface $node = NULL): array {
+    $this->entity = $node;
     $form = parent::build($form, $form_state);
 
     $form['role'] = [

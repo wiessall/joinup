@@ -13,7 +13,6 @@ use Drupal\joinup\Traits\AliasTranslatorTrait;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\MailCollectorTrait;
 use Drupal\joinup\Traits\NodeTrait;
-use Drupal\joinup\Traits\RdfEntityTrait;
 use Drupal\joinup\Traits\SearchTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup\Traits\UserTrait;
@@ -28,7 +27,6 @@ class ContactInformationContext extends RawDrupalContext {
   use EntityTrait;
   use MailCollectorTrait;
   use NodeTrait;
-  use RdfEntityTrait;
   use SearchTrait;
   use TestingEntitiesTrait;
   use UserTrait;
@@ -44,24 +42,8 @@ class ContactInformationContext extends RawDrupalContext {
    * @throws \Drupal\Core\Entity\EntityMalformedException
    */
   public function visitContactInformationPage(string $label): void {
-    /** @var \Drupal\rdf_entity\Entity\Rdf $entity */
     $entity = $this->getEntityByLabel('node', $label, 'contact_information');
     $this->visitPath($entity->toUrl()->toString());
-  }
-
-  /**
-   * Checks the number of available contact information entities.
-   *
-   * @param int $number
-   *   The expected number of entities.
-   *
-   * @throws \Exception
-   *   Throws an exception when the expected number is not equal to the given.
-   *
-   * @Then I should have :number contact information(s)
-   */
-  public function assertContactInformationCount(int $number): void {
-    $this->assertEntityCount('node', 'contact_information', $number);
   }
 
   /**

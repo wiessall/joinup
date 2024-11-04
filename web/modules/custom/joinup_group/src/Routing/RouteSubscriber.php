@@ -18,9 +18,9 @@ class RouteSubscriber extends RouteSubscriberBase {
   protected function alterRoutes(RouteCollection $collection): void {
     // Deny access to group admin pages.
     $routes = [
-      'entity.rdf_entity.og_admin_routes',
-      'entity.rdf_entity.og_admin_routes.members',
-      'entity.rdf_entity.og_admin_routes.add_membership_page',
+      'entity.node.og_admin_routes',
+      'entity.node.og_admin_routes.members',
+      'entity.node.og_admin_routes.add_membership_page',
       'entity.og_membership.og_admin_routes',
       'entity.og_membership.og_admin_routes.members',
       'entity.og_membership.og_admin_routes.add_membership_page',
@@ -43,19 +43,29 @@ class RouteSubscriber extends RouteSubscriberBase {
     // Fix the group route param for devel module.
     if ($route = $collection->get('entity.og_membership.devel_load_with_references')) {
       $options = $route->getOptions();
-      $options['parameters']['group'] = ['type' => 'entity:rdf_entity'];
+      $options['parameters']['group'] = [
+        'type' => 'entity:node',
+        'bundle' => ['collection', 'solution'],
+      ];
       $route->setOptions($options);
     }
 
-    // Add the '_joinup_group' requirement to 'common' routes.
-    $routes = [
+    if ($route = $collection->get('view.group_content_management.csv_export')) {
+      $parameters = $route->getOption('parameters');
+      $parameters['node']['bundle'] = ['collection', 'solution'];
+      $route->setOption('parameters', $parameters);
+    }
+
+    $archivedGroupRoutes = [
+      'joinup_group.add_content',
+      'moderation.content_moderation_overview',
       'view.group_content_management.manage',
       'view.group_content_management.csv_export',
       'view.moderated_content.moderated_content',
     ];
-    foreach ($routes as $route_name) {
+    foreach ($archivedGroupRoutes as $route_name) {
       if ($route = $collection->get($route_name)) {
-        $route->setRequirement('_joinup_group', 'TRUE');
+        $route->setRequirement('_archived_group', 'TRUE');
       }
     }
   }

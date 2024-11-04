@@ -5,8 +5,8 @@ dependencies:
   config:
     - field.storage.node.field_glossary_definition
     - field.storage.node.field_glossary_synonyms
+    - node.type.collection
     - node.type.glossary
-    - rdf_entity.rdfentity.collection
   module:
     - csv_serialization
     - joinup_group
@@ -333,7 +333,7 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
-          plugin_id: og_audience_group
+          plugin_id: string
           default_action: default
           exception:
             value: all
@@ -341,9 +341,8 @@ display:
             title: All
           title_enable: false
           title: ''
-          default_argument_type: rdf_entity
-          default_argument_options:
-            parameter_name: rdf_entity
+          default_argument_type: node
+          default_argument_options: {  }
           summary_options:
             base_path: ''
             count: true
@@ -355,7 +354,7 @@ display:
             format: default_summary
           specify_validation: true
           validate:
-            type: 'entity:rdf_entity'
+            type: 'entity:node'
             fail: 'not found'
           validate_options:
             bundles:
@@ -525,7 +524,7 @@ display:
         metatag_display_extender:
           metatags: {  }
           tokenize: false
-      path: rdf_entity/%rdf_entity/glossary_export
+      path: node/%node/glossary_export
       displays:
         main: main
         default: '0'

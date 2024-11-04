@@ -5,15 +5,12 @@ Feature:
   I need to be able to give extra permissions to authors.
 
   Scenario Outline: Authors can add content regardless of group settings.
-    Given collection:
-      | title | Author collection |
-      | state | published         |
-    And solution:
-      | title            | Author solution    |
-      | moderation       | <moderation>       |
-      | content creation | <content creation> |
-      | state            | published          |
-      | collection       | Author collection  |
+    Given collection content:
+      | title             | state     |
+      | Author collection | published |
+    And solution content:
+      | title           | moderation   | content creation   | state     | collection        |
+      | Author solution | <moderation> | <content creation> | published | Author collection |
 
     When I am logged in as an "author" of the "Author solution" solution
     And I go to the "Author solution" solution
@@ -38,13 +35,9 @@ Feature:
     And users:
       | Username          |
       | Solution API user |
-    And the following collection:
-      | title            | This is a klm collection |
-      | logo             | logo.png                 |
-      | moderation       | no                       |
-      | closed           | no                       |
-      | content creation | facilitators and authors |
-      | state            | published                |
+    And collection content:
+      | title                    | logo     | moderation | content creation         | state     |
+      | This is a klm collection | logo.png | no         | facilitators and authors | published |
     And the following collection user memberships:
       | user              | collection               | roles       |
       | Solution API user | This is a klm collection | facilitator |

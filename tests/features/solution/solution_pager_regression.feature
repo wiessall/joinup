@@ -8,7 +8,7 @@ Feature: Test for a 'facets' regression on the solution overview page.
     And contact_information content:
       | name           | email                      |
       | Pierre Plezant | pierre.plezant@example.com |
-    And the following solutions:
+    Given solution content:
       | title                | description                | logo     | state     | owner             | contact information | solution type | topic       |
       | Apache               | Serving the web            | logo.png | published | Apache Foundation | Pierre Plezant      | Business      | E-inclusion |
       | Security audit tools | Automated test of security | logo.png | published | Apache Foundation | Pierre Plezant      | Business      | E-inclusion |
@@ -26,7 +26,7 @@ Feature: Test for a 'facets' regression on the solution overview page.
       | Solution 9           | More solution              | logo.png | published | Apache Foundation | Pierre Plezant      | Business      | E-inclusion |
       | Solution 10          | More solution              | logo.png | published | Apache Foundation | Pierre Plezant      | Business      | E-inclusion |
     And distribution content:
-      | title       | description          | access url | solution | state     |
-      | test.zip    | Apache distribution  | test.zip   | Apache   | published |
+      | title    | description         | access url | solution | state     |
+      | test.zip | Apache distribution | test.zip   | Apache   | published |
     And I go to the homepage of the "Apache" solution
     Then I should not see the "Pager" region

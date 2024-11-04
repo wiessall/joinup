@@ -6,10 +6,9 @@ Feature: Collection TCA agreement
 
   Background:
     # The 'Create collection' button is not shown if there is no collection available.
-    Given the following collection:
-      | title | TCA Agreement collection |
-      | logo  | logo.png                 |
-      | state | published                |
+    Given collection content:
+      | title                    | logo     | state     |
+      | TCA Agreement collection | logo.png | published |
 
   Scenario: TCA agreement page is not accessible by anonymous users.
     When I am not logged in

@@ -5,7 +5,7 @@ Feature: Share discussion
   In order to have an overview of its content
 
   Background:
-    Given the following collections:
+    Given collection content:
       | title                         | description       | state     |
       | Development through bricolage | Bricolage 101.    | published |
       | Carrots love tomatoes         | Truth is out now. | published |

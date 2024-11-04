@@ -18,10 +18,10 @@ class DocumentThemeTest extends JoinupExistingSiteTestBase {
    * Tests that the logo affects relative fields in the listing tile.
    */
   public function testDocumentLogoListing(): void {
-    $collection = $this->createRdfEntity([
-      'rid' => 'collection',
-      'label' => $this->randomString(),
-      'field_ar_state' => 'published',
+    $collection = $this->createNode([
+      'type' => 'collection',
+      'title' => $this->randomString(),
+      'field_state' => 'published',
     ]);
 
     $document = $this->createNode([

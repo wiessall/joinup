@@ -1,0 +1,23 @@
+uuid: 02de56b5-3648-4671-bb0c-c11ef5645b46
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.content_creation
+    - node.type.solution
+  module:
+    - options
+id: node.solution.content_creation
+field_name: content_creation
+entity_type: node
+bundle: solution
+label: 'Content creation'
+description: 'Choose which users can create content (news, events, discussions and documents) in the solution.'
+required: true
+translatable: true
+default_value:
+  -
+    value: facilitators_and_authors
+default_value_callback: ''
+settings: {  }
+field_type: list_string

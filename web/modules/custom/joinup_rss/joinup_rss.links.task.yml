@@ -1,5 +1,5 @@
 joinup_rss.feed:
   route_name: view.group_feed.rss_feed
   title: 'RSS feed'
-  base_route: entity.rdf_entity.canonical
+  base_route: entity.node.canonical
   weight: 200

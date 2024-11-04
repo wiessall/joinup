@@ -7,26 +7,22 @@ namespace Drupal\joinup\Context;
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Exception\ElementNotFoundException;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Url;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
+use Drupal\DrupalExtension\Hook\Scope\AfterNodeCreateScope;
 use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
 use Drupal\collection\Entity\CollectionInterface;
-use Drupal\joinup\Traits\EntityReferenceTrait;
 use Drupal\joinup\Traits\EntityTrait;
-use Drupal\joinup\Traits\FileTrait;
 use Drupal\joinup\Traits\FormTrait;
 use Drupal\joinup\Traits\OgTrait;
-use Drupal\joinup\Traits\RdfEntityTrait;
-use Drupal\joinup\Traits\SearchTrait;
 use Drupal\joinup\Traits\TopicTrait;
 use Drupal\joinup\Traits\UserTrait;
 use Drupal\joinup\Traits\UtilityTrait;
-use Drupal\joinup\Traits\WorkflowTrait;
 use Drupal\joinup_collection\JoinupCollectionHelper;
 use Drupal\joinup_community_content\CommunityContentHelper;
 use Drupal\joinup_group\ContentCreationOptions;
+use Drupal\og\OgGroupAudienceHelper;
 use Drupal\og\OgRoleInterface;
-use Drupal\og_menu\Tests\Traits\OgMenuTrait;
-use Drupal\sparql_entity_storage\UriEncoder;
 use Drupal\user\Entity\User;
 use PHPUnit\Framework\ExpectationFailedException;
 
@@ -35,52 +31,19 @@ use PHPUnit\Framework\ExpectationFailedException;
  */
 class CollectionContext extends RawDrupalContext {
 
-  use EntityReferenceTrait;
   use EntityTrait;
-  use FileTrait;
   use FormTrait;
-  use OgMenuTrait;
   use OgTrait;
-  use RdfEntityTrait;
-  use SearchTrait;
   use TopicTrait;
   use UserTrait;
   use UtilityTrait;
-  use WorkflowTrait;
 
   /**
-   * Mapping of human readable field labels to machine names.
-   */
-  protected const FIELD_ALIASES = [
-    'author' => 'uid',
-    'uri' => 'id',
-    'title' => 'label',
-    'short ID' => 'field_short_id',
-    'abstract' => 'field_ar_abstract',
-    'access url' => 'field_ar_access_url',
-    'closed' => 'field_ar_closed',
-    'contact information' => 'field_ar_contact_information',
-    'content creation' => 'field_ar_content_creation',
-    'creation date' => 'created',
-    'description' => 'field_ar_description',
-    'featured' => 'feature',
-    'keywords' => 'field_keywords',
-    'logo' => 'field_ar_logo',
-    'moderation' => 'field_ar_moderation',
-    'modification date' => 'changed',
-    'owner' => 'field_ar_owner',
-    'published at' => 'published_at',
-    'topic' => 'field_topic',
-    'spatial coverage' => 'field_spatial_coverage',
-    'state' => 'field_ar_state',
-  ];
-
-  /**
-   * Test collections.
+   * Static cache for Joinup collection.
    *
-   * @var \Drupal\rdf_entity\Entity\Rdf[]
+   * @see self::getJoinupCollection()
    */
-  protected array $collections = [];
+  protected CollectionInterface $joinupCollection;
 
   /**
    * Navigates to the propose collection form.
@@ -103,8 +66,8 @@ class CollectionContext extends RawDrupalContext {
    * @throws \Drupal\Core\Entity\EntityMalformedException
    */
   public function visitCollection(string $collection): void {
-    /** @var \Drupal\rdf_entity\Entity\Rdf $entity */
-    $entity = $this->getEntityByLabel('rdf_entity', $collection, 'collection');
+    /** @var \Drupal\node\NodeInterface $entity */
+    $entity = $this->getEntityByLabel('node', $collection, 'collection');
     $this->visitPath($entity->toUrl()->toString());
   }
 
@@ -117,8 +80,8 @@ class CollectionContext extends RawDrupalContext {
    * @Then I should be on (the homepage of )the :collection collection
    */
   public function assertCollectionPath(string $collection): void {
-    /** @var \Drupal\rdf_entity\Entity\Rdf $entity */
-    $entity = $this->getEntityByLabel('rdf_entity', $collection, 'collection');
+    /** @var \Drupal\node\NodeInterface $entity */
+    $entity = $this->getEntityByLabel('node', $collection, 'collection');
     $this->assertSession()->addressEquals($this->locatePath($entity->toUrl()->toString()));
   }
 
@@ -138,96 +101,39 @@ class CollectionContext extends RawDrupalContext {
   }
 
   /**
-   * Creates a number of collections with data provided in a table.
-   *
-   * Table format:
-   * @codingStandardsIgnoreStart
-   * | title                   | abstract                                   | access url                             | closed | creation date    | description                                                                                                        | content creation                                  | featured | logo | moderation | modification date | owner | state                                              |
-   * | Dog owner collection    | Read up on all about <strong>dogs</strong> | http://dogtime.com/dog-breeds/profiles | yes|no | 28-01-1995 12:05 | The Afghan Hound is elegance personified.                                                                          | facilitators and authors|members|registered users | yes      |      | yes        |                   |       |                                                    |
-   * | Cats collection 4 ever! | Cats are cool!                             | http://mashable.com/category/cats/     | yes|no | 28-01-1995 12:06 | The domestic cat (Felis catus or Felis silvestris catus) is a small usually furry domesticated carnivorous mammal. | facilitators and authors|members|registered users | no       |      | no         |                   |       | draft|proposed|published|archival request|archived |
-   * @codingStandardsIgnoreEnd
-   *
-   * Only the title field is required.
-   *
-   * @param \Behat\Gherkin\Node\TableNode $collection_table
-   *   The collection data.
-   *
-   * @throws \Exception
-   *   Thrown when a column name is incorrect.
-   *
-   * @Given (the following )collections:
-   */
-  public function givenCollections(TableNode $collection_table): void {
-    $aliases = self::FIELD_ALIASES;
-
-    foreach ($collection_table->getColumnsHash() as $collection) {
-      $values = [];
-      // Replace the column aliases with the actual field names.
-      foreach ($collection as $key => $value) {
-        if (array_key_exists($key, $aliases)) {
-          $values[$aliases[$key]] = $value;
-        }
-        else {
-          throw new \Exception("Unknown column '$key' in collection table.");
-        }
-      }
-
-      // Convert user friendly values to machine values.
-      $values = $this->convertValueAliases($values);
-
-      // Provide default values.
-      $values = $this->provideDefaultValues($values);
-
-      $this->createCollection($values);
-    }
-  }
-
-  /**
    * Enriches the provided field values with defaults for missing values.
    *
-   * @param array $fields
-   *   An array of fields keyed by field name.
+   * @param \Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope $scope
+   *   The before node create scope.
    *
-   * @return array
-   *   The array with default values added.
+   * @BeforeNodeCreate
    */
-  protected function provideDefaultValues(array $fields): array {
+  public function defaultCollectionValues(BeforeNodeCreateScope $scope): void {
+    $node = $scope->getEntity();
+    if ($node->type !== 'collection') {
+      return;
+    }
+
     $default_values = [
-      'field_ar_state' => 'draft',
-      'field_ar_abstract' => 'This is a test abstract.',
+      'state' => 'draft',
+      'abstract' => 'This is a test abstract.',
     ];
 
     foreach ($default_values as $field => $default_value) {
-      if (!isset($fields[$field])) {
-        $fields[$field] = $default_value;
+      if (!isset($node->{$field})) {
+        $node->{$field} = $default_value;
       }
     }
 
-    return $fields;
-  }
-
-  /**
-   * Converts values from user friendly to normal machine values.
-   *
-   * @param array $fields
-   *   An array of fields keyed by field name.
-   *
-   * @return array
-   *   The array with the values converted.
-   *
-   * @throws \Exception
-   *    Throws an exception when a mapped value is not found.
-   */
-  protected function convertValueAliases(array $fields): array {
-    $mapped_values = [
-      'field_ar_moderation' => ['no' => 0, 'yes' => 1],
-      'field_ar_content_creation' => [
+    $mapping = [
+      'moderation' => ['no' => 0, 'yes' => 1],
+      'content creation' => [
         'facilitators and authors' => ContentCreationOptions::FACILITATORS_AND_AUTHORS,
         'members' => ContentCreationOptions::MEMBERS,
         'registered users' => ContentCreationOptions::REGISTERED_USERS,
       ],
-      'field_ar_closed' => ['no' => 0, 'yes' => 1],
-      'field_ar_state' => [
+      'closed' => ['no' => 0, 'yes' => 1],
+      'state' => [
         'draft' => 'draft',
         'proposed' => 'proposed',
         'published' => 'published',
@@ -236,120 +142,41 @@ class CollectionContext extends RawDrupalContext {
       ],
     ];
 
-    foreach ($fields as $field => $value) {
-      if (isset($mapped_values[$field])) {
-        if (!isset($mapped_values[$field][$value])) {
-          throw new \Exception("Value $value is not an acceptable value for field $field.");
-        }
-
-        $fields[$field] = $mapped_values[$field][$value];
+    foreach ($mapping as $field => $values) {
+      if (isset($node->{$field}) && isset($values[$node->{$field}])) {
+        $node->{$field} = $values[$node->{$field}];
       }
     }
 
-    // Convert any entity reference field label value with the entity id.
-    $fields = $this->convertEntityReferencesValues('rdf_entity', 'collection', $this->parseRdfEntityFields($fields));
-
-    return $fields;
+    // @todo Should this be merged with the other node bundles? Does it create
+    //   random test failures in search tests? Is the field optional somewhere?
+    if (empty($node->field_topic)) {
+      $node->field_topic = $this->getRandomTopic()->getName();
+    }
   }
 
   /**
-   * Creates a collection from the given property and field data.
+   * Actions to be performed after creating a collection.
    *
-   * @param array $values
-   *   An optional associative array of values, keyed by property name.
-   *
-   * @return \Drupal\collection\Entity\CollectionInterface
-   *   A new collection entity.
-   *
-   * @throws \Exception
-   *   Thrown when a given image is not found.
+   * @param \Drupal\DrupalExtension\Hook\Scope\AfterNodeCreateScope $scope
+   *   The after node create scope.
    */
-  protected function createCollection(array $values): CollectionInterface {
-    // Add logo image.
-    if (!empty($values['field_ar_logo'])) {
-      foreach ($values['field_ar_logo'] as &$filename) {
-        $filename = [$this->createFile($filename)->id()];
-      }
+  public function afterCollectionCreate(AfterNodeCreateScope $scope): void {
+    $node = $scope->getEntity();
+    if ($node->type !== 'collection') {
+      return;
     }
 
     // If the collection is featured we need to create the meta entity that
     // stores this information after creating the collection.
-    $is_featured = in_array(strtolower((string) ($values['feature'] ?? '')), [
+    $is_featured = in_array(strtolower((string) ($node->feature ?? '')), [
       'y',
       'yes',
     ]);
 
-    $this->setFallbackTopic($values);
-
-    /** @var \Drupal\collection\Entity\CollectionInterface $collection */
-    $collection = $this->createRdfEntity('collection', $values);
-
     if ($is_featured) {
-      $collection->feature();
+      $node->feature();
     }
-
-    $this->collections[$collection->id()] = $collection;
-
-    // We have to force reindex of affiliated solutions so the relationship
-    // with this collection will be indexed in Solr.
-    if (!$collection->get('field_ar_affiliates')->isEmpty()) {
-      foreach ($collection->get('field_ar_affiliates')->referencedEntities() as $solution) {
-        // Reindex the solution, so that the value of the "collection" computed
-        // field will be populated and indexed correctly.
-        $this->forceSearchApiReindex($solution);
-      }
-    }
-
-    return $collection;
-  }
-
-  /**
-   * Creates a collection with data provided in a table.
-   *
-   * @codingStandardsIgnoreStart
-   * Table format:
-   * | title            | Open Data Initiative                               |
-   * | author           | Mightily Oats                                      |
-   * | logo             | logo.png                                           |
-   * | featured         | yes|no                                             |
-   * | moderation       | yes|no                                             |
-   * | closed           | yes|no                                             |
-   * | content creation | facilitators and authors|members|registered users  |
-   * | metadata url     | https://ec.europa.eu/my/url                        |
-   * | state            | draft|proposed|published|archival request|archived |
-   * @codingStandardsIgnoreEnd
-   *
-   * Only the title field is required.
-   *
-   * @param \Behat\Gherkin\Node\TableNode $collection_table
-   *   The collection data.
-   *
-   * @throws \Exception
-   *   Thrown when a column name is incorrect.
-   *
-   * @Given (the following )collection:
-   */
-  public function givenCollection(TableNode $collection_table): void {
-    $aliases = self::FIELD_ALIASES;
-
-    $values = [];
-    // Replace the column aliases with the actual field names.
-    foreach ($collection_table->getRowsHash() as $key => $value) {
-      if (array_key_exists($key, $aliases)) {
-        $values[$aliases[$key]] = $value;
-      }
-      else {
-        throw new \Exception("Unknown column '$key' in collection table.");
-      }
-    }
-
-    // Convert user friendly values to machine values.
-    $values = $this->convertValueAliases($values);
-
-    // Provide default values.
-    $values = $this->provideDefaultValues($values);
-
-    $this->createCollection($values);
   }
 
   /**
@@ -361,21 +188,9 @@ class CollectionContext extends RawDrupalContext {
    * @When I delete the :collection collection
    */
   public function deleteCollection(string $collection): void {
-    $collection = $this->getEntityByLabel('rdf_entity', $collection);
+    $collection = $this->getEntityByLabel('node', $collection);
     $collection->skip_notification = TRUE;
     $collection->delete();
-  }
-
-  /**
-   * Checks the number of available collections.
-   *
-   * @param int $number
-   *   The expected number of collections.
-   *
-   * @Then I should have :number collection(s)
-   */
-  public function assertCollectionCount(int $number): void {
-    $this->assertEntityCount('rdf_entity', 'collection', $number);
   }
 
   /**
@@ -404,7 +219,7 @@ class CollectionContext extends RawDrupalContext {
    */
   public function givenCollectionUserMemberships(TableNode $membership_table): void {
     foreach ($membership_table->getColumnsHash() as $values) {
-      $group = $this->getEntityByLabel('rdf_entity', $values['collection']);
+      $group = $this->getEntityByLabel('node', $values['collection']);
       $this->givenUserMembership($group, $values);
     }
   }
@@ -438,7 +253,7 @@ class CollectionContext extends RawDrupalContext {
    * @Given (the following )custom page(s) :menu_type menu structure for the :group_label :group_bundle:
    */
   public function givenCollectionMenuStructure(TableNode $menu_table, string $menu_type, string $group_label, string $group_bundle): void {
-    $group = $this->getEntityByLabel('rdf_entity', $group_label, $group_bundle);
+    $group = $this->getEntityByLabel('node', $group_label, $group_bundle);
     $menu_link_manager = \Drupal::getContainer()->get('plugin.manager.menu.link');
     foreach ($menu_table->getColumnsHash() as $values) {
       if (!empty($values['parent'])) {
@@ -463,19 +278,19 @@ class CollectionContext extends RawDrupalContext {
    *
    * @param string $username
    *   The name of the user.
-   * @param string $rdf_entity
+   * @param string $entity
    *   The label of the group entity.
    *
    * @throws \Exception
    *    Throws an exception when the user is not found.
    */
-  protected function assertCollectionOwnership(string $username, string $rdf_entity): void {
+  protected function assertCollectionOwnership(string $username, string $entity): void {
     $user = user_load_by_name($username);
     if (!$user instanceof AccountInterface) {
       throw new \Exception("User {$username} could not be found.");
     }
 
-    $collection = $this->getEntityByLabel('rdf_entity', $rdf_entity, 'collection');
+    $collection = $this->getEntityByLabel('node', $entity, 'collection');
     $owner_roles = [
       OgRoleInterface::ADMINISTRATOR,
       OgRoleInterface::AUTHENTICATED,
@@ -488,7 +303,7 @@ class CollectionContext extends RawDrupalContext {
   /**
    * Asserts that the current user is an owner of the given collection.
    *
-   * @param string $rdf_entity
+   * @param string $entity
    *   The label of the group entity.
    *
    * @throws \Exception
@@ -496,31 +311,13 @@ class CollectionContext extends RawDrupalContext {
    *
    * @see assertCollectionOwnership()
    *
-   * @Given I should own the :rdf_entity collection
+   * @Given I should own the :entity collection
    */
-  public function assertCollectionOwnershipCurrentUser(string $rdf_entity): void {
+  public function assertCollectionOwnershipCurrentUser(string $entity): void {
     if (!$current_user = $this->userManager->getCurrentUser()) {
       throw new \Exception("No current user.");
     }
-    $this->assertCollectionOwnership($current_user->name, $rdf_entity);
-  }
-
-  /**
-   * Removes any created collections.
-   *
-   * @AfterScenario @api
-   */
-  public function cleanCollections(): void {
-    if (empty($this->collections)) {
-      return;
-    }
-
-    // Remove any collections that were created.
-    foreach ($this->collections as $collection) {
-      $collection->skip_notification = TRUE;
-      $collection->delete();
-    }
-    $this->collections = [];
+    $this->assertCollectionOwnership($current_user->name, $entity);
   }
 
   /**
@@ -584,7 +381,7 @@ class CollectionContext extends RawDrupalContext {
   public function verifyDeleteLinkVisibility(TableNode $check_table): void {
     foreach ($check_table->getColumnsHash() as $values) {
       $user = $this->getUserByName($values['user']);
-      $collection = $this->getEntityByLabel('rdf_entity', $values['collection']);
+      $collection = $this->getEntityByLabel('node', $values['collection']);
       $visible = $values['delete link'] === 'yes';
       $this->assertGroupEntityOperation($visible, 'delete', $collection, $user);
     }
@@ -599,9 +396,12 @@ class CollectionContext extends RawDrupalContext {
    * @Given I am about to leave( the) :label( collection)
    */
   public function visitCollectionLeaveConfirmationPage(string $label): void {
-    $collection = $this->getEntityByLabel('rdf_entity', $label, 'collection');
-    $encoded_id = UriEncoder::encodeUrl($collection->id());
-    $this->visitPath("/rdf_entity/$encoded_id/leave");
+    $collection = $this->getEntityByLabel('node', $label, 'collection');
+
+    $url = Url::fromRoute('joinup_group.leave_confirm_form', [
+      'node' => $collection->id(),
+    ]);
+    $this->visitPath($url->toString());
   }
 
   /**
@@ -635,7 +435,7 @@ class CollectionContext extends RawDrupalContext {
     $failures = [];
     foreach ($this->explodeCommaSeparatedStepArgument($labels) as $label) {
       /** @var \Drupal\collection\Entity\CollectionInterface $collection */
-      $collection = $this->getEntityByLabel('rdf_entity', $label, 'collection');
+      $collection = $this->getEntityByLabel('node', $label, 'collection');
       if (!$collection->getMembership((int) $account->id(), [])) {
         $failures[] = $label;
       }
@@ -660,26 +460,8 @@ class CollectionContext extends RawDrupalContext {
    * @When I change the name of the :collection collection to :name
    */
   public function updateCollectionName(string $collection, string $name): void {
-    $entity = $this->getEntityByLabel('rdf_entity', $collection);
-    $entity->setName($name)->save();
-  }
-
-  /**
-   * Creates the standard 'Joinup' collection.
-   *
-   * @return \Drupal\collection\Entity\CollectionInterface
-   *   The 'Joinup' collection.
-   *
-   * @BeforeScenario @joinup_collection&&@api
-   *
-   * @see joinup_collection.module
-   */
-  public function createJoinupCollection(): CollectionInterface {
-    return $this->createCollection([
-      'id' => JoinupCollectionHelper::getCollectionId(),
-      'label' => 'Interoperable Europe Portal',
-      'field_ar_state' => 'published',
-    ]);
+    $entity = $this->getEntityByLabel('node', $collection);
+    $entity->set('title', $name)->save();
   }
 
   /**
@@ -716,14 +498,13 @@ class CollectionContext extends RawDrupalContext {
   }
 
   /**
-   * Sets a random collection on content that requires one.
+   * Sets a collection on content that requires one.
    *
    * Some tests deal with collection content but don't care about which
    * collection the content belongs to. It is tedious to manually define a
    * collection and link it to the content for every single test. If it is
-   * omitted in the definition of the test we assign an existing collection, or
-   * if none exist we assign the "Joinup" collection. This ensures data
-   * integrity and prevents form validation errors.
+   * omitted in the definition of the test we assign the existing Joinup
+   * collection. This ensures data integrity and prevents validation errors.
    *
    * @param \Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope $scope
    *   An object containing the entity properties and fields that are to be used
@@ -734,31 +515,36 @@ class CollectionContext extends RawDrupalContext {
   public function provideCollection(BeforeNodeCreateScope $scope): void {
     $node = $scope->getEntity();
 
+    // Skip if a collection or solution has been assigned.
+    if (!empty($node->collection) || !empty($node->solution) || !empty($node->{OgGroupAudienceHelper::DEFAULT_FIELD})) {
+      return;
+    }
+
+    $collection_content_bundles = [
+      'custom_page',
+      'glossary',
+      'solution',
+      ...CommunityContentHelper::BUNDLES,
+    ];
+
     // Only deal with collection content.
-    $collection_content_bundles = array_merge(['custom_page'], CommunityContentHelper::BUNDLES);
-    if (!in_array($node->type, $collection_content_bundles, TRUE)) {
-      return;
+    if (in_array($node->type, $collection_content_bundles, TRUE)) {
+      $node->collection = $this->getJoinupCollection()->label();
     }
+  }
 
-    // Skip if a collection or solution has been defined.
-    if (!empty($node->collection) || !empty($node->solution)) {
-      return;
+  /**
+   * Returns and caches the Joinup collection.
+   *
+   * @return \Drupal\collection\Entity\CollectionInterface
+   *   The Joinup collection.
+   */
+  protected function getJoinupCollection(): CollectionInterface {
+    if (!isset($this->joinupCollection)) {
+      $this->joinupCollection = \Drupal::getContainer()->get('rdf_sync.mapper')
+        ->getEntityByUri(JoinupCollectionHelper::JOINUP_COLLECTION_URI);
     }
-
-    // Use an existing published collection if one is available.
-    foreach ($this->collections as $candidate_collection) {
-      if ($candidate_collection instanceof CollectionInterface && $candidate_collection->isPublished()) {
-        $collection = $candidate_collection;
-        break;
-      }
-    }
-
-    // If no suitable candidate is found, use the default "Joinup" collection.
-    if (empty($collection)) {
-      $collection = $this->createJoinupCollection();
-    }
-
-    $node->collection = $collection->label();
+    return $this->joinupCollection;
   }
 
 }

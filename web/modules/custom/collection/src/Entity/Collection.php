@@ -19,17 +19,19 @@ use Drupal\joinup_bundle_class\ShortIdTrait;
 use Drupal\joinup_featured\FeaturedContentTrait;
 use Drupal\joinup_group\Entity\GroupTrait;
 use Drupal\joinup_publication_date\Entity\EntityPublicationTimeFallbackTrait;
+use Drupal\joinup_rdf\Entity\RdfSyncEntityTrait;
 use Drupal\joinup_workflow\ArchivableEntityTrait;
 use Drupal\joinup_workflow\EntityWorkflowStateTrait;
 use Drupal\meta_entity\Entity\MetaEntity;
+use Drupal\node\Entity\Node;
+use Drupal\og\OgGroupAudienceHelper;
 use Drupal\og\OgMembershipInterface;
-use Drupal\rdf_entity\Entity\Rdf;
 use Drupal\topic\Entity\TopicReferencingEntityTrait;
 
 /**
  * Entity subclass for the 'collection' bundle.
  */
-class Collection extends Rdf implements CollectionInterface {
+class Collection extends Node implements CollectionInterface {
 
   use AbstractTrait;
   use ArchivableEntityTrait;
@@ -47,6 +49,7 @@ class Collection extends Rdf implements CollectionInterface {
   use TopicReferencingEntityTrait;
   use DescriptionTrait;
   use ContactInformationTrait;
+  use RdfSyncEntityTrait;
 
   /**
    * {@inheritdoc}
@@ -62,71 +65,42 @@ class Collection extends Rdf implements CollectionInterface {
   /**
    * {@inheritdoc}
    */
-  public function getSolutions(bool $only_published = FALSE): array {
-    $ids = $this->getSolutionIds($only_published);
+  public function getSolutions(bool $onlyPublished = FALSE): array {
+    $ids = $this->getSolutionIds($onlyPublished);
     if (empty($ids)) {
       return $ids;
     }
     return $this
       ->entityTypeManager()
-      ->getStorage('rdf_entity')
+      ->getStorage('node')
       ->loadMultiple($ids);
   }
 
   /**
    * {@inheritdoc}
+   *
+   * @todo Get rid of the $onlyPublished parameter as it is only used once.
+   * @todo Probably get rid of the method as we will have a computed field.
+   * @todo Make sure that access is enforced in the computed field.
+   * @todo The ::getSolutions might end up as this method.
    */
-  public function getSolutionIds(bool $only_published = FALSE): array {
-    $ids = $this->getReferencedEntityIds('field_ar_affiliates')['rdf_entity'] ?? [];
+  public function getSolutionIds(bool $onlyPublished = FALSE): array {
+    // @todo Fix this after the computed field is created.
+    // @todo The computed field should be in the solution module as should the
+    //   subscriber that exports the data to the collection.
+    $idsQuery = $this->entityTypeManager()->getStorage('node')
+      ->getQuery()
+      ->accessCheck(FALSE)
+      ->condition('type', 'solution')
+      ->condition(OgGroupAudienceHelper::DEFAULT_FIELD, $this->id());
 
-    if ($ids && $only_published) {
-      // Published solutions are stored in the 'default' graph.
-      $ids = $this->entityTypeManager()
-        ->getStorage('rdf_entity')
-        ->getQuery()
-        ->graphs(['default'])
-        ->condition('rid', 'solution')
-        ->condition('id', $ids, 'IN')
-        ->execute();
-      $ids = array_values($ids);
+    if ($onlyPublished) {
+      $idsQuery
+        ->accessCheck()
+        ->condition('status', 1);
     }
 
-    return $ids;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getWorkflowStateFieldName(): string {
-    return 'field_ar_state';
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getLogoFieldName(): string {
-    return 'field_ar_logo';
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getDescriptionField(): string {
-    return 'field_ar_description';
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getGroupModerationFieldName(): string {
-    return 'field_ar_moderation';
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getContentCreationFieldName(): string {
-    return 'field_ar_content_creation';
+    return array_values($idsQuery->execute());
   }
 
   /**
@@ -156,7 +130,7 @@ class Collection extends Rdf implements CollectionInterface {
    * {@inheritdoc}
    */
   public function isClosed(): bool {
-    return (bool) $this->getMainPropertyValue('field_ar_closed');
+    return (bool) $this->getMainPropertyValue('closed_group');
   }
 
   /**
@@ -187,7 +161,7 @@ class Collection extends Rdf implements CollectionInterface {
    */
   public function getNewMembershipSuccessMessage(OgMembershipInterface $membership): TranslatableMarkup {
     $parameters = [
-      '%group' => $this->getName(),
+      '%group' => $this->label(),
     ];
     return $membership->getState() === OgMembershipInterface::STATE_ACTIVE ?
       $this->t('You are now a member of %group.', $parameters) :
@@ -199,7 +173,7 @@ class Collection extends Rdf implements CollectionInterface {
    */
   public function getExistingMembershipMessage(OgMembershipInterface $membership): TranslatableMarkup {
     $parameters = [
-      '%group' => $this->getName(),
+      '%group' => $this->label(),
     ];
     switch ($membership->getState()) {
       case OgMembershipInterface::STATE_BLOCKED:
@@ -220,7 +194,7 @@ class Collection extends Rdf implements CollectionInterface {
     $ids = ['node' => $this->getNodeGroupContent()];
     $solutions = $this->getSolutions();
     $ids = NestedArray::mergeDeep($ids, [
-      'rdf_entity' => [
+      'node' => [
         'solution' => array_keys($solutions),
       ],
     ]);
@@ -233,22 +207,8 @@ class Collection extends Rdf implements CollectionInterface {
   /**
    * {@inheritdoc}
    */
-  public function getContactInformationFieldName(): string {
-    return 'field_ar_contact_information';
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function getWebsiteLinkFieldName(): string {
-    return 'field_ar_access_url';
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getAbstractField(): string {
-    return 'field_ar_abstract';
+    return 'website_url';
   }
 
 }

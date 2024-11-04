@@ -13,5 +13,4 @@ dependencies:
   - 'joinup:joinup_core'
   - 'joinup:joinup_group'
   - 'joinup:joinup_workflow'
-  - 'rdf_entity:rdf_entity'
   - 'state_machine:state_machine'

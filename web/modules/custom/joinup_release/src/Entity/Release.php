@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_release\Entity;
 
+use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\joinup_bundle_class\DescriptionTrait;
 use Drupal\joinup_bundle_class\JoinupBundleClassFieldAccessTrait;
 use Drupal\joinup_core\Entity\PermalinkTrait;
@@ -12,11 +13,12 @@ use Drupal\joinup_group\Entity\GroupContentTrait;
 use Drupal\joinup_group\Exception\MissingGroupException;
 use Drupal\joinup_publication_date\Entity\EntityPublicationTimeFallbackTrait;
 use Drupal\joinup_rdf\Entity\RdfSyncEntityTrait;
+use Drupal\joinup_solution\Entity\SolutionContentTrait;
+use Drupal\joinup_solution\Entity\SolutionInterface;
+use Drupal\joinup_solution\Exception\MissingSolutionException;
 use Drupal\joinup_workflow\ArchivableEntityTrait;
 use Drupal\joinup_workflow\EntityWorkflowStateTrait;
 use Drupal\node\Entity\Node;
-use Drupal\solution\Entity\SolutionContentTrait;
-use Drupal\solution\Entity\SolutionInterface;
 use Drupal\user\EntityOwnerTrait;
 
 /**
@@ -35,6 +37,23 @@ class Release extends Node implements ReleaseInterface {
   use PermalinkTrait;
   use RdfSyncEntityTrait;
   use SolutionContentTrait;
+
+  /**
+   * {@inheritdoc}
+   */
+  public function preSave(EntityStorageInterface $storage) {
+    if (!$this->isNew()) {
+      return;
+    }
+    // Set the solution data if a solution is passed as a group, or the group
+    // if the solution is passed as the solution data.
+    if ($this->get('solution_data')->isEmpty() && !$this->get('og_audience')->isEmpty()) {
+      $this->set('solution_data', $this->get('og_audience')->entity);
+    }
+    elseif ($this->get('og_audience')->isEmpty() && !$this->get('solution_data')->isEmpty()) {
+      $this->set('og_audience', $this->get('solution_data')->entity);
+    }
+  }
 
   /**
    * {@inheritdoc}
@@ -62,17 +81,10 @@ class Release extends Node implements ReleaseInterface {
    */
   public function getGroupId(): string {
     $ids = $this->getReferencedEntityIds('og_audience');
-    if (empty($ids['rdf_entity'])) {
+    if (empty($ids['node'])) {
       throw new MissingGroupException();
     }
-    return array_shift($ids['rdf_entity']);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getWorkflowStateFieldName(): string {
-    return 'field_state';
+    return array_shift($ids['node']);
   }
 
   /**
@@ -102,6 +114,19 @@ class Release extends Node implements ReleaseInterface {
       return '';
     }
     return $field->value;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getSolution(): SolutionInterface {
+    // For releases, this method returns the solution revision at the time the
+    // release has been created.
+    $solution = $this->get('solution_data')->entity;
+    if ($solution instanceof SolutionInterface) {
+      return $solution;
+    }
+    throw new MissingSolutionException();
   }
 
 }

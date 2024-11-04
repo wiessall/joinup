@@ -3,10 +3,10 @@ Feature: Interoperable solution flag
 
   @javascript
   Scenario: Flag/un-flag solution as interoperable.
-    Given collections:
+    Given collection content:
       | title        | state     |
       | Derby County | published |
-    And the following solutions:
+    Given solution content:
       | title            | collection   | description                                                                      | state     |
       | Crest identity   | Derby County | The badge consisted of a circular shield split into three equally sized sections | published |
       | Colours identity | Derby County | Derby County's original colours (right) were amber, chocolate and blue           | published |

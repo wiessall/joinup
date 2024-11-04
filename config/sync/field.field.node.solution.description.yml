@@ -1,0 +1,30 @@
+uuid: 128ebe39-42af-47f6-ac4a-67983e3f4f80
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.description
+    - filter.format.content_editor
+    - node.type.solution
+  module:
+    - rdf_sync
+    - text
+third_party_settings:
+  rdf_sync:
+    value:
+      predicate: 'http://purl.org/dc/terms/description'
+      type: null
+id: node.solution.description
+field_name: description
+entity_type: node
+bundle: solution
+label: Description
+description: 'At least 5 words, not similar to the title.'
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  allowed_formats:
+    - content_editor
+field_type: text_long

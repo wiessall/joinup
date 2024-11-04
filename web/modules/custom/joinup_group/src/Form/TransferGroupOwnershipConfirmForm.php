@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_group\Form;
 
+use Drupal\Component\Render\MarkupInterface;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Action\ActionManager;
@@ -13,6 +14,7 @@ use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\TempStore\PrivateTempStore;
 use Drupal\Core\TempStore\PrivateTempStoreFactory;
+use Drupal\joinup_group\Plugin\Action\TransferGroupOwnershipAction;
 use Drupal\og\Entity\OgMembership;
 use Drupal\og\Entity\OgRole;
 use Drupal\og\MembershipManagerInterface;
@@ -83,23 +85,17 @@ class TransferGroupOwnershipConfirmForm extends ConfirmFormBase {
   /**
    * {@inheritdoc}
    */
-  public function getQuestion() {
-    /** @var \Drupal\rdf_entity\RdfInterface $group */
-    $group = $this->membership->getGroup();
-    return $this->t('Are you sure you want to transfer the ownership of %group @label to %user?', [
-      '%group' => $group->label(),
-      '@label' => $group->get('rid')->entity->getSingularLabel(),
-      '%user' => $this->membership->getOwner()->getDisplayName(),
-    ]);
+  public function getQuestion(): MarkupInterface {
+    return $this->t(
+      'Are you sure you want to transfer the ownership of %group @label to %user?',
+      $this->getDefaultMessageArguments(),
+    );
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getDescription() {
-    /** @var \Drupal\rdf_entity\RdfInterface $group */
-    $group = $this->membership->getGroup();
-
+  public function getDescription(): MarkupInterface|string {
     $memberships = $this->membershipManager->getGroupMembershipsByRoleNames($this->membership->getGroup(), [
       'administrator',
     ]);
@@ -111,11 +107,7 @@ class TransferGroupOwnershipConfirmForm extends ConfirmFormBase {
       return $membership->getOwner()->getDisplayName();
     }, $memberships);
 
-    $args = [
-      '%group' => $group->label(),
-      '@label' => $group->get('rid')->entity->getSingularLabel(),
-      '%user' => $this->membership->getOwner()->getDisplayName(),
-    ];
+    $args = $this->getDefaultMessageArguments();
 
     $build = [];
     $build[] = [
@@ -167,7 +159,6 @@ class TransferGroupOwnershipConfirmForm extends ConfirmFormBase {
     // Cleanup the bulk form selection.
     $this->tempStore->delete($this->currentUser->id());
 
-    /** @var \Drupal\rdf_entity\RdfInterface $group */
     $group = $this->membership->getGroup();
     $memberships = $this->membershipManager->getGroupMembershipsByRoleNames($group, [
       'administrator',
@@ -175,16 +166,16 @@ class TransferGroupOwnershipConfirmForm extends ConfirmFormBase {
     // Revoke 'owner' role from existing group owners but grant them the
     // facilitator role, as a compensation, if missed.
     $facilitator_role = OgRole::loadByGroupAndName($group, 'facilitator');
-    $bundle = $group->bundle();
+    $administrator_role = OgRole::loadByGroupAndName($group, 'administrator');
     foreach ($memberships as $membership) {
-      $membership->revokeRoleById("rdf_entity-$bundle-administrator");
-      $membership->addRole($facilitator_role);
-      $membership->save();
+      $membership
+        ->revokeRole($administrator_role)
+        ->addRole($facilitator_role)
+        ->save();
     }
 
     // Add the 'owner' role, and also the 'facilitator' role, since in Joinup
     // every owner is also a facilitator.
-    $administrator_role = OgRole::loadByGroupAndName($group, 'administrator');
     $this->membership
       ->addRole($administrator_role)
       ->addRole($facilitator_role)
@@ -198,10 +189,7 @@ class TransferGroupOwnershipConfirmForm extends ConfirmFormBase {
       return $membership->getOwner()->getDisplayName();
     }, $memberships);
 
-    $args = [
-      '%group' => $group->label(),
-      '@label' => $group->get('rid')->entity->getSingularLabel(),
-      '%user' => $this->membership->getOwner()->getDisplayName(),
+    $args = $this->getDefaultMessageArguments() + [
       '@users' => implode(', ', $former_owners),
     ];
     if ($former_owners) {
@@ -239,9 +227,28 @@ class TransferGroupOwnershipConfirmForm extends ConfirmFormBase {
     if (!$this->membership) {
       return AccessResult::forbidden();
     }
-    /** @var \Drupal\joinup_group\Plugin\Action\TransferGroupOwnershipAction $action */
     $action = $this->actionPluginManager->createInstance('joinup_transfer_group_ownership');
+    assert($action instanceof TransferGroupOwnershipAction);
     return $action->access($this->membership, $this->currentUser, TRUE);
+  }
+
+  /**
+   * Returns the default arguments for messaging.
+   *
+   * @return array
+   *   The default arguments for messaging:
+   *   - '%group': the label of the group the membership belongs to.
+   *   - '@label': the group's singular label from its bundle entity.
+   *   - '%user': the display name of the membership's owner.
+   */
+  protected function getDefaultMessageArguments(): array {
+    $group = $this->membership->getGroup();
+    $bundleKey = $group->getEntityType()->getKey('bundle');
+    return [
+      '%group' => $group->label(),
+      '@label' => $group->get($bundleKey)->entity->getSingularLabel(),
+      '%user' => $this->membership->getOwner()->getDisplayName(),
+    ];
   }
 
 }

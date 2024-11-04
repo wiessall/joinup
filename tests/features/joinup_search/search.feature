@@ -4,14 +4,10 @@ Feature: Global search
 
   @javascript
   Scenario: Anonymous user can find items
-    Given the following collection:
-      | title            | Molecular cooking collection |
-      | logo             | logo.png                     |
-      | moderation       | no                           |
-      | topic            | Demography                   |
-      | spatial coverage | Belgium                      |
-      | state            | published                    |
-    And the following solutions:
+    Given collection content:
+      | title                        | logo     | moderation | topic      | spatial coverage | state     |
+      | Molecular cooking collection | logo.png | no         | Demography | Belgium          | published |
+    Given solution content:
       | title          | collection                   | description                                                                                                                          | topic      | spatial coverage | state     |
       | Spherification | Molecular cooking collection | Spherification is the culinary process of shaping a liquid into spheres                                                              | Demography | European Union   | published |
       | Foam           | Molecular cooking collection | "The use of foam in cuisine has been used in many forms in the history of cooking:whipped cream, meringue, and mousse are all foams" | eGov       |                  | published |
@@ -39,7 +35,7 @@ Feature: Global search
     And discussion content:
       | title            | body       | collection                   | topic       | spatial coverage | state    |
       | Rummy discussion | Dummy body | Molecular cooking collection | E-inclusion | Luxembourg       | archived |
-    And the following solutions:
+    Given solution content:
       | title         | collection                   | description                            | state    | topic             |
       | Spring device | Molecular cooking collection | A mechanical device that stores energy | archived | Supplier exchange |
 
@@ -75,7 +71,11 @@ Feature: Global search
     And I should see the "Spherification" tile
     And I should see the "Foam" tile
     # Terms are sorted alphabetically
-    And the "topic" checkbox facet should allow selecting the following values "eGov (1), Info (1), Statistics and Analysis (1), Social and Political (6), Demography (2), E-inclusion (4)"
+    #
+    # Joinup collection is always present and has 'Demography' as topic. Thus
+    # the 'Demography' and its parent, 'Social and Political', will have the
+    # count increased by one each. See joinup_test.install
+    And the "topic" checkbox facet should allow selecting the following values "eGov (1), Info (1), Statistics and Analysis (1), Social and Political (7), Demography (3), E-inclusion (4)"
     Then I click show more from the "spatial coverage" facet
     And the "spatial coverage" checkbox facet should allow selecting the following values "Belgium (1), European Union (1), Luxembourg (5)"
 
@@ -83,9 +83,12 @@ Feature: Global search
     # Interoperable Europe Portal there were two search fields, but this was confusing users.
     And there should be exactly 1 "search field" on the page
 
-    When I check the "Social and Political (6)" checkbox from the "topic" facet
+    When I check the "Social and Political (7)" checkbox from the "topic" facet
     Then the "Social and Political" content checkbox item should be selected
-    And the "topic" checkbox facet should allow selecting the following values "eGov (1), Info (1), Statistics and Analysis (1), Social and Political (6), Demography (2), E-inclusion (4)"
+    # Joinup collection is always present and has 'Demography' as topic. Thus
+    # the 'Demography' and its parent, 'Social and Political', will have the
+    # count increased by one each. See joinup_test.install
+    And the "topic" checkbox facet should allow selecting the following values "eGov (1), Info (1), Statistics and Analysis (1), Social and Political (7), Demography (3), E-inclusion (4)"
     # The tiles appear because the parent term is selected even though they do not have a direct reference there.
     And I should see the "Dummy news 1" tile
     And I should see the "Dummy news 2" tile
@@ -95,17 +98,20 @@ Feature: Global search
     And I should not see the "Rummy news 6" tile
 
     # Test ability to tick many topics.
-    When I check the "Demography (2)" checkbox from the "topic" facet
-    Then I should see the text "SEARCH RESULTS (2)"
+    When I check the "Demography (3)" checkbox from the "topic" facet
+    # Joinup collection is included
+    Then I should see the text "SEARCH RESULTS (3)"
     When I check the "E-inclusion (4)" checkbox from the "topic" facet
-    Then I should see the text "SEARCH RESULTS (6)"
+    # Joinup collection is included
+    Then I should see the text "SEARCH RESULTS (7)"
     And the "Demography" content checkbox item should be selected
     And the "E-inclusion" content checkbox item should be selected
 
     # The selected option moves to the last position by default.
     When I click "E-inclusion"
-    Then I should see the text "SEARCH RESULTS (2)"
-    And the "topic" checkbox facet should allow selecting the following values "eGov (1), Info (1), Statistics and Analysis (1), Social and Political (6), Demography (2), E-inclusion (4)"
+    # Joinup collection is included
+    Then I should see the text "SEARCH RESULTS (3)"
+    And the "topic" checkbox facet should allow selecting the following values "eGov (1), Info (1), Statistics and Analysis (1), Social and Political (7), Demography (3), E-inclusion (4)"
     When I click show more from the "spatial coverage" facet
     Then the "spatial coverage" checkbox facet should allow selecting the following values "Belgium (1), European Union (1)"
     And I should see the "Molecular cooking collection" tile
@@ -141,13 +147,15 @@ Feature: Global search
     Given I click "Clear filters"
     When I check the "News (5)" checkbox from the "Content types" facet
     Then the "News" content checkbox item should be selected
-    And the "Content types" checkbox facet should allow selecting the following values "Collection (1), Solutions (2), News (5), User profiles (1)"
+    # Joinup collection is included
+    And the "Content types" checkbox facet should allow selecting the following values "Collections (2), Solutions (2), News (5), User profiles (1)"
 
     When I check the "Solutions (2)" checkbox from the "Content types" facet
     Then the "Solutions" content checkbox item should be selected
     And the "News" content checkbox item should be selected
     And I should see the following facet summary "Solutions, News"
-    Then the "Content types" checkbox facet should allow selecting the following values "Collection (1), Solutions (2), News (5), User profiles (1)"
+    # Joinup collection is included
+    Then the "Content types" checkbox facet should allow selecting the following values "Collections (2), Solutions (2), News (5), User profiles (1)"
     And the "topic" checkbox facet should allow selecting the following values "eGov (1), Info (1), Statistics and Analysis (1), Social and Political (5), Demography (1), E-inclusion (4)"
     Then I click show more from the "spatial coverage" facet
     And the "spatial coverage" checkbox facet should allow selecting the following values "European Union (1), Luxembourg (5)"
@@ -197,7 +205,7 @@ Feature: Global search
     And contact_information content:
       | name          | email             |
       | Go-to contact | go-to@example.com |
-    And the following collections:
+    And collection content:
       | title            | description                                          | abstract                       | state     |
       | Collection alpha | <p>collection <strong>beta</strong> description.</p> | The collection gamma abstract. | published |
       | Col for Sol      | <p>collection for the solution.</p>                  | The col for sol abstract.      | published |
@@ -230,16 +238,16 @@ Feature: Global search
     And contact_information content:
       | name          | email             | state     |
       | Go-to contact | go-to@example.com | validated |
-    And the following collections:
+    And collection content:
       | title            | description                                          | abstract                       | state     |
       | Collection alpha | <p>collection <strong>beta</strong> description.</p> | The collection gamma abstract. | published |
       | Col for Sol      | <p>collection for the solution.</p>                  | The col for sol abstract.      | published |
-    And the following solutions:
+    Given solution content:
       | title          | description                                                | keywords | owner             | contact information | collection  | state     |
       | Solution alpha | <p>This is the solution <strong>beta</strong> description. | Alphabet | Responsible owner | Go-to contact       | Col for Sol | published |
     And release content:
-      | title         | release number | release notes                               | keywords | is version of  | owner             | contact information | state     |
-      | Release Alpha | 1              | <p>Release notes for <em>beta</em> changes. | Alphabet | Solution alpha | Responsible owner | Go-to contact       | published |
+      | title         | release number | release notes                               | keywords | is version of  | state     |
+      | Release Alpha | 1              | <p>Release notes for <em>beta</em> changes. | Alphabet | Solution alpha | published |
     And distribution content:
       | title              | description                                    | release       | access url | state     |
       | Distribution alpha | <p>A simple beta distribution description.</p> | Release Alpha | test.zip   | published |
@@ -268,7 +276,8 @@ Feature: Global search
       | ulyssesfrees | ulysses.freeman@example.com | Ulysses    | Freeman     | Omero snc    |
 
     When I visit the search page
-    Then the "Content types" checkbox facet should allow selecting the following values "Collections (2), Solution (1), News (1), Events (2), Document (1), Discussion (1), Release (1), Custom page (1), Licence (1), User profiles (2)"
+    # Joinup collection is included
+    Then the "Content types" checkbox facet should allow selecting the following values "Collections (3), Solution (1), News (1), Events (2), Document (1), Discussion (1), Release (1), Custom page (1), Licence (1), User profiles (2)"
 
     # "A beta" word does not show "You must include at least one positive keyword with 3 characters or more." error message.
     When I enter "A beta" in the search bar and press enter
@@ -328,7 +337,8 @@ Feature: Global search
     # Visit the homepage to be sure that the test fetches the correct updated page.
     When I go to the homepage
     And I enter "contact" in the search bar and press enter
-    Then the page should show the tiles "Solution alpha, Release Alpha"
+    # Joinup collection is included
+    Then the page should show the tiles "Joinup, Solution alpha, Release Alpha"
 
     # Users should be found by first name, family name and organisation.
     When I enter "Jenessa" in the search bar and press enter
@@ -358,15 +368,13 @@ Feature: Global search
   # This tests shows a regression to be fixed in ISAICP-6917.
   # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-6917
   Scenario: Collections and solutions are shown first in search results with the same relevance.
-    Given collections:
+    Given collection content:
       | title                           | description                         | state     |
       | Ornithology: the study of birds | Ornithology is a branch of zoology. | published |
       | Husky Flying Xylophone          | A strange instrument.               | published |
-    And the following solution:
-      | title       | Bird outposts in the wild            |
-      | collection  | Ornithology: the study of birds      |
-      | description | Exotic wings and where to find them. |
-      | state       | published                            |
+    And solution content:
+      | title                     | collection                      | description                          | state     |
+      | Bird outposts in the wild | Ornithology: the study of birds | Exotic wings and where to find them. | published |
     And custom_page content:
       | title           | body                                  | collection                      | state     |
       | Disturbed birds | Flocks of trained pigeons flying off. | Ornithology: the study of birds | published |
@@ -401,9 +409,9 @@ Feature: Global search
       | title      |
       | Apache-2.0 |
       | LGPL       |
-    And the following solution:
-      | title | Zzolution |
-      | state | published |
+    And solution content:
+      | title     | state     |
+      | Zzolution | published |
 
     When I enter "ZzoluDistro" in the search bar and press enter
     Then I should see "No content found for your search."
@@ -572,10 +580,9 @@ Feature: Global search
     Then I should see "No content found for your search."
 
   Scenario: Collections are found by their keywords.
-    Given the following collection:
-      | title    | Collection sample       |
-      | keywords | unique, key-definitions |
-      | state    | published               |
+    Given collection content:
+      | title             | keywords                | state     |
+      | Collection sample | unique, key-definitions | published |
 
     When I enter "key-definitions" in the search bar and press enter
     Then the page should show only the tiles "Collection sample"
@@ -585,7 +592,7 @@ Feature: Global search
 
   @javascript
   Scenario: Users are able to select the sort order.
-    Given collections:
+    Given collection content:
       | title             | description       | state     |
       | Custom collection | Some custom data. | published |
     And news content:
@@ -594,9 +601,9 @@ Feature: Global search
       | The uneven universe | Relativity news: Relativity theory | I do care about the relativity keyword in the body.               | Custom collection | published | 02/01/2019 | 02/08/2019 |
       | The earth is square | Absolutely nonsense                | Some news are not worth it but I will add relativity here anyway. | Custom collection | published | 03/01/2019 | 01/08/2019 |
     And event content:
-      | title            | collection        | state     | start date   | end date            | state     | created      |
-      | Blue revolution  | Custom collection | published | now +1 years | now +1 years +1 day | published | now -2 years |
-      | Red revolution   | Custom collection | published | now -1 years | now -1 years +1 day | published | now -1 years |
+      | title           | collection        | state     | start date   | end date            | state     | created      |
+      | Blue revolution | Custom collection | published | now +1 years | now +1 years +1 day | published | now -2 years |
+      | Red revolution  | Custom collection | published | now -1 years | now -1 years +1 day | published | now -1 years |
 
     When I am on the homepage
     And I enter "Relativity" in the search bar and press enter
@@ -641,17 +648,15 @@ Feature: Global search
       | The uneven universe |
       | Quantum information |
       | Red revolution      |
+      # Joinup collection is installed in all tests. See joinup_test.install
+      | Joinup              |
 
   @javascript
   Scenario: Anonymous user can find facets summary
-    Given the following collection:
-      | title            | Radio cooking collection |
-      | logo             | logo.png                 |
-      | moderation       | no                       |
-      | topic            | Demography               |
-      | spatial coverage | Belgium                  |
-      | state            | published                |
-    And the following solutions:
+    Given collection content:
+      | title                    | logo     | moderation | topic      | spatial coverage | state     |
+      | Radio cooking collection | logo.png | no         | Demography | Belgium          | published |
+    Given solution content:
       | title    | collection               | description                                                                                                                                                   | topic      | spatial coverage | state     |
       | Spheres  | Radio cooking collection | Spherification is the culinary process of shaping a liquid into spheres. Drupal is the best digital experience platform(DXP) on the web, proudly open source. | Demography | European Union   | published |
       | Movistar | Radio cooking collection | "The use of foam in cuisine has been used in many forms in the history of cooking:whipped cream, meringue, and mousse are all foams", proudly open source.    |            |                  | published |
@@ -667,9 +672,14 @@ Feature: Global search
     When I visit the search page
     And I should not see search bar icon in navbar
     And I enter "fu" in the "search bar"
+    # When the search term is less than 3 characters, the search is global and
+    # all results are fetched. Thus, the first two results are returned by
+    # score. That bring the first available collections as their score is the
+    # highest.
     Then I should see the following search suggestions:
       | Radio cooking collection |
-      | Spheres                  |
+      # Joinup collection is always installed
+      | Joinup                   |
 
     When I enter "cook" in the "search bar"
     Then I should see the following search suggestions:
@@ -687,27 +697,28 @@ Feature: Global search
     # Check if facet summary was remove correctly.
     When I click "Clear filters"
     And I check the "News (5)" checkbox from the "Content types" facet
-    And I check the "Collection (1)" checkbox from the "Content types" facet
-    Then I should see the following facet summary "Collection, News"
+    # There are 2 collections given the default Joinup collection.
+    And I check the "Collections (2)" checkbox from the "Content types" facet
+    Then I should see the following facet summary "Collections, News"
     When I remove the following facet summary "News"
-    Then the page should show only the tiles "Radio cooking collection"
+    Then the page should show only the tiles "Radio cooking collection, Joinup"
 
     # Check if search autocomplete works in navbar.
     When I visit the collection overview
     And I should see search bar icon in navbar
     Then I should toggle search bar in navbar
-    And I enter "fu" in the "search bar"
+    And I enter "funn" in the "search bar"
     Then I should see the following search suggestions:
-      | Radio cooking collection |
-      | Spheres                  |
+      | Funny news 1 |
+      | Funny news 2 |
 
     # Check if search autocomplete works in homepage's header search bar.
     Given I am on the homepage
     Then I should see the search bar in homepage's header
-    And I enter "fu" in the "search bar"
+    And I enter "funn" in the "search bar"
     Then I should see the following search suggestions:
-      | Radio cooking collection |
-      | Spheres                  |
+      | Funny news 1 |
+      | Funny news 2 |
 
     # Check if search did you mean works.
     Given I visit the search page
@@ -729,9 +740,9 @@ Feature: Global search
       | Spheres |
 
   Scenario: Filter on date
-    Given collection:
-      | title | Mice in space |
-      | state | published     |
+    Given collection content:
+      | title         | state     |
+      | Mice in space | published |
     And document content:
       | title        | collection    | topic                                  | state     | logo     | field_paragraphs_body                                                                                                                                                                           |
       | Microgravity | Mice in space | HR, Statistics and Analysis, E-justice | published | alan.jpg | Conventional studies investigating the effects of reduced gravity on muscle mass and function have used a ground control group that is not directly comparable to the space experimental group. |
@@ -763,23 +774,23 @@ Feature: Global search
     And I should see the text "SEARCH RESULTS (8)"
 
     Then I go to "/search?f[0]=date:(min:,max:1609113600)"
-    And I should see the text "SEARCH RESULTS (8)"
+    # One extra result due to the default Joinup collection.
+    And I should see the text "SEARCH RESULTS (9)"
 
     Then I go to "/search?f[0]=date:(min:,max:)"
-    And I should see the text "SEARCH RESULTS (14)"
+    # One extra result due to the default Joinup collection.
+    And I should see the text "SEARCH RESULTS (15)"
 
   Scenario: Max 2 topic terms appear in each search result with a suffix for the rest.
-    Given the following collection:
-      | title      | Max 2 topic collection                                                             |
-      | moderation | no                                                                                 |
-      | topic      | Finance in EU, Supplier exchange, Demography, E-inclusion, Statistics and Analysis |
-      | state      | published                                                                          |
+    Given collection content:
+      | title                  | moderation | topic                                                                              | state     |
+      | Max 2 topic collection | no         | Finance in EU, Supplier exchange, Demography, E-inclusion, Statistics and Analysis | published |
     When I visit the search page
     Then there should be 2 topics in the "Max 2 topic collection" card
     And I should see the text "+3 topics" in the "Max 2 topic collection" card
 
   Scenario: In search result I can see updated date label.
-    Given collections:
+    Given collection content:
       | title             | description       | state     |
       | Custom collection | Some custom data. | published |
     And news content:
@@ -795,11 +806,6 @@ Feature: Global search
   @javascript @loggedErrors
   Scenario: Regression test for warning generated by search_api_solr.
   See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-8210
-
-    Given collection:
-      | uri   | http://data.europa.eu/w21/df34e3a2-207b-4910-a804-344931654e20 |
-      | title | Interoperable Europe Portal                                                         |
-      | state | published                                                      |
 
     # Check if suggestion does not generate any warnings.
     Given I visit the search page
@@ -822,13 +828,13 @@ Feature: Global search
     And contact_information content:
       | name           | email              |
       | Gor-to contact | gor-to@example.com |
-    And the following collections:
+    And collection content:
       | title            | description                                          | abstract                      | state     |
       | Pull alpha       | <p>collection <strong>pull</strong> description.</p> | The collection pull abstract. | published |
       | Col for Sol javi | <p>collection for the solution javi.</p>             | Random abstract.              | published |
       | Roll alpha       | <p>collection <strong>roll</strong> description.</p> | The collection roll abstract. | archived  |
       | Col for Sol net  | <p>collection for the solution net.</p>              | Loky and Rocky.               | archived  |
-    And the following solutions:
+    Given solution content:
       | title         | description                                                | abstract                    | keywords | owner       | contact information | collection       | state     |
       | Solution pull | <p>This is the solution <strong>pull</strong> description. | The solution pull abstract. | Alphabet | Renew owner | Gor-to contact      | Pull alpha       | published |
       | Solution javi | <p>This is the solution <strong>javi</strong> description. |                             | Alphabet | Renew owner | Gor-to contact      | Col for Sol javi | published |

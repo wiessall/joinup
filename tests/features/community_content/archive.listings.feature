@@ -8,7 +8,7 @@ Feature: Archived content on content listings - groups and paragraphs.
     And contact_information content:
       | name         |
       | Some contact |
-    And collections:
+    And collection content:
       | title           | description | topic             | owner      | contact information | state     |
       | Some collection | Test        | Supplier exchange | Some owner | Some contact        | published |
       | Poly screens    | Test        | Supplier exchange | Some owner | Some contact        | published |
@@ -23,10 +23,10 @@ Feature: Archived content on content listings - groups and paragraphs.
     # We need the "Archived news" content to be archived by altering its state
     # because "Unarchiving" it restored the previous revision and thus, needs
     # to have a previous revision (created as published).
-    And the workflow state of the "Archived news" content is set to "archived"
+    And the workflow state of the "Archived news" content is changed to "archived"
 
   Scenario: Collection content listing can control archived content visibility.
-    Given the following solutions:
+    Given solution content:
       | title         | collection      | state     | creation date   |
       | Skewb cube    | Some collection | archived  | 2015-03-03T8:00 |
       | Pyraminx cube | Some collection | published | 2015-02-03T8:00 |
@@ -113,10 +113,9 @@ Feature: Archived content on content listings - groups and paragraphs.
 
   @javascript
   Scenario: Carousel listings can also control archived items visibility.
-    Given collection:
-      | uri   | http://data.europa.eu/w21/8e30f798-ff2b-478b-9c09-5ed5a63b4c8c |
-      | title | Interoperable Europe                                           |
-      | state | published                                                      |
+    Given collection content:
+      | uri                                                            | title                | state     |
+      | http://data.europa.eu/w21/8e30f798-ff2b-478b-9c09-5ed5a63b4c8c | Interoperable Europe | published |
     And news content:
       | title              | headline           | state     | collection           | body | content |
       | IOP archived news  | IOP archived news  | archived  | Interoperable Europe | Test | Test    |
@@ -188,7 +187,7 @@ Feature: Archived content on content listings - groups and paragraphs.
     And I should see the "collection content archived toggle" facet
 
   Scenario: "Show archived" facet on Discussions page content listing.
-    Given collections:
+    Given collection content:
       | title                      | description | topic             | owner      | contact information | state     |
       | Some discussion collection | Test        | Supplier exchange | Some owner | Some contact        | published |
     And discussion content:

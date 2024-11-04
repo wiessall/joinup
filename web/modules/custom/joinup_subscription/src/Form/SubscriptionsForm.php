@@ -107,11 +107,11 @@ class SubscriptionsForm extends FormBase {
 
     $form['groups']['#tree'] = TRUE;
     foreach (JoinupSubscriptionsHelper::SUBSCRIPTION_BUNDLES as $type => $subscription_bundles) {
-      $memberships = $this->groupManager->getUserGroupMembershipsByBundle($user, 'rdf_entity', $type);
+      $memberships = $this->groupManager->getUserGroupMembershipsByBundle($user, 'node', $type);
       $form['groups'][$type]['label'] = [
         '#type' => 'html_tag',
         '#tag' => 'h2',
-        '#value' => $this->entityTypeBundleInfo->getBundleCountLabel('rdf_entity', $type, count($memberships), 'no_count_capitalize'),
+        '#value' => $this->entityTypeBundleInfo->getBundleCountLabel('node', $type, count($memberships), 'no_count_capitalize'),
         '#attributes' => [
           'class' => ['subscription-type'],
         ],
@@ -123,7 +123,7 @@ class SubscriptionsForm extends FormBase {
 
       // Return early if there are no memberships to display.
       if (!$memberships) {
-        $type_info = $this->entityTypeBundleInfo->getBundleInfo('rdf_entity')[$type];
+        $type_info = $this->entityTypeBundleInfo->getBundleInfo('node')[$type];
         $empty_message = $this->t('No @group memberships yet. Join one or more @groups to subscribe to their content!', [
           '@group' => $type_info['label_singular'],
           '@groups' => $type_info['label_plural'],
@@ -279,7 +279,7 @@ class SubscriptionsForm extends FormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state): void {
     $group_id = $this->getTriggeringElementGroupId($form_state);
-    $group = $this->entityTypeManager->getStorage('rdf_entity')->load($group_id);
+    $group = $this->entityTypeManager->getStorage('node')->load($group_id);
     $user = $form_state->get('#user');
     $membership = $this->membershipManager->getMembership($group, $user->id());
 
@@ -391,10 +391,10 @@ class SubscriptionsForm extends FormBase {
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The form state of the submitted form.
    *
-   * @return string
+   * @return int
    *   The group ID that corresponds to the submit button that was clicked.
    */
-  protected function getTriggeringElementGroupId(FormStateInterface $form_state): string {
+  protected function getTriggeringElementGroupId(FormStateInterface $form_state): int {
     // Return the group ID which is stored in the third to last parent of
     // the button: `['groups'][$group_id]['options']['submit']`.
     $clicked_button_parents = array_values($form_state->getTriggeringElement()['#parents']);

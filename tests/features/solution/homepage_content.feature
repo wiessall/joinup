@@ -4,14 +4,16 @@ Feature: Solution homepage
   As a user of the website
   I need to be able see all content related to a solution on the solution homepage
 
-  Background:
+  # @covers \Drupal\joinup_release\Plugin\search_api\processor\ReleaseSolutionData::preprocessIndexItems
+  # @covers \Drupal\joinup_search\Plugin\search_api\processor\AddAggregatedTopicHierarchy::preprocessIndexItems
+  Scenario: The solution homepage shows related content.
     Given owner content:
       | name          | owner type |
       | Kostas Agathe | Company    |
     And contact_information content:
       | name    | email               |
       | Placebo | Placebo@example.com |
-    And the following solutions:
+    Given solution content:
       | title                        | abstract                              | description                           | logo     | state     | status | related by type | owner         | contact information | solution type | topic       |
       | Information sharing protocol | Handling information sharing securely | Handling information sharing securely | logo.png | published |        | yes             | Kostas Agathe | Placebo             | Business      | E-inclusion |
       | Security audit tools         | Automated test of security            | Automated test of security            | logo.png | published |        | yes             | Kostas Agathe | Placebo             | Business      | E-inclusion |
@@ -38,7 +40,6 @@ Feature: Solution homepage
       | title               | document type | short title | created           | field_paragraphs_body   | spatial coverage | topic       | solution                     | state     |
       | IS protocol draft 2 | Document      | IS draft 2  | 2018-10-04 8:08am | Next proposition draft. | European Union   | E-inclusion | Information sharing protocol | published |
 
-  Scenario: The solution homepage shows related content.
     When I go to the homepage of the "Information sharing protocol" solution
     # I should see only the related release.
     # And the distribution directly associated.
@@ -109,15 +110,3 @@ Feature: Solution homepage
     But I should not see the "IS protocol paper 1" tile
     And I should not see the "Protocol draft" tile
     And I should not see the text "Downloads: 1172"
-
-  # Regression test to ensure that related community content does not appear in the draft view.
-  # @see: https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3262
-  Scenario: The related content should not be shown in the draft view version as part of the content.
-    When I am logged in as a facilitator of the "Information sharing protocol" solution
-    And I go to the homepage of the "Information sharing protocol" solution
-    And I click "Edit" in the "Entity actions" region
-    And I fill in "Title" with "Information sharing non paper"
-    And I press "Save as draft"
-    And I click "View draft" in the "Entity actions" region
-    Then I should not see the "IS protocol paper 1" tile
-    And I should not see the "Protocol draft" tile

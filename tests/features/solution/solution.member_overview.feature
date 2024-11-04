@@ -25,14 +25,12 @@ Feature: Solution membership overview
       | Glædwine Ruskin     | Glædwine   | Ruskin      | linus.jpeg   | Comptroller                     |
       | Pocahontas Mathieu  | Pocahontas | Mathieu     | blaise.jpg   | Chief Communications Officer    |
       | Callista Wronski    | Callista   | Wronski     | richard.jpg  | Founder                         |
-    And collection:
-      | title | Growing collection |
-      | state | published          |
-    And the following solution:
-      | title       | Growing zone       |
-      | description | Soil and gravel    |
-      | state       | published          |
-      | collection  | Growing collection |
+    And collection content:
+      | title              | state     |
+      | Growing collection | published |
+    And solution content:
+      | title        | description     | state     | collection         |
+      | Growing zone | Soil and gravel | published | Growing collection |
     And the following solution user memberships:
       | solution     | user                | roles       | state   |
       | Growing zone | Ariadna Astrauskas  | owner       |         |
