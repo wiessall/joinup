@@ -11,8 +11,8 @@ Feature: SEO for news articles.
     And users:
       | Username                               | E-mail                 | First name | Family name |
       | Interoperable Europe Portal SEO author | joinup.seo@example.com | Kurk       | Smith       |
-    And "news" content:
-      | title                                | headline                                         | logo     | field_paragraphs_body | created                   | publication at            | changed                   | state     | author                                 | collection                                      |
+    And news content:
+      | title                                | headline                                         | logo     | field_paragraphs_body | created                   | published at              | changed                   | state     | author                                 | collection                                      |
       | Interoperable Europe Portal SEO news | Headline of Interoperable Europe Portal SEO news | logo.png | Body of news.         | Sun, 01 Dec 2019 13:00:00 | Wed, 25 Dec 2019 13:00:00 | Wed, 01 Jan 2020 13:00:00 | published | Interoperable Europe Portal SEO author | Interoperable Europe Portal SEO news collection |
 
     When I visit the "Interoperable Europe Portal SEO news" news
