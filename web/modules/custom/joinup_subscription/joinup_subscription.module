@@ -75,6 +75,12 @@ function joinup_subscription_entity_bundle_info_alter(&$bundles): void {
  * community content items within each group are sorted alphabetically.
  */
 function joinup_subscription_message_digest_aggregate_alter(array &$context, UserInterface $account, MessageNotifierInterface $notifier): void {
+  if (!$account->isActive()) {
+    // Prevent delivery when the user is blocked or cancelled.
+    $context['deliver'] = FALSE;
+    return;
+  }
+
   // Only act on the group community content digest. Bail out if this contains
   // any other message.
   if (!array_reduce($context['messages'], function (bool $carry, MessageInterface $message): bool {

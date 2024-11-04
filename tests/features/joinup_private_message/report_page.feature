@@ -6,10 +6,10 @@ Feature: Private message report page
 
   Background:
     Given users:
-      | Username  | First name | Family name | E-mail                | Roles              |
-      | alice_m   | Alice      | Miller      | alice.m@example.com   | developer          |
-      | bob_rolls | Bob        | Rolls       | bob.rolls@example.com |                    |
-      | joan_tiff | Joan       | Tiff        | joan.tiff@example.com |                    |
+      | Username  | First name | Family name | E-mail                | Roles     |
+      | alice_m   | Alice      | Miller      | alice.m@example.com   | developer |
+      | bob_rolls | Bob        | Rolls       | bob.rolls@example.com |           |
+      | joan_tiff | Joan       | Tiff        | joan.tiff@example.com |           |
 
     Given the following private messages:
       | owner     | recipient | message                    | report | report_timestamp |

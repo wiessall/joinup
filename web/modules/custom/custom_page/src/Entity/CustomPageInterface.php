@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\custom_page\Entity;
 
 use Drupal\collection\Entity\CollectionContentInterface;
+use Drupal\joinup_bundle_class\AbstractInterface;
 use Drupal\joinup_bundle_class\DescriptionInterface;
 use Drupal\joinup_bundle_class\LogoInterface;
 use Drupal\joinup_core\Entity\PermalinkInterface;
@@ -19,7 +20,7 @@ use Drupal\topic\Entity\TopicReferencingEntityInterface;
 /**
  * Interface for content page node entities.
  */
-interface CustomPageInterface extends NodeInterface, GroupContentInterface, CollectionContentInterface, EntityPublicationTimeInterface, LogoInterface, DescriptionInterface, EntityWorkflowStateInterface, ArchivableEntityInterface, GroupArchivableEntityInterface, TopicReferencingEntityInterface, PermalinkInterface {
+interface CustomPageInterface extends NodeInterface, GroupContentInterface, CollectionContentInterface, EntityPublicationTimeInterface, LogoInterface, DescriptionInterface, EntityWorkflowStateInterface, ArchivableEntityInterface, GroupArchivableEntityInterface, TopicReferencingEntityInterface, PermalinkInterface, AbstractInterface {
 
   /**
    * Checks if this custom page is set as a landing page of the group.
