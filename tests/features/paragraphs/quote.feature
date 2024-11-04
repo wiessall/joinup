@@ -9,8 +9,8 @@ Feature: Quote paragraph tests.
 
   Scenario: View quote paragraph in the custom page.
     Given custom_page content:
-      | title          | collection            | state     |
-      | Popular quotes | Paragraphs collection | published |
+      | title          | collection            | state     | abstract             |
+      | Popular quotes | Paragraphs collection | published | quotes page abstract |
     And I append "quote" to "field_paragraphs_body" field in "node" entity with following "Popular Quotes" title:
       | paragraph_quote | That's one small step for a man, a giant leap for mankind. |
 

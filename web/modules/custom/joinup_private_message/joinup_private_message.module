@@ -8,12 +8,14 @@
 declare(strict_types=1);
 
 use Drupal\Component\Serialization\Json;
+use Drupal\Component\Utility\Xss;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\CloseModalDialogCommand;
 use Drupal\Core\Ajax\RedirectCommand;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Render\Markup;
 use Drupal\Core\Url;
 use Drupal\private_message\Entity\PrivateMessage;
 use Drupal\symfony_mailer_lite\Plugin\Mail\SymfonyMailer;
@@ -211,6 +213,10 @@ function joinup_private_message_mail(string $key, array &$message, array $params
     $reportMessage = $params['message'];
     /** @var \Drupal\private_message\Entity\PrivateMessageThreadInterface $thread */
     $thread = \Drupal::service('private_message.service')->getThreadFromMessage($reportMessage);
+    $allowed_tags = ['p', 'br', 'strong', 'em', 'ul', 'ol', 'li', 'a'];
+    $report_message = Xss::filter($reportMessage->get('message')->value, $allowed_tags);
+
+    // Build message array.
     $message['subject'] = t('User @reporter reported a message', ['@reporter' => $recipient->getDisplayName()]);
     $message['body'] = [
       t('The user <a href="@reporter_url">@reporter_name</a> has reported user <a href="@sender_url">@sender_name</a> for sending an unwanted message (<a href="@message_url">view message</a>):',
@@ -227,8 +233,7 @@ function joinup_private_message_mail(string $key, array &$message, array $params
           ])->toString(),
         ]),
       t('<br><h5>Message content: </h5>@report_content', [
-        // @ todo fix the markup the same way as in ISAICP-9166.
-        '@report_content' => $reportMessage->get('message')->value,
+        '@report_content' => Markup::create($report_message),
       ]),
       t('<br><h5>Report reason: </h5>@report_reason', ['@report_reason' => $report]),
     ];
