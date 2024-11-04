@@ -7,11 +7,12 @@ namespace Drupal\Tests\joinup_private_message\Functional;
 use Drupal\Core\Url;
 use Drupal\Tests\BrowserTestBase;
 use Drupal\private_message\Entity\PrivateMessage;
+use Drupal\user\UserInterface;
 
 /**
  * Tests for the Private Messages.
  *
- * @group teste
+ * @group joinup_private_message
  */
 class PrivateMessageTest extends BrowserTestBase {
   /**
@@ -29,12 +30,12 @@ class PrivateMessageTest extends BrowserTestBase {
   /**
    * The second User used for the test.
    *
-   * @var \Drupal\Core\Session\AccountInterface
+   * @var \Drupal\user\UserInterface
    */
-  private $user;
+  protected UserInterface $user;
 
   /**
-   * Setup the test class.
+   * {@inheritdoc}
    */
   public function setUp(): void {
     parent::setUp();
