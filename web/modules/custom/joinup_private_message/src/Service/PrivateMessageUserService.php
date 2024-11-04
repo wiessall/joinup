@@ -29,7 +29,7 @@ class PrivateMessageUserService {
     $owner = $privateMessage->getOwner();
     $members = $thread->getMembers();
     $target = array_filter($members, function (UserInterface $user) use ($owner) {
-      return $user != $owner;
+      return $user !== $owner;
     });
     return $target ? array_shift($target) : NULL;
   }
