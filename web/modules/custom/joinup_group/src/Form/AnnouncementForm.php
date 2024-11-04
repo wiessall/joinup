@@ -262,7 +262,7 @@ class AnnouncementForm extends FormBase {
       $status = $this->t("The announcement has been updated but it's still in @to state. Review the announcement and, when is ready to be sent, use the 'Send' button.", $args);
     }
     elseif ($initial_state->getId() === 'draft' && $this->announcement->getWorkflowState() === 'sent') {
-      $status = $this->t("Your announcement has been sent for validation by Joinup moderators. Once approved, will reach the %group @type members.", $args);
+      $status = $this->t("Your announcement has been sent for validation by Interoperable Europe Portal moderators. Once approved, will reach the %group @type members.", $args);
       $redirect = Url::fromRoute('view.announcements.group', [
         'rdf_entity' => $this->announcement->getGroupId(),
       ]);

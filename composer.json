@@ -1,6 +1,6 @@
 {
     "name": "ec-europa/joinup",
-    "description": "Joinup is a collaborative platform created by the European Commission and funded by the European Union via the Interoperability Solutions for European Public Administrations (ISA) Programme. It offers several services that aim to help e-Government professionals share their experience with each other.",
+    "description": "The Interoperable Europe Portal is the European Union’s platform for promoting and supporting interoperability, collaboration, and knowledge sharing across public administrations, businesses, and citizens. It acts as a one-stop shop for discovering, sharing, and reusing IT solutions and good practices.",
     "type": "project",
     "license": "EUPL-1.2",
     "require": {

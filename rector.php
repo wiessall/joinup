@@ -37,7 +37,7 @@ return static function (RectorConfig $rectorConfig): void {
   $rectorConfig->importNames(TRUE, FALSE);
   $rectorConfig->importShortClasses(FALSE);
 
-  // Custom Joinup config.
+  // Custom Interoperable Europe Portal config.
   $rectorConfig->paths([
     __DIR__ . '/src',
     __DIR__ . '/tests/src',

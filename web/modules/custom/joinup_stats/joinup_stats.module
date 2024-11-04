@@ -128,7 +128,7 @@ function joinup_stats_form_meta_entity_type_edit_form_alter(array &$form, FormSt
 
   $form['third_party_settings']['joinup_stats'] = [
     '#type' => 'details',
-    '#title' => t('Joinup Statistics'),
+    '#title' => t('Interoperable Europe Portal Statistics'),
     'matomo_method' => [
       '#type' => 'textfield',
       '#title' => t('Matomo method'),

@@ -1,6 +1,6 @@
 @api @group-g
 Feature: Subscribing to community content in collections and solutions
-  As an avid fan of Joinup
+  As an avid fan of Interoperable Europe Portal
   I want to receive a periodic digest listing newly published content
   So that I can stay informed about everything
 
@@ -80,7 +80,7 @@ Feature: Subscribing to community content in collections and solutions
       | Null geodesics         |
       | Deflected rays         |
 
-    And the email sent to jpluminet with subject "Joinup: Daily digest message" contains the following lines of text:
+    And the email sent to jpluminet with subject "Interoperable Europe Portal: Daily digest message" contains the following lines of text:
       | Daily digest message                                                     |
       | Dear Jean-Pierre,                                                        |
       | New content published in Black hole imaging                              |
@@ -110,6 +110,6 @@ Feature: Subscribing to community content in collections and solutions
       | Marginally trapped                                                       |
       | Read more                                                                |
       | Kind regards,                                                            |
-      | The Joinup Support Team                                                  |
-      | You received this email because you opted in for Joinup digest messages. |
+      | The Portal Support Team                                                  |
+      | You received this email because you opted in for Interoperable Europe Portal digest messages. |
       | Manage your subscription notifications or unsubscribe from all.          |

@@ -391,6 +391,6 @@ drupal:
         $settings['eu_oss_catalogue']['platform_github']['access_token'] = getenv('JOINUP_GITHUB_TOKEN');
       Stage file proxy: |
         $config['stage_file_proxy.settings']['hotlink'] = TRUE;
-        $config['stage_file_proxy.settings']['origin'] = 'https://joinup.ec.europa.eu';
+        $config['stage_file_proxy.settings']['origin'] = 'https://interoperable-europe.ec.europa.eu';
         $config['stage_file_proxy.settings']['verify'] = FALSE;
         $config['stage_file_proxy.settings']['origin_dir'] = 'sites/default/files';

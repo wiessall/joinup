@@ -43,11 +43,11 @@ class JoinupCollectionContext extends RawDrupalContext {
       'email' => 'contact.email@example.com',
     ]);
 
-    // Create the Joinup collection.
+    // Create the Interoperable Europe Portal collection.
     Rdf::create([
       'rid' => 'collection',
       'id' => JoinupCollectionHelper::JOINUP_COLLECTION_DEFAULT_ENTITY_ID,
-      'label' => 'Joinup',
+      'label' => 'Interoperable Europe Portal',
       'field_ar_state' => 'published',
       'field_topic' => $this->getRandomTopic()->id(),
       'field_ar_owner' => $owner->nid,

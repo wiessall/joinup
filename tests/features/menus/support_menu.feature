@@ -45,8 +45,8 @@ Feature:
 
     When I am on the homepage
     Then I should <homepage expectation> the link "Take a tour" in the "Footer"
-    And I should see the link "Contact Joinup Support"
-    Then I click "Contact Joinup Support"
+    And I should see the link "Contact Portal Support"
+    Then I click "Contact Portal Support"
     And I fill in the following:
       | First name     | Rufus                       |
       | Last name      | Modric                      |
@@ -60,8 +60,8 @@ Feature:
 
     When I visit the collection overview page
     Then I should not see the link "Take a tour"
-    But I should see the link "Contact Joinup Support"
-    When I click "Contact Joinup Support"
+    But I should see the link "Contact Portal Support"
+    When I click "Contact Portal Support"
     And I fill in the following:
       | First name     | Oswine                      |
       | Last name      | Wulfric                     |
@@ -75,8 +75,8 @@ Feature:
 
     When I visit the content overview page
     Then I should see the link "Take a tour"
-    And I should see the link "Contact Joinup Support"
-    When I click "Contact Joinup Support"
+    And I should see the link "Contact Portal Support"
+    When I click "Contact Portal Support"
     And I fill in the following:
       | First name     | Roscof                      |
       | Last name      | Vulvric                     |
@@ -90,11 +90,11 @@ Feature:
 
     When I go to the homepage of the "Hotel California" collection
     Then I should see the link "Take a tour"
-    And I should see the link "Contact Joinup Support"
+    And I should see the link "Contact Portal Support"
 
     When I go to "/user"
     Then I should <user page expectation> the link "Take a tour"
-    And I should see the link "Contact Joinup Support"
+    And I should see the link "Contact Portal Support"
 
     Examples:
       | role                                 | user page expectation | homepage expectation |
@@ -126,12 +126,12 @@ Feature:
     When I click "Edit" in the "Take a tour" row
     Then I should see the heading "Edit menu link Take a tour"
     When I move backward one page
-    And I click "Edit" in the "Contact Joinup Support" row
-    Then I should see the heading "Edit menu link Contact Joinup Support"
+    And I click "Edit" in the "Contact Portal Support" row
+    Then I should see the heading "Edit menu link Contact Portal Support"
 
     Given I am an anonymous user
     And I am on the homepage
-    Then I should see the link "Contact Joinup Support"
+    Then I should see the link "Contact Portal Support"
     And I should see "Arbitrary support menu link"
     # Tour has been disabled.
     But I should not see the link "Take a tour"
@@ -158,7 +158,7 @@ Feature:
 
     Given I am an anonymous user
     When I am on the homepage
-    Then I should see the link "Contact Joinup Support"
+    Then I should see the link "Contact Portal Support"
     # The custom link has been deleted.
     But I should not see "Arbitrary support menu link"
     # Tour has been re-enabled.

@@ -135,7 +135,7 @@ class MenuHelper implements MenuHelperInterface {
       // However, in scope of the Ventuno theme the About Us link is considered
       // to be an important element, so we log a warning to alert the webmaster
       // that corrective action is required.
-      $this->logger->get('joinup_menu')->warning('"About us" link could not be rendered because the Joinup collection is not defined or doesn\'t have an About page.');
+      $this->logger->get('joinup_menu')->warning('"About us" link could not be rendered because the Interoperable Europe Portal collection is not defined or doesn\'t have an About page.');
     }
 
     return $anonymous_links;

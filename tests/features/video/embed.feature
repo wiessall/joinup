@@ -70,6 +70,6 @@ Feature: Embed of videos into the page.
     And I see the "iframe" element with the "title" attribute set to "<title attribute>" in the "Content" region
 
     Examples:
-      | url                                                                                                                                                   | embed url                                                                                                                                         | title attribute  |
+      | url                                                                                                                                                   | embed url                                                           | title attribute                 |
       | https://www.youtube.com/watch?v=YTaLmMsaLOg                                                                                                           | /media/oembed?url=https%3A//www.youtube.com/watch%3Fv%3DYTaLmMsaLOg | New Joinup (1/7)                |
       | https://vimeo.com/7073899                                                                                                                             | /media/oembed?url=https%3A//vimeo.com/7073899                       | Drupal Rap Video - Schipulcon09 |

@@ -1,10 +1,10 @@
-#  Joinup federation of Linked Data
+#  Interoperable Europe Portal federation of Linked Data
 ## Background
 TODO
 ## Stakeholders
 - Member state portals
-- Joinup community
-- Joinup platform
+- Interoperable Europe Portal community
+- Interoperable Europe Portal platform
 - Other ISA projects
 
 ## Architecture
@@ -40,7 +40,7 @@ Sharing SBBs as broad as possible will in the long run lower costs.
 
 * _Joinup portal_
 Globalization urges for more agile Europe. In order to stay relevant, the EC has a responsibility as it is in the coordinating role to facilitate the exchange of information between European public services.
-By sharing SBBs developed both in the commission and in member states as broad as possible, Joinup helps building the digital single market.
+By sharing SBBs developed both in the commission and in member states as broad as possible, Interoperable Europe Portal helps building the digital single market.
 
 * _Joinup community_
 
@@ -49,17 +49,17 @@ By sharing SBBs developed both in the commission and in member states as broad a
 ### Information system architecture
 #### Data architecture
 The data architecture is centered around ADMS-AP.
-The Joinup portal implements the model in a 'conformist' way, so that friction between Joinup and the data standard is minimized.
+The Interoperable Europe Portal portal implements the model in a 'conformist' way, so that friction between Interoperable Europe Portal and the data standard is minimized.
 This was one of the main changes in the architecture while migrating from D6 to D8.
 
 _Joinup extensions (optional):_
-Internally Joinup adds properties that are not included in the ADMS-AP data model. For example, the banner image that is shown inside collections.
+Internally Interoperable Europe Portal adds properties that are not included in the ADMS-AP data model. For example, the banner image that is shown inside collections.
 These properties should be imported when present, but not managed by the federation process.
 
 _Backwards compatibility:_
 At the moment, none of the member state data portals support ADMS-APv2, while some support ADMS-APv1.
 As not everyone will upgrade straight away, an intermediate upgrade path component will take care of supporting legacy systems.
-ADMS-APv1  ----> Transformation ----> Joinup (ADMS-APv2)
+ADMS-APv1  ----> Transformation ----> Interoperable Europe Portal (ADMS-APv2)
 It is of uttermost importance that a good relation is established with the repository owners, as they stay responsible for their data.
 
 
@@ -84,11 +84,11 @@ It is of uttermost importance that a good relation is established with the repos
       (If no existing entity, it might be needed to apply some defaults)
     2. Remove any unmapped properties
     3. Remove all properties defined by ADMS-APv2
-        (This leaves all Joinup specific properties)
+        (This leaves all Interoperable Europe Portal specific properties)
     4. Remove all triples from the STAGING graph whose predicates are present in the SINK graph
     5. Copy all triples from the SINK graph to the STAGING graph
 
-* Joinup compatibility checks
+* Interoperable Europe Portal compatibility checks
     For __each entity__ defined in the STAGING graph:
     1. Load the object
     2. Call the `->validate()` method

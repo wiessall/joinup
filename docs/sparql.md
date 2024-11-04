@@ -59,7 +59,7 @@ Below are some sample queries that can be run against the triplestore.
       <http://example.com/subject> ?p ?o .
     }
 
-You can find the URI ID of the entities in Joinup by visitin the menu
+You can find the URI ID of the entities in Interoperable Europe Portal by visitin the menu
 "Metadata > Export".
 
 ### Get all predicates
@@ -128,7 +128,7 @@ You can find the URI ID of the entities in Joinup by visitin the menu
 SPARQL Mappings
 ---------------
 
-In Joinup, we use `sparql_entity_storage` to map the RDF data to Drupal
+In Interoperable Europe Portal, we use `sparql_entity_storage` to map the RDF data to Drupal
 entities. The way this is done is through the SPARQL mapping config entities and
 the field third party settings.
 
@@ -174,7 +174,7 @@ is stored.
 
 The graphs are mainly groupings of triples. A good way to understand this is to
 think of the graphs as the tables in a relational database. The triples are the
-rows in the tables. The graphs are used to separate the data. In Joinup, we use
+rows in the tables. The graphs are used to separate the data. In Interoperable Europe Portal, we use
 graphs to distinguish between bundles and between published and draft data.
 
 For example, in order to retrieve all collection URI IDs that are published, the
@@ -253,7 +253,7 @@ base_fields_mapping:
 These are the base fields of the entity. The base fields are the fields that
 are defined in the `RdfEntity` class. As you can see, the `rid` field is mapped
 to the `http://www.w3.org/1999/02/22-rdf-syntax-ns#type` predicate and all the
-other fields are mapped to the predicates that are defined in the Joinup.
+other fields are mapped to the predicates that are defined in the Interoperable Europe Portal.
 
 Properties without a mapping value will not be stored in the database. For
 example, the uuid field will not be stored to the database according to the
@@ -278,4 +278,4 @@ entity_id_plugin: joinup_po_namespace
 ```
 The plugin that is used to generate the entity ID. The entity ID is the URI of
 the entity. `joinup_po_namespace` is the plugin that is used to generate the
-entity ID in Joinup.
+entity ID in Interoperable Europe Portal.

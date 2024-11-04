@@ -76,7 +76,7 @@ class JoinupContent extends ConditionPluginBase implements ContainerFactoryPlugi
    */
   public function buildConfigurationForm(array $form, FormStateInterface $form_state): array {
     $form['content'] = [
-      '#title' => $this->t('Joinup content'),
+      '#title' => $this->t('Interoperable Europe Portal content'),
       '#type' => 'checkboxes',
       '#options' => $this->getContentOptions(),
       '#default_value' => $this->configuration['content'],

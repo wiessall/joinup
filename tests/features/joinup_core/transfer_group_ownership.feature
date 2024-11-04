@@ -87,11 +87,11 @@ Feature: As a group (collection or solution) owner or site moderator
 
     Examples:
       | user  | option exists | type       | type capitalized | title                       | full name               | user name            |
-      | happy | contain       | collection | Collection       | Intensive Language Learning | The Joinup Support Team | Saga Þórirsdóttir    |
-      | light | contain       | collection | Collection       | Intensive Language Learning | The Joinup Support Team | Bjartur Jóhannsson   |
+      | happy | contain       | collection | Collection       | Intensive Language Learning | The Portal Support Team | Saga Þórirsdóttir    |
+      | light | contain       | collection | Collection       | Intensive Language Learning | The Portal Support Team | Bjartur Jóhannsson   |
       | cruel | not contain   | collection | Collection       | Intensive Language Learning | Finnur Robertsson       | Finnur Robertsson    |
-      | happy | contain       | solution   | Solution         | Learn German in 1 Month     | The Joinup Support Team | Saga Þórirsdóttir    |
-      | light | contain       | solution   | Solution         | Learn German in 1 Month     | The Joinup Support Team | Bjartur Jóhannsson   |
+      | happy | contain       | solution   | Solution         | Learn German in 1 Month     | The Portal Support Team | Saga Þórirsdóttir    |
+      | light | contain       | solution   | Solution         | Learn German in 1 Month     | The Portal Support Team | Bjartur Jóhannsson   |
       | cruel | not contain   | solution   | Solution         | Learn German in 1 Month     | Finnur Robertsson       | Finnur Robertsson    |
 
   Scenario Outline: Group facilitators do not have access to transfer ownership.
@@ -129,7 +129,7 @@ Feature: As a group (collection or solution) owner or site moderator
     And I am on the members page of "Babylon"
     Then the available options in the "Action" select should not include the "Transfer the ownership of the solution to the selected member" options
 
-  # In Joinup every owner is also a facilitator, so if a normal member is
+  # In Interoperable Europe Portal every owner is also a facilitator, so if a normal member is
   # promoted to owner, they should also become a facilitator.
   Scenario Outline: If ownership is transferred to a normal member, it should also include the facilitator role
     Given I am logged in as "light"

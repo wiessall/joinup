@@ -57,7 +57,7 @@ class EuplContext extends RawDrupalContext {
       'rid' => 'solution',
       'collection' => Eupl::EUPL_COMMUNITY_ID,
       'id' => Eupl::JLA_SOLUTION,
-      'label' => 'Joinup Licensing Assistant',
+      'label' => 'Interoperable Europe Portal Licensing Assistant',
       'field_is_state' => 'published',
     ]);
     $solution->save();

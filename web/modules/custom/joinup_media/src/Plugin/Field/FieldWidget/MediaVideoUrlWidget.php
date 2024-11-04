@@ -25,7 +25,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 #[FieldWidget(
   id: 'joinup_media_video_url',
-  label: new TranslatableMarkup('Joinup Media video URL'),
+  label: new TranslatableMarkup('Interoperable Europe Portal Media video URL'),
   field_types: [
     'entity_reference',
   ],

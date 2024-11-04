@@ -62,7 +62,7 @@ class DiscussionOverviewAccess extends AccessPluginBase implements CacheableDepe
    */
   public function access(AccountInterface $account): bool {
     if (!$this->groupManager->getGroupFromContext()) {
-      throw new \LogicException("The Views 'joinup_group_discussion_overview' can be used only in the context of a Joinup group.");
+      throw new \LogicException("The Views 'joinup_group_discussion_overview' can be used only in the context of a Interoperable Europe Portal group.");
     }
 
     return TRUE;

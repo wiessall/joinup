@@ -145,12 +145,12 @@ Feature: Messaging group announcements
       | The recipient's subscriptions page URL                                                                                                                                                                                                                     |
       | Kind regards,                                                                                                                                                                                                                                              |
       | The Fail pension <group> team                                                                                                                                                                                                                              |
-      | You received this e-mail because, as a registered user of Joinup and a member of Fail pension <group>, you agreed to receive information sent to you by the Fail pension <group> owner/administrator (based on Article 5(d) of Regulation (EU) 2018/1725). |
+      | You received this e-mail because, as a registered user of Interoperable Europe Portal and a member of Fail pension <group>, you agreed to receive information sent to you by the Fail pension <group> owner/administrator (based on Article 5(d) of Regulation (EU) 2018/1725). |
       | In case you do not want to receive such e-mails, you can unsubscribe from group announcement notifications or manage all your subscription notifications from the user subscriptions page.                                                                 |
       | This is an unmonitored email address, please do not reply. You can contact directly Fail pension <group> via the Overview page.                                                                                                                               |
 
     When I press "Send for approval"
-    Then I should see the success message "Your announcement has been sent for validation by Joinup moderators. Once approved, will reach the Fail pension <group> members."
+    Then I should see the success message "Your announcement has been sent for validation by Interoperable Europe Portal moderators. Once approved, will reach the Fail pension <group> members."
     And I should see the link "Add announcement"
     # The facilitator has exhausted all operations they can perform, so they
     # cannot edit the announcement anymore.
@@ -166,8 +166,8 @@ Feature: Messaging group announcements
     And I should not see the button "Reject"
     And I should not see the button "Undo reject"
     And I should not see the button "Preview"
-    And the email sent to "check.edit.moderator@example.com" with subject "Joinup: A new announcement 'The Big Opening is postponed' has been created" contains header "Content-Type" with value "text/html"
-    And the email sent to "check.edit.moderator@example.com" with subject "Joinup: A new announcement 'The Big Opening is postponed' has been created" contains the following lines of text:
+    And the email sent to "check.edit.moderator@example.com" with subject "Interoperable Europe Portal: A new announcement 'The Big Opening is postponed' has been created" contains header "Content-Type" with value "text/html"
+    And the email sent to "check.edit.moderator@example.com" with subject "Interoperable Europe Portal: A new announcement 'The Big Opening is postponed' has been created" contains the following lines of text:
       | A new announcement 'The Big Opening is postponed' has been created by Sons of tweets for the Fail pension <group>. |
       | You can approve or reject the announcement at                                                                      |
 
@@ -175,7 +175,7 @@ Feature: Messaging group announcements
 
     When I go to the announcements page of "Hidden gems" <group>
     Then the response status code should be 403
-    And I click the link from email sent to "Check edit moderator" with subject "Joinup: A new announcement 'The Big Opening is postponed' has been created"
+    And I click the link from email sent to "Check edit moderator" with subject "Interoperable Europe Portal: A new announcement 'The Big Opening is postponed' has been created"
     Then I should see "Announcement state: Pending approval"
     And I should see the button "Update"
     And I should see the button "Approve"
@@ -209,7 +209,7 @@ Feature: Messaging group announcements
       | The recipient's subscriptions page URL                                                                                                                                                                                                                     |
       | Kind regards,                                                                                                                                                                                                                                              |
       | The Fail pension <group> team                                                                                                                                                                                                                              |
-      | You received this e-mail because, as a registered user of Joinup and a member of Fail pension <group>, you agreed to receive information sent to you by the Fail pension <group> owner/administrator (based on Article 5(d) of Regulation (EU) 2018/1725). |
+      | You received this e-mail because, as a registered user of Interoperable Europe Portal and a member of Fail pension <group>, you agreed to receive information sent to you by the Fail pension <group> owner/administrator (based on Article 5(d) of Regulation (EU) 2018/1725). |
       | In case you do not want to receive such e-mails, you can unsubscribe from group announcement notifications or manage all your subscription notifications from the user subscriptions page.                                                                 |
       | This is an unmonitored email address, please do not reply. You can contact directly Fail pension <group> via the Overview page.                                                                                                                               |
 
@@ -270,7 +270,7 @@ Feature: Messaging group announcements
       | The recipient's subscriptions page URL                                                                                                                                                                                                                     |
       | Kind regards,                                                                                                                                                                                                                                              |
       | The Fail pension <group> team                                                                                                                                                                                                                              |
-      | You received this e-mail because, as a registered user of Joinup and a member of Fail pension <group>, you agreed to receive information sent to you by the Fail pension <group> owner/administrator (based on Article 5(d) of Regulation (EU) 2018/1725). |
+      | You received this e-mail because, as a registered user of Interoperable Europe Portal and a member of Fail pension <group>, you agreed to receive information sent to you by the Fail pension <group> owner/administrator (based on Article 5(d) of Regulation (EU) 2018/1725). |
       | In case you do not want to receive such e-mails, you can unsubscribe from group announcement notifications or manage all your subscription notifications from the user subscriptions page.                                                                 |
       | This is an unmonitored email address, please do not reply. You can contact directly Fail pension <group> via the Overview page.                                                                                                                               |
     And the email sent to "Greedy" with subject "The Big Opening is postponed" contains the following lines of text:
@@ -286,7 +286,7 @@ Feature: Messaging group announcements
       | The recipient's subscriptions page URL                                                                                                                                                                                                                     |
       | Kind regards,                                                                                                                                                                                                                                              |
       | The Fail pension <group> team                                                                                                                                                                                                                              |
-      | You received this e-mail because, as a registered user of Joinup and a member of Fail pension <group>, you agreed to receive information sent to you by the Fail pension <group> owner/administrator (based on Article 5(d) of Regulation (EU) 2018/1725). |
+      | You received this e-mail because, as a registered user of Interoperable Europe Portal and a member of Fail pension <group>, you agreed to receive information sent to you by the Fail pension <group> owner/administrator (based on Article 5(d) of Regulation (EU) 2018/1725). |
       | In case you do not want to receive such e-mails, you can unsubscribe from group announcement notifications or manage all your subscription notifications from the user subscriptions page.                                                                 |
       | This is an unmonitored email address, please do not reply. You can contact directly Fail pension <group> via the Overview page.                                                                                                                               |
     And the email sent to "Sons of tweets" with subject "The Big Opening is postponed" contains the following lines of text:
@@ -302,7 +302,7 @@ Feature: Messaging group announcements
       | The recipient's subscriptions page URL                                                                                                                                                                                                                     |
       | Kind regards,                                                                                                                                                                                                                                              |
       | The Fail pension <group> team                                                                                                                                                                                                                              |
-      | You received this e-mail because, as a registered user of Joinup and a member of Fail pension <group>, you agreed to receive information sent to you by the Fail pension <group> owner/administrator (based on Article 5(d) of Regulation (EU) 2018/1725). |
+      | You received this e-mail because, as a registered user of Interoperable Europe Portal and a member of Fail pension <group>, you agreed to receive information sent to you by the Fail pension <group> owner/administrator (based on Article 5(d) of Regulation (EU) 2018/1725). |
       | In case you do not want to receive such e-mails, you can unsubscribe from group announcement notifications or manage all your subscription notifications from the user subscriptions page.                                                                 |
       | This is an unmonitored email address, please do not reply. You can contact directly Fail pension <group> via the Overview page.                                                                                                                               |
     # Accepted 'Legal notice' but it's not subscribed to group announcements.
@@ -507,7 +507,7 @@ Feature: Messaging group announcements
     Then I should see the success message "The announcement has been created as Draft. Review the announcement and, when is ready to be sent, use the 'Send' button."
 
     When I press "Send for approval"
-    Then I should see the success message "Your announcement has been sent for validation by Joinup moderators. Once approved, will reach the Open Source Observatory (OSOR) collection members."
+    Then I should see the success message "Your announcement has been sent for validation by Interoperable Europe Portal moderators. Once approved, will reach the Open Source Observatory (OSOR) collection members."
     When I click "edit" in the "TEST: Mass-mailing announcement" row
     And I press "Approve"
     Then I should see the success message "The announcement has been scheduled to be delivered to the Open Source Observatory (OSOR) collection members. Because the collection has a large amount of members the emails will be sent in several batches."

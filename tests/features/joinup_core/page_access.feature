@@ -20,5 +20,5 @@ Feature:
 
   @api
   Scenario: Accessing the external URL as path should raise a 404.
-    When I go to "/https://joinup.ec.europa.eu/security.txt"
+    When I go to "/https://interoperable-europe.ec.europa.eu/security.txt"
     Then I should see the heading "Not Found"

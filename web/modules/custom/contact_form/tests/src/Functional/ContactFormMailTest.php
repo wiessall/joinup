@@ -66,7 +66,7 @@ class ContactFormMailTest extends JoinupMailFunctionalTestBase {
         'field_contact_email[0][value]' => 'jane.doe@example.com',
         'field_contact_category' => 'usage',
         'field_contact_subject[0][value]' => 'Question subject',
-        'field_contact_message[0][value]' => 'Question about Joinup',
+        'field_contact_message[0][value]' => 'Question about Interoperable Europe Portal',
         'field_contact_copy[value]' => $with_copy,
       ],
       'Submit'
@@ -84,12 +84,12 @@ class ContactFormMailTest extends JoinupMailFunctionalTestBase {
           'reply-to' => NULL,
           'langcode' => 'en',
           'send' => TRUE,
-          'subject' => 'Joinup - Contact form submission',
+          'subject' => 'Interoperable Europe Portal - Contact form submission',
           'body' => self::NOTIFICATION_HTML,
           'headers' => [
             'content-transfer-encoding' => '8Bit',
             'content-type' => 'text/html',
-            'from' => 'Joinup <joinup@example.com>',
+            'from' => 'Interoperable Europe Portal <joinup@example.com>',
             'mime-version' => '1.0',
             'return-path' => 'joinup@example.com',
             'sender' => 'joinup@example.com',
@@ -106,12 +106,12 @@ class ContactFormMailTest extends JoinupMailFunctionalTestBase {
           'reply-to' => NULL,
           'langcode' => 'en',
           'send' => TRUE,
-          'subject' => 'Joinup: Contact form notification',
+          'subject' => 'Interoperable Europe Portal: Contact form notification',
           'body' => $with_copy ? self::COPY_HTML : self::WITHOUT_COPY_HTML,
           'headers' => [
             'content-transfer-encoding' => '8Bit',
             'content-type' => 'text/html',
-            'from' => 'Joinup <joinup@example.com>',
+            'from' => 'Interoperable Europe Portal <joinup@example.com>',
             'mime-version' => '1.0',
             'return-path' => 'joinup@example.com',
             'sender' => 'joinup@example.com',
@@ -178,7 +178,7 @@ table tr td {
 <div class="field--name-field-contact-message contact-form-submission__field-contact-message">
 <div class="field__label fw-bold">
       Message    </div>
-<div class="field__item">Question about Joinup</div>
+<div class="field__item">Question about Interoperable Europe Portal</div>
 </div>
 
 
@@ -197,7 +197,7 @@ First name \nJane \n
  E-mail address \njane.doe@example.com \n
  Category \nQuestion on usage \n
  Subject \nQuestion subject \n
- Message \nQuestion about Joinup
+ Message \nQuestion about Interoperable Europe Portal
 EOS;
 
   const COPY_HTML = <<<'EOS'
@@ -217,15 +217,15 @@ table tr td {
       <td>
         <div style="padding: 0px 0px 0px 0px;">
           <p>Dear Jane Doe</p>
-<p>Thank you for submitting your message to the Joinup Support.</p>
+<p>Thank you for submitting your message to the Interoperable Europe Portal Support.</p>
 <p>This is the message you submitted through the online form:</p>
 <p>Subject: <em class="placeholder">Question subject</em></p>
 <p>Content:</p>
-<blockquote><p>Question about Joinup</p>
+<blockquote><p>Question about Interoperable Europe Portal</p>
 </blockquote>
 <p>Thank you for your interest, we will reply as soon as possible.</p>
 <p>Kind regards,</p>
-<p>The Joinup Support Team</p>
+<p>The Portal Support Team</p>
 
 
         </div>
@@ -240,7 +240,8 @@ EOS;
   const COPY_PLAIN = <<<EOS
 Dear Jane Doe
 
-Thank you for submitting your message to the Joinup Support.
+Thank you for submitting your message to the Interoperable Europe
+Portal Support.
 
 This is the message you submitted through the online form:
 
@@ -248,13 +249,13 @@ Subject: _Question subject_
 
 Content:
 
-> Question about Joinup
+> Question about Interoperable Europe Portal
 
 Thank you for your interest, we will reply as soon as possible.
 
 Kind regards,
 
-The Joinup Support Team
+The Portal Support Team
 EOS;
 
 
@@ -275,10 +276,10 @@ table tr td {
       <td>
         <div style="padding: 0px 0px 0px 0px;">
           <p>Dear Jane Doe</p>
-<p>Thank you for submitting your message to the Joinup Support.</p>
+<p>Thank you for submitting your message to the Interoperable Europe Portal Support.</p>
 <p>We will reply as soon as possible.</p>
 <p>Kind regards,</p>
-<p>The Joinup Support Team</p>
+<p>The Portal Support Team</p>
 
 
         </div>
@@ -293,13 +294,14 @@ EOS;
   const WITHOUT_COPY_PLAIN = <<<EOS
 Dear Jane Doe
 
-Thank you for submitting your message to the Joinup Support.
+Thank you for submitting your message to the Interoperable Europe
+Portal Support.
 
 We will reply as soon as possible.
 
 Kind regards,
 
-The Joinup Support Team
+The Portal Support Team
 EOS;
 
 }

@@ -18,7 +18,7 @@ tips:
     weight: 1
     position: left-start
     selector: '.listing .listing__item:first-of-type'
-    body: 'The content area displays Joinup events, documents, news, and discussions that have been created or updated recently.'
+    body: 'The content area displays Interoperable Europe Portal events, documents, news, and discussions that have been created or updated recently.'
   filters:
     id: filters
     plugin: text
@@ -34,4 +34,4 @@ tips:
     weight: 3
     position: left-start
     selector: .search-bar
-    body: 'Search through the entire Joinup platform and its supported content items.'
+    body: 'Search through the entire Interoperable Europe Portal platform and its supported content items.'

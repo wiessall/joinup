@@ -11,7 +11,7 @@ label: 'Solution release delete'
 description: 'Template 19: Deletion of release'
 text:
   -
-    value: 'Joinup: A release has been deleted'
+    value: 'Interoperable Europe Portal: A release has been deleted'
     format: full_html
   -
     value: '<p>release @entity:title, @entity:release_number of @group:title solution was deleted.</p>'

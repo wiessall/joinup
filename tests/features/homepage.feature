@@ -10,10 +10,10 @@ Feature: Homepage
     When I reload the page
     Then the page should be cached
     And I should see the following lines of text:
-      | The Joinup platform is the European Commission's one-stop shop for interoperable, open, and free digital government ICT solutions and an online space for e-Government professionals and enthusiasts to share and learn about digital public services and initiatives. |
-      | Joinup covers the hands-on aspects of interoperability.                                                                                                                                                                                                                |
-      | It’s the European Commission’s initiative for a reinforced interoperability policy showcasing news and events about government-related interoperability, along with initiatives and best practices that support the digitalisation of EU public administrations.       |
-      | Interoperable Europe covers the policy angle of interoperability.                                                                                                                                                                                                      |
+      | The Interoperable Europe Portal is the European Union’s platform for promoting and supporting interoperability, collaboration, and knowledge sharing across public administrations, businesses, and citizens.                                                                          |
+      | It acts as a one-stop shop for discovering, sharing, and reusing IT solutions and good practices.                                                                                                                                                                |
+      | It’s the European Commission’s initiative for a reinforced interoperability policy showcasing news and events about government-related interoperability, along with initiatives and best practices that support the digitalisation of EU public administrations. |
+      | Interoperable Europe covers the policy angle of interoperability.                                                                                                                                                                                                |
     And I should see the following links:
       | How to video |
       | FAQ          |
@@ -23,16 +23,16 @@ Feature: Homepage
     Given I am not logged in
     # Visit once to cache the page.
     And I am on the homepage
-    Then I should see the text "The Joinup platform is the European Commission's one-stop shop for interoperable"
+    Then I should see the text "The Interoperable Europe Portal is the European Union’s platform for promoting and supporting interoperability"
 
     Given I am logged in as a user with the "authenticated" role
     And I am on the homepage
-    Then I should not see the text "The Joinup platform is the European Commission's one-stop shop for interoperable"
+    Then I should not see the text "The Interoperable Europe Portal is the European Union’s platform for promoting and supporting interoperability"
 
     # Re check for anonymous users.
     Given I am not logged in
     And I am on the homepage
-    Then I should see the text "The Joinup platform is the European Commission's one-stop shop for interoperable"
+    Then I should see the text "The Interoperable Europe Portal is the European Union’s platform for promoting and supporting interoperability"
 
   Scenario: Latest news is shown on the homepage
     Given collection:
@@ -56,7 +56,7 @@ Feature: Homepage
 
     # There is a "More news" link that for the moment leads to the search page
     # pre-filtered on news articles. In the future this will become a dedicated
-    # page showing all the news on Joinup.
+    # page showing all the news on Interoperable Europe Portal.
     Given I am on the homepage
     When I click "More news"
     Then I should be on the advanced search page
@@ -185,7 +185,7 @@ Feature: Homepage
     And the response should not contain "http://raresteaktown.com"
 
     When I click "Read more" in the "Highlighted event"
-    Then the url should match "/collection/joinup/event/florentine-steak-festival"
+    Then the url should match "/collection/interoperable-europe-portal/event/florentine-steak-festival"
 
     # The "More events" link should temporarily link to the search page with the
     # events pre-filtered. This will be replaced with the events page later.
@@ -196,8 +196,8 @@ Feature: Homepage
     And I should see the "Florentine steak festival" tile
 
   @joinupVersion
-  Scenario Outline: The current version of the Joinup platform is shown in the footer.
-    Given the Joinup version is set to "<version>"
+  Scenario Outline: The current version of the Interoperable Europe Portal platform is shown in the footer.
+    Given the Interoperable Europe Portal version is set to "<version>"
     When I am on the homepage
     Then I should see the link "<version>" in the Footer region
     And the "<version>" link should point to "<url>"
