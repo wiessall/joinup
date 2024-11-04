@@ -5,12 +5,11 @@ Feature: Private message report.
   I need to be able to report a message.
 
   @javascript
-  Scenario: Send a private message
+  Scenario: Report a private message
     Given users:
       | Username  | First name | Family name | E-mail                | Roles     |
-      | alice_m   | Alice      | Miller      | alice.m@example.com   |           |
+      | alice_m   | Alice      | Miller      | alice.m@example.com   | Moderator |
       | bob_rolls | Bob        | Rolls       | bob.rolls@example.com |           |
-      | joan_tiff | Joan       | Tiff        | joan.tiff@example.com | Moderator |
 
     Given I am logged in as "alice_m"
     And I am on "/user/messages"
@@ -23,12 +22,12 @@ Feature: Private message report.
     And I press "Send" in the "Modal buttons" region
     Then the modal should be closed
     And a message containing the text "This is a mean message to Bob." should be present
-    And I should not see the link "Report"
+    And I should not see the link "Report message"
 
     When I am logged in as "bob_rolls"
     And I am on "/user/messages"
     And a message containing the text "This is a mean message to Bob." should be present
-    When I click "Report"
+    When I click "Report message"
     Then a modal should open
     And I should see the text "Report and block sender" in the "Modal title"
     When I fill in "Report" with "I want to report this message."
@@ -39,18 +38,23 @@ Feature: Private message report.
     And I should see the message "The user alice_m has been banned."
     And a message containing the text "This is a mean message to Bob." should not be present
     And I should not see the link "Report"
-    And the email sent to "joan.tiff@example.com" with subject "User Bob Rolls reported a message" contains the text:
+    And the email sent to "alice.m@example.com" with subject "User Bob Rolls reported a message" contains the text:
       | The user Bob Rolls has reported user Alice Miller for sending an unwanted message (view message): |
       | Message content:                                                                                  |
       | This is a mean message to Bob.                                                                    |
       | Report reason:                                                                                    |
       | I want to report this message.                                                                    |
-
+    And I go to admin page of reported private message with text "This is a mean message to Bob."
+    Then I should see "Access denied"
     When I am on "/user/messages/settings"
     And I click "Unblock"
     Then a modal should open
     And I should see the text "Are you sure you want to unblock user Alice Miller?" in the "Modal title"
     And I should see the button "Confirm"
+
+    When I am logged in as alice_m
+    And I go to admin page of reported private message with text "This is a mean message to Bob."
+    And I should see "This is a mean message to Bob."
     # @todo make this test pass, now it results in a javascript error.
     # When I press "Confirm" in the "Modal content" region
     # Then the modal should be closed
