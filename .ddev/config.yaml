@@ -38,6 +38,8 @@ composer_version: "2"
 web_environment: [ ]
 disable_settings_management: true
 nodejs_version: "20"
+# Affects only macOS developers.
+performance_mode: global
 
 upload_dirs:
   - sites/default/files

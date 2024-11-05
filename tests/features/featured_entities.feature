@@ -5,11 +5,11 @@ Feature: Featuring content site-wide
   So that important content has more visibility
 
   Background:
-    Given the following collections:
+    Given collection content:
       | title                | state     | featured |
       | Tidy Neutron         | published | yes      |
       | Reborn Eternal Gamma | published | no       |
-    And the following solutions:
+    Given solution content:
       | title                         | collection           | state     | featured |
       | Opensource neutron generators | Tidy Neutron         | published | yes      |
       | Gamma-sensible spectroscopy   | Reborn Eternal Gamma | published | no       |
@@ -83,10 +83,10 @@ Feature: Featuring content site-wide
     And the "Ionizing radiation types" <content type> tile should not be marked as featured
 
     Examples:
-      | content type | label      |
-      | event        | Event      |
-      | document     | Document   |
-      | news         | News       |
+      | content type | label    |
+      | event        | Event    |
+      | document     | Document |
+      | news         | News     |
 
   Scenario Outline: Moderators can feature and unfeature collections and solutions site-wide.
     When I am an anonymous user
@@ -94,6 +94,9 @@ Feature: Featuring content site-wide
     Then I should see the following tiles in the correct order:
       | <featured>   |
       | <unfeatured> |
+      # Joinup collection in installed by default.
+      # @see \joinup_test_install()
+      | <extra entity>       |
     And I should not see the contextual link "Feature" in the "<featured>" tile
     And I should not see the contextual link "Remove from featured" in the "<unfeatured>" tile
 
@@ -133,6 +136,6 @@ Feature: Featuring content site-wide
     Then I should see the success message "<label> <unfeatured> has been set as featured content."
 
     Examples:
-      | featured                      | unfeatured                  | label      | content type |
-      | Tidy Neutron                  | Reborn Eternal Gamma        | Collection | collection   |
-      | Opensource neutron generators | Gamma-sensible spectroscopy | Solution   | solution     |
+      | featured                      | unfeatured                  | extra entity | label      | content type |
+      | Tidy Neutron                  | Reborn Eternal Gamma        | Joinup       | Collection | collection   |
+      | Opensource neutron generators | Gamma-sensible spectroscopy |              | Solution   | solution     |

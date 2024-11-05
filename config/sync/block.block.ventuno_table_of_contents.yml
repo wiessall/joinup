@@ -12,7 +12,7 @@ dependencies:
 id: ventuno_table_of_contents
 theme: ventuno
 region: content
-weight: 2
+weight: -1
 provider: null
 plugin: 'custom_page_toc:navigation'
 settings:
@@ -31,8 +31,8 @@ visibility:
     context_mapping:
       og: '@og.context:og'
     group_types:
-      rdf_entity-collection: rdf_entity-collection
-      rdf_entity-solution: rdf_entity-solution
+      node-collection: node-collection
+      node-solution: node-solution
   request_route:
     id: request_route
     negate: false

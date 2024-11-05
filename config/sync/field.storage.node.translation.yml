@@ -1,0 +1,19 @@
+uuid: 503b4838-dccf-416a-bea5-537598368612
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.translation
+field_name: translation
+entity_type: node
+type: entity_reference
+settings:
+  target_type: node
+module: core
+locked: false
+cardinality: -1
+translatable: false
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

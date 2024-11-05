@@ -14,15 +14,12 @@ Feature: Contact form for solution
       | jocelyn.bass@example.com | confirmed |
       | john@example.com         | confirmed |
       | deleted@example.com      | confirmed |
-    And collection:
-      | title | Antibody development |
-      | state | published            |
-    And solution:
-      | title               | Six exclusion advantages        |
-      | description         | Separating molecules by weight. |
-      | state               | published                       |
-      | contact information | John Revoked                    |
-      | collection          | Antibody development            |
+    And collection content:
+      | title                | state     |
+      | Antibody development | published |
+    And solution content:
+      | title                    | description                     | state     | contact information | collection           |
+      | Six exclusion advantages | Separating molecules by weight. | published | John Revoked        | Antibody development |
     And user:
       | Username | Joe Hard             |
       | E-mail   | joe.hard@example.com |

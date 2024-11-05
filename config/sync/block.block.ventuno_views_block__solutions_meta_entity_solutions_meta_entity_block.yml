@@ -12,7 +12,7 @@ dependencies:
 id: ventuno_views_block__solutions_meta_entity_solutions_meta_entity_block
 theme: ventuno
 region: content
-weight: 1
+weight: -2
 provider: null
 plugin: 'views_block:solutions_meta_entity-solutions_meta_entity_block'
 settings:

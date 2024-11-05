@@ -120,8 +120,7 @@ datasource_settings:
     bundles:
       default: false
       selected:
-        - bookmark_node
-        - bookmark_rdf_entity
+        - bookmark
 processor_settings:
   add_url: {  }
   aggregated_field: {  }

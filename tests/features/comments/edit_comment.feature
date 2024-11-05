@@ -4,7 +4,7 @@ Feature: Edit a comment
   I should receive notifications when someone edits a comment.
 
   Scenario: Edit a comment.
-    Given the following collections:
+    Given collection content:
       | title              | state     | closed |
       | Structural pension | published | no     |
     And users:

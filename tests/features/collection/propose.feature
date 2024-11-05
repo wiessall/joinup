@@ -67,9 +67,6 @@ Feature: Proposing a collection
     And I press "Add existing" at the "Owner" field
     And I fill in "Owner" with "Organisation example"
     And I press "Propose"
-    Then I should not see the following error messages:
-      | error messages         |
-      | Field Logo is required |
     And I should see the heading "Ancient and Classical Mythology"
     # Regression test for the keywords field in the about page.
     And I should not see the text "Search keywords" in the "Content" region
@@ -97,9 +94,9 @@ Feature: Proposing a collection
     And I delete the "Contact person" contact information
 
   Scenario: Propose a collection with a duplicate name
-    Given the following collection:
-      | title | The Ratcatcher's Guild |
-      | state | published              |
+    Given collection content:
+      | title                  | state     |
+      | The Ratcatcher's Guild | published |
     Given I am logged in as a user with the "authenticated" role
     When I go to the propose collection form
     And I fill in the following:
@@ -270,6 +267,7 @@ Feature: Proposing a collection
     Given I am logged in as a "moderator"
     When I go to the edit form of the "Some email validation" collection
     And I press "Publish"
+    # @todo Re-enable in ISAICP-8992
     Then the following email should have been sent:
       | recipient_mail     | some_unique_contact_person@example.com                                                                                                |
       | subject            | Interoperable Europe Portal - Please validate your contact details                                                                    |

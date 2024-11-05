@@ -10,7 +10,7 @@ Feature: Collection RSS feed.
       | alejake  | Aleta      | Jakeman     |
       | forest   | Forest     | Robinson    |
       | otto     | Otto       | Drake       |
-    And collections:
+    And collection content:
       | title             | state     |
       | Indigo Monkey     | published |
       | Dreaded Scissors  | published |
@@ -20,7 +20,7 @@ Feature: Collection RSS feed.
       | Indigo Monkey    | alejake | facilitator |
       | Indigo Monkey    | forest  | facilitator |
       | Dreaded Scissors | otto    | facilitator |
-    And solutions:
+    Given solution content:
       | title           | state     | author  | creation date    | collection       |
       | Lantern Global  | published | alejake | 2018-12-18 08:00 | Indigo Monkey    |
       | Proton Lonesome | published | alejake | 2019-01-05 10:00 | Indigo Monkey    |
@@ -57,7 +57,7 @@ Feature: Collection RSS feed.
       | link        | /collection/indigo-monkey                                                                                          |
     And the RSS feed should have 7 items
     And the RSS feed items should be:
-      | title                                                      | link                                                                     | description                                                                            | publication date                | author          |
+      | title                                                      | link                                                                     | description                                                                            | published at                    | author          |
       | Discussion: Is the indigo coloration caused by their food? | /collection/indigo-monkey/discussion/indigo-coloration-caused-their-food | I was reading the technical paper and it seems their main food is the indigo cherries. | Mon, 21 Jan 2019 13:00:00 +0000 | Aleta Jakeman   |
       | News: Monkeys favourite indigo amongst colors              | /collection/indigo-monkey/news/monkeys-favourite-indigo-amongst-colors   | Research results are out.                                                              | Mon, 21 Jan 2019 12:36:00 +0000 | Aleta Jakeman   |
       | Solution: Proton Lonesome                                  | /collection/indigo-monkey/solution/proton-lonesome                       |                                                                                        | Sat, 05 Jan 2019 10:00:00 +0000 | Aleta Jakeman   |
@@ -76,7 +76,7 @@ Feature: Collection RSS feed.
       | description | This feed contains the latest published content from the Dreaded Scissors collection, including the newest solutions. |
       | link        | /collection/dreaded-scissors                                                                                          |
     And the RSS feed items should be:
-      | title                                   | link                                                                | description                                                                                                                                                                                              | publication date                | author     |
+      | title                                   | link                                                                | description                                                                                                                                                                                              | published at                    | author     |
       | Solution: Shiny Ray                     | /collection/dreaded-scissors/solution/shiny-ray                     |                                                                                                                                                                                                          | Tue, 14 Aug 2018 17:36:00 +0000 | Otto Drake |
       | News: New metal alloy improves scissors | /collection/dreaded-scissors/news/new-metal-alloy-improves-scissors | It improves sharpness but they are more subject to rust.                                                                                                                                                 | Wed, 11 Apr 2018 09:00:00 +0000 | Otto Drake |
       # The 'Scissor sharpening party' is using the `content_editor` text format

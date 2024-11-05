@@ -11,7 +11,7 @@ use Drupal\Core\Form\ConfirmFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
-use Drupal\joinup_group\Entity\GroupInterface;
+use Drupal\node\NodeInterface;
 use Drupal\og\MembershipManagerInterface;
 use Drupal\og\Og;
 use Drupal\user\Entity\User;
@@ -76,7 +76,7 @@ class LeaveGroupConfirmForm extends ConfirmFormBase {
    */
   public function getDescription(): TranslatableMarkup {
     return $this->t("<p>Are you sure you want to leave the %label :type?</p><p>By leaving the :type you will be no longer able to publish content in it or receive notifications from it.</p>", [
-      '%label' => $this->group->getName(),
+      '%label' => $this->group->label(),
       ':type' => $this->group->bundle(),
     ]);
   }
@@ -85,17 +85,15 @@ class LeaveGroupConfirmForm extends ConfirmFormBase {
    * {@inheritdoc}
    */
   public function getCancelUrl(): Url {
-    return Url::fromRoute('entity.rdf_entity.canonical', [
-      'rdf_entity' => $this->group->id(),
-    ]);
+    return $this->group->toUrl();
   }
 
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state, ?GroupInterface $rdf_entity = NULL): array {
+  public function buildForm(array $form, FormStateInterface $form_state, ?NodeInterface $node = NULL): array {
     // Store the group on the object so it can be reused.
-    $this->group = $rdf_entity;
+    $this->group = $node;
 
     $form = parent::buildForm($form, $form_state);
 
@@ -165,7 +163,7 @@ class LeaveGroupConfirmForm extends ConfirmFormBase {
     }
 
     $this->messenger()->addStatus($this->t('You are no longer a member of %label.', [
-      '%label' => $this->group->getName(),
+      '%label' => $this->group->label(),
     ]));
 
     $form_state->setRedirectUrl($this->getCancelUrl());
@@ -174,13 +172,13 @@ class LeaveGroupConfirmForm extends ConfirmFormBase {
   /**
    * Access check for the LeaveGroupConfirmForm.
    *
-   * @param \Drupal\joinup_group\Entity\GroupInterface $rdf_entity
+   * @param \Drupal\node\NodeInterface $node
    *   The group that is on the verge of losing a member.
    *
    * @return \Drupal\Core\Access\AccessResultInterface
    *   The access result object.
    */
-  public static function access(GroupInterface $rdf_entity): AccessResultInterface {
+  public static function access(NodeInterface $node): AccessResultInterface {
     /** @var \Drupal\Core\Session\AccountProxyInterface $account_proxy */
     $account_proxy = \Drupal::service('current_user');
 
@@ -191,7 +189,7 @@ class LeaveGroupConfirmForm extends ConfirmFormBase {
 
     // Only allow access if the current user is a member of the group.
     $user = User::load($account_proxy->id());
-    return AccessResult::allowedIf(Og::isMember($rdf_entity, $user));
+    return AccessResult::allowedIf(Og::isMember($node, $user));
   }
 
   /**

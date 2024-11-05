@@ -17,9 +17,6 @@ use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup\Traits\TopicTrait;
 use Drupal\joinup\Traits\UtilityTrait;
 use Drupal\meta_entity\Entity\MetaEntity;
-use Drupal\node\Entity\Node;
-use Drupal\paragraphs\Entity\Paragraph;
-use Drupal\rdf_entity\Entity\Rdf;
 
 /**
  * Behat step definitions and related methods provided by the eif module.
@@ -52,49 +49,38 @@ class EifContext extends RawDrupalContext {
       'email' => 'contact.email@example.com',
     ]);
 
+    // Random topic.
+    $topic_label = $this->getRandomTopic()->label();
     // Create the NIFO sample collection.
-    $collection = Rdf::create([
-      'rid' => 'collection',
-      'id' => 'http://nifo.collection',
-      'label' => 'NIFO collection',
-      'field_ar_state' => 'published',
-      'field_topic' => $tid = $this->getRandomTopic()->id(),
-      'field_ar_owner' => $owner->nid,
-      'field_ar_contact_information' => $contact->nid,
+    $collection = $this->nodeCreate((object) [
+      'type' => 'collection',
+      'uri' => 'http://nifo.collection',
+      'title' => 'NIFO collection',
+      'field_state' => 'published',
+      'field_topic' => $topic_label,
+      'owner' => $owner->title,
+      'contact_information' => $contact->title,
     ]);
-    $collection->save();
-    $this->entities['rdf_entity'][$collection->id()] = $collection;
 
     // Create the EIF Toolbox solution.
-    $solution = Rdf::create([
-      'rid' => 'solution',
-      'id' => EifInterface::EIF_ID,
-      'label' => 'EIF Toolbox',
-      'collection' => 'http://nifo.collection',
-      'field_is_state' => 'published',
-      'field_topic' => $tid,
-      'field_is_owner' => $owner->nid,
-      'field_is_contact_information' => $contact->nid,
+    $solution = $this->nodeCreate((object) [
+      'type' => 'solution',
+      'uri' => EifInterface::EIF_ID,
+      'title' => 'EIF Toolbox',
+      'og_audience' => $collection->title,
+      'field_state' => 'published',
+      'field_topic' => $topic_label,
+      'owner' => $owner->title,
+      'contact_information' => $contact->title,
     ]);
-    $solution->save();
-    $this->entities['rdf_entity'][$solution->id()] = $solution;
 
-    $page = Node::create([
+    $this->nodeCreate((object) [
       'type' => 'custom_page',
       'nid' => EifInterface::EIF_ONLINE_ASSISTANT,
       'title' => 'Online Assistant',
-      'og_audience' => EifInterface::EIF_ID,
-      'field_paragraphs_body' => Paragraph::create([
-        'type' => 'simple_paragraph',
-        'field_body' => [
-          'value' => '',
-          'format' => 'content_editor',
-        ],
-      ]),
+      'og_audience' => $solution->title,
       'field_state' => 'published',
     ]);
-    $page->save();
-    $this->entities['node'][$page->id()] = $page;
 
     // Ensure the taxonomy terms are indexed.
     $vids = [
@@ -127,12 +113,12 @@ class EifContext extends RawDrupalContext {
    * @Given the following EIF perspective data for the :solution solution:
    */
   public function givenEifPerspectiveOfSolution(TableNode $table_data, string $solution): void {
-    $solution = $this->getEntityByLabel('rdf_entity', $solution, 'solution');
+    $solution = $this->getEntityByLabel('node', $solution, 'solution');
     $fields = [];
     foreach ($table_data->getRows() as $row) {
       if ($row[0] === 'uri') {
         $fields['uri'] = $row[1];
-        break;
+        continue;
       }
       $field_name = 'eif_' . str_replace(' ', '_', strtolower($row[0]));
       $fields[$field_name] ??= [];
@@ -186,9 +172,9 @@ class EifContext extends RawDrupalContext {
    * @Given I go to the EIF perspective page of the :solution solution
    */
   public function goToEifPerspectiveOfSolution(string $solution): void {
-    $solution = $this->getEntityByLabel('rdf_entity', $solution, 'solution');
-    $url = Url::fromRoute('entity.rdf_entity.eif_perspective', [
-      'rdf_entity' => $solution->id(),
+    $solution = $this->getEntityByLabel('node', $solution, 'solution');
+    $url = Url::fromRoute('entity.node.eif_perspective', [
+      'node' => $solution->id(),
     ]);
     $this->visitPath($url->getInternalPath());
   }
@@ -202,7 +188,7 @@ class EifContext extends RawDrupalContext {
    * @Given there should be an EIF perspective associated with the :solution solution
    */
   public function assertSolutionWithPerspective(string $solution): void {
-    $solution = $this->getEntityByLabel('rdf_entity', $solution, 'solution');
+    $solution = $this->getEntityByLabel('node', $solution, 'solution');
     if (empty(\Drupal::getContainer()->get('meta_entity.repository')->getMetaEntityForEntity($solution, 'eif_perspective'))) {
       throw new \Exception('No perspective was found for the solution');
     }
@@ -217,7 +203,7 @@ class EifContext extends RawDrupalContext {
    * @Given I delete the EIF perspective of the :solution_label solution
    */
   public function deletePerspectiveOfSolution(string $solution_label): void {
-    $solution = $this->getEntityByLabel('rdf_entity', $solution_label, 'solution');
+    $solution = $this->getEntityByLabel('node', $solution_label, 'solution');
     $eif_perspective = $solution->get('eif_perspective')->entity;
     $eif_perspective->delete();
   }

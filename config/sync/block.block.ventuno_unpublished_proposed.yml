@@ -10,7 +10,7 @@ dependencies:
 id: ventuno_unpublished_proposed
 theme: ventuno
 region: content
-weight: 6
+weight: 3
 provider: null
 plugin: entity_unpublished
 settings:
@@ -19,7 +19,7 @@ settings:
   label_display: visible
   provider: joinup_group
   context_mapping:
-    og: '@rdf_entity.rdf_entity_route_context:rdf_entity'
+    og: '@node.node_route_context:node'
   states_filter:
     - proposed
   negate_states_filter: false
@@ -28,4 +28,4 @@ visibility:
     id: request_route
     negate: false
     routes:
-      - entity.rdf_entity.unpublished_content
+      - entity.node.unpublished_content

@@ -3,7 +3,7 @@ Feature: Add comments
   As a visitor of the website I can leave a comment on community content.
 
   Background:
-    Given the following collections:
+    Given collection content:
       | title             | state     | closed |
       | Gossip collection | published | no     |
     And users:
@@ -16,7 +16,7 @@ Feature: Add comments
   @javascript
   Scenario Outline: Make an authenticated comment, skips moderation.
 
-    Given solutions:
+    Given solution content:
       | title                | collection        | state     |
       | Gossip girl solution | Gossip collection | published |
     And users:
@@ -92,11 +92,11 @@ Feature: Add comments
       | body      | Salma Coster posted a comment in        |
 
     Examples:
-      | content type | title               | state     | parent     | parent title         |
-      | news         | Scandalous news     | published | collection | Gossip collection    |
-      | discussion   | Is gossip bad?      | published | collection | Gossip collection    |
+      | content type | title           | state     | parent     | parent title         |
+      | news         | Scandalous news | published | collection | Gossip collection    |
+      | discussion   | Is gossip bad?  | published | collection | Gossip collection    |
       # Add an example also for solutions to ensure the variables are properly replaced.
-      | news         | Scandalous news     | published | solution   | Gossip girl solution |
+      | news         | Scandalous news | published | solution   | Gossip girl solution |
 
   # This scenario uses javascript to work as regression test for a bug that
   # makes CKEditor unusable upon a page load.
@@ -104,7 +104,7 @@ Feature: Add comments
   @javascript
   Scenario Outline: Make an authenticated comment at a community content using layout paragraphs, skips moderation.
 
-    Given solutions:
+    Given solution content:
       | title                | collection        | state     |
       | Gossip girl solution | Gossip collection | published |
     And users:
@@ -243,7 +243,7 @@ Feature: Add comments
 
   Scenario Outline: Comments are disallowed for anonymous users.
 
-    Given the following collections:
+    Given collection content:
       | title          | state     | closed |
       | Shy collection | published | yes    |
     And <content type> content:
@@ -275,7 +275,7 @@ Feature: Add comments
       | Gossip collection | document     | Celebrity scandals 2019   | published |
 
   Scenario Outline: Anonymized comments
-    Given the following collections:
+    Given collection content:
       | title           | state     | closed |
       | Show collection | published | yes    |
     And <content type> content:
@@ -309,10 +309,10 @@ Feature: Add comments
     Then comment #2 should contain the markup "Anonymous user"
 
     Examples:
-      | collection         | content type | title                     | state     |
-      | Show collection    | news         | Scandalous busy           | published |
-      | Show collection    | discussion   | Is gossip bad or not?     | published |
-      | Show collection    | document     | Wikilikes                 | published |
-      | Gossip collection  | news         | Bosinga wears pope outfit | published |
-      | Gossip collection  | discussion   | Is gossip good or not?    | published |
-      | Gossip collection  | document     | Celebrity scandals 2022   | published |
+      | collection        | content type | title                     | state     |
+      | Show collection   | news         | Scandalous busy           | published |
+      | Show collection   | discussion   | Is gossip bad or not?     | published |
+      | Show collection   | document     | Wikilikes                 | published |
+      | Gossip collection | news         | Bosinga wears pope outfit | published |
+      | Gossip collection | discussion   | Is gossip good or not?    | published |
+      | Gossip collection | document     | Celebrity scandals 2022   | published |

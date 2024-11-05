@@ -11,22 +11,17 @@ Feature: Asset release "delete" functionality.
     And contact_information content:
       | name                | email                         | website url        |
       | Yet another contact | yetanothercontact@example.com | http://example.com |
-    And the following collection:
-      | title | Yet another collection |
-      | state | published              |
-    And the following solution:
-      | title               | Yet another solution       |
-      | description         | Bored of finding new texts |
-      | documentation       | text.pdf                   |
-      | owner               | Yet another owner          |
-      | contact information | Yet another contact        |
-      | collection          | Yet another collection     |
-      | state               | published                  |
+    And collection content:
+      | title                  | state     |
+      | Yet another collection | published |
+    And solution content:
+      | title                | description                | documentation | owner             | contact information | collection             | state     |
+      | Yet another solution | Bored of finding new texts | text.pdf      | Yet another owner | Yet another contact | Yet another collection | published |
     And release content:
-      | title               | release notes    | documentation | release number | release notes   | is version of        | owner             | contact information | state     |
-      | Yet another release | A sample release | text.pdf      | 1              | Changed release | Yet another solution | Yet another owner | Yet another contact | published |
-      | No release          | A sample release | text.pdf      | 1.2            | Changed release | Yet another solution | Yet another owner | Yet another contact | published |
-      | Jinks               | A sample release | text.pdf      | 3              | Changed release | Yet another solution | Yet another owner | Yet another contact | published |
+      | title               | release notes    | documentation | release number | release notes   | is version of        | state     |
+      | Yet another release | A sample release | text.pdf      | 1              | Changed release | Yet another solution | published |
+      | No release          | A sample release | text.pdf      | 1.2            | Changed release | Yet another solution | published |
+      | Jinks               | A sample release | text.pdf      | 3              | Changed release | Yet another solution | published |
     And users:
       | Username        | E-mail                      | First name | Family name |
       | Ronnie Holloway | Ronnie.holloway@example.com | Ronnie     | Holloway    |

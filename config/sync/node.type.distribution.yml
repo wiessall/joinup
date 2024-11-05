@@ -24,7 +24,7 @@ third_party_settings:
         value:
           predicate: 'http://purl.org/dc/terms/modified'
           type: 'xsd:dateTime'
-      created:
+      published_at:
         value:
           predicate: 'http://purl.org/dc/terms/issued'
           type: 'xsd:dateTime'

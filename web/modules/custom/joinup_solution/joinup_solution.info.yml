@@ -1,5 +1,22 @@
 name: 'Joinup solution'
 type: module
-description: 'Contains functionality related to the solution entity.'
+description: 'The interoperability solution entity.'
 package: Joinuo
 core_version_requirement: ^10 || ^11
+dependencies:
+  - 'drupal:datetime'
+  - 'drupal:image'
+  - 'drupal:link'
+  - 'drupal:options'
+  - 'drupal:text'
+  - 'file_url:file_url'
+  - 'inline_entity_form:inline_entity_form'
+  - 'joinup:joinup_release'
+  - 'joinup:contact_information'
+  - 'joinup:joinup_taxonomy'
+  - 'joinup:joinup_workflow'
+  - 'joinup:owner'
+  - 'joinup:search_api_field'
+  - 'search_api:search_api'
+  - 'state_machine:state_machine'
+  - 'token:token'

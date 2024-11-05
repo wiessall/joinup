@@ -11,22 +11,12 @@ Feature: Search inside groups
     And owner content:
       | name             |
       | Antonios Katsumi |
-    And collection:
-      | title               | Chalet construction |
-      | description         | Lorem Ipsum ipsum   |
-      | logo                | logo.png            |
-      | moderation          | no                  |
-      | topic               | Demography          |
-      | spatial coverage    | Belgium             |
-      | state               | published           |
-      | owner               | Antonios Katsumi    |
-      | contact information | Charalambos Katsumi |
-    And solution:
-      | title       | Inclined foundations                                  |
-      | description | Ways to construct foundations on hills and mountains. |
-      | logo        | logo.png                                              |
-      | collection  | Chalet construction                                   |
-      | state       | published                                             |
+    And collection content:
+      | title               | description       | logo     | moderation | topic      | spatial coverage | state     | owner            | contact information |
+      | Chalet construction | Lorem Ipsum ipsum | logo.png | no         | Demography | Belgium          | published | Antonios Katsumi | Charalambos Katsumi |
+    And solution content:
+      | title                | description                                           | logo     | collection          | state     |
+      | Inclined foundations | Ways to construct foundations on hills and mountains. | logo.png | Chalet construction | published |
     And discussion content:
       | title      | body                           | state     | collection          | solution             |
       | Room sizes | What are the ideal dimensions? | published | Chalet construction |                      |

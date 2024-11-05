@@ -3,10 +3,9 @@ Feature: Delete comments
   As a visitor of the website I can leave a comment on community content.
 
   Background:
-    Given the following collection:
-      | title | Semantic web fanatics |
-      | logo  | logo.png              |
-      | state | published             |
+    Given collection content:
+      | title                 | logo     | state     |
+      | Semantic web fanatics | logo.png | published |
     And users:
       | Username             | E-mail                        | First name  | Family name |
       | Tim Berners Lee      | tim.berners-lee@example.com   | Tim Berners | Lee         |

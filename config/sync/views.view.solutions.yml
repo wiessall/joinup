@@ -135,14 +135,14 @@ display:
           format_plural_string: !!binary MQNAY291bnQ=
           prefix: ''
           suffix: ''
-        label:
-          id: label
-          table: search_api_datasource_published_entity_rdf_entity
-          field: label
+        title:
+          id: title
+          table: search_api_datasource_published_entity_node
+          field: title
           relationship: none
           group_type: group
           admin_label: ''
-          entity_type: rdf_entity
+          entity_type: node
           plugin_id: search_api_field
           label: ''
           exclude: false
@@ -422,36 +422,38 @@ display:
           exposed: false
       arguments: {  }
       filters:
-        rid:
-          id: rid
+        entity_bundle:
+          id: entity_bundle
           table: search_api_index_published
-          field: rid
+          field: entity_bundle
           relationship: none
           group_type: group
           admin_label: ''
           plugin_id: search_api_string
-          operator: or
+          operator: '='
           value:
+            min: ''
+            max: ''
             value: solution
           group: 1
           exposed: false
           expose:
-            operator_id: rid_op
-            label: 'Rdf Type'
-            description: ''
+            operator_id: entity_bundle_op
+            label: Bundle
+            description: null
             use_operator: false
-            operator: rid_op
+            operator: entity_bundle_op
             operator_limit_selection: false
             operator_list: {  }
-            identifier: rid
+            identifier: entity_bundle
             required: false
             remember: false
             multiple: false
             remember_roles:
               authenticated: authenticated
-              anonymous: '0'
-              moderator: '0'
-              administrator: '0'
+            min_placeholder: null
+            max_placeholder: null
+            placeholder: null
           is_grouped: false
           group_info:
             label: ''
@@ -475,16 +477,25 @@ display:
         options:
           view_modes:
             'entity:node':
+              collection: view_mode_tile
               custom_page: default
+              discussion: default
               distribution: default
               document: default
               event: view_mode_tile
               licence: default
               news: default
               release: default
-            'entity:rdf_entity':
-              collection: view_mode_tile
               solution: view_mode_tile
+            'entity:taxonomy_term':
+              eif_conceptual_model: default
+              eif_interoperability_layer: default
+              eif_principle: default
+              eif_recommendation: default
+              oss_category: default
+              topic: default
+            'entity:user':
+              user: default
       query:
         type: search_api_query
         options:
@@ -494,17 +505,21 @@ display:
       show_admin_links: false
       header: {  }
       footer: {  }
-      display_extenders: {  }
+      display_extenders:
+        metatag_display_extender:
+          metatags: {  }
+          tokenize: false
     cache_metadata:
       max-age: -1
       contexts:
         - 'languages:language_content'
         - 'languages:language_interface'
-        - solution_owner
         - url.query_args
         - 'user.node_grants:view'
       tags:
         - 'config:search_api.index.published'
+        - 'config:views.view.solutions'
+        - 'search_api_list:published'
   page_1:
     id: page_1
     display_title: Page
@@ -525,10 +540,14 @@ display:
     cache_metadata:
       max-age: -1
       contexts:
+        - 'facets_filter:f'
         - 'languages:language_content'
         - 'languages:language_interface'
         - solution_owner
         - url.query_args
         - 'user.node_grants:view'
       tags:
+        - 'config:facets.facet.solution_my_content'
         - 'config:search_api.index.published'
+        - 'config:views.view.solutions'
+        - 'search_api_list:published'

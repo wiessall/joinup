@@ -4,7 +4,6 @@ Feature: Header
   As a UX designer
   I want to place links that are relevant to the user's status in the header
 
-  @joinup
   Scenario Outline: Header shows basic info and directs anonymous users to log in or create an account
     Given I am not logged in
     And I visit the <page>
@@ -32,13 +31,13 @@ Feature: Header
     Then I should see the heading "Sign in to continue"
 
     Examples:
-      | page         |
+      | page                |
       # A page with the new Ventuno theme.
-      | search page |
+      | search page         |
       # A page with the old Interoperable Europe Portal Theme theme.
       | collection overview |
 
-  @joinup @javascript
+  @javascript
   Scenario Outline: The 'Get started' button opens a popup with information about EU Login
     Given I am not logged in
     And I visit the <page>
@@ -61,8 +60,8 @@ Feature: Header
     Then I should see the heading "Sign in to continue"
 
     Examples:
-      | page         |
+      | page                |
       # A page with the new Ventuno theme.
-      | search page |
+      | search page         |
       # A page with the old Interoperable Europe Portal Theme theme.
       | collection overview |

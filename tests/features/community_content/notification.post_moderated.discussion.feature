@@ -11,7 +11,7 @@ Feature: Notification test for the discussion transitions on a post moderated pa
       | CC owner         |           | notify_owner@test.com       | CC         | Owner       | immediate              |
       | CC facilitator   |           | notify_facilitator@test.com | CC         | Facilitator | immediate              |
       | CC member        |           | notify_member@test.com      | CC         | Member      | immediate              |
-    And collections:
+    And collection content:
       | title              | state     | content creation | moderation   |
       | CC post collection | published | members          | <moderation> |
     And the following collection user memberships:
@@ -109,7 +109,7 @@ Feature: Notification test for the discussion transitions on a post moderated pa
       | yes        | author |
 
   Scenario: No notifications should be sent when a discussion is orphaned
-    Given collections:
+    Given collection content:
       | title                   | state     |
       | Event Horizon Telescope | published |
     And discussion content:

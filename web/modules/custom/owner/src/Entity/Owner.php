@@ -8,8 +8,6 @@ use Drupal\joinup_bundle_class\JoinupBundleClassFieldAccessTrait;
 use Drupal\joinup_rdf\Entity\RdfSyncEntityTrait;
 use Drupal\joinup_workflow\EntityWorkflowStateTrait;
 use Drupal\node\Entity\Node;
-use Drupal\rdf_entity\Entity\Rdf;
-use Drupal\sparql_entity_storage\Entity\Query\Sparql\SparqlArg;
 
 /**
  * Bundle class for the 'owner' bundle.
@@ -23,19 +21,8 @@ class Owner extends Node implements OwnerInterface {
   /**
    * {@inheritdoc}
    */
-  public function getWorkflowStateFieldName(): string {
-    return 'field_state';
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function isReferencedByGroups(): bool {
-    if (empty($this->id())) {
-      return FALSE;
-    }
-    $sparql_endpoint = \Drupal::getContainer()->get('sparql.endpoint');
-    return $sparql_endpoint->query("ASK { ?s ?p " . SparqlArg::uri($this->getUri()) . " }")->isTrue();
+    return count($this->getReferencingGroupIds()) > 0;
   }
 
   /**
@@ -46,13 +33,22 @@ class Owner extends Node implements OwnerInterface {
       return [];
     }
 
-    $query = \Drupal::entityQuery('rdf_entity')->accessCheck(FALSE);
-    $result = $query
-      ->condition('rid', 'collection')
-      ->condition('field_ar_owner', $this->getUri())
-      ->execute();
+    $groupIds = $this->getReferencingGroupIds();
+    return !empty($groupIds) ? Node::loadMultiple($groupIds) : [];
+  }
 
-    return !empty($result) ? Rdf::loadMultiple($result) : [];
+  /**
+   * Returns the ID of the groups which are referencing this owner.
+   *
+   * @return string[]|int[]
+   *   An array of groups IDs that reference the owner, keyed by revision IDs.
+   */
+  protected function getReferencingGroupIds(): array {
+    return \Drupal::entityQuery('node')
+      ->accessCheck(FALSE)
+      ->condition('type', ['collection', 'solution'], 'IN')
+      ->condition('owner', $this->id())
+      ->execute();
   }
 
 }

@@ -6,9 +6,6 @@ parameters:
             og_membership:
                 class: Drupal\og\Entity\OgMembership
                 storage: Drupal\Core\Entity\Sql\SqlContentEntityStorage
-            rdf_entity:
-                class: Drupal\rdf_entity\Entity\Rdf
-                storage: Drupal\sparql_entity_storage\SparqlEntityStorage
     ignoreErrors:
         # We're not prepared yet for this.
         - '#\Drupal calls should be avoided in classes, use dependency injection instead#'

@@ -12,18 +12,18 @@ Feature: As a group (collection or solution) owner or site moderator
       | shy      |                         | Ásdís      | Sigurðsdóttir |
       | light    | moderator               | Bjartur    | Jóhannsson    |
       | frozen   |                         | Edda       | Agnarsdóttir  |
-    And the following collection:
-      | title | Intensive Language Learning |
-      | state | published                   |
+    And collection content:
+      | title                       | state     |
+      | Intensive Language Learning | published |
     And the following collection user memberships:
       | collection                  | user   | roles       |
       | Intensive Language Learning | loner  |             |
       | Intensive Language Learning | cruel  | owner       |
       | Intensive Language Learning | shy    | facilitator |
       | Intensive Language Learning | frozen | owner       |
-    And the following solution:
-      | title | Learn German in 1 Month |
-      | state | published               |
+    And solution content:
+      | title                   | state     |
+      | Learn German in 1 Month | published |
     And the following solution user memberships:
       | solution                | user   | roles       |
       | Learn German in 1 Month | loner  |             |
@@ -105,13 +105,12 @@ Feature: As a group (collection or solution) owner or site moderator
       | solution   | Learn German in 1 Month     |
 
   Scenario: Collection owner cannot transfer ownership of a child solution, neither viceversa.
-    Given the following collection:
-      | title | Babylon   |
-      | state | published |
-    And the following solution:
-      | title      | Rivers Of Babylon |
-      | collection | Babylon           |
-      | state      | published         |
+    Given collection content:
+      | title   | state     |
+      | Babylon | published |
+    And solution content:
+      | title             | collection | state     |
+      | Rivers Of Babylon | Babylon    | published |
     And collection user membership:
       | collection | user  | roles       |
       | Babylon    | shy   | owner       |

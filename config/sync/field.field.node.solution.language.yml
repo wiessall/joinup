@@ -1,0 +1,35 @@
+uuid: 4d43f564-545e-4263-bcae-edce2290a15a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.language
+    - node.type.solution
+    - taxonomy.vocabulary.language
+  module:
+    - rdf_sync
+third_party_settings:
+  rdf_sync:
+    target_id:
+      predicate: 'http://purl.org/dc/terms/language'
+      type: resource
+id: node.solution.language
+field_name: language
+entity_type: node
+bundle: solution
+label: Languages
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      language: language
+    sort:
+      field: _none
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

@@ -22,7 +22,7 @@ Feature: Collection membership administration
       | Cam Bridge        |           | cambridge@example.com         | Cam        | Bridge      |
       # Moderator.
       | Daniel Moder      | moderator | daniel_moder@example.com      | Daniel     | Moder       |
-    And the following collections:
+    And collection content:
       | title             | description               | logo     | owner        | contact information                    | closed | state     |
       | Medical diagnosis | 10 patients in 10 minutes | logo.png | James Wilson | Princeton-Plainsboro Teaching Hospital | yes    | published |
     And the following collection user memberships:
