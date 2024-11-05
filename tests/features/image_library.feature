@@ -33,8 +33,8 @@ Feature: As a moderator, I am able to pre-upload images for logos.
     Then I should see the success message "The media item Name of <media type label> has been deleted."
 
     Examples:
-      | media type label  | entity bundle | extension |
-      | Collection logo   | collection    | png       |
-      | Solution logo     | solution      | png       |
-      | News logo         | news          | png       |
-      | Event logo        | event         | png       |
+      | media type label | entity bundle | extension |
+      | Collection logo  | collection    | png       |
+      | Solution logo    | solution      | png       |
+      | News logo        | news          | png       |
+      | Event logo       | event         | png       |

@@ -50,12 +50,12 @@ class JoinupGroupExceptionRedirectSubscriber implements EventSubscriberInterface
       return;
     }
 
-    $rdf_entity = $route_match->getParameter('rdf_entity');
-    if (!$rdf_entity instanceof GroupInterface || !$rdf_entity->access('view')) {
+    $node = $route_match->getParameter('node');
+    if (!$node instanceof GroupInterface || !$node->access('view')) {
       return;
     }
 
-    $event->setResponse(new RedirectResponse($rdf_entity->toUrl('canonical', ['absolute' => TRUE])->toString()));
+    $event->setResponse(new RedirectResponse($node->toUrl('canonical', ['absolute' => TRUE])->toString()));
   }
 
 }

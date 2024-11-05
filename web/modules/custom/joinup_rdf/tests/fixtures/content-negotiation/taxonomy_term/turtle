@@ -1,0 +1,7 @@
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+
+<http://purl.org/adms/licence/PD>
+  skos:inScheme <http://purl.org/adms/licencetype/1.1> ;
+  skos:prefLabel "Public domain"@en ;
+  skos:definition ""@en ;
+  a skos:Concept .

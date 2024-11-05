@@ -111,7 +111,7 @@ content:
         template_suggestion: bare
     weight: 0
     region: content
-  flag_like_node:
+  flag_like:
     settings: {  }
     third_party_settings: {  }
     weight: 2

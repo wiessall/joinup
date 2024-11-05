@@ -10,11 +10,12 @@ use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\ContentEntityInterface;
-use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Routing\TrustedRedirectResponse;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\joinup_release\Entity\ReleaseInterface;
-use Drupal\rdf_entity\RdfInterface;
+use Drupal\joinup_solution\Entity\SolutionInterface;
+use Drupal\node\NodeInterface;
+use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\rdf_sync\RdfSyncMapper;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -39,57 +40,57 @@ class ReleaseController extends ControllerBase {
    * Controller for the base form.
    *
    * We need to override the functionality of the create form for pages
-   * that include the rdf_entity id in the url so that the OG audience field
-   * is auto completed.
+   * that include the node id in the url so that the OG audience field is
+   * auto completed.
    *
-   * @param \Drupal\rdf_entity\RdfInterface $rdf_entity
-   *   The solution rdf_entity.
+   * @param \Drupal\node\NodeInterface $node
+   *   The solution entity.
    *
    * @return array
    *   Return the form array to be rendered.
    */
-  public function add(RdfInterface $rdf_entity): array {
-    return $this->entityFormBuilder()->getForm($this->createNewRelease($rdf_entity));
+  public function add(NodeInterface $node): array {
+    return $this->entityFormBuilder()->getForm($this->createNewRelease($node));
   }
 
   /**
    * Handles access to the release add form through solution pages.
    *
-   * @param \Drupal\rdf_entity\RdfInterface $rdf_entity
-   *   The RDF entity for which the custom page is created.
+   * @param \Drupal\node\NodeInterface $node
+   *   The group for which the custom page is created.
    * @param \Drupal\Core\Session\AccountInterface|null $account
-   *   The RDF entity for which the custom page is created.
+   *   The group for which the release is created.
    *
    * @return \Drupal\Core\Access\AccessResultInterface
    *   The access result object.
    */
-  public function createReleaseAccess(RdfInterface $rdf_entity, ?AccountInterface $account = NULL): AccessResultInterface {
-    if ($rdf_entity->bundle() !== 'solution') {
+  public function createReleaseAccess(NodeInterface $node, ?AccountInterface $account = NULL): AccessResultInterface {
+    if ($node->bundle() !== 'solution') {
       throw new NotFoundHttpException();
     }
 
     return $this->entityTypeManager()->getAccessControlHandler('node')->createAccess('release', $account, [
       // The group will be consumed in joinup_rdf_entity_create_access().
-      'group' => $rdf_entity,
+      'group' => $node,
     ], TRUE);
   }
 
   /**
    * Returns a build array for the solution releases overview page.
    *
-   * @param \Drupal\rdf_entity\RdfInterface $rdf_entity
-   *   The solution rdf entity.
+   * @param \Drupal\node\NodeInterface $node
+   *   The solution entity.
    *
    * @return array|\Drupal\Core\Routing\TrustedRedirectResponse
    *   The build array for the page or a 404 response.
    */
-  public function overview(RdfInterface $rdf_entity): TrustedRedirectResponse|array {
-    /** @var \Drupal\solution\SolutionReleasesAndDistributionsFieldItemList $field */
-    $field = $rdf_entity->get('releases_and_distributions');
+  public function overview(NodeInterface $node): TrustedRedirectResponse|array {
+    /** @var \Drupal\joinup_solution\SolutionReleasesAndDistributionsFieldItemList $field */
+    $field = $node->get('releases_and_distributions');
     if ($field->isEmpty()) {
       return (new TrustedRedirectResponse('/not-found'))
         ->setStatusCode(404)
-        ->addCacheableDependency($rdf_entity);
+        ->addCacheableDependency($node);
     }
     $entities = $field->referencedEntities();
 
@@ -123,7 +124,7 @@ class ReleaseController extends ControllerBase {
     ];
 
     (new CacheableMetadata())
-      ->addCacheableDependency($rdf_entity)
+      ->addCacheableDependency($node)
       ->applyTo($build);
 
     return $build;
@@ -132,23 +133,21 @@ class ReleaseController extends ControllerBase {
   /**
    * Page title callback for the solution releases overview.
    *
-   * @param \Drupal\rdf_entity\RdfInterface $rdf_entity
-   *   The solution rdf entity.
+   * @param \Drupal\node\NodeInterface $node
+   *   The solution entity.
    *
    * @return \Drupal\Component\Render\MarkupInterface
    *   The page title.
    */
-  public function overviewPageTitle(RdfInterface $rdf_entity): MarkupInterface {
-    return $this->t('Releases for %solution solution', ['%solution' => $rdf_entity->label()]);
+  public function overviewPageTitle(NodeInterface $node): MarkupInterface {
+    return $this->t('Releases for %solution solution', ['%solution' => $node->label()]);
   }
 
   /**
    * Access callback for the solution releases overview.
    *
-   * @param \Drupal\rdf_entity\RdfInterface $rdf_entity
-   *   The solution rdf entity.
-   * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
-   *   The route match object to be checked.
+   * @param \Drupal\node\NodeInterface $node
+   *   The solution entity.
    * @param \Drupal\Core\Session\AccountInterface $account
    *   The account being checked.
    *
@@ -156,18 +155,18 @@ class ReleaseController extends ControllerBase {
    *   The access result.
    *
    * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
-   *   Thrown when the rdf entity is not a solution.
+   *   Thrown when the entity is not a solution.
    */
-  public function overviewAccess(RdfInterface $rdf_entity, RouteMatchInterface $route_match, AccountInterface $account): AccessResultInterface {
+  public function overviewAccess(NodeInterface $node, AccountInterface $account): AccessResultInterface {
     // @todo This is probably not needed now that we have added the bundle to
     //   the route requirement options.
-    if ($rdf_entity->bundle() !== 'solution') {
+    if ($node->bundle() !== 'solution') {
       throw new NotFoundHttpException();
     }
 
-    $releases = $rdf_entity->getReleases();
-    $access = AccessResult::allowedIf($rdf_entity->access('view', $account, TRUE) && !empty($releases));
-    $access->addCacheableDependency($rdf_entity);
+    $releases = $node->getReleases();
+    $access = AccessResult::allowedIf($node->access('view', $account, TRUE) && !empty($releases));
+    $access->addCacheableDependency($node);
     foreach ($releases as $release) {
       $access->addCacheableDependency($release);
     }
@@ -177,33 +176,23 @@ class ReleaseController extends ControllerBase {
   /**
    * Creates a new release entity.
    *
-   * @param \Drupal\rdf_entity\RdfInterface $rdf_entity
+   * @param \Drupal\joinup_solution\Entity\SolutionInterface $solution
    *   The solution that the release is version of.
    *
    * @return \Drupal\joinup_release\Entity\ReleaseInterface
    *   The unsaved release entity.
    */
-  protected function createNewRelease(RdfInterface $rdf_entity): ReleaseInterface {
-    // @todo Remove solution stub workaround in ISAICP-8572.
-    if (!$solution_stub = $this->rdfSyncMapper->getEntityByUri($rdf_entity->id())) {
-      $solution_stub = $this->entityTypeManager()->getStorage('node')->create([
-        'type' => 'solution',
-        'uri' => $rdf_entity->id(),
-        'title' => substr($rdf_entity->label(), 0, 255),
-        'status' => FALSE,
-      ]);
-      $solution_stub->save();
-    }
-
-    /** @var \Drupal\rdf_entity\RdfInterface $release */
-    return $this->entityTypeManager()->getStorage('node')->create([
+  protected function createNewRelease(SolutionInterface $solution): ReleaseInterface {
+    $release = $this->entityTypeManager()->getStorage('node')->create([
       'type' => 'release',
-      'og_audience' => $rdf_entity->id(),
+      OgGroupAudienceHelperInterface::DEFAULT_FIELD => $solution->id(),
       'solution_data' => [
-        'target_id' => $solution_stub?->id(),
-        'target_revision_id' => $solution_stub?->getRevisionId(),
+        'target_id' => $solution->id(),
+        'target_revision_id' => $solution->getRevisionId(),
       ],
     ]);
+    assert($release instanceof ReleaseInterface);
+    return $release;
   }
 
 }

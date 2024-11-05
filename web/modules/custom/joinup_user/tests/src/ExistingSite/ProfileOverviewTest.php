@@ -60,19 +60,19 @@ class ProfileOverviewTest extends JoinupExistingSiteTestBase {
     // Sign a user up for more than 100 groups in total. Also, the owner will
     // transparently become a member of all these groups.
     for ($count = 0; $count < 52; $count++) {
-      $collection = $this->createRdfEntity([
-        'rid' => 'collection',
-        'label' => 'Collection ' . $count,
-        'field_ar_state' => 'published',
+      $collection = $this->createNode([
+        'type' => 'collection',
+        'title' => 'Collection ' . $count,
+        'field_state' => 'published',
         'uid' => $this->owner->id(),
       ]);
 
       $og_membership_manager->createMembership($collection, $this->member)->save();
-      $solution = $this->createRdfEntity([
-        'rid' => 'solution',
-        'label' => 'Solution ' . $count,
-        'collection' => $collection,
-        'field_is_state' => 'published',
+      $solution = $this->createNode([
+        'type' => 'solution',
+        'title' => 'Solution ' . $count,
+        'og_audience' => $collection,
+        'field_state' => 'published',
         'uid' => $this->owner->id(),
       ]);
       $og_membership_manager->createMembership($solution, $this->member)->save();

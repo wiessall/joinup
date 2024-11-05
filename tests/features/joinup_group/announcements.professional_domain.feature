@@ -2,7 +2,7 @@
 Feature: Filter announcements by professional domain
 
   Scenario Outline: User can narrow down targeted users based on the business domains.
-    Given the following <group>s:
+    Given <group> content:
       | title         | state     |
       | Pension funds | published |
     And users:

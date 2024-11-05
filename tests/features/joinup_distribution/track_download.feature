@@ -9,13 +9,12 @@ Feature: Asset distribution editing.
     Given licence content:
       | title            | description                          | licence type  |
       | Postcard licence | Send a postcard from where you live. | Public domain |
-    And collection:
-      | title | Berkeley Software Distributions |
-      | state | published                       |
-    And solution:
-      | title      | OpenBSD                         |
-      | collection | Berkeley Software Distributions |
-      | state      | published                       |
+    And collection content:
+      | title                           | state     |
+      | Berkeley Software Distributions | published |
+    And solution content:
+      | title   | collection                      | state     |
+      | OpenBSD | Berkeley Software Distributions | published |
     And release content:
       | title        | release number | is version of | state     |
       | Winter of 95 | 6.1            | OpenBSD       | published |
@@ -56,8 +55,8 @@ Feature: Asset distribution editing.
     When I click "Download" in the "OpenBSD images" distribution
     Then a modal should open
     And I should see the text "Download in progress"
-    And I should see the text "If you do not have a Joinup account, please take some time to create one, at this page. It will allow you to fully exploit the functionalities of Joinup to create new content, contribute to existing one and collaborate with other users."
-    And I should see the text "If you do not want to create a Joinup account, please select any of the following options and provide your email address if you want to be kept updated on the status of the solution. Your personal data will be treated in compliance with the legal notice"
+    And I should see the text "If you do not have a Interoperable Europe Portal account, please take some time to create one, at this page. It will allow you to fully exploit the functionalities of Interoperable Europe Portal to create new content, contribute to existing one and collaborate with other users."
+    And I should see the text "If you do not want to create a Interoperable Europe Portal account, please select any of the following options and provide your email address if you want to be kept updated on the status of the solution. Your personal data will be treated in compliance with the legal notice"
     When I fill in "E-mail address" with "trackme@example.com" in the "Modal content" region
     Then I press "Submit" in the "Modal buttons" region
     Then the modal should be closed
@@ -89,9 +88,9 @@ Feature: Asset distribution editing.
       | Username | E-mail            |
       | user1    | user1@example.com |
       | user2    | user2@example.com |
-    And the following solution:
-      | title | Solution  |
-      | state | published |
+    And solution content:
+      | title    | state     |
+      | Solution | published |
     And release content:
       | title     | is version of | state     |
       | Release 1 | Solution      | published |

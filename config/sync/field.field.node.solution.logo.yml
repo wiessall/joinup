@@ -1,0 +1,38 @@
+uuid: 8cfe9846-10d0-4e8d-95b4-fcd62a2b613d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.logo
+    - node.type.solution
+  module:
+    - image
+id: node.solution.logo
+field_name: logo
+entity_type: node
+bundle: solution
+label: Logo
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:file'
+  handler_settings: {  }
+  file_directory: 'solution/logo/[date:custom:Y]-[date:custom:m]'
+  file_extensions: 'png gif jpg jpeg svg'
+  max_filesize: '5 MB'
+  max_resolution: ''
+  min_resolution: ''
+  alt_field: false
+  alt_field_required: true
+  title_field: false
+  title_field_required: false
+  default_image:
+    uuid: ''
+    alt: ''
+    title: ''
+    width: null
+    height: null
+field_type: image

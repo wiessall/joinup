@@ -156,13 +156,8 @@ class FlagBlock extends BlockBase implements ContainerFactoryPluginInterface {
    *   Flag entity.
    */
   protected function getFlagForEntity(EntityInterface $entity): ?FlagInterface {
-    $prefix = $this->configuration['flag_type'] . '_';
-
-    $flags = array_filter($this->flagService->getAllFlags($entity->getEntityTypeID(), $entity->bundle()), function (FlagInterface $flag) use ($prefix) {
-      return str_starts_with($flag->id(), $prefix);
-    });
-
-    return empty($flags) ? NULL : reset($flags);
+    $allFlags = $this->flagService->getAllFlags($entity->getEntityTypeID(), $entity->bundle());
+    return $allFlags[$this->configuration['flag_type']] ?? NULL;
   }
 
 }

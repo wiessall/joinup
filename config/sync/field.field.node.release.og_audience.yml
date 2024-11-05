@@ -5,9 +5,9 @@ dependencies:
   config:
     - field.storage.node.og_audience
     - node.type.release
-    - rdf_entity.rdfentity.solution
   module:
     - og
+    - rdf_sync
 third_party_settings:
   rdf_sync:
     target_id:
@@ -24,10 +24,6 @@ translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:
-  handler: 'default:rdf_entity'
-  handler_settings:
-    target_bundles:
-      solution: solution
-    sort:
-      field: _none
+  handler: 'default:node'
+  handler_settings: {  }
 field_type: og_standard_reference

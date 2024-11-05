@@ -101,7 +101,7 @@ class CustomPageContext extends RawDrupalContext {
    * @Then the :name :type should have :count custom page(s)
    */
   public function assertContactInformationCount(int $count, string $name, string $type): void {
-    $group = $this->getEntityByLabel('rdf_entity', $name, $type);
+    $group = $this->getEntityByLabel('node', $name, $type);
     $this->assertGroupContentCount($count, $group, 'node', 'custom_page');
   }
 
@@ -129,7 +129,7 @@ class CustomPageContext extends RawDrupalContext {
    */
   public function assertNoAccessToOgMenuAdministration(string $menu, string $title, string $type): void {
     // Retrieve the OG Menu instance for the given menu and group.
-    $group = $this->getEntityByLabel('rdf_entity', $title, $type);
+    $group = $this->getEntityByLabel('node', $title, $type);
     $values = [
       'type' => $menu,
       OgGroupAudienceHelperInterface::DEFAULT_FIELD => $group->id(),
@@ -302,36 +302,9 @@ class CustomPageContext extends RawDrupalContext {
    *   The menu tree.
    */
   protected function getOgMenuTreeByNameLabelAndType(string $menu_name, string $group_label, string $group_type): array {
-    $group = $this->getEntityByLabel('rdf_entity', $group_label, $group_type);
+    $group = $this->getEntityByLabel('node', $group_label, $group_type);
     $menu_instance = $this->getOgMenuInstance($group->id(), $menu_name);
     return $this->getOgMenuTree($menu_instance);
-  }
-
-  /**
-   * Changes the publication state of a given custom page.
-   *
-   * Note that this is only targeting custom pages because most other node types
-   * are community content whose workflow state controls if they are published.
-   *
-   * @param string $title
-   *   The title of the custom page to update.
-   * @param string $state
-   *   The publication state to set, can be either 'published' or 'unpublished'.
-   *
-   * @throws \Exception
-   *   Thrown when the custom page doesn't exist, or cannot be saved.
-   *
-   * @When the publication state of the :title custom page is changed to :state
-   */
-  public function updatePublicationState(string $title, string $state): void {
-    $node = $this->getEntityByLabel('node', $title, 'custom_page');
-    if ($state === 'published') {
-      $node->set('field_state', 'published');
-    }
-    else {
-      $node->set('field_state', 'draft');
-    }
-    $node->save();
   }
 
   /**

@@ -48,7 +48,7 @@ class HomepageContext extends RawDrupalContext {
       $type = $expected_data['type'];
 
       if (in_array($type, ['collection', 'solution'])) {
-        $entity = $this->getEntityByLabel('rdf_entity', $expected_data['title']);
+        $entity = $this->getEntityByLabel('node', $expected_data['title']);
       }
       else {
         $entity = $this->getEntityByLabel('node', $expected_data['title']);
