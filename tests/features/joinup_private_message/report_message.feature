@@ -51,7 +51,6 @@ Feature: Private message report.
     Then a modal should open
     And I should see the text "Are you sure you want to unblock user Alice Miller?" in the "Modal title"
     And I should see the button "Confirm"
-    # @todo make this test pass, now it results in a javascript error.
-    # When I press "Confirm" in the "Modal content" region
-    # Then the modal should be closed
-    # And a message containing the text "This is a mean message to Bob." should be present
+    When I press "Confirm" in the "Modal buttons" region
+    Then the modal should be closed
+    And a message containing the text "This is a mean message to Bob." should be present
