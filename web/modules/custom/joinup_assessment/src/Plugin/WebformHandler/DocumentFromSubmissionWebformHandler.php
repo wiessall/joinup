@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_assessment\Plugin\WebformHandler;
 
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Layout\LayoutPluginManagerInterface;
 use Drupal\joinup_assessment\AssessmentInterface;
 use Drupal\webform\Plugin\WebformHandlerBase;
 use Drupal\webform\webformSubmissionInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Create a new Document node from a webform submission.
@@ -25,6 +28,23 @@ use Drupal\webform\webformSubmissionInterface;
  * )
  */
 class DocumentFromSubmissionWebformHandler extends WebformHandlerBase {
+
+  /**
+   * The Layouts Manager.
+   *
+   * @var \Drupal\Core\Layout\LayoutPluginManagerInterface
+   */
+  protected LayoutPluginManagerInterface $layoutPluginManager;
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+    $instance = parent::create($container, $configuration, $plugin_id, $plugin_definition);
+    $instance->layoutPluginManager = $container->get('plugin.manager.core.layout');
+
+    return $instance;
+  }
 
   /**
    * {@inheritdoc}
@@ -50,6 +70,7 @@ class DocumentFromSubmissionWebformHandler extends WebformHandlerBase {
     $node = $nodeStorage->create([
       'type' => 'document',
       'title' => $webformSubmission->label(),
+      'field_paragraphs_body' => [$this->getLayoutParagraph()],
       'field_state' => AssessmentInterface::DOCUMENT_STATE,
       'og_audience' => AssessmentInterface::DOCUMENT_GROUP_URI,
       'abstract' => substr($submissionData[AssessmentInterface::SUBMISSION_ABSTRACT] ?? '', 0, 250),
@@ -82,6 +103,34 @@ class DocumentFromSubmissionWebformHandler extends WebformHandlerBase {
 
     $tids = $query->execute();
     return !empty($tids) ? reset($tids) : NULL;
+  }
+
+  /**
+   * Generate layout paragraph.
+   *
+   * @param string $layout_id
+   *   Layout name.
+   *
+   * @return \Drupal\Core\Entity\EntityInterface
+   *   Paragraph entity.
+   */
+  protected function getLayoutParagraph(string $layout_id = 'layout_onecol'): EntityInterface {
+    $layoutInstance = $this->layoutPluginManager->createInstance($layout_id);
+    $paragraphStorage = $this->entityTypeManager->getStorage('paragraph');
+
+    $layoutParagraph = $paragraphStorage->create([
+        'type' => 'layout',
+      ]
+    );
+    $layoutParagraph->setBehaviorSettings(
+      'layout_paragraphs',
+      [
+        'layout' => $layout_id,
+        'config' => $layoutInstance->getConfiguration(),
+      ]
+    );
+
+    return $layoutParagraph;
   }
 
 }
