@@ -21,7 +21,7 @@ interface AssessmentInterface {
    *
    * Default value for a new document.
    */
-  public const string DOCUMENT_STATE = 'propose';
+  public const string DOCUMENT_STATE = 'proposed';
 
   /**
    * Type of document.
