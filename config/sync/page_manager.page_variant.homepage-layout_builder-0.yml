@@ -127,7 +127,7 @@ variant_settings:
           additional: {  }
       third_party_settings: {  }
     -
-      layout_id: joinup_layout_twocolfooter_onecol_67_33
+      layout_id: joinup_layout_twocolfooter_onecol_50_50
       layout_settings:
         label: About
       components:
@@ -208,36 +208,6 @@ variant_settings:
               block_attributes:
                 id: ''
                 class: 'about-how mt-4'
-                style: ''
-                data: ''
-              block_title_attributes:
-                id: ''
-                class: ''
-                style: ''
-                data: ''
-              block_content_attributes:
-                id: ''
-                class: ''
-                style: ''
-                data: ''
-        6ab0ceea-4541-4153-8b64-227e02369d30:
-          uuid: 6ab0ceea-4541-4153-8b64-227e02369d30
-          region: third
-          configuration:
-            id: custom_markup
-            label: 'New Interoperable Europe Portal video'
-            label_display: '0'
-            provider: custom_markup_block
-            context_mapping: {  }
-            markup:
-              value: '<drupal-media data-entity-type="media" data-entity-uuid="b03799ea-2116-4d21-965f-3556002d8a00">&nbsp;</drupal-media>'
-              format: content_editor
-          weight: 0
-          additional:
-            component_attributes:
-              block_attributes:
-                id: ''
-                class: about-video
                 style: ''
                 data: ''
               block_title_attributes:
