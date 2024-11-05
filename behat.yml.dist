@@ -21,6 +21,7 @@
       excludeElements:
         # Third-party code injected in page with Javascript.
         - .globan
+  - Drupal\joinup\Context\AssessmentContext
   - Drupal\joinup\Context\AdmsValidatorContext
   - Drupal\joinup\Context\BootstrapContext
   - Drupal\joinup\Context\CollectionContext
