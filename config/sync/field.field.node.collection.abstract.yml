@@ -1,0 +1,19 @@
+uuid: 06fa6686-8af5-4d51-81cc-ca265dc4d59e
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.abstract
+    - node.type.collection
+id: node.collection.abstract
+field_name: abstract
+entity_type: node
+bundle: collection
+label: Abstract
+description: 'Short description text of the collection. Appears on the Overview page.'
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

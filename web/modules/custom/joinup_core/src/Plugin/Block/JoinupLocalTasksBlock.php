@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_core\Plugin\Block;
 
+use Drupal\Core\Block\Attribute\Block;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Menu\Plugin\Block\LocalTasksBlock;
 use Drupal\Core\Render\Element;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\joinup\Traits\GroupHeaderAccessTrait;
 use Drupal\joinup_core\Traits\GroupPluginCacheTrait;
 
 /**
@@ -21,14 +24,14 @@ use Drupal\joinup_core\Traits\GroupPluginCacheTrait;
  * result in cases where there is only 1 tab left but it is not the current one.
  * Thus, we need to override the primary tabs block in order to allow a single
  * tab to be viewed.
- *
- * @Block(
- *   id = "joinup_local_tasks_block",
- *   admin_label = @Translation("Tabs"),
- * )
  */
+#[Block(
+  id: "joinup_local_tasks_block",
+  admin_label: new TranslatableMarkup("Tabs"),
+)]
 class JoinupLocalTasksBlock extends LocalTasksBlock {
 
+  use GroupHeaderAccessTrait;
   use GroupPluginCacheTrait;
 
   /**

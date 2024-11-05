@@ -1,4 +1,4 @@
-uuid: 475b1055-c12f-4160-a696-505b1018e587
+uuid: acae8bb8-593e-4d05-bc36-7ae82684973b
 langcode: en
 status: true
 dependencies: {  }
@@ -9,7 +9,7 @@ min_count: 1
 missing: false
 missing_label: others
 url_alias: solution_topic
-facet_source_id: 'search_api_field:rdf_entity.solution.field_is_content'
+facet_source_id: 'search_api_field:node.solution.listing_content'
 field_identifier: topic
 query_operator: or
 hard_limit: 0
@@ -39,41 +39,41 @@ processor_configs:
   active_widget_order:
     processor_id: active_widget_order
     weights:
-      sort: -2
+      sort: 20
     settings:
       sort: DESC
   aggregated_entity_reference_label:
     processor_id: aggregated_entity_reference_label
     weights:
-      build: 0
+      build: -3
     settings: {  }
   count_limit:
     processor_id: count_limit
     weights:
-      build: -2
+      build: -5
     settings:
       minimum_items: 1
       maximum_items: null
   count_widget_order:
     processor_id: count_widget_order
     weights:
-      sort: -1
+      sort: 30
     settings:
       sort: DESC
   display_value_widget_order:
     processor_id: display_value_widget_order
     weights:
-      sort: 0
+      sort: 40
     settings:
       sort: ASC
   hierarchy_processor:
     processor_id: hierarchy_processor
     weights:
-      build: 100
+      build: 10
     settings: {  }
   url_processor_handler:
     processor_id: url_processor_handler
     weights:
-      pre_query: -10
-      build: -1
+      pre_query: 50
+      build: -4
     settings: {  }

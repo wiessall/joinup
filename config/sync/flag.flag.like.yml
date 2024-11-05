@@ -1,0 +1,37 @@
+uuid: 09a24c92-9b17-4b0d-b5c5-d68de99f10e9
+langcode: en
+status: true
+dependencies:
+  module:
+    - joinup_like
+    - node
+id: like
+label: Like
+bundles:
+  - custom_page
+  - discussion
+  - document
+  - event
+  - news
+  - solution
+entity_type: node
+global: false
+flag_short: Like
+flag_long: ''
+flag_message: ''
+unflag_short: Unlike
+unflag_long: ''
+unflag_message: ''
+unflag_denied_text: ''
+weight: 0
+flag_type: 'entity:node'
+link_type: count_link
+flagTypeConfig:
+  show_in_links:
+    view_mode_tile: view_mode_tile
+  show_as_field: true
+  show_on_form: false
+  show_contextual_link: false
+  extra_permissions:
+    owner: '0'
+linkTypeConfig: {  }

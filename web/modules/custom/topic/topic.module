@@ -159,11 +159,11 @@ function topic_theme(): array {
     // template will be included.
     'meta_entity__homepage_topics__configurable_listing__list' => [
       'render element' => 'elements',
-      'base hook' => 'rdf_entity',
+      'base hook' => 'node',
     ],
     'meta_entity__homepage_topics__configurable_listing__grid' => [
       'render element' => 'elements',
-      'base hook' => 'rdf_entity',
+      'base hook' => 'node',
     ],
   ];
 }

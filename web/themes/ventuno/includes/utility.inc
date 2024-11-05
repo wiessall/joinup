@@ -14,6 +14,7 @@ use Drupal\joinup_bundle_class\LogoInterface;
 use Drupal\joinup_community_content\Entity\CommunityContentInterface;
 use Drupal\joinup_oss_catalogue\Entity\JoinupOssSolution;
 use Drupal\joinup_workflow\ArchivableEntityInterface;
+use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\smart_trim\TruncateHTML;
 use Drupal\topic\Entity\TopicReferencingEntityInterface;
 
@@ -100,7 +101,7 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
   }
 
   // Like flag. Meant to be the first "extra-data" displayed in tile's footer.
-  $like = $variables['content']['flag_like_node'] ?? $variables['content']['flag_like_rdf_entity'] ?? NULL;
+  $like = $variables['content']['flag_like'] ?? $variables['content']['flag_like'] ?? NULL;
   if ($like !== NULL) {
     $variables['extra_data'][] = ['label' => $like];
   }
@@ -221,10 +222,10 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
 
     case 'solution':
       // Add attributes that will allow JS to mark this tile as "Shared from".
-      $rdf_entity = $variables['rdf_entity'];
-      if (!$rdf_entity->get('collection')->isEmpty()) {
-        /** @var \Drupal\rdf_entity\RdfInterface|null $parent */
-        $parent = $rdf_entity->get('collection')->first()->entity;
+      $node = $variables['node'];
+      if (!$node->get(OgGroupAudienceHelperInterface::DEFAULT_FIELD)->isEmpty()) {
+        /** @var \Drupal\node\NodeInterface|null $parent */
+        $parent = $node->get(OgGroupAudienceHelperInterface::DEFAULT_FIELD)->first()->entity;
         $variables['attributes']['data-joinup-parent-id'] = $parent->id();
         $variables['attributes']['data-joinup-parent-label'] = $parent->label();
       }
@@ -271,19 +272,17 @@ function _ventuno_preprocess_tile(array &$variables, string $entity_type_id): vo
 function _ventuno_get_default_icon(string $entity_type_id, string $bundle): string {
   $mapping = [
     'node' => [
+      'collection' => 'folder2-open',
       'custom_page' => 'file-earmark-richtext',
       'discussion' => 'chat-left-text',
       'distribution' => 'file-earmark-post',
       'document' => 'file-earmark-text',
       'event' => 'calendar-event',
+      'licence' => 'file-earmark-medical',
       'news' => 'newspaper',
       'oss_solution' => 'clipboard2-check',
       'release' => 'file-earmark-zip',
       'video' => 'file-earmark-play',
-    ],
-    'rdf_entity' => [
-      'collection' => 'folder2-open',
-      'licence' => 'file-earmark-medical',
       'solution' => 'clipboard2-check',
     ],
   ];

@@ -17,9 +17,9 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\custom_page\Entity\CustomPage;
 use Drupal\custom_page\Entity\CustomPageInterface;
+use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\menu_link_content\MenuLinkContentInterface;
 use Drupal\node\NodeInterface;
-use Drupal\solution\Entity\SolutionInterface;
 
 /**
  * Implements hook_entity_type_alter().
@@ -27,7 +27,7 @@ use Drupal\solution\Entity\SolutionInterface;
 function custom_page_entity_type_alter(array &$entity_types): void {
   /** @var \Drupal\Core\Entity\ContentEntityTypeInterface[] $entity_types */
   // Add a link template allow adding custom pages.
-  $entity_types['rdf_entity']->setLinkTemplate('add-custom-page', '/rdf_entity/{rdf_entity}/{node_type}/add');
+  $entity_types['node']->setLinkTemplate('add-custom-page', '/node/{node}/{node_type}/add');
 
   // Replaces the standard OG Menu Instance form with a customized one that is
   // suitable for use in the front end.
@@ -310,7 +310,7 @@ function custom_page_node_presave(NodeInterface $entity): void {
     return;
   }
   if (!$entity->isPublished() && $entity->isGroupLandingPage()) {
-    throw new Exception("This page acts as landing page for the {$entity->getGroup()->get('rid')->entity->getSingularLabel()}. In order to unpublished it should be first unset as landing page.");
+    throw new Exception("This page acts as landing page for the {$entity->getGroup()->get('type')->entity->getSingularLabel()}. In order to unpublished it should be first unset as landing page.");
   }
 }
 
@@ -322,7 +322,7 @@ function custom_page_node_predelete(NodeInterface $entity): void {
     return;
   }
   if ($entity->isGroupLandingPage()) {
-    throw new Exception("This page acts as landing page for the {$entity->getGroup()->get('rid')->entity->getSingularLabel()}. In order to delete it should be first unset as landing page.");
+    throw new Exception("This page acts as landing page for the {$entity->getGroup()->get('type')->entity->getSingularLabel()}. In order to delete it should be first unset as landing page.");
   }
 }
 
@@ -334,7 +334,7 @@ function custom_page_form_node_custom_page_delete_form_alter(array &$form, FormS
   if ($entity->isGroupLandingPage()) {
     $form['#title'] = t('You can not delete this landing page!');
     $form['description'] = [
-      '#markup' => t('This page acts as landing page for the @group. In order to delete it should be first unset as landing page.', ['@group' => $entity->getGroup()->get('rid')->entity->getSingularLabel()]),
+      '#markup' => t('This page acts as landing page for the @group. In order to delete it should be first unset as landing page.', ['@group' => $entity->getGroup()->get('type')->entity->getSingularLabel()]),
     ];
     $form['actions']['submit']['#access'] = FALSE;
   }

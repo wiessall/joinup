@@ -1,0 +1,22 @@
+uuid: 106d4e81-9029-4f07-b74e-bf7b7a0889ff
+langcode: en
+status: true
+dependencies:
+  module:
+    - meta_entity
+id: meta_entity_topic
+label: 'Meta Entity: Topics'
+type: 'canonical_entities:meta_entity'
+pattern: 'topic/[meta_entity:parent_topic]/[meta_entity:label]'
+selection_criteria:
+  af573398-c50f-484c-b4dc-1e503b58541a:
+    id: 'entity_bundle:meta_entity'
+    negate: false
+    uuid: af573398-c50f-484c-b4dc-1e503b58541a
+    context_mapping:
+      meta_entity: meta_entity
+    bundles:
+      topic: topic
+selection_logic: and
+weight: -5
+relationships: {  }

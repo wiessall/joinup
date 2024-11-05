@@ -152,7 +152,7 @@ function joinup_user_mail_alter(&$message): void {
     $moderation_text = '</p><p>';
   }
   else {
-    $moderation_text = '</p><p>This action has been done in the framework of moderation activities regularly conducted on the Joinup platform.</p><p>';
+    $moderation_text = '</p><p>This action has been done in the framework of moderation activities regularly conducted on the Interoperable Europe Portal platform.</p><p>';
   }
 
   $message['body'] = array_map(function ($text) use ($moderation_text) {

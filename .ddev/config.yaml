@@ -16,7 +16,7 @@ webimage_extra_packages:
     - mime-support
 
 # It's not possible to use fpfis/httpd-php because DDEV is strongly advising
-# against using a non-DDEV image. But this has no impact on the Joinup code runs
+# against using a non-DDEV image. But this has no impact on the Interoperable Europe Portal code runs
 # in CI/CD or on production.
 # See:
 # - https://ddev.readthedocs.io/en/latest/users/configuration/config/#webimage
@@ -38,6 +38,8 @@ composer_version: "2"
 web_environment: [ ]
 disable_settings_management: true
 nodejs_version: "20"
+# Affects only macOS developers.
+performance_mode: global
 
 upload_dirs:
   - sites/default/files

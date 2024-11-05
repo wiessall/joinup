@@ -1,0 +1,37 @@
+uuid: 1822209f-51ad-4b48-82b4-f4fe3a3e48ba
+langcode: en
+status: true
+dependencies:
+  module:
+    - joinup_bookmark
+    - node
+id: bookmark
+label: Bookmark
+bundles:
+  - collection
+  - custom_page
+  - discussion
+  - document
+  - event
+  - news
+  - solution
+entity_type: node
+global: false
+flag_short: Bookmark
+flag_long: 'Add this page to bookmarks'
+flag_message: ''
+unflag_short: Bookmarked
+unflag_long: 'Remove this page from bookmarks'
+unflag_message: ''
+unflag_denied_text: ''
+weight: 0
+flag_type: 'entity:node'
+link_type: bookmark_link
+flagTypeConfig:
+  show_in_links: {  }
+  show_as_field: false
+  show_on_form: false
+  show_contextual_link: false
+  extra_permissions:
+    owner: '0'
+linkTypeConfig: {  }

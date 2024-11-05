@@ -1,0 +1,26 @@
+diff --git a/src/Utility/LinkitHelper.php b/src/Utility/LinkitHelper.php
+index e1ba0f7..b034b99 100644
+--- a/src/Utility/LinkitHelper.php
++++ b/src/Utility/LinkitHelper.php
+@@ -74,11 +74,18 @@ class LinkitHelper {
+     }
+ 
+     if ($host && UrlHelper::isExternal($input)) {
+-      if (UrlHelper::externalIsLocal($input, \Drupal::request()->getSchemeAndHttpHost())) {
++      $base_url = \Drupal::urlGenerator()->generateFromRoute('<front>', [], [
++        'absolute' => TRUE,
++        // Avoid that the language prefix is added to the url.
++        'path_processing' => FALSE
++      ]);
++      if (UrlHelper::externalIsLocal($input, $base_url)) {
+         // The link points to this domain. Make it relative to perform an entity
+         // lookup.
+-        $host_end = strpos($input, $host) + strlen($host);
+-        $input = substr($input, $host_end);
++        $base_url_end = strpos($input, $base_url) + strlen($base_url);
++        $input = substr($input, $base_url_end);
++        // Set scheme to empty string to make sure input starts with a /.
++        $scheme = '';
+       }
+       else {
+         // This link is really external.

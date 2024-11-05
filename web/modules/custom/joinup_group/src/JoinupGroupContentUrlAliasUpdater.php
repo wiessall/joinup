@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_group;
 
-use Drupal\Core\Queue\QueueFactory;
 use Drupal\joinup_group\Entity\GroupInterface;
+use Drupal\joinup_group\Queue\JoinupGroupQueueFactory;
 
 /**
  * Default implementation of 'joinup_group.url_alias_updater' service.
@@ -13,21 +13,12 @@ use Drupal\joinup_group\Entity\GroupInterface;
 class JoinupGroupContentUrlAliasUpdater implements JoinupGroupContentUrlAliasUpdaterInterface {
 
   /**
-   * The queue factory service.
-   *
-   * @var \Drupal\Core\Queue\QueueFactory
-   */
-  protected $queueFactory;
-
-  /**
    * Constructs a new service instance.
    *
-   * @param \Drupal\Core\Queue\QueueFactory $queue_factory
+   * @param \Drupal\Core\Queue\QueueFactory $queueFactory
    *   The queue factory service.
    */
-  public function __construct(QueueFactory $queue_factory) {
-    $this->queueFactory = $queue_factory;
-  }
+  public function __construct(protected JoinupGroupQueueFactory $queueFactory) {}
 
   /**
    * {@inheritdoc}

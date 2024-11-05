@@ -5,10 +5,10 @@ Feature: Pinning discussion entities
   So that important content has more visibility
 
   Background:
-    Given the following collections:
+    Given collection content:
       | title                   | state     |
       | Green Wrench collection | published |
-    Given the following solutions:
+    Given solution content:
       | title                | state     |
       | Blue Wrench solution | published |
 

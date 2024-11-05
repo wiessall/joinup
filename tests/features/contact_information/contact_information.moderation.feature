@@ -12,13 +12,9 @@ Feature: Contact Information moderation
     And owner content:
       | owner type | name               |
       | Company    | Anglo-Saxon Museum |
-    And collection:
-      | title       | Games of the Anglo-Saxon age                  |
-      | description | There were many different board games played. |
-      | logo        | logo.png                                      |
-      | owner       | Anglo-Saxon Museum                            |
-      | topic       | E-inclusion                                   |
-      | state       | draft                                         |
+    And collection content:
+      | title                        | description                                   | logo     | owner              | topic       | state |
+      | Games of the Anglo-Saxon age | There were many different board games played. | logo.png | Anglo-Saxon Museum | E-inclusion | draft |
     And collection user membership:
       | collection                   | user                  | roles       |
       | Games of the Anglo-Saxon age | Sæwine Cynebald       | facilitator |
@@ -120,13 +116,9 @@ Feature: Contact Information moderation
     And contact_information content:
       | name        | email            | author         |
       | Secreteriat | info@example.com | Sown Carnberry |
-    And collection:
-      | title               | Saint Louis solutions |
-      | description         | A software company    |
-      | logo                | logo.png              |
-      | owner               | Saint Louis           |
-      | contact information | Secreteriat           |
-      | state               | published             |
+    And collection content:
+      | title                 | description        | logo     | owner       | contact information | state     |
+      | Saint Louis solutions | A software company | logo.png | Saint Louis | Secreteriat         | published |
     And the following collection user memberships:
       | collection            | user            | roles       |
       | Saint Louis solutions | Sown Carnberry  |             |

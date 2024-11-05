@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_group\Event;
 
-use Drupal\rdf_entity\RdfInterface;
+use Drupal\joinup_group\Entity\GroupInterface;
 use Symfony\Contracts\EventDispatcher\Event;
 
 /**
@@ -13,9 +13,9 @@ use Symfony\Contracts\EventDispatcher\Event;
 class AddGroupContentEvent extends Event {
 
   /**
-   * The group RDF entity.
+   * The group entity.
    *
-   * @var \Drupal\rdf_entity\RdfInterface
+   * @var \Drupal\joinup_group\Entity\GroupInterface
    */
   protected $group;
 
@@ -29,20 +29,20 @@ class AddGroupContentEvent extends Event {
   /**
    * Constructs a new event instance.
    *
-   * @param \Drupal\rdf_entity\RdfInterface $group
+   * @param \Drupal\joinup_group\Entity\GroupInterface $group
    *   The group entity.
    */
-  public function __construct(RdfInterface $group) {
+  public function __construct(GroupInterface $group) {
     $this->group = $group;
   }
 
   /**
    * Returns the group.
    *
-   * @return \Drupal\rdf_entity\RdfInterface
+   * @return \Drupal\joinup_group\Entity\GroupInterface
    *   The group entity.
    */
-  public function getGroup(): RdfInterface {
+  public function getGroup(): GroupInterface {
     return $this->group;
   }
 

@@ -16,7 +16,7 @@ class LicenceGroupSubscriber extends AddGroupContentEventSubscriberBase {
    */
   protected function getBundles(): array {
     return [
-      'rdf_entity' => [
+      'node' => [
         'licence',
       ],
     ];

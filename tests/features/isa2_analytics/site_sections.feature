@@ -5,14 +5,12 @@ Feature: Site sections
   So that I can better understand the needs of our users
 
   Background:
-    Given the following collection:
-      | uri   | http://joinup.eu/collection/the-polygone-project |
-      | title | The Polygone Project                             |
-      | state | published                                        |
-    And the following solution:
-      | title      | Miss Fashionista     |
-      | collection | The Polygone Project |
-      | state      | published            |
+    Given collection content:
+      | uri                                              | title                | state     |
+      | http://joinup.eu/collection/the-polygone-project | The Polygone Project | published |
+    And solution content:
+      | title            | collection           | state     |
+      | Miss Fashionista | The Polygone Project | published |
     And discussion content:
       | title         | body       | state     | collection           |
       | Deep Carnival | Now online | published | The Polygone Project |

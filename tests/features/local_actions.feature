@@ -8,21 +8,20 @@ Feature:
   Scenario: The 'View' local action does not show in the canonical path.
     Given I am logged in as a developer
 
-    Given collection:
-      | title | Test collection |
-      | state | published       |
+    Given collection content:
+      | title           | state     |
+      | Test collection | published |
     When I go to the "Test collection" collection
     Then I should not see the link "View" in the "Entity actions" region
-    When I click "Translate" in the "Entity actions" region
+    When I click "Metadata" in the "Entity actions" region
     Then I should see the link "View" in the "Entity actions" region
 
-    Given solution:
-      | title      | Test solution   |
-      | collection | Test collection |
-      | state      | published       |
+    Given solution content:
+      | title         | collection      | state     |
+      | Test solution | Test collection | published |
     When I go to the "Test solution" solution
     Then I should not see the link "View" in the "Entity actions" region
-    When I click "Translate" in the "Entity actions" region
+    When I click "Metadata" in the "Entity actions" region
     Then I should see the link "View" in the "Entity actions" region
 
     Given release content:

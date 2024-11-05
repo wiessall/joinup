@@ -229,7 +229,7 @@ hidden:
   field_site_featured: true
   field_state: true
   field_topic: true
-  flag_like_node: true
+  flag_like: true
   langcode: true
   links: true
   og_audience: true

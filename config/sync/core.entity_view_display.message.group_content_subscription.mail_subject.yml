@@ -4,7 +4,7 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.message.mail_subject
-    - field.field.message.group_content_subscription.field_group_content
+    - field.field.message.group_content_subscription.group_content
     - message.template.group_content_subscription
 id: message.group_content_subscription.mail_subject
 targetEntityType: message
@@ -12,7 +12,7 @@ bundle: group_content_subscription
 mode: mail_subject
 content: {  }
 hidden:
-  field_group_content: true
+  group_content: true
   partial_0: true
   partial_1: true
   search_api_excerpt: true
