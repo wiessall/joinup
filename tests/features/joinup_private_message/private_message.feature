@@ -124,7 +124,7 @@ Feature: Private messages
     And I should see the following threads in private messages:
       | Alice Miller |
 
-#    #Delete private message
+    # Delete private message
     And a message containing the text "Another private message from Bob to Alice." should be present
     Then I should see "Delete message"
     Then I click "Delete message"
