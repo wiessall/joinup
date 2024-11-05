@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7ebf73743b84e015bcc8d0fd9cc95e44",
+    "content-hash": "e068452ba8bf26d87ed844f399a887c6",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -6784,17 +6784,17 @@
         },
         {
             "name": "drupal/private_message",
-            "version": "3.0.1",
+            "version": "3.0.2",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/private_message.git",
-                "reference": "3.0.1"
+                "reference": "3.0.2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/private_message-3.0.1.zip",
-                "reference": "3.0.1",
-                "shasum": "9bc305b45329d9267645e31f0a40f23c92576258"
+                "url": "https://ftp.drupal.org/files/projects/private_message-3.0.2.zip",
+                "reference": "3.0.2",
+                "shasum": "bb79d07ab72dc5fb6b423052c9f7676183fdafa8"
             },
             "require": {
                 "drupal/core": "^9.3 || ^10.0 || ^11.0",
@@ -6811,8 +6811,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "3.0.1",
-                    "datestamp": "1724512118",
+                    "version": "3.0.2",
+                    "datestamp": "1729586935",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -6841,6 +6841,10 @@
                 {
                     "name": "bohart",
                     "homepage": "https://www.drupal.org/user/289861"
+                },
+                {
+                    "name": "claudiu.cristea",
+                    "homepage": "https://www.drupal.org/user/56348"
                 },
                 {
                     "name": "edutrul",
@@ -25105,10 +25109,10 @@
         "drupal/dropsolid_purge": 10,
         "drupal/facets_block": 10,
         "drupal/facets_date_range": 10,
-        "drupal/masquerade": 5,
         "drupal/node_revision_delete": 5,
         "drupal/private_message_flood": 15,
         "drupal/views_block_area": 10,
+        "drupal/masquerade": 5,
         "php-task-runner/composer": 20,
         "php-task-runner/sparql": 20,
         "weitzman/drupal-test-traits": 20
