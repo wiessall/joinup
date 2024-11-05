@@ -7,7 +7,6 @@ namespace Drupal\joinup\Context;
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Element\NodeElement;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\Core\Url;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\JavascriptTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
@@ -390,17 +389,6 @@ class PrivateMessageContext extends RawDrupalContext {
       ]);
       $ban->save();
     }
-  }
-
-  /**
-   * Opens url to unblock user with private message ban param.
-   *
-   * @When I go to the unblock page to unblock user :target banned by :owner
-   */
-  public function iGoToTheUnblockPage(string $target, string $owner): void {
-    $banId = $this->getPrivateMessageBanIdByUserNames($target, $owner);
-    $url = Url::fromRoute('joinup_private_message.unblock', ['private_message_ban' => $banId])->toString();
-    $this->visitPath($url);
   }
 
   /**
