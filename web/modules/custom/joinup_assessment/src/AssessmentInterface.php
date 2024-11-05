@@ -33,9 +33,9 @@ interface AssessmentInterface {
   /**
    * Topic.
    *
-   * Default value for a new document (European Policies).
+   * Default value for a new document.
    */
-  public const int DOCUMENT_TOPIC_ID = 11225;
+  public const string DOCUMENT_TOPIC = 'European Policies';
 
   /**
    * Question used to generate abstract value.

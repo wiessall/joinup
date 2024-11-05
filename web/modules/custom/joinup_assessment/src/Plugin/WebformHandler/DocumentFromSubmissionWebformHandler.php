@@ -29,7 +29,7 @@ class DocumentFromSubmissionWebformHandler extends WebformHandlerBase {
   /**
    * {@inheritdoc}
    */
-  public function postSave(WebformSubmissionInterface $webform_submission, $update = TRUE) {
+  public function postSave(WebformSubmissionInterface $webform_submission, $update = TRUE): void {
     if ($webform_submission->getState() === WebformSubmissionInterface::STATE_COMPLETED) {
       $this->executeAction($webform_submission);
     }
@@ -54,7 +54,7 @@ class DocumentFromSubmissionWebformHandler extends WebformHandlerBase {
       'og_audience' => AssessmentInterface::DOCUMENT_GROUP_URI,
       'abstract' => substr($submissionData[AssessmentInterface::SUBMISSION_ABSTRACT] ?? '', 0, 250),
       'field_type' => AssessmentInterface::DOCUMENT_TYPE_KEY,
-      'field_topic' => AssessmentInterface::DOCUMENT_TOPIC_ID,
+      'field_topic' => $this->getTopicId(),
     ]);
     $node->save();
 
@@ -64,6 +64,24 @@ class DocumentFromSubmissionWebformHandler extends WebformHandlerBase {
       'submission' => $webformSubmission->id(),
     ]);
     $assessment->save();
+  }
+
+  /**
+   * Gets topic id.
+   *
+   * @return string|null
+   *   Topic id.
+   */
+  protected function getTopicId(): ?string {
+    $storage = $this->entityTypeManager->getStorage('taxonomy_term');
+    $query = $storage->getQuery()
+      ->accessCheck(FALSE)
+      ->condition('name', AssessmentInterface::DOCUMENT_TOPIC)
+      ->condition('vid', 'topic')
+      ->range(0, 1);
+
+    $tids = $query->execute();
+    return !empty($tids) ? reset($tids) : NULL;
   }
 
 }
