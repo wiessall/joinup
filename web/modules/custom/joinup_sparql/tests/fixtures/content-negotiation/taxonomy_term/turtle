@@ -1,9 +1,0 @@
-@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
-
-<http://example.com/citrus-fruits>
-  skos:inScheme <http://example.com/fruit-type> ;
-  skos:prefLabel "Citrus fruits"@en ;
-  skos:definition """<p>Amazing fruits <a href="http://example.com/very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-very-long.html">http://example.com/very-very-very-very-very-very-very-very-very-very-ve…</a></p>
-"""@en ;
-  skos:broaderTransitive <http://example.com/exotic> ;
-  a skos:Concept .

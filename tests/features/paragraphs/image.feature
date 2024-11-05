@@ -4,9 +4,9 @@ Feature:
   I need to be able to use "image" paragraphs for content.
 
   Background:
-    Given the following collection:
-      | title | Paragraphs collection |
-      | state | published             |
+    Given collection content:
+      | title                 | state     |
+      | Paragraphs collection | published |
 
   @javascript @uploadFiles:logo.png
   Scenario: User should be able to add image paragraph.

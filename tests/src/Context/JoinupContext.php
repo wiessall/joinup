@@ -69,60 +69,198 @@ class JoinupContext extends RawDrupalContext {
   use WorkflowTrait;
 
   /**
-   * Asserts that a list of triples exists in a certain graph.
+   * Returns the actual field name for a given node field alias.
    *
-   * It also asserts that no other triples for a given subject
-   * exist.
+   * @param string $type
+   *   The node type for which to return the field name.
+   * @param string $alias
+   *   The human readable node field alias.
    *
-   * Each row is a triple serialized as NTriples:
-   * | subject         | predicate         | object            |
-   * | http://subject1 | http://predicate1 | http://reference1 |
-   * | http://subject1 | http://predicate2 | value1            |
-   * | http://subject2 | http://predicate3 | value2            |
-   *
-   * @param string $graph
-   *   The graph to be queried.
-   * @param \Behat\Gherkin\Node\TableNode $triples
-   *   The user data.
-   *
-   * @Then the following :graph graph triples exist in the RDF backend:
+   * @return string
+   *   The actual field name, or the original string if the alias is not known.
    */
-  public function assertTriples(string $graph, TableNode $triples): void {
-    /** @var \Drupal\rdf_sync\RdfSyncConnectionInterface $connection */
-    $connection = \Drupal::service('rdf_sync.connection');
+  public static function getNodeFieldNameFromAlias(string $type, string $alias): string {
+    $aliases = [
+      'collection' => [
+        'author' => 'uid',
+        'uri' => 'uri',
+        'title' => 'title',
+        'short ID' => 'short_id',
+        'abstract' => 'abstract',
+        'access url' => 'website_url',
+        'closed' => 'closed_group',
+        'contact information' => 'contact',
+        'content creation' => 'content_creation',
+        'creation date' => 'created',
+        'description' => 'description',
+        'featured' => 'featured',
+        'keywords' => 'field_keywords',
+        'logo' => 'logo',
+        'moderation' => 'group_moderation',
+        'modification date' => 'changed',
+        'owner' => 'owner',
+        'published at' => 'published_at',
+        'spatial coverage' => 'spatial_coverage',
+        'state' => 'field_state',
+      ],
+      'contact_information' => [
+        'email' => 'email',
+        'name' => 'title',
+        'website url' => 'webpage',
+        'author' => 'uid',
+        'state' => 'field_state',
+      ],
+      'custom_page' => [
+        'attachments' => 'field_attachment',
+        'body' => 'field_paragraphs_body',
+        'keywords' => 'field_keywords',
+        'logo' => 'field_custom_page_logo',
+        'state' => 'field_state',
+      ],
+      'discussion' => [
+        'attachments' => 'field_attachment',
+        'content' => 'body',
+        'keywords' => 'field_keywords',
+        'logo' => 'field_discussion_logo',
+        'published at' => 'published_at',
+        'state' => 'field_state',
+      ],
+      'document' => [
+        'document publication date' => 'field_document_publication_date',
+        'document type' => 'field_type',
+        'file' => 'field_file',
+        'keywords' => 'field_keywords',
+        'licence' => 'field_licence',
+        'logo' => 'field_document_logo',
+        'published at' => 'published_at',
+        'short title' => 'field_short_title',
+        'spatial coverage' => 'field_document_spatial_coverage',
+        'state' => 'field_state',
+      ],
+      'event' => [
+        'agenda' => 'field_event_agenda',
+        'body' => 'field_paragraphs_body',
+        'end date' => 'field_event_date:end_value',
+        'keywords' => 'field_keywords',
+        'location' => 'field_location',
+        'logo' => 'field_event_logo',
+        'online location' => 'field_event_online_location',
+        'organisation' => 'field_organisation',
+        'published at' => 'published_at',
+        'scope' => 'field_scope',
+        'short title' => 'field_short_title',
+        'spatial coverage' => 'field_event_spatial_coverage',
+        'start date' => 'field_event_date:value',
+        'state' => 'field_state',
+        'web url' => 'field_event_web_url',
+      ],
+      'glossary' => [
+        'definition' => 'field_glossary_definition:value',
+        'summary' => 'field_glossary_definition:summary',
+        'synonyms' => 'field_glossary_synonyms',
+      ],
+      'licence' => [
+        'licence type' => 'licence_type',
+        'spdx licence' => 'spdx_licence',
+        'legal type' => 'legal_type',
+      ],
+      'news' => [
+        'headline' => 'field_news_headline',
+        'keywords' => 'field_keywords',
+        'logo' => 'field_news_logo',
+        'published at' => 'published_at',
+        'spatial coverage' => 'field_news_spatial_coverage',
+        'state' => 'field_state',
+      ],
+      'owner' => [
+        'name' => 'title',
+        'owner type' => 'owner_type',
+        'state' => 'field_state',
+        'author' => 'uid',
+      ],
+      'distribution' => [
+        'access url' => 'access_url',
+        'creation date' => 'created',
+        'description' => 'description',
+        'downloads' => 'downloads',
+        'file size' => 'file_size',
+        'format' => 'format',
+        'licence' => 'field_licence',
+        'modification date' => 'changed',
+        'representation technique' => 'representation_technique',
+        'release' => 'release',
+        'solution' => 'og_audience',
+        'state' => 'field_state',
+        'status' => 'process_status',
+        'title' => 'title',
+        'uri' => 'uri',
+        'published at' => 'published_at',
+      ],
+      'release' => [
+        'uri' => 'uri',
+        'is version of' => 'og_audience',
+        'title' => 'title',
+        'release number' => 'release_number',
+        'keywords' => 'field_keywords',
+        'spatial coverage' => 'spatial_coverage',
+        'status' => 'process_status',
+        'state' => 'field_state',
+        'creation date' => 'created',
+        'modification date' => 'changed',
+        'published at' => 'published_at',
+        'documentation' => 'documentation',
+        'release notes' => 'description',
+      ],
+      'solution' => [
+        'author' => 'uid',
+        'uri' => 'uri',
+        'title' => 'title',
+        'short ID' => 'short_id',
+        'abstract' => 'abstract',
+        'contact information' => 'contact',
+        'content creation' => 'content_creation',
+        'creation date' => 'created',
+        'description' => 'description',
+        'documentation' => 'documentation',
+        'keywords' => 'field_keywords',
+        'landing page' => 'landing_page',
+        'language' => 'language',
+        'logo' => 'logo',
+        'metrics page' => 'metrics_page',
+        'moderation' => 'group_moderation',
+        'modification date' => 'changed',
+        'owner' => 'owner',
+        'topic' => 'field_topic',
+        'related by type' => 'list_related_entities',
+        'related solutions' => 'related_solutions',
+        'solution type' => 'solution_type',
+        'spatial coverage' => 'spatial_coverage',
+        'status' => 'field_status',
+        'state' => 'field_state',
+        'collection' => 'og_audience',
+        'collections' => 'og_audience',
+        'featured' => 'featured',
+        'pinned in' => 'pinned_in_collection',
+        'published at' => 'published_at',
+        'unpinned in' => 'unpinned_in_collection',
+      ],
+      'shared' => [
+        'collection' => OgGroupAudienceHelperInterface::DEFAULT_FIELD,
+        'shared on' => 'field_shared_in',
+        'solution' => OgGroupAudienceHelperInterface::DEFAULT_FIELD,
+        'topic' => 'field_topic',
+        'visits' => 'visit_count',
+      ],
+    ];
 
-    $subjects = $rows = [];
-    foreach ($triples->getHash() as $triple) {
-      $subjects[$triple['subject']][] = $rows[implode(' ', $triple)] = $triple;
-    }
-
-    $unexpectedTriples = [];
-    foreach (array_keys($subjects) as $subject) {
-      $query = "SELECT ?p ?o WHERE { GRAPH <$graph> { <$subject> ?p ?o }}";
-      $results = $connection->query($query);
-      /** @var \EasyRdf\Sparql\Result $result */
-      foreach ($results as $result) {
-        $triple = [
-          'subject' => $subject,
-          'predicate' => (string) $result->p,
-          'object' => trim((string) $result->o),
-        ];
-        if (in_array($triple, $rows)) {
-          unset($rows[implode(' ', $triple)]);
-        }
-        else {
-          $unexpectedTriples[implode(' ', $triple)] = $triple;
-        }
+    // Check both the node type specific aliases as well as the shared aliases.
+    foreach ([$type, 'shared'] as $key) {
+      if (!empty($aliases[$key][$alias])) {
+        return $aliases[$key][$alias];
       }
     }
 
-    if (!empty($rows)) {
-      throw new ExpectationFailedException(sprintf("Triple(s) %s doesn't exists in the RDF backend", implode(PHP_EOL, array_keys($rows))));
-    }
-    if (!empty($unexpectedTriples)) {
-      throw new ExpectationFailedException(sprintf("These triple(s) %s were unexpectedly found in the RDF backend", implode(PHP_EOL, array_keys($unexpectedTriples))));
-    }
-
+    return $alias;
   }
 
   /**
@@ -183,23 +321,23 @@ class JoinupContext extends RawDrupalContext {
    *
    * @param string $roles
    *   A comma separated list of roles to assign to the user.
-   * @param string $rdf_entity
+   * @param string $group_label
    *   The label of the collection or solution of which the user is a member.
-   * @param string $rdf_entity_bundle
+   * @param string $group_bundle
    *   The RDF entity bundle, either 'collection' or 'solution'.
    *
    * @throws \Exception
    *   Thrown when a collection or solution with the given label doesn't exist.
    *
-   * @Given I am logged in as a user with the :role role(s) of the :rdf_entity :rdf_entity_bundle
-   * @Given I am logged in as a/an :role of the :rdf_entity :rdf_entity_bundle
+   * @Given I am logged in as a user with the :role role(s) of the :group_label :group_bundle
+   * @Given I am logged in as a/an :role of the :group_label :group_bundle
    *
    * @see \Drupal\DrupalExtension\Context\DrupalContext::assertAuthenticatedByRole()
    */
-  public function assertAuthenticatedByOgRole($roles, $rdf_entity, $rdf_entity_bundle): void {
-    $entity = $this->getEntityByLabel('rdf_entity', $rdf_entity, $rdf_entity_bundle);
+  public function assertAuthenticatedByOgRole(string $roles, string $group_label, string $group_bundle): void {
+    $entity = $this->getEntityByLabel('node', $group_label, $group_bundle);
     if (!$entity) {
-      throw new \Exception("No entity found with label $rdf_entity");
+      throw new \Exception("No entity found with label $group_label");
     }
     $roles = $this->explodeCommaSeparatedStepArgument($roles);
     $roles = $this->getOgRoles($roles, $entity);
@@ -229,9 +367,9 @@ class JoinupContext extends RawDrupalContext {
    *
    * Use this to e.g. test promotion or demotion of facilitators.
    *
-   * @param string $rdf_entity
+   * @param string $group_label
    *   The label of the collection or solution of which the user is a member.
-   * @param string $rdf_entity_bundle
+   * @param string $group_bundle
    *   The RDF entity bundle, either 'collection' or 'solution'.
    * @param string $roles
    *   A comma separated list of roles to assign to the user. All previously
@@ -240,12 +378,12 @@ class JoinupContext extends RawDrupalContext {
    * @throws \Exception
    *   Thrown when a collection or solution with the given label doesn't exist.
    *
-   * @Given my role(s) in the :rdf_entity :rdf_entity_bundle change(s) to :roles
+   * @Given my role(s) in the :group_label :group_bundle change(s) to :roles
    */
-  public function updateGroupRoles($rdf_entity, $rdf_entity_bundle, $roles): void {
-    $entity = $this->getEntityByLabel('rdf_entity', $rdf_entity, $rdf_entity_bundle);
+  public function updateGroupRoles(string $group_label, string $group_bundle, string $roles): void {
+    $entity = $this->getEntityByLabel('node', $group_label, $group_bundle);
     if (!$entity) {
-      throw new \Exception("No entity found with label $rdf_entity");
+      throw new \Exception("No entity found with label $group_label");
     }
     $roles = $this->explodeCommaSeparatedStepArgument($roles);
     $roles = $this->getOgRoles($roles, $entity);
@@ -261,9 +399,9 @@ class JoinupContext extends RawDrupalContext {
    *
    * Use this to e.g. test approval of pending memberships, or blocking users.
    *
-   * @param string $rdf_entity
+   * @param string $group_label
    *   The label of the collection or solution of which the user is a member.
-   * @param string $rdf_entity_bundle
+   * @param string $group_bundle
    *   The RDF entity bundle, either 'collection' or 'solution'.
    * @param string $state
    *   The new membership state, one of 'active', 'pending' or 'blocked'.
@@ -271,12 +409,12 @@ class JoinupContext extends RawDrupalContext {
    * @throws \Exception
    *   Thrown when a collection or solution with the given label doesn't exist.
    *
-   * @Given my membership state in the :rdf_entity :rdf_entity_bundle changes to :state
+   * @Given my membership state in the :group_label :group_bundle changes to :state
    */
-  public function updateGroupState($rdf_entity, $rdf_entity_bundle, $state): void {
-    $entity = $this->getEntityByLabel('rdf_entity', $rdf_entity, $rdf_entity_bundle);
+  public function updateGroupState(string $group_label, string $group_bundle, string $state): void {
+    $entity = $this->getEntityByLabel('node', $group_label, $group_bundle);
     if (!$entity) {
-      throw new \Exception("No entity found with label $rdf_entity");
+      throw new \Exception("No entity found with label $group_label");
     }
 
     $current_user = $this->getUserManager()->getCurrentUser();
@@ -738,7 +876,7 @@ class JoinupContext extends RawDrupalContext {
         }
       }
       // Add the body field format.
-      if ($name === 'body') {
+      if ($name === 'body' || $name === 'description') {
         $value_key = "{$name}:value";
         $format_key = "{$name}:format";
         $node->{$value_key} = $value;
@@ -786,7 +924,7 @@ class JoinupContext extends RawDrupalContext {
     // solution in a Behat test. This is by design, the URIs are not exposed to
     // end users of the site so they should not be used in BDD scenarios.
     if (!empty($node->{OgGroupAudienceHelperInterface::DEFAULT_FIELD})) {
-      $entity = $this->getEntityByLabel('rdf_entity', $node->{OgGroupAudienceHelperInterface::DEFAULT_FIELD});
+      $entity = $this->getEntityByLabel('node', $node->{OgGroupAudienceHelperInterface::DEFAULT_FIELD});
       $node->{OgGroupAudienceHelperInterface::DEFAULT_FIELD} = $entity->id();
     }
 
@@ -831,9 +969,11 @@ class JoinupContext extends RawDrupalContext {
     }
 
     $image_fields = [
+      'field_discussion_logo',
       'field_document_logo',
       'field_event_logo',
       'field_news_logo',
+      'logo',
     ];
     foreach ($image_fields as $image_field) {
       if (!empty($node->$image_field)) {
@@ -863,145 +1003,13 @@ class JoinupContext extends RawDrupalContext {
       // to satisfy data integrity and prevent form validation errors.
       $node->field_topic = $this->getRandomTopic()->label();
     }
-  }
 
-  /**
-   * Returns the actual field name for a given node field alias.
-   *
-   * @param string $type
-   *   The node type for which to return the field name.
-   * @param string $alias
-   *   The human readable node field alias.
-   *
-   * @return string
-   *   The actual field name, or the original string if the alias is not known.
-   */
-  protected static function getNodeFieldNameFromAlias($type, $alias): string {
-    $aliases = [
-      'contact_information' => [
-        'email' => 'email',
-        'name' => 'title',
-        'website url' => 'webpage',
-        'author' => 'uid',
-        'state' => 'field_state',
-      ],
-      'custom_page' => [
-        'attachments' => 'field_attachment',
-        'body' => 'field_paragraphs_body',
-        'keywords' => 'field_keywords',
-        'logo' => 'field_custom_page_logo',
-        'state' => 'field_state',
-      ],
-      'discussion' => [
-        'attachments' => 'field_attachment',
-        'content' => 'body',
-        'keywords' => 'field_keywords',
-        'publication date' => 'published_at',
-        'state' => 'field_state',
-      ],
-      'document' => [
-        'document publication date' => 'field_document_publication_date',
-        'document type' => 'field_type',
-        'file' => 'field_file',
-        'keywords' => 'field_keywords',
-        'licence' => 'field_licence',
-        'logo' => 'field_document_logo',
-        'publication date' => 'published_at',
-        'short title' => 'field_short_title',
-        'spatial coverage' => 'field_document_spatial_coverage',
-        'state' => 'field_state',
-      ],
-      'event' => [
-        'agenda' => 'field_event_agenda',
-        'body' => 'field_paragraphs_body',
-        'end date' => 'field_event_date:end_value',
-        'keywords' => 'field_keywords',
-        'location' => 'field_location',
-        'logo' => 'field_event_logo',
-        'online location' => 'field_event_online_location',
-        'organisation' => 'field_organisation',
-        'publication date' => 'published_at',
-        'scope' => 'field_scope',
-        'short title' => 'field_short_title',
-        'spatial coverage' => 'field_event_spatial_coverage',
-        'start date' => 'field_event_date:value',
-        'state' => 'field_state',
-        'web url' => 'field_event_web_url',
-      ],
-      'glossary' => [
-        'definition' => 'field_glossary_definition:value',
-        'summary' => 'field_glossary_definition:summary',
-        'synonyms' => 'field_glossary_synonyms',
-      ],
-      'licence' => [
-        'licence type' => 'licence_type',
-        'spdx licence' => 'spdx_licence',
-        'legal type' => 'legal_type',
-      ],
-      'news' => [
-        'headline' => 'field_news_headline',
-        'keywords' => 'field_keywords',
-        'logo' => 'field_news_logo',
-        'publication date' => 'published_at',
-        'spatial coverage' => 'field_news_spatial_coverage',
-        'state' => 'field_state',
-      ],
-      'owner' => [
-        'name' => 'title',
-        'owner type' => 'owner_type',
-        'state' => 'field_state',
-        'author' => 'uid',
-      ],
-      'distribution' => [
-        'access url' => 'access_url',
-        'creation date' => 'created',
-        'description' => 'description',
-        'downloads' => 'downloads',
-        'file size' => 'file_size',
-        'format' => 'format',
-        'licence' => 'field_licence',
-        'modification date' => 'changed',
-        'representation technique' => 'representation_technique',
-        'release' => 'release',
-        'solution' => 'og_audience',
-        'state' => 'field_state',
-        'status' => 'process_status',
-        'title' => 'title',
-        'uri' => 'uri',
-        'publication date' => 'published_at',
-      ],
-      'release' => [
-        'uri' => 'uri',
-        'is version of' => 'og_audience',
-        'title' => 'title',
-        'release number' => 'release_number',
-        'keywords' => 'field_keywords',
-        'spatial coverage' => 'spatial_coverage',
-        'status' => 'process_status',
-        'state' => 'field_state',
-        'creation date' => 'created',
-        'modification date' => 'changed',
-        'published at' => 'published_at',
-        'documentation' => 'documentation',
-        'release notes' => 'description',
-      ],
-      'shared' => [
-        'collection' => OgGroupAudienceHelperInterface::DEFAULT_FIELD,
-        'shared on' => 'field_shared_in',
-        'solution' => OgGroupAudienceHelperInterface::DEFAULT_FIELD,
-        'topic' => 'field_topic',
-        'visits' => 'visit_count',
-      ],
-    ];
-
-    // Check both the node type specific aliases as well as the shared aliases.
-    foreach ([$type, 'shared'] as $key) {
-      if (!empty($aliases[$key][$alias])) {
-        return $aliases[$key][$alias];
-      }
+    // Handle file URL fields.
+    if (!empty($node->documentation)) {
+      $fileHandler = \Drupal::service('file_url.handler');
+      $file = $this->createFile($node->documentation);
+      $node->documentation = $fileHandler::fileToUrl($file);
     }
-
-    return $alias;
   }
 
   /**
@@ -1229,27 +1237,15 @@ class JoinupContext extends RawDrupalContext {
   /**
    * Checks the current workflow state on the given entity.
    *
-   * @param string $type
-   *   The entity type ID of the entity.
+   * @param string $label
+   *   The label of the entity.
    * @param string $stateExpected
    *   The expected workflow state's label.
-   * @param string|null $label
-   *   The label of the entity.
-   * @param string|null $id
-   *   The ID of the entity.
    *
-   * @Given the workflow state of the :label :type should be :stateExpected
-   * @Given the workflow state of the :type with ID :id should be :stateExpected
+   * @Given the workflow state of the :label content should be :stateExpected
    */
-  public function assertEntityWorkflowState(string $type, string $stateExpected, ?string $label = NULL, ?string $id = NULL): void {
-    $mapping = [
-      'content' => 'node',
-      'rdf entity' => 'rdf_entity',
-    ];
-    $entityTypeId = $mapping[$type] ?? static::translateEntityTypeAlias($type);
-    $entity = $label
-      ? $this->getEntityByLabel($entityTypeId, $label)
-      : $this->getEntityById($entityTypeId, $id);
+  public function assertEntityWorkflowState(string $label, string $stateExpected): void {
+    $entity = $this->getEntityByLabel('node', $label);
     Assert::assertInstanceOf(
       EntityWorkflowStateInterface::class,
       $entity,
@@ -1261,9 +1257,8 @@ class JoinupContext extends RawDrupalContext {
       $stateIdExpected,
       $actual = $entity->getWorkflowState(),
       sprintf(
-        "Workflow state of '%s' '%s' is different than expected. Expected state is '%s', while the actual one is '%s'.",
-        $label ?? $id,
-        $type,
+        "Workflow state of '%s' content is different than expected. Expected state is '%s', while the actual one is '%s'.",
+        $label,
         $stateIdExpected,
         $actual,
       )
@@ -1291,18 +1286,7 @@ class JoinupContext extends RawDrupalContext {
     /** @var \Drupal\joinup_workflow\EntityWorkflowStateInterface|\Drupal\Core\Entity\EntityInterface $entity */
     $entity = $this->getEntityByLabel($entity_type, $title);
     $entity->setWorkflowState($state);
-
-    // Only create a new revision if the entity type supports it.
-    if ($entity->getEntityType()->isRevisionable()) {
-      $entity->setNewRevision(TRUE);
-    }
-    else {
-      // If the entity does not support revisioning the static cache in the
-      // access control handler will become stale. Force a cache reset since the
-      // changing of the workflow state might affect entity access.
-      \Drupal::entityTypeManager()->getAccessControlHandler($entity->getEntityTypeId())->resetCache();
-    }
-
+    $entity->setNewRevision(TRUE);
     $entity->save();
   }
 
@@ -1472,7 +1456,7 @@ class JoinupContext extends RawDrupalContext {
    */
   public function assertOrderedTilesPresent(TableNode $titles_table, ?string $list_title = NULL): void {
     $headings = array_keys($this->getTiles(listTitle: $list_title));
-    $headings_expected = $titles_table->getColumn(0);
+    $headings_expected = array_filter($titles_table->getColumn(0));
     Assert::assertEquals($headings_expected, $headings, 'The expected tiles were not found or were not in the proper order.');
   }
 
@@ -2156,22 +2140,15 @@ class JoinupContext extends RawDrupalContext {
    *   The link text.
    * @param string $title
    *   The entity title.
-   * @param string $type
-   *   The entity type. Either 'content' or 'rdf'.
    *
    * @throws \Exception
    *   Thrown when the link is not in the page.
    *
-   * @Then /^the share link "(?P<link>[^"]+)" should point to the "(?P<title>[^"]+)" (?P<type>[^" ]+)(?:| entity)$/
+   * @Then /^the share link "(?P<link>[^"]+)" should point to the "(?P<title>[^"]+)" content(?:| entity)$/
    */
-  public function assertLinkContainsEntityUrl(string $link, string $title, string $type): void {
-    if (!in_array($type, ['content', 'rdf'])) {
-      throw new \InvalidArgumentException('Type can only be one of "content" and "rdf".');
-    }
-    $type = $type === 'content' ? 'node' : 'rdf_entity';
-
+  public function assertLinkContainsEntityUrl(string $link, string $title): void {
     /** @var \Drupal\Core\Entity\EntityInterface $entity */
-    $entity = $this->getEntityByLabel($type, $title);
+    $entity = $this->getEntityByLabel('node', $title);
     $link_element = $this->getSession()->getPage()->findLink($link);
 
     if (!$link_element) {
@@ -2529,16 +2506,14 @@ class JoinupContext extends RawDrupalContext {
    * @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-4849
    * @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-4352
    */
-  public function assertTileNotMarkedAsFeatured($heading, $type): void {
-    if (in_array($type, ['collection', 'solution'])) {
-      $entity_type_id = 'rdf_entity';
-    }
-    elseif (in_array($type, CommunityContentHelper::BUNDLES)) {
-      $entity_type_id = 'node';
-    }
-    else {
-      throw new \Exception("Invalid bundle '$type'.");
-    }
+  public function assertTileNotMarkedAsFeatured(string $heading, string $type): void {
+    assert(in_array($type,
+      array_merge(CommunityContentHelper::BUNDLES, [
+        'solution',
+        'collection',
+      ])
+    ), 'Invalid bundle type.');
+    $entity_type_id = self::translateEntityTypeAlias($type);
     $entity = $this->getEntityByLabel($entity_type_id, $heading);
 
     if ($entity instanceof PinnableGroupContentInterface && $entity->isPinned()) {
@@ -2688,7 +2663,7 @@ class JoinupContext extends RawDrupalContext {
   public function assertDraggableMenuTable(TableNode $table, string $group_label, string $group_bundle): void {
     $this->assertJavaScriptEnabledBrowser();
 
-    $group = $this->getEntityByLabel('rdf_entity', $group_label, $group_bundle);
+    $group = $this->getEntityByLabel('node', $group_label, $group_bundle);
     /** @var \Behat\Mink\Element\NodeElement[] $rows */
     $rows = $this->getSession()->getPage()->findAll('css', '#menu-overview tbody tr.draggable');
     $expected = $table->getColumnsHash();
@@ -3018,23 +2993,6 @@ class JoinupContext extends RawDrupalContext {
   }
 
   /**
-   * Asserts that the rdf entity absolute urls exist as links.
-   *
-   * @param \Behat\Gherkin\Node\TableNode $titles
-   *   The titles of the rdf entities.
-   *
-   * @throws \Exception
-   *   Thrown if any link does not exist in the page.
-   *
-   * @Given I should see the absolute urls of the following RDF entities:
-   */
-  public function assertRdfEntityAbsoluteUrlsAsLinkInPage(TableNode $titles): void {
-    foreach ($titles->getRows() as $title) {
-      $this->assertEntityUrlInSitemap('rdf_entity', $title[0]);
-    }
-  }
-
-  /**
    * Asserts that the content absolute urls do not exist as links.
    *
    * @param \Behat\Gherkin\Node\TableNode $titles
@@ -3058,22 +3016,16 @@ class JoinupContext extends RawDrupalContext {
    *   The title of the entity.
    * @param string $bundle
    *   The bundle of the entity.
-   * @param string $entity_type_id
-   *   The entity type id. Either 'content' or 'rdf entity' is accepted.
    * @param string $new_publication_date
    *   The new publication date.
    *
    * @throws \InvalidArgumentException
    *   Thrown when one of the parameters is not correct.
    *
-   * @Given the publication date of the :title :bundle :entity_type_id is changed to :new_value
+   * @Given the publication date of the :title :bundle content is changed to :new_value
    */
-  public function givenPublicationDateChanged(string $title, string $bundle, string $entity_type_id, string $new_publication_date): void {
-    if (!in_array($entity_type_id, ['content', 'rdf entity'])) {
-      throw new \InvalidArgumentException('Only "content" and "rdf entity" are allowed for the $entity_type_id parameter.');
-    }
-    $entity_type_id = $entity_type_id === 'content' ? 'node' : 'rdf_entity';
-    $entity = $this->getEntityByLabel($entity_type_id, $title, $bundle);
+  public function givenPublicationDateChanged(string $title, string $bundle, string $new_publication_date): void {
+    $entity = $this->getEntityByLabel('node', $title, $bundle);
     $publication_date = is_numeric($new_publication_date) ? ((int) $new_publication_date) : strtotime($new_publication_date);
 
     if (empty($new_publication_date)) {
@@ -3082,23 +3034,6 @@ class JoinupContext extends RawDrupalContext {
 
     $entity->set('published_at', $publication_date);
     $entity->save();
-  }
-
-  /**
-   * Asserts that the absolute url of an rdf entity exists as a link.
-   *
-   * @param \Behat\Gherkin\Node\TableNode $titles
-   *   The titles of the rdf entities.
-   *
-   * @throws \Exception
-   *   Thrown if the link does not exist in the page.
-   *
-   * @Given I should not see the absolute urls of the following RDF entities:
-   */
-  public function assertEmptyRdfEntityAbsoluteUrlsAsLinkInPage(TableNode $titles): void {
-    foreach ($titles->getRows() as $title) {
-      $this->assertEntityUrlInSitemap('rdf_entity', $title[0], FALSE);
-    }
   }
 
   /**
@@ -3236,63 +3171,6 @@ class JoinupContext extends RawDrupalContext {
    */
   public function insulateScenario(): void {
     $this->getMink()->stopSessions();
-  }
-
-  /**
-   * Visits an entity canonical page given its RDF resource (URI).
-   *
-   * @param string $uri
-   *   The entity RDF URI.
-   *
-   * @throws \InvalidArgumentException
-   *   When for the passed URI no entity can be found.
-   *
-   * @Given I visit the page of the entity having :uri as RDF resource
-   */
-  public function visitEntityCanonicalPagePageByRdfUri(string $uri): void {
-    if (!$entity = \Drupal::getContainer()->get('rdf_sync.mapper')->getEntityByUri($uri)) {
-      throw new \InvalidArgumentException("No entity found for URI $uri");
-    }
-    $this->visitPath($entity->toUrl()->toString());
-  }
-
-  /**
-   * Updates an entity, given its RDF resource (URI).
-   *
-   * @codingStandardsIgnoreStart
-   *  Table format:
-   *  | title               | Sample solution   |
-   *  | description         | A sample solution |
-   *  | ...                 | ...               |
-   * @codingStandardsIgnoreEnd
-   *
-   * @param string $uri
-   *   The entity RDF URI.
-   * @param \Behat\Gherkin\Node\TableNode $fieldsTable
-   *   The values of the fields to update.
-   *
-   * @throws \Exception
-   *    Thrown when a field name is invalid.
-   * @throws \InvalidArgumentException
-   *   When for the passed URI no entity can be found.
-   *
-   * @When I update the entity having :uri as RDF resource:
-   */
-  public function updateEntityByRdfUri(string $uri, TableNode $fieldsTable): void {
-    /** @var \Drupal\Core\Entity\ContentEntityInterface|null $entity */
-    if (!$entity = \Drupal::getContainer()->get('rdf_sync.mapper')->getEntityByUri($uri)) {
-      throw new \InvalidArgumentException("No entity found for URI $uri");
-    }
-    $updated = (object) $fieldsTable->getRowsHash();
-    $updated->type = $entity->bundle();
-    $this->parseEntityFields($entity->getEntityTypeId(), $updated);
-    foreach (array_keys($fieldsTable->getRowsHash()) as $key) {
-      if ($key === 'changed' && !is_numeric($updated->$key)) {
-        $updated->$key = strtotime($updated->$key);
-      }
-      $entity->set($key, $updated->$key);
-    }
-    $entity->save();
   }
 
 }

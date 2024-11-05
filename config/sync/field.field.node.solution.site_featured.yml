@@ -1,0 +1,21 @@
+uuid: abcf12a5-ec7e-4dd2-af00-9462e2a3bae5
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.site_featured
+    - node.type.solution
+id: node.solution.site_featured
+field_name: site_featured
+entity_type: node
+bundle: solution
+label: 'Site featured'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

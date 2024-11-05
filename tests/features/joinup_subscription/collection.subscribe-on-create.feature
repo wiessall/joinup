@@ -11,8 +11,8 @@ Feature: Subscribing to a collection after creating
       | Abstract    | The seminal work on the ancient mythologies of the primitive and classical peoples of the Rollerblade. |
       | Description | The seminal work on the ancient mythologies of the primitive and classical peoples of the Rollerblade. |
       # Contact information data.
-      | Name        | Larry Jaoe                                                                                              |
-      | E-mail      | larry.jaoe@example.com                                                                                  |
+      | Name        | Larry Jaoe                                                                                             |
+      | E-mail      | larry.jaoe@example.com                                                                                 |
     When I select "EU and European Policies" from "Topic"
 
     # Click the button to create an organisation owner.

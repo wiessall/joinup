@@ -8,7 +8,7 @@ Feature: Test SVG attachments.
     And contact_information content:
       | name        | email           |
       | SVG contact | svg@example.com |
-    And collections:
+    And collection content:
       | title | logo     | abstract | description | content creation         | moderation | topic             | owner       | contact information | state     |
       | SVG   | logo.png | Test     | Test        | facilitators and authors | yes        | Supplier exchange | SVG company | SVG contact         | published |
 

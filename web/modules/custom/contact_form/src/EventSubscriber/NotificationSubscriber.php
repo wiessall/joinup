@@ -72,28 +72,15 @@ class NotificationSubscriber extends NotificationSubscriberBase {
     }
 
     $route_parameters = $url->getRouteParameters();
-    if (!isset($route_parameters['node']) && !isset($route_parameters['rdf_entity'])) {
+    if (!$nid ??= $route_parameters['node']) {
       return NULL;
     }
 
-    // Check what type of content we are reporting.
-    $entity_type_id = NULL;
-    if (isset($route_parameters['node'])) {
-      $entity_type_id = 'node';
-    }
-    elseif (isset($route_parameters['rdf_entity'])) {
-      $entity_type_id = 'rdf_entity';
-    }
-    if ($entity_type_id === NULL) {
+    if ($url->getRouteName() !== 'entity.node.canonical') {
       return NULL;
     }
 
-    if ($url->getRouteName() !== "entity.{$entity_type_id}.canonical") {
-      return NULL;
-    }
-
-    $entity_id = $route_parameters[$entity_type_id];
-    $entity = $this->entityTypeManager->getStorage($entity_type_id)->load($entity_id);
+    $entity = $this->entityTypeManager->getStorage('node')->load($nid);
 
     return $entity;
   }
@@ -152,10 +139,10 @@ class NotificationSubscriber extends NotificationSubscriberBase {
         ],
       ],
       'og_roles' => [
-        'rdf_entity-collection-administrator' => [
+        'node-collection-administrator' => [
           'report_contact_form',
         ],
-        'rdf_entity-solution-administrator' => [
+        'node-solution-administrator' => [
           'report_contact_form',
         ],
       ],

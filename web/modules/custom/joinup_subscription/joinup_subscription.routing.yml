@@ -1,5 +1,5 @@
 joinup_subscription.group_subscribers_report:
-  path: '/rdf_entity/{rdf_entity}/reports/subscribers'
+  path: '/node/{node}/reports/subscribers'
   defaults:
     _title: 'Subscribers report'
     _controller: \Drupal\joinup_subscription\Controller\SubscribersReportController::groupReport
@@ -7,12 +7,11 @@ joinup_subscription.group_subscribers_report:
     _custom_access: Drupal\joinup_group\Controller\GroupReportsController::access
   options:
     parameters:
-      rdf_entity:
-        type: entity:rdf_entity
+      node:
+        type: entity:node
         bundle:
           - collection
           - solution
-    _og_entity_type_id: rdf_entity
 
 joinup_subscription.my_subscriptions:
   path: '/user/subscriptions'
@@ -78,7 +77,7 @@ joinup_subscription.unsubscribe:
       user:
         type: entity:user
       group:
-        type: entity:rdf_entity
+        type: entity:node
         bundle:
           - collection
           - solution

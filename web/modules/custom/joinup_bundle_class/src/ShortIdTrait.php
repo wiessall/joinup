@@ -13,8 +13,8 @@ trait ShortIdTrait {
    * {@inheritdoc}
    */
   public function getShortId(): ?string {
-    assert(method_exists($this, 'getMainPropertyValue'), __TRAIT__ . ' depends on JoinupBundleClassFieldAccessTrait. Please include it in your class.');
-    $value = $this->getMainPropertyValue('field_short_id');
+    assert(method_exists($this, 'getMainPropertyValue'), __TRAIT__ . ' depends on ShortIdTrait. Please include it in your class.');
+    $value = $this->getMainPropertyValue('short_id');
     return $value ? (string) $value : NULL;
   }
 

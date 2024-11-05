@@ -1,22 +1,22 @@
-# Route to create a release that belongs to an rdf_entity.solution
+# Route to create a release that belongs to a solution
 joinup_release.solution_release.add:
-  path: 'rdf_entity/{rdf_entity}/release/add'
+  path: 'node/{node}/release/add'
   defaults:
     _controller: '\Drupal\joinup_release\Controller\ReleaseController::add'
     _title: 'Add Release'
   requirements:
     _custom_access: '\Drupal\joinup_release\Controller\ReleaseController::createReleaseAccess'
-    _joinup_group: 'solution'
+    _archived_group: 'TRUE'
   options:
     parameters:
-      rdf_entity:
-        type: entity:rdf_entity
-      bundle:
-        type: 'solution'
+      node:
+        type: entity:node
+        bundle:
+          - solution
 
 # Route to show an overview of releases belonging to a solution.
 joinup_release.solution_release.overview:
-  path: '/rdf_entity/{rdf_entity}/releases'
+  path: '/node/{node}/releases'
   defaults:
     _controller: '\Drupal\joinup_release\Controller\ReleaseController::overview'
     _title_callback: '\Drupal\joinup_release\Controller\ReleaseController::overviewPageTitle'
@@ -24,7 +24,7 @@ joinup_release.solution_release.overview:
     _custom_access: '\Drupal\joinup_release\Controller\ReleaseController::overviewAccess'
   options:
     parameters:
-      rdf_entity:
-        type: entity:rdf_entity
+      node:
+        type: entity:node
       bundle:
         type: 'solution'

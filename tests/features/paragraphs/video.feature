@@ -2,10 +2,9 @@
 Feature: Video paragraph tests.
 
   Background:
-    Given the following collection:
-      | title | Paragraphs collection |
-      | state | published             |
-      | topic | HR                    |
+    Given collection content:
+      | title                 | state     | topic |
+      | Paragraphs collection | published | HR    |
 
   @javascript
   Scenario: Collection facilitators can add video paragraphs.

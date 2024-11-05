@@ -16,4 +16,4 @@ views.filter.user_tristate_status:
 
 views.field.joinup_user_bulk_form:
   type: views.field.user_bulk_form
-  label: 'Joinup user operations bulk form'
+  label: 'Interoperable Europe Portal user operations bulk form'

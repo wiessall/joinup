@@ -87,7 +87,10 @@ class TransferGroupOwnershipSubscriber implements EventSubscriberInterface {
         }
       }
       $membership = OgMembership::load($data['membership']);
-      $view_url = Url::fromRoute('entity.rdf_entity.member_overview', ['rdf_entity' => $membership->getGroupId()]);
+      $entity_type_id = $membership->getGroup()->getEntityTypeId();
+      $view_url = Url::fromRoute("entity.$entity_type_id.member_overview", [
+        $entity_type_id => $membership->getGroupId(),
+      ]);
       $response->setTargetUrl($view_url->toString());
       // We go back to the view, expecting a new user selection, so we clear
       // the old user input.

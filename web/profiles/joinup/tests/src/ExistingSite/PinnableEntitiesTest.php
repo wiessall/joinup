@@ -5,10 +5,9 @@ declare(strict_types=1);
 namespace Drupal\Tests\joinup\ExistingSite;
 
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
-use Drupal\collection\Entity\Collection;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_group\Entity\PinnableGroupContentInterface;
-use Drupal\joinup_news\Entity\News;
+use Drupal\joinup_news\Entity\NewsInterface;
 use Drupal\og\OgGroupAudienceHelperInterface;
 
 /**
@@ -43,19 +42,19 @@ class PinnableEntitiesTest extends JoinupExistingSiteTestBase {
    * than groups.
    */
   public function testGetGroupsWherePinnedWithDeletedGroup(): void {
-    // Create a test collection.
-    $collection = Collection::create([
-      'label' => $this->getRandomGenerator()->string(),
+    $collection = $this->createNode([
+      'type' => 'collection',
+      'title' => $this->getRandomGenerator()->string(),
+      'field_state' => 'published',
     ]);
-    $collection->setWorkflowState('published')->save();
+    assert($collection instanceof CollectionInterface);
 
-    // Create a test news article inside the collection.
-    /** @var \Drupal\joinup_news\Entity\NewsInterface $news */
-    $news = News::create([
+    $news = $this->createNode([
+      'type' => 'news',
       'title' => $this->randomString(),
       OgGroupAudienceHelperInterface::DEFAULT_FIELD => $collection->id(),
     ]);
-    $news->save();
+    assert($news instanceof NewsInterface);
 
     // Pin the news article inside the collection.
     $news->pin($collection);
@@ -84,14 +83,14 @@ class PinnableEntitiesTest extends JoinupExistingSiteTestBase {
    * @param \Drupal\joinup_group\Entity\PinnableGroupContentInterface $entity
    *   The entity for which to return the groups.
    *
-   * @return \Drupal\rdf_entity\RdfInterface[]
+   * @return \Drupal\joinup_group\Entity\GroupInterface[]
    *   The groups where the entity has been pinned.
    */
   protected function getGroupsWherePinned(PinnableGroupContentInterface $entity): array {
     // Refresh the entity so that our test is not affected by static caches.
     $entity = $this->entityTypeManager->getStorage($entity->getEntityTypeId())->loadUnchanged($entity->id());
     $group_ids = $entity->getPinnedGroupIds();
-    return $this->entityTypeManager->getStorage('rdf_entity')->loadMultiple($group_ids);
+    return $this->entityTypeManager->getStorage('node')->loadMultiple($group_ids);
   }
 
 }

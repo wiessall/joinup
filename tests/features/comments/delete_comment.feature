@@ -3,10 +3,9 @@ Feature: Delete comments
   As a visitor of the website I can leave a comment on community content.
 
   Background:
-    Given the following collection:
-      | title | Semantic web fanatics |
-      | logo  | logo.png              |
-      | state | published             |
+    Given collection content:
+      | title                 | logo     | state     |
+      | Semantic web fanatics | logo.png | published |
     And users:
       | Username             | E-mail                        | First name  | Family name |
       | Tim Berners Lee      | tim.berners-lee@example.com   | Tim Berners | Lee         |
@@ -48,5 +47,5 @@ Feature: Delete comments
     Then I press "Delete"
     Then the following email should have been sent:
       | recipient | Tim Berners Lee                                                                                                                                                  |
-      | subject   | Joinup: Your comment has been deleted.                                                                                                                            |
+      | subject   | Interoperable Europe Portal: Your comment has been deleted.                                                                                                                            |
       | body      | Do Re Mi Facilitator deleted your comment in "RDF Schemas for government use". To avoid comment moderation in the future, please read our community guidelines at |

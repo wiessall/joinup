@@ -1,0 +1,25 @@
+uuid: d3e70a07-1c97-4acb-864e-e554019e6b4b
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_state
+    - node.type.collection
+  module:
+    - state_machine
+id: node.collection.field_state
+field_name: field_state
+entity_type: node
+bundle: collection
+label: State
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  workflow: collection_workflow
+  workflow_callback: ''
+  always_allow_default: false
+  current_state_first: true
+field_type: state

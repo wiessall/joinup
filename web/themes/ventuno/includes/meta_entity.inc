@@ -26,15 +26,15 @@ function ventuno_preprocess_meta_entity(array &$variables): void {
     return;
   }
 
-  /** @var \Drupal\solution\Entity\SolutionInterface $solution */
+  /** @var \Drupal\joinup_solution\Entity\SolutionInterface $solution */
   $solution = $meta_entity->getTargetEntity();
   $variables['solution_label'] = $solution->label();
   $variables['solution_url'] = $solution->toUrl()->setAbsolute()->toString();
   $route_parameters = ['meta_entity' => $meta_entity->id()];
   $url_options = [
     'query' => [
-      'destination' => Url::fromRoute('entity.rdf_entity.eif_perspective', [
-        'rdf_entity' => $solution->id(),
+      'destination' => Url::fromRoute('entity.node.eif_perspective', [
+        'node' => $solution->id(),
       ])->getInternalPath(),
     ],
   ];

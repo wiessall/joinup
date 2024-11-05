@@ -5,11 +5,11 @@ Feature: "Add custom page" visibility options.
   I need to be able to add "Custom page" content through UI.
 
   Background:
-    Given collections:
+    Given collection content:
       | title           | logo     | state     | topic      |
       | Open Collective | logo.png | published | Demography |
       | Code Camp       | logo.png | published | Demography |
-    And solutions:
+    Given solution content:
       | title     | logo     | state     | topic      |
       | Parachute | logo.png | published | Demography |
       | Skydiving | logo.png | published | Demography |
@@ -122,9 +122,9 @@ Feature: "Add custom page" visibility options.
       | Parachute   | Skydiving       | solution   |
 
   Scenario: Title can be visually hidden.
-    Given the following collection:
-      | title | Aggressive Rubber |
-      | state | published         |
+    Given collection content:
+      | title             | state     |
+      | Aggressive Rubber | published |
     And custom_page content:
       | title        | collection        | field_hide_title | state     |
       | Rubber bands | Aggressive Rubber | 1                | published |
@@ -149,9 +149,9 @@ Feature: "Add custom page" visibility options.
 
   @javascript
   Scenario: Long list of attachments should be collapsed.
-    Given the following collection:
-      | title | Aggressive Rubber |
-      | state | published         |
+    Given collection content:
+      | title             | state     |
+      | Aggressive Rubber | published |
     # Create custom pages with 5 and 6 attachments.
     # 5 is the limit before adding the "Show more" functionality.
     And custom_page content:

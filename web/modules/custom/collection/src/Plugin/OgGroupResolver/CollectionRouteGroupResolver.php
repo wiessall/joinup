@@ -24,14 +24,14 @@ class CollectionRouteGroupResolver extends RouteGroupResolver {
    */
   protected function getContentEntityPaths(): array {
     return [
-      '/rdf_entity/{rdf_entity}/glossary/{letter}' => 'rdf_entity',
+      '/node/{node}/glossary/{letter}' => 'node',
     ];
   }
 
   /**
    * {@inheritdoc}
    */
-  public function resolve(OgResolvedGroupCollectionInterface $collection) {
+  public function resolve(OgResolvedGroupCollectionInterface $collection): void {
     if (($group = $this->getContentEntity()) && $group instanceof CollectionInterface) {
       $collection->addGroup($group, ['route']);
       $this->stopPropagation();

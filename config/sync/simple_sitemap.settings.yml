@@ -26,4 +26,3 @@ excluded_languages:
   es: es
 enabled_entity_types:
   - node
-  - rdf_entity
