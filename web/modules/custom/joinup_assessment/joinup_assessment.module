@@ -19,7 +19,10 @@ use Drupal\webform\WebformSubmissionInterface;
 function joinup_assessment_entity_access(EntityInterface $entity, string $operation): AccessResultInterface {
   if ($entity instanceof WebformSubmissionInterface &&
     $operation === 'view' &&
-    $entity->getWebform()->id() === AssessmentInterface::WEBFORM_ID &&
+    str_starts_with(
+      $entity->getWebform()->id(),
+      AssessmentInterface::WEBFORM_ID
+    ) &&
     $entity->isCompleted()) {
     return AccessResult::allowed();
   }
