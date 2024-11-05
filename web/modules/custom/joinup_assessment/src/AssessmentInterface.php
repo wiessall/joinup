@@ -17,6 +17,11 @@ interface AssessmentInterface {
   public const string DOCUMENT_GROUP_URI = 'http://data.europa.eu/w21/c5e99eae-6d31-47a0-b914-a4b9f4ea82cf';
 
   /**
+   * Title prefix.
+   */
+  public const string DOCUMENT_TITLE_PREFIX = 'Assessment report #';
+
+  /**
    * State.
    *
    * Default value for a new document.

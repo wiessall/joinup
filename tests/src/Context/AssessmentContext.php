@@ -6,6 +6,7 @@ namespace Drupal\joinup\Context;
 
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\EntityTrait;
+use Drupal\joinup_assessment\AssessmentInterface;
 
 /**
  * Step definitions for assessments checks.
@@ -23,7 +24,7 @@ class AssessmentContext extends RawDrupalContext {
     $query = \Drupal::entityQuery('node')
       ->accessCheck(FALSE)
       ->condition('type', 'document')
-      ->condition('title', 'Online form for assessments demo: Submission' . '%', 'LIKE')
+      ->condition('title', AssessmentInterface::DOCUMENT_TITLE_PREFIX . '%', 'LIKE')
       ->sort('created', 'DESC')
       ->range(0, 1);
 

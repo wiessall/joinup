@@ -79,7 +79,7 @@ class DocumentFromSubmissionWebformHandler extends WebformHandlerBase {
 
     $node = $nodeStorage->create([
       'type' => 'document',
-      'title' => $webformSubmission->label(),
+      'title' => AssessmentInterface::DOCUMENT_TITLE_PREFIX . $webformSubmission->id(),
       'field_paragraphs_body' => [$this->getLayoutParagraph()],
       'field_state' => AssessmentInterface::DOCUMENT_STATE,
       'og_audience' => $this->getGroup() ?? NULL,
