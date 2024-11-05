@@ -148,10 +148,10 @@ class ReleaseRdfSubscriber extends NotificationSubscriberBase {
             ],
           ],
           'og_roles' => [
-            'rdf_entity-solution-administrator' => [
+            'node-solution-administrator' => [
               self::TEMPLATE_UPDATE_PUBLISHED,
             ],
-            'rdf_entity-solution-facilitator' => [
+            'node-solution-facilitator' => [
               self::TEMPLATE_UPDATE_PUBLISHED,
             ],
           ],
@@ -163,7 +163,7 @@ class ReleaseRdfSubscriber extends NotificationSubscriberBase {
         if ($this->fromState === 'needs_update') {
           $user_data = [
             'og_roles' => [
-              'rdf_entity-solution-administrator' => [
+              'node-solution-administrator' => [
                 self::TEMPLATE_APPROVE_PROPOSED,
               ],
             ],
@@ -176,10 +176,10 @@ class ReleaseRdfSubscriber extends NotificationSubscriberBase {
       case 'request_changes':
         $user_data = [
           'og_roles' => [
-            'rdf_entity-solution-administrator' => [
+            'node-solution-administrator' => [
               self::TEMPLATE_REQUEST_CHANGES,
             ],
-            'rdf_entity-solution-facilitator' => [
+            'node-solution-facilitator' => [
               self::TEMPLATE_REQUEST_CHANGES,
             ],
           ],
@@ -239,10 +239,10 @@ class ReleaseRdfSubscriber extends NotificationSubscriberBase {
         ],
       ],
       'og_roles' => [
-        'rdf_entity-solution-administrator' => [
+        'node-solution-administrator' => [
           self::TEMPLATE_DELETE,
         ],
-        'rdf_entity-solution-facilitator' => [
+        'node-solution-facilitator' => [
           self::TEMPLATE_DELETE,
         ],
       ],

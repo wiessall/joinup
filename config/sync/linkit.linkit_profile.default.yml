@@ -22,7 +22,7 @@ matchers:
       include_unpublished: false
     weight: -9
   cdd26670-8b46-4fa8-a644-ea3a0c9ae8fd:
-    id: 'entity:rdf_entity'
+    id: 'entity:node'
     uuid: cdd26670-8b46-4fa8-a644-ea3a0c9ae8fd
     settings:
       metadata: ''

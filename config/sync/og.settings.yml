@@ -1,7 +1,7 @@
 _core:
   default_config_hash: VagHDx04OxfsR9lV6g6jkOou-tAhZcYENvrJNOrbcEU
 groups:
-  rdf_entity:
+  node:
     - collection
     - solution
 group_manager_full_access: true

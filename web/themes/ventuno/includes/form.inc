@@ -67,6 +67,7 @@ function ventuno_form_views_exposed_form_alter(array &$form, FormStateInterface 
     $form['keys']['#theme'] = 'input__search_expose_form';
     $form['keys']['#title_display'] = 'invisible';
     $form['keys']['#attributes']['placeholder'] = t('Start typing to search…');
+    $form['keys']['#type'] = 'textfield';
     $form['keys']['#joinup_parent'] = $form_id . '_' . $view->id();
     // Ensure the ID is unique, using "search-box" as base.
     $form['keys']['#id'] = Html::getUniqueId('search-box');
@@ -238,7 +239,7 @@ function ventuno_preprocess_select(array &$variables): void {
   if (isset($variables['element']['#name'])) {
     switch ($variables['element']['#name']) {
       case 'field_topic':
-      case 'field_is_solution_type':
+      case 'solution_type':
         $variables['attributes']['class'][] = 'h-50vh';
         break;
     }

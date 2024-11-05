@@ -23,10 +23,10 @@ class CustomPageAdd extends LocalActionDefault {
     // solution this page will be associated, so we do not get any dangling
     // pages. This local action is shown on the navigation menu edit form, so we
     // can retrieve the collection or solution from the menu instance.
-    if (empty($parameters['rdf_entity'])) {
+    if (empty($parameters['node'])) {
       /** @var \Drupal\og_menu\Entity\OgMenuInstance $instance */
       /** @var \Drupal\Core\Entity\ContentEntityInterface $group */
-      if (($instance = $route_match->getParameter('ogmenu_instance')) && ($group = $instance->getGroup()) && $group->getEntityTypeId() === 'rdf_entity') {
+      if (($instance = $route_match->getParameter('ogmenu_instance')) && ($group = $instance->getGroup()) && $group->getEntityTypeId() === 'node') {
         $parameters[$group->getEntityTypeId()] = $group->id();
       }
       else {

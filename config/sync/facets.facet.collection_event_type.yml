@@ -1,4 +1,4 @@
-uuid: 1a6386af-8cd9-48fb-8a16-60c365e6dd32
+uuid: 8af3c194-9a16-4308-aca1-129c641c28a4
 langcode: en
 status: true
 dependencies: {  }
@@ -9,7 +9,7 @@ min_count: 1
 missing: false
 missing_label: others
 url_alias: event_type
-facet_source_id: 'search_api_field:rdf_entity.collection.field_collection_content'
+facet_source_id: 'search_api_field:node.collection.listing_content'
 field_identifier: field_event_date
 query_operator: or
 hard_limit: 0
@@ -29,8 +29,7 @@ widget:
     all_text: 'All events'
     prefix_text: ''
     suffix_text: ''
-    cache_contexts:
-      - 'community_content_author:event'
+    cache_contexts: {  }
 empty_behavior:
   behavior: none
 only_visible_when_facet_source_is_visible: true
@@ -40,19 +39,19 @@ processor_configs:
   active_widget_order:
     processor_id: active_widget_order
     weights:
-      sort: -10
+      sort: 20
     settings:
       sort: DESC
   count_widget_order:
     processor_id: count_widget_order
     weights:
-      sort: -9
+      sort: 30
     settings:
       sort: DESC
   dependent_processor:
     processor_id: dependent_processor
     weights:
-      build: -10
+      build: 5
     settings:
       collection_topic:
         enable: false
@@ -67,7 +66,7 @@ processor_configs:
   display_value_widget_order:
     processor_id: display_value_widget_order
     weights:
-      sort: -8
+      sort: 40
     settings:
       sort: ASC
   hierarchy_processor:
@@ -78,6 +77,6 @@ processor_configs:
   url_processor_handler:
     processor_id: url_processor_handler
     weights:
-      pre_query: -10
-      build: -9
+      pre_query: 50
+      build: 15
     settings: {  }

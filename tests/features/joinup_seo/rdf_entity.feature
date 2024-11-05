@@ -5,9 +5,9 @@ Feature: SEO for RDF entities.
   I need proper meta information to be encapsulated in the html code.
 
   Scenario Outline: Basic JSON meta information for collections and solutions.
-    Given the following <type>:
-      | title | SEO entity |
-      | state | published  |
+    Given <type> content:
+      | title      | state     |
+      | SEO entity | published |
 
     When I visit the "SEO entity" <type>
     And the metatag graph of the item with "title" "SEO entity" should be present
@@ -26,9 +26,9 @@ Feature: SEO for RDF entities.
       | solution   | http://www.w3.org/ns/dcat#Dataset |
 
   Scenario: Basic JSON meta information for releases and distributions.
-    Given the following solution:
-      | title | SEO solution |
-      | state | published    |
+    Given solution content:
+      | title        | state     |
+      | SEO solution | published |
     And release content:
       | title       | is version of | state     |
       | SEO release | SEO solution  | published |
@@ -50,7 +50,7 @@ Feature: SEO for RDF entities.
     Then the following meta tags should available in the html:
       | identifier   | value                            |
       | og:url       | __base_url__/licence/seo-licence |
-      | og:site_name | Joinup                           |
+      | og:site_name | Interoperable Europe Portal      |
       | og:title     | SEO licence                      |
     And the metatag JSON should be attached in the page without context
     And 1 metatag graph of type "http://purl.org/dc/terms/LicenseDocument" should exist in the page
@@ -59,5 +59,5 @@ Feature: SEO for RDF entities.
       | @type                                      | http://purl.org/dc/terms/LicenseDocument |
       | http://www.w3.org/2000/01/rdf-schema#label | SEO licence                              |
       | http://joinup.eu/licence/deprecated        | false                                    |
-      | description                                | <p>Licence to perform SEO</p>            |
+      | description                                | Licence to perform SEO                   |
       | type                                       | http://purl.org/adms/licence/PD          |

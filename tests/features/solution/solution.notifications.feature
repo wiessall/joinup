@@ -7,10 +7,9 @@ Feature: Solution notifications
   I need to receive email that inform me regarding solution transitions.
 
   Scenario: Notifications are sent every time a related transition is applied to a solution.
-    Given the following collection:
-      | title | Collection of random solutions |
-      | logo  | logo.png                       |
-      | state | published                      |
+    Given collection content:
+      | title                          | logo     | state     |
+      | Collection of random solutions | logo.png | published |
     And owner content:
       | name               | owner type |
       | Karanikolas Kitsos | Company    |
@@ -23,7 +22,7 @@ Feature: Solution notifications
       | Jack Harper  | moderator | Jack       | Harper      | jack.harper@example.com  |
       | Ramiro Myers |           | Ramiro     | Myers       | ramiro.myers@example.com |
       | Edith Poole  |           | Edith      | Poole       | edith.poole@example.com  |
-    And the following solutions:
+    Given solution content:
       | title                                                 | author       | abstract       | description | logo     | owner              | contact information | state        | topic       | solution type | collection                     |
       | Solution notification to propose changes              | Ramiro Myers | Short abstract | Sample text | logo.png | Karanikolas Kitsos | Information Desk    | published    | E-inclusion | Business      | Collection of random solutions |
       | Solution notification to blacklist                    | Ramiro Myers | Short abstract | Sample text | logo.png | Karanikolas Kitsos | Information Desk    | published    | E-inclusion | Business      | Collection of random solutions |
@@ -43,9 +42,9 @@ Feature: Solution notifications
     Then I should see the error message "This action requires you to fill in the motivation field"
     When I fill in "Motivation" with "Please, check my updates"
     And I press "Propose"
-    Then the email sent to "Ramiro Myers" with subject "Joinup: Changes have been proposed for your solution" contains the following lines of text:
-      | The Joinup Support Team has requested you to modify the interoperability solution "Solution notification to propose changes", with the following motivation: Please, check my updates. |
-      | If you think this action is not clear or not due, please contact Joinup Support at                                                                                                     |
+    Then the email sent to "Ramiro Myers" with subject "Interoperable Europe Portal: Changes have been proposed for your solution" contains the following lines of text:
+      | The Portal Support Team has requested you to modify the interoperability solution "Solution notification to propose changes", with the following motivation: Please, check my updates. |
+      | If you think this action is not clear or not due, please contact Portal Support at                                                                                                     |
 
     # Template 13. The moderation team blacklists a solution.
     When I go to the homepage of the "Solution notification to blacklist" solution
@@ -53,7 +52,7 @@ Feature: Solution notifications
     And I press "Blacklist"
     Then the following email should have been sent:
       | recipient | Ramiro Myers                                                                                                                                                 |
-      | subject   | Joinup: Your interoperability solution is blacklisted                                                                                                        |
+      | subject   | Interoperable Europe Portal: Your interoperability solution is blacklisted                                                                                                        |
       | body      | the moderator has blacklisted your interoperability solution - Solution notification to blacklist, you can contact the moderation team to resolve the issue. |
 
     # Template 14. The moderation team restores a solution from blacklisted.
@@ -62,7 +61,7 @@ Feature: Solution notifications
     And I press "Publish"
     Then the following email should have been sent:
       | recipient | Ramiro Myers                                                                                                                              |
-      | subject   | Joinup: Your interoperability solution is published again                                                                                 |
+      | subject   | Interoperable Europe Portal: Your interoperability solution is published again                                                                                 |
       | body      | the moderator has published back your interoperability solution - Solution notification to publish from blacklisted that was blacklisted. |
 
     # Template 15. The moderation team requests changes.
@@ -75,12 +74,12 @@ Feature: Solution notifications
     And I press "Request changes"
     Then the following email should have been sent:
       | recipient | Ramiro Myers                                                                                                                                                              |
-      | subject   | Joinup: You are requested to update your solution                                                                                                                         |
+      | subject   | Interoperable Europe Portal: You are requested to update your solution                                                                                                                         |
       | body      | the moderator has requested you to modify the interoperability solution - Solution notification to request changes following the following advises: Can you change this?. |
       | bcc       | pat.harper@example.com,jack.harper@example.com                                                                                                                            |
-    And the email sent to "Ramiro Myers" with subject "Joinup: You are requested to update your solution" contains the following lines of text:
+    And the email sent to "Ramiro Myers" with subject "Interoperable Europe Portal: You are requested to update your solution" contains the following lines of text:
       | the moderator has requested you to modify the interoperability solution - Solution notification to request changes following the following advises: Can you change this?. |
-      | If you think this action is not clear or not due, please contact Joinup Support at                                                                                        |
+      | If you think this action is not clear or not due, please contact Portal Support at                                                                                        |
 
     # Template 18. The moderation team deletes a solution without prior request.
     When I go to the homepage of the "Solution notification to delete by moderator team" solution
@@ -89,8 +88,8 @@ Feature: Solution notifications
     And I press "Delete"
     Then the following email should have been sent:
       | recipient | Ramiro Myers                                                                                                        |
-      | subject   | Joinup: Your solution has been deleted by the moderation team                                                       |
-      | body      | The Joinup moderation team deleted the interoperability solution Solution notification to delete by moderator team. |
+      | subject   | Interoperable Europe Portal: Your solution has been deleted by the moderation team                                                       |
+      | body      | The Interoperable Europe Portal moderation team deleted the interoperability solution Solution notification to delete by moderator team. |
 
     When I am logged in as "Ramiro Myers"
 
@@ -98,9 +97,9 @@ Feature: Solution notifications
     When I go to the homepage of the "Solution notification to propose from request changes" solution
     And I click "Edit" in the "Entity actions" region
     And I press "Propose"
-    Then the email sent to "Pat Harper" with subject "Joinup: An update of a solution has been proposed" contains the following lines of text:
-      | Ramiro Myers has proposed an update of the Interoperability solution: "Solution notification to propose from request changes" on Joinup. |
-      | If you think this action is not clear or not due, please contact Joinup Support at                                                       |
+    Then the email sent to "Pat Harper" with subject "Interoperable Europe Portal: An update of a solution has been proposed" contains the following lines of text:
+      | Ramiro Myers has proposed an update of the Interoperability solution: "Solution notification to propose from request changes" on Interoperable Europe Portal. |
+      | If you think this action is not clear or not due, please contact Portal Support at                                                       |
 
     # The owner deletes their own solution. No email should be sent to the owner
     # since we do not send notifications to the actor.

@@ -8,7 +8,8 @@ use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\email_contact\Plugin\Field\FieldFormatter\EmailContactLinkFormatter;
-use Drupal\rdf_entity\RdfInterface;
+use Drupal\joinup_group\Entity\GroupInterface;
+use Drupal\node\NodeInterface;
 
 /**
  * Extend email contact form.
@@ -16,17 +17,18 @@ use Drupal\rdf_entity\RdfInterface;
 class ContactForm extends ContactInformationFormBase {
 
   /**
-   * The collection group from the route.
+   * The group entity from the route.
    *
-   * @var \Drupal\rdf_entity\RdfInterface
+   * @var \Drupal\joinup_group\Entity\GroupInterface
    */
-  protected RdfInterface $rdfEntity;
+  protected GroupInterface $group;
 
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state, ?RdfInterface $rdf_entity = NULL): array {
-    $this->rdfEntity = $rdf_entity;
+  public function buildForm(array $form, FormStateInterface $form_state, ?NodeInterface $node = NULL): array {
+    assert($node instanceof GroupInterface);
+    $this->group = $node;
 
     $form = parent::buildForm($form, $form_state);
 
@@ -45,24 +47,23 @@ class ContactForm extends ContactInformationFormBase {
   public function submitForm(array &$form, FormStateInterface $form_state): void {
     $this->sendMessage($form, $form_state);
 
-    $form_state->setRedirect('entity.rdf_entity.canonical', [
-      'rdf_entity' => $this->rdfEntity->id(),
-    ]);
+    $form_state->setRedirectUrl($this->group->toUrl());
   }
 
   /**
    * Access check for the form.
    *
-   * @param \Drupal\rdf_entity\RdfInterface $rdf_entity
-   *   The RDF entity for which to check access.
+   * @param \Drupal\node\NodeInterface $node
+   *   The collection entity for which to check access.
    *
    * @return \Drupal\Core\Access\AccessResultInterface
    *   The access result.
    */
-  public function access(RdfInterface $rdf_entity): AccessResultInterface {
+  public function access(NodeInterface $node): AccessResultInterface {
     return AccessResult::allowedIf(
+      $node instanceof GroupInterface &&
       $this->accessIsAllowed() &&
-      !empty($rdf_entity->getValidatedContactInformationEmails())
+      !empty($node->getValidatedContactInformationEmails())
     );
   }
 
@@ -70,7 +71,7 @@ class ContactForm extends ContactInformationFormBase {
    * {@inheritdoc}
    */
   protected function getEmailAddresses(): array {
-    return $this->rdfEntity->getValidatedContactInformationEmails();
+    return $this->group->getValidatedContactInformationEmails();
   }
 
 }

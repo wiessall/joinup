@@ -37,6 +37,9 @@ class WysiwygContext extends RawDrupalContext {
     // 'Source' button so we can enter the text as HTML and get the same result
     // as in a non-JS browser.
     if ($this->hasJavascriptSupport()) {
+      if (!$this->getWysiwygButton($label, 'Source')) {
+        $this->pressWysiwygButton($label, 'Show more items');
+      }
       $this->pressWysiwygButton($label, 'Source');
       $this->setWysiwygText($label, $text);
     }

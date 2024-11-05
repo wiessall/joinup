@@ -77,41 +77,15 @@ trait EntityTrait {
   }
 
   /**
-   * Checks the number of available entities filtered by entity type and bundle.
-   *
-   * @param string $entityTypeId
-   *   The entity type.
-   * @param string $bundle
-   *   The bundle of the entity.
-   * @param int $number
-   *   The expected number of entities.
-   *
-   * @throws \Exception
-   *   Thrown when the number of entities does not
-   *   match the expectation.
-   */
-  protected function assertEntityCount(string $entityTypeId, string $bundle, int $number): void {
-    $typeKey = \Drupal::entityTypeManager()->getDefinition($entityTypeId)->getKey('bundle');
-    $actual = \Drupal::entityQuery($entityTypeId)
-      ->accessCheck(FALSE)
-      ->condition($typeKey, $bundle)
-      ->count()
-      ->execute();
-    if ($actual != $number) {
-      throw new \Exception("Wrong number of $bundle entities. Expected number: $number, actual number: $actual.");
-    }
-  }
-
-  /**
-   * Mapping of human readable entity type names to machine names.
+   * Mapping of human-readable entity type names to machine names.
    *
    * @return array
    *   The entity type mapping.
    */
   protected static function entityTypeAliases(): array {
     return [
-      'collection' => 'rdf_entity',
-      'contact information' => 'rdf_entity',
+      'collection' => 'node',
+      'contact information' => 'node',
       'content' => 'node',
       'custom page' => 'node',
       'discussion' => 'node',
@@ -119,13 +93,13 @@ trait EntityTrait {
       'document' => 'node',
       'event' => 'node',
       'glossary' => 'node',
-      'group' => 'rdf_entity',
+      'group' => 'node',
       'news' => 'node',
       'owner' => 'node',
       'oss_solution' => 'node',
       'release' => 'node',
-      'solution' => 'rdf_entity',
-      'spdx licence' => 'rdf_entity',
+      'solution' => 'node',
+      'spdx licence' => 'taxonomy_term',
       'topic' => 'taxonomy_term',
     ];
   }

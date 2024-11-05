@@ -12,18 +12,16 @@ Feature: Invite members to subscribe to discussions
       | Glory Ruskin     | gloruskin.hr@example.com         | Glory      | Ruskin      |
       | paternoster      | shaquila.paternoster@example.com | Shaquila   | Paternoster |
       | theacuteone      | hargrave.hr@example.com          | Shannon    | Hargrave    |
-    And the following solution:
-      | title       | Stainless Steel Siphons |
-      | description | Will last forever       |
-      | state       | published               |
+    And solution content:
+      | title                   | description       | state     |
+      | Stainless Steel Siphons | Will last forever | published |
     And the following solution user membership:
       | solution                | user         | roles       |
       | Stainless Steel Siphons | theacuteone  | member      |
       | Stainless Steel Siphons | Glory Ruskin | facilitator |
-    And the following collection:
-      | title       | The Siphon Community |
-      | description | We just love siphons |
-      | state       | published            |
+    And collection content:
+      | title                | description          | state     |
+      | The Siphon Community | We just love siphons | published |
     And the following collection user membership:
       | collection           | user             | roles       |
       | The Siphon Community | Lynwood Crawford | member      |
@@ -161,12 +159,12 @@ Feature: Invite members to subscribe to discussions
     Then I should see the success message "2 user(s) have been invited to this discussion."
     And the following email should have been sent:
       | recipient | Glory Ruskin                                                                                              |
-      | subject   | Lynwood Crawford invited you to follow a discussion on Joinup.                                            |
-      | body      | Lynwood Crawford invited you to participate in the discussion Concerned about dissolved gases? on Joinup. |
+      | subject   | Lynwood Crawford invited you to follow a discussion on Interoperable Europe Portal.                                            |
+      | body      | Lynwood Crawford invited you to participate in the discussion Concerned about dissolved gases? on Interoperable Europe Portal. |
     And the following email should have been sent:
       | recipient | paternoster                                                                                               |
-      | subject   | Lynwood Crawford invited you to follow a discussion on Joinup.                                            |
-      | body      | Lynwood Crawford invited you to participate in the discussion Concerned about dissolved gases? on Joinup. |
+      | subject   | Lynwood Crawford invited you to follow a discussion on Interoperable Europe Portal.                                            |
+      | body      | Lynwood Crawford invited you to participate in the discussion Concerned about dissolved gases? on Interoperable Europe Portal. |
     And 2 e-mails should have been sent
 
     # Try if it is possible to resend an invitation.
@@ -178,8 +176,8 @@ Feature: Invite members to subscribe to discussions
     Then I should see the success message "The invitation was resent to 1 user(s) that were already invited previously but haven't yet accepted the invitation."
     And the following email should have been sent:
       | recipient | Glory Ruskin                                                                                              |
-      | subject   | Lynwood Crawford invited you to follow a discussion on Joinup.                                            |
-      | body      | Lynwood Crawford invited you to participate in the discussion Concerned about dissolved gases? on Joinup. |
+      | subject   | Lynwood Crawford invited you to follow a discussion on Interoperable Europe Portal.                                            |
+      | body      | Lynwood Crawford invited you to participate in the discussion Concerned about dissolved gases? on Interoperable Europe Portal. |
 
     # Accept an invitation by clicking on the link in the e-mail.
     # Initially there should not be any subscriptions.

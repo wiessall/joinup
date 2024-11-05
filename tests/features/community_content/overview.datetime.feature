@@ -5,9 +5,9 @@ Feature:
   I want to have publication and update dates presented in the overview of my content.
 
   Scenario Outline: Last update date shown for specific content bundles.
-    Given the following collection:
-      | title | Gravitational wave detectors |
-      | state | published                    |
+    Given collection content:
+      | title                        | state     |
+      | Gravitational wave detectors | published |
     And <type> content:
       | title | created                   | <publication field name>  | changed                   | collection                   | state     |
       | LIGO  | Wed, 25 Dec 2019 13:00:00 | Wed, 25 Dec 2019 14:00:00 | Wed, 25 Dec 2019 15:00:00 | Gravitational wave detectors | published |
@@ -57,14 +57,14 @@ Feature:
 
     Examples:
       # Events are excluded since they do not show the updated timestamp to the end user.
-      | type       | publication field name     |
-      | document   | document publication date  |
-      | news       | publication date           |
+      | type     | publication field name    |
+      | document | document publication date |
+      | news     | published at              |
 
   Scenario: Documents without a publication date should show the published_at property.
-    Given the following collection:
-      | title | Gravitational pull detectors |
-      | state | published                    |
+    Given collection content:
+      | title                        | state     |
+      | Gravitational pull detectors | published |
     When I am logged in as a facilitator of the "Gravitational pull detectors" collection
     And I go to the "Gravitational pull detectors" collection
     And I click "Add document"
@@ -89,9 +89,9 @@ Feature:
     And I should not see the text "Last update:" in the "Content" region
 
   Scenario: Draft documents without a publication date should only show the last updated time.
-    Given the following collection:
-      | title | Gravitational pull detectors |
-      | state | published                    |
+    Given collection content:
+      | title                        | state     |
+      | Gravitational pull detectors | published |
     When I am logged in as a facilitator of the "Gravitational pull detectors" collection
     And I go to the "Gravitational pull detectors" collection
     And I click "Add document"

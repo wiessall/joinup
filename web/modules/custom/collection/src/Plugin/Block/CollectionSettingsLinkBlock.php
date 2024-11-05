@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Drupal\collection\Plugin\Block;
 
+use Drupal\Core\Block\Attribute\Block;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\og\OgContextInterface;
@@ -14,20 +16,12 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides a block plugin to show the collection settings link.
- *
- * @Block(
- *   id = "collection_settings_link",
- *   admin_label = @Translation("Collection settings link"),
- * )
  */
+#[Block(
+  id: "collection_settings_link",
+  admin_label: new TranslatableMarkup("Collection settings link"),
+)]
 class CollectionSettingsLinkBlock extends BlockBase implements ContainerFactoryPluginInterface {
-
-  /**
-   * The OG context service.
-   *
-   * @var \Drupal\og\OgContextInterface
-   */
-  protected OgContextInterface $ogContext;
 
   /**
    * Constructs a new plugin instance.
@@ -38,12 +32,16 @@ class CollectionSettingsLinkBlock extends BlockBase implements ContainerFactoryP
    *   The plugin_id for the plugin instance.
    * @param mixed $plugin_definition
    *   The plugin implementation definition.
-   * @param \Drupal\og\OgContextInterface $og_context
+   * @param \Drupal\og\OgContextInterface $ogContext
    *   The OG context service.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, OgContextInterface $og_context) {
+  public function __construct(
+    array $configuration,
+    $plugin_id,
+    $plugin_definition,
+    protected OgContextInterface $ogContext,
+  ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
-    $this->ogContext = $og_context;
   }
 
   /**
@@ -73,7 +71,7 @@ class CollectionSettingsLinkBlock extends BlockBase implements ContainerFactoryP
     if ($collection instanceof CollectionInterface) {
       $cache_metadata->addCacheableDependency($collection);
       $url = Url::fromRoute('joinup_group.settings_form', [
-        'rdf_entity' => $collection->id(),
+        'node' => $collection->id(),
       ]);
       $build['link'] = [
         '#type' => 'link',

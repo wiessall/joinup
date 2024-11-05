@@ -13,14 +13,14 @@ use Drupal\joinup_group\Entity\GroupContentTrait;
 use Drupal\joinup_publication_date\Entity\EntityPublicationTimeFallbackTrait;
 use Drupal\joinup_rdf\Entity\RdfSyncEntityTrait;
 use Drupal\joinup_release\Entity\ReleaseInterface;
+use Drupal\joinup_solution\Entity\SolutionContentTrait;
+use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\joinup_stats\Entity\DownloadCountAwareInterface;
 use Drupal\joinup_stats\Entity\DownloadCountAwareTrait;
 use Drupal\joinup_workflow\ArchivableEntityTrait;
 use Drupal\joinup_workflow\EntityWorkflowStateTrait;
 use Drupal\node\Entity\Node;
 use Drupal\og\OgGroupAudienceHelperInterface;
-use Drupal\solution\Entity\SolutionContentTrait;
-use Drupal\solution\Entity\SolutionInterface;
 
 /**
  * Bundle class for distributions.
@@ -95,19 +95,13 @@ class Distribution extends Node implements DistributionInterface {
     parent::postSave($storage, $update);
 
     // Re-index the parent of the distribution.
-    // @todo Drop the try-catching on ISAICP-8572.
-    try {
-      if ($parent = $this->getParent()) {
-        $this->reIndexDistributionParent($parent);
-      }
-
-      // Clear the cache of the solution of the distribution.
-      if ($solution = $this->get(OgGroupAudienceHelperInterface::DEFAULT_FIELD)?->entity) {
-        $this->clearSolutionCache($solution);
-      }
+    if ($parent = $this->getParent()) {
+      $this->reIndexDistributionParent($parent);
     }
-    catch (MissingDistributionParentException $e) {
-      // The parent is missing, so we cannot re-index it.
+
+    // Clear the cache of the solution of the distribution.
+    if ($solution = $this->get(OgGroupAudienceHelperInterface::DEFAULT_FIELD)?->entity) {
+      $this->clearSolutionCache($solution);
     }
   }
 
@@ -182,20 +176,6 @@ class Distribution extends Node implements DistributionInterface {
    */
   public function isStandalone(): bool {
     return $this->getParent() instanceof SolutionInterface;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getDescriptionField(): string {
-    return 'description';
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getWorkflowStateFieldName(): string {
-    return 'field_state';
   }
 
 }

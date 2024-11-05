@@ -5,7 +5,7 @@ Feature:
   I need to be able to provide a short ID to my group.
 
   Scenario: Short IDs are unique in collections.
-    Given the following collections:
+    Given collection content:
       | title              | short ID | state     |
       | Scientific Studies | sst-2020 | published |
     And owner content:
@@ -67,10 +67,10 @@ Feature:
     And I delete the "Contact person" contact information
 
   Scenario: Short IDs are unique in solutions.
-    Given the following collections:
+    Given collection content:
       | title              | short ID | state     |
       | Scientific Studies | sst-2020 | published |
-    And solutions:
+    Given solution content:
       | title                         | short ID | state     | collection         |
       | Who knows what a solution is? | wkwasi   | published | Scientific Studies |
     And owner content:

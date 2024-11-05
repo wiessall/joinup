@@ -1,0 +1,33 @@
+uuid: f03cfdf8-ff98-4241-9e11-b0ea41c47a53
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.solution_type
+    - node.type.solution
+    - taxonomy.vocabulary.eira
+third_party_settings:
+  rdf_sync:
+    target_id:
+      predicate: 'http://purl.org/dc/terms/type'
+      type: resource
+id: node.solution.solution_type
+field_name: solution_type
+entity_type: node
+bundle: solution
+label: 'Solution type'
+description: 'EIRA Building block'
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: grouped_taxonomy_term_selection
+  handler_settings:
+    target_bundles:
+      eira: eira
+    sort:
+      field: _none
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

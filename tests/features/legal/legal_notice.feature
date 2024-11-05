@@ -1,14 +1,14 @@
 @api @group-h
 Feature:
-  - As a visitor, in order to register to Joinup, I have to accept the site's
+  - As a visitor, in order to register to Interoperable Europe Portal, I have to accept the site's
     'Legal notice', otherwise I cannot register.
   - As registered user, in order to login when a new version of 'Legal notice'
-    has been released, I have to accept the new version, otherwise I cannot
-    login.
+  has been released, I have to accept the new version, otherwise I cannot
+  login.
   - As a moderator, I want to be able to release new versions of 'Legal notice'
-    or to edit the existing ones.
+  or to edit the existing ones.
   - As a visitor, in order to send a support request on the `/contact` page, I
-    have to accept the site's 'Legal notice', otherwise I cannot submit.
+  have to accept the site's 'Legal notice', otherwise I cannot submit.
 
   Background:
     Given the following legal document version:
@@ -36,7 +36,7 @@ Feature:
     # After accepting the agreement the user can continue.
     Given I check "I have read and accept the Legal notice"
     And I press "Submit"
-    Then I should see the success message "Fill in the fields below to let the Joinup community learn more about you!"
+    Then I should see the success message "Fill in the fields below to let the Interoperable Europe Portal community learn more about you!"
 
     # The user has been redirected to its user account edit form.
     And the following fields should be present "Email, First name, Family name, Photo, Country of origin, Professional domain, Business title"
@@ -178,7 +178,7 @@ Feature:
     And CAS users:
       | Username        | E-mail                  | Password | Local username  |
       | Sergeant Pepper | pepper@royalnavy.mod.uk | p3pp3r   | Sergeant Pepper |
-    And collections:
+    And collection content:
       | title              | state     |
       | Land of submarines | published |
 

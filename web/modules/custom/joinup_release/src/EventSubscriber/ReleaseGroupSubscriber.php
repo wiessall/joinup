@@ -6,7 +6,7 @@ namespace Drupal\joinup_release\EventSubscriber;
 
 use Drupal\joinup_group\Event\AddGroupContentEvent;
 use Drupal\joinup_group\EventSubscriber\AddGroupContentEventSubscriberBase;
-use Drupal\solution\Entity\SolutionInterface;
+use Drupal\joinup_solution\Entity\SolutionInterface;
 
 /**
  * Subscribes to Joinup Group events.
@@ -38,7 +38,7 @@ class ReleaseGroupSubscriber extends AddGroupContentEventSubscriberBase {
    */
   protected function getRouteParameters(AddGroupContentEvent $event, string $entityTypeId, string $bundleId): array {
     return [
-      'rdf_entity' => $event->getGroup()->id(),
+      'node' => $event->getGroup()->id(),
     ];
   }
 

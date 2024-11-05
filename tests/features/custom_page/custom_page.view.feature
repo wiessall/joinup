@@ -5,7 +5,7 @@ Feature:
   So that I can prepare all the pages before publishing them
 
   Scenario Outline: Access to custom pages should be restricted to unprivileged users
-    Given the following <group>s:
+    Given <group> content:
       | title           | state     |
       | Drafty things   | draft     |
       | Published tools | published |

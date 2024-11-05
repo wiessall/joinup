@@ -4,9 +4,9 @@ Feature:
   I need to be able to use "Webform" paragraph for content.
 
   Background:
-    Given the following collection:
-      | title | Webform collection |
-      | state | published          |
+    Given collection content:
+      | title              | state     |
+      | Webform collection | published |
     And users:
       | Username   | E-mail                 | First name | Family name |
       | john.smith | john.smith@example.com | John       | Smith       |

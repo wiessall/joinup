@@ -10,7 +10,6 @@ use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\og\Entity\OgMembership;
 use Drupal\og\Entity\OgRole;
 use Drupal\og\OgMembershipInterface;
-use Drupal\rdf_entity\RdfInterface;
 use PHPUnit\Framework\Assert;
 
 /**
@@ -24,7 +23,7 @@ trait OgTrait {
    * @param \Drupal\Core\Session\AccountInterface $user
    *   The user to be assigned as a group member.
    * @param \Drupal\joinup_group\Entity\GroupInterface $group
-   *   The Joinup group entity.
+   *   The Interoperable Europe Portal group entity.
    * @param \Drupal\og\Entity\OgRole[] $roles
    *   An array of OgRoles to be passed to the membership.
    * @param string|null $state
@@ -75,8 +74,8 @@ trait OgTrait {
   protected function convertOgRoleNamesToIds(array $roles, EntityInterface $group): array {
     $role_prefix = $group->getEntityTypeId() . '-' . $group->bundle() . '-';
     foreach ($roles as $key => $role) {
-      // What is called a "collection owner" or a "solution owner" in Joinup, is
-      // known as an "administrator" in OG.
+      // What is called a "collection owner" or a "solution owner" in
+      // Interoperable Europe Portal, is known as an "administrator" in OG.
       $role = $role === 'owner' ? 'administrator' : $role;
       $roles[$key] = $role_prefix . $role;
     }
@@ -184,7 +183,7 @@ trait OgTrait {
    *   Thrown when a event with the given title does not exist.
    */
   public function assertOgMembership(string $parent, string $parent_bundle, string $content, string $content_bundle): void {
-    $parent = $this->getEntityByLabel('rdf_entity', $parent, $parent_bundle);
+    $parent = $this->getEntityByLabel('node', $parent, $parent_bundle);
 
     $results = \Drupal::entityTypeManager()
       ->getStorage('node')
@@ -209,7 +208,7 @@ trait OgTrait {
   /**
    * Creates a group membership using the given group and table values.
    *
-   * @param \Drupal\rdf_entity\RdfInterface $group
+   * @param \Drupal\joinup_group\Entity\GroupInterface $group
    *   The group to which the user will be subscribed.
    * @param array $values
    *   Associative array containing table values from a Behat scenario. The
@@ -223,7 +222,7 @@ trait OgTrait {
    * @throws \Exception
    *   Thrown when a user with the given user name is not found.
    */
-  protected function givenUserMembership(RdfInterface $group, array $values): void {
+  protected function givenUserMembership(GroupInterface $group, array $values): void {
     // Load member.
     $member = user_load_by_name($values['user']);
     if (empty($member)) {
@@ -235,10 +234,11 @@ trait OgTrait {
     if (!empty($values['roles'])) {
       $role_names = explode(',', $values['roles']);
       $role_names = array_map('trim', $role_names);
-      // Every owner is also a facilitator. In Joinup the facilitator role is
-      // assigned to the owner when they create the collection. Since in this
-      // step the collections are already created, mimick this behaviour by
-      // making sure every owner also has the 'facilitator' role.
+      // Every owner is also a facilitator. In Interoperable Europe Portal the
+      // facilitator role is assigned to the owner when they create the
+      // collection. Since in this step the collections are already created,
+      // mimick this behaviour by making sure every owner also has the
+      // 'facilitator' role.
       if (in_array('owner', $role_names) && !in_array('facilitator', $role_names)) {
         $role_names[] = 'facilitator';
       }

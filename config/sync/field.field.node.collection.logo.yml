@@ -1,0 +1,38 @@
+uuid: e3fe05c3-3b95-4f2a-bdb8-eb75d8d1dd2e
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.logo
+    - node.type.collection
+  module:
+    - image
+id: node.collection.logo
+field_name: logo
+entity_type: node
+bundle: collection
+label: Logo
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:file'
+  handler_settings: {  }
+  file_directory: 'collection/logo/[date:custom:Y]-[date:custom:m]'
+  file_extensions: 'png gif jpg jpeg svg'
+  max_filesize: '5 MB'
+  max_resolution: ''
+  min_resolution: ''
+  alt_field: false
+  alt_field_required: false
+  title_field: false
+  title_field_required: false
+  default_image:
+    uuid: ''
+    alt: ''
+    title: ''
+    width: null
+    height: null
+field_type: image

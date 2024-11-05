@@ -12,7 +12,7 @@ use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
-use Drupal\rdf_entity\RdfInterface;
+use Drupal\node\NodeInterface;
 use Drupal\search_api\Query\QueryInterface;
 use Drupal\search_api\Query\ResultSetInterface;
 use Drupal\search_api\SearchApiException;
@@ -26,7 +26,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   id = "entity_unpublished",
  *   admin_label = @Translation("Unpublished content of group"),
  *   context_definitions = {
- *     "og" = @ContextDefinition("entity:rdf_entity", label = @Translation("Organic group"))
+ *     "og" = @ContextDefinition("entity:node", label = @Translation("Organic group"))
  *   }
  * )
  */
@@ -182,7 +182,7 @@ class EntityUnpublishedBlock extends BlockBase implements ContainerFactoryPlugin
   /**
    * Receives the content of the groups the user is a member of.
    *
-   * @param \Drupal\rdf_entity\RdfInterface $group
+   * @param \Drupal\node\NodeInterface $group
    *   The group entity.
    *
    * @return array
@@ -195,7 +195,7 @@ class EntityUnpublishedBlock extends BlockBase implements ContainerFactoryPlugin
    * @throws \Drupal\search_api\SearchApiException
    *   Thrown when a problem occurs during execution of the search query.
    */
-  protected function getRows(RdfInterface $group): array {
+  protected function getRows(NodeInterface $group): array {
     $query = $this->getQuery($group);
     $results = $query->execute();
     $entities = $this->getResultEntities($results);
@@ -248,36 +248,19 @@ class EntityUnpublishedBlock extends BlockBase implements ContainerFactoryPlugin
     /** @var \Drupal\search_api\Item\ItemInterface $item */
     foreach ($result->getResultItems() as $item) {
       try {
-        $entity = $item->getOriginalObject()->getValue();
-        // Revisions are not yet implemented for RDF entities, even though they
-        // inherit RevisionableInterface through ContentEntityInterface. We need
-        // to check the RdfInterface directly.
-        // @todo Remove this workaround once we have revisions for RDF entities.
-        // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-6481
-        if (!$entity instanceof RdfInterface) {
-          $entity = $this->revisionManager->loadLatestRevision($item->getOriginalObject()->getValue());
-        }
+        $entity = $this->revisionManager->loadLatestRevision($item->getOriginalObject()->getValue());
       }
       catch (SearchApiException $e) {
         $entity = NULL;
       }
+
       // Search results might be stale, so we check if the entity has been
       // found in the system.
       if (!$entity) {
         continue;
       }
 
-      // @todo The revision access check is replaced with an event subscriber.
-      //   Disable this call for now. If tests are green this workaround can be
-      //   removed.
-      // @see \Drupal\joinup_community_content\EventSubscriber\Eventsubscriber::checkEntityRevisionAccess()
-      if (TRUE || $entity->isDefaultRevision()) {
-        $view_access = $entity->access('view', $this->currentUser, TRUE);
-      }
-      else {
-        $view_access = $this->revisionAccessCheck->checkOgAccess($entity, $this->currentUser, 'view');
-      }
-
+      $view_access = $entity->access('view', $this->currentUser, TRUE);
       if (!$view_access->isAllowed()) {
         continue;
       }
@@ -300,9 +283,7 @@ class EntityUnpublishedBlock extends BlockBase implements ContainerFactoryPlugin
    */
   public function getCacheTags(): array {
     $node_type = $this->entityTypeManager->getStorage('node')->getEntityType();
-    $rdf_type = $this->entityTypeManager->getStorage('rdf_entity')->getEntityType();
-    $cache_tags = Cache::mergeTags(parent::getCacheTags(), $node_type->getListCacheTags());
-    return Cache::mergeTags($cache_tags, $rdf_type->getListCacheTags());
+    return Cache::mergeTags(parent::getCacheTags(), $node_type->getListCacheTags());
   }
 
 }
