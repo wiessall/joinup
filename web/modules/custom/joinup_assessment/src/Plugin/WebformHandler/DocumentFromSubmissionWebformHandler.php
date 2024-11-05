@@ -48,7 +48,7 @@ class DocumentFromSubmissionWebformHandler extends WebformHandlerBase {
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): self {
     $instance = parent::create($container, $configuration, $plugin_id, $plugin_definition);
     $instance->layoutPluginManager = $container->get('plugin.manager.core.layout');
     $instance->rdfSyncMapper = $container->get('rdf_sync.mapper');
@@ -74,6 +74,13 @@ class DocumentFromSubmissionWebformHandler extends WebformHandlerBase {
   protected function executeAction(WebformSubmissionInterface $webformSubmission): void {
     $nodeStorage = $this->entityTypeManager->getStorage('node');
     $metaStorage = $this->entityTypeManager->getStorage('meta_entity');
+    $logger = $this->getLogger('joinup_assessment');
+
+    $group = $this->getGroup();
+    if (!$group) {
+      $logger->error('Group with URI @uri was not found', ['@uri' => AssessmentInterface::DOCUMENT_GROUP_URI]);
+      return;
+    }
 
     $submissionData = $webformSubmission->getData();
 
@@ -82,7 +89,7 @@ class DocumentFromSubmissionWebformHandler extends WebformHandlerBase {
       'title' => AssessmentInterface::DOCUMENT_TITLE_PREFIX . $webformSubmission->id(),
       'field_paragraphs_body' => [$this->getLayoutParagraph()],
       'field_state' => AssessmentInterface::DOCUMENT_STATE,
-      'og_audience' => $this->getGroup() ?? NULL,
+      'og_audience' => $group,
       'abstract' => substr($submissionData[AssessmentInterface::SUBMISSION_ABSTRACT] ?? '', 0, 250),
       'field_type' => AssessmentInterface::DOCUMENT_TYPE_KEY,
       'field_topic' => $this->getTopicId(),
