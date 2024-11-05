@@ -10,6 +10,12 @@ twocolfooter_onecol_67_33:
     theme:
       layouts/twocolfooter-onecol-67-33/twocolfooter_onecol_67_33.css: {}
 
+twocolfooter_onecol_50_50:
+  version: VERSION
+  css:
+    theme:
+      layouts/twocolfooter-onecol-50-50/twocolfooter_onecol_50_50.css: {}
+
 oss_heading:
   css:
     layout:
