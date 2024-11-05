@@ -166,7 +166,7 @@ targetEntityType: node
 bundle: news
 mode: explore_item
 content:
-  flag_like_node:
+  flag_like:
     settings: {  }
     third_party_settings: {  }
     weight: 10

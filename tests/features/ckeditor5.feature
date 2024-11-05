@@ -8,11 +8,11 @@ Feature: CKEditor5
     And contact_information content:
       | name    | email                |
       | ReachMe | reach.me@example.com |
-    And collections:
+    And collection content:
       | title                 | state     | topic                   | owner    | contact information |
       | Shaping of disruption | published | Supplier exchange       | Landlord | ReachMe             |
       | The Other Collection  | published | Statistics and Analysis | Landlord | ReachMe             |
-    And solutions:
+    Given solution content:
       | title       | collection            | state     | topic             | owner    | contact information |
       | Angry Birds | Shaping of disruption | published | Supplier exchange | Landlord | ReachMe             |
 
@@ -261,20 +261,12 @@ Feature: CKEditor5
       | email                  | status    |
       | klim.smith@example.com | confirmed |
       | raul.timon@example.com | confirmed |
-    And collection:
-      | title               | Antiruin development |
-      | state               | published            |
-      | contact information | Raul Timon           |
-    And solution:
-      | title               | One exclusion advantages                          |
-      | abstract            | Separating molecules by height.                   |
-      | description         | Separating molecules by weight.                   |
-      | state               | published                                         |
-      | topic               | Demography, E-inclusion                           |
-      | owner               | Lotte                                             |
-      | solution type       | Non-binding Instrument, Data Owner                |
-      | collection          | Antiruin development                              |
-      | contact information | Klim Smith                                        |
+    And collection content:
+      | title                | state     | contact information |
+      | Antiruin development | published | Raul Timon          |
+    And solution content:
+      | title                    | abstract                        | description                     | state     | topic                   | owner | solution type                      | collection           | contact information |
+      | One exclusion advantages | Separating molecules by height. | Separating molecules by weight. | published | Demography, E-inclusion | Lotte | Non-binding Instrument, Data Owner | Antiruin development | Klim Smith          |
     And users:
       | Username    | E-mail         | First name | Family name |
       | jmacc_local | jodine@ankh.am | John       | Maccalariat |

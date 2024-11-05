@@ -151,14 +151,8 @@ class StateMachinePermissionsHelper implements StateMachinePermissionsHelperInte
    *   The global any permission.
    */
   protected function getGlobalPermissionString(EntityInterface $entity, string $operation, string $type): string {
-    \assert(in_array($entity->getEntityTypeId(), ['node', 'rdf_entity'], TRUE));
-    if ($entity instanceof NodeInterface) {
-      return "$operation $type {$entity->bundle()} content";
-    }
-
-    // Then, it is an RDF entity.
-    $operation = $operation === 'update' ? 'edit' : $operation;
-    return "$operation $type rdf entity";
+    \assert($entity instanceof NodeInterface);
+    return "$operation $type {$entity->bundle()} content";
   }
 
   /**
@@ -175,14 +169,8 @@ class StateMachinePermissionsHelper implements StateMachinePermissionsHelperInte
    *   The group permission.
    */
   protected function getGroupPermission(EntityInterface $entity, string $operation, string $type): string {
-    \assert(in_array($entity->getEntityTypeId(), ['node', 'rdf_entity'], TRUE));
-    if ($entity instanceof NodeInterface) {
-      return "$operation $type {$entity->bundle()} content";
-    }
-
-    // Then, it is an RDF entity.
-    $operation = $operation === 'update' ? 'edit' : $operation;
-    return "$operation $type {$entity->bundle()} {$entity->getEntityTypeId()}";
+    \assert($entity instanceof NodeInterface);
+    return "$operation $type {$entity->bundle()} content";
   }
 
   /**

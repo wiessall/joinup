@@ -21,6 +21,6 @@ class GlossaryTermName extends Constraint {
    *
    * @var string
    */
-  public $message = 'This glossary term (%name) name is already used as synonym of <a href=":url">@glossary</a>. You should remove that synonym before using this name.';
+  public string $message = 'This glossary term (%name) name is already used as synonym of <a href=":url">@glossary</a>. You should remove that synonym before using this name.';
 
 }

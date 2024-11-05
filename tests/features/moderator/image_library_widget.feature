@@ -31,8 +31,8 @@ Feature: As a moderator I want to be able to maintain sets of images to be
     But I should not see the link "NewName@<media type>"
 
     Examples:
-      | media type        |
-      | Collection logo   |
-      | Solution logo     |
-      | Event logo        |
-      | News logo         |
+      | media type      |
+      | Collection logo |
+      | Solution logo   |
+      | Event logo      |
+      | News logo       |

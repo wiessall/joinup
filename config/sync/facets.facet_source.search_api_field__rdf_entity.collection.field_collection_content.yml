@@ -1,9 +1,0 @@
-uuid: b35c75d5-c750-45e7-b75f-9e0300924ee3
-langcode: en
-status: true
-dependencies: {  }
-id: search_api_field__rdf_entity.collection.field_collection_content
-name: 'search_api_field:rdf_entity.collection.field_collection_content'
-filter_key: ''
-url_processor: query_string
-breadcrumb: {  }

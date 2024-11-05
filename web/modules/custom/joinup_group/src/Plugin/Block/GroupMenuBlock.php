@@ -147,7 +147,7 @@ class GroupMenuBlock extends OgMenuBlock {
    *   A render array for empty menu items.
    */
   protected function getEmptyResultsBuild(): array {
-    /** @var \Drupal\rdf_entity\RdfInterface $group */
+    /** @var \Drupal\joinup_group\Entity\GroupInterface $group */
     $group = $this->getContext('og')->getContextData()->getValue();
     if (empty($group->id())) {
       // In certain cases, like the layout builder, the entity is passed as a
@@ -157,7 +157,7 @@ class GroupMenuBlock extends OgMenuBlock {
 
     // Define URLs that are used in help texts.
     $create_custom_page_url = Url::fromRoute('joinup_group.add_content', [
-      'rdf_entity' => $group->id(),
+      $group->getEntityTypeId() => $group->id(),
       'node_type' => 'custom_page',
     ]);
     // In normal usage all groups have a menu instance, but this is not
@@ -174,7 +174,7 @@ class GroupMenuBlock extends OgMenuBlock {
     $disabled_message = '';
     if ($menu_instance instanceof OgMenuInstanceInterface && $menu_instance->bundle() === 'navigation') {
       $disabled_message = $this->t('All the pages have been disabled for this :type. You can <a href=":edit_menu_url">edit the menu configuration</a> or <a href=":add_page_url">add a new page</a>.', [
-        ':type' => $group->get('rid')->entity->getSingularLabel(),
+        ':type' => $group->get('type')->entity->getSingularLabel(),
         ':edit_menu_url' => $edit_navigation_menu_url,
         ':add_page_url' => $create_custom_page_url->toString(),
       ]);
@@ -218,7 +218,7 @@ class GroupMenuBlock extends OgMenuBlock {
     }
     $build['#contextual_links']['group_menu_block'] = [
       'route_parameters' => [
-        'rdf_entity' => $this->getContext('og')->getContextData()->getValue()->id(),
+        'node' => $this->getContext('og')->getContextData()->getValue()->id(),
         'node_type' => 'custom_page',
       ],
     ];

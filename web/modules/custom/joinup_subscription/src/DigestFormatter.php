@@ -50,7 +50,7 @@ class DigestFormatter extends OriginalFormatter {
 
       if ($group->id() !== $current_group_id) {
         $current_group_id = $group->id();
-        $output[] = $this->entityTypeManager->getViewBuilder('rdf_entity')->view($group, 'digest_message_header');
+        $output[] = $this->entityTypeManager->getViewBuilder('node')->view($group, 'digest_message_header');
       }
 
       // Set the user to the recipient. This is similar to how message_subscribe

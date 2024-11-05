@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Drupal\adms_validator;
 
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\sparql_entity_storage\Driver\Database\sparql\ConnectionInterface;
+use Drupal\rdf_sync\RdfSyncConnectionInterface;
 use EasyRdf\Sparql\Result;
 
 /**
@@ -22,24 +22,9 @@ class AdmsValidationResult {
    */
   protected $errors = [];
 
-  /**
-   * Constructs a list of SchemaErrors from a query result.
-   *
-   * @param \EasyRdf\Sparql\Result $result
-   *   The result of the validation query.
-   * @param string $graph_uri
-   *   The graph URI.
-   * @param \Drupal\sparql_entity_storage\Driver\Database\sparql\ConnectionInterface $sparql
-   *   The SPARQL endpoint.
-   *
-   * @todo Remove $graph_uri, $sparql params in ISAICP-4296.
-   * @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-4296
-   */
-  public function __construct(Result $result, $graph_uri, ConnectionInterface $sparql) {
+  public function __construct(Result $result, string $graph_uri, RdfSyncConnectionInterface $sparql) {
     $skipped_rules = [100, 101, 102, 103];
     foreach ($result as $error) {
-      // @todo Remove this hack in ISAICP-4296.
-      // @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-4296
       if (!in_array($error->Rule_ID->getValue(), $skipped_rules)) {
         $this->errors[] = new SchemaError($error);
       }
@@ -108,13 +93,10 @@ class AdmsValidationResult {
    *
    * @param string $graph_uri
    *   The graph URI.
-   * @param \Drupal\sparql_entity_storage\Driver\Database\sparql\ConnectionInterface $sparql
+   * @param \Drupal\rdf_sync\RdfSyncConnectionInterface $sparql
    *   The SPARQL endpoint.
-   *
-   * @todo Remove this hack in ISAICP-4296.
-   * @see https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-4296
    */
-  protected function applyRules100To103($graph_uri, ConnectionInterface $sparql): void {
+  protected function applyRules100To103($graph_uri, RdfSyncConnectionInterface $sparql): void {
     $rules = [
       100 => [
         'prefix' => 'dcat:Dataset',

@@ -4,10 +4,10 @@ Feature: Global Interoperable search
 
   @javascript
   Scenario: User can find Interoperable items
-    Given the following collections:
+    Given collection content:
       | title          | state     |
       | Open standards | published |
-    And the following solutions:
+    Given solution content:
       | title           | state     | collection     | description                                                                  |
       | eGovernment     | published | Open standards | It refers to the collaboration ability of cross-border services for citizens |
       | Military forces | published | Open standards | the ability of the forces of two or more nations to train                    |
@@ -25,5 +25,7 @@ Feature: Global Interoperable search
     Then the page should show the tiles "eGovernment"
 
     When I visit the search page
-    And I check the "Collection (1)" checkbox from the "Content types" facet
+    # Joinup in installed by default.
+    # @see joinup_test.install
+    And I check the "Collections (2)" checkbox from the "Content types" facet
     Then I should not see the text "Show only Interoperable Solutions"

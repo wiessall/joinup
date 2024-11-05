@@ -4,7 +4,7 @@ status: true
 dependencies:
   module:
     - blazy
-    - collection
+    - joinup_collection
     - markdown_easy
     - slick
 name: 'Essential HTML'

@@ -5,7 +5,7 @@ Feature: User interface for the File URL field
   I need to be able to interact with a field widget that offers both options
 
   Background:
-    Given the following collections:
+    Given collection content:
       | title            | state     |
       | Regression tests | published |
 
@@ -40,7 +40,7 @@ Feature: User interface for the File URL field
     And I should not see the text "Allowed types: txt doc docx pdf."
 
   Scenario: User should be able to remove entity even document's entities do not exist
-    Given the following solutions:
+    Given solution content:
       | title                      | documentation | state     | collection       |
       | Solution without documents | text.pdf      | published | Regression tests |
     And I delete documents from "Solution without documents" solution

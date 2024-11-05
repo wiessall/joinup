@@ -1,0 +1,10 @@
+{#
+/**
+ * @file
+ * Template override for the compact view mode of nodes.
+ */
+#}
+<article{{ attributes.addClass('node--compact') }}>
+  {{ content }}
+  <a class="ms-2" href="{{ url }}" rel="bookmark">{{ label }}</a>
+</article>

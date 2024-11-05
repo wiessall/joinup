@@ -5,11 +5,10 @@ Feature: "Add event" visibility options.
   I need to be able to add "Event" content through UI.
 
   Scenario: "Add event" button should not be shown to normal members, authenticated users and anonymous users.
-    Given the following collection:
-      | title | Collective Ragged tower |
-      | logo  | logo.png                |
-      | state | published               |
-    And the following solutions:
+    Given collection content:
+      | title                   | logo     | state     |
+      | Collective Ragged tower | logo.png | published |
+    Given solution content:
       | title           | collection              | logo     | state     |
       | Ragged Tower    | Collective Ragged tower | logo.png | published |
       | Prince of Magic | Collective Ragged tower | logo.png | published |
@@ -35,11 +34,10 @@ Feature: "Add event" visibility options.
 
   @uploadFiles:test.zip
   Scenario: Add event as a facilitator.
-    Given the following collection:
-      | title | Collective The Luscious Bridges |
-      | logo  | logo.png                        |
-      | state | published                       |
-    And the following solutions:
+    Given collection content:
+      | title                           | logo     | state     |
+      | Collective The Luscious Bridges | logo.png | published |
+    Given solution content:
       | title                | collection                      | logo     | state     |
       | The Luscious Bridges | Collective The Luscious Bridges | logo.png | published |
     And I am logged in as a facilitator of the "The Luscious Bridges" solution

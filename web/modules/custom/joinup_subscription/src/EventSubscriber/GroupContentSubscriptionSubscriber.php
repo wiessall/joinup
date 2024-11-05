@@ -168,7 +168,7 @@ class GroupContentSubscriptionSubscriber implements EventSubscriberInterface {
     }
 
     // Ignore content that is not approved for inclusion in digest messages.
-    $subscribable_bundles = JoinupSubscriptionsHelper::SUBSCRIPTION_BUNDLES[$group->bundle()]['rdf_entity'] ?? [];
+    $subscribable_bundles = JoinupSubscriptionsHelper::SUBSCRIPTION_BUNDLES[$group->bundle()]['node'] ?? [];
     if (!in_array($entity->bundle(), $subscribable_bundles)) {
       return;
     }
@@ -190,7 +190,7 @@ class GroupContentSubscriptionSubscriber implements EventSubscriberInterface {
     $membership_ids = $membership_storage
       ->getQuery()
       ->accessCheck(FALSE)
-      ->condition('entity_type', 'rdf_entity')
+      ->condition('entity_type', 'node')
       ->condition('entity_id', $entity->getGroupId())
       ->condition('state', OgMembershipInterface::STATE_ACTIVE)
       ->condition('subscription_bundles', $entity->bundle())
@@ -227,9 +227,8 @@ class GroupContentSubscriptionSubscriber implements EventSubscriberInterface {
       // user's chosen digest frequency.
       foreach ($this->getSubscribers($group_content) as $subscriber) {
         $message = GroupContentSubscriptionMessage::create([
-          'field_group_content' => [
+          'group_content' => [
             0 => [
-              'target_type' => $group_content->getEntityTypeId(),
               'target_id' => $group_content->id(),
             ],
           ],

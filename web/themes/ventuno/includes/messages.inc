@@ -55,6 +55,7 @@ function ventuno_preprocess_message_digest(array &$variables): void {
  * - Changes the link to the collection page to an absolute URL so this can be
  *   opened in email messages.
  */
-function ventuno_preprocess_rdf_entity__digest_message_header(array &$variables): void {
-  $variables['url'] = $variables['rdf_entity']->toUrl('canonical', ['absolute' => TRUE])->toString();
+function ventuno_preprocess_node__digest_message_header(array &$variables): void {
+  $variables['url'] = $variables['node']->toUrl('canonical', ['absolute' => TRUE])->toString();
+  $variables['label'][0]['#template'] = '{{ value }}';
 }

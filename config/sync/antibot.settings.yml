@@ -13,5 +13,4 @@ form_ids:
   - subscribe_to_collection_form
   - share_content_form
   - email_contact_mail_form
-  - 'rdf_entity_*'
 show_form_ids: false

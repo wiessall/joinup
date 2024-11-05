@@ -10,7 +10,7 @@ dependencies:
 id: iop_pagetitle
 theme: iop
 region: content
-weight: -19
+weight: -6
 provider: null
 plugin: page_title_block
 settings:

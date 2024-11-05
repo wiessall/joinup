@@ -10,7 +10,7 @@ Feature:
       | First name  | Jimmy                           |
       | Family name | Nine                            |
       | E-mail      | jimmy.nine@ec-europa.example.eu |
-    Given the following collections:
+    Given collection content:
       | title      | logo     | state     |
       | Nintendo64 | logo.png | published |
       | Emulators  | logo.png | published |
@@ -271,10 +271,9 @@ Feature:
       | Rare Nintendo64 disk drive discovered |
 
     # Create a solution and add it to the list.
-    Given the following solution:
-      | title      | N64 cartridge cleaner |
-      | state      | published             |
-      | collection | Nintendo64            |
+    Given solution content:
+      | title                 | state     | collection |
+      | N64 cartridge cleaner | published | Nintendo64 |
     When I open the header local tasks menu
     And I click "Edit" in the "Entity actions" region
     And I "edit" from the "Custom page body" field the child 1 paragraph of 1 layout
@@ -517,7 +516,7 @@ Feature:
   Scenario: Regression test for ISAICP-7040
   See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7040
 
-    Given solutions:
+    Given solution content:
       | title                | collection | state     |
       | Save the Planet      | Nintendo64 | published |
       | Fight Global Warming | Nintendo64 | published |
@@ -569,7 +568,7 @@ Feature:
   Scenario: Regression test for ISAICP-7183
   See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7183
 
-    Given solutions:
+    Given solution content:
       | title              | collection | state     |
       | Save gasoline      | Nintendo64 | published |
       | Fight battery mode | Nintendo64 | published |

@@ -6,10 +6,9 @@ Feature: Solution moderation
 
   # Access checks are not being made here. They are run in the solution add feature.
   Scenario: 'Save as draft' and 'Propose' states are available but moderators should also see 'Publish' state.
-    Given the following collection:
-      | title | Collection propose state test |
-      | logo  | logo.png                      |
-      | state | published                     |
+    Given collection content:
+      | title                         | logo     | state     |
+      | Collection propose state test | logo.png | published |
 
     When I am logged in as a member of the "Collection propose state test" collection
     And I go to the add solution form of the "Collection propose state test" collection
@@ -49,7 +48,7 @@ Feature: Solution moderation
       | Franklin Walker  |           |
       # Facilitator of all the solutions.
       | William Curtis   |           |
-    And the following solutions:
+    Given solution content:
       | title                      | description                | logo     | owner          | contact information | state        |
       | Azure Ship                 | Azure ship                 | logo.png | Angelos Agathe | Placide             | draft        |
       | The Last Illusion          | The Last Illusion          | logo.png | Angelos Agathe | Placide             | proposed     |

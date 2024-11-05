@@ -28,9 +28,9 @@ use Drupal\joinup_core\Event\AjaxCommandEvent;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\Traits\MembershipCreateTrait;
 use Drupal\joinup_subscription\JoinupSubscriptionsHelper;
+use Drupal\node\NodeInterface;
 use Drupal\og\MembershipManagerInterface;
 use Drupal\og\OgMembershipInterface;
-use Drupal\rdf_entity\RdfInterface;
 use Drupal\user\UserInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -66,7 +66,7 @@ class SubscribeToCollectionForm extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container) {
+  public static function create(ContainerInterface $container): self {
     return new static(
       $container->get('entity_type.manager'),
       $container->get('og.membership_manager'),
@@ -88,14 +88,14 @@ class SubscribeToCollectionForm extends FormBase {
   /**
    * Title callback of the form.
    *
-   * @param \Drupal\joinup_group\Entity\GroupInterface $rdf_entity
+   * @param \Drupal\joinup_group\Entity\GroupInterface $node
    *   The collection to join or subscribe to.
    *
    * @return \Drupal\Core\StringTranslation\TranslatableMarkup|string
    *   The title.
    */
-  public static function title(GroupInterface $rdf_entity): TranslatableMarkup|string {
-    return t('Welcome to @title', ['@title' => $rdf_entity->label()]);
+  public static function title(GroupInterface $node): TranslatableMarkup|string {
+    return t('Welcome to @title', ['@title' => $node->label()]);
   }
 
   /**
@@ -126,9 +126,9 @@ class SubscribeToCollectionForm extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state, ?RdfInterface $rdf_entity = NULL): array {
-    $coc_components = $this->getCodeOfConductComponents($rdf_entity);
-    $membership = $this->getUserNonBlockedMembership($rdf_entity);
+  public function buildForm(array $form, FormStateInterface $form_state, ?GroupInterface $node = NULL): array {
+    $coc_components = $this->getCodeOfConductComponents($node);
+    $membership = $this->getUserNonBlockedMembership($node);
     $intro_message = $membership && $membership->isPending() ?
       $this->t('When your membership is approved you will be able to publish content in it.') :
       $this->t('You have joined the collection and you are now able to publish content in it.');
@@ -159,8 +159,8 @@ class SubscribeToCollectionForm extends FormBase {
       '#title' => $this->t(
         'Notify me when content is published in <a href=":parent-url" target="_blank">@parent-name</a>.',
         [
-          ':parent-url' => $rdf_entity->toUrl()->toString(),
-          '@parent-name' => $rdf_entity->label(),
+          ':parent-url' => $node->toUrl()->toString(),
+          '@parent-name' => $node->label(),
         ]
       ),
       '#weight' => -2,
@@ -173,11 +173,11 @@ class SubscribeToCollectionForm extends FormBase {
 
     // This form should only be accessible if the user is already a member of
     // the collection.
-    $form['#access'] = $this->access($rdf_entity)->isAllowed();
+    $form['#access'] = $this->access($node)->isAllowed();
     // Keep track of the collection we are subscribing to.
     $form['collection_id'] = [
       '#type' => 'value',
-      '#value' => $rdf_entity->id(),
+      '#value' => $node->id(),
     ];
 
     $form['actions'] = [
@@ -193,7 +193,7 @@ class SubscribeToCollectionForm extends FormBase {
     // @see https://www.drupal.org/project/drupal/issues/2934463
     $ajax_callback = [
       'callback' => '::confirmSubscription',
-      'url' => $rdf_entity->toUrl('subscribe'),
+      'url' => $node->toUrl('subscribe'),
       'options' => [
         'query' => [
           FormBuilderInterface::AJAX_FORM_REQUEST => TRUE,
@@ -223,14 +223,14 @@ class SubscribeToCollectionForm extends FormBase {
   /**
    * Adds the necessary code of conduct form elements to the form.
    *
-   * @param \Drupal\rdf_entity\RdfInterface|null $collection
+   * @param \Drupal\node\NodeInterface|null $collection
    *   The collection.
    *
    * @return array[]|null
    *   The form components about accepting the Code of Conduct document, or
    *   NULL if there is nothing what users should agree to.
    */
-  protected function getCodeOfConductComponents(?RdfInterface $collection): ?array {
+  protected function getCodeOfConductComponents(?NodeInterface $collection): ?array {
     if (
       !$collection instanceof CollectionInterface ||
       !$collection->hasCodeOfConductToAccept()
@@ -306,7 +306,7 @@ class SubscribeToCollectionForm extends FormBase {
     if ($operation === 'cancel') {
       return;
     }
-    $parameters = ['%collection' => $collection->getName()];
+    $parameters = ['%collection' => $collection->label()];
     $codeOfConductHasBeenApproved = !empty($form_state->getValue(static::COC_CHECKBOX_KEY));
 
     $membership = $this->getUserNonBlockedMembership($collection);
@@ -410,31 +410,31 @@ class SubscribeToCollectionForm extends FormBase {
   /**
    * Access check for the form.
    *
-   * @param \Drupal\rdf_entity\RdfInterface $rdf_entity
+   * @param \Drupal\node\NodeInterface $node
    *   The collection for which to check access.
    *
    * @return \Drupal\Core\Access\AccessResultInterface
    *   The access result.
    */
-  public function access(RdfInterface $rdf_entity): AccessResultInterface {
+  public function access(NodeInterface $node): AccessResultInterface {
     $user = $this->getUser();
-    $hasCodeOfConductToAccept = $rdf_entity instanceof CollectionInterface && $rdf_entity->hasCodeOfConductToAccept();
+    $hasCodeOfConductToAccept = $node instanceof CollectionInterface && $node->hasCodeOfConductToAccept();
     return AccessResult::allowedIf(
       $user->isAuthenticated() &&
-      ($this->getUserNonBlockedMembership($rdf_entity) || $hasCodeOfConductToAccept)
+      ($this->getUserNonBlockedMembership($node) || $hasCodeOfConductToAccept)
     );
   }
 
   /**
    * Returns a membership of the user that is active or pending.
    *
-   * @param \Drupal\rdf_entity\RdfInterface $collection
+   * @param \Drupal\node\NodeInterface $collection
    *   The group entity.
    *
    * @return \Drupal\og\OgMembershipInterface|null
    *   The membership of the user or null.
    */
-  protected function getUserNonBlockedMembership(RdfInterface $collection): ?OgMembershipInterface {
+  protected function getUserNonBlockedMembership(NodeInterface $collection): ?OgMembershipInterface {
     return $this->membershipManager->getMembership($collection, $this->getUser()->id(), [
       OgMembershipInterface::STATE_ACTIVE,
       OgMembershipInterface::STATE_PENDING,
@@ -447,11 +447,13 @@ class SubscribeToCollectionForm extends FormBase {
    * @param string $collection_id
    *   The collection ID.
    *
-   * @return \Drupal\rdf_entity\RdfInterface
+   * @return \Drupal\collection\Entity\CollectionInterface
    *   The collection.
    */
-  protected function loadCollection(string $collection_id): RdfInterface {
-    return $this->entityTypeManager->getStorage('rdf_entity')->load($collection_id);
+  protected function loadCollection(string $collection_id): CollectionInterface {
+    $collection = $this->entityTypeManager->getStorage('node')->load($collection_id);
+    assert($collection instanceof CollectionInterface);
+    return $collection;
   }
 
   /**
