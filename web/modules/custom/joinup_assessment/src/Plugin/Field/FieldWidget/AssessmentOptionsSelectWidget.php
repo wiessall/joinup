@@ -46,7 +46,7 @@ class AssessmentOptionsSelectWidget extends OptionsSelectWidget {
    *   TRUE if is it.
    */
   protected function isAssessment(FieldableEntityInterface $entity): bool {
-    if ($entity->hasField('assessment')) {
+    if (!isset($entity->assessment)) {
       return FALSE;
     }
 
