@@ -18,6 +18,8 @@ interface AssessmentInterface {
 
   /**
    * Title prefix.
+   *
+   * Default prefix value for a new document.
    */
   public const string DOCUMENT_TITLE_PREFIX = 'Assessment report #';
 
