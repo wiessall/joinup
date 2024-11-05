@@ -3,7 +3,7 @@ Feature:
   Basic test steps for the EIF perspective meta entity.
 
   Scenario: Create an EIF perspective and view the data.
-    Given the following solutions:
+    Given solution content:
       | title         | description                                      | state     |
       | EIF solution  | Some description not to be shown in the EIF page | published |
       | EIF only type | Some description not to be shown in the EIF page | published |
@@ -21,8 +21,8 @@ Feature:
     # Verify that solution group menu contains correct links.
     When I go to the "EIF solution" solution
     Then I should see the following navigation menu items in the specified order:
-      | text            |
-      | Overview        |
+      | text     |
+      | Overview |
     And I should see the following quick links menu items in the specified order:
       | text            |
       | EIF Perspective |

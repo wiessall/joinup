@@ -1,5 +1,5 @@
 @api @group-clone
-Feature: Contant Information entities don't cause exceptions because of their invalid schema
+Feature: Contact Information entities don't cause exceptions because of their invalid schema
 
   Scenario: Check the page of an entity which had schema issues before
     Given I am logged in as a user with the "moderator" role
@@ -10,8 +10,8 @@ Feature: Contant Information entities don't cause exceptions because of their in
     # real value.
     And 1 metatag graph of type "http://www.w3.org/2006/vcard/ns#Kind" should exist in the page
     And the metatag graph of the item with "@type" "http://www.w3.org/2006/vcard/ns#Kind" should have the following "http://www.w3.org/2006/vcard/ns#fn" properties:
-      | property  | value      |
-      | @value    | TES team |
+      | property | value    |
+      | @value   | TES team |
     # Editing also thrown an error. Verify that it works too.
     Then I click "Edit"
     Then I should get a 200 HTTP response
@@ -20,13 +20,13 @@ Feature: Contant Information entities don't cause exceptions because of their in
 
   @javascript
   Scenario: Create contact info entity through IEF in a collection.
-    Given collection:
-      | title          | Contact Info Content Test |
-      | state          | published                 |
+    Given collection content:
+      | title                     | state     |
+      | Contact Info Content Test | published |
     Given I am logged in as a user with the "moderator" role
     When I go to the edit form of the "Contact Info Content Test" collection
     Then I should see the text "Edit Collection Contact Info Content Test"
-    And the HTML title of the page should be "Edit Rdf"
+    And the HTML title of the page should be "Contact Info Content Test"
 
     Then I fill in "Short ID" with "contact-info-test"
     And I enter "Some description" in the "Description" wysiwyg editor
@@ -55,8 +55,8 @@ Feature: Contant Information entities don't cause exceptions because of their in
     # real value.
     Then 1 metatag graph of type "http://www.w3.org/2006/vcard/ns#Kind" should exist in the page
     And the metatag graph of the item with "@type" "http://www.w3.org/2006/vcard/ns#Kind" should have the following "http://www.w3.org/2006/vcard/ns#fn" properties:
-      | property  | value            |
-      | @value    | Mr. John Doe DLA |
+      | property | value            |
+      | @value   | Mr. John Doe DLA |
     Then I open the header local tasks menu
     And I click "Edit"
     Then I should see the text "Edit Contact information Mr. John Doe DLA"

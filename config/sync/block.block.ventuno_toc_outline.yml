@@ -12,7 +12,7 @@ dependencies:
 id: ventuno_toc_outline
 theme: ventuno
 region: content
-weight: 3
+weight: 0
 provider: null
 plugin: toc_outline
 settings:
@@ -30,8 +30,8 @@ visibility:
     context_mapping:
       og: '@og.context:og'
     group_types:
-      rdf_entity-collection: rdf_entity-collection
-      rdf_entity-solution: rdf_entity-solution
+      node-collection: node-collection
+      node-solution: node-solution
   request_route:
     id: request_route
     negate: false

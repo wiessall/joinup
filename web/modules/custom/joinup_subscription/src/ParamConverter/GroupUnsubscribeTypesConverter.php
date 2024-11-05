@@ -14,8 +14,8 @@ use Symfony\Component\Routing\Route;
 /**
  * Converts route params of type 'group_unsubscribe_types'.
  *
- * This converter runs after sparql.paramconverter and paramconverter.entity, so
- * the group and user parameters are already converted at this point.
+ * This converter runs after paramconverter.entity, so the group and user
+ * parameters are already converted at this point.
  */
 class GroupUnsubscribeTypesConverter implements ParamConverterInterface {
 

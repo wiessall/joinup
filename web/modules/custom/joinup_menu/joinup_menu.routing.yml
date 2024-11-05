@@ -1,28 +1,28 @@
 # The menu item does not accept the public:// stream wrapper, so we need to use
 # a custom controller to serve a file.
 joinup_menu.documentation_file:
-  path: 'rdf_entity/{rdf_entity}/documentation-file'
+  path: 'node/{node}/documentation-file'
   defaults:
     _title: 'File Download'
     _controller: '\Drupal\joinup_menu\Controller\RedirectDocumentationController::documentationFile'
   requirements:
     _custom_access: '\Drupal\joinup_menu\Controller\RedirectDocumentationController::documentationFileAccess'
   options:
-    rdf_entity:
-      type: entity:rdf_entity
+    node:
+      type: entity:node
       bundles:
         - solution
 
 joinup_menu.website_link:
-  path: 'rdf_entity/{rdf_entity}/website-link'
+  path: 'node/{node}/website-link'
   defaults:
     _title: 'Website Link'
     _controller: '\Drupal\joinup_menu\Controller\RedirectWebsiteLinkController::websiteLink'
   requirements:
     _custom_access: '\Drupal\joinup_menu\Controller\RedirectWebsiteLinkController::websiteLinkAccess'
   options:
-    rdf_entity:
-      type: entity:rdf_entity
+    node:
+      type: entity:node
       bundles:
         - collection
         - solution

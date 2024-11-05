@@ -12,8 +12,8 @@ use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\EventSubscriber\JoinGroupSubscriber;
-use Drupal\rdf_entity\RdfInterface;
-use Drupal\solution\Entity\SolutionInterface;
+use Drupal\joinup_solution\Entity\SolutionInterface;
+use Drupal\node\NodeInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -69,9 +69,9 @@ class JoinGroupAnonymousRedirectForm extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state, ?GroupInterface $rdf_entity = NULL): array {
+  public function buildForm(array $form, FormStateInterface $form_state, ?GroupInterface $node = NULL): array {
     // Store the group on the object so it can be reused.
-    $this->group = $rdf_entity;
+    $this->group = $node;
 
     $form = [
       'description' => [
@@ -143,16 +143,16 @@ class JoinGroupAnonymousRedirectForm extends FormBase {
   /**
    * Route title callback. Returns the title of the authenticate to join modal.
    *
-   * @param \Drupal\rdf_entity\RdfInterface $rdf_entity
+   * @param \Drupal\node\NodeInterface $node
    *   The group that the anonymous user desires to join.
    *
    * @return \Drupal\Core\StringTranslation\TranslatableMarkup
    *   The title of the modal form.
    */
-  public function getTitle(RdfInterface $rdf_entity): TranslatableMarkup {
+  public function getTitle(NodeInterface $node): TranslatableMarkup {
     // Business analysts have indicated that specific terminology should be used
     // depending on the type of group that is being joined.
-    if ($rdf_entity instanceof SolutionInterface) {
+    if ($node instanceof SolutionInterface) {
       return $this->t('Sign in to subscribe');
     }
     return $this->t('Sign in to join');

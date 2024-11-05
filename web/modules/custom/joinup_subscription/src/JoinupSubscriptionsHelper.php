@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_subscription;
 
-use Drupal\joinup_community_content\CommunityContentHelper;
-
 /**
  * Helper class for Joinup subscriptions.
  */
@@ -20,8 +18,13 @@ class JoinupSubscriptionsHelper {
    */
   const array SUBSCRIPTION_BUNDLES = [
     'collection' => [
-      'rdf_entity' => ['solution'],
-      'node' => CommunityContentHelper::BUNDLES,
+      'node' => [
+        'discussion',
+        'document',
+        'event',
+        'news',
+        'solution',
+      ],
     ],
     'solution' => [
       'node' => [

@@ -13,9 +13,9 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\PluralTranslatableMarkup;
 use Drupal\Core\TempStore\PrivateTempStore;
 use Drupal\Core\TempStore\PrivateTempStoreFactory;
+use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\og\OgAccessInterface;
 use Drupal\og\OgMembershipInterface;
-use Drupal\rdf_entity\RdfInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -34,9 +34,9 @@ class DeleteGroupMembershipConfirmForm extends ConfirmFormBase {
   protected array $memberships;
 
   /**
-   * The memberships group entity.
+   * The membership's group entity.
    */
-  protected RdfInterface $group;
+  protected GroupInterface $group;
 
   /**
    * Constructs a new form instance.
@@ -84,7 +84,7 @@ class DeleteGroupMembershipConfirmForm extends ConfirmFormBase {
         '#markup' => $this->t("The member %member will be deleted from the '%name' @type.", [
           '%member' => $membership->getOwner()->getDisplayName(),
           '%name' => $this->getGroup()->label(),
-          '@type' => $this->getGroup()->get('rid')->entity->getSingularLabel(),
+          '@type' => $this->getGroup()->get('type')->entity->getSingularLabel(),
         ]),
         '#prefix' => '<p>',
         '#suffix' => '</p>',
@@ -107,7 +107,7 @@ class DeleteGroupMembershipConfirmForm extends ConfirmFormBase {
         [
           '#markup' => $this->t("will be deleted from the '%name' @type.", [
             '%name' => $this->getGroup()->label(),
-            '@type' => $this->getGroup()->get('rid')->entity->getSingularLabel(),
+            '@type' => $this->getGroup()->get('type')->entity->getSingularLabel(),
           ]),
           '#prefix' => '<p>',
           '#suffix' => '</p>',
@@ -137,7 +137,7 @@ class DeleteGroupMembershipConfirmForm extends ConfirmFormBase {
       [
         '%member' => $names,
         '%name' => $this->getGroup()->label(),
-        '@type' => $this->getGroup()->get('rid')->entity->getSingularLabel(),
+        '@type' => $this->getGroup()->get('type')->entity->getSingularLabel(),
       ]
     );
 
@@ -161,7 +161,7 @@ class DeleteGroupMembershipConfirmForm extends ConfirmFormBase {
       "Are you sure you want to delete the selected memberships from the '%name' @type?",
       [
         '%name' => $this->getGroup()->label(),
-        '@type' => $this->getGroup()->get('rid')->entity->getSingularLabel(),
+        '@type' => $this->getGroup()->get('type')->entity->getSingularLabel(),
       ]
     );
   }
@@ -215,22 +215,21 @@ class DeleteGroupMembershipConfirmForm extends ConfirmFormBase {
   /**
    * Returns the memberships group.
    *
-   * @return \Drupal\rdf_entity\RdfInterface
+   * @return \Drupal\joinup_group\Entity\GroupInterface
    *   The memberships group entity.
    *
    * @throws \LogicException
    *   If the membership group is not a collection or a solution.
    */
-  protected function getGroup(): RdfInterface {
+  protected function getGroup(): GroupInterface {
     if (!isset($this->group)) {
       /** @var \Drupal\og\OgMembershipInterface[] $memberships */
       $memberships = $this->getMemberships();
       // Pick-up the first membership. They're all belonging to the same group.
       $membership = reset($memberships);
 
-      /** @var \Drupal\rdf_entity\RdfInterface $group */
       $this->group = $membership->getGroup();
-      if ($this->group->getEntityTypeId() !== 'rdf_entity' || !in_array($this->group->bundle(), [
+      if (!($this->group instanceof GroupInterface) || !in_array($this->group->bundle(), [
         'collection',
         'solution',
       ])) {

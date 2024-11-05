@@ -1583,21 +1583,25 @@ class FeatureContext extends RawDrupalContext {
   }
 
   /**
-   * Performs the RDF synchronization.
+   * Performs the RDF synchronization after each behat step.
    *
    * When a request terminates, all services implementing DestructableInterface
    * are called to perform tasks after the response has been sent back to the
    * client. This is OK when operating manually the site, but when this is
    * wrapped in the test "page request", these operations will occur only after
    * all the steps were executed. But some tasks just need to be executed before
-   * the next Behat step.
-   * After a scenario terminates, the nodes created are deleted and RDF needs
-   * to be synchronized so that also RDF entities are deleted.
+   * the next Behat step. After a scenario terminates, the nodes created are
+   * deleted and RDF needs to be synchronized so that also triples are deleted.
+   *
+   * This is also needed to ensure that the RDF data is synchronized after each
+   * scenario because entities are cleaned after a scenario and we need to
+   * ensure that the RDF data is synchronized after each scenario. If this does
+   * not run, the RDF data will be left in the RDF database as stale data.
    *
    * @AfterStep
    * @AfterScenario
    */
-  public function rdfSyncDestruct(): void {
+  public function afterStepRdfSyncDestruct(): void {
     \Drupal::service('rdf_sync.synchronizer')->destruct();
   }
 
@@ -2093,15 +2097,15 @@ class FeatureContext extends RawDrupalContext {
   protected function getImageLibraryBrowserMapping(): array {
     return [
       'collection' => [
-        'type' => 'rdf_entity',
+        'type' => 'node',
         'fields' => [
-          'logo' => 'field_ar_logo',
+          'logo' => 'logo',
         ],
       ],
       'solution' => [
-        'type' => 'rdf_entity',
+        'type' => 'node',
         'fields' => [
-          'logo' => 'field_is_logo',
+          'logo' => 'logo',
         ],
       ],
       'event' => [

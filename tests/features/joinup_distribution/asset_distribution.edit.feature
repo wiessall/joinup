@@ -9,10 +9,10 @@ Feature: Asset distribution editing.
       | Username     | E-mail                   | First name | Family name | Roles |
       | Gregg Hill   | Gregg.Hill@example.com   | Gregg      | Hill        |       |
       | Pedro Torres | Pedro.Torres@example.com | Pedro      | Torres      |       |
-    And the following collection:
-      | title | Collection example |
-      | state | published          |
-    And the following solutions:
+    And collection content:
+      | title              | state     |
+      | Collection example | published |
+    Given solution content:
       | title      | collection         | description        | state     |
       | Solution A | Collection example | Sample description | published |
       | Solution B | Collection example | Sample description | published |
@@ -23,7 +23,7 @@ Feature: Asset distribution editing.
       | title                 | release number | release notes       | is version of |
       | Asset release example | C3PO           | Release description | Solution A    |
     And distribution content:
-      | title                      | description        | licence | access url | release               | state     | publication date | modification date |
+      | title                      | description        | licence | access url | release               | state     | published at     | modification date |
       | Asset distribution example | Sample description | LGPL    | test.zip   | Asset release example | published | 2019-11-19       | 2021-11-19        |
     And the following solution user membership:
       | solution   | user         | roles       |

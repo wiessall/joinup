@@ -1,0 +1,30 @@
+uuid: 1a11b5e3-585a-44f0-86fa-b2324160b7f2
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.description
+    - filter.format.content_editor
+    - node.type.collection
+  module:
+    - text
+    - rdf_sync
+third_party_settings:
+  rdf_sync:
+    value:
+      predicate: 'http://purl.org/dc/terms/description'
+      type: null
+id: node.collection.description
+field_name: description
+entity_type: node
+bundle: collection
+label: Description
+description: 'Description of the collection (compulsory in English, other languages are optionals)'
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  allowed_formats:
+    - content_editor
+field_type: text_long

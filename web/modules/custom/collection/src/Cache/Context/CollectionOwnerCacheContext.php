@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\collection\Cache\Context;
 
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\joinup_group\Cache\Context\GroupOwnerCacheContext;
 
 /**
@@ -29,7 +30,7 @@ class CollectionOwnerCacheContext extends GroupOwnerCacheContext {
   /**
    * {@inheritdoc}
    */
-  public static function getLabel() {
+  public static function getLabel(): TranslatableMarkup|string {
     return t('Collection owner');
   }
 
@@ -39,7 +40,7 @@ class CollectionOwnerCacheContext extends GroupOwnerCacheContext {
    * @var string[]
    */
   protected $roleIds = [
-    'rdf_entity-collection-administrator',
+    'node-collection-administrator',
   ];
 
 }

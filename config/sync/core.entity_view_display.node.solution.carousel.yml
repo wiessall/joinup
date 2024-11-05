@@ -1,0 +1,151 @@
+uuid: 4950b45f-6a67-4779-b406-a201f31161b1
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.carousel
+    - field.field.node.solution.abstract
+    - field.field.node.solution.body
+    - field.field.node.solution.contact
+    - field.field.node.solution.content_creation
+    - field.field.node.solution.description
+    - field.field.node.solution.documentation
+    - field.field.node.solution.field_keywords
+    - field.field.node.solution.field_shared_in
+    - field.field.node.solution.field_state
+    - field.field.node.solution.field_topic
+    - field.field.node.solution.group_moderation
+    - field.field.node.solution.landing_page
+    - field.field.node.solution.language
+    - field.field.node.solution.list_related_entities
+    - field.field.node.solution.listing_content
+    - field.field.node.solution.logo
+    - field.field.node.solution.metrics_page
+    - field.field.node.solution.og_audience
+    - field.field.node.solution.owner
+    - field.field.node.solution.process_status
+    - field.field.node.solution.related_solutions
+    - field.field.node.solution.release_number
+    - field.field.node.solution.short_id
+    - field.field.node.solution.site_featured
+    - field.field.node.solution.solution_type
+    - field.field.node.solution.spatial_coverage
+    - field.field.node.solution.translation
+    - node.type.solution
+    - responsive_image.styles.tile
+  module:
+    - field_fallback_formatter
+    - responsive_image
+    - smart_trim
+    - template_suggestion
+    - user
+id: node.solution.carousel
+targetEntityType: node
+bundle: solution
+mode: carousel
+content:
+  abstract:
+    type: field_fallback_formatter
+    label: hidden
+    settings:
+      main_field_formatter_id: string
+      main_field_formatter_settings:
+        link_to_entity: false
+      fallback_field_id: description
+      fallback_field_formatter_id: smart_trim
+      fallback_field_formatter_settings:
+        trim_length: 500
+        trim_type: chars
+        trim_suffix: ...
+        wrap_output: false
+        wrap_class: trimmed
+        more:
+          display_link: false
+          target_blank: false
+          link_trim_only: false
+          class: more-link
+          text: More
+          aria_label: 'Read more about [node:title]'
+        trim_options:
+          text: true
+          trim_zero: false
+          replace_tokens: false
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
+    weight: 1
+    region: content
+  flag_interoperability:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  flag_like:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 4
+    region: content
+  logo:
+    type: responsive_image
+    label: hidden
+    settings:
+      responsive_image_style: tile
+      image_link: ''
+      image_loading:
+        attribute: lazy
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: ''
+    weight: 0
+    region: content
+  read_more:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 3
+    region: content
+hidden:
+  body: true
+  collections: true
+  contact: true
+  content_creation: true
+  description: true
+  distributions: true
+  documentation: true
+  download_total: true
+  eif_perspective: true
+  featured: true
+  field_keywords: true
+  field_shared_in: true
+  field_state: true
+  field_topic: true
+  group_moderation: true
+  landing_page: true
+  langcode: true
+  language: true
+  links: true
+  list_related_entities: true
+  listing_content: true
+  members: true
+  metrics_page: true
+  node_solution_listing_content_inline_facets: true
+  node_solution_listing_content_top: true
+  og_audience: true
+  og_group: true
+  owner: true
+  pinned_in: true
+  process_status: true
+  published_at: true
+  related_solution: true
+  related_solutions: true
+  release_number: true
+  releases_overview: true
+  report: true
+  search_api_excerpt: true
+  share_link: true
+  short_id: true
+  site_featured: true
+  solution_subscribe: true
+  solution_type: true
+  spatial_coverage: true
+  translation: true
+  uri: true

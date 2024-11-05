@@ -453,9 +453,9 @@ Feature:
       | http://joinup.eu/spdx/foo | SPDX licence foo | SPDX-FOO |
       | http://joinup.eu/spdx/bar | SPDX licence bar | SPDX-BAR |
     And licence content:
-      | uri                             | title          | description                             | spdx licence     | legal type                                                            |
-      | http://joinup.eu/licence/foo    | Foo Licence    | Licence details for the foo licence.    | SPDX licence foo | Strong Community, Royalty free, Modify, Governments/EU, Use/reproduce |
-      | http://joinup.eu/licence/bar    | Bar Licence    | Licence details for the bar licence.    | SPDX licence bar | Distribute                                                            |
+      | uri                          | title       | description                          | spdx licence     | legal type                                                            |
+      | http://joinup.eu/licence/foo | Foo Licence | Licence details for the foo licence. | SPDX licence foo | Strong Community, Royalty free, Modify, Governments/EU, Use/reproduce |
+      | http://joinup.eu/licence/bar | Bar Licence | Licence details for the bar licence. | SPDX licence bar | Distribute                                                            |
 
     When I visit "/licence/compare/SPDX-FOO;SPDX-BAR"
     Then I should not see the text "Licence details for the foo licence."

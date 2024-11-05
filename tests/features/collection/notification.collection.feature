@@ -20,7 +20,7 @@ Feature: Notification test for the collection transitions.
       | NC member1     |           | nc_member1@test.com     | NC         | Member1     |
       | NC member2     |           | nc_member2@test.com     | NC         | Member2     |
       | NCS owner      |           | ncs_owner@test.com      | NC         | Owner       |
-    And collections:
+    And collection content:
       | title                  | state            | abstract     | description   | topic             | owner      | contact information        |
       | NC to propose          | draft            | No one cares | No one cares. | Supplier exchange | NC for all | Notificationous absolutous |
       | NC to publish          | proposed         | No one cares | No one cares. | Supplier exchange | NC for all | Notificationous absolutous |
@@ -32,12 +32,10 @@ Feature: Notification test for the collection transitions.
       | NC to archive          | archival request | No one cares | No one cares. | Supplier exchange | NC for all | Notificationous absolutous |
       | NC to delete           | published        | No one cares | No one cares. | Supplier exchange | NC for all | Notificationous absolutous |
       | NC to delete by mod    | published        | No one cares | No one cares. | Supplier exchange | NC for all | Notificationous absolutous |
-    And the following solutions:
-      | title        | collections                          | logo     | state     |
-      # Has only one affiliate.
-      | NC Solution1 | NC to archive                        | logo.png | published |
-      # Has more than one affiliate.
-      | NC Solution2 | NC to request archival,NC to archive | logo.png | published |
+    Given solution content:
+      | title        | collection    | logo     | state     |
+      | NC Solution1 | NC to archive | logo.png | published |
+      | NC Solution2 | NC to archive | logo.png | published |
     And the following solution user memberships:
       | solution     | user      | roles |
       | NC Solution1 | NCS owner | owner |
@@ -145,7 +143,7 @@ Feature: Notification test for the collection transitions.
       | body      | Your proposed collection "NC to publish" has been validated as per your request. |
 
     # Test the 'approve proposed' that was proposed through the 'propose edit' operation.
-    And I go to the homepage of the "NC to propose edit proposed" collection
+    And I go to the homepage of the "NC to propose edit" collection
     And I click "Edit" in the "Entity actions" region
     And I press "Publish"
     Then the email sent to "NC owner" with subject "Your request to edit collection NC to propose edit proposed has been approved." contains the following lines of text:
@@ -180,9 +178,9 @@ Feature: Notification test for the collection transitions.
       | subject   | The collection NC to archive was archived. Your solution was affiliated only to the collection NC to archive, and as a consequence, your solution is not currently affiliated to any other collection. Please verify and take appropriate action. |
       | body      | Since your solution "NC Solution1" was affiliated only with this archived collection, your solution is currently no longer affiliated to any other collection.                                                                                    |
     And the following email should have been sent:
-      | recipient | NCS owner                                                                                                                                                       |
-      | subject   | The collection NC to archive was archived                                                                                                                       |
-      | body      | The "NC to archive" collection, to which your "NC Solution2" solution was affiliated, was recently archived. Please verify the updated details of your solution |
+      | recipient | NCS owner                                                                                                                                                                                                                                         |
+      | subject   | The collection NC to archive was archived. Your solution was affiliated only to the collection NC to archive, and as a consequence, your solution is not currently affiliated to any other collection. Please verify and take appropriate action. |
+      | body      | Since your solution "NC Solution2" was affiliated only with this archived collection, your solution is currently no longer affiliated to any other collection.                                                                                    |
     And the following email should have been sent:
       | recipient | NC member1                                                                                                                   |
       | subject   | The collection NC to archive was archived.                                                                                   |

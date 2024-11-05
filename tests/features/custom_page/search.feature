@@ -5,7 +5,7 @@ Feature: Custom pages enhance search results for their collections/solutions
   I want search results for keywords that match content in my custom pages to include my group
 
   Scenario Outline: Collections and solutions are found when searching for keywords in custom pages
-    Given the following <group>s:
+    Given <group> content:
       | title           | state     |
       | Buddy system    | draft     |
       | Slab allocation | published |
@@ -23,9 +23,9 @@ Feature: Custom pages enhance search results for their collections/solutions
       | Alleviates fragmentation       | Slab allocation | Pre-allocated memory         | published   |
 
     And the following custom page navigation menu structure for the "Buddy system" <group>:
-      | title                          | enabled |
-      | Splitting and coalescing       | yes     |
-      | Reduces memory fragmentation   | no      |
+      | title                        | enabled |
+      | Splitting and coalescing     | yes     |
+      | Reduces memory fragmentation | no      |
     And the following custom page navigation menu structure for the "Slab allocation" <group>:
       | title                          | enabled |
       | Memory initialization overhead | yes     |
@@ -47,7 +47,7 @@ Feature: Custom pages enhance search results for their collections/solutions
 
     # Publish the custom page which is currently unpublished. It should now
     # appear in the search results.
-    When the publication state of the "Memory initialization overhead" custom page is changed to published
+    When the workflow state of the "Memory initialization overhead" content is changed to published
     When I enter "memory" in the search bar and press enter
     Then the page should show only the tiles "Alleviates fragmentation, Memory initialization overhead, Slab allocation"
 
