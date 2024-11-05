@@ -124,7 +124,6 @@ module:
   joinup_sitewide_alert: 0
   joinup_slick: 0
   joinup_solution: 0
-  joinup_sparql: 0
   joinup_stats: 0
   joinup_subscription: 0
   joinup_taxonomy: 0
@@ -193,9 +192,8 @@ module:
   purge_processor_lateruntime: 0
   purge_queuer_coretags: 0
   queue_ui: 0
-  rdf_draft: 0
-  rdf_entity: 0
   rdf_sync: 0
+  rdf_sync_published: 0
   redirect: 0
   replicate: 0
   replicate_actions: 0
@@ -229,7 +227,6 @@ module:
   solution: 0
   sparql_endpoint: 0
   sparql_endpoint_piwik: 0
-  sparql_entity_storage: 0
   state_machine: 0
   state_machine_permissions: 0
   state_machine_revisions: 0

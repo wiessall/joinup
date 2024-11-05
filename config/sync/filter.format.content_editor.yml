@@ -11,7 +11,7 @@ dependencies:
     - image.style.wysiwyg_one_third_width
   module:
     - blazy
-    - collection
+    - joinup_collection
     - editor
     - embed_block
     - image

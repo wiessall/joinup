@@ -22,7 +22,7 @@ Feature: Solutions by licence report
       | Free for all   |
       | Commercial     |
       | Not applicable |
-    And the following solutions:
+    Given solution content:
       | title                 | state     |
       | Solution by licence 1 | published |
       | Solution by licence 2 | published |

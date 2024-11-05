@@ -10,7 +10,6 @@ use Drupal\contact_information\Entity\ContactInformationInterface;
 use Drupal\email_confirmer\EmailConfirmerManagerInterface;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\JoinupGroupHelper;
-use Drupal\sparql_entity_storage\SparqlGraphInterface;
 
 /**
  * Default implementation for 'contact_information.email_confirm' service.
@@ -84,10 +83,10 @@ class ContactInformationEmailConfirm implements ContactInformationEmailConfirmIn
    * {@inheritdoc}
    */
   public function getGroupsUsingContactInfoWithEmail(string $email): array {
-    $storage = $this->entityTypeManager->getStorage('rdf_entity');
+    $storage = $this->entityTypeManager->getStorage('node');
     $contact_ids = $storage->getQuery()
       ->accessCheck(FALSE)
-      ->condition('rid', 'contact_information')
+      ->condition('type', 'contact_information')
       ->condition('email', $email)
       ->execute();
 
@@ -96,21 +95,18 @@ class ContactInformationEmailConfirm implements ContactInformationEmailConfirmIn
       return [];
     }
 
-    $query = $storage->getQuery();
-    $or = $query->orConditionGroup()
-      ->condition('field_ar_contact_information', $contact_ids, 'IN')
-      ->condition('field_is_contact_information', $contact_ids, 'IN');
-
-    return array_values($query
-      ->accessCheck(FALSE)
-      // Allow only published groups.
-      ->graphs([SparqlGraphInterface::DEFAULT])
-      ->condition('rid', array_values(JoinupGroupHelper::GROUP_BUNDLES), 'IN')
-      ->condition($or)
-      // Collections go first.
-      ->sort('rid')
-      ->sort('label')
-      ->execute());
+    return array_values(
+      $storage->getQuery()
+        ->accessCheck(FALSE)
+        // Allow only published groups.
+        ->condition('status', 1)
+        ->condition('type', array_values(JoinupGroupHelper::GROUP_BUNDLES), 'IN')
+        ->condition('contact', $contact_ids, 'IN')
+        // Collections go first.
+        ->sort('type')
+        ->sort('title')
+        ->execute()
+    );
   }
 
   /**

@@ -97,7 +97,7 @@ class FeaturedContentController extends ControllerBase {
    *   The redirect response to the node collection.
    */
   protected function getRedirect(ContentEntityInterface $entity): RedirectResponse {
-    if ($entity->getEntityTypeId() === 'rdf_entity') {
+    if ($entity->getEntityTypeId() === 'node') {
       $redirect = $entity->toUrl();
     }
     else {

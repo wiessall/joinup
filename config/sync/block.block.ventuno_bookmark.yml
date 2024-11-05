@@ -25,12 +25,11 @@ visibility:
     negate: false
     context_mapping:
       node: '@node.node_route_context:node'
-      rdf: '@rdf_entity.rdf_entity_route_context:rdf_entity'
     content:
       node-custom_page: node-custom_page
       node-discussion: node-discussion
       node-document: node-document
       node-event: node-event
       node-news: node-news
-      rdf_entity-collection: rdf_entity-collection
-      rdf_entity-solution: rdf_entity-solution
+      node-collection: node-collection
+      node-solution: node-solution

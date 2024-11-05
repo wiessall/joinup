@@ -14,7 +14,7 @@ use Drupal\csv_serialization\Encoder\CsvEncoder;
 use Drupal\joinup_community_content\CommunityContentHelper;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\JoinupGroupHelper;
-use Drupal\sparql_entity_storage\Driver\Database\sparql\ConnectionInterface;
+use Drupal\rdf_sync\RdfSyncConnectionInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,41 +25,20 @@ use Symfony\Component\HttpFoundation\Response;
 class SubscribersReportController extends ControllerBase {
 
   /**
-   * The SQL database connection.
-   *
-   * @var \Drupal\Core\Database\Connection
-   */
-  protected $sqlConnection;
-
-  /**
-   * The SPARQL database connection.
-   *
-   * @var \Drupal\sparql_entity_storage\Driver\Database\sparql\ConnectionInterface
-   */
-  protected $sparqlConnection;
-
-  /**
-   * The Symfony request stack.
-   *
-   * @var \Symfony\Component\HttpFoundation\RequestStack
-   */
-  protected $requestStack;
-
-  /**
    * Constructs a new SubscribersReportController.
    *
    * @param \Drupal\Core\Database\Connection $sqlConnection
    *   The SQL connection.
-   * @param \Drupal\sparql_entity_storage\Driver\Database\sparql\ConnectionInterface $sparqlConnection
+   * @param \Drupal\rdf_sync\RdfSyncConnectionInterface $sparqlConnection
    *   The SPARQL connection.
    * @param \Symfony\Component\HttpFoundation\RequestStack $requestStack
    *   The request stack.
    */
-  public function __construct(Connection $sqlConnection, ConnectionInterface $sparqlConnection, RequestStack $requestStack) {
-    $this->sqlConnection = $sqlConnection;
-    $this->sparqlConnection = $sparqlConnection;
-    $this->requestStack = $requestStack;
-  }
+  public function __construct(
+    protected Connection $sqlConnection,
+    protected RdfSyncConnectionInterface $sparqlConnection,
+    protected RequestStack $requestStack,
+  ) {}
 
   /**
    * {@inheritdoc}
@@ -67,7 +46,7 @@ class SubscribersReportController extends ControllerBase {
   public static function create(ContainerInterface $container): self {
     return new static(
       $container->get('database'),
-      $container->get('sparql.endpoint'),
+      $container->get('rdf_sync.connection'),
       $container->get('request_stack')
     );
   }
@@ -132,9 +111,9 @@ class SubscribersReportController extends ControllerBase {
 
     // Turn the group labels into links.
     array_walk($data, function (array &$row): void {
-      $route_params = ['rdf_entity' => $row['entity_id']];
+      $route_params = ['node' => $row['entity_id']];
       $row['label'] = new FormattableMarkup('<a href=":uri">@label</a>', [
-        ':uri' => (new Url('entity.rdf_entity.canonical', $route_params))->toString(),
+        ':uri' => (new Url('entity.node.canonical', $route_params))->toString(),
         '@label' => $row['label'],
       ]);
       unset($row['entity_id']);
@@ -160,15 +139,15 @@ class SubscribersReportController extends ControllerBase {
   /**
    * Returns a subscribers report for a single group.
    *
-   * @param \Drupal\joinup_group\Entity\GroupInterface $rdf_entity
+   * @param \Drupal\joinup_group\Entity\GroupInterface $node
    *   The group for which to return the report.
    *
    * @return array[]
    *   A render array containing subscriber data.
    */
-  public function groupReport(GroupInterface $rdf_entity): array {
-    $data = $this->getSubscriberData($rdf_entity);
-    $group_data = $data[$rdf_entity->id()] ?? NULL;
+  public function groupReport(GroupInterface $node): array {
+    $data = $this->getSubscriberData($node);
+    $group_data = $data[$node->id()] ?? NULL;
 
     if (!empty($group_data)) {
       $rows = [
@@ -248,12 +227,12 @@ SQL;
 
     // Prepare the data array with empty values to be filled in.
     $data = array_fill_keys(array_keys($subscribers), [
-      'label' => $group ? $group->label() : '',
-      'bundle' => $group ? $group->bundle() : '',
+      'label' => $group?->label() ?: '',
+      'bundle' => $group?->bundle() ?: '',
       'subscribers' => 0,
       'solution' => 0,
     ] + array_fill_keys(CommunityContentHelper::BUNDLES, 0));
-    $data = NestedArray::mergeDeep($data, $subscribers);
+    $data = NestedArray::mergeDeepArray([$data, $subscribers], TRUE);
 
     // Retrieve the number of subscribers by bundle.
     $query = <<<SQL
@@ -295,22 +274,15 @@ SQL;
     $info = [];
 
     foreach (JoinupGroupHelper::GROUP_BUNDLES as $bundle) {
-      $rdf_type = $bundle === 'collection' ? 'http://www.w3.org/ns/dcat#Catalog' : 'http://www.w3.org/ns/dcat#Dataset';
-      $query = <<<SPARQL
-SELECT ?entity_id ?label
-FROM <http://joinup.eu/$bundle/published>
-WHERE {
-  ?entity_id a <$rdf_type> .
-  ?entity_id <http://purl.org/dc/terms/title> ?label .
-}
-ORDER BY ASC(?label)
-SPARQL;
-
-      foreach ($this->sparqlConnection->query($query) as $result) {
-        $info[$result->entity_id->getUri()] = [
-          $result->label->getValue(),
-          $bundle,
-        ];
+      $query = <<<SQL
+SELECT n.nid as entity_id, n.title as label
+FROM {node_field_data} n
+WHERE n.type = :bundle
+ORDER BY n.title ASC;
+SQL;
+      $result = $this->sqlConnection->query($query, [':bundle' => $bundle]);
+      foreach ($result as $row) {
+        $info[$row->entity_id] = [$row->label, $bundle];
       }
     }
     return $info;

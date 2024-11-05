@@ -6,7 +6,6 @@ namespace Drupal\joinup_search\Plugin\search_api\processor;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\node\NodeInterface;
-use Drupal\rdf_entity\RdfInterface;
 use Drupal\search_api\IndexInterface;
 use Drupal\search_api\Processor\ProcessorPluginBase;
 use Drupal\state_machine_revisions\RevisionManagerInterface;
@@ -77,9 +76,8 @@ class JoinupEntityLatestRevision extends ProcessorPluginBase {
    * {@inheritdoc}
    */
   public static function supportsIndex(IndexInterface $index) {
-    $supported_entity_types = ['node', 'rdf_entity'];
     foreach ($index->getDatasources() as $datasource) {
-      if (in_array($datasource->getEntityTypeId(), $supported_entity_types)) {
+      if ($datasource->getEntityTypeId() === 'node') {
         return TRUE;
       }
     }
@@ -97,18 +95,6 @@ class JoinupEntityLatestRevision extends ProcessorPluginBase {
       if ($object instanceof NodeInterface) {
         if (!$this->revisionManager->isLatestRevision($object)) {
           $latest = $this->revisionManager->loadLatestRevision($object);
-          if (!empty($latest)) {
-            $original_object->setValue($latest);
-            $item->setOriginalObject($original_object);
-            $items[$item_id] = $item;
-          }
-        }
-      }
-      elseif ($object instanceof RdfInterface) {
-        if ($object->isPublished()) {
-          /** @var \Drupal\sparql_entity_storage\SparqlEntityStorageInterface $sparql_storage */
-          $sparql_storage = $this->entityTypeManager->getStorage('rdf_entity');
-          $latest = $sparql_storage->load($object->id(), ['draft']);
           if (!empty($latest)) {
             $original_object->setValue($latest);
             $item->setOriginalObject($original_object);

@@ -65,22 +65,22 @@ final class WorkflowOgEventSubscriber implements EventSubscriberInterface {
   public function contactInformationPermissionProvider(PermissionEventInterface $event): void {
     $permissions = [
       new GroupContentOperationPermission([
-        'name' => 'create contact_information rdf_entity',
+        'name' => 'create contact_information content',
         'title' => $this->t('Create contact information'),
-        'entityType' => 'rdf_entity',
+        'entityType' => 'node',
         'bundle' => 'contact_information',
         // Special permissions get a different operation other than the usual
         // CRUD operations because otherwise they would interfere with the CRUD
         // operations of other bundles.
-        'operation' => 'create contact_information rdf_entity',
+        'operation' => 'create contact_information content',
         'owner' => TRUE,
       ]),
       new GroupContentOperationPermission([
-        'name' => 'delete any contact_information rdf_entity',
+        'name' => 'delete any contact_information content',
         'title' => $this->t('Delete contact information'),
-        'entityType' => 'rdf_entity',
+        'entityType' => 'node',
         'bundle' => 'contact_information',
-        'operation' => 'delete any contact_information rdf_entity',
+        'operation' => 'delete any contact_information content',
       ]),
     ];
 

@@ -5,17 +5,12 @@ Feature:
   All semantic assets need to have a persistent URI
 
   Scenario: Entities should have distinct URI pattern
-    Given the following collection:
-      | title | Persistent collection                                          |
-      | logo  | logo.png                                                       |
-      | state | published                                                      |
-      | uri   | http://data.europa.eu/w21/37b8103e-26e5-4c81-8ce5-43ced02ff7d0 |
-    And the following solution:
-      | title       | Persistent solution                                            |
-      | collection  | Persistent collection                                          |
-      | description | Persistent solution description                                |
-      | state       | published                                                      |
-      | uri         | http://data.europa.eu/w21/ffb0ffc9-7704-45d3-95b3-42706b6320e5 |
+    Given collection content:
+      | title                 | logo     | state     | uri                                                            |
+      | Persistent collection | logo.png | published | http://data.europa.eu/w21/37b8103e-26e5-4c81-8ce5-43ced02ff7d0 |
+    And solution content:
+      | title               | collection            | description                     | state     | uri                                                            |
+      | Persistent solution | Persistent collection | Persistent solution description | published | http://data.europa.eu/w21/ffb0ffc9-7704-45d3-95b3-42706b6320e5 |
     And release content:
       | title              | release number | release notes      | is version of       | state     | uri                                                            |
       | Persistent release | 23             | Persistent release | Persistent solution | published | http://data.europa.eu/w21/98004ec9-62f3-4734-a1b6-af7e4838b09c |
@@ -87,7 +82,7 @@ Feature:
 
     # Our semantic content has a persistent canonical path at Europe's
     # official data portal: "http://data.europa.eu/w21/{uuid}". The data portal
-    # links back to the Joinup servers.
+    # links back to the Interoperable Europe Portal servers.
     Given I am on "data/w21/ffb0ffc9-7704-45d3-95b3-42706b6320e5"
     Then I should see the heading "Persistent solution"
     And I should see "Persistent solution description"

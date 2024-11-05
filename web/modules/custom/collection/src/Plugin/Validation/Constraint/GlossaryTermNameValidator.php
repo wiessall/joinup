@@ -17,21 +17,12 @@ use Symfony\Component\Validator\ConstraintValidator;
 class GlossaryTermNameValidator extends ConstraintValidator implements ContainerInjectionInterface {
 
   /**
-   * The entity type manager service.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
-
-  /**
    * Constructs a new constraint validator instance.
    *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity type manager service.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager) {
-    $this->entityTypeManager = $entity_type_manager;
-  }
+  public function __construct(protected EntityTypeManagerInterface $entityTypeManager) {}
 
   /**
    * {@inheritdoc}
@@ -43,15 +34,14 @@ class GlossaryTermNameValidator extends ConstraintValidator implements Container
   /**
    * {@inheritdoc}
    */
-  public function validate($items, Constraint $constraint): void {
-    /** @var \Drupal\Core\Field\FieldItemListInterface $items */
-    if ($items->isEmpty()) {
+  public function validate($value, Constraint $constraint): void {
+    if ($value->isEmpty()) {
       return;
     }
 
-    $glossary_term = $items->getEntity();
-    $field_definition = $items->getFieldDefinition();
-    if (!$glossary_term instanceof GlossaryTermInterface || $field_definition->getName() !== 'title') {
+    $glossaryTerm = $value->getEntity();
+    $fieldDefinition = $value->getFieldDefinition();
+    if (!$glossaryTerm instanceof GlossaryTermInterface || $fieldDefinition->getName() !== 'title') {
       throw new \InvalidArgumentException("The 'GlossaryTermName' can be used only on field 'title' of glossary terms.");
     }
 
@@ -59,27 +49,27 @@ class GlossaryTermNameValidator extends ConstraintValidator implements Container
 
     $query = $storage->getQuery()->accessCheck(FALSE)
       ->condition('type', 'glossary')
-      ->condition('og_audience', $glossary_term->get('og_audience')->target_id);
-    if ($glossary_term_id = $glossary_term->id()) {
+      ->condition('og_audience', $glossaryTerm->get('og_audience')->target_id);
+    if ($glossaryTermId = $glossaryTerm->id()) {
       // On update, filter out the current entity.
-      $query->condition('nid', $glossary_term_id, '<>');
+      $query->condition('nid', $glossaryTermId, '<>');
     }
     $nids = array_values($query->execute());
 
     $synonyms = [];
-    foreach ($storage->loadMultiple($nids) as $other_glossary_term) {
-      foreach ($other_glossary_term->get('field_glossary_synonyms') as $item) {
-        // We do a case insensitive match.
-        $synonyms[\mb_strtolower($item->value)] = $other_glossary_term;
+    foreach ($storage->loadMultiple($nids) as $otherGlossaryTerm) {
+      foreach ($otherGlossaryTerm->get('field_glossary_synonyms') as $item) {
+        // We do a case-insensitive match.
+        $synonyms[\mb_strtolower($item->value)] = $otherGlossaryTerm;
       }
     }
 
-    $lowercased_label = \mb_strtolower($glossary_term->label());
-    if (isset($synonyms[$lowercased_label])) {
+    $lowerCaseLabel = \mb_strtolower($glossaryTerm->label());
+    if (isset($synonyms[$lowerCaseLabel])) {
       $this->context->addViolation($constraint->message, [
-        '%name' => $glossary_term->label(),
-        ':url' => $synonyms[$lowercased_label]->toUrl()->toString(),
-        '@glossary' => $synonyms[$lowercased_label]->label(),
+        '%name' => $glossaryTerm->label(),
+        ':url' => $synonyms[$lowerCaseLabel]->toUrl()->toString(),
+        '@glossary' => $synonyms[$lowerCaseLabel]->label(),
       ]);
     }
   }

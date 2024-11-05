@@ -3,10 +3,10 @@ langcode: en
 status: true
 dependencies:
   config:
-    - rdf_entity.rdfentity.solution
+    - node.type.solution
   module:
     - joinup_stats
-    - rdf_entity
+    - node
 third_party_settings:
   joinup_stats:
     matomo_method: ''
@@ -18,7 +18,7 @@ id: solution_settings
 label: 'Solution settings'
 description: ''
 mapping:
-  rdf_entity:
+  node:
     solution:
       field_name: related_solution
       auto_create: false

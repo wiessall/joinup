@@ -5,14 +5,14 @@ Feature: Pinning entities inside collections
   So that important entities has more visibility
 
   Background:
-    Given the following collections:
+    Given collection content:
       | title         | state     |
       | Orange Wrench | published |
       | Cloudy Beam   | published |
       | Green Wrench  | published |
-    And the following solution:
-      | title | Space Silver |
-      | state | published    |
+    And solution content:
+      | title        | state     |
+      | Space Silver | published |
     And users:
       | Username        | E-mail                      |
       | Rozanne Minett  | rozanne.minett@example.com  |
@@ -80,17 +80,17 @@ Feature: Pinning entities inside collections
     Then I should see the success message "<label> Very important has been unpinned in the collection Orange Wrench."
     And I should see the following tiles in the correct order:
       | What is the HEX for orange? |
-      | Useful information         |
-      | Very important             |
+      | Useful information          |
+      | Very important              |
     And I should see the contextual link "Pin" in the "Very important" tile
     But I should not see the contextual link "Unpin" in the "Very important" tile
 
     When I click the contextual link "Pin" in the "Useful information" tile
     Then I should see the success message "<label> Useful information has been pinned in the collection Orange Wrench."
     And I should see the following tiles in the correct order:
-      | Useful information         |
+      | Useful information          |
       | What is the HEX for orange? |
-      | Very important             |
+      | Very important              |
     And I should see the contextual link "Unpin" in the "Useful information" tile
     But I should not see the contextual link "Pin" in the "Useful information" tile
 
@@ -100,9 +100,9 @@ Feature: Pinning entities inside collections
     And I should not see the contextual links "Pin, Unpin" in the "Very important" tile
 
     Examples:
-      | content type | label      |
-      | event        | Event      |
-      | document     | Document   |
+      | content type | label    |
+      | event        | Event    |
+      | document     | Document |
 
   Scenario: Facilitators can pin and unpin community news content inside their collections.
     Given news content:
@@ -172,10 +172,10 @@ Feature: Pinning entities inside collections
       | Where can I find this wrench? | Orange Wrench | published | no     | 2017-11-20 |
       | Any thoughts about blue?      | Orange Wrench | published | yes    | 2017-10-03 |
       | Multi stratus beaming         | Cloudy Beam   | published | no     | 2017-11-05 |
-    And solutions:
-      | title            | collection                 | state     | pinned in     | creation date |
-      | Wrench catalogue | Orange Wrench              | published | Orange Wrench | 2017-10-12    |
-      | Orange estimator | Orange Wrench, Cloudy Beam | published |               | 2017-10-02    |
+    Given solution content:
+      | title            | collection    | state     | pinned in     | creation date | shared on     |
+      | Wrench catalogue | Orange Wrench | published | Orange Wrench | 2017-10-12    |               |
+      | Orange estimator | Cloudy Beam   | published |               | 2017-10-02    | Orange Wrench |
 
     When I am an anonymous user
     And I go to the homepage of the "Orange Wrench" collection
@@ -211,7 +211,7 @@ Feature: Pinning entities inside collections
     # Facilitators of the collection the content belongs to can pin/unpin.
     When I am logged in as "Rozanne Minett"
     And I go to the homepage of the "Orange Wrench" collection
-    Then I should see the contextual link "Pin" in the "Orange estimator" tile
+    Then I should not see the contextual link "Pin" in the "Orange estimator" tile
     And I should see the contextual link "Unpin" in the "Wrench catalogue" tile
     But I should not see the contextual link "Unpin" in the "Orange estimator" tile
     And I should not see the contextual link "Pin" in the "Wrench catalogue" tile
@@ -233,16 +233,6 @@ Feature: Pinning entities inside collections
       | Orange estimator              |
     And I should see the contextual link "Pin" in the "Wrench catalogue" tile
     But I should not see the contextual link "Unpin" in the "Wrench catalogue" tile
-
-    When I click the contextual link "Pin" in the "Orange estimator" tile
-    Then I should see the success message "Solution Orange estimator has been pinned in the collection Orange Wrench."
-    And I should see the following tiles in the correct order:
-      | Any thoughts about blue?      |
-      | Orange estimator              |
-      | Where can I find this wrench? |
-      | Wrench catalogue              |
-    And I should see the contextual link "Unpin" in the "Orange estimator" tile
-    But I should not see the contextual link "Pin" in the "Orange estimator" tile
 
     # Pinning a solution in a collection shouldn't affect the other collections it is affiliated with.
     When I go to the homepage of the "Cloudy Beam" collection
@@ -267,14 +257,14 @@ Feature: Pinning entities inside collections
 
   @javascript
   Scenario: Last update time of a solution is not affected by (un)pinning.
-    Given the following collections:
+    Given collection content:
       | title              | state     | creation date | modification date |
       | Orange Screwdriver | published | 2018-10-15    | 2019-10-15T23:03  |
       | Green Screwdriver  | published | 2018-11-05    | 2019-11-05T23:03  |
     Given discussion content:
       | title                             | collection         | state     | pinned | created    | changed    |
       | What kind of screwdriver is this? | Orange Screwdriver | published | no     | 2017-11-20 | 2018-11-20 |
-    Given solutions:
+    Given solution content:
       | title                    | collection         | state     | pinned in          | creation date | modification date |
       | Drop forged screwdrivers | Orange Screwdriver | published | Orange Screwdriver | 2017-10-12    | 2018-10-12T23:03  |
     And the following collection user memberships:
@@ -360,41 +350,3 @@ Feature: Pinning entities inside collections
       | event        |
       | document     |
       | news         |
-
-  @javascript
-  Scenario: Pinned solutions tiles should show a visual cue only in their collection homepage.
-    Given solutions:
-      | title             | collection                 | state     | pinned in     |
-      | Positive sunshine | Orange Wrench              | published | Orange Wrench |
-      # Note: it is not yet possible to affiliate a solution to multiple collections from the UI.
-      | Fast lightning    | Orange Wrench, Cloudy Beam | published | Cloudy Beam   |
-
-    When I go to the homepage of the "Orange Wrench" collection
-    Then the "Positive sunshine" tile should be marked as pinned
-    But the "Fast lightning" tile should not be marked as pinned
-
-    When I go to the homepage of the "Cloudy Beam" collection
-    Then the "Fast lightning" tile should be marked as pinned
-
-    When I am at "/search"
-    Then the "Positive sunshine" tile should not be marked as pinned
-    And the "Fast lightning" tile should not be marked as pinned
-
-    # Verify that changes in the pinned state are reflected to the tile.
-    When I am logged in as "Rozanne Minett"
-    And I go to the homepage of the "Orange Wrench" collection
-    And I click the contextual link "Pin" in the "Fast lightning" tile
-    Then the "Fast lightning" tile should be marked as pinned
-    And the "Positive sunshine" tile should be marked as pinned
-
-    When I click the contextual link "Unpin" in the "Positive sunshine" tile
-    Then the "Positive sunshine" tile should not be marked as pinned
-    And the "Fast lightning" tile should be marked as pinned
-
-    # Unpinning a solution from one of the collections it is affiliated with
-    # should not affect the state in other collections.
-    When I go to the homepage of the "Cloudy Beam" collection
-    And I click the contextual link "Unpin" in the "Fast lightning" tile
-    Then the "Fast lightning" tile should not be marked as pinned
-    When I go to the homepage of the "Orange Wrench" collection
-    Then the "Fast lightning" tile should be marked as pinned

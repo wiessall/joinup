@@ -6,10 +6,9 @@ namespace Drupal\joinup_distribution\EventSubscriber;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Plugin\Context\ContextProviderInterface;
-use Drupal\Core\Url;
 use Drupal\joinup_group\Event\AddGroupContentEvent;
 use Drupal\joinup_group\EventSubscriber\AddGroupContentEventSubscriberBase;
-use Drupal\solution\Entity\SolutionInterface;
+use Drupal\joinup_solution\Entity\SolutionInterface;
 
 /**
  * Subscribes to Joinup Group events.
@@ -56,32 +55,6 @@ class DistributionGroupSubscriber extends AddGroupContentEventSubscriberBase {
   }
 
   /**
-   * Add a single link.
-   *
-   * @todo We are overriding the route by providing an alternative route name
-   *   for releases that are now nodes. This should be removed in ISAICP-8572.
-   *
-   * @param string $label
-   *   The link label.
-   * @param array $route_parameters
-   *   The link URL route parameters.
-   * @param \Drupal\joinup_group\Event\AddGroupContentEvent $event
-   *   The event.
-   */
-  protected function addOneLink(string $label, array $route_parameters, AddGroupContentEvent $event): void {
-    $route_name = isset($route_parameters['node']) ? 'joinup_distribution.group.add' : $this->getRouteName();
-    $page_url = Url::fromRoute($route_name, $route_parameters);
-    if ($page_url->access()) {
-      $event->addItem([
-        '#type' => 'link',
-        '#title' => $this->t('Add @label', ['@label' => $label]),
-        '#url' => $page_url,
-        '#attributes' => ['class' => ['circle-menu__link', 'nav-link']],
-      ]);
-    }
-  }
-
-  /**
    * {@inheritdoc}
    */
   protected function getBundles(): array {
@@ -96,8 +69,7 @@ class DistributionGroupSubscriber extends AddGroupContentEventSubscriberBase {
    * {@inheritdoc}
    */
   protected function getRouteName(): string {
-    // @todo This should be changed to the generic route in ISAICP-8572.
-    return 'joinup_distribution.distribution.add';
+    return 'joinup_distribution.group.add';
   }
 
   /**
@@ -105,7 +77,7 @@ class DistributionGroupSubscriber extends AddGroupContentEventSubscriberBase {
    */
   protected function getRouteParameters(AddGroupContentEvent $event, string $entityTypeId, string $bundleId): array {
     return [
-      'rdf_entity' => $event->getGroup()->id(),
+      $event->getGroup()->getEntityTypeId() => $event->getGroup()->id(),
     ];
   }
 

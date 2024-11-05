@@ -95,7 +95,7 @@ class SolutionsByLicenceForm extends FormBase {
       }
 
       $licence = $this->entityTypeManager->getStorage('node')->load($item->field_licence_target_id);
-      $solution = $this->entityTypeManager->getStorage('rdf_entity')->load($item->og_audience_target_id);
+      $solution = $this->entityTypeManager->getStorage('node')->load($item->og_audience_target_id);
 
       if (!$licence || !$solution) {
         continue;

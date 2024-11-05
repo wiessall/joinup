@@ -13,7 +13,7 @@ use Drupal\meta_entity\Entity\MetaEntity;
  * @ViewsArgumentValidator(
  *   id = "joinup_group_announcements_enabled",
  *   title = @Translation("Group announcements"),
- *   entity_type = "rdf_entity",
+ *   entity_type = "node",
  * )
  */
 class GroupAnnouncementsEnabledValidator extends JoinupGroupUserPermissionValidator {
@@ -22,7 +22,7 @@ class GroupAnnouncementsEnabledValidator extends JoinupGroupUserPermissionValida
    * {@inheritdoc}
    */
   public function validateArgument($arg): bool {
-    if (!$arg || !($group = $this->entityTypeManager->getStorage('rdf_entity')->load($arg)) || !$group instanceof GroupInterface || !$group->isPublished()) {
+    if (!$arg || !($group = $this->entityTypeManager->getStorage('node')->load($arg)) || !$group instanceof GroupInterface || !$group->isPublished()) {
       return FALSE;
     }
     $settings = MetaEntity::loadOrCreate("{$group->bundle()}_settings", $group);

@@ -1,4 +1,4 @@
-uuid: 0b83cd2c-ef03-44e0-9222-c94cc5114e34
+uuid: 2130809c-61dc-4dc8-b162-1482c9106248
 langcode: en
 status: true
 dependencies: {  }
@@ -9,7 +9,7 @@ min_count: 1
 missing: false
 missing_label: others
 url_alias: solution_content_bundle
-facet_source_id: 'search_api_field:rdf_entity.solution.field_is_content'
+facet_source_id: 'search_api_field:node.solution.listing_content'
 field_identifier: entity_bundle
 query_operator: or
 hard_limit: 0
@@ -36,13 +36,13 @@ processor_configs:
   active_widget_order:
     processor_id: active_widget_order
     weights:
-      sort: -10
+      sort: 20
     settings:
       sort: ASC
   aggregated_entity_bundle_label:
     processor_id: aggregated_entity_bundle_label
     weights:
-      build: 5
+      build: -2
     settings:
       plural_count_label:
         enabled: true
@@ -50,30 +50,30 @@ processor_configs:
   count_limit:
     processor_id: count_limit
     weights:
-      build: -10
+      build: -4
     settings:
       minimum_items: 1
       maximum_items: null
   count_widget_order:
     processor_id: count_widget_order
     weights:
-      sort: -10
+      sort: 30
     settings:
       sort: DESC
   display_value_widget_order:
     processor_id: display_value_widget_order
     weights:
-      sort: -10
+      sort: 40
     settings:
       sort: ASC
   hierarchy_processor:
     processor_id: hierarchy_processor
     weights:
-      build: 100
+      build: 10
     settings: {  }
   url_processor_handler:
     processor_id: url_processor_handler
     weights:
-      pre_query: -10
-      build: -10
+      pre_query: 50
+      build: -3
     settings: {  }

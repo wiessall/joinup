@@ -7,6 +7,7 @@ namespace Drupal\joinup_distribution\Plugin\search_api\processor;
 use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\File\FileUrlGeneratorInterface;
+use Drupal\joinup_distribution\Entity\DistributionInterface;
 use Drupal\joinup_distribution\Entity\DistributionsParentInterface;
 use Drupal\search_api\IndexInterface;
 use Drupal\search_api\Item\ItemInterface;
@@ -74,7 +75,7 @@ class IndexDistributionData extends ProcessorPluginBase {
    */
   public static function supportsIndex(IndexInterface $index): bool {
     foreach ($index->getDatasources() as $datasource) {
-      if ($datasource->getEntityTypeId() === 'rdf_entity') {
+      if ($datasource->getEntityTypeId() === 'node') {
         return TRUE;
       }
     }
@@ -103,7 +104,6 @@ class IndexDistributionData extends ProcessorPluginBase {
    *   object could not be loaded.
    */
   protected function appendDistributionData(ItemInterface $item): void {
-    /** @var \Drupal\rdf_entity\RdfInterface $entity */
     $entity = $item->getOriginalObject()->getValue();
 
     // Only solutions and releases should receive distribution data.
@@ -117,15 +117,15 @@ class IndexDistributionData extends ProcessorPluginBase {
     }
 
     // Get the parent Search API field.
-    $sapiFieldName = $entity->bundle() === 'release' ? 'description_processed' : 'field_is_description';
-    $sapiField = $item->getField($sapiFieldName);
+    $sapiField = $item->getField('description');
     if (empty($sapiField)) {
       return;
     }
 
     // Iterate over all distributions and append their data to Search API field.
-    /** @var \Drupal\rdf_entity\RdfInterface $distribution */
     foreach ($this->entityTypeManager->getStorage('node')->loadMultiple($distributionIds) as $distribution) {
+      assert($distribution instanceof DistributionInterface);
+
       // Add the distribution title.
       $sapiField->addValue($distribution->label());
 

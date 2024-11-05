@@ -1,0 +1,28 @@
+uuid: b089523c-e724-4bd3-bae8-a956e5545879
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_topic
+    - node.type.collection
+    - taxonomy.vocabulary.topic
+id: node.collection.field_topic
+field_name: field_topic
+entity_type: node
+bundle: collection
+label: Topic
+description: 'You can select multiple topics using the "ctrl" key on your keyboard.'
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: grouped_taxonomy_term_selection
+  handler_settings:
+    target_bundles:
+      topic: topic
+    sort:
+      field: _none
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference
