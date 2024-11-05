@@ -1,0 +1,28 @@
+uuid: 5fa10205-519e-4705-9e74-7c993efc8f31
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.documentation
+    - node.type.solution
+  module:
+    - file_url
+id: node.solution.documentation
+field_name: documentation
+entity_type: node
+bundle: solution
+label: Documentation
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'file_url_default:file'
+  handler_settings: {  }
+  file_directory: 'solution/documentation/[date:custom:Y]-[date:custom:m]'
+  file_extensions: 'txt doc docx pdf'
+  max_filesize: ''
+  description_field: false
+  description_field_required: false
+field_type: file_url

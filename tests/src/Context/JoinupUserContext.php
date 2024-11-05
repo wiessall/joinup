@@ -253,24 +253,4 @@ class JoinupUserContext extends RawDrupalContext {
     ])->toString();
   }
 
-  /**
-   * Asserts list of users with the given name doesn't exist.
-   *
-   * Table format:
-   * | name  |
-   * | user1 |
-   * | user2 |
-   * | user3 |
-   *
-   * @param \Behat\Gherkin\Node\TableNode $usersTable
-   *   A table containing the usernames to check.
-   *
-   * @Then the following users should be canceled:
-   */
-  public function assertUsersAreCanceled(TableNode $usersTable): void {
-    foreach ($usersTable->getHash() as $userData) {
-      $this->assertUserStatus($userData['name'], 'cancelled');
-    }
-  }
-
 }

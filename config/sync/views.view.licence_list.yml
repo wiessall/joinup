@@ -214,6 +214,7 @@ display:
         options:
           view_modes:
             'entity:node':
+              collection: default
               custom_page: default
               discussion: default
               distribution: default
@@ -222,8 +223,6 @@ display:
               licence: view_mode_search_list_item
               news: default
               release: default
-            'entity:rdf_entity':
-              collection: default
               solution: default
             'entity:taxonomy_term':
               eif_conceptual_model: default
@@ -298,6 +297,7 @@ display:
         options:
           view_modes:
             'entity:node':
+              collection: default
               custom_page: default
               discussion: default
               distribution: default
@@ -306,8 +306,6 @@ display:
               licence: compatibility_check
               news: default
               release: default
-            'entity:rdf_entity':
-              collection: default
               solution: default
             'entity:taxonomy_term':
               eif_conceptual_model: default

@@ -3,10 +3,18 @@ langcode: en
 status: true
 dependencies:
   config:
-    - rdf_entity.rdfentity.solution
+    - node.type.solution
   module:
-    - rdf_entity
+    - joinup_stats
+    - node
+    - rdf_sync
 third_party_settings:
+  joinup_stats:
+    matomo_method: ''
+    parameter_name: ''
+    parameter_method: ''
+    period: 7
+    type: null
   rdf_sync:
     type: 'http://data.europa.eu/eif/adms/PerspectiveEIF'
     uri_plugin: eif_perspective
@@ -19,7 +27,7 @@ id: eif_perspective
 label: 'EIF perspective'
 description: 'Holds settings related to the EIF toolbox.'
 mapping:
-  rdf_entity:
+  node:
     solution:
       field_name: eif_perspective
       auto_create: false

@@ -88,7 +88,7 @@ class JoinupGroupQueueWorker extends QueueWorkerBase implements ContainerFactory
    */
   public function processItem($data): void {
     $group = $this->entityTypeManager
-      ->getStorage('rdf_entity')
+      ->getStorage('node')
       ->load($data['entity_id']);
 
     if (!$group) {

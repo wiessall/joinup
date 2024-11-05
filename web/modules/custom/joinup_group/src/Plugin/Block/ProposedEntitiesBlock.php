@@ -21,13 +21,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class ProposedEntitiesBlock extends BlockBase implements ContainerFactoryPluginInterface {
 
   /**
-   * The entity type manager service.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
-
-  /**
    * Constructs a new ProposedEntitiesBlock object.
    *
    * @param array $configuration
@@ -36,18 +29,17 @@ class ProposedEntitiesBlock extends BlockBase implements ContainerFactoryPluginI
    *   The plugin_id for the plugin instance.
    * @param string $plugin_definition
    *   The plugin implementation definition.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
    *   The entity type manager service.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, protected EntityTypeManagerInterface $entityTypeManager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
-    $this->entityTypeManager = $entity_type_manager;
   }
 
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): self {
     return new static(
       $configuration,
       $plugin_id,
@@ -86,25 +78,19 @@ class ProposedEntitiesBlock extends BlockBase implements ContainerFactoryPluginI
    *   An array of rows to render.
    *
    * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
-   *   Thrown if the RDF Entity entity type definition is invalid.
+   *   Thrown if the Node entity type definition is invalid.
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
-   *   Thrown if the RDF Entity entity type is not defined.
+   *   Thrown if the Node entity type is not defined.
    */
   protected function getRows(): array {
-    /** @var \Drupal\sparql_entity_storage\SparqlEntityStorage $storage */
-    $storage = $this->entityTypeManager->getStorage('rdf_entity');
-    $query = $storage->getQuery('OR')->accessCheck(FALSE);
-    $solution_sub_condition = $query->andConditionGroup();
-    $solution_sub_condition->condition('rid', 'solution');
-    $solution_sub_condition->condition('field_is_state', 'proposed');
-    $collection_sub_condition = $query->andConditionGroup();
-    $collection_sub_condition->condition('rid', 'collection');
-    $collection_sub_condition->condition('field_ar_state', 'proposed');
-    $query->condition($solution_sub_condition);
-    $query->condition($collection_sub_condition);
+    $storage = $this->entityTypeManager->getStorage('node');
+    $query = $storage->getQuery()
+      ->accessCheck(FALSE)
+      ->condition('type', ['solution', 'collection'], 'IN')
+      ->condition('field_state', 'proposed')
+      ->sort('created', 'DESC');
     $results = $query->execute();
-
-    $entities = $storage->loadMultiple($results, ['draft']);
+    $entities = $storage->loadMultiple($results);
 
     $rows = [];
     foreach ($entities as $entity) {
@@ -122,8 +108,8 @@ class ProposedEntitiesBlock extends BlockBase implements ContainerFactoryPluginI
    * {@inheritdoc}
    */
   public function getCacheTags(): array {
-    $rdf_type = $this->entityTypeManager->getStorage('rdf_entity')->getEntityType();
-    return Cache::mergeTags(parent::getCacheTags(), $rdf_type->getListCacheTags());
+    $nodeType = $this->entityTypeManager->getStorage('node')->getEntityType();
+    return Cache::mergeTags(parent::getCacheTags(), $nodeType->getListCacheTags());
   }
 
 }

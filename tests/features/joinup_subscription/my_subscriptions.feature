@@ -56,7 +56,7 @@ Feature: My subscriptions
 
   @javascript
   Scenario: Manage my subscriptions
-    Given collections:
+    Given collection content:
       | title          | state     | abstract                                                       |
       | Alpha Centauri | published | A triple star system at a distance of 4.3 light years.         |
       | Barnard's Star | draft     | A low mass red dwarf at around 6 light years distance.         |
@@ -74,10 +74,11 @@ Feature: My subscriptions
     And I click "My subscriptions"
     Then I should see the heading "My subscriptions"
     And I should see the heading "Collection"
-    And I should see the text "No collection memberships yet. Join one or more collections to subscribe to their content!"
+    # The default collection Joinup is there.
+    # @see \joinup_test_install().
+    And I should see the text "Joinup" in the "Content" region
     And I should see the heading "Solution"
     And I should see the text "No solution memberships yet. Join one or more solutions to subscribe to their content!"
-    But I should not see the link "Unsubscribe from all"
     And I should not see the text "Alpha Centauri"
 
     # Log in as a user that is a member of 3 collections. The subscriptions for
@@ -187,9 +188,9 @@ Feature: My subscriptions
 
   @javascript
   Scenario Outline: Change the notification frequency of my digests
-    Given collection:
-      | title | Malicious plans |
-      | state | published       |
+    Given collection content:
+      | title           | state     |
+      | Malicious plans | published |
     And the following collection user memberships:
       | collection      | user             |
       | Malicious plans | Auric Goldfinger |
@@ -241,7 +242,7 @@ Feature: My subscriptions
   # checked after save.
   Scenario: Regression test "My subscriptions"
 
-    Given the following collections:
+    Given collection content:
       | title     | state     |
       | Fireblade | published |
       | Lopitopes | published |

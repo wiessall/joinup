@@ -5,7 +5,7 @@ Feature: "Add event" visibility options.
   I need to be able to add "Event" content through UI.
 
   Scenario: "Add event" button should not be shown to normal members, authenticated users and anonymous users.
-    Given the following collections:
+    Given collection content:
       | title               | logo     | state     |
       | The Stripped Stream | logo.png | published |
       | Years in the Nobody | logo.png | published |
@@ -35,7 +35,7 @@ Feature: "Add event" visibility options.
 
   @uploadFiles:test.zip
   Scenario: Add event as a facilitator.
-    Given collections:
+    Given collection content:
       | title            | logo     | state     |
       | Stream of Dreams | logo.png | published |
     And I am logged in as a facilitator of the "Stream of Dreams" collection
@@ -83,7 +83,7 @@ Feature: "Add event" visibility options.
     When I fill in "Physical location" with "Rue Belliard 28, Brussels, Belgium"
     And I enter the following for the "Virtual location" link field:
       | URL                          | Title           |
-      | https://joinup.ec.europa.eu/ | Joinup homepage |
+      | https://interoperable-europe.ec.europa.eu/ | Interoperable Europe Portal homepage |
       | https://drupal.org/          |                 |
     And I select "EU and European Policies" from "Topic"
     And I press "Save as draft"
@@ -100,7 +100,7 @@ Feature: "Add event" visibility options.
       | description | Rue Belliard 28, Brussels, Belgium |
       | latitude    | 50.842291                          |
       | longitude   | 4.370476                           |
-    And I should see the link "Joinup homepage"
+    And I should see the link "Interoperable Europe Portal homepage"
     And I should see the link "https://drupal.org"
     And the "Stream of Dreams" collection has a event titled "An amazing event"
     And I should not see the text "France"
@@ -119,9 +119,9 @@ Feature: "Add event" visibility options.
 
   @javascript @generateMedia @generateMediaTypes:event_logo @uploadFiles:logo.png
   Scenario: Test the image library widget.
-    Given the following collection:
-      | title | Stream of Dreams |
-      | state | published        |
+    Given collection content:
+      | title            | state     |
+      | Stream of Dreams | published |
     And event content:
       | title             | abstract | collection       | field_paragraphs_body | online location              | state     |
       | The Great Opening | abstract | Stream of Dreams | It opens!             | webinar - http://example.com | published |

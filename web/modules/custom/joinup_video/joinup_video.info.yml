@@ -1,5 +1,0 @@
-name: Joinup video
-description: Provides video functionality
-type: module
-package: Joinup
-core_version_requirement: ">= 9.4"

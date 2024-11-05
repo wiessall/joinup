@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Drupal\Tests\collection\Unit;
+namespace Drupal\Tests\joinup_collection\Unit;
 
 use Drupal\Component\Utility\Html;
 use Drupal\collection\Plugin\Filter\Glossary;
@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * Tests the collection glossary filter.
  *
- * @group collection
+ * @group joinup_collection
  *
  * @coversDefaultClass \Drupal\collection\Plugin\Filter\Glossary
  */

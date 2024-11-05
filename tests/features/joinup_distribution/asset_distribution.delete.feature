@@ -5,7 +5,7 @@ Feature: Asset distribution deleting.
   I need to be able to delete distributions through the UI.
 
   Scenario: "Delete" button should be shown to facilitators of the related solution.
-    Given the following solutions:
+    Given solution content:
       | title                 | description        | state     |
       | Rough valentine's day | Sample description | published |
     And users:
@@ -26,5 +26,5 @@ Feature: Asset distribution deleting.
     And I press "Delete"
     Then the following email should have been sent:
       | recipient | Papa Roach                                                                                        |
-      | subject   | Joinup: A distribution has been deleted                                                           |
+      | subject   | Interoperable Europe Portal: A distribution has been deleted                                                           |
       | body      | The distribution Francesco's cats of the solution Rough valentine's day was successfully deleted. |

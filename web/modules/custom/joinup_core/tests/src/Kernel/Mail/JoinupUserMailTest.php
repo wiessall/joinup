@@ -48,7 +48,7 @@ class JoinupUserMailTest extends JoinupMailKernelTestBase {
           'headers' => [
             'content-transfer-encoding' => '8Bit',
             'content-type' => 'text/html',
-            'from' => 'Joinup <joinup@example.com>',
+            'from' => 'Interoperable Europe Portal <joinup@example.com>',
             'mime-version' => '1.0',
             'reply-to' => 'joinup@example.com',
             'return-path' => 'joinup@example.com',
@@ -88,7 +88,7 @@ table tr td {
 <p>To confirm the request, please click <a href="http://localhost/user/reset/1/1690449287/poghcpHrsWKpNm05j_gcSjv43VJ7actKegl6F-mz384">http://localhost/user/reset/1/1690449287/poghcpHrsWKpNm05j_gcSjv43VJ7actKegl6F-mz384</a>.</p>
 <p>If you didn't ask for a new password, please disregard this message.</p>
 <p>Kind regards,</p>
-<p>The Joinup Support Team</p>
+<p>The Portal Support Team</p>
 
 
         </div>
@@ -117,7 +117,7 @@ If you didn't ask for a new password, please disregard this message.
 
 Kind regards,
 
-The Joinup Support Team
+The Portal Support Team
 EOS;
 
 }

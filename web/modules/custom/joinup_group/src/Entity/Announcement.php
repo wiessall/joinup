@@ -135,7 +135,7 @@ class Announcement extends Message implements AnnouncementInterface {
       $query->condition('pd.field_user_professional_domain_target_id', $professionalDomainIds, 'IN');
     }
 
-    return $query->condition('og.entity_type', 'rdf_entity')
+    return $query->condition('og.entity_type', 'node')
       ->fields('u', ['mail'])
       ->distinct()
       ->condition('og.entity_bundle', $group->bundle())

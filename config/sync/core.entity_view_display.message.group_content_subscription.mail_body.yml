@@ -4,82 +4,38 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.message.mail_body
-    - field.field.message.group_content_subscription.field_group_content
+    - field.field.message.group_content_subscription.group_content
     - message.template.group_content_subscription
   module:
-    - dynamic_entity_reference
-    - joinup
+    - field_delimiter
+    - field_formatter_range
+    - joinup_slick
+    - template_suggestion
 id: message.group_content_subscription.mail_body
 targetEntityType: message
 bundle: group_content_subscription
 mode: mail_body
 content:
-  field_group_content:
-    type: dynamic_entity_reference_entity_view
-    label: hidden
+  group_content:
+    type: entity_reference_entity_view
+    label: above
     settings:
-      node:
-        view_mode: digest_message
-      rdf_entity:
-        view_mode: digest_message
-      comment:
-        view_mode: default
-        link: false
-      menu_link_content:
-        view_mode: default
-        link: false
-      download_event:
-        view_mode: default
-        link: false
-      file:
-        view_mode: default
-        link: false
-      flagging:
-        view_mode: default
-        link: false
-      invitation:
-        view_mode: default
-        link: false
-      entity_legal_document_acceptance:
-        view_mode: default
-        link: false
-      entity_legal_document_version:
-        view_mode: default
-        link: false
-      message:
-        view_mode: default
-        link: false
-      meta_entity:
-        view_mode: default
-        link: false
-      ogmenu_instance:
-        view_mode: default
-        link: false
-      og_membership:
-        view_mode: default
-        link: false
-      redirect:
-        view_mode: default
-        link: false
-      remote_file:
-        view_mode: default
-        link: false
-      search_api_task:
-        view_mode: default
-        link: false
-      taxonomy_term:
-        view_mode: default
-        link: false
-      path_alias:
-        view_mode: default
-        link: false
-      user:
-        view_mode: default
-        link: false
+      view_mode: digest_message
+      link: false
     third_party_settings:
+      field_delimiter:
+        delimiter: ''
+      field_formatter_range:
+        order: 0
+        limit: 0
+        offset: 0
+      joinup_slick:
+        preset: ''
+        field_label: true
+        custom_label: ''
       template_suggestion:
         template_suggestion: bare
-    weight: 0
+    weight: 1
     region: content
   partial_1:
     weight: 0

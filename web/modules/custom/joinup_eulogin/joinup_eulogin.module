@@ -98,7 +98,7 @@ function joinup_eulogin_form_user_form_alter(array &$form, FormStateInterface $f
     '#weight' => -99,
     '#type' => 'html_tag',
     '#tag' => 'p',
-    '#value' => t('Your name and E-mail are inherited from EU Login. To update this information, you can visit <a href="https://webgate.ec.europa.eu/cas/eim/external/restricted/edit.cgi" rel="nofollow" target="_blank">your EU Login account page</a>. Synchronisation will take a few minutes and it will be visible the next time you login on Joinup.'),
+    '#value' => t('Your name and E-mail are inherited from EU Login. To update this information, you can visit <a href="https://webgate.ec.europa.eu/cas/eim/external/restricted/edit.cgi" rel="nofollow" target="_blank">your EU Login account page</a>. Synchronisation will take a few minutes and it will be visible the next time you login on Interoperable Europe Portal.'),
   ];
 
   $form['account']['mail']['#description'] = t('Your e-mail address is not made public. We will only send you necessary system notifications and you can opt in later if you wish to receive additional notifications about content you are subscribed to.');

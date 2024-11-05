@@ -2,10 +2,10 @@
 Feature: Cloning of entities
 
   Background:
-    Given collections:
+    Given collection content:
       | title      | state     |
       | Collection | published |
-    And solutions:
+    Given solution content:
       | title    | collection | state     |
       | Solution | Collection | published |
     And "custom_page" content:

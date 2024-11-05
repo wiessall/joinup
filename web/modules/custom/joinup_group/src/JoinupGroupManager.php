@@ -75,7 +75,7 @@ class JoinupGroupManager implements JoinupGroupManagerInterface {
   public function getGroupsWhereSoleOwner(AccountInterface $user): array {
     $groups = [];
     foreach (['collection', 'solution'] as $bundle) {
-      $memberships = $this->getUserMembershipsByRole($user, "rdf_entity-{$bundle}-administrator");
+      $memberships = $this->getUserMembershipsByRole($user, "node-{$bundle}-administrator");
 
       // Prepare a list of groups where the user is the sole owner.
       foreach ($memberships as $membership) {

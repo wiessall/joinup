@@ -19,11 +19,10 @@ use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\Url;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_core\Event\AjaxCommandEvent;
+use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\Form\JoinGroupFormBase;
 use Drupal\og\MembershipManagerInterface;
 use Drupal\og\OgMembershipInterface;
-use Drupal\rdf_entity\RdfInterface;
-use Drupal\sparql_entity_storage\UriEncoder;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -60,7 +59,7 @@ class JoinCollectionForm extends JoinGroupFormBase {
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state, ?AccountProxyInterface $user = NULL, ?RdfInterface $group = NULL): array {
+  public function buildForm(array $form, FormStateInterface $form_state, ?AccountProxyInterface $user = NULL, ?GroupInterface $group = NULL): array {
     $form = parent::buildForm($form, $form_state, $user, $group);
 
     // @todo Move this into the joinup_subscription module to solve a circular
@@ -74,7 +73,6 @@ class JoinCollectionForm extends JoinGroupFormBase {
       // the user has just authenticated after indicating their desire to join.
       $form['#attached']['library'][] = 'collection/subscribe_dialog';
       $form['#attached']['drupalSettings']['joinGroupData'] = [
-        'sparqlEncodedId' => UriEncoder::encodeUrl($group->id()),
         'id' => $group->id(),
       ];
     }

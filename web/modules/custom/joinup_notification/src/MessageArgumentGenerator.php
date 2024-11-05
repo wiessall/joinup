@@ -54,13 +54,13 @@ class MessageArgumentGenerator {
       // Joinup Moderation Team' because some emails use only the first name
       // instead of the full name.
       $arguments['@actor:role'] = 'moderator';
-      $arguments['@actor:full_name'] = $arguments['@actor:field_user_first_name'] = 'the Joinup Moderation Team';
+      $arguments['@actor:full_name'] = $arguments['@actor:field_user_first_name'] = 'the Interoperable Europe Portal Moderation Team';
     }
     elseif ($actor->hasRole('moderator')) {
       /** @var \Drupal\user\RoleInterface $role */
       $role = Role::load('moderator');
       $arguments['@actor:role'] = $role->label();
-      $arguments['@actor:full_name'] = 'The Joinup Support Team';
+      $arguments['@actor:full_name'] = 'The Portal Support Team';
     }
     elseif (!$actor->isAnonymous()) {
       $arguments['@actor:full_name'] = $actor->getDisplayName();

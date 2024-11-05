@@ -29,23 +29,22 @@ settings:
   facet_regions: {  }
   view_modes:
     'entity:node':
+      collection: view_mode_tile
       custom_page: view_mode_tile
       discussion: view_mode_tile
       distribution: view_mode_tile
       document: view_mode_tile
       event: view_mode_tile
+      licence: view_mode_tile
       news: view_mode_tile
       release: view_mode_tile
-    'entity:rdf_entity':
-      collection: view_mode_tile
-      licence: view_mode_tile
       solution: view_mode_tile
-      spdx_licence: view_mode_tile
     'entity:taxonomy_term':
       eif_conceptual_model: default
       eif_interoperability_layer: default
       eif_principle: default
       eif_recommendation: default
+      spdx_licence: view_mode_tile
       topic: default
     'entity:user':
       user: default

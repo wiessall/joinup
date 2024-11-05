@@ -5,8 +5,8 @@ dependencies:
   config:
     - field.storage.media.og_audience
     - media.type.file
-    - rdf_entity.rdfentity.collection
-    - rdf_entity.rdfentity.solution
+    - node.type.collection
+    - node.type.solution
   module:
     - og
 id: media.file.og_audience
@@ -20,7 +20,7 @@ translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:
-  handler: 'default:rdf_entity'
+  handler: 'default:node'
   handler_settings:
     target_bundles:
       collection: collection

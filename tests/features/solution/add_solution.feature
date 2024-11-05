@@ -5,9 +5,9 @@ Feature: "Add solution" visibility options.
   I need to be able to add "Solution" rdf entities through UI.
 
   Scenario: Required fields should be filled in
-    Given the following collection:
-      | title | Language parsers |
-      | state | published        |
+    Given collection content:
+      | title            | state     |
+      | Language parsers | published |
     And I am logged in as a facilitator of the "Language parsers" collection
     And I go to the homepage of the "Language parsers" collection
     And I click "Add solution"
@@ -28,10 +28,9 @@ Feature: "Add solution" visibility options.
       | Solution type field is required.  |
 
   Scenario: "Add solution" button should only be shown to moderators and facilitators.
-    Given the following collection:
-      | title | Collection solution test |
-      | logo  | logo.png                 |
-      | state | published                |
+    Given collection content:
+      | title                    | logo     | state     |
+      | Collection solution test | logo.png | published |
 
     When I am logged in as a moderator
     And I go to the homepage of the "Collection solution test" collection
@@ -54,10 +53,9 @@ Feature: "Add solution" visibility options.
 
   @uploadFiles:logo.png
   Scenario: Add solution as a collection facilitator.
-    Given the following collection:
-      | title | Belgian barista's |
-      | logo  | logo.png          |
-      | state | published         |
+    Given collection content:
+      | title             | logo     | state     |
+      | Belgian barista's | logo.png | published |
     And owner content:
       | name                 | owner type                   |
       | Organisation example | Company, Industry consortium |
@@ -74,7 +72,7 @@ Feature: "Add solution" visibility options.
     And I click "Add solution"
     And I check "I have read and accept the legal notice and I commit to manage my solution on a regular basis."
     And I press "Yes"
-    Then I should see the heading "Add Solution"
+    Then I should see the heading "Add solution"
     And the following fields should be present "Title, Abstract, Description, Upload a new file or enter a URL, Logo, Name, E-mail address, Website URL"
     And the following fields should not be present "Groups audience, Other groups, Current workflow state, Langcode, Translation, Motivation"
     # Regression test for ensuring that obsolete content creation value is removed.
@@ -90,8 +88,8 @@ Feature: "Add solution" visibility options.
       | Geographical coverage | Belgium                   |
       | Name                  | Ernst Brice               |
       | E-mail address        | ernsy1999@gmail.com       |
-    And I select "Flemish" from "Language"
-    Then I select "Data Owner" from "Solution type"
+    And I additionally select "Flemish" from "Language"
+    And I select "Data Owner" from "Solution type"
     And I select "Demography" from "Topic"
     # Attach a PDF to the documentation.
     And I upload the file "text.pdf" to "Upload a new file or enter a URL"
@@ -103,12 +101,12 @@ Feature: "Add solution" visibility options.
     And I press "Add owner"
     # Ensure that the Status field is a dropdown.
     # @see: https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-3342
-    And the option with text "Completed" from select "Status" is selected
+    And I select "Completed" from "Status"
     And the "Show solutions related by EIRA terms" checkbox should not be checked
     And I press "Propose"
-    Then the email sent to "Ruth Lee" with subject "Joinup: A new solution has been proposed" contains the following lines of text:
-      | Wendell Silva has proposed a new Interoperability solution: "Espresso is the solution" on Joinup. |
-      | If you think this action is not clear or not due, please contact Joinup Support at                |
+    Then the email sent to "Ruth Lee" with subject "Interoperable Europe Portal: A new solution has been proposed" contains the following lines of text:
+      | Wendell Silva has proposed a new Interoperability solution: "Espresso is the solution" on Interoperable Europe Portal. |
+      | If you think this action is not clear or not due, please contact Portal Support at                |
     And I should see "Thank you for proposing a solution. Your request is currently pending approval by the site administrator."
     And Log entry with the message "A new solution entity titled Espresso is the solution has been created by Wendell Silva in Belgian barista's." should exist.
 
@@ -133,7 +131,7 @@ Feature: "Add solution" visibility options.
     But I should see the link "Demography"
     And the following email should have been sent:
       | recipient | Wendell Silva                                                                                               |
-      | subject   | Joinup: Your solution has been accepted                                                                     |
+      | subject   | Interoperable Europe Portal: Your solution has been accepted                                                                     |
       | body      | Your proposed interoperability solution: "Espresso is the solution" has been validated as per your request. |
 
     When I am logged in as a facilitator of the "Belgian barista's" collection
@@ -179,9 +177,9 @@ Feature: "Add solution" visibility options.
     # buttons to leak into the solution create form, causing critical errors
     # when an invalid state button was pressed.
     # @see issue ISAICP-3209
-    Given the following collection:
-      | title | Language parsers |
-      | state | published        |
+    Given collection content:
+      | title            | state     |
+      | Language parsers | published |
     When I am logged in as a facilitator of the "Language parsers" collection
     And I go to the homepage of the "Language parsers" collection
     And I click "Add solution"
@@ -214,21 +212,16 @@ Feature: "Add solution" visibility options.
     And I should not see the button "Update"
 
   Scenario: Create a solution with a name that already exists
-    Given the following collections:
+    Given collection content:
       | title              | state     |
       | Ocean studies      | published |
       | Glacier monitoring | published |
-    And the following solution:
-      | title       | Climate change tracker                            |
-      | abstract    | Tracks climate change                             |
-      | description | Atlantic salmon arrived after the Little Ice Age. |
-      | collection  | Ocean studies                                     |
-      | state       | published                                         |
+    And solution content:
+      | title                  | abstract              | description                                       | collection    | state     |
+      | Climate change tracker | Tracks climate change | Atlantic salmon arrived after the Little Ice Age. | Ocean studies | published |
     And owner content:
       | name                | owner type          |
       | University of Basel | Industry consortium |
-
-    Then I should have 1 solution
 
     # No two solutions with the same name may be created in the same collection.
     Given I am logged in as a member of the "Ocean studies" collection
@@ -288,15 +281,9 @@ Feature: "Add solution" visibility options.
     And contact_information content:
       | name          | email                     |
       | Invisible Man | invisible.man@example.com |
-    And the following solution:
-      | title               | Cleaning solution                |
-      | abstract            | Cleans anything dirty            |
-      | description         | Use on metal surfaces.           |
-      | owner               | Organisation example             |
-      | state               | published                        |
-      | solution type       | Non-binding Instrument           |
-      | topic               | Employment and Support Allowance |
-      | contact information | Invisible Man                    |
+    And solution content:
+      | title             | abstract              | description            | owner                | state     | solution type          | topic                            | contact information |
+      | Cleaning solution | Cleans anything dirty | Use on metal surfaces. | Organisation example | published | Non-binding Instrument | Employment and Support Allowance | Invisible Man       |
 
     Given I am logged in as a moderator
     When I go to the edit form of the "Cleaning solution" solution

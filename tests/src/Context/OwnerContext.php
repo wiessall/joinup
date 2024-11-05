@@ -23,21 +23,6 @@ class OwnerContext extends RawDrupalContext {
   use UtilityTrait;
 
   /**
-   * Checks the number of available owners.
-   *
-   * @param int $number
-   *   The expected number of owners.
-   *
-   * @throws \Exception
-   *   Throws an exception when the expected number is not equal to the given.
-   *
-   * @Then I should have :number owner/owners
-   */
-  public function assertOwnerCount(int $number): void {
-    $this->assertEntityCount('node', 'owner', $number);
-  }
-
-  /**
    * Navigates to the canonical page display of an owner.
    *
    * @param string $owner

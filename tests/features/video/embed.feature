@@ -5,10 +5,9 @@ Feature: Embed of videos into the page.
   I should be able to embed a restricted set of videos in the page.
 
   Background:
-    Given the following collection:
-      | title       | Beer brewing corporation             |
-      | description | Beer is the real nectar of the gods. |
-      | state       | published                            |
+    Given collection content:
+      | title                    | description                          | state     |
+      | Beer brewing corporation | Beer is the real nectar of the gods. | published |
 
   Scenario: As a community content editor I can embed video iframes from allowed domains into the content field.
     Given I am logged in as a "facilitator" of the "Beer brewing corporation" collection
@@ -70,6 +69,6 @@ Feature: Embed of videos into the page.
     And I see the "iframe" element with the "title" attribute set to "<title attribute>" in the "Content" region
 
     Examples:
-      | url                                                                                                                                                   | embed url                                                                                                                                         | title attribute  |
+      | url                                                                                                                                                   | embed url                                                           | title attribute                 |
       | https://www.youtube.com/watch?v=YTaLmMsaLOg                                                                                                           | /media/oembed?url=https%3A//www.youtube.com/watch%3Fv%3DYTaLmMsaLOg | New Joinup (1/7)                |
       | https://vimeo.com/7073899                                                                                                                             | /media/oembed?url=https%3A//vimeo.com/7073899                       | Drupal Rap Video - Schipulcon09 |

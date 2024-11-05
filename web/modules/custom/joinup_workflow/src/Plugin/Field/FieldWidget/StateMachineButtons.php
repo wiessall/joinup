@@ -119,8 +119,7 @@ class StateMachineButtons extends OptionsSelectWidget implements ContainerFactor
 
     // Avoid using this widget in places other than the entity edit forms.
     $base_form_id = $form_state->getFormObject()->getBaseFormId();
-    // @todo Remove 'rdf_entity_form' in ISAICP-8376.
-    if (!in_array($base_form_id, ['node_form', 'rdf_entity_form'], TRUE)) {
+    if ($base_form_id !== 'node_form') {
       return $element;
     }
 
@@ -162,6 +161,8 @@ class StateMachineButtons extends OptionsSelectWidget implements ContainerFactor
    * @see \Drupal\content_moderation\Plugin\Field\FieldWidget\ModerationStateWidget::processActions()
    */
   public static function processActions($element, FormStateInterface $form_state, array &$form): array {
+    // No preview button.
+    unset($form['actions']['preview']);
     // We'll steal most of the button configuration from the default submit
     // button. However, NodeForm also hides that button for admins (as it adds
     // its own, too), so we have to restore it.

@@ -20,7 +20,7 @@ class CustomPageUnpublishedConstraintValidator extends ConstraintValidator {
     $custom_page = $value->getEntity();
     if ($custom_page instanceof CustomPageInterface) {
       if (!$custom_page->isPublished() && $custom_page->isGroupLandingPage()) {
-        $this->context->addViolation($constraint->message, ['@group' => $custom_page->getGroup()->get('rid')->entity->getSingularLabel()]);
+        $this->context->addViolation($constraint->message, ['@group' => $custom_page->getGroup()->get('type')->entity->getSingularLabel()]);
       }
     }
   }
