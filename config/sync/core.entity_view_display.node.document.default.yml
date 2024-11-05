@@ -78,7 +78,7 @@ mode: default
 content:
   assessment:
     type: entity_reference_entity_view
-    label: above
+    label: hidden
     settings:
       view_mode: default
       link: false
