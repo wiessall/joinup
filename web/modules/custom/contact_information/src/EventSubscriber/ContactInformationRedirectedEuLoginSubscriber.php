@@ -69,8 +69,10 @@ class ContactInformationRedirectedEuLoginSubscriber extends RedirectedEuLoginAut
    */
   protected function getContactInformation(): ?ContactInformationInterface {
     if ($contact_information_id = $this->currentRequest->cookies->get($this->getCookieName())) {
+      // @todo This was changed from node to node during the migration of
+      //   groups which means that there is no test for it?
       /** @var \Drupal\Core\Entity\ContentEntityInterface $contact_information */
-      $contact_information = $this->entityTypeManager->getStorage('rdf_entity')->load($contact_information_id);
+      $contact_information = $this->entityTypeManager->getStorage('node')->load($contact_information_id);
       if ($contact_information instanceof ContactInformationInterface) {
         return $contact_information;
       }

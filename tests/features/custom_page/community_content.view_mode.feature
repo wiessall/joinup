@@ -11,12 +11,12 @@ Feature:
     And contact_information content:
       | name                     | email                 |
       | Some fancy named contact | who.cares@example.com |
-    And the following solutions:
+    Given solution content:
       | title         | description | owner                  | contact information      | state     |
       | Tile solution | Meh...      | Some fancy named owner | Some fancy named contact | published |
     And release content:
-      | title        | release number | release notes | is version of | owner                  | contact information      | state     |
-      | Tile release | 0.1            | Meh...        | Tile solution | Some fancy named owner | Some fancy named contact | published |
+      | title        | release number | release notes | is version of | contact information      | state     |
+      | Tile release | 0.1            | Meh...        | Tile solution | Some fancy named contact | published |
     And distribution content:
       | title       | description | release      | access url | state     |
       | Tile distro | meh...      | Tile release | test.zip   | published |
@@ -60,7 +60,7 @@ Feature:
     And contact_information content:
       | name                     | email                 |
       | Some fancy named contact | who.cares@example.com |
-    And the following collections:
+    And collection content:
       | title           | description | owner                  | contact information      | state     |
       | Tile collection | Meh...      | Some fancy named owner | Some fancy named contact | published |
     And news content:

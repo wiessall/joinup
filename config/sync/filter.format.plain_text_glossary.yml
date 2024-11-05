@@ -3,7 +3,7 @@ langcode: en
 status: true
 dependencies:
   module:
-    - collection
+    - joinup_collection
 name: 'Plain text with glossary processing'
 format: plain_text_glossary
 weight: 0

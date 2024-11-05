@@ -9,7 +9,7 @@ use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\og\OgMembershipInterface;
 
 /**
- * Form to add a member with a certain role in a rdf entity group.
+ * Form to add a member with a certain role in a group.
  */
 class AddToGroupForm extends GroupFormBase {
 
@@ -76,8 +76,8 @@ class AddToGroupForm extends GroupFormBase {
     $this->messenger()->addMessage($this->t('Successfully added the role %role to the selected users.', [
       '%role' => $this->role->label(),
     ]));
-    $form_state->setRedirect('entity.rdf_entity.member_overview', [
-      'rdf_entity' => $this->entity->id(),
+    $form_state->setRedirect("entity.{$this->entity->getEntityTypeId()}.member_overview", [
+      $this->entity->getEntityTypeId() => $this->entity->id(),
     ]);
   }
 

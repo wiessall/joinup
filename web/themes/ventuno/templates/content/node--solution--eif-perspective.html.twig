@@ -1,0 +1,43 @@
+{#
+/**
+ * @file
+ * Themeing for solution's EIF perspective.
+ */
+#}
+<article{{ attributes }}>
+  <div class="d-flex justify-content-end">
+    <div>
+      <a class="btn btn-sm btn-outline-brand rounded-pill mb-1" href="{{ url('<front>')|render }}/collection/nifo-national-interoperability-framework-observatory/glossary">
+        {{ pattern('icon', {
+          name: 'journal-text',
+          path: bcl_icon_path,
+          size: 'fluid',
+        }) }}
+        {{ 'Glossary'|t }}
+      </a>
+      <a class="btn btn-sm btn-outline-brand rounded-pill mb-1" href="{{ url('<front>')|render }}/collection/nifo-national-interoperability-framework-observatory/solution/eif-toolbox/what-eif">
+        {{ pattern('icon', {
+          name: 'question-lg',
+          path: bcl_icon_path,
+          size: 'fluid',
+        }) }}
+        {{ 'What is EIF'|t }}
+      </a>
+    </div>
+  </div>
+
+  {{ title_prefix }}
+  <h2 class="my-3 fs-4">{{ 'General information'|t }}</h2>
+  {{ title_suffix }}
+  <div class="row">
+    <div class="col-12 col-sm-4 col-md-3 col-lg-2">
+      {{ content.field_is_logo }}
+    </div>
+    <div class="col-12 col-sm-8 col-md-9 col-lg-10">
+      <p class="mb-2"><strong>{{ 'Name of the solution'|t }}:</strong> {{ title|striptags }}</p>
+      <p class="mb-2"><strong>{{ 'Solution\'s owner'|t }}:</strong> {{ content.owner|render|striptags }}</p>
+      {{ content.eif_perspective_fields.eif_description }}
+    </div>
+    {{ content.eif_perspective }}
+  </div>
+</article>

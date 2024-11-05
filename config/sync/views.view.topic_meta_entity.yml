@@ -344,7 +344,6 @@ display:
               anonymous: '0'
               moderator: '0'
               administrator: '0'
-              rdf_graph_manager: '0'
           is_grouped: true
           group_info:
             label: 'Published (published)'
@@ -632,7 +631,6 @@ display:
               anonymous: '0'
               moderator: '0'
               administrator: '0'
-              rdf_graph_manager: '0'
           is_grouped: true
           group_info:
             label: 'Published (published)'

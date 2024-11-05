@@ -16,7 +16,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   id = "collection",
  *   label = @Translation("Collections"),
  *   context_definitions = {
- *     "og" = @ContextDefinition("entity:rdf_entity:collection", label = @Translation("Collection"))
+ *     "og" = @ContextDefinition("entity:node:collection", label = @Translation("Collection"))
  *   }
  * )
  */
@@ -25,7 +25,7 @@ class Collection extends ConditionPluginBase implements ContainerFactoryPluginIn
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): self {
     return new static(
       $configuration,
       $plugin_id,
@@ -36,7 +36,7 @@ class Collection extends ConditionPluginBase implements ContainerFactoryPluginIn
   /**
    * {@inheritdoc}
    */
-  public function buildConfigurationForm(array $form, FormStateInterface $form_state) {
+  public function buildConfigurationForm(array $form, FormStateInterface $form_state): array {
     $form['collections'] = [
       '#title' => $this->t('Show on Collection pages'),
       '#type' => 'checkbox',
@@ -48,7 +48,7 @@ class Collection extends ConditionPluginBase implements ContainerFactoryPluginIn
   /**
    * {@inheritdoc}
    */
-  public function submitConfigurationForm(array &$form, FormStateInterface $form_state) {
+  public function submitConfigurationForm(array &$form, FormStateInterface $form_state): void {
     // Certain form elements may return 'collections' as 0/1. Cast here to
     // ensure the data is in the expected type.
     $this->configuration['collections'] = (bool) $form_state->getValue('collections');
@@ -65,7 +65,7 @@ class Collection extends ConditionPluginBase implements ContainerFactoryPluginIn
   /**
    * {@inheritdoc}
    */
-  public function evaluate() {
+  public function evaluate(): bool {
     if ($this->configuration['collections'] == FALSE && !$this->isNegated()) {
       return TRUE;
     }
@@ -75,7 +75,7 @@ class Collection extends ConditionPluginBase implements ContainerFactoryPluginIn
   /**
    * {@inheritdoc}
    */
-  public function defaultConfiguration() {
+  public function defaultConfiguration(): array {
     return ['collections' => FALSE] + parent::defaultConfiguration();
   }
 

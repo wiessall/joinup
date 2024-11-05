@@ -121,8 +121,8 @@ function search_api_field_entity_view(array &$build, EntityInterface $entity, En
         if ($display->getComponent($name)) {
           if (
             !in_array($facet_name, [
-              'field_collection_content_status',
-              'field_is_content_status',
+              'collection_content_status',
+              'solution_content_status',
             ])
             || (
               $settings['show_archived'] === 'all'

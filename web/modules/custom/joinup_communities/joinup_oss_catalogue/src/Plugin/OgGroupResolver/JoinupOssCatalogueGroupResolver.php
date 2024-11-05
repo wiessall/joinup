@@ -4,10 +4,15 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_oss_catalogue\Plugin\OgGroupResolver;
 
+use Drupal\Core\Entity\EntityRepositoryInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\joinup_oss_catalogue\Entity\JoinupOssSolution;
 use Drupal\joinup_oss_catalogue\OssCatalogueCollectionInterface;
+use Drupal\og\GroupTypeManagerInterface;
 use Drupal\og\OgResolvedGroupCollectionInterface;
 use Drupal\og\OgRouteGroupResolverBase;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Resolves the group for EU OSS catalogue search route.
@@ -19,6 +24,33 @@ use Drupal\og\OgRouteGroupResolverBase;
  */
 class JoinupOssCatalogueGroupResolver extends OgRouteGroupResolverBase {
 
+  public function __construct(
+    array $configuration,
+    $plugin_id,
+    $plugin_definition,
+    RouteMatchInterface $route_match,
+    GroupTypeManagerInterface $group_type_manager,
+    EntityTypeManagerInterface $entity_type_manager,
+    protected readonly EntityRepositoryInterface $entityRepository,
+  ) {
+    parent::__construct($configuration, $plugin_id, $plugin_definition, $route_match, $group_type_manager, $entity_type_manager);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): self {
+    return new static(
+      $configuration,
+      $plugin_id,
+      $plugin_definition,
+      $container->get('current_route_match'),
+      $container->get('og.group_type_manager'),
+      $container->get('entity_type.manager'),
+      $container->get('entity.repository'),
+    );
+  }
+
   /**
    * {@inheritdoc}
    */
@@ -28,8 +60,8 @@ class JoinupOssCatalogueGroupResolver extends OgRouteGroupResolverBase {
     }
 
     /** @var \Drupal\collection\Entity\CollectionInterface $ossCatalogueGroup */
-    $ossCatalogueGroup = $this->entityTypeManager->getStorage('rdf_entity')
-      ->load(OssCatalogueCollectionInterface::COLLECTION_ENTITY_ID);
+    $ossCatalogueGroup = $this->entityRepository
+      ->loadEntityByUuid('node', OssCatalogueCollectionInterface::COLLECTION_UUID);
     if ($ossCatalogueGroup) {
       $collection->addGroup($ossCatalogueGroup, ['route']);
       $this->stopPropagation();

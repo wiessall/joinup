@@ -98,7 +98,7 @@ Feature: Owner moderation
     And the following 2 buttons should be present "Update, Request deletion"
     And the current workflow state should be "Published"
     And I press "Request deletion"
-    Then I should see the error message 'The owner cannot be deleted since it owns the following collections: "The healthy food European project". Please set a different owner for these collections before requesting deletion.'
+    Then I should see the error message 'The owner cannot be deleted since it owns the following groups: "[Collection] The healthy food European project". Please set a different owner for these groups before requesting deletion.'
 
     # Also a moderator cannot delete the owner as it's used by the collection.
     When I am logged in as a moderator

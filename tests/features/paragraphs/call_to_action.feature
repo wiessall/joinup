@@ -4,9 +4,9 @@ Feature:
   I need to be able to use "Call to action(s)" paragraphs for content.
 
   Background:
-    Given the following collection:
-      | title | Paragraphs collection |
-      | state | published             |
+    Given collection content:
+      | title                 | state     |
+      | Paragraphs collection | published |
 
   @javascript
   Scenario: Call to action(s) has alignment setting.

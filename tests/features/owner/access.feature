@@ -9,8 +9,6 @@ Feature: Owner access
       | name          | owner type |
       | Daisy Johnson | Company    |
 
-    Then I should have 1 owner
-
     When I am an anonymous user
     When I go to the "Daisy Johnson" owner
     Then I should see the heading "Sign in to continue"

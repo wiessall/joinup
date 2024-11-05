@@ -7,26 +7,26 @@ Feature:
   Scenario: Convert a URL of a taxonomy term.
     When I am logged in as a moderator
     And I am on the homepage
-    And I click "RDF ID converter"
-    Then I should see the heading "Convert an RDF entity ID"
+    And I click "RDF URI converter"
+    Then I should see the heading "Entity URI to URL and the other way around"
 
     # Deliberately add a blank space in the beginning and the end of the URI to ensure trimming.
-    When I fill in "RDF entity ID or a URL" with " http://data.europa.eu/dr8/PublicServiceProvider "
+    When I fill in "RDF URI or entity URL" with " http://data.europa.eu/dr8/PublicServiceProvider "
     And I press "Go!"
     Then I should see the heading "Public Service Provider"
 
   Scenario Outline: Convert a URL of an entity.
-    Given collections:
+    Given collection content:
       | uri   | title     | state     |
       | <uri> | <heading> | published |
 
     When I am logged in as a moderator
     And I am on the homepage
-    And I click "RDF ID converter"
-    Then I should see the heading "Convert an RDF entity ID"
+    And I click "RDF URI converter"
+    Then I should see the heading "Entity URI to URL and the other way around"
 
     # Deliberately add a blank space in the beginning and the end of the URI to ensure trimming.
-    When I fill in "RDF entity ID or a URL" with " <uri> "
+    When I fill in "RDF URI or entity URL" with " <uri> "
     And I press "Go!"
     Then I should see the heading "<heading>"
 

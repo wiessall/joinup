@@ -11,4 +11,4 @@ configuration:
   throttle:
     period: null
     limit: null
-  referer: 'https://joinup.ec.europa.eu/'
+  referer: 'https://interoperable-europe.ec.europa.eu/'

@@ -6,7 +6,7 @@ Feature: Collections Overview
     Given users:
       | Username      | E-mail                       |
       | Madam Shirley | i.see.the.future@example.com |
-    And collections:
+    And collection content:
     # As of ISAICP-3618 descriptions should not be visible in regular tiles.
       | title             | description                    | creation date     | state     |
       | E-health          | Supports health-related fields | 2018-10-04 8:31am | published |
@@ -82,13 +82,9 @@ Feature: Collections Overview
     And I delete the "Overviewer contact" contact information
 
   Scenario: Custom pages should not be visible on the overview page
-    Given the following collection:
-      | title            | Jira       |
-      | logo             | logo.png   |
-      | moderation       | no         |
-      | topic            | Demography |
-      | spatial coverage | Belgium    |
-      | state            | published  |
+    Given collection content:
+      | title | logo     | moderation | topic      | spatial coverage | state     |
+      | Jira  | logo.png | no         | Demography | Belgium          | published |
     And news content:
       | title                             | body                             | collection | topic                   | spatial coverage | state     |
       | Jira will be down for maintenance | As always, during business hours | Jira       | Statistics and Analysis | Luxembourg       | published |
@@ -101,9 +97,9 @@ Feature: Collections Overview
 
   @javascript
   Scenario: Feature icon should be visible for collection's content.
-    Given the following collection:
-      | title | Service Management apps |
-      | state | published               |
+    Given collection content:
+      | title                   | state     |
+      | Service Management apps | published |
     And news content:
       | title  | collection              | state     | featured |
       | Jira   | Service Management apps | published | yes      |
@@ -118,7 +114,7 @@ Feature: Collections Overview
       | Carolina Mercedes |
       | Luigi Plant       |
       | Yiannis Parios    |
-    And the following collections:
+    And collection content:
       | title                       | state     | featured | author            |
       | Enemies of the state        | published | yes      | Luigi Plant       |
       | Fed up meatlovers           | published | no       | Carolina Mercedes |
@@ -127,10 +123,9 @@ Feature: Collections Overview
       | Yiannis Parios collection 2 | published | no       | Yiannis Parios    |
       | Yiannis Parios collection 3 | published | no       | Yiannis Parios    |
     # Technical: use a separate step to create a collection associated to the anonymous user.
-    And the following collection:
-      | title    | Biologic meatballs |
-      | state    | published          |
-      | featured | no                 |
+    And collection content:
+      | title              | state     | featured |
+      | Biologic meatballs | published | no       |
 
     When I am logged in as "Yiannis Parios"
     And I visit the collection overview

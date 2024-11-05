@@ -100,7 +100,7 @@ hidden:
   field_state: true
   field_topic: true
   field_type: true
-  flag_like_node: true
+  flag_like: true
   langcode: true
   links: true
   og_audience: true

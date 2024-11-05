@@ -5,7 +5,7 @@ Feature: Subscribing to community content in collections
   So that I can stay informed
 
   Background:
-    Given the following collections:
+    Given collection content:
       | title                | state     |
       | Products of Bulgaria | published |
       | Cities of Bulgaria   | published |
@@ -60,7 +60,7 @@ Feature: Subscribing to community content in collections
       | title    | body                        | collection           | state     | author |
       | Rose oil | A widely used essential oil | Products of Bulgaria | published | bisera |
       | Burgas   | City of dreams              | Cities of Bulgaria   | published | hristo |
-    And solutions:
+    Given solution content:
       | title          | description                      | collection           | state     | author |
       | Double seaming | The rolls roll around the chuck  | Products of Bulgaria | proposed  | kalin  |
       | Belt conveyors | As troughed belts gently slope   | Products of Bulgaria | published | bisera |
@@ -127,7 +127,7 @@ Feature: Subscribing to community content in collections
       | Duck liver           |
       | Rose oil             |
       | Sunflower seeds      |
-    And the content subscription digest sent to hristo should have the subject "Joinup: Daily digest message"
+    And the content subscription digest sent to hristo should have the subject "Interoperable Europe Portal: Daily digest message"
 
     And the group content subscription digest sent to bisera contains the following sections:
       | title                |
@@ -138,7 +138,7 @@ Feature: Subscribing to community content in collections
       | Products of Bulgaria |
       | Canned cherries      |
       | Rose oil             |
-    And the content subscription digest sent to bisera should have the subject "Joinup: Weekly digest message"
+    And the content subscription digest sent to bisera should have the subject "Interoperable Europe Portal: Weekly digest message"
 
     And the group content subscription digest sent to kalin contains the following sections:
       | title                |
@@ -150,7 +150,7 @@ Feature: Subscribing to community content in collections
       | Products of Bulgaria |
       | Canned cherries      |
       | Sunflower seeds      |
-    And the content subscription digest sent to kalin should have the subject "Joinup: Monthly digest message"
+    And the content subscription digest sent to kalin should have the subject "Interoperable Europe Portal: Monthly digest message"
 
     # No message for aleks@primer.bg (blocked) and penka@primer.bg (cancelled).
     And 4 e-mails should have been sent to recipients "kalin@primer.bg, hristo@example.bg, bisera@example.bg"

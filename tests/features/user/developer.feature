@@ -13,7 +13,6 @@ Feature: Variety tests for the developer role.
       | /admin/content                                     |
       | /admin/content/meta-entity                         |
       | /admin/content/poll                                |
-      | /admin/content/rdf                                 |
       | /admin/content/meta-entity                         |
       | /admin/content/files                               |
       | /admin/content/messages                            |
@@ -27,7 +26,7 @@ Feature: Variety tests for the developer role.
       | /admin/config/people/accounts                      |
       | /admin/config/people/cas                           |
       | /admin/config/system/mailsystem                    |
-      | /admin/config/system/cron                           |
+      | /admin/config/system/cron                          |
       | /admin/config/search/path                          |
       | /admin/config/search/search-api                    |
       | /admin/config/search/search-api/server/joinup      |

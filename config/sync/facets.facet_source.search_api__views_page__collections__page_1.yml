@@ -1,0 +1,12 @@
+uuid: ad13c567-e95d-4cd8-83da-526df2b28f2e
+langcode: en
+status: true
+dependencies: {  }
+id: search_api__views_page__collections__page_1
+name: 'search_api:views_page__collections__page_1'
+filter_key: ''
+url_processor: query_string
+breadcrumb:
+  active: false
+  before: true
+  group: false
