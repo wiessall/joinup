@@ -10,110 +10,26 @@ declare(strict_types=1);
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Cache\Cache;
-use Drupal\Core\Database\Database;
 use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Installer\InstallerKernel;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\Core\Site\SettingsEditor;
 use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_community_content\Entity\CommunityContentInterface;
 use Drupal\joinup_featured\FeaturedContentInterface;
 use Drupal\joinup_group\Entity\PinnableGroupContentInterface;
-use Drupal\solution\Entity\SolutionInterface;
+use Drupal\joinup_solution\Entity\SolutionInterface;
 use Drupal\views\ViewExecutable;
-
-/**
- * Implements hook_form_FORMID_alter().
- *
- * Add the Sparql endpoint fields to the configure database install step.
- */
-function joinup_form_install_settings_form_alter(&$form, FormStateInterface $form_state): void {
-  $form['sparql'] = [
-    '#type' => 'fieldset',
-    '#title' => 'Sparql endpoint',
-    '#tree' => TRUE,
-  ];
-  $form['sparql']['host'] = [
-    '#type' => 'textfield',
-    '#title' => 'Host',
-    '#default_value' => 'localhost',
-    '#size' => 45,
-    '#required' => TRUE,
-  ];
-  $form['sparql']['port'] = [
-    '#type' => 'number',
-    '#title' => 'Port',
-    '#default_value' => '8890',
-    '#min' => 0,
-    '#max' => 65535,
-    '#required' => TRUE,
-  ];
-  $form['sparql']['namespace'] = [
-    '#type' => 'textfield',
-    '#title' => 'Namespace',
-    '#default_value' => 'Drupal\\joinup_sparql\\Driver\\Database\\joinup_sparql',
-    '#required' => TRUE,
-  ];
-
-  $form['actions']['save']['#limit_validation_errors'][] = ['sparql'];
-  $form['#validate'][] = 'joinup_form_install_settings_validate';
-  $form['actions']['save']['#submit'][] = 'joinup_form_install_settings_form_save';
-}
-
-/**
- * Validation callback for the installation form.
- *
- * Ensures that the connection class exists.
- */
-function joinup_form_install_settings_validate($form, FormStateInterface $form_state): void {
-  $namespace = $form_state->getValue(['sparql', 'namespace']);
-  $class = trim($namespace) . '\\Connection';
-  // Try to load the connection class.
-  if (!class_exists($class)) {
-    $form_state->setError($form['sparql']['namespace'], "Class {$class} could not be detected.");
-  }
-}
-
-/**
- * Submit callback: Save the Sparql connection string to the settings file.
- */
-function joinup_form_install_settings_form_save($form, FormStateInterface $form_state): void {
-  $host = $form_state->getValue(['sparql', 'host']);
-  $port = $form_state->getValue(['sparql', 'port']);
-  $namespace = $form_state->getValue(['sparql', 'namespace']);
-  // @see rdf_entity.services.yml
-  $key = 'sparql_default';
-  $target = 'default';
-  $database = [
-    'prefix' => '',
-    'host' => $host,
-    'port' => $port,
-    'namespace' => $namespace,
-    'driver' => 'sparql',
-  ];
-  $settings['databases'][$key][$target] = (object) [
-    'value' => $database,
-    'required' => TRUE,
-  ];
-  SettingsEditor::rewrite(\Drupal::getContainer()->getParameter('site.path') . '/settings.php', $settings);
-  // Load the database connection to make it available in the current request.
-  Database::addConnectionInfo($key, $target, $database);
-}
 
 /**
  * Implements hook_entity_type_alter().
  */
-function joinup_entity_type_alter(array &$entity_types): void {
-  // Add the "Propose" form operation to nodes and RDF entities so that we can
-  // add propose form displays to them.
-  // Skip this during installation, since the RDF entity will not yet be
-  // registered.
-  if (!InstallerKernel::installationAttempted()) {
-    /** @var \Drupal\Core\Entity\EntityTypeInterface[] $entity_types */
-    $entity_types['rdf_entity']->setFormclass('propose', 'Drupal\rdf_entity\Form\RdfForm');
+function joinup_entity_type_alter(array $entityTypes): void {
+  // Add the "Propose" form operation to nodes entities so that we can add
+  // propose form displays to them. Skip this during installation.
+  if (isset($entityTypes['node'])) {
+    $entityTypes['node']->setFormClass('propose', $entityTypes['node']->getFormClass('edit'));
   }
 }
 
@@ -125,25 +41,6 @@ function joinup_form_field_config_edit_form_alter(&$form): void {
   // registration of large amounts of extensions.
   if (isset($form['settings']['file_extensions']['#maxlength'])) {
     $form['settings']['file_extensions']['#maxlength'] = 1024;
-  }
-}
-
-/**
- * Implements hook_sparql_apply_default_fields_alter().
- *
- * This profile includes 'content_editor' filter format as a text editor and
- * access to 'full_html' and the rest of the filter formats are restricted.
- * With this hook, we make sure that the default fields with type 'text_long'
- * have the 'content_editor' filter format as default.
- */
-function joinup_sparql_apply_default_fields_alter($type, &$values): void {
-  // Since the profile includes a filter format, we provide this as default.
-  if ($type == 'text_long') {
-    foreach ($values as &$value) {
-      if ($value['format'] == 'full_html') {
-        $value['format'] = 'content_editor';
-      }
-    }
   }
 }
 
@@ -249,16 +146,17 @@ function joinup_theme($existing, $type, $theme, $path): array {
  * displayed.
  */
 function joinup_entity_view_alter(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display): void {
-  if (in_array($entity->getEntityTypeId(), ['node', 'rdf_entity']) && $display->getMode() !== 'group_header') {
+  if ($entity->getEntityTypeId() === 'node' && $display->getMode() !== 'group_header') {
     // Add the "entity" contextual links group. Avoid overwriting any existing
     // data that might have been added by other modules. Because of a bug in
     // Drupal core we cannot alter the running order of hook_entity_view_alter()
-    // when it is executed as an "extra hook" for hook_rdf_entity_view_alter().
-    // This means that we cannot use hook_module_implements_alter() to define a
-    // proper running order for this hook, so let's make sure that we do not
-    // lose any data set by other modules which are supposed to run after us.
+    // when it is executed as an "extra hook". This means that we cannot use
+    // hook_module_implements_alter() to define a proper running order for this
+    // hook, so let's make sure that we do not lose any data set by other
+    // modules which are supposed to run after us.
     // @see joinup_featured_entity_view_alter()
     // @see https://www.drupal.org/project/drupal/issues/3120298
+    // @todo Revisit this in ISAICP-8376.
     $build['#contextual_links']['entity']['route_parameters']['entity_type'] = $entity->getEntityTypeId();
     $build['#contextual_links']['entity']['route_parameters']['entity'] = $entity->id();
     $build['#contextual_links']['entity']['metadata']['changed'] = $entity->getChangedTime();
@@ -320,13 +218,6 @@ function joinup_entity_view_alter(array &$build, EntityInterface $entity, Entity
 }
 
 /**
- * Implements hook_preprocess_rdf_entity().
- */
-function joinup_preprocess_rdf_entity(&$variables): void {
-  _joinup_preprocess_entity_tiles($variables);
-}
-
-/**
  * Implements hook_preprocess_node().
  */
 function joinup_preprocess_node(&$variables): void {
@@ -334,7 +225,7 @@ function joinup_preprocess_node(&$variables): void {
 }
 
 /**
- * Adds common functionality to the tile view mode of nodes and rdf entities.
+ * Adds common functionality to the tile view mode of nodes.
  *
  * @param array $variables
  *   The variables array.

@@ -11,7 +11,7 @@ Feature: Site search
     Then the response should contain "\"search\":{\"keyword\":\"sample text 1\"}"
 
   Scenario: Search results should contain a total count when results are available.
-    And the following collections:
+    And collection content:
       | title                  | description               | abstract               | state     | creation date    | modification date |
       | Collection total count | No description available. | No abstract available. | published | 03-08-2023 12:05 | 03-04-2022 12:05  |
     And news content:

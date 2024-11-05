@@ -27,8 +27,8 @@ class AnnouncementEdit extends EntityLink {
     if (!$announcement instanceof AnnouncementInterface) {
       throw new \LogicException("The '{$this->getPluginId()}' Views field plugin can be used only with 'message' entity type and 'announcement' bundle.");
     }
-    return Url::fromRoute('entity.rdf_entity.announcement_edit', [
-      'rdf_entity' => $announcement->getGroupId(),
+    return Url::fromRoute('entity.node.announcement_edit', [
+      'node' => $announcement->getGroupId(),
       'announcement' => $announcement->id(),
     ])->setAbsolute($this->options['absolute']);
   }

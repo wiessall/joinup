@@ -15,7 +15,7 @@ field_name: file_size
 entity_type: node
 bundle: distribution
 label: 'File size'
-description: "Size of the distribution payload file (in KB).\r\nIf the distribution is hosted in Joinup, you can omit this field."
+description: "Size of the distribution payload file (in KB).\r\nIf the distribution is hosted in Interoperable Europe Portal, you can omit this field."
 required: false
 translatable: false
 default_value: {  }

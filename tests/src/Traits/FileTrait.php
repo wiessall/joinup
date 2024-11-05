@@ -6,6 +6,7 @@ namespace Drupal\joinup\Traits;
 
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\file\FileInterface;
+use PHPUnit\Framework\Assert;
 
 /**
  * Helper methods for dealing with files.
@@ -29,10 +30,7 @@ trait FileTrait {
    *   Throws an exception when the file is not found.
    */
   protected function createFile(string $filename, string $file_path = ''): FileInterface {
-    $source_path = rtrim(realpath($this->getMinkParameter('files_path')), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $filename;
-    if (!is_file($source_path)) {
-      throw new \Exception("File '$filename' was not found at '$source_path'");
-    }
+    $source_path = $this->getFileSourcePath($filename);
     $file_path = rtrim($file_path, DIRECTORY_SEPARATOR);
     /** @var \Drupal\Core\File\FileSystemInterface $file_system */
     $file_system = \Drupal::service('file_system');
@@ -53,6 +51,31 @@ trait FileTrait {
     $this->entities['file'][$file->id()] = $file;
 
     return $file;
+  }
+
+  /**
+   * Returns the absolute path to the given file name from the fixture folder.
+   *
+   * @param string $filename
+   *   The file name.
+   *
+   * @return string
+   *   The absolute path to the file.
+   */
+  public function getFileSourcePath(string $filename): string {
+    $filesPath = rtrim(realpath(
+      $this->getMinkParameter('files_path')
+    ), DIRECTORY_SEPARATOR);
+    $sourcePath = $filesPath . DIRECTORY_SEPARATOR . $filename;
+    Assert::assertTrue(
+      is_file($sourcePath),
+      sprintf(
+        "File '%s' was not found at '%s'",
+        $filename,
+        $sourcePath,
+      )
+    );
+    return $sourcePath;
   }
 
   /**

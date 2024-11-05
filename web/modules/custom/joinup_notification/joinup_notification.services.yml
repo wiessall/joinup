@@ -14,13 +14,13 @@ services:
     arguments: ['@state_machine_revisions.revision_manager']
     tags:
       - { name: event_subscriber }
-  joinup_notification.collection.rdf.subscriber:
-    class: Drupal\joinup_notification\EventSubscriber\CollectionRdfSubscriber
+  joinup_notification.collection_noticiation_subscriber:
+    class: Drupal\joinup_notification\EventSubscriber\CollectionSubscriber
     parent: joinup_notification.notification_subscriber_base
     tags:
       - { name: event_subscriber }
-  joinup_notification.solution.rdf.subscriber:
-    class: Drupal\joinup_notification\EventSubscriber\SolutionRdfSubscriber
+  joinup_notification.solution_noticiation_subscriber:
+    class: Drupal\joinup_notification\EventSubscriber\SolutionNotificationSubscriber
     parent: joinup_notification.notification_subscriber_base
     tags:
       - { name: event_subscriber }

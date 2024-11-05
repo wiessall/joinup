@@ -120,12 +120,12 @@ class OwnerWorkflowTest extends JoinupWorkflowExistingSiteTestBase {
       $this->entityAccess->resetCache();
 
       // Owner entities that are referenced in other ones cannot be deleted.
-      $this->createRdfEntity([
-        'rid' => 'collection',
-        'label' => $this->randomMachineName(),
+      $this->createNode([
+        'type' => 'collection',
+        'title' => $this->randomMachineName(),
         'uid' => $this->userOwner->id(),
-        'field_ar_state' => 'draft',
-        'field_ar_owner' => $content->id(),
+        'field_state' => 'draft',
+        'owner' => $content->id(),
       ]);
       foreach ($available_users as $user_var) {
         $this->assertFalse($this->entityAccess->access($content, 'delete', $this->$user_var), "User {$user_var} should not have delete access for entity {$content->label()} ({$entity_state}).");

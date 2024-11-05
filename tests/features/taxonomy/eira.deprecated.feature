@@ -11,10 +11,10 @@ Feature:
 
     When I am logged in as a moderator
     And I am on the homepage
-    And I click "RDF ID converter"
-    Then I should see the heading "Convert an RDF entity ID"
+    And I click "RDF URI converter"
+    Then I should see the heading "Entity URI to URL and the other way around"
 
-    When I fill in "RDF entity ID or a URL" with "http://joinup.eu/eira/term/only-deprecated"
+    When I fill in "RDF URI or entity URL" with "http://joinup.eu/eira/term/only-deprecated"
     And I press "Go!"
     Then I should see the heading "Deprecated"
     And I should see the warning message "This building block is deprecated, and should not be used in new development."
@@ -31,8 +31,8 @@ Feature:
       | http://joinup.eu/eira/term/replacement              | ReplacementTerm | This is a replacement | 0                         | DeprecatedTerm          |
     When I am logged in as a moderator
     And I am on the homepage
-    And I click "RDF ID converter"
-    And I fill in "RDF entity ID or a URL" with "http://joinup.eu/eira/term/deprecated-w-replacement"
+    And I click "RDF URI converter"
+    And I fill in "RDF URI or entity URL" with "http://joinup.eu/eira/term/deprecated-w-replacement"
     And I press "Go!"
     Then I should see the heading "DeprecatedTerm"
     And I should see the warning message "This building block is deprecated, and should not be used in new development. Consider using ReplacementTerm (http://joinup.eu/eira/term/replacement) instead."

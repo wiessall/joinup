@@ -1,36 +1,34 @@
 services:
   _defaults:
     autowire: true
+
   joinup_rdf.vocabulary_fixtures.helper:
     class: Drupal\joinup_rdf\VocabularyFixturesHelper
-    arguments: [ '@sparql.endpoint' ]
+    arguments: [ 'rdf_sync.connection' ]
+
   joinup_rdf.requirements_helper:
     class: Drupal\joinup_rdf\RequirementsHelper
-    arguments: ['@sparql.endpoint', '@string_translation']
-  # Move this to sparql_entity_storage in ISAICP-7374.
-  # See https://citnet.tech.ec.europa.eu/CITnet/jira/browse/ISAICP-7374
-  joinup_rdf.twig_extension:
-    class: Drupal\joinup_rdf\TwigExtension\TwigExtension
-    arguments: ['@language_manager', '@renderer']
-    tags:
-      - { name: twig.extension }
-  joinup_rdf.decode_rdf_url.param_converter:
-    class: Drupal\joinup_rdf\ParamConverter\DecodeRdfUrlConverter
-    tags:
-      - { name: paramconverter, priority: 10 }
-  # TODO: Drop in ISAICP-8376
-  joinup_rdf.outbound_value.tid:
-    class: Drupal\joinup_rdf\EventSubscriber\UriIdConversion
-    arguments: ['@database', '@entity_field.manager', '@logger.channel.php']
-    tags:
-      - { name: event_subscriber }
+    arguments: ['@rdf_sync.connection', '@string_translation']
+
+  # Move in joinup_rdf. See ISAICP-9156.
   joinup_rdf.legacy_rdf_url.subscriber:
     class: Drupal\joinup_rdf\EventSubscriber\LegacyRdfUrlSubscriber
     arguments: ['@rdf_sync.mapper']
     tags:
       - { name: event_subscriber }
+  Drupal\joinup_rdf\EventSubscriber\LegacyRdfUrlSubscriber: '@joinup_rdf.legacy_rdf_url.subscriber'
+
   joinup_rdf.export_route_subscriber:
     class: Drupal\joinup_rdf\Routing\RdfExportRouteSubscriber
     arguments: ['@entity_type.manager', '@entity_type.bundle.info', '@rdf_sync.mapper']
     tags:
       - { name: event_subscriber }
+
+  joinup_rdf.migration_helper:
+    class: Drupal\joinup_rdf\MigrationHelper
+    arguments: ['@entity_type.manager', '@path_alias.repository', '@database', '@rdf_sync.connection', '@rdf_sync.mapper', '@state']
+
+  joinup_rdf.http_middleware.accept_based_negotiation:
+    class: Drupal\joinup_rdf\Middleware\JoinupAcceptHeaderMiddleware
+    tags:
+      - { name: http_middleware, priority: 401 }

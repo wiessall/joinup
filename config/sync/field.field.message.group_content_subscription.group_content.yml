@@ -1,0 +1,42 @@
+uuid: 5e58caa3-3693-46d3-b448-9e6a2e095eeb
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.message.group_content
+    - message.template.group_content_subscription
+    - node.type.discussion
+    - node.type.document
+    - node.type.event
+    - node.type.news
+    - node.type.solution
+  module:
+    - tmgmt_content
+third_party_settings:
+  tmgmt_content:
+    excluded: false
+id: message.group_content_subscription.group_content
+field_name: group_content
+entity_type: message
+bundle: group_content_subscription
+label: 'Group content'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      discussion: discussion
+      document: document
+      event: event
+      news: news
+      solution: solution
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: discussion
+field_type: entity_reference

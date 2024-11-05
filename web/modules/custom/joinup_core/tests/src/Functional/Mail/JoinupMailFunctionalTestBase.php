@@ -8,7 +8,6 @@ use Drupal\Tests\BrowserTestBase;
 use Drupal\Tests\joinup_core\Traits\ConfigInstallTestTrait;
 use Drupal\Tests\joinup_core\Traits\DefaultThemeWithDependeciesSetupTrait;
 use Drupal\Tests\joinup_core\Traits\MailTestTrait;
-use Drupal\Tests\sparql_entity_storage\Traits\SparqlConnectionTrait;
 use Drupal\joinup_test_time\Datetime\TestTime;
 use Drupal\user\Entity\User;
 
@@ -20,7 +19,6 @@ abstract class JoinupMailFunctionalTestBase extends BrowserTestBase {
   use ConfigInstallTestTrait;
   use DefaultThemeWithDependeciesSetupTrait;
   use MailTestTrait;
-  use SparqlConnectionTrait;
 
   /**
    * {@inheritdoc}
@@ -77,8 +75,6 @@ abstract class JoinupMailFunctionalTestBase extends BrowserTestBase {
    */
   public function setUp(): void {
     parent::setUp();
-
-    $this->setUpSparql();
 
     // UID 1's email address.
     User::load(1)

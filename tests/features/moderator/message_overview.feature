@@ -7,7 +7,7 @@ Feature: Solutions message overview
   Scenario: Contact form messages are available in the message overview.
     And I am not logged in
     When I am on the homepage
-    And I click "Contact Joinup Support" in the "Footer" region
+    And I click "Contact Portal Support" in the "Footer" region
     Then I should see the heading "Contact"
 
     When I fill in the following:
@@ -67,7 +67,7 @@ Feature: Solutions message overview
       | To approve or reject this proposal, please go to                                   |
       | You'll be able to provide feedback.                                                |
       | The requestor will be notified of your decision and feedback.                      |
-      | If you think this action is not clear or not due, please contact Joinup Support at |
+      | If you think this action is not clear or not due, please contact Portal Support at |
 
     # Clean up the collection that was created.
     And I delete the "Message overview proposal" collection

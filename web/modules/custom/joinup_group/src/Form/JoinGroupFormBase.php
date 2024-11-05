@@ -19,7 +19,6 @@ use Drupal\joinup_group\Traits\MembershipCreateTrait;
 use Drupal\joinup_workflow\ArchivableEntityInterface;
 use Drupal\og\MembershipManagerInterface;
 use Drupal\og\OgMembershipInterface;
-use Drupal\rdf_entity\RdfInterface;
 use Drupal\user\UserInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -142,7 +141,7 @@ abstract class JoinGroupFormBase extends FormBase implements JoinGroupFormInterf
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state, ?AccountProxyInterface $user = NULL, ?RdfInterface $group = NULL): array {
+  public function buildForm(array $form, FormStateInterface $form_state, ?AccountProxyInterface $user = NULL, ?GroupInterface $group = NULL): array {
     assert($group instanceof GroupInterface, 'Only groups can be joined.');
 
     $form['#access'] = $this->access();
@@ -150,6 +149,7 @@ abstract class JoinGroupFormBase extends FormBase implements JoinGroupFormInterf
     $this->user = $this->loadUser((int) $user->id());
 
     $membership = $this->user->isAnonymous() ? NULL : $this->getUserNonBlockedMembership();
+    $parameters = ['node' => $this->group->id()];
 
     // User should not be allowed to subscribe if entity it archived.
     if (empty($membership) && $group instanceof ArchivableEntityInterface && $group->isArchived()) {
@@ -158,7 +158,6 @@ abstract class JoinGroupFormBase extends FormBase implements JoinGroupFormInterf
 
     // Inform anonymous users that they need to authenticate to join the group.
     elseif ($this->user->isAnonymous()) {
-      $parameters = ['rdf_entity' => $this->group->id()];
       if ($this->accessManager->checkNamedRoute('joinup_group.authenticate_to_join', $parameters)) {
         $form['authenticate'] = [
           '#type' => 'link',
@@ -191,7 +190,6 @@ abstract class JoinGroupFormBase extends FormBase implements JoinGroupFormInterf
     // button. The confirmation form should open in a modal dialog for
     // JavaScript-enabled browsers.
     elseif ($membership->getState() === OgMembershipInterface::STATE_ACTIVE) {
-      $parameters = ['rdf_entity' => $this->group->id()];
       $form['leave'] = [
         '#theme' => 'group_leave_button',
       ];

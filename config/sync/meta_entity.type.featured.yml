@@ -3,20 +3,30 @@ langcode: en
 status: true
 dependencies:
   config:
+    - node.type.collection
     - node.type.discussion
     - node.type.document
     - node.type.event
     - node.type.news
-    - rdf_entity.rdfentity.collection
-    - rdf_entity.rdfentity.solution
+    - node.type.solution
   module:
+    - joinup_stats
     - node
-    - rdf_entity
+third_party_settings:
+  joinup_stats:
+    matomo_method: ''
+    parameter_name: ''
+    parameter_method: ''
+    period: 7
+    type: null
 id: featured
 label: 'Featured site wide'
 description: 'A flag which indicates that the entity is flagged by a moderator to be featured site wide.'
 mapping:
   node:
+    collection:
+      field_name: featured
+      auto_create: false
     discussion:
       field_name: featured
       auto_create: false
@@ -27,10 +37,6 @@ mapping:
       field_name: featured
       auto_create: false
     news:
-      field_name: featured
-      auto_create: false
-  rdf_entity:
-    collection:
       field_name: featured
       auto_create: false
     solution:

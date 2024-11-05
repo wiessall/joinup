@@ -8,7 +8,6 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
 use Drupal\joinup_group\Event\GroupMenuLinksEvent;
-use Drupal\sparql_entity_storage\UriEncoder;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -45,10 +44,9 @@ class GroupMenuLinksSubscriber implements EventSubscriberInterface {
     $ogMenuInstanceId = substr($event->getMenuName(), 7);
     $menu = $this->entityTypeManager->getStorage('ogmenu_instance')->load($ogMenuInstanceId);
     $group = $event->getGroup();
+    $parameters = [$group->getEntityTypeId() => $group->id()];
     if ($menu->bundle() === 'navigation') {
-      $discussionUrl = Url::fromRoute('view.discussions.overview', [
-        'rdf_entity' => UriEncoder::encodeUrl($group->id()),
-      ]);
+      $discussionUrl = Url::fromRoute('view.discussions.overview', $parameters);
 
       $event
         ->addMenuLink($group->toUrl(), 'Overview', -10)
@@ -56,8 +54,6 @@ class GroupMenuLinksSubscriber implements EventSubscriberInterface {
     }
 
     if ($menu->bundle() === 'quick_links') {
-      $group = $event->getGroup();
-      $parameters = ['rdf_entity' => UriEncoder::encodeUrl($group->id())];
       $event->addMenuLink(Url::fromRoute('joinup_menu.website_link', $parameters), 'Website link');
 
       if ($group->bundle() === 'solution') {

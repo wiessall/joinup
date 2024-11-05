@@ -10,10 +10,11 @@ declare(strict_types=1);
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_collection\JoinupCollectionHelper;
 use Drupal\og\Entity\OgMembership;
 use Drupal\og\OgMembershipInterface;
-use Drupal\rdf_entity\Entity\Rdf;
+use Drupal\rdf_sync\RdfSyncMapper;
 use Drupal\user\UserInterface;
 
 /**
@@ -22,20 +23,27 @@ use Drupal\user\UserInterface;
  * Add the 'Joinup' collection membership to every new user.
  */
 function joinup_collection_user_insert(UserInterface $account): void {
-  /** @var \Drupal\collection\Entity\CollectionInterface $joinup_collection */
-  if ($joinup_collection = Rdf::load(JoinupCollectionHelper::getCollectionId())) {
-    // Add the membership only it doesn't exist yet.
-    if (!$membership = $joinup_collection->getMembership((int) $account->id(), [])) {
-      OgMembership::create()
-        ->setGroup($joinup_collection)
-        ->setOwner($account)
-        ->setState(OgMembershipInterface::STATE_ACTIVE)
-        ->save();
-    }
-    // If the membership exists but is not active, activate it.
-    elseif ($membership->getState() !== OgMembershipInterface::STATE_ACTIVE) {
-      $membership->setState(OgMembershipInterface::STATE_ACTIVE)->save();
-    }
+  $rdfSyncMapper = \Drupal::service('rdf_sync.mapper');
+  assert($rdfSyncMapper instanceof RdfSyncMapper);
+  $joinupCollection = $rdfSyncMapper->getEntityByUri(JoinupCollectionHelper::JOINUP_COLLECTION_URI);
+  if (!$joinupCollection instanceof CollectionInterface) {
+    return;
+  }
+
+  // Add the membership only it doesn't exist yet.
+  $membership = $joinupCollection->getMembership((int) $account->id(), []);
+  if (!$membership) {
+    OgMembership::create()
+      ->setGroup($joinupCollection)
+      ->setOwner($account)
+      ->setState(OgMembershipInterface::STATE_ACTIVE)
+      ->save();
+    return;
+  }
+
+  // If the membership exists but is not active, activate it.
+  if ($membership->getState() !== OgMembershipInterface::STATE_ACTIVE) {
+    $membership->setState(OgMembershipInterface::STATE_ACTIVE)->save();
   }
 }
 
@@ -48,9 +56,16 @@ function joinup_collection_form_views_form_og_members_overview_default_alter(&$f
   /** @var \Drupal\views\ViewExecutable $view */
   $view = $form_state->getBuildInfo()['args'][0];
   // The first view argument is the entity type.
-  if (isset($view->args[0]) && $view->args[0] === 'rdf_entity') {
+  if (isset($view->args[0]) && $view->args[0] === 'node') {
+    $rdfSyncMapper = \Drupal::service('rdf_sync.mapper');
+    assert($rdfSyncMapper instanceof RdfSyncMapper);
+    $joinupCollection = $rdfSyncMapper->getEntityByUri(JoinupCollectionHelper::JOINUP_COLLECTION_URI);
     // The second view argument is the group entity ID.
-    if (!empty($view->args[1]) && $view->args[1] === JoinupCollectionHelper::getCollectionId()) {
+    if (
+      $joinupCollection &&
+      !empty($view->args[1]) &&
+      $view->args[1] == $joinupCollection->id()
+    ) {
       unset($form['header']['og_membership_bulk_form']['action']['#options']['joinup_og_membership_delete_action']);
     }
   }
@@ -59,12 +74,18 @@ function joinup_collection_form_views_form_og_members_overview_default_alter(&$f
 /**
  * Implements hook_ENTITY_TYPE_insert().
  */
-function joinup_collection_rdf_entity_insert(EntityInterface $entity): void {
+function joinup_collection_node_insert(EntityInterface $entity): void {
   // Invalidate a custom cache tag, used to rebuild the hamburger menu so that
-  // the 'About us' link can be shown dependending on whether the Joinup
-  // collection exists. Mainly intended for tests since in the production site
-  // the Joinup collection is not regularly deleted.
-  if ($entity->id() === JoinupCollectionHelper::getCollectionId()) {
+  // the 'About us' link can be shown depending on whether the Joinup collection
+  // exists. Mainly intended for tests since in the production site the Joinup
+  // collection is not regularly deleted.
+  if (!$entity instanceof CollectionInterface) {
+    return;
+  }
+  $rdfSyncMapper = \Drupal::service('rdf_sync.mapper');
+  assert($rdfSyncMapper instanceof RdfSyncMapper);
+  $uriField = $rdfSyncMapper->getRdfUriFieldName('node', 'collection');
+  if (!$entity->get($uriField)->isEmpty() && ($entity->get($uriField)->first()->getString() === JoinupCollectionHelper::JOINUP_COLLECTION_URI)) {
     Cache::invalidateTags(['joinup_collection:exists']);
   }
 }
@@ -72,6 +93,6 @@ function joinup_collection_rdf_entity_insert(EntityInterface $entity): void {
 /**
  * Implements hook_ENTITY_TYPE_delete().
  */
-function joinup_collection_rdf_entity_delete(EntityInterface $entity): void {
-  joinup_collection_rdf_entity_insert($entity);
+function joinup_collection_node_delete(EntityInterface $entity): void {
+  joinup_collection_node_insert($entity);
 }

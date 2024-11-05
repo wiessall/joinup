@@ -4,9 +4,9 @@ Feature:
   I need to be able to use "image gallery" paragraphs for content.
 
   Background:
-    Given the following collection:
-      | title | Paragraphs IG collection |
-      | state | published                |
+    Given collection content:
+      | title                    | state     |
+      | Paragraphs IG collection | published |
 
   @javascript @uploadFiles:logo.png,topic.png,banner.jpg,linus.jpeg
   Scenario: User should be able to add image gallery paragraph.
@@ -39,8 +39,8 @@ Feature:
       | banner.jpg |
       | linus.jpeg |
     And I should see the following images on the page
-      | logo.png   |
-      | topic.png  |
+      | logo.png  |
+      | topic.png |
     And I should not see the image "banner.jpg"
     And I should not see the image "linus.jpeg"
     Then I click on element ".slick--optionset--image-gallery button[aria-label='Next']:not([aria-disabled='true'])"

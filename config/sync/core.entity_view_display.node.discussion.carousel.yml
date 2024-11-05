@@ -48,7 +48,7 @@ content:
         template_suggestion: comma_separated
     weight: 1
     region: content
-  flag_like_node:
+  flag_like:
     settings: {  }
     third_party_settings: {  }
     weight: 2

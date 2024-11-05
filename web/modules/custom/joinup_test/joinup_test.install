@@ -9,6 +9,8 @@ declare(strict_types=1);
 
 use Drupal\Component\Serialization\Yaml;
 use Drupal\Core\Field\Plugin\Field\FieldType\EntityReferenceItemInterface;
+use Drupal\joinup_collection\JoinupCollectionHelper;
+use Drupal\search_api\Plugin\search_api\datasource\ContentEntity;
 use Drupal\taxonomy\TermInterface;
 use Drupal\text\Plugin\Field\FieldType\TextItemBase;
 
@@ -18,10 +20,11 @@ use Drupal\text\Plugin\Field\FieldType\TextItemBase;
 function joinup_test_install($is_syncing): void {
   $rdfSync = \Drupal::getContainer()->get('rdf_sync.synchronizer');
   $fieldManager = \Drupal::getContainer()->get('entity_field.manager');
-  $storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
+  $entityTypeManager = \Drupal::entityTypeManager();
+  $termStorage = $entityTypeManager->getStorage('taxonomy_term');
 
   // Creates a term given term data from YAML file.
-  $createTerm = function (string $vid, int $weight, array $data, array $definitions, int $parentTermId = 0) use ($storage): TermInterface {
+  $createTerm = function (string $vid, int $weight, array $data, array $definitions, int $parentTermId = 0) use ($termStorage): TermInterface {
     $values = ['vid' => $vid, 'weight' => $weight, 'parent' => $parentTermId];
     foreach ($data as $fieldName => $fieldValue) {
       if (isset($definitions[$fieldName])) {
@@ -39,7 +42,7 @@ function joinup_test_install($is_syncing): void {
       }
     }
     /** @var \Drupal\taxonomy\TermInterface $term */
-    $term = $storage->create($values);
+    $term = $termStorage->create($values);
     $term->save();
 
     return $term;
@@ -51,7 +54,7 @@ function joinup_test_install($is_syncing): void {
 
   $termIds = [];
   foreach ($hierarchy as $vid => $terms) {
-    $hasTerms = (bool) $storage->getQuery()->accessCheck(FALSE)
+    $hasTerms = (bool) $termStorage->getQuery()->accessCheck(FALSE)
       ->condition('vid', $vid)
       ->count()
       ->execute();
@@ -67,7 +70,7 @@ function joinup_test_install($is_syncing): void {
       $termIds[] = $parentTermId;
       foreach ($data['children'] ?? [] as $childWeight => $child) {
         $term = $createTerm($vid, $childWeight, $child, $definitions, $parentTermId);
-        $termIds[] = $term->id();
+        $termIds[] = (int) $term->id();
       }
       $rdfSync->destruct();
     }
@@ -75,6 +78,45 @@ function joinup_test_install($is_syncing): void {
 
   // Keep track of created terms.
   \Drupal::state()->set('joinup_test.testing_terms', $termIds);
+
+  // Create the Joinup collection on clean installation.
+  $nodeStorage = $entityTypeManager->getStorage('node');
+  $mapper = \Drupal::getContainer()->get('rdf_sync.mapper');
+  if (!$mapper->getEntityByUri(JoinupCollectionHelper::JOINUP_COLLECTION_URI)) {
+    $collection = $nodeStorage->create([
+      'type' => 'collection',
+      'uri' => JoinupCollectionHelper::JOINUP_COLLECTION_URI,
+      'title' => 'Joinup',
+      'field_state' => 'published',
+      'field_topic' => $mapper->getEntityByUri('http://joinup.eu/ontology/topic#demography'),
+      'created' => strtotime('2015-01-01 08:00'),
+      'changed' => strtotime('2015-01-01 08:00'),
+      'published_at' => strtotime('2015-01-01 08:00'),
+      'abstract' => 'Joinup is a collaborative platform created by the European Commission and funded by the European Union via the ISA² Programme.',
+      'description' => [
+        'value' => 'Joinup is a collaborative platform created by the European Commission and funded by the European Union via the ISA² Programme. It offers several services that aim to help e-Government professionals share their experience with each other. The platform is also a repository of e-Government solutions, case studies, reusable software and components, and best practices. Joinup is a key initiative of the European Commission’s ISA² Programme, which is part of the EU’s policy to create a Digital Single Market.',
+        'format' => 'content_editor',
+      ],
+      'contact' => $nodeStorage->create([
+        'type' => 'contact_information',
+        'title' => 'Contact name',
+        'email' => 'contact.email@example.com',
+      ]),
+      'owner' => $nodeStorage->create([
+        'type' => 'owner',
+        'title' => 'ISA²',
+      ]),
+
+    ]);
+    $collection->save();
+    \Drupal::state()->set('joinup_test.joinup_collection.created', TRUE);
+
+    $indexes = ContentEntity::getIndexesForEntity($collection);
+    foreach ($indexes as $index) {
+      $index->setOption('index_directly', TRUE);
+      $index->trackItemsUpdated('entity:node', [$collection->id() . ':en']);
+    }
+  }
 }
 
 /**
@@ -82,10 +124,24 @@ function joinup_test_install($is_syncing): void {
  */
 function joinup_test_uninstall($is_syncing): void {
   $state = \Drupal::state();
+
   // Remove testing terms.
   if ($tids = $state->get('joinup_test.testing_terms', [])) {
-    $storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
-    $storage->delete($storage->loadMultiple($tids));
+    $termStorage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
+    $termStorage->delete($termStorage->loadMultiple($tids));
   }
   $state->delete('joinup_test.testing_terms');
+
+  // Delete the Joinup collection only if it has been created on clean.
+  if ($state->get('joinup_test.joinup_collection.created', FALSE)) {
+    $mapper = \Drupal::getContainer()->get('rdf_sync.mapper');
+    if ($joinupCollection = $mapper->getEntityByUri(JoinupCollectionHelper::JOINUP_COLLECTION_URI)) {
+      $joinupCollection->get('contact')->entity->delete();
+      $joinupCollection->get('owner')->entity->delete();
+      $joinupCollection->delete();
+    }
+  }
+  $state->delete('joinup_test.joinup_collection.created');
+
+  \Drupal::getContainer()->get('rdf_sync.synchronizer')->destruct();
 }
