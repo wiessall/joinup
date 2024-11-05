@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_assessment\Plugin\WebformHandler;
 
+use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Layout\LayoutPluginManagerInterface;
 use Drupal\joinup_assessment\AssessmentInterface;
+use Drupal\rdf_sync\RdfSyncMapperInterface;
 use Drupal\webform\Plugin\WebformHandlerBase;
 use Drupal\webform\webformSubmissionInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -37,11 +39,19 @@ class DocumentFromSubmissionWebformHandler extends WebformHandlerBase {
   protected LayoutPluginManagerInterface $layoutPluginManager;
 
   /**
+   * Rdf sync mapper.
+   *
+   * @var \Drupal\rdf_sync\RdfSyncMapperInterface
+   */
+  protected RdfSyncMapperInterface $rdfSyncMapper;
+
+  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
     $instance = parent::create($container, $configuration, $plugin_id, $plugin_definition);
     $instance->layoutPluginManager = $container->get('plugin.manager.core.layout');
+    $instance->rdfSyncMapper = $container->get('rdf_sync.mapper');
 
     return $instance;
   }
@@ -72,7 +82,7 @@ class DocumentFromSubmissionWebformHandler extends WebformHandlerBase {
       'title' => $webformSubmission->label(),
       'field_paragraphs_body' => [$this->getLayoutParagraph()],
       'field_state' => AssessmentInterface::DOCUMENT_STATE,
-      'og_audience' => AssessmentInterface::DOCUMENT_GROUP_URI,
+      'og_audience' => $this->getGroup() ?? NULL,
       'abstract' => substr($submissionData[AssessmentInterface::SUBMISSION_ABSTRACT] ?? '', 0, 250),
       'field_type' => AssessmentInterface::DOCUMENT_TYPE_KEY,
       'field_topic' => $this->getTopicId(),
@@ -128,6 +138,16 @@ class DocumentFromSubmissionWebformHandler extends WebformHandlerBase {
     );
 
     return $layoutParagraph;
+  }
+
+  /**
+   * Gets the parent group.
+   *
+   * @return \Drupal\Core\Entity\ContentEntityInterface|null
+   *   Group.
+   */
+  protected function getGroup(): ?ContentEntityInterface {
+    return $this->rdfSyncMapper->getEntityByUri(AssessmentInterface::DOCUMENT_GROUP_URI);
   }
 
 }

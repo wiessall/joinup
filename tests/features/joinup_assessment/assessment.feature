@@ -2,10 +2,9 @@
 Feature: Document assessment
 
   Background:
-    Given collection:
-      | uri   | http://data.europa.eu/w21/c5e99eae-6d31-47a0-b914-a4b9f4ea82cf |
-      | title | Assessment catalogue                                           |
-      | state | published                                                      |
+    Given collection content:
+      | title                | state     | uri                                                            |
+      | Assessment catalogue | published | http://data.europa.eu/w21/c5e99eae-6d31-47a0-b914-a4b9f4ea82cf |
 
   Scenario: Create a document node out of a webform.
     When I am at "/form/online-form-for-assessments-demo"
