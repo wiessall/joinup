@@ -118,10 +118,7 @@ class DocumentFromSubmissionWebformHandler extends WebformHandlerBase {
     $layoutInstance = $this->layoutPluginManager->createInstance($layout_id);
     $paragraphStorage = $this->entityTypeManager->getStorage('paragraph');
 
-    $layoutParagraph = $paragraphStorage->create([
-        'type' => 'layout',
-      ]
-    );
+    $layoutParagraph = $paragraphStorage->create(['type' => 'layout']);
     $layoutParagraph->setBehaviorSettings(
       'layout_paragraphs',
       [
