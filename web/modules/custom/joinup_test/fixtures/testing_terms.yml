@@ -6,6 +6,7 @@ topic:
   - name: 'eGov'
     children:
       - name: 'Supplier exchange'
+      - name: 'European Policies'
   - name: 'E-health Dpt.'
     children:
       - name: 'E-health'
