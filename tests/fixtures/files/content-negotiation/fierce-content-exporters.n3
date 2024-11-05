@@ -6,6 +6,5 @@
   a dc:LicenseDocument ;
   rdfs:label "Creative commons"@en ;
   ns0:deprecated true ;
-  dc:description """<p>This is so creative</p>
-""" ;
+  dc:description "<p>This is so creative</p>" ;
   dc:type <http://purl.org/adms/licencetype/NominalCost> .

@@ -7,8 +7,9 @@ namespace Drupal\joinup_group;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\menu_link_content\MenuLinkContentInterface;
-use Drupal\sparql_entity_storage\UriEncoder;
+use Drupal\menu_link_content\MenuLinkContentStorageInterface;
 
 /**
  * Provides implementation of "joinup_group.group_settings_form_alter" service.
@@ -61,9 +62,8 @@ class GroupSettingsFormAlter implements GroupSettingsFormAlterInterface {
    *   Menu link content.
    */
   protected function getMenuLinkContent(FormStateInterface $form_state): ?MenuLinkContentInterface {
-    /** @var \Drupal\joinup_group\Entity\GroupInterface|null $group */
     $group = $form_state->getFormObject()?->getEntity()?->getTargetEntity();
-    if (!$group) {
+    if (!$group instanceof GroupInterface) {
       return NULL;
     }
 
@@ -72,27 +72,28 @@ class GroupSettingsFormAlter implements GroupSettingsFormAlterInterface {
       return NULL;
     }
 
-    /** @var  \Drupal\menu_link_content\MenuLinkContentStorageInterface $menuLinkContentStorage */
     $menuLinkContentStorage = $this->entityTypeManager->getStorage('menu_link_content');
+    assert($menuLinkContentStorage instanceof MenuLinkContentStorageInterface);
 
+    $menuLinkQuery = $menuLinkContentStorage->getQuery();
     // Collect the IDs of links to the custom page.
-    $ids = $menuLinkContentStorage->getQuery()->accessCheck(FALSE)
+    $ids = $menuLinkQuery->accessCheck(FALSE)
       ->condition('bundle', 'menu_link_content')
       ->condition('menu_name', "ogmenu-{$menu->id()}")
-      ->condition('link.uri', 'entity:rdf_entity/' . UriEncoder::encodeUrl($group->id()))
+      ->condition($menuLinkQuery->orConditionGroup()
+        ->condition('link.uri', "entity:{$group->toUrl()->getInternalPath()}")
+        ->condition('link.uri', $group->toUrl()->toUriString())
+      )
       ->range(0, 1)
       ->execute();
     if (empty($ids)) {
       return NULL;
     }
 
-    /** @var \Drupal\menu_link_content\MenuLinkContentInterface $menuLinkContent */
     $menuLinkContent = $menuLinkContentStorage->load(reset($ids));
-    if (!$menuLinkContent) {
-      return NULL;
-    }
-
-    return $menuLinkContent;
+    return $menuLinkContent instanceof MenuLinkContentInterface
+      ? $menuLinkContent
+      : NULL;
   }
 
   /**

@@ -29,7 +29,7 @@ Feature: News moderation.
       | Cheetah       | ihatewonderwoman@example.com      |           |
       | Mirror Master | mirrormirroronthewall@example.com |           |
       | Metallo       | kryptoniteEverywhere@example.com  |           |
-    Given collections:
+    Given collection content:
       | title          | moderation | state     | content creation |
       | Justice League | no         | published | members          |
       | Legion of Doom | yes        | published | members          |
@@ -151,9 +151,9 @@ Feature: News moderation.
     And the following buttons should be present "Save as draft, Publish"
     And the following buttons should not be present "Propose, Request changes, Request deletion, Preview"
     When I fill in the following:
-      | Short title | Eagle joins the JL                   |
-      | Headline    | Eagle from WWII                      |
-      | Abstract    | Eagle abstract                       |
+      | Short title | Eagle joins the JL |
+      | Headline    | Eagle from WWII    |
+      | Abstract    | Eagle abstract     |
     And I append "text" to "field_paragraphs_body" layout paragraphs field
       | field_body:value  | Specialized in close combat training |
       | field_body:format | content_editor                       |
@@ -184,9 +184,9 @@ Feature: News moderation.
     And the following buttons should be present "Save as draft, Propose"
     And the following buttons should not be present "Publish, Request changes, Request deletion, Preview"
     When I fill in the following:
-      | Short title | Cheetah kills WonderWoman                             |
-      | Headline    | Scarch of poison                                      |
-      | Abstract    | Abstract of cheetah kills WonderWoman                 |
+      | Short title | Cheetah kills WonderWoman             |
+      | Headline    | Scarch of poison                      |
+      | Abstract    | Abstract of cheetah kills WonderWoman |
     And I append "text" to "field_paragraphs_body" layout paragraphs field
       | field_body:value  | A specific poison could expose Wonder-womans weakness |
       | field_body:format | content_editor                                        |
@@ -339,9 +339,9 @@ Feature: News moderation.
     And I click "Add news"
     Then I should see the heading "Add news"
     When I fill in the following:
-      | Short title | Whale joins the JL                   |
-      | Headline    | Whale from WWII                      |
-      | Abstract    | Whale abstract                       |
+      | Short title | Whale joins the JL |
+      | Headline    | Whale from WWII    |
+      | Abstract    | Whale abstract     |
     And I append "text" to "field_paragraphs_body" layout paragraphs field
       | field_body:value  | Specialized in close combat training |
       | field_body:format | content_editor                       |
@@ -357,9 +357,9 @@ Feature: News moderation.
     And I click "Add news"
     Then I should see the heading "Add news"
     When I fill in the following:
-      | Short title | Eagle joins the CE                   |
-      | Headline    | Eagle from WWVI                      |
-      | Abstract    | Eagle abstract                       |
+      | Short title | Eagle joins the CE |
+      | Headline    | Eagle from WWVI    |
+      | Abstract    | Eagle abstract     |
     And I append "text" to "field_paragraphs_body" layout paragraphs field
       | field_body:value  | Specialized in close combat training |
       | field_body:format | content_editor                       |

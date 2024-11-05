@@ -11,7 +11,6 @@ use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\ConfirmFormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Render\Renderer;
 use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
@@ -30,26 +29,6 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 class UnsubscribeForm extends ConfirmFormBase {
 
   /**
-   * The entity type manager service.
-   */
-  protected EntityTypeManagerInterface $entityTypeManager;
-
-  /**
-   * The renderer service.
-   */
-  protected RendererInterface $renderer;
-
-  /**
-   * The entity type bundle info service.
-   */
-  protected EntityTypeBundleInfoInterface $bundleInfo;
-
-  /**
-   * The OG membership manager service.
-   */
-  protected MembershipManagerInterface $membershipManager;
-
-  /**
    * The group, if any.
    */
   protected ?GroupInterface $group;
@@ -59,24 +38,12 @@ class UnsubscribeForm extends ConfirmFormBase {
    */
   protected ?array $types;
 
-  /**
-   * Constructs a new form instance.
-   *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   The entity type manager service.
-   * @param \Drupal\Core\Render\Renderer $renderer
-   *   The renderer service.
-   * @param \Drupal\Core\Entity\EntityTypeBundleInfoInterface $bundle_info
-   *   The entity type bundle info service.
-   * @param \Drupal\og\MembershipManagerInterface $membership_manager
-   *   The OG membership manager service.
-   */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, Renderer $renderer, EntityTypeBundleInfoInterface $bundle_info, MembershipManagerInterface $membership_manager) {
-    $this->entityTypeManager = $entity_type_manager;
-    $this->renderer = $renderer;
-    $this->bundleInfo = $bundle_info;
-    $this->membershipManager = $membership_manager;
-  }
+  public function __construct(
+    protected EntityTypeManagerInterface $entityTypeManager,
+    protected RendererInterface $renderer,
+    protected EntityTypeBundleInfoInterface $bundleInfo,
+    protected MembershipManagerInterface $membershipManager,
+  ) {}
 
   /**
    * {@inheritdoc}
@@ -106,7 +73,7 @@ class UnsubscribeForm extends ConfirmFormBase {
     }
     return $this->t('Unsubscribe from %group @type?', [
       '%group' => $this->group->label(),
-      '@type' => $this->group->get('rid')->entity->getSingularLabel(),
+      '@type' => $this->group->get('type')->entity->getSingularLabel(),
     ]);
   }
 
@@ -119,7 +86,7 @@ class UnsubscribeForm extends ConfirmFormBase {
     }
     $arguments = [
       '%group' => $this->group->label(),
-      '@type' => $this->group->get('rid')->entity->getSingularLabel(),
+      '@type' => $this->group->get('type')->entity->getSingularLabel(),
     ];
     if (!$this->types) {
       return $this->t('Are you sure you want to unsubscribe from %group @type? You will stop receiving news and updates, including the pending memberships, from this @type.', $arguments);
@@ -190,7 +157,7 @@ class UnsubscribeForm extends ConfirmFormBase {
       static::membershipUnsubscribeTypes($membership, $types);
       $arguments = [
         '%group' => $this->group->label(),
-        '@type' => $this->group->get('rid')->entity->getSingularLabel(),
+        '@type' => $this->group->get('type')->entity->getSingularLabel(),
         '@types' => implode(', ', $this->getTypesLabels()),
       ];
       if (!$this->types) {
@@ -374,7 +341,7 @@ class UnsubscribeForm extends ConfirmFormBase {
 
     $arguments = [
       '@group' => $group->label(),
-      '@type' => $group->get('rid')->entity->getSingularLabel(),
+      '@type' => $group->get('type')->entity->getSingularLabel(),
     ];
 
     if (!$types) {
@@ -433,7 +400,7 @@ class UnsubscribeForm extends ConfirmFormBase {
     foreach ($labels as $bundle => $group_labels) {
       $build[$bundle] = [
         '#theme' => 'item_list',
-        '#title' => $this->bundleInfo->getBundleCountLabel('rdf_entity', $bundle, count($group_labels), 'no_count_capitalize'),
+        '#title' => $this->bundleInfo->getBundleCountLabel('node', $bundle, count($group_labels), 'no_count_capitalize'),
         '#items' => $group_labels,
       ];
     }

@@ -22,13 +22,6 @@ class ContactInformation extends Node implements ContactInformationInterface {
   /**
    * {@inheritdoc}
    */
-  public function getWorkflowStateFieldName(): string {
-    return 'field_state';
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function getRelatedGroup(): ?GroupInterface {
     /** @var \Drupal\joinup_group\Entity\GroupInterface|null $group */
     return $this->get('related_group')->entity;

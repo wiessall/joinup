@@ -25,6 +25,10 @@ third_party_settings:
         value:
           predicate: 'http://purl.org/dc/terms/issued'
           type: 'xsd:dateTime'
+      distributions:
+        target_id:
+          predicate: 'http://www.w3.org/ns/dcat#distribution'
+          type: resource
 label_singular: release
 label_plural: releases
 label_count:

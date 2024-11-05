@@ -9,12 +9,9 @@ Feature: Discussion moderation
       | Username        |
       | Gabe Rogers     |
       | Brigham Salvage |
-    And the following collection:
-      | title            | DIY collection                           |
-      | description      | Collection of "Do it yourself" projects. |
-      | logo             | logo.png                                 |
-      | content creation | members                                  |
-      | state            | published                                |
+    And collection content:
+      | title          | description                              | logo     | content creation | state     |
+      | DIY collection | Collection of "Do it yourself" projects. | logo.png | members          | published |
     And the following collection user membership:
       | collection     | user            | roles       |
       | DIY collection | Gabe Rogers     | member      |
@@ -94,12 +91,9 @@ Feature: Discussion moderation
       | Vince Rome    | vince.rome@example.com    |
       | Lance Rustici | lance.rustici@example.com |
       | Denny Winslow | denny.winslow@example.com |
-    And the following collection:
-      | title            | Valentine's day survival kit                   |
-      | description      | How to survive the most scary day of the year. |
-      | logo             | logo.png                                       |
-      | content creation | members                                        |
-      | state            | published                                      |
+    And collection content:
+      | title                        | description                                    | logo     | content creation | state     |
+      | Valentine's day survival kit | How to survive the most scary day of the year. | logo.png | members          | published |
     And the following collection user membership:
       | collection                   | user          | roles       |
       | Valentine's day survival kit | Vince Rome    | member      |

@@ -4,8 +4,9 @@ status: true
 dependencies:
   config:
     - field.storage.ogmenu_instance.og_audience
+    - node.type.collection
+    - node.type.solution
     - og_menu.ogmenu.navigation
-    - rdf_entity.rdfentity.collection
   module:
     - og
 _core:
@@ -21,10 +22,11 @@ translatable: true
 default_value: {  }
 default_value_callback: ''
 settings:
-  handler: 'default:rdf_entity'
+  handler: 'default:node'
   handler_settings:
     target_bundles:
       collection: collection
+      solution: solution
     sort:
       field: _none
     auto_create: false

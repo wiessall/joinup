@@ -4,9 +4,9 @@ Feature:
   I need to be able to use "heading" paragraphs for content.
 
   Background:
-    Given the following collection:
-      | title | Paragraphs collection |
-      | state | published             |
+    Given collection content:
+      | title                 | state     |
+      | Paragraphs collection | published |
 
   Scenario: Heading paragraph is displayed as heading element.
     Given custom_page content:

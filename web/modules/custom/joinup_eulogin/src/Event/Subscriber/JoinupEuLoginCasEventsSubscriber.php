@@ -149,7 +149,7 @@ class JoinupEuLoginCasEventsSubscriber implements EventSubscriberInterface {
   public function blockedUserMessage(CasPostValidateEvent $event): void {
     $uid = $this->authmap->getUid($event->getCasPropertyBag()->getUsername(), 'cas');
     if ($uid && ($user = $this->entityTypeManager->getStorage('user')->load($uid)) && $user->isBlocked()) {
-      $this->messenger->addError('You cannot sign in yet. Your Joinup account is currently being verified. You will be notified by email once it is activated.');
+      $this->messenger->addError('You cannot sign in yet. Your Interoperable Europe Portal account is currently being verified. You will be notified by email once it is activated.');
     }
   }
 
@@ -208,7 +208,7 @@ class JoinupEuLoginCasEventsSubscriber implements EventSubscriberInterface {
     ]);
 
     if ($sameMailAccounts) {
-      $event->cancelAutomaticRegistration($this->t('While trying to register your account with Joinup, we found that your EU Login email address %mail is already in use on our site. Either change your EU Login email address or contact the <a href=":contact">Joinup support</a> if you feel that something is wrong.', [
+      $event->cancelAutomaticRegistration($this->t('While trying to register your account with Interoperable Europe Portal, we found that your EU Login email address %mail is already in use on our site. Either change your EU Login email address or contact the <a href=":contact">Interoperable Europe Portal support</a> if you feel that something is wrong.', [
         '%mail' => $mail,
         ':contact' => Url::fromRoute('contact_form.contact_page')->toString(),
       ]))->stopPropagation();
@@ -244,7 +244,7 @@ class JoinupEuLoginCasEventsSubscriber implements EventSubscriberInterface {
     // the correct case sensitivity email.
     if (strtolower($account->getEmail()) !== strtolower($euloginEmail)) {
       if (user_load_by_mail($euloginEmail)) {
-        $event->cancelLogin($this->t("You've recently changed your EU Login account email but that email is already used in Joinup by another user. You cannot login until, either you change your EU Login email or you <a href=':url'>contact support</a> to fix the issue.", [
+        $event->cancelLogin($this->t("You've recently changed your EU Login account email but that email is already used in Interoperable Europe Portal by another user. You cannot login until, either you change your EU Login email or you <a href=':url'>contact support</a> to fix the issue.", [
           ':url' => Url::fromRoute('contact_form.contact_page')->setAbsolute()->toString(),
         ]));
       }
@@ -271,7 +271,7 @@ class JoinupEuLoginCasEventsSubscriber implements EventSubscriberInterface {
     if ($event->getCasPropertyBag()->hasAttribute('newAccountRegistered')) {
       $url = $event->getAccount()->toUrl('edit-form');
       $this->currentRequest->query->set('destination', $url->toString());
-      $this->messenger->addStatus('Fill in the fields below to let the Joinup community learn more about you!');
+      $this->messenger->addStatus('Fill in the fields below to let the Interoperable Europe Portal community learn more about you!');
     }
   }
 

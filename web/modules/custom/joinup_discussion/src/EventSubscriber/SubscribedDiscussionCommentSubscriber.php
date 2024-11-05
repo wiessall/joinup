@@ -47,7 +47,7 @@ class SubscribedDiscussionCommentSubscriber implements EventSubscriberInterface 
   /**
    * The comment parent discussion group.
    *
-   * @var \Drupal\rdf_entity\RdfInterface
+   * @var \Drupal\joinup_group\Entity\GroupInterface
    */
   protected $group;
 

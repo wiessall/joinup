@@ -12,15 +12,15 @@ Feature: Sitewide forum
       | Quite new discussion     | published | 2024-05-05 | 2024-05-05 | 2024-05-05   |
       | Very new discussion      | published | 2024-06-06 | 2024-06-06 | 2024-06-06   |
       | Archived discussion      | published |            |            |              |
-    And the workflow state of the "Archived discussion" content is set to "archived"
+    And the workflow state of the "Archived discussion" content is changed to "archived"
     And user:
       | Username | Commenter |
     And comments:
-      | parent                  | created    | changed    |
-      | Blast from the past     | 1981-01-01 | 1981-01-01 |
-      | Blast from the past     | 1983-03-03 | 1983-03-03 |
-      | Old discussion          | 2012-12-12 | 2012-12-12 |
-      | New discussion          | 2022-02-02 | 2022-02-02 |
+      | parent              | created    | changed    |
+      | Blast from the past | 1981-01-01 | 1981-01-01 |
+      | Blast from the past | 1983-03-03 | 1983-03-03 |
+      | Old discussion      | 2012-12-12 | 2012-12-12 |
+      | New discussion      | 2022-02-02 | 2022-02-02 |
 
   Scenario: Sitewide page lists the appropriate discussions.
     Given I go to "/discussions"
@@ -44,10 +44,10 @@ Feature: Sitewide forum
       | Brand new draft discussion | draft     |
     And I go to "/discussions"
     Then I should see the following tiles in the correct order:
-      | Brand new discussion    |
-      | Very new discussion     |
-      | Quite new discussion    |
-      | New discussion          |
+      | Brand new discussion |
+      | Very new discussion  |
+      | Quite new discussion |
+      | New discussion       |
     But I should not see the heading "Most active discussions"
     # Users are posting new comment to discussions.
     Given comments:
@@ -64,10 +64,10 @@ Feature: Sitewide forum
       | New discussion          |
       | Not that old discussion |
     Then in the "Latest discussions" list, I should see the following tiles in the correct order:
-      | Brand new discussion    |
-      | Very new discussion     |
-      | Quite new discussion    |
-      | Old discussion          |
+      | Brand new discussion |
+      | Very new discussion  |
+      | Quite new discussion |
+      | Old discussion       |
     # A new discussion getting enough comments is able to land in the most
     # active list.
     Given discussion content:
@@ -87,10 +87,10 @@ Feature: Sitewide forum
       | New discussion          |
       | Not that old discussion |
     Then in the "Latest discussions" list, I should see the following tiles in the correct order:
-      | Brand new discussion    |
-      | Very new discussion     |
-      | Quite new discussion    |
-      | Old discussion          |
+      | Brand new discussion |
+      | Very new discussion  |
+      | Quite new discussion |
+      | Old discussion       |
     # We only display four discussions per list.
     Given discussion content:
       | title              | state     |
@@ -105,12 +105,12 @@ Feature: Sitewide forum
     # Again, send last comment through the UI.
     Given the Commenter user leaves a comment at the "This is the newest" discussion
     Then in the "Most active discussions" list, I should see the following tiles in the correct order:
-      | This is the newest      |
-      | Supa-dupa-new           |
-      | Blast from the past     |
-      | New discussion          |
+      | This is the newest  |
+      | Supa-dupa-new       |
+      | Blast from the past |
+      | New discussion      |
     Then in the "Latest discussions" list, I should see the following tiles in the correct order:
-      | Brand new discussion    |
-      | Another newest          |
-      | Very new discussion     |
-      | Quite new discussion    |
+      | Brand new discussion |
+      | Another newest       |
+      | Very new discussion  |
+      | Quite new discussion |

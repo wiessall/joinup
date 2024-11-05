@@ -5,8 +5,8 @@ dependencies:
   config:
     - field.storage.message.group
     - message.template.announcement
-    - rdf_entity.rdfentity.collection
-    - rdf_entity.rdfentity.solution
+    - node.type.collection
+    - node.type.solution
 id: message.announcement.group
 field_name: group
 entity_type: message
@@ -18,7 +18,7 @@ translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:
-  handler: 'default:rdf_entity'
+  handler: 'default:node'
   handler_settings:
     target_bundles:
       collection: collection

@@ -12,6 +12,13 @@ trait DescriptionTrait {
   /**
    * {@inheritdoc}
    */
+  public function getDescriptionField(): string {
+    return 'description';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function getDescriptionAsRenderArray($display_options = []): array {
     assert(method_exists($this, 'getMainPropertyValue'), __TRAIT__ . ' depends on JoinupBundleClassFieldAccessTrait. Please include it in your class.');
     return $this->get($this->getDescriptionField())->view($display_options);

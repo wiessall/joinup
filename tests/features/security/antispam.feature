@@ -22,10 +22,9 @@ Feature: As a visitor or logged-in user, when I want to post content, the form
     And the following email confirmation request:
       | email                | status    |
       | acme.inc@example.com | confirmed |
-    And the following collection:
-      | title               | Family photos |
-      | state               | published     |
-      | contact information | ACME Inc.     |
+    And collection content:
+      | title         | state     | contact information |
+      | Family photos | published | ACME Inc.           |
     And discussion content:
       | title      | collection    | state     |
       | Let's talk | Family photos | published |
@@ -85,16 +84,12 @@ Feature: As a visitor or logged-in user, when I want to post content, the form
     And contact_information content:
       | name      | email                |
       | Anti Inc. | anti.inc@example.com |
-    And the following collection:
-      | title               | Ware cat   |
-      | state               | draft      |
-      | contact information | Anti Inc.  |
-      | author              | Ransomware |
-    And the following solution:
-      | title      | Ware cat   |
-      | collection | Ware cat   |
-      | state      | draft      |
-      | author     | Ransomware |
+    And collection content:
+      | title    | state | contact information | author     |
+      | Ware cat | draft | Anti Inc.           | Ransomware |
+    And solution content:
+      | title    | collection | state | author     |
+      | Ware cat | Ware cat   | draft | Ransomware |
     And the following contact information emails are validated:
       | Anti Inc. |
 

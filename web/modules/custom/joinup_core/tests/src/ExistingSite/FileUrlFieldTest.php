@@ -8,8 +8,6 @@ use Behat\Mink\Exception\ElementNotFoundException;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Tests\joinup_core\Traits\TestFileTrait;
 use Drupal\Tests\joinup_test\ExistingSite\JoinupExistingSiteTestBase;
-use Drupal\Tests\rdf_entity\Traits\EntityUtilityTrait;
-use Drupal\Tests\sparql_entity_storage\Traits\SparqlConnectionTrait;
 use Drupal\file\FileInterface;
 use Drupal\file_url\FileUrlHandler;
 use Drupal\node\Entity\Node;
@@ -22,10 +20,8 @@ use weitzman\LoginTrait\LoginTrait;
  */
 class FileUrlFieldTest extends JoinupExistingSiteTestBase {
 
-  use EntityUtilityTrait;
   use TestFileTrait;
   use LoginTrait;
-  use SparqlConnectionTrait;
   use StringTranslationTrait;
 
   /**
@@ -61,15 +57,15 @@ class FileUrlFieldTest extends JoinupExistingSiteTestBase {
     $account = $this->createUser([], NULL, FALSE, ['roles' => ['moderator']]);
     $this->drupalLogin($account);
 
-    $solution = $this->createRdfEntity([
-      'rid' => 'solution',
-      'label' => $this->randomString(),
-      'field_is_state' => 'published',
+    $solution = $this->createNode([
+      'type' => 'solution',
+      'title' => $this->randomString(),
+      'field_state' => 'published',
       // Ensure a parent collection.
-      'collection' => $this->createRdfEntity([
-        'rid' => 'collection',
-        'label' => $this->randomString(),
-        'field_ar_state' => 'published',
+      'og_audience' => $this->createNode([
+        'type' => 'collection',
+        'title' => $this->randomString(),
+        'field_state' => 'published',
       ]),
     ]);
     $licence = $this->createNode([

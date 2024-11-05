@@ -147,7 +147,6 @@ final class VocabularyIndexForm extends FormBase {
     $items = array_keys($items);
 
     $items = array_merge($items, $this->getSearchApiItemIds('node', 'field_topic', $filter));
-    $items = array_merge($items, $this->getSearchApiItemIds('rdf_entity', 'field_topic', $filter));
 
     $batch = [
       'title' => new TranslatableMarkup('Reindexing vocabulary %vocabulary', ['%vocabulary' => $vocabulary]),
