@@ -57,6 +57,24 @@ joinup_layout_twocolfooter_onecol_67_33:
     two_col_footer:
       label: Two column footer
 
+joinup_layout_twocolfooter_onecol_50_50:
+  label: 'Joinup two columns, two with common footer'
+  path: layouts/twocolfooter-onecol-50-50
+  template: joinup-layout--twocolfooter-onecol-50-50
+  library: joinup_layout/twocolfooter_onecol_50_50
+  category: 'Columns: 2'
+  default_region: first
+  icon_map:
+    - [first, second]
+    - [two_col_footer]
+  regions:
+    first:
+      label: First
+    second:
+      label: Second
+    two_col_footer:
+      label: Two column footer
+
 joinup_layout_oss_heading:
   label: 'Joinup OSS heading'
   path: layouts/oss-heading
