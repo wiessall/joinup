@@ -1,0 +1,9 @@
+joinup_rdf.uri_converter:
+  path: '/rdf'
+  defaults:
+    _form: 'Drupal\joinup_rdf\Form\UriConverterForm'
+    _title: 'Entity URI to URL and the other way around'
+  requirements:
+    _permission: 'access uri converter'
+  options:
+    _admin_route: TRUE
