@@ -227,7 +227,7 @@ display:
           group_type: group
           admin_label: ''
           plugin_id: private_message_target
-          label: 'To: '
+          label: To
           exclude: false
           alter:
             alter_text: false
@@ -630,7 +630,13 @@ display:
     display_plugin: page
     position: 1
     display_options:
+      access:
+        type: role
+        options:
+          role:
+            moderator: moderator
       defaults:
+        access: false
         sorts: true
       display_description: ''
       display_extenders:
@@ -645,7 +651,7 @@ display:
         - 'languages:language_interface'
         - url
         - url.query_args
-        - user.permissions
+        - user.roles
       tags: {  }
   single:
     id: single

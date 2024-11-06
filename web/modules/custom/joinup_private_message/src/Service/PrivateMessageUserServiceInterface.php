@@ -18,7 +18,7 @@ interface PrivateMessageUserServiceInterface {
    * @param \Drupal\private_message\Entity\PrivateMessageInterface $privateMessage
    *   Private message entity.
    *
-   * @return \Drupal\user\UserInterface
+   * @return \Drupal\user\UserInterface|null
    *   Target user of Private Message.
    */
   public function getPrivateMessageTarget(PrivateMessageInterface $privateMessage): ?UserInterface;
