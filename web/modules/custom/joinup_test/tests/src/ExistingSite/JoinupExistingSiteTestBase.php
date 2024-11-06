@@ -8,7 +8,6 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\Tests\joinup_test\Traits\ConfigTestTrait;
-use Drupal\Tests\joinup_test\Traits\RdfEntityCreationTrait;
 use Drupal\taxonomy\VocabularyInterface;
 use weitzman\DrupalTestTraits\ExistingSiteBase;
 
@@ -32,7 +31,6 @@ abstract class JoinupExistingSiteTestBase extends ExistingSiteBase {
   protected bool $disableSpamProtection = TRUE;
 
   use ConfigTestTrait;
-  use RdfEntityCreationTrait;
 
   /**
    * {@inheritdoc}

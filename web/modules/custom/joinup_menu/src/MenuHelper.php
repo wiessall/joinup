@@ -17,6 +17,7 @@ use Drupal\collection\Entity\CollectionInterface;
 use Drupal\joinup_collection\JoinupCollectionHelper;
 use Drupal\og\OgGroupAudienceHelperInterface;
 use Drupal\og_menu\OgMenuInstanceInterface;
+use Drupal\rdf_sync\RdfSyncMapperInterface;
 use Exception;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -28,26 +29,13 @@ class MenuHelper implements MenuHelperInterface {
   use StringTranslationTrait;
   use RedirectDestinationTrait;
 
-  /**
-   * Constructs an instance of the MenuHelper service.
-   *
-   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger
-   *   The logger channel factory.
-   * @param \Drupal\Core\Menu\MenuLinkTreeInterface $menuLinkTree
-   *   The menu link tree service.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *   The entity type manager.
-   * @param \Symfony\Component\HttpFoundation\RequestStack $requestStack
-   *   The request stack.
-   * @param \Drupal\Core\Path\PathMatcherInterface $pathMatcher
-   *   The path matcher.
-   */
   public function __construct(
     protected LoggerChannelFactoryInterface $logger,
     protected MenuLinkTreeInterface $menuLinkTree,
     protected EntityTypeManagerInterface $entityTypeManager,
     protected RequestStack $requestStack,
     protected PathMatcherInterface $pathMatcher,
+    protected RdfSyncMapperInterface $mapper,
   ) {}
 
   /**
@@ -111,11 +99,10 @@ class MenuHelper implements MenuHelperInterface {
       'popover' => $popover,
     ];
 
-    // Generate a link to the Joinup collection, to show as
-    // the "About us" link in the hamburger menu for anonymous users.
-    $rdf_storage = $this->entityTypeManager->getStorage('rdf_entity');
+    // Generate a link to the Joinup collection, to show as the "About us" link
+    // in the hamburger menu for anonymous users.
     try {
-      $joinup_collection = $rdf_storage->load(JoinupCollectionHelper::getCollectionId());
+      $joinup_collection = $this->mapper->getEntityByUri(JoinupCollectionHelper::JOINUP_COLLECTION_URI);
       if (!$joinup_collection instanceof CollectionInterface) {
         throw new Exception();
       }
@@ -135,7 +122,7 @@ class MenuHelper implements MenuHelperInterface {
       // However, in scope of the Ventuno theme the About Us link is considered
       // to be an important element, so we log a warning to alert the webmaster
       // that corrective action is required.
-      $this->logger->get('joinup_menu')->warning('"About us" link could not be rendered because the Joinup collection is not defined or doesn\'t have an About page.');
+      $this->logger->get('joinup_menu')->warning('"About us" link could not be rendered because the Interoperable Europe Portal collection is not defined or doesn\'t have an About page.');
     }
 
     return $anonymous_links;

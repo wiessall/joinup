@@ -58,7 +58,7 @@ class ContactInformationWorkflowTest extends JoinupWorkflowExistingSiteTestBase 
    * {@inheritdoc}
    */
   protected function getEntityType(): string {
-    return 'rdf_entity';
+    return 'node';
   }
 
   /**
@@ -75,7 +75,7 @@ class ContactInformationWorkflowTest extends JoinupWorkflowExistingSiteTestBase 
     foreach ($this->workflowTransitionsProvider() as $entity_state => $workflow_data) {
       foreach ($workflow_data as $user_var => $expected_target_states) {
         $content = $this->createNode([
-          'type' => 'contact_information',
+          'type' => $this->getEntityBundle(),
           'title' => $this->randomMachineName(),
           'field_state' => $entity_state,
           'uid' => $this->$user_var->id(),

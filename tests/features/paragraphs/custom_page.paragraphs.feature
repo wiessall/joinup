@@ -5,10 +5,9 @@ Feature:
   I need to be able to place paragraphs for content.
 
   Background:
-    Given the following collection:
-      | title | Paragraphs collection |
-      | state | published             |
-      | topic | HR                    |
+    Given collection content:
+      | title                 | state     | topic |
+      | Paragraphs collection | published | HR    |
 
   @javascript
   Scenario: Paragraph sections are multivalue and sort-able.
@@ -48,9 +47,9 @@ Feature:
 
   @javascript
   Scenario Outline: Privileged users can add paragraphs.
-    Given the following <group type>:
-      | title | Paragraphs group type |
-      | state | published             |
+    Given <group type> content:
+      | title                 | state     |
+      | Paragraphs group type | published |
     And users:
       | Username |
       | Zohan    |

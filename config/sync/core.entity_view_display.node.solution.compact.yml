@@ -1,0 +1,111 @@
+uuid: 999d30d8-c251-4d57-a3e1-e57cfad0da33
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.compact
+    - field.field.node.solution.abstract
+    - field.field.node.solution.body
+    - field.field.node.solution.contact
+    - field.field.node.solution.content_creation
+    - field.field.node.solution.description
+    - field.field.node.solution.documentation
+    - field.field.node.solution.field_keywords
+    - field.field.node.solution.field_shared_in
+    - field.field.node.solution.field_state
+    - field.field.node.solution.field_topic
+    - field.field.node.solution.group_moderation
+    - field.field.node.solution.landing_page
+    - field.field.node.solution.language
+    - field.field.node.solution.list_related_entities
+    - field.field.node.solution.listing_content
+    - field.field.node.solution.logo
+    - field.field.node.solution.metrics_page
+    - field.field.node.solution.og_audience
+    - field.field.node.solution.owner
+    - field.field.node.solution.process_status
+    - field.field.node.solution.related_solutions
+    - field.field.node.solution.release_number
+    - field.field.node.solution.short_id
+    - field.field.node.solution.site_featured
+    - field.field.node.solution.solution_type
+    - field.field.node.solution.spatial_coverage
+    - field.field.node.solution.translation
+    - image.style.logo
+    - node.type.solution
+  module:
+    - svg_image
+    - template_suggestion
+    - user
+id: node.solution.compact
+targetEntityType: node
+bundle: solution
+mode: compact
+content:
+  logo:
+    type: image
+    label: hidden
+    settings:
+      image_link: ''
+      image_style: logo
+      image_loading:
+        attribute: lazy
+      svg_attributes:
+        width: null
+        height: null
+      svg_render_as_image: true
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: no_wrappers
+    weight: 0
+    region: content
+hidden:
+  abstract: true
+  body: true
+  collections: true
+  contact: true
+  content_creation: true
+  description: true
+  distributions: true
+  documentation: true
+  download_total: true
+  eif_perspective: true
+  featured: true
+  field_keywords: true
+  field_shared_in: true
+  field_state: true
+  field_topic: true
+  flag_interoperability: true
+  flag_like: true
+  group_moderation: true
+  landing_page: true
+  langcode: true
+  language: true
+  links: true
+  list_related_entities: true
+  listing_content: true
+  members: true
+  metrics_page: true
+  node_solution_listing_content_inline_facets: true
+  node_solution_listing_content_top: true
+  og_audience: true
+  og_group: true
+  owner: true
+  pinned_in: true
+  process_status: true
+  published_at: true
+  read_more: true
+  related_solution: true
+  related_solutions: true
+  release_number: true
+  releases_overview: true
+  report: true
+  search_api_excerpt: true
+  share_link: true
+  short_id: true
+  site_featured: true
+  solution_subscribe: true
+  solution_type: true
+  spatial_coverage: true
+  translation: true
+  uri: true

@@ -1,0 +1,3 @@
+<http://example.com/apple> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://purl.org/dc/terms/LicenseDocument> .
+<http://example.com/apple> <http://www.w3.org/2000/01/rdf-schema#label> "Apple"@en .
+<http://example.com/apple> <http://joinup.eu/licence/deprecated> "false"^^<http://www.w3.org/2001/XMLSchema#boolean> .

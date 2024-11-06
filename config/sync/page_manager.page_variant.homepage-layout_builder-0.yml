@@ -127,7 +127,7 @@ variant_settings:
           additional: {  }
       third_party_settings: {  }
     -
-      layout_id: joinup_layout_twocolfooter_onecol_67_33
+      layout_id: joinup_layout_twocolfooter_onecol_50_50
       layout_settings:
         label: About
       components:
@@ -136,11 +136,11 @@ variant_settings:
           region: first
           configuration:
             id: custom_markup
-            label: "What's Joinup about?"
+            label: "What's Interoperable Europe Portal about?"
             label_display: '0'
             provider: custom_markup_block
             markup:
-              value: "<h2>What's Joinup</h2>\r\n<p>The Joinup platform is the European Commission's one-stop shop for interoperable, open, and free digital government ICT solutions and an online space for e-Government professionals and enthusiasts to share and learn about digital public services and initiatives.</p>\r\n<p><strong>Joinup covers the hands-on aspects of interoperability.</strong></p>\r\n"
+              value: "<h2>What is the Interoperable Europe Portal</h2>\r\n<p>The Interoperable Europe Portal is the European Union’s platform for promoting and supporting interoperability, collaboration, and knowledge sharing across public administrations, businesses, and citizens.</p>\r\n<p><strong>It acts as a one-stop shop for discovering, sharing, and reusing IT solutions and good practices.</strong></p>\r\n"
               format: full_html
           weight: 0
           additional:
@@ -208,36 +208,6 @@ variant_settings:
               block_attributes:
                 id: ''
                 class: 'about-how mt-4'
-                style: ''
-                data: ''
-              block_title_attributes:
-                id: ''
-                class: ''
-                style: ''
-                data: ''
-              block_content_attributes:
-                id: ''
-                class: ''
-                style: ''
-                data: ''
-        6ab0ceea-4541-4153-8b64-227e02369d30:
-          uuid: 6ab0ceea-4541-4153-8b64-227e02369d30
-          region: third
-          configuration:
-            id: custom_markup
-            label: 'New Joinup video'
-            label_display: '0'
-            provider: custom_markup_block
-            context_mapping: {  }
-            markup:
-              value: '<drupal-media data-entity-type="media" data-entity-uuid="b03799ea-2116-4d21-965f-3556002d8a00">&nbsp;</drupal-media>'
-              format: content_editor
-          weight: 0
-          additional:
-            component_attributes:
-              block_attributes:
-                id: ''
-                class: about-video
                 style: ''
                 data: ''
               block_title_attributes:

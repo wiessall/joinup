@@ -5,9 +5,9 @@ Feature: Add community content
   I need to be able to add community content
 
   Scenario Outline: Advanced content and group administration should not be accessible for group members
-    Given the following collection:
-      | title | The night shift |
-      | state | published       |
+    Given collection content:
+      | title           | state     |
+      | The night shift | published |
 
     When I am logged in as a "<member type>" of the "The night shift" collection
     And I go to the homepage of the "The night shift" collection
@@ -37,9 +37,9 @@ Feature: Add community content
       | member      | news         |
 
   Scenario Outline: Advanced content and group administration should not be accessible for moderators
-    Given the following collection:
-      | title | The night shift |
-      | state | published       |
+    Given collection content:
+      | title           | state     |
+      | The night shift | published |
 
     When I am logged in as a "moderator"
     And I go to the homepage of the "The night shift" collection
@@ -70,9 +70,9 @@ Feature: Add community content
     Given users:
       | Username  | E-mail                     | First name | Family name    | Roles     |
       | Publisher | publisher-example@test.com | Publisher  | Georgakopoulos | moderator |
-    And the following collection:
-      | title | The afternoon shift |
-      | state | published           |
+    And collection content:
+      | title               | state     |
+      | The afternoon shift | published |
     And discussion content:
       | title             | content         | author    | state | collection          | created    |
       | Sample discussion | Sample content. | Publisher | draft | The afternoon shift | 01-01-2010 |
@@ -112,7 +112,7 @@ Feature: Add community content
       | news         |
 
   Scenario: Directly publishing community content sets the correct publication date.
-    Given the following collections:
+    Given collection content:
       | title        | description                  | logo     | state     |
       | CC container | Community content container. | logo.png | published |
     And I am logged in as a "facilitator" of the "CC container" collection
@@ -153,7 +153,7 @@ Feature: Add community content
       | Abstract    | Published community event |
     And I append "text" to "field_paragraphs_body" layout paragraphs field
       | field_body:value  | Published community event |
-      | field_body:format | content_editor                    |
+      | field_body:format | content_editor            |
     And I select "Supplier exchange" from "Topic"
     And I press "Add another item" at the "Virtual location" field
     And I fill the start date of the Date widget with "2018-08-29"
@@ -185,9 +185,9 @@ Feature: Add community content
     And the publication date of the "Published community news" news should be equal to the created date
 
   Scenario Outline: Community content type is indicated on the byline
-    Given the following collection:
-      | title | The night watch |
-      | state | published       |
+    Given collection content:
+      | title           | state     |
+      | The night watch | published |
     And <content type> content:
       | title                   | collection      | state     |
       | The glorious revolution | The night watch | published |
@@ -201,9 +201,9 @@ Feature: Add community content
       | news         | News       |
 
   Scenario: Event content type is not indicated on the byline
-    Given the following collection:
-      | title | The night batch |
-      | state | published       |
+    Given collection content:
+      | title           | state     |
+      | The night batch | published |
     And event content:
       | title                    | collection      | state     | start date   | end date            | state     |
       | Red glorious revolution  | The night batch | published | now +1 years | now +1 years +1 day | published |
@@ -226,9 +226,9 @@ Feature: Add community content
 
   @javascript @loggedErrors @uploadFiles:logo.png
   Scenario: Editor File dialog form does not trigger warning
-    Given the following collection:
-      | title | The editor tester collection |
-      | state | published                    |
+    Given collection content:
+      | title                        | state     |
+      | The editor tester collection | published |
     And the site error reporting verbosity is "verbose"
 
     When I am logged in as a "facilitator" of the "The editor tester collection" collection

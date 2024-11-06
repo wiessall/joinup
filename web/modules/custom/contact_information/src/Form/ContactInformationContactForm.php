@@ -8,7 +8,6 @@ use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\contact_information\Entity\ContactInformation;
 use Drupal\contact_information\Traits\ContactInfoInaccessibleTrait;
-use Drupal\rdf_entity\RdfInterface;
 
 /**
  * Default class to build the Contact Form.
@@ -20,7 +19,7 @@ class ContactInformationContactForm extends ContactInformationFormBase {
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state, ?RdfInterface $rdf_entity = NULL): array|AjaxResponse {
+  public function buildForm(array $form, FormStateInterface $form_state): array|AjaxResponse {
     $form = parent::buildForm($form, $form_state);
 
     // We cannot use the current url in case we open modal.

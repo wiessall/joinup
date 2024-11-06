@@ -1,4 +1,4 @@
 services:
   adms_validator.validator:
     class: Drupal\adms_validator\AdmsValidator
-    arguments: ['@sparql.endpoint']
+    arguments: ['@rdf_sync.connection', '@rdf_sync.triples']

@@ -1,0 +1,25 @@
+uuid: 13d57deb-2b87-410a-aa15-533a7457c7de
+langcode: en
+status: true
+dependencies:
+  module:
+    - field_permissions
+    - node
+third_party_settings:
+  field_permissions:
+    permission_type: public
+id: node.short_id
+field_name: short_id
+entity_type: node
+type: string
+settings:
+  max_length: 26
+  case_sensitive: false
+  is_ascii: true
+module: core
+locked: false
+cardinality: 1
+translatable: false
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

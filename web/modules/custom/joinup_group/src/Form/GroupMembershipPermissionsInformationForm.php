@@ -28,13 +28,13 @@ class GroupMembershipPermissionsInformationForm extends FormBase {
    *   The form render array.
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The form state object.
-   * @param \Drupal\joinup_group\Entity\GroupInterface|null $rdf_entity
+   * @param \Drupal\joinup_group\Entity\GroupInterface|null $node
    *   The group for which the membership permission information is rendered.
    *
    * @return array
    *   A render array containing the form.
    */
-  public function buildForm(array $form, FormStateInterface $form_state, ?GroupInterface $rdf_entity = NULL): array {
+  public function buildForm(array $form, FormStateInterface $form_state, ?GroupInterface $node = NULL): array {
     $form['permissions'] = [
       '#type' => 'table',
       '#header' => [
@@ -46,7 +46,7 @@ class GroupMembershipPermissionsInformationForm extends FormBase {
       ],
     ];
 
-    foreach ($this->getPermissionInfo($rdf_entity) as $permission_info) {
+    foreach ($this->getPermissionInfo($node) as $permission_info) {
       if ($permission_info['applicable'] ?? TRUE) {
         $form['permissions'][] = [
           [
@@ -100,8 +100,8 @@ class GroupMembershipPermissionsInformationForm extends FormBase {
     $only_authors_can_create = $content_creators === ContentCreationOptions::FACILITATORS_AND_AUTHORS;
     return [
       [
-        // A custom description is provided since this is intended for a non-
-        // technical audience which is not familiar with Drupal permissions.
+        // A custom description is provided since this is intended for a
+        // non-technical audience which is not familiar with Drupal permissions.
         'description' => $this->t('View published content'),
         'permitted' => [
           'member' => TRUE,

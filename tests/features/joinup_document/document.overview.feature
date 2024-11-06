@@ -9,9 +9,9 @@ Feature: "Document" overview.
     Given licence content:
       | title        | description                                      | licence type  |
       | Beer licence | Offer a beer to the developer when you meet him. | Public domain |
-    And the following collection:
-      | title | Traveller tools |
-      | state | published       |
+    And collection content:
+      | title           | state     |
+      | Traveller tools | published |
     And document content:
       | title                      | document type | short title           | file type | file                                                        | field_paragraphs_body                           | collection      | licence      | state     |
       | VAT refund sample document | document      | VAT refund fac-simile | upload    | text.pdf                                                    | Valid for people living outside the EU.         | Traveller tools | Beer licence | published |

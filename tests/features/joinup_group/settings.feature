@@ -17,7 +17,7 @@ Feature: Collections/Solutions settings
     And contact_information content:
       | name            | email                       |
       | Chico editorial | chico.editorial@example.com |
-    And collections:
+    And collection content:
       | title             | logo     | abstract                                    | access url        | closed | creation date    | description                     | content creation         | moderation | topic             | owner         | contact information | state     |
       | Jillian Land Eels | logo.png | Read up on all about <strong>spice</strong> | http://spice.com/ | yes    | 28-01-1995 12:05 | The spice elegance personified. | facilitators and authors | yes        | Supplier exchange | Chico example | Chico editorial     | published |
     When I am logged in as a owner of the "Jillian Land Eels" collection
@@ -45,7 +45,7 @@ Feature: Collections/Solutions settings
     And I click "Add solution" in the plus button menu
     And I check "I have read and accept the legal notice and I commit to manage my solution on a regular basis."
     And I press "Yes"
-    Then I should see the heading "Add Solution"
+    Then I should see the heading "Add solution"
 
     When I fill in the following:
       | Title          | Solution Beta    |
@@ -78,14 +78,12 @@ Feature: Collections/Solutions settings
     And I delete the "Solution Beta" solution
 
   Scenario: Testing group settings permissions
-    Given the following collection:
-      | title | Rally fanatics |
-      | logo  | logo.png       |
-      | state | published      |
-    And the following solution:
-      | title      | Klop mirubes   |
-      | state      | published      |
-      | collection | Rally fanatics |
+    Given collection content:
+      | title          | logo     | state     |
+      | Rally fanatics | logo.png | published |
+    And solution content:
+      | title        | state     | collection     |
+      | Klop mirubes | published | Rally fanatics |
     And users:
       | Username         | E-mail                     | First name | Family name |
       | Ferners Lee      | ferners-lee@example.com    | Ferners    | Lee         |

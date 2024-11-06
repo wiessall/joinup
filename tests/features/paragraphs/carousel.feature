@@ -3,14 +3,13 @@ Feature:
   Access and functionality checks for carousel paragraphs in custom pages.
 
   Background:
-    Given collection:
-      | title | Roman ruins |
-      | state | published   |
-      | topic | HR          |
+    Given collection content:
+      | title       | state     | topic |
+      | Roman ruins | published | HR    |
 
   @javascript
   Scenario: Test that carousels with specific content is working correctly.
-    Given the following collections:
+    Given collection content:
       | title  | state     |
       | Sparta | published |
     And custom_page content:
@@ -70,7 +69,7 @@ Feature:
 
   @javascript
   Scenario: Carousel's control buttons should be visible if there is more content to show.
-    Given the following collections:
+    Given collection content:
       | title  | state     |
       | Sparta | published |
     And news content:

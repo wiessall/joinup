@@ -5,9 +5,9 @@ Feature: Github feed paragraph tests.
 
   @javascript
   Scenario Outline: Test the Github feed paragraph.
-    Given the following <group>:
-      | title | Paragraphs <group> |
-      | state | published          |
+    Given <group> content:
+      | title              | state     |
+      | Paragraphs <group> | published |
     And custom_page content:
       | title                   | <group>            | state     | topic                   | abstract                |
       | Catalogue of paragraphs | Paragraphs <group> | published | Statistics and Analysis | Catalogue page abstract |
@@ -78,9 +78,9 @@ Feature: Github feed paragraph tests.
 
   @javascript
   Scenario Outline: Facilitators can also access paragraphs.
-    Given the following <group>:
-      | title | Paragraphs <group> |
-      | state | published          |
+    Given <group> content:
+      | title              | state     |
+      | Paragraphs <group> | published |
     And custom_page content:
       | title                   | <group>            | state     | topic                   |
       | Catalogue of paragraphs | Paragraphs <group> | published | Statistics and Analysis |
