@@ -28,9 +28,13 @@ function ventuno_preprocess_links__dropbutton__operations(array &$variables): vo
   }
   // Override with medium secondary classes.
   if (isset($variables['button']['#options']['attributes']['class'])) {
-    $variables['button']['#options']['attributes']['class'] = [
+    $classes = [
       'btn',
       'btn-secondary',
     ];
+    if (in_array('use-ajax', $variables['button']['#options']['attributes']['class'])) {
+      $classes[] = 'use-ajax';
+    }
+    $variables['button']['#options']['attributes']['class'] = $classes;
   }
 }

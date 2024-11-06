@@ -44,7 +44,6 @@ dependencies:
     - joinup_group_content_management
     - joinup_legal
     - joinup_licence
-    - joinup_news
     - joinup_newsletter
     - joinup_oss_catalogue
     - joinup_search
@@ -102,6 +101,7 @@ permissions:
   - 'administer nodes'
   - 'administer organic groups'
   - 'administer outdated content threshold'
+  - 'administer private messages'
   - 'administer search fields'
   - 'administer shared entities'
   - 'administer sitewide alert entities'
