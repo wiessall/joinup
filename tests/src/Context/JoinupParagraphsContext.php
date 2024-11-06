@@ -591,4 +591,36 @@ class JoinupParagraphsContext extends RawDrupalContext {
     }
   }
 
+  /**
+   * Check list of paragraphs in modal.
+   *
+   * @param \Behat\Gherkin\Node\TableNode $table
+   *   Paragraphs types.
+   *
+   * @throws \Exception
+   *
+   * @Then I should see the following paragraph types in the modal in order:
+   */
+  public function iShouldSeeParagraphTypesInTheModalInOrder(TableNode $table): void {
+    $this->waitForModalToOpen();
+
+    // Get expected order from the table.
+    $expectedOrder = array_map(function ($row) {
+      return $row[0];
+    }, $table->getRows());
+
+    // Retrieve the order of paragraph types inside the modal.
+    $actualOrder = [];
+    $ui_dialog = $this->getSession()->getPage()->find('css', '.ui-dialog');
+    $items = $ui_dialog->findAll('css', '.lpb-component-list__item');
+    foreach ($items as $item) {
+      $actualOrder[] = trim($item->getText());
+    }
+
+    // Assert the actual order matches the expected order.
+    if ($expectedOrder !== $actualOrder) {
+      throw new \Exception("Paragraph types order in modal does not match. Expected: " . implode(', ', $expectedOrder) . " but got: " . implode(', ', $actualOrder));
+    }
+  }
+
 }

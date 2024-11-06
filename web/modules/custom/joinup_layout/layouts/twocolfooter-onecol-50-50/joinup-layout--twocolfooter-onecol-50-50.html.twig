@@ -1,0 +1,41 @@
+{#
+/**
+ * @file
+ * Default theme implementation for a two column layout.
+ *
+ * Available variables:
+ * - content: The content for this layout.
+ * - attributes: HTML attributes for the layout <div>.
+ *
+ * @ingroup themeable
+ */
+#}
+{%
+  set classes = [
+    'joinup-layout',
+    'joinup-layout--twocolfooter-onecol-50-50',
+  ]
+%}
+{% if content %}
+  <div{{ attributes.addClass(classes) }}>
+    <div class="inline-column-top">
+      {% if content.first %}
+        <div {{ region_attributes.first.addClass('layout__region', 'layout__region--first') }}>
+          {{ content.first }}
+        </div>
+      {% endif %}
+      {% if content.second %}
+        <div {{ region_attributes.second.addClass('layout__region', 'layout__region--second') }}>
+          {{ content.second }}
+        </div>
+      {% endif %}
+    </div>
+    <div class="inline-column-bottom">
+      {% if content.two_col_footer %}
+        <div {{ region_attributes.two_col_footer.addClass('layout__region', 'layout__region--two_col_footer') }}>
+          {{ content.two_col_footer }}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+{% endif %}
