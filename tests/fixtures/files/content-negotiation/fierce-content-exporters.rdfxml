@@ -7,8 +7,7 @@
   <dc:LicenseDocument rdf:about="http://i-am-creative/">
     <rdfs:label xml:lang="en">Creative commons</rdfs:label>
     <ns0:deprecated rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</ns0:deprecated>
-    <dc:description>&lt;p&gt;This is so creative&lt;/p&gt;
-</dc:description>
+    <dc:description>&lt;p&gt;This is so creative&lt;/p&gt;</dc:description>
     <dc:type rdf:resource="http://purl.org/adms/licencetype/NominalCost"/>
   </dc:LicenseDocument>
 

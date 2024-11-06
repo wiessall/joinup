@@ -5,7 +5,7 @@ Feature: SEO for news articles.
   I need proper metatag to be encapsulated in the html code.
 
   Scenario Outline: Basic metatags are attached as JSON schema on the page.
-    Given collections:
+    Given collection content:
       | title                       | state     |
       | Joinup SEO event collection | published |
     And users:
@@ -59,13 +59,13 @@ Feature: SEO for news articles.
       | property  | value                            |
       | @type     | http://schema.org/GeoCoordinates |
       # Geo coordinates are hardcoded as offered by the service.
-      | latitude  | 50.842291      |
-      | longitude | 4.370476       |
+      | latitude  | 50.842291                        |
+      | longitude | 4.370476                         |
     And the following meta tags should available in the html:
       | identifier      | value                                                                      |
       | description     | Body of event.                                                             |
       | og:url          | __base_url__/collection/joinup-seo-event-collection/event/joinup-seo-event |
-      | og:site_name    | Joinup                                                                     |
+      | og:site_name    | Interoperable Europe Portal                                                |
       | og:title        | Joinup SEO event                                                           |
       | og:description  | Body of event.                                                             |
       | og:image        | __base_url__/sites/default/files/__random_text__.jpg                       |
@@ -89,7 +89,7 @@ Feature: SEO for news articles.
       | 0: Some url - 1: http://some-random-event-url | http://some-random-event-url                                               | Rue Belliard 28, Brussels, Belgium | Rue Belliard 28   |
 
   Scenario: Events without physical address but with online location should still show the online location.
-    Given collections:
+    Given collection content:
       | title                       | state     |
       | Joinup SEO event collection | published |
     And users:

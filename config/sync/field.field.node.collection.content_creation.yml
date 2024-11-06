@@ -1,0 +1,23 @@
+uuid: 76b3fbe2-f555-4ef7-87ad-7aa90698a5ac
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.content_creation
+    - node.type.collection
+  module:
+    - options
+id: node.collection.content_creation
+field_name: content_creation
+entity_type: node
+bundle: collection
+label: 'Content creation'
+description: 'Choose which users can create content (news, events, discussions and documents) in the collection.'
+required: true
+translatable: true
+default_value:
+  -
+    value: only_members
+default_value_callback: ''
+settings: {  }
+field_type: list_string

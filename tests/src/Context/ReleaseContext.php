@@ -76,22 +76,6 @@ class ReleaseContext extends RawDrupalContext {
   }
 
   /**
-   * Checks the number of available releases.
-   *
-   * @param int $number
-   *   The expected number of releases.
-   *
-   * @throws \Exception
-   *   Throws an exception when the expected number does not match the one
-   *   found.
-   *
-   * @Then I should have :number release(s)
-   */
-  public function assertReleaseCount(int $number): void {
-    $this->assertEntityCount('node', 'release', $number);
-  }
-
-  /**
    * Asserts that releases are shown in the page in the exact order.
    *
    * This step is meant for the releases overview page within a solution.

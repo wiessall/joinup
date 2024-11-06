@@ -1,0 +1,122 @@
+uuid: 3e555a3c-212a-456d-b795-557a5f9e35d9
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.view_mode_tile
+    - field.field.node.collection.abstract
+    - field.field.node.collection.closed_group
+    - field.field.node.collection.contact
+    - field.field.node.collection.content_creation
+    - field.field.node.collection.description
+    - field.field.node.collection.field_keywords
+    - field.field.node.collection.field_state
+    - field.field.node.collection.field_topic
+    - field.field.node.collection.group_moderation
+    - field.field.node.collection.listing_content
+    - field.field.node.collection.logo
+    - field.field.node.collection.newsletter
+    - field.field.node.collection.owner
+    - field.field.node.collection.short_id
+    - field.field.node.collection.site_featured
+    - field.field.node.collection.spatial_coverage
+    - field.field.node.collection.website_url
+    - node.type.collection
+    - responsive_image.styles.tile
+  module:
+    - field_fallback_formatter
+    - layout_builder
+    - responsive_image
+    - smart_trim
+    - template_suggestion
+    - user
+third_party_settings:
+  layout_builder:
+    enabled: false
+    allow_custom: false
+id: node.collection.view_mode_tile
+targetEntityType: node
+bundle: collection
+mode: view_mode_tile
+content:
+  abstract:
+    type: field_fallback_formatter
+    label: hidden
+    settings:
+      main_field_formatter_id: string
+      main_field_formatter_settings:
+        link_to_entity: false
+      fallback_field_id: description
+      fallback_field_formatter_id: smart_trim
+      fallback_field_formatter_settings:
+        trim_length: 200
+        trim_type: chars
+        trim_suffix: ''
+        wrap_output: false
+        wrap_class: trimmed
+        more:
+          display_link: false
+          target_blank: false
+          link_trim_only: false
+          class: more-link
+          text: More
+          aria_label: 'Read more about [node:title]'
+        trim_options:
+          text: false
+          trim_zero: false
+          replace_tokens: false
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: bare
+    weight: 2
+    region: content
+  logo:
+    type: responsive_image
+    label: hidden
+    settings:
+      responsive_image_style: tile
+      image_link: ''
+      image_loading:
+        attribute: lazy
+    third_party_settings:
+      template_suggestion:
+        template_suggestion: bare
+    weight: 1
+    region: content
+  members:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  closed_group: true
+  collection_settings: true
+  contact: true
+  content_creation: true
+  description: true
+  featured: true
+  field_keywords: true
+  field_state: true
+  field_topic: true
+  group_moderation: true
+  join_collection: true
+  langcode: true
+  last_update: true
+  links: true
+  listing_content: true
+  members: true
+  newsletter: true
+  node_collection_listing_content_inline_facets: true
+  node_collection_listing_content_top: true
+  og_group: true
+  owner: true
+  published_at: true
+  read_more: true
+  report: true
+  search_api_excerpt: true
+  short_id: true
+  site_featured: true
+  solutions: true
+  spatial_coverage: true
+  uri: true
+  website_url: true

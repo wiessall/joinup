@@ -9,10 +9,11 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\PluginFormInterface;
 use Drupal\joinup_group\Entity\GroupContentInterface;
+use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_group\Exception\MissingGroupException;
 use Drupal\node\NodeInterface;
-use Drupal\rdf_entity\RdfInterface;
 use Drupal\search_api\IndexInterface;
+use Drupal\search_api\Item\ItemInterface;
 use Drupal\search_api\Plugin\PluginFormTrait;
 use Drupal\search_api\Processor\ProcessorPluginBase;
 use Drupal\user\UserInterface;
@@ -24,7 +25,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * @SearchApiProcessor(
  *   id = "joinup_entity_status",
  *   label = @Translation("Joinup entity status"),
- *   description = @Translation("Exclude unpublished content, rdf entities and users."),
+ *   description = @Translation("Exclude unpublished content and users."),
  *   stages = {
  *     "alter_items" = 0,
  *   },
@@ -39,12 +40,12 @@ class JoinupEntityStatus extends ProcessorPluginBase implements PluginFormInterf
    *
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
-  protected $entityTypeManager;
+  protected EntityTypeManagerInterface $entityTypeManager;
 
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): self {
     /** @var static $processor */
     $processor = parent::create($container, $configuration, $plugin_id, $plugin_definition);
     $processor->setEntityTypeManager($container->get('entity_type.manager'));
@@ -67,8 +68,8 @@ class JoinupEntityStatus extends ProcessorPluginBase implements PluginFormInterf
   /**
    * {@inheritdoc}
    */
-  public static function supportsIndex(IndexInterface $index) {
-    $supported_entity_types = ['node', 'rdf_entity', 'user'];
+  public static function supportsIndex(IndexInterface $index): bool {
+    $supported_entity_types = ['node', 'user'];
     foreach ($index->getDatasources() as $datasource) {
       if (in_array($datasource->getEntityTypeId(), $supported_entity_types)) {
         return TRUE;
@@ -80,7 +81,7 @@ class JoinupEntityStatus extends ProcessorPluginBase implements PluginFormInterf
   /**
    * {@inheritdoc}
    */
-  public function defaultConfiguration() {
+  public function defaultConfiguration(): array {
     return [
       'inverse' => FALSE,
     ];
@@ -89,7 +90,7 @@ class JoinupEntityStatus extends ProcessorPluginBase implements PluginFormInterf
   /**
    * {@inheritdoc}
    */
-  public function buildConfigurationForm(array $form, FormStateInterface $form_state) {
+  public function buildConfigurationForm(array $form, FormStateInterface $form_state): array {
     $form['inverse'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Inverse'),
@@ -103,11 +104,9 @@ class JoinupEntityStatus extends ProcessorPluginBase implements PluginFormInterf
   /**
    * {@inheritdoc}
    */
-  public function alterIndexedItems(array &$items) {
-    $rdf_storage = $this->entityTypeManager->getStorage('rdf_entity');
-
-    /** @var \Drupal\search_api\Item\Item $item */
+  public function alterIndexedItems(array &$items): void {
     foreach ($items as $item_id => $item) {
+      assert($item instanceof ItemInterface);
       $object = $item->getOriginalObject()->getValue();
       $inverse = $this->getConfiguration()['inverse'];
       $enabled = TRUE;
@@ -121,20 +120,20 @@ class JoinupEntityStatus extends ProcessorPluginBase implements PluginFormInterf
         if ($enabled && $object instanceof GroupContentInterface && $object->hasGroup()) {
           $enabled = FALSE;
           try {
-            $parent = $rdf_storage->load($object->getGroupId());
+            $parent = $this->entityTypeManager->getStorage('node')->load($object->getGroupId());
             if ($parent instanceof EntityPublishedInterface && $parent->isPublished()) {
               $enabled = TRUE;
             }
           }
-          catch (MissingGroupException $e) {
+          catch (MissingGroupException) {
           }
         }
       }
-      elseif ($object instanceof RdfInterface) {
-        $enabled = $object->isPublished();
-      }
       elseif ($object instanceof UserInterface) {
         $enabled = $object->isActive();
+      }
+      elseif ($object instanceof GroupInterface) {
+        $enabled = $object->isPublished();
       }
 
       $enabled = $inverse ? !$enabled : $enabled;

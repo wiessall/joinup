@@ -7,6 +7,7 @@
 
 declare(strict_types=1);
 
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Render\BubbleableMetadata;
 use Drupal\Core\Url;
 use Drupal\joinup_group\Entity\GroupInterface;
@@ -43,7 +44,10 @@ function contact_information_tokens(string $type, array $tokens, array $data, ar
   foreach ($tokens as $name => $original) {
     if ($name === 'confirmation-entities') {
       $gids = $confirmation->getProperty('groups');
-      $groups = \Drupal::entityTypeManager()->getStorage('rdf_entity')->loadMultiple($gids);
+      $groups = array_filter(
+        \Drupal::entityTypeManager()->getStorage('node')->loadMultiple($gids),
+        fn (EntityInterface $entity): bool => $entity instanceof GroupInterface,
+      );
       $render_array = [
         '#theme' => 'item_list',
         '#items' => array_values(
@@ -53,7 +57,7 @@ function contact_information_tokens(string $type, array $tokens, array $data, ar
                 '#type' => 'link',
                 '#url' => $group->toUrl()->setAbsolute(),
                 '#title' => $group->label(),
-                '#prefix' => "{$group->get('rid')->entity->label()}: ",
+                '#prefix' => "{$group->get('type')->entity->label()}: ",
               ];
             },
             $groups)

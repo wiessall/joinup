@@ -8,4 +8,3 @@ dependencies:
   - joinup:joinup_notification
   - joinup:joinup_subscription
   - og:og
-  - rdf_entity:rdf_entity

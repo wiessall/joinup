@@ -108,7 +108,7 @@ display:
             alter_text: false
             text: ''
             make_link: true
-            path: '/rdf_entity/{{ raw_arguments.group_target_id }}/announcements/view/{{ mid }}'
+            path: '/node/{{ raw_arguments.group_target_id }}/announcements/view/{{ mid }}'
             absolute: false
             external: false
             replace_spaces: false
@@ -849,7 +849,7 @@ display:
             alter_text: false
             text: ''
             make_link: true
-            path: '/rdf_entity/{{ gid|sparql_entity_storage_uri_encode }}/announcements/view/{{ mid }}'
+            path: '/node/{{ gid }}/announcements/view/{{ mid }}'
             absolute: false
             external: false
             replace_spaces: false
@@ -1174,9 +1174,12 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
-          plugin_id: string
+          plugin_id: numeric
           operator: '='
-          value: ''
+          value:
+            min: ''
+            max: ''
+            value: ''
           group: 1
           exposed: true
           expose:
@@ -1195,9 +1198,12 @@ display:
               authenticated: authenticated
               licence_manager: '0'
               anonymous: '0'
+              interoperability_validator: '0'
               moderator: '0'
               administrator: '0'
-              rdf_graph_manager: '0'
+              developer: '0'
+            min_placeholder: ''
+            max_placeholder: ''
             placeholder: ''
           is_grouped: false
           group_info:
@@ -1241,7 +1247,6 @@ display:
               anonymous: '0'
               moderator: '0'
               administrator: '0'
-              rdf_graph_manager: '0'
             reduce: false
           is_grouped: false
           group_info:
@@ -1324,7 +1329,7 @@ display:
         metatag_display_extender:
           metatags: {  }
           tokenize: false
-      path: rdf_entity/%rdf_entity/announcements
+      path: node/%node/announcements
       menu:
         type: tab
         title: Announcements

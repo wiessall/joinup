@@ -43,13 +43,10 @@ class UnpublishedContentPageController extends ControllerBase {
   /**
    * Renders a placeholder page for group unpublished content.
    *
-   * @param \Drupal\joinup_group\Entity\GroupInterface $rdf_entity
-   *   The group entity from the URL.
-   *
    * @return array
    *   The render array.
    */
-  public function unpublishedContent(GroupInterface $rdf_entity): array {
+  public function unpublishedContent(): array {
     return [
       '#type' => 'markup',
       '#markup' => $this->t('Below you can find the content that is currently unpublished. Note that all content without the state field will be in the "Other unpublished content" section.'),
@@ -59,14 +56,14 @@ class UnpublishedContentPageController extends ControllerBase {
   /**
    * Access check for the unpublished content page.
    *
-   * @param \Drupal\joinup_group\Entity\GroupInterface $rdf_entity
+   * @param \Drupal\joinup_group\Entity\GroupInterface $node
    *   The group entity from the URL.
    *
    * @return \Drupal\Core\Access\AccessResultInterface
    *   The access result object.
    */
-  public function access(GroupInterface $rdf_entity): AccessResultInterface {
-    return $this->group_manager->access($rdf_entity, 'view any unpublished content', 'view any unpublished content');
+  public function access(GroupInterface $node): AccessResultInterface {
+    return $this->group_manager->access($node, 'view any unpublished content', 'view any unpublished content');
   }
 
 }

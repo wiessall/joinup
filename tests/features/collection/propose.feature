@@ -1,8 +1,8 @@
 @api @group-a
 Feature: Proposing a collection
-  In order to create a new collection on Joinup
+  In order to create a new collection on Interoperable Europe Portal
   As the product owner of a collection of software solutions
-  I need to be able to propose a collection for inclusion on Joinup
+  I need to be able to propose a collection for inclusion on Interoperable Europe Portal
 
   # An anonymous user should be shown the option to add a collection, so that
   # the user will be aware that collections can be added by the public, even
@@ -67,9 +67,6 @@ Feature: Proposing a collection
     And I press "Add existing" at the "Owner" field
     And I fill in "Owner" with "Organisation example"
     And I press "Propose"
-    Then I should not see the following error messages:
-      | error messages         |
-      | Field Logo is required |
     And I should see the heading "Ancient and Classical Mythology"
     # Regression test for the keywords field in the about page.
     And I should not see the text "Search keywords" in the "Content" region
@@ -97,9 +94,9 @@ Feature: Proposing a collection
     And I delete the "Contact person" contact information
 
   Scenario: Propose a collection with a duplicate name
-    Given the following collection:
-      | title | The Ratcatcher's Guild |
-      | state | published              |
+    Given collection content:
+      | title                  | state     |
+      | The Ratcatcher's Guild | published |
     Given I am logged in as a user with the "authenticated" role
     When I go to the propose collection form
     And I fill in the following:
@@ -236,7 +233,7 @@ Feature: Proposing a collection
     # Email confirmation occurs only for published groups.
     And the following email should not have been sent:
       | recipient_mail     | some_unique_contact_person@example.com                                                                                                |
-      | subject            | Joinup - Please validate your contact details                                                                                         |
+      | subject            | Interoperable Europe Portal - Please validate your contact details                                                                    |
       | body               | Please confirm your email address some_unique_contact_person@example.com, which is set in your contact information for the following: |
       | signature_required | no                                                                                                                                    |
       | html               | yes                                                                                                                                   |
@@ -261,7 +258,7 @@ Feature: Proposing a collection
     # Email confirmation occurs only for published groups.
     And the following email should not have been sent:
       | recipient_mail     | contact_Rapazoglou@example.com                                                                                                |
-      | subject            | Joinup - Please validate your contact details                                                                                 |
+      | subject            | Interoperable Europe Portal - Please validate your contact details                                                            |
       | body               | Please confirm your email address contact_Rapazoglou@example.com, which is set in your contact information for the following: |
       | signature_required | no                                                                                                                            |
       | html               | yes                                                                                                                           |
@@ -270,9 +267,10 @@ Feature: Proposing a collection
     Given I am logged in as a "moderator"
     When I go to the edit form of the "Some email validation" collection
     And I press "Publish"
+    # @todo Re-enable in ISAICP-8992
     Then the following email should have been sent:
       | recipient_mail     | some_unique_contact_person@example.com                                                                                                |
-      | subject            | Joinup - Please validate your contact details                                                                                         |
+      | subject            | Interoperable Europe Portal - Please validate your contact details                                                                    |
       | body               | Please confirm your email address some_unique_contact_person@example.com, which is set in your contact information for the following: |
       | signature_required | no                                                                                                                                    |
       | html               | yes                                                                                                                                   |
@@ -280,7 +278,7 @@ Feature: Proposing a collection
     And I press "Publish"
     And the following email should have been sent:
       | recipient_mail     | contact_Rapazoglou@example.com                                                                                                |
-      | subject            | Joinup - Please validate your contact details                                                                                 |
+      | subject            | Interoperable Europe Portal - Please validate your contact details                                                            |
       | body               | Please confirm your email address contact_Rapazoglou@example.com, which is set in your contact information for the following: |
       | signature_required | no                                                                                                                            |
       | html               | yes                                                                                                                           |

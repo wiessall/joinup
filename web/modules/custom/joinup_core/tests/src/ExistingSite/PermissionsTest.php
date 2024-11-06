@@ -82,15 +82,15 @@ class PermissionsTest extends JoinupExistingSiteTestBase {
       $og_permission_manager = \Drupal::service('og.permission_manager');
       /** @var \Drupal\og\GroupTypeManagerInterface $og_group_type_manager */
       $og_group_type_manager = \Drupal::service('og.group_type_manager');
-      $collection_content_bundle_ids = $og_group_type_manager->getGroupContentBundleIdsByGroupBundle('rdf_entity', 'collection');
-      $solution_content_bundle_ids = $og_group_type_manager->getGroupContentBundleIdsByGroupBundle('rdf_entity', 'solution');
+      $collection_content_bundle_ids = $og_group_type_manager->getGroupContentBundleIdsByGroupBundle('node', 'collection');
+      $solution_content_bundle_ids = $og_group_type_manager->getGroupContentBundleIdsByGroupBundle('node', 'solution');
       $permissions = array_unique([
         ...$permissions,
-        ...array_keys($og_permission_manager->getDefaultPermissions('rdf_entity', 'collection', $collection_content_bundle_ids + [
+        ...array_keys($og_permission_manager->getDefaultPermissions('node', 'collection', $collection_content_bundle_ids + [
           // Solution is not OG group content, but it acts in the same way.
-          'rdf_entity' => ['solution'],
+          'node' => ['solution'],
         ])),
-        ...array_keys($og_permission_manager->getDefaultPermissions('rdf_entity', 'solution', $solution_content_bundle_ids)),
+        ...array_keys($og_permission_manager->getDefaultPermissions('node', 'solution', $solution_content_bundle_ids)),
       ]);
     }
     return $permissions;

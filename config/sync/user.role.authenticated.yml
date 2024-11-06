@@ -40,7 +40,6 @@ dependencies:
     - paragraphs
     - paragraphs_type_permissions
     - poll
-    - rdf_entity
     - search_api_autocomplete
     - sitewide_alert
     - sparql_endpoint
@@ -61,7 +60,7 @@ permissions:
   - 'access user profiles'
   - 'cancel account'
   - 'cancel own vote'
-  - 'create collection rdf entity'
+  - 'create collection content'
   - 'create contact_information content'
   - 'create content for any_user option'
   - 'create discussion content'
@@ -121,10 +120,8 @@ permissions:
   - 'edit own news content'
   - 'edit own owner content'
   - 'edit own polls'
-  - 'flag bookmark_node'
-  - 'flag bookmark_rdf_entity'
-  - 'flag like_node'
-  - 'flag like_rdf_entity'
+  - 'flag bookmark'
+  - 'flag like'
   - 'flag subscribe_discussions'
   - 'legal re-accept legal_notice'
   - 'legal view legal_notice'
@@ -147,14 +144,12 @@ permissions:
   - 'perform owner_workflow workflow update_needs_changes transition on own entity'
   - 'perform owner_workflow workflow validate transition on own entity'
   - 'post comments'
-  - 'propose collection rdf entity'
+  - 'propose collection content'
   - 'revert all revisions'
   - 'skip comment approval'
   - 'sparql endpoint query'
-  - 'unflag bookmark_node'
-  - 'unflag bookmark_rdf_entity'
-  - 'unflag like_node'
-  - 'unflag like_rdf_entity'
+  - 'unflag bookmark'
+  - 'unflag like'
   - 'unflag subscribe_discussions'
   - 'update paragraph content accordion'
   - 'update paragraph content accordion_item'
@@ -185,8 +180,7 @@ permissions:
   - 'use text format simple_html'
   - 'use text format text_html'
   - 'use text format webform_default'
-  - 'view bookmark_node'
-  - 'view bookmark_rdf_entity'
+  - 'view bookmark'
   - 'view compatibility documents'
   - 'view eif_perspective meta-entity'
   - 'view interoperability'
@@ -224,5 +218,4 @@ permissions:
   - 'view paragraph content video'
   - 'view paragraph content webform'
   - 'view published sitewide alert entities'
-  - 'view rdf entity'
   - 'view topic meta-entity'

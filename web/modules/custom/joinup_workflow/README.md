@@ -116,15 +116,15 @@ settings](../joinup_news/config/install/joinup_news.settings) file.
     joinup implementation are:
         * authenticated
         * moderator
-        * rdf_entity-collection-member
-        * rdf_entity-collection-facilitator
-        * rdf_entity-collection-administrator
-        * rdf_entity-solution-member
-        * rdf_entity-solution-facilitator
-        * rdf_entity-solution-administrator
+        * node-collection-member
+        * node-collection-facilitator
+        * node-collection-administrator
+        * node-solution-member
+        * node-solution-facilitator
+        * node-solution-administrator
         * owner
-    * The `rdf_entity-solution-member` is not used by joinup, but functionally,
-    it has to be set whenever he can do something as being an authenticated user
+    * The `node-solution-member` is not used by joinup, but functionally, it
+    has to be set whenever he can do something as being an authenticated user
     for example, because tests take care of edge cases as well.
     * The `owner` is a special handle and is *not* a role in the system. The
     owner represents the author of the entity, if one exists, and is not to be

@@ -14,22 +14,18 @@ Feature: Solution editing.
     And users:
       | Username     | E-mail                   |
       | Yancy Burton | yancy.burton@example.com |
-    And collection:
-      | title | Collection example |
-      | state | published          |
+    And collection content:
+      | title              | state     |
+      | Collection example | published |
     # Assign facilitator role in order to allow creation of a solution.
     # In UAT this can be done by creating the collection through the UI
     # with the related user.
     And the following collection user memberships:
       | collection         | user         | roles       |
       | Collection example | Yancy Burton | facilitator |
-    And solution:
-      | title               | Another solution  |
-      | description         | Just another one. |
-      | logo                | logo.png          |
-      | contact information | Seward Shawn      |
-      | owner               | Acme inc.         |
-      | state               | published         |
+    And solution content:
+      | title            | description       | logo     | contact information | owner     | state     |
+      | Another solution | Just another one. | logo.png | Seward Shawn        | Acme inc. | published |
 
   @uploadFiles:logo.png
   Scenario: A solution owner can edit only its own solutions.
@@ -38,7 +34,7 @@ Feature: Solution editing.
     And I click "Add solution"
     And I check "I have read and accept the legal notice and I commit to manage my solution on a regular basis."
     And I press "Yes"
-    Then I should see the heading "Add Solution"
+    Then I should see the heading "Add solution"
     When I fill in the following:
       | Title          | Solution A         |
       | Abstract       | Abstract of "A"    |
@@ -61,10 +57,10 @@ Feature: Solution editing.
     And I should see the link "Edit"
     When I go to the edit form of the "Solution A" solution
     Then I should see the heading "Edit Solution Solution A"
-    Then the fields "Title, Description, Contact information, Topic, Owner, Solution type, Moderated, Content creation" should be correctly ordered in the region "Main fields accordion"
-    Then the fields "Logo, Upload a new file or enter a URL, Geographical coverage, Search keywords, Related solutions, Status, Languages, Landing page, Metrics page" should be correctly ordered in the region "Additional fields accordion"
+    Then the fields "Title, Description, Contact information, Topic, Owner, Solution type, Moderated, Content creation" should be correctly ordered in the region "Solution edit form main fields accordion"
+    Then the fields "Logo, Upload a new file or enter a URL, Geographical coverage, Search keywords, Related solutions, Status, Languages, Landing page, Metrics page" should be correctly ordered in the region "Solution edit form additional fields accordion"
 
-    And the following fields should not be present "Issue tracker, Wiki, Langcode, Translation"
+    And the following fields should not be present "Issue tracker, Langcode"
     And the following fieldsets should be present "Contact information, Owner, Content creation"
     # Logo is required, so it is filled up during the creation of the solution.
     # Unfortunately, file fields with a file already attached cannot be found by
@@ -85,14 +81,9 @@ Feature: Solution editing.
     Then I delete the "Solution A revised" solution
 
   Scenario: A solution facilitator can edit only the solutions he's associated with.
-    Given the following solution:
-      | title               | Solution B    |
-      | description         | Second letter |
-      | logo                | logo.png      |
-      | contact information | Seward Shawn  |
-      | owner               | Acme inc.     |
-      | state               | published     |
-      | solution type       | Citizen       |
+    Given solution content:
+      | title      | description   | logo     | contact information | owner     | state     | solution type |
+      | Solution B | Second letter | logo.png | Seward Shawn        | Acme inc. | published | Citizen       |
     When I am logged in as a facilitator of the "Solution B" solution
     And I go to the homepage of the "Solution B" solution
     Then I should see the link "Edit"

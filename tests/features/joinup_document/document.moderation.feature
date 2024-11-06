@@ -16,16 +16,9 @@ Feature: Document moderation
     And contact_information content:
       | name        | email                   |
       | Dis contact | dis.contact@example.com |
-    And the following collection:
-      | title               | The Naked Ashes                 |
-      | description         | The wolverine is a Marvel hero. |
-      | logo                | logo.png                        |
-      | content creation    | registered users                |
-      | moderation          | no                              |
-      | state               | published                       |
-      | owner               | thisisanowner                   |
-      | contact information | Dis contact                     |
-      | topic               | E-inclusion                     |
+    And collection content:
+      | title           | description                     | logo     | content creation | moderation | state     | owner         | contact information | topic       |
+      | The Naked Ashes | The wolverine is a Marvel hero. | logo.png | registered users | no         | published | thisisanowner | Dis contact         | E-inclusion |
     And the following collection user membership:
       | collection      | user            | roles       |
       | The Naked Ashes | Gretchen Greene | member      |

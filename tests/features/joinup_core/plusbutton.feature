@@ -5,10 +5,9 @@ Feature: Plus button
   I need to be able see the plus button only when it has actions available.
 
   Scenario: Plus button shown when actions are available.
-    Given the following solution:
-      | title       | Simple solutions                         |
-      | description | Conplex problems call for easy solutions |
-      | state       | published                                |
+    Given solution content:
+      | title            | description                              | state     |
+      | Simple solutions | Conplex problems call for easy solutions | published |
 
     When I am logged in as a facilitator of the "Simple solutions" solution
     And I go to the homepage of the "Simple solutions" solution

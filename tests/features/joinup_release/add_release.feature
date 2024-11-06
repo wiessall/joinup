@@ -5,11 +5,9 @@ Feature: "Add release" visibility options.
   I need to be able to add "Release" rdf entities through UI.
 
   Scenario: "Add release" button should only be shown to solution facilitators.
-    Given the following solution:
-      | title         | Release solution test |
-      | description   | My awesome solution   |
-      | documentation | text.pdf              |
-      | state         | published             |
+    Given solution content:
+      | title                 | description         | documentation | state     |
+      | Release solution test | My awesome solution | text.pdf      | published |
 
     When I am logged in as a "facilitator" of the "Release solution test" solution
     And I go to the homepage of the "Release solution test" solution
@@ -29,13 +27,12 @@ Feature: "Add release" visibility options.
     Given owner content:
       | name                 | owner type |
       | Organisation example | Company    |
-    And the following solutions:
+    Given solution content:
       | title          | description        | documentation | owner                | state     |
       | Release Test 1 | test description 1 | text.pdf      | Organisation example | published |
     And release content:
       | title           | is version of  | release number | status    | state     | creation date       | published at        |
       | Chasing shadows | Release Test 1 | 1.0            | Completed | published | 2014-08-30 23:59:00 | 2014-08-30 23:59:00 |
-    Then I should have 1 release
 
     # Assert that the "Release" tiles are present and contain version, release date, label and bundle type.
     When I go to the homepage of the "Release Test 1" solution
@@ -76,7 +73,6 @@ Feature: "Add release" visibility options.
     # It should be possible to choose a different version number.
     And I fill in "Release version" with "1.1"
     And I press "Publish"
-    Then I should have 2 releases
 
     # Verify that the "Chasing shadows 1.1." release is registered as a release
     # of the "Release Test 1" solution.
@@ -93,18 +89,18 @@ Feature: "Add release" visibility options.
     When I fill in "Name" with "Chasing flares"
     And I fill in "Release version" with "1.0"
     And I press "Publish"
-    Then I should have 3 releases
 
     # Clean up entities created through the UI.
     Then I delete the "Chasing shadows" release
     And I delete the "Chasing shadows" release
     And I delete the "Chasing flares" release
 
+  # TODO: This test works because of the redirection but it should be adapted to
+  # use the correct URL in ISAICP-8376.
   Scenario: Do not allow access to the page if the parent is not a solution.
-    Given the following collection:
-      | uri   | http://example1regression |
-      | title | The Stripped Stream       |
-      | state | published                 |
+    Given collection content:
+      | uri                       | title               | state     |
+      | http://example1regression | The Stripped Stream | published |
 
     When I am not logged in
     And I go to "/rdf_entity/http_e_f_fexample1regression/release/add"
@@ -118,7 +114,7 @@ Feature: "Add release" visibility options.
     Given owner content:
       | name                     | owner type |
       | Organisation example two | Company    |
-    And the following solutions:
+    Given solution content:
       | title          | description        | documentation | owner                    | state     |
       | Release Test 2 | test description 2 | text.pdf      | Organisation example two | published |
     When I am logged in as a "facilitator" of the "Release Test 2" solution
