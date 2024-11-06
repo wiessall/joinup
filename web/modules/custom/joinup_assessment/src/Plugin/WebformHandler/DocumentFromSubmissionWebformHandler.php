@@ -107,10 +107,10 @@ class DocumentFromSubmissionWebformHandler extends WebformHandlerBase {
   /**
    * Gets topic id.
    *
-   * @return string|null
+   * @return int|null
    *   Topic id.
    */
-  protected function getTopicId(): ?string {
+  protected function getTopicId(): ?int {
     $storage = $this->entityTypeManager->getStorage('taxonomy_term');
     $query = $storage->getQuery()
       ->accessCheck(FALSE)
@@ -119,7 +119,7 @@ class DocumentFromSubmissionWebformHandler extends WebformHandlerBase {
       ->range(0, 1);
 
     $tids = $query->execute();
-    return !empty($tids) ? reset($tids) : NULL;
+    return !empty($tids) ? (int) reset($tids) : NULL;
   }
 
   /**
