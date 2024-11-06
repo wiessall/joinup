@@ -256,9 +256,6 @@ drupal:
         // Enable test_mode.
         $config['joinup_test.settings']['test_mode'] = TRUE;
 
-        // The video from the home page interacts with Selenium tests.
-        $config['page_manager.page_variant.homepage-layout_builder-0']['variant_settings']['sections'][4]['components']['6ab0ceea-4541-4153-8b64-227e02369d30']['configuration']['text'] = 'Some joinup video';
-
         // In order to ensure that tests assert dates correctly even in edge cases, we
         // set the website default timezone to UTC and the same in tests too so that
         // even edge cases produce expected results.
@@ -389,6 +386,7 @@ drupal:
       Reverse proxy: |
         $settings['reverse_proxy'] = (bool) getenv('DRUPAL_REVERSE_PROXY_ENABLE');
         $settings['reverse_proxy_addresses'] = array_filter(explode(',', (string) getenv('DRUPAL_REVERSE_PROXY_ADDRESSES')));
+        $settings['reverse_proxy_trusted_headers'] = \Symfony\Component\HttpFoundation\Request::HEADER_X_FORWARDED_FOR | \Symfony\Component\HttpFoundation\Request::HEADER_X_FORWARDED_HOST | \Symfony\Component\HttpFoundation\Request::HEADER_X_FORWARDED_PORT | \Symfony\Component\HttpFoundation\Request::HEADER_X_FORWARDED_PROTO;
       EU OSS Catalogue: |
         $settings['eu_oss_catalogue']['platform_github']['access_token'] = getenv('JOINUP_GITHUB_TOKEN');
       Stage file proxy: |
