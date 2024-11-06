@@ -1,9 +1,9 @@
-uuid: e9d91640-d3cf-40ac-bba7-e3aa0d69b569
 langcode: en
 status: open
 dependencies:
   module:
     - joinup_assessment
+    - joinup_test
 weight: 0
 open: null
 close: null
