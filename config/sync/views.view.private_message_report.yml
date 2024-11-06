@@ -635,6 +635,7 @@ display:
         options:
           role:
             moderator: moderator
+            developer: developer
       defaults:
         access: false
         sorts: true
