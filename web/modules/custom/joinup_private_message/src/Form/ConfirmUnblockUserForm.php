@@ -50,7 +50,7 @@ class ConfirmUnblockUserForm extends ConfirmUnbanUserForm implements ContainerIn
    * {@inheritdoc}
    */
   public function getCancelUrl(): Url {
-    return new Url('joinup_private_message.unblock', ['private_message_ban' => $this->ban->id()]);
+    return new Url('joinup_private_message.private_message_settings_page');
   }
 
 }
