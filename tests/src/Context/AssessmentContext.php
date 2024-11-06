@@ -7,6 +7,7 @@ namespace Drupal\joinup\Context;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup_assessment\AssessmentInterface;
+use Drupal\webform\Entity\WebformSubmission;
 
 /**
  * Step definitions for assessments checks.
@@ -35,6 +36,25 @@ class AssessmentContext extends RawDrupalContext {
 
     $node = $this->getEntityById('node', reset($nids));
     $this->visitPath($node->toUrl()->toString());
+  }
+
+  /**
+   * Cleans up after the assessment test.
+   *
+   * @AfterScenario @demoAssessment
+   */
+  public function cleanSubmissions(): void {
+    $submissionIds = \Drupal::entityQuery('webform_submission')
+      ->accessCheck(FALSE)
+      ->condition('webform_id', 'online_form_for_assessments_demo')
+      ->execute();
+
+    foreach ($submissionIds as $submissionId) {
+      $submission = WebformSubmission::load($submissionId);
+      if ($submission) {
+        $submission->delete();
+      }
+    }
   }
 
 }
