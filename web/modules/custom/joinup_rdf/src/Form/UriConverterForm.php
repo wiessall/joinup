@@ -16,7 +16,6 @@ use Drupal\rdf_sync\RdfSyncMapperInterface;
 
 /**
  * Simple form converting a URI to entity URL and vice versa.
- *
  */
 class UriConverterForm extends FormBase {
 
