@@ -1,4 +1,4 @@
-@api @group-a
+@api @group-a @demoAssessment
 Feature: Document assessment
 
   Background:
