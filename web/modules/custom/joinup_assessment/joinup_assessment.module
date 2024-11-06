@@ -14,9 +14,9 @@ use Drupal\joinup_assessment\AssessmentInterface;
 use Drupal\webform\WebformSubmissionInterface;
 
 /**
- * Implements hook_entity_access().
+ * Implements hook_ENTITY_TYPE_access().
  */
-function joinup_assessment_entity_access(EntityInterface $entity, string $operation): AccessResultInterface {
+function joinup_assessment_webform_submission_access(EntityInterface $entity, $operation): AccessResultInterface {
   if ($entity instanceof WebformSubmissionInterface &&
     $operation === 'view' &&
     str_starts_with(
