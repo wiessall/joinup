@@ -38,7 +38,7 @@ class PrivateMessageUnreportForm extends ConfirmFormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state): void {
     $privateMessage = $form['private_message']['#value'];
-    $privateMessage->set('report', '');
+    $privateMessage->set('report', NULL);
     $privateMessage->set('report_timestamp', NULL);
     $privateMessage->save();
     $form_state->setRedirect('view.private_message_report.all');

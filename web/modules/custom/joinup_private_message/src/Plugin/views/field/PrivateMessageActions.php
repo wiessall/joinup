@@ -39,7 +39,7 @@ class PrivateMessageActions extends FieldPluginBase {
   /**
    * {@inheritdoc}
    */
-  public function render(ResultRow $values): array|string {
+  public function render(ResultRow $values): array {
     $entity = $values->_entity;
 
     if ($entity->getEntityTypeId() === 'private_message') {
@@ -49,7 +49,7 @@ class PrivateMessageActions extends FieldPluginBase {
           'url' => Url::fromRoute(
             'joinup_private_message.unreport',
             ['private_message' => $entity->id()]
-          )->setOption('query', ['destination' => '/dashboard/private-message-report']),
+          ),
           'attributes' => _joinup_private_message_get_ajax_modal_attributes(),
           'weight' => 1,
         ],
@@ -58,7 +58,11 @@ class PrivateMessageActions extends FieldPluginBase {
           'url' => Url::fromRoute(
             'entity.private_message.delete',
             ['private_message' => $entity->id()]
-          )->setOption('query', ['destination' => '/user/messages']),
+          )
+            ->setOption('query', [
+              'destination' => Url::fromRoute('view.private_message_report.all')
+                ->toString(),
+            ]),
           'attributes' => _joinup_private_message_get_ajax_modal_attributes(),
           'weight' => 0,
         ],
@@ -70,7 +74,7 @@ class PrivateMessageActions extends FieldPluginBase {
       ];
     }
 
-    return '';
+    return [];
   }
 
 }
