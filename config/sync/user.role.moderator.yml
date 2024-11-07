@@ -32,8 +32,10 @@ dependencies:
     - dashboard
     - entity_legal
     - entityqueue
+    - field_permissions
     - file
     - filter
+    - flag
     - joinup
     - joinup_community_content
     - joinup_core
@@ -41,8 +43,8 @@ dependencies:
     - joinup_featured
     - joinup_group
     - joinup_group_content_management
+    - joinup_legal
     - joinup_licence
-    - joinup_news
     - joinup_newsletter
     - joinup_oss_catalogue
     - joinup_search
@@ -144,6 +146,7 @@ permissions:
   - 'create paragraph content video'
   - 'create paragraph content webform'
   - 'create release content'
+  - 'create require_update_reason'
   - 'create solution_logo media'
   - 'create webform'
   - 'delete all sitewide alert revisions'
@@ -197,6 +200,7 @@ permissions:
   - 'edit any solution content'
   - 'edit any solution_logo media'
   - 'edit own document content'
+  - 'edit require_update_reason'
   - 'edit short id after publication'
   - 'edit sitewide alert entities'
   - 'edit terms in legal_type'
@@ -318,5 +322,6 @@ permissions:
   - 'view all sitewide alert revisions'
   - 'view any unpublished content'
   - 'view licence overview page'
+  - 'view require_update_reason'
   - 'view the administration theme'
   - 'view unpublished sitewide alert entities'
