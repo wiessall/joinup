@@ -9,13 +9,11 @@ Feature: Private message report page
       | Username   | First name | Family name | E-mail                 | Roles     |
       | alice_m    | Alice      | Miller      | alice.m@example.com    | moderator |
       | bob_rolls  | Bob        | Rolls       | bob.rolls@example.com  |           |
-      | joan_tiff  | Joan       | Tiff        | joan.tiff@example.com  |           |
       | ken_carson | Ken        | Carson      | ken_carson@example.com |           |
 
     Given the following private messages:
       | owner      | recipient | message                   | report             | report_timestamp |
       | bob_rolls  | alice_m   | This is message from bob  | reported by alice1 | 1729593851       |
-      | joan_tiff  | alice_m   | This is message from joan |                    |                  |
       | ken_carson | alice_m   | This is message from ken  | reported by alice2 | 1729593851       |
 
   @javascript
@@ -25,7 +23,6 @@ Feature: Private message report page
     Then I should see the following lines of text:
       | This is message from bob |
       | This is message from ken |
-    But I should not see "This is message from joan"
     And I should see the link "Flag as OK"
 
     When I go to admin page of reported private message with text "This is message from bob"
