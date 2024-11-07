@@ -10,7 +10,6 @@ use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\joinup_private_message\Service\PrivateMessageUserService;
 use Drupal\private_message\Entity\PrivateMessageInterface;
-use Drupal\user\UserInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -30,16 +29,13 @@ class PrivateMessageReportController implements ContainerInjectionInterface {
   }
 
   /**
-   * Custom access check for viewing the private message report.
+   * Custom access check for ability to report the private message.
    */
   public function access(PrivateMessageInterface $private_message): AccessResultInterface {
-    $privateMessageTarget = $this->privateMessageUserService->getPrivateMessageTarget($private_message);
-    if ($privateMessageTarget instanceof UserInterface && $privateMessageTarget->id() == $this->currentUser->id()) {
-      return AccessResult::allowed()
-        ->addCacheableDependency($privateMessageTarget);
+    if ($this->privateMessageUserService->isRecipient($private_message, (int) $this->currentUser->id())) {
+      return AccessResult::allowed();
     }
     return AccessResult::forbidden()
-      ->addCacheableDependency($privateMessageTarget)
       ->setReason('Access denied: You are not the target user for this private message.');
   }
 

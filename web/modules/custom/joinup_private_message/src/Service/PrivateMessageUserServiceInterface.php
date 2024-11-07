@@ -23,4 +23,15 @@ interface PrivateMessageUserServiceInterface {
    */
   public function getPrivateMessageTarget(PrivateMessageInterface $privateMessage): ?UserInterface;
 
+  /**
+   * Checks if user is a recipient of private message.
+   *
+   * @param int $userId
+   *   User id param.
+   *
+   * @return bool
+   *   If user is a private message recipient, return TRUE.
+   */
+  public function isRecipient(int $userId): bool;
+
 }
