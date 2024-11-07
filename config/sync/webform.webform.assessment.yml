@@ -8,7 +8,7 @@ close: null
 uid: null
 template: false
 archive: false
-id: assessments
+id: assessment
 title: 'Online form for Assessments'
 description: '<p>Interoperable Europe Solution Assessment form</p>'
 categories: {  }
@@ -178,6 +178,7 @@ elements: |-
       '#type': textfield
       '#title': 'Please provide the name of the initiative, project or action containing the binding requirements to be assessed:'
       '#required': true
+      '#admin_title': 'Initiative, project, action'
     if_applicable_please_provide_a_link_to_the_initiative_project_or:
       '#type': textfield
       '#title': 'If applicable, please provide a link to the initiative, project or action concerned:'
@@ -654,14 +655,14 @@ elements: |-
 css: ''
 javascript: ''
 settings:
-  ajax: false
-  ajax_scroll_top: form
-  ajax_progress_type: ''
-  ajax_effect: ''
+  ajax: true
+  ajax_scroll_top: page
+  ajax_progress_type: throbber
+  ajax_effect: fade
   ajax_speed: null
   page: true
-  page_submit_path: /assessments
-  page_confirm_path: /assessments/confirmation
+  page_submit_path: /assessments/questionnaire
+  page_confirm_path: /assessments/questionnaire/confirm
   page_theme_name: ''
   form_title: source_entity_webform
   form_submit_once: false
@@ -702,14 +703,18 @@ settings:
   share_page_body_attributes: {  }
   submission_label: ''
   submission_exception_message: ''
-  submission_locked_message: ''
-  submission_log: false
+  submission_locked_message: '<p>The assessment submission cannot be edited. Either is being moderated or it has been approved</p>'
+  submission_log: true
   submission_excluded_elements: {  }
   submission_exclude_empty: false
   submission_exclude_empty_checkbox: false
   submission_views: {  }
   submission_views_replace: {  }
-  submission_user_columns: {  }
+  submission_user_columns:
+    - serial
+    - element__please_provide_the_name_of_the_initiative_project_or_action_cont
+    - created
+    - completed
   submission_user_duplicate: false
   submission_access_denied: default
   submission_access_denied_title: ''
@@ -718,7 +723,7 @@ settings:
   previous_submission_message: ''
   previous_submissions_message: ''
   autofill: true
-  autofill_message: '<p><em class="placeholder" style="-webkit-text-stroke-width:0px;background-color:rgb(255, 255, 255);color:rgb(85, 86, 91);font-family:BlinkMacSystemFont, -apple-system, &quot;Segoe UI&quot;, Roboto, Oxygen-Sans, Ubuntu, Cantarell, &quot;Helvetica Neue&quot;, sans-serif;font-size:12.64px;font-variant-caps:normal;font-variant-ligatures:normal;font-weight:400;letter-spacing:normal;orphans:2;text-align:start;text-decoration-color:initial;text-decoration-style:initial;text-decoration-thickness:initial;text-indent:0px;text-transform:none;white-space:normal;widows:2;word-spacing:0px;">TEST &nbsp;"This submission has"</em></p>'
+  autofill_message: "<p>You're about to fill a new assessment questionnaire. The form is prefilled with your previous submission.</p>"
   autofill_excluded_elements: {  }
   wizard_progress_bar: true
   wizard_progress_pages: false
@@ -752,7 +757,7 @@ settings:
   draft_multiple: false
   draft_auto_save: false
   draft_saved_message: ''
-  draft_loaded_message: ''
+  draft_loaded_message: "<p>You've already started to fill this form. Please complete the remaining questions.</p>"
   draft_pending_single_message: "<p>Assessment report is saved. It will remain in 'Draft' status and you may return to this form later.</p>"
   draft_pending_multiple_message: "<p>Assessment report is updated. It will remain in 'Draft' status and you may return to this form later.</p>"
   confirmation_type: page
@@ -864,8 +869,8 @@ handlers:
       return_path: ''
       sender_mail: ''
       sender_name: ''
-      subject: 'New assessment submission'
-      body: '<p>Submitted on [webform_submission:created], by: [webform_submission:user]</p><p>Submission: <a href="[webform_submission:url]">[webform_submission:url]</a></p>'
+      subject: 'Assessment submission ([webform_submission:state:label])'
+      body: '<p>Submitted on [webform_submission:created], by: [webform_submission:user]</p><p>[webform_submission:state:label]: <a href="[webform_submission:url]">[webform_submission:url]</a></p>'
       excluded_elements: {  }
       ignore_access: false
       exclude_empty: true
