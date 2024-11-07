@@ -1,11 +1,3 @@
-# Move in joinup_rdf. See ISAICP-9156.
-joinup_core.uri_converter:
-  title: 'RDF URI converter'
-  route_name: joinup_core.uri_converter
-  description: 'Converts entity URI to URL and vice versa.'
-  parent: system.admin
-  weight: 1
-
 joinup_core.redirects:
   title: 'Redirects'
   route_name: redirect.list
