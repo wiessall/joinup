@@ -74,10 +74,14 @@ class PrivateMessageTarget extends FieldPluginBase {
     $privateMessage = $values->_entity;
     assert($privateMessage instanceof PrivateMessageInterface);
     $target = $this->privateMessageService->getPrivateMessageRecipient($privateMessage);
-    assert($target instanceof UserInterface);
-    $url = Url::fromRoute('entity.user.canonical', ['user' => $target->id()]);
-    return Link::fromTextAndUrl($target->getDisplayName(), $url)
-      ->toRenderable();
+    if ($target instanceof UserInterface) {
+      $url = Url::fromRoute('entity.user.canonical', ['user' => $target->id()]);
+      return Link::fromTextAndUrl($target->getDisplayName(), $url)
+        ->toRenderable();
+    }
+    else {
+      return [];
+    }
   }
 
 }
