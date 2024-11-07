@@ -36,6 +36,8 @@
     background-color: transparent;
   }
   .ui-dialog-title {
+    width: 100%;
+    padding-right: 2em;
     color: $primary;
     font-size: $h4-font-size;
     font-weight: $font-weight-normal;
