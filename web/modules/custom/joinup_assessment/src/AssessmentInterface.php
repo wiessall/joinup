@@ -47,13 +47,13 @@ interface AssessmentInterface {
   /**
    * Question used to generate abstract value.
    */
-  public const string SUBMISSION_ABSTRACT = 'please_provide_the_name_of_the_initiative_project_or_action_cont';
+  public const string SUBMISSION_ABSTRACT = 'initiative';
 
   /**
    * Webform ID.
    *
    * Webform which contains assessment questions.
    */
-  public const string WEBFORM_ID = 'assessments';
+  public const string WEBFORM_ID = 'assessment';
 
 }
