@@ -7,7 +7,7 @@ dependencies:
   module:
     - node
 id: assessment
-label: 'Assessment'
+label: Assessment
 description: ''
 mapping:
   node:
