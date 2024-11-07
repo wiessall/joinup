@@ -76,7 +76,14 @@
         <tr class="bg-light">
           <td class="p-3">
             <p class="fw-bold">
-              {{ subject }}
+              {#
+                We cannot use subject directly as it comes from twig with
+                message_notify, and twig encodes "'&>< chars to HTML entities
+                which would be printed as-is.
+                This is safe since Email::deliver already strips all tags.
+                @see \Drupal\message_notify\Plugin\Notifier\Email::deliver
+              #}
+              {{ subject|raw }}
             </p>
           </td>
         </tr>
