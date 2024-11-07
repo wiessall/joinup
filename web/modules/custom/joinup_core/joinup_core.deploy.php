@@ -15,44 +15,50 @@
 declare(strict_types=1);
 
 /**
- * Fix 724664 solution.
+ * Update all solution with default_langcode = 0 and set a new revision.
  */
 function joinup_core_deploy_200100(): void {
-  $nid = 724664;
-  $node = \Drupal::entityTypeManager()->getStorage('node')->load($nid);
+  $node_storage = \Drupal::entityTypeManager()->getStorage('node');
 
-  if ($node) {
-    // Fetch all relevant fields from the node_field_data table.
-    $result = \Drupal::database()->select('node_field_data', 'n')
-      ->fields('n', [
-        'title',
-        'created',
-        'changed',
-        'promote',
-        'sticky',
-        'default_langcode',
-        'status',
-        'uid',
-        'langcode',
-      ])
-      ->condition('n.nid', $nid)
-      ->execute()
-      ->fetchAssoc();
+  $results = \Drupal::database()->select('node_field_data', 'n')
+    ->fields('n', [
+      'nid',
+      'title',
+      'created',
+      'changed',
+      'promote',
+      'sticky',
+      'default_langcode',
+      'status',
+      'uid',
+      'langcode',
+    ])
+    ->condition('n.default_langcode', 0)
+    ->condition('n.type', 'solution')
+    ->execute()
+    ->fetchAllAssoc('nid');
 
-    $node->setTitle($result['title']);
-    if (!empty($result['created'])) {
-      $node->setCreatedTime($result['created']);
+  foreach ($results as $nid => $data) {
+    // Load the node by its ID.
+    $node = $node_storage->load($nid);
+
+    if ($node) {
+      $node->setTitle($data->title);
+      if (!empty($data->created)) {
+        $node->setCreatedTime($data->created);
+      }
+      if (!empty($data->changed)) {
+        $node->setChangedTime($data->changed);
+      }
+
+      $node->setPromoted($data->promote);
+      $node->setSticky($data->sticky);
+      $node->set('default_langcode', TRUE);
+      $node->setOwnerId($data->uid);
+      $node->set('langcode', $data->langcode);
+      $node->setNewRevision();
+      $node->setRevisionCreationTime(\Drupal::time()->getRequestTime());
+      $node->save();
     }
-    if (!empty($result['changed'])) {
-      $node->setChangedTime($result['changed']);
-    }
-    $node->setPromoted($result['promote']);
-    $node->setSticky($result['sticky']);
-    $node->set('default_langcode', TRUE);
-    $node->setOwnerId($result['uid']);
-    $node->set('langcode', $result['langcode']);
-    $node->setNewRevision();
-    $node->setRevisionCreationTime(\Drupal::time()->getRequestTime());
-    $node->save();
   }
 }
