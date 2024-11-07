@@ -6,9 +6,8 @@ namespace Drupal\joinup_private_message\Plugin\views\field;
 
 use Drupal\Core\Link;
 use Drupal\Core\Url;
-use Drupal\joinup_private_message\Service\PrivateMessageUserService;
+use Drupal\joinup_private_message\Service\PrivateMessageUserServiceInterface;
 use Drupal\private_message\Entity\PrivateMessageInterface;
-use Drupal\user\UserInterface;
 use Drupal\views\Plugin\views\field\FieldPluginBase;
 use Drupal\views\ResultRow;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -24,7 +23,7 @@ class PrivateMessageTarget extends FieldPluginBase {
     array $configuration,
     string $plugin_id,
     mixed $plugin_definition,
-    protected PrivateMessageUserService $privateMessageService,
+    protected PrivateMessageUserServiceInterface $privateMessageService,
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
   }
