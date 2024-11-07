@@ -54,6 +54,6 @@ interface AssessmentInterface {
    *
    * Webform which contains assessment questions.
    */
-  public const string WEBFORM_ID = 'online_form_for_assessments';
+  public const string WEBFORM_ID = 'assessments';
 
 }
