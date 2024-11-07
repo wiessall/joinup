@@ -23,7 +23,7 @@ joinup_private_message.report:
     _title: 'Report and block sender'
   requirements:
     _permission: 'use private messaging system'
-    _custom_access: '\Drupal\joinup_private_message\Controller\PrivateMessageReportController::access'
+    _custom_access: '\Drupal\joinup_private_message\Form\PrivateMessageReportForm::access'
   options:
     parameters:
       private_message:
