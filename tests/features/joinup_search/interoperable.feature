@@ -15,6 +15,9 @@ Feature: Global Interoperable search
     Given I am logged in as a user with the "interoperability_validator" role
     When I go to the homepage of the "eGovernment" solution
     And I click "Set interoperable flag" in the "Header" region
+    And a modal should open
+    And I press "Confirm" in the "Modal buttons" region
+    And the modal should be closed
 
     When I am an anonymous user
     And I visit the search page
