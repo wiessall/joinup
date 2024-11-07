@@ -34,7 +34,7 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
-    weight: 1
+    weight: 0
     region: content
   message:
     type: text_trimmed
@@ -42,8 +42,10 @@ content:
     settings:
       trim_length: 50
     third_party_settings: {  }
-    weight: 2
+    weight: 1
     region: content
 hidden:
   owner: true
+  report: true
+  report_timestamp: true
   search_api_excerpt: true

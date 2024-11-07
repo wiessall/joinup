@@ -4,11 +4,17 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_private_message\Form;
 
+use Drupal\Component\Datetime\TimeInterface;
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Mail\MailManager;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\joinup_private_message\Service\PrivateMessageUserServiceInterface;
 use Drupal\private_message\Entity\PrivateMessage;
+use Drupal\private_message\Entity\PrivateMessageInterface;
 use Drupal\private_message\Service\PrivateMessageBanManager;
 use Drupal\private_message\Service\PrivateMessageService;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -18,23 +24,14 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class PrivateMessageReportForm extends FormBase {
 
-  /**
-   * Constructs a PrivateMessageReportForm object.
-   *
-   * @param \Drupal\private_message\Service\PrivateMessageBanManager $privateMessageBanManager
-   *   PrivateMessageBanManager service.
-   * @param \Drupal\Core\Mail\MailManager $mailManager
-   *   MailManager service.
-   * @param \Drupal\private_message\Service\PrivateMessageService $privateMessageService
-   *   PrivateMessageService service.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *   EntityTypeManagerInterface service.
-   */
   public function __construct(
     protected readonly PrivateMessageBanManager $privateMessageBanManager,
     protected readonly MailManager $mailManager,
     protected readonly PrivateMessageService $privateMessageService,
     protected readonly EntityTypeManagerInterface $entityTypeManager,
+    protected readonly TimeInterface $time,
+    protected readonly PrivateMessageUserServiceInterface $privateMessageUserService,
+    protected readonly AccountInterface $currentUser,
   ) {
   }
 
@@ -47,6 +44,9 @@ class PrivateMessageReportForm extends FormBase {
       $container->get('plugin.manager.mail'),
       $container->get('private_message.service'),
       $container->get('entity_type.manager'),
+      $container->get('datetime.time'),
+      $container->get('joinup_private_message.user_service'),
+      $container->get('current_user'),
     );
   }
 
@@ -112,7 +112,22 @@ class PrivateMessageReportForm extends FormBase {
     if ($blockSender) {
       $this->privateMessageBanManager->banUser((int) $sender->id());
     }
+    // Update custom fields in private message entity.
+    $message->set('report', $report);
+    $message->set('report_timestamp', $this->time->getCurrentTime());
+    $message->save();
     $form_state->setRedirect('private_message.private_message_page');
+  }
+
+  /**
+   * Custom access check for ability to report the private message.
+   */
+  public function access(PrivateMessageInterface $private_message): AccessResultInterface {
+    if ($this->privateMessageUserService->isRecipient($private_message, (int) $this->currentUser->id())) {
+      return AccessResult::allowed();
+    }
+    return AccessResult::forbidden()
+      ->setReason('Access denied: You are not the target user for this private message.');
   }
 
 }
