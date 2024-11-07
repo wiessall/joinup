@@ -5,14 +5,18 @@ declare(strict_types=1);
 namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
+use Behat\Mink\Element\Element;
 use Behat\Mink\Element\NodeElement;
+use Drupal;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Url;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\JavascriptTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
 use Drupal\joinup\Traits\UserTrait;
 use Drupal\private_message\Entity\PrivateMessageBan;
 use Drupal\private_message\Entity\PrivateMessageThreadInterface;
+use Exception;
 
 /**
  * Behat step definitions for testing private messages.
@@ -32,7 +36,7 @@ class PrivateMessageContext extends RawDrupalContext {
    *   Table format:
    *
    * @code
-   *   | owner   | message | recipient |
+   *   | owner   | message | recipient | report | report_timestamp |
    *   | alice_m | hello   | bob_rolls |
    * @endcode
    *
@@ -65,6 +69,8 @@ class PrivateMessageContext extends RawDrupalContext {
           'value' => $values['message'],
           'format' => 'minimal',
         ],
+        'report' => $values['report'] ?? NULL,
+        'report_timestamp' => $values['report_timestamp'] ?? NULL,
       ]);
       $privateMessage->save();
 
@@ -420,6 +426,95 @@ class PrivateMessageContext extends RawDrupalContext {
     $ban = reset($result);
 
     return $ban;
+  }
+
+  /**
+   * Find a message with specific string.
+   *
+   * @param string $messageText
+   *   Message text.
+   *
+   * @return string
+   *   Message id.
+   *
+   * @throws \Exception
+   *   If there is no message, throws exception.
+   */
+  public function getPrivateMessageIdByMessageText(string $messageText): string {
+    $query = Drupal::entityQuery('private_message')
+      ->accessCheck(FALSE)
+      ->condition('message__value', '%' . $messageText . '%', 'LIKE')
+      ->range(0, 1);
+    $result = $query->execute();
+    if (empty($result)) {
+      throw new Exception('There is no message with text: ' . $messageText);
+    }
+    return reset($result);
+  }
+
+  /**
+   * Retrieve a table row containing specified text from a given element.
+   *
+   * @param \Behat\Mink\Element\Element $element
+   *   The element.
+   * @param string $search
+   *   The text to search for in the table row.
+   *
+   * @return \Behat\Mink\Element\NodeElement
+   *   The searched element.
+   *
+   * @throws \Exception
+   *
+   * @see \Drupal\DrupalExtension\Context\DrupalContext::getTableRow
+   */
+  public function getTableRow(Element $element, string $search): NodeElement {
+    $rows = $element->findAll('css', 'tr');
+    if (empty($rows)) {
+      throw new Exception(sprintf('No rows found on the page %s', $this->getSession()
+        ->getCurrentUrl()));
+    }
+    foreach ($rows as $row) {
+      if (strpos($row->getText(), $search) !== FALSE) {
+        return $row;
+      }
+    }
+    throw new Exception(sprintf('Failed to find a row containing "%s" on the page %s', $search, $this->getSession()
+      ->getCurrentUrl()));
+  }
+
+  /**
+   * Press button in table row.
+   *
+   * @param string $buttonText
+   *   Text of button.
+   * @param string $rowText
+   *   Text of row.
+   *
+   * @throws \Exception
+   *
+   * @When I press the button :button in the :text row
+   */
+  public function iPressTheButtonInTheRowContaining(string $buttonText, string $rowText): void {
+    $page = $this->getSession()->getPage();
+    if ($button = $this->getTableRow($page, $rowText)
+      ->findButton($buttonText)) {
+      $button->click();
+      return;
+    }
+    throw new Exception(sprintf('Found a row containing "%s", but no "%s" button on the page %s', $rowText, $buttonText, $this->getSession()
+      ->getCurrentUrl()));
+  }
+
+  /**
+   * Visit administration page for reported private message.
+   *
+   * @When I go to admin page of reported private message with text :messageText
+   */
+  public function iGoToAdminPageOfReportedPrivateMessageWithText(string $messageText): void {
+    $messageId = $this->getPrivateMessageIdByMessageText($messageText);
+    $messageUrl = Url::fromRoute('view.private_message_report.single', ['private_message' => $messageId], ['absolute' => TRUE])
+      ->toString();
+    $this->visitPath($messageUrl);
   }
 
 }
