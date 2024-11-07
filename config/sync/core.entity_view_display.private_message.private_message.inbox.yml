@@ -34,7 +34,7 @@ content:
     third_party_settings:
       template_suggestion:
         template_suggestion: ''
-    weight: 1
+    weight: 0
     region: content
   message:
     type: text_trimmed
@@ -42,35 +42,10 @@ content:
     settings:
       trim_length: 50
     third_party_settings: {  }
-    weight: 2
-    region: content
-  report:
-    type: string
-    label: inline
-    settings:
-      link_to_entity: false
-    third_party_settings: {  }
-    weight: 0
-    region: content
-  report_timestamp:
-    type: timestamp
-    label: inline
-    settings:
-      date_format: medium
-      custom_date_format: ''
-      timezone: ''
-      tooltip:
-        date_format: long
-        custom_date_format: ''
-      time_diff:
-        enabled: false
-        future_format: '@interval hence'
-        past_format: '@interval ago'
-        granularity: 2
-        refresh: 60
-    third_party_settings: {  }
     weight: 1
     region: content
 hidden:
   owner: true
+  report: true
+  report_timestamp: true
   search_api_excerpt: true
