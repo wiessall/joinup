@@ -69,11 +69,9 @@ class PrivateMessageContext extends RawDrupalContext {
           'value' => $values['message'],
           'format' => 'minimal',
         ],
+        'report' => $values['report'] ?? NULL,
+        'report_timestamp' => $values['report_timestamp'] ?? NULL,
       ]);
-      if (!empty($values['report']) && !empty($values['report_timestamp'])) {
-        $privateMessage->set('report', $values['report']);
-        $privateMessage->set('report_timestamp', $values['report_timestamp']);
-      }
       $privateMessage->save();
 
       $privateMessageThread->addMessage($privateMessage)->save();
