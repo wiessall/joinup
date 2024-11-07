@@ -5,11 +5,16 @@ declare(strict_types=1);
 namespace Drupal\joinup_private_message\Form;
 
 use Drupal\Component\Datetime\TimeInterface;
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Mail\MailManager;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\joinup_private_message\Service\PrivateMessageUserServiceInterface;
 use Drupal\private_message\Entity\PrivateMessage;
+use Drupal\private_message\Entity\PrivateMessageInterface;
 use Drupal\private_message\Service\PrivateMessageBanManager;
 use Drupal\private_message\Service\PrivateMessageService;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -25,6 +30,8 @@ class PrivateMessageReportForm extends FormBase {
     protected readonly PrivateMessageService $privateMessageService,
     protected readonly EntityTypeManagerInterface $entityTypeManager,
     protected readonly TimeInterface $time,
+    protected readonly PrivateMessageUserServiceInterface $privateMessageUserService,
+    protected readonly AccountInterface $currentUser,
   ) {
   }
 
@@ -37,7 +44,9 @@ class PrivateMessageReportForm extends FormBase {
       $container->get('plugin.manager.mail'),
       $container->get('private_message.service'),
       $container->get('entity_type.manager'),
-      $container->get('datetime.time')
+      $container->get('datetime.time'),
+      $container->get('joinup_private_message.user_service'),
+      $container->get('current_user'),
     );
   }
 
@@ -108,6 +117,17 @@ class PrivateMessageReportForm extends FormBase {
     $message->set('report_timestamp', $this->time->getCurrentTime());
     $message->save();
     $form_state->setRedirect('private_message.private_message_page');
+  }
+
+  /**
+   * Custom access check for ability to report the private message.
+   */
+  public function access(PrivateMessageInterface $private_message): AccessResultInterface {
+    if ($this->privateMessageUserService->isRecipient($private_message, (int) $this->currentUser->id())) {
+      return AccessResult::allowed();
+    }
+    return AccessResult::forbidden()
+      ->setReason('Access denied: You are not the target user for this private message.');
   }
 
 }
