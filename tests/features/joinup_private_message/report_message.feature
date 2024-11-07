@@ -44,8 +44,6 @@ Feature: Private message report.
       | This is a mean message to Bob.                                                                    |
       | Report reason:                                                                                    |
       | I want to report this message.                                                                    |
-    And I go to admin page of reported private message with text "This is a mean message to Bob."
-    Then I should see "Access denied"
     When I am on "/user/messages/settings"
     And I click "Unblock"
     Then a modal should open
@@ -55,7 +53,3 @@ Feature: Private message report.
     When I am logged in as alice_m
     And I go to admin page of reported private message with text "This is a mean message to Bob."
     And I should see "This is a mean message to Bob."
-    # @todo make this test pass, now it results in a javascript error.
-    # When I press "Confirm" in the "Modal content" region
-    # Then the modal should be closed
-    # And a message containing the text "This is a mean message to Bob." should be present

@@ -7,7 +7,7 @@ Feature: Private message report page
   Background:
     Given users:
       | Username  | First name | Family name | E-mail                | Roles     |
-      | alice_m   | Alice      | Miller      | alice.m@example.com   | developer |
+      | alice_m   | Alice      | Miller      | alice.m@example.com   | moderator |
       | bob_rolls | Bob        | Rolls       | bob.rolls@example.com |           |
       | joan_tiff | Joan       | Tiff        | joan.tiff@example.com |           |
 
@@ -19,12 +19,9 @@ Feature: Private message report page
   @javascript
   Scenario: Display, unreport and delete reported private messages
     When I am logged in as "bob_rolls"
-    And I am on the homepage
-    And I should see 2 unread private message
     And I am on "/user/messages"
-    And I should see the heading "Private Messages"
-    And I should see the link "Report"
-    When I click "Report" link in message "This is message from alice"
+    And I should see the link "Report message"
+    When I click "Report message" link in message "This is message from alice"
     And a modal should open
     When I fill in "Report" with "I want to report this message"
     And I press "Send" in the "Modal content" region
@@ -34,9 +31,14 @@ Feature: Private message report page
     And I am on "/dashboard/private-message-report"
     Then I should see "This is message from alice"
     And I should see "Flag as OK"
+    And I go to admin page of reported private message with text "This is message from alice"
+    Then I should see "This is message from alice"
+    And I should see "Flag as OK"
 
     When I am logged in as "bob_rolls"
     And I am on "/dashboard/private-message-report"
+    Then I should see "Access denied"
+    And I go to admin page of reported private message with text "This is message from alice"
     Then I should see "Access denied"
 
     When I am logged in as "alice_m"

@@ -454,7 +454,7 @@ class PrivateMessageContext extends RawDrupalContext {
   }
 
   /**
-   * Returns message Id  message text.
+   * Find a message with specific string.
    *
    * @param string $messageText
    *   Message text.
@@ -474,9 +474,7 @@ class PrivateMessageContext extends RawDrupalContext {
     if (empty($result)) {
       throw new Exception('There is no message with text: ' . $messageText);
     }
-    $messageId = reset($result);
-
-    return $messageId;
+    return reset($result);
   }
 
   /**
