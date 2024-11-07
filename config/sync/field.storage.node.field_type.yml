@@ -35,6 +35,9 @@ settings:
     -
       value: newsletter
       label: Newsletter
+    -
+      value: interoperability_assessment
+      label: 'Interoperability Assessment'
   allowed_values_function: ''
 module: options
 locked: false

@@ -1,0 +1,53 @@
+<?php
+
+/**
+ * @file
+ * Hook implementations for the Joinup assessment module.
+ */
+
+declare(strict_types=1);
+
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Access\AccessResultInterface;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\joinup_assessment\AssessmentInterface;
+use Drupal\joinup_document\Entity\DocumentInterface;
+use Drupal\webform\WebformSubmissionInterface;
+
+/**
+ * Implements hook_ENTITY_TYPE_access().
+ */
+function joinup_assessment_webform_submission_access(EntityInterface $entity, $operation): AccessResultInterface {
+  if ($entity instanceof WebformSubmissionInterface &&
+    $operation === 'view' &&
+    str_starts_with(
+      $entity->getWebform()->id(),
+      AssessmentInterface::WEBFORM_ID
+    ) &&
+    $entity->isCompleted()) {
+    return AccessResult::allowed();
+  }
+
+  return AccessResult::neutral();
+}
+
+/**
+ * Implements hook_options_list_alter().
+ */
+function joinup_assessment_options_list_alter(array &$options, array $context): void {
+  /** @var \Drupal\field\FieldConfigInterface $fieldDefinition */
+  $fieldDefinition = $context['fieldDefinition'];
+  $entity = $context['entity'];
+
+  if (empty($options) || $fieldDefinition->getName() !== 'field_type' || !$entity instanceof DocumentInterface) {
+    return;
+  }
+
+  if (isset($entity->assessment) && !$entity->get('assessment')->isEmpty()) {
+    return;
+  }
+
+  if (isset($options[AssessmentInterface::DOCUMENT_TYPE_KEY])) {
+    unset($options[AssessmentInterface::DOCUMENT_TYPE_KEY]);
+  }
+}
