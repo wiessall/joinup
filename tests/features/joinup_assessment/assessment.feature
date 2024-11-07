@@ -3,8 +3,8 @@ Feature: Document assessment
 
   Background:
     Given collection content:
-      | title                                          | state     | uri                                                            |
-      | Best practice for interoperability assessments | published | http://data.europa.eu/w21/c5e99eae-6d31-47a0-b914-a4b9f4ea82cf |
+      | title                                          | state     | content creation | moderation | uri                                                            |
+      | Best practice for interoperability assessments | published | members          | yes        | http://data.europa.eu/w21/c5e99eae-6d31-47a0-b914-a4b9f4ea82cf |
     And users:
       | Username         | Roles     | E-mail                    | First name | Family name |
       | Notify moderator | moderator | notify_moderator@test.com | Notify     | Moderator   |
@@ -19,9 +19,9 @@ Feature: Document assessment
     And I press "Submit"
     Then I should see "New submission added to Online form for assessments demo."
     And the following email should have been sent:
-      | recipient | Notify moderator                                       |
-      | subject   | Interoperable Europe Portal: Content has been proposed |
-      | body      | new document - "Assessment report                      |
+      | recipient | Notify moderator                                              |
+      | subject   | Interoperable Europe Portal: Content has been proposed        |
+      | body      | You can access the proposed new content at the following link |
 
     Given I am logged in as a moderator
     And I go to the latest document assessment
