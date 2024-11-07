@@ -19,7 +19,7 @@ class PrivateMessageReportController implements ContainerInjectionInterface {
 
   public function __construct(
     protected PrivateMessageUserServiceInterface $privateMessageUserService,
-    protected AccountInterface $currentUser
+    protected AccountInterface $currentUser,
   ) {}
 
   /**

@@ -22,7 +22,7 @@ class PrivateMessageUserService implements PrivateMessageUserServiceInterface {
     $thread = $this->privateMessageService->getThreadFromMessage($privateMessage);
     $owner = $privateMessage->getOwner();
 
-    return array_filter($thread->getMembers(), function(UserInterface $user) use ($owner) {
+    return array_filter($thread->getMembers(), function (UserInterface $user) use ($owner) {
       return $user !== $owner;
     });
   }
