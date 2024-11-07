@@ -14,3 +14,7 @@ action.configuration.change_state:*:*:
 views.access.manage_solutions:
   type: mapping
   label: 'Manage solutions'
+
+flag.link_type.plugin.interoperable_link:
+  type: flag.link_type.plugin.confirm
+  label: 'Interoperable link type'
