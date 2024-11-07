@@ -48,6 +48,7 @@ dependencies:
     - joinup_search
     - joinup_solution
     - joinup_subscription
+    - joinup_webform
     - media
     - menu_admin_per_menu
     - meta_entity
@@ -69,7 +70,6 @@ label: Moderator
 weight: -6
 is_admin: false
 permissions:
-  - 'access any webform configuration'
   - 'access compatibility document overview'
   - 'access contact form messages'
   - 'access content moderation overview'
@@ -86,7 +86,6 @@ permissions:
   - 'access uri converter'
   - 'access webform help'
   - 'access webform overview'
-  - 'access webform submission user'
   - 'add sitewide alert entities'
   - 'administer collection ownership'
   - 'administer comments'
@@ -105,8 +104,7 @@ permissions:
   - 'administer solution ownership'
   - 'administer support menu items'
   - 'administer users'
-  - 'administer webform element access'
-  - 'administer webform submission'
+  - 'administer webform via ui'
   - 'assign licence_manager role'
   - 'bypass entity legal acceptance'
   - 'create collection content'
@@ -198,12 +196,10 @@ permissions:
   - 'edit any owner content'
   - 'edit any solution content'
   - 'edit any solution_logo media'
-  - 'edit any webform'
   - 'edit own document content'
   - 'edit short id after publication'
   - 'edit sitewide alert entities'
   - 'edit terms in legal_type'
-  - 'edit webform variants'
   - 'eu oss catalogue log'
   - 'feature entity'
   - 'filter membership overview'

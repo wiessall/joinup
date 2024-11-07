@@ -1,0 +1,843 @@
+uuid: d11bb8a4-7fb0-4180-89bb-c9f22a49753a
+langcode: en
+status: open
+dependencies: {  }
+weight: 0
+open: null
+close: null
+uid: null
+template: false
+archive: false
+id: assessments
+title: 'Online form for Assessments'
+description: '<p>Interoperable Europe Solution Assessment form</p>'
+categories: {  }
+elements: |-
+  1_general_information:
+    '#type': webform_wizard_page
+    '#title': '1. General information'
+    '#prev_button_label': Previous
+    '#next_button_label': Next
+    general_info_intro:
+      '#type': processed_text
+      '#text': "<h2><strong>This section collects general information on your interoperability assessment.</strong></h2><p>You can 'Save' the current progress of the report or you can 'Submit' it once finalised. The report will be published on the Portal after the European Commission has checked that it complies with the assessment guidelines”.</p><p>&nbsp;</p>"
+      '#format': content_editor
+    union_entity_or_public_sector_body_providing_the_report:
+      '#type': processed_text
+      '#text': '<h2>&nbsp;</h2><h2>Union entity or public sector body which is providing the report.</h2>'
+      '#format': content_editor
+    horizontal_rule:
+      '#type': webform_horizontal_rule
+    please_select_the_type_of_public_sector_body:
+      '#type': select
+      '#title': 'Please select the type of public sector body'
+      '#options':
+        'Local public sector body': 'Local public sector body'
+        'Regional public sector body': 'Regional public sector body'
+        'National public sector body': 'National public sector body'
+        'European Union institution': 'European Union institution'
+        'European Union agency': 'European Union agency'
+        'European Union body': 'European Union body'
+    please_select_your_country:
+      '#type': select
+      '#title': 'Please select your country'
+      '#options':
+        Austria: Austria
+        Belgium: Belgium
+        Bulgaria: Bulgaria
+        Cyprus: Cyprus
+        'Czech Republic': 'Czech Republic'
+        Germany: Germany
+        Denmark: Denmark
+        England: England
+        Spain: Spain
+        Finland: Finland
+        France: France
+        Greece: Greece
+        Croatia: Croatia
+        Hungary: Hungary
+        Ireland: Ireland
+        Italy: Italy
+        Lithuania: Lithuania
+        Luxembourg: Luxembourg
+        Latvia: Latvia
+        Malta: Malta
+        Netherlands: Netherlands
+        Poland: Poland
+        Portugal: Portugal
+        Romania: Romania
+        'Slovak Republic': 'Slovak Republic'
+        Slovenia: Slovenia
+        Sweden: Sweden
+      '#states':
+        visible:
+          - ':input[name="please_select_the_type_of_public_sector_body"]':
+              value: 'Local public sector body'
+          - or
+          - ':input[name="please_select_the_type_of_public_sector_body"]':
+              value: 'Regional public sector body'
+          - or
+          - ':input[name="please_select_the_type_of_public_sector_body"]':
+              value: 'National public sector body'
+    please_select_your_institution:
+      '#type': select
+      '#title': 'Please select your Institution'
+      '#options':
+        'European Parliament': 'European Parliament'
+        'European Counci': 'European Counci'
+        'Council of the European Union': 'Council of the European Union'
+        'European Commission': 'European Commission'
+        'Court of Justice of the European Union': 'Court of Justice of the European Union'
+        'European Central Bank': 'European Central Bank'
+        'European Court of Auditors': 'European Court of Auditors'
+      '#states':
+        visible:
+          ':input[name="please_select_the_type_of_public_sector_body"]':
+            value: 'European Union institution'
+    please_select_your_body:
+      '#type': select
+      '#title': 'Please select your Body'
+      '#options':
+        'European External Action Service': 'European External Action Service'
+        'European Economic and Social Committee': 'European Economic and Social Committee'
+        'European Committee of the Regions': 'European Committee of the Regions'
+        'European Investment Bank': 'European Investment Bank'
+        'European Ombudsman': 'European Ombudsman'
+        'European Data Protection Supervisor': 'European Data Protection Supervisor'
+        'European Data Protection Board': 'European Data Protection Board'
+        "European Public Prosecutor's Office": "European Public Prosecutor's Office"
+      '#states':
+        visible:
+          ':input[name="please_select_the_type_of_public_sector_body"]':
+            value: 'European Union body'
+    please_select_your_agency:
+      '#type': select
+      '#title': 'Please select your Agency'
+      '#options':
+        'Agency for Support for BEREC': 'Agency for Support for BEREC'
+        'Agency for the Cooperation of Energy Regulators': 'Agency for the Cooperation of Energy Regulators'
+        'Authority for European Political Parties and European Political Foundations': 'Authority for European Political Parties and European Political Foundations'
+        'Community Plant Variety Office': 'Community Plant Variety Office'
+        Eurojust: Eurojust
+        'European Agency for Safety and Health at Work': 'European Agency for Safety and Health at Work'
+        'European Asylum Support Office': 'European Asylum Support Office'
+        'European Banking Authority': 'European Banking Authority'
+        'European Border and Coast Guard Agency': 'European Border and Coast Guard Agency'
+        'European Centre for Disease Prevention and Control': 'European Centre for Disease Prevention and Control'
+        'European Centre for the Development of Vocational Training': 'European Centre for the Development of Vocational Training'
+        'European Chemicals Agency': 'European Chemicals Agency'
+        'European Data Protection Board': 'European Data Protection Board'
+        'European Environment Agency': 'European Environment Agency'
+        'European Fisheries Control Agency': 'European Fisheries Control Agency'
+        'European Food Safety Authority': 'European Food Safety Authority'
+        'European Foundation for the Improvement of Living and Working Conditions': 'European Foundation for the Improvement of Living and Working Conditions'
+        'European GNSS Agency': 'European GNSS Agency'
+        'European Institute for Gender Equality': 'European Institute for Gender Equality'
+        'European Insurance and Occupational Pensions Authority': 'European Insurance and Occupational Pensions Authority'
+        'European Maritime Safety Agency': 'European Maritime Safety Agency'
+        'European Medicines Agency': 'European Medicines Agency'
+        'European Monitoring Centre for Drugs and Drug Addiction': 'European Monitoring Centre for Drugs and Drug Addiction'
+        "European Public Prosecutor's Office": "European Public Prosecutor's Office"
+        'European Securities and Markets Authority': 'European Securities and Markets Authority'
+        'European Training Foundation': 'European Training Foundation'
+        'European Union Agency for Cybersecurity': 'European Union Agency for Cybersecurity'
+        'European Union Agency for Fundamental Rights': 'European Union Agency for Fundamental Rights'
+        'European Union Agency for Law Enforcement Cooperation': 'European Union Agency for Law Enforcement Cooperation'
+        'European Union Agency for Law Enforcement Training': 'European Union Agency for Law Enforcement Training'
+        'European Union Agency for Railways': 'European Union Agency for Railways'
+        'European Union Agency for the Operational Management of Large-Scale IT Systems in the Area of Freedom, Security and Justice': 'European Union Agency for the Operational Management of Large-Scale IT Systems in the Area of Freedom, Security and Justice'
+        'European Union Aviation Safety Agency': 'European Union Aviation Safety Agency'
+        'European Union Intellectual Property Office': 'European Union Intellectual Property Office'
+        'Single Resolution Board': 'Single Resolution Board'
+        'Translation Centre for the Bodies of the European Union': 'Translation Centre for the Bodies of the European Union'
+      '#states':
+        visible:
+          ':input[name="please_select_the_type_of_public_sector_body"]':
+            value: 'European Union agency'
+    name_of_your_organisation_new:
+      '#type': textfield
+      '#title': 'Name of your organisation'
+      '#required': true
+      '#states':
+        visible:
+          - ':input[name="please_select_the_type_of_public_sector_body"]':
+              value: 'Local public sector body'
+          - or
+          - ':input[name="please_select_the_type_of_public_sector_body"]':
+              value: 'National public sector body'
+          - or
+          - ':input[name="please_select_the_type_of_public_sector_body"]':
+              value: 'Regional public sector body'
+    initiative_project_or_action_concerned:
+      '#type': processed_text
+      '#text': '<h2>&nbsp;</h2><h2>Initiative, project or action concerned (containing the binding requirements to be assessed)</h2>'
+      '#format': content_editor
+    horizontal_rule_01:
+      '#type': webform_horizontal_rule
+    please_provide_the_name_of_the_initiative_project_or_action_cont:
+      '#type': textfield
+      '#title': 'Please provide the name of the initiative, project or action containing the binding requirements to be assessed:'
+      '#required': true
+    if_applicable_please_provide_a_link_to_the_initiative_project_or:
+      '#type': textfield
+      '#title': 'If applicable, please provide a link to the initiative, project or action concerned:'
+    can_this_assessment_be_linked_to_previous_assessments_or_related:
+      '#type': radios
+      '#title': 'Can this assessment be linked to previous assessments or related assessments at EU or national level?'
+      '#options':
+        'Yes': 'Yes'
+        'No': 'No'
+      '#options__properties': ''
+      '#required': true
+    reference_of_the_linked_assessment:
+      '#type': textfield
+      '#title': 'Reference of the linked assessment'
+      '#multiple': 4
+      '#states':
+        visible:
+          ':input[name="can_this_assessment_be_linked_to_previous_assessments_or_related"]':
+            value: 'Yes'
+  2_binding_requirements:
+    '#type': webform_wizard_page
+    '#title': '2 Binding requirements'
+    '#prev_button_label': Previous
+    '#next_button_label': Next
+    intro_section_three:
+      '#type': processed_text
+      '#text': '<p>This section collects information on the assessed binding requirements.</p><p><a>The concept of ‘B</a>inding requirements’ is defined in Article&nbsp;2(15) IEA&nbsp;as:</p><ul><li>an obligation, prohibition, condition, criterion or limit;</li><li>of a legal, organisational, semantic or technical nature;&nbsp;</li><li>which is set by a Union entity or a public sector body;</li><li>concerning one or more trans-European digital public services; and&nbsp;</li><li>which has an effect on cross-border interoperability.</li></ul><p>When assessing if a requirement is ‘binding’ according to the IEA, one essential factor is whether the requirement has consequences for other organisations taking part in the provision of the public service (i.e., an effect on cross-border interoperability). For instance, a technical requirement that becomes mandatory only for the deciding party but <strong>still limits the choices left to others</strong> can be considered a binding requirement.</p><p>Binding requirements will usually arise from legislation. A binding requirement in a law could, for example, concern:</p><ul><li>the collection, processing, generation, exchange or sharing of data between Union entities or public sector bodies (e.g.&nbsp;a regulation on public registries);</li><li>the automation or digitalisation of public services (e.g.&nbsp;the use of AI in a public service or a digital driving licence);</li><li>the use of new or existing network and information systems (e.g.&nbsp;the use of the ‘once-only’ technical system from Single Digital Gateway Regulation: Regulation (EU) 2018/1724&nbsp;).</li></ul><p>For more information please consult the guidelines.</p>'
+      '#format': content_editor
+    trans_european_digital_public_services_concerned:
+      '#type': processed_text
+      '#text': '<h2>Trans-European digital public service(s) concerned</h2><p>Services are to be considered trans-European digital public services when they fulfil the cumulative requirements set out in Article 2(2) of the IEA. In other words, the services are:</p><p>‘<em>Digital services&nbsp;provided by Union entities or public sector bodies&nbsp;to one another or to natural or legal persons in the Union, and&nbsp;requiring interaction across Member State borders, among Union entities or between Union entities and public sector bodies, by means of their network and information systems.</em>’ &nbsp; –&nbsp; Article 2(2) IEA</p>'
+      '#format': content_editor
+    horizontal_rule_02:
+      '#type': webform_horizontal_rule
+    the_binding_requirements_identified_concern_please_select:
+      '#type': radios
+      '#title': 'The binding requirements identified concern (please select)'
+      '#options':
+        'One or few specific trans-European digital public services': 'One or few specific trans-European digital public services'
+        'Potentially many trans-European digital public services': 'Potentially many trans-European digital public services'
+      '#options__properties': ''
+    please_specify_the_trans_european_digital_public_service_s_conce:
+      '#type': textfield
+      '#title': 'Please specify the trans-European digital public service(s) concerned:'
+      '#multiple': true
+      '#states':
+        visible:
+          ':input[name="the_binding_requirements_identified_concern_please_select"]':
+            value: 'One or few specific trans-European digital public services'
+      '#multiple__sorting': false
+      '#multiple__operations': false
+      '#multiple__add_more_input': false
+    please_specify_the_concerned_application_domain_sector_of_trans:
+      '#type': checkboxes
+      '#title': 'Please specify the concerned function of trans-European digital public service(s):'
+      '#options':
+        Defense: Defense
+        'Economic affairs': 'Economic affairs'
+        Education: Education
+        'Environmental Protection': 'Environmental Protection'
+        'General public services': 'General public services'
+        Health: Health
+        'Housing and Community Amenities': 'Housing and Community Amenities'
+        'Public Order and Safety': 'Public Order and Safety'
+        'Recreation, Culture, and Religion': 'Recreation, Culture, and Religion'
+        'Social Protection': 'Social Protection'
+      '#required': true
+      '#options__properties': ''
+    identification_of_binding_requirements_assessed:
+      '#type': processed_text
+      '#text': '<h2>&nbsp;</h2><h2>Identification of binding requirements assessed</h2>'
+      '#format': content_editor
+    horizontal_rule_03:
+      '#type': webform_horizontal_rule
+    please_list_the_binding_requirement_assessed:
+      '#type': webform_custom_composite
+      '#title': 'Please list the binding requirement(s) assessed.'
+      '#multiple__sorting': false
+      '#multiple__add_more': false
+      '#element':
+        number_1:
+          '#type': number
+          '#title': Nr.
+          '#description': 'Please number each requirement'
+        legal_reference:
+          '#type': textfield
+          '#title': 'Please provide a legal reference for the binding requirement, if available'
+        description_1:
+          '#type': textfield
+          '#title': 'Please provide a short description or a title for the binding requirements for the purpose of referring back to the specific requirement in the assessment process'
+        relevant_1:
+          '#type': webform_checkboxes_other
+          '#options':
+            Data: Data
+            Systems: Systems
+          '#title': 'Please select all relevant '
+    please_specify_the_binding_requirement_s_including_numbering_the:
+      '#type': textarea
+      '#title': 'Please specify the binding requirement(s), including numbering them'
+      '#required': true
+      '#access': false
+    binding_requirement_list:
+      '#type': textfield
+      '#title': 'Please specify the binding requirement(s).'
+      '#multiple': true
+      '#required': true
+      '#access': false
+    public_and_or_private_stakeholders_affected:
+      '#type': processed_text
+      '#text': '<h2>&nbsp;</h2><h2>Public and/or private stakeholders affected</h2>'
+      '#format': content_editor
+    horizontal_rule_04:
+      '#type': webform_horizontal_rule
+    this_data_will_potentially_be_processed_by:
+      '#type': select
+      '#title': 'This data will potentially be processed by '
+      '#options':
+        'Local public sector body': 'Local public sector body'
+        'Regional public sector body': 'Regional public sector body'
+        'National public sector body': 'National public sector body'
+        'European Union institution': 'European Union institution'
+        'European Union agency': 'European Union agency'
+        'European Union body': 'European Union body'
+        'Private Businesses ': 'Private Businesses '
+      '#access': false
+    this_data_will_potentially_be_processed_by_1:
+      '#type': checkboxes
+      '#title': 'This data will potentially be processed by:'
+      '#options':
+        'Local public sector body': 'Local public sector body'
+        'Regional public sector body': 'Regional public sector body'
+        'National public sector body': 'National public sector body'
+        'European Union institution': 'European Union institution'
+        'European Union agency': 'European Union agency'
+        'uropean Union body': 'uropean Union body'
+        'Private Businesses ': 'Private Businesses '
+      '#options__properties': ''
+    please_select_your_country_1:
+      '#type': select
+      '#title': 'Please select the stakeholder’s country'
+      '#options':
+        Austria: Austria
+        Belgium: Belgium
+        Bulgaria: Bulgaria
+        Cyprus: Cyprus
+        'Czech Republic': 'Czech Republic'
+        Germany: Germany
+        Denmark: Denmark
+        England: England
+        Spain: Spain
+        Finland: Finland
+        France: France
+        Greece: Greece
+        Croatia: Croatia
+        Hungary: Hungary
+        Ireland: Ireland
+        Italy: Italy
+        Lithuania: Lithuania
+        Luxembourg: Luxembourg
+        Latvia: Latvia
+        Malta: Malta
+        Netherlands: Netherlands
+        Poland: Poland
+        Portugal: Portugal
+        Romania: Romania
+        'Slovak Republic': 'Slovak Republic'
+        Slovenia: Slovenia
+        Sweden: Sweden
+      '#states':
+        visible:
+          - ':input[name="this_data_will_potentially_be_processed_by_1[Local public sector body]"]':
+              checked: true
+          - or
+          - ':input[name="this_data_will_potentially_be_processed_by_1[Regional public sector body]"]':
+              checked: true
+          - or
+          - ':input[name="this_data_will_potentially_be_processed_by_1[National public sector body]"]':
+              checked: true
+          - or
+          - ':input[name="this_data_will_potentially_be_processed_by_1[Private Businesses ]"]':
+              checked: true
+      '#access': false
+    geographical_origin:
+      '#type': webform_custom_composite
+      '#title': 'Please select the stakeholder’s country'
+      '#multiple__header': false
+      '#multiple__item_label': ''
+      '#multiple__min_items': 1
+      '#multiple__sorting': false
+      '#multiple__add': false
+      '#multiple__add_more_input': false
+      '#multiple__add_more_button_label': 'Add country'
+      '#wrapper_type': form_element
+      '#label_attributes':
+        class:
+          - mb-0
+      '#access_create_roles':
+        - authenticated
+      '#access_view_roles':
+        - authenticated
+      '#element':
+        geographical_origin:
+          '#type': select
+          '#options':
+            'All EU': 'All EU'
+            Austria: Austria
+            Belgium: Belgium
+            Bulgaria: Bulgaria
+            Cyprus: Cyprus
+            'Czech Republic': 'Czech Republic'
+            Germany: Germany
+            Denmark: Denmark
+            England: England
+            Spain: Spain
+            Finland: Finland
+            France: France
+            Greece: Greece
+            Croatia: Croatia
+            Hungary: Hungary
+            Ireland: Ireland
+            Italy: Italy
+            Lithuania: Lithuania
+            Luxembourg: Luxembourg
+            Latvia: Latvia
+            Malta: Malta
+            Moldova: null
+            Netherlands: Netherlands
+            Poland: Poland
+            Portugal: Portugal
+            Romania: Romania
+            'Slovak Republic': 'Slovak Republic'
+            Slovenia: Slovenia
+            Sweden: Sweden
+          '#title': 'Choose a country'
+          '#description': 'Choose a country'
+    please_select_the_group_of_stakeholders_to_which_binding_require:
+      '#type': webform_checkboxes_other
+      '#title': 'Please select the group of stakeholders to which binding requirement(s) are relevant:'
+      '#options':
+        'Cross border users': 'Cross border users -- Natural or legal persons (i.e.. business) that live, reside work , travel, provide services'
+        'Public organisations': 'Public organisations -- EU, national, regional, local reusing or providing services or datas'
+      '#required': true
+      '#access': false
+      '#options__properties': ''
+    identified_effects_on_crossborder_interoperability:
+      '#type': processed_text
+      '#text': '<h2>&nbsp;</h2><h2>Identified effects on cross-border interoperability</h2>'
+      '#format': content_editor
+    horizontal_rule_05:
+      '#type': webform_horizontal_rule
+    the_interoperable_europe_act_requires_the_identification:
+      '#type': processed_text
+      '#text': '<p>The Interoperable Europe Act requires the identification of effects on cross-border interoperability, i.e., on the legal, organisational, semantic and technical interoperability of digital public services that exchange data across borders.</p><p>Taking the EIF as the main starting point for your assessment means considering the extent to which the proposed requirements enable or hinder interoperability. This could also show whether additional requirements are needed. As explained above, it is necessary to keep in mind that <strong>the assessment does not need to show the way towards full interoperability, but it should help detect ways towards&nbsp;</strong><em><strong>more&nbsp;</strong></em><strong>interoperability.</strong></p><p>As such, the identification should take into account the European Interoperability Framework with the dimensions mentioned above.</p><p>Please tick the most appropriate and provide a brief description.</p>'
+      '#format': content_editor
+    which_of_the_following_do_you_have_in_place_to_support_identifyi:
+      '#type': select
+      '#title': 'Which of the following do you have in place to support identifying the effects on cross-border interoperability?'
+      '#options':
+        'Standardised methodology based on EIF (e.g. CAMSS)': 'Standardised methodology based on EIF (e.g. CAMSS)'
+        'Standardised framework based on EIF (e.g. National Interoperability': 'Standardised framework based on EIF (e.g. National Interoperability'
+        'Standardised process based on EIF (e.g. digital checks)': 'Standardised process based on EIF (e.g. digital checks)'
+        'Standardised tool based on EIF (e.g. IMAPS or IQUAT)': 'Standardised tool based on EIF (e.g. IMAPS or IQUAT)'
+        'None of the above': 'None of the above'
+      '#empty_option': '-Select-'
+      '#required': true
+      '#access': false
+    please_tick_the_most_appropriate_identified_effects_on_based_on:
+      '#type': webform_custom_composite
+      '#title': 'Please tick the most appropriate identified effects based on the National Interoperability Framework or the EIF'
+      '#multiple__sorting': false
+      '#multiple__operations': false
+      '#multiple__add_more': false
+      '#access': false
+      '#element':
+        legal_1:
+          '#type': radios
+          '#options':
+            Beneficial: Beneficial
+            Negligible: Negligible
+            Risky: Risky
+          '#title': Legal
+        organisational_1:
+          '#type': radios
+          '#options':
+            Beneficial: Beneficial
+            Negligible: Negligible
+            Risky: Risky
+          '#title': Organisational
+        semantic_1:
+          '#type': radios
+          '#options':
+            Beneficial: Beneficial
+            Negligible: Negligible
+            Risky: Risky
+          '#title': Semantic
+        technical_1:
+          '#type': radios
+          '#options':
+            Beneficial: Beneficial
+            Negligible: Negligible
+            Risky: Risky
+          '#title': Technical
+    identified_effects_on_cross_border_legal:
+      '#type': webform_custom_composite
+      '#title': 'Identified effects on cross-border legal interoperability'
+      '#multiple__sorting': false
+      '#multiple__operations': false
+      '#multiple__add_more': false
+      '#element':
+        legal_options:
+          '#type': radios
+          '#options':
+            Beneficial: Beneficial
+            Negligible: Negligible
+            Risky: Risky
+          '#title': 'Please tick the most appropriate '
+        organisational_options:
+          '#type': textarea
+          '#title': 'Please provide a justification'
+    identified_effects_on_cross_border_organisational:
+      '#type': webform_custom_composite
+      '#title': 'Identified effects on cross-border organisational interoperability'
+      '#multiple__sorting': false
+      '#multiple__operations': false
+      '#multiple__add_more': false
+      '#element':
+        legal_options:
+          '#type': radios
+          '#options':
+            Beneficial: Beneficial
+            Negligible: Negligible
+            Risky: Risky
+          '#title': 'Please tick the most appropriate '
+        organisational_options:
+          '#type': textarea
+          '#title': 'Please provide a justification'
+    identified_effects_on_cross_border_semantic:
+      '#type': webform_custom_composite
+      '#title': 'Identified effects on cross-border semantic interoperability'
+      '#multiple__sorting': false
+      '#multiple__operations': false
+      '#multiple__add_more': false
+      '#element':
+        legal_options:
+          '#type': radios
+          '#options':
+            Beneficial: Beneficial
+            Negligible: Negligible
+            Risky: Risky
+          '#title': 'Please tick the most appropriate '
+        organisational_options:
+          '#type': textarea
+          '#title': 'Please provide a justification'
+    identified_effects_on_cross_border_technical:
+      '#type': webform_custom_composite
+      '#title': 'Identified effects on cross-border technical interoperability'
+      '#multiple__sorting': false
+      '#multiple__operations': false
+      '#multiple__add_more': false
+      '#element':
+        legal_options:
+          '#type': radios
+          '#options':
+            Beneficial: Beneficial
+            Negligible: Negligible
+            Risky: Risky
+          '#title': 'Please tick the most appropriate '
+        organisational_options:
+          '#type': textarea
+          '#title': 'Please provide a justification'
+  3_results:
+    '#type': webform_wizard_page
+    '#title': '3. Results'
+    '#prev_button_label': Previous
+    '#next_button_label': Next
+    intro_section_four:
+      '#type': processed_text
+      '#text': '<p>This section refers to the results of the interoperability assessment of binding requirement(s) required within the Interoperable Europe Act.</p>'
+      '#format': content_editor
+    interoperable_solutions_identified_for_use:
+      '#type': processed_text
+      '#text': '<h2>&nbsp;</h2><h2>Interoperable Europe solutions identified for use:</h2>'
+      '#format': content_editor
+    horizontal_rule_06:
+      '#type': webform_horizontal_rule
+    interoperable_europe_solutions_are_recommended_solutions_by_the_:
+      '#type': processed_text
+      '#text': '<p>Interoperable Europe Solutions are recommended solutions by the Interoperable Europe Board that support the interoperability of trans-European digital public services across the EU. For example, inter alia, these solutions could be open standards or specifications, specific software, guidelines or frameworks.</p><p>Currently, the formation of the Interoperable Europe Board is still pending. Consequently, there are no officially recommended Interoperable Europe solutions at this point. Updates will be provided as soon as the process is initiated and the Board has made its recommendations;</p>'
+      '#format': content_editor
+    other_relevant_interoperability_solutions_where_applicable:
+      '#type': processed_text
+      '#text': '<h2>&nbsp;</h2><h2>Other relevant interoperability solutions, where applicable, including machine-to-machine interfaces</h2>'
+      '#format': content_editor
+    horizontal_rule_07:
+      '#type': webform_horizontal_rule
+    will_any_of_the_following_interoperability_solutions_be_mandator:
+      '#type': webform_checkboxes_other
+      '#title': 'Will any of the following interoperability solutions be mandatory to use for the implementation of the assessed binding requirement?'
+      '#options':
+        'Open specification': 'Open specification'
+        'Open standard': 'Open standard'
+        API: API
+        'Core vocabulary/data model': 'Core vocabulary/data model'
+        'Open source principles': 'Open source principles'
+        'Open data frameworks': 'Open data frameworks'
+      '#required': true
+      '#access': false
+      '#options__properties': ''
+    identify_the_interoperability_solutions:
+      '#type': webform_markup
+      '#markup': '<h3>Identify the interoperability solutions mandatory to use for the implementation of the assessed binding requirement:</h3>'
+    solutions_in_the_portal:
+      '#type': entity_autocomplete
+      '#title': 'Internal Solutions in the Portal  '
+      '#multiple': true
+      '#multiple__add_more': false
+      '#multiple__add_more_input': false
+      '#target_type': node
+      '#selection_handler': 'default:node'
+      '#selection_settings':
+        target_bundles:
+          solution: solution
+    solutions_in_the_portal_link:
+      '#type': webform_link
+      '#title': 'Solutions not in the Portal (link)'
+      '#multiple': true
+      '#multiple__sorting': false
+      '#multiple__add_more': false
+      '#multiple__add_more_input': false
+      '#title__title': 'Solution Title'
+      '#url__title': 'Solution URL'
+    remaining_barriers_to_crossborder_interoperability:
+      '#type': processed_text
+      '#text': '<h2>&nbsp;</h2><h2>Remaining barriers to cross-border interoperability</h2>'
+      '#format': content_editor
+    horizontal_rule_08:
+      '#type': webform_horizontal_rule
+    have_you_discovered_any_remaining_barriers_to_cross_border_inter:
+      '#type': radios
+      '#title': 'Have you discovered any remaining barriers to cross-border interoperability?'
+      '#options':
+        'Yes': 'Yes'
+        'No': 'No'
+      '#required': true
+      '#options__properties': ''
+    c_remaining_barriers:
+      '#type': textarea
+      '#title': 'Remaining barriers'
+      '#states':
+        visible:
+          ':input[name="have_you_discovered_any_remaining_barriers_to_cross_border_inter"]':
+            value: 'Yes'
+  annexes:
+    '#type': webform_wizard_page
+    '#title': '4. Supporting documents'
+    binding_requirement_documents:
+      '#type': webform_document_file
+      '#title': 'Binding requirement documents'
+      '#multiple': 5
+      '#file_placeholder': '<p>Please upload any document giving more information on your binding requirements.</p>'
+    upload_assessment_documents:
+      '#type': webform_document_file
+      '#title': 'Upload assessment documents'
+      '#multiple': 5
+      '#file_placeholder': '<p>Please upload any document giving more information on your assessment.</p>'
+    please_add_any_other_comment_you_would_like_to_share:
+      '#type': text_format
+      '#title': 'Please add any other comment you would like to share.'
+      '#allowed_formats':
+        basic_html: basic_html
+  actions:
+    '#type': webform_actions
+    '#title': 'Submit button(s)'
+css: ''
+javascript: ''
+settings:
+  ajax: false
+  ajax_scroll_top: form
+  ajax_progress_type: ''
+  ajax_effect: ''
+  ajax_speed: null
+  page: true
+  page_submit_path: /assessments
+  page_confirm_path: /assessments/confirmation
+  page_theme_name: ''
+  form_title: source_entity_webform
+  form_submit_once: false
+  form_open_message: ''
+  form_close_message: ''
+  form_exception_message: ''
+  form_previous_submissions: true
+  form_confidential: false
+  form_confidential_message: ''
+  form_disable_remote_addr: false
+  form_convert_anonymous: false
+  form_prepopulate: false
+  form_prepopulate_source_entity: false
+  form_prepopulate_source_entity_required: false
+  form_prepopulate_source_entity_type: ''
+  form_unsaved: false
+  form_disable_back: false
+  form_submit_back: false
+  form_disable_autocomplete: false
+  form_novalidate: false
+  form_disable_inline_errors: false
+  form_required: false
+  form_autofocus: false
+  form_details_toggle: false
+  form_reset: false
+  form_access_denied: default
+  form_access_denied_title: ''
+  form_access_denied_message: ''
+  form_access_denied_attributes: {  }
+  form_file_limit: ''
+  form_attributes: {  }
+  form_method: ''
+  form_action: ''
+  share: false
+  share_node: false
+  share_theme_name: ''
+  share_title: true
+  share_page_body_attributes: {  }
+  submission_label: ''
+  submission_exception_message: ''
+  submission_locked_message: ''
+  submission_log: false
+  submission_excluded_elements: {  }
+  submission_exclude_empty: false
+  submission_exclude_empty_checkbox: false
+  submission_views: {  }
+  submission_views_replace: {  }
+  submission_user_columns: {  }
+  submission_user_duplicate: false
+  submission_access_denied: default
+  submission_access_denied_title: ''
+  submission_access_denied_message: ''
+  submission_access_denied_attributes: {  }
+  previous_submission_message: ''
+  previous_submissions_message: ''
+  autofill: true
+  autofill_message: '<p><em class="placeholder" style="-webkit-text-stroke-width:0px;background-color:rgb(255, 255, 255);color:rgb(85, 86, 91);font-family:BlinkMacSystemFont, -apple-system, &quot;Segoe UI&quot;, Roboto, Oxygen-Sans, Ubuntu, Cantarell, &quot;Helvetica Neue&quot;, sans-serif;font-size:12.64px;font-variant-caps:normal;font-variant-ligatures:normal;font-weight:400;letter-spacing:normal;orphans:2;text-align:start;text-decoration-color:initial;text-decoration-style:initial;text-decoration-thickness:initial;text-indent:0px;text-transform:none;white-space:normal;widows:2;word-spacing:0px;">TEST &nbsp;"This submission has"</em></p>'
+  autofill_excluded_elements: {  }
+  wizard_progress_bar: true
+  wizard_progress_pages: false
+  wizard_progress_percentage: false
+  wizard_progress_link: true
+  wizard_progress_states: false
+  wizard_start_label: ''
+  wizard_preview_link: false
+  wizard_confirmation: true
+  wizard_confirmation_label: ''
+  wizard_auto_forward: true
+  wizard_auto_forward_hide_next_button: false
+  wizard_keyboard: true
+  wizard_track: ''
+  wizard_prev_button_label: ''
+  wizard_next_button_label: ''
+  wizard_toggle: false
+  wizard_toggle_show_label: ''
+  wizard_toggle_hide_label: ''
+  wizard_page_type: container
+  wizard_page_title_tag: h2
+  preview: 1
+  preview_label: 'Submission review'
+  preview_title: ''
+  preview_message: ''
+  preview_attributes: {  }
+  preview_excluded_elements: {  }
+  preview_exclude_empty: true
+  preview_exclude_empty_checkbox: false
+  draft: authenticated
+  draft_multiple: false
+  draft_auto_save: false
+  draft_saved_message: ''
+  draft_loaded_message: ''
+  draft_pending_single_message: "<p>Assessment report is saved. It will remain in 'Draft' status and you may return to this form later.</p>"
+  draft_pending_multiple_message: "<p>Assessment report is updated. It will remain in 'Draft' status and you may return to this form later.</p>"
+  confirmation_type: page
+  confirmation_url: ''
+  confirmation_title: ''
+  confirmation_message: ''
+  confirmation_attributes: {  }
+  confirmation_back: true
+  confirmation_back_label: ''
+  confirmation_back_attributes: {  }
+  confirmation_exclude_query: false
+  confirmation_exclude_token: false
+  confirmation_update: false
+  limit_total: null
+  limit_total_interval: null
+  limit_total_message: ''
+  limit_total_unique: false
+  limit_user: null
+  limit_user_interval: null
+  limit_user_message: ''
+  limit_user_unique: false
+  entity_limit_total: null
+  entity_limit_total_interval: null
+  entity_limit_user: null
+  entity_limit_user_interval: null
+  purge: none
+  purge_days: null
+  results_disabled: false
+  results_disabled_ignore: false
+  results_customize: false
+  token_view: false
+  token_update: false
+  token_delete: false
+  serial_disabled: false
+access:
+  create:
+    roles:
+      - authenticated
+    users: {  }
+    permissions: {  }
+  view_any:
+    roles:
+      - moderator
+    users: {  }
+    permissions: {  }
+  update_any:
+    roles:
+      - moderator
+    users: {  }
+    permissions: {  }
+  delete_any:
+    roles:
+      - moderator
+    users: {  }
+    permissions: {  }
+  purge_any:
+    roles:
+      - moderator
+    users: {  }
+    permissions: {  }
+  view_own:
+    roles:
+      - authenticated
+    users: {  }
+    permissions: {  }
+  update_own:
+    roles:
+      - authenticated
+    users: {  }
+    permissions: {  }
+  delete_own:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  administer:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  test:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+  configuration:
+    roles: {  }
+    users: {  }
+    permissions: {  }
+handlers:  {  }
+variants: {  }

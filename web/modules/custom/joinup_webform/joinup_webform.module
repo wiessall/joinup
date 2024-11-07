@@ -1,0 +1,15 @@
+<?php
+
+/**
+ * @file
+ * Hook implementations for Joinup Webform module.
+ */
+
+declare(strict_types=1);
+
+/**
+ * Implements hook_webform_access_rules_alter().
+ */
+function joinup_webform_webform_access_rules_alter(array &$access_rules): void {
+  $access_rules['administer']['permissions'][] = 'administer webform via ui';
+}
