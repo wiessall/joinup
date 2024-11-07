@@ -174,7 +174,7 @@ elements: |-
       '#format': content_editor
     horizontal_rule_01:
       '#type': webform_horizontal_rule
-    please_provide_the_name_of_the_initiative_project_or_action_cont:
+    initiative:
       '#type': textfield
       '#title': 'Please provide the name of the initiative, project or action containing the binding requirements to be assessed:'
       '#required': true

@@ -21,7 +21,7 @@ elements: |-
   lastname:
     '#type': textfield
     '#title': Lastname
-  please_provide_the_name_of_the_initiative_project_or_action_cont:
+  initiative:
     '#type': textfield
     '#title': The name of the initiative project
 css: ''
