@@ -180,6 +180,7 @@ permissions:
   - 'use text format simple_html'
   - 'use text format text_html'
   - 'use text format webform_default'
+  - 'view assessment meta-entity'
   - 'view bookmark'
   - 'view compatibility documents'
   - 'view eif_perspective meta-entity'
