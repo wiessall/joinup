@@ -13,25 +13,38 @@ use Drupal\user\UserInterface;
 interface PrivateMessageUserServiceInterface {
 
   /**
-   * Gets Private Message target user.
+   * Gets recipients of the private message.
+   *
+   * @param \Drupal\private_message\Entity\PrivateMessageInterface $privateMessage
+   *   Private Message entity.
+   *
+   * @return \Drupal\user\UserInterface[]
+   *   Private message recipients.
+   */
+  public function getPrivateMessageRecipients(PrivateMessageInterface $privateMessage): ?array;
+
+  /**
+   * Gets first recipient of the private message.
+   *
+   * @param \Drupal\private_message\Entity\PrivateMessageInterface $privateMessage
+   *   Private Message entity.
+   *
+   * @return \Drupal\user\UserInterface|null
+   *   Private Message recipients.
+   */
+  public function getPrivateMessageRecipient(PrivateMessageInterface $privateMessage): ?UserInterface;
+
+  /**
+   * Checks if user is a recipient of the private message.
    *
    * @param \Drupal\private_message\Entity\PrivateMessageInterface $privateMessage
    *   Private message entity.
-   *
-   * @return \Drupal\user\UserInterface|null
-   *   Target user of Private Message.
-   */
-  public function getPrivateMessageTarget(PrivateMessageInterface $privateMessage): ?UserInterface;
-
-  /**
-   * Checks if user is a recipient of private message.
-   *
    * @param int $userId
-   *   User id param.
+   *   User id.
    *
    * @return bool
-   *   If user is a private message recipient, return TRUE.
+   *   If user id is in recipients array, return TRUE.
    */
-  public function isRecipient(int $userId): bool;
+  public function isRecipient(PrivateMessageInterface $privateMessage, int $userId): bool;
 
 }

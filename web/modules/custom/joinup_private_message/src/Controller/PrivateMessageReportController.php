@@ -8,7 +8,7 @@ use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Session\AccountInterface;
-use Drupal\joinup_private_message\Service\PrivateMessageUserService;
+use Drupal\joinup_private_message\Service\PrivateMessageUserServiceInterface;
 use Drupal\private_message\Entity\PrivateMessageInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -17,7 +17,10 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class PrivateMessageReportController implements ContainerInjectionInterface {
 
-  public function __construct(protected PrivateMessageUserService $privateMessageUserService, protected AccountInterface $currentUser) {}
+  public function __construct(
+    protected PrivateMessageUserServiceInterface $privateMessageUserService,
+    protected AccountInterface $currentUser
+  ) {}
 
   /**
    * {@inheritdoc}
