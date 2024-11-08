@@ -10,7 +10,6 @@ use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
-use Drupal\node\NodeInterface;
 use Drupal\rdf_sync\Model\RdfSyncFormat;
 use Drupal\rdf_sync\RdfSyncMapper;
 use EasyRdf\Format;
