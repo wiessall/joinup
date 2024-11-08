@@ -904,18 +904,19 @@ display:
         - request_format
         - url
         - user.permissions
-      tags: { }
+      tags: {  }
   csv_export_site_wide:
     id: csv_export_site_wide
     display_title: 'CSV export for Side-wide'
     display_plugin: data_export
     position: 4
     display_options:
+      title: 'Site-wide business log'
       access:
         type: perm
         options:
           perm: 'access site-wide business log'
-      arguments: { }
+      arguments: {  }
       style:
         type: data_export
         options:
@@ -932,11 +933,12 @@ display:
             use_serializer_encode_only: false
       defaults:
         access: false
+        title: false
         arguments: false
       display_description: ''
       display_extenders:
         metatag_display_extender:
-          metatags: { }
+          metatags: {  }
           tokenize: false
       path: admin/reporting/actions-log/csv
       displays:
@@ -996,6 +998,7 @@ display:
     display_plugin: page
     position: 3
     display_options:
+      title: 'Site-wide business log'
       access:
         type: perm
         options:
@@ -1003,6 +1006,7 @@ display:
       arguments: {  }
       defaults:
         access: false
+        title: false
         arguments: false
       display_description: ''
       display_extenders:
