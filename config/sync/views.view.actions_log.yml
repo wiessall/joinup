@@ -1329,6 +1329,296 @@ display:
         options:
           perm: 'access site-wide business log'
       arguments: {  }
+      filters:
+        timestamp_1:
+          id: timestamp_1
+          table: joinup_log
+          field: timestamp
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: joinup_log
+          entity_field: timestamp
+          plugin_id: date
+          operator: '>='
+          value:
+            min: ''
+            max: ''
+            value: ''
+            type: offset
+          group: 1
+          exposed: true
+          expose:
+            operator_id: timestamp_1_op
+            label: 'Date from'
+            description: 'An offset from the current time such as "+1 day" or "-2 hours -30 minutes"'
+            use_operator: false
+            operator: timestamp_1_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: from
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              licence_manager: '0'
+              anonymous: '0'
+              moderator: '0'
+              administrator: '0'
+              developer: '0'
+            min_placeholder: ''
+            max_placeholder: ''
+            placeholder: ''
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+        timestamp_2:
+          id: timestamp_2
+          table: joinup_log
+          field: timestamp
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: joinup_log
+          entity_field: timestamp
+          plugin_id: date
+          operator: '<='
+          value:
+            min: ''
+            max: ''
+            value: ''
+            type: date
+          group: 1
+          exposed: true
+          expose:
+            operator_id: timestamp_2_op
+            label: 'Date to'
+            description: 'An offset from the current time such as "+1 day" or "-2 hours -30 minutes"'
+            use_operator: false
+            operator: timestamp_2_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: to
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              licence_manager: '0'
+              anonymous: '0'
+              moderator: '0'
+              administrator: '0'
+              developer: '0'
+            min_placeholder: ''
+            max_placeholder: ''
+            placeholder: ''
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+        type:
+          id: type
+          table: joinup_log
+          field: type
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: joinup_log
+          entity_field: type
+          plugin_id: string
+          operator: in
+          group: 1
+          exposed: true
+          expose:
+            operator_id: type_op
+            label: Type
+            description: ''
+            use_operator: false
+            operator: type_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: type
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              licence_manager: '0'
+              anonymous: '0'
+              moderator: '0'
+              administrator: '0'
+              developer: '0'
+            placeholder: ''
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+        uid:
+          id: uid
+          table: users_field_data
+          field: uid
+          relationship: uid
+          group_type: group
+          admin_label: ''
+          entity_type: user
+          entity_field: uid
+          plugin_id: user_name
+          operator: in
+          value: {  }
+          group: 1
+          exposed: true
+          expose:
+            operator_id: uid_op
+            label: User
+            description: "Enter a Interoperable Europe Portal user's name to search for a user and select it with the mouse or the keyboard."
+            use_operator: false
+            operator: uid_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: uid
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              licence_manager: '0'
+              anonymous: '0'
+              moderator: '0'
+              administrator: '0'
+              developer: '0'
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+        uid_1:
+          id: uid_1
+          table: users_field_data
+          field: uid
+          relationship: actor
+          group_type: group
+          admin_label: ''
+          entity_type: user
+          entity_field: uid
+          plugin_id: user_name
+          operator: in
+          value: {  }
+          group: 1
+          exposed: true
+          expose:
+            operator_id: uid_1_op
+            label: Actor
+            description: "Enter a Interoperable Europe Portal user's name to search for a user and select it with the mouse or the keyboard."
+            use_operator: false
+            operator: uid_1_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: actor
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              licence_manager: '0'
+              anonymous: '0'
+              moderator: '0'
+              administrator: '0'
+              developer: '0'
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+        group:
+          id: group
+          table: joinup_log
+          field: group
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: joinup_log
+          entity_field: group
+          plugin_id: joinup_log_group
+          operator: '='
+          value: null
+          group: 1
+          exposed: true
+          expose:
+            operator_id: ''
+            label: Group
+            description: ''
+            use_operator: false
+            operator: group_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: group
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              licence_manager: '0'
+              anonymous: '0'
+              interoperability_validator: '0'
+              moderator: '0'
+              administrator: '0'
+              developer: '0'
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+      filter_groups:
+        operator: AND
+        groups:
+          1: AND
       style:
         type: data_export
         options:
@@ -1348,6 +1638,8 @@ display:
         title: false
         fields: false
         arguments: false
+        filters: false
+        filter_groups: false
       display_description: ''
       display_extenders:
         metatag_display_extender:
@@ -1374,7 +1666,8 @@ display:
         - request_format
         - url
         - user.permissions
-      tags: {  }
+      tags:
+        - joinup_log_list
   logs:
     id: logs
     display_title: Page
@@ -1817,11 +2110,303 @@ display:
         options:
           perm: 'access site-wide business log'
       arguments: {  }
+      filters:
+        timestamp_1:
+          id: timestamp_1
+          table: joinup_log
+          field: timestamp
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: joinup_log
+          entity_field: timestamp
+          plugin_id: date
+          operator: '>='
+          value:
+            min: ''
+            max: ''
+            value: ''
+            type: offset
+          group: 1
+          exposed: true
+          expose:
+            operator_id: timestamp_1_op
+            label: 'Date from'
+            description: 'An offset from the current time such as "+1 day" or "-2 hours -30 minutes"'
+            use_operator: false
+            operator: timestamp_1_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: from
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              licence_manager: '0'
+              anonymous: '0'
+              moderator: '0'
+              administrator: '0'
+              developer: '0'
+            min_placeholder: ''
+            max_placeholder: ''
+            placeholder: ''
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+        timestamp_2:
+          id: timestamp_2
+          table: joinup_log
+          field: timestamp
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: joinup_log
+          entity_field: timestamp
+          plugin_id: date
+          operator: '<='
+          value:
+            min: ''
+            max: ''
+            value: ''
+            type: date
+          group: 1
+          exposed: true
+          expose:
+            operator_id: timestamp_2_op
+            label: 'Date to'
+            description: 'An offset from the current time such as "+1 day" or "-2 hours -30 minutes"'
+            use_operator: false
+            operator: timestamp_2_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: to
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              licence_manager: '0'
+              anonymous: '0'
+              moderator: '0'
+              administrator: '0'
+              developer: '0'
+            min_placeholder: ''
+            max_placeholder: ''
+            placeholder: ''
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+        type:
+          id: type
+          table: joinup_log
+          field: type
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: joinup_log
+          entity_field: type
+          plugin_id: string
+          operator: in
+          group: 1
+          exposed: true
+          expose:
+            operator_id: type_op
+            label: Type
+            description: ''
+            use_operator: false
+            operator: type_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: type
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              licence_manager: '0'
+              anonymous: '0'
+              moderator: '0'
+              administrator: '0'
+              developer: '0'
+            placeholder: ''
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+        uid:
+          id: uid
+          table: users_field_data
+          field: uid
+          relationship: uid
+          group_type: group
+          admin_label: ''
+          entity_type: user
+          entity_field: uid
+          plugin_id: user_name
+          operator: in
+          value: {  }
+          group: 1
+          exposed: true
+          expose:
+            operator_id: uid_op
+            label: User
+            description: "Enter a Interoperable Europe Portal user's name to search for a user and select it with the mouse or the keyboard."
+            use_operator: false
+            operator: uid_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: uid
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              licence_manager: '0'
+              anonymous: '0'
+              moderator: '0'
+              administrator: '0'
+              developer: '0'
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+        uid_1:
+          id: uid_1
+          table: users_field_data
+          field: uid
+          relationship: actor
+          group_type: group
+          admin_label: ''
+          entity_type: user
+          entity_field: uid
+          plugin_id: user_name
+          operator: in
+          value: {  }
+          group: 1
+          exposed: true
+          expose:
+            operator_id: uid_1_op
+            label: Actor
+            description: "Enter a Interoperable Europe Portal user's name to search for a user and select it with the mouse or the keyboard."
+            use_operator: false
+            operator: uid_1_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: actor
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              licence_manager: '0'
+              anonymous: '0'
+              moderator: '0'
+              administrator: '0'
+              developer: '0'
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+        group:
+          id: group
+          table: joinup_log
+          field: group
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: joinup_log
+          entity_field: group
+          plugin_id: joinup_log_group
+          operator: '='
+          value: null
+          group: 1
+          exposed: true
+          expose:
+            operator_id: ''
+            label: Group
+            description: ''
+            use_operator: false
+            operator: group_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: group
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              licence_manager: '0'
+              anonymous: '0'
+              interoperability_validator: '0'
+              moderator: '0'
+              administrator: '0'
+              developer: '0'
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+      filter_groups:
+        operator: AND
+        groups:
+          1: AND
       defaults:
         access: false
         title: false
         fields: false
         arguments: false
+        filters: false
+        filter_groups: false
       display_description: ''
       display_extenders:
         metatag_display_extender:
@@ -1845,4 +2430,5 @@ display:
         - url
         - url.query_args
         - user.permissions
-      tags: {  }
+      tags:
+        - joinup_log_list
