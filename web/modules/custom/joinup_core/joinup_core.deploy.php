@@ -15,19 +15,17 @@
 declare(strict_types=1);
 
 /**
- * Update all solution with default_langcode = 0 and set a new revision.
+ * Fix solution nodes having wrong default_langcode after joinup 2.0 migration.
  */
 function joinup_core_deploy_200100(): void {
   $database = \Drupal::database();
-  $database->update('node_field_data')
-    ->fields(['default_langcode' => 1])
-    ->condition('langcode', 'en')
-    ->condition('default_langcode', 0)
-    ->execute();
-
-  $database->update('node_field_revision')
-    ->fields(['default_langcode' => 1])
-    ->condition('langcode', 'en')
-    ->condition('default_langcode', 0)
-    ->execute();
+  $tables = ['node_field_data', 'node_field_revision'];
+  foreach ($tables as $table) {
+    $database->update($table)
+      ->fields(['default_langcode' => 1])
+      ->condition('langcode', 'en')
+      ->condition('default_langcode', 0)
+      ->condition('type', 'solution')
+      ->execute();
+  }
 }
