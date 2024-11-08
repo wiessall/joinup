@@ -24,7 +24,7 @@ class InteroperableFlagRouteGroupResolver extends RouteGroupResolver {
    */
   protected function getContentEntity(): ?EntityInterface {
     $route = $this->routeMatch->getRouteObject();
-    if (!$route && !$this->isInteroperableFlag($route)) {
+    if (!$route || !$this->isInteroperableFlag($route)) {
       return NULL;
     }
 
