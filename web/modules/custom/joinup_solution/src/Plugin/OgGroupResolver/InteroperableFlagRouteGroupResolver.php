@@ -35,6 +35,7 @@ class InteroperableFlagRouteGroupResolver extends RouteGroupResolver {
    * Checks if it is the interoperable flag route.
    *
    * @param \Symfony\Component\Routing\Route $route
+   *   Route.
    *
    * @return bool
    *   True if is it the interoperable route
