@@ -841,7 +841,7 @@ display:
       tags: {  }
   csv_export:
     id: csv_export
-    display_title: 'CSV export'
+    display_title: 'CSV export for page'
     display_plugin: data_export
     position: 2
     display_options:
@@ -901,6 +901,61 @@ display:
         - 'languages:language_content'
         - 'languages:language_interface'
         - og_group_context
+        - request_format
+        - url
+        - user.permissions
+      tags: { }
+  csv_export_site_wide:
+    id: csv_export_site_wide
+    display_title: 'CSV export for Side-wide'
+    display_plugin: data_export
+    position: 4
+    display_options:
+      access:
+        type: perm
+        options:
+          perm: 'access site-wide business log'
+      arguments: { }
+      style:
+        type: data_export
+        options:
+          formats:
+            csv: csv
+          csv_settings:
+            delimiter: ','
+            enclosure: '"'
+            escape_char: \
+            strip_tags: true
+            trim: true
+            encoding: utf8
+            utf8_bom: '0'
+            use_serializer_encode_only: false
+      defaults:
+        access: false
+        arguments: false
+      display_description: ''
+      display_extenders:
+        metatag_display_extender:
+          metatags: { }
+          tokenize: false
+      path: admin/reporting/actions-log/csv
+      displays:
+        site_wide: site_wide
+        default: '0'
+        logs: '0'
+      filename: actions-log.csv
+      automatic_download: true
+      export_method: batch
+      export_batch_size: 1000
+      store_in_public_file_directory: false
+      custom_redirect_path: false
+      redirect_to_display: site_wide
+      include_query_params: false
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_content'
+        - 'languages:language_interface'
         - request_format
         - url
         - user.permissions
