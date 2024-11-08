@@ -104,29 +104,4 @@ class RdfExportController extends ControllerBase {
     throw new AccessException(sprintf('%s is not a valid entity route.', $route_match->getRouteName()));
   }
 
-  /**
-   * Provides a route for legacy RDF entity Metadata.
-   *
-   * @param \Drupal\node\NodeInterface $node
-   *   The entity.
-   *
-   * @return array[]
-   *   Response render array.
-   *
-   * @todo Remove this controller in ISAICP-8376.
-   */
-  public function downloadLinksLegacy(NodeInterface $node): array {
-    /** @var \EasyRdf\Format[] $formats */
-    $formats = array_intersect_key(Format::getFormats(), array_flip(['turtle', 'rdfxml']));
-    $list = ['#theme' => 'item_list'];
-    foreach ($formats as $format) {
-      $list['#items'][] = [
-        '#type' => 'link',
-        '#title' => $format->getLabel(),
-        '#url' => $node->toUrl('canonical', ['query' => ['_format' => $format->getName()]]),
-      ];
-    }
-    return [$list];
-  }
-
 }
