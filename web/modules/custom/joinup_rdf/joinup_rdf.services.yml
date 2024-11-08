@@ -6,10 +6,6 @@ services:
     class: Drupal\joinup_rdf\VocabularyFixturesHelper
     arguments: [ 'rdf_sync.connection' ]
 
-  joinup_rdf.requirements_helper:
-    class: Drupal\joinup_rdf\RequirementsHelper
-    arguments: ['@rdf_sync.connection', '@string_translation']
-
   # Move in joinup_rdf. See ISAICP-9156.
   joinup_rdf.legacy_rdf_url.subscriber:
     class: Drupal\joinup_rdf\EventSubscriber\LegacyRdfUrlSubscriber
