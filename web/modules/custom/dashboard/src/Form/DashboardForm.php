@@ -29,8 +29,7 @@ class DashboardForm extends FormBase {
     protected EntityTypeManagerInterface $entityTypeManager,
     protected RdfSyncConnectionInterface $rdfSyncConnection,
     protected Connection $db,
-  ) {
-  }
+  ) {}
 
   /**
    * {@inheritdoc}
@@ -109,7 +108,8 @@ class DashboardForm extends FormBase {
     ];
 
     // @todo Remove this button in ISAICP-9053.
-    $hasEnableDisablePermission = $this->currentUser()->hasPermission('toggle eu oss catalogue state');
+    $hasEnableDisablePermission = $this->currentUser()
+      ->hasPermission('toggle eu oss catalogue state');
     $form['actions']['enable'] = [
       '#type' => 'submit',
       '#value' => $this->t('Enable EU OSS Catalogue'),
@@ -136,7 +136,8 @@ class DashboardForm extends FormBase {
     joinup_oss_catalogue_toggle('enable');
     // Only clear cache for anonymous.
     $this->pageCache->deleteAll();
-    $this->messenger()->addStatus($this->t('EU OSS Catalogue has been enabled'));
+    $this->messenger()
+      ->addStatus($this->t('EU OSS Catalogue has been enabled'));
   }
 
   /**
@@ -148,7 +149,8 @@ class DashboardForm extends FormBase {
     joinup_oss_catalogue_toggle('disable');
     // Only clear cache for anonymous.
     $this->pageCache->deleteAll();
-    $this->messenger()->addStatus($this->t('EU OSS Catalogue has been disabled'));
+    $this->messenger()
+      ->addStatus($this->t('EU OSS Catalogue has been disabled'));
   }
 
   /**
@@ -242,6 +244,10 @@ class DashboardForm extends FormBase {
       [
         '#title' => $this->t('Manage webforms'),
         '#url' => Url::fromRoute('entity.webform.collection'),
+      ],
+      [
+        '#title' => $this->t('Private messages reports'),
+        '#url' => Url::fromRoute('view.private_message_report.all'),
       ],
     ];
 
