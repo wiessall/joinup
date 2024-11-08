@@ -22,7 +22,7 @@ class InteroperableFlagSubscriber implements EventSubscriberInterface {
   public function __construct(
     protected ContentEntityTrackingManager $trackingManager,
     protected LoggerChannelInterface $logger,
-    protected AccountInterface $currentUser
+    protected AccountInterface $currentUser,
   ) {}
 
   /**
