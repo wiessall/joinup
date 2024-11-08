@@ -5,6 +5,7 @@ dependencies:
   config:
     - node.type.collection
     - node.type.solution
+    - system.menu.admin
   module:
     - csv_serialization
     - joinup_group
@@ -930,6 +931,44 @@ display:
         - 'languages:language_content'
         - 'languages:language_interface'
         - og_group_context
+        - url
+        - url.query_args
+        - user.permissions
+      tags: {  }
+  site_wide:
+    id: site_wide
+    display_title: Site-wide
+    display_plugin: page
+    position: 3
+    display_options:
+      access:
+        type: perm
+        options:
+          perm: 'access site-wide business log'
+      arguments: {  }
+      defaults:
+        access: false
+        arguments: false
+      display_description: ''
+      display_extenders:
+        metatag_display_extender:
+          metatags: {  }
+          tokenize: false
+      path: admin/reporting/actions-log
+      menu:
+        type: normal
+        title: 'Site-wide business log'
+        description: ''
+        weight: 0
+        expanded: false
+        menu_name: admin
+        parent: joinup.admin_reporting
+        context: '0'
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_content'
+        - 'languages:language_interface'
         - url
         - url.query_args
         - user.permissions
