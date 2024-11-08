@@ -12,14 +12,16 @@ Feature: Private message report page
       | ken_carson | Ken        | Carson      | ken_carson@example.com |           |
 
     Given the following private messages:
-      | owner      | recipient | message                   | report             | report_timestamp |
-      | bob_rolls  | alice_m   | This is message from bob  | reported by alice1 | 1729593851       |
-      | ken_carson | alice_m   | This is message from ken  | reported by alice2 | 1729593851       |
+      | owner      | recipient | message                  | report             | report_timestamp |
+      | bob_rolls  | alice_m   | This is message from bob | reported by alice1 | 1729593851       |
+      | ken_carson | alice_m   | This is message from ken | reported by alice2 | 1729593851       |
 
   @javascript
   Scenario: Display, unreport and delete reported private messages
     When I am logged in as "alice_m"
-    And I am on "/dashboard/private-message-report"
+    And I am on "/dashboard"
+    Then I should see "Private messages reports"
+    When I click "Private messages reports"
     Then I should see the following lines of text:
       | This is message from bob |
       | This is message from ken |
