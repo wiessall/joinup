@@ -154,7 +154,7 @@ elements: |-
         visible:
           ':input[name="please_select_the_type_of_public_sector_body"]':
             value: 'European Union agency'
-    name_of_your_organisation_new:
+    organisation:
       '#type': textfield
       '#title': 'Name of your organisation'
       '#required': true
@@ -168,6 +168,7 @@ elements: |-
           - or
           - ':input[name="please_select_the_type_of_public_sector_body"]':
               value: 'Regional public sector body'
+      '#admin_title': Organization
     initiative_project_or_action_concerned:
       '#type': processed_text
       '#text': '<h2>&nbsp;</h2><h2>Initiative, project or action concerned (containing the binding requirements to be assessed)</h2>'
@@ -703,16 +704,22 @@ settings:
   share_page_body_attributes: {  }
   submission_label: ''
   submission_exception_message: ''
-  submission_locked_message: '<p>The assessment submission cannot be edited. Either is being moderated or it has been approved</p>'
+  submission_locked_message: '<p>The assessment submission cannot be edited. Either is being moderated or it has been approved and the report published on the <a href="[site:base-url]/assessments">assessments report</a> page.</p>'
   submission_log: true
   submission_excluded_elements: {  }
   submission_exclude_empty: false
   submission_exclude_empty_checkbox: false
-  submission_views: {  }
+  submission_views:
+    user_previous_submissions:
+      title: 'Your previous submissions'
+      view: 'assessment_user_submissions:embed_1'
+      webform_routes:
+        - entity.webform.user.submissions
   submission_views_replace: {  }
   submission_user_columns:
     - serial
-    - element__please_provide_the_name_of_the_initiative_project_or_action_cont
+    - element__organisation
+    - element__initiative
     - created
     - completed
   submission_user_duplicate: false
@@ -723,7 +730,7 @@ settings:
   previous_submission_message: ''
   previous_submissions_message: ''
   autofill: true
-  autofill_message: "<p>You're about to fill a new assessment questionnaire. The form is prefilled with your previous submission.</p>"
+  autofill_message: "<p>You're about to fill a new assessment questionnaire. The form is prefilled with your previous submitted data.</p>"
   autofill_excluded_elements: {  }
   wizard_progress_bar: true
   wizard_progress_pages: false
@@ -848,7 +855,7 @@ handlers:
   email:
     id: email
     handler_id: email
-    label: 'Moderator notification'
+    label: 'Notify moderators'
     notes: ''
     status: true
     conditions: {  }
@@ -881,5 +888,23 @@ handlers:
       twig: false
       theme_name: ''
       parameters: {  }
+      debug: false
+  action:
+    id: action
+    handler_id: action
+    label: Lock
+    notes: ''
+    status: true
+    conditions: {  }
+    weight: 0
+    settings:
+      states:
+        - completed
+      notes: 'Assessment submission has been locked because is being moderated'
+      sticky: true
+      locked: true
+      data: ''
+      message: '<p>Your assessment is being moderated. If approved, a report will be published on the <a href="[site:base-url]/assessments">assessment reports</a> page. Moderators might require changes to this submission but you will be notified by email in this case.</p>'
+      message_type: status
       debug: false
 variants: {  }
