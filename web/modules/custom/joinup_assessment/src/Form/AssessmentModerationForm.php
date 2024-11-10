@@ -13,6 +13,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Layout\LayoutPluginManagerInterface;
 use Drupal\joinup_assessment\AssessmentInterface;
 use Drupal\joinup_document\Entity\DocumentInterface;
+use Drupal\topic\Entity\TopicInterface;
 use Drupal\webform\WebformSubmissionInterface;
 use Drupal\webform\WebformSubmissionViewBuilderInterface;
 
@@ -181,7 +182,7 @@ class AssessmentModerationForm extends FormBase {
       'og_audience' => $group,
       'abstract' => $abstract,
       'field_type' => AssessmentInterface::DOCUMENT_TYPE_KEY,
-      'field_topic' => $this->getTopicId(),
+      'field_topic' => $this->getTopic(),
     ]);
     assert($document instanceof DocumentInterface);
     $document->save();
@@ -223,20 +224,15 @@ class AssessmentModerationForm extends FormBase {
   }
 
   /**
-   * Gets the topic ID.
+   * Gets the topic term entity.
    *
-   * @return string|null
-   *   Topic ID.
+   * @return \Drupal\topic\Entity\TopicInterface
+   *   The topic term.
    */
-  protected function getTopicId(): ?string {
-    $tids = $this->entityTypeManager->getStorage('taxonomy_term')->getQuery()
-      ->accessCheck(FALSE)
-      ->condition('name', AssessmentInterface::DOCUMENT_TOPIC)
-      ->condition('vid', 'topic')
-      ->range(0, 1)
-      ->execute();
-
-    return !empty($tids) ? reset($tids) : NULL;
+  protected function getTopic(): TopicInterface {
+    $topic = $this->entityRepository->loadEntityByUuid('taxonomy_term', AssessmentInterface::TOPIC_UUID);
+    assert($topic instanceof TopicInterface);
+    return $topic;
   }
 
 }
