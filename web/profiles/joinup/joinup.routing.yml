@@ -31,26 +31,6 @@ joinup.eligibility_criteria:
   requirements:
     _access: 'TRUE'
 
-joinup.export_user_list:
-  path: '/admin/reporting/export-user-list'
-  defaults:
-    _form: '\Drupal\joinup\Form\ExportUserListForm'
-    _title: 'Export user list'
-  requirements:
-    _permission: 'administer users'
-  options:
-    _admin_route: TRUE
-
-joinup.export_user_list_download:
-  path: '/admin/reporting/export-user-list/download'
-  defaults:
-    _controller: '\Drupal\joinup\Controller\DownloadUserListController::downloadUserList'
-    _title: 'Download user list'
-  requirements:
-    _permission: 'administer users'
-  options:
-    _admin_route: TRUE
-
 joinup.group_administrators_report:
   path: '/admin/reporting/group-administrators/export'
   defaults:
