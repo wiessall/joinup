@@ -9,6 +9,7 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Layout\LayoutPluginManagerInterface;
 use Drupal\joinup_assessment\AssessmentInterface;
+use Drupal\topic\Entity\TopicInterface;
 use Drupal\webform\Plugin\WebformHandlerBase;
 use Drupal\webform\webformSubmissionInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -88,7 +89,7 @@ class DocumentFromSubmissionWebformHandler extends WebformHandlerBase {
       'og_audience' => $group,
       'abstract' => substr($submissionData[AssessmentInterface::SUBMISSION_ABSTRACT] ?? '', 0, 250),
       'field_type' => AssessmentInterface::DOCUMENT_TYPE_KEY,
-      'field_topic' => $this->getTopicId(),
+      'field_topic' => $this->getTopic(),
     ]);
     $node->save();
 
@@ -101,21 +102,15 @@ class DocumentFromSubmissionWebformHandler extends WebformHandlerBase {
   }
 
   /**
-   * Gets topic id.
+   * Gets the topic term entity.
    *
-   * @return int|null
-   *   Topic id.
+   * @return \Drupal\topic\Entity\TopicInterface
+   *   The topic term.
    */
-  protected function getTopicId(): ?int {
-    $storage = $this->entityTypeManager->getStorage('taxonomy_term');
-    $query = $storage->getQuery()
-      ->accessCheck(FALSE)
-      ->condition('name', AssessmentInterface::DOCUMENT_TOPIC)
-      ->condition('vid', 'topic')
-      ->range(0, 1);
-
-    $tids = $query->execute();
-    return !empty($tids) ? (int) reset($tids) : NULL;
+  protected function getTopic(): TopicInterface {
+    $topic = $this->entityRepository->loadEntityByUuid('taxonomy_term', AssessmentInterface::TOPIC_UUID);
+    assert($topic instanceof TopicInterface);
+    return $topic;
   }
 
   /**

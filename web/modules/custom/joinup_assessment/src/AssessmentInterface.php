@@ -38,11 +38,9 @@ interface AssessmentInterface {
   public const string DOCUMENT_TYPE_KEY = 'interoperability_assessment';
 
   /**
-   * Topic.
-   *
-   * Default value for a new document.
+   * Default topic UUID for a new documents.
    */
-  public const string DOCUMENT_TOPIC = 'European Policies';
+  public const string TOPIC_UUID = '05f86e2a-8371-4944-b98f-87a8b7252f2a';
 
   /**
    * Question used to generate abstract value.
