@@ -870,7 +870,7 @@ handlers:
       sender_mail: ''
       sender_name: ''
       subject: 'Assessment submission ([webform_submission:state:label])'
-      body: '<p>Submitted on [webform_submission:created], by: [webform_submission:user]</p><p>[webform_submission:state:label]: <a href="[webform_submission:url]">[webform_submission:url]</a></p>'
+      body: '<p>Submitted on [webform_submission:created], by: [webform_submission:user]</p><p>Please <a href="[site:base-url]/assessments/questionnaire/[webform_submission:sid]/moderate">moderate</a> the submission</p>'
       excluded_elements: {  }
       ignore_access: false
       exclude_empty: true
