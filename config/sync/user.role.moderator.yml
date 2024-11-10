@@ -37,6 +37,7 @@ dependencies:
     - filter
     - flag
     - joinup
+    - joinup_assessment
     - joinup_community_content
     - joinup_core
     - joinup_distribution
@@ -208,6 +209,7 @@ permissions:
   - 'feature entity'
   - 'filter membership overview'
   - 'flag interoperability'
+  - 'manage assessments'
   - 'manage custom landing pages'
   - 'manage group add members'
   - 'manage group announcements'
