@@ -373,6 +373,9 @@
                 "Doesn't work in layout builder. @see https://www.drupal.org/i/3099580": "resources/patch/php/drupal/field_delimiter/3099580.patch",
                 "str_replace(): Passing null to parameter #3 ($subject) of type array|string is deprecated in Drupal\\Component\\Utility\\Xss::filter(). @see https://www.drupal.org/i/3301169": "resources/patch/php/drupal/field_delimiter/3301169.patch"
             },
+            "drupal/field_permissions": {
+                "Skip role with isAdmin when save custom permission @see https://www.drupal.org/project/field_permissions/issues/3470671": "resources/patch/php/drupal/field_permissions/3470671.mr36-note366100.diff"
+            },
             "drupal/file_url": {
                 "Handle deleted files @see https://www.drupal.org/project/file_url/issues/3326758": "resources/patch/php/drupal/file_url/3326758.diff",
                 "No link template 'canonical' found @see https://www.drupal.org/project/file_url/issues/3346487": "resources/patch/php/drupal/file_url/3346487.diff",
