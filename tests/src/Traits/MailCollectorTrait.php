@@ -28,8 +28,8 @@ trait MailCollectorTrait {
     // - undo the encoding done by Twig to quotes;
     // - remove the HTML to simplify the matching on the body text.
     // @see vendor/twig/twig/lib/Twig/Extension/Core.php:1034
-    $mail_body = htmlspecialchars_decode($mail_body, ENT_QUOTES | ENT_SUBSTITUTE);
-    return strip_tags($mail_body);
+    $mail_body = strip_tags($mail_body);
+    return htmlspecialchars_decode($mail_body, ENT_QUOTES | ENT_SUBSTITUTE);
   }
 
   /**
