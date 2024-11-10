@@ -15,7 +15,7 @@ field_name: require_update_reason
 entity_type: webform_submission
 bundle: assessment
 label: Reason
-description: 'Why updates are required?'
+description: 'Indicate why updates are required.'
 required: false
 translatable: false
 default_value: {  }
