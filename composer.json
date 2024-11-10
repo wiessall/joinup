@@ -119,6 +119,7 @@
         "drupal/views_data_export": "^1.0",
         "drupal/views_multiple_permissions": "^2.0",
         "drupal/webform": "^6.2",
+        "drupal/webform_views": "^5.4",
         "drush/drush": "^12.1",
         "gitonomy/gitlib": "^1.4",
         "jakeasmith/http_build_url": "^1.0",
