@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Drupal\joinup_core\Form;
+namespace Drupal\joinup_rdf\Form;
 
 use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\DependencyInjection\AutowireTrait;
@@ -16,8 +16,6 @@ use Drupal\rdf_sync\RdfSyncMapperInterface;
 
 /**
  * Simple form converting a URI to entity URL and vice versa.
- *
- * @todo Move in joinup_rdf. See ISAICP-9156.
  */
 class UriConverterForm extends FormBase {
 
@@ -78,7 +76,8 @@ class UriConverterForm extends FormBase {
     else {
       $entityTypeId = $match[1];
       if (($entityId = $url->getRouteParameters()[$entityTypeId] ?? NULL)) {
-        $entity = $this->entityTypeManager->getStorage($entityTypeId)->load($entityId);
+        $entity = $this->entityTypeManager->getStorage($entityTypeId)
+          ->load($entityId);
       }
     }
 
@@ -95,7 +94,8 @@ class UriConverterForm extends FormBase {
       return;
     }
 
-    $this->messenger()->addError($this->t('Cannot convert @uri', ['@uri' => $uri]));
+    $this->messenger()
+      ->addError($this->t('Cannot convert @uri', ['@uri' => $uri]));
   }
 
   /**
