@@ -713,7 +713,7 @@ handlers:
     notes: ''
     status: true
     conditions: {  }
-    weight: 0
+    weight: -50
     settings:
       states:
         - completed
@@ -750,7 +750,7 @@ handlers:
     notes: ''
     status: true
     conditions: {  }
-    weight: 0
+    weight: -49
     settings:
       states:
         - completed
