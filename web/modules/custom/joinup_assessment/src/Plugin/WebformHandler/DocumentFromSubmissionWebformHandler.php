@@ -6,9 +6,9 @@ namespace Drupal\joinup_assessment\Plugin\WebformHandler;
 
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\EntityRepositoryInterface;
 use Drupal\Core\Layout\LayoutPluginManagerInterface;
 use Drupal\joinup_assessment\AssessmentInterface;
-use Drupal\rdf_sync\RdfSyncMapperInterface;
 use Drupal\webform\Plugin\WebformHandlerBase;
 use Drupal\webform\webformSubmissionInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -33,17 +33,13 @@ class DocumentFromSubmissionWebformHandler extends WebformHandlerBase {
 
   /**
    * The Layouts Manager.
-   *
-   * @var \Drupal\Core\Layout\LayoutPluginManagerInterface
    */
   protected LayoutPluginManagerInterface $layoutPluginManager;
 
   /**
-   * Rdf sync mapper.
-   *
-   * @var \Drupal\rdf_sync\RdfSyncMapperInterface
+   * Entity repository service.
    */
-  protected RdfSyncMapperInterface $rdfSyncMapper;
+  protected EntityRepositoryInterface $entityRepository;
 
   /**
    * {@inheritdoc}
@@ -51,7 +47,7 @@ class DocumentFromSubmissionWebformHandler extends WebformHandlerBase {
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): self {
     $instance = parent::create($container, $configuration, $plugin_id, $plugin_definition);
     $instance->layoutPluginManager = $container->get('plugin.manager.core.layout');
-    $instance->rdfSyncMapper = $container->get('rdf_sync.mapper');
+    $instance->entityRepository = $container->get('entity.repository');
 
     return $instance;
   }
@@ -78,7 +74,7 @@ class DocumentFromSubmissionWebformHandler extends WebformHandlerBase {
 
     $group = $this->getGroup();
     if (!$group) {
-      $logger->error('Group with URI @uri was not found', ['@uri' => AssessmentInterface::DOCUMENT_GROUP_URI]);
+      $logger->error('Group with UUID @uuid was not found', ['@uuid' => AssessmentInterface::GROUP_UUID]);
       return;
     }
 
@@ -154,7 +150,7 @@ class DocumentFromSubmissionWebformHandler extends WebformHandlerBase {
    *   Group.
    */
   protected function getGroup(): ?ContentEntityInterface {
-    return $this->rdfSyncMapper->getEntityByUri(AssessmentInterface::DOCUMENT_GROUP_URI);
+    return $this->entityRepository->loadEntityByUuid('node', AssessmentInterface::GROUP_UUID);
   }
 
 }

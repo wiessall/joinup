@@ -10,11 +10,11 @@ namespace Drupal\joinup_assessment;
 interface AssessmentInterface {
 
   /**
-   * Group URI.
+   * Group UUID.
    *
    * Space where document's assessments are stored.
    */
-  public const string DOCUMENT_GROUP_URI = 'http://data.europa.eu/w21/c5e99eae-6d31-47a0-b914-a4b9f4ea82cf';
+  public const string GROUP_UUID = 'c5e99eae-6d31-47a0-b914-a4b9f4ea82cf';
 
   /**
    * Title prefix.
