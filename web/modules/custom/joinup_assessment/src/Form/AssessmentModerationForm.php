@@ -103,6 +103,7 @@ class AssessmentModerationForm extends FormBase {
       case 'require_updates':
         $submission
           ->set('in_draft', TRUE)
+          ->setLocked(FALSE)
           ->set('completed', NULL)
           ->setCurrentPage(key($submission->getWebform()->getPages()))
           ->set('require_update_reason', $form_state->getValue('reason'))
@@ -121,7 +122,11 @@ class AssessmentModerationForm extends FormBase {
 
       case 'publish':
         $document = $this->createDocument($submission);
-        $submission->delete();
+        // Once the report is published, the submission is locked. Normally, the
+        // submission is already locked in this stage, but we want to make sure.
+        if (!$submission->isLocked()) {
+          $submission->setLocked(TRUE)->save();
+        }
         $message = $this->t('The assessment submission report has been created: <a href=":href">@title</a>.', [
           ':href' => $document->toUrl()->toString(),
           '@title' => $document->label(),
