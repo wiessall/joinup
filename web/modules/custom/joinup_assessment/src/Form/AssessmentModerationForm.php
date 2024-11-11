@@ -122,8 +122,7 @@ class AssessmentModerationForm extends FormBase {
 
       case 'publish':
         $document = $this->createDocument($submission);
-        // Once the report is published, the submission is locked. Normally, the
-        // submission is already locked in this stage, but we want to make sure.
+        // Normally, the submission is already locked but let's make sure.
         if (!$submission->isLocked()) {
           $submission->setLocked(TRUE)->save();
         }
