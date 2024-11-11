@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_assessment\Form;
 
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\DependencyInjection\AutowireTrait;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityRepositoryInterface;
@@ -11,6 +13,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Layout\LayoutPluginManagerInterface;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\joinup_assessment\AssessmentInterface;
 use Drupal\joinup_document\Entity\DocumentInterface;
 use Drupal\topic\Entity\TopicInterface;
@@ -141,6 +144,36 @@ class AssessmentModerationForm extends FormBase {
   }
 
   /**
+   * Checks the 'joinup_assessment.moderation' route access.
+   *
+   * @param \Drupal\webform\WebformSubmissionInterface $submission
+   *   The webform submission.
+   * @param \Drupal\Core\Session\AccountInterface $account
+   *   The current user account.
+   *
+   * @return \Drupal\Core\Access\AccessResultInterface
+   *   The access check result.
+   */
+  public function access(WebformSubmissionInterface $submission, AccountInterface $account): AccessResultInterface {
+    $accessResult = AccessResult::allowedIf($submission->isCompleted())
+      ->andIf(AccessResult::allowedIf($submission->isLocked()))
+      ->andIf(AccessResult::allowedIfHasPermission($account, 'manage assessments'))
+      ->addCacheableDependency($submission);
+
+    if (!$accessResult->isAllowed()) {
+      return $accessResult;
+    }
+
+    $query = $this->entityTypeManager->getStorage('meta_entity')->getQuery();
+    $hasReport = (bool) $query->accessCheck(FALSE)
+      ->condition('submission', $submission->id())
+      ->count()
+      ->execute();
+
+    return $accessResult->andIf(AccessResult::allowedIf(!$hasReport));
+  }
+
+  /**
    * Builds the webform submission render array.
    *
    * @param \Drupal\webform\WebformSubmissionInterface $submission
@@ -196,7 +229,6 @@ class AssessmentModerationForm extends FormBase {
 
     return $document;
   }
-
 
   /**
    * Generates the layout paragraph.
