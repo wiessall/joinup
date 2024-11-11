@@ -36,7 +36,7 @@ class AssessmentModerationForm extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public function buildForm(array $form, FormStateInterface $form_state, WebformSubmissionInterface $submission = NULL): array {
+  public function buildForm(array $form, FormStateInterface $form_state, ?WebformSubmissionInterface $submission = NULL): array {
     $initiative = $submission->getData()[AssessmentInterface::SUBMISSION_ABSTRACT] ?? '';
     $form['#title'] = $this->t('Assessment @initiative', ['@initiative' => $initiative]);
 
