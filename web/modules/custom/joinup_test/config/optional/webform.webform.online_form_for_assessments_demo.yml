@@ -3,7 +3,6 @@ status: open
 dependencies:
   module:
     - joinup_assessment
-    - joinup_test
 weight: 0
 open: null
 close: null
@@ -23,7 +22,7 @@ elements: |-
     '#title': Lastname
   please_provide_the_name_of_the_initiative_project_or_action_cont:
     '#type': textfield
-    '#title': The name of the initiative project
+    '#title': 'The name of the initiative project'
 css: ''
 javascript: ''
 settings:
@@ -121,7 +120,7 @@ settings:
   preview_excluded_elements: { }
   preview_exclude_empty: true
   preview_exclude_empty_checkbox: false
-  draft: none
+  draft: authenticated
   draft_multiple: false
   draft_auto_save: false
   draft_saved_message: ''
@@ -180,11 +179,13 @@ access:
     users: { }
     permissions: { }
   purge_any:
-    roles: { }
+    roles:
+      - authenticated
     users: { }
     permissions: { }
   view_own:
-    roles: { }
+    roles:
+      - authenticated
     users: { }
     permissions: { }
   update_own:

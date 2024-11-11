@@ -17,6 +17,27 @@ class AssessmentContext extends RawDrupalContext {
   use EntityTrait;
 
   /**
+   * Navigates to the latest assessment webform submission.
+   *
+   * @When I go to the latest assessment submission
+   */
+  public function visitLatestAssessmentCanonicalPath(): void {
+    $query = \Drupal::entityQuery('webform_submission')
+      ->accessCheck(FALSE)
+      ->condition('webform_id', 'online_form_for_assessments_demo')
+      ->sort('created', 'DESC')
+      ->range(0, 1);
+
+    $submissionIds = $query->execute();
+    if (empty($submissionIds)) {
+      throw new \Exception('The latest assessment submission was not found.');
+    }
+
+    $submission = $this->getEntityById('webform_submission', reset($submissionIds));
+    $this->visitPath($submission->toUrl()->toString());
+  }
+
+  /**
    * Navigates to the latest assessment.
    *
    * @When I go to the latest document assessment

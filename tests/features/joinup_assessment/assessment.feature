@@ -41,3 +41,46 @@ Feature: Document assessment
       | Pioneer in making automobiles      |
       | Type of document                   |
       | Interoperability Assessment        |
+
+  Scenario: Webforms can be downloaded in PDF format.
+    When I am logged in as a user with the authenticated role
+
+    And I am at "/form/online-form-for-assessments-demo"
+    Then I should see the heading "Online form for assessments demo"
+
+    When I fill in "Firstname" with "Henry"
+    And I fill in "Lastname" with "Ford"
+    And I fill in "The name of the initiative project" with "Pioneer in making automobiles"
+    And I press "Submit"
+    Then I should see "New submission added to Online form for assessments demo."
+    And the following email should have been sent:
+      | recipient | Notify moderator                                              |
+      | subject   | Interoperable Europe Portal: Content has been proposed        |
+      | body      | You can access the proposed new content at the following link |
+
+    When I go to the latest assessment submission
+    And I click "Download PDF"
+    And the content type of the response should be "application/pdf"
+
+  Scenario: Draft webforms are available to owners to download, but not others.
+    When I am logged in as a user with the authenticated role
+
+    And I am at "/form/online-form-for-assessments-demo"
+    Then I should see the heading "Online form for assessments demo"
+
+    When I fill in "Firstname" with "Henry"
+    And I fill in "Lastname" with "Ford"
+    And I fill in "The name of the initiative project" with "Pioneer in making automobiles"
+    And I press "Save Draft"
+    Then I should see "Submission saved. You may return to this form later and it will restore the current values."
+
+    When I go to the latest assessment submission
+    Then I should see the link "Download PDF"
+
+    Given I am not logged in
+    And I go to the latest assessment submission
+    Then I should see the heading "Sign in to continue"
+
+    When I am logged in as a user with the authenticated role
+    And I go to the latest assessment submission
+    Then I should see the heading "Access denied"
