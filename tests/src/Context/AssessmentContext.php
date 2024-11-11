@@ -54,7 +54,7 @@ class AssessmentContext extends RawDrupalContext {
     $nids = \Drupal::entityQuery('node')
       ->accessCheck(FALSE)
       ->condition('type', 'document')
-      ->condition('type', AssessmentInterface::DOCUMENT_TYPE_KEY)
+      ->condition('field_type', AssessmentInterface::DOCUMENT_TYPE_KEY)
       ->sort('nid', 'DESC')
       ->range(0, 1)
       ->execute();
