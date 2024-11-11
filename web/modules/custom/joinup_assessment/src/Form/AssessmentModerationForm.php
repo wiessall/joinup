@@ -14,8 +14,10 @@ use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Layout\LayoutPluginManagerInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Url;
 use Drupal\joinup_assessment\AssessmentInterface;
 use Drupal\joinup_document\Entity\DocumentInterface;
+use Drupal\joinup_notification\JoinupMessageDeliveryInterface;
 use Drupal\topic\Entity\TopicInterface;
 use Drupal\webform\WebformSubmissionInterface;
 use Drupal\webform\WebformSubmissionViewBuilderInterface;
@@ -31,6 +33,7 @@ class AssessmentModerationForm extends FormBase {
     protected readonly EntityTypeManagerInterface $entityTypeManager,
     protected readonly EntityRepositoryInterface $entityRepository,
     protected readonly LayoutPluginManagerInterface $layoutPluginManager,
+    protected readonly JoinupMessageDeliveryInterface $delivery,
   ) {}
 
   /**
@@ -88,6 +91,7 @@ class AssessmentModerationForm extends FormBase {
       if (empty($reason)) {
         $form_state->setErrorByName('reason', $this->t('When updates are required, you should provide the reason.'));
       }
+      $form_state->setValue('reason', $reason);
     }
   }
 
@@ -101,15 +105,20 @@ class AssessmentModerationForm extends FormBase {
     $action = $form_state->getValue('action');
     switch ($action) {
       case 'require_updates':
+        $reason = $form_state->getValue('reason');
         $submission
           ->set('in_draft', TRUE)
           ->setLocked(FALSE)
           ->set('completed', NULL)
           ->setCurrentPage(key($submission->getWebform()->getPages()))
-          ->set('require_update_reason', $form_state->getValue('reason'))
+          ->set('require_update_reason', $reason)
           ->save();
 
-        // @todo
+        $arguments = [
+          '@assessment:require_update_reason' => $reason,
+          '@assessment:submission_edit_url' => $submission->toUrl('edit-form')->setAbsolute()->toString(),
+        ];
+        $this->delivery->sendMessageTemplateToUser('assessment_require_update', $arguments, $submission->getOwner());
         $message = $this->t('The assessment submission requires updates. The submitter has been notified.');
         $form_state->setRedirect('joinup_assessment.edit', ['webform_submission' => $submission->id()]);
         break;
@@ -126,6 +135,10 @@ class AssessmentModerationForm extends FormBase {
         if (!$submission->isLocked()) {
           $submission->setLocked(TRUE)->save();
         }
+        $this->delivery->sendMessageTemplateToUser('assessment_published', [
+          '@assessment:report_url' => $document->toUrl()->setAbsolute()->toString(),
+          '@assessment:reports_url' => Url::fromRoute('view.assessment_reports.list')->setAbsolute()->toString(),
+        ], $submission->getOwner());
         $message = $this->t('The assessment submission report has been created: <a href=":href">@title</a>.', [
           ':href' => $document->toUrl()->toString(),
           '@title' => $document->label(),
