@@ -125,15 +125,15 @@ Feature: Private messages
       | Alice Miller |
 
     # Delete private message
-    And a message containing the text "Another private message from Bob to Alice." should be present
-    Then I should see "Delete message"
-    Then I click "Delete message"
-    And a modal should open
+    When a message containing the text "A private message from Alice to Bob." should be present
+    And I click "Delete message"
+    Then a modal should open
     And I should see the text "Are you sure you want to delete the private message" in the "Modal title"
     And I should see the text "This action cannot be undone." in the "Modal content"
     And I should see the button "Delete" in the "Modal buttons" region
     Then I press "Delete" in the "Modal buttons" region
-    And a message containing the text "Another private message from Bob to Alice." should not be present
+    Then the modal should be closed
+    And a message containing the text "A private message from Alice to Bob." should not be present
 
   Scenario: Check a user without messages
     Given I am logged in as "alice_m"
