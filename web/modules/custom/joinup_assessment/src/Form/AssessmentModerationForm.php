@@ -120,13 +120,11 @@ class AssessmentModerationForm extends FormBase {
         ];
         $this->delivery->sendMessageTemplateToUser('assessment_require_update', $arguments, $submission->getOwner());
         $message = $this->t('The assessment submission requires updates. The submitter has been notified.');
-        $form_state->setRedirect('joinup_assessment.edit', ['webform_submission' => $submission->id()]);
         break;
 
       case 'delete':
         $submission->delete();
         $message = $this->t('The assessment submission has been deleted.');
-        $form_state->setRedirect('view.assessment_reports.list');
         break;
 
       case 'publish':
@@ -143,13 +141,13 @@ class AssessmentModerationForm extends FormBase {
           ':href' => $document->toUrl()->toString(),
           '@title' => $document->label(),
         ]);
-        $form_state->setRedirect('view.assessment_reports.list');
         break;
 
       default:
         throw new \InvalidArgumentException("Unknown action '$action'");
     }
 
+    $form_state->setRedirect('view.assessment_reports.list');
     $this->messenger()->addStatus($message);
   }
 
