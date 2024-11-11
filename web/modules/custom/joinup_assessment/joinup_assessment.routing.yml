@@ -3,7 +3,7 @@ joinup_assessment.moderation:
   defaults:
     _form: Drupal\joinup_assessment\Form\AssessmentModerationForm
   requirements:
-    _permission: manage assessments
+    _custom_access: Drupal\joinup_assessment\Form\AssessmentModerationForm::access
   options:
     parameters:
       submission:
