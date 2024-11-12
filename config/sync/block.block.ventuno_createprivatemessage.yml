@@ -9,8 +9,8 @@ dependencies:
     - ventuno
 id: ventuno_createprivatemessage
 theme: ventuno
-region: content
-weight: -22
+region: sidebar
+weight: -26
 provider: null
 plugin: joinup_private_message_block
 settings:
