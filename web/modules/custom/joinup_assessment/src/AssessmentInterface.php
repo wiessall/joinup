@@ -10,11 +10,11 @@ namespace Drupal\joinup_assessment;
 interface AssessmentInterface {
 
   /**
-   * Group URI.
+   * Group UUID.
    *
    * Space where document's assessments are stored.
    */
-  public const string DOCUMENT_GROUP_URI = 'http://data.europa.eu/w21/c5e99eae-6d31-47a0-b914-a4b9f4ea82cf';
+  public const string GROUP_UUID = 'c5e99eae-6d31-47a0-b914-a4b9f4ea82cf';
 
   /**
    * Title prefix.
@@ -28,7 +28,7 @@ interface AssessmentInterface {
    *
    * Default value for a new document.
    */
-  public const string DOCUMENT_STATE = 'proposed';
+  public const string DOCUMENT_STATE = 'published';
 
   /**
    * Type of document.
@@ -38,22 +38,20 @@ interface AssessmentInterface {
   public const string DOCUMENT_TYPE_KEY = 'interoperability_assessment';
 
   /**
-   * Topic.
-   *
-   * Default value for a new document.
+   * Default topic UUID for a new documents.
    */
-  public const string DOCUMENT_TOPIC = 'European Policies';
+  public const string TOPIC_UUID = '05f86e2a-8371-4944-b98f-87a8b7252f2a';
 
   /**
    * Question used to generate abstract value.
    */
-  public const string SUBMISSION_ABSTRACT = 'please_provide_the_name_of_the_initiative_project_or_action_cont';
+  public const string SUBMISSION_ABSTRACT = 'initiative';
 
   /**
    * Webform ID.
    *
    * Webform which contains assessment questions.
    */
-  public const string WEBFORM_ID = 'online_form_for_assessments';
+  public const string WEBFORM_ID = 'assessment';
 
 }

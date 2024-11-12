@@ -1,0 +1,7 @@
+type: module
+name: Joinup Webform
+description: Bridges Weform with Joinup
+package: Joinup
+core_version_requirement: ">= 9.4"
+dependencies:
+  - webform:webform
