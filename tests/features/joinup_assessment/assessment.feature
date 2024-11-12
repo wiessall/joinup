@@ -177,44 +177,50 @@ Feature: Assessments
     Then I should see the success message "Your assessment is being moderated. If approved, a report will be published on the assessment reports page. Moderators might require changes to this submission but you will be notified by email in this case."
 
   Scenario: Webforms can be downloaded in PDF format.
-    When I am logged in as a user with the authenticated role
+    Given users:
+      | Username         | Roles     | E-mail                    | First name | Family name |
+      | Regular          |           | regular@example.com       |            |             |
 
-    And I am at "/form/online-form-for-assessments-demo"
-    Then I should see the heading "Online form for assessments demo"
+    When I am logged in as "Regular"
+    And I go to "/assessments/questionnaire"
+    # 1st page.
+    And I fill in "Please provide the name of the initiative, project or action containing the binding requirements to be assessed:" with "Pioneer in making automobiles"
+    And I select the radio button "No"
+    And I press "Next"
+    # 2nd page.
+    When I check "Defense"
+    And I press "Next"
+    # 3rd page.
+    When I select the radio button "No"
+    And I press "Next"
+    # 4th page.
+    When I press "Submit"
+    Then I should see the success message "Your assessment is being moderated. If approved, a report will be published on the assessment reports page. Moderators might require changes to this submission but you will be notified by email in this case."
 
-    When I fill in "Firstname" with "Henry"
-    And I fill in "Lastname" with "Ford"
-    And I fill in "The name of the initiative project" with "Pioneer in making automobiles"
-    And I press "Submit"
-    Then I should see "New submission added to Online form for assessments demo."
-    And the following email should have been sent:
-      | recipient | Notify moderator                                              |
-      | subject   | Interoperable Europe Portal: Content has been proposed        |
-      | body      | You can access the proposed new content at the following link |
+    When I go to "/assessments/questionnaire"
+    Then I should see the heading "Online form for Assessments"
+    And I should see the text "You have already submitted this webform."
+    And I should see the link "View your previous submission"
 
-    When I go to the latest assessment submission
+    When I press "Save Draft"
+    Then I should see the success message "Submission saved. You may return to this form later and it will restore the current values."
+
+    When I go to "/assessments/questionnaire/submissions"
     And I click "Download PDF"
     And the content type of the response should be "application/pdf"
 
-  Scenario: Draft webforms are available to owners to download, but not others.
-    When I am logged in as a user with the authenticated role
+    # Assert that the step works fine.
+    When I go to the pdf download link of the latest assessment submission
+    Then the content type of the response should be "application/pdf"
 
-    And I am at "/form/online-form-for-assessments-demo"
-    Then I should see the heading "Online form for assessments demo"
-
-    When I fill in "Firstname" with "Henry"
-    And I fill in "Lastname" with "Ford"
-    And I fill in "The name of the initiative project" with "Pioneer in making automobiles"
-    And I press "Save Draft"
-    Then I should see "Submission saved. You may return to this form later and it will restore the current values."
-
-    When I go to the latest assessment submission
-    Then I should see the link "Download PDF"
-
-    Given I am not logged in
+    When I am not logged in
     And I go to the latest assessment submission
+    Then I should see the heading "Sign in to continue"
+    When I go to the pdf download link of the latest assessment submission
     Then I should see the heading "Sign in to continue"
 
     When I am logged in as a user with the authenticated role
     And I go to the latest assessment submission
+    Then I should see the heading "Access denied"
+    When I go to the pdf download link of the latest assessment submission
     Then I should see the heading "Access denied"

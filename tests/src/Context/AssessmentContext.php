@@ -20,6 +20,11 @@ class AssessmentContext extends RawDrupalContext {
   use EntityTrait;
 
   /**
+   * Latest submission ID before scenario.
+   */
+  protected int $latestSubmissionId;
+
+  /**
    * Navigates to the latest assessment webform submission.
    *
    * @When I go to the latest assessment submission
@@ -27,7 +32,7 @@ class AssessmentContext extends RawDrupalContext {
   public function visitLatestAssessmentCanonicalPath(): void {
     $query = \Drupal::entityQuery('webform_submission')
       ->accessCheck(FALSE)
-      ->condition('webform_id', 'online_form_for_assessments_demo')
+      ->condition('webform_id', AssessmentInterface::WEBFORM_ID)
       ->sort('created', 'DESC')
       ->range(0, 1);
 
@@ -39,11 +44,6 @@ class AssessmentContext extends RawDrupalContext {
     $submission = $this->getEntityById('webform_submission', reset($submissionIds));
     $this->visitPath($submission->toUrl()->toString());
   }
-
-  /**
-   * Latest submission ID before scenario.
-   */
-  protected int $latestSubmissionId;
 
   /**
    * Navigates to the latest submission edit form.
@@ -96,7 +96,7 @@ class AssessmentContext extends RawDrupalContext {
   public function storeLatestSubmissionId(): void {
     $submissionIds = \Drupal::entityQuery('webform_submission')
       ->accessCheck(FALSE)
-      ->condition('webform_id', 'assessment')
+      ->condition('webform_id', AssessmentInterface::WEBFORM_ID)
       ->sort('sid', 'DESC')
       ->range(0, 1)
       ->execute();
@@ -111,7 +111,7 @@ class AssessmentContext extends RawDrupalContext {
   public function cleanSubmissions(): void {
     $submissionIds = \Drupal::entityQuery('webform_submission')
       ->accessCheck(FALSE)
-      ->condition('webform_id', 'assessment')
+      ->condition('webform_id', AssessmentInterface::WEBFORM_ID)
       ->condition('sid', $this->latestSubmissionId, '>')
       ->execute();
 
@@ -123,7 +123,7 @@ class AssessmentContext extends RawDrupalContext {
         // Remove also the corresponding documents.
         $ids = $metaEntityStorage->getQuery()
           ->accessCheck(FALSE)
-          ->condition('type', 'assessment')
+          ->condition('type', AssessmentInterface::WEBFORM_ID)
           ->condition('submission', $submissionId)
           ->execute();
         if ($ids) {
@@ -144,7 +144,7 @@ class AssessmentContext extends RawDrupalContext {
   protected function getLatestSubmission(): WebformSubmissionInterface {
     $sids = \Drupal::entityQuery('webform_submission')
       ->accessCheck(FALSE)
-      ->condition('webform_id', 'assessment')
+      ->condition('webform_id', AssessmentInterface::WEBFORM_ID)
       ->sort('sid', 'DESC')
       ->range(0, 1)
       ->execute();
@@ -156,6 +156,22 @@ class AssessmentContext extends RawDrupalContext {
     $submission = WebformSubmission::load(reset($sids));
     assert($submission instanceof WebformSubmissionInterface);
     return $submission;
+  }
+
+  /**
+   * Navigate to the entity print download link of the latest submission.
+   *
+   * @When I go to the pdf download link of the latest assessment submission
+   */
+  public function visitLatestSubmissionPdfDownloadLink(): void {
+    $submission = $this->getLatestSubmission();
+    $url = Url::fromRoute('entity_print.view', [
+      'export_type' => 'pdf',
+      'entity_type' => 'webform_submission',
+      'entity_id' => $submission->id(),
+    ]);
+
+    $this->visitPath($url->toString());
   }
 
 }
