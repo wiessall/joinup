@@ -1541,6 +1541,9 @@ hidden:
   documentation: true
   download_total: true
   eif_perspective: true
+  entity_print_view_epub: true
+  entity_print_view_pdf: true
+  entity_print_view_word_docx: true
   featured: true
   field_is_description: true
   field_keywords: true

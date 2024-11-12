@@ -120,6 +120,9 @@ content:
     region: content
 hidden:
   assessment: true
+  entity_print_view_epub: true
+  entity_print_view_pdf: true
+  entity_print_view_word_docx: true
   featured: true
   field_comments: true
   field_document_publication_date: true
