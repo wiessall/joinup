@@ -37,15 +37,15 @@ Feature: Asset distribution editing.
 
     When I am logged in as a facilitator of the "Solution B" solution
     And I go to the homepage of the "Asset distribution example" distribution
-    Then I should not see the link "Edit" in the optional "Entity actions" region
+    Then I should not see the link "Edit" in the "Entity actions" region
 
     When I am logged in as an "authenticated user"
     And I go to the homepage of the "Asset distribution example" distribution
-    Then I should not see the link "Edit" in the optional "Entity actions" region
+    Then I should not see the link "Edit" in the "Entity actions" region
 
     When I am an anonymous user
     And I go to the homepage of the "Asset distribution example" distribution
-    Then I should not see the link "Edit" in the optional "Entity actions" region
+    Then I should not see the link "Edit" in the "Entity actions" region
     And I should see the text "Published on: 19/11/2019"
     And I should see the text "Last update: 19/11/2021"
 
