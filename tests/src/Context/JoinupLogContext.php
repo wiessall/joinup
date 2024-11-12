@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
-use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\EntityTrait;
