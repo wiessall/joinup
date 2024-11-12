@@ -239,7 +239,7 @@ display:
         metatag_display_extender:
           metatags: {  }
           tokenize: false
-      path: assessments/reports
+      path: assessments
     cache_metadata:
       max-age: -1
       contexts:
