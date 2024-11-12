@@ -9,26 +9,33 @@ declare(strict_types=1);
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
-use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\joinup_assessment\AssessmentInterface;
 use Drupal\joinup_document\Entity\DocumentInterface;
 use Drupal\webform\WebformSubmissionInterface;
 
 /**
- * Implements hook_ENTITY_TYPE_access().
+ * Implements hook_webform_submission_access().
  */
-function joinup_assessment_webform_submission_access(EntityInterface $entity, $operation): AccessResultInterface {
-  if ($entity instanceof WebformSubmissionInterface &&
-    $operation === 'view' &&
-    str_starts_with(
-      $entity->getWebform()->id(),
-      AssessmentInterface::WEBFORM_ID
-    ) &&
-    $entity->isCompleted()) {
-    return AccessResult::allowed();
+function joinup_assessment_webform_submission_access(WebformSubmissionInterface $submission, string $operation): AccessResultInterface {
+  $cacheMetadata = (new CacheableMetadata())->addCacheContexts(['route']);
+
+  if ($operation === 'view' && $submission->getWebform()->id() === AssessmentInterface::WEBFORM_ID) {
+    $routeMatch = \Drupal::routeMatch();
+    // Show a locked submission in the context of a document.
+    if (
+      $routeMatch->getRouteName() === 'entity.node.canonical' &&
+      ($document = $routeMatch->getParameter('node')) &&
+      $document instanceof DocumentInterface &&
+      $document->get('field_type')->value === AssessmentInterface::DOCUMENT_TYPE_KEY &&
+      $document->isPublished()
+    ) {
+      $cacheMetadata->addCacheableDependency($document);
+      return AccessResult::allowed()->addCacheableDependency($cacheMetadata);
+    }
   }
 
-  return AccessResult::neutral();
+  return AccessResult::neutral()->addCacheableDependency($cacheMetadata);
 }
 
 /**

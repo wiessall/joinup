@@ -1,0 +1,24 @@
+uuid: 65e3e7d7-35ec-4cfd-be50-00236ac0586e
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.webform_submission.require_update_reason
+    - webform.webform.assessment
+  module:
+    - tmgmt_content
+third_party_settings:
+  tmgmt_content:
+    excluded: false
+id: webform_submission.assessment.require_update_reason
+field_name: require_update_reason
+entity_type: webform_submission
+bundle: assessment
+label: Reason
+description: 'Indicate why updates are required.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string
