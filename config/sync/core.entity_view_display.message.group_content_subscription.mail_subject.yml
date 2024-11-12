@@ -12,6 +12,9 @@ bundle: group_content_subscription
 mode: mail_subject
 content: {  }
 hidden:
+  entity_print_view_epub: true
+  entity_print_view_pdf: true
+  entity_print_view_word_docx: true
   group_content: true
   partial_0: true
   partial_1: true

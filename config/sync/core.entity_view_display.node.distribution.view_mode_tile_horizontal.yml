@@ -44,6 +44,9 @@ content:
 hidden:
   access_url: true
   download_count: true
+  entity_print_view_epub: true
+  entity_print_view_pdf: true
+  entity_print_view_word_docx: true
   field_state: true
   file_size: true
   format: true
