@@ -6,5 +6,6 @@
 
 ddev solr:restore
 ddev run toolkit:install-clone
+ddev virtuoso:clear-data
 ddev run dev:install-modules
 ddev drush user:unblock --uid=1
