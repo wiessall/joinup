@@ -34,8 +34,8 @@ Feature: Private message report.
     And I check "Also block this sender"
     And I press "Send" in the "Modal content" region
     Then the modal should be closed
-    And I should see the message "Your report has been sent: I want to report this message."
-    And I should see the message "The user alice_m has been banned."
+    And I should see the success message "Thank you, your report was sent to the moderator team for further investigation."
+    And I should see the message "You will not receive anymore messages from Alice Miller."
     And a message containing the text "This is a mean message to Bob." should not be present
     And I should not see the link "Report"
     And the email sent to "alice.m@example.com" with subject "User Bob Rolls reported a message" contains the text:
