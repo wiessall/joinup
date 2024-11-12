@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a4e28db901fc0b9ceb4c0695a6231fc6",
+    "content-hash": "0190ea5848d3158a503eacee9aa99c7d",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -21455,158 +21455,6 @@
             "time": "2024-03-27T12:14:49+00:00"
         },
         {
-            "name": "php-task-runner/composer",
-            "version": "dev-toolkit-runner",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/php-task-runner/composer.git",
-                "reference": "26d77e2780f8dfe586f0e61c491f24e6daaffa33"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/php-task-runner/composer/zipball/26d77e2780f8dfe586f0e61c491f24e6daaffa33",
-                "reference": "26d77e2780f8dfe586f0e61c491f24e6daaffa33",
-                "shasum": ""
-            },
-            "require": {
-                "ec-europa/toolkit": "^9 || ^10",
-                "ext-json": "*",
-                "php": ">=7.4"
-            },
-            "require-dev": {
-                "composer/composer": "^2",
-                "phpunit/phpunit": "~7 || ~8 || ~9",
-                "slevomat/coding-standard": "~6",
-                "squizlabs/php_codesniffer": "~3"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "TaskRunner\\Composer\\": "./src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "EUPL-1.2"
-            ],
-            "authors": [
-                {
-                    "name": "Claudiu Cristea",
-                    "email": "clau.cristea@gmail.com"
-                }
-            ],
-            "description": "Provides Composer commands for OpenEuropa Task Runner",
-            "keywords": [
-                "task-runner"
-            ],
-            "support": {
-                "issues": "https://github.com/php-task-runner/composer/issues",
-                "source": "https://github.com/php-task-runner/composer/tree/toolkit-runner"
-            },
-            "time": "2023-12-06T18:01:36+00:00"
-        },
-        {
-            "name": "php-task-runner/sparql",
-            "version": "dev-toolkit-runner",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/php-task-runner/sparql.git",
-                "reference": "fc8043f94e3cd2ca6e16703c36acf9913c2b356d"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/php-task-runner/sparql/zipball/fc8043f94e3cd2ca6e16703c36acf9913c2b356d",
-                "reference": "fc8043f94e3cd2ca6e16703c36acf9913c2b356d",
-                "shasum": ""
-            },
-            "require": {
-                "ec-europa/toolkit": "^9 || ^10",
-                "php": ">=7.4",
-                "php-task-runner/sparql-robo-tasks": "1.x-dev"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "~7 || ~8 || ~9",
-                "slevomat/coding-standard": "~6",
-                "squizlabs/php_codesniffer": "~3"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "TaskRunner\\Sparql\\": "./src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "EUPL-1.2"
-            ],
-            "authors": [
-                {
-                    "name": "Claudiu Cristea",
-                    "email": "clau.cristea@gmail.com"
-                }
-            ],
-            "description": "Provides SPARQL commands for OpenEuropa Task Runner",
-            "keywords": [
-                "task-runner"
-            ],
-            "support": {
-                "issues": "https://github.com/php-task-runner/sparql/issues",
-                "source": "https://github.com/php-task-runner/sparql/tree/toolkit-runner"
-            },
-            "time": "2024-01-08T11:35:09+00:00"
-        },
-        {
-            "name": "php-task-runner/sparql-robo-tasks",
-            "version": "1.x-dev",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/php-task-runner/sparql-robo-tasks.git",
-                "reference": "dcd4467e0ab14c99f17db930a1c0a26a172a9b94"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/php-task-runner/sparql-robo-tasks/zipball/dcd4467e0ab14c99f17db930a1c0a26a172a9b94",
-                "reference": "dcd4467e0ab14c99f17db930a1c0a26a172a9b94",
-                "shasum": ""
-            },
-            "require": {
-                "consolidation/robo": "^1.0 || ^2.0 || ^3.0 || ^4 || ^5",
-                "easyrdf/easyrdf": "^1.1",
-                "php": ">=7.4"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "~7 || ~8 || ~9",
-                "slevomat/coding-standard": "~6",
-                "squizlabs/php_codesniffer": "~3"
-            },
-            "default-branch": true,
-            "type": "robo-tasks",
-            "autoload": {
-                "psr-4": {
-                    "Robo\\Sparql\\": "./src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "EUPL-1.2"
-            ],
-            "authors": [
-                {
-                    "name": "Claudiu Cristea",
-                    "email": "clau.cristea@gmail.com"
-                }
-            ],
-            "description": "Provides SPARQL commands for Robo",
-            "keywords": [
-                "task-runner"
-            ],
-            "support": {
-                "issues": "https://github.com/php-task-runner/sparql-robo-tasks/issues",
-                "source": "https://github.com/php-task-runner/sparql-robo-tasks/tree/1.x"
-            },
-            "time": "2024-07-09T10:27:09+00:00"
-        },
-        {
             "name": "phpcompatibility/php-compatibility",
             "version": "9.3.5",
             "source": {
@@ -25059,8 +24907,6 @@
         "drupal/masquerade": 5,
         "drupal/node_revision_delete": 5,
         "drupal/views_block_area": 10,
-        "php-task-runner/composer": 20,
-        "php-task-runner/sparql": 20,
         "weitzman/drupal-test-traits": 20
     },
     "prefer-stable": true,
