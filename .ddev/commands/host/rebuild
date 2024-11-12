@@ -5,7 +5,6 @@
 ## Example: ddev rebuild
 
 ddev solr:restore
-ddev virtuoso:restore
 ddev run toolkit:install-clone
 ddev run dev:install-modules
 ddev drush user:unblock --uid=1
