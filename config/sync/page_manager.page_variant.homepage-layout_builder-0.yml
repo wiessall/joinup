@@ -200,7 +200,7 @@ variant_settings:
             provider: custom_markup_block
             context_mapping: {  }
             markup:
-              value: "<p><a class=\"btn btn-secondary\" href=\"/collection/joinup/help-videos\">How to video</a>&nbsp;<button class=\"btn btn-secondary js-tour-start-button\" type=\"button\" data-drupal-tour-link=\"\">Guided tour</button>&nbsp;<a class=\"btn btn-secondary\" href=\"/collection/joinup/faq\">FAQ</a></p>\r\n"
+              value: "<p><a class=\"btn btn-secondary\" href=\"/collection/portal/how-articles\">How to video</a>&nbsp;<button class=\"btn btn-secondary js-tour-start-button\" type=\"button\" data-drupal-tour-link=\"\">Guided tour</button>&nbsp;<a class=\"btn btn-secondary\" href=\"/collection/portal/faq\">FAQ</a></p>\r\n"
               format: full_html
           weight: 0
           additional:

@@ -20,22 +20,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class ExportStatisticsPerGroupForm extends ExportBatchedDataFormBase {
 
-  /**
-   * Constructs an ExportUserListForm.
-   *
-   * @param \Drupal\Core\Cache\CacheBackendInterface $cache
-   *   The default cache bin.
-   * @param \Drupal\Core\Datetime\DateFormatterInterface $dateFormatter
-   *   The date formatter service.
-   * @param \Drupal\Component\Datetime\TimeInterface $time
-   *   The time service.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *   The entity type manager.
-   * @param \Drupal\Core\Database\Connection $mysql
-   *   The MySQL connection instance.
-   * @param \Drupal\rdf_sync\RdfSyncConnectionInterface $sparql
-   *   The SPARQL connection instance.
-   */
   public function __construct(
     protected CacheBackendInterface $cache,
     protected DateFormatterInterface $dateFormatter,
