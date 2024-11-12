@@ -1,110 +1,18 @@
 {#
 /**
  * @file
- * Theme override to display the private messages page with sidebar.
- *
- * Available variables:
- *
- * General utility variables:
- * - base_path: The base URL path of the Drupal installation. Will usually be
- *   "/" unless you have installed Drupal in a sub-directory.
- * - is_front: A flag indicating if the current page is the front page.
- * - logged_in: A flag indicating if the user is registered and signed in.
- * - is_admin: A flag indicating if the user has permission to access
- *   administration pages.
- *
- * Site identity:
- * - front_page: The URL of the front page. Use this instead of base_path when
- *   linking to the front page. This includes the language domain or prefix.
- *
- * Page content (in order of occurrence in the default page.html.twig):
- * - messages: Status and error messages. Should be displayed prominently.
- * - node: Fully loaded node, if there is an automatically-loaded node
- *   associated with the page and the node ID is the second argument in the
- *   page's path (e.g. node/12345 and node/12345/revisions, but not
- *   comment/reply/12345).
- *
- * Regions:
- * - page.search_bar: Items for the search_bar region (very custom region).
- * - page.header: Items for the header region.
- * - page.featured: Items for the featured content region.
- * - page.content_top: Items for the region displayed above the main content.
- * - page.content: The main content of the current page.
- * - page.sidebar: Items for the sidebar.
- * - page.footer: Items for the footer region.
- */
+ * Twig template extension for private messages page with sidebar.
 #}
-{%
-  set main_wrapper_classes = [
-    not page_manager ? 'mb-5',
-  ]
-%}
-<div{{ attributes.addClass('layout-container') }}>
-  {{ include('@ventuno/parts/header.html.twig', {
-    user_name: user_name,
-    landing_page_links: landing_page_links,
-    profile_links: profile_links,
-    anonymous_links: anonymous_links,
-    hide_searchbar: hide_searchbar,
-    searchbar: page.search_bar,
-    bookmark_link: bookmark_link,
-  }) }}
+{% extends 'page.html.twig' %}
 
-  {% block page_header %}
-    {% if page.header %}
-      <div class="region-header">
-        <div class="region-header__inner">
-          {{ page.header }}
-        </div>
-      </div>
-    {% endif %}
-  {% endblock %}
-
-  <div class="content container">
-    {% block page_featured %}
-      {% if page.featured %}
-        <div class="region-featured">
-          {{ page.featured }}
-        </div>
-      {% endif %}
-    {% endblock %}
-
-    {% block page_messages %}
-      {% if page.messages %}
-        <div{% if page.messages|render|striptags|trim %} class="mt-3"{% endif %}>
-          {{ page.messages }}
-        </div>
-      {% endif %}
-    {% endblock %}
-
-    {% block page_content_top %}
-      {% if page.content_top %}
-        <div class="region-content-top float-lg-end position-relative d-flex col-gap-2 mt-3 ms-lg-3">
-          {{ page.content_top }}
-        </div>
-      {% endif %}
-    {% endblock %}
-
-    <div{{ create_attribute({class: main_wrapper_classes}) }}>
-      <main>
-        <div id="main-content" tabindex="-1"></div>
-          <div class="row align-items-stretch">
-
-            {{ page.content.ventuno_pagetitle }}
-
-            <div class="layout-sidebar col-12 col-lg-3">
-              {{ page.sidebar }}
-            </div>
-          <div class="layout-content col-lg-9">
-            {{ page.content|without(page.content.ventuno_pagetitle) }}
-          </div>
-        </div>
-      </main>
+{% block page_content %}
+  <div class="row align-items-stretch">
+    {{ page.content.ventuno_pagetitle }}
+    <div class="layout-sidebar col-12 col-lg-3">
+      {{ page.sidebar }}
+    </div>
+    <div class="layout-content col-lg-9">
+      {{ page.content|without(page.content.ventuno_pagetitle) }}
     </div>
   </div>
-
-  {% if page.footer %}
-    {{ include('@ventuno/parts/footer.html.twig') }}
-  {% endif %}
-
-</div>
+{% endblock %}
