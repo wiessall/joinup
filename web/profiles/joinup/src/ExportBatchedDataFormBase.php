@@ -20,16 +20,6 @@ use Symfony\Component\HttpFoundation\Response;
  */
 abstract class ExportBatchedDataFormBase extends FormBase {
 
-  /**
-   * Constructs an ExportUserListForm.
-   *
-   * @param \Drupal\Core\Cache\CacheBackendInterface $cacheStorage
-   *   The default cache bin.
-   * @param \Drupal\Core\Datetime\DateFormatterInterface $dateFormatter
-   *   The date formatter service.
-   * @param \Drupal\Component\Datetime\TimeInterface $time
-   *   The time service.
-   */
   public function __construct(protected CacheBackendInterface $cacheStorage, protected DateFormatterInterface $dateFormatter, protected TimeInterface $time) {}
 
   /**
