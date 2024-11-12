@@ -115,8 +115,8 @@ class JoinupNotificationContext extends RawDrupalContext {
       // - remove the HTML to simplify the matching on the body text.
       // @see vendor/twig/twig/lib/Twig/Extension/Core.php:1034
       if ($mail['body'] instanceof MarkupInterface) {
-        $mail_body = htmlspecialchars_decode($mail_body, ENT_QUOTES | ENT_SUBSTITUTE);
         $mail_body = strip_tags($mail_body);
+        $mail_body = htmlspecialchars_decode($mail_body, ENT_QUOTES | ENT_SUBSTITUTE);
       }
 
       // Ensure that there are no un-replaced arguments in the mail subject and
