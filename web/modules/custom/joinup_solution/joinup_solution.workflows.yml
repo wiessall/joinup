@@ -23,6 +23,8 @@ solution_workflow:
     published:
       label: Published
       published: true
+    draft_after_published:
+      label: Draft
     needs_update:
       label: Needs update
     blacklisted:
@@ -33,8 +35,14 @@ solution_workflow:
   transitions:
     draft:
       label: Save as draft
-      from: [ __new__, draft, proposed, published, needs_update, blacklisted ]
+      from: [ __new__, draft, proposed, needs_update, blacklisted ]
       to: draft
+    # This state is meant to allow facilitators to publish changes directly
+    # to a solution that has already been approved before (by a moderator).
+    draft_after_published:
+      label: Save as draft
+      from: [ draft_after_published, published ]
+      to: draft_after_published
     propose:
       label: Propose
       from: [ __new__, draft, proposed, published, needs_update, blacklisted ]
@@ -47,7 +55,7 @@ solution_workflow:
     # But cannot approve proposed changes.
     update_validated:
       label: Publish
-      from: [ published ]
+      from: [ draft_after_published, published ]
       to: published
     needs_update:
       label: Request changes

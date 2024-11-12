@@ -90,6 +90,22 @@ Feature:
     And I should see the link "Video"
     And I should not see the link "Webform"
 
+    Then I should see the following paragraph types in the modal in order:
+      | Heading           |
+      | Text              |
+      | Image             |
+      | Accordion         |
+      | Call to action(s) |
+      | Carousel          |
+      | Content listing   |
+      | Poll              |
+      | Quote             |
+      | Social media      |
+      | Testimony         |
+      | Tiles             |
+      | Video             |
+      | Image gallery     |
+
     # Facilitator.
     When I am logged in as "Gilfoyle"
     And I go to the edit form of the "Don't Mess with the Zohan" "custom page"
