@@ -101,6 +101,7 @@ permissions:
   - 'perform node:pre_moderated workflow save_new_draft transition on any entity'
   - 'perform solution_workflow workflow archive transition on any entity'
   - 'perform solution_workflow workflow draft transition on any entity'
+  - 'perform solution_workflow workflow draft_after_published transition on any entity'
   - 'perform solution_workflow workflow propose transition on any entity'
   - 'perform solution_workflow workflow update_validated transition on any entity'
   - 'pin group content'
