@@ -434,7 +434,8 @@
                 "User can stuck on View results @see https://www.drupal.org/project/poll/issues/3405509": "resources/patch/php/drupal/poll/3405509.patch"
             },
             "drupal/private_message": {
-                "Email notifications contain HTML tags @see https://www.drupal.org/project/private_message/issues/2971692": "resources/patch/php/drupal/private_message/2971692.diff"
+                "Email notifications contain HTML tags @see https://www.drupal.org/project/private_message/issues/2971692": "resources/patch/php/drupal/private_message/2971692.diff",
+                "Show user display name instead of username everywhere @see https://www.drupal.org/i/3484561": "resources/patch/php/drupal/private_message/3484561.mr133-note404230.diff"
             },
             "drupal/private_message_flood": {
                 "Add return type to methods @see https://www.drupal.org/i/3477426": "resources/patch/php/drupal/private_message_flood/3477426.diff"
