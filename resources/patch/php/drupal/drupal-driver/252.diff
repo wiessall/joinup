@@ -1,473 +1,65 @@
-diff --git a/composer.json b/composer.json
-index e2f660b..beb4a8d 100644
---- a/composer.json
-+++ b/composer.json
-@@ -15,7 +15,7 @@
-     "php": ">=7.4",
-     "symfony/process": "~2.5|~3.0|~4.4|^6",
-     "symfony/dependency-injection": "~2.6|~3.0|~4.4|^6",
--    "drupal/core-utility": "^8.4 || ^9 || ^10@beta"
-+    "drupal/core-utility": "^8.4 || ^9 || ^10"
-   },
-   "require-dev": {
-     "composer/installers": "^2.1",
-@@ -23,8 +23,8 @@
-     "phpspec/phpspec": "~2.0 || ~4.0 || ~6.1 || dev-main",
-     "phpunit/phpunit": "~6.0 || ~7.0 || ^9",
-     "mockery/mockery": "^1.5",
--    "drupal/core-composer-scaffold": "^8.4 || ^9 || ^10@beta",
--    "drupal/core-recommended": "^8.4 || ^9 || ^10@beta",
-+    "drupal/core-composer-scaffold": "^8.4 || ^9 || ^10",
-+    "drupal/core-recommended": "^8.4 || ^9 || ^10",
-     "drupal/mailsystem": "^4.4",
-     "drush-ops/behat-drush-endpoint": "*",
-     "php-parallel-lint/php-parallel-lint": "^1.0",
-@@ -55,6 +55,12 @@
-       "Drupal\\Tests\\Driver" : "tests/"
-     }
-   },
-+  "autoload-dev": {
-+    "psr-4": {
-+      "Drupal\\": "drupal/core/lib/Drupal",
-+      "Drupal\\field\\": "drupal/core/modules/field/src"
-+    }
-+  },
-   "repositories": {
-     "drupal": {
-       "type": "composer",
-diff --git a/src/Drupal/Driver/Fields/Drupal8/AbstractHandler.php b/src/Drupal/Driver/Fields/Drupal8/AbstractHandler.php
-index 62bb0f3..c21a8e0 100644
---- a/src/Drupal/Driver/Fields/Drupal8/AbstractHandler.php
-+++ b/src/Drupal/Driver/Fields/Drupal8/AbstractHandler.php
-@@ -2,6 +2,7 @@
- 
- namespace Drupal\Driver\Fields\Drupal8;
- 
-+use Drupal\Core\Entity\EntityFieldManagerInterface;
- use Drupal\Driver\Fields\FieldHandlerInterface;
- 
- /**
-@@ -40,15 +41,14 @@ public function __construct(\StdClass $entity, $entity_type, $field_name) {
-       throw new \Exception("You must specify an entity type in order to parse entity fields.");
-     }
- 
--    /** @var \Drupal\Core\Entity\EntityFieldManagerInterface $entity_field_manager */
--    $entity_field_manager = \Drupal::service('entity_field.manager');
-+    $entity_field_manager = $this->getEntityFieldManager();
-     $fields = $entity_field_manager->getFieldStorageDefinitions($entity_type);
-     $this->fieldInfo = $fields[$field_name];
- 
-     // The bundle may be stored either under "step_bundle" or under the name
-     // of the entity's bundle key. If both are empty, assume this is a single
-     // bundle entity, and therefore make the bundle name the entity type.
--    $bundle_key = \Drupal::entityTypeManager()->getDefinition($entity_type)->getKey('bundle');
-+    $bundle_key = $this->getEntityTypeKey($entity_type, 'bundle');
-     $bundle = !empty($entity->$bundle_key) ? $entity->$bundle_key : (isset($entity->step_bundle) ? $entity->step_bundle : $entity_type);
- 
-     $fields = $entity_field_manager->getFieldDefinitions($entity_type, $bundle);
-@@ -62,4 +62,29 @@ public function __construct(\StdClass $entity, $entity_type, $field_name) {
-     $this->fieldConfig = $fields[$field_name];
-   }
- 
-+  /**
-+   * Returns the a key of a given entity type, if any.
-+   *
-+   * @param string $entity_type_id
-+   *   The entity type ID.
-+   * @param string $key
-+   *   The entity type key ID.
-+   *
-+   * @return string|false
-+   *   The key or FALSE if none.
-+   */
-+  protected function getEntityTypeKey(string $entity_type_id, string $key) {
-+    return \Drupal::entityTypeManager()->getDefinition($entity_type_id)->getKey($key);
-+  }
-+
-+  /**
-+   * Returns the entity field manager service.
-+   *
-+   * @return \Drupal\Core\Entity\EntityFieldManagerInterface
-+   *   The entity field manager service.
-+   */
-+  protected function getEntityFieldManager(): EntityFieldManagerInterface {
-+    return \Drupal::service('entity_field.manager');
-+  }
-+
- }
 diff --git a/src/Drupal/Driver/Fields/Drupal8/EntityReferenceHandler.php b/src/Drupal/Driver/Fields/Drupal8/EntityReferenceHandler.php
-index 5d3df71..f86e468 100644
+index 5ea3217..ef33ede 100644
 --- a/src/Drupal/Driver/Fields/Drupal8/EntityReferenceHandler.php
 +++ b/src/Drupal/Driver/Fields/Drupal8/EntityReferenceHandler.php
-@@ -7,60 +7,121 @@
-  */
- class EntityReferenceHandler extends AbstractHandler {
- 
-+  /**
-+   * The target entity type ID.
-+   *
-+   * @var string
-+   */
-+  protected $targetEntityTypeId;
-+
-+  /**
-+   * The target entity type label key.
-+   *
-+   * @var string
-+   */
-+  protected $targetLabelKey;
-+
-+  /**
-+   * The target entity type bundle key.
-+   *
-+   * @var string|null
-+   */
-+  protected $targetBundleKey = NULL;
-+
-+  /**
-+   * Allowed target entity bundles.
-+   *
-+   * @var string[]|null
-+   */
-+  protected $targetBundles = NULL;
-+
-   /**
+@@ -11,12 +11,9 @@ class EntityReferenceHandler extends AbstractHandler {
     * {@inheritdoc}
     */
    public function expand($values) {
 -    $return = [];
--    $entity_type_id = $this->fieldInfo->getSetting('target_type');
--    $entity_definition = \Drupal::entityTypeManager()->getDefinition($entity_type_id);
-+    $this->targetEntityTypeId = $this->fieldInfo->getSetting('target_type');
+     $entity_type_id = $this->fieldInfo->getSetting('target_type');
+     $entity_definition = \Drupal::entityTypeManager()->getDefinition($entity_type_id);
  
+-    $id_key = $entity_definition->getKey('id');
+-
      // Determine label field key.
--    if ($entity_type_id !== 'user') {
--      $label_key = $entity_definition->getKey('label');
-+    if ($this->targetEntityTypeId !== 'user') {
-+      $this->targetLabelKey = $this->getEntityTypeKey($this->targetEntityTypeId, 'label');
-     }
-     else {
-       // Entity Definition->getKey('label') returns false for users.
--      $label_key = 'name';
-+      $this->targetLabelKey = 'name';
-     }
- 
--    if (!$label_key && $entity_type_id == 'user') {
--      $label_key = 'name';
-+    if (!isset($this->targetLabelKey) && $this->targetEntityTypeId === 'user') {
-+      $this->targetLabelKey = 'name';
-     }
- 
-     // Determine target bundle restrictions.
--    $target_bundle_key = NULL;
--    if ($target_bundles = $this->getTargetBundles()) {
--      $target_bundle_key = $entity_definition->getKey('bundle');
-+    if ($this->targetBundles = $this->getTargetBundles()) {
-+      $this->targetBundleKey = $this->getEntityTypeKey($this->targetEntityTypeId, 'bundle');
+     if ($entity_type_id !== 'user') {
+       $label_key = $entity_definition->getKey('label');
+@@ -36,24 +33,38 @@ public function expand($values) {
+       $target_bundle_key = $entity_definition->getKey('bundle');
      }
  
 -    foreach ((array) $values as $value) {
--      $query = \Drupal::entityQuery($entity_type_id)->condition($label_key, $value);
--      $query->accessCheck(FALSE);
--      if ($target_bundles && $target_bundle_key) {
--        $query->condition($target_bundle_key, $target_bundles, 'IN');
--      }
--      if ($entities = $query->execute()) {
--        $return[] = array_shift($entities);
+-      $query = \Drupal::entityQuery($entity_type_id);
+-      $or = $query->orConditionGroup();
+-      $or->condition($id_key, $value)
+-        ->condition($label_key, $value);
+-      $query->condition($or);
 +    // The values can either be a direct label reference or a complex array
 +    // containing multiple properties of the field. For example, the file field
 +    // contains a target_id, a description and a display property. If the
 +    // target_id exists as a property, we assume that the other properties are
 +    // also present. Retrieve all labels and load the entities.
 +    $main_property = $this->fieldInfo->getMainPropertyName();
-+    $values = (array) $values;
 +    $labels = array_map(function ($value) use ($main_property) {
 +      return is_array($value) && isset($value[$main_property]) ? $value[$main_property] : $value;
 +    }, $values);
 +
-+    foreach ($labels as $delta => $label) {
-+      $entity_id = $this->getEntityReferenceIdFromLabel($label);
-+      // Replace the entity IDs in the original array so that other properties
-+      // are not lost.
-+      if (is_array($values[$delta]) && isset($values[$delta][$main_property])) {
-+        $values[$delta][$main_property] = $entity_id;
++    foreach ((array) $labels as $index => $label) {
++      $query = \Drupal::entityQuery($entity_type_id)->condition($label_key, $label);
+       $query->accessCheck(FALSE);
+       if ($target_bundles && $target_bundle_key) {
+         $query->condition($target_bundle_key, $target_bundles, 'IN');
+       }
+       if ($entities = $query->execute()) {
+-        $return[] = array_shift($entities);
++        $entity_id = array_shift($entities);
++        // Replace the entity IDs in the original array so that other properties
++        // are not lost.
++        if (is_array($values[$index]) && isset($values[$index][$main_property])) {
++          $values[$index][$main_property] = $entity_id;
++        }
++        else {
++          $values[$index] = $entity_id;
++        }
        }
        else {
 -        throw new \Exception(sprintf("No entity '%s' of type '%s' exists.", $value, $entity_type_id));
-+        $values[$delta] = $entity_id;
++        throw new \Exception(sprintf("No entity '%s' of type '%s' exists.", $label, $entity_type_id));
        }
      }
 -    return $return;
-+
 +    return $values;
    }
  
    /**
-    * Retrieves bundles for which the field is configured to reference.
-    *
--   * @return mixed
-+   * @return string[]|null
-    *   Array of bundle names, or NULL if not able to determine bundles.
-    */
--  protected function getTargetBundles() {
-+  protected function getTargetBundles(): ?array {
-     $settings = $this->fieldConfig->getSettings();
-     if (!empty($settings['handler_settings']['target_bundles'])) {
-       return $settings['handler_settings']['target_bundles'];
-     }
-+    return NULL;
-+  }
-+
-+  /**
-+   * Returns the target entity ID given its label.
-+   *
-+   * @param string $label
-+   *   The target entity label.
-+   *
-+   * @return string|int
-+   *   The target entity ID.
-+   *
-+   * @throws \Exception
-+   *   When no target entity exists.
-+   */
-+  protected function getEntityReferenceIdFromLabel(string $label) {
-+    $query = \Drupal::entityQuery($this->targetEntityTypeId)
-+      ->accessCheck(FALSE)
-+      ->condition($this->targetLabelKey, $label);
-+    if ($this->targetBundleKey && $this->targetBundles) {
-+      $query->condition($this->targetBundleKey, $this->targetBundles, 'IN');
-+    }
-+    if ($entities = $query->execute()) {
-+      return array_shift($entities);
-+    }
-+    throw new \Exception(sprintf("No entity '%s' of type '%s' exists.", $label, $this->targetEntityTypeId));
-   }
- 
- }
-diff --git a/tests/Drupal/Tests/Driver/DrupalFieldHandlerTest.php b/tests/Drupal/Tests/Driver/DrupalFieldHandlerTest.php
-new file mode 100644
-index 0000000..2d1a3a9
---- /dev/null
-+++ b/tests/Drupal/Tests/Driver/DrupalFieldHandlerTest.php
-@@ -0,0 +1,221 @@
-+<?php
-+
-+namespace Drupal\Tests\Driver;
-+
-+use Drupal\Component\Utility\Random;
-+use Drupal\Core\Entity\EntityFieldManagerInterface;
-+use Drupal\field\Entity\FieldConfig;
-+use Drupal\field\Entity\FieldStorageConfig;
-+use PHPUnit\Framework\Assert;
-+use PHPUnit\Framework\TestCase;
-+
-+/**
-+ * Tests the Drupal >= 8 field handlers.
-+ */
-+class DrupalFieldHandlerTest extends TestCase {
-+
-+  /**
-+   * Tests the entity reference field handlers.
-+   *
-+   * @param string $class
-+   *   The name of the field handler class under test.
-+   * @param array $entity
-+   *   An associative array representing an entity. Should contain a single
-+   *   item which represents a field containing a value. It will be converted to
-+   *   a \stdClass object before passed to the handler constructor.
-+   * @param string $entity_type_id
-+   *   The host entity type ID.
-+   * @param array $field_settings
-+   *   An array containing the field settings having the following keys:
-+   *   - field_type: The field type plugin ID,
-+   *   - main_property: The result of FieldItemInterface::mainPropertyName(),
-+   *   - field_name: The name of the field,
-+   *   - target_type: The target entity type ID,
-+   *   - handler_settings: The entity reference field handler settings.
-+   * @param array $expected_values
-+   *   The values in the expected format after expansion.
-+   *
-+   * @dataProvider dataProviderEntityReferenceHandler
-+   */
-+  public function testEntityReferenceHandlers(string $class, array $entity, string $entity_type_id, array $field_settings, array $expected_values): void {
-+    $handler = \Mockery::mock("Drupal\\Driver\\Fields\\Drupal8\\$class");
-+    $handler->makePartial()->shouldAllowMockingProtectedMethods();
-+    $handler->shouldReceive('getEntityFieldManager')->andReturn($this->getEntityFieldManagerMock($entity_type_id, $field_settings));
-+    $target_entity_type_id = $field_settings['target_type'];
-+    $target_entity_data = $this->getTargetEntityData($target_entity_type_id);
-+    $handler->shouldReceive('getEntityTypeKey')->andReturnUsing(function (string $entity_type_id, string $key) use ($target_entity_data) {
-+      return $target_entity_data['keys'][$key];
-+    });
-+    $handler->shouldReceive('getTargetBundles')->andReturnUsing(function () use ($field_settings): ?array {
-+      return $settings['handler_settings']['target_bundles'] ?? NULL;
-+    });
-+    $handler->shouldReceive('getEntityReferenceIdFromLabel')->andReturnUsing(function (string $label) use ($target_entity_data) {
-+      return $target_entity_data['samples'][$label];
-+    });
-+    $handler->__construct((object) $entity, $entity_type_id, $field_settings['field_name']);
-+
-+    $expanded_values = $handler->expand($entity[$field_settings['field_name']]);
-+    Assert::assertSame($expected_values, $expanded_values);
-+  }
-+
-+  /**
-+   * Data provider.
-+   *
-+   * @return array[][]
-+   *   An array of test data.
-+   *
-+   * @see testEntityReferenceHandlers
-+   */
-+  public function dataProviderEntityReferenceHandler(): array {
-+    return [
-+      'simple target file, no property key' => [
-+        'FileHandler',
-+        ['field_file' => 'foo.txt'],
-+        'node',
-+        [
-+          'field_type' => 'file',
-+          'main_property' => 'target_id',
-+          'field_name' => 'field_file',
-+          'target_type' => 'file',
-+          'handler_settings' => [],
-+        ],
-+        [1],
-+      ],
-+      'muliple target files, no property keys' => [
-+        'FileHandler',
-+        [
-+          'field_file' => [
-+            'foo.txt',
-+            'bar.png',
-+          ],
-+        ],
-+        'node',
-+        [
-+          'field_type' => 'file',
-+          'main_property' => 'target_id',
-+          'field_name' => 'field_file',
-+          'target_type' => 'file',
-+          'handler_settings' => [],
-+        ],
-+        [1, 5],
-+      ],
-+      'muliple target files, some property keys' => [
-+        'FileHandler',
-+        [
-+          'field_file' => [
-+            'foo.txt',
-+            'bar.png',
-+            ['target_id' => 'baz.jpg'],
-+          ],
-+        ],
-+        'node',
-+        [
-+          'field_type' => 'file',
-+          'field_name' => 'field_file',
-+          'main_property' => 'target_id',
-+          'target_type' => 'file',
-+          'handler_settings' => [],
-+        ],
-+        [1, 5, ['target_id' => 99]],
-+      ],
-+      'muliple target files, some with non-main properties' => [
-+        'FileHandler',
-+        [
-+          'field_file' => [
-+            'foo.txt',
-+            [
-+              'target_id' => 'bar.png',
-+              'display' => 1,
-+              'description' => 'The Logo',
-+            ],
-+            [
-+              'target_id' => 'baz.jpg',
-+              'display' => 0,
-+            ],
-+          ],
-+        ],
-+        'node',
-+        [
-+          'field_type' => 'file',
-+          'main_property' => 'target_id',
-+          'field_name' => 'field_file',
-+          'target_type' => 'file',
-+          'handler_settings' => [],
-+        ],
-+        [
-+          1,
-+          [
-+            'target_id' => 5,
-+            'display' => 1,
-+            'description' => 'The Logo',
-+          ],
-+          [
-+            'target_id' => 99,
-+            'display' => 0,
-+          ],
-+        ],
-+      ],
-+    ];
-+  }
-+
-+  /**
-+   * Mocks the entity field manager service.
-+   *
-+   * @return \Drupal\Core\Entity\EntityFieldManagerInterface|\Mockery\LegacyMockInterface|\Mockery\MockInterface
-+   *   Entity field manager service mock.
-+   */
-+  protected function getEntityFieldManagerMock(string $entity_type_id, array $field_settings) {
-+    $field_storage_config = \Mockery::mock(FieldStorageConfig::class, [
-+      'field_name' => $field_settings['field_name'],
-+      'entity_type' => $entity_type_id,
-+      'type' => $field_settings['field_type'],
-+    ])->makePartial();
-+    $field_storage_config->shouldReceive('getSetting')->with('target_type')->andReturn($field_settings['target_type']);
-+    $field_storage_config->shouldReceive('getMainPropertyName')->andReturn($field_settings['main_property']);
-+
-+    $entity_field_manager = \Mockery::mock(EntityFieldManagerInterface::class);
-+    $entity_field_manager->shouldReceive('getFieldStorageDefinitions')->andReturn([
-+      $field_settings['field_name'] => $field_storage_config,
-+    ]);
-+    $entity_field_manager->shouldReceive('getFieldDefinitions')->andReturn([
-+      $field_settings['field_name'] => new FieldConfig([
-+        'field_name' => $field_settings['field_name'],
-+        'entity_type' => $entity_type_id,
-+        'bundle' => (new Random())->name(),
-+        'field_type' => $field_settings['field_type'],
-+      ]),
-+    ]);
-+    return $entity_field_manager;
-+  }
-+
-+  /**
-+   * Returns target entity data used either in mocks or in test.
-+   *
-+   * @return array
-+   *   Associative array of target entity data keyed by target entity type ID
-+   *   and having target entity data as values.
-+   */
-+  protected function getTargetEntityData(string $target_entity_type_id): array {
-+    $target_entity_data = [
-+      'node' => [
-+        'keys' => [
-+          'label' => 'title',
-+          'bundle' => 'type',
-+        ],
-+      ],
-+      'file' => [
-+        'keys' => [
-+          'label' => 'filename',
-+          'bundle' => FALSE,
-+        ],
-+        'samples' => [
-+          'foo.txt' => 1,
-+          'bar.png' => 5,
-+          'baz.jpg' => 99,
-+        ],
-+      ],
-+    ];
-+    return $target_entity_data[$target_entity_type_id];
-+  }
-+
-+}
