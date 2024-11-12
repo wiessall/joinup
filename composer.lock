@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3dfa90c708717ad94f8550aee69ad31a",
+    "content-hash": "fc3ec9e90ac9ff859ca39c1460d23911",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -16196,16 +16196,16 @@
         },
         {
             "name": "symfony/process",
-            "version": "v6.4.13",
+            "version": "v6.4.14",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/process.git",
-                "reference": "1f9f59b46880201629df3bd950fc5ae8c55b960f"
+                "reference": "25214adbb0996d18112548de20c281be9f27279f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/process/zipball/1f9f59b46880201629df3bd950fc5ae8c55b960f",
-                "reference": "1f9f59b46880201629df3bd950fc5ae8c55b960f",
+                "url": "https://api.github.com/repos/symfony/process/zipball/25214adbb0996d18112548de20c281be9f27279f",
+                "reference": "25214adbb0996d18112548de20c281be9f27279f",
                 "shasum": ""
             },
             "require": {
@@ -16237,7 +16237,7 @@
             "description": "Executes commands in sub-processes",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/process/tree/v6.4.13"
+                "source": "https://github.com/symfony/process/tree/v6.4.14"
             },
             "funding": [
                 {
@@ -16253,7 +16253,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-09-25T14:18:03+00:00"
+            "time": "2024-11-06T09:25:01+00:00"
         },
         {
             "name": "symfony/psr-http-message-bridge",
@@ -19378,41 +19378,40 @@
         },
         {
             "name": "drupal/drupal-driver",
-            "version": "v2.2.2",
+            "version": "v2.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jhedstrom/DrupalDriver.git",
-                "reference": "632712db66681b76651518bf5ab1e60fddc70a39"
+                "reference": "52835be563891d74656fbaaf045dacc43ac5f701"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jhedstrom/DrupalDriver/zipball/632712db66681b76651518bf5ab1e60fddc70a39",
-                "reference": "632712db66681b76651518bf5ab1e60fddc70a39",
+                "url": "https://api.github.com/repos/jhedstrom/DrupalDriver/zipball/52835be563891d74656fbaaf045dacc43ac5f701",
+                "reference": "52835be563891d74656fbaaf045dacc43ac5f701",
                 "shasum": ""
             },
             "require": {
-                "drupal/core-utility": "^8.4 || ^9 || ^10@beta",
+                "drupal/core-utility": "^8.4 || ^9 || ^10 || ^11",
                 "php": ">=7.4",
-                "symfony/dependency-injection": "~2.6|~3.0|~4.4|^6",
-                "symfony/process": "~2.5|~3.0|~4.4|^6"
+                "symfony/dependency-injection": "~2.6 || ~3.0 || ~4.4 || ^6 || ^7.1",
+                "symfony/process": "~2.5 || ~3.0 || ~4.4 || ^6 || ^7.1"
             },
             "conflict": {
                 "drupal/core": ">=8.0 <9.3"
             },
             "require-dev": {
                 "composer/installers": "^2.1",
-                "dms/phpunit-arraysubset-asserts": "^0.4.0",
+                "dms/phpunit-arraysubset-asserts": "^0.4.0 || ^0.5.0",
                 "drupal/coder": "~8.3.0",
-                "drupal/core-composer-scaffold": "^8.4 || ^9 || ^10@beta",
-                "drupal/core-recommended": "^8.4 || ^9 || ^10@beta",
-                "drupal/mailsystem": "^4.4",
+                "drupal/core-composer-scaffold": "^8.4 || ^9 || ^10 || ^11",
+                "drupal/core-recommended": "^8.4 || ^9 || ^10 || ^11",
+                "drupal/mailsystem": "^4.4 || 4.x-dev",
                 "drush-ops/behat-drush-endpoint": "*",
-                "mglaman/drupal-check": "^1",
                 "mockery/mockery": "^1.5",
                 "palantirnet/drupal-rector": "^0.13",
                 "php-parallel-lint/php-parallel-lint": "^1.0",
                 "phpspec/phpspec": "~2.0 || ~4.0 || ~6.1 || dev-main",
-                "phpunit/phpunit": "~6.0 || ~7.0 || ^9",
+                "phpunit/phpunit": "~6.0 || ~7.0 || ^9 || ^10",
                 "symfony/phpunit-bridge": "^6.1"
             },
             "type": "library",
@@ -19456,7 +19455,7 @@
             ],
             "support": {
                 "issues": "https://github.com/jhedstrom/DrupalDriver/issues",
-                "source": "https://github.com/jhedstrom/DrupalDriver/tree/v2.2.2"
+                "source": "https://github.com/jhedstrom/DrupalDriver/tree/v2.3.0"
             },
             "funding": [
                 {
@@ -19464,7 +19463,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-01-06T17:22:24+00:00"
+            "time": "2024-10-21T16:17:44+00:00"
         },
         {
             "name": "drupal/drupal-extension",
@@ -24904,9 +24903,9 @@
         "drupal/dropsolid_purge": 10,
         "drupal/facets_block": 10,
         "drupal/facets_date_range": 10,
+        "drupal/masquerade": 5,
         "drupal/node_revision_delete": 5,
         "drupal/views_block_area": 10,
-        "drupal/masquerade": 5,
         "php-task-runner/composer": 20,
         "php-task-runner/sparql": 20,
         "weitzman/drupal-test-traits": 20
