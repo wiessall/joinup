@@ -183,6 +183,8 @@ Feature: Assessments
 
     When I am logged in as "Regular"
     And I go to "/assessments/questionnaire"
+    And I check "I agree to the Legal notice document"
+    And I press "Submit"
     # 1st page.
     And I fill in "Please provide the name of the initiative, project or action containing the binding requirements to be assessed:" with "Pioneer in making automobiles"
     And I select the radio button "No"
@@ -220,6 +222,8 @@ Feature: Assessments
     Then I should see the heading "Sign in to continue"
 
     When I am logged in as a user with the authenticated role
+    And I check "I agree to the Legal notice document"
+    And I press "Submit"
     And I go to the latest assessment submission
     Then I should see the heading "Access denied"
     When I go to the pdf download link of the latest assessment submission
