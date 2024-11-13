@@ -107,10 +107,13 @@ class PrivateMessageReportForm extends FormBase {
     foreach ($moderators as $moderator) {
       $this->mailManager->mail('joinup_private_message', 'report_message', $moderator->getEmail(), 'en', $params);
     }
-    $this->messenger()->addStatus($this->t('Your report has been sent: @message', ['@message' => $report]));
+    $this->messenger()->addStatus($this->t('Thank you, your report was sent to the moderator team for further investigation.'));
     // Ban user if checked.
     if ($blockSender) {
       $this->privateMessageBanManager->banUser((int) $sender->id());
+      $this->messenger()->addStatus($this->t('You will not receive anymore messages from %name.', [
+        '%name' => $sender->getDisplayName(),
+      ]));
     }
     // Update custom fields in private message entity.
     $message->set('report', $report);
