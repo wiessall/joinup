@@ -6,6 +6,7 @@ namespace Drupal\joinup\Access;
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Access\AccessResultInterface;
+use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Routing\Access\AccessInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountInterface;
@@ -13,10 +14,10 @@ use Drupal\Core\Session\AccountInterface;
 /**
  * Only grants access to UID 1, denies everyone else.
  */
-class Uid1OnlyAccess implements AccessInterface {
+class NodeCreationRoutesAccess implements AccessInterface {
 
   /**
-   * Grants access only to UID 1.
+   * Grants access to standard node creation pages in some circumstances.
    *
    * @param \Drupal\Core\Routing\RouteMatchInterface $routeMatch
    *   The current route match service.
@@ -27,19 +28,24 @@ class Uid1OnlyAccess implements AccessInterface {
    *   The access result.
    */
   public function access(RouteMatchInterface $routeMatch, AccountInterface $account): AccessResultInterface {
-    if ($account->id() == 1) {
-      return AccessResult::allowed()->addCacheContexts(['user.is_super_user']);
+    $cacheMetadata = (new CacheableMetadata())->addCacheContexts([
+      'route',
+      'user.permissions',
+    ]);
+
+    if ($account->hasPermission('access node creation routes')) {
+      return AccessResult::allowed()->addCacheableDependency($cacheMetadata);
     }
 
     if ($routeMatch->getRouteName() === 'node.add') {
       $nodeType = $routeMatch->getRawParameter('node_type');
       $standaloneNodeTypes = ['licence'];
       if (in_array($nodeType, $standaloneNodeTypes, TRUE)) {
-        return AccessResult::allowed()->addCacheContexts(['user.is_super_user']);
+        return AccessResult::allowed()->addCacheableDependency($cacheMetadata);
       }
     }
 
-    return AccessResult::forbidden()->addCacheContexts(['user.is_super_user']);
+    return AccessResult::forbidden()->addCacheableDependency($cacheMetadata);
   }
 
 }
