@@ -188,9 +188,3 @@ commands:
       options:
         yes: null
         root: ${joinup.site_dir}
-
-  dev:import-sparql-fixtures:
-    - task: run
-      command: virtuoso:import-fixtures
-      arguments:
-        - resources/adms/adms-definition.rdf

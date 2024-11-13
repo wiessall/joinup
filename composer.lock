@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c7c6eb0b281ff7325362ede8b52b734c",
+    "content-hash": "43ad43948ee8f438dae83a5775d12cfe",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -21299,158 +21299,6 @@
             "time": "2024-03-27T12:14:49+00:00"
         },
         {
-            "name": "php-task-runner/composer",
-            "version": "dev-toolkit-runner",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/php-task-runner/composer.git",
-                "reference": "26d77e2780f8dfe586f0e61c491f24e6daaffa33"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/php-task-runner/composer/zipball/26d77e2780f8dfe586f0e61c491f24e6daaffa33",
-                "reference": "26d77e2780f8dfe586f0e61c491f24e6daaffa33",
-                "shasum": ""
-            },
-            "require": {
-                "ec-europa/toolkit": "^9 || ^10",
-                "ext-json": "*",
-                "php": ">=7.4"
-            },
-            "require-dev": {
-                "composer/composer": "^2",
-                "phpunit/phpunit": "~7 || ~8 || ~9",
-                "slevomat/coding-standard": "~6",
-                "squizlabs/php_codesniffer": "~3"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "TaskRunner\\Composer\\": "./src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "EUPL-1.2"
-            ],
-            "authors": [
-                {
-                    "name": "Claudiu Cristea",
-                    "email": "clau.cristea@gmail.com"
-                }
-            ],
-            "description": "Provides Composer commands for OpenEuropa Task Runner",
-            "keywords": [
-                "task-runner"
-            ],
-            "support": {
-                "issues": "https://github.com/php-task-runner/composer/issues",
-                "source": "https://github.com/php-task-runner/composer/tree/toolkit-runner"
-            },
-            "time": "2023-12-06T18:01:36+00:00"
-        },
-        {
-            "name": "php-task-runner/sparql",
-            "version": "dev-toolkit-runner",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/php-task-runner/sparql.git",
-                "reference": "fc8043f94e3cd2ca6e16703c36acf9913c2b356d"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/php-task-runner/sparql/zipball/fc8043f94e3cd2ca6e16703c36acf9913c2b356d",
-                "reference": "fc8043f94e3cd2ca6e16703c36acf9913c2b356d",
-                "shasum": ""
-            },
-            "require": {
-                "ec-europa/toolkit": "^9 || ^10",
-                "php": ">=7.4",
-                "php-task-runner/sparql-robo-tasks": "1.x-dev"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "~7 || ~8 || ~9",
-                "slevomat/coding-standard": "~6",
-                "squizlabs/php_codesniffer": "~3"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "TaskRunner\\Sparql\\": "./src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "EUPL-1.2"
-            ],
-            "authors": [
-                {
-                    "name": "Claudiu Cristea",
-                    "email": "clau.cristea@gmail.com"
-                }
-            ],
-            "description": "Provides SPARQL commands for OpenEuropa Task Runner",
-            "keywords": [
-                "task-runner"
-            ],
-            "support": {
-                "issues": "https://github.com/php-task-runner/sparql/issues",
-                "source": "https://github.com/php-task-runner/sparql/tree/toolkit-runner"
-            },
-            "time": "2024-01-08T11:35:09+00:00"
-        },
-        {
-            "name": "php-task-runner/sparql-robo-tasks",
-            "version": "1.x-dev",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/php-task-runner/sparql-robo-tasks.git",
-                "reference": "dcd4467e0ab14c99f17db930a1c0a26a172a9b94"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/php-task-runner/sparql-robo-tasks/zipball/dcd4467e0ab14c99f17db930a1c0a26a172a9b94",
-                "reference": "dcd4467e0ab14c99f17db930a1c0a26a172a9b94",
-                "shasum": ""
-            },
-            "require": {
-                "consolidation/robo": "^1.0 || ^2.0 || ^3.0 || ^4 || ^5",
-                "easyrdf/easyrdf": "^1.1",
-                "php": ">=7.4"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "~7 || ~8 || ~9",
-                "slevomat/coding-standard": "~6",
-                "squizlabs/php_codesniffer": "~3"
-            },
-            "default-branch": true,
-            "type": "robo-tasks",
-            "autoload": {
-                "psr-4": {
-                    "Robo\\Sparql\\": "./src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "EUPL-1.2"
-            ],
-            "authors": [
-                {
-                    "name": "Claudiu Cristea",
-                    "email": "clau.cristea@gmail.com"
-                }
-            ],
-            "description": "Provides SPARQL commands for Robo",
-            "keywords": [
-                "task-runner"
-            ],
-            "support": {
-                "issues": "https://github.com/php-task-runner/sparql-robo-tasks/issues",
-                "source": "https://github.com/php-task-runner/sparql-robo-tasks/tree/1.x"
-            },
-            "time": "2024-07-09T10:27:09+00:00"
-        },
-        {
             "name": "phpcompatibility/php-compatibility",
             "version": "9.3.5",
             "source": {
@@ -21567,16 +21415,16 @@
         },
         {
             "name": "phpdocumentor/reflection-docblock",
-            "version": "5.4.1",
+            "version": "5.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpDocumentor/ReflectionDocBlock.git",
-                "reference": "9d07b3f7fdcf5efec5d1609cba3c19c5ea2bdc9c"
+                "reference": "54e10d44fc1a84e2598d26f70d4f6f1f233e228a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpDocumentor/ReflectionDocBlock/zipball/9d07b3f7fdcf5efec5d1609cba3c19c5ea2bdc9c",
-                "reference": "9d07b3f7fdcf5efec5d1609cba3c19c5ea2bdc9c",
+                "url": "https://api.github.com/repos/phpDocumentor/ReflectionDocBlock/zipball/54e10d44fc1a84e2598d26f70d4f6f1f233e228a",
+                "reference": "54e10d44fc1a84e2598d26f70d4f6f1f233e228a",
                 "shasum": ""
             },
             "require": {
@@ -21589,13 +21437,13 @@
                 "webmozart/assert": "^1.9.1"
             },
             "require-dev": {
-                "mockery/mockery": "~1.3.5",
+                "mockery/mockery": "~1.3.5 || ~1.6.0",
                 "phpstan/extension-installer": "^1.1",
                 "phpstan/phpstan": "^1.8",
                 "phpstan/phpstan-mockery": "^1.1",
                 "phpstan/phpstan-webmozart-assert": "^1.2",
                 "phpunit/phpunit": "^9.5",
-                "vimeo/psalm": "^5.13"
+                "psalm/phar": "^5.26"
             },
             "type": "library",
             "extra": {
@@ -21625,9 +21473,9 @@
             "description": "With this component, a library can provide support for annotations via DocBlocks or otherwise retrieve information that is embedded in a DocBlock.",
             "support": {
                 "issues": "https://github.com/phpDocumentor/ReflectionDocBlock/issues",
-                "source": "https://github.com/phpDocumentor/ReflectionDocBlock/tree/5.4.1"
+                "source": "https://github.com/phpDocumentor/ReflectionDocBlock/tree/5.5.0"
             },
-            "time": "2024-05-21T05:55:05+00:00"
+            "time": "2024-11-04T21:26:31+00:00"
         },
         {
             "name": "phpdocumentor/type-resolver",
@@ -24900,11 +24748,9 @@
         "drupal/dropsolid_purge": 10,
         "drupal/facets_block": 10,
         "drupal/facets_date_range": 10,
-        "drupal/masquerade": 5,
         "drupal/node_revision_delete": 5,
         "drupal/views_block_area": 10,
-        "php-task-runner/composer": 20,
-        "php-task-runner/sparql": 20,
+        "drupal/masquerade": 5,
         "weitzman/drupal-test-traits": 20
     },
     "prefer-stable": true,
