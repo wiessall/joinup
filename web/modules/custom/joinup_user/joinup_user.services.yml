@@ -1,3 +1,7 @@
+parameters:
+  # See https://www.drupal.org/node/2910500
+  security.enable_super_user: false
+
 services:
   cache_context.user.photo:
     class: Drupal\joinup_user\Cache\Context\UserPhotoCacheContext
