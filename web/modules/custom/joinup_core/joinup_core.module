@@ -493,6 +493,8 @@ function joinup_core_mail_alter(&$message): void {
 
 /**
  * Implements hook_views_plugins_field_alter().
+ *
+ * Restores crucial, but removed features between VBO 4.2.7 and 4.3.2.
  */
 function joinup_core_views_plugins_field_alter(array &$plugins): void {
   if (
