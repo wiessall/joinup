@@ -7,7 +7,7 @@ namespace Drupal\joinup_core\Plugin\views;
 use Drupal\views_bulk_operations\Plugin\views\field\ViewsBulkOperationsBulkForm;
 
 /**
- * Replacement class restoring suddenly removed features between VBO 4.2 to 4.3.
+ * Replacement class restoring removed features between VBO 4.2.7 and 4.3.2.
  *
  * @see \Drupal\views_bulk_operations\Plugin\views\field\ViewsBulkOperationsBulkForm
  * @see https://git.drupalcode.org/project/views_bulk_operations/-/commit/01cee7651049e16b13ec3b12139a36e8066674b
