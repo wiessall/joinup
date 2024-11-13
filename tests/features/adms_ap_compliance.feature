@@ -1,4 +1,4 @@
-@api
+@api @rdf_sync
 Feature: Interoperable Europe Portal should be ADMS-AP compliant.
 
   Scenario: Validate the entities in the published graph.
