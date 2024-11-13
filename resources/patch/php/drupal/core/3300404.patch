@@ -1,0 +1,415 @@
+From 27f7f0b36bfb33da8430e3854863e8b87de8ac5d Mon Sep 17 00:00:00 2001
+From: Kirill Roskolii <kirill.roskolii@catalyst.net.nz>
+Date: Thu, 16 May 2024 09:23:47 +1200
+Subject: [PATCH 1/5] Issue #3300404 by DavorHorvacki, Eduardo Morales Alberti,
+ akoe, wranvaud, taras.suliatitskiy: patch #48
+
+---
+ .../Entity/Sql/SqlContentEntityStorage.php    | 10 +--
+ .../Field/InitializeSerializedPropTest.php    | 74 +++++++++++++++++++
+ 2 files changed, 79 insertions(+), 5 deletions(-)
+ create mode 100644 core/tests/Drupal/KernelTests/Core/Field/InitializeSerializedPropTest.php
+
+diff --git a/core/lib/Drupal/Core/Entity/Sql/SqlContentEntityStorage.php b/core/lib/Drupal/Core/Entity/Sql/SqlContentEntityStorage.php
+index 93029c399df3..8c743d35db3b 100644
+--- a/core/lib/Drupal/Core/Entity/Sql/SqlContentEntityStorage.php
++++ b/core/lib/Drupal/Core/Entity/Sql/SqlContentEntityStorage.php
+@@ -470,7 +470,7 @@ protected function mapFromStorageRecords(array $records, $load_from_revision = F
+           $definition_columns = $this->fieldStorageDefinitions[$field_name]->getColumns();
+           foreach ($field_columns as $property_name => $column_name) {
+             if (property_exists($record, $column_name)) {
+-              $values[$id][$field_name][LanguageInterface::LANGCODE_DEFAULT][$property_name] = !empty($definition_columns[$property_name]['serialize']) ? unserialize($record->{$column_name}) : $record->{$column_name};
++              $values[$id][$field_name][LanguageInterface::LANGCODE_DEFAULT][$property_name] = !empty($definition_columns[$property_name]['serialize']) ? unserialize($record->{$column_name} ?? '') : $record->{$column_name};
+               unset($record->{$column_name});
+             }
+           }
+@@ -481,7 +481,7 @@ protected function mapFromStorageRecords(array $records, $load_from_revision = F
+           if (property_exists($record, $column_name)) {
+             $columns = $this->fieldStorageDefinitions[$field_name]->getColumns();
+             $column = reset($columns);
+-            $values[$id][$field_name][LanguageInterface::LANGCODE_DEFAULT] = !empty($column['serialize']) ? unserialize($record->{$column_name}) : $record->{$column_name};
++            $values[$id][$field_name][LanguageInterface::LANGCODE_DEFAULT] = !empty($column['serialize']) ? unserialize($record->{$column_name} ?? '') : $record->{$column_name};
+             unset($record->{$column_name});
+           }
+         }
+@@ -595,12 +595,12 @@ protected function loadFromSharedTables(array &$values, array &$translations, $l
+           if (count($columns) == 1) {
+             $column_name = reset($columns);
+             $column_attributes = $definition_columns[key($columns)];
+-            $values[$id][$field_name][$langcode] = (!empty($column_attributes['serialize'])) ? unserialize($row[$column_name]) : $row[$column_name];
++            $values[$id][$field_name][$langcode] = (!empty($column_attributes['serialize'])) ? unserialize($row[$column_name] ?? '') : $row[$column_name];
+           }
+           else {
+             foreach ($columns as $property_name => $column_name) {
+               $column_attributes = $definition_columns[$property_name];
+-              $values[$id][$field_name][$langcode][$property_name] = (!empty($column_attributes['serialize'])) ? unserialize($row[$column_name]) : $row[$column_name];
++              $values[$id][$field_name][$langcode][$property_name] = (!empty($column_attributes['serialize'])) ? unserialize($row[$column_name] ?? '') : $row[$column_name];
+             }
+           }
+         }
+@@ -1261,7 +1261,7 @@ protected function loadFromDedicatedTables(array &$values, $load_from_revision)
+             foreach ($storage_definition->getColumns() as $column => $attributes) {
+               $column_name = $table_mapping->getFieldColumnName($storage_definition, $column);
+               // Unserialize the value if specified in the column schema.
+-              $item[$column] = (!empty($attributes['serialize'])) ? unserialize($row->$column_name) : $row->$column_name;
++              $item[$column] = (!empty($attributes['serialize'])) ? unserialize($row->$column_name ?? '') : $row->$column_name;
+             }
+ 
+             // Add the item to the field values for the entity.
+diff --git a/core/tests/Drupal/KernelTests/Core/Field/InitializeSerializedPropTest.php b/core/tests/Drupal/KernelTests/Core/Field/InitializeSerializedPropTest.php
+new file mode 100644
+index 000000000000..4533e985151a
+--- /dev/null
++++ b/core/tests/Drupal/KernelTests/Core/Field/InitializeSerializedPropTest.php
+@@ -0,0 +1,74 @@
++<?php
++
++namespace Drupal\KernelTests\Core\Field;
++
++use Drupal\Core\Field\BaseFieldDefinition;
++use Drupal\entity_test_update\Entity\EntityTestUpdate;
++use Drupal\KernelTests\Core\Entity\EntityKernelTestBase;
++
++/**
++ * Tests initialization of fields containing serialized property.
++ *
++ * @group Field
++ */
++class InitializeSerializedPropTest extends EntityKernelTestBase {
++
++  /**
++   * The entity definition update manager.
++   *
++   * @var \Drupal\Core\Entity\EntityDefinitionUpdateManagerInterface
++   */
++  protected $entityDefinitionUpdateManager;
++
++  /**
++   * {@inheritdoc}
++   */
++  protected static $modules = ['entity_test_update', 'link'];
++
++  /**
++   * {@inheritdoc}
++   */
++  protected function setUp(): void {
++    parent::setUp();
++
++    $this->entityDefinitionUpdateManager = $this->container->get('entity.definition_update_manager');
++
++    // Install every entity type's schema that wasn't installed in the parent
++    // method.
++    foreach (array_diff_key($this->entityTypeManager->getDefinitions(), array_flip([
++      'user',
++      'entity_test',
++    ])) as $entity_type_id => $entity_type) {
++      $this->installEntitySchema($entity_type_id);
++    }
++  }
++
++  /**
++   * Tests uninstalling map item base field.
++   */
++  public function testUninstallMapItemBaseField() {
++
++    $entity = EntityTestUpdate::create([
++      'data_map' => [
++        'key' => 'value',
++      ],
++    ]);
++    $entity->save();
++
++    $definitions['data'] = BaseFieldDefinition::create('map')
++      ->setLabel('Data')
++      ->setRequired(TRUE);
++
++    $definitions['link'] = BaseFieldDefinition::create('link')
++      ->setLabel('Link')
++      ->setRequired(TRUE);
++
++    $this->state->set('entity_test_update.additional_base_field_definitions', $definitions);
++
++    $this->entityDefinitionUpdateManager->installFieldStorageDefinition('data', 'entity_test_update', 'entity_test', $definitions['data']);
++    $this->entityDefinitionUpdateManager->installFieldStorageDefinition('link', 'entity_test_update', 'entity_test', $definitions['link']);
++
++    $this->reloadEntity($entity);
++  }
++
++}
+-- 
+GitLab
+
+
+From bf19fd3bc29321559b3e6488d55b0800df7959cd Mon Sep 17 00:00:00 2001
+From: Kirill Roskolii <kirill.roskolii@catalyst.net.nz>
+Date: Thu, 16 May 2024 09:27:09 +1200
+Subject: [PATCH 2/5] Issue #3300404 by DavorHorvacki, Eduardo Morales Alberti,
+ akoe, wranvaud, taras.suliatitskiy: patch #54
+
+---
+ .../lib/Drupal/Core/Entity/Sql/SqlContentEntityStorage.php | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/core/lib/Drupal/Core/Entity/Sql/SqlContentEntityStorage.php b/core/lib/Drupal/Core/Entity/Sql/SqlContentEntityStorage.php
+index 8c743d35db3b..156fe5dd526f 100644
+--- a/core/lib/Drupal/Core/Entity/Sql/SqlContentEntityStorage.php
++++ b/core/lib/Drupal/Core/Entity/Sql/SqlContentEntityStorage.php
+@@ -481,7 +481,12 @@ protected function mapFromStorageRecords(array $records, $load_from_revision = F
+           if (property_exists($record, $column_name)) {
+             $columns = $this->fieldStorageDefinitions[$field_name]->getColumns();
+             $column = reset($columns);
+-            $values[$id][$field_name][LanguageInterface::LANGCODE_DEFAULT] = !empty($column['serialize']) ? unserialize($record->{$column_name} ?? '') : $record->{$column_name};
++            if (empty($column['serialize']) || isset($record->{$column_name})) {
++              $values[$id][$field_name][LanguageInterface::LANGCODE_DEFAULT] = !empty($column['serialize']) ? unserialize($record->{$column_name}) : $record->{$column_name};
++            }
++            else {
++              $values[$id][$field_name][LanguageInterface::LANGCODE_DEFAULT] = NULL;
++            }
+             unset($record->{$column_name});
+           }
+         }
+-- 
+GitLab
+
+
+From 8db7048cfc3e2b665095f17484dc932636f326e0 Mon Sep 17 00:00:00 2001
+From: Kirill Roskolii <kirill.roskolii@catalyst.net.nz>
+Date: Thu, 16 May 2024 09:32:04 +1200
+Subject: [PATCH 3/5] Issue #3300404 by DavorHorvacki, Eduardo Morales Alberti,
+ akoe, wranvaud, taras.suliatitskiy: add TODO as per #36
+
+---
+ core/lib/Drupal/Core/Entity/Sql/SqlContentEntityStorage.php | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/core/lib/Drupal/Core/Entity/Sql/SqlContentEntityStorage.php b/core/lib/Drupal/Core/Entity/Sql/SqlContentEntityStorage.php
+index 156fe5dd526f..25e731b34f4d 100644
+--- a/core/lib/Drupal/Core/Entity/Sql/SqlContentEntityStorage.php
++++ b/core/lib/Drupal/Core/Entity/Sql/SqlContentEntityStorage.php
+@@ -470,6 +470,7 @@ protected function mapFromStorageRecords(array $records, $load_from_revision = F
+           $definition_columns = $this->fieldStorageDefinitions[$field_name]->getColumns();
+           foreach ($field_columns as $property_name => $column_name) {
+             if (property_exists($record, $column_name)) {
++              // @todo See also https://www.drupal.org/project/drupal/issues/2883851 .
+               $values[$id][$field_name][LanguageInterface::LANGCODE_DEFAULT][$property_name] = !empty($definition_columns[$property_name]['serialize']) ? unserialize($record->{$column_name} ?? '') : $record->{$column_name};
+               unset($record->{$column_name});
+             }
+@@ -481,6 +482,7 @@ protected function mapFromStorageRecords(array $records, $load_from_revision = F
+           if (property_exists($record, $column_name)) {
+             $columns = $this->fieldStorageDefinitions[$field_name]->getColumns();
+             $column = reset($columns);
++            // @todo See also https://www.drupal.org/project/drupal/issues/2883851 .
+             if (empty($column['serialize']) || isset($record->{$column_name})) {
+               $values[$id][$field_name][LanguageInterface::LANGCODE_DEFAULT] = !empty($column['serialize']) ? unserialize($record->{$column_name}) : $record->{$column_name};
+             }
+-- 
+GitLab
+
+
+From 1b78816c9c2a22f3fe2467bc979601d1c8e832aa Mon Sep 17 00:00:00 2001
+From: Kirill Roskolii <kirill.roskolii@catalyst.net.nz>
+Date: Thu, 16 May 2024 09:36:32 +1200
+Subject: [PATCH 4/5] Issue #3300404: code style
+
+---
+ .../KernelTests/Core/Field/InitializeSerializedPropTest.php     | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/core/tests/Drupal/KernelTests/Core/Field/InitializeSerializedPropTest.php b/core/tests/Drupal/KernelTests/Core/Field/InitializeSerializedPropTest.php
+index 4533e985151a..64ca4fc9c097 100644
+--- a/core/tests/Drupal/KernelTests/Core/Field/InitializeSerializedPropTest.php
++++ b/core/tests/Drupal/KernelTests/Core/Field/InitializeSerializedPropTest.php
+@@ -1,5 +1,7 @@
+ <?php
+ 
++declare(strict_types=1);
++
+ namespace Drupal\KernelTests\Core\Field;
+ 
+ use Drupal\Core\Field\BaseFieldDefinition;
+-- 
+GitLab
+
+
+From c488ebf340fd041907ccf12792c4947640301ac4 Mon Sep 17 00:00:00 2001
+From: Qiangjun Ran <ranqiangjun@gmail.com>
+Date: Sat, 8 Jun 2024 09:33:38 +0800
+Subject: [PATCH 5/5] Introduce SqlContentEntityStorage::safeUnserialize and
+ use it
+
+---
+ .../Entity/Sql/SqlContentEntityStorage.php    | 45 ++++++++----
+ .../Sql/SqlContentEntityStorageTest.php       | 71 +++++++++++++++++++
+ 2 files changed, 104 insertions(+), 12 deletions(-)
+
+diff --git a/core/lib/Drupal/Core/Entity/Sql/SqlContentEntityStorage.php b/core/lib/Drupal/Core/Entity/Sql/SqlContentEntityStorage.php
+index 25e731b34f4d..b317c1fb609e 100644
+--- a/core/lib/Drupal/Core/Entity/Sql/SqlContentEntityStorage.php
++++ b/core/lib/Drupal/Core/Entity/Sql/SqlContentEntityStorage.php
+@@ -470,8 +470,7 @@ protected function mapFromStorageRecords(array $records, $load_from_revision = F
+           $definition_columns = $this->fieldStorageDefinitions[$field_name]->getColumns();
+           foreach ($field_columns as $property_name => $column_name) {
+             if (property_exists($record, $column_name)) {
+-              // @todo See also https://www.drupal.org/project/drupal/issues/2883851 .
+-              $values[$id][$field_name][LanguageInterface::LANGCODE_DEFAULT][$property_name] = !empty($definition_columns[$property_name]['serialize']) ? unserialize($record->{$column_name} ?? '') : $record->{$column_name};
++              $values[$id][$field_name][LanguageInterface::LANGCODE_DEFAULT][$property_name] = !empty($definition_columns[$property_name]['serialize']) ? SqlContentEntityStorage::safeUnserialize($record->{$column_name}) : $record->{$column_name};
+               unset($record->{$column_name});
+             }
+           }
+@@ -482,13 +481,7 @@ protected function mapFromStorageRecords(array $records, $load_from_revision = F
+           if (property_exists($record, $column_name)) {
+             $columns = $this->fieldStorageDefinitions[$field_name]->getColumns();
+             $column = reset($columns);
+-            // @todo See also https://www.drupal.org/project/drupal/issues/2883851 .
+-            if (empty($column['serialize']) || isset($record->{$column_name})) {
+-              $values[$id][$field_name][LanguageInterface::LANGCODE_DEFAULT] = !empty($column['serialize']) ? unserialize($record->{$column_name}) : $record->{$column_name};
+-            }
+-            else {
+-              $values[$id][$field_name][LanguageInterface::LANGCODE_DEFAULT] = NULL;
+-            }
++            $values[$id][$field_name][LanguageInterface::LANGCODE_DEFAULT] = !empty($column['serialize']) ? SqlContentEntityStorage::safeUnserialize($record->{$column_name}) : $record->{$column_name};
+             unset($record->{$column_name});
+           }
+         }
+@@ -602,12 +595,12 @@ protected function loadFromSharedTables(array &$values, array &$translations, $l
+           if (count($columns) == 1) {
+             $column_name = reset($columns);
+             $column_attributes = $definition_columns[key($columns)];
+-            $values[$id][$field_name][$langcode] = (!empty($column_attributes['serialize'])) ? unserialize($row[$column_name] ?? '') : $row[$column_name];
++            $values[$id][$field_name][$langcode] = (!empty($column_attributes['serialize'])) ? SqlContentEntityStorage::safeUnserialize($row[$column_name]) : $row[$column_name];
+           }
+           else {
+             foreach ($columns as $property_name => $column_name) {
+               $column_attributes = $definition_columns[$property_name];
+-              $values[$id][$field_name][$langcode][$property_name] = (!empty($column_attributes['serialize'])) ? unserialize($row[$column_name] ?? '') : $row[$column_name];
++              $values[$id][$field_name][$langcode][$property_name] = (!empty($column_attributes['serialize'])) ? SqlContentEntityStorage::safeUnserialize($row[$column_name]) : $row[$column_name];
+             }
+           }
+         }
+@@ -1268,7 +1261,7 @@ protected function loadFromDedicatedTables(array &$values, $load_from_revision)
+             foreach ($storage_definition->getColumns() as $column => $attributes) {
+               $column_name = $table_mapping->getFieldColumnName($storage_definition, $column);
+               // Unserialize the value if specified in the column schema.
+-              $item[$column] = (!empty($attributes['serialize'])) ? unserialize($row->$column_name ?? '') : $row->$column_name;
++              $item[$column] = (!empty($attributes['serialize'])) ? SqlContentEntityStorage::safeUnserialize($row->$column_name) : $row->$column_name;
+             }
+ 
+             // Add the item to the field values for the entity.
+@@ -1798,4 +1791,32 @@ public function countFieldData($storage_definition, $as_bool = FALSE) {
+     return $as_bool ? (bool) $count : (int) $count;
+   }
+ 
++  /**
++   * Safely unserializes data.
++   *
++   * @param string|null $value
++   *   The serialized string.
++   *
++   * @return mixed|null
++   *   The unserialized data, or null if the data is invalid.
++   */
++  public static function safeUnserialize($value) {
++    // Return null if the value is an empty string or null.
++    if ($value === '' || $value === NULL) {
++      return NULL;
++    }
++
++    // Attempt to unserialize the value.
++    $result = @unserialize($value);
++
++    // Check if unserialize resulted in false, indicating failure.
++    // Also ensure the input value wasn't the serialized form of false itself.
++    if ($result === FALSE && $value !== serialize(FALSE)) {
++      return NULL;
++    }
++
++    // Return the unserialized result.
++    return $result;
++  }
++
+ }
+diff --git a/core/tests/Drupal/Tests/Core/Entity/Sql/SqlContentEntityStorageTest.php b/core/tests/Drupal/Tests/Core/Entity/Sql/SqlContentEntityStorageTest.php
+index 998795a95005..290d61db27b5 100644
+--- a/core/tests/Drupal/Tests/Core/Entity/Sql/SqlContentEntityStorageTest.php
++++ b/core/tests/Drupal/Tests/Core/Entity/Sql/SqlContentEntityStorageTest.php
+@@ -1445,6 +1445,77 @@ public function testCleanIds() {
+ 
+   }
+ 
++  /**
++   * Data provider for testSafeUnserialize.
++   *
++   * @return array
++   *   Array of test cases with input value and expected output.
++   */
++  public static function safeUnserializeDataProvider() {
++    $object = new \stdClass();
++    $object->property = 'value';
++
++    return [
++      'valid array' => [
++        'input' => serialize(['key' => 'value']),
++        'expected' => ['key' => 'value'],
++      ],
++      'empty string' => [
++        'input' => '',
++        'expected' => NULL,
++      ],
++      'null value' => [
++        'input' => NULL,
++        'expected' => NULL,
++      ],
++      'invalid serialized data' => [
++        'input' => 'invalid serialized data',
++        'expected' => NULL,
++      ],
++      'serialized false' => [
++        'input' => serialize(FALSE),
++        'expected' => FALSE,
++      ],
++      'serialized true' => [
++        'input' => serialize(TRUE),
++        'expected' => TRUE,
++      ],
++      'serialized integer' => [
++        'input' => serialize(123),
++        'expected' => 123,
++      ],
++      'serialized string' => [
++        'input' => serialize('test string'),
++        'expected' => 'test string',
++      ],
++      'serialized array' => [
++        'input' => serialize([1, 2, 3]),
++        'expected' => [1, 2, 3],
++      ],
++      'serialized object' => [
++        'input' => serialize($object),
++        'expected' => $object,
++      ],
++      'false value' => [
++        'input' => FALSE,
++        'expected' => FALSE,
++      ],
++    ];
++  }
++
++  /**
++   * Tests the safeUnserialize method with multiple cases.
++   *
++   * @dataProvider safeUnserializeDataProvider
++   */
++  public function testSafeUnserialize($input, $expected) {
++    $this->assertEquals(
++      $expected,
++      SqlContentEntityStorage::safeUnserialize($input),
++      "Testing input: $input"
++    );
++  }
++
+   /**
+    * Sets up the module handler with no implementations.
+    */
+-- 
+GitLab
+
