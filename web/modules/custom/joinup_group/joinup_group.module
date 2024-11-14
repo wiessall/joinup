@@ -308,15 +308,10 @@ function joinup_group_node_access(EntityInterface $entity, $operation, AccountIn
 }
 
 /**
- * Implements hook_ENTITY_TYPE_insert() for RDF entities.
+ * Implements hook_ENTITY_TYPE_insert() for nodes.
  */
 function joinup_group_node_insert(NodeInterface $group): void {
   if (!$group instanceof GroupInterface) {
-    return;
-  }
-
-  // @todo Clean this in ISAICP-8376.
-  if (!empty($group->skip_menu_creation)) {
     return;
   }
 

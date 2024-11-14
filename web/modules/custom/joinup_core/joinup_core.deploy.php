@@ -13,3 +13,19 @@
  */
 
 declare(strict_types=1);
+
+/**
+ * Fix solution nodes having wrong default_langcode after joinup 2.0 migration.
+ */
+function joinup_core_deploy_200100(): void {
+  $database = \Drupal::database();
+  $tables = ['node_field_data', 'node_field_revision'];
+  foreach ($tables as $table) {
+    $database->query("
+      UPDATE {{$table}} n
+      JOIN (SELECT nid, vid FROM {{$table}} GROUP BY nid, vid HAVING COUNT(*) = 1) AS grouped
+      ON n.nid = grouped.nid AND n.vid = grouped.vid
+      SET n.default_langcode = 1;
+    ");
+  }
+}

@@ -117,7 +117,7 @@
         "drupal/view_unpublished": "^1.0",
         "drupal/views_autosubmit": "^1.5",
         "drupal/views_block_area": "^1.0@beta",
-        "drupal/views_bulk_operations": "4.2.7",
+        "drupal/views_bulk_operations": "^4",
         "drupal/views_data_export": "^1.0",
         "drupal/views_multiple_permissions": "^2.0",
         "drupal/webform": "^6.2",
@@ -148,7 +148,6 @@
         "drupal/config_inspector": "^2.1",
         "drupal/config_update": "^2.0",
         "drupal/devel": "^5.1",
-        "drupal/drupal-driver": "v2.2.2",
         "drupal/drupal-extension": "^5.0",
         "drupal/filecache": "^1.1",
         "drupal/http_request_mock": "^1.1",
@@ -165,8 +164,6 @@
         "nicwortel/behat-unused-step-definitions-extension": "^1.2",
         "palantirnet/drupal-rector": "^0.20.1",
         "pear/http_request2": "~2.4",
-        "php-task-runner/composer": "dev-toolkit-runner",
-        "php-task-runner/sparql": "dev-toolkit-runner",
         "phpro/grumphp-shim": "^2.6",
         "phpspec/prophecy-phpunit": "^2",
         "phpstan/extension-installer": "^1.3",
@@ -340,6 +337,7 @@
                 "Allow ChangedItem to skip updating the entity's \"changed\" timestamp when synchronizing @see https://drupal.org/i/2329253": "resources/patch/php/drupal/core/2329253-10.x.patch",
                 "Add 'Is empty (NULL)' and 'Is not empty (NOT NULL)' to field filter operators @see https://www.drupal.org/project/drupal/issues/3098560": "resources/patch/php/drupal/core/3098560.patch",
                 "JS errors from Drupal.dialog.resetSize when rapidly closing dialogs @see https://www.drupal.org/i/3472624": "resources/patch/php/drupal/core/3472624-4d97ff80.diff",
+                "Unserialize(): Passing null to parameter #1 ($data) of type string is deprecated @see https://drupal.org/i/3300404": "resources/patch/php/drupal/core/3300404.patch",
                 "Deprecated function: preg_match(): Passing null to parameter #2 ($subject) of type string is deprecated in Drupal\\Core\\Routing\\UrlGenerator->doGenerate() @see https://drupal.org/i/3338057": "resources/patch/php/drupal/core/3338057.diff"
             },
             "drupal/default_content": {
