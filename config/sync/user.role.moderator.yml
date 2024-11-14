@@ -46,6 +46,8 @@ dependencies:
     - joinup_group_content_management
     - joinup_legal
     - joinup_licence
+    - joinup_log
+    - joinup_news
     - joinup_newsletter
     - joinup_oss_catalogue
     - joinup_search
@@ -84,6 +86,7 @@ permissions:
   - 'access joinup reports'
   - 'access media overview'
   - 'access messages overview'
+  - 'access site-wide business log'
   - 'access taxonomy overview'
   - 'access toolbar'
   - 'access uri converter'

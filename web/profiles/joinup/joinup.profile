@@ -146,22 +146,6 @@ function joinup_theme($existing, $type, $theme, $path): array {
  * displayed.
  */
 function joinup_entity_view_alter(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display): void {
-  if ($entity->getEntityTypeId() === 'node' && $display->getMode() !== 'group_header') {
-    // Add the "entity" contextual links group. Avoid overwriting any existing
-    // data that might have been added by other modules. Because of a bug in
-    // Drupal core we cannot alter the running order of hook_entity_view_alter()
-    // when it is executed as an "extra hook". This means that we cannot use
-    // hook_module_implements_alter() to define a proper running order for this
-    // hook, so let's make sure that we do not lose any data set by other
-    // modules which are supposed to run after us.
-    // @see joinup_featured_entity_view_alter()
-    // @see https://www.drupal.org/project/drupal/issues/3120298
-    // @todo Revisit this in ISAICP-8376.
-    $build['#contextual_links']['entity']['route_parameters']['entity_type'] = $entity->getEntityTypeId();
-    $build['#contextual_links']['entity']['route_parameters']['entity'] = $entity->id();
-    $build['#contextual_links']['entity']['metadata']['changed'] = $entity->getChangedTime();
-  }
-
   if (!$entity instanceof PinnableGroupContentInterface) {
     return;
   }
