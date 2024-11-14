@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "394c5c85f63db43eebd7f4dfe184106b",
+    "content-hash": "810b35e6c380591b4bc167f4e2f9825f",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -9469,41 +9469,38 @@
         },
         {
             "name": "drupal/views_bulk_operations",
-            "version": "4.2.7",
+            "version": "4.3.2",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/views_bulk_operations.git",
-                "reference": "4.2.7"
+                "reference": "4.3.2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/views_bulk_operations-4.2.7.zip",
-                "reference": "4.2.7",
-                "shasum": "25c9fa531ac49664a361fdd2202eec0a6e53bc61"
+                "url": "https://ftp.drupal.org/files/projects/views_bulk_operations-4.3.2.zip",
+                "reference": "4.3.2",
+                "shasum": "b3d0ee06abb15520595b83324e93c5500d5dcef3"
             },
             "require": {
-                "drupal/core": "^9.4 || ^10 || ^11",
-                "php": ">=7.4.0"
+                "drupal/core": "^10.3 || ^11"
+            },
+            "conflict": {
+                "drush/drush": "<12.5.1"
             },
             "require-dev": {
-                "drush/drush": "^12"
+                "drush/drush": "^12 || ^13"
             },
             "suggest": {
-                "drush/drush": "^11 || ^12"
+                "drush/drush": "^12 || ^13"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "4.2.7",
-                    "datestamp": "1717665214",
+                    "version": "4.3.2",
+                    "datestamp": "1731070018",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
-                    }
-                },
-                "drush": {
-                    "services": {
-                        "drush.services.yml": "^10 || ^11"
                     }
                 }
             },
@@ -16563,16 +16560,16 @@
         },
         {
             "name": "symfony/process",
-            "version": "v6.4.13",
+            "version": "v6.4.14",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/process.git",
-                "reference": "1f9f59b46880201629df3bd950fc5ae8c55b960f"
+                "reference": "25214adbb0996d18112548de20c281be9f27279f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/process/zipball/1f9f59b46880201629df3bd950fc5ae8c55b960f",
-                "reference": "1f9f59b46880201629df3bd950fc5ae8c55b960f",
+                "url": "https://api.github.com/repos/symfony/process/zipball/25214adbb0996d18112548de20c281be9f27279f",
+                "reference": "25214adbb0996d18112548de20c281be9f27279f",
                 "shasum": ""
             },
             "require": {
@@ -16604,7 +16601,7 @@
             "description": "Executes commands in sub-processes",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/process/tree/v6.4.13"
+                "source": "https://github.com/symfony/process/tree/v6.4.14"
             },
             "funding": [
                 {
@@ -16620,7 +16617,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-09-25T14:18:03+00:00"
+            "time": "2024-11-06T09:25:01+00:00"
         },
         {
             "name": "symfony/psr-http-message-bridge",
@@ -19745,41 +19742,40 @@
         },
         {
             "name": "drupal/drupal-driver",
-            "version": "v2.2.2",
+            "version": "v2.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jhedstrom/DrupalDriver.git",
-                "reference": "632712db66681b76651518bf5ab1e60fddc70a39"
+                "reference": "52835be563891d74656fbaaf045dacc43ac5f701"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jhedstrom/DrupalDriver/zipball/632712db66681b76651518bf5ab1e60fddc70a39",
-                "reference": "632712db66681b76651518bf5ab1e60fddc70a39",
+                "url": "https://api.github.com/repos/jhedstrom/DrupalDriver/zipball/52835be563891d74656fbaaf045dacc43ac5f701",
+                "reference": "52835be563891d74656fbaaf045dacc43ac5f701",
                 "shasum": ""
             },
             "require": {
-                "drupal/core-utility": "^8.4 || ^9 || ^10@beta",
+                "drupal/core-utility": "^8.4 || ^9 || ^10 || ^11",
                 "php": ">=7.4",
-                "symfony/dependency-injection": "~2.6|~3.0|~4.4|^6",
-                "symfony/process": "~2.5|~3.0|~4.4|^6"
+                "symfony/dependency-injection": "~2.6 || ~3.0 || ~4.4 || ^6 || ^7.1",
+                "symfony/process": "~2.5 || ~3.0 || ~4.4 || ^6 || ^7.1"
             },
             "conflict": {
                 "drupal/core": ">=8.0 <9.3"
             },
             "require-dev": {
                 "composer/installers": "^2.1",
-                "dms/phpunit-arraysubset-asserts": "^0.4.0",
+                "dms/phpunit-arraysubset-asserts": "^0.4.0 || ^0.5.0",
                 "drupal/coder": "~8.3.0",
-                "drupal/core-composer-scaffold": "^8.4 || ^9 || ^10@beta",
-                "drupal/core-recommended": "^8.4 || ^9 || ^10@beta",
-                "drupal/mailsystem": "^4.4",
+                "drupal/core-composer-scaffold": "^8.4 || ^9 || ^10 || ^11",
+                "drupal/core-recommended": "^8.4 || ^9 || ^10 || ^11",
+                "drupal/mailsystem": "^4.4 || 4.x-dev",
                 "drush-ops/behat-drush-endpoint": "*",
-                "mglaman/drupal-check": "^1",
                 "mockery/mockery": "^1.5",
                 "palantirnet/drupal-rector": "^0.13",
                 "php-parallel-lint/php-parallel-lint": "^1.0",
                 "phpspec/phpspec": "~2.0 || ~4.0 || ~6.1 || dev-main",
-                "phpunit/phpunit": "~6.0 || ~7.0 || ^9",
+                "phpunit/phpunit": "~6.0 || ~7.0 || ^9 || ^10",
                 "symfony/phpunit-bridge": "^6.1"
             },
             "type": "library",
@@ -19823,7 +19819,7 @@
             ],
             "support": {
                 "issues": "https://github.com/jhedstrom/DrupalDriver/issues",
-                "source": "https://github.com/jhedstrom/DrupalDriver/tree/v2.2.2"
+                "source": "https://github.com/jhedstrom/DrupalDriver/tree/v2.3.0"
             },
             "funding": [
                 {
@@ -19831,7 +19827,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-01-06T17:22:24+00:00"
+            "time": "2024-10-21T16:17:44+00:00"
         },
         {
             "name": "drupal/drupal-extension",
@@ -21670,158 +21666,6 @@
             "time": "2024-03-27T12:14:49+00:00"
         },
         {
-            "name": "php-task-runner/composer",
-            "version": "dev-toolkit-runner",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/php-task-runner/composer.git",
-                "reference": "26d77e2780f8dfe586f0e61c491f24e6daaffa33"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/php-task-runner/composer/zipball/26d77e2780f8dfe586f0e61c491f24e6daaffa33",
-                "reference": "26d77e2780f8dfe586f0e61c491f24e6daaffa33",
-                "shasum": ""
-            },
-            "require": {
-                "ec-europa/toolkit": "^9 || ^10",
-                "ext-json": "*",
-                "php": ">=7.4"
-            },
-            "require-dev": {
-                "composer/composer": "^2",
-                "phpunit/phpunit": "~7 || ~8 || ~9",
-                "slevomat/coding-standard": "~6",
-                "squizlabs/php_codesniffer": "~3"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "TaskRunner\\Composer\\": "./src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "EUPL-1.2"
-            ],
-            "authors": [
-                {
-                    "name": "Claudiu Cristea",
-                    "email": "clau.cristea@gmail.com"
-                }
-            ],
-            "description": "Provides Composer commands for OpenEuropa Task Runner",
-            "keywords": [
-                "task-runner"
-            ],
-            "support": {
-                "issues": "https://github.com/php-task-runner/composer/issues",
-                "source": "https://github.com/php-task-runner/composer/tree/toolkit-runner"
-            },
-            "time": "2023-12-06T18:01:36+00:00"
-        },
-        {
-            "name": "php-task-runner/sparql",
-            "version": "dev-toolkit-runner",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/php-task-runner/sparql.git",
-                "reference": "fc8043f94e3cd2ca6e16703c36acf9913c2b356d"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/php-task-runner/sparql/zipball/fc8043f94e3cd2ca6e16703c36acf9913c2b356d",
-                "reference": "fc8043f94e3cd2ca6e16703c36acf9913c2b356d",
-                "shasum": ""
-            },
-            "require": {
-                "ec-europa/toolkit": "^9 || ^10",
-                "php": ">=7.4",
-                "php-task-runner/sparql-robo-tasks": "1.x-dev"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "~7 || ~8 || ~9",
-                "slevomat/coding-standard": "~6",
-                "squizlabs/php_codesniffer": "~3"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "TaskRunner\\Sparql\\": "./src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "EUPL-1.2"
-            ],
-            "authors": [
-                {
-                    "name": "Claudiu Cristea",
-                    "email": "clau.cristea@gmail.com"
-                }
-            ],
-            "description": "Provides SPARQL commands for OpenEuropa Task Runner",
-            "keywords": [
-                "task-runner"
-            ],
-            "support": {
-                "issues": "https://github.com/php-task-runner/sparql/issues",
-                "source": "https://github.com/php-task-runner/sparql/tree/toolkit-runner"
-            },
-            "time": "2024-01-08T11:35:09+00:00"
-        },
-        {
-            "name": "php-task-runner/sparql-robo-tasks",
-            "version": "1.x-dev",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/php-task-runner/sparql-robo-tasks.git",
-                "reference": "dcd4467e0ab14c99f17db930a1c0a26a172a9b94"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/php-task-runner/sparql-robo-tasks/zipball/dcd4467e0ab14c99f17db930a1c0a26a172a9b94",
-                "reference": "dcd4467e0ab14c99f17db930a1c0a26a172a9b94",
-                "shasum": ""
-            },
-            "require": {
-                "consolidation/robo": "^1.0 || ^2.0 || ^3.0 || ^4 || ^5",
-                "easyrdf/easyrdf": "^1.1",
-                "php": ">=7.4"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "~7 || ~8 || ~9",
-                "slevomat/coding-standard": "~6",
-                "squizlabs/php_codesniffer": "~3"
-            },
-            "default-branch": true,
-            "type": "robo-tasks",
-            "autoload": {
-                "psr-4": {
-                    "Robo\\Sparql\\": "./src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "EUPL-1.2"
-            ],
-            "authors": [
-                {
-                    "name": "Claudiu Cristea",
-                    "email": "clau.cristea@gmail.com"
-                }
-            ],
-            "description": "Provides SPARQL commands for Robo",
-            "keywords": [
-                "task-runner"
-            ],
-            "support": {
-                "issues": "https://github.com/php-task-runner/sparql-robo-tasks/issues",
-                "source": "https://github.com/php-task-runner/sparql-robo-tasks/tree/1.x"
-            },
-            "time": "2024-07-09T10:27:09+00:00"
-        },
-        {
             "name": "phpcompatibility/php-compatibility",
             "version": "9.3.5",
             "source": {
@@ -21938,16 +21782,16 @@
         },
         {
             "name": "phpdocumentor/reflection-docblock",
-            "version": "5.4.1",
+            "version": "5.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpDocumentor/ReflectionDocBlock.git",
-                "reference": "9d07b3f7fdcf5efec5d1609cba3c19c5ea2bdc9c"
+                "reference": "54e10d44fc1a84e2598d26f70d4f6f1f233e228a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpDocumentor/ReflectionDocBlock/zipball/9d07b3f7fdcf5efec5d1609cba3c19c5ea2bdc9c",
-                "reference": "9d07b3f7fdcf5efec5d1609cba3c19c5ea2bdc9c",
+                "url": "https://api.github.com/repos/phpDocumentor/ReflectionDocBlock/zipball/54e10d44fc1a84e2598d26f70d4f6f1f233e228a",
+                "reference": "54e10d44fc1a84e2598d26f70d4f6f1f233e228a",
                 "shasum": ""
             },
             "require": {
@@ -21960,13 +21804,13 @@
                 "webmozart/assert": "^1.9.1"
             },
             "require-dev": {
-                "mockery/mockery": "~1.3.5",
+                "mockery/mockery": "~1.3.5 || ~1.6.0",
                 "phpstan/extension-installer": "^1.1",
                 "phpstan/phpstan": "^1.8",
                 "phpstan/phpstan-mockery": "^1.1",
                 "phpstan/phpstan-webmozart-assert": "^1.2",
                 "phpunit/phpunit": "^9.5",
-                "vimeo/psalm": "^5.13"
+                "psalm/phar": "^5.26"
             },
             "type": "library",
             "extra": {
@@ -21996,9 +21840,9 @@
             "description": "With this component, a library can provide support for annotations via DocBlocks or otherwise retrieve information that is embedded in a DocBlock.",
             "support": {
                 "issues": "https://github.com/phpDocumentor/ReflectionDocBlock/issues",
-                "source": "https://github.com/phpDocumentor/ReflectionDocBlock/tree/5.4.1"
+                "source": "https://github.com/phpDocumentor/ReflectionDocBlock/tree/5.5.0"
             },
-            "time": "2024-05-21T05:55:05+00:00"
+            "time": "2024-11-04T21:26:31+00:00"
         },
         {
             "name": "phpdocumentor/type-resolver",
@@ -25274,8 +25118,6 @@
         "drupal/node_revision_delete": 5,
         "drupal/views_block_area": 10,
         "drupal/masquerade": 5,
-        "php-task-runner/composer": 20,
-        "php-task-runner/sparql": 20,
         "weitzman/drupal-test-traits": 20
     },
     "prefer-stable": true,

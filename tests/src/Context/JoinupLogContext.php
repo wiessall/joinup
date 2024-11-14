@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
-use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Drupal\joinup\Traits\EntityTrait;
 use Drupal\joinup\Traits\TestingEntitiesTrait;
+use Drupal\joinup\Traits\UserTrait;
 
 /**
  * Behat step definitions related to joinup_log entity.
@@ -18,6 +18,7 @@ class JoinupLogContext extends RawDrupalContext {
 
   use EntityTrait;
   use TestingEntitiesTrait;
+  use UserTrait;
 
   /**
    * Timestamp when the current test scenario was started.
@@ -81,7 +82,7 @@ class JoinupLogContext extends RawDrupalContext {
   public function createJoinupLog(TableNode $table): void {
     $storage = \Drupal::entityTypeManager()->getStorage('joinup_log');
     foreach ($table->getColumnsHash() as $values) {
-      foreach (['group', 'user', 'actor', 'type', 'timestamp'] as $required) {
+      foreach (['group', 'user', 'type', 'timestamp'] as $required) {
         if (!isset($values[$required])) {
           throw new \Exception("Missing column $required");
         }
@@ -90,17 +91,16 @@ class JoinupLogContext extends RawDrupalContext {
       $entityGroup = $this->getEntityByLabel('node', $values['group']);
       $values['group'] = $entityGroup->id();
 
-      $user = user_load_by_name($values['user']);
-      if (!$user instanceof AccountInterface) {
-        throw new \Exception("User {$values['user']} could not be found.");
-      }
+      $user = $this->getUserByName($values['user']);
       $values['uid'] = $user->id();
 
-      $actor = user_load_by_name($values['actor']);
-      if (!$actor instanceof AccountInterface) {
-        throw new \Exception("Actor {$values['actor']} could not be found.");
+      if (!empty($values['actor'])) {
+        $actor = $this->getUserByName($values['actor']);
+        $values['actor'] = $actor->id();
       }
-      $values['actor'] = $actor->id();
+      else {
+        $values['actor'] = NULL;
+      }
 
       /** @var \Drupal\joinup_log\Entity\JoinupLogInterface $log */
       $log = $storage->create($values);
