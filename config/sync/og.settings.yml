@@ -14,6 +14,7 @@ group_resolvers:
   - joinup_route_group
   - joinup_oss_catalogue_routes
   - joinup_subscription_routes
+  - interoperable_flag_routes
   - joinup_group_content_management
   - route_group
   - route_group_content

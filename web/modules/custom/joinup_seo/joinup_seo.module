@@ -96,8 +96,6 @@ function joinup_seo_module_implements_alter(&$implementations, $hook): void {
  *
  * Adds JSON-LD structured data to the canonical routes of RDF entities or
  * entities being synced with RDF entities.
- *
- * @todo Remove BC layer built arount RDF entities in ISAICP-8376.
  */
 function joinup_seo_page_attachments_alter(array &$attachments): void {
   // Don't do anything if HTML <head> attachments already have a

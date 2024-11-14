@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Drupal\joinup_solution\EventSubscriber;
 
+use Drupal\Core\Logger\LoggerChannelInterface;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\flag\Event\FlagEvents;
 use Drupal\flag\Event\FlaggingEvent;
 use Drupal\flag\Event\UnflaggingEvent;
@@ -19,6 +21,8 @@ class InteroperableFlagSubscriber implements EventSubscriberInterface {
 
   public function __construct(
     protected ContentEntityTrackingManager $trackingManager,
+    protected LoggerChannelInterface $logger,
+    protected AccountInterface $currentUser,
   ) {}
 
   /**
@@ -39,7 +43,7 @@ class InteroperableFlagSubscriber implements EventSubscriberInterface {
    */
   public function onUnFlag(UnflaggingEvent $event): void {
     foreach ($event->getFlaggings() as $flagging) {
-      $this->onFlagChange($flagging);
+      $this->onFlagChange($flagging, FALSE);
     }
   }
 
@@ -50,7 +54,7 @@ class InteroperableFlagSubscriber implements EventSubscriberInterface {
    *   The flagging event.
    */
   public function onFlag(FlaggingEvent $event): void {
-    $this->onFlagChange($event->getFlagging());
+    $this->onFlagChange($event->getFlagging(), TRUE);
   }
 
   /**
@@ -58,8 +62,10 @@ class InteroperableFlagSubscriber implements EventSubscriberInterface {
    *
    * @param \Drupal\flag\FlaggingInterface $flagging
    *   Flagging.
+   * @param bool $created
+   *   True if flagging was created.
    */
-  public function onFlagChange(FlaggingInterface $flagging): void {
+  public function onFlagChange(FlaggingInterface $flagging, bool $created): void {
     if ($flagging->getFlagId() !== 'interoperability') {
       return;
     }
@@ -67,6 +73,12 @@ class InteroperableFlagSubscriber implements EventSubscriberInterface {
     $solution = $flagging->getFlaggable();
     if ($solution instanceof SolutionInterface) {
       $this->trackingManager->trackEntityChange($solution);
+
+      $this->logger->info('Interoperable flag was changed in @group by @user.', [
+        '@user' => $this->currentUser->getDisplayName(),
+        '@group' => $solution->label(),
+        'type' => $created ? 'joinup:flag_interoperable' : 'joinup:unflag_interoperable',
+      ]);
     }
   }
 
