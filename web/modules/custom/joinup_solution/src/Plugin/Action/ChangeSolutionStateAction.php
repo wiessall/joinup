@@ -131,7 +131,7 @@ class ChangeSolutionStateAction extends ViewsBulkOperationsActionBase implements
   /**
    * {@inheritdoc}
    */
-  public function executeMultiple(array $objects): void {
+  public function executeMultiple(array $objects): array {
     $solutionIds = array_reduce(
       $objects,
       function (array $carry, NodeInterface $solution): array {
@@ -153,6 +153,13 @@ class ChangeSolutionStateAction extends ViewsBulkOperationsActionBase implements
     $tempStore = $this->tempStoreFactory->get(self::TEMPSTORE_COLLECTION);
     $tempStore->set(self::TEMPSTORE_SOLUTION_IDS_KEY, $solutionIds);
     $tempStore->set(self::TEMPSTORE_TARGET_STATE_KEY, $this->getConfiguration()['target_state']);
+
+    return [
+      'message' => $this->t('Action processing results: @operation (@count).', [
+        '@operation' => $this->getPluginDefinition()['label'],
+        '@count' => count($solutionIds),
+      ]),
+    ];
   }
 
   /**
