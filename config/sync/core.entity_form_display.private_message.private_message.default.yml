@@ -24,7 +24,7 @@ content:
     region: content
     settings:
       rows: 2
-      placeholder: Message
+      placeholder: ''
     third_party_settings:
       allowed_formats:
         hide_help: '1'
