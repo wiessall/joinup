@@ -95,13 +95,6 @@ commands:
   toolkit:install-clean:
     - task: run
       command: joinup:environment
-    # Temporary fix.
-    - task: run
-      command: sparql:query
-      arguments:
-        - 'DELETE { GRAPH ?g { ?s ?p ?o . }} WHERE { GRAPH ?g { ?s ?p ?o . } FILTER (STRSTARTS(STR(?g), "no prefix"))}'
-    - task: run
-      command: sparql:empty
     - task: exec
       command: ${drush.bin} memcache:flush-all
     - task: run
@@ -112,8 +105,6 @@ commands:
       command: drupal:site-install
       options:
         existing-config: null
-    - task: run
-      command: dev:import-sparql-fixtures
     - task: run
       command: testing:install-modules
     - task: run

@@ -95,19 +95,17 @@ Feature: "Add release" visibility options.
     And I delete the "Chasing shadows" release
     And I delete the "Chasing flares" release
 
-  # TODO: This test works because of the redirection but it should be adapted to
-  # use the correct URL in ISAICP-8376.
   Scenario: Do not allow access to the page if the parent is not a solution.
     Given collection content:
       | uri                       | title               | state     |
       | http://example1regression | The Stripped Stream | published |
 
     When I am not logged in
-    And I go to "/rdf_entity/http_e_f_fexample1regression/release/add"
+    And I go to "/collection/stripped-stream/release/add"
     Then I should see the heading "Page not found"
 
     When I am logged in as a moderator
-    And I go to "/rdf_entity/http_e_f_fexample1regression/release/add"
+    And I go to "/collection/stripped-stream/release/add"
     Then I should see the heading "Page not found"
 
   Scenario: Check publish time release is present time and past.

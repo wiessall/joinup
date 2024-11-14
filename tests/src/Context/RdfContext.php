@@ -6,6 +6,7 @@ namespace Drupal\joinup\Context;
 
 use Behat\Gherkin\Node\TableNode;
 use Drupal\DrupalExtension\Context\RawDrupalContext;
+use Drupal\rdf_sync\Model\SyncMethod;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\ExpectationFailedException;
 use function PHPUnit\Framework\assertCount;
@@ -233,6 +234,26 @@ class RdfContext extends RawDrupalContext {
     $result = $validator->validateByGraphUri('http://adms-validation');
     $sparqlEndpoint->query('CLEAR GRAPH <http://adms-validation>');
     Assert::assertTrue($result->isSuccessful(), 'The published graph is not ADMS-AP compliant.');
+  }
+
+  /**
+   * Re-synchronizes terms.
+   *
+   * Used in Digit QA pipeline. The terms are installed and synchronized in
+   * clean-install job but are not preserved between jobs. Tests requiring RDF
+   * synchronized terms, should be tagged with @rdf_sync.
+   *
+   * @BeforeScenario @rdf_sync&&@api
+   */
+  public function reSynchronizeTerms(): void {
+    $info = \Drupal::getContainer()->get('entity_type.bundle.info')->getBundleInfo('taxonomy_term');
+    $vids = array_filter($info, fn(array $bundle): bool => isset($bundle['rdf_sync']));
+    $tids = \Drupal::entityQuery('taxonomy_term')->accessCheck(FALSE)
+      ->condition('vid', array_keys($vids), 'IN')
+      ->execute();
+    /** @var \Drupal\taxonomy\TermInterface[] $terms */
+    $terms = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->loadMultiple($tids);
+    \Drupal::getContainer()->get('rdf_sync.synchronizer')->synchronize(SyncMethod::UPDATE, $terms);
   }
 
   /**
