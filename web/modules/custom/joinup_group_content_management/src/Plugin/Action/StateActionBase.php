@@ -44,7 +44,7 @@ abstract class StateActionBase extends ViewsBulkOperationsActionBase implements 
   /**
    * {@inheritdoc}
    */
-  public function executeMultiple(array $objects): void {
+  public function executeMultiple(array $objects): array {
     $messages = [];
 
     /** @var \Drupal\node\NodeInterface $entity */
@@ -69,7 +69,7 @@ abstract class StateActionBase extends ViewsBulkOperationsActionBase implements 
       ];
       $this->messenger()
         ->addMessage($this->renderer->render($list), MessengerInterface::TYPE_ERROR);
-      return;
+      return [];
     }
 
     foreach ($objects as $entity) {
@@ -78,6 +78,13 @@ abstract class StateActionBase extends ViewsBulkOperationsActionBase implements 
 
     $this->messenger()
       ->addMessage($this->t('Proceeded updates to @count entities', ['@count' => count($objects)]));
+
+    return [
+      'message' => $this->t('Action processing results: @operation (@count).', [
+        '@operation' => $this->getPluginDefinition()['label'],
+        '@count' => count($objects),
+      ]),
+    ];
   }
 
   /**
