@@ -203,6 +203,8 @@ final class JoinupLog extends ContentEntityBase implements JoinupLogInterface {
       'joinup:add_role' => new TranslatableMarkup('Add role to member'),
       'joinup:remove_role' => new TranslatableMarkup('Remove role to member'),
       'joinup:undefined' => new TranslatableMarkup('Undefined'),
+      'joinup:flag_interoperable' => new TranslatableMarkup('Flag interoperable'),
+      'joinup:unflag_interoperable' => new TranslatableMarkup('Unflag interoperable'),
     ];
   }
 
