@@ -273,7 +273,7 @@ Feature: Assessments
       | Custom assessments | published | Best practice for interoperability assessments |
 
     And I append "content_listing" to "field_paragraphs_body" field in "node" entity with following "Custom assessments" title:
-      | content_listing:value | a:4:{s:7:"enabled";i:1;s:13:"query_presets";s:62:"entity_bundle\|document\nfield_type\|interoperability_assessment";s:13:"show_archived";s:10:"unarchived";s:5:"limit";s:2:"10";} |
+      | content_listing:value | a:4:{s:7:"enabled";i:1;s:13:"query_presets";s:38:"field_type\|interoperability_assessment";s:13:"show_archived";s:10:"unarchived";s:5:"limit";s:2:"10";} |
 
     When I go to the "Custom assessments" custom_page
     Then I should see the heading "Custom assessments"
