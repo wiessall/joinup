@@ -52,6 +52,9 @@ function joinup_private_message_form_alter(array &$form, FormStateInterface $for
       if ($current_route_name !== 'private_message.private_message_create') {
         // Change the label from "Message" to "Reply".
         $form['message']['widget'][0]['#title'] = t('Reply');
+        // Use the tag <button> and set its value.
+        $form['actions']['submit']['#extra_suggestion'] = 'tag_button';
+        $form['actions']['submit']['#value'] = t('Send');
       }
       // Set as default and limit the allowed formats format to 'Plain text'.
       $form['message']['widget'][0]['#format'] = 'plain_text';
