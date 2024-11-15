@@ -178,8 +178,8 @@ Feature: Assessments
 
   Scenario: Webforms can be downloaded in PDF format.
     Given users:
-      | Username         | Roles     | E-mail                    | First name | Family name |
-      | Regular          |           | regular@example.com       |            |             |
+      | Username | Roles | E-mail              | First name | Family name |
+      | Regular  |       | regular@example.com |            |             |
 
     When I am logged in as "Regular"
     And I go to "/assessments/questionnaire"
@@ -228,3 +228,63 @@ Feature: Assessments
     Then I should see the heading "Access denied"
     When I go to the pdf download link of the latest assessment submission
     Then I should see the heading "Access denied"
+
+  Scenario: Assessment reports are listed in a distinct page.
+    # Publish the collection, otherwise the documents will end up in the
+    # unpublished index, and will not show in the listing. This does not affect
+    # the visibility of the documents in the view below as we force them as
+    # published, but it does affect the custom page listing below.
+    Given the workflow state of the "Best practice for interoperability assessments" collection is changed to "published"
+    And document content:
+      | title         | body               | state     | document type               | collection                                     | created              |
+      | Assessment 1  | Assessment 1 body  | published | Interoperability Assessment | Best practice for interoperability assessments | 2020-01-01T00:00:00Z |
+      | Assessment 2  | Assessment 2 body  | published | Interoperability Assessment | Best practice for interoperability assessments | 2020-01-02T00:00:00Z |
+      | Assessment 3  | Assessment 3 body  | published | Interoperability Assessment | Best practice for interoperability assessments | 2020-01-03T00:00:00Z |
+      | Assessment 4  | Assessment 4 body  | published | Interoperability Assessment | Best practice for interoperability assessments | 2020-01-04T00:00:00Z |
+      | Assessment 5  | Assessment 5 body  | published | Interoperability Assessment | Best practice for interoperability assessments | 2020-01-05T00:00:00Z |
+      | Assessment 6  | Assessment 6 body  | published | Interoperability Assessment | Best practice for interoperability assessments | 2020-01-06T00:00:00Z |
+      | Assessment 7  | Assessment 7 body  | draft     | Interoperability Assessment | Best practice for interoperability assessments | 2020-01-07T00:00:00Z |
+      | Assessment 8  | Assessment 8 body  | published | Interoperability Assessment | Best practice for interoperability assessments | 2020-01-08T00:00:00Z |
+      | Assessment 9  | Assessment 9 body  | published | Interoperability Assessment | Best practice for interoperability assessments | 2020-01-09T00:00:00Z |
+      | Assessment 10 | Assessment 10 body | published | Interoperability Assessment | Best practice for interoperability assessments | 2020-01-10T00:00:00Z |
+      | Assessment 11 | Assessment 11 body | published | Interoperability Assessment | Best practice for interoperability assessments | 2020-01-11T00:00:00Z |
+      | Assessment 12 | Assessment 12 body | published | Interoperability Assessment | Best practice for interoperability assessments | 2020-01-12T00:00:00Z |
+
+    When I go to "/assessments"
+    Then I should see the heading "Assessment reports"
+    # Reports are shown in creation descending order in a 10 pager listing.
+    And I should see the following tiles in the correct order:
+      | Assessment 12 |
+      | Assessment 11 |
+      | Assessment 10 |
+      | Assessment 9  |
+      | Assessment 8  |
+      | Assessment 6  |
+      | Assessment 5  |
+      | Assessment 4  |
+      | Assessment 3  |
+      | Assessment 2  |
+    # Hidden away in the second page.
+    And I should not see the "Assessment 1" tile
+
+    # A custom page can be created for only showing documents of a given type.
+    Given custom_page content:
+      | title              | state     | collection                                     |
+      | Custom assessments | published | Best practice for interoperability assessments |
+
+    And I append "content_listing" to "field_paragraphs_body" field in "node" entity with following "Custom assessments" title:
+      | content_listing:value | a:4:{s:7:"enabled";i:1;s:13:"query_presets";s:62:"entity_bundle\|document\nfield_type\|interoperability_assessment";s:13:"show_archived";s:10:"unarchived";s:5:"limit";s:2:"10";} |
+
+    When I go to the "Custom assessments" custom_page
+    Then I should see the heading "Custom assessments"
+    And I should see the following tiles in the correct order:
+      | Assessment 12 |
+      | Assessment 11 |
+      | Assessment 10 |
+      | Assessment 9  |
+      | Assessment 8  |
+      | Assessment 6  |
+      | Assessment 5  |
+      | Assessment 4  |
+      | Assessment 3  |
+      | Assessment 2  |

@@ -3,6 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
+    - core.entity_view_mode.node.view_mode_tile_horizontal
     - node.type.document
   module:
     - node
@@ -207,7 +208,10 @@ display:
       style:
         type: default
       row:
-        type: fields
+        type: 'entity:node'
+        options:
+          relationship: none
+          view_mode: view_mode_tile_horizontal
       query:
         type: views_query
         options:
