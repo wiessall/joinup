@@ -13,7 +13,6 @@ dependencies:
     - field.field.node.event.field_event_date
     - field.field.node.event.field_event_logo
     - field.field.node.event.field_event_online_location
-    - field.field.node.event.field_event_spatial_coverage
     - field.field.node.event.field_event_web_url
     - field.field.node.event.field_keywords
     - field.field.node.event.field_location
@@ -27,6 +26,7 @@ dependencies:
     - field.field.node.event.field_state
     - field.field.node.event.field_topic
     - field.field.node.event.og_audience
+    - field.field.node.event.spatial_coverage
     - node.type.event
   module:
     - layout_builder
@@ -216,4 +216,5 @@ hidden:
   report: true
   search_api_excerpt: true
   share_link: true
+  spatial_coverage: true
   visit_count: true
