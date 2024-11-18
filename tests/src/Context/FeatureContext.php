@@ -1018,6 +1018,50 @@ class FeatureContext extends RawDrupalContext {
   }
 
   /**
+   * Check a multi-value field value.
+   *
+   * @param string $values
+   *   A comma separated list of values.
+   * @param string $field
+   *   The name of the field.
+   *
+   * @throws \Exception
+   *   When the field cannot be found or the number of values is different from
+   *   the number of elements found.
+   *
+   * @When I check values :values in :field
+   */
+  public function checkFieldWithValues(string $values, string $field): void {
+    $values = $this->explodeCommaSeparatedStepArgument($values);
+
+    /** @var \Behat\Mink\Element\NodeElement[] $items */
+    $items = $this->getSession()->getPage()->findAll('named', ['field', $field]);
+
+    if (empty($items)) {
+      throw new \Exception("Cannot find field $field.");
+    }
+
+    // +1 because we have one empty field.
+    if (count($items) !== count($values) + 1) {
+      throw new \Exception('Expected ' . count($values) . ' items for field ' . $field . ', found ' . count($items));
+    }
+
+    $currrent_values = array_filter(
+      array_map(function ($item) {
+        return $item->getValue();
+      }, $items),
+      function ($value) {
+        return !empty($value);
+      }
+    );
+
+    $not_found = array_diff($currrent_values, $values);
+    if (!empty($not_found)) {
+      throw new \Exception(sprintf("Value '%s' not found in field '%s'", implode(', ', $not_found), $field));
+    }
+  }
+
+  /**
    * Asserts that a whole region is not present in the page.
    *
    * @param string $region
