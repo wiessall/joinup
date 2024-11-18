@@ -61,11 +61,14 @@ final class JoinupLog extends ContentEntityBase implements JoinupLogInterface {
       ->setSetting('target_type', 'user');
 
     $fields['group'] = BaseFieldDefinition::create('entity_reference')
+      ->setName('group')
       ->setLabel(t('Group'))
-      ->setDescription(t('RDF entity this log entry relates to, if any.'))
-      ->setTargetEntityTypeId('rdf_entity')
+      ->setDescription(t('Group where this log entry relates to, if any.'))
+      ->setTargetEntityTypeId('joinup_log')
       ->setRequired(FALSE)
-      ->setSetting('target_type', 'rdf_entity');
+      ->setSetting('target_type', 'node')
+      ->setDefaultValue(NULL)
+      ->setInitialValue(NULL);
 
     $fields['type'] = BaseFieldDefinition::create('list_string')
       ->setLabel(new TranslatableMarkup('Type'))
@@ -200,6 +203,8 @@ final class JoinupLog extends ContentEntityBase implements JoinupLogInterface {
       'joinup:add_role' => new TranslatableMarkup('Add role to member'),
       'joinup:remove_role' => new TranslatableMarkup('Remove role to member'),
       'joinup:undefined' => new TranslatableMarkup('Undefined'),
+      'joinup:flag_interoperable' => new TranslatableMarkup('Flag interoperable'),
+      'joinup:unflag_interoperable' => new TranslatableMarkup('Unflag interoperable'),
     ];
   }
 

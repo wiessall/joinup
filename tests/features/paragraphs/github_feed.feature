@@ -5,12 +5,12 @@ Feature: Github feed paragraph tests.
 
   @javascript
   Scenario Outline: Test the Github feed paragraph.
-    Given the following <group>:
-      | title | Paragraphs <group> |
-      | state | published          |
+    Given <group> content:
+      | title              | state     |
+      | Paragraphs <group> | published |
     And custom_page content:
-      | title                   | <group>            | state     | topic                   |
-      | Catalogue of paragraphs | Paragraphs <group> | published | Statistics and Analysis |
+      | title                   | <group>            | state     | topic                   | abstract                |
+      | Catalogue of paragraphs | Paragraphs <group> | published | Statistics and Analysis | Catalogue page abstract |
     And I append "layout" to "field_paragraphs_body" field in "node" entity with following "Catalogue of paragraphs" title:
       | behavior_settings | a:3:{s:17:"layout_paragraphs";a:4:{s:6:"layout";s:13:"layout_onecol";s:6:"config";a:1:{s:5:"label";s:0:"";}s:11:"parent_uuid";N;s:6:"region";N;}s:16:"background_theme";a:0:{}s:11:"extra_class";a:0:{}} |
 
@@ -78,9 +78,9 @@ Feature: Github feed paragraph tests.
 
   @javascript
   Scenario Outline: Facilitators can also access paragraphs.
-    Given the following <group>:
-      | title | Paragraphs <group> |
-      | state | published          |
+    Given <group> content:
+      | title              | state     |
+      | Paragraphs <group> | published |
     And custom_page content:
       | title                   | <group>            | state     | topic                   |
       | Catalogue of paragraphs | Paragraphs <group> | published | Statistics and Analysis |

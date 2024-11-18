@@ -31,7 +31,7 @@ Feature: Collection membership overview
       | Law Atteberry         | Law        | Atteberry   | linus.jpeg   | Comptroller                     |
       | Aniruddha Kováts      | Aniruddha  | Kováts      | blaise.jpg   | Chief Communications Officer    |
       | Aali Dalton           | Aali       | Dalton      | richard.jpg  | Founder                         |
-    And the following collections:
+    And collection content:
       | title           | description        | logo     | owner          | contact information | state     |
       | Jubilant Robots | Fresh oil harvest! | logo.png | Ayodele Sommer | Nita Yang           | published |
       | Jubilant Rabits | Fresh oil harvest! | logo.png | Ayodele Sommer | Nita Yang           | draft     |

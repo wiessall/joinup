@@ -1,11 +1,3 @@
-# Add handy links to configuration forms to the administration menu.
-joinup_core.rdf_entity_uri_web_converter_page:
-  title: 'RDF ID converter'
-  route_name: joinup_core.rdf_entity_uri_web_converter_page
-  description: 'Encodes and decodes RDF entity IDs.'
-  parent: system.admin
-  weight: 1
-
 joinup_core.redirects:
   title: 'Redirects'
   route_name: redirect.list
@@ -28,7 +20,7 @@ joinup_core.support.contact:
   destination: true
 
 joinup_core.support.homepage_contact:
-  title: 'Contact Joinup Support'
+  title: 'Contact Portal Support'
   menu_name: footer-help-and-support
   url: 'internal:/contact'
   weight: -100

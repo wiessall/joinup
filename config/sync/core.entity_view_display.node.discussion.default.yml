@@ -149,7 +149,7 @@ hidden:
   featured: true
   field_keywords: true
   field_site_featured: true
-  flag_like_node: true
+  flag_like: true
   langcode: true
   latest_update_time: true
   pinned_in: true

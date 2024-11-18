@@ -33,7 +33,7 @@ class ModerationEventSubscriber implements EventSubscriberInterface {
    *   The OG permission event.
    */
   public function provideOgPermission(PermissionEventInterface $event): void {
-    if ($event->getGroupEntityTypeId() === 'rdf_entity' && in_array($event->getGroupBundleId(), JoinupGroupHelper::GROUP_BUNDLES)) {
+    if ($event->getGroupEntityTypeId() === 'node' && in_array($event->getGroupBundleId(), JoinupGroupHelper::GROUP_BUNDLES)) {
       $event->setPermission(new GroupPermission([
         'name' => 'access content moderation overview',
         'title' => $this->t('Access the content moderation overview'),

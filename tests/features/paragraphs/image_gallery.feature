@@ -4,15 +4,15 @@ Feature:
   I need to be able to use "image gallery" paragraphs for content.
 
   Background:
-    Given the following collection:
-      | title | Paragraphs IG collection |
-      | state | published                |
+    Given collection content:
+      | title                    | state     |
+      | Paragraphs IG collection | published |
 
   @javascript @uploadFiles:logo.png,topic.png,banner.jpg,linus.jpeg
   Scenario: User should be able to add image gallery paragraph.
     Given custom_page content:
-      | title                        | collection               | state     |
-      | Image gallery paragraph page | Paragraphs IG collection | published |
+      | title                        | collection               | state     | abstract            |
+      | Image gallery paragraph page | Paragraphs IG collection | published | Image page abstract |
     And I append "layout" to "field_paragraphs_body" field in "node" entity with following "Image gallery paragraph page" title:
       | behavior_settings | a:3:{s:17:"layout_paragraphs";a:4:{s:6:"layout";s:13:"layout_onecol";s:6:"config";a:1:{s:5:"label";s:0:"";}s:11:"parent_uuid";N;s:6:"region";N;}s:16:"background_theme";a:0:{}s:11:"extra_class";a:0:{}} |
 
@@ -39,8 +39,8 @@ Feature:
       | banner.jpg |
       | linus.jpeg |
     And I should see the following images on the page
-      | logo.png   |
-      | topic.png  |
+      | logo.png  |
+      | topic.png |
     And I should not see the image "banner.jpg"
     And I should not see the image "linus.jpeg"
     Then I click on element ".slick--optionset--image-gallery button[aria-label='Next']:not([aria-disabled='true'])"

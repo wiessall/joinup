@@ -4,7 +4,7 @@ status: true
 dependencies:
   module:
     - blazy
-    - collection
+    - joinup_collection
     - editor
     - embed_block
     - image

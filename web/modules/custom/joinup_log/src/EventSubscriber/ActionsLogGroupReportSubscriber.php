@@ -42,7 +42,7 @@ class ActionsLogGroupReportSubscriber implements EventSubscriberInterface {
       'actions-log',
       $this->t('Actions log'),
       Url::fromRoute('view.actions_log.logs', [
-        'rdf_entity' => $event->getGroup()->id(),
+        'node' => $event->getGroup()->id(),
       ]),
       NULL
     ));

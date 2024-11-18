@@ -10,8 +10,8 @@ use Drupal\joinup_notification\Event\NotificationEvent;
 use Drupal\joinup_notification\MessageArgumentGenerator;
 use Drupal\joinup_notification\NotificationEvents;
 use Drupal\joinup_release\Entity\ReleaseInterface;
+use Drupal\joinup_solution\Exception\MissingSolutionException;
 use Drupal\og\OgRoleInterface;
-use Drupal\solution\Exception\MissingSolutionException;
 
 /**
  * Notification handler for the notifications related to distributions.
@@ -80,10 +80,10 @@ class DistributionSubscriber extends NotificationSubscriberBase {
 
     $user_data = [
       'og_roles' => [
-        'rdf_entity-solution-administrator' => [
+        'node-solution-administrator' => [
           self::TEMPLATE_UPDATE,
         ],
-        'rdf_entity-solution-facilitator' => [
+        'node-solution-facilitator' => [
           self::TEMPLATE_UPDATE,
         ],
       ],
@@ -125,10 +125,10 @@ class DistributionSubscriber extends NotificationSubscriberBase {
 
     $user_data = [
       'og_roles' => [
-        'rdf_entity-solution-administrator' => [
+        'node-solution-administrator' => [
           self::TEMPLATE_DELETE,
         ],
-        'rdf_entity-solution-facilitator' => [
+        'node-solution-facilitator' => [
           self::TEMPLATE_DELETE,
         ],
       ],

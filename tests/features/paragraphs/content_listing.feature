@@ -3,19 +3,18 @@ Feature:
   Functionality checks for content_listing paragraphs in custom pages.
 
   Background:
-    Given collection:
-      | title | Roman ruins |
-      | state | published   |
-      | topic | HR          |
+    Given collection content:
+      | title       | state     | topic |
+      | Roman ruins | published | HR    |
 
   Scenario: Test that content listing options are working correctly.
-    Given the following collections:
+    Given collection content:
       | title  | state     |
       | Sparta | published |
     And news content:
-      | title       | headline    | collection  | content       | state     |
-      | Some news 1 | Some news 1 | Roman ruins | Some content. | published |
-      | Some news 2 | Some news 2 | Sparta      | Come content. | published |
+      | title       | headline    | collection  | content       | state     | abstract             |
+      | Some news 1 | Some news 1 | Roman ruins | Some content. | published | Some news 1 abstract |
+      | Some news 2 | Some news 2 | Sparta      | Come content. | published | Some news 2 abstract |
 
     And custom_page content:
       | title         | collection  | state     |

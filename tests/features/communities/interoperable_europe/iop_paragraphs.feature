@@ -4,14 +4,12 @@ Feature:
 
   Background:
     # Mimic the "Interoperable Europe" collection.
-    Given collection:
-      | uri   | http://data.europa.eu/w21/8e30f798-ff2b-478b-9c09-5ed5a63b4c8c |
-      | title | Interoperable Europe                                           |
-      | state | published                                                      |
-      | topic | Demography                                                     |
+    Given collection content:
+      | uri                                                            | title                | state     | topic      |
+      | http://data.europa.eu/w21/8e30f798-ff2b-478b-9c09-5ed5a63b4c8c | Interoperable Europe | published | Demography |
 
   Scenario: Test that carousels content listing options are working correctly.
-    Given the following collections:
+    Given collection content:
       | title       | state     |
       | Carousel c1 | published |
     And news content:
@@ -31,7 +29,7 @@ Feature:
 
   @javascript
   Scenario: Test that carousels with specific content is working correctly.
-    Given the following collections:
+    Given collection content:
       | title       | state     |
       | Carousel c1 | published |
     And custom_page content:
@@ -45,7 +43,8 @@ Feature:
     And I click "Add custom page" in the plus button menu
 
     When I fill in the following:
-      | Title | Pages carousel |
+      | Title    | Pages carousel          |
+      | Abstract | Abstract pages carousel |
     And I select "Demography" from "Topic"
     And I add a layout paragraph in the "Custom page body" form field with the following properties:
       | layout           | one column |

@@ -19,9 +19,4 @@ settings:
   provider: joinup_core
   primary: true
   secondary: false
-visibility:
-  request_route:
-    id: request_route
-    negate: true
-    routes:
-      - entity.rdf_entity.edit_form
+visibility: {  }

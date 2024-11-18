@@ -71,10 +71,10 @@ class OgMembershipSubscriber extends NotificationSubscriberBase {
     $template_id = self::TEMPLATE_REQUEST_MEMBERSHIP;
     $user_data_array = [
       'og_roles' => [
-        'rdf_entity-collection-administrator' => [
+        'node-collection-administrator' => [
           $template_id,
         ],
-        'rdf_entity-collection-facilitator' => [
+        'node-collection-facilitator' => [
           $template_id,
         ],
       ],
@@ -219,7 +219,7 @@ class OgMembershipSubscriber extends NotificationSubscriberBase {
 
     // Ensure that the full name is not empty.
     if (empty($actor_first_name) && empty(($actor_last_name))) {
-      $arguments['@actor:full_name'] = 'A Joinup user';
+      $arguments['@actor:full_name'] = 'A Interoperable Europe Portal user';
     }
     else {
       /** @var \Drupal\user\UserInterface $actor */
@@ -242,7 +242,7 @@ class OgMembershipSubscriber extends NotificationSubscriberBase {
    */
   protected function getMembersUrl(): string {
     $entity_type_id = $this->entity->getEntityTypeId();
-    $route_name = 'entity.rdf_entity.member_overview';
+    $route_name = "entity.$entity_type_id.member_overview";
     $route_parameters = [
       $entity_type_id => $this->entity->id(),
     ];

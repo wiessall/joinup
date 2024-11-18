@@ -509,23 +509,23 @@ display:
               1:
                 title: Owner
                 operator: '='
-                value: rdf_entity-collection-administrator
+                value: node-collection-administrator
               2:
                 title: Facilitator
                 operator: '='
-                value: rdf_entity-collection-facilitator
+                value: node-collection-facilitator
               3:
                 title: Owner
                 operator: '='
-                value: rdf_entity-solution-administrator
+                value: node-solution-administrator
               4:
                 title: Facilitator
                 operator: '='
-                value: rdf_entity-solution-facilitator
+                value: node-solution-facilitator
               5:
                 title: Author
                 operator: '='
-                value: rdf_entity-collection-author
+                value: node-collection-author
         state:
           id: state
           table: og_membership

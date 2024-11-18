@@ -65,7 +65,7 @@ Feature: Owner moderation
     # Another authenticated user should not be allowed to edit the owner entity.
     When I am logged in as an "authenticated user"
     And I go to the homepage of the "EU healthy group" owner
-    Then I should not see the link "Edit" in the optional "Entity actions" region
+    Then I should not see the link "Edit" in the "Entity actions" region
 
     # The original owner creator is allowed to update the entity with the
     # requested changes.
@@ -98,7 +98,7 @@ Feature: Owner moderation
     And the following 2 buttons should be present "Update, Request deletion"
     And the current workflow state should be "Published"
     And I press "Request deletion"
-    Then I should see the error message 'The owner cannot be deleted since it owns the following collections: "The healthy food European project". Please set a different owner for these collections before requesting deletion.'
+    Then I should see the error message 'The owner cannot be deleted since it owns the following groups: "[Collection] The healthy food European project". Please set a different owner for these groups before requesting deletion.'
 
     # Also a moderator cannot delete the owner as it's used by the collection.
     When I am logged in as a moderator

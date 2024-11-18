@@ -1,0 +1,27 @@
+uuid: 2ae2b99e-ba6d-483f-bcb4-9afe6f0479e5
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.message.group_content_subscription.group_content
+    - message.template.group_content_subscription
+id: message.group_content_subscription.default
+targetEntityType: message
+bundle: group_content_subscription
+mode: default
+content:
+  group_content:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  partial_0:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  search_api_excerpt: true

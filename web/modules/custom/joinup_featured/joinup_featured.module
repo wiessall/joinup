@@ -75,6 +75,19 @@ function joinup_featured_meta_entity_delete(MetaEntityInterface $entity): void {
 }
 
 /**
+ * Implements hook_module_implements_alter().
+ */
+function joinup_featured_module_implements_alter(array &$implementations, string $hook): void {
+  // Ensure that for the entity_view_alter hook, the joinup_featured module runs
+  // after the joinup profile.
+  if ($hook === 'node_view_alter' && isset($implementations['joinup_featured'])) {
+    $group = $implementations['joinup_featured'];
+    unset($implementations['joinup_featured']);
+    $implementations['joinup_featured'] = $group;
+  }
+}
+
+/**
  * Implements hook_entity_view_alter().
  *
  * Adds contextual links metadata for the following:
@@ -84,11 +97,12 @@ function joinup_featured_meta_entity_delete(MetaEntityInterface $entity): void {
  *   the user, so that the links will be refreshed when the users relogs.
  */
 function joinup_featured_entity_view_alter(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display): void {
-  if ($entity instanceof FeaturedContentInterface) {
+  if ($entity instanceof FeaturedContentInterface && isset($build['#contextual_links'][$entity->getEntityTypeId()])) {
     // Note: the 'entity' contextual link group is added by the Joinup profile.
     // @see joinup_entity_view_alter()
-    $build['#contextual_links']['entity']['metadata']['is_featured'] = (int) $entity->isFeatured();
-    $build['#contextual_links']['entity']['metadata']['token'] = \Drupal::service('csrf_token')->get(__FUNCTION__);
+    $build['#contextual_links'][$entity->getEntityTypeId()]['metadata']['is_featured'] = (int) $entity->isFeatured();
+    $build['#contextual_links'][$entity->getEntityTypeId()]['metadata']['token'] = \Drupal::service('csrf_token')
+      ->get(__FUNCTION__);
     $build['#cache']['contexts'] = Cache::mergeContexts($build['#cache']['contexts'], [
       'joinup_featured_csrf',
     ]);

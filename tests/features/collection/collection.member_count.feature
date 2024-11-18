@@ -15,7 +15,7 @@ Feature: Collection homepage
     Given owner content:
       | name         |
       | Hobbit owner |
-    And the following collections:
+    And collection content:
       | title                                   | description        | owner        | logo     | moderation | closed | state     |
       | Under the mountain                      | Under the mountain | Hobbit owner | logo.png | yes        | no     | published |
       | Exactly the same collection, but closed | Under the mountain | Hobbit owner | logo.png | yes        | yes    | published |

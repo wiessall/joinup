@@ -18,7 +18,7 @@ class JoinupLogStorage extends SqlContentEntityStorage {
    */
   public function save(EntityInterface $entity): void {
     if (!$entity->isNew()) {
-      throw new EntityStorageException('Joinup log entities are read only entities. Saving them once created is not allowed.');
+      throw new EntityStorageException('Interoperable Europe Portal log entities are read only entities. Saving them once created is not allowed.');
     }
     parent::save($entity);
   }

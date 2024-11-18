@@ -115,8 +115,8 @@ class JoinupNotificationContext extends RawDrupalContext {
       // - remove the HTML to simplify the matching on the body text.
       // @see vendor/twig/twig/lib/Twig/Extension/Core.php:1034
       if ($mail['body'] instanceof MarkupInterface) {
-        $mail_body = htmlspecialchars_decode($mail_body, ENT_QUOTES | ENT_SUBSTITUTE);
         $mail_body = strip_tags($mail_body);
+        $mail_body = htmlspecialchars_decode($mail_body, ENT_QUOTES | ENT_SUBSTITUTE);
       }
 
       // Ensure that there are no un-replaced arguments in the mail subject and
@@ -126,7 +126,7 @@ class JoinupNotificationContext extends RawDrupalContext {
       }
 
       // Check the existence or absence of the signature.
-      $signature_present = preg_match('/Kind regards,\s{0,2}The Joinup Support Team/', $mail_body);
+      $signature_present = preg_match('/Kind regards,\s{0,2}The Portal Support Team/', $mail_body);
       if ($signature_required && !$signature_present) {
         throw new \Exception('The signature of the email was not found or is not correct.');
       }
@@ -364,16 +364,31 @@ class JoinupNotificationContext extends RawDrupalContext {
    *
    * @param int $count
    *   The expected count of e-mails sent.
+   * @param string|null $recipients
+   *   (optional) A list of recipient emails.
    *
    * @throws \Exception
    *   Thrown when the count doesn't match the actual number.
    *
    * @Then :count e-mail(s) should have been sent
+   * @Then :count e-mail(s) should have been sent to recipients :recipients
    */
-  public function assertNumberOfEmailSent($count): void {
+  public function assertNumberOfEmailSent(int $count, ?string $recipients = NULL): void {
     $mails = $this->getMails();
     if (count($mails) != $count) {
       throw new \Exception("Invalid number of e-mail sent. Expected $count, sent " . count($mails));
+    }
+    if ($recipients) {
+      $expected_recipients = $this->explodeCommaSeparatedStepArgument($recipients);
+      $actual_recipients = array_unique(array_map(
+        fn(array $mail): string => $mail['to'],
+        $mails,
+      ));
+      sort($expected_recipients);
+      sort($actual_recipients);
+      if ($expected_recipients !== $actual_recipients) {
+        throw new ExpectationFailedException("Expected recipients $recipients. Got " . implode(', ', $actual_recipients));
+      }
     }
   }
 

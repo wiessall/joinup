@@ -24,27 +24,27 @@ class GlossaryController extends ControllerBase {
    *
    * @var string[]
    */
-  protected $letters;
+  protected array $letters;
 
   /**
    * Provides an access callback for the Glossary route.
    *
-   * @param \Drupal\collection\Entity\CollectionInterface $rdf_entity
+   * @param \Drupal\collection\Entity\CollectionInterface $node
    *   The collection entity.
    *
    * @return \Drupal\Core\Access\AccessResultInterface
    *   The access result.
    */
-  public function access(CollectionInterface $rdf_entity): AccessResultInterface {
-    $tags = Cache::buildTags('og-group-content', $rdf_entity->getCacheTagsToInvalidate());
-    return AccessResult::allowedIf($this->hasGlossaryTerms($rdf_entity))
+  public function access(CollectionInterface $node): AccessResultInterface {
+    $tags = Cache::buildTags('og-group-content', $node->getCacheTagsToInvalidate());
+    return AccessResult::allowedIf($this->hasGlossaryTerms($node))
       ->addCacheTags($tags);
   }
 
   /**
    * Provides a controller for the Glossary route.
    *
-   * @param \Drupal\collection\Entity\CollectionInterface $rdf_entity
+   * @param \Drupal\collection\Entity\CollectionInterface $node
    *   The collection entity.
    * @param string|null $letter
    *   (optional) An optional letter to filter the glossary on.
@@ -52,18 +52,18 @@ class GlossaryController extends ControllerBase {
    * @return array
    *   The output render array.
    */
-  public function glossary(CollectionInterface $rdf_entity, ?string $letter = NULL): array {
+  public function glossary(CollectionInterface $node, ?string $letter = NULL): array {
     $navigator = [
       '#theme' => 'glossary_navigator',
-      '#url' => Url::fromRoute('entity.rdf_entity.glossary', [
-        'rdf_entity' => $rdf_entity->id(),
+      '#url' => Url::fromRoute('entity.node.glossary', [
+        'node' => $node->id(),
       ])->toString(),
-      '#letters' => $this->getGlossaryTermLetters($rdf_entity),
+      '#letters' => $this->getGlossaryTermLetters($node),
       '#current' => $letter,
     ];
 
     $view = Views::getView('glossary')->executeDisplay('main', [
-      $rdf_entity->id(),
+      $node->id(),
       $letter,
     ]);
     unset($view['#cache']['max-age']);
@@ -75,7 +75,7 @@ class GlossaryController extends ControllerBase {
         $navigator,
       ],
       '#cache' => [
-        'tags' => Cache::buildTags('og-group-content', $rdf_entity->getCacheTagsToInvalidate()),
+        'tags' => Cache::buildTags('og-group-content', $node->getCacheTagsToInvalidate()),
       ],
     ];
   }
@@ -83,33 +83,33 @@ class GlossaryController extends ControllerBase {
   /**
    * Returns the glossary page title.
    *
-   * @param \Drupal\collection\Entity\CollectionInterface $rdf_entity
+   * @param \Drupal\collection\Entity\CollectionInterface $node
    *   The collection entity.
    *
    * @return \Drupal\Component\Render\MarkupInterface
    *   The translated title.
    */
-  public function title(CollectionInterface $rdf_entity): MarkupInterface {
-    return $this->t('@group glossary', ['@group' => $rdf_entity->label()]);
+  public function title(CollectionInterface $node): MarkupInterface {
+    return $this->t('@group glossary', ['@group' => $node->label()]);
   }
 
   /**
    * Finds out if the collection has glossary term entries.
    *
-   * @param \Drupal\collection\Entity\CollectionInterface $rdf_entity
+   * @param \Drupal\collection\Entity\CollectionInterface $node
    *   The collection entity.
    *
    * @return bool
    *   If the collection has glossary term entries.
    */
-  protected function hasGlossaryTerms(CollectionInterface $rdf_entity): bool {
-    return (bool) $this->getGlossaryTermLetters($rdf_entity);
+  protected function hasGlossaryTerms(CollectionInterface $node): bool {
+    return (bool) $this->getGlossaryTermLetters($node);
   }
 
   /**
    * Returns a list of unique uppercase letters extracted from glossary terms.
    *
-   * @param \Drupal\collection\Entity\CollectionInterface $rdf_entity
+   * @param \Drupal\collection\Entity\CollectionInterface $node
    *   The collection entity.
    *
    * @return string[]
@@ -121,13 +121,13 @@ class GlossaryController extends ControllerBase {
    * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
    *   Thrown when the node entity type is not defined.
    */
-  protected function getGlossaryTermLetters(CollectionInterface $rdf_entity): array {
+  protected function getGlossaryTermLetters(CollectionInterface $node): array {
     if (!isset($this->letters)) {
       $this->letters = [];
       $storage = $this->entityTypeManager()->getStorage('node');
       $nids = $storage->getQuery()->accessCheck(FALSE)
         ->condition('type', 'glossary')
-        ->condition('og_audience', $rdf_entity->id())
+        ->condition('og_audience', $node->id())
         ->condition('status', TRUE)
         ->execute();
       if ($nids) {

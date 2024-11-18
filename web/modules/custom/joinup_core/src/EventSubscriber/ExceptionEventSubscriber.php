@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Drupal\joinup_core\EventSubscriber;
 
 use Drupal\Core\Logger\LoggerChannelInterface;
-use Drupal\sparql_entity_storage\Encoder\SparqlEncoder;
+use Drupal\rdf_sync\Encoder\RdfSyncEncoder;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
@@ -83,7 +83,7 @@ final class ExceptionEventSubscriber implements EventSubscriberInterface {
 
     $request = $event->getRequest();
     $format = $request->getRequestFormat();
-    if (in_array($format, array_keys(SparqlEncoder::getSupportedFormats()))) {
+    if (in_array($format, array_keys(RdfSyncEncoder::getSupportedFormats()))) {
       // This ensures that there is a format for the response and avoid cases
       // where debug information is logged about deprecations related to passing
       // null arguments to internal PHP functions.

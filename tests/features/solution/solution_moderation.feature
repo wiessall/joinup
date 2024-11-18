@@ -6,10 +6,9 @@ Feature: Solution moderation
 
   # Access checks are not being made here. They are run in the solution add feature.
   Scenario: 'Save as draft' and 'Propose' states are available but moderators should also see 'Publish' state.
-    Given the following collection:
-      | title | Collection propose state test |
-      | logo  | logo.png                      |
-      | state | published                     |
+    Given collection content:
+      | title                         | logo     | state     |
+      | Collection propose state test | logo.png | published |
 
     When I am logged in as a member of the "Collection propose state test" collection
     And I go to the add solution form of the "Collection propose state test" collection
@@ -49,25 +48,28 @@ Feature: Solution moderation
       | Franklin Walker  |           |
       # Facilitator of all the solutions.
       | William Curtis   |           |
-    And the following solutions:
-      | title                      | description                | logo     | owner          | contact information | state        |
-      | Azure Ship                 | Azure ship                 | logo.png | Angelos Agathe | Placide             | draft        |
-      | The Last Illusion          | The Last Illusion          | logo.png | Angelos Agathe | Placide             | proposed     |
-      | Rose of Doors              | Rose of Doors              | logo.png | Angelos Agathe | Placide             | published    |
-      | Fire Swords                | Fire Swords                | logo.png | Angelos Agathe | Placide             | archived     |
-      | The Guardian of the Stream | The Guardian of the Stream | logo.png | Angelos Agathe | Placide             | needs update |
-      | Flames in the Swords       | Flames in the Swords       | logo.png | Angelos Agathe | Placide             | blacklisted  |
+    Given solution content:
+      | title                      | description                | logo     | owner          | contact information | state                 |
+      | Azure Ship                 | Azure ship                 | logo.png | Angelos Agathe | Placide             | draft                 |
+      | The Last Illusion          | The Last Illusion          | logo.png | Angelos Agathe | Placide             | proposed              |
+      | Rose of Doors              | Rose of Doors              | logo.png | Angelos Agathe | Placide             | published             |
+      | Time Bandit                | Time Bandit                | logo.png | Angelos Agathe | Placide             | draft_after_published |
+      | Fire Swords                | Fire Swords                | logo.png | Angelos Agathe | Placide             | archived              |
+      | The Guardian of the Stream | The Guardian of the Stream | logo.png | Angelos Agathe | Placide             | needs update          |
+      | Flames in the Swords       | Flames in the Swords       | logo.png | Angelos Agathe | Placide             | blacklisted           |
     And the following solution user memberships:
       | solution                   | user            | roles       |
       | Azure Ship                 | Franklin Walker | owner       |
       | The Last Illusion          | Franklin Walker | owner       |
       | Rose of Doors              | Franklin Walker | owner       |
+      | Time Bandit                | Franklin Walker | owner       |
       | Fire Swords                | Franklin Walker | owner       |
       | The Guardian of the Stream | Franklin Walker | owner       |
       | Flames in the Swords       | Franklin Walker | owner       |
       | Azure Ship                 | William Curtis  | facilitator |
       | The Last Illusion          | William Curtis  | facilitator |
       | Rose of Doors              | William Curtis  | facilitator |
+      | Time Bandit                | William Curtis  | facilitator |
       | Fire Swords                | William Curtis  | facilitator |
       | The Guardian of the Stream | William Curtis  | facilitator |
       | Flames in the Swords       | William Curtis  | facilitator |
@@ -92,28 +94,32 @@ Feature: Solution moderation
       # This is checked separately below.
       | Azure Ship                 | Franklin Walker  | Save as draft, Propose                                               |
       | The Last Illusion          | Franklin Walker  | Propose, Save as draft                                               |
-      | Rose of Doors              | Franklin Walker  | Publish, Save as draft, Propose                                      |
+      | Rose of Doors              | Franklin Walker  | Publish, Save as draft, Propose, Archive                             |
+      | Time Bandit                | Franklin Walker  | Save as draft, Publish                                               |
       | Fire Swords                | Franklin Walker  |                                                                      |
       | The Guardian of the Stream | Franklin Walker  | Save as draft, Propose                                               |
       | Flames in the Swords       | Franklin Walker  | Save as draft, Propose                                               |
 
       # The following solutions do not follow the rule above and should be
-      # testes as shown.
+      # tested as shown.
       | Azure Ship                 | William Curtis   | Save as draft, Propose                                               |
       | The Last Illusion          | William Curtis   | Propose, Save as draft                                               |
-      | Rose of Doors              | William Curtis   | Publish, Save as draft, Propose                                      |
+      | Rose of Doors              | William Curtis   | Publish, Save as draft, Propose, Archive                             |
+      | Time Bandit                | William Curtis   | Save as draft, Publish                                               |
       | Fire Swords                | William Curtis   |                                                                      |
       | The Guardian of the Stream | William Curtis   | Save as draft, Propose                                               |
       | Flames in the Swords       | William Curtis   | Save as draft, Propose                                               |
       | Azure Ship                 | Isabel Banks     |                                                                      |
       | The Last Illusion          | Isabel Banks     |                                                                      |
       | Rose of Doors              | Isabel Banks     |                                                                      |
+      | Time Bandit                | Isabel Banks     |                                                                      |
       | Fire Swords                | Isabel Banks     |                                                                      |
       | The Guardian of the Stream | Isabel Banks     |                                                                      |
       | Flames in the Swords       | Isabel Banks     |                                                                      |
       | Azure Ship                 | Tyrone Underwood | Save as draft, Propose, Publish                                      |
       | The Last Illusion          | Tyrone Underwood | Propose, Save as draft, Publish, Request changes                     |
       | Rose of Doors              | Tyrone Underwood | Publish, Save as draft, Propose, Request changes, Blacklist, Archive |
+      | Time Bandit                | Tyrone Underwood | Save as draft, Publish                                               |
       | Fire Swords                | Tyrone Underwood | Unarchive                                                            |
       | The Guardian of the Stream | Tyrone Underwood | Save as draft, Propose, Publish                                      |
       | Flames in the Swords       | Tyrone Underwood | Save as draft, Propose, Publish                                      |

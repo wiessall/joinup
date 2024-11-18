@@ -3,12 +3,14 @@ langcode: en
 status: true
 dependencies:
   config:
-    - rdf_entity.rdfentity.collection
-    - rdf_entity.rdfentity.solution
+    - node.type.collection
+    - node.type.solution
+    - system.menu.admin
   module:
     - csv_serialization
     - joinup_group
     - joinup_log
+    - node
     - options
     - rest
     - serialization
@@ -441,7 +443,7 @@ display:
           admin_label: ''
           entity_type: joinup_log
           entity_field: group
-          plugin_id: og_audience_group
+          plugin_id: string
           default_action: default
           exception:
             value: all
@@ -462,7 +464,7 @@ display:
             format: default_summary
           specify_validation: true
           validate:
-            type: 'entity:rdf_entity'
+            type: 'entity:node'
             fail: 'not found'
           validate_options:
             bundles:
@@ -644,7 +646,7 @@ display:
           expose:
             operator_id: uid_op
             label: User
-            description: "Enter a Joinup user's name to search for a user and select it with the mouse or the keyboard."
+            description: "Enter a Interoperable Europe Portal user's name to search for a user and select it with the mouse or the keyboard."
             use_operator: false
             operator: uid_op
             operator_limit_selection: false
@@ -689,7 +691,7 @@ display:
           expose:
             operator_id: uid_1_op
             label: Actor
-            description: "Enter a Joinup user's name to search for a user and select it with the mouse or the keyboard."
+            description: "Enter a Interoperable Europe Portal user's name to search for a user and select it with the mouse or the keyboard."
             use_operator: false
             operator: uid_1_op
             operator_limit_selection: false
@@ -822,6 +824,17 @@ display:
           entity_field: actor
           plugin_id: standard
           required: false
+        group:
+          id: group
+          table: joinup_log
+          field: group
+          relationship: none
+          group_type: group
+          admin_label: Content
+          entity_type: joinup_log
+          entity_field: group
+          plugin_id: standard
+          required: false
       header: {  }
       footer: {  }
       display_extenders:
@@ -840,7 +853,7 @@ display:
       tags: {  }
   csv_export:
     id: csv_export
-    display_title: 'CSV export'
+    display_title: 'CSV export for page'
     display_plugin: data_export
     position: 2
     display_options:
@@ -882,7 +895,7 @@ display:
         metatag_display_extender:
           metatags: {  }
           tokenize: false
-      path: rdf_entity/%rdf_entity/reports/actions-log/csv
+      path: node/%node/reports/actions-log/csv
       displays:
         logs: logs
         default: '0'
@@ -904,6 +917,757 @@ display:
         - url
         - user.permissions
       tags: {  }
+  csv_export_site_wide:
+    id: csv_export_site_wide
+    display_title: 'CSV export for Side-wide'
+    display_plugin: data_export
+    position: 4
+    display_options:
+      title: 'Site-wide business log'
+      fields:
+        timestamp:
+          id: timestamp
+          table: joinup_log
+          field: timestamp
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: joinup_log
+          entity_field: timestamp
+          plugin_id: field
+          label: Date
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: value
+          type: timestamp
+          settings:
+            date_format: short
+            custom_date_format: ''
+            timezone: ''
+            tooltip:
+              date_format: long
+              custom_date_format: ''
+            time_diff:
+              enabled: false
+              future_format: '@interval hence'
+              past_format: '@interval ago'
+              granularity: 2
+              refresh: 60
+          group_column: value
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
+        type:
+          id: type
+          table: joinup_log
+          field: type
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: joinup_log
+          entity_field: type
+          plugin_id: field
+          label: Type
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: value
+          type: list_default
+          settings: {  }
+          group_column: value
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
+        message:
+          id: message
+          table: joinup_log
+          field: message
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: joinup_log
+          entity_field: message
+          plugin_id: field
+          label: Message
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: value
+          type: basic_string
+          settings: {  }
+          group_column: value
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
+        name:
+          id: name
+          table: users_field_data
+          field: name
+          relationship: uid
+          group_type: group
+          admin_label: ''
+          entity_type: user
+          entity_field: name
+          plugin_id: field
+          label: User
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: value
+          type: user_name
+          settings:
+            link_to_entity: true
+          group_column: value
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
+        name_1:
+          id: name_1
+          table: users_field_data
+          field: name
+          relationship: actor
+          group_type: group
+          admin_label: ''
+          entity_type: user
+          entity_field: name
+          plugin_id: field
+          label: Actor
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: value
+          type: user_name
+          settings:
+            link_to_entity: true
+          group_column: value
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
+        title:
+          id: title
+          table: node_field_data
+          field: title
+          relationship: group
+          group_type: group
+          admin_label: ''
+          entity_type: node
+          entity_field: title
+          plugin_id: field
+          label: Group
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: true
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: value
+          type: string
+          settings:
+            link_to_entity: true
+          group_column: value
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
+      access:
+        type: perm
+        options:
+          perm: 'access site-wide business log'
+      arguments: {  }
+      filters:
+        timestamp_1:
+          id: timestamp_1
+          table: joinup_log
+          field: timestamp
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: joinup_log
+          entity_field: timestamp
+          plugin_id: date
+          operator: '>='
+          value:
+            min: ''
+            max: ''
+            value: ''
+            type: offset
+          group: 1
+          exposed: true
+          expose:
+            operator_id: timestamp_1_op
+            label: 'Date from'
+            description: 'An offset from the current time such as "+1 day" or "-2 hours -30 minutes"'
+            use_operator: false
+            operator: timestamp_1_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: from
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              licence_manager: '0'
+              anonymous: '0'
+              moderator: '0'
+              administrator: '0'
+              developer: '0'
+            min_placeholder: ''
+            max_placeholder: ''
+            placeholder: ''
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+        timestamp_2:
+          id: timestamp_2
+          table: joinup_log
+          field: timestamp
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: joinup_log
+          entity_field: timestamp
+          plugin_id: date
+          operator: '<='
+          value:
+            min: ''
+            max: ''
+            value: ''
+            type: date
+          group: 1
+          exposed: true
+          expose:
+            operator_id: timestamp_2_op
+            label: 'Date to'
+            description: 'An offset from the current time such as "+1 day" or "-2 hours -30 minutes"'
+            use_operator: false
+            operator: timestamp_2_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: to
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              licence_manager: '0'
+              anonymous: '0'
+              moderator: '0'
+              administrator: '0'
+              developer: '0'
+            min_placeholder: ''
+            max_placeholder: ''
+            placeholder: ''
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+        type:
+          id: type
+          table: joinup_log
+          field: type
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: joinup_log
+          entity_field: type
+          plugin_id: string
+          operator: in
+          group: 1
+          exposed: true
+          expose:
+            operator_id: type_op
+            label: Type
+            description: ''
+            use_operator: false
+            operator: type_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: type
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              licence_manager: '0'
+              anonymous: '0'
+              moderator: '0'
+              administrator: '0'
+              developer: '0'
+            placeholder: ''
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+        uid:
+          id: uid
+          table: users_field_data
+          field: uid
+          relationship: uid
+          group_type: group
+          admin_label: ''
+          entity_type: user
+          entity_field: uid
+          plugin_id: user_name
+          operator: in
+          value: {  }
+          group: 1
+          exposed: true
+          expose:
+            operator_id: uid_op
+            label: User
+            description: "Enter a Interoperable Europe Portal user's name to search for a user and select it with the mouse or the keyboard."
+            use_operator: false
+            operator: uid_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: uid
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              licence_manager: '0'
+              anonymous: '0'
+              moderator: '0'
+              administrator: '0'
+              developer: '0'
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+        uid_1:
+          id: uid_1
+          table: users_field_data
+          field: uid
+          relationship: actor
+          group_type: group
+          admin_label: ''
+          entity_type: user
+          entity_field: uid
+          plugin_id: user_name
+          operator: in
+          value: {  }
+          group: 1
+          exposed: true
+          expose:
+            operator_id: uid_1_op
+            label: Actor
+            description: "Enter a Interoperable Europe Portal user's name to search for a user and select it with the mouse or the keyboard."
+            use_operator: false
+            operator: uid_1_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: actor
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              licence_manager: '0'
+              anonymous: '0'
+              moderator: '0'
+              administrator: '0'
+              developer: '0'
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+        group:
+          id: group
+          table: joinup_log
+          field: group
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: joinup_log
+          entity_field: group
+          plugin_id: joinup_log_group
+          operator: '='
+          value: null
+          group: 1
+          exposed: true
+          expose:
+            operator_id: ''
+            label: Group
+            description: ''
+            use_operator: false
+            operator: group_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: group
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              licence_manager: '0'
+              anonymous: '0'
+              interoperability_validator: '0'
+              moderator: '0'
+              administrator: '0'
+              developer: '0'
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+      filter_groups:
+        operator: AND
+        groups:
+          1: AND
+      style:
+        type: data_export
+        options:
+          formats:
+            csv: csv
+          csv_settings:
+            delimiter: ','
+            enclosure: '"'
+            escape_char: \
+            strip_tags: true
+            trim: true
+            encoding: utf8
+            utf8_bom: '0'
+            use_serializer_encode_only: false
+      defaults:
+        access: false
+        title: false
+        fields: false
+        arguments: false
+        filters: false
+        filter_groups: false
+      display_description: ''
+      display_extenders:
+        metatag_display_extender:
+          metatags: {  }
+          tokenize: false
+      path: admin/reporting/actions-log/csv
+      displays:
+        site_wide: site_wide
+        default: '0'
+        logs: '0'
+      filename: actions-log.csv
+      automatic_download: true
+      export_method: batch
+      export_batch_size: 1000
+      store_in_public_file_directory: false
+      custom_redirect_path: false
+      redirect_to_display: site_wide
+      include_query_params: false
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_content'
+        - 'languages:language_interface'
+        - request_format
+        - url
+        - user.permissions
+      tags:
+        - joinup_log_list
   logs:
     id: logs
     display_title: Page
@@ -914,7 +1678,7 @@ display:
         metatag_display_extender:
           metatags: {  }
           tokenize: false
-      path: rdf_entity/%rdf_entity/reports/actions-log
+      path: node/%node/reports/actions-log
       menu:
         type: tab
         title: 'Actions log'
@@ -934,3 +1698,737 @@ display:
         - url.query_args
         - user.permissions
       tags: {  }
+  site_wide:
+    id: site_wide
+    display_title: Site-wide
+    display_plugin: page
+    position: 3
+    display_options:
+      title: 'Site-wide business log'
+      fields:
+        timestamp:
+          id: timestamp
+          table: joinup_log
+          field: timestamp
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: joinup_log
+          entity_field: timestamp
+          plugin_id: field
+          label: Date
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: value
+          type: timestamp
+          settings:
+            date_format: short
+            custom_date_format: ''
+            timezone: ''
+            tooltip:
+              date_format: long
+              custom_date_format: ''
+            time_diff:
+              enabled: false
+              future_format: '@interval hence'
+              past_format: '@interval ago'
+              granularity: 2
+              refresh: 60
+          group_column: value
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
+        type:
+          id: type
+          table: joinup_log
+          field: type
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: joinup_log
+          entity_field: type
+          plugin_id: field
+          label: Type
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: value
+          type: list_default
+          settings: {  }
+          group_column: value
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
+        message:
+          id: message
+          table: joinup_log
+          field: message
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: joinup_log
+          entity_field: message
+          plugin_id: field
+          label: Message
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: value
+          type: basic_string
+          settings: {  }
+          group_column: value
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
+        name:
+          id: name
+          table: users_field_data
+          field: name
+          relationship: uid
+          group_type: group
+          admin_label: ''
+          entity_type: user
+          entity_field: name
+          plugin_id: field
+          label: User
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: value
+          type: user_name
+          settings:
+            link_to_entity: true
+          group_column: value
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
+        name_1:
+          id: name_1
+          table: users_field_data
+          field: name
+          relationship: actor
+          group_type: group
+          admin_label: ''
+          entity_type: user
+          entity_field: name
+          plugin_id: field
+          label: Actor
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: value
+          type: user_name
+          settings:
+            link_to_entity: true
+          group_column: value
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
+        title:
+          id: title
+          table: node_field_data
+          field: title
+          relationship: group
+          group_type: group
+          admin_label: ''
+          entity_type: node
+          entity_field: title
+          plugin_id: field
+          label: Group
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: true
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: value
+          type: string
+          settings:
+            link_to_entity: true
+          group_column: value
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
+      access:
+        type: perm
+        options:
+          perm: 'access site-wide business log'
+      arguments: {  }
+      filters:
+        timestamp_1:
+          id: timestamp_1
+          table: joinup_log
+          field: timestamp
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: joinup_log
+          entity_field: timestamp
+          plugin_id: date
+          operator: '>='
+          value:
+            min: ''
+            max: ''
+            value: ''
+            type: offset
+          group: 1
+          exposed: true
+          expose:
+            operator_id: timestamp_1_op
+            label: 'Date from'
+            description: 'An offset from the current time such as "+1 day" or "-2 hours -30 minutes"'
+            use_operator: false
+            operator: timestamp_1_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: from
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              licence_manager: '0'
+              anonymous: '0'
+              moderator: '0'
+              administrator: '0'
+              developer: '0'
+            min_placeholder: ''
+            max_placeholder: ''
+            placeholder: ''
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+        timestamp_2:
+          id: timestamp_2
+          table: joinup_log
+          field: timestamp
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: joinup_log
+          entity_field: timestamp
+          plugin_id: date
+          operator: '<='
+          value:
+            min: ''
+            max: ''
+            value: ''
+            type: date
+          group: 1
+          exposed: true
+          expose:
+            operator_id: timestamp_2_op
+            label: 'Date to'
+            description: 'An offset from the current time such as "+1 day" or "-2 hours -30 minutes"'
+            use_operator: false
+            operator: timestamp_2_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: to
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              licence_manager: '0'
+              anonymous: '0'
+              moderator: '0'
+              administrator: '0'
+              developer: '0'
+            min_placeholder: ''
+            max_placeholder: ''
+            placeholder: ''
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+        type:
+          id: type
+          table: joinup_log
+          field: type
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: joinup_log
+          entity_field: type
+          plugin_id: string
+          operator: in
+          group: 1
+          exposed: true
+          expose:
+            operator_id: type_op
+            label: Type
+            description: ''
+            use_operator: false
+            operator: type_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: type
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              licence_manager: '0'
+              anonymous: '0'
+              moderator: '0'
+              administrator: '0'
+              developer: '0'
+            placeholder: ''
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+        uid:
+          id: uid
+          table: users_field_data
+          field: uid
+          relationship: uid
+          group_type: group
+          admin_label: ''
+          entity_type: user
+          entity_field: uid
+          plugin_id: user_name
+          operator: in
+          value: {  }
+          group: 1
+          exposed: true
+          expose:
+            operator_id: uid_op
+            label: User
+            description: "Enter a Interoperable Europe Portal user's name to search for a user and select it with the mouse or the keyboard."
+            use_operator: false
+            operator: uid_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: uid
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              licence_manager: '0'
+              anonymous: '0'
+              moderator: '0'
+              administrator: '0'
+              developer: '0'
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+        uid_1:
+          id: uid_1
+          table: users_field_data
+          field: uid
+          relationship: actor
+          group_type: group
+          admin_label: ''
+          entity_type: user
+          entity_field: uid
+          plugin_id: user_name
+          operator: in
+          value: {  }
+          group: 1
+          exposed: true
+          expose:
+            operator_id: uid_1_op
+            label: Actor
+            description: "Enter a Interoperable Europe Portal user's name to search for a user and select it with the mouse or the keyboard."
+            use_operator: false
+            operator: uid_1_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: actor
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              licence_manager: '0'
+              anonymous: '0'
+              moderator: '0'
+              administrator: '0'
+              developer: '0'
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+        group:
+          id: group
+          table: joinup_log
+          field: group
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: joinup_log
+          entity_field: group
+          plugin_id: joinup_log_group
+          operator: '='
+          value: null
+          group: 1
+          exposed: true
+          expose:
+            operator_id: ''
+            label: Group
+            description: ''
+            use_operator: false
+            operator: group_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: group
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              licence_manager: '0'
+              anonymous: '0'
+              interoperability_validator: '0'
+              moderator: '0'
+              administrator: '0'
+              developer: '0'
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+      filter_groups:
+        operator: AND
+        groups:
+          1: AND
+      defaults:
+        access: false
+        title: false
+        fields: false
+        arguments: false
+        filters: false
+        filter_groups: false
+      display_description: ''
+      display_extenders:
+        metatag_display_extender:
+          metatags: {  }
+          tokenize: false
+      path: admin/reporting/actions-log
+      menu:
+        type: normal
+        title: 'Site-wide business log'
+        description: ''
+        weight: 0
+        expanded: false
+        menu_name: admin
+        parent: joinup.admin_reporting
+        context: '0'
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_content'
+        - 'languages:language_interface'
+        - url
+        - url.query_args
+        - user.permissions
+      tags:
+        - joinup_log_list

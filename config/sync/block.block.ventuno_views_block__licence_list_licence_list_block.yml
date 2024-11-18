@@ -12,7 +12,7 @@ dependencies:
 id: ventuno_views_block__licence_list_licence_list_block
 theme: ventuno
 region: content
-weight: -7
+weight: -5
 provider: null
 plugin: 'views_block:licence_list-licence_list_block'
 settings:

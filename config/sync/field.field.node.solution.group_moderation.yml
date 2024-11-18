@@ -1,0 +1,23 @@
+uuid: 49a3b2c6-7c66-44dd-9de9-314a948fcc6b
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.group_moderation
+    - node.type.solution
+id: node.solution.group_moderation
+field_name: group_moderation
+entity_type: node
+bundle: solution
+label: Moderation
+description: 'If checked, community content items (news, events, discussions and documents) are pre-moderated: they have to be validated by the moderators of the solution before they will be published.'
+required: false
+translatable: true
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: Moderated
+  off_label: 'Non moderated'
+field_type: boolean

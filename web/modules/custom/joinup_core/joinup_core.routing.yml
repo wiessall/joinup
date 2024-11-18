@@ -26,16 +26,6 @@ joinup_core.id_redirect:
     # @see \Drupal\Core\Routing\Router::doMatchCollection()
     uuid: '.+'
 
-joinup_core.rdf_entity_uri_web_converter_page:
-  path: '/rdf'
-  defaults:
-    _form: 'Drupal\joinup_core\Form\RdfEntityUriWebConverterForm'
-    _title: 'Convert an RDF entity ID'
-  requirements:
-    _permission: 'access uri converter'
-  options:
-    _admin_route: TRUE
-
 joinup_core.outdated_content_threshold:
   path: '/outdated-content-threshold'
   defaults:

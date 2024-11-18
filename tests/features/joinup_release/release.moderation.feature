@@ -17,13 +17,9 @@ Feature: Asset release moderation
       | Felix Russell   | Felix.Russell@example.com   | Felix      | Russell     |           |
       | Wilson Mendoza  | Wilson.Mendoza@example.com  | Wilson     | Mendoza     | moderator |
       | Patric Sereira  | Patric.Sereira@example.com  | Patric     | Sereira     | moderator |
-    And the following solution:
-      | title               | Dark Ship   |
-      | description         | Dark ship   |
-      | logo                | logo.png    |
-      | owner               | Kenny Logan |
-      | contact information | SheriMoore  |
-      | state               | published   |
+    And solution content:
+      | title     | description | logo     | owner       | contact information | state     |
+      | Dark Ship | Dark ship   | logo.png | Kenny Logan | SheriMoore          | published |
     And the following solution user membership:
       | solution  | user            | roles       |
       | Dark Ship | Bonnie Holloway | owner       |
@@ -48,21 +44,21 @@ Feature: Asset release moderation
     And 0 e-mails should have been sent
 
     When I click "Edit" in the "Entity actions" region
-    And I should see the workflow buttons "Update, Save as draft"
+    And I should see the workflow buttons "Update, Save as draft, Archive"
     When I fill in "Release notes" with "We go live soon."
     And I press "Update"
     Then I should see the text "Release of the dark ship v1" in the "Page title" region
     And the following email should have been sent:
       | recipient | Felix Russell                                                                   |
-      | subject   | Joinup: A release has been updated                                              |
+      | subject   | Interoperable Europe Portal: A release has been updated                                              |
       | body      | The release Release of the dark ship, v1 of the solution Dark Ship was updated. |
     And the following email should have been sent:
       | recipient | Wilson Mendoza                                                                  |
-      | subject   | Joinup: A release has been updated                                              |
+      | subject   | Interoperable Europe Portal: A release has been updated                                              |
       | body      | The release Release of the dark ship, v1 of the solution Dark Ship was updated. |
     And the following email should have been sent:
       | recipient | Patric Sereira                                                                  |
-      | subject   | Joinup: A release has been updated                                              |
+      | subject   | Interoperable Europe Portal: A release has been updated                                              |
       | body      | The release Release of the dark ship, v1 of the solution Dark Ship was updated. |
 
     # Archive and unarchive as moderator.
@@ -108,13 +104,13 @@ Feature: Asset release moderation
     And I press "Request changes"
     # The published version does not change.
     Then I should see the text "Release of the dark ship v1" in the "Page title" region
-    And the email sent to "Bonnie Holloway" with subject "Joinup: Modification of a release of your solution has been requested" contains the following lines of text:
-      | the Joinup moderation team requires editing the release Release, v1 of the solution Dark Ship due to I don't like it. |
-      | If you think this action is not clear or not due, please contact Joinup Support at                                    |
+    And the email sent to "Bonnie Holloway" with subject "Interoperable Europe Portal: Modification of a release of your solution has been requested" contains the following lines of text:
+      | the Interoperable Europe Portal moderation team requires editing the release Release, v1 of the solution Dark Ship due to I don't like it. |
+      | If you think this action is not clear or not due, please contact Portal Support at                                    |
     And the following email should have been sent:
       | recipient | Felix Russell                                                                                                         |
-      | subject   | Joinup: Modification of a release of your solution has been requested                                                 |
-      | body      | the Joinup moderation team requires editing the release Release, v1 of the solution Dark Ship due to I don't like it. |
+      | subject   | Interoperable Europe Portal: Modification of a release of your solution has been requested                                                 |
+      | body      | the Interoperable Europe Portal moderation team requires editing the release Release, v1 of the solution Dark Ship due to I don't like it. |
 
     # We do not show the created time in the UI so another visit to the edit screen is required.
     When I go to the "Release of the dark ship" release
@@ -144,22 +140,43 @@ Feature: Asset release moderation
     Then I should see the text "Release fix v1" in the "Page title" region
     And the following email should have been sent:
       | recipient | Bonnie Holloway                                                                                    |
-      | subject   | Joinup: Your release was accepted                                                                  |
+      | subject   | Interoperable Europe Portal: Your release was accepted                                                                  |
       | body      | Your proposed Release fix, v1 for the solution "Dark Ship" has been validated as per your request. |
 
+    # Check archive permissions author and facilitator.
+    When I am logged in as "Bonnie Holloway"
+    And I go to the "Release fix" release
+    When I click "Edit" in the "Entity actions" region
+    And I press "Archive"
+    Then I should see the text "Archived" in the "Page title" region
+
+    When I am logged in as a moderator
+    And I go to the "Release fix" release
+    And I click "Edit" in the "Entity actions" region
+    And I press "Unarchive"
+    Then I should not see the text "Archived" in the "Page title" region
+
+    When I am logged in as "Felix Russell"
+    And I go to the "Release fix" release
+    When I click "Edit" in the "Entity actions" region
+    And I press "Archive"
+    Then I should see the text "Archived" in the "Page title" region
+
+    When I am logged in as a moderator
+    And I go to the "Release fix" release
     # Delete a release as a moderator.
     When I click "Edit" in the "Entity actions" region
     And I click "Delete"
     And I press "Delete"
     And the following email should have been sent:
       | recipient | Bonnie Holloway                                            |
-      | subject   | Joinup: A release has been deleted                         |
+      | subject   | Interoperable Europe Portal: A release has been deleted                         |
       | body      | release Release fix, v1 of Dark Ship solution was deleted. |
     And the following email should have been sent:
       | recipient | Felix Russell                                              |
-      | subject   | Joinup: A release has been deleted                         |
+      | subject   | Interoperable Europe Portal: A release has been deleted                         |
       | body      | release Release fix, v1 of Dark Ship solution was deleted. |
     And the following email should have been sent:
       | recipient | Patric Sereira                                             |
-      | subject   | Joinup: A release has been deleted                         |
+      | subject   | Interoperable Europe Portal: A release has been deleted                         |
       | body      | release Release fix, v1 of Dark Ship solution was deleted. |

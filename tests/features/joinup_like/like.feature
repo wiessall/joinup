@@ -9,15 +9,15 @@ Feature: Like/unlike feature.
       | Username     | Roles | E-mail           | First name | Family name |
       | Lisa Like    |       | lisa@like.com    | Lisa       | Like        |
       | Gregory Like |       | gregory@like.com | Gregory    | Like        |
-    Given the following collections:
+    Given collection content:
       | title    | state     |
       | Bulgaria | published |
-    Given the following solutions:
+    Given solution content:
       | title               | state     | collection |
       | Very liked solution | published | Bulgaria   |
 
   Scenario: Like functionality is disabled for archived content.
-    Given the following solutions:
+    Given solution content:
       | title         | state    | collection |
       | Mount Vitosha | archived | Bulgaria   |
 
@@ -136,7 +136,7 @@ Feature: Like/unlike feature.
       | news         |
 
   Scenario: Logged-in user can see and hit like button in custom page, discussion and solution tiles
-    Given the following solutions:
+    Given solution content:
       | title             | state     | collection |
       | Likeable solution | published | Bulgaria   |
     And "custom_page" content:
@@ -222,6 +222,7 @@ Feature: Like/unlike feature.
     And I click "Add custom page"
 
     And I fill in "Title" with "Carousel of likes"
+    And I fill in "Abstract" with "Abstract carousel of likes"
     And I select "HR" from "Topic"
     And I add a layout paragraph in the "Custom page body" form field with the following properties:
       | layout           | one column |

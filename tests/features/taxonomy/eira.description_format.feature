@@ -7,8 +7,8 @@ Feature:
   Scenario: Apply a formatter to the description field that allows the description to be properly formatted.
     When I am logged in as a moderator
     And I am on the homepage
-    And I click "RDF ID converter"
-    And I fill in "RDF entity ID or a URL" with "http://data.europa.eu/dr8/BusinessCapability"
+    And I click "RDF URI converter"
+    And I fill in "RDF URI or entity URL" with "http://data.europa.eu/dr8/BusinessCapability"
     And I press "Go!"
     Then I should see the heading "Business Capability"
     # The <br> tags are not part of the original description.

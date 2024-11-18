@@ -12,11 +12,11 @@ use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
+use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_taxonomy\Entity\MappedTerm;
 use Drupal\node\NodeInterface;
 use Drupal\owner\Entity\Owner;
 use Drupal\owner\Entity\OwnerInterface;
-use Drupal\rdf_entity\RdfInterface;
 
 /**
  * Implements hook_entity_bundle_info_alter().
@@ -64,14 +64,14 @@ function owner_form_alter_validate(array &$form, FormStateInterface $form_state)
     // Check if the owner is still referenced by one or more collections.
     $entity->isReferencedByGroups()
   ) {
-    // Compile a list of collections that are referencing the owner, to show in
-    // the form validation error message.
-    $collection_labels = array_map(function (RdfInterface $collection) {
-      return '"' . $collection->label() . '"';
+    // Compile a list of groups that are referencing the owner, to show in the
+    // form validation error message.
+    $group_labels = array_map(function (GroupInterface $collection) {
+      return '"[' . ucfirst($collection->type->entity->getSingularLabel()) . '] ' . $collection->label() . '"';
     }, $entity->getReferencingGroups());
 
-    $form_state->setError($element, new TranslatableMarkup('The owner cannot be deleted since it owns the following collections: @collections. Please set a different owner for these collections before requesting deletion.', [
-      '@collections' => implode(', ', $collection_labels),
+    $form_state->setError($element, new TranslatableMarkup('The owner cannot be deleted since it owns the following groups: @groups. Please set a different owner for these groups before requesting deletion.', [
+      '@groups' => implode(', ', $group_labels),
     ]));
   }
 }

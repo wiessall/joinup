@@ -1,0 +1,33 @@
+uuid: 28098f25-c182-42ae-8054-0de7909c0793
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.spatial_coverage
+    - node.type.collection
+    - taxonomy.vocabulary.spatial
+third_party_settings:
+  rdf_sync:
+    target_id:
+      predicate: 'http://purl.org/dc/terms/spatial'
+      type: resource
+id: node.collection.spatial_coverage
+field_name: spatial_coverage
+entity_type: node
+bundle: collection
+label: 'Geographical coverage'
+description: 'Add a country name relevant to the content of this collection.'
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      spatial: spatial
+    sort:
+      field: _none
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

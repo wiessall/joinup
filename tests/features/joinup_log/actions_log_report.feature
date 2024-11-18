@@ -5,10 +5,10 @@ Feature: Actions log
   I want to have access the actions log report
 
   Background:
-    Given collections:
+    Given collection content:
       | title         | state     |
       | Tilt and Turn | published |
-    And solutions:
+    Given solution content:
       | title    | state     | collection    |
       | Skylight | published | Tilt and Turn |
 
@@ -58,6 +58,8 @@ Feature: Actions log
       | Branson Winthrop | Mary Shotgun     | Skylight      | joinup:block_membership     | Block x member      | 1721315286 |
       | Andre Munson     | Mary Shotgun     | Skylight      | joinup:deleted_membership   | Delete x membership | 1721215287 |
       | Andre Munson     | Mary Shotgun     | Skylight      | joinup:add_role             | Add x author role   | 1721115288 |
+      | Dave Crash       |                  | Skylight      | joinup:flag_interoperable   | Flagged             | 1721111290 |
+      | Dave Crash       |                  | Skylight      | joinup:unflag_interoperable | Unflagged           | 1721110295 |
 
     Given I am logged in as a moderator
     When I go to the actions log report for "Tilt and Turn"
@@ -76,13 +78,17 @@ Feature: Actions log
 
     When I go to the actions log report for "Skylight"
     Then the "actions log report" table should be:
-      | Date               | Type               | Message             | User             | Actor            |
-      | 16/07/2024 - 07:34 | Add role to member | Add x author role   | Andre Munson     | Mary Shotgun     |
-      | 17/07/2024 - 11:21 | Deleted membership | Delete x membership | Andre Munson     | Mary Shotgun     |
-      | 18/07/2024 - 15:08 | Block membership   | Block x member      | Branson Winthrop | Mary Shotgun     |
-      | 19/07/2024 - 18:54 | Add content        | Add x event         | Branson Winthrop | Branson Winthrop |
+      | Date               | Type                 | Message             | User             | Actor            |
+      | 16/07/2024 - 06:11 | Unflag interoperable | Unflagged           | Dave Crash       |                  |
+      | 16/07/2024 - 06:28 | Flag interoperable   | Flagged             | Dave Crash       |                  |
+      | 16/07/2024 - 07:34 | Add role to member   | Add x author role   | Andre Munson     | Mary Shotgun     |
+      | 17/07/2024 - 11:21 | Deleted membership   | Delete x membership | Andre Munson     | Mary Shotgun     |
+      | 18/07/2024 - 15:08 | Block membership     | Block x member      | Branson Winthrop | Mary Shotgun     |
+      | 19/07/2024 - 18:54 | Add content          | Add x event         | Branson Winthrop | Branson Winthrop |
     Then the content received from clicking the link "Download CSV" contains the following strings:
       | Date;Type;Message;User;Actor                                                                  |
+      | "16/07/2024 - 06:11";"Unflag interoperable";Unflagged;"Dave Crash";                           |
+      | "16/07/2024 - 06:28";"Flag interoperable";Flagged;"Dave Crash";                               |
       | "16/07/2024 - 07:34";"Add role to member";"Add x author role";"Andre Munson";"Mary Shotgun"   |
       | "17/07/2024 - 11:21";"Deleted membership";"Delete x membership";"Andre Munson";"Mary Shotgun" |
       | "18/07/2024 - 15:08";"Block membership";"Block x member";"Branson Winthrop";"Mary Shotgun"    |

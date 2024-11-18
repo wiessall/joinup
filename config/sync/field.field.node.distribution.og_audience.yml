@@ -4,8 +4,9 @@ status: true
 dependencies:
   config:
     - field.storage.node.og_audience
+    - node.type.collection
     - node.type.distribution
-    - rdf_entity.rdfentity.solution
+    - node.type.solution
   module:
     - og
 id: node.distribution.og_audience
@@ -19,13 +20,14 @@ translatable: false
 default_value: {  }
 default_value_callback: ''
 settings:
-  handler: 'default:rdf_entity'
+  handler: 'default:node'
   handler_settings:
     target_bundles:
+      collection: collection
       solution: solution
     sort:
       field: _none
       direction: ASC
     auto_create: false
-    auto_create_bundle: release
+    auto_create_bundle: collection
 field_type: og_standard_reference

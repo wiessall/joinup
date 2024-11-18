@@ -5,9 +5,9 @@ Feature: Landing custom page.
   I need to be able to manage "Landing Custom Page" content through UI.
 
   Scenario: Manage custom landing pages
-    Given collection:
-      | title | Roman law |
-      | state | published |
+    Given collection content:
+      | title     | state     |
+      | Roman law | published |
     And custom_page content:
       | title                       | collection | state     |
       | Early law and jurisprudence | Roman law  | published |
@@ -23,7 +23,8 @@ Feature: Landing custom page.
     When I click "Add custom landing page"
     And the following field should be present "URL alias"
     And I fill in the following:
-      | Title | Twelve Tables |
+      | Title    | Twelve Tables          |
+      | Abstract | Twelve tables abstract |
     And I select "Data gathering and processing" from "Topic"
     And I press "Publish"
 

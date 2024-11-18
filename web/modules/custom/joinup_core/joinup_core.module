@@ -26,11 +26,13 @@ use Drupal\joinup_core\Entity\OutdatedContentInterface;
 use Drupal\joinup_core\Plugin\Field\FieldType\OutdatedContentFieldItemList;
 use Drupal\joinup_core\Plugin\Field\FieldType\PermalinkFieldItemList;
 use Drupal\joinup_core\Plugin\Field\FieldWidget\ImageLibraryWidget;
+use Drupal\joinup_core\Plugin\views\JoinupVboBulkForm;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\joinup_workflow\ArchivableEntityInterface;
 use Drupal\link\LinkItemInterface;
 use Drupal\node\NodeInterface;
 use Drupal\symfony_mailer_lite\Plugin\Mail\SymfonyMailer;
+use Drupal\views_bulk_operations\Plugin\views\field\ViewsBulkOperationsBulkForm;
 
 /**
  * Implements hook_theme().
@@ -312,7 +314,6 @@ function joinup_core_get_etrans_block_config_for_current_page(array &$build = []
   $contexts = $context_repository->getRuntimeContexts(
     [
       '@node.node_route_context:node',
-      '@rdf_entity.rdf_entity_route_context:rdf_entity',
     ]
   );
   $cachableMetadata = CacheableMetadata::createFromRenderArray($build);
@@ -448,7 +449,6 @@ function joinup_core_entity_view_alter(array &$build, EntityInterface $entity, E
 function joinup_core_menu_local_tasks_alter(&$data, $route_name, RefinableCacheableDependencyInterface &$cacheability): void {
   $routes = [
     'entity.node.canonical',
-    'entity.rdf_entity.canonical',
     'entity.user.canonical',
   ];
   if (in_array($route_name, $routes) && isset($data['tabs'][0][$route_name])) {
@@ -489,4 +489,19 @@ function joinup_core_mail_alter(&$message): void {
   // in HTML mails.
   $html_mail_body = implode(PHP_EOL . PHP_EOL, $message['body']);
   $message['body'] = [Markup::create(_filter_autop($html_mail_body))];
+}
+
+/**
+ * Implements hook_views_plugins_field_alter().
+ *
+ * Restores crucial, but removed features between VBO 4.2.7 and 4.3.2.
+ */
+function joinup_core_views_plugins_field_alter(array &$plugins): void {
+  if (
+    !isset($plugins['views_bulk_operations_bulk_form']) ||
+    $plugins['views_bulk_operations_bulk_form']['class'] !== ViewsBulkOperationsBulkForm::class
+  ) {
+    return;
+  }
+  $plugins['views_bulk_operations_bulk_form']['class'] = JoinupVboBulkForm::class;
 }

@@ -13,31 +13,8 @@ use Drupal\Core\Access\AccessResultInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\contact_information\Entity\ContactInformationInterface;
-use Drupal\joinup_workflow\EntityWorkflowStateInterface;
+use Drupal\joinup_group\Entity\GroupContentInterface;
 use Drupal\owner\Entity\OwnerInterface;
-
-/**
- * Implements hook_ENTITY_TYPE_create_access().
- */
-function state_machine_permissions_rdf_entity_create_access(AccountInterface $account, array $context, string $entity_bundle): AccessResultInterface {
-  $ignored_bundles = ['collection', 'contact_information', 'licence'];
-  if (in_array($entity_bundle, $ignored_bundles)) {
-    return AccessResult::neutral();
-  }
-  if (empty($context['group'])) {
-    return AccessResult::forbidden('Cannot create RDF entities outside a group context.');
-  }
-
-  $workflow_helper = \Drupal::getContainer()->get('joinup_workflow.workflow_helper');
-  /** @var \Drupal\joinup_group\Entity\GroupContentInterface $entity */
-  $entity = \Drupal::entityTypeManager()->getStorage('rdf_entity')->create(['rid' => $entity_bundle]);
-  $entity->setGroup($context['group']);
-  if (empty($workflow_helper->getAvailableTransitions($entity, $account))) {
-    return AccessResult::forbidden('No available transitions for the entity.');
-  }
-
-  return AccessResult::neutral();
-}
 
 /**
  * Implements hook_ENTITY_TYPE_create_access().
@@ -48,7 +25,8 @@ function state_machine_permissions_node_create_access(AccountInterface $account,
     return AccessResult::neutral();
   }
 
-  if (empty($context['group']) && in_array($entity_bundle, ['custom_page', 'licence'], TRUE)) {
+  $ignored_bundles = ['collection', 'contact_information', 'custom_page', 'licence'];
+  if (empty($context['group']) && in_array($entity_bundle, $ignored_bundles, TRUE)) {
     return AccessResult::neutral('Custom pages and licences can be created as individual pages.');
   }
 
@@ -81,18 +59,12 @@ function state_machine_permissions_node_create_access(AccountInterface $account,
 /**
  * Implements hook_ENTITY_TYPE_access().
  */
-function state_machine_permissions_rdf_entity_access(EntityInterface $entity, $operation, AccountInterface $account): AccessResultInterface {
-  if ($operation === 'view' || !$entity instanceof EntityWorkflowStateInterface) {
-    // View permission is already covered.
-    return AccessResult::neutral();
-  }
-  return _state_machine_permissions_check_transition_access($entity, $operation, $account);
-}
-
-/**
- * Implements hook_ENTITY_TYPE_access().
- */
 function state_machine_permissions_node_access(EntityInterface $entity, string $operation, AccountInterface $account): AccessResultInterface {
+  // Group content only allow view operation if the parent is archived.
+  if ($entity instanceof GroupContentInterface && $operation !== 'view' && $entity->hasGroup() && $entity->getGroup()->getWorkflowState() === 'archived') {
+    return AccessResult::forbidden('Cannot update archived content.');
+  }
+
   if (!$entity instanceof ContactInformationInterface && !$entity instanceof OwnerInterface) {
     // This is only for contact information and owner entities.
     return AccessResult::neutral();

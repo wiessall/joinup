@@ -68,7 +68,6 @@ function joinup_stats_invalidate_solution_download_count_cache(MetaEntityInterfa
  */
 function joinup_stats_invalidate_solution_download_count_cache_by_distribution(DistributionInterface $distribution): void {
   if ($distribution->bundle() === 'distribution') {
-    /** @var \Drupal\rdf_entity\RdfInterface $solution */
     if ($solution = $distribution->get('og_audience')->entity) {
       // On solution page we show the sum of all compounded distributions
       // download count. When a distribution download count changes, we need to
@@ -128,7 +127,7 @@ function joinup_stats_form_meta_entity_type_edit_form_alter(array &$form, FormSt
 
   $form['third_party_settings']['joinup_stats'] = [
     '#type' => 'details',
-    '#title' => t('Joinup Statistics'),
+    '#title' => t('Interoperable Europe Portal Statistics'),
     'matomo_method' => [
       '#type' => 'textfield',
       '#title' => t('Matomo method'),
