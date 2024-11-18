@@ -1,4 +1,6 @@
 @use "sass:color";
+// Bootstrap buttons
+@import "@openeuropa/bcl-bootstrap/scss/buttons";
 
 .btn {
   &:not(.btn-link) {
@@ -14,38 +16,9 @@ a.btn-link {
   }
 }
 
-.btn-primary {
-  &:hover {
-    background-color: color.adjust(
-      $primary,
-      $saturation: -23.76%,
-      $lightness: 8.63%
-    );
-  }
-  &:focus,
-  &:active,
-  &.active {
-    color: $white;
-    background-color: $primary-darker;
-  }
-}
-
-.btn-secondary {
-  color: $brand-darker;
-  &:hover {
-    color: $brand-darker;
-    background-color: $secondary-darker;
-  }
-}
-
-.btn-light {
-  color: $primary;
-  &:hover {
-    color: $primary;
-  }
-}
-
-.button--primary {
+.button--primary,
+input.button--primary,
+button.button--primary {
   @extend .btn-primary;
 }
 
@@ -73,4 +46,9 @@ a.btn-link {
     background-color: transparent;
     box-shadow: none;
   }
+}
+
+.dialog-cancel {
+  @extend .btn;
+  @extend .btn-secondary;
 }
