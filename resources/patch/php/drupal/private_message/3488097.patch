@@ -1,0 +1,29 @@
+From d49d3c4387bb3a5c110f2ee256c244dbc3bbc15f Mon Sep 17 00:00:00 2001
+From: Adrian Lorenc <adrian.lorenc@gmail.com>
+Date: Mon, 18 Nov 2024 09:59:16 +0100
+Subject: [PATCH] Remove message id.
+
+---
+ src/Entity/Builder/PrivateMessageViewBuilder.php | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/src/Entity/Builder/PrivateMessageViewBuilder.php b/src/Entity/Builder/PrivateMessageViewBuilder.php
+index ebb5339..3ccf3c0 100644
+--- a/src/Entity/Builder/PrivateMessageViewBuilder.php
++++ b/src/Entity/Builder/PrivateMessageViewBuilder.php
+@@ -75,12 +75,10 @@ class PrivateMessageViewBuilder extends EntityViewBuilder {
+     $classes = ['private-message'];
+     $classes[] = 'private-message-' . $view_mode;
+     $classes[] = 'private-message-author-' . ($this->currentUser->id() == $entity->getOwnerId() ? 'self' : 'other');
+-    $id = 'private-message-' . $entity->id();
+ 
+     $build['wrapper'] = [
+       '#type' => 'container',
+       '#attributes' => [
+-        'id' => $id,
+         'data-message-id' => $entity->id(),
+         'class' => $classes,
+       ],
+-- 
+GitLab
+
