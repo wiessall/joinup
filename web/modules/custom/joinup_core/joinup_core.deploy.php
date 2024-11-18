@@ -15,30 +15,17 @@
 declare(strict_types=1);
 
 /**
- * Remove hard bounced emails (aka “permanent” bounces).
+ * Fix solution nodes having wrong default_langcode after joinup 2.0 migration.
  */
-function joinup_core_deploy_200000(array &$sandbox): string {
-  if (empty($sandbox['usernames'])) {
-    $sandbox['usernames'] = str_getcsv(file_get_contents(__DIR__ . "/fixtures/bounce_username.csv"));
-    $sandbox['progress'] = 0;
-    $sandbox['total'] = count($sandbox['usernames']);
+function joinup_core_deploy_200100(): void {
+  $database = \Drupal::database();
+  $tables = ['node_field_data', 'node_field_revision'];
+  foreach ($tables as $table) {
+    $database->query("
+      UPDATE {{$table}} n
+      JOIN (SELECT nid, vid FROM {{$table}} GROUP BY nid, vid HAVING COUNT(*) = 1) AS grouped
+      ON n.nid = grouped.nid AND n.vid = grouped.vid
+      SET n.default_langcode = 1;
+    ");
   }
-
-  $usernames = array_splice($sandbox['usernames'], 0, 50);
-
-  foreach ($usernames as $username) {
-    $user = user_load_by_name($username);
-    if ($user) {
-      $edit = ['user_cancel_notify' => FALSE];
-      // Call the user_cancel to cancel and log.
-      user_cancel($edit, $user->id(), 'joinup_user_cancel');
-    }
-    else {
-      \Drupal::logger('joinup_core')->warning('No user found for username: @username', ['@username' => $username]);
-    }
-    $sandbox['progress']++;
-  }
-
-  $sandbox['#finished'] = $sandbox['progress'] / $sandbox['total'];
-  return "Progress: {$sandbox['progress']}/{$sandbox['total']} of users.";
 }

@@ -7,8 +7,6 @@
 
 declare(strict_types=1);
 
-use Drupal\user\Entity\User;
-
 /**
  * Implements hook_requirements().
  *
@@ -20,23 +18,7 @@ function joinup_core_requirements($phase): array {
   $requirements = [];
 
   if ($phase === 'runtime') {
-    // Check if UID 1 is blocked. Not allowing to log in as the root user
-    // greatly decreases the chances of a privilege escalation bug to do real
-    // damage on production.
-    /** @var \Drupal\user\UserInterface $uid1 */
-    $uid1 = User::load(1);
-    if ($uid1->isActive()) {
-      $requirements['joinup_core_root_user_blocked'] = [
-        'title' => t('Root user access'),
-        'description' => t('Allowing to log in as the root user on production is a security risk.'),
-        'severity' => REQUIREMENT_ERROR,
-        'value' => t('Root user is not blocked'),
-      ];
-    }
-
-    /** @var \Drupal\Core\Extension\ModuleHandlerInterface $module_handler */
-    $module_handler = \Drupal::service('module_handler');
-    if ($module_handler->moduleExists('dblog')) {
+    if (\Drupal::moduleHandler()->moduleExists('dblog')) {
       $requirements['joinup_core_dblog'] = [
         'title' => t('Database logging'),
         'description' => t('On production environments logs should be written to a file, not to the database.'),

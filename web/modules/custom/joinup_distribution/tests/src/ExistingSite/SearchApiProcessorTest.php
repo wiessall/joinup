@@ -16,15 +16,15 @@ class SearchApiProcessorTest extends JoinupExistingSiteTestBase {
    * Tests that a file having ftp:// as scheme can be indexed.
    */
   public function testFtpScheme(): void {
-    $solution = $this->createRdfEntity([
-      'rid' => 'solution',
-      'field_is_state' => 'published',
-      'label' => $this->randomMachineName(),
+    $solution = $this->createNode([
+      'type' => 'solution',
+      'field_state' => 'published',
+      'title' => $this->randomMachineName(),
       // Ensure a parent collection.
-      'collection' => $this->createRdfEntity([
-        'rid' => 'collection',
-        'label' => $this->randomString(),
-        'field_ar_state' => 'published',
+      'og_audience' => $this->createNode([
+        'type' => 'collection',
+        'title' => $this->randomString(),
+        'field_state' => 'published',
       ]),
     ]);
     $distribution = $this->createNode([

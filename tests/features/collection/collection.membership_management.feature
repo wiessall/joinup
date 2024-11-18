@@ -1,8 +1,8 @@
-@api @joinup_collection @group-a
-Feature: Tests membership to Joinup collection.
+@api @group-a
+Feature: Tests membership to Interoperable Europe Portal collection.
 
   Background:
-    Given the following collections:
+    Given collection content:
       | title                   | state     |
       | An arbitrary collection | published |
 

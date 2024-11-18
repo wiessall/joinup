@@ -20,7 +20,7 @@ interface JoinupGroupManagerInterface {
    * @param \Drupal\Core\Session\AccountInterface $user
    *   The user to retrieve memberships for.
    *
-   * @return \Drupal\rdf_entity\Entity\Rdf[]
+   * @return \Drupal\joinup_group\Entity\GroupInterface[]
    *   An array of collections.
    */
   public function getGroupsWhereSoleOwner(AccountInterface $user): array;

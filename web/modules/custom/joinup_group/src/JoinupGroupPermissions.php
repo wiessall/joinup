@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Drupal\joinup_group;
 
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\og\GroupTypeManagerInterface;
-use Drupal\rdf_entity\Entity\RdfEntityType;
 use Drupal\state_machine\WorkflowManagerInterface;
 use Drupal\state_machine_permissions\StateMachinePermissionStringConstructor;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -19,28 +19,11 @@ class JoinupGroupPermissions implements ContainerInjectionInterface {
 
   use StringTranslationTrait;
 
-  /**
-   * The OG group type manager.
-   */
-  protected GroupTypeManagerInterface $groupTypeManager;
-
-  /**
-   * The workflow manager service.
-   */
-  protected WorkflowManagerInterface $workflowManager;
-
-  /**
-   * Creates a new JoinupGroupPermissions object.
-   *
-   * @param \Drupal\og\GroupTypeManagerInterface $groupTypeManager
-   *   The OG group type manager.
-   * @param \Drupal\state_machine\WorkflowManagerInterface $workflow_manager
-   *   The workflow manager service.
-   */
-  public function __construct(GroupTypeManagerInterface $groupTypeManager, WorkflowManagerInterface $workflow_manager) {
-    $this->groupTypeManager = $groupTypeManager;
-    $this->workflowManager = $workflow_manager;
-  }
+  public function __construct(
+    protected readonly GroupTypeManagerInterface $groupTypeManager,
+    protected readonly WorkflowManagerInterface $workflowManager,
+    protected readonly EntityTypeManagerInterface $entityTypeManager,
+  ) {}
 
   /**
    * {@inheritdoc}
@@ -49,6 +32,7 @@ class JoinupGroupPermissions implements ContainerInjectionInterface {
     return new static(
       $container->get('og.group_type_manager'),
       $container->get('plugin.manager.workflow'),
+      $container->get('entity_type.manager'),
     );
   }
 
@@ -60,9 +44,8 @@ class JoinupGroupPermissions implements ContainerInjectionInterface {
    */
   public function groupOwnershipPermissions(): array {
     $permissions = [];
-    $bundle_ids = $this->groupTypeManager->getGroupBundleIdsByEntityType('rdf_entity');
-    /** @var \Drupal\rdf_entity\RdfEntityTypeInterface[] $bundles */
-    $bundles = RdfEntityType::loadMultiple($bundle_ids);
+    $bundle_ids = $this->groupTypeManager->getGroupBundleIdsByEntityType('node');
+    $bundles = $this->entityTypeManager->getStorage('node_type')->loadMultiple($bundle_ids);
     foreach ($bundles as $bundle_id => $bundle) {
       $permissions["administer $bundle_id ownership"] = [
         'title' => $this->t('Administer @plural_label ownership', ['@plural_label' => $bundle->getPluralLabel()]),

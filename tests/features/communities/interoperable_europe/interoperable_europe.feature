@@ -116,3 +116,15 @@ Feature:
     # The search bar icon has a hidden accessibility label "Toggle search box".
     And I press "Toggle search box"
     And I enter "About" in the search bar and press enter
+
+  Scenario: Member management links appear in the members page.
+    When I am logged in as a facilitator of the "Interoperable Europe" collection
+    And I go to "/interoperable-europe/members"
+    When I check the box "I agree to the Legal notice document"
+    And I press "Submit"
+
+    Then I should see the following links:
+      | Invite members   |
+      | Add announcement |
+    # Add members is not available for facilitators, only moderators.
+    But I should not see the link "Add members"

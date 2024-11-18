@@ -19,18 +19,11 @@ class ReplicateContext extends RawDrupalContext {
    *
    * @param string $entityLabel
    *   The label of the entity.
-   * @param string $entityType
-   *   The type of the entity.
    *
-   * @When I visit the replicate path of the :entityLabel :entityType
+   * @When I visit the replicate path of the :entityLabel content
    */
-  public function visitSolution(string $entityLabel, string $entityType): void {
-    $entityType = match ($entityType) {
-      'content' => 'node',
-      'rdf entity', 'rdf' => 'rdf_entity',
-      default => $entityType,
-    };
-    $entity = $this->getEntityByLabel($entityType, $entityLabel);
+  public function visitReplicationPath(string $entityLabel): void {
+    $entity = $this->getEntityByLabel('node', $entityLabel);
     $canonical = (string) $entity->toUrl()->toString();
     $this->visitPath($canonical . '/replicate');
   }

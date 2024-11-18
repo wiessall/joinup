@@ -3,8 +3,11 @@ langcode: en
 status: true
 dependencies:
   module:
+    - field_permissions
     - node
-    - rdf_entity
+third_party_settings:
+  field_permissions:
+    permission_type: public
 _core:
   default_config_hash: oAbzlw73NN2z6OLcp6SFKIl9usv1zWNKuoKKdcs5qqo
 id: node.field_shared_in
@@ -12,7 +15,7 @@ field_name: field_shared_in
 entity_type: node
 type: entity_reference
 settings:
-  target_type: rdf_entity
+  target_type: node
 module: core
 locked: false
 cardinality: -1

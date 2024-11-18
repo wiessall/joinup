@@ -12,35 +12,41 @@ joinup_invite.update_invitation:
       invitation:
         type: entity:invitation
 
-entity.rdf_entity.members.invite:
-  path: 'rdf_entity/{rdf_entity}/members/invite'
+entity.node.members.invite:
+  path: '/node/{node}/members/invite'
   defaults:
     _form: '\Drupal\joinup_invite\Form\InviteToGroupForm'
     _title: 'Invite members'
   requirements:
     _og_user_access_group: 'manage members'
-    _joinup_group: 'TRUE'
+    _archived_group: 'TRUE'
   options:
     parameters:
-      rdf_entity:
-        type: entity:rdf_entity
-    _og_entity_type_id: rdf_entity
+      node:
+        type: entity:node
+        bundles:
+          - collection
+          - solution
+    _og_entity_type_id: node
 
 # We have special styling for add forms so use "add_member" instead of just "add" to avoid the styling.
 # @see: _joinup_is_create_form_route
-entity.rdf_entity.members.add_members:
-  path: 'rdf_entity/{rdf_entity}/members/add'
+entity.node.members.add_members:
+  path: '/node/{node}/members/add'
   defaults:
     _form: '\Drupal\joinup_invite\Form\AddToGroupForm'
     _title: 'Add members'
   requirements:
     _permission: 'manage group add members'
-    _joinup_group: 'TRUE'
+    _archived_group: 'TRUE'
   options:
     parameters:
-      rdf_entity:
-        type: entity:rdf_entity
-    _og_entity_type_id: rdf_entity
+      node:
+        type: entity:node
+        bundles:
+          - collection
+          - solution
+    _og_entity_type_id: node
 
 joinup_invite.user_auto_complete:
   path: 'joinup_invite/user_auto_complete'

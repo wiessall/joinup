@@ -1,0 +1,21 @@
+uuid: 94a25301-6cb4-4178-a2df-103e7ba86768
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.list_related_entities
+    - node.type.solution
+id: node.solution.list_related_entities
+field_name: list_related_entities
+entity_type: node
+bundle: solution
+label: 'Show solutions related by EIRA terms'
+description: 'If checked, solutions related by EIRA terms ("Solution type" field) will be displayed in the <em>Related solutions</em> section'
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  on_label: 'Solutions related by type will be displayed in the "Related solutions" section'
+  off_label: 'Solutions related by type will not be displayed in the "Related solutions" section'
+field_type: boolean

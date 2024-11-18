@@ -3,9 +3,9 @@ Feature: View discussion API
   As a visitor of the website I can view a discussion content.
 
   Scenario: Programmatically create a discussion
-    And the following collection:
-      | title | Parallel programming |
-      | state | published            |
+    And collection content:
+      | title                | state     |
+      | Parallel programming | published |
     Given discussion content:
       | title                | content                  | collection           | state     |
       | Fearless concurrency | Let us have a discussion | Parallel programming | published |

@@ -4,9 +4,9 @@ Feature:
   I need to be able to use "Webform" paragraph for content.
 
   Background:
-    Given the following collection:
-      | title | Webform collection |
-      | state | published          |
+    Given collection content:
+      | title              | state     |
+      | Webform collection | published |
     And users:
       | Username   | E-mail                 | First name | Family name |
       | john.smith | john.smith@example.com | John       | Smith       |
@@ -17,8 +17,8 @@ Feature:
       | id           | title        | elements                                           |
       | test_webform | Test webform | [{"#type": "textfield", "#title": "Test element"}] |
     Given custom_page content:
-      | title           | collection         | state     |
-      | Webform example | Webform collection | published |
+      | title           | collection         | state     | abstract                 |
+      | Webform example | Webform collection | published | Webform example abstract |
     And I append "layout" to "field_paragraphs_body" field in "node" entity with following "Webform example" title:
       | behavior_settings | a:3:{s:17:"layout_paragraphs";a:4:{s:6:"layout";s:13:"layout_onecol";s:6:"config";a:1:{s:5:"label";s:0:"";}s:11:"parent_uuid";N;s:6:"region";N;}s:16:"background_theme";a:0:{}s:11:"extra_class";a:0:{}} |
 

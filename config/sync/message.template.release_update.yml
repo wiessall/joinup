@@ -11,7 +11,7 @@ label: 'Solution release update'
 description: 'Template 18: Solution release update'
 text:
   -
-    value: 'Joinup: A release has been updated'
+    value: 'Interoperable Europe Portal: A release has been updated'
     format: full_html
   -
     value: '<p>The release @entity:title, @entity:release_number of the solution @group:title was updated.</p>'

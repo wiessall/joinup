@@ -9,7 +9,7 @@ label: 'Solution blacklist'
 description: 'Template 13: Blacklist a solution'
 text:
   -
-    value: 'Joinup: Your interoperability solution is blacklisted'
+    value: 'Interoperable Europe Portal: Your interoperability solution is blacklisted'
     format: full_html
   -
     value: |-

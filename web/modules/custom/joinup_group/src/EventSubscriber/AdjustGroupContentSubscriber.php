@@ -23,10 +23,7 @@ class AdjustGroupContentSubscriber implements EventSubscriberInterface {
    */
   public static function getSubscribedEvents(): array {
     return [
-      SearchApiEvents::QUERY_PRE_EXECUTE . '.search_api_field_field_collection_content' => [
-        ['queryAlter'],
-      ],
-      SearchApiEvents::QUERY_PRE_EXECUTE . '.search_api_field_field_is_content' => [
+      SearchApiEvents::QUERY_PRE_EXECUTE . '.search_api_field_listing_content' => [
         ['queryAlter'],
       ],
     ];

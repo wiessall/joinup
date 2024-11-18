@@ -5,16 +5,15 @@ Feature:
   I need to be able to place paragraphs for content.
 
   Background:
-    Given the following collection:
-      | title | Paragraphs collection |
-      | state | published             |
-      | topic | HR                    |
+    Given collection content:
+      | title                 | state     | topic |
+      | Paragraphs collection | published | HR    |
 
   @javascript
   Scenario: Custom page content is trimmed properly.
     Given custom_page content:
-      | title          | collection            | state     |
-      | Popular quotes | Paragraphs collection | published |
+      | title          | collection            | state     | abstract            |
+      | Popular quotes | Paragraphs collection | published | Tiles page abstract |
     And I append "text" to "field_paragraphs_body" field in "node" entity with following "Popular Quotes" title:
       | field_body:value  |     That's one small step for a man, a giant leap for mankind. |
       | field_body:format | text_html                                                      |
@@ -22,7 +21,8 @@ Feature:
     And I am on the homepage
     And I enter "mankind" in the search bar and press enter
     # Regression test that text is trimmed properly.
-    Then the response should contain ">That's one small step for a man, a giant leap for mankind.<"
+    # After ISAICP-9140 shows the abstract field.
+    Then the response should contain "Tiles page abstract"
 
   Scenario: Table is visible.
     Given custom_page content:
@@ -59,7 +59,7 @@ Feature:
       | Anchor link | Paragraphs collection | published |
     And I append "text" to "field_paragraphs_body" field in "node" entity with following "Anchor link" title:
       | field_body:value  | <a id="anchorlinkid"></a> |
-      | field_body:format | text_html                                                         |
+      | field_body:format | text_html                 |
 
     When I go to the "Anchor link" custom page
     Then the response should contain "<a id=\"anchorlinkid\"></a>"

@@ -13,6 +13,7 @@ use Drupal\Core\TempStore\PrivateTempStore;
 use Drupal\Core\TempStore\PrivateTempStoreFactory;
 use Drupal\joinup_group\Entity\GroupInterface;
 use Drupal\og\Entity\OgMembership;
+use Drupal\og\OgMembershipInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -88,9 +89,10 @@ class TransferGroupOwnershipAction extends ActionBase implements ContainerFactor
     // We only allow one user to pickup the membership.
     if (count($memberships) > 1) {
       $membership = reset($memberships);
-      $this->messages['warning'][] = $this->t('You cannot transfer the @label ownership to more than one user. Please select a single user.', [
-        '@label' => $membership->getGroup()->get('rid')->entity->getSingularLabel(),
-      ]);
+      $this->messages['warning'][] = $this->t(
+        'You cannot transfer the @label ownership to more than one user. Please select a single user.',
+        static::getDefaultMessageArguments($membership),
+      );
     }
     parent::executeMultiple($memberships);
   }
@@ -105,11 +107,10 @@ class TransferGroupOwnershipAction extends ActionBase implements ContainerFactor
 
     // Is the selected member already the owner?
     if ($group->isGroupOwner((int) $user->id())) {
-      $this->messages['warning'][] = $this->t('Member %member is already the owner of %group @label. Please select other user.', [
-        '%member' => $user->label(),
-        '%group' => $group->label(),
-        '@label' => $group->get('rid')->entity->getSingularLabel(),
-      ]);
+      $this->messages['warning'][] = $this->t(
+        'Member %member is already the owner of %group @label. Please select other user.',
+        static::getDefaultMessageArguments($membership),
+      );
     }
 
     // After validating, store the data in the user private tempstore. We'll
@@ -154,6 +155,28 @@ class TransferGroupOwnershipAction extends ActionBase implements ContainerFactor
     return $account->hasPermission("administer {$group->bundle()} ownership") ||
       // Or the user is the current group owner.
       $group->isGroupOwner((int) $account->id());
+  }
+
+  /**
+   * Returns the default arguments for messaging.
+   *
+   * @param \Drupal\og\OgMembershipInterface $membership
+   *   The membership object.
+   *
+   * @return array
+   *   The default arguments for messaging:
+   *   - '%group': the label of the group the membership belongs to.
+   *   - '@label': the group's singular label from its bundle entity.
+   *   - '%member': the display name of the membership's owner.
+   */
+  protected static function getDefaultMessageArguments(OgMembershipInterface $membership): array {
+    $group = $membership->getGroup();
+    $bundleKey = $group->getEntityType()->getKey('bundle');
+    return [
+      '%member' => $membership->getOwner()->getDisplayName(),
+      '%group' => $group->label(),
+      '@label' => $group->get($bundleKey)->entity->getSingularLabel(),
+    ];
   }
 
 }

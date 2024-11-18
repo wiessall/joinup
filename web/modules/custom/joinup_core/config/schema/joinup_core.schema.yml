@@ -133,6 +133,10 @@ field.formatter.settings.joinup_core_more_in_modal:
       type: string
       label: 'Display mode to use for rendering'
 
+field.formatter.settings.iframe_with_consent_declaration:
+  type: field.formatter.settings.iframe_default
+  label: 'Formatter "iframe_with_consent_declaration"'
+
 field.widget.settings.email_legacy_multicardinality:
   type: field.widget.settings.email_default
 

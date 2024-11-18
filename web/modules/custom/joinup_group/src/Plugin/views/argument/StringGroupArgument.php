@@ -11,10 +11,17 @@ use Drupal\views\Plugin\views\argument\StringArgument;
  *
  * @ingroup views_argument_handlers
  *
+ * @todo Remove this in ISAICP-8573.
+ *
  * @ViewsArgument("og_audience_group")
  */
 class StringGroupArgument extends StringArgument {
 
-  use DecodeRdfEntityIdArgumentTrait;
+  /**
+   * {@inheritdoc}
+   */
+  public function setArgument($arg): bool {
+    return $arg ? parent::setArgument($arg) : FALSE;
+  }
 
 }

@@ -8,6 +8,9 @@
 declare(strict_types=1);
 
 use Drupal\Core\Cache\CacheableMetadata;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\collection\Entity\CollectionInterface;
+use Drupal\joinup_collection\JoinupCollectionHelper;
 use Drupal\joinup_test\Utils\TestUtils;
 
 /**
@@ -55,4 +58,23 @@ function joinup_test_honeypot_form_protections_alter(array &$options, array $for
   if (!$honeypot_settings->get('form_settings')) {
     $options = [];
   }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_presave().
+ */
+function joinup_test_node_presave(EntityInterface $entity): void {
+  if (!$entity instanceof CollectionInterface) {
+    return;
+  }
+
+  if ($entity->isNew() || $entity->getUri() !== JoinupCollectionHelper::JOINUP_COLLECTION_URI) {
+    return;
+  }
+
+  // Ensure the changed date does not change. This mainly reverts the change
+  // done by `\collection_node_delete()` for the Joinup test collection so that
+  // tests can be predictable.
+  // @see \collection_node_delete().
+  $entity->setChangedTime($entity->original->getChangedTime());
 }

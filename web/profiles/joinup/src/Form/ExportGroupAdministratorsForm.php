@@ -17,18 +17,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class ExportGroupAdministratorsForm extends ExportBatchedDataFormBase {
 
-  /**
-   * Constructs an ExportUserListForm.
-   *
-   * @param \Drupal\Core\Cache\CacheBackendInterface $cache
-   *   The default cache bin.
-   * @param \Drupal\Core\Datetime\DateFormatterInterface $dateFormatter
-   *   The date formatter service.
-   * @param \Drupal\Component\Datetime\TimeInterface $time
-   *   The time service.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *   The entity type manager.
-   */
   public function __construct(protected CacheBackendInterface $cache, protected DateFormatterInterface $dateFormatter, protected TimeInterface $time, protected EntityTypeManagerInterface $entityTypeManager) {
     parent::__construct($cache, $dateFormatter, $time);
   }
@@ -86,8 +74,8 @@ class ExportGroupAdministratorsForm extends ExportBatchedDataFormBase {
       ->getQuery()
       ->accessCheck(FALSE);
     $membership_or = $membership_query->orConditionGroup()
-      ->condition('roles', 'rdf_entity-collection-facilitator')
-      ->condition('roles', 'rdf_entity-solution-facilitator');
+      ->condition('roles', 'node-collection-facilitator')
+      ->condition('roles', 'node-solution-facilitator');
     $membership_ids = $this->entityTypeManager->getStorage('og_membership')
       ->getQuery()
       ->accessCheck(FALSE)
@@ -140,7 +128,7 @@ class ExportGroupAdministratorsForm extends ExportBatchedDataFormBase {
     $user_url = $user->toUrl()->setAbsolute()->toString();
     $group_label = $group->label();
     $group_url = $group->toUrl()->setAbsolute()->toString();
-    $is_administrator = (string) ($membership->hasRole("rdf_entity-{$group->bundle()}-administrator") ? $this->t('Yes') : $this->t('No'));
+    $is_administrator = (string) ($membership->hasRole("node-{$group->bundle()}-administrator") ? $this->t('Yes') : $this->t('No'));
 
     $context['results']['data'][$membership->id()] = [
       'User name' => $user->getDisplayName(),

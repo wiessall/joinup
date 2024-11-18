@@ -9,10 +9,10 @@ Feature: Asset distribution editing.
       | Username     | E-mail                   | First name | Family name | Roles |
       | Gregg Hill   | Gregg.Hill@example.com   | Gregg      | Hill        |       |
       | Pedro Torres | Pedro.Torres@example.com | Pedro      | Torres      |       |
-    And the following collection:
-      | title | Collection example |
-      | state | published          |
-    And the following solutions:
+    And collection content:
+      | title              | state     |
+      | Collection example | published |
+    Given solution content:
       | title      | collection         | description        | state     |
       | Solution A | Collection example | Sample description | published |
       | Solution B | Collection example | Sample description | published |
@@ -23,7 +23,7 @@ Feature: Asset distribution editing.
       | title                 | release number | release notes       | is version of |
       | Asset release example | C3PO           | Release description | Solution A    |
     And distribution content:
-      | title                      | description        | licence | access url | release               | state     | publication date | modification date |
+      | title                      | description        | licence | access url | release               | state     | published at     | modification date |
       | Asset distribution example | Sample description | LGPL    | test.zip   | Asset release example | published | 2019-11-19       | 2021-11-19        |
     And the following solution user membership:
       | solution   | user         | roles       |
@@ -37,15 +37,15 @@ Feature: Asset distribution editing.
 
     When I am logged in as a facilitator of the "Solution B" solution
     And I go to the homepage of the "Asset distribution example" distribution
-    Then I should not see the link "Edit" in the optional "Entity actions" region
+    Then I should not see the link "Edit" in the "Entity actions" region
 
     When I am logged in as an "authenticated user"
     And I go to the homepage of the "Asset distribution example" distribution
-    Then I should not see the link "Edit" in the optional "Entity actions" region
+    Then I should not see the link "Edit" in the "Entity actions" region
 
     When I am an anonymous user
     And I go to the homepage of the "Asset distribution example" distribution
-    Then I should not see the link "Edit" in the optional "Entity actions" region
+    Then I should not see the link "Edit" in the "Entity actions" region
     And I should see the text "Published on: 19/11/2019"
     And I should see the text "Last update: 19/11/2021"
 
@@ -73,9 +73,9 @@ Feature: Asset distribution editing.
     Then I should see the heading "Asset distribution example revised"
     And the following email should have been sent:
       | recipient | Gregg Hill                                                                                                                                          |
-      | subject   | Joinup: A distribution has been updated                                                                                                             |
+      | subject   | Interoperable Europe Portal: A distribution has been updated                                                                                                             |
       | body      | The distribution Asset distribution example revised of the release Asset release example, C3PO of the solution Solution A was successfully updated. |
     And the following email should have been sent:
       | recipient | Pedro Torres                                                                                                                                        |
-      | subject   | Joinup: A distribution has been updated                                                                                                             |
+      | subject   | Interoperable Europe Portal: A distribution has been updated                                                                                                             |
       | body      | The distribution Asset distribution example revised of the release Asset release example, C3PO of the solution Solution A was successfully updated. |

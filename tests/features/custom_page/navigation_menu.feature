@@ -5,7 +5,7 @@ Feature: Navigation menu for custom pages
   I need to be able to manage the navigation menu
 
   Scenario Outline: Access the navigation menu through the contextual link
-    Given the following <group>s:
+    Given <group> content:
       | title            | logo     | state     |
       | Rainbow tables   | logo.png | published |
       | Cripple Mr Onion | logo.png | published |
@@ -26,7 +26,8 @@ Feature: Navigation menu for custom pages
     When I click the contextual link "Add new page" in the "Header" region
     Then I should see the heading "Add custom page"
     When I fill in the following:
-      | Title  | About us    |
+      | Title    | About us             |
+      | Abstract | Lorem ipsum abstract |
     And I select "HR" from "Topic"
     And I press "Publish"
     Then I should see the success message "Custom page About us has been created."
@@ -116,9 +117,9 @@ Feature: Navigation menu for custom pages
 
   @javascript
   Scenario: Menus with items that do not fit in available space should be wrapped in a dropdown
-    Given collection:
-      | title | Plaster molds |
-      | state | published     |
+    Given collection content:
+      | title         | state     |
+      | Plaster molds | published |
     And custom_page content:
       | title              | body                   | collection    | state     | topic |
       | Molds for candles  | This is a sample body. | Plaster molds | published | HR    |
@@ -133,9 +134,9 @@ Feature: Navigation menu for custom pages
     But I should not see the text "See more" in the "Navigation menu"
     # A menu with items that do not fit the available space are in a dropdown
     Given custom_page content:
-      | title              | body                   | collection    | state     | topic |
-      | Vintage molds      | This is a sample body. | Plaster molds | published | HR    |
-      | Plaster casting    | This is a sample body. | Plaster molds | published | HR    |
+      | title           | body                   | collection    | state     | topic |
+      | Vintage molds   | This is a sample body. | Plaster molds | published | HR    |
+      | Plaster casting | This is a sample body. | Plaster molds | published | HR    |
     When I go to the "Plaster molds" collection
     Then I should see the text "See more" in the "Navigation menu"
     But I should not see the text "Plaster casting" in the "Navigation menu"
@@ -149,10 +150,9 @@ Feature: Navigation menu for custom pages
     # In order to easily discover that I can manage the items in the navigation menu
     # As a group facilitator
     # I should see a button in the navigation menu that displays options when clicked
-    Given the following <group>:
-      | title | Prism Gazers |
-      | logo  | logo.png     |
-      | state | published    |
+    Given <group> content:
+      | title        | logo     | state     |
+      | Prism Gazers | logo.png | published |
     And custom_page content:
       | title           | body                   | <group>      | state     | topic |
       | Mists of dreams | This is a sample body. | Prism Gazers | published | HR    |
@@ -177,12 +177,12 @@ Feature: Navigation menu for custom pages
       | solution   |
 
   Scenario Outline: Synchronize titles of custom pages and menu links
-    Given the following <group>:
-      | title | Ravenous wood-munching alphabeavers |
-      | state | published                           |
+    Given <group> content:
+      | title                               | state     |
+      | Ravenous wood-munching alphabeavers | published |
     And custom_page content:
-      | title       | body                                                                | <group>                             | topic | state     |
-      | Tree eaters | Given time, they will most likely strip the entire region of trees. | Ravenous wood-munching alphabeavers | HR    | published |
+      | title       | abstract               | body                                                                | <group>                             | topic | state     |
+      | Tree eaters | entire region of trees | Given time, they will most likely strip the entire region of trees. | Ravenous wood-munching alphabeavers | HR    | published |
     When I am logged in as a facilitator of the "Ravenous wood-munching alphabeavers" "<group>"
     And I go to the homepage of the "Ravenous wood-munching alphabeavers" <group>
     Then I should see the link "Tree eaters" in the "Navigation menu"
@@ -202,7 +202,7 @@ Feature: Navigation menu for custom pages
       | solution   |
 
   Scenario Outline: Only the links below the topmost page are rendered in TOC.
-    Given the following <group>s:
+    Given <group> content:
       | title                   | state     |
       | Table of contents group | published |
     And custom_page content:
@@ -300,9 +300,9 @@ Feature: Navigation menu for custom pages
 
   @javascript
   Scenario Outline: Only custom page entries can be nested in the navigation menu.
-    Given the following <group>:
-      | title | Ergonomic backpacks |
-      | state | published           |
+    Given <group> content:
+      | title               | state     |
+      | Ergonomic backpacks | published |
     And custom_page content:
       | title              | <group>             | state     | topic |
       | Types of backpacks | Ergonomic backpacks | published | HR    |
@@ -424,7 +424,7 @@ Feature: Navigation menu for custom pages
       | solution   |
 
   Scenario Outline: Show appropriate menu entries in the table of contents outline.
-    Given the following <group>s:
+    Given <group> content:
       | title                     | state     |
       | Table of contents outline | published |
     And custom_page content:
@@ -511,7 +511,7 @@ Feature: Navigation menu for custom pages
 
   @javascript
   Scenario Outline: Assert cache invalidation of the TOC outline.
-    Given the following <group>s:
+    Given <group> content:
       | title                            | state     |
       | Table of contents outline cached | published |
     And custom_page content:

@@ -464,9 +464,8 @@ Feature:
       | event       | 1           | grid       | published |
       | document    | 1           | list       | published |
       | document    | 1           | grid       | published |
-      # Discussions don't have logos.
-      | discussion  | 0           | list       | published |
-      | discussion  | 0           | grid       | published |
+      | discussion  | 1           | list       | published |
+      | discussion  | 1           | grid       | published |
 
   @javascript
   Scenario: Up to 4 topics should be shown for tile-two view modes.
@@ -564,11 +563,11 @@ Feature:
 
   @javascript
   Scenario: Show abstract instead of description in Collection/Solution tiles.
-    Given collections:
+    Given collection content:
       | title                | abstract         | closed | description                          | state     |
       | Col with abstract    | Magic abstract   | no     | This tree is impervious description. | published |
       | Col without abstract | Another abstract | no     | Magic description.                   | published |
-    Given the following solutions:
+    Given solution content:
       | title             | description              | state     | collection        | abstract                         |
       | Another rough day | Lorem description issum  | published | Col with abstract |                                  |
       | Just another solt | Second description issum | published | Col with abstract | This is an soltion with abstract |

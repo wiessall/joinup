@@ -5,10 +5,10 @@ Feature: Asset distribution overview on solution.
   I need to be able to view the releases of a solution.
 
   Scenario: Releases should be available in the overview page.
-    Given the following collection:
-      | title | End of Past |
-      | state | published   |
-    And the following solutions:
+    Given collection content:
+      | title       | state     |
+      | End of Past | published |
+    Given solution content:
       | title            | collection  | description        | state     |
       | Lovely Butterfly | End of Past | Sample description | published |
 

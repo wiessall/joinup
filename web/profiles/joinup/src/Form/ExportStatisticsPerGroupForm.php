@@ -11,8 +11,8 @@ use Drupal\Core\Datetime\DateFormatterInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\joinup\ExportBatchedDataFormBase;
-use Drupal\solution\Entity\SolutionInterface;
-use Drupal\sparql_entity_storage\Driver\Database\sparql\ConnectionInterface;
+use Drupal\joinup_solution\Entity\SolutionInterface;
+use Drupal\rdf_sync\RdfSyncConnectionInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -20,29 +20,13 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class ExportStatisticsPerGroupForm extends ExportBatchedDataFormBase {
 
-  /**
-   * Constructs an ExportUserListForm.
-   *
-   * @param \Drupal\Core\Cache\CacheBackendInterface $cache
-   *   The default cache bin.
-   * @param \Drupal\Core\Datetime\DateFormatterInterface $dateFormatter
-   *   The date formatter service.
-   * @param \Drupal\Component\Datetime\TimeInterface $time
-   *   The time service.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entityTypeManager
-   *   The entity type manager.
-   * @param \Drupal\Core\Database\Connection $mysql
-   *   The MySQL connection instance.
-   * @param \Drupal\sparql_entity_storage\Driver\Database\sparql\ConnectionInterface $sparql
-   *   The SPARQL connection instance.
-   */
   public function __construct(
     protected CacheBackendInterface $cache,
     protected DateFormatterInterface $dateFormatter,
     protected TimeInterface $time,
     protected EntityTypeManagerInterface $entityTypeManager,
     protected Connection $mysql,
-    protected ConnectionInterface $sparql,
+    protected RdfSyncConnectionInterface $sparql,
   ) {
     parent::__construct($cache, $dateFormatter, $time);
   }
@@ -57,7 +41,7 @@ class ExportStatisticsPerGroupForm extends ExportBatchedDataFormBase {
       $container->get('datetime.time'),
       $container->get('entity_type.manager'),
       $container->get('database'),
-      $container->get('sparql.endpoint'),
+      $container->get('rdf_sync.connection'),
     );
   }
 
@@ -152,8 +136,8 @@ QUERY;
    *   The batch context.
    */
   public function generateGroupStatistics(string $entity_id, array &$context): void {
-    $rdf_storage = $this->entityTypeManager->getStorage('rdf_entity');
-    /** @var \Drupal\collection\Entity\CollectionInterface|\Drupal\solution\Entity\SolutionInterface $group */
+    $rdf_storage = $this->entityTypeManager->getStorage('node');
+    /** @var \Drupal\collection\Entity\CollectionInterface|\Drupal\joinup_solution\Entity\SolutionInterface $group */
     $group = $rdf_storage->load((string) $entity_id);
     // Fetch the nodes that belong to the group.
     $group_content_data = $this->mysql->query(
@@ -257,7 +241,7 @@ QUERY;
   private function getLikesCount(array $entity_ids): string {
     $query = $this->mysql->select('flag_counts', 'fc');
     $query->addExpression('IFNULL(SUM(count), 0)', 'sum');
-    $query->condition('flag_id', ['like_node', 'like_rdf_entity'], 'IN');
+    $query->condition('flag_id', 'like');
     $query->condition('entity_id', $entity_ids, 'IN');
     return $query->execute()->fetchField();
   }

@@ -1,15 +1,9 @@
-# TODO: Remove this route in ISAICP-8376.
-entity.rdf_entity.rdf_export:
-  path: /rdf_entity/{rdf_entity}/export-metadata
+joinup_rdf.uri_converter:
+  path: '/rdf'
   defaults:
-    _controller: Drupal\joinup_rdf\Controller\RdfExportController::downloadLinksLegacy
-    _title: Export RDF Metadata
+    _form: 'Drupal\joinup_rdf\Form\UriConverterForm'
+    _title: 'Entity URI to URL and the other way around'
   requirements:
-    _permission: 'view rdf entity'
+    _permission: 'access uri converter'
   options:
-    parameters:
-      rdf_entity:
-        type: entity:rdf_entity
-        bundle:
-          - collection
-          - solution
+    _admin_route: TRUE

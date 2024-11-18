@@ -12,7 +12,7 @@ dependencies:
 id: ventuno_bookmarkentitybundle
 theme: ventuno
 region: content
-weight: -12
+weight: -10
 provider: null
 plugin: 'facet_block:bookmark_entity_bundle'
 settings:
