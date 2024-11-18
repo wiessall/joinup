@@ -1,12 +1,12 @@
 @api @group-clone
 Feature: Test spatial coverage migration.
 
-  @update:joinup_core_update_200100
+  @update:joinup_core_post_update_200100
   Scenario Outline: Check spatial coverage migration
     Given I am logged in as a moderator
     Then I visit "<url>"
     And I click "Edit" in the "Entity actions" region
-    Then I check values "<values>" in "Geographical coverage"
+    Then the "Geographical coverage" entity reference autocomplete widget should contain values "<values>"
 
     Examples:
       | url                                                                         | values                             |
