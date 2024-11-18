@@ -33,6 +33,7 @@
     text-decoration: none !important;
     &::before {
       @include get-bootstrap-icon("pencil-square", currentColor);
+
       margin-right: $spacer * 0.5;
     }
   }
@@ -127,8 +128,8 @@
       border: none !important;
     }
     a.private_message_report {
-      margin-right: $spacer * 0.5;
       float: right;
+      margin-right: $spacer * 0.5;
       margin-right: 3em;
       text-decoration: none;
       color: $primary;
@@ -141,10 +142,11 @@
       visibility: hidden;
       width: 24px;
       height: 24px;
-      color: $dark;
       margin-top: -1.4em;
+      color: $dark;
       &::before {
         @include get-bootstrap-icon("trash", currentColor);
+
         visibility: visible;
       }
       &:hover {
@@ -173,6 +175,7 @@
         margin-top: 3.4em;
         &::after {
           @include get-bootstrap-icon("send-fill", currentColor);
+
           margin-left: $spacer * 0.4;
         }
       }
@@ -185,6 +188,7 @@
   & + .ui-widget-content button.form-submit {
     &::after {
       @include get-bootstrap-icon("send-fill", currentColor);
+
       margin-left: $spacer * 0.4;
     }
   }
