@@ -180,7 +180,6 @@ content:
     third_party_settings: {  }
 hidden:
   created: true
-  field_document_spatial_coverage: true
   field_shared_in: true
   field_site_featured: true
   langcode: true

@@ -220,7 +220,6 @@ content:
 hidden:
   abstract: true
   featured: true
-  field_event_spatial_coverage: true
   field_keywords: true
   field_organisation: true
   field_organisation_type: true

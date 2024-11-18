@@ -253,7 +253,6 @@ content:
 hidden:
   created: true
   field_event_coordinates: true
-  field_event_spatial_coverage: true
   field_shared_in: true
   field_site_featured: true
   langcode: true

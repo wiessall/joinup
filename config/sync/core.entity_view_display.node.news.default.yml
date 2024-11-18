@@ -184,7 +184,6 @@ hidden:
   abstract: true
   featured: true
   field_keywords: true
-  field_news_spatial_coverage: true
   field_site_featured: true
   field_state: true
   field_topic: true
