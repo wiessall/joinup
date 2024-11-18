@@ -107,7 +107,6 @@ hidden:
   field_event_contact_email: true
   field_event_coordinates: true
   field_event_online_location: true
-  field_event_spatial_coverage: true
   field_event_web_url: true
   field_keywords: true
   field_location: true

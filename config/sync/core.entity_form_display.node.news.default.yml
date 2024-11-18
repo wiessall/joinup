@@ -112,7 +112,9 @@ content:
     weight: 4
     region: content
     settings:
+      view_mode: default
       preview_view_mode: preview
+      form_display_mode: default
       nesting_depth: 0
       require_layouts: 1
       empty_message: ''
@@ -182,7 +184,6 @@ content:
     third_party_settings: {  }
 hidden:
   created: true
-  field_news_spatial_coverage: true
   field_shared_in: true
   field_site_featured: true
   og_audience: true

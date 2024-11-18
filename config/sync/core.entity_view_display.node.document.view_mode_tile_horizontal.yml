@@ -120,7 +120,6 @@ hidden:
   featured: true
   field_comments: true
   field_document_publication_date: true
-  field_document_spatial_coverage: true
   field_file: true
   field_keywords: true
   field_licence: true
