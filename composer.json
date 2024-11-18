@@ -434,7 +434,8 @@
             "drupal/private_message": {
                 "Email notifications contain HTML tags @see https://www.drupal.org/project/private_message/issues/2971692": "resources/patch/php/drupal/private_message/2971692.diff",
                 "Show user display name instead of username everywhere @see https://www.drupal.org/i/3484561": "resources/patch/php/drupal/private_message/3484561.mr133-note404230.diff",
-                "setActiveThread is not called when loading the page private-messages @see https://www.drupal.org/i/3486915": "resources/patch/php/drupal/private_message/3486915.diff"
+                "setActiveThread is not called when loading the page private-messages @see https://www.drupal.org/i/3486915": "resources/patch/php/drupal/private_message/3486915.diff",
+                "Page with threads view and inbox block have two divs with the same ID @see https://www.drupal.org/i/3484828": "resources/patch/php/drupal/private_message/3484828.diff"
             },
             "drupal/private_message_flood": {
                 "Add return type to methods @see https://www.drupal.org/i/3477426": "resources/patch/php/drupal/private_message_flood/3477426.diff"
