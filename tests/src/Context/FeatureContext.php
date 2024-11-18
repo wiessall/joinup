@@ -1020,18 +1020,18 @@ class FeatureContext extends RawDrupalContext {
   /**
    * Check a multi-value field value.
    *
-   * @param string $values
-   *   A comma separated list of values.
    * @param string $field
    *   The name of the field.
+   * @param string $values
+   *   A comma separated list of values.
    *
    * @throws \Exception
    *   When the field cannot be found or the number of values is different from
    *   the number of elements found.
    *
-   * @When I check values :values in :field
+   * @Then the :field entity reference autocomplete widget should contain values :values
    */
-  public function checkFieldWithValues(string $values, string $field): void {
+  public function assertEntityReferenceAutocompleteFieldValues(string $field, string $values): void {
     $values = $this->explodeCommaSeparatedStepArgument($values);
 
     /** @var \Behat\Mink\Element\NodeElement[] $items */
