@@ -157,6 +157,7 @@ Feature: Private messages
     Then I should see "Message field is required." in the "Modal content" region
     And I should see "You can not send a message to yourself only." in the "Modal content" region
 
+  @javascript
   Scenario: User can view a selected thread.
     Given the following private messages:
       | owner   | recipient | message |
@@ -168,3 +169,4 @@ Feature: Private messages
     Then I should see the following texts in private messages:
       | Hello 1 |
       | Hello 2 |
+    And the page meets accessibility standards
