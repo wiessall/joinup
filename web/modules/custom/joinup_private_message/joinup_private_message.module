@@ -12,6 +12,7 @@ use Drupal\Component\Utility\Xss;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\CloseModalDialogCommand;
 use Drupal\Core\Ajax\RedirectCommand;
+use Drupal\Core\Database\Query\AlterableInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
@@ -300,4 +301,19 @@ function joinup_private_message_views_data_alter(array &$data): void {
       'id' => 'private_message_target',
     ],
   ];
+}
+
+/**
+ * Implements hook_query_TAG_alter().
+ */
+function joinup_private_message_query_skip_banned_users_alter(AlterableInterface $query): void {
+  $current_uid = $query->getMetaData('current_user');
+
+  // The user from the query should be excluded if the current user is banned
+  // by them, or that user is banned by the current user. The data are in the
+  // `private_message_ban` table.
+  $query->leftJoin('private_message_ban', 'ban', '(ban.owner = {base_table}.uid AND ban.target = :current_uid) OR (ban.owner = :current_uid AND ban.target = {base_table}.uid)', [
+    ':current_uid' => $current_uid,
+  ]);
+  $query->condition('ban.id', NULL, 'IS NULL');
 }
