@@ -7,9 +7,9 @@ Feature: Private message report.
   @javascript
   Scenario: Report a private message
     Given users:
-      | Username  | First name | Family name | E-mail                | Roles     |
-      | alice_m   | Alice      | Miller      | alice.m@example.com   | Moderator |
-      | bob_rolls | Bob        | Rolls       | bob.rolls@example.com |           |
+      | ID   | Username  | First name | Family name | E-mail                | Roles     |
+      | 900  | alice_m   | Alice      | Miller      | alice.m@example.com   | Moderator |
+      | 9001 | bob_rolls | Bob        | Rolls       | bob.rolls@example.com |           |
 
     Given I am logged in as "alice_m"
     And I am on "/user/messages"
@@ -17,6 +17,11 @@ Feature: Private message report.
     Then a modal should open
     When I type "Bob" in the "To:" autocomplete field
     And I wait for AJAX to finish
+    # Ensure we have waited long enough for the autocomplete list item to
+    # appear. Unfortunately, the AJAX wait above is not enough as there is a
+    # further slight delay between the AJAX request completing and the
+    # autocomplete list item appearing.
+    And I wait until "#private-message-create-form-wrapper + .ui-autocomplete > .ui-menu-item" element exists
     Then I should see the text "Bob Rolls" in the "Private message autocomplete results" region
     When I pick "Bob Rolls" from the "Member" autocomplete suggestions
     And I enter "This is a mean message to Bob." in the "Message" wysiwyg editor
@@ -50,11 +55,25 @@ Feature: Private message report.
     # blocked them.
     When I am logged in as "alice_m"
     And I am on "/user/messages"
+    # Since there is only the thread with bob_rolls, we can already assert that
+    # the wysiwyg editor and the "Send" button are not present.
+    Then the following fields should not be present "Reply"
+    And I should not see the button "Send"
     And I click "New message"
     Then a modal should open
     When I type "Bob" in the "To:" autocomplete field
     And I wait for AJAX to finish
+    # Ensure that the fact that the user cannot be found is not because of
+    # behat checking the markup too soon.
+    And I wait for 1 second
     Then I should not see the text "Bob Rolls" in the "Private message autocomplete results" region
+
+    # Ensure that the user cannot force the user to the recipient list.
+    When I type "Bob Rolls (9001)" in the "To:" autocomplete field
+    And I wait for AJAX to finish
+    And I enter "This is another mean message to Bob." in the "Message" wysiwyg editor
+    And I press "Send" in the "Modal buttons" region
+    Then I should see the error message "You cannot send messages to a user that has blocked you, or was blocked by you."
 
     Given I am logged in as "bob_rolls"
     When I am on "/user/messages/settings"

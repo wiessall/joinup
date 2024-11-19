@@ -45,6 +45,21 @@ class PrivateMessageMemberWidget extends EntityReferenceAutocompleteWidget {
     if (count($form_state->getValue('members')) > 1) {
       $form_state->setError($element, t('Multiple members is not allowed.'));
     }
+
+    if (empty($form_state->getValue('members'))) {
+      return;
+    }
+
+    $targetId = $form_state->getValue('members')['target_id'];
+    if (!is_numeric($targetId) || !\Drupal::entityTypeManager()->getStorage('user')->load($targetId)) {
+      $form_state->setError($element, t('Invalid user.'));
+      return;
+    }
+
+    $currentUserId = \Drupal::currentUser()->id();
+    if (joinup_private_message_ban_exists_between_users((string) $currentUserId, $targetId)) {
+      $form_state->setError($element, t('You cannot send messages to a user that has blocked you, or was blocked by you.'));
+    }
   }
 
   /**
