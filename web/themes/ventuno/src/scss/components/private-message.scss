@@ -130,7 +130,7 @@
     a.private_message_report {
       float: right;
       margin-right: $spacer * 0.5;
-      margin-right: 3em;
+      margin-right: $spacer * 2;
       text-decoration: none;
       color: $primary;
       font-weight: $font-weight-bold;
@@ -139,15 +139,12 @@
       }
     }
     a.private_message_delete {
-      visibility: hidden;
-      width: 24px;
-      height: 24px;
+      min-width: 24px;
+      min-height: 24px;
       margin-top: -1.4em;
       color: $dark;
       &::before {
         @include get-bootstrap-icon("trash", currentColor);
-
-        visibility: visible;
       }
       &:hover {
         color: $primary;
