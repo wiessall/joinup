@@ -14,6 +14,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Mail\MailManager;
+use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\joinup_private_message\Service\PrivateMessageUserServiceInterface;
@@ -140,6 +141,7 @@ class PrivateMessageReportForm extends FormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state): void {
+    $this->messenger()->deleteByType(MessengerInterface::TYPE_ERROR);
     $report = $form_state->getValue('report');
     $blockSender = $form_state->getValue('block_sender');
     $message = $form_state->getValue('private_message');
