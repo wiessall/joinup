@@ -20,16 +20,6 @@ targetEntityType: private_message_thread
 bundle: private_message_thread
 mode: default
 content:
-  clear_history_link:
-    settings: {  }
-    third_party_settings: {  }
-    weight: 1
-    region: content
-  delete_link:
-    settings: {  }
-    third_party_settings: {  }
-    weight: 0
-    region: content
   private_message_form:
     settings: {  }
     third_party_settings: {  }
@@ -60,6 +50,8 @@ content:
     weight: 4
     region: content
 hidden:
+  clear_history_link: true
+  delete_link: true
   last_message: true
   members: true
   no_active_users: true
