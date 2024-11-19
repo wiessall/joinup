@@ -243,7 +243,7 @@ display:
           plugin_id: text
           empty: true
           content:
-            value: "<a href=\"/assessments/questionnaire\" class=\"btn btn-primary\">New Assessment</a>\r\n<a href=\"/assessments/questionnaire/submissions\" class=\"btn btn-secondary\">My assessments</a>"
+            value: '<a href="/assessments/questionnaire" class="btn btn-primary">New assessment</a>'
             format: full_html
           tokenize: false
       footer: {  }
