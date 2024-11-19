@@ -526,6 +526,9 @@ function joinup_group_form_views_exposed_form_alter(array &$form, FormStateInter
       ],
       '#validate_reference' => FALSE,
       '#maxlength' => 1024,
+      '#element_validate' => [
+        'validateAutocompleteWithoutId',
+      ],
       '#default_value' => !empty($form['group']['#default_value']) ? $storage->load($form['group']['#default_value']) : NULL,
     ];
   }
@@ -605,6 +608,34 @@ function joinup_group_form_views_exposed_form_alter(array &$form, FormStateInter
     '#access' => $url->access(),
     '#attached' => ['library' => ['core/drupal.dialog.ajax']],
   ];
+}
+
+/**
+ * Group validation handler for autocomplete field.
+ *
+ * This function validates the input of an entity_autocomplete field,
+ * ensuring that only the title of the entity (e.g., node title) is stored,
+ * and the entity ID is removed from the value. This is useful when the ID
+ * is appended in the format "Title (ID)" by default, but you want to keep
+ * only the title.
+ *
+ * @param array $element
+ *   The form element to be validated. This is the autocomplete field definition.
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ *   The current state of the form.
+ * @param array $form
+ *   The full form structure.
+ */
+function validateAutocompleteWithoutId(array &$element, FormStateInterface $form_state, array &$form): void {
+  $value = $form_state->getValue($element['#parents']);
+
+  // If value is a node, strip the ID.
+  if (!empty($value)) {
+    // Parse the title from the autocomplete value if in "Title (ID)" format.
+    if (preg_match('/^(.*?)\s*\(\d+\)$/', $value, $matches)) {
+      $form_state->setValue($element['#parents'], $matches[1]);
+    }
+  }
 }
 
 /**
