@@ -7,6 +7,7 @@ dependencies:
     - image.style.thumbnail
   module:
     - media
+    - node
     - svg_image
     - user
 _core:
@@ -722,27 +723,26 @@ display:
                 title: Unpublished
                 operator: '='
                 value: '0'
-        og_audience_target_id:
-          id: og_audience_target_id
-          table: media__og_audience
-          field: og_audience_target_id
-          relationship: none
+        title:
+          id: title
+          table: node_field_data
+          field: title
+          relationship: og_audience
           group_type: group
           admin_label: ''
-          plugin_id: numeric
+          entity_type: node
+          entity_field: title
+          plugin_id: string
           operator: '='
-          value:
-            min: ''
-            max: ''
-            value: ''
+          value: ''
           group: 1
           exposed: true
           expose:
-            operator_id: og_audience_target_id_op
+            operator_id: title_op
             label: Group
             description: ''
             use_operator: false
-            operator: og_audience_target_id_op
+            operator: title_op
             operator_limit_selection: false
             operator_list: {  }
             identifier: group
@@ -757,8 +757,6 @@ display:
               moderator: '0'
               administrator: '0'
               developer: '0'
-            min_placeholder: ''
-            max_placeholder: ''
             placeholder: ''
           is_grouped: false
           group_info:
@@ -853,7 +851,16 @@ display:
           distinct: false
           replica: false
           query_tags: {  }
-      relationships: {  }
+      relationships:
+        og_audience:
+          id: og_audience
+          table: media__og_audience
+          field: og_audience
+          relationship: none
+          group_type: group
+          admin_label: 'og_audience: Content'
+          plugin_id: standard
+          required: false
       header: {  }
       footer: {  }
       display_extenders: {  }

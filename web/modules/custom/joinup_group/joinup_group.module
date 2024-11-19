@@ -527,7 +527,7 @@ function joinup_group_form_views_exposed_form_alter(array &$form, FormStateInter
       '#validate_reference' => FALSE,
       '#maxlength' => 1024,
       '#element_validate' => [
-        'validateAutocompleteWithoutId',
+        'joinup_group_validate_autocomplete_without_id',
       ],
       '#default_value' => !empty($form['group']['#default_value']) ? $storage->load($form['group']['#default_value']) : NULL,
     ];
@@ -620,13 +620,13 @@ function joinup_group_form_views_exposed_form_alter(array &$form, FormStateInter
  * only the title.
  *
  * @param array $element
- *   The form element to be validated. This is the autocomplete field definition.
+ *   The form element to be validated (autocomplete field definition).
  * @param \Drupal\Core\Form\FormStateInterface $form_state
  *   The current state of the form.
  * @param array $form
  *   The full form structure.
  */
-function validateAutocompleteWithoutId(array &$element, FormStateInterface $form_state, array &$form): void {
+function joinup_group_validate_autocomplete_without_id(array &$element, FormStateInterface $form_state, array &$form): void {
   $value = $form_state->getValue($element['#parents']);
 
   // If value is a node, strip the ID.
