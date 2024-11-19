@@ -15,9 +15,10 @@ Feature: Private message report.
     And I am on "/user/messages"
     And I click "New message"
     Then a modal should open
-    When I type "Bob Rolls" in the "To:" autocomplete field
+    When I type "Bob" in the "To:" autocomplete field
     And I wait for AJAX to finish
-    And I pick "Bob Rolls" from the "Member" autocomplete suggestions
+    Then I should see the text "Bob Rolls" in the "Private message autocomplete results" region
+    When I pick "Bob Rolls" from the "Member" autocomplete suggestions
     And I enter "This is a mean message to Bob." in the "Message" wysiwyg editor
     And I press "Send" in the "Modal buttons" region
     Then the modal should be closed
@@ -44,6 +45,18 @@ Feature: Private message report.
       | This is a mean message to Bob.                                                                    |
       | Report reason:                                                                                    |
       | I want to report this message.                                                                    |
+
+    # A blocked user should not be able to send messages to the user that
+    # blocked them.
+    When I am logged in as "alice_m"
+    And I am on "/user/messages"
+    And I click "New message"
+    Then a modal should open
+    When I type "Bob" in the "To:" autocomplete field
+    And I wait for AJAX to finish
+    Then I should not see the text "Bob Rolls" in the "Private message autocomplete results" region
+
+    Given I am logged in as "bob_rolls"
     When I am on "/user/messages/settings"
     And I click "Unblock"
     Then a modal should open
