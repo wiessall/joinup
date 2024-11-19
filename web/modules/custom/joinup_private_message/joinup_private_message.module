@@ -182,7 +182,7 @@ function joinup_private_message_private_message_view_alter(array &$build, Entity
       '#type' => 'link',
       '#title' => Markup::create('<span class="visually-hidden">' . t('Delete message') . '</span>'),
       '#url' => $delete_url,
-      '#attributes' => array_merge(
+      '#attributes' => array_merge_recursive(
         _joinup_private_message_get_ajax_modal_attributes(),
         ['class' => ['private_message_delete']]
       ),
