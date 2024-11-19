@@ -22,6 +22,7 @@ use Drupal\Core\Render\Markup;
 use Drupal\Core\Url;
 use Drupal\private_message\Entity\PrivateMessage;
 use Drupal\symfony_mailer_lite\Plugin\Mail\SymfonyMailer;
+use Drupal\user\UserInterface;
 
 /**
  * Implements hook_preprocess_HOOK().
@@ -51,9 +52,27 @@ function joinup_private_message_form_alter(array &$form, FormStateInterface $for
     $current_route_name = \Drupal::routeMatch()->getRouteName();
     if (isset($form['message'])) {
       if ($current_route_name !== 'private_message.private_message_create') {
-        // Change the label from "Message" to "Reply".
-        $form['message']['widget'][0]['#title'] = t('Reply');
+        /** @var \Drupal\private_message\Entity\PrivateMessageThread $thread */
+        $thread = $form_state->getBuildInfo()['args'][0];
+        // Threads in Joinup always have only 2 members.
+        $is_banned = joinup_private_message_ban_exists_between_users(...$thread->getMembersId());
+        if ($is_banned) {
+          $form['message']['widget'][0] = [
+            '#theme' => 'status_messages',
+            '#message_list' => [
+              'warning' => [
+                t('You cannot send messages to a user that has blocked you, or was blocked by you.'),
+              ],
+            ],
+          ];
+          $form['actions']['submit']['#access'] = FALSE;
+        }
+        else {
+          // Change the label from "Message" to "Reply".
+          $form['message']['widget'][0]['#title'] = t('Reply');
+        }
       }
+
       // Set the default format to 'Minimal'
       // and limit the allowed formats to only 'Minimal'.
       $form['message']['widget'][0]['#format'] = 'minimal';
@@ -316,4 +335,63 @@ function joinup_private_message_query_skip_banned_users_alter(AlterableInterface
     ':current_uid' => $current_uid,
   ]);
   $query->condition('ban.id', NULL, 'IS NULL');
+}
+
+/**
+ * Implements hook_entity_predelete().
+ */
+function joinup_private_message_entity_predelete(EntityInterface $entity): void {
+  // In Joinup, threads strictly involve 2 users. If one of them is deleted,
+  // the thread should be deleted as well.
+  if (!$entity instanceof UserInterface) {
+    return;
+  }
+
+  $query = \Drupal::entityQuery('private_message_thread')
+    ->accessCheck(FALSE)
+    ->condition('members', $entity->id());
+  $thread_ids = $query->execute();
+  if (!empty($thread_ids)) {
+    $storage = \Drupal::entityTypeManager()->getStorage('private_message_thread');
+    $storage->delete($storage->loadMultiple($thread_ids));
+  }
+
+  // Delete relevant bans.
+  $query = \Drupal::entityQuery('private_message_ban')
+    ->accessCheck(FALSE);
+  $or = $query->orConditionGroup()
+    ->condition('owner', $entity->id())
+    ->condition('target', $entity->id());
+  $ban_ids = $query->condition($or)
+    ->execute();
+
+  if (!empty($ban_ids)) {
+    $storage = \Drupal::entityTypeManager()->getStorage('private_message_ban');
+    $storage->delete($storage->loadMultiple($ban_ids));
+  }
+}
+
+/**
+ * Returns whether a private message ban exists between two users.
+ *
+ * @param int $user1
+ *   The first user ID.
+ * @param int $user2
+ *   The second user ID.
+ *
+ * @return bool
+ *   TRUE if a ban exists, FALSE otherwise.
+ */
+function joinup_private_message_ban_exists_between_users(string $user1, string $user2): bool {
+  $query = \Drupal::entityQuery('private_message_ban')
+    ->accessCheck(FALSE);
+  $or = $query->orConditionGroup()
+    ->condition('owner', $user1)
+    ->condition('target', $user1);
+  $or->condition('owner', $user2)
+    ->condition('target', $user2);
+  $ban_ids = $query->condition($or)
+    ->execute();
+
+  return !empty($ban_ids);
 }
