@@ -1,0 +1,196 @@
+diff --git a/src/Entity/PrivateMessageThread.php b/src/Entity/PrivateMessageThread.php
+index 2ec93e1397273cf1f47a8d19dba6099b8a3aca56..6caa10f03d807b403ff800649e565ee280177701 100644
+--- a/src/Entity/PrivateMessageThread.php
++++ b/src/Entity/PrivateMessageThread.php
+@@ -114,7 +114,7 @@ class PrivateMessageThread extends ContentEntityBase implements PrivateMessageTh
+   /**
+    * {@inheritdoc}
+    */
+-  public function getMessages() {
++  public function getMessages(bool $include_banned = FALSE) {
+     /** @var \Drupal\private_message\Entity\PrivateMessageInterface[] $raw_messages */
+     $raw_messages = $this->get('private_messages')->referencedEntities();
+     $messages = [];
+@@ -127,7 +127,7 @@ class PrivateMessageThread extends ContentEntityBase implements PrivateMessageTh
+         // This is to ensure that the thread display is not broken.
+         $messages[] = $message;
+       }
+-      elseif (!in_array($message->getOwnerId(), $bannedUsers)) {
++      elseif ($include_banned || !in_array($message->getOwnerId(), $bannedUsers)) {
+         $messages[] = $message;
+       }
+     }
+@@ -404,7 +404,7 @@ class PrivateMessageThread extends ContentEntityBase implements PrivateMessageTh
+    * Delete the thread from the database, as well as all reference entities.
+    */
+   protected function deleteReferencedEntities() {
+-    $messages = $this->getMessages();
++    $messages = $this->getMessages(TRUE);
+     foreach ($messages as $message) {
+       $message->delete();
+     }
+diff --git a/src/Entity/PrivateMessageThreadInterface.php b/src/Entity/PrivateMessageThreadInterface.php
+index 603efff6e9f824d258bff48423955aaf93091c2e..cab0cebb16a66fee55af7448163ed3e084a3a860 100644
+--- a/src/Entity/PrivateMessageThreadInterface.php
++++ b/src/Entity/PrivateMessageThreadInterface.php
+@@ -79,10 +79,14 @@ interface PrivateMessageThreadInterface extends ContentEntityInterface {
+   /**
+    * Retrieve all private messages attached to this thread.
+    *
++   * @param bool $include_banned
++   *   (Optional) Whether to include messages from banned users. Defaults to
++   *   FALSE.
++   *
+    * @return \Drupal\Core\Field\EntityReferenceFieldItemListInterface
+    *   A list of private messages attached to this thread
+    */
+-  public function getMessages();
++  public function getMessages(bool $include_banned = FALSE);
+ 
+   /**
+    * Filter the list down to only the newest messages.
+diff --git a/tests/src/Kernel/EntityDeleteTest.php b/tests/src/Kernel/EntityDeleteTest.php
+new file mode 100644
+index 0000000000000000000000000000000000000000..20e22153a864869a4489843d418d177abe3e4f9d
+--- /dev/null
++++ b/tests/src/Kernel/EntityDeleteTest.php
+@@ -0,0 +1,139 @@
++<?php
++
++declare(strict_types=1);
++
++namespace Drupal\Tests\private_message\Kernel;
++
++use Drupal\KernelTests\KernelTestBase;
++use Drupal\Tests\private_message\Traits\PrivateMessageTestTrait;
++use Drupal\private_message\Entity\PrivateMessageBan;
++use Drupal\private_message\Entity\PrivateMessageThreadInterface;
++use PHPUnit\Framework\Attributes\Group;
++
++/**
++ * Tests deletion of private message entities.
++ */
++#[Group('private_message')]
++final class EntityDeleteTest extends KernelTestBase {
++
++  use PrivateMessageTestTrait;
++
++  /**
++   * {@inheritdoc}
++   */
++  protected static $modules = [
++    'field',
++    'filter',
++    'message',
++    'message_notify',
++    'private_message',
++    'private_message_notify',
++    'system',
++    'text',
++    'user',
++  ];
++
++  /**
++   * The thread.
++   *
++   * @var \Drupal\private_message\Entity\PrivateMessageThreadInterface
++   */
++  protected PrivateMessageThreadInterface $thread;
++
++  /**
++   * {@inheritdoc}
++   */
++  protected function setUp(): void {
++    parent::setUp();
++
++    $this->installEntitySchema('user');
++    $this->installEntitySchema('message');
++    $this->installEntitySchema('private_message_ban');
++    $this->installEntitySchema('private_message_thread');
++    $this->installEntitySchema('private_message');
++    $this->installSchema('private_message', ['pm_thread_history']);
++
++    $this->installConfig([
++      'filter',
++      'message',
++      'message_notify',
++      'private_message_notify',
++    ]);
++
++    $this->createTestingUsers();
++    $this->thread = \Drupal::getContainer()->get('private_message.service')->getThreadForMembers([
++      $this->users['a'],
++      $this->users['b'],
++    ]);
++
++    // Create a few messages.
++    for ($i = 0; $i < 5; $i++) {
++      $message = \Drupal::entityTypeManager()
++        ->getStorage('private_message')
++        ->create([
++          'owner' => $this->users['a'],
++          'message' => $this->randomString(),
++        ]);
++      $message->save();
++      $this->thread->addMessage($message);
++    }
++  }
++
++  /**
++   * Test callback.
++   */
++  public function testDeleteThread(): void {
++    $this->thread->delete();
++
++    // Assert that the thread has been deleted.
++    $this->assertNull(\Drupal::entityTypeManager()
++      ->getStorage('private_message_thread')
++      ->load($this->thread->id()));
++
++    // Assert no messages are left.
++    $this->assertEmpty(\Drupal::entityTypeManager()
++      ->getStorage('private_message')
++      ->loadMultiple());
++  }
++
++  /**
++   * Tests that banned messages are also cleared.
++   *
++   * @dataProvider testBannedMessagesProvider
++   */
++  public function testBannedMessages(string $logged_in): void {
++    $this->setCurrentUser($this->users[$logged_in]);
++    $ban = PrivateMessageBan::create([
++      'owner' => $this->users['b']->id(),
++      'target' => $this->users['a']->id(),
++    ]);
++    $ban->save();
++    $this->thread->delete();
++
++    // Assert that the thread has been deleted.
++    $this->assertNull(\Drupal::entityTypeManager()
++      ->getStorage('private_message_thread')
++      ->load($this->thread->id()));
++
++    // Assert no messages are left.
++    $this->assertEmpty(\Drupal::entityTypeManager()
++      ->getStorage('private_message')
++      ->loadMultiple());
++  }
++
++  /**
++   * Provides test data for testBannedMessages().
++   *
++   * @return array[]
++   *   The test data.
++   */
++  public function testBannedMessagesProvider(): array {
++    return [
++      // User A is logged in, which is the user that created the messages.
++      ['a'],
++      // User B is logged in, they banned user A, they cannot see the messages.
++      ['b'],
++    ];
++  }
++
++}

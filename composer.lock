@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1fbaace3b35c3cfa9e14a5c65a67721e",
+    "content-hash": "e809e773c1fe90ab3b2cdac7cbc73dcd",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -6784,43 +6784,38 @@
         },
         {
             "name": "drupal/private_message",
-            "version": "3.0.2",
+            "version": "3.0.3",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/private_message.git",
-                "reference": "3.0.2"
+                "reference": "3.0.3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/private_message-3.0.2.zip",
-                "reference": "3.0.2",
-                "shasum": "bb79d07ab72dc5fb6b423052c9f7676183fdafa8"
+                "url": "https://ftp.drupal.org/files/projects/private_message-3.0.3.zip",
+                "reference": "3.0.3",
+                "shasum": "ee70b9ec7add0f105884c5aeb94d935ec05bbed8"
             },
             "require": {
-                "drupal/core": "^9.3 || ^10.0 || ^11.0",
+                "drupal/core": "^10 || ^11",
                 "drupal/message": "^1.0",
                 "drupal/message_notify": "^1.0",
-                "php": ">=7.4"
+                "php": ">=8.1"
             },
             "require-dev": {
-                "drupal/message_notify": "*"
-            },
-            "suggest": {
-                "drush/drush": "^10 || ^11 || ^12"
+                "drupal/message_notify": "*",
+                "drupal/rules": "^4.0",
+                "drupal/symfony_mailer_lite": "^2.0",
+                "drush/drush": "^12.5 || ^13.3"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "3.0.2",
-                    "datestamp": "1729586935",
+                    "version": "3.0.3",
+                    "datestamp": "1731957877",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
-                    }
-                },
-                "drush": {
-                    "services": {
-                        "drush.services.yml": "^10 || ^11 || ^12"
                     }
                 }
             },
