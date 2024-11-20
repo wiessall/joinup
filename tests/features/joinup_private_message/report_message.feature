@@ -18,7 +18,7 @@ Feature: Private message report.
     When I type "Bob Rolls" in the "To:" autocomplete field
     And I wait for AJAX to finish
     And I pick "Bob Rolls" from the "Member" autocomplete suggestions
-    And I enter "This is a mean message to Bob." in the "Message" wysiwyg editor
+    And I fill in "Message" with "This is a mean message to Bob."
     And I press "Send" in the "Modal buttons" region
     Then the modal should be closed
     And a message containing the text "This is a mean message to Bob." should be present
