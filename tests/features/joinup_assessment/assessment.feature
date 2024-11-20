@@ -183,7 +183,9 @@ Feature: Assessments
 
     When I am logged in as "Regular"
     And I go to "/assessments/questionnaire"
-    And I check "I agree to the Legal notice document"
+    Then I should not see the link "Download PDF" in the "Content" region
+
+    When I check "I agree to the Legal notice document"
     And I press "Submit"
     # 1st page.
     And I fill in "Please provide the name of the initiative, project or action containing the binding requirements to be assessed:" with "Pioneer in making automobiles"
@@ -206,6 +208,7 @@ Feature: Assessments
 
     When I press "Save Draft"
     Then I should see the success message "Submission saved. You may return to this form later and it will restore the current values."
+    And I should see the link "Download PDF" in the "Content" region
 
     When I go to "/assessments/questionnaire/submissions"
     And I click "Download PDF"
