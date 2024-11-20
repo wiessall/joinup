@@ -1,0 +1,413 @@
+diff --git a/private_message.services.yml b/private_message.services.yml
+index 0f27baf..97f8362 100644
+--- a/private_message.services.yml
++++ b/private_message.services.yml
+@@ -16,6 +16,9 @@ services:
+       - '@entity_type.manager'
+       - '@datetime.time'
+ 
++  private_message.uninstaller:
++    class: Drupal\private_message\Service\PrivateMessageUninstaller
++
+   private_message.ban_manager:
+     class: Drupal\private_message\Service\PrivateMessageBanManager
+     arguments:
+diff --git a/src/Drush/Commands/PrivateMessageCommands.php b/src/Drush/Commands/PrivateMessageCommands.php
+index b75a706..fab1647 100644
+--- a/src/Drush/Commands/PrivateMessageCommands.php
++++ b/src/Drush/Commands/PrivateMessageCommands.php
+@@ -3,22 +3,20 @@
+ namespace Drupal\private_message\Drush\Commands;
+ 
+ use Drupal\Component\DependencyInjection\ContainerInterface;
+-use Drupal\Core\Entity\EntityTypeManagerInterface;
+ use Drupal\Core\StringTranslation\StringTranslationTrait;
+-use Drupal\private_message\Service\PrivateMessageService;
++use Drupal\private_message\Service\PrivateMessageUninstallerInterface;
+ use Drush\Attributes as CLI;
+ use Drush\Commands\DrushCommands;
+ 
+ /**
+  * Drush commands for the Private Message module.
+  */
+-class PrivateMessageCommands extends DrushCommands {
++final class PrivateMessageCommands extends DrushCommands {
+ 
+   use StringTranslationTrait;
+ 
+   public function __construct(
+-    protected readonly PrivateMessageService $privateMessageService,
+-    protected readonly EntityTypeManagerInterface $entityTypeManager,
++    protected readonly PrivateMessageUninstallerInterface $privateMessageUninstaller,
+   ) {
+     parent::__construct();
+   }
+@@ -28,37 +26,20 @@ public function __construct(
+    */
+   public static function create(ContainerInterface $container): self {
+     return new static(
+-      $container->get('private_message.service'),
+-      $container->get('entity_type.manager')
++      $container->get('private_message.uninstaller')
+     );
+   }
+ 
+   /**
+    * Prepares the Private Message module for uninstallation.
+    */
+-  #[CLI\Command('private_message:prepare_uninstall', aliases: ['pu'])]
++  #[CLI\Command(name: 'private_message:prepare_uninstall', aliases: ['pu'])]
+   public function prepareUninstall(): void {
+     if ($this->io()->confirm($this->t('Proceeding will delete all private messages and private message threads in your system. They cannot be recovered. Do you wish to proceed?')->render())) {
+-      // Get the IDs of all threads in the system.
+-      $thread_ids = $this->privateMessageService->getThreadIds();
+-      // Load the private message thread storage.
+-      $thread_storage = $this->entityTypeManager->getStorage('private_message_thread');
+-      $message_storage = $this->entityTypeManager->getStorage('private_message');
++      $this->privateMessageUninstaller->initiateBatch();
++      drush_backend_batch_process();
+ 
+       $output = $this->output();
+-      // Note that each thread ID is looped through, as there may be a massive
+-      // number of threads in the system, meaning that loading them all could be
+-      // a crazy memory hog and crash.
+-      foreach ($thread_ids as $thread_id) {
+-        // Load the thread.
+-        $thread = $thread_storage->load($thread_id);
+-        $message_storage->delete($thread->getMessages());
+-        // Delete the thread.
+-        $thread_storage->delete([$thread]);
+-        // Notify the user.
+-        $output->writeln($this->t('Deleted thread: @id', ['@id' => $thread_id])->render());
+-      }
+-      // Inform the user the process is finished.
+       $output->writeln($this->t('All private message content deleted.')->render());
+     }
+   }
+diff --git a/src/Form/AdminUninstallForm.php b/src/Form/AdminUninstallForm.php
+index e9d82cc..748f766 100644
+--- a/src/Form/AdminUninstallForm.php
++++ b/src/Form/AdminUninstallForm.php
+@@ -4,8 +4,8 @@
+ 
+ use Drupal\Core\Form\ConfirmFormBase;
+ use Drupal\Core\Form\FormStateInterface;
+-use Drupal\Core\Messenger\MessengerInterface;
+ use Drupal\Core\Url;
++use Drupal\private_message\Service\PrivateMessageUninstallerInterface;
+ use Symfony\Component\DependencyInjection\ContainerInterface;
+ 
+ /**
+@@ -13,29 +13,16 @@
+  */
+ class AdminUninstallForm extends ConfirmFormBase {
+ 
+-  /**
+-   * The messenger.
+-   *
+-   * @var \Drupal\Core\Messenger\MessengerInterface
+-   */
+-  protected $messenger;
+-
+-  /**
+-   * Constructs a new AdminUninstallForm object.
+-   *
+-   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
+-   *   The messenger service.
+-   */
+-  public function __construct(MessengerInterface $messenger) {
+-    $this->messenger = $messenger;
+-  }
++  public function __construct(
++    protected PrivateMessageUninstallerInterface $privateMessageUninstaller,
++  ) {}
+ 
+   /**
+    * {@inheritdoc}
+    */
+   public static function create(ContainerInterface $container) {
+     return new static(
+-      $container->get('messenger')
++      $container->get('private_message.uninstaller')
+     );
+   }
+ 
+@@ -71,43 +58,12 @@ public function getDescription() {
+    * {@inheritdoc}
+    */
+   public function submitForm(array &$form, FormStateInterface $form_state) {
+-    $batch = [
+-      'title' => $this->t('Deleting private message data'),
+-      'operations' => [
+-        [[__CLASS__, 'deletePrivateMessageMessages'], []],
+-        [[__CLASS__, 'deletePrivateMessageThreads'], []],
+-      ],
+-      'progress_message' => static::t('Deleting private message data. Completed: @percentage% (@current of @total).'),
+-    ];
+-    batch_set($batch);
++    $this->privateMessageUninstaller->initiateBatch();
+ 
+-    $this->messenger->addMessage($this->t('Private message data has been deleted.'));
++    $this->messenger()
++      ->addMessage($this->t('Private message data has been deleted.'));
+ 
+     $form_state->setRedirectUrl($this->getCancelUrl());
+   }
+ 
+-  /**
+-   * Batch callback to delete private messages.
+-   */
+-  public static function deletePrivateMessageMessages(&$context) {
+-    $private_message_ids = \Drupal::entityQuery('private_message')->accessCheck(FALSE)->range(0, 100)->execute();
+-    $storage = \Drupal::entityTypeManager()->getStorage('private_message');
+-    if ($private_messages = $storage->loadMultiple($private_message_ids)) {
+-      $storage->delete($private_messages);
+-    }
+-    $context['finished'] = (int) count($private_messages) < 100;
+-  }
+-
+-  /**
+-   * Batch callback to delete private message threads.
+-   */
+-  public static function deletePrivateMessageThreads(&$context) {
+-    $private_message_thread_ids = \Drupal::entityQuery('private_message_thread')->accessCheck(FALSE)->range(0, 100)->execute();
+-    $storage = \Drupal::entityTypeManager()->getStorage('private_message_thread');
+-    if ($private_message_threads = $storage->loadMultiple($private_message_thread_ids)) {
+-      $storage->delete($private_message_threads);
+-    }
+-    $context['finished'] = (int) count($private_message_threads) < 100;
+-  }
+-
+ }
+diff --git a/src/Service/PrivateMessageUninstaller.php b/src/Service/PrivateMessageUninstaller.php
+new file mode 100644
+index 0000000..993446e
+--- /dev/null
++++ b/src/Service/PrivateMessageUninstaller.php
+@@ -0,0 +1,110 @@
++<?php
++
++namespace Drupal\private_message\Service;
++
++use Drupal\Core\Batch\BatchBuilder;
++
++/**
++ * Handles uninstallation of Private Message entities with batch processing.
++ */
++class PrivateMessageUninstaller implements PrivateMessageUninstallerInterface {
++
++  /**
++   * Initiates the batch process for uninstalling messages.
++   */
++  public function initiateBatch(): void {
++    $batchBuilder = new BatchBuilder();
++
++    $batchBuilder->setTitle(t('Deleting private message data'))
++      ->setInitMessage(t('Starting the uninstallation of private data.'))
++      ->setProgressMessage(t('Deleting private message threads...'))
++      ->setErrorMessage(t('An error occurred during deleting the private message data.'));
++
++    $batchBuilder->addOperation([
++      get_class($this),
++      'batchDeleteThreads',
++    ]);
++    $batchBuilder->addOperation([
++      get_class($this),
++      'deleteMessageBans',
++    ]);
++
++    batch_set($batchBuilder->toArray());
++  }
++
++  /**
++   * Batch operation callback for processing threads dynamically.
++   *
++   * @param array $context
++   *   Batch context array.
++   */
++  public static function batchDeleteThreads(array &$context): void {
++    if (!isset($context['sandbox']['threads'])) {
++      $threads = \Drupal::service('private_message.service')->getThreadIds();
++      $context['sandbox']['threads'] = $threads;
++      $context['sandbox']['total'] = count($threads);
++      $context['sandbox']['processed'] = 0;
++      $context['finished'] = 0;
++    }
++
++    $threadId = array_shift($context['sandbox']['threads']);
++    if ($threadId) {
++      self::deleteThread($threadId);
++
++      $context['sandbox']['processed']++;
++      $context['message'] = t('Deleted thread @processed of @total.', [
++        '@processed' => $context['sandbox']['processed'],
++        '@total' => $context['sandbox']['total'],
++      ]);
++    }
++
++    if (empty($context['sandbox']['threads'])) {
++      $context['finished'] = 1;
++    }
++  }
++
++  /**
++   * Deletes message bans.
++   *
++   * @param array $context
++   *   Batch context array.
++   */
++  public static function deleteMessageBans(array &$context): void {
++    $entityIds = \Drupal::entityQuery('private_message_ban')
++      ->accessCheck(FALSE)
++      ->execute();
++
++    if (!empty($entityIds)) {
++      $storage = \Drupal::entityTypeManager()
++        ->getStorage('private_message_ban');
++      $storage->delete($storage->loadMultiple($entityIds));
++
++      $context['message'] = t('Removed @bans message bans.', [
++        '@bans' => count($entityIds),
++      ]);
++    }
++  }
++
++  /**
++   * Deletes thread and messages.
++   *
++   * @param int $threadId
++   *   Thread id.
++   */
++  public static function deleteThread(int $threadId): void {
++    /** @var \Drupal\private_message\Entity\PrivateMessageThreadInterface $thread */
++    $thread = \Drupal::entityTypeManager()
++      ->getStorage('private_message_thread')
++      ->load($threadId);
++    if (!$thread) {
++      return;
++    }
++
++    foreach ($thread->getMessages() as $message) {
++      $message->delete();
++    }
++
++    $thread->delete();
++  }
++
++}
+diff --git a/src/Service/PrivateMessageUninstallerInterface.php b/src/Service/PrivateMessageUninstallerInterface.php
+new file mode 100644
+index 0000000..063941b
+--- /dev/null
++++ b/src/Service/PrivateMessageUninstallerInterface.php
+@@ -0,0 +1,15 @@
++<?php
++
++namespace Drupal\private_message\Service;
++
++/**
++ * The interface for the Private Message Uninstall Service.
++ */
++interface PrivateMessageUninstallerInterface {
++
++  /**
++   * Initiates the batch process for uninstalling messages.
++   */
++  public function initiateBatch(): void;
++
++}
+diff --git a/tests/src/Functional/PrivateMessageUninstallTest.php b/tests/src/Functional/PrivateMessageUninstallTest.php
+index 252c7dd..c4534a8 100644
+--- a/tests/src/Functional/PrivateMessageUninstallTest.php
++++ b/tests/src/Functional/PrivateMessageUninstallTest.php
+@@ -6,6 +6,7 @@
+ 
+ use Drupal\Tests\BrowserTestBase;
+ use Drupal\private_message\Entity\PrivateMessage;
++use Drupal\private_message\Entity\PrivateMessageBan;
+ use Drupal\private_message\Entity\PrivateMessageThread;
+ 
+ /**
+@@ -43,6 +44,7 @@ public function testLimitedAccess(): void {
+    */
+   public function testUninstallation(): void {
+     $owner = $this->DrupalCreateUser();
++    $guest = $this->DrupalCreateUser();
+     $adminUser = $this->DrupalCreateUser([
+       'administer site configuration',
+       'administer private message module',
+@@ -63,6 +65,27 @@ public function testUninstallation(): void {
+       ],
+     ])->save();
+ 
++    PrivateMessageThread::create([
++      'members' => [$guest, $adminUser],
++      'subject' => $this->getRandomGenerator()->word(10),
++      'updated' => \Drupal::time()->getRequestTime() - 3600,
++      'private_messages' => [
++        PrivateMessage::create([
++          'owner' => $guest,
++          'message' => [
++            'value' => $this->getRandomGenerator()->sentences(5),
++            'format' => 'plain_text',
++          ],
++        ]),
++      ],
++    ])->save();
++
++    PrivateMessageBan::create([
++      'owner' => $owner,
++      'target' => $guest,
++    ]
++    )->save();
++
+     $this->drupalLogin($adminUser);
+     $this->drupalGet('/admin/config/private-message/uninstall');
+ 
+@@ -72,7 +95,7 @@ public function testUninstallation(): void {
+     $this->assertSession()->statusCodeEquals(200);
+     $this->getSession()->getPage()->clickLink('Cancel');
+ 
+-    $this->assertSame(2, $this->retrieveCount());
++    $this->assertSame(5, $this->retrieveCount());
+ 
+     $this->getSession()
+       ->getPage()
+@@ -90,25 +113,30 @@ public function testUninstallation(): void {
+    *   Number of entities.
+    */
+   protected function retrieveCount(): int {
+-    $messages = $this
+-      ->container
+-      ->get('entity_type.manager')
++    $entityTypeManager = $this->container->get('entity_type.manager');
++
++    $messages = $entityTypeManager
+       ->getStorage('private_message')
+       ->getQuery()
+       ->accessCheck(FALSE)
+       ->count()
+       ->execute();
+ 
+-    $threads = $this
+-      ->container
+-      ->get('entity_type.manager')
++    $threads = $entityTypeManager
+       ->getStorage('private_message_thread')
+       ->getQuery()
+       ->accessCheck(FALSE)
+       ->count()
+       ->execute();
+ 
+-    return $messages + $threads;
++    $bans = $entityTypeManager
++      ->getStorage('private_message_ban')
++      ->getQuery()
++      ->accessCheck(FALSE)
++      ->count()
++      ->execute();
++
++    return $messages + $threads + $bans;
+   }
+ 
+ }
