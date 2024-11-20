@@ -42,12 +42,12 @@ class CopyEUOrganisationWebformHandler extends WebformHandlerBase {
 
     if (in_array($public_sector_body, $valid_bodies, TRUE)) {
       // Combine relevant fields into 'organisation'.
-      $organisation = sprintf(
+      $organisation = trim(sprintf(
         '%s %s %s',
         $values['institution'] ?? '',
         $values['body'] ?? '',
         $values['agency'] ?? ''
-      );
+      ));
 
       // Set the 'organisation' field value.
       $webform_submission->setData(['organisation' => $organisation] + $values);
