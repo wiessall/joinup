@@ -39,6 +39,7 @@ Feature: Private messages
     And I should see the link "New message"
     And I should not see the text "You do not have any messages"
     And I should see 1 private message
+    # Moderators can delete a thread.
     And I should see the link "Delete thread"
     And a message containing the text "A private message from Alice to Bob." should be present
     And I fill in "Reply" with "Another private message from Bob to Alice."
