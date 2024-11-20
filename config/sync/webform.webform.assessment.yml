@@ -85,7 +85,7 @@ elements: |-
       '#title': 'Please select your Institution'
       '#options':
         'European Parliament': 'European Parliament'
-        'European Counci': 'European Council'
+        'European Council': 'European Council'
         'Council of the European Union': 'Council of the European Union'
         'European Commission': 'European Commission'
         'Court of Justice of the European Union': 'Court of Justice of the European Union'
