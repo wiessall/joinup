@@ -1,60 +1,19 @@
-diff --git a/src/Entity/PrivateMessageThread.php b/src/Entity/PrivateMessageThread.php
-index 2ec93e1397273cf1f47a8d19dba6099b8a3aca56..6caa10f03d807b403ff800649e565ee280177701 100644
---- a/src/Entity/PrivateMessageThread.php
-+++ b/src/Entity/PrivateMessageThread.php
-@@ -114,7 +114,7 @@ class PrivateMessageThread extends ContentEntityBase implements PrivateMessageTh
-   /**
-    * {@inheritdoc}
-    */
--  public function getMessages() {
-+  public function getMessages(bool $include_banned = FALSE) {
-     /** @var \Drupal\private_message\Entity\PrivateMessageInterface[] $raw_messages */
-     $raw_messages = $this->get('private_messages')->referencedEntities();
-     $messages = [];
-@@ -127,7 +127,7 @@ class PrivateMessageThread extends ContentEntityBase implements PrivateMessageTh
-         // This is to ensure that the thread display is not broken.
-         $messages[] = $message;
-       }
--      elseif (!in_array($message->getOwnerId(), $bannedUsers)) {
-+      elseif ($include_banned || !in_array($message->getOwnerId(), $bannedUsers)) {
-         $messages[] = $message;
-       }
-     }
-@@ -404,7 +404,7 @@ class PrivateMessageThread extends ContentEntityBase implements PrivateMessageTh
-    * Delete the thread from the database, as well as all reference entities.
-    */
-   protected function deleteReferencedEntities() {
--    $messages = $this->getMessages();
-+    $messages = $this->getMessages(TRUE);
-     foreach ($messages as $message) {
-       $message->delete();
-     }
-diff --git a/src/Entity/PrivateMessageThreadInterface.php b/src/Entity/PrivateMessageThreadInterface.php
-index 603efff6e9f824d258bff48423955aaf93091c2e..cab0cebb16a66fee55af7448163ed3e084a3a860 100644
---- a/src/Entity/PrivateMessageThreadInterface.php
-+++ b/src/Entity/PrivateMessageThreadInterface.php
-@@ -79,10 +79,14 @@ interface PrivateMessageThreadInterface extends ContentEntityInterface {
-   /**
-    * Retrieve all private messages attached to this thread.
-    *
-+   * @param bool $include_banned
-+   *   (Optional) Whether to include messages from banned users. Defaults to
-+   *   FALSE.
-+   *
-    * @return \Drupal\Core\Field\EntityReferenceFieldItemListInterface
-    *   A list of private messages attached to this thread
-    */
--  public function getMessages();
-+  public function getMessages(bool $include_banned = FALSE);
- 
-   /**
-    * Filter the list down to only the newest messages.
+From 21afc3b1215c49bb1226a5f2d4cac986c31ab079 Mon Sep 17 00:00:00 2001
+From: Ilias Dimopoulos <idimopoulos@hotmail.com>
+Date: Wed, 20 Nov 2024 03:48:58 +0200
+Subject: [PATCH 1/5] Provide a test to prove the failure.
+
+---
+ tests/src/Kernel/EntityDeleteTest.php | 137 ++++++++++++++++++++++++++
+ 1 file changed, 137 insertions(+)
+ create mode 100644 tests/src/Kernel/EntityDeleteTest.php
+
 diff --git a/tests/src/Kernel/EntityDeleteTest.php b/tests/src/Kernel/EntityDeleteTest.php
 new file mode 100644
-index 0000000000000000000000000000000000000000..20e22153a864869a4489843d418d177abe3e4f9d
+index 0000000..b372056
 --- /dev/null
 +++ b/tests/src/Kernel/EntityDeleteTest.php
-@@ -0,0 +1,139 @@
+@@ -0,0 +1,137 @@
 +<?php
 +
 +declare(strict_types=1);
@@ -62,9 +21,9 @@ index 0000000000000000000000000000000000000000..20e22153a864869a4489843d418d177a
 +namespace Drupal\Tests\private_message\Kernel;
 +
 +use Drupal\KernelTests\KernelTestBase;
-+use Drupal\Tests\private_message\Traits\PrivateMessageTestTrait;
 +use Drupal\private_message\Entity\PrivateMessageBan;
 +use Drupal\private_message\Entity\PrivateMessageThreadInterface;
++use Drupal\Tests\private_message\Traits\PrivateMessageTestTrait;
 +use PHPUnit\Framework\Attributes\Group;
 +
 +/**
@@ -158,11 +117,11 @@ index 0000000000000000000000000000000000000000..20e22153a864869a4489843d418d177a
 +   *
 +   * @dataProvider testBannedMessagesProvider
 +   */
-+  public function testBannedMessages(string $logged_in): void {
-+    $this->setCurrentUser($this->users[$logged_in]);
++  public function testBannedMessages(string $a, string $b): void {
++    $this->setCurrentUser($this->users[$a]);
 +    $ban = PrivateMessageBan::create([
-+      'owner' => $this->users['b']->id(),
-+      'target' => $this->users['a']->id(),
++      'owner' => $this->users[$a]->id(),
++      'target' => $this->users[$b]->id(),
 +    ]);
 +    $ban->save();
 +    $this->thread->delete();
@@ -186,11 +145,244 @@ index 0000000000000000000000000000000000000000..20e22153a864869a4489843d418d177a
 +   */
 +  public function testBannedMessagesProvider(): array {
 +    return [
-+      // User A is logged in, which is the user that created the messages.
-+      ['a'],
-+      // User B is logged in, they banned user A, they cannot see the messages.
-+      ['b'],
++      ['a', 'b'],
++      ['b', 'a'],
 +    ];
 +  }
 +
 +}
+-- 
+GitLab
+
+
+From 68e44ef622abb5193d18575902cb21f255c6f5b3 Mon Sep 17 00:00:00 2001
+From: Ilias Dimopoulos <idimopoulos@hotmail.com>
+Date: Wed, 20 Nov 2024 03:56:04 +0200
+Subject: [PATCH 2/5] Allow the delete to delete all messages regardless of ban
+ status.
+
+---
+ src/Entity/PrivateMessageThread.php          | 6 +++---
+ src/Entity/PrivateMessageThreadInterface.php | 6 +++++-
+ 2 files changed, 8 insertions(+), 4 deletions(-)
+
+diff --git a/src/Entity/PrivateMessageThread.php b/src/Entity/PrivateMessageThread.php
+index 2ec93e1..6caa10f 100644
+--- a/src/Entity/PrivateMessageThread.php
++++ b/src/Entity/PrivateMessageThread.php
+@@ -114,7 +114,7 @@ class PrivateMessageThread extends ContentEntityBase implements PrivateMessageTh
+   /**
+    * {@inheritdoc}
+    */
+-  public function getMessages() {
++  public function getMessages(bool $include_banned = FALSE) {
+     /** @var \Drupal\private_message\Entity\PrivateMessageInterface[] $raw_messages */
+     $raw_messages = $this->get('private_messages')->referencedEntities();
+     $messages = [];
+@@ -127,7 +127,7 @@ class PrivateMessageThread extends ContentEntityBase implements PrivateMessageTh
+         // This is to ensure that the thread display is not broken.
+         $messages[] = $message;
+       }
+-      elseif (!in_array($message->getOwnerId(), $bannedUsers)) {
++      elseif ($include_banned || !in_array($message->getOwnerId(), $bannedUsers)) {
+         $messages[] = $message;
+       }
+     }
+@@ -404,7 +404,7 @@ class PrivateMessageThread extends ContentEntityBase implements PrivateMessageTh
+    * Delete the thread from the database, as well as all reference entities.
+    */
+   protected function deleteReferencedEntities() {
+-    $messages = $this->getMessages();
++    $messages = $this->getMessages(TRUE);
+     foreach ($messages as $message) {
+       $message->delete();
+     }
+diff --git a/src/Entity/PrivateMessageThreadInterface.php b/src/Entity/PrivateMessageThreadInterface.php
+index 603efff..cab0ceb 100644
+--- a/src/Entity/PrivateMessageThreadInterface.php
++++ b/src/Entity/PrivateMessageThreadInterface.php
+@@ -79,10 +79,14 @@ interface PrivateMessageThreadInterface extends ContentEntityInterface {
+   /**
+    * Retrieve all private messages attached to this thread.
+    *
++   * @param bool $include_banned
++   *   (Optional) Whether to include messages from banned users. Defaults to
++   *   FALSE.
++   *
+    * @return \Drupal\Core\Field\EntityReferenceFieldItemListInterface
+    *   A list of private messages attached to this thread
+    */
+-  public function getMessages();
++  public function getMessages(bool $include_banned = FALSE);
+ 
+   /**
+    * Filter the list down to only the newest messages.
+-- 
+GitLab
+
+
+From adbc6bb367f337edccfbf8e9c917b62e8428c8cd Mon Sep 17 00:00:00 2001
+From: Ilias Dimopoulos <idimopoulos@hotmail.com>
+Date: Wed, 20 Nov 2024 03:57:27 +0200
+Subject: [PATCH 3/5] Fix codesniffs.
+
+---
+ tests/src/Kernel/EntityDeleteTest.php | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tests/src/Kernel/EntityDeleteTest.php b/tests/src/Kernel/EntityDeleteTest.php
+index b372056..873b7f0 100644
+--- a/tests/src/Kernel/EntityDeleteTest.php
++++ b/tests/src/Kernel/EntityDeleteTest.php
+@@ -5,9 +5,9 @@ declare(strict_types=1);
+ namespace Drupal\Tests\private_message\Kernel;
+ 
+ use Drupal\KernelTests\KernelTestBase;
++use Drupal\Tests\private_message\Traits\PrivateMessageTestTrait;
+ use Drupal\private_message\Entity\PrivateMessageBan;
+ use Drupal\private_message\Entity\PrivateMessageThreadInterface;
+-use Drupal\Tests\private_message\Traits\PrivateMessageTestTrait;
+ use PHPUnit\Framework\Attributes\Group;
+ 
+ /**
+-- 
+GitLab
+
+
+From fc66989c5e007928f903beaa584d272573228dae Mon Sep 17 00:00:00 2001
+From: Ilias Dimopoulos <idimopoulos@hotmail.com>
+Date: Wed, 20 Nov 2024 04:08:03 +0200
+Subject: [PATCH 4/5] Simplify the tests.
+
+---
+ tests/src/Kernel/EntityDeleteTest.php | 14 ++++++++------
+ 1 file changed, 8 insertions(+), 6 deletions(-)
+
+diff --git a/tests/src/Kernel/EntityDeleteTest.php b/tests/src/Kernel/EntityDeleteTest.php
+index 873b7f0..20e2215 100644
+--- a/tests/src/Kernel/EntityDeleteTest.php
++++ b/tests/src/Kernel/EntityDeleteTest.php
+@@ -101,11 +101,11 @@ final class EntityDeleteTest extends KernelTestBase {
+    *
+    * @dataProvider testBannedMessagesProvider
+    */
+-  public function testBannedMessages(string $a, string $b): void {
+-    $this->setCurrentUser($this->users[$a]);
++  public function testBannedMessages(string $logged_in): void {
++    $this->setCurrentUser($this->users[$logged_in]);
+     $ban = PrivateMessageBan::create([
+-      'owner' => $this->users[$a]->id(),
+-      'target' => $this->users[$b]->id(),
++      'owner' => $this->users['b']->id(),
++      'target' => $this->users['a']->id(),
+     ]);
+     $ban->save();
+     $this->thread->delete();
+@@ -129,8 +129,10 @@ final class EntityDeleteTest extends KernelTestBase {
+    */
+   public function testBannedMessagesProvider(): array {
+     return [
+-      ['a', 'b'],
+-      ['b', 'a'],
++      // User A is logged in, which is the user that created the messages.
++      ['a'],
++      // User B is logged in, they banned user A, they cannot see the messages.
++      ['b'],
+     ];
+   }
+ 
+-- 
+GitLab
+
+
+From 138fe5f1bdbac178c68c37b38be858925e41d17d Mon Sep 17 00:00:00 2001
+From: Ilias Dimopoulos <idimopoulos@hotmail.com>
+Date: Wed, 20 Nov 2024 07:26:14 +0200
+Subject: [PATCH 5/5] Ensure the relevant entities are also cleaned up when the
+ thread is deleted directly from the storage class.
+
+---
+ src/Entity/PrivateMessageThread.php   | 43 +++++++++++++++++----------
+ tests/src/Kernel/EntityDeleteTest.php |  7 +++++
+ 2 files changed, 35 insertions(+), 15 deletions(-)
+
+diff --git a/src/Entity/PrivateMessageThread.php b/src/Entity/PrivateMessageThread.php
+index 6caa10f..717655e 100644
+--- a/src/Entity/PrivateMessageThread.php
++++ b/src/Entity/PrivateMessageThread.php
+@@ -240,9 +240,35 @@ class PrivateMessageThread extends ContentEntityBase implements PrivateMessageTh
+    * {@inheritdoc}
+    */
+   public function delete() {
+-    $this->deleteReferencedEntities();
+     parent::delete();
+-    $this->clearCacheTags();
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public static function preDelete(EntityStorageInterface $storage, array $entities) {
++    parent::preDelete($storage, $entities);
++
++    // Delete the thread from the database, as well as all reference entities.
++    foreach ($entities as $entity) {
++      $messages = $entity->getMessages(TRUE);
++      foreach ($messages as $message) {
++        $message->delete();
++      }
++      \Drupal::database()->delete('pm_thread_history')
++        ->condition('thread_id', $entity->id())
++        ->execute();
++    }
++  }
++
++  /**
++   * {@inheritdoc}
++   */
++  public static function postDelete(EntityStorageInterface $storage, array $entities) {
++    parent::postDelete($storage, $entities);
++    foreach ($entities as $entity) {
++      $entity->clearCacheTags();
++    }
+   }
+ 
+   /**
+@@ -400,19 +426,6 @@ class PrivateMessageThread extends ContentEntityBase implements PrivateMessageTh
+     return $tags;
+   }
+ 
+-  /**
+-   * Delete the thread from the database, as well as all reference entities.
+-   */
+-  protected function deleteReferencedEntities() {
+-    $messages = $this->getMessages(TRUE);
+-    foreach ($messages as $message) {
+-      $message->delete();
+-    }
+-    \Drupal::database()->delete('pm_thread_history')
+-      ->condition('thread_id', $this->id())
+-      ->execute();
+-  }
+-
+   /**
+    * {@inheritdoc}
+    */
+diff --git a/tests/src/Kernel/EntityDeleteTest.php b/tests/src/Kernel/EntityDeleteTest.php
+index 20e2215..ae7fed7 100644
+--- a/tests/src/Kernel/EntityDeleteTest.php
++++ b/tests/src/Kernel/EntityDeleteTest.php
+@@ -136,4 +136,11 @@ final class EntityDeleteTest extends KernelTestBase {
+     ];
+   }
+ 
++  public function testStorageThreadAndMessageDeletion(): void {
++    \Drupal::entityTypeManager()->getStorage('private_message_thread')->delete([$this->thread]);
++    $this->assertNull(\Drupal::entityTypeManager()
++      ->getStorage('private_message')
++      ->load($this->thread->id()));
++  }
++
+ }
+-- 
+GitLab
