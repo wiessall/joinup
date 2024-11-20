@@ -432,7 +432,8 @@
                 "User can stuck on View results @see https://www.drupal.org/project/poll/issues/3405509": "resources/patch/php/drupal/poll/3405509.patch"
             },
             "drupal/private_message": {
-                "Ensure messages are deleted with threads @see https://www.drupal.org/i/3488508": "resources/patch/php/drupal/private_message/3488508.diff"
+                "Ensure messages are deleted with threads @see https://www.drupal.org/i/3488508": "resources/patch/php/drupal/private_message/3488508.diff",
+                "Fix Drush commands @see https://www.drupal.org/i/3488247": "resources/patch/php/drupal/private_message/3488247.diff"
             },
             "drupal/private_message_flood": {
                 "Add return type to methods @see https://www.drupal.org/i/3477426": "resources/patch/php/drupal/private_message_flood/3477426.diff"
