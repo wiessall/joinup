@@ -15,4 +15,4 @@ settings:
   cafile: ''
   verify_peer: true
   verify_peer_name: true
-  disable_log: 0
+  disable_log: false
