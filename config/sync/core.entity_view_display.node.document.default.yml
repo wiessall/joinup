@@ -184,9 +184,6 @@ content:
     region: content
 hidden:
   abstract: true
-  entity_print_view_epub: true
-  entity_print_view_pdf: true
-  entity_print_view_word_docx: true
   featured: true
   field_document_logo: true
   field_document_publication_date: true
