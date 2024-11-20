@@ -7,7 +7,6 @@ dependencies:
     - image.style.thumbnail
   module:
     - media
-    - node
     - svg_image
     - user
 _core:
@@ -723,26 +722,24 @@ display:
                 title: Unpublished
                 operator: '='
                 value: '0'
-        title:
-          id: title
-          table: node_field_data
-          field: title
-          relationship: og_audience
+        og_audience_target_id:
+          id: og_audience_target_id
+          table: media__og_audience
+          field: og_audience_target_id
+          relationship: none
           group_type: group
           admin_label: ''
-          entity_type: node
-          entity_field: title
-          plugin_id: string
-          operator: '='
-          value: ''
+          plugin_id: numeric
+          operator: or
+          value: null
           group: 1
           exposed: true
           expose:
-            operator_id: title_op
+            operator_id: og_audience_target_id_op
             label: Group
             description: ''
             use_operator: false
-            operator: title_op
+            operator: og_audience_target_id_op
             operator_limit_selection: false
             operator_list: {  }
             identifier: group
@@ -757,7 +754,10 @@ display:
               moderator: '0'
               administrator: '0'
               developer: '0'
+            min_placeholder: ''
+            max_placeholder: ''
             placeholder: ''
+            reduce: 0
           is_grouped: false
           group_info:
             label: ''
@@ -770,6 +770,18 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
+          reduce_duplicates: false
+          sub_handler: 'default:node'
+          sub_handler_settings:
+            target_bundles:
+              collection: collection
+              solution: solution
+            sort:
+              field: title
+              direction: ASC
+            auto_create: false
+            auto_create_bundle: ''
+          widget: autocomplete
       filter_groups:
         operator: AND
         groups:
@@ -851,16 +863,7 @@ display:
           distinct: false
           replica: false
           query_tags: {  }
-      relationships:
-        og_audience:
-          id: og_audience
-          table: media__og_audience
-          field: og_audience
-          relationship: none
-          group_type: group
-          admin_label: 'og_audience: Content'
-          plugin_id: standard
-          required: false
+      relationships: {  }
       header: {  }
       footer: {  }
       display_extenders: {  }
