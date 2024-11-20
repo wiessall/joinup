@@ -176,7 +176,6 @@ Feature: Assessments
     And I press "Submit"
     Then I should see the success message "Your assessment is being moderated. If approved, a report will be published on the assessment reports page. Moderators might require changes to this submission but you will be notified by email in this case."
 
-  @javascript
   Scenario Outline: Check organization field value.
     Given I am logged in as an "authenticated user"
     And I check "I agree to the Legal notice document"
