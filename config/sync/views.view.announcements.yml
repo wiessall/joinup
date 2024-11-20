@@ -11,7 +11,6 @@ dependencies:
   module:
     - joinup_group
     - message
-    - node
     - options
     - state_machine
     - user
@@ -1168,26 +1167,24 @@ display:
           expose:
             operator_limit_selection: false
             operator_list: {  }
-        title:
-          id: title
-          table: node_field_data
-          field: title
-          relationship: group
+        group_target_id:
+          id: group_target_id
+          table: message__group
+          field: group_target_id
+          relationship: none
           group_type: group
           admin_label: ''
-          entity_type: node
-          entity_field: title
-          plugin_id: string
-          operator: '='
-          value: ''
+          plugin_id: numeric
+          operator: or
+          value: null
           group: 1
           exposed: true
           expose:
-            operator_id: title_op
-            label: Group
+            operator_id: group_target_id_op
+            label: 'Group (group)'
             description: ''
             use_operator: false
-            operator: title_op
+            operator: group_target_id_op
             operator_limit_selection: false
             operator_list: {  }
             identifier: group
@@ -1202,7 +1199,10 @@ display:
               moderator: '0'
               administrator: '0'
               developer: '0'
+            min_placeholder: ''
+            max_placeholder: ''
             placeholder: ''
+            reduce: 0
           is_grouped: false
           group_info:
             label: ''
@@ -1215,6 +1215,18 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
+          reduce_duplicates: false
+          sub_handler: 'default:node'
+          sub_handler_settings:
+            target_bundles:
+              collection: collection
+              solution: solution
+            sort:
+              field: title
+              direction: ASC
+            auto_create: false
+            auto_create_bundle: ''
+          widget: autocomplete
         state_value:
           id: state_value
           table: message__state
@@ -1268,16 +1280,7 @@ display:
         arguments: false
         filters: false
         filter_groups: false
-      relationships:
-        group:
-          id: group
-          table: message__group
-          field: group
-          relationship: none
-          group_type: group
-          admin_label: 'group: Content'
-          plugin_id: standard
-          required: false
+      relationships: {  }
       display_description: ''
       display_extenders:
         metatag_display_extender:

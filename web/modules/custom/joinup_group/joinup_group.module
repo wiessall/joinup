@@ -508,30 +508,7 @@ function joinup_group_og_user_access_alter(array &$permissions, CacheableMetadat
 function joinup_group_form_views_exposed_form_alter(array &$form, FormStateInterface $form_state): void {
   /** @var \Drupal\views\ViewExecutable $view */
   $view = $form_state->get('view');
-  $storage = \Drupal::entityTypeManager()->getStorage('node');
   $view_id = $view->id();
-  $display = $view->current_display;
-
-  // Replaces a group text exposed filter with a dropdown.
-  if (($view_id === 'announcements' && $display === 'all') || ($view_id === 'media' && $display === 'media_page_list')) {
-    $form['group'] = [
-      '#title' => t('Group'),
-      '#type' => 'entity_autocomplete',
-      '#target_type' => 'node',
-      '#selection_handler' => 'default:node',
-      '#selection_settings' => [
-        'target_bundles' => ['collection', 'solution'],
-        'match_operator' => 'CONTAINS',
-        'match_limit' => 10,
-      ],
-      '#validate_reference' => FALSE,
-      '#maxlength' => 1024,
-      '#element_validate' => [
-        'joinup_group_validate_autocomplete_without_id',
-      ],
-      '#default_value' => !empty($form['group']['#default_value']) ? $storage->load($form['group']['#default_value']) : NULL,
-    ];
-  }
 
   // Adds result counts to the role options on the membership overview for
   // collections and solutions.
@@ -608,34 +585,6 @@ function joinup_group_form_views_exposed_form_alter(array &$form, FormStateInter
     '#access' => $url->access(),
     '#attached' => ['library' => ['core/drupal.dialog.ajax']],
   ];
-}
-
-/**
- * Group validation handler for autocomplete field.
- *
- * This function validates the input of an entity_autocomplete field,
- * ensuring that only the title of the entity (e.g., node title) is stored,
- * and the entity ID is removed from the value. This is useful when the ID
- * is appended in the format "Title (ID)" by default, but you want to keep
- * only the title.
- *
- * @param array $element
- *   The form element to be validated (autocomplete field definition).
- * @param \Drupal\Core\Form\FormStateInterface $form_state
- *   The current state of the form.
- * @param array $form
- *   The full form structure.
- */
-function joinup_group_validate_autocomplete_without_id(array &$element, FormStateInterface $form_state, array &$form): void {
-  $value = $form_state->getValue($element['#parents']);
-
-  // If value is a node, strip the ID.
-  if (!empty($value)) {
-    // Parse the title from the autocomplete value if in "Title (ID)" format.
-    if (preg_match('/^(.*?)\s*\(\d+\)$/', $value, $matches)) {
-      $form_state->setValue($element['#parents'], $matches[1]);
-    }
-  }
 }
 
 /**

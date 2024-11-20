@@ -16,6 +16,9 @@ use Drupal\search_api\Entity\Index;
  * entities.
  */
 function joinup_search_views_data_alter(array &$data): void {
+  // Use entity reference for grouping fields within messages and media.
+  $data['message__group']['group_target_id']['filter']['id'] = 'entity_reference';
+  $data['media__og_audience']['og_audience_target_id']['filter']['id'] = 'entity_reference';
   // Create an empty alias tracker variable to mimic the alias generation from
   // search_api_views_data().
   $alias_tracker = [];
