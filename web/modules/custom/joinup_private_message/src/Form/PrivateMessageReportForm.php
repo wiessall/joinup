@@ -120,6 +120,7 @@ class PrivateMessageReportForm extends FormBase {
           '@message' => $error_message,
         ]);
       }
+      $this->messenger()->deleteByType(MessengerInterface::TYPE_ERROR);
       $response->addCommand(
         new HtmlCommand(
           '#validation-message',
