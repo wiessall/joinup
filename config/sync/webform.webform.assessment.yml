@@ -761,4 +761,38 @@ handlers:
       message: '<p>Your assessment is being moderated. If approved, a report will be published on the <a href="[site:base-url]/assessments">assessment reports</a> page. Moderators might require changes to this submission but you will be notified by email in this case.</p>'
       message_type: status
       debug: false
+  action_1:
+    id: action
+    handler_id: action_1
+    label: 'Copy the EU institution/agency/body into organization'
+    notes: ''
+    status: true
+    conditions:
+      enabled:
+        -
+          ':input[name="public_sector_body"]':
+            value: 'European Union institution'
+        - xor
+        -
+          ':input[name="public_sector_body"]':
+            value: 'European Union agency'
+        - xor
+        -
+          ':input[name="public_sector_body"]':
+            value: 'European Union body'
+    weight: 0
+    settings:
+      states:
+        - draft_created
+        - draft_updated
+        - converted
+        - completed
+        - updated
+      notes: ''
+      sticky: null
+      locked: null
+      data: 'organisation: "[webform_submission:values:institution][webform_submission:values:body][webform_submission:values:agency]"'
+      message: ''
+      message_type: status
+      debug: false
 variants: {  }
