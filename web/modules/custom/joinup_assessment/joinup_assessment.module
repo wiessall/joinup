@@ -74,16 +74,14 @@ function joinup_assessment_webform_element_webform_actions_alter(array &$element
     return;
   }
 
-  $route_name = 'entity_print.view';
-  $route_parameters = [
-    'export_type' => 'pdf',
-    'entity_type' => 'webform_submission',
-    'entity_id' => $webform_id,
-  ];
   $element['print'] = [
     '#type' => 'link',
     '#title' => t('Download PDF'),
-    '#url' => Url::fromRoute($route_name, $route_parameters),
+    '#url' => Url::fromRoute('entity_print.view', [
+      'export_type' => 'pdf',
+      'entity_type' => 'webform_submission',
+      'entity_id' => $webform_id,
+    ]),
     '#weight' => 100,
   ];
 }
