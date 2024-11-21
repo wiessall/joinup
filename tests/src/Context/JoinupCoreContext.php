@@ -193,7 +193,8 @@ class JoinupCoreContext extends RawDrupalContext {
    * @throws \Exception
    *   Thrown when a field is not found by name or is not disabled.
    *
-   * @Then the following (fields|elements|buttons) should be disabled :fields
+   * @Then the following field(s) should be disabled :fields
+   * @Then the following button(s) should be disabled :fields
    */
   public function givenDisabledFields(string $fields): void {
     $fields = $this->explodeCommaSeparatedStepArgument($fields);
