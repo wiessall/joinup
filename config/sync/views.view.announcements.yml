@@ -1174,14 +1174,14 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
-          plugin_id: numeric
+          plugin_id: entity_reference
           operator: or
-          value: null
+          value: {  }
           group: 1
           exposed: true
           expose:
             operator_id: group_target_id_op
-            label: 'Group (group)'
+            label: Group
             description: ''
             use_operator: false
             operator: group_target_id_op
@@ -1199,10 +1199,7 @@ display:
               moderator: '0'
               administrator: '0'
               developer: '0'
-            min_placeholder: ''
-            max_placeholder: ''
-            placeholder: ''
-            reduce: 0
+            reduce: false
           is_grouped: false
           group_info:
             label: ''
@@ -1217,6 +1214,7 @@ display:
             group_items: {  }
           reduce_duplicates: false
           sub_handler: 'default:node'
+          widget: autocomplete
           sub_handler_settings:
             target_bundles:
               collection: collection
@@ -1226,7 +1224,6 @@ display:
               direction: ASC
             auto_create: false
             auto_create_bundle: ''
-          widget: autocomplete
         state_value:
           id: state_value
           table: message__state
