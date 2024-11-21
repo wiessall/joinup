@@ -91,7 +91,7 @@ Feature: Proposing a collection
 
     # Clean up the collection that was created.
     Then I delete the "Ancient and Classical Mythology" collection
-    And I delete the "Contact person" contact information
+    And I delete the "Contact person" contact_information
 
   Scenario: Propose a collection with a duplicate name
     Given collection content:
@@ -179,7 +179,7 @@ Feature: Proposing a collection
 
     # As some entities were created via UI, we should explicitly delete them.
     And I delete the "Just a proposal" collection
-    And I delete the "Invisible Man" contact information
+    And I delete the "Invisible Man" contact_information
 
   @javascript
   # This is a regression test for a bug where nothing was happening when
@@ -289,8 +289,8 @@ Feature: Proposing a collection
     Then I should get an access denied error
 
     # As some entities were created via UI, we should explicitly delete them.
-    And I delete the "Contact person" contact information
-    And I delete the "Contact Rapazoglou" contact information
+    And I delete the "Contact person" contact_information
+    And I delete the "Contact Rapazoglou" contact_information
     And I delete the "Some email validation" collection
     And I delete the "Rolly email validation" solution
 
@@ -327,4 +327,4 @@ Feature: Proposing a collection
     And I should own the "SVG API example" collection
     # Cleanup step.
     Then I delete the "SVG API example" collection
-    And I delete the "BasicSvgAPI Contact" contact information
+    And I delete the "BasicSvgAPI Contact" contact_information

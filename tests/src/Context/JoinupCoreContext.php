@@ -480,4 +480,22 @@ class JoinupCoreContext extends RawDrupalContext {
     );
   }
 
+  /**
+   * Deletes an entity.
+   *
+   * @param string $title
+   *   The entity title.
+   * @param string $bundle
+   *   The entity bundle.
+   *
+   * @When I delete the :title :bundle
+   */
+  public function deleteEntity(string $title, string $bundle): void {
+    $entity = $this->getEntityByLabel('node', $title);
+    if ($bundle !== 'contact_information') {
+      $entity->skip_notification = TRUE;
+    }
+    $entity->delete();
+  }
+
 }
