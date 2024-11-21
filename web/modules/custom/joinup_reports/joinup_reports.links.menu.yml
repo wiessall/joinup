@@ -5,13 +5,6 @@ joinup_reports.admin_reporting:
   title: 'Reporting'
   weight: 75
 
-joinup_reports.export_user_list:
-  title: 'Export user list'
-  route_name: joinup_reports.export_user_list
-  description: 'Export the list of users as a CSV file.'
-  parent: joinup_reports.admin_reporting
-  weight: 0
-
 joinup_reports.group_administrators_report:
   title: 'Group administrators and facilitators'
   route_name: joinup_reports.group_administrators_report
