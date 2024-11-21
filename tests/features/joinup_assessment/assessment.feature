@@ -235,6 +235,11 @@ Feature: Assessments
     # the visibility of the documents in the view below as we force them as
     # published, but it does affect the custom page listing below.
     Given the workflow state of the "Best practice for interoperability assessments" collection is changed to "published"
+    When I go to "/assessments"
+    Then I should see the heading "Assessment reports"
+    And I should see the link "New assessment"
+    And I should not see the link "My assessments"
+    And I should see the text "There's are no published assessment reports yet. You can add one by filling this questionnaire"
     And document content:
       | title         | body               | state     | document type               | collection                                     | created              |
       | Assessment 1  | Assessment 1 body  | published | Interoperability Assessment | Best practice for interoperability assessments | 2020-01-01T00:00:00Z |
@@ -252,6 +257,9 @@ Feature: Assessments
 
     When I go to "/assessments"
     Then I should see the heading "Assessment reports"
+    And I should see the link "New assessment"
+    And I should not see the link "My assessments"
+    And I should not see the text "There's are no published assessment reports yet. You can add one by filling this questionnaire"
     # Reports are shown in creation descending order in a 10 pager listing.
     And I should see the following tiles in the correct order:
       | Assessment 12 |
@@ -288,3 +296,10 @@ Feature: Assessments
       | Assessment 4  |
       | Assessment 3  |
       | Assessment 2  |
+
+    When I am logged in as a moderator
+    When I go to "/assessments"
+    Then I should see the heading "Assessment reports"
+    And I should see the link "New assessment"
+    And I should see the link "My assessments"
+    And I should not see the text "There's are no published assessment reports yet. You can add one by filling this questionnaire"
