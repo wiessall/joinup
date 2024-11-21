@@ -55,31 +55,36 @@ function joinup_private_message_form_alter(array &$form, FormStateInterface $for
         /** @var \Drupal\private_message\Entity\PrivateMessageThread $thread */
         $thread = $form_state->getBuildInfo()['args'][0];
         // Threads in Joinup always have only 2 members.
-        $is_banned = joinup_private_message_ban_exists_between_users(...$thread->getMembersId());
-        if ($is_banned) {
-          $form['message']['widget'][0] = [
+        if (joinup_private_message_ban_exists_between_users(...$thread->getMembersId())) {
+          $form['warning'] = [
             '#theme' => 'status_messages',
             '#message_list' => [
               'warning' => [
                 t('You cannot send messages to a user that has blocked you, or was blocked by you.'),
               ],
             ],
+            '#weight' => -100,
           ];
-          $form['actions']['submit']['#access'] = FALSE;
 
-          // Use the tag <button> and set its value.
-          $form['actions']['submit']['#extra_suggestion'] = 'tag_button';
-          $form['actions']['submit']['#value'] = t('Send');
+          // In order to avoid removing the button from the DOM, we disable it
+          // because otherwise, since this is a strictly AJAX form, an error
+          // will be raised about the missing AJAX callback.
+          $form['actions']['submit']['#attributes']['disabled'] = 'disabled';
+          $form['message']['#attributes']['disabled'] = 'disabled';
         }
-        else {
-          // Change the label from "Message" to "Reply".
-          $form['message']['widget'][0]['#title'] = t('Reply');
-        }
+
+        // Change the label from "Message" to "Reply".
+        $form['message']['widget'][0]['#title'] = t('Reply');
+        $form['actions']['submit']['#value'] = t('Send');
+
+        // Use the tag <button> and set its value.
+        $form['actions']['submit']['#extra_suggestion'] = 'tag_button';
       }
       // Set as default and limit the allowed formats format to 'Plain text'.
       $form['message']['widget'][0]['#format'] = 'plain_text';
       $form['message']['widget'][0]['#allowed_formats'] = ['plain_text'];
     }
+    $form['#validate'][] = 'joinup_private_message_add_form_validate';
     $form['actions']['submit']['#submit'][] = 'joinup_private_message_form_submit';
   }
 
@@ -90,6 +95,22 @@ function joinup_private_message_form_alter(array &$form, FormStateInterface $for
     if (isset($form['actions']['submit']['#value'])) {
       $form['actions']['submit']['#value'] = t('Delete for me');
     }
+  }
+}
+
+/**
+ * Ensure that open windows are still unable to send messages to blocked users.
+ */
+function joinup_private_message_add_form_validate(array &$form, FormStateInterface $form_state): void {
+  $thread = $form_state->getBuildInfo()['args'][0];
+  if (empty($thread)) {
+    // A new message is being created.
+    return;
+  }
+
+  $is_banned = joinup_private_message_ban_exists_between_users(...$thread->getMembersId());
+  if ($is_banned) {
+    $form_state->setError($form, \Drupal::config('private_message.settings')->get('ban_message'));
   }
 }
 

@@ -4,13 +4,14 @@ Feature: Private message report.
   As a user
   I need to be able to report a message.
 
-  @javascript
-  Scenario: Report a private message
+  Background:
     Given users:
       | ID   | Username  | First name | Family name | E-mail                | Roles     |
       | 900  | alice_m   | Alice      | Miller      | alice.m@example.com   | Moderator |
       | 9001 | bob_rolls | Bob        | Rolls       | bob.rolls@example.com |           |
 
+  @javascript
+  Scenario: Report a private message
     Given I am logged in as "alice_m"
     And I am on "/user/messages"
     And I click "New message"
@@ -84,3 +85,21 @@ Feature: Private message report.
     When I press "Confirm" in the "Modal buttons" region
     Then the modal should be closed
     And a message containing the text "This is a mean message to Bob." should be present
+
+  @javascript
+  Scenario: Validation fails when a user is already messaging another user that
+  banned them.
+    Given the following private messages:
+      | owner   | recipient | message |
+      | alice_m | bob_rolls | Hello 1 |
+    And I am logged in as "bob_rolls"
+    And I am on "/user/messages"
+    And I fill in "Reply" with "A private message from Bob to Alice."
+
+    # Simulate that Alice has banned Bob while bob has already filled the
+    # message form and is about to send the message.
+    And "alice_m" has banned "bob_rolls"
+    And I press "Send"
+    Then I should see the warning message "You cannot send messages to a user that has blocked you, or was blocked by you."
+    And I reload the page
+    And I should not see the text "A private message from Bob to Alice."
