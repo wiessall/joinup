@@ -58,8 +58,7 @@ Feature: Private message report.
     And I am on "/user/messages"
     # Since there is only the thread with bob_rolls, we can already assert that
     # the wysiwyg editor and the "Send" button are not present.
-    Then the following fields should not be present "Reply"
-    And I should not see the button "Send"
+    And the following buttons should be disabled "Send"
     And I click "New message"
     Then a modal should open
     When I type "Bob" in the "To:" autocomplete field
