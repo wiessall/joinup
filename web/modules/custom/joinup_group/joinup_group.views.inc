@@ -18,4 +18,5 @@ function joinup_group_views_data_alter(array &$data): void {
       'id' => 'joinup_group_announcement_edit_link',
     ],
   ];
+  $data['message__group']['group_target_id']['filter']['id'] = 'entity_reference';
 }
