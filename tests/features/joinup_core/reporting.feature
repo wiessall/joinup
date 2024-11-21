@@ -31,7 +31,6 @@ Feature:
     And I am on "/admin/reporting"
     Then I should see the following links:
       | Group administrators and facilitators |
-      | Export user list                      |
       | Solutions by solution type            |
       | Solutions by licences                 |
       | Statistics per group                  |
