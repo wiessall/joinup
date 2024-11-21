@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Drupal\joinup\Form;
+namespace Drupal\joinup_reports\Form;
 
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Cache\CacheBackendInterface;
@@ -56,7 +56,7 @@ class ExportStatisticsPerGroupForm extends ExportBatchedDataFormBase {
    * {@inheritdoc}
    */
   protected function getRedirectRouteName(): string {
-    return 'joinup.statistics_per_group';
+    return 'joinup_reports.statistics_per_group';
   }
 
   /**
